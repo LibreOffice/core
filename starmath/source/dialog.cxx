@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:55:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ const String & SmFontStyles::GetStyleName( const Font &rFont ) const
 {
     //! compare also SmSpecialNode::Prepare
     BOOL bBold   = rFont.GetWeight() > WEIGHT_NORMAL,
-         bItalic = rFont.GetItalic() != ITALIC_NONE;
+         bItalic = rFont.GetItalic() > ITALIC_NONE;
 
     if (bBold && bItalic)
         return aBoldItalic;
@@ -423,8 +423,8 @@ void SmFontDialog::SetFont(const Font &rFont)
     Face = rFont;
 
     aFontBox.SetText(Face.GetName());
-    aBoldCheckBox.Check(Face.GetWeight() == WEIGHT_BOLD);
-    aItalicCheckBox.Check(Face.GetItalic() != ITALIC_NONE);
+    aBoldCheckBox.Check(Face.GetWeight() > WEIGHT_BOLD);
+    aItalicCheckBox.Check(Face.GetItalic() > ITALIC_NONE);
 
     aShowFont.SetFont(Face);
 }
