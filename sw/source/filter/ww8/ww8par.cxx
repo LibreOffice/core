@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 10:01:15 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2969,7 +2969,7 @@ void SwWW8ImplReader::SetOutLineStyles()
                     already has some set we can't do this, thats covered by
                     the list of level in nFlagsStyleOutlLevel to ignore.
                     */
-                    outlineeq aCmp(rSI.nListLevel);
+                    outlineeq aCmp(rSI.nOutlineLevel);
                     myiter aResult = ::std::find_if(aOutLined.begin(),
                         aOutLined.end(), aCmp);
 
