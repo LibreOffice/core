@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:26:47 $
+ *  last change: $Author: rt $ $Date: 2001-05-12 07:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ String STR_PATH_NOT_FOUND2
     Text[ chinese_traditional ] = "' ¤£¦s¦b¡C";
     Text[ arabic ] = "' ÛíÑ ãæÌæÏ.";
     Text[ greek ] = "' äåí õğÜñ÷åé.";
-    Text[ korean ] = "' °¡ Á¸ÀçÇÏÁö ¾ÊÀ½";
+    Text[ korean ] = "' ÀÌ/°¡ Á¸ÀçÇÏÁö ¾ÊÀ½";
     Text[ turkish ] = "' mevcut değil.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "' no existe.";
