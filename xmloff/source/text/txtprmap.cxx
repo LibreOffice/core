@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:45:46 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,9 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     M_E( "CharScaleWidth",          STYLE,      TEXT_SCALE,                 XML_TYPE_PERCENT16, 0 ),
     //RES_CHRATR_RELIEF
     M_E( "CharRelief",              STYLE,      FONT_RELIEF,                XML_TYPE_TEXT_FONT_RELIEF, 0 ),
+    // RES_CHRATR_HIDDEN
+    M_E( "CharHidden",              TEXT,       DISPLAY,                    XML_TYPE_TEXT_HIDDEN_AS_DISPLAY, 0 ),
+
     // RES_TXTATR_INETFMT
     // TODO
     // RES_TXTATR_REFMARK
@@ -504,6 +507,8 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     M_E( "",                        STYLE,      TEXT_COMBINE,               XML_TYPE_TEXT_COMBINE_CHARACTERS|MID_FLAG_NO_PROPERTY, CTF_COMBINED_CHARACTERS_FIELD ),
     //RES_CHRATR_RELIEF
     M_E( "CharRelief",              STYLE,      FONT_RELIEF,                XML_TYPE_TEXT_FONT_RELIEF, 0 ),
+    // RES_CHRATR_HIDDEN
+    M_E( "CharHidden",              TEXT,       DISPLAY,                    XML_TYPE_TEXT_HIDDEN_AS_DISPLAY, 0 ),
 
     // RES_TXTATR_INETFMT
     M_E( "HyperLinkURL",            TEXT,       XMLNS,                      XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_IMPORT,    CTF_HYPERLINK_URL ),
