@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXFootnote.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:45:18 $
+ *  last change:$Date: 2003-09-08 12:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,8 @@
 
 package mod._sw;
 
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XFootnote;
-import com.sun.star.text.XText;
-import com.sun.star.text.XTextCursor;
-import com.sun.star.text.XTextContent;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -79,6 +70,14 @@ import lib.TestParameters;
 import util.FrameDsc;
 import util.InstCreator;
 import util.SOfficeFactory;
+
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XFootnote;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
 
 /**
  * Test for object which is represented by service
@@ -147,13 +146,6 @@ public class SwXFootnote extends TestCase {
     * </ul>
     */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-        XInterface oInterface = null;
-        XInterface oObj = null;
-        XComponentLoader oCLoader = null;
-        XDesktop oDesktop = null;
-        String oObjLog = null;
-        boolean bOK = true;
-        boolean result = true;
         XFootnote oFootnote;
 
         log.println( "Creating a test environment" );
