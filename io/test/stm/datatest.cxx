@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datatest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-15 17:58:02 $
+ *  last change: $Author: jbu $ $Date: 2002-09-18 12:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,8 @@ void ODataStreamTest::testSimple(   const Reference < XDataInputStream > &rInput
         ERROR_ASSERT( 0 , "wrong exception after reading beyond eof" );
     }
 
-    ERROR_ASSERT( ! rInput->readBytes( Sequence<sal_Int8> (1) , 1 ),
+    Sequence<sal_Int8> dummy (1);
+    ERROR_ASSERT( ! rInput->readBytes( dummy , 1 ),
                     "stream must be on eof !" );
 
     rInput->closeInput();
@@ -425,7 +426,14 @@ OUString    ODataStreamTest_getImplementationName( int i) throw ()
 class MyPersistObject : public WeakImplHelper2< XPersistObject , XPropertySet >
 {
 public:
-    MyPersistObject( ) : m_sServiceName( OMyPersistObject_getServiceName() )
+    MyPersistObject( ) : m_sServiceName( OMyPersistObject_getServiceName() ) ,
+        m_l( -392 ),
+        m_f( 7883.2 ),
+        m_d( -123923.5 ),
+        m_b( sal_True ),
+        m_byte( 42 ),
+        m_c( 429 ),
+        m_s( OUString( RTL_CONSTASCII_USTRINGPARAM( "foo" ) ) )
         {}
     MyPersistObject( const OUString & sServiceName ) : m_sServiceName( sServiceName )
         {}
@@ -860,17 +868,27 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
         r2->getPropertyValue( OUString::createFromAscii("long") ).getValueType() == getCppuVoidType() ) {
 
         // one of the objects is not the correct propertyset !
+        fprintf( stderr, "compareMyPropertySet: 1\n" );
         return sal_False;
     }
 
     b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("long")) ) ==
                 r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("long")) ) );
+    if( ! b ) fprintf( stderr, "compareMyPropertySet: 2\n" );
 
     b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) ==
                 r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) );
+    if( ! b ){
+        float f1;
+        float f2;
+        r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) >>= f1;
+        r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("float")) ) >>= f2;
+        fprintf( stderr, "compareMyPropertySet: %f %f 3\n",f1,f2 );
+    }
 
     b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("double")) ) ==
                 r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("double" ))) );
+    if( ! b ) fprintf( stderr, "compareMyPropertySet: 4\n" );
 
     sal_Bool b1 ,b2;
     Any a =r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("bool")) );
@@ -878,18 +896,22 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
     a = r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("bool")) );
     a >>= b2;
     b = b && ( (b1 && b2) || b1 == b2 );
+    if( ! b ) fprintf( stderr, "compareMyPropertySet: 5\n" );
 
 //      b = b &&    r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("bool")) ) ==
 //                  r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("bool")) ) );
 
     b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("byte")) ) ==
                 r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("byte")) ) );
+    if( ! b ) fprintf( stderr, "compareMyPropertySet: 6\n" );
 
     b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("char")) ) ==
                 r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("char")) ) );
+    if( ! b ) fprintf( stderr, "compareMyPropertySet: 7\n" );
 
     b = b && (  r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("string")) ) ==
                 r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("string")) ));
+    if( ! b ) fprintf( stderr, "compareMyPropertySet: 8\n" );
 
     Any o1 = r1->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("object")) );
     Any o2 = r2->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("object")) );
@@ -912,11 +934,13 @@ sal_Bool compareMyPropertySet( Reference< XPropertySet > &r1 , Reference < XProp
         else {
             b = sal_False;
         }
+        if( ! b ) fprintf( stderr, "compareMyPropertySet: 9\n" );
     }
     else {
         if( o2.getValueType()  == getCppuType( (Reference<XPersistObject>*)0 ) ) {
             b = sal_False;
         }
+        if( ! b ) fprintf( stderr, "compareMyPropertySet: 10\n" );
     }
 
     return b;

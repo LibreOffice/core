@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pumptest.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-20 09:12:18 $
+ *  last change: $Author: jbu $ $Date: 2002-09-18 12:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,14 @@ using namespace ::com::sun::star::test;
 
 #include "testfactreg.hxx"
 
+static void mywait()
+{
+    TimeValue a = { 0, 10000 };
+    osl_waitThread( &a );
+    osl_yieldThread();
+    osl_yieldThread();
+}
+
 class OPumpTest : public WeakImplHelper1 < XSimpleTest >
 {
 public:
@@ -125,7 +133,9 @@ public:
 private:
     void testSimple( const Reference < XInterface > & );
     void testWrongUsage( const Reference < XInterface > & );
-
+    void testClose( const Reference< XInterface >& );
+    void testTerminate( const Reference< XInterface >& );
+    void testFunction( const Reference< XInterface >& );
 private:
     Sequence<Any>  m_seqExceptions;
     Sequence<OUString> m_seqErrors;
@@ -186,6 +196,18 @@ sal_Int32 OPumpTest::test(
             {
                 testWrongUsage( TestObject);
             }
+            else if ( 2 == hTestHandle )
+            {
+                testClose( TestObject);
+            }
+            else if ( 3 == hTestHandle )
+            {
+                testTerminate( TestObject );
+            }
+            else if ( 4 == hTestHandle )
+            {
+                testFunction( TestObject );
+            }
         }
         catch( Exception & e )
         {
@@ -199,7 +221,7 @@ sal_Int32 OPumpTest::test(
 
         hTestHandle ++;
 
-        if( 2 == hTestHandle )
+        if( 5 == hTestHandle )
         {
             // all tests finished.
             hTestHandle = -1;
@@ -249,6 +271,176 @@ void OPumpTest::testSimple( const Reference < XInterface > &r )
 
 }
 
+class TestListener: public WeakImplHelper1< XStreamListener >
+{
+public:
+    sal_Bool m_bStarted;
+    sal_Bool m_bClosed;
+    sal_Bool m_bTerminated;
+    sal_Bool m_bError;
+    sal_Bool m_bDisposed;
+    TestListener() : m_bStarted (sal_False),
+                     m_bClosed (sal_False),
+                     m_bTerminated ( sal_False ),
+                     m_bError( sal_False ),
+                     m_bDisposed( sal_False )
+    {}
+
+    virtual void SAL_CALL disposing( const EventObject &obj  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_bDisposed = sal_True;
+//         printf( "disposing called\n");
+    }
+
+    virtual void SAL_CALL started(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_bStarted = sal_True;
+//         printf( "started called\n");
+    }
+    virtual void SAL_CALL closed(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_bClosed = sal_True;
+//         printf( "closed called\n");
+    }
+    virtual void SAL_CALL terminated(  ) throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_bTerminated = sal_True;
+//         printf( "terminated called\n");
+    }
+    virtual void SAL_CALL error( const ::com::sun::star::uno::Any& aException )
+        throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_bError = sal_True;
+        Exception e;
+        aException >>= e;
+//         printf( "error called %s\n", OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
+    }
+};
+
+class TestCase
+{
+public:
+    TestCase( const Reference< XMultiServiceFactory > & rSMgr,
+              const Reference< XInterface > &r ) : m_rSmgr( rSMgr ), m_pTestListener( 0 )
+    {
+        m_rControl = Reference<XActiveDataControl>( r, UNO_QUERY );
+
+        Reference< XActiveDataSource > rSource ( r, UNO_QUERY );
+        Reference< XActiveDataSink > rSink( r , UNO_QUERY );
+
+        m_rOutSource = Reference< XOutputStream > ( createPipe() );
+        rSink->setInputStream(Reference< XInputStream> (m_rOutSource,UNO_QUERY));
+
+        Reference< XOutputStream > rOutSink( createPipe() );
+        m_rInSink = Reference< XInputStream > ( rOutSink, UNO_QUERY );
+        rSource->setOutputStream( rOutSink );
+
+        m_pTestListener = new TestListener();
+        m_pTestListener->acquire();
+        m_rControl->addListener( m_pTestListener );
+    }
+
+    ~TestCase()
+    {
+        if( m_pTestListener )
+            m_pTestListener->release();
+    }
+
+    TestListener *m_pTestListener;
+    Reference< XActiveDataControl > m_rControl;
+    Reference< XOutputStream > m_rOutSource;
+    Reference< XInputStream > m_rInSink;
+    Reference< XMultiServiceFactory > m_rSmgr;
+
+private:
+    Reference< XOutputStream > createPipe()
+    {
+        Reference< XOutputStream > rOut( m_rSmgr->createInstance(
+             OUString::createFromAscii( "com.sun.star.io.Pipe" )),UNO_QUERY);
+        return rOut;
+    }
+};
+
+
+
+void OPumpTest::testClose( const Reference< XInterface > &r )
+{
+    TestCase t( m_rSmgr, r );
+
+    ERROR_ASSERT( ! t.m_pTestListener->m_bStarted , "started too early" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "terminiation unexpected" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bClosed, "unexpected clase" );
+
+    t.m_rControl->start();
+    mywait();
+
+    ERROR_ASSERT( t.m_pTestListener->m_bStarted , "should have been started already" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "terminiation unexpected" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bClosed, "unexpected clase" );
+
+    Reference< XStreamListener > rListener( new TestListener() );
+    t.m_rControl->addListener( rListener );
+    t.m_rControl->removeListener( rListener );
+
+    t.m_rOutSource->closeOutput();
+    mywait();
+    ERROR_ASSERT( t.m_pTestListener->m_bStarted , "should have been started already" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "should be terminiated already" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
+    ERROR_ASSERT( t.m_pTestListener->m_bClosed, "should be closed already" );
+}
+
+void OPumpTest::testTerminate( const Reference< XInterface > &r )
+{
+    TestCase t( m_rSmgr, r );
+
+    ERROR_ASSERT( ! t.m_pTestListener->m_bStarted , "started too early" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "terminiation unexpected" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bClosed, "unexpected clase" );
+
+    t.m_rControl->start();
+    mywait();
+
+    ERROR_ASSERT( t.m_pTestListener->m_bStarted , "should have been started already" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "terminiation unexpected" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bClosed, "unexpected clase" );
+
+    t.m_rControl->terminate();
+
+    mywait();
+    ERROR_ASSERT( t.m_pTestListener->m_bStarted , "should have been started already" );
+    ERROR_ASSERT( t.m_pTestListener->m_bTerminated , "should be terminiated already" );
+    // terminte leads to an error, that is no surprise, in fact
+    // one can't tell wether the error occurs because of the terminate
+    // call or for some other reason !
+//     ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
+    ERROR_ASSERT( t.m_pTestListener->m_bClosed, "should be closed already" );
+}
+
+void OPumpTest::testFunction( const Reference< XInterface > &r )
+{
+    TestCase t( m_rSmgr, r );
+
+    t.m_rControl->start();
+
+    t.m_rOutSource->writeBytes( Sequence< sal_Int8 > ( 5 ) );
+
+    Sequence< sal_Int8 > dummy;
+    ERROR_ASSERT( 5 == t.m_rInSink->readBytes( dummy , 5 ), "couldn't read the expected number of bytes" );
+
+    t.m_rOutSource->closeOutput();
+    mywait();
+
+    ERROR_ASSERT( t.m_pTestListener->m_bStarted , "should have been started already" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bTerminated , "should be terminiated already" );
+    ERROR_ASSERT( ! t.m_pTestListener->m_bError, "unexpected error" );
+    ERROR_ASSERT( t.m_pTestListener->m_bClosed, "should be closed already" );
+}
+
 void OPumpTest::testWrongUsage( const Reference< XInterface > &r )
 {
     Reference< XActiveDataSource > rSource ( r, UNO_QUERY );
@@ -265,9 +457,7 @@ void OPumpTest::testWrongUsage( const Reference< XInterface > &r )
 
     rControl->start();
 
-    //wait a second, so that the pumpthread can terminate
-    TimeValue w = {1,1};
-    osl_waitThread( &w );
+    mywait();
 }
 
 Reference< XInterface > SAL_CALL OPumpTest_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception )

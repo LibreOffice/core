@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipetest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-15 17:58:02 $
+ *  last change: $Author: jbu $ $Date: 2002-09-18 12:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,6 +344,24 @@ void OPipeTest::testSimple( const Reference < XInterface > &r )
     catch( IOException & ) {
     }
 
+    try
+    {
+        input->available( );
+        ERROR_ASSERT( 0 , "calling available from a closed stream should thrown an io exception" );
+    }
+    catch( IOException & )
+    {
+
+    }
+    try
+    {
+        input->skipBytes(42 );
+        ERROR_ASSERT( 0 , "calling available from a closed stream should thrown an io exception" );
+    }
+    catch( IOException & )
+    {
+
+    }
 }
 
 void OPipeTest::testBufferResizing( const Reference < XInterface > &r )
@@ -361,7 +379,8 @@ void OPipeTest::testBufferResizing( const Reference < XInterface > &r )
     // this is just to better check the
     // internal buffers
     output->writeBytes( Sequence<sal_Int8>(100) );
-    input->readBytes( Sequence<sal_Int8>() , 100);
+    Sequence< sal_Int8 > dummy;
+    input->readBytes( dummy , 100);
 
     for( int i = 0 ; i < iMax ; i ++ ) {
         output->writeBytes( createIntSeq( i ) );
