@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:45:30 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,17 @@ const sal_Unicode EXC_URL_RAW               = '\x05';   /// Unencoded URL.
 const sal_Unicode EXC_URL_SHEETNAME         = '\x09';   /// Sheet name starts here (BIFF4).
 
 const sal_Unicode EXC_DDE_DELIM             = '\x03';   /// DDE application-topic delimiter
+
+
+// Error codes ----------------------------------------------------------------
+
+const sal_uInt8 EXC_ERR_NULL                = 0x00;
+const sal_uInt8 EXC_ERR_DIV0                = 0x07;
+const sal_uInt8 EXC_ERR_VALUE               = 0x0F;
+const sal_uInt8 EXC_ERR_REF                 = 0x17;
+const sal_uInt8 EXC_ERR_NAME                = 0x1D;
+const sal_uInt8 EXC_ERR_NUM                 = 0x24;
+const sal_uInt8 EXC_ERR_NA                  = 0x2A;
 
 
 // Cached values list (EXTERNNAME, ptgArray, ...) -----------------------------
