@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-12 14:43:36 $
+ *  last change: $Author: ama $ $Date: 2002-06-24 09:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2570,6 +2570,11 @@ void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             break;
         case RES_COLUMNBALANCE:
             rInvFlags |= 0x01;
+            break;
+
+        case RES_FRAMEDIR :
+            SetDerivedR2L( sal_False );
+            CheckDirChange();
             break;
 
         default:
