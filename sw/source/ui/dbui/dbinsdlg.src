@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:35:11 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "Εισαγωγή δεδομένων ως:";
         Text[ korean ] = "·Ξ µ¥ΐΜΕΝ »πΐΤ:";
         Text[ turkish ] = "Eklenecek verilerin tόrό:";
+        Text[ catalan ] = "Insertar datos como:";
     };
     RadioButton RB_AS_TABLE
     {
@@ -129,6 +130,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "Πίνακας";
         Text[ korean ] = "Η¥(~A)";
         Text[ turkish ] = "T~ablo";
+        Text[ catalan ] = "T~abla";
     };
     RadioButton RB_AS_FIELD
     {
@@ -157,6 +159,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "Πεδία";
         Text[ korean ] = "ΗΚµε(~F)";
         Text[ turkish ] = "~Alanlar";
+        Text[ catalan ] = "~Campos";
     };
     RadioButton RB_AS_TEXT
     {
@@ -185,6 +188,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "Κείμενο";
         Text[ korean ] = "ΕΨ½ΊΖ®(~T)";
         Text[ turkish ] = "~Metin";
+        Text[ catalan ] = "~Texto";
     };
     OKButton BT_OK
     {
@@ -238,6 +242,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "Στήλες βάσης δεδομένων";
         Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί Ώ­(~C)";
         Text[ turkish ] = "Veritabanύ ~sόtunlarύ";
+        Text[ catalan ] = "~Columnas de la base de datos";
     };
     GroupBox GB_DB_FORMAT
     {
@@ -265,6 +270,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "~Μορφή";
         Text[ korean ] = "Ό­½Δ(~M)";
         Text[ turkish ] = "For~mat";
+        Text[ catalan ] = "For~mato";
     };
     RadioButton RB_DBFMT_FROM_DB
     {
@@ -294,6 +300,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "Από βάση δεδομένων";
         Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί·ΞΊΞΕΝ(~D)";
         Text[ turkish ] = "Kaynak veritabanύ";
+        Text[ catalan ] = "~De la base de datos";
     };
     RadioButton RB_DBFMT_FROM_USR
     {
@@ -368,6 +375,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         TEXT[ greek ] = "Πρότυπo παραγράφου:";
         TEXT[ korean ] = "΄ά¶τ ΐ―Ηό(~S):";
         TEXT[ turkish ] = "Paragraf b~iηimi:";
+        TEXT[ catalan ] = "~Estilo de pαrrafo:";
     };
     ListBox LB_DB_PARA_COLL
     {
@@ -441,6 +449,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "Πίνακας";
         Text[ korean ] = "Η¥(~L)";
         Text[ turkish ] = "~Tablo";
+        Text[ catalan ] = "Tab~la";
     };
     ListBox LB_TABLE_COL
     {
@@ -475,6 +484,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "Επικεφαλίδα πίνακα";
         Text[ korean ] = "Η¥ Α¦Έρ";
         Text[ turkish ] = "Tablo baώlύπύ";
+        Text[ catalan ] = "Encabezado de la tabla";
     };
     CheckBox CB_TABLE_HEADON
     {
@@ -504,6 +514,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "Ενεργοποίηση";
         Text[ korean ] = "Θ°ΌΊ(~O)";
         Text[ turkish ] = "Ηalύώtύr";
+        Text[ catalan ] = "~Activar";
     };
     RadioButton RB_HEADL_COLNMS
     {
@@ -533,6 +544,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "Ονόματα στήλης";
         Text[ korean ] = "Ώ­ ΐΜΈ§(~N)";
         Text[ turkish ] = "~Sόtun adύ";
+        Text[ catalan ] = "~Nombres de columnas";
     };
     RadioButton RB_HEADL_EMPTY
     {
@@ -561,6 +573,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "κενό";
         Text[ korean ] = "ΊρΎξΐΦΐ½(~E)";
         Text[ turkish ] = "boώ";
+        Text[ catalan ] = "~vacνo";
     };
     PushButton PB_TBL_FORMAT
     {
@@ -589,6 +602,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "Ιδιότητες...";
         Text[ korean ] = "µξ·ΟΑ¤ΊΈ(~O)...";
         Text[ turkish ] = "Φ~zelikler...";
+        Text[ catalan ] = "P~ropiedades...";
     };
     PushButton PB_TBL_AUTOFMT
     {
@@ -617,6 +631,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "Αυτ~οΜορφή...";
         Text[ korean ] = "ΐΪµΏ Ό­½Δ (~O)...";
         Text[ turkish ] = "Otomatik formatla...";
+        Text[ catalan ] = "~Autoformato...";
     };
     String STR_NOTEMPL
     {
@@ -642,6 +657,7 @@ ModalDialog DLG_AP_INSERT_DB_SEL
         Text[ greek ] = "<κανένα>";
         Text[ korean ] = "<Ύψΐ½>";
         Text[ turkish ] = "<yok>";
+        Text[ catalan ] = "<ninguno>";
     };
     Text [ english_us ] = "Insert Database Columns" ;
     Text [ portuguese_brazilian ] = "Datenbankspalten einfόgen" ;
@@ -663,4 +679,5 @@ ModalDialog DLG_AP_INSERT_DB_SEL
     Text[ greek ] = "Προσθήκη στηλών βάσης δεδομένων";
     Text[ korean ] = "µ¥ΐΜΕΝΊ£ΐΜ½Ί Ώ­ »πΐΤ";
     Text[ turkish ] = "Veritabanύ sόtunu ekle";
+    Text[ catalan ] = "Insertar columnas de la base de datos";
 };
