@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.35 $
- *  last change: $Author: hdu $ $Date: 2001-05-10 12:15:11 $
+ *  $Revision: 1.36 $
+ *  last change: $Author: hdu $ $Date: 2001-05-14 08:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,10 @@
 #include <outfont.hxx>
 #include <bitmap.hxx>
 #include <bmpacc.hxx>
+#include <poly.hxx>
 
 #include <osl/file.hxx>
-#include <poly.hxx>
+#include <osl/thread.hxx>
 
 //#define FT20b8 true /* VERSION_MINOR in freetype.h is too coarse */
 #include "freetype/freetype.h"
@@ -171,13 +172,14 @@ long FreetypeManager::AddFontDir( const String& rNormalizedName )
     long nCount = 0;
 
     osl::DirectoryItem aDirItem;
+    rtl_TextEncoding theEncoding = osl_getThreadTextEncoding();
     while( (rcOSL = aDir.getNextItem( aDirItem, 20 )) == osl::FileBase::E_None )
     {
         osl::FileStatus aFileStatus( FileStatusMask_NativePath );
 
         rcOSL = aDirItem.getFileStatus( aFileStatus );
         ::rtl::OUString aUFileName = aFileStatus.getNativePath();
-        ::rtl::OString aCFileName = rtl::OUStringToOString( aUFileName, RTL_TEXTENCODING_UTF8 );
+        ::rtl::OString aCFileName = rtl::OUStringToOString( aUFileName, theEncoding );
         const char* pszFontFileName = aCFileName.getStr();
 
         FT_FaceRec_* aFaceFT = NULL;
@@ -322,7 +324,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
     //if( rFSD.mbVertical )
     //  mnLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
 
-#ifndef TT_CONFIG_OPTION_BYTECODE_INTERPRETER
+#if /*defined(FT20B8) &&*/ !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     mnLoadFlags |= FT_LOAD_NO_HINTING;  // TODO: enable when AH improves
 #endif
 }
@@ -549,6 +551,10 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     FT_Int nLoadFlags = mnLoadFlags;
     if( nGlyphFlags != 0 )
         nLoadFlags |= FT_LOAD_NO_BITMAP;
+#if !defined(FT20B8)
+    if( nCos==0 || nSin==0)
+        nLoadFlags &= ~FT_LOAD_NO_HINTING;
+#endif
 
     FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
     if( rc != FT_Err_Ok )
@@ -573,7 +579,7 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     }
 
     const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(aGlyphFT);
-    // autohinting miscaculates the offsets below by +-1
+    // autohinting miscalculates the offsets below by +-1
     rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
     rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
 
