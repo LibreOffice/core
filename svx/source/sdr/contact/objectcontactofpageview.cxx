@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofpageview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:44:37 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,21 +109,21 @@ namespace sdr
 {
     namespace contact
     {
-        // internal access to SdrPageView
-        SdrPageView& ObjectContactOfPageView::GetPageView() const
+        // internal access to SdrPageViewWindow
+        SdrPageViewWindow& ObjectContactOfPageView::GetPageViewWindow() const
         {
-            return mrPageView;
+            return mrPageViewWindow;
         }
 
         // internal access to SdrPage of SdrPageView
         SdrPage* ObjectContactOfPageView::GetSdrPage() const
         {
-            return GetPageView().GetPage();
+            return GetPageViewWindow().GetPageView().GetPage();
         }
 
-        ObjectContactOfPageView::ObjectContactOfPageView(SdrPageView& rPageView)
+        ObjectContactOfPageView::ObjectContactOfPageView(SdrPageViewWindow& rPageViewWindow)
         :   ObjectContact(),
-            mrPageView(rPageView),
+            mrPageViewWindow(rPageViewWindow),
             mpRememberedStartPage(0L)
         {
         }
@@ -425,12 +425,23 @@ namespace sdr
                 aProcessLayers.Clear((sal_uInt8)nControlLayerId);
             }
 
+            // #114359# save old and set clip region
+            OutputDevice& rOutDev = GetPageViewWindow().GetOutputDevice();
+            sal_Bool bClipRegionPushed(sal_False);
+            const Region& rRedrawArea(rDisplayInfo.GetRedrawArea());
+
+            if(!rRedrawArea.IsEmpty())
+            {
+                bClipRegionPushed = sal_True;
+                rOutDev.Push(PUSH_CLIPREGION);
+                rOutDev.IntersectClipRegion(rRedrawArea);
+            }
+
             // Draw DrawPage without controls
             if(!aProcessLayers.IsEmpty())
             {
                 // standard paint
                 rDisplayInfo.SetProcessLayers(aProcessLayers);
-                rDisplayInfo.SetTemporaryPaintPage(sal_True);
                 rDrawPageVOContact.PaintObjectHierarchy(rDisplayInfo);
             }
 
@@ -441,8 +452,15 @@ namespace sdr
                 aProcessLayers.ClearAll();
                 aProcessLayers.Set((sal_uInt8)nControlLayerId);
                 rDisplayInfo.SetProcessLayers(aProcessLayers);
-                rDisplayInfo.SetTemporaryPaintPage(sal_False);
+                rDisplayInfo.SetControlLayerPainting(sal_True);
                 rDrawPageVOContact.PaintObjectHierarchy(rDisplayInfo);
+                rDisplayInfo.SetControlLayerPainting(sal_False);
+            }
+
+            // #114359# restore old ClipReghion
+            if(bClipRegionPushed)
+            {
+                rOutDev.Pop();
             }
 
             // Visualize entered groups: Reset to original DrawMode
@@ -456,7 +474,7 @@ namespace sdr
             if(!rDisplayInfo.DoContinuePaint())
             {
                 Rectangle aRect = rDisplayInfo.GetRedrawArea().GetBoundRect();
-                GetPageView().InvalidateAllWin(aRect);
+                GetPageViewWindow().Invalidate(aRect);
             }
 
             // If a ObjectAnimator exists, execute it. This will only do anything
@@ -471,7 +489,7 @@ namespace sdr
         // test if visualizing of entered groups is switched on at all
         sal_Bool ObjectContactOfPageView::DoVisualizeEnteredGroup() const
         {
-            SdrView& rView = GetPageView().GetView();
+            SdrView& rView = GetPageViewWindow().GetPageView().GetView();
             return rView.DoVisualizeEnteredGroup();
         }
 
@@ -480,7 +498,7 @@ namespace sdr
         // classes.
         ViewContact* ObjectContactOfPageView::GetActiveGroupContact() const
         {
-            SdrObjList* pActiveGroupList = GetPageView().GetObjList();
+            SdrObjList* pActiveGroupList = GetPageViewWindow().GetPageView().GetObjList();
             ViewContact* pRetval = 0L;
 
             if(pActiveGroupList)
@@ -514,19 +532,19 @@ namespace sdr
         void ObjectContactOfPageView::InvalidatePartOfView(const Rectangle& rRectangle) const
         {
             // invalidate all associated windows.
-            GetPageView().InvalidateAllWin(rRectangle);
+            GetPageViewWindow().Invalidate(rRectangle);
         }
 
         // Get info about the need to visualize GluePoints
         sal_Bool ObjectContactOfPageView::AreGluePointsVisible() const
         {
-            return GetPageView().GetView().ImpIsGlueVisible();
+            return GetPageViewWindow().GetPageView().GetView().ImpIsGlueVisible();
         }
 
         // check if text animation is allowed.
         sal_Bool ObjectContactOfPageView::IsTextAnimationAllowed() const
         {
-            SdrView& rView = GetPageView().GetView();
+            SdrView& rView = GetPageViewWindow().GetPageView().GetView();
             const SvtAccessibilityOptions& rOpt = rView.getAccessibilityOptions();
             return rOpt.GetIsAllowAnimatedText();
         }
@@ -534,7 +552,7 @@ namespace sdr
         // check if graphic animation is allowed.
         sal_Bool ObjectContactOfPageView::IsGraphicAnimationAllowed() const
         {
-            SdrView& rView = GetPageView().GetView();
+            SdrView& rView = GetPageViewWindow().GetPageView().GetView();
             const SvtAccessibilityOptions& rOpt = rView.getAccessibilityOptions();
             return rOpt.GetIsAllowAnimatedGraphics();
         }
@@ -542,7 +560,7 @@ namespace sdr
         // check if asynchronious graphis loading is allowed. Default is sal_False.
         sal_Bool ObjectContactOfPageView::IsAsynchronGraphicsLoadingAllowed() const
         {
-            SdrView& rView = GetPageView().GetView();
+            SdrView& rView = GetPageViewWindow().GetPageView().GetView();
             return rView.IsSwapAsynchron();
         }
     } // end of namespace contact
