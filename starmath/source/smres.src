@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 16:52:46 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,7 +402,7 @@ ModalDialog RID_FONTSIZEDIALOG
         Text[ chinese_traditional ] = "¼Ğ»x(~I)";
         Text[ arabic ] = ":İåÇÑÓ";
         Text[ greek ] = "Äåßêôåò:";
-        Text[ korean ] = "ÀÎµ¦½º:(~I)";
+        Text[ korean ] = "»öÀÎ:(~I)";
         Text[ turkish ] = "İndisler:";
         Text[ language_user1 ] = " ";
     };
@@ -811,7 +811,7 @@ ModalDialog RID_FONTTYPEDIALOG
         Text[ chinese_traditional ] = "¼Æ¦r(~N)";
         Text[ arabic ] = ":ÃÑŞÇã";
         Text[ greek ] = "Áñéèìïß:";
-        Text[ korean ] = "¹øÈ£:(~N)";
+        Text[ korean ] = "¼ıÀÚ:(~N)";
         Text[ turkish ] = "Sayılar:";
         Text[ language_user1 ] = " ";
     };
@@ -1410,7 +1410,7 @@ ModalDialog RID_DISTANCEDIALOG
             Text[ chinese_traditional ] = "¼Ğ»x";
             Text[ arabic ] = "ÅÓÇÓ (ÃÏáÉ)";
             Text[ greek ] = "Äåßêôåò";
-            Text[ korean ] = "ÀÎµ¦½º";
+            Text[ korean ] = "»öÀÎ";
             Text[ turkish ] = "İndisler";
             Text[ language_user1 ] = " ";
         };
@@ -3828,7 +3828,7 @@ Menu RID_DISTANCEMENU
             Text[ chinese_traditional ] = "¼Ğ»x";
             Text[ arabic ] = "İåÇÑÓ";
             Text[ greek ] = "Äåßêôåò";
-            Text[ korean ] = "ÀÎµ¦½º";
+            Text[ korean ] = "»öÀÎ";
             Text[ turkish ] = "İndisler";
         };
         MenuItem
@@ -9001,7 +9001,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_traditional ] = "Óì¥Î¥ş³¡";
                 TEXT[ arabic ] = "ááßá";
                 TEXT[ greek ] = "Ãéá üëá";
-                TEXT[ korean ] = "ÀüÃ¼¿¡";
+                TEXT[ korean ] = "¸ğµÎ¿¡ ´ëÇØ";
                 TEXT[ turkish ] = "Tümü için";
                 TEXT[ language_user1 ] = " ";
             };
@@ -9271,7 +9271,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ english_us ] = "Dots At Bottom";
                 TEXT[ chinese_simplified ] = "µãÏòÏÂ";
                 TEXT[ russian ] = "Òî÷êè ñíèçó";
-                TEXT[ polish ] = "Punkty na dole";
+                TEXT[ polish ] = "Kropki na dole";
                 TEXT[ japanese ] = "ÄŞ¯Ä‰º";
                 TEXT[ chinese_traditional ] = "ÂI¦V¤U";
                 TEXT[ arabic ] = "äŞÇØ ÃÓİá";
@@ -9297,7 +9297,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ english_us ] = "Dots In Middle";
                 TEXT[ chinese_simplified ] = "ÖĞÏòµã";
                 TEXT[ russian ] = "Òî÷êè ïî öåíòğó";
-                TEXT[ polish ] = "Punkty w œrodku";
+                TEXT[ polish ] = "Kropki w œrodku";
                 TEXT[ japanese ] = "ÄŞ¯Ä’†‰›";
                 TEXT[ chinese_traditional ] = "¤¤¦VÂI";
                 TEXT[ arabic ] = "äŞÇØ İí ÇáæÓØ";
@@ -10552,7 +10552,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ chinese_traditional ] = "¾ã­Ó¤½¦¡";
             Text[ arabic ] = "ÕíÛÉ ßÇãáÉ";
             Text[ greek ] = "Ïëüêëçñïò ôığïò";
-            Text[ korean ] = "ÀüÃ¼ ¼ö½Ä";
+            Text[ korean ] = "ÃÑ ¼ö½Ä";
             Text[ turkish ] = "Tüm formül";
             Text[ language_user1 ] = " ";
         };
@@ -10584,7 +10584,7 @@ ToolBox RID_MATH_TOOLBOX
             Text[ chinese_traditional ] = "§ó·s";
             Text[ arabic ] = "ÊÍÏíË";
             Text[ greek ] = "Åíçìİñùóç";
-            Text[ korean ] = "»õ·Î °íÄ§";
+            Text[ korean ] = "°»½Å";
             Text[ turkish ] = "Güncelle";
             Text[ language_user1 ] = " ";
         };
