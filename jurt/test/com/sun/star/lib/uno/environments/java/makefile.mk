@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 09:12:38 $
+#   last change: $Author: vg $ $Date: 2003-10-09 10:14:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,6 @@ TARGET := test_com_sun_star_lib_uno_environments_java
 
 PACKAGE := com$/sun$/star$/lib$/uno$/environments$/java
 JAVATESTFILES := java_environment_Test.java
-JARFILES := ridl.jar sandbox.jar
+JARFILES := ridl.jar
 
 .INCLUDE: javaunittest.mk
