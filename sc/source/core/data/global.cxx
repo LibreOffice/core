@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-06-25 14:13:16 $
+ *  last change: $Author: er $ $Date: 2001-07-02 09:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef _UNOTOOLS_INTLWRAPPER_HXX
 #include <unotools/intlwrapper.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
 
 #include "global.hxx"
 #include "scresid.hxx"
@@ -145,7 +148,7 @@ String**        ScGlobal::ppRscString = NULL;
 LanguageType    ScGlobal::eLnge = LANGUAGE_SYSTEM;
 ::com::sun::star::lang::Locale*     ScGlobal::pLocale = NULL;
 CharClass*  ScGlobal::pCharClass = NULL;
-LocaleDataWrapper* ScGlobal::pLocaleData = NULL;
+SvtSysLocale*   ScGlobal::pSysLocale = NULL;
 CalendarWrapper* ScGlobal::pCalendar = NULL;
 CollatorWrapper* ScGlobal::pCollator = NULL;
 CollatorWrapper* ScGlobal::pCaseCollator = NULL;
@@ -597,7 +600,7 @@ void ScGlobal::Init()
     ConvertLanguageToIsoNames( Application::GetSettings().GetLanguage(), aLanguage, aCountry );
     pLocale = new ::com::sun::star::lang::Locale( aLanguage, aCountry, EMPTY_STRING );
     pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), *pLocale );
-    pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), *pLocale );
+    pSysLocale = new SvtSysLocale;
     pCalendar = new CalendarWrapper( ::comphelper::getProcessServiceFactory() );
     pCalendar->loadDefaultCalendar( *pLocale );
     pCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
@@ -707,7 +710,7 @@ void ScGlobal::Clear()
     DELETEZ(pCaseCollator);
     DELETEZ(pCollator);
     DELETEZ(pCalendar);
-    DELETEZ(pLocaleData);
+    DELETEZ(pSysLocale);
     DELETEZ(pCharClass);
     DELETEZ(pLocale);
     DELETEZ(pScIntlWrapper);

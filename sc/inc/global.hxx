@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:21:28 $
+ *  last change: $Author: er $ $Date: 2001-07-02 09:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,7 @@ class SvNumberFormatter;
 class ScUnitConverter;
 class International;
 class CharClass;
-class LocaleDataWrapper;
+class SvtSysLocale;
 class CalendarWrapper;
 class CollatorWrapper;
 class IntlWrapper;
@@ -551,7 +551,7 @@ class ScGlobal
 public:
     static ::com::sun::star::lang::Locale*      pLocale;
     static CharClass*           pCharClass;
-    static LocaleDataWrapper*   pLocaleData;
+    static SvtSysLocale*        pSysLocale;
     static CalendarWrapper*     pCalendar;
     static CollatorWrapper*     pCollator;
     static CollatorWrapper*     pCaseCollator;

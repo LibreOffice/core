@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:05:33 $
+ *  last change: $Author: er $ $Date: 2001-07-02 09:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 #include "global.hxx"
@@ -1260,11 +1260,11 @@ __EXPORT ScPostIt::~ScPostIt()
 void ScPostIt::AutoSetText( const String& rNewText )
 {
     aStrText   = rNewText;
-    aStrDate   = ScGlobal::pLocaleData->getDate( Date() );
+    aStrDate   = ScGlobal::pSysLocale->GetLocaleData().getDate( Date() );
 
     //  Der Einheitlichkeit halber das Datum immer ohne Uhrzeit (wie im Writer)
 //  aStrDate  += ", ";
-//  aStrDate  += ScGlobal::pLocaleData->getTime( Time() );
+//  aStrDate  += ScGlobal::pSysLocale->GetLocaleData().getTime( Time() );
 
     SvtUserOptions aUserOpt;
     aStrAuthor = aUserOpt.GetID();
