@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2001-06-21 16:55:32 $
+#   last change: $Author: fs $ $Date: 2001-07-19 12:00:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,22 +78,22 @@ all: \
 
 .IF "$(GUI)" == "UNX"
 
-$(MISC)$/unpacked_$(TARGET)_lib : $(OS)$(COM)lib.zip
-    +unzip -o -d $(LB) $(OS)$(COM)lib.zip && unzip -o -d $(LB) $(OS)$(COM)runtime.zip && $(TOUCH) $@
+$(MISC)$/unpacked_$(TARGET)_lib : $(OS)$(COM)$(CPU)lib.zip
+    +unzip -o -d $(LB) $(OS)$(COM)$(CPU)lib.zip && unzip -o -d $(LB) $(OS)$(COM)$(CPU)runtime.zip && $(TOUCH) $@
 
 .ELSE
 
-$(MISC)$/unpacked_$(TARGET)_lib : $(OS)$(COM)lib.zip
-    +unzip -o -d $(LB) $(OS)$(COM)lib.zip && \
+$(MISC)$/unpacked_$(TARGET)_lib : $(OS)$(COM)$(CPU)lib.zip
+    +unzip -o -d $(LB) $(OS)$(COM)$(CPU)lib.zip && \
     $(TOUCH) $@
 
 .ENDIF
 
-$(MISC)$/unpacked_$(TARGET)_inc : $(OS)$(COM)inc.zip
-    +unzip -o -d $(INCCOM) $(OS)$(COM)inc.zip && $(TOUCH)	$@
+$(MISC)$/unpacked_$(TARGET)_inc : $(OS)$(COM)$(CPU)inc.zip
+    +unzip -o -d $(INCCOM) $(OS)$(COM)$(CPU)inc.zip && $(TOUCH)	$@
 
-$(BIN)$/mozruntime.zip : $(OS)$(COM)runtime.zip
-    +$(COPY) $(OS)$(COM)runtime.zip $(BIN)$/mozruntime.zip
+$(BIN)$/mozruntime.zip : $(OS)$(COM)$(CPU)runtime.zip
+    +$(COPY) $(OS)$(COM)$(CPU)runtime.zip $(BIN)$/mozruntime.zip
 
 .INCLUDE :  target.mk
 
