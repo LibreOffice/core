@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-02 21:12:47 $
+ *  last change: $Author: kz $ $Date: 2001-10-12 21:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,4 +373,5 @@ String STR_SW_TEAM_NAMES
 {
     TEXT = "Michael Brauer, Martin Gallwey, Thomas Lange, Andreas Martens, Caolan McNamara, Frank Meies, Juergen Pingel, Oliver Specht, Daniel Vogelheim";
 };
+
 
