@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2352,10 +2352,12 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, USHORT nRangeCnt, USHORT* pRanges
             else if ( eMode==SC_SIZE_DIRECT || eMode==SC_SIZE_ORIGINAL )
             {
                 if (nSizeTwips)
+                {
                     pDoc->SetRowHeightRange( nStartNo, nEndNo, nTab, nSizeTwips );
+                    pDoc->SetManualHeight( nStartNo, nEndNo, nTab, TRUE );          // height was set manually
+                }
                 if ( eMode != SC_SIZE_ORIGINAL )
                     pDoc->ShowRows( nStartNo, nEndNo, nTab, nSizeTwips != 0 );
-                pDoc->SetManualHeight( nStartNo, nEndNo, nTab, TRUE );      // Manual-Flag
             }
             else if ( eMode==SC_SIZE_SHOW )
             {
