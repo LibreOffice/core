@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTabPage.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 13:02:14 $
+ *  last change:$Date: 2004-01-05 20:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,18 +60,6 @@
  ************************************************************************/
 package mod._toolkit;
 
-import java.awt.Robot;
-import java.awt.event.InputEvent;
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.DesktopTools;
-import util.SOfficeFactory;
-
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleAction;
@@ -93,6 +81,20 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XURLTransformer;
+
+import java.awt.Robot;
+import java.awt.event.InputEvent;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.DesktopTools;
+import util.SOfficeFactory;
 
 
 /**
@@ -130,7 +132,7 @@ public class AccessibleTabPage extends TestCase {
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
                                                         DesktopTools.createDesktop(
-        (XMultiServiceFactory) Param.getMSF()));
+                                                                (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
@@ -199,7 +201,8 @@ public class AccessibleTabPage extends TestCase {
         }
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) tParam.getMSF());
 
         try {
             log.println("creating a text document");
@@ -224,8 +227,8 @@ public class AccessibleTabPage extends TestCase {
         XURLTransformer urlTransf = null;
 
         try {
-            XInterface transf = (XInterface) ( (XMultiServiceFactory) tParam.getMSF())
-                                                   .createInstance("com.sun.star.util.URLTransformer");
+            XInterface transf = (XInterface) ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+                                        "com.sun.star.util.URLTransformer");
             urlTransf = (XURLTransformer) UnoRuntime.queryInterface(
                                 XURLTransformer.class, transf);
         } catch (com.sun.star.uno.Exception e) {
@@ -250,8 +253,8 @@ public class AccessibleTabPage extends TestCase {
         XInterface oObj = null;
 
         try {
-            oObj = (XInterface) ( (XMultiServiceFactory) tParam.getMSF())
-                                      .createInstance("com.sun.star.awt.Toolkit");
+            oObj = (XInterface) ((XMultiServiceFactory) tParam.getMSF()).createInstance(
+                           "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
@@ -322,15 +325,6 @@ public class AccessibleTabPage extends TestCase {
     }
 
     protected void closeDoc() {
-        XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
-                                    XCloseable.class, xTextDoc);
-
-        try {
-            closer.close(true);
-        } catch (com.sun.star.util.CloseVetoException e) {
-            log.println("Couldn't close document " + e.getMessage());
-        } catch (com.sun.star.lang.DisposedException e) {
-            log.println("Couldn't close document " + e.getMessage());
-        }
+        util.DesktopTools.closeDoc(xTextDoc);
     }
 }
