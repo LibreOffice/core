@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-05 12:47:57 $
+ *  last change: $Author: pb $ $Date: 2001-07-11 15:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ private:
     DECL_LINK(          NewFolderHdl_Impl, SvtTemplateWindow* );
     DECL_LINK(          SendFocusHdl_Impl, SvtTemplateWindow* );
     DECL_LINK(          OKHdl_Impl, PushButton* );
+    DECL_LINK(          OrganizerHdl_Impl, PushButton* );
     DECL_LINK(          UpdateHdl_Impl, Timer* );
 
     void                UpdateDocumentTemplates_Impl();
