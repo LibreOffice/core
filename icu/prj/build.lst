@@ -1,3 +1,4 @@
 ic  icu :	solenv NULL
 ic	icu		usr1	-	all	ic_mkout NULL
-ic	icu		nmake	-	all	ic_icu	NULL
+ic	icu		nmake	-	u	ic_icu	NULL
+ic	icu		nmake	-	w,vc7	ic_icu	NULL
