@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:30:38 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ ToolBox RID_TOOLBOX
             Text[ japanese ] = "γƒγ‚Ώγƒ³";
             Text[ chinese_traditional ] = "ζ‡δ»¤ζ‰ι•";
             Text[ arabic ] = "ÒΡ";
-            Text[ greek ] = "Πεδίο επιλογής";
+            Text[ greek ] = "Κουμπί";
             Text[ korean ] = "λ²„νΌ";
             Text[ turkish ] = "Dόπme";
             Text[ language_user1 ] = " ";
@@ -194,7 +194,7 @@ ToolBox RID_TOOLBOX
             Text[ japanese ] = "γƒγ‚§γƒƒγ‚―γƒγƒƒγ‚―γ‚Ή";
             Text[ chinese_traditional ] = "ζ Έε–ζ–Ήε΅";
             Text[ arabic ] = "ΞΗδΙ ΗΞΚνΗΡ";
-            Text[ greek ] = "Πεδίο σήμανσης";
+            Text[ greek ] = "Πλαίσιο επιλογής";
             Text[ korean ] = "ν™•μΈλ€";
             Text[ turkish ] = "Kontrol Kutusu";
             Text[ language_user1 ] = " ";
@@ -229,7 +229,7 @@ ToolBox RID_TOOLBOX
             Text[ japanese ] = "ε›³θ΅¨η•ªε·γƒγƒƒγ‚―γ‚Ή";
             Text[ chinese_traditional ] = "ζ¨™η±¤ζ¬„δ½";
             Text[ arabic ] = "ΘΨΗήΙ ΪδζδΙ";
-            Text[ greek ] = "Πεδίο επιγραφής";
+            Text[ greek ] = "Πεδίο επισήμανσης";
             Text[ korean ] = "λ μ΄λΈ” ν•„λ“";
             Text[ turkish ] = "Etiket alanύ";
             Text[ language_user1 ] = " ";
@@ -264,7 +264,7 @@ ToolBox RID_TOOLBOX
             Text[ japanese ] = "γƒªγ‚Ήγƒγƒγƒƒγ‚―γ‚Ή";
             Text[ chinese_traditional ] = "ζΈ…ε–®ζ–Ήε΅";
             Text[ arabic ] = "γΡΘΪ ήΗΖγΙ";
-            Text[ greek ] = "Πεδίο λίστας";
+            Text[ greek ] = "Πλαίσιο καταλόγου";
             Text[ korean ] = "λª©λ΅ μƒμ";
             Text[ turkish ] = "Liste kutusu";
             Text[ language_user1 ] = " ";
@@ -337,7 +337,7 @@ ToolBox RID_TOOLBOX
             Text[ greek ] = "Πλαίσιο ομαδοποίησης";
             Text[ korean ] = "κ·Έλ£Ή μƒμ";
             Text[ turkish ] = "Ηoklu Kutu";
-            Text[ language_user1 ] = "; German should be \"Rahmen\"";
+            Text[ language_user1 ] = "; ; German should be \"Rahmen\"";
             Text[ catalan ] = "Control del marc";
             Text[ finnish ] = "Ryhmδruutu";
             Text[ thai ] = "ΰΈΰΈ¥ΰΉΰΈ­ΰΈ‡ΰΈ—ΰΈµΰΉΰΈΰΈ±ΰΈ”ΰΉ€ΰΈ›ΰΉ‡ΰΈ™ΰΈΰΈ¥ΰΈΈΰΉΰΈ΅";
@@ -389,7 +389,7 @@ ToolBox RID_TOOLBOX
             Text[ english_us ] = "Date Field";
             Text[ portuguese ] = "Campo de data";
             Text[ russian ] = "Οξλε δΰςϋ";
-            Text[ greek ] = "DateField";
+            Text[ greek ] = "Πεδίο ημερομηνίας";
             Text[ dutch ] = "Datumveld";
             Text[ french ] = "Champ de date";
             Text[ spanish ] = "Campo de fecha";
@@ -422,7 +422,7 @@ ToolBox RID_TOOLBOX
             Text[ english_us ] = "Numeric Field";
             Text[ portuguese ] = "Campo numιrico";
             Text[ russian ] = "Χθρλξβξε οξλε";
-            Text[ greek ] = "NumericField";
+            Text[ greek ] = "Αριθμητικό πεδίο";
             Text[ dutch ] = "Numeriek veld";
             Text[ french ] = "Champ numιrique";
             Text[ spanish ] = "Campo numιrico";
@@ -455,7 +455,7 @@ ToolBox RID_TOOLBOX
             Text[ english_us ] = "Formatted Field";
             Text[ portuguese ] = "Campo formatado";
             Text[ russian ] = "Οξλε τξπμΰςθπξβΰνθÿ";
-            Text[ greek ] = "FormattedField";
+            Text[ greek ] = "Μορφοποιημένο πεδίο";
             Text[ dutch ] = "Opgemaakt veld";
             Text[ french ] = "Champ formatι";
             Text[ spanish ] = "Campo formateado";
@@ -488,7 +488,7 @@ ToolBox RID_TOOLBOX
             Text[ english_us ] = "File Selection";
             Text[ portuguese ] = "Selecηγo de ficheiro";
             Text[ russian ] = "Βϋαξπ τΰιλΰ";
-            Text[ greek ] = "FileControl";
+            Text[ greek ] = "Επιλογή αρχείου";
             Text[ dutch ] = "Bestandselectie";
             Text[ french ] = "Sιlection de fichier";
             Text[ spanish ] = "Selecciσn de archivo";
@@ -603,7 +603,7 @@ ToolBox RID_TOOLBOX
             Text[ japanese ] = "γ‚ªγƒ—γ‚·γƒ§γƒ³γƒγƒƒγ‚―γ‚Ή";
             Text[ chinese_traditional ] = "ιΈι …ζ¬„δ½";
             Text[ arabic ] = "ÒΡ ΞνΗΡ";
-            Text[ greek ] = "Πεδίο επιλογών";
+            Text[ greek ] = "Κουμπί επιλογών";
             Text[ korean ] = "μµμ… λ²„νΌ";
             Text[ turkish ] = "Seηenek dόπmesi";
             Text[ language_user1 ] = " ";
@@ -796,7 +796,7 @@ ToolBox RID_TOOLBOX
             Text[ english_us ] = "Time Field";
             Text[ portuguese ] = "Campo horαrio";
             Text[ russian ] = "Οξλε βπεμενθ";
-            Text[ greek ] = "TimeField";
+            Text[ greek ] = "Πεδίο ώρας";
             Text[ dutch ] = "Tijdveld";
             Text[ french ] = "Champ horaire";
             Text[ spanish ] = "Campo horario";
@@ -829,7 +829,7 @@ ToolBox RID_TOOLBOX
             Text[ english_us ] = "Currency Field";
             Text[ portuguese ] = "Campo para moeda";
             Text[ russian ] = "Δενεζνξε οξλε";
-            Text[ greek ] = "CurrencyField";
+            Text[ greek ] = "Πεδίο νομίσματος";
             Text[ dutch ] = "Valutaveld";
             Text[ french ] = "Champ monιtaire";
             Text[ spanish ] = "Campo de moneda";
@@ -862,7 +862,7 @@ ToolBox RID_TOOLBOX
             Text[ english_us ] = "Pattern Field";
             Text[ portuguese ] = "Campo mascarado";
             Text[ russian ] = "Οξλε ρ μΰρκξι ββξδΰ";
-            Text[ greek ] = "PatternField";
+            Text[ greek ] = "Πεδίο μοτίβου";
             Text[ dutch ] = "Patroonveld";
             Text[ french ] = "Champ masquι";
             Text[ spanish ] = "Campo enmascarado";
@@ -957,6 +957,7 @@ ToolBox RID_TOOLBOX
         };
     };
 };
+
 
 
 
