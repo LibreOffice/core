@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:31:40 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:33:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ ExcRowBlock* ExcTable::pRowBlock = NULL;
 ExcTable::ExcTable( RootData* pRD ) :
     ExcRoot( pRD ),
     nScTab( 0 ),
-    nExcTab( EXC_TABBUF_INVALID ),
+    nExcTab( EXC_NOTAB ),
     pDefRowXFs( NULL )
 {   }
 
@@ -196,7 +196,7 @@ ExcTable::ExcTable( RootData* pRD ) :
 ExcTable::ExcTable( RootData* pRD, UINT16 nScTable ) :
     ExcRoot( pRD ),
     nScTab( nScTable ),
-    nExcTab( pRD->pER->GetTabIdBuffer().GetXclTab( nScTable ) ),
+    nExcTab( pRD->pER->GetTabInfo().GetXclTab( nScTable ) ),
     pDefRowXFs( NULL )
 {   }
 
@@ -252,7 +252,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     RootData&           rR              = *pExcRoot;
     const XclExpRoot&   rRoot           = *rR.pER;
     ScDocument&         rDoc            = *rR.pDoc;
-    XclExpTabIdBuffer&  rTabBuffer      = rRoot.GetTabIdBuffer();
+    XclExpTabInfo&      rTabInfo      = rRoot.GetTabInfo();
 
     if ( rR.eDateiTyp < Biff8 )
         Add( new ExcBofW );
@@ -261,9 +261,9 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
 
     UINT16  nC;
     String  aTmpString;
-    UINT16  nScTabCount     = rTabBuffer.GetScTabCount();
-    UINT16  nExcTabCount    = rTabBuffer.GetXclTabCount();
-    UINT16  nCodenames      = rTabBuffer.GetCodenameCount();
+    UINT16  nScTabCount     = rTabInfo.GetScTabCount();
+    UINT16  nExcTabCount    = rTabInfo.GetXclTabCount();
+    UINT16  nCodenames      = rTabInfo.GetXclCodenameCount();
 
     ExcNameList*    pNameList   = rR.pNameList  = new ExcNameList( rR );
 
@@ -279,7 +279,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         if( rR.bWriteVBAStorage )
         {
             Add( new XclObproj );
-            const String*   p = rR.pExtDocOpt->GetCodename();
+            const String*   p = rRoot.GetExtDocOptions().GetCodename();
             if( p )
                 Add( new XclCodename( *p ) );
         }
@@ -292,7 +292,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     String          aName;
 
     for( nC = 0 ; nC < nScTabCount ; nC++ )
-        if( rTabBuffer.IsExportTable( nC ) )
+        if( rTabInfo.IsExportTab( nC ) )
         {
             rDoc.GetName( nC, aTmpString );
             *ExcDocument::pTabNames << aTmpString;
@@ -314,7 +314,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         Add( pExcExtShtList );
 
         for( nC = 0 ; nC < nScTabCount ; nC++ )
-            if( rTabBuffer.IsExportTable( nC ) )
+            if( rTabInfo.IsExportTab( nC ) )
                 pExcExtShtList->Add( new ExcExternsheet( &rR, nC ) );
 
         // Names
@@ -322,6 +322,8 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
 
         Add( new XclExpWindowProtection(false) );
         Add( new XclExpDocProtection(rDoc.IsDocProtected() == TRUE) );
+        Add( new XclExpBoolRecord( 0x0013, false ) );   // PASSWORD
+        Add( new XclExpWindow1( rRoot ) );
         Add( new ExcDummy_040 );
         Add( new Exc1904( rDoc ) );
         Add( new ExcDummy_041 );
@@ -335,7 +337,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         // Bundlesheet
         ExcBundlesheetBase* pBS;
         for( nC = 0 ; nC < nScTabCount ; nC++ )
-            if( rTabBuffer.IsExportTable( nC ) )
+            if( rTabInfo.IsExportTab( nC ) )
             {
                 pBS = new ExcBundlesheet( rR, nC );
                 Add( pBS );
@@ -350,7 +352,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
             Add( new XclExpWindowProtection(false));
         Add( new XclExpDocProtection(rDoc.IsDocProtected() == TRUE) );
         Add( new ExcDummy8_040 );
-        Add( new ExcWindow18( rR ) );
+        Add( new XclExpWindow1( rRoot ) );
         Add( new Exc1904( rDoc ) );
         Add( new ExcDummy8_041 );
 
@@ -388,7 +390,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         // Bundlesheet
         ExcBundlesheetBase* pBS;
         for( nC = 0 ; nC < nScTabCount ; nC++ )
-            if( rTabBuffer.IsExportTable( nC ) )
+            if( rTabInfo.IsExportTab( nC ) )
             {
                 pBS = new ExcBundlesheet8( rR, nC );
                 Add( pBS );
@@ -425,12 +427,12 @@ void ExcTable::FillAsTable( void )
     RootData&           rR          = *pExcRoot;
     const XclExpRoot&   rRoot       = *rR.pER;
     ScDocument&         rDoc        = rRoot.GetDoc();
-    XclExpTabIdBuffer&  rTabBuffer  = rRoot.GetTabIdBuffer();
+    XclExpTabInfo&      rTabInfo    = rRoot.GetTabInfo();
     XclExpXFBuffer&     rXFBuffer   = rRoot.GetXFBuffer();
 
-    if( nScTab >= rTabBuffer.GetScTabCount() )
+    if( nScTab >= rTabInfo.GetScTabCount() )
     {
-        CodenameList*       pL = rR.pExtDocOpt->GetCodenames();
+        CodenameList*       pL = rRoot.GetExtDocOptions().GetCodenames();
         if( pL )
         {
             const String*   p = pL->Next();
@@ -621,7 +623,7 @@ void ExcTable::FillAsTable( void )
 
     // at least one ROW rec
     if( !bIter )
-        AddRow( new ExcRow( 0, nScTab, 0, 0, EXC_XF_DEFAULTCELL, rDoc, aExcOLRow, *this ) );
+        AddRow( new ExcRow( rRoot, 0, nScTab, 0, 0, EXC_XF_DEFAULTCELL, rDoc, aExcOLRow, *this ) );
 
     while( bIter )
     {
@@ -636,7 +638,7 @@ void ExcTable::FillAsTable( void )
         // add ROW recs from empty rows
         while( nPrevRow < nRow )
         {
-            ExcRow* pRow = new ExcRow( nPrevRow, nScTab, 0, 0, EXC_XF_DEFAULTCELL, rDoc, aExcOLRow, *this );
+            ExcRow* pRow = new ExcRow( rRoot, nPrevRow, nScTab, 0, 0, EXC_XF_DEFAULTCELL, rDoc, aExcOLRow, *this );
             AddUsedRow( pRow );
             nPrevRow++;
         }
@@ -707,7 +709,7 @@ void ExcTable::FillAsTable( void )
                     // current cell number format
                     sal_uInt32 nCellNumFmt = pPatt ?
                         static_cast< const SfxUInt32Item& >( pPatt->GetItem( ATTR_VALUE_FORMAT ) ).GetValue() :
-                        rR.pER->GetNumFmtBuffer().GetStandardFormat();
+                        rRoot.GetNumFmtBuffer().GetStandardFormat();
                     // alternative number format passed to XF buffer
                     sal_uInt32 nFmlaNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND;
 
@@ -723,7 +725,7 @@ void ExcTable::FillAsTable( void )
                         format is Boolean don't write that ugly special format. */
                     else if( (pFormCell->GetFormatType() == NUMBERFORMAT_LOGICAL) &&
                             (rFormatter.GetType( nCellNumFmt ) == NUMBERFORMAT_LOGICAL) )
-                        nFmlaNumFmt = rR.pER->GetNumFmtBuffer().GetStandardFormat();
+                        nFmlaNumFmt = rRoot.GetNumFmtBuffer().GetStandardFormat();
 
                     ExcFormula* pFmlaCell = new ExcFormula(
                         aScPos, pPatt, rR, nFmlaNumFmt, *pFormCell->GetCode(),
@@ -865,7 +867,7 @@ void ExcTable::FillAsTable( void )
             {
                 sal_uInt32 nHandle = ((const SfxUInt32Item*)pItem)->GetValue();
                 if( !pRecDval )
-                    pRecDval = new XclExpDval( *rR.pER );
+                    pRecDval = new XclExpDval( rRoot );
                 ScRange aRange( aScPos );
                 aRange.aEnd.SetCol( aIterator.GetEndCol() );
                 pRecDval->InsertCellRange( aRange, nHandle );
@@ -885,7 +887,7 @@ void ExcTable::FillAsTable( void )
         // new row -> add previous ROW rec
         if( !bIter || (nPrevRow < nRow) )
         {
-            AddRow( new ExcRow( nPrevRow, nScTab, nColMin, nCol, EXC_XF_DEFAULTCELL, rDoc, aExcOLRow, *this ) );
+            AddRow( new ExcRow( rRoot, nPrevRow, nScTab, nColMin, nCol, EXC_XF_DEFAULTCELL, rDoc, aExcOLRow, *this ) );
 
             nPrevRow++;
             nColMin = aIterator.GetStartCol();
@@ -899,7 +901,7 @@ void ExcTable::FillAsTable( void )
     while( nRow < nMaxFlagRow )
     {
         nRow++;
-        ExcRow* pRow = new ExcRow( nRow, nScTab, 0, 0, EXC_XF_DEFAULTCELL, rDoc, aExcOLRow, *this );
+        ExcRow* pRow = new ExcRow( rRoot, nRow, nScTab, 0, 0, EXC_XF_DEFAULTCELL, rDoc, aExcOLRow, *this );
         AddUsedRow( pRow );
     }
 
@@ -908,7 +910,7 @@ void ExcTable::FillAsTable( void )
     rR.pCellMerging = NULL;
     // label ranges
     if( rR.eDateiTyp >= Biff8 )
-        Add( new XclExpLabelranges( *rR.pER ) );
+        Add( new XclExpLabelranges( rRoot ) );
     // insert data validation
     if( pRecDval )
         Add( pRecDval );
@@ -954,20 +956,20 @@ void ExcTable::FillAsTable( void )
         }
 
         // WINDOW2
-        Add( new ExcWindow28( *rR.pER, nScTab ) );
+        Add( new ExcWindow28( rRoot, nScTab ) );
     }
 
     if( rR.eDateiTyp >= Biff8 )
     {
         // web queries
-        Add( new XclExpWebQueryBuffer( *rR.pER ) );
+        Add( new XclExpWebQueryBuffer( rRoot ) );
 
         // conditional formats
-        Add( new XclExpCondFormatBuffer( *rR.pER ) );
+        Add( new XclExpCondFormatBuffer( rRoot ) );
 
         if( rR.bWriteVBAStorage )
         {
-            CodenameList*       pL = rR.pExtDocOpt->GetCodenames();
+            CodenameList*       pL = rRoot.GetExtDocOptions().GetCodenames();
             if( pL )
             {
                 const String* p = nExcTab ? pL->Next() : pL->First();
@@ -1083,16 +1085,18 @@ void ExcDocument::ReadDoc( void )
 {
     aHeader.FillAsHeader( aBundleSheetRecList );
 
-    sal_uInt16 nScTabCount = GetTabIdBuffer().GetMaxScTabCount();
-    while( GetScTab() < nScTabCount )
+    USHORT nScTabCount = ::std::max< USHORT >(
+        GetTabInfo().GetScTabCount(), GetTabInfo().GetXclCodenameCount() );
+
+    while( GetCurrScTab() < nScTabCount )
     {
-        if( GetTabIdBuffer().IsExportTable( GetScTab() ) )
+        if( GetTabInfo().IsExportTab( GetCurrScTab() ) )
         {
-            ExcTable* pTab = new ExcTable( mpRD, GetScTab() );
+            ExcTable* pTab = new ExcTable( mpRD, GetCurrScTab() );
             maTableList.Append( pTab );
             pTab->FillAsTable();
         }
-        IncScTab();
+        IncCurrScTab();
     }
 
     if ( GetBiff() >= xlBiff8 )
