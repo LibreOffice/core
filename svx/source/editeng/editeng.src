@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:39:26 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ String RID_EDITUNDO_DEL
     TEXT[ czech ] = "Smazat";
     TEXT[ hebrew ] = "‮מחיקה‬";
     TEXT[ hindi ] = "मिटाओ";
+    TEXT[ slovak ] = "Zmazať";
 };
 
 String RID_EDITUNDO_MOVE
@@ -126,6 +127,7 @@ String RID_EDITUNDO_MOVE
     TEXT[ czech ] = "Přesunout";
     TEXT[ hebrew ] = "‮הזזה‬";
     TEXT[ hindi ] = "स्थानान्तर";
+    TEXT[ slovak ] = "Presunúť";
 };
 
 String RID_EDITUNDO_INSERT
@@ -159,6 +161,7 @@ String RID_EDITUNDO_INSERT
     TEXT[ czech ] = "Vložit";
     TEXT[ hebrew ] = "‮הוספה‬";
     TEXT[ hindi ] = "जोड़ो";
+    TEXT[ slovak ] = "Vložiť";
 };
 
 String RID_EDITUNDO_REPLACE
@@ -192,6 +195,7 @@ String RID_EDITUNDO_REPLACE
     TEXT[ czech ] = "Nahradit";
     TEXT[ hebrew ] = "‮החלפה‬";
     TEXT[ hindi ] = "प्रतिस्थापन";
+    TEXT[ slovak ] = "Nahradiť";
 };
 
 String RID_EDITUNDO_SETATTRIBS
@@ -225,6 +229,7 @@ String RID_EDITUNDO_SETATTRIBS
     TEXT[ czech ] = "Použít atributy";
     TEXT[ hebrew ] = "‮ישום תכונות‬";
     TEXT[ hindi ] = "ऐट्रिब्यूट्स लागू करो";
+    TEXT[ slovak ] = "Použiť atribúty";
 };
 
 String RID_EDITUNDO_RESETATTRIBS
@@ -258,6 +263,7 @@ String RID_EDITUNDO_RESETATTRIBS
     TEXT[ czech ] = "Obnovit atributy";
     TEXT[ hebrew ] = "‮איפוס תכונות‬";
     TEXT[ hindi ] = "ऐट्रिब्यूट्स रिसेट्ट करो";
+    TEXT[ slovak ] = "Obnoviť atribúty";
 };
 
 String RID_EDITUNDO_INDENT
@@ -290,6 +296,7 @@ String RID_EDITUNDO_INDENT
     Text[ czech ] = "Odsazení";
     Text[ hebrew ] = "‮כניסה‬";
     Text[ hindi ] = "इन्डेन्ट";
+    Text[ slovak ] = "Odsadenie";
 };
 
 String RID_EDITUNDO_SETSTYLE
@@ -323,6 +330,7 @@ String RID_EDITUNDO_SETSTYLE
     TEXT[ czech ] = "Použít styly";
     TEXT[ hebrew ] = "‮ישום סגנונות‬";
     TEXT[ hindi ] = "शैलियों को लागू करो";
+    TEXT[ slovak ] = "Použiť štýly";
 };
 
 String RID_EDITUNDO_TRANSLITERATE
@@ -354,6 +362,7 @@ String RID_EDITUNDO_TRANSLITERATE
     TEXT[ czech ] = "Velikost/znaky";
     TEXT[ hebrew ] = "‮סיווג אותיות‬";
     TEXT[ hindi ] = "केस/अक्षरें";
+    TEXT[ slovak ] = "Veľkosť/znaky";
 };
 
 
@@ -392,6 +401,7 @@ Menu RID_MENU_SPELL
             Text[ czech ] = "Kontrola pravopisu";
             Text[ hebrew ] = "‮בדיקת איות‬";
             Text[ hindi ] = "~अक्षर की जाँच";
+            Text[ slovak ] = "~Kontrola pravopisu";
         };
         MenuItem
         {
@@ -428,6 +438,7 @@ Menu RID_MENU_SPELL
             Text[ czech ] = "Přidat";
             Text[ hebrew ] = "‮הוספה‬";
             Text[ hindi ] = "~जोड़ो";
+            Text[ slovak ] = "Prid~ať";
         };
         MenuItem
         {
@@ -462,6 +473,7 @@ Menu RID_MENU_SPELL
             Text[ czech ] = "Ignorovat vše";
             Text[ hebrew ] = "‮התעלמות מהכל‬";
             Text[ hindi ] = "सब उपेक्षा करो";
+            Text[ slovak ] = "Ignorovať všetko";
         };
         MenuItem
         {
@@ -498,6 +510,7 @@ Menu RID_MENU_SPELL
             Text[ czech ] = "Automatické opravy";
             Text[ hebrew ] = "‮תיקון אוטומטי‬";
             Text[ hindi ] = "स्वयं ठीक करो";
+            Text[ slovak ] = "Automatické opravy";
         };
     };
 };
@@ -531,6 +544,7 @@ String RID_STR_WORD
     Text[ czech ] = "Slovo je %x";
     Text[ hebrew ] = "‮מילה היא %x‬";
     Text[ hindi ] = "Word is %x";
+    Text[ slovak ] = "Slovo je %x";
 };
 
 String RID_STR_PARAGRAPH
@@ -561,7 +575,10 @@ String RID_STR_PARAGRAPH
     Text[ czech ] = "Odstavec je %x";
     Text[ hebrew ] = "‮פסקה היא %x‬";
     Text[ hindi ] = "Paragraph is %x";
+    Text[ slovak ] = "Odstavec je %x";
 };
+
+
 
 
 
