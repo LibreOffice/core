@@ -2,9 +2,9 @@
  *
  *  $RCSfile: partwnd.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:34 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,72 +61,28 @@
 #ifndef _PARTWND_HXX
 #define _PARTWND_HXX
 
-// includes --------------------------------------------------------------
-/* ASDBG
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
-#include <com/sun/star/beans/PropertyValues.hpp>
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
-#include <com/sun/star/beans/PropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
-#include <com/sun/star/beans/XMultiPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
-#include <com/sun/star/beans/XFastPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XVETOABLECHANGELISTENER_HPP_
-#include <com/sun/star/beans/XVetoableChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
-#include <com/sun/star/beans/XPropertyState.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATECHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertyStateChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTIESCHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertiesChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
-#include <com/sun/star/beans/XPropertyAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
-#include <com/sun/star/beans/XPropertyContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATECHANGEEVENT_HPP_
-#include <com/sun/star/beans/PropertyStateChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYCHANGEEVENT_HPP_
-#include <com/sun/star/beans/PropertyChangeEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
-#include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
-#include <com/sun/star/util/URL.hpp>
-#endif
-*/
+
+namespace com
+{
+    namespace sun
+    {
+        namespace star
+        {
+            namespace frame
+            {
+                class XFrame;
+            };
+        };
+    };
+};
+
 #include "childwin.hxx"
 #include "dockwin.hxx"
 
 // forward ---------------------------------------------------------------
-
-class SfxPartwinFrame_Impl;
 
 // class SfxPartChildWnd_Impl -----------------------------------
 
@@ -147,7 +103,8 @@ public:
 class SfxPartDockWnd_Impl : public SfxDockingWindow
 {
 private:
-    SfxPartwinFrame_Impl*   _pFrame;
+//    SfxPartwinFrame_Impl*   _pFrame;
+    ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > m_xFrame;
 
 protected:
     virtual void            Resize();
@@ -163,7 +120,6 @@ public:
     sal_Bool                    QueryClose();
     virtual void            FillInfo(SfxChildWinInfo&) const;
 };
-
 
 #endif
 

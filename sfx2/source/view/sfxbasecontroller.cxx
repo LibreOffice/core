@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:36 $
+ *  last change: $Author: mba $ $Date: 2000-10-23 12:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,9 +119,10 @@
 #endif
 
 #include <viewimp.hxx>
-#ifndef _SFX_UNOCTITM_HXX
 #include <unoctitm.hxx>
-#endif
+#include <childwin.hxx>
+#include <sfxsids.hrc>
+
 
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
@@ -506,6 +507,17 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
         {
             sal_uInt16 nId = 0;
             ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            if ( sTargetFrameName.compareToAscii( "_beamer" ) == COMPARE_EQUAL )
+            {
+                SfxViewFrame *pFrame = m_pData->m_pViewShell->GetViewFrame();
+                if ( eSearchFlags & ::com::sun::star::frame::FrameSearchFlag::CREATE )
+                    pFrame->SetChildWindow( SID_PARTWIN, TRUE );
+                SfxChildWindow* pChildWin = pFrame->GetChildWindow( SID_PARTWIN );
+                REFERENCE < XDISPATCHPROVIDER > xProv( pChildWin->GetFrame(), ::com::sun::star::uno::UNO_QUERY );
+                if ( xProv.is() )
+                    return xProv->queryDispatch( aURL, sTargetFrameName, eSearchFlags );
+            }
+
             if ( aURL.Protocol.compareToAscii( ".uno:" ) == COMPARE_EQUAL )
             {
                 SfxSlotPool& rPool = SFX_APP()->GetSlotPool( pAct );
