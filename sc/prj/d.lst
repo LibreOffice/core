@@ -1,3 +1,5 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\inc\sc.lst %_DEST%\inc%_EXT%\sc.lst
 ..\%__SRC%\bin\scalc3.exe %_DEST%\bin%_EXT%\scalc3.exe
 ..\%__SRC%\bin\*.sym %_DEST%\bin%_EXT%\*.sym
@@ -10,7 +12,6 @@
 ..\%__SRC%\bin\addin.zip %_DEST%\bin%_EXT%\addin.zip
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
 ..\%__SRC%\misc\sc.csv %_DEST%\inc%_EXT%\sc.csv
-touch: ..\%__SRC%\misc\sc.hid %_DEST%\bin%_EXT%\sc.hid
 ..\%__SRC%\lib\sci.lib %_DEST%\lib%_EXT%\sci.lib
 ..\%__SRC%\lib\sclib.lib %_DEST%\lib%_EXT%\sclib.lib
 ..\%__SRC%\slb\ysclib.lib %_DEST%\lib%_EXT%\ysclib.lib
