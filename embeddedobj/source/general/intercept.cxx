@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2003-10-29 12:59:21 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 using namespace ::com::sun::star;
 
 
-#define IUL 5
+#define IUL 6
 
 
 uno::Sequence< ::rtl::OUString > Interceptor::m_aInterceptedURL(IUL);
@@ -181,6 +181,9 @@ Interceptor::Interceptor( DocumentHolder* pDocHolder )
         RTL_CONSTASCII_USTRINGPARAM(".uno:CloseWin"));
     m_aInterceptedURL[4] = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));
+    m_aInterceptedURL[5] = rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM(".uno:SaveAs"));
+
 }
 
 
@@ -212,11 +215,38 @@ Interceptor::dispatch(
                 URL.Complete == m_aInterceptedURL[4])
         {
             try {
-                m_pDocHolder->GetEmbedObject()->changeState( embed::EmbedStates::EMBED_RUNNING );
+                m_pDocHolder->GetEmbedObject()->changeState( embed::EmbedStates::RUNNING );
             }
             catch( uno::Exception& )
             {
             }
+        }
+        else if ( URL.Complete == m_aInterceptedURL[5] )
+        {
+            uno::Sequence< beans::PropertyValue > aNewArgs = Arguments;
+            sal_Int32 nInd = 0;
+
+            while( nInd < aNewArgs.getLength() )
+            {
+                if ( aNewArgs[nInd].Name.equalsAscii( "SaveTo" ) )
+                {
+                    aNewArgs[nInd].Value <<= sal_True;
+                    break;
+                }
+                nInd++;
+            }
+
+            if ( nInd == aNewArgs.getLength() )
+            {
+                aNewArgs.realloc( nInd + 1 );
+                aNewArgs[nInd].Name = ::rtl::OUString::createFromAscii( "SaveTo" );
+                aNewArgs[nInd].Value <<= sal_True;
+            }
+
+            uno::Reference< frame::XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
+                URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
+            if ( xDispatch.is() )
+                xDispatch->dispatch( URL, aNewArgs );
         }
 }
 
@@ -248,6 +278,14 @@ void Interceptor::GenerateFeatureStateEvent()
                 aStateEvent.State <<= (rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM("($1) ")) + m_pDocHolder->GetTitle() );
 
+            }
+            else if ( i == 5 )
+            {
+                aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
+                aStateEvent.FeatureDescriptor = rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("SaveCopyTo"));
+                aStateEvent.State <<= (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("($3)")));
             }
             else
             {
@@ -331,6 +369,29 @@ Interceptor::addStatusListener(
         m_pStatCL->addInterface(URL.Complete,Control);
         return;
     }
+
+    if(URL.Complete == m_aInterceptedURL[5])
+    {   // SaveAs
+        frame::FeatureStateEvent aStateEvent;
+        aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
+        aStateEvent.FeatureDescriptor = rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("SaveCopyTo"));
+        aStateEvent.IsEnabled = sal_True;
+        aStateEvent.Requery = sal_False;
+        aStateEvent.State <<= (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("($3)")));
+        Control->statusChanged(aStateEvent);
+
+        {
+            osl::MutexGuard aGuard(m_aMutex);
+            if(!m_pStatCL)
+                m_pStatCL =
+                    new StatusChangeListenerContainer(m_aMutex);
+        }
+
+        m_pStatCL->addInterface(URL.Complete,Control);
+        return;
+    }
+
 }
 
 
@@ -388,6 +449,8 @@ Interceptor::queryDispatch(
         return (frame::XDispatch*)this;
     else if(URL.Complete == m_aInterceptedURL[4])
         return (frame::XDispatch*)this;
+    else if(URL.Complete == m_aInterceptedURL[5])
+        return (frame::XDispatch*)this;
     else {
         if(m_xSlaveDispatchProvider.is())
             return m_xSlaveDispatchProvider->queryDispatch(
@@ -421,6 +484,8 @@ Interceptor::queryDispatches(
         else if(m_aInterceptedURL[3] == Requests[i].FeatureURL.Complete)
             aRet[i] = (frame::XDispatch*) this;
         else if(m_aInterceptedURL[4] == Requests[i].FeatureURL.Complete)
+            aRet[i] = (frame::XDispatch*) this;
+        else if(m_aInterceptedURL[5] == Requests[i].FeatureURL.Complete)
             aRet[i] = (frame::XDispatch*) this;
 
     return aRet;
@@ -473,3 +538,4 @@ Interceptor::setMasterDispatchProvider(
     osl::MutexGuard aGuard(m_aMutex);
     m_xMasterDispatchProvider = NewSupplier;
 }
+
