@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-21 11:34:10 $
+ *  last change: $Author: jp $ $Date: 2001-03-22 13:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,9 +388,3 @@ sal_Bool DropTargetHelper::IsDropFormatSupported( const DataFlavor& rFlavor )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
-
-DataFlavorExVector& DropTargetHelper::GetDataFlavorExVector() const
-{
-    return( *mpFormats );
-}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-21 11:34:09 $
+ *  last change: $Author: jp $ $Date: 2001-03-22 13:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,13 +1067,6 @@ DataFlavor TransferableDataHelper::GetFormatDataFlavor( sal_uInt32 nFormat ) con
         aRet = (DataFlavor&) (*mpFormats)[ nFormat ];
 
     return aRet;
-}
-
-// -----------------------------------------------------------------------------
-
-DataFlavorExVector& TransferableDataHelper::GetDataFlavorExVector() const
-{
-    return( *mpFormats );
 }
 
 // -----------------------------------------------------------------------------
