@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-26 12:21:13 $
+ *  last change: $Author: mt $ $Date: 2001-08-10 09:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1149,6 +1149,10 @@ public:
 class UnoDateFieldControl : public UnoEditControl,
                             public ::com::sun::star::awt::XDateField
 {
+private:
+    sal_Int32       mnFirst;
+    sal_Int32       mnLast;
+    sal_Bool        mbLongFormat;
 public:
                     UnoDateFieldControl();
     ::rtl::OUString         GetComponentServiceName();
@@ -1161,6 +1165,8 @@ public:
     // ::com::sun::star::lang::XTypeProvider
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XTextListener
     void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);
@@ -1219,6 +1225,10 @@ public:
 class UnoTimeFieldControl : public UnoEditControl,
                             public ::com::sun::star::awt::XTimeField
 {
+private:
+    sal_Int32       mnFirst;
+    sal_Int32       mnLast;
+
 public:
                         UnoTimeFieldControl();
     ::rtl::OUString     GetComponentServiceName();
@@ -1231,6 +1241,8 @@ public:
     // ::com::sun::star::lang::XTypeProvider
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::awt::XTextListener
     void SAL_CALL textChanged( const ::com::sun::star::awt::TextEvent& rEvent ) throw(::com::sun::star::uno::RuntimeException);

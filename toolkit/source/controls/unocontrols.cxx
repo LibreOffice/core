@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-07 11:18:02 $
+ *  last change: $Author: mt $ $Date: 2001-08-10 09:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+#include <tools/date.hxx>
+#include <tools/time.hxx>
 
 using namespace ::com::sun::star;
 
@@ -3164,6 +3167,9 @@ uno::Reference< beans::XPropertySetInfo > UnoControlDateFieldModel::getPropertyS
 //  ----------------------------------------------------
 UnoDateFieldControl::UnoDateFieldControl()
 {
+    mnFirst = Date( 1, 1, 1900 ).GetDate();
+    mnLast = Date( 31, 12, 2200 ).GetDate();
+    mbLongFormat = sal_False;
 }
 
 ::rtl::OUString UnoDateFieldControl::GetComponentServiceName()
@@ -3185,9 +3191,20 @@ IMPL_XTYPEPROVIDER_START( UnoDateFieldControl )
     UnoEditControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
+void UnoDateFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
+{
+    UnoEditControl::createPeer( rxToolkit, rParentPeer );
+
+    uno::Reference < awt::XDateField > xField( mxPeer, uno::UNO_QUERY );
+    xField->setFirst( mnFirst );
+    xField->setLast( mnLast );
+    xField->setLongFormat( mbLongFormat );
+}
+
+
 void UnoDateFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::RuntimeException)
 {
-    uno::Reference < awt::XDateField >  xField( mxPeer, uno::UNO_QUERY );
+    uno::Reference < awt::XDateField > xField( mxPeer, uno::UNO_QUERY );
     uno::Any aValue;
     if ( !xField->isEmpty() )
         aValue <<= xField->getDate();
@@ -3236,35 +3253,47 @@ sal_Int32 UnoDateFieldControl::getMax() throw(uno::RuntimeException)
 
 void UnoDateFieldControl::setFirst( sal_Int32 Date ) throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoDateFieldControl::setFirst not supported" );
+    mnFirst = Date;
+    if ( mxPeer.is() )
+    {
+        uno::Reference < awt::XDateField > xField( mxPeer, uno::UNO_QUERY );
+        xField->setFirst( Date );
+    }
 }
 
 sal_Int32 UnoDateFieldControl::getFirst() throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoDateFieldControl::getFirst not supported" );
-    return 0;
+    return mnFirst;
 }
 
 void UnoDateFieldControl::setLast( sal_Int32 Date ) throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoDateFieldControl::setLast not supported" );
+    mnLast = Date;
+    if ( mxPeer.is() )
+    {
+        uno::Reference < awt::XDateField > xField( mxPeer, uno::UNO_QUERY );
+        xField->setLast( Date );
+    }
 }
 
 sal_Int32 UnoDateFieldControl::getLast() throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoDateFieldControl::getLast not supported" );
-    return 0;
+    return mnLast;
 }
 
 void UnoDateFieldControl::setLongFormat( sal_Bool bLong ) throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoDateFieldControl::setLongFormat not supported" );
+    mbLongFormat = bLong;
+    if ( mxPeer.is() )
+    {
+        uno::Reference < awt::XDateField > xField( mxPeer, uno::UNO_QUERY );
+        xField->setLongFormat( bLong );
+    }
 }
 
 sal_Bool UnoDateFieldControl::isLongFormat() throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoDateFieldControl::getLongFormat not supported" );
-    return sal_False;
+    return mbLongFormat;
 }
 
 void UnoDateFieldControl::setEmpty() throw(uno::RuntimeException)
@@ -3365,6 +3394,8 @@ uno::Reference< beans::XPropertySetInfo > UnoControlTimeFieldModel::getPropertyS
 //  ----------------------------------------------------
 UnoTimeFieldControl::UnoTimeFieldControl()
 {
+    mnFirst = Time( 0, 0 ).GetTime();
+    mnLast = Time( 23, 59, 59, 99 ).GetTime();
 }
 
 ::rtl::OUString UnoTimeFieldControl::GetComponentServiceName()
@@ -3385,6 +3416,15 @@ IMPL_XTYPEPROVIDER_START( UnoTimeFieldControl )
     getCppuType( ( uno::Reference< awt::XTimeField>* ) NULL ),
     UnoEditControl::getTypes()
 IMPL_XTYPEPROVIDER_END
+
+void UnoTimeFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
+{
+    UnoEditControl::createPeer( rxToolkit, rParentPeer );
+
+    uno::Reference < awt::XTimeField > xField( mxPeer, uno::UNO_QUERY );
+    xField->setFirst( mnFirst );
+    xField->setLast( mnLast );
+}
 
 void UnoTimeFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::RuntimeException)
 {
@@ -3436,24 +3476,32 @@ sal_Int32 UnoTimeFieldControl::getMax() throw(uno::RuntimeException)
 
 void UnoTimeFieldControl::setFirst( sal_Int32 Time ) throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoTimeFieldControl::setFirst not supported" );
+    mnFirst = Time;
+    if ( mxPeer.is() )
+    {
+        uno::Reference < awt::XTimeField > xField( mxPeer, uno::UNO_QUERY );
+        xField->setFirst( mnFirst );
+    }
 }
 
 sal_Int32 UnoTimeFieldControl::getFirst() throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoTimeFieldControl::getFirst not supported" );
-    return 0;
+    return mnFirst;
 }
 
 void UnoTimeFieldControl::setLast( sal_Int32 Time ) throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoTimeFieldControl::setLast not supported" );
+    mnLast = Time;
+    if ( mxPeer.is() )
+    {
+        uno::Reference < awt::XTimeField > xField( mxPeer, uno::UNO_QUERY );
+        xField->setFirst( mnLast );
+    }
 }
 
 sal_Int32 UnoTimeFieldControl::getLast() throw(uno::RuntimeException)
 {
-    DBG_WARNING( "UnoTimeFieldControl::getLast not supported" );
-    return 0;
+    return mnLast;
 }
 
 void UnoTimeFieldControl::setEmpty() throw(uno::RuntimeException)
