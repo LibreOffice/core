@@ -15,9 +15,11 @@ common
 	{
 		*mkout
 		*deliver
+		cvsmodules
         *copyprj
 		__mgrdir
         rsc_once
+        *zipdep
 		BIG_GOODIES
 		BIG_SVX
 		BIG_TOOLS
@@ -89,6 +91,7 @@ common
 		OLD_CHAOS
 		PCLEAN_PATH
 		PRE
+        PRODUCTENVCACHE
 		PRODUCTNAME
 		PROEXT
 		PROFILE
@@ -147,6 +150,7 @@ common
         VCL
 		WST
 		XCLASSPATH
+        ZIPDEP
 	}
 	restore
 	{
@@ -202,6 +206,7 @@ wntmsci7
 	{
 		common
 		{
+			XXX_CVSMODULES_XXX r:\etw\modules
 			SOLARSRC o:\%UPD%
 			*build set mk_tmp=#@unique[#tmp#] ^ set mk_tmp=#@path[#mk_tmp#]#@name[#mk_tmp#].bat ^ #SOLARENV#\wnti\build -file #mk_tmp# #1& ^ call #mk_tmp# ^ del #@path[#mk_tmp#]#@name[#mk_tmp#].* >& NUL ^ unset mk_tmp
 		}
