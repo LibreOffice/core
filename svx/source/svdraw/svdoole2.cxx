@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 11:09:04 $
+ *  last change: $Author: cl $ $Date: 2002-04-29 14:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -651,9 +651,15 @@ FASTBOOL SdrOle2Obj::Paint(ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoRe
             if (aPos.X() >= aRect.Left() && aPos.Y() >= aRect.Top())
                 pGraphic->Draw(pOutDev,aPos, aDstSize);
 
-            pOutDev->SetFillColor();
-            pOutDev->SetLineColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
-            pOutDev->DrawRect(aRect);
+            svx::ColorConfig aColorConfig;
+            svx::ColorConfigValue aColor( aColorConfig.GetColorValue( svx::OBJECTBOUNDARIES ) );
+
+            if( aColor.bIsVisible )
+            {
+                pOutDev->SetFillColor();
+                pOutDev->SetLineColor( aColor.nColor );
+                pOutDev->DrawRect(aRect);
+            }
         }
         else
             pGraphic->Draw( pOutDev, aRect.TopLeft() );

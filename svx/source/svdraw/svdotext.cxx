@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-25 09:58:13 $
+ *  last change: $Author: cl $ $Date: 2002-04-29 14:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include "svdstr.hrc"   // Objektname
 #include "svdtxhdl.hxx"  // DrawTextToPath
 #include "writingmodeitem.hxx"
+
+#ifndef _SVX_COLORCFG_HXX
+#include "colorcfg.hxx"
+#endif
 
 #ifndef _EEITEM_HXX //autogen
 #include <eeitem.hxx>
@@ -1217,23 +1221,29 @@ FASTBOOL SdrTextObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
         if (bEmptyPresObj)
         {
             // leere Praesentationsobjekte bekommen einen grauen Rahmen
-            rXOut.GetOutDev()->SetFillColor();
-            rXOut.GetOutDev()->SetLineColor( Application::GetSettings().GetStyleSettings().GetWindowTextColor() );
+            svx::ColorConfig aColorConfig;
+            svx::ColorConfigValue aColor( aColorConfig.GetColorValue( svx::OBJECTBOUNDARIES ) );
 
-            if (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0)
+            if( aColor.bIsVisible )
             {
-                Polygon aPoly(aRect);
-                if (aGeo.nShearWink!=0)
-                    ShearPoly(aPoly,aRect.TopLeft(),aGeo.nTan);
+                rXOut.GetOutDev()->SetFillColor();
+                rXOut.GetOutDev()->SetLineColor( aColor.nColor );
 
-                if (aGeo.nDrehWink!=0)
-                    RotatePoly(aPoly,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+                if (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0)
+                {
+                    Polygon aPoly(aRect);
+                    if (aGeo.nShearWink!=0)
+                        ShearPoly(aPoly,aRect.TopLeft(),aGeo.nTan);
 
-                rXOut.GetOutDev()->DrawPolyLine(aPoly);
-            }
-            else
-            {
-                rXOut.GetOutDev()->DrawRect(aRect);
+                    if (aGeo.nDrehWink!=0)
+                        RotatePoly(aPoly,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+
+                    rXOut.GetOutDev()->DrawPolyLine(aPoly);
+                }
+                else
+                {
+                    rXOut.GetOutDev()->DrawRect(aRect);
+                }
             }
         } // if pOutlParaObj!=NULL
     }

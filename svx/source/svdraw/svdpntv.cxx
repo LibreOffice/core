@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2002-03-14 13:42:01 $
+ *  last change: $Author: cl $ $Date: 2002-04-29 14:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,13 @@
 #include "svdibrow.hxx"
 #include "svditer.hxx"
 #include "svdouno.hxx"
+
+#ifndef _SVX_XLNCLIT_HXX
+#include "xlnclit.hxx"
+#endif
+#ifndef _SVX_XFLCLIT_HXX
+#include "xflclit.hxx"
+#endif
 
 #ifndef _EEITEM_HXX //autogen
 #include <eeitem.hxx>
@@ -528,6 +535,8 @@ void SdrPaintView::ImpClearVars()
         SetDefaultStyleSheet(pMod->GetDefaultStyleSheet(), TRUE);
 
     aNam.ToUpperAscii();
+
+    maGridColor = Color( COL_BLACK );
 }
 
 
@@ -546,6 +555,9 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, OutputDevice* pOut):
 
     // Flag zur Visualisierung von Gruppen
     bVisualizeEnteredGroup = TRUE;
+
+    StartListening( maColorConfig );
+    onChangeColorConfig();
 }
 
 SdrPaintView::SdrPaintView(SdrModel* pModel1, ExtOutputDevice* pExtOut):
@@ -570,12 +582,17 @@ SdrPaintView::SdrPaintView(SdrModel* pModel1, ExtOutputDevice* pExtOut):
 
     // Flag zur Visualisierung von Gruppen
     bVisualizeEnteredGroup = TRUE;
+
+    StartListening( maColorConfig );
+    onChangeColorConfig();
 }
 
 SdrPaintView::~SdrPaintView()
 {
     DBG_DTOR(SdrPaintView,NULL);
     aAfterPaintTimer.Stop();
+
+    EndListening( maColorConfig );
 
     ClearAll();
     if (!bForeignXOut && pXOut!=NULL) {
@@ -640,6 +657,12 @@ void __EXPORT SdrPaintView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCTyp
                 if (bMaster) ReleaseMasterPagePaintCache();
             }
         }
+    }
+
+    if( rHint.ISA( SfxSimpleHint ) && ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_COLORS_CHANGED )
+    {
+        onChangeColorConfig();
+        InvalidateAllWin();
     }
 }
 
@@ -2101,5 +2124,30 @@ void SdrPaintView::VisAreaChanged(const SdrPageViewWinRec& rPVWR)
             }
         }
     }
+}
+
+
+const svx::ColorConfig& SdrPaintView::getColorConfig() const
+{
+    return maColorConfig;
+}
+
+void SdrPaintView::onChangeColorConfig()
+{
+    String aEmpty;
+    SfxItemSet aSet( GetDefaultAttr() );
+    aSet.Put( XFillColorItem( aEmpty, Color( maColorConfig.GetColorValue( svx::DRAWFILL ).nColor ) ) );
+    aSet.Put( XLineColorItem( aEmpty, Color( maColorConfig.GetColorValue( svx::DRAWDRAWING ).nColor ) ) );
+    SetDefaultAttr( aSet, false);
+}
+
+void SdrPaintView::SetGridColor( Color aColor )
+{
+    maGridColor = aColor;
+}
+
+Color SdrPaintView::GetGridColor() const
+{
+    return maGridColor;
 }
 
