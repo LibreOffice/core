@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:04:11 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,14 +86,14 @@
 
 namespace css = ::com::sun::star;
 
-namespace dp_gui
-{
+namespace dp_gui {
 
 enum PackageState { REGISTERED, NOT_REGISTERED, AMBIGUOUS, NOT_AVAILABLE };
 
-//------------------------------------------------------------------------------
 PackageState getPackageState(
-    css::uno::Reference<css::deployment::XPackage> const & xPackage );
+    css::uno::Reference<css::deployment::XPackage> const & xPackage,
+    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv =
+    css::uno::Reference<css::ucb::XCommandEnvironment>() );
 
 //==============================================================================
 struct DialogImpl :
@@ -116,10 +116,12 @@ struct DialogImpl :
             css::uno::Reference<css::deployment::XPackageManager>
             const & xPackageManager,
             css::uno::Reference<css::deployment::XPackage> const & xPackage,
+            css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv,
             bool sortIn = true );
         SvLBoxEntry * addPackageNode(
             SvLBoxEntry * parentNode,
-            css::uno::Reference<css::deployment::XPackage> const & xPackage );
+            css::uno::Reference<css::deployment::XPackage> const & xPackage,
+            css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv);
 
         DialogImpl * m_dialog;
         SvLBoxEntry * m_currentEntry;
@@ -201,9 +203,12 @@ struct DialogImpl :
     void clickExport( USHORT id );
 
     bool m_allowSharedLayerModification;
-    void updateButtonStates();
+    void updateButtonStates(
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv =
+        com::sun::star::uno::Reference<
+        com::sun::star::ucb::XCommandEnvironment>() );
 
-    void errbox( css::uno::Any const & exc );
+    void errbox( ::rtl::OUString const & msg );
 
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
     css::uno::Reference<css::deployment::XPackageManagerFactory> m_xPkgMgrFac;
@@ -218,14 +223,14 @@ struct DialogImpl :
     long m_ftFontHeight;
     long m_descriptionYSpace;
 
-    String m_strAddPackages;
-    String m_strAddingPackages;
-    String m_strRemovingPackages;
-    String m_strEnablingPackages;
-    String m_strDisablingPackages;
-    String m_strExportPackage;
-    String m_strExportPackages;
-    String m_strExportingPackages;
+    const String m_strAddPackages;
+    const String m_strAddingPackages;
+    const String m_strRemovingPackages;
+    const String m_strEnablingPackages;
+    const String m_strDisablingPackages;
+    const String m_strExportPackage;
+    const String m_strExportPackages;
+    const String m_strExportingPackages;
 
     // controls:
     ::std::auto_ptr<FixedText> m_ftPackages;
@@ -267,6 +272,6 @@ struct DialogImpl :
         css::lang::EventObject const & evt ) throw (css::uno::RuntimeException);
 };
 
-}
+} // namespace dp_gui
 
 #endif
