@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: er $ $Date: 2002-11-13 17:49:38 $
+ *  last change: $Author: er $ $Date: 2002-12-05 16:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4022,6 +4022,7 @@ String SvNumberformat::GetMappedFormatstring(
                                     case '+' :
                                     case '-' :
                                     case ' ' :
+                                    case '%' :
                                         aStr += cx;     // don't escape simple forms
                                     break;
                                     default:
