@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-27 12:03:56 $
+ *  last change: $Author: sj $ $Date: 2001-04-03 13:26:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,8 +534,6 @@ void WMFWriter::WMFRecord_ExtTextOut( const Point & rPoint, const String & rStri
     nOriginalTextLen = rString.Len();
 
     rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
-    if ( eChrSet == RTL_TEXTENCODING_DONTKNOW )
-        eChrSet = gsl_getSystemTextEncoding();
     ByteString aByteString( rString, eChrSet );
 
     if ( ( nOriginalTextLen <= 1 ) || ( pDXAry == NULL ) )
@@ -1173,8 +1171,6 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                     const MetaTextAction * pA = (const MetaTextAction*) pMA;
                     String aTemp( pA->GetText(), pA->GetIndex(), pA->GetLen() );
                     rtl_TextEncoding eChrSet = aSrcFont.GetCharSet();
-                    if ( eChrSet == RTL_TEXTENCODING_DONTKNOW )
-                        eChrSet = gsl_getSystemTextEncoding();
                     ByteString aStr( aTemp, eChrSet );
                     SetAttrForText();
                     WMFRecord_TextOut( pA->GetPoint(), aStr );
@@ -1445,7 +1441,11 @@ void WMFWriter::WriteRecords( const GDIMetaFile & rMTF )
                 case META_FONT_ACTION:
                 {
                     const MetaFontAction* pA = (const MetaFontAction*) pMA;
-                    aSrcFont=pA->GetFont();
+                    aSrcFont = pA->GetFont();
+
+                    if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_DONTKNOW )
+                        aSrcFont.SetCharSet( gsl_getSystemTextEncoding() );
+
                     bAttrReadyForText=FALSE;
                 }
                 break;
