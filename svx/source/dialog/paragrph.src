@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-29 21:06:49 $
+ *  last change: $Author: kz $ $Date: 2002-05-16 14:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,7 +913,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ chinese_traditional ] = "ε‘ε·¦(~L)";
         Text[ arabic ] = "νΣΗΡ";
         Text[ greek ] = "Αριστερά";
-        Text[ korean ] = "μ™Όμª½ λ§μ¶¤(~L)";
+        Text[ korean ] = "μ™Όμª½/μ„";
         Text[ turkish ] = "So~l";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "I~zquierda";
@@ -943,7 +943,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ chinese_traditional ] = "ε‘ε³(~T)";
         Text[ arabic ] = "νγνδ";
         Text[ greek ] = "Δεξιά";
-        Text[ korean ] = "μ¤λ¥Έμª½(~T)";
+        Text[ korean ] = "μ¤λ¥Έμª½/μ•„λ";
         Text[ turkish ] = "Sa~π";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Derecha";
@@ -1165,7 +1165,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         };
         StringList [ korean ] =
         {
-                < "μ™Όμª½" ; Default ; > ;
+                < "μ™Όμª½/μ„" ; Default ; > ;
             < "κ°€μ΄λ°" ; Default ; > ;
             < "μ–‘μª½ λ§μ¶¤" ; Default ; > ;
         };
@@ -1272,7 +1272,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text = "Text-an-Text" ;
         Text [ ENGLISH ] = "Text-to-text" ;
         Hide = TRUE;
-        Text[ english_us ] = "Vertical text alignment";
+        Text[ english_us ] = "Text-to-text";
         Text[ portuguese ] = "Alinhamento vertical do texto";
         Text[ russian ] = "Βϋπΰβνθβΰνθε ςεκρςΰ οξ βεπςθκΰλθ";
         Text[ greek ] = "Vertical text alignment";
@@ -1286,7 +1286,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ polish ] = "Wyrσwnanie tekstu w pionie";
         Text[ portuguese_brazilian ] = "Vertical text alignment";
         Text[ japanese ] = "ηΈ¦ζ›Έγ";
-        Text[ korean ] = "ν…μ¤νΈ μ„Έλ΅ λ§μ¶¤";
+        Text[ korean ] = "λ¬Έμ κ°„ μ‚¬μ΄";
         Text[ chinese_simplified ] = "η›΄εΌζ–‡ε­—ζ–Ήε‘";
         Text[ chinese_traditional ] = "η›΄εΌζ–‡ε­—ε°ι½";
         Text[ turkish ] = "Vertical text alignment";
@@ -1608,7 +1608,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ chinese_traditional ] = "εΎ(~A)";
         Text[ arabic ] = "ΗΘΚΟΗΑπ γδ";
         Text[ greek ] = "~από";
-        Text[ korean ] = "λ¶€ν„°(~A)";
+        Text[ korean ] = "λ¬Έμμ— μ μ©";
         Text[ turkish ] = "~asg.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~en";
@@ -1656,7 +1656,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ chinese_traditional ] = "θ΅ζ«ζ–‡ε­—";
         Text[ arabic ] = "ΓΝΡέ έν δεΗνΙ ΗαΣΨΡ";
         Text[ greek ] = "Χαρακτήρες στο τέλος της γραμμής";
-        Text[ korean ] = "μ¤„ λ§μ§€λ§‰ λ¶€λ¶„μ— μλ” λ¬Έμ";
+        Text[ korean ] = "μ¤„ λ§μ§€λ§‰ λ¶€λ¶„(~A)";
         Text[ turkish ] = "satύrsonu karakteri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "carαcter al final de la lνnea";
@@ -1687,7 +1687,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ chinese_traditional ] = "εΎ(~T)";
         Text[ arabic ] = "ΗΘΚΟΗΑπ γδ";
         Text[ greek ] = "από";
-        Text[ korean ] = "λ¶€ν„°(~T)";
+        Text[ korean ] = "λ¬Έμμ— μ μ©";
         Text[ turkish ] = "a~sg.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "e~n";
@@ -2000,7 +2000,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ chinese_traditional ] = "δ½Ώη”¨ι ιΆζ¨£εΌ(~Y)";
         Text[ arabic ] = "ΘδγΨ ΥέΝΙ";
         Text[ greek ] = "Με πρότυπο σελίδας";
-        Text[ korean ] = "νμ΄μ§€ ν…ν”λ¦Ώκ³Ό ν•¨κ»(~Y)";
+        Text[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌκ³Ό ν•¨κ»(~Y)";
         Text[ turkish ] = "Sayfa biηiml~i";
         Text[ language_user1 ] = "All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
         Text[ catalan ] = "C~on estilo de pαgina";
