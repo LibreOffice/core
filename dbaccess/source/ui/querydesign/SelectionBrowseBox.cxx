@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:49:36 $
+ *  last change: $Author: svesik $ $Date: 2002-01-02 11:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1993,7 +1993,7 @@ void OSelectionBrowseBox::SetCellContents(sal_uInt16 nRow, long nColId, const St
     switch (nRow)
     {
         case BROW_VIS_ROW:
-            pEntry->SetVisible(strNewText == g_strOne);
+            pEntry->SetVisible(strNewText.Equals(g_strOne));
             break;
         case BROW_FIELD_ROW:
             pEntry->SetField(strNewText);
@@ -2172,7 +2172,7 @@ void OSelectionBrowseBox::copy()
 // -----------------------------------------------------------------------------
 void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String& _rNewValue,sal_Int32 _nRow)
 {
-    if(_rNewValue != _rOldValue)
+    if(!_rNewValue.Equals(_rOldValue))
     {
         OTabFieldCellModifiedUndoAct* pUndoAct = new OTabFieldCellModifiedUndoAct(this);
         pUndoAct->SetCellIndex(_nRow);
