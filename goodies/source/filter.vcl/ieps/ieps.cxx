@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ieps.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 10:40:38 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
                             {
                                 int  nBitsLeft;
                                 BOOL bIsValid = TRUE;
-                                BYTE nDat;
+                                BYTE nDat = 0;
                                 char nByte;
                                 for ( long y = 0; bIsValid && ( y < nHeight ); y++ )
                                 {
@@ -490,8 +490,9 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
 }
 
 //================== ein bischen Muell fuer Windows ==========================
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifdef WIN
 
