@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NotNumericException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:50 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ module com {  module sun {  module star {  module util {
 
 /** indicates that a non-numeric string is to be converted to a number.
  */
-exception NotNumericException: com::sun::star::uno::Exception
+published exception NotNumericException: com::sun::star::uno::Exception
 {
 };
 
