@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConditionalText.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 13:23:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ module com { module sun { module star { module text { module textfield {
 /** specifies service of a conditional text field.
     @see com::sun::star::text::TextField
 */
-service ConditionalText
+published service ConditionalText
 {
     service  com::sun::star::text::TextField;
 
