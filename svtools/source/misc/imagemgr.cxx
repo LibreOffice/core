@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: pb $ $Date: 2002-04-11 10:01:46 $
+ *  last change: $Author: pb $ $Date: 2002-07-30 08:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,7 +556,7 @@ USHORT GetFolderDescriptionId_Impl( const String& rURL )
 
 Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
 {
-    if ( !bBig && IMG_FOLDER == nImageId )
+    if ( !bBig && IMG_FOLDER == nImageId && !bHighContrast )
         // return our new small folder image (256 colors)
         return Image( SvtResId( IMG_SVT_FOLDER ) );
 
