@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2001-03-27 12:57:10 $
+ *  last change: $Author: os $ $Date: 2001-03-27 14:00:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3788,6 +3788,13 @@ void SvxCharNamePage::ActivatePage( const SfxItemSet& rSet )
         FontEmphasisMark eMark = rItem.GetEmphasisMark();
         rFont.SetEmphasisMark( eMark );
     }
+    // Relief
+    nWhich = GetWhich(SID_ATTR_CHAR_RELIEF);
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxCharReliefItem& rItem = (const SvxCharReliefItem&)rSet.Get( nWhich );
+        rFont.SetRelief( (FontRelief)rItem.GetValue() );
+    }
 
     // Effects
     nWhich = GetWhich( SID_ATTR_CHAR_CASEMAP );
@@ -4609,6 +4616,7 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
     nWhich = GetWhich(SID_ATTR_CHAR_RELIEF);
     if(m_aReliefLB.GetSelectEntryPos() != m_aReliefLB.GetSavedValue())
     {
+        m_aReliefLB.SaveValue();
         SvxCharReliefItem aRelief((FontRelief)m_aReliefLB.GetSelectEntryPos(), nWhich);
         rSet.Put(aRelief);
     }
@@ -5070,6 +5078,13 @@ void SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
         const SvxEmphasisMarkItem& rItem = (SvxEmphasisMarkItem&)rSet.Get( nWhich );
         FontEmphasisMark eMark = rItem.GetEmphasisMark();
         rFont.SetEmphasisMark( eMark );
+    }
+    // Relief
+    nWhich = GetWhich(SID_ATTR_CHAR_RELIEF);
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxCharReliefItem& rItem = (const SvxCharReliefItem&)rSet.Get( nWhich );
+        rFont.SetRelief( (FontRelief)rItem.GetValue() );
     }
 
     // Effects
@@ -5692,6 +5707,14 @@ void SvxCharTwoLinesPage::ActivatePage( const SfxItemSet& rSet )
         const SvxEmphasisMarkItem& rItem = (SvxEmphasisMarkItem&)rSet.Get( nWhich );
         FontEmphasisMark eMark = rItem.GetEmphasisMark();
         rFont.SetEmphasisMark( eMark );
+    }
+
+    // Relief
+    nWhich = GetWhich(SID_ATTR_CHAR_RELIEF);
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxCharReliefItem& rItem = (const SvxCharReliefItem&)rSet.Get( nWhich );
+        rFont.SetRelief( (FontRelief)rItem.GetValue() );
     }
 
     // Effects
