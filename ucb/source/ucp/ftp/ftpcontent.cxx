@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-06-20 14:49:20 $
+ *  last change: $Author: abi $ $Date: 2002-06-24 15:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _FTP_FTPLOADERTHREAD_HXX_
 #include "ftploaderthread.hxx"
+#endif
+#ifndef _FTP_FTPINPSTR_HXX_
+#include "ftpinpstr.hxx"
 #endif
 #ifndef __CURL_CURL_H
 #include <curl/curl.h>
@@ -200,9 +203,21 @@ void SAL_CALL FtpContent::abort( sal_Int32 CommandId )
 }
 
 
-struct XOutputStreamContainer
+struct StreamContainer
 {
-    Reference<XOutputStream> stream;
+    Reference<XOutputStream> m_out;
+
+    StreamContainer(const Reference<XOutputStream>& out)
+        : m_out(out) { }
+};
+
+
+struct FtpBufferContainer
+{
+    FtpInputStream *m_out;
+
+    FtpBufferContainer(FtpInputStream* out)
+        : m_out(out) { }
 };
 
 
@@ -210,25 +225,37 @@ struct XOutputStreamContainer
 extern "C" {
 #endif
 
-    /** Callback for curl_easy_perform();
+    int write2InputStream(void *buffer,size_t size,size_t nmemb,void *stream)
+    {
+        size_t ret = size*nmemb;
+        if(!stream || !ret)   // OK, no error if nothing can be written.
+            return ret;
+
+        FtpBufferContainer *p = reinterpret_cast<FtpBufferContainer*>(stream);
+        if(p && p->m_out)
+            p->m_out->append(buffer,ret);
+        return ret;
+    }
+
+
+    /** Callback for curl_easy_perform(),
+     *  forwarding the written content to the outputstream.
      */
 
     int write2OutputStream(void *buffer,size_t size,size_t nmemb,void *stream)
     {
         size_t ret = size*nmemb;
 
-        if(!stream)  // OK, no error if nothing can be written.
+        if(!stream || !ret)  // OK, no error if nothing can be written.
             return ret;
 
-        XOutputStreamContainer *p = static_cast<XOutputStreamContainer*>(stream);
-        Sequence<sal_Int8> seq(static_cast<sal_Int8*>(buffer),size*nmemb);
         try{
-            if(p && p->stream.is())
-                p->stream->writeBytes(seq);
+            StreamContainer *p = reinterpret_cast<StreamContainer*>(stream);
+            if(p && p->m_out.is())
+                p->m_out->writeBytes(Sequence<sal_Int8>(static_cast<sal_Int8*>(buffer),
+                                                      size*nmemb));
             return ret;
-        }
-        catch(const Exception&)
-        {
+        } catch(const Exception&) {
             return 0;
         }
     }
@@ -248,11 +275,9 @@ Any SAL_CALL FtpContent::execute( const Command& aCommand,
 
     Any aRet;
 
-    if ( aCommand.Name.compareToAscii( "getPropertyValues" ) == 0 )
-    {
+    if( aCommand.Name.compareToAscii( "getPropertyValues" ) == 0 ) {
     }
-    else if ( aCommand.Name.compareToAscii( "open" ) == 0 )
-    {
+    else if ( aCommand.Name.compareToAscii( "open" ) == 0 ) {
         OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
             throw IllegalArgumentException();
@@ -269,30 +294,24 @@ Any SAL_CALL FtpContent::execute( const Command& aCommand,
         rtl::OUString aOUStr(m_xIdentifier->getContentIdentifier());
         rtl::OString aOStr(aOUStr.getStr(),
                            aOUStr.getLength(),
-                           RTL_TEXTENCODING_UTF8); // Only ASCII in URLs -> UTF8
+                           RTL_TEXTENCODING_UTF8); // Only ASCII in URLs => UTF8 ok
         curl_easy_setopt(curl,CURLOPT_URL,aOStr.getStr());
 
         Reference<XActiveDataSink> activeDataSink(aOpenCommand.Sink,UNO_QUERY);
-        if(activeDataSink.is())
-            throw UnsupportedDataSinkException();;
+        if(activeDataSink.is()) {
+            FtpBufferContainer cont(new FtpInputStream());
+            curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write2InputStream);
+            curl_easy_setopt(curl,CURLOPT_WRITEDATA,&cont);
+            curl_easy_perform(curl);
+            activeDataSink->setInputStream(cont.m_out);
+        }
 
         Reference< XOutputStream > xOutputStream(aOpenCommand.Sink,UNO_QUERY);
-        if(xOutputStream.is())
-        {
-            XOutputStreamContainer container;
-            container.stream = xOutputStream;
-            struct curl_slist *list = curl_slist_append(NULL,"pwd");
-            curl_easy_setopt(curl,CURLOPT_QUOTE,list);
-            CURLcode code;
-
-            code = curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write2OutputStream);
-            curl_easy_setopt(curl,CURLOPT_WRITEDATA,&container);
-
-            code = curl_easy_setopt(curl,CURLOPT_HEADERFUNCTION,write2OutputStream);
-              curl_easy_setopt(curl,CURLOPT_WRITEHEADER,&container);
-
+        if(xOutputStream.is()) {
+            StreamContainer cont(xOutputStream);
+            curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write2OutputStream);
+            curl_easy_setopt(curl,CURLOPT_WRITEDATA,&cont);
             curl_easy_perform(curl);
-            curl_slist_free_all(list);
         }
     }
     else
@@ -301,6 +320,12 @@ Any SAL_CALL FtpContent::execute( const Command& aCommand,
     return aRet;
 }
 
+
+//              curl_easy_setopt(curl,CURLOPT_HEADERFUNCTION,write2OutputStream);
+//              curl_easy_setopt(curl,CURLOPT_WRITEHEADER,&cont);
+
+
+//              curl_slist_free_all(list);
 
 
 Sequence<Property> FtpContent::getProperties(const Reference<XCommandEnvironment>& xEnv)

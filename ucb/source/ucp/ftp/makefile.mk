@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: abi $ $Date: 2002-06-07 15:31:00 $
+#   last change: $Author: abi $ $Date: 2002-06-24 15:17:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,8 @@ SLOFILES=\
     $(SLO)$/ftpservices.obj  \
     $(SLO)$/ftpcontentprovider.obj  \
     $(SLO)$/ftpcontent.obj   \
-    $(SLO)$/ftploaderthread.obj
+    $(SLO)$/ftploaderthread.obj  \
+    $(SLO)$/ftpinpstr.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
@@ -105,6 +106,28 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS= \
     $(LIB1TARGET)  \
     $(SOLARLIBDIR)$/libcurl.lib
+
+
+APP1TARGET=ftptest
+APP1OBJS=\
+    $(OBJ)$/test.obj
+
+.IF "$(COMPHELPERLIB)"==""
+.IF "$(GUI)" == "UNX"
+COMPHELPERLIB=-licomphelp2
+.ENDIF # unx
+.IF "$(GUI)"=="WNT"
+COMPHELPERLIB=icomphelp2.lib
+.ENDIF # wnt
+.ENDIF
+
+APP1STDLIBS=\
+    $(CPPULIB) \
+    $(CPPUHELPERLIB) \
+    $(SALLIB) \
+    $(COMPHELPERLIB)
+
+APP1DEF=	$(MISC)\$(APP1TARGET).def
 
 # Make symbol renaming match library name for Mac OS X
 .IF "$(OS)"=="MACOSX"
