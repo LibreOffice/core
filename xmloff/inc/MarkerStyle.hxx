@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MarkerStyle.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:57 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,13 @@
 #ifndef _XMLOFF_MARKERSTYLE_HXX
 #define _XMLOFF_MARKERSTYLE_HXX
 
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_XMLOFF_DLLAPI_H
+#include "xmloff/dllapi.h"
+#endif
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -77,7 +84,7 @@ namespace com { namespace sun { namespace star {
 namespace rtl { class OUString; }
 
 
-class XMLMarkerStyleImport
+class XMLOFF_DLLPUBLIC XMLMarkerStyleImport
 {
     SvXMLImport& rImport;
 
@@ -92,7 +99,7 @@ public:
         ::rtl::OUString& rStrName );
 };
 
-class XMLMarkerStyleExport
+class XMLOFF_DLLPUBLIC XMLMarkerStyleExport
 {
     SvXMLExport& rExport;
 
