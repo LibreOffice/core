@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
     Text[ russian ] = "Íàêëåéêè";                       \
     Text[ polish ] = "Etykiety";                        \
     Text[ japanese ] = "×ÍŞÙ";                          \
-    Text[ chinese_traditional ] = "¼ĞÅÒ";               \
+    Text[ chinese_traditional ] = "¶K¼Ğ";               \
     Text[ arabic ] = "ÈØÇŞÇÊ ÚäæäÉ";                    \
     Text[ greek ] = "Åôéêİôåò";                         \
     Text[ korean ] = "¶óº§";    \
@@ -259,7 +259,7 @@ TabDialog DLG_LAB
         Text[ polish ] = "Noœnik danych";
         Text[ portuguese_brazilian ] = "Media";
         Text[ japanese ] = "”}‘Ì";
-        Text[ korean ] = "Áß°£";
+        Text[ korean ] = "¸ÅÃ¼";
         Text[ chinese_simplified ] = "Ö½ÕÅ";
         Text[ chinese_traditional ] = "¯È±i";
         Text[ arabic ] = "ÇáæÇÓØÉ";
@@ -299,7 +299,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_traditional ] = "¿é¤J¤å¦r";
         Text[ arabic ] = "äÕ ÇáÈØÇŞÉ";
         Text[ greek ] = "ÅğéãñáöŞ";
-        Text[ korean ] = "¶óº§ ÅØ½ºÆ®";
+        Text[ korean ] = "¶óº§";
         Text[ turkish ] = "Etiket metni";
         Text[ language_user1 ] = " ";
     };
@@ -432,7 +432,7 @@ TabPage TP_LAB_LAB
         Text [ portuguese ] = "Campo base de dados" ;
         Text [ finnish ] = "Tietokantakenttä" ;
         Text [ danish ] = "Databasefelt" ;
-        Text [ french ] = "~Champ de B.D." ;
+        Text [ french ] = "~Champ de BD" ;
         Text [ swedish ] = "Databas~fält" ;
         Text [ dutch ] = "~Databaseveld" ;
         Text [ spanish ] = "~Campo base de datos" ;
@@ -479,10 +479,10 @@ TabPage TP_LAB_LAB
         Text[ polish ] = "Oznaczenie";
         Text[ japanese ] = "ˆ¶æ";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "¤º®e";
+        Text[ chinese_traditional ] = "¼ĞÅÒ";
         Text[ arabic ] = "äÕ ÇáÈØÇŞÉ";
         Text[ greek ] = "ÅğéãñáöŞ";
-        Text[ korean ] = "Ç¥Á¦";
+        Text[ korean ] = "¶óº§";
         Text[ turkish ] = "Etiket metni";
     };
     RadioButton BTN_CONT
@@ -511,7 +511,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_traditional ] = "¤£¶¡Â_(~C)";
         Text[ arabic ] = "æÑŞ ÛíÑ ãÊŞØÚ";
         Text[ greek ] = "Óõíå÷Şò";
-        Text[ korean ] = "°è¼Ó(~C)";
+        Text[ korean ] = "°è¼Ó";
         Text[ turkish ] = "Sonsuz form";
         Text[ language_user1 ] = " ";
     };
@@ -539,7 +539,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_traditional ] = "¯È±i(~S)";
         Text[ arabic ] = "İÑÎ æÑŞ";
         Text[ greek ] = "~ÖÜêåëïò";
-        Text[ korean ] = "½ÃÆ®(~S)";
+        Text[ korean ] = "½ÃÆ®";
         Text[ turkish ] = "Föy";
         Text[ language_user1 ] = " ";
     };
@@ -561,12 +561,12 @@ TabPage TP_LAB_LAB
         Text [ spanish ] = "~Marca" ;
         Text [ english_us ] = "Brand" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "ÉÌ±ê";
+        Text[ chinese_simplified ] = "±êÇ©";
         Text[ russian ] = "Ìàğêà";
         Text[ polish ] = "Znacznik";
         Text[ japanese ] = "»‘¢Œ³";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "°Ó¼Ğ";
+        Text[ chinese_traditional ] = "¶K¼Ğ";
         Text[ arabic ] = "ÇáãÇÑßÉ";
         Text[ greek ] = "~ÌÜñêá";
         Text[ korean ] = "»óÇ¥";
@@ -605,7 +605,7 @@ TabPage TP_LAB_LAB
         Text[ chinese_traditional ] = "Ãş«¬(~T)";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "~Ôığïò";
-        Text[ korean ] = "À¯Çü(~T)";
+        Text[ korean ] = "À¯Çü";
         Text[ turkish ] = "Tipi";
         Text[ language_user1 ] = " ";
     };
@@ -779,7 +779,7 @@ TabPage TP_VISITING_CARDS
         Text[ polish ] = "Obszar Autotekstu";
         Text[ portuguese_brazilian ] = "AutoText group";
         Text[ japanese ] = "“ü—Íx‰‡”ÍˆÍ(~S)";
-        Text[ korean ] = "ÀÚµ¿ ÅØ½ºÆ® - ±¸¿ª(~S)";
+        Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ® - ±¸¿ª(~S)";
         Text[ chinese_simplified ] = "×Ô¶¯Í¼ÎÄ¼¯·ÖÀà(~S)";
         Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°¤ÀÃş(~S)";
         Text[ arabic ] = "äØÇŞ ÇáäÕ ÇáÊáŞÇÆí";
@@ -845,7 +845,7 @@ TabPage TP_VISITING_CARDS
         Text[ portuguese_brazilian ] = "Preview";
         Text[ japanese ] = "ÌßÚËŞ­°";
         Text[ korean ] = "¹Ì¸®º¸±â";
-        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ chinese_simplified ] = "Ô¤ÀÀ";
         Text[ chinese_traditional ] = "¹wÄı";
         Text[ arabic ] = "ÇáãÚÇíäÉ";
         Text[ turkish ] = "Önizleme";
@@ -881,7 +881,7 @@ TabPage TP_PRIVATE_DATA
         Text[ japanese ] = "ŒÂlÃŞ°À";
         Text[ korean ] = "°³ÀÎ µ¥ÀÌÅÍ";
         Text[ chinese_simplified ] = "Ë½ÈË×ÊÁÏ";
-        Text[ chinese_traditional ] = "¨p¤H¼ÆÕu";
+        Text[ chinese_traditional ] = "¨p¤H¸ê®Æ";
         Text[ arabic ] = "ÈíÇäÇÊ ÔÎÕíÉ";
         Text[ turkish ] = "Özel bilgiler";
         Text[ language_user1 ] = " ";
@@ -895,7 +895,7 @@ TabPage TP_PRIVATE_DATA
         Text[ english_us ] = "First/Last ~name/Initials";
         Text[ portuguese ] = "~Nome próprio/Apelido/Iniciais";
         Text[ russian ] = "Ôàìèëèÿ/èìÿ/èíèöèàëû";
-        Text[ greek ] = "¼íïìá/Åğşíõìï/Áñ÷éêÜ";
+        Text[ greek ] = "¼íïìá/Åğşíõìï/Áñ~÷éêÜ";
         Text[ dutch ] = "~Voor-/achternaam/Initialen";
         Text[ french ] = "~Prénom/Nom/Initiales";
         Text[ spanish ] = "No~mbre/Apellidos/Iniciales";
@@ -905,7 +905,7 @@ TabPage TP_PRIVATE_DATA
         Text[ polish ] = "Imiê/Nazwisko/Inicja³y";
         Text[ portuguese_brazilian ] = "First/Last ~name";
         Text[ japanese ] = "–¼/©/²Æ¼¬Ù(~N)";
-        Text[ korean ] = "ÀÌ¸§/¼º/ÀÌ´Ï¼È 2(~N)";
+        Text[ korean ] = "ÀÌ¸§/¼º/¸Ó¸®±ÛÀÚ(~N)";
         Text[ chinese_simplified ] = "Ãû×Ö/ĞÕÊÏ/ËõĞ´(~N)";
         Text[ chinese_traditional ] = "¦W¦r/©m¤ó/ÁY¼g(~N)";
         Text[ arabic ] = "ÇáÇÓã/ÇÓã ÇáÚÇÆáÉ/ÇáÇÎÊÕÇÑ";
@@ -939,7 +939,7 @@ TabPage TP_PRIVATE_DATA
         Text[ english_us ] = "First / Last ~Name / Initials 2";
         Text[ portuguese ] = "~Nome próprio/Apelido/Iniciais 2";
         Text[ russian ] = "Ôàìèëèÿ/èìÿ/ñîêğàùåíèå 2";
-        Text[ greek ] = "¼íïìá/Åğßèåôï/Áñ÷éêÜ 2";
+        Text[ greek ] = "¼íïìá/Åğßèåôï/Áñ~÷éêÜ 2";
         Text[ dutch ] = "Voor/achter ~naam 2";
         Text[ french ] = "~Prénom/Nom/Initiales 2";
         Text[ spanish ] = "Nombre/Apellidos/Iniciales 2";
@@ -949,7 +949,7 @@ TabPage TP_PRIVATE_DATA
         Text[ polish ] = "Imiê/Nazwisko/Inicja³y";
         Text[ portuguese_brazilian ] = "First/Last ~name 2";
         Text[ japanese ] = "©/–¼/²Æ¼¬Ù 2i~Nj";
-        Text[ korean ] = "ÀÌ¸§/¼º/ÀÌ´Ï¼È 2(~N)";
+        Text[ korean ] = "ÀÌ¸§/¼º/¸Ó¸®±ÛÀÚ 2(~N)";
         Text[ chinese_simplified ] = "Ãû×Ö/ĞÕÊÏ/ËõĞ´ 2";
         Text[ chinese_traditional ] = "¦W¦r/©m¤ó/ÁY¼g 2";
         Text[ arabic ] = "ÇáÇÓã/ÇÓã ÇáÚÇÆáÉ/ÇáÇÎÊÕÇÑ 2";
@@ -992,7 +992,7 @@ TabPage TP_PRIVATE_DATA
         Text[ polish ] = "Ulica";
         Text[ portuguese_brazilian ] = "Street";
         Text[ japanese ] = "’¬–¼(~T)";
-        Text[ korean ] = "ÁÖ¼Ò¹øÁö(~T)";
+        Text[ korean ] = "°Å¸®¹øÁö(~T)";
         Text[ chinese_simplified ] = "½ÖµÀ(~T)";
         Text[ chinese_traditional ] = "µó¹D(~T)";
         Text[ arabic ] = "ÇáÔÇÑÚ";
@@ -1100,7 +1100,7 @@ TabPage TP_PRIVATE_DATA
         Text[ polish ] = "Tytu³/Zawód";
         Text[ portuguese_brazilian ] = "Title/Profession";
         Text[ japanese ] = "Œ¨‘‚«/E‹Æ(~P)";
-        Text[ korean ] = "Á÷À§/Àü¹®ºĞ¾ß(~P)";
+        Text[ korean ] = "Á÷À§/Á÷¾÷(~P)";
         Text[ chinese_simplified ] = "Í·ÏÎ/Ö°Òµ(~P)";
         Text[ chinese_traditional ] = "ºÙ©I/Â¾·~";
         Text[ arabic ] = "ÇááŞÈ Çáãåäí/ÇáæÙíİÉ";
@@ -1125,6 +1125,24 @@ TabPage TP_PRIVATE_DATA
         Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Telefon/Mobil" ;
         Text [ English ] = "Phone/Mobile" ;
+        Text[ english_us ] = "Phone/Mobile";
+        Text[ portuguese ] = "Phone/Mobile";
+        Text[ russian ] = "Òåëåôîí/ìîáèëüíûé";
+        Text[ greek ] = "Ôçëİöùíï/Êéíçôü";
+        Text[ dutch ] = "Phone/Mobile";
+        Text[ french ] = "Phone/Mobile";
+        Text[ spanish ] = "Phone/Mobile";
+        Text[ italian ] = "Phone/Mobile";
+        Text[ danish ] = "Phone/Mobile";
+        Text[ swedish ] = "Telefon/Mobil";
+        Text[ polish ] = "Telefon/Komórka";
+        Text[ portuguese_brazilian ] = "Phone/Mobile";
+        Text[ japanese ] = "Phone/Mobile";
+        Text[ korean ] = "Phone/Mobile";
+        Text[ chinese_simplified ] = "Phone/Mobile";
+        Text[ chinese_traditional ] = "¹q¸Ü/²¾°Ê¹q¸Ü";
+        Text[ turkish ] = "Phone/Mobile";
+        Text[ arabic ] = "ÇáåÇÊİ/ÇáãÍãæá";
     };
     Edit ED_PHONE
     {
@@ -1189,7 +1207,7 @@ TabPage TP_PRIVATE_DATA
         Text[ polish ] = "Strona macierzysta/e-mail";
         Text[ portuguese_brazilian ] = "Homepage / eMail";
         Text[ japanese ] = "Î°ÑÍß°¼Ş/E-mail";
-        Text[ korean ] = "È¨ÆäÀÌÁö / ÀüÀÚ¿ìÆí";
+        Text[ korean ] = "È¨ÆäÀÌÁö / E-Mail ";
         Text[ chinese_simplified ] = "Ö÷Ò³/µç×ÓÓÊ¼ş";
         Text[ chinese_traditional ] = "­º­¶/¹q¤l¶l¥ó";
         Text[ arabic ] = "ãæŞÚ ÇáÅäÊÑäÊ / ÇáÈÑíÏ ÇáÅáßÊÑæäí";
@@ -1235,7 +1253,7 @@ TabPage TP_BUSINESS_DATA
         Text[ japanese ] = "Ğ—pÃŞ°À";
         Text[ korean ] = "¾÷¹« µ¥ÀÌÅÍ";
         Text[ chinese_simplified ] = "ÉÌÎñ×ÊÁÏ";
-        Text[ chinese_traditional ] = "°Ó°È¼ÆÕu";
+        Text[ chinese_traditional ] = "°Ó°È¸ê®Æ";
         Text[ arabic ] = "ÈíÇäÇÊ ÇáÚãá";
         Text[ turkish ] = "İş Bilgileri";
         Text[ language_user1 ] = " ";
@@ -1291,7 +1309,7 @@ TabPage TP_BUSINESS_DATA
         Text[ polish ] = "Firma 2 wiersz";
         Text[ portuguese_brazilian ] = "Company 2nd line";
         Text[ japanese ] = "‰ïĞ–¼ 2s–Ú";
-        Text[ korean ] = "È¸»ç 2¹øÂ° ¼±";
+        Text[ korean ] = "È¸»ç 2¹øÂ° ÁÙ";
         Text[ chinese_simplified ] = "¹«Ë¾(µÚ¶şĞĞ)";
         Text[ chinese_traditional ] = "¤½¥q(²Ä¤G¦æ)";
         Text[ arabic ] = "ÇáÔÑßÉ ÇáÓØÑ ÇáËÇäí";
@@ -1355,7 +1373,7 @@ TabPage TP_BUSINESS_DATA
         Text[ polish ] = "Ulica";
         Text[ portuguese_brazilian ] = "Street";
         Text[ japanese ] = "’¬–¼";
-        Text[ korean ] = "ÁÖ¼Ò¹øÁö";
+        Text[ korean ] = "°Å¸®¹øÁö";
         Text[ chinese_simplified ] = "½ÖµÀ";
         Text[ chinese_traditional ] = "µó¹D";
         Text[ arabic ] = "ÇáÔÇÑÚ";
@@ -1482,6 +1500,24 @@ TabPage TP_BUSINESS_DATA
         Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Telefon/Mobil" ;
         Text [ English ] = "Phone/Mobile" ;
+        Text[ english_us ] = "Phone/Mobile";
+        Text[ portuguese ] = "Phone/Mobile";
+        Text[ russian ] = "Òåëåôîí/ìîáèëüíûé";
+        Text[ greek ] = "Ôçëİöùíï/Êéíçôü";
+        Text[ dutch ] = "Phone/Mobile";
+        Text[ french ] = "Phone/Mobile";
+        Text[ spanish ] = "Phone/Mobile";
+        Text[ italian ] = "Phone/Mobile";
+        Text[ danish ] = "Phone/Mobile";
+        Text[ swedish ] = "Telefon/Mobil";
+        Text[ polish ] = "Telefon/Komórka";
+        Text[ portuguese_brazilian ] = "Phone/Mobile";
+        Text[ japanese ] = "Phone/Mobile";
+        Text[ korean ] = "Phone/Mobile";
+        Text[ chinese_simplified ] = "Phone/Mobile";
+        Text[ chinese_traditional ] = "¹q¸Ü/²¾°Ê¹q¸Ü";
+        Text[ turkish ] = "Phone/Mobile";
+        Text[ arabic ] = "ÇáåÇÊİ/ÇáãÍãæá";
     };
     Edit ED_PHONE
     {
@@ -1501,6 +1537,24 @@ TabPage TP_BUSINESS_DATA
         Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Fax" ;
         Text [ English ] = "Fax" ;
+        Text[ english_us ] = "Fax";
+        Text[ portuguese ] = "Fax";
+        Text[ russian ] = "Ôàêñ";
+        Text[ greek ] = "Fax";
+        Text[ dutch ] = "Fax";
+        Text[ french ] = "Fax";
+        Text[ spanish ] = "Fax";
+        Text[ italian ] = "Fax";
+        Text[ danish ] = "Fax";
+        Text[ swedish ] = "Fax";
+        Text[ polish ] = "Faks";
+        Text[ portuguese_brazilian ] = "Fax";
+        Text[ japanese ] = "Fax";
+        Text[ korean ] = "Fax";
+        Text[ chinese_simplified ] = "Fax";
+        Text[ chinese_traditional ] = "¶Ç¯u";
+        Text[ turkish ] = "Fax";
+        Text[ arabic ] = "ÇáİÇßÓ";
     };
     Edit ED_FAX
     {
