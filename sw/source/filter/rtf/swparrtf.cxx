@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-11 11:53:55 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2794,8 +2794,8 @@ void SwRTFParser::ReadPageDescTbl()
             aFLR.SetLeft( 0 );  aFLR.SetRight( 0 );
             aFUL.SetLower( 0 ); aFUL.SetUpper( 0 );
             nCols = USHRT_MAX; nColSpace = USHRT_MAX; nAktCol = 0;
-            aFSz.SetSizeType( ATT_MIN_SIZE ); aFSz.SetHeight( 0 );
-            aHSz.SetSizeType( ATT_MIN_SIZE ); aHSz.SetHeight( 0 );
+            aFSz.SetHeightSizeType( ATT_MIN_SIZE ); aFSz.SetHeight( 0 );
+            aHSz.SetHeightSizeType( ATT_MIN_SIZE ); aHSz.SetHeight( 0 );
             break;
 
         case RTF_PGDSCUSE:
@@ -2844,8 +2844,8 @@ void SwRTFParser::ReadPageDescTbl()
 //          aSz = pPgFmt->GetFrmSize();
             aSz.SetWidth( 11905 ); aSz.SetHeight( 16837 );      // DIN A4 defaulten
             nCols = USHRT_MAX; nColSpace = USHRT_MAX; nAktCol = 0;
-            aFSz.SetSizeType( ATT_MIN_SIZE ); aFSz.SetHeight( 0 );
-            aHSz.SetSizeType( ATT_MIN_SIZE ); aHSz.SetHeight( 0 );
+            aFSz.SetHeightSizeType( ATT_MIN_SIZE ); aFSz.SetHeight( 0 );
+            aHSz.SetHeightSizeType( ATT_MIN_SIZE ); aHSz.SetHeight( 0 );
             break;
 #endif
 
@@ -2881,7 +2881,7 @@ void SwRTFParser::ReadPageDescTbl()
         case RTF_HEADER_YH:
                 if( 0 > nTokenValue )
                 {
-                    aHSz.SetSizeType( ATT_FIX_SIZE );
+                    aHSz.SetHeightSizeType( ATT_FIX_SIZE );
                     nTokenValue = -nTokenValue;
                 }
                 aHSz.SetHeight( (USHORT)nTokenValue );
@@ -2890,7 +2890,7 @@ void SwRTFParser::ReadPageDescTbl()
         case RTF_FOOTER_YH:
                 if( 0 > nTokenValue )
                 {
-                    aFSz.SetSizeType( ATT_FIX_SIZE );
+                    aFSz.SetHeightSizeType( ATT_FIX_SIZE );
                     nTokenValue = -nTokenValue;
                 }
                 aFSz.SetHeight( (USHORT)nTokenValue );
