@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 13:40:33 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 14:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,32 +69,67 @@
 #include <rtl/ustring.hxx>
 #endif
 
-//============================================================
-//= a helper for static ascii pseudo-unicode strings
-//============================================================
-struct _ConstAsciiString_
-{
-    sal_Int32 length;
-    sal_Char  const* str;
-
-    operator ::rtl::OUString () const { return ::rtl::OUString(str, length, RTL_TEXTENCODING_ASCII_US); }
-    operator const sal_Char* () const { return str; }
-};
-
-#ifndef XMLFORM_IMPLEMENT_STRINGS
-#define XMLFORM_CONSTASCII_STRING(ident, string) extern const _ConstAsciiString_ ident
-#else
-#define XMLFORM_CONSTASCII_STRING(ident, string) extern const _ConstAsciiString_ ident = { sizeof(string)-1, string }
-#endif
-
-//============================================================
-//= string constants
-//============================================================
-
 //.........................................................................
 namespace xmloff
 {
 //.........................................................................
+
+    //============================================================
+    //= a helper for static ascii pseudo-unicode strings
+    //============================================================
+    struct ConstAsciiString
+    {
+        const sal_Char* ascii;
+        sal_Int32       length;
+
+        inline  operator ::rtl::OUString () const;
+        inline  operator const sal_Char* () const { return ascii; }
+
+        inline ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength);
+        inline ~ConstAsciiString();
+
+    private:
+        mutable rtl_uString*    ustring;
+
+    private:
+        ConstAsciiString(); // never implemented
+    };
+
+    //------------------------------------------------------------
+    inline ConstAsciiString::ConstAsciiString(const sal_Char* _pAsciiZeroTerminated, const sal_Int32 _nLength)
+        :ascii(_pAsciiZeroTerminated)
+        ,length(_nLength)
+        ,ustring(NULL)
+    {
+    }
+
+    //------------------------------------------------------------
+    inline ConstAsciiString::~ConstAsciiString()
+    {
+        if (ustring)
+        {
+            rtl_uString_release(ustring);
+            ustring = NULL;
+        }
+    }
+
+    //------------------------------------------------------------
+    inline ConstAsciiString::operator ::rtl::OUString () const
+    {
+        if (!ustring)
+            rtl_uString_newFromAscii( &ustring, ascii );
+        return ustring;
+    }
+
+#ifndef XMLFORM_IMPLEMENT_STRINGS
+    #define XMLFORM_CONSTASCII_STRING(ident, string) extern const ConstAsciiString ident
+#else
+    #define XMLFORM_CONSTASCII_STRING(ident, string) extern const ConstAsciiString ident(string, sizeof(string)-1)
+#endif
+
+    //============================================================
+    //= string constants
+    //============================================================
 
     // properties
     XMLFORM_CONSTASCII_STRING( PROPERTY_CLASSID,            "ClassId" );
@@ -178,9 +213,15 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( PROPERTY_BORDER,             "Border");
     XMLFORM_CONSTASCII_STRING( PROPERTY_AUTOCONTROLFOCUS,   "AutomaticControlFocus");
     XMLFORM_CONSTASCII_STRING( PROPERTY_APPLYDESIGNMODE,    "ApplyFormDesignMode");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_FORMATSSUPPLIER,    "FormatsSupplier");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_LOCALE,             "Locale");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_FORMATSTRING,       "FormatString");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_DATEFORMAT,         "DateFormat");
+    XMLFORM_CONSTASCII_STRING( PROPERTY_TIMEFORMAT,         "TimeFormat");
 
     // services
-    XMLFORM_CONSTASCII_STRING( SERVICE_FORMSCOLLECTION, "com.sun.star.form.Forms" );
+    XMLFORM_CONSTASCII_STRING( SERVICE_FORMSCOLLECTION,         "com.sun.star.form.Forms" );
+    XMLFORM_CONSTASCII_STRING( SERVICE_NUMBERFORMATSSUPPLIER,   "com.sun.star.util.NumberFormatsSupplier" );
 
     // old service names (compatibility)
     XMLFORM_CONSTASCII_STRING( SERVICE_PERSISTENT_COMPONENT_FORM,           "stardiv.one.form.component.Form");
@@ -242,6 +283,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/20 13:40:33  fs
+ *  #83970# +AutomaticControlFocus / +ApplyFormDesignMode
+ *
  *  Revision 1.4  2001/01/02 15:58:22  fs
  *  event ex- & import
  *
