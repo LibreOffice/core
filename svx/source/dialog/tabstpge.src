@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:36:55 $
+ *  last change: $Author: os $ $Date: 2002-05-27 10:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ TabPage RID_SVXPAGE_TABULATOR
     Text [ french ] = "Tabulations" ;
     Text [ swedish ] = "Tabulatorer" ;
     Text [ dutch ] = "Tabstops" ;
-    Text [ spanish ] = "Tabulaciones" ;
+    Text [ spanish ] = "Tabuladores" ;
     Text [ english_us ] = "Tabs" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     MetricBox ED_TABPOS
@@ -106,20 +106,21 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ danish ] = "Placering" ;
         Text [ french ] = "Position" ;
         Text [ swedish ] = "~Position" ;
-        Text [ dutch ] = "Positie" ;
+        Text [ dutch ] = "~Positie" ;
         Text [ spanish ] = "Posición" ;
         Text [ english_us ] = "Position" ;
-        Text[ chinese_simplified ] = "Î»ÖÃ";
+        Text[ chinese_simplified ] = "ä½ç½®";
         Text[ russian ] = "Ïîëîæåíèå";
         Text[ polish ] = "Pozycja";
-        Text[ japanese ] = "ˆÊ’u";
-        Text[ chinese_traditional ] = "¦ì¸m";
+        Text[ japanese ] = "ä½ç½®";
+        Text[ chinese_traditional ] = "ä½ç½®";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ greek ] = "Èİóç";
-        Text[ korean ] = "À§Ä¡";
+        Text[ korean ] = "ìœ„ì¹˜";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Posición";
+        Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
     };
     FixedLine FL_TABPOS_VERT
     {
@@ -137,25 +138,26 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ italian ] = "A ~sinistra" ;
         Text [ portuguese_brazilian ] = "~Esquerda" ;
         Text [ portuguese ] = "~Esquerda" ;
-        Text [ finnish ] = "~Vasen" ;
+        Text [ finnish ] = "~Vasen:" ;
         Text [ danish ] = "Venstre" ;
-        Text [ french ] = "~À gauche" ;
+        Text [ french ] = "À gauche" ;
         Text [ swedish ] = "~Vänster" ;
         Text [ dutch ] = "~Links" ;
         Text [ spanish ] = "~Izquierda" ;
         Text [ english_us ] = "~Left" ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "Ïò×ó(~L)";
+        Text[ chinese_simplified ] = "å‘å·¦(~L)";
         Text[ russian ] = "Ñëåâà";
         Text[ polish ] = "Lewy";
-        Text[ japanese ] = "¶‘µ‚¦(~L)";
-        Text[ chinese_traditional ] = "¦V¥ª(~L)";
+        Text[ japanese ] = "å·¦æƒãˆ(~L)";
+        Text[ chinese_traditional ] = "å‘å·¦(~L)";
         Text[ arabic ] = "íÓÇÑ";
         Text[ greek ] = "ÁñéóôåñÜ";
-        Text[ korean ] = "¿ŞÂÊ(~L)";
+        Text[ korean ] = "ì™¼ìª½(~L)";
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Izquierda";
+        Text[ thai ] = "~à¸‹à¹‰à¸²à¸¢";
     };
     Window WIN_TABLEFT
     {
@@ -174,22 +176,23 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese ] = "Di~reita" ;
         Text [ finnish ] = "~Oikea" ;
         Text [ danish ] = "Højre" ;
-        Text [ french ] = "~À droite" ;
+        Text [ french ] = "À droite" ;
         Text [ swedish ] = "Höge~r" ;
         Text [ dutch ] = "~Rechts" ;
-        Text [ spanish ] = "~Derecha" ;
+        Text [ spanish ] = "Derecha" ;
         Text [ english_us ] = "Righ~t" ;
-        Text[ chinese_simplified ] = "ÏòÓÒ(~T)";
+        Text[ chinese_simplified ] = "å‘å³(~T)";
         Text[ russian ] = "Ñïğàâà";
         Text[ polish ] = "Prawy";
-        Text[ japanese ] = "‰E‘µ‚¦(~T)";
-        Text[ chinese_traditional ] = "¦V¥k(~T)";
+        Text[ japanese ] = "å³æƒãˆ(~T)";
+        Text[ chinese_traditional ] = "å‘å³(~T)";
         Text[ arabic ] = "íãíä";
         Text[ greek ] = "ÄåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊ(~T)";
+        Text[ korean ] = "ì˜¤ë¥¸ìª½(~T)";
         Text[ turkish ] = "Sağ~";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Derecha";
+        Text[ thai ] = "à¸‚~à¸§à¸²";
     };
     Window WIN_TABRIGHT
     {
@@ -210,20 +213,21 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ danish ] = "Centreret" ;
         Text [ french ] = "Centré" ;
         Text [ swedish ] = "~Centrerad" ;
-        Text [ dutch ] = "~Centreren" ;
-        Text [ spanish ] = "Cen~trado" ;
+        Text [ dutch ] = "~Gecentreerd" ;
+        Text [ spanish ] = "Centrado" ;
         Text [ english_us ] = "C~entered" ;
-        Text[ chinese_simplified ] = "¾ÓÖĞ(~E)";
+        Text[ chinese_simplified ] = "å±…ä¸­(~E)";
         Text[ russian ] = "Ïî öåíòğó";
         Text[ polish ] = "Do œrodka";
-        Text[ japanese ] = "’†‰›‘µ‚¦(~E)";
-        Text[ chinese_traditional ] = "¸m¤¤(~E)";
+        Text[ japanese ] = "ä¸­å¤®æƒãˆ(~E)";
+        Text[ chinese_traditional ] = "ç½®ä¸­(~E)";
         Text[ arabic ] = "ÊæÓíØ";
         Text[ greek ] = "Êåíôñáñéóìİíá";
-        Text[ korean ] = "°¡¿îµ¥(~E)";
+        Text[ korean ] = "ê°€ìš´ë°(~E)";
         Text[ turkish ] = "~Ortala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cen~trado";
+        Text[ thai ] = "à¸•~à¸£à¸‡à¸à¸¥à¸²à¸‡";
     };
     Window WIN_TABCENTER
     {
@@ -247,17 +251,18 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ dutch ] = "~Decimaal" ;
         Text [ spanish ] = "Deci~mal" ;
         Text [ english_us ] = "Deci~mal" ;
-        Text[ chinese_simplified ] = "Ê®½øÖÆ(~M)";
+        Text[ chinese_simplified ] = "åè¿›åˆ¶(~M)";
         Text[ russian ] = "Äåñÿòè÷íûé";
         Text[ polish ] = "Dziesiê~tny";
-        Text[ japanese ] = "¬”“_‘µ‚¦(~M)";
-        Text[ chinese_traditional ] = "¤p¼ÆÂI(~M)";
+        Text[ japanese ] = "å°æ•°ç‚¹æƒãˆ(~M)";
+        Text[ chinese_traditional ] = "å°æ•¸é»(~M)";
         Text[ arabic ] = "ÚÔÑí";
         Text[ greek ] = "~ÄåêáäéêÜ";
-        Text[ korean ] = "¼Ò¼öÁ¡(~M)";
+        Text[ korean ] = "ì†Œìˆ˜ì (~M)";
         Text[ turkish ] = "O~ndalık";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Deci~mal";
+        Text[ thai ] = "à¸—à¸¨à¸™à¸´~à¸¢à¸¡";
     };
     Window WIN_TABDECIMAL
     {
@@ -276,22 +281,23 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese ] = "~Caracteres" ;
         Text [ finnish ] = "~Merkki" ;
         Text [ danish ] = "Tegn" ;
-        Text [ french ] = "Caractère" ;
+        Text [ french ] = "Caractères" ;
         Text [ swedish ] = "T~ecken" ;
         Text [ dutch ] = "T~eken" ;
         Text [ spanish ] = "~Carácter" ;
         Text [ english_us ] = "~Character" ;
-        Text[ chinese_simplified ] = "×Ö·û(~C)";
+        Text[ chinese_simplified ] = "å­—ç¬¦(~C)";
         Text[ russian ] = "Çíàê";
         Text[ polish ] = "Znak";
-        Text[ japanese ] = "•¶š—ñ(~C)";
-        Text[ chinese_traditional ] = "¦r¤¸(~C)";
+        Text[ japanese ] = "æ–‡å­—åˆ—(~C)";
+        Text[ chinese_traditional ] = "å­—å…ƒ(~C)";
         Text[ arabic ] = "ÍÑİ";
         Text[ greek ] = "×áñáêôŞñåò";
-        Text[ korean ] = "¹®ÀÚ(~C)";
+        Text[ korean ] = "ë¬¸ì(~C)";
         Text[ turkish ] = "Ka~rakter";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Carácter";
+        Text[ thai ] = "~à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
     };
     Edit ED_TABTYPE_DECCHAR
     {
@@ -317,17 +323,18 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ dutch ] = "Type" ;
         Text [ spanish ] = "Tipo" ;
         Text [ english_us ] = "Type" ;
-        Text[ chinese_simplified ] = "ÀàĞÍ";
+        Text[ chinese_simplified ] = "ç±»å‹";
         Text[ russian ] = "Òèï";
         Text[ polish ] = "Rodzaj";
-        Text[ japanese ] = "í—Ş";
-        Text[ chinese_traditional ] = "Ãş«¬";
+        Text[ japanese ] = "ç¨®é¡";
+        Text[ chinese_traditional ] = "é¡å‹";
         Text[ arabic ] = "ÇáäæÚ";
         Text[ greek ] = "Ôığïò";
-        Text[ korean ] = "À¯Çü";
+        Text[ korean ] = "ìœ í˜•";
         Text[ turkish ] = "Tip";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo";
+        Text[ thai ] = "Type";
     };
     FixedLine FL_TABTYPE_VERT
     {
@@ -342,7 +349,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text = "~Keine" ;
         Text [ ENGLISH ] = "~None" ;
         Text [ norwegian ] = "I~ngen" ;
-        Text [ italian ] = "~Nessuno" ;
+        Text [ italian ] = "Nessuno" ;
         Text [ portuguese_brazilian ] = "N~enhum" ;
         Text [ portuguese ] = "N~enhum" ;
         Text [ finnish ] = "~Ei mitään" ;
@@ -353,17 +360,18 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ spanish ] = "Nin~guno" ;
         Text [ english_us ] = "N~one" ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "ÎŞ(~O)";
+        Text[ chinese_simplified ] = "æ— (~O)";
         Text[ russian ] = "Áåç";
         Text[ polish ] = "Brak";
-        Text[ japanese ] = "‚È‚µ(~O)";
-        Text[ chinese_traditional ] = "µL(~O)";
+        Text[ japanese ] = "ãªã—(~O)";
+        Text[ chinese_traditional ] = "ç„¡(~O)";
         Text[ arabic ] = "ÈÏæä";
         Text[ greek ] = "Êáíİíá";
-        Text[ korean ] = "¾øÀ½(~O)";
+        Text[ korean ] = "ì—†ìŒ(~O)";
         Text[ turkish ] = "~Yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nin~guno";
+        Text[ thai ] = "à¹„~à¸¡à¹ˆà¸¡à¸µ";
     };
     RadioButton BTN_FILLCHAR_POINTS
     {
@@ -395,22 +403,23 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ portuguese ] = "Ca~racteres" ;
         Text [ finnish ] = "Merkki" ;
         Text [ danish ] = "Tegn" ;
-        Text [ french ] = "C~aractères" ;
+        Text [ french ] = "Caractères" ;
         Text [ swedish ] = "Tec~ken" ;
         Text [ dutch ] = "~Teken" ;
         Text [ spanish ] = "C~arácter" ;
         Text [ english_us ] = "Character" ;
-        Text[ chinese_simplified ] = "×Ö·û(~H)";
+        Text[ chinese_simplified ] = "å­—ç¬¦";
         Text[ russian ] = "Çíàê";
         Text[ polish ] = "Znak";
-        Text[ japanese ] = "•¶š(~H)";
-        Text[ chinese_traditional ] = "¦r¤¸(~H)";
+        Text[ japanese ] = "æ–‡å­—";
+        Text[ chinese_traditional ] = "å­—å…ƒ";
         Text[ arabic ] = "ÍÑİ";
         Text[ greek ] = "×áñáêôŞñåò";
-        Text[ korean ] = "¹®ÀÚ";
+        Text[ korean ] = "ë¬¸ì";
         Text[ turkish ] = "Kara~kter";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "C~arácter";
+        Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
     };
     Edit ED_FILLCHAR_OTHER
     {
@@ -429,24 +438,25 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ italian ] = "Caratteri riempitivi" ;
         Text [ portuguese_brazilian ] = "Caracter preenchido" ;
         Text [ portuguese ] = "Carácter de preenchimento" ;
-        Text [ finnish ] = "Täytemerkki" ;
+        Text [ finnish ] = "Täyttömerkki" ;
         Text [ danish ] = "Fyldtegn" ;
         Text [ french ] = "Caractères de remplissage" ;
         Text [ swedish ] = "Utfyllnadstecken" ;
         Text [ dutch ] = "Opvulteken" ;
         Text [ spanish ] = "Carácter de relleno" ;
         Text [ english_us ] = "Fill character" ;
-        Text[ chinese_simplified ] = "³äÌî×Ö·û";
+        Text[ chinese_simplified ] = "å……å¡«å­—ç¬¦";
         Text[ russian ] = "Çàïîëíèòåëü";
         Text[ polish ] = "Wype³niacze";
-        Text[ japanese ] = "Ø°ÀŞ°";
-        Text[ chinese_traditional ] = "¥R¶ñ¦r¤¸";
+        Text[ japanese ] = "ãƒªãƒ¼ãƒ€ãƒ¼";
+        Text[ chinese_traditional ] = "å……å¡«å­—å…ƒ";
         Text[ arabic ] = "ÍÑİ ÓÇÈŞ";
         Text[ greek ] = "×áñáêôŞñáò ãåìßóìáôïò";
-        Text[ korean ] = "Ã¤¿ò±âÈ£";
+        Text[ korean ] = "ì±„ì›€ê¸°í˜¸";
         Text[ turkish ] = "Öncü";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Carácter de relleno";
+        Text[ thai ] = "Fill character";
     };
     PushButton BTN_NEW
     {
@@ -465,17 +475,18 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ dutch ] = "~Nieuw" ;
         Text [ spanish ] = "~Nuevo" ;
         Text [ english_us ] = "~New" ;
-        Text[ chinese_simplified ] = "ĞÂ½¨(~N)";
+        Text[ chinese_simplified ] = "æ–°å»º(~N)";
         Text[ russian ] = "Ñîçä~àòü";
         Text[ polish ] = "Nowy";
-        Text[ japanese ] = "V‹Kì¬(~N)";
-        Text[ chinese_traditional ] = "·s«Ø(~N)";
+        Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)";
+        Text[ chinese_traditional ] = "æ–°å»º(~N)";
         Text[ arabic ] = "ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá";
-        Text[ korean ] = "»õ·Î(~N)";
+        Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";
         Text[ turkish ] = "~Yeni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nuevo";
+        Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ";
     };
     PushButton BTN_DELALL
     {
@@ -484,7 +495,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text = "~Alle löschen" ;
         Text [ ENGLISH ] = "Dele~te all" ;
         Text [ norwegian ] = "Sle~tt alle" ;
-        Text [ italian ] = "~Elimina tutti" ;
+        Text [ italian ] = "Elimina t~utti" ;
         Text [ portuguese_brazilian ] = "Apag~ar tudo" ;
         Text [ portuguese ] = "Eli~minar tudo" ;
         Text [ finnish ] = "~Poista kaikki" ;
@@ -494,17 +505,18 @@ TabPage RID_SVXPAGE_TABULATOR
         Text [ dutch ] = "~Alle verwijderen" ;
         Text [ spanish ] = "E~liminar todas" ;
         Text [ english_us ] = "Delete ~All" ;
-        Text[ chinese_simplified ] = "È«²¿É¾³ı(~A)";
+        Text[ chinese_simplified ] = "å…¨éƒ¨åˆ é™¤(~A)";
         Text[ russian ] = "Óäàëèòü âñå";
         Text[ polish ] = "Wyczyœæ w~szyst.";
-        Text[ japanese ] = "‚·‚×‚Äíœ(~A)";
-        Text[ chinese_traditional ] = "¥ş³¡§R°£(~A)";
+        Text[ japanese ] = "ã™ã¹ã¦å‰Šé™¤(~A)";
+        Text[ chinese_traditional ] = "å…¨éƒ¨åˆªé™¤(~A)";
         Text[ arabic ] = "ÍĞİ Çáßá";
         Text[ greek ] = "ÄéáãñáöŞ üë~á";
-        Text[ korean ] = "¸ğµÎ »èÁ¦(~A)";
+        Text[ korean ] = "ëª¨ë‘ ì‚­ì œ(~A)";
         Text[ turkish ] = "~Tümünü sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "E~liminar todas";
+        Text[ thai ] = "à¸¥à¸š~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";
     };
     PushButton BTN_DEL
     {
@@ -513,42 +525,53 @@ TabPage RID_SVXPAGE_TABULATOR
         Text = "Lö~schen" ;
         Text [ ENGLISH ] = "~Delete" ;
         Text [ norwegian ] = "~Slett" ;
-        Text [ italian ] = "~Elimina" ;
+        Text [ italian ] = "Eli~mina" ;
         Text [ portuguese_brazilian ] = "~Apagar" ;
         Text [ portuguese ] = "~Eliminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
-        Text [ french ] = "~Supprimer" ;
+        Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "Ra~dera" ;
         Text [ dutch ] = "~Wissen" ;
         Text [ spanish ] = "~Eliminar" ;
         Text [ english_us ] = "~Delete" ;
-        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "Óäàëèòü";
         Text[ polish ] = "~Usuñ";
-        Text[ japanese ] = "íœ(~D)";
-        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ japanese ] = "å‰Šé™¤(~D)";
+        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
         Text[ greek ] = "ÄéáãñáöŞ";
-        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ korean ] = "ì‚­ì œ(~D)";
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
+        Text[ thai ] = "~à¸¥à¸š";
     };
-    Text[ chinese_simplified ] = "ÖÆ±í·û";
+    String ST_LEFTTAB_ASIAN
+    {
+        Text = "~Links/Oben" ;
+        Text [ english_us ] = "~Left/Top" ;
+    };
+    String ST_RIGHTTAB_ASIAN
+    {
+        Text = "~Rechts/Unten" ;
+        Text [ english_us ] = "Righ~t/Bottom" ;
+    };
+    Text[ chinese_simplified ] = "åˆ¶è¡¨ç¬¦";
     Text[ russian ] = "Òàáóëÿòîğû";
     Text[ polish ] = "Tabulatory";
-    Text[ japanese ] = "ÀÌŞ";
-    Text[ chinese_traditional ] = "»sªí²Å";
+    Text[ japanese ] = "ã‚¿ãƒ–";
+    Text[ chinese_traditional ] = "å®šä½éµ";
     Text[ arabic ] = "ÚáÇãÇÊ ÇáÌÏæáÉ";
     Text[ greek ] = "Óôçëïèİôåò";
-    Text[ korean ] = "ÅÇ";
+    Text[ korean ] = "íƒ­";
     Text[ turkish ] = "Sekmeler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tabulaciones";
+    Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸à¸±à¹‰à¸™";
 };
  // ********************************************************************** EOF
-
 
 
 
