@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-03 10:59:07 $
+ *  last change: $Author: mba $ $Date: 2002-06-14 07:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3399,10 +3399,10 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
             if ( xRecorder.is() )
             {
                 // disable active recording and insert script into basic library container of application
-                xRecorder->endRecording();
                 aProp <<= com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier >();
                 xSet->setPropertyValue(sProperty,aProp);
                 AddDispatchMacroToBasic_Impl(xRecorder->getRecordedMacro());
+                xRecorder->endRecording();
                 xRecorder = NULL;
                 GetBindings().SetRecorder_Impl( xRecorder );
             }
