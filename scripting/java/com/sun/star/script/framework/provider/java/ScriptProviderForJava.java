@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForJava.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: rt $ $Date: 2004-01-05 13:44:40 $
+*  last change: $Author: svesik $ $Date: 2004-04-19 23:12:07 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -101,7 +101,7 @@ import drafts.com.sun.star.script.provider.XScriptProvider;
 import drafts.com.sun.star.script.provider.XScript;
 import drafts.com.sun.star.script.browse.XBrowseNode;
 import drafts.com.sun.star.script.browse.BrowseNodeTypes;
-import com.sun.star.script.framework.browse.ScriptMetaData;
+import com.sun.star.script.framework.container.ScriptMetaData;
 
 import com.sun.star.script.framework.provider.*;
 import com.sun.star.script.framework.log.LogUtils;
@@ -146,7 +146,17 @@ public class ScriptProviderForJava
             return script;
         }
 
+        public boolean hasScriptEditor()
+        {
+            return false;
+        }
+
+        public ScriptEditor getScriptEditor()
+        {
+            return null;
+        }
     }
+
     /**
      * Returns a factory for creating the service.
      * This method is called by the <code>JavaLoader</code>
@@ -234,7 +244,7 @@ class ScriptImpl implements XScript
         }
         catch ( Exception e )
         {
-            e.printStackTrace();
+            LogUtils.DEBUG( LogUtils.getTrace( e ) );
             throw new com.sun.star.uno.RuntimeException(
                 "Error constructing  ScriptProvider: "
                 + e.getMessage() );
@@ -296,7 +306,7 @@ class ScriptImpl implements XScript
             catch (ArrayStoreException e )
             {
                 LogUtils.DEBUG("Barfed " + e);
-                e.printStackTrace();
+                LogUtils.DEBUG( LogUtils.getTrace( e ) );
             }
 
             ArrayList invocationArgList = new ArrayList();
