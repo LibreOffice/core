@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:05:51 $
+ *  last change: $Author: mt $ $Date: 2001-07-18 13:45:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2218,7 +2218,8 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, BOOL bMBDow
                         {
                             MenuItemData* pData = pMenu->pItemList->GetDataFromPos( n );
                             bAllowNewPopup = pData && ( pData->pSubMenu != pActivePopup );
-                            KillActivePopup();
+                            if ( bAllowNewPopup )
+                                KillActivePopup();
                         }
 
                         if ( bPopupArea && bAllowNewPopup )
