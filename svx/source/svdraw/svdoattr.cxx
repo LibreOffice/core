@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoattr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:19:29 $
+ *  last change: $Author: cl $ $Date: 2001-01-31 16:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -794,6 +794,9 @@ const SfxItemSet& SdrAttrObj::GetUnmergedItemSet() const
 
 const SfxPoolItem* ImplCheckFillBitmapItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
 {
+    if( NULL == pModel )
+        return pNewItem;
+
     XFillBitmapItem* pBitmapItem = (XFillBitmapItem*)pNewItem;
 
     const GraphicObject& xGraphic = pBitmapItem->GetValue().GetGraphicObject();
@@ -882,6 +885,9 @@ const SfxPoolItem* ImplCheckFillBitmapItem( const SfxPoolItem* pNewItem, SdrMode
 
 const SfxPoolItem* ImplCheckLineDashItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
 {
+    if( NULL == pModel )
+        return pNewItem;
+
     XLineDashItem* pLineDashItem = (XLineDashItem*)pNewItem;
 
     String aUniqueName( pLineDashItem->GetName() );
@@ -967,6 +973,9 @@ const SfxPoolItem* ImplCheckLineDashItem( const SfxPoolItem* pNewItem, SdrModel*
 
 const SfxPoolItem* ImplCheckLineStartItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
 {
+    if( NULL == pModel )
+        return pNewItem;
+
     XLineStartItem* pClosedItem = NULL;
     XLineStartItem* pLineStartItem = (XLineStartItem*)pNewItem;
 
@@ -1138,6 +1147,9 @@ const SfxPoolItem* ImplCheckLineStartItem( const SfxPoolItem* pNewItem, SdrModel
 
 const SfxPoolItem* ImplCheckLineEndItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
 {
+    if( NULL == pModel )
+        return pNewItem;
+
     XLineEndItem* pClosedItem = NULL;
     XLineEndItem* pLineEndItem = (XLineEndItem*)pNewItem;
 
@@ -1310,6 +1322,9 @@ const SfxPoolItem* ImplCheckLineEndItem( const SfxPoolItem* pNewItem, SdrModel* 
 
 const SfxPoolItem* ImplCheckFillGradientItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
 {
+    if( NULL == pModel )
+        return pNewItem;
+
     XFillGradientItem* pFillGradientItem = (XFillGradientItem*)pNewItem;
 
     String aUniqueName( pFillGradientItem->GetName() );
@@ -1395,6 +1410,9 @@ const SfxPoolItem* ImplCheckFillGradientItem( const SfxPoolItem* pNewItem, SdrMo
 
 const SfxPoolItem* ImplCheckFillFloatTransparenceItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
 {
+    if( NULL == pModel )
+        return pNewItem;
+
     XFillFloatTransparenceItem* pFillFloatTransparenceItem = (XFillFloatTransparenceItem*)pNewItem;
 
     String aUniqueName( pFillFloatTransparenceItem->GetName() );
@@ -1481,6 +1499,9 @@ const SfxPoolItem* ImplCheckFillFloatTransparenceItem( const SfxPoolItem* pNewIt
 
 const SfxPoolItem* ImplCheckFillHatchItem( const SfxPoolItem* pNewItem, SdrModel* pModel )
 {
+    if( NULL == pModel )
+        return pNewItem;
+
     XFillHatchItem* pFillHatchItem = (XFillHatchItem*)pNewItem;
 
     String aUniqueName( pFillHatchItem->GetName() );
@@ -1570,7 +1591,7 @@ void SdrAttrObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem
     {
         const SfxPoolItem* pItem = pNewItem;
 
-        switch( pNewItem->Which() )
+        switch( nWhich )
         {
         case XATTR_FILLBITMAP:
             pItem = ImplCheckFillBitmapItem( pItem, pModel );
