@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:56:00 $
+ *  last change: $Author: gt $ $Date: 2001-06-14 09:06:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9028,7 +9028,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Duration
         {
-            Text = "Liefert die jährliche Duration eines Wertpapieres mit periodischer Zinszahlung.";
+            Text = "Liefert die jährliche Macauley Laufzeit eines Wertpapieres mit periodischer Zinszahlung.";
             Text[ english ] = "Returns the annual duration of a security with periodic interest payments";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Returns the annual duration of a security with periodic interest payments";
@@ -12431,7 +12431,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Yielddisc
         {
-            Text = "Liefert die jährliche Rendite eines unverzinslichen Wertpapiers.";
+            Text = "Liefert die jährliche Rendite eines diskontierten Wertpapiers.";
             Text[ english ] = "Returns the annual yield for a discounted security (e.g. treasury bill)";
             Text[ language_user1 ] = " ";
             Text[ english_us ] = "Returns the annual yield for a discounted security (e.g. treasury bill)";
