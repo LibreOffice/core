@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:25:40 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1188,7 +1188,9 @@ void SwFmtCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
 
     //Spalte 2 bis n-1 ist PrtBreite + Zwischenraumbreite
     const sal_uInt16 nMidWidth = nPrtWidth + nGutterWidth;
-    for ( sal_uInt16 i = 1; i < GetNumCols()-1; ++i )
+    sal_uInt16 i;
+
+    for ( i = 1; i < GetNumCols()-1; ++i )
     {
         pCol = aColumns[i];
         pCol->SetWishWidth( nMidWidth );
@@ -2717,7 +2719,8 @@ sal_Bool SwFrmFmt::IsLowerOf( const SwFrmFmt& rFmt ) const
         while( pFlyNd )
         {
             // dann ueber den Anker nach oben "hangeln"
-            for( sal_uInt16 n = 0; n < rFmts.Count(); ++n )
+            sal_uInt16 n;
+            for( n = 0; n < rFmts.Count(); ++n )
             {
                 const SwFrmFmt* pFmt = rFmts[ n ];
                 const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
