@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:20:19 $
+ *  last change: $Author: vg $ $Date: 2001-07-14 20:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,14 +316,14 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ dutch ] = "Op iedere pagina ~herhalen";
         Text[ spanish ] = "~Repetir en cada página";
         Text[ english_us ] = "Re~peat header";
-        Text[ chinese_simplified ] = "ÔÚÃ¿Ò³ÉÏÖØ¸´ÏÔÊ¾(~R)";
+        Text[ chinese_simplified ] = "ÔÚÃ¿Ò³ÉÏÖØ¸´ÏÔÊ¾(~P)";
         Text[ russian ] = "Ïîâòîğ íà êàæäîé ñòğàíèöå";
         Text[ polish ] = "Powtórz na ~ka¿dej stronie";
-        Text[ japanese ] = "ŠeÍß°¼Ş‚ÉŒJ‚è•Ô‚µ(~R)";
-        Text[ chinese_traditional ] = "¦b¨C­¶¤W­«½ÆÅã¥Ü(~R)";
+        Text[ japanese ] = "ŠeÍß°¼Ş‚ÉŒJ‚è•Ô‚µ(~P)";
+        Text[ chinese_traditional ] = "¦b¨C­¶¤W­«½ÆÅã¥Ü(~P)";
         Text[ arabic ] = "ÊßÑÇÑ İí ßá ÕİÍÉ";
         Text[ greek ] = "Åì~öÜíéóç óå êÜèå óåëßäá";
-        Text[ korean ] = "¸ğµç¡¡ÂÊ¿¡¼­¡¡¹İº¹(~R)";
+        Text[ korean ] = "¸ğµç ÂÊ¿¡¼­ ¹İº¹(~P)";
         Text[ turkish ] = "İlk satırı her sayfada yi~nele";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Repetir en cada página";
@@ -352,7 +352,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Text[ chinese_traditional ] = "¤£¤À¶}ªí®æ";
         Text[ arabic ] = "ÚÏã İÕá ÇáÌÏæá";
         Text[ greek ] = "¼÷é äéáßñåóç ôïõ ğß~íáêá";
-        Text[ korean ] = "Å×ÀÌºí ºĞ¸®ÇÏÁö¡¡¾Ê±â.";
+        Text[ korean ] = "Å×ÀÌºí ºĞ¸®ÇÏÁö ¾Ê±â.";
         Text[ turkish ] = "Tabloyu tek sayfaya  ~sığdır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No dividir tabla";
@@ -504,5 +504,6 @@ ModalDialog DLG_CONV_TEXT_TABLE
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Convertir tabla en texto";
 };
+
 
 
