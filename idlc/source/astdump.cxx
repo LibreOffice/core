@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdump.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:44:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:07:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,8 +122,10 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
             typeClass = RT_TYPE_CONSTANTS;
 
         typereg::Writer aBlob(
-            TYPEREG_VERSION_0, getDocumentation(),
+            m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
+            getDocumentation(),
             OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8), typeClass,
+            m_bPublished,
             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0,
             nConst, 0, 0);
 
@@ -137,7 +139,9 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
             if ( pDecl->getNodeType() == NT_const &&
                  pDecl->isInMainfile() )
             {
-                ((AstConstant*)pDecl)->dumpBlob(aBlob, index++);
+                ((AstConstant*)pDecl)->dumpBlob(
+                    aBlob, index++,
+                    getNodeType() == NT_module && pDecl->isPublished());
             }
             ++iter;
         }
@@ -164,7 +168,8 @@ sal_Bool AstModule::dump(RegistryKey& rKey)
             fileName = OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8);
         }
         typereg::Writer aBlob(
-            TYPEREG_VERSION_0, getDocumentation(), fileName, typeClass,
+            m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
+            getDocumentation(), fileName, typeClass, m_bPublished,
             OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 0, 0, 0,
             0);
 
@@ -198,9 +203,10 @@ sal_Bool AstTypeDef::dump(RegistryKey& rKey)
     }
 
     typereg::Writer aBlob(
-        TYPEREG_VERSION_0, getDocumentation(),
+        m_bPublished ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0,
+        getDocumentation(),
         OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8),
-        RT_TYPE_TYPEDEF,
+        RT_TYPE_TYPEDEF, m_bPublished,
         OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8), 1, 0, 0, 0);
     aBlob.setSuperTypeName(
         0,
@@ -223,7 +229,8 @@ sal_Bool AstTypeDef::dump(RegistryKey& rKey)
 
 sal_Bool AstService::dump(RegistryKey& rKey)
 {
-    typereg_Version version = TYPEREG_VERSION_0;
+    typereg_Version version = m_bPublished
+        ? TYPEREG_VERSION_1 : TYPEREG_VERSION_0;
     rtl::OString superName;
     sal_uInt16 constructors = 0;
     sal_uInt16 properties = 0;
@@ -233,6 +240,7 @@ sal_Bool AstService::dump(RegistryKey& rKey)
     {
         switch ((*i)->getNodeType()) {
         case NT_interface:
+        case NT_typedef:
             version = TYPEREG_VERSION_1;
             OSL_ASSERT(superName.getLength() == 0);
             superName = (*i)->getRelativName();
@@ -286,6 +294,7 @@ sal_Bool AstService::dump(RegistryKey& rKey)
         version, getDocumentation(),
         rtl::OStringToOUString(getFileName(), RTL_TEXTENCODING_UTF8),
         getNodeType() == NT_singleton ? RT_TYPE_SINGLETON : RT_TYPE_SERVICE,
+        m_bPublished,
         rtl::OStringToOUString(getRelativName(), RTL_TEXTENCODING_UTF8),
         superName.getLength() == 0 ? 0 : 1, properties, constructors,
         references);
@@ -362,7 +371,9 @@ sal_Bool AstService::dump(RegistryKey& rKey)
             }
 
         default:
-            OSL_ASSERT((*i)->getNodeType() == NT_interface);
+            OSL_ASSERT(
+                (*i)->getNodeType() == NT_interface
+                || (*i)->getNodeType() == NT_typedef);
             break;
         }
     }}
@@ -434,15 +445,19 @@ sal_Bool AstAttribute::dumpBlob(
         index, getDocumentation(), OUString(), accessMode, name,
         OStringToOUString(getType()->getRelativName(), RTL_TEXTENCODING_UTF8),
         RTConstValue());
-    dumpExceptions(rBlob, m_getExceptions, RT_MODE_ATTRIBUTE_GET, methodIndex);
-    dumpExceptions(rBlob, m_setExceptions, RT_MODE_ATTRIBUTE_SET, methodIndex);
+    dumpExceptions(
+        rBlob, m_getDocumentation, m_getExceptions, RT_MODE_ATTRIBUTE_GET,
+        methodIndex);
+    dumpExceptions(
+        rBlob, m_setDocumentation, m_setExceptions, RT_MODE_ATTRIBUTE_SET,
+        methodIndex);
 
     return sal_True;
 }
 
 void AstAttribute::dumpExceptions(
-    typereg::Writer & writer, DeclList const & exceptions, RTMethodMode flags,
-    sal_uInt16 * methodIndex)
+    typereg::Writer & writer, rtl::OUString const & documentation,
+    DeclList const & exceptions, RTMethodMode flags, sal_uInt16 * methodIndex)
 {
     if (!exceptions.empty()) {
         OSL_ASSERT(methodIndex != 0);
@@ -450,7 +465,7 @@ void AstAttribute::dumpExceptions(
         // exceptions.size() <= SAL_MAX_UINT16 already checked in
         // AstInterface::dump:
         writer.setMethodData(
-            idx, rtl::OUString(), flags,
+            idx, documentation, flags,
             OStringToOUString(getLocalName(), RTL_TEXTENCODING_UTF8),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void")), 0,
             static_cast< sal_uInt16 >(exceptions.size()));
@@ -471,7 +486,7 @@ const sal_Char* AstSequence::getRelativName() const
     if ( !m_pRelativName )
     {
         m_pRelativName = new OString("[]");
-        AstType const * pType = resolveTypedefs( m_pMemberType );
+        AstDeclaration const * pType = resolveTypedefs( m_pMemberType );
         *m_pRelativName += pType->getRelativName();
     }
 
