@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:49:40 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 14:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,15 +413,19 @@ void OutputDevice::DrawOutDev( const Point& rDestPt, const Size& rDestSize,
 
     if( mpAlphaVDev )
     {
-        ImplDrawOutDevDirect( &rOutDev, &aPosAry );
-
         if( rOutDev.mpAlphaVDev )
         {
+            // alpha-blend source over destination
+            DrawBitmapEx( rDestPt, rDestSize, rOutDev.GetBitmapEx(rSrcPt, rSrcSize) );
+
+            // This would be mode SOURCE:
             // copy source alpha channel to our alpha channel
-            mpAlphaVDev->DrawOutDev( rDestPt, rDestSize, rSrcPt, rSrcSize, *rOutDev.mpAlphaVDev );
+            //mpAlphaVDev->DrawOutDev( rDestPt, rDestSize, rSrcPt, rSrcSize, *rOutDev.mpAlphaVDev );
         }
         else
         {
+            ImplDrawOutDevDirect( &rOutDev, &aPosAry );
+
             // make destination rectangle opaque - source has no alpha
             mpAlphaVDev->DrawRect( Rectangle(rDestPt, rDestSize) );
         }
@@ -890,8 +894,17 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
                 // #110958# Paint mask to alpha channel. Luckily, the
                 // black and white representation of the mask maps to
                 // the alpha channel
+
+                // #i25167# Restrict mask painting to _opaque_ areas
+                // of the mask, otherwise we spoil areas where no
+                // bitmap content was ever visible. Interestingly
+                // enough, this can be achieved by taking the mask as
+                // the transparency mask of itself
                 if( mpAlphaVDev )
-                    mpAlphaVDev->DrawBitmap( rDestPt, rDestSize, rBitmapEx.GetMask() );
+                    mpAlphaVDev->DrawBitmapEx( rDestPt,
+                                               rDestSize,
+                                               BitmapEx( rBitmapEx.GetMask(),
+                                                         rBitmapEx.GetMask() ) );
             }
             else
             {
