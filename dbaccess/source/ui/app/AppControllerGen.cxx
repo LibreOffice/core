@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-25 14:26:49 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@
 #endif
 #ifndef _DBAUI_DLGRENAME_HXX
 #include "dlgrename.hxx"
+#endif
+#ifndef INCLUDED_SFX_MAILMODELAPI_HXX
+#include <sfx2/mailmodelapi.hxx>
 #endif
 #ifndef DBAUI_APPVIEW_HXX
 #include "AppView.hxx"
@@ -235,7 +238,11 @@ void OApplicationController::pasteFormat(sal_uInt32 _nFormatId)
             const TransferableDataHelper& rClipboard = getViewClipboard();
             ElementType eType = getContainer()->getElementType();
             if ( eType == E_TABLE )
-                pasteTable(_nFormatId, rClipboard );
+            {
+                Reference<XConnection> xDestConnection;
+                ensureConnection(xDestConnection);
+                m_aTableCopyHelper.pasteTable(_nFormatId, rClipboard,getDatabaseName() , xDestConnection);
+            }
             else
                 paste( eType,ODataAccessObjectTransferable::extractObjectDescriptor(rClipboard) );
 
@@ -622,23 +629,57 @@ void OApplicationController::onLoadedMenu(const Reference< drafts::com::sun::sta
     }
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::doAction(sal_uInt16 _nId ,sal_Bool _bEdit)
+void OApplicationController::doAction(sal_uInt16 _nId ,OLinkedDocumentsAccess::EOpenMode _eOpenMode)
 {
     ::std::vector< ::rtl::OUString> aList;
     getSelectionElementNames(aList);
     ElementType eType = getContainer()->getElementType();
 
+    ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > > aCompoments;
     ::std::vector< ::rtl::OUString>::iterator aEnd = aList.end();
     for (::std::vector< ::rtl::OUString>::iterator aIter = aList.begin(); aIter != aEnd; ++aIter)
     {
         if ( SID_DB_APP_CONVERTTOVIEW == _nId )
             convertToView(*aIter);
         else
-            openElement(*aIter,eType, _bEdit );
+            aCompoments.push_back( ::std::pair< ::rtl::OUString ,Reference< XModel > >(*aIter,Reference< XModel >(openElement(*aIter,eType, _eOpenMode ),UNO_QUERY)));
+    }
+
+    // special handling for mail, if more than one document is selected attach them all
+    if ( _eOpenMode == OLinkedDocumentsAccess::OPEN_FORMAIL )
+    {
+        ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator aIter = aCompoments.begin();
+        ::std::vector< ::std::pair< ::rtl::OUString ,Reference< XModel > > >::iterator aEnd = aCompoments.end();
+        SfxMailModel aSendMail(m_xCurrentFrame);
+        SfxMailModel::SendMailResult eResult = SfxMailModel::SEND_MAIL_OK;
+        for (; aIter != aEnd && SfxMailModel::SEND_MAIL_OK == eResult; ++aIter)
+        {
+            Reference< XModel > xModel(aIter->second,UNO_QUERY);
+
+            eResult = aSendMail.AttachDocument(SfxMailModel::TYPE_SELF,xModel,aIter->first);
+        }
+        if ( !aSendMail.IsEmpty() )
+            aSendMail.Send();
     }
 }
 // -----------------------------------------------------------------------------
-
+ElementType OApplicationController::getElementType(const Reference< XContainer >& _xContainer) const
+{
+    ElementType eRet = E_NONE;
+    Reference<XServiceInfo> xServiceInfo(_xContainer,UNO_QUERY);
+    if ( xServiceInfo.is() )
+    {
+        if ( xServiceInfo->supportsService(SERVICE_SDBCX_TABLES) )
+            eRet = E_TABLE;
+        else if ( xServiceInfo->supportsService(SERVICE_NAME_FORM_COLLECTION) )
+            eRet = E_FORM;
+        else if ( xServiceInfo->supportsService(SERVICE_NAME_REPORT_COLLECTION) )
+            eRet = E_REPORT;
+        else
+            eRet = E_QUERY;
+    }
+    return eRet;
+}
 //........................................................................
 }   // namespace dbaui
 //........................................................................
