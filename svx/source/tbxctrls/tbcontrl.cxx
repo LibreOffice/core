@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-13 14:11:35 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 16:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,6 +960,8 @@ SvxColorWindow::SvxColorWindow( USHORT nId, USHORT nSlotId,
     lcl_CalcSizeValueSet( *this, aColorSet, aSize12 );
 
     SetHelpId( HID_POPUP_COLOR );
+    aColorSet.SetHelpId( HID_POPUP_COLOR_CTRL );
+
     SetText( rWndTitle );
     aColorSet.Show();
     StartListening( rBindings );
