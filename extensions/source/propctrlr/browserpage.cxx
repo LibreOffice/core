@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 09:04:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,12 @@ namespace pcr
 
     //------------------------------------------------------------------
     OBrowserListBox* OBrowserPage::getListBox()
+    {
+        return &m_aListBox;
+    }
+
+    //------------------------------------------------------------------
+    const OBrowserListBox* OBrowserPage::getListBox() const
     {
         return &m_aListBox;
     }
