@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:42:53 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2001-05-17 08:42:53 $ $Revision: 1.17 $
+ // $Author: kz $ $Date: 2001-06-08 23:24:54 $ $Revision: 1.18 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -1757,6 +1757,7 @@ ImageList RID_OFFICEIMAGELIST_LC
     MaskColor = STD_MASKCOLOR ;
     OFFICE_IDLIST
 };
+
 
 
 
