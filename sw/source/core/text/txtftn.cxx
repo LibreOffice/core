@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-02 14:20:48 $
+ *  last change: $Author: ama $ $Date: 2001-07-09 09:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,7 +530,9 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
                     }
                     else
                     {
-                        if( !bEndDoc || ( bEndn && pEndBoss->IsInSct() ) )
+                        if( !bEndDoc || ( bEndn && pEndBoss->IsInSct() &&
+                            !SwLayouter::Collecting( GetNode()->GetDoc(),
+                            pEndBoss->FindSctFrm(), NULL ) ) )
                         {
                             if( bEndn )
                                 pEndBoss->RemoveFtn( this, pFtn );
