@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:41:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 13:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@
 #ifndef _SVX_SHADITEM_HXX //autogen
 #include <svx/shaditem.hxx>
 #endif
+// --> collapsing borders FME 2005-05-27 #i29550#
+#ifndef SVX_FRAMELINK_HXX
+#include <svx/framelink.hxx>
+#endif
+#include <map>
+// <--
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
@@ -333,6 +339,7 @@ static double aScaleX = 1.0;
 static double aScaleY = 1.0;
 static double aMinDistScale = 0.73;
 static double aEdgeScale = 0.5;
+
 
 //In pLines werden Umrandungen waehrend des Paint gesammelt und soweit
 //moeglich zusammengefasst.
@@ -1317,12 +1324,25 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
             const FASTBOOL bBottom = 0 != (pFrm->*fnRect->fnGetBottomMargin)();
             if ( bBottom )
             {
-                SwTwips nDiff = rBox.GetBottom() ?
+                SwTwips nDiff = 0;
+                // --> collapsing borders FME 2005-05-27 #i29550#
+                if ( pFrm->IsTabFrm() &&
+                     ((SwTabFrm*)pFrm)->IsCollapsingBorders() )
+                {
+                    // For collapsing borders, we have to add the height of
+                    // the height of the last line
+                    nDiff = ((SwTabFrm*)pFrm)->GetBottomLineSize();
+                }
+                // <-- collapsing
+                else
+                {
+                    nDiff = rBox.GetBottom() ?
                     rBox.CalcLineSpace( BOX_LINE_BOTTOM ) :
                     ( rAttrs.IsBorderDist() ?
                       // OD 23.01.2003 #106386# - increase of distance by
                       // one twip is incorrect.
                       rBox.GetDistance( BOX_LINE_BOTTOM ) : 0 );
+                }
                 if( nDiff )
                     (rRect.*fnRect->fnAddBottom)( nDiff );
             }
@@ -2087,6 +2107,529 @@ void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
 #endif
 #endif
 }
+
+
+//
+// FUNCTIONS USED FOR COLLAPSING TABLE BORDER LINES START
+//
+
+struct SwLineEntry
+{
+    SwTwips mnKey;
+    SwTwips mnStartPos;
+    SwTwips mnEndPos;
+
+    svx::frame::Style maAttribute;
+
+    enum OverlapType { NO_OVERLAP, NO_SEGMENTS, ONE_SEGMENT_LEFT, ONE_SEGMENT_RIGHT, TWO_SEGMENTS };
+
+public:
+    SwLineEntry( SwTwips nKey,
+                 SwTwips nStartPos,
+                 SwTwips nEndPos,
+                 const svx::frame::Style& rAttribute );
+
+    BYTE Overlaps( const SwLineEntry& rComp ) const;
+};
+
+SwLineEntry::SwLineEntry( SwTwips nKey,
+                          SwTwips nStartPos,
+                          SwTwips nEndPos,
+                          const svx::frame::Style& rAttribute )
+    :   mnKey( nKey ),
+        mnStartPos( nStartPos ),
+        mnEndPos( nEndPos ),
+        maAttribute( rAttribute )
+{
+}
+
+BYTE SwLineEntry::Overlaps( const SwLineEntry& rComp )  const
+{
+    BYTE eRet;
+
+    if ( mnStartPos >= rComp.mnEndPos || mnEndPos <= rComp.mnStartPos )
+        eRet = NO_OVERLAP;
+    else if ( mnStartPos < rComp.mnStartPos && mnEndPos > rComp.mnEndPos )
+        eRet = TWO_SEGMENTS;
+    else if ( mnStartPos >= rComp.mnStartPos && mnEndPos <= rComp.mnEndPos )
+        eRet = NO_SEGMENTS;
+    else
+        eRet = ( mnStartPos < rComp.mnStartPos ) ? ONE_SEGMENT_LEFT : ONE_SEGMENT_RIGHT;
+
+    return eRet;
+}
+
+
+typedef std::multimap< SwTwips, SwLineEntry >::iterator SwLineEntryIter;
+typedef std::multimap< SwTwips, SwLineEntry >::const_iterator SwLineEntryConstIter;
+
+class SwTabFrmPainter
+{
+    std::multimap< SwTwips, SwLineEntry > maVertLines;
+    std::multimap< SwTwips, SwLineEntry > maHoriLines;
+    const SwTabFrm& mrTabFrm;
+
+    void Insert( SwLineEntry&, bool bHori );
+    void Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem );
+    void HandleFrame( const SwFrm& rFrm );
+    void FindStylesForLine( const Point&,
+                            const Point&,
+                            svx::frame::Style*,
+                            bool bHori ) const;
+
+public:
+    SwTabFrmPainter( const SwTabFrm& rTabFrm );
+
+    void PaintLines( OutputDevice& rDev, const SwRect& rRect ) const;
+};
+
+SwTabFrmPainter::SwTabFrmPainter( const SwTabFrm& rTabFrm )
+    : mrTabFrm( rTabFrm )
+{
+    HandleFrame( rTabFrm );
+}
+
+void SwTabFrmPainter::HandleFrame( const SwFrm& rFrm )
+{
+    if ( rFrm.IsLayoutFrm() )
+    {
+        SwBorderAttrAccess aAccess( SwFrm::GetCache(), &rFrm );
+        const SwBorderAttrs& rAttrs = *aAccess.Get();
+        const SvxBoxItem& rBox = rAttrs.GetBox();
+
+        Insert( rFrm, rBox );
+        // recurse, but do not recurse into lower tabframes:
+        SwFrm* pLower = ((SwLayoutFrm&)rFrm).Lower();
+        while ( pLower )
+        {
+            if ( !pLower->IsTabFrm() )
+                HandleFrame( *pLower );
+            pLower = pLower->GetNext();
+        }
+    }
+}
+
+void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) const
+{
+    const SwFrm* pTmpFrm = &mrTabFrm;
+    SWRECTFN( pTmpFrm )
+
+    SwLineEntryConstIter aIter = maHoriLines.begin();
+    bool bHori = true;
+
+    // color for subsidiary lines:
+    const Color& rCol( SwViewOption::GetTableBoundariesColor() );
+
+    // high contrast mode:
+    // overrides the color of non-subsidiary lines.
+    const Color* pHCColor = 0;
+    ULONG nOldDrawMode = rDev.GetDrawMode();
+    if( pGlobalShell->GetWin() &&
+        Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        pHCColor = &SwViewOption::GetFontColor();
+        rDev.SetDrawMode( 0 );
+    }
+
+    // set clip region:
+    rDev.Push( PUSH_CLIPREGION );
+    Size aSize( rRect.SSize() );
+    // Hack! Necessary, because the layout is not pixel aligned!
+    aSize.Width() += nPixelSzW; aSize.Height() += nPixelSzH;
+    rDev.SetClipRegion( Rectangle( rRect.Pos(), aSize ) );
+
+    // The following stuff if necessary to have the new table borders fit
+    // into a ::SwAlignRect adjusted world.
+    const SwTwips nTwipXCorr =  bVert ? 0 : Max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
+    const SwTwips nTwipYCorr = !bVert ? 0 : Max( 0L, nHalfPixelSzW - 2 );    // 1 < 2 < 3 ;-)
+    const SwFrm* pUpper = mrTabFrm.GetUpper();
+    SwRect aUpper( pUpper->Prt() );
+    aUpper.Pos() += pUpper->Frm().Pos();
+    SwRect aUpperAligned( aUpper );
+    ::SwAlignRect( aUpperAligned, pGlobalShell );
+
+    while ( true )
+    {
+        if ( aIter == maHoriLines.end() )
+        {
+            aIter = maVertLines.begin();
+            bHori = false;
+        }
+
+        if ( aIter == maVertLines.end() )
+            break;
+
+        const SwLineEntry& rEntry = (*aIter).second;
+        const svx::frame::Style& rEntryStyle( (*aIter).second.maAttribute );
+
+        Point aStart, aEnd;
+        if ( bHori )
+        {
+            aStart.X() = rEntry.mnStartPos;
+            aStart.Y() = rEntry.mnKey;
+            aEnd.X() = rEntry.mnEndPos;
+            aEnd.Y() = rEntry.mnKey;
+        }
+        else
+        {
+            aStart.X() = rEntry.mnKey;
+            aStart.Y() = rEntry.mnStartPos;
+            aEnd.X() = rEntry.mnKey;
+            aEnd.Y() = rEntry.mnEndPos;
+        }
+
+        SwRect aRepaintRect( aStart, aEnd );
+
+        // the repaint rectangle has to be moved a bit for the centered lines:
+        SwTwips nRepaintRectSize = !rEntryStyle.GetWidth() ? 1 : rEntryStyle.GetWidth();
+        if ( bHori )
+        {
+            aRepaintRect.Height( 2 * nRepaintRectSize );
+            aRepaintRect.Pos().Y() -= nRepaintRectSize;
+        }
+        else
+        {
+            aRepaintRect.Width( 2 * nRepaintRectSize );
+            aRepaintRect.Pos().X() -= nRepaintRectSize;
+        }
+
+        if ( rRect.IsOver( aRepaintRect ) )
+        {
+            svx::frame::Style aStyles[ 7 ];
+            aStyles[ 0 ] = rEntryStyle;
+            FindStylesForLine( aStart, aEnd, aStyles, bHori );
+
+            // subsidiary lines
+            const Color* pTmpColor = 0;
+            if ( 0 == aStyles[ 0 ].GetWidth() )
+            {
+                if ( IS_SUBS_TABLE && pGlobalShell->GetWin() )
+                    aStyles[ 0 ].Set( rCol, 1, 0, 0 );
+            }
+            else
+                pTmpColor = pHCColor;
+
+            // The line sizes stored in the line style have to be adjusted as well.
+            // This will guarantee that lines with the same twip size will have the
+            // same pixel size.
+            for ( int i = 0; i < 7; ++i )
+            {
+                sal_uInt16 nPrim = aStyles[ i ].Prim();
+                sal_uInt16 nDist = aStyles[ i ].Dist();
+                sal_uInt16 nSecn = aStyles[ i ].Secn();
+
+                if ( nPrim > 0 )
+                    nPrim = (sal_uInt16)( Max( 1L, nPixelSzH * ( nPrim / nPixelSzH ) ) );
+                if ( nDist > 0 )
+                    nDist = (sal_uInt16)( Max( 1L, nPixelSzH * ( nDist / nPixelSzH ) ) );
+                if ( nSecn > 0 )
+                    nSecn = (sal_uInt16)( Max( 1L, nPixelSzH * ( nSecn / nPixelSzH ) ) );
+
+                aStyles[ i ].Set( nPrim, nDist, nSecn );
+            }
+
+            // The (twip) positions will be adjusted to meet these requirements:
+            // 1. The y coordinates are located in the middle of the pixel grid
+            // 2. The x coordinated are located at the beginning of the pixel grid
+            // This is done, because the horizontal lines are painted "at beginning",
+            // whereas the vertical lines are painted "centered". By making the line
+            // sizes a multiple of one pixel size, we can assure, that all lines having
+            // the same twip size have the same pixel size, independent of their position
+            // on the screen.
+            Point aPaintStart = rDev.PixelToLogic( rDev.LogicToPixel( aStart ) );
+            Point aPaintEnd = rDev.PixelToLogic( rDev.LogicToPixel( aEnd ) );
+
+            if( pGlobalShell->GetWin() )
+            {
+                // The table borders do not use SwAlignRect, but all the other frames do.
+                // Therefore we tweak the outer borders a bit to achieve that the outer
+                // borders match the subsidiary lines of the upper:
+                if ( aStart.X() == aUpper.Left() )
+                    aPaintStart.X() = aUpperAligned.Left();
+                else if ( aStart.X() == aUpper._Right() )
+                    aPaintStart.X() = aUpperAligned._Right();
+                if ( aStart.Y() == aUpper.Top() )
+                    aPaintStart.Y() = aUpperAligned.Top();
+                else if ( aStart.Y() == aUpper._Bottom() )
+                    aPaintStart.Y() = aUpperAligned._Bottom();
+
+                if ( aEnd.X() == aUpper.Left() )
+                    aPaintEnd.X() = aUpperAligned.Left();
+                else if ( aEnd.X() == aUpper._Right() )
+                    aPaintEnd.X() = aUpperAligned._Right();
+                if ( aEnd.Y() == aUpper.Top() )
+                    aPaintEnd.Y() = aUpperAligned.Top();
+                else if ( aEnd.Y() == aUpper._Bottom() )
+                    aPaintEnd.Y() = aUpperAligned._Bottom();
+            }
+
+            aPaintStart.X() -= nTwipXCorr; // nHalfPixelSzW - 2 to assure that we do not leave the pixel
+            aPaintEnd.X()   -= nTwipXCorr;
+            aPaintStart.Y() -= nTwipYCorr;
+            aPaintEnd.Y()   -= nTwipYCorr;
+
+            // Here comes the painting stuff: Thank you, DR, great job!!!
+            if ( bHori )
+                svx::frame::DrawHorFrameBorder
+                (
+                    rDev,
+                    aPaintStart,
+                    aPaintEnd,
+                    aStyles[ 0 ],   // current style
+                    aStyles[ 1 ],   // aLFromT
+                    aStyles[ 2 ],   // aLFromL
+                    aStyles[ 3 ],   // aLFromB
+                    aStyles[ 4 ],   // aRFromT
+                    aStyles[ 5 ],   // aRFromR
+                    aStyles[ 6 ],   // aRFromB
+                    pTmpColor
+                );
+            else
+                svx::frame::DrawVerFrameBorder
+                (
+                    rDev,
+                    aPaintStart,
+                    aPaintEnd,
+                    aStyles[ 0 ],   // current style
+                    aStyles[ 1 ],   // aTFromL
+                    aStyles[ 2 ],   // aTFromT
+                    aStyles[ 3 ],   // aTFromR
+                    aStyles[ 4 ],   // aBFromL
+                    aStyles[ 5 ],   // aBFromB
+                    aStyles[ 6 ],   // aBFromR
+                    pTmpColor
+                );
+        }
+
+        ++aIter;
+    }
+
+    // restore output device:
+    rDev.Pop();
+    rDev.SetDrawMode( nOldDrawMode );
+}
+
+// Finds the lines that join the line defined by (StartPoint, EndPoint) in either
+// StartPoint or Endpoint. The styles of these lines are required for DR's magic
+// line painting functions.
+void SwTabFrmPainter::FindStylesForLine( const Point& rStartPoint,
+                                         const Point& rEndPoint,
+                                         svx::frame::Style* pStyles,
+                                         bool bHori ) const
+{
+    // pStyles[ 1 ] = bHori ? aLFromT : TFromL
+    // pStyles[ 2 ] = bHori ? aLFromL : TFromT,
+    // pStyles[ 3 ] = bHori ? aLFromB : TFromR,
+    // pStyles[ 4 ] = bHori ? aRFromT : BFromL,
+    // pStyles[ 5 ] = bHori ? aRFromR : BFromB,
+    // pStyles[ 6 ] = bHori ? aRFromB : BFromR,
+
+    std::pair< SwLineEntryConstIter, SwLineEntryConstIter > aVertRange = maVertLines.equal_range( rStartPoint.X() );
+    std::pair< SwLineEntryConstIter, SwLineEntryConstIter > aHoriRange = maHoriLines.equal_range( rStartPoint.Y() );
+
+    SwLineEntryConstIter aIter = aVertRange.first;
+    while ( aIter != aVertRange.second )
+    {
+        const SwLineEntry& rEntry = (*aIter).second;
+        if ( bHori )
+        {
+            if ( rStartPoint.Y() == rEntry.mnStartPos )
+                pStyles[ 3 ] = rEntry.maAttribute;
+            else if ( rStartPoint.Y() == rEntry.mnEndPos )
+                pStyles[ 1 ] = rEntry.maAttribute;
+        }
+        else
+        {
+            if ( rStartPoint.Y() == rEntry.mnEndPos )
+                pStyles[ 2 ] = rEntry.maAttribute;
+            else if ( rEndPoint.Y() == rEntry.mnStartPos )
+                pStyles[ 5 ] = rEntry.maAttribute;
+        }
+        ++aIter;
+    }
+
+    aIter = aHoriRange.first;
+    while ( aIter != aHoriRange.second )
+    {
+        const SwLineEntry& rEntry = (*aIter).second;
+        if ( bHori )
+        {
+            if ( rStartPoint.X() == rEntry.mnEndPos )
+                pStyles[ 2 ] = rEntry.maAttribute;
+            else if ( rEndPoint.X() == rEntry.mnStartPos )
+                pStyles[ 5 ] = rEntry.maAttribute;
+        }
+        else
+        {
+            if ( rStartPoint.X() == rEntry.mnEndPos )
+                pStyles[ 1 ] = rEntry.maAttribute;
+            else if ( rStartPoint.X() == rEntry.mnStartPos )
+                pStyles[ 3 ] = rEntry.maAttribute;
+        }
+        ++aIter;
+    }
+
+    if ( bHori )
+    {
+        aVertRange = maVertLines.equal_range( rEndPoint.X() );
+        aIter = aVertRange.first;
+        while ( aIter != aVertRange.second )
+        {
+            const SwLineEntry& rEntry = (*aIter).second;
+            if ( rEndPoint.Y() == rEntry.mnStartPos )
+                pStyles[ 6 ] = rEntry.maAttribute;
+            else if ( rEndPoint.Y() == rEntry.mnEndPos )
+                pStyles[ 4 ] = rEntry.maAttribute;
+            ++aIter;
+        }
+    }
+    else
+    {
+        aHoriRange = maHoriLines.equal_range( rEndPoint.Y() );
+        aIter = aHoriRange.first;
+        while ( aIter != aHoriRange.second )
+        {
+            const SwLineEntry& rEntry = (*aIter).second;
+            if ( rEndPoint.X() == rEntry.mnEndPos )
+                pStyles[ 4 ] = rEntry.maAttribute;
+            else if ( rEndPoint.X() == rEntry.mnStartPos )
+                pStyles[ 6 ] = rEntry.maAttribute;
+            ++aIter;
+        }
+    }
+}
+
+void SwTabFrmPainter::Insert( const SwFrm& rFrm, const SvxBoxItem& rBoxItem )
+{
+    // build 4 line entries for the 4 borders:
+    SwRect aBorderRect = rFrm.Frm();
+    if ( rFrm.IsTabFrm() )
+    {
+        aBorderRect = rFrm.Prt();
+        aBorderRect.Pos() += rFrm.Frm().Pos();
+    }
+
+    const SwTwips nLeft   = aBorderRect._Left();
+    const SwTwips nRight  = aBorderRect._Right();
+    const SwTwips nTop    = aBorderRect._Top();
+    const SwTwips nBottom = aBorderRect._Bottom();
+
+    svx::frame::Style aL( rBoxItem.GetLeft() );
+    svx::frame::Style aR( rBoxItem.GetRight() );
+    svx::frame::Style aT( rBoxItem.GetTop() );
+    svx::frame::Style aB( rBoxItem.GetBottom() );
+
+    aR.MirrorSelf();
+    aB.MirrorSelf();
+
+    bool bVert = mrTabFrm.IsVertical();
+    bool bR2L  = mrTabFrm.IsRightToLeft();
+
+    aL.SetRefMode( svx::frame::REFMODE_CENTERED );
+    aR.SetRefMode( svx::frame::REFMODE_CENTERED );
+    aT.SetRefMode( !bVert ? svx::frame::REFMODE_BEGIN : svx::frame::REFMODE_END );
+    aB.SetRefMode( !bVert ? svx::frame::REFMODE_BEGIN : svx::frame::REFMODE_END );
+
+    SwLineEntry aLeft  ( nLeft,   nTop,  nBottom, bVert ? aB : ( bR2L ? aR : aL ) );
+    SwLineEntry aRight ( nRight,  nTop,  nBottom, bVert ? aT : ( bR2L ? aL : aR ) );
+    SwLineEntry aTop   ( nTop,    nLeft, nRight,  bVert ? aL : aT );
+    SwLineEntry aBottom( nBottom, nLeft, nRight,  bVert ? aR : aB );
+
+    Insert( aLeft, false );
+    Insert( aRight, false );
+    Insert( aTop, true );
+    Insert( aBottom, true );
+}
+
+void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
+{
+    // get all lines from structure, that have key entry of pLE
+    std::multimap< SwTwips, SwLineEntry >* pLines = bHori ? &maHoriLines : &maVertLines;
+    const SwTwips nKey = rNew.mnKey;
+    std::pair< SwLineEntryIter, SwLineEntryIter > aPair = pLines->equal_range( nKey );
+    std::list< SwLineEntry > aInsertList;
+    SwLineEntryIter aIter = aPair.first;
+
+    bool bInsert = true;
+
+    while ( aIter != aPair.second )
+    {
+        const BYTE nOverlapType = (*aIter).second.Overlaps( rNew );
+        if ( SwLineEntry::NO_OVERLAP != nOverlapType )
+        {
+            const svx::frame::Style& rAttr = (*aIter).second.maAttribute;
+            const svx::frame::Style  aNewAttr = rNew.maAttribute > rAttr ? rNew.maAttribute : rAttr;
+
+            // rNew is completely covered by *aIter:
+            if ( SwLineEntry::TWO_SEGMENTS == nOverlapType )
+            {
+                // left segment
+                SwLineEntry aLeft( nKey, (*aIter).second.mnStartPos,
+                                   rNew.mnStartPos, rAttr );
+
+                aInsertList.push_back( aLeft );
+
+                // right regment
+                (*aIter).second.mnStartPos = rNew.mnEndPos;
+
+                // insert new entry
+                rNew.maAttribute = aNewAttr;
+
+                break;
+            }
+            // rNew is partly covered by *aIter:
+            else if ( SwLineEntry::ONE_SEGMENT_LEFT == nOverlapType ||
+                      SwLineEntry::ONE_SEGMENT_RIGHT == nOverlapType )
+            {
+                bInsert = false;
+                SwTwips nNewStartPos;
+                SwTwips nNewEndPos;
+
+                if ( SwLineEntry::ONE_SEGMENT_LEFT == nOverlapType )
+                {
+                    nNewStartPos = rNew.mnStartPos;
+                    nNewEndPos = (*aIter).second.mnEndPos;
+                    (*aIter).second.mnEndPos = rNew.mnStartPos;
+                }
+                else
+                {
+                    nNewStartPos = (*aIter).second.mnStartPos;
+                    nNewEndPos = rNew.mnEndPos;
+                    (*aIter).second.mnStartPos = rNew.mnEndPos;
+                }
+
+                SwLineEntry aNew( nKey, nNewStartPos, nNewEndPos, aNewAttr );
+                aInsertList.push_back( aNew );
+            }
+            // *aIter is completely covered by rNew:
+            else if ( SwLineEntry::NO_SEGMENTS == nOverlapType )
+            {
+                bInsert = false;
+                (*aIter).second.maAttribute = aNewAttr;
+            }
+        }
+
+        ++aIter;
+    }
+
+    std::list< SwLineEntry >::iterator aListIter = aInsertList.begin();
+    for ( aListIter; aListIter != aInsertList.end(); ++aListIter )
+    {
+        pLines->insert( std::pair< const SwTwips, SwLineEntry >( nKey, *aListIter ) );
+    }
+
+    if ( bInsert )
+        pLines->insert( std::pair< const SwTwips, SwLineEntry >( nKey, rNew ) );
+}
+
+//
+// FUNCTIONS USED FOR COLLAPSING TABLE BORDER LINES END
+//
+
+
+
+
+
 
 /*************************************************************************
 |*
@@ -2890,6 +3433,27 @@ void SwTabFrm::Paint( const SwRect& rRect ) const
 {
     if ( pGlobalShell->GetViewOptions()->IsTable() )
     {
+        // --> collapsing borders FME 2005-05-27 #i29550#
+        if ( IsCollapsingBorders() )
+        {
+            SwBorderAttrAccess aAccess( SwFrm::GetCache(), (SwFrm*)this );
+            const SwBorderAttrs &rAttrs = *aAccess.Get();
+
+            // paint shadow
+            if ( rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE )
+            {
+                SwRect aRect;
+                ::lcl_CalcBorderRect( aRect, this, rAttrs, TRUE );
+                const SwPageFrm* pPage = FindPageFrm();
+                PaintShadow( rRect, aRect, pPage, rAttrs );
+            }
+
+            // paint lines
+            SwTabFrmPainter aHelper( *this );
+            aHelper.PaintLines( *pGlobalShell->GetOut(), rRect );
+        }
+        // <-- collapsing
+
         SwLayoutFrm::Paint( rRect );
     }
     // OD 10.01.2003 #i6467# - no light grey rectangle for page preview
@@ -3804,7 +4368,6 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
 void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                          const SwBorderAttrs &rAttrs ) const
 {
-
     //fuer (Row,Body,Ftn,Root,Column,NoTxt) gibt's hier nix zu tun
     if ( (GetType() & 0x90C5) || (Prt().SSize() == Frm().SSize()) )
         return;
@@ -3812,6 +4375,15 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
     if ( (GetType() & 0x2000) &&    //Cell
          !pGlobalShell->GetViewOptions()->IsTable() )
         return;
+
+    // --> collapsing borders FME 2005-05-27 #i29550#
+    if ( IsTabFrm() || IsCellFrm() || IsRowFrm() )
+    {
+        const SwTabFrm* pTabFrm = FindTabFrm();
+        if ( pTabFrm->IsCollapsingBorders() )
+            return;
+    }
+    // <--
 
     const bool bLine = rAttrs.IsLine() ? true : false;
     const bool bShadow = rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE;
@@ -5032,6 +5604,15 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
 void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
                                         const SwRect &rRect ) const
 {
+    // --> collapsing borders FME 2005-05-27 #i29550#
+    if ( IsTabFrm() || IsCellFrm() || IsRowFrm() )
+    {
+        const SwTabFrm* pTabFrm = FindTabFrm();
+        if ( pTabFrm->IsCollapsingBorders() )
+            return;
+    }
+    // <-- collapsing
+
     const bool bFlys = pPage->GetSortedObjs() ? true : false;
 
     const bool bCell = IsCellFrm() ? true : false;
@@ -5614,3 +6195,5 @@ Graphic SwDrawFrmFmt::MakeGraphic( ImageMap* pMap )
     }
     return aRet;
 }
+
+
