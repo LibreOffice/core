@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-29 14:18:02 $
+ *  last change: $Author: nn $ $Date: 2002-10-08 13:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,6 +1045,13 @@ void ScGridWindow::ExecFilter( ULONG nSel,
                 {
                     if (bFound)
                         aParam.DeleteQuery(nQueryPos);
+                }
+
+                //  #100597# end edit mode - like in ScCellShell::ExecuteDB
+                if ( pViewData->HasEditView( pViewData->GetActivePart() ) )
+                {
+                    SC_MOD()->InputEnterHandler();
+                    pViewData->GetViewShell()->UpdateInputHandler();
                 }
 
                 pViewData->GetView()->Query( aParam, NULL, TRUE );

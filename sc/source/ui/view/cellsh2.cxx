@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-20 10:07:33 $
+ *  last change: $Author: nn $ $Date: 2002-10-08 13:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,12 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
     ScModule*           pScMod      = SC_MOD();
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
+
+    if ( GetViewData()->HasEditView( GetViewData()->GetActivePart() ) )
+    {
+        pScMod->InputEnterHandler();
+        pTabViewShell->UpdateInputHandler();
+    }
 
     switch ( nSlotId )
     {
