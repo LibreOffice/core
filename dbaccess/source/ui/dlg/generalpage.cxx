@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:49:16 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,12 @@
 #ifndef _DBAUI_GENERALPAGE_HXX_
 #include "generalpage.hxx"
 #endif
-
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
 #ifndef _DBAUI_TABLESPAGE_HXX_
 #include "tablespage.hxx"
 #endif
@@ -98,6 +103,9 @@
 #endif
 #ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
 #include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
+#include <com/sun/star/sdbc/SQLWarning.hpp>
 #endif
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
@@ -181,12 +189,17 @@
 #ifndef DBAUI_FILEPICKER_INTERACTION_HXX
 #include "finteraction.hxx"
 #endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
+#endif
+#ifndef _UNOTOOLS_UCBHELPER_HXX
+#include <unotools/ucbhelper.hxx>
+#endif
 
 //.........................................................................
 namespace dbaui
 {
 //.........................................................................
-
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::com::sun::star::ui::dialogs;
@@ -216,9 +229,6 @@ namespace dbaui
         ,m_aConnection          (this, ResId(ET_CONNECTURL))
         ,m_aBrowseConnection    (this, ResId(PB_BROWSECONNECTION))
         ,m_aCreateDatabase      (this, ResId(PB_CREATEDATABASE))
-//      ,m_aTimeoutLabel        (this, ResId(FT_LOGINTIMEOUT))
-//      ,m_aTimeoutNumber       (this, ResId(ET_TIMEOUT_NUMBER))
-//      ,m_aTimeoutUnit         (this, ResId(LB_TIMEOUT_UNIT))
         ,m_aSpecialMessage      (this, ResId(FT_SPECIAL_MESSAGE))
         ,m_pCollection(NULL)
         ,m_eCurrentSelection(DST_UNKNOWN)
@@ -471,7 +481,6 @@ namespace dbaui
     void OGeneralPage::checkCreateDatabase(DATASOURCE_TYPE _eType)
     {
         static BOOL bServiceFound = FALSE;
-        BOOL bInstallationFound = FALSE;
         OSL_ENSURE(m_pAdminDialog,"No parent set!");
         if ( _eType == DST_ADABAS && m_pAdminDialog && !bServiceFound )
         {
@@ -479,13 +488,16 @@ namespace dbaui
             bServiceFound = xCatalog.is();
         }
 
-        m_aCreateDatabase.Show(_eType == DST_ADABAS && bServiceFound);
+        sal_Bool bAdabasSpecial = _eType == DST_ADABAS && bServiceFound;
+        m_aCreateDatabase.Show(bAdabasSpecial);
 
         if ( bServiceFound )
         {
             static const ::rtl::OUString sDBWORK(RTL_CONSTASCII_USTRINGPARAM("DBWORK"));
             static const ::rtl::OUString sDBROOT(RTL_CONSTASCII_USTRINGPARAM("DBROOT"));
             static const ::rtl::OUString sDBCONFIG(RTL_CONSTASCII_USTRINGPARAM("DBCONFIG"));
+
+            BOOL bInstallationFound = FALSE;
             rtl_uString* pDbVar = NULL;
             if ( (osl_getEnvironment(sDBWORK.pData,&pDbVar) == osl_Process_E_None && pDbVar)
                 && ((pDbVar = NULL) == NULL && osl_getEnvironment(sDBROOT.pData,&pDbVar) == osl_Process_E_None && pDbVar)
@@ -862,7 +874,6 @@ namespace dbaui
         }
         return 0L;
     }
-
     //-------------------------------------------------------------------------
     sal_Bool OGeneralPage::createDirectoryDeep(const String& _rPathURL)
     {
@@ -1238,6 +1249,7 @@ namespace dbaui
                         aSelected.AssignAscii(":");
                         aSelected += aSelector.GetSelected();
                         setURLNoPrefix(aSelected);
+                        checkCreateDatabase(DST_ADABAS);
                         callModifiedHdl();
                     }
                 }
@@ -1432,8 +1444,34 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.34  2003/06/02 07:49:16  vg
+ *  INTEGRATION: CWS evoab (1.31.2.3.12); FILE MERGED
+ *  2003/05/26 16:48:16 fs 1.31.2.3.12.2: RESYNC: (1.31.2.3-1.33); FILE MERGED
+ *  2003/04/04 14:48:23 bjia 1.31.2.3.12.1: #108648# adding codes for evolution address book driver
+ *
  *  Revision 1.31.2.3.12.2  2003/05/26 16:48:16  fs
  *  RESYNC: (1.31.2.3-1.33); FILE MERGED
+ *
+ *  Revision 1.33.18.7  2003/04/25 11:54:33  oj
+ *  #108708# remove convert button again
+ *
+ *  Revision 1.33.18.6  2003/04/24 15:13:03  oj
+ *  #108708# hide convert button if no dbversion
+ *
+ *  Revision 1.33.18.5  2003/04/24 14:08:42  oj
+ *  #108708# hide convert button if type is not adabas
+ *
+ *  Revision 1.33.18.4  2003/04/24 14:04:06  oj
+ *  #108708# disable convert button if dbroot isnot set
+ *
+ *  Revision 1.33.18.3  2003/04/24 06:27:28  oj
+ *  #108708# not beore exist was missing
+ *
+ *  Revision 1.33.18.2  2003/04/22 12:06:52  oj
+ *  #108708# add header
+ *
+ *  Revision 1.33.18.1  2003/04/22 11:33:45  oj
+ *  #108708# impl new adabas version
  *
  *  Revision 1.33  2003/04/01 14:02:04  vg
  *  INTEGRATION: CWS dba03 (1.31.2.3.4); FILE MERGED
