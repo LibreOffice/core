@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collatorImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:02:11 $
+ *  last change: $Author: khong $ $Date: 2002-04-16 00:09:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,9 @@ sal_Int32 SAL_CALL
 CollatorImpl::compareString( const OUString& in_str1, const OUString& in_str2) throw(RuntimeException)
 {
     if (cachedItem)
-        cachedItem->xC->compareString(in_str1, in_str2);
+        return cachedItem->xC->compareString(in_str1, in_str2);
 
-    return compareSubstring(in_str1, 0, in_str1.getLength(), in_str2, 0, in_str2.getLength());
+    return CollatorImpl::compareSubstring(in_str1, 0, in_str1.getLength(), in_str2, 0, in_str2.getLength());
 }
 
 
