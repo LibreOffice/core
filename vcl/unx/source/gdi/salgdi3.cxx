@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-31 15:01:50 $
+ *  last change: $Author: cp $ $Date: 2001-02-13 09:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,7 +862,6 @@ DrawString( Display *pDisplay, Drawable nDrawable, GC nGC,
             pVTextItemExt[ nItem - 1 ].mnEncoding = nEncoding;
             DrawVerticalTextItem( pDisplay, nDrawable, nGC, nX, nY,
                           pTextItem, nItem, pVTextItemExt, pFont );
-            free( pVTextItemExt );
         }
         else
         {
