@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:40:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ namespace frm
 #define PROPERTY_ID_BORDER              (PROPERTY_ID_START + 62)    // UINT16
 #define PROPERTY_ID_ALIGN               (PROPERTY_ID_START + 63)    // UINT16
 #define PROPERTY_ID_DROPDOWN            (PROPERTY_ID_START + 64)    // BOOL
-    // FREE
+#define PROPERTY_ID_UNCHECKED_REFVALUE  (PROPERTY_ID_START + 65)    // ::rtl::OUString
 #define PROPERTY_ID_HSCROLL             (PROPERTY_ID_START + 66)    // BOOL
 #define PROPERTY_ID_VSCROLL             (PROPERTY_ID_START + 67)    // BOOL
 #define PROPERTY_ID_TABSTOP             (PROPERTY_ID_START + 68)    // BOOL
@@ -292,18 +292,32 @@ namespace frm
 #define PROPERTY_ID_SPIN_VALUE                  ( PROPERTY_ID_START + 217 ) // sal_Int32
 #define PROPERTY_ID_ICONSIZE                    ( PROPERTY_ID_START + 218 ) // sal_Int16
 
-#define PROPERTY_ID_FONT_CHARWIDTH         ( PROPERTY_ID_START + 219 )      // float
-#define PROPERTY_ID_FONT_KERNING           ( PROPERTY_ID_START + 220 )      // sal_Bool
-#define PROPERTY_ID_FONT_ORIENTATION       ( PROPERTY_ID_START + 221 )      // float
-#define PROPERTY_ID_FONT_PITCH             ( PROPERTY_ID_START + 222 )      // sal_Int16
-#define PROPERTY_ID_FONT_TYPE              ( PROPERTY_ID_START + 223 )      // sal_Int16
-#define PROPERTY_ID_FONT_WIDTH             ( PROPERTY_ID_START + 224 )      // sal_Int16
+#define PROPERTY_ID_FONT_CHARWIDTH          ( PROPERTY_ID_START + 219 )      // float
+#define PROPERTY_ID_FONT_KERNING            ( PROPERTY_ID_START + 220 )      // sal_Bool
+#define PROPERTY_ID_FONT_ORIENTATION        ( PROPERTY_ID_START + 221 )      // float
+#define PROPERTY_ID_FONT_PITCH              ( PROPERTY_ID_START + 222 )      // sal_Int16
+#define PROPERTY_ID_FONT_TYPE               ( PROPERTY_ID_START + 223 )      // sal_Int16
+#define PROPERTY_ID_FONT_WIDTH              ( PROPERTY_ID_START + 224 )      // sal_Int16
+#define PROPERTY_ID_RICH_TEXT               ( PROPERTY_ID_START + 225 )      // sal_Bool
 
-#define PROPERTY_ID_RICH_TEXT              ( PROPERTY_ID_START + 225 )      // sal_Bool
+#define PROPERTY_ID_DYNAMIC_CONTROL_BORDER       ( PROPERTY_ID_START + 226 )    // sal_Bool
+#define PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS   ( PROPERTY_ID_START + 227 )    // sal_Int32
+#define PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE   ( PROPERTY_ID_START + 228 )    // sal_Int32
+#define PROPERTY_ID_CONTROL_BORDER_COLOR_INVALID ( PROPERTY_ID_START + 229 )    // sal_Int32
 
-#define PROPERTY_ID_DYNAMIC_CONTROL_BORDER      ( PROPERTY_ID_START + 218 ) // sal_Bool
-#define PROPERTY_ID_CONTROL_BORDER_COLOR_FOCUS  ( PROPERTY_ID_START + 219 ) // sal_Int32
-#define PROPERTY_ID_CONTROL_BORDER_COLOR_MOUSE  ( PROPERTY_ID_START + 220 ) // sal_Int32
+#define PROPERTY_ID_XSD_PATTERN             ( PROPERTY_ID_START + 230 )
+#define PROPERTY_ID_XSD_WHITESPACE          ( PROPERTY_ID_START + 231 )
+#define PROPERTY_ID_XSD_LENGTH              ( PROPERTY_ID_START + 232 )
+#define PROPERTY_ID_XSD_MIN_LENGTH          ( PROPERTY_ID_START + 233 )
+#define PROPERTY_ID_XSD_MAX_LENGTH          ( PROPERTY_ID_START + 234 )
+#define PROPERTY_ID_XSD_TOTAL_DIGITS        ( PROPERTY_ID_START + 235 )
+#define PROPERTY_ID_XSD_FRACTION_DIGITS     ( PROPERTY_ID_START + 236 )
+#define PROPERTY_ID_XSD_MAX_INCLUSIVE       ( PROPERTY_ID_START + 237 )
+#define PROPERTY_ID_XSD_MAX_EXCLUSIVE       ( PROPERTY_ID_START + 238 )
+#define PROPERTY_ID_XSD_MIN_INCLUSIVE       ( PROPERTY_ID_START + 239 )
+#define PROPERTY_ID_XSD_MIN_EXCLUSIVE       ( PROPERTY_ID_START + 240 )
+#define PROPERTY_ID_XSD_IS_BASIC            ( PROPERTY_ID_START + 241 )
+#define PROPERTY_ID_XSD_TYPE_CLASS          ( PROPERTY_ID_START + 242 )
 
 #define PROPERTY_ID_LINEEND_FORMAT              ( PROPERTY_ID_START + 221 ) // css.awt.LineEndFormat
 
