@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2001-04-11 11:35:20 $
+ *  last change: $Author: as $ $Date: 2001-05-04 12:33:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,8 @@ namespace utl
             ConfigItem(const rtl::OUString rSubTree, sal_Int16 nMode = CONFIG_MODE_IMMEDIATE_UPDATE);
             ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTree);
 
-            void                    SetModified();
+            void                    SetModified  (); // mark item as modified
+            void                    ClearModified(); // reset state after commit!
 
             com::sun::star::uno::Sequence< com::sun::star::uno::Any>
                                     GetProperties(const com::sun::star::uno::Sequence< rtl::OUString >& rNames);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: as $ $Date: 2001-04-11 11:35:20 $
+ *  last change: $Author: as $ $Date: 2001-05-04 12:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1208,6 +1208,13 @@ sal_Int16   ConfigItem::GetMode() const
 void    ConfigItem::SetModified()
 {
     pImpl->bIsModified = sal_True;
+}
+/* -----------------------------05.05.01 14:07--------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    ConfigItem::ClearModified()
+{
+    pImpl->bIsModified = sal_False;
 }
 /* -----------------------------12.02.01 13:31--------------------------------
 
