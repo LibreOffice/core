@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:59:12 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,12 @@
 #include <fmtanchr.hxx>
 #endif
 #include "shellres.hxx"
+
+// #i7672#
+#ifndef _OUTLINER_HXX //autogen
+#include <svx/outliner.hxx>
+#endif
+
 
 class SwSdrHdl : public SdrHdl
 {
@@ -640,6 +646,38 @@ void SwDrawView::MarkListHasChanged()
     FmFormView::MarkListHasChanged();
 }
 
+// #i7672#
+void SwDrawView::ModelHasChanged()
+{
+    // The ModelHasChanged() call in DrawingLayer also updates
+    // a eventually active text edit view (OutlinerView). This also leads
+    // to newly setting the background color for that edit view. Thus,
+    // this method rescues the current background color if a OutlinerView
+    // exists and re-establishes it then. To be more safe, the OutlinerView
+    // will be fetched again (maybe textedit has ended).
+    OutlinerView* pView = GetTextEditOutlinerView();
+    Color aBackColor;
+    sal_Bool bColorWasSaved(sal_False);
+
+    if(pView)
+    {
+        aBackColor = pView->GetBackgroundColor();
+        bColorWasSaved = sal_True;
+    }
+
+    // call parent
+    FmFormView::ModelHasChanged();
+
+    if(bColorWasSaved)
+    {
+        pView = GetTextEditOutlinerView();
+
+        if(pView)
+        {
+            pView->SetBackgroundColor(aBackColor);
+        }
+    }
+}
 
 void SwDrawView::MakeVisible( const Rectangle &rRect, Window &rWin )
 {
