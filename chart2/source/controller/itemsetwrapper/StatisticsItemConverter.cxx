@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:12:05 $
+ *  last change: $Author: bm $ $Date: 2004-01-28 10:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,8 @@ bool StatisticsItemConverter::ApplySpecialItem(
             {
                 SvxChartRegress eOldRegress(
                     static_cast< SvxChartRegress >(
-                        RegressionCurveHelper::getRegressType( xRegCnt )));
+                        static_cast< sal_Int32 >(
+                            RegressionCurveHelper::getRegressType( xRegCnt ))));
                 if( eOldRegress != eRegress )
                 {
                     uno::Reference< beans::XPropertySet > xFormerProp(
