@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-03 10:29:50 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,9 +250,6 @@ void SfxApplication::Deinitialize()
         return;
 
     // Falls man nochmal beim Runterfahren in ein Reschedule l"auft
-#if SUPD<613//MUSTINI
-    pAppData_Impl->EndListening( *pAppIniMgr );
-#endif
     pAppData_Impl->EndListening( *this );
     if ( pAppData_Impl->pCancelMgr )
         pAppData_Impl->EndListening( *pAppData_Impl->pCancelMgr );
@@ -344,7 +341,6 @@ void SfxApplication::Deinitialize()
 
 #ifndef PRODUCT
     DELETEX(pSlotPool);
-    SfxToolBoxConfig::Release();
     DELETEX(pAppData_Impl->pEventConfig);
     DELETEX(pAppData_Impl->pMiscConfig);
     SfxMacroConfig::Release_Impl();
@@ -352,11 +348,6 @@ void SfxApplication::Deinitialize()
     DELETEX(pAppData_Impl->pFactArr);
     DELETEX(pAppData_Impl->pInitLinkList);
 #endif
-
-#if SUPD<613//MUSTINI
-    pAppIniMgr->LeaveLock();
-#endif
-    DELETEZ(pCfgMgr);
 
 #ifndef PRODUCT
     DELETEX(pImp->pTbxCtrlFac);
