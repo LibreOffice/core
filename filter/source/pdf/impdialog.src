@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-23 07:44:42 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,27 @@ ModalDialog DLG_PDFEXPORT
         Size = MAP_APPFONT ( 111 , 8 ) ;
         Text = "Bereich" ;
         Text [ ENGLISH ] = "Range" ;
+        Text[ english_us ] = "Range";
+        Text[ portuguese ] = "Range";
+        Text[ russian ] = "Range";
+        Text[ greek ] = "Range";
+        Text[ dutch ] = "Range";
+        Text[ french ] = "Range";
+        Text[ spanish ] = "Range";
+        Text[ finnish ] = "Range";
+        Text[ italian ] = "Range";
+        Text[ danish ] = "Range";
+        Text[ swedish ] = "Omr�de";
+        Text[ polish ] = "Range";
+        Text[ portuguese_brazilian ] = "Range";
+        Text[ japanese ] = "Range";
+        Text[ korean ] = "Range";
+        Text[ chinese_simplified ] = "区域";
+        Text[ chinese_traditional ] = "區域";
+        Text[ turkish ] = "Range";
+        Text[ arabic ] = "Range";
+        Text[ catalan ] = "Range";
+        Text[ thai ] = "Range";
     };
     RadioButton RB_ALL
     {
@@ -83,6 +104,27 @@ ModalDialog DLG_PDFEXPORT
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "~Alle" ;
         Text [ ENGLISH ] = "~All" ;
+        Text[ english_us ] = "~All";
+        Text[ portuguese ] = "~All";
+        Text[ russian ] = "~All";
+        Text[ greek ] = "~All";
+        Text[ dutch ] = "~All";
+        Text[ french ] = "~All";
+        Text[ spanish ] = "~All";
+        Text[ finnish ] = "~All";
+        Text[ italian ] = "~All";
+        Text[ danish ] = "~All";
+        Text[ swedish ] = "~Alla";
+        Text[ polish ] = "~All";
+        Text[ portuguese_brazilian ] = "~All";
+        Text[ japanese ] = "~All";
+        Text[ korean ] = "~All";
+        Text[ chinese_simplified ] = "全部(~A)";
+        Text[ chinese_traditional ] = "全部(~A)";
+        Text[ turkish ] = "~All";
+        Text[ arabic ] = "~All";
+        Text[ catalan ] = "~All";
+        Text[ thai ] = "~All";
     };
     RadioButton RB_PAGES
     {
@@ -90,6 +132,27 @@ ModalDialog DLG_PDFEXPORT
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text = "~Seiten" ;
         Text [ ENGLISH ] = "Pa~ges" ;
+        Text[ english_us ] = "Pa~ges";
+        Text[ portuguese ] = "Pa~ges";
+        Text[ russian ] = "Pa~ges";
+        Text[ greek ] = "Pa~ges";
+        Text[ dutch ] = "Pa~ges";
+        Text[ french ] = "Pa~ges";
+        Text[ spanish ] = "Pa~ges";
+        Text[ finnish ] = "Pa~ges";
+        Text[ italian ] = "Pa~ges";
+        Text[ danish ] = "Pa~ges";
+        Text[ swedish ] = "~Sidor";
+        Text[ polish ] = "Pa~ges";
+        Text[ portuguese_brazilian ] = "Pa~ges";
+        Text[ japanese ] = "Pa~ges";
+        Text[ korean ] = "Pa~ges";
+        Text[ chinese_simplified ] = "页(~P)";
+        Text[ chinese_traditional ] = "頁(~P)";
+        Text[ turkish ] = "Pa~ges";
+        Text[ arabic ] = "Pa~ges";
+        Text[ catalan ] = "Pa~ges";
+        Text[ thai ] = "Pa~ges";
     };
     RadioButton RB_SELECTION
     {
@@ -97,6 +160,27 @@ ModalDialog DLG_PDFEXPORT
         Size = MAP_APPFONT ( 105 , 10 ) ;
         Text = "A~uswahl" ;
         Text [ ENGLISH ] = "~Selection" ;
+        Text[ english_us ] = "~Selection";
+        Text[ portuguese ] = "~Selection";
+        Text[ russian ] = "~Selection";
+        Text[ greek ] = "~Selection";
+        Text[ dutch ] = "~Selection";
+        Text[ french ] = "~Selection";
+        Text[ spanish ] = "~Selection";
+        Text[ finnish ] = "~Selection";
+        Text[ italian ] = "~Selection";
+        Text[ danish ] = "~Selection";
+        Text[ swedish ] = "~Markering";
+        Text[ polish ] = "~Selection";
+        Text[ portuguese_brazilian ] = "~Selection";
+        Text[ japanese ] = "~Selection";
+        Text[ korean ] = "~Selection";
+        Text[ chinese_simplified ] = "选择";
+        Text[ chinese_traditional ] = "選擇";
+        Text[ turkish ] = "~Selection";
+        Text[ arabic ] = "~Selection";
+        Text[ catalan ] = "~Selection";
+        Text[ thai ] = "~Selection";
     };
     Edit ED_PAGES
     {
@@ -110,6 +194,27 @@ ModalDialog DLG_PDFEXPORT
         Size = MAP_APPFONT ( 111 , 8 ) ;
         Text = "Komprimierung";
         Text [ ENGLISH ] = "Compression";
+        Text[ english_us ] = "Compression";
+        Text[ portuguese ] = "Compression";
+        Text[ russian ] = "Compression";
+        Text[ greek ] = "Compression";
+        Text[ dutch ] = "Compression";
+        Text[ french ] = "Compression";
+        Text[ spanish ] = "Compression";
+        Text[ finnish ] = "Compression";
+        Text[ italian ] = "Compression";
+        Text[ danish ] = "Compression";
+        Text[ swedish ] = "Komprimering";
+        Text[ polish ] = "Compression";
+        Text[ portuguese_brazilian ] = "Compression";
+        Text[ japanese ] = "Compression";
+        Text[ korean ] = "Compression";
+        Text[ chinese_simplified ] = "压缩";
+        Text[ chinese_traditional ] = "壓縮";
+        Text[ turkish ] = "Compression";
+        Text[ arabic ] = "Compression";
+        Text[ catalan ] = "Compression";
+        Text[ thai ] = "Compression";
     };
     RadioButton RB_SCREEN
     {
@@ -117,6 +222,27 @@ ModalDialog DLG_PDFEXPORT
         Size = MAP_APPFONT ( 165 , 10 ) ;
         Text = "Optimiert f�r ~Bildschirm (kleinste Dateigr��e)" ;
         Text [ ENGLISH ] = "S~creen optimized (smallest file size)" ;
+        Text[ english_us ] = "S~creen optimized (smallest file size)";
+        Text[ portuguese ] = "S~creen optimized (smallest file size)";
+        Text[ russian ] = "S~creen optimized (smallest file size)";
+        Text[ greek ] = "S~creen optimized (smallest file size)";
+        Text[ dutch ] = "S~creen optimized (smallest file size)";
+        Text[ french ] = "S~creen optimized (smallest file size)";
+        Text[ spanish ] = "S~creen optimized (smallest file size)";
+        Text[ finnish ] = "S~creen optimized (smallest file size)";
+        Text[ italian ] = "S~creen optimized (smallest file size)";
+        Text[ danish ] = "S~creen optimized (smallest file size)";
+        Text[ swedish ] = "Optimerad f�r ~bildsk�rm (minsta filstorlek)";
+        Text[ polish ] = "S~creen optimized (smallest file size)";
+        Text[ portuguese_brazilian ] = "S~creen optimized (smallest file size)";
+        Text[ japanese ] = "S~creen optimized (smallest file size)";
+        Text[ korean ] = "S~creen optimized (smallest file size)";
+        Text[ chinese_simplified ] = "优化屏幕显示(最小的文件大小)";
+        Text[ chinese_traditional ] = "優化屏幕顯示(最小的檔案大小)";
+        Text[ turkish ] = "S~creen optimized (smallest file size)";
+        Text[ arabic ] = "S~creen optimized (smallest file size)";
+        Text[ catalan ] = "S~creen optimized (smallest file size)";
+        Text[ thai ] = "S~creen optimized (smallest file size)";
     };
     RadioButton RB_PRINT
     {
@@ -124,6 +250,27 @@ ModalDialog DLG_PDFEXPORT
         Size = MAP_APPFONT ( 165, 10 ) ;
         Text = "Optimiert f�r ~Druck" ;
         Text [ ENGLISH ] = "~Print optimized" ;
+        Text[ english_us ] = "~Print optimized";
+        Text[ portuguese ] = "~Print optimized";
+        Text[ russian ] = "~Print optimized";
+        Text[ greek ] = "~Print optimized";
+        Text[ dutch ] = "~Print optimized";
+        Text[ french ] = "~Print optimized";
+        Text[ spanish ] = "~Print optimized";
+        Text[ finnish ] = "~Print optimized";
+        Text[ italian ] = "~Print optimized";
+        Text[ danish ] = "~Print optimized";
+        Text[ swedish ] = "~Utskriftsoptimerad";
+        Text[ polish ] = "~Print optimized";
+        Text[ portuguese_brazilian ] = "~Print optimized";
+        Text[ japanese ] = "~Print optimized";
+        Text[ korean ] = "~Print optimized";
+        Text[ chinese_simplified ] = "优化打印效果";
+        Text[ chinese_traditional ] = "優化列印效果";
+        Text[ turkish ] = "~Print optimized";
+        Text[ arabic ] = "~Print optimized";
+        Text[ catalan ] = "~Print optimized";
+        Text[ thai ] = "~Print optimized";
     };
     RadioButton RB_PRESS
     {
@@ -131,6 +278,27 @@ ModalDialog DLG_PDFEXPORT
         Size = MAP_APPFONT ( 165, 10 ) ;
         Text = "Optimiert f�r Druck~vorstufe" ;
         Text [ ENGLISH ] = "Pr~ess optimized" ;
+        Text[ english_us ] = "Pr~ess optimized";
+        Text[ portuguese ] = "Pr~ess optimized";
+        Text[ russian ] = "Pr~ess optimized";
+        Text[ greek ] = "Pr~ess optimized";
+        Text[ dutch ] = "Pr~ess optimized";
+        Text[ french ] = "Pr~ess optimized";
+        Text[ spanish ] = "Pr~ess optimized";
+        Text[ finnish ] = "Pr~ess optimized";
+        Text[ italian ] = "Pr~ess optimized";
+        Text[ danish ] = "Pr~ess optimized";
+        Text[ swedish ] = "Tr~yckoptimerad";
+        Text[ polish ] = "Pr~ess optimized";
+        Text[ portuguese_brazilian ] = "Pr~ess optimized";
+        Text[ japanese ] = "Pr~ess optimized";
+        Text[ korean ] = "Pr~ess optimized";
+        Text[ chinese_simplified ] = "优化新闻印刷";
+        Text[ chinese_traditional ] = "優化新聞印刷";
+        Text[ turkish ] = "Pr~ess optimized";
+        Text[ arabic ] = "Pr~ess optimized";
+        Text[ catalan ] = "Pr~ess optimized";
+        Text[ thai ] = "Pr~ess optimized";
     };
     OKButton BT_OK
     {
@@ -140,6 +308,27 @@ ModalDialog DLG_PDFEXPORT
         Size = MAP_APPFONT( 50 , 14 );
         TabStop = TRUE ;
         DefButton = TRUE ;
+        Text[ english_us ] = "E~xport";
+        Text[ portuguese ] = "E~xport";
+        Text[ russian ] = "E~xport";
+        Text[ greek ] = "E~xport";
+        Text[ dutch ] = "E~xport";
+        Text[ french ] = "E~xport";
+        Text[ spanish ] = "E~xport";
+        Text[ finnish ] = "E~xport";
+        Text[ italian ] = "E~xport";
+        Text[ danish ] = "E~xport";
+        Text[ swedish ] = "E~xportera";
+        Text[ polish ] = "E~xport";
+        Text[ portuguese_brazilian ] = "E~xport";
+        Text[ japanese ] = "E~xport";
+        Text[ korean ] = "E~xport";
+        Text[ chinese_simplified ] = "E~xport";
+        Text[ chinese_traditional ] = "匯出";
+        Text[ turkish ] = "E~xport";
+        Text[ arabic ] = "E~xport";
+        Text[ catalan ] = "E~xport";
+        Text[ thai ] = "E~xport";
     };
     CancelButton BT_CANCEL
     {
@@ -155,4 +344,25 @@ ModalDialog DLG_PDFEXPORT
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
+    Text[ english_us ] = "PDF Options";
+    Text[ portuguese ] = "PDF Options";
+    Text[ russian ] = "PDF Options";
+    Text[ greek ] = "PDF Options";
+    Text[ dutch ] = "PDF Options";
+    Text[ french ] = "PDF Options";
+    Text[ spanish ] = "PDF Options";
+    Text[ finnish ] = "PDF Options";
+    Text[ italian ] = "PDF Options";
+    Text[ danish ] = "PDF Options";
+    Text[ swedish ] = "PDF-alternativ";
+    Text[ polish ] = "PDF Options";
+    Text[ portuguese_brazilian ] = "PDF Options";
+    Text[ japanese ] = "PDF Options";
+    Text[ korean ] = "PDF Options";
+    Text[ chinese_simplified ] = "PDF 选项";
+    Text[ chinese_traditional ] = "PDF 選項";
+    Text[ turkish ] = "PDF Options";
+    Text[ arabic ] = "PDF Options";
+    Text[ catalan ] = "PDF Options";
+    Text[ thai ] = "PDF Options";
 };
