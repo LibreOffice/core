@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:27:32 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 14:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 #ifndef _SV_BITMAP_HXX
 #include <bitmap.hxx>
 #endif
-#ifndef _SV_ALPHA_HXX
-#include <alpha.hxx>
+#ifndef _SV_BITMAPEX_HXX
+#include <bitmapex.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <svapp.hxx>
@@ -96,7 +96,9 @@
 #include <image.hxx>
 #endif
 
-// ------------------------------------------------------------------
+// ----------
+// - Bitmap -
+// ----------
 
 Bitmap::Bitmap() :
     mpImpBmp( NULL )
@@ -108,20 +110,10 @@ Bitmap::Bitmap() :
 Bitmap::Bitmap( const ResId& rResId ) :
     mpImpBmp( NULL )
 {
-    ResMgr * pResMgr = NULL;
+    const BitmapEx aBmpEx( rResId );
 
-    ResMgr::GetResourceSkipHeader( rResId.SetRT( RSC_BITMAP ), &pResMgr );
-
-    USHORT nBitmapType;
-    USHORT nBitmapId;
-    nBitmapType = pResMgr->ReadShort();
-    nBitmapId   = pResMgr->ReadShort();
-
-    SvStream* pBmpStream = pResMgr->pImpRes->GetBitmapStream( nBitmapId );
-    if( pBmpStream )
-        *pBmpStream >> *this;
-    // pop filename
-    String aDummy = pResMgr->ReadString();
+    if( !aBmpEx.IsEmpty() )
+        *this = aBmpEx.GetBitmap();
 }
 
 // ------------------------------------------------------------------
@@ -1046,6 +1038,9 @@ BOOL Bitmap::CopyPixel( const Rectangle& rRectDst,
                         }
                         else if( pReadAcc->HasPalette() )
                         {
+                            for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
+                                for( long nSrcX = aRectSrc.Left(), nDstX = aRectDst.Left(); nSrcX < nSrcEndX; nSrcX++, nDstX++ )
+                                    pWriteAcc->SetPixel( nDstY, nDstX, pReadAcc->GetPaletteColor( pReadAcc->GetPixel( nSrcY, nSrcX ) ) );
                         }
                         else
                             for( long nSrcY = aRectSrc.Top(); nSrcY < nSrcEndY; nSrcY++, nDstY++ )
@@ -1741,18 +1736,30 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
 
 Bitmap Bitmap::GetColorTransformedBitmap( BmpColorMode eColorMode ) const
 {
-    Bitmap  aRet( *this );
-    Color*  pSrcColors = NULL;
-    Color*  pDstColors = NULL;
-    ULONG   nColorCount = 0;
+    Bitmap  aRet;
 
-    Image::GetColorTransformArrays( (ImageColorTransform) eColorMode, pSrcColors, pDstColors, nColorCount );
+    if( BMP_COLOR_HIGHCONTRAST == eColorMode )
+    {
+        Color*  pSrcColors = NULL;
+        Color*  pDstColors = NULL;
+        ULONG   nColorCount = 0;
 
-    if( nColorCount && pSrcColors && pDstColors )
-        aRet.Replace( pSrcColors, pDstColors, nColorCount );
+        aRet = *this;
 
-    delete[] pSrcColors;
-    delete[] pDstColors;
+        Image::GetColorTransformArrays( (ImageColorTransform) eColorMode, pSrcColors, pDstColors, nColorCount );
+
+        if( nColorCount && pSrcColors && pDstColors )
+               aRet.Replace( pSrcColors, pDstColors, nColorCount );
+
+        delete[] pSrcColors;
+        delete[] pDstColors;
+    }
+    else if( BMP_COLOR_MONOCHROME_BLACK == eColorMode ||
+             BMP_COLOR_MONOCHROME_WHITE == eColorMode )
+    {
+        aRet = *this;
+        aRet.MakeMono( BMP_COLOR_MONOCHROME_THRESHOLD );
+    }
 
     return aRet;
 }
