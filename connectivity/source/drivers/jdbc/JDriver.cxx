@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 15:46:01 $
+ *  last change: $Author: oj $ $Date: 2002-11-29 14:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,49 +180,45 @@ void java_sql_Driver::loadDriverFromProperties(const Sequence< PropertyValue >& 
     SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     try
     {
-        if(!object)
+        const PropertyValue* pBegin = info.getConstArray();
+        const PropertyValue* pEnd   = pBegin + info.getLength();
+        for(jsize i=0;pBegin != pEnd;++pBegin)
         {
-            const PropertyValue* pBegin = info.getConstArray();
-            const PropertyValue* pEnd   = pBegin + info.getLength();
-            for(jsize i=0;pBegin != pEnd;++pBegin)
+            if ( !object && !pBegin->Name.compareToAscii("JavaDriverClass") )
             {
-                if(!pBegin->Name.compareToAscii("JavaDriverClass"))
-                {
-                    // here I try to find the class for jdbc driver
-                    java_sql_SQLException_BASE::getMyClass();
-                    java_lang_Throwable::getMyClass();
+                // here I try to find the class for jdbc driver
+                java_sql_SQLException_BASE::getMyClass();
+                java_lang_Throwable::getMyClass();
 
-                    ::rtl::OUString aStr;
-                    pBegin->Value >>= aStr;
-                    // the driver manager holds the class of the driver for later use
-                    // if forName didn't find the class it will throw an exception
-                    java_lang_Class *pDrvClass = java_lang_Class::forName(aStr);
-                    if(pDrvClass)
+                ::rtl::OUString aStr;
+                pBegin->Value >>= aStr;
+                // the driver manager holds the class of the driver for later use
+                // if forName didn't find the class it will throw an exception
+                java_lang_Class *pDrvClass = java_lang_Class::forName(aStr);
+                if(pDrvClass)
+                {
+                    saveRef(t.pEnv, pDrvClass->newInstanceObject());
+                    jclass tempClass = t.pEnv->GetObjectClass(object);
+                    if(object)
                     {
-                        saveRef(t.pEnv, pDrvClass->newInstanceObject());
-                        jclass tempClass = t.pEnv->GetObjectClass(object);
-                        if(object)
-                        {
-                            jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-                            t.pEnv->DeleteLocalRef( tempClass );
-                            saveClassRef( globClass );
-                        }
-                        delete pDrvClass;
+                        jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
+                        t.pEnv->DeleteLocalRef( tempClass );
+                        saveClassRef( globClass );
                     }
-                    break;
+                    delete pDrvClass;
                 }
-                else if(!pBegin->Name.compareToAscii("IsAutoRetrievingEnabled"))
-                {
-                    pBegin->Value >>= _rbAutoRetrievingEnabled;
-                }
-                else if(!pBegin->Name.compareToAscii("AutoRetrievingStatement"))
-                {
-                    pBegin->Value >>= _rsGeneratedValueStatement;
-                }
-                else if(!pBegin->Name.compareToAscii("ParameterNameSubstitution"))
-                {
-                    pBegin->Value >>= _bParameterSubstitution;
-                }
+            }
+            else if(!pBegin->Name.compareToAscii("IsAutoRetrievingEnabled"))
+            {
+                pBegin->Value >>= _rbAutoRetrievingEnabled;
+            }
+            else if(!pBegin->Name.compareToAscii("AutoRetrievingStatement"))
+            {
+                pBegin->Value >>= _rsGeneratedValueStatement;
+            }
+            else if(!pBegin->Name.compareToAscii("ParameterNameSubstitution"))
+            {
+                pBegin->Value >>= _bParameterSubstitution;
             }
         }
     }
