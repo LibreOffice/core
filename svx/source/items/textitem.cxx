@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-21 14:28:26 $
+ *  last change: $Author: mib $ $Date: 2000-11-23 11:10:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ TYPEINIT1_AUTOFACTORY(SvxNoLinebreakItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxNoHyphenItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxLineColorItem, SvxColorItem);
 TYPEINIT1_AUTOFACTORY(SvxBlinkItem, SfxBoolItem);
-TYPEINIT1_AUTOFACTORY(SvxEmphasisMarkItem, SfxEnumItem);
+TYPEINIT1_AUTOFACTORY(SvxEmphasisMarkItem, SfxUInt16Item);
 TYPEINIT1_AUTOFACTORY(SvxTwoLinesItem, SfxPoolItem);
 TYPEINIT1_AUTOFACTORY(SvxScriptTypeItem, SfxUInt16Item);
 
@@ -1753,6 +1753,9 @@ sal_Bool SvxUnderlineItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     case MID_UL_COLOR:
         rVal <<= (sal_Int32)( mColor.GetColor() );
         break;
+    case MID_UL_HASCOLOR:
+        rVal = Bool2Any( !mColor.GetTransparency() );
+        break;
     }
     return sal_True;
 
@@ -1783,13 +1786,28 @@ sal_Bool SvxUnderlineItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         if( !( rVal >>= nCol ) )
             bRet = sal_False;
         else
+        {
+            // Keep transparence, because it contains the information
+            // whether the font color or the stored color should be used
+            sal_uInt8 nTrans = mColor.GetTransparency();
             mColor = Color( nCol );
+            mColor.SetTransparency( nTrans );
+        }
     }
+    break;
+    case MID_UL_HASCOLOR:
+        mColor.SetTransparency( Any2Bool( rVal ) ? 0 : 0xff );
     break;
     }
     return bRet;
 }
 
+int SvxUnderlineItem::operator==( const SfxPoolItem& rItem ) const
+{
+    DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal type" );
+    return SfxEnumItem::operator==( rItem ) &&
+           GetColor() == ((SvxUnderlineItem&)rItem).GetColor();
+}
 // -----------------------------------------------------------------------
 
 #ifndef SVX_LIGHT
