@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:43:43 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ class XclObjOle : public XclObj
 private:
 
         const SdrObject&    rOleObj;
-        SvStorage*          pRootStorage;
+        SotStorage*         pRootStorage;
 
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
