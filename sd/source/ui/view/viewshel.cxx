@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:20:24 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
 #endif
+#include "SpellDialogChildWindow.hxx"
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -395,6 +396,14 @@ void ViewShell::Construct(void)
 
     mpWindowUpdater->SetViewShell (*this);
     mpWindowUpdater->SetDocument (GetDoc());
+
+    // Re-initialize the spell dialog.
+    ::sd::SpellDialogChildWindow* pSpellDialog =
+          static_cast< ::sd::SpellDialogChildWindow*> (
+              GetViewFrame()->GetChildWindow (
+                  ::sd::SpellDialogChildWindow::GetChildWindowId()));
+    if (pSpellDialog != NULL)
+        pSpellDialog->InvalidateSpellDialog();
 
     // Set up the object bar manager.
     mpObjectBarManager = ::std::auto_ptr<ObjectBarManager> (
