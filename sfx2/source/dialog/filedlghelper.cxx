@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-15 08:49:37 $
+ *  last change: $Author: dv $ $Date: 2001-06-15 10:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,10 +394,19 @@ void FileDialogHelper_Impl::updateVersions()
     xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
                     ListboxControlActions::DELETE_ITEMS, aValue );
 
-    aValue <<= aEntries;
+    sal_Int32 nCount = aEntries.getLength();
 
-    xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
-                    ListboxControlActions::ADD_ITEMS, aValue );
+    if ( nCount )
+    {
+        aValue <<= aEntries;
+        xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
+                        ListboxControlActions::ADD_ITEMS, aValue );
+
+        Any aPos;
+        aPos <<= (sal_Int16) 0;
+        xDlg->setValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
+                        ListboxControlActions::SET_SELECT_ITEM, aPos );
+    }
 }
 
 
