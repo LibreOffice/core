@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 09:27:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,12 +441,20 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
                 {
                     aEvent.PropertyName = rValue.Name;
                     aEvent.OldValue     = makeAny( m_pImpl->m_aProps.aTitle );
-                    aEvent.NewValue     = makeAny( aNewValue );
 
-                    aChanges.getArray()[ nChanged ] = aEvent;
+                    try
+                    {
+                        rename( aNewValue );
+                        OSL_ENSURE( m_pImpl->m_aProps.aTitle == aNewValue, "OContentHelper::setPropertyValues('Title'): rename did not work!" );
 
-                    m_pImpl->m_aProps.aTitle = aNewValue;
-                    nChanged++;
+                        aEvent.NewValue     = makeAny( aNewValue );
+                        aChanges.getArray()[ nChanged ] = aEvent;
+                        nChanged++;
+                    }
+                    catch( const Exception& )
+                    {
+                        OSL_ENSURE( sal_False, "OContentHelper::setPropertyValues('Title'): caught an exception while renaming!" );
+                    }
                 }
                 else
                 {
@@ -680,6 +688,9 @@ void SAL_CALL OContentHelper::setParent( const Reference< XInterface >& _xParent
 void SAL_CALL OContentHelper::rename( const ::rtl::OUString& newName ) throw (SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard  aGuard(m_aMutex);
+    if ( newName.equals( m_pImpl->m_aProps.aTitle ) )
+        return;
+
     Reference<XNameContainer> xNameCont(m_xParentContainer,UNO_QUERY);
     if ( xNameCont.is() )
     {
