@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-01 16:31:30 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 09:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ protected:
     SfxItemSet*             m_pDatasourceItems;     // item set for the dialog
     SfxItemPool*            m_pItemPool;            // item pool for the item set for the dialog
     SfxPoolItem**           m_pItemPoolDefaults;    // pool defaults
-    ODsnTypeCollection      m_aCollection;          // datasource type collection
+    ODsnTypeCollection*     m_pCollection;          // datasource type collection
 
     ::rtl::OUString         m_sInitialSelection;
 
@@ -137,6 +137,9 @@ protected:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/11/01 16:31:30  fs
+ *  migrated from awt::XDialog to ui::XExecutableDialog / removed the star* namespace shortcuts
+ *
  *  Revision 1.2  2000/10/31 08:07:47  fs
  *  support an initial selection
  *

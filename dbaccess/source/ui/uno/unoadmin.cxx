@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:27:03 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 09:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XM
     ,m_pDatasourceItems(NULL)
     ,m_pItemPool(NULL)
     ,m_pItemPoolDefaults(NULL)
+    ,m_pCollection(NULL)
 {
 }
 
@@ -138,6 +139,9 @@ ODatabaseAdministrationDialog::~ODatabaseAdministrationDialog()
         if (m_pDialog)
             destroyDialog();
     }
+
+    delete m_pCollection;
+    m_pCollection = NULL;
 }
 
 //-------------------------------------------------------------------------
@@ -210,7 +214,10 @@ void ODatabaseAdministrationDialog::destroyDialog()
 //------------------------------------------------------------------------------
 Dialog* ODatabaseAdministrationDialog::createDialog(Window* _pParent)
 {
-    ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, &m_aCollection);
+    if (!m_pCollection)
+        m_pCollection = new ODsnTypeCollection;
+
+    ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
     ODbAdminDialog* pDialog = new ODbAdminDialog(_pParent, m_pDatasourceItems, m_xORB);
     pDialog->selectDataSource(m_sInitialSelection);
     return pDialog;
@@ -240,6 +247,9 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/15 08:27:03  fs
+ *  cppuhelper/extract -> comphelper/extract
+ *
  *  Revision 1.6  2001/01/05 12:16:07  fs
  *  adjusted the implementation name
  *
