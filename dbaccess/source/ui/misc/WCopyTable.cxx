@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:57:01 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 09:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,5 +1059,25 @@ const OTypeInfo* OCopyTableWizard::convertType(const OTypeInfo* _pType)
         }
     }
     return pType;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OCopyTableWizard::createUniqueName(const ::rtl::OUString& _sName)
+{
+    ::rtl::OUString sName = _sName;
+    if ( m_xSourceColumns.is() )
+        sName = ::dbtools::createUniqueName(m_xSourceColumns,sName,sal_False);
+    else
+    {
+        if ( m_vSourceColumns.find(sName) != m_vSourceColumns.end())
+        {
+            sal_Int32 nPos = 0;
+            while(m_vSourceColumns.find(sName) != m_vSourceColumns.end())
+            {
+                sName = _sName;
+                sName += ::rtl::OUString::valueOf(++nPos);
+            }
+        }
+    }
+    return sName;
 }
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:57:01 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 09:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
 #endif
+#ifndef DBAUI_FIELDCONTROLS_HXX
+#include "FieldControls.hxx"
+#endif
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -156,36 +159,67 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
     MultiListBox &aListBox = ((OWizTypeSelect*)GetParent())->m_lbColumnNames;
 
     sal_uInt16 nPos = aListBox.GetEntryPos(String(pActFieldDescr->GetName()));
+    OSL_ENSURE(nPos != LISTBOX_ENTRY_NOTFOUND,"Columnname could not be found in the listbox");
     pActFieldDescr = static_cast<OFieldDescription*>(aListBox.GetEntryData(nPos));
+    if ( !pActFieldDescr )
+        return;
 
     ::rtl::OUString sName = pActFieldDescr->GetName();
-    SaveData(pActFieldDescr);
+    ::rtl::OUString sNewName;
+    const OPropColumnEditCtrl* pColumnName = getColumnCtrl();
+    if ( pColumnName )
+        sNewName = pColumnName->GetText();
+
     switch(nColId)
     {
         case FIELD_PRPOERTY_COLUMNNAME:
             {
+                OCopyTableWizard* pWiz = static_cast<OCopyTableWizard*>(GetParent()->GetParent());
                 // first we have to check if this name already exists
-                if ( aListBox.GetEntryPos(String(pActFieldDescr->GetName())) != LISTBOX_ENTRY_NOTFOUND )
+                sal_Bool bDoubleName = sal_False;
+                sal_Bool bCase = sal_True;
+                if ( getMetaData().is() && !getMetaData()->storesMixedCaseQuotedIdentifiers() )
+                {
+                    bCase = sal_False;
+                    sal_Int32 nCount = aListBox.GetEntryCount();
+                    for (sal_Int32 i=0 ; !bDoubleName && i < nCount ; ++i)
+                    {
+                        ::rtl::OUString sEntry(aListBox.GetEntry(i));
+                        bDoubleName = sNewName.equalsIgnoreAsciiCase(sEntry);
+                    }
+                    if ( !bDoubleName && pWiz->isAutoincrementEnabled() )
+                        bDoubleName = sNewName.equalsIgnoreAsciiCase(pWiz->getPrimaryKeyName());
+
+                }
+                else
+                    bDoubleName =  ((aListBox.GetEntryPos(String(pActFieldDescr->GetName())) != LISTBOX_ENTRY_NOTFOUND)
+                                    || ( pWiz->isAutoincrementEnabled()
+                                        &&  pWiz->getPrimaryKeyName() == pActFieldDescr->GetName()) );
+
+                if ( bDoubleName )
                 {
                     String strMessage = String(ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME));
-                    strMessage.SearchAndReplaceAscii("$column$", pActFieldDescr->GetName());
+                    strMessage.SearchAndReplaceAscii("$column$", sNewName);
                     String sTitle(ModuleRes(STR_STAT_WARNING));
                     OSQLMessageBox aMsg(this,sTitle,strMessage,WB_OK | WB_DEF_OK,OSQLMessageBox::Error);
                     aMsg.Execute();
                     pActFieldDescr->SetName(sName);
                     DisplayData(pActFieldDescr);
-                    break;
+                    return;
                 }
+
+                pActFieldDescr->SetName(sNewName);
 
                 // now we change the name
                 OCopyTableWizard::TNameMapping::iterator aIter = ((OWizTypeSelect*)GetParent())->m_pParent->m_mNameMapping.begin();
                 OCopyTableWizard::TNameMapping::iterator aEnd  = ((OWizTypeSelect*)GetParent())->m_pParent->m_mNameMapping.end();
 
+                ::comphelper::UStringMixEqual aCase(bCase);
                 for(;aIter != aEnd;++aIter)
                 {
-                    if ( aIter->second == sName )
+                    if ( aCase(aIter->second,sName) )
                     {
-                        aIter->second = pActFieldDescr->GetName();
+                        aIter->second = sNewName;
                         break;
                     }
                 }
@@ -196,6 +230,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
             }
             break;
     }
+    SaveData(pActFieldDescr);
 }
 // -----------------------------------------------------------------------
 void OWizTypeSelectControl::SetModified(sal_Bool bModified) {}

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:57:01 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 09:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView, 
         m_edKeyName.Enable(sal_False);
 
         ::rtl::OUString sKeyName(::rtl::OUString::createFromAscii("ID"));
-        sKeyName = ::dbtools::createUniqueName(m_pParent->m_xSourceColumns,sKeyName,sal_False);
+        sKeyName = m_pParent->createUniqueName(sKeyName);
         m_edKeyName.SetText(sKeyName);
 
         sal_Int32 nMaxLen = m_pParent->getMaxColumnNameLength();
@@ -320,7 +320,7 @@ sal_Bool OCopyTable::LeavePage()
 
         // now we have to check if the name of the primary key already exists
         if (    m_pParent->m_bCreatePrimaryColumn
-            &&  m_pParent->m_aKeyName != ::dbtools::createUniqueName(m_pParent->m_xSourceColumns,m_pParent->m_aKeyName,sal_False) )
+            &&  m_pParent->m_aKeyName != m_pParent->createUniqueName(m_pParent->m_aKeyName) )
         {
             String aInfoString( ModuleRes(STR_WIZ_PKEY_ALREADY_DEFINED) );
             aInfoString += String(' ');

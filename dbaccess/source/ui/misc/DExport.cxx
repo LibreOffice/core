@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:57:00 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 09:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,7 +604,7 @@ void ODatabaseExport::CreateDefaultColumn(const ::rtl::OUString& _rColumnName)
     {
         aAlias = aAlias.copy(0,::std::min<sal_Int32>( nMaxNameLen-1, aAlias.getLength() ));
 
-        sal_Int32 nPos = 1;
+        sal_Int32 nPos = 0;
         sal_Int32 nCount = 2;
         while(m_aDestColumns.find(sName) != m_aDestColumns.end())
         {

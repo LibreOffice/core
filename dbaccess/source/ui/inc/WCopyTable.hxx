@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:58:31 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 09:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,13 @@ namespace dbaui
             @return
                 <TRUE/> if I need to set the autoincrement value by myself otherwise <FALSE/>
         */
-        sal_Bool isAutoincrementEnabled() const;
+        sal_Bool        isAutoincrementEnabled() const;
+
+        /** returns the name of the primary key
+            @return
+                The name of teh primary key.
+        */
+        ::rtl::OUString getPrimaryKeyName() const { return m_aKeyName; }
 
         const OTypeInfo*    getTypeInfo(sal_Int32 _nPos)        const { return m_aTypeInfoIndex[_nPos]->second; }
         const OTypeInfoMap* getTypeInfo()                       const { return &m_aTypeInfo; }
@@ -318,6 +324,8 @@ namespace dbaui
                                             const ::rtl::OUString&  _sExtraChars,
                                             sal_Int32               _nMaxNameLen);
         const OTypeInfo* convertType(const OTypeInfo* _pType);
+
+        ::rtl::OUString createUniqueName(const ::rtl::OUString& _sName);
     };
 }
 

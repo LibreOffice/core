@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-24 09:18:56 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 09:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,8 @@ namespace dbaui
 
         String  BoolStringPersistent(const String& rUIString) const;
         String  BoolStringUI(const String& rPersistentString) const;
+
+        const OPropColumnEditCtrl* getColumnCtrl() const { return m_pColumnName; }
 
     public:
         OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHelpBar);
