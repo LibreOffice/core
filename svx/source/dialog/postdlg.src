@@ -2,9 +2,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:04 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog RID_SVXDLG_POSTIT
     Text [ ENGLISH ] = "Note" ;
     Text [ norwegian ] = "Merknad" ;
     Text [ italian ] = "Nota" ;
-    Text [ portuguese_brazilian ] = "Observa??o" ;
+    Text [ portuguese_brazilian ] = "Anota��o" ;
     Text [ portuguese ] = "Observa��o" ;
     Text [ finnish ] = "Huomautus" ;
     Text [ danish ] = "Note" ;
@@ -114,6 +114,9 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ turkish ] = "Yazan";
         Text[ catalan ] = "Autor";
         Text[ thai ] = "ผู้เขียน";
+        Text[ czech ] = "Autor";
+        Text[ hebrew ] = "‮מחבר‬";
+        Text[ hindi ] = "लेखक";
     };
     FixedText FT_LASTEDIT
     {
@@ -141,15 +144,18 @@ ModalDialog RID_SVXDLG_POSTIT
         Left = TRUE ;
         Text[ chinese_simplified ] = "文字(~T)";
         Text[ russian ] = "�����";
-        Text[ polish ] = "Tekst";
+        Text[ polish ] = "~Tekst";
         Text[ japanese ] = "テキスト(~T)";
         Text[ chinese_traditional ] = "文字(~T)";
         Text[ arabic ] = "����";
         Text[ greek ] = "�������";
         Text[ korean ] = "텍스트(~T)";
-        Text[ turkish ] = "~Metin";
+        Text[ turkish ] = "Metin";
         Text[ catalan ] = "~Text";
         Text[ thai ] = "~ข้อความ";
+        Text[ czech ] = "Text";
+        Text[ hebrew ] = "‮טקסט‬";
+        Text[ hindi ] = "~टेक्स्ट्";
     };
     MultiLineEdit ED_EDIT
     {
@@ -169,7 +175,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ ENGLISH ] = "Contents" ;
         Text [ norwegian ] = "Innhold  " ;
         Text [ italian ] = "Contenuto" ;
-        Text [ portuguese_brazilian ] = "Conte?o" ;
+        Text [ portuguese_brazilian ] = "�ndice" ;
         Text [ portuguese ] = "Conte�do" ;
         Text [ finnish ] = "Sis�lt�" ;
         Text [ danish ] = "Indhold" ;
@@ -186,9 +192,12 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ arabic ] = "���������";
         Text[ greek ] = "�����������";
         Text[ korean ] = "내용";
-        Text[ turkish ] = "��erik";
+        Text[ turkish ] = "��erikler";
         Text[ catalan ] = "Contingut";
         Text[ thai ] = "เนื้อหา";
+        Text[ czech ] = "Obsah";
+        Text[ hebrew ] = "‮תוכן עיניינים‬";
+        Text[ hindi ] = "विषयसूची";
     };
     OKButton BTN_POST_OK
     {
@@ -225,26 +234,29 @@ ModalDialog RID_SVXDLG_POSTIT
         Text = "E~inf�gen" ;
         Text [ English ] = "~Insert" ;
         Text[ english_us ] = "~Insert";
-        Text[ portuguese ] = "~Insert";
-        Text[ russian ] = "~Insert";
-        Text[ greek ] = "~Insert";
-        Text[ dutch ] = "~Insert";
+        Text[ portuguese ] = "Co~lar";
+        Text[ russian ] = "��������";
+        Text[ greek ] = "��~��������";
+        Text[ dutch ] = "I~nvoegen";
         Text[ french ] = "Ins�rer";
         Text[ spanish ] = "In~sertar";
-        Text[ finnish ] = "~Insert";
+        Text[ finnish ] = "L~iit�";
         Text[ italian ] = "~Incolla";
-        Text[ danish ] = "~Insert";
+        Text[ danish ] = "~Paste";
         Text[ swedish ] = "~Infoga";
-        Text[ polish ] = "~Insert";
+        Text[ polish ] = "Wklej";
         Text[ japanese ] = "挿入";
         Text[ korean ] = "삽입";
         Text[ chinese_simplified ] = "插入";
         Text[ chinese_traditional ] = "插入(~I)";
-        Text[ turkish ] = "~Insert";
-        Text[ arabic ] = "~Insert";
+        Text[ turkish ] = "~Ekle";
+        Text[ arabic ] = "���";
         Text[ catalan ] = "~Enganxa";
         Text[ thai ] = "~วาง";
         Text[ portuguese_brazilian ] = "Co~lar";
+        Text[ czech ] = "Vložit";
+        Text[ hebrew ] = "‮הוספה‬";
+        Text[ hindi ] = "~Insert";
     };
     PushButton BTN_AUTHOR
     {
@@ -265,15 +277,18 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ english_us ] = "Author" ;
         Text[ chinese_simplified ] = "作者";
         Text[ russian ] = "�����";
-        Text[ polish ] = "Autor";
+        Text[ polish ] = "~Autor";
         Text[ japanese ] = "作成者";
         Text[ chinese_traditional ] = "作者";
         Text[ arabic ] = "������";
         Text[ greek ] = "���������";
         Text[ korean ] = "작성자(~A)";
-        Text[ turkish ] = "~Yazan";
+        Text[ turkish ] = "Yazar";
         Text[ catalan ] = "~Autor";
         Text[ thai ] = "~ผู้เขียน";
+        Text[ czech ] = "Autor";
+        Text[ hebrew ] = "‮מחבר‬";
+        Text[ hindi ] = "~लेखक";
     };
      // lokale Strings
     String STR_NOTIZ_EDIT
@@ -282,7 +297,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ English ] = "Edit Note" ;
         Text [ norwegian ] = "Rediger Merknad" ;
         Text [ italian ] = "Modifica nota" ;
-        Text [ portuguese_brazilian ] = "Editar Observa??o" ;
+        Text [ portuguese_brazilian ] = "Editar Anota��o" ;
         Text [ portuguese ] = "Editar anota��o" ;
         Text [ finnish ] = "Muokkaa huomautusta" ;
         Text [ danish ] = "Rediger note" ;
@@ -302,6 +317,9 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ turkish ] = "Notu d�zenle";
         Text[ catalan ] = "Edita la nota";
         Text[ thai ] = "แก้ไขบันทึกย่อ";
+        Text[ czech ] = "Upravit poznámku";
+        Text[ hebrew ] = "‮עריכת הערה‬";
+        Text[ hindi ] = "टिप्पणी संपादन";
     };
     String STR_NOTIZ_INSERT
     {
@@ -311,7 +329,7 @@ ModalDialog RID_SVXDLG_POSTIT
         Text [ English ] = "Insert Note" ;
         Text [ norwegian ] = "Sett inn Merknad" ;
         Text [ italian ] = "Inserisci nota" ;
-        Text [ portuguese_brazilian ] = "Inserir Observa??o" ;
+        Text [ portuguese_brazilian ] = "Inserir anota��o" ;
         Text [ portuguese ] = "Inserir anota��o" ;
         Text [ finnish ] = "Lis�� huomautus" ;
         Text [ danish ] = "Inds�t note" ;
@@ -331,6 +349,9 @@ ModalDialog RID_SVXDLG_POSTIT
         Text[ turkish ] = "Not ekle";
         Text[ catalan ] = "Insereix una nota";
         Text[ thai ] = "แทรกบันทึกย่อ";
+        Text[ czech ] = "Vložit poznámku";
+        Text[ hebrew ] = "‮הכנסת הערה‬";
+        Text[ hindi ] = "टिप्पणी जोड़ो";
     };
     Text[ chinese_simplified ] = "备注";
     Text[ russian ] = "����������";
@@ -343,8 +364,20 @@ ModalDialog RID_SVXDLG_POSTIT
     Text[ turkish ] = "Not";
     Text[ catalan ] = "Nota";
     Text[ thai ] = "บันทึกย่อ";
+    Text[ czech ] = "Poznámka";
+    Text[ hebrew ] = "‮הערה‬";
+    Text[ hindi ] = "टिप्पणी";
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
 
 
 
