@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:11:16 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,6 @@
 #include "fontsubs.hxx"
 #include "unolingu.hxx"
 #include "xtable.hxx"
-#include "adritem.hxx"
 #include "connpoolconfig.hxx"
 
 #ifndef _SVX_LANGITEM_HXX
@@ -307,38 +306,6 @@ struct OptionsGroupInfo
     ~OptionsGroupInfo() { delete pInItemSet; delete pOutItemSet; }
 };
 
-// class ExternBrowserHintBox_Impl ---------------------------------------
-
-class ExternBrowserHintBox_Impl : public ModalDialog
-{
-private:
-    FixedImage  aImage;
-    FixedText   aHintFT;
-    CheckBox    aDisableCB;
-    OKButton    aOKBtn;
-
-public:
-    ExternBrowserHintBox_Impl( Window* pParent );
-
-    sal_Bool        IsHintDisabled() const { return aDisableCB.IsChecked(); }
-};
-
-// -----------------------------------------------------------------------
-
-ExternBrowserHintBox_Impl::ExternBrowserHintBox_Impl( Window* pParent ) :
-
-    ModalDialog( pParent, ResId( RID_OFADLG_OPTIONS_TREE_HINT, DIALOG_MGR() ) ),
-
-    aImage      ( this, ResId( IMG_HINT ) ),
-    aHintFT     ( this, ResId( FT_HINT ) ),
-    aDisableCB  ( this, ResId( CB_DISABLE ) ),
-    aOKBtn      ( this, ResId( BTN_HINT ) )
-
-{
-    FreeResource();
-
-    aImage.SetImage( WarningBox::GetStandardImage() );
-}
 /* -----------------04.05.99 15:51-------------------
  *
  * --------------------------------------------------*/
@@ -381,7 +348,6 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent ) :
     nUnknownPos         ( COLORPAGE_UNKNOWN ),
     bIsAreaTP           ( sal_False ),
     bForgetSelection    ( sal_False ),
-    bExternBrowserActive( sal_False ),
     bImageResized       ( sal_False ),
     bInSelectHdl_Impl   ( false )
 {
@@ -411,11 +377,8 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent ) :
     aOkPB.SetClickHdl( LINK( this, OfaTreeOptionsDialog, OKHdl_Impl ) );
 
     aHiddenGB.Show();
-    aHintTimer.SetTimeout( HINT_TIMEOUT );
-    aHintTimer.SetTimeoutHdl( LINK( this, OfaTreeOptionsDialog, HintHdl_Impl ) );
     aSelectTimer.SetTimeout( SELECT_FIRST_TIMEOUT );
     aSelectTimer.SetTimeoutHdl( LINK( this, OfaTreeOptionsDialog, SelectHdl_Impl ) );
-    bExternBrowserActive = FALSE;
 
     Initialize();
 }
@@ -761,43 +724,6 @@ void OfaTreeOptionsDialog::DataChanged( const DataChangedEvent& rDCEvt )
         }
     }
 }
-/*-----------------01.04.99 15:52-------------------
- *  ggf. einen Hinweis zum externen Browser ausgeben
- * --------------------------------------------------*/
-
-void OfaTreeOptionsDialog::StartHint( const OptionsPageInfo* pInfo, const XubString& rTitle )
-{
-    if ( bExternBrowserActive )
-    {
-        switch ( pInfo->nPageId )
-        {
-            case RID_SVXPAGE_INET_PROXY:
-            case RID_SVXPAGE_INET_SCRIPTING:
-            case RID_SVXPAGE_BROWSER_OTHER:
-            case RID_SW_TP_HTML_CONTENT_OPT:
-            case RID_SW_TP_HTML_OPTPRINT_PAGE:
-            case RID_SW_TP_OPTSRCVIEW:
-            case RID_SW_TP_BACKGROUND:
-                pHintInfo = pInfo;
-                sHintTitle = rTitle;
-                aHintTimer.Start();
-                break;
-        }
-    }
-}
-
-void OfaTreeOptionsDialog::ShowHint()
-{
-/* (pb) obsolete
-*/
-}
-
-IMPL_LINK(OfaTreeOptionsDialog, HintHdl_Impl, Timer*, EMPTYARG )
-{
-    ShowHint();
-    return 0;
-}
-
 class FlagSet_Impl
 {
     bool & rFlag;
@@ -828,52 +754,6 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
                 pPageInfo->pPage->HasExchangeSupport())
         {
            nLeave = pPageInfo->pPage->DeactivatePage(pGroupInfo->pOutItemSet);
-
-           if ( RID_SVXPAGE_OPT_EXTERN_BROWSER == pPageInfo->nPageId )
-           {
-                // Benutzung des externen Browsers an/aus?
-                sal_Bool bTemp = sal_False;
-                FASTBOOL bOutSet = sal_False;
-                const SfxPoolItem* pItem;
-
-                // Im OutSet nach bestimmte Items suchen
-                if ( SFX_ITEM_SET == pGroupInfo->pOutItemSet->
-                     GetItemState( SID_OPT_EXTBRW_ON, sal_False, &pItem ) )
-                {
-                    DBG_ASSERT( pItem->ISA(SfxBoolItem), "BoolItem erwartet" );
-                    bTemp = ( (SfxBoolItem*)pItem )->GetValue();
-                    bOutSet = sal_True;
-                }
-
-                if ( !bTemp &&
-                     SFX_ITEM_SET == pGroupInfo->pOutItemSet->
-                     GetItemState( SID_OPT_EXTBRW_OFF_EXCEPTION, sal_False, &pItem ) )
-                {
-                    DBG_ASSERT( pItem->ISA(SfxStringListItem), "StringListItem erwartet" );
-                    List* pList = ( (SfxStringListItem*)pItem )->GetList();
-                    bTemp = ( pList->Count() > 0 );
-                    bOutSet = sal_True;
-                }
-
-                // Im OutSet nichts gefunden? -> dann im InSet suchen
-                if ( !bOutSet &&
-                     SFX_ITEM_SET == pGroupInfo->pInItemSet->
-                     GetItemState( SID_OPT_EXTBRW_ON, sal_False, &pItem ) )
-                {
-                    DBG_ASSERT( pItem->ISA(SfxBoolItem), "BoolItem erwartet" );
-                    bTemp = ( (SfxBoolItem*)pItem )->GetValue();
-                }
-
-                if ( !bTemp && !bOutSet &&
-                     SFX_ITEM_SET == pGroupInfo->pInItemSet->
-                     GetItemState( SID_OPT_EXTBRW_OFF_EXCEPTION, sal_False, &pItem ) )
-                {
-                    DBG_ASSERT( pItem->ISA(SfxStringListItem), "StringListItem erwartet" );
-                    List* pList = ( (SfxStringListItem*)pItem )->GetList();
-                    bTemp = ( pList->Count() > 0 );
-                }
-                bExternBrowserActive = bTemp;
-           }
         }
 
         if(nLeave == SfxTabPage::KEEP_PAGE)
@@ -1032,7 +912,6 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
         pCurrentPageEntry = pEntry;
         if(!bForgetSelection)
             nLastDialogPageId = pPageInfo->nPageId;
-        StartHint( pPageInfo, sTmpTitle );
     }
     else
     {
@@ -1221,48 +1100,23 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
         {
             pRet = new SfxItemSet(
                 SFX_APP()->GetPool(),
-                SID_BASIC_ENABLED, SID_BASIC_ENABLED,
-//SID_OPTIONS_START - ..END
-                SID_OPTIONS_START, SID_INET_PROXY_PORT,
-                SID_INET_SMTPSERVER, SID_INET_SMTPSERVER,
-                SID_INET_NOPROXY, SID_INET_SOCKS_PROXY_PORT,
-                SID_INET_DNS_AUTO, SID_INET_DNS_SERVER,
-                SID_INET_EXE_PLUGIN, SID_INET_EXE_PLUGIN,
-                SID_ATTR_BUTTON_OUTSTYLE3D, SID_ATTR_BUTTON_BIGSIZE,
-                SID_ATTR_AUTO_STYLE_UPDATE, SID_AUTOHELPAGENT_RESET,
-                SID_ATTR_QUICKLAUNCHER, SID_APPEAR_COLORED_TABCTRL,
-                SID_ATTR_ALLOWFOLDERWEBVIEW, SID_HELPAGENT_TIMEOUT,
-                SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                SID_PRINTER_CHANGESTODOC, SID_PRINTER_CHANGESTODOC,
-                SID_SECURE_URL, SID_SECURE_URL,
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-                SID_OPT_FONT_ANTIALIASING_ENABLED, SID_OPT_FONT_ANTIALIASING_MINPIXELS,
-#endif
-                SID_OPT_MIDDLE_MOUSE, SID_OPT_MIDDLE_MOUSE,
-                SID_MACRO_WARNING,  SID_MACRO_CONFIRMATION,
-                SID_HELP_STYLESHEET, SID_HELP_STYLESHEET,
+                SID_ATTR_METRIC, SID_ATTR_SPELL,
+                SID_AUTOSPELL_CHECK, SID_AUTOSPELL_MARKOFF,
+                SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER,
+                SID_ATTR_YEAR2000, SID_ATTR_YEAR2000,
                 0 );
 
-            SFX_APP()->GetOptions(*pRet);
-            pRet->Put(SvxAddressItem(SID_ATTR_ADDRESS));
+            SfxItemSet aOptSet(SFX_APP()->GetPool(),
+                    SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
+            SFX_APP()->GetOptions(aOptSet);
+            pRet->Put(aOptSet);
 
             SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
             const SfxPoolItem* pItem;
-            SfxPoolItem* pClone;
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             if ( pViewFrame )
             {
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
-
-                sal_Bool bAppUndo = sal_False;
-    //          UndoCount fuer den Writer extra
-                if(SFX_ITEM_AVAILABLE <= pDispatch->QueryState( SID_ATTR_UNDO_COUNT, pItem) )
-                {
-                    pClone = pItem->Clone();
-                    pRet->Put(*pClone);
-                    delete pClone;
-                    bAppUndo = sal_True;
-                }
 
                 // Sonstiges - Year2000
                 if( SFX_ITEM_AVAILABLE <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
@@ -1281,38 +1135,6 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             nFlag  |= pMisc->IsPaperOrientationWarning()  ? SFX_PRINTER_CHG_ORIENTATION : 0;
             pRet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, nFlag ));
 
-            // Optionen Allgemein -- Darstellung
-            SvtTabAppearanceCfg aAppearanceCfg;
-            sal_uInt16 nSet;
-
-            nSet = aAppearanceCfg.GetLookNFeel();
-            pRet->Put(SfxUInt16Item (SID_OPT_SYSTEMLOOK,    nSet) );
-
-            nSet = aAppearanceCfg.GetScaleFactor();
-            pRet->Put(SfxUInt16Item (SID_OPT_SCREENSCALING, nSet) );
-
-            nSet = aAppearanceCfg.GetDragMode();
-            pRet->Put(SfxUInt16Item (SID_OPT_DRAGMODE,      nSet) );
-
-            pRet->Put(SfxInt16Item (SID_OPT_SNAPTYPE, aAppearanceCfg.GetSnapMode()) );
-            pRet->Put(SfxInt16Item (SID_OPT_MIDDLE_MOUSE, aAppearanceCfg.GetMiddleMouseButton()));
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-            pRet->Put( SfxBoolItem( SID_OPT_FONT_ANTIALIASING_ENABLED, aAppearanceCfg.IsFontAntiAliasing() ) );
-            pRet->Put( SfxUInt16Item( SID_OPT_FONT_ANTIALIASING_MINPIXELS, aAppearanceCfg.GetFontAntialiasingMinPixelHeight() ) );
-#endif
-
-            AllSettings   hAppSettings = Application::GetSettings();
-            MouseSettings hMouseSettings = hAppSettings.GetMouseSettings();
-            sal_uInt32 nFollow = hMouseSettings.GetFollow();
-
-            sal_uInt16 nTabStyle = hAppSettings.GetStyleSettings().GetTabControlStyle();
-
-            pRet->Put(SfxBoolItem(SID_APPEAR_MENUE_MOUSE_FOLLOW,
-                                    0 != (nFollow&MOUSE_FOLLOW_MENU)));
-            pRet->Put(SfxBoolItem(SID_APPEAR_SINGLE_LINE_TABCTRL,
-                        0 !=(nTabStyle&STYLE_TABCONTROL_SINGLELINE)));
-            pRet->Put(SfxBoolItem(SID_APPEAR_COLORED_TABCTRL,
-                        0 !=(nTabStyle&STYLE_TABCONTROL_COLOR)));
         }
         break;
         case SID_LANGUAGE_OPTIONS:
@@ -1431,16 +1253,12 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
         {
             SfxMiscCfg* pMisc = SFX_APP()->GetMiscConfig();
             const SfxPoolItem* pItem;
-            SFX_APP()->SetOptions( rSet );
+            SfxItemSet aOptSet(SFX_APP()->GetPool(), SID_ATTR_QUICKLAUNCHER, SID_ATTR_QUICKLAUNCHER);
+            aOptSet.Put(rSet);
+            if(aOptSet.Count())
+                SFX_APP()->SetOptions( aOptSet );
             // Dispatcher neu holen, weil SetOptions() ggf. den Dispatcher zerst"ort hat
             SfxViewFrame *pViewFrame = SfxViewFrame::Current();
-// -------------------------------------------------------------------------
-//                          Adresse setzen
-// -------------------------------------------------------------------------
-            if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_ADDRESS, sal_False, &pItem ) )
-            {
-                ( (SvxAddressItem*)pItem )->Store();
-            }
 
 // -------------------------------------------------------------------------
 //          Year2000 auswerten
@@ -1449,35 +1267,10 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             USHORT nY2K = USHRT_MAX;
             if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_YEAR2000, sal_False, &pItem ) )
                 nY2K = ((const SfxUInt16Item*)pItem)->GetValue();
-            if ( pViewFrame )
+            if ( pViewFrame && USHRT_MAX != nY2K)
             {
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
-                if( USHRT_MAX != nY2K)
-                {
-                    pDispatch->Execute( SID_ATTR_YEAR2000, SFX_CALLMODE_ASYNCHRON, pItem, 0L);
-                }
-
-// -------------------------------------------------------------------------
-//          UndoCount fuer den Writer extra
-// -------------------------------------------------------------------------
-
-                sal_Bool bAppUndo = sal_False;
-    //          UndoCount fuer den Writer extra
-                if(SFX_ITEM_AVAILABLE <= pDispatch->QueryState( SID_ATTR_UNDO_COUNT, pItem)
-                    && SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_UNDO_COUNT, sal_False, &pItem))
-                {
-                    pDispatch->Execute(SID_ATTR_UNDO_COUNT, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD, pItem, 0L);
-                }
-            }
-            if( USHRT_MAX != nY2K)
-            {
-                pMisc->SetYear2000( nY2K );
-                // an die Settings fuer VCL-Fields und NumberFormatter-Default propagieren
-                AllSettings aAllSettings( Application::GetSettings() );
-                MiscSettings aMiscSettings( aAllSettings.GetMiscSettings() );
-                aMiscSettings.SetTwoDigitYearStart( (USHORT)pMisc->GetYear2000() );
-                aAllSettings.SetMiscSettings( aMiscSettings );
-                Application::SetSettings( aAllSettings );
+                pDispatch->Execute( SID_ATTR_YEAR2000, SFX_CALLMODE_ASYNCHRON, pItem, 0L);
             }
 
 // -------------------------------------------------------------------------
@@ -1494,90 +1287,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                 pMisc->SetPaperOrientationWarning(0 !=  (pFlag->GetValue() & SFX_PRINTER_CHG_ORIENTATION ));
             }
 
-// -------------------------------------------------------------------------
-//          Appearance auswerten
-// -------------------------------------------------------------------------
-
-            AllSettings   hAppSettings = Application::GetSettings();
-            StyleSettings hAppStyle    = hAppSettings.GetStyleSettings();
-            sal_Bool  bAppChanged = sal_False;
-
-            SvtTabAppearanceCfg aAppearanceCfg;
-            // Look & Feel
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_OPT_SYSTEMLOOK, sal_False, &pItem))
-            {
-                aAppearanceCfg.SetLookNFeel( ((const SfxUInt16Item*)pItem)->GetValue() );
-                bAppChanged = sal_True;
-            }
-
-            // Screen and ScreenFont Scaling
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_OPT_SCREENSCALING, sal_False, &pItem))
-            {
-                aAppearanceCfg.SetScaleFactor( ((const SfxUInt16Item*)pItem)->GetValue() );
-                bAppChanged = sal_True;
-            }
-
-            // Mouse Snap
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_OPT_SNAPTYPE, sal_False, &pItem))
-            {
-                aAppearanceCfg.SetSnapMode( ((const SfxInt16Item*)pItem)->GetValue() );
-                bAppChanged = sal_True;
-            }
-            // Middle mouse button
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_OPT_MIDDLE_MOUSE, sal_False, &pItem))
-            {
-                aAppearanceCfg.SetMiddleMouseButton( ((const SfxInt16Item*)pItem)->GetValue() );
-                bAppChanged = sal_True;
-            }
-
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-            // Font Antialising - enabled
-            if (SFX_ITEM_SET == rSet.GetItemState(SID_OPT_FONT_ANTIALIASING_ENABLED, sal_False, &pItem) )
-            {
-                aAppearanceCfg.SetFontAntiAliasing( static_cast< const SfxBoolItem* >( pItem )->GetValue() );
-                bAppChanged = sal_True;
-            }
-
-            // Font Antialising - min pixel height
-            if (SFX_ITEM_SET == rSet.GetItemState(SID_OPT_FONT_ANTIALIASING_MINPIXELS, sal_False, &pItem) )
-            {
-                aAppearanceCfg.SetFontAntialiasingMinPixelHeight( static_cast< const SfxUInt16Item* >( pItem )->GetValue() );
-                bAppChanged = sal_True;
-            }
-#endif
-
-            // Show Full Window while dragging?
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_OPT_DRAGMODE, sal_False, &pItem))
-            {
-                aAppearanceCfg.SetDragMode( ((const SfxUInt16Item*)pItem)->GetValue() );
-                bAppChanged = sal_True;
-            }
-
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_APPEAR_MENUE_MOUSE_FOLLOW, sal_False, &pItem))
-            {
-                aAppearanceCfg.SetMenuMouseFollow( ((const SfxBoolItem*)pItem)->GetValue() );
-                bAppChanged = sal_True;
-            }
-
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_APPEAR_SINGLE_LINE_TABCTRL, sal_False, &pItem))
-            {
-                aAppearanceCfg.SetSingleLineTabCtrl( ((const SfxBoolItem*)pItem)->GetValue() );
-                bAppChanged = sal_True;
-            }
-
-            if(SFX_ITEM_SET == rSet.GetItemState(SID_APPEAR_COLORED_TABCTRL, sal_False, &pItem))
-            {
-                aAppearanceCfg.SetColoredTabCtrl(((const SfxBoolItem*)pItem)->GetValue() );
-                bAppChanged = sal_True;
-            }
-
-            // Appearance has changed ? publish it to Application
-            if ( bAppChanged )
-            {
-                aAppearanceCfg.SetApplicationDefaults ( GetpApp() );
-            }
         }
-
         break;
         case SID_LANGUAGE_OPTIONS :
         {
