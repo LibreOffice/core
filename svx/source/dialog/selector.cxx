@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:47:45 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@
 #include <drafts/com/sun/star/script/browse/BrowseNodeFactoryViewType.hpp>
 #endif
 
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::script;
@@ -313,6 +314,7 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
     Window* pParent, const ResId& rResId, ULONG nConfigMode )
         : SvTreeListBox( pParent, rResId )
         , nMode( nConfigMode ), bShowSF( FALSE ), bShowBasic( TRUE )
+        , m_pImageProvider( NULL )
 {
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
 
@@ -334,7 +336,7 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
     sal_Bool tmp;
 
     value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
-        ::rtl::OUString::createFromAscii(
+        OUString::createFromAscii(
             "Office.Scripting/ScriptDisplaySettings/ShowBasic" ) );
 
     value >>= tmp;
@@ -347,7 +349,7 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
     }
 
     value = ::utl::ConfigManager::GetConfigManager()->GetLocalProperty(
-        ::rtl::OUString::createFromAscii(
+        OUString::createFromAscii(
             "Office.Scripting/ScriptDisplaySettings/ShowSF" ) );
 
     value >>= tmp;
@@ -494,7 +496,7 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
             if ( pAppBasicMgr->GetLibCount() )
             {
                 // Nur einf"ugen, wenn Bibliotheken vorhanden
-                ::rtl::OUString aAppBasTitle;
+                OUString aAppBasTitle;
                 utl::ConfigManager::GetDirectConfigProperty(
                     utl::ConfigManager::PRODUCTNAME) >>= aAppBasTitle;
                 aAppBasTitle += aMacroName;
@@ -563,7 +565,7 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
                 ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
             Reference< XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
             Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-                ::rtl::OUString::createFromAscii( "/singletons/drafts.com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
+                OUString::createFromAscii( "/singletons/drafts.com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
             rootNode.set( xFac->getView( browse::BrowseNodeFactoryViewType::SCRIPTSELECTOR ) );
             //rootNode.set( xFac->getView( browse::BrowseNodeFactoryViewType::SCRIPTORGANIZER ) );
         }
@@ -605,9 +607,9 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
                             rootNode->getChildNodes();
                         BOOL bIsRootNode = FALSE;
 
-                        ::rtl::OUString user = ::rtl::OUString::createFromAscii("user");
-                        ::rtl::OUString share = ::rtl::OUString::createFromAscii("share");
-                        if ( rootNode->getName().equals(::rtl::OUString::createFromAscii("Root") ))
+                        OUString user = OUString::createFromAscii("user");
+                        OUString share = OUString::createFromAscii("share");
+                        if ( rootNode->getName().equals(OUString::createFromAscii("Root") ))
                         {
                             bIsRootNode = TRUE;
                         }
@@ -622,7 +624,7 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr, SfxSlotPool* pPool )
                             set the bDisplay flag to FALSE if the current
                             node is a first level child of the Root and is NOT
                             either the current document, user or share */
-                            ::rtl::OUString currentDocTitle;
+                            OUString currentDocTitle;
                                if ( SfxObjectShell::GetWorkingDocument() )
                             {
                                 currentDocTitle = SfxObjectShell::GetWorkingDocument()->GetTitle();
@@ -717,10 +719,40 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                             if ( pFunctionListBox->GetEntry_Impl( aName ) )
                                 DBG_WARNINGFILE( "function name already exits" );
 #endif
+
+                            // create the dispatch name from the slot ID
+                            OUString aSuffix, aCmd;
+                            Image aImage;
+
+                            if ( pSfxSlot->pUnoName && m_pImageProvider )
+                            {
+                                aSuffix = OUString::createFromAscii(
+                                    pSfxSlot->GetUnoName());
+
+                                if ( aSuffix.getLength() != 0 )
+                                {
+                                    aCmd = DEFINE_CONST_UNICODE(".uno:");
+                                    aCmd += aSuffix;
+
+                                    aImage = m_pImageProvider->GetImage( aCmd );
+                                }
+                            }
+
                             // Wenn die Namen unterschiedlich sind, dann auch die Funktion, denn zu
                             // einer Id liefert der Slotpool immer den gleichen Namen!
-                            SvLBoxEntry* pFuncEntry =
-                                pFunctionListBox->InsertEntry( aName, NULL );
+                            SvLBoxEntry* pFuncEntry = NULL;
+                            if ( !!aImage )
+                            {
+                                OSL_TRACE("Got an image");
+                                pFuncEntry = pFunctionListBox->InsertEntry(
+                                    aName, aImage, aImage );
+                            }
+                            else
+                            {
+                                OSL_TRACE("Got no image");
+                                pFuncEntry = pFunctionListBox->InsertEntry(
+                                    aName, NULL );
+                            }
 
                             SvxGroupInfo_Impl *pInfo = new SvxGroupInfo_Impl( SFX_CFGFUNCTION_SLOT, nId );
                             pFunctionListBox->aArr.Insert( pInfo, pFunctionListBox->aArr.Count() );
@@ -791,8 +823,8 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                         {
                             if (children[n]->getType() == browse::BrowseNodeTypes::SCRIPT)
                             {
-                                ::rtl::OUString uri;
-                                ::rtl::OUString description;
+                                OUString uri;
+                                OUString description;
 
                                 Reference < beans::XPropertySet >xPropSet( children[n], UNO_QUERY );
                                 if (!xPropSet.is())
@@ -978,9 +1010,9 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                             rootNode->getChildNodes();
                         BOOL bIsRootNode = FALSE;
 
-                        ::rtl::OUString user = ::rtl::OUString::createFromAscii("user");
-                        ::rtl::OUString share = ::rtl::OUString::createFromAscii("share");
-                        if ( rootNode->getName().equals(::rtl::OUString::createFromAscii("Root") ))
+                        OUString user = OUString::createFromAscii("user");
+                        OUString share = OUString::createFromAscii("share");
+                        if ( rootNode->getName().equals(OUString::createFromAscii("Root") ))
                         {
                             bIsRootNode = TRUE;
                         }
@@ -995,7 +1027,7 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                             set the bDisplay flag to FALSE if the current
                             node is a first level child of the Root and is NOT
                             either the current document, user or share */
-                            ::rtl::OUString currentDocTitle;
+                            OUString currentDocTitle;
                                if ( SfxObjectShell::GetWorkingDocument() )
                             {
                                 currentDocTitle = SfxObjectShell::GetWorkingDocument()->GetTitle();
@@ -1148,7 +1180,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     aHelpButton( this, ResId( BTN_SELECTOR_HELP ) ),
     aDescription( this, ResId( GRP_SELECTOR_DESCRIPTION ) ),
     aDescriptionText( this, ResId( TXT_SELECTOR_DESCRIPTION ) ),
-    bShowSlots( bShowSlots )
+    m_bShowSlots( bShowSlots )
 {
     FreeResource();
 
@@ -1156,10 +1188,11 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
 
     // If we are showing Slot API commands update labels in the UI, and
     // enable drag'n'drop
-    if ( bShowSlots )
+    if ( m_bShowSlots )
     {
         aGroupText.SetText( String( ResId( STR_SELECTOR_CATEGORIES, pMgr ) ) );
         aOKButton.SetText( String( ResId( STR_SELECTOR_ADD, pMgr ) ) );
+        aCancelButton.SetText( String( ResId( STR_SELECTOR_CLOSE, pMgr ) ) );
         aFunctionText.SetText( String( ResId( STR_SELECTOR_COMMANDS, pMgr ) ) );
         aDialogDescription.SetText(
                     String( ResId( STR_SELECTOR_ADD_COMMANDS_DESCRIPTION, pMgr ) ) );
@@ -1291,7 +1324,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
     {
         // If we are displaying Slot API commands then the dialog is being
         // run from Tools/Configure and we should not close it, just hide it
-        if ( bShowSlots == FALSE )
+        if ( m_bShowSlots == FALSE )
         {
             EndDialog( RET_CANCEL );
         }
@@ -1306,7 +1339,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
 
         // If we are displaying Slot API commands then this the dialog is being
         // run from Tools/Configure and we should not close it
-        if ( bShowSlots == FALSE )
+        if ( m_bShowSlots == FALSE )
         {
             EndDialog( RET_OK );
         }
@@ -1343,7 +1376,7 @@ SvxScriptSelectorDialog::GetSelectedId()
 String
 SvxScriptSelectorDialog::GetScriptURL()
 {
-    ::rtl::OUString result;
+    OUString result;
 
     SfxMacroInfo* info = aCommands.GetMacroInfo();
 
