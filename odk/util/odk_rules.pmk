@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-23 13:18:57 $
+#   last change: $Author: hr $ $Date: 2004-11-09 13:46:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,6 +113,10 @@ $(DESTDIR)$/configureWindows.bat : $(PRJ)$/configureWindows.bat
 $(DESTDIR)$/setsdkenv_windows.bat : $(PRJ)$/setsdkenv_windows.bat
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/setsdkenv_windows.bat $(MY_TEXTCOPY_TARGETPRE) $@
+
+$(DESTDIR)$/cfgWin.js : $(PRJ)$/cfgWin.js
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/cfgWin.js $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIREXAMPLES)$/%.sxw : $(PRJ)$/examples$/%.sxw 
     +-rm -f $@ >& $(NULLDEV)
@@ -302,6 +306,20 @@ $(DESTDIRBIN)$/%$(EXEPOSTFIX) : $(BINOUT)$/%$(EXEPOSTFIX)
     $(GNUCOPY) $(BINOUT)$/$(@:f) $@
 .IF "$(GUI)"=="UNX"
     +-strip $@    
+.ENDIF
+
+$(DESTDIRBIN)$/%.bin : $(BINOUT)$/%.bin
+    +-rm -f $@ >& $(NULLDEV)
+    $(GNUCOPY) $(BINOUT)$/$(@:f) $@
+.IF "$(GUI)"=="UNX"
+    +-strip $@    
+.ENDIF
+
+$(DESTDIRBIN)$/regcomp : $(BINOUT)$/regcomp
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+    +-chmod 755 $@
 .ENDIF
 
 $(DESTDIRBIN)$/unoapploader$(EXEPOSTFIX) : $(BIN)$/unoapploader$(EXEPOSTFIX)
