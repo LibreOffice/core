@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-27 17:20:05 $
+ *  last change: $Author: jp $ $Date: 2001-11-30 12:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,12 +342,22 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     Beschreibung:
  --------------------------------------------------------------------*/
 
-#if (SUPD>397)
-void SwSrcEditWindow::DataChanged( const DataChangedEvent& )
+void SwSrcEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    Resize();
+    Window::DataChanged( rDCEvt );
+
+    switch ( rDCEvt.GetType() )
+    {
+    case DATACHANGED_SETTINGS:
+        // ScrollBars neu anordnen bzw. Resize ausloesen, da sich
+        // ScrollBar-Groesse geaendert haben kann. Dazu muss dann im
+        // Resize-Handler aber auch die Groesse der ScrollBars aus
+        // den Settings abgefragt werden.
+        if( rDCEvt.GetFlags() & SETTINGS_STYLE )
+            Resize();
+        break;
+    }
 }
-#endif
 
 void  SwSrcEditWindow::Resize()
 {
@@ -404,13 +414,24 @@ void  SwSrcEditWindow::Resize()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void TextViewOutWin::DataChanged( const DataChangedEvent& )
+void TextViewOutWin::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    const Color &rCol = GetSettings().GetStyleSettings().GetWindowColor();
-    SetBackground( rCol );
-    Font aFont( pTextView->GetTextEngine()->GetFont() );
-    aFont.SetFillColor( rCol );
-    pTextView->GetTextEngine()->SetFont( aFont );
+    Window::DataChanged( rDCEvt );
+
+    switch( rDCEvt.GetType() )
+    {
+    case DATACHANGED_SETTINGS:
+        // den Settings abgefragt werden.
+        if( rDCEvt.GetFlags() & SETTINGS_STYLE )
+        {
+            const Color &rCol = GetSettings().GetStyleSettings().GetWindowColor();
+            SetBackground( rCol );
+            Font aFont( pTextView->GetTextEngine()->GetFont() );
+            aFont.SetFillColor( rCol );
+            pTextView->GetTextEngine()->SetFont( aFont );
+        }
+        break;
+    }
 }
 
 void  TextViewOutWin::MouseMove( const MouseEvent &rEvt )

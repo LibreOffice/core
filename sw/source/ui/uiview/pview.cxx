@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-08 13:50:55 $
+ *  last change: $Author: jp $ $Date: 2001-11-30 12:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1107,12 +1107,30 @@ void SwPagePreViewWin::SetPagePreview( BYTE nRow, BYTE nCol )
     }
 }
 
-void SwPagePreViewWin::DataChanged( const DataChangedEvent& )
+void SwPagePreViewWin::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    rView.InvalidateBorder();               //Scrollbarbreiten
-    rView.GetDocShell()->UpdateFontList();  //Fontwechsel
-    if ( pViewShell->GetWin() )
-        pViewShell->GetWin()->Invalidate();
+    Window::DataChanged( rDCEvt );
+
+    switch( rDCEvt.GetType() )
+    {
+    case DATACHANGED_SETTINGS:
+        // ScrollBars neu anordnen bzw. Resize ausloesen, da sich
+        // ScrollBar-Groesse geaendert haben kann. Dazu muss dann im
+        // Resize-Handler aber auch die Groesse der ScrollBars aus
+        // den Settings abgefragt werden.
+        if( rDCEvt.GetFlags() & SETTINGS_STYLE )
+            rView.InvalidateBorder();               //Scrollbarbreiten
+        break;
+
+    case DATACHANGED_PRINTER:
+    case DATACHANGED_DISPLAY:
+    case DATACHANGED_FONTS:
+    case DATACHANGED_FONTSUBSTITUTION:
+        rView.GetDocShell()->UpdateFontList();  //Fontwechsel
+        if ( pViewShell->GetWin() )
+            pViewShell->GetWin()->Invalidate();
+        break;
+    }
 }
 
 
@@ -2256,6 +2274,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/10/08 13:50:55  jp
+      Task #92830#: min/max -> Min/Max
+
       Revision 1.8  2001/06/01 11:23:56  fme
       Fix #86988#: Redesign of dialogs
 
