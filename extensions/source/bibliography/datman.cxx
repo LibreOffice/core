@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-24 08:54:39 $
+ *  last change: $Author: fs $ $Date: 2002-10-29 13:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -861,7 +861,7 @@ BibInterceptorHelper::~BibInterceptorHelper( )
 {
 }
 
-BibInterceptorHelper::ReleaseInterceptor()
+void BibInterceptorHelper::ReleaseInterceptor()
 {
     if ( xInterception.is() )
         xInterception->releaseDispatchProviderInterceptor( this );
