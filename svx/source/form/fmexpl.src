@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-01 20:22:37 $
+ *  last change: $Author: obo $ $Date: 2001-03-09 20:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,8 +170,8 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ portuguese_brazilian ] = "Ersetzen durch";
             Text[ japanese ] = "’u‚«Š·‚¦";
             Text[ korean ] = "¹Ù²Ù±â";
-            Text[ chinese_simplified ] = "Ìæ»»Îª";
-            Text[ chinese_traditional ] = "´À¥N¥Î";
+            Text[ chinese_simplified ] = "Ìæ»»³É";
+            Text[ chinese_traditional ] = "§ó´À¦¨";
             Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ";
             Text[ turkish ] = "Þununla deðiþtir...";
         };
@@ -220,7 +220,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ russian ] = "Ïîðÿäîê àêòèâèðîâàíèÿ";
             Text[ polish ] = "Kolejnoœæ aktywacji";
             Text[ japanese ] = "ÀÌÞµ°ÀÞ°...";
-            Text[ chinese_traditional ] = "½ü´«¶¶§Ç...";
+            Text[ chinese_traditional ] = "±Ò°Ê¶¶§Ç...";
             Text[ arabic ] = "ÊÑÊíÈ ÇáÊäÔíØ...";
             Text[ greek ] = "Ó~åéñÜ åíåñãïðïßçóçò...";
             Text[ korean ] = "È°¼ºÈ­ ¼ø¼­...";
@@ -460,7 +460,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ japanese ] = "Ø½ÄÎÞ¯¸½(~I)";
             Text[ korean ] = "¸ñ·Ï ÇÊµå(~I)";
             Text[ chinese_simplified ] = "ÁÐ±í¿ò(~I)";
-            Text[ chinese_traditional ] = "²M³æ¤è®Ø(~I)";
+            Text[ chinese_traditional ] = "²M³æ¤è¶ô(~I)";
             Text[ arabic ] = "ãÑÈÚ ÞÇÆãÉ";
             Text[ turkish ] = "Liste alaný";
             Text[ language_user1 ] = " ";
@@ -497,12 +497,12 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text = "~Optionsfeld" ;
             Text [ ENGLISH ] = "~Option Button" ;
             Text[ english_us ] = "~Radio Button";
-            Text[ portuguese ] = "Botão de ~selecção";
+            Text[ portuguese ] = "Botão de ~opção";
             Text[ russian ] = "~Ïåðåêëþ÷àòåëü";
             Text[ greek ] = "Ðåäß~ï åðéëïãþí";
             Text[ dutch ] = "~Optieveld";
             Text[ french ] = "Bouton ~radio";
-            Text[ spanish ] = "~Botón radio";
+            Text[ spanish ] = "~Campo de opción";
             Text[ italian ] = "Pulsante di scelta";
             Text[ danish ] = "Alternativfelt";
             Text[ swedish ] = "~Alternativfält";
@@ -556,7 +556,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ spanish ] = "Botón g~ráfico";
             Text[ italian ] = "P~ulsante immagine";
             Text[ danish ] = "Grafisk knap";
-            Text[ swedish ] = "G~rafisk knapp";
+            Text[ swedish ] = "~Grafisk kommandoknapp";
             Text[ polish ] = "Przycisk graficzny";
             Text[ portuguese_brazilian ] = "I~mage Button";
             Text[ japanese ] = "²Ò°¼ÞÎÞÀÝ(~M)";
