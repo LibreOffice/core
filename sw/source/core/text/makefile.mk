@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 16:51:01 $
+#   last change: $Author: hr $ $Date: 2004-09-08 16:12:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ CXXFILES += \
 
 SLOFILES =  \
                 $(SLO)$/atrstck.obj \
+                $(SLO)$/EnhancedPDFExportHelper.obj \
         $(SLO)$/frmcrsr.obj \
         $(SLO)$/frmform.obj \
         $(SLO)$/frminf.obj \
@@ -114,7 +115,7 @@ SLOFILES =  \
         $(SLO)$/portox.obj \
         $(SLO)$/portxt.obj \
         $(SLO)$/redlnitr.obj \
-        $(SLO)$/txtcache.obj \
+                $(SLO)$/txtcache.obj \
         $(SLO)$/txtdrop.obj \
         $(SLO)$/txtfld.obj \
         $(SLO)$/txtfly.obj \
