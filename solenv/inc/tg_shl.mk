@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hjs $ $Date: 2001-01-31 17:52:40 $
+#   last change: $Author: pluby $ $Date: 2001-02-02 04:38:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -437,6 +437,9 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+.IF "$(SHL$(TNR)VERSIONMAP)"!=""
+    @strip -i -n -r -u -s $(SHL$(TNR)VERSIONMAP) $@
+.ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
 .ENDIF

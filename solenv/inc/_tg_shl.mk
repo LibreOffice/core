@@ -337,6 +337,9 @@ $(SHL1TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+.IF "$(SHL1VERSIONMAP)"!=""
+    @strip -i -n -r -u -s $(SHL1VERSIONMAP) $@
+.ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
 .ENDIF
@@ -355,56 +358,6 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(SHL1TARGETN)"!=""
 
 # Anweisungen fuer das Linken
-# unroll begin
-
-.IF "$(SHL1IMPLIBN)" != ""
-
-.IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL1LIBS)
-.ELSE
-.ENDIF
-
-.IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL1TARGETN)
-.ENDIF
-
-.IF "$(GUI)" != "UNX"
-$(SHL1IMPLIBN):	\
-                    $(SHL1DEF) \
-                    $(USE_SHLTARGET) \
-                    $(USELIBDEPN)
-.ELSE
-$(SHL1IMPLIBN):	\
-                    $(SHL1LIBS)
-.ENDIF
-    @echo ------------------------------
-    @echo Making: $(SHL1IMPLIBN)
-.IF "$(GUI)" == "WNT"
-# bei use_deffile implib von linker erstellt
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL1IMPLIBN) \
-    -def:$(SHL1DEF) )
-.ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL1TARGETN) to get $@
-.ENDIF			# "$(GUI)" == "WNT"
-.ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL1DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL1TARGETN)
-.ENDIF
-.ELSE
-    @echo keine ImportLibs auf Mac und *ix
-    @+-$(RM) $@
-    @$(TOUCH) $@
-.ENDIF
-.ENDIF
-.ENDIF
-
-# Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(OS)"=="AIX"
@@ -744,6 +697,9 @@ $(SHL2TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+.IF "$(SHL2VERSIONMAP)"!=""
+    @strip -i -n -r -u -s $(SHL2VERSIONMAP) $@
+.ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
 .ENDIF
@@ -762,56 +718,6 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(SHL2TARGETN)"!=""
 
 # Anweisungen fuer das Linken
-# unroll begin
-
-.IF "$(SHL2IMPLIBN)" != ""
-
-.IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL2LIBS)
-.ELSE
-.ENDIF
-
-.IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL2TARGETN)
-.ENDIF
-
-.IF "$(GUI)" != "UNX"
-$(SHL2IMPLIBN):	\
-                    $(SHL2DEF) \
-                    $(USE_SHLTARGET) \
-                    $(USELIBDEPN)
-.ELSE
-$(SHL2IMPLIBN):	\
-                    $(SHL2LIBS)
-.ENDIF
-    @echo ------------------------------
-    @echo Making: $(SHL2IMPLIBN)
-.IF "$(GUI)" == "WNT"
-# bei use_deffile implib von linker erstellt
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL2IMPLIBN) \
-    -def:$(SHL2DEF) )
-.ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL2TARGETN) to get $@
-.ENDIF			# "$(GUI)" == "WNT"
-.ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL2DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL2TARGETN)
-.ENDIF
-.ELSE
-    @echo keine ImportLibs auf Mac und *ix
-    @+-$(RM) $@
-    @$(TOUCH) $@
-.ENDIF
-.ENDIF
-.ENDIF
-
-# Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(OS)"=="AIX"
@@ -1151,6 +1057,9 @@ $(SHL3TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+.IF "$(SHL3VERSIONMAP)"!=""
+    @strip -i -n -r -u -s $(SHL3VERSIONMAP) $@
+.ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
 .ENDIF
@@ -1169,56 +1078,6 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(SHL3TARGETN)"!=""
 
 # Anweisungen fuer das Linken
-# unroll begin
-
-.IF "$(SHL3IMPLIBN)" != ""
-
-.IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL3LIBS)
-.ELSE
-.ENDIF
-
-.IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL3TARGETN)
-.ENDIF
-
-.IF "$(GUI)" != "UNX"
-$(SHL3IMPLIBN):	\
-                    $(SHL3DEF) \
-                    $(USE_SHLTARGET) \
-                    $(USELIBDEPN)
-.ELSE
-$(SHL3IMPLIBN):	\
-                    $(SHL3LIBS)
-.ENDIF
-    @echo ------------------------------
-    @echo Making: $(SHL3IMPLIBN)
-.IF "$(GUI)" == "WNT"
-# bei use_deffile implib von linker erstellt
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL3IMPLIBN) \
-    -def:$(SHL3DEF) )
-.ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL3TARGETN) to get $@
-.ENDIF			# "$(GUI)" == "WNT"
-.ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL3DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL3TARGETN)
-.ENDIF
-.ELSE
-    @echo keine ImportLibs auf Mac und *ix
-    @+-$(RM) $@
-    @$(TOUCH) $@
-.ENDIF
-.ENDIF
-.ENDIF
-
-# Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(OS)"=="AIX"
@@ -1558,6 +1417,9 @@ $(SHL4TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+.IF "$(SHL4VERSIONMAP)"!=""
+    @strip -i -n -r -u -s $(SHL4VERSIONMAP) $@
+.ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
 .ENDIF
@@ -1576,56 +1438,6 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(SHL4TARGETN)"!=""
 
 # Anweisungen fuer das Linken
-# unroll begin
-
-.IF "$(SHL4IMPLIBN)" != ""
-
-.IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL4LIBS)
-.ELSE
-.ENDIF
-
-.IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL4TARGETN)
-.ENDIF
-
-.IF "$(GUI)" != "UNX"
-$(SHL4IMPLIBN):	\
-                    $(SHL4DEF) \
-                    $(USE_SHLTARGET) \
-                    $(USELIBDEPN)
-.ELSE
-$(SHL4IMPLIBN):	\
-                    $(SHL4LIBS)
-.ENDIF
-    @echo ------------------------------
-    @echo Making: $(SHL4IMPLIBN)
-.IF "$(GUI)" == "WNT"
-# bei use_deffile implib von linker erstellt
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL4IMPLIBN) \
-    -def:$(SHL4DEF) )
-.ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL4TARGETN) to get $@
-.ENDIF			# "$(GUI)" == "WNT"
-.ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL4DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL4TARGETN)
-.ENDIF
-.ELSE
-    @echo keine ImportLibs auf Mac und *ix
-    @+-$(RM) $@
-    @$(TOUCH) $@
-.ENDIF
-.ENDIF
-.ENDIF
-
-# Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(OS)"=="AIX"
@@ -1965,6 +1777,9 @@ $(SHL5TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+.IF "$(SHL5VERSIONMAP)"!=""
+    @strip -i -n -r -u -s $(SHL5VERSIONMAP) $@
+.ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
 .ENDIF
@@ -1983,56 +1798,6 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(SHL5TARGETN)"!=""
 
 # Anweisungen fuer das Linken
-# unroll begin
-
-.IF "$(SHL5IMPLIBN)" != ""
-
-.IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL5LIBS)
-.ELSE
-.ENDIF
-
-.IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL5TARGETN)
-.ENDIF
-
-.IF "$(GUI)" != "UNX"
-$(SHL5IMPLIBN):	\
-                    $(SHL5DEF) \
-                    $(USE_SHLTARGET) \
-                    $(USELIBDEPN)
-.ELSE
-$(SHL5IMPLIBN):	\
-                    $(SHL5LIBS)
-.ENDIF
-    @echo ------------------------------
-    @echo Making: $(SHL5IMPLIBN)
-.IF "$(GUI)" == "WNT"
-# bei use_deffile implib von linker erstellt
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL5IMPLIBN) \
-    -def:$(SHL5DEF) )
-.ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL5TARGETN) to get $@
-.ENDIF			# "$(GUI)" == "WNT"
-.ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL5DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL5TARGETN)
-.ENDIF
-.ELSE
-    @echo keine ImportLibs auf Mac und *ix
-    @+-$(RM) $@
-    @$(TOUCH) $@
-.ENDIF
-.ENDIF
-.ENDIF
-
-# Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(OS)"=="AIX"
@@ -2372,6 +2137,9 @@ $(SHL6TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+.IF "$(SHL6VERSIONMAP)"!=""
+    @strip -i -n -r -u -s $(SHL6VERSIONMAP) $@
+.ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
 .ENDIF
@@ -2390,56 +2158,6 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(SHL6TARGETN)"!=""
 
 # Anweisungen fuer das Linken
-# unroll begin
-
-.IF "$(SHL6IMPLIBN)" != ""
-
-.IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL6LIBS)
-.ELSE
-.ENDIF
-
-.IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL6TARGETN)
-.ENDIF
-
-.IF "$(GUI)" != "UNX"
-$(SHL6IMPLIBN):	\
-                    $(SHL6DEF) \
-                    $(USE_SHLTARGET) \
-                    $(USELIBDEPN)
-.ELSE
-$(SHL6IMPLIBN):	\
-                    $(SHL6LIBS)
-.ENDIF
-    @echo ------------------------------
-    @echo Making: $(SHL6IMPLIBN)
-.IF "$(GUI)" == "WNT"
-# bei use_deffile implib von linker erstellt
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL6IMPLIBN) \
-    -def:$(SHL6DEF) )
-.ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL6TARGETN) to get $@
-.ENDIF			# "$(GUI)" == "WNT"
-.ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL6DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL6TARGETN)
-.ENDIF
-.ELSE
-    @echo keine ImportLibs auf Mac und *ix
-    @+-$(RM) $@
-    @$(TOUCH) $@
-.ENDIF
-.ENDIF
-.ENDIF
-
-# Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(OS)"=="AIX"
@@ -2779,6 +2497,9 @@ $(SHL7TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+.IF "$(SHL7VERSIONMAP)"!=""
+    @strip -i -n -r -u -s $(SHL7VERSIONMAP) $@
+.ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
 .ENDIF
@@ -2797,56 +2518,6 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(SHL7TARGETN)"!=""
 
 # Anweisungen fuer das Linken
-# unroll begin
-
-.IF "$(SHL7IMPLIBN)" != ""
-
-.IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL7LIBS)
-.ELSE
-.ENDIF
-
-.IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL7TARGETN)
-.ENDIF
-
-.IF "$(GUI)" != "UNX"
-$(SHL7IMPLIBN):	\
-                    $(SHL7DEF) \
-                    $(USE_SHLTARGET) \
-                    $(USELIBDEPN)
-.ELSE
-$(SHL7IMPLIBN):	\
-                    $(SHL7LIBS)
-.ENDIF
-    @echo ------------------------------
-    @echo Making: $(SHL7IMPLIBN)
-.IF "$(GUI)" == "WNT"
-# bei use_deffile implib von linker erstellt
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL7IMPLIBN) \
-    -def:$(SHL7DEF) )
-.ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL7TARGETN) to get $@
-.ENDIF			# "$(GUI)" == "WNT"
-.ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL7DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL7TARGETN)
-.ENDIF
-.ELSE
-    @echo keine ImportLibs auf Mac und *ix
-    @+-$(RM) $@
-    @$(TOUCH) $@
-.ENDIF
-.ENDIF
-.ENDIF
-
-# Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(OS)"=="AIX"
@@ -3186,6 +2857,9 @@ $(SHL8TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+.IF "$(SHL8VERSIONMAP)"!=""
+    @strip -i -n -r -u -s $(SHL8VERSIONMAP) $@
+.ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
 .ENDIF
@@ -3204,56 +2878,6 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(SHL8TARGETN)"!=""
 
 # Anweisungen fuer das Linken
-# unroll begin
-
-.IF "$(SHL8IMPLIBN)" != ""
-
-.IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL8LIBS)
-.ELSE
-.ENDIF
-
-.IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL8TARGETN)
-.ENDIF
-
-.IF "$(GUI)" != "UNX"
-$(SHL8IMPLIBN):	\
-                    $(SHL8DEF) \
-                    $(USE_SHLTARGET) \
-                    $(USELIBDEPN)
-.ELSE
-$(SHL8IMPLIBN):	\
-                    $(SHL8LIBS)
-.ENDIF
-    @echo ------------------------------
-    @echo Making: $(SHL8IMPLIBN)
-.IF "$(GUI)" == "WNT"
-# bei use_deffile implib von linker erstellt
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL8IMPLIBN) \
-    -def:$(SHL8DEF) )
-.ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL8TARGETN) to get $@
-.ENDIF			# "$(GUI)" == "WNT"
-.ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL8DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL8TARGETN)
-.ENDIF
-.ELSE
-    @echo keine ImportLibs auf Mac und *ix
-    @+-$(RM) $@
-    @$(TOUCH) $@
-.ENDIF
-.ENDIF
-.ENDIF
-
-# Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(OS)"=="AIX"
@@ -3593,6 +3217,9 @@ $(SHL9TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+.IF "$(SHL9VERSIONMAP)"!=""
+    @strip -i -n -r -u -s $(SHL9VERSIONMAP) $@
+.ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
 .ENDIF
@@ -3611,56 +3238,6 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(SHL9TARGETN)"!=""
 
 # Anweisungen fuer das Linken
-# unroll begin
-
-.IF "$(SHL9IMPLIBN)" != ""
-
-.IF "$(UPDATER)"=="YES"
-USELIBDEPN=$(SHL9LIBS)
-.ELSE
-.ENDIF
-
-.IF "$(USE_DEFFILE)"!=""
-USE_SHLTARGET=$(SHL9TARGETN)
-.ENDIF
-
-.IF "$(GUI)" != "UNX"
-$(SHL9IMPLIBN):	\
-                    $(SHL9DEF) \
-                    $(USE_SHLTARGET) \
-                    $(USELIBDEPN)
-.ELSE
-$(SHL9IMPLIBN):	\
-                    $(SHL9LIBS)
-.ENDIF
-    @echo ------------------------------
-    @echo Making: $(SHL9IMPLIBN)
-.IF "$(GUI)" == "WNT"
-# bei use_deffile implib von linker erstellt
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL9IMPLIBN) \
-    -def:$(SHL9DEF) )
-.ELSE			# "$(GUI)" == "WNT"
-    @+if exist $@ $(TOUCH) $@
-    @+if not exist $@ echo rebuild $(SHL9TARGETN) to get $@
-.ENDIF			# "$(GUI)" == "WNT"
-.ELSE
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
-.IF "$(USE_DEFFILE)"==""
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL9DEF)
-.ELSE
-    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL9TARGETN)
-.ENDIF
-.ELSE
-    @echo keine ImportLibs auf Mac und *ix
-    @+-$(RM) $@
-    @$(TOUCH) $@
-.ENDIF
-.ENDIF
-.ENDIF
-
-# Anweisungen fuer das Linken
-#next Target
 # unroll begin
 
 .IF "$(OS)"=="AIX"
@@ -4000,6 +3577,9 @@ $(SHL10TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
+.IF "$(SHL10VERSIONMAP)"!=""
+    @strip -i -n -r -u -s $(SHL10VERSIONMAP) $@
+.ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
 .ENDIF
@@ -4016,6 +3596,447 @@ $(SHL10TARGETN) : \
     $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(foreach,i,$(shell $(UNIX2MACPATH) $(PRJ)$/$(ROUT)$/lib $(SOLARLIB:s/-L//)) -L"$i") $(shell $(UNIX2MACPATH) $(STDSLO) $(SHL10OBJS) `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ)) $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) -o $(shell $(UNIX2MACPATH) $@)
 .ENDIF			# "$(GUI)"=="MAC"
 .ENDIF			# "$(SHL10TARGETN)"!=""
+
+# Anweisungen fuer das Linken
+# unroll begin
+
+.IF "$(SHL1IMPLIBN)" != ""
+
+.IF "$(UPDATER)"=="YES"
+USELIBDEPN=$(SHL1LIBS)
+.ELSE
+.ENDIF
+
+.IF "$(USE_DEFFILE)"!=""
+USE_SHLTARGET=$(SHL1TARGETN)
+.ENDIF
+
+.IF "$(GUI)" != "UNX"
+$(SHL1IMPLIBN):	\
+                    $(SHL1DEF) \
+                    $(USE_SHLTARGET) \
+                    $(USELIBDEPN)
+.ELSE
+$(SHL1IMPLIBN):	\
+                    $(SHL1LIBS)
+.ENDIF
+    @echo ------------------------------
+    @echo Making: $(SHL1IMPLIBN)
+.IF "$(GUI)" == "WNT"
+# bei use_deffile implib von linker erstellt
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL1IMPLIBN) \
+    -def:$(SHL1DEF) )
+.ELSE			# "$(GUI)" == "WNT"
+    @+if exist $@ $(TOUCH) $@
+    @+if not exist $@ echo rebuild $(SHL1TARGETN) to get $@
+.ENDIF			# "$(GUI)" == "WNT"
+.ELSE
+.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL1DEF)
+.ELSE
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL1TARGETN)
+.ENDIF
+.ELSE
+    @echo keine ImportLibs auf Mac und *ix
+    @+-$(RM) $@
+    @$(TOUCH) $@
+.ENDIF
+.ENDIF
+.ENDIF
+
+# Anweisungen fuer das Linken
+# unroll begin
+
+.IF "$(SHL2IMPLIBN)" != ""
+
+.IF "$(UPDATER)"=="YES"
+USELIBDEPN=$(SHL2LIBS)
+.ELSE
+.ENDIF
+
+.IF "$(USE_DEFFILE)"!=""
+USE_SHLTARGET=$(SHL2TARGETN)
+.ENDIF
+
+.IF "$(GUI)" != "UNX"
+$(SHL2IMPLIBN):	\
+                    $(SHL2DEF) \
+                    $(USE_SHLTARGET) \
+                    $(USELIBDEPN)
+.ELSE
+$(SHL2IMPLIBN):	\
+                    $(SHL2LIBS)
+.ENDIF
+    @echo ------------------------------
+    @echo Making: $(SHL2IMPLIBN)
+.IF "$(GUI)" == "WNT"
+# bei use_deffile implib von linker erstellt
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL2IMPLIBN) \
+    -def:$(SHL2DEF) )
+.ELSE			# "$(GUI)" == "WNT"
+    @+if exist $@ $(TOUCH) $@
+    @+if not exist $@ echo rebuild $(SHL2TARGETN) to get $@
+.ENDIF			# "$(GUI)" == "WNT"
+.ELSE
+.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL2DEF)
+.ELSE
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL2TARGETN)
+.ENDIF
+.ELSE
+    @echo keine ImportLibs auf Mac und *ix
+    @+-$(RM) $@
+    @$(TOUCH) $@
+.ENDIF
+.ENDIF
+.ENDIF
+
+# Anweisungen fuer das Linken
+# unroll begin
+
+.IF "$(SHL3IMPLIBN)" != ""
+
+.IF "$(UPDATER)"=="YES"
+USELIBDEPN=$(SHL3LIBS)
+.ELSE
+.ENDIF
+
+.IF "$(USE_DEFFILE)"!=""
+USE_SHLTARGET=$(SHL3TARGETN)
+.ENDIF
+
+.IF "$(GUI)" != "UNX"
+$(SHL3IMPLIBN):	\
+                    $(SHL3DEF) \
+                    $(USE_SHLTARGET) \
+                    $(USELIBDEPN)
+.ELSE
+$(SHL3IMPLIBN):	\
+                    $(SHL3LIBS)
+.ENDIF
+    @echo ------------------------------
+    @echo Making: $(SHL3IMPLIBN)
+.IF "$(GUI)" == "WNT"
+# bei use_deffile implib von linker erstellt
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL3IMPLIBN) \
+    -def:$(SHL3DEF) )
+.ELSE			# "$(GUI)" == "WNT"
+    @+if exist $@ $(TOUCH) $@
+    @+if not exist $@ echo rebuild $(SHL3TARGETN) to get $@
+.ENDIF			# "$(GUI)" == "WNT"
+.ELSE
+.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL3DEF)
+.ELSE
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL3TARGETN)
+.ENDIF
+.ELSE
+    @echo keine ImportLibs auf Mac und *ix
+    @+-$(RM) $@
+    @$(TOUCH) $@
+.ENDIF
+.ENDIF
+.ENDIF
+
+# Anweisungen fuer das Linken
+# unroll begin
+
+.IF "$(SHL4IMPLIBN)" != ""
+
+.IF "$(UPDATER)"=="YES"
+USELIBDEPN=$(SHL4LIBS)
+.ELSE
+.ENDIF
+
+.IF "$(USE_DEFFILE)"!=""
+USE_SHLTARGET=$(SHL4TARGETN)
+.ENDIF
+
+.IF "$(GUI)" != "UNX"
+$(SHL4IMPLIBN):	\
+                    $(SHL4DEF) \
+                    $(USE_SHLTARGET) \
+                    $(USELIBDEPN)
+.ELSE
+$(SHL4IMPLIBN):	\
+                    $(SHL4LIBS)
+.ENDIF
+    @echo ------------------------------
+    @echo Making: $(SHL4IMPLIBN)
+.IF "$(GUI)" == "WNT"
+# bei use_deffile implib von linker erstellt
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL4IMPLIBN) \
+    -def:$(SHL4DEF) )
+.ELSE			# "$(GUI)" == "WNT"
+    @+if exist $@ $(TOUCH) $@
+    @+if not exist $@ echo rebuild $(SHL4TARGETN) to get $@
+.ENDIF			# "$(GUI)" == "WNT"
+.ELSE
+.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL4DEF)
+.ELSE
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL4TARGETN)
+.ENDIF
+.ELSE
+    @echo keine ImportLibs auf Mac und *ix
+    @+-$(RM) $@
+    @$(TOUCH) $@
+.ENDIF
+.ENDIF
+.ENDIF
+
+# Anweisungen fuer das Linken
+# unroll begin
+
+.IF "$(SHL5IMPLIBN)" != ""
+
+.IF "$(UPDATER)"=="YES"
+USELIBDEPN=$(SHL5LIBS)
+.ELSE
+.ENDIF
+
+.IF "$(USE_DEFFILE)"!=""
+USE_SHLTARGET=$(SHL5TARGETN)
+.ENDIF
+
+.IF "$(GUI)" != "UNX"
+$(SHL5IMPLIBN):	\
+                    $(SHL5DEF) \
+                    $(USE_SHLTARGET) \
+                    $(USELIBDEPN)
+.ELSE
+$(SHL5IMPLIBN):	\
+                    $(SHL5LIBS)
+.ENDIF
+    @echo ------------------------------
+    @echo Making: $(SHL5IMPLIBN)
+.IF "$(GUI)" == "WNT"
+# bei use_deffile implib von linker erstellt
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL5IMPLIBN) \
+    -def:$(SHL5DEF) )
+.ELSE			# "$(GUI)" == "WNT"
+    @+if exist $@ $(TOUCH) $@
+    @+if not exist $@ echo rebuild $(SHL5TARGETN) to get $@
+.ENDIF			# "$(GUI)" == "WNT"
+.ELSE
+.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL5DEF)
+.ELSE
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL5TARGETN)
+.ENDIF
+.ELSE
+    @echo keine ImportLibs auf Mac und *ix
+    @+-$(RM) $@
+    @$(TOUCH) $@
+.ENDIF
+.ENDIF
+.ENDIF
+
+# Anweisungen fuer das Linken
+# unroll begin
+
+.IF "$(SHL6IMPLIBN)" != ""
+
+.IF "$(UPDATER)"=="YES"
+USELIBDEPN=$(SHL6LIBS)
+.ELSE
+.ENDIF
+
+.IF "$(USE_DEFFILE)"!=""
+USE_SHLTARGET=$(SHL6TARGETN)
+.ENDIF
+
+.IF "$(GUI)" != "UNX"
+$(SHL6IMPLIBN):	\
+                    $(SHL6DEF) \
+                    $(USE_SHLTARGET) \
+                    $(USELIBDEPN)
+.ELSE
+$(SHL6IMPLIBN):	\
+                    $(SHL6LIBS)
+.ENDIF
+    @echo ------------------------------
+    @echo Making: $(SHL6IMPLIBN)
+.IF "$(GUI)" == "WNT"
+# bei use_deffile implib von linker erstellt
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL6IMPLIBN) \
+    -def:$(SHL6DEF) )
+.ELSE			# "$(GUI)" == "WNT"
+    @+if exist $@ $(TOUCH) $@
+    @+if not exist $@ echo rebuild $(SHL6TARGETN) to get $@
+.ENDIF			# "$(GUI)" == "WNT"
+.ELSE
+.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL6DEF)
+.ELSE
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL6TARGETN)
+.ENDIF
+.ELSE
+    @echo keine ImportLibs auf Mac und *ix
+    @+-$(RM) $@
+    @$(TOUCH) $@
+.ENDIF
+.ENDIF
+.ENDIF
+
+# Anweisungen fuer das Linken
+# unroll begin
+
+.IF "$(SHL7IMPLIBN)" != ""
+
+.IF "$(UPDATER)"=="YES"
+USELIBDEPN=$(SHL7LIBS)
+.ELSE
+.ENDIF
+
+.IF "$(USE_DEFFILE)"!=""
+USE_SHLTARGET=$(SHL7TARGETN)
+.ENDIF
+
+.IF "$(GUI)" != "UNX"
+$(SHL7IMPLIBN):	\
+                    $(SHL7DEF) \
+                    $(USE_SHLTARGET) \
+                    $(USELIBDEPN)
+.ELSE
+$(SHL7IMPLIBN):	\
+                    $(SHL7LIBS)
+.ENDIF
+    @echo ------------------------------
+    @echo Making: $(SHL7IMPLIBN)
+.IF "$(GUI)" == "WNT"
+# bei use_deffile implib von linker erstellt
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL7IMPLIBN) \
+    -def:$(SHL7DEF) )
+.ELSE			# "$(GUI)" == "WNT"
+    @+if exist $@ $(TOUCH) $@
+    @+if not exist $@ echo rebuild $(SHL7TARGETN) to get $@
+.ENDIF			# "$(GUI)" == "WNT"
+.ELSE
+.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL7DEF)
+.ELSE
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL7TARGETN)
+.ENDIF
+.ELSE
+    @echo keine ImportLibs auf Mac und *ix
+    @+-$(RM) $@
+    @$(TOUCH) $@
+.ENDIF
+.ENDIF
+.ENDIF
+
+# Anweisungen fuer das Linken
+# unroll begin
+
+.IF "$(SHL8IMPLIBN)" != ""
+
+.IF "$(UPDATER)"=="YES"
+USELIBDEPN=$(SHL8LIBS)
+.ELSE
+.ENDIF
+
+.IF "$(USE_DEFFILE)"!=""
+USE_SHLTARGET=$(SHL8TARGETN)
+.ENDIF
+
+.IF "$(GUI)" != "UNX"
+$(SHL8IMPLIBN):	\
+                    $(SHL8DEF) \
+                    $(USE_SHLTARGET) \
+                    $(USELIBDEPN)
+.ELSE
+$(SHL8IMPLIBN):	\
+                    $(SHL8LIBS)
+.ENDIF
+    @echo ------------------------------
+    @echo Making: $(SHL8IMPLIBN)
+.IF "$(GUI)" == "WNT"
+# bei use_deffile implib von linker erstellt
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL8IMPLIBN) \
+    -def:$(SHL8DEF) )
+.ELSE			# "$(GUI)" == "WNT"
+    @+if exist $@ $(TOUCH) $@
+    @+if not exist $@ echo rebuild $(SHL8TARGETN) to get $@
+.ENDIF			# "$(GUI)" == "WNT"
+.ELSE
+.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL8DEF)
+.ELSE
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL8TARGETN)
+.ENDIF
+.ELSE
+    @echo keine ImportLibs auf Mac und *ix
+    @+-$(RM) $@
+    @$(TOUCH) $@
+.ENDIF
+.ENDIF
+.ENDIF
+
+# Anweisungen fuer das Linken
+# unroll begin
+
+.IF "$(SHL9IMPLIBN)" != ""
+
+.IF "$(UPDATER)"=="YES"
+USELIBDEPN=$(SHL9LIBS)
+.ELSE
+.ENDIF
+
+.IF "$(USE_DEFFILE)"!=""
+USE_SHLTARGET=$(SHL9TARGETN)
+.ENDIF
+
+.IF "$(GUI)" != "UNX"
+$(SHL9IMPLIBN):	\
+                    $(SHL9DEF) \
+                    $(USE_SHLTARGET) \
+                    $(USELIBDEPN)
+.ELSE
+$(SHL9IMPLIBN):	\
+                    $(SHL9LIBS)
+.ENDIF
+    @echo ------------------------------
+    @echo Making: $(SHL9IMPLIBN)
+.IF "$(GUI)" == "WNT"
+# bei use_deffile implib von linker erstellt
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL9IMPLIBN) \
+    -def:$(SHL9DEF) )
+.ELSE			# "$(GUI)" == "WNT"
+    @+if exist $@ $(TOUCH) $@
+    @+if not exist $@ echo rebuild $(SHL9TARGETN) to get $@
+.ENDIF			# "$(GUI)" == "WNT"
+.ELSE
+.IF "$(GUI)" == "WIN" || "$(GUI)" == "OS2"
+.IF "$(USE_DEFFILE)"==""
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL9DEF)
+.ELSE
+    $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL9TARGETN)
+.ENDIF
+.ELSE
+    @echo keine ImportLibs auf Mac und *ix
+    @+-$(RM) $@
+    @$(TOUCH) $@
+.ENDIF
+.ENDIF
+.ENDIF
 
 # Anweisungen fuer das Linken
 # unroll begin
@@ -4067,4 +4088,3 @@ $(SHL10IMPLIBN):	\
 .ENDIF
 
 # Anweisungen fuer das Linken
-#next Target
