@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ namespace configmgr
             /// the node that is affected by the change
             NodeOffset getTargetNode() const;
 
-            data::Accessor getDataAccessor() const { return m_aDataAccessor; }
+            data::Accessor const& getDataAccessor() const { return m_aDataAccessor; }
         protected:
             /// setup the 'target' node that is to be affected or changed
             void setTarget(data::Accessor const& _aAccessor, TreeHolder const& _aAffectedTree, NodeOffset _nAffectedNode);
