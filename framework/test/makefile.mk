@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: as $ $Date: 2001-11-26 09:55:15 $
+#   last change: $Author: as $ $Date: 2002-08-13 12:20:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,9 +61,8 @@
 #*************************************************************************
 PRJ=..
 
-PRJNAME=			framework
-TARGET=				test
-LIBTARGET=			NO
+PRJNAME=            framework
+TARGET=             test
 ENABLE_EXCEPTIONS=	TRUE
 USE_DEFFILE=		TRUE
 NO_BSYMBOLIC=		TRUE
@@ -78,32 +77,33 @@ NO_BSYMBOLIC=		TRUE
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 
-# --- applikation: "Test ArgumentAnalyzer" --------------------------------------------------
+CDEFS += -DENABLE_COMPONENT_SELF_CHECK
 
-APP1TARGET= 	test_argumentanalyzer
+# --- debug lib: "fwkdbg.dll" --------------------------------------------------
 
-APP1OBJS=		$(SLO)$/test_argumentanalyzer.obj	\
-                $(SLO)$/servicemanager.obj			\
-                $(SLO)$/lockhelper.obj				\
+SHL1TARGET=     fwkdbg
+
+SHL1IMPLIB=     ifwkdbg
+
+SHL1OBJS=       $(SLO)$/debugservice.obj                            \
+                $(SLO)$/register.obj                                \
                 $(SLO)$/argumentanalyzer.obj
 
-APP1STDLIBS=	$(CPPULIB)							\
-                $(CPPUHELPERLIB)					\
-                $(OSLLIB)							\
-                $(SALLIB)							\
-                $(VOSLIB)							\
-                $(SVTOOLLIB)						\
-                $(TOOLSLIB)							\
-                $(COMPHELPERLIB)					\
-                $(SVLIB)
+SHL1STDLIBS=    $(CPPULIB)                                          \
+                $(CPPUHELPERLIB)                                    \
+                $(COMPHELPERLIB)                                    \
+                $(UNOTOOLSLIB)                                      \
+                $(TOOLSLIB)                                         \
+                $(VOSLIB)                                           \
+                $(SVLLIB)                                           \
+                $(SALLIB)                                           \
+                $(FWILIB)
 
-APP1DEPN=		$(SLO)$/argumentanalyzer.obj		\
-                $(SLO)$/servicemanager.obj			\
-                $(SLO)$/lockhelper.obj
+SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
 
-.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP1DEF=		$(MISC)$/test_argumentanalyzer.def
-.ENDIF
+DEF1NAME=       $(SHL1TARGET)
+
+DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 
