@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-07 10:55:50 $
+ *  last change: $Author: fme $ $Date: 2002-05-07 11:14:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,7 +904,8 @@ void SwGrfNumPortion::Paint( const SwTxtPaintInfo &rInf ) const
                 rInf.GetTxtFrm()->GetShell()->InvalidateWindows( aTmp );
             }
             // first check accessibility options before starting animation
-            else if ( ! rInf.GetOpt().IsStopAnimatedGraphics() )
+            else if ( ! rInf.GetOpt().IsStopAnimatedGraphics() &&
+                      ! rInf.GetTxtFrm()->GetShell()->IsPreView() )
             {
                 ( (Graphic*) pBrush->GetGraphic() )->StartAnimation(
                     (OutputDevice*)rInf.GetOut(), aPos, aSize, nId );
