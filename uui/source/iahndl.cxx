@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mav $ $Date: 2002-06-07 15:10:33 $
+ *  last change: $Author: as $ $Date: 2002-07-18 08:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,11 @@
 #include <vector>
 #define INCLUDED_VECTOR
 #endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+#include <stdio.h>
 
 using namespace com::sun;
 
@@ -1623,100 +1628,112 @@ UUIInteractionHandler::handleNoSuchFilterRequest( star::document::NoSuchFilterRe
             xFilterTransport = star::uno::Reference< star::document::XInteractionFilterSelect >( rContinuations[nStep], star::uno::UNO_QUERY );
     }
 
-    uui::FilterNameList lNames;
+    // check neccessary ressources - if they doesn't exist - abort or break this operation
+    if (!xAbort.is())
+        return;
 
-    if( m_xServiceFactory.is() == sal_True )
+    if (!xFilterTransport.is() || !m_xServiceFactory.is())
     {
-        star::uno::Reference< star::container::XNameContainer > xFilterContainer( m_xServiceFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory") ), star::uno::UNO_QUERY );
-        if( xFilterContainer.is() == sal_True )
-        {
-            star::uno::Any                                      aResult   ;
-            star::uno::Sequence< rtl::OUString >                lResult   ;
-            star::uno::Sequence< star::beans::PropertyValue >   lProps    ;
-            sal_Int32                                           nFactory  ;
-            sal_Int32                                           nName     ;
-            sal_Int32                                           nProp     ;
-            sal_Int32                                           nNameCount;
-            sal_Int32                                           nPropCount;
-            uui::FilterNamePair                                 aPair     ;
-
-            rtl::OUString sQueryBase  ;
-            rtl::OUString sQueryParams;
-            rtl::OUString sQuery      ;
-
-            sQueryParams = rtl::OUString::createFromAscii(":sort_prop=uiname:use_order:default_first:case_sensitive:eflags=12288");
-
-            for( nFactory=0; nFactory<8; ++nFactory )
-            {
-                switch( nFactory )
-                {
-                    case 0 : sQueryBase = rtl::OUString::createFromAscii("_query_writer");
-                             break;
-                    case 1 : sQueryBase = rtl::OUString::createFromAscii("_query_web");
-                             break;
-                    case 2 : sQueryBase = rtl::OUString::createFromAscii("_query_global");
-                             break;
-                    case 3 : sQueryBase = rtl::OUString::createFromAscii("_query_calc");
-                             break;
-                    case 4 : sQueryBase = rtl::OUString::createFromAscii("_query_draw");
-                             break;
-                    case 5 : sQueryBase = rtl::OUString::createFromAscii("_query_impress");
-                             break;
-                    case 6 : sQueryBase = rtl::OUString::createFromAscii("_query_math");
-                             break;
-                    case 7 : sQueryBase = rtl::OUString::createFromAscii("_query_chart");
-                             break;
-                }
-
-                sQuery  = sQueryBase  ;
-                sQuery += sQueryParams;
-
-                aResult   = xFilterContainer->getByName( sQuery );
-                aResult >>= lResult;
-
-                nNameCount = lResult.getLength();
-                for( nName=0; nName<nNameCount; ++nName )
-                {
-                    aPair.sInternal   = lResult[nName];
-                    aResult           = xFilterContainer->getByName( aPair.sInternal );
-                    aResult         >>= lProps;
-                    nPropCount        = lProps.getLength();
-                    for( nProp=0; nProp<nPropCount; ++nProp )
-                    {
-                        if( lProps[nProp].Name.compareToAscii("UIName") == 0 )
-                        {
-                            ::rtl::OUString sUIName;
-                            lProps[nProp].Value >>= sUIName;
-                            aPair.sUI = sUIName;
-                            break;
-                        }
-                    }
-                    lNames.push_back( aPair );
-                }
-            }
-        }
+        xAbort->select();
+        return;
     }
 
-    if( xAbort.is() && xFilterTransport.is() )
+    star::uno::Reference< star::container::XNameContainer > xFilterContainer( m_xServiceFactory->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory") ), star::uno::UNO_QUERY );
+    if (!xFilterContainer.is())
     {
-        if( lNames.size() < 1 )
-        {
-            xAbort->select();
-        }
-        else
-        {
-            rtl::OUString sFilter;
-            executeFilterDialog( rRequest.URL, lNames, sFilter );
+        xAbort->select();
+        return;
+    }
 
-            if( sFilter.getLength() > 0 )
+    uui::FilterNameList                                 lNames        ;
+    uui::FilterNamePair                                 aPair         ;
+    star::uno::Sequence< rtl::OUString >                lFilters      ;
+    sal_Int32                                           nFilterCount  = 0;
+    sal_Int32                                           nPropCount    = 0;
+    star::uno::Sequence< star::beans::PropertyValue >   lProps        ;
+    rtl::OUString                                       sInternalName ;
+    rtl::OUString                                       sUIName       ;
+    sal_Bool                                            bTakeIt       = sal_False;
+    sal_Int8                                            nHandledProps = 0;
+
+    // Note: We look for all filters here which match the following criteria:
+    //          - they are import filters as minimum (of course they can support export too)
+    //          - we don't show any filter which are flaged as "don't show it at the UI" or "they are not installed"
+    //          - we ignore filters, which have not set any valid DocumentService (e.g. our pure graphic filters)
+    //          - we show it sorted by her UIName's
+    //          - We don't use the order flag or prefer default filters. (Because this list shows all filters and the user should find his filter vry easy by his UIName ...)
+    //          - We use "_query_all" here ... but we filter graphic filters out by using DocumentService property later!
+    if ( !(xFilterContainer->getByName(::rtl::OUString::createFromAscii("_query_all:sort_prop=uiname:iflags=1:eflags=143360")) >>= lFilters) )
+    {
+        xAbort->select();
+        return;
+    }
+
+    nFilterCount = lFilters.getLength();
+    for (sal_Int32 f=0; f<nFilterCount; ++f)
+    {
+        // ignore it - if we can't unpack set of properties or we found an empty internal name!
+        if ( lFilters[f].getLength()<1 || !(xFilterContainer->getByName(lFilters[f])>>=lProps) )
+            continue;
+
+        // step over the properties of the filter
+        // search for "UIName" and "DocumentService"
+        // break the loop if both values could be found
+        bTakeIt       = sal_False;           // indicates if we use this filter after this loop of not
+        nHandledProps = 0;                   // used to break loop if two properties could be readed
+        nPropCount    = lProps.getLength();
+        for(sal_Int32 p=0; p<nPropCount && nHandledProps<2; ++p )
+        {
+            if( lProps[p].Name.compareToAscii("UIName") == 0 )
             {
-                xFilterTransport->setFilter( sFilter );
-                xFilterTransport->select();
+                bTakeIt = ( (lProps[p].Value>>=sUIName) && (sUIName.getLength()>0) );
+                if (!bTakeIt)
+                    break;
+                ++nHandledProps;
             }
             else
-                xAbort->select();
+            if( lProps[p].Name.compareToAscii("DocumentService") == 0 )
+            {
+                ::rtl::OUString sService;
+                bTakeIt = ( (lProps[p].Value>>=sService) && (sService.getLength()>0) );
+                if (!bTakeIt)
+                    break;
+                ++nHandledProps;
+            }
         }
+
+        // now we should have a valid filter for showing ... or not :-)
+        if (!bTakeIt)
+            continue;
+
+        aPair.sInternal = lFilters[f];
+        aPair.sUI       = sUIName    ;
+        lNames.push_back( aPair );
     }
+
+    // no list available for showing
+    // -> abort operation
+    if (lNames.size()<1)
+    {
+        xAbort->select();
+        return;
+    }
+
+    // let the user select the right filter
+    rtl::OUString sSelectedFilter;
+    executeFilterDialog( rRequest.URL, lNames, sSelectedFilter );
+
+    // If he doesn't select anyone
+    // -> abort operation
+    if (sSelectedFilter.getLength()<1)
+    {
+        xAbort->select();
+        return;
+    }
+
+    // otherwhise set it for return
+    xFilterTransport->setFilter( sSelectedFilter );
+    xFilterTransport->select();
 }
 
 void
