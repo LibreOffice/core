@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uno3.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-06 14:01:26 $
+ *  last change: $Author: oj $ $Date: 2000-10-20 11:09:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,6 @@ namespace comphelper
 {
 //.........................................................................
 
-    namespace staruno = ::com::sun::star::uno;
-
 //=========================================================================
 
     /// manipulate ref counts without calling acquire/release
@@ -115,14 +113,14 @@ namespace comphelper
                 ....
     */
     template <class iface>
-    sal_Bool query_aggregation(const staruno::Reference<staruno::XAggregation>& _rxAggregate, staruno::Reference<iface>& _rxOut)
+    sal_Bool query_aggregation(const ::com::sun::star::uno::Reference<::com::sun::star::uno::XAggregation>& _rxAggregate, ::com::sun::star::uno::Reference<iface>& _rxOut)
     {
         _rxOut = static_cast<iface*>(NULL);
         if (_rxAggregate.is())
         {
-            staruno::Any aCheck = _rxAggregate->queryAggregation(::getCppuType((staruno::Reference<iface>*)NULL));
+            ::com::sun::star::uno::Any aCheck = _rxAggregate->queryAggregation(::getCppuType((::com::sun::star::uno::Reference<iface>*)NULL));
             if (aCheck.hasValue())
-                _rxOut = *(staruno::Reference<iface>*)aCheck.getValue();
+                _rxOut = *(::com::sun::star::uno::Reference<iface>*)aCheck.getValue();
         }
         return _rxOut.is();
     }
@@ -134,15 +132,15 @@ namespace comphelper
                 ....
     */
     template <class iface>
-    sal_Bool query_interface(const InterfaceRef& _rxObject, staruno::Reference<iface>& _rxOut)
+    sal_Bool query_interface(const InterfaceRef& _rxObject, ::com::sun::star::uno::Reference<iface>& _rxOut)
     {
         _rxOut = static_cast<iface*>(NULL);
         if (_rxObject.is())
         {
-            staruno::Any aCheck = _rxObject->queryInterface(::getCppuType((staruno::Reference<iface>*)NULL));
+            ::com::sun::star::uno::Any aCheck = _rxObject->queryInterface(::getCppuType((::com::sun::star::uno::Reference<iface>*)NULL));
             if(aCheck.hasValue())
             {
-                _rxOut = *(staruno::Reference<iface>*)aCheck.getValue();
+                _rxOut = *(::com::sun::star::uno::Reference<iface>*)aCheck.getValue();
                 return _rxOut.is();
             }
         }
