@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-22 11:01:32 $
+ *  last change: $Author: ama $ $Date: 2001-11-14 14:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,8 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
         }
 #ifdef VERTICAL_LAYOUT
         SWRECTFN( this )
-        if( Abs( (pNewUpper->Prt().*fnRect->fnGetWidth)() -
+        SWRECTFNX( pNewUpper )
+        if( Abs( (pNewUpper->Prt().*fnRectX->fnGetWidth)() -
                  (GetUpper()->Prt().*fnRect->fnGetWidth)() ) > 1 )
 #else
         if( Abs(pNewUpper->Prt().Width() - GetUpper()->Prt().Width()) > 1 )
@@ -183,8 +184,8 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
             while ( pPrevFrm )
             {
 #ifdef VERTICAL_LAYOUT
-                (aRect.*fnRect->fnSetTop)(
-                    (pPrevFrm->Frm().*fnRect->fnGetBottom)() );
+                (aRect.*fnRectX->fnSetTop)(
+                    (pPrevFrm->Frm().*fnRectX->fnGetBottom)() );
 #else
                 aRect.Top( pPrevFrm->Frm().Bottom() );
 #endif
@@ -196,7 +197,7 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
             {
                 //Zur Verfuegung stehenden Raum berechnen.
 #ifdef VERTICAL_LAYOUT
-                nSpace = (aRect.*fnRect->fnGetHeight)();
+                nSpace = (aRect.*fnRectX->fnGetHeight)();
 #else
                 nSpace = aRect.Height();
 #endif
@@ -225,7 +226,7 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
                 //zurueckfliessen
                 else if( pNewUpper->IsInSct() && pNewUpper->IsColBodyFrm() &&
 #ifdef VERTICAL_LAYOUT
-                    !(pNewUpper->Prt().*fnRect->fnGetWidth)() &&
+                    !(pNewUpper->Prt().*fnRectX->fnGetWidth)() &&
 #else
                     !pNewUpper->Prt().Width() &&
 #endif
@@ -1195,13 +1196,6 @@ void SwCntntFrm::MakeAll()
     Point aOldFrmPos;               //Damit bei Turnarounds jew. mit der
     Point aOldPrtPos;               //letzten Pos verglichen und geprueft
                                     //werden kann, ob ein Prepare sinnvoll ist.
-#ifdef VERTICAL_LAYOUT
-    SWRECTFN( this )
-    long nKeepBottom = (Frm().*fnRect->fnGetBottom)();
-#else
-    long  nKeepBottom = Frm().Bottom(); //Um beim Keep den naechsten sinnvoll
-                                        //anstossen zu koennen.
-#endif
 
     SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
@@ -1232,6 +1226,10 @@ void SwCntntFrm::MakeAll()
         MoveFwd( bMakePage, FALSE );
     }
 
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+#endif
+
     while ( !bValidPos || !bValidSize || !bValidPrtArea )
     {
         if ( TRUE == (bMoveable = IsMoveable()) )
@@ -1239,6 +1237,9 @@ void SwCntntFrm::MakeAll()
             SwFrm *pPre = GetIndPrev();
             if ( CheckMoveFwd( bMakePage, bKeep, bMovedBwd ) )
             {
+#ifdef VERTICAL_LAYOUT
+                SWREFRESHFN( this )
+#endif
                 bMovedFwd = TRUE;
                 if ( bMovedBwd )
                 {
@@ -1349,6 +1350,9 @@ void SwCntntFrm::MakeAll()
         if ( !lcl_Prev( this ) && !bMovedFwd && (bMoveable || (bFly && !bTab)) &&
              (!bFtn || !GetUpper()->FindFtnFrm()->GetPrev()) && MoveBwd( bDummy ))
         {
+#ifdef VERTICAL_LAYOUT
+            SWREFRESHFN( this )
+#endif
             bMovedBwd = TRUE;
             bFormatted = FALSE;
             if ( bKeep )
@@ -1357,6 +1361,9 @@ void SwCntntFrm::MakeAll()
                 {
                     bMovedFwd = TRUE;
                     bMoveable = IsMoveable();
+#ifdef VERTICAL_LAYOUT
+                    SWREFRESHFN( this )
+#endif
                 }
 #ifdef VERTICAL_LAYOUT
                 Point aOldPos = (Frm().*fnRect->fnGetPos)();
@@ -1499,11 +1506,9 @@ void SwCntntFrm::MakeAll()
                     const FASTBOOL bNxtNew =
                         ( 0 == (pNxt->Prt().*fnRect->fnGetHeight)() ) &&
                         (!pNxt->IsTxtFrm() ||!((SwTxtFrm*)pNxt)->IsHiddenNow());
-                    nKeepBottom = (Frm().*fnRect->fnGetBottom)();
 #else
                     const FASTBOOL bNxtNew = ( 0 == pNxt->Prt().V_HEIGHT ) &&
                        (!pNxt->IsTxtFrm() || !((SwTxtFrm*)pNxt)->IsHiddenNow());
-                    nKeepBottom = Frm().Bottom();
 #endif
                     pNxt->Calc();
                     if ( !bMovedBwd &&
@@ -1627,6 +1632,9 @@ void SwCntntFrm::MakeAll()
 
         if ( !bMovedFwd && !MoveFwd( bMakePage, FALSE ) )
             bMakePage = FALSE;
+#ifdef VERTICAL_LAYOUT
+        SWREFRESHFN( this )
+#endif
         bMovedFwd = TRUE;
         bFormatted = FALSE;
         if ( bMoveOrFit && GetUpper() == pOldUp )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-13 15:19:40 $
+ *  last change: $Author: ama $ $Date: 2001-11-14 14:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,6 +689,8 @@ BOOL SwSectionFrm::SplitSect( SwFrm* pFrm, BOOL bApres )
             pLay = (SwLayoutFrm*)pLay->Lower();
         pNew->InsertBehind( pSect->GetUpper(), pSect );
 #ifdef VERTICAL_LAYOUT
+        if( pNew->IsVertical() )
+            pNew->Init();
         SWRECTFN( pSect )
         (pNew->*fnRect->fnMakePos)( NULL, pSect, TRUE );
 #else
@@ -1271,8 +1273,7 @@ void SwSectionFrm::SimpleFormat()
     if( (Frm().*fnRect->fnCheckLimit)( nDeadLine ) < 0 )
     {
         const Size aOldSz( Prt().SSize() );
-        nDeadLine = (*fnRect->fnYDiff)( nDeadLine, (Frm().*fnRect->fnGetTop)());
-        (Frm().*fnRect->fnSetHeight)( nDeadLine );
+        (Frm().*fnRect->fnSetBottom)( nDeadLine );
         (this->*fnRect->fnSetYMargins)( CalcUpperSpace(), 0 );
         lcl_ColumnRefresh( this, FALSE );
     }

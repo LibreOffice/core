@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-09 13:28:41 $
+ *  last change: $Author: ama $ $Date: 2001-11-14 14:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,18 @@ extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R;
                             SwRectFn fnRect = bVert ? \
                                 ( bRev ? fnRectVL2R : fnRectVert ): \
                                 ( bRev ? fnRectB2T : fnRectHori );
+#define SWRECTFNX( pFrm )   sal_Bool bVertX = pFrm->IsVertical(); \
+                            sal_Bool bRevX = pFrm->IsReverse(); \
+                            SwRectFn fnRectX = bVertX ? \
+                                ( bRevX ? fnRectVL2R : fnRectVert ): \
+                                ( bRevX ? fnRectB2T : fnRectHori );
+#define SWREFRESHFN( pFrm ) { if( bVert != pFrm->IsVertical() || \
+                                  bRev  != pFrm->IsReverse() ) \
+                                bVert = pFrm->IsVertical(); \
+                                bRev = pFrm->IsReverse(); \
+                                fnRect = bVert ? \
+                                    ( bRev ? fnRectVL2R : fnRectVert ): \
+                                    ( bRev ? fnRectB2T : fnRectHori ); }
 #define SWRECTFN2( pFrm )   sal_Bool bVert = pFrm->IsVertical(); \
                             sal_Bool bNeighb = pFrm->IsNeighbourFrm(); \
                             SwRectFn fnRect = bVert == bNeighb ? \

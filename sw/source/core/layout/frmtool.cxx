@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-12 14:12:42 $
+ *  last change: $Author: ama $ $Date: 2001-11-14 14:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,6 +1260,10 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                             ((SwTxtFrm*)pPrv)->Prepare( PREP_QUOVADIS, 0, FALSE );
                     }
                 }
+#ifdef VERTICAL_LAYOUT
+                if( pFrm->IsVertical() )
+                    ((SwSectionFrm*)pFrm)->Init();
+#endif
                 pFrm->Frm().Pos() = pLay->Frm().Pos();
                 pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
 
@@ -1312,6 +1316,10 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 {
                     pFrm = pActualSection->GetSectionNode()->MakeFrm();
                     pFrm->InsertBehind( pLay, pPrv );
+#ifdef VERTICAL_LAYOUT
+                    if( pFrm->IsVertical() )
+                        ((SwSectionFrm*)pFrm)->Init();
+#endif
                     pFrm->Frm().Pos() = pLay->Frm().Pos();
                     pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
                 }
