@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:13:25 $
+ *  last change: $Author: jp $ $Date: 2000-10-26 11:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
                     rPos.nNode, rPos.nContent.GetIndex()+1 );
         pRedlSaveData = new SwRedlineSaveDatas;
-        if( !FillSaveData( aPam, *pRedlSaveData ))
+        if( !FillSaveData( aPam, *pRedlSaveData, FALSE ))
             delete pRedlSaveData, pRedlSaveData = 0;
     }
 
@@ -135,14 +135,15 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     ASSERT( pTxtNd, "Overwrite nicht im TextNode?" );
 
     bInsChar = TRUE;
-    if( nSttCntnt < pTxtNd->Len() )     // kein reines Einfuegen ?
+    xub_StrLen nTxtNdLen = pTxtNd->GetTxt().Len();
+    if( nSttCntnt < nTxtNdLen )     // kein reines Einfuegen ?
     {
         aDelStr.Insert( pTxtNd->GetTxt().GetChar( nSttCntnt ) );
         if( !pHistory )
             pHistory = new SwHistory;
         SwRegHistory aRHst( *pTxtNd, pHistory );
         pHistory->CopyAttr( pTxtNd->GetpSwpHints(), nSttNode, 0,
-                            pTxtNd->Len(), FALSE );
+                            nTxtNdLen, FALSE );
         rPos.nContent++;
         bInsChar = FALSE;
     }
@@ -359,11 +360,14 @@ void SwUndoOverwrite::Redo( SwUndoIter& rUndoIter )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unovwr.cxx,v 1.2 2000-10-25 15:13:25 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unovwr.cxx,v 1.3 2000-10-26 11:24:24 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/25 15:13:25  jp
+      use CharClass/BreakIt instead of old WordSelection
+
       Revision 1.1.1.1  2000/09/19 00:08:28  hr
       initial import
 
