@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 14:02:55 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef  _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
 #include <com/sun/star/container/XNameReplace.hpp>
 #endif
+#ifndef  _COM_SUN_STAR_CONTAINER_XSET_HPP_
+#include <com/sun/star/container/XSet.hpp>
+#endif
 #ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
 #endif
@@ -100,6 +103,9 @@
 #ifndef  _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
@@ -108,6 +114,15 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCEASVECTOR_HXX_
+#include <comphelper/sequenceasvector.hxx>
 #endif
 
 #ifndef  _SFX_SFXUNO_HXX
@@ -191,27 +206,128 @@ public:
     static void                 BlowUpMacro( const ANY& rIn, ANY& rOut, SfxObjectShell* pDoc );
 };
 
-class SfxGlobalEvents_Impl : public ::cppu::WeakImplHelper4< ::com::sun::star::document::XEventsSupplier,
-                        ::com::sun::star::document::XEventBroadcaster, ::com::sun::star::lang::XServiceInfo,
-                        ::com::sun::star::document::XEventListener >,
-                        public SfxListener
+//=============================================================================
+struct ModelCollectionMutexBase
 {
-    GlobalEventConfig*             pImp;
-    REFERENCE < XNAMEREPLACE >  m_xEvents;
-    WEAKREFERENCE < XJOBEXECUTOR > m_xJobsBinding;
-    OINTERFACECONTAINERHELPER   m_aInterfaceContainer;
-    ::osl::Mutex                m_aMutex;
+    public:
+        ::osl::Mutex m_aLock;
+};
 
-                                void Notify( SfxBroadcaster& aBC, const SfxHint& aHint );
+//=============================================================================
+typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > > TModelList;
+
+//=============================================================================
+class ModelCollectionEnumeration : public ModelCollectionMutexBase
+                                 , public ::cppu::WeakImplHelper1< ::com::sun::star::container::XEnumeration >
+{
+
+    //-------------------------------------------------------------------------
+    // member
+    //-------------------------------------------------------------------------
+    private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xSMGR;
+        TModelList m_lModels;
+        TModelList::iterator m_pEnumerationIt;
+
+    //-------------------------------------------------------------------------
+    // native interface
+    //-------------------------------------------------------------------------
+    public:
+        ModelCollectionEnumeration(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMGR);
+        virtual ~ModelCollectionEnumeration();
+        void setModelList(const TModelList& rList);
+
+    //-------------------------------------------------------------------------
+    // uno interface
+    //-------------------------------------------------------------------------
+    public:
+
+        // css.container.XEnumeration
+        virtual sal_Bool SAL_CALL hasMoreElements()
+            throw(::com::sun::star::uno::RuntimeException);
+
+        virtual ::com::sun::star::uno::Any SAL_CALL nextElement()
+            throw(::com::sun::star::container::NoSuchElementException,
+                  ::com::sun::star::lang::WrappedTargetException     ,
+                  ::com::sun::star::uno::RuntimeException            );
+};
+
+//=============================================================================
+class SfxGlobalEvents_Impl : public ModelCollectionMutexBase
+                           , public ::cppu::WeakImplHelper5< ::com::sun::star::lang::XServiceInfo
+                                                           , ::com::sun::star::document::XEventsSupplier
+                                                           , ::com::sun::star::document::XEventBroadcaster
+                                                           , ::com::sun::star::document::XEventListener
+                                                           , ::com::sun::star::container::XSet >
+                           , public SfxListener
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xSMGR;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xEvents;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::task::XJobExecutor > m_xJobsBinding;
+    OINTERFACECONTAINERHELPER m_aInterfaceContainer;
+    TModelList m_lModels;
+    GlobalEventConfig* pImp;
+
+    void Notify( SfxBroadcaster& aBC, const SfxHint& aHint );
+
 public:
-                                SfxGlobalEvents_Impl( const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xSmgr );
-                                ~SfxGlobalEvents_Impl();
+    SfxGlobalEvents_Impl(const com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >& xSMGR);
+    virtual ~SfxGlobalEvents_Impl();
+
     SFX_DECL_XSERVICEINFO
-    virtual REFERENCE< XNAMEREPLACE > SAL_CALL getEvents() throw( RUNTIMEEXCEPTION );
-    virtual void SAL_CALL addEventListener( const REFERENCE< XDOCEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
-    virtual void SAL_CALL removeEventListener( const REFERENCE< XDOCEVENTLISTENER >& xListener ) throw( RUNTIMEEXCEPTION );
-    virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw ( RUNTIMEEXCEPTION );
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Event ) throw ( RUNTIMEEXCEPTION );
+
+    // css.document.XEventBroadcaster
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents()
+        throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL addEventListener(const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& xListener)
+        throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& xListener)
+        throw(::com::sun::star::uno::RuntimeException);
+
+    // css.document.XEventListener
+    virtual void SAL_CALL notifyEvent(const ::com::sun::star::document::EventObject& aEvent)
+        throw(::com::sun::star::uno::RuntimeException);
+
+    // css.container.XSet
+    virtual sal_Bool SAL_CALL has(const ::com::sun::star::uno::Any& aElement)
+        throw(::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL insert(const ::com::sun::star::uno::Any& aElement)
+        throw(::com::sun::star::lang::IllegalArgumentException  ,
+              ::com::sun::star::container::ElementExistException,
+              ::com::sun::star::uno::RuntimeException           );
+
+    virtual void SAL_CALL remove(const ::com::sun::star::uno::Any& aElement)
+        throw(::com::sun::star::lang::IllegalArgumentException   ,
+              ::com::sun::star::container::NoSuchElementException,
+              ::com::sun::star::uno::RuntimeException            );
+
+    // css.container.XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration()
+        throw(::com::sun::star::uno::RuntimeException);
+
+    // css.container.XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
+        throw(::com::sun::star::uno::RuntimeException);
+
+    virtual sal_Bool SAL_CALL hasElements()
+        throw(::com::sun::star::uno::RuntimeException);
+
+    // css.lang.XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& aEvent)
+        throw(::com::sun::star::uno::RuntimeException);
+
+private:
+
+    // threadsafe
+    void implts_notifyJobExecution(const ::com::sun::star::document::EventObject& aEvent);
+    void implts_checkAndExecuteEventBindings(const ::com::sun::star::document::EventObject& aEvent);
+    void implts_notifyListener(const ::com::sun::star::document::EventObject& aEvent);
+
+    // not threadsafe
+    TModelList::iterator impl_searchDoc(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
 };
 
 #endif
