@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-17 09:38:40 $
+#   last change: $Author: obo $ $Date: 2004-06-03 15:27:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,8 @@ PACKAGE=com$/sun$/star$/beans
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    Ambiguous.idl\
+    Defaulted.idl\
     GetDirectPropertyTolerantResult.idl\
     GetPropertyTolerantResult.idl\
     IllegalTypeException.idl\
@@ -81,6 +83,7 @@ IDLFILES=\
     MethodConcept.idl\
     NamedValue.idl\
     NotRemoveableException.idl\
+    Optional.idl\
     Property.idl\
     PropertyAttribute.idl\
     PropertyBag.idl\
