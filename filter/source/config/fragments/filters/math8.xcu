@@ -1,0 +1,14 @@
+    <node oor:name="math8" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="FileFormatVersion"><value>6800</value></prop>
+        <prop oor:name="Type"><value>math8</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.formula.FormulaProperties</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Open Formula</value>
+            <value xml:lang="de">Offene Formel</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT</value></prop>
+    </node>
