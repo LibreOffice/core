@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basprov.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:17:59 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,11 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_XBROWSENODE_HPP_
-#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
+#ifndef _COM_SUN_STAR_SCRIPT_BROWSE_XBROWSENODE_HPP_
+#include <com/sun/star/script/browse/XBrowseNode.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
-#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
+#ifndef _COM_SUN_STAR_SCRIPT_PROVIDER_XSCRIPTPROVIDER_HPP_
+#include <com/sun/star/script/provider/XScriptProvider.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -103,8 +103,8 @@ namespace basprov
     typedef ::cppu::WeakImplHelper4<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::lang::XInitialization,
-        ::drafts::com::sun::star::script::provider::XScriptProvider,
-        ::drafts::com::sun::star::script::browse::XBrowseNode > BasicProviderImpl_BASE;
+        ::com::sun::star::script::provider::XScriptProvider,
+        ::com::sun::star::script::browse::XBrowseNode > BasicProviderImpl_BASE;
 
 
     class BasicProviderImpl : public BasicProviderImpl_BASE
@@ -142,14 +142,14 @@ namespace basprov
             throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
         // XScriptProvider
-        virtual ::com::sun::star::uno::Reference < ::drafts::com::sun::star::script::provider::XScript > SAL_CALL getScript(
+        virtual ::com::sun::star::uno::Reference < ::com::sun::star::script::provider::XScript > SAL_CALL getScript(
             const ::rtl::OUString& scriptURI )
-            throw (  ::drafts::com::sun::star::script::provider::ScriptFrameworkErrorException, ::com::sun::star::uno::RuntimeException);
+            throw (  ::com::sun::star::script::provider::ScriptFrameworkErrorException, ::com::sun::star::uno::RuntimeException);
 
         // XBrowseNode
         virtual ::rtl::OUString SAL_CALL getName(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL hasChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);
