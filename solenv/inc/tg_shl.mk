@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-31 12:01:21 $
+#   last change: $Author: hjs $ $Date: 2002-02-08 15:18:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -534,6 +534,16 @@ $(SHL$(TNR)TARGETN) : \
     @+echo -
     @+echo ----------------------------------------------------------
 .ENDIF			# "$(TARGETTHREAD)"!="MT"
+
+.IF "$(TESTDIR)"!=""
+.IF "$(NO_TESTS)"==""
+
+ALLTAR : runtest_$(SHL$(TNR)TARGET)
+
+runtest_$(SHL$(TNR)TARGET) : $(SHL$(TNR)TARGETN)
+    testshl $(SHL$(TNR)TARGETN) sce\$(SHL$(TNR)TARGET).sce -msg
+.ENDIF			# "$(NO_TESTS)"==""
+.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL$(TNR)TARGETN)"!=""
 
 # Anweisungen fuer das Linken
