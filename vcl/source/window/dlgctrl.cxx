@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-14 14:26:35 $
+ *  last change: $Author: pl $ $Date: 2002-11-06 11:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -970,6 +970,20 @@ Window* Window::ImplFindDlgCtrlWindow( Window* pWindow )
 
 // -----------------------------------------------------------------------
 
+Window* Window::GetParentLabelFor( const Window* pLabel ) const
+{
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+Window* Window::GetParentLabeledBy( const Window* pLabeled ) const
+{
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
 static sal_Unicode getAccel( const String& rStr )
 {
     sal_Unicode nChar = 0;
@@ -988,12 +1002,18 @@ static sal_Unicode getAccel( const String& rStr )
 Window* Window::GetLabelFor() const
 {
     Window* pWindow = NULL;
+    Window* pFrameWindow = ImplGetFrameWindow();
+    Window* pParent = ImplGetParent();
 
-    WinBits nFrameStyle = ImplGetFrameWindow()->GetStyle();
+    WinBits nFrameStyle = pFrameWindow->GetStyle();
     if( ! ( nFrameStyle & WB_DIALOGCONTROL )
         || ( nFrameStyle & WB_NODIALOGCONTROL )
         )
         return NULL;
+
+    pWindow = pParent->GetParentLabelFor( this );
+    if( pWindow )
+        return pWindow;
 
     sal_Unicode nAccel = getAccel( GetText() );
     if( GetType() == WINDOW_FIXEDTEXT       ||
@@ -1003,7 +1023,7 @@ Window* Window::GetLabelFor() const
         Window* pSWindow = NULL;
         // get index, form start and form end
         USHORT nIndex, nFormStart, nFormEnd;
-        pSWindow = ::ImplFindDlgCtrlWindow( ImplGetFrameWindow(),
+        pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
                                            const_cast<Window*>(this),
                                            nIndex,
                                            nFormStart,
@@ -1011,7 +1031,7 @@ Window* Window::GetLabelFor() const
         if( nAccel )
         {
             // find the accelerated window
-            pWindow = ::ImplFindAccelWindow( ImplGetFrameWindow(),
+            pWindow = ::ImplFindAccelWindow( pFrameWindow,
                                              nIndex,
                                              nAccel,
                                              nFormStart,
@@ -1025,7 +1045,7 @@ Window* Window::GetLabelFor() const
             while( nIndex < nFormEnd )
             {
                 nIndex++;
-                pSWindow = ::ImplGetChildWindow( ImplGetFrameWindow(),
+                pSWindow = ::ImplGetChildWindow( pFrameWindow,
                                                  nIndex,
                                                  nIndex,
                                                  FALSE );
@@ -1051,12 +1071,18 @@ Window* Window::GetLabelFor() const
 Window* Window::GetLabeledBy() const
 {
     Window* pWindow = NULL;
+    Window* pFrameWindow = ImplGetFrameWindow();
+    Window* pParent = ImplGetParent();
 
-    WinBits nFrameStyle = ImplGetFrameWindow()->GetStyle();
+    WinBits nFrameStyle = pFrameWindow->GetStyle();
     if( ! ( nFrameStyle & WB_DIALOGCONTROL )
         || ( nFrameStyle & WB_NODIALOGCONTROL )
         )
         return NULL;
+
+    pWindow = pParent->GetParentLabeledBy( this );
+    if( pWindow )
+        return pWindow;
 
     if( ! ( GetType() == WINDOW_FIXEDTEXT       ||
             GetType() == WINDOW_FIXEDLINE       ||
@@ -1070,7 +1096,7 @@ Window* Window::GetLabeledBy() const
 
         // get form start and form end and index of this control
         USHORT nIndex, nFormStart, nFormEnd;
-        Window* pSWindow = ::ImplFindDlgCtrlWindow( ImplGetFrameWindow(),
+        Window* pSWindow = ::ImplFindDlgCtrlWindow( pFrameWindow,
                                                     const_cast<Window*>(this),
                                                     nIndex,
                                                     nFormStart,
@@ -1087,7 +1113,7 @@ Window* Window::GetLabeledBy() const
             for( USHORT nSearchIndex = nIndex-1; nSearchIndex >= nFormStart; nSearchIndex-- )
             {
                 USHORT nFoundIndex = 0;
-                pSWindow = ::ImplGetChildWindow( ImplGetFrameWindow(),
+                pSWindow = ::ImplGetChildWindow( pFrameWindow,
                                                  nSearchIndex,
                                                  nFoundIndex,
                                                  FALSE );
