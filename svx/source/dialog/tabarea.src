@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:40:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ portuguese_brazilian ] = "~Linear transparence";
         Text[ japanese ] = "üó‚Å“§‰ß«‚ ‚è(~L)";
         Text[ korean ] = "¼±Çü Åõ¸íÈ¿°ú(~L)";
-        Text[ chinese_simplified ] = "ÏßÊ½Í¸Ã÷(~L)";
-        Text[ chinese_traditional ] = "½u¦¡³z©ú(~L)";
+        Text[ chinese_simplified ] = "ÏßÌõÊ½Í¸Ã÷(~L)";
+        Text[ chinese_traditional ] = "½u±ø¦¡³z©ú(~L)";
         Text[ arabic ] = "ÔİÇİíÉ ÎØíÉ";
         Text[ turkish ] = "~Doğrusal saydamlık";
     };
@@ -215,7 +215,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ portuguese_brazilian ] = "Linear transparence";
         Text[ japanese ] = "üó‚Å“§‰ß«‚ ‚è";
         Text[ korean ] = "¼±Çü Åõ¸íÈ¿°ú";
-        Text[ chinese_simplified ] = "ÏßÊ½Í¸Ã÷";
+        Text[ chinese_simplified ] = "ÏßĞÔÍ¸Ã÷";
         Text[ chinese_traditional ] = "½u¦¡³z©ú";
         Text[ arabic ] = "ÔİÇİíÉ ÎØíÉ";
         Text[ turkish ] = "Doğrusal saydamlık";
@@ -395,7 +395,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         < "²" ; Default ; > ;
         < "•úËüó" ; Default ; > ;
         < "‘È‰~‘Ì" ; Default ; > ;
-        < "lŠp" ; Default ; > ;
+        < "³•ûŒ`" ; Default ; > ;
         < "lŠpŒ`" ; Default ; > ;
     };
     StringList [ korean ] =
@@ -409,7 +409,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     StringList [ chinese_simplified ] =
     {
-            < "ÏßÊ½" ; Default ; > ;
+            < "ÏßĞÎµÄ" ; Default ; > ;
         < "ÖáÏò" ; Default ; > ;
         < "¾¶Ïò" ; Default ; > ;
         < "ÍÖÔ²Ìå" ; Default ; > ;
@@ -418,7 +418,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     StringList [ chinese_traditional ] =
     {
-            < "½u¦¡" ; Default ; > ;
+            < "½u§Îªº" ; Default ; > ;
         < "¶b¦¡" ; Default ; > ;
         < "®|¦V" ; Default ; > ;
         < "¾ò¶ê²y" ; Default ; > ;
@@ -605,7 +605,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ portuguese_brazilian ] = "~Border";
         Text[ japanese ] = "—]”’(~B)";
         Text[ korean ] = "Å×µÎ¸®(~B)";
-        Text[ chinese_simplified ] = "±ß¿ò(~B)";
+        Text[ chinese_simplified ] = "±ß¾à(~B)";
         Text[ chinese_traditional ] = "­¶¹MªÅ¥Õ(~B)";
         Text[ arabic ] = "ÇáÍÏ";
         Text[ turkish ] = "~Kenar";
@@ -834,7 +834,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ chinese_simplified ] = "ÒşÈëµÄ(~N)";
         Text[ russian ] = "Íåâèäèìûé";
         Text[ polish ] = "Niewidoczny";
-        Text[ japanese ] = "”ñ•\\¦(~N)";
+        Text[ japanese ] = "“h‚è‚Â‚Ô‚µ‚È‚µ(~N)";
         Text[ chinese_traditional ] = "Áô¤Jªº(~N)";
         Text[ arabic ] = "ÛíÑ ãÑÆí";
         Text[ greek ] = "Ìç ïñáôÜ";
@@ -915,11 +915,11 @@ TabPage RID_SVXPAGE_AREA
         Text [ dutch ] = "~Arcering" ;
         Text [ spanish ] = "~Trama" ;
         Text [ english_us ] = "H~atching" ;
-        Text[ chinese_simplified ] = "ÒõÓ°(~A)";
+        Text[ chinese_simplified ] = "ÒõÓ°Ïß(~A)";
         Text[ russian ] = "Øòğèõîâêà";
         Text[ polish ] = "~Kreskowanie";
         Text[ japanese ] = "Ê¯Áİ¸Ş(~H)";
-        Text[ chinese_traditional ] = "³±¼v(~H)";
+        Text[ chinese_traditional ] = "³±¼v½u(~H)";
         Text[ arabic ] = "äŞÔ";
         Text[ greek ] = "Ãñáììï~óêéÜ";
         Text[ korean ] = "ÇØÄª(~A)";
@@ -1044,7 +1044,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ chinese_simplified ] = "×Ô¶¯(~U)";
         Text[ russian ] = "Àâòîìàòè÷åñêè";
         Text[ polish ] = "Automatycznie";
-        Text[ japanese ] = "©“®“I(~A)";
+        Text[ japanese ] = "©“®(~A)";
         Text[ chinese_traditional ] = "¦Û°Ê(~A)";
         Text[ arabic ] = "ÊáŞÇÆí";
         Text[ greek ] = "~Áõôüìáôá";
@@ -1083,7 +1083,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ danish ] = "Trinvidde" ;
         Text [ portuguese_brazilian ] = "Schrittweite" ;
         Text [ portuguese ] = "Incremento" ;
-        Text[ chinese_simplified ] = "½¥½ø";
+        Text[ chinese_simplified ] = "ÔöÁ¿";
         Text[ russian ] = "Øèğèíà øàãà";
         Text[ polish ] = "Inkrement";
         Text[ japanese ] = "½Ã¯Ìß”";
@@ -1153,7 +1153,7 @@ TabPage RID_SVXPAGE_AREA
         Text[ portuguese_brazilian ] = "Hatch Background";
         Text[ japanese ] = "Ê¯Áİ¸Ş‚Ì”wŒi";
         Text[ korean ] = "¹è°æ ÇØÄª";
-        Text[ chinese_simplified ] = "ÒõÓ°±³¾°";
+        Text[ chinese_simplified ] = "ÒõÓ°Ïß±³¾°";
         Text[ chinese_traditional ] = "³±¼v½u±ø­I´º";
         Text[ arabic ] = "ÎáİíÉ ãä ÇáäŞæÔ";
         Text[ turkish ] = "Artalan deseni";
@@ -1412,7 +1412,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ danish ] = "X-offset" ;
         Text [ portuguese_brazilian ] = "~X-Offset" ;
         Text [ portuguese ] = "Offset ~X" ;
-        Text[ chinese_simplified ] = "XÏòÆ«ÒÆ(~X)";
+        Text[ chinese_simplified ] = "~X Æ«ÒÆ";
         Text[ russian ] = "Ñäâèã îñè X";
         Text[ polish ] = "Ofset X";
         Text[ japanese ] = "µÌ¾¯Ä X";
@@ -1438,7 +1438,7 @@ TabPage RID_SVXPAGE_AREA
         Text [ danish ] = "Y-offset" ;
         Text [ portuguese_brazilian ] = "~Y-Offset" ;
         Text [ portuguese ] = "Offset ~Y" ;
-        Text[ chinese_simplified ] = "YÏòÆ«ÒÆ(~Y)";
+        Text[ chinese_simplified ] = "~Y Æ«ÒÆ";
         Text[ russian ] = "Ñäâèã îñè Y";
         Text[ polish ] = "Ofset Y";
         Text[ japanese ] = "µÌ¾¯Ä Y";
@@ -2614,7 +2614,7 @@ TabPage RID_SVXPAGE_BITMAP
     Text [ portuguese ] = "Modelos de bitmaps" ;
     Text [ finnish ] = "Bittikartat" ;
     Text [ danish ] = "Bitmapmønstre" ;
-    Text [ french ] = "Motifs bitmaps" ;
+    Text [ french ] = "Motifs bitmap" ;
     Text [ swedish ] = "Bitmapsmönster" ;
     Text [ dutch ] = "Bitmappatronen" ;
     Text [ spanish ] = "Modelos de bitmap" ;
@@ -2757,7 +2757,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text [ portuguese ] = "~Modificar..." ;
         Text [ finnish ] = "~Muokkaa..." ;
         Text [ danish ] = "Modificer..." ;
-        Text [ french ] = "~Appliquer..." ;
+        Text [ french ] = "~Modifier..." ;
         Text [ swedish ] = "~Ändra..." ;
         Text [ dutch ] = "Wij~zigen..." ;
         Text [ spanish ] = "~Modificar..." ;
@@ -2877,7 +2877,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text [ portuguese ] = "Editar pixels" ;
         Text [ finnish ] = "Pisteiden muokkaus" ;
         Text [ danish ] = "Pixel-redigering" ;
-        Text [ french ] = "Modification de pixels" ;
+        Text [ french ] = "Éditeur de pixels" ;
         Text [ swedish ] = "Pixel-Editor" ;
         Text [ dutch ] = "Pixel Editor" ;
         Text [ spanish ] = "Editor de píxeles" ;
@@ -2905,7 +2905,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text [ portuguese ] = "Modelos de bitmaps" ;
         Text [ finnish ] = "Bittikartat" ;
         Text [ danish ] = "Tabel bitmap-mønstre" ;
-        Text [ french ] = "Palette de motifs bitmaps" ;
+        Text [ french ] = "Palette de motifs bitmap" ;
         Text [ swedish ] = "Tabell bitmapmönster" ;
         Text [ dutch ] = "Bitmappatronen" ;
         Text [ spanish ] = "Modelo bitmap" ;
@@ -3062,7 +3062,7 @@ TabPage RID_SVXPAGE_GRADIENT
     Text [ portuguese_brazilian ] = "Dégradés" ;
     Text [ portuguese ] = "Matizes" ;
     Text [ finnish ] = "Liukuvärit" ;
-    Text [ danish ] = "Farvegraduering" ;
+    Text [ danish ] = "Farvegradueringer" ;
     Text [ french ] = "Dégradés" ;
     Text [ swedish ] = "Färggradienter" ;
     Text [ dutch ] = "Kleurverloop" ;
@@ -3089,7 +3089,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ chinese_simplified ] = "´Ó(~F)";
         Text[ russian ] = "Îò";
         Text[ polish ] = "Od";
-        Text[ japanese ] = "Œó•â(~F)";
+        Text[ japanese ] = "n‚ß(~F)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "±q(~F)";
         Text[ arabic ] = "ãä";
@@ -3226,7 +3226,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text[ chinese_simplified ] = "ÖÁ(~T)";
         Text[ russian ] = "Äî";
         Text[ polish ] = "Do";
-        Text[ japanese ] = "‚Ü‚Å(~T)";
+        Text[ japanese ] = "I‚è(~T)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¦Ü(~T)";
         Text[ arabic ] = "Åáì";
@@ -3250,7 +3250,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ swedish ] = "~Vinkel" ;
         Text [ dutch ] = "~Hoek" ;
         Text [ spanish ] = "Án~gulo" ;
-        Text [ english_us ] = "A~ngle" ;
+        Text [ english_us ] = "~Angle" ;
         Text[ chinese_simplified ] = "½Ç¶È(~A)";
         Text[ russian ] = "Óãîë";
         Text[ polish ] = "K¹t";
@@ -3592,7 +3592,7 @@ TabPage RID_SVXPAGE_GRADIENT
         };
     StringList [ chinese_simplified ] =
     {
-            < "Ö±ÏßµÄ" ; Default ; > ;
+            < "ÏßĞÎµÄ" ; Default ; > ;
         < "ÖáÏò" ; Default ; > ;
         < "¾¶Ïò" ; Default ; > ;
         < "ÍÖÔ²Ìå" ; Default ; > ;
@@ -3623,12 +3623,12 @@ TabPage RID_SVXPAGE_GRADIENT
         < "²" ; Default ; > ;
         < "•úËüó" ; Default ; > ;
         < "‘È‰~" ; Default ; > ;
-        < "lŠp" ; Default ; > ;
+        < "³•ûŒ`" ; Default ; > ;
         < "lŠpŒ`" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "ª½½uªº" ; Default ; > ;
+            < "½u§Îªº" ; Default ; > ;
         < "¶b¦V" ; Default ; > ;
         < "®|¦V" ; Default ; > ;
         < "¾ò¶êÅé" ; Default ; > ;
@@ -4692,7 +4692,7 @@ TabDialog RID_SVXDLG_AREA
                 Text[ russian ] = "Øòğèõîâêè";
                 Text[ polish ] = "Kreskowanie";
                 Text[ japanese ] = "Ê¯Áİ¸Ş";
-                Text[ chinese_traditional ] = "³±¼v";
+                Text[ chinese_traditional ] = "³±¼v½u";
                 Text[ arabic ] = "äŞæÔ";
                 Text[ greek ] = "Ãñáììïóêéİò";
                 Text[ korean ] = "ÇØÄª";
@@ -4710,7 +4710,7 @@ TabDialog RID_SVXDLG_AREA
                 Text [ portuguese ] = "Modelos de bitmap" ;
                 Text [ finnish ] = "Bittikartat" ;
                 Text [ danish ] = "Bitmapmønstre" ;
-                Text [ french ] = "Motifs bitmaps" ;
+                Text [ french ] = "Motifs bitmap" ;
                 Text [ swedish ] = "Bitmapmönster" ;
                 Text [ dutch ] = "Bitmappatronen" ;
                 Text [ spanish ] = "Modelos de bitmap" ;
