@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:38:25 $
+ *  last change: $Author: rt $ $Date: 2001-07-03 23:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ String RID_STR_BRWTITLE_NO_PROPERTIES
     Text[ polish ] = "Nie zaznaczono formantu";
     Text[ portuguese_brazilian ] = "No Control marked";
     Text[ japanese ] = "ºÝÄÛ°Ù—v‘f‚Ì‘I‘ð‚È‚µ";
-    Text[ korean ] = "ÄÁÆ®·Ñ ¿ä¼Ò°¡ ¼±ÅÃÇ¥½ÃµÇÁö ¾Ê¾ÒÀ½";
+    Text[ korean ] = "ÄÁÆ®·Ñ ¿ä¼Ò°¡ ¸¶Å©Ç¥½ÃµÇÁö ¾Ê¾ÒÀ½";
     Text[ chinese_simplified ] = "Ã»ÓÐÑ¡Ôñ¿ØÖÆÏî";
     Text[ chinese_traditional ] = "¨S¦³¿ï¨ú±±¨î¶µ";
     Text[ turkish ] = "No Control marked";
@@ -196,5 +196,6 @@ String RID_STR_BRWTITLE_MULTISELECT
 };
 
 // -----------------------------------------------------------------------
+
 
 
