@@ -16,7 +16,7 @@
 <DateSeparator>-</DateSeparator>
 <ThousandSeparator> </ThousandSeparator>
 <DecimalSeparator>,</DecimalSeparator>
-<TimeSeparator>:</TimeSeparator>
+<TimeSeparator>.</TimeSeparator>
 <Time100SecSeparator>,</Time100SecSeparator>
 <ListSeparator>;</ListSeparator>
 <LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
@@ -30,8 +30,8 @@
 <DoubleQuotationStart>”</DoubleQuotationStart>
 <DoubleQuotationEnd>”</DoubleQuotationEnd>
 </Markers>
-<TimeAM>am</TimeAM>
-<TimePM>pm</TimePM>
+<TimeAM>fm</TimeAM>
+<TimePM>em</TimePM>
 <MeasurementSystem>metric</MeasurementSystem>
 </LC_CTYPE>
 <LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$kr-41D]">
@@ -140,7 +140,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey6" default="false" type="short" usage="TIME"  formatindex="44">
-<FormatCode>MM:SS,00</FormatCode>
+<FormatCode>MM.SS,00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME"  formatindex="45">
