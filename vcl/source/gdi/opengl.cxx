@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:19:59 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_OPENGL_CXX
-
 #define private public
 #include <svsys.h>
 #include <window.hxx>
@@ -94,9 +92,7 @@
 // - Defines -
 // -----------
 
-#ifdef WIN
-#define __OPENGL_CALL _far _pascal
-#elif defined WNT
+#ifdef WNT
 #define __OPENGL_CALL __stdcall
 #else
 #define __OPENGL_CALL
