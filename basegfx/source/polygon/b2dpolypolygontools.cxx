@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:29 $
+ *  last change: $Author: aw $ $Date: 2003-11-11 09:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,30 @@ namespace basegfx
                 rCandidate.clear();
                 aCutter.getPolyPolygon(rCandidate);
             }
+
+            ::basegfx::polygon::B2DPolyPolygon adaptiveSubdivide(const ::basegfx::polygon::B2DPolyPolygon& rCandidate, double fDistanceBound)
+            {
+                ::basegfx::polygon::B2DPolyPolygon aRetval(rCandidate);
+
+                if(aRetval.areControlPointsUsed())
+                {
+                    const sal_uInt32 nPolygonCount(aRetval.count());
+
+                    for(sal_uInt32 a(0L); aRetval.areControlPointsUsed() && a < nPolygonCount; a++)
+                    {
+                        ::basegfx::polygon::B2DPolygon aCandidate = aRetval.getPolygon(a);
+
+                        if(aCandidate.areControlPointsUsed())
+                        {
+                            aCandidate = ::basegfx::polygon::tools::adaptiveSubdivide(aCandidate, fDistanceBound);
+                            aRetval.setPolygon(a, aCandidate);
+                        }
+                    }
+                }
+
+                return aRetval;
+            }
+
         } // end of namespace tools
     } // end of namespace polygon
 } // end of namespace basegfx

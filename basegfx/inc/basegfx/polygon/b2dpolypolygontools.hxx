@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygontools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-06 16:30:25 $
+ *  last change: $Author: aw $ $Date: 2003-11-11 09:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@ namespace basegfx
             // have the same orientation are removed (cleanup).
             void removeIntersections(::basegfx::polygon::B2DPolyPolygon& rCandidate,
                 sal_Bool bForceOrientation = sal_True, sal_Bool bInvertRemove = sal_False);
+
+            // Subdivide all contained curves. Use distanceBound value if given.
+            ::basegfx::polygon::B2DPolyPolygon adaptiveSubdivide(const ::basegfx::polygon::B2DPolyPolygon& rCandidate, double fDistanceBound = 0.0);
 
         } // end of namespace tools
     } // end of namespace polygon

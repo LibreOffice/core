@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-10 11:45:47 $
+ *  last change: $Author: aw $ $Date: 2003-11-11 09:48:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ namespace basegfx
                 method corrects this (removes double start/end points)
                 and sets the Closed()-state of the polygon correctly.
             */
-            void checkClosed(polygon::B2DPolygon& rCandidate);
+            void checkClosed(::basegfx::polygon::B2DPolygon& rCandidate);
 
             // Get index of outmost point (e.g. biggest X and biggest Y)
             sal_uInt32 getIndexOfOutmostPoint(const ::basegfx::polygon::B2DPolygon& rCandidate);
@@ -152,6 +152,9 @@ namespace basegfx
 
             // Continuity check for point with given index
             ::basegfx::vector::B2DVectorContinuity getContinuityInPoint(const ::basegfx::polygon::B2DPolygon& rCandidate, sal_uInt32 nIndex);
+
+            // Subdivide all contained curves. Use distanceBound value if given.
+            ::basegfx::polygon::B2DPolygon adaptiveSubdivide(const ::basegfx::polygon::B2DPolygon& rCandidate, double fDistanceBound = 0.0);
 
             // Definitions for the cut flags used from the findCut methods
             typedef sal_uInt16 CutFlagValue;

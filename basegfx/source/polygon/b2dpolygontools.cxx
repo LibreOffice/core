@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolygontools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-10 11:45:50 $
+ *  last change: $Author: aw $ $Date: 2003-11-11 09:48:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,14 @@
 
 #ifndef _BGFX_RANGE_B2DRANGE_HXX
 #include <basegfx/range/b2drange.hxx>
+#endif
+
+#ifndef _BGFX_CURVE_B2DCUBICBEZIER_HXX
+#include <basegfx/curve/b2dcubicbezier.hxx>
+#endif
+
+#ifndef _BGFX_CURVE_B2DBEZIERTOOLS_HXX
+#include <basegfx/curve/b2dbeziertools.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -228,6 +236,80 @@ namespace basegfx
                 }
 
                 return eRetval;
+            }
+
+            ::basegfx::polygon::B2DPolygon adaptiveSubdivide(const ::basegfx::polygon::B2DPolygon& rCandidate, double fDistanceBound)
+            {
+                ::basegfx::polygon::B2DPolygon aRetval(rCandidate);
+
+                if(aRetval.areControlPointsUsed())
+                {
+                    const sal_uInt32 nPointCount(rCandidate.isClosed() ? rCandidate.count() : rCandidate.count() - 1L);
+                    aRetval.clear();
+
+                    for(sal_uInt32 a(0L); a < nPointCount; a++)
+                    {
+                        const ::basegfx::vector::B2DVector aVectorA(rCandidate.getControlVectorA(a));
+                        const ::basegfx::vector::B2DVector aVectorB(rCandidate.getControlVectorB(a));
+
+                        if(!aVectorA.equalZero() || !aVectorB.equalZero())
+                        {
+                            // vectors are used, get points
+                            const sal_uInt32 nNext(getIndexOfSuccessor(a, rCandidate));
+                            ::basegfx::point::B2DPoint aPointA(rCandidate.getB2DPoint(a));
+                            ::basegfx::point::B2DPoint aPointB(rCandidate.getB2DPoint(nNext));
+
+                            // build CubicBezier segment
+                            ::basegfx::curve::B2DCubicBezier aBezier(
+                                aPointA, aPointA + aVectorA, aPointB + aVectorB, aPointB);
+
+                            // generate DistanceBound
+                            double fBound;
+
+                            if(0.0 == fDistanceBound)
+                            {
+                                // If not set, calculate rough length of bezier segment by taking
+                                // half of the sum of the edge and the control polygon
+                                ::basegfx::vector::B2DVector aSimpleDistance(aPointB - aPointA);
+                                ::basegfx::vector::B2DVector aTripleDistanceTop((aPointB + aVectorB) - (aPointA + aVectorA));
+                                const double fRoughLength(
+                                    (aSimpleDistance.getLength()
+                                    + (aVectorA.getLength() + aVectorB.getLength() + aTripleDistanceTop.getLength())) / 2.0);
+
+                                // take 1/100th of the rouch curve length
+                                fBound = fRoughLength * 0.01;
+                            }
+                            else
+                            {
+                                // use given bound value
+                                fBound = fDistanceBound;
+                            }
+
+                            // make sure bound value is not too small. The base units are 1/100th mm, thus
+                            // just make sure it's not smaller then 1/100th of that
+                            if(fBound < 0.01)
+                            {
+                                fBound = 0.01;
+                            }
+
+                            // call adaptive subdivide
+                            ::basegfx::curve::adaptiveSubdivide(aRetval, aBezier, fBound);
+                        }
+                        else
+                        {
+                            // no vectors used, add point
+                            aRetval.append(rCandidate.getB2DPoint(a));
+                        }
+                    }
+
+                    // check closed flag, aRetval was cleared and thus it may be invalid.
+                    if(aRetval.isClosed() != rCandidate.isClosed())
+                    {
+                        aRetval.setClosed(rCandidate.isClosed());
+                    }
+                }
+
+                return aRetval;
             }
 
             sal_Bool isInside(const ::basegfx::polygon::B2DPolygon& rCandidate, const ::basegfx::point::B2DPoint& rPoint, sal_Bool bWithBorder)
