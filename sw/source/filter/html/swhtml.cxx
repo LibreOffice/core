@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:30:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:37:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -685,7 +685,16 @@ SvParserState __EXPORT SwHTMLParser::CallParser()
         *pSttNdIdx = pPos->nNode.GetIndex()-1;
         pDoc->SplitNode( *pPos );
 
+        SwPaM aInsertionRangePam( *pPos );
+
         pPam->Move( fnMoveBackward );
+
+        // #106634# split any redline over the insertion point
+        aInsertionRangePam.SetMark();
+        *aInsertionRangePam.GetPoint() = *pPam->GetPoint();
+        aInsertionRangePam.Move( fnMoveBackward );
+        pDoc->SplitRedline( aInsertionRangePam );
+
         pDoc->SetTxtFmtColl( *pPam,
                 pCSS1Parser->GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
     }
