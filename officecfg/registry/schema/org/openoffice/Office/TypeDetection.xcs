@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TypeDetection.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:32:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:36:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,12 @@
 				<desc xml:lang="sv">Lists the types that represent common content formats in Office.</desc>
 				<desc xml:lang="pl">Lists the types that represent common content formats in Office.</desc>
 				<desc xml:lang="pt-BR">Lists the types that represent common content formats in Office.</desc>
-				<desc xml:lang="ja">Lists the types that represent common content formats in Office.</desc>
+				<desc xml:lang="ja">Office で共通のコンテンツ書式を表すタイプを一覧表示します。</desc>
 				<desc xml:lang="ko">Lists the types that represent common content formats in Office.</desc>
 				<desc xml:lang="tr">Lists the types that represent common content formats in Office.</desc>
 				<desc xml:lang="th">Lists the types that represent common content formats in Office.</desc>
 				<desc xml:lang="hi-IN">Lists the types that represent common content formats in Office.</desc>
+				<desc xml:lang="x-comment">Lists the types that represent common content formats in Office.</desc>
 			</info>
 			<prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
 				<info>
@@ -114,11 +115,12 @@
 					<desc xml:lang="sv">Displays a localized type on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="pl">Displays a localized type on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="pt-BR">Displays a localized type on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
-					<desc xml:lang="ja">Displays a localized type on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
+					<desc xml:lang="ja">ローカライズされたタイプをユーザーインターフェスに表示します。CJK への値または言語の割り当てを許可することで、CJK をサポートします。すべての UniCode 文字が使用できます。</desc>
 					<desc xml:lang="ko">Displays a localized type on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="tr">Displays a localized type on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="th">Displays a localized type on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="hi-IN">Displays a localized type on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
+					<desc xml:lang="x-comment">Displays a localized type on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Data" oor:type="xs:string">
@@ -142,11 +144,12 @@
 					<desc xml:lang="sv">Contains configuration items of the type. Items are separated by using &quot;,&quot;, list items are separated by&quot;;&quot;. Sequence of items: Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID.</desc>
 					<desc xml:lang="pl">Contains configuration items of the type. Items are separated by using &quot;,&quot;, list items are separated by&quot;;&quot;. Sequence of items: Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID.</desc>
 					<desc xml:lang="pt-BR">Contains configuration items of the type. Items are separated by using &quot;,&quot;, list items are separated by&quot;;&quot;. Sequence of items: Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID.</desc>
-					<desc xml:lang="ja">Contains configuration items of the type. Items are separated by using &quot;,&quot;, list items are separated by&quot;;&quot;. Sequence of items: Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID.</desc>
+					<desc xml:lang="ja">そのタイプの設定項目を含みます。項目は「,」で区切り、表の項目は「;」で区切ります。項目のシーケンス:Preferred、MediaType、ClipboardFormat、URLPattern、Extensions、DocumentIconID</desc>
 					<desc xml:lang="ko">Contains configuration items of the type. Items are separated by using &quot;,&quot;, list items are separated by&quot;;&quot;. Sequence of items: Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID.</desc>
 					<desc xml:lang="tr">Contains configuration items of the type. Items are separated by using &quot;,&quot;, list items are separated by&quot;;&quot;. Sequence of items: Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID.</desc>
 					<desc xml:lang="th">Contains configuration items of the type. Items are separated by using &quot;,&quot;, list items are separated by&quot;;&quot;. Sequence of items: Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID.</desc>
 					<desc xml:lang="hi-IN">Contains configuration items of the type. Items are separated by using &quot;,&quot;, list items are separated by&quot;;&quot;. Sequence of items: Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID.</desc>
+					<desc xml:lang="x-comment">Contains configuration items of the type. Items are separated by using &quot;,&quot;, list items are separated by&quot;;&quot;. Sequence of items: Preferred,MediaType,ClipboardFormat,URLPattern,Extensions,DocumentIconID.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -172,11 +175,12 @@
 				<desc xml:lang="sv">Lists filters that can import or export content.</desc>
 				<desc xml:lang="pl">Lists filters that can import or export content.</desc>
 				<desc xml:lang="pt-BR">Lists filters that can import or export content.</desc>
-				<desc xml:lang="ja">Lists filters that can import or export content.</desc>
+				<desc xml:lang="ja">コンテンツをインポートまたはエクスポートできるフィルタを一覧表示します。</desc>
 				<desc xml:lang="ko">Lists filters that can import or export content.</desc>
 				<desc xml:lang="tr">Lists filters that can import or export content.</desc>
 				<desc xml:lang="th">Lists filters that can import or export content.</desc>
 				<desc xml:lang="hi-IN">Lists filters that can import or export content.</desc>
+				<desc xml:lang="x-comment">Lists filters that can import or export content.</desc>
 			</info>
 			<prop oor:name="Installed" oor:type="xs:boolean">
 				<info>
@@ -199,11 +203,12 @@
 					<desc xml:lang="sv">Enables or disables filter with the setup utility.</desc>
 					<desc xml:lang="pl">Enables or disables filter with the setup utility.</desc>
 					<desc xml:lang="pt-BR">Enables or disables filter with the setup utility.</desc>
-					<desc xml:lang="ja">Enables or disables filter with the setup utility.</desc>
+					<desc xml:lang="ja">セットアップユーティリティで、フィルタを有効または無効にします。</desc>
 					<desc xml:lang="ko">Enables or disables filter with the setup utility.</desc>
 					<desc xml:lang="tr">Enables or disables filter with the setup utility.</desc>
 					<desc xml:lang="th">Enables or disables filter with the setup utility.</desc>
 					<desc xml:lang="hi-IN">Enables or disables filter with the setup utility.</desc>
+					<desc xml:lang="x-comment">Enables or disables filter with the setup utility.</desc>
 				</info>
 				<value>false</value>
 			</prop>
@@ -228,11 +233,12 @@
 					<desc xml:lang="sv">Displays the localized filter on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="pl">Displays the localized filter on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="pt-BR">Displays the localized filter on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
-					<desc xml:lang="ja">Displays the localized filter on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
+					<desc xml:lang="ja">ローカライズされたフィルタをユーザーインタフェースに表示します。CJK への値または言語の割り当てを許可することで、CJK をサポートします。すべての UniCode 文字が使用できます。</desc>
 					<desc xml:lang="ko">Displays the localized filter on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="tr">Displays the localized filter on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="th">Displays the localized filter on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="hi-IN">Displays the localized filter on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
+					<desc xml:lang="x-comment">Displays the localized filter on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Data" oor:type="xs:string">
@@ -256,11 +262,12 @@
 					<desc xml:lang="sv">Contains configuration items of the filter. Items are separated by &quot;,&quot;, list items are separated by &quot;;&quot;. Sequence of items: Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent.</desc>
 					<desc xml:lang="pl">Contains configuration items of the filter. Items are separated by &quot;,&quot;, list items are separated by &quot;;&quot;. Sequence of items: Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent.</desc>
 					<desc xml:lang="pt-BR">Contains configuration items of the filter. Items are separated by &quot;,&quot;, list items are separated by &quot;;&quot;. Sequence of items: Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent.</desc>
-					<desc xml:lang="ja">Contains configuration items of the filter. Items are separated by &quot;,&quot;, list items are separated by &quot;;&quot;. Sequence of items: Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent.</desc>
+					<desc xml:lang="ja">フィルタの設定項目を含みます。項目は「,」で区切り、表の項目は「;」で区切ります。項目のシーケンス:Order、Type、DocumentService、FilterService、Flags、UserData、FilteFormatVersion、TemplateName、UIComponent</desc>
 					<desc xml:lang="ko">Contains configuration items of the filter. Items are separated by &quot;,&quot;, list items are separated by &quot;;&quot;. Sequence of items: Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent.</desc>
 					<desc xml:lang="tr">Contains configuration items of the filter. Items are separated by &quot;,&quot;, list items are separated by &quot;;&quot;. Sequence of items: Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent.</desc>
 					<desc xml:lang="th">Contains configuration items of the filter. Items are separated by &quot;,&quot;, list items are separated by &quot;;&quot;. Sequence of items: Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent.</desc>
 					<desc xml:lang="hi-IN">Contains configuration items of the filter. Items are separated by &quot;,&quot;, list items are separated by &quot;;&quot;. Sequence of items: Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent.</desc>
+					<desc xml:lang="x-comment">Contains configuration items of the filter. Items are separated by &quot;,&quot;, list items are separated by &quot;;&quot;. Sequence of items: Order,Type,DocumentService,FilterService,Flags,UserData,FilteFormatVersion,TemplateName,UIComponent.</desc>
 				</info>
 			</prop>
 		</group>
@@ -285,11 +292,12 @@
 				<desc xml:lang="sv">Improves the type detection. UNO services access stored content to determine type.</desc>
 				<desc xml:lang="pl">Improves the type detection. UNO services access stored content to determine type.</desc>
 				<desc xml:lang="pt-BR">Improves the type detection. UNO services access stored content to determine type.</desc>
-				<desc xml:lang="ja">Improves the type detection. UNO services access stored content to determine type.</desc>
+				<desc xml:lang="ja">タイプの保護を改善します。UNO サービスは保存されたコンテンツにアクセスして、タイプを決定します。</desc>
 				<desc xml:lang="ko">Improves the type detection. UNO services access stored content to determine type.</desc>
 				<desc xml:lang="tr">Improves the type detection. UNO services access stored content to determine type.</desc>
 				<desc xml:lang="th">Improves the type detection. UNO services access stored content to determine type.</desc>
 				<desc xml:lang="hi-IN">Improves the type detection. UNO services access stored content to determine type.</desc>
+				<desc xml:lang="x-comment">Improves the type detection. UNO services access stored content to determine type.</desc>
 			</info>
 			<prop oor:name="Types" oor:type="oor:string-list">
 				<info>
@@ -312,11 +320,12 @@
 					<desc xml:lang="sv">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="pl">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="pt-BR">Lists internal type names that can be recognized by this service.</desc>
-					<desc xml:lang="ja">Lists internal type names that can be recognized by this service.</desc>
+					<desc xml:lang="ja">このサービスで認識できる内部のタイプ名を一覧表示します。</desc>
 					<desc xml:lang="ko">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="tr">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="th">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="hi-IN">Lists internal type names that can be recognized by this service.</desc>
+					<desc xml:lang="x-comment">Lists internal type names that can be recognized by this service.</desc>
 				</info>
 			</prop>
 		</group>
@@ -341,11 +350,12 @@
 				<desc xml:lang="sv">Loads &quot;non visible&quot; content, such as sounds.</desc>
 				<desc xml:lang="pl">Loads &quot;non visible&quot; content, such as sounds.</desc>
 				<desc xml:lang="pt-BR">Loads &quot;non visible&quot; content, such as sounds.</desc>
-				<desc xml:lang="ja">Loads &quot;non visible&quot; content, such as sounds.</desc>
+				<desc xml:lang="ja">音声など、「目に見えない」コンテンツを読み込みます。</desc>
 				<desc xml:lang="ko">Loads &quot;non visible&quot; content, such as sounds.</desc>
 				<desc xml:lang="tr">Loads &quot;non visible&quot; content, such as sounds.</desc>
 				<desc xml:lang="th">Loads &quot;non visible&quot; content, such as sounds.</desc>
 				<desc xml:lang="hi-IN">Loads &quot;non visible&quot; content, such as sounds.</desc>
+				<desc xml:lang="x-comment">Loads &quot;non visible&quot; content, such as sounds.</desc>
 			</info>
 			<prop oor:name="Types" oor:type="oor:string-list">
 				<info>
@@ -368,11 +378,12 @@
 					<desc xml:lang="sv">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="pl">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="pt-BR">Lists internal type names that can be recognized by this service.</desc>
-					<desc xml:lang="ja">Lists internal type names that can be recognized by this service.</desc>
+					<desc xml:lang="ja">このサービスで認識できる内部のタイプ名を一覧表示します。</desc>
 					<desc xml:lang="ko">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="tr">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="th">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="hi-IN">Lists internal type names that can be recognized by this service.</desc>
+					<desc xml:lang="x-comment">Lists internal type names that can be recognized by this service.</desc>
 				</info>
 			</prop>
 		</group>
@@ -397,11 +408,12 @@
 				<desc xml:lang="sv">Loads &quot;visible content&quot; into a frame.</desc>
 				<desc xml:lang="pl">Loads &quot;visible content&quot; into a frame.</desc>
 				<desc xml:lang="pt-BR">Loads &quot;visible content&quot; into a frame.</desc>
-				<desc xml:lang="ja">Loads &quot;visible content&quot; into a frame.</desc>
+				<desc xml:lang="ja">「目に見える」コンテンツをフレームに読み込みます。</desc>
 				<desc xml:lang="ko">Loads &quot;visible content&quot; into a frame.</desc>
 				<desc xml:lang="tr">Loads &quot;visible content&quot; into a frame.</desc>
 				<desc xml:lang="th">Loads &quot;visible content&quot; into a frame.</desc>
 				<desc xml:lang="hi-IN">Loads &quot;visible content&quot; into a frame.</desc>
+				<desc xml:lang="x-comment">Loads &quot;visible content&quot; into a frame.</desc>
 			</info>
 			<prop oor:name="UIName" oor:type="xs:string" oor:localized="true">
 				<info>
@@ -424,11 +436,12 @@
 					<desc xml:lang="sv">Displays the localized loader on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="pl">Displays the localized loader on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="pt-BR">Displays the localized loader on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
-					<desc xml:lang="ja">Displays the localized loader on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
+					<desc xml:lang="ja">ローカライズされたローダーをユーザーインターフェスに表示します。CJK への値または言語の割り当てを許可することで、CJK をサポートします。すべての UniCode 文字が使用できます。</desc>
 					<desc xml:lang="ko">Displays the localized loader on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="tr">Displays the localized loader on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="th">Displays the localized loader on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 					<desc xml:lang="hi-IN">Displays the localized loader on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
+					<desc xml:lang="x-comment">Displays the localized loader on the user interface. Supports CJK by allowing you to assign it a value or language. Any UniCode characters is permitted.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Types" oor:type="oor:string-list">
@@ -452,11 +465,12 @@
 					<desc xml:lang="sv">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="pl">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="pt-BR">Lists internal type names that can be recognized by this service.</desc>
-					<desc xml:lang="ja">Lists internal type names that can be recognized by this service.</desc>
+					<desc xml:lang="ja">このサービスで認識できる内部のタイプ名を一覧表示します。</desc>
 					<desc xml:lang="ko">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="tr">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="th">Lists internal type names that can be recognized by this service.</desc>
 					<desc xml:lang="hi-IN">Lists internal type names that can be recognized by this service.</desc>
+					<desc xml:lang="x-comment">Lists internal type names that can be recognized by this service.</desc>
 				</info>
 			</prop>
 		</group>
@@ -483,11 +497,12 @@
 				<desc xml:lang="sv">Lists the registered content types.</desc>
 				<desc xml:lang="pl">Lists the registered content types.</desc>
 				<desc xml:lang="pt-BR">Lists the registered content types.</desc>
-				<desc xml:lang="ja">Lists the registered content types.</desc>
+				<desc xml:lang="ja">登録済みのコンテンツタイプを一覧表示します。</desc>
 				<desc xml:lang="ko">Lists the registered content types.</desc>
 				<desc xml:lang="tr">Lists the registered content types.</desc>
 				<desc xml:lang="th">Lists the registered content types.</desc>
 				<desc xml:lang="hi-IN">Lists the registered content types.</desc>
+				<desc xml:lang="x-comment">Lists the registered content types.</desc>
 			</info>
 		</set>
 		<set oor:name="Filters" oor:node-type="Filter">
@@ -511,11 +526,12 @@
 				<desc xml:lang="sv">Lists the registered office filters.</desc>
 				<desc xml:lang="pl">Lists the registered office filters.</desc>
 				<desc xml:lang="pt-BR">Lists the registered office filters.</desc>
-				<desc xml:lang="ja">Lists the registered office filters.</desc>
+				<desc xml:lang="ja">登録済みの Office フィルタを一覧表示します。 </desc>
 				<desc xml:lang="ko">Lists the registered office filters.</desc>
 				<desc xml:lang="tr">Lists the registered office filters.</desc>
 				<desc xml:lang="th">Lists the registered office filters.</desc>
 				<desc xml:lang="hi-IN">Lists the registered office filters.</desc>
+				<desc xml:lang="x-comment">Lists the registered office filters.</desc>
 			</info>
 		</set>
 		<set oor:name="DetectServices" oor:node-type="DetectService">
@@ -539,11 +555,12 @@
 				<desc xml:lang="sv">Lists the registered deep detection services.</desc>
 				<desc xml:lang="pl">Lists the registered deep detection services.</desc>
 				<desc xml:lang="pt-BR">Lists the registered deep detection services.</desc>
-				<desc xml:lang="ja">Lists the registered deep detection services.</desc>
+				<desc xml:lang="ja">登録済みの広範囲な検出サービスを一覧表示します。</desc>
 				<desc xml:lang="ko">Lists the registered deep detection services.</desc>
 				<desc xml:lang="tr">Lists the registered deep detection services.</desc>
 				<desc xml:lang="th">Lists the registered deep detection services.</desc>
 				<desc xml:lang="hi-IN">Lists the registered deep detection services.</desc>
+				<desc xml:lang="x-comment">Lists the registered deep detection services.</desc>
 			</info>
 		</set>
 		<set oor:name="ContentHandlers" oor:node-type="ContentHandler">
@@ -567,11 +584,12 @@
 				<desc xml:lang="sv">Lists the registered content handler services.</desc>
 				<desc xml:lang="pl">Lists the registered content handler services.</desc>
 				<desc xml:lang="pt-BR">Lists the registered content handler services.</desc>
-				<desc xml:lang="ja">Lists the registered content handler services.</desc>
+				<desc xml:lang="ja">登録済みのコンテンツハンドラサービスを一覧表示します。</desc>
 				<desc xml:lang="ko">Lists the registered content handler services.</desc>
 				<desc xml:lang="tr">Lists the registered content handler services.</desc>
 				<desc xml:lang="th">Lists the registered content handler services.</desc>
 				<desc xml:lang="hi-IN">Lists the registered content handler services.</desc>
+				<desc xml:lang="x-comment">Lists the registered content handler services.</desc>
 			</info>
 		</set>
 		<set oor:name="FrameLoaders" oor:node-type="FrameLoader">
@@ -595,11 +613,12 @@
 				<desc xml:lang="sv">Lists the registered frame loader services.</desc>
 				<desc xml:lang="pl">Lists the registered frame loader services.</desc>
 				<desc xml:lang="pt-BR">Lists the registered frame loader services.</desc>
-				<desc xml:lang="ja">Lists the registered frame loader services.</desc>
+				<desc xml:lang="ja">登録済みのフレームローダーサービスを一覧表示します。</desc>
 				<desc xml:lang="ko">Lists the registered frame loader services.</desc>
 				<desc xml:lang="tr">Lists the registered frame loader services.</desc>
 				<desc xml:lang="th">Lists the registered frame loader services.</desc>
 				<desc xml:lang="hi-IN">Lists the registered frame loader services.</desc>
+				<desc xml:lang="x-comment">Lists the registered frame loader services.</desc>
 			</info>
 		</set>
 		<group oor:name="Defaults">
@@ -623,11 +642,12 @@
 				<desc xml:lang="sv">Contains default objects that are used if no specialized service was registered.</desc>
 				<desc xml:lang="pl">Contains default objects that are used if no specialized service was registered.</desc>
 				<desc xml:lang="pt-BR">Contains default objects that are used if no specialized service was registered.</desc>
-				<desc xml:lang="ja">Contains default objects that are used if no specialized service was registered.</desc>
+				<desc xml:lang="ja">専用サービスの登録がない場合に使用される、デフォルトのオブジェクトを含みます。</desc>
 				<desc xml:lang="ko">Contains default objects that are used if no specialized service was registered.</desc>
 				<desc xml:lang="tr">Contains default objects that are used if no specialized service was registered.</desc>
 				<desc xml:lang="th">Contains default objects that are used if no specialized service was registered.</desc>
 				<desc xml:lang="hi-IN">Contains default objects that are used if no specialized service was registered.</desc>
+				<desc xml:lang="x-comment">Contains default objects that are used if no specialized service was registered.</desc>
 			</info>
 			<prop oor:name="FrameLoader" oor:type="xs:string">
 				<info>
@@ -650,11 +670,12 @@
 					<desc xml:lang="sv">Specifies the default frame loader.</desc>
 					<desc xml:lang="pl">Specifies the default frame loader.</desc>
 					<desc xml:lang="pt-BR">Specifies the default frame loader.</desc>
-					<desc xml:lang="ja">Specifies the default frame loader.</desc>
+					<desc xml:lang="ja">デフォルトのフレームローダーを指定します。</desc>
 					<desc xml:lang="ko">Specifies the default frame loader.</desc>
 					<desc xml:lang="tr">Specifies the default frame loader.</desc>
 					<desc xml:lang="th">Specifies the default frame loader.</desc>
 					<desc xml:lang="hi-IN">Specifies the default frame loader.</desc>
+					<desc xml:lang="x-comment">Specifies the default frame loader.</desc>
 				</info>
 				<value>com.sun.star.comp.office.FrameLoader</value>
 			</prop>
@@ -679,11 +700,12 @@
 					<desc xml:lang="sv">Specifies the generic detection service.</desc>
 					<desc xml:lang="pl">Specifies the generic detection service.</desc>
 					<desc xml:lang="pt-BR">Specifies the generic detection service.</desc>
-					<desc xml:lang="ja">Specifies the generic detection service.</desc>
+					<desc xml:lang="ja">一般的な検出サービスを指定します。</desc>
 					<desc xml:lang="ko">Specifies the generic detection service.</desc>
 					<desc xml:lang="tr">Specifies the generic detection service.</desc>
 					<desc xml:lang="th">Specifies the generic detection service.</desc>
 					<desc xml:lang="hi-IN">Specifies the generic detection service.</desc>
+					<desc xml:lang="x-comment">Specifies the generic detection service.</desc>
 				</info>
 				<value>com.sun.star.comp.office.FrameLoader</value>
 			</prop>
@@ -709,17 +731,19 @@
 					<desc xml:lang="sv">Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc>
 					<desc xml:lang="pl">Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc>
 					<desc xml:lang="pt-BR">Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc>
-					<desc xml:lang="ja">Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc>
+					<desc xml:lang="ja">サードパーティのフィルタを「ツール」→「オプション」で表示されるデフォルトフィルタに設定しようとすると、警告を表示します。</desc>
 					<desc xml:lang="ko">Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc>
 					<desc xml:lang="tr">Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc>
 					<desc xml:lang="th">Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc>
 					<desc xml:lang="hi-IN">Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc>
+					<desc xml:lang="x-comment">Displays a warning when a user tries to set a third-party filter as the default filter in &quot;Tools - Options&quot;.</desc>
 				</info>
 				<value>true</value>
 			</prop>
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
