@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animate.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:16:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,9 +490,6 @@ void Animation::Draw( OutputDevice* pOut, const Point& rDestPt, const Size& rDes
 
 void Animation::ImplRestartTimer( ULONG nTimeout )
 {
-#ifdef REMOTE_APPSERVER
-    nTimeout = nTimeout > 40 ? nTimeout : 40;
-#endif
     maTimer.SetTimeout( Max( nTimeout, MIN_TIMEOUT + ( mnAnimCount - 1 ) * INC_TIMEOUT ) * 10L );
     maTimer.Start();
 }
