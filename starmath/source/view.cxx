@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-05 07:04:05 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 10:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #endif
 #ifndef _SV_DECOVIEW_HXX //autogen
 #include <vcl/decoview.hxx>
-#endif
-#ifndef _SV_CLIP_HXX //autogen
-#include <vcl/clip.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
