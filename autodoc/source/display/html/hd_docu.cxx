@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hd_docu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <ary/info/codeinfo.hxx>
 #include <ary/info/all_tags.hxx>
 #include <ary/info/all_dts.hxx>
+#include <adc_cl.hxx>
 #include "html_kit.hxx"
 
 
@@ -106,7 +107,7 @@ C_sTagHeadlines[ ary::info::C_eAtTag_NrOfClasses ] =
                         "Return",       "Summary",      "Todos",        "Version",
         "Base Classes", "Exceptions",   "Implements",   "Keywords",     "Parameters",
         "See Also",     "Template Parameters",
-                                        ""
+                                        "",             "Since "
     };
 
 
@@ -315,6 +316,32 @@ Docu_Display::Display_TemplateTag( const TemplateTag & i_rData )
 void
 Docu_Display::Display_LabelTag( const LabelTag & i_rData )
 {
+}
+
+void
+Docu_Display::Display_SinceTag( const ary::info::SinceTag & i_rData )
+{
+    if ( i_rData.Version().empty()
+         OR
+         NOT autodoc::CommandLine::Get_().Display_SinceTag() )
+    {
+         return;
+    }
+    // Transform the value of the @since tag into the text to be displayed.
+    String sDisplay =
+        autodoc::CommandLine::Get_().DisplayOf_SinceTagValue(
+                                                i_rData.Version() );
+    if (sDisplay.empty())
+        return;
+
+    Write_TagTitle( "Since " );
+
+    DefListDefinition * dpDef = new DefListDefinition;
+    CurOut() << dpDef;
+
+    Easy().Enter(*dpDef);
+    CurOut() << sDisplay;
+    Easy().Leave();
 }
 
 void
