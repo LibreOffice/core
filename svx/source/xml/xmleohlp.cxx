@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,10 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 
-#define XML_CONTAINERSTORAGE_NAME       "Objects"
+#define XML_CONTAINERSTORAGE_NAME_60        "Pictures"
+#define XML_CONTAINERSTORAGE_NAME       "ObjectReplacements"
 #define XML_EMBEDDEDOBJECT_URL_BASE     "vnd.sun.star.EmbeddedObject:"
+#define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE      "vnd.sun.star.GraphicObject:"
 
 // -----------------------------------------------------------------------------
 class InputStorageWrapper_Impl : public ::cppu::WeakImplHelper1<stario::XInputStream>
@@ -309,7 +311,8 @@ struct OUStringLess
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
     WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
-    maDefaultContainerStorageName( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME) ),
+    maReplacementGraphicsContainerStorageName( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME) ),
+    maReplacementGraphicsContainerStorageName60( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME_60) ),
     mpDocPersist( 0 ),
     mpStreamMap( 0 ),
     meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ )
@@ -318,7 +321,8 @@ SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper() :
 
 SvXMLEmbeddedObjectHelper::SvXMLEmbeddedObjectHelper( SfxObjectShell& rDocPersist, SvXMLEmbeddedObjectHelperMode eCreateMode ) :
     WeakComponentImplHelper2< XEmbeddedObjectResolver, XNameAccess >( maMutex ),
-    maDefaultContainerStorageName( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME) ),
+    maReplacementGraphicsContainerStorageName( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME) ),
+    maReplacementGraphicsContainerStorageName60( RTL_CONSTASCII_USTRINGPARAM(XML_CONTAINERSTORAGE_NAME_60) ),
     mpDocPersist( 0 ),
     mpStreamMap( 0 ),
     meCreateMode( EMBEDDEDOBJECTHELPER_MODE_READ )
@@ -359,15 +363,21 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         const OUString& rURLStr,
         OUString& rContainerStorageName,
         OUString& rObjectStorageName,
-        sal_Bool bInternalToExternal ) const
+        sal_Bool bInternalToExternal,
+        sal_Bool *pGraphicRepl ) const
 {
     // internal URL: vnd.sun.star.EmbeddedObject:<object-name>
     //           or: vnd.sun.star.EmbeddedObject:<path>/<object-name>
+    // internal replacement images:
+    //               vnd.sun.star.EmbeddedObjectGraphic:<object-name>
+    //           or: vnd.sun.star.EmbeddedObjectGraphic:<path>/<object-name>
     // external URL: ./<path>/<object-name>
     //           or: <path>/<object-name>
     //           or: <object-name>
     // currently, path may only consist of a single directory name
     sal_Bool    bRet = sal_False;
+    if( pGraphicRepl )
+        *pGraphicRepl = sal_False;
 
     if( !rURLStr.getLength() )
         return sal_False;
@@ -375,9 +385,15 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     if( bInternalToExternal )
     {
         sal_Int32 nPos = rURLStr.indexOf( ':' );
-        if( -1 == nPos ||
-            0 != rURLStr.compareToAscii( XML_EMBEDDEDOBJECT_URL_BASE,
-                                 sizeof( XML_EMBEDDEDOBJECT_URL_BASE ) -1 ) )
+        if( -1 == nPos )
+            return sal_False;
+        sal_Bool bObjUrl =
+            0 == rURLStr.compareToAscii( XML_EMBEDDEDOBJECT_URL_BASE,
+                                 sizeof( XML_EMBEDDEDOBJECT_URL_BASE ) -1 );
+        sal_Bool bGrUrl = !bObjUrl &&
+              0 == rURLStr.compareToAscii( XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE,
+                         sizeof( XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE ) -1 );
+        if( !(bObjUrl || bGrUrl) )
             return sal_False;
 
         sal_Int32 nPathStart = nPos + 1;
@@ -394,6 +410,20 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         }
         else
             return sal_False;
+
+        if( bGrUrl )
+        {
+            sal_Bool bOASIS = mxRootStorage.is() &&
+                ( SotStorage::GetVersion( mxRootStorage ) > SOFFICE_FILEFORMAT_60 );
+            rContainerStorageName = bOASIS
+                    ? maReplacementGraphicsContainerStorageName
+                    : maReplacementGraphicsContainerStorageName60;
+
+            if( pGraphicRepl )
+                *pGraphicRepl = sal_True;
+        }
+
+
     }
     else
     {
@@ -689,23 +719,42 @@ Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
     }
     else
     {
+        sal_Bool bGraphicRepl = sal_False;
         Reference < XInputStream > xStrm;
         OUString aContainerStorageName, aObjectStorageName;
         if( ImplGetStorageNames( rURLStr, aContainerStorageName,
                                  aObjectStorageName,
-                                 sal_True ) )
+                                 sal_True,
+                                    &bGraphicRepl ) )
         {
             try
             {
-                uno::Reference < embed::XStorage > xDocStor( mpDocPersist->GetStorage() );
-                if ( xDocStor->isStreamElement( aObjectStorageName ) )
+                if( bGraphicRepl )
                 {
-                    uno::Reference < io::XStream > xStream = xDocStor->openStreamElement( aObjectStorageName, embed::ElementModes::READ );
-                    xStrm = xStream->getInputStream();
+                    Reference < embed::XEmbeddedObject > xObj =
+                        mpDocPersist->GetEmbeddedObjectContainer().
+                            GetEmbeddedObject( aObjectStorageName );
+                    DBG_ASSERT( xObj.is(), "Didn't get object" );
+                    if( xObj.is() )
+                    {
+                        OUString aMimeType;
+                        xStrm = mpDocPersist->GetEmbeddedObjectContainer().
+                                                    GetGraphicStream( xObj,
+                                                    &aMimeType );
+                    }
                 }
                 else
                 {
-                    xStrm = new InputStorageWrapper_Impl( xDocStor, aObjectStorageName );
+                    uno::Reference < embed::XStorage > xDocStor( mpDocPersist->GetStorage() );
+                    if ( xDocStor->isStreamElement( aObjectStorageName ) )
+                    {
+                        uno::Reference < io::XStream > xStream = xDocStor->openStreamElement( aObjectStorageName, embed::ElementModes::READ );
+                        xStrm = xStream->getInputStream();
+                    }
+                    else
+                    {
+                        xStrm = new InputStorageWrapper_Impl( xDocStor, aObjectStorageName );
+                    }
                 }
             }
             catch ( uno::Exception& )
