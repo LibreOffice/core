@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-08 13:31:46 $
+ *  last change: $Author: ka $ $Date: 2001-01-11 16:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ public:
     SdOutliner*     GetOutliner(BOOL bCreateOutliner=TRUE);
     SdOutliner*     GetInternalOutliner(BOOL bCreateOutliner=TRUE);
 
-    SdDrawDocShell* GetDocSh() { return(pDocSh) ; }
+    SdDrawDocShell* GetDocSh() const { return(pDocSh) ; }
 
     LanguageType    GetLanguage( const USHORT nId ) const;
     void            SetLanguage( const LanguageType eLang, const USHORT nId );
