@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dkenny $ $Date: 2001-05-31 07:22:02 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 18:35:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,43 +75,43 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :      sv.mk
 
 # --- Files --------------------------------------------------------
-OBJFILES=       $(OBJ)$/main.obj 
+OBJFILES=       $(OBJ)$/main.obj
+
+
+APPSTDLIBS=$(SALLIB) \
+        $(VOSLIB) \
+    $(CPPULIB)	\
+    $(CPPUHELPERLIB)	\
+    $(UCBHELPERLIB)	\
+    $(DBTOOLSLIB)	\
+    $(COMPHELPERLIB)
+            
+
+# ... cfgapi ..............................
 
 APP1TARGET= $(TARGET)
 APP1OBJS=       $(OBJFILES)
-.IF $(GUI) == "WNT"
-APPSTDLIBS=$(SALLIB) \
-            $(VOSLIB) \
-            $(CPPULIB)	\
-            $(CPPUHELPERLIB)	\
-            $(UCBHELPERLIB)	\
-            $(DBTOOLSLIB)	\
-            $(COMPHELPERLIB)	\
-            isdbc2.lib icalc.lib imozab.lib icomphelp2.lib \
-            $(SLB)$/sql.lib 
-.ELSE
-APPSTDLIBS=$(SALLIB) \
-            $(VOSLIB) \
-            $(CPPULIB)	\
-            $(CPPUHELPERLIB)	\
-            $(UCBHELPERLIB)	\
-            $(DBTOOLSLIB)	\
-            -lsdbc2 -lcalc$(UPD)$(DLLSUFFIX) -lmozab$(UPD)$(DLLSUFFIX) \
-            `grep -v '^$$' $(SLB)$/sql.lib | sed -e "s@^@$(PRJ)/@"`
-.ENDIF
-            
-#			-lsdbc2 -lcalc619li -lmozab619li \
-
-# ... cfgapi ..............................
 APP1STDLIBS = $(APPSTDLIBS)
 
-APP1STDLIBS+=$(STDLIBCPP)
 
+    
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS+=$(LIBCIMT)
 .ENDIF
 
-# --- Targets ------------------------------------------------------
+APP2TARGET = mozThread
+APP2OBJS   = $(OBJ)$/initUNO.obj	\
+     $(OBJ)$/mozthread.obj
+                 
+APP2STDLIBS = $(APPSTDLIBS)
 
+
+    
+.IF "$(GUI)"=="WNT"
+APP2STDLIBS+=$(LIBCIMT)
+.ENDIF
+
+# --- Targets ------------------------------------------------------
+    
 .INCLUDE :      target.mk
 
