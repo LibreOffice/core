@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:57:44 $
+ *  last change: $Author: er $ $Date: 2002-08-05 16:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #ifndef _I18N_CCLASS_UNICODE_HXX_
 #define _I18N_CCLASS_UNICODE_HXX_
 
+#include <drafts/com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hdl>
@@ -156,11 +157,13 @@ private:
     /// If and where c occurs in pStr
     static  const sal_Unicode*  StrChr( const sal_Unicode* pStr, sal_Unicode c );
 
+
     com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > xMSF;
 
     /// used for parser only
     com::sun::star::lang::Locale    aParserLocale;
     com::sun::star::uno::Reference < XLocaleData > xLocaleData;
+    com::sun::star::uno::Reference < drafts::com::sun::star::i18n::XNativeNumberSupplier > xNatNumSup;
     rtl::OUString             aStartChars;
     rtl::OUString             aContChars;
     UPT_FLAG_TYPE*              pTable;
@@ -213,43 +216,5 @@ private:
 };
 
 } } } }
-
-/**************************************************************************
-
-    Source Code Control System - Updates
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1  2002/03/26 13:36:40  bustamam
-    #97583# add Include files
-
-    Revision 1.3  2001/10/19 21:16:45  bustamam.harun
-    #84725# Add XServiceInfo implementation
-
-    Revision 1.2  2001/05/18 17:57:33  er
-    #79771# optimize: disentangled: cclass_unicode not derived from CharacterClassificationImpl; reuse instance if locale didn't change; rtl::OUString instead of String
-
-    Revision 1.1  2001/03/27 21:13:45  bustamam.harun
-    rename characterclassification to cclass_unicode
-
-    Revision 1.6  2001/01/29 17:05:55  er
-    CharacterClassification with service manager
-
-    Revision 1.5  2000/10/29 17:01:45  er
-    i18n API moved from com.sun.star.lang to com.sun.star.i18n
-
-    Revision 1.4  2000/08/11 14:51:29  er
-    removed queryInterface/aquire/release, using WeakImplHelper instead
-
-    Revision 1.3  2000/07/06 15:49:21  gmu
-    changed parsing functions
-
-    Revision 1.2  2000/07/06 15:21:04  er
-    define USE_I18N_DEFAULT_IMPLEMENTATION and Locale dependent source
-
-    Revision 1.1  2000/07/06 08:51:54  er
-    new: CharacterClassification with parser
-
-
-**************************************************************************/
 
 #endif
