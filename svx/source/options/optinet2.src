@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-29 09:39:46 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1698,6 +1698,23 @@ TabPage RID_SVXPAGE_INET_OTHER
         Text [ English ] = "Mail server" ;
         Text [ english_us ] = "Mail server" ;
         Text[ language_user1 ] = " ";
+        Text[ portuguese ] = "Mail server";
+        Text[ russian ] = "Mail server";
+        Text[ greek ] = "ÄéáêïìéóôŞò Mail";
+        Text[ dutch ] = "Mail server";
+        Text[ french ] = "Mail server";
+        Text[ spanish ] = "Mail server";
+        Text[ italian ] = "Mail server";
+        Text[ danish ] = "Mail server";
+        Text[ swedish ] = "E-postserver";
+        Text[ polish ] = "Mail server";
+        Text[ portuguese_brazilian ] = "Mail server";
+        Text[ japanese ] = "Mail server";
+        Text[ korean ] = "Mail server";
+        Text[ chinese_simplified ] = "Mail server";
+        Text[ chinese_traditional ] = "Mail server";
+        Text[ turkish ] = "Mail server";
+        Text[ arabic ] = "ãÒæÏ ÇáÈÑíÏ";
     };
     FixedText FT_SEND
     {
@@ -1817,24 +1834,24 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         /* ### ACHTUNG: Neuer Text in Resource? Star Basic-Scripts ausführen von : Star Basic-Scripts ausf³hren von */
         Text = "StarBasic-Scripts ausführen von" ;
         Text [ English ] = "Execute StarBasic Scripts from" ;
-        Text [ english_us ] = "Execute StarOffice Basic Scripts from" ;
+        Text [ english_us ] = "Execute %PRODUCTNAME Basic Scripts from" ;
         Text [ portuguese_brazilian ] = "Star Basic-Scripts ausführen von" ;
-        Text [ swedish ] = "Utför StarOffice Basic-skript från" ;
-        Text [ danish ] = "Udfør StarOffice Basic-scripter fra" ;
-        Text [ italian ] = "Esegui script StarOffice Basic da" ;
-        Text [ spanish ] = "Ejecutar Scripts de StarOffice Basic desde" ;
-        Text [ french ] = "Exécuter les scripts StarOffice Basic de" ;
-        Text [ dutch ] = "StarOffice Basic-scripts uitvoeren van" ;
-        Text [ portuguese ] = "Executar scripts StarOffice Basic a partir de" ;
+        Text [ swedish ] = "Utför %PRODUCTNAME Basic-skript från" ;
+        Text [ danish ] = "Udfør %PRODUCTNAME Basic-scripter fra" ;
+        Text [ italian ] = "Esegui script %PRODUCTNAME Basic da" ;
+        Text [ spanish ] = "Ejecutar Scripts de %PRODUCTNAME Basic desde" ;
+        Text [ french ] = "Exécuter les scripts %PRODUCTNAME Basic de" ;
+        Text [ dutch ] = "%PRODUCTNAME Basic-scripts uitvoeren van" ;
+        Text [ portuguese ] = "Executar scripts %PRODUCTNAME Basic a partir de" ;
         Text[ chinese_simplified ] = "Ö´ĞĞ Star Basic ½Å±¾´Ó";
-        Text[ russian ] = "Âûïîëíèòü ñêğèïòû StarOffice Basic èç";
+        Text[ russian ] = "Âûïîëíèòü ñêğèïòû %PRODUCTNAME Basic èç";
         Text[ polish ] = "Wykonaj skrypty Star Basic z";
-        Text[ japanese ] = "StarOffice Basic ½¸ØÌßÄ‚ÌÀsŒó•â";
+        Text[ japanese ] = "%PRODUCTNAME Basic ½¸ØÌßÄ‚ÌÀsŒó•â";
         Text[ chinese_traditional ] = "°õ¦æStar Basic©R¥O½Z±q";
-        Text[ arabic ] = "ÊäİíĞ StarOffice Basic Scripts ãä";
-        Text[ greek ] = "Åêôİëåóç äåóìşí åíİñãåéáò ôïõ StarOffice Basic áğü";
-        Text[ korean ] = "StarOffice Basic ½ºÅ©¸³Æ® ½ÇÇà";
-        Text[ turkish ] = "StarOffice Basic script'leri şuradan yürüt:";
+        Text[ arabic ] = "ÊäİíĞ %PRODUCTNAME Basic Scripts ãä";
+        Text[ greek ] = "Åêôİëåóç äåóìşí åíİñãåéáò ôïõ %PRODUCTNAME Basic áğü";
+        Text[ korean ] = "%PRODUCTNAME Basic ½ºÅ©¸³Æ® ½ÇÇà";
+        Text[ turkish ] = "%PRODUCTNAME Basic script'leri şuradan yürüt:";
         Text[ language_user1 ] = " ";
     };
     Edit ED_SCRIPT_EXEC
@@ -1938,24 +1955,24 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 73 , 126 ) ;
         Text = "StarBasic-Script" ;
         Text [ English ] = "StarBasic Script" ;
-        Text [ english_us ] = "StarOffice Basic Script" ;
-        Text [ portuguese_brazilian ] = "StarOffice Basic-Script" ;
-        Text [ swedish ] = "StarOffice Basic-skript" ;
-        Text [ danish ] = "StarOffice Basic-Script" ;
-        Text [ italian ] = "Script StarOffice Basic" ;
-        Text [ spanish ] = "Script StarOffice Basic" ;
-        Text [ french ] = "Script StarOffice Basic" ;
-        Text [ dutch ] = "StarOffice Basic-Script" ;
-        Text [ portuguese ] = "StarOffice Basic-Script" ;
-        Text[ chinese_simplified ] = "StarOffice Basic ½Å±¾";
-        Text[ russian ] = "Ñêğèïò StarOffice Basic";
-        Text[ polish ] = "Skrypt StarOffice Basic";
-        Text[ japanese ] = "StarOffice Basic ½¸ØÌßÄ";
-        Text[ chinese_traditional ] = "StarOffice Basic©R¥O½Z";
-        Text[ arabic ] = "StarOffice Basic Script";
-        Text[ greek ] = "StarOffice Basic Script";
-        Text[ korean ] = "StarOffice Basic ½ºÅ©¸³Æ®";
-        Text[ turkish ] = "StarOffice Basic Script";
+        Text [ english_us ] = "%PRODUCTNAME Basic Script" ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic-Script" ;
+        Text [ swedish ] = "%PRODUCTNAME Basic-skript" ;
+        Text [ danish ] = "%PRODUCTNAME Basic-Script" ;
+        Text [ italian ] = "Script %PRODUCTNAME Basic" ;
+        Text [ spanish ] = "Script %PRODUCTNAME Basic" ;
+        Text [ french ] = "Script %PRODUCTNAME Basic" ;
+        Text [ dutch ] = "%PRODUCTNAME Basic-Script" ;
+        Text [ portuguese ] = "%PRODUCTNAME Basic-Script" ;
+        Text[ chinese_simplified ] = "%PRODUCTNAME Basic ½Å±¾";
+        Text[ russian ] = "Ñêğèïò %PRODUCTNAME Basic";
+        Text[ polish ] = "Skrypt %PRODUCTNAME Basic";
+        Text[ japanese ] = "%PRODUCTNAME Basic ½¸ØÌßÄ";
+        Text[ chinese_traditional ] = "%PRODUCTNAME Basic©R¥O½Z";
+        Text[ arabic ] = "%PRODUCTNAME Basic Script";
+        Text[ greek ] = "%PRODUCTNAME Basic Script";
+        Text[ korean ] = "%PRODUCTNAME Basic ½ºÅ©¸³Æ®";
+        Text[ turkish ] = "%PRODUCTNAME Basic Script";
         Text[ language_user1 ] = " ";
     };
     RadioButton RBT_STARBASIC_ALWAYS
@@ -2048,24 +2065,24 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         /* ### ACHTUNG: Neuer Text in Resource? ACHTUNG: StarBasic-Scripte aus dem Internet werden ohne Überprüfung ausgeführt! : ACHTUNG: StarBasic-Scripte aus dem Internet werden ohne šberpr³fung ausgef³hrt! */
         Text = "ACHTUNG: StarBasic-Scripte aus dem Internet werden ohne Überprüfung ausgeführt!" ;
         Text [ English ] = "ATTENTION: StarBasic scripts from the Internet will be executet without check!" ;
-        Text [ english_us ] = "NOTE: StarOffice Basic scripts from the Internet will be executed without confirming!" ;
-        Text [ portuguese_brazilian ] = "ACHTUNG: StarOffice Basic-Scripte aus dem Internet werden ohne Überprüfung ausgeführt!" ;
-        Text [ swedish ] = "OBS: StarOffice Basic-skript från Internet utförs utan kontroll!" ;
-        Text [ danish ] = "BEMÆRK: StarOffice Basic-scripter fra Internettet bliver udført uden kontrol!" ;
-        Text [ italian ] = "ATTENZIONE: gli script StarOffice Basic di Internet vengono eseguiti senza un controllo!" ;
-        Text [ spanish ] = "ADVERTENCIA: ¡Los scripts de StarOffice Basic en Internet son ejecutados sin consultar!" ;
-        Text [ french ] = "ATTENTION : Les scripts StarOffice Basic à partir d'Internet seront exécutés sans validation !" ;
-        Text [ dutch ] = "PAS OP: StarOffice Basic scripts uit Internet worden zonder controle uitgevoerd." ;
-        Text [ portuguese ] = "ATENÇÃO: os scripts StarOffice Basic da Internet serão executados sem verificação!" ;
-        Text[ chinese_simplified ] = "×¢Òâ£º¹ú¼Ê»¥ÁªÍø´«µİµÄ StarOffice Basic ½Å±¾»á²»¾­¹ıÓÃ»§¼ì²é¾Í×Ô¶¯Ö´ĞĞ£¡";
-        Text[ russian ] = "ÂÍÈÌÀÍÈÅ: Ñêğèïòû StarOffice Basic èç Èíòåğíåòà âûïîëíÿşòñÿ áåç ïğîâåğêè!";
-        Text[ polish ] = "UWAGA: Skrypty StarOffice Basic z sieci Internet bêd¹ wykonywane bez potwierdzenia!";
-        Text[ japanese ] = "’ˆÓ:²İÀ°È¯Ä‚©‚ç‚ÌStarOffice Basic‚Ì½¸ØÌßÄ‚ÍAÁª¯¸‚È‚µ‚ÉÀs‚³‚ê‚Ü‚·!";
-        Text[ chinese_traditional ] = "ª`·N¡GInternet¶Ç»¼ªºStarOffice Basic©R¥O½Z¤£¸g¹L¨Ï¥ÎªÌ»{µı´N·|¦Û°Ê°õ¦æ¡I";
-        Text[ arabic ] = "ÊÍĞíÑ: ÓíÊã ÊäİíĞ StarOffice Basic scripts ãä ÇáÅäÊÑäÊ ÈÏæä ÅÌÑÇÁ İÍÕ!";
-        Text[ greek ] = "ĞÑÏÓÏ×Ç: Äİóìåò åíåñãåéşí ôïõ StarOffice Basic áğü ôï Internet èá åêôåëïıíôáé äß÷ùò íá åëåã÷èïıí!";
-        Text[ korean ] = "ÁÖÀÇ: ÀÎÅÍ³İ¿¡¼­ÀÇ StarOffice Basic ½ºÅ©¸³Æ®´Â È®ÀÎ¾øÀÌ ½ÇÇàµË´Ï´Ù!";
-        Text[ turkish ] = "Dikkat: İnternetten alınan StarOffice Basic script'leri kontrol edilmeden yürütülecek!";
+        Text [ english_us ] = "NOTE: %PRODUCTNAME Basic scripts from the Internet will be executed without confirming!" ;
+        Text [ portuguese_brazilian ] = "ACHTUNG: %PRODUCTNAME Basic-Scripte aus dem Internet werden ohne Überprüfung ausgeführt!" ;
+        Text [ swedish ] = "OBS: %PRODUCTNAME Basic-skript från Internet utförs utan kontroll!" ;
+        Text [ danish ] = "BEMÆRK: %PRODUCTNAME Basic-scripter fra Internettet bliver udført uden kontrol!" ;
+        Text [ italian ] = "ATTENZIONE: gli script %PRODUCTNAME Basic di Internet vengono eseguiti senza un controllo!" ;
+        Text [ spanish ] = "ADVERTENCIA: ¡Los scripts de %PRODUCTNAME Basic en Internet son ejecutados sin consultar!" ;
+        Text [ french ] = "ATTENTION : Les scripts %PRODUCTNAME Basic à partir d'Internet seront exécutés sans validation !" ;
+        Text [ dutch ] = "PAS OP: %PRODUCTNAME Basic scripts uit Internet worden zonder controle uitgevoerd." ;
+        Text [ portuguese ] = "ATENÇÃO: os scripts %PRODUCTNAME Basic da Internet serão executados sem verificação!" ;
+        Text[ chinese_simplified ] = "×¢Òâ£º¹ú¼Ê»¥ÁªÍø´«µİµÄ %PRODUCTNAME Basic ½Å±¾»á²»¾­¹ıÓÃ»§¼ì²é¾Í×Ô¶¯Ö´ĞĞ£¡";
+        Text[ russian ] = "ÂÍÈÌÀÍÈÅ: Ñêğèïòû %PRODUCTNAME Basic èç Èíòåğíåòà âûïîëíÿşòñÿ áåç ïğîâåğêè!";
+        Text[ polish ] = "UWAGA: Skrypty %PRODUCTNAME Basic z sieci Internet bêd¹ wykonywane bez potwierdzenia!";
+        Text[ japanese ] = "’ˆÓ:²İÀ°È¯Ä‚©‚ç‚Ì%PRODUCTNAME Basic‚Ì½¸ØÌßÄ‚ÍAÁª¯¸‚È‚µ‚ÉÀs‚³‚ê‚Ü‚·!";
+        Text[ chinese_traditional ] = "ª`·N¡GInternet¶Ç»¼ªº%PRODUCTNAME Basic©R¥O½Z¤£¸g¹L¨Ï¥ÎªÌ»{µı´N·|¦Û°Ê°õ¦æ¡I";
+        Text[ arabic ] = "ÊÍĞíÑ: ÓíÊã ÊäİíĞ %PRODUCTNAME Basic scripts ãä ÇáÅäÊÑäÊ ÈÏæä ÅÌÑÇÁ İÍÕ!";
+        Text[ greek ] = "ĞÑÏÓÏ×Ç: Äİóìåò åíåñãåéşí ôïõ %PRODUCTNAME Basic áğü ôï Internet èá åêôåëïıíôáé äß÷ùò íá åëåã÷èïıí!";
+        Text[ korean ] = "ÁÖÀÇ: ÀÎÅÍ³İ¿¡¼­ÀÇ %PRODUCTNAME Basic ½ºÅ©¸³Æ®´Â È®ÀÎ¾øÀÌ ½ÇÇàµË´Ï´Ù!";
+        Text[ turkish ] = "Dikkat: İnternetten alınan %PRODUCTNAME Basic script'leri kontrol edilmeden yürütülecek!";
         Text[ language_user1 ] = " ";
     };
     FixedText FI_STARBASIC_DISCRIPTION_LIST
@@ -2077,24 +2094,24 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         /* ### ACHTUNG: Neuer Text in Resource? StarBasic-Scripte werden nur aus Verzeichnissen der Liste ausgeführt. : StarBasic-Scripte werden nur aus Verzeichnissen der Liste ausgef³hrt. */
         Text = "StarBasic-Scripte werden nur aus Verzeichnissen der Liste ausgeführt." ;
         Text [ English ] = "StarBasic scripts will be executet only from directories from the list." ;
-        Text [ english_us ] = "StarOffice Basic scripts will be executed only from directories in the list." ;
-        Text [ portuguese_brazilian ] = "StarOffice Basic-Scripte werden nur aus Verzeichnissen der Liste ausgeführt." ;
-        Text [ swedish ] = "StarOffice Basic-skript utförs endast från katalogerna i listan." ;
-        Text [ danish ] = "StarOffice Basic-scripter bliver kun udført fra biblioteker i listen." ;
-        Text [ italian ] = "Gli Script di StarOffice Basic vengono eseguiti solo dalle cartelle dell'elenco." ;
-        Text [ spanish ] = "Los scripts StarOffice Basic se ejecutarán solo a partir de los directorios de la lista." ;
-        Text [ french ] = "Seuls les scripts StarOffice Basic contenus dans la liste des répertoires seront exécutés." ;
-        Text [ dutch ] = "StarOffice Basic-scripts worden alleen uitgevoerd vanuit mappen uit de lijst." ;
-        Text [ portuguese ] = "Os scripts StarOffice Basic são apenas executados a partir de directórios da lista." ;
-        Text[ chinese_simplified ] = "Ö»Ö´ĞĞÁĞ±í¼ÇÂ¼\nÖĞµÄStarOffice Basic½Å±¾¡£";
-        Text[ russian ] = "Ñêğèïòû StarOffice Basic âûïîëíÿşòñÿ òîëüêî èç êàòàëîãîâ ñïèñêà.";
-        Text[ polish ] = "Skrypty StarOffice Basic wykonane bêd¹ tylko z katalogów list.";
-        Text[ japanese ] = "StarOffice Basic ½¸ØÌßÄ‚ÍØ½Ä‚É‚ ‚éÃŞ¨Ú¸ÄØ‚©‚ç‚Å‚µ‚©Às‚³‚ê‚Ü‚¹‚ñB@";
-        Text[ chinese_traditional ] = "¥u°õ¦æ²M³æ¤§¤¤ªº\nStarOffice Basic©R¥O½Z¡C";
-        Text[ arabic ] = "ÓíÊã ÊäİíĞ StarOffice Basic scripts ãä ÇáÏáÇÆá ÇáãæÌæÏÉ İí ÇáŞÇÆãÉ İŞØ.";
-        Text[ greek ] = "Ç åêôİëåóç ôùí StarOffice Basic Scripts èá ãßíåôáé ìüíï áğü ôïõò êáôáëüãïõò ğïõ ğåñéİ÷ïíôáé óôçí ëßóôá.";
-        Text[ korean ] = "StarOffice Basic ½ºÅ©¸³Æ®´Â ¸ñ·ÏÀÇ µğ·ºÅä¸®¿¡¼­¸¸ ½ÇÇàµË´Ï´Ù.";
-        Text[ turkish ] = "StarOffice Basic script'leri yalnızca listedeki dizinlerden yürütülecek.";
+        Text [ english_us ] = "%PRODUCTNAME Basic scripts will be executed only from directories in the list." ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic-Scripte werden nur aus Verzeichnissen der Liste ausgeführt." ;
+        Text [ swedish ] = "%PRODUCTNAME Basic-skript utförs endast från katalogerna i listan." ;
+        Text [ danish ] = "%PRODUCTNAME Basic-scripter bliver kun udført fra biblioteker i listen." ;
+        Text [ italian ] = "Gli Script di %PRODUCTNAME Basic vengono eseguiti solo dalle cartelle dell'elenco." ;
+        Text [ spanish ] = "Los scripts %PRODUCTNAME Basic se ejecutarán solo a partir de los directorios de la lista." ;
+        Text [ french ] = "Seuls les scripts %PRODUCTNAME Basic contenus dans la liste des répertoires seront exécutés." ;
+        Text [ dutch ] = "%PRODUCTNAME Basic-scripts worden alleen uitgevoerd vanuit mappen uit de lijst." ;
+        Text [ portuguese ] = "Os scripts %PRODUCTNAME Basic são apenas executados a partir de directórios da lista." ;
+        Text[ chinese_simplified ] = "Ö»Ö´ĞĞÁĞ±í¼ÇÂ¼\nÖĞµÄ%PRODUCTNAME Basic½Å±¾¡£";
+        Text[ russian ] = "Ñêğèïòû %PRODUCTNAME Basic âûïîëíÿşòñÿ òîëüêî èç êàòàëîãîâ ñïèñêà.";
+        Text[ polish ] = "Skrypty %PRODUCTNAME Basic wykonane bêd¹ tylko z katalogów list.";
+        Text[ japanese ] = "%PRODUCTNAME Basic ½¸ØÌßÄ‚ÍØ½Ä‚É‚ ‚éÃŞ¨Ú¸ÄØ‚©‚ç‚Å‚µ‚©Às‚³‚ê‚Ü‚¹‚ñB@";
+        Text[ chinese_traditional ] = "¥u°õ¦æ²M³æ¤§¤¤ªº\n%PRODUCTNAME Basic©R¥O½Z¡C";
+        Text[ arabic ] = "ÓíÊã ÊäİíĞ %PRODUCTNAME Basic scripts ãä ÇáÏáÇÆá ÇáãæÌæÏÉ İí ÇáŞÇÆãÉ İŞØ.";
+        Text[ greek ] = "Ç åêôİëåóç ôùí %PRODUCTNAME Basic Scripts èá ãßíåôáé ìüíï áğü ôïõò êáôáëüãïõò ğïõ ğåñéİ÷ïíôáé óôçí ëßóôá.";
+        Text[ korean ] = "%PRODUCTNAME Basic ½ºÅ©¸³Æ®´Â ¸ñ·ÏÀÇ µğ·ºÅä¸®¿¡¼­¸¸ ½ÇÇàµË´Ï´Ù.";
+        Text[ turkish ] = "%PRODUCTNAME Basic script'leri yalnızca listedeki dizinlerden yürütülecek.";
         Text[ language_user1 ] = " ";
     };
     FixedText FI_STARBASIC_DISCRIPTION_NEVER
@@ -2106,24 +2123,24 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         /* ### ACHTUNG: Neuer Text in Resource? Es werden kein StarBasic-Scripte ausgeführt. : Es werden kein StarBasic-Scripte ausgef³hrt. */
         Text = "Es werden kein StarBasic-Scripte ausgeführt." ;
         Text [ English ] = "StarBasic scripts won't be executed." ;
-        Text [ english_us ] = "StarOffice Basic scripts won't be executed." ;
-        Text [ portuguese_brazilian ] = "Es werden kein StarOffice Basic-Scripte ausgeführt." ;
-        Text [ swedish ] = "Inga StarOffice Basic-skript utförs." ;
-        Text [ danish ] = "StarOffice Basic-scripter bliver ikke udført." ;
-        Text [ italian ] = "Gli Script StarOffice Basic non vengono eseguiti." ;
-        Text [ spanish ] = "No se ejecutan ningunos scripts de StarOffice Basic." ;
-        Text [ french ] = "Aucun script StarOffice Basic ne sera exécuté." ;
-        Text [ dutch ] = "Er worden geen StarOffice Basic-scripts uitgevoerd." ;
-        Text [ portuguese ] = "Não serão executados nenhuns scripts StarOffice Basic." ;
-        Text[ chinese_simplified ] = "²»Ê¹ÓÃ StarOffice Basic ½Å±¾¡£";
-        Text[ russian ] = "Âûïîëíèòü ñêğèïòû StarOffice Basic íåâîçìîæíî.";
-        Text[ polish ] = "Skrypty StarOffice Basic nie bêd¹ wykonywane.";
-        Text[ japanese ] = "StarOffice Basic ½¸ØÌßÄ‚ÍÀs‚³‚ê‚Ü‚¹‚ñB";
-        Text[ chinese_traditional ] = "¤£¨Ï¥ÎStarOffice Basic©R¥O½Z¡C";
-        Text[ arabic ] = "áä íÊã ÊäİíĞ StarOffice Basic scripts.";
-        Text[ greek ] = "Äåí èá åêôåëïıíôáé StarOffice Basic Scripts";
-        Text[ korean ] = "StarOffice Basic ½ºÅ©¸³Æ®´Â ½ÇÇàµÇÁö ¾Ê½À´Ï´Ù.";
-        Text[ turkish ] = "StarOffice Basic script'leri yürütülmeyecek.";
+        Text [ english_us ] = "%PRODUCTNAME Basic scripts won't be executed." ;
+        Text [ portuguese_brazilian ] = "Es werden kein %PRODUCTNAME Basic-Scripte ausgeführt." ;
+        Text [ swedish ] = "Inga %PRODUCTNAME Basic-skript utförs." ;
+        Text [ danish ] = "%PRODUCTNAME Basic-scripter bliver ikke udført." ;
+        Text [ italian ] = "Gli Script %PRODUCTNAME Basic non vengono eseguiti." ;
+        Text [ spanish ] = "No se ejecutan ningunos scripts de %PRODUCTNAME Basic." ;
+        Text [ french ] = "Aucun script %PRODUCTNAME Basic ne sera exécuté." ;
+        Text [ dutch ] = "Er worden geen %PRODUCTNAME Basic-scripts uitgevoerd." ;
+        Text [ portuguese ] = "Não serão executados nenhuns scripts %PRODUCTNAME Basic." ;
+        Text[ chinese_simplified ] = "²»Ê¹ÓÃ %PRODUCTNAME Basic ½Å±¾¡£";
+        Text[ russian ] = "Âûïîëíèòü ñêğèïòû %PRODUCTNAME Basic íåâîçìîæíî.";
+        Text[ polish ] = "Skrypty %PRODUCTNAME Basic nie bêd¹ wykonywane.";
+        Text[ japanese ] = "%PRODUCTNAME Basic ½¸ØÌßÄ‚ÍÀs‚³‚ê‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "¤£¨Ï¥Î%PRODUCTNAME Basic©R¥O½Z¡C";
+        Text[ arabic ] = "áä íÊã ÊäİíĞ %PRODUCTNAME Basic scripts.";
+        Text[ greek ] = "Äåí èá åêôåëïıíôáé %PRODUCTNAME Basic Scripts";
+        Text[ korean ] = "%PRODUCTNAME Basic ½ºÅ©¸³Æ®´Â ½ÇÇàµÇÁö ¾Ê½À´Ï´Ù.";
+        Text[ turkish ] = "%PRODUCTNAME Basic script'leri yürütülmeyecek.";
         Text[ language_user1 ] = " ";
     };
     Text[ chinese_simplified ] = "½Å±¾";
