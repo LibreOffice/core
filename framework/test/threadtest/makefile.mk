@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:22:04 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:40:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,7 @@ APP1OBJS=		$(SLO)$/threadtest.obj							\
 
 # [ed] 6/16/02 Add the transaction manager library on OS X
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 APP1OBJS+=	$(SLO)$/transactionmanager.obj
 .ENDIF
 
