@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xformsapi.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:15:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:26:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,10 +262,15 @@ static SvXMLTokenMapEntry aTypes[] =
     TOKEN_MAP_ENTRY( XSD, BOOLEAN ),
     TOKEN_MAP_ENTRY( XSD, ANYURI ),
     TOKEN_MAP_ENTRY( XSD, DATETIME_XSD ),
+    TOKEN_MAP_ENTRY( XSD, DATE ),
+    TOKEN_MAP_ENTRY( XSD, TIME ),
+    TOKEN_MAP_ENTRY( XSD, YEAR ),
+    TOKEN_MAP_ENTRY( XSD, MONTH ),
+    TOKEN_MAP_ENTRY( XSD, DAY ),
     XML_TOKEN_MAP_END
 };
 
-rtl::OUString lcl_getTypeName(
+sal_uInt16 lcl_getTypeClass(
     const Reference<XDataTypeRepository>& xRepository,
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName )
@@ -276,12 +281,11 @@ rtl::OUString lcl_getTypeName(
     SvXMLTokenMap aMap( aTypes );
     sal_uInt16 mnToken = aMap.Get( nPrefix, sLocalName );
 
-    OUString sTypeName = rXMLName;
+    sal_uInt16 nTypeClass = com::sun::star::xsd::DataTypeClass::STRING;
     if( mnToken != XML_TOK_UNKNOWN )
     {
         // we found an XSD name: then get the proper API name for it
         DBG_ASSERT( xRepository.is(), "can't find type without repository");
-        sal_uInt16 nTypeClass = com::sun::star::xsd::DataTypeClass::STRING;
         switch( mnToken )
         {
         case XML_STRING:
@@ -305,31 +309,68 @@ rtl::OUString lcl_getTypeName(
         case XML_DATETIME_XSD:
             nTypeClass = com::sun::star::xsd::DataTypeClass::DATETIME;
             break;
+        case XML_DATE:
+            nTypeClass = com::sun::star::xsd::DataTypeClass::DATE;
+            break;
+        case XML_TIME:
+            nTypeClass = com::sun::star::xsd::DataTypeClass::TIME;
+            break;
+        case XML_YEAR:
+            nTypeClass = com::sun::star::xsd::DataTypeClass::gYear;
+            break;
+        case XML_DAY:
+            nTypeClass = com::sun::star::xsd::DataTypeClass::gDay;
+            break;
+        case XML_MONTH:
+            nTypeClass = com::sun::star::xsd::DataTypeClass::gMonth;
+            break;
 
             /* data types not yet supported:
             nTypeClass = com::sun::star::xsd::DataTypeClass::DURATION;
-            nTypeClass = com::sun::star::xsd::DataTypeClass::TIME;
-            nTypeClass = com::sun::star::xsd::DataTypeClass::DATE;
             nTypeClass = com::sun::star::xsd::DataTypeClass::gYearMonth;
-            nTypeClass = com::sun::star::xsd::DataTypeClass::gYear;
             nTypeClass = com::sun::star::xsd::DataTypeClass::gMonthDay;
-            nTypeClass = com::sun::star::xsd::DataTypeClass::gDay;
-            nTypeClass = com::sun::star::xsd::DataTypeClass::gMonth;
             nTypeClass = com::sun::star::xsd::DataTypeClass::hexBinary;
             nTypeClass = com::sun::star::xsd::DataTypeClass::base64Binary;
             nTypeClass = com::sun::star::xsd::DataTypeClass::QName;
             nTypeClass = com::sun::star::xsd::DataTypeClass::NOTATION;
             */
         }
+    }
 
-        try
-        {
-            sTypeName = xRepository->getBasicDataType(nTypeClass)->getName();
-        }
-        catch( const Exception& )
-        {
-            DBG_ERROR( "exception during type creation" );
-        }
+    return nTypeClass;
+}
+
+
+rtl::OUString lcl_getTypeName(
+    const Reference<XDataTypeRepository>& xRepository,
+    const SvXMLNamespaceMap& rNamespaceMap,
+    const OUString& rXMLName )
+{
+    OUString sLocalName;
+    sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName(rXMLName, &sLocalName);
+    SvXMLTokenMap aMap( aTypes );
+    sal_uInt16 mnToken = aMap.Get( nPrefix, sLocalName );
+    return ( mnToken == XML_TOK_UNKNOWN )
+        ? rXMLName
+        : lcl_getBasicTypeName( xRepository, rNamespaceMap, rXMLName );
+}
+
+rtl::OUString lcl_getBasicTypeName(
+    const Reference<XDataTypeRepository>& xRepository,
+    const SvXMLNamespaceMap& rNamespaceMap,
+    const OUString& rXMLName )
+{
+    OUString sTypeName = rXMLName;
+    try
+    {
+        sTypeName =
+            xRepository->getBasicDataType(
+                lcl_getTypeClass( xRepository, rNamespaceMap, rXMLName ) )
+            ->getName();
+    }
+    catch( const Exception& )
+    {
+        DBG_ERROR( "exception during type creation" );
     }
     return sTypeName;
 }
