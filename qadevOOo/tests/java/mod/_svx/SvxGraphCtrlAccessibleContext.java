@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxGraphCtrlAccessibleContext.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2003-05-27 13:36:12 $
+ *  last change: $Date: 2003-09-08 12:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,27 @@
 
 package mod._svx;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.AccessibilityTools;
+import util.DrawTools;
+import util.SOfficeFactory;
+import util.utils;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XExtendedToolkit;
 import com.sun.star.awt.XWindow;
-import com.sun.star.awt.Rectangle;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.XIndexAccess;
 import com.sun.star.drawing.XShape;
 import com.sun.star.frame.XController;
-import com.sun.star.frame.XModel;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
@@ -78,19 +89,6 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 import com.sun.star.view.XSelectionSupplier;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.awt.XExtendedToolkit;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.SOfficeFactory;
-import util.DrawTools;
-import util.utils;
 
 
 /**
@@ -206,7 +204,6 @@ public class SvxGraphCtrlAccessibleContext extends TestCase{
         //selecting the inserted shape
         final XSelectionSupplier SelSupp = (XSelectionSupplier)
                 UnoRuntime.queryInterface(XSelectionSupplier.class,xController);
-        final XShape shape = oShape;
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
