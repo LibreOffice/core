@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: jp $ $Date: 2000-09-27 17:33:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,10 +705,6 @@ IMAGE_SETEVENT:
 
         // JP 28.05.96: dann suche doch mal in unserem QuickDraw-Cache, ob
         //              die Groesse dieser Grafik schon vorhanden ist.
-
-// Code for the new GraphicObject
-#ifdef USE_GRFOBJECT
-
         bGrfSzValid =
 #ifdef NEW_GRFOBJ
             FindGrfSizeFromCache( sGrfNm, aGrfSz )
@@ -716,14 +712,6 @@ IMAGE_SETEVENT:
                 FALSE;
 #endif
             ;
-
-#else
-// USE_GRFOBJECT
-
-        bGrfSzValid = FindGrfSizeFromCache( sGrfNm, aGrfSz );
-
-#endif
-// USE_GRFOBJECT
 
         // Wenn die Grfik in einer Tabelle steht, wird sie gleich
         // angefordert, damit sie eventuell schon da ist, bevor die
@@ -819,9 +807,6 @@ IMAGE_SETEVENT:
     {
         // Breite und Hoehe wurden angegeben und brauchen nicht gesetzt
         // zu werden
-// Code for the new GraphicObject
-#ifdef USE_GRFOBJECT
-
         bGrfSzValid =
 #ifdef NEW_GRFOBJ
         FindGrfSizeFromCache( sGrfNm, aGrfSz )
@@ -829,14 +814,6 @@ IMAGE_SETEVENT:
             FALSE;
 #endif
         ;
-
-
-#else
-// USE_GRFOBJECT
-
-        bGrfSzValid = FindGrfSizeFromCache( sGrfNm, aGrfSz );
-#endif
-// USE_GRFOBJECT
 
         bSetTwipSize = FALSE;
 
@@ -1607,11 +1584,14 @@ void SwHTMLParser::StripTrailingPara()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlgrin.cxx,v 1.1.1.1 2000-09-18 17:14:55 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/htmlgrin.cxx,v 1.2 2000-09-27 17:33:15 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:55  hr
+      initial import
+
       Revision 1.130  2000/09/18 16:04:45  willem.vandorp
       OpenOffice header added.
 

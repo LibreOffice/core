@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtypes.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: jp $ $Date: 2000-09-27 17:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,15 +161,6 @@
 #include <sectfrm.hxx>
 #endif
 
-// ! Code for the new GraphicObject
-#ifndef USE_GRFOBJECT
-
-#ifndef _GRFCACHE_HXX
-#include <grfcache.hxx>
-#endif
-
-#endif
-
 using namespace ::com::sun::star;
 using namespace ::utl;
 
@@ -212,13 +203,6 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtFrm,     50,  50 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableFmt, 10, 10 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableLineFmt, 10, 10 )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTableBoxFmt, 50, 50 )
-
-// ! Code for the new GraphicObject
-#ifndef USE_GRFOBJECT
-
-IMPL_FIXEDMEMPOOL_NEWDEL( SwGraphicCacheObj, 50, 50 )
-
-#endif
 
 
 #ifndef PROFILE

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: jp $ $Date: 2000-09-27 17:34:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,16 +300,6 @@
 #include <breakit.hxx>
 #endif
 
-// ! Code for the new GraphicObject
-#ifndef USE_GRFOBJECT
-
-#ifndef _GRFCACHE_HXX
-#include <grfcache.hxx>
-#endif
-
-#endif
-
-
 extern void _FrmFinit();
 extern void ClearFEShellTabCols();
 
@@ -551,14 +541,6 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
 USHORT* SwAttrPool::pVersionMap1 = 0;
 USHORT* SwAttrPool::pVersionMap2 = 0;
 USHORT* SwAttrPool::pVersionMap3 = 0;
-
-// ! Code for the new GraphicObject
-#ifndef USE_GRFOBJECT
-
-SwGraphicCache* SwGraphicCacheObj::pGrfCache = 0;
-
-#endif
-
 SwIndexReg* SwIndexReg::pEmptyIndexArray = 0;
 
 const sal_Char* __FAR_DATA pMarkToTable     = "table";
@@ -858,13 +840,6 @@ void _InitCore()
     SwSelPaintRects::pMapMode = new MapMode;
     SwFntObj::pPixMap = new MapMode;
 
-// ! Code for the new GraphicObject
-#ifndef USE_GRFOBJECT
-    // Grafik-Cache Klasse anlegen
-    SwGraphicCacheObj::pGrfCache = new SwGraphicCache;
-
-#endif
-
     SwIndexReg::pEmptyIndexArray = new SwIndexReg;
 
     pGlobalOLEExcludeList = new SvPtrarr;
@@ -887,14 +862,6 @@ void _FinitCore()
 
     delete pBreakIt;
     delete pAppCharClass;
-
-// ! Code for the new GraphicObject
-#ifndef USE_GRFOBJECT
-
-    // Grafik-Cache Klasse zerstoeren
-    delete SwGraphicCacheObj::pGrfCache;
-
-#endif
 
     // das default TableAutoFormat zerstoeren
     delete SwTableAutoFmt::pDfltBoxAutoFmt;
