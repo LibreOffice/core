@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:21:11 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 14:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ String ERR_INET_NAME_RESOLVE
     Text [ swedish ] = "Det gick inte att lösa upp datornamnet\n" ;
     Text [ danish ] = "Det var ikke muligt at fortolke computernavnet\n" ;
     Text [ portuguese ] = "Impossível resolver o nome do computador.\n" ;
-    Text [ portuguese_brazilian ] = "Der Rechnername konnte nicht aufgelöst werden\n" ;
+    Text [ portuguese_brazilian ] = "Der Rechnername konnte nicht aufgel?t werden\n" ;
     Text[ chinese_simplified ] = "ÎŞ·¨ÕÒµ½Ö÷»úµØÖ·\n";
     Text[ russian ] = "Îïğåäåëèòü èìÿ êîìïşòåğà íå óäàåòñÿ\n";
     Text[ polish ] = "Nazwy komputera nie mo¿na by³o przetworzyæ\n";
@@ -126,7 +126,7 @@ String ERR_INET_READ
     Text [ swedish ] = "Data kunde inte läsas via Internet.\nServerfelmeddelande: $(ARG1)" ;
     Text [ danish ] = "Det var ikke muligt at indlæse data over Internettet.\nServerfejlmelding: $(ARG1)" ;
     Text [ portuguese ] = "Foi impossível ler os dados via Internet.\nMensagem de erro do servidor: $(ARG1)" ;
-    Text [ portuguese_brazilian ] = "Daten konnten nicht über das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
+    Text [ portuguese_brazilian ] = "Daten konnten nicht ?er das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)" ;
     Text[ chinese_simplified ] = "ÎŞ·¨Í¨¹ı¹ú¼Ê»¥ÁªÍø¶ÁÈ¡Êı¾İ¡£\n·şÎñÆ÷±¨¸æ´íÎó£º$(ARG1)";
     Text[ russian ] = "Ïğî÷èòàòü äàííûå ÷åğåç Èíòåğíåò íå óäàåòñÿ.\nÑîîáùåíèå îøèáêè ñ ñåğâåğà: $(ARG1)";
     Text[ polish ] = "Danych nie mo¿na odczytaæ przez Internet. \nKomunikat o b³êdzie serwera: $(ARG1)";
@@ -151,7 +151,7 @@ String ERR_INET_WRITE
     Text [ swedish ] = "Data kunde inte överföras till Internet.\nServerfelmeddelande: $(ARG1)" ;
     Text [ danish ] = "Det var ikke muligt at overføre data til Internettet.\nServerfejlmelding: $(ARG1)" ;
     Text [ portuguese ] = "Foi impossível transmitir dados para a Internet.\nMensagem de erro do servidor: $(ARG1)" ;
-    Text [ portuguese_brazilian ] = "Daten konnten nicht ins Internet übertragen werden.\nServerfehlermeldung: $(ARG1)" ;
+    Text [ portuguese_brazilian ] = "Daten konnten nicht ins Internet ?ertragen werden.\nServerfehlermeldung: $(ARG1)" ;
     Text[ chinese_simplified ] = "ÎŞ·¨Ïò¹ú¼Ê»¥ÁªÍø´«µİÊı¾İ¡£\n·şÎñÆ÷±¨¸æ´íÎó£º$(ARG1)";
     Text[ russian ] = "Ïåğåäàòü äàííûå â Èíòåğíåò íå óäàåòñÿ.\nÑîîáùåíèå îøèáêè ñ ñåğâåğà: $(ARG1)";
     Text[ polish ] = "Danych nie mo¿na przes³aæ przez Internet.\nKomunikat o b³êdzie z serwera: $(ARG1)";
@@ -294,7 +294,7 @@ String ERR_FILENAMECHECK83
     Text [ english ] = "Der eingegebene Dateiname ist ungültig.\nBitte beachten sie, daß der Dateiname maximal 8 Zeichen\n und die Dateierweiterung maximal 3 Zeichen lang sein dürfen." ;
     Text [ english_us ] = "The file name entered is invalid.\nPlease note that file names may not exceed 8 characters\n and the file extension may only consist of 3 characters." ;
     Text [ portuguese ] = "O nome do ficheiro indicado não é válido.\nO nome do ficheiro deverá ter no máximo 8 caracteres\n e a respectiva extensão o máximo de 3." ;
-    Text [ portuguese_brazilian ] = "Der eingegebene Dateiname ist ungültig.\nBitte beachten sie, daß der Dateiname maximal 8 Zeichen\n und die Dateierweiterung maximal 3 Zeichen lang sein dürfen." ;
+    Text [ portuguese_brazilian ] = "Der eingegebene Dateiname ist ung?tig.\nBitte beachten sie, da? der Dateiname maximal 8 Zeichen\n und die Dateierweiterung maximal 3 Zeichen lang sein d?fen." ;
     Text [ swedish ] = "Det inmatade filnamnet är ogiltigt.\nVar vänlig och se till att filnamnet innehåller maximalt 8 tecken\n och filnamnstillägget maximalt 3 tecken." ;
     Text [ danish ] = "Det indtastede navn er ugyldigt.\nBemærk venligst at filnavnet højst må indeholde 8 tegn \nog filypenavnet højst må bestå af 3 tegn." ;
     Text [ italian ] = "Il nome del file digitato non è valido.\nTenete presente che il nome del file può avere una lunghezza massima di 8 caratteri\ne l'estensione del file di 3." ;
@@ -307,7 +307,7 @@ String ERR_FILENAMECHECK83
     Text[ japanese ] = "w’è‚µ‚½Ì§²Ù–¼‚ª–³Œø‚Å‚·B\nÌ§²Ù–¼‚ÍÅ‚8•¶š‚Ü‚ÅA\nÌ§²ÙŠg’£q‚ÍÅ‚3•¶š‚Ü‚Å‚Æ§ŒÀ‚ª‚ ‚è‚Ü‚·B’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢B";
     Text[ chinese_traditional ] = "¿é¤JªºÀÉ®×¦WµL®Ä¡C\n½Ğ±z¯d·NÀÉ®×¦W¤£±o¶W¹L8­Ó¦r¤¸¡C\n°ÆÀÉ¦W¤£±o¶W¹L 3 ­Ó¦r¤¸¡C";
     Text[ arabic ] = "ÇÓã Çáãáİ ÇáãõÏÎá ÛíÑ ÕÇáÍ.\n ÇáÑÌÇÁ ãáÇÍÙÉ Ãä ÇÓã Çáãáİ íÌÈ ÃáÇ íÒíÏ Úä\nËãÇäíÉ ÍÑæİ æÇãÊÏÇÏå Úä ËáÇËÉ.";
-    Text[ greek ] = "Ôï åğéëåãìİíï üíïìá áñ÷åßïõ äåí åßíáé İãêõñï.\nĞáñáêáëş ğñïóİîôå üôé äåí åğéôñİğåôáé ôï üíïìá ôïõ áñ÷åßïõ íá õğåñâáßíåé ôïõò 8 ÷áñáêôŞñåò\n êáé ç åğİêôáóç íá ğåñéİ÷åé ğÜíù áğü 3 ÷áñáêôŞñåò.";
+    Text[ greek ] = "Ôï åğéëåãìİíï üíïìá áñ÷åßïõ äåí åßíáé İãêõñï.\nĞáñáêáëş ğñïóİîôå üôé äåí åğéôñİğåôáé ôï üíïìá ôïõ áñ÷åßïõ íá õğåñâáßíåé ôïõò 8 ÷áñáêôŞñåò\n ?";
     Text[ korean ] = "ÁöÁ¤µÈ ÆÄÀÏ ÀÌ¸§ÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù.\nÆÄÀÏÀÇ ÀÌ¸§ÀÌ 8¹®ÀÚ¸¦ ÃÊ°úÇÒ ¼ö ¾ø´Ù´ÂÁ¡°ú   \n È®ÀåÀÚ°¡3¹®ÀÚ¸¦ ÃÊ°ú ÇÒ¼ö ¾ø´Ù´ÂÁ¡¿¡ À¯ÀÇÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Girilen dosya adı geçerli değil.\nDosya adı en fazla 8 ve dosyan\\uzantısı en fazla 3 karakter uzunluğunda olabilir.";
     Text[ catalan ] = "El nombre del archivo especificado no es válido.\\Tenga en cuenta que el nombre debe tener un máximo de 8 caracteres\ny la terminación 3.";
@@ -318,7 +318,7 @@ String ERR_INSUFFICIENTDISKSPACE
     Text = "Die Datei %1 wird größer als der zur Verfügung stehende Plattenplatz.\nWollen Sie fortfahren ?\n" ;
     Text [ english_us ] = "The file %1 exceeds the available disk space.\nDo you want to continue anyway?\n" ;
     Text[ italian ] = "Il file %1 occupa più spazio di quello disponibile sul disco.\nVolete continuare?\n";
-    Text[ portuguese_brazilian ] = "Die Datei %1 wird größer als der zur Verfügung stehende Plattenplatz.\nWollen Sie fortfahren ?\n";
+    Text[ portuguese_brazilian ] = "Die Datei %1 wird gr?er als der zur Verf?ung stehende Plattenplatz.\nWollen Sie fortfahren ?\n";
     Text[ portuguese ] = "O ficheiro %1 excede o espaço disponível no disco.\nContinuar?\n";
     Text[ danish ] = "Filen %1 overskrider den tilgængelige diskplads.\nVil du fortsætte alligevel?\n";
     Text[ french ] = "La taille du fichier %1 dépasse l'espace libre sur votre disque dur.\nSouhaitez-vous poursuivre ?\n";
@@ -327,7 +327,7 @@ String ERR_INSUFFICIENTDISKSPACE
     Text[ spanish ] = "El tamaño del archivo %1 excederá al del disponible en el disco.\n¿Desea continuar?\n";
     Text[ chinese_simplified ] = "ÎÄ¼ş %1 ËùĞè¿Õ¼ä´óÓÚÏÖÓĞµÄ¿ÉÓÃ¿Õ¼ä¡£\nÄúÒª¼ÌĞøÂğ£¿\n";
     Text[ russian ] = "Îáúåì ôàéëà %1 áîëüøå, ÷åì îáúåì äîñòóïíîãî íà äèñêå ìåñòà.\nÂñå ğàâíî ïğîäîëæàòü?\n";
-    Text[ polish ] = "Plik %1 przewy¿sza iloœæ miejsca na dysku.\nKontynuowaæ ?\n";
+    Text[ polish ] = "Plik %1 przewy¿sza ilo?æ miejsca na dysku.\nKontynuowaæ ?\n";
     Text[ japanese ] = "Ì§²Ù %1‚Í‹ó‚«ÃŞ½¸—e—Ê—Ìˆæ‚ğ‰z‚¦‚Ä‚¢‚Ü‚·¡\n‘±s‚µ‚Ü‚·‚©?\n";
     Text[ chinese_traditional ] = "ÀÉ®× %1 ©Ò»İªÅ¶¡¤j©ó²{¦sªº¥i¥ÎªÅ¶¡¡C\n­nÄ~Äò¡S\n";
     Text[ arabic ] = "Óæİ íÕÈÍ Çáãáİ %1 ÃßÈÑ ãä ÇáãÓÇÍÉ ÇáãÊÇÍÉ Úáì ÇáŞÑÕ.\nåá ÊÑíÏ ÇáãÊÇÈÚÉ¿\n";
@@ -353,7 +353,7 @@ String STR_DOWNLOAD_SOURCE
     Text [ portuguese_brazilian ] = "Quelle" ;
     Text [ chinese_simplified ] = "Ô´";
     Text [ russian ] = "Èñòî÷íèê";
-    Text [ polish ] = "ród³o";
+    Text [ polish ] = "?ród³o";
     Text [ japanese ] = "¿°½";
     Text [ chinese_traditional ] = "¸ê®Æ¨Ó·½";
     Text [ arabic ] = "ÇáãÕÏÑ";
@@ -481,7 +481,7 @@ Resource RID_DLSTATUS2
         Text [ portuguese ] = "Ligação com: $(HOST). Esperando resposta ..." ;
         Text[ chinese_simplified ] = "Á¬½Ó£º$(HOST)¡£ÕıÔÚµÈºò»ØÓ¦...";
         Text[ russian ] = "Ïîäêëş÷åíèå ê: $(HOST). Æäèòå îòâåòà...";
-        Text[ polish ] = "Po³¹czenie z: $(HOST). Czekanie na odpowiedŸ...";
+        Text[ polish ] = "Po³¹czenie z: $(HOST). Czekanie na odpowied?...";
         Text[ japanese ] = "Ú‘±æ:$(HOST)B‰“š‚ğ‘Ò‚Á‚Ä‚¢‚Ü‚·...";
         Text[ chinese_traditional ] = "³s½u¨ì¡G$(HOST)¡C¥¿¦bµ¥­Ôµª´_...";
         Text[ arabic ] = "ÇáÇÊÕÇá ÈÜ: $(HOST). İí ÇäÊÙÇÑ ÇáÑÏ...";
@@ -506,7 +506,7 @@ Resource RID_DLSTATUS2
         Text [ swedish ] = "$(TARGET) öppnas på $(HOST)" ;
         Text [ danish ] = "Åbner: $(TARGET) på $(HOST)" ;
         Text [ portuguese ] = "Abrir: $(TARGET) em $(HOST)" ;
-        Text [ portuguese_brazilian ] = "Geöffnet wird: $(TARGET) auf $(HOST)" ;
+        Text [ portuguese_brazilian ] = "Ge?fnet wird: $(TARGET) auf $(HOST)" ;
         Text[ chinese_simplified ] = "´ò¿ª£º $(HOST)ÉÏµÄ$(TARGET)";
         Text[ russian ] = "Îòêğûâàåòÿ: $(TARGET) â $(HOST)";
         Text[ polish ] = "Otwarte zostanie: $(TARGET) na $(HOST)";
@@ -533,7 +533,7 @@ Resource RID_DLSTATUS2
         Text [ dutch ] = "Geladen wordt: $(TARGET) Gelezen: $(BYTE)" ;
         Text [ swedish ] = "Överförs: $(TARGET) Läst: $(BYTE)" ;
         Text [ danish ] = "Overfører: $(TARGET) Indlæst: $(BYTE)" ;
-        Text [ portuguese_brazilian ] = "Übertragen wird: $(TARGET) Gelesen: $(BYTE)" ;
+        Text [ portuguese_brazilian ] = "?bertragen wird: $(TARGET) Gelesen: $(BYTE)" ;
         Text [ portuguese ] = "Transferir: $(TARGET) Lidos: $(BYTE)" ;
         Text[ chinese_simplified ] = "´«µİ£º$(TARGET)ÒÑ¾­ÔÄ¶Á£º$(BYTE)";
         Text[ russian ] = "Ïåğåäàåòñÿ: $(TARGET) Ïğî÷èòàíî: $(BYTE)";
