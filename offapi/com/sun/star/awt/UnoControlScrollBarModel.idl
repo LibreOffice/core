@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlScrollBarModel.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:35:39 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 10:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef __com_sun_star_awt_UnoControlScrollBarModel_idl__
 #define __com_sun_star_awt_UnoControlScrollBarModel_idl__
+
+#ifndef __com_sun_star_util_Color_idl__
+#include <com/sun/star/util/Color.idl>
+#endif
 
 #ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
@@ -163,14 +167,14 @@ service UnoControlScrollBarModel
 
     /** specifies the RGB color to be used for the control
     */
-    [optional, property] long BackgroundColor;
+    [optional, property] com::sun::star::util::Color BackgroundColor;
 
     //-------------------------------------------------------------------------
 
     /** specifies the RGB color to be used when painting symbols which are
         part of the control's appearance, such as the arrow buttons.
     */
-    [optional, property] long SymbolColor;
+    [optional, property] com::sun::star::util::Color SymbolColor;
 
     //-------------------------------------------------------------------------
 
