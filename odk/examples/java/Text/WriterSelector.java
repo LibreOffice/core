@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WriterSelector.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 16:01:02 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -63,7 +63,7 @@ import com.sun.star.beans.XPropertySet;
 /** This class gives you information on the selected objects (text range, text
  * frame, or graphics) at an OpenOffice.org Server. The Office must be started in
  * advance using the following command line option:
- * soffice "-accept=socket,host=localhost,port=8100;urp;StarOffice.ServiceManager"
+ * soffice "-accept=socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"
  */
 public class WriterSelector {
     /**
@@ -72,7 +72,7 @@ public class WriterSelector {
     public static void main(String args[]) {
         try {
             //the connection string to connect the office
-            String sConnectionString = "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";
+            String sConnectionString = "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager";
 
             // It is possible to use a different connection string, passed as argument
             if ( args.length == 1 ) {
