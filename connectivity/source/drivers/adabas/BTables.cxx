@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,9 +219,11 @@ void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQ
                                             + aDescription
                                             + ::rtl::OUString::createFromAscii("'");
                 xStmt->execute(aSql);
+                ::comphelper::disposeComponent(xStmt);
             }
         }
     }
+    ::comphelper::disposeComponent(xStmt);
 }
 // -------------------------------------------------------------------------
 // XDrop
@@ -266,6 +268,7 @@ void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQ
         aSql += sDot;
         aSql += m_xMetaData->getIdentifierQuoteString(  ) + aName + m_xMetaData->getIdentifierQuoteString(  );
         xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
         // if no exception was thrown we must delete it from the views
         if(bIsView)
         {
@@ -440,6 +443,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
     OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
         Reference< XStatement > xStmt = pConnection->createStatement(  );
     xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
 
     if(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION))).getLength())
         setComments(descriptor);

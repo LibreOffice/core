@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:12:05 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XRESULTSET_HPP_
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 
 // -------------------------------------------------------------------------
@@ -128,6 +131,7 @@ void OAdabasCatalog::refreshTables()
             aName += xRow->getString(3);
             aVector.push_back(aName);
         }
+        ::comphelper::disposeComponent(xResult);
     }
     if(m_pTables)
         m_pTables->reFill(aVector);
@@ -155,7 +159,10 @@ void OAdabasCatalog::refreshViews()
             aName += xRow->getString(2);
             aVector.push_back(aName);
         }
+        ::comphelper::disposeComponent(xResult);
     }
+    ::comphelper::disposeComponent(xStmt);
+
     if(m_pViews)
         m_pViews->reFill(aVector);
     else
@@ -173,7 +180,10 @@ void OAdabasCatalog::refreshGroups()
         Reference< XRow > xRow(xResult,UNO_QUERY);
         while(xResult->next())
             aVector.push_back(xRow->getString(1));
+        ::comphelper::disposeComponent(xResult);
     }
+    ::comphelper::disposeComponent(xStmt);
+
     if(m_pGroups)
         m_pGroups->reFill(aVector);
     else
@@ -191,7 +201,10 @@ void OAdabasCatalog::refreshUsers()
         Reference< XRow > xRow(xResult,UNO_QUERY);
         while(xResult->next())
             aVector.push_back(xRow->getString(1));
+        ::comphelper::disposeComponent(xResult);
     }
+    ::comphelper::disposeComponent(xStmt);
+
     if(m_pUsers)
         m_pUsers->reFill(aVector);
     else

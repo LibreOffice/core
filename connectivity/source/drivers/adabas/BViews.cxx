@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,8 +156,8 @@ Reference< XNamed > OViews::createObject(const ::rtl::OUString& _rName)
                                                                                 aSchema);
             xRet = pRet;
         }
+        ::comphelper::disposeComponent(xResult);
     }
-    ::comphelper::disposeComponent(xResult);
     ::comphelper::disposeComponent(xStmt);
 
     return xRet;
@@ -231,6 +231,7 @@ void SAL_CALL OViews::dropByName( const ::rtl::OUString& elementName ) throw(SQL
         aSql = aSql + sDot;
         aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aName + m_xMetaData->getIdentifierQuoteString(  );
         xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
     }
 
     OCollection_TYPE::dropByName(elementName);
@@ -271,6 +272,7 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
     OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
         Reference< XStatement > xStmt = pConnection->createStatement(  );
     xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
 
     // insert the new view also in the tables collection
     OTables* pTables = static_cast<OTables*>(static_cast<OAdabasCatalog&>(m_rParent).getPrivateTables());

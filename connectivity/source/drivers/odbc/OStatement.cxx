@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-18 11:22:29 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,10 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection )
     ,m_pRowStatusArray(0)
     ,m_aStatementHandle(SQL_NULL_HANDLE)
 {
+    osl_incrementInterlockedCount( &m_refCount );
     m_pConnection->acquire();
     m_aStatementHandle = m_pConnection->createStatementHandle();
+    osl_decrementInterlockedCount( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 OStatement_Base::~OStatement_Base()
@@ -176,9 +178,13 @@ void OStatement_BASE2::disposing()
     OSL_ENSURE(m_aStatementHandle,"OStatement_BASE2::disposing: StatementHandle is null!");
     N3SQLFreeStmt(m_aStatementHandle,SQL_RESET_PARAMS);
     N3SQLFreeStmt(m_aStatementHandle,SQL_UNBIND);
-    m_pConnection->freeStatementHandle(m_aStatementHandle);
+
     if (m_pConnection)
+    {
+        m_pConnection->freeStatementHandle(m_aStatementHandle);
         m_pConnection->release();
+        m_pConnection = NULL;
+    }
 
     dispose_ChildImpl();
     OStatement_Base::disposing();

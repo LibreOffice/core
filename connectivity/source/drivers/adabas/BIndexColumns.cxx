@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexColumns.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:49:44 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _CONNECTIVITY_ADABAS_CATALOG_HXX_
 #include "adabas/BCatalog.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 using namespace connectivity::adabas;
 using namespace connectivity::sdbcx;
@@ -96,8 +99,8 @@ using namespace ::com::sun::star::lang;
 Reference< XNamed > OIndexColumns::createObject(const ::rtl::OUString& _rName)
 {
 
-        Reference< XResultSet > xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getIndexInfo(Any(),
-        m_pIndex->getTable()->getSchema(),m_pIndex->getTable()->getTableName(),sal_False,sal_False);
+    Reference< XResultSet > xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getIndexInfo(Any(),
+                    m_pIndex->getTable()->getSchema(),m_pIndex->getTable()->getTableName(),sal_False,sal_False);
 
     sal_Bool bAsc = sal_True;
     if(xResult.is())
@@ -109,6 +112,7 @@ Reference< XNamed > OIndexColumns::createObject(const ::rtl::OUString& _rName)
             if(xRow->getString(9) == _rName)
                 bAsc = xRow->getString(10) != aD;
         }
+        ::comphelper::disposeComponent(xResult);
     }
 
     xResult = m_pIndex->getTable()->getConnection()->getMetaData()->getColumns(Any(),
@@ -140,6 +144,7 @@ Reference< XNamed > OIndexColumns::createObject(const ::rtl::OUString& _rName)
                 break;
             }
         }
+        ::comphelper::disposeComponent(xResult);
     }
 
     return xRet;

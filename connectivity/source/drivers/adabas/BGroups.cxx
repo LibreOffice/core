@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BGroups.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ void SAL_CALL OGroups::appendByDescriptor( const Reference< XPropertySet >& desc
 
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
 
     OCollection_TYPE::appendByDescriptor(descriptor);
 }
@@ -147,6 +148,7 @@ void SAL_CALL OGroups::dropByName( const ::rtl::OUString& elementName ) throw(SQ
 
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
 
     OCollection_TYPE::dropByName(elementName);
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,7 @@ void OAdabasTable::refreshColumns()
             Reference< XRow > xRow(xResult,UNO_QUERY);
             while(xResult->next())
                 aVector.push_back(xRow->getString(4));
+            ::comphelper::disposeComponent(xResult);
         }
     }
 
@@ -183,6 +184,7 @@ void OAdabasTable::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
             ::rtl::OUString aPkName = xRow->getString(6);
             _rKeys.push_back(aPkName);
         }
+        ::comphelper::disposeComponent(xResult);
     }
 }
 // -------------------------------------------------------------------------
@@ -195,6 +197,7 @@ void OAdabasTable::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
         Reference< XRow > xRow(xResult,UNO_QUERY);
         while(xResult->next())
             _rKeys.push_back(xRow->getString(12));
+        ::comphelper::disposeComponent(xResult);
     }
 }
 // -------------------------------------------------------------------------
@@ -242,6 +245,7 @@ void OAdabasTable::refreshIndexes()
                 }
                 sPreviousRoundName = aName;
             }
+            ::comphelper::disposeComponent(xResult);
         }
     }
 

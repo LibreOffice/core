@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUser.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:12:05 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,9 @@ void OAdabasUser::refreshGroups()
                 Reference< XRow > xRow(xResult,UNO_QUERY);
         while(xResult->next())
             aVector.push_back(xRow->getString(1));
+        ::comphelper::disposeComponent(xResult);
     }
+    ::comphelper::disposeComponent(xStmt);
 
     if(m_pGroups)
         m_pGroups->reFill(aVector);
@@ -243,7 +245,9 @@ void OAdabasUser::findPrivilegesAndGrantPrivileges(const ::rtl::OUString& objNam
                         nRightsWithGrant |= Privilege::REFERENCE;
                 }
             }
+            ::comphelper::disposeComponent(xRes);
         }
+        ::comphelper::disposeComponent(xStmt);
     }
 }
 // -------------------------------------------------------------------------
@@ -276,6 +280,7 @@ void SAL_CALL OAdabasUser::grantPrivileges( const ::rtl::OUString& objName, sal_
         Reference<XStatement> xStmt = m_pConnection->createStatement();
         if(xStmt.is())
             xStmt->execute(sGrant);
+        ::comphelper::disposeComponent(xStmt);
     }
 }
 // -------------------------------------------------------------------------
@@ -298,6 +303,7 @@ void SAL_CALL OAdabasUser::revokePrivileges( const ::rtl::OUString& objName, sal
         Reference<XStatement> xStmt = m_pConnection->createStatement();
         if(xStmt.is())
             xStmt->execute(sGrant);
+        ::comphelper::disposeComponent(xStmt);
     }
 }
 // -----------------------------------------------------------------------------
@@ -335,6 +341,7 @@ void SAL_CALL OAdabasUser::changePassword( const ::rtl::OUString& objPassword, c
         Reference<XStatement> xStmt = xConnection->createStatement();
         if(xStmt.is())
             xStmt->execute(sAlterPwd);
+        ::comphelper::disposeComponent(xStmt);
         if(bDisposeConnection)
             ::comphelper::disposeComponent(xConnection);
     }

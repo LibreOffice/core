@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)
                     break;
                 }
             }
+            ::comphelper::disposeComponent(xResult);
         }
     }
     else
@@ -267,6 +268,7 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
         // we need a name for the insertion
         if(nKeyType == KeyType::FOREIGN)
         {
@@ -284,6 +286,7 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
                         break;
                     }
                 }
+                ::comphelper::disposeComponent(xResult);
             }
         }
     }
@@ -318,6 +321,7 @@ void SAL_CALL OKeys::dropByName( const ::rtl::OUString& elementName ) throw(SQLE
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
     }
     OCollection_TYPE::dropByName(elementName);
 }

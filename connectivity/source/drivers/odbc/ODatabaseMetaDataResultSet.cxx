@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:13:20 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,12 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection
 // -------------------------------------------------------------------------
 ODatabaseMetaDataResultSet::~ODatabaseMetaDataResultSet()
 {
+    OSL_ENSURE(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed,"Object wasn't disposed!");
+    if(!ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed)
+    {
+        osl_incrementInterlockedCount( &m_refCount );
+        dispose();
+    }
     delete m_pRowStatusArray;
 }
 // -------------------------------------------------------------------------
@@ -224,22 +230,11 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 // -------------------------------------------------------------------------
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ODatabaseMetaDataResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-
-    columnIndex = mapColumn(columnIndex);
     return NULL;
 }
 
@@ -405,22 +400,12 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getInt( sal_Int32 columnIndex ) t
 
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-
     return 0;
 }
 // -------------------------------------------------------------------------
 
 sal_Int64 SAL_CALL ODatabaseMetaDataResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
-
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    columnIndex = mapColumn(columnIndex);
     return sal_Int64(0);
 }
 // -------------------------------------------------------------------------
@@ -437,9 +422,7 @@ Reference< XArray > SAL_CALL ODatabaseMetaDataResultSet::getArray( sal_Int32 col
 {
     return NULL;
 }
-
 // -------------------------------------------------------------------------
-
 Reference< XClob > SAL_CALL ODatabaseMetaDataResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     return NULL;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:12:05 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
                 break;
             }
         }
+        ::comphelper::disposeComponent(xResult);
     }
 
     return xRet;
@@ -210,6 +211,7 @@ void SAL_CALL OIndexes::appendByDescriptor( const Reference< XPropertySet >& des
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
     }
     OCollection_TYPE::appendByDescriptor(descriptor);
 }

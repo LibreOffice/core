@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUsers.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ void SAL_CALL OUsers::appendByDescriptor( const Reference< XPropertySet >& descr
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     if(xStmt.is())
         xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
 
     OCollection_TYPE::appendByDescriptor(descriptor);
 }
@@ -169,6 +170,8 @@ void SAL_CALL OUsers::dropByName( const ::rtl::OUString& elementName ) throw(SQL
                     ::dbtools::throwGenericSQLException(::rtl::OUString::createFromAscii("This user couldn't be deleted. Otherwise the database stays in a inconsistent state."),*this);
                 }
             }
+            ::comphelper::disposeComponent(xRes);
+            ::comphelper::disposeComponent(xStmt);
         }
     }
 
@@ -180,6 +183,7 @@ void SAL_CALL OUsers::dropByName( const ::rtl::OUString& elementName ) throw(SQL
         Reference< XStatement > xStmt = m_pConnection->createStatement(  );
         if(xStmt.is())
             xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
     }
 
     OCollection_TYPE::dropByName(elementName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BColumns.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 13:58:56 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,12 +113,12 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
 {
     Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getColumns(Any(),
-    m_pTable->getSchema(),m_pTable->getTableName(),_rName);
+                                                            m_pTable->getSchema(),m_pTable->getTableName(),_rName);
 
     Reference< XNamed > xRet = NULL;
     if(xResult.is())
     {
-                Reference< XRow > xRow(xResult,UNO_QUERY);
+        Reference< XRow > xRow(xResult,UNO_QUERY);
         while(xResult->next())
         {
             if(xRow->getString(4) == _rName)
@@ -140,6 +140,7 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
                 break;
             }
         }
+        ::comphelper::disposeComponent(xResult);
     }
 
     return xRet;
@@ -214,6 +215,7 @@ void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(S
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
     }
 
     OCollection_TYPE::dropByName(elementName);
@@ -238,6 +240,7 @@ void SAL_CALL OColumns::dropByIndex( sal_Int32 index ) throw(SQLException, Index
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
     }
     OCollection_TYPE::dropByIndex(index);
 }

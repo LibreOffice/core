@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 09:58:40 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _CONNECTIVITY_ADABAS_TABLE_HXX_
 #include "adabas/BTable.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
@@ -132,6 +135,7 @@ void OAdabasIndex::refreshColumns()
                         aVector.push_back(aColName);
                 }
             }
+            ::comphelper::disposeComponent(xResult);
         }
     }
     if(m_pColumns)

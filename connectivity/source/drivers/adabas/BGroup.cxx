@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BGroup.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-14 11:41:57 $
+ *  last change: $Author: oj $ $Date: 2001-10-02 13:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef _CONNECTIVITY_ADABAS_BCONNECTION_HXX_
 #include "adabas/BConnection.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
@@ -113,13 +116,16 @@ void OAdabasGroup::refreshUsers()
     aSql += getName( );
     aSql += ::rtl::OUString::createFromAscii("'");
 
-        Reference< XResultSet >  xResult = xStmt->executeQuery(aSql);
+    Reference< XResultSet >  xResult = xStmt->executeQuery(aSql);
     if(xResult.is())
     {
                 Reference< XRow > xRow(xResult,UNO_QUERY);
         while(xResult->next())
             aVector.push_back(xRow->getString(1));
+        ::comphelper::disposeComponent(xResult);
     }
+    ::comphelper::disposeComponent(xStmt);
+
     if(m_pUsers)
         m_pUsers->reFill(aVector);
     else
