@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: er $ $Date: 2001-11-15 11:08:20 $
+ *  last change: $Author: mt $ $Date: 2002-08-12 17:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,15 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_AWT_XEXTENDEDTOOLKIT_HPP_
+#include <drafts/com/sun/star/awt/XExtendedToolkit.hpp>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTOBJECT_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventObject.hpp>
+#endif
+
+
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 
 #include <cppuhelper/servicefactory.hxx>
@@ -95,6 +104,7 @@
 #include <osl/file.hxx>
 
 #include <svdata.hxx>
+#include <svapp.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -253,4 +263,14 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
 
     return aLibName;
 }
+
+void vcl::unohelper::NotifyAccessibleStateEventGlobally( const ::drafts::com::sun::star::accessibility::AccessibleEventObject& rEventObject )
+{
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::awt::XExtendedToolkit > xExtToolkit( Application::GetVCLToolkit(), uno::UNO_QUERY );
+    if ( xExtToolkit.is() )
+    {
+        // Method missing in interface, implement later!
+    }
+}
+
 
