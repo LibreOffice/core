@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-07 17:15:48 $
+ *  last change: $Author: oj $ $Date: 2000-11-14 13:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,15 +123,15 @@ void OCollection::disposing(void)
             (*aIter).second = Reference< XNamed >();
         }
     }
-    m_aNameMap.clear();
     m_aElements.clear();
+    m_aNameMap.clear();
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OCollection::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (Index < 0 || Index >= getCount())
-        throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(Index),*this);
 
     ObjectIter aIter = m_aElements[Index];
     Reference< XNamed > xName = (*aIter).second;
@@ -150,11 +150,11 @@ Any SAL_CALL OCollection::getByName( const ::rtl::OUString& aName ) throw(NoSuch
 
     ObjectIter aIter = m_aNameMap.find(aName);
     if(aIter == m_aNameMap.end())
-        return Any();
+        throw NoSuchElementException(aName,*this);
     Reference< XNamed > xName = (*aIter).second;
     if(!(*aIter).second.is())
     {
-        xName = createObject(aName);
+        xName = createObject(aIter->first);
         (*aIter).second = xName;
     }
 
