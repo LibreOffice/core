@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-29 13:16:17 $
+ *  last change: $Author: pb $ $Date: 2001-06-05 08:16:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
+#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
@@ -624,7 +627,7 @@ void SearchTabPage_Impl::Resize()
         Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
         long n3Height = a6Size.Height() / 2;
         Size aBtnSize = aOpenBtn.GetSizePixel();
-        long nExtraHeight = aBtnSize.Height() + aScopeCB.GetSizePixel().Height() + n3Height;
+        long nExtraHeight = aBtnSize.Height() + n3Height;
 
         Point aPnt = aResultsLB.GetPosPixel();
         Size aNewSize = aResultsLB.GetSizePixel();
@@ -633,12 +636,8 @@ void SearchTabPage_Impl::Resize()
         aResultsLB.SetSizePixel( aNewSize );
 
         aPnt.X() += ( aNewSize.Width() - aBtnSize.Width() );
-        aPnt.Y() += aNewSize.Height() + ( a6Size.Height() / 2 );
+        aPnt.Y() += aNewSize.Height() + a6Size.Height();
         aOpenBtn.SetPosPixel( aPnt );
-
-        Point aNewPnt = aScopeCB.GetPosPixel();
-        aNewPnt.Y() = aPnt.Y() + aBtnSize.Height() + n3Height;
-        aScopeCB.SetPosPixel( aNewPnt );
     }
 }
 
@@ -1300,7 +1299,8 @@ void SfxHelpWindow_Impl::FirstOpenMessage()
 {
     Update();
     URL aURL;
-    aURL.Complete = DEFINE_CONST_UNICODE("file:////dummy/dummy.htm");
+    aURL.Complete = SvtPathOptions().GetWorkPath();
+    aURL.Complete += DEFINE_CONST_UNICODE("/dummy.htm");
     PARSE_URL( aURL );
     Reference < XDispatch > xDisp = pHelpInterceptor->queryDispatch( aURL, String(), 0 );
     if ( xDisp.is() )
