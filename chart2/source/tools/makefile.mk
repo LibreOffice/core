@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: iha $ $Date: 2003-11-10 19:32:44 $
+#   last change: $Author: bm $ $Date: 2003-11-11 12:19:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,6 +99,7 @@ SLOFILES=	\
                 $(SLO)$/ChartTypeHelper.obj \
                 $(SLO)$/MeterHelper.obj \
                 $(SLO)$/MutexContainer.obj \
+                $(SLO)$/PropertyHelper.obj \
                 $(SLO)$/TitleHelper.obj \
                 $(SLO)$/LegendHelper.obj
 
