@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocpres.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-
+#ifndef _SVDPAGE_HXX
+#include <svx/svdpage.hxx>
+#endif
 #include <cppuhelper/extract.hxx>
 
 #include "unohelp.hxx"
@@ -209,9 +211,13 @@ uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
     uno::Any aAny;
     if(mpSdCustomShow && mpModel )
     {
-        uno::Reference< drawing::XDrawPage > xRef( mpModel->CreateXDrawPage((SdPage*)mpSdCustomShow->GetObject(Index)));
+        SdrPage* pPage = (SdrPage*)mpSdCustomShow->GetObject(Index);
 
-        aAny <<= xRef;
+        if( pPage )
+        {
+            uno::Reference< drawing::XDrawPage > xRef( pPage->getUnoPage(), uno::UNO_QUERY );
+            aAny <<= xRef;
+        }
     }
 
     return aAny;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-17 10:56:37 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1823,4 +1823,17 @@ void SdDrawDocument::SetHideSpell(BOOL bIn)
 }
 #endif
 
+uno::Reference< uno::XInterface > SdDrawDocument::createUnoModel()
+{
+    uno::Reference< uno::XInterface > xModel;
 
+    try
+    {
+        xModel = pDocSh->GetModel();
+    }
+    catch( uno::RuntimeException& e )
+    {
+    }
+
+    return xModel;
+}

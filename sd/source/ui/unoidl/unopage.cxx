@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-17 13:05:46 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,8 +470,18 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
             if(!::cppu::enum2int( nEnum, aValue ))
                 throw lang::IllegalArgumentException();
 
-            view::PaperOrientation eOri = (view::PaperOrientation)nEnum;
-            mpPage->SetOrientation( eOri == view::PaperOrientation_PORTRAIT?ORIENTATION_PORTRAIT:ORIENTATION_LANDSCAPE );
+            Orientation eOri = (((view::PaperOrientation)nEnum) == view::PaperOrientation_PORTRAIT)?ORIENTATION_PORTRAIT:ORIENTATION_LANDSCAPE;
+            if( eOri != mpPage->GetOrientation() )
+            {
+                mpPage->SetOrientation( eOri );
+
+                // switch width and height
+                Size aSize( mpPage->GetSize() );
+                long nTemp = aSize.Width();
+                aSize.Width() = aSize.Height();
+                aSize.Height() = nTemp;
+                mpPage->SetSize(aSize);
+            }
             break;
         }
         case WID_PAGE_EFFECT:
@@ -639,11 +649,9 @@ void SAL_CALL SdGenericDrawPage::removeVetoableChangeListener( const OUString& P
 
 uno::Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj ) const
 {
-    SvxShape* pShape = SvxShape::GetShapeForSdrObj( pObj );
-    if(pShape != NULL)
-        return uno::Reference< drawing::XShape > (pShape);
-
     PresObjKind eKind = mpPage->GetPresObjKind(pObj);
+
+    SvxShape* pShape = NULL;
 
     if(pObj->GetObjInventor() == SdrInventor)
     {
@@ -784,9 +792,7 @@ uno::Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const uno
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
         if( pObj )
-        {
-            xShape = _CreateShape( pObj );
-        }
+            xShape = uno::Reference< drawing::XShape >::query( pObj->getUnoShape() );
     }
 
     pView->HidePage(pPageView);
@@ -835,9 +841,7 @@ uno::Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const uno::R
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
         if( pObj )
-        {
-            xShape = _CreateShape( pObj );
-        }
+            xShape = uno::Reference< drawing::XShape >::query( pObj->getUnoShape() );
     }
 
     pView->HidePage(pPageView);
@@ -921,13 +925,9 @@ uno::Any SAL_CALL SdPageLinkTargets::getByName( const OUString& aName )
     if( mpPage != NULL )
     {
         SdrObject* pObj = FindObject( aName );
-        if( pObj != NULL )
+        if( pObj )
         {
-            uno::Reference< drawing::XShape >  xShape = SvxShape::GetShapeForSdrObj( pObj );
-            if( !xShape.is() )
-                xShape = mpUnoPage->_CreateShape( pObj );
-
-            uno::Reference< beans::XPropertySet >  aRef( xShape, uno::UNO_QUERY );
+            uno::Reference< beans::XPropertySet > aRef( pObj->getUnoShape(), uno::UNO_QUERY );
             aAny <<= aRef;
         }
     }
@@ -1192,8 +1192,8 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getMasterPage(  )
     DBG_ASSERT(mpModel,"SdDrawPage hat kein Model??");
     if(mpModel && mpPage)
     {
-        uno::Reference< drawing::XDrawPages >  xPages( mpModel->getMasterPages() );
-        return mpModel->CreateXDrawPage((SdPage*)mpPage->GetMasterPage(0));
+        uno::Reference< drawing::XDrawPages > xPages( mpModel->getMasterPages() );
+        uno::Reference< drawing::XDrawPage > xPage( ((SdrPage*)mpPage->GetMasterPage(0))->getUnoPage(), uno::UNO_QUERY );
     }
     return NULL;
 }
@@ -1230,7 +1230,11 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getNotesPage()
     if(mpPage && mpModel && mpModel->GetDoc() )
     {
         SdPage* pNotesPage = mpModel->GetDoc()->GetSdPage( (mpPage->GetPageNum()-1)>>1, PK_NOTES );
-        return mpModel->CreateXDrawPage(pNotesPage);
+        if( pNotesPage )
+        {
+            uno::Reference< drawing::XDrawPage > xPage( pNotesPage->getUnoPage(), uno::UNO_QUERY );
+            return xPage;
+        }
     }
     return NULL;
 }
@@ -1775,7 +1779,11 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPage::getNotesPage()
     if(mpPage && mpModel && mpModel->GetDoc() )
     {
         SdPage* pNotesPage = mpModel->GetDoc()->GetMasterSdPage( (mpPage->GetPageNum()-1)>>1, PK_NOTES );
-        return mpModel->CreateXDrawPage(pNotesPage);
+        if( pNotesPage )
+        {
+            uno::Reference< drawing::XDrawPage > xPage( pNotesPage->getUnoPage(), uno::UNO_QUERY );
+            return xPage;
+        }
     }
     return NULL;
 }
@@ -1799,4 +1807,27 @@ void SAL_CALL SdMasterPage::remove( const uno::Reference< drawing::XShape >& xSh
     SdGenericDrawPage::remove( xShape );
 }
 
+
+uno::Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage )
+{
+    uno::Reference< uno::XInterface > xPage;
+
+    if( pPage && pPage->GetModel() )
+    {
+        SdXImpressDocument* pModel = SdXImpressDocument::getImplementation( pPage->GetModel()->getUnoModel() );
+        if( pModel )
+        {
+            if( pPage->IsMasterPage() )
+            {
+                xPage = (::cppu::OWeakObject*)new SdMasterPage( pModel, pPage );
+            }
+            else
+            {
+                xPage = (::cppu::OWeakObject*)new SdDrawPage( pModel, pPage );
+            }
+        }
+    }
+
+    return xPage;
+}
 

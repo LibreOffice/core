@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
 
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
@@ -140,7 +143,8 @@ class SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAK
                            public ::com::sun::star::document::XLinkTargetSupplier,
                            public ::com::sun::star::beans::XPropertySet,
                            public ::com::sun::star::style::XStyleFamiliesSupplier,
-                           public ::com::sun::star::lang::XServiceInfo
+                           public ::com::sun::star::lang::XServiceInfo,
+                           public ::com::sun::star::lang::XUnoTunnel
 {
     friend class SdDrawPagesAccess;
     friend class SdMasterPagesAccess;
@@ -181,9 +185,6 @@ public:
 
     // SfxListener
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
-    // uno helper
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >  CreateXDrawPage( SdPage* pPage ) throw();
 
     UNO3_GETIMPLEMENTATION_DECL(SdXImpressDocument)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-16 13:55:08 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:17:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,8 @@
 #include "glob.hxx"
 
 #define MAX_PRESOBJ     5              // Max. Anzahl Praesentationsobjekte
+
+using namespace ::com::sun::star;
 
 TYPEINIT2( SdPage, FmFormPage, SdrObjUserCall );
 
@@ -2780,6 +2782,21 @@ String SdPage::GetPresObjText(PresObjKind eObjKind)
 
     return(aString);
 }
+
+#ifndef SVX_LIGHT
+extern uno::Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage );
+#endif
+
+uno::Reference< uno::XInterface > SdPage::createUnoPage()
+{
+#ifndef SVX_LIGHT
+    return createUnoPageImpl( this );
+#else
+    uno::Reference< uno::XInterface > xInt;
+    return xInt;
+#endif
+}
+
 #endif // !SVX_LIGHT
 
 

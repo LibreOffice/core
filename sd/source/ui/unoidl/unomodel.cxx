@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-08 11:18:04 $
+ *  last change: $Author: cl $ $Date: 2000-11-26 19:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,7 @@ SdXImpressDocument::~SdXImpressDocument() throw()
 * Erzeugt anhand der uebergebennen SdPage eine SdDrawPage. Wurde fuer diese   *
 * SdPage bereits eine SdDrawPage erzeugt, wird keine neue SdDrawPage erzeug.  *
 ******************************************************************************/
+/*
 uno::Reference< drawing::XDrawPage >  SdXImpressDocument::CreateXDrawPage( SdPage* pPage ) throw()
 {
     DBG_ASSERT(pPage,"SdXImpressDocument::CreateXDrawPage( NULL? )");
@@ -220,6 +221,7 @@ uno::Reference< drawing::XDrawPage >  SdXImpressDocument::CreateXDrawPage( SdPag
 
     return xDrawPage;
 }
+*/
 
 UNO3_GETIMPLEMENTATION_IMPL( SdXImpressDocument );
 
@@ -237,6 +239,7 @@ uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType ) 
     else QUERYINT(drawing::XDrawPagesSupplier);
     else QUERYINT(document::XLinkTargetSupplier);
     else QUERYINT(style::XStyleFamiliesSupplier);
+    else QUERYINT(lang::XUnoTunnel);
     else if( mbImpressDoc && rType == ITYPE(presentation::XPresentationSupplier) )
             aAny <<= uno::Reference< presentation::XPresentationSupplier >(this);
     else if( mbImpressDoc && rType == ITYPE(presentation::XCustomPresentationSupplier) )
@@ -266,7 +269,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
 
-        const sal_Int32 nOwnTypes = mbImpressDoc ? 11 : 9;      // !DANGER! Keep this updated!
+        const sal_Int32 nOwnTypes = mbImpressDoc ? 12 : 10;     // !DANGER! Keep this updated!
 
         maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
         uno::Type* pTypes = maTypeSequence.getArray();
@@ -280,6 +283,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         *pTypes++ = ITYPE(drawing::XDrawPagesSupplier);
         *pTypes++ = ITYPE(document::XLinkTargetSupplier);
         *pTypes++ = ITYPE(style::XStyleFamiliesSupplier);
+        *pTypes++ = ITYPE(lang::XUnoTunnel);
         if( mbImpressDoc )
         {
             *pTypes++ = ITYPE(presentation::XPresentationSupplier);
@@ -462,8 +466,6 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::duplicate( con
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    uno::Reference< drawing::XDrawPage > xDrawPage;
-
     if( pDoc )
     {
         // pPage von xPage besorgen und dann die Id (nPos )ermitteln
@@ -475,10 +477,15 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::duplicate( con
             nPos = ( nPos - 1 ) / 2;
             pPage = InsertSdPage( nPos, sal_True );
             if( pPage )
-                return CreateXDrawPage( pPage );
+            {
+                uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
+                return xDrawPage;
+            }
         }
     }
-    return uno::Reference< drawing::XDrawPage >();
+
+    uno::Reference< drawing::XDrawPage > xDrawPage;
+    return xDrawPage;
 }
 
 
@@ -876,7 +883,7 @@ uno::Any SAL_CALL SdDrawPagesAccess::getByIndex( sal_Int32 Index )
         SdPage* pPage = rModel.pDoc->GetSdPage( (sal_uInt16)Index, PK_STANDARD );
         if( pPage )
         {
-            uno::Reference< drawing::XDrawPage >  xDrawPage = rModel.CreateXDrawPage(pPage);
+            uno::Reference< drawing::XDrawPage >  xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
             aAny <<= xDrawPage;
         }
     }
@@ -907,14 +914,18 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPagesAccess::insertNewByInde
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    uno::Reference< drawing::XDrawPage >  xDrawPage;
 
     if( rModel.pDoc )
     {
         SdPage* pPage = rModel.InsertSdPage(nIndex );
-        xDrawPage = rModel.CreateXDrawPage(pPage);
+        if( pPage )
+        {
+            uno::Reference< drawing::XDrawPage > xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
+            return xDrawPage;
+        }
     }
-    return( xDrawPage );
+    uno::Reference< drawing::XDrawPage > xDrawPage;
+    return xDrawPage;
 }
 
 /******************************************************************************
@@ -1000,7 +1011,7 @@ uno::Any SAL_CALL SdMasterPagesAccess::getByIndex( sal_Int32 Index )
         SdPage* pPage = rModel.pDoc->GetMasterSdPage( (sal_uInt16)Index, PK_STANDARD );
         if( pPage )
         {
-            uno::Reference< drawing::XDrawPage >  xDrawPage( rModel.CreateXDrawPage(pPage) );
+            uno::Reference< drawing::XDrawPage >  xDrawPage( pPage->getUnoPage(), uno::UNO_QUERY );
             aAny <<= xDrawPage;
         }
     }
@@ -1095,7 +1106,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
             pMPage->CreatePresObj(PRESOBJ_BACKGROUND, aBackgroundRect, sal_True );
         }
 
-        xDrawPage = rModel.CreateXDrawPage(pMPage);
+        xDrawPage = uno::Reference< drawing::XDrawPage >::query( pMPage->getUnoPage() );
 
         // create and instert new notes masterpage
         SdPage* pMNotesPage = (SdPage*)rModel.pDoc->AllocPage(sal_True);
@@ -1297,5 +1308,3 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()
     uno::Sequence< OUString > aSeq( &aSN, 1 );
     return aSeq;
 }
-
-
