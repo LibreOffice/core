@@ -394,6 +394,7 @@ Function GetDocumentType(oDocument)
 		GetDocumentType() = &quot;swriter&quot;
 	ElseIf oDocument.SupportsService(&quot;com.sun.star.drawing.DrawingDocument&quot;) Then
 		GetDocumentType() = &quot;sdraw&quot;
+&apos; Todo: Formel services einbinden		
 	End If
 End Function
 

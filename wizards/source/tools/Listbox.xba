@@ -23,27 +23,29 @@ End Sub
 Sub FormMoveSelected(aEvent as Object)
 	Call MoveSelectedListBox(oDialogModel.lstFields, oDialogModel.lstSelFields)
 	Call FormSetMoveRights()
+	oDialogModel.lstSelFields.Tag = True
 End Sub
 
 
 Sub FormMoveAll()
 	Call CopyListboxItems(oDialogModel.lstFields, oDialogModel.lstSelFields)
 	Call FormSetMoveRights()
-&apos;	CmdNext.SetFocus
+	oDialogModel.lstSelFields.Tag = True
 End Sub
 
 
 Sub FormRemoveSelected()
 	Call MoveOrderedSelectedListbox(oDialogModel.lstFields, oDialogModel.lstSelFields, False)
 	Call FormSetMoveRights()
+	oDialogModel.lstSelFields.Tag = True
 End Sub
 
 
 Sub FormRemoveAll()
 	Call MoveOrderedSelectedListbox(oDialogModel.lstFields, oDialogModel.lstSelFields, True)
 	Call FormSetMoveRights()
+	oDialogModel.lstSelFields.Tag = 1
 End Sub
-
 
 
 Sub MoveSelectedListBox(SourceListbox as Object, TargetListbox as Object)
@@ -220,6 +222,7 @@ Dim SelectCount as Integer
 	oDialogModel.cmdMoveAll.Enabled = FieldCount &gt;=1
 	oDialogModel.cmdMoveSelected.Enabled = bIsFieldSelected
 	oDialogModel.cmdGoOn.Enabled = SelectCount&gt;=1
+	&apos; This flag is set to &apos;1&apos; when the lstSelFields has been modified 
 End Sub
 
 

@@ -142,13 +142,19 @@ Dim oCell as Object
 End Function
 
 
-Function LoadDialog(Libname as String, DialogName as String)
+Function LoadDialog(Libname as String, DialogName as String, Optional oLibContainer)
 Dim oLib as Object
-Dim oDialog as Object
-	DialogLibraries.loadLibrary(Libname)
-	oLib = DialogLibraries.GetByName(Libname)
-	oDialog = CreateUnoDialog(oLib, DialogName)
-	LoadDialog() = oDialog
+Dim oLibDialog as Object
+Dim oRuntimeDialog as Object
+
+	If IsMissing( oLibContainer ) then
+		oLibContainer = DialogLibraries
+	End If
+	oLibContainer.LoadLibrary(Libname)
+	oLib = oLibContainer.GetByName(Libname)
+	oLibDialog = oLib.GetByName(DialogName)
+	oRuntimeDialog = CreateUnoDialog(oLibDialog)
+	LoadDialog() = oRuntimeDialog
 End Function
 
 
