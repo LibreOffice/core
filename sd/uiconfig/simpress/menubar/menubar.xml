@@ -128,7 +128,6 @@
             </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:HeaderAndFooter" menu:helpid="27407" menu:label="" />
-            <menu:menuitem menu:id=".uno:FullScreen" menu:helpid="5627" menu:label="" />
             <menu:menuitem menu:id=".uno:Zoom" menu:helpid="10000" menu:label="" />
         </menu:menupopup>
     </menu:menu>
