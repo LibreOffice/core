@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-27 08:18:30 $
+ *  last change: $Author: os $ $Date: 2001-04-27 12:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,7 +422,12 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
 
             if(0 ==(nStyleFlags&EX_SHOW_ONLINE_LAYOUT))
             {
-                uno::Any aZoom; aZoom <<= (sal_Int16)view::DocumentZoomType::PAGE_WIDTH;
+                uno::Any aZoom;
+#if SUPD<631
+                aZoom <<= (sal_Int16)4;
+#else
+                aZoom <<= (sal_Int16)view::DocumentZoomType::PAGE_WIDTH_EXACT;
+#endif
                 xViewProps->setPropertyValue(C2U(UNO_NAME_ZOOM_TYPE), aZoom);
             }
             else
