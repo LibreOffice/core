@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unfmco.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:38:50 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:08:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,3 +133,11 @@ void SwUndoFmtColl::Repeat( SwUndoIter& rUndoIter )
     rUndoIter.pLastUndoObj = this;
 }
 
+SwRewriter SwUndoFmtColl::GetRewriter() const
+{
+    SwRewriter aResult;
+
+    aResult.AddRule(UNDO_ARG1, pFmtColl->GetName());
+
+    return aResult;
+}
