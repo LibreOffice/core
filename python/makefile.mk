@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2003-06-17 16:22:30 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:34:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,10 +99,20 @@ BUILD_ACTION_SEP=^
 DSP_DIR=PCbuild
 .IF "$(GUI)" == "UNX"
 CONFIGURE_ACTION= ./configure --prefix=../python-inst
+.IF "$(OS)" == "IRIX"
+BUILD_ACTION=gmake ; gmake install
+.ELSE
 BUILD_ACTION=make ; make install
-PYTHONCORESHL=$(OUT)$/lib$/libpython.so.$(PYVERSION)
-PYTHONCORELINK1=$(OUT)$/lib$/libpython.so.$(PYMAJOR)
-PYTHONCORELINK2=$(OUT)$/lib$/libpython.so
+.ENDIF
+.IF "$(OS)"=="MACOSX"
+PYTHONCORESHL=$(OUT)$/lib$/$(DLLPRE)python$(PYMAJOR)$(PYMINOR)$(DLLPOST)
+PYTHONCORELINK1=$(OUT)$/lib$/$(DLLPRE)python$(PYMAJOR)$(DLLPOST)
+PYTHONCORELINK2=$(OUT)$/lib$/$(DLLPRE)python$(DLLPOST)
+.ELSE
+PYTHONCORESHL=$(OUT)$/lib$/$(DLLPRE)python$(DLLPOST).$(PYVERSION)
+PYTHONCORELINK1=$(OUT)$/lib$/$(DLLPRE)python$(DLLPOST).$(PYMAJOR)
+PYTHONCORELINK2=$(OUT)$/lib$/$(DLLPRE)python$(DLLPOST)
+.ENDIF
 .ELSE
 BUILD_DIR=$(DSP_DIR)
 CONFIGURE_DIR=$(DSP_DIR)
@@ -118,9 +128,9 @@ BUILD_ACTION=devenv /build Release /project winsound pcbuild.sln /useenv \
     $(BUILD_ACTION_SEP) devenv /build Release /project _symtable pcbuild.sln /useenv \
     $(BUILD_ACTION_SEP) devenv /build Release /project _socket pcbuild.sln /useenv  \
     $(BUILD_ACTION_SEP) devenv /build Release /project _sre pcbuild.sln /useenv  \
-       $(BUILD_ACTION_SEP) devenv /build Release /project python pcbuild.sln /useenv
+    $(BUILD_ACTION_SEP) devenv /build Release /project python pcbuild.sln /useenv
 .ELSE
-BUILD_ACTION=msdev pcbuild.dsw /MAKE 	\
+BUILD_ACTION=msdev pcbuild.dsw /USEENV /MAKE 	\
     "python - Win32 Release" 	\
     "_sre - Win32 Release" 		\
     "_socket - Win32 Release"	\
@@ -160,8 +170,10 @@ $(MISC)$/convert_dos_flag : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(MISC)$/convert_dos_flag
 
+$(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
+
 #.IF "$(GUI)" !="UNX"
-$(MISC)$/build$/pyconfig.h :$(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
+$(MISC)$/build$/pyconfig.h : $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h
     -rm -f $@
     cat $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h > $@
 #.ENDIF
@@ -171,17 +183,37 @@ $(PYTHONCORESHL) : makefile.mk $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
 .IF "$(OS)" == "SOLARIS"
     ld -G -o $@ -u Py_Main -u Py_FrozenMain -u PyFPE_dummy $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -h libpython.so.$(PYMAJOR) -lm -ldl -lc -lpthread
 .ELSE
+.IF "$(OS)" == "FREEBSD"
+    ld -shared -o $@ --whole-archive $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a --no-whole-archive -soname libpython.so.$(PYMAJOR)  -lm -lutil ${PTHREAD_LIBS}
+.ELSE
+.IF "$(OS)" == "IRIX"
+    ld -shared -o $@ -all $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a -notall -soname libpython.so.$(PYMAJOR)  -lm -ldl -lc -lpthread
+.ELSE	
+.IF "$(OS)" == "MACOSX"
+    cp $(MISC)$/build$/$(TARFILE_NAME)$/$(DLLPRE)python$(PYMAJOR).$(PYMINOR)$(DLLPOST) $(OUT)$/lib
+.ELSE
     echo "$(OS)"
     ld -shared -o $@ --whole-archive $(MISC)$/build$/$(TARFILE_NAME)$/libpython$(PYMAJOR).$(PYMINOR).a --no-whole-archive -soname libpython.so.$(PYMAJOR)  -lm -ldl -lutil -lc -lpthread
-.ENDIF
+.ENDIF # MACOSX
+.ENDIF # IRIX
+.ENDIF # FREEBSD
+.ENDIF # SOLARIS
 
 $(PYTHONCORELINK1) : makefile.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     -rm -f $@
-    cd $(OUT)$/lib && ln -s libpython.so.$(PYVERSION) libpython.so.$(PYMAJOR)
+.IF "$(OS)" == "MACOSX"
+    cd $(OUT)$/lib && ln -s $(DLLPRE)python$(PYMAJOR).$(PYMINOR)$(DLLPOST) $(DLLPRE)python$(PYMAJOR)$(DLLPOST)
+.ELSE
+    cd $(OUT)$/lib && ln -s $(DLLPRE)python$(DLLPOST).$(PYVERSION) $(DLLPRE)python$(DLLPOST).$(PYMAJOR)
+.ENDIF
 
 $(PYTHONCORELINK2) : makefile.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
     -rm -f $@
-    cd $(OUT)$/lib && ln -s libpython.so.$(PYVERSION) libpython.so
+.IF "$(OS)" == "MACOSX"
+    cd $(OUT)$/lib && ln -s $(DLLPRE)python$(PYMAJOR).$(PYMINOR)$(DLLPOST) $(DLLPRE)python$(DLLPOST)
+.ELSE
+    cd $(OUT)$/lib && ln -s $(DLLPRE)python$(DLLPOST).$(PYVERSION) $(DLLPRE)python$(DLLPOST)
+.ENDIF
 .ENDIF
 
 $(PYVERSIONFILE) : pyversion.mk $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE)
