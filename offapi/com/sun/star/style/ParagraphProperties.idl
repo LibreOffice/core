@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParagraphProperties.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-24 14:58:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,13 @@ service ParagraphProperties
         [optional, property] com::sun::star::container::XNameContainer ParaUserDefinedAttributes;
 
         //-------------------------------------------------------------------------
+        /** returns </TRUE> if the numbering of a paragraph is a number but
+            has no symbol.
+
+            <p>If the paragraph is not part of a numbering the property is void.</p>
+         */
+        [optional, property, maybevoid] boolean NumberingIsNumber;
+
 };
 
 //=============================================================================
