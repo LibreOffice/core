@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgassim.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:32 $
+ *  last change: $Author: dl $ $Date: 2000-10-13 11:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,6 @@ void TemplateCache::Load()
 
     SfxMedium aMedium( aURL.GetMainURL(),
                     STREAM_READ | STREAM_NOCREATE,
-                    TRUE,                 // direkt
                     TRUE );               // Download
 
     SvStream* pStream = aMedium.GetInStream();
@@ -405,7 +404,6 @@ void TemplateCache::Save()
 
     SfxMedium aMedium( aURL.GetMainURL(),
                     STREAM_WRITE | STREAM_TRUNC,
-                    TRUE,                 // direkt
                     FALSE );              // Download
 
     SvStream* pStream = aMedium.GetInStream();

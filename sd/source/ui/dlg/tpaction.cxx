@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: dl $ $Date: 2000-10-13 11:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -967,7 +967,6 @@ IMPL_LINK( SdTPAction, CheckFileHdl, void *, EMPTYARG )
         // Ueberpruefen, ob es eine gueltige Draw-Datei ist
         SfxMedium aMedium( aFile,
                     STREAM_READ | STREAM_NOCREATE,
-                    TRUE,                 // direkt
                     TRUE );               // Download
 
         if( aMedium.IsStorage() )

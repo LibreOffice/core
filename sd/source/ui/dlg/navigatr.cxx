@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-10 08:58:30 $
+ *  last change: $Author: dl $ $Date: 2000-10-13 11:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,6 @@ BOOL SdNavigatorWin::InsertFile(const String& rFileName)
             // ersteinmal nachgeschaut, ob es einen Storage enthaelt
             SfxMedium* pMedium = new SfxMedium( rFileName,
                                                 STREAM_READ | STREAM_NOCREATE,
-                                                FALSE,                // direkt
                                                 TRUE);                // Download
 
             if (pMedium->IsStorage())
