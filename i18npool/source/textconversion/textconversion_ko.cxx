@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconversion_ko.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:35:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 10:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <assert.h>
 #include <textconversion.hxx>
 #include <com/sun/star/i18n/TextConversionType.hpp>
@@ -240,22 +239,19 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
         else if (length > nLength)
             length = nLength;
 
-        sal_Int32 maxLength = 1;
         sal_Int16 scriptType = SCRIPT_OTHERS;
-        ConversionDirection eDirection = ConversionDirection_FROM_LEFT;
-        sal_Bool toHanja = sal_True;
+        sal_Int32 len = 1;
+        sal_Bool toHanja = (nConversionType == TextConversionType::TO_HANJA);
+        // FROM_LEFT:  Hangul -> Hanja
+        // FROM_RIGHT: Hanja  -> Hangul
+        ConversionDirection eDirection = toHanja ? ConversionDirection_FROM_LEFT : ConversionDirection_FROM_RIGHT;
+        sal_Int32 maxLength = maxLength = toHanja ? maxLeftLength : maxRightLength;
+        if (maxLength == 0) maxLength = 1;
 
         // search for a max length of convertible text
         for (start = 0, end = 0; start < length; start++) {
-
             if (end <= start) {
                 scriptType = checkScriptType(aText[nStartPos + start]);
-                /* wait for BI_DIRECTION being add to idl
-                if (nConversionOptions & TextConversionOption::BI_DIRECTION) {
-                    if (scriptType == SCRIPT_OTHERS) // skip non-Korean chararacters
-                        continue;
-                } else
-                */
                 if (nConversionType == TextConversionType::TO_HANJA) {
                     if (scriptType != SCRIPT_HANGUL) // skip non-Hangul characters
                         continue;
@@ -263,64 +259,50 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
                     if (scriptType != SCRIPT_HANJA) // skip non-Hanja characters
                         continue;
                 }
-
-                toHanja = (scriptType == SCRIPT_HANGUL);
-                // FROM_LEFT:  Hangul -> Hanja
-                // FROM_RIGHT: Hanja  -> Hangul
-                eDirection = toHanja ?
-                        ConversionDirection_FROM_LEFT : ConversionDirection_FROM_RIGHT;
-
-                maxLength = toHanja ? maxLeftLength : maxRightLength;
-                if (maxLength == 0 || (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER))
-                    maxLength = 1;
-
                 end = start + 1;
             }
+            if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER) {
+                result.Candidates = getCharConversions(aText, nStartPos + start, len, toHanja); // char2char conversion
+            } else {
+                for (; end < length && end - start < maxLength; end++)
+                    if (checkScriptType(aText[nStartPos + end]) != scriptType)
+                        break;
 
-            for (; end < length && end - start < maxLength; end++)
-                if (checkScriptType(aText[nStartPos + end]) != scriptType)
-                    break;
-
-            for (sal_Int32 len = end - start; len > 0; len--) {
-                try {
-                    if (xCDL.is())
-                        result.Candidates = xCDL->queryConversions(aText, start + nStartPos, len,
-                            aLocale, ConversionDictionaryType::HANGUL_HANJA, eDirection, nConversionOptions); // user dictionary
-                }
-                catch ( NoSupportException & ) {
-                    // clear reference (when there is no user dictionary) in order
-                    // to not always have to catch this exception again
-                    // in further calls. (save time)
-                    xCDL = 0;
-                }
-                catch (...) {
-                    // catch all other exceptions to allow
-                    // querying the system dictionary in the next line
-                }
-                if (xCD.is() && toHanja) { // System dictionary would not do Hanja_to_Hangul conversion.
-                                         // Char2char converison below is enough.
-                    candidates = xCD->getConversions(aText, start + nStartPos, len, eDirection, nConversionOptions); // system dictionary
-                    result.Candidates += candidates;
-                }
-                if (len == 1) {
-                    if (!toHanja && !result.Candidates.hasElements() &&
-                            !(nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER)) {
-                        // do whole word character 2 character conversion
+                for (len = end - start; len > 0; len--) {
+                    if (len > 1) {
+                        try {
+                            if (xCDL.is())
+                                result.Candidates = xCDL->queryConversions(aText, start + nStartPos, len,
+                                    aLocale, ConversionDictionaryType::HANGUL_HANJA, eDirection, nConversionOptions); // user dictionary
+                        }
+                        catch ( NoSupportException & ) {
+                            // clear reference (when there is no user dictionary) in order
+                            // to not always have to catch this exception again
+                            // in further calls. (save time)
+                            xCDL = 0;
+                        }
+                        catch (...) {
+                            // catch all other exceptions to allow
+                            // querying the system dictionary in the next line
+                        }
+                        if (xCD.is() && toHanja) { // System dictionary would not do Hanja_to_Hangul conversion.
+                            candidates = xCD->getConversions(aText, start + nStartPos, len, eDirection, nConversionOptions);
+                            result.Candidates += candidates;
+                        }
+                    } else if (! toHanja) { // do whole word character 2 character conversion for Hanja to Hangul conversion
                         result.Candidates = getCharConversions(aText, nStartPos + start, length - start, toHanja);
                         if (result.Candidates.hasElements())
                             len = result.Candidates[0].getLength();
-                    } else {
-                        candidates = getCharConversions(aText, nStartPos + start, 1, toHanja); // char2char conversion
-                        result.Candidates += candidates;
                     }
+                    if (result.Candidates.hasElements())
+                        break;
                 }
-
-                // found match
-                if (result.Candidates.hasElements()) {
-                    result.Boundary.startPos = start + nStartPos;;
-                    result.Boundary.endPos = start + len + nStartPos;
-                    return result;
-                }
+            }
+            // found match
+            if (result.Candidates.hasElements()) {
+                result.Boundary.startPos = start + nStartPos;;
+                result.Boundary.endPos = start + len + nStartPos;
+                return result;
             }
         }
     } else
