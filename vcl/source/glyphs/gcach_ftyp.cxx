@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.15 $
- *  last change: $Author: pl $ $Date: 2001-03-07 15:06:42 $
+ *  $Revision: 1.16 $
+ *  last change: $Author: hdu $ $Date: 2001-03-08 11:41:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,16 +302,7 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, const Ft
     mnLoadFlags = FT_LOAD_DEFAULT;
 
     if( rFSD.mnOrientation != 0 )
-    {
         mnLoadFlags |= FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP;
-
-        FT_Matrix aMatrix;
-        aMatrix.xx = +nCos;
-        aMatrix.yy = +nCos;
-        aMatrix.xy = -nSin;
-        aMatrix.yx = +nSin;
-        FT_Set_Transform( maFaceFT, &aMatrix, 0 );
-    }
 
 //  if( rFSD.mbVertical )
 //      mnLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
@@ -378,7 +369,6 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
 
 // -----------------------------------------------------------------------
 
-/*### TODO
 static int SetVerticalFlags( sal_Unicode nChar )
 {
     if ( (nChar >= 0x1100 && nChar <= 0x11f9) ||    // Hangul Jamo
@@ -387,9 +377,8 @@ static int SetVerticalFlags( sal_Unicode nChar )
         if( nChar == 0x2010 || nChar == 0x2015 ||
             nChar == 0x2016 || nChar == 0x2026 ||
             (nChar >= 0x3008 && nChar <= 0x3017) )
-        {
-            return VCLASS_ROTATE;
-        }
+            return 0;   // not turned
+/*
         else if( nChar == 0x3001 || nChar == 0x3002 )
         {
             return VCLASS_TRANSFORM1;
@@ -408,17 +397,56 @@ static int SetVerticalFlags( sal_Unicode nChar )
         {
             return VCLASS_TRANSFORM2;
         }
+*/
         else if ( nChar == 0x30fc )
-        {
-            return VCLASS_ROTATE_REVERSE;
-        }
-
-        return VCLASS_CJK;
+            return +2;  // right
+        return +1;      // left
     }
 
-    return VCLASS_ROTATE;
+    return 0;
 }
-*/
+
+static inline void SetGlyphFlags( int& nGlyphIndex, int nFlags )
+{
+    nGlyphIndex |= (nFlags << 28);
+}
+
+static inline void SplitGlyphFlags( int& nGlyphIndex, int& nGlyphFlags )
+{
+    nGlyphFlags = (nGlyphIndex >> 28);
+    nGlyphIndex &= 0x00ffffff;
+}
+
+static void SetTransform( int nSin, int nCos, int nGlyphFlags, FT_Glyph& rGlyphFT )
+{
+    FT_Vector aVector = { 0, 0};
+    FT_Matrix aMatrix;
+    switch( nGlyphFlags )
+    {
+    case +1:    // left
+        aMatrix.xx = -nSin;
+        aMatrix.yy = -nSin;
+        aMatrix.xy = -nCos;
+        aMatrix.yx = +nCos;
+        //TODO: aVector += ...
+        break;
+    case +2:    // right
+        aMatrix.xx = -nSin;
+        aMatrix.yy = -nSin;
+        aMatrix.xy = +nCos;
+        aMatrix.yx = -nCos;
+        //TODO: aVector += ...
+        break;
+    default:    // straight
+        aMatrix.xx = +nCos;
+        aMatrix.yy = +nCos;
+        aMatrix.xy = -nSin;
+        aMatrix.yx = +nSin;
+        break;
+    }
+
+    FT_Glyph_Transform( rGlyphFT, &aMatrix, &aVector );
+}
 
 // -----------------------------------------------------------------------
 
@@ -434,6 +462,12 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
     if( it != aGlyphSubstitution.end() )
         nGlyphIndex = (*it).first;
 
+    if( GetFontSelData().mbVertical )
+    {
+        int nVertFlags = SetVerticalFlags( aChar );
+        SetGlyphFlags( nGlyphIndex, nVertFlags );
+    }
+
     return nGlyphIndex;
 }
 
@@ -441,10 +475,13 @@ int FreetypeServerFont::GetGlyphIndex( sal_Unicode aChar ) const
 
 void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 {
+    int nGlyphFlags;
+    SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
+
     FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, mnLoadFlags );
     if( rc != FT_Err_Ok )
     {
-        // we get here when e.g. a PS font doesn't have a default glyph
+        // we get here e.g. when a PS font lacks the default glyph
         rGD.SetCharWidth( 0 );
         rGD.SetDelta( 0, 0 );
         rGD.SetOffset( 0, 0 );
@@ -452,12 +489,7 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
         return;
     }
 
-#if 0
-    if( GetFontSelData().mbVertical && FT_HAS_VERTICAL(maFaceFT) )
-        rGD.SetCharWidth( (maFaceFT->glyph->metrics.vertAdvance + 32) >> 6 );
-    else
-#endif
-        rGD.SetCharWidth( (maFaceFT->glyph->metrics.horiAdvance + 32) >> 6 );
+    rGD.SetCharWidth( (maFaceFT->glyph->metrics.horiAdvance + 32) >> 6 );
 
     FT_Glyph aGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &aGlyphFT );
@@ -480,11 +512,15 @@ void FreetypeServerFont::InitGlyphData( int nGlyphIndex, GlyphData& rGD ) const
 
 bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 {
-    FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, mnLoadFlags );
+    int nGlyphFlags;
+    SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
+    FT_Int nLoadFlags = mnLoadFlags;
+    if( nGlyphFlags != 0 )
+        nLoadFlags |= FT_LOAD_NO_BITMAP;
+
+    FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
     if( rc != FT_Err_Ok )
         return false;
-
-    // TODO: if( GetFontSelData().mbVertical ) ...
 
     FT_Glyph aGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &aGlyphFT );
@@ -493,6 +529,9 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
     if( aGlyphFT->format != ft_glyph_format_bitmap )
     {
+        if( (nCos!=0x10000) || (nGlyphFlags!=0) )
+            SetTransform( nSin, nCos, nGlyphFlags, aGlyphFT );
+
         if( aGlyphFT->format == ft_glyph_format_outline )
             ((FT_OutlineGlyphRec*)aGlyphFT )->outline.flags |= ft_outline_high_precision;
         rc = FT_Glyph_To_Bitmap( &aGlyphFT, ft_render_mode_mono, NULL, TRUE );
@@ -504,6 +543,16 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
     // autohinting miscaculates the offsets below by +-1
     rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
     rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
+
+    if( nGlyphFlags != 0 )
+    {
+        // TODO: remove once vector move works in SetTransform
+        int nH = GetFontSelData().mnHeight;
+        if( nGlyphFlags == +2 )
+            nH = -nH;
+        rRawBitmap.mnXOffset += (nH * nCos) >> 16;
+        rRawBitmap.mnYOffset -= (nH * nSin) >> 16;
+    }
 
     const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
@@ -532,12 +581,13 @@ bool FreetypeServerFont::GetGlyphBitmap1( int nGlyphIndex, RawBitmap& rRawBitmap
 
 bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap ) const
 {
+    int nGlyphFlags;
+    SplitGlyphFlags( nGlyphIndex, nGlyphFlags );
+
     FT_Int nLoadFlags = mnLoadFlags | FT_LOAD_NO_BITMAP;
     FT_Error rc = FT_Load_Glyph( maFaceFT, nGlyphIndex, nLoadFlags );
     if( rc != FT_Err_Ok )
         return false;
-
-    // TODO: if( GetFontSelData().mbVertical ) ...
 
     FT_Glyph aGlyphFT;
     rc = FT_Get_Glyph( maFaceFT->glyph, &aGlyphFT );
@@ -545,7 +595,13 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
         return false;
 
     if( aGlyphFT->format == ft_glyph_format_outline )
-        ((FT_OutlineGlyphRec*)aGlyphFT )->outline.flags |= ft_outline_high_precision;
+    {
+        if( (nCos!=0x10000) || (nGlyphFlags!=0) )
+            SetTransform( nSin, nCos, nGlyphFlags, aGlyphFT );
+
+        ((FT_OutlineGlyph)aGlyphFT)->outline.flags |= ft_outline_high_precision;
+    }
+
     rc = FT_Glyph_To_Bitmap( &aGlyphFT, ft_render_mode_normal, NULL, TRUE );
     if( rc != FT_Err_Ok )
         return false;
@@ -553,6 +609,16 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
     const FT_BitmapGlyph& rBmpGlyphFT = reinterpret_cast<const FT_BitmapGlyph&>(aGlyphFT);
     rRawBitmap.mnXOffset        = +rBmpGlyphFT->left;
     rRawBitmap.mnYOffset        = -rBmpGlyphFT->top;
+
+    if( nGlyphFlags != 0 )
+    {
+        // TODO: remove once vector move works in SetTransform
+        int nH = GetFontSelData().mnHeight;
+        if( nGlyphFlags == +2 )
+            nH = -nH;
+        rRawBitmap.mnXOffset += (nH * nCos) >> 16;
+        rRawBitmap.mnYOffset -= (nH * nSin) >> 16;
+    }
 
     const FT_Bitmap& rBitmapFT  = rBmpGlyphFT->bitmap;
     rRawBitmap.mnHeight         = rBitmapFT.rows;
@@ -906,6 +972,158 @@ bool FreetypeServerFont::GetGlyphOutline( int nGlyphIndex, PolyPolygon& rPolyPol
     FT_Done_Glyph( aGlyphFT );
 
     return true;
+}
+
+// -----------------------------------------------------------------------
+
+bool FreetypeServerFont::ApplyGSUB( const char* aLangsysName )
+{
+    SFNT_Interface* pSFNT = (SFNT_Interface*) FT_Get_Module_Interface( aLibFT, "sfnt" );
+    DBG_ASSERT( (pSFNT!=NULL), "pSFNT==NULL!" );
+
+    FT_ULong nLength = 0;
+    FT_Error rcFT = pSFNT->load_any( (TT_Face)maFaceFT, TTAG_GSUB, 0, NULL, &nLength );
+    if( rcFT != FT_Err_Ok )
+        return 0;
+
+    FT_Byte* const pGSUB = new FT_Byte[ nLength ];
+    rcFT = pSFNT->load_any( (TT_Face)maFaceFT, TTAG_GSUB, 0, pGSUB, &nLength );
+
+    // GSUB header
+    const FT_Byte* pBuffer = pGSUB;
+    ULONG nVersion = NEXT_Long( pBuffer );
+    const USHORT nOfsScriptList     = NEXT_UShort( pBuffer );
+    const USHORT nOfsFeatureTable   = NEXT_UShort( pBuffer );
+    const USHORT nOfsLookupList     = NEXT_UShort( pBuffer );
+
+    // Script Table
+    pBuffer = pGSUB + nOfsScriptList;
+    const USHORT nCntScript = NEXT_UShort( pBuffer );
+    for( USHORT nScriptIndex = 0; nScriptIndex < nCntScript; ++nScriptIndex )
+    {
+        const ULONG nTagScript      = NEXT_Long( pBuffer );             // e.g. "hani", "arab"
+        const USHORT nOfsScriptTable= NEXT_UShort( pBuffer );
+        const FT_Byte* pScriptTable = pGSUB + nOfsScriptList + nOfsScriptTable;
+        const USHORT nOfsDefaultLang= NEXT_UShort( pScriptTable );
+        const USHORT nCntLangSystem = NEXT_UShort( pScriptTable );
+        for( USHORT nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
+        {
+            const ULONG nTagLangsys     = NEXT_Long( pScriptTable );        // e.g. "KOR", "ZHS", "ZHT"
+            const USHORT nOfsLangsys    = NEXT_UShort( pScriptTable );
+
+            const FT_Byte* pLangSys = pGSUB + nOfsScriptList + nOfsScriptTable + nOfsLangsys;
+            const USHORT nLookupOrder   = NEXT_UShort( pLangSys );
+            const USHORT nReqFeatureIdx = NEXT_UShort( pLangSys );
+            const USHORT nCntFeature    = NEXT_UShort( pLangSys );
+            for( USHORT i = 0; i < nCntFeature; ++i )
+            {
+                const USHORT nFeatureIndex  = NEXT_UShort( pLangSys );
+                int j = nFeatureIndex;
+            }
+        }
+    }
+
+    // Feature Table
+    pBuffer = pGSUB + nOfsFeatureTable;
+    const USHORT nCntFeature = NEXT_UShort( pBuffer );
+    for( USHORT nFeatureIndex = 0; nFeatureIndex < nCntFeature; ++nFeatureIndex )
+    {
+        const ULONG nTagFeatureIndex    = NEXT_Long( pBuffer );     // e.g. "locl", "vert", "trad", "smpl", "liga", "fina"...
+        const USHORT nOfsFeatureIndex   = NEXT_UShort( pBuffer );
+    }
+
+    // Lookup List
+    pBuffer = pGSUB + nOfsLookupList;
+    const USHORT nCntLookupTable = NEXT_UShort( pBuffer );
+    for( USHORT nLookupIdx = 0; nLookupIdx < nCntLookupTable; ++nLookupIdx )
+    {
+        const USHORT nOfsLookupTable    = NEXT_UShort( pBuffer );
+
+        const FT_Byte* pLookupTable = pGSUB + nOfsLookupList + nOfsLookupTable;
+        const USHORT eLookupType        = NEXT_UShort( pLookupTable );
+        const USHORT eLookupFlag        = NEXT_UShort( pLookupTable );
+        const USHORT nCntLookupSubtable = NEXT_UShort( pLookupTable );
+
+        for( USHORT nSubTableIdx = 0; nSubTableIdx < nCntLookupSubtable; ++nSubTableIdx )
+        {
+            const USHORT nOfsSubLookupTable = NEXT_UShort( pLookupTable );
+            const FT_Byte* pSubLookup = pGSUB + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable;
+
+            const USHORT nFmtSubstitution   = NEXT_UShort( pSubLookup );
+            const USHORT nOfsCoverage       = NEXT_UShort( pSubLookup );
+
+            typedef std::pair<USHORT,USHORT> GlyphSubst;
+            typedef std::vector<GlyphSubst> SubstVector;
+            SubstVector aSubstVector;
+
+            const FT_Byte* pCoverage    = pGSUB + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable + nOfsCoverage;
+            const USHORT nFmtCoverage   = NEXT_UShort( pCoverage );
+            switch( nFmtCoverage )
+            {
+                case 1:         // Coverage Format 1
+                    {
+                        const USHORT nCntGlyph = NEXT_UShort( pCoverage );
+                        aSubstVector.reserve( nCntGlyph );
+                        for( USHORT i = 0; i < nCntGlyph; ++i )
+                        {
+                            const USHORT nGlyphId = NEXT_UShort( pCoverage );
+                            aSubstVector.push_back( GlyphSubst( nGlyphId, 0 ) );
+                        }
+                    }
+                    break;
+
+                case 2:         // Coverage Format 2
+                    {
+                        const USHORT nCntRange = NEXT_UShort( pCoverage );
+                        for( USHORT i = 0; i < nCntRange; ++i )
+                        {
+                            const USHORT nGlyph0 = NEXT_UShort( pCoverage );
+                            const USHORT nGlyph1 = NEXT_UShort( pCoverage );
+                            const USHORT nCovIdx = NEXT_UShort( pCoverage );
+                            for( USHORT i = nGlyph0; i <= nGlyph1; ++i )
+                                aSubstVector.push_back( GlyphSubst( i + nCovIdx, 0 ) );
+                        }
+                    }
+                    break;
+            }
+
+            SubstVector::iterator it( aSubstVector.begin() );
+
+            if( eLookupType == 1 )  // Single Substitution Format
+            {
+                switch( nFmtSubstitution )
+                {
+                    case 1:     // Single Substitution Format 1
+                        {
+                            const USHORT nDeltaGlyphId = NEXT_UShort( pSubLookup );
+                            for(; it != aSubstVector.end(); ++it )
+                                (*it).second = (*it).first + nDeltaGlyphId;
+                        }
+                        break;
+
+                    case 2:     // Single Substitution Format 2
+                        {
+                            const USHORT nCntGlyph = NEXT_UShort( pSubLookup );
+                            for( USHORT i = 0; (i < nCntGlyph) && (it != aSubstVector.end()); ++i, ++it )
+                            {
+                                const USHORT nGlyphId = NEXT_UShort( pSubLookup );
+                                (*it).second = nGlyphId;
+                            }
+                        }
+                        break;
+                }
+            }
+
+            DBG_ASSERT( (it == aSubstVector.end()), "lookup<->coverage table mismatch" );
+            // now apply the glyph substitutions that have been collected in this subtable
+            for( it = aSubstVector.begin(); it != aSubstVector.end(); ++it )
+                aGlyphSubstitution[ (*it).first ] =  (*it).second;
+
+        }
+    }
+
+    delete[] pGSUB;
+    return 0;
 }
 
 // =======================================================================

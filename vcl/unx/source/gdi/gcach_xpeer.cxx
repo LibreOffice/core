@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-02 14:04:26 $
+ *  last change: $Author: hdu $ $Date: 2001-03-08 11:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay )
     if( !pFunc ) return;
     pXRenderQueryVersion            = (void(*)(Display*,int*,int*))pFunc;
     pFunc = dlsym( pRenderLib, "XRenderFindVisualFormat" );
+
     if( !pFunc ) return;
     pXRenderFindVisualFormat    = (XRenderPictFormat*(*)(Display*,Visual*))pFunc;
     pFunc = dlsym( pRenderLib, "XRenderFindFormat" );
@@ -208,6 +209,7 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
             // current version of XRENDER does not implement XRenderFreeGlyphs()
 //###       (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
             mnBytesUsed -= nHeight * ((nWidth + 3) & ~3);
+
             break;
         }
 #endif // USE_XRENDER
@@ -281,6 +283,7 @@ Pixmap X11GlyphPeer::GetPixmap( ServerFont& rServerFont, int nGlyphIndex )
             {
                 // conversion table LSB<->MSB (for XCreatePixmapFromData)
                 static const unsigned char lsb2msb[256] =
+
                 {
                     0x00, 0x80, 0x40, 0xC0, 0x20, 0xA0, 0x60, 0xE0,
                     0x10, 0x90, 0x50, 0xD0, 0x30, 0xB0, 0x70, 0xF0,
@@ -365,7 +368,7 @@ Glyph X11GlyphPeer::GetGlyphId( ServerFont& rServerFont, int nGlyphIndex )
         // upload glyph bitmap to server
         GlyphSet aGlyphSet = GetGlyphSet( rServerFont );
 
-        aGlyphId = nGlyphIndex;
+        aGlyphId = nGlyphIndex & 0x00FFFFFF;
         const ULONG nBytes = maRawBitmap.mnScanlineSize * maRawBitmap.mnHeight;
         (*pXRenderAddGlyphs)( mpDisplay, aGlyphSet, &aGlyphId, &aGlyphInfo, 1,
             (char*)maRawBitmap.mpBits,  nBytes );
