@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdlgfact.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:49:38 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
+#endif
+#ifndef _SVX_SVXIDS_HRC
+#include <svx/svxids.hrc>
 #endif
 // class ResId
 #include <tools/rc.hxx>
@@ -1692,6 +1695,10 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
         case TP_OPTLOAD_PAGE :
         case RID_SW_TP_OPTLOAD_PAGE :
             return SwLoadOptPage::Create;
+            break;
+        case TP_OPTCAPTION_PAGE:
+        case RID_SW_TP_OPTCAPTION_PAGE:
+            return SwCaptionOptPage::Create;
             break;
         case TP_CONTENT_OPT :
         case RID_SW_TP_CONTENT_OPT:
