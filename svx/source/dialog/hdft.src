@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:51:19 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ korean ] = "¸Ó¸®±Û »ğÀÔ(~D)";
         Text[ turkish ] = "~Üstbilgi oluştur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Activar encabezamiento";
     };
     CheckBox CB_SHARED
     {
@@ -130,7 +131,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ english_us ] = "Same ~content left/right" ;
         Text[ chinese_simplified ] = "×óÓÒÄÚÈİÏàÍ¬(~C)";
         Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
-        Text[ polish ] = "Zawarto~œæ z lewej i z prawej jest taka sama";
+        Text[ polish ] = "Taka sama zawartoœæ na stronie parzystej/nieparzystej";
         Text[ japanese ] = "¶‰EÍß°¼Ş“¯ˆê€–Ú(~C)";
         Text[ chinese_traditional ] = "¤º®e¥ª¥k¬Û¦P(~C)";
         Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
@@ -138,6 +139,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ korean ] = "³»¿ë ¿ŞÂÊ/¿À¸¥ÂÊ °°°Ô(~C)";
         Text[ turkish ] = "Sol/sağ içerik ay~nı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Contenido a la izquierda/derecha igual";
     };
     FixedText FT_LMARGIN
     {
@@ -167,6 +169,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ korean ] = "¿ŞÂÊ ¿©¹é(~L)";
         Text[ turkish ] = "S~ol kenar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Margen ~izquierdo";
     };
     MetricField ED_LMARGIN
     {
@@ -211,6 +214,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é(~I)";
         Text[ turkish ] = "~Sağ kenar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Margen ~derecho";
     };
     MetricField ED_RMARGIN
     {
@@ -253,6 +257,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ korean ] = "°£°İ(~S)";
         Text[ turkish ] = "U~zaklık";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Espacio";
     };
     MetricField ED_DIST
     {
@@ -294,6 +299,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ korean ] = "³ôÀÌ(~H)";
         Text[ turkish ] = "Y~ükseklik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ltura";
     };
     MetricField ED_HEIGHT
     {
@@ -339,6 +345,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ korean ] = "³ôÀÌ ÀÚµ¿ ¸ÂÃã(~A)";
         Text[ turkish ] = "Yüksekliği oto~matik olarak ayarla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ajus~te dinámico de la altura";
     };
     FixedLine FL_FRAME
     {
@@ -367,6 +374,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ korean ] = "¸Ó¸®±Û";
         Text[ turkish ] = "Üstbilgi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Encabezamiento";
     };
     Window WN_BSP
     {
@@ -400,6 +408,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ korean ] = "µ¡ºÙÀÓ(~M)...";
         Text[ turkish ] = "Ayr~ıntılar...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Opciones...";
     };
     Text[ chinese_simplified ] = "Ò³Ã¼";
     Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
@@ -411,6 +420,7 @@ TabPage RID_SVXPAGE_HEADER
     Text[ korean ] = "¸Ó¸®±Û";
     Text[ turkish ] = "Üstbilgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Encabezamiento";
 };
  // RID_SVXPAGE_FOOTER ----------------------------------------------------
 TabPage RID_SVXPAGE_FOOTER
@@ -458,6 +468,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ korean ] = "¹Ù´Ú±Û »ğÀÔ(~F)";
         Text[ turkish ] = "A~ltbilgi oluştur";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Activar pie de página";
     };
     CheckBox CB_SHARED
     {
@@ -478,7 +489,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ english_us ] = "Same ~content left/right" ;
         Text[ chinese_simplified ] = "×óÓÒÄÚÈİÏàÍ¬(~C)";
         Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
-        Text[ polish ] = "Zawartoœæ z prawej i z lewej jest ta~ka sama";
+        Text[ polish ] = "Taka sama zawartoœæ na stronie parzystej/nieparzystej";
         Text[ japanese ] = "¶‰EÍß°¼Ş“¯ˆê€–Ú(~C)";
         Text[ chinese_traditional ] = "¤º®e¥ª¥k¬Û¦P(~C)";
         Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
@@ -486,6 +497,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ korean ] = "³»¿ë ¿ŞÂÊ/¿À¸¥ÂÊ °°°Ô(~C)";
         Text[ turkish ] = "Sol/sağ içerik ay~nı";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Igual ~contenido a la izquierda/derecha";
     };
     FixedText FT_LMARGIN
     {
@@ -515,6 +527,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ korean ] = "¿ŞÂÊ ¿©¹é(~L)";
         Text[ turkish ] = "S~ol kenar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Margen ~izquierdo";
     };
     MetricField ED_LMARGIN
     {
@@ -559,6 +572,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é(~I)";
         Text[ turkish ] = "~Sağ kenar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Margen ~derecho";
     };
     MetricField ED_RMARGIN
     {
@@ -600,6 +614,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ korean ] = "°£°İ(~S)";
         Text[ turkish ] = "~Uzaklık";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Es~pacio";
     };
     MetricField ED_DIST
     {
@@ -642,6 +657,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ korean ] = "³ôÀÌ(~H)";
         Text[ turkish ] = "Y~ükseklik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ltura";
     };
     MetricField ED_HEIGHT
     {
@@ -689,6 +705,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ korean ] = "³ôÀÌ ÀÚµ¿Á¶Àı(~A)";
         Text[ turkish ] = "Yüksekliği oto~matik olarak ayarla";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Aj~uste dinámico de la altura";
     };
 
     FixedLine FL_FRAME
@@ -718,6 +735,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ korean ] = "¹Ù´Ú±Û";
         Text[ turkish ] = "Altbilgi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Pie de página";
     };
     Window WN_BSP
     {
@@ -751,6 +769,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ korean ] = "µ¡ºÙÀÓ(~M)...";
         Text[ turkish ] = "Ayr~ıntılar...";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Opciones...";
     };
     Text[ chinese_simplified ] = "Ò³½Å";
     Text[ russian ] = "Íèæíèé êîëîíòèòóë";
@@ -762,6 +781,7 @@ TabPage RID_SVXPAGE_FOOTER
     Text[ korean ] = "¹Ù´Ú±Û";
     Text[ turkish ] = "Altbilgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Pie de página";
 };
 QueryBox RID_SVXQBX_DELETE_HEADFOOT
 {
@@ -791,6 +811,7 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
     Message[ korean ] = "¸Ó¸®±ÛÀÌ³ª ¹Ù´Ú±ÛÀ» ¾ø¾Ö¸é ±âÁ¸ÀÇ ÅØ½ºÆ®°¡ »èÁ¦µË´Ï´Ù. \n³»¿ëÀ» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Üstbilgi ve altbilginin kaldırılması ile mevcut metin silinecek.\nİçeriği silmek istiyor musunuz?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "Al desactivar el encabezamiento o pie de página se eliminará su contenido.\n¿Desea eliminarlo?";
 };
 
  // ********************************************************************** EOF
