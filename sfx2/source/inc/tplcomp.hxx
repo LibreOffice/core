@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplcomp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+ *  last change: $Author: rt $ $Date: 2001-08-09 13:40:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 //ASDBG #ifndef _USR_SERVICES_HXX
 //ASDBG #include <usr/services.hxx>
 //ASDBG #endif
-#ifndef _DTRANS_HXX
-#include <so3/dtrans.hxx>
-#endif
 #ifndef _COM_SUN_STAR_CHAOS_XCOMMANDEXECUTOR_HPP_
 #include <com/sun/star/chaos/XCommandExecutor.hpp>
 #endif
