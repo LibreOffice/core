@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-19 14:59:37 $
+ *  last change: $Author: kso $ $Date: 2001-04-27 13:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ using namespace package_ucp;
 #define NONE_MODIFIED           sal_uInt32( 0x00 )
 #define MEDIATYPE_MODIFIED      sal_uInt32( 0x01 )
 #define COMPRESSED_MODIFIED     sal_uInt32( 0x02 )
+#define ENCRYPTED_MODIFIED      sal_uInt32( 0x03 )
 
 //=========================================================================
 //=========================================================================
@@ -171,9 +172,10 @@ using namespace package_ucp;
 
 ContentProperties::ContentProperties( const OUString& rContentType )
 : aContentType( rContentType ),
-#if SUPD>616
+#if SUPD>614
   nSize( 0 ),
-  bCompressed( sal_True )
+  bCompressed( sal_True ),
+  bCompressed( sal_False )
 #else
   nSize( 0 )
 #endif
@@ -808,14 +810,26 @@ Reference< XRow > Content::getPropertyValues(
             }
             else if ( rProp.Name.compareToAscii( "Size" ) == 0 )
             {
-                xRow->appendLong   ( rProp, rData.nSize );
+                // Property only available for streams.
+                if ( rData.bIsDocument )
+                    xRow->appendLong( rProp, rData.nSize );
+                else
+                    xRow->appendVoid( rProp );
             }
-#if SUPD>616
+#if SUPD>614
             else if ( rProp.Name.compareToAscii( "Compressed" ) == 0 )
             {
                 // Property only available for streams.
                 if ( rData.bIsDocument )
                     xRow->appendBoolean( rProp, rData.bCompressed );
+                else
+                    xRow->appendVoid( rProp );
+            }
+            else if ( rProp.Name.compareToAscii( "Encrypted" ) == 0 )
+            {
+                // Property only available for streams.
+                if ( rData.bIsDocument )
+                    xRow->appendBoolean( rProp, rData.bEncrypted );
                 else
                     xRow->appendVoid( rProp );
             }
@@ -885,14 +899,17 @@ Reference< XRow > Content::getPropertyValues(
                       getCppuType( static_cast< const OUString * >( 0 ) ),
                       PropertyAttribute::BOUND ),
             rData.aMediaType );
-        xRow->appendLong   (
-            Property( OUString::createFromAscii( "Size" ),
-                      -1,
-                      getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
-                      PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
-            rData.nSize );
+        // Property only available for streams.
+        if ( rData.bIsDocument )
+            xRow->appendLong   (
+                Property( OUString::createFromAscii( "Size" ),
+                          -1,
+                          getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
+                          PropertyAttribute::BOUND
+                              | PropertyAttribute::READONLY ),
+                rData.nSize );
 
-#if SUPD>616
+#if SUPD>614
         // Property only available for streams.
         if ( rData.bIsDocument )
             xRow->appendBoolean(
@@ -901,6 +918,15 @@ Reference< XRow > Content::getPropertyValues(
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND ),
                 rData.bCompressed );
+
+        // Property only available for streams.
+        if ( rData.bIsDocument )
+            xRow->appendBoolean(
+                Property( OUString::createFromAscii( "Encrypted" ),
+                          -1,
+                          getCppuBooleanType(),
+                          PropertyAttribute::BOUND ),
+                rData.bEncrypted );
 #endif
 
         // Append all Additional Core Properties.
@@ -1014,7 +1040,7 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
         {
             // Read-only property!
         }
-#if SUPD>616
+#if SUPD>614
         else if ( rValue.Name.compareToAscii( "Compressed" ) == 0 )
         {
             // Property only available for streams.
@@ -1035,6 +1061,72 @@ void Content::setPropertyValues( const Sequence< PropertyValue >& rValues )
                           nChanged++;
                         bStore = sal_True;
                         m_nModifiedProps |= COMPRESSED_MODIFIED;
+                    }
+                }
+            }
+        }
+        else if ( rValue.Name.compareToAscii( "Encrypted" ) == 0 )
+        {
+            // Property only available for streams.
+            if ( m_aProps.bIsDocument )
+            {
+                sal_Bool bNewValue;
+                if ( rValue.Value >>= bNewValue )
+                {
+                    if ( bNewValue != m_aProps.bEncrypted )
+                    {
+                        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+
+                        aEvent.PropertyName = rValue.Name;
+                        aEvent.OldValue     = makeAny( m_aProps.bEncrypted );
+                        aEvent.NewValue     = makeAny( bNewValue );
+
+                        m_aProps.bEncrypted = bNewValue;
+                          nChanged++;
+                        bStore = sal_True;
+                        m_nModifiedProps |= ENCRYPTED_MODIFIED;
+                    }
+                }
+            }
+        }
+        else if ( rValue.Name.compareToAscii( "EncryptionKey" ) == 0 )
+        {
+            // @@@ This is a temporary solution. In the future submitting
+            //     the key should be done using an interaction handler!
+
+            // Write-Only property. Only supported by root folder ( all
+            // streams of a package have the same encryption key ).
+            if ( m_aUri.getPath().compareToAscii( "/" ) == 0 )
+            {
+                Reference< XPropertySet > xPropSet( getPackage(), UNO_QUERY );
+
+                OSL_ENSURE( xPropSet.is(),
+                            "Content::setPropertyValues - "
+                            "Got no XPropertySet interface from package!" );
+
+                if ( xPropSet.is() )
+                {
+                    try
+                    {
+                        xPropSet->setPropertyValue(
+                                OUString::createFromAscii( "EncryptionKey" ),
+                                rValue.Value );
+                    }
+                    catch ( UnknownPropertyException & )
+                    {
+                        // setPropertyValue
+                    }
+                    catch ( PropertyVetoException & )
+                    {
+                        // setPropertyValue
+                    }
+                    catch ( IllegalArgumentException & )
+                    {
+                        // setPropertyValue
+                    }
+                    catch ( WrappedTargetException & )
+                    {
+                        // setPropertyValue
                     }
                 }
             }
@@ -1823,32 +1915,6 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
                 return sal_False;
             }
 
-            // Size
-            try
-            {
-                Any aSize
-                    = xPropSet->getPropertyValue(
-                        OUString::createFromAscii( "Size" ) );
-                if ( !( aSize >>= rProps.nSize ) )
-                {
-                    VOS_ENSURE( sal_False,
-                                "Content::loadData - Got no Size value!" );
-                    return sal_False;
-                }
-            }
-            catch ( UnknownPropertyException & )
-            {
-                VOS_ENSURE( sal_False,
-                            "Content::loadData - Got no Size value!" );
-                return sal_False;
-            }
-            catch ( WrappedTargetException & )
-            {
-                VOS_ENSURE( sal_False,
-                            "Content::loadData - Got no Size value!" );
-                return sal_False;
-            }
-
             Reference< XEnumerationAccess > xEnumAccess;
             aEntry >>= xEnumAccess;
 
@@ -1870,10 +1936,35 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
                 rProps.bIsFolder = sal_False;
             }
 
-#if SUPD>616
-            // Compressed ( only available for streams )
             if ( rProps.bIsDocument )
             {
+                // Size ( only available for streams )
+                try
+                {
+                    Any aSize
+                        = xPropSet->getPropertyValue(
+                            OUString::createFromAscii( "Size" ) );
+                    if ( !( aSize >>= rProps.nSize ) )
+                    {
+                        VOS_ENSURE( sal_False,
+                                    "Content::loadData - Got no Size value!" );
+                        return sal_False;
+                    }
+                }
+                catch ( UnknownPropertyException & )
+                {
+                    VOS_ENSURE( sal_False,
+                                "Content::loadData - Got no Size value!" );
+                    return sal_False;
+                }
+                catch ( WrappedTargetException & )
+                {
+                    VOS_ENSURE( sal_False,
+                                "Content::loadData - Got no Size value!" );
+                    return sal_False;
+                }
+#if SUPD>614
+                // Compressed ( only available for streams )
                 try
                 {
                     Any aCompressed
@@ -1882,24 +1973,50 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
                     if ( !( aCompressed >>= rProps.bCompressed ) )
                     {
                         VOS_ENSURE( sal_False,
-                            "Content::loadData - Got no Commpress value!" );
+                            "Content::loadData - Got no Compressed value!" );
                         return sal_False;
                     }
                 }
                 catch ( UnknownPropertyException & )
                 {
                     VOS_ENSURE( sal_False,
-                            "Content::loadData - Got no Compress value!" );
+                            "Content::loadData - Got no Compressed value!" );
                     return sal_False;
                 }
                 catch ( WrappedTargetException & )
                 {
                     VOS_ENSURE( sal_False,
-                            "Content::loadData - Got no Compress value!" );
+                            "Content::loadData - Got no Compressed value!" );
                     return sal_False;
                 }
-            }
+
+                // Encrypted ( only available for streams )
+                try
+                {
+                    Any aEncrypted
+                        = xPropSet->getPropertyValue(
+                            OUString::createFromAscii( "Encrypted" ) );
+                    if ( !( aEncrypted >>= rProps.bEncrypted ) )
+                    {
+                        VOS_ENSURE( sal_False,
+                            "Content::loadData - Got no Encrypted value!" );
+                        return sal_False;
+                    }
+                }
+                catch ( UnknownPropertyException & )
+                {
+                    VOS_ENSURE( sal_False,
+                            "Content::loadData - Got no Encrypted value!" );
+                    return sal_False;
+                }
+                catch ( WrappedTargetException & )
+                {
+                    VOS_ENSURE( sal_False,
+                            "Content::loadData - Got no Encrypted value!" );
+                    return sal_False;
+                }
 #endif
+            }
             return sal_True;
         }
     }
@@ -2052,9 +2169,8 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
 
     try
     {
-        Any aEntry = xNA->getByHierarchicalName( m_aUri.getPath() );
         Reference< XPropertySet > xPropSet;
-        aEntry >>= xPropSet;
+        xNA->getByHierarchicalName( m_aUri.getPath() ) >>= xPropSet;
 
         if ( !xPropSet.is() )
         {
@@ -2075,7 +2191,7 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
             m_nModifiedProps &= ~MEDIATYPE_MODIFIED;
         }
 
-#if SUPD>616
+#if SUPD>614
         if ( m_nModifiedProps & COMPRESSED_MODIFIED )
         {
             if ( !isFolder() )
@@ -2084,6 +2200,16 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
                                 makeAny( m_aProps.bCompressed ) );
 
             m_nModifiedProps &= ~COMPRESSED_MODIFIED;
+        }
+
+        if ( m_nModifiedProps & ENCRYPTED_MODIFIED )
+        {
+            if ( !isFolder() )
+                xPropSet->setPropertyValue(
+                                OUString::createFromAscii( "Encrypted" ),
+                                makeAny( m_aProps.bEncrypted ) );
+
+            m_nModifiedProps &= ~ENCRYPTED_MODIFIED;
         }
 #endif
 

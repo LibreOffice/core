@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-04-05 09:48:30 $
+ *  last change: $Author: kso $ $Date: 2001-04-27 13:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,12 +325,8 @@ Reference< XHierarchicalNameAccess > ContentProvider::createPackage(
 
         Reference< XInterface > xIfc
             = m_xSMgr->createInstanceWithArguments(
-#if SUPD>625
                 OUString::createFromAscii(
                                 "com.sun.star.packages.comp.ZipPackage" ),
-#else
-                OUString::createFromAscii( "com.sun.star.package.Package" ),
-#endif
                 aArguments );
 
         if ( xIfc.is() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-27 14:08:51 $
+ *  last change: $Author: kso $ $Date: 2001-04-27 13:19:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,11 @@
     IsDocument            x       x
     IsFolder              x       x
     MediaType            (x)      x
-    Size                  x       x
     Title                 x       x
-#if SUPD>616
+    Size                          x
+#if SUPD>614
     Compressed                    x
+    Encrypted                     x
 #endif
 
     getCommandInfo        x       x
@@ -186,12 +187,6 @@ Sequence< Property > Content::getProperties(
                 -1,
                 getCppuType( static_cast< const OUString * >( 0 ) ),
                 PropertyAttribute::BOUND
-            ),
-            Property(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ),
-                -1,
-                getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
-                PropertyAttribute::BOUND | PropertyAttribute::READONLY
             )
             ///////////////////////////////////////////////////////////////
             // New properties
@@ -250,7 +245,7 @@ Sequence< Property > Content::getProperties(
                 -1,
                 getCppuType( static_cast< const sal_Int64 * >( 0 ) ),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
-#if SUPD>616
+#if SUPD>614
             ),
             ///////////////////////////////////////////////////////////////
             // New properties
@@ -260,11 +255,17 @@ Sequence< Property > Content::getProperties(
                 -1,
                 getCppuType( static_cast< const sal_Bool * >( 0 ) ),
                 PropertyAttribute::BOUND
+            ),
+            Property(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "Encrypted" ) ),
+                -1,
+                getCppuType( static_cast< const sal_Bool * >( 0 ) ),
+                PropertyAttribute::BOUND
 #endif
             )
         };
-#if SUPD>616
-        return Sequence< Property >( aStreamPropertyInfoTable, 7 );
+#if SUPD>614
+        return Sequence< Property >( aStreamPropertyInfoTable, 8 );
 #else
         return Sequence< Property >( aStreamPropertyInfoTable, 6 );
 #endif
