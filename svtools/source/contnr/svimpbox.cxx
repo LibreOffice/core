@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:23:27 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,7 +796,7 @@ void SvImpLBox::KeyLeftRight( long nDelta )
 // dem letzten Eintrag ist
 SvLBoxEntry* SvImpLBox::GetClickedEntry( const Point& rPoint ) const
 {
-    if( pView->GetEntryCount() == 0 || !pStartEntry)
+    if( pView->GetEntryCount() == 0 || !pStartEntry || !pView->GetEntryHeight())
         return 0;
 
     USHORT nClickedEntry = (USHORT)(rPoint.Y() / pView->GetEntryHeight() );
@@ -838,7 +838,8 @@ BOOL SvImpLBox::EntryReallyHit(SvLBoxEntry* pEntry,const Point& rPosPixel,long n
 SvLBoxEntry* SvImpLBox::GetEntry( const Point& rPoint ) const
 {
     if( (pView->GetEntryCount() == 0) || !pStartEntry ||
-        (rPoint.Y() > aOutputSize.Height()) )
+        (rPoint.Y() > aOutputSize.Height())
+        || !pView->GetEntryHeight())
         return 0;
 
     USHORT nClickedEntry = (USHORT)(rPoint.Y() / pView->GetEntryHeight() );
@@ -3164,11 +3165,23 @@ void SvImpLBox::Command( const CommandEvent& rCEvt )
         }
         //added by BerryJia for fixing Bug102739 2002-9-9 17:00(Beijing Time)
         if( bClickedIsFreePlace )
+        {
             while(!aSelRestore.empty())
             {
-                SetCurEntry( aSelRestore.top());
+                SvLBoxEntry* pEntry = aSelRestore.top();
+                //#i19717# the entry is maybe already deleted
+                bool bFound = false;
+                for(ULONG nEntry = 0; nEntry < pView->GetEntryCount(); nEntry++)
+                    if(pEntry == pView->GetEntry(nEntry))
+                    {
+                        bFound = true;
+                        break;
+                    }
+                if(bFound)
+                    SetCurEntry( pEntry );
                 aSelRestore.pop();
             }
+        }
     }
 #ifndef NOCOMMAND
     else
