@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpref.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:37:59 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         Text[ hebrew ] = "Bereich";
         Text[ hindi ] = "विस्तीर्ण";
         Text[ slovak ] = "Oblasť";
+        Text[ hungarian ] = "Terület";
+        Text[ slovenian ] = "Področje";
     };
     Edit ED_ASSIGN
     {
@@ -145,6 +147,8 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     OKButton BTN_OK
     {
@@ -165,6 +169,7 @@ ModelessDialog RID_SCDLG_SIMPLEREF
         TabStop = TRUE ;
     };
 };
+
 
 
 
