@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:12:46 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,8 @@
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
 #endif
+
+#include <comphelper/seqstream.hxx>
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XCLIPBOARDNOTIFIER_HPP_
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
@@ -1966,6 +1968,25 @@ sal_Bool TransferableDataHelper::GetSotStorageStream( const DataFlavor& rFlavor,
         rxStream->Write( aSeq.getConstArray(), aSeq.getLength() );
         rxStream->Seek( 0 );
     }
+
+    return bRet;
+}
+
+sal_Bool TransferableDataHelper::GetInputStream( SotFormatStringId nFormat, Reference < XInputStream >& rxStream )
+{
+    DataFlavor aFlavor;
+    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetInputStream( aFlavor, rxStream ) );
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Bool TransferableDataHelper::GetInputStream( const DataFlavor& rFlavor, Reference < XInputStream >& rxStream )
+{
+    Sequence< sal_Int8 >    aSeq;
+    sal_Bool                bRet = GetSequence( rFlavor, aSeq );
+
+    if( bRet )
+          rxStream = new ::comphelper::SequenceInputStream( aSeq );
 
     return bRet;
 }
