@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tptable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:00:23 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:14:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 //------------------------------------------------------------------
 
-#define _TPTABLE_CXX
 #include "scitems.hxx"
 
 #include "tptable.hxx"
@@ -77,7 +76,30 @@
 #include "sc.hrc"
 #include "pagedlg.hrc"
 
-#undef _TPTABLE_CXX
+// =======================================================================
+
+void EmptyNumericField::Modify()
+{
+    if( GetText().Len() )
+        NumericField::Modify();
+    else
+        SetEmptyFieldValue();
+}
+
+void EmptyNumericField::SetValue( long nValue )
+{
+    if( nValue == 0 )
+        SetEmptyFieldValue();
+    else
+        NumericField::SetValue( nValue );
+}
+
+long EmptyNumericField::GetValue() const
+{
+    return IsEmptyFieldValue() ? 0 : NumericField::GetValue();
+}
+
+// =======================================================================
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -95,9 +117,18 @@ BOOL lcl_PutVObjModeItem( USHORT            nWhich,
 BOOL lcl_PutScaleItem( USHORT               nWhich,
                        SfxItemSet&          rCoreSet,
                        const SfxItemSet&    rOldSet,
-                       const RadioButton&   rBtn,
+                       const ListBox&       rListBox,
+                       USHORT               nLBEntry,
                        const SpinField&     rEd,
                        UINT16               nValue );
+
+BOOL lcl_PutScaleItem2( USHORT               nWhich,
+                       SfxItemSet&          rCoreSet,
+                       const SfxItemSet&    rOldSet,
+                       const ListBox&       rListBox,
+                       USHORT               nLBEntry,
+                       const NumericField&  rEd1,
+                       const NumericField&  rEd2 );
 
 BOOL lcl_PutBoolItem( USHORT            nWhich,
                       SfxItemSet&       rCoreSet,
@@ -110,6 +141,7 @@ BOOL lcl_PutBoolItem( USHORT            nWhich,
 #define PAGENO_HDL          LINK(this,ScTablePage,PageNoHdl)
 #define PAGEDIR_HDL         LINK(this,ScTablePage,PageDirHdl)
 #define SCALE_HDL           LINK(this,ScTablePage,ScaleHdl)
+
 #define WAS_DEFAULT(w,s)    (SFX_ITEM_DEFAULT==(s).GetItemState((w),TRUE))
 #define GET_BOOL(sid,set)   ((const SfxBoolItem&)((set).Get(GetWhich((sid))))).GetValue()
 #define GET_USHORT(sid,set) (USHORT)((const SfxUInt16Item&)((set).Get(GetWhich((sid))))).GetValue()
@@ -118,12 +150,9 @@ BOOL lcl_PutBoolItem( USHORT            nWhich,
 
 //========================================================================
 
-ScTablePage::ScTablePage( Window*               pParent,
-                          const SfxItemSet&     rCoreAttrs )
+ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
-    :   SfxTabPage      ( pParent,
-                          ScResId( RID_SCPAGE_TABLE ),
-                          rCoreAttrs ),
+        SfxTabPage( pParent, ScResId( RID_SCPAGE_TABLE ), rCoreAttrs ),
 
         aBtnHeaders         ( this, ScResId( BTN_HEADER ) ),
         aBtnGrid            ( this, ScResId( BTN_GRID ) ),
@@ -144,18 +173,23 @@ ScTablePage::ScTablePage( Window*               pParent,
         aBtnPageNo          ( this, ScResId( BTN_PAGENO ) ),
         aEdPageNo           ( this, ScResId( ED_PAGENO ) ),
         aFlPageDir          ( this, ScResId( FL_PAGEDIR ) ),
-        aBtnScaleAll        ( this, ScResId( BTN_SCALEALL ) ),
-        aBtnScalePageNum    ( this, ScResId( BTN_SCALEPAGENUM ) ),
+        aFlScale            ( this, ScResId( FL_SCALE ) ),
+        aFtScaleMode        ( this, ScResId( FT_SCALEMODE ) ),
+        aLbScaleMode        ( this, ScResId( LB_SCALEMODE ) ),
+        aFtScaleAll         ( this, ScResId( FT_SCALEFACTOR ) ),
         aEdScaleAll         ( this, ScResId( ED_SCALEALL ) ),
-        aEdScalePageNum     ( this, ScResId( ED_SCALEPAGENUM ) ),
-        aFlScale            ( this, ScResId( FL_SCALE ) )
+        aFtScalePageWidth   ( this, ScResId( FT_SCALEPAGEWIDTH ) ),
+        aEdScalePageWidth   ( this, ScResId( ED_SCALEPAGEWIDTH ) ),
+        aFtScalePageHeight  ( this, ScResId( FT_SCALEPAGEHEIGHT ) ),
+        aEdScalePageHeight  ( this, ScResId( ED_SCALEPAGEHEIGHT ) ),
+        aFtScalePageNum     ( this, ScResId( FT_SCALEPAGENUM ) ),
+        aEdScalePageNum     ( this, ScResId( ED_SCALEPAGENUM ) )
 {
     SetExchangeSupport();
-    aBtnPageNo          .SetClickHdl( PAGENO_HDL );
-    aBtnTopDown         .SetClickHdl( PAGEDIR_HDL );
-    aBtnLeftRight       .SetClickHdl( PAGEDIR_HDL );
-    aBtnScaleAll        .SetClickHdl( SCALE_HDL );
-    aBtnScalePageNum    .SetClickHdl( SCALE_HDL );
+    aBtnPageNo.SetClickHdl( PAGENO_HDL );
+    aBtnTopDown.SetClickHdl( PAGEDIR_HDL );
+    aBtnLeftRight.SetClickHdl( PAGEDIR_HDL );
+    aLbScaleMode.SetSelectHdl( SCALE_HDL );
 
     Size aBmpSize = Image( IMG_LEFTRIGHT ).GetSizePixel();
     aBmpPageDir.SetOutputSizePixel( aBmpSize );
@@ -167,8 +201,8 @@ ScTablePage::ScTablePage( Window*               pParent,
 
 void ScTablePage::ShowImage()
 {
-    sal_Bool bDark = GetDisplayBackground().GetColor().IsDark();
-    sal_Bool bLeftRight = aBtnLeftRight.IsChecked();
+    bool bDark = GetDisplayBackground().GetColor().IsDark();
+    bool bLeftRight = aBtnLeftRight.IsChecked();
     aBmpPageDir.SetImage( bDark ?
         (bLeftRight ? aImgLeftRightHC : aImgTopDownHC) :
         (bLeftRight ? aImgLeftRight : aImgTopDown) );
@@ -176,28 +210,27 @@ void ScTablePage::ShowImage()
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScTablePage::~ScTablePage()
+ScTablePage::~ScTablePage()
 {
 }
 
 //------------------------------------------------------------------------
 
-USHORT* __EXPORT ScTablePage::GetRanges()
+USHORT* ScTablePage::GetRanges()
 {
     return pPageTableRanges;
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTablePage::Create( Window*            pParent,
-                                          const SfxItemSet& rCoreSet )
+SfxTabPage* ScTablePage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScTablePage( pParent, rCoreSet ) );
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTablePage::Reset( const SfxItemSet& rCoreSet )
+void ScTablePage::Reset( const SfxItemSet& rCoreSet )
 {
     BOOL    bTopDown = GET_BOOL( SID_SCATTR_PAGE_TOPDOWN, rCoreSet );
     USHORT  nWhich   = 0;
@@ -233,23 +266,45 @@ void __EXPORT ScTablePage::Reset( const SfxItemSet& rCoreSet )
     //------------
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALE);
-
     if ( rCoreSet.GetItemState( nWhich, TRUE ) >= SFX_ITEM_AVAILABLE )
     {
         USHORT nScale = ((const SfxUInt16Item&)rCoreSet.Get(nWhich)).GetValue();
+        if( nScale > 0 )
+            aLbScaleMode.SelectEntryPos( SC_TPTABLE_SCALE_PERCENT );
+        aEdScaleAll.SetValue( (nScale > 0) ? nScale : 100 );
+    }
 
-        aBtnScaleAll.Check( (nScale>0) );
-        aEdScaleAll .SetValue( (nScale>0) ? nScale : 100 );
+    nWhich = GetWhich(SID_SCATTR_PAGE_SCALETO);
+    if ( rCoreSet.GetItemState( nWhich, TRUE ) >= SFX_ITEM_AVAILABLE )
+    {
+        const ScPageScaleToItem& rItem = static_cast< const ScPageScaleToItem& >( rCoreSet.Get( nWhich ) );
+        USHORT nWidth = rItem.GetWidth();
+        USHORT nHeight = rItem.GetHeight();
+
+        /*  width==0 and height==0 is invalid state, used as "not selected".
+            Dialog shows width=height=1 then. */
+        bool bValid = nWidth || nHeight;
+        if( bValid )
+            aLbScaleMode.SelectEntryPos( SC_TPTABLE_SCALE_TO );
+        aEdScalePageWidth.SetValue( bValid ? nWidth : 1 );
+        aEdScalePageHeight.SetValue( bValid ? nHeight : 1 );
     }
 
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALETOPAGES);
-
     if ( rCoreSet.GetItemState( nWhich, TRUE ) >= SFX_ITEM_AVAILABLE )
     {
         USHORT nPages = ((const SfxUInt16Item&)rCoreSet.Get(nWhich)).GetValue();
+        if( nPages > 0 )
+            aLbScaleMode.SelectEntryPos( SC_TPTABLE_SCALE_TO_PAGES );
+        aEdScalePageNum.SetValue( (nPages > 0) ? nPages : 1 );
+    }
 
-        aBtnScalePageNum.Check( (nPages>0) );
-        aEdScalePageNum .SetValue( (nPages>0) ? nPages : 1 );
+    if( aLbScaleMode.GetSelectEntryCount() == 0 )
+    {
+        // fall back to 100%
+        DBG_ERRORFILE( "ScTablePage::Reset - missing scaling item" );
+        aLbScaleMode.SelectEntryPos( SC_TPTABLE_SCALE_PERCENT );
+        aEdScaleAll.SetValue( 100 );
     }
 
     PageDirHdl( NULL );
@@ -263,20 +318,21 @@ void __EXPORT ScTablePage::Reset( const SfxItemSet& rCoreSet )
     aBtnHeaders     .SaveValue();
     aBtnTopDown     .SaveValue();
     aBtnLeftRight   .SaveValue();
-    aBtnScaleAll    .SaveValue();
-    aBtnScalePageNum.SaveValue();
+    aLbScaleMode    .SaveValue();
     aBtnCharts      .SaveValue();
     aBtnObjects     .SaveValue();
     aBtnDrawings    .SaveValue();
     aBtnPageNo      .SaveValue();
     aEdPageNo       .SaveValue();
     aEdScaleAll     .SaveValue();
+    aEdScalePageWidth.SaveValue();
+    aEdScalePageHeight.SaveValue();
     aEdScalePageNum .SaveValue();
 }
 
 // -----------------------------------------------------------------------
 
-BOOL __EXPORT ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
+BOOL ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
 {
     const SfxItemSet&   rOldSet      = GetItemSet();
     USHORT              nWhichPageNo = GetWhich(SID_SCATTR_PAGE_FIRSTPAGENO);
@@ -355,22 +411,33 @@ BOOL __EXPORT ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     // Skalierung:
     //------------
 
+    if( !aEdScalePageWidth.GetValue() && !aEdScalePageHeight.GetValue() )
+    {
+        aLbScaleMode.SelectEntryPos( SC_TPTABLE_SCALE_PERCENT );
+        aEdScaleAll.SetValue( 100 );
+    }
+
     bDataChanged |= lcl_PutScaleItem( GetWhich(SID_SCATTR_PAGE_SCALE),
                                       rCoreSet, rOldSet,
-                                      aBtnScaleAll, aEdScaleAll,
-                                      (UINT16)aEdScaleAll.GetValue() );
+                                      aLbScaleMode, SC_TPTABLE_SCALE_PERCENT,
+                                      aEdScaleAll, (UINT16)aEdScaleAll.GetValue() );
+
+    bDataChanged |= lcl_PutScaleItem2( GetWhich(SID_SCATTR_PAGE_SCALETO),
+                                      rCoreSet, rOldSet,
+                                      aLbScaleMode, SC_TPTABLE_SCALE_TO,
+                                      aEdScalePageWidth, aEdScalePageHeight );
 
     bDataChanged |= lcl_PutScaleItem( GetWhich(SID_SCATTR_PAGE_SCALETOPAGES),
                                       rCoreSet, rOldSet,
-                                      aBtnScalePageNum, aEdScalePageNum,
-                                      (UINT16)aEdScalePageNum.GetValue() );
+                                      aLbScaleMode, SC_TPTABLE_SCALE_TO_PAGES,
+                                      aEdScalePageNum, (UINT16)aEdScalePageNum.GetValue() );
 
     return bDataChanged;
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScTablePage::DeactivatePage( SfxItemSet* pSet )
+int ScTablePage::DeactivatePage( SfxItemSet* pSet )
 {
     if ( pSet )
         FillItemSet( *pSet );
@@ -380,7 +447,7 @@ int __EXPORT ScTablePage::DeactivatePage( SfxItemSet* pSet )
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
+void ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
         ShowImage();
@@ -415,24 +482,24 @@ IMPL_LINK( ScTablePage, PageNoHdl, CheckBox*, pBtn )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScTablePage, ScaleHdl, RadioButton*, pBtn )
+IMPL_LINK( ScTablePage, ScaleHdl, ListBox*, pListBox )
 {
-    if ( aBtnScaleAll.IsChecked() )
-    {
-        aEdScalePageNum .Disable();
-        aEdScaleAll     .Enable();
+    // controls for "Reduce/enlarge"
+    bool bPercent = (aLbScaleMode.GetSelectEntryPos() == SC_TPTABLE_SCALE_PERCENT);
+    aFtScaleAll.Show( bPercent );
+    aEdScaleAll.Show( bPercent );
 
-        if ( pBtn )
-            aEdScaleAll.GrabFocus();
-    }
-    else if ( aBtnScalePageNum.IsChecked() )
-    {
-        aEdScaleAll     .Disable();
-        aEdScalePageNum .Enable();
+    // controls for "Scale to width/height"
+    bool bScaleTo = (aLbScaleMode.GetSelectEntryPos() == SC_TPTABLE_SCALE_TO);
+    aFtScalePageWidth.Show( bScaleTo );
+    aEdScalePageWidth.Show( bScaleTo );
+    aFtScalePageHeight.Show( bScaleTo );
+    aEdScalePageHeight.Show( bScaleTo );
 
-        if ( pBtn )
-            aEdScalePageNum.GrabFocus();
-    }
+    // controls for "Scale to pages"
+    bool bScalePages = (aLbScaleMode.GetSelectEntryPos() == SC_TPTABLE_SCALE_TO_PAGES);
+    aFtScalePageNum.Show( bScalePages );
+    aEdScalePageNum.Show( bScalePages );
 
     return 0;
 }
@@ -484,44 +551,50 @@ BOOL lcl_PutVObjModeItem( USHORT            nWhich,
 BOOL lcl_PutScaleItem( USHORT               nWhich,
                       SfxItemSet&           rCoreSet,
                       const SfxItemSet&     rOldSet,
-                      const RadioButton&    rBtn,
+                      const ListBox&        rListBox,
+                      USHORT                nLBEntry,
                       const SpinField&      rEd,
                       UINT16                nValue )
 {
-//    UINT16  nValue          = (UINT16)rEd.GetValue();
-    BOOL    bIsChecked      = rBtn.IsChecked();
-    BOOL    bSaveValue      = rBtn.GetSavedValue();
-    BOOL    bDataChanged    = FALSE;
+    BOOL bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
+    BOOL bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
+                        (rEd.GetSavedValue() != rEd.GetText()) ||
+                        !WAS_DEFAULT( nWhich, rOldSet );
 
-    if (   (bSaveValue && bIsChecked)
-        || (!bSaveValue && !bIsChecked) )
-    {
-        if (   (rEd.GetSavedValue() == rEd.GetText())
-            && WAS_DEFAULT(nWhich,rOldSet) )
-        {
-            rCoreSet.ClearItem( nWhich );
-        }
-        else
-        {
-//          rCoreSet.Put( SfxUInt16Item( nWhich, bIsChecked ? nValue : 0 ) );
-            if ( bIsChecked )
-                rCoreSet.Put( SfxUInt16Item( nWhich, nValue ) );
-            else
-                rCoreSet.Put( SfxUInt16Item( nWhich, 0 ) );
+    if( bDataChanged )
+        rCoreSet.Put( SfxUInt16Item( nWhich, bIsSel ? nValue : 0 ) );
+    else
+        rCoreSet.ClearItem( nWhich );
 
-            bDataChanged = TRUE;
-        }
-    }
-    else if ( bSaveValue && !bIsChecked )
+    return bDataChanged;
+}
+
+
+BOOL lcl_PutScaleItem2( USHORT               nWhich,
+                      SfxItemSet&           rCoreSet,
+                      const SfxItemSet&     rOldSet,
+                      const ListBox&        rListBox,
+                      USHORT                nLBEntry,
+                      const NumericField&   rEd1,
+                      const NumericField&   rEd2 )
+{
+    UINT16 nValue1 = (UINT16)rEd1.GetValue();
+    UINT16 nValue2 = (UINT16)rEd2.GetValue();
+    BOOL bIsSel = (rListBox.GetSelectEntryPos() == nLBEntry);
+    BOOL bDataChanged = (rListBox.GetSavedValue() != nLBEntry) ||
+                        (rEd1.GetSavedValue() != rEd1.GetText()) ||
+                        (rEd2.GetSavedValue() != rEd2.GetText()) ||
+                        !WAS_DEFAULT( nWhich, rOldSet );
+
+    if( bDataChanged )
     {
-        rCoreSet.Put( SfxUInt16Item( nWhich, 0 ) );
-        bDataChanged = TRUE;
+        ScPageScaleToItem aItem;
+        if( bIsSel )
+            aItem.Set( nValue1, nValue2 );
+        rCoreSet.Put( aItem );
     }
-    else if ( !bSaveValue && bIsChecked )
-    {
-        rCoreSet.Put( SfxUInt16Item( nWhich, nValue ) );
-        bDataChanged = TRUE;
-    }
+    else
+        rCoreSet.ClearItem( nWhich );
 
     return bDataChanged;
 }
