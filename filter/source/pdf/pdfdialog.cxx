@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-23 07:44:45 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ PDFDialog::PDFDialog( const Reference< XMultiServiceFactory > &rxMSF ) :
     ByteString aResMgrName( "pdffilter" );
 
     aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
-    mpResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILanguage() );
+    mpResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 }
 
 // -----------------------------------------------------------------------------
