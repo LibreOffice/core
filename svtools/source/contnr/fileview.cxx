@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-17 12:47:56 $
+ *  last change: $Author: dv $ $Date: 2001-07-18 11:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,10 @@
 #include <tools/wldcrd.hxx>
 #endif
 
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
@@ -179,7 +183,8 @@ class SvtFileView_Impl
 {
 public:
 
-    ::std::vector< SortingData_Impl* > maContent;
+    ::std::vector< SortingData_Impl* >  maContent;
+    ::osl::Mutex                        maMutex;
 
     ViewTabListBox_Impl*    mpView;
     sal_uInt16              mnSortColumn;
@@ -211,6 +216,8 @@ public:
                                           const OUString& rName );
     void                    FolderInserted( const OUString& rURL,
                                             const OUString& rTitle );
+
+    ULONG                   GetEntryPos( const OUString& rURL );
 
     void                    Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending );
 };
@@ -994,6 +1001,8 @@ SvtFileView_Impl::~SvtFileView_Impl()
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::Clear()
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     std::vector< SortingData_Impl* >::iterator aIt;
 
     for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
@@ -1005,6 +1014,8 @@ void SvtFileView_Impl::Clear()
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     SortingData_Impl* pData;
 
     INetURLObject aFolderObj( rFolder );
@@ -1113,6 +1124,8 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
          ( rFilter.compareToAscii( ALL_FILES_FILTER ) == COMPARE_EQUAL ) )
         return;
 
+    ::osl::MutexGuard aGuard( maMutex );
+
     sal_Bool bDelete;
 
     std::vector< SortingData_Impl* >::iterator aIt;
@@ -1153,6 +1166,9 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::OpenFolder_Impl()
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
+    mpView->SetUpdateMode( FALSE );
     mpView->ClearAll();
 
     std::vector< SortingData_Impl* >::iterator aIt;
@@ -1176,11 +1192,15 @@ void SvtFileView_Impl::OpenFolder_Impl()
     SvLBoxEntry* pFirst = mpView->First();
     if ( pFirst )
         mpView->SetCursor( pFirst, TRUE );
+
+    mpView->SetUpdateMode( TRUE );
 }
 
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::CreateDisplayText_Impl()
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(),
                                       Application::GetSettings().GetLocale() );
 
@@ -1227,13 +1247,15 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
 
 void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     OUString aTab     = OUString::createFromAscii( "\t" );
 
     sal_uInt32 nCount = (sal_uInt32) rList.getLength();
 
     for( sal_uInt32 i = 0; i < nCount; i++ )
     {
-        SortingData_Impl*   pEntry;
+        SortingData_Impl*   pEntry = new SortingData_Impl;
         OUString            aValue = rList[i];
         OUString            aDisplayText;
         sal_Int32           nIndex = 0;
@@ -1312,15 +1334,32 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     if ( ( nColumn == mnSortColumn ) &&
          ( bAscending == mbAscending ) )
          return;
+
+    String aEntryURL;
+    SvLBoxEntry* pEntry = mpView->GetCurEntry();
+    if ( pEntry && pEntry->GetUserData() )
+        aEntryURL = ( (SvtContentEntry*)pEntry->GetUserData() )->maURL;
 
     mnSortColumn = nColumn;
     mbAscending = bAscending;
 
     SortFolderContent_Impl();
     OpenFolder_Impl();
+
+    if ( aEntryURL.Len() )
+    {
+        ULONG nPos = GetEntryPos( aEntryURL );
+        if ( nPos < mpView->GetEntryCount() )
+        {
+            pEntry = mpView->GetEntry( nPos );
+            mpView->SetCurEntry( pEntry );
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1401,6 +1440,8 @@ sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne,
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::SortFolderContent_Impl()
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     sal_uInt32 nSize = maContent.size();
 
     if ( nSize > 1 )
@@ -1408,15 +1449,17 @@ void SvtFileView_Impl::SortFolderContent_Impl()
         gbAscending = mbAscending;
         gnColumn = mnSortColumn;
 
-        std::sort( maContent.begin(),
-                   maContent.end(),
-                   CompareSortingData_Impl );
+        std::stable_sort( maContent.begin(),
+                          maContent.end(),
+                          CompareSortingData_Impl );
     }
 }
 
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::EntryRemoved( const OUString& rURL )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     std::vector< SortingData_Impl* >::iterator aIt;
 
     for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
@@ -1433,6 +1476,8 @@ void SvtFileView_Impl::EntryRemoved( const OUString& rURL )
 void SvtFileView_Impl::EntryRenamed( OUString& rURL,
                                      const OUString& rTitle )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     std::vector< SortingData_Impl* >::iterator aIt;
 
     for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
@@ -1462,6 +1507,8 @@ void SvtFileView_Impl::EntryRenamed( OUString& rURL,
 void SvtFileView_Impl::FolderInserted( const OUString& rURL,
                                        const OUString& rTitle )
 {
+    ::osl::MutexGuard aGuard( maMutex );
+
     SortingData_Impl* pData = new SortingData_Impl;
 
     pData->maTitle    = rTitle;
@@ -1498,6 +1545,25 @@ void SvtFileView_Impl::FolderInserted( const OUString& rURL,
 
     maContent.push_back( pData );
 }
+
+// -----------------------------------------------------------------------
+ULONG SvtFileView_Impl::GetEntryPos( const OUString& rURL )
+{
+    ::osl::MutexGuard aGuard( maMutex );
+
+    std::vector< SortingData_Impl* >::iterator aIt;
+    ULONG   nPos = 0;
+
+    for ( aIt = maContent.begin(); aIt != maContent.end(); aIt++ )
+    {
+        if ( (*aIt)->maTargetURL == rURL )
+            return nPos;
+        nPos += 1;
+    }
+
+    return nPos;
+}
+
 
 namespace svtools {
 
