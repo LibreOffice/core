@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-25 14:27:01 $
+ *  last change: $Author: jp $ $Date: 2002-02-18 09:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,6 +740,8 @@ public:
                             sal_Bool bDelRedlines = sal_True,
                             sal_Bool bCopyFlyAtFly = sal_False ) const;
     sal_Bool IsInHeaderFooter( const SwNodeIndex& rIdx ) const;
+    sal_Bool IsInVerticalText( const SwPosition& rPos,
+                               const Point* pPt = 0 ) const;
 
     sal_Bool SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet );
     sal_Bool SetFrmFmtToFly( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFmt,

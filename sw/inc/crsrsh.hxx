@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-08 15:03:36 $
+ *  last change: $Author: jp $ $Date: 2002-02-18 09:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -815,6 +815,9 @@ public:
     const SwRedline* SelNextRedline();
     const SwRedline* SelPrevRedline();
     const SwRedline* GotoRedline( USHORT nArrPos, BOOL bSelect = FALSE );
+
+    // is cursor or the point in/over a vertical formatted text?
+    FASTBOOL IsInVerticalText( const Point* pPt = 0 ) const;
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:37:59 $
+ *  last change: $Author: jp $ $Date: 2002-02-18 09:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2694,6 +2694,20 @@ FASTBOOL SwCrsrShell::IsSelFullPara() const
         bRet = pCNd && !nStt && nEnd == pCNd->Len();
     }
     return bRet;
+}
+
+FASTBOOL SwCrsrShell::IsInVerticalText( const Point* pPt ) const
+{
+    SwPosition aPos( *pCurCrsr->GetPoint() );
+    Point aPt( pPt ? *pPt : pCurCrsr->GetPtPos() );
+    if( pPt )
+    {
+        SwCrsrMoveState aTmpState( MV_NONE );
+        aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
+
+        GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState );
+    }
+    return pDoc->IsInVerticalText( aPos, &aPt );
 }
 
 /*  */
