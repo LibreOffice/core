@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-15 11:28:40 $
+ *  last change: $Author: dr $ $Date: 2001-10-23 14:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,6 +894,7 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 eFormat = EIF_BIFF8;
 
             MakeDrawLayer();                //! im Filter
+            CalcOutputFactor();             // #93255# prepare update of row height
             ScColumn::bDoubleAlloc = TRUE;
             FltError eError = ScImportExcel( rMedium, &aDocument, eFormat );
             ScColumn::bDoubleAlloc = FALSE;
@@ -918,7 +919,8 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             else
                 bRet = TRUE;
 
-            bSetRowHeights = TRUE;      //  #75357# optimal row heights must be updated
+            // #93255# update of row height done inside of Excel filter to speed up chart import
+//            bSetRowHeights = TRUE;      //  #75357# optimal row heights must be updated
         }
         else if (aFltName.EqualsAscii(pFilterAscii))
         {
