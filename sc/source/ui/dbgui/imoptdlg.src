@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-12 13:34:45 $
+ *  last change: $Author: dr $ $Date: 2002-07-17 16:02:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     HelpId = HID_SC_INPORTOPT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 256 , 70 ) ;
+    Size = MAP_APPFONT ( 256 , 66 ) ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     Text = "Datei Importieren" ;
@@ -151,7 +151,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     ComboBox ED_TEXTSEP
     {
-        Pos = MAP_APPFONT ( 70 , 50 ) ;
+        Pos = MAP_APPFONT ( 70 , 46 ) ;
         Size = MAP_APPFONT ( 121 , 60 ) ;
         DropDown = TRUE ;
     };
@@ -233,7 +233,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     };
     CheckBox CB_FIXEDWIDTH
     {
-        Pos = MAP_APPFONT( 12, 70 );
+        Pos = MAP_APPFONT( 12, 66 );
         Size = MAP_APPFONT( 172, 10 );
         Hide = TRUE;
         Text = "Feste Text~breite";
