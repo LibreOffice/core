@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-21 12:19:34 $
+ *  last change: $Author: pb $ $Date: 2001-05-31 10:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ ULONG SfxPS_Impl::Load( SvStream& rStream )
 
     if( nSections != 1 )
     {
-        DBG_WARNINGFILE( "DocInfo enthaelt mehr als eine Section" );
+        DBG_WARNINGFILE( "DocInfo contains more than one section" );
         return ERRCODE_IO_GENERAL;
     }
     SetSectionName( aName );
@@ -596,71 +596,8 @@ void FileHeader::Save( SvStream& rStream ) const
     rStream << (BYTE)bPasswd;
 }
 
-//*************************************************************************
-#if SUPD < 563
-
 //-------------------------------------------------------------------------
 
-void SfxStamp::AdjustName_Impl()
-{
-    if ( aModifiedByName.Len() > TIMESTAMP_MAXLENGTH )
-        aModifiedByName.Erase( TIMESTAMP_MAXLENGTH );
-}
-
-//-------------------------------------------------------------------------
-
-BOOL SfxStamp::Load(SvStream &rStream)
-{
-    long d, t;
-    rStream >> aModifiedByName;
-    Skip(rStream, TIMESTAMP_MAXLENGTH - aModifiedByName.Len()) >> d >> t;
-    aModifiedDateTime = DateTime(Date(d), Time(t));
-    return rStream.GetError() == SVSTREAM_OK;
-}
-
-//-------------------------------------------------------------------------
-
-BOOL SfxStamp::Save(SvStream &rStream) const
-{
-    DBG_ASSERT(aModifiedByName.Len() <= TIMESTAMP_MAXLENGTH, "Max. Stringlaenge ueberschritten");
-    rStream << aModifiedByName;
-    PaddWithBlanks_Impl(rStream, TIMESTAMP_MAXLENGTH - aModifiedByName.Len())
-            << (long) aModifiedDateTime.GetDate()
-            << (long) aModifiedDateTime.GetTime();
-
-    return rStream.GetError() == SVSTREAM_OK;
-}
-
-//-------------------------------------------------------------------------
-SfxStamp::SfxStamp( const String& rName ) : aModifiedByName( rName )
-{
-    AdjustName_Impl();
-}
-//-------------------------------------------------------------------------
-SfxStamp::SfxStamp( const String& rName, const DateTime& rTime ) :
-        aModifiedByName( rName ), aModifiedDateTime( rTime )
-{
-    AdjustName_Impl();
-}
-//-------------------------------------------------------------------------
-const SfxStamp& SfxStamp::operator=( const SfxStamp& rCopy )
-{
-    aModifiedByName = rCopy.aModifiedByName;
-    aModifiedDateTime = rCopy.aModifiedDateTime;
-    AdjustName_Impl();
-    return *this;
-}
-//-------------------------------------------------------------------------
-void SfxStamp::SetName( const String&rName )
-{
-    aModifiedByName = rName;
-    AdjustName_Impl();
-}
-
-#endif // SUPD < 563
-//*************************************************************************
-
-//-------------------------------------------------------------------------
 void SfxDocUserKey::AdjustTitle_Impl()
 {
     if ( aTitle.Len() > SFXDOCUSERKEY_LENMAX )
@@ -683,12 +620,21 @@ BOOL SfxDocUserKey::Load(SvStream &rStream)
 
 BOOL SfxDocUserKey::Save(SvStream &rStream) const
 {
-    DBG_ASSERT(aTitle.Len() <= SFXDOCUSERKEY_LENMAX, "Max. Stringlaenge ueberschritten");
-    DBG_ASSERT(aWord.Len() <= SFXDOCUSERKEY_LENMAX, "Max. Stringlaenge ueberschritten");
-    rStream.WriteByteString( aTitle );
-    PaddWithBlanks_Impl(rStream, SFXDOCUSERKEY_LENMAX - aTitle.Len());
-    rStream.WriteByteString( aWord );
-    PaddWithBlanks_Impl(rStream, SFXDOCUSERKEY_LENMAX - aWord.Len());
+    DBG_ASSERT( aTitle.Len() <= SFXDOCUSERKEY_LENMAX, "length of user key title overflow" );
+    DBG_ASSERT( aWord.Len() <= SFXDOCUSERKEY_LENMAX, "length of user key value overflow" );
+
+    // save the title of the user key
+    String aString = aTitle;
+    aString.Erase( SFXDOCUSERKEY_LENMAX );
+    rStream.WriteByteString( aString );
+    PaddWithBlanks_Impl(rStream, SFXDOCUSERKEY_LENMAX - aString.Len());
+
+    // save the value of the user key
+    aString = aWord;
+    aString.Erase( SFXDOCUSERKEY_LENMAX );
+    rStream.WriteByteString( aString );
+    PaddWithBlanks_Impl(rStream, SFXDOCUSERKEY_LENMAX - aString.Len());
+
     return rStream.GetError() == SVSTREAM_OK;
 }
 
@@ -696,17 +642,17 @@ BOOL SfxDocUserKey::Save(SvStream &rStream) const
 SfxDocUserKey::SfxDocUserKey( const String& rTitle, const String& rWord ) :
         aTitle( rTitle ), aWord( rWord )
 {
-    AdjustTitle_Impl();
+    //!AdjustTitle_Impl();
 }
 //------------------------------------------------------------------------
 const SfxDocUserKey& SfxDocUserKey::operator=(const SfxDocUserKey &rCopy)
 {
     aTitle = rCopy.aTitle;
     aWord = rCopy.aWord;
-    AdjustTitle_Impl();
+    //!AdjustTitle_Impl();
     return *this;
 }
-//------------------------------------------------------------------------
+// SfxDocumentInfo -------------------------------------------------------
 
 BOOL SfxDocumentInfo::Load( SvStream& rStream )
 {
@@ -928,7 +874,7 @@ BOOL SfxDocumentInfo::SavePropertySet( SvStorage *pStorage) const
         String::CreateFromAscii( pPropSlot ), STREAM_TRUNC | STREAM_STD_WRITE );
     if ( !aStrPropSet.Is() )
     {
-        DBG_ERROR( "Konnte PropSet nicht oeffnen" );
+        DBG_ERRORFILE( "can not open the property set" );
         return FALSE;
     }
     pPS->SetSectionName( SvGlobalName(
@@ -967,18 +913,32 @@ BOOL SfxDocumentInfo::Save( SvStream& rStream ) const
     aCreated.Save(rStream);
     aChanged.Save(rStream);
     aPrinted.Save(rStream);
-    DBG_ASSERT(aTitle.Len() <= SFXDOCINFO_TITLELENMAX , "Max. Stringlaenge ueberschritten");
-    DBG_ASSERT(aTheme.Len() <= SFXDOCINFO_THEMELENMAX , "Max. Stringlaenge ueberschritten");
-    DBG_ASSERT(aComment.Len() <= SFXDOCINFO_COMMENTLENMAX , "Max. Stringlaenge ueberschritten");
-    DBG_ASSERT(aKeywords.Len() <= SFXDOCINFO_KEYWORDLENMAX , "Max. Stringlaenge ueberschritten");
-    rStream.WriteByteString( aTitle );
-    PaddWithBlanks_Impl(rStream, SFXDOCINFO_TITLELENMAX - aTitle.Len());
-    rStream.WriteByteString( aTheme );
-    PaddWithBlanks_Impl(rStream, SFXDOCINFO_THEMELENMAX - aTheme.Len());
-    rStream.WriteByteString( aComment );
-    PaddWithBlanks_Impl(rStream, SFXDOCINFO_COMMENTLENMAX - aComment.Len());
-    rStream.WriteByteString( aKeywords );
-    PaddWithBlanks_Impl(rStream, SFXDOCINFO_KEYWORDLENMAX - aKeywords.Len());
+
+    DBG_ASSERT( aTitle.Len() <= SFXDOCINFO_TITLELENMAX , "length of title overflow" );
+    DBG_ASSERT( aTheme.Len() <= SFXDOCINFO_THEMELENMAX , "length of theme overflow" );
+    DBG_ASSERT( aComment.Len() <= SFXDOCINFO_COMMENTLENMAX , "length of description overflow" );
+    DBG_ASSERT( aKeywords.Len() <= SFXDOCINFO_KEYWORDLENMAX , "length of keywords overflow" );
+
+    // save the title
+    String aString = aTitle;
+    aString.Erase( SFXDOCINFO_TITLELENMAX );
+    rStream.WriteByteString( aString );
+    PaddWithBlanks_Impl(rStream, SFXDOCINFO_TITLELENMAX - aString.Len());
+    // save the theme
+    aString = aTheme;
+    aString.Erase( SFXDOCINFO_THEMELENMAX );
+    rStream.WriteByteString( aString );
+    PaddWithBlanks_Impl(rStream, SFXDOCINFO_THEMELENMAX - aString.Len());
+    // save the description
+    aString = aComment;
+    aString.Erase( SFXDOCINFO_COMMENTLENMAX );
+    rStream.WriteByteString( aString );
+    PaddWithBlanks_Impl(rStream, SFXDOCINFO_COMMENTLENMAX - aString.Len());
+    // save the keywords
+    aString = aKeywords;
+    aString.Erase( SFXDOCINFO_KEYWORDLENMAX );
+    rStream.WriteByteString( aString );
+    PaddWithBlanks_Impl(rStream, SFXDOCINFO_KEYWORDLENMAX - aString.Len());
 
     for(USHORT i = 0; i < MAXDOCUSERKEYS; ++i)
         aUserKeys[i].Save(rStream);
@@ -1064,24 +1024,24 @@ BOOL SfxDocumentInfo::Save(SvStorage* pStorage) const
 
 //-------------------------------------------------------------------------
 
-const  SfxDocUserKey& SfxDocumentInfo::GetUserKey( USHORT n ) const
+const SfxDocUserKey& SfxDocumentInfo::GetUserKey( USHORT n ) const
 {
-    DBG_ASSERT(n < GetUserKeyCount(), "UserKeyArray ueberindiziert");
+    DBG_ASSERT( n < GetUserKeyCount(), "user key index overflow" );
     return aUserKeys[n];
 }
 
 //-------------------------------------------------------------------------
 
-void   SfxDocumentInfo::SetUserKey( const SfxDocUserKey& rKey, USHORT n )
+void SfxDocumentInfo::SetUserKey( const SfxDocUserKey& rKey, USHORT n )
 {
-    DBG_ASSERT(n < GetUserKeyCount(), "UserKeyArray ueberindiziert");
+    DBG_ASSERT( n < GetUserKeyCount(), "user key index overflow" );
     aUserKeys[n] = rKey;
 }
 
 
 //-------------------------------------------------------------------------
 
-SfxDocumentInfo::SfxDocumentInfo( const SfxDocumentInfo& rInf):
+SfxDocumentInfo::SfxDocumentInfo( const SfxDocumentInfo& rInf ):
     nUserDataSize(0),
     pUserData(0)
 {
@@ -1319,8 +1279,9 @@ void SfxDocumentInfo::Free()
 String SfxDocumentInfo::AdjustTextLen_Impl( const String& rText, USHORT nMax )
 {
     String aRet = rText;
+/*! pb: dont cut any longer because the new file format has no length limit
     if ( aRet.Len() > nMax )
-        aRet.Erase( nMax );
+        aRet.Erase( nMax ); */
     return aRet;
 }
 
