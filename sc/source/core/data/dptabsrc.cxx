@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:26:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <algorithm>
+
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <svtools/itemprop.hxx>
@@ -83,7 +85,12 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
+#include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
 #ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
 #include <unotools/calendarwrapper.hxx>
 #endif
@@ -578,6 +585,17 @@ long lcl_CountMinMembers( ScDPDimension** ppDim, ScDPLevel** ppLevel, long nLeve
     return nTotal;
 }
 
+long lcl_GetIndexFromName( const rtl::OUString rName, const uno::Sequence<rtl::OUString>& rElements )
+{
+    long nCount = rElements.getLength();
+    const rtl::OUString* pArray = rElements.getConstArray();
+    for (long nPos=0; nPos<nCount; nPos++)
+        if (pArray[nPos] == rName)
+            return nPos;
+
+    return -1;  // not found
+}
+
 void ScDPSource::CreateRes_Impl()
 {
     if ( !pResData )
@@ -591,10 +609,19 @@ void ScDPSource::CreateRes_Impl()
         }
 
         String* pDataNames = NULL;
+        sheet::DataPilotFieldReference* pDataRefValues = NULL;
         if (nDataDimCount)
+        {
             pDataNames = new String[nDataDimCount];
+            pDataRefValues = new sheet::DataPilotFieldReference[nDataDimCount];
+        }
 
         long nDataSrcCols[SC_DAPI_MAXFIELDS];
+        USHORT nDataRefOrient[SC_DAPI_MAXFIELDS];
+
+        //  LateInit (initialize only those rows/children that are used) can be used unless
+        //  any data dimension needs reference values from column/row dimensions
+        BOOL bLateInit = TRUE;
 
         long i;
         for (i=0; i<nDataDimCount; i++)
@@ -608,6 +635,26 @@ void ScDPSource::CreateRes_Impl()
                 eUser = sheet::GeneralFunction_SUM;
             }
             eDataFunctions[i] = ScDataUnoConversion::GeneralToSubTotal( eUser );
+            pDataRefValues[i] = pDim->GetReferenceValue();
+            nDataRefOrient[i] = sheet::DataPilotFieldOrientation_HIDDEN;    // default if not used
+            sal_Int32 eRefType = pDataRefValues[i].ReferenceType;
+            if ( eRefType == sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE ||
+                 eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE ||
+                 eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE_DIFFERENCE ||
+                 eRefType == sheet::DataPilotFieldReferenceType::RUNNING_TOTAL )
+            {
+                long nColumn = lcl_GetIndexFromName( pDataRefValues[i].ReferenceField,
+                                        GetDimensionsObject()->getElementNames() );
+                if ( nColumn >= 0 )
+                {
+                    nDataRefOrient[i] = GetOrientation( nColumn );
+                    //  need fully initialized results to find reference values
+                    //  (both in column or row dimensions), so updated values or
+                    //  differences to 0 can be displayed even for empty results.
+                    bLateInit = FALSE;
+                }
+            }
+
             pDataNames[i] = String( pDim->getName() );  //! label?
 
             //  asterisk is added to duplicated dimension names by ScDPSaveData::WriteToSource
@@ -628,10 +675,14 @@ void ScDPSource::CreateRes_Impl()
         }
 
         pResData = new ScDPResultData( this );
-        pResData->SetMeasureData( nDataDimCount, eDataFunctions, pDataNames );
+        pResData->SetMeasureData( nDataDimCount, eDataFunctions, pDataRefValues, nDataRefOrient, pDataNames );
         pResData->SetDataLayoutOrientation(nDataOrient);
+        pResData->SetLateInit( bLateInit );
 
         delete[] pDataNames;
+        delete[] pDataRefValues;
+
+        BOOL bHasAutoShow = FALSE;
 
         pColResRoot = new ScDPResultMember( pResData, NULL, NULL, NULL, bColumnGrand );
         pRowResRoot = new ScDPResultMember( pResData, NULL, NULL, NULL, bRowGrand );
@@ -656,9 +707,14 @@ void ScDPSource::CreateRes_Impl()
 
             for (long j=0; j<nCount; j++)
             {
+                ScDPLevel* pLevel = pLevels->getByIndex(j);
+                pLevel->EvaluateSortOrder();
+                pLevel->SetEnableLayout( FALSE );           // no layout flags for column fields
+                if ( pLevel->GetAutoShow().IsEnabled )
+                    bHasAutoShow = TRUE;
                 nColLevelDims[nColLevelCount] = nColDims[i];
                 ppColDim[nColLevelCount] = pDim;
-                ppColLevel[nColLevelCount] = pLevels->getByIndex(j);
+                ppColLevel[nColLevelCount] = pLevel;
                 ++nColLevelCount;
             }
         }
@@ -688,14 +744,25 @@ void ScDPSource::CreateRes_Impl()
 
             for (long j=0; j<nCount; j++)
             {
+                ScDPLevel* pLevel = pLevels->getByIndex(j);
+                pLevel->EvaluateSortOrder();
+                pLevel->SetEnableLayout( TRUE );            // enable layout flags for row fields
+                if ( pLevel->GetAutoShow().IsEnabled )
+                    bHasAutoShow = TRUE;
                 nRowLevelDims[nRowLevelCount] = nRowDims[i];
                 ppRowDim[nRowLevelCount] = pDim;
-                ppRowLevel[nRowLevelCount] = pLevels->getByIndex(j);
+                ppRowLevel[nRowLevelCount] = pLevel;
                 ++nRowLevelCount;
             }
         }
         ppRowDim[nRowLevelCount] = NULL;
         ppRowLevel[nRowLevelCount] = NULL;
+
+        if ( nRowLevelCount > 0 )
+        {
+            // disable layout flags for the innermost row field (level)
+            ppRowLevel[nRowLevelCount-1]->SetEnableLayout( FALSE );
+        }
 
         pRowResRoot->InitFrom( ppRowDim, ppRowLevel );
         pRowResRoot->SetHasElements();
@@ -756,8 +823,72 @@ void ScDPSource::CreateRes_Impl()
                     }
                 }
             }
+
+            // ----------------------------------------------------------------
+            //  With all data processed, calculate the final results:
+
+            //  UpdateDataResults calculates all original results from the collected values,
+            //  and stores them as reference values if needed.
+            pRowResRoot->UpdateDataResults( pColResRoot, pResData->GetRowStartMeasure() );
+
+            if ( bHasAutoShow )     // do the double calculation only if AutoShow is used
+            {
+                //  Find the desired members and set bAutoHidden flag for the others
+                pRowResRoot->DoAutoShow( pColResRoot );
+
+                //  Reset all results to empty, so they can be built again with data for the
+                //  desired members only.
+                pColResRoot->ResetResults( TRUE );
+                pRowResRoot->ResetResults( TRUE );
+
+                //  Again loop over the source data.
+                //  LateInitFrom is not needed again.
+                pData->ResetIterator();
+                while ( pData->GetNextRow( aIterPar ) )
+                {
+                    //  test for filtered entries
+                    if ( ( !pColResRoot->GetChildDimension() || pColResRoot->GetChildDimension()->IsValidEntry( aColData ) ) &&
+                         ( !pRowResRoot->GetChildDimension() || pRowResRoot->GetChildDimension()->IsValidEntry( aRowData ) ) )
+                    {
+                        if (pColResRoot->GetChildDimension())
+                            pColResRoot->GetChildDimension()->ProcessData( aColData, NULL, NULL, aValues );
+                        pRowResRoot->ProcessData( aRowData, pColResRoot->GetChildDimension(), aColData, aValues );
+                    }
+                }
+
+                //  Call UpdateDataResults again, with the new (limited) values.
+                pRowResRoot->UpdateDataResults( pColResRoot, pResData->GetRowStartMeasure() );
+            }
+
+            //  SortMembers does the sorting by a result dimension, using the orginal results,
+            //  but not running totals etc.
+            pRowResRoot->SortMembers( pColResRoot );
+
+            //  UpdateRunningTotals calculates running totals along column/row dimensions,
+            //  differences from other members (named or relative), and column/row percentages
+            //  or index values.
+            //  Running totals and relative differences need to be done using the sorted values.
+            //  Column/row percentages and index values must be done after sorting, because the
+            //  results may no longer be in the right order (row total for percentage of row is
+            //  always 1).
+            ScDPRunningTotalState aRunning( pColResRoot, pRowResRoot );
+            ScDPRowTotals aTotals;
+            pRowResRoot->UpdateRunningTotals( pColResRoot, pResData->GetRowStartMeasure(), aRunning, aTotals );
+
+            // ----------------------------------------------------------------
         }
     }
+}
+
+void ScDPSource::DumpState( ScDocument* pDoc, const ScAddress& rPos )
+{
+    CreateRes_Impl();
+
+    ScAddress aDocPos( rPos );
+
+    if (pColResRoot->GetChildDimension())
+        pColResRoot->GetChildDimension()->DumpState( NULL, pDoc, aDocPos );
+    pRowResRoot->DumpState( pColResRoot, pDoc, aDocPos );
 }
 
 void ScDPSource::FillLevelList( USHORT nOrientation, List& rList )
@@ -1203,6 +1334,11 @@ BOOL ScDPDimension::isDuplicated() const
     return (nSourceDim >= 0);
 }
 
+const sheet::DataPilotFieldReference& ScDPDimension::GetReferenceValue() const
+{
+    return aReferenceValue;
+}
+
 BOOL ScDPDimension::IsValidPage( const ScDPItemData& rData )
 {
     if ( bHasSelectedPage )
@@ -1260,6 +1396,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
         {MAP_CHAR_LEN(SC_UNO_ORIENTAT), 0,  &getCppuType((sheet::DataPilotFieldOrientation*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_ORIGINAL), 0,  &getCppuType((uno::Reference<container::XNamed>*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_POSITION), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_REFVALUE), 0,  &getCppuType((sheet::DataPilotFieldReference*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_USEDHIER), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
         {0,0,0,0}
     };
@@ -1298,6 +1435,8 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
         if (aValue >>= eEnum)
             setFunction( eEnum );
     }
+    else if ( aNameStr.EqualsAscii( SC_UNO_REFVALUE ) )
+        aValue >>= aReferenceValue;
     else if ( aNameStr.EqualsAscii( SC_UNO_FILTER ) )
     {
         BOOL bDone = FALSE;
@@ -1356,6 +1495,8 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
         sheet::GeneralFunction eVal = (sheet::GeneralFunction)getFunction();
         aRet <<= eVal;
     }
+    else if ( aNameStr.EqualsAscii( SC_UNO_REFVALUE ) )
+        aRet <<= aReferenceValue;
     else if ( aNameStr.EqualsAscii( SC_UNO_ISDATALA ) )                 // read-only properties
         lcl_SetBoolInAny( aRet, getIsDataLayoutDimension() );
     else if ( aNameStr.EqualsAscii( SC_UNO_NUMBERFO ) )
@@ -1681,13 +1822,44 @@ ScDPLevel* ScDPLevels::getByIndex(long nIndex) const
 
 // -----------------------------------------------------------------------
 
+class ScDPGlobalMembersOrder
+{
+    ScDPLevel&  rLevel;
+    BOOL        bAscending;
+
+public:
+            ScDPGlobalMembersOrder( ScDPLevel& rLev, BOOL bAsc ) :
+                rLevel(rLev),
+                bAscending(bAsc)
+            {}
+            ~ScDPGlobalMembersOrder() {}
+
+    BOOL operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
+};
+
+BOOL ScDPGlobalMembersOrder::operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const
+{
+    ScDPMembers* pMembers = rLevel.GetMembersObject();
+    ScDPMember* pMember1 = pMembers->getByIndex(nIndex1);
+    ScDPMember* pMember2 = pMembers->getByIndex(nIndex2);
+
+    sal_Int32 nCompare = pMember1->Compare( *pMember2 );
+
+    return bAscending ? ( nCompare < 0 ) : ( nCompare > 0 );
+}
+
+// -----------------------------------------------------------------------
+
 ScDPLevel::ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL ) :
     pSource( pSrc ),
     nDim( nD ),
     nHier( nH ),
     nLev( nL ),
     pMembers( NULL ),
-    bShowEmpty( FALSE )
+    bShowEmpty( FALSE ),
+    nSortMeasure( 0 ),
+    nAutoMeasure( 0 ),
+    bEnableLayout( FALSE )
 {
     //! hold pSource
     //  aSubTotals is empty
@@ -1699,6 +1871,72 @@ ScDPLevel::~ScDPLevel()
 
     if ( pMembers )
         pMembers->release();    // ref-counted
+}
+
+void ScDPLevel::EvaluateSortOrder()
+{
+    switch (aSortInfo.Mode)
+    {
+        case sheet::DataPilotFieldSortMode::DATA:
+            {
+                // find index of measure (index among data dimensions)
+
+                String aDataFieldName = aSortInfo.Field;
+                long nMeasureCount = pSource->GetDataDimensionCount();
+                for (long nMeasure=0; nMeasure<nMeasureCount; nMeasure++)
+                {
+                    if ( pSource->GetDataDimName(nMeasure) == aDataFieldName )
+                    {
+                        nSortMeasure = nMeasure;
+                        break;
+                    }
+                }
+
+                //! error if not found?
+            }
+            break;
+//        case sheet::DataPilotFieldSortMode::MANUAL:
+        case sheet::DataPilotFieldSortMode::NAME:
+            {
+                ScDPMembers* pMembers = GetMembersObject();
+                long nCount = pMembers->getCount();
+
+                DBG_ASSERT( aGlobalOrder.empty(), "sort twice?" );
+                aGlobalOrder.resize( nCount );
+                for (long nPos=0; nPos<nCount; nPos++)
+                    aGlobalOrder[nPos] = nPos;
+
+                //! allow manual or name
+                //  (manual is then always ascending!)
+
+                ScDPGlobalMembersOrder aComp( *this, aSortInfo.IsAscending );
+                ::std::sort( aGlobalOrder.begin(), aGlobalOrder.end(), aComp );
+            }
+            break;
+    }
+
+    if ( aAutoShowInfo.IsEnabled )
+    {
+        // find index of measure (index among data dimensions)
+
+        String aDataFieldName = aAutoShowInfo.DataField;
+        long nMeasureCount = pSource->GetDataDimensionCount();
+        for (long nMeasure=0; nMeasure<nMeasureCount; nMeasure++)
+        {
+            if ( pSource->GetDataDimName(nMeasure) == aDataFieldName )
+            {
+                nAutoMeasure = nMeasure;
+                break;
+            }
+        }
+
+        //! error if not found?
+    }
+}
+
+void ScDPLevel::SetEnableLayout( BOOL bSet )
+{
+    bEnableLayout = bSet;
 }
 
 ScDPMembers* ScDPLevel::GetMembersObject()
@@ -1813,7 +2051,11 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
 
     static SfxItemPropertyMap aDPLevelMap_Impl[] =
     {
+        //! change type of AutoShow/Layout/Sorting to API struct when available
+        {MAP_CHAR_LEN(SC_UNO_AUTOSHOW), 0,  &getCppuType((sheet::DataPilotFieldAutoShowInfo*)0),     0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_LAYOUT),   0,  &getCppuType((sheet::DataPilotFieldLayoutInfo*)0),       0, 0 },
         {MAP_CHAR_LEN(SC_UNO_SHOWEMPT), 0,  &getBooleanCppuType(),                                   0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_SORTING),  0,  &getCppuType((sheet::DataPilotFieldSortInfo*)0),         0, 0 },
         {MAP_CHAR_LEN(SC_UNO_SUBTOTAL), 0,  &getCppuType((uno::Sequence<sheet::GeneralFunction>*)0), 0, 0 },
         {0,0,0,0}
     };
@@ -1836,6 +2078,12 @@ void SAL_CALL ScDPLevel::setPropertyValue( const rtl::OUString& aPropertyName, c
         if ( aValue >>= aSeq )
             setSubTotals( aSeq );
     }
+    else if ( aNameStr.EqualsAscii( SC_UNO_SORTING ) )
+        aValue >>= aSortInfo;
+    else if ( aNameStr.EqualsAscii( SC_UNO_AUTOSHOW ) )
+        aValue >>= aAutoShowInfo;
+    else if ( aNameStr.EqualsAscii( SC_UNO_LAYOUT ) )
+        aValue >>= aLayoutInfo;
     else
     {
         DBG_ERROR("unknown property");
@@ -1856,6 +2104,12 @@ uno::Any SAL_CALL ScDPLevel::getPropertyValue( const rtl::OUString& aPropertyNam
         uno::Sequence<sheet::GeneralFunction> aSeq = getSubTotals();        //! avoid extra copy?
         aRet <<= aSeq;
     }
+    else if ( aNameStr.EqualsAscii( SC_UNO_SORTING ) )
+        aRet <<= aSortInfo;
+    else if ( aNameStr.EqualsAscii( SC_UNO_AUTOSHOW ) )
+        aRet <<= aAutoShowInfo;
+    else if ( aNameStr.EqualsAscii( SC_UNO_LAYOUT ) )
+        aRet <<= aLayoutInfo;
     else
     {
         DBG_ERROR("unknown property");
@@ -2146,6 +2400,31 @@ BOOL ScDPMember::IsNamedItem( const ScDPItemData& r ) const
     }
 
     return r.IsCaseInsEqual( ScDPItemData( aName, fValue, bHasValue ) );
+}
+
+sal_Int32 ScDPMember::Compare( const ScDPMember& rOther ) const
+{
+    sal_Int32 nResult;
+    if ( bHasValue )
+    {
+        if ( rOther.bHasValue )
+        {
+            if ( rtl::math::approxEqual( fValue, rOther.fValue ) )
+                nResult = 0;
+            else if ( fValue < rOther.fValue )
+                nResult = -1;
+            else
+                nResult = 1;
+        }
+        else
+            nResult = -1;           // values first
+    }
+    else if ( rOther.bHasValue )
+        nResult = 1;                // values first
+    else
+        nResult = ScGlobal::pCollator->compareString( aName, rOther.aName );
+
+    return nResult;
 }
 
 void ScDPMember::FillItemData( ScDPItemData& rData ) const
