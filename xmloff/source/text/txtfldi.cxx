@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:55:32 $
+ *  last change: $Author: rt $ $Date: 2004-06-11 08:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4065,7 +4065,7 @@ SvXMLImportContext* XMLDropDownFieldImportContext::CreateChildContext(
         IsXMLToken( rLocalName, XML_LABEL ) )
     {
         OUString sLabel;
-        bool bIsSelected;
+        bool bIsSelected = sal_False;
         if( lcl_ProcessLabel( GetImport(), xAttrList, sLabel, bIsSelected ) )
         {
             if( bIsSelected )
