@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-09 12:33:08 $
+ *  last change: $Author: gt $ $Date: 2001-05-10 15:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1376,6 +1376,9 @@ void List::Insert( void* p, sal_uInt32 n )
 
 
 
+const sal_Char* FuncData::pInternParam = "x(internal)";
+
+
 FuncData::FuncData( void )
 {
     pIntName = "<no internal name assigned>";
@@ -1383,7 +1386,9 @@ FuncData::FuncData( void )
     pEnglish = "NO_NAME_ASSIGNED";
     pDescr = "<no description available>";
     ppParam = ppParamDescr = NULL;
+    pOptParam = pOptParamDescr = "optional";
     nParam = nParamDescr = 0;
+    bWithOpt = sal_False;
 }
 
 
@@ -1398,29 +1403,35 @@ FuncData::~FuncData()
 
 const sal_Char* FuncData::GetParam( sal_uInt32 nInd ) const
 {
-    if( !nInd )
-        return "(internal)";
-
-    nInd--;
+    if( bWithOpt )
+    {
+        if( nInd )
+            nInd--;
+        else
+            return FuncData::pInternParam + 1;
+    }
 
     if( nInd < nParam )
         return ppParam[ nInd ];
     else
-        return "<no name for parameter available>";
+        return pOptParam;
 }
 
 
 const sal_Char* FuncData::GetParamDescr( sal_uInt32 nInd ) const
 {
-    if( !nInd )
-        return "(internal)";
-
-    nInd--;
+    if( bWithOpt )
+    {
+        if( nInd )
+            nInd--;
+        else
+            return FuncData::pInternParam + 1;
+    }
 
     if( nInd < nParamDescr )
         return ppParamDescr[ nInd ];
     else
-        return "<no name for parameter description available>";
+        return pOptParamDescr;
 }
 
 
@@ -1445,14 +1456,16 @@ FuncData* FuncData::CloneFromList( const sal_Char**& rpp )
         {
             switch( *pAct )
             {
-                case 'i':   p->pIntName = pAct + 1;     break;
-                case '1':   p->pGerman = pAct + 1;      break;
-                case '2':   p->pEnglish = pAct + 1;     break;
-                case 'd':   p->pDescr = pAct + 1;       break;
-                case 'p':   aPNList.Append( pAct + 1 ); break;
-                case 'P':   aPDList.Append( pAct + 1 ); break;
+                case 'i':   p->pIntName = pAct + 1;         break;
+                case '1':   p->pGerman = pAct + 1;          break;
+                case '2':   p->pEnglish = pAct + 1;         break;
+                case 'd':   p->pDescr = pAct + 1;           break;
+                case 'p':   aPNList.Append( pAct + 1 );     break;
+                case 'P':   aPDList.Append( pAct + 1 );     break;
+                case 'o':   p->pOptParam = pAct + 1;        break;
+                case 'O':   p->pOptParamDescr = pAct + 1;   break;
+                case 'x':   p->bWithOpt = sal_True;         break;
             }
-
         }
 
         pp++;

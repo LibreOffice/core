@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-09 12:33:08 $
+ *  last change: $Author: gt $ $Date: 2001-05-10 15:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,10 +217,14 @@ public:
 class FuncData
 {
 public:
+    static const sal_Char*  pInternParam;
     const sal_Char*         pIntName;
     const sal_Char*         pGerman;
     const sal_Char*         pEnglish;
     const sal_Char*         pDescr;
+    const sal_Char*         pOptParam;
+    const sal_Char*         pOptParamDescr;
+    sal_Bool                bWithOpt;
 private:
     const sal_Char**        ppParam;        // list with naming of the parameters
     sal_uInt32              nParam;         // len of ~
