@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LTable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:03:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ void OEvoabTable::fillColumns()
                     }
                 }
 
-                // jetzt könnte es noch ein Datumsfeld sein
+                // jetzt koennte es noch ein Datumsfeld sein
                 if (!bNumeric)
                 {
                     try
