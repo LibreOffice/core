@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:31:32 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,8 @@ private:
 #endif
 
     void            PasteSelection( const Point& rPosPixel );
+
+    void            SelectForContextMenu( const Point& rPosPixel );
 
 protected:
     virtual void    Resize( const Size& rSize );
