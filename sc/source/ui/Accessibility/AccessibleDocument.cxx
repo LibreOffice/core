@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:30:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -932,7 +932,7 @@ void ScChildrenShapes::Deselect(sal_Int32 nChildIndex)
 
 SdrPage* ScChildrenShapes::GetDrawPage() const
 {
-    sal_uInt16 nTab(mpAccessibleDocument->getVisibleTable());
+    SCTAB nTab(mpAccessibleDocument->getVisibleTable());
     SdrPage* pDrawPage = NULL;
     if (mpViewShell)
     {
@@ -941,7 +941,7 @@ SdrPage* ScChildrenShapes::GetDrawPage() const
         {
             ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
             if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
-                pDrawPage = pDrawLayer->GetPage(nTab);
+                pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
         }
     }
     return pDrawPage;
@@ -1129,7 +1129,7 @@ ScAddress* ScChildrenShapes::GetAnchor(const uno::Reference<drawing::XShape>& xS
                             aCoreAbsoluteCaptionPoint += aCoreRelativeCaptionPoint;
                             aRectangle.Union(Rectangle(aCoreAbsoluteCaptionPoint, aCoreAbsoluteCaptionPoint));
                         }
-                        ScRange aRange = pDoc->GetRange(static_cast<USHORT>(mpAccessibleDocument->getVisibleTable()), aRectangle);
+                        ScRange aRange = pDoc->GetRange(mpAccessibleDocument->getVisibleTable(), aRectangle);
                         pAddress = new ScAddress(aRange.aStart);
                     }
                 }
@@ -2117,9 +2117,9 @@ Rectangle ScAccessibleDocument::GetBoundingBox() const
     return aRect;
 }
 
-sal_uInt16 ScAccessibleDocument::getVisibleTable() const
+SCTAB ScAccessibleDocument::getVisibleTable() const
 {
-    sal_uInt16 nVisibleTable(0);
+    SCTAB nVisibleTable(0);
     if (mpViewShell && mpViewShell->GetViewData())
         nVisibleTable = mpViewShell->GetViewData()->GetTabNo();
     return nVisibleTable;
@@ -2153,7 +2153,7 @@ sal_Bool ScAccessibleDocument::IsTableSelected() const
     sal_Bool bResult (sal_False);
     if(mpViewShell)
     {
-        sal_uInt16 nTab(getVisibleTable());
+        SCTAB nTab(getVisibleTable());
         //#103800#; use a copy of MarkData
         ScMarkData aMarkData(mpViewShell->GetViewData()->GetMarkData());
         aMarkData.MarkToMulti();
