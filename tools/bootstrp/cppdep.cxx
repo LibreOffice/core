@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppdep.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jmarmion $ $Date: 2000-10-20 15:01:16 $
+ *  last change: $Author: oisin $ $Date: 2000-11-02 14:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,11 @@
 
 #ifdef UNX
 #ifdef MACOSX
+#ifdef BOOTSTRAPPER
+#include <glibc/posix/getopt.h>
+#else
 #include <glibc/getopt.h>
+#endif
 #endif
 #include <unistd.h>
 #endif
