@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:11:55 $
+ *  last change: $Author: kz $ $Date: 2001-05-08 15:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,11 +179,11 @@ StringList [ language_user1 ] =\
     {\
             < " " ; Default ; > ;\
         < " " ; Default ; > ;\
-    };
-StringList [ catalan ] =
-    {
-            < "Y" ; Default ; > ;
-        < "O" ; Default ; > ;
+    };\
+StringList [ catalan ] = \
+    {\
+            < "Y" ; Default ; > ;\
+        < "O" ; Default ; > ;\
     };
 
 ModalDialog DLG_FILTERCRIT
