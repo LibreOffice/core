@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:09:06 $
+#   last change: $Author: rt $ $Date: 2004-05-21 13:55:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ SRS1NAME=$(TARGET)
 SRC1FILES=           preload.src
 
 RESLIB1NAME=preload
+RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES= $(SRS)$/preload.srs
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
