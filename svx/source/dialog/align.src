@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 14:23:46 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ english_us ] = "~Default" ;
         Text[ chinese_simplified ] = "±Í◊º(~D)";
         Text[ russian ] = "—Ú‡Ì‰‡Ú";
-        Text[ polish ] = "S~tandard";
+        Text[ polish ] = "Domyúlnie";
         Text[ japanese ] = "ïWèÄ(~D)";
         Text[ chinese_traditional ] = "º–∑«(~D)";
         Text[ arabic ] = "ﬁÌ«”Ì";
@@ -325,10 +325,10 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text [ swedish ] = "S~tandard" ;
         Text [ dutch ] = "~Standaard" ;
         Text [ spanish ] = "~Predeterm." ;
-        Text [ english_us ] = "Standard" ;
+        Text [ english_us ] = "~Standard" ;
         Text[ chinese_simplified ] = "±Í◊º(~S)";
         Text[ russian ] = "—Ú‡Ì‰‡Ú";
-        Text[ polish ] = "Sta~ndard";
+        Text[ polish ] = "Domyúlnie";
         Text[ japanese ] = "ïWèÄ(~S)";
         Text[ chinese_traditional ] = "º–∑«(~S)";
         Text[ arabic ] = "ﬁÌ«”Ì";
@@ -862,7 +862,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     {
         Text = "Textausdehnung von unterer Zellkante aus." ;
         Text [ English ] = "Text direction by lower cell-edge" ;
-        Text [ english_us ] = "Text Extension from Lower Cell Border" ;
+        Text [ english_us ] = "Text Extension From Lower Cell Border" ;
         Text [ portuguese_brazilian ] = "Textausdehnung von unterer Zellkante aus." ;
         Text [ swedish ] = "Textutstr‰ckning frÂn nedre cellkanten." ;
         Text [ danish ] = "TekstudstrÊkning ud fra nederste cellekant" ;
@@ -888,7 +888,7 @@ TabPage RID_SVXPAGE_ALIGNMENT
     {
         Text = "Textausdehnung von oberer Zellkante aus." ;
         Text [ English ] = "Text direction by upper cell-edge" ;
-        Text [ english_us ] = "Text Extension from Upper Cell Border" ;
+        Text [ english_us ] = "Text Extension From Upper Cell Border" ;
         Text [ portuguese_brazilian ] = "Textausdehnung von oberer Zellkante aus." ;
         Text [ swedish ] = "Textutstr‰ckning frÂn ˆvre cellkanten." ;
         Text [ danish ] = "TekstudstrÊkning ud fra ¯verste cellerand." ;
