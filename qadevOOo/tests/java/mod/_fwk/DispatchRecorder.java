@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchRecorder.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2004-03-02 13:41:30 $
+ *  last change:$Date: 2004-11-02 12:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,10 @@ public class DispatchRecorder extends TestCase {
         // INSTANCEn : _XIndexReplace
         log.println("adding INSTANCEn as obj relation to environment");
 
-        int THRCNT = Integer.parseInt((String) Param.get("THRCNT"));
+        int THRCNT = 1;
+        if ((String)Param.get("THRCNT") != null) {
+            THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
+        }
 
         URL instanceURL = null;
         DispatchStatement instance = new DispatchStatement();
