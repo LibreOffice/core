@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtlproto.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:48:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:08:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,6 +334,7 @@ extern RTLFUNC(Trim);
 extern RTLFUNC(DateAdd);
 extern RTLFUNC(DateDiff);
 extern RTLFUNC(DatePart);
+extern RTLFUNC(FormatDateTime);
 extern RTLFUNC(GetSolarVersion);
 extern RTLFUNC(TwipsPerPixelX);
 extern RTLFUNC(TwipsPerPixelY);
