@@ -2,9 +2,9 @@
  *
  *  $RCSfile: windowstateconfiguration.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:50:34 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -193,7 +193,7 @@ class WindowStateConfiguration :  public com::sun::star::lang::XTypeProvider    
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
         ModuleToWindowStateFileMap                                                          m_aModuleToFileHashMap;
         ModuleToWindowStateConfigHashMap                                                    m_aModuleToWindowStateHashMap;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XModuleManager > m_xModuleManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > m_xModuleManager;
 };
 
 } // namespace framework
