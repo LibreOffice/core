@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-10-06 13:04:23 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:00:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,8 +199,8 @@ class ManagerImpl
                                        XTypeDescriptionEnumerationAccess,
                                        XInitialization >
 {
-    friend EnumerationImpl;
-    friend EventListenerImpl;
+    friend class EnumerationImpl;
+    friend class EventListenerImpl;
 
     Mutex                               _aComponentMutex;
     Reference< XComponentContext >      _xContext;
