@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:57:59 $
+ *  last change: $Author: rt $ $Date: 2002-12-05 10:27:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,12 +262,12 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         };
         StringList [ language_user1 ] =
         {
-            < "Line; Linear" ; Default ; > ;
-            < "Axia; Axial" ; Default ; > ;
-            < "Radi; Radial" ; Default ; > ;
-            < "Elli; Ellipsoid" ; Default ; > ;
-            < "Quad; Quadratisch" ; Default ; > ;
-            < "Rech; Rechteckig" ; Default ; > ;
+            < "Line; Line; Linear" ; Default ; > ;
+            < "Axia; Axia; Axial" ; Default ; > ;
+            < "Radi; Radi; Radial" ; Default ; > ;
+            < "Elli; Elli; Ellipsoid" ; Default ; > ;
+            < "Quad; Quad; Quadratisch" ; Default ; > ;
+            < "Rech; Rech; Rechteckig" ; Default ; > ;
         };
         StringList [ english_us ] =
         {
@@ -2640,6 +2640,17 @@ TabPage RID_SVXPAGE_BITMAP
         // Hidden label that provides the name for the bitmaps list box.
         Text = "Bitmap" ;
         Text [ ENGLISH ] = "Bitmap" ;
+        Text[ portuguese ] = "Bitmap";
+        Text[ russian ] = "�����";
+        Text[ spanish ] = "Bitmap";
+        Text[ italian ] = "Stile bitmap";
+        Text[ swedish ] = "Bitmap";
+        Text[ polish ] = "Mapa bitowa";
+        Text[ portuguese_brazilian ] = "Bitmap";
+        Text[ japanese ] = "ビットマップ";
+        Text[ korean ] = "비트맵";
+        Text[ turkish ] = "Bit e�lem";
+        Text[ thai ] = "บิทแมป";
     };
     ListBox LB_BITMAPS
     {
