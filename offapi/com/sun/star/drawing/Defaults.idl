@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Defaults.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,16 @@
 #ifndef __com_sun_star_drawing_Defaults_idl__
 #define __com_sun_star_drawing_Defaults_idl__
 
-#ifndef __com_sun_star_drawing_LineProperties_idl__
-#include <com/sun/star/drawing/LineProperties.idl>
+#ifndef __com_sun_star_drawing_TextProperties_idl__
+#include <com/sun/star/drawing/TextProperties.idl>
 #endif
 
 #ifndef __com_sun_star_drawing_FillProperties_idl__
 #include <com/sun/star/drawing/FillProperties.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_TextProperties_idl__
-#include <com/sun/star/drawing/TextProperties.idl>
+#ifndef __com_sun_star_drawing_LineProperties_idl__
+#include <com/sun/star/drawing/LineProperties.idl>
 #endif
 
 #ifndef __com_sun_star_drawing_ShadowProperties_idl__
@@ -85,21 +85,25 @@
 #include <com/sun/star/drawing/MeasureProperties.idl>
 #endif
 
+
 //=============================================================================
 
 module com { module sun { module star { module drawing {
 
 //=============================================================================
-/** describes a specialized shape with a 2D extent that can be filled.
-*/
+
+/** This is a set of properties to access the defaults of a drawing document
+
+    @see DrawingDocumentFactory
+ */
 service Defaults
 {
-    service com::sun::star::drawing::LineProperties;
-    service com::sun::star::drawing::FillProperties;
-    service com::sun::star::drawing::TextProperties;
-    service com::sun::star::drawing::ShadowProperties;
-    service com::sun::star::drawing::ConnectorProperties;
-    service com::sun::star::drawing::MeasureProperties;
+    service TextProperties;
+    service LineProperties;
+    service FillProperties;
+    service ShadowProperties;
+    service ConnectorProperties;
+    service MeasureProperties;
 };
 
 //=============================================================================
@@ -107,3 +111,4 @@ service Defaults
 }; }; }; };
 
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XShapeGrouper.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:21 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,22 +80,35 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::drawing::XShapeGrouper
 /** specifies the group/ungroup functionality.
  */
 interface XShapeGrouper: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XShapeGrouper::group
     /** groups the <type>Shape</type>s inside a collection.
+
+        @param xShapes
+            the <type>Shape</type>s that will be grouped. They
+            must all be inserted into the same <type>GenericDrawPage</type>.
+
+        @returns
+            a newly created <type>GroupShape</type> that contains all
+            <type>Shape</type>s from xShapes and is also added to the
+            <type>GenericDrawPage</type> of the <type>Shape</type>s
+            in xShapes.
      */
     com::sun::star::drawing::XShapeGroup group( [in] com::sun::star::drawing::XShapes xShapes );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XShapeGrouper::ungroup
-    /** ungroups a given <type>Shape</type>.
+    /** ungroups a given <type>GroupShape</type>.
+
+        @param aGroup
+            moves all <type>Shape</type>s from this <type>GroupShape</type>
+            to the parent <type>XShapes</type> of the <type>GroupShape</type>.
+            The <type>GroupShape</type> is than removed from the
+            <type>GenericDrawPage</type> and disposed.
      */
     void ungroup( [in] com::sun::star::drawing::XShapeGroup aGroup );
 
@@ -105,21 +118,5 @@ interface XShapeGrouper: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:42  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:15  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:24  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HomogenMatrixLine4.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:33:25 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,3 +94,4 @@ struct HomogenMatrixLine4
 }; }; }; };
 
 #endif
+

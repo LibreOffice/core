@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextFitToSizeType.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:42 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,27 +75,27 @@
 enum TextFitToSizeType
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR TextFitToSizeType::    NONE,
-
-    // DocMerge: empty anyway
+    /** the text size is only defined by the font properties
+    */
     NONE,
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR TextFitToSizeType::    PROPORTIONAL,
 
-    // DocMerge: empty anyway
+    /** if the shape is scaled, the text character size is scaled proportional
+    */
     PROPORTIONAL,
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR TextFitToSizeType::    ALLLINES,
 
-    // DocMerge: empty anyway
+    /** like <code>PROPORTIONAL</code>, but the width of each text row is
+        also scaled proportional.
+    */
     ALLLINES,
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR TextFitToSizeType::    RESIZEATTR
 
-    // DocMerge: empty anyway
+    /** if the shape is scaled, the font attributes are scaled and hard set
+        on the text */
     RESIZEATTR
 
 };
@@ -104,24 +104,5 @@ enum TextFitToSizeType
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:15  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:23  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/03/27 10:55:43  cl
-    #70728# fixed doku
-
-    Revision 1.2  2000/02/07 11:24:30  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

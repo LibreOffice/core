@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: PolyLineShape.idl,v $
+ *  $RCSfile: ShapeCollection.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-02 15:12:20 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,56 +58,39 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_drawing_PolyLineShape_idl__
-#define __com_sun_star_drawing_PolyLineShape_idl__
+#ifndef __com_sun_star_drawing_ShapeCollection_idl__
+#define __com_sun_star_drawing_ShapeCollection_idl__
 
-#ifndef __com_sun_star_drawing_Shape_idl__
-#include <com/sun/star/drawing/Shape.idl>
+#ifndef __com_sun_star_drawing_Shapes_idl__
+#include <com/sun/star/drawing/Shapes.idl>
 #endif
 
-#ifndef __com_sun_star_drawing_LineProperties_idl__
-#include <com/sun/star/drawing/LineProperties.idl>
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
 #endif
-
-#ifndef __com_sun_star_drawing_PolyPolygonDescriptor_idl__
-#include <com/sun/star/drawing/PolyPolygonDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_Text_idl__
-#include <com/sun/star/drawing/Text.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_ShadowProperties_idl__
-#include <com/sun/star/drawing/ShadowProperties.idl>
-#endif
-
-#ifndef __com_sun_star_drawing_RotationDescriptor_idl__
-#include <com/sun/star/drawing/RotationDescriptor.idl>
-#endif
-
 
 //=============================================================================
 
- module com {  module sun {  module star {  module drawing {
+module com { module sun { module star { module drawing {
 
 //=============================================================================
+/** This service describes a generic container to manage collections of
+    <type>Shape</type>. The <type>Shape</type> that are added to this
+    collection are not owned by the collection.
 
-/** This service is for a polyline shape.
-    <p>A polyline has one or more straight lines.</p>
- */
-service PolyLineShape
+    This service is used by the view f.e. to return a collection of
+    <type>Shape</type> that are selected at the ui.
+*/
+service ShapeCollection
 {
-    service com::sun::star::drawing::Shape;
+    /** gives access to the shapes
+     */
+    interface com::sun::star::drawing::XShapes;
 
-    service com::sun::star::drawing::LineProperties;
+    /** allows controlling or observing the lifetime of this collection
+     */
+    interface com::sun::star::lang::XComponent;
 
-    service com::sun::star::drawing::PolyPolygonDescriptor;
-
-    service com::sun::star::drawing::Text;
-
-    service com::sun::star::drawing::ShadowProperties;
-
-    service com::sun::star::drawing::RotationDescriptor;
 };
 
 //=============================================================================

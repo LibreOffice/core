@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransparencyGradientTable.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-02-28 16:27:07 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,20 +73,21 @@
 
 /** this is a container for <type>com.sun.star.awt.Gradient</type>s
 
-    <p>It is used for example to access the <type>com.sun.star.awt.Gradient</type>s that
-    are used inside a document for fill transparency. @see DrawingDocumentFactory
+    <p>It is used for example to access the <type scope="com::sun::star::awt">Gradient</type>s that
+    are used inside a document for fill transparency.
 
+    @see DrawingDocumentFactory
     @see com.sun.star.awt.Gradient
 */
 service TransparencyGradientTable
 {
-    /** this container lets you access the <type>com.sun.star.awt.Gradient</type>s that
+    /** this container lets you access the <typeu scope="com::sun::star::awt">Gradient</type>s that
         are indexed with a name.
 
         <p>Note: You can add new entries for later use, but you cannot
         remove entries that are used inside the document.
     */
-    interface com.sun.star.container.XNameContainer;
+    interface com::sun::star::container::XNameContainer;
 };
 
 //=============================================================================
@@ -94,3 +95,4 @@ service TransparencyGradientTable
 }; }; }; };
 
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicObjectShape.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-26 08:45:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ service GraphicObjectShape
 
     //-------------------------------------------------------------------------
     /** This property contains a image map for this graphic.
-        @see com.sun.star.image.ImageMap
+        @see com::sun::star::image::ImageMap
     */
     [optional, property] com::sun::star::container::XIndexContainer ImageMap;
 
@@ -183,3 +183,4 @@ service GraphicObjectShape
 }; }; }; };
 
 #endif
+

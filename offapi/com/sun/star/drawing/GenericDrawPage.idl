@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GenericDrawPage.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-12 09:01:30 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,14 +150,14 @@ service GenericDrawPage
     /** With this interface you can combine/split a collection of
                 <type>Shape</type>s.
      */
-    interface com::sun::star::drawing::XShapeCombiner;
+    [optional] interface com::sun::star::drawing::XShapeCombiner;
 
 
     // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::drawing::XShapeBinder
     /** With this interface you can bind/unbind a collection of
                 <type>Shape</type>s.
      */
-    interface com::sun::star::drawing::XShapeBinder;
+    [optional] interface com::sun::star::drawing::XShapeBinder;
 
 
     // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::container::XNamed
@@ -165,7 +165,7 @@ service GenericDrawPage
 
                 <p>Duplicated pagenames inside a document are not allowed.
      */
-    interface com::sun::star::container::XNamed;
+    [optional] interface com::sun::star::container::XNamed;
 
 
     // DocMerge from xml: service com::sun::star::drawing::GenericDrawPage: interface com::sun::star::lang::XServiceInfo
@@ -179,7 +179,7 @@ service GenericDrawPage
     /** gives you access to the properties of this
                 <type>DrawPage</type>.
      */
-    interface com::sun::star::beans::XPropertySet;
+    [optional] interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
@@ -259,33 +259,5 @@ service GenericDrawPage
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/10/26 08:45:35  mi
-    proofreading and corrections from Richard Holt
-
-    Revision 1.5  2001/10/16 09:47:34  cl
-    #91486# added xml alien attributes
-
-    Revision 1.4  2000/12/21 08:35:06  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:42:41  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:55  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:12  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:20  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DrawingDocumentFactory.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-02-28 16:18:37 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,9 +57,10 @@
  *  Contributor(s): _______________________________________
  *
  *
- ************************************************************************/
+ **************************************************************
+**********/
 #ifndef __com_sun_star_drawing_DrawingDocumentFactory_idl__
-#define __com_sun_star_drawing_DrawingDocumentFactory_idl__
+#define __com::sun::star::drawing_DrawingDocumentFactory_idl__
 
 #ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
 #include <com/sun/star/lang/XMultiServiceFactory.idl>
@@ -107,57 +108,57 @@ service DrawingDocumentFactory
             <li><type>AppletShape</type></li>
         </ul>
 
-        <p>The following services are all <type>com.sun.star.text.TextField</type>
-        and can be inserted into text as <type>com.sun.star.text.TextContent</type>.
+        <p>The following services are all <type scope="com::sun::star::text">TextField</type>
+        and can be inserted into text as <type scope="com::sun::star::text">TextContent</type>.
 
         <ul>
-            <li><type>com.sun.star.text.TextField.DateTime</type></li>
-            <li><type>com.sun.star.text.TextField.URL</type></li>
-            <li><type>com.sun.star.text.TextField.PageNumber</type></li>
-            <li><type>com.sun.star.text.TextField.PageCount</type></li>
-            <li><type>com.sun.star.text.TextField.SheetName</type></li>
-            <li><type>com.sun.star.text.TextField.FileName</type></li>
-            <li><type>com.sun.star.text.TextField.DocInfo.Title</type></li>
-            <li><type>com.sun.star.text.TextField.Author</type></li>
-            <li><type>com.sun.star.text.TextField.Measure</type></li>
+            <li><type scope="com::sun::star::text">TextField::DateTime</type></li>
+            <li><type scope="com::sun::star::text">TextField::URL</type></li>
+            <li><type scope="com::sun::star::text">TextField::PageNumber</type></li>
+            <li><type scope="com::sun::star::text">TextField::PageCount</type></li>
+            <li><type scope="com::sun::star::text">TextField::SheetName</type></li>
+            <li><type scope="com::sun::star::text">TextField::FileName</type></li>
+            <li><type scope="com::sun::star::text">TextField::DocInfo.Title</type></li>
+            <li><type scope="com::sun::star::text">TextField::Author</type></li>
+            <li><type scope="com::sun::star::text">TextField::Measure</type></li>
         </ul>
 
         <p>The following services gives access to resources used inside the document
         and let you add new resources.
 
         <ul>
-            <li><type>com.sun.star.drawing.DashTable</type></li>
-            <li><type>com.sun.star.drawing.GradientTable</type></li>
-            <li><type>com.sun.star.drawing.HatchTable</type></li>
-            <li><type>com.sun.star.drawing.BitmapTable</type></li>
-            <li><type>com.sun.star.drawing.TransparencyGradientTable</type></li>
-            <li><type>com.sun.star.drawing.MarkerTable</type></li>
+            <li><type scope="com::sun::star::drawing">DashTable</type></li>
+            <li><type scope="com::sun::star::drawing">GradientTable</type></li>
+            <li><type scope="com::sun::star::drawing">HatchTable</type></li>
+            <li><type scope="com::sun::star::drawing">BitmapTable</type></li>
+            <li><type scope="com::sun::star::drawing">TransparencyGradientTable</type></li>
+            <li><type scope="com::sun::star::drawing">MarkerTable</type></li>
         </ul>
 
         <p>The following service can be set at the <code>Numbering</code> property
-        inside a <type>com.sun.star.style.ParagraphProperties</type>
+        inside a <type scope="com:sun:star:style">ParagraphProperties</type>
 
         <ul>
-            <li><type>com.sun.star.text.NumberingRules</type></li>
+            <li><type scope="com::sun::star::text">NumberingRules</type></li>
         </ul>
 
-        <p>The following services can be used for a <type>com.sun.star.image.ImageMap</type>
+        <p>The following services can be used for a <type scope="com::sun::star::image">ImageMap</type>
         inside the document.
 
         <br>A <type>com.sun.star.image.ImageMap</type> can be obtained from a
         <type>GraphicObjectShape</type>
 
         <ul>
-            <li><type>com.sun.star.image.ImageMapRectangleObject</type></li>
-            <li><type>com.sun.star.image.ImageMapCircleObject</type></li>
-            <li><type>com.sun.star.image.ImageMapPolygonObject</type></li>
+            <li><type scope="com::sun::star::image">ImageMapRectangleObject</type></li>
+            <li><type scope="com::sun::star::image">ImageMapCircleObject</type></li>
+            <li><type scope="com::sun::star::image">ImageMapPolygonObject</type></li>
         </ul>
 
         <p>The following services lets you access the drawing property defaults
         of a document.
 
         <ul>
-            <li><type>com.sun.star.document.Defaults</type></li>
+            <li><type scope="com::sun::star::document">Defaults</type></li>
         </ul>
     */
     interface com::sun::star::lang::XMultiServiceFactory;
@@ -169,3 +170,4 @@ service DrawingDocumentFactory
 }; }; }; };
 
 #endif
+

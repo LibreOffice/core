@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CaptionShape.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-02-28 16:12:47 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ service CaptionShape
         the point that is captioned. A set of lines are
         rendered from the caption area.
     */
-    [property] com.sun.star.awt.Point CaptionPoint
+    [property] com::sun::star::awt::Point CaptionPoint;
 
     /** This property specifies the geometry of the line of a caption.
 
@@ -155,7 +155,7 @@ service CaptionShape
     /** This property specifies the escape direction for the
         line of a caption.
 
-        @see CaptionEscapeDirection;
+        @see CaptionEscapeDirection
     */
     [property] long CaptionEscapeDirection;
 
@@ -189,3 +189,4 @@ service CaptionShape
 }; }; }; };
 
 #endif
+

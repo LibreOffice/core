@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Text.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-06 16:53:32 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,3 +96,4 @@ service Text
 }; }; }; };
 
 #endif
+

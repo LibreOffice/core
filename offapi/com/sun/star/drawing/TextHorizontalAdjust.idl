@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextHorizontalAdjust.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-24 00:00:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,15 +103,5 @@ enum TextHorizontalAdjust
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2000/11/28 14:59:49  cl
-    #79743# replaced TextAdjust with TextHorizontalAdjust and TextVerticalAdjust
-
-    Revision 1.1  2000/11/15 16:57:04  cl
-    #79743# replaced TextAdjust with TextHorizontalAdjust and TextVerticalAdjust
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XShapeCombiner.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:21 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,23 +80,39 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::drawing::XShapeCombiner
 /** specifies the combine/split functionality.
  */
 interface XShapeCombiner: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XShapeCombiner::combine
-    /** combines the <type>Shape</type>s in the given collection.
+    /** combines <type>Shape</type>s
+
+        @param xShapes
+            the <type>Shape</type>s inside this container are converted
+            to <type>PolyPolygonBezierShape</type>s and are than combined
+            into one <type>PolyPolygonBezierShape</type>.
+            The <type>Shape</types>s in xShape will be removed from the
+            <type>GenericDrawPage</type> and disposed.
+
+        @returns
+            a newly created <type>PolyPolygonBezierShape</type> which contains all
+            converted <type>PolyPolygonBezierShape</type> combined. It is also added
+            to the <type>GenericDrawPage</type> of the source <type>Shape</type>s.
+
      */
     com::sun::star::drawing::XShape combine( [in] com::sun::star::drawing::XShapes xShapes );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XShapeCombiner::split
-    /** ungroups the combined <type>Shape</type> into its
-        individual <type>Shape</type>s.
+    /** splits <type>Shape</type>s.
+
+        @param xShapes
+            the <type>Shape</type> is converted to a
+            <type>PolyPolygonBezierShape</type>s and then splited into
+            several <type>PolyPolygonBezierShape</type>s
+            The <type>Shape</types>s in xShape will be removed from the
+            <type>GenericDrawPage</type> and disposed.
      */
     void split( [in] com::sun::star::drawing::XShape xGroup );
 
@@ -106,21 +122,5 @@ interface XShapeCombiner: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:42  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:15  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:24  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XShapeBinder.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:21 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,22 +80,36 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::drawing::XShapeBinder
-/** specifies the connect/break functionality.
+/** connects or breaks the lines of <type>Shape</type>s
  */
 interface XShapeBinder: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XShapeBinder::bind
-    /** binds the specified <type>Shape</type>s together.
+    /** binds <type>Shape</type>s together.
+
+        @param xShapes
+            a container with <type>Shape</type>s that will be bind toghether.
+            All <type>Shapes</type> will be converted to a <type>PolyPolygonBezierShape</type>
+            and the lines will be connected. The <type>Shape</types>s in xShape will be
+            removed from the <type>GenericDrawPage</type> and disposed.
+
+        @returns
+            a newly created <type>PolyPolygonBezierShape</type> which contains all
+            line segment from the supplied <type>Shape</type>s. It is also added
+            to the <type>GenericDrawPage</type> of the source <type>Shape</type>s.
      */
     com::sun::star::drawing::XShape bind( [in] com::sun::star::drawing::XShapes xShapes );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XShapeBinder::unbind
-    /** unbinds the specified shape.
+    /** breaks a <type>Shape</type> into its line segments
+
+        @param xShape
+            the given <type>Shape</type> will be converted to a <type>PolyPolygonBezierShape</type>
+            and the line segments of this <type>Shape</type> will be used to create
+            new <type>PolyPolygonBezierShape</type> shapes. The original <type>Shape</type>
+            will be removed from its <type>GenericDrawPage</type> and disposed.
      */
     void unbind( [in] com::sun::star::drawing::XShape xShape );
 
@@ -105,21 +119,5 @@ interface XShapeBinder: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:42  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:15  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:24  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

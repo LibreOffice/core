@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XShape.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:21 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::drawing::XShape
 /** lets you do a basic transformation on a <type>Shape</type> and
     get its type.
  */
@@ -92,29 +91,37 @@ interface XShape: com::sun::star::drawing::XShapeDescriptor
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XShape::getPosition
-    /** gets the current position of this instance.
+    /** gets the current position of this object.
+
+        @returns
+            the position of the top left edge in 100/th mm
      */
     com::sun::star::awt::Point getPosition();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XShape::setPosition
-    /** sets the current position of this instance.
+    /** sets the current position of this object
+
+        @param aPosition
+            the position of the top left edge in 100/th mm
      */
     void setPosition( [in] com::sun::star::awt::Point aPosition );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XShape::getSize
-    /** gets the size of this instance.
+    /** gets the size of this object.
+
+        @returns
+            the size in 100/th mm
      */
     com::sun::star::awt::Size getSize();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XShape::setSize
-    /** sets the size of this instance.
+    /** sets the size of this object.
+
+        @param aSize
+            the size in 100/th mm
      */
     void setSize( [in] com::sun::star::awt::Size aSize )
             raises( com::sun::star::beans::PropertyVetoException );
@@ -125,21 +132,5 @@ interface XShape: com::sun::star::drawing::XShapeDescriptor
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:42  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:15  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:24  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextProperties.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-26 08:45:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,19 +231,35 @@ service TextProperties
     [property] long TextLowerDistance;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR Text::TextMaximumFrameHeight
+
+    /** with this property you can set the maximum height for a shape with text.
+        On edit, the auto grow feature will not grow the object heigher than
+        the value of this property.
+    */
     [property] long TextMaximumFrameHeight;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR Text::TextMaximumFrameWidth
+
+    /** with this property you can set the maximum width for a shape with text.
+        On edit, the auto grow feature will not grow the objects wider than
+        the value of this property.
+    */
     [property] long TextMaximumFrameWidth;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR Text::TextMinimalFrameHeight
+
+    /** with this property you can set the minimum height for a shape with text.
+        On edit, the auto grow feature will not shrink the objects height smaller
+        than the value of this property.
+    */
     [property] long TextMinimumFrameHeight;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR Text::TextMinimumFrameWidth
+
+    /** with this property you can set the minimum width for a shape with text.
+        On edit, the auto grow feature will not shrink the object width smaller
+        than the value of this property.
+    */
     [property] long TextMinimumFrameWidth;
 
     //-------------------------------------------------------------------------
@@ -304,3 +320,4 @@ service TextProperties
 }; }; }; };
 
 #endif
+

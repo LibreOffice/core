@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageShape.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:42:42 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,30 +74,28 @@
 
 // DocMerge from xml: service com::sun::star::drawing::PageShape
 /** This service is for a page shape.
+    A page shape displays a preview of another page. These shapes
+    are used inside notes pages to preview the corresponding
+    drawing page. Theyre also used in the handout page to preview
+    the printing position and order of pages
  */
 service PageShape
 {
     // DocMerge: empty anyway
     service com::sun::star::drawing::Shape;
 
+    /** this is the page number that is used for the preview.
+        For page shapes on notes pages, this can't be changed.
+        For page shapes on handout pages, this value only
+        describes the relative order of the different page
+        shapes on the page.
+    */
+    [optional, property] long PageNumber;
 };
 
 //=============================================================================
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 23:35:13  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:21  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDrawPageExpander.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:21 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,19 +80,22 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::drawing::XDrawPageExpander
 /** is implemented by documents that can expand the contents
     of a summary on a <type>DrawPage</type> into a collection of
-    <type>DrawPage</type>s.@see XDrawPageSummarizer
+    <type>DrawPage</type>s.
+
+    @see XDrawPageSummarizer
+
+    @deprecated
  */
 interface XDrawPageExpander: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XDrawPageExpander::expand
     /** creates a collection of <type>DrawPage</type>s from the
-        summary inside the given <type>DrawPage</type>.
-     */
+        summary inside the given <type>DrawPage</type> and adds
+        them to the same model as the source <type>DrawPage</type>.
+    */
     com::sun::star::drawing::XDrawPages expand( [in] com::sun::star::drawing::XDrawPage xPage );
 
 };
@@ -101,24 +104,5 @@ interface XDrawPageExpander: com::sun::star::uno::XInterface
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:06  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:42:42  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:15  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:23  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDrawPages.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:21 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,24 +76,42 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::drawing::XDrawPages
-/** gives access to a collection of <type>DrawPage</type> instances.
- */
+/** gives access to a container of <type>DrawPage</type>s or <type>MasterPage</type>s.
+
+    <p>The pages are stored in an index container. The order is determined by
+    the index.
+
+    You usualy get this interface if you use the
+    <type>XDrawPagesSupplier<type> or the <type>XMasterPagesSupplier</type>
+    at a model that contains <type>DrawPage</type>s or <type>MasterPage</type>s
+*/
 interface XDrawPages: com::sun::star::container::XIndexAccess
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XDrawPages::insertNewByIndex
-    /** creates and inserts a new <type>DrawPage</type> into
-        this collection.
-     */
+    /** creates and inserts a new <type>DrawPage</type> or <type>MasterPage</type>
+        into this container
+
+        @param nIndex
+            the index at which the newly created <type>DrawPage</type> or
+            <type>MasterPage</type> will be inserted.
+
+        @return
+            the newly created and already inserted <type>DrawPage</type> or
+            <type>MasterPage</type>.
+    */
     com::sun::star::drawing::XDrawPage insertNewByIndex( [in] long nIndex );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XDrawPages::remove
-    /** removes the given <type>DrawPage</type> from this collection.
-     */
+    /** removes a <type>DrawPage</type> or <type>MasterPage</type> from this
+        container.
+
+        @param xPage
+            this <type>DrawPage</type> or <type>MasterPage</type> must be
+            contained and will be removed from this container. It will
+            also be disposed and shouldn't be used any further.
+    */
     void remove( [in] com::sun::star::drawing::XDrawPage xPage );
 
 };
@@ -102,21 +120,5 @@ interface XDrawPages: com::sun::star::container::XIndexAccess
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/11/08 12:42:42  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:15  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:23  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

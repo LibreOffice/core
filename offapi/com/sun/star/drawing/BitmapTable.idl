@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BitmapTable.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2002-02-28 16:06:42 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,10 @@
 /** this is a container for URLs to bitmaps.
 
     <p>It is used for example to access the bitmaps that
-    are used inside a document for filling. @see DrawingDocumentFactory
+    are used inside a document for filling.
 
-    @see Fillstyle.FillBitmapURL
+    @see DrawingDocumentFactory
+    @see Fillstyle::FillBitmapURL
 */
 service BitmapTable
 {
@@ -86,7 +87,7 @@ service BitmapTable
         <p>Note: You can add new entries for later use, but you cannot
         remove entries that are used inside the document.
     */
-    interface com.sun.star.container.XNameContainer;
+    interface com::sun::star::container::XNameContainer;
 };
 
 //=============================================================================
@@ -94,3 +95,4 @@ service BitmapTable
 }; }; }; };
 
 #endif
+

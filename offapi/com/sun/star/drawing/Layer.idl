@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Layer.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-26 08:45:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,10 @@
     <p>The properties of a <type>Layer</type> instance affect all <type>Shape</type>s
     attached to the Layer.
 
-    </p>@see    DrawingDocument
-        @see LayerManager
+    </p>
+
+    @see    DrawingDocument
+    @see LayerManager
  */
 service Layer
 {
@@ -134,30 +136,5 @@ service Layer
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:06  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:42:42  mi
-    moved from api
-
-    Revision 1.1.1.1  2000/09/18 23:35:13  hjs
-    initial import
-
-    Revision 1.5  2000/09/11 11:52:20  mi
-    documentation merged from XML
-
-    Revision 1.3  2000/02/21 16:17:59  mi
-    string documentation from stardiv...*.idl-files
-
-    Revision 1.2  2000/02/07 11:24:28  mi
-    zu #70728# missing documentation marked
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 09:47:34 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,12 @@
 //=============================================================================
 
 /** This abstract service specifies the general characteristics of all
-    <type>Shape</type>s.@see XShape
-        @see com::sun::star::lang::XComponent
-        @see com::sun::star::text::XText
-        @see ShapeDescriptor
+    <type>Shape</type>s.
+
+    @see XShape
+    @see com::sun::star::lang::XComponent
+    @see com::sun::star::text::XText
+    @see ShapeDescriptor
  */
 service Shape
 {
@@ -194,6 +196,9 @@ service Shape
 
     /** this property lets you get and set the transformation matrix
         for this shape.
+
+        The transformation is a 3x3 homogen matrix and can contain
+        translation, rotation, shearing and scaling.
      */
     [optional, property] com::sun::star::drawing::HomogenMatrix3 Transformation;
 
@@ -212,3 +217,4 @@ service Shape
 }; }; }; };
 
 #endif
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EllipseShape.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-10-26 08:45:35 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,3 +136,4 @@ service EllipseShape
 }; }; }; };
 
 #endif
+

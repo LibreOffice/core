@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XControlShape.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:21 $
+ *  last change: $Author: mi $ $Date: 2002-10-02 15:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,22 +76,34 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::drawing::XControlShape
-/** is implemented by <type>Shape</type>s that contain a control.
- */
+/** is implemented by a <type>ControlShape</type> to access the controls model.
+
+    @see com::sun::star::drawing::ControlShape
+    @see com::sun::star::awt::ControlModel
+*/
 interface XControlShape: com::sun::star::drawing::XShape
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XControlShape::getControl
-    /** returns the control of this <type>Shape</type>.@see com::sun::star::awt::ControlModel
+    /** returns the control model of this <type>Shape</type>.
+
+        @return
+            if there is already a control model assigned
+            to this <type>ControlShape</type>, than its returned.
+            Otherwise you get an empty reference.
      */
     com::sun::star::awt::XControlModel getControl();
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::drawing::XControlShape::setControl
-    /** sets the control for this <type>Shape</type>.@see com::sun::star::awt::ControlMOodel
+    /** sets the control model for this <type>Shape</type>.
+
+        @param xControl
+            this will be the new control model that is
+            displayed with this shape. You may change
+            the model more than once during the lifetime
+            of a <type>ControlShape</type>
+
      */
     [oneway] void setControl( [in] com::sun::star::awt::XControlModel xControl );
 
@@ -101,27 +113,5 @@ interface XControlShape: com::sun::star::drawing::XShape
 
 }; }; }; };
 
-/*=============================================================================
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2000/12/21 08:35:06  mi
-    @see interface/service/... ident -> @see ident - for new docu generator
-
-    Revision 1.3  2000/11/08 12:42:42  mi
-    moved from api
-
-    Revision 1.2  2000/10/09 14:24:55  mi
-    #78715# exchanged stardiv::... by com::sun::star::... (especially in @see tags)
-
-    Revision 1.1.1.1  2000/09/18 23:35:15  hjs
-    initial import
-
-    Revision 1.3  2000/09/11 11:52:23  mi
-    documentation merged from XML
-
-    Revision 1.1.1.1  1999/11/11 09:48:42  jsc
-    new
-
-
-=============================================================================*/
 #endif
+
