@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:12:40 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,6 +264,13 @@ Link URIHelper::GetMaybeFileHdl()
 
 namespace {
 
+bool isAbsoluteHierarchicalUriReference(
+    css::uno::Reference< css::uri::XUriReference > const & uriReference)
+{
+    return uriReference.is() && uriReference->isAbsolute()
+        && uriReference->isHierarchical() && !uriReference->hasRelativePath();
+}
+
 // To improve performance, assume that if for any prefix URL of a given
 // hierarchical URL either a UCB content cannot be created, or the UCB content
 // does not support the getCasePreservingURL command, then this will hold for
@@ -272,7 +279,7 @@ enum Result { Success, GeneralFailure, SpecificFailure };
 
 Result normalizePrefix(
     css::uno::Reference< css::ucb::XContentProvider > const & broker,
-    rtl::OUString const & uriReference, rtl::OUString * normalized)
+    rtl::OUString const & uri, rtl::OUString * normalized)
 {
     OSL_ASSERT(broker.is() && normalized != 0);
     css::uno::Reference< css::ucb::XContent > content;
@@ -280,7 +287,7 @@ Result normalizePrefix(
         content = broker->queryContent(
             css::uno::Reference< css::ucb::XContentIdentifierFactory >(
                 broker, css::uno::UNO_QUERY_THROW)->createContentIdentifier(
-                    uriReference));
+                    uri));
     } catch (css::ucb::IllegalIdentifierException &) {}
     if (!content.is()) {
         return GeneralFailure;
@@ -318,17 +325,17 @@ rtl::OUString normalize(
     // normalize as long a prefix of the given URL as possible (i.e., normalize
     // all the existing directories within the path):
     rtl::OUString normalized;
-    switch (normalizePrefix(broker, uriReference, &normalized)) {
+    sal_Int32 i = uriReference.indexOf('#');
+    normalized = i == -1 ? uriReference : uriReference.copy(0, i);
+    switch (normalizePrefix(broker, normalized, &normalized)) {
     case Success:
-        return normalized;
+        return i == -1 ? normalized : normalized + uriReference.copy(i);
     case GeneralFailure:
         return uriReference;
     }
     css::uno::Reference< css::uri::XUriReference > ref(
         uriFactory->parse(uriReference));
-    if (!ref.is() || !ref->isAbsolute() || !ref->isHierarchical()
-        || ref->hasRelativePath())
-    {
+    if (!isAbsoluteHierarchicalUriReference(ref)) {
         return uriReference;
     }
     sal_Int32 count = ref->getPathSegmentCount();
@@ -351,6 +358,26 @@ rtl::OUString normalize(
         if (normalizePrefix(broker, normalized, &normalized) != SpecificFailure)
         {
             buf.append(normalized);
+            css::uno::Reference< css::uri::XUriReference > preRef(
+                uriFactory->parse(normalized));
+            if (!isAbsoluteHierarchicalUriReference(preRef)) {
+                // This could only happen if something is inconsistent:
+                break;
+            }
+            sal_Int32 preCount = preRef->getPathSegmentCount();
+            // normalizePrefix may have added or removed a final slash:
+            if (preCount != i) {
+                if (preCount == i - 1) {
+                    buf.append(static_cast< sal_Unicode >('/'));
+                } else if (preCount - 1 == i && buf.getLength() > 0
+                           && buf.charAt(buf.getLength() - 1) == '/')
+                {
+                    buf.setLength(buf.getLength() - 1);
+                } else {
+                    // This could only happen if something is inconsistent:
+                    break;
+                }
+            }
             for (sal_Int32 j = i; j < count; ++j) {
                 buf.append(static_cast< sal_Unicode >('/'));
                 buf.append(ref->getPathSegment(j));
