@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LayoutMenu.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:31:42 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,19 +200,17 @@ private:
     */
     void InsertPageWithLayout (AutoLayout aLayout);
 
-    /** Create an SID_INSERTPAGE request.  The parameters are set so that
-        the given layout is assigned to the current page of the main view
-        shell.
+    /** Create a request structure that can be used with the SID_INSERTPAGE
+        and SID_MODIFYPAGE slots.  The parameters are set so that the given
+        layout is assigned to the current page of the main view shell.
+        @param nSlotId
+            Supported slots are SID_INSERTPAGE and SID_MODIFYPAGE.
+        @param aLayout
+            Layout of the page to insert or to assign.
     */
     SfxRequest CreateRequest (
         USHORT nSlotId,
         AutoLayout aLayout);
-
-    /** Return </TRUE> when the main view shell supports a master page mode
-        (true for the edit view, notes view, and handout view) and has it
-        turned on.
-    */
-    bool IsMainViewInMasterPageMode (void);
 
     /** When clicked then set the current page of the view in the center pane.
     */
