@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-22 20:43:27 $
+ *  last change: $Author: kz $ $Date: 2001-10-25 20:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,7 @@ Resource RSC_CHARSETS
         Text [ english ] = "System";
         Text [ english_us ] = "System";
         Text[ portuguese ] = "Sistema";
-        Text[ russian ] = "Система";
+        Text[ russian ] = "Из системы";
         Text[ greek ] = "Уэуфзмб";
         Text[ dutch ] = "Systeem";
         Text[ french ] = "Systиme";
@@ -398,7 +398,7 @@ String STR_GENERAL_SDB_ERROR
     Text [ english ] = "Error while connecting to the data source";
     Text [ english_us ] = "Error while connecting to the data source";
     Text[ portuguese ] = "Erro na ligaзгo а fonte de dados";
-    Text[ russian ] = "Ошибка при соединении с источником данных";
+    Text[ russian ] = "Ошибка при соединении с исходными данными";
     Text[ greek ] = "РбспхуйЬуфзке уцЬлмб кбфЬ фз уэндеуз ме фзн рспЭлехуз фщн дедпмЭнщн";
     Text[ dutch ] = "Fout bij verbinding met gegevensbron";
     Text[ french ] = "Erreur lors de la connexion а la source de donnйes";
@@ -553,6 +553,9 @@ String STR_BUTTON_TEXT_ALL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.38  2001/10/22 20:43:27  kz
+ *  Merge SRC641: 22.10.01 - 22:43:55
+ *
  *  Revision 1.37  2001/10/18 20:44:31  vg
  *  Merge SRC641: 18.10.01 - 22:45:04
  *
@@ -624,6 +627,7 @@ String STR_BUTTON_TEXT_ALL
  *
  *  Revision 1.0 26.09.00 08:26:13  fs
  ************************************************************************/
+
 
 
 
