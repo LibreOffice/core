@@ -1,3 +1,5 @@
+"OButtonControl";"com::sun::star::form::submission::XVetoableSubmission";"addSubmissionVetoListener()"
+"OButtonControl";"com::sun::star::form::submission::XVetoableSubmission";"removeSubmissionVetoListener()"
 "OButtonControl";"com::sun::star::awt::XLayoutConstrains";"getMinimumSize()"
 "OButtonControl";"com::sun::star::awt::XLayoutConstrains";"getPreferredSize()"
 "OButtonControl";"com::sun::star::awt::XLayoutConstrains";"calcAdjustedSize()"
@@ -9,6 +11,7 @@
 "OButtonControl";"com::sun::star::lang::XComponent";"dispose()"
 "OButtonControl";"com::sun::star::lang::XComponent";"addEventListener()"
 "OButtonControl";"com::sun::star::lang::XComponent";"removeEventListener()"
+"OButtonControl";"com::sun::star::form::submission::XSubmission";"submit()"
 "OButtonControl";"com::sun::star::awt::XControl";"setContext()"
 "OButtonControl";"com::sun::star::awt::XControl";"getContext()"
 "OButtonControl";"com::sun::star::awt::XControl";"createPeer()"
