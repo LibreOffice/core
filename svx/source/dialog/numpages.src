@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-28 17:18:34 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 18:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ TabPage RID_SVXPAGE_PICK_BULLET
         Text[ korean ] = "ÏÑ†ÌÉù";
         Text[ turkish ] = "SeÁim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SelecciÛn";
+        Text[ catalan ] = "Seleccioneu";
         Text[ finnish ] = "Valinta";
     };
     Control VS_VALUES
@@ -145,7 +145,7 @@ TabPage RID_SVXPAGE_PICK_SINGLE_NUM
         Text[ korean ] = "ÏÑ†ÌÉù";
         Text[ turkish ] = "SeÁim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SelecciÛn";
+        Text[ catalan ] = "Seleccioneu";
         Text[ finnish ] = "Valinta";
     };
     Control VS_VALUES
@@ -191,7 +191,7 @@ TabPage RID_SVXPAGE_PICK_NUM
         Text[ korean ] = "ÏÑ†ÌÉù";
         Text[ turkish ] = "SeÁim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SelecciÛn";
+        Text[ catalan ] = "Seleccioneu";
         Text[ finnish ] = "Valinta";
     };
     Control VS_VALUES
@@ -237,7 +237,7 @@ TabPage RID_SVXPAGE_PICK_BMP
         Text[ korean ] = "ÏÑ†ÌÉù";
         Text[ turkish ] = "SeÁim";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "SelecciÛn";
+        Text[ catalan ] = "Seleccioneu";
         Text[ finnish ] = "Valinta";
     };
     Control VS_VALUES
@@ -329,7 +329,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese_brazilian ] = "NÌvel" ;
         Text [ portuguese ] = "~NÌvel" ;
         Text [ finnish ] = "Taso " ;
-        Text [ danish ] = "Niveau" ;
+        Text [ danish ] = "~Niveau" ;
         Text [ french ] = "Niveau" ;
         Text [ swedish ] = "~NivÂ" ;
         Text [ dutch ] = "~Niveau" ;
@@ -381,7 +381,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "ÏÑúÏãù";
         Text[ turkish ] = "Format";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Formato";
+        Text[ catalan ] = "Formata";
         Text[ finnish ] = "Muoto";
     };
     FixedText FT_FMT
@@ -723,9 +723,9 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
             < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
             < "ViÒeta" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-            < "Imagen" ;                    8/*SVX_NUM_BITMAP              */; > ;
+            < "Gr‡fics" ;                   8/*SVX_NUM_BITMAP              */; > ;
             < "Imagen vinculada" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-            < "Ninguna" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+            < "Cap" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
         };
         StringList [ finnish ] =
         {
@@ -828,7 +828,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ ENGLISH ] = "Character St~yle" ;
         Text [ english_us ] = "~Character Style" ;
         Text [ swedish ] = "Teckenf~ormatmall" ;
-        Text [ danish ] = "Tegntypografi:" ;
+        Text [ danish ] = "Te~gntypografi" ;
         Text [ italian ] = "Modello di carattere:" ;
         Text [ spanish ] = "Es~tilo de car·cter:" ;
         Text [ french ] = "Style de caractËres" ;
@@ -865,7 +865,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ italian ] = "Colore";
         Text[ portuguese_brazilian ] = "~Color:";
         Text[ portuguese ] = "~Cor";
-        Text[ danish ] = "Farve:";
+        Text[ danish ] = "~Farve";
         Text[ french ] = "Couleur";
         Text[ swedish ] = "~F‰rg";
         Text[ dutch ] = "~Kleur";
@@ -902,7 +902,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ italian ] = "Dimensione relativa";
         Text[ portuguese_brazilian ] = "~Relatize size:";
         Text[ portuguese ] = "~Tamanho relativo";
-        Text[ danish ] = "Relativ st¯rrelse:";
+        Text[ danish ] = "~Relativ st¯rrelse";
         Text[ french ] = "Taille relative";
         Text[ swedish ] = "~Relativ storlek";
         Text[ dutch ] = "~Relatieve grootte";
@@ -948,7 +948,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese_brazilian ] = "~Completar" ;
         Text [ portuguese ] = "Co~mpleto" ;
         Text [ finnish ] = "N‰yt‰ alatasot" ;
-        Text [ danish ] = "FuldstÊndig" ;
+        Text [ danish ] = "F~uldstÊndig" ;
         Text [ french ] = "Complet" ;
         Text [ swedish ] = "F~ullst‰ndig" ;
         Text [ dutch ] = "~Volledig" ;
@@ -992,7 +992,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ portuguese_brazilian ] = "~Come?ar em" ;
         Text [ portuguese ] = "~ComeÁar em" ;
         Text [ finnish ] = "Aloita kohdasta" ;
-        Text [ danish ] = "Begynd med" ;
+        Text [ danish ] = "Be~gyndelse ved" ;
         Text [ french ] = "Commencer avec" ;
         Text [ swedish ] = "~Bˆrja med" ;
         Text [ dutch ] = "~Begin met" ;
@@ -1220,9 +1220,9 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         };
         StringList [ catalan ] =
         {
-            < "Izquierda" ; > ;
-            < "Centrado" ; > ;
-            < "Derecha" ; > ;
+            < "Esquerra" ; > ;
+            < "Centrat" ; > ;
+            < "Dreta" ; > ;
         };
         StringList [ finnish ] =
         {
@@ -1292,7 +1292,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "Í∑∏ÎûòÌîΩ";
         Text[ turkish ] = "Grafik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Imagen";
+        Text[ catalan ] = "Gr‡fics";
         Text[ finnish ] = "Kuvat";
     };
     MenuButton MB_BITMAP
@@ -1411,7 +1411,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "ÎÑàÎπÑ";
         Text[ turkish ] = "Geni˛lik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~ncho";
+        Text[ catalan ] = "~Amplada";
         Text[ finnish ] = "Leveys";
     };
     MetricField MF_WIDTH
@@ -1443,7 +1443,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ english_us ] = "Height" ;
         Text [ portuguese_brazilian ] = "~H?e" ;
         Text [ swedish ] = "H~ˆjd" ;
-        Text [ danish ] = "H¯jde" ;
+        Text [ danish ] = "H~¯jde" ;
         Text [ italian ] = "Altezza" ;
         Text [ spanish ] = "A~ltura" ;
         Text [ french ] = "Hauteur" ;
@@ -1459,7 +1459,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text[ korean ] = "ÎÜíÏù¥";
         Text[ turkish ] = "Y¸kseklik";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "A~ltura";
+        Text[ catalan ] = "~AlÁada";
         Text[ finnish ] = "Korkeus";
     };
     MetricField MF_HEIGHT
@@ -1861,7 +1861,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Text [ english_us ] = "~Consecutive numbering" ;
         Text [ portuguese_brazilian ] = "~Fortlaufende Numerierung" ;
         Text [ swedish ] = "Fort~lˆpande numrering" ;
-        Text [ danish ] = "Fortl¯bende nummerering" ;
+        Text [ danish ] = "~Fortl¯bende nu~mmerering" ;
         Text [ italian ] = "~Numerazione continua" ;
         Text [ spanish ] = "NumeraciÛn consecutiva" ;
         Text [ french ] = "NumÈrotation continue" ;
@@ -1935,7 +1935,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text [ portuguese_brazilian ] = "NÌvel" ;
         Text [ portuguese ] = "~NÌvel" ;
         Text [ finnish ] = "Taso " ;
-        Text [ danish ] = "Niveau" ;
+        Text [ danish ] = "~Niveau" ;
         Text [ french ] = "Niveau" ;
         Text [ swedish ] = "~NivÂ" ;
         Text [ dutch ] = "~Niveau" ;
@@ -2319,9 +2319,9 @@ TabPage RID_SVXPAGE_NUM_POSITION
         };
         StringList [ catalan ] =
         {
-            < "Izquierda" ; > ;
-            < "Centrado" ; > ;
-            < "Derecha" ; > ;
+            < "Esquerra" ; > ;
+            < "Centrat" ; > ;
+            < "Dreta" ; > ;
         };
         StringList [ finnish ] =
         {
@@ -2355,7 +2355,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Text[ korean ] = "Í∏∞Î≥∏ Í∞í";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Predeterminado";
+        Text[ catalan ] = "~Est‡ndard";
         Text[ finnish ] = "Oletusarvo";
     };
     Window WIN_PREVIEW
