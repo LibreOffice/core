@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *  last change: $Author: mba $ $Date: 2000-09-29 13:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,9 @@
 #include <objshimp.hxx>
 
 #include <osl/mutex.hxx>
-#ifdef _USE_NAMESPACE
 using namespace vos;
-#endif
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::frame;
 
 #define SfxIOException_Impl( nErr ) ::com::sun::star::io::IOException()
 
@@ -213,7 +213,7 @@ SfxDocumentInfoObject::SfxDocumentInfoObject( SfxObjectShell *pObjSh )
         SfxDocumentInfo &rDocInfo = pObjSh->GetDocInfo();
         _pInfo = &rDocInfo;
         _pFilter = pObjSh->GetMedium()->GetFilter();
-        _xObjSh = pObjSh;
+        _wModel = pObjSh->GetModel();
     }
 }
 
@@ -422,13 +422,16 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
                 break;
             }
             case WID_TITLE :
+            {
                 _pInfo->SetTitle( aStrVal );
-                if ( _xObjSh )
+                Reference < XModel > xModel( _wModel.get(), UNO_QUERY );
+                if ( xModel.is() )
                 {
-                    _xObjSh->InvalidateName();
-                    _xObjSh->Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );
+                    _pImp->_pObjSh->InvalidateName();
+                    _pImp->_pObjSh->Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );
                 }
                 break;
+            }
             case MID_DOCINFO_SUBJECT :
                 _pInfo->SetTheme( aStrVal );
                 break;
@@ -557,7 +560,8 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
         }
     }
 
-    if ( bModified && _pImp->_pObjSh )
+    Reference < XModel > xModel( _wModel.get(), UNO_QUERY );
+    if ( bModified && xModel.is() )
         _pImp->_pObjSh->SetModified( sal_True );
 }
 
@@ -743,7 +747,8 @@ void  SAL_CALL SfxDocumentInfoObject::setUserFieldName(sal_Int16 nIndex, const :
     {
         const SfxDocUserKey& rKey = _pInfo->GetUserKey( nIndex );
         _pInfo->SetUserKey( SfxDocUserKey( aName, rKey.GetWord() ), nIndex );
-        if ( _pImp->_pObjSh )
+        Reference < XModel > xModel( _wModel.get(), UNO_QUERY );
+        if ( xModel.is() )
             _pImp->_pObjSh->SetModified( sal_True );
     }
 }
@@ -756,7 +761,8 @@ void SAL_CALL  SfxDocumentInfoObject::setUserFieldValue( sal_Int16 nIndex, const
     {
         const SfxDocUserKey& rKey = _pInfo->GetUserKey( nIndex );
         _pInfo->SetUserKey( SfxDocUserKey( rKey.GetTitle(), aValue ), nIndex );
-        if ( _pImp->_pObjSh )
+        Reference < XModel > xModel( _wModel.get(), UNO_QUERY );
+        if ( xModel.is() )
             _pImp->_pObjSh->SetModified( sal_True );
     }
 }
