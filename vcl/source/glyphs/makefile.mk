@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 09:31:23 $
+#   last change: $Author: rt $ $Date: 2004-09-08 15:08:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,10 @@ TARGET=glyphs
 
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 .INCLUDE :  settings.mk
+
+.IF "$(SYSTEM_FREETYPE)" == "YES"
+CFLAGS+=-DSYSTEM_FREETYPE $(FREETYPE_CFLAGS)
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
