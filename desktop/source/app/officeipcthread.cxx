@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:40:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,11 @@ void SAL_CALL OfficeIPCThread::run()
                         eFactory = SvtModuleOptions::E_WRITERGLOBAL;
                     else if ( aCmdLineArgs.IsWeb() )
                         eFactory = SvtModuleOptions::E_WRITERWEB;
-                    AddURLToStringList( aOpt.GetFactoryEmptyDocumentURL( eFactory ), pRequest->aOpenList );
+
+                    if ( eFactory != SvtModuleOptions::E_DATABASE )
+                        AddURLToStringList( aOpt.GetFactoryEmptyDocumentURL( eFactory ), pRequest->aOpenList );
+                    else
+                        AddURLToStringList( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("service:com.sun.star.sdb.DatabaseWizardDialog")), pRequest->aOpenList );
                     bDocRequestSent = sal_True;
                 }
             }
