@@ -7196,3 +7196,4 @@ FreeSpaceStr
 ?s_pType_com_sun_star_i18n_Currency@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBUCurrency@i18n@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?GetFormatSpecialInfo@SvNumberformat@@QBEXAAE0AAG1@Z
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Sequence@UCurrency@i18n@star@sun@com@@@2345@@Z
+?GetFormatDecimalSep@SvNumberFormatter@@QBE?AVString@@K@Z
