@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: er $ $Date: 2002-09-24 14:16:50 $
+ *  last change: $Author: nn $ $Date: 2002-10-01 13:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,8 @@ static BYTE cCharWidths[ 128-32 ] = {
     2,2,1,2,1,2,2,2,2,2,2,1,1,1,2,1
 };
 
-static xub_StrLen InsertBlanks( String& r, xub_StrLen nPos, sal_Unicode c )
+// static
+xub_StrLen SvNumberformat::InsertBlanks( String& r, xub_StrLen nPos, sal_Unicode c )
 {
     if( c >= 32 )
     {
