@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-30 15:08:01 $
+ *  last change: $Author: tl $ $Date: 2001-03-05 08:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,19 +211,26 @@
 #define RB_LOWPOS               303
 #define FT_HIGHLOW              304
 #define ED_HIGHLOW              305
-#define FT_FONTSIZE             306
-#define ED_FONTSIZE             307
-#define CB_FONTSIZE             308
+#define CB_HIGHLOW              306
+#define FT_FONTSIZE             307
+#define ED_FONTSIZE             308
+#define FL_ROTATION_SCALING     309
+#define RB_0_DEG                310
+#define RB_90_DEG               311
+#define RB_270_DEG              312
+#define CB_FIT_TO_LINE          313
+#define FT_SCALE_WIDTH          314
+#define MF_SCALE_WIDTH          315
 
-#define FL_KERNING2             310
-#define LB_KERNING2             311
-#define FT_KERNING2             312
-#define ED_KERNING2             313
-#define CB_PAIRKERNING          314
+#define FL_KERNING2             320
+#define LB_KERNING2             321
+#define FT_KERNING2             322
+#define ED_KERNING2             323
+#define CB_PAIRKERNING          324
 
-#define FL_POS_PREVIEW          320
-#define WIN_POS_PREVIEW         321
-#define FT_POS_FONTTYPE         322
+#define FL_POS_PREVIEW          330
+#define WIN_POS_PREVIEW         331
+#define FT_POS_FONTTYPE         332
 
 // TwoLinesPage -------------------------------------------------------------
 
