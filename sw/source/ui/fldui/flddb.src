@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:21:42 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:45:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,8 +170,8 @@ TabPage TP_FLD_DB
         TEXT [ english_us ] = "Record number" ;
         Left = TRUE ;
         TEXT[ chinese_simplified ] = "МхДї±аєЕ";
-        TEXT[ russian ] = "Номер предложения";
-        TEXT[ polish ] = "Numer zdania";
+        TEXT[ russian ] = "Номер записи";
+        TEXT[ polish ] = "Numer rekordu";
         TEXT[ japanese ] = "Ъє°ДЮ”ФЌ†";
         TEXT[ chinese_traditional ] = "¶µҐШё№ЅX";
         TEXT[ arabic ] = "СЮг ЗбУМб";
@@ -237,7 +237,7 @@ TabPage TP_FLD_DB
         Text [ dutch ] = "~Uit database" ;
         Text [ portuguese ] = "~Da base de dados" ;
         Text[ chinese_simplified ] = "ґУКэѕЭїв";
-        Text[ russian ] = "из базы данных";
+        Text[ russian ] = "Из базы данных";
         Text[ polish ] = "Z bazy danych";
         Text[ japanese ] = "ГЮ°АНЮ°Ѕ‚©‚з";
         Text[ chinese_traditional ] = "±qёк®Ж®w";
@@ -262,7 +262,7 @@ TabPage TP_FLD_DB
         Text [ dutch ] = "~Zelf gedefinieerd" ;
         Text [ portuguese ] = "D~efinido pelo utilizador" ;
         Text[ chinese_simplified ] = "УГ»§ЧФ¶Ё";
-        Text[ russian ] = "пользователя";
+        Text[ russian ] = "Настройки пользователя";
         Text[ polish ] = "Zdefiniowane przez uїytkownika";
         Text[ japanese ] = "Х°»Ю°’и‹`";
         Text[ chinese_traditional ] = "¦Ы­q";
