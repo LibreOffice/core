@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:07:08 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #define ITEMID_SEARCH           SID_SEARCH_ITEM
 
+#include "PageListWatcher.hxx"
+
 #ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
 #include <com/sun/star/text/WritingMode.hpp>
 #endif
@@ -94,7 +96,9 @@
 #include <offmgr/app.hxx>
 #include <svx/linkmgr.hxx>
 #include <svx/dialogs.hrc>
-#include "sdoutl.hxx"
+#ifndef SD_OUTLINER_HXX
+#include "Outliner.hxx"
+#endif
 #include "app.hxx"
 
 #ifndef _EEITEM_HXX //autogen
@@ -186,22 +190,35 @@
 #include "cusshow.hxx"
 
 #ifndef MAC
-#include "../ui/inc/docshell.hxx"
-#include "../ui/inc/grdocsh.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "../ui/inc/DrawDocShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "../ui/inc/GraphicDocShell.hxx"
+#endif
 #include "../ui/inc/sdxfer.hxx"
-#include "../ui/inc/viewshel.hxx"
-#include "../ui/inc/grdocsh.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "../ui/inc/ViewShell.hxx"
+#endif
 #include "../ui/inc/optsitem.hxx"
-#include "../ui/inc/frmview.hxx"
+#ifndef SD_FRAME_VIEW_HXX
+#include "../ui/inc/FrameView.hxx"
+#endif
 #else
-#include "docshell.hxx"
-#include "grdocsh.hxx"
-#include "sdresid.hxx"
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
+#endif
+#ifndef SD_GRAPHIC_DOC_SHELL_HXX
+#include "GraphicDocShell.hxx"
+#endif
 #include "sdxfer.hxx"
-#include "viewshel.hxx"
-#include "grdocsh.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "optsitem.hxx"
-#include "frmview.hxx"
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
 #endif
 
 // #90477#
@@ -214,172 +231,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
-
-//////////////////////////////////////////////////////////////////////////////
-// #109538#
-
-void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
-{
-    // clear vectors
-    maPageVectorStandard.clear();
-    maPageVectorNotes.clear();
-    mpHandoutPage = 0L;
-
-    // build up vectors again
-    const sal_uInt32 nPageCount(ImpGetPageCount());
-
-    for(sal_uInt32 a(0L); a < nPageCount; a++)
-    {
-        SdPage* pCandidate = ImpGetPage(a);
-        DBG_ASSERT(pCandidate, "ImpPageListWatcher::ImpRecreateSortedPageListOnDemand: Invalid PageList in Model (!)");
-
-        switch(pCandidate->GetPageKind())
-        {
-            case PK_STANDARD:
-            {
-                maPageVectorStandard.push_back(pCandidate);
-                break;
-            }
-            case PK_NOTES:
-            {
-                maPageVectorNotes.push_back(pCandidate);
-                break;
-            }
-            case PK_HANDOUT:
-            {
-                DBG_ASSERT(!mpHandoutPage, "ImpPageListWatcher::ImpRecreateSortedPageListOnDemand: Two Handout pages in PageList of Model (!)");
-                mpHandoutPage = pCandidate;
-                break;
-            }
-        }
-    }
-
-    // set to valid
-    mbPageListValid = sal_True;
-}
-
-ImpPageListWatcher::ImpPageListWatcher(const SdrModel& rModel)
-:   mrModel(rModel),
-    mpHandoutPage(0L),
-    mbPageListValid(sal_False)
-{
-}
-
-ImpPageListWatcher::~ImpPageListWatcher()
-{
-}
-
-SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
-{
-    SdPage* pRetval(0L);
-
-    if(!mbPageListValid)
-    {
-        ImpRecreateSortedPageListOnDemand();
-    }
-
-    switch(ePgKind)
-    {
-        case PK_STANDARD:
-        {
-            DBG_ASSERT(nPgNum <= maPageVectorStandard.size(), "ImpPageListWatcher::GetSdPage: access out of range (!)");
-            pRetval = maPageVectorStandard[nPgNum];
-            break;
-        }
-        case PK_NOTES:
-        {
-            DBG_ASSERT(nPgNum <= maPageVectorNotes.size(), "ImpPageListWatcher::GetSdPage: access out of range (!)");
-            pRetval = maPageVectorNotes[nPgNum];
-            break;
-        }
-        case PK_HANDOUT:
-        {
-            DBG_ASSERT(mpHandoutPage, "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
-            DBG_ASSERT(nPgNum == 0L, "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
-            pRetval = mpHandoutPage;
-            break;
-        }
-    }
-
-    return pRetval;
-}
-
-sal_uInt32 ImpPageListWatcher::GetSdPageCount(PageKind ePgKind)
-{
-    sal_uInt32 nRetval(0L);
-
-    if(!mbPageListValid)
-    {
-        ImpRecreateSortedPageListOnDemand();
-    }
-
-    switch(ePgKind)
-    {
-        case PK_STANDARD:
-        {
-            nRetval = maPageVectorStandard.size();
-            break;
-        }
-        case PK_NOTES:
-        {
-            nRetval = maPageVectorNotes.size();
-            break;
-        }
-        case PK_HANDOUT:
-        {
-            if(mpHandoutPage)
-            {
-                nRetval = 1L;
-            }
-
-            break;
-        }
-    }
-
-    return nRetval;
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-sal_uInt32 ImpDrawPageListWatcher::ImpGetPageCount() const
-{
-    return (sal_uInt32)mrModel.GetPageCount();
-}
-
-SdPage* ImpDrawPageListWatcher::ImpGetPage(sal_uInt32 nIndex) const
-{
-    return (SdPage*)mrModel.GetPage((sal_uInt16)nIndex);
-}
-
-ImpDrawPageListWatcher::ImpDrawPageListWatcher(const SdrModel& rModel)
-:   ImpPageListWatcher(rModel)
-{
-}
-
-ImpDrawPageListWatcher::~ImpDrawPageListWatcher()
-{
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-sal_uInt32 ImpMasterPageListWatcher::ImpGetPageCount() const
-{
-    return (sal_uInt32)mrModel.GetMasterPageCount();
-}
-
-SdPage* ImpMasterPageListWatcher::ImpGetPage(sal_uInt32 nIndex) const
-{
-    return (SdPage*)mrModel.GetMasterPage((sal_uInt16)nIndex);
-}
-
-ImpMasterPageListWatcher::ImpMasterPageListWatcher(const SdrModel& rModel)
-:   ImpPageListWatcher(rModel)
-{
-}
-
-ImpMasterPageListWatcher::~ImpMasterPageListWatcher()
-{
-}
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -398,7 +249,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     SvtPathOptions().GetPalettePath(),
     NULL, (SvPersist*)pDrDocSh ),
     eDocType(eType),
-    pDocSh( (SdDrawDocShell*) pDrDocSh ),
+    pDocSh(static_cast< ::sd::DrawDocShell*>(pDrDocSh)),
     pCreatingTransferable( NULL ),
     bPresAll(TRUE),
     bPresEndless(FALSE),
@@ -437,12 +288,14 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     eLanguageCTL( LANGUAGE_SYSTEM ),
     mbStartWithPresentation( false ),
     // #109538#
-    mpDrawPageListWatcher(0L),
-    mpMasterPageListWatcher(0L)
+    mpDrawPageListWatcher(0),
+    mpMasterPageListWatcher(0)
 {
     // #109538#
-    mpDrawPageListWatcher = new ImpDrawPageListWatcher(*this);
-    mpMasterPageListWatcher = new ImpMasterPageListWatcher(*this);
+    mpDrawPageListWatcher = ::std::auto_ptr<ImpDrawPageListWatcher>(
+        new ImpDrawPageListWatcher(*this));
+    mpMasterPageListWatcher = ::std::auto_ptr<ImpMasterPageListWatcher>(
+        new ImpMasterPageListWatcher(*this));
 
     SetObjectShell(pDrDocSh);       // fuer das VCDrawModel
 
@@ -693,12 +546,13 @@ SdDrawDocument::~SdDrawDocument()
         pLinkManager = NULL;
     }
 
-    FrameView* pFrameView = NULL;
+    ::sd::FrameView* pFrameView = NULL;
 
     for (ULONG i = 0; i < pFrameViewList->Count(); i++)
     {
         // Ggf. FrameViews loeschen
-        pFrameView = (FrameView*) pFrameViewList->GetObject(i);
+        pFrameView =
+            static_cast< ::sd::FrameView*>(pFrameViewList->GetObject(i));
 
         if (pFrameView)
             delete pFrameView;
@@ -737,7 +591,7 @@ SdDrawDocument::~SdDrawDocument()
 
     delete mpCharClass;
     mpCharClass = NULL;
-
+    /*af deletion is done by auto ptr s.
     // #109538#
     delete mpDrawPageListWatcher;
     mpDrawPageListWatcher = 0L;
@@ -745,6 +599,7 @@ SdDrawDocument::~SdDrawDocument()
     // #109538#
     delete mpMasterPageListWatcher;
     mpMasterPageListWatcher = 0L;
+        */
 }
 
 /*************************************************************************
@@ -763,14 +618,16 @@ SdrModel* SdDrawDocument::AllocModel() const
     {
         // Dokument wird fuer Drag&Drop/Clipboard erzeugt, dafuer muss dem Dokument eine DocShell (SvPersist) bekannt sein
         SvEmbeddedObject*   pObj = NULL;
-        SdDrawDocShell*     pNewDocSh = NULL;
+        ::sd::DrawDocShell*     pNewDocSh = NULL;
 
         if( eDocType == DOCUMENT_TYPE_IMPRESS )
-            pCreatingTransferable->SetDocShell( new SdDrawDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
+            pCreatingTransferable->SetDocShell( new ::sd::DrawDocShell(
+                SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
         else
-            pCreatingTransferable->SetDocShell( new SdGraphicDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
+            pCreatingTransferable->SetDocShell( new ::sd::GraphicDocShell(
+                SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType ) );
 
-        pNewDocSh = (SdDrawDocShell*) ( pObj = pCreatingTransferable->GetDocShell() );
+        pNewDocSh = static_cast< ::sd::DrawDocShell*>( pObj = pCreatingTransferable->GetDocShell() );
         pNewDocSh->DoInitNew( NULL );
         pNewModel = pNewDocSh->GetDoc();
 
@@ -796,7 +653,8 @@ SdrModel* SdDrawDocument::AllocModel() const
         // Es wird eine DocShell erzeugt, welche mit GetAllocedDocSh() zurueckgegeben wird
         SdDrawDocument* pDoc = (SdDrawDocument*) this;
         pDoc->SetAllocDocSh(FALSE);
-        pDoc->xAllocedDocShRef = new SdDrawDocShell(SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType);
+        pDoc->xAllocedDocShRef = new ::sd::DrawDocShell(
+            SFX_CREATE_MODE_EMBEDDED, TRUE, eDocType);
         pDoc->xAllocedDocShRef->DoInitNew(NULL);
         pNewModel = pDoc->xAllocedDocShRef->GetDoc();
     }
@@ -896,7 +754,7 @@ SvStream& operator << (SvStream& rOut, SdDrawDocument& rDoc)
     * FrameViews schreiben
     **************************************************************************/
     ULONG nFrameViewCount = 0;
-    SdViewShell* pViewSh = NULL;
+    ::sd::ViewShell* pViewSh = NULL;
     SfxViewShell* pSfxViewSh = NULL;
     SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(rDoc.pDocSh,
                                                          TYPE(SfxTopViewFrame));
@@ -905,7 +763,7 @@ SvStream& operator << (SvStream& rOut, SdDrawDocument& rDoc)
     {
         // Anzahl FrameViews ermitteln
         pSfxViewSh = pSfxViewFrame->GetViewShell();
-        pViewSh = PTR_CAST( SdViewShell, pSfxViewSh );
+        pViewSh = PTR_CAST(::sd::ViewShell, pSfxViewSh );
 
         if ( pViewSh && pViewSh->GetFrameView() )
         {
@@ -919,7 +777,7 @@ SvStream& operator << (SvStream& rOut, SdDrawDocument& rDoc)
     // Anzahl FrameViews schreiben
     rOut << nFrameViewCount;
 
-    FrameView* pFrame = NULL;
+    ::sd::FrameView* pFrame = NULL;
     pViewSh = NULL;
     pSfxViewSh = NULL;
     pSfxViewFrame = SfxViewFrame::GetFirst(rDoc.pDocSh, TYPE(SfxTopViewFrame));
@@ -928,7 +786,7 @@ SvStream& operator << (SvStream& rOut, SdDrawDocument& rDoc)
     {
         // FrameViews schreiben
         pSfxViewSh = pSfxViewFrame->GetViewShell();
-        pViewSh = PTR_CAST( SdViewShell, pSfxViewSh );
+        pViewSh = PTR_CAST(::sd::ViewShell, pSfxViewSh );
 
         if ( pViewSh && pViewSh->GetFrameView() )
         {
@@ -1043,7 +901,7 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
 
         if (bSingleFrameView)
         {
-            FrameView * pFrameView = new FrameView( &rDoc );
+            ::sd::FrameView * pFrameView = new ::sd::FrameView( &rDoc );
             rIn >> *pFrameView;
             rDoc.pFrameViewList->Insert(pFrameView, LIST_APPEND);
 
@@ -1108,12 +966,13 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
         * FrameViews lesen
         **********************************************************************/
         ULONG nCount = 0;
-        FrameView* pFrameView = NULL;
+        ::sd::FrameView* pFrameView = NULL;
 
         for (nCount=0; nCount<rDoc.pFrameViewList->Count(); nCount++)
         {
             // Ggf. FrameViews loeschen
-            pFrameView = (FrameView*) rDoc.pFrameViewList->GetObject(nCount);
+            pFrameView = static_cast< ::sd::FrameView*>(
+                rDoc.pFrameViewList->GetObject(nCount));
 
             if (pFrameView)
                 delete pFrameView;
@@ -1131,7 +990,7 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
         for (nCount=0; nCount<nFrameViewCount; nCount++)
         {
             // Einzelne FrameViews lesen
-            pFrameView = new FrameView( &rDoc );
+            pFrameView = new ::sd::FrameView( &rDoc );
             rIn >> *pFrameView;
 
             if (bIsSaveDocView)
@@ -1196,7 +1055,7 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
         // existiert eine DocShell bestimmt diese den DocType
         if(rDoc.pDocSh)
         {
-            if(NULL != PTR_CAST(SdGraphicDocShell,rDoc.pDocSh))
+            if(NULL != PTR_CAST(::sd::GraphicDocShell,rDoc.pDocSh))
                 rDoc.eDocType = DOCUMENT_TYPE_DRAW;
             else
                 rDoc.eDocType = DOCUMENT_TYPE_IMPRESS;
@@ -1616,7 +1475,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
                             if (aString.Len())
                             {
-                                SdOutliner* pInternalOutl = GetInternalOutliner(TRUE);
+                                ::sd::Outliner* pInternalOutl = GetInternalOutliner(TRUE);
                                 pInternalOutl->SetMinDepth(0);
                                 pPage->SetObjText( (SdrTextObj*) pObj, pInternalOutl, ePresObjKind, aString );
                                 pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), TRUE );
@@ -1712,7 +1571,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
                             if (aString.Len())
                             {
-                                SdOutliner* pInternalOutl = GetInternalOutliner(TRUE);
+                                ::sd::Outliner* pInternalOutl = GetInternalOutliner(TRUE);
                                 pInternalOutl->SetMinDepth(0);
                                 pPage->SetObjText( (SdrTextObj*) pObj, pInternalOutl, ePresObjKind, aString );
                                 pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), TRUE );
@@ -1773,11 +1632,11 @@ void SdDrawDocument::UpdateAllLinks()
 |*
 \************************************************************************/
 
-SdOutliner* SdDrawDocument::GetOutliner(BOOL bCreateOutliner)
+::sd::Outliner* SdDrawDocument::GetOutliner(BOOL bCreateOutliner)
 {
     if (!pOutliner && bCreateOutliner)
     {
-        pOutliner = new SdOutliner( this, OUTLINERMODE_TEXTOBJECT );
+        pOutliner = new ::sd::Outliner( this, OUTLINERMODE_TEXTOBJECT );
 
         if (pDocSh)
             pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *pDocSh ) );
@@ -1799,11 +1658,11 @@ SdOutliner* SdDrawDocument::GetOutliner(BOOL bCreateOutliner)
 |*
 \************************************************************************/
 
-SdOutliner* SdDrawDocument::GetInternalOutliner(BOOL bCreateOutliner)
+::sd::Outliner* SdDrawDocument::GetInternalOutliner(BOOL bCreateOutliner)
 {
     if ( !pInternalOutliner && bCreateOutliner )
     {
-        pInternalOutliner = new SdOutliner( this, OUTLINERMODE_TEXTOBJECT );
+        pInternalOutliner = new ::sd::Outliner( this, OUTLINERMODE_TEXTOBJECT );
         // MT:
         // Dieser Outliner wird nur fuer das Erzeugen spezieller Textobjekte
         // verwendet. Da in diesen Textobjekten keine Portion-Informationen
