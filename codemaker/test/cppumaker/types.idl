@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:54:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 03:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+//TODO: Do not depend on types for which C++ header files are only generated
+// later in the build process in offuh:
 #include "com/sun/star/lang/ClassNotFoundException.idl"
 #include "com/sun/star/lang/IllegalAccessException.idl"
 #include "com/sun/star/lang/Locale.idl"
@@ -555,5 +557,60 @@ singleton std: com::sun::star::uno::XNamingService;
 singleton NDEBUG: com::sun::star::uno::XNamingService;
 
 singleton get: com::sun::star::uno::XNamingService;
+
+enum HelperEnum { ZERO, ONE };
+
+struct HelperStruct { boolean m1; com::sun::star::uno::XInterface m2; };
+
+typedef byte TDByte;
+typedef HelperEnum TDEnum1;
+typedef TDEnum1 TDEnum;
+
+struct BigStruct {
+    boolean m1;
+    byte m2;
+    short m3;
+    unsigned short m4;
+    long m5;
+    unsigned long m6;
+    hyper m7;
+    unsigned hyper m8;
+    float m9;
+    double m10;
+    char m11;
+    string m12;
+    type m13;
+    any m14;
+    sequence<boolean> m15;
+    HelperEnum m16;
+    HelperStruct m17;
+    com::sun::star::uno::XInterface m18;
+    TDByte m19;
+    TDEnum m20;
+};
+
+struct Struct<T, U> {
+    T member1;
+    sequence<SequenceAny> member2;
+};
+
+struct StructUsage {
+    Struct< long, short > member1;
+    sequence<
+        sequence<
+            Struct<
+                sequence< Struct< any, boolean > >,
+                com::sun::star::uno::XInterface > > >
+                    member2;
+};
+
+struct AlignmentBaseStruct {
+    double member1;
+    short member2;
+};
+
+struct AlignmentDerivedStruct: AlignmentBaseStruct {
+    short member3;
+};
 
 }; }; };
