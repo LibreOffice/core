@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:21:02 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 //........................................................................
 ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
 {
-    Text [ de ] = "Autopilot Adressdatenquelle" ;
-    Text [ en-US ]  = "Address Data Source AutoPilot" ;
+    Text [ de ] = "Adressdatenquellen-Assistent" ;
+    Text [ en-US ] = "Address Book Data Source Wizard" ;
 
     HelpId = HID_ABSPILOT;
 
@@ -123,8 +123,8 @@ TabPage RID_PAGE_SELECTABTYPE
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
 #if !defined( ABP_USE_ROADMAP )
-    Text [ de ] = "Willkommen zum AutoPiloten zur Einrichtung von Adressdatenquellen.";
-    Text [ en-US ] = "Welcome to the Address Data Source AutoPilot";
+    Text [ de ] = "Willkommen zum Assistenten zur Einrichtung von Adressdatenquellen.";
+    Text [ en-US ] = "Welcome to the Address Data Source Wizard.";
 #endif
 
     FixedText FT_TYPE_HINTS
@@ -135,8 +135,8 @@ TabPage RID_PAGE_SELECTABTYPE
 
         Text [ de ] = "%PRODUCTNAME bietet Ihnen die Möglichkeit, auf bereits in Ihrem System vorhandene Adressdaten zuzugreifen. "
             "Dazu wird eine %PRODUCTNAME Datenquelle angelegt, unter der Ihre Adressbücher als Tabellen zugänglich sind.\n\n"
-            "Dieser AutoPilot unterstützt Sie bei der Einrichtung dieser Datenquelle.";
-        Text [ en-US ] = "%PRODUCTNAME lets you access address data already present in your system. To do this, a %PRODUCTNAME data source will be created in which your address data is available in tabular form.\n\nThis AutoPilot helps you create the data source.";
+            "Dieser Assistent unterstützt Sie bei der Einrichtung dieser Datenquelle.";
+        Text [ en-US ] = "%PRODUCTNAME lets you access address data already present in your system. To do this, a %PRODUCTNAME data source will be created in which your address data is available in tabular form.\n\nThis wizard helps you create the data source.";
     };
 
     FixedLine FL_TYPE
