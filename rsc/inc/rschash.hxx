@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rschash.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:24:18 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,62 +61,27 @@
 #ifndef _RSCHASH_HXX
 #define _RSCHASH_HXX
 
-#ifndef _RSCTOOLS_HXX
-#include <rsctools.hxx>
-#endif
+#include <sal/types.h>
+#include <rtl/string.hxx>
+#include <hash_map>
 
-/****************** T Y P E S ********************************************/
-/****************** C L A S S E S ****************************************/
-/****************** S t r i n g - C o n **********************************/
-class StringCon{
-private:
-    USHORT    nMax;     // sizeof character field
-    USHORT    nFill;    // index after last entry
-    char *    pField;   // pointer to character field
-public:
-           StringCon( USHORT nMaxEntries );  // maximum numbers of characters
-           ~StringCon();
-    char   *Put( const char * pStr ); // put string in field
-};
+typedef sal_uInt32 Atom;
 
-/****************** H a s h - T a b e l **********************************/
-class HashTabel{
-private:
-    USHORT      nMax;                 // size of hash-tabel
-    USHORT      nFill;                // elements in hash-tabel
-    ULONG       lAsk;                 // Anzahl der Anfragen
-    ULONG       lTry;                 // Anzahl der Versuche
-protected:
-    HASHID  Test_Insert( const void *, BOOL bInsert );
-public:
-    HashTabel( USHORT nMaxEntries );    // max size of hash-tabel
-    ~HashTabel();
-    HASHID  Test( const void * );             // test of insert
-    HASHID  Insert( const void * pElement );  // insert in hashtabel
-    virtual USHORT HashFunc( const void * ){ return( 0 ); };
-                                        // get hash value from subclass
-    virtual BOOL IsEntry( HASHID ){ return( FALSE ); };
-                                        // is field
-                                        // nIndex = index in Field
-    virtual COMPARE Compare( const void * , HASHID )
-        { return( EQUAL ); };           // compare element with entry
-};
+#define InvalidAtom Atom( ~0 )
 
-/****************** H a s h - S t r i n g ********************************/
-class HashString : public HashTabel{
-private:
-    StringCon * paSC;           // container of strings
-    char * *    ppStr;          // pointer to char * array
-public:
-            HashString( USHORT nMaxEntries );   // max size of hash-tabel
-            ~HashString();
-    USHORT  HashFunc( const void * pElement );  // return hash value
-    static USHORT  Hash_Func( const void * pElement );  // return hash value
-    BOOL    IsEntry( HASHID nIndex );
-    COMPARE Compare( const void * pElement, HASHID nIndex );
-    HASHID  Insert( const char * pStr );        // test of insert string
-    HASHID  Test( const char * pStr );          // insert string
-    char *  Get( HASHID nIndex );               // return pointer to string
+class AtomContainer
+{
+    Atom m_nNextID;
+    std::hash_map< rtl::OString, Atom, rtl::OStringHash > m_aStringToID;
+    std::hash_map< Atom, rtl::OString > m_aIDToString;
+
+    public:
+    AtomContainer();
+    ~AtomContainer();
+
+    Atom getID( const rtl::OString& rStr, bool bOnlyIfExists = false );
+    const rtl::OString& getString( Atom nAtom );
+
 };
 
 #endif // _RSCHASH_HXX
