@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:14:11 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1049,9 +1049,9 @@ void Databases::setActiveText( const rtl::OUString& Module,
         // ensure existence of tmp after for
         rtl::OString tmp;
         for( int i = 0; i < len; ++i )
-            if( ptr[i] == '%' )
+            if( ptr[i] == '%' || ptr[i] == '$' )
             {
-                // need to replace
+                // need of replacement
                 rtl::OUString temp = rtl::OUString( ptr,len,RTL_TEXTENCODING_UTF8 );
                 replaceName( temp );
                 tmp = rtl::OString( temp.getStr(),
