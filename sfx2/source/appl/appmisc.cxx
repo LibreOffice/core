@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:21:27 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,16 +222,6 @@ IMPL_LINK( SfxSpecialConfigError_Impl, TimerHdl, Timer*, pTimer )
 
 SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
 {
-    SFX_CHILDWINDOW_REGISTRATION( SID_CUSTOMIZETOOLBOX );
-
-    // Menu ist auf dem Macintosh sowieso sichtbar
-    SFX_OBJECTBAR_REGISTRATION(
-            SFX_OBJECTBAR_FULLSCREEN | SFX_VISIBILITY_FULLSCREEN,
-            SfxResId(RID_FULLSCREENTOOLBOX) );
-    SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_APPLICATION |
-            SFX_VISIBILITY_DESKTOP | SFX_VISIBILITY_STANDARD | SFX_VISIBILITY_CLIENT,
-            SfxResId(RID_ENVTOOLBOX) );
-
     SFX_STATUSBAR_REGISTRATION(SfxResId(SFX_ITEMTYPE_STATBAR));
 }
 
@@ -727,7 +717,7 @@ ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBind
         return ((SfxTemplateDialog*) pChild->GetWindow())->GetISfxTemplateCommon();
     return 0;
 }
-
+/*
 long Select_Impl( void* pHdl, void* pVoid )
 {
     Menu* pMenu = (Menu*) pVoid;
@@ -773,19 +763,12 @@ long Select_Impl( void* pHdl, void* pVoid )
     }
     if ( xDisp.is() )
     {
-/*
-        Sequence<PropertyValue> aArgs(1);
-        PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = rtl::OUString::createFromAscii("Referer");
-        pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
-        xDisp->dispatch( aTargetURL, aArgs );
- */
         xDisp->dispatch( aTargetURL, Sequence<PropertyValue>() );
     }
 
     return TRUE;
 }
-
+*/
 SfxMenuBarManager* SfxApplication::GetMenuBarManager() const
 {
 /*
