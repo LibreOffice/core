@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-31 05:32:19 $
+ *  last change: $Author: tl $ $Date: 2002-08-29 08:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 
 #define FONTNAME_MATH   "StarSymbol"
 #define FONTNAME_MATH2  "OpenSymbol"
+
+/////////////////////////////////////////////////////////////////
+
+enum SmPrintSize { PRINT_SIZE_NORMAL, PRINT_SIZE_SCALED, PRINT_SIZE_ZOOMED };
 
 /////////////////////////////////////////////////////////////////
 // enum definitions for characters from the 'StarSymbol' font

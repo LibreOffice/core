@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-15 09:59:15 $
+ *  last change: $Author: tl $ $Date: 2002-08-29 08:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,9 @@ protected:
 public:
     TYPEINFO();
 
+    SmViewShell(SfxViewFrame *pFrame, SfxViewShell *pOldSh);
+    ~SmViewShell();
+
     SmDocShell * GetDoc()
     {
         return (SmDocShell *) GetViewFrame()->GetObjectShell();
@@ -338,8 +341,8 @@ public:
     virtual void Execute( SfxRequest& rReq );
     virtual void GetState(SfxItemSet &);
 
-    SmViewShell(SfxViewFrame *pFrame, SfxViewShell *pOldSh);
-    ~SmViewShell();
+    void Impl_Print( OutputDevice &rOutDev, const SmPrintSize ePrintSize,
+                     Rectangle aOutRect, Point aZeroPoint );
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitem.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-06 14:23:03 $
+ *  last change: $Author: tl $ $Date: 2002-08-29 08:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@
 #endif
 
 #include <symbol.hxx>
+#include <types.hxx>
 
 using namespace com::sun::star;
 
@@ -94,10 +95,6 @@ class SmSym;
 class SmFormat;
 class Font;
 struct SmCfgOther;
-
-/////////////////////////////////////////////////////////////////
-
-enum SmPrintSize { PRINT_SIZE_NORMAL, PRINT_SIZE_SCALED, PRINT_SIZE_ZOOMED };
 
 /////////////////////////////////////////////////////////////////
 

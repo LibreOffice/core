@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-02 11:03:40 $
+ *  last change: $Author: tl $ $Date: 2002-08-29 08:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,17 +79,17 @@
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
-#ifndef UNOMODEL_HXX
-#include "unomodel.hxx"
-#endif
-#ifndef DOCUMENT_HXX
-#include "document.hxx"
+#ifndef _TOOLKIT_AWT_VCLXDEVICE_HXX_
+#include <toolkit/awt/vclxdevice.hxx>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FORMULA_SYMBOLDESCRIPTOR_HPP_
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
@@ -99,6 +99,16 @@
 #endif
 #ifndef _COMPHELPER_PROPERTSETINFO_HXX_
 #include <comphelper/propertysetinfo.hxx>
+#endif
+
+#ifndef UNOMODEL_HXX
+#include <unomodel.hxx>
+#endif
+#ifndef DOCUMENT_HXX
+#include <document.hxx>
+#endif
+#ifndef VIEW_HXX
+#include <view.hxx>
 #endif
 #ifndef SYMBOL_HXX
 #include <symbol.hxx>
@@ -120,6 +130,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::formula;
+using namespace ::com::sun::star::view;
 
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
@@ -275,17 +286,18 @@ SmModel::~SmModel() throw ()
   -----------------------------------------------------------------------*/
 uno::Any SAL_CALL SmModel::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
 {
-    uno::Any aRet =  ::cppu::queryInterface ( rType                                     ,
+    uno::Any aRet =  ::cppu::queryInterface ( rType,
                                     // OWeakObject interfaces
-                                    reinterpret_cast< XInterface*       > ( this )  ,
-                                    static_cast< XWeak*         > ( this )  ,
+                                    reinterpret_cast< XInterface* > ( this ),
+                                    static_cast< XWeak* > ( this ),
                                     // PropertySetHelper interfaces
-                                    static_cast< XPropertySet*      > ( this )  ,
-                                    static_cast< XMultiPropertySet*     > ( this )  ,
-                                    //static_cast< XPropertyState*        > ( this ) ,
+                                    static_cast< XPropertySet* > ( this ),
+                                    static_cast< XMultiPropertySet* > ( this ),
+                                    //static_cast< XPropertyState* > ( this ),
                                     // my own interfaces
-                                    static_cast< XUnoTunnel*        > ( this )  ,
-                                    static_cast< XServiceInfo*  > ( this ) );
+                                    static_cast< XUnoTunnel* > ( this ),
+                                    static_cast< XServiceInfo*  > ( this ),
+                                    static_cast< XRenderable*  > ( this ) );
     if (!aRet.hasValue())
         aRet = SfxBaseModel::queryInterface ( rType );
     return aRet;
@@ -314,12 +326,13 @@ uno::Sequence< uno::Type > SAL_CALL SmModel::getTypes(  ) throw(uno::RuntimeExce
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Sequence< uno::Type > aTypes = SfxBaseModel::getTypes();
     sal_Int32 nLen = aTypes.getLength();
-    aTypes.realloc(nLen + 4);
+    aTypes.realloc(nLen + 5);
     uno::Type* pTypes = aTypes.getArray();
     pTypes[nLen++] = ::getCppuType((Reference<XServiceInfo>*)0);
     pTypes[nLen++] = ::getCppuType((Reference<XUnoTunnel>*)0);
     pTypes[nLen++] = ::getCppuType((Reference<XPropertySet>*)0);
     pTypes[nLen++] = ::getCppuType((Reference<XMultiPropertySet>*)0);
+    pTypes[nLen++] = ::getCppuType((Reference<XRenderable>*)0);
 
     // XPropertyState not supported?? (respective virtual functions from
     // PropertySetHelper not overloaded)
@@ -848,3 +861,132 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
         }
     }
 }
+
+//////////////////////////////////////////////////////////////////////
+
+sal_Int32 SAL_CALL SmModel::getRendererCount(
+        const uno::Any& rSelection,
+        const uno::Sequence< beans::PropertyValue >& xOptions )
+    throw (IllegalArgumentException, RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    return 1;
+}
+
+uno::Sequence< beans::PropertyValue > SAL_CALL SmModel::getRenderer(
+        sal_Int32 nRenderer,
+        const uno::Any& rSelection,
+        const uno::Sequence< beans::PropertyValue >& xOptions )
+    throw (IllegalArgumentException, RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if (0 != nRenderer)
+        throw IllegalArgumentException();
+
+    SmDocShell *pDocSh = static_cast < SmDocShell * >( GetObjectShell() );
+    if (!pDocSh)
+        throw RuntimeException();
+
+    uno::Sequence< beans::PropertyValue > aRenderer(1);
+
+    const Rectangle aVisArea( pDocSh->GetVisArea() );
+    awt::Size       aPageSize( aVisArea.GetWidth(), aVisArea.GetHeight() );
+    PropertyValue  &rValue = aRenderer.getArray()[0];
+    rValue.Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
+    rValue.Value <<= aPageSize;
+
+#ifdef TL_TEST
+{
+SmPrinterAccess aPrinterAccess( *pDocSh );
+Printer *pPrinter = aPrinterAccess.GetPrinter();
+
+Point     aZeroPoint;
+Rectangle OutputRect( aZeroPoint, pPrinter->GetOutputSize() );
+
+Point   aPrtPageOffset( pPrinter->GetPageOffset() );
+Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
+
+aPageSize.Width  = aPrtPaperSize.Width();
+aPageSize.Height = aPrtPaperSize.Height();
+rValue.Value <<= aPageSize;
+}
+#endif
+    return aRenderer;
+}
+
+void SAL_CALL SmModel::render(
+        sal_Int32 nRenderer,
+        const uno::Any& rSelection,
+        const uno::Sequence< beans::PropertyValue >& rxOptions )
+    throw (IllegalArgumentException, RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if (0 != nRenderer)
+        throw IllegalArgumentException();
+
+    SmDocShell *pDocSh = static_cast < SmDocShell * >( GetObjectShell() );
+    if (!pDocSh)
+        throw RuntimeException();
+
+    // get device to be rendered in
+    uno::Reference< awt::XDevice >  xRenderDevice;
+    for (sal_Int32 i = 0, nCount = rxOptions.getLength();  i < nCount;  ++i)
+    {
+        if( rxOptions[i].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
+            rxOptions[i].Value >>= xRenderDevice;
+    }
+
+    if (xRenderDevice.is())
+    {
+        VCLXDevice*   pDevice = VCLXDevice::GetImplementation( xRenderDevice );
+        OutputDevice* pOut = pDevice ? pDevice->GetOutputDevice() : NULL;
+
+        if (!pOut)
+            throw RuntimeException();
+
+        const Rectangle aVisArea( pDocSh->GetVisArea() );
+
+        pOut->SetMapMode( MAP_100TH_MM );
+        pOut->IntersectClipRegion( aVisArea );
+
+        uno::Reference< frame::XModel > xModel;
+        rSelection >>= xModel;
+        if (xModel == pDocSh->GetModel())
+        {
+            pDocSh->Draw( *pOut, Point() );
+            SmViewShell *pView = SmGetActiveView();
+            if (pView)
+            {
+                SmPrinterAccess aPrinterAccess( *pDocSh );
+                Printer *pPrinter = aPrinterAccess.GetPrinter();
+
+                Point     aZeroPoint;
+                Rectangle OutputRect( aZeroPoint, pPrinter->GetOutputSize() );
+
+                Point   aPrtPageOffset( pPrinter->GetPageOffset() );
+                Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
+
+                // set minimum top and bottom border
+                if (aPrtPageOffset.Y() < 2000)
+                    OutputRect.Top() += 2000 - aPrtPageOffset.Y();
+                if ((aPrtPaperSize.Height() - (aPrtPageOffset.Y() + OutputRect.Bottom())) < 2000)
+                    OutputRect.Bottom() -= 2000 - (aPrtPaperSize.Height() -
+                                                (aPrtPageOffset.Y() + OutputRect.Bottom()));
+
+                // set minimum left and right border
+                if (aPrtPageOffset.X() < 2500)
+                    OutputRect.Left() += 2500 - aPrtPageOffset.X();
+                if ((aPrtPaperSize.Width() - (aPrtPageOffset.X() + OutputRect.Right())) < 1500)
+                    OutputRect.Right() -= 1500 - (aPrtPaperSize.Width() -
+                                                (aPrtPageOffset.X() + OutputRect.Right()));
+
+
+                pView->Impl_Print( *pOut, PRINT_SIZE_NORMAL,
+                     Rectangle( OutputRect ), Point() );
+            }
+        }
+    }
+}
+

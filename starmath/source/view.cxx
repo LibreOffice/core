@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-16 12:58:56 $
+ *  last change: $Author: tl $ $Date: 2002-08-29 08:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1062,40 +1062,16 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
     }
 }
 
-
-USHORT SmViewShell::Print(SfxProgress &rProgress, PrintDialog *pPrintDialog)
+void SmViewShell::Impl_Print(
+        OutputDevice &rOutDev, const SmPrintSize ePrintSize,
+        Rectangle aOutRect, Point aZeroPoint )
 {
-    MapMode    OutputMapMode;
-    SmPrinterAccess aPrinterAccess( *GetDoc() );
-    Printer *pPrinter = aPrinterAccess.GetPrinter();
-    pPrinter->Push();
-
-    Point      aZeroPoint;
-
-    SfxViewShell::Print (rProgress, pPrintDialog);
-
-    pPrinter->StartPage();
-    pPrinter->SetLineColor( Color(COL_BLACK) );
-
-    Rectangle OutputRect (aZeroPoint, pPrinter->GetOutputSize());
-
-    // set minimum top and bottom border
-    if (pPrinter->GetPageOffset().Y() < 2000)
-        OutputRect.Top() += 2000 - pPrinter->GetPageOffset().Y();
-    if ((pPrinter->GetPaperSize().Height() - (pPrinter->GetPageOffset().Y() + OutputRect.Bottom())) < 2000)
-        OutputRect.Bottom() -= 2000 - (pPrinter->GetPaperSize().Height() -
-                                       (pPrinter->GetPageOffset().Y() + OutputRect.Bottom()));
-
-    // set minimum left and right border
-    if (pPrinter->GetPageOffset().X() < 2500)
-        OutputRect.Left() += 2500 - pPrinter->GetPageOffset().X();
-    if ((pPrinter->GetPaperSize().Width() - (pPrinter->GetPageOffset().X() + OutputRect.Right())) < 1500)
-        OutputRect.Right() -= 1500 - (pPrinter->GetPaperSize().Width() -
-                                      (pPrinter->GetPageOffset().X() + OutputRect.Right()));
-
-    // output text on top
     SmModule *pp = SM_MOD1();
 
+    rOutDev.Push();
+    rOutDev.SetLineColor( Color(COL_BLACK) );
+
+    // output text on top
     if (pp->GetConfig()->IsPrintTitle())
     {
         Size aSize600 (0, 600);
@@ -1105,39 +1081,39 @@ USHORT SmViewShell::Print(SfxProgress &rProgress, PrintDialog *pPrintDialog)
         aFont.SetAlign(ALIGN_TOP);
         aFont.SetWeight(WEIGHT_BOLD);
         aFont.SetSize(aSize650);
-        pPrinter->SetFont(aFont);
+        rOutDev.SetFont(aFont);
 
-        Size aTitleSize (GetTextSize(*pPrinter, GetDoc()->GetTitle(), OutputRect.GetWidth() - 200));
+        Size aTitleSize (GetTextSize(rOutDev, GetDoc()->GetTitle(), aOutRect.GetWidth() - 200));
 
         aFont.SetWeight(WEIGHT_NORMAL);
         aFont.SetSize(aSize600);
-        pPrinter->SetFont(aFont);
+        rOutDev.SetFont(aFont);
 
-        Size aDescSize (GetTextSize(*pPrinter, GetDoc()->GetComment(), OutputRect.GetWidth() - 200));
+        Size aDescSize (GetTextSize(rOutDev, GetDoc()->GetComment(), aOutRect.GetWidth() - 200));
 
         // output rectangle
         SmModule *pp = SM_MOD1();
 
         if (pp->GetConfig()->IsPrintFrame())
-            pPrinter->DrawRect(Rectangle(OutputRect.TopLeft(),
-                               Size(OutputRect.GetWidth(), 100 + aTitleSize.Height() + 200 + aDescSize.Height() + 100)));
-        OutputRect.Top() += 200;
+            rOutDev.DrawRect(Rectangle(aOutRect.TopLeft(),
+                               Size(aOutRect.GetWidth(), 100 + aTitleSize.Height() + 200 + aDescSize.Height() + 100)));
+        aOutRect.Top() += 200;
 
         // output title
         aFont.SetWeight(WEIGHT_BOLD);
         aFont.SetSize(aSize650);
-        pPrinter->SetFont(aFont);
-        DrawText(*pPrinter, Point (OutputRect.Left() + (OutputRect.GetWidth() - aTitleSize.Width())  / 2,
-                                   OutputRect.Top()), GetDoc()->GetTitle(), OutputRect.GetWidth() - 200);
-        OutputRect.Top() += aTitleSize.Height() + 200;
+        rOutDev.SetFont(aFont);
+        DrawText(rOutDev, Point (aOutRect.Left() + (aOutRect.GetWidth() - aTitleSize.Width())  / 2,
+                                   aOutRect.Top()), GetDoc()->GetTitle(), aOutRect.GetWidth() - 200);
+        aOutRect.Top() += aTitleSize.Height() + 200;
 
         // output description
         aFont.SetWeight(WEIGHT_NORMAL);
         aFont.SetSize(aSize600);
-        pPrinter->SetFont(aFont);
-        DrawText(*pPrinter, Point (OutputRect.Left() + (OutputRect.GetWidth()  - aDescSize.Width())  / 2,
-                                   OutputRect.Top()), GetDoc()->GetComment(), OutputRect.GetWidth() - 200);
-        OutputRect.Top() += aDescSize.Height() + 300;
+        rOutDev.SetFont(aFont);
+        DrawText(rOutDev, Point (aOutRect.Left() + (aOutRect.GetWidth()  - aDescSize.Width())  / 2,
+                                   aOutRect.Top()), GetDoc()->GetComment(), aOutRect.GetWidth() - 200);
+        aOutRect.Top() += aDescSize.Height() + 300;
     }
 
     // output text on bottom
@@ -1149,35 +1125,36 @@ USHORT SmViewShell::Print(SfxProgress &rProgress, PrintDialog *pPrintDialog)
         aFont.SetAlign(ALIGN_TOP);
 
         // get size
-        pPrinter->SetFont(aFont);
+        rOutDev.SetFont(aFont);
 
-        Size aSize (GetTextSize(*pPrinter, GetDoc()->GetText(), OutputRect.GetWidth() - 200));
+        Size aSize (GetTextSize(rOutDev, GetDoc()->GetText(), aOutRect.GetWidth() - 200));
 
-        OutputRect.Bottom() -= aSize.Height() + 600;
+        aOutRect.Bottom() -= aSize.Height() + 600;
 
         // output rectangle
         SmModule *pp = SM_MOD1();
 
         if (pp->GetConfig()->IsPrintFrame())
-            pPrinter->DrawRect(Rectangle(OutputRect.BottomLeft(),
-                               Size(OutputRect.GetWidth(), 200 + aSize.Height() + 200)));
+            rOutDev.DrawRect(Rectangle(aOutRect.BottomLeft(),
+                               Size(aOutRect.GetWidth(), 200 + aSize.Height() + 200)));
 
-        DrawText(*pPrinter, Point (OutputRect.Left() + (OutputRect.GetWidth()  - aSize.Width())  / 2,
-                                   OutputRect.Bottom() + 300), GetDoc()->GetText(), OutputRect.GetWidth() - 200);
-        OutputRect.Bottom() -= 200;
+        DrawText(rOutDev, Point (aOutRect.Left() + (aOutRect.GetWidth()  - aSize.Width())  / 2,
+                                   aOutRect.Bottom() + 300), GetDoc()->GetText(), aOutRect.GetWidth() - 200);
+        aOutRect.Bottom() -= 200;
     }
 
     if (pp->GetConfig()->IsPrintFrame())
-        pPrinter->DrawRect(OutputRect);
+        rOutDev.DrawRect(aOutRect);
 
-    OutputRect.Top()    += 100;
-    OutputRect.Left()   += 100;
-    OutputRect.Bottom() -= 100;
-    OutputRect.Right()  -= 100;
+    aOutRect.Top()    += 100;
+    aOutRect.Left()   += 100;
+    aOutRect.Bottom() -= 100;
+    aOutRect.Right()  -= 100;
 
     Size aSize (GetDoc()->GetSize());
 
-    switch (pp->GetConfig()->GetPrintSize())
+    MapMode    OutputMapMode;
+    switch (ePrintSize)
     {
         case PRINT_SIZE_NORMAL:
             OutputMapMode = MapMode(MAP_100TH_MM);
@@ -1186,9 +1163,9 @@ USHORT SmViewShell::Print(SfxProgress &rProgress, PrintDialog *pPrintDialog)
         case PRINT_SIZE_SCALED:
             if ((aSize.Width() > 0) && (aSize.Height() > 0))
             {
-                Size     OutputSize (pPrinter->LogicToPixel(Size(OutputRect.GetWidth(),
-                                                            OutputRect.GetHeight()), MapMode(MAP_100TH_MM)));
-                Size     GraphicSize (pPrinter->LogicToPixel(aSize, MapMode(MAP_100TH_MM)));
+                Size     OutputSize (rOutDev.LogicToPixel(Size(aOutRect.GetWidth(),
+                                                            aOutRect.GetHeight()), MapMode(MAP_100TH_MM)));
+                Size     GraphicSize (rOutDev.LogicToPixel(aSize, MapMode(MAP_100TH_MM)));
                 USHORT   nZ = (USHORT) Min((long)Fraction(OutputSize.Width()  * 100L, GraphicSize.Width()),
                                               (long)Fraction(OutputSize.Height() * 100L, GraphicSize.Height()));
                 Fraction aFraction ((USHORT) Max ((USHORT) MINZOOM, Min((USHORT) MAXZOOM, (USHORT) (nZ - 10))), (USHORT) 100);
@@ -1209,23 +1186,60 @@ USHORT SmViewShell::Print(SfxProgress &rProgress, PrintDialog *pPrintDialog)
         }
     }
 
-    aSize = pPrinter->PixelToLogic(pPrinter->LogicToPixel(aSize, OutputMapMode),
+    aSize = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aSize, OutputMapMode),
                                    MapMode(MAP_100TH_MM));
 
-    Point Position (OutputRect.Left() + (OutputRect.GetWidth()  - aSize.Width())  / 2,
-                    OutputRect.Top()  + (OutputRect.GetHeight() - aSize.Height()) / 2);
+    Point aPos (aOutRect.Left() + (aOutRect.GetWidth()  - aSize.Width())  / 2,
+                aOutRect.Top()  + (aOutRect.GetHeight() - aSize.Height()) / 2);
 
-    Position     = pPrinter->PixelToLogic(pPrinter->LogicToPixel(Position, MapMode(MAP_100TH_MM)),
+    aPos     = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aPos, MapMode(MAP_100TH_MM)),
                                           OutputMapMode);
-    OutputRect   = pPrinter->PixelToLogic(pPrinter->LogicToPixel(OutputRect, MapMode(MAP_100TH_MM)),
+    aOutRect   = rOutDev.PixelToLogic(rOutDev.LogicToPixel(aOutRect, MapMode(MAP_100TH_MM)),
                                           OutputMapMode);
 
-    pPrinter->SetMapMode(OutputMapMode);
-    pPrinter->SetClipRegion(Region(OutputRect));
-    GetDoc()->Draw(*pPrinter, Position);
-    pPrinter->SetClipRegion();
+    rOutDev.SetMapMode(OutputMapMode);
+    rOutDev.SetClipRegion(Region(aOutRect));
+    GetDoc()->Draw(rOutDev, aPos);
+    rOutDev.SetClipRegion();
+
+    rOutDev.Pop();
+}
+
+USHORT SmViewShell::Print(SfxProgress &rProgress, PrintDialog *pPrintDialog)
+{
+    SmPrinterAccess aPrinterAccess( *GetDoc() );
+    Printer *pPrinter = aPrinterAccess.GetPrinter();
+    OutputDevice *pOutDev = pPrinter;
+
+    SfxViewShell::Print (rProgress, pPrintDialog);
+
+    pPrinter->StartPage();
+
+    Point     aZeroPoint;
+    Rectangle OutputRect( aZeroPoint, pPrinter->GetOutputSize() );
+
+    Point   aPrtPageOffset( pPrinter->GetPageOffset() );
+    Size    aPrtPaperSize ( pPrinter->GetPaperSize() );
+
+    // set minimum top and bottom border
+    if (aPrtPageOffset.Y() < 2000)
+        OutputRect.Top() += 2000 - aPrtPageOffset.Y();
+    if ((aPrtPaperSize.Height() - (aPrtPageOffset.Y() + OutputRect.Bottom())) < 2000)
+        OutputRect.Bottom() -= 2000 - (aPrtPaperSize.Height() -
+                                       (aPrtPageOffset.Y() + OutputRect.Bottom()));
+
+    // set minimum left and right border
+    if (aPrtPageOffset.X() < 2500)
+        OutputRect.Left() += 2500 - aPrtPageOffset.X();
+    if ((aPrtPaperSize.Width() - (aPrtPageOffset.X() + OutputRect.Right())) < 1500)
+        OutputRect.Right() -= 1500 - (aPrtPaperSize.Width() -
+                                      (aPrtPageOffset.X() + OutputRect.Right()));
+
+    SmModule *pp = SM_MOD1();
+    Impl_Print( *pPrinter, pp->GetConfig()->GetPrintSize(),
+                 OutputRect, aZeroPoint );
+
     pPrinter->EndPage();
-    pPrinter->Pop();
 
     return 0;
 }
