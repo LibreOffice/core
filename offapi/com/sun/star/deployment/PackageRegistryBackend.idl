@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PackageRegistryBackend.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 11:50:11 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,8 @@ module com { module sun { module star { module deployment {
 /** The <type>PackageRegistryBackend</type> service is used to bind
     a specific type of <type>XPackage</type> which can be registered or revoked.
     <p>
-    Don't create <type>PackageRegistryBackend</type>s objects by yourself,
-    always use a <type>XPackageRegistry</type>, e.g. via
-    <member>XPackageManager::getPackageRegistry<member>.
+    All <type>PackageRegistryBackend</type> objects
+    are related to a <type>XPackageManager</type> instance.
     </p>
 
     @since #i20304#
@@ -81,18 +80,13 @@ service PackageRegistryBackend : XPackageRegistry
 {
     /** Creates a transient registry.
 
-        @param xRootRegistry
-               the root <type>PackageRegistry</type> of this context
         @param context
                context of registry, e.g. user, shared
     */
-    createTransient( [in] XPackageRegistry xRootRegistry,
-                     [in] string context );
+    createTransient( [in] string context );
 
     /** Creates a persistent registry.
 
-        @param xRootRegistry
-               the root <type>PackageRegistry</type> of this context
         @param context
                context of registry, e.g. user, shared
         @param cacheDirectory
@@ -100,8 +94,7 @@ service PackageRegistryBackend : XPackageRegistry
         @param readOnly
                reflects whether writing to cache directory is allowed
     */
-    createPersistent( [in] XPackageRegistry xRootRegistry,
-                      [in] string context,
+    createPersistent( [in] string context,
                       [in] string cacheDirectory,
                       [in] boolean readOnly );
 };
