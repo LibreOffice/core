@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.186 $
+ *  $Revision: 1.187 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:27:29 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,6 +670,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     mhShellWindow               = None;
     mhStackingWindow            = None;
     mhForeignParent             = None;
+    mhBackgroundPixmap          = None;
 
     pGraphics_                  = NULL;
     pFreeGraphics_              = NULL;
@@ -758,6 +759,12 @@ X11SalFrame::~X11SalFrame()
 {
     notifyDelete();
 
+    if( mhBackgroundPixmap )
+    {
+        XSetWindowBackgroundPixmap( GetXDisplay(), GetWindow(), None );
+        XFreePixmap( GetXDisplay(), mhBackgroundPixmap );
+    }
+
     if( mhStackingWindow )
         aPresentationReparentList.remove( mhStackingWindow );
 
@@ -818,6 +825,42 @@ X11SalFrame::~X11SalFrame()
         vcl::I18NStatus::free();
 
     passOnSaveYourSelf();
+}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+void X11SalFrame::SetBackgroundBitmap( SalBitmap* pBitmap )
+{
+    if( mhBackgroundPixmap )
+    {
+        XSetWindowBackgroundPixmap( GetXDisplay(), GetWindow(), None );
+        XFreePixmap( GetXDisplay(), mhBackgroundPixmap );
+        mhBackgroundPixmap = None;
+    }
+    if( pBitmap )
+    {
+        X11SalBitmap* pBM = static_cast<X11SalBitmap*>(pBitmap);
+        Size aSize = pBM->GetSize();
+        if( aSize.Width() && aSize.Height() )
+        {
+            mhBackgroundPixmap =
+                XCreatePixmap( GetXDisplay(),
+                               GetWindow(),
+                               aSize.Width(),
+                               aSize.Height(),
+                               GetDisplay()->GetVisual()->GetDepth() );
+            if( mhBackgroundPixmap )
+            {
+                SalTwoRect aTwoRect;
+                aTwoRect.mnSrcX = aTwoRect.mnSrcY = aTwoRect.mnDestX = aTwoRect.mnDestY = 0;
+                aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = aSize.Width();
+                aTwoRect.mnSrcHeight = aTwoRect.mnDestHeight = aSize.Height();
+                pBM->ImplDraw( mhBackgroundPixmap, GetDisplay()->GetVisual()->GetDepth(),
+                               aTwoRect, GetDisplay()->GetCopyGC(), false );
+                XSetWindowBackgroundPixmap( GetXDisplay(), GetWindow(), mhBackgroundPixmap );
+            }
+        }
+    }
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
