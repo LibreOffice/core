@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:50:37 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:16:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1077,6 +1077,9 @@ public:
     const SwCharFmt *GetDfltCharFmt() const { return pDfltCharFmt;}
           SwCharFmt *GetDfltCharFmt()       { return pDfltCharFmt;}
 
+    // Remove all language dependencies from all existing formats
+    void RemoveAllFmtLanguageDependencies();
+
     SwFrmFmt  *MakeFrmFmt(const String &rFmtName, SwFrmFmt *pDerivedFrom);
     void       DelFrmFmt( SwFrmFmt *pFmt );
     SwFrmFmt* FindFrmFmtByName( const String& rName ) const
@@ -1384,8 +1387,14 @@ public:
 
         // setzt, wenn noch keine Numerierung, sonst wird geaendert
         // arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
+    /** #109308# new parameter
+        @param bCalledFromShell
+        - sal_True called from shel
+        - sal_False else
+    */
     void SetNumRule( const SwPaM&, const SwNumRule&,
-                                        sal_Bool bSetAbsLSpace = sal_True );
+                     sal_Bool bSetAbsLSpace = sal_True,
+                     sal_Bool bCalledFromShell = sal_False );
         // ab hier neu starten lassen oder den Start wieder aufheben
     void SetNumRuleStart( const SwPosition& rPos, sal_Bool bFlag = sal_True );
     void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt = USHRT_MAX );
