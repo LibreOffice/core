@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:56:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2151,7 +2151,7 @@ void FmXFormController::removeControl(const Reference< XControl > & xControl)
     {
         if ( xControl.get() == (*pControls++).get() )
         {
-            ::comphelper::removeElementAt( m_aControls, pControls - m_aControls.getArray() );
+            ::comphelper::removeElementAt( m_aControls, pControls - m_aControls.getArray() - 1 );
             break;
         }
     }
