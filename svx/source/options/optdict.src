@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:10:06 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ ModalDialog RID_SFXDLG_NEWDICT
     Text [ finnish ] = "Uusi sanasto" ;
     Text [ danish ] = "Opret brugerordbog" ;
     Text [ french ] = "Nouveau dictionnaire de l'utilisateur" ;
-    Text [ swedish ] = "Skapa anv‰ndarordbok" ;
+    Text [ swedish ] = "Skapa anv‰ndarordlista" ;
     Text [ dutch ] = "Nieuw woordenboek" ;
     Text [ spanish ] = "Crear diccionario de usuario" ;
     Text [ english_us ] = "New Dictionary" ;
@@ -271,7 +271,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     Text [ finnish ] = "Muokkaa mukautettua sanastoa" ;
     Text [ danish ] = "Rediger brugerordbog" ;
     Text [ french ] = "…dition du dictionnaire de l'utilisateur" ;
-    Text [ swedish ] = "Redigera anv‰ndarordbok" ;
+    Text [ swedish ] = "Redigera anv‰ndarordlista" ;
     Text [ dutch ] = "Gebruikerswoordenboek bewerken" ;
     Text [ spanish ] = "Editar diccionario de usuario" ;
     Text [ english_us ] = "Edit Custom Dictionary" ;
@@ -414,7 +414,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ arabic ] = "«·«ﬁ —«Õ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "–ÒÔÙÂÈÌ¸ÏÂÌ·:";
-        Text[ korean ] = "¡¶æ»(~B):";
+        Text[ korean ] = "¡¶æ»:";
         Text[ turkish ] = "÷neri";
         Text[ catalan ] = "~Sugerencia";
         Text[ finnish ] = "~Korvaus:";
@@ -451,7 +451,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ chinese_traditional ] = "∑s¶rµ¸(~N)";
         Text[ arabic ] = "ÃœÌœ";
         Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ·";
-        Text[ korean ] = "ªı∑Œ(~N)";
+        Text[ korean ] = "ªı∑Œ";
         Text[ turkish ] = "Yeni";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nuevo";
@@ -480,7 +480,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ chinese_traditional ] = "ßR∞£(~D)";
         Text[ arabic ] = "Õ–›";
         Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
-        Text[ korean ] = "ªË¡¶(~D)";
+        Text[ korean ] = "ªË¡¶";
         Text[ turkish ] = "Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
@@ -516,7 +516,7 @@ ModalDialog RID_SFXDLG_EDITDICT
         Text[ chinese_traditional ] = "¥¿•N(~R)";
         Text[ arabic ] = "«” »œ«·";
         Text[ greek ] = "¡ÌÙÈÍ·Ù‹ÛÙ·ÛÁ";
-        Text[ korean ] = "¥Î√º(~R)";
+        Text[ korean ] = "πŸ≤Ÿ±‚";
         Text[ turkish ] = "Dei˛tir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Reemplazar";
@@ -635,5 +635,6 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     Message[ finnish ] = "Haluatko vaihtaa sanaston '%1' kielt‰?";
 };
  // ********************************************************************** EOF
+
 
 
