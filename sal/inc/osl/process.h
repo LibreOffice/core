@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-08 14:17:13 $
+ *  last change: $Author: hro $ $Date: 2001-05-08 16:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,6 @@ typedef struct {
     TimeValue               UserTime;
     TimeValue               SystemTime;
     sal_uInt32              HeapUsage;
-    rtl_uString             *WorkingDirURL;
 } oslProcessInfo;
 
 #ifdef SAL_W32
