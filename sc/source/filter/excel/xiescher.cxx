@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:48:07 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:35:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,8 +734,7 @@ void XclImpEscherOle::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
         rStrm.Ignore( 7 );
         sal_uInt16 nXti, nExtName;
         rStrm >> nXti >> nExtName;
-        const XclImpSupbook* pSupbook = GetLinkManager().GetSupbook( nXti );
-        const XclImpExtName* pExtName = pSupbook ? pSupbook->GetExtName( nExtName ) : NULL;
+        const XclImpExtName* pExtName = GetLinkManager().GetExternName( nXti, nExtName );
         bOk = (pExtName && (pExtName->GetType() == xlExtOLE));
         DBG_ASSERT( bOk, "XclImpEscherOle::ReadPictFmla - EXTERNNAME not found or not OLE" );
         if( bOk )
@@ -1728,6 +1727,10 @@ void XclImpObjectManager::ReadTxo( XclImpStream& rStrm )
             pTxoObj->SetAlignment( nAlign );
         }
     }
+    // The Notes text is formatted if there is more than 2 formatting
+    // runs present or if the first formatting run contains a non-
+    // standard font-index.
+    GetTracer().TraceFormattedNote(nFormCnt > 2);
 }
 
 
