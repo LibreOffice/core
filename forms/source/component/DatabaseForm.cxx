@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-17 07:30:30 $
+ *  last change: $Author: fs $ $Date: 2001-07-24 12:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,9 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
+#ifndef _COMPHELPER_SEQSTREAM_HXX
+#include <comphelper/seqstream.hxx>
+#endif
 #ifndef _COMPHELPER_ENUMHELPER_HXX_
 #include <comphelper/enumhelper.hxx>
 #endif
@@ -266,7 +269,8 @@ enum DatabaseCursorType
 
 #define DATABASEFORM_IMPLEMENTATION_NAME    ::rtl::OUString::createFromAscii("com.sun.star.comp.forms.ODatabaseForm")
 
-using namespace dbtools;
+using namespace ::dbtools;
+using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -2649,8 +2653,15 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const MouseE
                 Sequence<PropertyValue> aArgs(2);
                 aArgs.getArray()[0].Name = ::rtl::OUString::createFromAscii("Referer");
                 aArgs.getArray()[0].Value <<= aReferer;
-                aArgs.getArray()[1].Name = ::rtl::OUString::createFromAscii("PostString");
-                aArgs.getArray()[1].Value <<= aData;
+
+                // build a sequence from the to-be-submitted string
+                ByteString a8BitData(aData.getStr(), (sal_uInt16)aData.getLength(), RTL_TEXTENCODING_MS_1252);
+                    // always ANSI #58641
+                Sequence< sal_Int8 > aPostData((sal_Int8*)a8BitData.GetBuffer(), a8BitData.Len());
+                Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
+
+                aArgs.getArray()[1].Name = ::rtl::OUString::createFromAscii("PostData");
+                aArgs.getArray()[1].Value <<= xPostData;
 
                 xDisp->dispatch(aURL, aArgs);
             }
@@ -2686,8 +2697,12 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const MouseE
             aArgs.getArray()[0].Value <<= aReferer;
             aArgs.getArray()[1].Name = ::rtl::OUString::createFromAscii("ContentType");
             aArgs.getArray()[1].Value <<= aContentType;
+
+            // build a sequence from the to-be-submitted string
+            Reference< XInputStream > xPostData = new SequenceInputStream(aData);
+
             aArgs.getArray()[2].Name = ::rtl::OUString::createFromAscii("PostData");
-            aArgs.getArray()[2].Value <<= aData;
+            aArgs.getArray()[2].Value <<= xPostData;
 
             xDisp->dispatch(aURL, aArgs);
         }
@@ -2718,8 +2733,14 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const MouseE
             Sequence<PropertyValue> aArgs(2);
             aArgs.getArray()[0].Name = ::rtl::OUString::createFromAscii("Referer");
             aArgs.getArray()[0].Value <<= aReferer;
-            aArgs.getArray()[1].Name = ::rtl::OUString::createFromAscii("PostString");
-            aArgs.getArray()[1].Value <<= aData;
+
+            // build a sequence from the to-be-submitted string
+            ByteString aSystemEncodedData(aData.getStr(), (sal_uInt16)aData.getLength(), osl_getThreadTextEncoding());
+            Sequence< sal_Int8 > aPostData((sal_Int8*)aSystemEncodedData.GetBuffer(), aSystemEncodedData.Len());
+            Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
+
+            aArgs.getArray()[1].Name = ::rtl::OUString::createFromAscii("PostData");
+            aArgs.getArray()[1].Value <<= xPostData;
 
             xDisp->dispatch(aURL, aArgs);
         }
