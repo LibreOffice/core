@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:39:12 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:20:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,53 @@ void XclImpStreamPos::Get(
 
 
 // ============================================================================
+
+XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
+{
+    XclBiff eBiff = xlBiffUnknown;
+
+    rStrm.Seek( STREAM_SEEK_TO_BEGIN );
+    sal_uInt16 nBofId, nBofSize;
+    rStrm >> nBofId >> nBofSize;
+
+    switch( nBofId )
+    {
+        case EXC_ID2_BOF:
+            eBiff = xlBiff2;
+            DBG_ASSERT( nBofSize == 4, "XclImpStream::DetectBiffVersion - wrong BIFF2 BOF size" );
+        break;
+        case EXC_ID3_BOF:
+            eBiff = xlBiff3;
+            DBG_ASSERT( nBofSize == 6, "XclImpStream::DetectBiffVersion - wrong BIFF3 BOF size" );
+        break;
+        case EXC_ID4_BOF:
+            eBiff = xlBiff4;
+            DBG_ASSERT( nBofSize == 6, "XclImpStream::DetectBiffVersion - wrong BIFF4 BOF size" );
+        break;
+        case EXC_ID5_BOF:
+        {
+            sal_uInt16 nVersion;
+            rStrm >> nVersion;
+            switch( nVersion )
+            {
+                case EXC_BOF_BIFF5:
+                    eBiff = xlBiff5;
+                    DBG_ASSERT( nBofSize == 8, "XclImpStream::DetectBiffVersion - wrong BIFF5 BOF size" );
+                break;
+                case EXC_BOF_BIFF8:
+                    eBiff = xlBiff8;
+                    DBG_ASSERT( nBofSize == 16, "XclImpStream::DetectBiffVersion - wrong BIFF8 BOF size" );
+                break;
+                default:
+                    DBG_ERRORFILE( "XclImpStream::DetectBiffVersion - unknown BIFF version" );
+            }
+        }
+        break;
+        default:
+            DBG_ERRORFILE( "XclImpStream::DetectBiffVersion - no BIFF stream" );
+    }
+    return eBiff;
+}
 
 XclImpStream::XclImpStream( SvStream& rInStrm, const XclImpRoot& rRoot, bool bContHandling ) :
     mrStrm( rInStrm ),
