@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-05 14:00:59 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 11:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,7 +538,7 @@ String RID_DB_COMMON_START + 30
 {
     Text = "Das Dokument konnte nicht gespeichert werden.";
     Text [ english ] = "The document could not be stored.";
-    Text[ english_us ] = "Could not save document";
+    Text[ english_us ] = "The document could not be saved.";
     Text[ portuguese ] = "The document could not be stored.";
     Text[ russian ] = "The document could not be stored.";
     Text[ greek ] = "The document could not be stored.";
@@ -563,7 +563,7 @@ String RID_DB_COMMON_START + 31
 {
     Text = " Eine Verknüpfung zur Datenquelle konnte nicht erstellt werden.";
     Text [ english ] = "A link to the datasource could not be created.";
-    Text[ english_us ] = "Could not link to data source";
+    Text[ english_us ] = "A link to data source could not be extablished.";
     Text[ portuguese ] = "A link to the datasource could not be created.";
     Text[ russian ] = "A link to the datasource could not be created.";
     Text[ greek ] = "A link to the datasource could not be created.";
@@ -660,7 +660,7 @@ String RID_DB_COMMON_START + 35
 {
     Text = "Die Verbindung zur Datenquelle konnte nicht hergestellt werden!";
     Text [ english ] = "The connection to the Datasource could not be established";
-    Text[ english_us ] = "Could not connect to data source";
+    Text[ english_us ] = "The connection to the data source could not be established.";
     Text[ portuguese ] = "The connection to the Datasource could not be established";
     Text[ russian ] = "The connection to the Datasource could not be established";
     Text[ greek ] = "The connection to the Datasource could not be established";
@@ -5361,6 +5361,26 @@ String RID_DB_REPORT_WIZARD_START + 68
 {
     Text = "Felder beschriften";
     Text [ english_us ] = "Labeling Fields";
+    Text[ portuguese ] = "Labeling Fields";
+    Text[ russian ] = "Labeling Fields";
+    Text[ greek ] = "Labeling Fields";
+    Text[ dutch ] = "Labeling Fields";
+    Text[ french ] = "Labeling Fields";
+    Text[ spanish ] = "Labeling Fields";
+    Text[ finnish ] = "Labeling Fields";
+    Text[ italian ] = "Labeling Fields";
+    Text[ danish ] = "Labeling Fields";
+    Text[ swedish ] = "Labeling Fields";
+    Text[ polish ] = "Labeling Fields";
+    Text[ portuguese_brazilian ] = "Labeling Fields";
+    Text[ japanese ] = "Labeling Fields";
+    Text[ korean ] = "Labeling Fields";
+    Text[ chinese_simplified ] = "Labeling Fields";
+    Text[ chinese_traditional ] = "Labeling Fields";
+    Text[ turkish ] = "Labeling Fields";
+    Text[ arabic ] = "Labeling Fields";
+    Text[ catalan ] = "Labeling Fields";
+    Text[ thai ] = "Labeling Fields";
 };
 
 
@@ -5368,12 +5388,52 @@ String RID_DB_REPORT_WIZARD_START + 69
 {
     Text = "Wie möchten Sie die Felder beschriften?";
     Text [ english_us ] = "How do you want to label the fields?";
+    Text[ portuguese ] = "How do you want to label the fields?";
+    Text[ russian ] = "How do you want to label the fields?";
+    Text[ greek ] = "How do you want to label the fields?";
+    Text[ dutch ] = "How do you want to label the fields?";
+    Text[ french ] = "How do you want to label the fields?";
+    Text[ spanish ] = "How do you want to label the fields?";
+    Text[ finnish ] = "How do you want to label the fields?";
+    Text[ italian ] = "How do you want to label the fields?";
+    Text[ danish ] = "How do you want to label the fields?";
+    Text[ swedish ] = "How do you want to label the fields?";
+    Text[ polish ] = "How do you want to label the fields?";
+    Text[ portuguese_brazilian ] = "How do you want to label the fields?";
+    Text[ japanese ] = "How do you want to label the fields?";
+    Text[ korean ] = "How do you want to label the fields?";
+    Text[ chinese_simplified ] = "How do you want to label the fields?";
+    Text[ chinese_traditional ] = "How do you want to label the fields?";
+    Text[ turkish ] = "How do you want to label the fields?";
+    Text[ arabic ] = "How do you want to label the fields?";
+    Text[ catalan ] = "How do you want to label the fields?";
+    Text[ thai ] = "How do you want to label the fields?";
 };
 
 String RID_DB_REPORT_WIZARD_START + 70
 {
     Text = "Beschriftung";
     Text [ english_us ] = "Label";
+    Text[ portuguese ] = "Label";
+    Text[ russian ] = "Label";
+    Text[ greek ] = "Label";
+    Text[ dutch ] = "Label";
+    Text[ french ] = "Label";
+    Text[ spanish ] = "Label";
+    Text[ finnish ] = "Label";
+    Text[ italian ] = "Label";
+    Text[ danish ] = "Label";
+    Text[ swedish ] = "Label";
+    Text[ polish ] = "Label";
+    Text[ portuguese_brazilian ] = "Label";
+    Text[ japanese ] = "Label";
+    Text[ korean ] = "Label";
+    Text[ chinese_simplified ] = "Label";
+    Text[ chinese_traditional ] = "Label";
+    Text[ turkish ] = "Label";
+    Text[ arabic ] = "Label";
+    Text[ catalan ] = "Label";
+    Text[ thai ] = "Label";
 };
 
 
@@ -5381,13 +5441,53 @@ String RID_DB_REPORT_WIZARD_START + 71
 {
     Text = "Feld";
     Text [ english_us ] = "Field";
+    Text[ portuguese ] = "Field";
+    Text[ russian ] = "Field";
+    Text[ greek ] = "Field";
+    Text[ dutch ] = "Field";
+    Text[ french ] = "Field";
+    Text[ spanish ] = "Field";
+    Text[ finnish ] = "Field";
+    Text[ italian ] = "Field";
+    Text[ danish ] = "Field";
+    Text[ swedish ] = "Field";
+    Text[ polish ] = "Field";
+    Text[ portuguese_brazilian ] = "Field";
+    Text[ japanese ] = "Field";
+    Text[ korean ] = "Field";
+    Text[ chinese_simplified ] = "Field";
+    Text[ chinese_traditional ] = "Field";
+    Text[ turkish ] = "Field";
+    Text[ arabic ] = "Field";
+    Text[ catalan ] = "Field";
+    Text[ thai ] = "Field";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 72
 {
     Text = "Es ist ein Fehler im Autopiloten aufgetreten.<BR>Möglicherweise ist die Vorlage '%PATH' fehlerhaft.<BR>Entweder die benötigten Bereiche bzw. Tabellen sind nicht vorhanden oder sie existiern unter einem falschen Namen.<BR>Bitte schauen Sie in der Hilfe nach genaueren Hinweisen.<BR>Bitte wählen Sie eine andere Dokumentvorlage aus.";
-    Text [ english_us ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text [ english_us ] = "An error occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ portuguese ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ russian ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ greek ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ dutch ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ french ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ spanish ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ finnish ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ italian ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ danish ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ swedish ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ polish ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ portuguese_brazilian ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ japanese ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ korean ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ chinese_simplified ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ chinese_traditional ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ turkish ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ arabic ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ catalan ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
+    Text[ thai ] = "An error  occurred in the AutoPilot.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
 };
 
 
@@ -5395,6 +5495,26 @@ String RID_DB_REPORT_WIZARD_START + 73
 {
     Text = "Es ist ein ungültiges Benutzerfeld in einer Tabelle vorhanden!";
     Text [ english_us ] = "There is an invalid user field in a table.";
+    Text[ portuguese ] = "There is an invalid user field in a table.";
+    Text[ russian ] = "There is an invalid user field in a table.";
+    Text[ greek ] = "There is an invalid user field in a table.";
+    Text[ dutch ] = "There is an invalid user field in a table.";
+    Text[ french ] = "There is an invalid user field in a table.";
+    Text[ spanish ] = "There is an invalid user field in a table.";
+    Text[ finnish ] = "There is an invalid user field in a table.";
+    Text[ italian ] = "There is an invalid user field in a table.";
+    Text[ danish ] = "There is an invalid user field in a table.";
+    Text[ swedish ] = "There is an invalid user field in a table.";
+    Text[ polish ] = "There is an invalid user field in a table.";
+    Text[ portuguese_brazilian ] = "There is an invalid user field in a table.";
+    Text[ japanese ] = "There is an invalid user field in a table.";
+    Text[ korean ] = "There is an invalid user field in a table.";
+    Text[ chinese_simplified ] = "There is an invalid user field in a table.";
+    Text[ chinese_traditional ] = "There is an invalid user field in a table.";
+    Text[ turkish ] = "There is an invalid user field in a table.";
+    Text[ arabic ] = "There is an invalid user field in a table.";
+    Text[ catalan ] = "There is an invalid user field in a table.";
+    Text[ thai ] = "There is an invalid user field in a table.";
 };
 
 
