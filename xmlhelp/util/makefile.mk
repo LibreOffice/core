@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: abi $ $Date: 2001-06-11 10:55:01 $
+#   last change: $Author: abi $ $Date: 2001-06-13 16:24:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,8 +77,18 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE: settings.mk
 
 .IF "$(GUI)"=="WNT"
-
 CFLAGS+=/GR
+.ENDIF
+
+.IF "$(SABLOT3RDLIB)"==""
+.IF "$(GUI)"=="UNX"
+SABLOT3RDLIB=-lsablot
+.ENDIF # unx
+.IF "$(GUI)"=="WNT"
+SABLOT3RDLIB=sablot.lib
+.ENDIF # wnt
+.ENDIF # sablot3rdlib
+
 # --- Shared-Library ---------------------------------------------------
 
 SHL1TARGET=$(TARGET)$(UCP_VERSION)
@@ -87,18 +97,18 @@ SHL1IMPLIB=i$(TARGET)
 SHL1VERSIONMAP=exports.map
 
 # Add additional libs here.
-SHL1STDLIBS=                 \
+SHL1STDLIBS=                     \
     $(CPPUHELPERLIB)         \
     $(CPPULIB)               \
     $(SALLIB)                \
     $(VOSLIB)                \
+    $(SABLOT3RDLIB)          \
     $(EXPATASCII3RDLIB)      \
-    sablot.lib               \
     $(UCBHELPERLIB)          \
     $(BERKELEYLIB)           \
     $(BERKELEYCPPLIB)
 
-SHL1LIBS =                   \
+SHL1LIBS =                       \
     $(SLB)$/jaqe.lib         \
     $(SLB)$/jautil.lib       \
     $(SLB)$/jadb.lib         \
@@ -111,9 +121,6 @@ DEF1EXPORTFILE=exports.dxp
 DEF1DES=UCB Help Content Provider
 
 # --- Targets ----------------------------------------------------------
-.ENDIF
-
-
 
 .INCLUDE: target.mk
 
