@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 08:38:10 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:29:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -102,24 +102,24 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 CFLAGSCXX= -pipe -frtti
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
-
+PICSWITCH:=-fPIC
 
 #Note: the build is not consistent in that it links static librtaries
 # libraries into dynamic libraries in places, so use -fPIC throughout
 # until fixed.
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
-CFLAGSOBJGUIST=-fPIC 
+CFLAGSOBJGUIST=$(PICSWITCH)
 # Compiler flags for compiling static object in single threaded environment with character user interface
-CFLAGSOBJCUIST=-fPIC
+CFLAGSOBJCUIST=$(PICSWITCH)
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
-CFLAGSOBJGUIMT=-fPIC
+CFLAGSOBJGUIMT=$(PICSWITCH)
 # Compiler flags for compiling static object in multi threaded environment with character user interface
-CFLAGSOBJCUIMT=-fPIC
+CFLAGSOBJCUIMT=$(PICSWITCH)
 # Compiler flags for compiling shared object in multi threaded environment with graphical user interface
-CFLAGSSLOGUIMT=-fPIC
+CFLAGSSLOGUIMT=$(PICSWITCH)
 # Compiler flags for compiling shared object in multi threaded environment with character user interface
-CFLAGSSLOCUIMT=-fPIC 
+CFLAGSSLOCUIMT=$(PICSWITCH)
 
 # Compiler flags for profiling
 CFLAGSPROF= 
