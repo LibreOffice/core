@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-11 08:23:14 $
+ *  last change: $Author: dv $ $Date: 2000-12-11 10:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,8 @@ public:
 
     EntryData_Impl*     AddEntry( Content& rParentFolder,
                                   const OUString& rTitle,
-                                  const OUString& rTargetURL );
+                                  const OUString& rTargetURL,
+                                  USHORT *pPos = NULL );
     void                DeleteEntry( ULONG nIndex );
 
     int                 Compare( const OUString& rTitle ) const
@@ -1271,13 +1272,6 @@ BOOL SfxDocumentTemplates::CopyFrom
     if ( !pTargetRgn )
         return FALSE;
 
-#if 0
-    // dv! what is the nIdx needed for?
-    EntryData_Impl *pTarget = pTargetRgn->GetEntry( nIdx );
-    if ( !pTarget )
-        return FALSE;
-#endif
-
     OUString aTitle = pImp->GetTitleFromURL( rName );
 
     if ( !aTitle.len() )
@@ -1319,10 +1313,16 @@ BOOL SfxDocumentTemplates::CopyFrom
 
     try
     {
+        if ( nIdx == USHRT_MAX )
+            nIdx = 0;
+        else
+            nIdx += 1;
+
         aTarget = Content( pTargetRgn->GetHierarchyURL(), aCmdEnv );
         EntryData_Impl *pEntry;
         pEntry = pTargetRgn->AddEntry( aTarget, aTitle,
-                                       aTmp.GetMainURL() );
+                                       aTmp.GetMainURL(),
+                                       &nIdx );
         if ( pEntry )
         {
             OUString aType = pImp->GetTypeFromURL( rName );
@@ -1545,17 +1545,23 @@ BOOL SfxDocumentTemplates::SetName
     Content aFolderCont;
 
     OUString aTitle( rName );
-    OUString aFolderURL = pRegion->GetTargetURL();
-    OUString aHierURL = pRegion->GetHierarchyURL();
+    OUString aFolderURL;
+    OUString aHierURL;
 
-    if ( nIdx != USHRT_MAX )
+    if ( nIdx == USHRT_MAX )
     {
-        EntryData_Impl *pEntry = pRegion->GetEntry( nIdx );
+        aFolderURL = pRegion->GetTargetURL();
+        aHierURL = pRegion->GetHierarchyURL();
+    }
+    else
+    {
+        pEntry = pRegion->GetEntry( nIdx );
+
         if ( !pEntry )
             return FALSE;
+
         aFolderURL = pEntry->GetTargetURL();
-        aHierURL += OUString( '/' );
-        aHierURL += pEntry->GetTitle();
+        aHierURL = pEntry->GetHierarchyURL();
     }
 
     Reference< XCommandEnvironment > aCmdEnv;
@@ -2189,6 +2195,25 @@ void RegionData_Impl::SetTargetURL( const OUString& rTargetURL )
 long RegionData_Impl::GetEntryPos( const OUString& rTitle,
                                    sal_Bool& rFound ) const
 {
+#if 1   // Don't use binary search today
+    ULONG i;
+    ULONG nCount = maEntries.Count();
+
+    for ( i=0; i<nCount; i++ )
+    {
+        EntryData_Impl *pData = maEntries.GetObject( i );
+
+        if ( pData->Compare( rTitle ) == 0 )
+        {
+            rFound = sal_True;
+            return i;
+        }
+    }
+
+    rFound = sal_False;
+    return i;
+
+#else
     // use binary search to find the correct position
     // in the maEntries list
 
@@ -2225,26 +2250,22 @@ long RegionData_Impl::GetEntryPos( const OUString& rTitle,
     }
 
     return nMid;
+#endif
 }
 
 // -----------------------------------------------------------------------
 EntryData_Impl* RegionData_Impl::AddEntry( Content& rParentFolder,
                                            const OUString& rTitle,
-                                           const OUString& rTargetURL )
+                                           const OUString& rTargetURL,
+                                           USHORT *pPos )
 {
     Content aLink;
     Reference< XCommandEnvironment > aCmdEnv;
-    INetURLObject aLinkObj( TEMPLATE_ROOT_URL );
-    aLinkObj.insertName( maTitle, true,
-                      INetURLObject::LAST_SEGMENT, true,
-                      INetURLObject::ENCODE_ALL );
+    INetURLObject aLinkObj( GetHierarchyURL() );
     aLinkObj.insertName( rTitle, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
     OUString aLinkURL = aLinkObj.GetMainURL();
-
-//  OUString aLinkURL( RTL_CONSTASCII_USTRINGPARAM( TEMPLATE_ROOT_URL ) );
-//  aLinkURL += OUString( '/' ) + maTitle + OUString( '/' ) + rTitle;
 
     if ( ! Content::create( aLinkURL, aCmdEnv, aLink ) )
     {
@@ -2296,6 +2317,9 @@ EntryData_Impl* RegionData_Impl::AddEntry( Content& rParentFolder,
     }
     else
     {
+        if ( pPos )
+            nPos = *pPos;
+
         pEntry = new EntryData_Impl( rTitle );
         pEntry->SetTargetURL( rTargetURL );
         pEntry->SetHierarchyURL( aLinkURL );
