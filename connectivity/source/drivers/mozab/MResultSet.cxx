@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-09-26 09:59:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1446,10 +1446,11 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
 sal_Bool OResultSet::isCount() const
 {
     return (m_pParseTree &&
-            m_pParseTree->count() > 2                                           &&
-            SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist)          &&
-            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0),derived_column)   &&
-            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0)->getChild(0),general_set_fct)
+            m_pParseTree->count() > 2                                                       &&
+            SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist)                      &&
+            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0),derived_column)               &&
+            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0)->getChild(0),general_set_fct) &&
+            m_pParseTree->getChild(2)->getChild(0)->getChild(0)->count() == 4
             );
 }
 

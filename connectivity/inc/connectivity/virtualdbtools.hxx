@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualdbtools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:47:18 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _COM_SUN_STAR_SDBC_SQLEXCEPTION_HPP_
 #include <com/sun/star/sdbc/SQLException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
 #include <vector>
 
 //========================================================================
@@ -95,6 +98,7 @@ namespace com {
             }
             namespace lang {
                 class XMultiServiceFactory;
+                class XComponent;
                 struct Locale;
             }
             namespace sdbc {
@@ -107,8 +111,15 @@ namespace com {
                 class XColumn;
                 class SQLContext;
             }
+            namespace container {
+                class XNameAccess;
+            }
         }
     }
+}
+
+namespace dbtools {
+    class SQLExceptionInfo;
 }
 
 //========================================================================
@@ -207,6 +218,23 @@ namespace connectivity
                 const ::rtl::OUString& _rsRegisteredName,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory
             ) const = 0;
+
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+                getFieldsByCommandDescriptor(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                    const sal_Int32 _nCommandType,
+                    const ::rtl::OUString& _rCommand,
+                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
+                    ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
+                )   SAL_THROW( ( ) ) = 0;
+
+            virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                getFieldNamesByCommandDescriptor(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                    const sal_Int32 _nCommandType,
+                    const ::rtl::OUString& _rCommand,
+                    ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
+                )   SAL_THROW( ( ) ) = 0;
 
             /** check if the property "Privileges" supports ::com::sun::star::sdbcx::Privilege::INSERT
                 @param      _rxCursorSet    the property set
@@ -343,23 +371,4 @@ namespace connectivity
 //........................................................................
 
 #endif // CONNECTIVITY_VIRTUAL_DBTOOLS_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4  2002/09/27 10:58:12  oj
- *  #97230# new interface for ParseContext
- *
- *  Revision 1.3  2001/08/13 14:53:21  fs
- *  #90761# +IDataAccessCharset / +createCharsetHelper
- *
- *  Revision 1.2  2001/08/06 14:47:53  fs
- *  #87690# +connectRowset / some other methods needed later on (to make writer link-time independent og dbtools)
- *
- *  Revision 1.1  2001/07/25 13:24:59  fs
- *  initial checkin - helper for accessing methods/classes in dbtools with loading the library on demand (and not linking against it)
- *
- *
- *  Revision 1.0 24.07.01 15:56:38  fs
- ************************************************************************/
 

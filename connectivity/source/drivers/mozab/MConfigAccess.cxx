@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConfigAccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-23 17:42:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,11 +214,4 @@ extern "C" void SAL_CALL setMozabServiceFactory( void* _pFactory )
     // of safely transporting it
     xFactory->release();
 }
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 23.10.01 18:36:07  fs
- ************************************************************************/
 

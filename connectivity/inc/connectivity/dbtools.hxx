@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-14 07:48:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,91 @@ namespace dbtools
     /** returns the columns of the named table of the given connection
     */
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getTableFields(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn, const ::rtl::OUString& _rName);
+
+    /** get fields for a result set given by a "command descriptor"
+
+        <p>A command descriptor here means:
+        <ul><li>a SDB-level connection (<type scope="com.sun.star.sdb">Connection</type></li>
+            <li>a string specifying the name of an object relative to the connection</li>
+            <li>a <type scope="com.sun.star.sdb">CommandType</type> value specifying the type
+                of the object</type></li>
+        </ul>
+        </p>
+
+        @param _rxConnection
+            the connection relative to which the to-be-examined object exists
+
+        @param _nCommandType
+            the type of the object
+
+        @param _rCommand
+            the object. This may be a table name, a query name, or an SQL statement, depending on the value
+            of <arg>_nCommandType</arg>
+
+        @param _rxCollectionOner
+            If (and only if) <arg>CommandType</arg> is CommandType.COMMAND, the fields collection which is returned
+            by this function here is a temporary object. It is kept alive by another object, which is to be
+            created temporarily, too. To ensure that the fields you get are valid as long as you need them,
+            the owner which controls their life time is transfered to this parameter upon return.<br/>
+
+            Your fields live as long as this component lives.<br/>
+
+            Additionally, you are encouraged to dispose this component as soon as you don't need the fields anymore.
+            It depends on the connection's implementation if this is necessary, but the is no guarantee, so to
+            be on the safe side with respect to resource leaks, you should dispose the component.
+
+        @param _pErrorInfo
+            If not <NULL/>, then upon return from the function the instance pointed to by this argument will
+            contain any available error information in case something went wrong.
+
+        @return
+            the container of the columns (aka fields) of the object
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+        getFieldsByCommandDescriptor(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const sal_Int32 _nCommandType,
+            const ::rtl::OUString& _rCommand,
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
+            SQLExceptionInfo* _pErrorInfo = NULL
+        )   SAL_THROW( ( ) );
+
+
+    /** get fields for a result set given by a "command descriptor"
+
+        <p>A command descriptor here means:
+        <ul><li>a SDB-level connection (<type scope="com.sun.star.sdb">Connection</type></li>
+            <li>a string specifying the name of an object relative to the connection</li>
+            <li>a <type scope="com.sun.star.sdb">CommandType</type> value specifying the type
+                of the object</type></li>
+        </ul>
+        </p>
+
+        @param _rxConnection
+            the connection relative to which the to-be-examined object exists
+
+        @param _nCommandType
+            the type of the object
+
+        @param _rCommand
+            the object. This may be a table name, a query name, or an SQL statement, depending on the value
+            of <arg>_nCommandType</arg>
+
+        @param _pErrorInfo
+            If not <NULL/>, then upon return from the function the instance pointed to by this argument will
+            contain any available error information in case something went wrong.
+
+        @return
+            an array of strings containing the names of the columns (aka fields) of the object
+    */
+    ::com::sun::star::uno::Sequence< ::rtl::OUString >
+        getFieldNamesByCommandDescriptor(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const sal_Int32 _nCommandType,
+            const ::rtl::OUString& _rCommand,
+            SQLExceptionInfo* _pErrorInfo = NULL
+        )   SAL_THROW( ( ) );
+
 
     /** create a new ::com::sun::star::sdbc::SQLContext, fill it with the given descriptions and the given source,
         and <i>append</i> _rException (i.e. put it into the NextException member of the SQLContext).

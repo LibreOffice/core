@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-01 10:58:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #endif
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
+#endif
+#ifndef _CONNECTIVITY_FDATABASEMETADATARESULTSET_HXX_
+#include "FDatabaseMetaDataResultSet.hxx"
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
@@ -919,7 +922,74 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out );
+    Reference< XResultSet > xReturn = out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out );
+
+    if ( xReturn.is() )
+    {
+        // we have to check the result columns for the tables privleges
+        Reference< XResultSetMetaDataSupplier > xMetaSup(xReturn,UNO_QUERY);
+        if ( xMetaSup.is() )
+        {
+            Reference< XResultSetMetaData> xMeta = xMetaSup->getMetaData();
+            if ( xMeta.is() && xMeta->getColumnCount() != 7 )
+            {
+                // here we know that the count of column doesn't match
+                ::std::map<sal_Int32,sal_Int32> aColumnMatching;
+                static const ::rtl::OUString sPrivs[] = {
+                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE_CAT")),
+                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE_SCHEM")),
+                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE_NAME")),
+                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GRANTOR")),
+                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GRANTEE")),
+                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PRIVILEGE")),
+                                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IS_GRANTABLE"))
+                                        };
+
+                ::rtl::OUString sColumnName;
+                sal_Int32 nCount = xMeta->getColumnCount();
+                for (sal_Int32 i = 1 ; i <= nCount ; ++i)
+                {
+                    sColumnName = xMeta->getColumnName(i);
+                    for (sal_Int32 j = 0 ; j < sizeof(sPrivs)/sizeof(sPrivs[0]); ++j)
+                    {
+                        if ( sPrivs[j] == sColumnName )
+                        {
+                            aColumnMatching.insert( ::std::map<sal_Int32,sal_Int32>::value_type(i,j+1) );
+                            break;
+                        }
+                    }
+
+                }
+                // fill our own resultset
+                ODatabaseMetaDataResultSet* pNewPrivRes = new ODatabaseMetaDataResultSet();
+                Reference< XResultSet > xTemp = xReturn;
+                xReturn = pNewPrivRes;
+                pNewPrivRes->setTablePrivilegesMap();
+                ODatabaseMetaDataResultSet::ORows aRows;
+                Reference< XRow > xRow(xTemp,UNO_QUERY);
+                ::rtl::OUString sValue;
+
+                ODatabaseMetaDataResultSet::ORow aRow(8);
+                while ( xRow.is() && xTemp->next() )
+                {
+                    ::std::map<sal_Int32,sal_Int32>::iterator aIter = aColumnMatching.begin();
+                    ::std::map<sal_Int32,sal_Int32>::iterator aEnd  = aColumnMatching.end();
+                    for (;aIter != aEnd ; ++aIter)
+                    {
+                        sValue = xRow->getString(aIter->first);
+                        if ( xRow->wasNull() )
+                            aRow[aIter->second] = ODatabaseMetaDataResultSet::getEmptyValue();
+                        else
+                            aRow[aIter->second] = new ORowSetValueDecorator(sValue);
+                    }
+
+                    aRows.push_back(aRow);
+                }
+                pNewPrivRes->setRows(aRows);
+            }
+        }
+    }
+    return xReturn;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(

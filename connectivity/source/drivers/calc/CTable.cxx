@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-31 18:32:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,8 @@
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
 #endif
-#ifndef _SOLMATH_HXX //autogen wg. SolarMath
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #ifndef _UCBHELPER_CONTENT_HXX
 #include <ucbhelper/content.hxx>
@@ -440,7 +440,7 @@ void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
                 if ( eCellType == CellContentType_VALUE )
                 {
                     ::Date aDate( rNullDate );
-                    aDate += (long)SolarMath::ApproxFloor( xCell->getValue() );
+                    aDate += (long)::rtl::math::approxFloor( xCell->getValue() );
                     ::com::sun::star::util::Date aDateStruct( aDate.GetDay(), aDate.GetMonth(), aDate.GetYear() );
                     rValue = aDateStruct;
                 }
@@ -451,8 +451,8 @@ void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
                 if ( eCellType == CellContentType_VALUE )
                 {
                     double fCellVal = xCell->getValue();
-                    double fTime = fCellVal - SolarMath::ApproxFloor( fCellVal );
-                    long nIntTime = (long)SolarMath::Round( fTime * 8640000.0 );
+                    double fTime = fCellVal - rtl::math::approxFloor( fCellVal );
+                    long nIntTime = (long)rtl::math::round( fTime * 8640000.0 );
                     if ( nIntTime == 8640000 )
                         nIntTime = 0;                       // 23:59:59.995 and above is 00:00:00.00
                     ::com::sun::star::util::Time aTime;
@@ -473,10 +473,10 @@ void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
                 if ( eCellType == CellContentType_VALUE )
                 {
                     double fCellVal = xCell->getValue();
-                    double fDays = SolarMath::ApproxFloor( fCellVal );
+                    double fDays = ::rtl::math::approxFloor( fCellVal );
                     double fTime = fCellVal - fDays;
                     long nIntDays = (long)fDays;
-                    long nIntTime = (long)SolarMath::Round( fTime * 8640000.0 );
+                    long nIntTime = (long)::rtl::math::round( fTime * 8640000.0 );
                     if ( nIntTime == 8640000 )
                     {
                         nIntTime = 0;                       // 23:59:59.995 and above is 00:00:00.00

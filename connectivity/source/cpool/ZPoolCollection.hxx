@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPoolCollection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-13 07:22:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef CONNECTIVITY_POOLCOLLECTION_HXX
 #define CONNECTIVITY_POOLCOLLECTION_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
@@ -91,6 +91,12 @@
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
+#include <com/sun/star/frame/XTerminateListener.hpp>
+#endif
 #ifndef _COM_SUN_STAR_REFLECTION_XPROXYFACTORY_HPP_
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #endif
@@ -108,9 +114,10 @@ namespace connectivity
     //= OPoolCollection - the one-instance service for PooledConnections
     //= manages the active connections and the connections in the pool
     //==========================================================================
-    typedef ::cppu::WeakImplHelper4<    ::com::sun::star::sdbc::XDriverManager,
+    typedef ::cppu::WeakImplHelper5<    ::com::sun::star::sdbc::XDriverManager,
                                         ::com::sun::star::sdbc::XDriverAccess,
                                         ::com::sun::star::lang::XServiceInfo,
+                                        ::com::sun::star::frame::XTerminateListener,
                                         ::com::sun::star::beans::XPropertyChangeListener
                                         >   OPoolCollection_Base;
 
@@ -136,6 +143,7 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriverAccess >           m_xDriverAccess;
         ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XProxyFactory >     m_xProxyFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xConfigNode;      // config node for generel connection pooling
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop>                m_xDesktop;
 
     private:
         OPoolCollection(
@@ -159,7 +167,7 @@ namespace connectivity
         OConnectionPool* getConnectionPool( const ::rtl::OUString& _sImplName,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >& _xDriver,
                                             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxDriverNode);
-        void clearConnectionPools();
+        void clearConnectionPools(sal_Bool _bDispose);
     protected:
         virtual ~OPoolCollection();
     public:
@@ -189,6 +197,10 @@ namespace connectivity
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
         // XPropertyChangeListener
         virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
+
+        // XTerminateListener
+        virtual void SAL_CALL queryTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& Event ) throw (::com::sun::star::uno::RuntimeException);
     };
 }
 #endif // CONNECTIVITY_POOLCOLLECTION_HXX

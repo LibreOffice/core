@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcharset.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-12 11:18:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,12 @@
 #ifndef _RTL_TEXTENC_H
 #include <rtl/textenc.h>
 #endif
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
+#endif
+#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
+#endif
 
 //.........................................................................
 namespace dbtools
@@ -89,27 +94,15 @@ namespace dbtools
             Have a look at <A href="http://www.iana.org/assignments/character-sets">this document</A> for
             more details</li>
             <li><b>rtl_TextEncoding</b></li>
-            <li><b>logical names</b> This are strings without a deeper meaning. They're introduced because different
-            logical names can be matched to the same IANA name, so the opposite direction is ambiguous. That's why if
-            you want to make a name persisten, you probably should use the logical name.</li>
         </ul>
         </p>
     */
     class OCharsetMap
     {
     protected:
-        DECLARE_STL_VECTOR(rtl_TextEncoding, TextEncVector);
-        TextEncVector   m_aEncodings;
-        DECLARE_STL_VECTOR(::rtl::OUString, StringVector);
-        StringVector    m_aIanaNames;
-            // IANA names for the charsets
-        StringVector    m_aNames;
-            // logical names
+        DECLARE_STL_STDKEY_SET( rtl_TextEncoding, TextEncBag );
 
-
-    #ifdef _DEBUG
-        sal_Int32       m_nLivingIterators;         /// just for debugging reasons, counts the living iterators
-    #endif
+        TextEncBag  m_aEncodings;
 
     public:
         class CharsetIterator;
@@ -120,7 +113,6 @@ namespace dbtools
         OCharsetMap();
         ~OCharsetMap();
 
-        struct Logical { };
         struct IANA { };
 
         /** find the given text encoding in the map.
@@ -131,17 +123,20 @@ namespace dbtools
             @return the <em>end</em> iterator if the IANA name could not be found.
         */
         CharsetIterator find(const ::rtl::OUString& _rIanaName, const IANA&) const;
-        /** find the given logical name in the map.
-            @return the <em>end</em> iterator if the logical name could not be found.
-        */
-        CharsetIterator find(const ::rtl::OUString& _rLogicalName, const Logical&) const;
 
-        sal_Int32   size() const { return m_aNames.size(); }
+        sal_Int32   size() const { ensureConstructed( ); return m_aEncodings.size(); }
 
         /// get access to the first element of the charset collection
         CharsetIterator begin() const;
         /// get access to the (last + 1st) element of the charset collection
         CharsetIterator end() const;
+
+    protected:
+        // needed because we want to call a virtual method during construction
+                void lateConstruct();
+        inline  void ensureConstructed( ) const { if ( m_aEncodings.empty() ) const_cast< OCharsetMap* >( this )->lateConstruct(); }
+
+        virtual sal_Bool approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const;
     };
 
     //-------------------------------------------------------------------------
@@ -153,18 +148,16 @@ namespace dbtools
 
         rtl_TextEncoding    m_eEncoding;
         ::rtl::OUString     m_aIanaName;
-        ::rtl::OUString     m_aName;
 
     public:
         CharsetIteratorDerefHelper(const CharsetIteratorDerefHelper& _rSource);
 
         rtl_TextEncoding    getEncoding() const { return m_eEncoding; }
         ::rtl::OUString     getIanaName() const { return m_aIanaName; }
-        ::rtl::OUString     getName() const     { return m_aName; }
 
     protected:
         CharsetIteratorDerefHelper();
-        CharsetIteratorDerefHelper(const rtl_TextEncoding _eEncoding, const ::rtl::OUString& _rIanaName, const ::rtl::OUString& _rName);
+        CharsetIteratorDerefHelper( const rtl_TextEncoding _eEncoding, const ::rtl::OUString& _rIanaName );
 
     };
 
@@ -179,11 +172,11 @@ namespace dbtools
         friend bool operator==(const CharsetIterator& lhs, const CharsetIterator& rhs);
         friend bool operator!=(const CharsetIterator& lhs, const CharsetIterator& rhs) { return !(lhs == rhs); }
 
-        friend sal_Int32 operator-(const CharsetIterator& lhs, const CharsetIterator& rhs);
+//      friend sal_Int32 operator-(const CharsetIterator& lhs, const CharsetIterator& rhs);
 
     protected:
-        const OCharsetMap*  m_pContainer;
-        sal_Int32           m_nPosition;
+        const OCharsetMap*                      m_pContainer;
+        OCharsetMap::TextEncBag::const_iterator m_aPos;
 
     public:
         CharsetIterator(const CharsetIterator& _rSource);
@@ -205,7 +198,7 @@ namespace dbtools
         const CharsetIterator   operator--(int) { CharsetIterator hold(*this); --*this; return hold; }
 
     protected:
-        CharsetIterator(const OCharsetMap* _pContainer, sal_Int32 _nInitialPos = 0);
+        CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator _aPos );
     };
 
 //.........................................................................
@@ -213,17 +206,4 @@ namespace dbtools
 //.........................................................................
 
 #endif // _DBHELPER_DBCHARSET_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/04/09 06:09:44  fs
- *  m_nLivingIterators for _DEBUG, not DBG_UTIL
- *
- *  Revision 1.1  2000/11/29 22:21:00  fs
- *  initial checkin - helper class for translating charset representations
- *
- *
- *  Revision 1.0 29.11.00 18:29:26  fs
- ************************************************************************/
 

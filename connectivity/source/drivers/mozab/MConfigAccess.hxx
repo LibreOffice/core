@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConfigAccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-23 17:43:00 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,4 @@
 extern "C" const sal_Unicode* SAL_CALL getUserProfile( void );
 
 #endif  // CONNECTIVITY_MOZAB_MCONFIGACCESS_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 23.10.01 18:15:48  fs
- ************************************************************************/
 

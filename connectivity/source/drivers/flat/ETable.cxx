@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 14:14:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,8 +100,8 @@
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
 #endif
-#ifndef _SOLMATH_HXX //autogen wg. SolarMath
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #include <stdio.h>      //sprintf
 #ifndef _UCBHELPER_CONTENT_HXX
@@ -654,8 +654,7 @@ sal_Bool OFlatTable::fetchRow(OValueRow _rRow,const OSQLColumns & _rCols,sal_Boo
                         else
                             aStrConverted += aStr.GetChar(j) ;
                     }
-                    int nErrno;
-                    double nVal = SolarMath::StringToDouble(aStrConverted.GetBuffer(),',','.',nErrno);
+                    double nVal = ::rtl::math::stringToDouble(aStrConverted,'.',',',NULL,NULL);
 
                     // #99178# OJ
                     if ( DataType::DECIMAL == nType || DataType::NUMERIC == nType )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-04 06:37:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,21 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
         DBG_ASSERT(pTableExp != NULL,"Fehler im Parse Tree");
         DBG_ASSERT(SQL_ISRULE(pTableExp,table_exp)," Fehler im Parse Tree");
         DBG_ASSERT(pTableExp->count() == 5,"Fehler im Parse Tree");
+
+        // check that we don't use anything other than count(*) as function
+        OSQLParseNode* pSelection = pSQLParseNode->getChild(2);
+        if ( SQL_ISRULE(pSelection,scalar_exp_commalist) )
+        {
+            for (sal_uInt32 i = 0; i < pSelection->count(); i++)
+            {
+                OSQLParseNode *pColumnRef = pSelection->getChild(i)->getChild(0);
+                if ( SQL_ISRULE(pColumnRef,set_fct_spec) || ( SQL_ISRULE(pColumnRef,general_set_fct) && pColumnRef->count() != 4 ) )
+                {
+                    ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Statement to complex. Only \"COUNT(*)\" is supported.")),NULL);
+                }
+            }
+        }
+
 
         pWhereClause    = pTableExp->getChild(1);
         pOrderbyClause  = pTableExp->getChild(4);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZConnectionPool.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 09:04:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,15 +154,18 @@ OConnectionPool::OConnectionPool(const Reference< XDriver >& _xDriver,
 // -----------------------------------------------------------------------------
 OConnectionPool::~OConnectionPool()
 {
-    clear();
+    clear(sal_False);
 }
 // -----------------------------------------------------------------------------
 struct TRemoveEventListenerFunctor : ::std::unary_function<TPooledConnections::value_type,void>
                                     ,::std::unary_function<TActiveConnectionMap::value_type,void>
 {
     OConnectionPool* m_pConnectionPool;
+    sal_Bool m_bDispose;
 
-    TRemoveEventListenerFunctor(OConnectionPool* _pConnectionPool) : m_pConnectionPool(_pConnectionPool)
+    TRemoveEventListenerFunctor(OConnectionPool* _pConnectionPool,sal_Bool _bDispose = sal_False)
+        : m_pConnectionPool(_pConnectionPool)
+        ,m_bDispose(_bDispose)
     {
         OSL_ENSURE(m_pConnectionPool,"No connection pool!");
     }
@@ -171,8 +174,12 @@ struct TRemoveEventListenerFunctor : ::std::unary_function<TPooledConnections::v
     {
         Reference< XComponent >  xComponent(_xComponent, UNO_QUERY);
 
-        if (xComponent.is())
+        if ( xComponent.is() )
+        {
             xComponent->removeEventListener(m_pConnectionPool);
+            if ( m_bDispose )
+                xComponent->dispose();
+        }
     }
     // -----------------------------------------------------------------------------
     void operator()(const TPooledConnections::value_type& _aValue)
@@ -186,33 +193,22 @@ struct TRemoveEventListenerFunctor : ::std::unary_function<TPooledConnections::v
     }
 };
 // -----------------------------------------------------------------------------
-struct TDisposeFunctor : ::std::unary_function<TPooledConnections::value_type,void>
-{
-    void operator()(const TPooledConnections::value_type& _aValue)
-    {
-        Reference< XComponent >  xComponent(_aValue, UNO_QUERY);
-        if (xComponent.is())
-            xComponent->dispose();
-    }
-};
-// -----------------------------------------------------------------------------
 struct TConnectionPoolFunctor : ::std::unary_function<TConnectionMap::value_type,void>
 {
     OConnectionPool* m_pConnectionPool;
 
-
-    TConnectionPoolFunctor(OConnectionPool* _pConnectionPool) : m_pConnectionPool(_pConnectionPool)
+    TConnectionPoolFunctor(OConnectionPool* _pConnectionPool)
+        : m_pConnectionPool(_pConnectionPool)
     {
         OSL_ENSURE(m_pConnectionPool,"No connection pool!");
     }
     void operator()(const TConnectionMap::value_type& _aValue)
     {
-        ::std::for_each(_aValue.second.aConnections.begin(),_aValue.second.aConnections.end(),TRemoveEventListenerFunctor(m_pConnectionPool));
-        ::std::for_each(_aValue.second.aConnections.begin(),_aValue.second.aConnections.end(),TDisposeFunctor());
+        ::std::for_each(_aValue.second.aConnections.begin(),_aValue.second.aConnections.end(),TRemoveEventListenerFunctor(m_pConnectionPool,sal_True));
     }
 };
 // -----------------------------------------------------------------------------
-void OConnectionPool::clear()
+void OConnectionPool::clear(sal_Bool _bDispose)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -222,7 +218,7 @@ void OConnectionPool::clear()
     ::std::for_each(m_aPool.begin(),m_aPool.end(),TConnectionPoolFunctor(this));
     m_aPool.clear();
 
-    ::std::for_each(m_aActiveConnections.begin(),m_aActiveConnections.end(),TRemoveEventListenerFunctor(this));
+    ::std::for_each(m_aActiveConnections.begin(),m_aActiveConnections.end(),TRemoveEventListenerFunctor(this,_bDispose));
     m_aActiveConnections.clear();
 
     Reference< XComponent >  xComponent(m_xDriverNode, UNO_QUERY);
@@ -319,8 +315,7 @@ void OConnectionPool::invalidatePooledConnections()
     {
         if(!(--(aIter->second.nALiveCount))) // connections are invalid
         {
-            ::std::for_each(aIter->second.aConnections.begin(),aIter->second.aConnections.end(),TRemoveEventListenerFunctor(this));
-            ::std::for_each(aIter->second.aConnections.begin(),aIter->second.aConnections.end(),TDisposeFunctor());
+            ::std::for_each(aIter->second.aConnections.begin(),aIter->second.aConnections.end(),TRemoveEventListenerFunctor(this,sal_True));
 
             aIter->second.aConnections.clear();
 

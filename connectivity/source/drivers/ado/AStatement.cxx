@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-08 10:56:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,6 @@
 #include <comphelper/types.hxx>
 #endif
 
-#if defined(max)
-#undef max
-#endif
 #include <algorithm>
 
 using namespace ::comphelper;
@@ -282,7 +279,11 @@ sal_Int32 OStatement_Base::getPrecision ( sal_Int32 sqlType)
         ::std::vector<OTypeInfo>::const_iterator aIter = ::std::find(m_aTypeInfo.begin(),m_aTypeInfo.end(),aInfo);
         for(;aIter != m_aTypeInfo.end();++aIter)
         {
+#if (_MSC_VER < 1300)
             prec = std::max(prec,(*aIter).nPrecision);
+#else
+            prec = max(prec,(*aIter).nPrecision);
+#endif
         }
     }
 

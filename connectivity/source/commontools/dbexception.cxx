@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 13:55:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,38 +412,4 @@ void throwGenericSQLException(const ::rtl::OUString& _rMsg, const Reference< XIn
 }   // namespace dbtools
 //.........................................................................
 
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.9  2001/11/08 07:11:36  dkenny
- *  #93274# - select count(*)...
- *
- *  Revision 1.8  2001/06/26 07:54:03  fs
- *  throwGenericSQLException version with additional NextException parameter
- *
- *  Revision 1.7  2001/05/14 11:42:00  oj
- *  #86528# lower size need
- *
- *  Revision 1.6  2001/04/19 07:05:17  fs
- *  +throwFunctionSequenceException
- *
- *  Revision 1.5  2001/03/21 13:37:07  jl
- *  OSL_ENSHURE replaced by OSL_ENSURE
- *
- *  Revision 1.4  2001/03/01 17:02:19  fs
- *  operator= for SQLExceptionInfo, new ctor for SQLExceptionIteratorHelper, new next method
- *
- *  Revision 1.3  2000/11/08 18:54:44  fs
- *  corrected the initial setting of the SQLExceptionInfo
- *
- *  Revision 1.2  2000/10/24 15:00:32  oj
- *  make strings unique for lib's
- *
- *  Revision 1.1  2000/10/05 08:50:41  fs
- *  moved the files from unotools to here
- *
- *
- *  Revision 1.0 29.09.00 08:17:11  fs
- ************************************************************************/
 

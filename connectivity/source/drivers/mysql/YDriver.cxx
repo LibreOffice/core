@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YDriver.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-05 14:50:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,10 +282,14 @@ namespace connectivity
     //--------------------------------------------------------------------
     sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const ::rtl::OUString& url ) throw (SQLException, RuntimeException)
     {
-        ::rtl::OUString sPrefix = url.copy(0,16);
-        sal_Bool bOK = sPrefix.equalsAscii("sdbc:mysql:odbc:");
-        if ( !bOK )
-            bOK = sPrefix.equalsAscii("sdbc:mysql:jdbc:");
+        sal_Bool bOK = sal_False;
+        if ( url.getLength() >= 16 )
+        {
+            ::rtl::OUString sPrefix = url.copy(0,16);
+            bOK = sPrefix.equalsAscii("sdbc:mysql:odbc:");
+            if ( !bOK )
+                bOK = sPrefix.equalsAscii("sdbc:mysql:jdbc:");
+        }
         return bOK;
     }
 

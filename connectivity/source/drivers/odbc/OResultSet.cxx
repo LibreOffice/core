@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-10 12:52:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
                         ,m_pSkipDeletedSet(NULL)
                         ,m_bRowInserted(sal_False)
                         ,m_bRowDeleted(sal_False)
+                        ,m_bUseFetchScroll(sal_False)
 {
     osl_incrementInterlockedCount( &m_refCount );
     try
@@ -199,6 +200,18 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
     catch(Exception&)
     { // we don't want our result destroy here
         m_bFetchData = sal_True;
+    }
+    try
+    {
+        if ( getOdbcFunction(ODBC3SQLGetFunctions) )
+        {
+            SQLUSMALLINT nSupported = 0;
+            m_bUseFetchScroll = ( N3SQLGetFunctions(m_aConnectionHandle,SQL_API_SQLFETCHSCROLL,&nSupported) == SQL_SUCCESS && nSupported == 1 );
+        }
+    }
+    catch(Exception&)
+    {
+        m_bUseFetchScroll = sal_False;
     }
 
     osl_decrementInterlockedCount( &m_refCount );
@@ -1551,11 +1564,16 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
 
     m_bEOF = sal_False;
     m_nLastColumnPos = 0;
+
     SQLRETURN nOldFetchStatus = m_nCurrentFetchState;
-    m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,nFetchOrientation,_nOffset);
+    if ( !m_bUseFetchScroll && _eCursorPosition == IResultSetHelper::NEXT )
+        m_nCurrentFetchState = N3SQLFetch(m_aStatementHandle);
+    else
+        m_nCurrentFetchState = N3SQLFetchScroll(m_aStatementHandle,nFetchOrientation,_nOffset);
+
     OTools::ThrowException(m_pStatement->getOwnConnection(),m_nCurrentFetchState,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
-    if(m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO)
+    if ( m_nCurrentFetchState == SQL_SUCCESS || m_nCurrentFetchState == SQL_SUCCESS_WITH_INFO )
     {
         switch(_eCursorPosition)
         {
@@ -1580,7 +1598,7 @@ sal_Bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32
                 break;
         }
     }
-    else if(IResultSetHelper::PRIOR == _eCursorPosition && m_nCurrentFetchState == SQL_NO_DATA)
+    else if ( IResultSetHelper::PRIOR == _eCursorPosition && m_nCurrentFetchState == SQL_NO_DATA )
         m_nRowPos = 0;
     else if(IResultSetHelper::NEXT == _eCursorPosition && m_nCurrentFetchState == SQL_NO_DATA && nOldFetchStatus != SQL_NO_DATA)
         ++m_nRowPos;

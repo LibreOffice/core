@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-12 10:45:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,6 +489,29 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
                 {
                 }
 
+                if ( nField11 != ColumnValue::NO_NULLS )
+                {
+                    try
+                    {
+                        Reference< XResultSet > xResult = xMetaData->getPrimaryKeys(aCatalog, aSchema, aTable);
+                        Reference< XRow > xRow(xResult,UNO_QUERY);
+                        if ( xRow.is() )
+                        {
+                            while( xResult->next() ) // there can be only one primary key
+                            {
+                                ::rtl::OUString sKeyColumn = xRow->getString(4);
+                                if ( _rName == sKeyColumn )
+                                {
+                                    nField11 = ColumnValue::NO_NULLS;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    catch(SQLException&)
+                    {
+                    }
+                }
 
                 connectivity::sdbcx::OColumn* pRet = new connectivity::sdbcx::OColumn(_rName,
                                             aField6,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-12 15:28:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,30 +91,6 @@ namespace connectivity
 {
     namespace ado
     {
-#ifdef DBG_UTIL
-        extern sal_Int32 nAdoObjectCounter;
-
-        template <class IFACE>
-        class WpCountedAdoObject : public WpOLEBase< IFACE >
-        {
-        protected:
-            WpCountedAdoObject( IFACE* _pInt = NULL ) : WpOLEBase< IFACE >( _pInt )
-            {
-                ++nAdoObjectCounter;
-            }
-            ~WpCountedAdoObject()
-            {
-                --nAdoObjectCounter;
-            }
-        };
-#endif
-
-#ifdef DBG_UTIL
-#define OBJECT_BASE     WpCountedAdoObject
-#else
-#define OBJECT_BASE     WpOLEBase
-#endif
-
         class WpADOConnection;
         class WpADOCommand;
         class WpADORecordset;
@@ -127,17 +103,17 @@ namespace connectivity
         typedef WpOLECollection<        ADOProperties,  ADOProperty,    WpADOProperty>      WpADOProperties;
 
         //------------------------------------------------------------------------
-        class WpADOConnection : public OBJECT_BASE<ADOConnection>
+        class WpADOConnection : public WpOLEBase<ADOConnection>
         {
             friend class WpADOCommand;
         public:
 
-            WpADOConnection(ADOConnection* pInt)    :   OBJECT_BASE<ADOConnection>(pInt){}
+            WpADOConnection(ADOConnection* pInt)    :   WpOLEBase<ADOConnection>(pInt){}
 
             WpADOConnection(const WpADOConnection& rhs){operator=(rhs);}
 
              WpADOConnection& operator=(const WpADOConnection& rhs)
-                {OBJECT_BASE<ADOConnection>::operator=(rhs); return *this;}
+                {WpOLEBase<ADOConnection>::operator=(rhs); return *this;}
 
             //////////////////////////////////////////////////////////////////////
 
@@ -236,19 +212,19 @@ namespace connectivity
         };
 
         //------------------------------------------------------------------------
-        class WpADOCommand : public OBJECT_BASE<ADOCommand>
+        class WpADOCommand : public WpOLEBase<ADOCommand>
         {
         public:
             WpADOCommand(){}
             // Konstruktoren, operator=
             // diese rufen nur die Oberklasse
-            WpADOCommand(ADOCommand* pInt)  :   OBJECT_BASE<ADOCommand>(pInt){}
+            WpADOCommand(ADOCommand* pInt)  :   WpOLEBase<ADOCommand>(pInt){}
 
             WpADOCommand(const WpADOCommand& rhs){operator=(rhs);}
 
              WpADOCommand& operator=(const WpADOCommand& rhs)
             {
-                OBJECT_BASE<ADOCommand>::operator=(rhs); return *this;}
+                WpOLEBase<ADOCommand>::operator=(rhs); return *this;}
 
             //////////////////////////////////////////////////////////////////////
 
@@ -275,19 +251,19 @@ namespace connectivity
              sal_Bool Cancel();
         };
         //------------------------------------------------------------------------
-        class WpADOError : public OBJECT_BASE<ADOError>
+        class WpADOError : public WpOLEBase<ADOError>
         {
         public:
 
             // Konstruktoren, operator=
             // diese rufen nur die Oberklasse
 
-            WpADOError(ADOError* pInt):OBJECT_BASE<ADOError>(pInt){}
+            WpADOError(ADOError* pInt):WpOLEBase<ADOError>(pInt){}
 
             WpADOError(const WpADOError& rhs){operator=(rhs);}
 
              WpADOError& operator=(const WpADOError& rhs)
-                {OBJECT_BASE<ADOError>::operator=(rhs); return *this;}
+                {WpOLEBase<ADOError>::operator=(rhs); return *this;}
 
             //////////////////////////////////////////////////////////////////////
 
@@ -303,18 +279,18 @@ namespace connectivity
 
 
         //------------------------------------------------------------------------
-        class WpADOField : public OBJECT_BASE<ADOField>
+        class WpADOField : public WpOLEBase<ADOField>
         {
             //  friend class WpADOFields;
         public:
 
             // Konstruktoren, operator=
             // diese rufen nur die Oberklasse
-            WpADOField(ADOField* pInt=NULL):OBJECT_BASE<ADOField>(pInt){}
+            WpADOField(ADOField* pInt=NULL):WpOLEBase<ADOField>(pInt){}
             WpADOField(const WpADOField& rhs){operator=(rhs);}
 
              WpADOField& operator=(const WpADOField& rhs)
-                {OBJECT_BASE<ADOField>::operator=(rhs); return *this;}
+                {WpOLEBase<ADOField>::operator=(rhs); return *this;}
             //////////////////////////////////////////////////////////////////////
 
              WpADOProperties get_Properties();
@@ -353,15 +329,15 @@ namespace connectivity
 
 
         //------------------------------------------------------------------------
-        class WpADOProperty: public OBJECT_BASE<ADOProperty>
+        class WpADOProperty: public WpOLEBase<ADOProperty>
         {
         public:
             // Konstruktoren, operator=
             // diese rufen nur die Oberklasse
-            WpADOProperty(ADOProperty* pInt = NULL):OBJECT_BASE<ADOProperty>(pInt){}
+            WpADOProperty(ADOProperty* pInt=NULL):WpOLEBase<ADOProperty>(pInt){}
             WpADOProperty(const WpADOProperty& rhs){operator=(rhs);}
              WpADOProperty& operator=(const WpADOProperty& rhs)
-                {OBJECT_BASE<ADOProperty>::operator=(rhs); return *this;}
+                {WpOLEBase<ADOProperty>::operator=(rhs); return *this;}
             //////////////////////////////////////////////////////////////////////
 
              OLEVariant GetValue() const;
@@ -374,17 +350,17 @@ namespace connectivity
         };
 
 
-        class WpADORecordset : public OBJECT_BASE<ADORecordset>
+        class WpADORecordset : public WpOLEBase<ADORecordset>
         {
 
         public:
             // Konstruktoren, operator=
             // diese rufen nur die Oberklasse
-            WpADORecordset(ADORecordset* pInt=NULL):OBJECT_BASE<ADORecordset>(pInt){}
+            WpADORecordset(ADORecordset* pInt=NULL):WpOLEBase<ADORecordset>(pInt){}
             WpADORecordset(const WpADORecordset& rhs){operator=(rhs);}
              WpADORecordset& operator=(const WpADORecordset& rhs)
             {
-                OBJECT_BASE<ADORecordset>::operator=(rhs);
+                WpOLEBase<ADORecordset>::operator=(rhs);
                 return *this;
             }
             ~WpADORecordset()
@@ -440,15 +416,15 @@ namespace connectivity
         };
 
         //------------------------------------------------------------------------
-        class WpADOParameter:public OBJECT_BASE<ADOParameter>
+        class WpADOParameter:public WpOLEBase<ADOParameter>
         {
         public:
             // Konstruktoren, operator=
             // diese rufen nur die Oberklasse
-            WpADOParameter(ADOParameter* pInt):OBJECT_BASE<ADOParameter>(pInt){}
-            WpADOParameter(const WpADOParameter& rhs):OBJECT_BASE<ADOParameter>(rhs){}
+            WpADOParameter(ADOParameter* pInt):WpOLEBase<ADOParameter>(pInt){}
+            WpADOParameter(const WpADOParameter& rhs):WpOLEBase<ADOParameter>(rhs){}
              WpADOParameter& operator=(const WpADOParameter& rhs)
-                {OBJECT_BASE<ADOParameter>::operator=(rhs); return *this;}
+                {WpOLEBase<ADOParameter>::operator=(rhs); return *this;}
             //////////////////////////////////////////////////////////////////////
 
              ::rtl::OUString GetName() const ;

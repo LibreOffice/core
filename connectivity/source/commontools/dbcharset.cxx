@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcharset.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-04 11:05:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,141 +66,129 @@
 #include <osl/diagnose.h>
 #endif
 
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
+#endif
+
 //.........................................................................
 namespace dbtools
 {
 //.........................................................................
-
-    //-------------------------------------------------------------------------
-    template <class T>
-    sal_Int32 getSequenceIndex( const ::std::vector< T >& _rUnsortedContainer, const T& _rLookupElement )
-    {
-        for (   ::std::vector< T >::const_iterator aSearch = _rUnsortedContainer.begin();
-                aSearch != _rUnsortedContainer.end();
-                ++aSearch
-            )
-            if (*aSearch == _rLookupElement)
-                return aSearch - _rUnsortedContainer.begin();
-
-        return _rUnsortedContainer.size();
-    }
 
     //=========================================================================
     //= OCharsetMap
     //=========================================================================
     //-------------------------------------------------------------------------
     OCharsetMap::OCharsetMap()
-    #ifdef _DEBUG
-        :m_nLivingIterators(0)
-    #endif
     {
-        m_aEncodings.resize(12);
-        m_aEncodings[ 0] = RTL_TEXTENCODING_MS_1252;        // ANSI
-        m_aEncodings[ 1] = RTL_TEXTENCODING_APPLE_ROMAN;    // MAC
-        m_aEncodings[ 2] = RTL_TEXTENCODING_IBM_437;        // IBMPC_437
-        m_aEncodings[ 3] = RTL_TEXTENCODING_IBM_850;        // IBMPC_850
-        m_aEncodings[ 4] = RTL_TEXTENCODING_IBM_860;        // IBMPC_860
-        m_aEncodings[ 5] = RTL_TEXTENCODING_IBM_861;        // IBMPC_861
-        m_aEncodings[ 6] = RTL_TEXTENCODING_IBM_863;        // IBMPC_863
-        m_aEncodings[ 7] = RTL_TEXTENCODING_IBM_865;        // IBMPC_865
-        m_aEncodings[ 8] = RTL_TEXTENCODING_IBM_866;        // IBMPC_866 (cyrillic)
-        m_aEncodings[ 9] = RTL_TEXTENCODING_DONTKNOW;       // SYSTEM
-        m_aEncodings[10] = RTL_TEXTENCODING_UTF8;           // UTF-8
-        m_aEncodings[11] = RTL_TEXTENCODING_BIG5_HKSCS;     // Big5-HKSCS
+    }
 
-        m_aNames.resize(12);
-        m_aNames[ 0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ANSI"));
-        m_aNames[ 1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MAC"));
-        m_aNames[ 2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_437"));
-        m_aNames[ 3] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_850"));
-        m_aNames[ 4] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_860"));
-        m_aNames[ 5] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_861"));
-        m_aNames[ 6] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_863"));
-        m_aNames[ 7] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_865"));
-        m_aNames[ 8] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBMPC_866"));
-        m_aNames[ 9] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYSTEM"));
-        m_aNames[10] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UTF-8"));
-        m_aNames[10] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Big5-HKSCS"));
+    //-------------------------------------------------------------------------
+    void OCharsetMap::lateConstruct()
+    {
+        const rtl_TextEncoding eFirstEncoding = RTL_TEXTENCODING_DONTKNOW;
+        const rtl_TextEncoding eLastEncoding = 100;     // TODO: a define in rtl/textenc.h would be fine here ...
+        OSL_ENSURE( 0 == eFirstEncoding, "OCharsetMap::OCharsetMap: somebody changed the numbers!" );
 
-        OSL_ENSURE(m_aEncodings.size() == m_aNames.size(),
-            "OCharsetMap::OCharsetMap: inconsistentce(1)!");
+        rtl_TextEncodingInfo aInfo; aInfo.StructSize = sizeof( rtl_TextEncodingInfo );
+        for ( rtl_TextEncoding eEncoding = eFirstEncoding; eEncoding < eLastEncoding; ++eEncoding )
+        {
+            if  (   ( RTL_TEXTENCODING_DONTKNOW == eEncoding )  // this is always allowed - it has the special meaning "system encoding"
+                ||  (   rtl_getTextEncodingInfo( eEncoding, &aInfo )
+                    &&  approveEncoding( eEncoding, aInfo )
+                    )
+                )
+            {
+                m_aEncodings.insert( eEncoding );
+            }
+        }
 
-        // the IANA representations of the character sets which we know
-        m_aIanaNames.resize(12);
-        m_aIanaNames[ 0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("windows-1252"));
-        m_aIanaNames[ 1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("macintosh"));
-        m_aIanaNames[ 2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM437"));
-        m_aIanaNames[ 3] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM850"));
-        m_aIanaNames[ 4] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM860"));
-        m_aIanaNames[ 5] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM861"));
-        m_aIanaNames[ 6] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM863"));
-        m_aIanaNames[ 7] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM865"));
-        m_aIanaNames[ 8] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IBM866"));
-        m_aIanaNames[ 9] = ::rtl::OUString();
-        m_aIanaNames[10] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UTF-8"));
-        m_aIanaNames[11] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Big5-HKSCS"));
+        OSL_ENSURE( find( RTL_TEXTENCODING_MS_1252 ) != end(), "OCharsetMap::lateConstruct: missing compatibility encoding ANSI!" );
+        OSL_ENSURE( find( RTL_TEXTENCODING_APPLE_ROMAN ) != end(), "OCharsetMap::lateConstruct: missing compatibility encoding macintosh!" );
+        OSL_ENSURE( find( RTL_TEXTENCODING_IBM_437 ) != end(), "OCharsetMap::lateConstruct: missing compatibility encoding IBM437!" );
+        OSL_ENSURE( find( RTL_TEXTENCODING_IBM_850) != end(), "OCharsetMap::lateConstruct: missing compatibility encoding IBM850!" );
+        OSL_ENSURE( find( RTL_TEXTENCODING_IBM_860 ) != end(), "OCharsetMap::lateConstruct: missing compatibility encoding IBM860!" );
+        OSL_ENSURE( find( RTL_TEXTENCODING_IBM_861 ) != end(), "OCharsetMap::lateConstruct: missing compatibility encoding IBM861!" );
+        OSL_ENSURE( find( RTL_TEXTENCODING_IBM_863 ) != end(), "OCharsetMap::lateConstruct: missing compatibility encoding IBM863!" );
+        OSL_ENSURE( find( RTL_TEXTENCODING_IBM_865 ) != end(), "OCharsetMap::lateConstruct: missing compatibility encoding IBM865!" );
+        OSL_ENSURE( find( RTL_TEXTENCODING_IBM_866 ) != end(), "OCharsetMap::lateConstruct: missing compatibility encoding IBM866!" );
+        OSL_ENSURE( find( RTL_TEXTENCODING_DONTKNOW ) != end(), "OCharsetMap::lateConstruct: missing compatibility encoding SYSTEM!" );
+        OSL_ENSURE( find( RTL_TEXTENCODING_UTF8 ) != end(), "OCharsetMap::lateConstruct: missing compatibility encoding UTF-8!" );
+        OSL_ENSURE( find( RTL_TEXTENCODING_BIG5_HKSCS ) != end(), "OCharsetMap::lateConstruct: missing compatibility encoding Big5-HKSCS!" );
+    }
 
-        OSL_ENSURE(m_aNames.size() == m_aIanaNames.size(),
-            "OCharsetMap::OCharsetMap: inconsistentce(2)!");
+    //-------------------------------------------------------------------------
+    sal_Bool OCharsetMap::approveEncoding( const rtl_TextEncoding _eEncoding, const rtl_TextEncodingInfo& _rInfo ) const
+    {
+        sal_Bool bIsMimeEncoding = 0 != ( _rInfo.Flags & RTL_TEXTENCODING_INFO_MIME );
+        OSL_ENSURE( !bIsMimeEncoding || rtl_getMimeCharsetFromTextEncoding( _eEncoding ),
+                "OCharsetMap::OCharsetMap: inconsistence in rtl!" );
+        return bIsMimeEncoding;
     }
 
     //-------------------------------------------------------------------------
     OCharsetMap::~OCharsetMap()
     {
-        OSL_ENSURE(0 == m_nLivingIterators, "OCharsetMap::~OCharsetMap : there are still living iterator objects!");
     }
 
     //-------------------------------------------------------------------------
     OCharsetMap::CharsetIterator OCharsetMap::begin() const
     {
-        return CharsetIterator(this, 0);
+        ensureConstructed( );
+        return CharsetIterator(this, m_aEncodings.begin() );
     }
 
     //-------------------------------------------------------------------------
     OCharsetMap::CharsetIterator    OCharsetMap::find(const rtl_TextEncoding _eEncoding) const
     {
-        sal_Int32 nSize = m_aEncodings.size();
-        TextEncVector::const_iterator aFind = ::std::find(m_aEncodings.begin(),m_aEncodings.end(),(sal_Int32)_eEncoding);
-        if(aFind != m_aEncodings.end())
-            nSize = aFind - m_aEncodings.begin();
-
-        return CharsetIterator(this, nSize);
+        ensureConstructed( );
+        return CharsetIterator( this, m_aEncodings.find( _eEncoding ) );
     }
 
     //-------------------------------------------------------------------------
     OCharsetMap::CharsetIterator    OCharsetMap::find(const ::rtl::OUString& _rIanaName, const IANA&) const
     {
-        return CharsetIterator(this, getSequenceIndex(m_aIanaNames, _rIanaName));
-    }
+        ensureConstructed( );
 
-    //-------------------------------------------------------------------------
-    OCharsetMap::CharsetIterator    OCharsetMap::find(const ::rtl::OUString& _rLogicalName, const Logical&) const
-    {
-        return CharsetIterator(this, getSequenceIndex(m_aNames, _rLogicalName));
+        rtl_TextEncoding eEncoding = RTL_TEXTENCODING_DONTKNOW;
+        if ( _rIanaName.getLength() )
+        {
+            // byte string conversion
+            ::rtl::OString sMimeByteString( _rIanaName.getStr(), _rIanaName.getLength(), RTL_TEXTENCODING_ASCII_US );
+            // look up
+            eEncoding = rtl_getTextEncodingFromMimeCharset( sMimeByteString.getStr() );
+
+            if ( RTL_TEXTENCODING_DONTKNOW == eEncoding )
+            {   // if we're here, the name is not empty, but unknown -> this is an invalid name
+                return end();
+            }
+        }
+
+        return find( eEncoding );
     }
 
     //-------------------------------------------------------------------------
     OCharsetMap::CharsetIterator OCharsetMap::end() const
     {
-        return CharsetIterator(this, m_aNames.size());
+        ensureConstructed( );
+
+        return CharsetIterator( this, m_aEncodings.end() );
     }
 
     //=========================================================================
     //= CharsetIteratorDerefHelper
     //=========================================================================
     //-------------------------------------------------------------------------
-    CharsetIteratorDerefHelper::CharsetIteratorDerefHelper(const CharsetIteratorDerefHelper& _rSource)
-        :m_eEncoding(_rSource.m_eEncoding)
-        ,m_aIanaName(_rSource.m_aIanaName)
-        ,m_aName(_rSource.m_aName)
+    CharsetIteratorDerefHelper::CharsetIteratorDerefHelper( const CharsetIteratorDerefHelper& _rSource )
+        :m_eEncoding( _rSource.m_eEncoding )
+        ,m_aIanaName( _rSource.m_aIanaName )
     {
     }
 
     //-------------------------------------------------------------------------
-    CharsetIteratorDerefHelper::CharsetIteratorDerefHelper(const rtl_TextEncoding _eEncoding, const ::rtl::OUString& _rIanaName, const ::rtl::OUString& _rName)
-        :m_eEncoding(_eEncoding)
-        ,m_aIanaName(_rIanaName)
-        ,m_aName(_rName)
+    CharsetIteratorDerefHelper:: CharsetIteratorDerefHelper(const rtl_TextEncoding _eEncoding, const ::rtl::OUString& _rIanaName )
+        :m_eEncoding( _eEncoding )
+        ,m_aIanaName( _rIanaName )
     {
     }
 
@@ -214,102 +202,68 @@ namespace dbtools
     //= OCharsetMap::CharsetIterator
     //=========================================================================
     //-------------------------------------------------------------------------
-    OCharsetMap::CharsetIterator::CharsetIterator(const OCharsetMap* _pContainer, sal_Int32 _nInitialPos)
-        :m_pContainer(_pContainer)
-        ,m_nPosition(_nInitialPos)
+    OCharsetMap::CharsetIterator::CharsetIterator(const OCharsetMap* _pContainer, OCharsetMap::TextEncBag::const_iterator _aPos )
+        :m_pContainer( _pContainer )
+        ,m_aPos( _aPos )
     {
-        OSL_ENSURE(m_pContainer, "OCharsetMap::CharsetIterator::CharsetIterator : invalid container!");
-    #ifdef _DEBUG
-        ++const_cast<OCharsetMap*>(m_pContainer)->m_nLivingIterators;
-    #endif
+        OSL_ENSURE( m_pContainer, "OCharsetMap::CharsetIterator::CharsetIterator : invalid container!" );
     }
 
     //-------------------------------------------------------------------------
     OCharsetMap::CharsetIterator::CharsetIterator(const CharsetIterator& _rSource)
-        :m_pContainer(_rSource.m_pContainer)
-        ,m_nPosition(_rSource.m_nPosition)
+        :m_pContainer( _rSource.m_pContainer )
+        ,m_aPos( _rSource.m_aPos )
     {
-    #ifdef _DEBUG
-        ++const_cast<OCharsetMap*>(m_pContainer)->m_nLivingIterators;
-    #endif
     }
 
     //-------------------------------------------------------------------------
     OCharsetMap::CharsetIterator::~CharsetIterator()
     {
-    #ifdef _DEBUG
-        --const_cast<OCharsetMap*>(m_pContainer)->m_nLivingIterators;
-    #endif
     }
 
     //-------------------------------------------------------------------------
     CharsetIteratorDerefHelper OCharsetMap::CharsetIterator::operator*() const
     {
-        OSL_ENSURE((sal_uInt32)m_nPosition < m_pContainer->m_aEncodings.size(), "OCharsetMap::CharsetIterator::operator*: invalid position!");
-        OSL_ENSURE((sal_uInt32)m_nPosition < m_pContainer->m_aIanaNames.size(), "OCharsetMap::CharsetIterator::operator*: invalid position!");
-        OSL_ENSURE((sal_uInt32)m_nPosition < m_pContainer->m_aNames.size(), "OCharsetMap::CharsetIterator::operator*: invalid position!");
-        return CharsetIteratorDerefHelper(
-            m_pContainer->m_aEncodings[m_nPosition],
-            m_pContainer->m_aIanaNames[m_nPosition],
-            m_pContainer->m_aNames[m_nPosition]);
+        OSL_ENSURE( m_aPos != m_pContainer->m_aEncodings.end(), "OCharsetMap::CharsetIterator::operator*: invalid position!");
+
+        rtl_TextEncoding eEncoding = *m_aPos;
+        ::rtl::OUString sIanaName;
+
+        if ( RTL_TEXTENCODING_DONTKNOW != eEncoding )
+        {   // it's not the virtual "system charset"
+            const char* pIanaName = rtl_getMimeCharsetFromTextEncoding( eEncoding );
+            OSL_ENSURE( pIanaName, "OCharsetMap::CharsetIterator: invalid mime name!" );
+            if ( pIanaName )
+                sIanaName = ::rtl::OUString::createFromAscii( pIanaName );
+        }
+        return CharsetIteratorDerefHelper( eEncoding, sIanaName );
     }
 
     //-------------------------------------------------------------------------
     const OCharsetMap::CharsetIterator& OCharsetMap::CharsetIterator::operator++()
     {
-        OSL_ENSURE((sal_uInt32)m_nPosition < m_pContainer->m_aNames.size(), "OCharsetMap::CharsetIterator::operator++ : invalid position!");
-        if ((sal_uInt32)m_nPosition < m_pContainer->m_aNames.size())
-            ++m_nPosition;
+        OSL_ENSURE( m_aPos != m_pContainer->m_aEncodings.end(), "OCharsetMap::CharsetIterator::operator++ : invalid position!" );
+        if ( m_aPos != m_pContainer->m_aEncodings.end())
+            ++m_aPos;
         return *this;
     }
 
     //-------------------------------------------------------------------------
     const OCharsetMap::CharsetIterator& OCharsetMap::CharsetIterator::operator--()
     {
-        OSL_ENSURE(m_nPosition >= 0, "OCharsetMap::CharsetIterator::operator-- : invalid position!");
-        if (m_nPosition >= 0)
-            --m_nPosition;
+        OSL_ENSURE( m_aPos != m_pContainer->m_aEncodings.begin(), "OCharsetMap::CharsetIterator::operator-- : invalid position!" );
+        if ( m_aPos != m_pContainer->m_aEncodings.begin() )
+            --m_aPos;
         return *this;
-    }
-
-    //-------------------------------------------------------------------------
-    sal_Int32 operator-(const OCharsetMap::CharsetIterator& lhs, const OCharsetMap::CharsetIterator& rhs)
-    {
-        return lhs.m_nPosition - rhs.m_nPosition;
     }
 
     //-------------------------------------------------------------------------
     bool operator==(const OCharsetMap::CharsetIterator& lhs, const OCharsetMap::CharsetIterator& rhs)
     {
-        return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_nPosition == rhs.m_nPosition);
+        return ( lhs.m_pContainer == rhs.m_pContainer ) && ( lhs.m_aPos == rhs.m_aPos );
     }
 
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.6  2001/10/15 13:30:12  fs
- *  #93204# new supported charset IBM866 (cyrillic)
- *
- *  Revision 1.5  2001/05/18 08:51:34  oj
- *  #86528# size changes
- *
- *  Revision 1.4  2001/04/27 08:04:07  fs
- *  #86370# add UTF-8 to the list of supported charsets
- *
- *  Revision 1.3  2001/04/09 06:09:58  fs
- *  m_nLivingIterators for _DEBUG, not DBG_UTIL
- *
- *  Revision 1.2  2001/02/13 09:47:39  fs
- *  #83632# merge IBMPC, IBMPC(850), DOS
- *
- *  Revision 1.1  2000/11/29 22:21:42  fs
- *  initial checkin - helper class for translating charset representations
- *
- *
- *  Revision 1.0 29.11.00 18:42:55  fs
- ************************************************************************/
 

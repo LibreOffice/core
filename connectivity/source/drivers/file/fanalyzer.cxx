@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 07:54:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,57 +109,7 @@ void OSQLAnalyzer::setIndexes(const Reference< XNameAccess>& _xIndexes)
 //------------------------------------------------------------------
 void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
 {
-    if (pSQLParseNode)
-    {
-
-        // Parse Tree analysieren (je nach Statement-Typ)
-        // und Zeiger auf WHERE-Klausel setzen:
-        OSQLParseNode* pWhereClause     = NULL;
-        OSQLParseNode* pOrderbyClause   = NULL;
-
-        if (SQL_ISRULE(pSQLParseNode,select_statement))
-        {
-            OSL_ENSURE(pSQLParseNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
-
-            OSQLParseNode * pTableExp = pSQLParseNode->getChild(3);
-            OSL_ENSURE(pTableExp != NULL,"Fehler im Parse Tree");
-            OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp)," Fehler im Parse Tree");
-            OSL_ENSURE(pTableExp->count() == 5,"Fehler im Parse Tree");
-
-            pWhereClause    = pTableExp->getChild(1);
-            pOrderbyClause  = pTableExp->getChild(4);
-        }
-        else if (SQL_ISRULE(pSQLParseNode,update_statement_searched))
-        {
-            OSL_ENSURE(pSQLParseNode->count() == 5,"OFILECursor: Fehler im Parse Tree");
-            pWhereClause = pSQLParseNode->getChild(4);
-        }
-        else if (SQL_ISRULE(pSQLParseNode,delete_statement_searched))
-        {
-            OSL_ENSURE(pSQLParseNode->count() == 4,"Fehler im Parse Tree");
-            pWhereClause = pSQLParseNode->getChild(3);
-        }
-        else
-                // Anderes Statement. Keine Selektionskriterien.
-            return;
-
-        if (SQL_ISRULE(pWhereClause,where_clause))
-        {
-            // Wenn es aber eine where_clause ist, dann darf sie nicht leer sein:
-            OSL_ENSURE(pWhereClause->count() == 2,"OFILECursor: Fehler im Parse Tree");
-
-            OSQLParseNode * pComparisonPredicate = pWhereClause->getChild(1);
-            OSL_ENSURE(pComparisonPredicate != NULL,"OFILECursor: Fehler im Parse Tree");
-
-            m_aCompiler.execute(pComparisonPredicate);
-        }
-        else
-        {
-            // Die Where Clause ist meistens optional, d. h. es koennte sich auch
-            // um "optional_where_clause" handeln.
-            OSL_ENSURE(SQL_ISRULE(pWhereClause,opt_where_clause),"OFILECursor: Fehler im Parse Tree");
-        }
-    }
+    m_aCompiler.start(pSQLParseNode);
 }
 
 //------------------------------------------------------------------

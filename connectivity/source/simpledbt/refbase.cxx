@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refbase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:29:37 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,4 @@ namespace connectivity
 //........................................................................
 }   // namespace connectivity
 //........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 24.07.01 16:32:42  fs
- ************************************************************************/
 

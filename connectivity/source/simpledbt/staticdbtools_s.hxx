@@ -2,9 +2,9 @@
  *
  *  $RCSfile: staticdbtools_s.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:48:49 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,25 @@ namespace connectivity
         */
         virtual sal_Bool canDelete(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxCursorSet) const;
 
+        // ------------------------------------------------
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
+            getFieldsByCommandDescriptor(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                const sal_Int32 _nCommandType,
+                const ::rtl::OUString& _rCommand,
+                ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxKeepFieldsAlive,
+                ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
+            )   SAL_THROW( ( ) );
+
+        // ------------------------------------------------
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+            getFieldNamesByCommandDescriptor(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                const sal_Int32 _nCommandType,
+                const ::rtl::OUString& _rCommand,
+                ::dbtools::SQLExceptionInfo* _pErrorInfo = NULL
+            )   SAL_THROW( ( ) );
+
         // disambiguate IReference
         // ------------------------------------------------
         virtual oslInterlockedCount SAL_CALL acquire();
@@ -213,17 +232,4 @@ namespace connectivity
 //........................................................................
 
 #endif // CONNECTIVITY_STATIC_DBTOOLS_SIMPLE_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/08/06 14:50:00  fs
- *  #87690# +connectRowset / some other methods needed later on (to make writer link-time independent og dbtools)
- *
- *  Revision 1.1  2001/07/25 13:30:17  fs
- *  initial checkin - class for load-on-demand usage of the statis DBTOOLS helper functions
- *
- *
- *  Revision 1.0 24.07.01 16:32:42  fs
- ************************************************************************/
 

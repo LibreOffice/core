@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-02 07:07:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,9 @@ BOOL ONDXPage::Find(const ONDXKey& rKey)
     // wird immer die aktuelle Seite und die Knotenposition vermerkt
     // auf die die Bedingung <= zutrifft
     // dieses findet beim Insert besondere Beachtung
-    USHORT i = FindPos( rKey );
+    USHORT i = 0;
+    while (i < nCount && rKey > ((*this)[i]).GetKey())
+           i++;
 
     BOOL bResult = FALSE;
 
@@ -348,10 +350,7 @@ BOOL ONDXPage::Insert(USHORT nPos, ONDXNode& rNode)
 {
     USHORT nMaxCount = rIndex.getHeader().db_maxkeys;
     if (nPos >= nMaxCount)
-    {
-        OSL_ENSURE(0,"Insert nPos >= nMaxCount!");
         return FALSE;
-    }
 
     if (nCount)
     {
@@ -361,10 +360,9 @@ BOOL ONDXPage::Insert(USHORT nPos, ONDXNode& rNode)
             (*this)[i] = (*this)[i-1];
     }
     else
-        //  if (nCount < nMaxCount)
+        if (nCount < nMaxCount)
             nCount++;
 
-    OSL_ENSURE(nPos < nCount, "Invalid position!");
     // einfuegen an der Position
     ONDXNode& rInsertNode = (*this)[nPos];
     rInsertNode = rNode;
@@ -397,7 +395,7 @@ void ONDXPage::Release(BOOL bSave)
 
     for (USHORT i = 0; i < rIndex.getHeader().db_maxkeys;i++)
     {
-        if (ppNodes[i].GetChild().Is())
+        if (ppNodes[i].GetChild())
             ppNodes[i].GetChild()->Release(bSave);
 
         ppNodes[i].GetChild().Clear();
@@ -408,17 +406,13 @@ void ONDXPage::Release(BOOL bSave)
 void ONDXPage::ReleaseFull(BOOL bSave)
 {
     ONDXPagePtr aTempParent = aParent;
-    USHORT nParentPos = NODE_NOTFOUND;
-    if (aTempParent.Is())
-    {
-        // Freigeben nicht benoetigter Seiten, danach besteht keine Referenz
-        // mehr auf die Seite, danach kann 'this' nicht mehr gueltig sein!!!
-        nParentPos = aTempParent->Search(this);
-    }
     Release(bSave);
 
     if (aTempParent.Is())
     {
+        // Freigeben nicht benoetigter Seiten, danach besteht keine Referenz
+        // mehr auf die Seite, danach kann 'this' nicht mehr gueltig sein!!!
+        USHORT nParentPos = aTempParent->Search(this);
         if (nParentPos != NODE_NOTFOUND)
             (*aTempParent)[nParentPos].GetChild().Clear();
         else
@@ -571,8 +565,6 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
     // Feststellen ob Seite rechter oder linker Nachbar
     BOOL    bRight    = ((*xPage)[0].GetKey() > (*this)[0].GetKey()); // TRUE, wenn xPage die rechte Seite ist
     USHORT  nNewCount = (*xPage).Count() + Count();
-
-    DBG_ASSERT(&xPage != this,"xPage und THIS dürfen nicht gleich sein: Endlosschleife");
 
     if (IsLeaf())
     {

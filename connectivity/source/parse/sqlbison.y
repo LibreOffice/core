@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.42 2002-11-27 17:14:33 obo Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.43 2003-03-19 16:38:46 hr Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,14 +9,13 @@
 //	OJ
 //
 // Last change:
-//	$Author: obo $ $Date: 2002-11-27 17:14:33 $ $Revision: 1.42 $
+//	$Author: hr $ $Date: 2003-03-19 16:38:46 $ $Revision: 1.43 $
 //
 // Description:
 //
 //
 //--------------------------------------------------------------------------
 
-#include <string.h>
 #ifndef _VECTOR_
 #include <vector>
 #endif
@@ -79,34 +78,6 @@
 #include "connectivity/dbconversion.hxx"
 #endif
 
-#ifdef WNT
-#include "stdarg.h"
-namespace std {
-int fprintf(FILE* stream, const char* format, ...)
-{
-    va_list va_param;
-
-    va_start(va_param, format);
-	int res = ::vfprintf(stream, format, va_param);
-    va_end(va_param);
-
-    return res;
-}
-
-#if _MSC_VER < 1300
-void* malloc( size_t size )
-{
-    return ::malloc(size);
-}
-
-void free( void *memblock )
-{
-    ::free(memblock);
-}
-#endif
-};
-#endif
-
 static ::rtl::OUString aEmptyString;
 
 static connectivity::OSQLInternalNode* newNode(const sal_Char* pNewValue,
@@ -163,20 +134,6 @@ using namespace connectivity;
 %token <pParseNode> SQL_TOKEN_STRING SQL_TOKEN_ACCESS_DATE SQL_TOKEN_INT SQL_TOKEN_REAL_NUM
 %token <pParseNode> SQL_TOKEN_INTNUM SQL_TOKEN_APPROXNUM SQL_TOKEN_NOT SQL_TOKEN_NAME
 
-	/* operators */
-%left <pParseNode> SQL_TOKEN_NAME
-%left <pParseNode> SQL_TOKEN_OR
-%left <pParseNode> SQL_TOKEN_AND
-
-%left <pParseNode> LESSEQ GREATEQ NOTEQUAL LESS GREAT EQUAL /* '<' '>' = <> < > <= >= != */
-%left <pParseNode> '+' '-'
-%left <pParseNode> '*' '/'
-%left <pParseNode> SQL_TOKEN_NATURAL SQL_TOKEN_CROSS SQL_TOKEN_FULL SQL_TOKEN_LEFT SQL_TOKEN_RIGHT
-%left <pParseNode> ')'
-%right <pParseNode> '='
-%right <pParseNode> '.'
-%right <pParseNode> '('
-
 
 %nonassoc <pParseNode> SQL_TOKEN_UMINUS
 
@@ -186,31 +143,31 @@ using namespace connectivity;
 
 %token <pParseNode> SQL_TOKEN_ALL SQL_TOKEN_ALTER SQL_TOKEN_AMMSC SQL_TOKEN_ANY SQL_TOKEN_AS SQL_TOKEN_ASC SQL_TOKEN_AT SQL_TOKEN_AUTHORIZATION SQL_TOKEN_AVG
 
-%token <pParseNode> SQL_TOKEN_BETWEEN SQL_TOKEN_BIT SQL_TOKEN_BIT_LENGTH SQL_TOKEN_BOTH SQL_TOKEN_BY
+%token <pParseNode> SQL_TOKEN_BETWEEN SQL_TOKEN_BIT SQL_TOKEN_BOTH SQL_TOKEN_BY
 
-%token <pParseNode> SQL_TOKEN_CAST SQL_TOKEN_CHARACTER SQL_TOKEN_CHAR_LENGTH SQL_TOKEN_CHECK SQL_TOKEN_COLLATE SQL_TOKEN_COMMIT SQL_TOKEN_CONTINUE SQL_TOKEN_CONVERT SQL_TOKEN_COUNT SQL_TOKEN_CREATE SQL_TOKEN_CROSS
-%token <pParseNode> SQL_TOKEN_CURRENT SQL_TOKEN_CURRENT_DATE SQL_TOKEN_CURRENT_TIME SQL_TOKEN_CURRENT_TIMESTAMP SQL_TOKEN_CURSOR
+%token <pParseNode> SQL_TOKEN_CAST SQL_TOKEN_CHARACTER SQL_TOKEN_CHECK SQL_TOKEN_COLLATE SQL_TOKEN_COMMIT SQL_TOKEN_CONTINUE SQL_TOKEN_CONVERT SQL_TOKEN_COUNT SQL_TOKEN_CREATE SQL_TOKEN_CROSS
+%token <pParseNode> SQL_TOKEN_CURRENT SQL_TOKEN_CURSOR
 
 %token <pParseNode> SQL_TOKEN_DATE SQL_TOKEN_DAY SQL_TOKEN_DEC SQL_TOKEN_DECIMAL SQL_TOKEN_DECLARE SQL_TOKEN_DEFAULT SQL_TOKEN_DELETE SQL_TOKEN_DESC
 %token <pParseNode> SQL_TOKEN_DISTINCT SQL_TOKEN_DOUBLE SQL_TOKEN_DROP
 
-%token <pParseNode> SQL_TOKEN_ESCAPE SQL_TOKEN_EXCEPT SQL_TOKEN_EXISTS SQL_TOKEN_EXTRACT SQL_TOKEN_FALSE SQL_TOKEN_FETCH SQL_TOKEN_FLOAT SQL_TOKEN_FOR SQL_TOKEN_FOREIGN SQL_TOKEN_FOUND SQL_TOKEN_FROM SQL_TOKEN_FULL
+%token <pParseNode> SQL_TOKEN_ESCAPE SQL_TOKEN_EXCEPT SQL_TOKEN_EXISTS SQL_TOKEN_FALSE SQL_TOKEN_FETCH SQL_TOKEN_FLOAT SQL_TOKEN_FOR SQL_TOKEN_FOREIGN SQL_TOKEN_FOUND SQL_TOKEN_FROM SQL_TOKEN_FULL
 
-%token <pParseNode> SQL_TOKEN_GRANT SQL_TOKEN_GROUP SQL_TOKEN_HAVING SQL_TOKEN_HOUR SQL_TOKEN_IN SQL_TOKEN_INDICATOR SQL_TOKEN_INNER SQL_TOKEN_INSERT SQL_TOKEN_INTEGER SQL_TOKEN_INTO SQL_TOKEN_IS SQL_TOKEN_INTERSECT
+%token <pParseNode> SQL_TOKEN_GRANT SQL_TOKEN_GROUP SQL_TOKEN_HAVING SQL_TOKEN_IN SQL_TOKEN_INDICATOR SQL_TOKEN_INNER SQL_TOKEN_INTEGER SQL_TOKEN_INTO SQL_TOKEN_IS SQL_TOKEN_INTERSECT
 
-%token <pParseNode> SQL_TOKEN_JOIN SQL_TOKEN_KEY SQL_TOKEN_LEADING SQL_TOKEN_LEFT SQL_TOKEN_LIKE SQL_TOKEN_LOCAL SQL_TOKEN_LOWER SQL_TOKEN_MINUTE SQL_TOKEN_MONTH
+%token <pParseNode> SQL_TOKEN_JOIN SQL_TOKEN_KEY SQL_TOKEN_LEADING SQL_TOKEN_LIKE SQL_TOKEN_LOCAL SQL_TOKEN_LOWER
 %token <pParseNode> SQL_TOKEN_MAX SQL_TOKEN_MIN SQL_TOKEN_NATURAL SQL_TOKEN_NCHAR SQL_TOKEN_NULL SQL_TOKEN_NUMERIC
 
 %token <pParseNode> SQL_TOKEN_OCTECT_LENGTH SQL_TOKEN_OF SQL_TOKEN_ON SQL_TOKEN_OPTION SQL_TOKEN_ORDER SQL_TOKEN_OUTER
 
-%token <pParseNode> SQL_TOKEN_POSITION SQL_TOKEN_PRECISION SQL_TOKEN_PRIMARY SQL_TOKEN_PRIVILEGES SQL_TOKEN_PROCEDURE SQL_TOKEN_PUBLIC
-%token <pParseNode> SQL_TOKEN_REAL SQL_TOKEN_REFERENCES SQL_TOKEN_ROLLBACK SQL_TOKEN_RIGHT
+%token <pParseNode> SQL_TOKEN_PRECISION SQL_TOKEN_PRIMARY SQL_TOKEN_PRIVILEGES SQL_TOKEN_PROCEDURE SQL_TOKEN_PUBLIC
+%token <pParseNode> SQL_TOKEN_REAL SQL_TOKEN_REFERENCES SQL_TOKEN_ROLLBACK
 
-%token <pParseNode> SQL_TOKEN_SCHEMA SQL_TOKEN_SECOND SQL_TOKEN_SELECT SQL_TOKEN_SET SQL_TOKEN_SIZE SQL_TOKEN_SMALLINT SQL_TOKEN_SOME SQL_TOKEN_SQLCODE SQL_TOKEN_SQLERROR SQL_TOKEN_SUBSTRING SQL_TOKEN_SUM
+%token <pParseNode> SQL_TOKEN_SCHEMA SQL_TOKEN_SELECT SQL_TOKEN_SET SQL_TOKEN_SIZE SQL_TOKEN_SMALLINT SQL_TOKEN_SOME SQL_TOKEN_SQLCODE SQL_TOKEN_SQLERROR SQL_TOKEN_SUM
 
 %token <pParseNode> SQL_TOKEN_TABLE SQL_TOKEN_TIME SQL_TOKEN_TIMESTAMP SQL_TOKEN_TIMEZONE_HOUR SQL_TOKEN_TIMEZONE_MINUTE SQL_TOKEN_TO SQL_TOKEN_TRAILING SQL_TOKEN_TRANSLATE SQL_TOKEN_TRIM SQL_TOKEN_TRUE SQL_TOKEN_UNION
 %token <pParseNode> SQL_TOKEN_UNIQUE SQL_TOKEN_UNKNOWN SQL_TOKEN_UPDATE SQL_TOKEN_UPPER SQL_TOKEN_USAGE SQL_TOKEN_USER SQL_TOKEN_USING SQL_TOKEN_VALUES SQL_TOKEN_VIEW
-%token <pParseNode> SQL_TOKEN_WHERE SQL_TOKEN_WITH SQL_TOKEN_WORK SQL_TOKEN_YEAR SQL_TOKEN_ZONE
+%token <pParseNode> SQL_TOKEN_WHERE SQL_TOKEN_WITH SQL_TOKEN_WORK SQL_TOKEN_ZONE
 
 /* ODBC KEYWORDS */
 %token <pParseNode> SQL_TOKEN_CALL SQL_TOKEN_D SQL_TOKEN_FN SQL_TOKEN_T SQL_TOKEN_TS SQL_TOKEN_OJ
@@ -232,6 +189,22 @@ using namespace connectivity;
 %token <pParseNode> SQL_TOKEN_COS SQL_TOKEN_COT SQL_TOKEN_DEGREES SQL_TOKEN_EXP SQL_TOKEN_FLOOR SQL_TOKEN_LOGF    
 %token <pParseNode> SQL_TOKEN_LOG10 SQL_TOKEN_MOD SQL_TOKEN_PI SQL_TOKEN_POWER SQL_TOKEN_RADIANS SQL_TOKEN_RAND    
 %token <pParseNode> SQL_TOKEN_ROUND   SQL_TOKEN_SIGN    SQL_TOKEN_SIN     SQL_TOKEN_SQRT    SQL_TOKEN_TAN SQL_TOKEN_TRUNCATE
+
+
+	/* operators */
+%left SQL_TOKEN_NAME
+%left <pParseNode> SQL_TOKEN_OR
+%left <pParseNode> SQL_TOKEN_AND
+
+%left <pParseNode> LESSEQ GREATEQ NOTEQUAL LESS GREAT EQUAL /* '<' '>' = <> < > <= >= != */
+%left <pParseNode> '+' '-'
+%left <pParseNode> '*' '/'
+%left SQL_TOKEN_NATURAL SQL_TOKEN_CROSS SQL_TOKEN_FULL SQL_TOKEN_LEFT SQL_TOKEN_RIGHT
+%left ')'
+%right '='
+%right '.'
+%right '('
+
 
 %token <pParseNode> SQL_TOKEN_INVALIDSYMBOL
 
@@ -1055,10 +1028,7 @@ boolean_primary:
 			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
-subroutine:
-	{
-		}
-	;
+
 boolean_test:
 		boolean_primary
 	|	boolean_primary SQL_TOKEN_IS truth_value
@@ -1076,7 +1046,7 @@ boolean_test:
 			$$->append($3);
 			$$->append($4);
 		}
-	|	subroutine SQL_TOKEN_NOT SQL_TOKEN_LIKE string_value_exp opt_escape
+/*	|	sql_not SQL_TOKEN_LIKE string_value_exp opt_escape
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
@@ -1085,10 +1055,10 @@ boolean_test:
 
 				$$ = SQL_NEW_RULE;
 				$$->append(pColumnRef);
+				$$->append($1);
 				$$->append($2);
-				$$->append($3);
-				if (xxx_pGLOBAL_SQLPARSER->buildLikeRule($$,$4,$5))
-					$$->append($5);
+				if (xxx_pGLOBAL_SQLPARSER->buildLikeRule($$,$3,$4))
+					$$->append($4);
 				else
 				{
 					delete $$;
@@ -1098,14 +1068,17 @@ boolean_test:
 			else
 				YYERROR;
 		}
+*/
 	;
 boolean_factor:
 		boolean_test
-	|	SQL_TOKEN_NOT  boolean_test
+	|	SQL_TOKEN_NOT '(' boolean_test ')'
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
-			$$->append($2);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
 		}
 	;
 boolean_term:
@@ -1224,15 +1197,7 @@ comparison:
 	  | GREATEQ
 	;
 between_predicate:
-		row_value_constructor SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
-		{$$ = SQL_NEW_RULE;
-			$$->append($1);
-			$$->append($2);
-			$$->append($3);
-			$$->append($4);
-			$$->append($5);
-		}
-	|	row_value_constructor SQL_TOKEN_NOT SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
+		row_value_constructor sql_not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
 		{$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
@@ -1241,7 +1206,7 @@ between_predicate:
 			$$->append($5);
 			$$->append($6);
 		}
-	|	subroutine SQL_TOKEN_NOT SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
+	|	sql_not SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
@@ -1250,24 +1215,7 @@ between_predicate:
 
 				$$ = SQL_NEW_RULE;
 				$$->append(pColumnRef);
-				$$->append($2);
-				$$->append($3);
-				$$->append($4);
-				$$->append($5);
-				$$->append($6);
-			}
-			else
-				YYERROR;
-		}
-	|	subroutine SQL_TOKEN_BETWEEN row_value_constructor SQL_TOKEN_AND row_value_constructor
-		{
-			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
-			{
-				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
-				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
-
-				$$ = SQL_NEW_RULE;
-				$$->append(pColumnRef);
+				$$->append($1);
 				$$->append($2);
 				$$->append($3);
 				$$->append($4);
@@ -1313,11 +1261,7 @@ like_predicate:
 			$$->append($3);
 			$$->append($4);
 		}
-	/*|	SQL_TOKEN_NOT
-		{
-			if(!xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
-				YYERROR;
-		} SQL_TOKEN_LIKE string_value_exp opt_escape
+	|	sql_not SQL_TOKEN_LIKE string_value_exp opt_escape
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
@@ -1327,73 +1271,31 @@ like_predicate:
 				$$ = SQL_NEW_RULE;
 				$$->append(pColumnRef);
 				$$->append($1);
-				$$->append($3);
-				if (xxx_pGLOBAL_SQLPARSER->buildLikeRule($$,$4,$5))
-					$$->append($5);
-				else
-				{
-					delete $$;
-					YYABORT;
-				}
-			}
-			else
-				YYERROR;
-		}
-	*/|	SQL_TOKEN_LIKE string_value_exp opt_escape
-		{
-			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
-			{
-				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
-				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
-
-				$$ = SQL_NEW_RULE;
-				$$->append(pColumnRef);
-				$$->append($1);
-				if (xxx_pGLOBAL_SQLPARSER->buildLikeRule($$,$2,$3))
-					$$->append($3);
-				else
-				{
-					delete $$;
-					YYABORT;
-				}
-			}
-			else
-				YYERROR;
-		}
-	|	SQL_TOKEN_LIKE value_exp_primary opt_escape
-		{
-			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
-			{
-				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
-				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
-
-				$$ = SQL_NEW_RULE;
-				$$->append(pColumnRef);
-				$$->append($1);
-				if (xxx_pGLOBAL_SQLPARSER->buildLikeRule($$,$2,$3))
-					$$->append($3);
-				else
-				{
-					delete $$;
-					YYABORT;
-				}
-			}
-			else
-				YYERROR;
-		}
-	|	subroutine SQL_TOKEN_NOT SQL_TOKEN_LIKE value_exp_primary opt_escape
-		{
-			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
-			{
-				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
-				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
-
-				$$ = SQL_NEW_RULE;
-				$$->append(pColumnRef);
 				$$->append($2);
-				$$->append($3);
-				if (xxx_pGLOBAL_SQLPARSER->buildLikeRule($$,$4,$5))
-					$$->append($5);
+				if (xxx_pGLOBAL_SQLPARSER->buildLikeRule($$,$3,$4))
+					$$->append($4);
+				else
+				{
+					delete $$;
+					YYABORT;
+				}
+			}
+			else
+				YYERROR;
+		}
+	|	sql_not SQL_TOKEN_LIKE value_exp_primary opt_escape
+		{
+			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
+			{
+				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
+				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
+
+				$$ = SQL_NEW_RULE;
+				$$->append(pColumnRef);
+				$$->append($1);
+				$$->append($2);
+				if (xxx_pGLOBAL_SQLPARSER->buildLikeRule($$,$3,$4))
+					$$->append($4);
 				else
 				{
 					delete $$;
@@ -1468,18 +1370,18 @@ in_predicate:
 			$$->append($3);
 			$$->append($4);
 		}
-		|	subroutine  SQL_TOKEN_IN in_predicate_value
+		|	sql_not SQL_TOKEN_IN in_predicate_value
 		{
-			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
+			if ( xxx_pGLOBAL_SQLPARSER->inPredicateCheck() )
 			{
 				OSQLParseNode* pColumnRef = newNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::column_ref));
 				pColumnRef->append(newNode(xxx_pGLOBAL_SQLPARSER->getFieldName(),SQL_NODE_NAME));
 
 				$$ = SQL_NEW_RULE;
 				$$->append(pColumnRef);
+				$$->append($1);
 				$$->append($2);
 				$$->append($3);
-				/*$$->append($3);*/
 			}
 			else
 				YYERROR;
@@ -2523,7 +2425,7 @@ value_exp_commalist:
 		value_exp
 			{$$ = SQL_NEW_COMMALISTRULE;
 			$$->append($1);}
-	|       value_exp_commalist ',' value_exp
+	|   value_exp_commalist ',' value_exp
 			{$1->append($3);
 			$$ = $1;}
 	/*	this rule is only valid if we check predicates */
@@ -3057,7 +2959,7 @@ sql:
 			}
 			else
 				YYERROR;
-		}
+		};
 %%
 
 
@@ -3105,7 +3007,6 @@ IMPLEMENT_CONSTASCII_STRING(KEY_STR_LIKE, "LIKE");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_NOT, "NOT");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_NULL, "NULL");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_TRUE, "True");
-
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_FALSE, "False");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_IS, "IS");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_BETWEEN, "BETWEEN");
@@ -3193,7 +3094,6 @@ IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::O
 	sal_uInt32 nCount = sizeof Intl_TokenID / sizeof Intl_TokenID[0];
 	for (sal_uInt32 i = 0; i < nCount; i++)
 	{
-
 		::rtl::OString aKey = getIntlKeywordAscii(Intl_TokenID[i]);
 		if (rToken.equalsIgnoreAsciiCase(aKey))
 			return Intl_TokenID[i];
@@ -3203,62 +3103,33 @@ IParseContext::InternationalKeyCode OParseContext::getIntlKeyCode(const ::rtl::O
 }
 
 //------------------------------------------------------------------------------
-
 static Locale& impl_getLocaleInstance( )
-
 {
-
 	static Locale s_aLocale(
-
 		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) ),
-
 		::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "US" ) ),
-
 		::rtl::OUString( )
-
 	);
-
 	return s_aLocale;
-
 }
 
-
-
 //------------------------------------------------------------------------------
-
 void OParseContext::setDefaultLocale( const ::com::sun::star::lang::Locale& _rLocale )
-
 {
-
 	impl_getLocaleInstance() = _rLocale;
-
 }
 
-
-
 //------------------------------------------------------------------------------
-
 Locale OParseContext::getPreferredLocale( ) const
-
 {
-
 	return getDefaultLocale();
-
 }
-
-
 
 //------------------------------------------------------------------------------
-
 const Locale& OParseContext::getDefaultLocale()
-
 {
-
 	return impl_getLocaleInstance();
-
 }
-
-
 
 //==========================================================================
 //= misc
@@ -3414,46 +3285,26 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 {
 	::rtl::OString aStr;
 	if (pContext)
-
 	{
-
 		IParseContext::InternationalKeyCode eKeyCode = IParseContext::KEY_NONE;
-
 		switch( nTokenID )
-
 		{
-
 			case SQL_TOKEN_LIKE: eKeyCode = IParseContext::KEY_LIKE; break;
-
 			case SQL_TOKEN_NOT: eKeyCode = IParseContext::KEY_NOT; break;
-
 			case SQL_TOKEN_NULL: eKeyCode = IParseContext::KEY_NULL; break;
-
 			case SQL_TOKEN_TRUE: eKeyCode = IParseContext::KEY_TRUE; break;
-
 			case SQL_TOKEN_FALSE: eKeyCode = IParseContext::KEY_FALSE; break;
-
 			case SQL_TOKEN_IS: eKeyCode = IParseContext::KEY_IS; break;
-
 			case SQL_TOKEN_BETWEEN: eKeyCode = IParseContext::KEY_BETWEEN; break;
-
 			case SQL_TOKEN_OR: eKeyCode = IParseContext::KEY_OR; break;
-
 			case SQL_TOKEN_AND: eKeyCode = IParseContext::KEY_AND; break;
-
 			case SQL_TOKEN_AVG: eKeyCode = IParseContext::KEY_AVG; break;
-
 			case SQL_TOKEN_COUNT: eKeyCode = IParseContext::KEY_COUNT; break;
-
 			case SQL_TOKEN_MAX: eKeyCode = IParseContext::KEY_MAX; break;
-
 			case SQL_TOKEN_MIN: eKeyCode = IParseContext::KEY_MIN; break;
-
 			case SQL_TOKEN_SUM: eKeyCode = IParseContext::KEY_SUM; break;
-
 		}
 		aStr = pContext->getIntlKeywordAscii(eKeyCode);
-
 	}
 
 	if (!aStr.getLength())
@@ -3852,16 +3703,5 @@ int OSQLParser::SQLlex()
 {
 	return s_pScanner->SQLlex();
 }
-/*------------------------------------------------------------------------
 
-	$Log: not supported by cvs2svn $
-	
-	Revision 1.34.8.1.2.1  2002/05/10 07:53:46  oj
-	#98357# enable = TRUE
-	
-	Revision 1.1  2000/07/25 10:39:29  oj
-	new revision
-
-	Revision 1.0 21.07.2000 12:27:34  oj
-------------------------------------------------------------------------*/
 

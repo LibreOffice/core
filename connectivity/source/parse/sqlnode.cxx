@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 11:10:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,10 @@
 #include <internalnode.hxx>
 #endif
 #define YYBISON   1
+#ifndef BISON_INCLUDED
+#define BISON_INCLUDED
 #include <sqlbison.hxx>
+#endif
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include <connectivity/sqlparse.hxx>
 #endif
@@ -327,7 +330,7 @@ void OSQLParseNode::parseNodeToStr(::rtl::OUString& rString, const SQLParseNodeP
             {
                 // Funktionsname nicht quoten
                 SQLParseNodeParameter aNewParam(rParam);
-                aNewParam.bQuote = sal_False;
+                aNewParam.bQuote = ( SQL_ISRULE(this,length_exp)    || SQL_ISRULE(this,char_value_fct) );
 
                 m_aChilds[0]->parseNodeToStr(rString, aNewParam);
                 aNewParam.bQuote = rParam.bQuote;

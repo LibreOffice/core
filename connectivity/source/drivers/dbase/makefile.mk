@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: fs $ $Date: 2002-02-21 08:14:25 $
+#   last change: $Author: hr $ $Date: 2003-03-19 16:38:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -162,7 +162,6 @@ EXCEPTIONSNOOPTFILES= \
 EXCEPTIONSFILES +=\
             $(SLO)$/DTable.obj
 .ENDIF
-
 
 # --- Targets ----------------------------------
 

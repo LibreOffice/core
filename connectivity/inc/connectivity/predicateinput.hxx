@@ -2,9 +2,9 @@
  *
  *  $RCSfile: predicateinput.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 10:58:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,14 +169,4 @@ namespace dbtools
 //.........................................................................
 
 #endif CONNECTIVITY_PREDICATEINPUT_HXX
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2002/04/09 14:29:53  fs
- *  initial checkin - helper class for inputting predicate values
- *
- *
- *  Revision 1.0 04.04.02 15:13:13  fs
- ************************************************************************/
 

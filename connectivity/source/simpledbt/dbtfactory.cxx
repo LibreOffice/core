@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 11:14:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,16 +143,4 @@ namespace connectivity
 }   // namespace connectivity
 //........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/08/13 14:54:24  fs
- *  #90761# +createCharsetHelper
- *
- *  Revision 1.1  2001/07/25 13:28:12  fs
- *  initial checkin - main factory for load-on-demand usage of DBTOOLS
- *
- *
- *  Revision 1.0 24.07.01 16:32:42  fs
- ************************************************************************/
 

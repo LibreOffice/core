@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-18 13:14:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTypeInfo(  ) throw(S
         aRow[3] = new ORowSetValueDecorator((sal_Int32)10);
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("BOOL"));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("BOOLEAN"));
         aRow[2] = new ORowSetValueDecorator(DataType::BIT);
         aRow[3] = ODatabaseMetaDataResultSet::get1Value();
         aRow[4] = ODatabaseMetaDataResultSet::getEmptyValue();

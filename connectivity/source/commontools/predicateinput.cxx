@@ -2,9 +2,9 @@
  *
  *  $RCSfile: predicateinput.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-04 11:23:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,19 +433,4 @@ namespace dbtools
 }   // namespace dbtools
 //.........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2002/09/27 11:15:47  oj
- *  #97230# new interface for ParseContext
- *
- *  Revision 1.2  2002/09/26 07:59:42  oj
- *  #103685# correct index of replaceAt call
- *
- *  Revision 1.1  2002/04/09 14:31:04  fs
- *  initial checkin - helper class for inputting predicate values
- *
- *
- *  Revision 1.0 04.04.02 15:57:58  fs
- ************************************************************************/
 

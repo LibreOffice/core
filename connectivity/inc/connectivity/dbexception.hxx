@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbexception.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 15:26:11 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,32 +215,4 @@ void throwGenericSQLException(
 
 #endif _DBHELPER_DBEXCEPTION_HXX_
 
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.7  2001/11/08 12:48:37  fs
- *  #93274# +throwFunctionNotSupportedException
- *
- *  Revision 1.6  2001/06/26 07:53:17  fs
- *  throwGenericSQLException version with additional NextException parameter
- *
- *  Revision 1.5  2001/05/14 11:40:39  oj
- *  #86528# lower size need
- *
- *  Revision 1.4  2001/04/19 07:04:21  fs
- *  +throwFunctionSequenceException
- *
- *  Revision 1.3  2001/03/01 17:01:18  fs
- *  operator= for SQLExceptionInfo, new ctor for SQLExceptionIteratorHelper, new next method
- *
- *  Revision 1.2  2000/10/24 15:19:40  oj
- *  make strings unique for lib's
- *
- *  Revision 1.1  2000/10/05 08:56:37  fs
- *  moved the files from unotools to here
- *
- *
- *  Revision 1.0 29.09.00 08:31:15  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 07:51:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,11 +160,18 @@ void OCollection::disposing(void)
 
     ::osl::MutexGuard aGuard(m_rMutex);
 
-
     disposeElements();
 
     ::std::vector< ObjectIter >().swap(m_aElements);
-    ObjectMap().swap(m_aNameMap);
+
+    OSL_ENSURE( m_aNameMap.empty(), "OCollection::disposing: what did disposeElements do?" );
+    ObjectMap( m_aNameMap ).swap( m_aNameMap );
+        // Note that it's /important/ to construct the new ObjectMap from m_aNameMap before
+        // swapping. This way, it's ensured that the compare object held by these maps is preserved
+        // during the swap. If we would not do this, the UStringMixLess instance which is used would be
+        // default constructed (instead of being constructed from the same instance in m_aNameMap), and
+        // it's case-sensitive flag would have an unpredictable value.
+        // 2002-01-09 - #106589# - fs@openoffice.org
 }
 // -------------------------------------------------------------------------
 Any SAL_CALL OCollection::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException)

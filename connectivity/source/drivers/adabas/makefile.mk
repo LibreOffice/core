@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: svesik $ $Date: 2002-03-11 15:00:42 $
+#   last change: $Author: hr $ $Date: 2003-03-19 16:38:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@ SLOFILES=\
         $(SLO)$/BResultSetMetaData.obj			\
         $(SLO)$/BResultSet.obj
         
-.IF "$(OS)"=="MACOSX" || "$(OS)"=="FREEBSD"
+.IF "$(OS)"=="MACOSX"
 #SHL1VERSIONMAP=$(ADABAS_TARGET).$(DLLPOSTFIX).map
 .ELSE      
 SHL1VERSIONMAP=$(ADABAS_TARGET).map

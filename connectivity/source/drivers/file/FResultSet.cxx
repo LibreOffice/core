@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-10 10:42:15 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 columnIndex ) throw(::com::su
 void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException)
 {
     if (   columnIndex <= 0
-        || columnIndex > (sal_Int32)m_xColumns->size()
+        //  || columnIndex > (sal_Int32)m_xColumns->size()
         || columnIndex >= (sal_Int32)m_aRow->size() )
         ::dbtools::throwInvalidIndexException(*this);
 }

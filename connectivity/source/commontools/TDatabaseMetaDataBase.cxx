@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TDatabaseMetaDataBase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:26:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,12 @@ ODatabaseMetaDataBase::ODatabaseMetaDataBase(const Reference< XConnection >& _rx
     : m_xConnection(_rxConnection)
 {
     osl_incrementInterlockedCount( &m_refCount );
-    m_xListenerHelper = new OEventListenerHelper(this);
-    Reference<XComponent> xCom(m_xConnection,UNO_QUERY);
-    if(xCom.is())
-        xCom->addEventListener(m_xListenerHelper);
+    {
+        m_xListenerHelper = new OEventListenerHelper(this);
+        Reference<XComponent> xCom(m_xConnection,UNO_QUERY);
+        if(xCom.is())
+            xCom->addEventListener(m_xListenerHelper);
+    }
     osl_decrementInterlockedCount( &m_refCount );
 }
 // -------------------------------------------------------------------------

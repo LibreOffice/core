@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-29 12:50:57 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,8 +104,8 @@
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
 #endif
-#ifndef _SOLMATH_HXX //autogen wg. SolarMath
-#include <tools/solmath.hxx>
+#ifndef INCLUDED_RTL_MATH_HXX
+#include <rtl/math.hxx>
 #endif
 #include <stdio.h>      //sprintf
 #ifndef _UCBHELPER_CONTENT_HXX
@@ -930,7 +930,24 @@ BOOL ODbaseTable::CreateImpl()
 
     return TRUE;
 }
+// -----------------------------------------------------------------------------
+void ODbaseTable::throwInvalidColumnType(const ::rtl::OUString& _sError,const ::rtl::OUString& _sColumnName)
+{
+    try
+    {
+        // we have to drop the file because it is corrupted now
+        DropImpl();
+    }
+    catch(const Exception&)
+    {
+    }
 
+    ::rtl::OUString sMsg = _sError;
+    sMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
+    sMsg += _sColumnName;
+    sMsg += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\" !"));
+    throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+}
 //------------------------------------------------------------------
 // erzeugt grundsätzlich dBase IV Datei Format
 BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
@@ -976,6 +993,14 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
 
         if (aName.getLength() > nMaxFieldLength)
         {
+            try
+            {
+                // we have to drop the file because it is corrupted now
+                DropImpl();
+            }
+            catch(const Exception&)
+            {
+            }
             ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column name length for column: ");
             sMsg += aName;
             sMsg += ::rtl::OUString::createFromAscii("!");
@@ -1014,10 +1039,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                 break;
             default:
                 {
-                    ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column type for column: ");
-                    sMsg += aName;
-                    sMsg += ::rtl::OUString::createFromAscii("!");
-                    throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+                    throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid column type for column: ")), aName);
                 }
         }
 
@@ -1035,10 +1057,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                 OSL_ENSURE(nPrecision < 255, "ODbaseTable::Create: Column zu lang!");
                 if (nPrecision > 254)
                 {
-                    ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid precision for column: ");
-                    sMsg += aName;
-                    sMsg += ::rtl::OUString::createFromAscii("!");
-                    throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+                    throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid precision for column: ")), aName);
                 }
                 (*m_pFileStream) << (BYTE) Min((ULONG)nPrecision, 255UL);      //Feldlänge
                 nRecLength += (USHORT)Min((ULONG)nPrecision, 255UL);
@@ -1050,11 +1069,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                            "ODbaseTable::Create: Feldlänge muß größer Nachkommastellen sein!");
                 if (nPrecision <  nScale)
                 {
-                    ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Precision is less than scale for column: ");
-                    sMsg += aName;
-                    sMsg += ::rtl::OUString::createFromAscii("!");
-                    throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
-                    break;
+                    throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Precision is less than scale for column: ")), aName);
                 }
                 if (getBOOL(xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)))) // Currency wird gesondert behandelt
                 {
@@ -1089,10 +1104,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                 break;
             default:
                 {
-                    ::rtl::OUString sMsg = ::rtl::OUString::createFromAscii("Invalid column type for column: ");
-                    sMsg += aName;
-                    sMsg += ::rtl::OUString::createFromAscii("!");
-                    throw SQLException(sMsg,*this,OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HY0000),1000,Any());
+                    throwInvalidColumnType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid column type for column: ")), aName);
                 }
         }
         m_pFileStream->Write(aBuffer, 14);
@@ -1378,8 +1390,7 @@ Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(sal_Int32 _nColumnPos)
 //------------------------------------------------------------------
 double toDouble(const ByteString& rString)
 {
-    int nErrno;
-    return SolarMath::StringToDouble(UniString(rString,gsl_getSystemTextEncoding()).GetBuffer(),',','.',nErrno);
+    return ::rtl::math::stringToDouble( rString, '.', ',', NULL, NULL );
 }
 
 //------------------------------------------------------------------
@@ -1535,7 +1546,9 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                     else
                         aDate = rRow[nPos];
                     char s[9];
-                    sprintf(s,"%04d%02d%02d",
+                    snprintf(s,
+                        sizeof(s),
+                        "%04d%02d%02d",
                         (int)aDate.Year,
                         (int)aDate.Month,
                         (int)aDate.Day);
@@ -1557,9 +1570,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                     // ein const_cast, da GetFormatPrecision am SvNumberFormat nicht const ist, obwohl es das eigentlich
                     // sein koennte und muesste
 
-                    String aString;
-                    SolarMath::DoubleToString(aString,n,'F',nScale,'.');
-                    ByteString aDefaultValue(aString, getConnection()->getTextEncoding());
+                    ByteString aDefaultValue = ::rtl::math::doubleToString( n, rtl_math_StringFormat_F, nScale, '.', NULL, 0);
                     BOOL bValidLength   = sal_False;
                     if (aDefaultValue.Len() <= nLen)
                     {

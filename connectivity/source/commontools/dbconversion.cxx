@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbconversion.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 14:56:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,10 +102,12 @@ using namespace ::com::sun::star::beans;
 ::rtl::OUString DBTypeConversion::toDateString(const Date& rDate)
 {
     sal_Char s[11];
-    sprintf(s,"%04d-%02d-%02d",
-                (int)rDate.Year,
-                (int)rDate.Month,
-                (int)rDate.Day);
+    snprintf(s,
+            sizeof(s),
+            "%04d-%02d-%02d",
+            (int)rDate.Year,
+            (int)rDate.Month,
+            (int)rDate.Day);
     s[10] = 0;
     return ::rtl::OUString::createFromAscii(s);
 }
@@ -113,7 +115,9 @@ using namespace ::com::sun::star::beans;
 ::rtl::OUString DBTypeConversion::toTimeString(const Time& rTime)
 {
     sal_Char s[9];
-    sprintf(s,"%02d:%02d:%02d",
+    snprintf(s,
+            sizeof(s),
+            "%02d:%02d:%02d",
             (int)rTime.Hours,
             (int)rTime.Minutes,
             (int)rTime.Seconds);
@@ -500,62 +504,4 @@ Time DBTypeConversion::toTime(const ::rtl::OUString& _sSQLString)
 }   // namespace dbtools
 //.........................................................................
 
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.17  2001/10/01 11:24:27  oj
- *  #92613# unbound evaluationrow fixed
- *
- *  Revision 1.16  2001/08/06 06:21:03  oj
- *  #89430# overflow corrected
- *
- *  Revision 1.15  2001/05/25 13:09:29  oj
- *  #86839# flush scanner buffer
- *
- *  Revision 1.14  2001/05/11 17:25:49  pl
- *  rtl string api changes
- *
- *  Revision 1.13  2001/03/27 12:19:34  jl
- *  calls to sal_setInt64 hhave been removed
- *
- *  Revision 1.12  2001/03/21 13:37:07  jl
- *  OSL_ENSHURE replaced by OSL_ENSURE
- *
- *  Revision 1.11  2001/03/15 08:45:56  fs
- *  cppuhelper/extract -> comphelper/extract
- *
- *  Revision 1.10  2001/01/03 09:02:13  oj
- *  check month >0 and < 13
- *
- *  Revision 1.9  2000/12/06 12:14:59  oj
- *  #80219# toDays corrected
- *
- *  Revision 1.8  2000/11/30 15:29:40  oj
- *  #80934# standarddate is no longer public
- *
- *  Revision 1.7  2000/11/09 08:46:09  oj
- *  some new methods for db's
- *
- *  Revision 1.6  2000/11/08 09:28:45  oj
- *  forget assignment of return value
- *
- *  Revision 1.5  2000/10/27 07:04:22  fs
- *  corrected the starutil namespace
- *
- *  Revision 1.4  2000/10/27 07:01:07  fs
- *  new: toDate(sal_Int32) / toTime(sal_Int32)
- *
- *  Revision 1.3  2000/10/24 15:00:32  oj
- *  make strings unique for lib's
- *
- *  Revision 1.2  2000/10/19 11:46:15  oj
- *  remove tools from dbtools
- *
- *  Revision 1.1  2000/10/05 08:50:32  fs
- *  moved the files from unotools to here
- *
- *
- *  Revision 1.0 29.09.00 08:17:18  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-18 09:41:25 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,12 +436,13 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rInd
     rStream.Seek(0);
     rStream.Read(&rIndex.m_aHeader,512);
 
+/* OJ: no longer needed
     // Text convertierung
     ByteString aText(rIndex.m_aHeader.db_name);
     //  aText.Convert(rIndex.m_pTable->getConnection()->GetCharacterSet(), m_pTable->getConnection()->getTextEncoding());
     //  aText.Convert(rIndex.m_pTable->getConnection()->GetCharacterSet(), m_pTable->getConnection()->getTextEncoding());
     strcpy(rIndex.m_aHeader.db_name,aText.GetBuffer());
-
+*/
     rIndex.m_nRootPage = rIndex.m_aHeader.db_rootpage;
     rIndex.m_nPageCount = rIndex.m_aHeader.db_pagecount;
     return rStream;
@@ -450,9 +451,11 @@ SvStream& connectivity::dbase::operator >> (SvStream &rStream, ODbaseIndex& rInd
 SvStream& connectivity::dbase::operator << (SvStream &rStream, ODbaseIndex& rIndex)
 {
     rStream.Seek(0);
+/* OJ: no longer needed
     ByteString aText(rIndex.m_aHeader.db_name);
     //  aText.Convert(m_pTable->getConnection()->getTextEncoding(), rIndex.m_pTable->getConnection()->GetCharacterSet());
     strcpy(rIndex.m_aHeader.db_name,aText.GetBuffer());
+*/
     sal_Int32 nWrites = rStream.Write(&rIndex.m_aHeader,512);
     OSL_ENSURE(nWrites == 512,"Write not successful: Wrong header size for dbase index!");
     return rStream;
@@ -669,7 +672,7 @@ BOOL ODbaseIndex::CreateImpl()
     m_aHeader.db_maxkeys = (512 - 8) / (8 + m_aHeader.db_keylen);
 
     ByteString aCol(aName,m_pTable->getConnection()->getTextEncoding());
-    strcpy(m_aHeader.db_name,aCol.GetBuffer());
+    strncpy(m_aHeader.db_name,aCol.GetBuffer(),std::min((USHORT)sizeof(m_aHeader.db_name), aCol.Len()));
     m_aHeader.db_unique  = m_IsUnique ? 1: 0;
     m_aHeader.db_keyrec  = m_aHeader.db_keylen + 8;
 

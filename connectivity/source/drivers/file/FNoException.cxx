@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FNoException.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 07:46:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,10 +133,11 @@ void OSQLAnalyzer::bindParameterRow(OValueRow _pRow)
 sal_Bool OResultSet::isCount() const
 {
     return (m_pParseTree &&
-            m_pParseTree->count() > 2 &&
-            SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist) &&
-            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0),derived_column) &&
-            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0)->getChild(0),general_set_fct)
+            m_pParseTree->count() > 2                                                       &&
+            SQL_ISRULE(m_pParseTree->getChild(2),scalar_exp_commalist)                      &&
+            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0),derived_column)               &&
+            SQL_ISRULE(m_pParseTree->getChild(2)->getChild(0)->getChild(0),general_set_fct) &&
+            m_pParseTree->getChild(2)->getChild(0)->getChild(0)->count() == 4
             );
 }
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conncleanup.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 10:47:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,17 +135,4 @@ namespace dbtools
 //.........................................................................
 
 #endif // _CONNECTIVITY_CONNCLEANUP_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/06/21 14:15:04  oj
- *  #88525# connect as rowlistener to get notified when the rowset changed
- *
- *  Revision 1.1  2001/04/12 09:48:22  fs
- *  initial checkin - helper for automatically disposing a rowset's connection
- *
- *
- *  Revision 1.0 12.04.01 09:36:51  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 07:41:55 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@ namespace connectivity
 
             void throwInvalidDbaseFormat();
             void SAL_CALL renameImpl( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
+            void ODbaseTable::throwInvalidColumnType(const ::rtl::OUString& _sError,const ::rtl::OUString& _sColumnName);
 
         protected:
             virtual void FileClose();

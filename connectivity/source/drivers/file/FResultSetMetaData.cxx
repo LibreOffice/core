@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-16 08:41:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -89,21 +86,18 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-DBG_NAME( file_OResultSetMetaData )
 // -------------------------------------------------------------------------
 OResultSetMetaData::OResultSetMetaData(const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,const ::rtl::OUString& _aTableName,OFileTable*  _pTable)
     : m_xColumns(_rxColumns)
     , m_aTableName(_aTableName)
     , m_pTable(_pTable)
 {
-    DBG_CTOR( file_OResultSetMetaData, NULL );
 }
 
 // -------------------------------------------------------------------------
 OResultSetMetaData::~OResultSetMetaData()
 {
     m_xColumns = NULL;
-    DBG_DTOR( file_OResultSetMetaData, NULL );
 }
 // -----------------------------------------------------------------------------
 void OResultSetMetaData::checkColumnIndex(sal_Int32 column)  throw(SQLException, RuntimeException)

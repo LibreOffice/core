@@ -2,9 +2,9 @@
  *
  *  $RCSfile: YTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-28 10:27:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,11 +245,11 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
 #endif
         );
 
-    if(m_pColumns && !m_pColumns->hasByName(colName))
+    if ( m_pColumns && !m_pColumns->hasByName(colName) )
         throw NoSuchElementException(colName,*this);
 
 
-    if(!isNew())
+    if ( !isNew() )
     {
         // first we have to check what should be altered
         Reference<XPropertySet> xProp;
@@ -257,25 +257,63 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
         // first check the types
         sal_Int32 nOldType = 0,nNewType = 0,nOldPrec = 0,nNewPrec = 0,nOldScale = 0,nNewScale = 0;
 
-        xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))         >>= nOldType;
-        descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))    >>= nNewType;
+        ::dbtools::OPropertyMap& rProp = OMetaConnection::getPropMap();
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))         >>= nOldType;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))    >>= nNewType;
         // and precsions and scale
-        xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))    >>= nOldPrec;
-        descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))>>= nNewPrec;
-        xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))        >>= nOldScale;
-        descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))   >>= nNewScale;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))    >>= nOldPrec;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))>>= nNewPrec;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))        >>= nOldScale;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))   >>= nNewScale;
         // second: check the "is nullable" value
         sal_Int32 nOldNullable = 0,nNewNullable = 0;
-        xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))       >>= nOldNullable;
-        descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))  >>= nNewNullable;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))       >>= nOldNullable;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))  >>= nNewNullable;
 
-        if ( nOldType != nNewType || nOldPrec != nNewPrec || nOldScale != nNewScale || nNewNullable != nOldNullable )
+        // check also the auto_increment
+        sal_Bool bOldAutoIncrement = sal_False,bAutoIncrement = sal_False;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))      >>= bOldAutoIncrement;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
+
+        if (    nOldType != nNewType
+            ||  nOldPrec != nNewPrec
+            ||  nOldScale != nNewScale
+            ||  nNewNullable != nOldNullable
+            ||  bOldAutoIncrement != bAutoIncrement )
+        {
+            // special handling because they change dthe type names to distinguish
+            // if a column should be an auto_incmrement one
+            if ( bOldAutoIncrement != bAutoIncrement )
+            {
+                ::rtl::OUString sTypeName;
+                descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME)) >>= sTypeName;
+
+                static ::rtl::OUString s_sAutoIncrement(RTL_CONSTASCII_USTRINGPARAM("auto_increment"));
+                if ( bAutoIncrement )
+                {
+                    if ( sTypeName.indexOf(s_sAutoIncrement) == -1 )
+                    {
+                        sTypeName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+                        sTypeName += s_sAutoIncrement;
+                    }
+                }
+                else
+                {
+                    sal_Int32 nIndex = 0;
+                    if ( sTypeName.getLength() && (nIndex = sTypeName.indexOf(s_sAutoIncrement)) != -1 )
+                    {
+                        sTypeName = sTypeName.copy(0,nIndex);
+                        descriptor->setPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME),makeAny(sTypeName));
+                    }
+                }
+            }
             alterColumnType(nNewType,colName,descriptor);
+        }
 
         // third: check the default values
         ::rtl::OUString sNewDefault,sOldDefault;
-        xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
-        descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
+        xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
 
         if(sOldDefault.getLength())
         {
@@ -288,13 +326,14 @@ void SAL_CALL OMySQLTable::alterColumnByName( const ::rtl::OUString& colName, co
 
         // now we should look if the name of the column changed
         ::rtl::OUString sNewColumnName;
-        descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sNewColumnName;
+        descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_NAME)) >>= sNewColumnName;
         if ( !sNewColumnName.equalsIgnoreAsciiCase(colName) )
         {
             ::rtl::OUString sSql = getAlterTableColumnPart(colName);
             sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" CHANGE "));
             const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
             sSql += ::dbtools::quoteName(sQuote,colName);
+            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
             sSql += ::dbtools::createStandardColumnPart(descriptor,getConnection());
             executeStatement(sSql);
         }
@@ -317,6 +356,7 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rCo
     sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" CHANGE "));
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
     sSql += ::dbtools::quoteName(sQuote,_rColName);
+    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
 
     OColumn* pColumn = new OColumn(sal_True);
     Reference<XPropertySet> xProp = pColumn;

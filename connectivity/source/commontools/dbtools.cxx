@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-21 14:04:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@
 #ifndef _COM_SUN_STAR_SDBC_XPARAMETERS_HPP_
 #include <com/sun/star/sdbc/XParameters.hpp>
 #endif
-
+#include <algorithm>
 
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
@@ -589,23 +589,261 @@ Reference< XConnection> connectRowset(const Reference< XRowSet>& _rxRowSet, cons
 //------------------------------------------------------------------------------
 Reference< XNameAccess> getTableFields(const Reference< XConnection>& _rxConn,const ::rtl::OUString& _rName)
 {
-    Reference< XTablesSupplier> xSupplyTables(_rxConn, UNO_QUERY);
-    OSL_ENSURE(xSupplyTables.is(), "::getTableFields : invalid connection !");
-        // the conn already said it would support the service sdb::Connection
-    Reference< XNameAccess> xTables( xSupplyTables->getTables());
-    if (xTables.is() && xTables->hasByName(_rName))
-    {
-        Reference< XColumnsSupplier> xTableCols;
-        xTables->getByName(_rName) >>= xTableCols;
-        OSL_ENSURE(xTableCols.is(), "::getTableFields : invalid table !");
-            // the table is expected to support the service sddb::Table, which requires an XColumnsSupplier interface
+    Reference< XComponent > xDummy;
+    return getFieldsByCommandDescriptor( _rxConn, CommandType::TABLE, _rName, xDummy );
+}
 
-        Reference< XNameAccess> xFieldNames(xTableCols->getColumns(), UNO_QUERY);
-        OSL_ENSURE(xFieldNames.is(), "::getTableFields : TableCols->getColumns doesn't export a NameAccess !");
-        return xFieldNames;
+//------------------------------------------------------------------------------
+namespace
+{
+    enum FieldLookupState
+    {
+        HANDLE_TABLE, HANDLE_QUERY, HANDLE_SQL, RETRIEVE_OBJECT, RETRIEVE_COLUMNS, DONE, FAILED
+    };
+}
+
+//------------------------------------------------------------------------------
+Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnection >& _rxConnection,
+    const sal_Int32 _nCommandType, const ::rtl::OUString& _rCommand,
+    Reference< XComponent >& _rxKeepFieldsAlive, SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
+{
+    OSL_PRECOND( _rxConnection.is(), "::dbtools::getFieldsByCommandDescriptor: invalid connection!" );
+    OSL_PRECOND( ( CommandType::TABLE == _nCommandType ) || ( CommandType::QUERY == _nCommandType ) || ( CommandType::COMMAND == _nCommandType ),
+        "::dbtools::getFieldsByCommandDescriptor: invalid command type!" );
+    OSL_PRECOND( _rCommand.getLength(), "::dbtools::getFieldsByCommandDescriptor: invalid command (empty)!" );
+
+    Reference< XNameAccess > xFields;
+
+    // reset the error
+    if ( _pErrorInfo )
+        *_pErrorInfo = SQLExceptionInfo();
+    // reset the ownership holder
+    _rxKeepFieldsAlive.clear();
+
+    // go for the fields
+    try
+    {
+        // some kind of state machine to ease the sharing of code
+        FieldLookupState eState = FAILED;
+        switch ( _nCommandType )
+        {
+            case CommandType::TABLE:
+                eState = HANDLE_TABLE;
+                break;
+            case CommandType::QUERY:
+                eState = HANDLE_QUERY;
+                break;
+            case CommandType::COMMAND:
+                eState = HANDLE_SQL;
+                break;
+        }
+
+        // needed in various states:
+        Reference< XNameAccess > xObjectCollection;
+        Reference< XColumnsSupplier > xSupplyColumns;
+
+        // go!
+        while ( ( DONE != eState ) && ( FAILED != eState ) )
+        {
+            switch ( eState )
+            {
+                case HANDLE_TABLE:
+                {
+                    // initial state for handling the tables
+
+                    // get the table objects
+                    Reference< XTablesSupplier > xSupplyTables( _rxConnection, UNO_QUERY );
+                    if ( xSupplyTables.is() )
+                        xObjectCollection = xSupplyTables->getTables();
+                    // if something went wrong 'til here, then this will be handled in the next state
+
+                    // next state: get the object
+                    eState = RETRIEVE_OBJECT;
+                }
+                break;
+
+                case HANDLE_QUERY:
+                {
+                    // initial state for handling the tables
+
+                    // get the table objects
+                    Reference< XQueriesSupplier > xSupplyQueries( _rxConnection, UNO_QUERY );
+                    if ( xSupplyQueries.is() )
+                        xObjectCollection = xSupplyQueries->getQueries();
+                    // if something went wrong 'til here, then this will be handled in the next state
+
+                    // next state: get the object
+                    eState = RETRIEVE_OBJECT;
+                }
+                break;
+
+                case RETRIEVE_OBJECT:
+                    // here we should have an object (aka query or table) collection, and are going
+                    // to retrieve the desired object
+
+                    // next state: default to FAILED
+                    eState = FAILED;
+
+                    OSL_ENSURE( xObjectCollection.is(), "::dbtools::getFieldsByCommandDescriptor: invalid connection (no sdb.Connection, or no Tables-/QueriesSupplier)!");
+                    if ( xObjectCollection.is() )
+                    {
+                        if ( xObjectCollection.is() && xObjectCollection->hasByName( _rCommand ) )
+                        {
+                            xObjectCollection->getByName( _rCommand ) >>= xSupplyColumns;
+                                // (xSupplyColumns being NULL will be handled in the next state)
+
+                            // next: go for the columns
+                            eState = RETRIEVE_COLUMNS;
+                        }
+                    }
+                    break;
+
+                case RETRIEVE_COLUMNS:
+                    OSL_ENSURE( xSupplyColumns.is(), "::dbtools::getFieldsByCommandDescriptor: could not retrieve the columns supplier!" );
+
+                    // next state: default to FAILED
+                    eState = FAILED;
+
+                    if ( xSupplyColumns.is() )
+                    {
+                        xFields = xSupplyColumns->getColumns();
+                        // that's it
+                        eState = DONE;
+                    }
+                    break;
+
+                case HANDLE_SQL:
+                {
+                    ::rtl::OUString sStatementToExecute( _rCommand );
+
+                    // well, the main problem here is to handle statements which contain a parameter
+                    // If we would simply execute a parametrized statement, then this will fail because
+                    // we cannot supply any parameter values.
+                    // Thus, we try to analyze the statement, and to append a WHERE 0=1 filter criterion
+                    // This should cause every driver to not really execute the statement, but to return
+                    // an empty result set with the proper structure. We then can use this result set
+                    // to retrieve the columns.
+
+                    try
+                    {
+                        Reference< XSQLQueryComposerFactory > xComposerFac( _rxConnection, UNO_QUERY );
+                        Reference< XSQLQueryComposer > xComposer;
+                        if ( xComposerFac.is() )
+                            xComposer = xComposerFac->createQueryComposer( );
+                        if ( xComposer.is() )
+                        {
+                            xComposer->setQuery( sStatementToExecute );
+
+                            // Now set the filter to a dummy restriction which will result in an empty
+                            // result set.
+
+                            // Unfortunately, if the statement already has a non-empty filter it is not
+                            // removed when setting a new one. Instead, the statement set with "setQuery",
+                            // acts as basis, everything added later (setFilter/setOrder and such) is
+                            // _added_. So we need to strip the original WHERE clause (if there is one)
+                            // manually
+                            {
+                                ::rtl::OUString sComplete = xComposer->getComposedQuery( );
+                                    // we norm it: now there's really a "WHERE", not only a "where" or such ...
+
+                                sal_Int32 nWherePos = sComplete.lastIndexOf( ::rtl::OUString::createFromAscii( "WHERE" ) );
+                                if ( -1 < nWherePos )
+                                {   // there indeed already is a where clause
+                                    sComplete = sComplete.copy( 0, nWherePos );
+                                        // this is not correct. The "WHERE" may have been a part of e.g. a filter itself
+                                        // (something like "WHERE <field> = 'WHERE'"), but without an API
+                                        // for _analyzing_ (and not only _composing_) queries, we don't have
+                                        // much of a chance ...
+                                    try
+                                    {
+                                        xComposer->setQuery( sComplete );
+                                    }
+                                    catch( const Exception& )
+                                    {
+                                        // just in case we found the wrong WHERE substring ....
+                                    }
+                                }
+                            }
+
+                            xComposer->setFilter( ::rtl::OUString::createFromAscii( "0=1" ) );
+                            sStatementToExecute = xComposer->getComposedQuery( );
+                        }
+                    }
+                    catch( const Exception& )
+                    {
+                        // silent this error, this was just a try. If we're here, we did not change sStatementToExecute,
+                        // so it will still be _rCommand, which then will be executed without being touched
+                    }
+
+                    // now execute
+                    Reference< XPreparedStatement > xStatement = _rxConnection->prepareStatement( sStatementToExecute );
+                    // transfer ownership of this temporary object to the caller
+                    _rxKeepFieldsAlive = _rxKeepFieldsAlive.query( xStatement );
+
+                    // set the "MaxRows" to 0. This is just in case our attempt to append a 0=1 filter
+                    // failed - in this case, the MaxRows restriction should at least ensure that there
+                    // is no data returned (which would be potentially expensive)
+                    Reference< XPropertySet > xStatementProps( xStatement,UNO_QUERY );
+                    try
+                    {
+                        if ( xStatementProps.is() )
+                            xStatementProps->setPropertyValue(
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxRows" ) ),
+                                makeAny( sal_Int32( 0 ) )
+                            );
+                    }
+                    catch( const Exception& )
+                    {
+                        OSL_ENSURE( sal_False, "::dbtools::getFieldsByCommandDescriptor: could not set the MaxRows!" );
+                        // oh damn. Not much of a chance to recover, we will no retrieve the complete
+                        // full blown result set
+                    }
+
+                    xSupplyColumns = xSupplyColumns.query( xStatement->executeQuery() );
+                    // this should have given us a result set which does not contain any data, but
+                    // the structural information we need
+
+                    // so the next state is to get the columns
+                    eState = RETRIEVE_COLUMNS;
+                }
+                break;
+
+                default:
+                    OSL_ENSURE( sal_False, "::dbtools::getFieldsByCommandDescriptor: oops! unhandled state here!" );
+                    eState = FAILED;
+            }
+        }
+    }
+    catch( const SQLContext& e ) { if ( _pErrorInfo ) *_pErrorInfo = SQLExceptionInfo( e ); }
+    catch( const SQLWarning& e ) { if ( _pErrorInfo ) *_pErrorInfo = SQLExceptionInfo( e ); }
+    catch( const SQLException& e ) { if ( _pErrorInfo ) *_pErrorInfo = SQLExceptionInfo( e ); }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "::dbtools::getFieldsByCommandDescriptor: caught an exception while retrieving the fields!" );
     }
 
-    return Reference< XNameAccess>();
+    return xFields;
+}
+
+//------------------------------------------------------------------------------
+Sequence< ::rtl::OUString > getFieldNamesByCommandDescriptor( const Reference< XConnection >& _rxConnection,
+    const sal_Int32 _nCommandType, const ::rtl::OUString& _rCommand,
+    SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
+{
+    // get the container for the fields
+    Reference< XComponent > xKeepFieldsAlive;
+    Reference< XNameAccess > xFieldContainer = getFieldsByCommandDescriptor( _rxConnection, _nCommandType, _rCommand, xKeepFieldsAlive );
+
+    // get the names of the fields
+    Sequence< ::rtl::OUString > aNames;
+    if ( xFieldContainer.is() )
+        aNames = xFieldContainer->getElementNames();
+
+    // clean up any temporary objects which have been created
+    disposeComponent( xKeepFieldsAlive );
+
+    // outta here
+    return aNames;
 }
 
 //------------------------------------------------------------------------------
@@ -739,11 +977,15 @@ try
             )
         {
             // binaere Suche
-            Property* pResult = (Property*) bsearch(pOldProps + i, (void*)pNewProps, nNewLen, sizeof(Property),
-                &PropertyCompare);
-            if (pResult && (pResult->Attributes == pOldProps[i].Attributes)
-                && ((pResult->Attributes & PropertyAttribute::READONLY) == 0)
-                && (pResult->Type.equals(pOldProps[i].Type)))
+            Property* pResult = ::std::lower_bound(pNewProps, pNewProps + nNewLen,pOldProps[i].Name, ::comphelper::PropertyStringLessFunctor());
+
+//          Property* pResult = (Property*) bsearch(pOldProps + i, (void*)pNewProps, nNewLen, sizeof(Property),
+//              &PropertyCompare);
+            if (pResult
+                && ( pResult != pNewProps + nNewLen && pResult->Name == pOldProps[i].Name )
+                && ( pResult->Attributes == pOldProps[i].Attributes )
+                && ( (pResult->Attributes & PropertyAttribute::READONLY) == 0 )
+                && ( pResult->Type.equals(pOldProps[i].Type)) )
             {   // Attribute stimmen ueberein und Property ist nicht read-only
                 try
                 {
@@ -1108,10 +1350,11 @@ Reference< XSQLQueryComposer> getCurrentSettingsComposer(
     catch(SQLException&)
     {
         xReturn = NULL;
+        throw;
     }
     catch(Exception&)
     {
-        OSL_ENSURE(sal_False, "::getCurrentSettingsComposer : catched an exception !");
+        OSL_ENSURE(sal_False, "::getCurrentSettingsComposer : caught an exception !");
         xReturn = NULL;
     }
 
@@ -1128,43 +1371,43 @@ namespace
 
         bool  supportsSchemasInDataManipulation(  )
         {
-            return m_xMetaData->supportsSchemasInDataManipulation();
+            return m_xMetaData->supportsSchemasInDataManipulation() ? true : false;
         }
         bool  supportsSchemasInProcedureCalls(  )
         {
-            return m_xMetaData->supportsSchemasInProcedureCalls();
+            return m_xMetaData->supportsSchemasInProcedureCalls() ? true : false;
         }
         bool  supportsSchemasInTableDefinitions(  )
         {
-            return m_xMetaData->supportsSchemasInTableDefinitions();
+            return m_xMetaData->supportsSchemasInTableDefinitions() ? true : false;
         }
         bool  supportsSchemasInIndexDefinitions(  )
         {
-            return m_xMetaData->supportsSchemasInIndexDefinitions();
+            return m_xMetaData->supportsSchemasInIndexDefinitions() ? true : false;
         }
         bool  supportsSchemasInPrivilegeDefinitions(  )
         {
-            return m_xMetaData->supportsSchemasInPrivilegeDefinitions();
+            return m_xMetaData->supportsSchemasInPrivilegeDefinitions() ? true : false;
         }
         bool  supportsCatalogsInDataManipulation(  )
         {
-            return m_xMetaData->supportsCatalogsInDataManipulation();
+            return m_xMetaData->supportsCatalogsInDataManipulation() ? true : false;
         }
         bool  supportsCatalogsInProcedureCalls(  )
         {
-            return m_xMetaData->supportsCatalogsInProcedureCalls();
+            return m_xMetaData->supportsCatalogsInProcedureCalls() ? true : false;
         }
         bool  supportsCatalogsInTableDefinitions(  )
         {
-            return m_xMetaData->supportsCatalogsInTableDefinitions();
+            return m_xMetaData->supportsCatalogsInTableDefinitions() ? true : false;
         }
         bool  supportsCatalogsInIndexDefinitions(  )
         {
-            return m_xMetaData->supportsCatalogsInIndexDefinitions();
+            return m_xMetaData->supportsCatalogsInIndexDefinitions() ? true : false;
         }
         bool  supportsCatalogsInPrivilegeDefinitions(  )
         {
-            return m_xMetaData->supportsCatalogsInPrivilegeDefinitions();
+            return m_xMetaData->supportsCatalogsInPrivilegeDefinitions() ? true : false;
         }
     };
 }
@@ -1785,58 +2028,4 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 // -----------------------------------------------------------------------------
 } //namespace connectivity
 // -----------------------------------------------------------------------------
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.47  2002/11/14 07:48:51  oj
- *  #105110# extend createUniqueName with bool param
- *
- *  Revision 1.46  2002/10/07 12:48:11  oj
- *  #i3289# correct table name quoting so that in every situation the correct schema, catalog is used
- *
- *  Revision 1.45  2002/09/13 08:28:02  fs
- *  #103242# implSetObject: handle TypeClass_HYPER
- *
- *  Revision 1.44  2002/08/26 12:35:02  oj
- *  #98671# change type for sequence to VARBINARY
- *
- *  Revision 1.43  2001/12/04 14:34:19  oj
- *  #95553# check if scale is greater than 0
- *
- *  Revision 1.42  2001/10/30 15:26:27  oj
- *  #93939# composeTableName remember values from metadata now
- *
- *  Revision 1.41  2001/09/20 12:51:56  oj
- *  #92232# fixes for BIGINT type
- *
- *  Revision 1.40  2001/08/28 14:36:17  fs
- *  encountered during #74241#: prependContextInfo uses a const SQLException& now
- *
- *  Revision 1.39  2001/08/24 06:02:18  oj
- *  #90015# code corrcetions for some speedup's
- *
- *  Revision 1.38  2001/08/06 15:56:13  fs
- *  #90664# TransferFormComponentProperties: properly check for formatted fields
- *
- *  Revision 1.37  2001/08/06 14:49:22  fs
- *  #87690# +connectRowset
- *
- *  Revision 1.36  2001/06/26 10:09:13  oj
- *  #87808# new method to wrap setObject method
- *
- *  Revision 1.35  2001/06/26 09:27:28  fs
- *  #88392# +implUpdaetObject
- *
- *  Revision 1.34  2001/06/22 10:53:35  oj
- *  #88455# new functions for parameters
- *
- *  Revision 1.33  2001/06/21 11:08:16  oj
- *  #87925# start at 1
- *
- *  Revision 1.32  2001/06/15 09:55:48  fs
- *  #86986# moved css/ui/* to css/ui/dialogs/*
- *
- *  Revision 1.0 29.09.00 08:16:59  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-30 09:44:56 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,10 +172,12 @@ namespace connectivity
     rtl::OUString toDateString(const ::com::sun::star::util::Date& rDate)
     {
         sal_Char s[11];
-        sprintf(s,"%04d-%02d-%02d",
-                    (int)rDate.Year,
-                    (int)rDate.Month,
-                    (int)rDate.Day);
+        snprintf(s,
+                sizeof(s),
+                "%04d-%02d-%02d",
+                (int)rDate.Year,
+                (int)rDate.Month,
+                (int)rDate.Day);
         s[10] = 0;
         return rtl::OUString::createFromAscii(s);
     }
@@ -184,7 +186,9 @@ namespace connectivity
     rtl::OUString toTimeString(const ::com::sun::star::util::Time& rTime)
     {
         sal_Char s[9];
-        sprintf(s,"%02d:%02d:%02d",
+        snprintf(s,
+                sizeof(s),
+                "%02d:%02d:%02d",
                 (int)rTime.Hours,
                 (int)rTime.Minutes,
                 (int)rTime.Seconds);
@@ -196,13 +200,15 @@ namespace connectivity
     rtl::OUString toDateTimeString(const ::com::sun::star::util::DateTime& rDateTime)
     {
         sal_Char s[21];
-        sprintf(s,"%04d-%02d-%02d %02d:%02d:%02d",
-                    (int)rDateTime.Year,
-                    (int)rDateTime.Month,
-                    (int)rDateTime.Day,
-                    (int)rDateTime.Hours,
-                    (int)rDateTime.Minutes,
-                    (int)rDateTime.Seconds);
+        snprintf(s,
+                sizeof(s),
+                "%04d-%02d-%02d %02d:%02d:%02d",
+                (int)rDateTime.Year,
+                (int)rDateTime.Month,
+                (int)rDateTime.Day,
+                (int)rDateTime.Hours,
+                (int)rDateTime.Minutes,
+                (int)rDateTime.Seconds);
         s[20] = 0;
         return rtl::OUString::createFromAscii(s);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-08 10:20:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,6 +219,7 @@ namespace connectivity
             sal_Bool                                    m_bFetchData;           // true when SQLGetaData can be called in any order or when fetching data for m_aRow
             sal_Bool                                    m_bRowInserted;
             sal_Bool                                    m_bRowDeleted;
+            sal_Bool                                    m_bUseFetchScroll;
 
             sal_Bool  isBookmarkable()          const;
             sal_Int32 getResultSetConcurrency() const;

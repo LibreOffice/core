@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VDescriptor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:06:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,13 +138,4 @@ namespace connectivity
     }
 }
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/03/19 07:33:30  fs
- *  initial checkin - implementation of ODescriptor
- *
- *
- *  Revision 1.0 19.03.01 08:21:59  fs
- ************************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZDriverWrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 08:43:23 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,16 +128,4 @@ namespace connectivity
 
 #endif // _CONNECTIVITY_CPOOL_ZDRIVERWRAPPER_HXX_
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2001/06/19 10:53:59  fs
- *  #88434# overload queryInterface to delegate calls to the aggregate
- *
- *  Revision 1.1  2001/05/25 10:56:23  fs
- *  initial checkin - driver rerouting it's connect through the connection pool
- *
- *
- *  Revision 1.0 25.05.01 11:03:45  fs
- ************************************************************************/
 

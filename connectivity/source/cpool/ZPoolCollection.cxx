@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZPoolCollection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 08:43:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 16:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,13 +137,23 @@ OPoolCollection::OPoolCollection(const Reference< XMultiServiceFactory >&   _rxF
     OSL_ENSURE(m_xProxyFactory.is(), "OConnectionPool::OConnectionPool: could not create a proxy factory!");
 
     Reference<XPropertySet> xProp(getConfigPoolRoot(),UNO_QUERY);
-    if(xProp.is())
+    if ( xProp.is() )
         xProp->addPropertyChangeListener(getEnablePoolingNodeName(),this);
+    // attach as desktop listener to know when we have to release our pools
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+
+        m_xDesktop = Reference< ::com::sun::star::frame::XDesktop>( m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop") ), UNO_QUERY);
+        if ( m_xDesktop.is() )
+            m_xDesktop->addTerminateListener(this);
+
+    }
+    osl_decrementInterlockedCount( &m_refCount );
 }
 // -----------------------------------------------------------------------------
 OPoolCollection::~OPoolCollection()
 {
-    clearConnectionPools();
+    clearConnectionPools(sal_False);
 }
 // -----------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL OPoolCollection::getConnection( const ::rtl::OUString& _rURL ) throw(SQLException, RuntimeException)
@@ -346,12 +356,12 @@ sal_Bool OPoolCollection::isPoolingEnabledByUrl(const ::rtl::OUString& _sUrl,
     return bEnabled;
 }
 // -----------------------------------------------------------------------------
-void OPoolCollection::clearConnectionPools()
+void OPoolCollection::clearConnectionPools(sal_Bool _bDispose)
 {
     OConnectionPools::const_iterator aIter = m_aPools.begin();
     while(aIter != m_aPools.end())
     {
-        aIter->second->clear();
+        aIter->second->clear(_bDispose);
         aIter->second->release();
         ::rtl::OUString sKeyValue = aIter->first;
         ++aIter;
@@ -510,21 +520,39 @@ Any OPoolCollection::getNodeValue(const ::rtl::OUString& _rPath,const Reference<
     return aReturn;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OPoolCollection::disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL OPoolCollection::queryTermination( const EventObject& Event ) throw (::com::sun::star::frame::TerminationVetoException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-    Reference<XPropertySet> xProp(Source.Source,UNO_QUERY);
-    if(Source.Source == m_xConfigNode)
-    {
-        if(xProp.is())
-            xProp->removePropertyChangeListener(getEnablePoolingNodeName(),this);
-        m_xConfigNode = NULL;
-    }
-    else if(xProp.is())
-        xProp->removePropertyChangeListener(getEnableNodeName(),this);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL OPoolCollection::notifyTermination( const EventObject& Event ) throw (RuntimeException)
+{
+    clearConnectionPools(sal_True);
+    m_xDesktop = NULL;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OPoolCollection::disposing( const EventObject& Source ) throw (RuntimeException)
+{
+    MutexGuard aGuard(m_aMutex);
+    if ( m_xDesktop == Source.Source )
+    {
+        clearConnectionPools(sal_True);
+        m_xDesktop = NULL;
+    }
+    else
+    {
+        Reference<XPropertySet> xProp(Source.Source,UNO_QUERY);
+        if(Source.Source == m_xConfigNode)
+        {
+            if ( xProp.is() )
+                xProp->removePropertyChangeListener(getEnablePoolingNodeName(),this);
+            m_xConfigNode = NULL;
+        }
+        else if ( xProp.is() )
+            xProp->removePropertyChangeListener(getEnableNodeName(),this);
+    }
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     if(evt.Source == m_xConfigNode)
@@ -538,7 +566,7 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
             OConnectionPools::iterator aIter = m_aPools.begin();
             for(;aIter != m_aPools.end();++aIter)
             {
-                aIter->second->clear();
+                aIter->second->clear(sal_False);
                 aIter->second->release();
             }
             m_aPools.clear();
@@ -569,7 +597,7 @@ void SAL_CALL OPoolCollection::propertyChange( const ::com::sun::star::beans::Pr
             OConnectionPools::iterator aFind = m_aPools.find(sThisDriverName);
             if(aFind != m_aPools.end() && aFind->second)
             {
-                aFind->second->clear();
+                aFind->second->clear(sal_False);
                 aFind->second->release();
                 m_aPools.erase(aFind);
             }
