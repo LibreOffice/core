@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:37:50 $
+#   last change: $Author: vg $ $Date: 2003-05-22 08:55:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,6 @@ TARGETOBJS=   $(OBJ)$/app.obj					\
             $(OBJ)$/ssoinit.obj				\
             $(OBJ)$/configinit.obj				\
             $(OBJ)$/javainteractionhandler.obj	\
-            $(OBJ)$/oempreload.obj			\
             $(OBJ)$/testtool.obj			\
             $(OBJ)$/checkinstall.obj		\
             $(OBJ)$/cmdlinehelp.obj
@@ -120,8 +119,8 @@ RESLIB1SRSFILES=	$(SRS)$/desktop.srs
 APP1TARGET=so$/$(TARGET)
 APP1STDLIBS=			\
     $(VCLLIB)			\
-    $(SVLLIB)			\
-    $(SVTOOLLIB)			\
+    $(SVLLIB)           \
+    $(SVTOOLLIB)            \
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
@@ -221,7 +220,8 @@ APP5TARGET=soffice
 APP5STDLIBS=			\
     $(VCLLIB)			\
     $(SVLLIB)			\
-    $(UNOTOOLSLIB)		\
+    $(SVTOOLLIB)        \
+    $(UNOTOOLSLIB)      \
     $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
     $(UCBHELPERLIB)		\
