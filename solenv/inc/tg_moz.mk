@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_moz.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:45:02 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:01:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,14 @@ CPUCFG=_solaris32.cfg
 
 .IF "$(OS)"=="LINUX"
 CPUCFG=_linux.cfg
+.ENDIF
+
+.IF "$(OS)"=="FREEBSD"
+CPUCFG=_freebsd.cfg
+.ENDIF
+
+.IF "$(OS)"=="NETBSD"
+CPUCFG=_netbsd.cfg
 .ENDIF
 
 .IF "$(GEN_PRCPUCFG)"!=""
