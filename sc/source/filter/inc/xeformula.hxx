@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeformula.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:09:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,8 @@ enum XclExpFomulaType
 
 // ----------------------------------------------------------------------------
 
+class ScRangeList;
+struct XclAddress;
 class XclExpFmlaCompImpl;
 
 /** The formula compiler to create Excel token arrays from Calc token arrays. */
@@ -167,7 +169,7 @@ public:
     XclExpTokenArrayRef CreateFormula( XclExpFomulaType eType, const ScRange& rScRange );
 
     /** Creates and returns the token array for a cell range list. */
-    XclExpTokenArrayRef CreateFormula( XclExpFomulaType eType, const ScRangeList& rRangeList );
+    XclExpTokenArrayRef CreateFormula( XclExpFomulaType eType, const ScRangeList& rScRanges );
 
     /** Creates a single error token containing the passed error code. */
     XclExpTokenArrayRef CreateErrorFormula( sal_uInt8 nErrCode );
@@ -175,8 +177,7 @@ public:
     /** Creates a single token for a special cell reference.
         @descr  This is used for array formulas and shared formulas (token tExp),
             and multiple operation tables (token tTbl). */
-    XclExpTokenArrayRef CreateSpecialRefFormula( sal_uInt8 nTokenId,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow );
+    XclExpTokenArrayRef CreateSpecialRefFormula( sal_uInt8 nTokenId, const XclAddress& rXclPos );
 
     /** Creates a single tNameXR token for a reference to an external name.
         @descr  This is used i.e. for linked macros in push buttons. */
