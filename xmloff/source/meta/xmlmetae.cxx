@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-11 16:48:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ using namespace ::xmloff::token;
 #define PROP_EDITINGDURATION "EditingDuration"
 
 #define PROP_CHARLOCALE     "CharLocale"
+const sal_Char *sOpenOfficeOrgProject ="OpenOffice.org_project";
 
 
 //-------------------------------------------------------------------------
@@ -272,25 +273,75 @@ rtl::OUString lcl_GetProductName()
     //  get the correct product name from the configuration
 
     rtl::OUStringBuffer aName;
+
+    // First product: branded name + version
+    // version is <product_versions>_<product_extension>$<platform>
     utl::ConfigManager* pMgr = utl::ConfigManager::GetConfigManager();
     if (pMgr)
     {
+        sal_Bool bValid = sal_True;
+        // plain product name
         rtl::OUString aValue;
-        uno::Any aAny = pMgr->GetDirectConfigProperty(utl::ConfigManager::PRODUCTNAME);
+        uno::Any aAny = pMgr->GetDirectConfigProperty(
+                                            utl::ConfigManager::PRODUCTNAME);
         if ( (aAny >>= aValue) && aValue.getLength() )
-            aName.append( aValue ).append( (sal_Unicode)' ' );
+        {
+            aName.append( aValue.replace( ' ', '_' ) );
+            aName.append( (sal_Unicode)'/' );
 
-        aAny = pMgr->GetDirectConfigProperty(utl::ConfigManager::PRODUCTVERSION);
-        if ( (aAny >>= aValue) && aValue.getLength() )
-            aName.append( aValue ).append( (sal_Unicode)' ' );
+            aAny = pMgr->GetDirectConfigProperty(
+                                        utl::ConfigManager::PRODUCTVERSION);
+            if ( (aAny >>= aValue) && aValue.getLength() )
+            {
+                aName.append( aValue.replace( ' ', '_' ) );
 
-        aAny = pMgr->GetDirectConfigProperty(utl::ConfigManager::PRODUCTEXTENSION);
-        if ( (aAny >>= aValue) && aValue.getLength() )
-            aName.append( aValue ).append( (sal_Unicode)' ' );
+                aAny = pMgr->GetDirectConfigProperty(
+                                        utl::ConfigManager::PRODUCTEXTENSION);
+                if ( (aAny >>= aValue) && aValue.getLength() )
+                {
+                    aName.append( (sal_Unicode)'_' );
+                    aName.append( aValue.replace( ' ', '_' ) );
+                }
+            }
+
+            aName.append( (sal_Unicode)'$' );
+            aName.append( ::rtl::OUString::createFromAscii(
+                                    TOOLS_INETDEF_OS ).replace( ' ', '_' ) );
+
+            aName.append( (sal_Unicode)' ' );
+        }
     }
-    aName.append( (sal_Unicode)'(' );
-    aName.appendAscii( TOOLS_INETDEF_OS );
-    aName.append( (sal_Unicode)')' );
+
+    // second product: OpenOffice.org_project/<build_information>
+    // build_information has '(' and '[' encoded as '$', ')' and ']' ignored
+    // and ':' replaced by '-'
+    {
+        aName.appendAscii( sOpenOfficeOrgProject );
+        aName.append( (sal_Unicode)'/' );
+        ::rtl::OUString aDefault;
+        ::rtl::OUString aBuildId( utl::Bootstrap::getBuildIdData( aDefault ) );
+        for( sal_Int32 i=0; i < aBuildId.getLength(); i++ )
+        {
+            sal_Unicode c = aBuildId[i];
+            switch( c )
+            {
+            case '(':
+            case '[':
+                aName.append( (sal_Unicode)'$' );
+                break;
+            case ')':
+            case ']':
+                break;
+            case ':':
+                aName.append( (sal_Unicode)'-' );
+                break;
+            default:
+                aName.append( c );
+                break;
+            }
+        }
+    }
+
 
     return aName.makeStringAndClear();
 }
@@ -302,21 +353,13 @@ void SfxXMLMetaExport::Export()
     rtl::OUString sElem, sSubElem, sAttrName, sValue;
     uno::Any aPropVal;
 
-    //  generator (exported only)
+    //  generator
+    // first token: real product name + version
     sValue = lcl_GetProductName();
     {
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_META, XML_GENERATOR,
                                   sal_True, sal_True );
         rExport.Characters( sValue );
-    }
-
-    //  build-id as comment
-    if (rExport.GetExtDocHandler().is())
-    {
-        rtl::OUString aDefault;
-        sValue = utl::Bootstrap::getBuildIdData( aDefault );
-        if ( sValue.getLength() )
-            rExport.GetExtDocHandler()->comment( sValue );
     }
 
     //  document title
@@ -357,8 +400,6 @@ void SfxXMLMetaExport::Export()
     aPropVal >>= sKeywords;
     if ( sKeywords.getLength() )
     {
-        SvXMLElementExport aElem( rExport, XML_NAMESPACE_META, XML_KEYWORDS,
-                                  sal_True, sal_True );
         sal_Int32 nTokenIndex = 0;
         do
         {
@@ -464,7 +505,7 @@ void SfxXMLMetaExport::Export()
         if ( sReloadURL.getLength() )
         {
             rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
-                                  INetURLObject::AbsToRel( sReloadURL) );
+                                  rExport.GetRelativeReference( sReloadURL) );
         }
 
         aPropVal = xInfoProp->getPropertyValue(
@@ -497,7 +538,7 @@ void SfxXMLMetaExport::Export()
 
         //  template URL
         rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
-                              INetURLObject::AbsToRel(sTplPath) );
+                              rExport.GetRelativeReference(sTplPath) );
 
         //  template name
         aPropVal = xInfoProp->getPropertyValue(
