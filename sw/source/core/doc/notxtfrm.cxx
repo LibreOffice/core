@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-11-01 13:33:00 $
+ *  last change: $Author: od $ $Date: 2002-11-29 15:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,53 +976,8 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                 else if ( pSh->VisArea().IsOver( aRect ) &&
                      OUTDEV_WINDOW == pSh->GetOut()->GetOutDevType() )
                 {
-                    const GraphicObject& rGrfObj = pNd->GetGrfObj();
-                    BOOL bSizeUnequal;
-                    if( rGrfObj.IsAnimated() )
-                        pSh->GetWin()->Invalidate( aRect.SVRect() );
-                    else if ( pNd->IsTransparent() ||
-                              (bSizeUnequal = (Frm().SSize() != Prt().SSize())))
-                    {
-                        if ( bSizeUnequal )
-                        {
-                            //Wieder mal die Umrandungen...
-                            aRect.Pos().X() = Max( long(0),
-                                            (long)(aRect.Left() - 20) );
-                            aRect.Pos().Y() = Max( long(0),
-                                            (long)(aRect.Top()  - 20) );
-                            aRect.SSize().Width() += 40;
-                            aRect.SSize().Height() += 40;
-                        }
-                        //virtuelles device erzeugen und einstellen.
-                        OutputDevice *pOld = pSh->GetOut();
-                        VirtualDevice *pVout = new VirtualDevice( *pOld );
-                        MapMode aMapMode( pOld->GetMapMode() );
-                        pVout->SetMapMode( aMapMode );
-                        if( pVout->SetOutputSize( aRect.SSize() ) )
-                        {
-//                          pVout->SetPen( pOld->GetPen() );
-                            pVout->SetLineColor(pOld->GetLineColor());
-//                          pVout->SetFillInBrush( pOld->GetFillInBrush() );
-                            pVout->SetFillColor(pOld->GetFillColor());
-                            Point aOrigin( aRect.Pos() );
-                            aOrigin.X() = -aOrigin.X(); aOrigin.Y() = -aOrigin.Y();
-                            aMapMode.SetOrigin( aOrigin );
-                            pVout->SetMapMode( aMapMode );
-                            ::SetOutDev( pSh, pVout );
-                            pSh->GetLayout()->Paint( aRect );
-                            pOld->DrawOutDev( aRect.Pos(), aRect.SSize(),
-                                              aRect.Pos(), aRect.SSize(), *pVout );
-                            ::SetOutDev( pSh, pOld );
-                        }
-                        else
-                            pSh->Paint( aRect.SVRect() );
-                        delete pVout;
-                    }
-                    else
-                    {
-                        aRect = Prt(); aRect += Frm().Pos();
-                        Paint( aRect );
-                    }
+                    // OD 27.11.2002 #105519# - invalidate instead of painting
+                    pSh->GetWin()->Invalidate( aRect.SVRect() );
                 }
 
                 pSh = (ViewShell *)pSh->GetNext();
