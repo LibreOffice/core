@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsb.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:19:34 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:56:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,10 @@
 #ifndef SD_OBJECT_BAR_MANAGER_HXX
 #include "ObjectBarManager.hxx"
 #endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
+#include "LayerTabBar.hxx"
 #include "sdabstdlg.hxx" //CHINA001
 #include "dlgfield.hrc" //CHINA001
 #include "ins_page.hrc" //CHINA001
@@ -218,9 +222,10 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                         || aLayerName.Len()==0 )
                     {
                         // Name ist schon vorhanden
-                        WarningBox aWarningBox( &GetViewFrame()->GetWindow(),
-                                                WinBits( WB_OK ),
-                                                String(SdResId( STR_WARN_NAME_DUPLICATE ) ) );
+                        WarningBox aWarningBox (
+                            GetParentWindow(),
+                            WinBits( WB_OK ),
+                            String(SdResId( STR_WARN_NAME_DUPLICATE)));
                         aWarningBox.Execute();
                     }
                     else
@@ -311,8 +316,8 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             }
 
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
-            USHORT nCurPage = aLayerTab.GetCurPageId();
-            String aLayerName = aLayerTab.GetPageText(nCurPage);
+            USHORT nCurPage = GetLayerTabControl()->GetCurPageId();
+            String aLayerName = GetLayerTabControl()->GetPageText(nCurPage);
             String aOldLayerName( aLayerName );
             SdrLayer* pLayer = rLayerAdmin.GetLayer(aLayerName, FALSE);
             const SfxItemSet* pArgs = rReq.GetArgs();
@@ -371,9 +376,10 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                          aLayerName != aOldLayerName) || aLayerName.Len()==0 )
                     {
                         // Name ist schon vorhanden
-                        WarningBox aWarningBox( &GetViewFrame()->GetWindow(),
-                                                WinBits( WB_OK ),
-                                                String( SdResId( STR_WARN_NAME_DUPLICATE ) ) );
+                        WarningBox aWarningBox (
+                            GetParentWindow(),
+                            WinBits( WB_OK ),
+                            String( SdResId( STR_WARN_NAME_DUPLICATE)));
                         aWarningBox.Execute();
                     }
                     else
@@ -393,7 +399,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                     case RET_DELETE :
                         pDrView->DeleteLayer (((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ());
-                        aLayerTab.RemovePage(nCurPage);
+                        GetLayerTabControl()->RemovePage(nCurPage);
 
                     default :
                         delete pDlg;
@@ -453,7 +459,8 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 pDrView->EndTextEdit();
             }
 
-            aLayerTab.StartEditMode( aLayerTab.GetCurPageId() );
+            GetLayerTabControl()->StartEditMode(
+                GetLayerTabControl()->GetCurPageId() );
 
             Cancel();
             rReq.Ignore ();
@@ -657,9 +664,9 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 pOutl->SetUpdateMode( FALSE );
 
                 Point aPos;
-                Rectangle aRect( aPos, pWindow->GetOutputSizePixel() );
+                Rectangle aRect( aPos, GetActiveWindow()->GetOutputSizePixel() );
                 aPos = aRect.Center();
-                aPos = pWindow->PixelToLogic(aPos);
+                aPos = GetActiveWindow()->PixelToLogic(aPos);
                 aPos.X() -= aSize.Width() / 2;
                 aPos.Y() -= aSize.Height() / 2;
 
@@ -695,7 +702,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     //CHINA001 SdModifyFieldDlg aDlg( pWindow, pFldItem->GetField(), pOLV->GetAttribs() );
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
                     DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
-                    AbstractSdModifyFieldDlg* pDlg = pFact->CreateSdModifyFieldDlg(ResId( DLG_FIELD_MODIFY ), pWindow, pFldItem->GetField(), pOLV->GetAttribs() );
+                    AbstractSdModifyFieldDlg* pDlg = pFact->CreateSdModifyFieldDlg(ResId( DLG_FIELD_MODIFY ), GetActiveWindow(), pFldItem->GetField(), pOLV->GetAttribs() );
                     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     if( pDlg->Execute() == RET_OK ) //CHINA001 if( aDlg.Execute() == RET_OK )
                     {
@@ -863,18 +870,26 @@ IMPL_LINK( DrawViewShell, RenameSlideHdl, AbstractSvxNameDialog*, pDialog )
              || GetDocSh()->IsNewPageNameValid( aNewName ) );
 }
 
-void DrawViewShell::ModifyLayer( SdrLayer* pLayer, String& rLayerName, bool bIsVisible, bool bIsLocked, bool bIsPrintable )
+
+
+
+void DrawViewShell::ModifyLayer (
+    SdrLayer* pLayer,
+    String& rLayerName,
+    bool bIsVisible,
+    bool bIsLocked,
+    bool bIsPrintable)
 {
     if( pLayer )
     {
 
-        const USHORT nPageCount = aLayerTab.GetPageCount();
+        const USHORT nPageCount = GetLayerTabControl()->GetPageCount();
         USHORT nCurPage = 0;
         USHORT nPos;
         for( nPos = 0; nPos < nPageCount; nPos++ )
         {
-            USHORT nId = aLayerTab.GetPageId( nPos );
-            if( pLayer->GetName() == aLayerTab.GetPageText( nId ) )
+            USHORT nId = GetLayerTabControl()->GetPageId( nPos );
+            if( pLayer->GetName() == GetLayerTabControl()->GetPageText( nId ) )
             {
                 nCurPage = nId;
                 break;
@@ -888,7 +903,7 @@ void DrawViewShell::ModifyLayer( SdrLayer* pLayer, String& rLayerName, bool bIsV
 
         GetDoc()->SetChanged(TRUE);
 
-        aLayerTab.SetPageText(nCurPage, rLayerName);
+        GetLayerTabControl()->SetPageText(nCurPage, rLayerName);
 
         TabBarPageBits nBits = 0;
 
@@ -898,13 +913,15 @@ void DrawViewShell::ModifyLayer( SdrLayer* pLayer, String& rLayerName, bool bIsV
             nBits = TPB_SPECIAL;
         }
 
-        aLayerTab.SetPageBits(nCurPage, nBits);
+        GetLayerTabControl()->SetPageBits(nCurPage, nBits);
 
-        GetViewFrame()->GetDispatcher()->Execute(SID_SWITCHLAYER,
-                        SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+        GetViewFrame()->GetDispatcher()->Execute(
+            SID_SWITCHLAYER,
+            SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 
         // Call Invalidate at the form shell.
-        FmFormShell* pFormShell = GetObjectBarManager().GetFormShell();
+        FmFormShell* pFormShell = static_cast<FmFormShell*>(
+            GetObjectBarManager().GetObjectBar(RID_FORMLAYER_TOOLBOX));
         if (pFormShell != NULL)
             pFormShell->Invalidate();
     }
