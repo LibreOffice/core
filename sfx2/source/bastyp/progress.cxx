@@ -2,9 +2,9 @@
  *
  *  $RCSfile: progress.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:33:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,9 @@
 #include "request.hxx"
 #include "frame.hxx"
 #include "viewfrm.hxx"
-//#include "ipfrm.hxx"
 #include "viewsh.hxx"
 #include "objsh.hxx"
 #include "app.hxx"
-#include "stbmgr.hxx"
 #include "dispatch.hxx"
 #include "sfxtypes.hxx"
 #include "docfile.hxx"
@@ -494,7 +492,7 @@ BOOL SfxProgress::SetState
         else if ( pImp->pView )
         {
             pImp->pWorkWin = SFX_APP()->GetWorkWindow_Impl( pImp->pView );
-            if( pImp->pWorkWin )
+            if ( pImp->pWorkWin )
                 pImp->xStatusInd = pImp->pWorkWin->GetStatusIndicator();
         }
 
