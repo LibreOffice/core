@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:11:35 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 14:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2857,7 +2857,11 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 #97824#  Need to make sure that the correct layer ordering is
                 applied.
                 */
-                pWWZOrder->InsertEscherObject(pObject, pF->nSpId);
+                // --> OD 2004-12-13 #117915# - pass information, if object
+                // is in page header|footer to method.
+                pWWZOrder->InsertEscherObject( pObject, pF->nSpId,
+                                               bIsHeader || bIsFooter );
+                // <--
             }
             else
             {
@@ -3089,7 +3093,13 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             // in SwWW8ImplReader::LoadDoc1() die Z-Order festgelegt werden
             // kann !!!
             if (!rpOurNewObject->IsInserted())
-                pWWZOrder->InsertEscherObject(rpOurNewObject,pF->nSpId);
+            {
+                // --> OD 2004-12-13 #117915# - pass information, if object
+                // is in page header|footer to method.
+                pWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
+                                               bIsHeader || bIsFooter );
+                // <--
+            }
         }
 
         // Box-0 erhaelt den Text fuer die ganze Kette!
@@ -3227,7 +3237,13 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         // Das Kontakt-Objekt MUSS in die Draw-Page gesetzt werden, damit in
         // SwWW8ImplReader::LoadDoc1() die Z-Order festgelegt werden kann !!!
         if (!rpOurNewObject->IsInserted())
-            pWWZOrder->InsertEscherObject(rpOurNewObject,pF->nSpId);
+        {
+            // --> OD 2004-12-13 #117915# - pass information, if object
+            // is in page header|footer to method.
+            pWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
+                                           bIsHeader || bIsFooter );
+            // <--
+        }
     }
     return pRetFrmFmt;
 }
