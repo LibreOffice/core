@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:25:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 09:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2959,7 +2959,7 @@ class EventsNameReplace_Impl:
             if ((nPropId == PROPERTY_ID_TARGET_URL || nPropId == PROPERTY_ID_IMAGE_URL) && aVal.Len())
             {
                 INetURLObject aDocURL( getDocumentURL() );
-                aUserVal = URIHelper::SmartRel2Abs( aDocURL, aVal, Link(), false, true, INetURLObject::ENCODE_ALL, INetURLObject::DECODE_TO_IURI );
+                aUserVal = URIHelper::SmartRel2Abs( aDocURL, aVal, Link(), false, true, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_TO_IURI );
             }
 
             Any aValue;
