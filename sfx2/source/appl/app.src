@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:22:24 $
+ *  last change: $Author: kz $ $Date: 2004-05-20 21:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3842,14 +3842,14 @@ ToolBox RID_ENVTOOLBOX
 
 ImageList RID_DEFAULTIMAGELIST_SC
 {
-    ImageBitmap = Bitmap { FILE = "sc_out.bmp" ; };
+    Prefix = "sc";
     MaskColor = IMAGE_STDBTN_COLOR ;
     IMAGE_ID_LIST
 };
 
 ImageList RID_DEFAULTIMAGELIST_LC
 {
-    ImageBitmap = Bitmap { FILE = "lc_out.bmp" ; };
+    Prefix = "lc";
     MaskColor = IMAGE_STDBTN_COLOR ;
     IMAGE_ID_LIST
 };
