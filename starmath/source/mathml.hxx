@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-14 08:23:34 $
+ *  last change: $Author: mib $ $Date: 2001-10-19 14:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,13 @@
 
 class SfxMedium;
 class SvStorage;
-namespace com { namespace sun { namespace star { namespace io {
-    class XInputStream;
-    class XOutputStream;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace io {
+        class XInputStream;
+        class XOutputStream; }
+        namespace beans { XPropertySet; }
+} } }
+
 
 class SmXMLWrapper
 {
@@ -119,6 +122,8 @@ private:
             xComponent,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pComponentName );
     sal_Bool WriteThroughComponent(
         SvStorage* pStorage,
@@ -127,6 +132,8 @@ private:
         const sal_Char* pStreamName,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::lang::XMultiServiceFactory > & rFactory,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > & rPropSet,
         const sal_Char* pComponentName,
         sal_Bool bCompress=sal_True );
 };

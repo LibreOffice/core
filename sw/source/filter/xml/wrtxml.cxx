@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-29 09:26:57 $
+ *  last change: $Author: mib $ $Date: 2001-10-19 14:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _XMLEOHLP_HXX
 #include <svx/xmleohlp.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
+#include <svtools/saveopt.hxx>
 #endif
 
 #ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
@@ -213,6 +216,9 @@ sal_uInt32 SwXMLWriter::_Write()
         { "WrittenNumberStyles", sizeof("WrittenNumberStyles")-1, 0,
               &::getCppuType((uno::Sequence<sal_Int32> *)0),
               beans::PropertyAttribute::MAYBEVOID, 0},
+        { "UsePrettyPrinting", sizeof("UsePrettyPrinting")-1, 0,
+              &::getBooleanCppuType(),
+              beans::PropertyAttribute::MAYBEVOID, 0},
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -222,6 +228,7 @@ sal_uInt32 SwXMLWriter::_Write()
     // create XStatusIndicator
     uno::Reference<task::XStatusIndicator> xStatusIndicator;
 
+    uno::Any aAny;
     if (bShowProgress)
     {
         try
@@ -259,7 +266,6 @@ sal_uInt32 SwXMLWriter::_Write()
             xStatusIndicator->start(SW_RESSTR( STR_STATSTR_SWGWRITE),
                                     nProgressRange);
         }
-        uno::Any aAny;
         aAny <<= nProgressRange;
         OUString sProgressRange(RTL_CONSTASCII_USTRINGPARAM("ProgressRange"));
         xInfoSet->setPropertyValue(sProgressRange, aAny);
@@ -268,6 +274,11 @@ sal_uInt32 SwXMLWriter::_Write()
         OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM("ProgressMax"));
         xInfoSet->setPropertyValue(sProgressMax, aAny);
     }
+    SvtSaveOptions aSaveOpt;
+    OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting"));
+    sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
+    aAny.setValue( &bUsePrettyPrinting, ::getBooleanCppuType() );
+    xInfoSet->setPropertyValue( sUsePrettyPrinting, aAny );
 
     // filter arguments
     // - graphics + object resolver for styles + content

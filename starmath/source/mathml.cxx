@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-12 11:38:16 $
+ *  last change: $Author: mib $ $Date: 2001-10-19 14:27:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ one go*/
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
+#include <svtools/saveopt.hxx>
+#endif
 #ifndef _SFXDOCFILE_HXX
 #include <sfx2/docfile.hxx>
 #endif
@@ -143,6 +146,12 @@ one go*/
 
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COMPHELPER_GENERICPROPERTYSET_HXX_
+#include <comphelper/genericpropertyset.hxx>
 #endif
 
 #ifndef _SFX_ITEMPROP_HXX
@@ -665,6 +674,7 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
     Reference<io::XOutputStream> xOutputStream,
     Reference<XComponent> xComponent,
     Reference<lang::XMultiServiceFactory> & rFactory,
+    Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pComponentName
     )
 {
@@ -687,8 +697,9 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
     // prepare arguments (prepend doc handler to given arguments)
     Reference<xml::sax::XDocumentHandler> xDocHandler( xSaxWriter,UNO_QUERY);
 
-    Sequence<Any> aArgs( 1 );
+    Sequence<Any> aArgs( 2 );
     aArgs[0] <<= xDocHandler;
+    aArgs[1] <<= rPropSet;
 
     // get filter component
     Reference< document::XExporter > xExporter(
@@ -722,6 +733,7 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
     Reference<XComponent> xComponent,
     const sal_Char* pStreamName,
     Reference<lang::XMultiServiceFactory> & rFactory,
+    Reference<beans::XPropertySet> & rPropSet,
     const sal_Char* pComponentName,
     sal_Bool bCompress
     )
@@ -769,7 +781,7 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
 
     // write the stuff
     sal_Bool bRet = WriteThroughComponent( xOutputStream, xComponent, rFactory,
-        pComponentName );
+        rPropSet, pComponentName );
 
     // finally, commit stream.
     if( bRet )
@@ -833,6 +845,27 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
         }
     }
 
+
+    // create XPropertySet with three properties for status indicator
+    comphelper::PropertyMapEntry aInfoMap[] =
+    {
+        { "UsePrettyPrinting", sizeof("UsePrettyPrinting")-1, 0,
+              &::getBooleanCppuType(),
+              beans::PropertyAttribute::MAYBEVOID, 0},
+        { NULL, 0, 0, NULL, 0, 0 }
+    };
+    uno::Reference< beans::XPropertySet > xInfoSet(
+                comphelper::GenericPropertySet_CreateInstance(
+                            new comphelper::PropertySetInfo( aInfoMap ) ) );
+
+    SvtSaveOptions aSaveOpt;
+    OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting"));
+    sal_Bool bUsePrettyPrinting( bFlat || aSaveOpt.IsPrettyPrinting() );
+    Any aAny;
+    aAny.setValue( &bUsePrettyPrinting, ::getBooleanCppuType() );
+    xInfoSet->setPropertyValue( sUsePrettyPrinting, aAny );
+
+
     sal_Int32 nSteps=0;
     if (xStatusIndicator.is())
             xStatusIndicator->setValue(nSteps++);
@@ -846,7 +879,7 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
                 xStatusIndicator->setValue(nSteps++);
 
             bRet = WriteThroughComponent(
-                    pStg, xModelComp, "meta.xml", xServiceFactory,
+                    pStg, xModelComp, "meta.xml", xServiceFactory, xInfoSet,
                     "com.sun.star.comp.Math.XMLMetaExporter",sal_False);
         }
         if( bRet )
@@ -855,7 +888,7 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
                 xStatusIndicator->setValue(nSteps++);
 
             bRet = WriteThroughComponent(
-                    pStg, xModelComp, "content.xml", xServiceFactory,
+                    pStg, xModelComp, "content.xml", xServiceFactory, xInfoSet,
                     "com.sun.star.comp.Math.XMLExporter");
         }
 
@@ -865,7 +898,7 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
                 xStatusIndicator->setValue(nSteps++);
 
             bRet = WriteThroughComponent(
-                    pStg, xModelComp, "settings.xml", xServiceFactory,
+                    pStg, xModelComp, "settings.xml", xServiceFactory, xInfoSet,
                     "com.sun.star.comp.Math.XMLSettingsExporter");
         }
     }
@@ -879,7 +912,7 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
             xStatusIndicator->setValue(nSteps++);
 
         bRet = WriteThroughComponent(
-            xOut, xModelComp, xServiceFactory,
+            xOut, xModelComp, xServiceFactory, xInfoSet,
             "com.sun.star.comp.Math.XMLExporter");
     }
 
