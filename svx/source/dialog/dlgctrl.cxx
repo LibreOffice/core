@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-15 16:58:27 $
+ *  last change: $Author: thb $ $Date: 2001-06-28 09:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,7 +461,8 @@ void SvxRectCtl::Paint( const Rectangle& rRect )
     DrawBitmap( aPtMB - aToCenter, aDstBtnSize, bNoVert?aBtnPnt3:aBtnPnt1, aBtnSize, *pBitmap );
     DrawBitmap( aPtRB - aToCenter, aDstBtnSize, (bNoHorz | bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, *pBitmap );
 
-    if( IsEnabled() ) // && eCS != CS_ANGLE )
+    // draw active button, avoid center pos for angle
+    if( IsEnabled() && (eCS != CS_ANGLE || aPtNew != aPtMM) )
     {
         DrawBitmap( aPtNew - aToCenter, aDstBtnSize, aBtnPnt2, aBtnSize, *pBitmap );
     }
