@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltertabdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:34:39 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:52:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ bool XMLFilterTabDialog::onOk()
         maTabCtrl.SetCurPageId( (USHORT)nErrorPage );
         ActivatePageHdl( &maTabCtrl );
 
-        ResId aResId( nErrorId );
+        ResId aResId( nErrorId, &mrResMgr );
         String aMessage( aResId );
 
         if( aReplace2.Len() )
