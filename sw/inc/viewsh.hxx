@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: od $ $Date: 2002-12-02 07:50:35 $
+ *  last change: $Author: od $ $Date: 2002-12-03 15:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,9 @@ public:
         @param _nRows
         input parameter - initial number of page rows in the preview.
 
+        @param _orMaxPageSize
+        output parameter - maximal size in width and height of all pages
+
         @param _orPreviewDocSize
         output parameter - size of the document in the proposed preview layout
         included the spacing between the pages.
@@ -418,6 +421,7 @@ public:
     */
     bool InitPreviewLayout( const sal_uInt16 _nCols,
                             const sal_uInt16 _nRows,
+                            Size&            _orMaxPageSize,
                             Size&            _orPreviewDocSize,
                             const bool       _bCalcScale,
                             const Size*      _pPxWinSize = NULL
@@ -445,6 +449,9 @@ public:
         document, which should be painted in the left-top-corner in the current
         output device.
 
+        @param _pPxWinSize
+        input parameter - pixel size of window the preview will be painted in.
+
         @param _onStartPageNum
         output parameter - physical number of page, which will be painted in the
         left-top-corner in the current output device.
@@ -453,17 +460,17 @@ public:
         output parameter - virtual number of page, which will be painted in the
         left-top-corner in the current output device.
 
-        @param _oaStartPos
-        output parameter - absolute position of the virtual preview document,
-        which will be painted in the left-top-corner in the current output device.
+        @param _orDocPreviewPaintRect
+        output parameter - rectangle of preview document, which will be painted.
 
         @return boolean, indicating, if prepare of preview paint was successful.
     */
     bool PreparePreviewPaint( const sal_uInt16 _nProposedStartPageNum,
                               const Point      _aProposedStartPos,
+                              const Size*      _pPxWinSize,
                               sal_uInt16&      _onStartPageNum,
                               sal_uInt16&      _onStartPageVirtNum,
-                              Point&           _oaStartPos
+                              Rectangle&       _orDocPreviewPaintRect
                             );
 
     /** paint prepared preview
@@ -472,11 +479,29 @@ public:
 
         @author OD
 
+        @param _nSelectedPageNum
+        input parameter - physical number of page, which should be painted as
+        selected by am extra border in color COL_LIGHTBLUE.
+
+        @param _aOutRect
+        input parameter - Twip rectangle of window, which should be painted.
+
         @return boolean, indicating, if paint of preview was performed
     */
     bool PaintPreview( const sal_uInt16 _nSelectedPageNum,
                        const Rectangle  _aOutRect
                      );
+
+    /** property <DoesPreviewLayoutRowsFitIntoWin> of current preview layout
+
+        OD 03.12.2002 #103492#
+
+        @author OD
+
+        @return boolean, indicating that the rows of the current preview layout
+        fit into the current window size.
+    */
+    bool DoesPreviewLayoutRowsFitIntoWindow();
 
     // Prospekt-Format drucken
     void PrintProspect( SwPrtOptions&, SfxProgress& );
