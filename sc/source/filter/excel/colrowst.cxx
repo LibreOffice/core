@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:55:44 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:47:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,6 +606,7 @@ ScExtDocOptions& ScExtDocOptions::operator =( const ScExtDocOptions& rCpy )
         pCodenames = new CodenameList( *rCpy.pCodenames );
 
     bChanged = rCpy.bChanged;
+    bWinProtection = rCpy.bWinProtection;
 
     return *this;
 }
