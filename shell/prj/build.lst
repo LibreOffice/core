@@ -1,5 +1,5 @@
 sh	shell	: offuh rdbmaker NULL
-sh  shell\source\win32\					nmake	-	w sh_win32 NULL
+sh  shell\source\win32					nmake	-	w sh_win32 NULL
 sh	shell\source\win32\simplemail		nmake	-	w sh_win32_simplemail NULL
 sh  shell\source\unix\exec				nmake	-	u sh_win32 NULL
 sh	shell\source\proxysettings			nmake	-	all sh_proxysettings NULL
