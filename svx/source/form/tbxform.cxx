@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:34:26 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@
 #ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>
 #endif
-
+/* //CHINA001
 //========================================================================
 // class FmInputRecordNoDialog
 //========================================================================
@@ -149,7 +149,7 @@ FmInputRecordNoDialog::FmInputRecordNoDialog(Window * pParent)
 
     FreeResource();
 }
-
+*/ //CHINA001
 //========================================================================
 // class SvxFmAbsRecWin
 //========================================================================
