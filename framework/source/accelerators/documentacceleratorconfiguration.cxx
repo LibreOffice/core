@@ -1,0 +1,193 @@
+/*************************************************************************
+ *
+ *  $RCSfile: documentacceleratorconfiguration.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:05:46 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __FRAMEWORK_ACCELERATORS_DOCUMENTACCELERATORCONFIGURATION_HXX_
+#include <accelerators/documentacceleratorconfiguration.hxx>
+#endif
+
+//_______________________________________________
+// own includes
+
+#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
+#include <threadhelp/readguard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
+#include <threadhelp/writeguard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_ACCELERATORCONST_H_
+#include <acceleratorconst.h>
+#endif
+
+#ifndef __FRAMEWORK_SERVICES_H_
+#include <services.h>
+#endif
+
+//_______________________________________________
+// interface includes
+
+//_______________________________________________
+// other includes
+
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX
+#include <comphelper/sequenceashashmap.hxx>
+#endif
+
+//_______________________________________________
+// const
+
+namespace framework
+{
+
+//-----------------------------------------------
+// XInterface, XTypeProvider, XServiceInfo
+DEFINE_XINTERFACE_2(DocumentAcceleratorConfiguration            ,
+                    AcceleratorConfiguration                    ,
+                    DIRECT_INTERFACE(css::lang::XServiceInfo)   ,
+                    DIRECT_INTERFACE(css::lang::XInitialization))
+
+DEFINE_XTYPEPROVIDER_2_WITH_BASECLASS(DocumentAcceleratorConfiguration,
+                                      AcceleratorConfiguration        ,
+                                      css::lang::XServiceInfo         ,
+                                      css::lang::XInitialization      )
+
+DEFINE_XSERVICEINFO_MULTISERVICE(DocumentAcceleratorConfiguration                   ,
+                                 ::cppu::OWeakObject                                ,
+                                 SERVICENAME_DOCUMENTACCELERATORCONFIGURATION       ,
+                                 IMPLEMENTATIONNAME_DOCUMENTACCELERATORCONFIGURATION)
+
+DEFINE_INIT_SERVICE(DocumentAcceleratorConfiguration,
+                    {
+                        /*Attention
+                        I think we don't need any mutex or lock here ... because we are called by our own static method impl_createInstance()
+                        to create a new instance of this class by our own supported service factory.
+                        see macro DEFINE_XSERVICEINFO_MULTISERVICE and "impl_initService()" for further informations!
+                        */
+                    }
+                   )
+
+//-----------------------------------------------
+DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(const css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR)
+    : AcceleratorConfiguration(xSMGR)
+{
+}
+
+//-----------------------------------------------
+DocumentAcceleratorConfiguration::~DocumentAcceleratorConfiguration()
+{
+    m_aPresetHandler.removeStorageListener(this);
+}
+
+//-----------------------------------------------
+void SAL_CALL DocumentAcceleratorConfiguration::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
+    throw(css::uno::Exception       ,
+          css::uno::RuntimeException)
+{
+    // SAFE -> ----------------------------------
+    WriteGuard aWriteLock(m_aLock);
+
+    ::comphelper::SequenceAsHashMap lArgs(lArguments);
+    m_xDocumentRoot = lArgs.getUnpackedValueOrDefault(
+                        ::rtl::OUString::createFromAscii("DocumentRoot"),
+                        css::uno::Reference< css::embed::XStorage >());
+
+    if (!m_xDocumentRoot.is())
+        throw css::uno::RuntimeException(
+                ::rtl::OUString::createFromAscii("The document dependend accelerator configuration was initialized with an invalid roo storage!"),
+                static_cast< ::cppu::OWeakObject* >(this));
+
+    aWriteLock.unlock();
+    // <- SAFE ----------------------------------
+
+    impl_ts_fillCache();
+}
+
+//-----------------------------------------------
+void DocumentAcceleratorConfiguration::impl_ts_fillCache()
+{
+    // SAFE -> ----------------------------------
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::embed::XStorage > xDocumentRoot = m_xDocumentRoot;
+    aReadLock.unlock();
+    // <- SAFE ----------------------------------
+
+    // get current office locale ... but dont cache it.
+    // Otherwise we must be listener on the configuration layer
+    // which seems to superflous for this small implementation .-)
+    ::comphelper::Locale aLocale = impl_ts_getLocale();
+
+    // Note: The used preset class is threadsafe by itself ... and live if we live!
+    // We do not need any mutex here.
+
+    // open the folder, where the configuration exists
+    m_aPresetHandler.connectToResource(
+        PresetHandler::E_DOCUMENT,
+        PresetHandler::RESOURCETYPE_ACCELERATOR(),
+        ::rtl::OUString(),
+        xDocumentRoot,
+        aLocale);
+
+    AcceleratorConfiguration::reload();
+    m_aPresetHandler.addStorageListener(this);
+}
+
+} // namespace framework
