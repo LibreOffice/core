@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:54:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,10 +93,10 @@ class COMPHELPER_DLLPUBLIC EmbeddedObjectContainer
 {
     EmbedImpl*  pImpl;
 
+public:
     // add an embedded object to the container storage
     sal_Bool            StoreEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString&, sal_Bool );
 
-public:
     // add an embedded object that has been imported from the container storage - should only be called by filters!
     void                AddEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, const ::rtl::OUString& );
 
@@ -148,7 +148,7 @@ public:
                         InsertEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream >&, ::rtl::OUString& );
 
     // copy an embedded object into the storage
-    sal_Bool CopyEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString& );
+    sal_Bool CopyEmbeddedObject( EmbeddedObjectContainer& rSrc, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString& );
 
     // move an embedded object from one container to another one
     sal_Bool MoveEmbeddedObject( EmbeddedObjectContainer& rSrc, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString& );
@@ -163,11 +163,19 @@ public:
     // get the stored graphical representation for the object
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > GetGraphicStream( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&, ::rtl::OUString* pMediaType=0 );
 
+    // get the stored graphical representation by the object name
+    com::sun::star::uno::Reference < com::sun::star::io::XInputStream > GetGraphicStream( const ::rtl::OUString& aName, ::rtl::OUString* pMediaType=0 );
+
     // add a graphical representation for an object
     sal_Bool            InsertGraphicStream( const com::sun::star::uno::Reference < com::sun::star::io::XInputStream >& rStream, const ::rtl::OUString& rObjectName, const ::rtl::OUString& rMediaType );
 
     // remove a graphical representation for an object
     sal_Bool            RemoveGraphicStream( const ::rtl::OUString& rObjectName );
+
+    // copy the graphical representation from different container
+    sal_Bool            TryToCopyGraphReplacement( EmbeddedObjectContainer& rSrc,
+                                                    const ::rtl::OUString& aOrigName,
+                                                    const ::rtl::OUString& aTargetName );
 
     void                CloseEmbeddedObjects();
 };
