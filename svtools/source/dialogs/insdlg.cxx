@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-07 07:48:07 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 
 #include <sot/clsids.hxx>
 #include <tools/rc.hxx>
+#include <unotools/configmgr.hxx>
 #include <sot/stg.hxx>
 
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
@@ -209,6 +210,30 @@ void SvObjectServerList::FillInsertObjects()
                 Sequence<OUString> seqNames= xNameAccess->getElementNames();
 
                 sal_Int32 nInd;
+
+                ::rtl::OUString aStringProductName( RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTNAME" ) );
+                sal_Int32 nStringProductNameLength = aStringProductName.getLength();
+
+                ::rtl::OUString aStringProductVersion( RTL_CONSTASCII_USTRINGPARAM( "%PRODUCTVERSION" ) );
+                sal_Int32 nStringProductVersionLength = aStringProductVersion.getLength();
+
+
+                // TODO/LATER: Do the request only once ( needs incompatible change )
+                ::rtl::OUString aProductName;
+                ::rtl::OUString aProductVersion;
+                ::com::sun::star::uno::Any aProperty =
+                    ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+                if ( !( aProperty >>= aProductName ) )
+                {
+                    OSL_ENSURE( sal_False, "Coudn't get PRODUCTNAME variable!\n" );
+                    aProductName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarOffice" ) );
+                }
+                aProperty = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+                if ( !( aProperty >>= aProductVersion ) )
+                {
+                    OSL_ENSURE( sal_False, "Coudn't get PRODUCTVERSION variable!\n" );
+                }
+
                 for( nInd = 0; nInd < seqNames.getLength(); nInd++ )
                 {
                     Reference< XNameAccess > xEntry ;
@@ -219,6 +244,25 @@ void SvObjectServerList::FillInsertObjects()
                         ::rtl::OUString aClassID;
                         xEntry->getByName( OUString::createFromAscii("ObjectUIName") ) >>= aUIName;
                         xEntry->getByName( OUString::createFromAscii("ClassID") ) >>= aClassID;
+
+                        if ( aUIName.getLength() )
+                        {
+                            // replace %PRODUCTNAME
+                            sal_Int32 nIndex = aUIName.indexOf( aStringProductName );
+                            while( nIndex != -1 )
+                            {
+                                aUIName = aUIName.replaceAt( nIndex, nStringProductNameLength, aProductName );
+                                nIndex = aUIName.indexOf( aStringProductName );
+                            }
+
+                            // replace %PRODUCTVERSION
+                            nIndex = aUIName.indexOf( aStringProductVersion );
+                            while( nIndex != -1 )
+                            {
+                                aUIName = aUIName.replaceAt( nIndex, nStringProductVersionLength, aProductVersion );
+                                nIndex = aUIName.indexOf( aStringProductVersion );
+                            }
+                        }
 
                         SvGlobalName aClassName;
                         if( aClassName.MakeId( String( aClassID )))
