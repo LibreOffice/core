@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <module-name>toolkit</module-name>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.Toolkit</name>
+        <description>Toolkit...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.Toolkit</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlContainer</name>
+        <description>UnoControlContainer...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlContainer</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlContainerModel</name>
+        <description>UnoControlContainerModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlContainerModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.TabController</name>
+        <description>TabController...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.TabController</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.TabControllerModel</name>
+        <description>TabControllerModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.TabControllerModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlDialog</name>
+        <description>UnoControlDialog...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlDialog</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlDialogModel</name>
+        <description>UnoControlDialogModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlDialogModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlEdit</name>
+        <description>UnoControlEdit...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlEdit</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlEditModel</name>
+        <description>UnoControlEditModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlEditModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlFileControl</name>
+        <description>UnoControlFileControl...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlFileControl</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlFileControlModel</name>
+        <description>UnoControlFileControlModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlFileControlModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlButton</name>
+        <description>UnoControlButton...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlButton</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlButtonModel</name>
+        <description>UnoControlButtonModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlButtonModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlImageButton</name>
+        <description>UnoControlImageButton...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlImageButton</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlImageButtonModel</name>
+        <description>UnoControlImageButtonModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlImageButtonModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlImageControl</name>
+        <description>UnoControlImageControl...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlImageControl</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlImageControlModel</name>
+        <description>UnoControlImageControlModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlImageControlModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlRadioButton</name>
+        <description>UnoControlRadioButton...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlRadioButton</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlRadioButtonModel</name>
+        <description>UnoControlRadioButtonModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlRadioButtonModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlCheckBox</name>
+        <description>UnoControlCheckBox...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlCheckBox</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlCheckBoxModel</name>
+        <description>UnoControlCheckBoxModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlCheckBoxModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlListBox</name>
+        <description>UnoControlListBox...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlListBox</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlListBoxModel</name>
+        <description>UnoControlListBoxModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlListBoxModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlComboBox</name>
+        <description>UnoControlComboBox...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlComboBox</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlComboBoxModel</name>
+        <description>UnoControlComboBoxModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlComboBoxModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlFixedText</name>
+        <description>UnoControlFixedText...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlFixedText</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlFixedTextModel</name>
+        <description>UnoControlFixedTextModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlFixedTextModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlGroupBox</name>
+        <description>UnoControlGroupBox...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlGroupBox</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlGroupBoxModel</name>
+        <description>UnoControlGroupBoxModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlGroupBoxModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlDateField</name>
+        <description>UnoControlDateField...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlDateField</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlDateFieldModel</name>
+        <description>UnoControlDateFieldModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlDateFieldModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlTimeField</name>
+        <description>UnoControlTimeField...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlTimeField</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlTimeFieldModel</name>
+        <description>UnoControlTimeFieldModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlTimeFieldModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlNumericField</name>
+        <description>UnoControlNumericField...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlNumericField</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlNumericFieldModel</name>
+        <description>UnoControlNumericFieldModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlNumericFieldModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlCurrencyField</name>
+        <description>UnoControlCurrencyField...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlCurrencyField</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlCurrencyFieldModel</name>
+        <description>UnoControlCurrencyFieldModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlCurrencyFieldModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlPatternField</name>
+        <description>UnoControlPatternField...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlPatternField</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlPatternFieldModel</name>
+        <description>UnoControlPatternFieldModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlPatternFieldModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlFormattedField</name>
+        <description>UnoControlFormattedField...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlFormattedField</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.UnoControlFormattedFieldModel</name>
+        <description>UnoControlFormattedFieldModel...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.UnoControlFormattedFieldModel</supported-service>
+    </component-description>
+
+    <component-description>
+        <author>Malte Timmermann</author>
+        <name>com.sun.star.awt.PrinterServer</name>
+        <description>PrinterServer...</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="depricated"/>
+        <supported-service>com.sun.star.awt.PrinterServer</supported-service>
+    </component-description>
+
+</module-description>
