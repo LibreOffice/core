@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-29 15:39:42 $
+ *  last change: $Author: ka $ $Date: 2000-10-11 10:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,13 @@ Sequence< OUString > SdOptionsGeneric::GetPropertyNames() const
     return aNames;
 }
 
+// -----------------------------------------------------------------------------
+
+void SdOptionsGeneric::Store()
+{
+    if( mpCfgItem )
+        mpCfgItem->Commit();
+}
 
 /*************************************************************************
 |*
@@ -1521,7 +1528,26 @@ void SdOptions::SetDefaults( ULONG nOptionsRange )
 
 // ----------------------------------------------------------------------
 
-void SdOptions::StoreConfig()
+void SdOptions::StoreConfig( ULONG nOptionsRange )
 {
-    DBG_ERROR( "SdOptions::StoreConfig(): Missing" );
+    if( nOptionsRange & SD_OPTIONS_LAYOUT )
+        SdOptionsLayout::Store();
+
+    if( nOptionsRange & SD_OPTIONS_CONTENTS )
+        SdOptionsContents::Store();
+
+    if( nOptionsRange & SD_OPTIONS_MISC )
+        SdOptionsMisc::Store();
+
+    if( nOptionsRange & SD_OPTIONS_SNAP )
+        SdOptionsSnap::Store();
+
+    if( nOptionsRange & SD_OPTIONS_ZOOM )
+        SdOptionsZoom::Store();
+
+    if( nOptionsRange & SD_OPTIONS_GRID )
+        SdOptionsGrid::Store();
+
+    if( nOptionsRange & SD_OPTIONS_PRINT )
+        SdOptionsPrint::Store();
 }

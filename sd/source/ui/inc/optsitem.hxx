@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-29 15:39:15 $
+ *  last change: $Author: ka $ $Date: 2000-10-11 10:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,6 +168,8 @@ public:
     USHORT                  GetConfigId() const { return mnConfigId; }
 
     void                    EnableModify( BOOL bModify ) { mbEnableModify = bModify; }
+
+    void                    Store();
 };
 
 // -------------------
@@ -648,7 +650,7 @@ public:
                         ~SdOptions();
 
     void                SetDefaults( ULONG nOptionRange );
-    void                StoreConfig();
+    void                StoreConfig( ULONG nOptionRange = SD_OPTIONS_ALL );
 };
 
 #endif // _SD_OPTSITEM_HXX
