@@ -1504,7 +1504,7 @@ sub create_java_installer
     prepare_language_pack_in_xmlfile($xmlfile);
     add_lowercasevariables_to_allvariableshashref($allvariableshashref);
     substitute_variables($xmlfile, $allvariableshashref);
-    if (( $installer::globals::issolarisx86build ) || ( ! $allvariables->{'ADAPRODUCT'} )) { remove_ada_from_xmlfile($xmlfile); }
+    if (( $installer::globals::issolarisx86build ) || ( ! $allvariableshashref->{'ADAPRODUCT'} )) { remove_ada_from_xmlfile($xmlfile); }
     if ( $installer::globals::issolarisx86build || $installer::globals::islinuxbuild ) { remove_w4w_from_xmlfile($xmlfile); }
     replace_component_names($xmlfile, $templatefilename, $modulesarrayref, $javatemplateorigfile, $ulffile);
     if ( $installer::globals::islinuxrpmbuild ) { put_filesize_into_xmlfile($xmlfile, $listofpackages); }
