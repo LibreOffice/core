@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 15:01:11 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,10 @@
 
 #include "sal/config.h"
 
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/RuntimeException.hpp"
 #include "cppuhelper/implbase1.hxx"
+#include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "test/testtools/bridgetest/XMulti.hpp"
 
@@ -73,21 +76,84 @@ namespace testtools { namespace bridgetest {
 class Multi: public cppu::WeakImplHelper1< test::testtools::bridgetest::XMulti >
 {
 public:
-    Multi(): a(0) {}
+    Multi(): m_attribute1(0.0), m_attribute3(0.0) {}
 
-    virtual sal_Int32 SAL_CALL f1() throw () { return 1; }
+    virtual double SAL_CALL getatt1()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_attribute1; }
 
-    virtual sal_Int32 SAL_CALL f2() throw () { return 2; }
+    virtual void SAL_CALL setatt1(double value)
+        throw (com::sun::star::uno::RuntimeException)
+    { m_attribute1 = value; }
 
-    virtual sal_Int32 SAL_CALL f3() throw () { return 3; }
+    virtual sal_Int32 SAL_CALL fn11(sal_Int32 arg)
+        throw (com::sun::star::uno::RuntimeException)
+    { return 11 * arg; }
 
-    virtual sal_Int32 SAL_CALL geta() throw () { return a; }
+    virtual rtl::OUString SAL_CALL fn12(rtl::OUString const & arg)
+        throw (com::sun::star::uno::RuntimeException)
+    { return rtl::OUString::createFromAscii("12") + arg; }
 
-    virtual void SAL_CALL seta(sal_Int32 value) throw () { a = value; }
+    virtual sal_Int32 SAL_CALL fn21(sal_Int32 arg)
+        throw (com::sun::star::uno::RuntimeException)
+    { return 21 * arg; }
+
+    virtual rtl::OUString SAL_CALL fn22(rtl::OUString const & arg)
+        throw (com::sun::star::uno::RuntimeException)
+    { return rtl::OUString::createFromAscii("22") + arg; }
+
+    virtual double SAL_CALL getatt3()
+        throw (com::sun::star::uno::RuntimeException)
+    { return m_attribute3; }
+
+    virtual void SAL_CALL setatt3(double value)
+        throw (com::sun::star::uno::RuntimeException)
+    { m_attribute3 = value; }
+
+    virtual sal_Int32 SAL_CALL fn31(sal_Int32 arg)
+        throw (com::sun::star::uno::RuntimeException)
+    { return 31 * arg; }
+
+    virtual rtl::OUString SAL_CALL fn32(rtl::OUString const & arg)
+        throw (com::sun::star::uno::RuntimeException)
+    { return rtl::OUString::createFromAscii("32") + arg; }
+
+    virtual sal_Int32 SAL_CALL fn33()
+        throw (com::sun::star::uno::RuntimeException)
+    { return 33; }
+
+    virtual sal_Int32 SAL_CALL fn41(sal_Int32 arg)
+        throw (com::sun::star::uno::RuntimeException)
+    { return 41 * arg; }
+
+    virtual sal_Int32 SAL_CALL fn61(sal_Int32 arg)
+        throw (com::sun::star::uno::RuntimeException)
+    { return 61 * arg; }
+
+    virtual rtl::OUString SAL_CALL fn62(rtl::OUString const & arg)
+        throw (com::sun::star::uno::RuntimeException)
+    { return rtl::OUString::createFromAscii("62") + arg; }
+
+    virtual sal_Int32 SAL_CALL fn71(sal_Int32 arg)
+        throw (com::sun::star::uno::RuntimeException)
+    { return 71 * arg; }
+
+    virtual rtl::OUString SAL_CALL fn72(rtl::OUString const & arg)
+        throw (com::sun::star::uno::RuntimeException)
+    { return rtl::OUString::createFromAscii("72") + arg; }
+
+    virtual sal_Int32 SAL_CALL fn73()
+        throw (com::sun::star::uno::RuntimeException)
+    { return 73; }
 
 private:
-    sal_Int32 a;
+    double m_attribute1;
+    double m_attribute3;
 };
+
+rtl::OUString testMulti(
+    com::sun::star::uno::Reference< test::testtools::bridgetest::XMulti >
+    const & multi);
 
 } }
 
