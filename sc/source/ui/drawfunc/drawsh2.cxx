@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:37:38 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #include <svtools/whiter.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdouno.hxx>
+#ifndef _SVX_EXTRUSION_BAR_HXX
+#include <svx/extrusionbar.hxx>
+#endif
 
 #include "drawsh.hxx"
 #include "drawview.hxx"
@@ -243,6 +246,8 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
             rSet.Put( SfxBoolItem( SID_ENABLE_HYPHENATION, bValue ) );
         }
     }
+
+    svx::ExtrusionBar::getState( pView, rSet );
 }
 
 //
