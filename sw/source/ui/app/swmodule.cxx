@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 12:15:08 $
+ *  last change: $Author: tbe $ $Date: 2000-11-10 15:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,6 @@
 #ifndef _SVX_LINECTRL_HXX //autogen
 #include <svx/linectrl.hxx>
 #endif
-//#include <basctl/btbxctl.hxx>         //z-Zt falscher includeschutz!
 #include <svx/tbxctl.hxx>           //z-Zt falscher includeschutz!
 #ifndef _FILLCTRL_HXX //autogen
 #include <svx/fillctrl.hxx>
