@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:03:01 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
                ,const Reference< XConnection >& _rxConn
                ,const Reference< XMultiServiceFactory >& _xORB)
     :OQueryDescriptor_Base(m_aMutex,*this)
-    ,ODataSettings(m_aBHelper)
+    ,ODataSettings(m_aBHelper,sal_True)
     ,OContentHelper(_xORB,NULL,TContentPtr(new OContentHelper_Impl))
     ,m_bCaseSensitiv(sal_True)
     ,m_xCommandDefinition(_rxCommandDefinition)
