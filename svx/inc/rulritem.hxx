@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rulritem.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:44:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,13 @@
 #include <svtools/poolitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 // class SvxLongLRSpaceItem ----------------------------------------------
 
-class SvxLongLRSpaceItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxLongLRSpaceItem : public SfxPoolItem
 {
     long    lLeft;         // nLeft oder der neg. Erstzeileneinzug
     long    lRight;        // der unproblematische rechte Rand
@@ -93,7 +97,7 @@ class SvxLongLRSpaceItem : public SfxPoolItem
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
 private:
-    const SvxLongLRSpaceItem& operator=(const SvxLongLRSpaceItem &); // n.i.
+    SVX_DLLPRIVATE const SvxLongLRSpaceItem& operator=(const SvxLongLRSpaceItem &); // n.i.
 
 public:
     TYPEINFO();
@@ -109,7 +113,7 @@ public:
 
 // class SvxLongULSpaceItem ----------------------------------------------
 
-class SvxLongULSpaceItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxLongULSpaceItem : public SfxPoolItem
 {
     long    lLeft;         // nLeft oder der neg. Erstzeileneinzug
     long    lRight;        // der unproblematische rechte Rand
@@ -129,7 +133,7 @@ class SvxLongULSpaceItem : public SfxPoolItem
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
 private:
-    const SvxLongULSpaceItem& operator=(const SvxLongULSpaceItem &); // n.i.
+    SVX_DLLPRIVATE const SvxLongULSpaceItem& operator=(const SvxLongULSpaceItem &); // n.i.
 
 public:
     TYPEINFO();
@@ -145,7 +149,7 @@ public:
 
 // class SvxPagePosSizeItem ----------------------------------------------
 
-class SvxPagePosSizeItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxPagePosSizeItem : public SfxPoolItem
 {
     Point aPos;
     long lWidth;
@@ -164,7 +168,7 @@ protected:
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 
 private:
-    const SvxPagePosSizeItem& operator=(const SvxPagePosSizeItem &); // n.i.
+    SVX_DLLPRIVATE const SvxPagePosSizeItem& operator=(const SvxPagePosSizeItem &); // n.i.
 public:
     TYPEINFO();
     SvxPagePosSizeItem(const Point &rPos, long lWidth, long lHeight);
@@ -222,7 +226,7 @@ struct SvxColumnDescription
 
 typedef SvPtrarr SvxColumns;
 
-class SvxColumnItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxColumnItem : public SfxPoolItem
 {
     SvxColumns aColumns;// Spaltenarray
     long    nLeft,      // Linker Rand bei Tabelle
@@ -290,7 +294,7 @@ public:
 
 // class SvxObjectItem ---------------------------------------------------
 
-class SvxObjectItem : public SfxPoolItem
+class SVX_DLLPUBLIC SvxObjectItem : public SfxPoolItem
 {
 private:
     long   nStartX;                    /* Beginn in X-Richtung */
@@ -311,7 +315,7 @@ protected:
     virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 private:
-    const SvxObjectItem &operator=(const SvxObjectItem &); // n.i.
+    SVX_DLLPRIVATE const SvxObjectItem &operator=(const SvxObjectItem &); // n.i.
 public:
     TYPEINFO();
     SvxObjectItem(long nStartX, long nEndX,
