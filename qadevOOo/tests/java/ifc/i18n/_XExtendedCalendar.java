@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XExtendedCalendar.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2004-11-02 11:55:29 $
+ *  last change: $Date: 2005-02-24 17:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ public class _XExtendedCalendar extends MultiMethodTest {
         String longQuarter = "1st quarter";
         if (month > 3 && month < 7) { quarter = "Q2"; longQuarter = "2nd quarter"; }
         else if (month > 6 && month < 10) { quarter = "Q3"; longQuarter = "3rd quarter"; }
-        else { quarter = "Q4"; longQuarter = "4th quarter"; }
+        else if (month > 10 && month < 13) {quarter = "Q4"; longQuarter = "4th quarter"; }
         expectedStringResult[3] = quarter;
         expectedStringResult[4] = longQuarter;
 
