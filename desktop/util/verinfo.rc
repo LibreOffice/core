@@ -2,9 +2,9 @@
 #
 #   $RCSfile: verinfo.rc,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-29 14:12:04 $
+#   last change: $Author: hro $ $Date: 2002-11-22 14:24:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -196,5 +196,5 @@ VS_VERSION_INFO rcdata
 15 ICON "icons\\015_math_document.ico"
 16 ICON "icons\\016_template.ico"
 17 ICON "icons\\017_macrolibrary.ico"
-
+18 ICON "icons\\018_configuration.ico"
 
