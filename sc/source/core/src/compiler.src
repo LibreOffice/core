@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:27:21 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 19:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,7 +1329,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text = "ZELLE" ;
         Text [ english ] = "CELL" ;
         Text[ english_us ] = "CELL";
-        Text[ portuguese ] = "CELL";
+        Text[ portuguese ] = "C…LULA";
         Text[ russian ] = "ﬂ◊≈… ¿";
         Text[ greek ] = " ≈À…";
         Text[ dutch ] = "CEL";
@@ -2139,7 +2139,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text = "ARABISCH" ;
         Text [ english ] = "ARABIC" ;
         Text[ english_us ] = "ARABIC";
-        Text[ portuguese ] = "ARABIC";
+        Text[ portuguese ] = "¡RABE";
         Text[ russian ] = "¿–¿¡— »≈";
         Text[ greek ] = "¡—¡¬… ¡";
         Text[ dutch ] = "ARABISCH";
@@ -3060,7 +3060,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text = "QIKV" ;
         Text [ english ] = "MIRR" ;
         Text[ english_us ] = "MIRR";
-        Text[ portuguese ] = "MIRR";
+        Text[ portuguese ] = "MTIR";
         Text[ russian ] = "Ã¬—ƒ";
         Text[ greek ] = "MIRR";
         Text[ dutch ] = "QIR";
@@ -7215,7 +7215,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text = "R÷MISCH";
         Text [ english ] = "ROMAN" ;
         Text[ english_us ] = "ROMAN";
-        Text[ portuguese ] = "ROMAN";
+        Text[ portuguese ] = "ROMANO";
         Text[ russian ] = "–»Ã— »≈";
         Text[ greek ] = "—ŸÃ¡… ¡";
         Text[ dutch ] = "ROMEINS";
