@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hjs $ $Date: 2003-09-25 10:49:59 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #endif
 #ifndef _FMTFTN_HXX //autogen
 #include <fmtftn.hxx>
+#endif
+#ifndef _ROWFRM_HXX
+#include <rowfrm.hxx>
 #endif
 
 #include "txtcfg.hxx"
@@ -328,6 +331,23 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pFrm, const SwTwips nRst,
             nWidLines = rSet.GetWidows().GetValue();
 
     }
+
+    if ( pFrm->IsInTab() && ( NULL != pFrm->IsInSplitTableRow() ||
+                              NULL != pFrm->IsInFollowFlowRow() ) )
+    {
+        // For compatibility reasons, we disable Keep/Widows/Orphans
+        // inside splittable row frames:
+        SwFrm* pTmpFrm = pFrm->GetUpper();
+        while ( !pTmpFrm->IsRowFrm() )
+            pTmpFrm = pTmpFrm->GetUpper();
+        if ( ((SwRowFrm*)pTmpFrm)->IsRowSplitAllowed() )
+        {
+            bKeep = sal_False;
+            nOrphLines = 0;
+            nWidLines = 0;
+        }
+    }
+
     if( pFrm->IsInFtn() && !pFrm->GetIndPrev() &&
         ( bKeep || nWidLines || nOrphLines ) )
     {
