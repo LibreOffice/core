@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 08:02:45 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,8 @@
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
 #include <svtools/colorcfg.hxx>
 #endif
+// ause
+#include "editutil.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
