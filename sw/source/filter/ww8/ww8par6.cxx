@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cmc $ $Date: 2001-11-06 14:43:05 $
+ *  last change: $Author: cmc $ $Date: 2001-11-08 15:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1165,7 +1165,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                 //     -- or in the sections before this one --
                 //     regardless whether they are used in this section or not
                 pHdFt->GetTextPosExact( nI+ (nActSectionNo+1)*6, nStart, nLen );
-                if( !nLen || nActSectionNo )
+                if( nLen <=2 || nActSectionNo )
                 {
                     short nOldSectionNo = nActSectionNo;
                     do
@@ -1179,7 +1179,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                     }
                     while( nOldSectionNo && !nOldLen );
                 }
-                if( nLen || nOldLen )
+                if( nLen > 2 || nOldLen )
                     nHdFtInfosStored |= nMask;
 
 
@@ -1187,7 +1187,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                 {
                     if( nActSectionNo )
                     {
-                        if(    !nLen
+                        if(    nLen<=2
                             || (    (nOldStart == nStart)
                                  && (nOldLen   == nLen  ) ) )
                         {
@@ -1205,7 +1205,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
                         }
                     }
                     else
-                        if( !nLen )
+                        if( nLen <= 2 )
                             nCorrIhdt &= ~nMask;// 0 in 1.Sect.: Hd/Ft undefined
                 }
             }
