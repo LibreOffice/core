@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ab $ $Date: 2000-12-02 16:29:13 $
+ *  last change: $Author: ab $ $Date: 2000-12-19 17:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,7 +536,7 @@ sal_uInt16 SfxApplication::SaveBasicManager() const
     INetURLObject aAppBasicObj( aBasicPath.GetToken(1) );
     aAppBasicObj.insertName( Application::GetAppName() );
     aAppBasicObj.setExtension( DEFINE_CONST_UNICODE( "sbl" ) );
-    String aAppBasicPath( aAppBasicObj.PathToFileName() );
+    String aAppBasicPath( aAppBasicObj.GetMainURL() );
     SvStorageRef aStor = new SvStorage( aAppBasicPath );
     if ( aStor->GetError() == 0 )
     {
