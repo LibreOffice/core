@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:30:45 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1499,33 +1499,9 @@ static void lcl_ReadSections( SwWrtShell& rSh, SfxMedium& rMedium, ComboBox& rBo
     if( rMedium.IsStorage() && (xStg = rMedium.GetStorage()).is() )
     {
         SvStringsDtor aArr( 10, 10 );
-        //TODO/LATER: conform that code can be removed
-/*
-        switch( pStg->GetFormat() )
-        {
-        case SOT_FORMATSTR_ID_STARWRITER_50:
-        case SOT_FORMATSTR_ID_STARWRITER_40:
-        case SOT_FORMATSTR_ID_STARWRITER_30:
-        case SOT_FORMATSTR_ID_STARWRITERGLOB_50:
-        case SOT_FORMATSTR_ID_STARWRITERGLOB_40:
-            {
-                Sw3Reader* pRdr = (Sw3Reader*)SwGetReaderSw3();
-                Sw3Io* pOldIo = pRdr->GetSw3Io();
-                  pRdr->SetSw3Io( rSh.GetView().GetDocShell()->GetIoSystem() );
-                pRdr->GetSectionList( rMedium, (SvStrings&) aArr );
-                  pRdr->SetSw3Io( pOldIo );
-            }
-            break;
-        case SOT_FORMATSTR_ID_STARWRITER_60:
-        case SOT_FORMATSTR_ID_STARWRITERGLOB_60:
-        case SOT_FORMATSTR_ID_STARWRITER_8:
-        case SOT_FORMATSTR_ID_STARWRITERGLOB_8:
-            SwGetReaderXML()->GetSectionList( rMedium, (SvStrings&) aArr );
-            break;
-        }
-*/
         sal_uInt32 nFormat = SotStorage::GetFormatID( xStg );
-        if ( nFormat == SOT_FORMATSTR_ID_STARWRITER_60 || nFormat == SOT_FORMATSTR_ID_STARWRITERGLOB_60 )
+        if ( nFormat == SOT_FORMATSTR_ID_STARWRITER_60 || nFormat == SOT_FORMATSTR_ID_STARWRITERGLOB_60 ||
+            nFormat == SOT_FORMATSTR_ID_STARWRITER_8 || nFormat == SOT_FORMATSTR_ID_STARWRITERGLOB_8)
             SwGetReaderXML()->GetSectionList( rMedium, (SvStrings&) aArr );
 
         for( USHORT n = 0; n < aArr.Count(); ++n )
