@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-30 09:27:25 $
+ *  last change: $Author: cmc $ $Date: 2001-02-06 11:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,16 +798,42 @@ sal_Bool WW8ListManager::ReadLVL( sal_uInt8 nLevel,
     }
     else
     {
-        if( 1 >= aLVL.aOfsNumsXCH[ 0 ] )
+#if 0
+        if(aLVL.aOfsNumsXCH[0] <= 1)
             aPrefix = aEmptyStr;
         else
             aPrefix = sNumString.Copy( 1, aLVL.aOfsNumsXCH[ 0 ]-1 );
+#else
+        /*
+        #83154#, #82192#, ##173##
+        Our aOfsNumsXCH seems generally to be an array that contains the
+        offset into sNumString of locations where the numbers should be
+        filled in, so if the first "fill in a number" slot is greater than
+        1 there is a "prefix" before the number
+        */
+        if(aLVL.aOfsNumsXCH[0] <= 1)
+            aPrefix = aEmptyStr;
+        else
+            aPrefix = sNumString.Copy(0,aLVL.aOfsNumsXCH[0]-1);
+#endif
 
         if( nUpperLevel && ( sNumString.Len() > aLVL.aOfsNumsXCH[ nUpperLevel-1 ] ) )
         {
+#if 0
             sNumString += String::CreateFromInt32(
                                     aLVL.aOfsNumsXCH[ nUpperLevel-1 ] );
             aPostfix = sNumString.Copy( 1 );
+#else
+
+        /*
+        #83154#, #82192#, ##173##
+        Bit of madness here when there was a change from a pointer to a
+        String class during the rush to OOo initial release. This wasn't meant
+        to be "append a number" at all it was originally an "increment a
+        pointer"
+        */
+            aPostfix = sNumString.Copy(aLVL.aOfsNumsXCH[nUpperLevel-1]);
+#endif
         }
         else
             aPostfix.Erase();
@@ -851,6 +877,7 @@ sal_Bool WW8ListManager::ReadLVL( sal_uInt8 nLevel,
     }
 
     rNumFmt.SetAbsLSpace( aLVL.nDxaLeft );
+
     if( 0 < aLVL.nDxaLeft1 )
         aLVL.nDxaLeft1 = aLVL.nDxaLeft1 * -1;
     rNumFmt.SetFirstLineOffset( aLVL.nDxaLeft1 );
@@ -2109,12 +2136,15 @@ BOOL SwMSConvertControls::InsertControl(
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.4 2001-01-30 09:27:25 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.5 2001-02-06 11:10:53 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2001/01/30 09:27:25  cmc
+      #80205# Keeping comments closely linked to bugids
+
       Revision 1.3  2001/01/29 10:17:21  cmc
       #80205# Default FormTextField Text import
 
