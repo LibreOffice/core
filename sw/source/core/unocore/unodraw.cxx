@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2001-06-18 14:08:04 $
+ *  last change: $Author: os $ $Date: 2001-06-27 06:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1255,6 +1255,17 @@ Sequence< PropertyState > SwXShape::getPropertyStates(
                 {
                     const SwAttrSet& rSet = pFmt->GetAttrSet();
                     SfxItemState eItemState = rSet.GetItemState(pMap->nWID, FALSE);
+
+                    //special handling for #88835#: vertical orientation should only be
+                    //exported if the anchor type is FLY_AUTO_CNTNT
+                    if(RES_VERT_ORIENT == pMap->nWID && SFX_ITEM_SET == eItemState)
+                    {
+                        const SwFmtAnchor& rAnchor = rSet.GetAnchor();
+                        if(rAnchor.GetAnchorId() != FLY_IN_CNTNT)
+                        {
+                            eItemState = SFX_ITEM_DEFAULT;
+                        }
+                    }
                     if(SFX_ITEM_SET == eItemState)
                         pRet[nProperty] = PropertyState_DIRECT_VALUE;
                     else if(SFX_ITEM_DEFAULT == eItemState)
