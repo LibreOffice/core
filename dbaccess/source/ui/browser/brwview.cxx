@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:31:09 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 13:40:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,43 +228,39 @@ void UnoDataBrowserView::hideStatus()
 }
 
 // -------------------------------------------------------------------------
-void UnoDataBrowserView::resizeControl(Rectangle& _rRect)
+void UnoDataBrowserView::resizeControl(Rectangle& _rPlayground)
 {
-    Point   aSplitPos(0,0);
-    Size    aSplitSize(0,0);
-    Size    aNewSize( _rRect.GetSize() );
-
-    Size aToolBoxSize;
-    ToolBox* pToolBox = getToolBox();
-    if(pToolBox)
-    {
-        aToolBoxSize = pToolBox->GetOutputSizePixel();
-        pToolBox->SetSizePixel(aToolBoxSize);
-    }
+    Point   aSplitPos;
+    Size    aSplitSize;
+    Point   aPlaygroundPos( _rPlayground.TopLeft() );
+    Size    aPlaygroundSize( _rPlayground.GetSize() );
 
     if (m_pTreeView && m_pTreeView->IsVisible() && m_pSplitter)
     {
+        // calculate the splitter pos and size
         aSplitPos   = m_pSplitter->GetPosPixel();
-        aSplitPos.Y() = aToolBoxSize.Height();
+        aSplitPos.Y() = aPlaygroundPos.Y();
         aSplitSize  = m_pSplitter->GetOutputSizePixel();
-        aSplitSize.Height() = aNewSize.Height() - aToolBoxSize.Height();
+        aSplitSize.Height() = aPlaygroundSize.Height();
 
-        if( ( aSplitPos.X() + aSplitSize.Width() ) > ( aNewSize.Width() ))
-            aSplitPos.X() = aNewSize.Width() - aSplitSize.Width();
+        if( ( aSplitPos.X() + aSplitSize.Width() ) > ( aPlaygroundSize.Width() ))
+            aSplitPos.X() = aPlaygroundSize.Width() - aSplitSize.Width();
 
-        if( aSplitPos.X() <= 0)
-            aSplitPos.X() = LogicToPixel( Size(sal_Int32(aNewSize.Width() * 0.2), 0 ), MAP_APPFONT ).Width();
+        if( aSplitPos.X() <= aPlaygroundPos.X() )
+            aSplitPos.X() = aPlaygroundPos.X() + sal_Int32(aPlaygroundSize.Width() * 0.2);
 
-        Point   aTreeViewPos( 0, aToolBoxSize.Height() );
-        Size    aTreeViewSize( aSplitPos.X(), aNewSize.Height() - aToolBoxSize.Height() );
+        // the tree pos and size
+        Point   aTreeViewPos( aPlaygroundPos );
+        Size    aTreeViewSize( aSplitPos.X(), aPlaygroundSize.Height() );
 
+        // the status pos and size
         if (m_pStatus && m_pStatus->IsVisible())
         {
-            Size aStatusSize(0, GetTextHeight() + 2);
+            Size aStatusSize(aPlaygroundPos.X(), GetTextHeight() + 2);
             aStatusSize = LogicToPixel(aStatusSize, MAP_APPFONT);
             aStatusSize.Width() = aTreeViewSize.Width() - 2 - 2;
 
-            Point aStatusPos( 2, aTreeViewPos.Y() + aTreeViewSize.Height() - aStatusSize.Height() );
+            Point aStatusPos( aPlaygroundPos.X() + 2, aTreeViewPos.Y() + aTreeViewSize.Height() - aStatusSize.Height() );
             m_pStatus->SetPosSizePixel( aStatusPos, aStatusSize );
             aTreeViewSize.Height() -= aStatusSize.Height();
         }
@@ -273,20 +269,19 @@ void UnoDataBrowserView::resizeControl(Rectangle& _rRect)
         m_pTreeView->SetPosSizePixel( aTreeViewPos, aTreeViewSize );
 
         //set the size of the splitter
-        m_pSplitter->SetPosSizePixel( aSplitPos, Size( aSplitSize.Width(), aNewSize.Height() - aToolBoxSize.Height() ) );
-        m_pSplitter->SetDragRectPixel(  Rectangle( Point( 0, aToolBoxSize.Height() ),
-                                        Size( aNewSize.Width(), aNewSize.Height() - aToolBoxSize.Height() ) ) );
+        m_pSplitter->SetPosSizePixel( aSplitPos, Size( aSplitSize.Width(), aPlaygroundSize.Height() ) );
+        m_pSplitter->SetDragRectPixel( _rPlayground );
     }
 
     // set the size of grid control
     Reference< ::com::sun::star::awt::XWindow >  xGridAsWindow(m_xGrid, UNO_QUERY);
     if (xGridAsWindow.is())
-        xGridAsWindow->setPosSize( aSplitPos.X() + aSplitSize.Width(), aToolBoxSize.Height() ,
-                                   aNewSize.Width() - aSplitSize.Width() - aSplitPos.X(),_rRect.GetHeight() - aToolBoxSize.Height(), ::com::sun::star::awt::PosSize::POSSIZE);
+        xGridAsWindow->setPosSize( aSplitPos.X() + aSplitSize.Width(), aPlaygroundPos.Y(),
+                                   aPlaygroundSize.Width() - aSplitSize.Width() - aSplitPos.X(), aPlaygroundSize.Height(), ::com::sun::star::awt::PosSize::POSSIZE);
 
-    // set the rect for the baseclass
-    _rRect.SetPos(Point(0, 0));
-    _rRect.SetSize(Size(aNewSize.Width(),aToolBoxSize.Height()));
+    // just for completeness: there is no space left, we occupied it all ...
+    _rPlayground.SetPos( _rPlayground.BottomRight() );
+    _rPlayground.SetSize( Size( 0, 0 ) );
 }
 
 //------------------------------------------------------------------

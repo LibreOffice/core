@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 14:21:46 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 13:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,52 +219,44 @@ void OQueryDesignView::initialize()
     m_pSelectionBox->Fill();
 }
 // -------------------------------------------------------------------------
-void OQueryDesignView::resizeControl(Rectangle& _rRect)
+void OQueryDesignView::resizeControl(Rectangle& _rPlayground)
 {
-    Window::Resize();
+    Point aPlaygroundPos( _rPlayground.TopLeft() );
+    Size aPlaygroundSize( _rPlayground.GetSize() );
 
-    Size aSize = GetOutputSizePixel();
-
+    // calc the split pos, and forward it to the controller
     sal_Int32 nSplitPos = static_cast<OQueryController*>(getController())->getSplitPos();
-    if( nSplitPos == -1 || nSplitPos >= aSize.Height())
+    if( nSplitPos == -1 || nSplitPos >= aPlaygroundSize.Height())
     {
-        nSplitPos = sal_Int32(aSize.Height()*0.5);
+        nSplitPos = sal_Int32(aPlaygroundSize.Height()*0.5);
         static_cast<OQueryController*>(getController())->setSplitPos(nSplitPos);
     }
 
-    Size aToolBoxSize;
-    ToolBox* pToolBox = getToolBox();
-    if(pToolBox)
-        aToolBoxSize = pToolBox->GetOutputSizePixel();
-    Point aTopLeft(_rRect.TopLeft());
-    aTopLeft.Y() += aToolBoxSize.Height();
+    // normalize the split pos
+    Point   aSplitPos       = Point( _rPlayground.Left(), nSplitPos );
+    Size    aSplitSize      = Size( _rPlayground.GetSize().Width(), m_aSplitter.GetSizePixel().Height() );
 
-    Point   aSplitPos(0,0);
-    Size    aSplitSize(0,0);
+    if( ( aSplitPos.Y() + aSplitSize.Height() ) > ( aPlaygroundSize.Height() ))
+        aSplitPos.Y() = aPlaygroundSize.Height() - aSplitSize.Height();
 
-    aSplitPos       = m_aSplitter.GetPosPixel();
-    aSplitPos.Y()   = nSplitPos;
-    aSplitSize      = m_aSplitter.GetOutputSizePixel();
-    aSplitSize.Width() = aSize.Width();
+    if( aSplitPos.Y() <= aPlaygroundPos.Y() )
+        aSplitPos.Y() = aPlaygroundPos.Y() + sal_Int32(aPlaygroundSize.Height() * 0.2);
 
-    if( ( aSplitPos.Y() + aSplitSize.Height() ) > ( aSize.Height() ))
-        aSplitPos.Y() = aSize.Height() - aSplitSize.Height();
+    // position the table
+    Size aTableViewSize(aPlaygroundSize.Width(), aSplitPos.Y() - aPlaygroundPos.Y());
+    m_pScrollWindow->SetPosSizePixel(aPlaygroundPos, aTableViewSize);
 
-    if( aSplitPos.Y() <= 0)
-        aSplitPos.Y() = LogicToPixel( Size(0,sal_Int32(aSize.Height() * 0.2) ), MAP_APPFONT ).Height();
+    // position the selection browse box
+    Point aPos( aPlaygroundPos.X(), aSplitPos.Y() + aSplitSize.Height() );
+    m_pSelectionBox->SetPosSizePixel( aPos, Size( aPlaygroundSize.Width(), aPlaygroundSize.Height() - aSplitSize.Height() - aTableViewSize.Height() ));
 
-    Size aTableView(aSize.Width(),aSplitPos.Y()-aToolBoxSize.Height());
-    m_pScrollWindow->SetPosSizePixel(aTopLeft,aTableView);
+    // set the size of the splitter
+    m_aSplitter.SetPosSizePixel( aSplitPos, aSplitSize );
+    m_aSplitter.SetDragRectPixel( _rPlayground );
 
-    Point aPos(0,aSplitPos.Y()+aSplitSize.Height());
-    m_pSelectionBox->SetPosSizePixel(aPos,Size( aSize.Width(), aSize.Height() - aSplitSize.Height() - aSplitPos.Y() ));
-
-    //set the size of the splitter
-    m_aSplitter.SetPosSizePixel( aSplitPos, Size( aSize.Width(), aSplitSize.Height()) );
-    m_aSplitter.SetDragRectPixel(   Rectangle( Point( 0, 0 ), aSize) );
-
-    aToolBoxSize.Width() += _rRect.getWidth();
-    _rRect.SetSize(aToolBoxSize);
+    // just for completeness: there is no space left, we occupied it all ...
+    _rPlayground.SetPos( _rPlayground.BottomRight() );
+    _rPlayground.SetSize( Size( 0, 0 ) );
 }
 // -----------------------------------------------------------------------------
 void OQueryDesignView::setReadOnly(sal_Bool _bReadOnly)

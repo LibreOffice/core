@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:55:35 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 13:43:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,20 +288,15 @@ void OTableDesignView::initialize()
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-void OTableDesignView::resizeControl(Rectangle& _rRect)
+void OTableDesignView::resizeControl(Rectangle& _rPlayground)
 {
-    Size aToolBoxSize;
-    ToolBox* pToolBox = getToolBox();
-    if(pToolBox)
-        aToolBoxSize = pToolBox->GetOutputSizePixel();
-    Size aSize = GetOutputSizePixel();
+    m_pWin->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
 
-    m_pWin->SetPosSizePixel(Point(0,aToolBoxSize.Height()),Size(aSize.Width(),aSize.Height() - aToolBoxSize.Height()));
-
-    aToolBoxSize.Width() = _rRect.getWidth();
-    _rRect.SetPos(Point(0,0));
-    _rRect.SetSize(aToolBoxSize);
+    // just for completeness: there is no space left, we occupied it all ...
+    _rPlayground.SetPos( _rPlayground.BottomRight() );
+    _rPlayground.SetSize( Size( 0, 0 ) );
 }
+
 //------------------------------------------------------------------------------
 IMPL_LINK( OTableDesignView, SwitchHdl, Accelerator*, pAcc )
 {

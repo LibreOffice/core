@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:26:26 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 13:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,23 +166,13 @@ void OJoinDesignView::initialize()
     getAddTableDialog()->Update();
 }
 // -------------------------------------------------------------------------
-void OJoinDesignView::resizeControl(Rectangle& _rRect)
+void OJoinDesignView::resizeControl(Rectangle& _rPlayground)
 {
-    Window::Resize();
-    Size aSize = GetOutputSizePixel();
+    m_pScrollWindow->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
 
-    Size aToolBoxSize;
-    ToolBox* pToolBox = getToolBox();
-    if(pToolBox)
-        aToolBoxSize = pToolBox->GetOutputSizePixel();
-    Point aTopLeft(_rRect.TopLeft());
-    aTopLeft.Y() += aToolBoxSize.Height();
-
-    aSize.Height() -= aToolBoxSize.Height();
-    m_pScrollWindow->SetPosSizePixel(aTopLeft,aSize);
-
-    aToolBoxSize.Width() += _rRect.getWidth();
-    _rRect.SetSize(aToolBoxSize);
+    // just for completeness: there is no space left, we occupied it all ...
+    _rPlayground.SetPos( _rPlayground.BottomRight() );
+    _rPlayground.SetSize( Size( 0, 0 ) );
 }
 // -----------------------------------------------------------------------------
 void OJoinDesignView::setReadOnly(sal_Bool _bReadOnly)

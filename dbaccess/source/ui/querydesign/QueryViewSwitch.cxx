@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:19:03 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 13:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,21 +148,14 @@ void OQueryViewSwitch::initialize()
         switchView();
 }
 // -------------------------------------------------------------------------
-void OQueryViewSwitch::resizeControl(Rectangle& _rRect)
+void OQueryViewSwitch::resizeControl(Rectangle& _rPlayground)
 {
-    Size aToolBoxSize;
-    ToolBox* pToolBox = m_pDesignView->getToolBox();
-    if(pToolBox)
-        aToolBoxSize = pToolBox->GetOutputSizePixel();
+    m_pTextView->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
+    m_pDesignView->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
 
-    Point aStart(_rRect.TopLeft());
-    aStart.Y() += aToolBoxSize.Height();
-
-    m_pTextView->SetPosSizePixel(aStart,Size(_rRect.GetSize().Width(),_rRect.GetSize().Height()-aToolBoxSize.Height()));
-    m_pDesignView->SetPosSizePixel(aStart,Size(_rRect.GetSize().Width(),_rRect.GetSize().Height()-aToolBoxSize.Height()));
-
-    aToolBoxSize.Width() += _rRect.getWidth();
-    _rRect.SetSize(aToolBoxSize);
+    // just for completeness: there is no space left, we occupied it all ...
+    _rPlayground.SetPos( _rPlayground.BottomRight() );
+    _rPlayground.SetSize( Size( 0, 0 ) );
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OQueryViewSwitch::getStatement()
