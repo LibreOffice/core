@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:50:22 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 12:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2208,14 +2208,14 @@ String STR_HYPH_TITLE
 
 ImageList ILIST_DB_DLG
 {
-    ImageBitmap = Bitmap { File = "sx_dbtree.bmp" ; };
+    Prefix = "sx";
     MaskColor = IMAGE_MASK_COLOR;
     IMGLIST_IDS;
 };
 
 ImageList ILIST_DB_DLG_HC
 {
-    ImageBitmap = Bitmap { File = "sxh_dbtree.bmp" ; };
+    Prefix = "sxh";
     MaskColor = IMAGE_MASK_COLOR ;
     IMGLIST_IDS;
 };
