@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 09:09:29 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 09:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #include <algorithm>
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
 #endif
 
 
@@ -1024,6 +1027,8 @@ void SAL_CALL OResultSet::updateBinaryStream( sal_Int32 columnIndex, const Refer
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
+    if(!x.is())
+        throw ::dbtools::FunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     Sequence<sal_Int8> aSeq;
@@ -1037,6 +1042,8 @@ void SAL_CALL OResultSet::updateCharacterStream( sal_Int32 columnIndex, const Re
     ::osl::MutexGuard aGuard( m_aMutex );
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
+    if(!x.is())
+        throw ::dbtools::FunctionSequenceException(*this);
 
     columnIndex = mapColumn(columnIndex);
     Sequence<sal_Int8> aSeq;
