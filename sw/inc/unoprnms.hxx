@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2000-11-27 11:11:30 $
+ *  last change: $Author: os $ $Date: 2000-11-29 09:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,6 +613,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_SORT_ASCENDING     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SORT_KEY              ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FIELDS;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_DATE_TIME_VALUE;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_ON;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_Z_ORDER;
 #endif
 
