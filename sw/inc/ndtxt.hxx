@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-11 08:53:50 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,11 @@ public:
        @return position of given attribute or NULL in case of failure
      */
     SwPosition * GetPosition(const SwTxtAttr * pAttr);
+
+    // -> #i29560
+    BOOL HasNumber() const;
+    BOOL HasBullet() const;
+    // <- #i29560
 
     USHORT GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd ) const;
 
