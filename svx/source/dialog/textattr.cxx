@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2001-01-26 14:11:01 $
+ *  last change: $Author: aw $ $Date: 2001-02-26 15:10:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,6 +657,11 @@ IMPL_LINK( SvxTextAttrPage, ClickHdl_Impl, void *, p )
         aMtrFldTop.SetValue( 0 );
         aMtrFldBottom.SetValue( 0 );
     }
+
+    // #83698# enable/disable text anchoring dependent of contour
+    aCtlPosition.Enable(!bContour);
+    aTsbFullWidth.Enable(!bContour);
+    aGrpPosition.Enable(!bContour);
 
 /*
     // Am Rahmen anpassen
