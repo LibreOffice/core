@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: ab $ $Date: 2001-09-04 06:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,8 @@ public:
     String aSource;                 // Quellcode
     String aComment;                // Kommentar
     BOOL   bInit;                   // TRUE: Init-Code ist gelaufen
+    BOOL   bFirstInit;              // TRUE, wenn das Image das erste mal nach
+                                    // dem Compilieren initialisiert wird.
     SbiImage();
    ~SbiImage();
     void Clear();                   // Inhalt loeschen
