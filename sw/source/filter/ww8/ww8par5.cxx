@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-06 14:38:27 $
+ *  last change: $Author: cmc $ $Date: 2001-03-16 13:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,8 +391,8 @@ BOOL _ReadFieldParams::GetTokenSttFromTo(USHORT* pFrom, USHORT* pTo, USHORT nMax
         String sStart( sParams.GetToken(0, '-', nIndex) );
         if( STRING_NOTFOUND != nIndex )
         {
-            nStart = sStart.ToInt32();
-            nEnd   = sParams.Copy( nIndex ).ToInt32();
+            nStart = static_cast<USHORT>(sStart.ToInt32());
+            nEnd   = static_cast<USHORT>(sParams.Copy(nIndex).ToInt32());
         }
     }
     if( pFrom ) *pFrom = nStart;
@@ -419,16 +419,15 @@ long SwWW8ImplReader::Read_Book( WW8PLCFManResult* pRes, BOOL bStartAttr )
         pEndStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_BOOKMARK );
         return 0;
     }
-    WW8PLCFx_Book* pB = pPlcxMan->GetBook();    // muesste auch ueber pRes.nCo2OrIdx gehen
+    // muesste auch ueber pRes.nCo2OrIdx gehen
+    WW8PLCFx_Book* pB = pPlcxMan->GetBook();
     if( !pB ){
         ASSERT( pB, "WW8PLCFx_Book - Pointer nicht da" );
         return 0;
     }
 
-    if( pB->GetIsEnd() ){
-#if 0
-        rDoc.Insert( *pPaM, 'E', CHARSET_ANSI );
-#endif
+    if (pB->GetIsEnd())
+    {
         pEndStck->SetAttr( *pPaM->GetPoint(), RES_FLTR_BOOKMARK,
                            TRUE, pB->GetHandle() );
         return 0;
@@ -437,17 +436,23 @@ long SwWW8ImplReader::Read_Book( WW8PLCFManResult* pRes, BOOL bStartAttr )
     eBookStatus eB = pB->GetStatus();
     if( ( eB & BOOK_IGNORE ) != 0 )
         return 0;                               // Bookmark zu ignorieren
-#if 0
-        rDoc.Insert( *pPaM, 'A', CHARSET_ANSI );
-#endif
 
     const String* pName = pB->GetName();
+    /*
+    ##413##
+    This code merely checks for the case of a bookmark names _Toc, while the
+    comment suggests that _Toc* is what it wants to ignore, in which case it
+    should be EqualsIgnoreCaseAscii( "_Toc",0,4 ) ). Don't know which is
+    intended. Will investigate for the future. Old speed of QuoteString may
+    have been the original reason an attempt to ignore strings beginning with
+    _Toc if that was the intent, in which case its ok now.
+    */
     if(    !pName
-        || pName->EqualsIgnoreCaseAscii( "_Toc" ) ) // "_Toc*" ist ueberfluessig
+        || pName->EqualsIgnoreCaseAscii( "_Toc" ) ) // "_Toc*" is unnecessary
         return 0;
 
 //JP 16.11.98: ToUpper darf auf keinen Fall gemacht werden, weil der Bookmark-
-//              name ein Hyperlink-Ziel sein kann!
+//name ein Hyperlink-Ziel sein kann!
 
     // Fuer UEbersetzung Bookmark -> Variable setzen
     long nLen = pB->GetLen();
@@ -993,33 +998,50 @@ long SwWW8ImplReader::Read_Field( WW8PLCFManResult* pRes, BOOL )
 //-----------------------------------------
 //        Felder Taggen
 //-----------------------------------------
-
-// QuoteChar ist ohne Laengenschutz
-
-void SwWW8ImplReader::QuoteChar( String& rStr, const sal_Unicode c, BOOL bAllowCr )
+//##413## Make QuoteString fast
+inline String lcl_QuoteChar(sal_Unicode c, BOOL bAllowCr)
 {
-    if ( c < 0x0020 || c == 0x00fe || c == 0x00ff )  // < 32, >0xfe
+    String sStr;
+    switch( c )
     {
-        switch( c )
-        {
         case 0x0b:
         case 0x0c:
-        case 0x0d: if(  bAllowCr )
-                   {
-                     rStr += '\n';
-                     break;
-                   }
-                    // no break
-        default:{
-                    // als Hex-Zahl mit \x  davor
-                    String sTmp( String::CreateFromInt32( c, 16 ) );
-                    if( 1 == sTmp.Len() )
-                        sTmp.Insert( '0', 0 );
-                    rStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\\x" ) );
-                    rStr += sTmp;
-                }
+        case 0x0d:
+            if( bAllowCr )
+                sStr += '\n';
+            else
+            {
+                //Common ones
+                static sal_Unicode __READONLY_DATA aCommon[3][5]=
+                {
+                    {'\\','x','0','b',0},
+                    {'\\','x','0','c',0},
+                    {'\\','x','0','d',0}
+                };
+                sStr.Append(aCommon[c-0x0b]);
+            }
+            break;
+        default:
+        {
+            //all Hex-Numbers with \x before
+            String sTmp( String::CreateFromInt32( c, 16 ) );
+            if( 1 == sTmp.Len() )
+                sTmp.Insert( '0', 0 );
+            sStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "\\x" ) );
+            sStr += sTmp;
+            break;
         }
     }
+    return sStr;
+}
+
+
+// QuoteChar ist ohne Laengenschutz
+void SwWW8ImplReader::QuoteChar( String& rStr, const sal_Unicode c,
+    BOOL bAllowCr )
+{
+    if ( c < 0x0020 || c == 0x00fe || c == 0x00ff )  // < 32, >0xfe
+        rStr.Append(lcl_QuoteChar(c,bAllowCr));
     else
         rStr += c;                  // normaler Text
 }
@@ -1027,13 +1049,18 @@ void SwWW8ImplReader::QuoteChar( String& rStr, const sal_Unicode c, BOOL bAllowC
 // QuoteString() wandelt CRs abhaengig von nFieldIniFlags in '\n' oder "\0x0d"
 void SwWW8ImplReader::QuoteString( String& rStr, const String& rOrg )
 {
-    BOOL bAllowCr = SwFltGetFlag( nFieldFlags, SwFltControlStack::ALLOW_FLD_CR );
+    BOOL bAllowCr = SwFltGetFlag(nFieldFlags,SwFltControlStack::ALLOW_FLD_CR);
     xub_StrLen nMax = rOrg.Len();
-    xub_StrLen i = 0;
-    while( nMax > i && ( rStr.Len() < MAX_FIELDLEN - 4 ) )
+    xub_StrLen nI = 0;
+    const sal_Unicode* pOrg = rOrg.GetBuffer();
+    while (nI < nMax && (rStr.Len() < MAX_FIELDLEN - 4))
     {
-        QuoteChar( rStr, rOrg.GetChar( i ), bAllowCr );
-        i++;
+        xub_StrLen nBegin = nI;
+        while (pOrg[nI] >= 0x0020 && pOrg[nI] != 0x00fe && pOrg[nI] != 0x00ff )
+            ++nI;
+        rStr.Append(pOrg+nBegin,nI-nBegin);
+        rStr.Append(lcl_QuoteChar(pOrg[nI],bAllowCr));
+        ++nI;
     }
 }
 
@@ -1322,7 +1349,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
 
     if( sLevel.Len() )
     {
-        USHORT nLvl = (USHORT)sLevel.ToInt32();
+        BYTE nLvl = (BYTE)sLevel.ToInt32();
         if( nLvl )
         {
             if( MAXLEVEL <= --nLvl )
@@ -1339,7 +1366,8 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
 eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 {
     USHORT nSub;
-    USHORT nReg = DI_SUB_AUTHOR;    // RegInfoFormat, DefaultFormat fuer DocInfoFelder
+    // RegInfoFormat, DefaultFormat fuer DocInfoFelder
+    USHORT nReg = DI_SUB_AUTHOR;
     BOOL   bDateTime = FALSE;
 
     if( 85 == pF->nId )
@@ -2376,7 +2404,8 @@ void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader,
             }
             else while( STRING_NOTFOUND != nIndex )
             {
-                sal_Int32 nLevel = sParams.GetToken(0, ';', nIndex).ToInt32();
+                USHORT nLevel = static_cast<USHORT>(
+                    sParams.GetToken(0, ';', nIndex).ToInt32());
 
                 if( (0 < nLevel) && (MAXLEVEL >= nLevel) )
                 {
@@ -2447,8 +2476,12 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         if( STRING_NOTFOUND != n )
                         {
                             String sParams( aReadParam.GetResult() );
-                            if( sParams.Len() ) // if NO String just ignore the \c
-                                nIndexCols = sParams.ToInt32();
+                            // if NO String just ignore the \c
+                            if( sParams.Len() )
+                            {
+                                nIndexCols =
+                                    static_cast<USHORT>(sParams.ToInt32());
+                            }
                         }
                     }
                     break;
@@ -3091,12 +3124,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.14 2001-03-06 14:38:27 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.15 2001-03-16 13:16:48 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2001/03/06 14:38:27  jp
+      compiler error
+
       Revision 1.13  2001/03/05 13:13:24  cmc
       One too many field handlers, my 1st dublin test checkin
 
