@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:54:47 $
+#   last change: $Author: vg $ $Date: 2003-06-12 09:50:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -118,16 +118,23 @@ BUILD_FLAGS=-f vc7.mak
 
 .IF "$(COM)"=="GCC"
 .IF "$(COMID)"=="gcc3"
+# FreeBSD needs a special makefile
+.IF "$(OS)"=="FREEBSD"
+BUILD_FLAGS=-f gcc-3.0-freebsd.mak
+.ELSE
 BUILD_FLAGS=-f gcc-3.0.mak
+.ENDIF
 .ELSE # "$(COMID)"=="gcc3"
 # MacOS X/Darwin need a special makefile
 .IF "$(OS)"=="MACOSX"
     BUILD_FLAGS=-f gcc-apple-macosx.mak
+.ELIF "$(OS)"=="FREEBSD"
+    BUILD_FLAGS=-f gcc-freebsd.mak
 .ELSE # "$(OS)"=="MACOSX"
     BUILD_FLAGS=-f gcc.mak
 .ENDIF # "$(OS)"=="MACOSX"
 .ENDIF # "$(COMID)"=="gcc3"
-BUILD_ACTION=make
+BUILD_ACTION=$(GNUMAKE)
 # build in parallel
 BUILD_FLAGS+= -j$(MAXPROCESS)
 .ENDIF
@@ -135,13 +142,18 @@ BUILD_FLAGS+= -j$(MAXPROCESS)
 .IF "$(COM)"=="C52"
 BUILD_ACTION=make
 BUILD_FLAGS=-f sunpro6.mak
-.ENDIF
 
-.IF "$(COM)"=="C52"
 OUT2INC= \
     stlport$/SC5$/*.SUNWCCh
+.ENDIF
 
-.ENDIF          # "$(COM)"=="C52"
+.IF "$(OS)"=="IRIX"
+TARFILE_NAME=STLport-4.5
+PATCH_FILE_NAME=$(MISC)$/STLport-4.5.patch
+BUILD_ACTION=gmake
+BUILD_FLAGS=-f gcc-3.0.mak
+BUILD_FLAGS+= -j$(MAXPROCESS)
+.ENDIF
 
 OUTDIR2INC= \
     stlport
