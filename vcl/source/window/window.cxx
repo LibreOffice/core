@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: sb $ $Date: 2002-04-09 08:39:02 $
+ *  last change: $Author: pl $ $Date: 2002-04-10 16:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -838,33 +838,23 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
 
 void Window::ImplSetFrameParent( const Window* pParent )
 {
-    if( mpFrame )
+    Window* pFrameWindow = ImplGetSVData()->maWinData.mpFirstFrame;
+    while( pFrameWindow )
     {
-        Window* pFrameWindow = ImplGetSVData()->maWinData.mpFirstFrame;
-        while( pFrameWindow )
+        if( ImplIsRealParentPath( pFrameWindow ) )
         {
-            if( pFrameWindow->mpClientWindow == this || pFrameWindow->mpRealParent == this  || pFrameWindow->mpParent == this )
-            {
-                DBG_ASSERT( mpFrame != pFrameWindow->mpFrame, "SetFrameParent to own" );
-                DBG_ASSERT( mpFrame, "no frame" );
+            DBG_ASSERT( mpFrame != pFrameWindow->mpFrame, "SetFrameParent to own" );
+            DBG_ASSERT( mpFrame, "no frame" );
 
 #ifndef REMOTE_APPSERVER
-                SalFrame* pParentFrame = pParent ? pParent->mpFrame : NULL;
-                mpFrame->SetParent( pParentFrame );
+            SalFrame* pParentFrame = pParent ? pParent->mpFrame : NULL;
+            pFrameWindow->mpFrame->SetParent( pParentFrame );
 #else
-                RmFrameWindow* pParentFrame = pParent ? pParent->mpFrame : NULL;
-                mpFrame->SetParent( pParentFrame ? pParentFrame->GetFrameInterface() : REF( NMSP_CLIENT::XRmFrameWindow )() );
+            RmFrameWindow* pParentFrame = pParent ? pParent->mpFrame : NULL;
+            pFrameWindow->mpFrame->SetParent( pParentFrame ? pParentFrame->GetFrameInterface() : REF( NMSP_CLIENT::XRmFrameWindow )() );
 #endif
-            }
-            pFrameWindow = pFrameWindow->mpFrameData->mpNextFrame;
         }
-    }
-
-    Window* pChild = mpFirstChild;
-    while( pChild )
-    {
-        pChild->ImplSetFrameParent( pParent );
-        pChild = pChild->mpNext;
+        pFrameWindow = pFrameWindow->mpFrameData->mpNextFrame;
     }
 }
 
