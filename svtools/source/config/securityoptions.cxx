@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 12:26:52 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #endif
 
 #include <pathoptions.hxx>
+
+#include <rtl/logfile.hxx>
+#include "itemholder1.hxx"
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -1050,7 +1053,11 @@ SvtSecurityOptions::SvtSecurityOptions()
     // ... and initialize ouer data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
+        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtSecurityOptions_Impl::ctor()");
         m_pDataContainer = new SvtSecurityOptions_Impl;
+
+        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
+        pHolder->holdConfigItem(E_SECURITYOPTIONS);
     }
 }
 
