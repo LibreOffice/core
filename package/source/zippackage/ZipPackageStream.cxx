@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:29:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 11:55:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,6 +567,9 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
 {
     if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("MediaType")))
     {
+        if ( !rZipPackage.isInPackageFormat() )
+            throw beans::PropertyVetoException();
+
         if ( aValue >>= sMediaType )
         {
             if (sMediaType.getLength() > 0)
@@ -593,6 +596,9 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Encrypted") ) )
     {
+        if ( !rZipPackage.isInPackageFormat() )
+            throw beans::PropertyVetoException();
+
         sal_Bool bEnc = sal_False;
         if ( aValue >>= bEnc )
         {
@@ -614,6 +620,9 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
     }
     else if (aPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EncryptionKey") ) )
     {
+        if ( !rZipPackage.isInPackageFormat() )
+            throw beans::PropertyVetoException();
+
         Sequence < sal_Int8 > aNewKey;
 
         if ( !( aValue >>= aNewKey ) )
