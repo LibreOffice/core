@@ -6,6 +6,6 @@ dt	desktop\jobs							get		-	all	dt_jobs NULL
 dt	desktop\res								get		-	all	dt_res NULL
 dt	desktop\script							nmake	-	all	dt_scrp NULL
 dt	desktop\source\app						nmake	-	all	dt_app NULL
-dt	desktop\win32\source						nmake	-	w	dt_app NULL
+dt	desktop\win32\source					nmake	-	w	dt_wrapper NULL
 dt	desktop\source\javaldx					nmake	-	u	dt_javaldx NULL
-dt	desktop\util							nmake	-	all	dt_util dt_app NULL
+dt	desktop\util							nmake	-	all	dt_util dt_app dt_wrapper.w NULL
