@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:25:41 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,10 +132,11 @@
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
 #endif
-#ifndef SD_BREAK_DLG_HXX
-#include "BreakDlg.hxx"
-#endif
-
+//CHINA001 #ifndef SD_BREAK_DLG_HXX
+//CHINA001 #include "BreakDlg.hxx"
+//CHINA001 #endif
+#include "sdabstdlg.hxx" //CHINA001
+#include "brkdlg.hrc" //CHINA001
 namespace sd {
 
 #define MIN_ACTIONS_FOR_DIALOG  5000    // bei mehr als 1600 Metaobjekten
@@ -459,8 +460,15 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 else
                 {
                     // mit Dialog aufbrechen
-                    BreakDlg aDlg( pWindow, pDrView, GetDocSh(), nCount, nAnz );
-                    aDlg.Execute();
+                    //CHINA001 BreakDlg aDlg( pWindow, pDrView, GetDocSh(), nCount, nAnz );
+                    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+                    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+
+                    VclAbstractDialog* pDlg = pFact->CreateBreakDlg(ResId( DLG_BREAK ), pWindow, pDrView, GetDocSh(), nCount, nAnz );
+                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+                    //CHINA001 aDlg.Execute();
+                    pDlg->Execute();
+                    delete pDlg; //add by CHINA001
                 }
             }
 
