@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2000-10-26 10:00:45 $
+ *  last change: $Author: os $ $Date: 2000-10-27 14:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -509,8 +509,7 @@ extern const SwPropNameLen __FAR_DATA UNO_LINK_DISPLAY_BITMAP                   
 extern const SwPropNameLen __FAR_DATA UNO_NAME_HEADING_STYLE_NAME                   ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SHOW_ONLINE_LAYOUT                   ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_USER_DEFINED_ATTRIBUTES          ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES     ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_USER_DEFINED_ATTRIBUTES     ;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_TEXT_USER_DEFINED_ATTRIBUTES     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_FILE_PATH                            ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_CHAPTER_NUMBERING_LEVEL     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_PARA_CONDITIONAL_STYLE_NAME        ;
