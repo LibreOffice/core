@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pam.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:33:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,14 @@ public:
     {
         return ( bPoint ? pPoint->nNode : pMark->nNode ).GetNode().GetCntntNode();
     }
+
+    /**
+       Normalizes PaM, i.e. sort point and mark.
+
+       @param bPointFirst TRUE: If the point is behind the mark then swap.
+                          FALSE: If the mark is behind the point then swap.
+    */
+    SwPaM & Normalize(BOOL bPointFirst = TRUE);
 
     // erfrage vom SwPaM das Dokument, in dem er angemeldet ist
     SwDoc* GetDoc() const { return pPoint->nNode.GetNode().GetDoc(); }
