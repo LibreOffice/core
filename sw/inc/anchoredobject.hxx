@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:01:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:26:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,10 @@ class SwAnchoredObject
         // is applied.
         bool mbConsiderForTextWrap;
         bool mbPositionLocked;
+        // --> OD 2005-01-10 #i40147# - boolean needed to keep position of
+        // anchored object locked due to special object positioning for sections.
+        bool mbKeepPositionLockedForSection;
+        // <--
         bool mbRestartLayoutProcess;
         bool mbClearedEnvironment;
         // <--
@@ -446,8 +450,23 @@ class SwAnchoredObject
         bool ConsiderForTextWrap() const;
         void SetConsiderForTextWrap( const bool _bConsiderForTextWrap );
         bool PositionLocked() const;
-        void LockPosition();
-        void UnlockPosition();
+        inline void LockPosition()
+        {
+            mbPositionLocked = true;
+        }
+        inline void UnlockPosition()
+        {
+            if ( !mbKeepPositionLockedForSection )
+            {
+                mbPositionLocked = false;
+            }
+        }
+        // --> OD 2005-01-10 #i40147#
+        inline void SetKeepPosLocked( const bool _bKeepPosLocked )
+        {
+            mbKeepPositionLockedForSection = _bKeepPosLocked;
+        }
+        // <--
         bool RestartLayoutProcess() const;
         void SetRestartLayoutProcess( const bool _bRestartLayoutProcess );
         // --> OD 2004-10-22 #i35911# - accessors for <mbClearedEnvironment>
@@ -506,6 +525,46 @@ class SwAnchoredObject
             @author OD
         */
         bool OverlapsPrevColumn() const;
+
+        /** method to determine position of anchored object relative to
+            anchor frame
+
+            OD 2005-01-06 #i30669#
+            Usage: Needed layout information for WW8 export
+
+            @author OD
+        */
+        Point GetRelPosToAnchorFrm() const;
+
+        /** method to determine position of anchored object relative to
+            page frame
+
+            OD 2005-01-06 #i30669#
+            Usage: Needed layout information for WW8 export
+
+            @author OD
+        */
+        Point GetRelPosToPageFrm() const;
+
+        /** method to determine position of anchored object relative to
+            anchor character
+
+            OD 2005-01-06 #i30669#
+            Usage: Needed layout information for WW8 export
+
+            @author OD
+        */
+        Point GetRelPosToChar() const;
+
+        /** method to determine position of anchored object relative to
+            top of line
+
+            OD 2005-01-06 #i30669#
+            Usage: Needed layout information for WW8 export
+
+            @author OD
+        */
+        Point GetRelPosToLine() const;
 };
 
 // ============================================================================
