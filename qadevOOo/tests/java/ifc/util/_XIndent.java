@@ -2,7 +2,7 @@
  *
  *  $RCSfile: _XIndent.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
  *  last change:$$
  *
@@ -61,11 +61,12 @@
 
 package ifc.util;
 
-import com.sun.star.util.XIndent;
-import com.sun.star.beans.XPropertySet;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.util.XIndent;
 
 /**
 * Testing <code>com.sun.star.util.XCancellable</code>

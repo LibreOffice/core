@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XCloneable.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:59 $
+ *  last change:$Date: 2003-09-08 11:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,13 @@
 
 package ifc.util;
 
-import com.sun.star.util.XCloneable;
 import lib.MultiMethodTest;
+
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloneable;
 
 /**
 * Testing <code>com.sun.star.util.XCloneable</code>
