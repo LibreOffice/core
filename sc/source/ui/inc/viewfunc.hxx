@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:38:13 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:52:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_VIEWFUNC_HXX
 #define SC_VIEWFUNC_HXX
 
@@ -102,6 +101,7 @@ struct ScTabOpParam;
 class ScPostIt;
 class ScConditionalFormat;
 class ScValidationData;
+class ScConversionParam;
 class SdrModel;
 class Graphic;
 class Exchange;
@@ -109,24 +109,6 @@ class ScRangeList;
 class SvxHyperlinkItem;
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
-
-//==================================================================
-
-struct ChineseTranslationParams
-{
-    Font            aTargetFont;
-    sal_Int32       nOptions;
-    LanguageType    nSourceLang;
-    LanguageType    nTargetLang;
-
-    ChineseTranslationParams( LanguageType nSL, LanguageType nTL, const Font &rTF , sal_Int32 nOpt ) :
-        nSourceLang( nSL ),
-        nTargetLang( nTL ),
-        aTargetFont( rTF ),
-        nOptions( nOpt )
-    {
-    }
-};
 
 //==================================================================
 
@@ -352,12 +334,11 @@ public:
     void            SetNote( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPostIt& rNote );
     void            DoSpellingChecker( BOOL bRecord = TRUE );
     void            DoHangulHanjaConversion( BOOL bRecord = TRUE );
-    void            DoChineseTranslation( const ChineseTranslationParams &rParams, BOOL bRecord = TRUE );
     void            DoThesaurus( BOOL bRecord = TRUE );
     DECL_LINK( SpellError, void * );
 
     /** Generic implementation of sheet conversion functions. */
-    void            DoSheetConversion( ScConversionType eConvType, BOOL bRecord, const ChineseTranslationParams *pChParams = NULL);
+    void            DoSheetConversion( const ScConversionParam& rParam, BOOL bRecord = TRUE );
 
     void            SetPrintRanges( BOOL bEntireSheet,
                                     const String* pPrint,
