@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-25 13:48:47 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 11:16:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,8 +336,15 @@ void SwFlyCntPortion::Paint( const SwTxtPaintInfo &rInf ) const
  * Es werden die Masze vom pFly->OutRect() eingestellt.
  * Es erfolgt ein SetBase() !
  *************************************************************************/
+#ifdef VERTICAL_LAYOUT
+SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
+                                  SwFlyInCntFrm *pFly, const Point &rBase,
+                                  long nLnAscent, long nLnDescent,
+                                  long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags ) :
+#else
 SwFlyCntPortion::SwFlyCntPortion( SwFlyInCntFrm *pFly, const Point &rBase,
     long nLnAscent, long nLnDescent, long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags ) :
+#endif
     pContact( pFly ),
     bDraw( sal_False ),
     bMax( sal_False ),
@@ -346,12 +353,24 @@ SwFlyCntPortion::SwFlyCntPortion( SwFlyInCntFrm *pFly, const Point &rBase,
     ASSERT( pFly, "SwFlyCntPortion::SwFlyCntPortion: no SwFlyInCntFrm!" );
     nLineLength = 1;
     nFlags |= SETBASE_ULSPACE | SETBASE_INIT;
+#ifdef VERTICAL_LAYOUT
+    SetBase( rFrm, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
+#else
     SetBase( rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
+#endif
     SetWhichPor( POR_FLYCNT );
 }
+
+#ifdef VERTICAL_LAYOUT
+SwFlyCntPortion::SwFlyCntPortion( const SwTxtFrm& rFrm,
+                                  SwDrawContact *pDrawContact, const Point &rBase,
+                                  long nLnAscent, long nLnDescent, long nFlyAsc,
+                                  long nFlyDesc, sal_uInt8 nFlags ) :
+#else
 SwFlyCntPortion::SwFlyCntPortion(  SwDrawContact *pDrawContact,
         const Point &rBase, long nLnAscent, long nLnDescent,
         long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags ) :
+#endif
     pContact( pDrawContact ),
     bDraw( sal_True ),
     bMax( sal_False ),
@@ -371,7 +390,13 @@ SwFlyCntPortion::SwFlyCntPortion(  SwDrawContact *pDrawContact,
     }
     nLineLength = 1;
     nFlags |= SETBASE_ULSPACE | SETBASE_INIT;
+
+#ifdef VERTICAL_LAYOUT
+    SetBase( rFrm, rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
+#else
     SetBase( rBase, nLnAscent, nLnDescent, nFlyAsc, nFlyDesc, nFlags );
+#endif
+
     SetWhichPor( POR_FLYCNT );
 }
 
@@ -392,8 +417,14 @@ const SwFrmFmt *SwFlyCntPortion::GetFrmFmt() const
  * Bei 0 liegt der obere Rand des FlyCnt auf der Baseline der Zeile.
  *************************************************************************/
 
+#ifdef VERTICAL_LAYOUT
+void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
+                               long nLnAscent, long nLnDescent, long nFlyAsc,
+                               long nFlyDesc, sal_uInt8 nFlags )
+#else
 void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
     long nLnDescent, long nFlyAsc, long nFlyDesc, sal_uInt8 nFlags )
+#endif
 {
     Point aBase( rBase );
     const SwFrmFmt* pFmt = GetFrmFmt();
@@ -419,14 +450,30 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
         nOldWidth = aBoundRect.Width();
     }
 
+#ifdef VERTICAL_LAYOUT
+    if ( rFrm.IsVertical() )
+        rFrm.SwitchVerticalToHorizontal( aBoundRect );
+#endif
+
     if( nFlags & SETBASE_ULSPACE )
         aBase.X() += rLRSpace.GetLeft();
     aBase.Y() += rULSpace.GetUpper();
     if( bDraw )
     {
+#ifdef VERTICAL_LAYOUT
+        SwRect aSnapRect = pSdrObj->GetSnapRect();
+        if ( rFrm.IsVertical() )
+            rFrm.SwitchVerticalToHorizontal( aSnapRect );
+#endif
+
         if( nFlags & SETBASE_ULSPACE )
+#ifdef VERTICAL_LAYOUT
+            aBase.X() += aSnapRect.Left() - aBoundRect.Left();
+        aBase.Y() += aSnapRect.Top() - aBoundRect.Top();
+#else
             aBase.X() += pSdrObj->GetSnapRect().Left() - aBoundRect.Left();
         aBase.Y() += pSdrObj->GetSnapRect().Top() - aBoundRect.Top();
+#endif
     }
     aBoundRect.Left( aBoundRect.Left() - rLRSpace.GetLeft() );
     aBoundRect.Width( aBoundRect.Width() + rLRSpace.GetRight() );
@@ -520,8 +567,24 @@ void SwFlyCntPortion::SetBase( const Point &rBase, long nLnAscent,
                 ((SwFrmFmt*)pFmt)->SetAttr( aVert );
                 ((SwFrmFmt*)pFmt)->UnlockModify();
             }
+#ifdef VERTICAL_LAYOUT
+            SwRect aSnapRect = pSdrObj->GetSnapRect();
+            if ( rFrm.IsVertical() )
+                rFrm.SwitchVerticalToHorizontal( aSnapRect );
+
+            Point aDiff = aRelPos + aBase - aSnapRect.TopLeft();
+            Point aAnchorBase( aBase );
+            if ( rFrm.IsVertical() )
+            {
+                rFrm.SwitchHorizontalToVertical( aAnchorBase );
+                aDiff = Point( -aDiff.Y(), aDiff.X() );
+            }
+
+            pSdrObj->ImpSetAnchorPos( aAnchorBase );
+#else
             Point aDiff = aRelPos + aBase - pSdrObj->GetSnapRect().TopLeft();
             pSdrObj->ImpSetAnchorPos( aBase );
+#endif
             // #80046# here a Move() is necessary, a NbcMove() is NOT ENOUGH(!)
             pSdrObj->Move( Size( aDiff.X(), aDiff.Y() ) );
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-12 08:11:40 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 11:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,8 +325,13 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurr, Point aStart,
             }
             else
             {
+#ifdef VERTICAL_LAYOUT
+                ((SwFlyCntPortion*)pPos)->SetBase( *aTmpInf.GetTxtFrm(), aTmpInf.GetPos(), nTmpAscent,
+                    nTmpDescent, nFlyAsc, nFlyDesc, nFlags );
+#else
                 ((SwFlyCntPortion*)pPos)->SetBase( aTmpInf.GetPos(), nTmpAscent,
                     nTmpDescent, nFlyAsc, nFlyDesc, nFlags );
+#endif
             }
         }
         if( pPos->IsMultiPortion() && ((SwMultiPortion*)pPos)->HasFlyInCntnt() )
@@ -399,8 +404,13 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
             {
                 const Point aBase( ( (SwFlyCntPortion*)pPos)->GetRefPoint().X(),
                                    nBaseLine );
+#ifdef VERTICAL_LAYOUT
+                ((SwFlyCntPortion*)pPos)->SetBase( *GetInfo().GetTxtFrm(), aBase, nTmpAscent, nTmpDescent,
+                    nFlyAsc, nFlyDesc, nFlags );
+#else
                 ((SwFlyCntPortion*)pPos)->SetBase( aBase, nTmpAscent, nTmpDescent,
                     nFlyAsc, nFlyDesc, nFlags );
+#endif
             }
         }
         pPos = pPos->GetPortion();
@@ -701,8 +711,13 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
 
     if( pFly )
     {
+#ifdef VERTICAL_LAYOUT
+        pRet = new SwFlyCntPortion( *GetInfo().GetTxtFrm(), pFly, aBase, nTmpAscent, nTmpDescent,
+                        nFlyAsc, nFlyDesc, nMode );
+#else
         pRet = new SwFlyCntPortion( pFly, aBase, nTmpAscent, nTmpDescent,
                         nFlyAsc, nFlyDesc, nMode );
+#endif
         // Wir muessen sicherstellen, dass unser Font wieder im OutputDevice
         // steht. Es koennte sein, dass der FlyInCnt frisch eingefuegt wurde,
         // dann hat GetFlyFrm dazu gefuehrt, dass er neu angelegt wird.
@@ -714,14 +729,24 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
             aBase.Y() = Y() + pRet->GetAscent();
             nMode |= SETBASE_ULSPACE;
             if( !rInf.IsTest() )
+#ifdef VERTICAL_LAYOUT
+                pRet->SetBase( *rInf.GetTxtFrm(), aBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc,
+                               nMode );
+#else
                 pRet->SetBase( aBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc,
                                nMode );
+#endif
         }
     }
     else
     {
+#ifdef VERTICAL_LAYOUT
+        pRet = new SwFlyCntPortion( *rInf.GetTxtFrm(), (SwDrawContact*)pFrmFmt->FindContactObj(),
+           aBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
+#else
         pRet = new SwFlyCntPortion( (SwDrawContact*)pFrmFmt->FindContactObj(),
            aBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
+#endif
     }
     return pRet;
 }
@@ -1205,6 +1230,10 @@ SwFlyList *SwTxtFly::InitFlyList()
     ASSERT( pCurrFrm, "InitFlyList: No Frame, no FlyList" );
     ASSERT( !pFlyList, "InitFlyList: FlyList already initialized" );
 
+#ifdef VERTICAL_LAYOUT
+    SWAP_IF_NOT_SWAPPED( pCurrFrm )
+#endif
+
     const SwSortDrawObjs *pSorted = pPage->GetSortedObjs();
     const MSHORT nCount = pSorted ? pSorted->Count() : 0;
     bOn = sal_False;
@@ -1303,6 +1332,8 @@ SwFlyList *SwTxtFly::InitFlyList()
             pRotRectList = new SwRotRectList( 0, 10 );
         pFlyList = new SwFlyList( 0, 10 );
     }
+
+    UNDO_SWAP( pCurrFrm )
 #else
         pFlyList = new SwFlyList( 0, 10 );
 #endif
@@ -1777,7 +1808,9 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
                 if( pRect )
                 {
 #ifdef VERTICAL_LAYOUT
-                    SwRect aFly = FlyToRect( pObj, rRect, &aRect );
+                    SwRect aFly = FlyToRect( pObj, rRect,
+                                             pCurrFrm->IsVertical() ?
+                                             &aRect : 0 );
 #else
                     SwRect aFly = FlyToRect( pObj, rRect );
 #endif
