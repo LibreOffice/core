@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Shape.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:44 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@
     @see com::sun::star::text::XText
     @see ShapeDescriptor
  */
-service Shape
+published service Shape
 {
     //-------------------------------------------------------------------------
 
