@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-08 08:36:47 $
+ *  last change: $Author: jl $ $Date: 2001-08-14 13:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,8 @@ sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 nSourceActions)
     // no MK_ALT, MK_CONTROL, MK_SHIFT
     if( !(grfKeyState & MK_CONTROL) &&
         !(grfKeyState & MK_ALT)    &&
-        !(grfKeyState & MK_RBUTTON) )
+        !(grfKeyState & MK_RBUTTON) &&
+        !(grfKeyState & MK_SHIFT))
     {
         if( nSourceActions & ACTION_MOVE )
         {
@@ -103,6 +104,11 @@ sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 nSourceActions)
 
         else
             ret = 0;
+    }
+    else if( grfKeyState & MK_SHIFT &&
+            !(grfKeyState & MK_CONTROL))
+    {
+        ret= ACTION_MOVE;
     }
     else if ( grfKeyState & MK_CONTROL &&
               !(grfKeyState & MK_SHIFT) )
@@ -129,7 +135,7 @@ sal_Int8 dndOleDropEffectsToActions( DWORD dwEffect)
     if( dwEffect & DROPEFFECT_COPY)
         ret |= ACTION_COPY;
     if( dwEffect & DROPEFFECT_MOVE)
-        ret |= ACTION_MOVE | ACTION_DEFAULT;
+        ret |= ACTION_MOVE;
     if( dwEffect & DROPEFFECT_LINK)
         ret |= ACTION_LINK;
 

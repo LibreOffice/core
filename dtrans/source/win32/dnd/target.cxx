@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-08 08:36:47 $
+ *  last change: $Author: jl $ $Date: 2001-08-14 13:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,8 +653,6 @@ void DropTarget::_acceptDrag( sal_Int8 dragOperation, const Reference<XDropTarge
     if( context == m_currentDragContext)
     {
         m_nLastDropAction= dragOperation;
-        if( m_nLastDropAction == ACTION_MOVE)
-            m_nLastDropAction |= ACTION_DEFAULT;
     }
 }
 
