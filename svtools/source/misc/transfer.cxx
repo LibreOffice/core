@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-20 15:58:26 $
+ *  last change: $Author: ka $ $Date: 2001-03-21 11:34:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ void SAL_CALL TransferableHelper::TerminateListener::queryTermination( const Eve
 
 void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const EventObject& aEvent ) throw( RuntimeException )
 {
-    mrParent.FlushToClipboard();
+    mrParent.ImplFlush();
 }
 
 // ----------------------
@@ -237,21 +237,25 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
 {
     if( !maAny.hasValue() || !mpFormats->size() || ( maLastFormat != rFlavor.MimeType ) )
     {
+        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
         maLastFormat = rFlavor.MimeType;
         maAny = Any();
 
-        Application::GetSolarMutex().acquire();
+        try
+        {
+            if( !mpFormats->size() )
+                AddSupportedFormats();
 
-        if( !mpFormats->size() )
-            AddSupportedFormats();
+            GetData( rFlavor );
 
-        GetData( rFlavor );
-
-        // watch for special formats
-        if( !maAny.hasValue() )
-            ImplGetSubstitutionData( rFlavor );
-
-        Application::GetSolarMutex().release();
+            // watch for special formats
+            if( !maAny.hasValue() )
+                ImplGetSubstitutionData( rFlavor );
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+        }
 
         if( !maAny.hasValue() )
             throw UnsupportedFlavorException();
@@ -264,11 +268,15 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor ) th
 
 Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() throw( RuntimeException )
 {
-    if( !mpFormats->size() )
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    try
     {
-        Application::GetSolarMutex().acquire();
-        AddSupportedFormats();
-        Application::GetSolarMutex().release();
+        if( !mpFormats->size() )
+            AddSupportedFormats();
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
     }
 
     Sequence< DataFlavor >          aRet( mpFormats->size() );
@@ -285,13 +293,16 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors() thr
 
 sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& rFlavor ) throw( RuntimeException )
 {
-    sal_Bool bRet = sal_False;
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    sal_Bool            bRet = sal_False;
 
-    if( !mpFormats->size() )
+    try
     {
-        Application::GetSolarMutex().acquire();
-        AddSupportedFormats();
-        Application::GetSolarMutex().release();
+        if( !mpFormats->size() )
+            AddSupportedFormats();
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
     }
 
     DataFlavorExVector::iterator aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
@@ -312,24 +323,30 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
 
 void SAL_CALL TransferableHelper::lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans ) throw( RuntimeException )
 {
-    if( mxTerminateListener.is() )
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    try
     {
-        Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
-
-        if( xFact.is() )
+        if( mxTerminateListener.is() )
         {
-            Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+            Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
 
-            if( xDesktop.is() )
-                xDesktop->removeTerminateListener( mxTerminateListener );
+            if( xFact.is() )
+            {
+                Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
+
+                if( xDesktop.is() )
+                    xDesktop->removeTerminateListener( mxTerminateListener );
+            }
+
+            mxTerminateListener = Reference< XTerminateListener >();
         }
 
-        mxTerminateListener = Reference< XTerminateListener >();
+        ObjectReleased();
     }
-
-    Application::GetSolarMutex().acquire();
-    ObjectReleased();
-    Application::GetSolarMutex().release();
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -342,10 +359,16 @@ void SAL_CALL TransferableHelper::disposing( const EventObject& rSource ) throw(
 
 void SAL_CALL TransferableHelper::dragDropEnd( const DragSourceDropEvent& rDSDE ) throw( RuntimeException )
 {
-    Application::GetSolarMutex().acquire();
-    DragFinished( rDSDE.DropSuccess ? rDSDE.DropAction : DNDConstants::ACTION_NONE );
-    ObjectReleased();
-    Application::GetSolarMutex().release();
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    try
+    {
+        DragFinished( rDSDE.DropSuccess ? rDSDE.DropAction : DNDConstants::ACTION_NONE );
+        ObjectReleased();
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -405,6 +428,29 @@ void TransferableHelper::ImplGetSubstitutionData( const DataFlavor& rFlavor )
                 }
             }
         }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+void TransferableHelper::ImplFlush()
+{
+    if( mxClipboard.is() )
+    {
+        Reference< XFlushableClipboard >    xFlushableClipboard( mxClipboard, UNO_QUERY );
+        const sal_uInt32                    nRef = Application::ReleaseSolarMutex();
+
+        try
+        {
+            if( xFlushableClipboard.is() )
+                 xFlushableClipboard->flushClipboard();
+        }
+        catch( const ::com::sun::star::uno::Exception& )
+        {
+            DBG_ERROR( "Could not flush clipboard" );
+        }
+
+        Application::AcquireSolarMutex( nRef );
     }
 }
 
@@ -790,6 +836,8 @@ void TransferableHelper::CopyToClipboard() const
 
     if( mxClipboard.is() )
     {
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+
         try
         {
             Reference< XMultiServiceFactory > xFact( ::comphelper::getProcessServiceFactory() );
@@ -798,48 +846,20 @@ void TransferableHelper::CopyToClipboard() const
             {
                 Reference< XDesktop > xDesktop( xFact->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), UNO_QUERY );
 
-// #81926: should be enabled
-#if 0
                 if( xDesktop.is() )
                 {
                     TransferableHelper* pThis = (TransferableHelper*) this;
                     xDesktop->addTerminateListener( pThis->mxTerminateListener = new TerminateListener( *pThis ) );
                 }
-#endif
             }
 
-            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
             mxClipboard->setContents( (TransferableHelper*) this, (TransferableHelper*) this );
-            Application::AcquireSolarMutex( nRef );
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
-            DBG_ERROR( "Could not copy to clipboard" );
         }
-    }
-}
 
-// -----------------------------------------------------------------------------
-
-void TransferableHelper::FlushToClipboard() const
-{
-    if( mxClipboard.is() )
-    {
-        Reference< XFlushableClipboard > xFlushableClipboard( mxClipboard, UNO_QUERY );
-
-        try
-        {
-            if( xFlushableClipboard.is() )
-            {
-                const sal_uInt32 nRef = Application::ReleaseSolarMutex();
-                xFlushableClipboard->flushClipboard();
-                Application::AcquireSolarMutex( nRef );
-            }
-        }
-        catch( const ::com::sun::star::uno::Exception& )
-        {
-            DBG_ERROR( "Could not flush clipboard" );
-        }
+        Application::AcquireSolarMutex( nRef );
     }
 }
 
@@ -853,24 +873,25 @@ void TransferableHelper::StartDrag( Window* pWindow, sal_Int8 nDnDSourceActions,
 
     if( xDragSource.is() )
     {
-        DragGestureEvent    aEvt;
-        const Point         aPt( pWindow->GetPointerPosPixel() );
-
-        aEvt.DragAction = DNDConstants::ACTION_COPY;
-        aEvt.DragOriginX = aPt.X();
-        aEvt.DragOriginY = aPt.Y();
-        aEvt.DragSource = xDragSource;
+        const sal_uInt32 nRef = Application::ReleaseSolarMutex();
 
         try
         {
-            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
+            DragGestureEvent    aEvt;
+            const Point         aPt( pWindow->GetPointerPosPixel() );
+
+            aEvt.DragAction = DNDConstants::ACTION_COPY;
+            aEvt.DragOriginX = aPt.X();
+            aEvt.DragOriginY = aPt.Y();
+            aEvt.DragSource = xDragSource;
+
             xDragSource->startDrag( aEvt, nDnDSourceActions, nDnDPointer, nDnDImage, this, this );
-            Application::AcquireSolarMutex( nRef );
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
-            DBG_ERROR( "Could not start drag" );
         }
+
+        Application::AcquireSolarMutex( nRef );
     }
 }
 
@@ -892,7 +913,6 @@ Reference< XClipboard> TransferableHelper::GetSystemClipboard()
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        DBG_ERROR( "Clipboard could not be initialized" );
     }
 
     return xClipboard;
@@ -945,7 +965,8 @@ TransferableDataHelper::~TransferableDataHelper()
 
 void TransferableDataHelper::InitFormats()
 {
-    Application::GetSolarMutex().acquire();
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     mpFormats->clear();
 
     try
@@ -980,8 +1001,6 @@ void TransferableDataHelper::InitFormats()
     catch( const ::com::sun::star::uno::Exception& )
     {
     }
-
-    Application::GetSolarMutex().release();
 }
 
 // -----------------------------------------------------------------------------
@@ -1061,8 +1080,8 @@ DataFlavorExVector& TransferableDataHelper::GetDataFlavorExVector() const
 
 Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor ) const
 {
-    const sal_uInt32    nRef = Application::ReleaseSolarMutex();
     Any                 aRet;
+    const sal_uInt32    nRef = Application::ReleaseSolarMutex();
 
     try
     {
@@ -1424,8 +1443,7 @@ sal_Bool TransferableDataHelper::GetINetImage( SotFormatStringId nFormat,
                                                 INetImage& rINtImg )
 {
     DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) &&
-             GetINetImage( aFlavor, rINtImg ) );
+    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetINetImage( aFlavor, rINtImg ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -1448,8 +1466,7 @@ sal_Bool TransferableDataHelper::GetFileList( SotFormatStringId nFormat,
                                                 FileList& rFileList )
 {
     DataFlavor aFlavor;
-    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) &&
-             GetFileList( aFlavor, rFileList ) );
+    return( SotExchange::GetFormatDataFlavor( nFormat, aFlavor ) && GetFileList( aFlavor, rFileList ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -1459,10 +1476,11 @@ sal_Bool TransferableDataHelper::GetFileList(
             FileList& rFileList )
 {
     SotStorageStreamRef xStm;
-    sal_Bool bRet = GetSotStorageStream( rFlavor, xStm );
+    sal_Bool            bRet = GetSotStorageStream( rFlavor, xStm );
 
     if( bRet )
         bRet = ERRCODE_NONE == ( *xStm >> rFileList ).GetError();
+
     return bRet;
 }
 
@@ -1544,7 +1562,6 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard()
         }
         catch( const ::com::sun::star::uno::Exception& )
         {
-            DBG_ERROR( "Could not get clipboard content" );
         }
     }
 

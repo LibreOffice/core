@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-20 15:58:26 $
+ *  last change: $Author: ka $ $Date: 2001-03-21 11:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,29 +191,37 @@ void SAL_CALL DropTargetHelper::DropTargetListener::disposing( const EventObject
 
 void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEvent& rDTDE ) throw( RuntimeException )
 {
-    Application::GetSolarMutex().acquire();
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    const sal_Int8 nRet = mrParent.ExecuteDrop( ExecuteDropEvent( rDTDE.DropAction, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE ) );
+    try
+    {
+        const sal_Int8 nRet = mrParent.ExecuteDrop( ExecuteDropEvent( rDTDE.DropAction, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE ) );
 
-    if( DNDConstants::ACTION_NONE == nRet )
-        rDTDE.Context->rejectDrop();
-    else
-        rDTDE.Context->acceptDrop( nRet );
+        if( DNDConstants::ACTION_NONE == nRet )
+            rDTDE.Context->rejectDrop();
+        else
+            rDTDE.Context->acceptDrop( nRet );
 
-    rDTDE.Context->dropComplete( DNDConstants::ACTION_NONE != nRet );
-
-    Application::GetSolarMutex().release();
+        rDTDE.Context->dropComplete( DNDConstants::ACTION_NONE != nRet );
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+    }
 }
 
 // -----------------------------------------------------------------------------
 
 void SAL_CALL DropTargetHelper::DropTargetListener::dragEnter( const DropTargetDragEnterEvent& rDTDEE ) throw( RuntimeException )
 {
-    Application::GetSolarMutex().acquire();
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    mrParent.ImplBeginDrag( rDTDEE.SupportedDataFlavors );
-
-    Application::GetSolarMutex().release();
+    try
+    {
+        mrParent.ImplBeginDrag( rDTDEE.SupportedDataFlavors );
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+    }
 
     dragOver( rDTDEE );
 }
@@ -222,27 +230,35 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragEnter( const DropTargetD
 
 void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEvent& dte ) throw( RuntimeException )
 {
-    Application::GetSolarMutex().acquire();
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    mrParent.ImplEndDrag();
-
-    Application::GetSolarMutex().release();
+    try
+    {
+        mrParent.ImplEndDrag();
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+    }
 }
 
 // -----------------------------------------------------------------------------
 
 void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDragEvent& rDTDE ) throw( RuntimeException )
 {
-    Application::GetSolarMutex().acquire();
+    const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-    const sal_Int8 nRet = mrParent.AcceptDrop( AcceptDropEvent( rDTDE.DropAction, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE ) );
+    try
+    {
+        const sal_Int8 nRet = mrParent.AcceptDrop( AcceptDropEvent( rDTDE.DropAction, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE ) );
 
-    if( DNDConstants::ACTION_NONE == nRet )
-        rDTDE.Context->rejectDrag();
-    else
-        rDTDE.Context->acceptDrag( nRet );
-
-    Application::GetSolarMutex().release();
+        if( DNDConstants::ACTION_NONE == nRet )
+            rDTDE.Context->rejectDrag();
+        else
+            rDTDE.Context->acceptDrag( nRet );
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+    }
 }
 
 // -----------------------------------------------------------------------------
