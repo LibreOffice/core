@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:04:02 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 14:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,8 @@ namespace
     {
         sal_Unicode const* const pStr = sName.getStr();
         sal_Unicode const* const pEnd = pStr + sName.getLength();
+        if (pStr == pEnd)
+            return false;
 
         for (sal_Unicode const* pValidate = pStr; pValidate != pEnd; ++pValidate)
         {
