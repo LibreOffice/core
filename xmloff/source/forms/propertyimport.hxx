@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyimport.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:00:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ namespace xmloff
     protected:
         typedef ::std::vector< ::com::sun::star::beans::PropertyValue > PropertyValueArray;
         PropertyValueArray          m_aValues;
+        PropertyValueArray          m_aGenericValues;
             // the values which the instance collects between StartElement and EndElement
 
         DECLARE_STL_STDKEY_SET( ::rtl::OUString, StringSet );
@@ -168,6 +169,8 @@ namespace xmloff
 
         void implPushBackPropertyValue(const ::com::sun::star::beans::PropertyValue& _rProp)
         { m_aValues.push_back(_rProp); }
+        void implPushBackGenericPropertyValue(const ::com::sun::star::beans::PropertyValue& _rProp)
+        { m_aGenericValues.push_back(_rProp); }
 
         static ::com::sun::star::uno::Any convertString(
             SvXMLImport& _rImporter,
@@ -217,10 +220,6 @@ namespace xmloff
     class OSinglePropertyContext : public SvXMLImportContext
     {
         OPropertyImportRef          m_xPropertyImporter;    // to add the properties
-        OAccumulateCharactersRef    m_xValueReader;         // the class reading the characters
-        ::com::sun::star::beans::PropertyValue
-                                    m_aPropValue;           // the property the instance imports currently
-        ::com::sun::star::uno::Type m_aPropType;            // the type of the property the instance imports currently
 
     public:
         OSinglePropertyContext(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
@@ -235,35 +234,7 @@ namespace xmloff
 #if OSL_DEBUG_LEVEL > 0
         virtual void Characters(const ::rtl::OUString& _rChars);
 #endif
-        virtual void EndElement();
     };
-
-    //=====================================================================
-    //= OAccumulateCharacters
-    //=====================================================================
-    /** helper class which accumulates the characters it gets
-    */
-    class OAccumulateCharacters : public SvXMLImportContext
-    {
-    protected:
-        ::rtl::OUString             m_sCharacters;
-        sal_Bool                    m_bPropertyIsVoid;      //added by BerryJia for Bug102407
-
-    public:
-        OAccumulateCharacters(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName);
-
-        virtual void StartElement(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
-
-        // SvXMLImportContext overridables
-        virtual void Characters(const ::rtl::OUString& _rChars);
-
-        //added by BerryJia for Bug102407
-        sal_Bool isVoid();
-
-        ::rtl::OUString getCharacters() const { return m_sCharacters; }
-    };
-    SV_IMPL_REF( OAccumulateCharacters )
 
 //.........................................................................
 }   // namespace xmloff
