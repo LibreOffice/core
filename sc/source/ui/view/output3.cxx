@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:28:44 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:14:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@
 #endif
 #endif
 
+#ifndef _SVX_FMVIEW_HXX
+#include <svx/fmview.hxx>
+#endif
+
 // STATIC DATA -----------------------------------------------------------
 
 SdrObject* pSkipPaintObj = NULL;
@@ -169,13 +173,13 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const Rectangle
         return;
 
     // #109985#
-    if(pViewShell)
+    if(pViewShell || pDrawView)
     {
-        SdrView* pDrawView = pViewShell->GetSdrView();
+        SdrView* pLocalDrawView = (pDrawView) ? pDrawView : pViewShell->GetSdrView();
 
-        if(pDrawView)
+        if(pLocalDrawView)
         {
-            SdrPageView* pPageView = pDrawView->GetPageViewPvNum(0);
+            SdrPageView* pPageView = pLocalDrawView->GetPageViewPvNum(0);
 
             if(pPageView)
             {
