@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 14:21:43 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -568,20 +571,18 @@ Reference<XResultSet> createResultSet(  OApplicationController* _pBrowser,sal_Bo
         {
             // look if we have to fill in some parameters
             // create and fill a composer
-            Reference< XSQLQueryComposerFactory >  xFactory(_xSrcConnection, UNO_QUERY);
-            Reference< XSQLQueryComposer> xComposer;
-            if (xFactory.is())
+            Reference< XMultiServiceFactory > xFactory( _xSrcConnection, UNO_QUERY );
+            Reference< XSingleSelectQueryComposer > xComposer;
+            if ( xFactory.is() )
+                xComposer.set( xFactory->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY );
+            if ( xComposer.is() )
             {
                 try
                 {
-                    xComposer = xFactory->createQueryComposer();
-                    if(xComposer.is())
-                    {
-                        xComposer->setQuery(sSql);
-                        Reference< XInteractionHandler > xHandler(_pBrowser->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.InteractionHandler"))), UNO_QUERY);
-                        ::dbtools::askForParameters(xComposer,Reference<XParameters>(xPrepStmt,UNO_QUERY),_xSrcConnection,xHandler);
-                        xSrcRs = xPrepStmt->executeQuery();
-                    }
+                    xComposer->setQuery(sSql);
+                    Reference< XInteractionHandler > xHandler(_pBrowser->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.InteractionHandler"))), UNO_QUERY);
+                    ::dbtools::askForParameters(xComposer,Reference<XParameters>(xPrepStmt,UNO_QUERY),_xSrcConnection,xHandler);
+                    xSrcRs = xPrepStmt->executeQuery();
                 }
                 catch(SQLContext&)
                 {
@@ -603,7 +604,6 @@ Reference<XResultSet> createResultSet(  OApplicationController* _pBrowser,sal_Bo
                 }
                 catch (Exception&)
                 {
-                    xComposer = NULL;
                 }
             }
         }
