@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.174 $
+ *  $Revision: 1.175 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:46:52 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2378,6 +2378,19 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aMailMergeMap;
+            }
+            break;
+            case PROPERTY_MAP_TEXT_VIEW :
+            {
+                static SfxItemPropertyMap pTextViewMap[] =
+                {
+                    {SW_PROP_NMID(UNO_NAME_PAGE_COUNT),             WID_PAGE_COUNT,             CPPU_E2T(CPPUTYPE_INT32),   PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_LINE_COUNT),             WID_LINE_COUNT,             CPPU_E2T(CPPUTYPE_INT32),   PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_CONSTANT_SPELLCHECK), WID_IS_CONSTANT_SPELLCHECK, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_HIDE_SPELL_MARKS),    WID_IS_HIDE_SPELL_MARKS,    CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0},
+                    {0,0,0,0}
+                };
+                aMapArr[nPropertyId] = pTextViewMap;
             }
             break;
 
