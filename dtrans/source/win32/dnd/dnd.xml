@@ -6,8 +6,8 @@
 
 <Author> Joachim Lingner </Author>
 
-<Name>  com.sun.star.comp.datatransfer.dnd.OleDragAndDropSource_V1 </Name>
-<Name>  com.sun.star.comp.datatransfer.dnd.OleDragAndDropTarget_V1 </Name>
+<Name>  com.sun.star.comp.datatransfer.dnd.OleDragSource_V1 </Name>
+<Name>  com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1 </Name>
 
 <Description>
     The win32 implementation of the drop target service.
@@ -21,8 +21,8 @@
 
 <Status StatusValue="experimental"/>
 
-<SupportedService>  com.sun.star.datatransfer.dnd.OleDragAndDropSource</SupportedService>
-<SupportedService>  com.sun.star.datatransfer.dnd.OleDragAndDropTarget</SupportedService>
+<SupportedService>  com.sun.star.datatransfer.dnd.OleDragSource</SupportedService>
+<SupportedService>  com.sun.star.datatransfer.dnd.OleDropTarget</SupportedService>
 
 <ServiceDependency> ... </ServiceDependency>
 

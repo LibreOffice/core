@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globals.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-08 14:30:48 $
+ *  last change: $Author: obr $ $Date: 2001-02-14 16:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,13 +69,13 @@
 #include <sal/types.h>
 
 
-#define DNDSOURCE_SERVICE_NAME  "com.sun.star.datatransfer.dnd.OleDragAndDropSource"
-#define DNDSOURCE_IMPL_NAME  "com.sun.star.comp.datatransfer.dnd.OleDragAndDropSource_V1"
-#define DNDSOURCE_REGKEY_NAME  "/com.sun.star.comp.datatransfer.dnd.OleDragAndDropSource_V1/UNO/SERVICES/com.sun.star.datatransfer.dnd.OleDragAndDropSource"
+#define DNDSOURCE_SERVICE_NAME  "com.sun.star.datatransfer.dnd.OleDragSource"
+#define DNDSOURCE_IMPL_NAME  "com.sun.star.comp.datatransfer.dnd.OleDragSource_V1"
+#define DNDSOURCE_REGKEY_NAME  "/com.sun.star.comp.datatransfer.dnd.OleDragSource_V1/UNO/SERVICES/com.sun.star.datatransfer.dnd.OleDragSource"
 
-#define DNDTARGET_SERVICE_NAME  "com.sun.star.datatransfer.dnd.OleDragAndDropTarget"
-#define DNDTARGET_IMPL_NAME  "com.sun.star.comp.datatransfer.dnd.OleDragAndDropTarget_V1"
-#define DNDTARGET_REGKEY_NAME  "/com.sun.star.comp.datatransfer.dnd.OleDragAndDropTarget_V1/UNO/SERVICES/com.sun.star.datatransfer.dnd.OleDragAndDropTarget"
+#define DNDTARGET_SERVICE_NAME  "com.sun.star.datatransfer.dnd.OleDropTarget"
+#define DNDTARGET_IMPL_NAME  "com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1"
+#define DNDTARGET_REGKEY_NAME  "/com.sun.star.comp.datatransfer.dnd.OleDropTarget_V1/UNO/SERVICES/com.sun.star.datatransfer.dnd.OleDropTarget"
 
 
 
