@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 12:36:40 $
+ *  last change: $Author: rt $ $Date: 2004-01-06 08:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,33 +591,22 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
         // TODO: copy encrypted element
         if ( !pElement->m_pStream->IsEncrypted() )
         {
-            uno::Reference< io::XStream > xOwnStream = pElement->m_pStream->GetStream(
-                                                                        embed::ElementModes::ELEMENT_READ );
-
-            if ( !xOwnStream.is() )
-                throw io::IOException(); // TODO
-
             uno::Reference< io::XStream > xSubStr =
                                         xDest->openStreamElement( pElement->m_aName,
                                         embed::ElementModes::ELEMENT_READWRITE | embed::ElementModes::ELEMENT_TRUNCATE );
             OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
 
-            completeStorageStreamCopy_Impl( xOwnStream, xSubStr );
+            pElement->m_pStream->CopyInternallyTo_Impl( xSubStr );
         }
         else if ( pElement->m_pStream->HasCachedPassword() && pElement->m_pStream->IsModified() )
         {
-            uno::Reference< io::XStream > xOwnStream = pElement->m_pStream->GetStream( embed::ElementModes::ELEMENT_READ,
-                                                             pElement->m_pStream->GetCachedPassword() );
-            if ( !xOwnStream.is() )
-                throw io::IOException(); // TODO
-
             uno::Reference< io::XStream > xSubStr =
                                         xDest->openEncryptedStreamElement( pElement->m_aName,
                                             embed::ElementModes::ELEMENT_READWRITE | embed::ElementModes::ELEMENT_TRUNCATE,
                                             pElement->m_pStream->GetCachedPassword() );
             OSL_ENSURE( xSubStr.is(), "No destination substream!\n" );
 
-            completeStorageStreamCopy_Impl( xOwnStream, xSubStr );
+            pElement->m_pStream->CopyInternallyTo_Impl( xSubStr, pElement->m_pStream->GetCachedPassword() );
         }
         else
         {
@@ -695,7 +684,7 @@ void OStorage_Impl::Commit()
         if ( m_bCommited || m_bIsRoot )
             xNewPackageFolder->removeByName( (*pDeletedIter)->m_aOriginalName );
         delete *pDeletedIter;
-        pDeletedIter = NULL;
+        *pDeletedIter = NULL;
     }
     m_aDeletedList.clear();
 
@@ -1045,7 +1034,7 @@ SotElement_Impl* OStorage_Impl::InsertElement( ::rtl::OUString aName, sal_Bool b
             OSL_ENSURE( (*pElementIter)->m_bIsRemoved, "Try to insert an element instead of existing one!\n" );
             if ( (*pElementIter)->m_bIsRemoved )
             {
-                OSL_ENSURE( (*pElementIter)->m_bIsInserted, "Inserted elements must be deleted immediatelly!\n" );
+                OSL_ENSURE( !(*pElementIter)->m_bIsInserted, "Inserted elements must be deleted immediatelly!\n" );
                 pDeletedElm = *pElementIter;
                 break;
             }
@@ -1594,6 +1583,11 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
 
             if ( pElement->m_pStorage->m_nStorageMode & embed::ElementModes::ELEMENT_WRITE )
                 nStorageMode |= embed::ElementModes::ELEMENT_WRITE;
+
+            // in case parent storage allows writing the readonly mode of the child storage is
+            // virtual, that means that it is just enough to change the flag to let it be writable
+            // and since there is no AntiImpl nobody should be notified about it
+            pElement->m_pStorage->m_nStorageMode = nStorageMode | embed::ElementModes::ELEMENT_READ;
 
             if ( ( nStorageMode & embed::ElementModes::ELEMENT_TRUNCATE ) )
             {
