@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:20 $
+ *  last change: $Author: mib $ $Date: 2000-10-20 05:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1727,7 +1727,7 @@ sal_Bool SvxShadowItem::importXML( const OUString& rValue, sal_uInt16 nMemberId,
     OUString aToken;
     while( aTokenEnum.getNextToken( aToken ) )
     {
-        if( aToken.compareToAscii( sXML_none ) )
+        if( aToken.compareToAscii( sXML_none ) == 0 )
         {
             eLocation = SVX_SHADOW_NONE;
             return sal_True;
@@ -4735,7 +4735,8 @@ sal_Bool SvxBrushItem::importXML( const OUString& rValue,
                         bRet = sal_False;
                     }
                 }
-                else if( aToken.compareToAscii( sXML_center ) )
+                else if( aToken.equalsAsciiL( sXML_center,
+                                              sizeof(sXML_center)-1 ) )
                 {
                     if( bHori )
                         lcl_frmitems_MergeXMLVertPos( ePos, GPOS_MM );
