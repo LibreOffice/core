@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:56:48 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:07:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,8 @@ static SfxItemInfo __READONLY_DATA  aItemInfos[] =
     { SID_ATTR_PAGE_HEADERSET,      SFX_ITEM_POOLABLE },    // ATTR_PAGE_HEADERSET
     { SID_ATTR_PAGE_FOOTERSET,      SFX_ITEM_POOLABLE },    // ATTR_PAGE_FOOTERSET
     { SID_SCATTR_PAGE_FORMULAS,     SFX_ITEM_POOLABLE },    // ATTR_PAGE_FORMULAS
-    { SID_SCATTR_PAGE_NULLVALS,     SFX_ITEM_POOLABLE }     // ATTR_PAGE_NULLVALS
+    { SID_SCATTR_PAGE_NULLVALS,     SFX_ITEM_POOLABLE },    // ATTR_PAGE_NULLVALS
+    { SID_SCATTR_PAGE_SCALETO,      SFX_ITEM_POOLABLE }     // ATTR_PAGE_SCALETO
 };
 
 // -----------------------------------------------------------------------
@@ -353,6 +354,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     ppPoolDefaults[ ATTR_PAGE_FOOTERSET  - ATTR_STARTINDEX ] = new SvxSetItem( ATTR_PAGE_FOOTERSET, aSetItemItemSet );
     ppPoolDefaults[ ATTR_PAGE_FORMULAS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_FORMULAS, FALSE );
     ppPoolDefaults[ ATTR_PAGE_NULLVALS   - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_PAGE_NULLVALS, TRUE );
+    ppPoolDefaults[ ATTR_PAGE_SCALETO    - ATTR_STARTINDEX ] = new ScPageScaleToItem( 1, 1 );
 //  ppPoolDefaults[ ATTR_ITEM_DOUBLE     - ATTR_STARTINDEX ] = new ScDoubleItem( ATTR_ITEM_DOUBLE, 0 );
 
     SetDefaults( ppPoolDefaults );
@@ -810,7 +812,7 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
         switch ( ePresentation )
         {
             case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText  = ScGlobal::GetRscString(STR_SCATTR_PAGE_NULLVALS);
+            rText  = ScGlobal::GetRscString(STR_SCATTR_PAGE_FORMULAS);
             rText += aStrSep;
 //          break; // DURCHFALLEN!!!
             case SFX_ITEM_PRESENTATION_NAMELESS:
@@ -854,11 +856,16 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
                 switch ( ePresentation )
                 {
                     case SFX_ITEM_PRESENTATION_COMPLETE:
-                    rText  = ScGlobal::GetRscString(STR_SCATTR_PAGE_SCALETOPAGES);
-                    rText += aStrSep;
+                    {
+                        rText.Assign( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALETOPAGES ) ).Append( aStrSep );
+                    }
 //                  break; // DURCHFALLEN!!!
                     case SFX_ITEM_PRESENTATION_NAMELESS:
-                    rText += String::CreateFromInt32( nPagNo );
+                    {
+                        String aPages( ScGlobal::GetRscString( STR_SCATTR_PAGE_SCALE_PAGES ) );
+                        aPages.SearchAndReplaceAscii( "%1", String::CreateFromInt32( nPagNo ) );
+                        rText.Append( aPages );
+                    }
                     break;
                 }
             }
