@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 15:50:25 $
+ *  last change: $Author: pl $ $Date: 2001-09-14 05:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@
 #include <vos/security.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_I18N_XCOLLATOR_HPP_
+#include <com/sun/star/i18n/XCollator.hpp>
+#endif
+
 #include <vcl/rcid.h>
 
 #include <stdctrl.hxx>
@@ -97,6 +101,9 @@
 #endif
 
 #include <helpid.hrc>
+
+using namespace com::sun::star;
+using namespace com::sun::star::uno;
 
 
 DECLARE_LIST( UniStringList, UniString* );
@@ -177,6 +184,12 @@ ImpPathDialog::ImpPathDialog( PathDialog* pDlg, WinBits nWinBits, RESOURCE_TYPE 
     }
 
     pDlg->SetHelpId( HID_FILEDLG_PATHDLG );
+
+    lang::Locale aLocale = Application::GetSettings().GetLocale();
+    xCollator = ::vcl::unohelper::CreateCollator();
+    if( xCollator.is() )
+        xCollator->loadDefaultCollator( aLocale, 1 );
+    DBG_ASSERT( xCollator.is(), "not collator service for path dialog" );
 }
 
 ImpPathDialog::~ImpPathDialog()
@@ -482,10 +495,13 @@ void ImpPathDialog::UpdateEntries( const BOOL dummy_bWithDirs )
             {
                 if( FileStat( rEntry ).GetKind() & FSYS_KIND_DIR )
                 {
-                    ULONG l;
-                    for( l = 0; l < aSortDirList.Count(); l++ )
-                        if( *aSortDirList.GetObject(l) > aName )
-                            break;
+                    ULONG l = 0;
+                    if( xCollator.is() )
+                    {
+                        for( l = 0; l < aSortDirList.Count(); l++ )
+                            if( xCollator->compareString( *aSortDirList.GetObject(l), aName ) > 0 )
+                                break;
+                    }
                     aSortDirList.Insert( new UniString( aName ), l );
                 }
             }
@@ -1036,10 +1052,10 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
     if ( nEntries )
     {
         UniStringList   aSortDirList;
-    for ( USHORT n = 0; n < nEntries; n++ )
+        for ( USHORT n = 0; n < nEntries; n++ )
         {
             DirEntry& rEntry = aDir[n];
-        UniString aName( rEntry.GetName() );
+            UniString aName( rEntry.GetName() );
 
             if( aName.Len() &&
                 ( ( ( aName.GetChar(0) != '.' ) ||
@@ -1054,9 +1070,9 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
                 {
                     ULONG n = aFileStat.GetKind();
                     if( pFileList )
-            pFileList->InsertEntry( aName );
+                        pFileList->InsertEntry( aName );
                 }
-        else if( bWithDirs && ( aFileStat.GetKind() & FSYS_KIND_DIR ) )
+                else if( bWithDirs && ( aFileStat.GetKind() & FSYS_KIND_DIR ) )
                 {
                     if( pDirList == pFileList )
                     {
@@ -1066,11 +1082,14 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
                     }
                     else
                     {
-            ULONG l;
-            for( l = 0; l < aSortDirList.Count(); l++ )
-                if( *aSortDirList.GetObject(l) > aName )
-                                break;
-            aSortDirList.Insert( new UniString( aName ), l );
+                        ULONG l = 0;
+                        if( xCollator.is() )
+                        {
+                            for( l = 0; l < aSortDirList.Count(); l++ )
+                                if( xCollator->compareString( *aSortDirList.GetObject(l), aName ) > 0 )
+                                    break;
+                        }
+                        aSortDirList.Insert( new UniString( aName ), l );
             }
         }
         }

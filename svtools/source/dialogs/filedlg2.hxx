@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlg2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:58 $
+ *  last change: $Author: pl $ $Date: 2001-09-14 05:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #ifndef _SV_BUTTON_HXX //autogen wg. PushButton
 #include <vcl/button.hxx>
 #endif
+#ifndef _VCL_UNOHELP_HXX
+#include <vcl/unohelp.hxx>
+#endif
+
 class FixedText;
 class Edit;
 class ListBox;
@@ -135,6 +139,9 @@ private:
     DirEntry            aPath;          // aktuell angewaehlter Pfad
     USHORT              nDirCount;      // Anzahl der Verzeichnis-
                                         // Verschachtelungen
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
+                        xCollator;
 
 protected:
 
