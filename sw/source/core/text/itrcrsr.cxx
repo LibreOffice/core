@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-27 17:05:19 $
+ *  last change: $Author: fme $ $Date: 2002-02-27 17:11:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
 
         if( pPor )
         {
-            ASSERT( !pPor->InNumberGrp(), "Number surprise" );
+            ASSERT( !pPor->InNumberGrp() || bInsideFirstField, "Number surprise" );
             sal_Bool bEmptyFld = sal_False;
             if( pPor->InFldGrp() && pPor->GetLen() )
             {
