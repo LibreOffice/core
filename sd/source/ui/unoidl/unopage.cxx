@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-26 10:19:46 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
 
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 
 #ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
@@ -154,7 +154,9 @@
 #include <svx/svdview.hxx>
 #include "misc.hxx"
 #include "sdview.hxx"
+#ifndef SVX_LIGHT
 #include "docshell.hxx"
+#endif
 #include "viewshel.hxx"
 #include "drviewsh.hxx"
 #include "unoobj.hxx"
@@ -614,6 +616,7 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
         break;
     case WID_PAGE_PREVIEW :
         {
+#ifndef SVX_LIGHT
             SdDrawDocument* pDoc = (SdDrawDocument*)mpPage->GetModel();
             if ( pDoc )
             {
@@ -646,6 +649,7 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
                     }
                 }
             }
+#endif
         }
         break;
 
@@ -1252,6 +1256,7 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
         SdPage* pNotesPage = mpModel->GetDoc()->GetSdPage( (mpPage->GetPageNum()-1)>>1, PK_NOTES );
         pNotesPage->SetName(aName);
 
+#ifndef SVX_LIGHT
         // fake a mode change to repaint the page tab bar
         SdDrawDocShell* pDocSh = mpModel->GetDocShell();
         SdViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
@@ -1270,6 +1275,7 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
         }
 
         mpModel->SetModified();
+#endif
     }
 }
 
@@ -1764,7 +1770,7 @@ void SdMasterPage::setBackground( const uno::Any& rValue )
 
         // if we find the background style, copy the set to the background
         SdDrawDocument* pDoc = (SdDrawDocument*)mpPage->GetModel();
-        SfxStyleSheetBasePool* pSSPool = pDoc->GetDocSh()->GetStyleSheetPool();
+        SfxStyleSheetBasePool* pSSPool = (SfxStyleSheetBasePool*)pDoc->GetStyleSheetPool();
         SfxStyleSheetBase* pStyleSheet = NULL;
         if(pSSPool)
         {
@@ -1820,7 +1826,7 @@ void SdMasterPage::getBackground( uno::Any& rValue ) throw()
     else
     {
         SdDrawDocument* pDoc = (SdDrawDocument*)mpPage->GetModel();
-        SfxStyleSheetBasePool* pSSPool = pDoc->GetDocSh()->GetStyleSheetPool();
+        SfxStyleSheetBasePool* pSSPool = (SfxStyleSheetBasePool*)pDoc->GetStyleSheetPool();
         SfxStyleSheetBase* pStyleSheet = NULL;
         if(pSSPool)
         {
@@ -1874,6 +1880,7 @@ void SAL_CALL SdMasterPage::setName( const OUString& aName )
         if(mpModel->GetDoc())
             mpModel->GetDoc()->RenameLayoutTemplate(mpPage->GetLayoutName(), aNewName);
 
+#ifndef SVX_LIGHT
         // fake a mode change to repaint the page tab bar
         SdDrawDocShell* pDocSh = mpModel->GetDocShell();
         SdViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
@@ -1890,6 +1897,7 @@ void SAL_CALL SdMasterPage::setName( const OUString& aName )
                 pDrawViewSh->ChangeEditMode( eMode, bLayer );
             }
         }
+#endif
 
         mpModel->SetModified();
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolayer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-19 16:19:32 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,9 @@ private:
     SdXImpressDocument& rModel;
 
     SdView* GetView() const throw();
+#ifndef SVX_LIGHT
     SdDrawDocShell* GetDocShell() const throw() { return rModel.pDocShell; }
+#endif
 
     void UpdateLayerView( sal_Bool modify = sal_True ) const throw();
 

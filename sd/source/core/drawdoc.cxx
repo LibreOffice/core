@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:18:30 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@
 #ifndef INCLUDED_SVTOOLS_SAVEOPT_HXX
 #include <svtools/saveopt.hxx>
 #endif
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 
 #include "eetext.hxx"
 
@@ -266,7 +266,9 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     eLanguageCJK( LANGUAGE_SYSTEM ),
     eLanguageCTL( LANGUAGE_SYSTEM )
 {
+#ifndef SVX_LIGHT
     SetObjectShell(pDrDocSh);       // fuer das VCDrawModel
+#endif
 
     if (pDocSh)
     {
@@ -1290,6 +1292,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
             SdPage* pPage = GetMasterSdPage( nPage, PK_STANDARD );
             SdrObject* pPresObj = pPage->GetPresObj( PRESOBJ_BACKGROUND ) ;
 
+            DBG_ASSERT( pPresObj, "Masterpage without a background object!" );
             if (pPresObj && pPresObj->GetOrdNum() != 0 )
                 pPage->NbcSetObjectOrdNum(pPresObj->GetOrdNum(),0);
         }
@@ -1816,7 +1819,6 @@ uno::Reference< uno::XInterface > SdDrawDocument::createUnoModel()
 {
     uno::Reference< uno::XInterface > xModel;
 
-#ifndef SVX_LIGHT
     try
     {
         xModel = pDocSh->GetModel();
@@ -1824,7 +1826,6 @@ uno::Reference< uno::XInterface > SdDrawDocument::createUnoModel()
     catch( uno::RuntimeException& e )
     {
     }
-#endif
 
     return xModel;
 }

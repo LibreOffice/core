@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cusshow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-15 14:24:28 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,12 +188,10 @@ uno::Reference< uno::XInterface > SdCustomShow::getUnoCustomShow()
     // try weak reference first
     uno::Reference< uno::XInterface > xShow( mxUnoCustomShow );
 
-#ifndef SVX_LIGHT
     if( !xShow.is() )
     {
         xShow = createUnoCustomShow( this );
     }
-#endif
 
     return xShow;
 }

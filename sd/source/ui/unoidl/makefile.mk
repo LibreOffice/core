@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:48:42 $
+#   last change: $Author: cl $ $Date: 2001-03-19 09:52:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,6 +120,24 @@ SLOFILES =      \
         $(SLO)$/unostyls.obj	\
         $(SLO)$/unopback.obj	\
         $(SLO)$/unovwcrs.obj
+
+SVXLIGHTOBJFILES = \
+        $(OBJ)$/unomodel.obj    \
+        $(OBJ)$/unopage.obj     \
+        $(OBJ)$/unolayer.obj    \
+        $(OBJ)$/unopres.obj     \
+        $(OBJ)$/unocpres.obj    \
+        $(OBJ)$/unoobj.obj		\
+        $(OBJ)$/unosrch.obj		\
+        $(OBJ)$/unowcntr.obj	\
+        $(OBJ)$/unogsfm.obj		\
+        $(OBJ)$/unogstyl.obj	\
+        $(OBJ)$/unopsfm.obj		\
+        $(OBJ)$/unopstyl.obj	\
+        $(OBJ)$/unokywds.obj	\
+        $(OBJ)$/unostyls.obj	\
+        $(OBJ)$/unopback.obj	\
+        $(OBJ)$/basemodel.obj
 
 # --- Tagets -------------------------------------------------------
 

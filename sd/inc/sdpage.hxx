@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-26 10:17:43 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,9 +145,7 @@ protected:
     Rectangle   GetTitleRect() const;
     Rectangle   GetLayoutRect() const;
 
-#ifndef SVX_LIGHT
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
-#endif
 
 public:
     TYPEINFO();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolayer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 23:03:39 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,12 @@
 #include <svx/svdlayer.hxx>
 #endif
 
+#ifndef SVX_LIGHT
 #ifndef _SD_DOCSHELL_HXX
 #include <docshell.hxx>
 #endif
+#endif
+
 #ifndef _DRAWDOC_HXX
 #include <drawdoc.hxx>
 #endif
@@ -288,8 +291,10 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
         break;
     }
 
+#ifndef SVX_LIGHT
     if( pLayerManager->GetDocShell() )
         pLayerManager->GetDocShell()->SetModified();
+#endif
 }
 
 uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
@@ -356,6 +361,7 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
             }
         }
 
+#ifndef SVX_LIGHT
         // Versuch 2. Info von der FrameView besorgen
         if(pLayerManager->GetDocShell())
         {
@@ -368,7 +374,7 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
                 case LOCKED:    return pFrameView->GetLockedLayers().IsSet(pLayer->GetID());
                 }
         }
-
+#endif
     }
     return sal_False; //TODO: uno::Exception?
 }
@@ -397,6 +403,7 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
             }
         }
 
+#ifndef SVX_LIGHT
         // Versuch 2. Info von der FrameView besorgen
         if(pLayerManager->GetDocShell())
         {
@@ -429,6 +436,7 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
                 return;
             }
         }
+#endif
     }
     //TODO: uno::Exception?
 }
@@ -673,6 +681,7 @@ sal_Bool SAL_CALL SdLayerManager::hasElements() throw(uno::RuntimeException)
     die Aenderungen auch in der sdbcx::View sichtbar gemacht werden */
 void SdLayerManager::UpdateLayerView( sal_Bool modify ) const throw()
 {
+#ifndef SVX_LIGHT
     if(rModel.pDocShell)
     {
         SdDrawViewShell* pDrViewSh =
@@ -688,17 +697,20 @@ void SdLayerManager::UpdateLayerView( sal_Bool modify ) const throw()
         if(modify)
             rModel.pDoc->SetChanged(sal_True);
     }
+#endif
 }
 
 /** */
 SdView* SdLayerManager::GetView() const throw()
 {
+#ifndef SVX_LIGHT
     if( rModel.pDocShell )
     {
         SdViewShell* pViewSh = rModel.pDocShell->GetViewShell();
         if(pViewSh)
             return pViewSh->GetView();
     }
+#endif
     return NULL;
 }
 

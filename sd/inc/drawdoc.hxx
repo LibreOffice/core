@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-11 16:16:37 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _DRAWDOC_HXX
 #define _DRAWDOC_HXX
 
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HDL_
+#include <com/sun/star/frame/XModel.hdl>
+#endif
 #ifndef _SV_PRINT_HXX
 #include <vcl/print.hxx>
 #endif
@@ -135,20 +138,31 @@ enum DocCreationMode
 
 #ifdef SVX_LIGHT
 class SvStream;
+class SdDrawDocument;
 
+/** this is a dummy SdDrawDocShell that is used by the Player */
 class SdDrawDocShell
 {
 private:
     SvStream* pStream;
     Printer* pPrinter;
+    SdDrawDocument* mpDoc;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxModel;
+
 public:
-    SdDrawDocShell( SvStream* pS ) { pPrinter = NULL; pStream = pS; }
+    SdDrawDocShell( SvStream* pS ) : pPrinter(NULL), pStream( pS ) {}
     ~SdDrawDocShell() { delete pPrinter; }
 
     virtual void SetPrinter( Printer* pPrntr ) { pPrinter = pPrntr; }
     virtual Printer* GetPrinter( BOOL bCreate ) { if( pPrinter == NULL && bCreate ) pPrinter = new Printer(); return pPrinter; }
 
     virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const { return pStream; }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModel();
+
+    void SetDoc( SdDrawDocument* pDoc ) { mpDoc = pDoc; }
+    SdDrawDocument* GetDoc() const { return mpDoc; }
 };
 
 #endif

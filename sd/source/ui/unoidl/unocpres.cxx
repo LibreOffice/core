@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocpres.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-15 09:56:25 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
 #endif
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 
 #include "unohelp.hxx"
 #include "unomodel.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-15 12:47:27 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
 #endif
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svditer.hxx>
@@ -147,7 +147,9 @@
 #include "unogsfm.hxx"
 #include "unopstyl.hxx"
 #include "viewshel.hxx"
+#ifndef SVX_LIGHT
 #include "docshell.hxx"
+#endif
 #include "helpids.h"
 #include "glob.hxx"
 #include "glob.hrc"
@@ -1103,6 +1105,7 @@ sal_Bool SdXShape::IsEmptyPresObj() const throw()
 */
 void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
 {
+#ifndef SVX_LIGHT
     // only possible if this actually *is* a presentation object
     if( !IsPresObj() )
         return;
@@ -1155,6 +1158,7 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
 
         pObj->SetEmptyPresObj(bEmpty);
     }
+#endif
 }
 
 sal_Bool SdXShape::IsMasterDepend() const throw()
@@ -1325,6 +1329,7 @@ void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumen
 
     SdDrawDocument* pDoc = mpModel? mpModel->GetDoc() : NULL;
 
+#ifndef SVX_LIGHT
     if( pDoc )
     {
         SdDrawDocShell* pDocSh = pDoc->GetDocSh();
@@ -1333,6 +1338,7 @@ void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumen
         if( pViewSh )
             pViewSh->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
     }
+#endif
 }
 
 uno::Any SdXShape::GetStyleSheet() const throw( beans::UnknownPropertyException  )

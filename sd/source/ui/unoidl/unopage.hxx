@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-15 09:52:06 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@ class SdPage;
 class SvxShape;
 class SdrObject;
 struct SfxItemPropertyMap;
+
+#ifdef SVX_LIGHT
+#define SvxFmDrawPage SvxDrawPage
+#endif
 
 /***********************************************************************
 *                                                                      *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 16:29:08 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,17 @@
 #include <unomodel.hxx>
 #endif
 
+#ifndef SVX_LIGHT
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
 #ifndef _SFX_BINDINGS_HXX
 #include <sfx2/bindings.hxx>
+#endif
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 
 // folgende fuer InsertSdPage()
@@ -123,7 +129,10 @@
 #include <svx/unoshape.hxx>
 #include <svx/unonrule.hxx>
 
+#ifndef SVX_LIGHT
 #include <docshell.hxx>
+#endif
+
 #include <drawdoc.hxx>
 #include <glob.hrc>
 #include <sdresid.hxx>
@@ -338,6 +347,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
     else
     {
+#ifndef SVX_LIGHT
         const SfxSimpleHint* pSfxHint = PTR_CAST(SfxSimpleHint, &rHint );
 
         // ist unser SdDrawDocument gerade gestorben?
@@ -357,6 +367,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 }
             }
         }
+#endif
     }
 }
 
@@ -849,6 +860,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
             break;
         }
         case WID_MODEL_VISAREA:
+#ifndef SVX_LIGHT
             {
                 SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
                 if( !pEmbeddedObj )
@@ -860,6 +872,7 @@ void SAL_CALL SdXImpressDocument::setPropertyValue( const OUString& aPropertyNam
 
                 pEmbeddedObj->SetVisArea( Rectangle( aVisArea.X, aVisArea.Y, aVisArea.X + aVisArea.Width - 1, aVisArea.Y + aVisArea.Height - 1 ) );
             }
+#endif
             break;
         case WID_MODEL_MAPUNIT:
         default:
@@ -896,6 +909,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
         break;
     case WID_MODEL_VISAREA:
         {
+#ifndef SVX_LIGHT
             SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
             if( !pEmbeddedObj )
                 break;
@@ -904,10 +918,12 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
             awt::Rectangle aVisArea( aRect.nLeft, aRect.nTop, aRect.getWidth(), aRect.getHeight() );
 
             aAny <<= aVisArea;
+#endif
         }
         break;
     case WID_MODEL_MAPUNIT:
         {
+#ifndef SVX_LIGHT
             SvEmbeddedObject* pEmbeddedObj = pDoc->GetDocSh();
             if( !pEmbeddedObj )
                 break;
@@ -915,6 +931,7 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
             sal_Int16 nMeasureUnit = 0;
             SvxMapUnitToMeasureUnit( pEmbeddedObj->GetMapUnit(), nMeasureUnit );
             aAny <<= (sal_Int16)nMeasureUnit;
+#endif
         }
         break;
     default:
@@ -1512,3 +1529,14 @@ uno::Sequence< OUString > SAL_CALL SdDocLinkTargets::getSupportedServiceNames()
     uno::Sequence< OUString > aSeq( &aSN, 1 );
     return aSeq;
 }
+
+#ifdef SVX_LIGHT
+uno::Reference< frame::XModel > SdDrawDocShell::GetModel()
+{
+    if( !mxModel.is() )
+        mxModel = new SdXImpressDocument( this );
+
+    return mxModel;
+}
+#endif
+

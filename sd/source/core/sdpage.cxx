@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-14 10:53:35 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,6 @@ SdrObject* SdPage::GetPresObject(PresObjKind eObjKind, BOOL bVertical, USHORT nI
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rectangle& rRect,
                                  BOOL bInsert)
 {
@@ -413,7 +412,11 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
     }
     else if (eObjKind == PRESOBJ_GRAPHIC)
     {
+#ifndef SVX_LIGHT
         Graphic aGraphic ( SdResId(BMP_PRESOBJ_GRAPHIC) );
+#else
+        Graphic aGraphic;
+#endif
         OutputDevice &aOutDev = *Application::GetDefaultDevice();
         aOutDev.Push();
 
@@ -430,29 +433,37 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
     else if (eObjKind == PRESOBJ_OBJECT)
     {
         pSdrObj = new SdrOle2Obj();
+#ifndef SVX_LIGHT
         Graphic aGraphic( SdResId(BMP_PRESOBJ_OBJECT) );
         ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+#endif
     }
     else if (eObjKind == PRESOBJ_CHART)
     {
         pSdrObj = new SdrOle2Obj();
         ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarChart" )));
+#ifndef SVX_LIGHT
         Graphic aGraphic( SdResId(BMP_PRESOBJ_CHART) );
         ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+#endif
     }
     else if (eObjKind == PRESOBJ_ORGCHART)
     {
         pSdrObj = new SdrOle2Obj();
         ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarOrg" )));
+#ifndef SVX_LIGHT
         Graphic aGraphic( SdResId(BMP_PRESOBJ_ORGCHART) );
         ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+#endif
     }
     else if (eObjKind == PRESOBJ_TABLE)
     {
         pSdrObj = new SdrOle2Obj();
         ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarCalc" )));
+#ifndef SVX_LIGHT
         Graphic aGraphic( SdResId(BMP_PRESOBJ_TABLE) );
         ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
+#endif
     }
 #ifdef STARIMAGE_AVAILABLE
     else if (eObjKind == PRESOBJ_IMAGE)
@@ -486,7 +497,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 
     if (pSdrObj)
     {
-        String aString = GetPresObjText(eObjKind);
         pSdrObj->SetEmptyPresObj(TRUE);
         pSdrObj->SetLogicRect(rRect);
         InsertObject(pSdrObj);
@@ -510,9 +520,12 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             pSdrObj->SetItemSet(aTempAttr);
         }
 
+#ifndef SVX_LIGHT
+        String aString = GetPresObjText(eObjKind);
         if ( aString.Len() && pSdrObj->ISA(SdrTextObj) )
         {
             SdrOutliner* pOutliner = ( (SdDrawDocument*) GetModel() )->GetInternalOutliner();
+
             USHORT nOutlMode = pOutliner->GetMode();
             pOutliner->Init( OUTLINERMODE_TEXTOBJECT );
             pOutliner->SetMinDepth(0);
@@ -520,11 +533,12 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             pOutliner->SetVertical( bVertical );
 
             String aEmptyStr;
-            SetObjText( (SdrTextObj*) pSdrObj, pOutliner, eObjKind, aString );
+            SetObjText( (SdrTextObj*) pSdrObj, (SdrOutliner*)pOutliner, eObjKind, aString );
 
             pOutliner->Init( nOutlMode );
             pOutliner->SetStyleSheet( 0, NULL );
         }
+#endif
 
         pSdrObj->SetUserCall(this);
         pSdrObj->RecalcBoundRect();
@@ -589,7 +603,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 
     return(pSdrObj);
 }
-#endif
 
 /*************************************************************************
 |*
@@ -598,7 +611,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind)
 {
     String aName(GetLayoutName());
@@ -646,7 +658,6 @@ SfxStyleSheet* SdPage::GetStyleSheetForPresObj(PresObjKind eObjKind)
     SfxStyleSheetBase*     pResult   = pStShPool->Find(aName, SD_LT_FAMILY);
     return (SfxStyleSheet*)pResult;
 }
-#endif // !SVX_LIGHT
 
 /*************************************************************************
 |*
@@ -1103,10 +1114,10 @@ Rectangle SdPage::GetLayoutRect() const
 |*
 \*************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
 {
     eAutoLayout = eLayout;
+#ifndef SVX_LIGHT
     bOwnArrangement = TRUE;
 
     CreateTitleAndLayout(bInit);
@@ -1830,8 +1841,8 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
     aPresObjList = aObjList;
 
     bOwnArrangement = FALSE;
-}
 #endif // !SVX_LIGHT
+}
 
 /*************************************************************************
 |*
@@ -2992,12 +3003,9 @@ String SdPage::GetPresObjText(PresObjKind eObjKind)
 }
 #endif // !SVX_LIGHT
 
-#ifndef SVX_LIGHT
 extern uno::Reference< uno::XInterface > createUnoPageImpl( SdPage* pPage );
 
 uno::Reference< uno::XInterface > SdPage::createUnoPage()
 {
     return createUnoPageImpl( this );
 }
-
-#endif // !SVX_LIGHT
