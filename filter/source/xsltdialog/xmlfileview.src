@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfileview.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:55:31 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:26:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,10 @@ WorkWindow DLG_XML_SOURCE_FILE_DIALOG
         Text[ slovak ] = "Pot~vrdi≈•";
         Text[ portuguese_brazilian ] = "~Validar";
         Text[ greek ] = "~Validate";
-        Text[ dutch ] = "~Validate";
+        Text[ dutch ] = "~Valideren";
         Text[ finnish ] = "~Validate";
         Text[ czech ] = "Validovat";
-        Text[ danish ] = "~Validate";
+        Text[ danish ] = "~Valider";
         Text[ arabic ] = "~Validate";
         Text[ hebrew ] = "~Validate";
         Text[ catalan ] = "~Validate";
@@ -111,6 +111,8 @@ WorkWindow DLG_XML_SOURCE_FILE_DIALOG
         Text[ polish ] = "~Validate";
         Text[ turkish ] = "~Validate";
         Text[ thai ] = "~Validate";
+        Text[ hungarian ] = "√âr~v√©nyes√≠t√©s";
+        Text[ slovenian ] = "~Oceni";
     };
     Text[ french ] = "Sortie filtre XML";
     Text[ spanish ] = "Salida filtro XML";
@@ -122,11 +124,11 @@ WorkWindow DLG_XML_SOURCE_FILE_DIALOG
     Text[ chinese_traditional ] = "XML ÁØ©ÈÅ∏Âô®ÂåØÂá∫";
     Text[ slovak ] = "XML Filter v√Ωstup";
     Text[ portuguese_brazilian ] = "SaÌda do filtro XML";
-    Text[ greek ] = "XML Filter output";
-    Text[ dutch ] = "XML Filter output";
+    Text[ greek ] = "∏ÓÔ‰ÔÚ ˆﬂÎÙÒÔı XML";
+    Text[ dutch ] = "XML-filter output";
     Text[ finnish ] = "XML Filter output";
     Text[ czech ] = "V√Ωstup XML filtru";
-    Text[ danish ] = "XML Filter output";
+    Text[ danish ] = "XML-filter udtrÊk";
     Text[ arabic ] = "XML Filter output";
     Text[ hebrew ] = "XML Filter output";
     Text[ catalan ] = "XML Filter output";
@@ -136,7 +138,10 @@ WorkWindow DLG_XML_SOURCE_FILE_DIALOG
     Text[ polish ] = "XML Filter output";
     Text[ turkish ] = "XML Filter output";
     Text[ thai ] = "XML Filter output";
+    Text[ hungarian ] = "XML-sz≈±r≈ë kimenete";
+    Text[ slovenian ] = "Izhod XML filtra";
 };
+
 
 
 
