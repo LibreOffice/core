@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 14:51:46 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,8 +717,8 @@ Sequence< OUString > SvxLinguData_Impl::GetSortedImplNames( INT16 nLang, BYTE nT
 
         if (aImplName.getLength()  &&  (lcl_SeqGetIndex( aRes, aImplName) == -1))    // name not yet added
         {
-      DBG_ASSERT( nIdx < aRes.getLength(), "index out of range" );
-      if (nIdx < aRes.getLength())
+            DBG_ASSERT( nIdx < aRes.getLength(), "index out of range" );
+            if (nIdx < aRes.getLength())
                 pRes[ nIdx++ ] = aImplName;
         }
     }
@@ -781,6 +781,11 @@ void lcl_MergeDisplayArray(
         SvxLinguData_Impl &rData,
         const ServiceInfo_Impl* pToAdd )
 {
+    DBG_ASSERT( pToAdd,
+            "lcl_MergeDisplayArray: tried to merge 0 pointer. Data missing?" );
+    if (!pToAdd)
+        return;
+
     ULONG nCnt = 0;
 
     ServiceInfoArr &rSvcInfoArr = rData.GetDisplayServiceArray();
@@ -1546,10 +1551,11 @@ void SvxLinguTabPage::UpdateModulesBox_Impl()
         for (USHORT i = 0;  i < nDispSrvcCount;  ++i)
         {
             pInfo = rAllDispSrvcArr.Get(i);
-            aLinguModulesCLB.InsertEntry(pInfo->sDisplayName);
+            DBG_ASSERT( pInfo, "UpdateModulesBox_Impl: data missing" );
+            aLinguModulesCLB.InsertEntry( pInfo ? pInfo->sDisplayName : C2U("!! missing entry !!") );
             SvLBoxEntry* pEntry = aLinguModulesCLB.GetEntry(i);
             pEntry->SetUserData( (void *) pInfo );
-            aLinguModulesCLB.CheckEntryPos( i, pInfo->bConfigured );
+            aLinguModulesCLB.CheckEntryPos( i, pInfo ? pInfo->bConfigured : FALSE );
         }
         aLinguModulesEditPB.Enable( nDispSrvcCount > 0 );
     }
@@ -2336,19 +2342,25 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         sal_Int32 nLocalIndex = 0;  // index relative to parent
         for (n = 0;  n < nNames;  ++n)
         {
+            OUString aImplName;
+            BOOL     bIsSuppLang = FALSE;
+
             pInfo = rLinguData.GetInfoByImplName( pName[n] );
-            BOOL bIsSuppLang = pInfo->xSpell.is()  &&
-                               pInfo->xSpell->hasLocale( aCurLocale );
-            const OUString &rImplName = pInfo->sSpellImplName;
-            if (rImplName.getLength()  &&  bIsSuppLang)
+            if (pInfo)
+            {
+                bIsSuppLang = pInfo->xSpell.is()  &&
+                              pInfo->xSpell->hasLocale( aCurLocale );
+                aImplName = pInfo->sSpellImplName;
+            }
+            if (aImplName.getLength() && bIsSuppLang)
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
                 const Sequence< OUString > *pCfgImplNames = rLinguData.GetSpellTable().Get( eCurLanguage );
                 DBG_ASSERT( pCfgImplNames, "pCfgImplNames missing" );
-                BOOL bChecked = pCfgImplNames && lcl_SeqGetEntryPos( *pCfgImplNames, rImplName ) >= 0;
+                BOOL bChecked = pCfgImplNames && lcl_SeqGetEntryPos( *pCfgImplNames, aImplName ) >= 0;
                 lcl_SetCheckButton( pEntry, bChecked );
-                pUserData = new ModuleUserData_Impl( rImplName, FALSE,
+                pUserData = new ModuleUserData_Impl( aImplName, FALSE,
                                         bChecked, TYPE_SPELL, (BYTE)nLocalIndex++ );
                 pEntry->SetUserData( (void *)pUserData );
                 pModel->Insert( pEntry );
@@ -2369,19 +2381,25 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         nLocalIndex = 0;
         for (n = 0;  n < nNames;  ++n)
         {
+            OUString aImplName;
+            BOOL     bIsSuppLang = FALSE;
+
             pInfo = rLinguData.GetInfoByImplName( pName[n] );
-            BOOL bIsSuppLang = pInfo->xHyph.is()  &&
-                               pInfo->xHyph->hasLocale( aCurLocale );
-            const OUString &rImplName = pInfo->sHyphImplName;
-            if (rImplName.getLength()  &&  bIsSuppLang)
+            if (pInfo)
+            {
+                bIsSuppLang = pInfo->xHyph.is()  &&
+                              pInfo->xHyph->hasLocale( aCurLocale );
+                aImplName = pInfo->sHyphImplName;
+            }
+            if (aImplName.getLength() && bIsSuppLang)
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
                 const Sequence< OUString > *pCfgImplNames = rLinguData.GetHyphTable().Get( eCurLanguage );
                 DBG_ASSERT( pCfgImplNames, "pCfgImplNames missing" );
-                BOOL bChecked = pCfgImplNames && lcl_SeqGetEntryPos( *pCfgImplNames, rImplName ) >= 0;
+                BOOL bChecked = pCfgImplNames && lcl_SeqGetEntryPos( *pCfgImplNames, aImplName ) >= 0;
                 lcl_SetCheckButton( pEntry, bChecked );
-                pUserData = new ModuleUserData_Impl( rImplName, FALSE,
+                pUserData = new ModuleUserData_Impl( aImplName, FALSE,
                                         bChecked, TYPE_HYPH, (BYTE)nLocalIndex++ );
                 pEntry->SetUserData( (void *)pUserData );
                 pModel->Insert( pEntry );
@@ -2402,19 +2420,25 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         nLocalIndex = 0;
         for (n = 0;  n < nNames;  ++n)
         {
+            OUString aImplName;
+            BOOL     bIsSuppLang = FALSE;
+
             pInfo = rLinguData.GetInfoByImplName( pName[n] );
-            BOOL bIsSuppLang = pInfo->xThes.is()  &&
-                               pInfo->xThes->hasLocale( aCurLocale );
-            const OUString &rImplName = pInfo->sThesImplName;
-            if (rImplName.getLength()  &&  bIsSuppLang)
+            if (pInfo)
+            {
+                bIsSuppLang = pInfo->xThes.is()  &&
+                              pInfo->xThes->hasLocale( aCurLocale );
+                aImplName = pInfo->sThesImplName;
+            }
+            if (aImplName.getLength() && bIsSuppLang)
             {
                 String aTxt( pInfo->sDisplayName );
                 SvLBoxEntry* pEntry = CreateEntry( aTxt, CBCOL_FIRST );
                 const Sequence< OUString > *pCfgImplNames = rLinguData.GetThesTable().Get( eCurLanguage );
                 DBG_ASSERT( pCfgImplNames, "pCfgImplNames missing" );
-                BOOL bChecked = pCfgImplNames && lcl_SeqGetEntryPos( *pCfgImplNames, rImplName ) >= 0;
+                BOOL bChecked = pCfgImplNames && lcl_SeqGetEntryPos( *pCfgImplNames, aImplName ) >= 0;
                 lcl_SetCheckButton( pEntry, bChecked );
-                pUserData = new ModuleUserData_Impl( rImplName, FALSE,
+                pUserData = new ModuleUserData_Impl( aImplName, FALSE,
                                         bChecked, TYPE_THES, (BYTE)nLocalIndex++ );
                 pEntry->SetUserData( (void *)pUserData );
                 pModel->Insert( pEntry );
