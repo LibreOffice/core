@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-16 15:17:54 $
+ *  last change: $Author: nn $ $Date: 2002-07-16 17:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -765,6 +765,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     {
         BOOL bAskIfNotEmpty = bAllowDialogs &&
                                 ( nFlags & IDF_CONTENTS ) &&
+                                nFunction == PASTE_NOFUNC &&
                                 SC_MOD()->GetInputOptions().GetReplaceCellsWarn();
         if ( bAskIfNotEmpty )
         {
