@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 16:06:46 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,11 +189,17 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_FORM_XBINDABLEVALUE_HPP_
 #include <drafts/com/sun/star/form/XBindableValue.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_FORM_XLISTENTRYSINK_HPP_
 #include <drafts/com/sun/star/form/XListEntrySink.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
 #ifndef _SVX_FMGLOB_HXX
 #include <fmglob.hxx>
@@ -278,6 +284,9 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
 #endif
 #include "svxdlg.hxx" //CHINA001
 #include <dialogs.hrc> //CHINA001
@@ -412,6 +421,7 @@ sal_Int16 nObjectTypes[] =
     OBJ_FM_SPINBUTTON
 };
 
+using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -1361,13 +1371,7 @@ sal_Bool FmXFormShell::ConvertControlTo(const Reference< XFormComponent>& xModel
     if (aOldScripts.getLength())
     {
         // das Control zum Model suchen
-        SdrPageView* pPageView = m_pShell->GetFormView()->GetPageViewPvNum(0);
-        //DBG_ASSERT(pPageView->GetWinList().GetCount() > 0, "FmXFormShell::ConvertControlTo : no SdrPageViewWinRecs");
-        //const SdrPageViewWinRec& rViewWinRec = pPageView->GetWinList()[0];
-        //Reference< XControlContainer> xControlContainer(rViewWinRec.GetControlContainerRef());
-        DBG_ASSERT(pPageView->WindowCount() > 0, "FmXFormShell::ConvertControlTo : no SdrPageViewWindows");
-        const SdrPageViewWindow& rWindow = *pPageView->GetWindow(0);
-        Reference< XControlContainer> xControlContainer(rWindow.GetControlContainerRef());
+        Reference< XControlContainer > xControlContainer( getControlContainerForView() );
 
         Sequence< Reference< XControl> > aControls( xControlContainer->getControls() );
         const Reference< XControl>* pControls = aControls.getConstArray();
@@ -1421,6 +1425,7 @@ void FmXFormShell::LoopGrids(sal_Int16 nWhat)
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
     Reference< XIndexContainer> xControlModels(m_xActiveForm, UNO_QUERY);
     if (xControlModels.is())
+    {
         for (sal_Int16 i=0; i<xControlModels->getCount(); ++i)
         {
             Reference< XPropertySet> xModelSet;
@@ -1478,46 +1483,66 @@ void FmXFormShell::LoopGrids(sal_Int16 nWhat)
                 xModelSet->setPropertyValue(FM_PROP_CURSORCOLOR, makeAny(sal_Int32(COL_LIGHTRED)));
             }
         }
-
-/*  // alle Controls der Page durchiterieren und nach GridControls suchen ...
-    SdrPageView* pCurPageView = m_pShell->GetFormView()->GetPageViewPvNum(0);
-    // deren ViewWinRec-Liste, daraus das erste Element
-    DBG_ASSERT(pCurPageView->GetWinList().GetCount() > 0, "FmXFormShell::LoopGrids : unexpected : no SdrPageViewWinRecs");
-    const SdrPageViewWinRec& rViewWinRec = pCurPageView->GetWinList()[0];
-    // von dem bekomme ich alle Controls ...
-    Reference< XControlContainer> xControlContainer( rViewWinRec.GetControlContainerRef());
-    Sequence< Reference< XControl> > seqControls = xControlContainer->getControls();
-    const Reference< XControl>* pControls = seqControls.getConstArray();
-    // ... die ich dann durchsuchen kann
-    for (int i=0; i<seqControls.getLength(); ++i)
-    {
-        Reference<XGridPeer> xGridPeer(pControls[i]->getPeer(), UNO_QUERY);
-        if (!xGridPeer.is())
-            continue;
-
-        FmXGridPeer* pPeer = (FmXGridPeer*)xGridPeer->getImplementation(FmXGridPeer_getReflection());
-        if (!pPeer)
-            continue;
-
-        FmGridControl* pGrid = (FmGridControl*)pPeer->GetWindow();
-        // what to do ?
-        // display synchronisation ?
-        switch (nWhat & GA_SYNC_MASK)
-        {
-            case GA_DISABLE_SYNC:
-                pGrid->setDisplaySynchron(sal_False); break;
-            case GA_FORCE_SYNC:
-                pGrid->forceSyncDisplay(); break;
-            case GA_ENABLE_SYNC:
-                pGrid->setDisplaySynchron(sal_True); break;
-        }
-
-        if (nWhat & GA_DISABLE_ROCTRLR)
-            pGrid->forceROController(sal_False);
-        else if (nWhat & GA_ENABLE_ROCTRLR)
-            pGrid->forceROController(sal_True);
     }
-*/
+}
+
+//------------------------------------------------------------------------------
+Reference< XControlContainer > FmXFormShell::getControlContainerForView()
+{
+    SdrPageView* pPageView = NULL;
+    if ( m_pShell && m_pShell->GetFormView() )
+        pPageView = m_pShell->GetFormView()->GetPageViewPvNum(0);
+
+    Reference< XControlContainer> xControlContainer;
+    if ( pPageView )
+        xControlContainer = pPageView->GetWindow(0)->GetControlContainerRef();
+
+    return xControlContainer;
+}
+
+//------------------------------------------------------------------------------
+void FmXFormShell::ExecuteTabOrderDialog( const Reference< XTabControllerModel >& _rxForForm )
+{
+    OSL_PRECOND( _rxForForm.is(), "FmXFormShell::ExecuteTabOrderDialog: invalid tabbing model!" );
+    if ( !_rxForForm.is() )
+        return;
+
+    try
+    {
+        Sequence< Any > aDialogArgs( 3 );
+        aDialogArgs[0] <<= NamedValue(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TabbingModel" ) ),
+            makeAny( _rxForForm )
+        );
+        aDialogArgs[1] <<= NamedValue(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ControlContext" ) ),
+            makeAny( getControlContainerForView() )
+        );
+
+        Reference< XWindow > xParentWindow;
+        if ( m_pShell && m_pShell->GetViewShell() && m_pShell->GetViewShell()->GetViewFrame() )
+            xParentWindow = VCLUnoHelper::GetInterface ( &m_pShell->GetViewShell()->GetViewFrame()->GetWindow() );
+        aDialogArgs[2] <<= NamedValue(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ) ),
+            makeAny( xParentWindow )
+        );
+
+        Reference< dialogs::XExecutableDialog > xDialog(
+            ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.form.ui.TabOrderDialog" ) ),
+                aDialogArgs
+            ),
+            UNO_QUERY
+        );
+        OSL_ENSURE( xDialog.is(), "FmXFormShell::ExecuteTabOrderDialog: could not create the dialog!" );
+
+        if ( xDialog.is() )
+            xDialog->execute();
+    }
+    catch( const Exception& )
+    {
+        OSL_ENSURE( sal_False, "FmXFormShell::ExecuteTabOrderDialog: caught an exception!" );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -3505,19 +3530,7 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
 Reference< XControl> FmXFormShell::GetControlFromModel(const Reference< XControlModel>& xModel)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
-    // die View ...
-    SdrPageView* pCurPageView = m_pShell->GetFormView()->GetPageViewPvNum(0);
-    // deren ViewWinRec-Liste, daraus das erste Element
-
-    DBG_ASSERT(pCurPageView->WindowCount() > 0, "FmXFormShell::GetControlFromModel : unexpected : no SdrPageViewWindows");
-    const SdrPageViewWindow& rWindow = *pCurPageView->GetWindow(0);
-    // von dem bekomme ich alle Controls ...
-    Reference< XControlContainer> xControlContainer(rWindow.GetControlContainerRef());
-
-    //DBG_ASSERT(pCurPageView->GetWinList().GetCount() > 0, "FmXFormShell::GetControlFromModel : unexpected : no SdrPageViewWinRecs");
-    //const SdrPageViewWinRec& rViewWinRec = pCurPageView->GetWinList()[0];
-    //// von dem bekomme ich alle Controls ...
-    //Reference< XControlContainer> xControlContainer(rViewWinRec.GetControlContainerRef());
+    Reference< XControlContainer> xControlContainer( getControlContainerForView() );
 
     Sequence< Reference< XControl> > seqControls( xControlContainer->getControls() );
     Reference< XControl>* pControls = seqControls.getArray();
@@ -4834,9 +4847,11 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
         if ( xForms.is() )
         {
             Reference< XLoadable >  xForm;
+            sal_Bool                bFormWasLoaded = sal_False;
             for ( sal_Int32 j = 0, nCount = xForms->getCount(); j < nCount; ++j )
             {
                 xForms->getByIndex( j ) >>= xForm;
+                bFormWasLoaded = sal_False;
                 // a database form must be loaded for
                 if ( 0 == ( _nBehaviour & FORMS_UNLOAD ) )
                 {
@@ -4846,10 +4861,14 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
                 else
                 {
                     if ( xForm->isLoaded() )
+                    {
+                        bFormWasLoaded = sal_True;
                         xForm->unload();
+                    }
                 }
 
-                if ( _nBehaviour & FORMS_RESET )
+                // reset the form if it was loaded
+                if ( bFormWasLoaded )
                 {
                     Reference< XIndexAccess > xContainer( xForm, UNO_QUERY );
                     DBG_ASSERT( xContainer.is(), "FmXFormShell::loadForms: the form is no container!" );
