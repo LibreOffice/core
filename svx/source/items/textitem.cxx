@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 15:36:29 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,12 @@
 
 #ifndef _COM_SUN_STAR_STYLE_CASEMAP_HPP_
 #include <com/sun/star/style/CaseMap.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
+#include <com/sun/star/awt/FontDescriptor.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_STATUS_FONTHEIGHT_HPP_
+#include <drafts/com/sun/star/frame/status/FontHeight.hpp>
 #endif
 
 #ifndef _SV_BITMAPEX_HXX
@@ -137,6 +143,9 @@
 #endif
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
+#endif
+#ifndef _CTRLTOOL_HXX
+#include <svtools/ctrltool.hxx>
 #endif
 #ifndef _SV_SETTINGS_HXX
 #include <vcl/settings.hxx>
@@ -295,6 +304,14 @@ SvxFontListItem::SvxFontListItem( const FontList* pFontLst,
     SfxPoolItem( nId ),
     pFontList( pFontLst )
 {
+    if ( pFontList )
+    {
+        sal_Int32 nCount = pFontList->GetFontNameCount();
+        aFontNameSeq.realloc( nCount );
+
+        for ( int i = 0; i < nCount; i++ )
+            aFontNameSeq[i] = pFontList->GetFontName(i).GetName();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -302,7 +319,8 @@ SvxFontListItem::SvxFontListItem( const FontList* pFontLst,
 SvxFontListItem::SvxFontListItem( const SvxFontListItem& rItem ) :
 
     SfxPoolItem( rItem ),
-    pFontList( rItem.GetFontList() )
+    pFontList( rItem.GetFontList() ),
+    aFontNameSeq( rItem.aFontNameSeq )
 {
 }
 
@@ -320,6 +338,12 @@ int SvxFontListItem::operator==( const SfxPoolItem& rAttr ) const
     DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unequal types" );
 
     return( pFontList == ((SvxFontListItem&)rAttr).pFontList );
+}
+
+sal_Bool SvxFontListItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+{
+    rVal <<= aFontNameSeq;
+    return sal_True;
 }
 
 //------------------------------------------------------------------------
@@ -370,6 +394,17 @@ sal_Bool SvxFontItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
+        case 0:
+        {
+            com::sun::star::awt::FontDescriptor aFontDescriptor;
+            aFontDescriptor.Name = aFamilyName.GetBuffer();
+            aFontDescriptor.StyleName = aStyleName.GetBuffer();
+            aFontDescriptor.Family = (sal_Int16)(eFamily);
+            aFontDescriptor.CharSet = (sal_Int16)(eTextEncoding);
+            aFontDescriptor.Pitch = (sal_Int16)(ePitch);
+            rVal <<= aFontDescriptor;
+        }
+        break;
         case MID_FONT_FAMILY_NAME   :
             rVal <<= OUString(aFamilyName.GetBuffer());
         break;
@@ -389,6 +424,19 @@ sal_Bool SvxFontItem::PutValue( const uno::Any& rVal, BYTE nMemberId)
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
     {
+        case 0:
+        {
+            com::sun::star::awt::FontDescriptor aFontDescriptor;
+            if ( !( rVal >>= aFontDescriptor ))
+                return sal_False;
+
+            aFamilyName = aFontDescriptor.Name;
+            aStyleName = aFontDescriptor.StyleName;
+            eFamily = (FontFamily)aFontDescriptor.Family;
+            eTextEncoding = (rtl_TextEncoding)aFontDescriptor.CharSet;
+            ePitch = (FontPitch)aFontDescriptor.Pitch;
+        }
+        break;
         case MID_FONT_FAMILY_NAME   :
         {
             OUString aStr;
@@ -938,6 +986,34 @@ sal_Bool SvxFontHeightItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
+        case 0:
+        {
+            drafts::com::sun::star::frame::status::FontHeight aFontHeight;
+
+            aFontHeight.Height = (float)( nHeight / 20.0 );
+            aFontHeight.Prop <<= (sal_Int16)(SFX_MAPUNIT_RELATIVE == ePropUnit ? nProp : 100);
+
+            float fRet = (float)(short)nProp;
+            switch( ePropUnit )
+            {
+                case SFX_MAPUNIT_RELATIVE:
+                    fRet = 0.;
+                break;
+                case SFX_MAPUNIT_100TH_MM:
+                    fRet = MM100_TO_TWIP(fRet);
+                    fRet /= 20.;
+                break;
+                case SFX_MAPUNIT_POINT:
+
+                break;
+                case SFX_MAPUNIT_TWIP:
+                    fRet /= 20.;
+                break;
+            }
+            aFontHeight.Diff = fRet;
+            rVal <<= aFontHeight;
+        }
+        break;
         case MID_FONTHEIGHT:
         {
             //  Point (also Twips) sind gefragt,
@@ -1028,6 +1104,28 @@ sal_Bool SvxFontHeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
+        case 0:
+        {
+            drafts::com::sun::star::frame::status::FontHeight aFontHeight;
+            if ( rVal >>= aFontHeight )
+            {
+                // Height
+                ePropUnit = SFX_MAPUNIT_RELATIVE;
+                nProp = 100;
+                double fPoint = aFontHeight.Height;
+                if( fPoint < 0. || fPoint > 10000. )
+                    return sal_False;
+
+                nHeight = (long)( fPoint * 20.0 + 0.5 );        // Twips
+                if (!bConvert)
+                    nHeight = TWIP_TO_MM100(nHeight);   // umrechnen, wenn das Item 1/100mm enthaelt
+
+                nProp = aFontHeight.Prop;
+            }
+            else
+                return sal_False;
+        }
+        break;
         case MID_FONTHEIGHT:
         {
             ePropUnit = SFX_MAPUNIT_RELATIVE;
