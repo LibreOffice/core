@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-09 14:48:50 $
+ *  last change: $Author: dv $ $Date: 2001-03-23 15:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,8 +145,13 @@ public:
                                                  const ::rtl::OUString& SourceURL ) throw( RUNTIMEEXCEPTION );
     sal_Bool SAL_CALL               removeTemplate( const ::rtl::OUString& GroupName,
                                                     const ::rtl::OUString& TemplateName ) throw( RUNTIMEEXCEPTION );
+    sal_Bool SAL_CALL               renameTemplate( const ::rtl::OUString& GroupName,
+                                                    const ::rtl::OUString& OldTemplateName,
+                                                    const ::rtl::OUString& NewTemplateName ) throw( RUNTIMEEXCEPTION );
     sal_Bool SAL_CALL               addGroup( const ::rtl::OUString& GroupName ) throw( RUNTIMEEXCEPTION );
     sal_Bool SAL_CALL               removeGroup( const ::rtl::OUString& GroupName ) throw( RUNTIMEEXCEPTION );
+    sal_Bool SAL_CALL               renameGroup( const ::rtl::OUString& OldGroupName,
+                                                 const ::rtl::OUString& NewGroupName ) throw( RUNTIMEEXCEPTION );
     void SAL_CALL                   update() throw( RUNTIMEEXCEPTION );
 };
 
