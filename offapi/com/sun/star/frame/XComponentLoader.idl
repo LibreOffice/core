@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponentLoader.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-01 10:29:29 $
+ *  last change: $Author: as $ $Date: 2001-11-20 14:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,9 @@ interface XComponentLoader: com::sun::star::uno::XInterface
         @param aTargetFrameName
             specifies the name of the frame to view the document in. If a frame
             with the specified name already exists, it is used, otherwise it
-            is created. "_blank" always creates a new frame, "_hidden" will
-            create a new, hidden frame.
+            is created. "_blank" always creates a new frame, "_self" means frame himself,
+            "_parent" address direct parent of frame, "_top" indicates top frame of
+            current path in tree.
 
         @param nSearchFlags
             use the values of <type>FrameSearchFlag</type> to specify
@@ -142,6 +143,9 @@ interface XComponentLoader: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.10  2001/11/01 10:29:29  mi
+    proofreading and corrections from Richard Holt
+
     Revision 1.9  2001/03/22 17:25:56  mi
     #77161# arguments of XComponentLoader::loadComponents
 
