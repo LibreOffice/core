@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-06 07:46:57 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:33:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,16 @@
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
 
+// #110094#
+#ifndef _SDR_CONTACT_OBJECTCONTACTOFOBJLISTPAINTER_HXX
+#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#endif
+
+// #110094#
+#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
+#include <svx/sdr/contact/displayinfo.hxx>
+#endif
+
 /*************************************************************************
 |*
 |* Ctor SvxXConnectionPreview
@@ -153,7 +163,14 @@ void SvxXConnectionPreview::Construct()
                 SdrObject* pTmpObj1 = pTmpEdgeObj->GetConnectedNode( TRUE );
                 SdrObject* pTmpObj2 = pTmpEdgeObj->GetConnectedNode( FALSE );
 
-                pObjList = new SdrObjList( pView->GetModel(), NULL );
+                // #110094#
+                // potential memory leak here (!). Create SdrObjList only when there is
+                // not yet one.
+                if(!pObjList)
+                {
+                    pObjList = new SdrObjList( pView->GetModel(), NULL );
+                }
+
                 if( pTmpObj1 )
                 {
                     SdrObject* pObj1 = pTmpObj1->Clone();
@@ -283,7 +300,43 @@ void SvxXConnectionPreview::Paint( const Rectangle& rRect )
 
     //pEdgeObj->Paint( *pExtOutDev, aInfoRec );
     if( pObjList )
-        pObjList->Paint( *pExtOutDev, aInfoRec );
+    {
+        // #110094#
+        // This will not work anymore. To not start at Adam and Eve, i will
+        // ATM not try to change all this stuff to really using an own model
+        // and a view. I will just try to provide a mechanism to paint such
+        // objects without own model and without a page/view with the new
+        // mechanism.
+        //
+        //pObjList->Paint( *pExtOutDev, aInfoRec );
+
+        // New stuff: Use a ObjectContactOfObjListPainter.
+        sdr::contact::SdrObjectVector aObjectVector;
+
+        for(sal_uInt32 a(0L); a < pObjList->GetObjCount(); a++)
+        {
+            SdrObject* pObject = pObjList->GetObj(a);
+            DBG_ASSERT(pObject,
+                "SvxXConnectionPreview::Paint: Corrupt ObjectList (!)");
+            aObjectVector.push_back(pObject);
+        }
+
+        sdr::contact::ObjectContactOfObjListPainter aPainter(aObjectVector);
+        sdr::contact::DisplayInfo aDisplayInfo;
+
+        aDisplayInfo.SetExtendedOutputDevice(pExtOutDev);
+        aDisplayInfo.SetPaintInfoRec(&aInfoRec);
+        aDisplayInfo.SetOutputDevice(pExtOutDev->GetOutDev());
+
+        // keep draw hierarchy up-to-date
+        aPainter.PreProcessDisplay(aDisplayInfo);
+
+        // do processing
+        aPainter.ProcessDisplay(aDisplayInfo);
+
+        // prepare delete
+        aPainter.PrepareDelete();
+    }
 }
 
 /*************************************************************************
@@ -294,10 +347,8 @@ void SvxXConnectionPreview::Paint( const Rectangle& rRect )
 
 void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
 {
-//-/    pEdgeObj->SetAttributes( rInAttrs, FALSE );
-//-/    SdrBroadcastItemChange aItemChange(*pEdgeObj);
-    pEdgeObj->SetItemSetAndBroadcast(rInAttrs);
-//-/    pEdgeObj->BroadcastItemChange(aItemChange);
+    //pEdgeObj->SetItemSetAndBroadcast(rInAttrs);
+    pEdgeObj->SetMergedItemSetAndBroadcast(rInAttrs);
 
     Invalidate();
 }
@@ -310,18 +361,7 @@ void SvxXConnectionPreview::SetAttributes( const SfxItemSet& rInAttrs )
 
 USHORT SvxXConnectionPreview::GetLineDeltaAnz()
 {
-//-/    USHORT nCount = 0;
-//-/    SfxItemSet aSet( rAttrs );
-//-/
-//-/    pEdgeObj->TakeAttributes( aSet, FALSE, FALSE );
-//-/
-//-/    if( aSet.GetItemState( SDRATTR_EDGELINEDELTAANZ ) != SFX_ITEM_DONTCARE )
-//-/    {
-//-/        nCount = ( ( const SdrEdgeLineDeltaAnzItem& ) aSet.
-//-/                    Get( SDRATTR_EDGELINEDELTAANZ ) ).GetValue();
-//-/    }
-//-/    return( nCount );
-    const SfxItemSet& rSet = pEdgeObj->GetItemSet();
+    const SfxItemSet& rSet = pEdgeObj->GetMergedItemSet();
     sal_uInt16 nCount(0);
 
     if(SFX_ITEM_DONTCARE != rSet.GetItemState(SDRATTR_EDGELINEDELTAANZ))
