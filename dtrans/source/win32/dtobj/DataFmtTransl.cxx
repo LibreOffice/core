@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-20 13:39:33 $
+ *  last change: $Author: tra $ $Date: 2001-03-23 11:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,23 +153,26 @@ CFormatEtc CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& 
     {
         Any aFormat = m_XDataFormatTranslator->getSystemDataTypeFromDataFlavor( aDataFlavor );
 
-        if ( aFormat.getValueType( ) == CPPUTYPE_SALINT32 )
+        if ( aFormat.hasValue( ) )
         {
-            aFormat >>= cf;
-            OSL_ENSURE( CF_INVALID != cf, "Invalid Clipboard format delivered" );
-        }
-        else if ( aFormat.getValueType( ) == CPPUTYPE_OUSTRING )
-        {
-            OUString aClipFmtName;
-            aFormat >>= aClipFmtName;
+            if ( aFormat.getValueType( ) == CPPUTYPE_SALINT32 )
+            {
+                aFormat >>= cf;
+                OSL_ENSURE( CF_INVALID != cf, "Invalid Clipboard format delivered" );
+            }
+            else if ( aFormat.getValueType( ) == CPPUTYPE_OUSTRING )
+            {
+                OUString aClipFmtName;
+                aFormat >>= aClipFmtName;
 
-            OSL_ASSERT( aClipFmtName.getLength( ) );
-            cf = RegisterClipboardFormatW( aClipFmtName.getStr( ) );
+                OSL_ASSERT( aClipFmtName.getLength( ) );
+                cf = RegisterClipboardFormatW( aClipFmtName.getStr( ) );
 
-            OSL_ENSURE( CF_INVALID != cf, "RegisterClipboardFormat failed" );
+                OSL_ENSURE( CF_INVALID != cf, "RegisterClipboardFormat failed" );
+            }
+            else
+                OSL_ENSURE( sal_False, "Wrong Any-Type detected" );
         }
-        else
-            OSL_ENSURE( sal_False, "Wrong Any-Type detected" );
     }
     catch( ... )
     {

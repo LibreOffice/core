@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-22 14:15:51 $
+ *  last change: $Author: tra $ $Date: 2001-03-23 11:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 
 #ifndef _IMPLHELPER_HXX_
 #include "..\misc\ImplHelper.hxx"
+#endif
+
+#ifndef _WINCLIP_HXX_
+#include "..\misc\WinClip.hxx"
 #endif
 
 #include <algorithm>
@@ -272,6 +276,10 @@ void SAL_CALL CFormatRegistrar::RegisterFormats(
         aFlavor = aFlavorList[i];
         CFormatEtc fetc = m_DataFormatTranslator.getFormatEtcFromDataFlavor( aFlavor );
 
+        // maybe an internal format so we ignore it
+        if ( CF_INVALID == fetc.getClipformat( ) )
+            continue;
+
         if ( !needsToSynthesizeAccompanyFormats( fetc ) )
             aFormatEtcContainer.addFormatEtc( fetc );
         else
@@ -323,7 +331,7 @@ void SAL_CALL CFormatRegistrar::RegisterFormats(
                     }
                 }
             }
-            else // Html (Hyper Text...)
+            else if ( m_DataFormatTranslator.isTextHtmlFormat( fetc.getClipformat( ) ) ) // Html (Hyper Text...)
             {
                 // we add text/html ( HTML (HyperText Markup Language) )
                 aFormatEtcContainer.addFormatEtc( fetc );

@@ -12,8 +12,8 @@
         <language>  c++ </language>
         <status value="beta"/>
         <supported-service> com.sun.star.datatransfer.clipboard.SystemClipboard </supported-service>
-        <supported-service> com.sun.star.datatransfer.clipboard.dnd.X11DragSource </supported-service>
-        <supported-service> com.sun.star.datatransfer.clipboard.dnd.X11DropTarget </supported-service>
+        <supported-service> com.sun.star.datatransfer.dnd.X11DragSource </supported-service>
+        <supported-service> com.sun.star.datatransfer.dnd.X11DropTarget </supported-service>
         <service-dependency>    ... </service-dependency>
         <type>   com.sun.star.datatransfer.clipboard.XClipboardEx  </type>
         <type>   com.sun.star.datatransfer.XTransferable           </type>
