@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2001-05-16 13:21:00 $
+#   last change: $Author: hjs $ $Date: 2001-05-16 13:56:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -189,6 +189,8 @@ STORELIB=-lstore
 SALLIB=-lsal
 .INCLUDE .IGNORE : connectivity$/version.mk
 ODBCLIB=-lodbc$(ODBC_MAJOR)
+ODBCBASELIB=-lodbcbase$(ODBC_MAJOR)
+DBFILELIB=-lfile$(UPD)
 SALTLSLIB=-lsaltls$(UDK_MAJOR)
 SALZIPLIB=-lsalzip$(UDK_MAJOR)
 RMCXTLIB=-lrmcxt
@@ -368,6 +370,8 @@ SALTLSLIB=isaltls.lib
 SALZIPLIB=isalzip.lib
 UCBHELPERLIB=$(LIBPRE) iucbhelper.lib
 ODBCLIB=$(LIBPRE) iodbc.lib
+ODBCBASELIB=$(LIBPRE) iodbcbase.lib
+DBFILELIB=$(LIBPRE) ifile$(UPD).lib
 TOOLSLIB=$(LIBPRE)itools.lib
 TOOLSLIBST=$(LIBPRE) atools.lib
 DVOSUTILLIBST=$(LIBPRE) dvosutil.lib
