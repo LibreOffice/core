@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:45:54 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,6 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
     SdStyleSheet* pRealStyle = NULL;
     SdDrawDocument* pDoc = ((SdStyleSheetPool&) rPool).GetDoc();
 
-#ifndef SVX_LIGHT
     SfxViewShell* pViewShellBase = SfxViewShell::Current();
     if (pViewShellBase!=NULL && pViewShellBase->ISA(::sd::ViewShellBase))
     {
@@ -403,15 +402,6 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
             aRealStyle.Erase(aRealStyle.Search(aSep) + aSep.Len());
         }
     }
-
-#else
-    SdrPage* pPage = pDoc->GetSdPage(0, PK_STANDARD);
-    if( pPage )
-    {
-        aRealStyle = pPage->GetLayoutName();
-        aRealStyle.Erase(aRealStyle.Search(aSep) + aSep.Len());
-    }
-#endif // !SVX_LIGHT
 
     if (aRealStyle.Len() == 0)
     {
