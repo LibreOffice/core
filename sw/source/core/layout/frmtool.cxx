@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:31:16 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1200,6 +1200,25 @@ void AppendAllObjs( const SwSpzFrmFmts *pTbl )
     aCpy.Remove( 0, aCpy.Count() );
 }
 
+/** local method to set 'working' position for newly inserted frames
+
+    OD 12.08.2003 #i17969#
+
+    @author OD
+*/
+void lcl_SetPos( SwFrm&             _rNewFrm,
+                 const SwLayoutFrm& _rLayFrm )
+{
+    SWRECTFN( (&_rLayFrm) )
+    (_rNewFrm.Frm().*fnRect->fnSetPos)( (_rLayFrm.Frm().*fnRect->fnGetPos)() );
+    // move position by one SwTwip in text flow direction in order to get
+    // notifications for a new calculated position after its formatting.
+    if ( bVert )
+        _rNewFrm.Frm().Pos().X() -= 1;
+    else
+        _rNewFrm.Frm().Pos().Y() += 1;
+}
+
 void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                              ULONG nIndex, BOOL bPages, ULONG nEndIndex,
                              SwFrm *pPrv )
@@ -1301,8 +1320,9 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 ::SetProgressState( pPage->GetPhyPageNum(),pDoc->GetDocShell());
 
             pFrm->InsertBehind( pLay, pPrv );
-            pFrm->Frm().Pos() = pLay->Frm().Pos();
-            pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
+            // OD 12.08.2003 #i17969# - consider horizontal/vertical layout
+            // for setting position at newly inserted frame
+            lcl_SetPos( *pFrm, *pLay );
             pPrv = pFrm;
 
             if ( pTbl->Count() && bObjsDirect && !bDontCreateObjects )
@@ -1329,8 +1349,10 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
             pFrm->InsertBehind( pLay, pPrv );
             if ( bObjsDirect && pTbl->Count() )
                 ((SwTabFrm*)pFrm)->RegistFlys();
-            pFrm->Frm().Pos() = pLay->Frm().Pos();
-            pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
+            // OD 12.08.2003 #i17969# - consider horizontal/vertical layout
+            // for setting position at newly inserted frame
+            lcl_SetPos( *pFrm, *pLay );
+
             pPrv = pFrm;
             //Index auf den Endnode der Tabellensection setzen.
             nIndex = pTblNode->EndOfSectionIndex();
@@ -1380,8 +1402,10 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 }
                 pFrm->CheckDirChange();
 
-                pFrm->Frm().Pos() = pLay->Frm().Pos();
-                pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
+                // OD 12.08.2003 #i17969# - consider horizontal/vertical layout
+                // for setting position at newly inserted frame
+                lcl_SetPos( *pFrm, *pLay );
+
                 // OD 20.11.2002 #105405# - no page, no invalidate.
                 if ( pPage )
                 {
@@ -1434,8 +1458,9 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                 pFrm->InsertBehind( pLay, pPrv );
                 static_cast<SwSectionFrm*>(pFrm)->Init();
 
-                pFrm->Frm().Pos() = pLay->Frm().Pos();
-                pFrm->Frm().Pos().Y() += 1; //wg. Benachrichtigungen.
+                // OD 12.08.2003 #i17969# - consider horizontal/vertical layout
+                // for setting position at newly inserted frame
+                lcl_SetPos( *pFrm, *pLay );
 
                 SwSectionFrm* pOuterSectionFrm = pActualSection->GetSectionFrm();
 
