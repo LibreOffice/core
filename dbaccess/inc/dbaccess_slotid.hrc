@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_slotid.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:23:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,19 @@
 #define SID_APP_NEW_FOLDER              ( SID_DBACCESS_START +  53 )
 #define SID_APP_NEW_FORM                ( SID_DBACCESS_START +  54 )
 #define SID_DB_APP_PASTE_SPECIAL        ( SID_DBACCESS_START +  55 )
+
+// status information
+#define SID_DB_APP_STATUS_TYPE          ( SID_DBACCESS_START +  57 )
+#define SID_DB_APP_STATUS_DBNAME        ( SID_DBACCESS_START +  58 )
+#define SID_DB_APP_STATUS_USERNAME      ( SID_DBACCESS_START +  59 )
+#define SID_DB_APP_STATUS_HOSTNAME      ( SID_DBACCESS_START +  60 )
+
+#define SID_DB_APP_SENDREPORTASMAIL     ( SID_DBACCESS_START +  61 )
+#define SID_DB_APP_SENDREPORTTOWRITER   ( SID_DBACCESS_START +  62 )
+#define SID_DB_FORM_NEW_PILOT           ( SID_DBACCESS_START +  63 )
+#define SID_DB_NEW_VIEW_SQL             ( SID_DBACCESS_START +  64 )
+
+
 
 #endif // _DBACCESS_SLOTID_HRC_
 
