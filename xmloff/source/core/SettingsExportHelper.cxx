@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SettingsExportHelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-27 09:54:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #ifndef _COM_SUN_STAR_FORMULA_SYMBOLDESCRIPTOR_HPP_
 #include <com/sun/star/formula/SymbolDescriptor.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#endif
 #ifndef _XMLENUMS_HXX_
 #include <xmlenums.hxx>
 #endif
@@ -125,10 +128,19 @@ XMLSettingsExportHelper::~XMLSettingsExportHelper()
 {
 }
 
+
+/** function to allow changing the API and XML representation;
+ implementation below */
+void lcl_manipulateSetting( uno::Any&, const rtl::OUString& );
+
+
 void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
                                             const rtl::OUString& rName) const
 {
-    uno::TypeClass eClass = rAny.getValueTypeClass();
+    uno::Any aAny( rAny );
+    lcl_manipulateSetting( aAny, rName );
+
+    uno::TypeClass eClass = aAny.getValueTypeClass();
     switch (eClass)
     {
         case uno::TypeClass_VOID:
@@ -143,94 +155,94 @@ void XMLSettingsExportHelper::CallTypeFunction(const uno::Any& rAny,
         break;
         case uno::TypeClass_BOOLEAN:
         {
-            exportBool(::cppu::any2bool(rAny), rName);
+            exportBool(::cppu::any2bool(aAny), rName);
         }
         break;
         case uno::TypeClass_BYTE:
         {
             sal_Int8 nInt8;
-            rAny >>= nInt8;
+            aAny >>= nInt8;
             exportByte(nInt8, rName);
         }
         break;
         case uno::TypeClass_SHORT:
         {
             sal_Int16 nInt16;
-            rAny >>= nInt16;
+            aAny >>= nInt16;
             exportShort(nInt16, rName);
         }
         break;
         case uno::TypeClass_LONG:
         {
             sal_Int32 nInt32;
-            rAny >>= nInt32;
+            aAny >>= nInt32;
             exportInt(nInt32, rName);
         }
         break;
         case uno::TypeClass_HYPER:
         {
             sal_Int64 nInt64;
-            rAny >>= nInt64;
+            aAny >>= nInt64;
             exportLong(nInt64, rName);
         }
         break;
         case uno::TypeClass_DOUBLE:
         {
             double fDouble;
-            rAny >>= fDouble;
+            aAny >>= fDouble;
             exportDouble(fDouble, rName);
         }
         break;
         case uno::TypeClass_STRING:
         {
             rtl::OUString sString;
-            rAny >>= sString;
+            aAny >>= sString;
             exportString(sString, rName);
         }
         break;
         default:
         {
-            uno::Type aType = rAny.getValueType();
+            uno::Type aType = aAny.getValueType();
             if (aType.equals(getCppuType( (uno::Sequence<beans::PropertyValue> *)0 ) ) )
             {
                 uno::Sequence< beans::PropertyValue> aProps;
-                rAny >>= aProps;
+                aAny >>= aProps;
                 exportSequencePropertyValue(aProps, rName);
             }
             else if( aType.equals(getCppuType( (uno::Sequence<sal_Int8> *)0 ) ) )
             {
                 uno::Sequence< sal_Int8 > aProps;
-                rAny >>= aProps;
+                aAny >>= aProps;
                 exportbase64Binary(aProps, rName);
             }
             else if (aType.equals(getCppuType( (uno::Reference<container::XNameContainer> *)0 ) ) ||
                     aType.equals(getCppuType( (uno::Reference<container::XNameAccess> *)0 ) ))
             {
                 uno::Reference< container::XNameAccess> aNamed;
-                rAny >>= aNamed;
+                aAny >>= aNamed;
                 exportNameAccess(aNamed, rName);
             }
             else if (aType.equals(getCppuType( (uno::Reference<container::XIndexAccess> *)0 ) ) ||
                     aType.equals(getCppuType( (uno::Reference<container::XIndexContainer> *)0 ) ) )
             {
                 uno::Reference<container::XIndexAccess> aIndexed;
-                rAny >>= aIndexed;
+                aAny >>= aIndexed;
                 exportIndexAccess(aIndexed, rName);
             }
             else if (aType.equals(getCppuType( (util::DateTime *)0 ) ) )
             {
                 util::DateTime aDateTime;
-                rAny >>= aDateTime;
+                aAny >>= aDateTime;
                 exportDateTime(aDateTime, rName);
             }
             else if( aType.equals(getCppuType( (uno::Reference<i18n::XForbiddenCharacters> *)0 ) ) )
             {
-                exportForbiddenCharacters( rAny, rName );
+                exportForbiddenCharacters( aAny, rName );
             }
             else if( aType.equals(getCppuType( (uno::Sequence<formula::SymbolDescriptor> *)0 ) ) )
             {
                 uno::Sequence< formula::SymbolDescriptor > aProps;
-                rAny >>= aProps;
+                aAny >>= aProps;
                 exportSymbolDescriptors(aProps, rName);
             }
             else
@@ -544,4 +556,27 @@ void XMLSettingsExportHelper::exportSettings(
     DBG_ASSERT(rName.getLength(), "no name");
     DBG_ASSERT(aProps.getLength(), "no properties to export");
     exportSequencePropertyValue(aProps, rName);
+}
+
+
+/** For some settings we may want to change their API representation
+ * from their XML settings representation. This is your chance to do
+ * so!
+ */
+void lcl_manipulateSetting(
+    uno::Any& rAny,
+    const rtl::OUString& rName )
+{
+    if( rName.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( "PrinterIndependentLayout" ) ) )
+    {
+        sal_Int16 nTmp;
+        if( rAny >>= nTmp )
+        {
+            if( nTmp == document::PrinterIndependentLayout::ENABLED )
+                rAny <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("enabled"));
+            else if( nTmp == document::PrinterIndependentLayout::DISABLED )
+                rAny <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("disabled"));
+        }
+    }
 }

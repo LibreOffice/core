@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-27 09:53:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XVIEWDATASUPPLIER_HPP_
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -234,6 +237,7 @@ class XMLConfigItemContext : public SvXMLImportContext
     rtl::OUString               sValue;
     uno::Sequence<sal_Int8>     aDecoded;
     com::sun::star::uno::Any&   rAny;
+    const rtl::OUString         rItemName;
     XMLConfigBaseContext*       pBaseContext;
 
 public:
@@ -241,6 +245,7 @@ public:
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     com::sun::star::uno::Any& rAny,
+                                    const rtl::OUString& rItemName,
                                     XMLConfigBaseContext* pBaseContext);
     virtual ~XMLConfigItemContext();
 
@@ -251,6 +256,8 @@ public:
     virtual void Characters( const ::rtl::OUString& rChars );
 
     virtual void EndElement();
+
+    virtual void ManipulateConfigItem();
 };
 
 //=============================================================================
@@ -347,7 +354,7 @@ SvXMLImportContext *CreateSettingsContext(SvXMLImport& rImport, USHORT nPrefix,
     if (nPrefix == XML_NAMESPACE_CONFIG)
     {
         if (IsXMLToken(rLocalName, XML_CONFIG_ITEM))
-            pContext = new XMLConfigItemContext(rImport, nPrefix, rLocalName, xAttrList, rProp.Value, pBaseContext);
+            pContext = new XMLConfigItemContext(rImport, nPrefix, rLocalName, xAttrList, rProp.Value, rProp.Name, pBaseContext);
         else if((IsXMLToken(rLocalName, XML_CONFIG_ITEM_SET)) ||
                 (IsXMLToken(rLocalName, XML_CONFIG_ITEM_MAP_ENTRY)) )
             pContext = new XMLConfigItemSetContext(rImport, nPrefix, rLocalName, xAttrList, rProp.Value, pBaseContext);
@@ -502,12 +509,14 @@ XMLConfigItemContext::XMLConfigItemContext(SvXMLImport& rImport, USHORT nPrfx, c
                                     const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                     com::sun::star::uno::Any& rTempAny,
+                                    const rtl::OUString& rTempItemName,
                                     XMLConfigBaseContext* pTempBaseContext)
     : SvXMLImportContext(rImport, nPrfx, rLName),
     rAny(rTempAny),
     pBaseContext(pTempBaseContext),
     sType(),
-    sValue()
+    sValue(),
+    rItemName(rTempItemName)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -633,11 +642,34 @@ void XMLConfigItemContext::EndElement()
         }
         else
             DBG_ERROR("wrong type");
+
+        ManipulateConfigItem();
+
         pBaseContext->AddPropertyValue();
     }
     else
         DBG_ERROR("no BaseContext");
 }
+
+/** There are some instances where there is a mismatch between API and
+ * XML mapping of a setting. In this case, this method allows us to
+ * manipulate the values accordingly. */
+void XMLConfigItemContext::ManipulateConfigItem()
+{
+    if( rItemName.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM( "PrinterIndependentLayout" ) ) )
+    {
+        rtl::OUString sValue;
+        rAny >>= sValue;
+
+        sal_Int16 nTmp =
+            sValue.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("disabled"))
+            ? document::PrinterIndependentLayout::DISABLED
+            : document::PrinterIndependentLayout::ENABLED;
+        rAny <<= nTmp;
+    }
+}
+
 
 //=============================================================================
 
