@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2001-06-08 23:00:50 $
+ *  last change: $Author: rt $ $Date: 2001-06-13 23:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
         Text[ russian ] = "Àâòîòåêñò - Ãğóïïà";
         Text[ polish ] = "Autotekst - Grupa";
         Text[ japanese ] = "“ü—Íx‰‡ ¸ŞÙ°Ìß";
-        Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°¤p²Õ";
+        Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°¸s²Õ";
         Text[ arabic ] = "ãÌãæÚÉ äÕ ÊáŞÇÆí";
         Text[ greek ] = "ÏìÜäá ÁõôïÊåéìİíïõ";
         Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ®£­±×·ì";
@@ -153,6 +153,7 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
     Text[ catalan ] = "Seleccionar módulo de texto:  ";
     Text[ finnish ] = "Valitse automaattinen teksti: ";
 };
+
 
 
 
