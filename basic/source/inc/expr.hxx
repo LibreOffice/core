@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:57:26 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,13 @@ enum SbiNodeType {
     SbxNODE                         // Node
 };
 
+enum RecursiveMode
+{
+    UNDEFINED,
+    FORCE_CALL,
+    PREVENT_CALL
+};
+
 class SbiExprNode {                  // Operatoren (und Operanden)
     friend class SbiExpression;
     friend class SbiConstExpression;
@@ -150,7 +157,7 @@ public:
 
     void Optimize();                // Baumabgleich
 
-    void Gen( BOOL bParam0Allowed = FALSE );    // Ausgabe eines Nodes
+    void Gen( RecursiveMode eRecMode = UNDEFINED ); // Ausgabe eines Nodes
 };
 
 class SbiExpression {                // der Ausdruck:
@@ -202,7 +209,7 @@ public:
     SbiExprNode* GetExprNode()      { return pExpr; }
     SbxDataType GetType()           { return pExpr->GetType();    }
     void SetType( SbxDataType eType){ pExpr->eType = eType;       }
-    void Gen( BOOL bParam0Allowed = FALSE );
+    void Gen( RecursiveMode eRecMode = UNDEFINED ); // Ausgabe eines Nodes
 };
 
 class SbiConstExpression : public SbiExpression {
