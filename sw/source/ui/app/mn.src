@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-26 20:05:48 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ String MN_TEXT_POPUPMENU
     Text[ greek ] = "Κείμενο";
     Text[ korean ] = "ΕΨ½ΊΖ®";
     Text[ turkish ] = "Metin";
+    Text[ catalan ] = "Texto";
 };
 
 
@@ -121,6 +122,7 @@ String MN_TAB_POPUPMENU
     Text[ greek ] = "Πίνακας";
     Text[ korean ] = "Η₯";
     Text[ turkish ] = "Tablo";
+    Text[ catalan ] = "Tabla";
 };
 
 Menu MN_TAB_POPUPMENU
@@ -171,6 +173,7 @@ Menu MN_TAB_POPUPMENU
             Text[ greek ] = "Ό~ρια πίνακα";
             Text[ korean ] = "Η₯ °ζ°θ";
             Text[ turkish ] = "Tablo sύnύrlamalarύ";
+            Text[ catalan ] = "~Lνmites de la tabla";
         };
         MenuItem
         {
@@ -196,6 +199,7 @@ Menu MN_TAB_POPUPMENU
             Text[ chinese_traditional ] = "ΓΡ§OΌΖ¦r(~N)";
             Text[ arabic ] = "ΚΪΡνέ ΗαΓΡήΗγ";
             Text[ turkish ] = "Sayύ tanύma";
+            Text[ catalan ] = "~Reconocimiento de nϊmero";
         };
     };
 };
@@ -225,6 +229,7 @@ String MN_FRM_POPUPMENU
     Text[ greek ] = "Περίγραμμα";
     Text[ korean ] = "ΗΑ·ΉΐΣ";
     Text[ turkish ] = "Ηerηeve";
+    Text[ catalan ] = "Marco";
 };
 
 Menu MN_FRM_POPUPMENU
@@ -264,6 +269,7 @@ String MN_DRAW_POPUPMENU
     Text[ greek ] = "Γραφικό";
     Text[ korean ] = "±Χ·‘ΗΘ";
     Text[ turkish ] = "Grafik";
+    Text[ catalan ] = "Imagen";
 };
 
 Menu MN_DRAW_POPUPMENU
@@ -308,6 +314,7 @@ String MN_DRAWFORM_POPUPMENU
     Text[ greek ] = "Πεδίο ελέγχου";
     Text[ korean ] = "ΔΑΖ®·Ρ";
     Text[ turkish ] = "Komut alanύ";
+    Text[ catalan ] = "Campo de control";
 };
 
 Menu MN_DRAWFORM_POPUPMENU
@@ -350,6 +357,7 @@ String MN_DRWTXT_POPUPMENU
     Text[ greek ] = "Κείμενο αντικειμένου σχεδίασης";
     Text[ korean ] = "±ΧΈ®±β °³ΓΌ ΕΨ½ΊΖ®";
     Text[ turkish ] = "Ηizim nesnesi metni";
+    Text[ catalan ] = "Texto del objeto de dibujo";
 };
 
 Menu MN_DRWTXT_POPUPMENU
@@ -391,6 +399,7 @@ String MN_GRF_POPUPMENU
     Text[ greek ] = "Γραφικό";
     Text[ korean ] = "±Χ·‘ΗΘ";
     Text[ turkish ] = "Grafik";
+    Text[ catalan ] = "Imagen";
 };
 
 Menu MN_GRF_POPUPMENU
@@ -436,6 +445,7 @@ String MN_OLE_POPUPMENU
     Text[ greek ] = "Αντικείμενο";
     Text[ korean ] = "°³ΓΌ";
     Text[ turkish ] = "Nesne";
+    Text[ catalan ] = "Objeto";
 };
 
 
@@ -476,6 +486,7 @@ String MN_PPREVIEW_POPUPMENU
     Text[ greek ] = "Κείμενο αντικειμένου σχεδίασης";
     Text[ korean ] = "±ΧΈ®±β °³ΓΌ ΕΨ½ΊΖ®";
     Text[ turkish ] = "Ηizim nesnesi metni";
+    Text[ catalan ] = "Texto del objeto de dibujo";
 };
 
 Menu MN_PPREVIEW_POPUPMENU
@@ -506,6 +517,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ greek ] = "Προηγούμενη σελίδα";
             Text[ korean ] = "ΐΜΐό ΒΚ";
             Text[ turkish ] = "Φnceki sayfa";
+            Text[ catalan ] = "Pαgina anterior";
         };
         MenuItem
         {
@@ -532,6 +544,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ greek ] = "Στην επόμενη σελίδα";
             Text[ korean ] = "΄Ωΐ½ ΒΚ";
             Text[ turkish ] = "Sonraki sayfa";
+            Text[ catalan ] = "Pαgina siguiente";
         };
         MenuItem
         {
@@ -564,6 +577,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ greek ] = "Εκτύπωση προεπισκόπησης";
             Text[ korean ] = "ΒΚΉΜΈ®ΊΈ±β‘‘ΐΞΌβ";
             Text[ turkish ] = "Yazdύr";
+            Text[ catalan ] = "Imprimir vista preliminar";
         };
         MenuItem
         {
@@ -589,6 +603,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ greek ] = "Επιλογές εκτύπωσης";
             Text[ korean ] = "ΐΞΌβ ΏΙΌΗ";
             Text[ turkish ] = "Yazdύrma seηenekleri";
+            Text[ catalan ] = "Opciones de impresiσn";
         };
         SEPARATOR ;
         MenuItem
