@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-12 12:02:37 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:36:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,23 +168,23 @@ TabPage TP_HELP_INDEX
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "~Suchbegriff" ;
         Text [ english_us ] = "~Search term" ;
-        Text[ portuguese ] = "~Suchbegriff";
-        Text[ russian ] = "~Suchbegriff";
-        Text[ greek ] = "~Suchbegriff";
-        Text[ dutch ] = "~Suchbegriff";
-        Text[ french ] = "~Suchbegriff";
+        Text[ portuguese ] = "~Expressão procurada";
+        Text[ russian ] = "~Èñêîìîå ïîíÿòèå";
+        Text[ greek ] = "¼ñïò áíáæŞôç~óçò";
+        Text[ dutch ] = "~Zoekbegrip";
+        Text[ french ] = "~Terme recherché";
         Text[ spanish ] = "~Término de búsqueda";
-        Text[ italian ] = "~Suchbegriff";
+        Text[ italian ] = "~Termine cercato";
         Text[ danish ] = "~Suchbegriff";
-        Text[ swedish ] = "~Suchbegriff";
-        Text[ polish ] = "~Suchbegriff";
+        Text[ swedish ] = "~Sökord";
+        Text[ polish ] = "Szukane has³o";
         Text[ portuguese_brazilian ] = "~Suchbegriff";
         Text[ japanese ] = "ŒŸõ·°(~S)";
         Text[ korean ] = "~Suchbegriff";
         Text[ chinese_simplified ] = "ËÑÑ°×Ö´Ê(~S)";
         Text[ chinese_traditional ] = "·j´M¦rµü(~S)";
         Text[ turkish ] = "~Suchbegriff";
-        Text[ arabic ] = "~Suchbegriff";
+        Text[ arabic ] = "ãÕØáÍ ÇáÈÍË";
     };
     Edit ED_EXPRESSION
     {
@@ -205,22 +205,22 @@ TabPage TP_HELP_INDEX
         Text = "~Anzeigen" ;
         Text [ english_us ] = "~Display" ;
         Text[ portuguese ] = "~Display";
-        Text[ russian ] = "~Display";
-        Text[ greek ] = "~Display";
-        Text[ dutch ] = "~Display";
-        Text[ french ] = "~Display";
+        Text[ russian ] = "~Ïîêàçàòü";
+        Text[ greek ] = "ÅìöÜíéóç";
+        Text[ dutch ] = "~Weergeven";
+        Text[ french ] = "~Affichage";
         Text[ spanish ] = "~Visualizar";
-        Text[ italian ] = "~Display";
+        Text[ italian ] = "~Mostra";
         Text[ danish ] = "~Display";
-        Text[ swedish ] = "~Display";
-        Text[ polish ] = "~Display";
+        Text[ swedish ] = "Vis~a";
+        Text[ polish ] = "Poka¿";
         Text[ portuguese_brazilian ] = "~Display";
         Text[ japanese ] = "•\\¦(~D)";
         Text[ korean ] = "~Display";
         Text[ chinese_simplified ] = "ÏÔÊ¾(~D)";
         Text[ chinese_traditional ] = "Åã¥Ü(~D)";
         Text[ turkish ] = "~Display";
-        Text[ arabic ] = "~Display";
+        Text[ arabic ] = "ÚÑÖ";
     };
 };
 
@@ -234,23 +234,23 @@ TabPage TP_HELP_SEARCH
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text = "S~uchbegriff" ;
         Text [ english_us ] = "S~earch term" ;
-        Text[ portuguese ] = "~Suchbegriff";
-        Text[ russian ] = "~Suchbegriff";
-        Text[ greek ] = "~Suchbegriff";
-        Text[ dutch ] = "~Suchbegriff";
-        Text[ french ] = "~Suchbegriff";
+        Text[ portuguese ] = "~Expressão procurada";
+        Text[ russian ] = "Èñêîìîå ïîíÿòèå";
+        Text[ greek ] = "¼ñïò áíáæŞôç~óçò";
+        Text[ dutch ] = "~Zoekbegrip";
+        Text[ french ] = "T~erme recherché";
         Text[ spanish ] = "~Término de búsqueda";
-        Text[ italian ] = "~Suchbegriff";
+        Text[ italian ] = "~Termine cercato";
         Text[ danish ] = "~Suchbegriff";
-        Text[ swedish ] = "~Suchbegriff";
-        Text[ polish ] = "~Suchbegriff";
+        Text[ swedish ] = "~Sökord";
+        Text[ polish ] = "Szukane has³o";
         Text[ portuguese_brazilian ] = "~Suchbegriff";
         Text[ japanese ] = "ŒŸõ·°(~E)";
         Text[ korean ] = "~Suchbegriff";
         Text[ chinese_simplified ] = "ËÑÑ°×Ö´Ê(~S)";
         Text[ chinese_traditional ] = "·j´M¦rµü(~E)";
         Text[ turkish ] = "~Suchbegriff";
-        Text[ arabic ] = "~Suchbegriff";
+        Text[ arabic ] = "ãÕØáÍ ÇáÈÍË";
     };
     ComboBox ED_SEARCH
     {
@@ -266,22 +266,22 @@ TabPage TP_HELP_SEARCH
         Text = "~Suchen";
         Text [ english_us ] = "~Find";
         Text[ portuguese ] = "Search";
-        Text[ russian ] = "Search";
-        Text[ greek ] = "Search";
-        Text[ dutch ] = "Search";
-        Text[ french ] = "Search";
+        Text[ russian ] = "Íàéòè";
+        Text[ greek ] = "Áíá~æŞôçóç";
+        Text[ dutch ] = "~Zoeken";
+        Text[ french ] = "~Recherche";
         Text[ spanish ] = "Buscar";
-        Text[ italian ] = "Search";
+        Text[ italian ] = "~Cerca";
         Text[ danish ] = "Search";
-        Text[ swedish ] = "Search";
-        Text[ polish ] = "Search";
+        Text[ swedish ] = "~Sök";
+        Text[ polish ] = "Szukaj";
         Text[ portuguese_brazilian ] = "Search";
         Text[ japanese ] = "ŒŸõ(~F)";
         Text[ korean ] = "Search";
         Text[ chinese_simplified ] = "ËÑÑ°(~F)";
         Text[ chinese_traditional ] = "·j´M(~F)";
         Text[ turkish ] = "Search";
-        Text[ arabic ] = "Search";
+        Text[ arabic ] = "ÈÍË";
     };
     ListBox LB_RESULT
     {
@@ -296,22 +296,22 @@ TabPage TP_HELP_SEARCH
         Text = "~Anzeigen" ;
         Text [ english_us ] = "~Display" ;
         Text[ portuguese ] = "~Display";
-        Text[ russian ] = "~Display";
-        Text[ greek ] = "~Display";
-        Text[ dutch ] = "~Display";
-        Text[ french ] = "~Display";
+        Text[ russian ] = "~Ïîêàçàòü";
+        Text[ greek ] = "ÅìöÜíéóç";
+        Text[ dutch ] = "~Weergeven";
+        Text[ french ] = "~Affichage";
         Text[ spanish ] = "~Visualizar";
-        Text[ italian ] = "~Display";
+        Text[ italian ] = "~Mostra";
         Text[ danish ] = "~Display";
-        Text[ swedish ] = "~Display";
-        Text[ polish ] = "~Display";
+        Text[ swedish ] = "Vis~a";
+        Text[ polish ] = "Poka¿";
         Text[ portuguese_brazilian ] = "~Display";
         Text[ japanese ] = "•\\¦(~D)";
         Text[ korean ] = "~Display";
         Text[ chinese_simplified ] = "ÏÔÊ¾(~D)";
         Text[ chinese_traditional ] = "Åã¥Ü(~D)";
         Text[ turkish ] = "~Display";
-        Text[ arabic ] = "~Display";
+        Text[ arabic ] = "ÚÑÖ";
     };
 };
 
@@ -351,14 +351,14 @@ String STR_HELP_WINDOW_TITLE
     Text = "%PRODUCTNAME Hilfe";
     Text [ english_us ] = "%PRODUCTNAME Help";
     Text[ portuguese ] = "%PRODUCTNAME Help";
-    Text[ russian ] = "%PRODUCTNAME Help";
+    Text[ russian ] = "Ñïğàâêà %PRODUCTNAME";
     Text[ greek ] = "ÂïŞèåéá ôïõ %PRODUCTNAME";
     Text[ dutch ] = "%PRODUCTNAME Help";
-    Text[ french ] = "%PRODUCTNAME Help";
+    Text[ french ] = "Aide de %PRODUCTNAME";
     Text[ spanish ] = "%PRODUCTNAME Ayuda";
-    Text[ italian ] = "%PRODUCTNAME Help";
+    Text[ italian ] = "Guida %PRODUCTNAME";
     Text[ danish ] = "%PRODUCTNAME Help";
-    Text[ swedish ] = "%PRODUCTNAME Help";
+    Text[ swedish ] = "%PRODUCTNAME hjälp";
     Text[ polish ] = "%PRODUCTNAME - Pomoc";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Help";
     Text[ japanese ] = "%PRODUCTNAME ÍÙÌß";
@@ -373,12 +373,12 @@ String STR_HELP_BUTTON_INDEX
     Text = "Index";
     Text [ english_us ] = "Index";
     Text[ portuguese ] = "Index";
-    Text[ russian ] = "Index";
+    Text[ russian ] = "Èíäåêñ";
     Text[ greek ] = "ÅõñåôŞñéï";
     Text[ dutch ] = "Index";
     Text[ french ] = "Index";
     Text[ spanish ] = "Índice";
-    Text[ italian ] = "Index";
+    Text[ italian ] = "Indice";
     Text[ danish ] = "Index";
     Text[ swedish ] = "Index";
     Text[ polish ] = "Indeks";
@@ -395,14 +395,14 @@ String STR_HELP_BUTTON_START
     Text = "Startseite";
     Text [ english_us ] = "First page";
     Text[ portuguese ] = "Start page";
-    Text[ russian ] = "Start page";
+    Text[ russian ] = "Ïåğâàÿ ñòğàíèöà";
     Text[ greek ] = "Áñ÷éêŞ óåëßäá";
-    Text[ dutch ] = "Start page";
-    Text[ french ] = "Start page";
+    Text[ dutch ] = "Startpagina";
+    Text[ french ] = "Page de départ";
     Text[ spanish ] = "Página de inicio";
-    Text[ italian ] = "Start page";
+    Text[ italian ] = "Home";
     Text[ danish ] = "Start page";
-    Text[ swedish ] = "Start page";
+    Text[ swedish ] = "Startsida";
     Text[ polish ] = "Strona startowa";
     Text[ portuguese_brazilian ] = "Start page";
     Text[ japanese ] = "ŠJnÍß°¼Ş";
@@ -417,14 +417,14 @@ String STR_HELP_BUTTON_PREV
     Text = "Vorherige Seite";
     Text [ english_us ] = "Previous page";
     Text[ portuguese ] = "Backward";
-    Text[ russian ] = "Backward";
+    Text[ russian ] = "Ïğåäûäóùàÿ ñòğàíèöà";
     Text[ greek ] = "Ğñïçãïıìåíç óåëßäá";
-    Text[ dutch ] = "Backward";
-    Text[ french ] = "Backward";
+    Text[ dutch ] = "Vorige";
+    Text[ french ] = "Page précédente";
     Text[ spanish ] = "Página anterior";
-    Text[ italian ] = "Backward";
+    Text[ italian ] = "Pagina precedente";
     Text[ danish ] = "Backward";
-    Text[ swedish ] = "Backward";
+    Text[ swedish ] = "Föregående sida";
     Text[ polish ] = "Poprzednia strona";
     Text[ portuguese_brazilian ] = "Backward";
     Text[ japanese ] = "‘OÍß°¼Ş";
@@ -439,14 +439,14 @@ String STR_HELP_BUTTON_NEXT
     Text = "Nächste Seite";
     Text [ english_us ] = "Next page";
     Text[ portuguese ] = "Forward";
-    Text[ russian ] = "Forward";
+    Text[ russian ] = "Ñëåäóşùàÿ ñòğàíèöà";
     Text[ greek ] = "Åğüìåíç óåëßäá";
-    Text[ dutch ] = "Forward";
-    Text[ french ] = "Forward";
+    Text[ dutch ] = "Volgende";
+    Text[ french ] = "Page suivante";
     Text[ spanish ] = "Página siguiente";
-    Text[ italian ] = "Forward";
+    Text[ italian ] = "Pagina successiva";
     Text[ danish ] = "Forward";
-    Text[ swedish ] = "Forward";
+    Text[ swedish ] = "Nästa sida";
     Text[ polish ] = "Nastêpna strona";
     Text[ portuguese_brazilian ] = "Forward";
     Text[ japanese ] = "ŸÍß°¼Ş";
@@ -461,14 +461,14 @@ String STR_HELP_BUTTON_PRINT
     Text = "Drucken";
     Text [ english_us ] = "Print";
     Text[ portuguese ] = "Print";
-    Text[ russian ] = "Print";
+    Text[ russian ] = "Ïå÷àòü";
     Text[ greek ] = "Åêôığùóç";
-    Text[ dutch ] = "Print";
-    Text[ french ] = "Print";
+    Text[ dutch ] = "Afdrukken";
+    Text[ french ] = "Imprimer";
     Text[ spanish ] = "Imprimir";
-    Text[ italian ] = "Print";
+    Text[ italian ] = "Stampa";
     Text[ danish ] = "Print";
-    Text[ swedish ] = "Print";
+    Text[ swedish ] = "Skriv ut";
     Text[ polish ] = "Drukuj";
     Text[ portuguese_brazilian ] = "Print";
     Text[ japanese ] = "ˆóü";
