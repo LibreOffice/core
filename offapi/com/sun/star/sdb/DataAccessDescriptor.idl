@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataAccessDescriptor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:05:51 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ module com {  module sun {  module star {  module sdb {
     is urged to specify which properties are mandatory, and which ones optional. Additionally,
     it's free to specify any additional requirements about the relations of properties.</p>
 
-    @since #107627#
+    @since OOo 1.1.2
 */
 published service DataAccessDescriptor
 {
