@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-26 08:46:33 $
+ *  last change: $Author: ka $ $Date: 2001-07-04 15:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -825,9 +825,49 @@ void OutputDevice::ImplDrawBitmapEx( const Point& rDestPt, const Size& rDestSize
 
     if( OUTDEV_PRINTER == meOutDevType )
     {
-        Bitmap aBmp( aBmpEx.GetBitmap() ), aMask( aBmpEx.GetMask() );
-        aBmp.Replace( aMask, Color( COL_WHITE ) );
-        ImplPrintTransparent( aBmp, aMask, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
+        Bitmap aBmp( aBmpEx.GetBitmap() );
+
+        if( aBmpEx.IsAlpha() )
+        {
+            if( !aBmp.IsEmpty() )
+            {
+                TwoRect aPosAry;
+
+                aPosAry.mnSrcX = rSrcPtPixel.X();
+                aPosAry.mnSrcY = rSrcPtPixel.Y();
+                aPosAry.mnSrcWidth = rSrcSizePixel.Width();
+                aPosAry.mnSrcHeight = rSrcSizePixel.Height();
+                aPosAry.mnDestX = ImplLogicXToDevicePixel( rDestPt.X() );
+                aPosAry.mnDestY = ImplLogicYToDevicePixel( rDestPt.Y() );
+                aPosAry.mnDestWidth = ImplLogicWidthToDevicePixel( rDestSize.Width() );
+                aPosAry.mnDestHeight = ImplLogicHeightToDevicePixel( rDestSize.Height() );
+
+                const ULONG nMirrFlags = ImplAdjustTwoRect( aPosAry, aBmp.GetSizePixel() );
+
+                if ( aPosAry.mnSrcWidth && aPosAry.mnSrcHeight && aPosAry.mnDestWidth && aPosAry.mnDestHeight )
+                {
+                    if ( nMirrFlags )
+                        aBmp.Mirror( nMirrFlags );
+
+#ifndef REMOTE_APPSERVER
+                    mpGraphics->DrawBitmap( &aPosAry, *aBmp.ImplGetImpBitmap()->ImplGetSalBitmap() );
+#else
+                    aBmp.ImplDrawRemote( this,
+                                Point( aPosAry.mnSrcX, aPosAry.mnSrcY ),
+                                Size( aPosAry.mnSrcWidth, aPosAry.mnSrcHeight ),
+                                Point( aPosAry.mnDestX, aPosAry.mnDestY ),
+                                Size( aPosAry.mnDestWidth, aPosAry.mnDestHeight ) );
+#endif
+                }
+            }
+        }
+        else
+        {
+            Bitmap aMask( aBmpEx.GetMask() );
+            aBmp.Replace( aMask, Color( COL_WHITE ) );
+            ImplPrintTransparent( aBmp, aMask, rDestPt, rDestSize, rSrcPtPixel, rSrcSizePixel );
+        }
+
         return;
     }
 #ifndef REMOTE_APPSERVER
