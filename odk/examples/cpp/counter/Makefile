@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:29:37 $
+#  last change: $Author: rt $ $Date: 2005-01-31 17:06:25 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -90,13 +90,13 @@ $(OUT_COMP_GEN)/%.urd : %.idl
 # This example type library will be extended by the office types
 $(OUT_BIN)/%.rdb : $(GENURDFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	$(REGMERGE) $@ /UCR $(GENURDFILES)
-	$(REGMERGE) $@ / $(DKREGISTRYNAME) 
+	$(REGMERGE) $@ / $(OFFICE_TYPE_LIBRARY) 
 
 $(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB) $(COMPONENT_XML)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
 	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
 	echo flagged > $@
 
@@ -108,24 +108,17 @@ $(OUT_COMP_SLO)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
 
-$(OUT_COMP_GEN)/%.uno.def : exports.dxp
 ifeq "$(OS)" "WIN"
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	@echo EXPORTS > $@
-	$(CAT) exports.dxp >> $@
-endif
-
-ifeq "$(OS)" "WIN"
-$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES) $(OUT_COMP_GEN)/%.def
+$(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(OUT_COMP_GEN))
-	$(LINK) $(LIBRARY_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),map,$(@F)) \
-	/DEF:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),def,$(@F)) $(SLOFILES) \
+	$(LINK) $(COMP_LINK_FLAGS) /OUT:$@ \
+	/MAP:$(OUT_COMP_GEN)/$(subst $(SHAREDLIB_EXT),map,$(@F)) $(SLOFILES) \
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) msvcrt.lib kernel32.lib
 else
 $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(LINK) $(LIBRARY_LINK_FLAGS) $(LINK_LIBS) -o $@ $^\
+	$(LINK) $(COMP_LINK_FLAGS) $(LINK_LIBS) -o $@ $^\
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
 endif	
 
