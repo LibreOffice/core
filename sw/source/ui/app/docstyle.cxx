@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:20:49 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -922,12 +922,33 @@ BOOL  SwDocStyleSheet::SetName( const String& rStr)
             break;
         case SFX_STYLE_FAMILY_PSEUDO:
             ASSERT(pNumRule, "NumRule fehlt!");
-            if( pNumRule && pNumRule->GetName() != rStr )
+
+            // -> #106897#
+            if (pNumRule)
             {
-                ((SwNumRule*)pNumRule)->SetName( rStr );
-                rDoc.SetModified();
-                bChg = TRUE;
+                String aOldName = pNumRule->GetName();
+
+                if (aOldName.Len() > 0)
+                {
+                    if ( aOldName != rStr &&
+                         rDoc.RenameNumRule(aOldName, rStr))
+                    {
+                        pNumRule = rDoc.FindNumRulePtr(rStr);
+                        rDoc.SetModified();
+
+                        bChg = TRUE;
+                    }
+                }
+                else
+                {
+                    ((SwNumRule*)pNumRule)->SetName( rStr );
+                    rDoc.SetModified();
+
+                    bChg = TRUE;
+                }
             }
+            // <- #106897#
+
             break;
 
 
@@ -1291,6 +1312,7 @@ void   SwDocStyleSheet::SetItemSet(const SfxItemSet& rSet)
                     SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
                     pSetRule->UnLinkGraphics();
                     //SwNumRule aSetRule(rDoc.GetUniqueNumRuleName());
+
                     SwNumRule aSetRule(pNumRule->GetName());
                     aSetRule.SetSvxRule(*pSetRule, &rDoc);
                     rDoc.ChgNumRuleFmts( aSetRule );
@@ -1422,7 +1444,7 @@ void lcl_DeleteInfoStyles( USHORT nFamily, SvPtrarr& rArr, SwDoc& rDoc )
         {
             SvUShorts aDelArr;
             const SwCharFmts& rTbl = *rDoc.GetCharFmts();
-            for( sal_uInt16 n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
+            for( n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
             {
                 void* p = (void*)rTbl[ n ];
                 if( USHRT_MAX == rArr.GetPos( p ))
@@ -1437,7 +1459,7 @@ void lcl_DeleteInfoStyles( USHORT nFamily, SvPtrarr& rArr, SwDoc& rDoc )
         {
             SvUShorts aDelArr;
             const SwTxtFmtColls& rTbl = *rDoc.GetTxtFmtColls();
-            for( sal_uInt16 n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
+            for( n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
             {
                 void* p = (void*)rTbl[ n ];
                 if( USHRT_MAX == rArr.GetPos( p ))
@@ -1452,7 +1474,7 @@ void lcl_DeleteInfoStyles( USHORT nFamily, SvPtrarr& rArr, SwDoc& rDoc )
         {
             SvPtrarr aDelArr;
             const SwFrmFmts& rTbl = *rDoc.GetFrmFmts();
-            for( sal_uInt16 n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
+            for( n = 0, nCnt = rTbl.Count(); n < nCnt; ++n )
             {
                 void* p = (void*)rTbl[ n ];
                 if( USHRT_MAX == rArr.GetPos( p ))
