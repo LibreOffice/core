@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2000-12-07 18:44:40 $
+ *  last change: $Author: nn $ $Date: 2001-01-10 15:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,7 @@ void SvXMLNumFmtExport::AddLanguageAttr_Impl( sal_Int32 nLang )
     if ( nLang != LANGUAGE_SYSTEM )
     {
         String aLangStr, aCountryStr;
-        ConvertLanguageToIsoNames( nLang, aLangStr, aCountryStr );
+        ConvertLanguageToIsoNames( (LanguageType)nLang, aLangStr, aCountryStr );
 
         OUString sAttrName, sAttrValue;
         if (aLangStr.Len())
@@ -287,8 +287,35 @@ void SvXMLNumFmtExport::AddLanguageAttr_Impl( sal_Int32 nLang )
 //  methods to write individual elements within a format
 //
 
+void SvXMLNumFmtExport::AddToTextElement_Impl( const OUString& rString )
+{
+    //  append to sTextContent, write element in FinishTextElement_Impl
+    //  to avoid several text elements following each other
+
+    sTextContent.append( rString );
+}
+
+void SvXMLNumFmtExport::FinishTextElement_Impl()
+{
+    DBG_ASSERT( !xAttrList->getLength(), "FinishTextElement_Impl: AttrList not empty" );
+
+    if ( sTextContent.getLength() )
+    {
+        OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
+                            OUString::createFromAscii( sXML_text ) );
+        OUString sContentStr = sTextContent.makeStringAndClear();
+
+        xHandler->ignorableWhitespace( sWS );
+        xHandler->startElement( sElem, xAttrList );
+        xHandler->characters( sContentStr );
+        xHandler->endElement( sElem );
+    }
+}
+
 void SvXMLNumFmtExport::WriteColorElement_Impl( const Color& rColor )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_STYLE,
                         OUString::createFromAscii( sXML_properties ) );
 
@@ -306,19 +333,11 @@ void SvXMLNumFmtExport::WriteColorElement_Impl( const Color& rColor )
     pAttrList->Clear();
 }
 
-void SvXMLNumFmtExport::WriteTextElement_Impl( const OUString& rString )
-{
-    OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
-                        OUString::createFromAscii( sXML_text ) );
-    xHandler->ignorableWhitespace( sWS );
-    xHandler->startElement( sElem, xAttrList );
-    xHandler->characters( rString );
-    xHandler->endElement( sElem );
-}
-
 void SvXMLNumFmtExport::WriteCurrencyElement_Impl( const OUString& rString,
                                                     const OUString& rExt )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_currency_symbol ) );
 
@@ -340,6 +359,8 @@ void SvXMLNumFmtExport::WriteCurrencyElement_Impl( const OUString& rString,
 
 void SvXMLNumFmtExport::WriteBooleanElement_Impl()
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_boolean ) );
     xHandler->ignorableWhitespace( sWS );
@@ -349,6 +370,8 @@ void SvXMLNumFmtExport::WriteBooleanElement_Impl()
 
 void SvXMLNumFmtExport::WriteTextContentElement_Impl()
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_text_content ) );
     xHandler->ignorableWhitespace( sWS );
@@ -360,6 +383,8 @@ void SvXMLNumFmtExport::WriteTextContentElement_Impl()
 
 void SvXMLNumFmtExport::WriteDayElement_Impl( sal_Bool bLong )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_day ) );
 
@@ -374,6 +399,8 @@ void SvXMLNumFmtExport::WriteDayElement_Impl( sal_Bool bLong )
 
 void SvXMLNumFmtExport::WriteMonthElement_Impl( sal_Bool bLong, sal_Bool bText )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_month ) );
 
@@ -389,6 +416,8 @@ void SvXMLNumFmtExport::WriteMonthElement_Impl( sal_Bool bLong, sal_Bool bText )
 
 void SvXMLNumFmtExport::WriteYearElement_Impl( sal_Bool bLong )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_year ) );
 
@@ -403,6 +432,8 @@ void SvXMLNumFmtExport::WriteYearElement_Impl( sal_Bool bLong )
 
 void SvXMLNumFmtExport::WriteEraElement_Impl( sal_Bool bLong )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_era ) );
 
@@ -417,6 +448,8 @@ void SvXMLNumFmtExport::WriteEraElement_Impl( sal_Bool bLong )
 
 void SvXMLNumFmtExport::WriteDayOfWeekElement_Impl( sal_Bool bLong )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_day_of_week ) );
 
@@ -431,6 +464,8 @@ void SvXMLNumFmtExport::WriteDayOfWeekElement_Impl( sal_Bool bLong )
 
 void SvXMLNumFmtExport::WriteWeekElement_Impl()
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_week_of_year ) );
     xHandler->ignorableWhitespace( sWS );
@@ -440,6 +475,8 @@ void SvXMLNumFmtExport::WriteWeekElement_Impl()
 
 void SvXMLNumFmtExport::WriteQuarterElement_Impl( sal_Bool bLong )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_quarter ) );
 
@@ -456,6 +493,8 @@ void SvXMLNumFmtExport::WriteQuarterElement_Impl( sal_Bool bLong )
 
 void SvXMLNumFmtExport::WriteHoursElement_Impl( sal_Bool bLong )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_hours ) );
 
@@ -470,6 +509,8 @@ void SvXMLNumFmtExport::WriteHoursElement_Impl( sal_Bool bLong )
 
 void SvXMLNumFmtExport::WriteMinutesElement_Impl( sal_Bool bLong )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_minutes ) );
 
@@ -484,6 +525,8 @@ void SvXMLNumFmtExport::WriteMinutesElement_Impl( sal_Bool bLong )
 
 void SvXMLNumFmtExport::WriteSecondsElement_Impl( sal_Bool bLong, sal_uInt16 nDecimals )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_seconds ) );
 
@@ -505,6 +548,8 @@ void SvXMLNumFmtExport::WriteSecondsElement_Impl( sal_Bool bLong, sal_uInt16 nDe
 
 void SvXMLNumFmtExport::WriteAMPMElement_Impl()
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_am_pm ) );
     xHandler->ignorableWhitespace( sWS );
@@ -518,6 +563,8 @@ void SvXMLNumFmtExport::WriteNumberElement_Impl(
                             sal_Int32 nDecimals, sal_Int32 nInteger,
                             const OUString& rDashStr, sal_Bool bGrouping )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_number ) );
     OUString sAttrName, sAttrValue;
@@ -568,6 +615,8 @@ void SvXMLNumFmtExport::WriteScientificElement_Impl(
                             sal_Int32 nDecimals, sal_Int32 nInteger,
                             sal_Bool bGrouping, sal_Int32 nExp )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_scientific_number ) );
     OUString sAttrName, sAttrValue;
@@ -618,6 +667,8 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
                             sal_Int32 nInteger, sal_Bool bGrouping,
                             sal_Int32 nNumerator, sal_Int32 nDenominator )
 {
+    FinishTextElement_Impl();
+
     OUString sElem = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
                         OUString::createFromAscii( sXML_fraction ) );
     OUString sAttrName, sAttrValue;
@@ -669,6 +720,8 @@ void SvXMLNumFmtExport::WriteFractionElement_Impl(
 void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
                                                 sal_Int32 nKey, sal_Int32 nPart )
 {
+    FinishTextElement_Impl();
+
     if ( nOp != NUMBERFORMAT_OP_NO )
     {
         // style namespace
@@ -762,7 +815,7 @@ void SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
 
         //  text before currency symbol
         if ( nPos > 0 )
-            WriteTextElement_Impl( rString.copy( 0, nPos ) );
+            AddToTextElement_Impl( rString.copy( 0, nPos ) );
 
         //  currency symbol (empty string -> default)
         OUString sEmpty;
@@ -770,10 +823,10 @@ void SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
 
         //  text after currency symbol
         if ( nCont < nLength )
-            WriteTextElement_Impl( rString.copy( nCont, nLength-nCont ) );
+            AddToTextElement_Impl( rString.copy( nCont, nLength-nCont ) );
     }
     else
-        WriteTextElement_Impl( rString );       // simple text
+        AddToTextElement_Impl( rString );       // simple text
 }
 
 //-------------------------------------------------------------------------
@@ -1017,7 +1070,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                             WriteTextWithCurrency_Impl( *pElemStr, aIntl, aChrCls );
                         }
                         else
-                            WriteTextElement_Impl( *pElemStr );
+                            AddToTextElement_Impl( *pElemStr );
                     }
                     break;
                 case NF_KEY_CCC:
@@ -1116,7 +1169,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                         {
                             //  write additional text element for separator
                             International aIntl( nLang );
-                            WriteTextElement_Impl( aIntl.GetLongDateDayOfWeekSep() );
+                            AddToTextElement_Impl( aIntl.GetLongDateDayOfWeekSep() );
                         }
                     }
                     break;
@@ -1213,6 +1266,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
         WriteMapElement_Impl( eOp1, fLimit1, nKey, 0 );
         WriteMapElement_Impl( eOp2, fLimit2, nKey, 1 );
     }
+
+    FinishTextElement_Impl();       // final text element
 
     xHandler->ignorableWhitespace( sWS );
     xHandler->endElement( sElem );
