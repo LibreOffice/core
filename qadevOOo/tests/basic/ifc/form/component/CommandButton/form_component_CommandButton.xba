@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: form_component_CommandButton.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:49:08 $ 
+'*  last change:$Date: 2003-02-26 16:57:03 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -81,18 +81,24 @@ Sub RunTest()
 On Error Goto ErrHndl
 
     Dim bOK As Boolean
+    Dim n as Integer
 
     Test.StartMethod("ButtonType")
     bOK = true
-
-    oObj.ButtonType = com.sun.star.form.FormButtonType.PUSH
-    bOK = bOK AND oObj.ButtonType = com.sun.star.form.FormButtonType.PUSH
-
-    oObj.ButtonType = com.sun.star.form.FormButtonType.SUBMIT
-    bOK = bOK AND oObj.ButtonType = com.sun.star.form.FormButtonType.SUBMIT
+    Dim ButtonTypes(4) as Variant
+    ButtonTypes(0) = com.sun.star.form.FormButtonType.PUSH
+    ButtonTypes(1) = com.sun.star.form.FormButtonType.SUBMIT
+    ButtonTypes(2) = com.sun.star.form.FormButtonType.URL
+    ButtonTypes(3) = com.sun.star.form.FormButtonType.RESET
+    
+    for n = 0 to ubound(ButtonTypes())-1
+        oObj.setPropertyValue("ButtonType", _
+                                        createUnoValue("byte", ButtonTypes(n)))
+        bOK = bOK AND (oObj.getPropertyValue("ButtonType") = ButtonTypes(n))
+    next
 
     Test.MethodTested("ButtonType", bOK)
-
+    
     PropertyTester.TestProperty("TargetFrame")
 
     PropertyTester.TestProperty("TargetURL")
