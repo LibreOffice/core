@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-26 18:22:34 $
+#   last change: $Author: hjs $ $Date: 2002-04-02 13:11:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -128,7 +128,7 @@ SHL$(TNR)DEF*=$(MISC)$/$(SHL$(TNR)TARGET).def
 .IF "$(COMP$(TNR)TYPELIST)"==""
 
 #fallback
-LOCAL$(TNR)DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL$(TNR)TARGET)))}.xml"))
+LOCAL$(TNR)DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL$(TNR)TARGET)))}.xml"))
 .IF "$(LOCAL$(TNR)DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@

@@ -28,7 +28,7 @@ SHL1DEF*=$(MISC)$/$(SHL1TARGET).def
 .IF "$(COMP1TYPELIST)"==""
 
 #fallback
-LOCAL1DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL1TARGET)))}.xml"))
+LOCAL1DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL1TARGET)))}.xml"))
 .IF "$(LOCAL1DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL1TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -484,7 +484,7 @@ SHL2DEF*=$(MISC)$/$(SHL2TARGET).def
 .IF "$(COMP2TYPELIST)"==""
 
 #fallback
-LOCAL2DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL2TARGET)))}.xml"))
+LOCAL2DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL2TARGET)))}.xml"))
 .IF "$(LOCAL2DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL2TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -940,7 +940,7 @@ SHL3DEF*=$(MISC)$/$(SHL3TARGET).def
 .IF "$(COMP3TYPELIST)"==""
 
 #fallback
-LOCAL3DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL3TARGET)))}.xml"))
+LOCAL3DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL3TARGET)))}.xml"))
 .IF "$(LOCAL3DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL3TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -1396,7 +1396,7 @@ SHL4DEF*=$(MISC)$/$(SHL4TARGET).def
 .IF "$(COMP4TYPELIST)"==""
 
 #fallback
-LOCAL4DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL4TARGET)))}.xml"))
+LOCAL4DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL4TARGET)))}.xml"))
 .IF "$(LOCAL4DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL4TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -1852,7 +1852,7 @@ SHL5DEF*=$(MISC)$/$(SHL5TARGET).def
 .IF "$(COMP5TYPELIST)"==""
 
 #fallback
-LOCAL5DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL5TARGET)))}.xml"))
+LOCAL5DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL5TARGET)))}.xml"))
 .IF "$(LOCAL5DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL5TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -2308,7 +2308,7 @@ SHL6DEF*=$(MISC)$/$(SHL6TARGET).def
 .IF "$(COMP6TYPELIST)"==""
 
 #fallback
-LOCAL6DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL6TARGET)))}.xml"))
+LOCAL6DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL6TARGET)))}.xml"))
 .IF "$(LOCAL6DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL6TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -2764,7 +2764,7 @@ SHL7DEF*=$(MISC)$/$(SHL7TARGET).def
 .IF "$(COMP7TYPELIST)"==""
 
 #fallback
-LOCAL7DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL7TARGET)))}.xml"))
+LOCAL7DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL7TARGET)))}.xml"))
 .IF "$(LOCAL7DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL7TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -3220,7 +3220,7 @@ SHL8DEF*=$(MISC)$/$(SHL8TARGET).def
 .IF "$(COMP8TYPELIST)"==""
 
 #fallback
-LOCAL8DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL8TARGET)))}.xml"))
+LOCAL8DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL8TARGET)))}.xml"))
 .IF "$(LOCAL8DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL8TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -3676,7 +3676,7 @@ SHL9DEF*=$(MISC)$/$(SHL9TARGET).def
 .IF "$(COMP9TYPELIST)"==""
 
 #fallback
-LOCAL9DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL9TARGET)))}.xml"))
+LOCAL9DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL9TARGET)))}.xml"))
 .IF "$(LOCAL9DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL9TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
@@ -4132,7 +4132,7 @@ SHL10DEF*=$(MISC)$/$(SHL10TARGET).def
 .IF "$(COMP10TYPELIST)"==""
 
 #fallback
-LOCAL10DESC:=$(subst,/,$/ $(shell find . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL10TARGET)))}.xml"))
+LOCAL10DESC:=$(subst,/,$/ $(shell $(FIND) . -name "{$(subst,$($(WINVERSIONNAMES)_MAJOR),* $(subst,$(UPD)$(DLLPOSTFIX), $(SHL10TARGET)))}.xml"))
 .IF "$(LOCAL10DESC)"==""
 $(MISC)$/%{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL10TARGET))}.xml : $(SOLARENV)$/src$/default_description.xml
     +$(COPY) $< $@
