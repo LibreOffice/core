@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-30 13:53:54 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 21:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ korean ] = "필터";
         Text[ turkish ] = "Filtre";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Filtro";
+        Text[ catalan ] = "Filtre";
         Text[ finnish ] = "Suodatin";
         Text[ thai ] = "ตัวกรอง";
     };
@@ -125,7 +125,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ korean ] = "날짜(~D)";
         Text[ turkish ] = "~Tarih";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Fecha";
+        Text[ catalan ] = "~Data";
         Text[ finnish ] = "~P�iv�m��r�";
         Text[ thai ] = "~วันที่";
     };
@@ -329,12 +329,12 @@ TabPage SID_REDLIN_FILTER_PAGE
     };
     StringList [ catalan ] =
     {
-            < "antes de" ; Default ; > ;
-        < "desde el" ; Default ; > ;
-        < "igual a" ; Default ; > ;
+            < "abans de" ; Default ; > ;
+        < "des de" ; Default ; > ;
+        < "igual que" ; Default ; > ;
         < "desigual a" ; Default ; > ;
         < "entre" ; Default ; > ;
-        < "desde el 'Guardado'" ; Default ; > ;
+        < "des del desament" ; Default ; > ;
     };
     StringList [ finnish ] =
     {
@@ -423,7 +423,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
-        QuickHelpText[ catalan ] = "Definir fecha/hora";
+        QuickHelpText[ catalan ] = "Defineix data/hora";
         QuickHelpText[ finnish ] = "M��rit� p�iv�m��r�/aika";
         QuickHelpText[ thai ] = "Set Date/Time";
     };
@@ -454,7 +454,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ korean ] = "그리고";
         Text[ turkish ] = "~ile";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "y";
+        Text[ catalan ] = "i";
         Text[ finnish ] = "ja";
         Text[ thai ] = "และ";
     };
@@ -526,7 +526,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Datum/Uhrzeit einstellen";
-        QuickHelpText[ catalan ] = "Definir fecha/hora";
+        QuickHelpText[ catalan ] = "Defineix data/hora";
         QuickHelpText[ finnish ] = "M��rit� p�iv�m��r�/aika";
         QuickHelpText[ thai ] = "Set Date/Time";
     };
@@ -598,7 +598,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ korean ] = "범위(~R)";
         Text[ turkish ] = "~Aral�k";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~�rea";
+        Text[ catalan ] = "~�rea";
         Text[ finnish ] = "~Alue";
         Text[ thai ] = "~ช่วง";
     };
@@ -634,7 +634,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ korean ] = "수행(~C)";
         Text[ turkish ] = "�~�lem";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Acci�n";
+        Text[ catalan ] = "~Acci�";
         Text[ finnish ] = "~Toiminto";
         Text[ thai ] = "การกระ~ทำ";
     };
@@ -697,7 +697,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Tabellenreferenz einstellen";
         Text[ catalan ] = "...";
-        QuickHelpText[ catalan ] = "Definir referencia a tabla";
+        QuickHelpText[ catalan ] = "Defineix la refer�ncia a la taula";
         Text[ finnish ] = "...";
         QuickHelpText[ finnish ] = "M��rit� viite";
         Text[ thai ] = "...";
@@ -730,7 +730,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ korean ] = "설명";
         Text[ turkish ] = "A��k~lama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Descripci�n";
+        Text[ catalan ] = "Comentari";
         Text[ finnish ] = "Huomautus";
         Text[ thai ] = "ข้อคิดเห็น";
     };
@@ -779,7 +779,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "목록";
         Text[ turkish ] = "Liste";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Lista";
+        Text[ catalan ] = "Llista";
         Text[ finnish ] = "Luettelo";
         Text[ thai ] = "รายการ";
     };
@@ -816,7 +816,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "수락(~A)";
         Text[ turkish ] = "~Kabul et";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Aceptar";
+        Text[ catalan ] = "~Accepto";
         Text[ finnish ] = "~Hyv�ksy";
         Text[ thai ] = "~ยอมรับ";
     };
@@ -846,7 +846,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "거부(~R)";
         Text[ turkish ] = "R~eddet";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Rechazar";
+        Text[ catalan ] = "~Rebutjo";
         Text[ finnish ] = "~Hylk��";
         Text[ thai ] = "~ปฏิเสธ";
     };
@@ -876,7 +876,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "모두 수락(~C)";
         Text[ turkish ] = "~T�m�n� kabul et";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Aceptar todo";
+        Text[ catalan ] = "Ho a~ccepto tot";
         Text[ finnish ] = "~Hyv�ksy kaikki";
         Text[ thai ] = "ย~อมรับทั้งหมด";
     };
@@ -906,7 +906,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "모두 거부(~E)";
         Text[ turkish ] = "T�m�n� ~reddet";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Rechazar todo";
+        Text[ catalan ] = "Ho r~ebutjo tot";
         Text[ finnish ] = "~Hylk�� kaikki";
         Text[ thai ] = "ป~ฏิเสธทั้งหมด";
     };
@@ -938,7 +938,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "실행취소";
         Text[ turkish ] = "~Geri al";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Deshacer";
+        Text[ catalan ] = "~Desf�s";
         Text[ finnish ] = "Peruuta";
         Text[ thai ] = "เลิกทำ";
     };
@@ -965,7 +965,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "수행";
         Text[ turkish ] = "��lem";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Acci�n";
+        Text[ catalan ] = "Acci�";
         Text[ finnish ] = "Toiminto";
         Text[ thai ] = "การกระทำ";
     };
@@ -992,7 +992,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "위치";
         Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Posici�n";
+        Text[ catalan ] = "Posici�";
         Text[ finnish ] = "Sijainti";
         Text[ thai ] = "ตำแหน่ง";
     };
@@ -1019,7 +1019,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "작성자";
         Text[ turkish ] = "Yazan";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Remitent";
+        Text[ catalan ] = "Autor";
         Text[ finnish ] = "Laatija";
         Text[ thai ] = "ผู้เขียน";
     };
@@ -1046,7 +1046,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "날짜";
         Text[ turkish ] = "Tarih";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Fecha";
+        Text[ catalan ] = "Data";
         Text[ finnish ] = "P�iv�m��r�";
         Text[ thai ] = "วันที่";
     };
@@ -1073,7 +1073,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ korean ] = "설명";
         Text[ turkish ] = "A��klama";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Descripci�n";
+        Text[ catalan ] = "Comentari";
         Text[ finnish ] = "Huomautus";
         Text[ thai ] = "ข้อคิดเห็น";
     };
