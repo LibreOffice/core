@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailwindow.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 13:18:02 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ Window RID_MAIL_WINDOW
         Text[ french ] = "Envo~yer";
         Text[ spanish ] = "Enviar";
         Text[ italian ] = "In~via";
-        Text[ danish ] = "~Send";
+        Text[ danish ] = "Send";
         Text[ swedish ] = "~Skicka";
         Text[ polish ] = "Wy�lij";
         Text[ portuguese_brazilian ] = "E~nviar";
@@ -102,6 +102,8 @@ Window RID_MAIL_WINDOW
         Text[ hebrew ] = "‮שליחה‬";
         Text[ hindi ] = "भेजो";
         Text[ slovak ] = "Odoslať";
+        Text[ hungarian ] = "Küldés";
+        Text[ slovenian ] = "Pošlji";
     };
     PushButton PB_MAILWIN_CLOSE
     {
@@ -119,7 +121,7 @@ Window RID_MAIL_WINDOW
         Text[ french ] = "Fermer";
         Text[ spanish ] = "Cerrar";
         Text[ italian ] = "C~hiudi";
-        Text[ danish ] = "L~uk";
+        Text[ danish ] = "Luk";
         Text[ swedish ] = "S~t�ng";
         Text[ polish ] = "Zamknij";
         Text[ portuguese_brazilian ] = "~Fechar";
@@ -136,6 +138,8 @@ Window RID_MAIL_WINDOW
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "बन्द करो";
         Text[ slovak ] = "Zavrieť";
+        Text[ hungarian ] = "Bezárás";
+        Text[ slovenian ] = "Zapri";
     };
     ListBox LB_MAILWIN_ROLE
     {
@@ -213,7 +217,7 @@ Window RID_MAIL_WINDOW
         StringList [ danish ] =
         {
             < "Til" ; 1 ; > ;
-            < "Kopi" ; 2 ; > ;
+            < "Kopier" ; 2 ; > ;
             < "Blindkopi" ; 3 ; > ;
         };
         StringList [ swedish ] =
@@ -312,6 +316,18 @@ Window RID_MAIL_WINDOW
         < "Kópia" ; 2 ; > ;
         < "Slepá kópia" ; 3 ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Címzett" ; 1 ; > ;
+        < "Másolat" ; 2 ; > ;
+        < "Rejtett másolat" ; 3 ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Za" ; 1 ; > ;
+        < "Kopija" ; 2 ; > ;
+        < "Slepa kopija" ; 3 ; > ;
+    };
     };
     Edit ED_MAILWIN_ROLE
     {
@@ -359,6 +375,8 @@ Window RID_MAIL_WINDOW
         Text[ hebrew ] = ":‮נושא‬";
         Text[ hindi ] = "विषय:";
         Text[ slovak ] = "Predmet:";
+        Text[ hungarian ] = "Tárgy:";
+        Text[ slovenian ] = "Zadeva:";
     };
     Edit ED_MAILWIN_SUBJECT
     {
@@ -398,6 +416,8 @@ Window RID_MAIL_WINDOW
         Text[ hebrew ] = "‮מאת: ‬";
         Text[ hindi ] = "से:";
         Text[ slovak ] = "Od:";
+        Text[ hungarian ] = "Feladó:";
+        Text[ slovenian ] = "Od:";
     };
     Edit ED_MAILWIN_FROM
     {
@@ -438,6 +458,8 @@ Window RID_MAIL_WINDOW
         Text[ hebrew ] = "‮עדיפות:‬";
         Text[ hindi ] = "प्रधान्य:";
         Text[ slovak ] = "Priorita:";
+        Text[ hungarian ] = "Prioritás:";
+        Text[ slovenian ] = "Prioriteta:";
     };
     ListBox LB_MAILWIN_PRIO
     {
@@ -670,6 +692,22 @@ Window RID_MAIL_WINDOW
         < "Nízka" ; 4 ; > ;
         < "Najnižšia" ; 5 ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Sürgős" ; 1 ; > ;
+        < "Fontos" ; 2 ; > ;
+        < "Normál" ; 3 ; > ;
+        < "Alacsony" ; 4 ; > ;
+        < "Legalacsonyabb" ; 5 ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Zelo visoka" ; 1 ; > ;
+        < "Visoka" ; 2 ; > ;
+        < "Navadno" ; 3 ; > ;
+        < "Nizka" ; 4 ; > ;
+        < "Zelo nizka" ; 5 ; > ;
+    };
     };
     Image IMG_MAILWIN_SEND
     {
@@ -696,7 +734,7 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE [ portuguese_brazilian ] = "Ocorreu um erro ao enviar correio." ;
     MESSAGE [ portuguese ] = "Erro ao enviar correio." ;
     MESSAGE [ finnish ] = "Virhe viesti� l�hetett�ess�. Syit� voivat olla puuttuva k�ytt�j�tili tai virheelliset asetukset.\nTarkista %PRODUCTNAMEn tai s�hk�postiohjelmasi asetukset." ;
-    MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen. Mulige fejl er en manglende brugerkonto eller en forkert ops�tning.\nKontroller indstillingerne i %PRODUCTNAME eller i dit e-mail-program." ;
+    MESSAGE [ danish ] = "Fejl ved afsendelse af meddelelsen. Mulige fejlkilder er en manglende brugerkonto eller en forkert ops�tning.\nKontroller venligst indstillingerne i %PRODUCTNAME eller i dit e-mailprogram." ;
     MESSAGE [ french ] = "Erreur lors de l'envoi du message. Erreurs possibles : compte d'utilisateur manquant ou Setup erron�.\nV�rifiez les param�tres de %PRODUCTNAME ou ceux du logiciel de messagerie." ;
     MESSAGE [ swedish ] = "Fel vid s�ndning av meddelande. M�jliga fel �r att ett anv�ndarkonto saknas eller en felaktig installation.\nKontrollera inst�llningarna i %PRODUCTNAME eller i ditt e-postprogram." ;
     MESSAGE [ dutch ] = "Fout bij verzenden van bericht. Het is mogelijk dat de gebruikersaccount ontbreekt of dat de installatie fouten bevat.\nControleer de instellingen van %PRODUCTNAME of van het e-mailprogramma." ;
@@ -718,9 +756,12 @@ InfoBox MSG_ERROR_SEND_MAIL
     MESSAGE[ hebrew ] = "‮ארעה שגיאה בשילוח ההודעה. יתכן שחסר הגדרת חשבון המשתמש או שההתקנה פגומה.\nנא לבדוק את הקביעות של %PRODUCTNAME ושל תוכנית הדואר.‬";
     MESSAGE[ hindi ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings.";
     MESSAGE[ slovak ] = "Behom posielania správy sa vyskytla chyba. Možnou príčinou tejto chyby by mohlo byť chýbajúce užívateľské konto alebo chyba v nastavení.\nProsím skontrolujte nastavenia %PRODUCTNAME alebo nastavenia svojho programu na posielanie e-mailov.";
+    MESSAGE[ hungarian ] = "Üzenetküldéskor hiba történt, ennek oka a hiányzó felhasználónév vagy egyéb hibás beállítás lehet.\nEllenőrizze az %PRODUCTNAME és a levelezőprogramja beállításait. ";
+    MESSAGE[ slovenian ] = "Med pošiljanjem sporočila je prišlo do napake. Možne napake so nepravilne nastavitve računa ali pa račun sploh ne obstaja.\nPreverite nastavitve poštnega programa v %PRODUCTNAME.";
 };
 
 // ------------------------------------------------------------------- EOF
+
 
 
 
