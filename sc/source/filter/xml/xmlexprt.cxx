@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-06 05:46:05 $
+ *  last change: $Author: sab $ $Date: 2001-03-07 18:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2624,10 +2624,11 @@ void ScXMLExport::WriteTableSource()
                             aAny >>= sFilter;
                             aAny = xLinkProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FILTOPT)));
                             aAny >>= sFilterOptions;
-                            if (sLink.getLength() && sTableName.getLength())
+                            if (sLink.getLength())
                             {
                                 AddAttribute(XML_NAMESPACE_XLINK, sXML_href, sLink);
-                                AddAttribute(XML_NAMESPACE_TABLE, sXML_table_name, sTableName);
+                                if (sTableName.getLength())
+                                    AddAttribute(XML_NAMESPACE_TABLE, sXML_table_name, sTableName);
                                 if (sFilter.getLength())
                                     AddAttribute(XML_NAMESPACE_TABLE, sXML_filter_name, sFilter);
                                 if (sFilterOptions.getLength())

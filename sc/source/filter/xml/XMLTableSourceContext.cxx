@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableSourceContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-08 14:42:50 $
+ *  last change: $Author: sab $ $Date: 2001-03-07 18:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ SvXMLImportContext *ScXMLTableSourceContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLTableSourceContext::EndElement()
 {
-    if (sLink.getLength() && sTableName.getLength())
+    if (sLink.getLength())
     {
         uno::Reference <sheet::XSheetLinkable> xLinkable (GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY);
         ScDocument* pDoc = GetScImport().GetDocument();
