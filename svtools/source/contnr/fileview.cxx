@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-07 15:39:24 $
+ *  last change: $Author: pb $ $Date: 2001-12-11 15:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,8 +171,8 @@
 #ifndef _UNOTOOLS_UCBHELPER_HXX
 #include <unotools/ucbhelper.hxx>
 #endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 using namespace ::com::sun::star::lang;
@@ -199,6 +199,11 @@ using namespace ::ucb;
 #define ROW_DATE_CREATE     4
 #define ROW_IS_FOLDER       5
 #define ROW_TARGET_URL      6
+#define ROW_IS_VOLUME       7
+#define ROW_IS_REMOTE       8
+#define ROW_IS_REMOVEABLE   9
+#define ROW_IS_FLOPPY       10
+#define ROW_IS_COMPACTDISC  11
 
 DECLARE_LIST( StringList_Impl, OUString* );
 
@@ -209,28 +214,47 @@ DECLARE_LIST( StringList_Impl, OUString* );
 
 struct SortingData_Impl
 {
-    DateTime    maModDate;
 private:
     OUString    maFilename;     // only filename in upper case - for compare purposes
     OUString    maTitle;        //  -> be carefull when changing maTitle to update maFilename only when new
     OUString    maLowerTitle;
+
 public:
     OUString    maType;
     OUString    maTargetURL;
     OUString    maImageURL;
     OUString    maDisplayText;
+    DateTime    maModDate;
     Image       maImage;
     sal_Int64   maSize;
     sal_Bool    mbIsFolder;
+    sal_Bool    mbIsVolume;
+    sal_Bool    mbIsRemote;
+    sal_Bool    mbIsRemoveable;
+    sal_Bool    mbIsFloppy;
+    sal_Bool    mbIsCompactDisc;
 
+    inline                  SortingData_Impl();
     inline const OUString&  GetTitle() const;
     inline const OUString&  GetLowerTitle() const;
     inline const OUString&  GetFileName() const;
     inline void             SetNewTitle( const OUString& rNewTitle );       // new maTitle is set -> maFilename is set to same!
     inline void             ChangeTitle( const OUString& rChangedTitle );   // maTitle is changed, maFilename is unchanged!
+
 private:
     void                    SetTitles( const OUString& rNewTitle );
 };
+
+inline SortingData_Impl::SortingData_Impl() :
+    maSize          ( 0 ),
+    mbIsFolder      ( sal_False ),
+    mbIsVolume      ( sal_False ),
+    mbIsRemote      ( sal_False ),
+    mbIsRemoveable  ( sal_False ),
+    mbIsFloppy      ( sal_False ),
+    mbIsCompactDisc ( sal_False )
+{
+}
 
 inline const OUString& SortingData_Impl::GetTitle() const
 {
@@ -718,10 +742,10 @@ void AppendDateTime_Impl( const ::com::sun::star::util::DateTime& rDT,
 {
     DateTime aDT;
     CONVERT_DATETIME( rDT, aDT );
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), rLocale );
-    String aDateStr = aLocaleWrapper.getDate( aDT );
+    const LocaleDataWrapper& rLocaleData = SvtSysLocale().GetLocaleData();
+    String aDateStr = rLocaleData.getDate( aDT );
     aDateStr += String::CreateFromAscii( ", " );
-    aDateStr += aLocaleWrapper.getTime( aDT );
+    aDateStr += rLocaleData.getTime( aDT );
     rRow += aDateStr;
 }
 
@@ -760,8 +784,8 @@ OUString CreateExactSizeText_Impl( sal_Int64 nSize )
     }
 
     String aSizeStr;
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    SolarMath::DoubleToString( aSizeStr, fSize, 'F', nDec, aLocaleWrapper.getNumDecimalSep().GetChar(0) );
+    SolarMath::DoubleToString(
+        aSizeStr, fSize, 'F', nDec, SvtSysLocale().GetLocaleData().getNumDecimalSep().GetChar(0) );
     aSizeStr += aUnitStr;
 
     return aSizeStr;
@@ -1747,7 +1771,7 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
 
         Content aCnt( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ), mpView->GetCommandEnvironment() );
         Reference< XResultSet > xResultSet;
-        Sequence< OUString > aProps(6);
+        Sequence< OUString > aProps(11);
 
         aProps[0] = OUString::createFromAscii( "Title" );
         aProps[1] = OUString::createFromAscii( "Size" );
@@ -1755,6 +1779,11 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
         aProps[3] = OUString::createFromAscii( "DateCreated" );
         aProps[4] = OUString::createFromAscii( "IsFolder" );
         aProps[5] = OUString::createFromAscii( "TargetURL" );
+        aProps[6] = OUString::createFromAscii( "IsVolume" );
+        aProps[7] = OUString::createFromAscii( "IsRemote" );
+        aProps[8] = OUString::createFromAscii( "IsRemoveable" );
+        aProps[9] = OUString::createFromAscii( "IsFloppy" );
+        aProps[10] = OUString::createFromAscii( "IsCompactDisc" );
 
         try
         {
@@ -1795,6 +1824,11 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                     OUString aTargetURL = xRow->getString( ROW_TARGET_URL );
                     sal_Bool bHasTargetURL = aTargetURL.getLength() > 0;
                     pData->mbIsFolder = xRow->getBoolean( ROW_IS_FOLDER );
+                    pData->mbIsVolume = xRow->getBoolean( ROW_IS_VOLUME );
+                    pData->mbIsRemote = xRow->getBoolean( ROW_IS_REMOTE );
+                    pData->mbIsRemoveable = xRow->getBoolean( ROW_IS_REMOVEABLE );
+                    pData->mbIsFloppy = xRow->getBoolean( ROW_IS_FLOPPY );
+                    pData->mbIsCompactDisc = xRow->getBoolean( ROW_IS_COMPACTDISC );
                     pData->SetNewTitle( xRow->getString( ROW_TITLE ) );
                     pData->maSize = xRow->getLong( ROW_SIZE );
 
@@ -1813,8 +1847,16 @@ void SvtFileView_Impl::GetFolderContent_Impl( const String& rFolder )
                     else
                         pData->maTargetURL = aContentURL;
 
-                    pData->maType =
-                        SvFileInformationManager::GetDescription( INetURLObject( pData->maTargetURL ) );
+                    if ( pData->mbIsFolder )
+                    {
+                        ::svtools::VolumeInfo aVolInfo( pData->mbIsVolume, pData->mbIsRemote,
+                                                        pData->mbIsRemoveable, pData->mbIsFloppy,
+                                                        pData->mbIsCompactDisc );
+                        pData->maType = SvFileInformationManager::GetFolderDescription( aVolInfo );
+                    }
+                    else
+                        pData->maType = SvFileInformationManager::GetFileDescription(
+                            INetURLObject( pData->maTargetURL ) );
 
                     // replace names on demand
                     if( mbReplaceNames )
@@ -2059,9 +2101,6 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(),
-                                      Application::GetSettings().GetLocale() );
-
     OUString aValue;
     OUString aTab     = OUString::createFromAscii( "\t" );
     OUString aDateSep = OUString::createFromAscii( ", " );
@@ -2080,20 +2119,25 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
             aValue += CreateExactSizeText_Impl( (*aIt)->maSize );
         aValue += aTab;
         // set the date, but volumes have no date
-        sal_Bool bIsVolume = sal_False;
-        ::utl::UCBContentHelper::GetProperty(
-            (*aIt)->maTargetURL, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("IsVolume") ) ) >>= bIsVolume;
-        if ( ! (*aIt)->mbIsFolder || !bIsVolume )
+        if ( ! (*aIt)->mbIsFolder || ! (*aIt)->mbIsVolume )
         {
-            aValue += aLocaleWrapper.getDate( (*aIt)->maModDate );
+            const LocaleDataWrapper& rLocaleData = SvtSysLocale().GetLocaleData();
+            aValue += rLocaleData.getDate( (*aIt)->maModDate );
             aValue += aDateSep;
-            aValue += aLocaleWrapper.getTime( (*aIt)->maModDate );
+            aValue += rLocaleData.getTime( (*aIt)->maModDate );
         }
         (*aIt)->maDisplayText = aValue;
 
         // detect image
-        INetURLObject aObj( (*aIt)->maTargetURL );
-        (*aIt)->maImage = SvFileInformationManager::GetImage( aObj, FALSE );
+        if ( (*aIt)->mbIsFolder )
+        {
+            ::svtools::VolumeInfo aVolInfo( (*aIt)->mbIsVolume, (*aIt)->mbIsRemote,
+                                            (*aIt)->mbIsRemoveable, (*aIt)->mbIsFloppy,
+                                            (*aIt)->mbIsCompactDisc );
+            (*aIt)->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE );
+        }
+        else
+            (*aIt)->maImage = SvFileInformationManager::GetFileImage( INetURLObject( (*aIt)->maTargetURL ), FALSE );
     }
 }
 
@@ -2357,8 +2401,7 @@ void SvtFileView_Impl::EntryRenamed( OUString& rURL,
 }
 
 // -----------------------------------------------------------------------
-void SvtFileView_Impl::FolderInserted( const OUString& rURL,
-                                       const OUString& rTitle )
+void SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& rTitle )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -2371,11 +2414,9 @@ void SvtFileView_Impl::FolderInserted( const OUString& rURL,
 
     INetURLObject aURLObj( rURL );
 
-    pData->maType = SvFileInformationManager::GetDescription( aURLObj );
-    pData->maImage = SvFileInformationManager::GetImage( aURLObj, FALSE );
-
-    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(),
-                                      Application::GetSettings().GetLocale() );
+    ::svtools::VolumeInfo aVolInfo;
+    pData->maType = SvFileInformationManager::GetFolderDescription( aVolInfo );
+    pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE );
 
     OUString aValue;
     OUString aTab     = OUString::createFromAscii( "\t" );
@@ -2389,9 +2430,10 @@ void SvtFileView_Impl::FolderInserted( const OUString& rURL,
     // folders don't have a size
     aValue += aTab;
     // set the date
-    aValue += aLocaleWrapper.getDate( pData->maModDate );
+    const LocaleDataWrapper& rLocaleData = SvtSysLocale().GetLocaleData();
+    aValue += rLocaleData.getDate( pData->maModDate );
     aValue += aDateSep;
-    aValue += aLocaleWrapper.getTime( pData->maModDate );
+    aValue += rLocaleData.getTime( pData->maModDate );
 
     pData->maDisplayText = aValue;
 
