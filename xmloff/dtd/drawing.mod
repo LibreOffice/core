@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.48 2001-05-11 07:36:26 cl Exp $
+	$Id: drawing.mod,v 1.49 2001-05-16 13:31:25 cl Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -520,6 +520,9 @@
 <!ATTLIST style:properties presentation:duration %timeDuration; #IMPLIED>
 <!ATTLIST style:properties presentation:visibility (visible|hidden) #IMPLIED>
 <!ATTLIST style:properties draw:background-size (full|border) #IMPLIED>
+<!ATTLIST style:properties presentation:background-objects-visible %boolean; #IMPLIED>
+<!ATTLIST style:properties presentation:background-visible %boolean; #IMPLIED>
+
 
 <!-- text boxes -->
 <!ELEMENT draw:text-box (office:events?,draw:image-map?,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-15 14:11:55 $
+ *  last change: $Author: cl $ $Date: 2001-05-16 13:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,6 +395,9 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
     { "Visible",                    XML_NAMESPACE_PRESENTATION, "visibility",       XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_VISIBLE },
     { "Sound",                      XML_NAMESPACE_PRESENTATION, "sound",            XML_TYPE_STRING|MID_FLAG_ELEMENT_ITEM, CTF_PAGE_SOUND_URL },
     { "BackgroundFullSize",         XML_NAMESPACE_DRAW,         "background-size",  XML_SD_TYPE_PRESPAGE_BACKSIZE, CTF_PAGE_BACKSIZE },
+
+    { "IsBackgroundVisible",        XML_NAMESPACE_PRESENTATION, sXML_background_visible, XML_TYPE_BOOL, 0 },
+    { "IsBackgroundObjectsVisible", XML_NAMESPACE_PRESENTATION, sXML_background_objects_visible, XML_TYPE_BOOL, 0 },
 
     { "FillStyle",                  XML_NAMESPACE_DRAW, sXML_fill,                  XML_SD_TYPE_FILLSTYLE, 0 },
     { "FillColor",                  XML_NAMESPACE_DRAW, sXML_fill_color,            XML_TYPE_COLOR, 0 },

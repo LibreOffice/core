@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-14 14:41:59 $
+ *  last change: $Author: cl $ $Date: 2001-05-16 13:34:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2125,9 +2125,6 @@ void SdXMLExport::_ExportAutoStyles()
 
     // ...for text
     GetTextParagraphExport()->exportTextAutoStyles();
-
-    // ...for chart
-    GetChartExport()->exportAutoStyles();
 }
 
 //////////////////////////////////////////////////////////////////////////////
