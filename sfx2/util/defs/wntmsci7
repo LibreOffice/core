@@ -4199,3 +4199,12 @@ _real@8@40098000000000000000
 ?reserve@?$vector@PAXV?$allocator@U?$pair@$$CBVOUString@rtl@@V12@@_STL@@@_STL@@@_STL@@QAEXI@Z
 ?resize@?$hashtable@U?$pair@$$CBVOUString@rtl@@V12@@_STL@@VOUString@rtl@@UTStringHashFunction@@U?$_S1st@U?$pair@$$CBVOUString@rtl@@V12@@_STL@@@2@U?$equal_to@VOUString@rtl@@@2@V?$allocator@U?$pair@$$CBVOUString@rtl@@V12@@_STL@@@2@@_STL@@QAEXI@Z
 ?s_pType_com_sun_star_container_XNameAccess@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXNameAccess@container@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+??0OInstanceProvider@sfx2@@QAE@V?$Reference@VXConnection@connection@star@sun@com@@@uno@star@sun@com@@PAVOProcess@vos@@@Z
+??1RVPStartupClient@sfx2@@QAE@XZ
+?getConnectString@RVPStartupClient@sfx2@@AAE?AVOUString@rtl@@ABV34@@Z
+?isOfficeInitialized@OInstanceProvider@sfx2@@AAEEXZ
+?m_bLocalClientConnected@OInstanceProvider@sfx2@@0EA
+?startClient@RVPStartupClient@sfx2@@QAEPAVOProcess@vos@@XZ
+??1?$Reference@VXDragSource@dnd@datatransfer@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+??1SystemWindow@@UAE@XZ
+?IsValid@MSE40HTMLClipFormatObj@@QAEPAVSvStream@@AAV2@@Z
