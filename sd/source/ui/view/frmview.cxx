@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:06 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,6 +548,14 @@ SvStream& operator >> (SvStream& rIn, FrameView& rView)
     else if (aLayerName == String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_MEASURELINES" )))
     {
         rView.SetActiveLayer(String(SdResId(STR_LAYER_MEASURELINES)));
+    }
+    else
+    {
+        // #i12131#
+        // If layer name was not translated this may be an old layer name in
+        // translated speech version. To avoid errors (see bugid) this needs to be
+        // set to a useful default. Best default-layout is 'Layout'.
+        rView.SetActiveLayer(String(SdResId(STR_LAYER_LAYOUT)));
     }
 
     if (rView.GetModel())
