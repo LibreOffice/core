@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleKeyBinding.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-08-16 13:13:06 $
+ *  last change: $Author: obr $ $Date: 2002-08-23 09:29:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ public class AccessibleKeyBinding extends Object implements javax.accessibility.
         return modifiers;
     }
 
-    static int convertKeyCode(short s) {
+    public static int convertKeyCode(short s) {
         int keycode = java.awt.event.KeyEvent.VK_UNDEFINED;
 
         switch( s ) {
