@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendaccess.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 15:23:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #ifndef CONFIGMGR_BACKEND_MERGEDCOMPONENTDATA_HXX
 #include "mergedcomponentdata.hxx"
 #endif // CONFIGMGR_BACKEND_MERGEDCOMPONENTDATA_HXX
+
+#ifndef CONFIGMGR_MATCHLOCALE_HXX
+#include "matchlocale.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
 #include <com/sun/star/configuration/backend/XLayer.hpp>
@@ -175,7 +179,8 @@ class BackendAccess : public IMergedDataProvider
                 MergedComponentData& aData,
                 const uno::Reference<backenduno::XLayer> * pLayers,
                 sal_Int32 aNumLayers,
-                RequestOptions const & aOptions,
+                localehelper::Locale const & aRequestedLocale,
+                localehelper::LocaleSequence & inoutMergedLocales,
                 ITemplateDataProvider *aTemplateProvider,
                 sal_Int32 * pLayersMerged = 0)
             CFG_UNO_THROW_ALL();
