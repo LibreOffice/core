@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-25 13:40:03 $
+ *  last change: $Author: sab $ $Date: 2000-09-28 17:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef _XMLOFF_XMLIMPPR_HXX
 #include <xmloff/xmlimppr.hxx>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_CONDITIONOPERATOR_HPP_
+#include <com/sun/star/sheet/ConditionOperator.hpp>
+#endif
 #include "xmlimprt.hxx"
 
 class ScXMLImportPropertyMapper : public SvXMLImportPropertyMapper
@@ -112,19 +115,33 @@ public:
             ::std::vector< XMLPropertyState >& rProperties ) const;
 };
 
-class ScXMLMapContext;
+struct ScXMLMapContent;
 
 class XMLTableStyleContext : public XMLPropStyleContext
 {
     ::rtl::OUString             sDataStyleName;
     const rtl::OUString         sNumberFormat;
     SvXMLStylesContext*         pStyles;
-    std::vector<ScXMLMapContext*>   aMaps;
+    std::vector<ScXMLMapContent>    aMaps;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
-    com::sun::star::uno::Any GetConditionalFormat(const ::com::sun::star::uno::Any aAny, const rtl::OUString& sCondition,
+    void SetOperator(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
+        const com::sun::star::sheet::ConditionOperator aOp) const;
+    void SetBaseCellAddress(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
+        const rtl::OUString& sBaseCell) const;
+    void SetStyle(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
+        const rtl::OUString& sApplyStyle) const;
+    void SetFormula1(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
+        const rtl::OUString& sFormula) const;
+    void SetFormula2(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
+        const rtl::OUString& sFormula) const;
+    void SetFormulas(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
+        const rtl::OUString& sFormulas) const;
+
+    ::com::sun::star::uno::Any& GetConditionalFormat(
+        ::com::sun::star::uno::Any& aAny, const rtl::OUString& sCondition,
         const rtl::OUString& sApplyStyle, const rtl::OUString& sBaseCell) const;
 protected:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-25 13:40:03 $
+ *  last change: $Author: sab $ $Date: 2000-09-28 17:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,22 +347,22 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                     switch (aOperator)
                                                     {
                                                         case sheet::ConditionOperator_LESS:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" < "));
+                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
                                                         break;
                                                         case sheet::ConditionOperator_GREATER:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" > "));
+                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
                                                         break;
                                                         case sheet::ConditionOperator_LESS_EQUAL:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" <= "));
+                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
                                                         break;
                                                         case sheet::ConditionOperator_GREATER_EQUAL:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" >= "));
+                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
                                                         break;
                                                         case sheet::ConditionOperator_EQUAL:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" = "));
+                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
                                                         break;
                                                         case sheet::ConditionOperator_NOT_EQUAL:
-                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" != "));
+                                                            sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
                                                         break;
                                                     }
                                                     sCondition += xSheetCondition->getFormula1();

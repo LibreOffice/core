@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-09-25 13:40:03 $
+ *  last change: $Author: sab $ $Date: 2000-09-28 17:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+
+#include "docuno.hxx"
+#include "unonames.hxx"
 
 #define SC_NUMBERFORMAT "NumberFormat"
 #define SC_CONDITIONALFORMAT "ConditionalFormat"
@@ -275,32 +278,202 @@ ScXMLMapContext::~ScXMLMapContext()
 {
 }
 
-uno::Any XMLTableStyleContext::GetConditionalFormat(const uno::Any aAny,
-        const rtl::OUString& sCondition,
+void XMLTableStyleContext::SetOperator(com::sun::star::uno::Sequence<beans::PropertyValue>& aProps,
+        const com::sun::star::sheet::ConditionOperator aOp) const
+{
+    aProps.realloc(aProps.getLength() + 1);
+    beans::PropertyValue aProp;
+    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OPERATOR));
+    uno::Any aAnyOp;
+    aAnyOp <<= aOp;
+    aProp.Value = aAnyOp;
+    aProps[aProps.getLength() - 1] = aProp;
+}
+
+void XMLTableStyleContext::SetBaseCellAddress(com::sun::star::uno::Sequence<beans::PropertyValue>& aProps,
+    const rtl::OUString& sBaseCell) const
+{
+    ScModelObj* pDocObj = ScModelObj::getImplementation( GetImport().GetModel() );
+    if ( pDocObj )
+    {
+        ScDocument* pDoc = pDocObj->GetDocument();
+        if (pDoc)
+        {
+            aProps.realloc(aProps.getLength() + 1);
+            beans::PropertyValue aProp;
+            ScAddress aBase;
+            aBase.Parse(sBaseCell, pDoc);
+            table::CellAddress aBaseAddress;
+            aBaseAddress.Column = aBase.Col();
+            aBaseAddress.Row = aBase.Row();
+            aBaseAddress.Sheet = aBase.Tab();
+            uno::Any aAnyBase;
+            aAnyBase <<= aBaseAddress;
+            aProp.Value = aAnyBase;
+            aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCEPOS));
+            aProps[aProps.getLength() - 1] = aProp;
+        }
+    }
+}
+
+void XMLTableStyleContext::SetStyle(com::sun::star::uno::Sequence<beans::PropertyValue>& aProps,
+    const rtl::OUString& sApplyStyle) const
+{
+    aProps.realloc(aProps.getLength() + 1);
+    beans::PropertyValue aProp;
+    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STYLENAME));
+    uno::Any aAnyApplyStyle;
+    aAnyApplyStyle <<= sApplyStyle;
+    aProp.Value = aAnyApplyStyle;
+    aProps[aProps.getLength() - 1] = aProp;
+}
+
+void XMLTableStyleContext::SetFormula1(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
+    const rtl::OUString& sFormula) const
+{
+    aProps.realloc(aProps.getLength() + 1);
+    beans::PropertyValue aProp;
+    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULA1));
+    uno::Any aAnyFormula;
+    aAnyFormula <<= sFormula;
+    aProp.Value = aAnyFormula;
+    aProps[aProps.getLength() - 1] = aProp;
+}
+
+void XMLTableStyleContext::SetFormula2(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
+    const rtl::OUString& sFormula) const
+{
+    aProps.realloc(aProps.getLength() + 1);
+    beans::PropertyValue aProp;
+    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULA2));
+    uno::Any aAnyFormula;
+    aAnyFormula <<= sFormula;
+    aProp.Value = aAnyFormula;
+    aProps[aProps.getLength() - 1] = aProp;
+}
+
+void XMLTableStyleContext::SetFormulas(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
+    const rtl::OUString& sFormulas) const
+{
+    sal_Int32 i = 0;
+    sal_Bool bString = sal_False;
+    sal_Int32 nBrakes = 0;
+    while ((sFormulas[i] != ',' || nBrakes > 0 || bString) && i < sFormulas.getLength())
+    {
+        if (sFormulas[i] == '(')
+            nBrakes++;
+        if (sFormulas[i] == ')')
+            nBrakes--;
+        if (sFormulas[i] == '"')
+            if (bString)
+                bString = sal_False;
+            else
+                bString = sal_True;
+        i++;
+    }
+    if (sFormulas[i] == ',')
+    {
+        rtl::OUString sFormula1 = sFormulas.copy(0, i);
+        rtl::OUString sFormula2 = sFormulas.copy(i + 1);
+        SetFormula1(aProps, sFormula1);
+        SetFormula2(aProps, sFormula2);
+    }
+}
+
+uno::Any& XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
+        const rtl::OUString& sTempCondition,
         const rtl::OUString& sApplyStyle, const rtl::OUString& sBaseCell) const
 {
+    rtl::OUString sCondition = sTempCondition;
     if (sCondition.getLength() && sApplyStyle.getLength())
     {
         uno::Reference<sheet::XSheetConditionalEntries> xConditionalEntries;
         if (aAny >>= xConditionalEntries)
         {
+            // ToDo: erase all blanks in the condition, but not in formulas or strings
+            rtl::OUString scell_content(RTL_CONSTASCII_USTRINGPARAM("cell_content"));
+            rtl::OUString scell_content_is_between(RTL_CONSTASCII_USTRINGPARAM("cell_content_is_between"));
+            rtl::OUString scell_content_is_not_between(RTL_CONSTASCII_USTRINGPARAM("cell_content_is_not_between"));
+            rtl::OUString sis_true_formula(RTL_CONSTASCII_USTRINGPARAM("is_true_formula"));
             uno::Sequence<beans::PropertyValue> aProps;
             if (sBaseCell.getLength())
+                SetBaseCellAddress(aProps, sBaseCell);
+            SetStyle(aProps, sApplyStyle);
+            sal_Int32 i = 0;
+            while (sCondition[i] != '(' && i < sCondition.getLength())
+                i++;
+            if (sCondition[i] == '(')
             {
-                /*aProps.realloc(aProps.getLength() + 1);
-                beans::PropertyValue aProp;
-                ScAddress aBase;
-                aBase.Parse(sBaseCell, pDoc);
-                table::CellAddress aBaseAddress;
-                aBaseAddress.Column = aBase.Col();
-                aBaseAddress.Row = aBase.Row();
-                aBaseAddress.Sheet = aBase.Tab();
-                uno::Any aAnyBase;
-                aAnyBase <<= aBaseAddress;
-                aProp.Value = aAnyBase;
-                aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCEPOS));
-                aProps[aProps.getLength() - 1] = aProp;*/
+                sCondition = sCondition.copy(i + 1);
+                if (i == scell_content.getLength())
+                {
+                    sCondition = sCondition.copy(1);
+                    switch (sCondition[0])
+                    {
+                        case '<' :
+                        {
+                            if (sCondition[1] == '=')
+                            {
+                                SetOperator(aProps, sheet::ConditionOperator_LESS_EQUAL);
+                                sCondition = sCondition.copy(2);
+                            }
+                            else
+                            {
+                                SetOperator(aProps, sheet::ConditionOperator_LESS);
+                                sCondition = sCondition.copy(1);
+                            }
+                        }
+                        break;
+                        case '>' :
+                        {
+                            if (sCondition[1] == '=')
+                            {
+                                SetOperator(aProps, sheet::ConditionOperator_GREATER_EQUAL);
+                                sCondition = sCondition.copy(2);
+                            }
+                            else
+                            {
+                                SetOperator(aProps, sheet::ConditionOperator_GREATER);
+                                sCondition = sCondition.copy(1);
+                            }
+                        }
+                        break;
+                        case '=' :
+                        {
+                            SetOperator(aProps, sheet::ConditionOperator_EQUAL);
+                            sCondition = sCondition.copy(1);
+                        }
+                        break;
+                        case '!' :
+                        {
+                            SetOperator(aProps, sheet::ConditionOperator_NOT_EQUAL);
+                            sCondition = sCondition.copy(1);
+                        }
+                        break;
+                    }
+                    SetFormula1(aProps, sCondition);
+                }
+                else if (i == scell_content_is_between.getLength())
+                {
+                    SetOperator(aProps, sheet::ConditionOperator_BETWEEN);
+                    sCondition = sCondition.copy(0, sCondition.getLength() - 1);
+                    SetFormulas(aProps, sCondition);
+                }
+                else if (i == scell_content_is_not_between.getLength())
+                {
+                    SetOperator(aProps, sheet::ConditionOperator_NOT_BETWEEN);
+                    sCondition = sCondition.copy(0, sCondition.getLength() - 1);
+                    SetFormulas(aProps, sCondition);
+                }
+                else if (i == sis_true_formula.getLength())
+                {
+                    SetOperator(aProps, sheet::ConditionOperator_FORMULA);
+                    sCondition = sCondition.copy(0, sCondition.getLength() - 1);
+                    SetFormula1(aProps, sCondition);
+                }
             }
+            xConditionalEntries->addNew(aProps);
+            aAny <<= xConditionalEntries;
         }
     }
     return aAny;
@@ -320,6 +493,13 @@ void XMLTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
     }
 }
+
+struct ScXMLMapContent
+{
+    rtl::OUString sCondition;
+    rtl::OUString sApplyStyle;
+    rtl::OUString sBaseCell;
+};
 
 TYPEINIT1( XMLTableStyleContext, XMLPropStyleContext );
 
@@ -343,19 +523,22 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
         const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList )
 {
-    SvXMLImportContext *pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
-                                                           xAttrList );
+    SvXMLImportContext *pContext = NULL;
 
-    if (!pContext)
+    if( XML_NAMESPACE_STYLE == nPrefix &&
+        rLocalName.compareToAscii( sXML_map ) == 0 )
     {
-        if( XML_NAMESPACE_STYLE == nPrefix &&
-            rLocalName.compareToAscii( sXML_map ) == 0 )
-        {
-            pContext = new ScXMLMapContext(GetImport(), nPrefix, rLocalName, xAttrList);
-            aMaps.push_back((ScXMLMapContext*)pContext);
-        }
-    }
+        pContext = new ScXMLMapContext(GetImport(), nPrefix, rLocalName, xAttrList);
 
+        ScXMLMapContent aMap;
+        aMap.sCondition = ((ScXMLMapContext*)pContext)->GetCondition();
+        aMap.sApplyStyle = ((ScXMLMapContext*)pContext)->GetApplyStyle();
+        aMap.sBaseCell = ((ScXMLMapContext*)pContext)->GetBaseCell();
+        aMaps.push_back(aMap);
+    }
+    if (!pContext)
+        pContext = XMLPropStyleContext::CreateChildContext( nPrefix, rLocalName,
+                                                           xAttrList );
     return pContext;
 }
 
@@ -383,15 +566,12 @@ void XMLTableStyleContext::FillPropertySet(
     }
     if (aMaps.size() > 0)
     {
-        std::vector<ScXMLMapContext*>::iterator aItr = aMaps.begin();
+        std::vector<ScXMLMapContent>::iterator aItr = aMaps.begin();
         while(aItr != aMaps.end())
         {
-            rtl::OUString sApplyStyle = (*aItr)->GetApplyStyle();
-            rtl::OUString sCondition = (*aItr)->GetCondition();
-            rtl::OUString sBaseCell = (*aItr)->GetBaseCell();
             uno::Any aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)));
             rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)),
-                GetConditionalFormat(aConditionalFormat, sCondition, sApplyStyle, sBaseCell));
+                GetConditionalFormat(aConditionalFormat, aItr->sCondition, aItr->sApplyStyle, aItr->sBaseCell));
             aItr++;
         }
     }
