@@ -2,9 +2,9 @@
  *
  *  $RCSfile: move.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 10:30:44 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:43:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,115 +723,5 @@ FASTBOOL SwWrtShell::SelectTxtAttr( USHORT nWhich, const SwTxtAttr* pAttr )
     return SwCrsrShell::SelectTxtAttr( nWhich, FALSE, pAttr );
 }
 
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.3  2002/08/01 14:13:38  os
-      #99985# text selection in readonly documents
-
-      Revision 1.2  2002/02/01 12:51:13  jp
-      Task #92291#: add new character skip modifier
-
-      Revision 1.1.1.1  2000/09/18 17:14:53  hr
-      initial import
-
-      Revision 1.100  2000/09/18 16:06:26  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.99  2000/09/07 15:59:35  os
-      change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-      Revision 1.98  2000/06/27 19:42:49  jp
-      Bug #70447#: select the current TOXMark if the EditDialog is open
-
-      Revision 1.97  1999/10/12 07:24:36  os
-      #69115# API parameter in GotoLeftRight/LRMargin
-
-      Revision 1.96  1999/10/06 12:58:10  jp
-      PushCrsr: if cursor not in visarea, thne use the visarea for new position
-
-      Revision 1.95  1998/11/27 13:59:32  AMA
-      Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-
-      Rev 1.94   27 Nov 1998 14:59:32   AMA
-   Fix #59951#59825#: Unterscheiden zwischen Rahmen-,Seiten- und Bereichsspalten
-
-      Rev 1.93   14 Jun 1998 13:46:24   MA
-   ein paar inlines mittels function pointer
-
-      Rev 1.92   04 May 1998 18:00:20   JP
-   Bug #49993#: IsSelOver darf nicht immer den Cursor verschieben; GotoBookmark mit ReturntWert
-
-      Rev 1.91   12 Feb 1998 20:12:22   JP
-   Left-/RightMargin: zus. Flag fuer BasicCall, im ReadOnlyCall an Anfang/Ende des Randes scrollen
-
-      Rev 1.90   24 Nov 1997 14:35:06   MA
-   includes
-
-      Rev 1.89   03 Nov 1997 14:02:54   MA
-   precomp entfernt
-
-      Rev 1.88   29 Jul 1997 09:24:26   OM
-   Hyperlink Statusmethode
-
-      Rev 1.87   12 Jun 1997 11:20:20   MA
-   chg: CursorTimer vorlaeufig entfernt
-
-      Rev 1.86   29 Apr 1997 16:30:56   AMA
-   New: Scrolling bei abgeschnittenen Absaetzen in Rahmen mit fester Hoehe.
-
-      Rev 1.85   06 Mar 1997 12:27:28   JP
-   Left/Right/Up/Down: bei API-Calls in ReadOnly Docs normale verhalten
-
-      Rev 1.84   18 Feb 1997 13:40:44   MA
-   new: Rahmen im Readonly  editierbar
-
-      Rev 1.83   21 Nov 1996 16:48:52   AMA
-   Fix #33452#: Das GCAttr-Flag wandert von der WriterShell in die CrsrShell
-
-      Rev 1.82   30 Oct 1996 10:14:50   JP
-   Bug #32859#: PushCrsr - Rahmenselektin aufheben; PopCrsr: Rahmenselektion wieder erzeugen
-
-      Rev 1.81   01 Oct 1996 16:55:32   OM
-   Hyperlinks editieren
-
-      Rev 1.80   24 Sep 1996 12:33:38   MA
-   chg: Travelling fuer ReadOnly
-
-      Rev 1.79   29 Aug 1996 09:26:02   OS
-   includes
-
-      Rev 1.78   16 Aug 1996 10:26:08   OS
-   richtiges Verhalten bei SelAll
-
-      Rev 1.77   08 Aug 1996 15:51:50   JP
-   neu: SelectTextAttr - vom Attribut umspannten Bereich Selectieren
-
-      Rev 1.76   15 Jul 1996 16:31:54   OM
-   Bei Selektionsaenderung Slot invalidieren
-
-      Rev 1.75   10 May 1996 15:55:22   OS
-   GotoBookmark markiert jetzt immer bug #27690#
-
-      Rev 1.74   08 May 1996 12:58:44   OS
-   neu: GotoBookmark mit Select- und Start Flag
-
-      Rev 1.73   09 Jan 1996 09:46:58   JP
-   GoStart: an Dok-Anfang springen, wenn die 1. Box leer ist!
-
-      Rev 1.72   22 Dec 1995 20:17:38   JP
-   Bug 22611: Rahmenselecktion wird verlassen/wiederhergestellt - dadurch die richtigen Shells!
-
-      Rev 1.71   24 Nov 1995 16:59:08   OM
-   PCH->PRECOMPILED
-
-      Rev 1.70   23 Nov 1995 19:50:54   OS
-   +Fwd/BwdPara
-
-      Rev 1.69   30 Oct 1995 18:43:08   OS
-   Select-Param im EndPg auch auswerten
-
-*************************************************************************/
 
 

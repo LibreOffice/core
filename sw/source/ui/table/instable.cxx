@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-09-24 06:44:20 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,107 +229,6 @@ IMPL_LINK(SwInsTableDlg, CheckBoxHdl, CheckBox*, EMPTYARG)
     return 0;
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2002/07/03 16:58:42  mba
-    #100782#: recording for InsertTable
-
-    Revision 1.3  2001/06/01 11:14:09  fme
-    Fix #86988#: Redesign of dialogs
-
-    Revision 1.2  2001/02/28 09:09:32  os
-    #83804# no split in HTML
-
-    Revision 1.1.1.1  2000/09/18 17:14:47  hr
-    initial import
-
-    Revision 1.49  2000/09/18 16:06:08  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.48  2000/02/11 14:58:35  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.47  1999/02/17 07:39:44  OS
-    #58158# Einfuegen TabPage auch in HTML-Docs
-
-
-      Rev 1.46   17 Feb 1999 08:39:44   OS
-   #58158# Einfuegen TabPage auch in HTML-Docs
-
-      Rev 1.45   02 Dec 1998 15:29:26   OM
-   #59770# Tabellenueberschrift nur auf erster Seite
-
-      Rev 1.44   30 Nov 1998 17:33:40   OM
-   #59770# Tabellenoptionen: Ueberschrift nur auf erster Seite
-
-      Rev 1.43   11 Nov 1998 16:51:58   OM
-   #58158# Einfuegeoptionen fuer Tabellen
-
-      Rev 1.42   29 May 1998 18:55:32   JP
-   SS vom TableAutoFormatDialog hat sich geaendert
-
-      Rev 1.41   28 May 1998 11:48:08   OS
-   Leerzeichen auch aus dem Clipboard abfangen #50497#
-
-      Rev 1.40   12 May 1998 23:42:44   JP
-   neu: InserTable/TextToTable mit optionalen AutoFormat
-
-      Rev 1.39   24 Apr 1998 17:25:26   OS
-   Min/Max schon initial setzen
-
-      Rev 1.38   15 Apr 1998 14:30:44   OS
-   Zeilen/Spaltenzahl nur noch durch max. Zellenzahl begrenzt #49479#
-
-      Rev 1.37   24 Nov 1997 15:52:22   MA
-   includes
-
-      Rev 1.36   03 Nov 1997 13:56:50   MA
-   precomp entfernt
-
-      Rev 1.35   06 Aug 1997 14:43:50   TRI
-   VCL: GetpApp() statt pApp
-
-      Rev 1.34   11 Nov 1996 11:20:14   MA
-   ResMgr
-
-      Rev 1.33   02 Oct 1996 19:06:06   MA
-   Umstellung Enable/Disable
-
-      Rev 1.32   28 Aug 1996 14:33:16   OS
-   includes
-
-      Rev 1.31   26 Jun 1996 15:25:20   OS
-   Aufruf von Dispatcher.Execute an 324 angepasst
-
-      Rev 1.30   22 Mar 1996 14:16:32   HJS
-   umstellung 311
-
-      Rev 1.29   06 Feb 1996 15:21:22   JP
-   Link Umstellung 305
-
-      Rev 1.28   24 Nov 1995 16:58:58   OM
-   PCH->PRECOMPILED
-
-      Rev 1.27   10 Nov 1995 15:26:46   OS
-   Execute mit 0L abschliessen
-
-      Rev 1.26   08 Nov 1995 13:34:40   OS
-   Change => Set
-
-      Rev 1.25   08 Nov 1995 07:12:18   OS
-   Klammern verschoben
-
-      Rev 1.24   07 Nov 1995 18:08:40   OS
-   InsertTable ohne Manager, ausf. ueber Slot
-
-      Rev 1.23   18 Oct 1995 10:12:54   OM
-   Helpbutton fuer >Tabelle einfuegen<
-
-      Rev 1.22   13 Sep 1995 17:09:44   OS
-   Recording ausgeweitet
-
-------------------------------------------------------------------------*/
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,69 +140,6 @@ SfxPopupWindowType  SwTableOptimizeCtrl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
-
-
-/***********************************************************************
-
-        $Log: not supported by cvs2svn $
-        Revision 1.10  2000/09/18 16:06:01  willem.vandorp
-        OpenOffice header added.
-
-        Revision 1.9  2000/03/03 15:17:03  os
-        StarView remainders removed
-
-        Revision 1.8  1997/11/24 13:54:00  MA
-        includes
-
-
-      Rev 1.7   24 Nov 1997 14:54:00   MA
-   includes
-
-      Rev 1.6   03 Nov 1997 13:24:22   MA
-   precomp entfernt
-
-      Rev 1.5   24 Mar 1997 01:43:52   OS
-   Alignment aussen einstellen
-
-      Rev 1.4   23 Mar 1997 23:54:26   OS
-   ToolBoxAlign statt ToolBoxControl uebergeben
-
-      Rev 1.3   29 Jan 1997 14:52:24   OM
-   Draw-Toolboxen ins Svx verschoben
-
-      Rev 1.2   14 Nov 1996 15:40:48   TRI
-   includes
-
-      Rev 1.1   11 Nov 1996 11:15:14   MA
-   ResMgr
-
-      Rev 1.0   08 Nov 1996 13:39:36   OS
-   Initial revision.
-
-
-***********************************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

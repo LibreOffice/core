@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablemgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-26 10:18:31 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,103 +338,5 @@ int SwTableFUNC::GetRightSeparator(int nNum) const
     return i - 1;
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:48  hr
-    initial import
-
-    Revision 1.120  2000/09/18 16:06:09  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.119  2000/08/29 14:01:23  ama
-    New: Negative margins
-
-    Revision 1.118  2000/04/26 14:59:03  os
-    GetName() returns const String&
-
-    Revision 1.117  2000/03/09 21:54:38  jp
-    Changes: SchMemChart in new headerfile
-
-    Revision 1.116  2000/02/11 14:58:54  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.115  1999/02/09 13:31:14  JP
-    Task #61632#: Charts auch in complexen Tabellen zulassen
-
-
-      Rev 1.114   09 Feb 1999 14:31:14   JP
-   Task #61632#: Charts auch in complexen Tabellen zulassen
-
-      Rev 1.113   29 Nov 1997 14:28:10   MA
-   includes
-
-      Rev 1.112   24 Nov 1997 15:52:24   MA
-   includes
-
-      Rev 1.111   03 Nov 1997 13:56:50   MA
-   precomp entfernt
-
-      Rev 1.110   06 Aug 1997 14:48:50   TRI
-   VCL: Anpassungen
-
-      Rev 1.109   04 Apr 1997 08:38:36   MA
-   include vergessen
-
-      Rev 1.108   03 Apr 1997 09:14:08   MA
-   undo fuer insertchart
-
-      Rev 1.107   01 Apr 1997 18:00:58   MA
-   #37054# Chart immer vor Tabelle
-
-      Rev 1.106   04 Mar 1997 09:13:46   MA
-   #37054# InsertChart, richtiger Anker bei zwei Tabellen uebereinander
-
-      Rev 1.105   24 Nov 1996 14:59:48   WP
-   SvGlobalNames beseitigt
-
-      Rev 1.104   24 Oct 1996 13:33:04   TRI
-   sostor.hxx included
-
-      Rev 1.103   05 Sep 1996 08:19:22   OS
-   richtige Min/Max-Einstellungen fuer einspaltige Tabellen
-
-      Rev 1.102   04 Sep 1996 11:15:12   JP
-   Split/InsertCol/Row-Dialoge und Methoden entfernt -> direkt an der Shell rufen
-
-      Rev 1.101   28 Aug 1996 14:33:20   OS
-   includes
-
-      Rev 1.100   06 Jun 1996 14:54:54   OS
-   MM50 ->MINLAY
-
-      Rev 1.99   18 Apr 1996 11:38:54   OM
-   Unbenutzte Fkt entfernt
-
-      Rev 1.98   26 Mar 1996 15:10:20   MA
-   fix: richtige Chart-SS, optimierung abgeschaltet
-
-      Rev 1.97   07 Mar 1996 15:03:18   HJS
-   del: memchart.hxx
-
-      Rev 1.96   28 Feb 1996 16:47:06   MA
-   chg: InsertChart mit ItemSet
-
-      Rev 1.95   27 Feb 1996 19:19:52   MA
-   chg: SS Chart geaendert
-
-      Rev 1.94   27 Feb 1996 17:11:38   MA
-   chg: Chart jetzt per Data-SS
-
-      Rev 1.93   09 Jan 1996 19:55:24   JP
-   InsertChart: TabellenName weitergeben; ueberfluessige Methoden entfernt
-
-      Rev 1.92   14 Dec 1995 23:01:28   JP
-   Filter Umstellung: ErrorHandling und Read/Write-Parameter
-
-      Rev 1.91   24 Nov 1995 16:58:58   OM
-   PCH->PRECOMPILED
-
-------------------------------------------------------------------------*/
 
 

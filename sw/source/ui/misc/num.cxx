@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-31 16:04:55 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,114 +902,5 @@ IMPL_LINK(SwSvxNumBulletTabDialog, RemoveNumberingHdl, PushButton*, EMPTYARG)
     EndDialog(RET_USER);
     return 0;
 }
-
-/*--------------------------------------------------------------------
-
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.4  2001/07/19 16:56:22  mtg
-      #89999# use the static methods in the new SwStyleNameMapper class for Programmatic Name <-> UI Name <-> Pool Id conversion
-
-      Revision 1.3  2001/06/01 11:04:53  fme
-      Fix #86988#: Redesign of dialogs
-
-      Revision 1.2  2001/02/23 12:45:29  os
-      Complete use of DefaultNumbering component
-
-      Revision 1.1.1.1  2000/09/18 17:14:45  hr
-      initial import
-
-      Revision 1.198  2000/09/18 16:05:58  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.197  2000/07/27 21:16:39  jp
-      opt: get template names direct from the doc and don't load it from the resource
-
-      Revision 1.196  2000/06/30 15:08:15  os
-      #76568# CreateFromInt32
-
-      Revision 1.195  2000/05/23 19:22:35  jp
-      Bugfixes for Unicode
-
-      Revision 1.194  2000/04/18 15:08:17  os
-      UNICODE
-
-      Revision 1.193  2000/03/03 15:17:02  os
-      StarView remainders removed
-
-      Revision 1.192  2000/02/11 14:56:31  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.191  1999/08/19 14:26:00  OS
-      #67374# embedded graphics in numberings
-
-
-      Rev 1.190   19 Aug 1999 16:26:00   OS
-   #67374# embedded graphics in numberings
-
-      Rev 1.189   23 Apr 1999 16:09:20   OS
-   #64476# Differenz zu numpages.cxx
-
-      Rev 1.188   14 Apr 1999 08:57:14   OS
-   #64476# noch ein Problem behoben
-
-      Rev 1.187   13 Apr 1999 16:04:20   OS
-   #64473# CheckBox an der richtigen Stelle enablen/disablen
-
-      Rev 1.186   08 Apr 1999 13:30:58   OS
-   #64476# SetMinDist wird nicht mehr gebraucht
-
-      Rev 1.185   19 Mar 1999 07:38:10   OS
-   #62656# Abstand Num->Text jetzt richtig
-
-      Rev 1.184   18 Mar 1999 09:25:40   OS
-   #63049# gemogelte Anzeige der Numerierungseinzuege
-
-      Rev 1.183   02 Dec 1998 09:20:56   OS
-   #58263# Entfernen-Button fuer Numerierungen
-
-      Rev 1.182   17 Nov 1998 10:57:20   OS
-   #58263# Numerierungs-Tabseiten aus dem Svx
-
-      Rev 1.181   03 Nov 1998 07:25:04   OS
-   #58263# Numerierungsdialog in den Svx
-
-      Rev 1.180   12 Oct 1998 13:17:26   OS
-   #57760# Fontgroesse fuer das Beispiel eleganter ermitteln
-
-      Rev 1.179   22 Sep 1998 10:04:02   OS
-   #56894# vollstaendig fuer fortlaufende Num. veraendern
-
-      Rev 1.178   08 Sep 1998 17:01:42   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.177   06 Aug 1998 21:41:14   JP
-   Bug #54796#: neue NumerierungsTypen (WW97 kompatibel)
-
-      Rev 1.176   18 Jul 1998 14:50:46   OS
-   richtige Ebenenanzahl fuer vollst. Numerierung #53233#
-
-      Rev 1.175   09 Jul 1998 14:03:12   OS
-   Kapitelnumerierung jetzt TabDialog
-
-      Rev 1.174   07 Jul 1998 11:31:08   OS
-   InitControls: erst Min/Max setzen, dann Inhalte setzn
-
-      Rev 1.173   07 Jul 1998 09:16:40   OS
-   DisableItem ist nicht zulaessig #52134#
-
-      Rev 1.172   04 Jul 1998 15:44:10   OS
-   Grafikhoehe und Ausrichtung richtig anzeigen #52140#
-
-      Rev 1.171   25 Jun 1998 11:26:48   OS
-   RelLSpace ausbgebaut #51379#
-
-      Rev 1.170   24 Jun 1998 09:00:44   OS
-   MS-Optimierungs-GPF #51425#
-
-
- --------------------------------------------------------------------*/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:51:13 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,44 +254,5 @@ FASTBOOL SwWrtShell::_BwdPara()
     Combine();
     return 1;
 }
-/*************************************************************************
-
-   $Log: not supported by cvs2svn $
-   Revision 1.1.1.1  2000/09/18 17:14:53  hr
-   initial import
-
-   Revision 1.8  2000/09/18 16:06:27  willem.vandorp
-   OpenOffice header added.
-
-   Revision 1.7  1998/07/13 08:58:02  JP
-   Bug #52635#: _Fwd/_BwdSentence: End-/SttPara beachten
-
-
-      Rev 1.6   13 Jul 1998 10:58:02   JP
-   Bug #52635#: _Fwd/_BwdSentence: End-/SttPara beachten
-
-      Rev 1.5   24 Nov 1997 14:35:04   MA
-   includes
-
-      Rev 1.4   03 Nov 1997 14:02:54   MA
-   precomp entfernt
-
-      Rev 1.3   29 Aug 1996 09:25:56   OS
-   includes
-
-      Rev 1.2   07 Jun 1996 09:14:06   OS
-   Spruenge zum vorherigen/folgenden Absatz: auch bei leerem Absatz richtig springen Bug #28382#
-
-      Rev 1.1   14 May 1996 13:35:32   HJS
-   wer braucht schon includes...
-
-      Rev 1.0   14 May 1996 13:29:20   HJS
-   aus wrtsh1 w.g. clooks
-
-      Rev 1.0   12 May 1996 12:41:56   HJS
-   clooks
-
-*************************************************************************/
-
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:46:20 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,30 +118,6 @@ BYTE SwInsertAbstractDlg::GetPara() const
 
 
 
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:34  hr
-      initial import
-
-      Revision 1.4  2000/09/18 16:05:19  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.3  1997/11/03 12:12:26  MA
-      precomp entfernt
-
-
-      Rev 1.2   03 Nov 1997 13:12:26   MA
-   precomp entfernt
-
-      Rev 1.1   23 May 1997 10:09:12   OS
-   Ableitung von SfxModalDialog
-
-      Rev 1.0   22 Feb 1997 20:18:04   OS
-   Initial revision.
-
-
-*************************************************************************/
 
 
 

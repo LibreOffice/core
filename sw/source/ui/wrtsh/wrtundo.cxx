@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtundo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-22 15:00:50 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,83 +227,5 @@ String SwWrtShell::GetRepeatString() const
     }
     return aStr;
 }
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.3  2001/09/11 14:57:42  jp
-      Task #91678#: 'selection clipbord' implemented
-
-      Revision 1.2  2001/04/09 07:28:55  tl
-      Undo/Redo controller modifications
-
-      Revision 1.1.1.1  2000/09/18 17:14:53  hr
-      initial import
-
-      Revision 1.53  2000/09/18 16:06:27  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.52  2000/07/27 21:01:41  jp
-      Bug #76923#: Do - clamp the enterstdmode and Undo/Redo/Repeat call
-
-      Revision 1.51  2000/03/03 15:17:06  os
-      StarView remainders removed
-
-      Revision 1.50  1998/04/15 14:35:34  OS
-      STR_UNDO/REDO/REPEAT aus dem Sfx
-
-
-      Rev 1.49   15 Apr 1998 16:35:34   OS
-   STR_UNDO/REDO/REPEAT aus dem Sfx
-
-      Rev 1.48   24 Nov 1997 14:35:02   MA
-   includes
-
-      Rev 1.47   03 Nov 1997 14:02:56   MA
-   precomp entfernt
-
-      Rev 1.46   22 Jan 1997 11:55:56   MA
-   opt: bSelection entfernt
-
-      Rev 1.45   11 Nov 1996 10:18:48   MA
-   ResMgr
-
-      Rev 1.44   31 Oct 1996 18:32:30   JP
-   Bug #32918#: nach Undo der View sagen, das sich was getan hat
-
-      Rev 1.43   29 Aug 1996 09:25:56   OS
-   includes
-
-      Rev 1.42   24 Nov 1995 16:59:06   OM
-   PCH->PRECOMPILED
-
-      Rev 1.41   19 Sep 1995 19:11:52   JP
-   Bug 19431: Repeat funkt. wieder
-
-      Rev 1.40   12 Sep 1995 17:59:32   JP
-   Bug19137: vor Undo den Cursor in den StandardMode setzen
-
-      Rev 1.39   28 Aug 1995 15:59:40   MA
-   Renovierung: IDL, Shells, Textshell-Doktrin aufgegeben
-
-      Rev 1.38   22 Aug 1995 17:30:04   JP
-   GetUndo-/-Redo-/-RepeatIds: optional mit String-Ptr - DrawUndo-Objecte erzeuge die Strings selbst
-
-      Rev 1.37   15 Aug 1995 19:52:20   JP
-   Nach Undo/Redo kann der Cursor in OLE oder GRF stehen, selektieren dann den Frame
-
-      Rev 1.36   27 Apr 1995 13:14:16   AMA
-   Fix (JP): ResId-Ueberpruef. bei Undo
-
-      Rev 1.35   23 Feb 1995 17:51:58   MA
-   Rudimentaer Undo/Redo fuer Zeichenobjekte.
-
-      Rev 1.34   08 Feb 1995 23:36:12   ER
-   undo.hxx -> swundo.hxx wegen solar undo.hxx
-
-      Rev 1.33   08 Feb 1995 19:01:30   JP
-   UI-UndoIds ins undo.hxx verschoben
-
-*************************************************************************/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-07 09:44:54 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:38:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,88 +547,5 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
         pBtn->SaveValue();
     return 0;
 }
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.11  2002/08/14 14:10:45  os
-      #101300# system encoding entry doesn't get 'System' as name
-
-      Revision 1.10  2002/07/29 15:17:09  er
-      #100289# exclude subsets of RTL_TEXTENCODING_GB_18030 in import dialogs
-
-      Revision 1.9  2002/06/26 08:29:59  os
-      #99863# get default font and language on import from configuration
-
-      Revision 1.8  2002/06/21 14:21:24  os
-      #99863# text encoded filter of writer: Option dialog called via service
-
-      Revision 1.7  2001/07/25 15:25:31  fme
-      Fix #90247#: Size of ASCII Filter Options dialog too small
-
-      Revision 1.6  2001/06/01 10:46:20  fme
-      Fix #86988#: Redesign of dialogs
-
-      Revision 1.5  2001/03/27 21:47:58  jp
-      use GetAppLanguage
-
-      Revision 1.4  2001/03/22 10:42:29  tl
-      Type of aLanguageLB changed to SvxLanguageBox
-
-      Revision 1.3  2001/02/21 12:55:55  jp
-      use new function GetWhichOfScript() to get right WhichId
-
-      Revision 1.2  2001/01/19 13:48:26  jp
-      replace own code with new svx classes
-
-      Revision 1.1.1.1  2000/09/18 17:14:34  hr
-      initial import
-
-      Revision 1.13  2000/09/18 16:05:20  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.12  2000/08/04 16:24:47  jp
-      read/write unicode ascii files
-
-      Revision 1.11  2000/08/01 07:40:17  jp
-      new CJK filters
-
-      Revision 1.10  2000/04/13 08:01:20  os
-      UNICODE
-
-      Revision 1.9  2000/03/30 10:59:20  os
-      UNO III
-
-      Revision 1.8  2000/03/16 16:38:36  kz
-      chg. include sfx2/printer.hxx
-
-      Revision 1.7  2000/02/07 16:01:51  jp
-      Task #72603#: new textencodings
-
-      Revision 1.6  2000/01/14 16:28:47  jp
-      Task #71802#: one user settings for export and one for import
-
-      Revision 1.5  2000/01/13 23:13:19  jp
-      Task #71802#: save/restore user settings
-
-      Revision 1.4  1999/11/15 14:21:12  jp
-      remove not supportet charsets from the list
-
-      Revision 1.3  1999/10/25 19:10:51  tl
-      ongoing ONE_LINGU implementation
-
-      Revision 1.2  1999/08/26 18:35:26  JP
-      load and save Text with more options (charset/language/lineend/font)
-
-
-      Rev 1.1   26 Aug 1999 20:35:26   JP
-   load and save Text with more options (charset/language/lineend/font)
-
-      Rev 1.0   25 Aug 1999 19:45:40   JP
-   Dialog for ASCII filter options
-
-
-*************************************************************************/
-
 
 

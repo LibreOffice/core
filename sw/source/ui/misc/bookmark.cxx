@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 08:59:06 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,110 +362,6 @@ long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
         nHandled = SwComboBox::PreNotify( rNEvt );
     return nHandled;
 }
-/*------------------------------------------------------------------------
-
-      $Log: not supported by cvs2svn $
-      Revision 1.3  2001/08/16 16:50:54  jp
-      Bug #85153#: prenotify disable asserts
-
-      Revision 1.2  2001/05/29 13:46:19  fme
-      Fix #86988#: Redesign of dialogs
-
-      Revision 1.1.1.1  2000/09/18 17:14:44  hr
-      initial import
-
-      Revision 1.50  2000/09/18 16:05:55  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.49  2000/05/10 11:53:42  os
-      Basic API removed
-
-      Revision 1.48  2000/04/18 15:08:16  os
-      UNICODE
-
-      Revision 1.47  1999/07/02 07:13:56  OS
-      #63003# NameWarning also in StarOne rename dialog
-
-
-      Rev 1.46   02 Jul 1999 09:13:56   OS
-   #63003# NameWarning also in StarOne rename dialog
-
-      Rev 1.45   18 Jun 1999 13:04:58   OS
-   #63003# prevent illegal characters from beeing pasted
-
-      Rev 1.44   25 Feb 1999 13:43:04   OS
-   #62407# AutoComplete casesensitive
-
-      Rev 1.43   08 Feb 1999 15:04:12   OS
-   #61421# einige Sonderzeichen in Textmarken nicht erlauben
-
-      Rev 1.42   08 Oct 1998 15:45:34   OM
-   #57748# Multiselektion beim Loeschen von Bookmarks
-
-      Rev 1.41   23 Feb 1998 07:28:18   OS
-   GetBookmark/ Cnt mit Bookmark-Flag
-
-      Rev 1.40   24 Nov 1997 16:47:42   MA
-   includes
-
-      Rev 1.39   03 Nov 1997 13:22:42   MA
-   precomp entfernt
-
-      Rev 1.38   08 Aug 1997 17:28:20   OM
-   Headerfile-Umstellung
-
-      Rev 1.37   30 Jul 1997 18:33:30   HJS
-   includes
-
-      Rev 1.36   07 Apr 1997 16:08:26   MH
-   chg: header
-
-      Rev 1.35   20 Feb 1997 10:00:44   MA
-   #36242# richtig enablen
-
-      Rev 1.34   14 Jan 1997 09:22:28   TRI
-   includes wegen Internal Compiler Error
-
-      Rev 1.33   11 Nov 1996 11:05:46   MA
-   ResMgr
-
-      Rev 1.32   02 Oct 1996 18:28:58   MA
-   Umstellung Enable/Disable
-
-      Rev 1.31   28 Aug 1996 14:12:20   OS
-   includes
-
-      Rev 1.30   06 Feb 1996 15:21:06   JP
-   Link Umstellung 305
-
-      Rev 1.29   24 Nov 1995 16:58:44   OM
-   PCH->PRECOMPILED
-
-      Rev 1.28   08 Nov 1995 13:31:40   JP
-   Umstellung zur 301: Change -> Set
-
-      Rev 1.27   24 Oct 1995 17:05:06   OS
-   Textmarken einfuegen/loeschen recordable
-
-      Rev 1.26   17 Oct 1995 20:54:50   JP
-   IsMark oder IsBookmark am Bookmark benutzen
-
-      Rev 1.25   30 Aug 1995 14:00:54   MA
-   fix: sexport'iert
-
-      Rev 1.24   21 Aug 1995 09:32:42   MA
-   chg: swstddlg -> svxstandarddialog, Optimierungen
-
-      Rev 1.23   05 Jul 1995 19:08:14   JP
-   SwBookmarkFUNC gibts nicht mehr, rufe Methoden an die Shell-Methoden
-
-      Rev 1.22   20 Mar 1995 19:28:20   OS
-   unbenutzte Funktionen entfernt
-
-      Rev 1.21   26 Oct 1994 12:18:00   ER
-   add: PCH (missed the misc)
-
- -----------------------------------------------------------------------*/
 
 
 

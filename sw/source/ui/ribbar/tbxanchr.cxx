@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxanchr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,67 +174,5 @@ void  SwTbxAnchor::Click()
         pView->GetViewFrame()->GetDispatcher()->Execute(nSlotId, SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
 }
 
-/***********************************************************************
-
-        $Log: not supported by cvs2svn $
-        Revision 1.18  2000/09/18 16:06:02  willem.vandorp
-        OpenOffice header added.
-
-        Revision 1.17  2000/09/07 15:59:27  os
-        change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-        Revision 1.16  2000/05/24 12:36:18  hr
-        conflict between STLPORT and Workshop header
-
-        Revision 1.15  2000/02/11 14:56:54  hr
-        #70473# changes for unicode ( patched by automated patchtool )
-
-        Revision 1.14  1999/07/02 11:22:28  OS
-        #64782# anchor type page in hader or footer disabled
-
-
-      Rev 1.13   02 Jul 1999 13:22:28   OS
-   #64782# anchor type page in hader or footer disabled
-
-      Rev 1.12   24 Apr 1998 08:57:10   OS
-   Seitenbindung fuer HTML-Rahmen bedingt erlauben
-
-      Rev 1.11   31 Mar 1998 15:21:02   AMA
-   Fix #47521#: IsFlyInFly liefert jetzt das Format des potentiellen Ankers
-
-      Rev 1.10   29 Jan 1998 14:59:22   OM
-   Am Zeichen verankern
-
-      Rev 1.9   10 Dec 1997 11:38:48   TJ
-   include
-
-      Rev 1.8   28 Nov 1997 19:57:26   MA
-   includes
-
-      Rev 1.7   24 Nov 1997 14:53:58   MA
-   includes
-
-      Rev 1.6   12 Sep 1997 15:33:26   AMA
-   Neu: IsFlyInFly wird gefragt, ob Verankerung am Rahmen zugelassen ist.
-
-      Rev 1.5   29 Aug 1997 15:45:34   OS
-   PopupMenu::Execute mit Window* fuer VCL
-
-      Rev 1.4   08 Aug 1997 17:29:58   OM
-   Headerfile-Umstellung
-
-      Rev 1.3   04 Jun 1997 16:07:06   MH
-   Syntax
-
-      Rev 1.2   04 Jun 1997 12:37:22   OS
-   Rahmen an Rahmen nicht in der 4.0; Segmentierung raus
-
-      Rev 1.1   03 Mar 1997 16:41:22   OM
-   Segmentiert
-
-      Rev 1.0   03 Mar 1997 14:24:08   OM
-   Initial revision.
-
-***********************************************************************/
 
 

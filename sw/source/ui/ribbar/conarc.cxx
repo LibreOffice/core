@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conarc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:47:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,63 +195,5 @@ void ConstArc::Deactivate()
     SwDrawBase::Deactivate();
 }
 
-/*************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.24  2000/09/18 16:06:00  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.23  1997/11/24 13:53:58  MA
-      includes
-
-
-      Rev 1.22   24 Nov 1997 14:53:58   MA
-   includes
-
-      Rev 1.21   03 Nov 1997 13:24:22   MA
-   precomp entfernt
-
-      Rev 1.20   05 Sep 1997 11:59:36   MH
-   chg: header
-
-      Rev 1.19   04 Feb 1997 15:20:32   OM
-   Bugs in Selektionsmodi behoben
-
-      Rev 1.18   28 Aug 1996 13:39:26   OS
-   includes
-
-      Rev 1.17   14 Aug 1996 11:31:02   JP
-   svdraw.hxx entfernt
-
-      Rev 1.16   23 May 1996 08:50:16   OS
-   ein define weniger
-
-      Rev 1.15   07 Mar 1996 14:27:30   HJS
-   2 defines zu viel
-
-      Rev 1.14   24 Nov 1995 16:58:04   OM
-   PCH->PRECOMPILED
-
-      Rev 1.13   15 Nov 1995 18:35:26   OM
-   Virtuelle Fkt rausgeworfen
-
-      Rev 1.12   21 Sep 1995 18:38:28   OM
-   Selektionsmodi ueberarbeitet
-
-      Rev 1.11   20 Sep 1995 10:07:02   OM
-   Control-Browser: Stati gefixt
-
-      Rev 1.10   09 Aug 1995 16:55:38   MA
-   drawing-undo-header rein
-
-      Rev 1.9   21 Jun 1995 16:15:26   OS
-   SID_TOOL => SID_DRAW
-
-      Rev 1.8   24 Apr 1995 12:44:36   OM
-   Absturz bei Delete gefixt
-
-*************************************************************************/
 
 

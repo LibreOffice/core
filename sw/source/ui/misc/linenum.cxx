@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linenum.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:04:53 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,54 +387,4 @@ BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& rSet )
     return FALSE;
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2001/03/02 14:09:26  os
-    extended numbering types available
-
-    Revision 1.2  2001/02/23 12:45:29  os
-    Complete use of DefaultNumbering component
-
-    Revision 1.1.1.1  2000/09/18 17:14:45  hr
-    initial import
-
-    Revision 1.11  2000/09/18 16:05:57  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.10  2000/08/14 12:50:15  ma
-    optional restart at each page for line numbering
-
-    Revision 1.9  2000/04/26 14:55:46  os
-    GetName() returns const String&
-
-    Revision 1.8  2000/02/11 14:56:26  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.7  1998/11/17 09:57:52  OS
-    #58263# NumType durch SvxExtNumType ersetzt
-
-
-      Rev 1.6   17 Nov 1998 10:57:52   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.5   11 Aug 1998 14:26:30   HR
-   void* kann nicht direkt nach USHORT gecastet werden
-
-      Rev 1.4   10 Aug 1998 16:42:10   JP
-   Bug #54796#: neue NumerierungsTypen (WW97 kompatibel)
-
-      Rev 1.3   15 Apr 1998 14:34:08   OS
-   CharStyles sortiert
-
-      Rev 1.2   20 Feb 1998 11:23:22   MA
-   Restarbeiten Zeilennummerierung
-
-      Rev 1.1   19 Feb 1998 13:51:32   OM
-   Zeilennumerierung
-
-      Rev 1.0   18 Feb 1998 18:56:48   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/
 

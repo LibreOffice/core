@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insrc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,75 +131,6 @@ SwInsRowColDlg::SwInsRowColDlg(SwView& rVw, BOOL bCol )
     }
     SetText( aTmp );
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:47  hr
-    initial import
-
-    Revision 1.30  2000/09/18 16:06:08  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.29  2000/09/07 15:59:31  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.28  1998/05/13 14:00:48  OS
-    HelpButton
-
-
-      Rev 1.27   13 May 1998 16:00:48   OS
-   HelpButton
-
-      Rev 1.26   24 Nov 1997 15:52:22   MA
-   includes
-
-      Rev 1.25   03 Nov 1997 13:56:52   MA
-   precomp entfernt
-
-      Rev 1.24   14 Nov 1996 15:43:44   TRI
-   includes
-
-      Rev 1.23   11 Nov 1996 11:20:10   MA
-   ResMgr
-
-      Rev 1.22   04 Sep 1996 11:16:52   JP
-   TableManager wird nicht mehr benoetigt
-
-      Rev 1.21   28 Aug 1996 14:33:14   OS
-   includes
-
-      Rev 1.20   26 Jun 1996 15:25:20   OS
-   Aufruf von Dispatcher.Execute an 324 angepasst
-
-      Rev 1.19   22 Mar 1996 14:16:32   HJS
-   umstellung 311
-
-      Rev 1.18   24 Nov 1995 16:58:58   OM
-   PCH->PRECOMPILED
-
-      Rev 1.17   10 Nov 1995 15:26:16   OS
-   Execute mit 0L abschliessen
-
-      Rev 1.16   05 Nov 1995 16:49:32   OS
-   Dtor ueberfluessig, -RecordFlag, Aktion ueber Dispatcher
-
-      Rev 1.15   13 Sep 1995 17:10:04   OS
-   Recording ausgeweitet
-
-      Rev 1.14   30 Aug 1995 14:02:52   MA
-   fix: sexport'iert
-
-      Rev 1.13   21 Aug 1995 09:34:28   MA
-   chg: swstddlg -> svxstandarddialog, Optimierungen
-
-      Rev 1.12   25 Oct 1994 18:52:28   ER
-   add: PCH
-
-      Rev 1.11   20 Apr 1994 15:34:20   MA
-   operator Optimierung.
-
-------------------------------------------------------------------------*/
 
 
 

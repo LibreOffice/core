@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glshell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-06 09:48:17 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,122 +395,5 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
     }
     return xDocSh;
 }
-
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2001/05/15 13:16:44  mtg
-    Moved conversion code into glossary.cxx
-
-    Revision 1.2  2001/05/03 14:42:16  mtg
-    #75825# Set a boolean to show a frame or not, so frames are not displayed when auto texts are edited over the API
-
-    Revision 1.1.1.1  2000/09/18 17:14:44  hr
-    initial import
-
-    Revision 1.59  2000/09/18 16:05:57  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.58  2000/05/10 11:53:43  os
-    Basic API removed
-
-    Revision 1.57  1999/12/22 09:21:04  os
-    #71203# editing of AutoText: keep macros
-
-    Revision 1.56  1999/07/23 08:23:24  OS
-    #67828# glossary - methods on doc level
-
-
-      Rev 1.55   23 Jul 1999 10:23:24   OS
-   #67828# glossary - methods on doc level
-
-      Rev 1.54   09 Feb 1999 10:47:04   OS
-   #61205# AutoText-Gruppen koennen beliebige Namen erhalten
-
-      Rev 1.53   22 Jan 1999 13:06:14   JP
-   Task #61076#: UndoFlag zuruecksetzen
-
-      Rev 1.52   27 Jun 1998 15:59:06   JP
-   neu: Textbausteine ohne Formatierung
-
-      Rev 1.51   19 Jan 1998 11:57:42   MBA
-   CreateViewFrame verwenden
-
-      Rev 1.50   25 Nov 1997 11:58:26   TJ
-   include fuer SfxPrinter
-
-      Rev 1.49   24 Nov 1997 16:47:44   MA
-   includes
-
-      Rev 1.48   13 Nov 1997 13:21:16   MH
-   chg: header
-
-      Rev 1.47   03 Sep 1997 19:09:14   MBA
-   Kein wswslots.hxx mehr includen
-
-      Rev 1.46   01 Sep 1997 13:16:34   OS
-   DLL-Umstellung
-
-      Rev 1.45   26 Aug 1997 16:05:10   HJS
-   internal comp. err. - header vor-includet
-
-      Rev 1.44   05 Aug 1997 16:14:20   TJ
-   include svx/srchitem.hxx
-
-      Rev 1.43   31 Jul 1997 15:22:04   MH
-   chg: header
-
-      Rev 1.42   11 Jul 1997 16:35:46   JP
-   Bug #41481#: SaveGlossaryDoc - beachtet auch Tabellen am Anfang
-
-      Rev 1.41   07 Apr 1997 16:08:24   MH
-   chg: header
-
-      Rev 1.40   12 Feb 1997 12:01:16   JP
-   neu: WebGlossryDocShell
-
-      Rev 1.39   11 Nov 1996 11:05:46   MA
-   ResMgr
-
-      Rev 1.38   15 Oct 1996 14:13:26   JP
-   AutoCorrCfg in die OfficeApplication verschoben
-
-      Rev 1.37   23 Sep 1996 08:07:54   OS
-   Statusstring fuer SID_SAVE
-
-      Rev 1.36   28 Aug 1996 14:12:12   OS
-   includes
-
-      Rev 1.35   09 Aug 1996 11:08:04   OS
-   Appear am Frame aufrufen, damit das Fenster richtige erkannt wird
-
-      Rev 1.34   08 Aug 1996 21:37:50   JP
-   Save: das gesamte Doc selektieren, nicht den akt. Bereich
-
-      Rev 1.33   09 Jul 1996 10:11:16   OS
-   Autotexte relativ sichern
-
-      Rev 1.32   25 Jun 1996 18:39:36   HJS
-   includes
-
-      Rev 1.31   19 Jun 1996 12:29:24   OM
-   Umstellung auf 323
-
-      Rev 1.30   27 Mar 1996 09:39:20   OS
-   GlosDocShell ueber Ref anlegen
-
-      Rev 1.29   22 Mar 1996 14:06:50   HJS
-   umstellung 311
-
-      Rev 1.28   14 Dec 1995 23:00:40   JP
-   Filter Umstellung: ErrorHandling und Read/Write-Parameter
-
-      Rev 1.27   03 Dec 1995 11:24:32   OS
-   +include itemdef.hxx
-
-      Rev 1.26   29 Nov 1995 13:47:00   OS
-   -slotadd.hxx
-
-------------------------------------------------------------------------*/
 
 

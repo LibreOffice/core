@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ma $ $Date: 2001-03-21 17:39:50 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,103 +429,5 @@ USHORT* SwFootNotePage::GetRanges()
     return aPageRg;
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2000/11/20 09:04:01  jp
-    should change: use LocaleDataWrapper
-
-    Revision 1.1.1.1  2000/09/18 17:14:45  hr
-    initial import
-
-    Revision 1.79  2000/09/18 16:05:59  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.78  2000/03/03 15:17:03  os
-    StarView remainders removed
-
-    Revision 1.77  2000/02/11 14:56:44  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.76  1999/09/20 11:23:04  os
-    set initial value for max footnote height
-
-    Revision 1.75  1999/07/29 11:40:06  MA
-    avoid internal compiler errors
-
-
-      Rev 1.74   29 Jul 1999 13:40:06   MA
-   avoid internal compiler errors
-
-      Rev 1.73   08 Sep 1998 17:01:46   OS
-   #56134# Metric fuer Text und HTML getrennt
-
-      Rev 1.72   17 Apr 1998 16:24:44   OS
-   Design verbessert, Linienstaerken berichtigt
-
-      Rev 1.71   28 Nov 1997 20:11:46   MA
-   includes
-
-      Rev 1.70   24 Nov 1997 16:47:42   MA
-   includes
-
-      Rev 1.69   03 Nov 1997 13:22:44   MA
-   precomp entfernt
-
-      Rev 1.68   10 Oct 1997 12:24:12   OS
-   Index fuer LineType berichtigt
-
-      Rev 1.67   09 Sep 1997 16:11:18   OS
-   fuer VCL LineListBox benutzen #43663#
-
-      Rev 1.66   09 Aug 1997 13:31:40   OS
-   paraitem/frmitems/textitem aufgeteilt
-
-      Rev 1.65   05 Feb 1997 10:19:18   OM
-   FillItemSet in DeactivatePage rufen
-
-      Rev 1.64   11 Nov 1996 11:05:46   MA
-   ResMgr
-
-      Rev 1.63   02 Oct 1996 18:28:58   MA
-   Umstellung Enable/Disable
-
-      Rev 1.62   29 Aug 1996 16:09:16   OS
-   Korrektur: max. Hoehe des Fussnotenbereichs
-
-      Rev 1.61   28 Aug 1996 14:12:12   OS
-   includes
-
-      Rev 1.60   02 Jul 1996 10:09:56   NF
-   includes
-
-      Rev 1.59   06 Feb 1996 15:21:14   JP
-   Link Umstellung 305
-
-      Rev 1.58   23 Jan 1996 11:27:10   OS
-   richtige Reaktion auf Standard-Button im Formatdialog
-
-      Rev 1.57   29 Nov 1995 17:51:26   OS
-   im Reset Default-Fussnote erzeugen
-
-      Rev 1.56   28 Nov 1995 21:13:18   JP
-   UiSystem-Klasse aufgehoben, in initui/swtype aufgeteilt
-
-      Rev 1.55   24 Nov 1995 16:58:46   OM
-   PCH->PRECOMPILED
-
-      Rev 1.54   13 Nov 1995 10:51:34   OM
-   static entfernt
-
-      Rev 1.53   08 Nov 1995 13:31:44   JP
-   Umstellung zur 301: Change -> Set
-
-      Rev 1.52   05 Oct 1995 17:31:02   JP
-   eigene TabPages mit GetRanges versehen (fuer Vorlagen editieren)
-
-      Rev 1.51   22 Aug 1995 09:34:22   MA
-   svxitems-header entfernt
-
-------------------------------------------------------------------------*/
 
 

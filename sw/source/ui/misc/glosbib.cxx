@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-18 12:27:55 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:45:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,80 +642,5 @@ void    SwGlossaryGroupTLB::Clear()
     SvTabListBox::Clear();
 }
 
-/*--------------------------------------------------------------------
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.10  2001/10/17 16:58:33  jp
-      Bug #93393#: fix some assert bugs
-
-      Revision 1.9  2001/09/05 10:25:33  jp
-      Task #91873#: use SvtSysLocale and Transliterationrwapper for string compare
-
-      Revision 1.8  2001/05/21 12:29:30  fme
-      Fix #86988#: Redesign of dialogs
-
-      Revision 1.7  2001/04/27 17:46:40  jp
-      use Collator for international string compare
-
-      Revision 1.6  2001/03/08 15:39:00  os
-      #84732# skip invalid auto text groups
-
-      Revision 1.5  2000/11/15 14:43:07  hr
-      #65293#: SFX_SEARCHPATH_DELIMITER -> SVT_SEARCHPATH_DELIMITER
-
-      Revision 1.4  2000/11/13 10:54:33  jp
-      remove IniManager
-
-      Revision 1.3  2000/11/06 09:19:24  jp
-      must changes: tempfile
-
-      Revision 1.2  2000/10/20 14:18:05  os
-      use comphelper methods
-
-      Revision 1.1.1.1  2000/09/18 17:14:44  hr
-      initial import
-
-      Revision 1.64  2000/09/18 16:05:56  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.63  2000/07/20 15:24:32  jp
-      Bug #77040#: don't create references with stack objects, must always created on the heap
-
-      Revision 1.62  2000/07/20 13:17:12  jp
-      change old txtatr-character to the two new characters
-
-      Revision 1.61  2000/06/13 09:57:14  os
-      using UCB
-
-      Revision 1.60  2000/06/07 13:27:58  os
-      using UCB
-
-      Revision 1.59  2000/05/30 14:34:29  os
-      #75706# removing of glossary groups: ask for title instead of group name
-
-      Revision 1.58  2000/05/23 19:22:32  jp
-      Bugfixes for Unicode
-
-      Revision 1.57  2000/04/18 15:08:16  os
-      UNICODE
-
-      Revision 1.56  2000/03/14 10:09:58  os
-      #73944# check if directories are readonly
-
-      Revision 1.55  2000/03/06 15:49:27  os
-      #70359# dialog size increased
-
-      Revision 1.54  2000/03/03 15:17:02  os
-      StarView remainders removed
-
-      Revision 1.53  2000/02/22 13:26:21  os
-      #73271# always append path index
-
-      Revision 1.52  2000/02/14 14:40:48  os
-      #70473# Unicode
-
- --------------------------------------------------------------------*/
 
 

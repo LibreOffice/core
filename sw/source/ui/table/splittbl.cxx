@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splittbl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,27 +113,4 @@ void SwSplitTblDlg::Apply()
 }
 
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:48  hr
-    initial import
-
-    Revision 1.4  2000/09/18 16:06:09  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.3  1998/03/20 12:39:40  OS
-    verdrehter enum
-
-
-      Rev 1.2   20 Mar 1998 13:39:40   OS
-   verdrehter enum
-
-      Rev 1.1   19 Mar 1998 11:15:38   OS
-   Neuer Parameter: mit Vorlage
-
-      Rev 1.0   17 Mar 1998 16:16:52   OS
-   Initial revision.
-
-------------------------------------------------------------------------*/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syncbtn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:36 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,29 +143,4 @@ IMPL_LINK( SwSyncBtnDlg, BtnHdl, PushButton *, pBtn )
     return 0;
 }
 
-/*------------------------------------------------------------------------
 
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2000/09/18 16:05:27  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.5  2000/09/07 15:59:23  os
-    change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-    Revision 1.4  1998/03/18 10:27:32  OM
-    #48713# SynchronButton initial oben links positionieren
-
-
-      Rev 1.3   18 Mar 1998 11:27:32   OM
-   #48713# SynchronButton initial oben links positionieren
-
-      Rev 1.2   16 Mar 1998 20:11:34   OM
-   Initial in der View positionieren
-
-      Rev 1.1   16 Mar 1998 16:17:40   OM
-   Aktualisieren-Button kontextsensitiv
-
-      Rev 1.0   15 Mar 1998 14:09:52   OM
-   Initial revision.
-
-------------------------------------------------------------------------*/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conpoly.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,81 +224,5 @@ void ConstPolygon::Activate(const USHORT nSlotId)
     SwDrawBase::Activate(nSlotId);
 }
 
-/*************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.29  2000/09/18 16:06:01  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.28  1997/11/28 19:14:18  MA
-      includes
-
-
-      Rev 1.27   28 Nov 1997 20:14:18   MA
-   includes
-
-      Rev 1.26   24 Nov 1997 14:53:58   MA
-   includes
-
-      Rev 1.25   03 Nov 1997 13:24:20   MA
-   precomp entfernt
-
-      Rev 1.24   05 Sep 1997 11:57:52   MH
-   chg: header
-
-      Rev 1.23   13 Aug 1997 12:18:56   OM
-   #42383# Selektion von Punkten im Konstruktionsmode
-
-      Rev 1.22   20 Mar 1997 12:14:28   OM
-   GPF in Beziermode behoben
-
-      Rev 1.21   30 Jan 1997 11:48:08   OM
-   Freihandzeichnen
-
-      Rev 1.20   29 Jan 1997 11:22:08   OM
-   Freihandzeichnen
-
-      Rev 1.19   23 Jan 1997 16:07:06   OM
-   Neuer Polygon Zeichenmode
-
-      Rev 1.18   16 Jan 1997 12:35:58   OM
-   Neuer Objekttyp: Bezier
-
-      Rev 1.17   28 Aug 1996 13:39:32   OS
-   includes
-
-      Rev 1.16   14 Aug 1996 11:31:00   JP
-   svdraw.hxx entfernt
-
-      Rev 1.15   24 Nov 1995 16:58:06   OM
-   PCH->PRECOMPILED
-
-      Rev 1.14   15 Nov 1995 18:35:28   OM
-   Virtuelle Fkt rausgeworfen
-
-      Rev 1.13   10 Aug 1995 18:15:00   OM
-   CreateMode geaendert
-
-      Rev 1.12   09 Aug 1995 16:53:02   MA
-   drawing-undo-header rein
-
-      Rev 1.11   20 Jul 1995 19:26:38   OM
-   Umbenamsung obj_pathline->obj_plin
-
-      Rev 1.10   06 May 1995 20:38:04   OM
-   Polygonerzeugung bei Einfachklick
-
-      Rev 1.9   21 Apr 1995 02:18:44   ER
-   ToggleClosed erwartet jetzt ein long und kein Size() mehr
-
-      Rev 1.8   06 Apr 1995 20:15:56   OM
-   Polygon beenden mit rechter Maustaste
-
-      Rev 1.7   21 Mar 1995 00:47:02   ER
-   _svdorect_hxx definiert => _svdcapt_hxx definieren
-
-*************************************************************************/
 
 

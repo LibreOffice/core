@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macassgn.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-14 07:40:12 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,67 +230,5 @@ SvStringsDtor* __EXPORT _GetRangeHdl( _SfxMacroTabPage* pTbPg, const String& rLa
 }
 
 
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:34  hr
-      initial import
-
-      Revision 1.40  2000/09/18 16:05:20  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.39  2000/04/20 12:55:01  os
-      GetName() returns String&
-
-      Revision 1.38  2000/02/11 14:44:39  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.37  1998/07/17 08:17:28  OS
-      SfxxSmallMacroTabPage einsetzen #52809#
-
-
-      Rev 1.36   17 Jul 1998 10:17:28   OS
-   SfxxSmallMacroTabPage einsetzen #52809#
-
-      Rev 1.35   10 Jul 1998 11:04:14   MBA
-   GetRangeHdl jetzt mit String
-
-      Rev 1.34   28 Nov 1997 17:57:10   MA
-   includes
-
-      Rev 1.33   25 Nov 1997 10:43:20   MA
-   includes
-
-      Rev 1.32   03 Nov 1997 13:12:26   MA
-   precomp entfernt
-
-      Rev 1.31   06 Aug 1997 11:59:46   TRI
-   VCL: includes
-
-      Rev 1.30   07 Apr 1997 14:24:32   MH
-   chg: header
-
-      Rev 1.29   21 Feb 1997 09:23:42   OS
-   ALL-define fuer Rahmenvorlagen
-
-      Rev 1.28   18 Feb 1997 17:07:52   JP
-   Erweiterung fuer Events am Frame
-
-      Rev 1.27   28 Jan 1997 16:31:18   OS
-   HtmlMode mit GetHtmlMode ermitteln
-
-      Rev 1.26   27 Jan 1997 15:34:46   OS
-   InetFmtDlg returnt Bool
-
-      Rev 1.25   08 Jan 1997 11:01:00   OS
-   SID_HTML_MODE jetzt UInt16Item
-
-      Rev 1.24   04 Dec 1996 15:04:52   JP
-   SW_EVENT -> SVX_EVENT/SFX_EVENT
-
-      Rev 1.23   03 Dec 1996 19:56:32   JP
-   Macrozuweisen-TabPage/-Dialog aus dem Writer exportiert, eigene Ableitung fuer setzen der Events
-
-*************************************************************************/
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:47:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,93 +169,6 @@ SwTableHeightDlg::SwTableHeightDlg( Window *pParent, SwWrtShell &rS ) :
         delete pSz;
     }
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.3  2000/10/09 16:54:59  jp
-    compiler error
-
-    Revision 1.2  2000/10/06 13:37:52  jp
-    should changes: don't use IniManager
-
-    Revision 1.1.1.1  2000/09/18 17:14:48  hr
-    initial import
-
-    Revision 1.38  2000/09/18 16:06:08  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.37  2000/05/26 07:21:33  os
-    old SW Basic API Slots removed
-
-    Revision 1.36  1998/05/15 05:27:00  OS
-    HelpButton
-
-
-      Rev 1.35   15 May 1998 07:27:00   OS
-   HelpButton
-
-      Rev 1.34   24 Nov 1997 15:52:22   MA
-   includes
-
-      Rev 1.33   03 Nov 1997 13:56:50   MA
-   precomp entfernt
-
-      Rev 1.32   15 Aug 1997 12:18:22   OS
-   chartar/frmatr/txtatr aufgeteilt
-
-      Rev 1.31   08 Jan 1997 10:34:48   OS
-   falschen default entfernt
-
-      Rev 1.30   17 Dec 1996 16:59:52   OS
-   per Default MM50 als Normhoehe
-
-      Rev 1.29   11 Dec 1996 20:58:14   MH
-   includes
-
-      Rev 1.28   11 Dec 1996 08:43:16   OS
-   Minimalwert nie NULL, Einheit richtig einstellen
-
-      Rev 1.27   26 Nov 1996 19:45:10   OS
-   minimale Zellenhoehe jetzt MINLAY
-
-      Rev 1.26   11 Nov 1996 11:20:18   MA
-   ResMgr
-
-      Rev 1.25   28 Aug 1996 14:33:12   OS
-   includes
-
-      Rev 1.24   26 Jun 1996 15:25:22   OS
-   Aufruf von Dispatcher.Execute an 324 angepasst
-
-      Rev 1.23   26 Jun 1996 10:59:48   OM
-   Autohoehe fuer Tabellenzeile
-
-      Rev 1.22   25 Jun 1996 18:13:34   OM
-   Autohoehe fuer Tabellenzeile
-
-      Rev 1.21   20 Jun 1996 13:57:38   MA
-   chg: RowHeight jetzt mit minimalgroesse
-
-      Rev 1.20   24 Nov 1995 16:58:58   OM
-   PCH->PRECOMPILED
-
-      Rev 1.19   10 Nov 1995 15:26:16   OS
-   Execute mit 0L abschliessen
-
-      Rev 1.18   05 Nov 1995 16:48:32   OS
-   Dtor ueberfluessig, -RecordFlag, Aktion ueber Dispatcher
-
-      Rev 1.17   13 Sep 1995 17:09:42   OS
-   Recording ausgeweitet
-
-      Rev 1.16   30 Aug 1995 14:04:24   MA
-   fix: sexport'iert
-
-      Rev 1.15   21 Aug 1995 09:34:04   MA
-   chg: swstddlg -> svxstandarddialog, Optimierungen
-
-------------------------------------------------------------------------*/
 
 
 

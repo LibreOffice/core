@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxmgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:46 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,99 +206,4 @@ SfxPopupWindow* SwPopupWindowTbxMgr::Clone() const
             );
 }
 
-/***********************************************************************
-
-        $Log: not supported by cvs2svn $
-        Revision 1.10  2000/09/18 16:06:02  willem.vandorp
-        OpenOffice header added.
-
-        Revision 1.9  2000/06/20 14:48:39  os
-        #70060# less occurences of columns in HTML
-
-        Revision 1.8  2000/03/03 15:17:03  os
-        StarView remainders removed
-
-        Revision 1.7  1999/02/12 07:21:26  OS
-        #61547# InsertEndnote in der Wz.Leiste
-
-
-      Rev 1.6   12 Feb 1999 08:21:26   OS
-   #61547# InsertEndnote in der Wz.Leiste
-
-      Rev 1.5   06 Apr 1998 09:57:30   OS
-   INSERT_FRAME_INTERACT fuer HTML wieder erlaubt
-
-      Rev 1.4   24 Nov 1997 14:53:58   MA
-   includes
-
-      Rev 1.3   03 Nov 1997 13:24:20   MA
-   precomp entfernt
-
-      Rev 1.2   23 Mar 1997 23:54:26   OS
-   ToolBoxAlign statt ToolBoxControl uebergeben
-
-      Rev 1.1   29 Jan 1997 17:16:36   NF
-   includes...
-
-      Rev 1.0   29 Jan 1997 14:51:48   OM
-   Initial revision.
-
-      Rev 1.36   28 Jan 1997 16:29:50   OS
-   Anpassung der ToolBox an die DocShell
-
-      Rev 1.35   15 Jan 1997 11:32:52   OM
-   Bezier-Controller entfernt
-
-      Rev 1.34   11 Dec 1996 12:33:46   OM
-   Bezier-Controller
-
-      Rev 1.33   30 Nov 1996 14:07:24   OS
-   SID_OBJECT_ALIGN: dieser Controller tauscht die Images nicht aus!
-
-      Rev 1.32   25 Nov 1996 10:56:50   OS
-   SwPopupWindowTbx entfernt
-
-      Rev 1.31   23 Nov 1996 12:41:26   OS
-   StateChanged fuer ...TbxMgr
-
-      Rev 1.30   14 Nov 1996 10:22:50   TRI
-   includes
-
-      Rev 1.29   13 Nov 1996 15:30:08   OS
-   RegisterToolBox nur noch fuer ..OUTSTYLE
-
-      Rev 1.28   12 Nov 1996 10:20:32   OS
-   Image an der Toolbox kann nur der Toolboxmgr selbst setzen
-
-      Rev 1.27   22 Oct 1996 10:47:38   OS
-   Image an der Toolbox austauschen
-
-      Rev 1.26   18 Oct 1996 08:52:02   OS
-   Alignment berichtigt
-
-      Rev 1.25   14 Oct 1996 13:38:26   OS
-   UseDefault statt Initialize am SfxToolBoxManager
-
-      Rev 1.24   10 Oct 1996 10:37:14   OS
-   Registrierung der Toolbox am SfxImageManager
-
-      Rev 1.23   26 Sep 1996 08:17:24   OS
-   Execute am Dispatcher mit OL abschliessen
-
-      Rev 1.22   23 Sep 1996 14:44:00   OS
-   Slot fuer ToolboxItem auch im SelectHdl rufen
-
-      Rev 1.21   19 Sep 1996 19:40:04   HJS
-   fehlende includes
-
-      Rev 1.20   19 Sep 1996 16:05:14   OS
-   neu: SwPopupWindowTbxMgr
-
-      Rev 1.19   28 Aug 1996 13:39:28   OS
-   includes
-
-      Rev 1.18   29 Jul 1996 15:16:04   OS
-   Clone impl.
-
-***********************************************************************/
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:51:13 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,92 +419,6 @@ long SwWrtShell::DelPrvWord()
     return nRet;
 }
 
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:14:53  hr
-      initial import
-
-      Revision 1.70  2000/09/18 16:06:26  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.69  2000/04/10 08:39:49  jp
-      Bug #74881#: DelPrvWord
-
-      Revision 1.68  1999/04/01 13:21:50  JP
-      Bug #64298#: DelRight - auch Controls usw. entfernen
-
-
-      Rev 1.67   01 Apr 1999 15:21:50   JP
-   Bug #64298#: DelRight - auch Controls usw. entfernen
-
-      Rev 1.66   05 Feb 1999 15:07:54   JP
-   Bug #61386#: DelRight unnoetigen Befehl entfernt
-
-      Rev 1.65   19 Jan 1999 22:53:46   JP
-   Task #58677#: Crsr in Readonly Bereichen zulassen
-
-      Rev 1.64   15 Jan 1999 15:43:28   JP
-   Bug #60917#: DelPrevWord korrigiert
-
-      Rev 1.63   09 Jun 1998 15:34:32   OM
-   VC-Controls entfernt
-
-      Rev 1.62   21 Apr 1998 17:36:28   OM
-   #49630 Keine Rahmenselektion nach Loeschung von Zeichenobjekten
-
-      Rev 1.61   24 Nov 1997 14:35:06   MA
-   includes
-
-      Rev 1.60   03 Nov 1997 14:02:54   MA
-   precomp entfernt
-
-      Rev 1.59   06 Mar 1997 09:22:58   OM
-   sel_drw_ctrl ergaenzt
-
-      Rev 1.58   05 Feb 1997 17:01:04   JP
-   Bug #35638#: DelRight in Zellen
-
-      Rev 1.57   03 Feb 1997 20:41:30   JP
-   DelRight: leeren TextNode vor Tabellen loeschen
-
-      Rev 1.56   22 Jan 1997 11:55:56   MA
-   opt: bSelection entfernt
-
-      Rev 1.55   29 Aug 1996 09:26:04   OS
-   includes
-
-      Rev 1.54   22 Jan 1996 16:28:50   OS
-   DelRight/Left: ACT_KONTEXT muss vor EnterStdMode enden wg. Shellumschaltung aus Basic Bug #24529#
-
-      Rev 1.53   24 Nov 1995 16:59:04   OM
-   PCH->PRECOMPILED
-
-      Rev 1.52   22 Sep 1995 11:45:48   JP
-   DelLeft: & und nicht | abfragen
-
-      Rev 1.51   10 Aug 1995 13:04:44   OS
-   DelLine: nur bis zum Zeilenende markieren und loeschen
-
-      Rev 1.50   05 Jul 1995 19:14:52   JP
-   Delete: mit Backspace keine Tabelle loeschen
-
-      Rev 1.49   29 Jun 1995 20:10:12   JP
-   DelLeft: keine Tabellen loeschen mit BACKSPACE
-
-      Rev 1.48   19 Jun 1995 09:53:44   MA
-   fix(13180): Del fuer Zeichenobjekte.
-
-      Rev 1.47   05 Apr 1995 19:47:38   OM
-   Bug in NumShell mit Delete gefixt
-
-      Rev 1.46   20 Dec 1994 11:53:44   MA
-   SS Drawing.
-
-      Rev 1.45   15 Dec 1994 20:32:04   SWG
-   *ARR* Ersetzungen, svmem, __far_data etc.
-
-*************************************************************************/
 
 
 

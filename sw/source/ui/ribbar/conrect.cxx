@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conrect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-10-22 17:04:17 $
+ *  last change: $Author: os $ $Date: 2002-12-05 12:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,110 +307,5 @@ void ConstRectangle::Activate(const USHORT nSlotId)
     SwDrawBase::Activate(nSlotId);
 }
 
-/*************************************************************************
-
-      Source Code Control System - History
-
-      $Log: not supported by cvs2svn $
-      Revision 1.4  2001/09/28 12:02:08  jp
-      Task #92540#: set vertical at the outlineparagraph object
-
-      Revision 1.3  2001/03/16 14:46:39  jp
-      new: vertical support for textboxes
-
-      Revision 1.2  2000/10/30 12:08:27  aw
-      change SdrObjects to use SfxItemSet instead of SfxSetItems.
-      Removed TakeAttributes() and SetAttributes(), new ItemSet
-      modification methods (GetItem[Set], SetItem[Set], ClearItem,...)
-
-      Revision 1.1.1.1  2000/09/18 17:14:46  hr
-      initial import
-
-      Revision 1.45  2000/09/18 16:06:01  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.44  2000/09/07 15:59:26  os
-      change: SFX_DISPATCHER/SFX_BINDINGS removed
-
-      Revision 1.43  1998/06/09 13:34:00  OM
-      VC-Controls entfernt
-
-
-      Rev 1.42   09 Jun 1998 15:34:00   OM
-   VC-Controls entfernt
-
-      Rev 1.41   28 Nov 1997 20:05:50   MA
-   includes
-
-      Rev 1.40   24 Nov 1997 14:53:58   MA
-   includes
-
-      Rev 1.39   18 Nov 1997 10:35:12   OM
-   Lauftext nur im HTML-Mode zeichengebunden einfuegen
-
-      Rev 1.38   03 Nov 1997 13:24:22   MA
-   precomp entfernt
-
-      Rev 1.37   05 Sep 1997 11:55:04   MH
-   chg: header
-
-      Rev 1.36   07 Apr 1997 13:39:28   MH
-   chg: header
-
-      Rev 1.35   07 Mar 1997 17:13:38   OM
-   Lauftext unendlich oft durchlaufen
-
-      Rev 1.34   07 Mar 1997 17:05:12   OM
-   Lauftext unendlich oft durchlaufen
-
-      Rev 1.33   24 Feb 1997 16:55:48   OM
-   Lauftext-Objekt sofort editieren
-
-      Rev 1.32   14 Feb 1997 14:00:34   OM
-   lauftextobjekt zeichengebunden
-
-      Rev 1.31   11 Feb 1997 14:03:32   OM
-   Lauftext im Webmode
-
-      Rev 1.30   10 Feb 1997 17:29:42   OM
-   Lauftext
-
-      Rev 1.29   09 Sep 1996 21:13:44   MH
-   Umstellungen wg. internal Compiler Errors
-
-      Rev 1.28   28 Aug 1996 13:39:22   OS
-   includes
-
-      Rev 1.27   14 Aug 1996 11:31:00   JP
-   svdraw.hxx entfernt
-
-      Rev 1.26   07 Aug 1996 14:59:24   JP
-   Umstellung fuer Upd. 330
-
-      Rev 1.25   24 Nov 1995 16:58:04   OM
-   PCH->PRECOMPILED
-
-      Rev 1.24   15 Nov 1995 18:35:28   OM
-   Virtuelle Fkt rausgeworfen
-
-      Rev 1.23   14 Nov 1995 17:36:56   OM
-   Cast entfernt
-
-      Rev 1.22   08 Nov 1995 15:29:48   OM
-   Invalidate-Reihenfolge geaendert
-
-      Rev 1.21   08 Nov 1995 14:15:50   OS
-   Change => Set
-
-      Rev 1.20   08 Nov 1995 10:35:42   OM
-   Invalidate optimiert
-
-      Rev 1.19   26 Oct 1995 16:41:36   OM
-   Leere Textobjekte beim Verlassen loeschen
-
-      Rev 1.18   08 Oct 1995 18:06:46   OM
-   Textobjekt nach einfuegen oeffnen
-
-*************************************************************************/
 
 
