@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:19:50 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:32:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1860,7 +1860,9 @@ void SwInsertDBColAutoPilot::Commit()
         Sequence<PropertyValue> aSubValues(aSubNodeNames.getLength());
         PropertyValue* pSubValues = aSubValues.getArray();
         const rtl::OUString* pSubNodeNames = aSubNodeNames.getConstArray();
-        for(sal_Int32 i = 0; i < aSubNodeNames.getLength(); i++)
+        sal_Int32 i;
+
+        for( i = 0; i < aSubNodeNames.getLength(); i++)
             pSubValues[i].Name = pSubNodeNames[i];
         pSubValues[0].Value <<= pColumn->sColumn;
         pSubValues[1].Value <<= i;
