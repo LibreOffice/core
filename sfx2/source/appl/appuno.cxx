@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-19 15:35:33 $
+ *  last change: $Author: mba $ $Date: 2001-06-21 14:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,19 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
     {
         const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
         String aName = rProp.Name ;
+
+        if ( pSlot->GetType()->Type() != TYPE(SfxVoidItem) )
+        {
+            if ( aName.CompareToAscii( pSlot->pName+1 ) == COMPARE_EQUAL )
+            {
+                SfxPoolItem* pItem = pSlot->GetType()->CreateItem();
+                pItem->SetWhich( nSlotId );
+                if ( pItem->PutValue( rProp.Value ) )
+                    rSet.Put( *pItem );
+                delete pItem;
+                break;
+            }
+        }
 
         sal_uInt16 nArgs;
         for ( nArgs=0; nArgs<pSlot->nArgDefCount; nArgs++ )
