@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-17 13:25:24 $
+ *  last change: $Author: mt $ $Date: 2001-07-27 11:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,16 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, SvKeyValueIterator* pHTTPHeaderAt
     nNumberingLevel = 0;
     pNumbers = 0;
     bFieldsInserted = FALSE;
-    DBG_ASSERT( pHTTPHeaderAttrs, "EditHTMLParser: no HTTPHeaderAttrs" );
+
     if ( pHTTPHeaderAttrs )
         SetEncodingByHTTPHeader( pHTTPHeaderAttrs );
+
+#ifdef EDITDEBUG
+    SvFileStream aStream( String( RTL_CONSTASCII_STRINGPARAM( "d:\\html.log" ) ), STREAM_WRITE|STREAM_TRUNC );
+    ULONG nP = rIn.Tell();
+    aStream << rIn;
+    rIn.Seek( nP );
+#endif
 }
 
 EditHTMLParser::~EditHTMLParser()
@@ -144,10 +151,38 @@ void EditHTMLParser::NextToken( int nToken )
         HTML_TOKEN_IDS xID = (HTML_TOKEN_IDS)nToken;
     #endif
 
-
     switch( nToken )
     {
+    case HTML_META:
+    {
+        const HTMLOptions *pOptions = GetOptions();
+        USHORT nArrLen = pOptions->Count();
+        BOOL bEquiv = FALSE;
+        for ( USHORT i = 0; i < nArrLen; i++ )
+        {
+            const HTMLOption *pOption = (*pOptions)[i];
+            switch( pOption->GetToken() )
+            {
+                case HTML_O_HTTPEQUIV:
+                {
+                    bEquiv = TRUE;
+                }
+                break;
+                case HTML_O_CONTENT:
+                {
+                    if ( bEquiv )
+                    {
+                        rtl_TextEncoding eEnc = GetEncodingByMIME( pOption->GetString() );
+                        if ( eEnc != RTL_TEXTENCODING_DONTKNOW )
+                            SetSrcEncoding( eEnc );
+                    }
+                }
+                break;
+            }
+        }
 
+    }
+    break;
     case HTML_PLAINTEXT_ON:
     case HTML_PLAINTEXT2_ON:
         bInPara = TRUE;
