@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: af $ $Date: 2002-05-24 09:08:31 $
+ *  last change: $Author: af $ $Date: 2002-05-30 15:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ void AccessibleShape::Init (void)
     // accessible.
     SdrView* pView = maShapeTreeInfo.GetSdrView ();
     const Window* pWindow = maShapeTreeInfo.GetWindow ();
-    if (pView != NULL && pWindow != NULL)
+    if (pView != NULL && pWindow != NULL && mxShape.is())
     {
         SvxEditSource* pEditSource = new SvxTextEditSource (
             *GetSdrObjectFromXShape (mxShape), *pView, *pWindow);
@@ -234,10 +234,10 @@ void AccessibleShape::UpdateStates (void)
                 {
                     uno::Any aValue = xSet->getPropertyValue (
                         OUString::createFromAscii ("FillStyle"));
-                        drawing::FillStyle aFillStyle;
-                        aValue >>= aFillStyle;
-                        if (aFillStyle == drawing::FillStyle_SOLID)
-                            bShapeIsOpaque = true;
+                    drawing::FillStyle aFillStyle;
+                    aValue >>= aFillStyle;
+                    if (aFillStyle == drawing::FillStyle_SOLID)
+                        bShapeIsOpaque = true;
                 }
                 catch (::com::sun::star::beans::UnknownPropertyException)
                 {
@@ -898,7 +898,8 @@ void SAL_CALL
 
         if (aEvent.Source == mxShape)
         {
-            uno::Reference<beans::XPropertySet> xShapeProperties (mxShape, uno::UNO_QUERY);
+            uno::Reference<beans::XPropertySet> xShapeProperties (
+                mxShape, uno::UNO_QUERY);
             SetState (AccessibleStateType::DEFUNC);
             mxShape = NULL;
 
@@ -913,6 +914,13 @@ void SAL_CALL
                 delete mpText;
                 mpText = NULL;
             }
+        }
+
+        else if (aEvent.Source ==  maShapeTreeInfo.GetModelBroadcaster())
+        {
+            // Remove reference to model broadcaster to allow it to pass
+            // away.
+            maShapeTreeInfo.SetModelBroadcaster(NULL);
         }
     }
     catch (uno::RuntimeException e)
@@ -1265,6 +1273,10 @@ void AccessibleShape::disposing (void)
     if (xComponent.is())
         xComponent->removeEventListener (this);
 
+    if (maShapeTreeInfo.GetModelBroadcaster().is())
+        maShapeTreeInfo.GetModelBroadcaster()->removeEventListener (
+            static_cast<document::XEventListener*>(this));
+
     // Release the child containers.
     if (mpChildrenManager != NULL)
     {
@@ -1277,8 +1289,9 @@ void AccessibleShape::disposing (void)
         mpText = NULL;
     }
 
-    // Cleanup.
+    // Cleanup.  Remove references to objects to allow them to be destroyed.
     mxShape = NULL;
+    maShapeTreeInfo = AccessibleShapeTreeInfo();
 
     // Call base classes.
     AccessibleContextBase::dispose ();
