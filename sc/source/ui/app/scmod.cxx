@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 19:09:11 $
+ *  last change: $Author: er $ $Date: 2001-05-16 10:59:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -983,6 +983,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                             rOldOpt.GetStdPrecision() != rNewOpt.GetStdPrecision())
                          || rOldOpt.IsMatchWholeCell() != rNewOpt.IsMatchWholeCell()
                          || rOldOpt.GetYear2000()   != rNewOpt.GetYear2000()
+                         || rOldOpt.IsFormulaRegexEnabled() != rNewOpt.IsFormulaRegexEnabled()
                          );
             pDoc->SetDocOptions( rNewOpt );
             pDocSh->SetDocumentModified();
