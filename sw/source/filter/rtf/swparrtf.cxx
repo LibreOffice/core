@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:09:02 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,12 +305,12 @@ SwRTFParser::SwRTFParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     int bReadNewDoc)
     : SvxRTFParser(pD->GetAttrPool(), rIn, bReadNewDoc),
     maParaStyleMapper(*pD), maCharStyleMapper(*pD), maSegments(*this),
-    maInsertedTables(*pD), aMergeBoxes(0, 5), aTblFmts(0, 10),
-    mpBookmarkStart(0), pGrfAttrSet(0), pTableNode(0), pOldTblNd(0),
-    pSttNdIdx(0), pRegionEndIdx(0), pDoc(pD),
+    maInsertedTables(*pD),
+    aMergeBoxes(0, 5), aTblFmts(0, 10), mpBookmarkStart(0), pGrfAttrSet(0),
+    pTableNode(0), pOldTblNd(0), pSttNdIdx(0), pRegionEndIdx(0), pDoc(pD),
     pRelNumRule(new SwRelNumRuleSpaces(*pD, bReadNewDoc)), nAktPageDesc(0),
     nAktFirstPageDesc(0), nAktBox(0), nInsTblRow(USHRT_MAX),
-    nNewNumSectDef(USHRT_MAX)
+    nNewNumSectDef(USHRT_MAX), nRowsToRepeat(0)
 {
     mbIsFootnote = mbReadNoTbl = bReadSwFly = bSwPageDesc = bStyleTabValid =
     bInPgDscTbl = bNewNumList = false;
