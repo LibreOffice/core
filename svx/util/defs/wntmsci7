@@ -23703,3 +23703,4 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?ChangePreviewText@SvxNumberFormatTabPage@@AAEXG@Z
 ?GetExpColorString@SvxNumberFormatTabPage@@AAE?AVString@@AAPAVColor@@ABV2@F@Z
 ?MakePreviewText@SvxNumberFormatTabPage@@AAEXABVString@@@Z
+?XOutCreatePolygonBezier@@YA?AVPolygon@@ABVXPolygon@@PAVOutputDevice@@@Z
