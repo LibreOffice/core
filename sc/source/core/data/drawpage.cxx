@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-11 18:02:18 $
+ *  last change: $Author: nn $ $Date: 2001-03-16 19:52:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,7 @@
 #include "drawpage.hxx"
 #include "drwlayer.hxx"
 #include "document.hxx"
+#include "pageuno.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -312,6 +313,11 @@ void __EXPORT ScDrawPage::RequestBasic()
         SetBasic(pDocSh->GetBasic());
 }
 
+// -----------------------------------------------------------------------
 
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ScDrawPage::createUnoPage()
+{
+    return static_cast<cppu::OWeakObject*>( new ScPageObj( this ) );
+}
 
 
