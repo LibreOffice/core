@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:33:15 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,8 @@ Reference<XAccessible> SAL_CALL
             return mxAccessibleOLEObject;
 
     throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString::createFromAscii ("no child with index ") + nIndex,
+        ::rtl::OUString::createFromAscii ("no child with index ")
+        + rtl::OUString::valueOf(nIndex),
         NULL);
 }
 
