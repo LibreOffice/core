@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:01:46 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:45:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -769,11 +769,20 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         rNumFmt.SetIncludeUpperLevels( nUpperLevel );
     }
 
-    rNumFmt.SetAbsLSpace( aLVL.nDxaLeft );
-
     if( 0 < aLVL.nDxaLeft1 )
         aLVL.nDxaLeft1 = aLVL.nDxaLeft1 * -1;
-    rNumFmt.SetFirstLineOffset( aLVL.nDxaLeft1 );
+
+    if (eAdj == SVX_ADJUST_RIGHT)
+    {
+        rNumFmt.SetAbsLSpace(aLVL.nDxaLeft);
+        rNumFmt.SetFirstLineOffset(-aLVL.nDxaLeft);
+        rNumFmt.SetCharTextDistance(-aLVL.nDxaLeft1);
+    }
+    else
+    {
+        rNumFmt.SetAbsLSpace( aLVL.nDxaLeft );
+        rNumFmt.SetFirstLineOffset(aLVL.nDxaLeft1);
+    }
 
     return true;
 }
@@ -1263,30 +1272,6 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 //
                 for (nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
                     delete aItemSet[ nLevel ];
-                //
-                // 2.2.5 falls diese NumRule identische Einstellungen und
-                //       Formatierungen hat wie ihre Parent-Rule, loeschen
-                //       wir sie wieder und nehmen stattdessen die alte.
-                //
-                if( LFOequaltoLST( *pLFOInfo ) )
-                {
-                    // 2.2.5.1 ggfs die an den einzelnen Leveln haengenden
-                    //         Char-Formate freigeben und loeschen
-                    //
-                    for (nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
-                    {
-                        if( aFlagsNewCharFmt & (1 << nLevel) )
-                        {
-                            rDoc.DelCharFmt(
-                                pLFOInfo->pNumRule->Get(nLevel ).GetCharFmt());
-                        }
-                    }
-                    //
-                    // 2.2.5.2 jetzt die NumRule freigeben und die alte nehmen
-                    //
-                    rDoc.DelNumRule( pLFOInfo->pNumRule->GetName() );
-                    pLFOInfo->pNumRule = pParentNumRule;
-                }
                 bOk = true;
             }
         }
