@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAccessibleTextGraphicObject.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,30 +60,30 @@
  ************************************************************************/
 package mod._sw;
 
-import lib.TestCase;
-import com.sun.star.lang.XMultiServiceFactory;
-import lib.TestParameters;
 import java.io.PrintWriter;
-import lib.TestEnvironment;
-import com.sun.star.uno.XInterface;
-import util.SOfficeFactory;
+
 import lib.StatusException;
-import com.sun.star.text.XTextDocument;
-import util.WriterTools;
-import com.sun.star.frame.XController;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
 import util.AccessibilityTools;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.frame.XModel;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.awt.XWindow;
-import com.sun.star.accessibility.XAccessible;
+import util.SOfficeFactory;
+import util.WriterTools;
 import util.utils;
-import com.sun.star.drawing.XDrawPageSupplier;
-import com.sun.star.drawing.XDrawPage;
-import com.sun.star.text.XText;
-import com.sun.star.text.XTextCursor;
-import com.sun.star.text.XTextContent;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XWindow;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextContent;
+import com.sun.star.text.XTextCursor;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 import com.sun.star.view.XViewSettingsSupplier;
 
 /**
