@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 14:47:55 $
+ *  last change: $Author: thb $ $Date: 2001-08-01 16:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ SvxOpenGraphicDialog::~SvxOpenGraphicDialog()
 
 GraphicFilter* GetGrfFilter();
 
-short SvxOpenGraphicDialog::Execute()
+ErrCode SvxOpenGraphicDialog::Execute()
 {
     USHORT  nImpRet;
     BOOL    bQuitLoop(FALSE);
@@ -308,7 +308,7 @@ short SvxOpenGraphicDialog::Execute()
     }
 
     // cancel
-    return -1;
+    return ERRCODE_ABORT;
 }
 
 
@@ -383,7 +383,7 @@ sal_Bool SvxOpenGraphicDialog::IsAsLink() const
 }
 
 
-int SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
+ErrCode SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
 {
     return mpImpl->aFileDlg.GetGraphic(rGraphic);
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-22 17:26:31 $
+ *  last change: $Author: thb $ $Date: 2001-08-01 16:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,28 +67,55 @@
 #include <svtools/filter.hxx>
 #endif
 
-
 struct  SvxOpenGrf_Impl;
+
+/**
+   The class SvxOpenGraphicDialog encapsulates functionality to display
+   an "insert graphics" dialog, as it is used e.g. in Draw or Writer.
+   The dialog has a preview graphic and a "link" checkbox, by which the user
+   can decide whether the document should only store a link to the selected graphic.
+   This class is intended as a bare-bones replacement for the old SvxInsertGraphicDialog,
+   with basically the same functionality.
+ */
 
 class SvxOpenGraphicDialog
 {
 public:
+    /// New "insert graphics" dialog with given title
     SvxOpenGraphicDialog    ( const String& rTitle );
     ~SvxOpenGraphicDialog   ();
 
-    short                   Execute();
+    /**
+       Displays the dialog
 
+       @return ERRCODE_NONE on success, ERRCODE_ABORT if user cancels, error of GraphicFilter::ImportGraphic() otherwise
+    */
+    ErrCode                 Execute();
+
+    /// Set initially displayed path
     void                    SetPath( const String& rPath );
+    /// Set initially displayed path and state of the "link" checkbox
     void                    SetPath( const String& rPath, sal_Bool bLinkState );
+    /// Get displayed path
     String                  GetPath() const;
 
-    int                     GetGraphic(Graphic&) const;
+    /**
+        Load selected graphic file (error if none selected)
 
+        @return ERRCODE_NONE on success, error of GraphicFilter::ImportGraphic() otherwise
+     */
+    ErrCode                 GetGraphic(Graphic&) const;
+
+    /// Enable/disable "link" checkbox
     void                    EnableLink(sal_Bool);
+    /// Set displayed "link" checkbox state
     void                    AsLink(sal_Bool);
+    /// Query displayed "link" checkbox state
     sal_Bool                IsAsLink() const;
 
+    /// Query displayed filter string
     String                  GetCurrentFilter() const;
+    /// Set displayed filter (chosen from the graphic filter list)
     void                    SetCurrentFilter(const String&);
 
 private:
@@ -96,6 +123,7 @@ private:
     SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&);
     SvxOpenGraphicDialog& operator = ( const SvxOpenGraphicDialog & );
 
+    // safe pointer for impl class (no changes, automatic destruction)
     const std::auto_ptr< SvxOpenGrf_Impl >  mpImpl;
 };
 
