@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsethelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2001-03-01 07:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,11 +297,19 @@ void SAL_CALL ResultSetImplHelper::connectToCache(
     Reference< XSourceInitialization > xTarget( xCache, UNO_QUERY );
     if ( xTarget.is() )
     {
-        Reference< XCachedDynamicResultSetStubFactory > xStubFactory(
-            m_xSMgr->createInstance(
-                OUString::createFromAscii(
-                    "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
-            UNO_QUERY );
+        Reference< XCachedDynamicResultSetStubFactory > xStubFactory;
+        try
+        {
+            xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
+                m_xSMgr->createInstance(
+                    OUString::createFromAscii(
+                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
+                UNO_QUERY );
+        }
+        catch ( Exception const & )
+        {
+        }
+
         if ( xStubFactory.is() )
         {
             xStubFactory->connectToCache(
