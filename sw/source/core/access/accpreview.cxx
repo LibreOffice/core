@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpreview.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-22 11:38:22 $
+ *  last change: $Author: mib $ $Date: 2002-07-09 12:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #endif
 
 
-const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentView";
-const sal_Char sPreviewImplementationName[] = "SwAccessibleDocumentPreview";
+const sal_Char sServiceName[] = "drafts.com.sun.star.text.AccessibleTextDocumentPageView";
+const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentPageView";
 
 
 // using namespace ::drafts::com::sun::star::accessibility;
@@ -100,20 +100,23 @@ SwAccessiblePreview::~SwAccessiblePreview()
 OUString SwAccessiblePreview::getImplementationName( )
     throw( RuntimeException )
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( sPreviewImplementationName ) );
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( sImplementationName ) );
 }
 
 sal_Bool SwAccessiblePreview::supportsService( const OUString& rServiceName )
     throw( RuntimeException )
 {
     return rServiceName.equalsAsciiL(
-        RTL_CONSTASCII_STRINGPARAM( sServiceName) );
+                RTL_CONSTASCII_STRINGPARAM( sServiceName) ) ||
+        rServiceName.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM( sAccessibleServiceName ) );
 }
 
 Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
     throw( RuntimeException )
 {
-    Sequence<OUString> aSeq( 1 );
+    Sequence<OUString> aSeq( 2 );
     aSeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( sServiceName ) );
+    aSeq[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( sAccessibleServiceName ) );
     return aSeq;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctextframe.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2002-04-29 12:16:06 $
+ *  last change: $Author: mib $ $Date: 2002-07-09 12:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,8 @@ using namespace ::rtl;
 
 using utl::AccessibleRelationSetHelper;
 
-const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextFrameView";
-const sal_Char sImplementationName[] = "SwAccessibleTextFrame";
+const sal_Char sServiceName[] = "drafts.com.sun.star.text.AccessibleTextFrameView";
+const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleTextFrameView";
 
 SwAccessibleTextFrame::SwAccessibleTextFrame(
         SwAccessibleMap *pMap,
@@ -156,15 +156,19 @@ sal_Bool SAL_CALL SwAccessibleTextFrame::supportsService(
         const ::rtl::OUString& sTestServiceName)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return sTestServiceName.equalsAsciiL( sServiceName, sizeof(sServiceName)-1 );
+    return sTestServiceName.equalsAsciiL( sServiceName,
+                                          sizeof(sServiceName)-1 ) ||
+           sTestServiceName.equalsAsciiL( sAccessibleServiceName,
+                                             sizeof(sAccessibleServiceName)-1 );
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleTextFrame::getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException )
 {
-    Sequence< OUString > aRet(1);
+    Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
+    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
     return aRet;
 }
 

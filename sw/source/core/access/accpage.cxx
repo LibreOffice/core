@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-29 14:58:09 $
+ *  last change: $Author: mib $ $Date: 2002-07-09 12:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@ using namespace ::drafts::com::sun::star::accessibility;
 using ::rtl::OUString;
 using ::drafts::com::sun::star::accessibility::XAccessibleContext;
 
-const sal_Char sServiceName[] = "com.sun.star.table.AccessibleCellView";
-const sal_Char sImplementationName[] = "SwAccessibleCell";
+const sal_Char sServiceName[] = "drafts.com.sun.star.text.AccessiblePageView";
+const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessiblePageView";
 
 sal_Bool SwAccessiblePage::IsSelected()
 {
@@ -208,15 +208,18 @@ OUString SwAccessiblePage::getImplementationName( )
 sal_Bool SwAccessiblePage::supportsService( const OUString& rServiceName)
     throw( RuntimeException )
 {
-    return rServiceName.equalsAsciiL( sServiceName, sizeof(sServiceName)-1 );
+    return rServiceName.equalsAsciiL( sServiceName, sizeof(sServiceName)-1 ) ||
+           rServiceName.equalsAsciiL( sAccessibleServiceName,
+                                   sizeof(sAccessibleServiceName)-1 );
 }
 
 Sequence<OUString> SwAccessiblePage::getSupportedServiceNames( )
     throw( RuntimeException )
 {
-    Sequence< OUString > aRet(1);
+    Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
+    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
     return aRet;
 }
 

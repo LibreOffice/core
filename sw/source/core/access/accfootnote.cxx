@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accfootnote.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-18 12:49:59 $
+ *  last change: $Author: mib $ $Date: 2002-07-09 12:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::accessibility;
 using namespace ::rtl;
 
-const sal_Char sServiceNameFootnote[] = "com.sun.star.text.AccessibleFootnoteView";
-const sal_Char sServiceNameEndnote[] = "com.sun.star.text.AccessibleEndnoteView";
-const sal_Char sImplementationName[] = "SwAccessibleFootnote";
+const sal_Char sServiceNameFootnote[] = "drafts.com.sun.star.text.AccessibleFootnoteView";
+const sal_Char sServiceNameEndnote[] = "drafts.com.sun.star.text.AccessibleEndnoteView";
+const sal_Char sImplementationNameFootnote[] = "com.sun.star.comp.Writer.SwAccessibleFootnote";
+const sal_Char sImplementationNameEndnote[] = "com.sun.star.comp.Writer.SwAccessibleEndnote";
 
 void SwAccessibleFootnote::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
@@ -182,14 +183,20 @@ OUString SAL_CALL SwAccessibleFootnote::getAccessibleDescription (void)
 OUString SAL_CALL SwAccessibleFootnote::getImplementationName()
         throw( RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
+    if( AccessibleRole::ENDNOTE == GetRole() )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationNameEndnote));
+    else
+        return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationNameFootnote));
 }
 
 sal_Bool SAL_CALL SwAccessibleFootnote::supportsService(
         const ::rtl::OUString& sTestServiceName)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    if( AccessibleRole::ENDNOTE == GetRole() )
+    if( sTestServiceName.equalsAsciiL( sAccessibleServiceName,
+                                       sizeof(sAccessibleServiceName)-1 ) )
+        return sal_True;
+    else if( AccessibleRole::ENDNOTE == GetRole() )
         return sTestServiceName.equalsAsciiL( sServiceNameEndnote, sizeof(sServiceNameEndnote)-1 );
     else
         return sTestServiceName.equalsAsciiL( sServiceNameFootnote, sizeof(sServiceNameFootnote)-1 );
@@ -199,12 +206,13 @@ sal_Bool SAL_CALL SwAccessibleFootnote::supportsService(
 Sequence< OUString > SAL_CALL SwAccessibleFootnote::getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException )
 {
-    Sequence< OUString > aRet(1);
+    Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     if( AccessibleRole::ENDNOTE == GetRole() )
         pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceNameEndnote) );
     else
         pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceNameFootnote) );
+    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
     return aRet;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accheaderfooter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 13:45:32 $
+ *  last change: $Author: mib $ $Date: 2002-07-09 12:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,9 +101,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::accessibility;
 using namespace ::rtl;
 
-const sal_Char sServiceNameHeader[] = "com.sun.star.text.AccessibleHeaderView";
-const sal_Char sServiceNameFooter[] = "com.sun.star.text.AccessibleFooterView";
-const sal_Char sImplementationName[] = "SwAccessibleHeaderFooter";
+const sal_Char sServiceNameHeader[] = "drafts.com.sun.star.text.AccessibleHeaderView";
+const sal_Char sServiceNameFooter[] = "drafts.com.sun.star.text.AccessibleFooterView";
+const sal_Char sImplementationNameHeader[] = "com.sun.star.comp.Writer.SwAccessibleHeader";
+const sal_Char sImplementationNameFooter[] = "com.sun.star.comp.Writer.SwAccessibleFooter";
 
 void SwAccessibleHeaderFooter::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
@@ -159,14 +160,20 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription (void)
 OUString SAL_CALL SwAccessibleHeaderFooter::getImplementationName()
         throw( RuntimeException )
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
+    if( AccessibleRole::HEADER == GetRole() )
+        return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationNameHeader));
+    else
+        return OUString(RTL_CONSTASCII_USTRINGPARAM(sImplementationNameFooter));
 }
 
 sal_Bool SAL_CALL SwAccessibleHeaderFooter::supportsService(
         const ::rtl::OUString& sTestServiceName)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    if( AccessibleRole::HEADER == GetRole() )
+    if( sTestServiceName.equalsAsciiL( sAccessibleServiceName,
+                                       sizeof(sAccessibleServiceName)-1 ) )
+        return sal_True;
+    else if( AccessibleRole::HEADER == GetRole() )
         return sTestServiceName.equalsAsciiL( sServiceNameHeader, sizeof(sServiceNameHeader)-1 );
     else
         return sTestServiceName.equalsAsciiL( sServiceNameFooter, sizeof(sServiceNameFooter)-1 );
@@ -176,11 +183,12 @@ sal_Bool SAL_CALL SwAccessibleHeaderFooter::supportsService(
 Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException )
 {
-    Sequence< OUString > aRet(1);
+    Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     if( AccessibleRole::HEADER == GetRole() )
         pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceNameHeader) );
     else
         pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceNameFooter) );
+    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
     return aRet;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-24 13:40:29 $
+ *  last change: $Author: mib $ $Date: 2002-07-09 12:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,8 +127,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::accessibility;
 using namespace ::rtl;
 
-const sal_Char sServiceName[] = "com.sun.star.table.AccessibleCellView";
-const sal_Char sImplementationName[] = "SwAccessibleCell";
+const sal_Char sServiceName[] = "drafts.com.sun.star.table.AccessibleCellView";
+const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleCellView";
 
 sal_Bool SwAccessibleCell::IsSelected()
 {
@@ -302,15 +302,19 @@ sal_Bool SAL_CALL SwAccessibleCell::supportsService(
         const ::rtl::OUString& sTestServiceName)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return sTestServiceName.equalsAsciiL( sServiceName, sizeof(sServiceName)-1 );
+    return sTestServiceName.equalsAsciiL( sServiceName,
+                                          sizeof(sServiceName)-1 ) ||
+           sTestServiceName.equalsAsciiL( sAccessibleServiceName,
+                                             sizeof(sAccessibleServiceName)-1 );
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleCell::getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException )
 {
-    Sequence< OUString > aRet(1);
+    Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
+    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
     return aRet;
 }
 

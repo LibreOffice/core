@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-14 11:15:54 $
+ *  last change: $Author: mib $ $Date: 2002-07-09 12:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,10 +126,9 @@
 #include <pagefrm.hxx>
 #endif
 
-const sal_Char sServiceName[] = "com.sun.star.text.AccessibleTextDocumentView";
-const sal_Char sImplementationName[] = "SwAccessibleDocument";
+const sal_Char sServiceName[] = "drafts.com.sun.star.text.AccessibleTextDocumentView";
+const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleDocumentView";
 
-const sal_Char sPreviewImplementationName[] = "SwAccessibleDocumentPreview";
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -445,15 +444,19 @@ sal_Bool SAL_CALL SwAccessibleDocument::supportsService(
         const ::rtl::OUString& sTestServiceName)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return sTestServiceName.equalsAsciiL( sServiceName, sizeof(sServiceName)-1 );
+    return sTestServiceName.equalsAsciiL( sServiceName,
+                                          sizeof(sServiceName)-1 ) ||
+           sTestServiceName.equalsAsciiL( sAccessibleServiceName,
+                                             sizeof(sAccessibleServiceName)-1 );
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException )
 {
-    Sequence< OUString > aRet(1);
+    Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
+    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
     return aRet;
 }
 

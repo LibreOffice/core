@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-07 07:32:53 $
+ *  last change: $Author: mib $ $Date: 2002-07-09 12:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@ class SwAccessibleMap;
 class SwCrsrShell;
 namespace utl { class AccessibleStateSetHelper; };
 namespace accessibility { class AccessibleShape; }
+
+const sal_Char sAccessibleServiceName[] = "com.sun.star.accessibility.Accessible";
 
 class SwAccessibleContext :
     public ::cppu::WeakImplHelper5<

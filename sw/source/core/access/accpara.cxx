@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dvo $ $Date: 2002-07-05 19:07:12 $
+ *  last change: $Author: mib $ $Date: 2002-07-09 12:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,8 @@ namespace com { namespace sun { namespace star {
 } } }
 
 
-const sal_Char sServiceName[] = "com.sun.star.text.AccessibleParagraphView";
-const sal_Char sImplementationName[] = "SwAccessibleParagraph";
+const sal_Char sServiceName[] = "drafts.com.sun.star.text.AccessibleParagraphView";
+const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessibleParagraphView";
 const xub_StrLen MAX_DESC_TEXT_LEN = 40;
 const SwTxtNode* SwAccessibleParagraph::GetTxtNode() const
 {
@@ -938,15 +938,19 @@ sal_Bool SAL_CALL SwAccessibleParagraph::supportsService(
         const ::rtl::OUString& sTestServiceName)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return sTestServiceName.equalsAsciiL( sServiceName, sizeof(sServiceName)-1 );
+    return sTestServiceName.equalsAsciiL( sServiceName,
+                                          sizeof(sServiceName)-1 ) ||
+           sTestServiceName.equalsAsciiL( sAccessibleServiceName,
+                                             sizeof(sAccessibleServiceName)-1 );
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleParagraph::getSupportedServiceNames()
         throw( ::com::sun::star::uno::RuntimeException )
 {
-    Sequence< OUString > aRet(1);
+    Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
     pArray[0] = OUString( RTL_CONSTASCII_USTRINGPARAM(sServiceName) );
+    pArray[1] = OUString( RTL_CONSTASCII_USTRINGPARAM(sAccessibleServiceName) );
     return aRet;
 }
 
