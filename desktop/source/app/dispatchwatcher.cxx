@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:21:40 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 11:07:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,25 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
             }
 
             // This is a synchron loading of a component so we don't have to deal with our statusChanged listener mechanism.
-            xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, aTarget, 0, aArgs ), UNO_QUERY );
+
+            try
+            {
+                xDoc = Reference < XPrintable >( xDesktop->loadComponentFromURL( aName, aTarget, 0, aArgs ), UNO_QUERY );
+            }
+            catch ( ::com::sun::star::lang::IllegalArgumentException& iae)
+            {
+                OUString aMsg = OUString::createFromAscii(
+                    "Dispatchwatcher IllegalArgumentException while calling loadComponentFromURL: ")
+                    + iae.Message;
+                OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+            }
+            catch (com::sun::star::io::IOException& ioe)
+            {
+                OUString aMsg = OUString::createFromAscii(
+                    "Dispatchwatcher IOException while calling loadComponentFromURL: ")
+                    + ioe.Message;
+                OSL_ENSURE( sal_False, OUStringToOString(aMsg, RTL_TEXTENCODING_ASCII_US).getStr());
+            }
             if ( aDispatchRequest.aRequestType == REQUEST_OPEN ||
                  aDispatchRequest.aRequestType == REQUEST_VIEW ||
                  aDispatchRequest.aRequestType == REQUEST_START ||
@@ -492,3 +510,11 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& aEve
 }
 
 }
+
+
+
+
+
+
+
+
