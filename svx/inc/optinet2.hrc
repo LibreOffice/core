@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:47:55 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,12 @@
 #define CB_SEC_RECOMMREADONLY       14
 #define CB_SEC_RECORDCHANGES        15
 #define PB_SEC_PROTRECORDS          16
+#define FI_SEC_SAVEORSENDDOCS       17
+#define FI_SEC_SIGNDOCS             18
+#define FI_SEC_PRINTDOCS            19
+#define FI_SEC_CREATEPDF            20
+#define FI_SEC_REMOVEPERSINFO       21
+#define FI_SEC_RECOMMPASSWD         22
 
 #define STR_SEC_PROTRECORDS         10
 #define STR_SEC_UNPROTRECORDS       11
