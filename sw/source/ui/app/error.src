@@ -2,9 +2,9 @@
  *
  *  $RCSfile: error.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 22:59:37 $
+ *  last change: $Author: kz $ $Date: 2001-06-15 21:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,7 +554,7 @@ Resource RID_SW_ERRHDL
         TEXT[ dutch ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ french ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
         TEXT[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posición $(ARG2)(fila,columna)";
-        TEXT[ italian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
         TEXT[ danish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ swedish ] = "Det har upptäckts ett formatfel i filen:  deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
         TEXT[ polish ] = "Wykryto b³¹d w formacie dokumentu podrzêdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
@@ -712,7 +712,7 @@ Resource RID_SW_ERRHDL
         TEXT[ dutch ] = "Error in writing sub-document $(ARG1)";
         TEXT[ french ] = "Erreur d'écriture dans le sous-document $(ARG1)";
         TEXT[ spanish ] = "Error al escribir en el documento parcial $(ARG1)";
-        TEXT[ italian ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ italian ] = "Errore di scrittura nel sottodocumento $(ARG1)";
         TEXT[ danish ] = "Error in writing sub-document $(ARG1)";
         TEXT[ swedish ] = "Fel när deldokumentet $(ARG1) skulle skrivas";
         TEXT[ polish ] = "Wyst¹pi³ b³¹d w trakcie pisania dokumentu podrzêdnego $(ARG1)";
@@ -1384,7 +1384,7 @@ Resource RID_SW_ERRHDL
         TEXT[ dutch ] = "Error in writing sub-document $(ARG1)";
         TEXT[ french ] = "Erreur d'écriture dans le sous-document $(ARG1)";
         TEXT[ spanish ] = "Error de escritura en documento parcial $(ARG1)";
-        TEXT[ italian ] = "Error in writing sub-document $(ARG1)";
+        TEXT[ italian ] = "Errore di scrittura nel sottodocumento $(ARG1)";
         TEXT[ danish ] = "Error in writing sub-document $(ARG1)";
         TEXT[ swedish ] = "Fel när deldokumentet $(ARG1) skulle skrivas";
         TEXT[ polish ] = "Wyst¹pi³ b³¹d w trakcie pisania dokumentu podrzêdnego $(ARG1)";
@@ -1409,7 +1409,7 @@ Resource RID_SW_ERRHDL
         TEXT[ dutch ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ french ] = "Erreur de format dans le sous-document $(ARG1), position $(ARG2)(ligne,colonne), du fichier.";
         TEXT[ spanish ] = "En el documento parcial $(ARG1) del archivo existe un error de formato en la posición $(ARG2)(fila,columna)";
-        TEXT[ italian ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
+        TEXT[ italian ] = "Errore di formato nel sottodocumento $(ARG1) del file nel punto $(ARG2)(riga,colonna)";
         TEXT[ danish ] = "File format error in sub-document $(ARG1) at $(ARG2)(row,col)";
         TEXT[ swedish ] = "Det har upptäckts ett formatfel i filen: deldokument $(ARG1), position $(ARG2)(rad,kolumn)";
         TEXT[ polish ] = "Wykryto b³¹d w formacie dokumentu podrzêdnego $(ARG1) na pozycji $(ARG2)(wiersz, kolumna)";
@@ -1424,6 +1424,7 @@ Resource RID_SW_ERRHDL
         TEXT[ finnish ] = "Formatfehler in Teildokument $(ARG1) an Position $(ARG2)(Zeile,Spalte) in der Datei entdeckt";
     };
 };
+
 
 
 
