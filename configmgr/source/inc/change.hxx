@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:32:26 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:13:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,14 @@
 #ifndef CONFIGMGR_CHANGE_HXX
 #define CONFIGMGR_CHANGE_HXX
 
+#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
+#include "valuenode.hxx"
+#endif
 #ifndef CONFIGMGR_TREESEGMENT_HXX
 #include "treesegment.hxx"
 #endif
 #ifndef CONFIGMGR_TREEADDRESS_HXX
 #include "treeaddress.hxx"
-#endif
-#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
-#include "valuenode.hxx"
 #endif
 
 #ifndef _SAL_TYPES_H_
