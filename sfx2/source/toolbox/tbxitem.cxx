@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-10 17:05:31 $
+ *  last change: $Author: mba $ $Date: 2002-09-19 10:28:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,7 +606,7 @@ void SfxPopupWindow::StateChanged( USHORT nSID, SfxItemState eState,
     }
     else if ( bFloating )
     {
-        Show();
+        Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
     }
 }
 
