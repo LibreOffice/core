@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:33:49 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 16:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,9 +220,12 @@ namespace configmgr
             TreeRef getContextTree() const;
             /// gets the parent node of this tree ('s root node), if available
             NodeRef getContextNode() const;
-
+            #if defined(_MSC_VER) && (_MSC_VER > 1300 )
+            friend bool equalTreeRef(TreeRef const& lhs, TreeRef const& rhs);
+            #else
             friend bool equalTreeRef(TreeRef const& lhs, TreeRef const& rhs) { return lhs.m_pImpl == rhs.m_pImpl; }
-        private:
+            #endif
+    private:
             friend class Tree;
             friend class TreeImplHelper;
             TreeImpl* operator->() const { return  m_pImpl; }
@@ -231,6 +234,10 @@ namespace configmgr
 
             TreeImpl* m_pImpl;
         };
+        #if defined(_MSC_VER) && (_MSC_VER > 1300 )
+        inline bool equalTreeRef(TreeRef const& lhs, TreeRef const& rhs) { return lhs.m_pImpl == rhs.m_pImpl; }
+        #endif
+
         /** represents a hierarchy of config entries (identified by <type>NodeRef</type>s and <type>ValueRef</type>s)
 
             <p>Examples for trees include</p>
