@@ -2,9 +2,9 @@
  *
  *  $RCSfile: com_sun_star_lib_connections_pipe_PipeConnection.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:33:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,10 +284,10 @@ JNIEXPORT jint JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_rea
     };
 
     short       state   = START;
-    oslPipe     npipe;      /* native pipe */
-    void *      nbuff;      /* native read buffer */
-    jbyteArray  bytes;      /* java read buffer */
-    jint        nread;      /* number of bytes has been read */
+    oslPipe     npipe;          /* native pipe */
+    void *      nbuff = NULL;   /* native read buffer */
+    jbyteArray  bytes;          /* java read buffer */
+    jint        nread;          /* number of bytes has been read */
 
     while (1)
     {
@@ -371,10 +371,10 @@ JNIEXPORT void JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_wri
     };
 
     short   state   = START;
-    oslPipe npipe;      /* native pipe */
-    long    count;      /* number of bytes has been written */
-    jsize   nwrite;     /* number of bytes to write */
-    jbyte * nbuff;      /* native buffer */
+    oslPipe npipe;          /* native pipe */
+    long    count;          /* number of bytes has been written */
+    jsize   nwrite;         /* number of bytes to write */
+    jbyte * nbuff = NULL;   /* native buffer */
 
     while (1)
     {
