@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:19:40 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ TabDialog TAB_TEMPLATE
     Text[ chinese_simplified ] = "Í¼ĞÎ¶ÔÏóÑùÊ½";
     Text[ russian ] = "Ñòèëè ãğàôè÷åñêèõ îáúåêòîâ";
     Text[ polish ] = "Style obiektów graficznych";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸ ½À²Ù";
+    Text[ japanese ] = "}µÌŞ¼Şª¸Ä½À²Ù";
     Text[ chinese_traditional ] = "¹Ï§Îª«¥ó¼Ë¦¡";
     Text[ greek ] = "Óôõë áíôéêåéìİíùí ãñáöéêşí";
     Text[ korean ] = "±×·¡ÇÈ °³Ã¼ À¯Çü";
