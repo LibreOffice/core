@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:06:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
 #include "msci.hxx"
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define TRACE(x) OSL_TRACE(x)
 #else
 #define TRACE(x)
@@ -556,7 +556,7 @@ sal_Int32 msci_filterCppException(
                     Type const & rType = ::getCppuType( &aRE );
                     ::uno_type_any_constructAndConvert(
                         pUnoExc, &aRE, rType.getTypeLibType(), pCpp2Uno );
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
                     OString aStr( OUStringToOString( aUNOname, RTL_TEXTENCODING_ASCII_US ) );
                     aStr += OString(" : unkonwn exception has been thrown: don't know how to handle, thus leaking!");
                     OSL_ENSURE( 0, aStr.getStr() );

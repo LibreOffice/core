@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:06:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ void SAL_CALL Mapping_map_to_uno(
         }
         catch (BridgeRuntimeError & err)
         {
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             OString cstr_msg(
                 OUStringToOString(
                     OUSTR("[jni_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
@@ -192,7 +192,7 @@ void SAL_CALL Mapping_map_to_java(
     }
     catch (BridgeRuntimeError & err)
     {
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OString cstr_msg(
             OUStringToOString(
                 OUSTR("[jni_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
@@ -483,7 +483,7 @@ void SAL_CALL uno_ext_getMapping(
         }
         catch (BridgeRuntimeError & err)
         {
-#if defined _DEBUG
+#if OSL_DEBUG_LEVEL > 0
             OString cstr_msg(
                 OUStringToOString(
                     OUSTR("[jni_uno bridge error] ") + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
