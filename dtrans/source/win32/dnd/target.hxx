@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-26 15:33:29 $
+ *  last change: $Author: jl $ $Date: 2001-03-02 13:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 
 #include <oleidl.h>
 #include "globals.hxx"
+#include "../../inc/DtObjFactory.hxx"
 
 
 using namespace ::com::sun::star::lang;
@@ -134,10 +135,8 @@ private:
     sal_Int8 m_userAction;
     // Set by listeners when they call XDropTargetDropContext::dropComplete
     sal_Bool m_bDropComplete;
-
-    // Used to find out wheter the listeners callbacks through the Context interfaces
-    // contained in the event objects are valid.
-
+    // converts IDataObject objects to XTransferable objects.
+    CDTransObjFactory m_aDataConverter;
     Reference<XDropTargetDragContext> m_currentDragContext;
     Reference<XDropTargetDropContext> m_currentDropContext;
 

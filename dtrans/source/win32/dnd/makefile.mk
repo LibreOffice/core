@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jl $ $Date: 2001-02-26 16:01:58 $
+#   last change: $Author: jl $ $Date: 2001-03-02 13:15:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -88,7 +88,8 @@ stoponerror=tr
 
 #DBG_CONSOLE_OUT: when IDropTarget or IDropSource are called we write to a console
 #DBG_CLIPBOARD_DATA: To provide DoDragDrop with an data object we call OleGetClipboard
-#CFLAGS+= -DDBG_CONSOLE_OUT 
+#CFLAGS+= -DDBG_CONSOLE_OUT -DDBG_CLIPBOARD_DATA
+
 
 SLOFILES=	$(SLO)$/dndentry.obj	\
             $(SLO)$/target.obj		\
@@ -97,16 +98,10 @@ SLOFILES=	$(SLO)$/dndentry.obj	\
             $(SLO)$/globals.obj		\
             $(SLO)$/targetdropcontext.obj	\
             $(SLO)$/targetdragcontext.obj	\
-            $(SLO)$/sourcecontext.obj		\
-            $(SLO)$/TransferableWrapper.obj  \
-            $(SLO)$/TxtConvertHelper.obj	\
-            $(SLO)$/DataObjectWrapper.obj	\
-            $(SLO)$/ImplHelper.obj	\
-            $(SLO)$/DTransHelper.obj \
+            $(SLO)$/sourcecontext.obj
 
 
-#			DataObjectWrapper.obj, ImplHelper.obj, DTransHelper.obj, TransferableWrapper.obj  have to be removed when Transferables are available as service
-            
+
 
 #$(SLO)$/mimehlp.obj
 
@@ -118,7 +113,8 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB) \
         ole32.lib\
         comsupp.lib\
-        oleaut32.lib
+        oleaut32.lib\
+        gdi32.lib
 
 SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET) 
@@ -127,12 +123,9 @@ SHL1IMPLIB=i$(SHL1TARGET)
 # for src614 
 
 SHL1LIBS=	\
-            $(SOLARLIBDIR)$/imtaolecb.lib\
-            $(SOLARLIBDIR)$/user9x.lib\
-            $(SOLARLIBDIR)$/tools32.lib \
-            $(LB)$/dtutils.lib
+            $(SLB)$/dtobjfact.lib\
+            $(SLB)$/dtutils.lib
 
-#dtutils.lib is build in source/misc
 
 SHL1OBJS=		$(SLOFILES)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def

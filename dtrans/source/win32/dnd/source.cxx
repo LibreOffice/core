@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-13 10:41:48 $
+ *  last change: $Author: jl $ $Date: 2001-03-02 13:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 #include "source.hxx"
 #include "globals.hxx"
 #include "sourcecontext.hxx"
-#include "TransferableWrapper.hxx"
+#include "../../inc/DtObjFactory.hxx"
 #include <rtl/ustring.h>
 #include <comdef.h>
 #include <process.h>
@@ -164,9 +164,8 @@ void SAL_CALL DragSource::startDrag( const DragGestureEvent& trigger,
                       static_cast<DragSource*>(this), listener ) );
 
     // Convert the XTransferable data object into an IDataObject object;
-
-    m_pDataObject= static_cast<IDataObject*>( new CXTDataObject( trans));
-    m_pDataObject->AddRef();
+    m_spDataObject= m_aDataConverter.createDataObjFromTransferable(
+                    m_serviceFactory, trans);
 
     // Obtain the id of the thread that created the window
     DWORD processId;
@@ -299,12 +298,12 @@ DWORD WINAPI DndOleSTAFunc(LPVOID pParams)
         AttachThreadInput( threadId , pSource->m_threadIdWindow, TRUE );
 
 #ifdef DBG_CLIPBOARD_DATA
-        m_pDataObject->release();
-        OleGetClipboard( &pSource->m_pDataObject);
+        m_spDataObject->release();
+        OleGetClipboard( &pSource->m_spDataObject);
 #endif
         DWORD dwEffect= 0;
         hr= DoDragDrop(
-            pSource->m_pDataObject,
+            pSource->m_spDataObject,
             static_cast<IDropSource*>(pSource),
             dndActionsToDropEffects( pSource->m_sourceActions),
             &dwEffect);
@@ -319,7 +318,7 @@ DWORD WINAPI DndOleSTAFunc(LPVOID pParams)
         // Destroy SourceContextslkfgj
         pSource->m_currentContext= 0;
         // Destroy the XTransferable wrapper
-        pSource->m_pDataObject->Release();
+        pSource->m_spDataObject=0;
 
         // Detach this thread from the window thread
         AttachThreadInput( threadId, pSource->m_threadIdWindow, FALSE);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-13 12:52:33 $
+ *  last change: $Author: jl $ $Date: 2001-03-02 13:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,10 @@
 #include <cppuhelper/compbase2.hxx>
 #endif
 
+#include "../../inc/DtObjFactory.hxx"
 #include "globals.hxx"
 #include <oleidl.h>
+#include <comdef.h>
 
 
 using namespace ::com::sun::star::lang;
@@ -89,14 +91,7 @@ using namespace osl;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::dnd;
 
-/*
-struct DndParams
-{
-    IDataObject* data;
-    DWORD dwOkEffects;
-    DWORD threadIdCreator;
-};
-*/
+
 
 class SourceContext;
 // RIGHT MOUSE BUTTON drag and drop not supportet currently.
@@ -112,7 +107,8 @@ class DragSource:
 
     // The mouse button that set off the drag and drop operation
     short m_MouseButton;
-
+    // Converts XTransferable objects to IDataObject objects.
+    CDTransObjFactory m_aDataConverter;
 
     DragSource();
     DragSource(const DragSource&);
@@ -126,7 +122,7 @@ public:
     Reference<XDragSourceContext>   m_currentContext;
 
     // the wrapper for the Transferable ( startDrag)
-    IDataObject* m_pDataObject;
+    IDataObjectPtr m_spDataObject;
 
     sal_Int8 m_sourceActions;
 

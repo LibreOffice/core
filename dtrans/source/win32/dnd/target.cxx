@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-26 15:58:39 $
+ *  last change: $Author: jl $ $Date: 2001-03-02 13:15:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 #include "globals.hxx"
 #include "targetdropcontext.hxx"
 #include "targetdragcontext.hxx"
-#include "DataObjectWrapper.hxx"
 #include <rtl/ustring.h>
 using namespace rtl;
 using namespace cppu;
@@ -240,8 +239,9 @@ HRESULT DropTarget::DragEnter( IDataObject *pDataObj,
 
         m_currentDragContext= static_cast<XDropTargetDragContext*>( new TargetDragContext(
             static_cast<DropTarget*>(this) ) );
-        m_currentData= static_cast<XTransferable*>( new DNDTransferable( pDataObj) );
-
+        // Convert the IDataObject to a XTransferable
+        m_currentData= m_aDataConverter.createTransferableFromDataObj(
+                                        m_serviceFactory, pDataObj);
         if( m_nListenerDropAction != ACTION_NONE)
         {
             DropTargetDragEnterEvent e;
