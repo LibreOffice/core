@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:16:49 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@ ModalDialog RID_DLG_SCRIPTORGANIZER
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 210 , 165 ) ;
     Text [ de ] = "%MACROLANG Makros" ;
-    Moveable = TRUE ;
     Text [ en-US ] = "%MACROLANG Macros";
+    Moveable = TRUE ;
     Closeable = TRUE ;
     HelpId = HID_SCRIPTORG_DIALOG;
     FixedText SF_TXT_SCRIPTS
@@ -186,9 +186,9 @@ ModalDialog RID_DLG_SCRIPTORGANIZER
         Size = MAP_APPFONT ( 60 , 14 ) ;
         TabStop = TRUE ;
     };
-
 };
-ModalDialog RID_DLG_NEWLIB
+
+ModalDialog RID_SVX_MDLG_SCRIPTORG_NEWLIB
 {
     Text [ de ] = "Bibliothek erstellen" ;
     Text [ en-US ] = "Create Library" ;
@@ -249,6 +249,9 @@ ModalDialog RID_DLG_NEWLIB
         Text [ en-US ] = "Enter the new name for the selected object." ;
     };
 };
+
+// global strings
+
 String RID_SVXSTR_DELQUERY
 {
     Text [ de ] = "Möchten Sie das folgende Objekt löschen?";
@@ -368,3 +371,4 @@ String RID_SVXSTR_ERROR_MESSAGE_LABEL
     Text [ de ] = "Meldung:";
     Text [ en-US ] = "Message:";
 };
+
