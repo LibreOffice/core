@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStatusBarItem.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2003-05-28 10:03:37 $
+ *  last change:$Date: 2003-09-08 13:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,18 +63,6 @@ package mod._toolkit;
 
 import java.io.PrintWriter;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XDesktop;
-import com.sun.star.frame.XModel;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleComponent;
-import com.sun.star.accessibility.XAccessibleContext;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -82,6 +70,17 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.DesktopTools;
 import util.SOfficeFactory;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.awt.XWindow;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object that implements the following interfaces :
@@ -125,7 +124,7 @@ public class AccessibleStatusBarItem extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop((XMultiServiceFactory)Param.getMSF()));
+                    XDesktop.class, DesktopTools.createDesktop( (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
@@ -165,9 +164,9 @@ public class AccessibleStatusBarItem extends TestCase {
         log.println( "creating a test environment" );
 
         if (xTextDoc != null) xTextDoc.dispose();
-        XMultiServiceFactory msf = (XMultiServiceFactory) tParam.getMSF();
+
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( msf);
+        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) tParam.getMSF());
 
         try {
             log.println( "creating a text document" );
@@ -181,14 +180,12 @@ public class AccessibleStatusBarItem extends TestCase {
         XModel aModel = (XModel)
                     UnoRuntime.queryInterface(XModel.class, xTextDoc);
 
-        XController xController = aModel.getCurrentController();
-
         XInterface oObj = null;
         XInterface secondItem = null;
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(msf, aModel);
+        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) tParam.getMSF(), aModel);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
@@ -199,7 +196,7 @@ public class AccessibleStatusBarItem extends TestCase {
 
         try {
             oObj = statusbar.getAccessibleChild(6);
-            secondItem = statusbar.getAccessibleChild(0);
+            secondItem = statusbar.getAccessibleChild(1);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
 
         }
