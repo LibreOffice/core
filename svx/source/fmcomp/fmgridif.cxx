@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-19 10:50:30 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 08:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ FmXGridPeer* FmXGridControl::imp_CreatePeer(Window* pParent)
             if (::comphelper::getINT16(xModelSet->getPropertyValue(FM_PROP_BORDER)))
                 nStyle |= WB_BORDER;
         }
-        catch(...)
+        catch(const Exception&)
         {
         }
     }
@@ -470,123 +470,137 @@ FmXGridPeer* FmXGridControl::imp_CreatePeer(Window* pParent)
 //------------------------------------------------------------------------------
 void SAL_CALL FmXGridControl::createPeer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& rToolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rParentPeer) throw( ::com::sun::star::uno::RuntimeException )
 {
-    if (mxPeer.is())
-        return;
+    DBG_ASSERT(/*(0 == m_nPeerCreationLevel) && */!mbCreatingPeer, "FmXGridControl::createPeer : recursion!");
+        // I think this should never assert, now that we're using the base class' mbCreatingPeer in addition to
+        // our own m_nPeerCreationLevel
+        // But I'm not sure as I don't _fully_ understand the underlying toolkit implementations ....
+        // (if this asserts, we still need m_nPeerCreationLevel. If not, we could omit it ....)
+        // 14.05.2001 - 86836 - frank.schoenheit@germany.sun.com
 
-    Window* pParentWin = NULL;
-    if (rParentPeer.is())
+    // TODO: why the hell this whole class does not use any mutex?
+
+    if (!mxPeer.is())
     {
-        VCLXWindow* pParent = VCLXWindow::GetImplementation(rParentPeer);
-        if (pParent)
-            pParentWin = pParent->GetWindow();
-    }
+        mbCreatingPeer = sal_True;
+            // mbCreatingPeer is virtually the same as m_nPeerCreationLevel, but it's the base class' method
+            // to prevent recursion.
 
-    FmXGridPeer* pPeer = imp_CreatePeer(pParentWin);
-    DBG_ASSERT(pPeer != NULL, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
-    mxPeer = pPeer;
-
-    // lesen der properties aus dem model
-    ++m_nPeerCreationLevel;
-    updateFromModel();
-
-    // folgendes unschoene Szenario : updateFromModel fuehrt zu einem propertiesChanged am Control,
-    // das stellt fest, dass sich eine 'kritische' Property geaendert hat (zum Beispiel "Border") und
-    // legt daraufhin eine neue Peer an, was wieder hier im createPeer landet, wir legen also eine
-    // zweite FmXGridPeer an und initialisieren die. Dann kommen wir in der ersten Inkarnation aus
-    // dem updsateFromModel raus und arbeiten dort weiter mit dem pPeer, das jetzt eigentlich schon
-    // veraltet ist (da ja in der zweiten Inkarnation eine andere Peer angelegt wurde).
-    // Deswegen also der Aufwand mit dem PeerCreationLevel, das stellt sicher, dass wir die in dem
-    // tiefsten Level angelegte Peer wirklich verwenden, sie aber erst im top-level
-    // initialisieren.
-    if (--m_nPeerCreationLevel == 0)
-    {
-        DBG_ASSERT(mxPeer.is(), "FmXGridControl::createPeer : something went wrong ... no top level peer !");
-        pPeer = FmXGridPeer::getImplementation(mxPeer);
-
-        ::com::sun::star::awt::Rectangle rArea = getPosSize();
-        if (!VCLUnoHelper::IsZero(rArea))
-            pPeer->setPosSize(rArea.X, rArea.Y, rArea.Width, rArea.Height, ::com::sun::star::awt::PosSize::POSSIZE);
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xColumns(getModel(), ::com::sun::star::uno::UNO_QUERY);
-        if (xColumns.is())
-            pPeer->setColumns(xColumns);
-
-        if (maComponentInfos.bVisible)
-            pPeer->setVisible(sal_True);
-
-        if (!maComponentInfos.bEnable)
-            pPeer->setEnable(sal_False);
-
-        if (maWindowListeners.getLength())
-            pPeer->addWindowListener( &maWindowListeners );
-
-        if (maFocusListeners.getLength())
-            pPeer->addFocusListener( &maFocusListeners );
-
-        if (maKeyListeners.getLength())
-            pPeer->addKeyListener( &maKeyListeners );
-
-        if (maMouseListeners.getLength())
-            pPeer->addMouseListener( &maMouseListeners );
-
-        if (maMouseMotionListeners.getLength())
-            pPeer->addMouseMotionListener( &maMouseMotionListeners );
-
-        if (maPaintListeners.getLength())
-            pPeer->addPaintListener( &maPaintListeners );
-
-        if (m_aModifyListeners.getLength())
-            pPeer->addModifyListener( &m_aModifyListeners );
-
-        if (m_aUpdateListeners.getLength())
-            pPeer->addUpdateListener( &m_aUpdateListeners );
-
-        if (m_aContainerListeners.getLength())
-            pPeer->addContainerListener( &m_aContainerListeners );
-
-        // forward the design mode
-        sal_Bool bForceAlivePeer = m_bInDraw && !maComponentInfos.bVisible;
-            // (we force a alive-mode peer if we're in "draw", cause in this case the peer will be used for drawing in
-            // foreign devices. We ensure this with the visibility check as an living peer is assumed to be noncritical
-            // only if invisible)
-        ::com::sun::star::uno::Any aOldCursorBookmark;
-        if (!mbDesignMode || bForceAlivePeer)
+        Window* pParentWin = NULL;
+        if (rParentPeer.is())
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xComp(getModel(), ::com::sun::star::uno::UNO_QUERY);
-            if (xComp.is())
+            VCLXWindow* pParent = VCLXWindow::GetImplementation(rParentPeer);
+            if (pParent)
+                pParentWin = pParent->GetWindow();
+        }
+
+        FmXGridPeer* pPeer = imp_CreatePeer(pParentWin);
+        DBG_ASSERT(pPeer != NULL, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
+        mxPeer = pPeer;
+
+        // lesen der properties aus dem model
+//      ++m_nPeerCreationLevel;
+        updateFromModel();
+
+        // folgendes unschoene Szenario : updateFromModel fuehrt zu einem propertiesChanged am Control,
+        // das stellt fest, dass sich eine 'kritische' Property geaendert hat (zum Beispiel "Border") und
+        // legt daraufhin eine neue Peer an, was wieder hier im createPeer landet, wir legen also eine
+        // zweite FmXGridPeer an und initialisieren die. Dann kommen wir in der ersten Inkarnation aus
+        // dem updsateFromModel raus und arbeiten dort weiter mit dem pPeer, das jetzt eigentlich schon
+        // veraltet ist (da ja in der zweiten Inkarnation eine andere Peer angelegt wurde).
+        // Deswegen also der Aufwand mit dem PeerCreationLevel, das stellt sicher, dass wir die in dem
+        // tiefsten Level angelegte Peer wirklich verwenden, sie aber erst im top-level
+        // initialisieren.
+//      if (--m_nPeerCreationLevel == 0)
+        {
+            DBG_ASSERT(mxPeer.is(), "FmXGridControl::createPeer : something went wrong ... no top level peer !");
+            pPeer = FmXGridPeer::getImplementation(mxPeer);
+
+            ::com::sun::star::awt::Rectangle rArea = getPosSize();
+            if (!VCLUnoHelper::IsZero(rArea))
+                pPeer->setPosSize(rArea.X, rArea.Y, rArea.Width, rArea.Height, ::com::sun::star::awt::PosSize::POSSIZE);
+
+            ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >  xColumns(getModel(), ::com::sun::star::uno::UNO_QUERY);
+            if (xColumns.is())
+                pPeer->setColumns(xColumns);
+
+            if (maComponentInfos.bVisible)
+                pPeer->setVisible(sal_True);
+
+            if (!maComponentInfos.bEnable)
+                pPeer->setEnable(sal_False);
+
+            if (maWindowListeners.getLength())
+                pPeer->addWindowListener( &maWindowListeners );
+
+            if (maFocusListeners.getLength())
+                pPeer->addFocusListener( &maFocusListeners );
+
+            if (maKeyListeners.getLength())
+                pPeer->addKeyListener( &maKeyListeners );
+
+            if (maMouseListeners.getLength())
+                pPeer->addMouseListener( &maMouseListeners );
+
+            if (maMouseMotionListeners.getLength())
+                pPeer->addMouseMotionListener( &maMouseMotionListeners );
+
+            if (maPaintListeners.getLength())
+                pPeer->addPaintListener( &maPaintListeners );
+
+            if (m_aModifyListeners.getLength())
+                pPeer->addModifyListener( &m_aModifyListeners );
+
+            if (m_aUpdateListeners.getLength())
+                pPeer->addUpdateListener( &m_aUpdateListeners );
+
+            if (m_aContainerListeners.getLength())
+                pPeer->addContainerListener( &m_aContainerListeners );
+
+            // forward the design mode
+            sal_Bool bForceAlivePeer = m_bInDraw && !maComponentInfos.bVisible;
+                // (we force a alive-mode peer if we're in "draw", cause in this case the peer will be used for drawing in
+                // foreign devices. We ensure this with the visibility check as an living peer is assumed to be noncritical
+                // only if invisible)
+            ::com::sun::star::uno::Any aOldCursorBookmark;
+            if (!mbDesignMode || bForceAlivePeer)
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  xForm(xComp->getParent(), ::com::sun::star::uno::UNO_QUERY);
-                // is the form alive?
-                // we can see that if the form contains columns
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xColumnsSupplier(xForm, ::com::sun::star::uno::UNO_QUERY);
-                if (xColumnsSupplier.is())
+                ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xComp(getModel(), ::com::sun::star::uno::UNO_QUERY);
+                if (xComp.is())
                 {
-                    if (::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > (xColumnsSupplier->getColumns(),::com::sun::star::uno::UNO_QUERY)->getCount())
+                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >  xForm(xComp->getParent(), ::com::sun::star::uno::UNO_QUERY);
+                    // is the form alive?
+                    // we can see that if the form contains columns
+                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xColumnsSupplier(xForm, ::com::sun::star::uno::UNO_QUERY);
+                    if (xColumnsSupplier.is())
                     {
-                        // we get only a new bookmark if the resultset is not forwardonly
-                        if (::comphelper::getINT32(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (xForm, ::com::sun::star::uno::UNO_QUERY)->getPropertyValue(FM_PROP_RESULTSET_TYPE)) != ::com::sun::star::sdbc::ResultSetType::FORWARD_ONLY)
+                        if (::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > (xColumnsSupplier->getColumns(),::com::sun::star::uno::UNO_QUERY)->getCount())
                         {
-                            // as the FmGridControl touches the data source it is connected to we have to remember the current
-                            // cursor position (and restore afterwards)
-                            aOldCursorBookmark = ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate > (xForm, ::com::sun::star::uno::UNO_QUERY)->getBookmark();
+                            // we get only a new bookmark if the resultset is not forwardonly
+                            if (::comphelper::getINT32(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > (xForm, ::com::sun::star::uno::UNO_QUERY)->getPropertyValue(FM_PROP_RESULTSET_TYPE)) != ::com::sun::star::sdbc::ResultSetType::FORWARD_ONLY)
+                            {
+                                // as the FmGridControl touches the data source it is connected to we have to remember the current
+                                // cursor position (and restore afterwards)
+                                aOldCursorBookmark = ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate > (xForm, ::com::sun::star::uno::UNO_QUERY)->getBookmark();
+                            }
                         }
                     }
+                    pPeer->setRowSet(xForm);
                 }
-                pPeer->setRowSet(xForm);
             }
-        }
-        pPeer->setDesignMode(mbDesignMode && !bForceAlivePeer);
+            pPeer->setDesignMode(mbDesignMode && !bForceAlivePeer);
 
-        if (aOldCursorBookmark.hasValue())
-        {   // we have a valid bookmark, so we have to restore the cursor's position
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xComp(getModel(), ::com::sun::star::uno::UNO_QUERY);
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate >  xLocate(xComp->getParent(), ::com::sun::star::uno::UNO_QUERY);
-            xLocate->moveToBookmark(aOldCursorBookmark);
-        }
+            if (aOldCursorBookmark.hasValue())
+            {   // we have a valid bookmark, so we have to restore the cursor's position
+                ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xComp(getModel(), ::com::sun::star::uno::UNO_QUERY);
+                ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate >  xLocate(xComp->getParent(), ::com::sun::star::uno::UNO_QUERY);
+                xLocate->moveToBookmark(aOldCursorBookmark);
+            }
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView >  xPeerView(mxPeer, ::com::sun::star::uno::UNO_QUERY);
-        xPeerView->setZoom( maComponentInfos.nZoomX, maComponentInfos.nZoomY );
-        xPeerView->setGraphics( mxGraphics );
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView >  xPeerView(mxPeer, ::com::sun::star::uno::UNO_QUERY);
+            xPeerView->setZoom( maComponentInfos.nZoomX, maComponentInfos.nZoomY );
+            xPeerView->setGraphics( mxGraphics );
+        }
+        mbCreatingPeer = sal_False;
     }
 }
 
