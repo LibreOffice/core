@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 12:10:52 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 07:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1180,11 +1180,18 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SQL_CONFORMANCE,nValue,*this);
     return nValue == SQL_SC_SQL92_INTERMEDIATE;
 }
+// -----------------------------------------------------------------------------
+::rtl::OUString ODatabaseMetaData::getURLImpl()
+{
+    ::rtl::OUString aValue;
+    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DATA_SOURCE_NAME,aValue,*this,m_pConnection->getTextEncoding());
+    return aValue;
+}
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("sdbc:odbc:");
-    OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DATA_SOURCE_NAME,aValue,*this,m_pConnection->getTextEncoding());
+    aValue += getURLImpl();
     return aValue;
 }
 // -------------------------------------------------------------------------

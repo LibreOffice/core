@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-29 11:19:23 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 07:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,8 +76,9 @@ using namespace ::com::sun::star::lang;
 
 ::rtl::OUString SAL_CALL OAdabasDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aRet = ::rtl::OUString::createFromAscii("sdbc:adabas:") + OAdabasDatabaseMetaData_BASE::getURL();
-    return aRet;
+    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("sdbc:adabas:");
+    aValue += OAdabasDatabaseMetaData_BASE::getURLImpl();
+    return aValue;
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OAdabasDatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw(SQLException, RuntimeException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUsers.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 07:44:38 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 07:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include "connectivity/dbtools.hxx"
+#endif
 
 using namespace ::comphelper;
 
@@ -97,9 +100,7 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 Reference< XNamed > OUsers::createObject(const ::rtl::OUString& _rName)
 {
-    OAdabasUser* pRet = new OAdabasUser(m_pConnection,_rName);
-        Reference< XNamed > xRet = pRet;
-    return xRet;
+    return new OAdabasUser(m_pConnection,_rName);
 }
 // -------------------------------------------------------------------------
 void OUsers::impl_refresh() throw(RuntimeException)
@@ -129,13 +130,14 @@ void SAL_CALL OUsers::appendByDescriptor( const Reference< XPropertySet >& descr
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sUserName;
     sUserName = sUserName.toAsciiUpperCase();
     descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sUserName));
-    aSql = aSql + aQuote + sUserName + aQuote
+    aSql += ::dbtools::quoteName(aQuote,sUserName)
                 + ::rtl::OUString::createFromAscii(" PASSWORD ")
                 + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)));
     aSql += ::rtl::OUString::createFromAscii(" RESOURCE NOT EXCLUSIVE");
 
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
-    xStmt->execute(aSql);
+    if(xStmt.is())
+        xStmt->execute(aSql);
 
     OCollection_TYPE::appendByDescriptor(descriptor);
 }
@@ -173,10 +175,11 @@ void SAL_CALL OUsers::dropByName( const ::rtl::OUString& elementName ) throw(SQL
     {
         ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP USER ");
         ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
-        aSql = aSql + aQuote + elementName + aQuote;
+        aSql += ::dbtools::quoteName(aQuote,elementName);
 
         Reference< XStatement > xStmt = m_pConnection->createStatement(  );
-        xStmt->execute(aSql);
+        if(xStmt.is())
+            xStmt->execute(aSql);
     }
 
     OCollection_TYPE::dropByName(elementName);

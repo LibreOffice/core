@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUser.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 12:22:57 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 07:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include "connectivity/dbtools.hxx"
+#endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include "connectivity/dbexception.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
@@ -311,15 +314,39 @@ void SAL_CALL OAdabasUser::changePassword( const ::rtl::OUString& objPassword, c
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
     ::rtl::OUString sAlterPwd;
-    sAlterPwd = ::rtl::OUString::createFromAscii("ALTER PASSWORD ");
-    sAlterPwd += m_Name;
-    sAlterPwd += ::rtl::OUString::createFromAscii(" ") ;
-    sAlterPwd += objPassword;
-    sAlterPwd += ::rtl::OUString::createFromAscii(" TO ") ;
-    sAlterPwd += newPassword;
-    Reference<XStatement> xStmt = m_pConnection->createStatement();
-    if(xStmt.is())
-        xStmt->execute(sAlterPwd);
+    sAlterPwd = ::rtl::OUString::createFromAscii("ALTER PASSWORD \"");
+    sAlterPwd += objPassword.toAsciiUpperCase();
+    sAlterPwd += ::rtl::OUString::createFromAscii("\" TO \"") ;
+    sAlterPwd += newPassword.toAsciiUpperCase();
+    sAlterPwd += ::rtl::OUString::createFromAscii("\"") ;
+
+    sal_Bool bDisposeConnection = sal_False;
+    Reference<XConnection> xConnection = m_pConnection;
+    if(m_pConnection->getMetaData()->getUserName() != m_Name)
+    {
+        OAdabasConnection* pNewConnection = new OAdabasConnection(m_pConnection->getDriverHandle(),m_pConnection->getDriver());
+        xConnection = pNewConnection;
+        if(pNewConnection)
+        {
+            Sequence< PropertyValue> aSeq(2);
+            aSeq.getArray()[0].Name     = ::rtl::OUString::createFromAscii("user") ;
+            aSeq.getArray()[0].Value    <<= m_Name;
+            aSeq.getArray()[1].Name     = ::rtl::OUString::createFromAscii("password") ;
+            aSeq.getArray()[1].Value    <<= objPassword;
+            pNewConnection->Construct(m_pConnection->getMetaData()->getURL(),aSeq);
+        }
+        bDisposeConnection = sal_True;
+    }
+    if(xConnection.is())
+    {
+        Reference<XStatement> xStmt = xConnection->createStatement();
+        if(xStmt.is())
+            xStmt->execute(sAlterPwd);
+        if(bDisposeConnection)
+            ::comphelper::disposeComponent(xConnection);
+    }
+    else
+        ::dbtools::throwFunctionSequenceException(*this);
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OAdabasUser::getPrivilegeString(sal_Int32 nRights) const

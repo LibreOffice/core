@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 12:10:35 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 07:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ namespace connectivity
             OConnection*    m_pConnection;
             sal_Bool        m_bUseCatalog;
             sal_Bool        m_bOdbc3;
+        protected:
+            ::rtl::OUString getURLImpl();
         public:
 
             inline OConnection* getOwnConnection() const { return m_pConnection; }
@@ -93,6 +95,8 @@ namespace connectivity
 
             ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon);
             ~ODatabaseMetaData();
+
+
             // XDatabaseMetaData
             virtual sal_Bool SAL_CALL allProceduresAreCallable(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL allTablesAreSelectable(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

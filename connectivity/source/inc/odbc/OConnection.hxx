@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-21 14:30:34 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 07:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,9 +182,12 @@ namespace connectivity
             SQLHANDLE getConnection() { return m_aConnectionHandle; }
 
             // should we use the catalog on filebased databases
-            sal_Bool isCatalogUsed() const { return m_bUseCatalog; }
+            sal_Bool    isCatalogUsed() const { return m_bUseCatalog; }
             ::rtl::OUString getUserName() const { return m_sUser; }
-            sal_Bool useOldDateFormat() const { return m_bUseOldDateFormat; }
+            sal_Bool    useOldDateFormat() const { return m_bUseOldDateFormat; }
+
+            SQLHANDLE   getDriverHandle() const { return m_pDriverHandleCopy;}
+            ODBCDriver* getDriver() const { return m_pDriver;}
         };
     }
 }
