@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:05:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 11:54:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,8 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 109 , 185 ) ;
-    Text = "Sprungziel im Dokument" ;
-    Text [ ENGLISH ] = "Link target in document" ;
-    Text [ english_us ] = "Target in Document" ;
+    Text [ de ] = "Sprungziel im Dokument" ;
+    Text [ en-US ] = "Target in Document" ;
     PushButton BT_APPLY
     {
         HelpId = HID_HYPERLINK_MARKWND_APPLY;
@@ -84,72 +83,18 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text = "Übernehmen";
-        Text[ ENGLISH ] = "Apply";
-        Text [ english_us ] = "Apply" ;
-        Text[ portuguese ] = "Aplicar";
-        Text[ russian ] = "Ïğèìåíèòü";
-        Text[ greek ] = "ÅöáñìïãŞ";
-        Text[ dutch ] = "Overnemen";
-        Text[ french ] = "Appliquer";
-        Text[ spanish ] = "Aplicar";
-        Text[ italian ] = "Applica";
-        Text[ danish ] = "Anvend";
-        Text[ swedish ] = "Överta";
-        Text[ polish ] = "Zastosuj";
-        Text[ portuguese_brazilian ] = "Aplicar";
-        Text[ japanese ] = "é©ç”¨";
-        Text[ korean ] = "ì ìš©";
-        Text[ chinese_simplified ] = "é‡‡ç”¨";
-        Text[ chinese_traditional ] = "æ¡ç”¨";
-        Text[ arabic ] = "ÊØÈíŞ";
-        Text[ turkish ] = "Uygula";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Aplica";
-        Text[ finnish ] = "Käytä";
-        Text[ thai ] = "à¹ƒà¸Šà¹‰";
-        Text[ czech ] = "PouÅ¾Ã­t";
-        Text[ hebrew ] = "â€®×™×™×©×•×â€¬";
-        Text[ hindi ] = "à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹";
-        Text[ slovak ] = "PouÅ¾iÅ¥";
-        Text[ hungarian ] = "Alkalmaz";
-        Text[ slovenian ] = "Uporabi";
+        Text [ de ] = "Übernehmen";
+        Text [ en-US ] = "Apply" ;
+        Text [ x-comment ] = " ";
     };
     PushButton BT_CLOSE
     {
         HelpId = HID_HYPERLINK_MARKWND_CLOSE;
         Pos = MAP_APPFONT ( 56 , 168 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text = "Schließen";
-        Text[ ENGLISH ] = "Close";
-        Text [ english_us ] = "Close" ;
-        Text[ portuguese ] = "Fechar";
-        Text[ russian ] = "Çàêğûòü";
-        Text[ greek ] = "Êëåßóéìï";
-        Text[ dutch ] = "Sluiten";
-        Text[ french ] = "Fermer";
-        Text[ spanish ] = "Cerrar";
-        Text[ italian ] = "Chiudi";
-        Text[ danish ] = "Luk";
-        Text[ swedish ] = "Stäng";
-        Text[ polish ] = "Zamknij";
-        Text[ portuguese_brazilian ] = "Fechar";
-        Text[ japanese ] = "é–‰ã˜ã‚‹";
-        Text[ korean ] = "ë‹«ê¸°";
-        Text[ chinese_simplified ] = "å…³é—­";
-        Text[ chinese_traditional ] = "é—œé–‰";
-        Text[ arabic ] = "ÅÛáÇŞ";
-        Text[ turkish ] = "Kapat";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Tanca";
-        Text[ finnish ] = "Sulje";
-        Text[ thai ] = "à¸›à¸´à¸”";
-        Text[ czech ] = "ZavÅ™Ã­t";
-        Text[ hebrew ] = "â€®×¡×’×™×¨×”â€¬";
-        Text[ hindi ] = "à¤¬à¤¨à¥à¤¦ à¤•à¤°à¥‹";
-        Text[ slovak ] = "ZavrieÅ¥";
-        Text[ hungarian ] = "BezÃ¡rÃ¡s";
-        Text[ slovenian ] = "Zapri";
+        Text [ de ] = "Schließen";
+        Text [ en-US ] = "Close" ;
+        Text [ x-comment ] = " ";
     };
     Control TLB_MARK
     {
@@ -159,98 +104,18 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
         Size = MAP_APPFONT ( 103 , 162 ) ;
         TabStop = TRUE ;
     };
-    Text[ portuguese ] = "Destino no documento";
-    Text[ russian ] = "Öåëü â äîêóìåíòå";
-    Text[ greek ] = "Ğñïïñéóìüò óôï İããñáöï";
-    Text[ dutch ] = "Doel in document";
-    Text[ french ] = "Cible dans le document";
-    Text[ spanish ] = "Destino en documento";
-    Text[ italian ] = "Destinazione nel documento";
-    Text[ danish ] = "Mål i dokument";
-    Text[ swedish ] = "Mål i dokumentet";
-    Text[ polish ] = "Cel w dokumencie";
-    Text[ portuguese_brazilian ] = "Destino no documento";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«ã‚ã‚‹ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ";
-    Text[ korean ] = "ë¬¸ì„œ ë‚´ ì—°ê²° ëŒ€ìƒ";
-    Text[ chinese_simplified ] = "æ–‡æ¡£ä¸­çš„è¿æ¥ç›®æ ‡";
-    Text[ chinese_traditional ] = "æ–‡ä»¶å…§çš„é€£çµç›®æ¨™";
-    Text[ arabic ] = "ÇáåÏİ İí ÇáãÓÊäÏ";
-    Text[ turkish ] = "Belgedeki Hedef";
-    Text[ catalan ] = "Objectiu en el document";
-    Text[ finnish ] = "Kohde asiakirjassa";
-    Text[ thai ] = "à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹ƒà¸™à¹€à¸­à¸à¸ªà¸²à¸£";
-    Text[ czech ] = "CÃ­l v dokumentu";
-    Text[ hebrew ] = "â€®×”×™×¢×“ ×‘××¡××šâ€¬";
-    Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤®à¥‡à¤‚ à¤²à¤•à¥à¤·à¥à¤¯";
-    Text[ slovak ] = "CieÄ¾ v dokumente";
-    Text[ hungarian ] = "CÃ©l a dokumentumban";
-    Text[ slovenian ] = "Cilj v dokumentu";
 };
 
 String RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES
 {
-    Text = "Keine Sprungziele im Dokument vorhanden.";
-    Text [ ENGLISH ] = "There are no link targets available in the document." ;
-    Text [ english_us ] = "Targets do not exist in the document." ;
-    Text[ portuguese ] = "Destinos inexistentes no documento.";
-    Text[ russian ] = "Íå ñóùåñòâóåò öåëåé â äîêóìåíòå.";
-    Text[ greek ] = "Äåí õğÜñ÷ïõí óçìåßá ğñïïñéóìïı óôï İããñáöï.";
-    Text[ dutch ] = "Geen doelen beschikbaar in document";
-    Text[ french ] = "Aucune cible existante dans le document.";
-    Text[ spanish ] = "No existen destinos en el documento.";
-    Text[ italian ] = "Nel documento non esistono destinazioni.";
-    Text[ danish ] = "Der findes ingen mål i dokumentet.";
-    Text[ swedish ] = "Det finns inga mål i dokumentet.";
-    Text[ polish ] = "Brak celów w dokumencie.";
-    Text[ portuguese_brazilian ] = "Não existem destinos no documento";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã«ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ë¬¸ì„œ ë‚´ ëŒ€ìƒì´ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ–‡æ¡£ä¸­ä¸å­˜åœ¨è¿æ¥ç›®æ ‡ã€‚";
-    Text[ chinese_traditional ] = "æ–‡ä»¶å…§æ²’æœ‰é€£çµç›®æ¨™ã€‚";
-    Text[ arabic ] = "ÇáãÓÊäÏ ÎÇáí ãä ÇáÃåÏÇİ.";
-    Text[ turkish ] = "Hedefler belgede bulunmamaktadır.";
-    Text[ catalan ] = "En aquest document no hi ha cap objectiu.";
-    Text[ finnish ] = "Kohteita ei ole tässä asiakirjassa.";
-    Text[ thai ] = "à¹€à¸›à¹‰à¸²à¸«à¸¡à¸²à¸¢à¹„à¸¡à¹ˆà¸­à¸¢à¸¹à¹ˆà¹ƒà¸™à¹€à¸­à¸à¸ªà¸²à¸£";
-    Text[ czech ] = "CÃ­le v dokumentu neexistujÃ­.";
-    Text[ hebrew ] = "â€®××™×Ÿ ×™×¢×“×™× ×‘××¡××š.â€¬";
-    Text[ hindi ] = "à¤²à¤•à¥à¤·à¥à¤¯ à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤®à¥‡à¤‚ à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "Ciele v dokumente neexistujÃº.";
-    Text[ hungarian ] = "A cÃ©lok nem talÃ¡lhatÃ³ak a dokumentumban";
-    Text[ slovenian ] = "V dokumentu ni ciljev";
+    Text [ de ] = "Keine Sprungziele im Dokument vorhanden.";
+    Text [ en-US ] = "Targets do not exist in the document." ;
 };
 
 String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
 {
-    Text = "Das Dokument konnte nicht geöffnet werden.";
-    Text [ ENGLISH ] = "Couldn't open the document." ;
-    Text [ english_us ] = "Couldn't open the document." ;
-    Text[ portuguese ] = "Foi impossível abrir o documento.";
-    Text[ russian ] = "Íåâîçìîæíî îòêğûòü äîêóìåíò.";
-    Text[ greek ] = "Äåí Şôáí äõíáôüí íá áíïé÷ôåß ôï İããñáöï.";
-    Text[ dutch ] = "Document kan niet geopend worden";
-    Text[ french ] = "Impossible d'ouvrir le document.";
-    Text[ spanish ] = "No se pudo abrir el documento.";
-    Text[ italian ] = "Non è stato possibile aprire il documento.";
-    Text[ danish ] = "Kunne ikke åbne dokumentet.";
-    Text[ swedish ] = "Dokumentet kunde inte öppnas.";
-    Text[ polish ] = "Nie mo¿na otworzyæ dokumentu.";
-    Text[ portuguese_brazilian ] = "Não foi possível abrir o documento.";
-    Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã¯é–‹ã‘ã¾ã›ã‚“ã§ã—ãŸã€‚";
-    Text[ korean ] = "ë¬¸ì„œë¥¼ ì—´ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•æ‰“å¼€è¿™ä¸ªæ–‡æ¡£ã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•é–‹å•Ÿæ–‡ä»¶ã€‚";
-    Text[ arabic ] = "ÊÚĞÑ İÊÍ ÇáãÓÊäÏ.";
-    Text[ turkish ] = "Belge açılamadı.";
-    Text[ catalan ] = "No s'ha pogut obrir el document.";
-    Text[ finnish ] = "Asiakirjan avaaminen ei onnistunut.";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹€à¸›à¸´à¸”à¹€à¸­à¸à¸ªà¸²à¸£à¹„à¸”à¹‰";
-    Text[ czech ] = "NenÃ­ moÅ¾nÃ© otevÅ™Ã­t soubor.";
-    Text[ hebrew ] = "â€®×œ× × ×™×ª×Ÿ ×œ×¤×ª×•×— ××ª ×”××¡××š.â€¬";
-    Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¥‹ à¤¨à¤¹à¥€à¤‚ à¤–à¥‹à¤² à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "Nie je moÅ¾nÃ© otvoriÅ¥ dokument.";
-    Text[ hungarian ] = "Nem sikerÃ¼lt megnyitni a dokumentumot.";
-    Text[ slovenian ] = "Ni mogoÄe odpreti dokumenta";
+    Text [ de ] = "Das Dokument konnte nicht geöffnet werden.";
+    Text [ en-US ] = "Couldn't open the document." ;
 };
 
 
