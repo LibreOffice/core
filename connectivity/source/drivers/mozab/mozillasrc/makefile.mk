@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 15:41:49 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 18:34:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ LDUMP=ldump2.exe
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
+
 .INCLUDE : settings.mk
 
 .IF "$(OS)"=="MACOSX" || "$(WITH_MOZILLA)" == "NO"
@@ -105,9 +106,17 @@ SLOFILES = \
     $(SLO)$/MDatabaseMetaDataHelper.obj		\
     $(SLO)$/MQuery.obj			            \
     $(SLO)$/MTypeConverter.obj              \
-    $(SLO)$/MNameMapper.obj
+    $(SLO)$/MNameMapper.obj					\
+    $(SLO)$/MNSMozabProxy.obj	\
+    $(SLO)$/MNSTerminateListener.obj
 
 
+.IF "$(GUI)"=="UNX"
+.IF "$(COMNAME)"=="sunpro5"
+CFLAGS += -features=tmplife
+#This flag is needed to build mozilla 1.7 code
+.ENDIF		# "$(COMNAME)"=="sunpro5"
+.ENDIF
 
 .IF "$(GUI)" == "WNT"
 .IF "$(DBG_LEVEL)" == "0"
@@ -116,7 +125,8 @@ INCPRE += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
         -I$(MOZ_INC)$/addrbook -I$(MOZ_INC)$/mork -I$(MOZ_INC)$/locale \
         -I$(MOZ_INC)$/pref -I$(MOZ_INC)$/mime -I$(MOZ_INC)$/chrome \
         -I$(MOZ_INC)$/necko -I$(MOZ_INC)$/intl -I$(MOZ_INC)$/profile \
-        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap
+        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap \
+        -I$(MOZ_INC)$/xpcom_obsolete -I$(MOZ_INC)$/content
 CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
         -DNS_NET_FILE -DCookieManagement -DSingleSignon -DClientWallet \
             -DTRACING -DXP_PC -DXP_WIN -DXP_WIN32 -DHW_THREADS \
@@ -132,7 +142,8 @@ INCPRE += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
         -I$(MOZ_INC)$/addrbook -I$(MOZ_INC)$/mork -I$(MOZ_INC)$/locale \
         -I$(MOZ_INC)$/pref -I$(MOZ_INC)$/mime -I$(MOZ_INC)$/chrome \
         -I$(MOZ_INC)$/necko -I$(MOZ_INC)$/intl -I$(MOZ_INC)$/profile \
-        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap
+        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap \
+        -I$(MOZ_INC)$/xpcom_obsolete -I$(MOZ_INC)$/content
 CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
         -DNS_NET_FILE -DCookieManagement -DSingleSignon -DClientWallet \
             -DTRACING -DXP_PC -DXP_WIN -DXP_WIN32 -DHW_THREADS \
@@ -150,7 +161,8 @@ INCPOST += . -I.. -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/xpcom \
         -I$(MOZ_INC)$/addrbook -I$(MOZ_INC)$/mork -I$(MOZ_INC)$/locale \
         -I$(MOZ_INC)$/pref -I$(MOZ_INC)$/mime -I$(MOZ_INC)$/chrome \
         -I$(MOZ_INC)$/necko -I$(MOZ_INC)$/intl -I$(MOZ_INC)$/profile \
-        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap
+        -I$(MOZ_INC)$/embed_base -I$(MOZ_INC)$/mozldap \
+        -I$(MOZ_INC)$/xpcom_obsolete -I$(MOZ_INC)$/content
 CDEFS+=	    -DMOZILLA_CLIENT \
             -DOSTYPE=\"Linux2.2.14-5\" -DOJI
 .IF "$(OS)" == "LINUX"
