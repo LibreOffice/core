@@ -2,9 +2,9 @@
  *
  *  $RCSfile: applicat.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:24 $
+ *  last change: $Author: tl $ $Date: 2001-05-16 13:24:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,6 @@ class SmApplicat: public SfxApplication
 protected:
     SvxErrorHandler     *pSvxErrorHandler;
 
-    // factories
-    virtual SfxFileDialog* CreateDocFileDialog(ULONG nBits,
-                                        const SfxObjectFactory &rFact);
     virtual void        OpenClients();
 
     // initialization / deinitialization
