@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-21 21:11:00 $
+ *  last change: $Author: kz $ $Date: 2002-02-26 14:21:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ String STR_HANDOUT
     Text[ chinese_simplified ] = "è®²ä¹‰";
     Text[ russian ] = "Òåçèñû";
     Text[ polish ] = "Materia³y";
-    Text[ japanese ] = "é…å¸ƒè³‡æ–™";
+    Text[ japanese ] = "ãƒãƒ³ãƒ‰ã‚¢ã‚¦ãƒˆ";
     Text[ chinese_traditional ] = "è¬›ç¾©";
     Text[ arabic ] = "äÔÑÇÊ";
     Text[ dutch ] = "Folder";
