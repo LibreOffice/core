@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-25 15:27:22 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,26 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Size = MAP_APPFONT ( 257 , 8 ) ;
         Text = "Layout" ;
         Text [ ENGLISH ] = "Layout" ;
+        Text[ english_us ] = "Layout";
+        Text[ portuguese ] = "ConfiguraÁ„o";
+        Text[ russian ] = "–‡ÁÏÂÚÍ‡";
+        Text[ greek ] = "ƒÈ‹Ù·ÓÁ";
+        Text[ dutch ] = "Lay-out";
+        Text[ french ] = "Mise en page";
+        Text[ spanish ] = "DiseÒo";
+        Text[ finnish ] = "Asettelu";
+        Text[ italian ] = "Layout";
+        Text[ danish ] = "Layout";
+        Text[ swedish ] = "Layout";
+        Text[ polish ] = "Uk≥ad";
+        Text[ portuguese_brazilian ] = "Layout";
+        Text[ japanese ] = "????";
+        Text[ korean ] = "∑π¿Ãæ∆øÙ";
+        Text[ chinese_simplified ] = "∞Ê Ω";
+        Text[ chinese_traditional ] = "™©¶°";
+        Text[ turkish ] = "Sayfa d¸zeni";
+        Text[ arabic ] = " ŒÿÌÿ";
+        Text[ catalan ] = "Layout";
     };
     OKButton BTN_OK
     {
@@ -291,7 +311,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ finnish ] = "Tulokset kohteeseen" ;
         Text [ danish ] = "Output fra" ;
         Text [ french ] = "Plage de destination" ;
-        Text [ swedish ] = "Utdata frÂn" ;
+        Text [ swedish ] = "Utd~ata frÂn" ;
         Text [ dutch ] = "Uitvoer van" ;
         Text [ spanish ] = "Resultado en" ;
         Text [ english_us ] = "Results to" ;
@@ -342,7 +362,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         QuickHelpText [ french ] = "RÈduire" ;
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
@@ -398,7 +418,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ finnish ] = "~Tunnista luokat" ;
         Text [ danish ] = "Identificer kategorier" ;
         Text [ french ] = "~Identifier les catÈgories" ;
-        Text [ swedish ] = "Identifiera k~ategorier" ;
+        Text [ swedish ] = "Identifiera ~kategorier" ;
         Text [ dutch ] = "~CategorieÎn opsporen" ;
         Text [ spanish ] = "I~dentificar categorÌas" ;
         Text [ english_us ] = "~Identify categories" ;
@@ -426,7 +446,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Hide = TRUE ;
         Text [ english_us ] = "Total ~columns" ;
         Text [ portuguese ] = "Soma total - ~colunas" ;
-        Text [ swedish ] = "Totalresultat ~kolumner" ;
+        Text [ swedish ] = "Totalresultat k~olumner" ;
         Text [ danish ] = "Total kolonner" ;
         Text [ italian ] = "Risultato complessivo ~colonne" ;
         Text [ spanish ] = "~Columnas de totales" ;
@@ -547,7 +567,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "Mean - " ;
         Text[ chinese_simplified ] = "÷–º‰÷µ - ";
         Text[ russian ] = "—Â‰ÌÂÂ ÁÌ‡˜ÂÌËÂ -  ";
-        Text[ polish ] = "?rednia warto?Ê -  ";
+        Text[ polish ] = "årednia wartoúÊ -  ";
         Text[ japanese ] = "ïΩãœíl - ";
         Text[ chinese_traditional ] = "§§∂°≠» - ";
         Text[ arabic ] = "‹ Average";
