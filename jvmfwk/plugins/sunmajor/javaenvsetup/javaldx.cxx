@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaldx.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:58:34 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:48:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,16 @@ static sal_Bool hasOption(char* szOption, int argc, char** argv);
 static rtl::OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData);
 //static sal_Bool printPaths(const OUString& sPathFile);
 
+#ifdef MACOSX
+#define HELP_TEXT    \
+"\njavaldx is necessary to make Java work on some UNIX platforms." \
+"It prints a string to std out that consists of directories which " \
+"have to be included into the DYLD_LIBRARY_PATH variable.The setting of " \
+"the variable usually occurs in a shell script that runs javaldx.\n" \
+"The directories are from the chosen java installation. \n" \
+"Options are: \n"\
+"--help or -h\n"
+#else
 #define HELP_TEXT    \
 "\njavaldx is necessary to make Java work on some UNIX platforms." \
 "It prints a string to std out that consists of directories which " \
@@ -85,7 +95,7 @@ static rtl::OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData);
 "The directories are from the chosen java installation. \n" \
 "Options are: \n"\
 "--help or -h\n"
-
+#endif
 
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
