@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-17 14:28:16 $
+ *  last change: $Author: ssa $ $Date: 2002-10-21 11:26:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4753,6 +4753,14 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             // diese nur als Background-Palette gesetzt wird
             if ( LOWORD( wParam ) != WA_INACTIVE )
                 ImplSendMessage( hWnd, SAL_MSG_FORCEPALETTE, 0, 0 );
+            break;
+
+        case WM_ENABLE:
+            // #95133# a system dialog is opened/closed, using our app window as parent
+            if( !wParam )
+                ImplGetSVData()->maAppData.mnModalMode++;
+            else
+                ImplGetSVData()->maAppData.mnModalMode--;
             break;
 
         case WM_KILLFOCUS:
