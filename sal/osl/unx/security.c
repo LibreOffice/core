@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:29:43 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:45:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,7 +252,7 @@ static sal_PamModule* osl_getPAM()
            (but not for PAM-0.66 RH 6.0) */
         void *pam_hdl;
 
-        pam_hdl = dlopen( "libpam.so", RTLD_GLOBAL | RTLD_LAZY );
+        pam_hdl = dlopen( "libpam.so.0", RTLD_GLOBAL | RTLD_LAZY );
 
         if ( pam_hdl != NULL )
             pam_module = (sal_PamModule*)calloc( 1, sizeof(sal_PamModule) );
@@ -345,7 +345,7 @@ osl_getCrypt()
     {
         oslModule crypt_library;
 
-        crypt_library = osl_psz_loadModule( "libcrypt.so", SAL_LOADMODULE_DEFAULT );  /* never closed */
+        crypt_library = osl_psz_loadModule( "libcrypt.so.1", SAL_LOADMODULE_DEFAULT );  /* never closed */
         if ( crypt_library != NULL )
             crypt_sym = (char* (*)(const char *, const char *)) osl_psz_getSymbol(crypt_library, "crypt" );
         if ( crypt_sym == NULL ) /* no libcrypt or libcrypt without crypt */
@@ -358,7 +358,7 @@ osl_getCrypt()
 }
 
 /* replacement for crypt function for password encryption, uses either
-   strong encryption of dlopen´ed libcrypt.so or dummy implementation
+   strong encryption of dlopen´ed libcrypt.so.1 or dummy implementation
    with no encryption. Objective target is to avoid linking against
    libcrypt (not available on caldera open linux 2.2 #63822#) */
 static sal_Char* SAL_CALL
