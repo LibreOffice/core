@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oemwiz.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:16:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 #ifndef _XTEXTEDT_HXX
 #include <svtools/xtextedt.hxx>
 #endif
+
+#include <sfx2/sfxdlg.hxx>
+#include <svx/dialogs.hrc>
+
 //.........................................................................
 namespace preload
 {
@@ -159,17 +163,26 @@ namespace preload
             aAddressItem.SetToken(POS_FAX, aOptions.GetFax() );
             aAddressItem.SetToken(POS_EMAIL, aOptions.GetEmail() );
             pSet->Put(aAddressItem);
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            if ( pFact )
+            {
+                CreateTabPage pFunc = pFact->GetTabPageCreatorFunc(RID_SFXPAGE_GENERAL);
+                pUserDataPage = (*pFunc)(pDialog, *pSet);
+                ((SfxTabPage*)pUserDataPage)->Reset(*pSet);
+            }
+            else
+                pUserDataPage = NULL;
+
             pWelcomePage = new OEMWelcomeTabPage(pDialog);
             pLicensePage = new OEMLicenseTabPage(pDialog);
-            pUserDataPage = new SvxGeneralTabPage(pDialog, *pSet);
-            ((SvxGeneralTabPage*)pUserDataPage)->Reset(*pSet);
         }
 /* -----------------------------14.11.2001 11:33------------------------------
 
  ---------------------------------------------------------------------------*/
         void OEMPreloadDialog_Impl::WriteUserData()
         {
-            ((SvxGeneralTabPage*)pUserDataPage)->FillItemSet(*pSet);
+            if ( pUserDataPage )
+                ((SfxTabPage*)pUserDataPage)->FillItemSet(*pSet);
             const SvxAddressItem& rAddressItem = (const SvxAddressItem&)pSet->Get(SID_ATTR_ADDRESS);
             aOptions.SetID(rAddressItem.GetShortName());
             aOptions.SetFirstName(rAddressItem.GetFirstName());
@@ -223,10 +236,12 @@ namespace preload
 
           AddPage( pImpl->pWelcomePage );
           AddPage( pImpl->pLicensePage );
-          AddPage( pImpl->pUserDataPage );
+          if ( pImpl->pUserDataPage )
+              AddPage( pImpl->pUserDataPage );
           SetPage( OEM_WELCOME, pImpl->pWelcomePage );
           SetPage( OEM_LICENSE, pImpl->pLicensePage );
-          SetPage( OEM_USERDATA, pImpl->pUserDataPage );
+          if ( pImpl->pUserDataPage )
+              SetPage( OEM_USERDATA, pImpl->pUserDataPage );
           ShowPage( OEM_WELCOME );
     }
 /* -----------------------------14.11.2001 11:33------------------------------
