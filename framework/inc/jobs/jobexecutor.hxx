@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobexecutor.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:47 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 //_______________________________________
 // my own includes
 
+#ifndef __FRAMEWORK_CONFIG_CONFIGACCESS_HXX_
+#include <jobs/configaccess.hxx>
+#endif
+
 #ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
 #endif
@@ -104,6 +108,22 @@
 #include <com/sun/star/task/XJobExecutor.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
+#include <com/sun/star/lang/XComponent.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
+#include <com/sun/star/container/XContainerListener.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
+#include <com/sun/star/lang/XEventListener.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
+#include <com/sun/star/document/XEventListener.hpp>
+#endif
+
 //_______________________________________
 // other includes
 
@@ -133,6 +153,8 @@ namespace framework{
 class JobExecutor : public  css::lang::XTypeProvider
                   , public  css::lang::XServiceInfo
                   , public  css::task::XJobExecutor
+                  , public  css::container::XContainerListener // => lang.XEventListener
+                  , public  css::document::XEventListener
                   , private ThreadHelpBase
                   , public  ::cppu::OWeakObject
 {
@@ -143,6 +165,12 @@ class JobExecutor : public  css::lang::XTypeProvider
 
         /** reference to the uno service manager */
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+
+        /** cached list of all registered event names of cfg for call optimization. */
+        OUStringList m_lEvents;
+
+        /** we listen at the configuration for changes at the event list. */
+        ConfigAccess m_aConfig;
 
     //___________________________________
     // native interface methods
@@ -162,8 +190,19 @@ class JobExecutor : public  css::lang::XTypeProvider
         DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
-        // XJobExecutor
+        // task.XJobExecutor
         virtual void SAL_CALL trigger( const ::rtl::OUString& sEvent ) throw(css::uno::RuntimeException);
+
+        // document.XEventListener
+        virtual void SAL_CALL notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException);
+
+        // container.XContainerListener
+        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException);
+        virtual void SAL_CALL elementRemoved ( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException);
+        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException);
+
+        // lang.XEventListener
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException);
 };
 
 } // namespace framework
