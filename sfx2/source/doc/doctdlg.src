@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-28 07:53:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:30:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµÑùÊ½";
         Text[ russian ] = "Íîâûé øàáëîí";
         Text[ polish ] = "Nowy szablon dokumentu";
-        Text[ japanese ] = "V‚µ‚¢ÃİÌßÚ°Ä";
+        Text[ japanese ] = "V‚µ‚¢ÄŞ·­ÒİÄÃİÌßÚ°Ä";
         Text[ chinese_traditional ] = "¶}±Ò·s¤å¥ó¼Ë¦¡";
         Text[ arabic ] = "ŞÇáÈ ãÓÊäÏ ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá ğñüôõğïõ åããñÜöïõ";
@@ -302,4 +302,5 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ catalan ] = "~Administrar...";
     };
 };
+
 
