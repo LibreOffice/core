@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npshell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2004-09-02 14:01:05 $
+ *  last change: $Author: kz $ $Date: 2004-09-02 14:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ int sendMsg( PLUGIN_MSG* pMsg, unsigned int len, int iEnsure)
     return len_w;
 }
 
-const char* pMimeTypes = "application/vnd.stardivision.calc:sdc:StarCalc 3.0 - 5.0;"
+char* pMimeTypes = "application/vnd.stardivision.calc:sdc:StarCalc 3.0 - 5.0;"
 "application/vnd.stardivision.chart:sds:StarChart 3.0 - 5.0;"
 "application/vnd.stardivision.draw:sda:StarDraw 3.0 - 5.0;"
 "application/vnd.stardivision.impress:sdd:StarImpress 3.0 - 5.0;"
@@ -251,7 +251,7 @@ const char* pMimeTypes = "application/vnd.stardivision.calc:sdc:StarCalc 3.0 - 5
 
 extern "C"
 {
-const char*
+char*
 NPP_GetMIMEDescription(void)
 {
     debug_fprintf(NSP_LOG_APPEND, "print by Netscape Plugin,  NPP_GetMIMEDescription:%s.\n", pMimeTypes);
