@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:47:24 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ ModalDialog DLG_SEL_GLOS
         Text[ chinese_traditional ] = "¦Û°Ê¹Ï¤å¶°ªºÁY¼g ";
         Text[ arabic ] = "äÕ ÊáŞÇÆí ááÇÎÊÕÇÑ ";
         Text[ greek ] = "ÁõôïÊåßìåíá ãéá áñ÷éêÜ";
-        Text[ korean ] = "ÀÚµ¿ ÅØ½ºÆ® ¹Ù·Î°¡±â ";
+        Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ® ¹Ù·Î°¡±â ";
         Text[ turkish ] = "Otomatik metin kısaltması ";
         Text[ language_user1 ] = " ";
     };
@@ -149,7 +149,7 @@ ModalDialog DLG_SEL_GLOS
     Text[ chinese_traditional ] = "´¡¤J¦Û°Ê¹Ï¤å¶°";
     Text[ arabic ] = "ÅÏÑÇÌ äÕ ÊáŞÇÆí";
     Text[ greek ] = "ĞñïóèŞêç ÁõôïÊåéìİíïõ";
-    Text[ korean ] = "ÀÚµ¿ ÅØ½ºÆ® »ğÀÔ";
+    Text[ korean ] = "ÀÚµ¿ÅØ½ºÆ® »ğÀÔ";
     Text[ turkish ] = "Otomatik metin ekle";
     Text[ language_user1 ] = " ";
 };
