@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DriverPropertyInfo.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 16:58:08 $
+ *  last change: $Author: obo $ $Date: 2005-01-26 09:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,8 +185,9 @@ Sequence< ::rtl::OUString> java_sql_DriverPropertyInfo::choices() const
         jfieldID id = t.pEnv->GetFieldID(java_sql_DriverPropertyInfo::getMyClass(),"choices","[Ljava/lang/String;");
         if(id)
         {
-            java_lang_String aEmpty(NULL,NULL);
-            return copyArrayAndDelete(t.pEnv,(jobjectArray)t.pEnv->GetObjectField( object, id), ::rtl::OUString(),aEmpty);
+            const java_lang_String * pEmpty = NULL;
+            const ::rtl::OUString * pEmpty2 = NULL;
+            return copyArrayAndDelete(t.pEnv,(jobjectArray)t.pEnv->GetObjectField( object, id), pEmpty2, pEmpty);
         }
     } //t.pEnv
     return Sequence< ::rtl::OUString>();
