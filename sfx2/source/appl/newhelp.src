@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-27 20:22:54 $
+ *  last change: $Author: pb $ $Date: 2001-09-28 15:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,6 +541,11 @@ Image IMG_HELP_TOOLBOX_BOOKMARKS
 Image IMG_HELP_TOOLBOX_SEARCHDIALOG
 {
     ImageBitmap = Bitmap { File = "search_small.bmp" ; };
+    MASKCOLOR_GREY
+};
+Image IMG_HELP_TOOLBOX_COPY
+{
+    ImageBitmap = Bitmap { File = "sc05711.bmp" ; };
     MASKCOLOR_GREY
 };
 Image IMG_HELP_CONTENT_BOOK_OPEN
