@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageObjectViewObjectContact.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:57:44 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,8 +622,7 @@ void PageObjectViewObjectContact::PaintFadeEffectIndicator (
     bool bHighContrastMode (
        Application::GetSettings().GetStyleSettings().GetHighContrastMode()!=0);
     if (GetPage() != NULL
-        && static_cast<const SdPage*>(GetPage())->GetFadeEffect()
-        != ::com::sun::star::presentation::FadeEffect_NONE)
+        && static_cast<const SdPage*>(GetPage())->getTransitionType() != 0)
     {
         pDevice->DrawImage (aIndicatorBox.TopLeft(),
             IconCache::Instance().GetIcon (
