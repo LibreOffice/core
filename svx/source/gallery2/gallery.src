@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 16:47:36 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:38:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
                 Text[ dutch ] = "Bestanden";
                 Text[ chinese_simplified ] = "ΞΔΌώ";
                 Text[ greek ] = "Αρχεία";
-                Text[ korean ] = "ΖΔΐΟµι";
+                Text[ korean ] = "ΖΔΐΟ";
                 Text[ turkish ] = "Dosyalar";
                 Text[ language_user1 ] = " ";
             };
@@ -437,7 +437,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ dutch ] = "Gemaakt op:";
         Text[ chinese_simplified ] = "½¨ΑΆΘΥΖΪ:";
         Text[ greek ] = "Δημιουργήθηκε τη:";
-        Text[ korean ] = "ΐΫΌΊ³―Β¥:";
+        Text[ korean ] = "ΐΫΌΊΐΟΐΪ:";
         Text[ turkish ] = "Oluώturma tarihi:";
         Text[ language_user1 ] = " ";
     };
@@ -473,7 +473,7 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
         Text[ dutch ] = "Gewijzigd op:";
         Text[ chinese_simplified ] = "ΈόΈΔΘΥΖΪ:";
         Text[ greek ] = "Τροποποίηση τις:";
-        Text[ korean ] = "Ί―°ζ ³―Β¥:";
+        Text[ korean ] = "Ί―°ζΐΟΐΪ:";
         Text[ turkish ] = "Deπiώiklik tarihi:";
         Text[ language_user1 ] = " ";
     };
@@ -653,7 +653,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
         Text[ dutch ] = "~Voorbeeld";
         Text[ chinese_simplified ] = "Τ¤ΐΐ(~E)";
         Text[ greek ] = "Πρ~οεπισκόπηση";
-        Text[ korean ] = "ΉΜΈ® ΊΈ±β(~E)";
+        Text[ korean ] = "ΉΜΈ®ΊΈ±β(~E)";
         Text[ turkish ] = "Φn izleme";
         Text[ language_user1 ] = " ";
     };
@@ -843,7 +843,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
         Text[ dutch ] = "Map";
         Text[ chinese_simplified ] = "ΔΏΒΌ";
         Text[ greek ] = "Κατάλογος";
-        Text[ korean ] = "µπ·ΊΕΝΈ®";
+        Text[ korean ] = "µπ·ΊΕδΈ®";
         Text[ turkish ] = "Dizin";
         Text[ language_user1 ] = " ";
     };
@@ -1331,9 +1331,9 @@ String RID_SVXSTR_GALLERY_DELETETHEME
     Text[ polish ] = "Do you really want to\ndelete this theme?";
     Text[ portuguese_brazilian ] = "Do you really want to\ndelete this theme?";
     Text[ japanese ] = "Do you really want to\ndelete this theme?";
-    Text[ korean ] = "Do you really want to\ndelete this theme?";
+    Text[ korean ] = "ΐΜ Α¦Έρΐ»\n Α¤Έ»·Ξ »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ chinese_simplified ] = "ΔϊΥζµΔÒªΙΎ³ύΥβΈφΦχΜβ£Ώ";
-    Text[ chinese_traditional ] = "Do you really want to\ndelete this theme?";
+    Text[ chinese_traditional ] = "±z―uªΊ­n§R°£³o­Σ¥DΓD΅H";
     Text[ turkish ] = "Do you really want to\ndelete this theme?";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα\n ΝΠέ εΠΗ ΗαγζΦζΪΏ";
 };
@@ -1363,7 +1363,7 @@ String RID_SVXSTR_EXTFORMAT1_UI
     Text[ dutch ] = "Wave - geluidsbestand";
     Text[ chinese_simplified ] = "Wave ÒτΖµΞΔΌώ";
     Text[ greek ] = "Wave - Αρχείο ήχου";
-    Text[ korean ] = "ΏώΐΜΊκ »ηΏξµε ΖΔΐΟ";
+    Text[ korean ] = "ΏώΐΜΊκ-»ηΏξµε ΖΔΐΟ";
     Text[ turkish ] = "Wave - Ses dosyasύ";
     Text[ language_user1 ] = " ";
 };
@@ -1530,7 +1530,7 @@ String RID_SVXSTR_GALLERY_DELETEDD
     Text[ dutch ] = "Wilt u het gekoppelde bestand wissen ?";
     Text[ chinese_simplified ] = "ΔϊÒªΙΎ³ύΑ΄½ΣµΔΞΔΌώΒπ£Ώ";
     Text[ greek ] = "Θέλετε να διαγραφεί το συνδεδεμένο αρχείο;";
-    Text[ korean ] = "Ώ¬°αµΘ ΖΔΐΟΐ» »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "ΈµΕ©µΘ ΖΔΐΟΐ» »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Baπlantύ oluώturduπunuz dosyayύ silmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
 };
@@ -1770,7 +1770,7 @@ String RID_SVXSTR_GALLERY_IMPORTTHEME
     Text[ dutch ] = "Im~porteren...";
     Text[ chinese_simplified ] = "ΚδΘλ(~M)...";
     Text[ greek ] = "Ε~ισαγωγή...";
-    Text[ korean ] = "°΅Α® Ώΐ±β(~M)...";
+    Text[ korean ] = "°΅Α®Ώΐ±β(~M)...";
     Text[ turkish ] = "έη~e aktar...";
     Text[ language_user1 ] = " ";
 };
@@ -1825,7 +1825,7 @@ String RID_SVXSTR_GALLERY_READONLY
     Text[ dutch ] = " (alleen lezen)";
     Text[ chinese_simplified ] = " (·ΐΈ²Π΄)";
     Text[ greek ] = " (μόνο για ανάγνωση)";
-    Text[ korean ] = "(Ύ²±βΊΈΘ£)";
+    Text[ korean ] = " (ΐΠ±β ΐόΏλ)";
     Text[ turkish ] = "(Salt okunur)";
     Text[ language_user1 ] = " ";
 };
@@ -1879,7 +1879,7 @@ String RID_SVXSTR_GALLERY_DIALOGID
     Text[ dutch ] = "ID bezet";
     Text[ chinese_simplified ] = "·ΦΕδ ID";
     Text[ greek ] = "Απονομή ταυτότητας (ID)";
-    Text[ korean ] = "ID ΑφΑ¤";
+    Text[ korean ] = "ID ΗÒ΄η";
     Text[ turkish ] = "Tanύtύcύ ata";
     Text[ language_user1 ] = " ";
 };
@@ -2117,7 +2117,7 @@ Menu RID_SVXMN_GALLERY1
             Text[ dutch ] = "~ID bezet";
             Text[ chinese_simplified ] = "ΦΈ¶¨ ~ID";
             Text[ greek ] = "Απονομή ταυτότητας (~ID)";
-            Text[ korean ] = "~ID ΑφΑ¤";
+            Text[ korean ] = "~ID ΗÒ΄η";
             Text[ turkish ] = "Tanύtύcύ ata";
             Text[ language_user1 ] = " ";
         };
@@ -2230,7 +2230,7 @@ Menu RID_SVXMN_GALLERY2
                         Text[ dutch ] = "~Koppeling";
                         Text[ chinese_simplified ] = "Α΄½Σ(~L)";
                         Text[ greek ] = "Σύ~νδεση";
-                        Text[ korean ] = "Ώ¬°α";
+                        Text[ korean ] = "ΈµΕ©";
                         Text[ turkish ] = "Baπlantύ";
                         Text[ language_user1 ] = " ";
                     };
@@ -2342,7 +2342,7 @@ Menu RID_SVXMN_GALLERY2
     Text[ japanese ] = "ΜίΪΛή­°(~P)";
     Text[ chinese_simplified ] = "Τ¤ΚΣ(~P)";
     Text[ greek ] = "Προεπισκόπηση";
-            Text[ korean ] = "ΉΜΈ® ΊΈ±β(~P)";
+            Text[ korean ] = "ΉΜΈ®ΊΈ±β(~P)";
             Text[ chinese_traditional ] = "ΉwΔύ(~P)";
             Text[ arabic ] = "γΪΗνδΙ";
             Text[ turkish ] = "Φnizleme";
