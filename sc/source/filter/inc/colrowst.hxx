@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:37:50 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ class ColRowSettings : public ExcRoot
 {
 private:
     // ACHTUNG: Col-/Row-Angaben in TWIPS
-    friend ScExtDocOptions;
+    friend class ScExtDocOptions;
 
     ScExtTabOptions*    pExtTabOpt;
     INT32*              pWidth;
