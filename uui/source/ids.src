@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 18:59:08 $
+ *  last change: $Author: kz $ $Date: 2002-01-22 21:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1226,7 +1226,7 @@ Resource RID_UUI_ERRHDL
         Text[ french ] = "Les données associées au partenariat sont défectueuses.";
         Text[ spanish ] = "Los datos guardados correspondientes a la asociación están en estado defectuoso.";
         Text[ finnish ] = "The data associated with the partnership are corrupted";
-        Text[ italian ] = "I dati relativi alla partnership sono corrotti";
+        Text[ italian ] = "I dati relativi alla partnership sono danneggiati";
         Text[ danish ] = "The data associated with the partnership are corrupted";
         Text[ swedish ] = "De data som har sparats till partnerskapet är defekta";
         Text[ polish ] = "Zapisane dane dotycz¹ce relacji s¹ uszkodzone";
@@ -1252,7 +1252,7 @@ Resource RID_UUI_ERRHDL
         Text[ french ] = "Les données associées au partenariat $(ARG1) sont défectueuses.";
         Text[ spanish ] = "Los datos guardados correspondientes a la asociación $(ARG1) están en estado defectuoso.";
         Text[ finnish ] = "The data associated with the partnership $(ARG1) are corrupted";
-        Text[ italian ] = "I dati relativi alla partnership $(ARG1) sono corrotti";
+        Text[ italian ] = "I dati relativi alla partnership $(ARG1) sono danneggiati";
         Text[ danish ] = "The data associated with the partnership $(ARG1) are corrupted";
         Text[ swedish ] = "De data som har sparats till partnerskapet $(ARG1) är defekta";
         Text[ polish ] = "Zapisane dane dotycz¹ce relacji $(ARG1) s¹ uszkodzone";
