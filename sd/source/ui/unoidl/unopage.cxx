@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:35:26 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_PRESENTATION_CLICKACTION_HPP_
 #include <com/sun/star/presentation/ClickAction.hpp>
 #endif
@@ -319,8 +322,7 @@ SdGenericDrawPage::SdGenericDrawPage( SdXImpressDocument* _pModel, SdPage* pInPa
         mpModel     ( _pModel ),
         maPropSet   ( (pInPage&& (pInPage->GetPageKind() != PK_STANDARD) && (pInPage->GetPageKind() != PK_HANDOUT) )?&pMap[1]:pMap ),
         SdUnoSearchReplaceShape(this),
-        mbHasBackgroundObject(sal_False),
-        mrBHelper( maMutex )
+        mbHasBackgroundObject(sal_False)
 {
     mxModel = (::cppu::OWeakObject*)(SvxDrawPage*)mpModel;
 }
@@ -425,7 +427,6 @@ uno::Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
     else QUERYINT( document::XLinkTargetSupplier );
     else QUERYINT( drawing::XShapeCombiner );
     else QUERYINT( drawing::XShapeBinder );
-    else QUERYINT( lang::XComponent );
     else
         return SvxDrawPage::queryInterface( rType );
 
@@ -437,6 +438,10 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL SdGenericDrawPage::getPropert
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     return maPropSet.getPropertySetInfo();
 }
 
@@ -445,8 +450,8 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( (GetPage() == NULL) || (mpModel == NULL) )
-        throw uno::RuntimeException();
+    if( pModel == 0 )
+        throw lang::DisposedException();
 
     const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(aPropertyName);
 
@@ -664,9 +669,10 @@ uno::Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyN
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    if( (pModel == 0) || (GetPage() == 0) )
+        throw lang::DisposedException();
+
     uno::Any aAny;
-    if( (GetPage() == NULL) || (mpModel == NULL) )
-        throw uno::RuntimeException();
 
     const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
 
@@ -1028,6 +1034,9 @@ uno::Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const uno
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     DBG_ASSERT(pPage,"SdrPage ist NULL! [CL]");
     DBG_ASSERT(pView, "SdrView ist NULL! [CL]");
 
@@ -1063,6 +1072,9 @@ void SAL_CALL SdGenericDrawPage::split( const uno::Reference< drawing::XShape >&
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     if(GetPage()==NULL||pView==NULL||!xGroup.is()||mpModel==NULL)
         return;
 
@@ -1079,6 +1091,9 @@ uno::Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const uno::R
     throw( uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
 
     uno::Reference< drawing::XShape > xShape;
     if(GetPage()==NULL||pView==NULL||!xShapes.is()||mpModel==NULL)
@@ -1111,6 +1126,9 @@ void SAL_CALL SdGenericDrawPage::unbind( const uno::Reference< drawing::XShape >
     throw( uno::RuntimeException )
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
 
     if(GetPage()==NULL||pView==NULL||!xShape.is()||mpModel==NULL)
         return;
@@ -1221,7 +1239,6 @@ void SdGenericDrawPage::SetLwrBorder( sal_Int32 nValue )
 
 static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
 {
-#ifndef SVX_LIGHT
     ::sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
     if ( pDocShell )
     {
@@ -1246,7 +1263,6 @@ static void refreshpage( SdDrawDocument* pDoc, const PageKind ePageKind )
             pViewSh->UpdateScrollBars();
         }
     }
-#endif
 }
 
 void SdGenericDrawPage::SetWidth( sal_Int32 nWidth )
@@ -1310,33 +1326,6 @@ void SdGenericDrawPage::SetHeight( sal_Int32 nHeight )
 // XInterface
 void SdGenericDrawPage::release() throw()
 {
-    uno::Reference< uno::XInterface > x( xDelegator );
-    if (! x.is())
-    {
-        if (osl_decrementInterlockedCount( &m_refCount ) == 0)
-        {
-            if (! mrBHelper.bDisposed)
-            {
-                uno::Reference< uno::XInterface > xHoldAlive( (uno::XWeak*)this );
-                // First dispose
-                try
-                {
-                    dispose();
-                }
-                catch(::com::sun::star::uno::Exception&)
-                {
-                    // release should not throw exceptions
-                }
-
-                // only the alive ref holds the object
-                OSL_ASSERT( m_refCount == 1 );
-                // destroy the object if xHoldAlive decrement the refcount to 0
-                return;
-            }
-        }
-        // restore the reference count
-        osl_incrementInterlockedCount( &m_refCount );
-    }
     OWeakAggObject::release();
 }
 
@@ -1344,78 +1333,6 @@ void SdGenericDrawPage::release() throw()
 void SdGenericDrawPage::disposing() throw()
 {
     Invalidate();
-}
-
-// XComponent
-void SdGenericDrawPage::dispose()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    // An frequently programming error is to release the last
-    // reference to this object in the disposing message.
-    // Make it rubust, hold a self Reference.
-    uno::Reference< lang::XComponent > xSelf( this );
-
-    // Guard dispose against multible threading
-    // Remark: It is an error to call dispose more than once
-    sal_Bool bDoDispose = sal_False;
-    {
-    osl::MutexGuard aGuard( mrBHelper.rMutex );
-    if( !mrBHelper.bDisposed && !mrBHelper.bInDispose )
-    {
-        // only one call go into this section
-        mrBHelper.bInDispose = sal_True;
-        bDoDispose = sal_True;
-    }
-    }
-
-    // Do not hold the mutex because we are broadcasting
-    if( bDoDispose )
-    {
-        // Create an event with this as sender
-        try
-        {
-            uno::Reference< uno::XInterface > xSource( uno::Reference< uno::XInterface >::query( (lang::XComponent *)this ) );
-            document::EventObject aEvt;
-            aEvt.Source = xSource;
-            // inform all listeners to release this object
-            // The listener container are automaticly cleared
-            mrBHelper.aLC.disposeAndClear( aEvt );
-            // notify subclasses to do their dispose
-            disposing();
-        }
-        catch(::com::sun::star::uno::Exception& e)
-        {
-            // catch exception and throw again but signal that
-            // the object was disposed. Dispose should be called
-            // only once.
-            mrBHelper.bDisposed = sal_True;
-            mrBHelper.bInDispose = sal_False;
-            throw e;
-        }
-
-        // the values bDispose and bInDisposing must set in this order.
-        // No multithread call overcome the "!rBHelper.bDisposed && !rBHelper.bInDispose" guard.
-        mrBHelper.bDisposed = sal_True;
-        mrBHelper.bInDispose = sal_False;
-    }
-    else
-    {
-        // in a multithreaded environment, it can't be avoided, that dispose is called twice.
-        // However this condition is traced, because it MAY indicate an error.
-        OSL_TRACE( "OComponentHelper::dispose() - dispose called twice" );
-    }
-}
-
-// XComponent
-void SAL_CALL SdGenericDrawPage::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
-{
-    mrBHelper.addListener( ::getCppuType( &aListener ) , aListener );
-}
-
-// XComponent
-void SAL_CALL SdGenericDrawPage::removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw(::com::sun::star::uno::RuntimeException)
-{
-    mrBHelper.removeListener( ::getCppuType( &aListener ) , aListener );
 }
 
 //========================================================================
@@ -1625,6 +1542,11 @@ UNO3_GETIMPLEMENTATION2_IMPL( SdDrawPage, SdGenericDrawPage );
 // XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     if( maTypeSequence.getLength() == 0 )
     {
         sal_Bool bPresPage = mpModel && mpModel->IsImpressDocument() && GetPage() && GetPage()->GetPageKind() != PK_HANDOUT;
@@ -1647,7 +1569,6 @@ uno::Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExc
         *pTypes++ = ITYPE(document::XLinkTargetSupplier);
         *pTypes++ = ITYPE( drawing::XShapeCombiner );
         *pTypes++ = ITYPE( drawing::XShapeBinder );
-        *pTypes++ = ITYPE( lang::XComponent );
 
         if( bPresPage )
             *pTypes++ = ITYPE(presentation::XPresentationPage);
@@ -1661,6 +1582,11 @@ uno::Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExc
 
 uno::Sequence< sal_Int8 > SAL_CALL SdDrawPage::getImplementationId() throw(uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     static uno::Sequence< sal_Int8 > aId;
     if( aId.getLength() == 0 )
     {
@@ -1757,6 +1683,11 @@ OUString SAL_CALL SdDrawPage::getImplementationName() throw(uno::RuntimeExceptio
 
 uno::Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames() throw(uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     uno::Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
     SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.DrawPage" );
 
@@ -1777,6 +1708,9 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
 
     DBG_ASSERT( GetPage() && !GetPage()->IsMasterPage(), "Don't call base implementation for masterpages!" );
 
@@ -1818,7 +1752,6 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
         if( pNotesPage )
             pNotesPage->SetName(aName);
 
-#ifndef SVX_LIGHT
         // fake a mode change to repaint the page tab bar
         ::sd::DrawDocShell* pDocSh = mpModel->GetDocShell();
         ::sd::ViewShell* pViewSh = pDocSh ? pDocSh->GetViewShell() : NULL;
@@ -1838,7 +1771,6 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
         }
 
         mpModel->SetModified();
-#endif
     }
 }
 
@@ -1846,6 +1778,9 @@ OUString SAL_CALL SdDrawPage::getName()
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
 
     return getPageApiName( GetPage() );
 }
@@ -1855,6 +1790,9 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getMasterPage(  )
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
 
     DBG_ASSERT(mpModel,"SdDrawPage hat kein Model??");
     if(mpModel && GetPage())
@@ -1874,6 +1812,9 @@ void SAL_CALL SdDrawPage::setMasterPage( const uno::Reference< drawing::XDrawPag
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
 
     DBG_ASSERT(mpModel,"SdDrawPage hat kein Model??");
     if(mpModel && pPage)
@@ -1913,6 +1854,9 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getNotesPage()
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
 
     if(pPage && mpModel && mpModel->GetDoc() )
     {
@@ -1961,6 +1905,11 @@ void SAL_CALL SdDrawPage::add( const uno::Reference< drawing::XShape >& xShape )
 
 void SAL_CALL SdDrawPage::remove( const uno::Reference< drawing::XShape >& xShape ) throw(uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     SvxShape* pShape = SvxShape::getImplementation( xShape );
     if( pShape )
     {
@@ -2128,6 +2077,11 @@ SdMasterPage::~SdMasterPage() throw()
 uno::Any SAL_CALL SdMasterPage::queryInterface( const uno::Type & rType )
     throw(uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     uno::Any aAny;
 
     if( rType == ITYPE( container::XIndexAccess ) )
@@ -2161,6 +2115,11 @@ UNO3_GETIMPLEMENTATION2_IMPL( SdMasterPage, SdGenericDrawPage );
 // XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     if( maTypeSequence.getLength() == 0 )
     {
         sal_Bool bPresPage = mpModel && mpModel->IsImpressDocument() && pPage && GetPage()->GetPageKind() != PK_HANDOUT;
@@ -2195,6 +2154,11 @@ uno::Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeE
 
 uno::Sequence< sal_Int8 > SAL_CALL SdMasterPage::getImplementationId() throw(uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     static uno::Sequence< sal_Int8 > aId;
     if( aId.getLength() == 0 )
     {
@@ -2212,6 +2176,11 @@ OUString SAL_CALL SdMasterPage::getImplementationName() throw(uno::RuntimeExcept
 
 uno::Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames() throw(uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     uno::Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
     SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.MasterPage" );
 
@@ -2230,6 +2199,11 @@ sal_Bool SAL_CALL SdMasterPage::supportsService( const OUString& ServiceName )
 // XElementAccess
 sal_Bool SAL_CALL SdMasterPage::hasElements() throw(uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     if( pPage == NULL )
         return sal_False;
 
@@ -2246,6 +2220,11 @@ uno::Type SAL_CALL SdMasterPage::getElementType()
 sal_Int32 SAL_CALL SdMasterPage::getCount()
     throw(uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     sal_Int32 nCount = SdGenericDrawPage::getCount();
     DBG_ASSERT( !mbHasBackgroundObject || (nCount > 0), "possible wrong shape count!" );
 
@@ -2258,6 +2237,11 @@ sal_Int32 SAL_CALL SdMasterPage::getCount()
 uno::Any SAL_CALL SdMasterPage::getByIndex( sal_Int32 Index )
     throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     if( mbHasBackgroundObject )
         Index++;
 
@@ -2470,6 +2454,9 @@ void SAL_CALL SdMasterPage::setName( const OUString& aName )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     if(pPage && GetPage()->GetPageKind() != PK_NOTES)
     {
         String aNewName( aName );
@@ -2507,6 +2494,9 @@ OUString SAL_CALL SdMasterPage::getName(  )
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     if(pPage)
     {
         String aLayoutName( GetPage()->GetLayoutName() );
@@ -2523,6 +2513,9 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPage::getNotesPage()
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
 
     if(pPage && mpModel && mpModel->GetDoc() )
     {
@@ -2544,6 +2537,11 @@ void SAL_CALL SdMasterPage::add( const uno::Reference< drawing::XShape >& xShape
 
 void SAL_CALL SdMasterPage::remove( const uno::Reference< drawing::XShape >& xShape ) throw(uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( pModel == 0 )
+        throw lang::DisposedException();
+
     SvxShape* pShape = SvxShape::getImplementation( xShape );
     if( pShape )
     {
