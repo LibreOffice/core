@@ -2,9 +2,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:12:02 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #ifndef _SWCRSR_HXX
 #include <swcrsr.hxx>
 #endif
+#include <svx/lrspitem.hxx> // #i23725#
 
 inline void SwWrtShell::OpenMark()
 {
@@ -91,6 +92,43 @@ inline void SwWrtShell::CloseMark( BOOL bOkFlag )
     EndAllAction();
 }
 
+// #i23725#
+BOOL SwWrtShell::TryRemoveIndent()
+{
+    BOOL bResult = FALSE;
+
+    SfxItemSet aAttrSet(GetAttrPool(), RES_LR_SPACE, RES_LR_SPACE);
+    GetAttr(aAttrSet);
+
+    SvxLRSpaceItem aItem = (const SvxLRSpaceItem &)aAttrSet.Get(RES_LR_SPACE);
+    short aOldFirstLineOfst = aItem.GetTxtFirstLineOfst();
+
+    if (aOldFirstLineOfst > 0)
+    {
+        aItem.SetTxtFirstLineOfst(0);
+        bResult = TRUE;
+    }
+    else if (aOldFirstLineOfst < 0)
+    {
+        aItem.SetTxtFirstLineOfst(0);
+        aItem.SetLeft(aItem.GetLeft() + aOldFirstLineOfst);
+
+        bResult = TRUE;
+    }
+    else if (aItem.GetLeft() != 0)
+    {
+        aItem.SetLeft(0);
+        bResult = TRUE;
+    }
+
+    if (bResult)
+    {
+        aAttrSet.Put(aItem);
+        SetAttr(aAttrSet);
+    }
+
+    return bResult;
+}
 
 /*------------------------------------------------------------------------
  Beschreibung:  Zeile loeschen
@@ -139,8 +177,6 @@ long SwWrtShell::DelToEndOfLine()
     CloseMark( 0 != nRet );
     return 1;
 }
-
-
 
 long SwWrtShell::DelLeft()
 {
