@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-23 11:28:19 $
+ *  last change: $Author: tbe $ $Date: 2001-04-10 15:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,8 @@ static const DataFlavorRepresentation aFormatArray_Impl[] =
 /*116 SOT_FORMATSTR_ID_DBACCESS_QUERY*/         { "application/x-openoffice;windows_formatname=\"Data source Query Object\"", "Data source Query Object", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*117 SOT_FORMATSTR_ID_DBACCESS_TABLE*/         { "application/x-openoffice;windows_formatname=\"Data source Table\"", "Data source Table", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*118 SOT_FORMATSTR_ID_DBACCESS_COMMAND*/       { "application/x-openoffice;windows_formatname=\"SQL query\"", "SQL query", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-/*119 SOT_FORMATSTR_ID_DUMMY7*/                 { "application/x-openoffice;windows_formatname=\"SO_DUMMYFORMAT_7\"", "SO_DUMMYFORMAT_7", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
+/*119 SOT_FORMATSTR_ID_DIALOG_60*/              { "application/vnd.sun.xml.dialog", "Dialog 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
+/*120 SOT_FORMATSTR_ID_DUMMY7*/                 { "application/x-openoffice;windows_formatname=\"SO_DUMMYFORMAT_7\"", "SO_DUMMYFORMAT_7", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
 };
 
 //-----------------------------------------------------------------------
