@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-09-26 13:58:21 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:23:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,16 +87,18 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
-#ifndef _URLOBJ_HXX
-#include <tools/urlobj.hxx>
+#ifndef _LINK_HXX
+#include <tools/link.hxx>
 #endif
-
+#ifndef _LIST_HXX
+#include <tools/list.hxx>
+#endif
 #ifndef _WLDCRD_HXX
 #include <tools/wldcrd.hxx>
 #endif
-
-#include <tools/link.hxx>
-#include <tools/list.hxx>
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -111,19 +113,22 @@ using namespace ::com::sun::star::uno   ;
 //  const
 //_________________________________________________________________________________________________________________
 
-#define ROOTNODE_MISC                   OUString( RTL_CONSTASCII_USTRINGPARAM("Office.Common/Misc") )
-#define DEFAULT_PLUGINSENABLED          sal_True;
+#define ASCII_STR(s)                        OUString( RTL_CONSTASCII_USTRINGPARAM(s) )
+#define ROOTNODE_MISC                       ASCII_STR("Office.Common/Misc")
+#define DEFAULT_PLUGINSENABLED              sal_True;
 
-#define PROPERTYNAME_PLUGINSENABLED     OUString(RTL_CONSTASCII_USTRINGPARAM("PluginsEnabled"))
-#define PROPERTYHANDLE_PLUGINSENABLED   0
-#define PROPERTYNAME_SYMBOLSET          OUString(RTL_CONSTASCII_USTRINGPARAM("SymbolSet"))
-#define PROPERTYHANDLE_SYMBOLSET        1
-#define PROPERTYNAME_TOOLBOXSTYLE       OUString(RTL_CONSTASCII_USTRINGPARAM("ToolboxStyle"))
-#define PROPERTYHANDLE_TOOLBOXSTYLE     2
-#define PROPERTYNAME_USESYSTEMFILEDIALOG          OUString(RTL_CONSTASCII_USTRINGPARAM("UseSystemFileDialog"))
-#define PROPERTYHANDLE_USESYSTEMFILEDIALOG        3
+#define PROPERTYNAME_PLUGINSENABLED         ASCII_STR("PluginsEnabled")
+#define PROPERTYHANDLE_PLUGINSENABLED       0
+#define PROPERTYNAME_SYMBOLSET              ASCII_STR("SymbolSet")
+#define PROPERTYHANDLE_SYMBOLSET            1
+#define PROPERTYNAME_TOOLBOXSTYLE           ASCII_STR("ToolboxStyle")
+#define PROPERTYHANDLE_TOOLBOXSTYLE         2
+#define PROPERTYNAME_USESYSTEMFILEDIALOG    ASCII_STR("UseSystemFileDialog")
+#define PROPERTYHANDLE_USESYSTEMFILEDIALOG  3
 
-#define PROPERTYCOUNT                   4
+#define PROPERTYCOUNT                       4
+
+#define VCL_TOOLBOX_STYLE_FLAT              ((USHORT)0x0004) // from <vcl/toolbox.hxx>
 
 DECLARE_LIST( LinkList, Link * );
 
@@ -195,31 +200,32 @@ class SvtMiscOptions_Impl : public ConfigItem
         //  public interface
         //---------------------------------------------------------------------------------------------------------
 
-        sal_Bool UseSystemFileDialog() const
+        inline sal_Bool UseSystemFileDialog() const
         { return m_bUseSystemFileDialog; }
 
-        void SetUseSystemFileDialog( sal_Bool bSet )
+        inline void SetUseSystemFileDialog( sal_Bool bSet )
         {  m_bUseSystemFileDialog = bSet; SetModified(); }
 
-        sal_Bool IsPluginsEnabled() const
+        inline sal_Bool IsPluginsEnabled() const
         { return m_bPluginsEnabled; }
 
         void SetPluginsEnabled( sal_Bool bEnable );
 
-        sal_Int16 GetSymbolSet()
+        inline sal_Int16 GetSymbolSet()
         { return m_nSymbolSet; }
 
         void SetSymbolSet( sal_Int16 nSet );
 
         // translate to VCL settings ( "0" = 3D, "1" = FLAT )
-        sal_Int16 GetToolboxStyle()
-        { return m_nToolboxStyle ? 4 : 0; }
+        inline sal_Int16 GetToolboxStyle()
+        { return m_nToolboxStyle ? VCL_TOOLBOX_STYLE_FLAT : 0; }
 
         // translate from VCL settings
-        void SetToolboxStyle( sal_Int16 nStyle );
+        void SetToolboxStyle( sal_Int16 nStyle, bool _bSetModified );
 
         void AddListener( const Link& rLink );
         void RemoveListener( const Link& rLink );
+        void CallListeners();
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -334,28 +340,32 @@ void SvtMiscOptions_Impl::RemoveListener( const Link& rLink )
     }
 }
 
-void SvtMiscOptions_Impl::SetToolboxStyle( sal_Int16 nStyle )
+void SvtMiscOptions_Impl::CallListeners()
+{
+    for ( USHORT n = 0; n < aList.Count(); ++n )
+        aList.GetObject(n)->Call( this );
+}
+
+void SvtMiscOptions_Impl::SetToolboxStyle( sal_Int16 nStyle, bool _bSetModified )
 {
     m_nToolboxStyle = nStyle ? 1 : 0;
-    SetModified();
-    for ( USHORT n=0; n<aList.Count(); n++ )
-        aList.GetObject(n)->Call( this );
+    if ( _bSetModified )
+        SetModified();
+    CallListeners();
 }
 
 void SvtMiscOptions_Impl::SetSymbolSet( sal_Int16 nSet )
 {
     m_nSymbolSet = nSet;
     SetModified();
-    for ( USHORT n=0; n<aList.Count(); n++ )
-        aList.GetObject(n)->Call( this );
+    CallListeners();
 }
 
 void SvtMiscOptions_Impl::SetPluginsEnabled( sal_Bool bEnable )
 {
     m_bPluginsEnabled = bEnable;
     SetModified();
-    for ( USHORT n=0; n<aList.Count(); n++ )
-        aList.GetObject(n)->Call( this );
+    CallListeners();
 }
 
 //*****************************************************************************************************************
@@ -401,8 +411,7 @@ void SvtMiscOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
         }
     }
 
-    for ( USHORT n=0; n<aList.Count(); n++ )
-        aList.GetObject(n)->Call( this );
+    CallListeners();
 }
 
 //*****************************************************************************************************************
@@ -539,7 +548,7 @@ sal_Int16 SvtMiscOptions::GetToolboxStyle() const
 
 void SvtMiscOptions::SetToolboxStyle( sal_Int16 nStyle )
 {
-    m_pDataContainer->SetToolboxStyle( nStyle );
+    m_pDataContainer->SetToolboxStyle( nStyle, true );
 }
 
 //*****************************************************************************************************************
