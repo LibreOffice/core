@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:50:12 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ greek ] = "Διαγραφή τρέχοντος ευρετηρίου";
                 Text[ dutch ] = "actuele index wissen";
                 Text[ french ] = "Supprimer l'index actif";
-                Text[ spanish ] = "eliminar νndice actual";
+                Text[ spanish ] = "Eliminar el νndice actual";
                 Text[ italian ] = "Elimina l'indice attuale";
                 Text[ danish ] = "Slet aktuelt indeks";
                 Text[ swedish ] = "Radera aktuellt index";
@@ -239,7 +239,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ greek ] = "Μετονομασία τρέχοντος ευρετηρίου";
                 Text[ dutch ] = "naam actuele index wijzigen";
                 Text[ french ] = "Renommer l'index actif";
-                Text[ spanish ] = "cambiar nombre a νndice actual";
+                Text[ spanish ] = "Cambiar el nombre del νndice actual";
                 Text[ italian ] = "Rinomina l'indice attuale";
                 Text[ danish ] = "Omdψb aktuelt indeks";
                 Text[ swedish ] = "Byt namn pε aktuellt index";
@@ -268,7 +268,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ greek ] = "Αποθήκευση τρέχοντος ευρετηρίου";
                 Text[ dutch ] = "actuele index opslaan";
                 Text[ french ] = "Enregistrer l'index actif";
-                Text[ spanish ] = "guardar νndice actual";
+                Text[ spanish ] = "Guardar el νndice actual";
                 Text[ italian ] = "Salva l'indica attuale";
                 Text[ danish ] = "Gem aktuelt indeks";
                 Text[ swedish ] = "Spara aktuellt index";
@@ -297,7 +297,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ greek ] = "Επαναφορά τρέχοντος ευρετηρίου";
                 Text[ dutch ] = "actuele index terugzetten";
                 Text[ french ] = "Restaurer l'index actif";
-                Text[ spanish ] = "restaurar νndice actual";
+                Text[ spanish ] = "Restaurar el νndice actual";
                 Text[ italian ] = "Ripristina l'indice attuale";
                 Text[ danish ] = "Nulstil aktuelt indeks";
                 Text[ swedish ] = "Εterstδll aktuellt index";
@@ -852,6 +852,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2002/09/05 13:50:12  kz
+ *  Merge SRX643: 05.09.02 - 15:46:53
+ *
  *  Revision 1.28  2002/08/30 14:58:26  gt
  *  #99281# new mask color magenta
  *
