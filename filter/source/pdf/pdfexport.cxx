@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 15:00:44 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:36:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,15 @@
 #ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFO_HPP_
+#include <com/sun/star/document/XDocumentInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
+#include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::vcl;
@@ -112,6 +121,31 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
+
+sal_Bool GetPropertyValue( Any& rAny, const Reference< XPropertySet > & rXPropSet, const sal_Char* pName )
+{
+    sal_Bool bRetValue = sal_True;
+    try
+    {
+        rAny = rXPropSet->getPropertyValue( String::CreateFromAscii( pName ) );
+        if ( !rAny.hasValue() )
+            bRetValue = sal_False;
+    }
+    catch( ::com::sun::star::uno::Exception& )
+    {
+        bRetValue = sal_False;
+    }
+    return bRetValue;
+}
+
+OUString GetProperty( const Reference< XPropertySet > & rXPropSet, const sal_Char* pName )
+{
+    OUString aRetValue;
+    Any aAny;
+    if ( GetPropertyValue( aAny, rXPropSet, pName ) )
+        aAny >>= aRetValue;
+    return aRetValue;
+}
 
 // -------------
 // - PDFExport -
@@ -290,9 +324,42 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     catch( UnknownPropertyException )
                     {
                     }
-
                     if( bRet )
+                    {
+                        PDFDocInfo aDocInfo;
+                        Reference< document::XDocumentInfoSupplier > xDocumentInfoSupplier( mxSrcDoc, UNO_QUERY );
+                        if ( xDocumentInfoSupplier.is() )
+                        {
+                            Reference< document::XDocumentInfo > xDocumentInfo( xDocumentInfoSupplier->getDocumentInfo() );
+                            if ( xDocumentInfo.is() )
+                            {
+                                Reference< XPropertySet > xPropSet( xDocumentInfo, UNO_QUERY );
+                                if ( xPropSet.is() )
+                                {
+                                    aDocInfo.Title = GetProperty( xPropSet, "Title" );
+                                    aDocInfo.Author = GetProperty( xPropSet, "Author" );
+                                    aDocInfo.Subject = GetProperty( xPropSet, "Theme" );
+                                    aDocInfo.Keywords = GetProperty( xPropSet, "Keywords" );
+                                }
+                            }
+                        }
+                        String aProducer;
+                        ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
+                        if ( pMgr )
+                        {
+                            Any aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+                            ::rtl::OUString sProductName;
+                            aProductName >>= sProductName;
+                            aProducer = sProductName;
+                            aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+                            aProductName >>= sProductName;
+                            aProducer.AppendAscii(" ");
+                            aProducer += String( sProductName );
+                        }
+                        aDocInfo.Producer = aProducer;
+                        pPDFWriter->SetDocInfo( aDocInfo );
                         pPDFWriter->Emit();
+                    }
                 }
             }
             catch( RuntimeException )
