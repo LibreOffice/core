@@ -124,6 +124,11 @@ public class BoundSheet implements BIFFRecord {
         return PocketExcelBiffConstants.BOUND_SHEET;
     }
 
+     /**
+     * Write this particular <code>BIFFRecord</code> to the <code>OutputStream</code>
+     *
+     * @param ouput the <code>OutputStream</code>
+     */
     public void write(OutputStream output) throws IOException {
 
         output.write(getBiffType());
@@ -134,6 +139,12 @@ public class BoundSheet implements BIFFRecord {
         Debug.log(Debug.TRACE,"Writing BoundSheet record");
     }
 
+    /**
+      * Reads a BoundSheet from the <code>InputStream</code> The byte array
+     * must be twice the size of the String as it uses unicode.
+      *
+      * @param  is InputStream containing the record data
+      */
     public int read(InputStream input) throws IOException {
 
         reserved            = (byte) input.read();
