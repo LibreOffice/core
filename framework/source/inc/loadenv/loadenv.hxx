@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-04 00:14:01 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 14:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,6 +722,21 @@ class LoadEnv : private ThreadHelpBase
          */
         void impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
                                                sal_Bool                                  bForceToFront);
+
+        //_______________________________________
+
+        /** @short  checks weather a frame is already used for another load request or not.
+
+            @descr  Such frames cant be used for our "recycle feature"!
+
+            @param  xFrame
+                    the frame, which should be checked.
+
+            @return [sal_Bool]
+                    TRUE if this frame is already used for loading,
+                    FALSE otherwise.
+         */
+        sal_Bool impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::frame::XFrame >& xFrame) const;
 };
 
 } // namespace framework
