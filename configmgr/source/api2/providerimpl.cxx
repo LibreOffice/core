@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-26 15:11:41 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,23 +265,7 @@ namespace configmgr
         }
         else
         {
-            m_pSession = _rSettings.createConnection(m_xContext);
-
-            if (!m_pSession) return false;
-
-         // prepare the options
-            // this is a hack asking the session if caching should be supported or not
-            // at the time we have complete notification support this hack isn't necessary anymore
-            if (!m_pSession->allowsCaching_Hack())
-                m_xDefaultOptions->setNoCache(sal_True);
-
-            // this is a hack to simulate 'finalized' where the backend doesn't support it
-            if (_rSettings.isAdminSession() && !m_pSession->supportsFinalized_Hack())
-                m_xDefaultOptions->setForceWritable(true);
-
-            this->implInitFromSettings(_rSettings,bNeedProfile);
-
-            xNewTreeManager = CacheFactory::instance().createCacheManager(m_pSession, m_xTypeConverter);
+            throw com::sun::star::uno::RuntimeException(OUString::createFromAscii("OProviderImpl: Only UNO Backends Supported"),NULL);
         }
 
         setTreeManager( xNewTreeManager.get() );
