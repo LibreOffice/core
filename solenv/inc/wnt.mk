@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-13 09:51:12 $
+#   last change: $Author: hjs $ $Date: 2001-09-24 15:35:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -391,7 +391,8 @@ CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS
 CDEFS+=-D_MT
 .ENDIF
 .IF "$(COMEX)"=="7"
-CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS
+#CDEFS+=-D__STL_NO_NEW_IOSTREAMS -DSTLPORT_VERSION=400 -D__STL_USE_ABBREVS
+CDEFS+=-DSTLPORT_VERSION=400
 CDEFS+=-D_MT
 .ENDIF
 .IF "$(COMEX)"=="8"
@@ -494,6 +495,9 @@ STDLIBCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 STDSHLGUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 STDSHLCUIMT=$(LIBCMT) kernel32.lib user32.lib $(OLDNAMES)
 .ENDIF
+
+LIBSTLPORT=stlport_vc6.lib
+LIBSTLPORTST=stlport_vc6_static.lib
 
 LIBMGR=lib $(NOLOGO)
 LIBFLAGS=
