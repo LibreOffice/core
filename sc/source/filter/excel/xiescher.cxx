@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:44:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,8 +543,7 @@ void XclImpEscherNote::Apply( ScfProgressBar& rProgress )
                 pObj->SetMergedItem( SvxWritingModeItem(aWriteMode));
                 pObj->SetMergedItem(SdrTextAutoGrowWidthItem(false));
                 pObj->SetMergedItem(SdrTextAutoGrowHeightItem(false));
-                const SfxItemSet& aItemSet = pObj->GetMergedItemSet();
-                aNote.SetItemSet(aItemSet);
+                aNote.SetAndApplyItemSet(pObj->GetMergedItemSet());
             }
             GetDoc().SetNote( GetCol(), GetRow(), mnScTab, aNote );
 
