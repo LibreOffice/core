@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:38:51 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:52:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -857,9 +857,10 @@ void BasicIDETabBar::Sort()
         ::std::vector<TabBarSortHelper> aModuleList;
         ::std::vector<TabBarSortHelper> aDialogList;
         USHORT nPageCount = GetPageCount();
+        USHORT i;
 
         // create module and dialog lists for sorting
-        for (USHORT i = 0; i < nPageCount; i++)
+        for ( i = 0; i < nPageCount; i++)
         {
             USHORT nId = GetPageId( i );
             aTabBarSortHelper.nPageId = nId;
