@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-17 07:22:24 $
+ *  last change: $Author: dr $ $Date: 2001-08-17 10:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ double              GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int3
                                 sal_Int32 nBase ) THROWDEF_RTE_IAE;
 double              GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
                                 sal_Int32 nBase ) THROWDEF_RTE_IAE;
-double              GetCoupdaysbs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
+double              GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
                                 sal_Int32 nBase ) THROWDEF_RTE_IAE;
 double              GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
                                 sal_Int32 nBase ) THROWDEF_RTE_IAE;
@@ -230,7 +230,7 @@ public:
     inline void                 SubYears( sal_uInt16 nSubYears );
 
     sal_Int32                   GetDate( sal_Int32 nNullDate ) const;
-    sal_Int32                   GetDiff( const ScAddInDate& rFrom ) const;
+    static sal_Int32            GetDiff( const ScAddInDate& rFrom, const ScAddInDate& rTo );
 
     sal_Bool                    operator<( const ScAddInDate& rCmp ) const;
     inline sal_Bool             operator<=( const ScAddInDate& rCmp ) const { return !(rCmp < *this); }

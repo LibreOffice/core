@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-17 07:22:24 $
+ *  last change: $Author: dr $ $Date: 2001-08-17 10:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1652,7 +1652,7 @@ double getPrice_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double
     double      fE = GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase );
     double      fDSC_E = GetCoupdaysnc( nNullDate, nSettle, nMat, nFreq, nBase ) / fE;
     double      fN = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase );
-    double      fA = nSettle - GetCouppcd( nNullDate, nSettle, nMat, nFreq, nBase );
+    double      fA = GetCoupdaybs( nNullDate, nSettle, nMat, nFreq, nBase );
 
     double      fRet = fRedemp / ( pow( 1.0 + fYield / fFreq, fN - 1.0 + fDSC_E ) );
     fRet -= 100.0 * fRate / fFreq * fA / fE;
@@ -1893,21 +1893,21 @@ sal_Int32 ScAddInDate::GetDate( sal_Int32 nNullDate ) const
     return DateToDays( nRealDay, nMonth, nYear ) - nNullDate;
 }
 
-sal_Int32 ScAddInDate::GetDiff( const ScAddInDate& rFrom ) const
+sal_Int32 ScAddInDate::GetDiff( const ScAddInDate& rFrom, const ScAddInDate& rTo )
 {
-    if( *this < rFrom )
-        return rFrom.GetDiff( *this );
+    if( rFrom > rTo )
+        return GetDiff( rTo, rFrom );
 
     sal_Int32 nDiff = 0;
     ScAddInDate aFrom( rFrom );
-    ScAddInDate aTo( *this );
+    ScAddInDate aTo( rTo );
 
-    if( b30Days )
+    if( rTo.b30Days )
     {
         // corrections for base 0 (US NASD)
-        if( bUSMode )
+        if( rTo.bUSMode )
         {
-            if( ((aFrom.nMonth == 2) || (aFrom.nDay < 30)) && (aTo.nOrigDay == 31) )
+            if( ((rFrom.nMonth == 2) || (rFrom.nDay < 30)) && (aTo.nOrigDay == 31) )
                 aTo.nDay = 31;
             else if( (aTo.nMonth == 2) && aTo.bLastDay )
                 aTo.nDay = DaysInMonth( 2, aTo.nYear );
@@ -2019,8 +2019,8 @@ double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 
 
 //-------
-// COUPDAYSBS: get day count: coupon date before settlement <-> settlement
-double GetCoupdaysbs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
+// COUPDAYBS: get day count: coupon date before settlement <-> settlement
+double GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
     THROWDEF_RTE_IAE
 {
     if( nSettle >= nMat || CHK_Freq )
@@ -2029,7 +2029,7 @@ double GetCoupdaysbs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sa
     ScAddInDate aSettle( nNullDate, nSettle, nBase );
     ScAddInDate aDate;
     lcl_GetCouppcd( aDate, aSettle, ScAddInDate( nNullDate, nMat, nBase ), nFreq );
-    return aSettle.GetDiff( aDate );
+    return ScAddInDate::GetDiff( aDate, aSettle );
 }
 
 
@@ -2041,10 +2041,14 @@ double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sa
     if( nSettle >= nMat || CHK_Freq )
         THROW_IAE;
 
-    ScAddInDate aSettle( nNullDate, nSettle, nBase );
-    ScAddInDate aDate;
-    lcl_GetCoupncd( aDate, aSettle, ScAddInDate( nNullDate, nMat, nBase ), nFreq );
-    return aDate.GetDiff( aSettle );
+    if( (nBase != 0) && (nBase != 4) )
+    {
+        ScAddInDate aSettle( nNullDate, nSettle, nBase );
+        ScAddInDate aDate;
+        lcl_GetCoupncd( aDate, aSettle, ScAddInDate( nNullDate, nMat, nBase ), nFreq );
+        return ScAddInDate::GetDiff( aSettle, aDate );
+    }
+    return GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase ) - GetCoupdaybs( nNullDate, nSettle, nMat, nFreq, nBase );
 }
 
 
@@ -2056,11 +2060,15 @@ double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
     if( nSettle >= nMat || CHK_Freq )
         THROW_IAE;
 
-    ScAddInDate aDate;
-    lcl_GetCouppcd( aDate, ScAddInDate( nNullDate, nSettle, nBase ), ScAddInDate( nNullDate, nMat, nBase ), nFreq );
-    ScAddInDate aNextDate( aDate );
-    aNextDate.AddMonths( static_cast< sal_uInt16 >( 12 / nFreq ) );
-    return aNextDate.GetDiff( aDate );
+    if( nBase == 1 )
+    {
+        ScAddInDate aDate;
+        lcl_GetCouppcd( aDate, ScAddInDate( nNullDate, nSettle, nBase ), ScAddInDate( nNullDate, nMat, nBase ), nFreq );
+        ScAddInDate aNextDate( aDate );
+        aNextDate.AddMonths( static_cast< sal_uInt16 >( 12 / nFreq ) );
+        return ScAddInDate::GetDiff( aDate, aNextDate );
+    }
+    return static_cast< double >( GetDaysInYear( 0, 0, nBase ) ) / nFreq;
 }
 
 
