@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-03-13 13:08:01 $
+ *  last change: $Author: os $ $Date: 2001-03-13 14:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,9 @@
 #endif
 #include <utlui.hrc>
 #include "swcont.hxx"
+#ifndef _UNODEFAULTS_HXX
+#include <unodefaults.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::util;
@@ -249,6 +252,7 @@ using namespace ::rtl;
 #define SW_CREATE_BITMAP_TABLE          0x04
 #define SW_CREATE_TRANSGRADIENT_TABLE   0x05
 #define SW_CREATE_MARKER_TABLE          0x06
+#define SW_CREATE_DRAW_DEFAULTS         0x07
 
 class SwXDocumentPropertyHelper : public cppu::WeakImplHelper1
 <com::sun::star::i18n::XForbiddenCharacters>
@@ -259,6 +263,7 @@ class SwXDocumentPropertyHelper : public cppu::WeakImplHelper1
     Reference<XInterface> xBitmapTable;
     Reference<XInterface> xTransGradientTable;
     Reference<XInterface> xMarkerTable;
+    Reference<XInterface> xDrawDefaults;
 
     SwDoc*  m_pDoc;
 public:
@@ -280,55 +285,10 @@ public:
             xBitmapTable = 0;
             xTransGradientTable = 0;
             xMarkerTable = 0;
+            xDrawDefaults = 0;
             m_pDoc = 0;
         }
 };
-/* -----------------------------13.03.01 11:56--------------------------------
-
- ---------------------------------------------------------------------------*/
-Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
-{
-    Reference<XInterface> xRet;
-    if(m_pDoc)
-    {
-        switch(nWhich)
-        {
-            case SW_CREATE_DASH_TABLE         :
-                if(!xDashTable.is())
-                    xDashTable = SvxUnoDashTable_createInstance( m_pDoc->GetDrawModel() );
-                xRet = xDashTable;
-            break;
-            case SW_CREATE_GRADIENT_TABLE     :
-                if(!xGradientTable.is())
-                    xGradientTable = SvxUnoGradientTable_createInstance( m_pDoc->GetDrawModel() );
-                xRet = xGradientTable;
-            break;
-            case SW_CREATE_HATCH_TABLE        :
-                if(!xHatchTable.is())
-                    xHatchTable = SvxUnoHatchTable_createInstance( m_pDoc->GetDrawModel() );
-                xRet = xHatchTable;
-            break;
-            case SW_CREATE_BITMAP_TABLE       :
-                if(!xBitmapTable.is())
-                    xBitmapTable = SvxUnoBitmapTable_createInstance( m_pDoc->GetDrawModel() );
-                xRet = xBitmapTable;
-            break;
-            case SW_CREATE_TRANSGRADIENT_TABLE:
-                if(!xTransGradientTable.is())
-                    xTransGradientTable = SvxUnoTransGradientTable_createInstance( m_pDoc->GetDrawModel() );
-                xRet = xTransGradientTable;
-            break;
-            case SW_CREATE_MARKER_TABLE       :
-                if(!xMarkerTable.is())
-                    xMarkerTable = SvxUnoMarkerTable_createInstance( m_pDoc->GetDrawModel() );
-                xRet = xMarkerTable;
-            break;
-            default: DBG_ERROR("which table?")
-        }
-    }
-    return xRet;
-}
-
 
 /******************************************************************************
  *
@@ -1907,6 +1867,8 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                         nTable = SW_CREATE_TRANSGRADIENT_TABLE;
                     else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MarkerTable") ) )
                         nTable = SW_CREATE_MARKER_TABLE;
+                    else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.Defaults") ) )
+                        nTable = SW_CREATE_DRAW_DEFAULTS;
                     if(nTable)
                     {
                         if(!xPropertyHelper.is())
@@ -3003,5 +2965,55 @@ void SwXDocumentPropertyHelper::removeForbiddenCharacters( const Locale& rLocale
         throw RuntimeException();
     LanguageType eLang = SvxLocaleToLanguage( rLocale );
     m_pDoc->ClearForbiddenCharacters( eLang );
+}
+/* -----------------------------13.03.01 11:56--------------------------------
+
+ ---------------------------------------------------------------------------*/
+Reference<XInterface> SwXDocumentPropertyHelper::GetDrawTable(short nWhich)
+{
+    Reference<XInterface> xRet;
+    if(m_pDoc)
+    {
+        switch(nWhich)
+        {
+            case SW_CREATE_DASH_TABLE         :
+                if(!xDashTable.is())
+                    xDashTable = SvxUnoDashTable_createInstance( m_pDoc->GetDrawModel() );
+                xRet = xDashTable;
+            break;
+            case SW_CREATE_GRADIENT_TABLE     :
+                if(!xGradientTable.is())
+                    xGradientTable = SvxUnoGradientTable_createInstance( m_pDoc->GetDrawModel() );
+                xRet = xGradientTable;
+            break;
+            case SW_CREATE_HATCH_TABLE        :
+                if(!xHatchTable.is())
+                    xHatchTable = SvxUnoHatchTable_createInstance( m_pDoc->GetDrawModel() );
+                xRet = xHatchTable;
+            break;
+            case SW_CREATE_BITMAP_TABLE       :
+                if(!xBitmapTable.is())
+                    xBitmapTable = SvxUnoBitmapTable_createInstance( m_pDoc->GetDrawModel() );
+                xRet = xBitmapTable;
+            break;
+            case SW_CREATE_TRANSGRADIENT_TABLE:
+                if(!xTransGradientTable.is())
+                    xTransGradientTable = SvxUnoTransGradientTable_createInstance( m_pDoc->GetDrawModel() );
+                xRet = xTransGradientTable;
+            break;
+            case SW_CREATE_MARKER_TABLE       :
+                if(!xMarkerTable.is())
+                    xMarkerTable = SvxUnoMarkerTable_createInstance( m_pDoc->GetDrawModel() );
+                xRet = xMarkerTable;
+            break;
+            case  SW_CREATE_DRAW_DEFAULTS:
+                if(!xDrawDefaults.is())
+                    xDrawDefaults = (cppu::OWeakObject*)new SwSvxUnoDrawPool(m_pDoc);
+                xRet = xDrawDefaults;
+            break;
+            default: DBG_ERROR("which table?")
+        }
+    }
+    return xRet;
 }
 
