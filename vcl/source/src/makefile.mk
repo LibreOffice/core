@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:25:29 $
+#   last change: $Author: rt $ $Date: 2004-05-21 14:43:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,28 +81,8 @@ SRC1FILES=			images.src			\
                     btntext.src
 
 RESLIB1NAME=		$(RESTARGET)
+RESLIB1IMAGES= $(PRJ)$/source/src
 RESLIB1SRSFILES=	$(SRS)$/svsrc.srs
-RESLIB1BMPS=		check.bmp			\
-                    checkwin.bmp		\
-                    checkos2.bmp		\
-                    checkmac.bmp		\
-                    checkunx.bmp		\
-                    radio.bmp			\
-                    radiowin.bmp		\
-                    radioos2.bmp		\
-                    radiomac.bmp		\
-                    radiounx.bmp		\
-                    msgbox.bmp			\
-                    scrbmp.bmp			\
-                    scrmsk.bmp			\
-                    pin.bmp 			\
-                    splhpin.bmp 		\
-                    splvpin.bmp 		\
-                    splharw.bmp 		\
-                    splvarw.bmp         \
-                    closedoc.bmp 		\
-                    closedochc.bmp
-                    
 
 # --- Targets ------------------------------------------------------
 
