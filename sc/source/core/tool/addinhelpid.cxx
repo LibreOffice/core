@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addinhelpid.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-08 14:00:52 $
+ *  last change: $Author: dr $ $Date: 2002-05-02 10:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 
 #pragma hdrstop
 
-//_____________________________________________________________________________
+// ============================================================================
 
 #ifndef SC_ADDINHELPID_HXX
 #include "addinhelpid.hxx"
@@ -75,12 +75,10 @@
 #include "sc.hrc"
 #endif
 
-using namespace ::rtl;
 
+// ============================================================================
 
-//_____________________________________________________________________________
-
-// A struct containing the built-in function name and the built-in help id.
+// A struct containing the built-in function name and the built-in help ID.
 struct ScUnoAddInHelpId
 {
     const sal_Char*             pFuncName;
@@ -88,7 +86,9 @@ struct ScUnoAddInHelpId
 };
 
 
-// Help ids for Analysis add-in. MUST BE SORTED for binary search.
+// ----------------------------------------------------------------------------
+
+// Help IDs for Analysis AddIn. MUST BE SORTED for binary search.
 const ScUnoAddInHelpId pAnalysisHelpIds[] =
 {
     { "getAccrint"                  , HID_AAI_FUNC_ACCRINT          },
@@ -186,20 +186,23 @@ const ScUnoAddInHelpId pAnalysisHelpIds[] =
     { "getYieldmat"                 , HID_AAI_FUNC_YIELDMAT         }
 };
 
-// Help ids for DateFunc add-in. MUST BE SORTED for binary search.
-//const ScUnoAddInHelpId pDateFuncHelpIds[] =
-//{
-//    { "getDaysInMonth"              , HID_DAI_FUNC_DAYSINMONTH      },
-//    { "getDaysInYear"               , HID_DAI_FUNC_DAYSINYEAR       },
-//    { "getDiffMonths"               , HID_DAI_FUNC_DIFFMONTHS       },
-//    { "getDiffWeeks"                , HID_DAI_FUNC_DIFFWEEKS        },
-//    { "getDiffYears"                , HID_DAI_FUNC_DIFFYEARS        },
-//    { "getRot13"                    , HID_DAI_FUNC_ROT13            }
-//    { "getWeeksInYear"              , HID_DAI_FUNC_WEEKSINYEAR      },
-//};
+
+// ----------------------------------------------------------------------------
+
+// Help IDs for DateFunc AddIn. MUST BE SORTED for binary search.
+const ScUnoAddInHelpId pDateFuncHelpIds[] =
+{
+    { "getDaysInMonth"              , HID_DAI_FUNC_DAYSINMONTH      },
+    { "getDaysInYear"               , HID_DAI_FUNC_DAYSINYEAR       },
+    { "getDiffMonths"               , HID_DAI_FUNC_DIFFMONTHS       },
+    { "getDiffWeeks"                , HID_DAI_FUNC_DIFFWEEKS        },
+    { "getDiffYears"                , HID_DAI_FUNC_DIFFYEARS        },
+    { "getRot13"                    , HID_DAI_FUNC_ROT13            },
+    { "getWeeksInYear"              , HID_DAI_FUNC_WEEKSINYEAR      }
+};
 
 
-//_____________________________________________________________________________
+// ============================================================================
 
 ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator() :
     pCurrHelpIds( NULL ),
@@ -207,12 +210,12 @@ ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator() :
 {
 }
 
-ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator( const OUString& rServiceName )
+ScUnoAddInHelpIdGenerator::ScUnoAddInHelpIdGenerator( const ::rtl::OUString& rServiceName )
 {
     SetServiceName( rServiceName );
 }
 
-void ScUnoAddInHelpIdGenerator::SetServiceName( const OUString& rServiceName )
+void ScUnoAddInHelpIdGenerator::SetServiceName( const ::rtl::OUString& rServiceName )
 {
     pCurrHelpIds = NULL;
     sal_uInt32 nSize = 0;
@@ -222,16 +225,16 @@ void ScUnoAddInHelpIdGenerator::SetServiceName( const OUString& rServiceName )
         pCurrHelpIds = pAnalysisHelpIds;
         nSize = sizeof( pAnalysisHelpIds );
     }
-//    else if( rServiceName.equalsAscii( "com.sun.star.sheet.addin.DateFunctions" ) )
-//    {
-//        pCurrHelpIds = pDateFuncHelpIds;
-//        nSize = sizeof( pDateFuncHelpIds );
-//    }
+    else if( rServiceName.equalsAscii( "com.sun.star.sheet.addin.DateFunctions" ) )
+    {
+        pCurrHelpIds = pDateFuncHelpIds;
+        nSize = sizeof( pDateFuncHelpIds );
+    }
 
     nArrayCount = nSize / sizeof( ScUnoAddInHelpId );
 }
 
-sal_uInt16 ScUnoAddInHelpIdGenerator::GetHelpId( const OUString& rFuncName ) const
+sal_uInt16 ScUnoAddInHelpIdGenerator::GetHelpId( const ::rtl::OUString& rFuncName ) const
 {
     if( !pCurrHelpIds || !nArrayCount )
         return 0;
@@ -255,5 +258,5 @@ sal_uInt16 ScUnoAddInHelpIdGenerator::GetHelpId( const OUString& rFuncName ) con
 }
 
 
-//_____________________________________________________________________________
+// ============================================================================
 

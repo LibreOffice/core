@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addinhelpid.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-08 14:01:42 $
+ *  last change: $Author: dr $ $Date: 2002-05-02 10:37:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,30 +67,30 @@
 #endif
 
 
-//_____________________________________________________________________________
+// ============================================================================
 
 struct ScUnoAddInHelpId;
 
-/// Generates help ids for the Calc add-ins Analysis and DateFunc.
+/** Generates help IDs for standard Calc AddIns. */
 class ScUnoAddInHelpIdGenerator
 {
 private:
-    const ScUnoAddInHelpId*     pCurrHelpIds;       /// Array of function names and help ids.
+    const ScUnoAddInHelpId*     pCurrHelpIds;       /// Array of function names and help IDs.
     sal_uInt32                  nArrayCount;        /// Count of array entries.
 
 public:
                                 ScUnoAddInHelpIdGenerator();
                                 ScUnoAddInHelpIdGenerator( const ::rtl::OUString& rServiceName );
 
-                                /// Set service name of the add-in before requesting help ids.
+    /** Sets service name of the AddIn. Has to be done before requesting help IDs. */
     void                        SetServiceName( const ::rtl::OUString& rServiceName );
 
-                                /// @return  The help id of the function with given built-in name or 0 if not found.
+    /** @return  The help ID of the function with given built-in name or 0 if not found. */
     sal_uInt16                  GetHelpId( const ::rtl::OUString& rFuncName ) const;
 };
 
 
-//_____________________________________________________________________________
+// ============================================================================
 
 #endif
 

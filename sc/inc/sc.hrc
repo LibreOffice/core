@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-18 17:02:04 $
+ *  last change: $Author: dr $ $Date: 2002-05-02 10:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 #define HID_SC_MENU_START       (HID_SC_START + 1180)
 #define HID_SC_OTHER_START      (HID_SC_START + 1230)
 #define HID_SC_AAI_FUNCS_START  (HID_SC_START + 1300)       // Analysis Addin Functions
+#define HID_SC_DAI_FUNCS_START  (HID_SC_START + 1420)       // DateFunc Addin Functions
 
 // ---------------------------------------------------------------------------
 
@@ -352,7 +353,7 @@
 // Other help IDs (max.70) ---------------------------------------------------
 #define HID_SCDLG_LINKAREAURL   ( HID_SC_OTHER_START )
 
-// Analysis Addin Functions --------------------------------------------------
+// Analysis Addin Functions (max.120) ----------------------------------------
 #define HID_AAI_FUNC_WORKDAY        ( HID_SC_AAI_FUNCS_START )
 #define HID_AAI_FUNC_YEARFRAC       ( HID_SC_AAI_FUNCS_START + 1 )
 #define HID_AAI_FUNC_EDATE          ( HID_SC_AAI_FUNCS_START + 2 )
@@ -446,6 +447,15 @@
 #define HID_AAI_FUNC_OCT2HEX        ( HID_SC_AAI_FUNCS_START + 90 )
 #define HID_AAI_FUNC_CONVERT        ( HID_SC_AAI_FUNCS_START + 91 )
 #define HID_AAI_FUNC_FACTDOUBLE     ( HID_SC_AAI_FUNCS_START + 92 )
+
+// DateFunc Addin Functions (max.20) -----------------------------------------
+#define HID_DAI_FUNC_DAYSINMONTH    ( HID_SC_DAI_FUNCS_START )
+#define HID_DAI_FUNC_DAYSINYEAR     ( HID_SC_DAI_FUNCS_START + 1 )
+#define HID_DAI_FUNC_WEEKSINYEAR    ( HID_SC_DAI_FUNCS_START + 2 )
+#define HID_DAI_FUNC_DIFFMONTHS     ( HID_SC_DAI_FUNCS_START + 3 )
+#define HID_DAI_FUNC_DIFFWEEKS      ( HID_SC_DAI_FUNCS_START + 4 )
+#define HID_DAI_FUNC_DIFFYEARS      ( HID_SC_DAI_FUNCS_START + 5 )
+#define HID_DAI_FUNC_ROT13          ( HID_SC_DAI_FUNCS_START + 6 )
 
 // Ende Hilfe IDs ------------------------------------------------------------
 // ---------------------------------------------------------------------------
