@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-02-02 16:37:08 $
+ *  last change: $Author: as $ $Date: 2001-02-20 09:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ void FrameWork::Main()
 
     // Create new global servicemanager.
     ServiceManager aManager;
-    Reference< XMultiServiceFactory > xGlobalServiceManager = aManager.getManager( OUString() );
+    Reference< XMultiServiceFactory > xGlobalServiceManager = aManager.getGlobalUNOServiceManager();
 
     if ( xGlobalServiceManager.is() == sal_True )
     {

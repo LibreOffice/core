@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-02-02 13:32:23 $
+ *  last change: $Author: as $ $Date: 2001-02-20 09:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,6 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#ifndef __FRAMEWORK_OMUTEXMEMBER_HXX_
-#include <helper/omutexmember.hxx>
-#endif
-
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
 #endif
@@ -94,6 +90,10 @@
 #include <rtl/ustring>
 #endif
 
+#ifndef _OSL_MUTEX_HXX_
+#include <osl/mutex.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -103,6 +103,7 @@ namespace framework{
 #define REFERENCE                   ::com::sun::star::uno::Reference
 #define XMULTISERVICEFACTORY        ::com::sun::star::lang::XMultiServiceFactory
 #define OUSTRING                    ::rtl::OUString
+#define MUTEX                       ::osl::Mutex
 
 //_________________________________________________________________________________________________________________
 //  exported const
@@ -118,12 +119,12 @@ namespace framework{
                     a factory to create new objects with special type. That's the reason for a servicemanager.
 
     @implements     -
-    @base           OMutexMember
+    @base           -
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class ServiceManager    :   public OMutexMember                     // Struct for right initalization of mutex member!
+class ServiceManager
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -138,9 +139,10 @@ class ServiceManager    :   public OMutexMember                     // Struct fo
         /*-****************************************************************************************************//**
             @short      standard constructor
             @descr      This method don't initialize the new global servicemanager!
-                        Use getManager() function to do this.
+                        But we increase an internal ref count. These is needed in dtor to release
+                        all created static references to created service mamanger!
 
-            @seealso    -
+            @seealso    dtor
 
             @param      -
             @return     -
@@ -152,10 +154,9 @@ class ServiceManager    :   public OMutexMember                     // Struct fo
 
         /*-****************************************************************************************************//**
             @short      standard destructor to delete instance
-            @descr      Here is a good place to destroy the global manager instance!
-                        But we don't do it in these implementation yet.
+            @descr      Here is a good place to destroy the global manager instances!
 
-            @seealso    -
+            @seealso    ctor
 
             @param      -
             @return     -
@@ -166,23 +167,77 @@ class ServiceManager    :   public OMutexMember                     // Struct fo
         virtual ~ServiceManager();
 
         /*-****************************************************************************************************//**
-            @short      return a reference to the global servicemanager instance
+            @short      initialize global uno service manager and return it
             @descr      This method create a new manager only at first call. We confiscate this with a static
                         pointer, which will be initialized only, if it NULL!
                         Then you can call this method everytime to get a reference to the manager.
-                        Uno support a "applicat.rdb" and a user named rdb-file which are merged.
-                        Use "sUserRegsitry" to specify the name of this file.
-                        If no value is given - we use automaticly userXX.rdb of our normal soffice-process!
+                        If you will initialize an uno application you must set returned reference in ::comphelper::setProcessServiceFactory()!
+                        The created manager use "applicat.rdb" and "userXX.rdb" automaticly.
 
             @seealso    -
 
-            @param      "sRegistryFile", file name of user registry
+            @param      -
             @return     A reference to the global servicemanager. It can be NULL!
 
             @onerror    We return a null-reference.
         *//*-*****************************************************************************************************/
 
-        REFERENCE< XMULTISERVICEFACTORY > getManager( const OUSTRING& sRegistryFile );
+        REFERENCE< XMULTISERVICEFACTORY > getGlobalUNOServiceManager();
+
+        /*-****************************************************************************************************//**
+            @short      initialize global uno service manager and return it
+            @descr      Do the same like getGlobalUNOServiceManager() before, but use "applicat.rdb" only!
+
+            @seealso    -
+
+            @param      -
+            @return     A reference to the global servicemanager. It can be NULL!
+
+            @onerror    We return a null-reference.
+        *//*-*****************************************************************************************************/
+
+        REFERENCE< XMULTISERVICEFACTORY > getSimpleGlobalUNOServiceManager();
+
+        /*-****************************************************************************************************//**
+            @short      return a reference to a uno servicemanager instance which use your specified user registry file
+            @descr      This do the same like method before - but instead of "userXX.rdb" we use your file.
+                        These is neccessary, if you will run more then one uno application at the same time in same environment!
+                        All created servicemanager use the same "applicat.rdb" but different user registries.
+
+            @ATTENTION  Given file name must be a full qualified system file name. If file not already exist we create a new one!
+                        "applicat.rdb", "userXX.rdb" are not valid values!
+
+            @seealso    method generateGlobalUNOServiceManager()
+            @seealso    method generatePrivateUNOServiceManager()
+
+            @param      "sUserRegistryFile", full qualified system file name of user registry
+            @return     A reference to the created servicemanager. It can be NULL!
+
+            @onerror    We return a null-reference.
+        *//*-*****************************************************************************************************/
+
+        REFERENCE< XMULTISERVICEFACTORY > getSharedUNOServiceManager( const OUSTRING& sUserRegistryFile );
+
+        /*-****************************************************************************************************//**
+            @short      return a reference to a uno servicemanager instance which use your specified user registry file only
+            @descr      This do the same like methods before - but use your file as the only one registry.
+                        "applicat.rdb" is used here!
+
+            @ATTENTION  Given file name must be a full qualified system file name. If file not already exist we create a new one!
+                        "applicat.rdb", "userXX.rdb" are not valid values!
+                        If file was new created - you must register services at runtime himself.
+                        Otherwise no service could be created by these manager ...
+
+            @seealso    method generateGlobalUNOServiceManager()
+            @seealso    method generateSharedUNOServiceManager()
+
+            @param      "sUserRegistryFile", full qualified system file name of user registry
+            @return     A reference to the created servicemanager. It can be NULL!
+
+            @onerror    We return a null-reference.
+        *//*-*****************************************************************************************************/
+
+        REFERENCE< XMULTISERVICEFACTORY > getPrivateUNOServiceManager( const OUSTRING& sUserRegistryFile );
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -195,6 +250,23 @@ class ServiceManager    :   public OMutexMember                     // Struct fo
     //-------------------------------------------------------------------------------------------------------------
 
     private:
+
+        /*-****************************************************************************************************//**
+            @short      create our own global mutex to prevent us against multithreaded problems
+            @descr      We use some static member. For correct access to it we must use the global osl mutex ...
+                        but its not fine to do so! These block ALL other operations, which need these mutex too.
+                        That's the reason to create our own static mutex. Only first creation is protected
+                        by the global mutex, using isn't it!
+
+            @seealso    using
+
+            @param      -
+            @return     reference to created static own global mutex
+
+            @onerror    No error should occure.
+        *//*-*****************************************************************************************************/
+
+        MUTEX& impl_getOwnGlobalMutex();
 
         /*-****************************************************************************************************//**
             @short      create a new global servicemanager instance
@@ -242,6 +314,12 @@ class ServiceManager    :   public OMutexMember                     // Struct fo
     //-------------------------------------------------------------------------------------------------------------
 
     private:
+
+        static REFERENCE< XMULTISERVICEFACTORY >*   m_pGlobalServiceManager         ;
+        static REFERENCE< XMULTISERVICEFACTORY >*   m_pSimpleGlobalServiceManager   ;
+        static REFERENCE< XMULTISERVICEFACTORY >*   m_pSharedServiceManager         ;
+        static REFERENCE< XMULTISERVICEFACTORY >*   m_pPrivateServiceManager        ;
+        static sal_Int32                            m_nRefCount                     ;
 
 };      //  class ServiceManager
 
