@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-31 10:24:50 $
+ *  last change: $Author: rt $ $Date: 2001-06-05 15:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
 {
     ThreadedBuffer *pBuffer;
     Reference < XOutputStream > xBuffer = (pBuffer = new ThreadedBuffer ( n_ConstBufferSize, sURL, *this ));
-    ZipOutputStream aZipOut ( Reference < XOutputStream > (pBuffer), n_ConstBufferSize); //, nSegmentSize );
+    ZipOutputStream aZipOut ( xBuffer, n_ConstBufferSize); //, nSegmentSize );
     pBuffer->setZipOutputStream ( aZipOut );
 
     aZipOut.setMethod(DEFLATED);
