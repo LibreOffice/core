@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-18 14:49:04 $
+ *  last change: $Author: hdu $ $Date: 2001-05-29 09:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5607,51 +5607,38 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
             return 0;
     }
 
-    ImplFontEntry*      pFontEntry = mpFontEntry;
-    const sal_Unicode*  pStr;
-    long                nCalcWidth = 0;
-    xub_StrLen          nLastIndex;
+    long nWidthFactor = 1000;
+    if ( nWidthFactor < mpFontEntry->mnWidthFactor )
+        nWidthFactor = mpFontEntry->mnWidthFactor;
+
+    nCharExtra *= nWidthFactor;
+    nTextWidth *= nWidthFactor;
 
     if ( mbMap )
     {
-        nTextWidth = ImplLogicWidthToDevicePixel( nTextWidth*10 );
-        nTextWidth *= mpFontEntry->mnWidthFactor;
-        nTextWidth /= 10;
+        nTextWidth = ImplLogicWidthToDevicePixel( nTextWidth );
         if ( nCharExtra )
-        {
-            nCharExtra = ImplLogicWidthToDevicePixel( nCharExtra*10 );
-            nCharExtra *= mpFontEntry->mnWidthFactor;
-            nCharExtra /= 10;
-        }
-    }
-    else
-    {
-        nCharExtra *= mpFontEntry->mnWidthFactor;
-        nTextWidth *= mpFontEntry->mnWidthFactor;
+            nCharExtra = ImplLogicWidthToDevicePixel( nCharExtra );
     }
 
-    // Letzte Index-Position ermitteln
-    if ( (ULONG)nIndex+nLen > rStr.Len() )
+    // calc last index position
+    xub_StrLen nLastIndex = nIndex + nLen;
+    if ( nLastIndex > rStr.Len() )
         nLastIndex = rStr.Len();
-    else
-        nLastIndex = nIndex + nLen;
 
-    pStr = rStr.GetBuffer();
-    pStr += nIndex;
-    while ( nIndex < nLastIndex )
+    long nCalcWidth = 0;
+    const sal_Unicode* pStr = rStr.GetBuffer() + nIndex;
+    for(; nIndex < nLastIndex; ++nIndex, ++pStr )
     {
-        nCalcWidth += ImplGetCharWidth( *pStr );
+        nCalcWidth += (ImplGetCharWidth(*pStr) * nWidthFactor) / mpFontEntry->mnWidthFactor;
 
         if ( nCalcWidth > nTextWidth )
             return nIndex;
 
-        // Kerning beruecksichtigen
+        // apply kerning
         if ( mbKerning )
-            nCalcWidth += ImplCalcKerning( pStr, 2, NULL, 0 )*mpFontEntry->mnWidthFactor;
+            nCalcWidth += ImplCalcKerning( pStr, 2, NULL, 0 ) * nWidthFactor;
         nCalcWidth += nCharExtra;
-
-        nIndex++;
-        pStr++;
     }
 
     return STRING_LEN;
@@ -5676,46 +5663,37 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
             return 0;
     }
 
-    ImplFontEntry*      pFontEntry = mpFontEntry;
-    const sal_Unicode*  pStr;
-    long                nTextWidth2;
-    long                nCalcWidth = 0;
-    xub_StrLen          nIndex2 = STRING_LEN;
-    xub_StrLen          nLastIndex;
+    long nWidthFactor = 1000;
+    if ( mpFontEntry->mnWidthFactor > nWidthFactor )
+        nWidthFactor = mpFontEntry->mnWidthFactor;
+
+    nCharExtra *= nWidthFactor;
+    nTextWidth *= nWidthFactor;
 
     if ( mbMap )
     {
-        nTextWidth = ImplLogicWidthToDevicePixel( nTextWidth*10 );
-        nTextWidth *= mpFontEntry->mnWidthFactor;
-        nTextWidth /= 10;
+        nTextWidth = ImplLogicWidthToDevicePixel( nTextWidth );
         if ( nCharExtra )
-        {
-            nCharExtra = ImplLogicWidthToDevicePixel( nCharExtra*10 );
-            nCharExtra *= mpFontEntry->mnWidthFactor;
-            nCharExtra /= 10;
-        }
-    }
-    else
-    {
-        nCharExtra *= mpFontEntry->mnWidthFactor;
-        nTextWidth *= mpFontEntry->mnWidthFactor;
+            nCharExtra = ImplLogicWidthToDevicePixel( nCharExtra );
     }
 
-    // Letzte Index-Position ermitteln
-    if ( (ULONG)nIndex+nLen > rStr.Len() )
+    // calc last index position
+    xub_StrLen nLastIndex = nIndex + nLen;
+    if ( nLastIndex > rStr.Len() )
         nLastIndex = rStr.Len();
-    else
-        nLastIndex = nIndex + nLen;
 
-    nTextWidth2 = nTextWidth - ImplGetCharWidth( nExtraChar ) - nCharExtra;
-    if( nTextWidth2 < 0 )
+    xub_StrLen nIndex2 = STRING_LEN;
+    long nTextWidth2 = nTextWidth;
+    nTextWidth2 -= (ImplGetCharWidth(nExtraChar) * nWidthFactor) / mpFontEntry->mnWidthFactor;
+    nTextWidth2 -= nCharExtra;
+    if ( nTextWidth2 < 0 )
         nIndex2 = 0;
 
-    pStr = rStr.GetBuffer();
-    pStr += nIndex;
-    while ( nIndex < nLastIndex )
+    long nCalcWidth = 0;
+    const sal_Unicode* pStr = rStr.GetBuffer() + nIndex;
+    for(; nIndex < nLastIndex; ++nIndex, ++pStr )
     {
-        nCalcWidth += ImplGetCharWidth( *pStr );
+        nCalcWidth += (ImplGetCharWidth(*pStr) * nWidthFactor) / mpFontEntry->mnWidthFactor;
 
         if ( nCalcWidth > nTextWidth2 )
         {
@@ -5724,20 +5702,14 @@ xub_StrLen OutputDevice::GetTextBreak( const XubString& rStr, long nTextWidth,
         }
         if ( nCalcWidth > nTextWidth )
         {
-            if ( nIndex2 == STRING_LEN )
-                rExtraCharPos = nIndex;
-            else
-                rExtraCharPos = nIndex2;
+            rExtraCharPos = (nIndex2 == STRING_LEN) ? nIndex : nIndex2;
             return nIndex;
         }
 
-        // Kerning beruecksichtigen
+        // apply kerning
         if ( mbKerning )
-            nCalcWidth += ImplCalcKerning( pStr, 2, NULL, 0 )*mpFontEntry->mnWidthFactor;
+            nCalcWidth += ImplCalcKerning( pStr, 2, NULL, 0 ) * nWidthFactor;
         nCalcWidth += nCharExtra;
-
-        nIndex++;
-        pStr++;
     }
 
     rExtraCharPos = nIndex2;
