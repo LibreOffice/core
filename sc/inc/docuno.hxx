@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:41:39 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,6 @@ class ScTableRowObj;
 class ScTableSheetObj;
 class SvxFmDrawPage;
 class SvxDrawPage;
-class SvEmbeddedObject;
 
 class ScModelObj : public SfxBaseModel,
                     public com::sun::star::sheet::XSpreadsheetDocument,
@@ -208,7 +207,7 @@ public:
     static void             CreateAndSet(ScDocShell* pDocSh);
 
     ScDocument*             GetDocument() const;
-    SvEmbeddedObject*       GetEmbeddedObject() const;
+    SfxObjectShell*         GetEmbeddedObject() const;
     BOOL                    IsEmbedded() const;
     double                  GetOutputFactor() const;
 
