@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:55:57 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ public:
     virtual SalI18NImeStatus*   CreateI18NImeStatus();
     virtual SalSystem*          CreateSalSystem();
     virtual SalBitmap*          CreateSalBitmap();
+    virtual SalSession*         CreateSalSession();
 
     virtual vos::IMutex*        GetYieldMutex();
     virtual ULONG               ReleaseYieldMutex();
