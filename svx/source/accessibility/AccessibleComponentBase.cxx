@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComponentBase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-04-11 12:39:33 $
+ *  last change: $Author: af $ $Date: 2002-04-18 16:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,11 @@ sal_Bool SAL_CALL AccessibleComponentBase::contains (
         const ::com::sun::star::awt::Point& aPoint)
         throw (::com::sun::star::uno::RuntimeException)
 {
-    awt::Rectangle aBounds (getBounds());
-    return (aPoint.X >= aBounds.X)
-        && (aPoint.X <= aBounds.X+aBounds.Width)
-        && (aPoint.Y >= aBounds.Y)
-        && (aPoint.Y <= aBounds.Y+aBounds.Height);
+    awt::Size aSize (getSize());
+    return (aPoint.X >= 0)
+        && (aPoint.X < aSize.Width)
+        && (aPoint.Y >= 0)
+        && (aPoint.Y <= aSize.Height);
 }
 
 
