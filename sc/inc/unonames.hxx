@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-23 18:20:49 $
+ *  last change: $Author: nn $ $Date: 2001-05-30 10:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,8 @@
 #define SC_UNONAME_ULISTS           "UserLists"
 #define SC_UNONAME_USETABCOL        "UseTabCol"
 #define SC_UNONAME_PRMETRICS        "UsePrinterMetrics"
+#define SC_UNONAME_PRALLSH          "PrintAllSheets"
+#define SC_UNONAME_PREMPTY          "PrintEmptyPages"
 
 //  data pilot field
 #define SC_UNONAME_FUNCTION         "Function"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 19:22:18 $
+ *  last change: $Author: nn $ $Date: 2001-05-30 10:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include <tools/shl.hxx>
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
+#include <sfx2/app.hxx>
 
 #include "appluno.hxx"
 #include "afmtuno.hxx"
@@ -76,6 +77,7 @@
 #include "scmod.hxx"
 #include "appoptio.hxx"
 #include "inputopt.hxx"
+#include "printopt.hxx"
 #include "userlist.hxx"
 #include "sc.hrc"           // VAR_ARGS
 #include "unoguard.hxx"
@@ -163,6 +165,8 @@ const SfxItemPropertyMap* lcl_GetSettingsPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_METRIC),   0,  &getCppuType((sal_Int16*)0),        0},
         {MAP_CHAR_LEN(SC_UNONAME_MOVEDIR),  0,  &getCppuType((sal_Int16*)0),        0},
         {MAP_CHAR_LEN(SC_UNONAME_MOVESEL),  0,  &getBooleanCppuType(),              0},
+        {MAP_CHAR_LEN(SC_UNONAME_PRALLSH),  0,  &getBooleanCppuType(),              0},
+        {MAP_CHAR_LEN(SC_UNONAME_PREMPTY),  0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNONAME_RANGEFIN), 0,  &getBooleanCppuType(),              0},
         {MAP_CHAR_LEN(SC_UNONAME_SCALE),    0,  &getCppuType((sal_Int16*)0),        0},
         {MAP_CHAR_LEN(SC_UNONAME_STBFUNC),  0,  &getCppuType((sal_Int16*)0),        0},
@@ -469,6 +473,7 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
     ScInputOptions aInpOpt = pScMod->GetInputOptions();
     BOOL bSaveApp = FALSE;
     BOOL bSaveInp = FALSE;
+    // print options aren't loaded until needed
 
     if (aString.EqualsAscii( SC_UNONAME_DOAUTOCP ))
     {
@@ -578,6 +583,19 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
             bSaveApp = TRUE;    // Liste wird mit den App-Optionen gespeichert
         }
     }
+    else if (aString.EqualsAscii( SC_UNONAME_PRALLSH ))
+    {
+        ScPrintOptions aPrintOpt = pScMod->GetPrintOptions();
+        aPrintOpt.SetAllSheets( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        pScMod->SetPrintOptions( aPrintOpt );
+    }
+    else if (aString.EqualsAscii( SC_UNONAME_PREMPTY ))
+    {
+        ScPrintOptions aPrintOpt = pScMod->GetPrintOptions();
+        aPrintOpt.SetSkipEmpty( !ScUnoHelpFunctions::GetBoolFromAny( aValue ) );    // reversed
+        pScMod->SetPrintOptions( aPrintOpt );
+        SFX_APP()->Broadcast( SfxSimpleHint( SID_SCPRINTOPTIONS ) );    // update previews
+    }
 
     if ( bSaveApp )
         pScMod->SetAppOptions( aAppOpt );
@@ -596,6 +614,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const rtl::OUString& 
     ScModule* pScMod = SC_MOD();
     ScAppOptions   aAppOpt = pScMod->GetAppOptions();
     ScInputOptions aInpOpt = pScMod->GetInputOptions();
+    // print options aren't loaded until needed
 
     if (aString.EqualsAscii( SC_UNONAME_DOAUTOCP ))     ScUnoHelpFunctions::SetBoolInAny( aRet, aAppOpt.GetAutoComplete() );
     else if (aString.EqualsAscii( SC_UNONAME_ENTERED )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetEnterEdit() );
@@ -638,6 +657,10 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const rtl::OUString& 
             aRet <<= aSeq;
         }
     }
+    else if (aString.EqualsAscii( SC_UNONAME_PRALLSH ))
+        ScUnoHelpFunctions::SetBoolInAny( aRet, pScMod->GetPrintOptions().GetAllSheets() );
+    else if (aString.EqualsAscii( SC_UNONAME_PREMPTY ))
+        ScUnoHelpFunctions::SetBoolInAny( aRet, !pScMod->GetPrintOptions().GetSkipEmpty() );    // reversed
 
     return aRet;
 }
