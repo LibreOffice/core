@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-27 16:52:29 $
+ *  last change: $Author: fs $ $Date: 2001-10-01 16:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,9 @@
 #endif
 #ifndef _SFX_FILEDLGHELPER_HRC
 #include "filedlghelper.hrc"
+#endif
+#ifndef SFX2_FILTERGROUPING_HXX
+#include "filtergrouping.hxx"
 #endif
 
 //-----------------------------------------------------------------------------
@@ -1299,81 +1302,18 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
         nFilterFlags = SFX_FILTER_IMPORT;
 
     sal_Bool    bHasAll = sal_False;
-    OUString    aAllFilterName = OUString( String( SfxResId( STR_FILTERNAME_ALL ) ) );
-    OUString    aUIName;
     SfxFilterMatcherIter aIter( mpMatcher, nFilterFlags, SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG );
-    const SfxFilter* pDef = aIter.First();
 
-    // when in file open mode, we have to check, wether there is a filter named <ALL>
+    // append the filters
+    ::rtl::OUString sFirstFilter;
     if ( WB_OPEN == ( nFlags & WB_OPEN ) )
-    {
-        for ( const SfxFilter* pFilter = pDef; pFilter && !bHasAll; pFilter = aIter.Next() )
-        {
-            OUString aUIName( pFilter->GetUIName() );
-            if ( aUIName == aAllFilterName )
-                bHasAll = sal_True;
-        }
+        ::sfx2::appendFiltersForOpen( aIter, xFltMgr, sFirstFilter );
+    else
+        ::sfx2::appendFilters( aIter, xFltMgr, sFirstFilter );
 
-        // Add the filter for displaying all files, if there is none
-        if ( !bHasAll )
-        {
-            try
-            {
-                xFltMgr->appendFilter( aAllFilterName, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
-                maSelectFilter = aAllFilterName;
-            }
-            catch( IllegalArgumentException )
-            {
-#ifdef DBG_UTIL
-                ByteString aMsg( "Could not append Filter" );
-                aMsg += ByteString( String( aAllFilterName ), RTL_TEXTENCODING_UTF8 );
-                DBG_ERRORFILE( aMsg.GetBuffer() );
-#endif
-            }
-        }
-    }
-
-    pDef = aIter.First();
-
-    for ( const SfxFilter* pFilter = pDef; pFilter; pFilter = aIter.Next() )
-    {
-        aUIName = pFilter->GetUIName();
-        try
-        {
-            xFltMgr->appendFilter( aUIName, pFilter->GetWildcard().GetWildCard() );
-            if ( !maSelectFilter.getLength() )
-                maSelectFilter = aUIName;
-
-        }
-        catch( IllegalArgumentException )
-        {
-#ifdef DBG_UTIL
-            ByteString aMsg( "Could not append Filter" );
-            aMsg += ByteString( String( aUIName ), RTL_TEXTENCODING_UTF8 );
-            DBG_ERRORFILE( aMsg.GetBuffer() );
-#endif
-        }
-    }
-
-#ifdef FS_PRIV_DEBUG
-    Reference< XFilterGroupManager > xFilterGroups( xFltMgr, UNO_QUERY );
-    if ( xFilterGroups.is() )
-    {
-        Sequence< StringPair > aFilters(2);
-
-        aFilters[0].First   = ::rtl::OUString::createFromAscii( "testing *.txt" );
-        aFilters[0].Second  = ::rtl::OUString::createFromAscii( "*.txt" );
-        aFilters[1].First   = ::rtl::OUString::createFromAscii( "testing *.sdw" );
-        aFilters[1].Second  = ::rtl::OUString::createFromAscii( "*.sdw" );
-        xFilterGroups->appendFilterGroup( ::rtl::OUString::createFromAscii( "Textdokumente" ), aFilters );
-
-        aFilters[0].First   = ::rtl::OUString::createFromAscii( "just a test - Calc 5.x" );
-        aFilters[0].Second  = ::rtl::OUString::createFromAscii( "*.sdc" );
-        aFilters[1].First   = ::rtl::OUString::createFromAscii( "still a test - Calc 6.0" );
-        aFilters[1].Second  = ::rtl::OUString::createFromAscii( "*.sxc" );
-        xFilterGroups->appendFilterGroup( ::rtl::OUString::createFromAscii( "Tabellendkumente" ), aFilters );
-    }
-#endif
+    // set our initial selected filter (if we do not already have one)
+    if ( maSelectFilter.getLength() )
+        maSelectFilter = sFirstFilter;
 }
 
 // ------------------------------------------------------------------------
