@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:30:50 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ ModalDialog DLG_NEW_FILE
         Text [ italian ] = "~Categorie" ;
         Text [ portuguese_brazilian ] = "~Regiões" ;
         Text [ portuguese ] = "~Categorias" ;
-        Text [ finnish ] = "~Alueet" ;
+        Text [ finnish ] = "~Luokat" ;
         Text [ danish ] = "Områder" ;
         Text [ french ] = "~Catégories" ;
         Text [ swedish ] = "~Kategorier" ;
@@ -148,7 +148,7 @@ ModalDialog DLG_NEW_FILE
         Text [ italian ] = "~Modelli" ;
         Text [ portuguese_brazilian ] = "~Modelos" ;
         Text [ portuguese ] = "~Modelos" ;
-        Text [ finnish ] = "~Mallit" ;
+        Text [ finnish ] = "~Mallipohjat" ;
         Text [ danish ] = "Skabeloner" ;
         Text [ french ] = "~Modèles" ;
         Text [ swedish ] = "~Mallar" ;
@@ -187,7 +187,7 @@ ModalDialog DLG_NEW_FILE
         Text [ italian ] = "E~xtra" ;
         Text [ portuguese_brazilian ] = "~Mais" ;
         Text [ portuguese ] = "~Outros" ;
-        Text [ finnish ] = "~Enemmän" ;
+        Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Flere" ;
         Text [ french ] = "O~ptions" ;
         Text [ swedish ] = "~Fler" ;
@@ -226,7 +226,7 @@ ModalDialog DLG_NEW_FILE
         Text [ italian ] = "Anteprima" ;
         Text [ portuguese_brazilian ] = "E~xaminar" ;
         Text [ portuguese ] = "~Previsualização" ;
-        Text [ finnish ] = "~Esikatselu" ;
+        Text [ finnish ] = "Esi~katselu" ;
         Text [ danish ] = "Eksempel" ;
         Text [ french ] = "~Aperçu" ;
         Text [ swedish ] = "Förhandsvi~sning" ;
@@ -273,6 +273,7 @@ ModalDialog DLG_NEW_FILE
         Text[ turkish ] = "Taným";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Descripción";
+        Text[ finnish ] = "Kuvaus";
     };
     FixedText FT_TITLE
     {
@@ -284,7 +285,7 @@ ModalDialog DLG_NEW_FILE
         Text [ italian ] = "~Titolo" ;
         Text [ portuguese_brazilian ] = "Título" ;
         Text [ portuguese ] = "~Título" ;
-        Text [ finnish ] = "Otsikko" ;
+        Text [ finnish ] = "~Otsikko" ;
         Text [ danish ] = "Titel" ;
         Text [ french ] = "~Titre" ;
         Text [ swedish ] = "~Rubrik" ;
@@ -362,7 +363,7 @@ ModalDialog DLG_NEW_FILE
         Text [ italian ] = "Parole chiave" ;
         Text [ portuguese_brazilian ] = "Palavras-chave" ;
         Text [ portuguese ] = "~Palavras-chave" ;
-        Text [ finnish ] = "Avainsanat" ;
+        Text [ finnish ] = "~Avainsanat" ;
         Text [ danish ] = "Nøgleord" ;
         Text [ french ] = "Mots-cl~és" ;
         Text [ swedish ] = "~Nyckelord" ;
@@ -400,7 +401,7 @@ ModalDialog DLG_NEW_FILE
         Text [ italian ] = "Descrizione" ;
         Text [ portuguese_brazilian ] = "Descrição" ;
         Text [ portuguese ] = "~Descrição" ;
-        Text [ finnish ] = "Kuvaus" ;
+        Text [ finnish ] = "~Kuvaus" ;
         Text [ danish ] = "Beskrivelse" ;
         Text [ french ] = "~Description" ;
         Text [ swedish ] = "B~eskrivning" ;
