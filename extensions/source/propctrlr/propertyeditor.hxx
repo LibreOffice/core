@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyeditor.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:05:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,6 @@ namespace pcr
 
     public:
                                             OPropertyEditor (Window* pParent, WinBits nWinStyle = WB_DIALOGCONTROL);
-                                            OPropertyEditor (Window* pParent, const ResId& rResId);
 
                                             ~OPropertyEditor();
 
