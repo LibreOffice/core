@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XScriptEventsAttacher.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:20 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 #ifndef __com_sun_star_script_XScriptListener_idl__
 #include <com/sun/star/script/XScriptListener.idl>
 #endif
-
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
@@ -97,7 +96,7 @@
     objects that give access to the definition of events that should
     be attached to them, e.g., by supporting XEventsSupplier
 */
-interface XScriptEventsAttacher: com::sun::star::uno::XInterface
+published interface XScriptEventsAttacher: com::sun::star::uno::XInterface
 {
     /**
         Attaches the events defined by XScriptEventsSupplier to the
