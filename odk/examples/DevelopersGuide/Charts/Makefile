@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2004-05-18 13:20:22 $
+#  last change: $Author: rt $ $Date: 2005-01-31 16:11:11 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -48,62 +48,111 @@ include $(SETTINGS)/std.mk
 include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
-OUT_COMP_CLASS = $(OUT_CLASS)/ChartExamples
+SAMPLE_NAME=DevGuideChartExample
+SAMPLE_CLASS_OUT = $(OUT_CLASS)/$(SAMPLE_NAME)
+SAMPLE_GEN_OUT = $(OUT_MISC)/$(SAMPLE_NAME)
+
+APP1_NAME=ChartInCalc
+APP1_JAR=$(SAMPLE_CLASS_OUT)/$(APP1_NAME).jar
+APP2_NAME=ChartInDraw
+APP2_JAR=$(SAMPLE_CLASS_OUT)/$(APP2_NAME).jar
+APP3_NAME=ChartInWriter
+APP3_JAR=$(SAMPLE_CLASS_OUT)/$(APP3_NAME).jar
+APP4_NAME=ListenAtCalcRangeInDraw
+APP4_JAR=$(SAMPLE_CLASS_OUT)/$(APP4_NAME).jar
+APP5_NAME=SelectionChangeListener
+APP5_JAR=$(SAMPLE_CLASS_OUT)/$(APP5_NAME).jar
 
 COMPONENT_NAME=JavaSampleChartAddIn
-COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).uno.zip
-COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).uno.zip")
+COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).$(UNOPKG_EXT)
+COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).$(UNOPKG_EXT)")
 COMPONENT_JAR_NAME = $(COMPONENT_NAME).uno.jar
-COMPONENT_JAR = $(OUT_CLASS)/$(COMPONENT_JAR_NAME)
-COMPONENT_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
+COMPONENT_JAR = $(SAMPLE_CLASS_OUT)/$(COMPONENT_JAR_NAME)
+COMPONENT_MANIFESTFILE = $(SAMPLE_CLASS_OUT)/$(COMPONENT_NAME).uno.Manifest
+COMPONENT_UNOPKG_MANIFEST = $(SAMPLE_CLASS_OUT)/$(COMPONENT_NAME)/META-INF/manifest.xml
+COMP_REGISTERFLAG = $(SAMPLE_GEN_OUT)/devguide_$(COMPONENT_NAME)_register_component.flag
 
-REGISTERFLAG = $(OUT_MISC)/devguide_$(COMPONENT_NAME)_register_component.flag
+COMPJAVAFILES  = \
+	   JavaSampleChartAddIn.java
 
-JAVAFILES  = \
-	   CalcHelper.java	\
-	   ChartHelper.java	\
-	   ChartInCalc.java	\
-	   ChartInDraw.java	\
-	   ChartInWriter.java	\
-	   Helper.java	\
-	   JavaSampleChartAddIn.java	\
-	   ListenAtCalcRangeInDraw.java \
-	   SelectionChangeListener.java
+APP_JAVAFILES  = \
+	   Helper.java \
+	   CalcHelper.java \
+	   ChartHelper.java
 
-CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
+COMPCLASSFILES= $(patsubst %.java,$(SAMPLE_CLASS_OUT)/%.class,$(COMPJAVAFILES))
+
+APP_CLASSFILES= $(patsubst %.java,$(SAMPLE_CLASS_OUT)/%.class,$(APP_JAVAFILES))
+APP_CLASSNAMES= $(patsubst %.java,%.class,$(APP_JAVAFILES))
 
 $(COMPONENT_NAME)_CLASSFILES = $(COMPONENT_NAME).class
 
 SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
-		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
+		$(PATH_SEPARATOR)$(SAMPLE_CLASS_OUT))
 
 
 # Targets
 .PHONY: ALL
-ALL : ChartExamples
+ALL : $(SAMPLE_NAME)
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_CLASS)/%.Manifest :
+$(SAMPLE_CLASS_OUT)/%.Manifest :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	@echo RegistrationClassName: $(basename $(basename $(@F)))> $@
 
-$(CLASSFILES) : $(JAVAFILES)
+# rule for client/example application class files, explicit dependencies to common
+# java files which are used in all examples.
+$(SAMPLE_CLASS_OUT)/%.class : %.java $(APP_JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(SAMPLE_CLASS_OUT) $< $(APP_JAVAFILES)
 
-$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
+$(COMPCLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_JAR) cvfm ../$(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(SAMPLE_CLASS_OUT) $(COMPJAVAFILES) 
 
-$(COMPONENT_PACKAGE) : $(COMPONENT_JAR)
+# rule for client/example application manifest file
+$(SAMPLE_CLASS_OUT)/%.mf :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	cd $(subst /,$(PS),$(OUT_CLASS)) && $(SDK_JAR) cvfM ../bin/$(@F) $(^F)
+	@echo Main-Class: com.sun.star.lib.loader.Loader> $@
+	$(ECHOLINE)>> $@
+	@echo Name: com/sun/star/lib/loader/Loader.class>> $@
+	@echo Application-Class: $*>> $@
 
-$(REGISTERFLAG) : $(COMPONENT_PACKAGE)
+# rule for client/example application jar file
+$(SAMPLE_CLASS_OUT)/%.jar : $(SAMPLE_CLASS_OUT)/%.mf $(SAMPLE_CLASS_OUT)/%.class
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	+cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_JAR) cvfm $(@F) $*.mf $*.class $(APP_CLASSNAMES)
+	+$(SDK_JAR) uvf $@ $(SDK_JAVA_UNO_BOOTSTRAP_FILES)
+
+# rule for component jar file
+$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(COMPCLASSFILES)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_JAR) cvfm $(@F) $(<F) $($(basename $(basename $(@F)))_CLASSFILES)
+
+# rule for component package manifest
+$(SAMPLE_CLASS_OUT)/%/manifest.xml :
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
+	@echo $(OSEP)!DOCTYPE manifest:manifest PUBLIC "$(QM)-//OpenOffice.org//DTD Manifest 1.0//EN$(QM)" "$(QM)Manifest.dtd$(QM)"$(CSEP) >> $@
+	@echo $(OSEP)manifest:manifest xmlns:manifest="$(QM)http://openoffice.org/2001/manifest$(QM)"$(CSEP) >> $@
+	@echo $(SQM)  $(SQM)$(OSEP)manifest:file-entry manifest:media-type="$(QM)application/vnd.sun.star.uno-component;type=Java$(QM)" >> $@
+	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(subst /META-INF,,$(subst $(SAMPLE_CLASS_OUT)/,,$(@D))).uno.jar$(QM)"/$(CSEP) >> $@
+	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
+
+# rule for component pacakge file
+$(COMPONENT_PACKAGE) : $(COMPONENT_JAR) $(COMPONENT_UNOPKG_MANIFEST)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) ../../bin/$(@F) $(<F)
+	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)/$(subst .$(UNOPKG_EXT),,$(@F))) && $(SDK_ZIP) ../../../bin/$(@F) -u META-INF/manifest.xml
+
+$(COMP_REGISTERFLAG) : $(COMPONENT_PACKAGE)
 ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	-$(DEL) $(subst /,$(PS),$@)
 	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
@@ -114,31 +163,41 @@ else
 	@echo --------------------------------------------------------------------------------
 endif
 
-ChartExamples : $(REGISTERFLAG)
+$(APP1_JAR) : $(SAMPLE_CLASS_OUT)/$(APP1_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP1_NAME).class
+$(APP2_JAR) : $(SAMPLE_CLASS_OUT)/$(APP2_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP2_NAME).class
+$(APP3_JAR) : $(SAMPLE_CLASS_OUT)/$(APP3_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP3_NAME).class
+$(APP4_JAR) : $(SAMPLE_CLASS_OUT)/$(APP4_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP4_NAME).class
+$(APP5_JAR) : $(SAMPLE_CLASS_OUT)/$(APP5_NAME).mf $(SAMPLE_CLASS_OUT)/$(APP5_NAME).class
+
+$(SAMPLE_NAME) : $(COMP_REGISTERFLAG) $(APP1_JAR)  $(APP2_JAR)  $(APP3_JAR)  $(APP4_JAR)  $(APP5_JAR)
 	@echo --------------------------------------------------------------------------------
-	@echo When you run the "$(QM)SelectionChangeListener$(QM)" example please select the
-	@echo legend or the title to add a SelectionChangeListener. The example terminates
+	@echo When you run the "$(QM)$(APP5_NAME)$(QM)" example please select the
+	@echo legend or the title to add a $(APP5_NAME). The example terminates
 	@echo when the document is closed.
 	@echo -
 	@echo Please use the following commands to execute the examples!
 	@echo -
-	@echo make ChartInCalc.run
-	@echo make ChartInDraw.run
-	@echo make ChartInWriter.run
-	@echo make ListenAtCalcRangeInDraw.run
-	@echo make SelectionChangeListener.run
+	@echo make $(APP1_NAME).run
+	@echo make $(APP2_NAME).run
+	@echo make $(APP3_NAME).run
+	@echo make $(APP4_NAME).run
+	@echo make $(APP5_NAME).run
 	@echo --------
 	@echo The Chart add-in component was installed if SDK_AUTO_DEPLOYMENT = YES.
-	@echo Load the "$(QM)AddinChart.sxc$(QM)" document in your office to see the new chart type,
+	@echo Load the "$(QM)AddInChart.ods$(QM)" document in your office to see the new chart type,
 	@echo and see the example description.
+	@echo -
+	@echo make AddInChart.ods.load
 	@echo --------------------------------------------------------------------------------
 
-%.run: $(OUT_COMP_CLASS)/%.class
-	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
+%.run: $(SAMPLE_CLASS_OUT)/%.jar
+	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<
+
+AddInChart.ods.load : $(REGISTERFLAG)
+	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(basename $@)
 
 .PHONY: clean
 clean :
-	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_CLASS_OUT))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_GEN_OUT))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))
-	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
