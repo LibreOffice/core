@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:48:05 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,44 +226,44 @@ void SdrPageObj::TakeObjNamePlural(XubString& rName) const
     rName=ImpGetResStr(STR_ObjNamePluralPAGE);
 }
 
-void SdrPageObj::WriteData(SvStream& rOut) const
-{
-    SdrObject::WriteData(rOut);
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrPageObj");
-#endif
+//BFS01void SdrPageObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrObject::WriteData(rOut);
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrPageObj");
+//BFS01#endif
+//BFS01
+//BFS01 // #111111#
+//BFS01 if(mpShownPage)
+//BFS01 {
+//BFS01     rOut << (sal_uInt16)mpShownPage->GetPageNum();
+//BFS01 }
+//BFS01 else
+//BFS01 {
+//BFS01     rOut << (sal_uInt16)0;
+//BFS01 }
+//BFS01}
 
-    // #111111#
-    if(mpShownPage)
-    {
-        rOut << (sal_uInt16)mpShownPage->GetPageNum();
-    }
-    else
-    {
-        rOut << (sal_uInt16)0;
-    }
-}
-
-void SdrPageObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if (rIn.GetError()!=0) return;
-    SdrObject::ReadData(rHead,rIn);
-    SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrPageObj");
-#endif
-
-    // #111111#
-    sal_uInt16 nPageNum;
-    rIn >> nPageNum;
-
-    if(GetModel())
-    {
-        SdrPage* pNewPage = GetModel()->GetPage(nPageNum);
-        SetReferencedPage(pNewPage);
-    }
-}
+//BFS01void SdrPageObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return;
+//BFS01 SdrObject::ReadData(rHead,rIn);
+//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrPageObj");
+//BFS01#endif
+//BFS01
+//BFS01 // #111111#
+//BFS01 sal_uInt16 nPageNum;
+//BFS01 rIn >> nPageNum;
+//BFS01
+//BFS01 if(GetModel())
+//BFS01 {
+//BFS01     SdrPage* pNewPage = GetModel()->GetPage(nPageNum);
+//BFS01     SetReferencedPage(pNewPage);
+//BFS01 }
+//BFS01}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // eof
