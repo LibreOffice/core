@@ -7472,3 +7472,6 @@ _TI4?AVout_of_range@_STL@@
 ?__query@?$Reference@VXDispatch@frame@star@sun@com@@@uno@star@sun@com@@CAPAVXDispatch@frame@345@PAVXInterface@2345@@Z
 ??0?$_Vector_base@VOUString@rtl@@V?$allocator@VOUString@rtl@@@_STL@@@_STL@@QAE@ABV?$allocator@VOUString@rtl@@@1@@Z
 ?deallocate@?$allocator@VOUString@rtl@@@_STL@@QBEXPAVOUString@rtl@@I@Z
+?SystrayThread@@YGKPAX@Z
+?executerWndProc@@YGJPAUHWND__@@IIJ@Z
+?GetMPath@FileDialogHelper@sfx2@@QBE?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@XZ
