@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-08-30 10:50:18 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
 
 #include "hdft.hxx"
 #include "pageitem.hxx"
-#include "bbdlg.hxx"
+//CHINA001 #include "bbdlg.hxx"
 #include "dlgutil.hxx"
 #include "dialmgr.hxx"
 #include "htmlmode.hxx"
@@ -110,6 +110,8 @@
 #include "sizeitem.hxx"
 #include "boxitem.hxx"
 
+#include "svxdlg.hxx" //CHINA001
+#include "dialogs.hrc" //CHINA001
 // static ----------------------------------------------------------------
 
 static const long MINBODY = 284;            // 0,5cm in twips aufgerundet
@@ -607,51 +609,56 @@ IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
             pBBSet->Put( *pItem );
     }
 
-    SvxBorderBackgroundDlg* pDlg =
-        new SvxBorderBackgroundDlg( this, *pBBSet, bEnableBackgroundSelector );
-
-    if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
+    //CHINA001 SvxBorderBackgroundDlg* pDlg =
+//CHINA001      new SvxBorderBackgroundDlg( this, *pBBSet, bEnableBackgroundSelector );
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    if(pFact)
     {
-        SfxItemIter aIter( *pDlg->GetOutputItemSet() );
-        const SfxPoolItem* pItem = aIter.FirstItem();
-
-        while ( pItem )
+        SfxAbstractTabDialog* pDlg = pFact->CreateSvxBorderBackgroundDlg( this, *pBBSet, ResId(RID_SVXDLG_BBDLG),bEnableBackgroundSelector );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+        if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
         {
-            if ( !IsInvalidItem( pItem ) )
-                pBBSet->Put( *pItem );
-            pItem = aIter.NextItem();
+            SfxItemIter aIter( *pDlg->GetOutputItemSet() );
+            const SfxPoolItem* pItem = aIter.FirstItem();
+
+            while ( pItem )
+            {
+                if ( !IsInvalidItem( pItem ) )
+                    pBBSet->Put( *pItem );
+                pItem = aIter.NextItem();
+            }
+
+            //----------------------------------------------------------------
+
+            USHORT nWhich = GetWhich( SID_ATTR_BRUSH );
+
+            if ( pBBSet->GetItemState( nWhich ) == SFX_ITEM_SET )
+            {
+                const SvxBrushItem& rItem = (const SvxBrushItem&)pBBSet->Get( nWhich );
+                if ( nId == SID_ATTR_PAGE_HEADERSET )
+                    aBspWin.SetHdColor( rItem.GetColor() );
+                else
+                    aBspWin.SetFtColor( rItem.GetColor() );
+            }
+
+            //----------------------------------------------------------------
+
+            nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
+
+            if ( pBBSet->GetItemState( nWhich ) == SFX_ITEM_SET )
+            {
+                const SvxBoxItem& rItem = (const SvxBoxItem&)pBBSet->Get( nWhich );
+
+                if ( nId == SID_ATTR_PAGE_HEADERSET )
+                    aBspWin.SetHdBorder( rItem );
+                else
+                    aBspWin.SetFtBorder( rItem );
+            }
+
+            UpdateExample();
         }
-
-        //----------------------------------------------------------------
-
-        USHORT nWhich = GetWhich( SID_ATTR_BRUSH );
-
-        if ( pBBSet->GetItemState( nWhich ) == SFX_ITEM_SET )
-        {
-            const SvxBrushItem& rItem = (const SvxBrushItem&)pBBSet->Get( nWhich );
-            if ( nId == SID_ATTR_PAGE_HEADERSET )
-                aBspWin.SetHdColor( rItem.GetColor() );
-            else
-                aBspWin.SetFtColor( rItem.GetColor() );
-        }
-
-        //----------------------------------------------------------------
-
-        nWhich = GetWhich( SID_ATTR_BORDER_OUTER );
-
-        if ( pBBSet->GetItemState( nWhich ) == SFX_ITEM_SET )
-        {
-            const SvxBoxItem& rItem = (const SvxBoxItem&)pBBSet->Get( nWhich );
-
-            if ( nId == SID_ATTR_PAGE_HEADERSET )
-                aBspWin.SetHdBorder( rItem );
-            else
-                aBspWin.SetFtBorder( rItem );
-        }
-
-        UpdateExample();
-    }
     delete pDlg;
+    }
     return 0;
 }
 
