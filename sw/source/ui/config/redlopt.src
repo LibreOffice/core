@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:36:37 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,10 +97,10 @@ TabPage TP_REDLINE_OPT
         Text[ chinese_simplified ] = "ÎÄ×ÖÏÔÊ¾";
         Text[ russian ] = "Ïîêàç òåêñòà";
         Text[ polish ] = "Wyœwietl tekst";
-        Text[ japanese ] = "Ã·½Ä‚ÌÃŞ¨½ÌßÚ²";
+        Text[ japanese ] = "•ÏX‰ÓŠ‚Ì—š—ğ";
         Text[ chinese_traditional ] = "¤å¦rÅã¥Ü";
-        Text[ arabic ] = "ÚÑÖ ÇáäÕ";
-        Text[ greek ] = "ÄéÜôáîç êåéìİíïõ";
+        Text[ arabic ] = "ØÑíŞÉ ÚÑÖ ÇáäÕ";
+        Text[ greek ] = "ĞñïâïëŞ êåéìİíïõ";
         Text[ korean ] = "ÅØ½ºÆ® Ç¥½Ã";
         Text[ turkish ] = "Metin görünümü";
         Text[ language_user1 ] = " ";
@@ -113,22 +113,22 @@ TabPage TP_REDLINE_OPT
         Text [ English ] = "Attributes" ;
         Text[ english_us ] = "Attributes";
         Text[ portuguese ] = "Attributes";
-        Text[ russian ] = "Attributes";
-        Text[ greek ] = "Attributes";
+        Text[ russian ] = "Àòğèáóòû";
+        Text[ greek ] = "Éäéü~ôçôåò";
         Text[ dutch ] = "Attributes";
         Text[ french ] = "Attributes";
         Text[ spanish ] = "Attributes";
         Text[ italian ] = "Attributes";
         Text[ danish ] = "Attributes";
-        Text[ swedish ] = "Attributes";
-        Text[ polish ] = "Attributes";
+        Text[ swedish ] = "A~ttribut";
+        Text[ polish ] = "Atrybuty";
         Text[ portuguese_brazilian ] = "Attributes";
-        Text[ japanese ] = "Attributes";
+        Text[ japanese ] = "‘®«";
         Text[ korean ] = "Attributes";
-        Text[ chinese_simplified ] = "Attributes";
+        Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
         Text[ turkish ] = "Attributes";
-        Text[ arabic ] = "Attributes";
+        Text[ arabic ] = "ÇáÓãÇÊ";
     };
     ListBox LB_INS_ATTR
     {
@@ -167,12 +167,12 @@ TabPage TP_REDLINE_OPT
             < "[None]" ; > ;
             < "Bold" ; > ;
             < "Italic" ; > ;
-            < "Underline" ; > ;
-            < "Underline: double" ; > ;
-            < "Caps" ; > ;
-            < "Lower case" ; > ;
+            < "Underlined" ; > ;
+            < "Underlined: double" ; > ;
+            < "Uppercase" ; > ;
+            < "Lowercase" ; > ;
             < "Small caps" ; > ;
-            < "Title Font" ; > ;
+            < "Title font" ; > ;
             < "Background color" ; > ;
         };
         stringlist [ portuguese_brazilian ] =
@@ -190,15 +190,15 @@ TabPage TP_REDLINE_OPT
         };
         stringlist [ swedish ] =
         {
-            < "[Inga]" ; > ;
+            < "[Inget]" ; > ;
             < "Fet" ; > ;
             < "Kursiv" ; > ;
             < "Understruken" ; > ;
-            < "Dubbelt understruket" ; > ;
+            < "Dubbelt understruken" ; > ;
             < "Versaler" ; > ;
             < "Gemener" ; > ;
             < "Kapitäler" ; > ;
-            < "Titelteckensnitt" ; > ;
+            < "Titel" ; > ;
             < "Bakgrundsfärg" ; > ;
         };
         stringlist [ danish ] =
@@ -452,22 +452,22 @@ TabPage TP_REDLINE_OPT
         Text [ English ] = "Insert" ;
         Text[ english_us ] = "Insert";
         Text[ portuguese ] = "Insert";
-        Text[ russian ] = "Insert";
-        Text[ greek ] = "Insert";
+        Text[ russian ] = "Âñòàâèòü";
+        Text[ greek ] = "ÅéóáãùãŞ";
         Text[ dutch ] = "Insert";
         Text[ french ] = "Insert";
         Text[ spanish ] = "Insert";
         Text[ italian ] = "Insert";
         Text[ danish ] = "Insert";
-        Text[ swedish ] = "Insert";
-        Text[ polish ] = "Insert";
+        Text[ swedish ] = "Infoga";
+        Text[ polish ] = "Wstaw";
         Text[ portuguese_brazilian ] = "Insert";
-        Text[ japanese ] = "Insert";
+        Text[ japanese ] = "‘}“ü";
         Text[ korean ] = "Insert";
-        Text[ chinese_simplified ] = "Insert";
+        Text[ chinese_simplified ] = "²åÈë";
         Text[ chinese_traditional ] = "´¡¤J";
         Text[ turkish ] = "Insert";
-        Text[ arabic ] = "Insert";
+        Text[ arabic ] = "ÅÏÑÇÌ";
     };
     FixedText FT_DEL_ATTR
     {
@@ -477,22 +477,22 @@ TabPage TP_REDLINE_OPT
         Text [ English ] = "Attributes" ;
         Text[ english_us ] = "Attributes";
         Text[ portuguese ] = "Attributes";
-        Text[ russian ] = "Attributes";
-        Text[ greek ] = "Attributes";
+        Text[ russian ] = "Àòğèáóòû";
+        Text[ greek ] = "Éäéü~ôçôåò";
         Text[ dutch ] = "Attributes";
         Text[ french ] = "Attributes";
         Text[ spanish ] = "Attributes";
         Text[ italian ] = "Attributes";
         Text[ danish ] = "Attributes";
-        Text[ swedish ] = "Attributes";
-        Text[ polish ] = "Attributes";
+        Text[ swedish ] = "A~ttribut";
+        Text[ polish ] = "Atrybuty";
         Text[ portuguese_brazilian ] = "Attributes";
-        Text[ japanese ] = "Attributes";
+        Text[ japanese ] = "‘®«";
         Text[ korean ] = "Attributes";
-        Text[ chinese_simplified ] = "Attributes";
+        Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
         Text[ turkish ] = "Attributes";
-        Text[ arabic ] = "Attributes";
+        Text[ arabic ] = "ÇáÓãÇÊ";
     };
     ListBox LB_DEL_ATTR
     {
@@ -509,22 +509,22 @@ TabPage TP_REDLINE_OPT
         Text [ English ] = "Color" ;
         Text[ english_us ] = "Color";
         Text[ portuguese ] = "Color";
-        Text[ russian ] = "Color";
-        Text[ greek ] = "Color";
+        Text[ russian ] = "Öâåò";
+        Text[ greek ] = "×ñşìá";
         Text[ dutch ] = "Color";
         Text[ french ] = "Color";
         Text[ spanish ] = "Color";
         Text[ italian ] = "Color";
         Text[ danish ] = "Color";
-        Text[ swedish ] = "Color";
-        Text[ polish ] = "Color";
+        Text[ swedish ] = "~Färg";
+        Text[ polish ] = "Kolor";
         Text[ portuguese_brazilian ] = "Color";
-        Text[ japanese ] = "Color";
+        Text[ japanese ] = "F";
         Text[ korean ] = "Color";
-        Text[ chinese_simplified ] = "Color";
+        Text[ chinese_simplified ] = "ÑÕÉ«";
         Text[ chinese_traditional ] = "ÃC¦â";
         Text[ turkish ] = "Color";
-        Text[ arabic ] = "Color";
+        Text[ arabic ] = "Çááæä";
     };
     ListBox LB_DEL_COL
     {
@@ -542,22 +542,22 @@ TabPage TP_REDLINE_OPT
         Text [ English ] = "Delete" ;
         Text[ english_us ] = "Delete";
         Text[ portuguese ] = "Delete";
-        Text[ russian ] = "Delete";
-        Text[ greek ] = "Delete";
+        Text[ russian ] = "Óäàëèòü";
+        Text[ greek ] = "ÄéáãñáöŞ";
         Text[ dutch ] = "Delete";
         Text[ french ] = "Delete";
         Text[ spanish ] = "Delete";
         Text[ italian ] = "Delete";
         Text[ danish ] = "Delete";
-        Text[ swedish ] = "Delete";
-        Text[ polish ] = "Delete";
+        Text[ swedish ] = "Radera";
+        Text[ polish ] = "Usuñ";
         Text[ portuguese_brazilian ] = "Delete";
-        Text[ japanese ] = "Delete";
+        Text[ japanese ] = "íœ";
         Text[ korean ] = "Delete";
-        Text[ chinese_simplified ] = "Delete";
+        Text[ chinese_simplified ] = "É¾³ı";
         Text[ chinese_traditional ] = "§R°£";
         Text[ turkish ] = "Delete";
-        Text[ arabic ] = "Delete";
+        Text[ arabic ] = "ÍĞİ";
     };
     FixedText FT_CHG_ATTR
     {
@@ -567,22 +567,22 @@ TabPage TP_REDLINE_OPT
         Text [ English ] = "Attributes" ;
         Text[ english_us ] = "Attributes";
         Text[ portuguese ] = "Attributes";
-        Text[ russian ] = "Attributes";
-        Text[ greek ] = "Attributes";
+        Text[ russian ] = "Àòğèáóòû";
+        Text[ greek ] = "Éäéü~ôçôåò";
         Text[ dutch ] = "Attributes";
         Text[ french ] = "Attributes";
         Text[ spanish ] = "Attributes";
         Text[ italian ] = "Attributes";
         Text[ danish ] = "Attributes";
-        Text[ swedish ] = "Attributes";
-        Text[ polish ] = "Attributes";
+        Text[ swedish ] = "A~ttribut";
+        Text[ polish ] = "Atrybuty";
         Text[ portuguese_brazilian ] = "Attributes";
-        Text[ japanese ] = "Attributes";
+        Text[ japanese ] = "‘®«";
         Text[ korean ] = "Attributes";
-        Text[ chinese_simplified ] = "Attributes";
+        Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
         Text[ turkish ] = "Attributes";
-        Text[ arabic ] = "Attributes";
+        Text[ arabic ] = "ÇáÓãÇÊ";
     };
     ListBox LB_CHG_ATTR
     {
@@ -599,22 +599,22 @@ TabPage TP_REDLINE_OPT
         Text [ English ] = "Color" ;
         Text[ english_us ] = "Color";
         Text[ portuguese ] = "Color";
-        Text[ russian ] = "Color";
-        Text[ greek ] = "Color";
+        Text[ russian ] = "Öâåò";
+        Text[ greek ] = "×ñşìá";
         Text[ dutch ] = "Color";
         Text[ french ] = "Color";
         Text[ spanish ] = "Color";
         Text[ italian ] = "Color";
         Text[ danish ] = "Color";
-        Text[ swedish ] = "Color";
-        Text[ polish ] = "Color";
+        Text[ swedish ] = "~Färg";
+        Text[ polish ] = "Kolor";
         Text[ portuguese_brazilian ] = "Color";
-        Text[ japanese ] = "Color";
+        Text[ japanese ] = "F";
         Text[ korean ] = "Color";
-        Text[ chinese_simplified ] = "Color";
+        Text[ chinese_simplified ] = "ÑÕÉ«";
         Text[ chinese_traditional ] = "ÃC¦â";
         Text[ turkish ] = "Color";
-        Text[ arabic ] = "Color";
+        Text[ arabic ] = "Çááæä";
     };
     ListBox LB_CHG_COL
     {
@@ -632,22 +632,22 @@ TabPage TP_REDLINE_OPT
         Text [ English ] = "Attributes" ;
         Text[ english_us ] = "Attributes";
         Text[ portuguese ] = "Attributes";
-        Text[ russian ] = "Attributes";
-        Text[ greek ] = "Attributes";
+        Text[ russian ] = "Àòğèáóòû";
+        Text[ greek ] = "Éäéüôçôåò";
         Text[ dutch ] = "Attributes";
         Text[ french ] = "Attributes";
         Text[ spanish ] = "Attributes";
         Text[ italian ] = "Attributes";
         Text[ danish ] = "Attributes";
-        Text[ swedish ] = "Attributes";
-        Text[ polish ] = "Attributes";
+        Text[ swedish ] = "Attribut";
+        Text[ polish ] = "Atrybuty";
         Text[ portuguese_brazilian ] = "Attributes";
-        Text[ japanese ] = "Attributes";
+        Text[ japanese ] = "‘®«";
         Text[ korean ] = "Attributes";
-        Text[ chinese_simplified ] = "Attributes";
+        Text[ chinese_simplified ] = "ÊôĞÔ";
         Text[ chinese_traditional ] = "Äİ©Ê";
         Text[ turkish ] = "Attributes";
-        Text[ arabic ] = "Attributes";
+        Text[ arabic ] = "ÇáÓãÇÊ";
     };
     FixedLine GB_LC
     {
@@ -656,7 +656,7 @@ TabPage TP_REDLINE_OPT
         Text = "Geänderte Zeilen" ;
         Text [ English ] = "Changed lines" ;
         Text [ portuguese ] = "Linhas modificadas" ;
-        Text [ english_us ] = "Lines changed " ;
+        Text [ english_us ] = "Lines changed" ;
         Text [ portuguese_brazilian ] = "Geänderte Zeilen" ;
         Text [ swedish ] = "Ändrade rader" ;
         Text [ danish ] = "Ændrede rækker" ;
@@ -664,13 +664,13 @@ TabPage TP_REDLINE_OPT
         Text [ spanish ] = "Líneas modificadas" ;
         Text [ french ] = "Lignes modifiées" ;
         Text [ dutch ] = "Gewijzigde regels" ;
-        Text[ chinese_simplified ] = "¸ü¸ÄµÄĞĞ";
+        Text[ chinese_simplified ] = "ÒÑ¾­¸ü¸ÄµÄĞĞ";
         Text[ russian ] = "Èçìåíåííûå ñòğîêè";
         Text[ polish ] = "Zmienione wiersze";
-        Text[ japanese ] = "•ÏX‚µ‚½s";
+        Text[ japanese ] = "•ÏX‰ÓŠ‚Ì‚ ‚és‚ğ¦‚·";
         Text[ chinese_traditional ] = "¤w¸gÅÜ§óªº¦æ";
         Text[ arabic ] = "ÃÓØÑ ãÚÏáÉ";
-        Text[ greek ] = "Ãñáììİò ğïõ İ÷ïõí áëëá÷èåß";
+        Text[ greek ] = "Ôñïğïğïéçìİíåò ãñáììİò";
         Text[ korean ] = "º¯°æµÈ¡¡¼±.";
         Text[ turkish ] = "Değiştirilen satırlar";
         Text[ language_user1 ] = " ";
@@ -813,7 +813,7 @@ TabPage TP_REDLINE_OPT
     };
     StringList [ polish ] =
     {
-            < "[¿adne]" ; > ;
+            < "[Brak]" ; > ;
         < "Lewy margines" ; > ;
         < "Prawy margines" ; > ;
         < "Margines zewnêtrzny" ; > ;
