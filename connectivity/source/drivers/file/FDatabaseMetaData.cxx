@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 12:39:52 $
+ *  last change: $Author: oj $ $Date: 2001-01-15 09:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             if(aURL.getExtension() == aFilenameExtension)
             {
                 aName = aName.replaceAt(aName.getLength()-(aFilenameExtension.Len()+1),aFilenameExtension.Len()+1,::rtl::OUString());
-                if(match(tableNamePattern,aName.getStr(),'\0'))
+                sal_Unicode nChar = aName.toChar();
+                if(match(tableNamePattern,aName.getStr(),'\0') && (nChar < '0' || nChar > '9'))
                 {
                     aRow.push_back(makeAny(aName));
                     bNewRow = sal_True;
@@ -245,7 +246,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
             {
                 if (!aURL.getExtension().Len())
                 {
-                    if(match(tableNamePattern,aURL.getBase().GetBuffer(),'\0'))
+                    sal_Unicode nChar = aURL.getBase().GetChar(0);
+                    if(match(tableNamePattern,aURL.getBase().GetBuffer(),'\0') && (nChar < '0' || nChar > '9'))
                     {
                         aRow.push_back(makeAny(::rtl::OUString(aURL.getBase())));
                         bNewRow = sal_True;
