@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-14 19:44:52 $
+ *  last change: $Author: mt $ $Date: 2002-02-15 10:31:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -107,6 +110,64 @@ Window* VCLXAccessibleComponent::GetWindow() const
 
 void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
+    using namespace ::drafts::com::sun::star;
+
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        if ( pWindow->IsVisible() )
+        {
+            rStateSet.AddState( accessibility::AccessibleStateType::VISIBLE );
+            rStateSet.AddState( accessibility::AccessibleStateType::SHOWING );
+        }
+        else
+        {
+            rStateSet.AddState( accessibility::AccessibleStateType::INVALID );
+        }
+
+        if ( pWindow->IsEnabled() )
+            rStateSet.AddState( accessibility::AccessibleStateType::ENABLED );
+
+        if ( pWindow->HasChildPathFocus() )
+            rStateSet.AddState( accessibility::AccessibleStateType::ACTIVE );
+
+        if ( pWindow->HasFocus() )
+            rStateSet.AddState( accessibility::AccessibleStateType::FOCUSED );
+
+        if ( pWindow->IsWait() )
+            rStateSet.AddState( accessibility::AccessibleStateType::BUSY );
+
+        if ( pWindow->GetStyle() & WB_SIZEABLE )
+            rStateSet.AddState( accessibility::AccessibleStateType::RESIZABLE );
+    }
+    else
+    {
+        rStateSet.AddState( accessibility::AccessibleStateType::DEFUNC );
+    }
+
+/*
+
+MUST BE SET FROM DERIVED CLASSES:
+
+CHECKED
+COLLAPSED
+EXPANDED
+EXPANDABLE
+EDITABLE
+FOCUSABLE
+HORIZONTAL
+VERTICAL
+ICONIFIED
+MODAL
+MULTILINE
+MULTISELECTABLE
+PRESSED
+SELECTABLE
+SELECTED
+SINGLE_LINE
+TRANSIENT
+
+    */
 }
 
 
@@ -233,8 +294,8 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (::com::sun::star
     utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > xSet = pStateSetHelper;
     FillAccessibleStateSet( *pStateSetHelper );
-//    return xSet;
-    return NULL;
+    return xSet;
+//    return NULL;
 }
 
 ::com::sun::star::lang::Locale VCLXAccessibleComponent::getLocale() throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException)
@@ -246,16 +307,6 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (::com::sun::star
         aLocale = GetWindow()->GetSettings().GetUILocale();
 
     return aLocale;
-}
-
-void VCLXAccessibleComponent::addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-}
-
-void VCLXAccessibleComponent::removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 }
 
 // ::drafts::com::sun::star::accessibility::XAccessibleComponent
