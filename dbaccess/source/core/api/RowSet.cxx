@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-23 05:54:33 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 13:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,9 @@
 #endif
 #ifndef _DBA_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
+#endif
+#ifndef _DBHELPER_DBCONVERSION_HXX_
+#include <connectivity/dbconversion.hxx>
 #endif
 
 using namespace utl;
@@ -913,12 +916,41 @@ void SAL_CALL ORowSet::updateObject( sal_Int32 columnIndex, const Any& x ) throw
 
     checkUpdateIterator();
 
-    if (!::dbtools::implUpdateObject(this, columnIndex, x))
+    Any aNewValue = x;
+
+    if ( m_pColumns )
+    {
+        Reference<XPropertySet> xColumn;
+        m_pColumns->getByIndex(columnIndex-1) >>= xColumn;
+        sal_Int32 nColType;
+        xColumn->getPropertyValue(PROPERTY_TYPE) >>= nColType;
+        switch( nColType )
+        {
+            case DataType::DATE:
+            case DataType::TIME:
+            case DataType::TIMESTAMP:
+            {
+                double nValue;
+                if ( x >>= nValue )
+                {
+                    if ( DataType::TIMESTAMP == nColType )
+                        aNewValue <<= dbtools::DBTypeConversion::toDateTime( nValue );
+                    else if ( DataType::DATE == nColType )
+                        aNewValue <<= dbtools::DBTypeConversion::toDate( nValue );
+                    else
+                        aNewValue <<= dbtools::DBTypeConversion::toTime( nValue );
+                }
+                break;
+            }
+        }
+    }
+
+    if (!::dbtools::implUpdateObject(this, columnIndex, aNewValue))
     {   // there is no other updateXXX call which can handle the value in x
         ::connectivity::ORowSetValue aOldValue((*(*m_aCurrentRow))[columnIndex]);
-        m_pCache->updateObject(columnIndex,x);
+        m_pCache->updateObject(columnIndex,aNewValue);
         // we have to notify all listeners
-        (*(*m_aCurrentRow))[columnIndex] = x;
+        (*(*m_aCurrentRow))[columnIndex] = aNewValue;
         firePropertyChange(columnIndex-1 ,aOldValue);
         fireProperty(PROPERTY_ID_ISMODIFIED,sal_True,sal_False);
     }
