@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-16 07:52:00 $
+ *  last change: $Author: gt $ $Date: 2004-07-16 10:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,15 @@ public:
                     cssu::Reference< css::lang::XMultiServiceFactory >& rxMSF,
                     cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment );
     virtual             ~MacroSecurity();
+
+    inline void     EnableReset( bool _bEnable = true );
 };
+
+inline void MacroSecurity::EnableReset( bool _bEnable )
+{
+    maResetBtn.Enable ( _bEnable );
+}
+
 
 
 class MacroSecurityTP : public TabPage

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2004-07-16 07:51:43 $
+ *  last change: $Author: gt $ $Date: 2004-07-16 10:25:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,29 @@ using namespace ::com::sun::star::security;
 // Only for bigIntegerToNumericString
 #include <xmlsecurity/xmlsignaturehelper.hxx>
 
+#ifndef _FILEDLGHELPER_HXX
+#include <sfx2/filedlghelper.hxx>
+#endif
+#ifndef _PICKERHELPER_HXX
+#include <svtools/pickerhelper.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
+#include <com/sun/star/uno/Exception.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFOLDERPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#endif
+#include <tools/urlobj.hxx>
+
 #include "dialogs.hrc"
 #include "resourcemanager.hxx"
 
@@ -134,6 +157,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
 
 void MacroSecurityLevelTP::ActivatePage()
 {
+    mpDlg->EnableReset();
 }
 
 
@@ -144,9 +168,12 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, AddCertPBHdl, void*, EMTYARG )
     {
         uno::Reference< css::security::XCertificate > xCert = aChooser.GetSelectedCertificate();
 
-//      InsertCert( xCert );
+        if( xCert.is() )
+        {
+//          mpDlg->maCurrentSignatureInformations.push_back( ;
 
-        FillCertLB();
+            FillCertLB();
+        }
     }
 
     return 0;
@@ -175,16 +202,58 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMTYARG )
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMTYARG )
 {
+    if( maTrustCertLB.FirstSelected() )
+    {
+        USHORT nSelected = (USHORT) maTrustCertLB.FirstSelected()->GetUserData();
+        mpDlg->maCurrentSignatureInformations.erase( mpDlg->maCurrentSignatureInformations.begin()+nSelected );
+
+        FillCertLB();
+    }
+
     return 0;
 }
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMTYARG )
 {
+        try
+        {
+            rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
+            uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+            uno::Reference < ui::dialogs::XFolderPicker > xFolderPicker( xFactory->createInstance( aService ), uno::UNO_QUERY );
+
+            short nRet = xFolderPicker->execute();
+
+            if( ui::dialogs::ExecutableDialogResults::OK != nRet )
+                return 0;
+
+            String aPathStr = xFolderPicker->getDirectory();
+            INetURLObject aNewObj( aPathStr );
+            aNewObj.removeFinalSlash();
+
+            // then the new path also an URL else system path
+            String aNewPathStr = ( aNewObj.GetProtocol() != INET_PROT_NOT_VALID )? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
+
+            if( maTrustFileLocLB.GetEntryPos( aNewPathStr ) == LISTBOX_ENTRY_NOTFOUND )
+            {
+                maTrustFileLocLB.InsertEntry( aNewPathStr );
+            }
+        }
+        catch( uno::Exception& )
+        {
+            DBG_ERRORFILE( "MacroSecurityTrustedSourcesTP::AddLocPBHdl(): exception from folder picker" )
+        }
+
     return 0;
 }
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMTYARG )
 {
+    USHORT  nSel = maTrustFileLocLB.GetSelectEntryPos();
+    if( nSel != LISTBOX_ENTRY_NOTFOUND )
+    {
+        maTrustFileLocLB.RemoveEntry( nSel );
+    }
+
     return 0;
 }
 
@@ -228,32 +297,13 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
         const SignatureInformation& rInfo = mpDlg->maCurrentSignatureInformations[n];
         xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
-        // If we don't get it, create it from signature data:
-        if ( !xCert.is() )
-            xCert = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
-
-        DBG_ASSERT( xCert.is(), "Certificate not found and can't be created!" );
-
-        String  aSubject;
-        String  aIssuer;
-        String  aDateTimeStr;
         if( xCert.is() )
         {
-            aSubject = XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id );
-            aIssuer = XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id );
-//          aDateTimeStr = XmlSec::GetDateString( xCert->getNotAfter() );
-            aDateTimeStr = XmlSec::GetDateTimeString( rInfo.ouDate, rInfo.ouTime );
+            SvLBoxEntry* pEntry = maTrustCertLB.InsertEntry( XmlSec::GetContentPart( xCert->getSubjectName(), aCN_Id ) );
+            maTrustCertLB.SetEntryText( XmlSec::GetContentPart( rInfo.ouX509IssuerName, aCN_Id ), pEntry, 1 );
+            maTrustCertLB.SetEntryText( XmlSec::GetDateTimeString( rInfo.ouDate, rInfo.ouTime ), pEntry, 2 );
+            pEntry->SetUserData( ( void* ) n );     // missuse user data as index
         }
-        else
-        {
-#if OSL_DEBUG_LEVEL > 1
-            aSubject = String::CreateFromAscii( "ERROR getting certificate!" );
-#endif
-        }
-        SvLBoxEntry* pEntry = maTrustCertLB.InsertEntry( aSubject );
-        maTrustCertLB.SetEntryText( aIssuer, pEntry, 1 );
-        maTrustCertLB.SetEntryText( aDateTimeStr, pEntry, 2 );
-        pEntry->SetUserData( ( void* ) n );     // missuse user data as index
     }
 
     TrustCertLBSelectHdl( NULL );
@@ -292,4 +342,5 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, 
 
 void MacroSecurityTrustedSourcesTP::ActivatePage()
 {
+    mpDlg->EnableReset( false );
 }
