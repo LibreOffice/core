@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-18 13:50:59 $
+ *  last change: $Author: mib $ $Date: 2001-05-21 07:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,6 +1055,15 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 aAny <<= rMasterPageName;
                 xPropSet->setPropertyValue( sPageDescName, aAny );
             }
+        }
+        if( bPara && pStyle->GetDropCapStyleName().getLength() &&
+            xTextStyles.is() &&
+            xTextStyles->hasByName( pStyle->GetDropCapStyleName() ) &&
+            xPropSetInfo->hasPropertyByName( pStyle->sDropCapCharStyleName ) )
+        {
+            Any aAny;
+            aAny <<= pStyle->GetDropCapStyleName();
+            xPropSet->setPropertyValue( pStyle->sDropCapCharStyleName, aAny );
         }
 
         // combined characters special treatment
