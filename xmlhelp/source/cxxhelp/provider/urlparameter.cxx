@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-13 13:16:11 $
+ *  last change: $Author: abi $ $Date: 2001-06-13 14:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -719,7 +719,11 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 
         rtl::OUString xslURL = pDatabases->getInstallPathAsURL();
           rtl::OString xslURLascii = "file:";
+#ifdef WIN32
+#define OFFSET 6
+#else
 #define OFFSET 5
+#endif
         xslURLascii += rtl::OString( xslURL.getStr()+OFFSET,
                          xslURL.getLength()-OFFSET,
                          RTL_TEXTENCODING_UTF8 );
