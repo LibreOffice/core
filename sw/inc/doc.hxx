@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:49:28 $
+ *  last change: $Author: obo $ $Date: 2004-09-13 09:31:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2223,6 +2223,7 @@ public:
 
     // Change a format undoable.
     void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
+    void ChgFmt(SwFmt & rFmt, const SfxPoolItem & rItem);
 
     void RenameFmt(SwFmt & rFmt, const String & sNewName,
                    BOOL bBroadcast = FALSE);
