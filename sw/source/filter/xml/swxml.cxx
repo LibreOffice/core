@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-09 12:22:39 $
+ *  last change: $Author: mib $ $Date: 2001-05-09 15:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,11 +253,19 @@ sal_Int32 ReadThroughComponent(
         sErr += String::CreateFromInt32( r.ColumnNumber );
 
         if( rStreamName.Len() )
-            return *new TwoStringErrorInfo( ERR_FORMAT_FILE_ROWCOL, rStreamName, sErr,
-                                         ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+        {
+            return *new TwoStringErrorInfo(
+                            (bMustBeSuccessfull ? ERR_FORMAT_FILE_ROWCOL
+                                                    : WARN_FORMAT_FILE_ROWCOL),
+                            rStreamName, sErr,
+                            ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+        }
         else
+        {
+            ASSERT( bMustBeSuccessfull, "Warnings are not supported" );
             return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
-                                         ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+                             ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+        }
     }
     catch( xml::sax::SAXException& r )
     {
