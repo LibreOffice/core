@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-08 13:43:10 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:41:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -948,12 +948,13 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 }
                 else
                 {
-                    SfxItemSet aArgSet( GetPool(), FID_VALID_MODE, FID_VALID_ERRTEXT );
+                    SfxItemSet aArgSet( GetPool(), ScTPValidationValue::GetRanges() );
 
                     ScValidationMode eMode = SC_VALID_ANY;
                     ScConditionMode eOper = SC_COND_EQUAL;
                     String aExpr1, aExpr2;
                     BOOL bBlank = TRUE;
+                    sal_Int16 nListType = ValidListType::UNSORTED;
                     BOOL bShowHelp = FALSE;
                     String aHelpTitle, aHelpText;
                     BOOL bShowError = FALSE;
@@ -985,6 +986,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aExpr1 = pOldData->GetExpression( aCursorPos, 0, nNumFmt );
                             aExpr2 = pOldData->GetExpression( aCursorPos, 1, nNumFmt );
                             bBlank = pOldData->IsIgnoreBlank();
+                            sal_Int16 nListType = pOldData->GetListType();
 
                             bShowHelp = pOldData->GetInput( aHelpTitle, aHelpText );
                             bShowError = pOldData->GetErrMsg( aErrTitle, aErrText, eErrStyle );
@@ -994,6 +996,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aArgSet.Put( SfxStringItem(  FID_VALID_VALUE1,      aExpr1 ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_VALUE2,      aExpr2 ) );
                             aArgSet.Put( SfxBoolItem(    FID_VALID_BLANK,       bBlank ) );
+                            aArgSet.Put( SfxInt16Item(   FID_VALID_LISTTYPE,    nListType ) );
                             aArgSet.Put( SfxBoolItem(    FID_VALID_SHOWHELP,    bShowHelp ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_HELPTITLE,   aHelpTitle ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_HELPTEXT,    aHelpText ) );
@@ -1019,6 +1022,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aExpr2 = ((const SfxStringItem*)pItem)->GetValue();
                         if ( pOutSet->GetItemState( FID_VALID_BLANK, TRUE, &pItem ) == SFX_ITEM_SET )
                             bBlank = ((const SfxBoolItem*)pItem)->GetValue();
+                        if ( pOutSet->GetItemState( FID_VALID_LISTTYPE, TRUE, &pItem ) == SFX_ITEM_SET )
+                            nListType = ((const SfxInt16Item*)pItem)->GetValue();
 
                         if ( pOutSet->GetItemState( FID_VALID_SHOWHELP, TRUE, &pItem ) == SFX_ITEM_SET )
                             bShowHelp = ((const SfxBoolItem*)pItem)->GetValue();
@@ -1039,6 +1044,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         USHORT nTab = GetViewData()->GetTabNo();
                         ScValidationData aData( eMode, eOper, aExpr1, aExpr2, pDoc, aCursorPos );
                         aData.SetIgnoreBlank( bBlank );
+                        aData.SetListType( nListType );
 
                         aData.SetInput(aHelpTitle, aHelpText);      // sets bShowInput to TRUE
                         if (!bShowHelp)
