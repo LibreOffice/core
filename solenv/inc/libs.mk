@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2001-05-16 14:33:37 $
+#   last change: $Author: mh $ $Date: 2001-06-06 06:57:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,96 +69,6 @@ LIBPRE=libr
 #
 #externe libs in plattform.mk
 #
-
-.IF "$(OS)"=="S390"
-
-GPC3RDLIB=$(L)$/libgpc.x
-SALHELPERLIB=$(L)$/libsalhelper$(UDK_MAJOR)$(DLLPOSTFIX).x
-XMLSCRIPTLIB =$(L)$/libxcr$(UPD)$(DLLPOSTFIX).x
-CONNECTIVITYLIB=$(L)$/libconnectivity.x
-LDAPBERLIB=$(L)$/libldapber.x
-TOOLSLIB=$(L)$/libtl$(UPD)$(DLLPOSTFIX).x
-OTXLIB=$(L)$/libotx_ind.x
-OSXLIB=$(L)$/libosx.x
-REGLIB=$(L)$/libreg$(UPD)$(DLLPOSTFIX).x
-BPICONVLIB=$(L)$/libbpiconv.x
-OSLLIB=$(L)$/libosl$(UPD)$(DLLPOSTFIX).x
-VOSLIB=$(L)$/libvos$(VOS_MAJOR)$(DLLPOSTFIX).x
-UNOLIB=$(L)$/libuno$(UPD)$(DLLPOSTFIX).x
-RTLLIB=$(L)$/librtl$(UPD)$(DLLPOSTFIX).x
-TECLIB=$(L)$/libtec$(UPD)$(DLLPOSTFIX).x
-UCRLIB=$(L)$/libucr$(UPD)$(DLLPOSTFIX).x
-UASLIB=$(L)$/libuas$(UPD)$(DLLPOSTFIX).x
-USRLIB=$(L)$/libusr$(UPD)$(DLLPOSTFIX).x
-SOTLIB=$(L)$/libsot$(UPD)$(DLLPOSTFIX).x
-SVLIBDEPEND=$(L)$/$(L)$/libvcl$(UPD)$(DLLPOSTFIX)$(DLLPOST)
-SVLIB=$(L)$/libvcl$(UPD)$(DLLPOSTFIX).x
-VCLLIB=$(L)$/$(SVLIB)
-TKLIB=$(L)$/libtk$(UPD)$(DLLPOSTFIX).x
-XPLIB=$(L)$/lib_xp.x
-SVTOOLLIB=$(L)$/libsvt$(UPD)$(DLLPOSTFIX).x
-AUTOMATIONLIB=$(L)$/libsts$(UPD)$(DLLPOSTFIX).x
-SVLLIB=$(L)$/libsvl$(UPD)$(DLLPOSTFIX).x
-VCLLIB=$(L)$/$(SVLIB)
-SVMEMLIB=
-SVUNZIPLIB=$(L)$/libsvunzip.x
-PLUGCTORLIB=$(L)$/libplugctor.x
-# PLUGCTORLIB=
-INETLIB=$(L)$/libni$(UPD)$(DLLPOSTFIX).x
-INETLIBSH=$(L)$/libinetdll.x
-INETLIBST=$(L)$/libinetwrap.x
-SO2LIB=$(L)$/libso$(UPD)$(DLLPOSTFIX).x
-TKTLIB=$(L)$/libtkt$(UPD)$(DLLPOSTFIX).x
-GOODIESLIB=$(L)$/libgo$(UPD)$(DLLPOSTFIX).x
-GOODIESLLIB=$(L)$/libgol$(UPD)$(DLLPOSTFIX).x
-MAILLIB=$(L)$/libmail.x
-DOCMGRLIB=$(L)$/libdmg$(UPD)$(DLLPOSTFIX).x
-.IF "$(BIG_GOODIES)"!=""
-HELPLIB=
-CHANELLIB=
-.ELSE
-HELPLIB=$(L)$/libhlp$(UPD)$(DLLPOSTFIX).x
-CHANELLIB=$(L)$/libcha$(UPD)$(DLLPOSTFIX).x
-.ENDIF
-BASICLIB=$(L)$/libsb$(UPD)$(DLLPOSTFIX).x
-SDBLIB=$(L)$/libsdb$(UPD)$(DLLPOSTFIX).x
-DBTOOLSLIB=$(L)$/libdbt$(UPD)$(DLLPOSTFIX).x
-HM2LIBSH=$(L)$/libhmwrpdll.x
-HM2LIBST=$(L)$/libhmwrap.x
-LINGULIB=$(L)$/$(HM2LIBST).x
-EXPAT3RDLIB=$(L)$/libexpat_xmltok.x $(L)$/libexpat_xmlparse.x
-EXPATASCII3RDLIB=$(L)$/libexpat_xmltok.x $(L)$/libascii_expat_xmlparse.x
-ZLIB3RDLIB=$(L)$/libzlib.x
-JPEG3RDLIB=$(L)$/libjpeglib.x
-NEON3RDLIB=$(L)$/libneon.x
-BERKELEYLIB=$(L)$/libdb-3.2.x
-BERKELEYCPPLIB=$(L)$/libdb_cxx-3.2.x
-SFX2LIB=$(L)$/libsfx$(UPD)$(DLLPOSTFIX).x
-SFXLIB=$(L)$/libsfx$(UPD)$(DLLPOSTFIX).x
-SFXDEBUGLIB=
-FWELIB=$(L)$/libfwe$(UPD)$(DLLPOSTFIX).x
-SVXLIB=$(L)$/libsvx$(UPD)$(DLLPOSTFIX).x
-BASCTLLIB=$(L)$/libbasctl$(UPD)$(DLLPOSTFIX).x
-SVXlLIB=$(L)$/libsvx$(UPD)$(DLLPOSTFIX).a
-.IF "$(OLD_CHAOS)"==""
-CHAOSLIB=$(L)$/libcnt$(UPD)$(DLLPOSTFIX).x
-.ENDIF
-UUILIB=$(L)$/libuui$(UPD)$(DLLPOSTFIX).x
-DGLIB=
-SIMLIB=$(L)$/libysim.x
-SCHLIB=$(L)$/libysch.x
-SMLIB=$(L)$/libysm.x
-#SBALIB=$(L)$/libsbawrap
-SBALIB=$(L)$/libsba$(UPD)$(DLLPOSTFIX).x
-OFALIB=$(L)$/libofa$(UPD)$(DLLPOSTFIX).x
-TARCERLIB=$(L)$/libtrc$(UPD)$(DLLPOSTFIX).x
-PAPILIB=$(L)$/libpap$(UPD)$(DLLPOSTFIX).x
-SCLIB=$(L)$/libsclib.x
-SDLIB=$(L)$/libsdlib.x
-SDLLIB=$(L)$/libsdl.a
-SWLIB=$(L)$/libswlib.x
-
-.ELSE				# "$(OS)"=="S390"
 
 GPC3RDLIB=-lgpc
 SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COM)
@@ -290,19 +200,6 @@ SDLIB=-lsdlib
 SDLLIB=-lsdl
 SWLIB=-lswlib
 
-.ENDIF				# "$(OS)"=="S390"
-
-
-#SOLARLIB=	$(TOOLSLIB) \
-#			$(SVTOOLLIB) \
-#			$(SVLIB) \
-#			$(SO2LIB) \
-#			$(SFX2LIB) \
-#			$(BASICLIB) \
-#			$(SVXLIB)
-
-
-
 #
 # USED_%NAME%_LIBS
 # Variablen, in denen in gueltiger Reihenfolge ALLE Libraries,
@@ -323,40 +220,6 @@ USED_RCLIENT_LIBS =	$(VCLLIB) $(SOTLIB) $(TOOLSLIB) $(UNOLIB) \
                     $(USED_UNO_LIBS)
 
 .ELSE				# "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
-.IF "$(make_xl)"!=""
-TOOLSLIB=$(LIBPRE) ixl.lib $(LIBPRE) xapp.lib
-BTSTRPLIB=
-STORELIB=
-ICOLIB=
-OSLLIB=
-CPPULIB=
-CPPUHELPERLIB=
-UCBHELPERLIB=
-VOSLIB=
-UNOLIB=
-UNOTOOLSLIB=
-SOTLIB=
-SVLIB=
-VCLLIB=
-SVTOOLLIB=
-AUTOMATIONLIB=
-SVLLIB=
-INETLIB=
-GOODIESLIB=
-BASICLIB=
-SFX2LIB=
-SO2LIB=
-SVXLIB=
-BASCTLLIB=
-DGLIB=
-OFALIB=
-TRACERLIB=
-TRCLIB=
-SCHEDLIB=
-SETUPLIB=
-SSCLIB=
-SSLLIB=
-.ELSE				# "$(make_xl)"!=""
 GPC3RDLIB=gpc.lib
 SALHELPERLIB=$(LIBPRE) isalhelper.lib
 XMLSCRIPTLIB=ixcr.lib
@@ -480,12 +343,5 @@ SVXLLIB=$(LIBPRE) svxl.lib
 #FREETYPELIB=freetype.lib
 FREETYPELIBST=freetype.lib
 
-.IF "$(BIG_TOOLS)"!=""
-SALLIB=
-OSLLIB=
-RTLLIB=
-VOSLIB=
-.ENDIF		# "$(BIG_TOOLS)"!=""
-.ENDIF				# "$(make_xl)"!=""
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
