@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:42 $
+ *  last change: $Author: pl $ $Date: 2001-01-26 14:40:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -469,9 +469,6 @@ final void SalXLib::Init( int *pArgc, char *ppArgv[] )
 
     pInputMethod->SetLocale();
 
-    if( !getenv( "DISPLAY" ) )
-        putenv( "DISPLAY=:0" );
-
     XtSetLanguageProc( NULL, NULL, NULL );
     XtToolkitInitialize();
     XrmInitialize();
@@ -490,11 +487,23 @@ final void SalXLib::Init( int *pArgc, char *ppArgv[] )
     {
         char *pDisplayString = getenv ("DISPLAY");
 
-        fprintf( stderr, "%s: cannot open display \"%s\"\n",
-                 ppArgv[0],
-                 pDisplayString ? pDisplayString : ":0.0" );
-        fprintf( stderr, "Please check your \"DISPLAY\" environment variable, as well as the permissions to access that display ");
-        fprintf( stderr, "(See \"man X\" resp. \"man xhost\" for details)\n");
+        if( pDisplayString )
+        {
+            fprintf( stderr, "%s:\n   cannot open display \"%s\"\n",
+                     ppArgv[0],
+                     pDisplayString );
+            fprintf( stderr, "   Please check your \"DISPLAY\" environment variable\n   as well as the permissions to access that display.\n");
+        }
+        else
+        {
+            fprintf( stderr,
+                     "%s:\n   cannot open display; DISPLAY environment variable is not set\n"
+                     "   please set it to the correct value and check\n"
+                     "   the permission to access that display.\n",
+                     ppArgv[0]
+                     );
+        }
+        fprintf( stderr, "   (See \"man X\" resp. \"man xhost\" for details)\n");
         fflush ( stderr );
         exit (0);
     }
