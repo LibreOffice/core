@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-19 07:58:23 $
+ *  last change: $Author: nn $ $Date: 2001-09-28 17:06:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -690,7 +690,8 @@ protected:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
                             GetCellByPosition_Impl( sal_Int32 nColumn, sal_Int32 nRow )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::lang::IndexOutOfBoundsException,
+                                    ::com::sun::star::uno::RuntimeException);
 
 
 public:
@@ -816,11 +817,13 @@ public:
                             // XCellRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > SAL_CALL
                             getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::lang::IndexOutOfBoundsException,
+                                    ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL
                             getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop,
                                 sal_Int32 nRight, sal_Int32 nBottom )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::lang::IndexOutOfBoundsException,
+                                        ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL
                             getCellRangeByName( const ::rtl::OUString& aRange )
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -1069,11 +1072,13 @@ public:
                             // XCellRange
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > SAL_CALL
                             getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow )
-                                throw(::com::sun::star::uno::RuntimeException);
+                                throw(::com::sun::star::lang::IndexOutOfBoundsException,
+                                    ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL
                             getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop,
                                 sal_Int32 nRight, sal_Int32 nBottom )
-                                    throw(::com::sun::star::uno::RuntimeException);
+                                    throw(::com::sun::star::lang::IndexOutOfBoundsException,
+                                        ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL
                             getCellRangeByName( const ::rtl::OUString& aRange )
                                 throw(::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-28 12:56:54 $
+ *  last change: $Author: nn $ $Date: 2001-09-28 17:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4385,28 +4385,31 @@ uno::Sequence<sal_Int8> SAL_CALL ScCellRangeObj::getImplementationId()
 
 uno::Reference<table::XCell> ScCellRangeObj::GetCellByPosition_Impl(
                                         sal_Int32 nColumn, sal_Int32 nRow )
-                                                throw(uno::RuntimeException)
+                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
+    ScDocShell* pDocSh = GetDocShell();
+    if (!pDocSh)
+        throw uno::RuntimeException();
+
     if ( nColumn >= 0 && nRow >= 0 )
     {
-        ScDocShell* pDocSh = GetDocShell();
         sal_Int32 nPosX = aRange.aStart.Col() + nColumn;
         sal_Int32 nPosY = aRange.aStart.Row() + nRow;
 
-        if ( pDocSh && nPosX <= aRange.aEnd.Col() && nPosY <= aRange.aEnd.Row() )
+        if ( nPosX <= aRange.aEnd.Col() && nPosY <= aRange.aEnd.Row() )
         {
             ScAddress aNew( (USHORT)nPosX, (USHORT)nPosY, aRange.aStart.Tab() );
             return new ScCellObj( pDocSh, aNew );
         }
     }
 
-    throw uno::RuntimeException();
+    throw lang::IndexOutOfBoundsException();
     return NULL;
 }
 
 uno::Reference<table::XCell> SAL_CALL ScCellRangeObj::getCellByPosition(
                                         sal_Int32 nColumn, sal_Int32 nRow )
-                                                throw(uno::RuntimeException)
+                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
 
@@ -4415,20 +4418,23 @@ uno::Reference<table::XCell> SAL_CALL ScCellRangeObj::getCellByPosition(
 
 uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPosition(
                 sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
-                                                    throw(uno::RuntimeException)
+                                    throw(lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
 
+    ScDocShell* pDocSh = GetDocShell();
+    if (!pDocSh)
+        throw uno::RuntimeException();
+
     if ( nLeft >= 0 && nTop >= 0 && nRight >= 0 && nBottom >= 0 )
     {
-        ScDocShell* pDocSh = GetDocShell();
         sal_Int32 nStartX = aRange.aStart.Col() + nLeft;
         sal_Int32 nStartY = aRange.aStart.Row() + nTop;
         sal_Int32 nEndX = aRange.aStart.Col() + nRight;
         sal_Int32 nEndY = aRange.aStart.Row() + nBottom;
 
-        if ( pDocSh && nStartX <= nEndX && nEndX <= aRange.aEnd.Col() &&
-                       nStartY <= nEndY && nEndY <= aRange.aEnd.Row() )
+        if ( nStartX <= nEndX && nEndX <= aRange.aEnd.Col() &&
+             nStartY <= nEndY && nEndY <= aRange.aEnd.Row() )
         {
             ScRange aNew( (USHORT)nStartX, (USHORT)nStartY, aRange.aStart.Tab(),
                           (USHORT)nEndX, (USHORT)nEndY, aRange.aEnd.Tab() );
@@ -4436,7 +4442,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPositio
         }
     }
 
-    throw uno::RuntimeException();
+    throw lang::IndexOutOfBoundsException();
     return NULL;
 }
 
@@ -6359,7 +6365,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScTableSheetObj::getSpreadsheet()
 
 uno::Reference<table::XCell> SAL_CALL ScTableSheetObj::getCellByPosition(
                                         sal_Int32 nColumn, sal_Int32 nRow )
-                                                throw(uno::RuntimeException)
+                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     return ScCellRangeObj::GetCellByPosition_Impl(nColumn, nRow);
@@ -6367,7 +6373,7 @@ uno::Reference<table::XCell> SAL_CALL ScTableSheetObj::getCellByPosition(
 
 uno::Reference<table::XCellRange> SAL_CALL ScTableSheetObj::getCellRangeByPosition(
                 sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
-                                                    throw(uno::RuntimeException)
+                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     return ScCellRangeObj::getCellRangeByPosition(nLeft,nTop,nRight,nBottom);

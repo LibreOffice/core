@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cursuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-21 13:59:04 $
+ *  last change: $Author: nn $ $Date: 2001-09-28 17:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,7 +505,7 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScCellCursorObj::getSpreadsheet()
 
 uno::Reference<table::XCell> SAL_CALL ScCellCursorObj::getCellByPosition(
                                         sal_Int32 nColumn, sal_Int32 nRow )
-                                                throw(uno::RuntimeException)
+                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     return ScCellRangeObj::getCellByPosition(nColumn,nRow);
@@ -513,7 +513,7 @@ uno::Reference<table::XCell> SAL_CALL ScCellCursorObj::getCellByPosition(
 
 uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByPosition(
                 sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
-                                                    throw(uno::RuntimeException)
+                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     return ScCellRangeObj::getCellRangeByPosition(nLeft,nTop,nRight,nBottom);
