@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-19 13:32:39 $
+ *  last change: $Author: dbo $ $Date: 2001-10-19 14:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,6 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     void * pCppExc;
     type_info * rtti;
 
-    fprintf( stderr, ">1\n" );
     {
     // construct cpp exception object
     typelib_TypeDescription * pTypeDescr = 0;
