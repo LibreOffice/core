@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:05:39 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1316,9 +1316,9 @@ void Sc10Import::LoadPatternCollection()
                 if( ( OJustify & ojWordBreak ) == ojWordBreak )
                     rItemSet.Put( SfxBoolItem( TRUE ) );
                 if( ( OJustify & ojBottomTop ) == ojBottomTop )
-                    rItemSet.Put( SvxOrientationItem( SVX_ORIENTATION_BOTTOMTOP ) );
+                    rItemSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
                 else if( ( OJustify & ojTopBottom ) == ojTopBottom )
-                    rItemSet.Put( SvxOrientationItem( SVX_ORIENTATION_TOPBOTTOM ) );
+                    rItemSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
 
                 INT16 Margin = Max( ( USHORT ) 20, ( USHORT ) ( EJustify * 20 ) );
 //              if( ( ( OJustify & ojBottomTop ) == ojBottomTop ) ||
@@ -1946,9 +1946,9 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             if (OJustify & ojWordBreak)
                 aPattern.GetItemSet().Put(SfxBoolItem(TRUE));
             if (OJustify & ojBottomTop)
-                aPattern.GetItemSet().Put(SvxOrientationItem(SVX_ORIENTATION_BOTTOMTOP));
+                aPattern.GetItemSet().Put(SfxInt32Item(ATTR_ROTATE_VALUE,9000));
             else if (OJustify & ojTopBottom)
-                aPattern.GetItemSet().Put(SvxOrientationItem(SVX_ORIENTATION_TOPBOTTOM));
+                aPattern.GetItemSet().Put(SfxInt32Item(ATTR_ROTATE_VALUE,27000));
 
             INT16 Margin = Max((USHORT)20, (USHORT)(EJustify * 20));
             if (((OJustify & ojBottomTop) == ojBottomTop) || ((OJustify & ojBottomTop) == ojBottomTop))
