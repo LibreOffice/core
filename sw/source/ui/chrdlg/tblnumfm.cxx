@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblnumfm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:32 $
+ *  last change: $Author: jp $ $Date: 2001-03-12 17:51:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,32 +66,35 @@
 #pragma hdrstop
 
 
-#ifndef _SVX_SVXIDS_HRC //autogen
+#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#ifndef _SVX_NUMFMT_HXX //autogen
+#ifndef _SVX_NUMFMT_HXX
 #include <svx/numfmt.hxx>
 #endif
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _TBLNUMFM_HXX
+#include <tblnumfm.hxx>
+#endif
 
-#include "swtypes.hxx"
+#ifndef _CHRDLG_HRC
+#include <chrdlg.hrc>
+#endif
 
-#include "chrdlg.hrc"
-#include "tblnumfm.hxx"
 
-
-SwNumFmtDlg::SwNumFmtDlg(Window* pParent, SfxItemSet& rSet) :
-
-    SfxSingleTabDialog(pParent, rSet, 0)
-
+SwNumFmtDlg::SwNumFmtDlg(Window* pParent, SfxItemSet& rSet)
+    : SfxSingleTabDialog( pParent, rSet, 0 )
 {
 //    SetText(SW_RESSTR(STR_NUMFMT));
 
     // TabPage erzeugen
-    SvxNumberFormatTabPage* pPage = (SvxNumberFormatTabPage*) SvxNumberFormatTabPage::Create(this, rSet);
-    const SfxPoolItem& rInfoItem = pPage->GetItemSet().Get(SID_ATTR_NUMBERFORMAT_INFO);
-    pPage->SetNumberFormatList((const SvxNumberInfoItem&)rInfoItem );
-
-    SetTabPage(pPage);
+    SvxNumberFormatTabPage* pPage = (SvxNumberFormatTabPage*)
+                                SvxNumberFormatTabPage::Create( this, rSet );
+    pPage->SetNumberFormatList( (const SvxNumberInfoItem&)pPage->
+                            GetItemSet().Get( SID_ATTR_NUMBERFORMAT_INFO ) );
+    SetTabPage( pPage );
 }
 
 
@@ -104,6 +107,9 @@ SwNumFmtDlg::~SwNumFmtDlg()
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:32  hr
+      initial import
+
       Revision 1.5  2000/09/18 16:05:15  willem.vandorp
       OpenOffice header added.
 
