@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 14:06:42 $
+ *  last change: $Author: oj $ $Date: 2002-10-01 14:04:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -785,7 +785,8 @@ void FmXFormController::disposing(void)
     m_aRowSetApproveListeners.disposeAndClear(aEvt);
     m_aParameterListeners.disposeAndClear(aEvt);
 
-    m_aFilterControls.clear();
+    stopFiltering();
+
     m_aFilters.clear();
 
     ::osl::MutexGuard aGuard( m_aMutex );
