@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-29 15:34:51 $
+ *  last change: $Author: ka $ $Date: 2000-12-01 11:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,14 @@
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_ASSERT
 #include <tools/debug.hxx>
 #endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
-
 
 #ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
@@ -192,6 +194,9 @@ void SvXMLImport::_InitCtor()
                                sXML_n_table_old, XML_NAMESPACE_TABLE );
     pNamespaceMap->AddAtIndex( XML_OLD_NAMESPACE_META_IDX, sXML_np__meta_old,
                                sXML_n_meta_old, XML_NAMESPACE_META );
+
+    sPicturesPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Pictures/" ) );
+    sPackageProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
 }
 
 SvXMLImport::SvXMLImport() throw () :
@@ -205,13 +210,15 @@ SvXMLImport::SvXMLImport() throw () :
     _InitCtor();
 }
 
-SvXMLImport::SvXMLImport( const Reference< XModel > & rModel ) throw () :
+SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
+                          const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > & rGraphicObjects ) throw () :
     pImpl( 0 ),
     pNamespaceMap( new SvXMLNamespaceMap ),
     pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, MAP_100TH_MM ) ),
     pContexts( new SvXMLImportContexts_Impl ),
     pNumImport( NULL ),
     xModel( rModel ),
+    xGraphicObjects( rGraphicObjects ),
     xNumberFormatsSupplier (rModel, uno::UNO_QUERY),
     pProgressBarHelper( NULL )
 {
@@ -601,4 +608,35 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
     }
 
     return xDashHelper;
+}
+
+::rtl::OUString SvXMLImport::ResolveGraphicObjectURL( const ::rtl::OUString& rURL, sal_Bool bLoadOnDemand )
+{
+    ::rtl::OUString sRet;
+
+    if( 0 == rURL.compareTo( ::rtl::OUString( '#' ), 1 ) )
+    {
+        if( !bLoadOnDemand && xGraphicObjects.is() )
+        {
+            Any                 aAny;
+            const sal_uInt32    nCount = xGraphicObjects->getCount();
+            ::rtl::OUString     aTmp( sPackageProtocol );
+
+            aAny <<= ( aTmp += rURL.copy( 1 ) );
+            xGraphicObjects->insertByIndex( nCount, aAny );
+            aAny = xGraphicObjects->getByIndex( nCount );
+            aAny >>= sRet;
+        }
+
+        if( !sRet.getLength() )
+        {
+            sRet = sPackageProtocol;
+            sRet += rURL.copy( 1 );
+        }
+    }
+
+    if( !sRet.getLength() )
+        sRet = INetURLObject::RelToAbs( rURL );
+
+    return sRet;
 }

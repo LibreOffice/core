@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageStyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-10 11:12:45 $
+ *  last change: $Author: ka $ $Date: 2000-12-01 11:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,14 @@
 #include "xmlkywd.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLEXP_HXX
+#include "xmlexp.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLIMP_HXX
+#include "xmlimp.hxx"
+#endif
+
 #ifndef _RTL_USTRBUF_HXX_
 #include<rtl/ustrbuf.hxx>
 #endif
@@ -130,12 +138,7 @@ static __FAR_DATA SvXMLTokenMapEntry aHatchAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-XMLImageStyle::XMLImageStyle( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & _rHandler,
-                                        const SvXMLNamespaceMap& _rNamespaceMap, const SvXMLUnitConverter& _rUnitConverter )
-: rHandler      ( _rHandler ),
-  mrNamespaceMap ( _rNamespaceMap ),
-  rUnitConverter( _rUnitConverter ),
-  pAttrList     ( NULL )
+XMLImageStyle::XMLImageStyle()
 {
 }
 
@@ -143,27 +146,17 @@ XMLImageStyle::~XMLImageStyle()
 {
 }
 
-void XMLImageStyle::AddAttribute( sal_uInt16 nPrefix, const sal_Char *pName, const OUString& aStrValue )
+sal_Bool XMLImageStyle::exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue, SvXMLExport& rExport )
 {
-    const OUString aStrName( OUString::createFromAscii( pName ) );
-    const OUString aStrCDATA( OUString::createFromAscii( sXML_CDATA ) );
-
-    pAttrList->AddAttribute( mrNamespaceMap.GetQNameByKey( nPrefix, aStrName ), aStrCDATA, aStrValue );
+    return ImpExportXML( rStrName, rValue, rExport );
 }
 
-sal_Bool XMLImageStyle::exportXML( const OUString& rStrName, const ::com::sun::star::uno::Any& rValue )
+sal_Bool XMLImageStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport )
 {
-    return ImpExportXML( rHandler, mrNamespaceMap, rUnitConverter, rStrName, rValue );
+    return ImpImportXML( xAttrList, rValue, rStrName, rImport );
 }
 
-sal_Bool XMLImageStyle::importXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList, uno::Any& rValue, OUString& rStrName )
-{
-    return ImpImportXML( rUnitConverter, xAttrList, rValue, rStrName );
-}
-
-sal_Bool XMLImageStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-                                           const SvXMLNamespaceMap& rNamespaceMap, const SvXMLUnitConverter& rUnitConverter,
-                                           const OUString& rStrName, const uno::Any& rValue )
+sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& rValue, SvXMLExport& rExport )
 {
     sal_Bool bRet = sal_False;
 
@@ -173,20 +166,17 @@ sal_Bool XMLImageStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::
     {
         if( rValue >>= aURL )
         {
-            pAttrList = new SvXMLAttributeList();   // Do NOT delete me !!
-            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > xAttrList( pAttrList );
-
             OUString aStrValue;
             OUStringBuffer aOut;
 
             // Name
-            AddAttribute( XML_NAMESPACE_DRAW, sXML_name, rStrName );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, sXML_name, rStrName );
 
             // uri
-            AddAttribute( XML_NAMESPACE_XLINK, sXML_href, aURL );
-            AddAttribute( XML_NAMESPACE_XLINK, sXML_type, OUString::createFromAscii(sXML_simple) );
-            AddAttribute( XML_NAMESPACE_XLINK, sXML_show, OUString::createFromAscii(sXML_embed) );
-            AddAttribute( XML_NAMESPACE_XLINK, sXML_actuate, OUString::createFromAscii(sXML_onLoad) );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, sXML_href, rExport.AddEmbeddedGraphicObject( aURL ) );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, sXML_type, OUString::createFromAscii(sXML_simple) );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, sXML_show, OUString::createFromAscii(sXML_embed) );
+            rExport.AddAttribute( XML_NAMESPACE_XLINK, sXML_actuate, OUString::createFromAscii(sXML_onLoad) );
 
 /*
             // size
@@ -200,26 +190,21 @@ sal_Bool XMLImageStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::
             aStrValue = aOut.makeStringAndClear();
             AddAttribute( XML_NAMESPACE_SVG, sXML_height, aStrValue );
 */
-
             // Do Write
-            rHandler->startElement( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW, OUString::createFromAscii(sXML_fill_image) ),
-                                    xAttrList );
-            rHandler->endElement( OUString::createFromAscii( sXML_fill_image ) );
+            SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, sXML_fill_image, sal_True, sal_True );
         }
     }
 
     return bRet;
 }
 
-sal_Bool XMLImageStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
-                                           const uno::Reference< xml::sax::XAttributeList >& xAttrList,
-                                           uno::Any& rValue, OUString& rStrName )
+sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+                                      uno::Any& rValue, OUString& rStrName,
+                                      SvXMLImport& rImport )
 {
     sal_Bool bRet     = sal_False;
-
     sal_Bool bHasHRef = sal_False;
     sal_Bool bHasName = sal_False;
-
     OUString aStrURL;
 
     SvXMLTokenMap aTokenMap( aHatchAttrTokenMap );
@@ -229,7 +214,7 @@ sal_Bool XMLImageStyle::ImpImportXML( const SvXMLUnitConverter& rUnitConverter,
     {
         const OUString& rFullAttrName = xAttrList->getNameByIndex( i );
         OUString aStrAttrName;
-        sal_uInt16 nPrefix = mrNamespaceMap.GetKeyByAttrName( rFullAttrName, &aStrAttrName );
+        sal_uInt16 nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( rFullAttrName, &aStrAttrName );
         const OUString& rStrValue = xAttrList->getValueByIndex( i );
 
         switch( aTokenMap.Get( nPrefix, aStrAttrName ) )

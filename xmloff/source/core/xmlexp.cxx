@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-30 09:10:49 $
+ *  last change: $Author: ka $ $Date: 2000-12-01 11:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -530,7 +530,7 @@ void SvXMLExport::_ExportStyles( sal_Bool bUsed )
             uno::Reference< container::XNameAccess > xBitmap( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.BitmapTable") ) ), uno::UNO_QUERY );
             if( xBitmap.is() )
             {
-                XMLImageStyle aImageStyle( xHandler, *pNamespaceMap, *pUnitConv );
+                XMLImageStyle aImageStyle;
 
                 if( xBitmap->hasElements() )
                 {
@@ -544,7 +544,7 @@ void SvXMLExport::_ExportStyles( sal_Bool bUsed )
                         {
                             uno::Any aValue = xBitmap->getByName( rStrName );
 
-                            aImageStyle.exportXML( rStrName, aValue );
+                            aImageStyle.exportXML( rStrName, aValue, *this );
                         }
                         catch( container::NoSuchElementException& )
                         {}
@@ -709,11 +709,7 @@ OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectUR
         sRet += rGraphicObjectURL.copy( sGraphicObjectProtocol.getLength() );
     }
     else
-    {
-        String sTmp( sRet );
-        INetURLObject::AbsToRel( sTmp );
-        sRet = sTmp;
-    }
+        sRet = INetURLObject::AbsToRel( sRet );
 
     return sRet;
 }

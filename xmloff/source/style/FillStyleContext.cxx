@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FillStyleContext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: ka $ $Date: 2000-12-01 11:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,8 +187,8 @@ XMLBitmapStyleContext::XMLBitmapStyleContext( SvXMLImport& rImport, sal_uInt16 n
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList)
 {
     // start import
-    XMLImageStyle aBitmapStyle( NULL, GetImport().GetNamespaceMap(), GetImport().GetMM100UnitConverter() );
-    aBitmapStyle.importXML( xAttrList, maAny, maStrName );
+    XMLImageStyle aBitmapStyle;
+    aBitmapStyle.importXML( xAttrList, maAny, maStrName, rImport );
 }
 
 XMLBitmapStyleContext::~XMLBitmapStyleContext()

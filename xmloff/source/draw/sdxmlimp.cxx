@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-27 12:52:59 $
+ *  last change: $Author: ka $ $Date: 2000-12-01 11:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,12 +303,13 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
 //////////////////////////////////////////////////////////////////////////////
 
 SdXMLImport::SdXMLImport(
-    uno::Reference<frame::XModel>& rMod,
+    uno::Reference< frame::XModel >& rMod,
+    uno::Reference< container::XIndexContainer >& rGrfContainer,
     BOOL bLDoc,
     UINT16 nStyleFamMask,
     BOOL bShowProgr,
     BOOL bIsDraw)
-:   SvXMLImport(rMod),
+:   SvXMLImport(rMod, rGrfContainer),
     mpMasterStylesContext(0L),
     mpDocElemTokenMap(0L),
     mpBodyElemTokenMap(0L),
