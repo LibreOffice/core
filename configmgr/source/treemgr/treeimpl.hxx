@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:42:31 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,8 +178,8 @@ namespace configmgr
         */
         class NodeData
         {
-            Name                m_aName_; // cached for better performance
             NodeImplHolder      m_pSpecificNode;
+            Name                m_aName_; // cached for better performance
             NodeOffset          m_nParent;
         public:
             NodeData(NodeImplHolder const& aSpecificNodeImpl, Name const& aName, NodeOffset nParent);
@@ -526,9 +526,9 @@ namespace configmgr
             virtual void doFinishRootPath(Path::Rep& rPath) const;
         private:
             TemplateHolder  const   m_aInstanceInfo;
-            data::TreeSegment       m_aOwnData;
+            Name                    m_aElementName;
             data::TreeAddress       m_aDataAddress;
-            Name m_aElementName;
+            data::TreeSegment       m_aOwnData;
         };
 //-----------------------------------------------------------------------------
 
