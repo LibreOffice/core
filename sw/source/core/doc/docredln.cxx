@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-22 11:57:39 $
+ *  last change: $Author: dvo $ $Date: 2002-03-25 16:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2696,7 +2696,10 @@ BOOL SwRedline::HasValidRange() const
     if( pPtNd->FindStartNode() == pMkNd->FindStartNode() &&
         !pPtNd->FindStartNode()->IsTableNode() &&
         // JP 18.5.2001: Bug 87222 - invalid if points on the end of content
-        ( pPtNd != pMkNd || pPtNd != &pPtNd->GetNodes().GetEndOfContent() )
+        // DVO 25.03.2002: #96530# end-of-content only invalid if no content
+        //                 index exists
+        ( pPtNd != pMkNd || GetContentIdx() != NULL ||
+          pPtNd != &pPtNd->GetNodes().GetEndOfContent() )
         )
         return TRUE;
     return FALSE;
