@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 14:26:19 $
+ *  last change: $Author: sab $ $Date: 2002-06-27 09:06:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,11 @@ public:
     */
     virtual sal_Bool SAL_CALL containsAll (
         const ::com::sun::star::uno::Sequence<sal_Int16>& rStateSet)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Returns a sequence of all states.
+    */
+    virtual com::sun::star::uno::Sequence<sal_Int16> SAL_CALL getStates()
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Adds a state to the set.

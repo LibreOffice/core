@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-26 14:26:44 $
+ *  last change: $Author: sab $ $Date: 2002-06-27 09:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ public:
         throw (uno::RuntimeException);
     sal_Bool Contains (sal_Int16 aState)
         throw (uno::RuntimeException);
+    uno::Sequence<sal_Int16> GetStates()
+        throw (uno::RuntimeException);
     void AddState(sal_Int16 aState)
         throw (uno::RuntimeException);
     void RemoveState(sal_Int16 aState)
@@ -101,7 +103,7 @@ public:
                         AccessibleStateSetHelperImpl* pNewStates)
         throw (uno::RuntimeException);
 
-    void    AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) );
+    inline void AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) );
 
 private:
 #if 0
@@ -124,7 +126,7 @@ AccessibleStateSetHelperImpl::~AccessibleStateSetHelperImpl()
 {
 }
 
-sal_Bool AccessibleStateSetHelperImpl::IsEmpty ()
+inline sal_Bool AccessibleStateSetHelperImpl::IsEmpty ()
     throw (uno::RuntimeException)
 {
 #if 0
@@ -133,7 +135,7 @@ sal_Bool AccessibleStateSetHelperImpl::IsEmpty ()
     return maStates == 0;
 }
 
-sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState)
+inline sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState)
     throw (uno::RuntimeException)
 {
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is to small")
@@ -145,12 +147,29 @@ sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState)
     return ((aTempBitSet & maStates) != 0);
 }
 
-void AccessibleStateSetHelperImpl::AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) )
+inline uno::Sequence<sal_Int16> AccessibleStateSetHelperImpl::GetStates()
+    throw (uno::RuntimeException)
+{
+    uno::Sequence<sal_Int16> aRet(BITFIELDSIZE);
+    sal_Int16* pSeq = aRet.getArray();
+    sal_Int16 nStateCount(0);
+    for (sal_Int16 i = 0; i < BITFIELDSIZE; ++i)
+        if (Contains(i))
+        {
+            *pSeq = i;
+            ++pSeq;
+            ++nStateCount;
+        }
+    aRet.realloc(nStateCount);
+    return aRet;
+}
+
+inline void AccessibleStateSetHelperImpl::AddStates( const sal_Int64 _nStates ) SAL_THROW( ( ) )
 {
     maStates |= _nStates;
 }
 
-void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
+inline void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is to small")
@@ -162,7 +181,7 @@ void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
     maStates |= aTempBitSet;
 }
 
-void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
+inline void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is to small")
@@ -175,7 +194,7 @@ void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
     maStates &= aTempBitSet;
 }
 
-sal_Bool AccessibleStateSetHelperImpl::Compare(
+inline sal_Bool AccessibleStateSetHelperImpl::Compare(
     const AccessibleStateSetHelperImpl* pComparativeValue,
         AccessibleStateSetHelperImpl* pOldStates,
         AccessibleStateSetHelperImpl* pNewStates)
@@ -295,6 +314,13 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
         i++;
     }
     return bFound;
+}
+
+uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSetHelper::getStates()
+    throw (uno::RuntimeException)
+{
+    ::vos::OGuard aGuard(maMutex);
+    return mpHelperImpl->GetStates();
 }
 
 void AccessibleStateSetHelper::AddState(sal_Int16 aState)
