@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 10:15:43 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@
 #include "oleobjsh.hxx"
 #include "chartsh.hxx"
 #include "graphsh.hxx"
+#include "mediash.hxx"
 #include "pgbrksh.hxx"
 #include "dpobject.hxx"
 #include "prevwsh.hxx"
@@ -667,6 +668,10 @@ void ScTabViewShell::SetDrawShellOrSub()
     {
         SetCurSubShell(OST_Graphic);
     }
+    else if(bActiveMediaSh)
+    {
+        SetCurSubShell(OST_Media);
+    }
     else if(bActiveChartSh)
     {
         SetCurSubShell(OST_Chart);
@@ -797,6 +802,14 @@ void ScTabViewShell::SetGraphicShell( BOOL bActive )
 
     if(bActiveGraphicSh)
         SetCurSubShell(OST_Graphic);
+}
+
+void ScTabViewShell::SetMediaShell( BOOL bActive )
+{
+    bActiveMediaSh = bActive;
+
+    if(bActiveMediaSh)
+        SetCurSubShell(OST_Media);
 }
 
 void ScTabViewShell::SetOleObjectShell( BOOL bActive )
@@ -961,6 +974,18 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                     }
                     break;
 
+            case    OST_Media:
+                    {
+                        if ( !pMediaShell)
+                        {
+                            pDocSh->MakeDrawLayer();
+                            pMediaShell = new ScMediaShell( GetViewData() );
+                            pMediaShell->SetRepeatTarget( &aTarget );
+                        }
+                        AddSubShell(*pMediaShell);
+                    }
+                    break;
+
             case    OST_Pivot:
                     {
                         AddSubShell(*pCellShell);
@@ -1045,7 +1070,7 @@ SfxShell* ScTabViewShell::GetMySubShell() const
         if ( pSub == pDrawShell  || pSub == pDrawTextShell || pSub == pEditShell ||
              pSub == pPivotShell || pSub == pAuditingShell || pSub == pDrawFormShell ||
              pSub == pCellShell  || pSub == pOleObjectShell|| pSub == pChartShell ||
-             pSub == pGraphicShell || pSub == pPageBreakShell)
+             pSub == pGraphicShell || pSub == pMediaShell || pSub == pPageBreakShell)
             return pSub;    // gefunden
 
         pSub = ((ScTabViewShell*)this)->GetSubShell(++nPos);
@@ -1570,6 +1595,7 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     pOleObjectShell(NULL),      \
     pChartShell(NULL),          \
     pGraphicShell(NULL),        \
+    pMediaShell(NULL),          \
     pDrawTextShell(NULL),       \
     pEditShell(NULL),           \
     pPivotShell(NULL),          \
@@ -1581,6 +1607,7 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     bActiveDrawSh(FALSE),       \
     bActiveDrawTextSh(FALSE),   \
     bActiveGraphicSh(FALSE),    \
+    bActiveMediaSh(FALSE),      \
     bActivePivotSh(FALSE),      \
     bActiveAuditingSh(FALSE),   \
     bActiveDrawFormSh(FALSE),   \
@@ -1879,6 +1906,7 @@ __EXPORT ScTabViewShell::~ScTabViewShell()
     DELETEZ(pOleObjectShell);
     DELETEZ(pChartShell);
     DELETEZ(pGraphicShell);
+    DELETEZ(pMediaShell);
     DELETEZ(pDrawTextShell);
     DELETEZ(pEditShell);
     DELETEZ(pPivotShell);
