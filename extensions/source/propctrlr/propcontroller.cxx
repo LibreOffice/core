@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:56 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/util/XModifiable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
@@ -128,6 +131,10 @@
 #ifndef _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
 #include "formstrings.hxx"
 #endif
+#ifndef _EXTENSIONS_PROPCTRLR_FORMMETADATA_HXX_
+#include "formmetadata.hxx"
+#endif
+#include <algorithm>
 
 //------------------------------------------------------------------------
 // !!! outside the namespace !!!
@@ -150,6 +157,7 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::frame;
+    using namespace ::com::sun::star::util;
     using namespace ::comphelper;
 
 #define THISREF()   static_cast< XController* >(this)
@@ -601,7 +609,7 @@ namespace pcr
         if (aProp.Name.getLength())
         {
             DBG_ASSERT(aProp.Name == _rEvent.PropertyName, "OPropertyBrowserController::_propertyChanged: getIntrospecteeProperty returned nonsense!");
-            ::rtl::OUString sNewValue = AnyToString(_rEvent.NewValue, aProp, m_pPropertyInfo->getPropertyId(_rEvent.PropertyName));
+            ::rtl::OUString sNewValue = getStringRepFromPropertyValue(_rEvent.NewValue, m_pPropertyInfo->getPropertyId(_rEvent.PropertyName));
             getPropertyBox()->SetPropertyValue(_rEvent.PropertyName, sNewValue);
         }
     }
@@ -679,29 +687,46 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString OPropertyBrowserController::GetPropertyValue(const ::rtl::OUString& _rPropName)
+    Any OPropertyBrowserController::GetPropertyUnoValue( const ::rtl::OUString& _rPropName )
     {
-        ::rtl::OUString aStrVal;
+        Any aValue;
         try
         {
-            if (m_xPropValueAccess.is())
+            if ( _rPropName.getLength() )
             {
-                Property aProp = getIntrospecteeProperty(_rPropName);
-                DBG_ASSERT(aProp.Name.getLength(), "OPropertyBrowserController::GetPropertyValue: invalid property name!");
-                if (aProp.Name.getLength())
+                sal_Int32   nPropId = m_pPropertyInfo->getPropertyId( _rPropName );
+                sal_uInt32  nPropertyUIFlags = m_pPropertyInfo->getPropertyUIFlags( nPropId );
+                bool bIsVirtualProperty = ( nPropertyUIFlags & PROP_FLAG_VIRTUAL_PROP ) != 0;
+
+                if ( !bIsVirtualProperty )
                 {
-                    Any aVal( m_xPropValueAccess->getPropertyValue(_rPropName ) );
-                    aStrVal = AnyToString(aVal, aProp, m_pPropertyInfo->getPropertyId(_rPropName));
+                    if ( m_xPropValueAccess.is() )
+                    {
+                        aValue = m_xPropValueAccess->getPropertyValue( _rPropName );
+                    }
+                }
+                else
+                {
+                    aValue = getVirtualPropertyValue( nPropId );
                 }
             }
         }
 
         catch (Exception&)
         {
-            DBG_ERROR("OPropertyBrowserController::GetPropertyValue : caught an exception !");
+            DBG_ERROR("OPropertyBrowserController::GetPropertyUnoValue: caught an exception !");
         }
 
-        return aStrVal;
+        return aValue;
+    }
+
+    //------------------------------------------------------------------------
+    ::rtl::OUString OPropertyBrowserController::GetPropertyValue( const ::rtl::OUString& _rPropName )
+    {
+        return getStringRepFromPropertyValue(
+            GetPropertyUnoValue( _rPropName ),
+            m_pPropertyInfo->getPropertyId( _rPropName )
+        );
     }
 
     //------------------------------------------------------------------------
@@ -854,10 +879,23 @@ namespace pcr
             }
 
             //////////////////////////////////////////////////////////////////////
-            // get the properties, and sort them by relative pos
+            // the real properties
             Sequence< Property > aProperties(m_xIntrospection->getProperties(PropertyConcept::ALL));
 
-            // transfer all the props to a map
+            // the virtual properties
+            Sequence< Property > aVirtualProps;
+            if ( describeVirtualProperties( aVirtualProps ) )
+            {
+                sal_Int32 nOldPropCount = aProperties.getLength();
+                aProperties.realloc( nOldPropCount + aVirtualProps.getLength() );
+                ::std::copy(
+                    aVirtualProps.getConstArray(),
+                    aVirtualProps.getConstArray() + aVirtualProps.getLength(),
+                    aProperties.getArray() + nOldPropCount
+                );
+            }
+
+            // sort them by relative pos, which is done by inserting into a map
             DECLARE_STL_STDKEY_MAP( sal_Int32, Property, OrderedPropertyMap );
             OrderedPropertyMap aSortProperties;
             const Property* pSourceProps = aProperties.getConstArray();
@@ -870,13 +908,12 @@ namespace pcr
 
             // and copy them into the sequence, now that they're sorted
             m_aObjectProperties.realloc(aSortProperties.size());
-            Property* pCopyDest = m_aObjectProperties.getArray();
-            for (   ConstOrderedPropertyMapIterator aCopySource = aSortProperties.begin();
-                    aCopySource != aSortProperties.end();
-                    ++aCopySource, ++pCopyDest
-                )
-                *pCopyDest = aCopySource->second;
-
+            ::std::transform(
+                aSortProperties.begin(),
+                aSortProperties.end(),
+                m_aObjectProperties.getArray(),
+                ::std::select2nd< OrderedPropertyMap::value_type >()
+            );
 
             //////////////////////////////////////////////////////////////////////
             // get the model and the control listeners
@@ -1051,6 +1088,24 @@ namespace pcr
         return nControlType;
     }
 
+    //------------------------------------------------------------------------
+    void OPropertyBrowserController::setDocumentModified( )
+    {
+        Reference< XChild > xChild;
+        m_aIntrospectee >>= xChild;
+        Reference< XModel > xDocumentModel( xChild, UNO_QUERY );
+        while( !xDocumentModel.is() && xChild.is() )
+        {
+            Reference< XInterface > xParent = xChild->getParent();
+            xDocumentModel = Reference< XModel >( xParent, UNO_QUERY );
+            xChild = Reference< XChild >( xParent, UNO_QUERY );
+        }
+
+        Reference< XModifiable > xModifiable( xDocumentModel, UNO_QUERY );
+        if ( xModifiable.is() )
+            xModifiable->setModified( sal_True );
+    }
+
     // XLayoutConstrains #95343# ----------------
     ::com::sun::star::awt::Size SAL_CALL OPropertyBrowserController::getMinimumSize() throw (::com::sun::star::uno::RuntimeException)
     {
@@ -1076,7 +1131,6 @@ namespace pcr
             aAdjustedSize.Height = aMinSize.Height;
         return aAdjustedSize;
     }
-
 
 //............................................................................
 } // namespace pcr
