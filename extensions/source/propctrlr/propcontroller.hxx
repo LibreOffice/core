@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:56 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,10 +254,10 @@ namespace pcr
     protected:
         // good callback candidates:
 
-        // convert the display string into a property value
-        ::com::sun::star::uno::Any StringToAny(const ::rtl::OUString& _rString, const ::com::sun::star::beans::Property& _rProp, sal_Int32 _nPropId);
+        /// convert the display string into a property value
+        ::com::sun::star::uno::Any getPropertyValueFromStringRep( const ::rtl::OUString& _rString, const ::com::sun::star::beans::Property& _rProp, sal_Int32 _nPropId );
         // convert a property value into a display string
-        ::rtl::OUString AnyToString(const ::com::sun::star::uno::Any& _rValue, const ::com::sun::star::beans::Property& _rProp, sal_Int32 _nPropId);
+        ::rtl::OUString getStringRepFromPropertyValue(const ::com::sun::star::uno::Any& _rValue, sal_Int32 _nPropId);
 
         // helper to find a string within a string list
         sal_Int32 GetStringPos(const String& _rEntry, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rEntries);
@@ -361,6 +361,49 @@ namespace pcr
         // bind the browser to a new object (a more comprehensive version of setObject)
         void bindToObject(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject);
 
+
+        /** retrieves the virtual properties which apply to our introspectee
+            @return
+                <TRUE/> if any only if the introspectee supports virtual properties. In such a
+                case <arg>_rProps</arg> will contain a description of these properties
+        */
+        bool    describeVirtualProperties( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps );
+
+        /** retrieves the actual value of a virtual property
+        */
+        ::com::sun::star::uno::Any
+                getVirtualPropertyValue( sal_Int32 _nPropId );
+
+        /** sets the actual value of a virtual property
+        */
+        void    setVirtualPropertyValue(
+                    sal_Int32 _nPropId,
+                    const ::com::sun::star::uno::Any& _rValue
+                );
+
+        /** called to update properties which depend on a given properties's value
+        */
+        void    updateDependentProperties( sal_Int32 _nPropId, const ::com::sun::star::uno::Any& _rNewValue );
+
+        /** sets the modified flag of our document
+
+            <p>The document is searched by traveling up the component hierarchy, starting with
+            our introspectee, until we find an XModel. If this XModel supports XModifiable, then
+            we use this to set the flag.</p>
+        */
+        void    setDocumentModified( );
+
+        /** enables the lines for the properties given
+            @param _pPropertyStart
+                iterator pointing to the first property name
+            @param _pPropertyStart
+                iterator pointing behind the last property name
+            @param _bEnable
+                the enable-status of the lines
+        */
+        void    enablePropertyLines( const ::rtl::OUString* _pPropertyStart, const ::rtl::OUString* _pPropertyEnd,
+            sal_Bool _bEnable );
+
         void SetCursorSource( sal_Bool _bConnect, sal_Bool _bInit );
         void SetListSource(sal_Bool _bInit = sal_False);
         void SetStringSeq(const ::com::sun::star::beans::Property& rProperty, OLineDescriptor& _rUIData);
@@ -382,8 +425,10 @@ namespace pcr
                     getRowSet( ) const;
 
 
-        sal_uInt32 GetPropertyPos(const ::rtl::OUString& _rPropName);
+        sal_uInt32      GetPropertyPos(const ::rtl::OUString& _rPropName);
         ::rtl::OUString GetPropertyValue(const ::rtl::OUString& _rPropName);
+        ::com::sun::star::uno::Any
+                        GetPropertyUnoValue( const ::rtl::OUString& _rPropName );
 
         void syncPropertyToView();
         void syncViewToProperty();
