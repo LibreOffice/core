@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:50:24 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "Hilfslinien";
         Text[ hindi ] = "सलाह";
         Text[ slovak ] = "Vodítka";
+        Text[ hungarian ] = "Vezetővonalak";
+        Text[ slovenian ] = "Vodila";
     };
     CheckBox CB_CROSS
     {
@@ -129,7 +131,7 @@ TabPage TP_CONTENT_OPT
         Text[ french ] = "Rep�res lors du d�placement";
         Text[ spanish ] = "Gu�as al despla~zar";
         Text[ italian ] = "Linee guida durante lo spostamento";
-        Text[ danish ] = "Hj~�lpelinjer ved flytning";
+        Text[ danish ] = "~Hj�lpelinjer ved flytning";
         Text[ swedish ] = "Hj�l~plinjer vid f�rflyttning";
         Text[ polish ] = "Linie pomo~cnicze przy przesuwaniu";
         Text[ portuguese_brazilian ] = "~Guias ao mover objetos";
@@ -146,6 +148,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "Hilf~slinien beim Verschieben";
         Text[ hindi ] = "स्थान ~परिवर्तन के समय सलाह ";
         Text[ slovak ] = "Vodítka ~pri pohybe";
+        Text[ hungarian ] = "Ve~zetővonalak látszanak áthelyezéskor";
+        Text[ slovenian ] = "Vodila ~med premikanjem";
     };
     CheckBox CB_HANDLE
     {
@@ -178,6 +182,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "Einfa~che Griffe";
         Text[ hindi ] = "सामा~न्य हान्डलें";
         Text[ slovak ] = "Je~dnoduché úchytky";
+        Text[ hungarian ] = "~Egyszerű fogantyúk";
+        Text[ slovenian ] = "Enostavne ~ročice";
     };
     CheckBox CB_BIGHANDLE
     {
@@ -193,7 +199,7 @@ TabPage TP_CONTENT_OPT
         Text[ french ] = "Grandes poign�es";
         Text[ spanish ] = "Agarraderas grandes";
         Text[ italian ] = "Maniglie grandi";
-        Text[ danish ] = "~Store h�ndtag";
+        Text[ danish ] = "Store h�ndtag";
         Text[ swedish ] = "Sto~ra handtag";
         Text[ polish ] = "Du�e ~uchwyty";
         Text[ portuguese_brazilian ] = "Al�as grandes";
@@ -210,6 +216,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "G~roße Griffe";
         Text[ hindi ] = "बड़ा हान्डलें";
         Text[ slovak ] = "Veľké úchytky";
+        Text[ hungarian ] = "Nagy fogantyúk";
+        Text[ slovenian ] = "Velike ročice";
     };
     FixedLine FL_WINDOW
     {
@@ -243,6 +251,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "‮תצוגה‬";
         Text[ hindi ] = "दृश्य";
         Text[ slovak ] = "Zobraziť";
+        Text[ hungarian ] = "Nézet";
+        Text[ slovenian ] = "Pogled";
     };
     CheckBox CB_HSCROLL
     {
@@ -256,7 +266,7 @@ TabPage TP_CONTENT_OPT
         Text [ french ] = "Barre de d�filement ~horizontale" ;
         Text [ dutch ] = "Ho~rizontale beeldschuifbalk" ;
         Text [ swedish ] = "Horisontell r~ullningslist" ;
-        Text [ danish ] = "Vandret rulle~panel" ;
+        Text [ danish ] = "~Vandret rullebj�lke" ;
         Text [ portuguese_brazilian ] = "Barra de rolagem h~orizontal" ;
         Text [ portuguese ] = "Barra de deslocamento ~horizontal" ;
         Text[ chinese_simplified ] = "水平滚动条(~O)";
@@ -276,6 +286,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "Horizontale Bildla~ufleiste";
         Text[ hindi ] = "स~मतल स्क्रॉल पट्टी";
         Text[ slovak ] = "V~odorovná posuvná lišta";
+        Text[ hungarian ] = "Vízsz~intes görgetősáv";
+        Text[ slovenian ] = "V~odoravni drsni trak";
     };
     CheckBox CB_VSCROLL
     {
@@ -289,7 +301,7 @@ TabPage TP_CONTENT_OPT
         Text [ french ] = "Barre de d�filement ~verticale" ;
         Text [ dutch ] = "Verticale beeldsch~uifbalk" ;
         Text [ swedish ] = "~Vertikal rullningslist" ;
-        Text [ danish ] = "Lodret r~ullepanel" ;
+        Text [ danish ] = "~Lodret rullebj�lke" ;
         Text [ portuguese_brazilian ] = "Barra de rolagem ~vertical" ;
         Text [ portuguese ] = "Barra de deslocamento ~vertical" ;
         Text[ chinese_simplified ] = "垂直滚动条(~V)";
@@ -309,6 +321,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "‮פס גלילה אנכי‬";
         Text[ hindi ] = "~लंबरूप स्क्रॉल पट्टी";
         Text[ slovak ] = "Z~vislá posuvná lišta";
+        Text[ hungarian ] = "~Függőleges görgetősáv";
+        Text[ slovenian ] = "~Navpični drsni trak";
     };
     CheckBox CB_ANY_RULER
     {
@@ -324,7 +338,7 @@ TabPage TP_CONTENT_OPT
         Text[ spanish ] = "R~egla";
         Text[ finnish ] = "R~uler";
         Text[ italian ] = "Rig~hello";
-        Text[ danish ] = "R~uler";
+        Text[ danish ] = "~Lineal";
         Text[ swedish ] = "Linjal";
         Text[ polish ] = "R~uler";
         Text[ portuguese_brazilian ] = "R�gua";
@@ -340,6 +354,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "Line~al";
         Text[ hindi ] = "R~uler";
         Text[ slovak ] = "Pra~vítko";
+        Text[ hungarian ] = "V~onalzó";
+        Text[ slovenian ] = "Ravn~ilo";
     };
     CheckBox CB_HRULER
     {
@@ -374,6 +390,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "Horizontales ~Lineal";
         Text[ hindi ] = "सम~तल रूलर";
         Text[ slovak ] = "V~odorovné pravítko";
+        Text[ hungarian ] = "Vízszintes von~alzó";
+        Text[ slovenian ] = "Vodo~ravno ravnilo";
     };
     ListBox LB_HMETRIC
     {
@@ -414,6 +432,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "Vertik~ales Lineal";
         Text[ hindi ] = "लं~बरूप रूलर";
         Text[ slovak ] = "Z~vislé pravítko";
+        Text[ hungarian ] = "Függőleges vona~lzó";
+        Text[ slovenian ] = "Navp~ično ravnilo";
     };
     CheckBox CB_VRULER_RIGHT
     {
@@ -430,7 +450,7 @@ TabPage TP_CONTENT_OPT
         Text[ spanish ] = "Alineado a la derecha";
         Text[ finnish ] = "Right aligned";
         Text[ italian ] = "Allineato a destra";
-        Text[ danish ] = "Right aligned";
+        Text[ danish ] = "H�jrejusteret";
         Text[ swedish ] = "H�gerjusterat";
         Text[ polish ] = "Right aligned";
         Text[ portuguese_brazilian ] = "Alinhado � direita";
@@ -446,6 +466,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "Rechts ausgerichtet";
         Text[ hindi ] = "Right-aligned";
         Text[ slovak ] = "Zarovanané-vpravo";
+        Text[ hungarian ] = "Jobbra igazított";
+        Text[ slovenian ] = "Desno poravnano";
     };
     ListBox LB_VMETRIC
     {
@@ -466,7 +488,7 @@ TabPage TP_CONTENT_OPT
         Text [ italian ] = "Scorrimento dolce" ;
         Text [ spanish ] = "Desplazamiento ~suave" ;
         Text [ french ] = "D�filement doux" ;
-        Text [ dutch ] = "Zacht scr~ollen" ;
+        Text [ dutch ] = "Vloeiend scr~ollen" ;
         Text [ portuguese ] = "~Mover suavemente" ;
         Text[ chinese_simplified ] = "平滑滚动(~M)";
         Text[ russian ] = "������ ���������";
@@ -485,6 +507,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "~Weiches Scrollen";
         Text[ hindi ] = "मृ~दु स्क्रॉल";
         Text[ slovak ] = "Ply~nulý posuv";
+        Text[ hungarian ] = "Finom~görgetés";
+        Text[ slovenian ] = "~Gladko drsenje";
     };
     FixedLine FL_DISP
     {
@@ -520,6 +544,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "Anzeigen";
         Text[ hindi ] = "दिखाओ";
         Text[ slovak ] = "Zobraziť";
+        Text[ hungarian ] = "Megjelenítés";
+        Text[ slovenian ] = "Prikaz";
     };
     CheckBox CB_GRF
     {
@@ -534,7 +560,7 @@ TabPage TP_CONTENT_OPT
         Text [ french ] = "Images et objets" ;
         Text [ dutch ] = "A~fbeeldingen en objecten" ;
         Text [ spanish ] = "~Im�genes y objetos" ;
-        Text [ danish ] = "Grafik og objekter" ;
+        Text [ danish ] = "~Grafik og objekter" ;
         Text [ swedish ] = "~Grafik och objekt" ;
         Text [ finnish ] = "Grafiikat ja objektit" ;
         Text [ english_us ] = "~Graphics and objects" ;
@@ -556,6 +582,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "~Grafiken und Objekte";
         Text[ hindi ] = "~सुचित्र और वस्तु";
         Text[ slovak ] = "O~brázky a objekty";
+        Text[ hungarian ] = "~Képek és objektumok";
+        Text[ slovenian ] = "~Grafike in predmeti";
     };
     CheckBox CB_TBL
     {
@@ -590,6 +618,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "‮טבלאות‬";
         Text[ hindi ] = "~सारणियाँ";
         Text[ slovak ] = "~Tabuľky";
+        Text[ hungarian ] = "~Táblázatok";
+        Text[ slovenian ] = "~Tabele";
     };
     CheckBox CB_DRWFAST
     {
@@ -624,6 +654,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "Zeichnungen und ~Kontrollfelder";
         Text[ hindi ] = "रे~खाचित्र और नियंत्रण";
         Text[ slovak ] = "Kre~sby a ovládacie prvky";
+        Text[ hungarian ] = "~Rajzok és vezérlőelemek";
+        Text[ slovenian ] = "~Risbe in kontrolniki";
     };
     CheckBox CB_FIELD
     {
@@ -633,7 +665,7 @@ TabPage TP_CONTENT_OPT
         Text [ ENGLISH ] = "~Field names" ;
         Text [ english_us ] = "~Field codes" ;
         Text [ swedish ] = "F~�ltnamn" ;
-        Text [ danish ] = "Feltnavne" ;
+        Text [ danish ] = "~Feltkoder" ;
         Text [ italian ] = "Nome di campo" ;
         Text [ spanish ] = "~C�digos de campo" ;
         Text [ french ] = "Noms des champs" ;
@@ -657,6 +689,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "F~eldnamen";
         Text[ hindi ] = "~क्षेत्र कोड";
         Text[ slovak ] = "Kódy ~polí";
+        Text[ hungarian ] = "~Mezőkódok";
+        Text[ slovenian ] = "Kode ~polj";
     };
     CheckBox CB_POSTIT
     {
@@ -666,7 +700,7 @@ TabPage TP_CONTENT_OPT
         Text [ ENGLISH ] = "N~otes" ;
         Text [ english_us ] = "~Notes" ;
         Text [ swedish ] = "Ante~ckningar" ;
-        Text [ danish ] = "Noter" ;
+        Text [ danish ] = "~Noter" ;
         Text [ italian ] = "N~ote" ;
         Text [ spanish ] = "Notas" ;
         Text [ french ] = "Notes" ;
@@ -690,6 +724,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "~टिप्पणी";
         Text[ slovak ] = "Kome~ntáre";
+        Text[ hungarian ] = "~Jegyzetek";
+        Text[ slovenian ] = "~Opombe";
     };
     FixedLine FL_SETTINGS
     {
@@ -723,6 +759,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Nastavitve";
     };
     FixedText FT_METRIC
     {
@@ -733,7 +771,7 @@ TabPage TP_CONTENT_OPT
         Text [ italian ] = "Unit� di misura";
         Text [ portuguese_brazilian ] = "Unidade de medida";
         Text [ portuguese ] = "~Unidade de medida";
-        Text [ danish ] = "~M�leenhed";
+        Text [ danish ] = "M�leenhed";
         Text [ french ] = "Unit� de mesure";
         Text [ swedish ] = "~M�ttenhet";
         Text [ dutch ] = "~Maateenheid";
@@ -758,6 +796,8 @@ TabPage TP_CONTENT_OPT
         Text[ hebrew ] = "~Maßeinheit";
         Text[ hindi ] = "नाप यूनिट्";
         Text[ slovak ] = "Jednotka miery";
+        Text[ hungarian ] = "Mértékegység";
+        Text[ slovenian ] = "Merska enota";
     };
     ListBox LB_METRIC
     {
@@ -812,6 +852,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮תוכן עיניינים‬";
         Text[ hindi ] = "विषय";
         Text[ slovak ] = "Obsah";
+        Text[ hungarian ] = "Nyomtatandó elemek";
+        Text[ slovenian ] = "Vsebina";
     };
     CheckBox CB_PGRF
     {
@@ -824,7 +866,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ portuguese_brazilian ] = "~Figuras" ;
         Text [ portuguese ] = "~Imagens" ;
         Text [ finnish ] = "~Grafiikka" ;
-        Text [ danish ] = "Grafik" ;
+        Text [ danish ] = "~Grafik" ;
         Text [ french ] = "Images" ;
         Text [ swedish ] = "~Grafik" ;
         Text [ dutch ] = "A~fbeeldingen" ;
@@ -848,6 +890,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮גרפיקה‬";
         Text[ hindi ] = "~सुचित्र";
         Text[ slovak ] = "O~brázky";
+        Text[ hungarian ] = "~Képek";
+        Text[ slovenian ] = "~Grafika";
     };
     CheckBox CB_PTAB
     {
@@ -882,6 +926,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮טבלאות‬";
         Text[ hindi ] = "~सारणियाँ";
         Text[ slovak ] = "~Tabuľky";
+        Text[ hungarian ] = "~Táblázatok";
+        Text[ slovenian ] = "~Tabele";
     };
     CheckBox CB_PDRAW
     {
@@ -916,6 +962,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮שרטוטים‬";
         Text[ hindi ] = "रेखा~चित्र";
         Text[ slovak ] = "K~resby";
+        Text[ hungarian ] = "Ra~jzok";
+        Text[ slovenian ] = "~Risbe";
     };
     CheckBox CB_CTRLFLD
     {
@@ -950,6 +998,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "Kontroll~felder";
         Text[ hindi ] = "नियंत्र~ण";
         Text[ slovak ] = "~Ovládacie prvky";
+        Text[ hungarian ] = "Ve~zérlőelemek";
+        Text[ slovenian ] = "~Kontrolniki";
     };
     CheckBox CB_BACKGROUND
     {
@@ -983,6 +1033,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮רקע‬";
         Text[ hindi ] = "पृष्ठ~भाग";
         Text[ slovak ] = "Po~zadie";
+        Text[ hungarian ] = "~Háttér";
+        Text[ slovenian ] = "~Ozadje";
     };
     CheckBox CB_BLACK_FONT
     {
@@ -1016,6 +1068,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮תמיד בשחור‬";
         Text[ hindi ] = "का~ला छपाई";
         Text[ slovak ] = "Tlačiť čie~rnou farbou";
+        Text[ hungarian ] = "Nyomt~atás feketén";
+        Text[ slovenian ] = "Natisni ~črno-belo";
     };
     FixedLine FL_SEP_PRT_LEFT
     {
@@ -1057,6 +1111,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮עמודים‬";
         Text[ hindi ] = "पृष्ठ";
         Text[ slovak ] = "Stránky";
+        Text[ hungarian ] = "Oldalak";
+        Text[ slovenian ] = "Strani";
     };
     CheckBox CB_LEFTP
     {
@@ -1069,7 +1125,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ portuguese_brazilian ] = "~P�ginas da esquerda" ;
         Text [ portuguese ] = "~P�ginas esquerdas" ;
         Text [ finnish ] = "~Vasemmat sivut" ;
-        Text [ danish ] = "Venstre sider" ;
+        Text [ danish ] = "~Venstre sider" ;
         Text [ french ] = "Pages de ~gauche" ;
         Text [ swedish ] = "V�~nstersidor" ;
         Text [ dutch ] = "~Linkerpagina's" ;
@@ -1093,6 +1149,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮דפים שמאליים‬";
         Text[ hindi ] = "~बायाँ पृष्ठें";
         Text[ slovak ] = "Ľ~avé stránky";
+        Text[ hungarian ] = "~Páros";
+        Text[ slovenian ] = "~Leve strani";
     };
     CheckBox CB_RIGHTP
     {
@@ -1127,6 +1185,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮דפים ימניים‬";
         Text[ hindi ] = "~दाहिना पृष्ठें";
         Text[ slovak ] = "P~ravé stránky";
+        Text[ hungarian ] = "Pá~ratlan";
+        Text[ slovenian ] = "~Desne strani";
     };
     CheckBox CB_REVERSE
     {
@@ -1139,7 +1199,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ portuguese_brazilian ] = "In~vertido" ;
         Text [ portuguese ] = "~Invers�o" ;
         Text [ finnish ] = "K��nnetty" ;
-        Text [ danish ] = "Omvendt" ;
+        Text [ danish ] = "~Omvendt" ;
         Text [ french ] = "Ordre in~vers�" ;
         Text [ swedish ] = "O~mv�nt" ;
         Text [ dutch ] = "~Omgekeerd" ;
@@ -1161,6 +1221,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮בסדר הפוך‬";
         Text[ hindi ] = "उल~टा हुआ ";
         Text[ slovak ] = "Pre~vrátené";
+        Text[ hungarian ] = "~Fordított sorrend";
+        Text[ slovenian ] = "~Obratno";
     };
     CheckBox CB_PROSPECT
     {
@@ -1194,6 +1256,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮כחוברת‬";
         Text[ hindi ] = "~छोटी पुस्तक";
         Text[ slovak ] = "Prír~učka";
+        Text[ hungarian ] = "~Brosúra";
+        Text[ slovenian ] = "~Brošura";
     };
     RadioButton RB_NO
     {
@@ -1206,7 +1270,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ portuguese_brazilian ] = "~Nenhum" ;
         Text [ portuguese ] = "~Nenhum" ;
         Text [ finnish ] = "Ei mit�~�n" ;
-        Text [ danish ] = "Ingen" ;
+        Text [ danish ] = "Ing~en" ;
         Text [ french ] = "Aucun(e)" ;
         Text [ swedish ] = "~Inga" ;
         Text [ dutch ] = "~Geen" ;
@@ -1230,6 +1294,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "~कोई नहीं";
         Text[ slovak ] = "~Nič";
+        Text[ hungarian ] = "~Nincs";
+        Text[ slovenian ] = "~Brez";
     };
     RadioButton RB_ONLY
     {
@@ -1264,6 +1330,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮הערות בלבד‬";
         Text[ hindi ] = "केवल टिप्प~णी";
         Text[ slovak ] = "Len k~omentáre";
+        Text[ hungarian ] = "~Csak a jegyzetek";
+        Text[ slovenian ] = "~Samo opombe";
     };
     RadioButton RB_END
     {
@@ -1276,7 +1344,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ portuguese_brazilian ] = "Fim do ~documento" ;
         Text [ portuguese ] = "Fim de ~documento" ;
         Text [ finnish ] = "Asiakirjan ~loppu" ;
-        Text [ danish ] = "Dokumentets slutn." ;
+        Text [ danish ] = "Dokumentets slutning" ;
         Text [ french ] = "Fin du document" ;
         Text [ swedish ] = "~Dokumentslut" ;
         Text [ dutch ] = "~Documenteinde" ;
@@ -1298,6 +1366,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮הערות בסוף הקובץ‬";
         Text[ hindi ] = "लेखपत्र का ~अंत";
         Text[ slovak ] = "Koniec doku~mentu";
+        Text[ hungarian ] = "~Dokumentum vége";
+        Text[ slovenian ] = "~Konec dokumenta";
     };
     RadioButton RB_PAGEEND
     {
@@ -1310,7 +1380,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ portuguese_brazilian ] = "Fim da ~p�gina" ;
         Text [ portuguese ] = "Fim de ~p�gina" ;
         Text [ finnish ] = "~Sivun loppu" ;
-        Text [ danish ] = "Sidens slutning" ;
+        Text [ danish ] = "~Sidens slutning" ;
         Text [ french ] = "Fin de la page" ;
         Text [ swedish ] = "~Sidslut" ;
         Text [ dutch ] = "Pag~ina-einde" ;
@@ -1332,6 +1402,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮הערות בסוף הדף‬";
         Text[ hindi ] = "~पृष्ठ का अंत";
         Text[ slovak ] = "~Koniec stránky";
+        Text[ hungarian ] = "~Oldal alja";
+        Text[ slovenian ] = "~Konec strani";
     };
     FixedLine FL_SEP_PRT_RIGHT
     {
@@ -1373,6 +1445,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "टिप्पणी";
         Text[ slovak ] = "Poznámky";
+        Text[ hungarian ] = "Jegyzetek";
+        Text[ slovenian ] = "Opombe";
     };
     FixedLine FL_4
     {
@@ -1406,6 +1480,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮שונות‬";
         Text[ hindi ] = "अन्य ";
         Text[ slovak ] = "Ostatné";
+        Text[ hungarian ] = "Egyéb";
+        Text[ slovenian ] = "Drugo";
     };
     CheckBox CB_SINGLEJOBS
     {
@@ -1421,7 +1497,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ italian ] = "Cr~ea singoli ordini di stampa" ;
         Text [ spanish ] = "Crear tareas individuales de impresi�n" ;
         Text [ french ] = "Travaux d'impression individuels" ;
-        Text [ dutch ] = "Afzonderli~jke afdruktaken geven" ;
+        Text [ dutch ] = "Afzonderli~jke afdruktaken aanmaken" ;
         Text [ portuguese ] = "C~riar tarefas de impress�o individuais" ;
         Text[ chinese_simplified ] = "生成单个打印任务(~I)";
         Text[ russian ] = "������� ��������� ������� ��������";
@@ -1439,6 +1515,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮עבודות הדפסה מופרדות‬";
         Text[ hindi ] = "अकेला छ~पाई कार्यों को उत्पन्न करो";
         Text[ slovak ] = "Vytvoriť jednotl~ivé tlačové úlohy";
+        Text[ hungarian ] = "Önálló nyo~mtatási feladatok";
+        Text[ slovenian ] = "Ustvari ~posamezna tiskalniška opravila";
     };
     CheckBox CB_PAPERFROMSETUP
     {
@@ -1456,7 +1534,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ french ] = "D'apr�s les param�tres de l'imprimante";
         Text[ spanish ] = "Bandeja seg�n c~onfiguraci�n de impresora";
         Text[ italian ] = "Cassetto come da  imposta~zione stampante";
-        Text[ danish ] = "Papirbakke fra ~udskriftsindstillinger";
+        Text[ danish ] = "~Papirbakke fra udskriftsindstillingerne";
         Text[ swedish ] = "~Pappersmagasin fr�n skrivarinst�llning";
         Text[ polish ] = "~Zasobnik papieru z ustawie� drukarki";
         Text[ portuguese_brazilian ] = "Bandeja de papel  da ~impressora";
@@ -1474,6 +1552,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮צורת הזנה על פי הגדרות מדפסת‬";
         Text[ hindi ] = "~मुद्रक निर्धारण से कागज़ ट्रे";
         Text[ slovak ] = "Zásobník ~papiera podľa nastavenia tlačiarne";
+        Text[ hungarian ] = "Papírtálca-vá~lasztás a nyomtató beállításai szerint";
+        Text[ slovenian ] = "~Pladenj za papir iz nastavitev tiskalnika";
     };
     FixedText FT_FAX
     {
@@ -1507,6 +1587,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮שליחת הקובץ לפקס‬";
         Text[ hindi ] = "~फॉक्स";
         Text[ slovak ] = "~Fax";
+        Text[ hungarian ] = "Fa~x";
+        Text[ slovenian ] = "~Faks";
     };
     ListBox LB_FAX
     {
@@ -1529,7 +1611,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ french ] = "<Aucun(e)>";
         Text[ spanish ] = "<Ninguno>";
         Text[ italian ] = "<Nessuno>";
-        Text[ danish ] = "<Intet>";
+        Text[ danish ] = "<Ingen>";
         Text[ swedish ] = "<Ingen>";
         Text[ polish ] = "<Brak>";
         Text[ portuguese_brazilian ] = "<nenhum>";
@@ -1546,6 +1628,8 @@ TabPage TP_OPTPRINT_PAGE
         Text[ hebrew ] = "‮(ללא)‬";
         Text[ hindi ] = "<कोई नहीं>";
         Text[ slovak ] = "<nič>";
+        Text[ hungarian ] = "<Nincs>";
+        Text[ slovenian ] = "<Brez>";
     };
 };
 /**************************************************************************/
@@ -1573,7 +1657,7 @@ TabPage TP_STD_FONT
         Text[ spanish ] = "Fuentes b�sicas (%1)";
         Text[ finnish ] = "Perusfontit (%1)";
         Text[ italian ] = "Caratteri standard (%1)";
-        Text[ danish ] = "Standardskrifttyper (%1)";
+        Text[ danish ] = "Grundl�ggende skrifttyper (%1)";
         Text[ swedish ] = "Standardteckensnitt (%1)";
         Text[ polish ] = "Czcionki podstawowe (%1)";
         Text[ portuguese_brazilian ] = "Fontes b�sicas (%1)";
@@ -1589,6 +1673,8 @@ TabPage TP_STD_FONT
         Text[ hebrew ] = "Grundschriften (%1)";
         Text[ hindi ] = "Basic अक्षरें (%1)";
         Text[ slovak ] = "Základné písma (%1)";
+        Text[ hungarian ] = "Alap betűkészletek (%1)";
+        Text[ slovenian ] = "Osnovne pisave (%1)";
     };
     FixedText FT_STANDARD
     {
@@ -1600,7 +1686,7 @@ TabPage TP_STD_FONT
         Text [ english_us ] = "De~fault" ;
         Text [ portuguese_brazilian ] = "~Padr�o" ;
         Text [ swedish ] = "~Standard" ;
-        Text [ danish ] = "Standard" ;
+        Text [ danish ] = "Standar~d" ;
         Text [ italian ] = "Standard" ;
         Text [ spanish ] = "Predeterminado" ;
         Text [ french ] = "Standard" ;
@@ -1623,6 +1709,8 @@ TabPage TP_STD_FONT
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "अनु~पस्थिति";
         Text[ slovak ] = "Východ~zie";
+        Text[ hungarian ] = "Alapé~rtelmezett";
+        Text[ slovenian ] = "P~rivzeto";
     };
     FixedText FT_TITLE
     {
@@ -1635,7 +1723,7 @@ TabPage TP_STD_FONT
         Text [ portuguese_brazilian ] = "~T�tulo" ;
         Text [ portuguese ] = "~T�tulo" ;
         Text [ finnish ] = "Ot~sikko" ;
-        Text [ danish ] = "Overskrift" ;
+        Text [ danish ] = "~Overskrift" ;
         Text [ french ] = "Titre" ;
         Text [ swedish ] = "~�verskrift" ;
         Text [ dutch ] = "~Kop" ;
@@ -1658,6 +1746,8 @@ TabPage TP_STD_FONT
         Text[ hebrew ] = "~Überschrift";
         Text[ hindi ] = "शीर्ष~क";
         Text[ slovak ] = "~Nadpis";
+        Text[ hungarian ] = "~Címsor";
+        Text[ slovenian ] = "~Naslov";
     };
     FixedText FT_LIST
     {
@@ -1670,7 +1760,7 @@ TabPage TP_STD_FONT
         Text [ portuguese_brazilian ] = "~Lista" ;
         Text [ portuguese ] = "~Lista" ;
         Text [ finnish ] = "~Luettelo" ;
-        Text [ danish ] = "Liste" ;
+        Text [ danish ] = "~Liste" ;
         Text [ french ] = "L~iste" ;
         Text [ swedish ] = "~Lista" ;
         Text [ dutch ] = "~Lijst" ;
@@ -1693,6 +1783,8 @@ TabPage TP_STD_FONT
         Text[ hebrew ] = "~Liste";
         Text[ hindi ] = "~सूची";
         Text[ slovak ] = "Zo~znam";
+        Text[ hungarian ] = "~Lista";
+        Text[ slovenian ] = "~Seznam";
     };
     FixedText FT_LABEL
     {
@@ -1728,6 +1820,8 @@ TabPage TP_STD_FONT
         Text[ hebrew ] = "~Beschriftung";
         Text[ hindi ] = "कॉ~प्शन्";
         Text[ slovak ] = "P~opis";
+        Text[ hungarian ] = "~Felirat";
+        Text[ slovenian ] = "~Napis";
     };
     FixedText FT_IDX
     {
@@ -1740,7 +1834,7 @@ TabPage TP_STD_FONT
         Text [ portuguese_brazilian ] = "~�ndice" ;
         Text [ portuguese ] = "~�ndice" ;
         Text [ finnish ] = "~Hakemisto" ;
-        Text [ danish ] = "Indeks" ;
+        Text [ danish ] = "~Indeks" ;
         Text [ french ] = "Index" ;
         Text [ swedish ] = "~F�rteckning" ;
         Text [ dutch ] = "~Index" ;
@@ -1763,6 +1857,8 @@ TabPage TP_STD_FONT
         Text[ hebrew ] = "~Verzeichnis";
         Text[ hindi ] = "~अनुक्रमणिका";
         Text[ slovak ] = "Re~gister";
+        Text[ hungarian ] = "~Jegyzék";
+        Text[ slovenian ] = "~Kazalo";
     };
     ComboBox LB_STANDARD
     {
@@ -1816,7 +1912,7 @@ TabPage TP_STD_FONT
         Text [ spanish ] = "S�lo para el documento ~actual" ;
         Text [ french ] = "Uniquement pour le document actif" ;
         Text [ swedish ] = "Bara f�r det a~ktuella dokumentet" ;
-        Text [ danish ] = "Kun det aktuelle dokument" ;
+        Text [ danish ] = "Kun det nuv�rende dokument" ;
         Text [ portuguese ] = "~Apenas para documento actual" ;
         Text [ portuguese_brazilian ] = "~Apenas para o documento atual" ;
         Text[ chinese_simplified ] = "只用于当前的文档(~U)";
@@ -1836,6 +1932,8 @@ TabPage TP_STD_FONT
         Text[ hebrew ] = "~Nur für das aktuelle Dokument";
         Text[ hindi ] = "केवल वर्त~मान लेखपत्र";
         Text[ slovak ] = "Len ~tento súbor";
+        Text[ hungarian ] = "Csa~k az aktuális dokumentum";
+        Text[ slovenian ] = "S~amo trenutni dokument";
     };
     PushButton PB_STANDARD
     {
@@ -1849,7 +1947,7 @@ TabPage TP_STD_FONT
         Text [ french ] = "Par d�faut" ;
         Text [ dutch ] = "S~tandaard" ;
         Text [ swedish ] = "St~andard" ;
-        Text [ danish ] = "Standard" ;
+        Text [ danish ] = "Standar~d" ;
         Text [ portuguese_brazilian ] = "~Padr�o" ;
         Text [ portuguese ] = "~Padr�o" ;
         Text[ chinese_simplified ] = "标准(~D)";
@@ -1869,6 +1967,8 @@ TabPage TP_STD_FONT
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
         Text[ slovak ] = "Výcho~dzie";
+        Text[ hungarian ] = "~Alapértelmezett";
+        Text[ slovenian ] = "~Privzeto";
     };
     String ST_SCRIPT_ASIAN
     {
@@ -1899,6 +1999,8 @@ TabPage TP_STD_FONT
         Text[ hebrew ] = "asiatisch";
         Text[ hindi ] = "ऐशियन";
         Text[ slovak ] = "Ázijský";
+        Text[ hungarian ] = "Ázsiai";
+        Text[ slovenian ] = "Azijski";
     };
     String ST_SCRIPT_CTL
     {
@@ -1929,6 +2031,8 @@ TabPage TP_STD_FONT
         Text[ thai ] = "CTL";
         Text[ hindi ] = "CTL";
         Text[ slovak ] = "CTL";
+        Text[ hungarian ] = "CTL";
+        Text[ slovenian ] = "Kompleksne abecede";
     };
     String ST_SCRIPT_WESTERN
     {
@@ -1938,12 +2042,12 @@ TabPage TP_STD_FONT
         Text[ portuguese ] = "Ocidental";
         Text[ russian ] = "��������";
         Text[ greek ] = "~������";
-        Text[ dutch ] = "Westelijk";
+        Text[ dutch ] = "Westers";
         Text[ french ] = "Occidental";
         Text[ spanish ] = "occidentales";
         Text[ finnish ] = "L�nsimainen";
         Text[ italian ] = "Occidentale";
-        Text[ danish ] = "Vestlig";
+        Text[ danish ] = "Vestligt";
         Text[ swedish ] = "v�stliga";
         Text[ polish ] = "Zachodnie";
         Text[ portuguese_brazilian ] = "Ocidental";
@@ -1959,6 +2063,8 @@ TabPage TP_STD_FONT
         Text[ hebrew ] = "westlich";
         Text[ hindi ] = "पाश्चात्य";
         Text[ slovak ] = "Západné";
+        Text[ hungarian ] = "Nyugati";
+        Text[ slovenian ] = "Zahodni";
     };
 };
 /**************************************************************************/
@@ -2002,6 +2108,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "अनुपस्थिति";
         Text[ slovak ] = "Východzie";
+        Text[ hungarian ] = "Alapértelmezett";
+        Text[ slovenian ] = "Privzeto";
     };
     CheckBox CB_HEADER
     {
@@ -2036,6 +2144,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "Übe~rschrift";
         Text[ hindi ] = "शी~र्षक";
         Text[ slovak ] = "N~adpis";
+        Text[ hungarian ] = "Cí~msor";
+        Text[ slovenian ] = "~Naslov";
     };
     CheckBox CB_REPEAT_HEADER
     {
@@ -2070,6 +2180,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "Auf jeder Seite ~wiederholen";
         Text[ hindi ] = "~हरेक पृष्ठ में दुहराना";
         Text[ slovak ] = "O~pakovať na každej stránke";
+        Text[ hungarian ] = "Ismét~lés minden oldalon";
+        Text[ slovenian ] = "Po~novi na vsaki strani";
     };
     CheckBox CB_DONT_SPLIT
     {
@@ -2081,7 +2193,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ italian ] = "Non separare";
         Text[ portuguese_brazilian ] = "N�o dividir";
         Text[ portuguese ] = "N�o ~dividir";
-        Text[ danish ] = "Opdel ~ikke";
+        Text[ danish ] = "Opdel ikke";
         Text[ french ] = "Pas de coupure";
         Text[ swedish ] = "Dela i~nte";
         Text[ dutch ] = "Niet ~splitsen";
@@ -2104,6 +2216,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "~Nicht trennen";
         Text[ hindi ] = "मत अलगाना";
         Text[ slovak ] = "Nedeliť";
+        Text[ hungarian ] = "Ne vágja ketté";
+        Text[ slovenian ] = "Ne deli";
     };
     CheckBox CB_BORDER
     {
@@ -2115,7 +2229,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ italian ] = "Bordo";
         Text[ portuguese_brazilian ] = "B~ordas";
         Text[ portuguese ] = "~Contornos";
-        Text[ danish ] = "Ra~mme";
+        Text[ danish ] = "~Kant";
         Text[ french ] = "Bordure";
         Text[ swedish ] = "Inra~mning";
         Text[ dutch ] = "~Omranding";
@@ -2138,6 +2252,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "~Umrandung";
         Text[ hindi ] = "कि~नारा";
         Text[ slovak ] = "~Okraje (rámovanie)";
+        Text[ hungarian ] = "Szegél~y";
+        Text[ slovenian ] = "~Obroba";
     };
     FixedLine FL_TABLE_SEPARATOR
     {
@@ -2177,6 +2293,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "Eingabe in Tabellen";
         Text[ hindi ] = "सारणीयों में इनपुट्";
         Text[ slovak ] = "Vstup v tabuľkách";
+        Text[ hungarian ] = "Beviteli táblák";
+        Text[ slovenian ] = "Vnosi v tabele";
     };
     CheckBox CB_NUMFORMATTING
     {
@@ -2192,7 +2310,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ french ] = "R~econnaissance des nombres";
         Text[ spanish ] = "Reconocimiento de n�meros";
         Text[ italian ] = "Riconoscimento numeri";
-        Text[ danish ] = "T~algenkendelse";
+        Text[ danish ] = "Talgenkendelse";
         Text[ swedish ] = "Talig~enk�nning";
         Text[ polish ] = "~Rozpoznawanie liczb";
         Text[ portuguese_brazilian ] = "Reconhecer dados num�ricos";
@@ -2211,6 +2329,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "‮זיהוי מספרים‬";
         Text[ hindi ] = "संख्या पहचान";
         Text[ slovak ] = "Rozpoznávanie čísel";
+        Text[ hungarian ] = "Számfelismerés";
+        Text[ slovenian ] = "Prepoznavanje števil";
     };
     CheckBox CB_NUMFMT_FORMATTING
     {
@@ -2226,7 +2346,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ french ] = "Reconnaissance du format num�rique";
         Text[ spanish ] = "Reconocimiento del formato ~num�rico";
         Text[ italian ] = "Riconoscimento formato numerico";
-        Text[ danish ] = "Talformatgen~kendelse";
+        Text[ danish ] = "Talformatgenkendelse";
         Text[ swedish ] = "Talformatsigen~k�nning";
         Text[ polish ] = "Rozpoznawanie ~formatu liczb";
         Text[ portuguese_brazilian ] = "Reconhecer formato num�rico";
@@ -2245,6 +2365,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "Zahlenformater~kennung";
         Text[ hindi ] = "संख्या रचना पहचान";
         Text[ slovak ] = "Rozpoznanie formátu čísel";
+        Text[ hungarian ] = "Számformátum-felismerés";
+        Text[ slovenian ] = "Prepoznavanje oblike števil";
     };
     CheckBox CB_NUMALIGNMENT
     {
@@ -2260,7 +2382,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ french ] = "Alignement";
         Text[ spanish ] = "~Alineaci�n";
         Text[ italian ] = "Allineamento";
-        Text[ danish ] = "~Justering";
+        Text[ danish ] = "Justering";
         Text[ swedish ] = "~Justering";
         Text[ polish ] = "W~yr�wnanie";
         Text[ portuguese_brazilian ] = "Alinhamento";
@@ -2279,6 +2401,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "‮ישור‬";
         Text[ hindi ] = "पंक्तिकरण";
         Text[ slovak ] = "Zarovnanie";
+        Text[ hungarian ] = "Igazítás";
+        Text[ slovenian ] = "Poravnava";
     };
     FixedLine FL_MOVE
     {
@@ -2311,6 +2435,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "Tastaturbedienung";
         Text[ hindi ] = "कीबोर्ड हान्डलिंग";
         Text[ slovak ] = "Obsluha klávesnice";
+        Text[ hungarian ] = "Billentyűzet-kezelés";
+        Text[ slovenian ] = "Upravljanje tipkovnice";
     };
     FixedText FT_MOVE
     {
@@ -2343,6 +2469,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "Zellen verschieben";
         Text[ hindi ] = "कोष्ठों का स्थान परिवर्तन करो";
         Text[ slovak ] = "Presunúť bunky";
+        Text[ hungarian ] = "Cellák mozgatása";
+        Text[ slovenian ] = "Premakni celice";
     };
     FixedText FT_ROWMOVE
     {
@@ -2376,6 +2504,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "~Zeile";
         Text[ hindi ] = "~पंक्ति";
         Text[ slovak ] = "~Riadok";
+        Text[ hungarian ] = "So~r";
+        Text[ slovenian ] = "V~rstica";
     };
     MetricField MF_ROWMOVE
     {
@@ -2402,7 +2532,7 @@ TabPage TP_OPTTABLE_PAGE
         Text [ english_us ] = "~Column" ;
         Text [ portuguese_brazilian ] = "~Coluna" ;
         Text [ swedish ] = "Kol~umn" ;
-        Text [ danish ] = "Ko~lonne" ;
+        Text [ danish ] = "~Kolonne" ;
         Text [ italian ] = "Colonna" ;
         Text [ spanish ] = "~Columna" ;
         Text [ french ] = "Colonne" ;
@@ -2425,6 +2555,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "Sp~alte";
         Text[ hindi ] = "~स्तंभ";
         Text[ slovak ] = "~Stĺpec";
+        Text[ hungarian ] = "Os~zlop";
+        Text[ slovenian ] = "~Stolpec";
     };
     MetricField MF_COLMOVE
     {
@@ -2473,6 +2605,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "Zelle einfügen";
         Text[ hindi ] = "कोष्ठ जोड़ो";
         Text[ slovak ] = "Vložiť bunku";
+        Text[ hungarian ] = "Cella beszúrása";
+        Text[ slovenian ] = "Vstavi celico";
     };
     FixedText FT_ROWINSERT
     {
@@ -2483,7 +2617,7 @@ TabPage TP_OPTTABLE_PAGE
         Text [ english_us ] = "Ro~w" ;
         Text [ portuguese_brazilian ] = "~Linha" ;
         Text [ swedish ] = "Ra~d" ;
-        Text [ danish ] = "R~�kke" ;
+        Text [ danish ] = "~R�kke" ;
         Text [ italian ] = "Riga" ;
         Text [ spanish ] = "F~ila" ;
         Text [ french ] = "Ligne" ;
@@ -2506,6 +2640,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "Zei~le";
         Text[ hindi ] = "पं~क्ति";
         Text[ slovak ] = "Ria~dok";
+        Text[ hungarian ] = "S~or";
+        Text[ slovenian ] = "Vrsti~ca";
     };
     MetricField MF_ROWINSERT
     {
@@ -2533,7 +2669,7 @@ TabPage TP_OPTTABLE_PAGE
         Text [ english_us ] = "Colu~mn" ;
         Text [ portuguese_brazilian ] = "~Coluna" ;
         Text [ swedish ] = "K~olumn" ;
-        Text [ danish ] = "Kolonne" ;
+        Text [ danish ] = "~Kolonne" ;
         Text [ italian ] = "Colonna" ;
         Text [ spanish ] = "C~olumna" ;
         Text [ french ] = "Colonne" ;
@@ -2555,6 +2691,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "S~palte";
         Text[ hindi ] = "स्तं~भ";
         Text[ slovak ] = "S~tĺpec";
+        Text[ hungarian ] = "Oszlo~p";
+        Text[ slovenian ] = "Stolpe~c";
     };
     MetricField MF_COLINSERT
     {
@@ -2586,7 +2724,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ french ] = "Comportement lors du d�placement";
         Text[ spanish ] = "Comportamiento durante el desplazamiento";
         Text[ italian ] = "Comportamento durante lo spostamento";
-        Text[ danish ] = "Effekt ved flytning";
+        Text[ danish ] = "Adf�rd for r�kker og kolonner";
         Text[ swedish ] = "Effekt av �ndringar";
         Text[ polish ] = "Efekt przesuwania";
         Text[ portuguese_brazilian ] = "Comportamento das linhas/colunas";
@@ -2603,6 +2741,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "Verhalten während des Verschiebens";
         Text[ hindi ] = "पंक्तियों/स्तंभों का चाल-ढ़ाल";
         Text[ slovak ] = "Chovanie riadkov/stĺpcov";
+        Text[ hungarian ] = "Sorok és oszlopok viselkedése";
+        Text[ slovenian ] = "Obnašanje vrstic/stolpcev";
     };
     RadioButton RB_FIX
     {
@@ -2613,7 +2753,7 @@ TabPage TP_OPTTABLE_PAGE
         Text [ english_us ] = "~Fixed" ;
         Text [ portuguese_brazilian ] = "~Fixo" ;
         Text [ swedish ] = "~Fast" ;
-        Text [ danish ] = "Fast" ;
+        Text [ danish ] = "~Fast" ;
         Text [ italian ] = "~Fisso" ;
         Text [ spanish ] = "Fi~jo" ;
         Text [ french ] = "~Fixe" ;
@@ -2636,6 +2776,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "~Fix";
         Text[ hindi ] = "~स्थिर";
         Text[ slovak ] = "~Nemenné";
+        Text[ hungarian ] = "Rögzít~ett";
+        Text[ slovenian ] = "~Fiksno";
     };
     FixedText FT_FIX
     {
@@ -2649,7 +2791,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ portuguese ] = "As modifica��es afectam apenas a �rea adjacente";
         Text[ russian ] = "��������� �������� ������ �� ������� �������";
         Text[ greek ] = "�� ������� ���������� ���� ��� ����� ��������� �������";
-        Text[ dutch ] = "Wijzigingen hebben alleen uitwerkingen op het aangrenzende bereik";
+        Text[ dutch ] = "Wijzigingen hebben alleen uitwerking op het aangrenzende bereik";
         Text[ french ] = "Modifications n'affectent que la plage adjacente";
         Text[ spanish ] = "Las modificaciones afectan s�lo a la fila o columna contigua";
         Text[ finnish ] = "Muutokset vaikuttavat vain vierekk�iseen alueeseen";
@@ -2670,6 +2812,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "Veränderungen wirken sich nur auf den direkten Nachbarn aus";
         Text[ hindi ] = "परिवर्तन का प्रभाव केवल समीप का विस्तीर्ण केलिए ";
         Text[ slovak ] = "Zmeny ovplyvnia len susednú oblasť";
+        Text[ hungarian ] = "A változások csak a szomszédos területeket érintik";
+        Text[ slovenian ] = "Spremembe zajamejo samo sosednja področja";
     };
     RadioButton RB_FIXPROP
     {
@@ -2703,6 +2847,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "F~ix, proportional";
         Text[ hindi ] = "स्थि~र, अनुरूप";
         Text[ slovak ] = "Ne~menné, proporcionálne";
+        Text[ hungarian ] = "Rö~gzített, arányos";
+        Text[ slovenian ] = "Fi~ksno, sorazmerno";
     };
     FixedText FT_FIXPROP
     {
@@ -2716,7 +2862,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ portuguese ] = "As modifica��es afectam a tabela inteira";
         Text[ russian ] = "��������� �������� �� ��� �������";
         Text[ greek ] = "�� ������� ���������� �������� ��� ������";
-        Text[ dutch ] = "Wijzigingen hebben alleen uitwerkingen op de hele tabel";
+        Text[ dutch ] = "Wijzigingen hebben alleen uitwerking op de hele tabel";
         Text[ french ] = "Modifications affectent la totalit� du tableau";
         Text[ spanish ] = "Las modificaciones afectan a toda la tabla";
         Text[ finnish ] = "Muutokset vaikuttavat koko taulukkoon";
@@ -2737,6 +2883,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "Veränderungen wirken sich auf die gesamte Tabelle aus";
         Text[ hindi ] = "परिवर्तन का प्रभाव केवल सम्पूर्ण सारणी केलिए";
         Text[ slovak ] = "Zmeny ovplyvnia celú tabuľku";
+        Text[ hungarian ] = "A változások a teljes táblát érintik";
+        Text[ slovenian ] = "Spremembe zajamejo celotno tabelo";
     };
     RadioButton RB_VAR
     {
@@ -2747,7 +2895,7 @@ TabPage TP_OPTTABLE_PAGE
         Text [ english_us ] = "~Variable" ;
         Text [ portuguese_brazilian ] = "~Vari�vel" ;
         Text [ swedish ] = "~Variabel" ;
-        Text [ danish ] = "Variabel" ;
+        Text [ danish ] = "~Variabel" ;
         Text [ italian ] = "~Variabile" ;
         Text [ spanish ] = "~Variable" ;
         Text [ french ] = "~Variable" ;
@@ -2770,6 +2918,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "~Variabel";
         Text[ hindi ] = "~अस्थिर";
         Text[ slovak ] = "Pre~menné";
+        Text[ hungarian ] = "Vál~tozó";
+        Text[ slovenian ] = "~Spremenljivo";
     };
     FixedText FT_VAR
     {
@@ -2804,6 +2954,8 @@ TabPage TP_OPTTABLE_PAGE
         Text[ hebrew ] = "Veränderungen wirken sich auf die Tabellengröße aus";
         Text[ hindi ] = "परिवर्तन का प्रभाव सारणी परिमाण केलिए";
         Text[ slovak ] = "Zmeny ovplyvnia veľkosť tabuľky";
+        Text[ hungarian ] = "A változások hatással vannak a tábla méretére";
+        Text[ slovenian ] = "Spremembe vplivajo na velikost tabele";
     };
 };
 /**************************************************************************/
@@ -2834,7 +2986,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ spanish ] = "Mostrar";
         Text[ finnish ] = "N�kym� kohteesta";
         Text[ italian ] = "Caratteri non stampabili";
-        Text[ danish ] = "Visning af ";
+        Text[ danish ] = "Visning af";
         Text[ swedish ] = "Visa";
         Text[ polish ] = "Wy�wietl";
         Text[ portuguese_brazilian ] = "Exibi��o de";
@@ -2850,6 +3002,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "‮הצגת‬";
         Text[ hindi ] = "को दिखाओ";
         Text[ slovak ] = "Zobrazovať";
+        Text[ hungarian ] = "Megjelenítés:";
+        Text[ slovenian ] = "Prikaz";
     };
     CheckBox CB_PARA
     {
@@ -2886,6 +3040,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "Absatz~ende";
         Text[ hindi ] = "प~रिच्छेद का अंत";
         Text[ slovak ] = "Koniec o~dstavca";
+        Text[ hungarian ] = "~Bekezdés vége";
+        Text[ slovenian ] = "~Konec odstavka";
     };
     CheckBox CB_SHYPH
     {
@@ -2898,10 +3054,10 @@ TabPage TP_OPTSHDWCRSR
         Text [ portuguese_brazilian ] = "~H�fens personalizados" ;
         Text [ portuguese ] = "~H�fens opcionais" ;
         Text [ finnish ] = "~Mukautetut tavuviivat" ;
-        Text [ danish ] = "~Brugerdefinerede separatorer" ;
+        Text [ danish ] = "~Brugerdefinerede ordelinger" ;
         Text [ french ] = "Tirets ~utilisateur" ;
         Text [ swedish ] = "An~v�ndardefinierade bindestreck" ;
-        Text [ dutch ] = "~Door gebruiker gedefinieerde afbreektekens" ;
+        Text [ dutch ] = "~Gebruikergedefinieerde afbreektekens" ;
         Text [ spanish ] = "Separaci�n ma~nual" ;
         Text [ english_us ] = "Custom h~yphens" ;
         Text[ chinese_simplified ] = "自定的连字符(~Y)";
@@ -2920,6 +3076,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "~Benutzerdefinierte Trenner";
         Text[ hindi ] = "हा~इफनों को व्यवस्था करो";
         Text[ slovak ] = "Vlastné ~delenie slov";
+        Text[ hungarian ] = "Egyéni ~elválasztások";
+        Text[ slovenian ] = "~Vezaji po meri";
     };
     CheckBox CB_SPACE
     {
@@ -2954,6 +3112,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "Lee~rzeichen";
         Text[ hindi ] = "अं~तरें";
         Text[ slovak ] = "~Medzery";
+        Text[ hungarian ] = "S~zóközök";
+        Text[ slovenian ] = "Pr~esledki";
     };
     CheckBox CB_HSPACE
     {
@@ -2969,7 +3129,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ danish ] = "H~�rde mellemrum" ;
         Text [ french ] = "Espaces ins�cables" ;
         Text [ swedish ] = "Fa~st mellanrum" ;
-        Text [ dutch ] = "Ha~rde spaties" ;
+        Text [ dutch ] = "Harde spaties" ;
         Text [ spanish ] = "Espacios proteg~idos" ;
         Text [ english_us ] = "Non-breaking s~paces" ;
         Text[ chinese_simplified ] = "受保护的空格字符(~P)";
@@ -2988,6 +3148,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "Ge~schützte Leerzeichen";
         Text[ hindi ] = "बिना-~खण्डन का अंतरें";
         Text[ slovak ] = "Nezalomiteľné ~medzery";
+        Text[ hungarian ] = "~Nemtörő szóközök";
+        Text[ slovenian ] = "Nedeljivi ~presledki";
     };
     CheckBox CB_TAB
     {
@@ -3022,6 +3184,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "Tabulat~oren";
         Text[ hindi ] = "टॉब्स";
         Text[ slovak ] = "Tabulátory";
+        Text[ hungarian ] = "~Tabulátorok";
+        Text[ slovenian ] = "Ta~bulatorji";
     };
     CheckBox CB_BREAK
     {
@@ -3034,10 +3198,10 @@ TabPage TP_OPTSHDWCRSR
         Text [ portuguese_brazilian ] = "~Quebras" ;
         Text [ portuguese ] = "Quebras" ;
         Text [ finnish ] = "Vaih~dot" ;
-        Text [ danish ] = "Sides~kift" ;
+        Text [ danish ] = "~Skift" ;
         Text [ french ] = "~Sauts" ;
         Text [ swedish ] = "Br~ytningar" ;
-        Text [ dutch ] = "Af~brekingen" ;
+        Text [ dutch ] = "Harde regeleinden" ;
         Text [ spanish ] = "~Saltos" ;
         Text [ english_us ] = "Brea~ks" ;
         Text[ chinese_simplified ] = "换行符(~K)";
@@ -3056,6 +3220,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "Umbr~üche";
         Text[ hindi ] = "खण्ड~न";
         Text[ slovak ] = "Za~lomenia";
+        Text[ hungarian ] = "Tö~rések";
+        Text[ slovenian ] = "Pre~lomi";
     };
     CheckBox CB_HIDDEN
     {
@@ -3090,6 +3256,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "Verste~ckter Text";
         Text[ hindi ] = "छि~पा हुआ टेक्सट्";
         Text[ slovak ] = "Skrytý te~xt";
+        Text[ hungarian ] = "Re~jtett szöveg";
+        Text[ slovenian ] = "Skrito be~sedilo";
     };
     CheckBox CB_HIDDEN_PARA
     {
@@ -3123,6 +3291,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "~Versteckte Absätze";
         Text[ hindi ] = "छिपा हु~आ परिच्छेद";
         Text[ slovak ] = "Skryté o~dstavce";
+        Text[ hungarian ] = "Rejtett bekez~dések";
+        Text[ slovenian ] = "Skriti odst~avki";
     };
     FixedLine FL_SEPARATOR_SHDW
     {
@@ -3162,6 +3332,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "‮סמן ישיר‬";
         Text[ hindi ] = "सीधा कर्सर";
         Text[ slovak ] = "Priamy kurzor";
+        Text[ hungarian ] = "Közvetlen kurzor";
+        Text[ slovenian ] = "Neposredna kazalka";
     };
     CheckBox CB_SHDWCRSONOFF
     {
@@ -3175,7 +3347,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ english_us ] = "~Direct cursor" ;
         Text [ portuguese_brazilian ] = "Cursor ~direto" ;
         Text [ swedish ] = "~Direktmark�r" ;
-        Text [ danish ] = "Direkt-mark�r" ;
+        Text [ danish ] = "~Direkt-mark�r" ;
         Text [ italian ] = "Cursore ~diretto" ;
         Text [ spanish ] = "Cursor directo" ;
         Text [ french ] = "Curseur direct" ;
@@ -3197,6 +3369,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "‮סמן ישיר‬";
         Text[ hindi ] = "~सीधा कर्सर";
         Text[ slovak ] = "~Priamy kurzor";
+        Text[ hungarian ] = "~Közvetlen kurzor";
+        Text[ slovenian ] = "Neposre~dna kazalka";
     };
     FixedText FT_SHDWCRSFILLMODE
     {
@@ -3231,6 +3405,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "जोड़ो";
         Text[ slovak ] = "Vložiť";
+        Text[ hungarian ] = "Beszúrás";
+        Text[ slovenian ] = "Vstavi";
     };
     RadioButton RB_SHDWCRSFILLMARGIN
     {
@@ -3266,6 +3442,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "~Absatzausrichtung";
         Text[ hindi ] = "परिच्छे~द पंक्तिकरण";
         Text[ slovak ] = "Zarovnanie od~stavca";
+        Text[ hungarian ] = "Bekezdés ~igazítása";
+        Text[ slovenian ] = "~Poravnava odstavka";
     };
     RadioButton RB_SHDWCRSFILLINDENT
     {
@@ -3276,7 +3454,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ english_us ] = "~Left paragraph margin" ;
         Text [ portuguese_brazilian ] = "Margem e~squerda do par�grafo" ;
         Text [ swedish ] = "V�~nster styckemarginal" ;
-        Text [ danish ] = "~Venstre margen" ;
+        Text [ danish ] = "~Venstre afsnitsmargen" ;
         Text [ italian ] = "Margine paragrafo sinistro" ;
         Text [ spanish ] = "~Margen izquierdo del p�rrafo" ;
         Text [ french ] = "Marge gauche du paragraphe" ;
@@ -3299,6 +3477,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "li~nker Absatzrand";
         Text[ hindi ] = "~बायाँ परिच्छेद का पृष्ठ-प्रान्त";
         Text[ slovak ] = "Ľa~vý okraj odstavca";
+        Text[ hungarian ] = "Bekezdés bal ~margója";
+        Text[ slovenian ] = "~Levi rob odstavka";
     };
     RadioButton RB_SHDWCRSFILLTAB
     {
@@ -3332,6 +3512,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "~Tabulator";
         Text[ hindi ] = "~टॉब्स";
         Text[ slovak ] = "~Tabulátory";
+        Text[ hungarian ] = "Tab~ulátorok";
+        Text[ slovenian ] = "~Tabulatorji";
     };
     RadioButton RB_SHDWCRSFILLSPACE
     {
@@ -3365,6 +3547,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "Tabulator und ~Leerzeichen";
         Text[ hindi ] = "टॉब्स औ~र अंतरें";
         Text[ slovak ] = "T~abulátory a medzery";
+        Text[ hungarian ] = "T~abulátorok és szóközök";
+        Text[ slovenian ] = "Tabulatorji i~n presledki";
     };
     FixedLine FL_CRSR_OPT
     {
@@ -3397,6 +3581,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "Cursor in geschützten Zonen";
         Text[ hindi ] = "सुरक्षित विस्तीर्ण में कर्सर";
         Text[ slovak ] = "Kurzor v zamknutých oblastiach";
+        Text[ hungarian ] = "A kurzor a védett területeken is áthalad";
+        Text[ slovenian ] = "Kazalka na zaščitenih področjih";
     };
     CheckBox CB_ALLOW_IN_PROT
     {
@@ -3414,7 +3600,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ french ] = "Autoriser";
         Text[ spanish ] = "Permitir";
         Text[ italian ] = "Permetti";
-        Text[ danish ] = "T~illad";
+        Text[ danish ] = "Aktiver";
         Text[ swedish ] = "T~ill�t";
         Text[ polish ] = "W��c~z";
         Text[ portuguese_brazilian ] = "Habilitar";
@@ -3432,8 +3618,12 @@ TabPage TP_OPTSHDWCRSR
         Text[ hebrew ] = "Z~ulassen";
         Text[ hindi ] = "सक्षम";
         Text[ slovak ] = "Aktivovať";
+        Text[ hungarian ] = "Engedélyezés";
+        Text[ slovenian ] = "Omogoči";
     };
 };
+
+
 
 
 
