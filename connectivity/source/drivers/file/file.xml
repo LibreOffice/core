@@ -4,13 +4,14 @@
     <module-name>file</module-name>
     <component-description>
         <author>Ocke Jannsen</author>
-        <name>com.sun.star.sdbc.ODBCDriver</name>
+        <name>com.sun.star.sdbc.driver.file.Driver</name>
         <description>This library implements basic functionallity for file-base drivers.
 </description>
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
         <supported-service>com.sun.star.sdbc.Driver</supported-service>
+        <supported-service>com.sun.star.sdbcx.Driver</supported-service>
         <service-dependency>    ... </service-dependency>
     </component-description>
     <project-build-dependency>cppuhelper</project-build-dependency>
