@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:02:33 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2846,10 +2846,13 @@ void  SwStyleSheetIterator::Notify( SfxBroadcaster&, const SfxHint& rHint )
     {
         SfxStyleSheetBase* pStyle = ((SfxStyleSheetHint&)rHint).GetStyleSheet();
 
-        USHORT nTmpPos = lcl_FindName( aLst, pStyle->GetFamily(),
-                                        pStyle->GetName() );
-        if( nTmpPos < aLst.Count() )
-            aLst.DeleteAndDestroy( nTmpPos );
+        if (pStyle)
+        {
+            USHORT nTmpPos = lcl_FindName( aLst, pStyle->GetFamily(),
+                                           pStyle->GetName() );
+            if( nTmpPos < aLst.Count() )
+                aLst.DeleteAndDestroy( nTmpPos );
+        }
     }
 }
 
