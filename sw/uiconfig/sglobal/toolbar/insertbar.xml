@@ -4,6 +4,7 @@
  <toolbar:toolbaritem xlink:href=".uno:InsertFrameInteractNoColumns" toolbar:helpid="helpid:20336" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:InsertFrameInteract" toolbar:helpid="helpid:20333" toolbar:text="" toolbar:style="dropdown" />
  <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="helpid:10241" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertAVMedia" toolbar:helpid="helpid:6695" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:helpid="helpid:20330" toolbar:text="" toolbar:style="dropdown" />
  <toolbar:toolbaritem xlink:href=".uno:InsertDoc" toolbar:helpid="helpid:5532" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:InsertFootnote" toolbar:helpid="helpid:20399" toolbar:text="" />
