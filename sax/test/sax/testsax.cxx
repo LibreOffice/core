@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsax.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:43:13 $
+ *  last change: $Author: jbu $ $Date: 2000-10-13 06:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ using namespace ::com::sun::star::xml::sax;
 *
 *
 ****/
+
+namespace sax_test {
 
 class OSaxParserTest : public WeakImplHelper1< XSimpleTest >
 {
@@ -269,7 +271,7 @@ Reference < XInputStream > createStreamFromSequence(
     const Reference < XMultiServiceFactory > &xSMgr )
 {
     Reference < XInterface > xOutStreamService =
-        xSMgr->createInstance( L"com.sun.star.io.Pipe" );
+        xSMgr->createInstance( OUString::createFromAscii("com.sun.star.io.Pipe") );
     assert( xOutStreamService.is() );
     Reference< XOutputStream >  rOutStream( xOutStreamService , UNO_QUERY );
     assert( rOutStream.is() );
@@ -812,7 +814,8 @@ void OSaxParserTest::testPerformance( const Reference < XParser > & rParser )
         }
     }
 }
-
+}
+using namespace sax_test;
 
 extern "C"
 {
@@ -836,16 +839,16 @@ sal_Bool SAL_CALL component_writeInfo(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey ) );
 
             OUString str =
-                OUString( L"/" ) +
+                OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
                 OSaxParserTest_getImplementationName() +
-                OUString( L"/UNO/SERVICES" );
+                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
             Reference< XRegistryKey > xNewKey = xKey->createKey( str );
             xNewKey->createKey( OSaxParserTest_getServiceName() );
 
             str =
-                OUString( L"/" ) +
+                OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
                 OSaxWriterTest_getImplementationName() +
-                OUString( L"/UNO/SERVICES" );
+                OUString( RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES") );
 
             xNewKey = xKey->createKey( str );
             xNewKey->createKey( OSaxWriterTest_getServiceName() );

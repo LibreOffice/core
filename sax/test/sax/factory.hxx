@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:43:13 $
+ *  last change: $Author: jbu $ $Date: 2000-10-13 06:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,12 +60,13 @@
  ************************************************************************/
 #include <rtl/strbuf.hxx>
 
+namespace sax_test {
 Reference< XInterface > SAL_CALL OSaxWriterTest_CreateInstance(
     const Reference< XMultiServiceFactory > & rSMgr ) throw ( Exception );
 OUString    OSaxWriterTest_getServiceName( ) throw();
 OUString    OSaxWriterTest_getImplementationName( ) throw();
 Sequence<OUString> OSaxWriterTest_getSupportedServiceNames( ) throw();
-
+}
 #define BUILD_ERROR(expr, Message)\
         {\
             m_seqErrors.realloc( m_seqErrors.getLength() + 1 ); \

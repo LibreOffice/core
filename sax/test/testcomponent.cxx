@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomponent.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:43:13 $
+ *  last change: $Author: jbu $ $Date: 2000-10-13 06:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,9 @@ int main (int argc, char **argv)
 #ifdef SAL_W32
             OUString aDllName = OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US );
 #else
-            OUString aDllName = L"lib";
+            OUString aDllName = OUString( RTL_CONSTASCII_USTRINGPARAM("lib"));
             aDllName += OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US );
-            aDllName += L".so";
+            aDllName += OUString( RTL_CONSTASCII_USTRINGPARAM(".so"));
 #endif
             xReg->registerImplementation(
                 OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
@@ -161,9 +161,9 @@ int main (int argc, char **argv)
 #ifdef SAL_W32
         OUString aDllName = OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
 #else
-        OUString aDllName = L"lib";
+        OUString aDllName = OUString( RTL_CONSTASCII_USTRINGPARAM("lib"));
         aDllName += OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
-        aDllName += L".so";
+        aDllName += OUString( RTL_CONSTASCII_USTRINGPARAM(".so"));
 #endif
 
         xReg->registerImplementation(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testwriter.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:43:13 $
+ *  last change: $Author: jbu $ $Date: 2000-10-13 06:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::xml::sax;
 
 #include "factory.hxx"
+
+namespace sax_test {
 
 class OFileWriter :
         public WeakImplHelper1< XOutputStream >
@@ -381,7 +383,7 @@ void OSaxWriterTest::testInvariant( const OUString& TestName,
                                     const Reference < XInterface >& TestObject )
     throw  (    IllegalArgumentException, RuntimeException)
 {
-    if( L"com.sun.star.xml.sax.Writer" == TestName ) {
+    if( OUString::createFromAscii("com.sun.star.xml.sax.Writer") == TestName ) {
         Reference< XDocumentHandler > doc( TestObject , UNO_QUERY );
         Reference< XExtendedDocumentHandler > ext( TestObject , UNO_QUERY );
         Reference< XActiveDataSource > source( TestObject , UNO_QUERY );
@@ -595,7 +597,7 @@ void OSaxWriterTest::testExceptions( const Reference< XExtendedDocumentHandler >
         sal_Bool bException = sal_True;
         try
         {
-            r->startElement( L"huhu" , rList );
+            r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("huhu")) , rList );
             bException = sal_False;
         }
         catch( SAXException &e )
@@ -683,7 +685,7 @@ void OSaxWriterTest::testPerformance(const  Reference< XExtendedDocumentHandler 
     // just write a bunch of xml tags !
     // for performance testing
     sal_Int32 i2;
-    for( i2 = 0 ; i2 < 15 ; i2 ++ )
+    for( i2 = 0 ; i2 < 75 ; i2 ++ )
     {
         r->startElement( OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ) +
                          OUString::valueOf( i2 ), rList );
@@ -697,7 +699,7 @@ void OSaxWriterTest::testPerformance(const  Reference< XExtendedDocumentHandler 
             r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("huhu")) );
         }
     }
-    for( i2 = 14 ; i2 >= 0  ; i2-- )
+    for( i2 = 74 ; i2 >= 0  ; i2-- )
     {
         r->ignorableWhitespace( OUString() );
         r->endElement( OUString( RTL_CONSTASCII_USTRINGPARAM("tag") ) + OUString::valueOf( i2 ) );
@@ -711,4 +713,5 @@ void OSaxWriterTest::testPerformance(const  Reference< XExtendedDocumentHandler 
     double fEnd = (double)aEndTime.Seconds + ((double)aEndTime.Nanosec / 1000000000.0);
 
     printf( "Performance writing : %g s\n" , fEnd - fStart );
+}
 }
