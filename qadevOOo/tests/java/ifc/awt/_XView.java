@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XView.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:14:15 $
+ *  last change:$Date: 2003-12-11 12:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
