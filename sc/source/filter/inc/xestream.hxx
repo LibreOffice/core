@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestream.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:40:58 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,14 +64,9 @@
 #ifndef SC_XESTREAM_HXX
 #define SC_XESTREAM_HXX
 
-#ifndef _STREAM_HXX
-#include <tools/stream.hxx>
+#ifndef SC_XLSTREAM_HXX
+#include "xlstream.hxx"
 #endif
-
-#ifndef SC_FTOOLS_HXX
-#include "ftools.hxx"
-#endif
-
 
 /* ============================================================================
 Output stream class for Excel export
