@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestRemote.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:40:41 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:18:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,10 @@ import com.sun.star.uno.UnoRuntime;
 
 public final class TestRemote {
     public static void main(String[] args) throws Exception {
-        System.out.println(
-            "success? "
-            + new TestBed().execute(new Provider(), false, Client.class, 0));
+        boolean success = new TestBed().execute(
+            new Provider(), false, Client.class, 0);
+        System.out.println("success? " + success);
+        System.exit(success ? 0 : 1);
     }
 
     public static final class Client extends TestBed.Client {
