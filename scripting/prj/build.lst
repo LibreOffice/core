@@ -5,5 +5,6 @@ tc	scripting\source\provider				nmake	-	all	tc_scriptingprovider tc_scriptingsto
 tc	scripting\source\protocolhandler			nmake	-	all	tc_scriptingprotocolhandler tc_scriptingstorage tc_scriptingprovider NULL
 tc	scripting\java						nmake	-	all	tc_scriptingjava tc_scriptingstorage tc_scriptingprovider tc_scriptingprotocolhandler NULL
 tc	scripting\source\runtimemgr				nmake	-	all	tc_scriptingruntimemgr tc_scriptingstorage tc_scriptingprovider tc_scriptingprotocolhandler tc_scriptingjava  NULL
-tc	scripting\util						nmake	-	all	tc_scriptingutil tc_scriptingstorage tc_scriptingprovider tc_scriptingprotocolhandler tc_scriptingjava tc_scriptingruntimemgr  NULL
+tc	scripting\examples				nmake	-	all	tc_scriptingexamples tc_scriptingjava  NULL
+tc	scripting\util						nmake	-	all	tc_scriptingutil tc_scriptingstorage tc_scriptingprovider tc_scriptingprotocolhandler tc_scriptingjava tc_scriptingruntimemgr tc_scriptingexamples NULL
 
