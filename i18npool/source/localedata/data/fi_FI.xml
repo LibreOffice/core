@@ -13,7 +13,7 @@
 </LC_INFO>
 <LC_CTYPE unoid="generic">
 <Separators>
-<DateSeparator>/</DateSeparator>
+<DateSeparator>.</DateSeparator>
 <ThousandSeparator> </ThousandSeparator>
 <DecimalSeparator>,</DecimalSeparator>
 <TimeSeparator>:</TimeSeparator>
