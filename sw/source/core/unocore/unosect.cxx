@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-16 09:19:06 $
+ *  last change: $Author: tl $ $Date: 2002-11-21 14:49:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,7 +665,7 @@ void SwXTextSection::setPropertyValues(
                         if(m_bIsDescriptor)
                         {
                             pProps->bDDE = sal_False;
-                            pProps->sSectionRegion = sLink.GetToken(2, so3::cTokenSeperator);
+                            pProps->sSectionRegion = sLink;
                         }
                         else
                         {
