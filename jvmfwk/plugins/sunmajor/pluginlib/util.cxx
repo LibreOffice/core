@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 12:32:55 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@ using namespace std;
 ;
 
 #ifdef WNT
-#define HKEY_SUN_JRE "Software\\JavaSoft\\Java Runtime Environment"
-#define HKEY_SUN_SDK "Software\\JavaSoft\\Java Development Kit"
+#define HKEY_SUN_JRE L"Software\\JavaSoft\\Java Runtime Environment"
+#define HKEY_SUN_SDK L"Software\\JavaSoft\\Java Development Kit"
 #endif
 
 #ifdef UNX
@@ -404,7 +404,7 @@ bool getJavaProps(const OUString & exePath,
     stderrReader.join();
 #if OSL_DEBUG_LEVEL >=2
     OString data = stderrReader.getData();
-    fprintf(stdout,"%s\n", data.getStr());
+    fprintf(stderr,"%s\n", data.getStr());
 #endif
 
 
@@ -466,38 +466,40 @@ void createJavaInfoFromWinReg(std::vector<rtl::Reference<VendorBase> > & vecInfo
 }
 
 
-bool getJavaInfoFromRegistry(const bool bSdk, const char* szRegKey,
+bool getJavaInfoFromRegistry(const bool bSdk, const wchar_t* szRegKey,
                              vector<OUString>& vecJavaHome)
 {
     HKEY    hRoot;
-    if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szRegKey, 0, KEY_ENUMERATE_SUB_KEYS, &hRoot)
+    if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, szRegKey, 0, KEY_ENUMERATE_SUB_KEYS, &hRoot)
         == ERROR_SUCCESS)
     {
         DWORD dwIndex = 0;
-        DWORD nNameLen;
-        char bufVersion[1024];
+        const DWORD BUFFSIZE = 1024;
+        wchar_t bufVersion[BUFFSIZE];
+//      char bufVersion[BUFFSIZE];
+        DWORD nNameLen = BUFFSIZE;
         FILETIME fileTime;
         nNameLen = sizeof(bufVersion);
 
         // Iterate over all subkeys of HKEY_LOCAL_MACHINE\Software\JavaSoft\Java Runtime Environment
-        while (RegEnumKeyEx(hRoot, dwIndex, bufVersion, &nNameLen, NULL, NULL, NULL, &fileTime) != ERROR_NO_MORE_ITEMS)
+        while (RegEnumKeyExW(hRoot, dwIndex, bufVersion, &nNameLen, NULL, NULL, NULL, &fileTime) != ERROR_NO_MORE_ITEMS)
         {
             HKEY    hKey;
             // Open a Java Runtime Environment sub key, e.g. "1.4.0"
-            if (RegOpenKeyEx(hRoot, bufVersion, 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
+            if (RegOpenKeyExW(hRoot, bufVersion, 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
             {
                 DWORD   dwType;
                 DWORD   dwTmpPathLen= 0;
                 // Get the path to the JavaHome every JRE entry
                 // Find out how long the string for JavaHome is and allocate memory to hold the path
-                if( RegQueryValueExA(hKey, "JavaHome", 0, &dwType, NULL, &dwTmpPathLen)== ERROR_SUCCESS)
+                if( RegQueryValueExW(hKey, L"JavaHome", 0, &dwType, NULL, &dwTmpPathLen)== ERROR_SUCCESS)
                 {
                     char* szTmpPath= (char *) malloc( dwTmpPathLen);
                     // Get the path for the runtime lib
-                    if(RegQueryValueExA(hKey, "JavaHome", 0, &dwType, (unsigned char*) szTmpPath, &dwTmpPathLen) == ERROR_SUCCESS)
+                    if(RegQueryValueExW(hKey, L"JavaHome", 0, &dwType, (unsigned char*) szTmpPath, &dwTmpPathLen) == ERROR_SUCCESS)
                     {
                         // There can be several version entries refering with the same JavaHome,e.g 1.4 and 1.4.1
-                        OUString usHome= OUString::createFromAscii(szTmpPath);
+                        OUString usHome((sal_Unicode*) szTmpPath);
                         // check if there is already an entry with the same JavaHomeruntime lib
                         // if so, we use the one with the more accurate version
                         bool bAppend= true;
@@ -528,7 +530,7 @@ bool getJavaInfoFromRegistry(const bool bSdk, const char* szRegKey,
                 }
             }
             dwIndex ++;
-            nNameLen = sizeof(bufVersion);
+            nNameLen = BUFFSIZE;
         }
         RegCloseKey(hRoot);
     }
@@ -563,9 +565,32 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
             rtl::Reference<VendorBase>& cur= vec.at(j);
             rtl::Reference<VendorBase>& next= vec.at(j-1);
 
-                // comparing invalid SunVersion s is possible, they will be less than a
-                // valid version
-            int nCmp = cur->compareVersions(next->getVersion());
+            int nCmp = 0;
+            // comparing invalid SunVersion s is possible, they will be less than a
+            // valid version
+
+            //check if version of current is recognized, by comparing it with itself
+            try
+            {
+                cur->compareVersions(cur->getVersion());
+            }
+            catch (MalformedVersionException &)
+            {
+                nCmp = -1; // current < next
+            }
+            //The version of cur is valid, now compare with the second version
+            if (nCmp == 0)
+            {
+                try
+                {
+                    nCmp = cur->compareVersions(next->getVersion());
+                }
+                catch (MalformedVersionException & )
+                {
+                    //The second version is invalid, therefor it is regardes less.
+                    nCmp = 1;
+                }
+            }
             if(nCmp == 1) // cur > next
             {
                 rtl::Reference<VendorBase> less = next;
@@ -688,14 +713,40 @@ std::vector<rtl::Reference<VendorBase> > getAllJREInfos(
         }
         if (bMinVersion)
         {
-            if (cur->compareVersions(sMinVersion) == -1)
+            try
+            {
+                if (cur->compareVersions(sMinVersion) == -1)
+                    continue;
+            }
+            catch (MalformedVersionException&)
+            {
+#if OSL_DEBUG_LEVEL >= 1
+                OString _ver = OUStringToOString(
+                    cur->getVersion(), osl_getThreadTextEncoding());
+                fprintf(stderr, "sunjavaplugin: A JRE was detected which version "
+                        "has an unknown format: %s",_ver.getStr());
+#endif
                 continue;
+            }
         }
 
         if (bMaxVersion)
         {
-            if (cur->compareVersions(sMaxVersion) == 1)
+            try
+            {
+                if (cur->compareVersions(sMaxVersion) == 1)
+                    continue;
+            }
+            catch (MalformedVersionException&)
+            {
+#if OSL_DEBUG_LEVEL >= 1
+                OString _ver = OUStringToOString(
+                    cur->getVersion(), osl_getThreadTextEncoding());
+                fprintf(stderr, "sunjavaplugin: A JRE was detected which version "
+                        "has an unknown format: %s",_ver.getStr());
+#endif
                 continue;
+            }
         }
 
         if (bExcludeList)
@@ -705,8 +756,22 @@ std::vector<rtl::Reference<VendorBase> > getAllJREInfos(
             for (it_s ii = vecExcludeVersions.begin();
                  ii != vecExcludeVersions.end(); ii++)
             {
-                if (cur->compareVersions(*ii) == 0)
+                try
                 {
+                    if (cur->compareVersions(*ii) == 0)
+                    {
+                        bExclude = true;
+                        break;
+                    }
+                }
+                catch (MalformedVersionException&)
+                {
+#if OSL_DEBUG_LEVEL >= 1
+                OString _ver = OUStringToOString(
+                    cur->getVersion(), osl_getThreadTextEncoding());
+                fprintf(stderr, "sunjavaplugin: A JRE was detected which version "
+                        "has an unknown format: %s",_ver.getStr());
+#endif
                     bExclude = true;
                     break;
                 }
@@ -860,7 +925,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     {
 #if OSL_DEBUG_LEVEL >= 2
         OString _s = OUStringToOString(sResolvedDir, osl_getThreadTextEncoding());
-        fprintf(stdout,"###JRE found again (detected before): %s\n", _s.getStr());
+        fprintf(stderr,"###JRE found again (detected before): %s\n", _s.getStr());
 #endif
         return entry2->second;
     }
@@ -915,7 +980,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             {
 #if OSL_DEBUG_LEVEL >= 2
                 OString _s = OUStringToOString(sFilePath, osl_getThreadTextEncoding());
-                fprintf(stdout,"###JRE found again (detected before): %s\n", _s.getStr());
+                fprintf(stderr,"###JRE found again (detected before): %s\n", _s.getStr());
 #endif
 
                 return entry->second;
@@ -985,7 +1050,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 #if OSL_DEBUG_LEVEL >= 2
         OString _s = OUStringToOString(sResolvedDir, osl_getThreadTextEncoding());
         OString _s2 = OUStringToOString(path, osl_getThreadTextEncoding());
-        fprintf(stdout,"###Detected another JRE: %s\n at: %s\n" ,
+        fprintf(stderr,"###Detected another JRE: %s\n at: %s\n" ,
                 _s.getStr(), _s2.getStr());
 #endif
         mapJREs.insert(MAPJRE::value_type(sResolvedDir, ret));
@@ -1139,7 +1204,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                         OUString usDir3(usDir2 + arNames[k]);
 
 //                         OString _s = OUStringToOString(usDir3, osl_getThreadTextEncoding());
-//                         fprintf(stdout,"###directory: %s\n", _s.getStr());
+//                         fprintf(stderr,"###directory: %s\n", _s.getStr());
 
                         DirectoryItem item3;
                         if(DirectoryItem::get(usDir3, item) == File::E_None)
