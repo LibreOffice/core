@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:32:27 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,7 @@ QueryBox RID_SVXQB_DONTEXIST
     Message [ danish ] = "Denne URL findes ikke.\nSkal den tilføjes alligevel?" ;
     Message [ portuguese_brazilian ] = "Esta URL não existe.\nDeseja contudo inseri-la?" ;
     Message [ portuguese ] = "O URL não existe.\nDeseja contudo inseri-lo?" ;
-    Message[ chinese_simplified ] = "è¿™ä¸ª URL ä¸å­˜åœ¨ã€‚\næ‚¨è¿˜æ˜¯è¦æ’å…¥å®ƒï¼Ÿ";
+    Message[ chinese_simplified ] = "è¿™ä¸ª URL ä¸å­˜åœ¨ã€‚\næ‚¨è¿˜æ˜¯è¦åŠ å…¥å®ƒï¼Ÿ";
     Message[ russian ] = "URL íå ñóùåñòâóåò.\nÂñòàâèòü, íåñìîòğÿ íà ıòî?";
     Message[ polish ] = "Ten adres URL nie istnieje.\nCzy mimo to go wstawiæ?";
     Message[ japanese ] = "ã“ã® URL ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚\nãã‚Œã§ã‚‚æŒ¿å…¥ã—ã¾ã™ã‹ã€‚";
