@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-06-07 08:06:48 $
+ *  last change: $Author: af $ $Date: 2002-06-12 12:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
 #define _SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
@@ -129,13 +128,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 
-    //=====  XFrameActionListener  ============================================
-
-    virtual void SAL_CALL
-        frameAction (const ::com::sun::star::frame::FrameActionEvent& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException);
-
-
     //=====  XPropertyChangeListener  =========================================
 
     virtual void SAL_CALL
@@ -171,6 +163,10 @@ protected:
         accessible objects representing them.
     */
     ChildrenManager* mpChildrenManager;
+
+    // This method is called from the component helper base class while
+    // disposing.
+    virtual void SAL_CALL disposing (void);
 
     /** Create a shape the represents the page as seen on the screen.
     */
