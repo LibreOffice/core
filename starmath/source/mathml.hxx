@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-23 07:46:57 $
+ *  last change: $Author: mtg $ $Date: 2001-04-05 22:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,7 @@ public:
     String &GetText() { return aText;}
 
     virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
+    virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
 
 private:
         SvXMLTokenMap *pMathElemTokenMap;
@@ -411,6 +412,7 @@ public:
     sal_uInt32 exportDoc(const sal_Char *pClass);
 
     virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
+    virtual void GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
 
     sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
         sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException);

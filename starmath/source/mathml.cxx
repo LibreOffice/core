@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-05 14:57:16 $
+ *  last change: $Author: mtg $ $Date: 2001-04-05 22:17:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,9 +135,16 @@ one go*/
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 
+#ifndef _SFX_ITEMPROP_HXX
+#include <svtools/itemprop.hxx>
+#endif
+
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::document;
+using namespace com::sun::star::container;
+using namespace com::sun::star::beans;
 using namespace com::sun::star;
 using namespace rtl;
 
@@ -589,7 +596,7 @@ sal_Bool SmXMLWrapper::WriteThroughComponent(
 
     // filter!
     Reference < XFilter > xFilter( xExporter, UNO_QUERY );
-    uno::Sequence< beans::PropertyValue > aProps(0);
+    uno::Sequence< PropertyValue > aProps(0);
     xFilter->filter( aProps );
 
     uno::Reference<lang::XUnoTunnel> xFilterTunnel;
@@ -2981,7 +2988,7 @@ SmXMLImport::~SmXMLImport()
     delete pAnnotationAttrTokenMap;
 }
 
-void SmXMLImport::SetViewSettings(const Sequence<beans::PropertyValue>& aViewProps)
+void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
 {
     uno::Reference <frame::XModel> xModel = GetModel();
     if( !xModel.is() )
@@ -3003,7 +3010,7 @@ void SmXMLImport::SetViewSettings(const Sequence<beans::PropertyValue>& aViewPro
     Rectangle aRect( pDocShell->GetVisArea() );
 
     sal_Int32 nCount = aViewProps.getLength();
-    const beans::PropertyValue *pValue = aViewProps.getConstArray();
+    const PropertyValue *pValue = aViewProps.getConstArray();
 
     long nTmp;
     sal_Bool bShowDeletes = sal_False, bShowInserts = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
@@ -3036,6 +3043,29 @@ void SmXMLImport::SetViewSettings(const Sequence<beans::PropertyValue>& aViewPro
     pDocShell->SetVisArea ( aRect );
 }
 
+void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfProps)
+{
+    uno::Reference <frame::XModel> xModel = GetModel();
+    if( !xModel.is() )
+        return;
+
+    uno::Reference <lang::XUnoTunnel> xTunnel;
+    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+    SmModel *pModel = reinterpret_cast<SmModel *>
+        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+
+    if( !pModel )
+        return;
+
+    SmDocShell *pDocShell =
+        static_cast<SmDocShell*>(pModel->GetObjectShell());
+    if( !pDocShell )
+        return;
+
+    const PropertyValue *pValue = aConfProps.getConstArray();
+    for (sal_Int32 i = 0, nLength = aConfProps.getLength(); i < nLength; i ++)
+        pModel->setPropertyValue(pValue[i].Name, pValue[i].Value );
+}
 void SmXMLExport::_ExportContent()
 {
     SvXMLElementExport aEquation(*this,XML_NAMESPACE_MATH,sXML_math, sal_False,
@@ -3061,7 +3091,7 @@ void SmXMLExport::_ExportContent()
     delete pSemantics;
 }
 
-void SmXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
+void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
 {
     uno::Reference <frame::XModel> xModel = GetModel();
     if( !xModel.is() )
@@ -3081,11 +3111,10 @@ void SmXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
         return;
 
     aProps.realloc( 4 );
-    beans::PropertyValue *pValue = aProps.getArray();
+    PropertyValue *pValue = aProps.getArray();
     sal_Int32 nIndex = 0;
 
-    const Rectangle &rRect =
-        pDocShell->GetVisArea();
+    const Rectangle &rRect = pDocShell->GetVisArea();
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaTop") );
     pValue[nIndex++].Value <<= rRect.Top();
@@ -3099,6 +3128,38 @@ void SmXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaHeight") );
     pValue[nIndex++].Value <<= rRect.GetHeight();
 }
+
+#define SM_NUM_EXPORTED_ITEMS 55
+void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & aProps)
+{
+    uno::Reference <frame::XModel> xModel = GetModel();
+    if( !xModel.is() )
+        return;
+
+    uno::Reference <lang::XUnoTunnel> xTunnel;
+    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+    SmModel *pModel = reinterpret_cast<SmModel *>
+        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+
+    if( !pModel )
+        return;
+
+    SmDocShell *pDocShell =
+        static_cast<SmDocShell*>(pModel->GetObjectShell());
+    if( !pDocShell )
+        return;
+    const SmFormat &rFormat = (static_cast < SmDocShell* > ( pDocShell ))->GetFormat();
+    const SfxItemPropertyMap *pMap = pModel->getPropertyMap();
+
+    aProps.realloc( SM_NUM_EXPORTED_ITEMS );
+    PropertyValue *pValue = aProps.getArray();
+    for (sal_Int32 i = 0, nLength = SM_NUM_EXPORTED_ITEMS; i < nLength; i++)
+    {
+        pValue[i].Name = OUString::createFromAscii( pMap[i].pName );
+        pValue[i].Value <<= pModel->getPropertyValue ( pValue[i].Name );
+    }
+}
+#undef SM_NUM_EXPORTED_ITEMS
 
 void SmXMLExport::ExportLine(const SmNode *pNode,int nLevel)
 {
