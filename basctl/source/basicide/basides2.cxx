@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 12:02:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 
 #include <vcl/sound.hxx>
 #include <basidesh.hxx>
+#include <basidesh.hrc>
 #include <baside2.hxx>
 #include <basdoc.hxx>
 #include <basobj.hxx>
@@ -183,20 +184,30 @@ USHORT __EXPORT BasicIDEShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiff
 
 void BasicIDEShell::SetMDITitle()
 {
-    String aTitle = BasicIDE::GetStdTitle();
+    String aTitle;
 
-    if ( pCurWin && m_aCurLibName.Len() )
+    if ( m_aCurLibName.Len() )
     {
-        aTitle += String( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
         LibraryLocation eLocation = BasicIDE::GetLibraryLocation( m_pCurShell, m_aCurLibName );
-        aTitle += BasicIDE::GetTitle( m_pCurShell, eLocation, SFX_TITLE_FILENAME );
+        aTitle = BasicIDE::GetTitle( m_pCurShell, eLocation, SFX_TITLE_FILENAME );
         aTitle += '.';
         aTitle += m_aCurLibName;
     }
+    else
+    {
+        aTitle = String( IDEResId( RID_STR_ALL ) );
+    }
 
-    // Wenn DocShell::SetTitle, erfolgt beim Schliessen Abfrage, ob Speichern!
-    GetViewFrame()->GetObjectShell()->SetTitle( aTitle );
-    GetViewFrame()->GetObjectShell()->SetModified( FALSE );
+    SfxViewFrame* pViewFrame = GetViewFrame();
+    if ( pViewFrame )
+    {
+        SfxObjectShell* pShell = pViewFrame->GetObjectShell();
+        if ( pShell && aTitle != pShell->GetTitle( SFX_TITLE_FILENAME ) )
+        {
+            pShell->SetTitle( aTitle );
+            pShell->SetModified( FALSE );
+        }
+    }
 }
 
 void BasicIDEShell::DestroyModulWindowLayout()
