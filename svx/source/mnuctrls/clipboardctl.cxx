@@ -2,9 +2,9 @@
  *
  *  $RCSfile: clipboardctl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:17:35 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:51:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _PASTEDLG_HXX
-#include <so3/pastedlg.hxx>
-#endif
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
 #endif
@@ -97,7 +94,8 @@
 #include <clipfmtitem.hxx>
 #endif
 
-#include <svxids.hrc>
+#include <svtools/insdlg.hxx>
+#include "svxids.hrc"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -145,7 +143,7 @@ SfxPopupWindow* SvxClipBoardControl::CreatePopupWindow()
             ULONG nFmtID =  pFmtItem->GetClipbrdFormatId( i );
             String aFmtStr( pFmtItem->GetClipbrdFormatName( i ) );
             if (!aFmtStr.Len())
-                aFmtStr = SvPasteObjectDialog::GetSotFormatUIName( nFmtID );
+              aFmtStr = SvPasteObjectHelper::GetSotFormatUIName( nFmtID );
             pPopup->InsertItem( (USHORT)nFmtID, aFmtStr );
         }
 
