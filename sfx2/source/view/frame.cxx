@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:35:29 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,7 +1043,7 @@ sal_Bool SfxFrame::CheckContentForLoad_Impl()
         return sal_False;
     }
 
-    return (GetDescriptor()->GetActualURL().GetMainURL( INetURLObject::NO_DECODE ).Len() != 0);
+    return (GetDescriptor()->GetActualURL().GetMainURL( INetURLObject::NO_DECODE ).getLength() != 0);
 }
 
 sal_Bool SfxFrame::IsParent( SfxFrame *pFrame ) const
