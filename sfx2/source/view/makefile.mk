@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mba $ $Date: 2001-06-18 10:52:07 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:29:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,25 +67,18 @@ TARGET=				view
 ENABLE_EXCEPTIONS=	TRUE
 
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-AUTOSEG=true
-
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
-SRCFILES = \
+SRS1NAME=$(TARGET)
+SRC1FILES = \
         view.src \
         fsetview.src \
         framedlg.src
-
-#	removed for unicode
-#		$(SLO)$/winscoll.obj \
-
 
 SLOFILES =	\
         $(SLO)$/frmload.obj \
