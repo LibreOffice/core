@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-10 14:00:16 $
+ *  last change: $Author: mba $ $Date: 2001-09-13 12:30:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1335,7 +1335,15 @@ String GetURL_Impl( const String& rName )
     INetURLObject aObj( aTmp );
     bool bWasAbsolute;
     INetURLObject aURL = aObj.smartRel2Abs( rName, bWasAbsolute );
-    return aURL.GetMainURL(INetURLObject::NO_DECODE);
+    String aFileURL = aURL.GetMainURL(INetURLObject::NO_DECODE);
+
+    ::osl::FileStatus aStatus( FileStatusMask_FileURL );
+    ::osl::DirectoryItem aItem;
+    if( ::osl::FileBase::E_None == ::osl::DirectoryItem::get( aFileURL, aItem ) &&
+        ::osl::FileBase::E_None == aItem.getFileStatus( aStatus ) )
+            aFileURL = aStatus.getFileURL();
+
+    return aFileURL;
 }
 
 void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
