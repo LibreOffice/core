@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,11 +229,12 @@ class SwDrawModellListener_Impl : public SfxListener,
     mutable ::osl::Mutex maListenerMutex;
     ::cppu::OInterfaceContainerHelper maEventListeners;
     SdrModel *mpDrawModel;
-
+protected:
+    virtual ~SwDrawModellListener_Impl();
 public:
 
     SwDrawModellListener_Impl( SdrModel *pDrawModel );
-    virtual ~SwDrawModellListener_Impl();
+
 
     virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
@@ -747,6 +748,7 @@ void SwAccessibleMap::InvalidateCursorPosition(
     }
     else
     {
+        FireEvents();
         pAccImpl->InvalidateCursorPos();
     }
 }
@@ -761,6 +763,7 @@ void SwAccessibleMap::InvalidateShapeSelection()
     }
     else
     {
+        FireEvents();
         DoInvalidateShapeSelection();
     }
 }
@@ -1575,6 +1578,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
             }
             else
             {
+                FireEvents();
                 xAccImpl->InvalidatePosOrSize( rOldBox );
             }
         }
@@ -1589,6 +1593,7 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
             }
             else
             {
+                FireEvents();
                 xParentAccImpl->InvalidateChildPosOrSize( aFrmOrObj,
                                                           rOldBox );
             }
@@ -1627,6 +1632,7 @@ void SwAccessibleMap::InvalidateContent( const SwFrm *pFrm )
             }
             else
             {
+                FireEvents();
                 pAccImpl->InvalidateContent();
             }
         }
@@ -1778,6 +1784,7 @@ void SwAccessibleMap::InvalidateStates( sal_uInt8 nStates, const SwFrm *pFrm )
     }
     else
     {
+        FireEvents();
         pAccImpl->InvalidateStates( nStates );
     }
 }
@@ -1820,6 +1827,7 @@ void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
             }
             else
             {
+                FireEvents();
                 pAccImpl->InvalidateRelation( bFrom ?
                     AccessibleEventId::CONTENT_FLOWS_FROM_EVENT :
                     AccessibleEventId::CONTENT_FLOWS_TO_EVENT );
