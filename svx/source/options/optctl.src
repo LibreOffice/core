@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optctl.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 10:22:57 $
+ *  last change: $Author: rt $ $Date: 2002-12-09 09:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,15 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ korean ] = "Sequence checking";
         Text[ turkish ] = "Sequence checking";
         Text[ thai ] = "Sequence checking";
+        Text[ greek ] = "Sequence checking";
+        Text[ dutch ] = "Sequence checking";
+        Text[ french ] = "Sequence checking";
+        Text[ finnish ] = "Sequence checking";
+        Text[ danish ] = "Sequence checking";
+        Text[ chinese_simplified ] = "Sequence checking";
+        Text[ chinese_traditional ] = "Sequence checking";
+        Text[ arabic ] = "Sequence checking";
+        Text[ catalan ] = "Sequence checking";
     };
     CheckBox CB_SEQUENCECHECKING
     {
@@ -109,6 +118,15 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ korean ] = "Use se~quence checking";
         Text[ turkish ] = "Use se~quence checking";
         Text[ thai ] = "Use se~quence checking";
+        Text[ greek ] = "Use se~quence checking";
+        Text[ dutch ] = "Use se~quence checking";
+        Text[ french ] = "Use se~quence checking";
+        Text[ finnish ] = "Use se~quence checking";
+        Text[ danish ] = "Use se~quence checking";
+        Text[ chinese_simplified ] = "Use se~quence checking";
+        Text[ chinese_traditional ] = "Use se~quence checking";
+        Text[ arabic ] = "Use se~quence checking";
+        Text[ catalan ] = "Use se~quence checking";
     };
     FixedLine FL_CURSORCONTROL
     {
@@ -127,6 +145,15 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ korean ] = "Cursor control";
         Text[ turkish ] = "Cursor control";
         Text[ thai ] = "Cursor control";
+        Text[ greek ] = "Cursor control";
+        Text[ dutch ] = "Cursor control";
+        Text[ french ] = "Cursor control";
+        Text[ finnish ] = "Cursor control";
+        Text[ danish ] = "Cursor control";
+        Text[ chinese_simplified ] = "Cursor control";
+        Text[ chinese_traditional ] = "Cursor control";
+        Text[ arabic ] = "Cursor control";
+        Text[ catalan ] = "Cursor control";
     };
     FixedText FT_MOVEMENT
     {
@@ -145,6 +172,15 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ korean ] = "Movement";
         Text[ turkish ] = "Movement";
         Text[ thai ] = "Movement";
+        Text[ greek ] = "Movement";
+        Text[ dutch ] = "Movement";
+        Text[ french ] = "Movement";
+        Text[ finnish ] = "Movement";
+        Text[ danish ] = "Movement";
+        Text[ chinese_simplified ] = "Movement";
+        Text[ chinese_traditional ] = "Movement";
+        Text[ arabic ] = "Movement";
+        Text[ catalan ] = "Movement";
     };
     RadioButton RB_MOVEMENT_LOGICAL
     {
@@ -163,6 +199,15 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ korean ] = "Lo~gical";
         Text[ turkish ] = "Lo~gical";
         Text[ thai ] = "Lo~gical";
+        Text[ greek ] = "Lo~gical";
+        Text[ dutch ] = "Lo~gical";
+        Text[ french ] = "Lo~gical";
+        Text[ finnish ] = "Lo~gical";
+        Text[ danish ] = "Lo~gical";
+        Text[ chinese_simplified ] = "Lo~gical";
+        Text[ chinese_traditional ] = "Lo~gical";
+        Text[ arabic ] = "Lo~gical";
+        Text[ catalan ] = "Lo~gical";
     };
     RadioButton RB_MOVEMENT_VISUAL
     {
@@ -181,6 +226,15 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ korean ] = "~Visual";
         Text[ turkish ] = "~Visual";
         Text[ thai ] = "~Visual";
+        Text[ greek ] = "~Visual";
+        Text[ dutch ] = "~Visual";
+        Text[ french ] = "~Visual";
+        Text[ finnish ] = "~Visual";
+        Text[ danish ] = "~Visual";
+        Text[ chinese_simplified ] = "~Visual";
+        Text[ chinese_traditional ] = "~Visual";
+        Text[ arabic ] = "~Visual";
+        Text[ catalan ] = "~Visual";
     };
     FixedLine FL_GENERAL
     {
@@ -199,6 +253,15 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ korean ] = "General options";
         Text[ turkish ] = "General options";
         Text[ thai ] = "General options";
+        Text[ greek ] = "General options";
+        Text[ dutch ] = "General options";
+        Text[ french ] = "General options";
+        Text[ finnish ] = "General options";
+        Text[ danish ] = "General options";
+        Text[ chinese_simplified ] = "General options";
+        Text[ chinese_traditional ] = "General options";
+        Text[ arabic ] = "General options";
+        Text[ catalan ] = "General options";
     };
     FixedText FT_NUMERALS
     {
@@ -217,6 +280,15 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         Text[ korean ] = "~Numerals (in text only)";
         Text[ turkish ] = "~Numerals (in text only)";
         Text[ thai ] = "~Numerals (in text only)";
+        Text[ greek ] = "~Numerals (in text only)";
+        Text[ dutch ] = "~Numerals (in text only)";
+        Text[ french ] = "~Numerals (in text only)";
+        Text[ finnish ] = "~Numerals (in text only)";
+        Text[ danish ] = "~Numerals (in text only)";
+        Text[ chinese_simplified ] = "~Numerals (in text only)";
+        Text[ chinese_traditional ] = "~Numerals (in text only)";
+        Text[ arabic ] = "~Numerals (in text only)";
+        Text[ catalan ] = "~Numerals (in text only)";
     };
     ListBox LB_NUMERALS
     {
@@ -308,6 +380,60 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
         < "à¸®à¸´à¸™à¸”à¸µ" ; > ;
         < "à¸£à¸°à¸šà¸š" ; > ;
     };
+    StringList [ greek ] =
+    {
+         < "ÁñáâéêÜ" ; > ;
+        < "Hindi" ; > ;
+        < "Óýóôçìá" ; > ;
+    };
+    StringList [ dutch ] =
+    {
+         < "Arabisch" ; > ;
+        < "Hindi" ; > ;
+        < "Systeem" ; > ;
+    };
+    StringList [ french ] =
+    {
+         < "Arabe" ; > ;
+        < "Hindi" ; > ;
+        < "Système" ; > ;
+    };
+    StringList [ finnish ] =
+    {
+         < "arabia" ; > ;
+        < "unkari" ; > ;
+        < "Järjestelmä" ; > ;
+    };
+    StringList [ danish ] =
+    {
+         < "Arabisk" ; > ;
+        < "Hindi" ; > ;
+        < "System" ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+         < "é˜¿æ‹‰ä¼¯æ•°å­—" ; > ;
+        < "åŒ—å°åº¦è¯­" ; > ;
+        < "ç³»ç»Ÿ" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+         < "é˜¿æ‹‰ä¼¯æ•¸å­—" ; > ;
+        < "åŒ—å°åº¦èªž" ; > ;
+        < "ç³»çµ±" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+         < "ÚÑÈí" ; > ;
+        < "Hindi" ; > ;
+        < "ÇáäÙÇã" ; > ;
+    };
+    StringList [ catalan ] =
+    {
+         < "Àrab" ; > ;
+        < "Hindi" ; > ;
+        < "Sistema" ; > ;
+    };
     };
     Text[ portuguese ] = "Complex Text Layout";
     Text[ russian ] = "Complex Text Layout";
@@ -320,5 +446,14 @@ TabPage RID_SVXPAGE_OPTIONS_CTL
     Text[ korean ] = "Complex Text Layout";
     Text[ turkish ] = "Complex Text Layout";
     Text[ thai ] = "Complex Text Layout";
+    Text[ greek ] = "Complex Text Layout";
+    Text[ dutch ] = "Complex Text Layout";
+    Text[ french ] = "Complex Text Layout";
+    Text[ finnish ] = "Complex Text Layout";
+    Text[ danish ] = "Complex Text Layout";
+    Text[ chinese_simplified ] = "Complex Text Layout";
+    Text[ chinese_traditional ] = "Complex Text Layout";
+    Text[ arabic ] = "Complex Text Layout";
+    Text[ catalan ] = "Complex Text Layout";
 };
 
