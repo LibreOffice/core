@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontrolling.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:22:01 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,7 +489,6 @@ namespace svx
 
         disposeParser();
 
-        // 같같같같같같같같같같같같
         // revoke various listeners
         if ( m_xCursor.is() )
             m_xCursor->removeRowSetListener( this );
@@ -504,7 +503,6 @@ namespace svx
         if ( xBroadcaster.is() )
             xBroadcaster->removeModifyListener( this );
 
-        // 같같같같같같같같같같같같
         m_xController.clear();
         m_xCursor.clear();
         m_xUpdateCursor.clear();
