@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-12 15:26:05 $
+ *  last change: $Author: mba $ $Date: 2001-11-30 13:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,8 +221,6 @@ private:
     const String&   GetPath( StrPtr pPtr );
     void            SetPath( StrPtr pPtr, const String& rNewPath );
 
-    rtl::OUString   UsePathVariables( const rtl::OUString& rPath );
-
 public:
                     SvtPathOptions_Impl();
 
@@ -281,6 +279,7 @@ public:
 
     rtl::OUString   SubstVar( const rtl::OUString& rVar );
     rtl::OUString   SubstituteAndConvert( const rtl::OUString& rPath );
+    rtl::OUString   UsePathVariables( const rtl::OUString& rPath );
 
     LanguageType    GetLanguageType() const { return m_eLanguageType; }
 };
@@ -1374,6 +1373,12 @@ void SvtPathOptions::SetWorkPath( const String& rPath )
 String SvtPathOptions::SubstituteVariable( const String& rVar )
 {
     String aRet = pImp->SubstituteAndConvert( rVar );
+    return aRet;
+}
+
+String SvtPathOptions::UseVariable( const String& rPath )
+{
+    String aRet = pImp->UsePathVariables( rPath );
     return aRet;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-28 13:59:26 $
+ *  last change: $Author: mba $ $Date: 2001-11-30 13:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,8 @@
 #include <tools/wldcrd.hxx>
 #endif
 
+#include <pathoptions.hxx>
+
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
@@ -115,12 +117,16 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYNAME_SECUREURL          OUString(RTL_CONSTASCII_USTRINGPARAM("SecureURL"        ))
 #define PROPERTYNAME_STAROFFICEBASIC    OUString(RTL_CONSTASCII_USTRINGPARAM("OfficeBasic"  ))
 #define PROPERTYNAME_EXECUTEPLUGINS     OUString(RTL_CONSTASCII_USTRINGPARAM("ExecutePlugins"  ))
+#define PROPERTYNAME_WARNINGENABLED     OUString(RTL_CONSTASCII_USTRINGPARAM("Warning"  ))
+#define PROPERTYNAME_CONFIRMATIONENABLED OUString(RTL_CONSTASCII_USTRINGPARAM("Confirmation"  ))
 
 #define PROPERTYHANDLE_SECUREURL        0
 #define PROPERTYHANDLE_STAROFFICEBASIC  1
 #define PROPERTYHANDLE_EXECUTEPLUGINS   2
+#define PROPERTYHANDLE_WARNINGENABLED   3
+#define PROPERTYHANDLE_CONFIRMATIONENABLED 4
 
-#define PROPERTYCOUNT                   3
+#define PROPERTYCOUNT                   5
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -193,6 +199,10 @@ class SvtSecurityOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
+        sal_Bool IsWarningEnabled() const;
+        void SetWarningEnabled( sal_Bool bSet );
+        sal_Bool IsConfirmationEnabled() const;
+        void SetConfirmationEnabled( sal_Bool bSet );
         sal_Bool    IsExecutePlugins() const;
         void        SetExecutePlugins( sal_Bool bSet );
         Sequence< OUString >    GetSecureURLs   (                                               ) const ;
@@ -232,6 +242,8 @@ class SvtSecurityOptions_Impl : public ConfigItem
         Sequence< OUString >    m_seqSecureURLs     ;
         EBasicSecurityMode      m_eBasicMode    ;
         sal_Bool                m_bExecutePlugins;
+        sal_Bool                m_bWarning;
+        sal_Bool                m_bConfirmation;
 };
 
 //_________________________________________________________________________________________________________________
@@ -248,6 +260,8 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
     ,   m_seqSecureURLs     ( DEFAULT_SECUREURL         )
     ,   m_eBasicMode    ( DEFAULT_STAROFFICEBASIC   )
     ,   m_bExecutePlugins( sal_True )
+    ,   m_bWarning( sal_True )
+    ,   m_bConfirmation( sal_True )
 {
     // Use our static list of configuration keys to get his values.
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
@@ -270,6 +284,10 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
             case PROPERTYHANDLE_SECUREURL       :   {
                                                         DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SEQUENCE), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nWho has changed the value type of \"Security\\SecureURL\"?" );
                                                         seqValues[nProperty] >>= m_seqSecureURLs;
+                                                        SvtPathOptions aOpt;
+                                                        sal_uInt32 nCount = m_seqSecureURLs.getLength();
+                                                        for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
+                                                            m_seqSecureURLs[nItem] = aOpt.SubstituteVariable( m_seqSecureURLs[nItem] );
                                                     }
                                                     break;
 
@@ -284,6 +302,16 @@ SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()
             case PROPERTYHANDLE_EXECUTEPLUGINS  :   {
                                                         if ( !( seqValues[nProperty] >>= m_bExecutePlugins ) )
                                                             DBG_ERROR("Wrong type for ExecutePlugins!");
+                                                    }
+                                                    break;
+            case PROPERTYHANDLE_WARNINGENABLED  :   {
+                                                        if ( !( seqValues[nProperty] >>= m_bWarning ) )
+                                                            DBG_ERROR("Wrong type for Warning!");
+                                                    }
+                                                    break;
+            case PROPERTYHANDLE_CONFIRMATIONENABLED :   {
+                                                        if ( !( seqValues[nProperty] >>= m_bConfirmation ) )
+                                                            DBG_ERROR("Wrong type for Confirmation!");
                                                     }
                                                     break;
         }
@@ -324,6 +352,10 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
         {
             DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_SEQUENCE), "SvtSecurityOptions_Impl::Notify()\nWho has changed the value type of \"Security\\SecureURL\"?" );
             seqValues[nProperty] >>= m_seqSecureURLs;
+            SvtPathOptions aOpt;
+            sal_uInt32 nCount = m_seqSecureURLs.getLength();
+            for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
+                m_seqSecureURLs[nItem] = aOpt.SubstituteVariable( m_seqSecureURLs[nItem] );
         }
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_STAROFFICEBASIC )
         {
@@ -335,6 +367,16 @@ void SvtSecurityOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNam
         else if( seqPropertyNames[nProperty] == PROPERTYNAME_EXECUTEPLUGINS )
         {
             if ( !( seqValues[nProperty] >>= m_bExecutePlugins ) )
+                DBG_ERROR("Wrong type for ExecutePlugins!");
+        }
+        else if( seqPropertyNames[nProperty] == PROPERTYNAME_WARNINGENABLED )
+        {
+            if ( !( seqValues[nProperty] >>= m_bWarning ) )
+                DBG_ERROR("Wrong type for ExecutePlugins!");
+        }
+        else if( seqPropertyNames[nProperty] == PROPERTYNAME_CONFIRMATIONENABLED )
+        {
+            if ( !( seqValues[nProperty] >>= m_bConfirmation ) )
                 DBG_ERROR("Wrong type for ExecutePlugins!");
         }
         #ifdef DEBUG
@@ -357,7 +399,12 @@ void SvtSecurityOptions_Impl::Commit()
         switch( nProperty )
         {
             case PROPERTYHANDLE_SECUREURL       :   {
-                                                        seqValues[nProperty] <<= m_seqSecureURLs;
+                                                        Sequence < OUString > seqURLs( m_seqSecureURLs );
+                                                        SvtPathOptions aOpt;
+                                                        sal_uInt32 nCount = seqURLs.getLength();
+                                                        for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
+                                                            seqURLs[nItem] = aOpt.UseVariable( seqURLs[nItem] );
+                                                        seqValues[nProperty] <<= seqURLs;
                                                     }
                                                     break;
 
@@ -367,6 +414,12 @@ void SvtSecurityOptions_Impl::Commit()
                                                     break;
             case PROPERTYHANDLE_EXECUTEPLUGINS  :   {
                                                         seqValues[nProperty] <<= m_bExecutePlugins;
+                                                    }
+            case PROPERTYHANDLE_WARNINGENABLED  :   {
+                                                        seqValues[nProperty] <<= m_bWarning;
+                                                    }
+            case PROPERTYHANDLE_CONFIRMATIONENABLED  :   {
+                                                        seqValues[nProperty] <<= m_bConfirmation;
                                                     }
                                                     break;
         }
@@ -420,6 +473,28 @@ void SvtSecurityOptions_Impl::SetExecutePlugins( sal_Bool bSet )
     SetModified();
 }
 
+sal_Bool SvtSecurityOptions_Impl::IsWarningEnabled() const
+{
+    return m_bWarning;
+}
+
+void SvtSecurityOptions_Impl::SetWarningEnabled( sal_Bool bSet )
+{
+    m_bWarning =  bSet;
+    SetModified();
+}
+
+sal_Bool SvtSecurityOptions_Impl::IsConfirmationEnabled() const
+{
+    return m_bWarning;
+}
+
+void SvtSecurityOptions_Impl::SetConfirmationEnabled( sal_Bool bSet )
+{
+    m_bWarning =  bSet;
+    SetModified();
+}
+
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
@@ -440,7 +515,7 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
 
     // All other URLs must checked in combination with referer and internal information about security
     if ( aProtocol != INET_PROT_MACRO && aProtocol !=  INET_PROT_SLOT ||
-         aURL.GetMainURL().CompareIgnoreCaseToAscii( "macro://#", 9 )  ==  COMPARE_EQUAL )
+         aURL.GetMainURL().CompareIgnoreCaseToAscii( "macro:///", 9 )  ==  COMPARE_EQUAL )
     {
         // security check only for "macro" ( without app basic ) or "slot" protocols
         bState = sal_True;
@@ -453,7 +528,7 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
         // YES => search for it in our internal url list
         if( sReferer.getLength() > 0 )
         {
-            // Search in internal list ...
+            // Search in internal list
             sal_uInt32 nCount = m_seqSecureURLs.getLength();
             for( sal_uInt32 nItem=0; nItem<nCount; ++nItem )
             {
@@ -467,6 +542,8 @@ sal_Bool SvtSecurityOptions_Impl::IsSecureURL(  const   OUString&   sURL    ,
             }
         }
     }
+    else if ( m_eBasicMode == eNEVER_EXECUTE )
+        bState = sal_False;
 
     // Return result of operation.
     return bState;
@@ -482,7 +559,9 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
     {
         PROPERTYNAME_SECUREURL          ,
         PROPERTYNAME_STAROFFICEBASIC    ,
-        PROPERTYNAME_EXECUTEPLUGINS
+        PROPERTYNAME_EXECUTEPLUGINS     ,
+        PROPERTYNAME_WARNINGENABLED     ,
+        PROPERTYNAME_CONFIRMATIONENABLED
     };
     // Initialize return sequence with these list ...
     static const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
@@ -588,6 +667,30 @@ void SvtSecurityOptions::SetExecutePlugins( sal_Bool bSet )
 {
     MutexGuard aGuard( GetInitMutex() );
     m_pDataContainer->SetExecutePlugins( bSet );
+}
+
+sal_Bool SvtSecurityOptions::IsWarningEnabled() const
+{
+    MutexGuard aGuard( GetInitMutex() );
+    return m_pDataContainer->IsWarningEnabled();
+}
+
+void SvtSecurityOptions::SetWarningEnabled( sal_Bool bSet )
+{
+    MutexGuard aGuard( GetInitMutex() );
+    m_pDataContainer->SetWarningEnabled( bSet );
+}
+
+sal_Bool SvtSecurityOptions::IsConfirmationEnabled() const
+{
+    MutexGuard aGuard( GetInitMutex() );
+    return m_pDataContainer->IsWarningEnabled();
+}
+
+void SvtSecurityOptions::SetConfirmationEnabled( sal_Bool bSet )
+{
+    MutexGuard aGuard( GetInitMutex() );
+    m_pDataContainer->SetWarningEnabled( bSet );
 }
 
 //*****************************************************************************************************************
