@@ -23,6 +23,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
 #ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
 #endif
@@ -35,13 +38,16 @@
 #ifndef _SFX_SFXUNO_HXX
 #include <sfx2/sfxuno.hxx>
 #endif
-#ifndef _CPPUHELPER_COMPBASE2_HXX_
-#include <cppuhelper/compbase2.hxx>
+#ifndef _CPPUHELPER_COMPBASE3_HXX_
+#include <cppuhelper/compbase3.hxx>
 #endif
 
 class ResMgr;
 
-typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::frame::XTerminateListener, ::com::sun::star::lang::XServiceInfo > ShutdownIconServiceBase;
+typedef ::cppu::WeakComponentImplHelper3<
+    ::com::sun::star::lang::XInitialization,
+    ::com::sun::star::frame::XTerminateListener,
+    ::com::sun::star::lang::XServiceInfo > ShutdownIconServiceBase;
 
 class ShutdownIcon :    public ShutdownIconServiceBase
 {
@@ -100,6 +106,10 @@ class ShutdownIcon :    public ShutdownIconServiceBase
             throw(::com::sun::star::frame::TerminationVetoException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL notifyTermination( const ::com::sun::star::lang::EventObject& aEvent )
             throw(::com::sun::star::uno::RuntimeException);
+
+        // XInitialization
+        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+            throw( ::com::sun::star::uno::Exception );
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop > m_xDesktop;
 };

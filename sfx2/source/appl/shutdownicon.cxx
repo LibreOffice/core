@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-18 08:02:40 $
+ *  last change: $Author: cd $ $Date: 2001-07-20 09:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 #include "dispatch.hxx"
+#include <comphelper/extract.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -112,25 +113,6 @@ ShutdownIcon::ShutdownIcon( Reference< XMultiServiceFactory > aSMgr ) :
     m_pResMgr( 0 ),
     m_bVeto ( false )
 {
-    m_pResMgr = SFX_APP()->GetSfxResManager();
-
-    ::vos::OExtCommandLine aExtCmdLine;
-    ::sfx2::CommandLineArgs aCommandLineArgs( aExtCmdLine );
-
-    if( Application::IsRemoteServer() || ( !aCommandLineArgs.IsQuickstart() && !GetAutostart() ) )
-        return;
-
-    m_xDesktop = Reference < XDesktop >( m_xServiceManager->createInstance(
-                                                DEFINE_CONST_UNICODE( "com.sun.star.frame.Desktop" )),
-                                            UNO_QUERY );
-
-    if ( !m_xDesktop.is() )
-        return;
-
-    ShutdownIcon::pShutdownIcon = this;
-#ifdef WNT
-    initSystray();
-#endif
 }
 
 ShutdownIcon::~ShutdownIcon()
@@ -215,7 +197,8 @@ void ShutdownIcon::FileOpen()
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
-        FileDialogHelper dlg( WB_OPEN );
+        // use ctor for filling up filters automatically! #89169#
+        FileDialogHelper dlg( WB_OPEN, *(SfxObjectFactory*) NULL );
         if ( ERRCODE_NONE == dlg.Execute() )
             OpenURL( OUString( dlg.GetPath() ) );
     }
@@ -344,3 +327,37 @@ throw(::com::sun::star::uno::RuntimeException)
 {
 }
 
+
+void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
+    throw( ::com::sun::star::uno::Exception )
+{
+    ::osl::ClearableMutexGuard  aGuard( m_aMutex );
+
+    if ( !ShutdownIcon::pShutdownIcon && aArguments.getLength() > 0 )
+    {
+        try
+        {
+            sal_Bool bQuickstart = sal_False;
+            bQuickstart = ::cppu::any2bool( aArguments[0] );
+            if( Application::IsRemoteServer() || ( !bQuickstart && !GetAutostart() ) )
+                return;
+
+            m_pResMgr = SFX_APP()->GetSfxResManager();
+
+            m_xDesktop = Reference < XDesktop >( m_xServiceManager->createInstance(
+                                                        DEFINE_CONST_UNICODE( "com.sun.star.frame.Desktop" )),
+                                                    UNO_QUERY );
+
+            if ( !m_xDesktop.is() )
+                return;
+
+            ShutdownIcon::pShutdownIcon = this;
+#ifdef WNT
+            initSystray();
+#endif
+        }
+        catch(const ::com::sun::star::lang::IllegalArgumentException&)
+        {
+        }
+    }
+}
