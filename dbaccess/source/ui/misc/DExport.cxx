@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 09:09:46 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,9 @@ using namespace ::com::sun::star::lang;
 ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  const ::std::vector<sal_Int32> &_rColumnPositions,
                                  const Reference< XNumberFormatter >& _rxNumberF,
-                                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+                                 const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                                 const TColumnVector* pList,
+                                 const OTypeInfoMap* _pInfoMap)
     :m_nColumnPos(0)
     ,m_nRows(1)
     ,m_nRowCount(0)
@@ -194,11 +196,14 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     {
     }
 
+    SetColumnTypes(pList,_pInfoMap);
 }
 //---------------------------------------------------------------------------
 ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
                                  const Reference< XNumberFormatter >& _rxNumberF,
-                                 const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+                                 const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                                 const TColumnVector* pList,
+                                 const OTypeInfoMap* _pInfoMap)
     :m_xConnection(_rxConnection)
     ,m_nColumnPos(0)
     ,m_nRows(1)
@@ -256,6 +261,7 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
             }
         }
     }
+    SetColumnTypes(pList,_pInfoMap);
 }
 //---------------------------------------------------------------------------
 ODatabaseExport::~ODatabaseExport()
@@ -480,56 +486,59 @@ sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOl
 // -----------------------------------------------------------------------------
 void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfoMap* _pInfoMap)
 {
-    TColumnVector::const_iterator aIter = _pList->begin();
-    for(sal_Int32 i=0;aIter != _pList->end();++aIter,++i)
+    if(_pList && _pInfoMap)
     {
-        sal_Int32 nDataType;
-        sal_Int32 nLength(0),nScale(0);
-        switch(m_vFormatKey[i])
+        TColumnVector::const_iterator aIter = _pList->begin();
+        for(sal_Int32 i=0;aIter != _pList->end();++aIter,++i)
         {
-            case NumberFormat::ALL:
-                nDataType  = DataType::DOUBLE;
-                break;
-            case NumberFormat::DEFINED:
-                nDataType   = DataType::VARCHAR;
-                nLength     = ((m_vColumnSize[i] % 10 ) ? m_vColumnSize[i]/ 10 + 1: m_vColumnSize[i]/ 10) * 10;
-                break;
-            case NumberFormat::DATE:
-                nDataType  = DataType::DATE;
-                break;
-            case NumberFormat::TIME:
-                nDataType  = DataType::TIME;
-                break;
-            case NumberFormat::DATETIME:
-                nDataType  = DataType::TIMESTAMP;
-                break;
-            case NumberFormat::CURRENCY:
-                nDataType  = DataType::NUMERIC;
-                nScale      = 4;
-                nLength     = 19;
-                break;
-            case NumberFormat::NUMBER:
-            case NumberFormat::SCIENTIFIC:
-            case NumberFormat::FRACTION:
-            case NumberFormat::PERCENT:
-                nDataType  = DataType::DOUBLE;
-                break;
-            case NumberFormat::TEXT:
-            case NumberFormat::UNDEFINED:
-            case NumberFormat::LOGICAL:
-            default:
-                nDataType  = DataType::VARCHAR;
-                nLength     = ((m_vColumnSize[i] % 10 ) ? m_vColumnSize[i]/ 10 + 1: m_vColumnSize[i]/ 10) * 10;
-                break;
+            sal_Int32 nDataType;
+            sal_Int32 nLength(0),nScale(0);
+            switch(m_vFormatKey[i])
+            {
+                case NumberFormat::ALL:
+                    nDataType  = DataType::DOUBLE;
+                    break;
+                case NumberFormat::DEFINED:
+                    nDataType   = DataType::VARCHAR;
+                    nLength     = ((m_vColumnSize[i] % 10 ) ? m_vColumnSize[i]/ 10 + 1: m_vColumnSize[i]/ 10) * 10;
+                    break;
+                case NumberFormat::DATE:
+                    nDataType  = DataType::DATE;
+                    break;
+                case NumberFormat::TIME:
+                    nDataType  = DataType::TIME;
+                    break;
+                case NumberFormat::DATETIME:
+                    nDataType  = DataType::TIMESTAMP;
+                    break;
+                case NumberFormat::CURRENCY:
+                    nDataType  = DataType::NUMERIC;
+                    nScale      = 4;
+                    nLength     = 19;
+                    break;
+                case NumberFormat::NUMBER:
+                case NumberFormat::SCIENTIFIC:
+                case NumberFormat::FRACTION:
+                case NumberFormat::PERCENT:
+                    nDataType  = DataType::DOUBLE;
+                    break;
+                case NumberFormat::TEXT:
+                case NumberFormat::UNDEFINED:
+                case NumberFormat::LOGICAL:
+                default:
+                    nDataType  = DataType::VARCHAR;
+                    nLength     = ((m_vColumnSize[i] % 10 ) ? m_vColumnSize[i]/ 10 + 1: m_vColumnSize[i]/ 10) * 10;
+                    break;
+            }
+            OTypeInfoMap::const_iterator aFind = _pInfoMap->find(nDataType);
+            if(aFind != _pInfoMap->end())
+            {
+                (*aIter)->second->SetType(aFind->second);
+                (*aIter)->second->SetPrecision(::std::min<sal_Int32>(aFind->second->nPrecision,nLength));
+                (*aIter)->second->SetScale(::std::min<sal_Int32>(aFind->second->nMaximumScale,nScale));
+            }
+            (*aIter)->second->SetFormatKey(m_vFormatKey[i]);
         }
-        OTypeInfoMap::const_iterator aFind = _pInfoMap->find(nDataType);
-        if(aFind != _pInfoMap->end())
-        {
-            (*aIter)->second->SetType(aFind->second);
-            (*aIter)->second->SetPrecision(::std::min<sal_Int32>(aFind->second->nPrecision,nLength));
-            (*aIter)->second->SetScale(::std::min<sal_Int32>(aFind->second->nMaximumScale,nScale));
-        }
-        (*aIter)->second->SetFormatKey(m_vFormatKey[i]);
     }
 }
 // -----------------------------------------------------------------------------

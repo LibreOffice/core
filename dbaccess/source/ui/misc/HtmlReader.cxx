@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-11 10:27:05 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,9 +214,11 @@ DBG_NAME(OHTMLReader);
 // ==========================================================================
 OHTMLReader::OHTMLReader(SvStream& rIn,const Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                        const TColumnVector* pList,
+                        const OTypeInfoMap* _pInfoMap)
     : HTMLParser(rIn)
-    ,ODatabaseExport(_rxConnection,_rxNumberF,_rM)
+    ,ODatabaseExport(_rxConnection,_rxNumberF,_rM,pList,_pInfoMap)
     ,m_nTableCount(0)
     ,m_nColumnWidth(87)
     ,m_bMetaOptions(sal_False)
@@ -234,9 +236,11 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
                          sal_Int32 nRows,
                          const ::std::vector<sal_Int32> &_rColumnPositions,
                          const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                         const TColumnVector* pList,
+                         const OTypeInfoMap* _pInfoMap)
     : HTMLParser(rIn)
-    ,ODatabaseExport(nRows,_rColumnPositions,_rxNumberF,_rM)
+    ,ODatabaseExport(nRows,_rColumnPositions,_rxNumberF,_rM,pList,_pInfoMap)
     ,m_nTableCount(0)
     ,m_nColumnWidth(87)
     ,m_bMetaOptions(sal_False)
@@ -663,7 +667,7 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 
     if (aWizard.Execute())
     {
-        switch(aWizard.GetCreateStyle())
+        switch(aWizard.getCreateStyle())
         {
             case OCopyTableWizard::WIZARD_DEF_DATA:
             case OCopyTableWizard::WIZARD_APPEND_DATA:

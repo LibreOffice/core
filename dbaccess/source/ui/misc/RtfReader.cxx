@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:23:44 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,9 +166,11 @@ DBG_NAME(ORTFReader);
 ORTFReader::ORTFReader( SvStream& rIn,
                         const Reference< XConnection >& _rxConnection,
                         const Reference< XNumberFormatter >& _rxNumberF,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                        const TColumnVector* pList,
+                        const OTypeInfoMap* _pInfoMap)
     : SvRTFParser(rIn)
-    ,ODatabaseExport(_rxConnection,_rxNumberF,_rM)
+    ,ODatabaseExport(_rxConnection,_rxNumberF,_rM,pList,_pInfoMap)
 {
     DBG_CTOR(ORTFReader,NULL);
 }
@@ -177,9 +179,11 @@ ORTFReader::ORTFReader(SvStream& rIn,
                        sal_Int32 nRows,
                        const ::std::vector<sal_Int32> &_rColumnPositions,
                        const Reference< XNumberFormatter >& _rxNumberF,
-                       const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
+                       const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                       const TColumnVector* pList,
+                       const OTypeInfoMap* _pInfoMap)
    :SvRTFParser(rIn)
-   ,ODatabaseExport(nRows,_rColumnPositions,_rxNumberF,_rM)
+   ,ODatabaseExport(nRows,_rColumnPositions,_rxNumberF,_rM,pList,_pInfoMap)
 {
     DBG_CTOR(ORTFReader,NULL);
 }
@@ -439,7 +443,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
 
     if (aWizard.Execute())
     {
-        switch(aWizard.GetCreateStyle())
+        switch(aWizard.getCreateStyle())
         {
             case OCopyTableWizard::WIZARD_DEF_DATA:
             case OCopyTableWizard::WIZARD_APPEND_DATA:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@
 #include <vcl/button.hxx>
 #endif
 
+class SvStream;
+class SvParser;
 namespace dbaui
 {
     class OTableDesignHelpBar;
@@ -152,8 +154,11 @@ namespace dbaui
         PushButton              m_pbAuto;
 
         Image                   m_imgPKey;
+        SvStream*               m_pParserStream; // stream to read the tokens from or NULL
 
-        virtual void            fillColumnList(sal_uInt32 nRows) = 0;
+        void                    fillColumnList(sal_uInt32 nRows);
+        virtual SvParser*       createReader(sal_Int32 _nRows) = 0;
+
         void                    EnableAuto(sal_Bool bEnable);
     public:
         virtual void            Reset ( );

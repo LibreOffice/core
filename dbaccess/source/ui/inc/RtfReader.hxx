@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 15:02:06 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,13 +90,17 @@ namespace dbaui
         ORTFReader( SvStream& rIn,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                    const TColumnVector* rList = 0,
+                    const OTypeInfoMap* _pInfoMap = 0);
         // wird f"ur auto. Typ-Erkennung gebraucht
         ORTFReader( SvStream& rIn,
                     sal_Int32 nRows,
                     const ::std::vector<sal_Int32> &_rColumnPositions,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+                    const TColumnVector* rList = 0,
+                    const OTypeInfoMap* _pInfoMap = 0);
 
         virtual         SvParserState CallParser();// Basisklasse
         // birgt nur korrekte Daten, wenn der 2. CTOR benutzt wurde

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WExtendPages.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-23 14:59:14 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,14 @@ namespace dbaui
     // ========================================================
     class OWizHTMLExtend : public OWizTypeSelect
     {
-        SvStream*       m_pParserStream; // HTML Stream
     protected:
-        virtual void    fillColumnList(sal_uInt32 nRows);
+        virtual SvParser*   createReader(sal_Int32 _nRows);
     public:
         OWizHTMLExtend(Window* pParent,SvStream&    rRtfStream)
             : OWizTypeSelect( pParent)
-            ,m_pParserStream(&rRtfStream)
-        {}
+        {
+            m_pParserStream = &rRtfStream;
+        }
 
         virtual ~OWizHTMLExtend(){}
     };
@@ -89,14 +89,14 @@ namespace dbaui
     // ========================================================
     class OWizRTFExtend : public OWizTypeSelect
     {
-        SvStream*       m_pParserStream; // RTF Stream
     protected:
-        virtual void    fillColumnList(sal_uInt32 nRows);
+        virtual SvParser* createReader(sal_Int32 _nRows);
     public:
         OWizRTFExtend(Window* pParent,SvStream& rRtfStream)
             : OWizTypeSelect( pParent)
-            ,m_pParserStream(&rRtfStream)
-        {}
+        {
+            m_pParserStream = &rRtfStream;
+        }
 
         virtual ~OWizRTFExtend(){}
     };
@@ -107,7 +107,7 @@ namespace dbaui
     class OWizNormalExtend : public OWizTypeSelect
     {
     protected:
-        virtual void    fillColumnList(sal_uInt32 nRows) { }
+        virtual SvParser* createReader(sal_Int32 _nRows);
     public:
         OWizNormalExtend(Window* pParent);
     };

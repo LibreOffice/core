@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,21 @@
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _DBHELPER_DBEXCEPTION_HXX_
+#include <connectivity/dbexception.hxx>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
+#endif
 
 using namespace ::dbaui;
+using namespace ::dbtools;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -122,38 +132,45 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsQuery,
 
     if(m_pParent->m_xConnection.is())
     {
+        // first we have to determine if we support views
         Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
-        try
+        Reference< XViewsSupplier > xViewSups(m_pParent->m_xConnection,UNO_QUERY);
+        if(!(m_bIsViewAllowed = xViewSups.is()))
         {
-            static ::rtl::OUString sVIEW = ::rtl::OUString::createFromAscii("VIEW");
-            Reference<XResultSet> xRs = xMetaData->getTableTypes();
-            if(xRs.is())
+            try
             {
-                Reference<XRow> xRow(xRs,UNO_QUERY);
-                while(xRs->next())
+                static ::rtl::OUString sVIEW = ::rtl::OUString::createFromAscii("VIEW");
+                Reference<XResultSet> xRs = xMetaData->getTableTypes();
+                if(xRs.is())
                 {
-                    ::rtl::OUString sValue = xRow->getString(1);
-                    if(!xRow->wasNull() && sValue.equalsIgnoreAsciiCase(sVIEW))
+                    Reference<XRow> xRow(xRs,UNO_QUERY);
+                    while(xRs->next())
                     {
-                        m_bIsViewAllowed = m_bIsViewAllowed || sal_True;
-                        break;
+                        ::rtl::OUString sValue = xRow->getString(1);
+                        if(!xRow->wasNull() && sValue.equalsIgnoreAsciiCase(sVIEW))
+                        {
+                            m_bIsViewAllowed = m_bIsViewAllowed || sal_True;
+                            break;
+                        }
                     }
                 }
             }
-        }
-        catch(SQLException&)
-        {
+            catch(const SQLException& e)
+            {
+                ::dbaui::showError(SQLExceptionInfo(e),pParent,m_pParent->m_xFactory);
+            }
         }
 
         if(!m_bIsViewAllowed)
             m_aRB_View.Disable();
 
         //////////////////////////////////////////////////////////////////////
-        // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
+        // do we support pkeys
         m_bPKeyAllowed = xMetaData->supportsCoreSQLGrammar();
 
         m_aCB_PrimaryColumn.Enable(m_bPKeyAllowed);
 
+        // reselect the last action before
         switch(nLastAction)
         {
             case OCopyTableWizard::WIZARD_DEF_DATA:
@@ -186,7 +203,7 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsQuery,
         m_aFT_KeyName.Enable(sal_False);
         m_edKeyName.Enable(sal_False);
         m_edKeyName.SetText(String::CreateFromAscii("ID"));
-        sal_Int32 nMaxLen = xMetaData->getMaxColumnNameLength();
+        sal_Int32 nMaxLen = m_pParent->getMaxColumnNameLength();
         m_edKeyName.SetMaxTextLen(nMaxLen ? (xub_StrLen)nMaxLen : EDIT_NOLIMIT);
     }
 
@@ -210,12 +227,12 @@ OCopyTable::~OCopyTable()
 //------------------------------------------------------------------------
 IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, pButton )
 {
-    sal_Bool bChecked = m_aRB_AppendData.IsChecked();
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_True);
     m_aFT_KeyName.Enable(sal_False);
     m_aCB_PrimaryColumn.Enable(sal_False);
     m_edKeyName.Enable(sal_False);
-    m_pParent->m_eCreateStyle = OCopyTableWizard::WIZARD_APPEND_DATA;
+    m_pParent->setCreateStyle(OCopyTableWizard::WIZARD_APPEND_DATA);
+
     return 0;
 }
 //------------------------------------------------------------------------
@@ -229,11 +246,11 @@ IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 
     // set typ what to do
     if( IsOptionDefData() )
-        m_pParent->m_eCreateStyle = OCopyTableWizard::WIZARD_DEF_DATA;
+        m_pParent->setCreateStyle(OCopyTableWizard::WIZARD_DEF_DATA);
     else if( IsOptionDef() )
-        m_pParent->m_eCreateStyle = OCopyTableWizard::WIZARD_DEF;
+        m_pParent->setCreateStyle(OCopyTableWizard::WIZARD_DEF);
     else if( IsOptionView() )
-        m_pParent->m_eCreateStyle = OCopyTableWizard::WIZARD_DEF_VIEW;
+        m_pParent->setCreateStyle(OCopyTableWizard::WIZARD_DEF_VIEW);
 
     return 0;
 }
@@ -251,7 +268,7 @@ sal_Bool OCopyTable::LeavePage()
     m_pParent->m_aKeyName               = m_edKeyName.GetText();
 
     // a table that comes from a html or rtf import already has a name that is valid in the db
-    if( m_pParent->m_eCreateStyle != OCopyTableWizard::WIZARD_APPEND_DATA )
+    if( m_pParent->getCreateStyle() != OCopyTableWizard::WIZARD_APPEND_DATA )
     {
         Reference<XTablesSupplier > xSup(m_pParent->m_xConnection,UNO_QUERY);
         Reference<XNameAccess> xTables;
@@ -269,7 +286,7 @@ sal_Bool OCopyTable::LeavePage()
 
     if(!m_edTableName.GetSavedValue().Equals(m_edTableName.GetText()))
     { // table exist and name has changed
-        if(m_pParent->m_eCreateStyle == OCopyTableWizard::WIZARD_APPEND_DATA)
+        if(m_pParent->getCreateStyle() == OCopyTableWizard::WIZARD_APPEND_DATA)
         {
             m_pParent->clearDestColumns();
             m_pParent->m_xSourceObject = NULL;
@@ -290,14 +307,14 @@ sal_Bool OCopyTable::LeavePage()
         }
         else if(m_eOldStyle == OCopyTableWizard::WIZARD_APPEND_DATA)
         {
-            OSL_ENSURE(sal_False, "OCopyTable::LeavePage: how this?");
             m_pParent->m_xSourceObject = NULL;
+            m_edTableName.SaveValue();
             return LeavePage();
         }
     }
     else
     { // table exist and is not new or doesn't exist and so on
-        switch(m_pParent->m_eCreateStyle)
+        switch(m_pParent->getCreateStyle())
         {
             case OCopyTableWizard::WIZARD_APPEND_DATA:
             {
@@ -344,18 +361,14 @@ sal_Bool OCopyTable::LeavePage()
 //------------------------------------------------------------------------
 void OCopyTable::ActivatePage()
 {
-    m_eOldStyle = m_pParent->m_eCreateStyle;
+    m_eOldStyle = m_pParent->getCreateStyle();
     //////////////////////////////////////////////////////////////////////////
-    // Ist der Name zu lang?
-    sal_Int32 nLen = m_pParent->m_xConnection->getMetaData()->getMaxTableNameLength();
+    // set max name length
+    sal_Int32 nLen = 0;
+    if(m_pParent->m_xConnection.is())
+        nLen = m_pParent->m_xConnection->getMetaData()->getMaxTableNameLength();
     m_edTableName.SetMaxTextLen(nLen ? (xub_StrLen)nLen : EDIT_NOLIMIT);
-    //m_pParent->EnableButton(OCopyTableWizard::WIZARD_FINISH,FALSE);
-
-    //  if (m_pParent->m_xSourceDef.Is() && (m_pParent->m_xSourceDef->GetDatabase() == m_pParent->m_xDatabase))
-        // copying within the same database -> assume that the name should be modified at first
-        m_edTableName.GrabFocus();
-    //  else
-        //  m_pParent->GetOKButton().GrabFocus();
+    m_edTableName.GrabFocus();
 }
 //------------------------------------------------------------------------
 String OCopyTable::GetTitle() const { return String(ModuleRes(STR_WIZ_TABLE_COPY)); }

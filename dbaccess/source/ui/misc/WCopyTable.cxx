@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,7 @@ IMPL_LINK( OCopyTableWizard, ImplPrevHdl, PushButton*, EMPTYARG )
     m_ePressed = WIZARD_PREV;
     if ( GetCurLevel() )
     {
-        if(m_eCreateStyle != WIZARD_APPEND_DATA)
+        if(getCreateStyle() != WIZARD_APPEND_DATA)
         {
             if(GetCurLevel() == 2)
                 ShowPage(GetCurLevel()-2);
@@ -291,7 +291,7 @@ IMPL_LINK( OCopyTableWizard, ImplNextHdl, PushButton*, EMPTYARG )
     m_ePressed = WIZARD_NEXT;
     if ( GetCurLevel() < MAX_PAGES )
     {
-        if(m_eCreateStyle != WIZARD_APPEND_DATA)
+        if(getCreateStyle() != WIZARD_APPEND_DATA)
         {
             if(GetCurLevel() == 0)
                 ShowPage(GetCurLevel()+2);
@@ -342,7 +342,7 @@ void OCopyTableWizard::CheckColumns()
             //  DlgFieldMatch   dlgMissingFields(this);
             //  ListBox*        pInfoBox = dlgMissingFields.GetInfoBox();
             ::rtl::OUString aColumnName,aOldColName;
-            sal_Int32 nMaxNameLen = xMetaData->getMaxColumnNameLength();
+            sal_Int32 nMaxNameLen = getMaxColumnNameLength();
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
             for(;aSrcIter != m_vSourceVec.end();++aSrcIter)
             {
@@ -389,10 +389,10 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
     if(bFinish)
     {
         sal_Bool bWasEmpty = !m_vDestColumns.size();
-        if(m_eCreateStyle != WIZARD_DEF_VIEW && m_eCreateStyle != WIZARD_APPEND_DATA )
+        if(getCreateStyle() != WIZARD_DEF_VIEW && getCreateStyle() != WIZARD_APPEND_DATA )
             CheckColumns();
 
-        switch(m_eCreateStyle)
+        switch(getCreateStyle())
         {
             case WIZARD_APPEND_DATA:
             {
@@ -829,5 +829,35 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
     return m_xDestObject;
 }
 // -----------------------------------------------------------------------------
-
-
+sal_Bool OCopyTableWizard::supportsPrimaryKey() const
+{
+    sal_Bool bAllowed = sal_False;
+    if(m_xConnection.is())
+    {
+        Reference< XDatabaseMetaData >  xMetaData(m_xConnection->getMetaData());
+        bAllowed = xMetaData.is() && xMetaData->supportsCoreSQLGrammar();
+    }
+    return bAllowed;
+}
+// -----------------------------------------------------------------------------
+sal_Int32 OCopyTableWizard::getMaxColumnNameLength() const
+{
+    sal_Int32 nLen = 0;
+    if(m_xConnection.is())
+    {
+        Reference< XDatabaseMetaData >  xMetaData(m_xConnection->getMetaData());
+        nLen = xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0;
+    }
+    return nLen;
+}
+// -----------------------------------------------------------------------------
+void OCopyTableWizard::setCreateStyle(const OCopyTableWizard::Wizard_Create_Style& _eStyle)
+{
+    m_eCreateStyle = _eStyle;
+}
+// -----------------------------------------------------------------------------
+OCopyTableWizard::Wizard_Create_Style OCopyTableWizard::getCreateStyle() const
+{
+    return m_eCreateStyle;
+}
+// -----------------------------------------------------------------------------

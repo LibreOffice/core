@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WExtendPages.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,34 +73,26 @@
 
 using namespace dbaui;
 //========================================================================
-void OWizHTMLExtend::fillColumnList(sal_uInt32 nRows)
+SvParser* OWizHTMLExtend::createReader(sal_Int32 _nRows)
 {
-    sal_uInt32 nTell = m_pParserStream->Tell(); // verändert vielleicht die Position des Streams
-    OHTMLReader *pReader = new OHTMLReader(*m_pParserStream,
-                                            nRows,
-                                            m_pParent->GetColumnPositions(),
-                                            m_pParent->GetFormatter(),
-                                            m_pParent->GetFactory());
-    pReader->AddRef();
-    pReader->CallParser();
-    pReader->SetColumnTypes(m_pParent->getDestVector(),m_pParent->getTypeInfo());
-    pReader->ReleaseRef();
-    m_pParserStream->Seek(nTell);
+    return new OHTMLReader(*m_pParserStream,
+                            _nRows,
+                            m_pParent->GetColumnPositions(),
+                            m_pParent->GetFormatter(),
+                            m_pParent->GetFactory(),
+                            m_pParent->getDestVector(),
+                            m_pParent->getTypeInfo());
 }
 //========================================================================
-void OWizRTFExtend::fillColumnList(sal_uInt32 nRows)
+SvParser* OWizRTFExtend::createReader(sal_Int32 _nRows)
 {
-    sal_uInt32 nTell = m_pParserStream->Tell(); // verändert vielleicht die Position des Streams
-    ORTFReader *pReader = new ORTFReader(*m_pParserStream,
-                                            nRows,
-                                            m_pParent->GetColumnPositions(),
-                                            m_pParent->GetFormatter(),
-                                            m_pParent->GetFactory());
-    pReader->AddRef();
-    pReader->CallParser();
-    pReader->SetColumnTypes(m_pParent->getDestVector(),m_pParent->getTypeInfo());
-    pReader->ReleaseRef();
-    m_pParserStream->Seek(nTell);
+    return new ORTFReader(*m_pParserStream,
+                            _nRows,
+                            m_pParent->GetColumnPositions(),
+                            m_pParent->GetFormatter(),
+                            m_pParent->GetFactory(),
+                            m_pParent->getDestVector(),
+                            m_pParent->getTypeInfo());
 }
 //========================================================================
 OWizNormalExtend::OWizNormalExtend(Window* pParent) : OWizTypeSelect( pParent)
@@ -117,6 +109,11 @@ OWizNormalExtend::OWizNormalExtend(Window* pParent) : OWizTypeSelect( pParent)
 
     aflSize = m_aTypeControl.GetSizePixel();
     m_aTypeControl.SetPosSizePixel(aPos,aNewSize);
+}
+// -----------------------------------------------------------------------------
+SvParser* OWizNormalExtend::createReader(sal_Int32 _nRows)
+{
+    return NULL;
 }
 // -----------------------------------------------------------------------------
 

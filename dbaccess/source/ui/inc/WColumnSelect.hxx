@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ namespace dbaui
         DECL_LINK( ListDoubleClickHdl, MultiListBox * );
 
 
+        void clearListBox(MultiListBox& _rListBox);
     public:
         virtual void            Reset ( );
         virtual void            ActivatePage();

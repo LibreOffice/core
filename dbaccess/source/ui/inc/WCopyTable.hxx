@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 10:31:49 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,6 @@ namespace dbaui
         void                AddWizardPage(OWizardPage* pPage); // Page wird von OCopyTableWizard gelöscht
         void                RemoveWizardPage(OWizardPage* pPage); // Page goes again to user
         void                CheckButtons(); // checks which button can be disabled, enabled
-        Wizard_Create_Style GetCreateStyle() const { return m_eCreateStyle; }
         // returns a vector where the position of a column and if the column is in the selection
         // when not the value is CONTAINER_ENTRY_NOTFOUND == (sal_uInt32)-1
         ::std::vector<sal_Int32>    GetColumnPositions()    const { return m_vColumnPos; }
@@ -245,6 +244,12 @@ namespace dbaui
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createTable();
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createView();
+        // return true when the conenction supports primary keys
+        sal_Bool  supportsPrimaryKey() const;
+        sal_Int32 getMaxColumnNameLength() const;
+
+        void setCreateStyle(const Wizard_Create_Style& _eStyle);
+        Wizard_Create_Style getCreateStyle() const;
     };
 }
 

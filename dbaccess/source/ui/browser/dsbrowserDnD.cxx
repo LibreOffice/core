@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 10:53:59 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:22:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,7 +449,7 @@ namespace dbaui
                         if (aWizard.Execute())
                         {
                             Reference<XPropertySet> xTable;
-                            switch(aWizard.GetCreateStyle())
+                            switch(aWizard.getCreateStyle())
                             {
                                 case OCopyTableWizard::WIZARD_DEF:
                                 case OCopyTableWizard::WIZARD_DEF_DATA:
@@ -457,7 +457,7 @@ namespace dbaui
                                         xTable = aWizard.createTable();
                                         if(!xTable.is())
                                             break;
-                                        if(OCopyTableWizard::WIZARD_DEF == aWizard.GetCreateStyle())
+                                        if(OCopyTableWizard::WIZARD_DEF == aWizard.getCreateStyle())
                                             break;
                                     }
                                 case OCopyTableWizard::WIZARD_APPEND_DATA:
@@ -916,6 +916,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/06/22 10:53:59  oj
+ *  #88455# serveral fixes for parameters
+ *
  *  Revision 1.15  2001/06/12 13:19:24  fs
  *  #65293# linux ambiguity
  *

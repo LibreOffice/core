@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:21:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,12 @@
 #endif
 #ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
+#endif
+#ifndef _STREAM_HXX
+#include <tools/stream.hxx>
+#endif
+#ifndef _SVPARSER_HXX
+#include <svtools/svparser.hxx>
 #endif
 
 using namespace ::dbaui;
@@ -165,22 +171,22 @@ void OWizTypeSelectControl::SetModified(sal_Bool bModified) {}
 // -----------------------------------------------------------------------------
 ::com::sun::star::lang::Locale  OWizTypeSelectControl::GetLocale() const
 {
-    return ((OWizTypeSelect*)GetParent())->m_pParent->GetLocale();
+    return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->GetLocale();
 }
 // -----------------------------------------------------------------------------
 Reference< XNumberFormatter > OWizTypeSelectControl::GetFormatter()
 {
-    return ((OWizTypeSelect*)GetParent())->m_pParent->GetFormatter();
+    return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->GetFormatter();
 }
 // -----------------------------------------------------------------------------
 const OTypeInfo*    OWizTypeSelectControl::getTypeInfo(sal_Int32 _nPos)
 {
-    return ((OWizTypeSelect*)GetParent())->m_pParent->getTypeInfo(_nPos);
+    return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getTypeInfo(_nPos);
 }
 // -----------------------------------------------------------------------------
 const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
 {
-    return ((OWizTypeSelect*)GetParent())->m_pParent->getTypeInfo();
+    return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getTypeInfo();
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OWizTypeSelectControl::getMetaData()
@@ -200,6 +206,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent)
                ,m_ftAuto( this, ModuleRes( FT_AUTO ) )
                ,m_etAuto( this, ModuleRes( ET_AUTO ) )
                ,m_pbAuto( this, ModuleRes( PB_AUTO ) )
+               ,m_pParserStream(NULL)
 {
     DBG_CTOR(OWizTypeSelect,NULL);
     m_lbColumnNames.SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
@@ -325,46 +332,6 @@ IMPL_LINK( OWizTypeSelect, ButtonClickHdl, Button *, pButton )
     m_pParent->CheckColumns();
     fillColumnList(m_etAuto.GetText().ToInt32());
 
-//  OColumnList &aList = FillColumnList(m_pParent->m_xTableDef->GetColumns(),m_etAuto.GetText().ToInt32());
-//
-//  for(sal_uInt32 i=0;i<aList.Count();++i)
-//  {
-//      sal_uInt32 nPos = m_pColumnList.GetPos(aList.GetObject(i));
-//      OColumn *pSrcColumn = aList.GetObject(i);
-//      SFX_ITEMSET_GET( *pSrcColumn, pName, ONameItem, SBA_DEF_FLTNAME, sal_True );
-//      OColumn *pDestColumn = m_pParent->m_lColumnList.Lookup(m_pParent->m_mNameMapping[pName->GetValue()],String());
-//      if(pDestColumn)
-//      {
-//          OColumn*    pNewColumn = pDestColumn;
-//          OColumn*    pColumn = aList.GetObject(i);
-//
-//          SFX_ITEMSET_GET(*pColumn, pType, ODataFieldTypeItem, SBA_DEF_FLTTYPE, sal_True);
-//          SFX_ITEMSET_GET(*pColumn, pLength, SfxUInt32Item, SBA_DEF_FLTLENGTH, sal_True);
-//          SFX_ITEMSET_GET(*pColumn, pScale, SfxUInt16Item, SBA_DEF_FLTSCALE, sal_True);
-//          SFX_ITEMSET_GET(*pColumn, pFormat, SfxUInt32Item, SBA_DEF_FMTVALUE, sal_True );
-//
-//          SdbTypeInfo* pInfo = m_pParent->m_xTableDef->GetDatabase()->IsTypeAvailable(pType->GetType(), pLength->GetValue());
-//
-//          pNewColumn->Put(ODataFieldTypeItem(SBA_DEF_FLTTYPE,(OFieldType) pType->GetValue()));
-//          pNewColumn->Put(SfxUInt32Item(SBA_DEF_FLTLENGTH,pLength->GetValue()));
-//          pNewColumn->Put(SfxUInt16Item(SBA_DEF_FLTSCALE,pScale->GetValue()));
-//          pNewColumn->Put(SfxUInt32Item(SBA_DEF_FMTVALUE, pFormat->GetValue()));
-//
-//          if(!pInfo)
-//              m_pParent->m_xTableDef->AdjustType(pColumn,pNewColumn);
-//
-//          SFX_ITEMSET_GET(*pNewColumn, pType2, ODataFieldTypeItem, SBA_DEF_FLTTYPE, sal_True);
-//
-//          switch(pType2->GetType())
-//          {
-//              case dbChar:
-//              case dbText:
-//                  if(pInfo && pInfo->nPrecision && pInfo->nPrecision < pLength->GetValue()) // this type is to small for my data
-//                      m_pParent->m_xTableDef->ConvertTypeTo(dbMemo, pNewColumn);
-//                  break;
-//          }
-//      }
-//  }
     ActivatePage();
 
     return 0;
@@ -453,6 +420,23 @@ long OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
         break;
     }
     return nDone ? nDone : MultiListBox::PreNotify(rEvt);
+}
+// -----------------------------------------------------------------------------
+void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)
+{
+    if(m_pParserStream)
+    {
+        sal_uInt32 nTell = m_pParserStream->Tell(); // verändert vielleicht die Position des Streams
+
+        SvParser *pReader = createReader(nRows);
+        if(pReader)
+        {
+            pReader->AddRef();
+            pReader->CallParser();
+            pReader->ReleaseRef();
+        }
+        m_pParserStream->Seek(nTell);
+    }
 }
 // -----------------------------------------------------------------------------
 

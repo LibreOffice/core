@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:26:43 $
+ *  last change: $Author: oj $ $Date: 2001-07-02 13:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,13 +159,8 @@ void OWizColumnSelect::Reset()
     // urspr"unglichen zustand wiederherstellen
     DBG_CHKTHIS(OWizColumnSelect,NULL);
 
-    while(m_lbOrgColumnNames.GetEntryCount())
-        m_lbOrgColumnNames.RemoveEntry(0);
-    m_lbOrgColumnNames.Clear();
-
-    while(m_lbNewColumnNames.GetEntryCount())
-        m_lbNewColumnNames.RemoveEntry(0);
-    m_lbNewColumnNames.Clear();
+    clearListBox(m_lbOrgColumnNames);
+    clearListBox(m_lbNewColumnNames);
 
     // insert the source columns in the left listbox
     const ODatabaseExport::TColumnVector* pSrcColumns = m_pParent->getSrcVector();
@@ -192,14 +187,7 @@ void OWizColumnSelect::ActivatePage( )
     if(m_pParent->getDestColumns()->size() == 0)
         Reset();
 
-    while(m_lbNewColumnNames.GetEntryCount())
-        m_lbNewColumnNames.RemoveEntry(0);
-    m_lbNewColumnNames.Clear();
-
-    //////////////////////////////////////////////////////////////////////
-    // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
-    Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
-    sal_Bool bPKeyAllowed = xMetaData->supportsCoreSQLGrammar();
+    clearListBox(m_lbNewColumnNames);
 
     const ODatabaseExport::TColumnVector* pDestColumns = m_pParent->getDestVector();
 
@@ -211,7 +199,7 @@ void OWizColumnSelect::ActivatePage( )
         m_lbOrgColumnNames.RemoveEntry((*aIter)->first);
     }
     m_pParent->GetOKButton().Enable(m_lbNewColumnNames.GetEntryCount() != 0);
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_lbNewColumnNames.GetEntryCount() && m_pParent->m_eCreateStyle != OCopyTableWizard::WIZARD_APPEND_DATA);
+    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_lbNewColumnNames.GetEntryCount() && m_pParent->getCreateStyle() != OCopyTableWizard::WIZARD_APPEND_DATA);
     m_ibColumns_RH.GrabFocus();
 }
 // -----------------------------------------------------------------------
@@ -220,6 +208,7 @@ sal_Bool OWizColumnSelect::LeavePage()
     DBG_CHKTHIS(OWizColumnSelect,NULL);
 
     //  m_pParent->getColumns()->clear();
+    m_pParent->clearDestColumns();
 
     for(sal_uInt16 i=0 ; i< m_lbNewColumnNames.GetEntryCount();++i)
     {
@@ -227,6 +216,7 @@ sal_Bool OWizColumnSelect::LeavePage()
         OSL_ENSURE(pField,"The field information can not be null!");
         m_pParent->insertColumn(i,pField);
     }
+
 
     if(m_pParent->WasButtonPressed() == OCopyTableWizard::WIZARD_NEXT || m_pParent->WasButtonPressed() == OCopyTableWizard::WIZARD_FINISH)
         return m_pParent->getDestColumns()->size();
@@ -261,12 +251,7 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
         bAll   = sal_True;
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
-    Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
-
-    sal_Bool bPKeyAllowed = xMetaData->supportsCoreSQLGrammar();
-    sal_Int32 nLen = xMetaData->getMaxColumnNameLength();
+    sal_Int32 nLen = m_pParent->getMaxColumnNameLength();
 
     //  DlgFieldMatch   dlgMissingFields(GetpApp()->GetDefDialogParent());
     //  ListBox*        pInfoBox = dlgMissingFields.GetInfoBox();
@@ -281,8 +266,6 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
             if(pRight == &m_lbNewColumnNames)
             {
                 OFieldDescription* pSrcField = static_cast<OFieldDescription*>(pLeft->GetEntryData(pLeft->GetEntryPos(aColumnName)));
-//              if(!bPKeyAllowed)
-//                  pColumn->Put(SfxBoolItem(SBA_DEF_FLTPRIMARY, sal_False));
                 if(nLen && nLen < aColumnName.Len())
                 {
                     String aNewName( aColumnName.Copy( 0, (xub_StrLen)nLen ));
@@ -334,8 +317,6 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
             if(pRight == &m_lbNewColumnNames)
             {
                 OFieldDescription* pSrcField = static_cast<OFieldDescription*>(pLeft->GetEntryData(i-1));
-//              if(!bPKeyAllowed)
-//                  pColumn->Put(SfxBoolItem(SBA_DEF_FLTPRIMARY, sal_False));
                 if(nLen && nLen < aColumnName.Len())
                 {
                     String aNewName( aColumnName.Copy( 0, (xub_StrLen)nLen ));
@@ -384,7 +365,7 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
         //  dlgMissingFields.Execute();
 
     m_pParent->GetOKButton().Enable(m_lbNewColumnNames.GetEntryCount() != 0);
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_lbNewColumnNames.GetEntryCount() && m_pParent->m_eCreateStyle != OCopyTableWizard::WIZARD_APPEND_DATA);
+    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_lbNewColumnNames.GetEntryCount() && m_pParent->getCreateStyle() != OCopyTableWizard::WIZARD_APPEND_DATA);
 
     if(m_lbOrgColumnNames.GetEntryCount())
         m_lbOrgColumnNames.SelectEntryPos(0);
@@ -408,9 +389,7 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
 
     //////////////////////////////////////////////////////////////////////
     // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
-    Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
-    sal_Bool bPKeyAllowed   = xMetaData->supportsCoreSQLGrammar();
-    sal_Int32 nLen          = xMetaData->getMaxColumnNameLength();
+    sal_Int32 nLen = m_pParent->getMaxColumnNameLength();
 
     String aColumnName;
     for(sal_uInt16 i=0; i < pLeft->GetSelectEntryCount(); ++i)
@@ -421,8 +400,6 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
         if(pRight == &m_lbNewColumnNames)
         {
             OFieldDescription* pSrcField = static_cast<OFieldDescription*>(pLeft->GetEntryData(pLeft->GetEntryPos(aColumnName)));
-//          if(!bPKeyAllowed)
-//              pColumn->Put(SfxBoolItem(SBA_DEF_FLTPRIMARY, sal_False));
             if(nLen && nLen < aColumnName.Len())
             {
                 String aNewName( aColumnName.Copy( 0, (xub_StrLen)nLen ));
@@ -467,8 +444,15 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
         pLeft->RemoveEntry(pLeft->GetSelectEntry(j-1));
 
     m_pParent->GetOKButton().Enable(m_lbNewColumnNames.GetEntryCount() != 0);
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_lbNewColumnNames.GetEntryCount() && m_pParent->m_eCreateStyle != OCopyTableWizard::WIZARD_APPEND_DATA);
+    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_lbNewColumnNames.GetEntryCount() && m_pParent->getCreateStyle() != OCopyTableWizard::WIZARD_APPEND_DATA);
     return 0;
+}
+// -----------------------------------------------------------------------------
+void OWizColumnSelect::clearListBox(MultiListBox& _rListBox)
+{
+    while(_rListBox.GetEntryCount())
+        _rListBox.RemoveEntry(0);
+    _rListBox.Clear();
 }
 // -----------------------------------------------------------------------------
 
