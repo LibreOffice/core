@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOLEShape.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-05-06 09:05:29 $
+ *  last change: $Author: af $ $Date: 2002-06-28 14:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,28 @@ void SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleOLEShape"));
+}
+
+
+
+
+::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    AccessibleOLEShape::getSupportedServiceNames (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    CheckDisposedState ();
+    // Get list of supported service names from base class...
+    uno::Sequence<OUString> aServiceNames =
+        AccessibleShape::getSupportedServiceNames();
+    sal_Int32 nCount (aServiceNames.getLength());
+
+    // ...and add additional names.
+    aServiceNames.realloc (nCount + 1);
+    static const OUString sAdditionalServiceName (RTL_CONSTASCII_USTRINGPARAM(
+        "drafts.com.sun.star.drawing.AccessibleOLEShape"));
+    aServiceNames[nCount] = sAdditionalServiceName;
+
+    return aServiceNames;
 }
 
 
