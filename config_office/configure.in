@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2004-11-09 18:41:26 $
+dnl * Date: $Date: 2004-11-15 12:32:36 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.75 $ )
+AC_REVISION( $Revision: 1.76 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2428,8 +2428,34 @@ if test "$_os" = "WINNT" -a "$COMEX" = "10"; then
          AC_MSG_ERROR([msvcp71.dll and/or msvcr71.dll are/is missing in the default location.
 These dlls are part of the .NET installation and should be found in a directory
 similar to:
-"c:\\Program Files\\Microsoft Visual Studio .NET\\Visual C++ .NET Professional - English\\"
+"c:\\Program Files\\Microsoft Visual Studio .NET 2003\\Visual C++ .NET Professional - English\\"
 As the automatic detection fails please copy the files to external/msvcp71/.])
+      else
+         AC_MSG_RESULT([found and copied])
+      fi
+   fi
+fi
+
+dnl ===================================================================
+dnl Windows builds with .NET 2003 need instmsia.exe and instmsiw.exe in external/msi
+dnl ===================================================================
+if test "$_os" = "WINNT" -a "$COMEX" = "10"; then
+   AC_MSG_CHECKING([instmsia.exe/instmsiw.exe])
+   if test -x ../external/msi/instmsia.exe -a -x ../external/msi/instmsiw.exe; then
+      AC_MSG_RESULT([found])
+   else
+      MSIAPATH=`/bin/find "$COMPATH/../.." -iname instmsia.exe | head -n 1`
+      MSIWPATH=`/bin/find "$COMPATH/../.." -iname instmsiw.exe | head -n 1`
+      if test -n "$MSIAPATH" -a -n "$MSIWPATH"; then
+         cp "$MSIAPATH" ../external/msi/ && chmod +x ../external/msi/instmsia.exe && MSIACOPY="OK"
+         cp "$MSIWPATH" ../external/msi/ && chmod +x ../external/msi/instmsiw.exe && MSIWCOPY="OK"
+      fi
+      if test -z "$MSIACOPY" -o -z "$MSIWCOPY"; then
+         AC_MSG_ERROR([instmsia.exe and/or instmsiw.exe are/is missing in the default location.
+These programs are part of the .NET installation and should be found in a
+directory similar to:
+"c:\\Program Files\\Microsoft Visual Studio .NET 2003\\Common7\\Tools\\Deployment\\MsiRedist\\"
+As the automatic detection fails please copy the files to external/msi/.])
       else
          AC_MSG_RESULT([found and copied])
       fi
