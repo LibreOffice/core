@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:26:59 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ void SdrEditView::MovMarkedToTop()
                 pOL0=pOL;
             }
             ULONG nNowPos=pObj->GetOrdNumDirect();
-            const Rectangle& rBR=pObj->GetBoundRect();
+            const Rectangle& rBR=pObj->GetCurrentBoundRect();
             ULONG nCmpPos=nNowPos+1;
             SdrObject* pMaxObj=GetMaxToTopObj(pObj);
             if (pMaxObj!=NULL) {
@@ -175,7 +175,7 @@ void SdrEditView::MovMarkedToTop()
                     nNewPos=nCmpPos;
                     nNewPos--;
                     bEnd=TRUE;
-                } else if (rBR.IsOver(pCmpObj->GetBoundRect())) {
+                } else if (rBR.IsOver(pCmpObj->GetCurrentBoundRect())) {
                     nNewPos=nCmpPos;
                     bEnd=TRUE;
                 } else nCmpPos++;
@@ -232,7 +232,7 @@ void SdrEditView::MovMarkedToBtm()
                 pOL0=pOL;
             }
             ULONG nNowPos=pObj->GetOrdNumDirect();
-            const Rectangle& rBR=pObj->GetBoundRect();
+            const Rectangle& rBR=pObj->GetCurrentBoundRect();
             ULONG nCmpPos=nNowPos; if (nCmpPos>0) nCmpPos--;
             SdrObject* pMaxObj=GetMaxToBtmObj(pObj);
             if (pMaxObj!=NULL) {
@@ -253,7 +253,7 @@ void SdrEditView::MovMarkedToBtm()
                     nNewPos=nCmpPos;
                     nNewPos++;
                     bEnd=TRUE;
-                } else if (rBR.IsOver(pCmpObj->GetBoundRect())) {
+                } else if (rBR.IsOver(pCmpObj->GetCurrentBoundRect())) {
                     nNewPos=nCmpPos;
                     bEnd=TRUE;
                 } else nCmpPos--;
@@ -569,13 +569,13 @@ void SdrEditView::ImpCopyAttributes(const SdrObject* pSource, SdrObject* pDest) 
             EE_ITEMS_START,             EE_ITEMS_END,
             0, 0); // #52757#, #52762#
 
-        aSet.Put(pSource->GetItemSet());
+        aSet.Put(pSource->GetMergedItemSet());
 
-        pDest->ClearItem();
-        pDest->SetItemSet(aSet);
+        pDest->ClearMergedItem();
+        pDest->SetMergedItemSet(aSet);
 
         pDest->NbcSetLayer(pSource->GetLayer());
-        pDest->NbcSetStyleSheet(pSource->GetStyleSheet(),TRUE);
+        pDest->NbcSetStyleSheet(pSource->GetStyleSheet(), sal_True);
     }
 }
 
@@ -1222,8 +1222,8 @@ BOOL SdrEditView::CombineMarkedObjects(BOOL bNoPolyPoly)
         ImpCopyAttributes(pAttrObj,pPath);
 
         // #100408# If LineStyle of pAttrObj is XLINE_NONE force to XLINE_SOLID to make visible.
-        const XLineStyle eLineStyle = ((const XLineStyleItem&)pAttrObj->GetItem(XATTR_LINESTYLE)).GetValue();
-        const XFillStyle eFillStyle = ((const XFillStyleItem&)pAttrObj->GetItem(XATTR_FILLSTYLE)).GetValue();
+        const XLineStyle eLineStyle = ((const XLineStyleItem&)pAttrObj->GetMergedItem(XATTR_LINESTYLE)).GetValue();
+        const XFillStyle eFillStyle = ((const XFillStyleItem&)pAttrObj->GetMergedItem(XATTR_FILLSTYLE)).GetValue();
 
         // #110635#
         // Take fill style/closed state of pAttrObj in account when deciding to change the line style
@@ -1231,13 +1231,20 @@ BOOL SdrEditView::CombineMarkedObjects(BOOL bNoPolyPoly)
 
         if(XLINE_NONE == eLineStyle && (XFILL_NONE == eFillStyle || !bIsClosedPathObj))
         {
-            pPath->SetItem(XLineStyleItem(XLINE_SOLID));
+            pPath->SetMergedItem(XLineStyleItem(XLINE_SOLID));
         }
 
         SdrInsertReason aReason(SDRREASON_VIEWCALL,pAttrObj);
         pInsOL->InsertObject(pPath,nInsPos,&aReason);
         AddUndo(new SdrUndoNewObj(*pPath)); // Insert durch New ersetzt - Joe, 31-08-1995
-        MarkObj(pPath,pInsPV,FALSE,TRUE);
+
+        // #111111#
+        // Here was a severe error: Without UnmarkAllObj, the new object was marked
+        // additionally to the two ones which are deleted below. As long as those are
+        // in the UNDO there is no problem, but as soon as they get deleted, the
+        // MarkList will contain deleted objects -> GPF.
+        UnmarkAllObj(pInsPV);
+        MarkObj(pPath, pInsPV, FALSE, TRUE);
     }
     if (!bCombineError) {
         // UndoComment aus den tatsaechlich verwendeten Objekten zusammenbauen
@@ -1754,8 +1761,11 @@ void SdrEditView::DoImportMarkedMtf(SvdProgressInfo *pProgrInfo)
     if(aNewMarked.GetMarkCount())
     {
         // Neue Selektion bilden
-        for(INT32 a=0;a<aNewMarked.GetMarkCount();a++)
+        for(sal_uInt32 a(0); a < aNewMarked.GetMarkCount(); a++)
+        {
             aMark.InsertEntry(*aNewMarked.GetMark(a));
+        }
+
         aMark.ForceSort();
     }
 
