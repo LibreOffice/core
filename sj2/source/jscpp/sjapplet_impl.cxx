@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kr $ $Date: 2001-08-08 16:33:43 $
+ *  last change: $Author: kr $ $Date: 2001-08-10 15:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+
+
 
 #ifdef UNX
 #include <cstdarg>
@@ -143,6 +146,94 @@ struct EmbeddedWindow {
     void dispose(JNIEnv * pEnv);
 };
 
+static Atom getStateAtom(Display* pDisplay)
+{
+    static Atom nWM_State = XInternAtom (pDisplay, "WM_STATE", False);
+    return nWM_State;
+}
+
+static Widget getAppletWidget(Widget widget) {
+    sal_Bool found = sal_False;
+    Display* pDisplay = XtDisplay(widget);
+    Atom nState = getStateAtom( pDisplay );
+    do
+    {
+        XLIB_Window nWindow = XtWindow(widget);
+        int nCount;
+        Atom *pAtom = XListProperties(pDisplay, nWindow, &nCount);
+        for (int i = 0; i < nCount && !found; ++i)
+            found = (pAtom[i] == nState);
+
+        XFree(pAtom);
+
+        if(found)
+            break;
+
+        widget = XtParent(widget);
+    }
+    while (widget);
+
+    return widget;
+}
+
+#ifdef DEBUG
+
+static void spaces(int count) {
+    for(int i = 0; i < count; ++ i)
+        fprintf(stderr, "    ");
+}
+
+static void displayTree(Display * display, XLIB_Window window, int dp) {
+    XLIB_Window root_return, parent_return, * children_return;
+    unsigned int nchildren_returnw;
+
+    XQueryTree(display, window,
+               &root_return, &parent_return,  &children_return, &nchildren_returnw);
+
+    spaces(dp); fprintf(stderr, "RootWindow %x\n", root_return);
+    spaces(dp); fprintf(stderr, "ParentWindow %x\n", parent_return);
+    for(int i = 0; i < nchildren_returnw; ++ i) {
+        spaces(dp); fprintf(stderr, " child #%i %x\n", i, children_return[i]);
+
+        displayTree(display, children_return[i], dp + 1);
+    }
+}
+#endif
+
+extern "C" {
+    static Bool withdrawPredicate( Display* pDisplay, XEvent* pEvent, XPointer arg )
+    {
+        Bool bRet = False;
+        if( pEvent->type == PropertyNotify
+            && pEvent->xproperty.window == (XLIB_Window)arg
+            && pEvent->xproperty.atom == getStateAtom( pDisplay )
+            )
+        {
+            if( pEvent->xproperty.state == PropertyDelete )
+                bRet = True;
+            else
+            {
+                Atom aType;
+                int format;
+                unsigned long items, bytes;
+                unsigned char* prop = NULL;
+                if( XGetWindowProperty( pDisplay, (XLIB_Window)arg, getStateAtom(pDisplay),
+                                        0, 1, False, getStateAtom(pDisplay),
+                                        &aType, &format, &items, &bytes, &prop ) == 0
+                    && prop
+                    && format == 32
+                    && *(sal_uInt32*)prop == 0
+                    )
+                {
+                    bRet = True;
+                    XFree( prop );
+                }
+            }
+        }
+        return bRet;
+    }
+}
+
 EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) throw(com::sun::star::uno::RuntimeException)
 {
     // create a canvas
@@ -169,8 +260,10 @@ EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) th
     jclass jcWindow = pEnv->FindClass("java/awt/Window");                                                      testJavaException(pEnv);
     jmethodID jmWindow_rinit = pEnv->GetMethodID(jcWindow, "<init>", "(Ljava/awt/Frame;)V" );                  testJavaException(pEnv);
 
-    jobject joWindow = pEnv->NewGlobalRef(pEnv->AllocObject(jcWindow));                                        testJavaException(pEnv);
+    jobject joWindow = pEnv->AllocObject(jcWindow);                                                            testJavaException(pEnv);
     pEnv->CallVoidMethod(joWindow, jmWindow_rinit, joFrame);                                                   testJavaException(pEnv);
+
+//  joWindow = joFrame;
 
     jmethodID jmWindow_setLayout = pEnv->GetMethodID(jcWindow, "setLayout", "(Ljava/awt/LayoutManager;)V");    testJavaException(pEnv);
     pEnv->CallVoidMethod(joWindow, jmWindow_setLayout, 0);                                                     testJavaException(pEnv);
@@ -224,14 +317,31 @@ EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) th
         if (!widget)
             throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - couldn't get DrawingSurface widget")), Reference<XInterface>());
 
-        Widget parentWidget = widget;
-        Widget axasxasxa = 0;
-        while(XtParent(parentWidget)) {
-            axasxasxa = parentWidget;
-            parentWidget = XtParent(parentWidget);
-        }
 
-        XReparentWindow(dsi_x11->display, XtWindow(axasxasxa), pEnvData->aWindow, 0, 0);
+        Widget appletWidget = getAppletWidget(widget);
+        if(!appletWidget)
+            throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("EmbeddedWindow::EmbeddedWindow - can't find AppletWidget")), Reference<XInterface>());
+
+#ifdef DEBUG
+        fprintf(stderr, "+++++++++++++ the parent %x\n", pEnvData->aWindow);
+        displayTree(dsi_x11->display, pEnvData->aWindow, 0);
+
+        fprintf(stderr, "+++++++++++++ the child %x\n", XtWindow(appletWidget));
+        displayTree(dsi_x11->display, XtWindow(appletWidget), 0);
+#endif
+
+        XWithdrawWindow( dsi_x11->display, XtWindow(appletWidget), DefaultScreen( dsi_x11->display ) );
+        XEvent aEvent;
+        XIfEvent( dsi_x11->display, &aEvent, withdrawPredicate, (XPointer)XtWindow(appletWidget) );
+//      XPutBackEvent( dsi_x11->display, &aEvent );
+
+        XReparentWindow(dsi_x11->display, XtWindow(appletWidget), pEnvData->aWindow, 0, 0);
+        XtMapWidget( appletWidget );
+
+#ifdef DEBUG
+        fprintf(stderr, "------------- the child %x\n", XtWindow(appletWidget));
+        displayTree(dsi_x11->display, XtWindow(appletWidget), 0);
+#endif
 
         ds->FreeDrawingSurfaceInfo(dsi);
         ds->Unlock(ds);
