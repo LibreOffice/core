@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-27 17:28:54 $
+ *  last change: $Author: dvo $ $Date: 2002-02-28 13:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,9 @@ using com::sun::star::i18n::Boundary;
 // for GetWordBoundary
 using com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES;
 
+
+#define POR_TERMINATE 0
+
 SwAccessiblePortionData::SwAccessiblePortionData(
     const String& rCoreString ) :
     SwPortionHandler(),
@@ -138,7 +141,7 @@ SwAccessiblePortionData::~SwAccessiblePortionData()
     delete pSentences;
 }
 
-void SwAccessiblePortionData::Text(USHORT nLength)
+void SwAccessiblePortionData::Text(USHORT nLength, USHORT nType)
 {
     DBG_ASSERT( nLength >= 0, "illegal length" );
     DBG_ASSERT( (nModelPosition + nLength) <= sModelString.getLength(),
@@ -172,7 +175,7 @@ void SwAccessiblePortionData::Special(
     DBG_ASSERT( !bFinished, "We are already done!" );
 
     // ignore zero/zero portions (except our terminators)
-    if( (nLength == 0) && (rText.Len() == 0) && (nType != 0) )
+    if( (nLength == 0) && (rText.Len() == 0) && (nType != POR_TERMINATE) )
         return;
 
     // special case portions: (none so far)
@@ -198,7 +201,7 @@ void SwAccessiblePortionData::Special(
 
     // remember 'last' special portion (unless it's our own 'closing'
     // portions from 'Finish()'
-    if( nType != 0 )
+    if( nType != POR_TERMINATE )
         bLastIsSpecial = sal_True;
 }
 
@@ -224,8 +227,8 @@ void SwAccessiblePortionData::Finish()
     // include terminator values: always include two 'last character'
     // markers in the position arrays to make sure we always find one
     // position before the end
-    Special( 0, String(), 0 );
-    Special( 0, String(), 0 );
+    Special( 0, String(), POR_TERMINATE );
+    Special( 0, String(), POR_TERMINATE );
     LineBreak();
     LineBreak();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-27 17:28:54 $
+ *  last change: $Author: dvo $ $Date: 2002-02-28 13:35:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ public:
     virtual ~SwAccessiblePortionData();
 
     // SwPortionHandler methods
-    virtual void Text(USHORT nLength);
+    virtual void Text(USHORT nLength, USHORT nType);
     virtual void Special(USHORT nLength, const String& rText, USHORT nType);
     virtual void LineBreak();
     virtual void Skip(USHORT nLength);
