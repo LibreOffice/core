@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScTableSheetObj.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change:$Date: 2004-11-02 12:02:30 $
+ *  last change:$Date: 2005-02-24 17:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,9 @@ public class ScTableSheetObj extends TestCase {
         log.println("creating a new environment for object");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        // do not execute com::sun::star::sheets::XCellSeries::fillAuto()
+        tEnv.addObjRelation("XCELLSERIES_FILLAUTO", new Boolean(false));
 
         // set the adress ranges of the cells (see values set above): for e.g. XSheetOutline test
         tEnv.addObjRelation("CellRangeAddress",
