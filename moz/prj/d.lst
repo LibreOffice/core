@@ -114,7 +114,7 @@ mkdir: %_DEST%\inc%_EXT%\mozilla\xpinstall
 mkdir: %_DEST%\inc%_EXT%\mozilla\xpnet
 mkdir: %_DEST%\inc%_EXT%\mozilla\zlib
 
-..\%__SRC%\inc\* %_DEST%\inc%_EXT%\mozilla
+..\%__SRC%\inc\*.h %_DEST%\inc%_EXT%\mozilla
 ..\%__SRC%\inc\absync\* %_DEST%\inc%_EXT%\mozilla\absync
 ..\%__SRC%\inc\accessibility\* %_DEST%\inc%_EXT%\mozilla\accessibility
 ..\%__SRC%\inc\AcctIdl\* %_DEST%\inc%_EXT%\mozilla\AcctIdl
