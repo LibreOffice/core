@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:07:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -887,7 +887,19 @@ Reference< XEnumeration >  SwXTextCursor::createEnumeration(void) throw( Runtime
         *pNewCrsr->GetMark() = *pUnoCrsr->GetMark();
     }
     CursorType eSetType = eType == CURSOR_TBLTEXT ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
-    Reference< XEnumeration > xRet = new SwXParagraphEnumeration(pParentText, *pNewCrsr, eSetType);
+    SwXParagraphEnumeration *pEnum = new SwXParagraphEnumeration(pParentText, *pNewCrsr, eSetType);
+    Reference< XEnumeration > xRet = pEnum;
+    if (eType == CURSOR_TBLTEXT)
+    {
+        // for import of tables in tables we have to remember the actual
+        // table and start node of the current position in the enumeration.
+        SwTableNode *pStartN = pUnoCrsr->GetPoint()->nNode.GetNode().FindTableNode();
+        if (pStartN)
+        {
+            pEnum->SetOwnTable( &pStartN->GetTable() );
+            pEnum->SetOwnStartNode( pStartN );
+        }
+    }
 
     return xRet;
 }
@@ -1123,6 +1135,8 @@ SwXParagraphEnumeration::SwXParagraphEnumeration(SwXText* pParent,
         nFirstParaStart(-1),
         nLastParaEnd(-1)
 {
+    pOwnTable = 0;
+    pOwnStartNode = 0;
     SwUnoCrsr* pUnoCrsr = pParent->GetDoc()->CreateUnoCrsr(rPos, sal_False);
     pUnoCrsr->Add(this);
 }
@@ -1141,6 +1155,8 @@ SwXParagraphEnumeration::SwXParagraphEnumeration(SwXText* pParent,
         nFirstParaStart(-1),
         nLastParaEnd(-1)
 {
+    pOwnTable = 0;
+    pOwnStartNode = 0;
     if(CURSOR_SELECTION == eCursorType || CURSOR_SELECTION_IN_TABLE == eCursorType)
     {
         if(*pCrsr->GetPoint() > *pCrsr->GetMark())
@@ -1172,6 +1188,44 @@ sal_Bool SwXParagraphEnumeration::hasMoreElements(void) throw( uno::RuntimeExcep
 /*-- 14.08.03 13:10:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+
+//!! compare to SwShellTableCrsr::FillRects() in viscrs.cxx
+SwTableNode * lcl_FindTopLevelTable(
+        /*SwUnoCrsr* pUnoCrsr ,*/
+        SwTableNode *pTblNode,
+        const SwTable *pOwnTable )
+{
+    // find top-most table in current context (section) level
+
+    SwTableNode * pLast = pTblNode;
+    for (SwTableNode* pTmp = pLast;
+         pTmp != NULL  &&  &pTmp->GetTable() != pOwnTable;  /* we must not go up higher than the own table! */
+         pTmp = pTmp->FindStartNode()->FindTableNode() )
+    {
+        pLast = pTmp;
+    }
+    return pLast;
+}
+
+
+BOOL lcl_CursorIsInSection(
+        const SwUnoCrsr *pUnoCrsr,
+        const SwStartNode *pOwnStartNode )
+{
+    // returns true if the cursor is in the section (or in a sub section!)
+    // represented by pOwnStartNode
+
+    BOOL bRes = TRUE;
+    if (pUnoCrsr && pOwnStartNode)
+    {
+        const SwEndNode * pOwnEndNode = pOwnStartNode->EndOfSectionNode();
+        bRes = pOwnStartNode->GetIndex() <= pUnoCrsr->Start()->nNode.GetIndex() &&
+               pUnoCrsr->End()->nNode.GetIndex() <= pOwnEndNode->GetIndex();
+    }
+    return bRes;
+}
+
+
 uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Impl(void)
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
@@ -1184,14 +1238,17 @@ uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Imp
         if(!bFirstParagraph)
         {
             //man soll hier auch in Tabellen landen duerfen
-            if(CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType)
+            //if(CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType)
             {
+                //BOOL bRemain = sal_False;
+                //pUnoCrsr->SetRemainInSection( bRemain );
                 pUnoCrsr->SetRemainInSection( sal_False );
                 //was mache ich, wenn ich schon in einer Tabelle stehe?
                 SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
-                if(pTblNode)
+                pTblNode = lcl_FindTopLevelTable( /*pUnoCrsr,*/ pTblNode, pOwnTable );
+                if(pTblNode  &&  &pTblNode->GetTable() != pOwnTable)
                 {
-                    // wir haben es mit einer Tabelle zu tun - also ans Ende
+                    // wir haben es mit einer fremden Tabelle zu tun - also ans Ende
                     pUnoCrsr->GetPoint()->nNode = pTblNode->EndOfSectionIndex();
                     if(!pUnoCrsr->Move(fnMoveForward, fnGoNode))
                         return aRef;
@@ -1202,7 +1259,12 @@ uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Imp
             }
         }
 
-        if( bFirstParagraph || bInTable || pUnoCrsr->MovePara(fnParaNext, fnParaStart))
+        // the cursor must remain in the current section or a subsection
+        // before AND after the movement...
+        if( lcl_CursorIsInSection( pUnoCrsr, pOwnStartNode ) &&
+            (bFirstParagraph || bInTable ||
+            (pUnoCrsr->MovePara(fnParaNext, fnParaStart) &&
+                lcl_CursorIsInSection( pUnoCrsr, pOwnStartNode ) ) ) )
         {
             SwPosition* pStart = pUnoCrsr->Start();
             sal_Int32 nFirstContent = bFirstParagraph ? nFirstParaStart : -1;
@@ -1211,9 +1273,12 @@ uno::Reference< XTextContent > SAL_CALL SwXParagraphEnumeration::NextElement_Imp
             //steht man nun in einer Tabelle, oder in einem einfachen Absatz?
 
             SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
-            if(CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType && pTblNode)
+            pTblNode = lcl_FindTopLevelTable( /*pUnoCrsr,*/ pTblNode, pOwnTable );
+            if(/*CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType && */
+                pTblNode  &&  &pTblNode->GetTable() != pOwnTable)
             {
-                // wir haben es mit einer Tabelle zu tun
+
+                // wir haben es mit einer fremden Tabelle zu tun
                 SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
                 XTextTable* pTable = SwXTextTables::GetObject( *pTableFmt );
                 aRef =  (XTextContent*)(SwXTextTable*)pTable;
