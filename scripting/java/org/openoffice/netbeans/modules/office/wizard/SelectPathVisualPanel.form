@@ -43,15 +43,12 @@
       </Constraints>
     </Component>
     <Component class="javax.swing.JComboBox" name="installationsComboBox">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="installationsComboBoxActionPerformed"/>
-      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value=""/>
         <AuxValue name="JavaCodeGenerator_CreateCodePre" type="java.lang.String" value=""/>
         <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value=""/>
-        <AuxValue name="JavaCodeGenerator_CodeGeneration" type="java.lang.Integer" value="0"/>
         <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value=""/>
+        <AuxValue name="JavaCodeGenerator_CodeGeneration" type="java.lang.Integer" value="0"/>
       </AuxValues>
       <Constraints>
         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">

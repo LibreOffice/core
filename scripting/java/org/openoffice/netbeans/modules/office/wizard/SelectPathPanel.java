@@ -17,7 +17,9 @@ import org.openide.WizardDescriptor;
 import org.openide.util.HelpCtx;
 import org.openide.util.NbBundle;
 
+import org.openoffice.netbeans.modules.office.options.OfficeSettings;
 import org.openoffice.idesupport.OfficeInstallation;
+import org.openoffice.idesupport.SVersionRCFile;
 
 /** A single panel descriptor for a wizard.
  * You probably want to make a wizard iterator to hold it.
@@ -31,9 +33,18 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
      * just use getComponent().
      */
     private SelectPathVisualPanel component;
+    private OfficeInstallation office;
 
     /** Create the wizard panel descriptor. */
     public SelectPathPanel() {
+        office = OfficeSettings.getDefault().getOfficeDirectory();
+
+        if (office == null) {
+            try {
+                office = SVersionRCFile.createInstance().getDefaultVersion();
+            }
+            catch (java.io.IOException ioe) {}
+        }
     }
 
     // Get the visual component for the panel. In this template, the component
@@ -88,8 +99,6 @@ public class SelectPathPanel implements WizardDescriptor.Panel /* .FinishPanel *
             ((ChangeListener)it.next()).stateChanged(ev);
         }
     }
-
-    private OfficeInstallation office;
 
     public void setSelectedPath(OfficeInstallation oi) {
         this.office = oi;

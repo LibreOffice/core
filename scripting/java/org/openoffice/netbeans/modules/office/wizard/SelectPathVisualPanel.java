@@ -33,7 +33,7 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
     public SelectPathVisualPanel(SelectPathPanel panel) {
         this.panel = panel;
         initComponents();
-        OfficeInstallation orig = OfficeSettings.getDefault().getOfficeDirectory();
+        OfficeInstallation orig = panel.getSelectedPath();
 
         try {
             Enumeration enum = SVersionRCFile.createInstance().getVersions();
@@ -49,7 +49,16 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
 
         if (orig != null) {
             installationsComboBox.setSelectedItem(orig);
+            installPath.setText(orig.getPath());
         }
+
+        installationsComboBox.addActionListener(
+            new java.awt.event.ActionListener() {
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    installationsComboBoxActionPerformed(evt);
+                }
+            }
+        );
 
         // Provide a name in the title bar.
         setName(NbBundle.getMessage(SelectPathVisualPanel.class, "TITLE_SelectPathVisualPanel"));
@@ -64,6 +73,16 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
             throw new IllegalStateException(mfue.toString());
         }
          */
+    }
+
+    private void installationsComboBoxActionPerformed(
+        java.awt.event.ActionEvent evt) {
+
+        OfficeInstallation oi =
+            (OfficeInstallation)installationsComboBox.getSelectedItem();
+
+        installPath.setText(oi.getPath());
+        panel.setSelectedPath(oi);
     }
 
     /** This method is called from within the constructor to
@@ -107,12 +126,6 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
         gridBagConstraints.gridy = 1;
         gridBagConstraints.insets = new java.awt.Insets(12, 12, 11, 12);
         add(jLabel2, gridBagConstraints);
-
-        installationsComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                installationsComboBoxActionPerformed(evt);
-            }
-        });
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -172,15 +185,6 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
 
     }//GEN-LAST:event_browseButtonActionPerformed
 
-    private void installationsComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_installationsComboBoxActionPerformed
-        // Add your handling code here:
-        OfficeInstallation oi =
-            (OfficeInstallation)installationsComboBox.getSelectedItem();
-
-        installPath.setText(oi.getPath());
-        panel.setSelectedPath(oi);
-    }//GEN-LAST:event_installationsComboBoxActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField installPath;
     private javax.swing.JButton browseButton;
@@ -189,5 +193,4 @@ public class SelectPathVisualPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
-
 }
