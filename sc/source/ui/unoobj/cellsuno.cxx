@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-12 12:52:37 $
+ *  last change: $Author: sab $ $Date: 2001-06-14 07:11:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5366,7 +5366,8 @@ String ScCellObj::GetInputString_Impl(BOOL bEnglish) const      // fuer getFormu
             {
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                 ULONG nNumFmt = bEnglish ?
-                        pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) :
+//                      pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US) :
+                        pDoc->GetStandardIndexEnglishUS() :
                         pDoc->GetNumberFormat( aCellPos );
 
                 if ( eType == CELLTYPE_EDIT )
