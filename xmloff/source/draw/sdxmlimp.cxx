@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:34:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
     { XML_NAMESPACE_OFFICE, XML_AUTOMATIC_STYLES,   XML_TOK_DOC_AUTOSTYLES      },
     { XML_NAMESPACE_OFFICE, XML_MASTER_STYLES,      XML_TOK_DOC_MASTERSTYLES    },
     { XML_NAMESPACE_OFFICE, XML_META,               XML_TOK_DOC_META            },
-    { XML_NAMESPACE_OFFICE, XML_SCRIPT,             XML_TOK_DOC_SCRIPT          },
+    { XML_NAMESPACE_OFFICE, XML_SCRIPTS,            XML_TOK_DOC_SCRIPT          },
     { XML_NAMESPACE_OFFICE, XML_BODY,               XML_TOK_DOC_BODY            },
     { XML_NAMESPACE_OFFICE, XML_SETTINGS,           XML_TOK_DOC_SETTINGS        },
     XML_TOKEN_MAP_END
@@ -172,7 +172,7 @@ static __FAR_DATA SvXMLTokenMapEntry aBodyElemTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aStylesElemTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  XML_PAGE_MASTER,                XML_TOK_STYLES_PAGE_MASTER              },
+    { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT,                XML_TOK_STYLES_PAGE_MASTER              },
     { XML_NAMESPACE_STYLE,  XML_PRESENTATION_PAGE_LAYOUT,   XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT },
     { XML_NAMESPACE_STYLE,  XML_STYLE,                      XML_TOK_STYLES_STYLE    },
     XML_TOKEN_MAP_END
@@ -188,7 +188,7 @@ static __FAR_DATA SvXMLTokenMapEntry aMasterPageElemTokenMap[] =
 static __FAR_DATA SvXMLTokenMapEntry aMasterPageAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_NAME,                       XML_TOK_MASTERPAGE_NAME },
-    { XML_NAMESPACE_STYLE,  XML_PAGE_MASTER_NAME,           XML_TOK_MASTERPAGE_PAGE_MASTER_NAME },
+    { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT_NAME,           XML_TOK_MASTERPAGE_PAGE_MASTER_NAME },
     { XML_NAMESPACE_DRAW,   XML_STYLE_NAME,                 XML_TOK_MASTERPAGE_STYLE_NAME       },
     { XML_NAMESPACE_PRESENTATION,   XML_PRESENTATION_PAGE_LAYOUT_NAME,  XML_TOK_MASTERPAGE_PAGE_LAYOUT_NAME },
     XML_TOKEN_MAP_END
@@ -240,6 +240,44 @@ static __FAR_DATA SvXMLTokenMapEntry aPresentationPlaceholderAttrTokenMap[] =
 };
 
 //////////////////////////////////////////////////////////////////////////////
+
+class SdXMLBodyContext_Impl : public SvXMLImportContext
+{
+    const SdXMLImport& GetSdImport() const
+        { return (const SdXMLImport&)GetImport(); }
+    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
+
+public:
+
+    SdXMLBodyContext_Impl( SdXMLImport& rImport, sal_uInt16 nPrfx,
+                const OUString& rLName,
+                const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+    virtual ~SdXMLBodyContext_Impl();
+
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+                const OUString& rLocalName,
+                const uno::Reference< xml::sax::XAttributeList > & xAttrList );
+};
+
+SdXMLBodyContext_Impl::SdXMLBodyContext_Impl( SdXMLImport& rImport,
+                sal_uInt16 nPrfx, const OUString& rLName,
+                const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
+    SvXMLImportContext( rImport, nPrfx, rLName )
+{
+}
+
+SdXMLBodyContext_Impl::~SdXMLBodyContext_Impl()
+{
+}
+
+SvXMLImportContext *SdXMLBodyContext_Impl::CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    return GetSdImport().CreateBodyContext(rLocalName, xAttrList);
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 class SdXMLDocContext_Impl : public SvXMLImportContext
@@ -347,7 +385,8 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
             if( GetImport().getImportFlags() & IMPORT_CONTENT )
             {
                 // office:body inside office:document
-                pContext = GetSdImport().CreateBodyContext(rLocalName, xAttrList);
+                pContext = new SdXMLBodyContext_Impl(GetSdImport(),nPrefix,
+                                                     rLocalName, xAttrList);
             }
             break;
         }
@@ -362,203 +401,36 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
 
 //////////////////////////////////////////////////////////////////////////////
 
-uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
+#define SERVICE(classname,servicename,implementationname,draw,flags)\
+uno::Sequence< OUString > SAL_CALL classname##_getSupportedServiceNames() throw()\
+{\
+    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( servicename ) );\
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );\
+    return aSeq;\
+}\
+OUString SAL_CALL classname##_getImplementationName() throw()\
+{\
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( implementationname ) );\
+}\
+uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )\
+{\
+    return (cppu::OWeakObject*)new SdXMLImport( rSMgr, draw, flags );\
 }
 
-OUString SAL_CALL SdImpressXMLImport_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Impress" ) );
-}
+SERVICE( XMLImpressImportOasis, "com.sun.star.comp.Impress.XMLOasisImporter", "XMLImpressImportOasis", sal_False, IMPORT_ALL )
+SERVICE( XMLDrawImportOasis, "com.sun.star.comp.Draw.XMLOasisImporter", "XMLDrawImportOasis", sal_True, IMPORT_ALL )
 
-uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLImport( sal_False );
-    return (cppu::OWeakObject*)new SdXMLImport( rSMgr, sal_False );
-}
+SERVICE( XMLImpressStylesImportOasis, "com.sun.star.comp.Impress.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", sal_False, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES )
+SERVICE( XMLDrawStylesImportOasis, "com.sun.star.comp.Draw.XMLOasisStylesImporter", "XMLImpressStylesImportOasis", sal_True, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES )
 
-uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
+SERVICE( XMLImpressContentImportOasis, "com.sun.star.comp.Impress.XMLOasisContentImporter", "XMLImpressContentImportOasis", sal_False, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS )
+SERVICE( XMLDrawContentImportOasis, "com.sun.star.comp.Draw.XMLOasisContentImporter", "XMLImpressContentImportOasis", sal_True, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS )
 
-OUString SAL_CALL SdDrawXMLImport_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Draw" ) );
-}
+SERVICE( XMLImpressMetaImportOasis, "com.sun.star.comp.Impress.XMLOasisMetaImporter", "XMLImpressMetaImportOasis", sal_False, IMPORT_META )
+SERVICE( XMLDrawMetaImportOasis, "com.sun.star.comp.Draw.XMLOasisMetaImporter", "XMLImpressMetaImportOasis", sal_True, IMPORT_META )
 
-uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLImport( sal_True );
-    return (cppu::OWeakObject*)new SdXMLImport( rSMgr, sal_True );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_Style_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLStylesImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdImpressXMLImport_Style_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Impress.Styles" ) );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Style_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLImport( sal_False, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES );
-    return (cppu::OWeakObject*)new SdXMLImport( rSMgr, sal_False, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES );
-}
-
-uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Style_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLStylesImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdDrawXMLImport_Style_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Draw.Styles" ) );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Style_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLImport( sal_True, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES );
-    return (cppu::OWeakObject*)new SdXMLImport( rSMgr, sal_True, IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_Content_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLContentImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdImpressXMLImport_Content_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Impress.Content" ) );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLImport( sal_False, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS );
-    return (cppu::OWeakObject*)new SdXMLImport( rSMgr, sal_False, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS );
-}
-
-uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Content_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLContentImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdDrawXMLImport_Content_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Draw.Content" ) );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Content_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLImport( sal_True, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS );
-    return (cppu::OWeakObject*)new SdXMLImport( rSMgr, sal_True, IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_Meta_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLMetaImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdImpressXMLImport_Meta_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Impress.Meta" ) );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLImport( sal_False, IMPORT_META );
-    return (cppu::OWeakObject*)new SdXMLImport( rSMgr, sal_False, IMPORT_META );
-}
-
-uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Meta_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLMetaImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdDrawXMLImport_Meta_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Draw.Meta" ) );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Meta_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLImport( sal_True, IMPORT_META );
-    return (cppu::OWeakObject*)new SdXMLImport( rSMgr, sal_True, IMPORT_META );
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-uno::Sequence< OUString > SAL_CALL SdImpressXMLImport_Settings_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Impress.XMLSettingsImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdImpressXMLImport_Settings_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Impress.Settings" ) );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SdImpressXMLImport_Settings_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLImport( sal_False, IMPORT_SETTINGS );
-    return (cppu::OWeakObject*)new SdXMLImport( rSMgr, sal_False, IMPORT_SETTINGS );
-}
-
-uno::Sequence< OUString > SAL_CALL SdDrawXMLImport_Settings_getSupportedServiceNames() throw()
-{
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Draw.XMLSettingsImporter" ) );
-    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-OUString SAL_CALL SdDrawXMLImport_Settings_getImplementationName() throw()
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdXMLImport.Draw.Settings" ) );
-}
-
-uno::Reference< uno::XInterface > SAL_CALL SdDrawXMLImport_Settings_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )
-{
-    // #110680#
-    // return (cppu::OWeakObject*)new SdXMLImport( sal_True, IMPORT_SETTINGS );
-    return (cppu::OWeakObject*)new SdXMLImport( rSMgr, sal_True, IMPORT_SETTINGS );
-}
+SERVICE( XMLImpressSettingsImportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", sal_False, IMPORT_META )
+SERVICE( XMLDrawSettingsImportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", sal_True, IMPORT_META )
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -1068,17 +940,17 @@ OUString SAL_CALL SdXMLImport::getImplementationName() throw( uno::RuntimeExcept
         switch( getImportFlags())
         {
             case IMPORT_ALL:
-                return SdDrawXMLImport_getImplementationName();
+                return XMLDrawImportOasis_getImplementationName();
             case (IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES):
-                return SdDrawXMLImport_Style_getImplementationName();
+                return XMLDrawStylesImportOasis_getImplementationName();
             case (IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS):
-                return SdDrawXMLImport_Content_getImplementationName();
+                return XMLDrawContentImportOasis_getImplementationName();
             case IMPORT_META:
-                return SdDrawXMLImport_Meta_getImplementationName();
+                return XMLDrawMetaImportOasis_getImplementationName();
             case IMPORT_SETTINGS:
-                return SdDrawXMLImport_Settings_getImplementationName();
+                return XMLDrawSettingsImportOasis_getImplementationName();
             default:
-                return OUString::createFromAscii( "SdXMLImport.Draw" );
+                return XMLDrawImportOasis_getImplementationName();
         }
     }
     else
@@ -1088,17 +960,17 @@ OUString SAL_CALL SdXMLImport::getImplementationName() throw( uno::RuntimeExcept
         switch( getImportFlags())
         {
             case IMPORT_ALL:
-                return SdImpressXMLImport_getImplementationName();
+                return XMLImpressImportOasis_getImplementationName();
             case (IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES):
-                return SdImpressXMLImport_Style_getImplementationName();
+                return XMLImpressStylesImportOasis_getImplementationName();
             case (IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS):
-                return SdImpressXMLImport_Content_getImplementationName();
+                return XMLImpressContentImportOasis_getImplementationName();
             case IMPORT_META:
-                return SdImpressXMLImport_Meta_getImplementationName();
+                return XMLImpressMetaImportOasis_getImplementationName();
             case IMPORT_SETTINGS:
-                return SdImpressXMLImport_Settings_getImplementationName();
+                return XMLImpressSettingsImportOasis_getImplementationName();
             default:
-                return OUString::createFromAscii( "SdXMLImport.Impress" );
+                return XMLImpressImportOasis_getImplementationName();
         }
     }
 }
