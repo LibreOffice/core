@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:11:36 $
+ *  last change: $Author: er $ $Date: 2001-05-08 16:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,7 +654,8 @@ void ScHTMLExport::WriteBody()
             {
                 // Grafik als (JPG-)File speichern
                 aGrfNm = aStreamPath;
-                USHORT nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm, _STRINGCONST( "JPG" ) );
+                USHORT nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
+                    _STRINGCONST( "JPG" ), XOUTBMP_USE_NATIVE_IF_POSSIBLE );
                 if( !nErr )     // fehlerhaft, da ist nichts auszugeben
                 {
                     aGrfNm = URIHelper::SmartRelToAbs( aGrfNm );
