@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-07 13:04:08 $
+ *  last change: $Author: hdu $ $Date: 2002-11-07 09:03:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -785,7 +785,7 @@ void FontNameBox::ImplCalcUserItemSize()
         }
 
         // guess maximimum width
-        Size aOneCharSz( GetTextWidth( XubString( 'X' ) ), GetTextHeight() );
+        Size aOneCharSz( GetTextWidth( String( 'X' ) ), GetTextHeight() );
         Size aSz( aOneCharSz );
         aSz.Width() *= nMaxLen;
         // only XX% of width, because ListBox calculates the normal width...
@@ -875,20 +875,50 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         long nTextHeight = rUDEvt.GetDevice()->GetTextHeight();
         Point aPos( nX, aTopLeft.Y() + (nH-nTextHeight)/2 );
 
-        // was it only remapped to starsymbol?
-        BOOL bStarSymbol = FALSE;
-        String aDisplayName( rUDEvt.GetDevice()->GetFontMetric().GetName() );
-        if( aDisplayName.EqualsIgnoreCaseAscii( "starsymbol" )
-         || aDisplayName.EqualsIgnoreCaseAscii( "opensymbol" ) )
-            bStarSymbol = TRUE;
-
-        if ( bSymbolFont )
-        {
-            String aString( bStarSymbol ? aImplStarSymbolText : aImplSymbolFontText );
-            rUDEvt.GetDevice()->DrawText( aPos, aString );
-        }
+        String aString;
+        if( !bSymbolFont )
+            aString = rInfo.GetName();
         else
-            rUDEvt.GetDevice()->DrawText( aPos, rInfo.GetName() );
+        {
+            // use some sample characters available in the font
+            sal_Unicode aText[8], *pText = aText;
+
+            FontCharMap aFontCharMap;
+            if( rUDEvt.GetDevice()->GetFontCharMap( aFontCharMap ) )
+            {
+                sal_Unicode cNewChar = 0xFF00;
+                int nMaxCount = sizeof(aText)/sizeof(*aText) - 1;
+                int nSkip = aFontCharMap.GetCharCount() / nMaxCount;
+                if( nSkip > 10 )
+                    nSkip = 10;
+                else if( nSkip <= 0 )
+                    nSkip = 1;
+                for( int i = 0; i < nMaxCount; ++i )
+                {
+                    sal_Unicode cOldChar = cNewChar;
+                    for( int j = nSkip; --j >= 0; )
+                        cNewChar = aFontCharMap.GetPrevChar( cNewChar );
+                    if( cOldChar == cNewChar )
+                        break;
+                    aText[ i ] = cNewChar;
+                    aText[ i+1 ] = 0;
+                }
+            }
+            else
+            {
+                pText = aImplSymbolFontText;
+
+                // was it only remapped to starsymbol?
+                String aDisplayName( rUDEvt.GetDevice()->GetFontMetric().GetName() );
+                if( aDisplayName.EqualsIgnoreCaseAscii( "starsymbol" )
+                 || aDisplayName.EqualsIgnoreCaseAscii( "opensymbol" ) )
+                    pText = aImplStarSymbolText;
+            }
+
+            aString = String( pText );
+        }
+
+        rUDEvt.GetDevice()->DrawText( aPos, aString );
 
         rUDEvt.GetDevice()->SetFont( aOldFont );
         DrawEntry( rUDEvt, FALSE, FALSE);   // draw seperator
