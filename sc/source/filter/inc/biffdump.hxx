@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:01:01 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 #ifndef _EXCFORM_HXX
 #include "excform.hxx"
 #endif
-#ifndef _ROOT_HXX
-#include "root.hxx"
+#ifndef SC_XIROOT_HXX
+#include "xiroot.hxx"
 #endif
 
 
@@ -171,7 +171,7 @@ public:
 
 
 
-class Biff8RecDumper : public ExcRoot
+class Biff8RecDumper : public XclImpRoot
 {
 private:
 protected:
@@ -185,7 +185,6 @@ protected:
 
     SvFileStream*               pDumpStream;
     XclImpStream*               pIn;
-    SvStorage*                  pPivotCache;
 
     UINT32                      nMaxBodyLines;
     BOOL                        bEndLoading;
@@ -197,6 +196,7 @@ protected:
     BOOL                        bBlankLine;
     BOOL                        bExportBookStream;
     BOOL                        bBIFF8;
+    bool                        bEncrypted;
 
     UINT32                      nFieldCnt;
     UINT32                      nItemCnt;
@@ -225,7 +225,7 @@ protected:
 
     void                        Print( const ByteString& rStr );
     void                        Print( const sal_Char* pStr );
-    void                        DumpSubStream( SvStorage* pStorage, const sal_Char* pStreamName );
+    void                        DumpSubStream( SvStorage* pStorage, const String& rStrmName );
     void                        DumpPivotCache( const UINT16 nStrId );
     UINT16                      DumpXF( XclImpStream& rIn, const sal_Char* pPre );
     void                        DumpValidPassword( XclImpStream& rIn, const sal_Char* pPre );
@@ -236,6 +236,7 @@ protected:
     void                        ContDumpStream( SvStream& rStrm, const ULONG nL );
     void                        FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT );
     void                        ControlsDump( SvStream& rIn );
+    void                        PreDumpDecrypted( ULONG nL );
     static const sal_Char*      GetBlanks( const UINT16 nNumOfBlanks );
     static BOOL                 IsLineEnd( const sal_Char c, sal_Char& rNext, SvStream& rIn, INT32& rLeft );
     void                        Init( void );
@@ -286,7 +287,7 @@ protected:
     inline const DUMP_ERR*      FirstErr( void );
     inline const DUMP_ERR*      NextErr( void );
 public:
-                                Biff8RecDumper( RootData& rRootData, BOOL bBIFF8 );
+                                Biff8RecDumper( const XclImpRoot& rRoot, BOOL bBIFF8 );
                                 ~Biff8RecDumper();
     BOOL                        Dump( XclImpStream& rIn );
                                 // = TRUE -> nicht weiter laden
