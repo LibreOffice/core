@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 15:23:03 $
+ *  last change: $Author: mtg $ $Date: 2001-09-24 18:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,10 @@ class ZipPackageStream : public ZipPackageEntry,
 protected:
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
     ZipPackage          &rZipPackage;
-    sal_Bool            bToBeCompressed, bToBeEncrypted, bPackageMember;
+    sal_Bool            bToBeCompressed, bToBeEncrypted, bPackageMember, bHaveOwnKey;
     vos::ORef < EncryptionData > xEncryptionData;
 public:
+    sal_Bool HasOwnKey ()        { return bHaveOwnKey;}
     sal_Bool IsToBeCompressed () { return bToBeCompressed;}
     sal_Bool IsToBeEncrypted ()  { return bToBeEncrypted;}
     sal_Bool IsPackageMember ()  { return bPackageMember;}
