@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.39 $
+*  $Revision: 1.40 $
 *
-*  last change: $Author: kz $ $Date: 2004-09-01 16:28:31 $
+*  last change: $Author: kz $ $Date: 2004-09-08 12:39:04 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1949,7 +1949,7 @@ File gid_File_Lib_LibXMLSec_xmlseccore
         Name = "xmlsec.dll";
     #endif
     Dir = gid_Dir_Program;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED);
 End
 
 #ifdef WNT
@@ -1957,7 +1957,7 @@ File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     TXT_FILE_BODY;
     Name = "xmlsec-mscrypto.dll";
     Dir = gid_Dir_Program;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED);
 End
 #endif
 
@@ -1966,7 +1966,7 @@ File gid_File_Lib_LibXMLSec_xmlsecnss
     TXT_FILE_BODY;
     Name = STRING(CONCAT2(libxmlsec-nss,UNXSUFFIX));
     Dir = gid_Dir_Program;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED);
 End
 #endif
 
