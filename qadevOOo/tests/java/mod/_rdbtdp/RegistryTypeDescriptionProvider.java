@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RegistryTypeDescriptionProvider.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:06 $
+ *  last change:$Date: 2003-01-31 12:52:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 import java.io.PrintWriter;
 import lib.Status;
 import lib.StatusException;
@@ -138,12 +140,14 @@ public class RegistryTypeDescriptionProvider extends TestCase {
                                         "No TypeDescriptionProvider given"));
             // take the first registry type description provider
             oInterface = xProviderEnum.nextElement();
+            oObj = (XInterface) AnyConverter.toObject(
+                            new Type(XInterface.class),oInterface);
         }
         catch( com.sun.star.uno.Exception e ) {
             log.println("Service not available" );
         }
 
-        oObj = (XInterface) oInterface;
+        //oObj = (XInterface) oInterface;
 
         log.println( "    creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
