@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futxtatt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:21:27 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,8 @@
 #endif
 
 #include <svx/textattr.hxx>
-#include <svx/textanim.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
@@ -106,8 +107,8 @@ FuTextAttrDlg::FuTextAttrDlg (
 
     if( !pArgs )
     {
-        SvxTextTabDialog* pDlg = new SvxTextTabDialog( NULL, &aNewAttr, pView );
-        //SvxTextAttrDialog* pDlg = new SvxTextAttrDialog( NULL, aNewAttr, pView );
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, ResId( RID_SVXDLG_TEXT ), pView );
 
         USHORT nResult = pDlg->Execute();
 
