@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbhelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2001-12-13 18:16:09 $
+ *  last change: $Author: mav $ $Date: 2002-11-05 09:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,7 +596,7 @@ sal_Bool UCBContentHelper::MakeFolder( const String& rFolder )
     Reference< XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
     Reference< XInteractionHandler > xInteractionHandler = Reference< XInteractionHandler > (
                xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.uui.InteractionHandler") ) ), UNO_QUERY );
-    if ( Content::create( aURL.GetMainURL(), new CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ), aCnt ) )
+    if ( Content::create( aURL.GetMainURL( INetURLObject::NO_DECODE ), new CommandEnvironment( xInteractionHandler, Reference< XProgressHandler >() ), aCnt ) )
         return MakeFolder( aCnt, aTitle, aNew );
     else
         return sal_False;
