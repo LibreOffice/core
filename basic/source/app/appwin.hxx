@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appwin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:26:37 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ public:
     virtual void Command( const CommandEvent& rCEvt );  // Kommando-Handler
     virtual void Resize();              // Aenderung Fenstergroesse
     virtual void Help();                // Hilfe aktivieren
-    virtual void Load( const String& );     // Datei laden
+    virtual BOOL Load( const String& ); // Datei laden
     virtual void PostLoad(){}           // Nachbearbeiten des geladenen (Source am Modul setzen)
     virtual USHORT SaveAs();                // Datei unter neuem Namen speichern
     virtual void PostSaveAs(){}         // Nachbearbeiten des Moduls ...
