@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:52:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,11 @@
 #ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSQLQueryComposer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -733,47 +736,23 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
 
                     try
                     {
-                        Reference< XSQLQueryComposerFactory > xComposerFac( _rxConnection, UNO_QUERY );
-                        Reference< XSQLQueryComposer > xComposer;
+                        Reference< XMultiServiceFactory > xComposerFac( _rxConnection, UNO_QUERY );
+
                         if ( xComposerFac.is() )
-                            xComposer = xComposerFac->createQueryComposer( );
-                        if ( xComposer.is() )
                         {
-                            xComposer->setQuery( sStatementToExecute );
-
-                            // Now set the filter to a dummy restriction which will result in an empty
-                            // result set.
-
-                            // Unfortunately, if the statement already has a non-empty filter it is not
-                            // removed when setting a new one. Instead, the statement set with "setQuery",
-                            // acts as basis, everything added later (setFilter/setOrder and such) is
-                            // _added_. So we need to strip the original WHERE clause (if there is one)
-                            // manually
+                            Reference< XSingleSelectQueryAnalyzer > xAnalyzer(xComposerFac->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.SingleSelectQueryComposer"))),UNO_QUERY);
+                            if ( xAnalyzer.is() )
                             {
-                                ::rtl::OUString sComplete = xComposer->getComposedQuery( );
-                                    // we norm it: now there's really a "WHERE", not only a "where" or such ...
+                                xAnalyzer->setQuery( sStatementToExecute );
 
-                                sal_Int32 nWherePos = sComplete.lastIndexOf( ::rtl::OUString::createFromAscii( "WHERE" ) );
-                                if ( -1 < nWherePos )
-                                {   // there indeed already is a where clause
-                                    sComplete = sComplete.copy( 0, nWherePos );
-                                        // this is not correct. The "WHERE" may have been a part of e.g. a filter itself
-                                        // (something like "WHERE <field> = 'WHERE'"), but without an API
-                                        // for _analyzing_ (and not only _composing_) queries, we don't have
-                                        // much of a chance ...
-                                    try
-                                    {
-                                        xComposer->setQuery( sComplete );
-                                    }
-                                    catch( const Exception& )
-                                    {
-                                        // just in case we found the wrong WHERE substring ....
-                                    }
-                                }
+                                // Now set the filter to a dummy restriction which will result in an empty
+                                // result set.
+                                Reference<XSingleSelectQueryComposer> xComposer(xAnalyzer,UNO_QUERY);
+
+
+                                xComposer->setFilter( ::rtl::OUString::createFromAscii( "0=1" ) );
+                                sStatementToExecute = xAnalyzer->getQuery( );
                             }
-
-                            xComposer->setFilter( ::rtl::OUString::createFromAscii( "0=1" ) );
-                            sStatementToExecute = xComposer->getComposedQuery( );
                         }
                     }
                     catch( const Exception& )
