@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:25:42 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,16 +334,52 @@ void FmFormView::MarkListHasChanged()
     }
 }
 
-//------------------------------------------------------------------------
-void FmFormView::AddWin(OutputDevice* pWin1)
+namespace
 {
-    E3dView::AddWin(pWin1);
+    const SdrPageViewWindow* findPageViewWindow( const SdrPaintView* _pView, OutputDevice* _pWindow )
+    {
+        for ( USHORT pageView = 0; pageView < _pView->GetPageViewCount(); ++pageView )
+        {
+            SdrPageView* pPageView = _pView->GetPageViewPvNum( pageView );
+            if ( !pPageView )
+                continue;
+
+            for ( sal_uInt32 window = 0; window < pPageView->WindowCount(); ++window )
+            {
+                const SdrPageViewWindow* pPageViewWindow = pPageView->GetWindow( window );
+                if ( !pPageViewWindow || &pPageViewWindow->GetOutputDevice() != _pWindow )
+                    continue;
+
+                return pPageViewWindow;
+            }
+        }
+        return NULL;
+    }
 }
 
 //------------------------------------------------------------------------
-void FmFormView::DelWin(OutputDevice* pWin1)
+void FmFormView::AddWin( OutputDevice* pWindow )
 {
-    E3dView::DelWin(pWin1);
+    E3dView::AddWin( pWindow );
+
+    if ( !pWindow )
+        return;
+
+    // look up the PageViewWindow for the newly inserted window, and care for it
+    // #ii39269# / 2004-12-20 / frank.schoenheit@sun.com
+    const SdrPageViewWindow* pPageViewWindow = findPageViewWindow( this, pWindow );
+    if ( pPageViewWindow && pPageViewWindow->GetControlList().GetCount() )
+        pImpl->addWindow( *pPageViewWindow );
+}
+
+//------------------------------------------------------------------------
+void FmFormView::DelWin( OutputDevice* pWindow )
+{
+    const SdrPageViewWindow* pPageViewWindow = findPageViewWindow( this, pWindow );
+    if ( pPageViewWindow && pPageViewWindow->GetControlList().GetCount() )
+        pImpl->removeWindow( pPageViewWindow->GetControlContainerRef() );
+
+    E3dView::DelWin( pWindow );
 }
 
 //------------------------------------------------------------------------
