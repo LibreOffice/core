@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxUnoTextCursor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:04 $
+ *  last change:$Date: 2003-05-27 13:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@ package mod._svx;
 
 import com.sun.star.drawing.XShape;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextCursor;
@@ -94,7 +95,7 @@ public class SvxUnoTextCursor extends TestCase {
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         try {
             log.println( "creating a drawdoc" );
-            xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
+            xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -138,7 +139,7 @@ public class SvxUnoTextCursor extends TestCase {
         // create testobject here
 
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory(tParam.getMSF()) ;
+            SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)tParam.getMSF()) ;
             XShape oShape = SOF.createShape
                 (xDrawDoc,5000,3500,7500,5000,"Text");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape) ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxUnoTextField.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:04 $
+ *  last change:$Date: 2003-05-27 13:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ public class SvxUnoTextField extends TestCase {
 
         try {
             log.println( "creating a drawdoc" );
-            xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
+            xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -151,7 +151,7 @@ public class SvxUnoTextField extends TestCase {
         log.println( "creating a test environment" );
         try {
 
-            SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
               oShape = SOF.createShape(xDrawDoc,5000,3500,7500,5000,"Rectangle");
             DrawTools.getShapes(DrawTools.getDrawPage(xDrawDoc,0)).add(oShape);
         }
