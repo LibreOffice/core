@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:09:49 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,6 +1444,7 @@ bool SwScriptInfo::IsInHiddenRange( const SwTxtNode& rNode, xub_StrLen nPos )
 }
 
 
+#if OSL_DEBUG_LEVEL > 1
 /*************************************************************************
  *                        SwScriptInfo::CompType(..)
  * returns the type of the compressed character
@@ -1464,6 +1465,7 @@ BYTE SwScriptInfo::CompType( const xub_StrLen nPos ) const
     }
     return NONE;
 }
+#endif
 
 /*************************************************************************
  *                      SwScriptInfo::HasKana()
