@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 19:31:25 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = " ÕœÌœ";
                 Text[ turkish ] = "SeÁim";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "SelecciÛn";
             };
             ToolBoxItem
             {
@@ -139,6 +140,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = "Œÿ";
                 Text[ turkish ] = "«izgi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "LÌnea";
             };
             ToolBoxItem
             {
@@ -168,6 +170,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = "„” ÿÌ·";
                 Text[ turkish ] = "Dikdˆrtgen";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Rect·ngulo";
             };
             ToolBoxItem
             {
@@ -198,6 +201,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = "‘ﬂ· »Ì÷ÊÌ";
                 Text[ turkish ] = "Elips";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Elipse";
             };
             ToolBoxItem
             {
@@ -227,6 +231,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = "„÷·⁄";
                 Text[ turkish ] = "Poligon";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "PolÌgono";
             };
             ToolBoxItem
             {
@@ -254,6 +259,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ korean ] = "∫£¡ˆø°";
                 Text[ arabic ] = "BÈzier";
                 Text[ turkish ] = "Bezier";
+                Text[ catalan ] = "BÈzier";
             };
             ToolBoxItem
             {
@@ -281,6 +287,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = "Õ—";
                 Text[ turkish ] = "Serbest biÁim";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Mano alzada";
             };
             ToolBoxItem
             {
@@ -310,6 +317,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = "ﬁÊ” œ«∆—Ì";
                 Text[ turkish ] = "Yay";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Arco de cÌrculo";
             };
             ToolBoxItem
             {
@@ -337,6 +345,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = "ﬁÿ«⁄ ‘ﬂ· »Ì÷ÊÌ";
                 Text[ turkish ] = "Elips dilimi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sector de elipse";
             };
             ToolBoxItem
             {
@@ -364,6 +373,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = "ﬁÿ⁄… „‰ œ«∆—…";
                 Text[ turkish ] = "Yay dilimi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Segmento de cÌrculo";
             };
             ToolBoxItem
             {
@@ -393,6 +403,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = "«·‰’";
                 Text[ turkish ] = "Metin";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Texto";
             };
             ToolBoxItem
             {
@@ -419,6 +430,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ chinese_traditional ] = "™Ω¶°§Â¶r";
                 Text[ turkish ] = "Vertical Text";
                 Text[ arabic ] = "‰’ ⁄„ÊœÌ";
+                Text[ catalan ] = "Texto vertical";
             };
             ToolBoxItem
             {
@@ -446,6 +458,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = "‰’ „ Õ—ﬂ";
                 Text[ turkish ] = "Metin canland˝rma";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "AnimaciÛn de texto";
             };
             ToolBoxItem
             {
@@ -475,6 +488,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ arabic ] = " ⁄·Ìﬁ  ›”Ì—Ì";
                 Text[ turkish ] = "Belirtme Áizgisi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Leyenda";
             };
             ToolBoxItem
             {
@@ -501,6 +515,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ chinese_traditional ] = "™Ω¶°πœ®“";
                 Text[ turkish ] = "Vertical Caption";
                 Text[ arabic ] = " ”„Ì…  Ê÷ÌÕÌ… ⁄„ÊœÌ…";
+                Text[ catalan ] = "Leyenda vertical";
             };
         };
     };
@@ -523,6 +538,7 @@ FloatingWindow RID_SVXTBX_DRAW
     Text[ arabic ] = "ÊŸ«∆› —”„";
     Text[ turkish ] = "«izim i˛levleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Funciones de dibujo";
 };
 FloatingWindow RID_SVXTBX_ALIGNMENT
 {
@@ -578,6 +594,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ arabic ] = "Ì”«—";
                 Text[ turkish ] = "Sol";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Izquierda";
             };
             ToolBoxItem
             {
@@ -606,6 +623,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ arabic ] = " Ê”Ìÿ";
                 Text[ turkish ] = "Ortala";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Centrado";
             };
             ToolBoxItem
             {
@@ -634,6 +652,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ arabic ] = "Ì„Ì‰";
                 Text[ turkish ] = "Sa";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Derecha";
             };
             ToolBoxItem
             {
@@ -662,6 +681,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ arabic ] = "√⁄·Ï";
                 Text[ turkish ] = "‹st";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Arriba";
             };
             ToolBoxItem
             {
@@ -690,6 +710,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ arabic ] = "«·Ê”ÿ";
                 Text[ turkish ] = "Orta";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Centro";
             };
             ToolBoxItem
             {
@@ -718,6 +739,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
                 Text[ arabic ] = "√”›·";
                 Text[ turkish ] = "Alt";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Abajo";
             };
         };
     };
@@ -731,5 +753,6 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
     Text[ arabic ] = "«·„Õ«–«…";
     Text[ turkish ] = "Hizalama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "AlineaciÛn";
 };
  // ********************************************************************** EOF
