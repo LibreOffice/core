@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:58:07 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 10:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,6 +395,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         pTabViewShell->DoSubTotals( aSubTotalParam );
                         rReq.Done( *pOutSet );
                     }
+                    else
+                        GetViewData()->GetDocShell()->CancelAutoDBRange();
+
                     delete pDlg;
                 }
             }
@@ -547,6 +550,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                         rReq.Done();
                     }
+                    else
+                        GetViewData()->GetDocShell()->CancelAutoDBRange();
 
                     delete pDlg;
                 }
