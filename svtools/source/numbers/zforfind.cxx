@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:22:44 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 10:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,14 @@ const BYTE ImpSvNumberInputScan::nMatchedStartString  = 0x04;
 const BYTE ImpSvNumberInputScan::nMatchedVirgin       = 0x08;
 const BYTE ImpSvNumberInputScan::nMatchedUsedAsReturn = 0x10;
 
+/* It is not clear how we want timezones to be handled. Convert them to local
+ * time isn't wanted, as it isn't done in any other place and timezone
+ * information isn't stored anywhere. Ignoring them and pretending local time
+ * may be wrong too and might not be what the user expects. Keep the input as
+ * string so that no information is lost.
+ * Anyway, defining NF_RECOGNIZE_ISO8601_TIMEZONES to 1 would be the way how it
+ * would work, together with the nTimezonePos handling in GetTimeRef(). */
+#define NF_RECOGNIZE_ISO8601_TIMEZONES 0
 
 //---------------------------------------------------------------------------
 //      Konstruktor
@@ -183,6 +191,8 @@ void ImpSvNumberInputScan::Reset()
     nStringScanNumFor = 0;
     nStringScanSign = 0;
     nMatchedAllStrings = nMatchedVirgin;
+    nMayBeIso8601 = 0;
+    nTimezonePos = 0;
 }
 
 
@@ -883,6 +893,21 @@ void ImpSvNumberInputScan::GetTimeRef(
     double fSecond100 = 0.0;
     USHORT nStartIndex = nIndex;
 
+    if (nTimezonePos)
+    {
+        // find first timezone number index and adjust count
+        for (USHORT j=0; j<nAnzNums; ++j)
+        {
+            if (nNums[j] == nTimezonePos)
+            {
+                // nAnz is not total count, but count of time relevant strings.
+                if (nStartIndex < j && j - nStartIndex < nAnz)
+                    nAnz = j - nStartIndex;
+                break;  // for
+            }
+        }
+    }
+
     if (nDecPos == 2 && nAnz == 3)                      // 20:45,5
         nHour = 0;
     else
@@ -960,6 +985,20 @@ USHORT ImpSvNumberInputScan::ImplGetYear( USHORT nIndex )
     return nYear;
 }
 
+//---------------------------------------------------------------------------
+
+bool ImpSvNumberInputScan::MayBeIso8601()
+{
+    if (nMayBeIso8601 == 0)
+    {
+        if (nAnzNums >= 3 && nNums[0] < nAnzStrings &&
+                sStrArray[nNums[0]].ToInt32() > 31)
+            nMayBeIso8601 = 1;
+        else
+            nMayBeIso8601 = 2;
+    }
+    return nMayBeIso8601 == 1;
+}
 
 //---------------------------------------------------------------------------
 //      GetDateRef
@@ -1080,15 +1119,14 @@ input for the following reasons:
 
         res = TRUE;
         nCounter = 0;
+        // For incomplete dates, always assume first day of month if not specified.
+        pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
 
         switch (nAnzNums)       // count of numbers in string
         {
             case 0:                 // none
                 if (nMonthPos)          // only month (Jan)
-                {
-                    pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
                     pCal->setValue( CalendarFieldIndex::MONTH, Abs(nMonth)-1 );
-                }
                 else
                     res = FALSE;
                 break;
@@ -1109,7 +1147,6 @@ input for the following reasons:
                                 pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                                 break;
                             case DMY:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
                                 pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                                 break;
                             default:
@@ -1125,7 +1162,6 @@ input for the following reasons:
                                 pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(0) );
                                 break;
                             case YMD:
-                                pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, 1 );
                                 pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                                 break;
                             default:
@@ -1262,6 +1298,7 @@ input for the following reasons:
                 switch (nMonthPos)  // where is the month
                 {
                     case 0:             // not found
+                    {
                         nCounter = 3;
                         if ( nTimePos > 1 )
                         {   // find first time number index (should only be 3 or 2 anyway)
@@ -1274,7 +1311,9 @@ input for the following reasons:
                                 }
                             }
                         }
-                        switch (DateFmt)
+                        // ISO 8601 yyyy-mm-dd forced recognition
+                        DateFormat eDF = (MayBeIso8601() ? YMD : DateFmt);
+                        switch (eDF)
                         {
                             case MDY:
                                 pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
@@ -1298,6 +1337,7 @@ input for the following reasons:
                                 res = FALSE;
                                 break;
                         }
+                    }
                         break;
                     case 1:             // month at the beginning (Jan 01 01 8:23)
                         nCounter = 2;
@@ -1324,7 +1364,7 @@ input for the following reasons:
                                 break;
                             case YMD:
                                 pCal->setValue( CalendarFieldIndex::DAY_OF_MONTH, ImplGetDay(1) );
-                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(2) );
+                                pCal->setValue( CalendarFieldIndex::YEAR, ImplGetYear(0) );
                                 break;
                             default:
                                 res = FALSE;
@@ -1690,12 +1730,53 @@ BOOL ImpSvNumberInputScan::ScanMidString( const String& rString,
             nTimePos = nStringPos + 1;
     }
 
-    // #68232# recognize long date separators like ", " in "September 5, 1999"
-    if ( nPos < rString.Len() && eScannedType == NUMBERFORMAT_DATE
-            && nMonthPos == 1 && pLoc->getLongDateFormat() == MDY )
+    if (nPos < rString.Len())
     {
-        if ( SkipString( pLoc->getLongDateDaySep(), rString, nPos )  )
-            SkipBlanks( rString, nPos );
+        switch (eScannedType)
+        {
+            case NUMBERFORMAT_DATE:
+                if (nMonthPos == 1 && pLoc->getLongDateFormat() == MDY)
+                {
+                    // #68232# recognize long date separators like ", " in "September 5, 1999"
+                    if (SkipString( pLoc->getLongDateDaySep(), rString, nPos ))
+                        SkipBlanks( rString, nPos );
+                }
+                else if (nStringPos == 5 && nPos == 0 && rString.Len() == 1 &&
+                        rString.GetChar(0) == 'T' && MayBeIso8601())
+                {
+                    // ISO 8601 combined date and time, yyyy-mm-ddThh:mm
+                    ++nPos;
+                }
+                break;
+#if NF_RECOGNIZE_ISO8601_TIMEZONES
+            case NUMBERFORMAT_DATETIME:
+                if (nPos == 0 && rString.Len() == 1 && nStringPos >= 9 &&
+                        MayBeIso8601())
+                {
+                    // ISO 8601 timezone offset
+                    switch (rString.GetChar(0))
+                    {
+                        case '+':
+                        case '-':
+                            if (nStringPos == nAnzStrings-2 ||
+                                    nStringPos == nAnzStrings-4)
+                            {
+                                ++nPos;     // yyyy-mm-ddThh:mm[:ss]+xx[[:]yy]
+                                // nTimezonePos needed for GetTimeRef()
+                                if (!nTimezonePos)
+                                    nTimezonePos = nStringPos + 1;
+                            }
+                            break;
+                        case ':':
+                            if (nTimezonePos && nStringPos >= 11 &&
+                                    nStringPos == nAnzStrings-2)
+                                ++nPos;     // yyyy-mm-ddThh:mm[:ss]+xx:yy
+                            break;
+                    }
+                }
+                break;
+#endif
+        }
     }
 
     if (nPos < rString.Len())                       // not everything consumed?
@@ -1922,6 +2003,15 @@ BOOL ImpSvNumberInputScan::ScanEndString( const String& rString,
         else
             nPos = nOldPos;
     }
+
+#if NF_RECOGNIZE_ISO8601_TIMEZONES
+    if (nPos == 0 && eScannedType == NUMBERFORMAT_DATETIME &&
+            rString.Len() == 1 && rString.GetChar(0) == 'Z' && MayBeIso8601())
+    {
+        // ISO 8601 timezone UTC yyyy-mm-ddThh:mmZ
+        ++nPos;
+    }
+#endif
 
     if (nPos < rString.Len())                       // everything consumed?
     {
@@ -2186,7 +2276,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormatMain(
                     return FALSE;
             }
             GetNextNumber(i,j);                 // i=1,2
-            if ( !ScanMidString( sStrArray[i], i,  pFormat ) )
+            if ( !ScanMidString( sStrArray[i], i, pFormat ) )
                 return FALSE;
             i++;                                // i=2,3
             USHORT nThOld = 10;                 // just not 0 or 1
@@ -2198,7 +2288,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormatMain(
                 if (eScannedType == NUMBERFORMAT_SCIENTIFIC)    // E only at end
                     return FALSE;
                 GetNextNumber(i,j);
-                if ( i < nAnzStrings && !ScanMidString( sStrArray[i], i,  pFormat ) )
+                if ( i < nAnzStrings && !ScanMidString( sStrArray[i], i, pFormat ) )
                     return FALSE;
                 i++;
             }
