@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:19:18 $
+ *  last change: $Author: oj $ $Date: 2001-03-27 06:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,7 +627,7 @@ sal_Int32 SAL_CALL ORowSetBase::findColumn( const ::rtl::OUString& columnName ) 
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
     // it is possible to save some time her when we remember the names - position relation in a map
-    return m_pColumns->findColumn(columnName);
+    return m_pColumns ? m_pColumns->findColumn(columnName) : sal_Int32(0);
 }
 // -------------------------------------------------------------------------
 
