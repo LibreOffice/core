@@ -1,0 +1,359 @@
+/*************************************************************************
+ *
+ *  $RCSfile: querydlg.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2001-02-05 09:20:58 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+#ifndef DBAUI_QUERYDLG_HRC
+#include "querydlg.hrc"
+#endif
+#include "dbaccess_helpid.hrc"
+
+ModalDialog DLG_QRY_JOIN
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpId = HID_DLG_QRY_JOIN ;
+    Size = MAP_APPFONT ( 203, 107 ) ;
+    Text = "Verbundeigenschaften" ;
+    Text [ ENGLISH ] = "Join properties" ;
+
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+
+    GroupBox GB_JOIN
+    {
+    Pos = MAP_APPFONT ( 6 , 3 ) ;
+    Size = MAP_APPFONT ( 191 , 78 ) ;
+    Text = "Optionen" ;
+    Text [ ENGLISH ] = "Options" ;
+        Text[ english_us ] = "Options";
+        Text[ portuguese ] = "Opções";
+        Text[ russian ] = "Ïàğàìåòğû";
+        Text[ dutch ] = "Opties";
+        Text[ french ] = "Options";
+        Text[ spanish ] = "Opciones";
+        Text[ italian ] = "Opzioni";
+        Text[ danish ] = "Indstillinger";
+        Text[ swedish ] = "Alternativ";
+        Text[ polish ] = "Opcje";
+        Text[ portuguese_brazilian ] = "Options";
+        Text[ japanese ] = "µÌß¼®İ";
+        Text[ chinese_simplified ] = "Ñ¡Ïî";
+        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ dutch ] = "Opties";
+        Text[ chinese_simplified ] = "Ñ¡Ïî";
+        Text[ greek ] = "Åğéëïãİò";
+        Text[ korean ] = "¿É¼Ç";
+        Text[ arabic ] = "ÎíÇÑÇÊ";
+        Text[ turkish ] = "Seçenekler";
+        Text[ language_user1 ] = " ";
+    };
+
+    RadioButton RB_INNER
+    {
+    Pos = MAP_APPFONT ( 12 , 14 ) ;
+    Size = MAP_APPFONT ( 63 , 10 ) ;
+        HelpId = HID_DLG_QRY_INNER ;
+    Text = "~Innerer" ;
+    Text [ ENGLISH ] = "~Inner" ;
+        Text[ english_us ] = "~Inner Join";
+        Text[ portuguese ] = "~Interior";
+        Text[ russian ] = "Âíóòğåííÿÿ ñâÿçü";
+        Text[ dutch ] = "~Binnenste";
+        Text[ french ] = "~Interne";
+        Text[ spanish ] = "~Interior";
+        Text[ italian ] = "Relazione interna";
+        Text[ danish ] = "~Indre";
+        Text[ swedish ] = "~Inre";
+        Text[ polish ] = "Wewnêtrzne sprzê¿enie";
+        Text[ portuguese_brazilian ] = "~Inner";
+        Text[ japanese ] = "“à•”Œ‹‡(~I)";
+        Text[ chinese_simplified ] = "ÄÚ(~I)";
+        Text[ chinese_traditional ] = "¤º(~I)";
+        Text[ dutch ] = "~Binnenste";
+        Text[ chinese_simplified ] = "ÄÚ(~I)";
+        Text[ greek ] = "Åóùôåñéêüò";
+        Text[ korean ] = "ÀÌ³Ê Á¶ÀÎ(~I)";
+        Text[ arabic ] = "ÕáÉ ÏÇÎáíÉ";
+        Text[ turkish ] = "~İç";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_LEFT
+    {
+    Pos = MAP_APPFONT ( 12 , 30 ) ;
+    Size = MAP_APPFONT ( 63 , 10 ) ;
+        HelpId = HID_DLG_QRY_LEFT ;
+    Text = "~Linker" ;
+    Text [ ENGLISH ] = "~Left" ;
+        Text[ english_us ] = "~Left Join";
+        Text[ portuguese ] = "~Esquerda";
+        Text[ russian ] = "Ëåâîå ñîåäèíåíèå";
+        Text[ dutch ] = "~Linker";
+        Text[ french ] = "~Gauche";
+        Text[ spanish ] = "~Izquierda";
+        Text[ italian ] = "Relazione sinistra";
+        Text[ danish ] = "~Venstre";
+        Text[ swedish ] = "~Vänstra";
+        Text[ polish ] = "Lewe sprzê¿enie";
+        Text[ portuguese_brazilian ] = "~Left";
+        Text[ japanese ] = "¶Œ‹‡(~L)";
+        Text[ chinese_simplified ] = "×ó(~L)";
+        Text[ chinese_traditional ] = "¥ª(~L)";
+        Text[ dutch ] = "~Linker";
+        Text[ chinese_simplified ] = "×ó(~L)";
+        Text[ greek ] = "Áñéóôåñüò";
+        Text[ korean ] = "·¹ÇÁÆ® Á¶ÀÎ(~L)";
+        Text[ arabic ] = "ÕáÉ íÓÑì";
+        Text[ turkish ] = "~Sol";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_RIGHT
+    {
+    Pos = MAP_APPFONT ( 12 , 46 ) ;
+    Size = MAP_APPFONT ( 63 , 10 ) ;
+        HelpId = HID_DLG_QRY_RIGHT ;
+    Text = "~Rechter" ;
+    Text [ ENGLISH ] = "~Right" ;
+        Text[ english_us ] = "~Right Join";
+        Text[ portuguese ] = "~Direita";
+        Text[ russian ] = "Ïğàâîå ñîåäèíåíèå";
+        Text[ dutch ] = "~Rechter";
+        Text[ french ] = "~Droite";
+        Text[ spanish ] = "~Derecha";
+        Text[ italian ] = "Relazione destra";
+        Text[ danish ] = "~Højre";
+        Text[ swedish ] = "~Högra";
+        Text[ polish ] = "Prawe sprzê¿enie";
+        Text[ portuguese_brazilian ] = "~Right";
+        Text[ japanese ] = "‰EŒ‹‡(~R)";
+        Text[ chinese_simplified ] = "ÓÒ(~R)";
+        Text[ chinese_traditional ] = "¥k(~R)";
+        Text[ dutch ] = "~Rechter";
+        Text[ chinese_simplified ] = "ÓÒ(~R)";
+        Text[ greek ] = "Äåîéüò";
+        Text[ korean ] = "¶óÀÌÆ® Á¶ÀÎ(~R)";
+        Text[ arabic ] = "ÕáÉ íãäì";
+        Text[ turkish ] = "~Sağ";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_FULL
+    {
+    Pos = MAP_APPFONT ( 12 , 62 ) ;
+    Size = MAP_APPFONT ( 63 , 10 ) ;
+        HelpId = HID_DLG_QRY_FULL ;
+    Text = "~Vollständiger" ;
+    Text [ ENGLISH ] = "~Full" ;
+        Text[ english_us ] = "~Full (Outer) Join";
+        Text[ portuguese ] = "Co~mpleto";
+        Text[ russian ] = "Ïîëíàÿ ñâÿçü";
+        Text[ dutch ] = "~Volledige";
+        Text[ french ] = "~Complète";
+        Text[ spanish ] = "~Completa";
+        Text[ italian ] = "Relazione completa";
+        Text[ danish ] = "~Fuldstændig";
+        Text[ swedish ] = "~Fullständig";
+        Text[ polish ] = "Pe³ne sprzê¿enie";
+        Text[ portuguese_brazilian ] = "~Full";
+        Text[ japanese ] = "Š®‘SŒ‹‡(~F)";
+        Text[ chinese_simplified ] = "ÍêÕûµÄ(~F)";
+        Text[ chinese_traditional ] = "§¹¾ãªº(~F)";
+        Text[ language_user1 ] = " ";
+        Text[ dutch ] = "~Volledige";
+        Text[ chinese_simplified ] = "ÍêÕûµÄ(~F)";
+        Text[ greek ] = "Ïëüêëçñïò";
+        Text[ korean ] = "Ç® Á¶ÀÎ(~F)";
+        Text[ arabic ] = "ÕáÉ ßÇãáÉ";
+        Text[ turkish ] = "Tam";
+    };
+
+    MultiLineEdit ML_HELPTEXT
+    {
+        Pos                     = MAP_APPFONT ( 81 , 14 ) ;
+    Size            = MAP_APPFONT ( 110 , 58 ) ;
+        HelpId          = HID_DLG_QRY_HELPTEXT ;
+        ReadOnly        = TRUE;
+        SVLook          = TRUE;
+        Border          = TRUE;
+    };
+
+    OKButton PB_OK
+    {
+    Pos = MAP_APPFONT ( 6 , 87 ) ;
+    Size = MAP_APPFONT ( 50 , 14 ) ;
+    TabStop = TRUE ;
+    DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+    Pos = MAP_APPFONT ( 59 , 87 ) ;
+    Size = MAP_APPFONT ( 50 , 14 ) ;
+    TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+    Pos = MAP_APPFONT ( 147 , 87 ) ;
+    Size = MAP_APPFONT ( 50 , 14 ) ;
+    TabStop = TRUE ;
+    };
+    Text[ english_us ] = "Join Properties";
+    Text[ portuguese ] = "Propriedades relacionais";
+    Text[ russian ] = "Ñâîéñòâà ñâÿçè";
+    Text[ dutch ] = "Verbindingseigenschappen";
+    Text[ french ] = "Propriétés de la jointure";
+    Text[ spanish ] = "Propiedades de unión";
+    Text[ italian ] = "Proprietà relazioni";
+    Text[ danish ] = "Forbindelsesegenskaber";
+    Text[ swedish ] = "Förbindelseegenskaper";
+    Text[ polish ] = "W³aœciowoœci sprzê¿enia";
+    Text[ portuguese_brazilian ] = "Join properties";
+    Text[ japanese ] = "Œ‹‡‘®«";
+    Text[ chinese_simplified ] = "Á¬½ÓÊôĞÔ";
+    Text[ chinese_traditional ] = "³sµ²Äİ©Ê";
+    Text[ dutch ] = "Verbindingseigenschappen";
+    Text[ chinese_simplified ] = "Á¬½ÓÊôĞÔ";
+    Text[ greek ] = "Éäéüôçôåò óõíäİóìïõ";
+    Text[ korean ] = "Á¶ÀÎ ¼Ó¼º";
+    Text[ arabic ] = "ÎÕÇÆÕ ÇáÕáÉ";
+    Text[ turkish ] = "Birleşme özellikleri";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_QUERY_INNER_JOIN
+{
+    Text = "Beinhaltet nur die Datensätze, bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
+    Text [ ENGLISH ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
+    Text[ english_us ] = "Only includes records for which the contents of both related tables are identical.";
+    Text[ portuguese ] = "Contém apenas os registos de dados, cujos conteúdos dos campos ligados sejam iguais em ambas as tabelas.";
+    Text[ russian ] = "Ñîäåğæèò òîëüêî òàêèå çàïèñè, ïğè êîòîğûõ ñîäåğæèìîå ñâÿçàííûõ ïîëåé îáåèõ òàáëèö ÿâëÿåòñÿ îäèíàêîâûì.";
+    Text[ dutch ] = "Bevat alleen records waarbij de de inhoud van de gekoppelde velden van beide tabellen gelijk zijn.";
+    Text[ french ] = "Contient uniquement les enregistrements pour lesquels les contenus des champs liés des deux tables sont identiques.";
+    Text[ spanish ] = "Contiene solo los registros en los que los contenidos de los campos vinculados de ambas tablas con iguales";
+    Text[ italian ] = "Contiene solamente i record di dati in cui i contenuti dei campi collegati di entrambe le tabelle sono uguali.";
+    Text[ danish ] = "Indeholder kun dataposter for hvilke indholdet af de sammenkædede felter i begge tabeller er ens.";
+    Text[ swedish ] = "Innehåller bara de dataposter vars innehåll i de länkade fälten är lika i båda tabellerna.";
+    Text[ polish ] = "Zawiera tylko te rekordy, których zawartoœci w po³¹czonych polach s¹ takie same w obydwu tabelach.";
+    Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
+    Text[ japanese ] = "—¼•û‚ÌÃ°ÌŞÙ‚ÉØİ¸‚µ‚½Ì¨°ÙÄŞ‚Ì“à—e‚ªˆê’v‚·‚éÚº°ÄŞ‚Ì‚İ‚ğŠÜ‚İ‚Ü‚·B";
+    Text[ chinese_simplified ] = "Ö»°üº¬Á½¸ö±í¸ñÖĞÒıÓÃÇøÓòÏàÍ¬µÄÊı¾İÌõÄ¿¡£";
+    Text[ chinese_traditional ] = "¶È¥]§t¨â­Óªí®æ¤¤¤Ş¥ÎÄæ¦ì¬Û¦Pªº¸ê®Æ¶µ¥Ø¡C";
+    Text[ dutch ] = "Bevat alleen records waarbij de de inhoud van de gekoppelde velden van beide tabellen gelijk zijn.";
+    Text[ chinese_simplified ] = "Ö»°üº¬Á½¸ö±í¸ñÖĞÒıÓÃÇøÓòÏàÍ¬µÄÊı¾İÌõÄ¿¡£";
+    Text[ greek ] = "Ğåñéİ÷åé ìüíï åããñáöİò äåäïìİíùí ôùí ïğïßùí ôá ğåñéå÷üìåíá ôùí óõíäåäåìİíùí ğåäßùí êáé ôùí äıï ğéíÜêùí ôáõôßæïíôáé.";
+    Text[ korean ] = "¾çÂÊ Å×ÀÌºíÀÌ ¿¬°áµÈ ÇÊµåÀÇ ³»¿ëÀÌ°°Àº ·¹ÄÚµå¸¸À» Æ÷ÇÔÇÕ´Ï´Ù.";
+    Text[ arabic ] = "ıáÇ íÍÊæí ÅáÇ Úáì ÇáÓÌáÇÊ ÇáÊí íÊØÇÈŞ İíåÇ ãÍÊæíÇÊ ÇáÍŞæá ÇáãÑÊÈØÉ İí ßáÇ ÇáÌÏæáíä.";
+    Text[ turkish ] = "Yalnızca her iki tablodaki ilişkili alan içeriklerinin aynı olduğu kayıtları içerir.";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_QUERY_LEFTRIGHT_JOIN
+{
+    Text = "Beinhaltet ALLE Datensätze aus '%1' und nur die Datensätze aus '%2', bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
+    Text [ ENGLISH ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
+    Text[ english_us ] = "Contains ALL records from table '%1' but only records from table '%2' where the values in the related field are matching.";
+    Text[ portuguese ] = "Contém TODOS os registos de dados de '%1' e apenas os registos de dados de '%2', cujos conteúdos dos campos ligados sejam iguais em ambas as tabelas.";
+    Text[ russian ] = "Ñîäåğæèò ÂÑÅ çàïèñè èç '%1', à òàêæå òîëüêî òàêèå çàïèñè èç '%2', ïğè êîòîğûõ ñîäåğæèìîå ñâÿçàííûõ ïîëåé îáåõ òàáëèö ÿâëÿåòñÿ îäèíàêîâûì.";
+    Text[ dutch ] = "Bevat ALLE records uit '%1' en alleen de records uit '%2' waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk zijn.";
+    Text[ french ] = "Contient TOUS les enregistrements de '%1' et uniquement les enregistrements de '%2' pour lesquels les contenus des champs liés des deux tables sont identiques.";
+    Text[ spanish ] = "Contiene TODOS los registros de datos de '%1' y solo los registros de '%2' en los que los contenidos de los campos vinculados de ambas tablas son iguales.";
+    Text[ italian ] = "Contiene TUTTI i record di dati da '%1' e soltanto i record di dati da '%2' in cui i campi collegati di entrambe le caselle sono uguali.";
+    Text[ danish ] = "Indeholder alle dataposter fra '%1' og kun de dataposter fra '%2', for hvilke indholdet af de sammenkædede felter i begge tabeller ens.";
+    Text[ swedish ] = "Innehåller ALLA dataposter ur '%1' och bara de dataposter ur '%2' vars innehåll i de länkade fälten är lika i båda tabellerna.";
+    Text[ polish ] = "Zawiera WSZYSTKIE rekordy z %1 i tylko te rekordy z %2, przy których wartoœci po³¹czonych pól obu tabel s¹ równe.";
+    Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
+    Text[ japanese ] = "'%1' Ã°ÌŞÙ‚Ì‚·‚×‚Ä‚ÌÚº°ÄŞA‚¨‚æ‚Ñ '%2' Ã°ÌŞÙ‚ÌÚº°ÄŞ‚Å—¼•û‚ÌÃ°ÌŞÙ‚ÉØİ¸‚·‚éÌ¨°ÙÄŞ‚Ì“à—e‚ªˆê’v‚·‚éÚº°ÄŞ‚Ì‚İ‚ğŠÜ‚İ‚Ü‚·B";
+    Text[ chinese_simplified ] = "º¬ÓĞ'%1'ÖĞµÄËùÓĞÊı¾İÌõÄ¿ºÍ'%2ÖĞÁ½¸ö±í¸ñµÄÒıÓÃÇøÓòÏàÍ¬µÄÊı¾İÌõÄ¿¡£";
+    Text[ chinese_traditional ] = "§t¦³'%1'¤¤ªº©Ò¦³¸ê®Æ¶µ¥Ø©M'%2¤¤¨â­Óªí®æªº¤Ş¥ÎÄæ¦ì¬Û¦Pªº¸ê®Æ¶µ¥Ø¡C";
+    Text[ dutch ] = "Bevat ALLE records uit '%1' en alleen de records uit '%2' waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk zijn.";
+    Text[ chinese_simplified ] = "º¬ÓĞ'%1'ÖĞµÄËùÓĞÊı¾İÌõÄ¿ºÍ'%2ÖĞÁ½¸ö±í¸ñµÄÒıÓÃÇøÓòÏàÍ¬µÄÊı¾İÌõÄ¿¡£";
+    Text[ greek ] = "Ğåñéİ÷åé ÏËÅÓ ôéò åããñáöİò ôïõ ğßíáêá '%1' êáé ìüíï ôéò åããñáöİò ôïõ ğßíáêá '%2' üğïõ ôá ğåñéå÷üìåíá ôùí óõíäåäåìİíùí ğåäßùí ôùí äıï ğéíÜêùí ôáõôßæïíôáé.";
+    Text[ korean ] = "Å×ÀÌºí'%1'¿¡¼­´Â ¸ğµç ·¹ÄÚµåµéÀ», Å×ÀÌºí '%2'¿¡¼­´Â ¾çÂÊ Å×ÀÌºíÀÌ ¿¬°áµÈ ÇÊµåÀÇ ³»¿ëÀÌ °°Àº ·¹ÄÚµå¸¸À» Æ÷ÇÔÇÕ´Ï´Ù .";
+    Text[ arabic ] = "íÍÊæí Úáì ßá ÓÌáÇÊ '%1'¡ æÓÌáÇÊ '%2' ÇáÊí ÊÊØÇÈŞ İíåÇ ãÍÊæíÇÊ ÇáÍŞæá ÇáãÑÊÈØÉ İí ßáÇ ÇáÌÏæáíä İŞØ.";
+    Text[ turkish ] = "'%1' tablosundaki kayıtların TAMAMINI ve '%2' tablosundaki kayıtlardan yalnızca her iki tablodaki ilişkili alan içerikleri aynı olan kayıtları içerir.";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_QUERY_FULL_JOIN
+{
+    Text = "Beinhaltet ALLE Datensätze aus '%1' und aus '%2'.";
+    Text [ ENGLISH ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
+    Text[ english_us ] = "Contains ALL records from both tables, i.e., '%1' and '%2'.";
+    Text[ portuguese ] = "Contém TODOS os registos de dados de '%1' e de '%2'.";
+    Text[ russian ] = "Ñîäåğæèò ÂÑÅ çàïèñè èç '%1' è èç '%2'.";
+    Text[ dutch ] = "Bevat ALLE records uit '%1' en uit '%2'.";
+    Text[ french ] = "Contient TOUS les enregistrements de '%1' et de '%2'.";
+    Text[ spanish ] = "Contiene TODOS los registros de datos de '%1' y de '%2'";
+    Text[ italian ] = "Contiene TUTTI i record di dati da '%1' e da '%2'.";
+    Text[ danish ] = "Indeholder ALLE dataposter fra '%1' og fra '%2'.";
+    Text[ swedish ] = "Innehåller ALLA dataposterna ur '%1' och ur '%2'.";
+    Text[ polish ] = "Zawiera WSZYSTKIE rekordy z %1' i z %2'.";
+    Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
+    Text[ japanese ] = "'%1' ‚Æ '%2' ‚Ì‚·‚×‚Ä‚ÌÚº°ÄŞ‚ğŠÜ‚İ‚Ü‚·B";
+    Text[ chinese_simplified ] = "º¬ÓĞ '%1'ºÍ'%2'ÄÚÈ«²¿µÄÊı¾İÌõÄ¿";
+    Text[ chinese_traditional ] = "§t¦³ '%1'©M'%2'¤º¥ş³¡ªº¸ê®Æ¶µ¥Ø";
+    Text[ dutch ] = "Bevat ALLE records uit '%1' en uit '%2'.";
+    Text[ chinese_simplified ] = "º¬ÓĞ '%1'ºÍ'%2'ÄÚÈ«²¿µÄÊı¾İÌõÄ¿";
+    Text[ greek ] = "Ğåñéİ÷åé ÏËÅÓ ôéò åããñáöİò ôïõ '%1' êáé '%2'.";
+    Text[ korean ] = "Å×ÀÌºí'%1' ¿Í '%2'ÀÇ ¸ğµç ·¹ÄÚµå¸¦ Æ÷ÇÔÇÕ´Ï´Ù.";
+    Text[ arabic ] = "íÍÊæí Úáì ßá ÇáÓÌáÇÊ ãä '%1' æ '%2'.";
+    Text[ turkish ] = "'%1' ve '%2' tablolarındaki TÜM kayıtları içerir.";
+    Text[ language_user1 ] = " ";
+};
+

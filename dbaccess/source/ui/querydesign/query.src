@@ -1,0 +1,1366 @@
+/*************************************************************************
+ *
+ *  $RCSfile: query.src,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: oj $ $Date: 2001-02-05 09:20:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the License); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an AS IS basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _DBU_RESOURCE_HRC_
+#include "dbu_resource.hrc"
+#endif
+#ifndef DBAUI_QUERY_HRC
+#include "Query.hrc"
+#endif
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#ifndef _CNTIDS_HRC
+#include <sfx2/cntidS.hrc>
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+#ifndef DBAUI_TOOLBOX_HXX
+#include "toolbox.hrc"
+#endif
+
+Menu RID_QUERYCOLPOPUPMENU
+{
+    ItemList =
+    {
+    MenuItem
+    {
+        ITEM_EDIT_DELETE
+    };
+    };
+};
+ImageList IMG_JOINS
+{
+    ImageBitmap = Bitmap { File = "joins.bmp"; };
+    MaskColor   = Color {
+            Red   = 0xffff;
+            Green = 0x0000;
+            Blue  = 0xffff;
+    };
+    IdList = {
+        IMG_PRIMARY_KEY; IMG_FOREIGN_KEY;
+    };
+    IdCount = { 2; };
+};
+
+String STR_QUERY_UNDO_TABWINSHOW
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Tabellenfenster hinzufügen : Tabellenfenster hinzufügen */
+    Text = "Tabellenfenster hinzufügen" ;
+    Text [ ENGLISH ] = "Add Tablewindow" ;
+    Text [ english_us ] = "Add Table" ;
+    Text [ portuguese_brazilian ] = "Tabellenfenster hinzufügen" ;
+    Text [ swedish ] = "Lägg till tabellfönster" ;
+    Text [ danish ] = "Tilføj tabelvindue" ;
+    Text [ italian ] = "Aggiungi finestra di tabella" ;
+    Text [ spanish ] = "Añadir ventana de tabla" ;
+    Text [ french ] = "Ajouter une fenêtre de table" ;
+    Text [ dutch ] = "Tabelvenster toevoegen" ;
+    Text [ portuguese ] = "Adicionar janela de tabela" ;
+    Text[ chinese_simplified ] = "ĞÂÔö±í¸ñÊÓ´°";
+    Text[ russian ] = "Äîáàâèòü îêíî òàáëèöû";
+    Text[ polish ] = "Dodaj okno tabeli";
+    Text[ japanese ] = "Ã°ÌŞÙ³¨İÄŞ³‚Ì’Ç‰Á";
+    Text[ chinese_traditional ] = "·s¼Wªí®æµøµ¡";
+    Text[ dutch ] = "Tabelvenster toevoegen";
+    Text[ chinese_simplified ] = "ĞÂÔö±í¸ñÊÓ´°";
+    Text[ greek ] = "ĞñïóèŞêç ğáñáèıñïõ ğßíáêá";
+    Text[ korean ] = "Å×ÀÌºí »ğÀÔ";
+    Text[ arabic ] = "ÅÖÇİÉ ÌÏæá";
+    Text[ turkish ] = "Tablo penceresi ekle";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_QUERY_UNDO_MOVETABWIN
+{
+    Text = "Tabellenfenster verschieben" ;
+    Text [ ENGLISH ] = "move table window" ;
+    Text [ english_us ] = "Move table window" ;
+    Text [ portuguese_brazilian ] = "Tabellenfenster verschieben" ;
+    Text [ swedish ] = "Flytta tabellfönster" ;
+    Text [ danish ] = "Flyt tabelvindue" ;
+    Text [ italian ] = "Sposta finestra di tabella" ;
+    Text [ spanish ] = "Desplazar ventana de tabla" ;
+    Text [ french ] = "Déplacer une fenêtre de table" ;
+    Text [ dutch ] = "Tabelvenster verplaatsen" ;
+    Text [ portuguese ] = "Mover janela da tabela" ;
+    Text[ chinese_simplified ] = "ÒÆ¶¯±í¸ñÊÓ´°";
+    Text[ russian ] = "Ïåğåìåñòèòü îêíî òàáëèöû";
+    Text[ polish ] = "Przenieœ okno tabeli";
+    Text[ japanese ] = "Ã°ÌŞÙ³¨İÄŞ³‚ÌˆÚ“®";
+    Text[ chinese_traditional ] = "²¾°Êªí®æµøµ¡";
+    Text[ dutch ] = "Tabelvenster verplaatsen";
+    Text[ chinese_simplified ] = "ÒÆ¶¯±í¸ñÊÓ´°";
+    Text[ greek ] = "Ìåôáêßíçóç ğáñáèıñïõ ğßíáêá";
+    Text[ korean ] = "Å×ÀÌºíÃ¢ ÀÌµ¿";
+    Text[ arabic ] = "ÊÍÑíß äÇİĞÉ ÌÏæá";
+    Text[ turkish ] = "Tablo penceresini taşı";
+    Text[ language_user1 ] = " ";
+};
+String STR_QUERY_UNDO_INSERTCONNECTION
+{
+    Text = "Verbindung einfügen" ;
+    Text [ ENGLISH ] = "insert connection" ;
+    Text [ english_us ] = "Insert Join" ;
+    Text [ portuguese_brazilian ] = "Verbindung einfügen" ;
+    Text [ swedish ] = "Infoga förbindelse" ;
+    Text [ danish ] = "Tilføj forbindelse" ;
+    Text [ italian ] = "Inserisci collegamento" ;
+    Text [ spanish ] = "Insertar conexión" ;
+    Text [ french ] = "Insérer un lien" ;
+    Text [ dutch ] = "Verbinding invoegen" ;
+    Text [ portuguese ] = "Inserir ligação" ;
+    Text[ chinese_simplified ] = "²åÈëÁ¬½Ó";
+    Text[ russian ] = "Âñòàâèòü ñâÿçü";
+    Text[ polish ] = "Wstaw sprzê¿enie";
+    Text[ japanese ] = "Œ‹‡‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤J³sµ²";
+    Text[ dutch ] = "Verbinding invoegen";
+    Text[ chinese_simplified ] = "²åÈëÁ¬½Ó";
+    Text[ greek ] = "ĞñïóèŞêç óõíäİóìïõ";
+    Text[ korean ] = "¿¬°á »ğÀÔ";
+    Text[ arabic ] = "ÅÏÑÇÌ ÇÑÊÈÇØ";
+    Text[ turkish ] = "Bağlantı ekle";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_QUERY_UNDO_REMOVECONNECTION
+{
+    Text = "Verbindung löschen" ;
+    Text [ ENGLISH ] = "delete connection" ;
+    Text [ english_us ] = "Delete Join" ;
+    Text [ portuguese_brazilian ] = "Verbindung löschen" ;
+    Text [ swedish ] = "Radera förbindelse" ;
+    Text [ danish ] = "Slet forbindelse" ;
+    Text [ italian ] = "Termina collegamento" ;
+    Text [ spanish ] = "Eliminar conexión" ;
+    Text [ french ] = "Supprimer un lien" ;
+    Text [ dutch ] = "Verbinding wissen" ;
+    Text [ portuguese ] = "Eliminar ligação" ;
+    Text[ chinese_simplified ] = "É¾³ıÁ¬½Ó";
+    Text[ russian ] = "Óäàëèòü ñâÿçü";
+    Text[ polish ] = "Usuñ sprzê¿enie";
+    Text[ japanese ] = "Œ‹‡‚Ìíœ";
+    Text[ chinese_traditional ] = "§R°£³sµ²";
+    Text[ dutch ] = "Verbinding wissen";
+    Text[ chinese_simplified ] = "É¾³ıÁ¬½Ó";
+    Text[ greek ] = "ÄéáãñáöŞ óıíäåóçò";
+    Text[ korean ] = "¿¬°á »èÁ¦";
+    Text[ arabic ] = "ÍĞİ ÇÑÊÈÇØ";
+    Text[ turkish ] = "Bağlantıyı sil";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_QUERY_UNDO_SIZETABWIN
+{
+    Text = "Tabellenfenster - Größe aendern" ;
+    Text [ ENGLISH ] = "size table window" ;
+    Text [ english_us ] = "Resize table window" ;
+    Text [ portuguese_brazilian ] = "Tabellenfenster - Größe aendern" ;
+    Text [ swedish ] = "Tabellfönster - ändra storlek" ;
+    Text [ danish ] = "Tabelvindue - modificer størrelse" ;
+    Text [ italian ] = "Finestra di tabella - cambia dimensione" ;
+    Text [ spanish ] = "Ventana de tabla - Modificar tamaño" ;
+    Text [ french ] = "Modifier la taille d'une fenêtre de table" ;
+    Text [ dutch ] = "Tabelvenster - Grootte veranderen" ;
+    Text [ portuguese ] = "Janela da tabela - modificar tamanho" ;
+    Text[ chinese_simplified ] = "¸ü¸Ä±í¸ñÊÓ´°´óĞ¡";
+    Text[ russian ] = "Èçìåíèòü ğàçìåğ îêíà òàáëèöû";
+    Text[ polish ] = "Zmieñ wielkoœæ okna tabeli";
+    Text[ japanese ] = "Ã°ÌŞÙ³¨İÄŞ³‚Ì‘å‚«‚³‚ğ•ÏX";
+    Text[ chinese_traditional ] = "ÅÜ§óªí®æµøµ¡¤j¤p";
+    Text[ dutch ] = "Tabelvenster - Grootte veranderen";
+    Text[ chinese_simplified ] = "¸ü¸Ä±í¸ñÊÓ´°´óĞ¡";
+    Text[ greek ] = "ĞáñÜèõñï ğßíáêá - ÁëëáãŞ ìåãİèïõò";
+    Text[ korean ] = "Å×ÀÌºíÃ¢- Å©±â Á¶Àı";
+    Text[ arabic ] = "ÊÛííÑ ÍÌã äÇİĞÉ ÌÏæá";
+    Text[ turkish ] = "Tablo penceresini yeniden boyutlandır";
+    Text[ language_user1 ] = " ";
+};
+String STR_QUERY_UNDO_TABFIELDDELETE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Spalte löschen : Spalte löschen */
+    Text = "Spalte löschen" ;
+    Text [ ENGLISH ] = "Delete Column" ;
+    Text [ english_us ] = "Delete Column" ;
+    Text [ portuguese_brazilian ] = "Spalte löschen" ;
+    Text [ swedish ] = "Radera kolumn" ;
+    Text [ danish ] = "Slet kolonne" ;
+    Text [ italian ] = "Elimina colonna" ;
+    Text [ spanish ] = "Eliminar columna" ;
+    Text [ french ] = "Supprimer la colonne" ;
+    Text [ dutch ] = "Kolom wissen" ;
+    Text [ portuguese ] = "Eliminar coluna" ;
+    Text[ chinese_simplified ] = "É¾³ıÁĞ";
+    Text[ russian ] = "Óáğàòü êîëîíêó";
+    Text[ polish ] = "Usuñ kolumnê";
+    Text[ japanese ] = "—ñ‚Ìíœ";
+    Text[ chinese_traditional ] = "§R°£Äæ¦ì";
+    Text[ dutch ] = "Kolom wissen";
+    Text[ chinese_simplified ] = "É¾³ıÁĞ";
+    Text[ greek ] = "ÄéáãñáöŞ óôŞëçò";
+    Text[ korean ] = "¿­ »èÁ¦";
+    Text[ arabic ] = "ÅÒÇáÉ ÇáÚãæÏ";
+    Text[ turkish ] = "Sütunu sil";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_QUERY_UNDO_TABFIELDCREATE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Spalte hinzufügen : Spalte hinzufügen */
+    Text = "Spalte hinzufügen" ;
+    Text [ ENGLISH ] = "Add Column" ;
+    Text [ english_us ] = "Add Column" ;
+    Text [ portuguese_brazilian ] = "Spalte hinzufügen" ;
+    Text [ swedish ] = "Lägg till kolumn" ;
+    Text [ danish ] = "Tilføj kolonne" ;
+    Text [ italian ] = "Aggiungi colonna" ;
+    Text [ spanish ] = "Añadir columna" ;
+    Text [ french ] = "Ajouter une colonne" ;
+    Text [ dutch ] = "Kolom toevoegen" ;
+    Text [ portuguese ] = "Adicionar coluna" ;
+    Text[ chinese_simplified ] = "ĞÂÔöÁĞ";
+    Text[ russian ] = "Äîáàâèòü êîëîíêó";
+    Text[ polish ] = "Dodaj kolumnê";
+    Text[ japanese ] = "—ñ‚Ì’Ç‰Á";
+    Text[ chinese_traditional ] = "·s¼WÄæ";
+    Text[ dutch ] = "Kolom toevoegen";
+    Text[ chinese_simplified ] = "ĞÂÔöÁĞ";
+    Text[ greek ] = "ĞñïóèŞêç óôŞëçò";
+    Text[ korean ] = "¿­ Ãß°¡";
+    Text[ arabic ] = "ÅÖÇİÉ ÚãæÏ";
+    Text[ turkish ] = "Sütun ekle";
+    Text[ language_user1 ] = " ";
+};
+String RID_STR_TABLE_DOESNT_EXIST
+{
+    Text = "Der Ausdruck ist ungueltig, da keine Tabelle '$name$' existiert !";
+    Text [ ENGLISH ] = "The expression is invalid because table '$name$' doesn't exist !";
+    Text[ english_us ] = "Invalid statement, table '$name$' does not exist !";
+    Text[ portuguese ] = "A expressão não é válida, porque a tabela '$name$' não existe!";
+    Text[ russian ] = "Íåïğàâèëüíîå âûğàæåíèå, ò.ê. òàáëèöà '$name$' íå ñóùåñòâóåò !";
+    Text[ dutch ] = "De uitdrukking is ongeldig daar de tabel '$name$' niet bestaat !";
+    Text[ french ] = "Expression incorrecte : la table '$name$' n'existe pas !";
+    Text[ spanish ] = "¡La expresión no es válida porque no existe ninguna tabla '$name$'!";
+    Text[ italian ] = "L'espressione non è valida in quanto la tabella '$name$' non esiste !";
+    Text[ danish ] = "Udtrykket er ugyldigt, tabel '$name$' eksisterer ikke !";
+    Text[ swedish ] = "Uttrycket är ogiltigt då det inte existerar någon tabell med namnet '$name$'!";
+    Text[ polish ] = "Wyra¿enie jest nieprawid³owe, poniewa¿ nie istnieje tabela '$name$'!";
+    Text[ portuguese_brazilian ] = "The expression is invalid because table '$name$' doesn't exist !";
+    Text[ japanese ] = "Ã°ÌŞÙ'$–¼‘O$'‚ª‚È‚¢‚½‚ßA‚±‚Ì•\\Œ»‚Í–³Œø‚Å‚·!";
+    Text[ chinese_simplified ] = "Õâ¸ö±í´ïÊ½ÎŞĞ§£¬ÒòÎª±í¸ñ '$name$' ²»´æÔÚ£¡";
+    Text[ chinese_traditional ] = "³o­Óªí¹F¦¡µL®Ä¡A¦]¬°ªí®æ¦WºÙ '$name$' ¤£¦s¦b¡I";
+    Text[ dutch ] = "De uitdrukking is ongeldig daar de tabel '$name$' niet bestaat !";
+    Text[ chinese_simplified ] = "Õâ¸ö±í´ïÊ½ÎŞĞ§£¬ÒòÎª±í¸ñ '$name$' ²»´æÔÚ£¡";
+    Text[ greek ] = "Ìç İãêõñç İêöñáóç, åğåéäŞ äåí õğÜñ÷åé ï ğßíáêáò '$name$' !";
+    Text[ korean ] = "Å×ÀÌºí '$name$'°¡ Á¸ÀçÇÏÁö ¾ÊÀ¸¹Ç·Î À¯È¿ÇÏÁö ¾ÊÀº ¹®ÀåÀÔ´Ï´Ù !";
+    Text[ arabic ] = "ÇáÚÈÇÑÉ ÛíÑ ÕÇáÍÉ¡ áÚÏã æÌæÏ ÇáÌÏæá  '$name$'!";
+    Text[ turkish ] = "Geçersiz deyim. Tablo '$name$' mevcut değil !";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_STR_FIELD_DOESNT_EXIST
+{
+    Text = "Der Ausdruck ist ungueltig, da der Feldname '$name$' nicht zugerordnet werden kann !";
+    Text [ ENGLISH ] = "The expression is invalid because the field name '$name$' kann nicht zugeordnet werden !";
+    Text[ english_us ] = "Statement invalid, field name '$name$' cannot be assigned !";
+    Text[ portuguese ] = "A expressão não é válida, porque foi impossível atribuir o nome do campo '$name$'!";
+    Text[ russian ] = "Íåïğàâèëüíîå âûğàæåíèå, ïîñêîëüêó èìÿ ïîëÿ '$name$'óïîğÿäî÷èòü íåâîçìîæíî !";
+    Text[ dutch ] = "De uitdrukking is ongeldig omdat de veldnaam '$name$' niet kan worden ondergebracht !";
+    Text[ french ] = "Expression incorrecte : impossible d'attribuer le nom de champ '$name$' !";
+    Text[ spanish ] = "¡La expresión no es válida porque el nombre de campo '$name$' no puede ser asignado!";
+    Text[ italian ] = "L'espressione non è valida in quanto non è possibile correlare il nome di campo '$name$'!";
+    Text[ danish ] = "Udtrykket er ugyldigt, feltnavnet '$name$' kan ikke tildeles!";
+    Text[ swedish ] = "Uttrycket är ogiltigt då fältnamnet '$name$' inte kan tilldelas!";
+    Text[ polish ] = "Wyra¿enie jest nieprawid³owe, poniewa¿ nie mo¿na by³o przypisaæ nazwy pola '$name$'!";
+    Text[ portuguese_brazilian ] = "The expression is invalid because the field name '$name$' kann nicht zugeordnet werden !";
+    Text[ japanese ] = "Ì¨°ÙÄŞ–¼‚Ì'$–¼‘O$'‚ğ•ª—Ş‚Å‚«‚È‚¢‚½‚ß ‚±‚Ì•\\Œ»‚Í–³Œø‚Å‚·!";
+    Text[ chinese_simplified ] = "Õâ¸ö±í´ïÊ½ÎŞĞ§£¬ÒòÎª×Ö¶ÎÃû³Æ '$name$' ÎŞ·¨±»È·ÈÏ£¡";
+    Text[ chinese_traditional ] = "¦]µLªk½T»{Äæ¦ìªº¦WºÙ '$name$' ¡A³o­Óªí¹F¦¡µL®Ä¡T";
+    Text[ dutch ] = "De uitdrukking is ongeldig omdat de veldnaam '$name$' niet kan worden ondergebracht !";
+    Text[ chinese_simplified ] = "Õâ¸ö±í´ïÊ½ÎŞĞ§£¬ÒòÎª×Ö¶ÎÃû³Æ '$name$' ÎŞ·¨±»È·ÈÏ£¡";
+    Text[ greek ] = "Åóöáëìİíç İêöñáóç, ôï üíïìá ğåäßïõ '$name$' äåí åßíáé äõíáôüí íá ğñïóäéïñéóôåß !";
+    Text[ korean ] = "ÇÊµå¸í'$name$'ÀÌ ÁöÁ¤µÉ ¼ö ¾øÀ¸¹Ç·Î ÀÌ ¹®ÀåÀº À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù!";
+    Text[ arabic ] = "ÇáÚÈÇÑÉ ÛíÑ ÕÇáÍÉ áÚÏã ÅãßÇäíÉ ÊÚííä ÇÓã ÇáÍŞá '$name$' !";
+    Text[ turkish ] = "Geçersiz deyim. Alan adı '$name$' atanamıyor !";
+    Text[ language_user1 ] = " ";
+};
+String RID_STR_TOMUCHTABLES
+{
+    Text = "Die Abfrage enthält #num# Tabellen. Der aktuelle Datenbanktyp kann aber maximal #maxnum# Tabelle(n) pro Statement verarbeiten !";
+    Text [ ENGLISH ] = "Die Abfrage enthält #num# Tabellen. Der aktuelle Datenbanktyp kann aber maximal #maxnum# Tabelle(n) pro Statement verarbeiten !";
+    Text[ italian ] = "La ricerca contiene #num# tabelle. Il tipo attuale di dati riesce a elaborare #maxnum# tabella/e massimo per indicazione!";
+    Text[ portuguese_brazilian ] = "Die Abfrage enthält #num# Tabellen. Der aktuelle Datenbanktyp kann aber maximal #maxnum# Tabelle(n) pro Statement verarbeiten !";
+    Text[ portuguese ] = "A consulta tem #num# tabelas. O tipo da base de dados actual admite apenas um máximo de #maxnum# tabela(s)por instrução!";
+    Text[ danish ] = "Forespørgslen indeholder #num# tabeller. Denne databasetype kan dog kun behandle maksimalt #maxnum# tabel(ler) per sætning !";
+    Text[ french ] = "La requête contient #num# tables. Or le type de base de données actif peut traiter au maximum #maxnum# table(s) par instruction !";
+    Text[ swedish ] = "Sökningen innehåller #num# tabeller. Den aktuella databastypen kan dock bara bearbeta max #maxnum# tabell(er) per statement!";
+    Text[ dutch ] = "Query bevat #num# tabellen. Het actuele databastype kan echter maximaal #maxnum# tabel(len) per statement verwerken !";
+    Text[ spanish ] = "La consulta contiene #num# Tablas. ¡El tipo actual de base de datos admite cómo máximo solo #maxnum# tabla(s) por instrucción!";
+    Text[ english_us ] = "The query covers #num# tables. The selected database type, however, can only process a maximum of #maxnum# table(s) per statement!";
+    Text[ chinese_simplified ] = "²éÑ¯º¬ÓĞ #num# ±í¸ñ¡£Õâ¸öÊı¾İ¿âÀàĞÍÔÚ´¦ÀíÒ»¸öÓï¾äÊ±×î¶àÖ»ÄÜ¹»²éÑ¯ #maxnum# ±í¸ñ£¡";
+    Text[ language_user1 ] = " ";
+    Text[ russian ] = "Çàïğîñ ñîäåğæèò #num# òàáëèö(ó,û). Îäíàêî, òåêóùèé òèï áàçû äàííûõ ìîæåò îáğàáîòàòü ìàêñèìóì #maxnum# òàáëèö(ó,û) çà îäíó èíñòğóêöèş !";
+    Text[ polish ] = "Kwerenda zawiera #num# tabele. Aktualny typ bazy danych mo¿e przetworzyæ tylko maksymalnie #maxnum# tabele (-) na instrukcjê!";
+    Text[ japanese ] = "¸´Ø°‚ÍAÃ°ÌŞÙ‚Ì #num#‚ğŠÜ‚İ‚Ü‚·Bì‹Æ’†‚ÌÃŞ°ÀÍŞ°½‚Ìí—Ş‚ÍA‚µ‚©‚µ‚È‚ª‚ç‚Ğ‚Æ‚Â‚Ì½Ã°ÄÒİÄ‚É‚Â‚«Å‘åÃ°ÌŞÙ‚Ì#maxnum# ‚ğˆ—‚Å‚«‚Ü‚·!";
+    Text[ chinese_traditional ] = "¬d¸ß§t¦³ #num# ªí®æ¡C³o­Ó¸ê®Æ®wÃş«¬¦b³B²z¤@­Ó»y¥y®É³Ì¦h¥u¯à°÷¬d¸ß #maxnum# ªí®æ¡T";
+    Text[ dutch ] = "Query bevat #num# tabellen. Het actuele databastype kan echter maximaal #maxnum# tabel(len) per statement verwerken !";
+    Text[ chinese_simplified ] = "²éÑ¯º¬ÓĞ #num# ±í¸ñ¡£Õâ¸öÊı¾İ¿âÀàĞÍÔÚ´¦ÀíÒ»¸öÓï¾äÊ±×î¶àÖ»ÄÜ¹»²éÑ¯ #maxnum# ±í¸ñ£¡";
+    Text[ greek ] = "Ôï åñşôçìá ğåñéİ÷åé #num# ğßíáêåò. Áõôüò ï ôığïò âÜóçò äåäïìİíùí ìğïñåß íá åğåîåñãáóôåß ôï ìİãéóôï #maxnum# ğßíáêá/-åò áíÜ åíôïëŞ!";
+    Text[ korean ] = "ÁúÀÇ´Â #num#Å×ÀÌºíÀ» Æ÷ÇÔÇÕ´Ï´Ù. ±×·¯³ª ÇöÀç µ¥ÀÌÅÍº£ÀÌ½ºÀ¯ÇüÀº ÃÖ´ëÇÑ ¹®Àå´ç #maxnum#Å×ÀÌºíÀ» ÀÛ¾÷ÇÒ ¼ö ÀÖ½À´Ï´Ù!";
+    Text[ arabic ] = "íÍÊæí ÇáÇÓÊİÓÇÑ Úáì #num# ÌÏæáÇğ/ÌÏÇæá. áÇ íãßä áäæÚ ŞÇÚÏÉ ÇáÈíÇäÇÊ ÇáÍÇáíÉ ãÚÇáÌÉ ÃßËÑ ãä #maxnum# ÌÏæáÇğ/ÌÏÇæá ááÚÈÇÑÉ ÇáæÇÍÏÉ!";
+    Text[ turkish ] = "Sorgu #num# tablo içeriyor. Ancak seçili veritabanı tipi her deyim için en fazla #maxnum# tablo işleyebilmektedir !";
+};
+
+String STR_QUERY_UNDO_TABWINDELETE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Tabellenfenster löschen : Tabellenfenster löschen */
+    Text = "Tabellenfenster löschen" ;
+    Text [ ENGLISH ] = "Delete Tablewindow" ;
+    Text [ english_us ] = "Delete Sheet Window" ;
+    Text [ portuguese_brazilian ] = "Tabellenfenster löschen" ;
+    Text [ swedish ] = "Radera tabellfönster" ;
+    Text [ danish ] = "Slet tabelvindue" ;
+    Text [ italian ] = "Elimina finestra di tabella" ;
+    Text [ spanish ] = "Eliminar ventana de tabla" ;
+    Text [ french ] = "Supprimer une fenêtre de table" ;
+    Text [ dutch ] = "Tabelvenster wissen" ;
+    Text [ portuguese ] = "Eliminar janela de tabela" ;
+    Text[ chinese_simplified ] = "É¾³ı±í¸ñÊÓ´°";
+    Text[ russian ] = "Óäàëèòü îêíî òàáëèöû";
+    Text[ polish ] = "Usuñ okno tabeli";
+    Text[ japanese ] = "Ã°ÌŞÙ³¨İÄŞ³‚Ìíœ";
+    Text[ chinese_traditional ] = "§R°£ªí®æµøµ¡";
+    Text[ dutch ] = "Tabelvenster wissen";
+    Text[ chinese_simplified ] = "É¾³ı±í¸ñÊÓ´°";
+    Text[ greek ] = "ÄéáãñáöŞ ğáñáèıñïõ ğßíáêá";
+    Text[ korean ] = "Å×ÀÌºí »èÁ¦";
+    Text[ arabic ] = "ÅÒÇáÉ äÇİĞÉ ÇáÌÏæá";
+    Text[ turkish ] = "Tablo penceresini sil";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_QUERY_UNDO_MODIFY_CELL
+{
+    Text = "Spaltenbeschreibung ändern" ;
+    Text [ ENGLISH ] = "Spaltenbeschreibung ändern" ;
+    Text[ italian ] = "Cambia descrizione colonna";
+    Text[ portuguese_brazilian ] = "Spaltenbeschreibung ändern";
+    Text[ portuguese ] = "Modificar descrição das colunas";
+    Text[ danish ] = "Modificer kolonnebeskrivelse";
+    Text[ french ] = "Modifier la description des colonnes";
+    Text[ swedish ] = "Ändra kolumnbeskrivning";
+    Text[ dutch ] = "Kolombeschrijving wijzigen";
+    Text[ spanish ] = "Modificar descripción de columnas";
+    Text[ english_us ] = "Edit column description";
+    Text[ chinese_simplified ] = "¸ü¸ÄÁĞ±êÌâ";
+    Text[ russian ] = "Èçìåíèòü îïèñàíèå êîëîíêè";
+    Text[ polish ] = "Zmieñ opis kolumn";
+    Text[ japanese ] = "—ñ‹Lq‚Ì•ÏX";
+    Text[ chinese_traditional ] = "ÅÜ§óÄæ¼ĞÃD";
+    Text[ dutch ] = "Kolombeschrijving wijzigen";
+    Text[ chinese_simplified ] = "¸ü¸ÄÁĞ±êÌâ";
+    Text[ greek ] = "Åğåîåñãáóßá ğåñéãñáöŞò óôçëşí";
+    Text[ korean ] = "¿­ ¼³¸í º¯°æ";
+    Text[ arabic ] = "ÊÛííÑ æÕİ ÌÏæá";
+    Text[ turkish ] = "Sütun açıklamasını değiştir";
+    Text[ language_user1 ] = " ";
+};
+String STR_QUERY_UNDO_SIZE_COLUMN
+{
+    Text = "Spaltenbreite ändern" ;
+    Text [ ENGLISH ] = "Spaltenbreite ändern" ;
+    Text[ italian ] = "Cambia larghezza colonna";
+    Text[ portuguese_brazilian ] = "Spaltenbreite ändern";
+    Text[ portuguese ] = "Ajustar largura das colunas";
+    Text[ danish ] = "Modificer kolonnebredde";
+    Text[ french ] = "Modifier la largeur des colonnes";
+    Text[ swedish ] = "Ändra kolumnbredd";
+    Text[ dutch ] = "Kolombreedte wijzigen";
+    Text[ spanish ] = "Modificar ancho de columnas";
+    Text[ english_us ] = "Adjust column width";
+    Text[ chinese_simplified ] = "¸ü¸ÄÁĞ¿í";
+    Text[ russian ] = "Èçìåíèòü øèğèíó êîëîíêè";
+    Text[ polish ] = "Zmieñ szerokoœæ kolumn";
+    Text[ japanese ] = "—ñ‚Ì•‚Ì•ÏX";
+    Text[ chinese_traditional ] = "ÅÜ§óÄæ¼e";
+    Text[ dutch ] = "Kolombreedte wijzigen";
+    Text[ chinese_simplified ] = "¸ü¸ÄÁĞ¿í";
+    Text[ greek ] = "ÁëëáãŞ ğëÜôïõò óôŞëçò";
+    Text[ korean ] = "¿­ ³Êºñ Á¶Àı";
+    Text[ arabic ] = "ÊÛííÑ ÚÑÖ ÚãæÏ";
+    Text[ turkish ] = "Sütun genişliğini değiştir";
+    Text[ language_user1 ] = " ";
+};
+String STR_QUERY_SORTTEXT
+{
+    Text = "(nicht sortiert);aufsteigend;absteigend" ;
+    Text [ ENGLISH ] = "(not sorted);ascending;descending" ;
+    Text [ english_us ] = "(not sorted);ascending;descending" ;
+    Text [ swedish ] = "(icke sorterad);stigande;fallande" ;
+    Text [ danish ] = "(ikke sorteret);stigende;faldende" ;
+    Text [ italian ] = "(non ordinato);crescente;decrescente" ;
+    Text [ spanish ] = "(sin ordenar);ascendente;descendente" ;
+    Text [ french ] = "(Sans tri);Tri croissant;Tri décroissant" ;
+    Text [ dutch ] = "(niet gesorteerd);oplopend;aflopend" ;
+    Text [ portuguese_brazilian ] = "(nicht sortiert);aufsteigend;absteigend" ;
+    Text [ portuguese ] = "(não classificado);ascendente; descendente" ;
+    Text[ chinese_simplified ] = "(²»ÅÅĞò);ÏòÉÏ;ÏòÏÂ";
+    Text[ russian ] = "(áåç ñîğòèğîâêè);ïî âîçğàñòàíèş;ïî óáûâàíèş";
+    Text[ polish ] = "(bez sortowania);rosn¹co;malej¹co";
+    Text[ japanese ] = "(•À‚×‘Ö‚¦‚È‚µ);¸‡;~‡";
+    Text[ chinese_traditional ] = "(¤£±Æ§Ç);¦V¤W;¦V¤U";
+    Text[ dutch ] = "(niet gesorteerd);oplopend;aflopend";
+    Text[ chinese_simplified ] = "(²»ÅÅĞò);ÏòÉÏ;ÏòÏÂ";
+    Text[ greek ] = "(÷ùñßò ôáîéíüìçóç);áıîïõóá, öèßíïõóá";
+    Text[ korean ] = "(Á¤·Ä¾ÈµÊ);¿À¸§Â÷¼ø;³»¸²Â÷¼ø";
+    Text[ arabic ] = "(ÈÏæä İÑÒ)ºÊÕÇÚÏíºÊäÇÒáí";
+    Text[ turkish ] = "(sıralanmamış);artan;azalan";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_QUERY_FUNCTIONS
+{
+    /* Gleiche Textreihenfolge fuer die Funtkionen wie in common.src */
+    Text = "(keine Funktion);Durchschnitt;Anzahl;Maximum;Minimum;Summe;Gruppierung";
+    Text [ ENGLISH ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
+    Text[ english_us ] = "(no function);Average;Count;Maximum;Minimum;Sum;Group";
+    Text[ portuguese ] = "(sem função);Média;Quantidade;Máximo; Mínimo;Soma;Agrupar";
+    Text[ russian ] = "(áåç ôóíêöèè);Ñğåäíåå;Êîëè÷åñòâî;Ìàêñèìóì;Ìèíèìóì;Ñóììà;Ãğóïïà";
+    Text[ dutch ] = "(geen functie);Gemiddelde;Aantal;Maximum;Minimum;Som;Groep";
+    Text[ french ] = "(aucune fonction);Moyenne;Nombre;Maximum;Minimum;Somme;Groupement";
+    Text[ spanish ] = "(sin función);Promedio;Cantidad;Máximo;Mínimo;Suma;Agrupar";
+    Text[ italian ] = "(nessuna funzione);Media;Quantità;Massimo;Minimo;Somma;Gruppo";
+    Text[ danish ] = "(ingen funktion);Middeltal;Antal;Maksimum;Minimum;Sum;Gruppering";
+    Text[ swedish ] = "(ingen funktion);Genomsnitt;Antal;Maximum;Minimum;Summa;Gruppering";
+    Text[ polish ] = "(brak funkcji);Œrednia;Liczba;Maksimum;Minimum;Suma;Grupowanie";
+    Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
+    Text[ japanese ] = "(ŠÖ”‚È‚µ);•½‹Ï;”;Å‘å;Å¬;‡Œv;¸ŞÙ°Ìß";
+    Text[ chinese_simplified ] = "(ÎŞ¹¦ÄÜ);Æ½¾ùÖµ;ÊıÄ¿;×î´ó;×îĞ¡;×ÜÊı;·Ö×é";
+    Text[ chinese_traditional ] = "(µL¥\\¯à);¥­§¡­È;¼Æ¥Ø;³Ì¤j;³Ì¤p;Á`¼Æ;¤À²Õ";
+    Text[ dutch ] = "(geen functie);Gemiddelde;Aantal;Maximum;Minimum;Som;Groep";
+    Text[ chinese_simplified ] = "(ÎŞ¹¦ÄÜ);Æ½¾ùÖµ;ÊıÄ¿;×î´ó;×îĞ¡;×ÜÊı;·Ö×é";
+    Text[ greek ] = "(êáìßá óõíÜñôçóç)-Ìİóïò üñïò,Êáôáìİôñçóç,Ìİãéóôï,ÅëÜ÷éóôï,Óıíïëï,Ïìáäïğïßçóç";
+    Text[ korean ] = "(±â´É ¾øÀ½);Æò±Õ;°³¼ö;ÃÖ´ë;ÃÖ¼Ò;ÇÕ°è;±×·ì";
+    Text[ arabic ] = "ı(ÈÏæä ÏÇáÉ)ºãÚÏáºÚÏÏºÃŞÕìºÃÏäìºãÌãæÚºÊÌãíÚ";
+    Text[ turkish ] = "(işlevsiz);Ortalama;Adet;Azami;Asgari;Toplam;Grup";
+    Text[ language_user1 ] = " ";
+};
+String STR_QUERY_NOTABLE
+{
+    Text = "(keine Tabelle)";
+    Text [ ENGLISH ] = "(no table)";
+    Text[ english_us ] = "(no table)";
+    Text[ portuguese ] = "(nenhuma tabela)";
+    Text[ greek ] = "(÷ùñßò ğßíáêá)";
+    Text[ dutch ] = "(geen tabel)";
+    Text[ french ] = "(aucune table)";
+    Text[ spanish ] = "(ninguna tabla)";
+    Text[ swedish ] = "(ingen tabell)";
+    Text[ language_user1 ] = "nk26.10.99: was bedeutet  das?";
+    Text[ russian ] = "(áåç òàáëèöû)";
+    Text[ italian ] = "(nessuna tabella)";
+    Text[ danish ] = "(ingen tabel)";
+    Text[ polish ] = "(bez tabeli)";
+    Text[ portuguese_brazilian ] = "(no table)";
+    Text[ japanese ] = "(Ã°ÌŞÙ‚È‚µ)";
+    Text[ korean ] = "(Ç¥¾øÀ½)";
+    Text[ chinese_simplified ] = "(ÎŞ±í¸ñ)";
+    Text[ chinese_traditional ] = "(µLªí®æ)";
+    Text[ arabic ] = "(ÈÏæä ÌÏæá)";
+    Text[ turkish ] = "(tablo yok)";
+};
+String STR_QRY_ORDERBY_UNRELATED
+{
+    Text = "Die Datenbank unterstützt die Sortierung nur für sichtbare Felder.";
+    Text[ENGLISH] = "Die Datenbank unterstützt die Sortierung nur für sichtbare Felder.";
+    Text[ english_us ] = "The database only supports sorting for visible fields.";
+    Text[ portuguese ] = "A base de dados só suporta a ordem de campos visíveis.";
+    Text[ russian ] = "Áàçà äàííûõ îáåñïå÷èâàåò ñîğòèğîâêó òîëüêî äëÿ âèäèìûõ ïîëåé.";
+    Text[ dutch ] = "De database ondersteunt alleen de sortering voor zichtbare velden.";
+    Text[ french ] = "La base de données ne supporte le tri que pour les champs visibles.";
+    Text[ spanish ] = "La base de datos apoya la clasificación solo para campos visibles.";
+    Text[ italian ] = "Il database supporta solo la classificazione soltanto dei campi visibili.";
+    Text[ danish ] = "Databasen understøtter sortering kun for synlige felter.";
+    Text[ swedish ] = "Databasen stöder endast sorteringen av synliga fält.";
+    Text[ polish ] = "Baza danych obs³uguje sortowanie tylko dla widocznych pól.";
+    Text[ portuguese_brazilian ] = "Die Datenbank unterstützt die Sortierung nur für sichtbare Felder.";
+    Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚Í¤•\\¦‚³‚ê‚Ä‚¢‚éÌ¨°ÙÄŞ‚Ì•À‚Ñ‘Ö‚¦‚Ì‚İ‚ğ»Îß°Ä‚µ‚Ü‚·B";
+    Text[ chinese_simplified ] = "Êı¾İ¿âÖ»Ö§³Ö¿É¼ûÇøÓòµÄÅÅĞò¡£";
+    Text[ chinese_traditional ] = "¸ê®Æ®w¥u¤ä«ù¥i¨£Äæ¦ìªº±Æ§Ç¡C";
+    Text[ dutch ] = "De database ondersteunt alleen de sortering voor zichtbare velden.";
+    Text[ chinese_simplified ] = "Êı¾İ¿âÖ»Ö§³Ö¿É¼ûÇøÓòµÄÅÅĞò¡£";
+    Text[ greek ] = "Ç âÜóç äåäïìİíùí õğïóôçñßæåé ôçí ôáîéíüìçóç ìüíï ãéá ïñáôÜ ğåäßá.";
+    Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º´Â º¸ÀÌ´Â ÇÊµåÀÇ Á¤·Ä¸¸À» Áö¿øÇÕ´Ï´Ù.";
+    Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ áÇ ÊÏÚã ÇáİÑÒ ÅáÇ ááÍŞæá ÇáãÑÆíÉ.";
+    Text[ turkish ] = "Veritabanı yalnızca görünür alanlar için sıralamayı destekler.";
+    Text[ language_user1 ] = " ";
+};
+Menu RID_QUERYFUNCTION_POPUPMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ID_QUERY_FUNCTION ;
+            HelpID = HID_QUERY_FUNCTION;
+            Text = "Funktionen" ;
+            Text [ ENGLISH ] = "Functions" ;
+            Text[ english_us ] = "Functions";
+            Text[ portuguese ] = "Funções";
+            Text[ russian ] = "Ôóíêöèè";
+            Text[ dutch ] = "Functies";
+            Text[ french ] = "Fonctions";
+            Text[ spanish ] = "Funciones";
+            Text[ italian ] = "Funzioni";
+            Text[ danish ] = "Funktioner";
+            Text[ swedish ] = "Funktioner";
+            Text[ polish ] = "Funkcje";
+            Text[ portuguese_brazilian ] = "Functions";
+            Text[ japanese ] = "ŠÖ”";
+            Text[ chinese_simplified ] = "º¯Êı";
+            Text[ chinese_traditional ] = "¨ç¼Æ";
+            Text[ dutch ] = "Functies";
+            Text[ chinese_simplified ] = "º¯Êı";
+            Text[ greek ] = "ÓõíáñôŞóåéò";
+            Text[ korean ] = "±â´É";
+            Text[ arabic ] = "ÏÇáÇÊ";
+            Text[ turkish ] = "İşlevler";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = ID_QUERY_TABLENAME ;
+            HelpID = HID_QUERY_TABLENAME ;
+            Text = "Tabellenname" ;
+            Text [ ENGLISH ] = "Table name" ;
+            Text[ english_us ] = "Table Name";
+            Text[ portuguese ] = "Nome da tabela";
+            Text[ russian ] = "Èìÿ òàáëèöû";
+            Text[ dutch ] = "Tabelnaam";
+            Text[ french ] = "Nom de la table";
+            Text[ spanish ] = "Nombre de la tabla";
+            Text[ italian ] = "Nome tabella";
+            Text[ danish ] = "Tabelnavn";
+            Text[ swedish ] = "Tabellnamn";
+            Text[ polish ] = "Nazwa tabeli";
+            Text[ portuguese_brazilian ] = "Table name";
+            Text[ japanese ] = "Ã°ÌŞÙ–¼";
+            Text[ chinese_simplified ] = "±í¸ñÃû³Æ";
+            Text[ chinese_traditional ] = "ªí®æ¦WºÙ";
+            Text[ dutch ] = "Tabelnaam";
+            Text[ chinese_simplified ] = "±í¸ñÃû³Æ";
+            Text[ greek ] = "¼íïìá ğßíáêá";
+            Text[ korean ] = "Å×ÀÌºí¸í";
+            Text[ arabic ] = "ÇÓã ÇáÌÏæá";
+            Text[ turkish ] = "Tablo adı";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = ID_QUERY_ALIASNAME ;
+            HelpID = HID_QUERY_ALIASNAME ;
+            Text = "Aliasname" ;
+            Text [ ENGLISH ] = "Alias name" ;
+            Text[ english_us ] = "Alias name";
+            Text[ portuguese ] = "Nome alias";
+            Text[ russian ] = "Ïñåâäîíèì òàáëèöû";
+            Text[ dutch ] = "Alias naam";
+            Text[ french ] = "Alias";
+            Text[ spanish ] = "Alias";
+            Text[ italian ] = "Alias";
+            Text[ danish ] = "Aliasnavn";
+            Text[ swedish ] = "Aliasnamn";
+            Text[ polish ] = "Nazwa aliasu";
+            Text[ portuguese_brazilian ] = "Alias name";
+            Text[ japanese ] = "´²Ø±½–¼";
+            Text[ chinese_simplified ] = "±ğÃû";
+            Text[ chinese_traditional ] = "¥N¥Î¦WºÙ";
+            Text[ dutch ] = "Alias naam";
+            Text[ chinese_simplified ] = "±ğÃû";
+            Text[ greek ] = "Øåõäşíõìï";
+            Text[ korean ] = "¾Ë¸®¾Æ½º ÀÌ¸§";
+            Text[ arabic ] = "ÇÓã ãÓÊÚÇÑ";
+            Text[ turkish ] = "Diğer ad";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            Identifier = ID_QUERY_DISTINCT ;
+            HelpID = HID_QUERY_DISTINCT ;
+            Text = "Eindeutige Werte" ;
+            Text [ ENGLISH ] = "Distinct values" ;
+            Text[ english_us ] = "Distinct Values";
+            Text[ portuguese ] = "Valores distintos";
+            Text[ russian ] = "Îäíîçíà÷íûå çíà÷åíèÿ";
+            Text[ dutch ] = "Duidelijke waarden";
+            Text[ french ] = "Valeurs distinctes";
+            Text[ spanish ] = "Valores unívocos";
+            Text[ italian ] = "Valori distinti";
+            Text[ danish ] = "Entydige værdier";
+            Text[ swedish ] = "Entydiga värden";
+            Text[ polish ] = "Jednoznaczne wartoœci";
+            Text[ portuguese_brazilian ] = "Distinct values";
+            Text[ japanese ] = "–¾—Ä’l";
+            Text[ chinese_simplified ] = "Ã÷È·µÄÊıÖµ";
+            Text[ chinese_traditional ] = "©ú½Tªº¼Æ­È";
+            Text[ dutch ] = "Duidelijke waarden";
+            Text[ chinese_simplified ] = "Ã÷È·µÄÊıÖµ";
+            Text[ greek ] = "Äéáêñéôéêİò ôéìİò";
+            Text[ korean ] = "´ÜÀÏ °ª";
+            Text[ arabic ] = "Şíã æÇÖÍÉ";
+            Text[ turkish ] = "Benzersiz değerler";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+String STR_QUERY_HANDLETEXT
+{
+    Text = "Feld;Alias;Tabelle;Sortierung;Sichtbar;Funktion;Kriterium;oder;oder" ;
+    Text [ ENGLISH ] = "Field;Alias;Table;Order;Visible;Function;Criteria;or;or" ;
+    Text[ english_us ] = "Field;Alias;Table;Sort;Visible;Function;Criterion;Or;Or";
+    Text[ portuguese ] = "Campo;Alias;Tabela;Ordem;Visível;Função;Critério;ou;ou";
+    Text[ russian ] = "Ïîëå;Ïñåâäîíèì;Òàáëèöà;Ñîğòèğîâêà;Âèäèìûé;Ôóíêöèÿ;Êğèòåğèé;èëè;èëè";
+    Text[ dutch ] = "Veld;Alias;Tabel;Volgorde;Zichtbaar;Functie;Criterium;of;of";
+    Text[ french ] = "Champ;Alias;Table;Tri;Visible;Fonction;Critère;Ou;Ou";
+    Text[ spanish ] = "Campo;Alias;Tabla;Orden;Visible;Función;Criterio;o;o";
+    Text[ italian ] = "Campo;Alias;Tabella;Ordine;Visibile;Funzione;Criteri;o;o";
+    Text[ danish ] = "Felt;Alias;Tabel;Sortering;Synlig;Funktion;Kriterium;eller;eller";
+    Text[ swedish ] = "Fält;Alias;Tabell;Sortering;Synlig;Funktion;Kriterium;eller;eller";
+    Text[ polish ] = "Pole;Alias;Tabela;Sortowanie;Widoczny;Funkcja;Kryterium;lub;lub";
+    Text[ portuguese_brazilian ] = "Campo;Tabela;Ordem;Visível;Critérios;ou;ou";
+    Text[ japanese ] = "Ì¨°ÙÄŞ;´²Ø±½;Ã°ÌŞÙ;•À‚×‘Ö‚¦;•\\¦;‹@”\\;Šî€;–”‚Í;–”‚Í";
+    Text[ chinese_simplified ] = "×Ö¶Î;±ğÃû;±í¸ñ;ÅÅĞò;¿É¼ûµÄ;¹¦ÄÜ;±ê×¼;»òÕß;»òÕß";
+    Text[ chinese_traditional ] = "Äæ¦ì;¥N¦W;ªí®æ;±Æ§Ç;¥iµø;³W«h;©ÎªÌ;©ÎªÌ";
+    Text[ dutch ] = "Veld;Alias;Tabel;Volgorde;Zichtbaar;Functie;Criterium;of;of";
+    Text[ chinese_simplified ] = "×Ö¶Î;±ğÃû;±í¸ñ;ÅÅĞò;¿É¼ûµÄ;¹¦ÄÜ;±ê×¼;»òÕß;»òÕß";
+    Text[ greek ] = "Ğåäßï;Øåõäşíõìï;Ğßíáêáò;Ôáîéíüìçóç;Ïñáôü;ÓõíÜñôçóç;ÊñéôŞñéï;Åßôå;Åßôå";
+    Text[ korean ] = "ÇÊµå:¾Ë¸®¾Æ½º;Ç¥;Á¤·Ä;°¡½ÃÀû;±â´É;±âÁØ;¶Ç´Â;¶Ç´Â";
+    Text[ arabic ] = "ÍŞá;ÊÓãíÉ ÈÏíáÉ;ÌÏæá;İÑÒ;ãÑÆí;ãåãÉ;ãÚíÇÑ;Ãæ;Ãæ";
+    Text[ turkish ] = "Alan;Diğer ad;Tablo;Sıralama;Görünür;İşlev;Ölçüt;ya da;ya da";
+    Text[ language_user1 ] = " ";
+};
+
+ErrorBox ERR_QRY_TOO_MANY_COLUMNS
+{
+    Message = "Es sind zu viele Spalten vorhanden." ;
+    Message [ ENGLISH ] = "There are too many columns." ;
+    Message[ italian ] = "Esistono troppe colonne.";
+    Message[ portuguese_brazilian ] = "There are too many columns.";
+    Message[ portuguese ] = "Existem demasiadas colunas.";
+    Message[ danish ] = "Der er for mange kolonner.";
+    Message[ french ] = "Il y a trop de colonnes.";
+    Message[ swedish ] = "Det finns för många kolumner.";
+    Message[ dutch ] = "Er zijn teveel kolommen";
+    Message[ spanish ] = "Existen demasiadas columnas.";
+    Message[ english_us ] = "Too many columns enclosed in query.";
+    Message[ chinese_simplified ] = "ÓĞÌ«¶àµÄÁĞ¡£";
+    Message[ russian ] = "Ñëèøêîì ìíîãî êîëîíîê.";
+    Message[ polish ] = "Jest za du¿o kolumn.";
+    Message[ japanese ] = "—ñ‚ª‘½‚·‚¬‚Ü‚·B";
+    Message[ chinese_traditional ] = "¦³¤Ó¦hªºÄæ¡C";
+    Message[ dutch ] = "Er zijn teveel kolommen";
+    Message[ chinese_simplified ] = "ÓĞÌ«¶àµÄÁĞ¡£";
+    Message[ greek ] = "ÕğÜñ÷ïõí Şäç ğïëëİò óôŞëåò.";
+    Message[ korean ] = "ÁúÀÇ¿¡ ¿­ÀÌ ³Ê¹« ¸¹ÀÌ µé¾î ÀÖ½À´Ï´Ù.";
+    Message[ arabic ] = "íæÌÏ ÃÚãÏÉ ßËíÑÉ ÌÏÇğ.";
+    Message[ turkish ] = "Mevcut sütun sayısı çok fazla.";
+    Message[ language_user1 ] = " ";
+};
+
+ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Eine Bedingung für Feld [*] ist nicht möglich : Eine Bedingung für Feld [*] ist nicht möglich */
+    Message = "Eine Bedingung für Feld [*] ist nicht möglich" ;
+    Message [ ENGLISH ] = "Criteria for field [*] is impossible" ;
+    Message [ portuguese ] = "Condição para o campo [*] não é possível." ;
+    Message [ english_us ] = "A condition cannot be applied to field [*]" ;
+    Message [ portuguese_brazilian ] = "Eine Bedingung für Feld [*] ist nicht möglich" ;
+    Message [ swedish ] = "Ett villkor är omöjligt för fält [*]" ;
+    Message [ danish ] = "En betingelse for felt [*] er ikke mulig" ;
+    Message [ italian ] = "Non è possibile nessuna condizione per il campo [*" ;
+    Message [ spanish ] = "No es posible una condición para el campo [*]" ;
+    Message [ french ] = "Aucune condition possible pour le champ [*]" ;
+    Message [ dutch ] = "Een voorwaarde voor veld [*] is niet mogelijk" ;
+    Message[ chinese_simplified ] = "Ìõ¼şÎŞ·¨ÓÃÓÚ×Ö¶Î [*]";
+    Message[ russian ] = "Óñëîâèå äëÿ ïîëÿ [*] íåâîçìîæíî";
+    Message[ polish ] = "Warunek dla pola [*] nie jest mo¿liwy";
+    Message[ japanese ] = "Ì¨°ÙÄŞ [*] ‚Ö‚ÌğŒ‚Í“–‚Ä‚Í‚Ü‚è‚Ü‚¹‚ñB";
+    Message[ greek ] = "Äåí åßíáé äõíáôüí íá åöáñìïóôåß óõíèŞêç ãéá ôï ğåäßï [*]";
+    Message[ korean ] = "ÇÊµå[*]¿¡´Â ¾Æ¹« Á¶°Çµµ ÁöÁ¤ÇÒ ¼ö ¾øÀ½ ";
+    Message[ chinese_traditional ] = "Äæ¦ìªº±ø¥ó[*]µL®Ä¡C";
+    Message[ arabic ] = "áÇ íãßä ÊØÈíŞ ÔÑØ Úáì ÇáÍŞá [*]";
+    Message[ turkish ] = "[*] alanı için koşul belirlenemiyor";
+};
+ErrorBox ERR_QRY_TOO_LONG_STATEMENT
+{
+    Message = "Der erzeugte SQL Ausdruck ist zu lang." ;
+    Message [ ENGLISH ] = "The created sql expression ist too long." ;
+    Message[ italian ] = "L'espressione SQL creata è troppo lunga.";
+    Message[ portuguese_brazilian ] = "The created sql expression ist too long.";
+    Message[ portuguese ] = "A expressão sql criada é demasiado extensa.";
+    Message[ danish ] = "Det frembragte SQL-udtryk er for langt.";
+    Message[ french ] = "L'expression SQL créée est trop longue.";
+    Message[ swedish ] = "Det skapade SQL-uttrycket är för långt.";
+    Message[ dutch ] = "SQL-uitdrukking is te lang.";
+    Message[ spanish ] = "La expresión creada SQL es demasiado larga.";
+    Message[ english_us ] = "The created SQL statement is too long.";
+    Message[ chinese_simplified ] = "Éú³ÉµÄ SQL ±í´ïÊ½Ì«³¤¡£";
+    Message[ russian ] = "Ñîçäàííîå âûğàæåíèå SQL ñëèøêîì äëèííîå.";
+    Message[ polish ] = "Utworzone wyra¿enie SQL jest za d³ugie.";
+    Message[ japanese ] = "ì¬‚³‚ê‚½SQL‚Ì½Ã°ÄÒİÄ‚ª’·‚·‚¬‚Ü‚·B";
+    Message[ chinese_traditional ] = "¥Í¦¨ªº SQL ªí¹F¦¡¤Óªø¡C";
+    Message[ dutch ] = "SQL-uitdrukking is te lang.";
+    Message[ chinese_simplified ] = "Éú³ÉµÄ SQL ±í´ïÊ½Ì«³¤¡£";
+    Message[ greek ] = "Ç İêöñáóç SQL ğïõ äçìéïõñãŞèçêå åßíáé ğïëı ìåãÜëç.";
+    Message[ korean ] = "ÀÛ¼ºµÈ SQL¹®ÀåÀÌ ³Ê¹« ±é´Ï´Ù.";
+    Message[ arabic ] = "ÚÈÇÑÉ SQL ÇáÊí Êã ÅäÔÇÁåÇ ØæíáÉ ÌÏÇğ.";
+    Message[ turkish ] = "Yaratılan SQL deyimi çok uzun.";
+    Message[ language_user1 ] = " ";
+};
+ErrorBox ERR_QRY_TOOCOMPLEX
+{
+    Message = "Anfrage ist zu komplex" ;
+    Message [ ENGLISH ] = "Query too complex" ;
+    Message [ norwegian ] = "Query too complex" ;
+    Message [ italian ] = "Ricerca troppo complessa" ;
+    Message [ portuguese_brazilian ] = "Consulta muito complexa" ;
+    Message [ portuguese ] = "Consulta demasiado complexa" ;
+    Message [ finnish ] = "Kysely on liian monimutkainen" ;
+    Message [ danish ] = "Forespørgslen er for kompleks" ;
+    Message [ french ] = "Cette requête est trop complexe" ;
+    Message [ swedish ] = "Frågan är alltför komplex" ;
+    Message [ dutch ] = "Query te complex" ;
+    Message [ spanish ] = "Consulta demasiado compleja" ;
+    Message [ english_us ] = "Query is too complex" ;
+    Message[ chinese_simplified ] = "²éÑ¯ÄÚÈİÌ«¸´ºÏ";
+    Message[ russian ] = "Ñëèøêîì ñëîæíûé çàïğîñ";
+    Message[ polish ] = "Kwerenda jest zbyt z³o¿ona";
+    Message[ japanese ] = "¸´Ø°‚ª•¡G‚·‚¬‚Ü‚·B";
+    Message[ chinese_traditional ] = "¬d¸ß¤º®e¤Ó½Æ¦X";
+    Message[ dutch ] = "Query te complex";
+    Message[ chinese_simplified ] = "²éÑ¯ÄÚÈİÌ«¸´ºÏ";
+    Message[ greek ] = "Ôï åñşôçìá åßíáé ğïëı ğåñßğëïêï";
+    Message[ korean ] = "ÁúÀÇ°¡ ³Ê¹« º¹ÇÕÀûÀÓ";
+    Message[ arabic ] = "ÇáÇÓÊİÓÇÑ İí ÛÇíÉ ÇáÊÚŞíÏ";
+    Message[ turkish ] = "Sorgu çok karmaşık";
+    Message[ language_user1 ] = " ";
+};
+ErrorBox ERR_QRY_NOSELECT
+{
+    Message = "Es fehlt eine Selektion" ;
+    Message [ ENGLISH ] = "Missing selection" ;
+    Message [ norwegian ] = "Missing selection" ;
+    Message [ italian ] = "Selezione mancante" ;
+    Message [ portuguese_brazilian ] = "Falta seleção" ;
+    Message [ portuguese ] = "Falta selecção" ;
+    Message [ finnish ] = "Valinta puuttuu" ;
+    Message [ danish ] = "Manglende markering" ;
+    Message [ french ] = "Vous n'avez opéré aucune sélection" ;
+    Message [ swedish ] = "Markering saknas" ;
+    Message [ dutch ] = "Selectie ontbreekt" ;
+    Message [ spanish ] = "Falta una selección" ;
+    Message [ english_us ] = "Nothing selected" ;
+    Message[ chinese_simplified ] = "È±ÉÙÒ»¸öÑ¡Ôñ";
+    Message[ russian ] = "Îòñóòñòâóåò âûäåëåíèå";
+    Message[ polish ] = "Nic nie wybrano";
+    Message[ japanese ] = "‘I‘ğ‚ª‘«‚è‚Ü‚¹‚ñB";
+    Message[ chinese_traditional ] = "¯Ê¤Ö¤@­Ó¿ï¾Ü";
+    Message[ dutch ] = "Selectie ontbreekt";
+    Message[ chinese_simplified ] = "È±ÉÙÒ»¸öÑ¡Ôñ";
+    Message[ greek ] = "Êáìßá åğéëïãŞ";
+    Message[ korean ] = "¾Æ¹« ¼±ÅÃµµ µÇ¾îÀÖÁö ¾ÊÀ½";
+    Message[ arabic ] = "áã íÊã Úãá ÊÍÏíÏ";
+    Message[ turkish ] = "Seçim yapılmadı";
+    Message[ language_user1 ] = " ";
+};
+ErrorBox ERR_QRY_TOOMANYCOND
+{
+    Message = "Zu viele Suchkriterien" ;
+    Message [ ENGLISH ] = "Too many search criteria" ;
+    Message [ norwegian ] = "Too many search criteria" ;
+    Message [ italian ] = "Troppi criteri di ricerca" ;
+    Message [ portuguese_brazilian ] = "Excesso de critérios de  procura" ;
+    Message [ portuguese ] = "Excesso de critérios de procura" ;
+    Message [ finnish ] = "Liian monta hakuehtoa" ;
+    Message [ danish ] = "For mange søgekriterier" ;
+    Message [ french ] = "Trop de critères de recherche" ;
+    Message [ swedish ] = "För många sökkriterier" ;
+    Message [ dutch ] = "Teveel zoekcriteria" ;
+    Message [ spanish ] = "Demasiados criterios de búsqueda" ;
+    Message [ english_us ] = "Too many search criteria" ;
+    Message[ chinese_simplified ] = "ËÑÑ°¹æÔòÌ«¶à";
+    Message[ russian ] = "Ñëèøêîì ìíîãî êğèòåğèåâ ïîèñêà";
+    Message[ polish ] = "Za du¿o kryteriów wyszukiwania";
+    Message[ japanese ] = "ŒŸõğŒ‚ª‘½‚·‚¬‚Ü‚·B";
+    Message[ chinese_traditional ] = "·j´M³W«h¤Ó¦h";
+    Message[ dutch ] = "Teveel zoekcriteria";
+    Message[ chinese_simplified ] = "ËÑÑ°¹æÔòÌ«¶à";
+    Message[ greek ] = "Ôá êñéôŞñéá áíáæŞôçóçò åßíáé ğÜñá ğïëëÜ";
+    Message[ korean ] = "°Ë»ö±âÁØÀÌ ³Ê¹« ¸¹À½";
+    Message[ arabic ] = "ãÚÇííÑ ÇáÈÍË ßËíÑÉ ááÛÇíÉ";
+    Message[ turkish ] = "Arama ölçütü sayısı çok fazla";
+    Message[ language_user1 ] = " ";
+};
+ErrorBox ERR_QRY_SYNTAX
+{
+    Message = "Fehler in der SQL Syntax" ;
+    Message [ ENGLISH ] = "SQL syntax error" ;
+    Message [ norwegian ] = "SQL syntax error" ;
+    Message [ italian ] = "Errore di sintassi SQL" ;
+    Message [ portuguese_brazilian ] = "Erro de sintaxe SQL" ;
+    Message [ portuguese ] = "Erro de sintaxe SQL" ;
+    Message [ finnish ] = "SQL-kielioppivirhe" ;
+    Message [ danish ] = "SQL syntaksfejl" ;
+    Message [ french ] = "Erreur de syntaxe SQL" ;
+    Message [ swedish ] = "Fel i SQL-syntax" ;
+    Message [ dutch ] = "SQL-syntaxisfout" ;
+    Message [ spanish ] = "Error en la sintaxis SQL" ;
+    Message [ english_us ] = "SQL syntax error" ;
+    Message[ chinese_simplified ] = "SQL Óï·¨´íÎó";
+    Message[ russian ] = "Îøèáêà â ñèíòàêñå SQL";
+    Message[ polish ] = "B³¹d sk³adniowy SQL";
+    Message[ japanese ] = "SQL¼İÀ¯¸½´×°";
+    Message[ chinese_traditional ] = "SQL »yªk¿ù»~";
+    Message[ dutch ] = "SQL-syntaxisfout";
+    Message[ chinese_simplified ] = "SQL Óï·¨´íÎó";
+    Message[ greek ] = "Óõíôáêôéêü óöÜëìá SQL";
+    Message[ korean ] = "SQL ±¸¹® ¿À·ù";
+    Message[ arabic ] = "SQL ÎØÃ İí ÈäÇÁ ÌãáÉ";
+    Message[ turkish ] = "SQL sözdizimi hatası";
+    Message[ language_user1 ] = " ";
+};
+ErrorBox ERR_QRY_ORDERBY_ON_ASTERISK
+{
+    Message = "Nach [*] kann nicht sortiert werden.";
+    Message [ ENGLISH ] = "Order by for field [*] is impossible." ;
+    Message[ italian ] = "Non è possibile ordinare per [*].";
+    Message[ portuguese_brazilian ] = "Order by for field [*] is impossible.";
+    Message[ portuguese ] = "[*] não pode ser usado como critério de ordem.";
+    Message[ danish ] = "Det er ikke muligt at sortere efter [*].";
+    Message[ french ] = "Tri en fonction de [*] impossible !";
+    Message[ swedish ] = "Det går inte att sortera efter [*]";
+    Message[ dutch ] = "Na [*] kan niet worden gesorteerd.";
+    Message[ spanish ] = "No se puede ordenar según [*].";
+    Message[ english_us ] = "[*]-cannot be used as a sort criterion.";
+    Message[ chinese_simplified ] = "ÎŞ·¨°´ÕÕ [*] ÅÅĞò¡£";
+    Message[ russian ] = "Ñîğòèğîâàòü ñîãëàñíî [*] íåâîçìîæíî.";
+    Message[ polish ] = "Sortowanie wed³ug [*] nie jest mo¿liwe.";
+    Message[ japanese ] = "[*]‚ğŠî€‚É•À‚×‘Ö‚¦‚Å‚«‚Ü‚¹‚ñB";
+    Message[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé ôáîéíüìçóç ùò ğñïò [*]";
+    Message[ arabic ] = "áÇ íãßä ÇáİÑÒ ÊÈÚÇğ áÜ [*].";
+    Message[ chinese_traditional ] = "µLªk«ö[*]½s±Æ¡C";
+    Message[ korean ] = "[*]¿¡ µû¶ó Á¤·ÄÇÒ ¼ö ¾øÀ½";
+    Message[ turkish ] = "[*] sıralama ölçütü olarak kullanılamaz.";
+    Message[ language_user1 ] = " ";
+};
+String STR_QUERY_TRUE
+{
+    Text = "WAHR" ;
+    Text [ ENGLISH ] = "TRUE" ;
+    Text [ dutch ] = "WAAR" ;
+    Text [ english_us ] = "TRUE" ;
+    Text [ italian ] = "VERO" ;
+    Text [ spanish ] = "VERDADERO" ;
+    Text [ french ] = "VRAI" ;
+    Text [ swedish ] = "SANN" ;
+    Text [ danish ] = "SAND" ;
+    Text [ portuguese ] = "VERDADEIRO" ;
+    Text [ portuguese_brazilian ] = "WAHR" ;
+    Text[ chinese_simplified ] = "TRUE";
+    Text[ russian ] = "ÈÑÒÈÍÀ";
+    Text[ polish ] = "PRAWDA";
+    Text[ japanese ] = "TRUE";
+    Text[ chinese_traditional ] = "TRUE";
+    Text[ arabic ] = "ÕæÇÈ";
+    Text[ dutch ] = "WAAR";
+    Text[ chinese_simplified ] = "TRUE";
+    Text[ greek ] = "ÁËÇÈÇÓ";
+    Text[ korean ] = "Âü";
+    Text[ turkish ] = "DOĞRU";
+};
+String STR_QUERY_FALSE
+{
+    Text = "FALSCH" ;
+    Text [ ENGLISH ] = "FALSE" ;
+    Text [ dutch ] = "ONWAAR" ;
+    Text [ english_us ] = "FALSE" ;
+    Text [ italian ] = "FALSO" ;
+    Text [ spanish ] = "FALSO" ;
+    Text [ french ] = "FAUX" ;
+    Text [ swedish ] = "FALSK" ;
+    Text [ danish ] = "FALSK" ;
+    Text [ portuguese ] = "FALSO" ;
+    Text [ portuguese_brazilian ] = "FALSCH" ;
+    Text[ chinese_simplified ] = "FALSE";
+    Text[ russian ] = "ËÎÆÜ";
+    Text[ polish ] = "FA£SZ";
+    Text[ japanese ] = "FALSE";
+    Text[ chinese_traditional ] = "FALSE";
+    Text[ arabic ] = "ÎØÃ";
+    Text[ dutch ] = "ONWAAR";
+    Text[ chinese_simplified ] = "FALSE";
+    Text[ greek ] = "FALSE";
+    Text[ korean ] = "°ÅÁş";
+    Text[ turkish ] = "YANLIŞ";
+};
+ErrorBox ERR_QRY_TOO_MANY_TABLES
+{
+    Message = "Es sind zu viele Tabellen vorhanden." ;
+    Message [ ENGLISH ] = "There are too many tables." ;
+    Message[ italian ] = "Esistono troppe tabelle.";
+    Message[ portuguese_brazilian ] = "There are too many tables.";
+    Message[ portuguese ] = "Existem demasiadas tabelas.";
+    Message[ danish ] = "Der er for mange tabeller.";
+    Message[ french ] = "Il y a trop de tables.";
+    Message[ swedish ] = "Det finns för många tabeller.";
+    Message[ dutch ] = "Er zijn teveel tabellen";
+    Message[ spanish ] = "Existen demasiadas tablas.";
+    Message[ english_us ] = "Too many tables enclosed.";
+    Message[ chinese_simplified ] = "ÓĞÌ«¶àµÄ±í¸ñ¡£";
+    Message[ russian ] = "Ñëèøêîì ìíîãî òàáëèö.";
+    Message[ polish ] = "Jest za du¿o tabel.";
+    Message[ japanese ] = "Ã°ÌŞÙ‚Ì”‚ª‘½‚·‚¬‚Ü‚·B";
+    Message[ chinese_traditional ] = "ªí®æ¤Ó¦h¡C";
+    Message[ dutch ] = "Er zijn teveel tabellen";
+    Message[ chinese_simplified ] = "ÓĞÌ«¶àµÄ±í¸ñ¡£";
+    Message[ greek ] = "ÕğÜñ÷ïõí Şäç ğïëëïß ğßíáêåò.";
+    Message[ korean ] = "Å×ÀÌºíÀÌ ³Ê¹« ¸¹½À´Ï´Ù.";
+    Message[ arabic ] = "íæÌÏ ÌÏÇæá ßËíÑÉ ÌÏÇğ.";
+    Message[ turkish ] = "Mevcut tablo sayısı çok fazla.";
+    Message[ language_user1 ] = " ";
+};
+
+WarningBox WARN_QRY_NATIVE
+{
+    Buttons = WB_OK_CANCEL ;
+    /* ### ACHTUNG: Neuer Text in Resource? Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen : Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen */
+    Message = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen" ;
+    Message [ ENGLISH ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen" ;
+    Message [ norwegian ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen" ;
+    Message [ italian ] = "Con una ricerca nel dialetto SQL del database lo statement non viene accettato" ;
+    Message [ portuguese_brazilian ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen" ;
+    Message [ portuguese ] = "A instrução não será executada se efectuar a consulta no dialecto SQL da base de dados" ;
+    Message [ french ] = "En cas de requête dans le langage SQL de la base de données, l'instruction ne sera pas appliquée." ;
+    Message [ dutch ] = "Bij query in SQL-dialect van database wordt statement de niet overgenomen." ;
+    Message [ spanish ] = "Al consultar en el dialecto SQL de la base de datos no se acepta la instrucción" ;
+    Message [ danish ] = "Ved forespørgsel i databasens SQL-dialekt bliver sætningen ikke overtaget" ;
+    Message [ swedish ] = "Vid fråga i databasens SQL-dialekt kommer inte statement att övertas" ;
+    Message [ finnish ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen" ;
+    Message [ english_us ] = "The statement will not be applied when querying in the SQL dialect of the database." ;
+    Message[ chinese_simplified ] = "²»½ÓÊÜÊı¾İ¿âµÄ SGL ·½ÑÔ²éÑ¯Ö¸Áî¡£";
+    Message[ russian ] = "Ïğè çàïğîñå â äèàëåêòå SQL áàçû äàííûõ èíñòğóêöèÿ íåïğèìåíèìà";
+    Message[ polish ] = "W kwerendzie w dialekcie bazy danych SQL nie bêdzie mo¿liwe wykonanie instrukcji.";
+    Message[ japanese ] = "ÃŞ°ÀÍŞ°½‚ÌSQLÀŞ²±Ú¸Ä‚É‚ ‚é¸´Ø°‚ÌÀs’†‚Í½Ã°ÄÒİÄ‚Í“K—p‚Å‚«‚Ü‚¹‚ñB";
+    Message[ chinese_traditional ] = "¤£±µ¨ü¸ê®Æ®wªº SGL ¤è¨¥¬d¸ß«ü¥O¡C";
+    Message[ dutch ] = "Bij query in SQL-dialect van database wordt statement de niet overgenomen.";
+    Message[ chinese_simplified ] = "²»½ÓÊÜÊı¾İ¿âµÄ SGL ·½ÑÔ²éÑ¯Ö¸Áî¡£";
+    Message[ greek ] = "ÊáôÜ ôçí åêôİëåóç ôïõ åñùôŞìáôïò óôç äéÜëåêôï SQL ôçò âÜóçò äåäïìİíùí ç åíôïëŞ äåí èá ìğïñåß íá åêôåëåóèåß";
+    Message[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½ºÀÇ SQL¹æ¾ğÀ¸·Î µÈ ÁúÀÇÀÇ °æ¿ì ¹®ÀåÀÌ Àû¿ëµÇÁö ¾Ê½À´Ï´Ù";
+    Message[ arabic ] = "áä íÊã ÊØÈíŞ ÇáÚÈÇÑÉ¡ ÅĞÇ ßÇä ÇáÇÓÊİÓÇÑ ÈáåÌÉ SQL ÇáÎÇÕÉ ÈŞÇÚÏÉ ÇáÈíÇäÇÊ ";
+    Message[ turkish ] = "Deyim, sorgunun bu veritabanının SQL dilinde yapılması halinde kullanılmayacaktır";
+    Message[ language_user1 ] = " ";
+};
+ErrorBox ERR_QRY_AMB_FIELD
+{
+    Message = "Feldname nicht gefunden oder eindeutig" ;
+    Message [ ENGLISH ] = "Field name not found or not unique" ;
+    Message [ norwegian ] = "Field name not found or not unique" ;
+    Message [ italian ] = "Nome del campo non trovato o non univoco" ;
+    Message [ portuguese_brazilian ] = "Nome de campo não encontrado ou não exclusivo" ;
+    Message [ portuguese ] = "Nome de campo não encontrado ou não exclusivo" ;
+    Message [ finnish ] = "Kentän nimi puuttuu tai ei ole yksikäsitteinen" ;
+    Message [ danish ] = "Feltnavn ikke fundet eller ikke entydigt" ;
+    Message [ french ] = "Nom de champ introuvable ou ambigu" ;
+    Message [ swedish ] = "Fältnamn hittades inte eller är inte entydigt" ;
+    Message [ dutch ] = "Veldnaam niet gevonden of niet duidelijk" ;
+    Message [ spanish ] = "El nombre del campo no se encontró o no es único" ;
+    Message [ english_us ] = "Field name not found or not unique" ;
+    Message[ chinese_simplified ] = "Ã»ÓĞÕÒµ½×Ö¶ÎÃû³Æ»òÕß²»Ã÷È·¡£";
+    Message[ russian ] = "Èìÿ ïîëÿ íåíàéäåíî èëè îíî íåîäíîçíà÷íî";
+    Message[ polish ] = "Nazwy pola nie znaleziono lub jest ona nie jednoznaczna";
+    Message[ japanese ] = "Ì¨°ÙÄŞ–¼‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB–”‚ÍA–¾Šm‚Å‚ ‚è‚Ü‚¹‚ñB";
+    Message[ language_user1 ] = " ";
+    Message[ chinese_traditional ] = "¨S¦³§ä¨ìÄæ¦ì¦WºÙ©ÎªÌ¦WºÙ¤£©ú½T¡C";
+    Message[ dutch ] = "Veldnaam niet gevonden of niet duidelijk";
+    Message[ chinese_simplified ] = "Ã»ÓĞÕÒµ½×Ö¶ÎÃû³Æ»òÕß²»Ã÷È·¡£";
+    Message[ greek ] = "¼íïìá ğåäßïõ äåí âñİèçêå Ş äåí åßíáé áğïêëåéóôéêü";
+    Message[ korean ] = "ÇÊµå¸íÀ» Ã£Áö ¸øÇß°Å³ª ºÒºĞ¸íÇÔ";
+    Message[ arabic ] = "ÇÓã ÇáÍŞá ÛíÑ ãæÌæÏ Ãæ ÛíÑ æÇÖÍ";
+    Message[ turkish ] = "Alan adı bulunamadı ya da benzersiz değil";
+};
+ErrorBox ERR_QRY_ILLEGAL_JOIN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung konnte nicht ausgeführt werden : Verknüpfung konnte nicht ausgeführt werden */
+    Message = "Verknüpfung konnte nicht ausgeführt werden" ;
+    Message [ ENGLISH ] = "Could not create link" ;
+    Message [ norwegian ] = "Could not create link" ;
+    Message [ italian ] = "Impossibile creare il collegamento" ;
+    Message [ portuguese_brazilian ] = "Não pude criar ligação" ;
+    Message [ portuguese ] = "Impossível criar ligação" ;
+    Message [ finnish ] = "Linkkiä ei voi luoda" ;
+    Message [ danish ] = "Det var ikke muligt at oprette en kæde" ;
+    Message [ french ] = "Le lien n'a pas pu être créé" ;
+    Message [ swedish ] = "Länk kunde inte utföras" ;
+    Message [ dutch ] = "Koppeling kon niet tot stand worden gebracht" ;
+    Message [ spanish ] = "No se pudo ejecutar el vínculo." ;
+    Message [ english_us ] = "A join can not be processed" ;
+    Message[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞÁ´½Ó¹¦ÄÜ";
+    Message[ russian ] = "Âûïîëíèòü ñâÿçü íå óäàåòñÿ";
+    Message[ polish ] = "Sprzê¿enia nie mo¿na by³o wykonaæ";
+    Message[ japanese ] = "Øİ¸‚Ìì¬‚Ío—ˆ‚Ü‚¹‚ñB";
+    Message[ chinese_traditional ] = "µLªk°õ¦æ³sµ²¥\\¯à";
+    Message[ dutch ] = "Koppeling kon niet tot stand worden gebracht";
+    Message[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞÁ´½Ó¹¦ÄÜ";
+    Message[ greek ] = "Ï óıíäåóìïò äåí Şôáí äõíáôüí íá ïëïêëçñùèåß";
+    Message[ korean ] = "°áÇÕÀÌ ½ÇÇàµÇÁö ¸øÇßÀ½";
+    Message[ arabic ] = "áã íãßä ÊäİíĞ ÇÑÊÈÇØ";
+    Message[ turkish ] = "Bağlantı oluşturulamadı";
+    Message[ language_user1 ] = " ";
+};
+ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
+{
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 3 , 1 ) ;
+    Size = MAP_APPFONT ( 200 , 14 ) ;
+    OutputSize = TRUE ;
+    Align = BOXALIGN_TOP ;
+    ItemImageList = RID_DEFAULTIMAGELIST_SC ;
+    HideWhenDeactivate = TRUE ;
+    HelpId = HID_TLB_QUERYDESIGN ;
+
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_EDITDOC ;
+            HelpId = ID_BROWSER_EDITDOC ;
+            Text = "Bearbeiten" ;
+            Text [ ENGLISH ] = "Bearbeiten" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NEWDOC ;
+            HelpId = SID_NEWDOC ;
+            Hide = TRUE;
+            Text = "Bearbeiten" ;
+            Text [ ENGLISH ] = "Bearbeiten" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_SAVEDOC ;
+            HelpId = ID_BROWSER_SAVEDOC ;
+            Text = "Speichern" ;
+            Text [ ENGLISH ] = "Save" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_SAVEASDOC ;
+            HelpId = ID_BROWSER_SAVEASDOC ;
+            Text = "Speichern als" ;
+            Text [ ENGLISH ] = "Save as" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PRINTDOCDIRECT ;
+            HelpId = SID_PRINTDOCDIRECT ;
+            Hide = TRUE;
+            Text = "Drucken" ;
+            Text [ ENGLISH ] = "Print" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_CUT ;
+            HelpId = ID_BROWSER_CUT ;
+            MID_SBA_QRY_CUT
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_COPY ;
+            HelpId = ID_BROWSER_COPY ;
+            MID_SBA_QRY_COPY
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_PASTE ;
+            HelpId = ID_BROWSER_PASTE ;
+            MID_SBA_QRY_PASTE
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_UNDO ;
+            HelpId = ID_BROWSER_UNDO ;
+            Text = "Rückgängig" ;
+            Text [ ENGLISH ] = "Undo" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_REDO ;
+            HelpId = ID_BROWSER_REDO ;
+            Text = "Wiederherstellen" ;
+            Text [ ENGLISH ] = "Redo" ;
+
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_QUERY_EXECUTE;
+            HelpId = ID_BROWSER_QUERY_EXECUTE ;
+            Text = "Ausführen" ;
+            Text [ ENGLISH ] = "Execute" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_ESACPEPROCESSING;
+            HelpId = ID_BROWSER_ESACPEPROCESSING ;
+            Text = "SQL-Kommando direkt ausführen" ;
+            Text [ ENGLISH ] = "Native sql command" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_CLEAR_QUERY;
+            HelpId = ID_BROWSER_CLEAR_QUERY ;
+            Text = "Abfrage löschen" ;
+            Text [ ENGLISH ] = "clear query" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_SQL;
+            HelpId = ID_BROWSER_SQL ;
+            Text = "Design Ansicht an-, ausschalten" ;
+            Text [ ENGLISH ] = "switch design view on/off" ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_ADDTABLE;
+            HelpId = ID_BROWSER_ADDTABLE ;
+            Text = "Tabellen hinzufügen" ;
+            Text [ ENGLISH ] = "Add tables" ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_QUERY_VIEW_FUNCTIONS;
+            HelpId = ID_BROWSER_QUERY_VIEW_FUNCTIONS ;
+            Text = "Funktionen" ;
+            Text [ ENGLISH ] = "Functions" ;
+            Text[ english_us ] = "Functions";
+            Text[ portuguese ] = "Funções";
+            Text[ russian ] = "Ôóíêöèè";
+            Text[ dutch ] = "Functies";
+            Text[ french ] = "Fonctions";
+            Text[ spanish ] = "Funciones";
+            Text[ italian ] = "Funzioni";
+            Text[ danish ] = "Funktioner";
+            Text[ swedish ] = "Funktioner";
+            Text[ polish ] = "Funkcje";
+            Text[ portuguese_brazilian ] = "Functions";
+            Text[ japanese ] = "ŠÖ”";
+            Text[ chinese_simplified ] = "º¯Êı";
+            Text[ chinese_traditional ] = "¨ç¼Æ";
+            Text[ dutch ] = "Functies";
+            Text[ chinese_simplified ] = "º¯Êı";
+            Text[ greek ] = "ÓõíáñôŞóåéò";
+            Text[ korean ] = "±â´É";
+            Text[ arabic ] = "ÏÇáÇÊ";
+            Text[ turkish ] = "İşlevler";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_QUERY_VIEW_TABLES;
+            HelpId = ID_BROWSER_QUERY_VIEW_TABLES ;
+            Text = "Tabellenname" ;
+            Text [ ENGLISH ] = "Table name" ;
+            Text[ english_us ] = "Table Name";
+            Text[ portuguese ] = "Nome da tabela";
+            Text[ russian ] = "Èìÿ òàáëèöû";
+            Text[ dutch ] = "Tabelnaam";
+            Text[ french ] = "Nom de la table";
+            Text[ spanish ] = "Nombre de la tabla";
+            Text[ italian ] = "Nome tabella";
+            Text[ danish ] = "Tabelnavn";
+            Text[ swedish ] = "Tabellnamn";
+            Text[ polish ] = "Nazwa tabeli";
+            Text[ portuguese_brazilian ] = "Table name";
+            Text[ japanese ] = "Ã°ÌŞÙ–¼";
+            Text[ chinese_simplified ] = "±í¸ñÃû³Æ";
+            Text[ chinese_traditional ] = "ªí®æ¦WºÙ";
+            Text[ dutch ] = "Tabelnaam";
+            Text[ chinese_simplified ] = "±í¸ñÃû³Æ";
+            Text[ greek ] = "¼íïìá ğßíáêá";
+            Text[ korean ] = "Å×ÀÌºí¸í";
+            Text[ arabic ] = "ÇÓã ÇáÌÏæá";
+            Text[ turkish ] = "Tablo adı";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_QUERY_VIEW_ALIASES;
+            HelpId = ID_BROWSER_QUERY_VIEW_ALIASES ;
+            Text = "Aliasname" ;
+            Text [ ENGLISH ] = "Alias name" ;
+            Text[ english_us ] = "Alias name";
+            Text[ portuguese ] = "Nome alias";
+            Text[ russian ] = "Ïñåâäîíèì òàáëèöû";
+            Text[ dutch ] = "Alias naam";
+            Text[ french ] = "Alias";
+            Text[ spanish ] = "Alias";
+            Text[ italian ] = "Alias";
+            Text[ danish ] = "Aliasnavn";
+            Text[ swedish ] = "Aliasnamn";
+            Text[ polish ] = "Nazwa aliasu";
+            Text[ portuguese_brazilian ] = "Alias name";
+            Text[ japanese ] = "´²Ø±½–¼";
+            Text[ chinese_simplified ] = "±ğÃû";
+            Text[ chinese_traditional ] = "¥N¥Î¦WºÙ";
+            Text[ dutch ] = "Alias naam";
+            Text[ chinese_simplified ] = "±ğÃû";
+            Text[ greek ] = "Øåõäşíõìï";
+            Text[ korean ] = "¾Ë¸®¾Æ½º ÀÌ¸§";
+            Text[ arabic ] = "ÇÓã ãÓÊÚÇÑ";
+            Text[ turkish ] = "Diğer ad";
+            Text[ language_user1 ] = " ";
+        };
+        ToolBoxItem
+        {
+            Identifier = ID_BROWSER_QUERY_DISTINCT_VALUES;
+            HelpId = ID_BROWSER_QUERY_DISTINCT_VALUES ;
+            Text = "Eindeutige Werte" ;
+            Text [ ENGLISH ] = "Distinct values" ;
+            Text[ english_us ] = "Distinct Values";
+            Text[ portuguese ] = "Valores distintos";
+            Text[ russian ] = "Îäíîçíà÷íûå çíà÷åíèÿ";
+            Text[ dutch ] = "Duidelijke waarden";
+            Text[ french ] = "Valeurs distinctes";
+            Text[ spanish ] = "Valores unívocos";
+            Text[ italian ] = "Valori distinti";
+            Text[ danish ] = "Entydige værdier";
+            Text[ swedish ] = "Entydiga värden";
+            Text[ polish ] = "Jednoznaczne wartoœci";
+            Text[ portuguese_brazilian ] = "Distinct values";
+            Text[ japanese ] = "–¾—Ä’l";
+            Text[ chinese_simplified ] = "Ã÷È·µÄÊıÖµ";
+            Text[ chinese_traditional ] = "©ú½Tªº¼Æ­È";
+            Text[ dutch ] = "Duidelijke waarden";
+            Text[ chinese_simplified ] = "Ã÷È·µÄÊıÖµ";
+            Text[ greek ] = "Äéáêñéôéêİò ôéìİò";
+            Text[ korean ] = "´ÜÀÏ °ª";
+            Text[ arabic ] = "Şíã æÇÖÍÉ";
+            Text[ turkish ] = "Benzersiz değerler";
+            Text[ language_user1 ] = " ";
+        };
+/*      ToolBoxItem
+        {
+            Identifier = SID_ZOOM_OUT ;
+            HelpId = SID_ZOOM_OUT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_ZOOM_IN ;
+            HelpId = SID_ZOOM_IN ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_EXPLORER_CONTENT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+*/
+    };
+};
+
+
