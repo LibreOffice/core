@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-10-16 11:12:00 $
+ *  last change: $Author: os $ $Date: 2002-04-29 11:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ protected:
     BOOL AddGrfUpdateSlot( USHORT nSlot )
                                 { return aGrfUpdateSlots.Insert( nSlot ); }
 
+    void InsertURLButton(const String& rURL, const String& rTarget, const String& rTxt);
 public:
     SwBaseShell(SwView &rShell);
     virtual     ~SwBaseShell();

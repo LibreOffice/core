@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:47:56 $
+ *  last change: $Author: os $ $Date: 2002-04-29 11:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,13 +293,6 @@
 #endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
-#endif
-
-#ifdef OS2
-#include <vcl/sysdep.hxx>
-#endif
-#ifndef _FSYS_HXX
-#include <tools/fsys.hxx>
 #endif
 
 USHORT SwBaseShell::nFrameMode = FLY_DRAG_END;
@@ -859,36 +852,37 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case SID_GALLERY_FORMATS:
         {
             const int nSelType = rSh.GetSelectionType();
-            if ( !rSh.IsSelFrmMode() || nSelType & SwWrtShell::SEL_GRF )
+            if(SFX_ITEM_SET == pArgs->GetItemState( nSlot, TRUE, &pItem))
             {
-                if( SFX_ITEM_SET == pArgs->GetItemState( nSlot, TRUE, &pItem) &&
-                    SGA_FORMAT_GRAPHIC & ((SfxUInt32Item*)pItem)->GetValue())
+                GalleryExplorer* pGal = 0;
+                if ( (!rSh.IsSelFrmMode() || nSelType & SwWrtShell::SEL_GRF) &&
+                    0!= (pGal = SVX_GALLERY())&&
+                    0 != (SGA_FORMAT_GRAPHIC & ((SfxUInt32Item*)pItem)->GetValue()))
                 {
+                    SwWait aWait( *rView.GetDocShell(), TRUE );
 
-                    GalleryExplorer* pGal = SVX_GALLERY();
+                    String aGrfName, aFltName;
+                    const Graphic aGrf( pGal->GetGraphic() );
 
-                    if ( pGal )
+                    if( pGal->IsLinkage() )
                     {
-                        SwWait aWait( *rView.GetDocShell(), TRUE );
-
-                        String aGrfName, aFltName;
-                        const Graphic aGrf( pGal->GetGraphic() );
-
-                        if( pGal->IsLinkage() )
-                        {
-                            // Verknuepft
-                            aGrfName = pGal->GetURL().PathToFileName();
-                            aGrfName = URIHelper::SmartRelToAbs(aGrfName);
-                            aFltName = pGal->GetFilterName();
-                        }
-
-                        if ( nSelType & SwWrtShell::SEL_GRF )
-                            rSh.ReRead( aGrfName, aFltName, &aGrf );
-                        else
-                            rSh.Insert( aGrfName, aFltName, aGrf );
-
-                        GetView().GetEditWin().GrabFocus();
+                        // Verknuepft
+                        aGrfName = pGal->GetURL().PathToFileName();
+                        aGrfName = URIHelper::SmartRelToAbs(aGrfName);
+                        aFltName = pGal->GetFilterName();
                     }
+
+                    if ( nSelType & SwWrtShell::SEL_GRF )
+                        rSh.ReRead( aGrfName, aFltName, &aGrf );
+                    else
+                        rSh.Insert( aGrfName, aFltName, aGrf );
+
+                    GetView().GetEditWin().GrabFocus();
+                }
+                else if(!rSh.IsSelFrmMode() && SGA_FORMAT_SOUND & ((SfxUInt32Item*)pItem)->GetValue())
+                {
+                    String aURL( pGal->GetURL().GetMainURL( INetURLObject::NO_DECODE ) );
+                    InsertURLButton( aURL, aEmptyStr, aURL );
                 }
             }
         }
@@ -2586,5 +2580,4 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
             ASSERT(FALSE, falscher Dispatcher);
     }
 }
-
 

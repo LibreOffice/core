@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:32 $
+ *  last change: $Author: os $ $Date: 2002-04-29 11:25:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@ class SwTextShell: public SwBaseShell
     void InsertSymbol( const String& rChars, const String& rFont );
     void InsertHyperlink(const SvxHyperlinkItem& rHlnkItem);
     BOOL InsertGraphicDlg();
-    void InsertURLButton(const String& rURL, const String& rTarget, const String& rTxt);
 
 public:
     SFX_DECL_INTERFACE(SW_TEXTSHELL);

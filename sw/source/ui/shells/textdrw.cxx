@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdrw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:47 $
+ *  last change: $Author: os $ $Date: 2002-04-29 11:26:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,8 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
-#ifndef _TEXTSH_HXX
-#include <textsh.hxx>
+#ifndef _BASESH_HXX
+#include <basesh.hxx>
 #endif
 
 #ifndef _POOLFMT_HRC
@@ -111,7 +111,7 @@ using namespace ::rtl;
     Beschreibung:
  ----------------------------------------------------------------------------*/
 
-void SwTextShell::InsertURLButton(const String& rURL, const String& rTarget, const String& rTxt)
+void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, const String& rTxt)
 {
     SwWrtShell& rSh = GetShell();
 
@@ -178,101 +178,5 @@ void SwTextShell::InsertURLButton(const String& rURL, const String& rTarget, con
     rSh.EndUndo( UIUNDO_INSERT_URLBTN );
     rSh.EndAction();
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.36  2000/09/18 16:06:05  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.35  2000/05/16 09:15:14  os
-    project usr removed
-
-    Revision 1.34  2000/04/18 14:58:24  os
-    UNICODE
-
-    Revision 1.33  2000/03/23 07:49:14  os
-    UNO III
-
-    Revision 1.32  2000/02/11 14:57:44  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.31  1999/11/19 16:40:24  os
-    modules renamed
-
-    Revision 1.30  1999/01/26 13:48:26  OS
-    #56371# TF_ONE51
-
-
-      Rev 1.29   26 Jan 1999 14:48:26   OS
-   #56371# TF_ONE51
-
-      Rev 1.28   21 Jan 1999 23:59:00   JP
-   Bug #61062#: InsertURL mit eigener UndoId
-
-      Rev 1.27   07 Jul 1998 14:03:54   OM
-   #51853# util::URL-Button wiederbelebt
-
-      Rev 1.26   06 Jul 1998 14:18:46   OM
-   #51853# util::URL-Button einfuegen
-
-      Rev 1.25   09 Jun 1998 15:35:58   OM
-   VC-Controls entfernt
-
-      Rev 1.24   29 Nov 1997 15:52:54   MA
-   includes
-
-      Rev 1.23   24 Nov 1997 09:47:08   MA
-   includes
-
-      Rev 1.22   03 Nov 1997 13:55:46   MA
-   precomp entfernt
-
-      Rev 1.21   05 Sep 1997 12:08:16   MH
-   chg: header
-
-      Rev 1.20   29 Jul 1997 16:00:16   TJ
-   include VCURLButton
-
-      Rev 1.19   04 Apr 1997 16:41:46   HJS
-   includes
-
-      Rev 1.18   08 Nov 1996 11:59:22   HJS
-   include w.g. positivdefine
-
-      Rev 1.17   28 Aug 1996 15:55:04   OS
-   includes
-
-      Rev 1.16   15 Aug 1996 13:44:24   JP
-   svdraw.hxx entfernt
-
-      Rev 1.15   11 Jul 1996 12:15:44   OM
-   #29283# Buttons zeichengebunden einfuegen
-
-      Rev 1.14   26 Jun 1996 15:21:00   OS
-   Aufruf von Dispatcher.Execute an 324 angepasst
-
-      Rev 1.13   25 Jun 1996 22:07:12   JP
-   SmartRelToAbs: Flag fuer CutMark hat jetzt inverse Bedeutung
-
-      Rev 1.12   18 Jun 1996 12:29:36   JP
-   SmartRelToAbs: text::Bookmark soll beibehalten werden
-
-      Rev 1.11   13 Jun 1996 15:55:36   MA
-   splitt si.hxx
-
-      Rev 1.10   12 Jun 1996 15:09:18   OM
-   Target am util::URL-Button setzen
-
-      Rev 1.9   12 Jun 1996 14:56:48   OM
-   Target aus Hyperlinkleiste uebernehmen
-
-      Rev 1.8   31 May 1996 11:17:14   NF
-   CLOOKS
-
-      Rev 1.7   11 Apr 1996 17:22:40   JP
-   Umstellung - RelToAbs/AbsToRel
-
-------------------------------------------------------------------------*/
 
 
