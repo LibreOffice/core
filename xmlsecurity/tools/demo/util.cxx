@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mmi $ $Date: 2004-08-12 02:30:19 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:00:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,15 +169,69 @@ cssu::Reference< cssl::XMultiServiceFactory > serviceManager(
     const SignatureInformation& infor,
     cssu::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& xSecurityEnvironment )
 {
-    char* status[5]={"INIT", "CREATION_SUCCEED", "CREATION_FAIL", "VERIFY_SUCCEED", "VERIFY_FAIL"};
+    char* status[50] = {
+        "STATUS_UNKNOWN",
+        "OPERATION_SUCCEEDED",
+        "RUNTIMEERROR_FAILED",
+        "ENGINE_FAILED",
+        "MALLOC_FAILED",
+        "STRDUP_FAILED",
+        "CRYPTO_FAILED",
+        "XML_FAILED",
+        "XSLT_FAILED",
+        "IO_FAILED",
+        "DISABLED",
+        "NOT_IMPLEMENTED",
+        "INVALID_SIZE",
+        "INVALID_DATA",
+        "INVALID_RESULT",
+        "INVALID_TYPE",
+        "INVALID_OPERATION",
+        "INVALID_STATUS",
+        "INVALID_FORMAT",
+        "DATA_NOT_MATCH",
+        "INVALID_NODE",
+        "INVALID_NODE_CONTENT",
+        "INVALID_NODE_ATTRIBUTE",
+        "MISSING_NODE_ATTRIBUTE",
+        "NODE_ALREADY_PRESENT",
+        "UNEXPECTED_NODE",
+        "NODE_NOT_FOUND",
+        "INVALID_TRANSFORM",
+        "INVALID_TRANSFORM_KEY",
+        "INVALID_URI_TYPE",
+        "TRANSFORM_SAME_DOCUMENT_REQUIRED",
+        "TRANSFORM_DISABLED",
+        "INVALID_KEY_DATA",
+        "KEY_DATA_NOT_FOUND",
+        "KEY_DATA_ALREADY_EXIST",
+        "INVALID_KEY_DATA_SIZE",
+        "KEY_NOT_FOUND",
+        "KEYDATA_DISABLED",
+        "MAX_RETRIEVALS_LEVEL",
+        "MAX_RETRIEVAL_TYPE_MISMATCH",
+        "MAX_ENCKEY_LEVEL",
+        "CERT_VERIFY_FAILED",
+        "CERT_NOT_FOUND",
+        "CERT_REVOKED",
+        "CERT_ISSUER_FAILED",
+        "CERT_NOT_YET_VALID",
+        "CERT_HAS_EXPIRED",
+        "DSIG_NO_REFERENCES",
+        "DSIG_INVALID_REFERENCE",
+        "ASSERTION"};
+
+    //char* status[5]={"INIT", "CREATION_SUCCEED", "CREATION_FAIL", "VERIFY_SUCCEED", "VERIFY_FAIL"};
 
     rtl::OUString result;
 
     result += rtl::OUString::createFromAscii( "Security Id : " )
         +rtl::OUString::valueOf(infor.nSecurityId)
         +rtl::OUString::createFromAscii( "\n" );
-    result += rtl::OUString::createFromAscii( "Status : " )
-        +rtl::OUString::createFromAscii( status[infor.nStatus] )
+    result += rtl::OUString::createFromAscii( "Status : [" )
+        +rtl::OUString::valueOf((sal_Int32)(infor.nStatus))
+        +rtl::OUString::createFromAscii( "] " )
+        +rtl::OUString::createFromAscii(status[infor.nStatus])
         +rtl::OUString::createFromAscii( "\n" );
 
     const SignatureReferenceInformations& rInfors = infor.vSignatureReferenceInfors;
