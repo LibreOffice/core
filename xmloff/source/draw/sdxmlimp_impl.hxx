@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-25 11:45:08 $
+ *  last change: $Author: aw $ $Date: 2001-07-31 16:30:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,6 +332,9 @@ public:
 
     void setDrawPageId( sal_Int32 nId, com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > );
     com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > getDrawPageForId( sal_Int32 nId );
+
+    // #80365#
+    virtual void SetStatisticAttributes(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs);
 };
 
 #endif  //  _SDXMLIMP_HXX

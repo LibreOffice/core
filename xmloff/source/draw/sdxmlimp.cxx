@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-25 11:45:08 $
+ *  last change: $Author: aw $ $Date: 2001-07-31 16:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,12 +632,14 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
 SdXMLImport::~SdXMLImport()
 {
-    // stop progress view
-    if(mxStatusIndicator.is())
-    {
-        mxStatusIndicator->end();
-        mxStatusIndicator->reset();
-    }
+// #80365# removed ending of progress bar here, this was an old implementation
+// and maybe removed on demand
+//  // stop progress view
+//  if(mxStatusIndicator.is())
+//  {
+//      mxStatusIndicator->end();
+//      mxStatusIndicator->reset();
+//  }
 
     // Styles or AutoStyles context?
     if(mpMasterStylesContext)
@@ -985,3 +987,38 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
         pValues++;
     }
 }
+
+// #80365# overload this method to read and use the hint value from the
+// written meta information. If no info is found, guess 10 draw objects
+void SdXMLImport::SetStatisticAttributes(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+{
+    sal_uInt32 nCount(10);
+    sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
+
+    for(sal_Int16 a(0); a < nAttrCount; a++)
+    {
+        rtl::OUString sAttrName = xAttrList->getNameByIndex(a);
+        rtl::OUString aLocalName;
+        sal_uInt16 nPrefix = GetNamespaceMap().GetKeyByAttrName(sAttrName, &aLocalName);
+
+        if(nPrefix == XML_NAMESPACE_META)
+        {
+            rtl::OUString sValue = xAttrList->getValueByIndex(a);
+            sal_Int32 nValue(0);
+
+            if(IsXMLToken(aLocalName, XML_OBJECT_COUNT))
+            {
+                SvXMLUnitConverter::convertNumber(nValue, sValue);
+                nCount = nValue;
+            }
+        }
+    }
+
+    if(nCount)
+    {
+        GetProgressBarHelper()->SetReference(nCount);
+        GetProgressBarHelper()->SetValue(0);
+    }
+}
+
+// eof
