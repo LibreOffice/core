@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-18 11:26:23 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 17:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,16 +58,6 @@
  *
  *
  ************************************************************************/
-//*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
-//                                                                            //
-// (C) 1997 Star Division GmbH, Hamburg, Germany                              //
-//                                                                            //
-// $Revision: 1.2 $  $Author: pl $  $Date: 2002-06-18 11:26:23 $    //
-//                                                                            //
-// $Workfile:   salvd.h  $                                                    //
-//  $Modtime:   09 Aug 1997 00:15:48  $                                       //
-//                                                                            //
-//*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-*=*-//
 
 #ifndef _SV_SALVD_H
 #define _SV_SALVD_H
