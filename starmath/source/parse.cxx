@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-15 11:16:11 $
+ *  last change: $Author: tl $ $Date: 2001-06-05 08:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1527,6 +1527,8 @@ void SmParser::Escape()
         case TRPARENT :     cChar = MS_RPARENT;     break;
         case TLBRACKET :    cChar = MS_LBRACKET;    break;
         case TRBRACKET :    cChar = MS_RBRACKET;    break;
+        case TLDBRACKET :   cChar = MS_LDBRACKET;   break;
+        case TRDBRACKET :   cChar = MS_RDBRACKET;   break;
         case TLBRACE :
         case TLGROUP :      cChar = MS_LBRACE;      break;
         case TRBRACE :
