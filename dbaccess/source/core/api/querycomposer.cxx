@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 12:58:35 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 13:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,12 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifdef SUPD > 610
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
+#endif
+#else
+#include "stringconstants.hrc"
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
