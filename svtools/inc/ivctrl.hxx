@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:20:56 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@ public:
 #define WB_HIGHLIGHTFRAME       WB_INFO
 #define WB_NOASYNCSELECTHDL     WB_NOLABEL
 
+class MnemonicGenerator;
 class SvtIconChoiceCtrl : public Control
 {
     friend class SvxIconChoiceCtrl_Impl;
@@ -358,7 +359,18 @@ public:
                                      const Point* pPos = 0,
                                      USHORT nFlags = 0 );
 
+    /** creates automatic mnemonics for all icon texts in the control
+    */
     void                CreateAutoMnemonics( void );
+
+    /** creates automatic mnemonics for all icon texts in the control
+
+    @param _rUsedMnemonics
+        a <type>MnemonicGenerator</type> at which some other mnemonics are already registered.
+        This can be used if the control needs to share the "mnemonic space" with other elements,
+        such as a menu bar.
+    */
+    void                CreateAutoMnemonics( MnemonicGenerator& _rUsedMnemonics );
 
     void                RemoveEntry( SvxIconChoiceCtrlEntry* pEntry );
 
