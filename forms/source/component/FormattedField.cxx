@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 13:09:03 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
+using namespace ::drafts::com::sun::star::form;
 
 //.........................................................................
 namespace frm
@@ -210,7 +211,6 @@ StandardFormatsSupplier::operator Reference<XNumberFormatsSupplier> ()
 
 //------------------------------------------------------------------
 Reference<XNumberFormatsSupplier>  OFormattedModel::s_xDefaultFormatter;
-sal_Int32 OFormattedModel::nValueHandle = -1;
 
 /*************************************************************************/
 //------------------------------------------------------------------
@@ -385,8 +385,6 @@ void OFormattedModel::implConstruct()
     m_xOriginalFormatter = NULL;
     m_nKeyType = NumberFormat::UNDEFINED;
     m_aNullDate = DBTypeConversion::getStandardDate();
-    m_bAggregateListening = sal_False;
-    m_pPropertyMultiplexer = NULL;
     m_nFieldType =  DataType::OTHER;
 
     // default our formats supplier
@@ -394,33 +392,27 @@ void OFormattedModel::implConstruct()
     setPropertyToDefaultByHandle(PROPERTY_ID_FORMATSSUPPLIER);
     decrement(m_refCount);
 
-    startAggregateListening();
-    doSetDelegator();
+    startAggregatePropertyListening( PROPERTY_FORMATKEY );
 }
 
 //------------------------------------------------------------------
 OFormattedModel::OFormattedModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_CONTROL_FORMATTEDFIELD, sal_False )
+    :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_FORMATTEDFIELD, FRM_CONTROL_FORMATTEDFIELD, sal_True )
                             // use the old control name for compytibility reasons
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
-    ,OPropertyChangeListener( m_aMutex )
 {
     DBG_CTOR(OFormattedModel, NULL);
 
     implConstruct();
 
-    m_sDataFieldConnectivityProperty = PROPERTY_EFFECTIVE_VALUE;
     m_nClassId = FormComponentType::TEXTFIELD;
-
-    if (OFormattedModel::nValueHandle == -1)
-        OFormattedModel::nValueHandle = getOriginalHandle(PROPERTY_ID_EFFECTIVE_VALUE);
+    initValueProperty( PROPERTY_EFFECTIVE_VALUE, PROPERTY_ID_EFFECTIVE_VALUE );
 }
 
 //------------------------------------------------------------------
 OFormattedModel::OFormattedModel( const OFormattedModel* _pOriginal, const Reference< XMultiServiceFactory >& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
     ,OErrorBroadcaster( OComponentHelper::rBHelper )
-    ,OPropertyChangeListener( m_aMutex )
 {
     DBG_CTOR(OFormattedModel, NULL);
 
@@ -430,9 +422,6 @@ OFormattedModel::OFormattedModel( const OFormattedModel* _pOriginal, const Refer
 //------------------------------------------------------------------------------
 OFormattedModel::~OFormattedModel()
 {
-    doResetDelegator();
-    releaseAggregateListener();
-
     DBG_DTOR(OFormattedModel, NULL);
 }
 
@@ -441,54 +430,8 @@ OFormattedModel::~OFormattedModel()
 IMPLEMENT_DEFAULT_CLONING( OFormattedModel )
 
 //------------------------------------------------------------------------------
-void OFormattedModel::startAggregateListening()
-{
-    DBG_ASSERT(!m_bAggregateListening, "OFormattedModel::startAggregateListening: already listening!");
-    if (m_bAggregateListening)
-        return;
-
-    DBG_ASSERT(NULL == m_pPropertyMultiplexer, "OFormattedModel::startAggregateListening: previous listener not released!");
-    if (m_pPropertyMultiplexer)
-        releaseAggregateListener();
-
-    m_pPropertyMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet, sal_False);
-    m_pPropertyMultiplexer->addProperty(PROPERTY_FORMATKEY);
-    m_pPropertyMultiplexer->acquire();
-
-    m_bAggregateListening = sal_True;
-}
-
-//------------------------------------------------------------------------------
-void OFormattedModel::stopAggregateListening()
-{
-    DBG_ASSERT(m_bAggregateListening, "OFormattedModel::stopAggregateListening: not listening!");
-    if (!m_bAggregateListening)
-        return;
-
-    if (m_pPropertyMultiplexer)
-        m_pPropertyMultiplexer->dispose();
-
-    m_bAggregateListening = sal_False;
-}
-
-//------------------------------------------------------------------------------
-void OFormattedModel::releaseAggregateListener()
-{
-    DBG_ASSERT(!m_bAggregateListening, "OFormattedModel::releaseAggregateListener: still listening!");
-    if (m_bAggregateListening)
-        stopAggregateListening();
-
-    if (m_pPropertyMultiplexer)
-    {
-        m_pPropertyMultiplexer->release();
-        m_pPropertyMultiplexer = NULL;
-    }
-}
-
-//------------------------------------------------------------------------------
 void SAL_CALL OFormattedModel::disposing()
 {
-    stopAggregateListening();
     OErrorBroadcaster::disposing();
     OEditBaseModel::disposing();
 }
@@ -498,10 +441,11 @@ void SAL_CALL OFormattedModel::disposing()
 StringSequence OFormattedModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OEditBaseModel::getSupportedServiceNames();
-    aSupported.realloc(aSupported.getLength() + 2);
+    aSupported.realloc(aSupported.getLength() + 3);
 
     ::rtl::OUString*pArray = aSupported.getArray();
-    pArray[aSupported.getLength()-2] = ::rtl::OUString::createFromAscii("com.sun.star.form.component.DatabaseFormattedField");
+    pArray[aSupported.getLength()-3] = FRM_SUN_COMPONENT_BINDDB_FORMATTEDFIELD;
+    pArray[aSupported.getLength()-2] = FRM_SUN_COMPONENT_DATABASE_FORMATTEDFIELD;
     pArray[aSupported.getLength()-1] = FRM_SUN_COMPONENT_FORMATTEDFIELD;
     return aSupported;
 }
@@ -618,7 +562,7 @@ sal_Bool OFormattedModel::convertFastPropertyValue(Any& rConvertedValue, Any& rO
 void OFormattedModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 {
     if (nHandle == PROPERTY_ID_FORMATSSUPPLIER)
-    {   // das aggregierte Model koennte auf die Idee kommen
+    {
         Reference<XNumberFormatsSupplier>  xSupplier = calcDefaultFormatsSupplier();
         DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::setPropertyToDefaultByHandle(FORMATSSUPPLIER) : have no aggregate !");
         if (m_xAggregateSet.is())
@@ -667,34 +611,36 @@ Any SAL_CALL OFormattedModel::getPropertyDefault( const ::rtl::OUString& aProper
 //------------------------------------------------------------------------------
 void OFormattedModel::_propertyChanged( const com::sun::star::beans::PropertyChangeEvent& evt ) throw(RuntimeException)
 {
-    Reference< XPropertySet > xSourceSet(evt.Source, UNO_QUERY);
-    if (xSourceSet.get() == m_xAggregateSet.get())
+    // TODO: check how this works with external bindings
+
+    OSL_ENSURE( evt.Source == m_xAggregateSet, "OFormattedModel::_propertyChanged: where did this come from?" );
+    if ( evt.Source == m_xAggregateSet )
     {
-        if (evt.PropertyName.equals(PROPERTY_FORMATKEY))
+        Reference< XPropertySet > xSourceSet( evt.Source, UNO_QUERY );
+        if ( evt.PropertyName.equals( PROPERTY_FORMATKEY ) )
         {
-            if (evt.NewValue.getValueType().getTypeClass() == TypeClass_LONG)
+            if ( evt.NewValue.getValueType().getTypeClass() == TypeClass_LONG )
             {
                 try
                 {
                     Reference<XNumberFormatsSupplier> xSupplier(calcFormatsSupplier());
                     m_nKeyType  = getNumberFormatType(xSupplier->getNumberFormats(), getINT32(evt.NewValue));
-                    // as m_aSaveValue (which is used by _commit) is format dependent we have
-                    // to recalc it, which is done by _onValueChanged
-                    if (m_xColumn.is() && m_xAggregateFastSet.is())
+                    // as m_aSaveValue (which is used by commitControlValueToDbColumn) is format dependent we have
+                    // to recalc it, which is done by translateDbColumnToControlValue
+                    if ( m_xColumn.is() && m_xAggregateFastSet.is() )
                     {
-                        ::osl::MutexGuard aGuard(m_aMutex);     // _onValueChanged expects that ...
-                        _onValueChanged();
+                        ::osl::MutexGuard aGuard( m_aMutex );   // setControlValue expects that
+                        setControlValue( translateDbColumnToControlValue() );
                     }
                 }
                 catch(Exception&)
                 {
                 }
             }
+            return;
         }
-        // our base class does not listen at the aggregate at the moment ... and it does not expect
-        // to get events from objects other than the field we're bound to. So do not call the
-        // base class method here.
-        return;
+
+        OBoundControlModel::_propertyChanged( evt );
     }
 }
 
@@ -791,7 +737,7 @@ void OFormattedModel::getFormatDescription(::rtl::OUString& sFormat, LanguageTyp
 //------------------------------------------------------------------------------
 void OFormattedModel::loaded(const EventObject& rEvent) throw ( ::com::sun::star::uno::RuntimeException)
 {
-    // HACK : our _loaded accesses our NumberFormatter which locks the solar mutex (as it doesn't have
+    // HACK : our onConnectedDbColumn accesses our NumberFormatter which locks the solar mutex (as it doesn't have
     // an own one). To prevent deadlocks with other threads which may request a property from us in an
     // UI-triggered action (e.g. an tooltip) we lock the solar mutex _here_ before our base class locks
     // it's own muext (which is used for property requests)
@@ -806,7 +752,7 @@ void OFormattedModel::loaded(const EventObject& rEvent) throw ( ::com::sun::star
 }
 
 //------------------------------------------------------------------------------
-void OFormattedModel::_loaded(const EventObject& rEvent)
+void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     static const ::rtl::OUString s_aNullDataProp = ::rtl::OUString::createFromAscii("NullDate");
 
@@ -821,11 +767,11 @@ void OFormattedModel::_loaded(const EventObject& rEvent)
     }
 
 
-    DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::_loaded : have no aggregate !");
+    DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::onConnectedDbColumn : have no aggregate !");
     if (m_xAggregateSet.is())
     {   // all the following doesn't make any sense if we have no aggregate ...
         Any aSupplier = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER);
-        DBG_ASSERT(((Reference<XNumberFormatsSupplier> *)aSupplier.getValue())->is(), "OFormattedModel::_loaded : invalid property value !");
+        DBG_ASSERT(((Reference<XNumberFormatsSupplier> *)aSupplier.getValue())->is(), "OFormattedModel::onConnectedDbColumn : invalid property value !");
         // das sollte im Constructor oder im read auf was richtiges gesetzt worden sein
 
         Any aFmtKey = m_xAggregateSet->getPropertyValue(PROPERTY_FORMATKEY);
@@ -840,7 +786,7 @@ void OFormattedModel::_loaded(const EventObject& rEvent)
             }
 
             Reference<XNumberFormatsSupplier>  xSupplier = calcFormFormatsSupplier();
-            DBG_ASSERT(xSupplier.is(), "OFormattedModel::_loaded : bound to a field but no parent with a formatter ? how this ?");
+            DBG_ASSERT(xSupplier.is(), "OFormattedModel::onConnectedDbColumn : bound to a field but no parent with a formatter ? how this ?");
             if (xSupplier.is())
             {
                 m_bOriginalNumeric = getBOOL(getPropertyValue(PROPERTY_TREATASNUMERIC));
@@ -915,13 +861,13 @@ void OFormattedModel::_loaded(const EventObject& rEvent)
         xSupplier->getNumberFormatSettings()->getPropertyValue(s_aNullDataProp) >>= m_aNullDate;
     }
 
-    OEditBaseModel::_loaded(rEvent);
+    OEditBaseModel::onConnectedDbColumn( _rxForm );
 }
 
 //------------------------------------------------------------------------------
-void OFormattedModel::_unloaded()
+void OFormattedModel::onDisconnectedDbColumn()
 {
-    OEditBaseModel::_unloaded();
+    OEditBaseModel::onDisconnectedDbColumn();
     if (m_xOriginalFormatter.is())
     {   // unser aggregiertes Model hatte keinerlei Format-Informationen
         m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(m_xOriginalFormatter));
@@ -1176,15 +1122,15 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OFormattedModel::_commit()
+sal_Bool OFormattedModel::commitControlValueToDbColumn( bool _bPostReset )
 {
-    Any aNewValue = m_xAggregateFastSet->getFastPropertyValue( OFormattedModel::nValueHandle );
-    if (!compare(aNewValue, m_aSaveValue))
+    Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
+    if ( !compare( aControlValue, m_aSaveValue ) )
     {
         // Leerstring + EmptyIsNull = void
-        if  (   !aNewValue.hasValue()
-            ||  (   (aNewValue.getValueType().getTypeClass() == TypeClass_STRING)
-                &&  (getString(aNewValue).getLength() == 0)
+        if  (   !aControlValue.hasValue()
+            ||  (   ( aControlValue.getValueType().getTypeClass() == TypeClass_STRING )
+                &&  ( getString( aControlValue ).getLength() == 0 )
                 &&  m_bEmptyIsNull
                 )
             )
@@ -1194,57 +1140,14 @@ sal_Bool OFormattedModel::_commit()
             // als Value koennen nur double, string oder void auftreten
             try
             {
-                if (aNewValue.getValueType().getTypeClass() == TypeClass_DOUBLE)
+                if ( aControlValue.getValueType().getTypeClass() == TypeClass_DOUBLE )
                 {
-/*                  // some plausibility checks
-                    // 74241 - 28.08.2001 - frank.schoenheit@sun.com
-                    double nValue = getDouble( aNewValue );
-                    double nLimitMin = 0;
-                    double nLimitMax = 0;
-                    sal_Bool bLargeInt = sal_False;
-                    switch ( m_nFieldType )
-                    {
-                    case DataType::TINYINT:
-                        nLimitMin = -128; nLimitMax = 127;
-                        break;  // no specification if TINYINT is signed, thus this odd numbers ....
-
-                    case DataType::SMALLINT:
-                        nLimitMin = -32768; nLimitMax = 32767;
-                        break;
-
-                    case DataType::INTEGER:
-                        nLimitMin = ((double)-2147483647) - 1; nLimitMax = 2147483647;
-                        bLargeInt = sal_True;
-                        break;
-                    }
-                    if ( nLimitMin && nLimitMax )
-                    {
-                        if ( ( nValue < nLimitMin ) || ( nValue > nLimitMax ) )
-                        {
-                            ::rtl::OUString sMessage = FRM_RES_STRING( RID_STR_INVALID_FIELD_VALUE );
-                            lcl_replaceAscii( sMessage, "$min$", bLargeInt ? ::rtl::OUString::createFromAscii( "-2147483648" ) : ::rtl::OUString::valueOf( (sal_Int32)nLimitMin ) );
-                            lcl_replaceAscii( sMessage, "$max$", ::rtl::OUString::valueOf( (sal_Int32)nLimitMax ) );
-
-                            SQLException aError;
-                            aError.Message = sMessage;
-
-                            onError( aError, FRM_RES_STRING( RID_STR_COULD_NOT_COMMIT ) );
-                            return sal_False;
-                        }
-                    }
-                    // Do not do this checks. This would make sense if a min and max for the control are defined,
-                    // but not with such implicit restrictions as got from the field type. This is way too dependent
-                    // on the type of database we're working with (e.g., for a TINYINT, it is not defined if this is
-                    // signed or unsigned. There may be databases which treat it as signed, and databases which don't.
-                    // And we have no chance to know this, but we would need to to use the correct limits ....
-*/
-
-                    DBTypeConversion::setValue(m_xColumnUpdate, m_aNullDate, getDouble(aNewValue), m_nKeyType);
+                    DBTypeConversion::setValue( m_xColumnUpdate, m_aNullDate, getDouble( aControlValue ), m_nKeyType );
                 }
                 else
                 {
-                    DBG_ASSERT(aNewValue.getValueType().getTypeClass() == TypeClass_STRING, "OFormattedModel::_commit : invalud value type !");
-                    m_xColumnUpdate->updateString(getString(aNewValue));
+                    DBG_ASSERT( aControlValue.getValueType().getTypeClass() == TypeClass_STRING, "OFormattedModel::commitControlValueToDbColumn: invalud value type !" );
+                    m_xColumnUpdate->updateString( getString( aControlValue ) );
                 }
             }
             catch(Exception&)
@@ -1252,49 +1155,51 @@ sal_Bool OFormattedModel::_commit()
                 return sal_False;
             }
         }
-        m_aSaveValue = aNewValue;
+        m_aSaveValue = aControlValue;
     }
     return sal_True;
 }
 
-// XPropertyChangeListener
 //------------------------------------------------------------------------------
-void OFormattedModel::_onValueChanged()
+Any OFormattedModel::translateExternalValueToControlValue( )
 {
-    if (m_bNumeric)
-        m_aSaveValue <<= DBTypeConversion::getValue(m_xColumn, m_aNullDate, m_nKeyType); // #100056# OJ
+    OSL_PRECOND( m_xExternalBinding.is(),
+        "OFormattedModel::translateExternalValueToControlValue: precondition not met!" );
+
+    Any aReturn;
+    if ( m_xExternalBinding.is() )
+        aReturn = m_xExternalBinding->getValue( ::getCppuType( static_cast< double* >( NULL ) ) );
+    return aReturn;
+}
+
+//------------------------------------------------------------------------------
+Any OFormattedModel::translateDbColumnToControlValue()
+{
+    if ( m_bNumeric )
+        m_aSaveValue <<= DBTypeConversion::getValue( m_xColumn, m_aNullDate, m_nKeyType ); // #100056# OJ
     else
         m_aSaveValue <<= m_xColumn->getString();
 
-    if (m_xColumn->wasNull())
+    if ( m_xColumn->wasNull() )
         m_aSaveValue.clear();
 
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(OFormattedModel::nValueHandle, m_aSaveValue);
-    }
+    return m_aSaveValue;
 }
 
-// XReset
 //------------------------------------------------------------------------------
-void OFormattedModel::_reset( void )
+sal_Bool OFormattedModel::approveValueBinding( const Reference< XValueBinding >& _rxBinding )
 {
-    if (!m_xAggregateSet.is())
-    {
-        DBG_ERROR("OFormattedModel::_reset : no aggregate !");
-        return;
-    }
-        Any aValue = m_xAggregateSet->getPropertyValue(PROPERTY_EFFECTIVE_DEFAULT);
-    {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
-        // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
-        // our own mutex locked
-        // FS - 72451 - 31.01.00
-        MutexRelease aRelease(m_aMutex);
-        m_xAggregateFastSet->setFastPropertyValue(OFormattedModel::nValueHandle, aValue);
-    }
+    OSL_PRECOND( _rxBinding.is(), "OFormattedModel::approveValueBinding: invalid binding!" );
+
+    // only strings are accepted for simplicity
+    return  _rxBinding.is()
+        &&  _rxBinding->supportsType( ::getCppuType( static_cast< double* >( NULL ) ) );
+}
+
+//------------------------------------------------------------------------------
+Any OFormattedModel::getDefaultForReset() const
+{
+    return m_xAggregateSet->getPropertyValue( PROPERTY_EFFECTIVE_DEFAULT );
 }
 
 //.........................................................................
