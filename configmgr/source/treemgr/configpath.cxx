@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2001-07-06 13:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,9 @@
 #define INCLUDED_ALGORITHM
 #endif
 
-#define OLD_SETELEMENT_NAMES 1
+#ifndef CFG_PATH_STRICT
+//#define CFG_PATH_STRICT 1
+#endif
 
 namespace configmgr
 {
@@ -527,6 +529,8 @@ namespace
     static sal_Char const c_apos_name[] = "&apos;";
     static sal_Char const c_quot_name[] = "&quot;";
 
+    const sal_Int32 c_nMinEscapeLen = sizeof c_amp_name  - 1;
+    const sal_Int32 c_nMaxEscapeLen = sizeof c_quot_name - 1;
 //-------------------------------------------------------------------------
     /// distinguishes which kind of path is held in a path object
     enum PathType { eRELATIVE = 1, eABSOLUTE = 2 };
@@ -535,6 +539,28 @@ namespace
     typedef sal_Unicode const * StrPos;
 
 //-----------------------------------------------------------------------------
+    // missing or mis leading in SAL/rtl: pStr1[nLength] must NOT be evaluated
+    static
+    sal_Int32 cfg_ustr_ascii_compare_WithLength( const sal_Unicode* pStr1,
+                                                          sal_Int32 nStr1Len,
+                                                          const sal_Char* pStr2 )
+    {
+        while( nStr1Len )
+        {
+            sal_Int32 nRet = static_cast<sal_Int32>(*pStr1)-
+                             static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2));
+
+            if (nRet != 0 || *pStr2 == 0) return nRet;
+
+            ++pStr1;
+            ++pStr2;
+            --nStr1Len;
+        }
+
+        return -static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2));
+    }
+//-----------------------------------------------------------------------------
+
 
     /** find the char being escaped by the escape sequence in the given string range
         @return
@@ -550,15 +576,15 @@ namespace
 
         sal_Unicode chResult;
 
-        if ( 2 > nLen || nLen > 4) // quick check, if there is no possible match
+        if ( c_nMinEscapeLen > nLen || nLen > c_nMaxEscapeLen) // quick check, if there is no possible match
             chResult = 0;
         // the standard escapes
-        else if (0 == rtl_ustr_ascii_compare_WithLength(pBegin,nLen,c_amp_name))   chResult = c_amp;
-        else if (0 == rtl_ustr_ascii_compare_WithLength(pBegin,nLen,c_apos_name))  chResult = c_apos;
-        else if (0 == rtl_ustr_ascii_compare_WithLength(pBegin,nLen,c_quot_name))  chResult = c_quot;
+        else if (0 == cfg_ustr_ascii_compare_WithLength(pBegin,nLen,c_amp_name))   chResult = c_amp;
+        else if (0 == cfg_ustr_ascii_compare_WithLength(pBegin,nLen,c_apos_name))  chResult = c_apos;
+        else if (0 == cfg_ustr_ascii_compare_WithLength(pBegin,nLen,c_quot_name))  chResult = c_quot;
         // extra escapes for XML compatibility
-        else if (0 == rtl_ustr_ascii_compare_WithLength(pBegin,nLen,"&lt;"))    chResult = sal_Unicode('<');
-        else if (0 == rtl_ustr_ascii_compare_WithLength(pBegin,nLen,"&gt;"))    chResult = sal_Unicode('>');
+        else if (0 == cfg_ustr_ascii_compare_WithLength(pBegin,nLen,"&lt;"))    chResult = sal_Unicode('<');
+        else if (0 == cfg_ustr_ascii_compare_WithLength(pBegin,nLen,"&gt;"))    chResult = sal_Unicode('>');
         else chResult = 0;
 
         return chResult;
@@ -705,7 +731,7 @@ namespace
                 if (ch == c_amp)
                 {
                     // find an escape end marker (after pCur). Result is pCur, if the end marker is not there
-                    StrPos pEndEscape = pCur + indexOfCharInRange(pCur+1,pEndContent,c_end_escape);
+                    StrPos pEndEscape = pCur + 1 + indexOfCharInRange(pCur+1,pEndContent,c_end_escape);
                     sal_Unicode ch2   = pCur != pEndEscape ? implParseEscape(pCur,pEndEscape+1) : 0;
 
                     if (ch2 != 0) // found and read a valid escape sequence
@@ -766,7 +792,7 @@ namespace
 
         // handle an escape
             // find an escape end marker (after pCur). Result is pCur, if the end marker is not there
-            StrPos pEndEscape = pCur + indexOfCharInRange(pCur+1,pEnd,c_end_escape);
+            StrPos pEndEscape = pCur + 1 + indexOfCharInRange(pCur+1,pEnd,c_end_escape);
 
             OSL_ENSURE(pEndEscape != pCur, "Found dangling ampersand in normalized data");
 
@@ -859,8 +885,10 @@ namespace
             if ( detectAbsolutePath(_aPathString) )
                 ++pBegin; // skip the leading slash
 
+#ifdef CFG_PATH_STRICT
             else
                 OSL_ENSURE(false, "Warning: trying to parse relative path as absolute");
+#endif
         }
         else
             OSL_ENSURE(!detectAbsolutePath(_aPathString), "ERROR: trying to parse absolute path as relative one");
@@ -870,7 +898,9 @@ namespace
 
         else if (pBegin != pEnd && pEnd[-1] == '/')
         {
+#ifdef CFG_PATH_STRICT
             OSL_ENSURE(false, "Illegal configuration path. Terminating '/' found.");
+#endif
             --pEnd;
         }
 
