@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewContainer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:36:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,20 +38,10 @@
  *
  *************************************************************************/
 
-package OfficeDev.samples.DesktopEnvironment;
-
 // __________ Imports __________
 
-// interfaces
-
-// helper
 import com.sun.star.uno.UnoRuntime;
 
-// UI classes
-
-// events
-
-// base classes
 import java.lang.*;
 import java.util.*;
 
