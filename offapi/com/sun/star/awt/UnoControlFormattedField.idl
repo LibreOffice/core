@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlFormattedField.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 17:23:48 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ published service UnoControlFormattedField
     /** gives access to the value of a spin field and makes it possible to
         register for spin events.
 
-        @since #106832#
+        @since OOo 1.1.2
      */
     [optional] interface com::sun::star::awt::XSpinField;
 
