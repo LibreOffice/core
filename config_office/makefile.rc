@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: mh $ $Date: 2002-10-02 09:18:56 $
+#   last change: $Author: waratah $ $Date: 2002-10-13 05:19:45 $
 #
 #   Bugs:  'update' tag will not change you from one release to another.
 #          See webpages to checkout OpenOffice from you office directory.
@@ -203,8 +203,10 @@ bootstrap .PHONY :
 
 
 clean .PHONY:
-	@rm -rf */$(INPATH)
-	@rm -rf solver/*/$(INPATH)
+	-rm -rf */$(INPATH)
+	-rm -rf solver/*/$(INPATH)
+	-echo cleaning up dmake...
+	-echo $(shell +cd dmake && make clean)
 
 # 
 # configure target
