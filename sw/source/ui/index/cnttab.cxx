@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:41:46 $
+ *  last change: $Author: jp $ $Date: 2000-10-31 21:24:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-#ifndef _SFX_INIMGR_HXX
-//#include <sfx2/inimgr.hxx>
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
 #endif
 #ifndef _IODLG_HXX
 #include <sfx2/iodlg.hxx>
@@ -4729,15 +4729,9 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkU
         aEntriesBB.RowInserted(0, 1, sal_True);
     else
     {
-        SvFileStream aStream(sAutoMarkURL, STREAM_STD_READ);
-        aStream.ReOpen();
-        aStream.Seek(0);
-        sal_uInt32 nError = aStream.GetError();
-        if(!nError)
-        {
-            aEntriesBB.ReadEntries(aStream);
-            aStream.Close();
-        }
+        SfxMedium aMed( sAutoMarkURL, STREAM_STD_READ, FALSE );
+        if( !aMed.GetInStream()->GetError() )
+            aEntriesBB.ReadEntries( *aMed.GetInStream() );
         else
             bError = sal_True;
     }
@@ -4759,25 +4753,21 @@ IMPL_LINK(SwAutoMarkDlg_Impl, OkHdl, OKButton*, pButton)
     sal_Bool bError = sal_False;
     if(aEntriesBB.IsModified() || bCreateMode)
     {
-        SvFileStream aStream(sAutoMarkURL,
-            bCreateMode ? STREAM_WRITE : STREAM_WRITE| STREAM_TRUNC);
-        if(!bCreateMode)
+        SfxMedium aMed( sAutoMarkURL,
+                        bCreateMode ? STREAM_WRITE
+                                    : STREAM_WRITE| STREAM_TRUNC,
+                        FALSE );
+        SvStream* pStrm = aMed.GetOutStream();
+        pStrm->SetStreamCharSet( RTL_TEXTENCODING_MS_1253 );
+        if( !pStrm->GetError() )
         {
-            aStream.ReOpen();
-            aStream.Seek(0);
-        }
-        sal_uInt32 nError = aStream.GetError();
-        aStream.SetStreamCharSet( RTL_TEXTENCODING_MS_1253 );
-        if(!nError)
-        {
-            aEntriesBB.WriteEntries(aStream);
-            aStream.Close();
+            aEntriesBB.WriteEntries( *pStrm );
+            aMed.Commit();
         }
         else
             bError = sal_True;
-
     }
-    if(!bError)
+    if( !bError )
         EndDialog(RET_OK);
     return 0;
 }
