@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.pmk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: tv $ $Date: 2001-01-26 15:28:28 $
+#   last change: $Author: tv $ $Date: 2001-08-09 09:34:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,6 +117,8 @@ CONFIG_SERVER_NOLANG_TARGET     = cfgsrvnolang
 CONFIG_SERVER_BITMAP_UNX_TARGET = cfgsrvbitmapunx
 CONFIG_SERVER_DOCLANG_TARGET    = cfgsrvdoclang
 CONFIG_USER_TARGET              = cfgusr
+
+MIGRATION_TARGET                = migration
 
 PALETTES_TARGET                 = palettes
 
