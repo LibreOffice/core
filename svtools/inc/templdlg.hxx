@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-08 07:05:49 $
+ *  last change: $Author: pb $ $Date: 2001-05-11 07:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 
-class SvtTemplateWindow;
+struct SvtTmplDlg_Impl;
 
 // class SvtDocumentTemplateDialog ---------------------------------------
 
@@ -79,10 +79,11 @@ private:
     CancelButton        aCancelBtn;
     HelpButton          aHelpBtn;
 
-    SvtTemplateWindow*  pWin;
+    SvtTmplDlg_Impl*    pImpl;
 
     DECL_LINK(          SelectHdl_Impl, SvtTemplateWindow* );
     DECL_LINK(          DoubleClickHdl_Impl, SvtTemplateWindow* );
+    DECL_LINK(          NewFolderHdl_Impl, SvtTemplateWindow* );
     DECL_LINK(          OKHdl_Impl, PushButton* );
 
 public:
