@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-30 13:33:54 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,10 @@
 #ifndef _SV_FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
+#include "scui_def.hxx" //CHINA001
 
-
-#define SCRET_COLS 0x42
-#define SCRET_ROWS 0x43
+//CHINA001 #define SCRET_COLS 0x42
+//CHINA001 #define SCRET_ROWS 0x43
 
 //------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filldlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-30 13:33:54 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,11 @@ class ScDocument;
 
 //----------------------------------------------------------------------------
 
-#define FDS_OPT_NONE        0
-#define FDS_OPT_HORZ        1
-#define FDS_OPT_VERT        2
-
+//CHINA001 #define  FDS_OPT_NONE        0
+//CHINA001 #define  FDS_OPT_HORZ        1
+//CHINA001 #define  FDS_OPT_VERT        2
+//CHINA001
+#include "scui_def.hxx" //CHINA001
 //============================================================================
 
 class ScFillSeriesDlg : public ModalDialog
