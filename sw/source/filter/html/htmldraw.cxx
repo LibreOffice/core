@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmldraw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:26:12 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,8 +621,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         aTwipSz.Height() = MINFLY;
     aItemSet.Put( SdrTextMinFrameHeightItem( aTwipSz.Height() ) );
 
-//-/    pMarquee->SetAttributes( aItemSet, sal_False );
-    pMarquee->SetItemSetAndBroadcast(aItemSet);
+    pMarquee->SetMergedItemSetAndBroadcast(aItemSet);
 
     if( aTwipSz.Width() < MINFLY )
         aTwipSz.Width() = MINFLY;
@@ -658,7 +657,7 @@ void SwHTMLParser::EndMarquee()
 
     // den gesammelten Text einfuegen
     ((SdrTextObj*)pMarquee)->SetText( aContents );
-    pMarquee->SetItemSetAndBroadcast( pMarquee->GetItemSet() );
+    pMarquee->SetMergedItemSetAndBroadcast( pMarquee->GetMergedItemSet() );
 
     if( bFixMarqueeWidth )
     {
@@ -706,10 +705,7 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
                                          sal_Bool bSetDefaults )
 {
     // die Edit ::com::sun::star::script::Engine-Attribute aus dem Objekt holen
-//-/    SfxItemSet aObjItemSet( *pObj->GetItemPool(), EE_CHAR_START,
-//-/                                                  EE_CHAR_END );
-//-/    pObj->TakeAttributes( aObjItemSet, sal_False, sal_False );
-    SfxItemSet rObjItemSet = pObj->GetItemSet();
+    SfxItemSet rObjItemSet = pObj->GetMergedItemSet();
 
     // ueber die Edit ::com::sun::star::script::Engine-Attribute iterieren und die Attribute
     // in SW-Attrs wandeln bzw. default setzen
@@ -785,12 +781,7 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     sOut += sHTML_marquee;
 
     // Die Attribute des Objektd holen
-//-/    sal_uInt16 aWhichMap[5] =   { XATTR_FILL_FIRST,   XATTR_FILL_LAST,
-//-/                              SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST,
-//-/                              0 };
-//-/    SfxItemSet aItemSet( *pTextObj->GetItemPool(), aWhichMap );
-//-/    pTextObj->TakeAttributes( aItemSet, sal_False, sal_False );
-    const SfxItemSet& rItemSet = pTextObj->GetItemSet();
+    const SfxItemSet& rItemSet = pTextObj->GetMergedItemSet();
 
     // BEHAVIOUR
     SdrTextAniKind eAniKind = pTextObj->GetTextAniKind();
