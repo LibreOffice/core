@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:45:57 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,18 +168,28 @@ static sal_Bool bTestTheBitmapBufferedObjects(sal_False);
         {
             ViewObjectContact* pRetval = 0L;
 
-#ifdef DBG_UTIL
-            if(bTestTheBitmapBufferedObjects)
+            // #114233#
+            if(GetSdrObject().ISA(SdrOle2Obj))
             {
+                // Always buffer OLE2 objects, this needs to be moved to a
+                // ViewContactOfOLE2Obj later
                 pRetval = new VOCBitmapBuffer(rObjectContact, *this);
             }
             else
             {
-#endif // DBG_UTIL
-                pRetval = new ViewObjectContact(rObjectContact, *this);
 #ifdef DBG_UTIL
-            }
+                if(bTestTheBitmapBufferedObjects)
+                {
+                    pRetval = new VOCBitmapBuffer(rObjectContact, *this);
+                }
+                else
+                {
 #endif // DBG_UTIL
+                    pRetval = new ViewObjectContact(rObjectContact, *this);
+#ifdef DBG_UTIL
+                }
+#endif // DBG_UTIL
+            }
 
             DBG_ASSERT(pRetval, "ViewContactOfSdrObj::CreateObjectSpecificViewObjectContact() failed (!)");
             return *pRetval;
