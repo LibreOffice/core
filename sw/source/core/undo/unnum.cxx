@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unnum.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:07:01 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,8 @@ void SwUndoMoveNum::Repeat( SwUndoIter& rUndoIter )
 
 
 SwUndoNumUpDown::SwUndoNumUpDown( const SwPaM& rPam, short nOff )
-    : SwUndo( UNDO_NUMUPDOWN ), SwUndRng( rPam ), nOffset( nOff )
+    : SwUndo( nOff > 0 ? UNDO_NUMUP : UNDO_NUMDOWN ), SwUndRng( rPam ),
+      nOffset( nOff )
 {
     // nOffset: Down    =>  1
     //          Up      => -1
