@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:27:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,8 +787,6 @@ void SalXLib::Yield( BOOL bWait )
     {
         // release YieldMutex (and re-acquire at block end)
         YieldMutexReleaser aReleaser;
-        if( !bWait )
-            osl_yieldThread();
         nFound = select( nFDs, &ReadFDS, NULL, &ExceptionFDS, pTimeout );
     }
     if( nFound < 0 ) // error
