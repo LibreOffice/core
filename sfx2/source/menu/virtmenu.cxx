@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:25:16 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,7 +223,7 @@ static Image RetrieveAddOnImage( Reference< com::sun::star::frame::XFrame >& rFr
 BOOL IsItemHidden_Impl( USHORT nItemId, int bOleServer, int bMac )
 {
     return ( bMac &&
-             ( nItemId == SID_ARRANGEICONS || nItemId == SID_MINIMIZEWINS ) ) ||
+             ( nItemId == SID_MINIMIZEWINS ) ) ||
            (  bOleServer &&
              ( nItemId == SID_QUITAPP || nItemId == SID_SAVEDOC ||
                nItemId == SID_OPENDOC || nItemId == SID_SAVEASDOC ||
