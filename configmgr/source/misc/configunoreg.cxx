@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:24:35 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 10:10:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,6 +297,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
         RegisterService(configmgr::localbe::getLocalDataStratumServiceInfo(), xKey) ;
         RegisterService(configmgr::localbe::getLocalReadonlyStratumServiceInfo(), xKey) ;
         RegisterService(configmgr::localbe::getLocalResourceStratumServiceInfo(), xKey) ;
+        RegisterService(configmgr::localbe::getLocalMultiStratumServiceInfo(), xKey) ;
 
         // im/export
         RegisterService(configmgr::backend::getMergeImportServiceInfo(), xKey);
@@ -413,6 +414,10 @@ extern "C" void* SAL_CALL component_getFactory(
          aReq.CreateServiceFactory(
                 configmgr::localbe::getLocalResourceStratumServiceInfo(),
                 configmgr::localbe::instantiateLocalResourceStratum)
+        ||
+         aReq.CreateServiceFactory(
+                configmgr::localbe::getLocalMultiStratumServiceInfo(),
+                configmgr::localbe::instantiateLocalMultiStratum)
         ||
         // im/export
         aReq.CreateServiceFactory(
