@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 16:16:02 $
+#   last change: $Author: hr $ $Date: 2004-12-10 18:06:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,7 +62,7 @@
 
 PRJ=..$/..
 
-PRJNAME=libxml2
+PRJNAME=unoxml
 TARGET=unoxml
 LIBTARGET=NO
 
@@ -71,7 +71,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
+
 .IF "$(SYSTEM_LIBXML)" == "YES"
 CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
 .ENDIF
