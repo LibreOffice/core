@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-15 10:05:02 $
+ *  last change: $Author: cl $ $Date: 2000-11-16 16:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,6 +244,7 @@ const SvXMLTokenMap& XMLShapeImportHelper::GetGroupShapeElemTokenMap()
 
 static __FAR_DATA SvXMLTokenMapEntry aShapeAttrTokenMap[] =
 {
+    { XML_NAMESPACE_DRAW,           sXML_name,              XML_TOK_SHAPE_NAME                          },
     { XML_NAMESPACE_DRAW,           sXML_style_name,        XML_TOK_SHAPE_DRAWSTYLE_NAME_GRAPHICS       },
     { XML_NAMESPACE_PRESENTATION,   sXML_class,             XML_TOK_SHAPE_PRESENTATION_CLASS            },
     { XML_NAMESPACE_PRESENTATION,   sXML_style_name,        XML_TOK_SHAPE_DRAWSTYLE_NAME_PRESENTATION   },

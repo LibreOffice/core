@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-15 12:28:21 $
+ *  last change: $Author: cl $ $Date: 2000-11-16 16:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,10 @@
 
 #ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart/XChartDocument.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
@@ -2748,6 +2752,15 @@ void SdXMLExport::ImpWriteSingleShapeStyleInfo(
             rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, rStyleName);
         else
             rExp.AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_style_name, rStyleName);
+    }
+
+    // export shape name if he has one
+    uno::Reference< container::XNamed > xNamed( xShape, uno::UNO_QUERY );
+    if( xNamed.is() )
+    {
+        const OUString aName( xNamed->getName() );
+        if( aName.getLength() )
+            rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_name, aName );
     }
 
     switch(eShapeType)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-15 11:58:54 $
+ *  last change: $Author: cl $ $Date: 2000-11-16 16:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,11 @@ SdXMLShapeContext::SdXMLShapeContext(
 
         switch(rAttrTokenMap.Get(nPrefix, aLocalName))
         {
+            case XML_TOK_SHAPE_NAME:
+            {
+                maShapeName = sValue;
+                break;
+            }
             case XML_TOK_SHAPE_IS_USER_TRANSFORMED:
             {
                 if(sValue.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true))))
@@ -273,6 +278,13 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
     {
         // set shape local
         mxShape = xShape;
+
+        if(maShapeName.getLength())
+        {
+            uno::Reference< container::XNamed > xNamed( mxShape, uno::UNO_QUERY );
+            if( xNamed.is() )
+                xNamed->setName( maShapeName );
+        }
 
         GetImport().GetShapeImport()->addShape( xShape, mxAttrList, mxShapes );
     }
