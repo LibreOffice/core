@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animcore.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-29 10:36:49 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,15 @@
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XCHANGESNOTIFIER_HPP_
+#include <com/sun/star/util/XChangesNotifier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+#ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
+#include <cppuhelper/interfacecontainer.hxx>
+#endif
 
 #include <cppuhelper/implbase1.hxx>
 
@@ -148,6 +157,8 @@
 using ::osl::Mutex;
 using ::osl::Guard;
 using ::rtl::OUString;
+using ::cppu::OInterfaceContainerHelper;
+using ::cppu::OInterfaceIteratorHelper;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
@@ -171,6 +182,11 @@ using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::util::XCloneable;
+using ::com::sun::star::lang::XUnoTunnel;
+using ::com::sun::star::util::XChangesNotifier;
+using ::com::sun::star::util::XChangesListener;
+using ::com::sun::star::util::ElementChange;
+using ::com::sun::star::util::ChangesEvent;
 
 using ::cppu::OWeakObject;
 
@@ -186,19 +202,28 @@ typedef ::std::list< Reference< XAnimationNode > > ChildList_t;
 
 // ====================================================================
 
-class AnimationNode :   public XAnimateMotion,
-                        public XAnimateColor,
-                        public XTransitionFilter,
-                        public XAnimateSet,
-                        public XAnimateTransform,
-                        public XIterateContainer,
-                        public XEnumerationAccess,
-                        public XServiceInfo,
-                        public XTypeProvider,
-                        public XAudio,
-                        public XCommand,
-                        public XCloneable,
-                        public OWeakObject
+class AnimationNodeBase :   public XAnimateMotion,
+                            public XAnimateColor,
+                            public XTransitionFilter,
+                            public XAnimateSet,
+                            public XAnimateTransform,
+                            public XIterateContainer,
+                            public XEnumerationAccess,
+                            public XServiceInfo,
+                            public XTypeProvider,
+                            public XAudio,
+                            public XCommand,
+                            public XCloneable,
+                            public XChangesNotifier,
+                            public XUnoTunnel,
+                            public OWeakObject
+{
+public:
+    // our first, last and only protection from mutli-threads!
+    Mutex maMutex;
+};
+
+class AnimationNode : public AnimationNodeBase
 {
 public:
     AnimationNode( sal_Int16 nNodeType );
@@ -350,7 +375,19 @@ public:
     virtual double SAL_CALL getIterateInterval() throw (RuntimeException);
     virtual void SAL_CALL setIterateInterval( double _iterateinterval ) throw (RuntimeException);
 
+    // XChangesNotifier
+    virtual void SAL_CALL addChangesListener( const Reference< XChangesListener >& aListener ) throw (RuntimeException);
+    virtual void SAL_CALL removeChangesListener( const Reference< XChangesListener >& aListener ) throw (RuntimeException);
+
+    // XUnoTunnel
+    virtual ::sal_Int64 SAL_CALL getSomething( const Sequence< ::sal_Int8 >& aIdentifier ) throw (RuntimeException);
+
+    static const Sequence< sal_Int8 > & getUnoTunnelId();
+    void fireChangeListener();
+
 private:
+    OInterfaceContainerHelper   maChangeListener;
+
     static void initTypeProvider( sal_Int16 nNodeType ) throw();
 
     const sal_Int16 mnNodeType;
@@ -358,9 +395,6 @@ private:
     // for XTypeProvider
     static Sequence< Type >* mpTypes[10];
     static Sequence< sal_Int8 >* mpId[10];
-
-    // our first, last and only protection from mutli-threads!
-    Mutex maMutex;
 
     // attributes for the XAnimationNode interface implementation
     Any maBegin, maDuration, maEnd, maEndSync, maRepeatCount, maRepeatDuration;
@@ -371,6 +405,7 @@ private:
 
     // parent interface for XChild interface implementation
     Reference<XInterface>   mxParent;
+    AnimationNode*          mpParent;
 
     // attributes for XAnimate
     Any maTarget;
@@ -495,7 +530,9 @@ AnimationNode::AnimationNode( sal_Int16 nNodeType )
     mfVolume(1.0),
     mnCommand(0),
     mnIterateType( ::com::sun::star::presentation::ShapeAnimationSubType::AS_WHOLE ),
-    mfIterateInterval(0.0)
+    mfIterateInterval(0.0),
+    maChangeListener(maMutex),
+    mpParent(0)
 {
 }
 
@@ -560,7 +597,9 @@ AnimationNode::AnimationNode( const AnimationNode& rNode )
 
     // XIterateContainer
     mnIterateType( rNode.mnIterateType ),
-    mfIterateInterval( rNode.mfIterateInterval )
+    mfIterateInterval( rNode.mfIterateInterval ),
+    maChangeListener(maMutex),
+    mpParent(0)
 {
 }
 
@@ -611,7 +650,9 @@ Any SAL_CALL AnimationNode::queryInterface( const Type& aType ) throw (RuntimeEx
         static_cast< XCloneable* >( this ),
         static_cast< XAnimationNode* >( static_cast< XTimeContainer * >(this) ),
         static_cast< XInterface* >(static_cast< OWeakObject * >(this)),
-        static_cast< XWeak* >(static_cast< OWeakObject * >(this)) ) );
+        static_cast< XWeak* >(static_cast< OWeakObject * >(this)),
+        static_cast< XChangesNotifier* >( this ),
+        static_cast< XUnoTunnel* >( this ) ) );
 
     if(!aRet.hasValue())
     {
@@ -698,18 +739,18 @@ void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) throw()
 
         static sal_Int32 type_numbers[] =
         {
-            5, // CUSTOM
-            7, // PAR
-            7, // SEQ
-            7, // ITERATE
-            6, // ANIMATE
-            6, // SET
-            6, // ANIMATEMOTION
-            6, // ANIMATECOLOR
-            6, // ANIMATETRANSFORM
-            6, // TRANSITIONFILTER
-            6, // AUDIO
-            6, // COMMAND
+            7, // CUSTOM
+            9, // PAR
+            9, // SEQ
+            9, // ITERATE
+            8, // ANIMATE
+            8, // SET
+            8, // ANIMATEMOTION
+            8, // ANIMATECOLOR
+            8, // ANIMATETRANSFORM
+            8, // TRANSITIONFILTER
+            8, // AUDIO
+            8, // COMMAND
         };
 
         // collect types
@@ -722,6 +763,8 @@ void AnimationNode::initTypeProvider( sal_Int16 nNodeType ) throw()
         pTypeAr[nPos++] = ::getCppuType( (const Reference< XCloneable > *)0 );
         pTypeAr[nPos++] = ::getCppuType( (const Reference< XTypeProvider > *)0 );
         pTypeAr[nPos++] = ::getCppuType( (const Reference< XServiceInfo > *)0 );
+        pTypeAr[nPos++] = ::getCppuType( (const Reference< XUnoTunnel > *)0 );
+        pTypeAr[nPos++] = ::getCppuType( (const Reference< XChangesNotifier> *)0 );
 
         switch( nNodeType )
         {
@@ -899,7 +942,11 @@ Any SAL_CALL AnimationNode::getBegin() throw (RuntimeException)
 void SAL_CALL AnimationNode::setBegin( const Any& _begin ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    maBegin = _begin;
+    if( _begin != maBegin )
+    {
+        maBegin = _begin;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -917,7 +964,11 @@ Any SAL_CALL AnimationNode::getDuration() throw (RuntimeException)
 void SAL_CALL AnimationNode::setDuration( const Any& _duration ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    maDuration = _duration;
+    if( _duration != maDuration )
+    {
+        maDuration = _duration;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -935,7 +986,11 @@ Any SAL_CALL AnimationNode::getEnd() throw (RuntimeException)
 void SAL_CALL AnimationNode::setEnd( const Any& _end ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    maEnd = _end;
+    if( _end != maEnd )
+    {
+        maEnd = _end;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -953,7 +1008,11 @@ Any SAL_CALL AnimationNode::getEndSync() throw (RuntimeException)
 void SAL_CALL AnimationNode::setEndSync( const Any& _endsync ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    maEndSync = _endsync;
+    if( _endsync != maEndSync )
+    {
+        maEndSync = _endsync;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -971,7 +1030,11 @@ Any SAL_CALL AnimationNode::getRepeatCount() throw (RuntimeException)
 void SAL_CALL AnimationNode::setRepeatCount( const Any& _repeatcount ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    maRepeatCount = _repeatcount;
+    if( _repeatcount != maRepeatCount )
+    {
+        maRepeatCount = _repeatcount;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -989,7 +1052,11 @@ Any SAL_CALL AnimationNode::getRepeatDuration() throw (RuntimeException)
 void SAL_CALL AnimationNode::setRepeatDuration( const Any& _repeatduration ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    maRepeatDuration = _repeatduration;
+    if( _repeatduration != maRepeatDuration )
+    {
+        maRepeatDuration = _repeatduration;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1007,7 +1074,11 @@ sal_Int16 SAL_CALL AnimationNode::getFill() throw (RuntimeException)
 void SAL_CALL AnimationNode::setFill( sal_Int16 _fill ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnFill = _fill;
+    if( _fill != mnFill )
+    {
+        mnFill = _fill;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1025,7 +1096,11 @@ sal_Int16 SAL_CALL AnimationNode::getFillDefault() throw (RuntimeException)
 void SAL_CALL AnimationNode::setFillDefault( sal_Int16 _filldefault ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnFillDefault = _filldefault;
+    if( _filldefault != mnFillDefault )
+    {
+        mnFillDefault = _filldefault;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1043,7 +1118,11 @@ sal_Int16 SAL_CALL AnimationNode::getRestart() throw (RuntimeException)
 void SAL_CALL AnimationNode::setRestart( sal_Int16 _restart ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnRestart = _restart;
+    if( _restart != mnRestart )
+    {
+        mnRestart = _restart;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1061,7 +1140,11 @@ sal_Int16 SAL_CALL AnimationNode::getRestartDefault() throw (RuntimeException)
 void SAL_CALL AnimationNode::setRestartDefault( sal_Int16 _restartdefault ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnRestartDefault = _restartdefault;
+    if( _restartdefault != mnRestartDefault )
+    {
+        mnRestartDefault = _restartdefault;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1079,7 +1162,11 @@ double SAL_CALL AnimationNode::getAcceleration() throw (RuntimeException)
 void SAL_CALL AnimationNode::setAcceleration( double _acceleration ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mfAcceleration = _acceleration;
+    if( _acceleration != mfAcceleration )
+    {
+        mfAcceleration = _acceleration;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1097,7 +1184,11 @@ double SAL_CALL AnimationNode::getDecelerate() throw (RuntimeException)
 void SAL_CALL AnimationNode::setDecelerate( double _decelerate ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mfDecelerate = _decelerate;
+    if( _decelerate != mfDecelerate )
+    {
+        mfDecelerate = _decelerate;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1115,7 +1206,11 @@ sal_Bool SAL_CALL AnimationNode::getAutoReverse() throw (RuntimeException)
 void SAL_CALL AnimationNode::setAutoReverse( sal_Bool _autoreverse ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mbAutoReverse = _autoreverse;
+    if( _autoreverse != mbAutoReverse )
+    {
+        mbAutoReverse = _autoreverse;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1132,6 +1227,7 @@ void SAL_CALL AnimationNode::setUserData( const Sequence< NamedValue >& _userdat
 {
     Guard< Mutex > aGuard( maMutex );
     maUserData = _userdata;
+    fireChangeListener();
 }
 
 // --------------------------------------------------------------------
@@ -1149,7 +1245,17 @@ Reference< XInterface > SAL_CALL AnimationNode::getParent() throw (RuntimeExcept
 void SAL_CALL AnimationNode::setParent( const Reference< XInterface >& Parent ) throw (NoSupportException, RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mxParent = Parent;
+    if( Parent != mxParent )
+    {
+        mxParent = Parent;
+
+        mpParent = 0;
+        Reference< XUnoTunnel > xTunnel( mxParent, UNO_QUERY );
+        if( xTunnel.is() )
+            mpParent = ( AnimationNode* )xTunnel->getSomething( getUnoTunnelId() );
+
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1209,7 +1315,11 @@ void SAL_CALL AnimationNode::setTarget( const Any& _target )
     throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    maTarget= _target;
+    if( _target != maTarget )
+    {
+        maTarget= _target;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1228,7 +1338,11 @@ void SAL_CALL AnimationNode::setAttributeName( const OUString& _attribute )
     throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    maAttributeName = _attribute;
+    if( _attribute != maAttributeName )
+    {
+        maAttributeName = _attribute;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1249,6 +1363,7 @@ void SAL_CALL AnimationNode::setValues( const Sequence< Any >& _values )
 {
     Guard< Mutex > aGuard( maMutex );
     maValues = _values;
+    fireChangeListener();
 }
 
 // --------------------------------------------------------------------
@@ -1266,7 +1381,11 @@ sal_Int16 SAL_CALL AnimationNode::getSubItem() throw (RuntimeException)
 void SAL_CALL AnimationNode::setSubItem( sal_Int16 _subitem ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnSubItem = _subitem;
+    if( _subitem != mnSubItem )
+    {
+        mnSubItem = _subitem;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1285,6 +1404,7 @@ void SAL_CALL AnimationNode::setKeyTimes( const Sequence< double >& _keytimes ) 
 {
     Guard< Mutex > aGuard( maMutex );
     maKeyTimes = _keytimes;
+    fireChangeListener();
 }
 
 // --------------------------------------------------------------------
@@ -1301,7 +1421,11 @@ sal_Int16 SAL_CALL AnimationNode::getValueType() throw (RuntimeException)
 void SAL_CALL AnimationNode::setValueType( sal_Int16 _valuetype ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnValueType = _valuetype;
+    if( _valuetype != mnValueType )
+    {
+        mnValueType = _valuetype;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1321,7 +1445,11 @@ void SAL_CALL AnimationNode::setCalcMode( sal_Int16 _calcmode )
     throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnCalcMode = _calcmode;
+    if( _calcmode != mnCalcMode )
+    {
+        mnCalcMode = _calcmode;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1341,7 +1469,11 @@ void SAL_CALL AnimationNode::setAccumulate( sal_Bool _accumulate )
     throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mbAccumulate = _accumulate;
+    if( _accumulate != mbAccumulate )
+    {
+        mbAccumulate = _accumulate;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1361,7 +1493,11 @@ void SAL_CALL AnimationNode::setAdditive( sal_Int16 _additive )
     throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnAdditive = _additive;
+    if( _additive != mnAdditive )
+    {
+        mnAdditive = _additive;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1381,7 +1517,11 @@ void SAL_CALL AnimationNode::setFrom( const Any& _from )
     throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    maFrom = _from;
+    if( _from != maFrom )
+    {
+        maFrom = _from;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1401,7 +1541,11 @@ void SAL_CALL AnimationNode::setTo( const Any& _to )
     throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    maTo = _to;
+    if( _to != maTo )
+    {
+        maTo = _to;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1421,7 +1565,11 @@ void SAL_CALL AnimationNode::setBy( const Any& _by )
     throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    maBy = _by;
+    if( _by != maBy )
+    {
+        maBy = _by;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1442,6 +1590,7 @@ void SAL_CALL AnimationNode::setTimeFilter( const Sequence< TimeFilterPair >& _t
 {
     Guard< Mutex > aGuard( maMutex );
     maTimeFilter = _timefilter;
+    fireChangeListener();
 }
 
 // --------------------------------------------------------------------
@@ -1457,7 +1606,11 @@ OUString SAL_CALL AnimationNode::getFormula() throw (RuntimeException)
 void SAL_CALL AnimationNode::setFormula( const OUString& _formula ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    maFormula = _formula;
+    if( _formula != maFormula )
+    {
+        maFormula = _formula;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1475,7 +1628,11 @@ sal_Int16 SAL_CALL AnimationNode::getColorInterpolation() throw (RuntimeExceptio
 void SAL_CALL AnimationNode::setColorInterpolation( sal_Int16 _colorspace ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnColorSpace = _colorspace;
+    if( _colorspace != mnColorSpace )
+    {
+        mnColorSpace = _colorspace;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1493,7 +1650,11 @@ sal_Bool SAL_CALL AnimationNode::getDirection() throw (RuntimeException)
 void SAL_CALL AnimationNode::setDirection( sal_Bool _direction ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mbDirection = _direction;
+    if( _direction != mbDirection )
+    {
+        mbDirection = _direction;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1512,6 +1673,7 @@ void SAL_CALL AnimationNode::setPath( const Any& _path ) throw (RuntimeException
 {
     Guard< Mutex > aGuard( maMutex );
     maPath = _path;
+    fireChangeListener();
 }
 
 // --------------------------------------------------------------------
@@ -1530,6 +1692,7 @@ void SAL_CALL AnimationNode::setOrigin( const Any& _origin ) throw (RuntimeExcep
 {
     Guard< Mutex > aGuard( maMutex );
     maOrigin = _origin;
+    fireChangeListener();
 }
 
 // --------------------------------------------------------------------
@@ -1547,7 +1710,11 @@ sal_Int16 SAL_CALL AnimationNode::getTransformType() throw (RuntimeException)
 void SAL_CALL AnimationNode::setTransformType( sal_Int16 _transformtype ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnTransformType = _transformtype;
+    if( _transformtype != mnTransformType )
+    {
+        mnTransformType = _transformtype;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1565,7 +1732,11 @@ sal_Int16 SAL_CALL AnimationNode::getTransition() throw (RuntimeException)
 void SAL_CALL AnimationNode::setTransition( sal_Int16 _transition ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnTransition = _transition;
+    if( _transition != mnTransition )
+    {
+        mnTransition = _transition;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1583,7 +1754,11 @@ sal_Int16 SAL_CALL AnimationNode::getSubtype() throw (RuntimeException)
 void SAL_CALL AnimationNode::setSubtype( sal_Int16 _subtype ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnSubtype = _subtype;
+    if( _subtype != mnSubtype )
+    {
+        mnSubtype = _subtype;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1601,7 +1776,11 @@ sal_Bool SAL_CALL AnimationNode::getMode() throw (RuntimeException)
 void SAL_CALL AnimationNode::setMode( sal_Bool _mode ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mbMode = _mode;
+    if( _mode != mbMode )
+    {
+        mbMode = _mode;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1619,7 +1798,11 @@ sal_Int32 SAL_CALL AnimationNode::getFadeColor() throw (RuntimeException)
 void SAL_CALL AnimationNode::setFadeColor( sal_Int32 _fadecolor ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnFadeColor = _fadecolor;
+    if( _fadecolor != mnFadeColor )
+    {
+        mnFadeColor = _fadecolor;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1638,6 +1821,7 @@ void SAL_CALL AnimationNode::setSource( const Any& _source ) throw (RuntimeExcep
 {
     Guard< Mutex > aGuard( maMutex );
     maTarget = _source;
+    fireChangeListener();
 }
 
 // --------------------------------------------------------------------
@@ -1655,7 +1839,11 @@ double SAL_CALL AnimationNode::getVolume() throw (RuntimeException)
 void SAL_CALL AnimationNode::setVolume( double _volume ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mfVolume = _volume;
+    if( _volume != mfVolume )
+    {
+        mfVolume = _volume;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1673,7 +1861,11 @@ sal_Int16 SAL_CALL AnimationNode::getCommand() throw (RuntimeException)
 void SAL_CALL AnimationNode::setCommand( sal_Int16 _command ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnCommand = _command;
+    if( _command != mnCommand )
+    {
+        mnCommand = _command;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1692,6 +1884,7 @@ void SAL_CALL AnimationNode::setParameter( const Any& _parameter ) throw (Runtim
 {
     Guard< Mutex > aGuard( maMutex );
     maParameter = _parameter;
+    fireChangeListener();
 }
 
 // --------------------------------------------------------------------
@@ -1742,6 +1935,9 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertBefore( const Referenc
         throw ElementExistException();
 
     maChilds.insert( before, newChild );
+
+    Reference< XInterface > xThis( static_cast< OWeakObject * >(this) );
+    newChild->setParent( xThis );
 
     return newChild;
 }
@@ -1865,7 +2061,11 @@ sal_Int16 SAL_CALL AnimationNode::getIterateType() throw (RuntimeException)
 void SAL_CALL AnimationNode::setIterateType( sal_Int16 _iteratetype ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mnIterateType = _iteratetype;
+    if( _iteratetype != mnIterateType )
+    {
+        mnIterateType = _iteratetype;
+        fireChangeListener();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -1883,7 +2083,86 @@ double SAL_CALL AnimationNode::getIterateInterval() throw (RuntimeException)
 void SAL_CALL AnimationNode::setIterateInterval( double _iterateinterval ) throw (RuntimeException)
 {
     Guard< Mutex > aGuard( maMutex );
-    mfIterateInterval = _iterateinterval;
+    if( _iterateinterval != mfIterateInterval )
+    {
+        mfIterateInterval = _iterateinterval;
+        fireChangeListener();
+    }
 }
+
+// --------------------------------------------------------------------
+
+// XChangesNotifier
+void SAL_CALL AnimationNode::addChangesListener( const Reference< XChangesListener >& aListener ) throw (RuntimeException)
+{
+    maChangeListener.addInterface( aListener );
+}
+
+// --------------------------------------------------------------------
+
+// XChangesNotifier
+void SAL_CALL AnimationNode::removeChangesListener( const Reference< XChangesListener >& aListener ) throw (RuntimeException)
+{
+    maChangeListener.removeInterface(aListener);
+}
+
+// --------------------------------------------------------------------
+
+// XUnoTunnel
+::sal_Int64 SAL_CALL AnimationNode::getSomething( const Sequence< ::sal_Int8 >& rId ) throw (RuntimeException)
+{
+    if( rId.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) )
+    {
+        return (sal_Int64)this;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+// --------------------------------------------------------------------
+
+const ::com::sun::star::uno::Sequence< sal_Int8 > & AnimationNode::getUnoTunnelId()
+{
+    static ::com::sun::star::uno::Sequence< sal_Int8 > * pSeq = 0;
+    if( !pSeq )
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
+        if( !pSeq )
+        {
+            static ::com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
+            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+            pSeq = &aSeq;
+        }
+    }
+    return *pSeq;
+}
+
+// --------------------------------------------------------------------
+
+void AnimationNode::fireChangeListener()
+{
+    Guard< Mutex > aGuard( maMutex );
+
+    OInterfaceIteratorHelper aIterator( maChangeListener );
+    if( aIterator.hasMoreElements() )
+    {
+        Reference< XInterface > xSource( static_cast<OWeakObject*>(this), UNO_QUERY );
+        Sequence< ElementChange > aChanges;
+        const ChangesEvent aEvent( xSource, makeAny( mxParent ), aChanges );
+        while( aIterator.hasMoreElements() )
+        {
+            Reference< XChangesListener > xListener( aIterator.next(), UNO_QUERY );
+            if( xListener.is() )
+                xListener->changesOccurred( aEvent );
+        }
+    }
+
+    if( mpParent )
+        mpParent->fireChangeListener();
+}
+
+// --------------------------------------------------------------------
 
 }; // namespace animcore
