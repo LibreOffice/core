@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-12 15:12:22 $
+ *  last change: $Author: tra $ $Date: 2002-11-14 08:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1136,22 +1136,36 @@ oslFileError SAL_CALL osl_getTempDirURL( rtl_uString **pustrTempDirURL );
     directory returned by osl_getTempDirURL.
     Under UNIX Operating Systems the file will be created with read and write
     access for the user exclusively.
-    The caller is responsible for closing and removing the created file on
-    success.<br><br>
+    If the caller requests only a handle to the open file but not the name of
+    it, the file will be automatically removed on close else the caller is
+    responsible for removing the file on success.<br><br>
 
-    @param  pustrDirectoryURL [in] specifies the full qualified UNC path where
+    @param  pustrDirectoryURL [in] specifies the full qualified URL where
             the temporary file should be created.
             If pustrDirectoryURL is 0 the path returned by osl_getTempDirURL
             will be used.
 
     @param  pHandle [out] on success receives a handle to the open file.
-            If pHandle is 0 the file will be closed on return and only the
-            file name will be returned.
+            If pHandle is 0 the file will be closed on return, in this case
+            ppustrTempFileURL must not be 0.
 
-    @param  ppustrTempFileURL [out] on success receives the URL of the
-            temporary file.
-            ppustrTempFileURL must not be 0
-            *ppustrTempFileURL must be 0 or must point to a valid rtl_uString
+    @param  ppustrTempFileURL [out] on success receives the full qualified URL
+            of the temporary file.
+            If ppustrTempFileURL is 0 the file will be automatically removed
+            on close, in this case pHandle must not be 0.
+            If ppustrTempFileURL is not 0 the caller receives the name of the
+            created file and is responsible for removing the file, in this case
+            *ppustrTempFileURL must be 0 or must point to a valid rtl_uString.
+
+    @descr  Description of the different pHandle, ppustrTempFileURL parameter combinations.
+            pHandle is 0 and ppustrTempDirURL is 0 - this combination is invalid<br>
+            pHandle is not 0 and ppustrTempDirURL is 0 - a handle to the open file
+            will be returned on success and the file will be automatically removed on close<br>
+            pHandle is 0 and ppustrTempDirURL is not 0 - the name of the file will be
+            returned, the caller is responsible for opening, closing and removing the file.<br>
+            pHandle is not 0 and ppustrTempDirURL is not 0 - a handle to the open file as well as
+            the file name will be returned, the caller is responsible for closing and removing
+            the file.<br>
 
     @return osl_File_E_None   on success or one of the following error codes:<p>
             osl_File_E_INVAL  the format of the parameter is invalid
