@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_lib_container.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:17:54 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,9 @@ using namespace ::com::sun::star::ucb;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
-namespace dp_registry
-{
-namespace backend
-{
-namespace script
-{
+namespace dp_registry {
+namespace backend {
+namespace script {
 
 //______________________________________________________________________________
 OUString LibraryContainer::get_libname(
@@ -100,10 +97,8 @@ OUString LibraryContainer::get_libname(
     xml_parse( ::xmlscript::importLibrary( import ), ucb_content, xContext );
 
     if (import.aName.getLength() == 0)
-    {
         throw Exception( getResourceString(RID_STR_CANNOT_DETERMINE_LIBNAME),
                          Reference<XInterface>() );
-    }
     return import.aName;
 }
 
@@ -119,8 +114,7 @@ void LibraryContainer::flush(
     t_libs_map::iterator iPos( m_map.begin() );
     t_libs_map::iterator const iEnd( m_map.end() );
     ::std::size_t nPos = 0;
-    for ( ; iPos != iEnd; ++iPos )
-    {
+    for ( ; iPos != iEnd; ++iPos ) {
         export_array.mpLibs[ nPos ] = iPos->second;
         ++nPos;
     }
@@ -215,11 +209,9 @@ bool LibraryContainer::insert(
         // found one:
         OUString const & storage_url = iFind->second.aStorageURL;
         if (! insert_url.equals( storage_url ))
-        {
             throw container::ElementExistException(
                 getResourceString(RID_STR_LIBNAME_ALREADY_EXISTS) + descr.aName,
                 Reference<XInterface>() );
-        }
         return true;
     }
 }
@@ -238,15 +230,15 @@ bool LibraryContainer::remove(
         if (libname.getLength() != 0)
         {
             ::std::size_t erased = m_map.erase( libname );
-            if (0 < erased)
-            {
+            if (0 < erased) {
                 m_modified = true;
                 succ = true;
             }
         }
     }
-    else // erase some matching url
+    else
     {
+        // erase some matching url:
         t_libs_map::iterator iPos( m_map.begin() );
         t_libs_map::iterator const iEnd( m_map.end() );
         while (iPos != iEnd)
@@ -255,8 +247,7 @@ bool LibraryContainer::remove(
             if (iPos->second.aStorageURL.getLength() > 0)
             {
                 OUString const & storage_url = iPos->second.aStorageURL;
-                if (storage_url.match( url ))
-                {
+                if (storage_url.match( url )) {
                     t_libs_map::iterator iErase( iPos );
                     ++iPos;
                     m_map.erase( iErase );

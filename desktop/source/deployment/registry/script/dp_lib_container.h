@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_lib_container.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:18:13 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,9 @@
 
 namespace css = ::com::sun::star;
 
-namespace dp_registry
-{
-namespace backend
-{
-namespace script
-{
+namespace dp_registry {
+namespace backend {
+namespace script {
 
 typedef ::std::list< ::xmlscript::LibDescriptor > t_descr_list;
 
