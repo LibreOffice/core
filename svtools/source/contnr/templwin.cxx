@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:40 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,9 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
-
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
+#endif
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
@@ -467,9 +469,7 @@ String SvtIconWindow_Impl::GetSelectedIconURL() const
 String SvtIconWindow_Impl::GetSelectedIconText() const
 {
     ULONG nPos;
-    String aText = aIconCtrl.GetSelectedEntry( nPos )->GetText();
-    aText.EraseAllChars( '~' );
-    return aText;
+    return MnemonicGenerator::EraseAllMnemonicChars( aIconCtrl.GetSelectedEntry( nPos )->GetText() );
 }
 
 String SvtIconWindow_Impl::GetIconText( const String& rURL ) const
@@ -477,10 +477,7 @@ String SvtIconWindow_Impl::GetIconText( const String& rURL ) const
     String aText;
     SvxIconChoiceCtrlEntry* pEntry = GetEntry( rURL );
     if ( pEntry )
-    {
-        aText = pEntry->GetText();
-        aText.EraseAllChars( '~' );
-    }
+        aText = MnemonicGenerator::EraseAllMnemonicChars( pEntry->GetText() );
     return aText;
 }
 
@@ -657,7 +654,7 @@ Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
         else
         {
             // title
-            String aRow = String( aTitle ).EraseAllChars( '~' );
+            String aRow = MnemonicGenerator::EraseAllMnemonicChars( String( aTitle ) );
             aRow += '\t';
             // no type
             aRow += '\t';
