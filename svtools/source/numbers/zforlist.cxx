@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:53:50 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3539,8 +3539,8 @@ void SvNumberFormatter::ImpInitCurrencyTable()
 #endif
         theCurrencyTable.Insert( pEntry, nCurrencyPos++ );
         if ( !nSystemCurrencyPosition && (aConfiguredCurrencyAbbrev.Len() ?
-                pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev :
-                pEntry->GetLanguage() == eConfiguredCurrencyLanguage) )
+                pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev &&
+                pEntry->GetLanguage() == eConfiguredCurrencyLanguage : FALSE) )
             nSystemCurrencyPosition = nCurrencyPos-1;
         if ( !nMatchingSystemCurrencyPosition &&
                 pEntry->GetLanguage() == eSysLang )
