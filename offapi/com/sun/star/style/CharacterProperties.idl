@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterProperties.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 13:45:09 $
+ *  last change: $Author: os $ $Date: 2001-02-19 10:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,40 @@ service CharacterProperties
         @optional
      */
     [optional, property] short CharEmphasize;
+    //-------------------------------------------------------------------------
+    /** contains the text that is set as ruby.
+        @optional
+     */
+    [optional, property] string RubyText;
+    //-------------------------------------------------------------------------
+    /** determins the adjustment of the ruby text as <type scope="com::sun::star::text">RubyAdjust</type>.
+        @optional
+     */
+    [optional, property] short RubyAdjust;
+    //-------------------------------------------------------------------------
+    /** contains the name of the character style that is applied to RubyText.
+        @optional
+     */
+    [optional, property] string RubyCharStyleName;
+
+    //-------------------------------------------------------------------------
+    /** determins the rotation of a character in degree.
+         <p>Depending on the implementation only certain values may be allowed.
+        </p>
+        @optional
+     */
+    [optional, property] short CharRotation;
+    //-------------------------------------------------------------------------
+    /** determins whether the text formatting tries to fit rotated text into the
+         surrounded line height.
+        @optional
+     */
+    [optional, property] boolean CharRotationIsFitToLine;
+    //-------------------------------------------------------------------------
+    /** determins the percentage value of scaling of characters.
+        @optional
+     */
+    [optional, property] short CharScaleWidth;
 };
 
 //=============================================================================
