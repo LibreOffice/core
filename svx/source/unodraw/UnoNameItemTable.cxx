@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:33:15 $
+ *  last change: $Author: cl $ $Date: 2001-03-06 18:19:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,9 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
             continue;
 
         // check if there is already an item with this name
-        const OUString aSearchName( pItem->GetName() );
+        OUString aSearchName;
+        SvxUnogetApiNameForItem( mnWhich, pItem->GetName(), aSearchName );
+
         OUString* pStartNames = aSeq.getArray();
         sal_Bool bFound = sal_False;
         for( sal_Int32 i = 0; i < nCount; i++ )
@@ -286,9 +288,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
         if( !bFound )
         {
             nCount++;
-
-            SvxUnogetApiNameForItem( mnWhich, pItem->GetName(), *pStrings );
-            pStrings++;
+            *pStrings++ = aSearchName;
         }
     }
 
@@ -300,7 +300,9 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
             continue;
 
         // check if there is already an item with this name
-        const OUString aSearchName( pItem->GetName() );
+        OUString aSearchName;
+        SvxUnogetApiNameForItem( mnWhich, pItem->GetName(), aSearchName );
+
         OUString* pStartNames = aSeq.getArray();
         sal_Bool bFound = sal_False;
         for( sal_Int32 i = 0; i < nCount; i++ )
@@ -315,9 +317,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoNameItemTable::getElementNames(  )
         if( !bFound )
         {
             nCount++;
-
-            SvxUnogetApiNameForItem( mnWhich, pItem->GetName(), *pStrings );
-            pStrings++;
+            *pStrings++ = aSearchName;
         }
     }
 
