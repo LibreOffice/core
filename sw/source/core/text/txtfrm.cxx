@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:31:51 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:34:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,17 @@
 #ifndef _SORTEDOBJS_HXX
 #include <sortedobjs.hxx>
 #endif
+// --> OD 2005-03-30 #???#
+#ifndef _TXTFLCNT_HXX
+#include <txtflcnt.hxx>     // SwTxtFlyCnt
+#endif
+#ifndef _FMTFLCNT_HXX
+#include <fmtflcnt.hxx>     // SwFmtFlyCnt
+#endif
+#ifndef _FMTCNTNT_HXX
+#include <fmtcntnt.hxx>     // SwFmtCntnt
+#endif
+// <--
 
 #if OSL_DEBUG_LEVEL > 1
 #ifndef _TXTPAINT_HXX
@@ -552,6 +563,80 @@ void SwTxtFrm::HideFootnotes( xub_StrLen nStart, xub_StrLen nEnd )
     }
 }
 
+// --> OD 2005-03-30 #120729# - hotfix: WW8 documents contain at its end hidden,
+// as-character anchored graphics, which are used for a graphic bullet list.
+// As long as these graphic bullet list aren't imported, do not hide a
+// at-character anchored object, if
+// (a) the document is an imported WW8 document -
+//     checked by checking certain compatibility options -,
+// (b) the paragraph is the last content in the document and
+// (c) the anchor character is an as-character anchored graphic.
+bool lcl_HideObj( const SwTxtFrm& _rFrm,
+                  const RndStdIds _eAnchorType,
+                  const xub_StrLen _nObjAnchorPos,
+                  SwAnchoredObject* _pAnchoredObj )
+{
+    bool bRet( true );
+
+    if ( _eAnchorType == FLY_AUTO_CNTNT )
+    {
+        const SwDoc* pDoc( _rFrm.GetTxtNode()->GetDoc() );
+        if ( !pDoc->IsFormerTextWrapping() &&
+             !pDoc->IsFormerLineSpacing() &&
+             !pDoc->IsFormerObjectPositioning() &&
+             pDoc->ConsiderWrapOnObjPos() &&
+             _rFrm.IsInDocBody() && !_rFrm.FindNextCnt() )
+        {
+            const xub_Unicode cAnchorChar =
+                        _rFrm.GetTxtNode()->GetTxt().GetChar( _nObjAnchorPos );
+            if ( cAnchorChar == CH_TXTATR_BREAKWORD )
+            {
+                SwpHints* pHints =
+                        const_cast<SwTxtFrm&>(_rFrm).GetTxtNode()->GetpSwpHints();
+                const SwTxtAttr* pHint( 0L );
+                if( pHints )
+                {
+                    for( MSHORT i = 0; i < pHints->Count(); ++i )
+                    {
+                        SwTxtAttr* pPos = pHints->GetHt(i);
+                        xub_StrLen nStart = *pPos->GetStart();
+                        if ( _nObjAnchorPos < nStart )
+                            break;
+                        if ( _nObjAnchorPos == nStart && !pPos->GetEnd() )
+                        {
+                            pHint = pPos;
+                            break;
+                        }
+                    }
+                }
+                if ( pHint &&
+                     pHint->Which() == RES_TXTATR_FLYCNT )
+                {
+                    const SwFrmFmt* pFrmFmt =
+                        static_cast<const SwTxtFlyCnt*>(pHint)->GetFlyCnt().GetFrmFmt();
+                    if ( pFrmFmt->Which() == RES_FLYFRMFMT )
+                    {
+                        SwNodeIndex nCntntIndex = *(pFrmFmt->GetCntnt().GetCntntIdx());
+                        nCntntIndex++;
+                        if ( nCntntIndex.GetNode().IsNoTxtNode() )
+                        {
+                            bRet = false;
+                            // set needed data structure values for object positioning
+                            SWRECTFN( (&_rFrm) );
+                            SwRect aLastCharRect( _rFrm.Frm() );
+                            (aLastCharRect.*fnRect->fnSetWidth)( 1 );
+                            _pAnchoredObj->maLastCharRect = aLastCharRect;
+                            _pAnchoredObj->mnLastTopOfLine = (aLastCharRect.*fnRect->fnGetTop)();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return bRet;
+}
+// <--
 /*************************************************************************
  *                        SwTxtFrm::HideAndShowObjects()
  *************************************************************************/
@@ -578,7 +663,16 @@ void SwTxtFrm::HideAndShowObjects()
             {
                 SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
-                pContact->MoveObjToInvisibleLayer( pObj );
+                // --> OD 2005-03-30 #120729# - hotfix: do not hide object
+                // under certain conditions
+                const RndStdIds eAnchorType( pContact->GetAnchorId() );
+                const xub_StrLen nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
+                if ( eAnchorType != FLY_AUTO_CNTNT ||
+                     lcl_HideObj( *this, eAnchorType, nObjAnchorPos, (*GetDrawObjs())[i] ) )
+                {
+                    pContact->MoveObjToInvisibleLayer( pObj );
+                }
+                // <--
             }
         }
         else
@@ -597,19 +691,26 @@ void SwTxtFrm::HideAndShowObjects()
             {
                 SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
+                // --> OD 2005-03-30 #120729# - determine anchor type only once
+                const RndStdIds eAnchorType( pContact->GetAnchorId() );
+                // <--
 
-                if ( pContact->ObjAnchoredAtPara() )
+                if ( eAnchorType == FLY_AT_CNTNT )
                 {
                     pContact->MoveObjToVisibleLayer( pObj );
                 }
-                else if ( pContact->ObjAnchoredAtChar() ||
-                          pContact->ObjAnchoredAsChar() )
+                else if ( eAnchorType == FLY_AUTO_CNTNT ||
+                          eAnchorType == FLY_IN_CNTNT )
                 {
                     xub_StrLen nHiddenStart;
                     xub_StrLen nHiddenEnd;
                     xub_StrLen nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
                     SwScriptInfo::GetBoundsOfHiddenRange( rNode, nObjAnchorPos, nHiddenStart, nHiddenEnd, 0 );
-                    if ( nHiddenStart != STRING_LEN && bShouldBeHidden )
+                    // --> OD 2005-03-30 #120729# - hotfix: do not hide object
+                    // under certain conditions
+                    if ( nHiddenStart != STRING_LEN && bShouldBeHidden &&
+                         lcl_HideObj( *this, eAnchorType, nObjAnchorPos, (*GetDrawObjs())[i] ) )
+                    // <--
                         pContact->MoveObjToInvisibleLayer( pObj );
                     else
                         pContact->MoveObjToVisibleLayer( pObj );
