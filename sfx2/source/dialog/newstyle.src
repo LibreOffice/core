@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newstyle.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:34:39 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:23:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Message [ dutch ] = "Dit opmaakprofiel bestaat reeds. Overschrijven?" ;
         Message [ spanish ] = "El estilo ya existe. ¿Desea sobrescribirlo?" ;
         Message [ english_us ] = "Style already exists. Overwrite?" ;
-        Message[ chinese_simplified ] = "ÑùÊ½ÒÑ¾­´æÔÚ¡£Òª¸²Ğ´Ëü£¿";
+        Message[ chinese_simplified ] = "ÑùÊ½ÒÑ¾­´æÔÚ¡£Òª¸ÄĞ´£¿";
         Message[ russian ] = "Ñòèëü óæå ñóùåñòâóåò. Ïåğåïèñàòü?";
         Message[ polish ] = "Styl ju¿ istnieje. Zast¹piæ innym?";
         Message[ japanese ] = "½À²Ù‚Í‚·‚Å‚É‚ ‚è‚Ü‚·Bã‘‚«‚µ‚Ü‚·‚©B";
@@ -173,6 +173,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Message[ catalan ] = "El estilo ya existe. ¿Desea sobrescribirlo?";
     };
 };
+
 
 
 
