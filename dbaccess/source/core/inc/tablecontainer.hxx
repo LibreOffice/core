@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 14:49:19 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 10:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,9 @@
 #ifndef DBA_CORE_WARNINGS_HXX
 #include "warnings.hxx"
 #endif
-
-
+#ifndef DBA_CORE_REFRESHLISTENER_HXX
+#include "RefreshListener.hxx"
+#endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
@@ -133,6 +134,7 @@ namespace dbaccess
         ::utl::OConfigurationTreeRoot   m_aCommitLocation; // need to commit new table nodes
         ::utl::OConfigurationNode       m_aTablesConfig;
         IWarningsContainer*             m_pWarningsContainer;
+        IRefreshListener*               m_pRefreshListener;
 
         // holds the original tables which where set in construct but they can be null
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterTables;
@@ -144,6 +146,7 @@ namespace dbaccess
         sal_Bool m_bConstructed : 1;        // late ctor called
 
 
+        void removeEventListener();
         sal_Bool isNameValid(const ::rtl::OUString& _rName,
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableFilter,
             const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter,
@@ -172,6 +175,7 @@ namespace dbaccess
             ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
             sal_Bool _bCase,
+            IRefreshListener*   _pRefreshListener = NULL,
             IWarningsContainer* _pWarningsContainer = NULL
             );
         virtual ~OTableContainer();

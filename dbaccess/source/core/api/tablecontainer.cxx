@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 06:30:54 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 10:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ OTableContainer::OTableContainer(const OConfigurationNode& _rTablesConfig,
                                  ::osl::Mutex& _rMutex,
                                  const Reference< XConnection >& _xCon,
                                  sal_Bool _bCase,
+                                 IRefreshListener*  _pRefreshListener,
                                  IWarningsContainer* _pWarningsContainer)
     :OCollection(_rParent,_bCase,_rMutex,::std::vector< ::rtl::OUString>())
     ,m_bConstructed(sal_False)
@@ -167,6 +168,7 @@ OTableContainer::OTableContainer(const OConfigurationNode& _rTablesConfig,
     ,m_aCommitLocation(_rCommitLocation)
     ,m_aTablesConfig(_rTablesConfig)
     ,m_pWarningsContainer(_pWarningsContainer)
+    ,m_pRefreshListener(_pRefreshListener)
     ,m_bInAppend(sal_False)
     ,m_bInDrop(sal_False)
 {
@@ -402,19 +404,20 @@ void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter
 
     m_bConstructed = sal_True;
 }
-
+// -----------------------------------------------------------------------------
+void OTableContainer::removeEventListener()
+{
+    Reference<XContainer> xCont(m_xMasterTables,UNO_QUERY);
+    if(xCont.is())
+        xCont->removeContainerListener(this);
+}
 //------------------------------------------------------------------------------
 void OTableContainer::disposing()
 {
     MutexGuard aGuard(m_rMutex);
     OCollection::disposing();
+    removeEventListener();
 
-//  m_aElements.clear();
-//      //  !!! do this before clearing the map which the vector elements refer to !!!
-//  m_aNameMap.clear();
-    Reference<XContainer> xCont(m_xMasterTables,UNO_QUERY);
-    if(xCont.is())
-        xCont->removeContainerListener(this);
     m_xMasterTables = NULL;
     m_xMetaData     = NULL;
     m_xConnection   = NULL;
@@ -482,6 +485,15 @@ sal_Bool OTableContainer::isNameValid(  const ::rtl::OUString& _rName,
 // -------------------------------------------------------------------------
 void OTableContainer::impl_refresh() throw(RuntimeException)
 {
+    if ( m_pRefreshListener )
+    {
+        m_bConstructed = sal_False;
+        removeEventListener();
+        Reference<XRefreshable> xRefresh(m_xMasterTables,UNO_QUERY);
+        if ( xRefresh.is() )
+            xRefresh->refresh();
+        m_pRefreshListener->refresh(this);
+    }
 }
 // -----------------------------------------------------------------------------
 Reference< XNamed > OTableContainer::createObject(const ::rtl::OUString& _rName)

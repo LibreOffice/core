@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 06:51:06 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 10:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
@@ -132,6 +133,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::osl;
 using namespace ::comphelper;
@@ -147,11 +149,13 @@ OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent,
                                  ::osl::Mutex& _rMutex,
                                  const Reference< XConnection >& _xCon,
                                  sal_Bool _bCase,
+                                 IRefreshListener*  _pRefreshListener,
                                  IWarningsContainer* _pWarningsContainer)
     :OCollection(_rParent,_bCase,_rMutex,::std::vector< ::rtl::OUString>())
     ,m_bConstructed(sal_False)
     ,m_xConnection(_xCon)
     ,m_pWarningsContainer(_pWarningsContainer)
+    ,m_pRefreshListener(_pRefreshListener)
 {
     DBG_CTOR(OViewContainer, NULL);
     try
@@ -429,6 +433,14 @@ sal_Bool OViewContainer::isNameValid(   const ::rtl::OUString& _rName,
 // -------------------------------------------------------------------------
 void OViewContainer::impl_refresh() throw(RuntimeException)
 {
+    if ( m_pRefreshListener )
+    {
+        m_bConstructed = sal_False;
+        Reference<XRefreshable> xRefresh(m_xMasterViews,UNO_QUERY);
+        if ( xRefresh.is() )
+            xRefresh->refresh();
+        m_pRefreshListener->refresh(this);
+    }
 }
 // -----------------------------------------------------------------------------
 Reference< XNamed > OViewContainer::createObject(const ::rtl::OUString& _rName)

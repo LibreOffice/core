@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontainer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 06:52:01 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 10:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
+#ifndef DBA_CORE_REFRESHLISTENER_HXX
+#include "RefreshListener.hxx"
+#endif
 
 class WildCard;
 namespace dbaccess
@@ -132,6 +135,7 @@ namespace dbaccess
     {
     protected:
         IWarningsContainer*     m_pWarningsContainer;
+        IRefreshListener*       m_pRefreshListener;
 
         // holds the original tables which where set in construct but they can be null
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterViews;
@@ -166,6 +170,7 @@ namespace dbaccess
                         ::osl::Mutex& _rMutex,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
                         sal_Bool _bCase,
+                        IRefreshListener*   _pRefreshListener = NULL,
                         IWarningsContainer* _pWarningsContainer = NULL
                         );
         virtual ~OViewContainer();
