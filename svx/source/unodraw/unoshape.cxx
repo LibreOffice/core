@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:16:01 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1975,8 +1975,7 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             {
                 awt::Size aTmp( aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
                 uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObj)->GetObjRef();
-                svt::EmbeddedObjectRef::TryRunningState( xObj );
-                if ( xObj.is() )
+                if( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
                     xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, aTmp );
                 return;
             }
@@ -2326,9 +2325,8 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 awt::Rectangle aVisArea;
                 if( pObj->ISA(SdrOle2Obj))
                 {
-                    uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObj)->GetObjRef();
-                    svt::EmbeddedObjectRef::TryRunningState( xObj );
-                    if ( xObj.is() )
+                    uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef() );
+                    if ( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
                     {
                         awt::Size aTmp = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
                         aVisArea = awt::Rectangle( 0, 0, aTmp.Width, aTmp.Height );
@@ -2343,9 +2341,8 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 awt::Size aSize;
                 if( pObj->ISA(SdrOle2Obj))
                 {
-                    uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObj)->GetObjRef();
-                    svt::EmbeddedObjectRef::TryRunningState( xObj );
-                    if ( xObj.is() )
+                    uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef() );
+                    if( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
                         aSize = xObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
                 }
                 aAny <<= aSize;
@@ -2356,7 +2353,8 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
                 if( pObj->ISA(SdrOle2Obj))
                 {
                     SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
-                    if ( svt::EmbeddedObjectRef::TryRunningState( aObj.GetObjRef() ) )
+                    uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef() );
+                    if( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
                         return makeAny( aObj.GetObjRef()->getComponent() );
                 }
 
