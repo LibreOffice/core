@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-09-27 13:56:59 $
+ *  last change: $Author: sj $ $Date: 2000-10-10 14:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,17 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+
+#ifndef _UCBHELPER_CONTENT_HXX_
+#include <ucbhelper/content.hxx>
+#endif
+#ifndef _UCBHELPER_CONTENTBROKER_HXX_
+#include <ucbhelper/contentbroker.hxx>
+#endif
+#include <vos/xception.hxx>
+#ifndef _VOS_NO_NAMESPACE
+using namespace vos;
 #endif
 
 //---------------------------------------------------------------------------
@@ -2814,9 +2825,42 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, Rect
             ((SdrGrafObj*)pRet)->SetGraphic( aGraf );
 #if SUPD>601
         if( bLinkGrf )
-            ((SdrGrafObj*)pRet)->SetFileName( ::URIHelper::SmartRelToAbs( aFilename, FALSE,
-                                                                          INetURLObject::WAS_ENCODED,
-                                                                          INetURLObject::DECODE_UNAMBIGUOUS ) );
+        {
+            UniString aName( ::URIHelper::SmartRelToAbs( aFilename, FALSE,
+                                                                INetURLObject::WAS_ENCODED,
+                                                                    INetURLObject::DECODE_UNAMBIGUOUS ) );
+            sal_Bool bSetFileName = TRUE;
+
+            if ( bGrfRead )
+            {
+
+                // There is still an embedded graphic that could be used. Sometimes
+                // a graphiclink is also set. The problem is that the graphic cache will
+                // not swapout graphics when a graphiclink exists, so a validity check has to be done
+
+                if ( ( eFlags & mso_blipflagLinkToFile ) == mso_blipflagComment )
+                    bSetFileName = FALSE;
+                else
+                {
+                    try
+                    {
+                        ::ucb::Content  aCnt( aName, ::com::sun::star::uno::Reference<
+                            ::com::sun::star::ucb::XCommandEnvironment >() );
+                        ::rtl::OUString     aTitle;
+
+                        aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "Title" ) ) >>= aTitle;
+                        bSetFileName = ( aTitle.getLength() > 0 );
+                    }
+                    catch( ... )
+                    {
+                        // this file did not exist, so we will not set this as graphiclink
+                        bSetFileName = FALSE;
+                    }
+                }
+            }
+            if ( bSetFileName )
+                ((SdrGrafObj*)pRet)->SetFileName( aName );
+        }
 #endif
     }
     if ( !pRet->GetName().Len() )                   // SJ 22.02.00 : PPT OLE IMPORT:
