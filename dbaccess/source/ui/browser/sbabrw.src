@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:34:45 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:41:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,159 +71,7 @@
 #ifndef _GLOBLMN_HRC
 #include <svx/globlmn.hrc>
 #endif
-
-#ifndef DBAUI_TOOLBOX_HXX
 #include "toolbox.hrc"
-#endif
-
-
-#define MN_SORT     23
-#define MN_EXTRA    24
-#define MN_WIN      30
-#define MN_HELP     31
- // Toolbox----------------------------------------------------------------------------
-
-
- // HelpIds duerfen nur in dieser Form angegeben werden,
- // ansonsten können keine langnamen erzeugt werden
-ToolBox RID_BRW_QRY_TOOLBOX
-{
-    SVLook = TRUE ;
-    Pos = MAP_APPFONT ( 3 , 1 ) ;
-    //  Size = MAP_APPFONT ( 200 , 14 ) ;
-    OutputSize = TRUE ;
-    Align = BOXALIGN_TOP ;
-    HideWhenDeactivate = TRUE ;
-    ItemImageList = RID_DEFAULTIMAGELIST_SC ;
-    HelpId = HID_TLB_TABBROWSER ;
-    Border = TRUE;
-    ItemList =
-    {
-    CUR_ITEM
-    {
-        MID_BROWSER_EXPLORER
-        HelpId = SID_DSBROWSER_EXPLORER ;
-    };
-    CUR_SEPARATOR ;
-    CUR_ITEM
-    {
-        MID_FM_SEARCH
-        HelpId = SID_FM_SEARCH ;
-    };
-    CUR_SEPARATOR ;
-    CUR_ITEM
-    {
-        MID_SBA_QRY_SORTUP
-        HelpId = SID_FM_SORTUP ;
-    };
-    CUR_ITEM
-    {
-        MID_SBA_QRY_SORTDOWN
-        HelpId = SID_FM_SORTDOWN ;
-    };
-    CUR_ITEM
-    {
-        MID_SBA_QRY_AUTOFILTER
-        HelpId = SID_FM_AUTOFILTER ;
-    };
-    CUR_SEPARATOR ;
-    CUR_ITEM
-    {
-        MID_SBA_QRY_FILTERCRIT
-        HelpId = SID_FM_FILTERCRIT ;
-    };
-    CUR_ITEM
-    {
-        MID_SBA_QRY_ORDERCRIT
-        HelpId = SID_FM_ORDERCRIT ;
-    };
-    CUR_ITEM
-    {
-        MID_SBA_QRY_REMOVEFILTER
-        HelpId = SID_FM_REMOVE_FILTER_SORT ;
-    };
-    CUR_ITEM
-    {
-        MID_SBA_BROWSER_FILTERED
-        HelpId = SID_FM_FORM_FILTERED ;
-    };
-    CUR_SEPARATOR ;
-    CUR_ITEM
-    {
-        MID_SBA_QRY_REFRESH
-        HelpId = SID_FM_REFRESH ;
-        DropDown = TRUE ;
-    };
-    CUR_SEPARATOR ;
-    CUR_ITEM
-    {
-        MID_SBA_QRY_EDIT
-        Hide = FALSE ;
-        HelpId = SID_EDITDOC ;
-    };
-    CUR_ITEM
-    {
-        MID_SAVE_RECORD
-        Hide = FALSE ;
-    };
-    CUR_ITEM
-    {
-        MID_UNDO_RECORD
-        Hide = FALSE ;
-    };
-
-    CUR_SEPARATOR ;
-    CUR_ITEM
-    {
-        MID_SBA_QRY_CUT
-        HelpId = SID_CUT ;
-    };
-    CUR_ITEM
-    {
-        MID_SBA_QRY_COPY
-        HelpId = SID_COPY ;
-    };
-    CUR_ITEM
-    {
-        MID_SBA_QRY_PASTE
-        HelpId = SID_PASTE ;
-    };
-    CUR_SEPARATOR ;
-    CUR_ITEM
-    {
-        MID_BROWSER_INSERTCOLUMNS
-        Hide = TRUE ;
-        HelpId = SID_SBA_BRW_INSERT ;
-    };
-    CUR_ITEM
-    {
-        MID_BROWSER_INSERTCONTENT
-        Hide = TRUE ;
-        HelpId = SID_SBA_BRW_UPDATE ;
-    };
-    CUR_ITEM
-    {
-        MID_BROWSER_FORMLETTER
-        Hide = TRUE ;
-        HelpId = SID_SBA_BRW_MERGE ;
-    };
-    CUR_ITEM
-    {
-        MID_BROWSER_DOCUMENT_DATASOURCE
-        Hide = TRUE ;
-        HelpId = SID_DOCUMENT_DATA_SOURCE;
-    };
-    CUR_ITEM
-    {
-        Identifier = ID_BROWSER_CLOSE ;
-        HelpId = ID_BROWSER_CLOSE ;
-        Hide = TRUE;
-        Text [ de ] = "Schließen" ;
-        Text [ en-US ] = "Close";
-        };
-    };
-};
-
 
 String RID_STR_LOADING_DATASOURCE
 {
@@ -363,7 +211,7 @@ String STR_TITLE_CONFIRM_DELETION
 {
     Text [ de ] = "Löschen bestätigen" ;
     Text [ en-US ] = "Confirm Deletion" ;
-    };
+};
 
 String STR_QUERY_DELETE_QUERY
 {
@@ -395,13 +243,13 @@ String STR_OPENTABLES_WARNINGS
 {
     Text [ de ] = "Warnungen aufgetreten.";
     Text [ en-US ] = "Warnings encountered";
-    };
+};
 
 String STR_OPENTABLES_WARNINGS_DETAILS
 {
     Text [ de ] = "Beim Ermitteln der Tabellen wurden von der Datenbankverbindung Warnungen gemeldet.";
     Text [ en-US ] = "While retrieving the tables, warnings were reported by the database connection.";
-    };
+};
 
 String STR_CONNECTING_DATASOURCE
 {
@@ -447,15 +295,16 @@ Menu RID_MENU_REFRESH_DATA
         {
             MID_SBA_QRY_REFRESH
             HelpId = SID_FM_REFRESH ;
+            Command = ".uno:Refresh";
         };
         MenuItem
         {
             Identifier = ID_BROWSER_REFRESH_REBUILD;
+            Command = ".uno:DBRebuildData";
             HelpId = HID_BROWSER_REFRESH_REBUILDVIEW;
             Text [ de ] = "Neu aufbauen";
             Text [ en-US ] = "Rebuild";
-            };
+        };
     };
 };
-
 
