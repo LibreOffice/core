@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-25 18:07:16 $
+ *  last change: $Author: dr $ $Date: 2001-01-31 10:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #include "olinetab.hxx"
 #include "progress.hxx"
 #include "editutil.hxx"
+
+#ifndef _SC_XCLIMPSTREAM_HXX
+#include "XclImpStream.hxx"
+#endif
 
 #include "imp_op.hxx"
 #include "root.hxx"
@@ -1269,6 +1273,152 @@ void EncodeExternSheetUnicode( SvStream& aIn, String& aFile, String& aTabName, I
         EncodeExternSheet( aIn, aFile, aTabName, nBytesLeft, rbSWbk, nCch, b16Bit );
 }
 
+
+//___________________________________________________________________
+// class XclImpHelper
+
+// static
+UINT16 XclImpHelper::ReadExternsheetChar( XclImpStream& rStrm, UINT16& nCharsLeft, BOOL b16Bit )
+{
+    UINT16      nRetVal;
+    sal_Char    cChar;
+
+    if( b16Bit )
+        rStrm >> nRetVal;
+    else
+    {
+        rStrm >> cChar;
+        nRetVal = (UINT16) cChar;
+    }
+    nCharsLeft--;
+    return nRetVal;
+}
+
+// static
+void XclImpHelper::DecodeExternsheetImpl( XclImpStream& rStrm, String& rFile, String& rTable, BOOL& rbSameWb, UINT16 nChars, BOOL b16Bit )
+{
+    enum State { S_INIT, S_PATH, S_FILENAME, S_TABNAME };
+
+    UINT16  cEnc;
+    State   eState = S_INIT;
+    UINT16  nCharsLeft = nChars;
+
+    rbSameWb = FALSE;
+
+    while( nCharsLeft )
+    {
+        cEnc = ReadExternsheetChar( rStrm, nCharsLeft, b16Bit );
+        switch( eState )
+        {
+            case S_INIT:
+            {
+                switch( cEnc )
+                {
+                    case 0x0000:                                // empty
+                    case 0x0001:                        break;  // encode
+                    case 0x0002:                                // self
+                    case 0x0003:    rbSameWb = TRUE;    break;  // encode & self
+                    default:        rFile += (sal_Unicode) cEnc;
+                }
+                eState = S_PATH;
+            }
+            break;
+            case S_PATH:
+            {
+                switch( cEnc )
+                {
+                    case 0x0001:
+                    {
+                        if( nCharsLeft > 1 )
+                        {
+                            cEnc = ReadExternsheetChar( rStrm, nCharsLeft, b16Bit );
+                            if( cEnc == '@' )
+                                rFile.AppendAscii( "//" );
+                            else
+                            {
+                                rFile += (sal_Unicode) cEnc;
+                                rFile.AppendAscii( ":\\" );
+                            }
+                        }
+                        else
+                            rFile.AppendAscii( "<NULL-DRIVE!>" );
+                    }
+                    break;
+                    case 0x0002:
+                    case 0x0003:    rFile.AppendAscii( "\\" );      break;
+                    case 0x0004:    rFile.AppendAscii( "..\\") ;    break;
+                    case 0x0005:
+                    {
+                        if( nCharsLeft )
+                        {
+                            UINT16 nVolLen = ReadExternsheetChar( rStrm, nCharsLeft, b16Bit );
+                            if( nVolLen )
+                            {
+                                while( nVolLen-- )
+                                {
+                                    cEnc = ReadExternsheetChar( rStrm, nCharsLeft, b16Bit );
+                                    rFile += (sal_Unicode) cEnc;
+                                }
+                            }
+                            else
+                                rFile.AppendAscii( "<EMPTY MAC-LONG-VOLUME>" );
+
+                            rFile.AppendAscii( ":" );
+                        }
+                        else
+                            rFile.AppendAscii( "<ERROR IN MAC-LONG-VOLUME>" );
+                    }
+                    break;
+                    case 0x0006:    rFile.AppendAscii( "<Startup Dir>:" );      break;
+                    case 0x0007:    rFile.AppendAscii( "<Alt Startup Dir>:" );  break;
+                    case 0x0008:    rFile.AppendAscii( "<Library>" );           break;
+                    case '[':       eState = S_FILENAME;                        break;  // start of file name
+                    default:        rFile += (sal_Unicode) cEnc;
+                }
+            }
+            break;
+            case S_FILENAME:
+            {
+                switch( cEnc )
+                {
+                    case ']':   eState = S_TABNAME;             break;  // end of file name
+                    default:    rFile += (sal_Unicode) cEnc;
+                }
+            }
+            break;
+            case S_TABNAME:     rTable += (sal_Unicode) cEnc;   break;
+        }
+    }
+}
+
+// static
+void XclImpHelper::DecodeExternsheet( XclImpStream& rStrm, String& rFile, String& rTable, BOOL& rbSameWb, UINT16 nChars, UINT8 nFlags )
+{
+    rStrm.PushPosition();
+    BOOL b16Bit;
+    rStrm.SeekUniStringData( b16Bit, nFlags );
+    DecodeExternsheetImpl( rStrm, rFile, rTable, rbSameWb, nChars, b16Bit );
+    rStrm.PopPosition();
+    rStrm.IgnoreUniString( nChars, nFlags );
+}
+
+// static
+void XclImpHelper::DecodeExternsheet( XclImpStream& rStrm, String& rFile, String& rTable, BOOL& rbSameWb, UINT16 nChars )
+{
+    UINT8 nFlags;
+    rStrm >> nFlags;
+    DecodeExternsheet( rStrm, rFile, rTable, rbSameWb, nChars, nFlags );
+}
+
+// static
+void XclImpHelper::DecodeExternsheet( XclImpStream& rStrm, String& rFile, String& rTable, BOOL& rbSameWb )
+{
+    UINT16 nChars;
+    rStrm >> nChars;
+    DecodeExternsheet( rStrm, rFile, rTable, rbSameWb, nChars );
+}
+
+//___________________________________________________________________
 
 
 

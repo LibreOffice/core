@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-17 15:24:04 $
+ *  last change: $Author: dr $ $Date: 2001-01-31 10:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,14 @@
 // excdefs.hxx: constants for import/export
 //_________________________________________________________
 
+
+//_________________________________________________________
+// unicode strings
+
+#define EXC_STR_16BIT               0x01
+#define EXC_STR_FAREAST             0x04
+#define EXC_STR_RICH                0x08
+#define EXC_STR_UNKNOWN             0xF2
 
 //_________________________________________________________
 // ExcETabNumBuffer

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dr $ $Date: 2001-01-19 11:31:30 $
+#   last change: $Author: dr $ $Date: 2001-01-31 10:59:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
+        XclImpStream.cxx \
         read.cxx \
         readchrt.cxx \
         impop.cxx \
@@ -108,6 +109,7 @@ CXXFILES = \
 
 
 SLOFILES =	\
+        $(SLO)$/XclImpStream.obj \
         $(SLO)$/read.obj \
         $(SLO)$/readchrt.obj \
         $(SLO)$/impop.obj \

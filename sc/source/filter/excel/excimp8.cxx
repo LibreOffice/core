@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-01-30 15:16:53 $
+ *  last change: $Author: dr $ $Date: 2001-01-31 10:59:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,10 @@
 #include "validat.hxx"
 #include "dbcolect.hxx"
 #include "editutil.hxx"
+
+#ifndef _SC_XCLIMPSTREAM_HXX
+#include "XclImpStream.hxx"
+#endif
 
 #include "excimp8.hxx"
 #include "xfbuff.hxx"
@@ -2500,19 +2504,6 @@ void ImportExcel8::Dv( void )
 }
 
 
-static BOOL lcl_Test( SvStream& r, const UINT32 n )
-{
-    UINT32      nOldPos = r.Tell();
-    UINT32      nRef;
-
-    r >> nRef;
-
-    r.Seek( nOldPos );
-
-    return nRef == n;
-}
-
-
 static void lcl_GetAbs( String& rPath, UINT16 nDl, SfxObjectShell* pDocShell )
 {
     String      aTmpStr;
@@ -3167,6 +3158,20 @@ XclImpSupbook::~XclImpSupbook()
 {
     for( XclImpSupbookTab* pTab = (XclImpSupbookTab*) List::First(); pTab; pTab = (XclImpSupbookTab*) List::Next() )
         delete pTab;
+}
+
+//static
+void XclImpSupbook::ReadDocName( XclImpStream& rStrm, String& rDocName, BOOL& rSelf )
+{
+    String sTabName;
+    XclImpHelper::DecodeExternsheet( rStrm, rDocName, sTabName, rSelf );
+}
+
+//static
+void XclImpSupbook::ReadTabName( XclImpStream& rStrm, RootData& rExcRoot, String& rTabName )
+{
+    rStrm.ReadUniString( rTabName, *rExcRoot.pCharset );
+    ::ExcelNameToScName( rTabName );
 }
 
 //static

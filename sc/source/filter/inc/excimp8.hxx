@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-11 09:38:04 $
+ *  last change: $Author: dr $ $Date: 2001-01-31 10:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@ class ScConditionalFormat;
 class ExcEscherTxo;
 
 class ScDBData;
+
+class XclImpStream;
 
 
 class Biff8MSDffManager : public SvxMSDffManager, protected ExcRoot
@@ -727,6 +729,9 @@ private:
 public:
                                 XclImpSupbook( SvStream& rIn, INT32& rBytesLeft, RootData& rExcRoot );
     virtual                     ~XclImpSupbook();
+
+    static void                 ReadDocName( XclImpStream& rStrm, String& rDocName, BOOL& rSelf );
+    static void                 ReadTabName( XclImpStream& rStrm, RootData& rExcRoot, String& rTabName );
 
     static void                 ReadDocName( SvStream& rStrm, RootData& rExcRoot, INT32& rBytesLeft, String& rDocName, BOOL& rSelf );
     static void                 ReadTabName( SvStream& rStrm, RootData& rExcRoot, INT32& rBytesLeft, String& rTabName );

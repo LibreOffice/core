@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-18 16:32:13 $
+ *  last change: $Author: dr $ $Date: 2001-01-31 10:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <tools/datetime.hxx>
 #endif
 
+#ifndef _SC_XCLIMPSTREAM_HXX
+#include "XclImpStream.hxx"
+#endif
 #ifndef _EXCFORM_HXX
 #include "excform.hxx"
 #endif
@@ -99,6 +102,12 @@ struct XclImpChTrRecHeader
     sal_uInt16                  nAccept;
 };
 
+inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpChTrRecHeader& rRecHeader )
+{
+    rStrm >> rRecHeader.nSize >> rRecHeader.nIndex >> rRecHeader.nOpCode >> rRecHeader.nAccept;
+    return rStrm;
+}
+
 //___________________________________________________________________
 
 class XclImpChangeTrack : protected ExcRoot
@@ -107,14 +116,12 @@ private:
     XclImpChTrRecHeader         aRecHeader;
     String                      sOldUsername;
 
+    UINT32List                  aCutPosList;    // cut positions for string input
     ScChangeTrack*              pChangeTrack;
     SvStream*                   pInStrm;        // input stream
-    SvMemoryStream*             pContStrm;      // memory stream for continue recs
-    UINT32List                  aCutPosList;    // cut positions for string input
-    SvStream*                   pStrm;          // either pInStrm or pContStrm
-    sal_uInt32                  nStreamLen;
-    sal_Int32                   nBytesLeft;
+    XclImpStream*               pStrm;          // stream import class
     sal_uInt16                  nTabIdCount;
+    sal_Bool                    bGlobExit;      // global exit loop
 
     enum { nmBase, nmFound, nmNested }
                                 eNestedMode;    // action with nested content actions
@@ -127,13 +134,7 @@ private:
     void                        DoInsertRange( const ScRange& rRange );
     void                        DoDeleteRange( const ScRange& rRange );
 
-    inline sal_Bool             CheckSize( sal_Int32 nBytes );
-    inline void                 IgnoreBytes( sal_uInt32 nBytes );
-    inline sal_uInt8            ReaduInt8();
     inline sal_uInt8            LookAtuInt8();
-    inline sal_uInt16           ReaduInt16();
-    inline sal_uInt32           ReaduInt32();
-    inline double               ReadDouble();
     inline double               ReadRK();
     inline sal_Bool             ReadBool();
     inline void                 Read2DAddress( ScAddress& rAddress );
@@ -141,18 +142,12 @@ private:
     inline sal_uInt16           ReadTabNum();
     void                        ReadDateTime( DateTime& rDateTime );
 
-    sal_Bool                    ReadStringHeader( sal_uInt16& rSize, sal_Bool& r16Bit );
-    void                        ReadString( String& rString );
-    void                        IgnoreString();
-    void                        CopyFromStreamToStream( SvStream& rFromStrm, SvStream& rToStrm, sal_uInt16 nBytes );
+    inline void                 ReadString( String& rString );
+    inline void                 IgnoreString();
 
-    sal_Bool                    ReadRecordHeader();
-    sal_Bool                    CheckRecord(
-                                    sal_uInt16 nOpCode,
-                                    sal_Int32 nMinSize = -1,
-                                    sal_Int32 nMaxSize = -1 );
+    sal_Bool                    CheckRecord( sal_uInt16 nOpCode );
 
-    sal_Bool                    ReadFormula(
+    void                        ReadFormula(
                                     ScTokenArray*& rpTokenArray,
                                     const ScAddress& rPosition );
     void                        ReadCell(
@@ -167,18 +162,11 @@ private:
     void                        ReadChTrTabId();            // 0x013D
     void                        ReadChTrMoveRange();        // 0x0140
     void                        ReadChTrInsertTab();        // 0x014D
-    void                        StartNestedMode();          // 0x014E, 0x0150
+    void                        InitNestedMode();           // 0x014E, 0x0150
+    void                        ReadNestedRecords();
     sal_Bool                    EndNestedMode();            // 0x014F, 0x0151
 
-                                // creates continue stream, if cont record present
-                                // return: position of next regular record
-    sal_uInt32                  PrepareReadRecord( sal_uInt16 nRecLen );
-                                // destroys continue stream, sets input stream
-                                // to next record
-    void                        EndReadRecord( sal_uInt32 nNextPos );
-
     void                        ReadRecords();
-    void                        ReadStream();
 
 public:
                                 XclImpChangeTrack( RootData* pRootData );
@@ -191,88 +179,52 @@ public:
     void                        Apply();
 };
 
-inline sal_Bool XclImpChangeTrack::CheckSize( sal_Int32 nBytes )
-{
-    DBG_ASSERT( nBytes <= nBytesLeft, "XclImpChangeTrack::CheckSize - unexpected end" );
-    return nBytes <= nBytesLeft;
-}
-
-inline void XclImpChangeTrack::IgnoreBytes( sal_uInt32 nBytes )
-{
-    pStrm->SeekRel( nBytes );
-    nBytesLeft -= nBytes;
-}
-
-inline sal_uInt8 XclImpChangeTrack::ReaduInt8()
-{
-    sal_uInt8 nValue;
-    *pStrm >> nValue;
-    nBytesLeft--;
-    return nValue;
-}
-
 inline sal_uInt8 XclImpChangeTrack::LookAtuInt8()
 {
+    pStrm->PushPosition();
     sal_uInt8 nValue;
     *pStrm >> nValue;
-    pStrm->SeekRel( -1 );
+    pStrm->PopPosition();
     return nValue;
-}
-
-inline sal_uInt16 XclImpChangeTrack::ReaduInt16()
-{
-    sal_uInt16 nValue;
-    *pStrm >> nValue;
-    nBytesLeft -= 2;
-    return nValue;
-}
-
-inline sal_uInt32 XclImpChangeTrack::ReaduInt32()
-{
-    sal_uInt32 nValue;
-    *pStrm >> nValue;
-    nBytesLeft -= 4;
-    return nValue;
-}
-
-inline double XclImpChangeTrack::ReadDouble()
-{
-    double nDblValue;
-    *pStrm >> nDblValue;
-    nBytesLeft -= 8;
-    return nDblValue;
 }
 
 inline double XclImpChangeTrack::ReadRK()
 {
-    sal_uInt32 nRKValue = ReaduInt32();
-    return ImportExcel::RkToDouble( nRKValue );
+    return ImportExcel::RkToDouble( pStrm->ReaduInt32() );
 }
 
 inline sal_Bool XclImpChangeTrack::ReadBool()
 {
-    sal_uInt16 nBoolValue = ReaduInt16();
-    return (nBoolValue != 0);
+    return (pStrm->ReaduInt16() != 0);
 }
 
 inline void XclImpChangeTrack::Read2DAddress( ScAddress& rAddress )
 {
-    rAddress.SetRow( ReaduInt16() );
-    rAddress.SetCol( ReaduInt16() );
+    rAddress.SetRow( pStrm->ReaduInt16() );
+    rAddress.SetCol( pStrm->ReaduInt16() );
 }
 
 inline void XclImpChangeTrack::Read2DRange( ScRange& rRange )
 {
-    rRange.aStart.SetRow( ReaduInt16() );
-    rRange.aEnd.SetRow( ReaduInt16() );
-    rRange.aStart.SetCol( ReaduInt16() );
-    rRange.aEnd.SetCol( ReaduInt16() );
+    rRange.aStart.SetRow( pStrm->ReaduInt16() );
+    rRange.aEnd.SetRow( pStrm->ReaduInt16() );
+    rRange.aStart.SetCol( pStrm->ReaduInt16() );
+    rRange.aEnd.SetCol( pStrm->ReaduInt16() );
 }
 
 inline sal_uInt16 XclImpChangeTrack::ReadTabNum()
 {
-    sal_uInt16 nTab = ReaduInt16();
-    return pExcRoot->pImpTabIdBuffer->GetIndex( nTab, nTabIdCount );
+    return pExcRoot->pImpTabIdBuffer->GetIndex( pStrm->ReaduInt16(), nTabIdCount );
+}
+
+inline void XclImpChangeTrack::ReadString( String& rString )
+{
+    pStrm->ReadUniString( rString, *pExcRoot->pCharset );
+}
+
+inline void XclImpChangeTrack::IgnoreString()
+{
+    pStrm->IgnoreUniString();
 }
 
 //___________________________________________________________________
