@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-07-03 13:39:56 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 17:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,12 +151,12 @@ class LocalFileLayer : public cppu::WeakImplHelper3<backend::XUpdatableLayer,
             throw (uno::RuntimeException) { return mTimestamp ; }
 
         /**
-          Returns the reference to the layer writer.
+          Returns a externally usable layer writer.
 
           @return   layer writer reference
           */
-        const uno::Reference<backend::XLayerHandler>&
-            getLayerWriter(void) const ;
+        uno::Reference<backend::XLayerHandler> createLayerWriter(void);
+
         /**
           Returns a timestamp in the official backend format
           YYYYMMDDhhmmssZ associated to a file defined by its URL.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localoutputstream.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:31:44 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 17:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@ class LocalOutputStream : public cppu::WeakImplHelper1<io::XOutputStream> {
         /** Destructor */
         ~LocalOutputStream(void) ;
 
+        // closeOutput and mark as successful
+        void finishOutput();
+    protected :
         // XOutputStream
         virtual void SAL_CALL writeBytes(const uno::Sequence<sal_Int8>& aData)
             throw (io::NotConnectedException,
@@ -118,7 +121,6 @@ class LocalOutputStream : public cppu::WeakImplHelper1<io::XOutputStream> {
                     io::BufferSizeExceededException,
                     io::IOException, uno::RuntimeException) ;
 
-    protected :
 
     private :
         /** Temporary file used during access */
@@ -127,8 +129,6 @@ class LocalOutputStream : public cppu::WeakImplHelper1<io::XOutputStream> {
         rtl::OUString mFileUrl ;
         /** URL of the temporary file */
         rtl::OUString mTemporaryFileUrl ;
-        /** Has the stream been closed yet? */
-        sal_Bool bIsClosed ;
         /** File being written */
         osl::File *mWriteFile ;
 } ;

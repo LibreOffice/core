@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localoutputstream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-17 14:31:44 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 17:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,10 @@ namespace configmgr { namespace localbe {
 
 LocalOutputStream::LocalOutputStream(const rtl::OUString& aFileUrl)
     throw (io::IOException)
-: mFileUrl(aFileUrl), mTemporaryFileUrl(mFileUrl), bIsClosed(sal_False) {
+: mFileUrl(aFileUrl), mTemporaryFileUrl(mFileUrl), mWriteFile(NULL) {
     // First, ensure the directory where the file is supposed to be
     // put exists.
-    mTemporaryFileUrl += rtl::OUString::createFromAscii(".tmp") ;
+    mTemporaryFileUrl += rtl::OUString::createFromAscii("_tmp") ;
     rtl::OUString parentDirectory = FileHelper::getParentDir(aFileUrl) ;
 
     if (!FileHelper::mkdirs(parentDirectory)) {
@@ -86,24 +86,40 @@ LocalOutputStream::LocalOutputStream(const rtl::OUString& aFileUrl)
 
         message.appendAscii("Impossible to create directory '") ;
         message.append(parentDirectory).appendAscii("'") ;
-        throw io::IOException(message.makeStringAndClear(), *this) ;
+        throw io::IOException(message.makeStringAndClear(), NULL) ;
     }
     FileHelper::removeFile(mTemporaryFileUrl) ;
     mWriteFile = new osl::File(mTemporaryFileUrl) ;
     osl::FileBase::RC errorCode = mWriteFile->open(OpenFlag_Write |
                                                    OpenFlag_Create) ;
 
-    if (errorCode != osl_File_E_None) {
-        throw io::IOException(FileHelper::createOSLErrorString(errorCode),
-                              *this) ;
+    if (errorCode != osl_File_E_None)
+    {
+        delete mWriteFile, mWriteFile = NULL;
+        throw io::IOException(FileHelper::createOSLErrorString(errorCode),NULL) ;
     }
     mTemporaryFile = new OSLOutputStreamWrapper(*mWriteFile) ;
 }
 //------------------------------------------------------------------------------
 
-LocalOutputStream::~LocalOutputStream(void) {
-    if (!bIsClosed) { closeOutput() ; }
-    delete mWriteFile ;
+LocalOutputStream::~LocalOutputStream(void)
+{
+    this->closeOutput();
+    delete mWriteFile;
+
+    //  if (mWriteFile)  FileHelper::removeFile(mTemporaryFileUrl) ;
+}
+//------------------------------------------------------------------------------
+
+void LocalOutputStream::finishOutput()
+{
+    if (mWriteFile)
+    {
+        this->closeOutput();
+        delete mWriteFile, mWriteFile = NULL;
+
+        FileHelper::replaceFile(mFileUrl, mTemporaryFileUrl) ;
+    }
 }
 //------------------------------------------------------------------------------
 
@@ -111,9 +127,12 @@ void SAL_CALL LocalOutputStream::closeOutput(void)
     throw (io::NotConnectedException, io::BufferSizeExceededException,
             io::IOException, uno::RuntimeException)
 {
-    mTemporaryFile->closeOutput() ;
-    FileHelper::replaceFile(mFileUrl, mTemporaryFileUrl) ;
-    bIsClosed = sal_True ;
+    if (mTemporaryFile.is())
+    {
+        mTemporaryFile->closeOutput() ;
+
+        mTemporaryFile.clear();
+    }
 }
 //------------------------------------------------------------------------------
 

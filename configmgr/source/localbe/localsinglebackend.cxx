@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-07-08 12:42:44 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 17:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ static const rtl::OUString kUserDataUrl(kMetaConfPrefix +
 static const rtl::OUString kUserName(kMetaConfPrefix +
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UserName"))) ;
 static const rtl::OUString kAdminMode(kMetaConfPrefix +
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("service"))) ;
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_session_class_"))) ;
 
 static const rtl::OUString kAdminModeValue(
         RTL_CONSTASCII_USTRINGPARAM("adminconfiguration")) ;
@@ -358,9 +358,10 @@ LocalSingleBackend::getWriteHandler(const rtl::OUString& aLayerId)
             uno::RuntimeException)
 {
     LocalFileLayer *layer = getFileLayer(aLayerId) ;
-    uno::Reference<backend::XLayerHandler> retCode = layer->getLayerWriter() ;
+    uno::Reference<backend::XUpdatableLayer> xLayer(layer);
 
-    delete layer ;
+    uno::Reference<backend::XLayerHandler> retCode = layer->createLayerWriter() ;
+
     return retCode ;
 }
 //------------------------------------------------------------------------------

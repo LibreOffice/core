@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-07-03 13:39:55 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 17:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,12 @@
 #include <rtl/ustrbuf.hxx>
 #endif // _RTL_USTRBUF_HXX_
 
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
-#endif // _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
+#include <com/sun/star/io/XActiveDataSink.hpp>
+#endif
 
 namespace configmgr { namespace localbe {
 
@@ -121,7 +124,42 @@ void SAL_CALL LocalFileLayer::replaceWith(
         const uno::Reference<backend::XLayer>& aNewLayer)
     throw (lang::WrappedTargetException, uno::RuntimeException)
 {
-    aNewLayer->readData(getLayerWriter()) ;
+    uno::Reference<io::XActiveDataSource> xAS(mLayerWriter, uno::UNO_QUERY);
+    if (!xAS.is())
+    {
+        rtl::OUString sMsg(RTL_CONSTASCII_USTRINGPARAM("LocalFileLayer - Missing interface: XActiveDataSource not supported by LayerWriter"));
+
+        throw uno::RuntimeException(sMsg,*this);
+    }
+
+    LocalOutputStream * pStream = new LocalOutputStream(mFileUrl);
+    uno::Reference<io::XOutputStream> xStream( pStream );
+
+    xAS->setOutputStream(xStream);
+
+    aNewLayer->readData(mLayerWriter) ;
+
+    pStream->finishOutput();
+
+    // clear the output stream
+    xStream.clear();
+    xAS->setOutputStream(xStream);
+}
+//------------------------------------------------------------------------------
+
+uno::Reference<backend::XLayerHandler> LocalFileLayer::createLayerWriter(void)
+{
+    OSL_ENSURE(false, "Creating a LayerWriter is not supported. This function should be removed");
+
+    /* or else we need a wrapper for a kXMLLayerWriter,
+        that properly calls LocalOutputStream::finishOutput at the end
+    */
+
+    rtl::OUString sMsg(RTL_CONSTASCII_USTRINGPARAM("LocalFileLayer - Deprecated functionality: createLayerWriter is not supported any more"));
+
+    throw uno::RuntimeException(sMsg,*this);
+
+    return NULL;
 }
 //------------------------------------------------------------------------------
 
@@ -145,18 +183,6 @@ void SAL_CALL LocalFileLayer::readSubLayerData(
                                              *this, 1) ;
     }
     readData(xHandler, mSubLayerFiles [i]) ;
-}
-//------------------------------------------------------------------------------
-
-const uno::Reference<backend::XLayerHandler>&
-LocalFileLayer::getLayerWriter(void) const {
-    uno::Reference<io::XOutputStream> stream = new LocalOutputStream(mFileUrl) ;
-    uno::Sequence<uno::Any> arguments(1) ;
-
-    arguments [0] <<= stream ;
-    uno::Reference<lang::XInitialization>::query(mLayerWriter)->initialize(
-                                                                    arguments) ;
-    return mLayerWriter ;
 }
 //------------------------------------------------------------------------------
 
@@ -221,18 +247,56 @@ void LocalFileLayer::readData(
         const rtl::OUString& aFileUrl)
     throw (lang::WrappedTargetException, uno::RuntimeException)
 {
+    if (!xHandler.is())
+    {
+        // throw IllegalArgumentException ??
+        return;
+    }
+
     osl::File blobFile(aFileUrl) ;
-    osl::FileBase::RC errorCode = blobFile.open(OpenFlag_Read) ;
+    osl::File::RC errorCode = blobFile.open(OpenFlag_Read) ;
 
-    if (errorCode != osl_File_E_None) { return ; }
-    uno::Reference<io::XInputStream> stream =
-                                        new OSLInputStreamWrapper(blobFile) ;
-    uno::Sequence<uno::Any> arguments(1) ;
+    switch (errorCode)
+    {
+    case osl::File::E_None: // got it
+        {
+            uno::Reference<io::XActiveDataSink> xAS(mLayerReader, uno::UNO_QUERY);
+            if (!xAS.is())
+            {
+                rtl::OUString sMsg(RTL_CONSTASCII_USTRINGPARAM("LocalFileLayer - Missing interface: XActiveDataSink not supported by LayerReader"));
 
-    arguments [0] <<= stream ;
-    uno::Reference<lang::XInitialization>::query(mLayerReader)->initialize(
-                                                                    arguments) ;
-    mLayerReader->readData(xHandler) ;
+                throw uno::RuntimeException(sMsg,*this);
+            }
+
+            uno::Reference<io::XInputStream> xStream( new OSLInputStreamWrapper(blobFile) );
+
+            xAS->setInputStream(xStream);
+
+            mLayerReader->readData(xHandler) ;
+        }
+        break;
+
+    case osl::File::E_NOENT: // no layer => empty layer
+        xHandler->startLayer();
+        xHandler->endLayer();
+        break;
+
+    default:
+        {
+            rtl::OUStringBuffer sMsg;
+            sMsg.appendAscii("Cannot open output file \"");
+            sMsg.append(aFileUrl);
+            sMsg.appendAscii("\" : ");
+            sMsg.append(FileHelper::createOSLErrorString(errorCode));
+
+            io::IOException ioe(sMsg.makeStringAndClear(),*this);
+
+            sMsg.appendAscii("LocalFileLayer - Cannot readData: ").append(ioe.Message);
+            throw lang::WrappedTargetException(sMsg.makeStringAndClear(),*this,uno::makeAny(ioe));
+        }
+        break;
+
+    }
 }
 //------------------------------------------------------------------------------
 
