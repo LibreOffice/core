@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scextopt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:48:40 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,7 @@ struct ScExtTabOptions
     BOOL                        bFrozen;            // = TRUE -> nSplitX / nSplitY contain
                                                     // count of visible columns/rows
 
-    inline                      ScExtTabOptions( void );
-    inline                      ScExtTabOptions( const ScExtTabOptions& rCpy );
-    inline void                 operator =( const ScExtTabOptions& rCpy );
+    explicit                    ScExtTabOptions();
 
     void                        SetSelection( const ScRange& rSelection );
     void                        SetDimension( const ScRange& rDim );
@@ -150,6 +148,8 @@ private:
     BOOL                    bChanged;       // for import: copy data only first time to doc
     bool                    bWinProtection;  // Excel Workbook Windows protection flag
 
+    void                    Reset();
+
 public:
     UINT32                  nLinkCnt;       // Zaehlt die Rekursionstufe beim Laden
                                             //  von externen Dokumenten
@@ -163,6 +163,7 @@ public:
     UINT16                  nCurRow;
     // -------------------------------------------------------------------
                             ScExtDocOptions( void );
+                            ScExtDocOptions( const ScExtDocOptions& rCpy );
                             ~ScExtDocOptions();
 
     ScExtDocOptions&        operator =( const ScExtDocOptions& rCpy );
@@ -221,54 +222,6 @@ inline const String* CodenameList::Next( void )
 inline const String* CodenameList::Act( void ) const
 {
     return ( const String* ) List::GetCurObject();
-}
-
-
-
-
-inline ScExtTabOptions::ScExtTabOptions( void )
-{
-    nTabNum = nSplitX = nSplitY = nLeftCol = nTopRow = nLeftSplitCol = nTopSplitRow = 0;
-    nActPane = 3;
-    bSelected = bFrozen = bValidSel = bValidDim = FALSE;
-}
-
-
-inline ScExtTabOptions::ScExtTabOptions( const ScExtTabOptions& rCpy )
-{
-    nTabNum = rCpy.nTabNum;
-    nSplitX = rCpy.nSplitX;
-    nSplitY = rCpy.nSplitY;
-    nLeftCol = rCpy.nLeftCol;
-    nTopRow = rCpy.nTopRow;
-    nLeftSplitCol = rCpy.nLeftSplitCol;
-    nTopSplitRow = rCpy.nTopSplitRow;
-    nActPane = rCpy.nActPane;
-    aLastSel = rCpy.aLastSel;
-    aDim = rCpy.aDim;
-    bSelected = rCpy.bSelected;
-    bFrozen = rCpy.bFrozen;
-    bValidSel = rCpy.bValidSel;
-    bValidDim = rCpy.bValidDim;
-}
-
-
-inline void ScExtTabOptions::operator =( const ScExtTabOptions& rCpy )
-{
-    nTabNum = rCpy.nTabNum;
-    nSplitX = rCpy.nSplitX;
-    nSplitY = rCpy.nSplitY;
-    nLeftCol = rCpy.nLeftCol;
-    nTopRow = rCpy.nTopRow;
-    nLeftSplitCol = rCpy.nLeftSplitCol;
-    nTopSplitRow = rCpy.nTopSplitRow;
-    nActPane = rCpy.nActPane;
-    aLastSel = rCpy.aLastSel;
-    aDim = rCpy.aDim;
-    bSelected = rCpy.bSelected;
-    bFrozen = rCpy.bFrozen;
-    bValidSel = rCpy.bValidSel;
-    bValidDim = rCpy.bValidDim;
 }
 
 
