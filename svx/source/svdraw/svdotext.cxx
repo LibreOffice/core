@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-06 11:21:15 $
+ *  last change: $Author: dl $ $Date: 2001-03-07 10:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2102,6 +2102,17 @@ void SdrTextObj::SetVerticalWriting( BOOL bVertical )
     DBG_ASSERT( pOutlinerParaObject, "SdrTextObj::SetVerticalWriting() without OutlinerParaObject!" );
     if( pOutlinerParaObject )
     {
+        if( bVertical )
+        {
+            SetItem( SdrTextAutoGrowWidthItem(TRUE) );
+            SetItem( SdrTextAutoGrowHeightItem(FALSE) );
+        }
+        else
+        {
+            SetItem( SdrTextAutoGrowWidthItem(FALSE) );
+            SetItem( SdrTextAutoGrowHeightItem(TRUE) );
+        }
+
         pOutlinerParaObject->SetVertical( bVertical );
         mpObjectItemSet->Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, !bVertical ) );
     }
