@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 13:59:32 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #include <tools/intn.hxx>
 #include <tools/fsys.hxx>
 #include <tools/rc.h>
+#include <tools/isolang.hxx>
+#include <tools/isofallback.hxx>
 #include <rtl/strbuf.hxx>
 
 // Programmabhaengige Includes.
@@ -102,15 +104,12 @@ using namespace rtl;
 |*
 *************************************************************************/
 RscTypCont :: RscTypCont( RscError * pErrHdl,
-                          LanguageType    nLangType,
                           RSCBYTEORDER_TYPE nOrder,
-                          rtl_TextEncoding nSourceCharSet_,
                           const ByteString & rSearchPath,
                           USHORT nFlagsP )
-    : nLangTypeId( nLangType ),
-      nDfltLangTypeId( International::GetNeutralLanguage( nLangType ) ),
+    :
       nByteOrder( nOrder ),
-      nSourceCharSet( nSourceCharSet_ ),
+      nSourceCharSet( RTL_TEXTENCODING_UTF8 ),
       aSearchPath( rSearchPath ),
       nFlags( nFlagsP ),
       aBool( pHS->Insert( "BOOL" ), RSC_NOTYPE ),
@@ -130,11 +129,9 @@ RscTypCont :: RscTypCont( RscError * pErrHdl,
       aIdLong( pHS->Insert( "IDLONG" ), RSC_NOTYPE, TRUE ),
       aString( pHS->Insert( "Chars" ), RSC_NOTYPE ),
       aWinBits( pHS->Insert( "WinBits" ), RSC_NOTYPE, FALSE ),
-      aLangType( pHS->Insert( "LangEnum" ), RSC_NOTYPE ),
-      aLangString( pHS->Insert( "Lang_Chars" ), RSC_NOTYPE, &aString,
-                    &aLangType, &nLangTypeId, &nDfltLangTypeId ),
-      aLangShort( pHS->Insert( "Lang_short" ), RSC_NOTYPE, &aShort,
-                  &aLangType, &nLangTypeId, &nDfltLangTypeId ),
+      aLangType(),
+      aLangString( pHS->Insert( "Lang_Chars" ), RSC_NOTYPE, &aString, &aLangType ),
+      aLangShort( pHS->Insert( "Lang_short" ), RSC_NOTYPE, &aShort, &aLangType ),
       nAcceleratorType( 0 )
 {
     nUniqueId = 256;
@@ -142,6 +139,35 @@ RscTypCont :: RscTypCont( RscError * pErrHdl,
     pEH = pErrHdl;
     Init();
 }
+
+ByteString RscTypCont::ChangeLanguage( const ByteString& rNewLang )
+{
+    ByteString aRet = aLanguage;
+    aLanguage = rNewLang;
+
+    ByteString aLang = aLanguage;
+
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "RscTypCont::ChangeLanguage:" );
+#endif
+    aLangFallbacks.clear();
+    do
+    {
+        USHORT nFallback = GetLangId( aLang );
+        aLangFallbacks.push_back( nFallback );
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, " %s (0x%hx)", aLang.GetBuffer(), nFallback );
+#endif
+    } while( GetIsoFallback( aLang ) );
+
+#if OSL_DEBUG_LEVEL > 1
+    fprintf( stderr, "\n" );
+#endif
+
+    return aRet;
+}
+
+
 
 /*************************************************************************
 |*
