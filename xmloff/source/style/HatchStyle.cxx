@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HatchStyle.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: cl $ $Date: 2001-01-24 18:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,9 +208,12 @@ sal_Bool XMLHatchStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::
             AddAttribute( XML_NAMESPACE_DRAW, sXML_rotation, aStrValue );
 
             // Do Write
+            OUString sWS( RTL_CONSTASCII_USTRINGPARAM( sXML_WS ) );
+            rHandler->ignorableWhitespace( sWS );
             rHandler->startElement( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW, ::rtl::OUString::createFromAscii(sXML_hatch) ),
                                     xAttrList );
             rHandler->endElement( ::rtl::OUString::createFromAscii( sXML_gradient ) );
+            rHandler->ignorableWhitespace( sWS );
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GradientStyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-10 11:04:20 $
+ *  last change: $Author: cl $ $Date: 2001-01-24 18:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,10 +256,13 @@ sal_Bool XMLGradientStyle::ImpExportXML( const ::com::sun::star::uno::Reference<
             AddAttribute( XML_NAMESPACE_DRAW, sXML_gradient_border, aStrValue );
 
             // Do Write
+            OUString sWS( RTL_CONSTASCII_USTRINGPARAM( sXML_WS ) );
+            rHandler->ignorableWhitespace( sWS );
             OUString aStrTmp( RTL_CONSTASCII_USTRINGPARAM( sXML_gradient ) );
             rHandler->startElement( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW, aStrTmp ),
                                     xAttrList );
             rHandler->endElement( OUString::createFromAscii( sXML_gradient ) );
+            rHandler->ignorableWhitespace( sWS );
         }
     }
 

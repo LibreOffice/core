@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MarkerStyle.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-03 10:04:26 $
+ *  last change: $Author: cl $ $Date: 2001-01-24 18:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,10 +193,13 @@ sal_Bool XMLMarkerStyle::ImpExportXML( const uno::Reference< xml::sax::XDocument
 
             /////////////////
             // Do Write
+            OUString sWS( RTL_CONSTASCII_USTRINGPARAM( sXML_WS ) );
+
             OUString aStrTmp( RTL_CONSTASCII_USTRINGPARAM( sXML_marker ) );
-            rHandler->startElement( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW, aStrTmp ),
-                                    xAttrList );
+            rHandler->ignorableWhitespace( sWS );
+            rHandler->startElement( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW, aStrTmp ), xAttrList );
             rHandler->endElement( OUString::createFromAscii( sXML_marker ) );
+            rHandler->ignorableWhitespace( sWS );
         }
     }
 

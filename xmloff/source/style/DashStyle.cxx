@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DashStyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mh $ $Date: 2000-12-01 05:40:17 $
+ *  last change: $Author: cl $ $Date: 2001-01-24 18:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,11 +259,14 @@ sal_Bool XMLDashStyle::ImpExportXML( const ::com::sun::star::uno::Reference< ::c
 
 
             // Do Write
+            OUString sWS( RTL_CONSTASCII_USTRINGPARAM( sXML_WS ) );
+            rHandler->ignorableWhitespace( sWS );
             OUString sElem = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW,
                                            OUString::createFromAscii(sXML_stroke_dash) );
 
             rHandler->startElement( sElem, xAttrList );
             rHandler->endElement( sElem );
+            rHandler->ignorableWhitespace( sWS );
         }
     }
     return bRet;

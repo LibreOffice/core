@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TransGradientStyle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 22:40:12 $
+ *  last change: $Author: cl $ $Date: 2001-01-24 18:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,9 +244,12 @@ sal_Bool XMLTransGradientStyle::ImpExportXML( const ::com::sun::star::uno::Refer
             AddAttribute( XML_NAMESPACE_DRAW, sXML_gradient_border, aStrValue );
 
             // Do Write
+            OUString sWS( RTL_CONSTASCII_USTRINGPARAM( sXML_WS ) );
+            rHandler->ignorableWhitespace( sWS );
             rHandler->startElement( rNamespaceMap.GetQNameByKey( XML_NAMESPACE_DRAW, OUString::createFromAscii(sXML_transparency) ),
                                     xAttrList );
             rHandler->endElement( OUString::createFromAscii( sXML_gradient ) );
+            rHandler->ignorableWhitespace( sWS );
         }
     }
 
