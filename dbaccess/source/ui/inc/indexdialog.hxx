@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:21:52 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 06:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
+#endif
+#ifndef _DBAUI_INDEXES_HXX_
+#include "indexes.hxx"
 #endif
 
 //......................................................................
@@ -183,10 +186,12 @@ namespace dbaui
         void OnResetIndex();
 
         sal_Bool implCommit(SvLBoxEntry* _pEntry);
-        sal_Bool implSaveModified();
+        sal_Bool implSaveModified(sal_Bool _bPlausibility = sal_True);
         sal_Bool implCommitPreviouslySelected();
 
         sal_Bool implDropIndex(SvLBoxEntry* _pEntry, sal_Bool _bRemoveFromCollection);
+
+        sal_Bool implCheckPlausibility(const ConstIndexesIterator& _rPos);
     };
 
 //......................................................................
@@ -198,6 +203,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/16 16:21:52  fs
+ *  initial checkin - index design related classes
+ *
  *
  *  Revision 1.0 07.03.01 11:51:22  fs
  ************************************************************************/
