@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-27 09:39:58 $
+ *  last change: $Author: mt $ $Date: 2002-03-04 15:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,13 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleEventListener.hpp>
+#endif
+
 
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -75,14 +82,15 @@
 
 #include <unotools/accessiblestatesethelper.hxx>
 
+using namespace ::com::sun::star;
+using namespace ::drafts::com::sun::star;
+
+
 //  ----------------------------------------------------
 //  class VCLXAccessibleComponent
 //  ----------------------------------------------------
 VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXindow )
-    : cppu::WeakComponentImplHelper3<
-        ::drafts::com::sun::star::accessibility::XAccessible,
-        ::drafts::com::sun::star::accessibility::XAccessibleContext,
-        ::drafts::com::sun::star::accessibility::XAccessibleComponent> ( GetMutex() )
+    : maEventListeners( GetMutex() ), VCLXAccessibleComponentBase( GetMutex() )
 {
     mpVCLXindow = pVCLXindow;
     mxWindow = pVCLXindow;
@@ -113,10 +121,27 @@ void VCLXAccessibleComponent::ProcessWindowEvent( const VclWindowEvent& rVclWind
 {
     switch ( rVclWindowEvent.GetId() )
     {
-//        case XXX:
-//        {
-//        }
-//        break;
+        case VCLEVENT_WINDOW_SHOW:
+        case VCLEVENT_WINDOW_HIDE:
+        case VCLEVENT_WINDOW_ACTIVATE:
+        case VCLEVENT_WINDOW_DEACTIVATE:
+        case VCLEVENT_WINDOW_CLOSE:
+        case VCLEVENT_WINDOW_GETFOCUS:
+        case VCLEVENT_WINDOW_LOSEFOCUS:
+        case VCLEVENT_WINDOW_MINIMIZE:
+        case VCLEVENT_WINDOW_NORMALIZE:
+        case VCLEVENT_CONTROL_GETFOCUS:
+        case VCLEVENT_CONTROL_LOSEFOCUS:
+        {
+            NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, uno::Any(), uno::Any() );
+        }
+        break;
+        case VCLEVENT_WINDOW_MOVE:
+        case VCLEVENT_WINDOW_RESIZE:
+        {
+            // ???
+        }
+        break;
    }
 }
 
@@ -124,6 +149,11 @@ void VCLXAccessibleComponent::disposing()
 {
    if ( mpVCLXindow && mpVCLXindow->GetWindow() )
       mpVCLXindow->GetWindow()->RemoveEventListener( LINK( this, VCLXAccessibleComponent, WindowEventListener ) );
+
+    NotifyAccessibleEvent( accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, uno::Any(), uno::Any() );
+
+    lang::EventObject aEvt( *this );
+    maEventListeners.disposeAndClear( aEvt );
 
     mxWindow.clear();
     mpVCLXindow = NULL;
@@ -134,17 +164,45 @@ Window* VCLXAccessibleComponent::GetWindow() const
     return GetVCLXWindow() ? GetVCLXWindow()->GetWindow() : NULL;
 }
 
-// ::drafts::com::sun::star::accessibility::XAccessible
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXAccessibleComponent::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException)
+void VCLXAccessibleComponent::NotifyAccessibleEvent( sal_Int16 nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
 {
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xAcc( (::cppu::OWeakObject*)this, ::com::sun::star::uno::UNO_QUERY );
+    accessibility::AccessibleEventObject aEvt;
+    aEvt.Source = *this;
+    aEvt.EventId = nEventId;
+    aEvt.OldValue = rOldValue;
+    aEvt.NewValue = rNewValue;
+
+    ::cppu::OInterfaceIteratorHelper aIter( maEventListeners );
+    while ( aIter.hasMoreElements() )
+    {
+        uno::Reference< accessibility::XAccessibleEventListener > xEL( aIter.next(), uno::UNO_QUERY );
+        if ( xEL.is() )
+            xEL->notifyEvent( aEvt );
+    }
+}
+
+// accessibility::XAccessibleEventBroadcaster
+void SAL_CALL VCLXAccessibleComponent::addEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener ) throw (uno::RuntimeException)
+{
+    if ( rxListener.is() )
+        maEventListeners.addInterface( rxListener );
+}
+
+void SAL_CALL VCLXAccessibleComponent::removeEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener ) throw (uno::RuntimeException)
+{
+    if ( rxListener.is() )
+        maEventListeners.removeInterface( rxListener );
+}
+
+// accessibility::XAccessible
+uno::Reference< accessibility::XAccessibleContext > VCLXAccessibleComponent::getAccessibleContext(  ) throw (uno::RuntimeException)
+{
+    uno::Reference< accessibility::XAccessibleContext > xAcc( (::cppu::OWeakObject*)this, uno::UNO_QUERY );
     return xAcc;
 }
 
 void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
-    using namespace ::drafts::com::sun::star;
-
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
@@ -204,8 +262,8 @@ TRANSIENT
 }
 
 
-// ::drafts::com::sun::star::accessibility::XAccessibleContext
-sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount() throw (::com::sun::star::uno::RuntimeException)
+// accessibility::XAccessibleContext
+sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount() throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -216,14 +274,14 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount() throw (::com::sun::
     return nChildren;
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException)
+uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleChild( sal_Int32 i ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     if ( i >= getAccessibleChildCount() )
-        throw ::com::sun::star::lang::IndexOutOfBoundsException();
+        throw lang::IndexOutOfBoundsException();
 
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    uno::Reference< accessibility::XAccessible > xAcc;
     if ( GetWindow() )
     {
         Window* pChild = GetWindow()->GetAccessibleChildWindow( (USHORT)i );
@@ -234,11 +292,11 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount() throw (::com::sun::
     return xAcc;
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException)
+uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleParent(  ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    uno::Reference< accessibility::XAccessible > xAcc;
     if ( GetWindow() )
     {
         Window* pParent = GetWindow()->GetAccessibleParentWindow();
@@ -249,7 +307,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleChildCount() throw (::com::sun::
     return xAcc;
 }
 
-sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException)
+sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -273,7 +331,7 @@ sal_Int32 VCLXAccessibleComponent::getAccessibleIndexInParent(  ) throw (::com::
     return nIndex;
 }
 
-sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException)
+sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -285,7 +343,7 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (::com::sun::star
     return nRole;
 }
 
-::rtl::OUString VCLXAccessibleComponent::getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException)
+::rtl::OUString VCLXAccessibleComponent::getAccessibleDescription(  ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -297,7 +355,7 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (::com::sun::star
     return aDescription;
 }
 
-::rtl::OUString VCLXAccessibleComponent::getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException)
+::rtl::OUString VCLXAccessibleComponent::getAccessibleName(  ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -314,46 +372,54 @@ sal_Int16 VCLXAccessibleComponent::getAccessibleRole(  ) throw (::com::sun::star
     return aName;
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleRelationSet > VCLXAccessibleComponent::getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException)
+uno::Reference< accessibility::XAccessibleRelationSet > VCLXAccessibleComponent::getAccessibleRelationSet(  ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return NULL;
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > VCLXAccessibleComponent::getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException)
+uno::Reference< accessibility::XAccessibleStateSet > VCLXAccessibleComponent::getAccessibleStateSet(  ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     utl::AccessibleStateSetHelper* pStateSetHelper = new utl::AccessibleStateSetHelper;
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > xSet = pStateSetHelper;
+    uno::Reference< accessibility::XAccessibleStateSet > xSet = pStateSetHelper;
     FillAccessibleStateSet( *pStateSetHelper );
     return xSet;
 //    return NULL;
 }
 
-::com::sun::star::lang::Locale VCLXAccessibleComponent::getLocale() throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException)
+lang::Locale VCLXAccessibleComponent::getLocale() throw (accessibility::IllegalAccessibleComponentStateException, uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::lang::Locale aLocale;
+    lang::Locale aLocale;
     if ( GetWindow() )
         aLocale = GetWindow()->GetSettings().GetUILocale();
 
     return aLocale;
 }
 
-// ::drafts::com::sun::star::accessibility::XAccessibleComponent
-sal_Bool VCLXAccessibleComponent::contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException)
+// accessibility::XAccessibleComponent
+sal_Bool VCLXAccessibleComponent::contains( const awt::Point& rPoint ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    return sal_False;
+
+    sal_Bool bInside = sal_False;
+    if ( GetWindow() )
+    {
+        Rectangle aRect( GetWindow()->GetPosPixel(), GetWindow()->GetSizePixel() );
+        bInside = aRect.IsInside( VCLPoint( rPoint ) );
+    }
+
+    return bInside;
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleAt( const ::com::sun::star::awt::Point& rPoint ) throw (::com::sun::star::uno::RuntimeException)
+uno::Reference< accessibility::XAccessible > VCLXAccessibleComponent::getAccessibleAt( const awt::Point& rPoint ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    uno::Reference< accessibility::XAccessible > xAcc;
 
     if ( GetWindow() )
     {
@@ -367,29 +433,29 @@ sal_Bool VCLXAccessibleComponent::contains( const ::com::sun::star::awt::Point& 
     return xAcc;
 }
 
-::com::sun::star::awt::Size VCLXAccessibleComponent::getSize() throw (::com::sun::star::uno::RuntimeException)
+awt::Size VCLXAccessibleComponent::getSize() throw (uno::RuntimeException)
 {
-    ::com::sun::star::awt::Size aSize;
+    awt::Size aSize;
     if ( GetWindow() )
         aSize = AWTSize( GetWindow()->GetSizePixel() );
     return aSize;
 
 }
 
-::com::sun::star::awt::Rectangle VCLXAccessibleComponent::getBounds() throw (::com::sun::star::uno::RuntimeException)
+awt::Rectangle VCLXAccessibleComponent::getBounds() throw (uno::RuntimeException)
 {
-    ::com::sun::star::awt::Rectangle aBounds;
+    awt::Rectangle aBounds;
     if ( mxWindow.is() )
         aBounds = mxWindow->getPosSize();
     return aBounds;
 
 }
 
-::com::sun::star::awt::Point VCLXAccessibleComponent::getLocation() throw (::com::sun::star::uno::RuntimeException)
+awt::Point VCLXAccessibleComponent::getLocation() throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::awt::Point aPos;
+    awt::Point aPos;
     if ( GetWindow() )
     {
         Point aVclPos = GetWindow()->GetPosPixel();
@@ -400,11 +466,11 @@ sal_Bool VCLXAccessibleComponent::contains( const ::com::sun::star::awt::Point& 
     return aPos;
 }
 
-::com::sun::star::awt::Point VCLXAccessibleComponent::getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException)
+awt::Point VCLXAccessibleComponent::getLocationOnScreen(  ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    ::com::sun::star::awt::Point aPos;
+    awt::Point aPos;
     if ( GetWindow() )
     {
         Rectangle aRect = GetWindow()->GetWindowExtentsRelative( NULL );
@@ -415,7 +481,7 @@ sal_Bool VCLXAccessibleComponent::contains( const ::com::sun::star::awt::Point& 
     return aPos;
 }
 
-sal_Bool VCLXAccessibleComponent::isShowing() throw (::com::sun::star::uno::RuntimeException)
+sal_Bool VCLXAccessibleComponent::isShowing() throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -426,7 +492,7 @@ sal_Bool VCLXAccessibleComponent::isShowing() throw (::com::sun::star::uno::Runt
     return bShowing;
 }
 
-sal_Bool VCLXAccessibleComponent::isVisible() throw (::com::sun::star::uno::RuntimeException)
+sal_Bool VCLXAccessibleComponent::isVisible() throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -437,12 +503,12 @@ sal_Bool VCLXAccessibleComponent::isVisible() throw (::com::sun::star::uno::Runt
     return bVisible;
 }
 
-sal_Bool VCLXAccessibleComponent::isFocusTraversable() throw (::com::sun::star::uno::RuntimeException)
+sal_Bool VCLXAccessibleComponent::isFocusTraversable() throw (uno::RuntimeException)
 {
     return FALSE;
 }
 
-void VCLXAccessibleComponent::addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void VCLXAccessibleComponent::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -450,7 +516,7 @@ void VCLXAccessibleComponent::addFocusListener( const ::com::sun::star::uno::Ref
         mxWindow->addFocusListener( xListener );
 }
 
-void VCLXAccessibleComponent::removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void VCLXAccessibleComponent::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -458,7 +524,7 @@ void VCLXAccessibleComponent::removeFocusListener( const ::com::sun::star::uno::
         mxWindow->removeFocusListener( xListener );
 }
 
-void VCLXAccessibleComponent::grabFocus(  ) throw (::com::sun::star::uno::RuntimeException)
+void VCLXAccessibleComponent::grabFocus(  ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -466,8 +532,8 @@ void VCLXAccessibleComponent::grabFocus(  ) throw (::com::sun::star::uno::Runtim
         mxWindow->setFocus();
 }
 
-::com::sun::star::uno::Any VCLXAccessibleComponent::getAccessibleKeyBinding() throw (::com::sun::star::uno::RuntimeException)
+uno::Any VCLXAccessibleComponent::getAccessibleKeyBinding() throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    return ::com::sun::star::uno::Any();
+    return uno::Any();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2002-02-27 09:40:21 $
+ *  last change: $Author: mt $ $Date: 2002-03-04 15:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,15 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleComponent.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
 #include <com/sun/star/awt/XWindow.hpp>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
 #endif
 
 #include <tools/gen.hxx>    // Size
@@ -97,34 +100,40 @@ protected:
     ::osl::Mutex    maMutex;
 };
 
+typedef cppu::WeakComponentImplHelper4<
+    ::drafts::com::sun::star::accessibility::XAccessible,
+    ::drafts::com::sun::star::accessibility::XAccessibleContext,
+    ::drafts::com::sun::star::accessibility::XAccessibleComponent,
+    ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
+    > VCLXAccessibleComponentBase;
+
+
 //  ----------------------------------------------------
 //  class VCLXAccessibleComponent
 //  ----------------------------------------------------
 
-class VCLXAccessibleComponent : public MutexHelper_Impl,
-                                          public cppu::WeakComponentImplHelper3<
-                                            ::drafts::com::sun::star::accessibility::XAccessible,
-                                            ::drafts::com::sun::star::accessibility::XAccessibleContext,
-                                            ::drafts::com::sun::star::accessibility::XAccessibleComponent
-                                            >
+class VCLXAccessibleComponent : public MutexHelper_Impl, public VCLXAccessibleComponentBase
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> mxWindow;
-    VCLXWindow*                     mpVCLXindow;
+    VCLXWindow*                         mpVCLXindow;
+
+    ::cppu::OInterfaceContainerHelper   maEventListeners;
 
     ULONG                           nDummy1;
     ULONG                           nDummy2;
     void*                           pDummy1;
     void*                           pDummy2;
 
-//  virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
-
 protected:
     ::osl::Mutex&   GetMutex() { return maMutex; }
      DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
-     /* virtual */ void  ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
+
+    void            NotifyAccessibleEvent( sal_Int16 nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
+
 
 public:
     VCLXAccessibleComponent( VCLXWindow* pVCLXindow );
@@ -137,6 +146,10 @@ public:
 
     // ::drafts::com::sun::star::accessibility::XAccessible
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
+    void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
     // ::drafts::com::sun::star::accessibility::XAccessibleContext
     sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -171,20 +184,17 @@ public:
   Maybe derived classes must overwrite these Accessibility interfaces:
 
     // XAccessibleContext:
-    sal_Int16 getAccessibleRole()
-    OUString getAccessibleDescription()
-    OUString getAccessibleName()    // Default is Window::GetText()
+    sal_Int16 getAccessibleRole() => VCL Window::GetAccessibleRole()
+    OUString getAccessibleDescription() => VCL Window::GetAccessibleDescription
+    OUString getAccessibleName() => VCL Window::GetAccessibleText() => Most windows return Window::GetText()
     Reference< XAccessibleRelationSet > getAccessibleRelationSet()
-    Reference< XAccessibleStateSet > getAccessibleStateSet(), or overload FillAccessibleStateSet( ... )
-    void addPropertyChangeListener( Reference< XPropertyChangeListener > )
-    void removePropertyChangeListener( Reference< XPropertyChangeListener > )
+    Reference< XAccessibleStateSet > getAccessibleStateSet() => overload FillAccessibleStateSet( ... )
 
 // ::drafts::com::sun::star::accessibility::XAccessibleComponent
     sal_Bool isFocusTraversable()
     Any getAccessibleKeyBinding()
 
- ---------------------------------------------------------- */
-
+---------------------------------------------------------- */
 
 
 #endif // _TOOLKIT_AWT_VCLXAccessibleComponent_HXX_
