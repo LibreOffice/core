@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:35:15 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2421,7 +2421,7 @@ sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl
     DBG_ASSERT( pCollatorWrapper, "*CompareSortingData_Impl(): Can't work this way!" );
 
     sal_Int32   nComp;
-    sal_Bool    bRet;
+    sal_Bool    bRet = sal_False;
     sal_Bool    bEqual = sal_False;
 
     if ( aOne->mbIsFolder != aTwo->mbIsFolder )
@@ -2478,6 +2478,9 @@ sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl
                 else
                     bEqual = sal_True;
                 break;
+            default:
+                DBG_WARNING( "CompareSortingData_Impl: Compare unknown type!" );
+                bRet = sal_False;
         }
     }
 
