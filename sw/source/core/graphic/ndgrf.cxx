@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:24:48 $
+ *  last change: $Author: jp $ $Date: 2001-03-30 09:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>             // FRound
+#endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
 #endif
@@ -1263,7 +1266,10 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
     rGA.SetChannelB( rSet.GetChannelBGrf().GetValue() );
     rGA.SetGamma( rSet.GetGammaGrf().GetValue() );
     rGA.SetInvert( rSet.GetInvertGrf().GetValue() );
-    rGA.SetTransparency( rSet.GetTransparencyGrf().GetValue() );
+
+    const sal_uInt16 nTrans = rSet.GetTransparencyGrf().GetValue();
+    rGA.SetTransparency( (BYTE) FRound(
+                                Min( nTrans, (USHORT) 100 )  * 2.55 ) );
 
     return rGA;
 }
