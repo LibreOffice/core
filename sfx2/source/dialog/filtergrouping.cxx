@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-26 07:57:16 $
+ *  last change: $Author: cd $ $Date: 2002-08-29 13:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1002,16 +1002,18 @@ namespace sfx2
         if ( !_rxFilterManager.is() )
             return;
 
-        sal_Int32       nPDFIndex   = -1;
-        sal_Int32       nHTMLIndex  = -1;
-        sal_Int32       nCount      = 0;
-        ::rtl::OUString sUIName;
-        ::rtl::OUString sExtensions;
-        String          sPDFExtension = String::CreateFromAscii( "*.pdf" );
-        String          sHTMLExtension = String::CreateFromAscii( "*.htm*" );
-        std::vector< ExportFilter > aFilterVector;
-        WildCard        aHTMLWildcardMatcher( sHTMLExtension, ';' );
-        WildCard        aPDFWildcardMatcher( sPDFExtension, ';' );
+        sal_Int32                           nPDFIndex   = -1;
+        sal_Int32                           nHTMLIndex  = -1;
+        sal_Int32                           nCount      = 0;
+        String                              sPDFExtension = String::CreateFromAscii( "*.pdf" );
+        String                              sHTMLExtension = String::CreateFromAscii( "*.htm*" );
+        WildCard                            aHTMLWildcardMatcher( sHTMLExtension, ';' );
+        WildCard                            aPDFWildcardMatcher( sPDFExtension, ';' );
+        ::rtl::OUString                     sUIName;
+        ::rtl::OUString                     sExtensions;
+        std::vector< ExportFilter >         aImportantFilterGroup;
+        std::vector< ExportFilter >         aFilterGroup;
+        Reference< XFilterGroupManager >    xFilterGroupManager( _rxFilterManager, UNO_QUERY );
 
         for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
         {
@@ -1023,49 +1025,104 @@ namespace sfx2
             String aExt = sExtensions;
             if ( nHTMLIndex == -1 && aHTMLWildcardMatcher.Matches( aExt ))
             {
-                aFilterVector.insert( aFilterVector.begin(), aExportFilter );
+                aImportantFilterGroup.insert( aImportantFilterGroup.begin(), aExportFilter );
                 nHTMLIndex = 0;
                 nCount++;
             }
             else if ( nPDFIndex == -1 && aPDFWildcardMatcher.Matches( aExt ))
             {
-                std::vector< ExportFilter >::iterator aIter = aFilterVector.begin();
+                std::vector< ExportFilter >::iterator aIter = aImportantFilterGroup.begin();
                 if ( nHTMLIndex == -1 )
-                    aFilterVector.insert( aIter, aExportFilter );
+                    aImportantFilterGroup.insert( aIter, aExportFilter );
                 else
-                    aFilterVector.insert( ++aIter, aExportFilter );
+                    aImportantFilterGroup.insert( ++aIter, aExportFilter );
                 nPDFIndex = 0;
                 nCount++;
             }
             else
-                aFilterVector.push_back( aExportFilter );
+                aFilterGroup.push_back( aExportFilter );
         }
 
-        if ( nCount > 0 )
+        if ( xFilterGroupManager.is() )
         {
-            // Insert separator
-            ExportFilter aExportFilter( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Separator" )), rtl::OUString() );
-            std::vector< ExportFilter >::iterator aIter = aFilterVector.begin();
-            aIter += nCount;
-            aFilterVector.insert( aIter, aExportFilter );
-        }
-
-        for ( sal_Int32 n = 0; n < (sal_Int32)aFilterVector.size(); n++ )
-        {
-            try
+            // Add both html/pdf filter as a filter group to get a separator between both groups
+            if ( aImportantFilterGroup.size() > 0 )
             {
-                _rxFilterManager->appendFilter( aFilterVector[n].aUIName, aFilterVector[n].aWildcard  );
-                if ( !_rFirstNonEmpty.getLength() )
-                    _rFirstNonEmpty = sUIName;
+                Sequence< StringPair > aFilters( aImportantFilterGroup.size() );
+                for ( sal_Int32 i = 0; i < (sal_Int32)aImportantFilterGroup.size(); i++ )
+                {
+                    aFilters[i].First   = addExtension( aImportantFilterGroup[i].aUIName, aImportantFilterGroup[i].aWildcard, sal_False );
+                    aFilters[i].Second  = aImportantFilterGroup[i].aWildcard;
+                }
 
+                try
+                {
+                    xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
+                }
+                catch( IllegalArgumentException )
+                {
+                }
             }
-            catch( IllegalArgumentException )
+
+            if ( aFilterGroup.size() > 0 )
             {
-    #ifdef DBG_UTIL
-                ByteString aMsg( "Could not append Filter" );
-                aMsg += ByteString( String( sUIName ), osl_getThreadTextEncoding() );
-                DBG_ERRORFILE( aMsg.GetBuffer() );
-    #endif
+                Sequence< StringPair > aFilters( aFilterGroup.size() );
+                for ( sal_Int32 i = 0; i < (sal_Int32)aFilterGroup.size(); i++ )
+                {
+                    aFilters[i].First   = addExtension( aFilterGroup[i].aUIName, aFilterGroup[i].aWildcard, sal_False );
+                    aFilters[i].Second  = aFilterGroup[i].aWildcard;
+                }
+
+                try
+                {
+                    xFilterGroupManager->appendFilterGroup( ::rtl::OUString(), aFilters );
+                }
+                catch( IllegalArgumentException )
+                {
+                }
+            }
+        }
+        else
+        {
+            // Fallback solution just add both filter groups as single filters
+            for ( sal_Int32 n = 0; n < (sal_Int32)aImportantFilterGroup.size(); n++ )
+            {
+                try
+                {
+                    rtl::OUString aUIName = addExtension( aImportantFilterGroup[n].aUIName, aImportantFilterGroup[n].aWildcard, sal_False );
+                    _rxFilterManager->appendFilter( aUIName, aImportantFilterGroup[n].aWildcard  );
+                    if ( !_rFirstNonEmpty.getLength() )
+                        _rFirstNonEmpty = sUIName;
+
+                }
+                catch( IllegalArgumentException )
+                {
+        #ifdef DBG_UTIL
+                    ByteString aMsg( "Could not append Filter" );
+                    aMsg += ByteString( String( sUIName ), osl_getThreadTextEncoding() );
+                    DBG_ERRORFILE( aMsg.GetBuffer() );
+        #endif
+                }
+            }
+
+            for ( n = 0; n < (sal_Int32)aFilterGroup.size(); n++ )
+            {
+                try
+                {
+                    rtl::OUString aUIName = addExtension( aFilterGroup[n].aUIName, aFilterGroup[n].aWildcard, sal_False );
+                    _rxFilterManager->appendFilter( aUIName, aFilterGroup[n].aWildcard );
+                    if ( !_rFirstNonEmpty.getLength() )
+                        _rFirstNonEmpty = sUIName;
+
+                }
+                catch( IllegalArgumentException )
+                {
+        #ifdef DBG_UTIL
+                    ByteString aMsg( "Could not append Filter" );
+                    aMsg += ByteString( String( sUIName ), osl_getThreadTextEncoding() );
+                    DBG_ERRORFILE( aMsg.GetBuffer() );
+        #endif
+                }
             }
         }
     }
@@ -1141,6 +1198,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2002/08/26 07:57:16  cd
+ *  #101559# Display export filters in new order
+ *
  *  Revision 1.12  2002/08/20 09:22:52  pb
  *  fix: #92788# show extensions of filter
  *
