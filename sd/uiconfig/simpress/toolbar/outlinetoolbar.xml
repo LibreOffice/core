@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:ZoomToolBox" toolbar:helpid="helpid:10096" toolbar:text="" toolbar:style="dropdown" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineCollapseAll" toolbar:helpid="helpid:10155" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:OutlineExpandAll" toolbar:helpid="helpid:10232" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:OutlineCollapse" toolbar:helpid="helpid:10231" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:OutlineExpand" toolbar:helpid="helpid:10233" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:OutlineFormat" toolbar:helpid="helpid:10154" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ColorView" toolbar:helpid="helpid:27257" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Presentation" toolbar:helpid="helpid:10157" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ZoomIn" toolbar:helpid="helpid:10098" toolbar:text="" toolbar:visible="false" />
+ <toolbar:toolbaritem xlink:href=".uno:ZoomPlus" toolbar:helpid="helpid:10097" toolbar:text="" toolbar:visible="false" />
+</toolbar:toolbar>
