@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cusshow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-15 14:23:06 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,16 +78,18 @@
 #include <cppuhelper/weakref.hxx>
 #endif
 
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
+
 class SdDrawDocument;
-
-
 
 /*************************************************************************
 |*
 |* CustomShow
 |*
 \************************************************************************/
-class SdCustomShow : public List
+class SD_DLLPUBLIC SdCustomShow : public List
 {
 private:
     String          aName;
@@ -96,12 +98,18 @@ private:
     // this is a weak reference to a possible living api wrapper for this custom show
     ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface > mxUnoCustomShow;
 
+    // forbidden and not implemented
+    SdCustomShow();
+
 public:
-    SdCustomShow(SdDrawDocument* pDrawDoc);
+    // single argument ctors shall be explicit
+    explicit SdCustomShow(SdDrawDocument* pDrawDoc);
     SdCustomShow(SdDrawDocument* pDrawDoc, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xShow );
 
-    SdCustomShow( const SdCustomShow& rShow );
     virtual ~SdCustomShow();
+
+    // @@@ copy ctor, but no copy assignment? @@@
+    SdCustomShow( const SdCustomShow& rShow );
 
     void   SetName(const String& rName) { aName = rName; }
     String GetName() const              { return aName; }
