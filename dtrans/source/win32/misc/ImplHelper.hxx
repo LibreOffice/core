@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 12:44:33 $
+ *  last change: $Author: tra $ $Date: 2001-03-09 08:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,20 +77,9 @@
 
 #include <windows.h>
 
-
-//------------------------------------------------------------------------
-// const
-//------------------------------------------------------------------------
-
-//const sal_Bool SET_HUMANPRESENTABLE_NAME  = sal_True;
-
 //------------------------------------------------------------------------
 // deklarations
 //------------------------------------------------------------------------
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 // target device and formatetc helper
 void      SAL_CALL DeleteTargetDevice(DVTARGETDEVICE* ptd);
@@ -99,18 +88,52 @@ sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLeft, const FORMATETC
 sal_Bool  SAL_CALL CompareTargetDevice(DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* ptdRight);
 DVTARGETDEVICE* SAL_CALL CopyTargetDevice(DVTARGETDEVICE* ptdSrc);
 
-#ifdef __cplusplus
-}
-#endif
-
 // some codepage helper functions
-sal_Int32     SAL_CALL getWinCodePageFromMimeCharset( const rtl::OUString& charset );
-UINT          SAL_CALL GetWinCPFromMime( const rtl::OUString& mimeType );
-sal_Bool      SAL_CALL IsOEMCP( UINT codepage );
-rtl::OUString SAL_CALL CodePageToString( sal_Int32 codepage );
 
+//--------------------------------------------------
+// returns a windows codepage appropriate to the
+// given mime charset parameter value
+//--------------------------------------------------
 
-sal_Bool SAL_CALL operator==( const ::com::sun::star::datatransfer::DataFlavor& lhs,
-                              const ::com::sun::star::datatransfer::DataFlavor& rhs );
+sal_uInt32 SAL_CALL getWinCPFromMimeCharset(
+    const rtl::OUString& charset );
+
+//--------------------------------------------------
+// returns a windows codepage appropriate to the
+// given locale and locale type
+//--------------------------------------------------
+
+rtl::OUString SAL_CALL getWinCPFromLocaleId(
+    LCID lcid, LCTYPE lctype );
+
+//--------------------------------------------------
+// returns a mime charset parameter value appropriate
+// to the given codepage, optional a prefix can be
+// given, e.g. "windows-" or "cp"
+//--------------------------------------------------
+
+rtl::OUString SAL_CALL getMimeCharsetFromWinCP(
+    sal_uInt32 cp, const rtl::OUString& aPrefix );
+
+//--------------------------------------------------
+// returns a mime charset parameter value appropriate
+// to the given locale id and locale type, optional a
+// prefix can be given, e.g. "windows-" or "cp"
+//--------------------------------------------------
+
+rtl::OUString SAL_CALL getMimeCharsetFromLocaleId(
+    LCID lcid, LCTYPE lctype, const rtl::OUString& aPrefix  );
+
+//-----------------------------------------------------
+// returns true, if a given codepage is an oem codepage
+//-----------------------------------------------------
+
+sal_Bool SAL_CALL IsOEMCP( sal_uInt32 codepage );
+
+//--------------------------------------------------
+// converts a codepage into a string representation
+//--------------------------------------------------
+
+rtl::OUString SAL_CALL cptostr( sal_uInt32 codepage );
 
 #endif

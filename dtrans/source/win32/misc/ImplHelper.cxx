@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-02 12:44:41 $
+ *  last change: $Author: tra $ $Date: 2001-03-09 08:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,47 +101,75 @@ using ::rtl::OUString;
 using ::rtl::OString;
 
 //------------------------------------------------------------------------
-// converts a codepage into its string representation
+// returns a windows codepage appropriate to the
+// given mime charset parameter value
 //------------------------------------------------------------------------
 
-OUString SAL_CALL CodePageToString( sal_Int32 codepage )
-{
-    OSL_ASSERT( IsValidCodePage( codepage ) );
-
-    sal_Unicode cpStr[6];
-    _itow( codepage, cpStr, 10 );
-    return OUString( cpStr, wcslen( cpStr ) );
-}
-
-//------------------------------------------------------------------------
-// convert a mime charset into a windows codepage
-//------------------------------------------------------------------------
-
-sal_Int32 SAL_CALL getWinCodePageFromMimeCharset( const OUString& charset )
+sal_uInt32 SAL_CALL getWinCPFromMimeCharset( const OUString& charset )
 {
     OString osCharset( charset.getStr( ), charset.getLength( ), CP_ACP );
 
-    rtl_TextEncoding textEnc = rtl_getTextEncodingFromMimeCharset( osCharset.getStr( ) );
+    rtl_TextEncoding textEnc =
+        rtl_getTextEncodingFromMimeCharset( osCharset.getStr( ) );
+
     return rtl_getBestPCCodePageFromTextEncoding( textEnc );
+}
+
+//--------------------------------------------------
+// returns a windows codepage appropriate to the
+// given locale and locale type
+//--------------------------------------------------
+
+OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
+{
+    OSL_ASSERT( IsValidLocale( lcid, LCID_SUPPORTED ) );
+
+    // we use the GetLocaleInfoA because don't want to provide
+    // a unicode wrapper function for Win9x in sal/systools
+    char buff[6];
+    GetLocaleInfoA( lcid, lctype, buff, sizeof( buff ) );
+    rtl_TextEncoding tenc = rtl_getTextEncodingFromPCCodePage( CP_ACP );
+
+    return OUString( buff, rtl_str_getLength( buff ), tenc );
+}
+
+//--------------------------------------------------
+// returns a mime charset parameter value appropriate
+// to the given codepage, optional a prefix can be
+// given, e.g. "windows-" or "cp"
+//--------------------------------------------------
+
+OUString SAL_CALL getMimeCharsetFromWinCP( sal_uInt32 cp, const OUString& aPrefix )
+{
+    return aPrefix + cptostr( cp );
+}
+
+//--------------------------------------------------
+// returns a mime charset parameter value appropriate
+// to the given locale id and locale type, optional a
+// prefix can be given, e.g. "windows-" or "cp"
+//--------------------------------------------------
+
+OUString SAL_CALL getMimeCharsetFromLocaleId( LCID lcid, LCTYPE lctype, const OUString& aPrefix  )
+{
+    OUString charset = getWinCPFromLocaleId( lcid, lctype );
+    return aPrefix + charset;
 }
 
 //------------------------------------------------------------------------
 // IsOEMCP
 //------------------------------------------------------------------------
 
-sal_Bool SAL_CALL IsOEMCP( UINT codepage )
+sal_Bool SAL_CALL IsOEMCP( sal_uInt32 codepage )
 {
-    UINT arrOEMCP[] = { 437, 708, 709,
-                        710, 720, 737,
-                        775, 850, 852,
-                        855, 857, 860,
-                        861, 862, 863,
-                        864, 865, 866,
-                        869, 874, 932,
-                        936, 949, 950,
-                        1361 };
+    OSL_ASSERT( IsValidCodePage( codepage ) );
 
-    for ( sal_Int8 i = 0; i < ( sizeof( arrOEMCP )/sizeof( UINT ) ); ++i )
+    sal_uInt32 arrOEMCP[] = { 437, 708, 709, 710, 720, 737,
+                              775, 850, 852, 855, 857, 860,
+                              861, 862, 863, 864, 865, 866,
+                              869, 874, 932, 936, 949, 950, 1361 };
+
+    for ( sal_Int8 i = 0; i < ( sizeof( arrOEMCP )/sizeof( sal_uInt32 ) ); ++i )
         if ( arrOEMCP[i] == codepage )
             return sal_True;
 
@@ -149,20 +177,17 @@ sal_Bool SAL_CALL IsOEMCP( UINT codepage )
 }
 
 //------------------------------------------------------------------------
-// a '==' operator for DataFlavors
-// we compare only MimeType and DataType
+// converts a codepage into its string representation
 //------------------------------------------------------------------------
 
-sal_Bool SAL_CALL operator==( const DataFlavor& lhs, const DataFlavor& rhs )
+OUString SAL_CALL cptostr( sal_uInt32 codepage )
 {
-#pragma message( "******************************************" )
-#pragma message( "**************** fix this ****************" )
-#pragma message( "******************************************" )
+    OSL_ASSERT( IsValidCodePage( codepage ) );
 
-    return ( ( lhs.MimeType == rhs.MimeType ) &&
-             ( lhs.DataType == rhs.DataType ) );
+    sal_Unicode cpStr[6];
+    _itow( codepage, cpStr, 10 );
+    return OUString( cpStr, wcslen( cpStr ) );
 }
-
 
 //-------------------------------------------------------------------------
 // OleStdDeleteTargetDevice()

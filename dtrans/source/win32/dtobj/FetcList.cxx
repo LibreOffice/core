@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FetcList.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-06 12:25:42 $
+ *  last change: $Author: tra $ $Date: 2001-03-09 08:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,7 +395,7 @@ void SAL_CALL CFormatRegistrar::synthesizeAndRegisterAccompanyFormats(
     {
         OUString charset = getCharsetFromDataFlavor( aFlavor );
         if ( charset.getLength( ) )
-            m_TxtCodePage = getWinCodePageFromMimeCharset( charset );
+            m_TxtCodePage = getWinCPFromMimeCharset( charset );
         else
             m_TxtCodePage = GetACP( );
 
@@ -444,13 +444,15 @@ OUString SAL_CALL CFormatRegistrar::getCharsetFromDataFlavor( const DataFlavor& 
         if( xMimeFac.is( ) )
         {
             Reference< XMimeContentType > xMimeType( xMimeFac->createMimeContentType( aFlavor.MimeType ) );
-            charset = xMimeType->getParameterValue( TEXTPLAIN_PARAM_CHARSET );
+            if ( xMimeType->hasParameter( TEXTPLAIN_PARAM_CHARSET ) )
+                charset = xMimeType->getParameterValue( TEXTPLAIN_PARAM_CHARSET );
+            else
+                charset = getMimeCharsetFromWinCP( GetACP( ), PRE_WINDOWS_CODEPAGE );
         }
     }
     catch(NoSuchElementException&)
     {
-        OSL_ENSURE( sal_False, "Text data flavor without charset not allowed" );
-        charset = OUString::createFromAscii( "windows-1252" );
+        OSL_ENSURE( sal_False, "Unexpected" );
     }
     catch(...)
     {
