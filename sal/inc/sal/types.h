@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-08 16:13:37 $
+ *  last change: $Author: hr $ $Date: 2002-02-07 14:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,14 @@
 #ifndef _SAL_TYPES_H_
 #define _SAL_TYPES_H_
 
+#ifndef _SAL_CONFIG_H_
 #include <sal/config.h>
+#endif
+
+#ifndef INCLUDED_STDLIB_H
+#include <stdlib.h>
+#define INCLUDED_STDLIB_H
+#endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -2,8 +2,8 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.10 $
- *  last change: $Author: mh $ $Date: 2001-12-19 14:57:41 $
+ *  $Revision: 1.11 $
+ *  last change: $Author: hr $ $Date: 2002-02-07 14:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,6 @@
 #ifndef _SAL_CONFIG_H_
 #define _SAL_CONFIG_H_
 
-#include <stdlib.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -81,14 +79,14 @@ extern "C" {
 #define SAL_CONFIGFILE( name ) name ".ini"
 #define SAL_SYSCONFIGFILE( name ) name ".ini"
 
-#ifdef __MSC_VER
+#ifdef _MSC_VER
 /* No warning for: C++ Exception Specification ignored */
 #pragma warning( disable : 4290 )
 
-    #if defined(_DEBUG)
-    /* No warning for: identifier was truncated to '255' characters in the browser information */
-    #pragma warning( disable : 4786 )
-    #endif
+#if defined(_DEBUG)
+/* No warning for: identifier was truncated to '255' characters in the browser information */
+#pragma warning( disable : 4786 )
+#endif
 
 #endif
 #endif
