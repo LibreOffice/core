@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-22 23:56:03 $
+ *  last change: $Author: obo $ $Date: 2001-11-28 23:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7812,7 +7812,7 @@ SfxSlotInfo FN_TABLE_MERGE_CELLS
     SlotName[ spanish ] = "Unir celdas";
     SlotName[ italian ] = "Collega celle";
     SlotName[ danish ] = "Flet celler";
-    SlotName[ swedish ] = "F�rbind celler";
+    SlotName[ swedish ] = "Sammanfoga celler";
     SlotName[ polish ] = "Scal kom�rki";
     SlotName[ portuguese_brazilian ] = "TableCellsMerge";
     SlotName[ japanese ] = "ｾﾙの結合";
@@ -9539,6 +9539,7 @@ SfxSlotInfo FN_UPDATE_CHARTS
     SlotName[ arabic ] = "Update Charts";
     SlotName[ catalan ] = "Update Charts";
 };
+
 
 
 
