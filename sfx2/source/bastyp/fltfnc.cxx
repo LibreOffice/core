@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-11 08:05:49 $
+ *  last change: $Author: aw $ $Date: 2002-06-20 14:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1671,6 +1671,12 @@ void SfxFilterContainer::ReadExternalFilters( const String& rDocServiceName )
                             if( sHumanName.getLength() )
                             {
                                 nClipboardId = SotExchange::RegisterFormatName( sHumanName );
+
+                                // #100570# For external filters ignore clipboard IDs
+                                if(nFlags & SFX_FILTER_STARONEFILTER)
+                                {
+                                    nClipboardId = 0;
+                                }
                             }
                             // register SfxFilter
                             // first erase module name from old filter names!
