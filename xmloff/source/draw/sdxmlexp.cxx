@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-21 18:36:35 $
+ *  last change: $Author: ka $ $Date: 2001-01-08 14:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2563,9 +2563,21 @@ void SdXMLExport::ImpExportGraphicObjectShape(SvXMLExport& rExp,
 
         if( !bIsEmptyPresObj )
         {
+            OUString aStreamURL;
+
             aAny = xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL")));
             aAny >>= aStr;
-            rExp.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, rExp.AddEmbeddedGraphicObject( aStr ) );
+            rExp.AddAttribute(XML_NAMESPACE_XLINK, sXML_href, aStr = rExp.AddEmbeddedGraphicObject( aStr ) );
+
+            if( aStr.getLength() && aStr[ 0 ] == '#' )
+            {
+                aStreamURL = OUString::createFromAscii( "vnd.sun.star.Package:" );
+                aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
+            }
+
+            // update stream URL for load on demand
+            aAny <<= aStreamURL;
+            xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL")), aAny );
 
             aStr = OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_simple));
             rExp.AddAttribute(XML_NAMESPACE_XLINK, sXML_type, aStr );

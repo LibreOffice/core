@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 16:58:04 $
+ *  last change: $Author: ka $ $Date: 2001-01-08 14:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1410,10 +1410,11 @@ void SdXMLGraphicObjectShapeContext::StartElement( const ::com::sun::star::uno::
                 if( maURL.getLength() )
                 {
                     uno::Any aAny;
-                    aAny <<= GetImport().ResolveGraphicObjectURL( maURL, sal_False );
+                    aAny <<= GetImport().ResolveGraphicObjectURL( maURL, sal_True );
                     try
                     {
                         xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL") ), aAny );
+                        xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL") ), aAny );
                     }
                     catch (lang::IllegalArgumentException const &)
                     {
