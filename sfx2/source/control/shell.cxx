@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:54 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,9 +155,9 @@ String SfxShellIdent_Impl( const SfxShell *pSh )
                    pSh->ISA(SfxViewFrame) ? DEFINE_CONST_UNICODE("SfxViewFrame") :
                    pSh->ISA(SfxViewShell) ? DEFINE_CONST_UNICODE("SfxViewShell") :
                    pSh->ISA(SfxObjectShell) ? DEFINE_CONST_UNICODE("SfxObjectShell") : DEFINE_CONST_UNICODE("SfxShell") );
-    aIdent += 0x005B; // '[' = 5Bh
+    aIdent += '[';
     aIdent += pSh->GetName();
-    aIdent += 0x005D; // ']' = 5Dh
+    aIdent += ']';
     return aIdent;
 }
 
