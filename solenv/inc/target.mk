@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.128 $
+#   $Revision: 1.129 $
 #
-#   last change: $Author: hjs $ $Date: 2002-10-22 16:04:11 $
+#   last change: $Author: hjs $ $Date: 2002-10-23 17:52:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2464,7 +2464,7 @@ $(TARGETDPJ) : $(JAVAFILES) $(JAVATARGET)
 .IF "$(NOPCH_FLAG)" == ""
 $(NOPCHTARGET):
     @+echo --- NOPCH ---
-    @dmake $(MFLAGS) PCHSLOFLAGSU= PCHOBJFLAGSU= $(NOPCHFILES) NOPCH_FLAG=TRUE $(CALLMACROS)
+    @dmake $(MFLAGS) $(MAKEFILE) PCHSLOFLAGSU= PCHOBJFLAGSU= $(NOPCHFILES) NOPCH_FLAG=TRUE $(CALLMACROS)
 .ENDIF
 .ENDIF
 
@@ -2478,7 +2478,7 @@ $(NOPCHTARGET):
 
 .IF "$(PROJECTPCH_FLAG)"==""
 $(PROJECTPCHTARGET) .PHONY :
-    dmake $(MFLAGS) $@ PROJECTPCH_FLAG=TRUE $(CALLMACROS)
+    dmake $(MFLAGS) $(MAKEFILE) $@ PROJECTPCH_FLAG=TRUE $(CALLMACROS)
 .ELSE			# "$(PROJECTPCH_FLAG)"!=""
 $(PROJECTPCHTARGET) : $(PROJECTPCHSOURCE).cxx
 .IF "$(COM)"=="MSC" || "(COM)"=="BLC"
@@ -2502,12 +2502,12 @@ $(PROJECTPCHTARGET) : $(PROJECTPCHSOURCE).cxx
 
 $(NOOPTTARGET):
     @+echo --- NOOPTFILES ---
-    @dmake $(MFLAGS) nopt=true $(PROJECTPCHTARGET:s/.pc/.xc/) $(NOOPTFILES) NOOPT_FLAG=TRUE $(CALLMACROS)
+    @dmake $(MFLAGS) $(MAKEFILE) nopt=true $(PROJECTPCHTARGET:s/.pc/.xc/) $(NOOPTFILES) NOOPT_FLAG=TRUE $(CALLMACROS)
     @+echo --- NOOPTFILES OVER ---
 
 $(NOOPTFILES):
     @+echo --- NOOPT ---
-    @dmake $(MFLAGS) nopt=true NOOPT_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/) $@
+    @dmake $(MFLAGS) $(MAKEFILE) nopt=true NOOPT_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/) $@
     @+echo --- NOOPT OVER ---
 .ENDIF
 .ENDIF
@@ -2524,12 +2524,12 @@ $(NOOPTFILES):
 
 $(EXCEPTIONSTARGET):
     @+echo --- EXCEPTIONSFILES ---
-    @dmake $(MFLAGS) ENABLE_EXCEPTIONS=true $(PROJECTPCHTARGET:s/.pc/.xc/) $(EXCEPTIONSFILES) EXCEPTIONS_FLAG=TRUE $(CALLMACROS)
+    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true $(PROJECTPCHTARGET:s/.pc/.xc/) $(EXCEPTIONSFILES) EXCEPTIONS_FLAG=TRUE $(CALLMACROS)
     @+echo --- EXCEPTIONSFILES OVER ---
 
 $(EXCEPTIONSFILES):
     @+echo --- EXCEPTIONS ---
-    @dmake $(MFLAGS) ENABLE_EXCEPTIONS=true EXCEPTIONS_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/) $@
+    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true EXCEPTIONS_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/) $@
     @+echo --- EXCEPTIONS OVER ---
 
 
@@ -2547,12 +2547,12 @@ $(EXCEPTIONSFILES):
 
 $(EXCEPTIONSNOOPTTARGET):
     @+echo --- EXCEPTIONSNOOPTFILES ---
-    @dmake $(MFLAGS) ENABLE_EXCEPTIONS=true $(PROJECTPCHTARGET:s/.pc/.xc/) $(EXCEPTIONSNOOPTFILES) EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS)
+    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true $(PROJECTPCHTARGET:s/.pc/.xc/) $(EXCEPTIONSNOOPTFILES) EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS)
     @+echo --- EXCEPTIONSNOOPTFILES OVER ---
 
 $(EXCEPTIONSNOOPTFILES):
     @+echo --- EXCEPTIONSNOOPT ---
-    @dmake $(MFLAGS) ENABLE_EXCEPTIONS=true EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/) $@
+    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/) $@
     @+echo --- EXCEPTIONSNOOPT OVER ---
 
 
@@ -2571,7 +2571,7 @@ $(EXCEPTIONSNOOPTFILES):
 .IF "$(remote)" == ""
 $(REMOTE_BUILD):
     @+echo --- REMOTE_BUILD ---
-    @dmake $(MFLAGS) remote=true REMOTE_BUILD_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/)
+    @dmake $(MFLAGS) $(MAKEFILE) remote=true REMOTE_BUILD_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/)
     @+echo --- REMOTE_BUILD OVER ---
 .ENDIF          # "$(remote)" == ""
 .ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
@@ -2967,7 +2967,7 @@ ALLTAR : ALLDEP \
 .IF "$(remote)" == ""
 $(REMOTE_DEPEND):
     @+echo --- REMOTE_DEPEND ---
-    @dmake $(MFLAGS) remote=true depend=t REMOTE_BUILD_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/)
+    @dmake $(MFLAGS) $(MAKEFILE) remote=true depend=t REMOTE_BUILD_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/)
     @+echo --- REMOTE_DEPEND OVER ---
 .ENDIF          # "$(remote)" == ""
 .ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: hjs $ $Date: 2002-09-13 14:30:48 $
+#   last change: $Author: hjs $ $Date: 2002-10-23 17:52:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -556,19 +556,19 @@ $(MISC)$/%.dprc :
 $(MISC)$/%.dpc : $(CFILES) $(CXXFILES) $(RCFILES) $(UNOIDLTARGETS) $(SLOFILES) $(OBJFILES) $(DEPOBJFILES)
     @echo ------------------------------
     @echo Making: $@
-    dmake subdmake=true $(MFLAGS) $(CALLMACROS) depend=t ALLDPC
+    dmake subdmake=true $(MFLAGS) $(MAKEFILE) $(CALLMACROS) depend=t ALLDPC
 
 $(MISC)$/%.dpw : $(CFILES) $(CXXFILES) $(RCFILES)
     @echo ------------------------------
     @echo Making: $@
-    dmake $(MFLAGS) $(CALLMACROS) depend=t ALLDPC
+    dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) depend=t ALLDPC
 
 $(MISC)$/%.dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)
     @echo ------------------------------ 
 .IF "$(nodep)"==""
     @echo Making: $@
     @+-$(RM) $(SRS)$/$(PWD:f).*.dpr >& $(NULLDEV)
-    dmake $(MFLAGS) $(CALLMACROS) make_srs_deps=true SRCALLTARGET -u
+    dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_srs_deps=true SRCALLTARGET -u
     +-$(TYPE) $(SRS)$/$(PWD:f).*.dpr >> $@
 .ENDIF			# "$(nodep)"==""
 
@@ -578,7 +578,7 @@ $(MISC)$/%.dpz :
     @echo Making: $@
     @+-$(RM) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >& $(NULLDEV)
     @+-$(RM) $@ >& $(NULLDEV)
-    +dmake $(MFLAGS) $(CALLMACROS) make_zip_deps=true ZIPALLTARGET -u
+    +dmake $(MFLAGS) $(MAKEFILE) $(CALLMACROS) make_zip_deps=true ZIPALLTARGET -u
     $(TYPE) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz | grep -v "CVS" >> $@
     +echo zipdep_langs=$(alllangext) >> $@
     @+-$(RM) $(MISC)$/$(TARGET).$(PWD:f).*.dpzz >& $(NULLDEV)
