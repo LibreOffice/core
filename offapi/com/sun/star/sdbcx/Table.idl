@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Table.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:34 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,18 +79,17 @@ interface XAlterTable;
 /** used to specify a table in a database. A table is described by its
     name and one or more columns.
 
-
     <p>In addition, it may contain indexes to improve the performance in
-    the retrieval of the table's data and keys and to define semantic rules for the table.
-    </p>
-    <p>
+    the retrieval of the table's data and keys, and to define semantic rules for the table.
+    </p><p>
     <b>Note:</b> All properties and columns of a table could by modified before
-    it is appended to a database. In that case the service is in fact a
+    it is appended to a database. In that case, the service is in fact a
     descriptor. On existing tables, a user might alter columns, add or delete
     columns, indexes, and keys depending on the capabilities of the database and on
-    the user's privileges.
-    </p>@see com::sun::star::sdbc::XDatabaseMetaData
-     @see com::sun::star::sdbcx::Privilege
+    the user's privileges.</p>
+
+    @see com::sun::star::sdbc::XDatabaseMetaData
+    @see com::sun::star::sdbcx::Privilege
  */
 service Table
 {
@@ -153,15 +152,15 @@ service Table
 
 
     // DocMerge from xml: property com::sun::star::sdbcx::Table::Description
-    /** supplies a comment on the table. Could be empty if not supported by
+    /** supplies a comment on the table. Could be empty, if not supported by
         the driver.
      */
     [readonly, property] string Description;
 
 
     // DocMerge from xml: property com::sun::star::sdbcx::Table::Type
-    /** indicates the type of the table like (TABLE,VIEW,SYSTEM TABLE).
-        Could be empty if not supported by the driver.
+    /** indicates the type of the table like (TABLE, VIEW, SYSTEM TABLE).
+        Could be empty, if not supported by the driver.
 
         @optional
      */
@@ -174,6 +173,9 @@ service Table
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/01/23 10:08:34  mi
+    optional interfaces now marked as [optional] instead of just a prosa description of this fact
+
     Revision 1.3  2000/11/08 12:43:39  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Statement.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-14 12:53:40 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,9 @@
 
 
 // DocMerge from xml: service com::sun::star::sdbcx::Statement
-/** extends the definition of the service <type scope="com::sun::star::sdbc">Statement</type> with a flag for the usage of bookmarks.@see ResultSet
-     @see XRowLocate
+/** extends the definition of the service <type scope="com::sun::star::sdbc">Statement</type> with a flag for the usage of bookmarks.
+    @see ResultSet
+    @see XRowLocate
  */
 service Statement
 {
@@ -79,7 +80,7 @@ service Statement
 
 
     // DocMerge from xml: property com::sun::star::sdbcx::Statement::UseBookmarks
-    /** returns <TRUE/> if a resultset should allow the navigation with bookmarks
+    /** returns <TRUE/> if a resultset should allow navigation with bookmarks
         or not. The default is <FALSE/>.
      */
     [property] boolean UseBookmarks;
@@ -91,6 +92,9 @@ service Statement
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/14 12:53:40  mi
+    <true></true> -> <TRUE/> and same with FALSE
+
     Revision 1.3  2000/11/08 12:43:39  mi
     moved from api
 

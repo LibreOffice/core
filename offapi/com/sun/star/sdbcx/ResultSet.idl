@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ResultSet.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:33 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ interface XDeleteRows;
 
 // DocMerge from xml: service com::sun::star::sdbcx::ResultSet
 /** extends the SDBC ResultSet by the possibility of bookmark positioning, cancelling
-    the positioning and updating of rows.
+    the positioning, and updating of rows.
  */
 service ResultSet
 {
@@ -83,22 +83,20 @@ service ResultSet
 
     // DocMerge from xml: service com::sun::star::sdbcx::ResultSet: interface com::sun::star::util::XCancellable
     /** could be used for cancelling the execution of SQL statements if both
-             if both the DBMS and the driver support aborting of navigation
-             commands.
-             The implementation is optional.
+ the DBMS and the driver support aborting of navigation commands.
+ The implementation is optional.
      */
     [optional] interface com::sun::star::util::XCancellable;
 
 
     // DocMerge from xml: service com::sun::star::sdbcx::ResultSet: interface com::sun::star::sdbcx::XRowLocate
-    /** is the interface for navigating on the result set by unique
-              bookmarks.
+    /** is the interface for navigating on the result set by unique bookmarks.
      */
     interface XRowLocate;
 
 
     // DocMerge from xml: service com::sun::star::sdbcx::ResultSet: interface com::sun::star::sdbcx::XDeleteRows
-    /** is the interface for delete more than one row identified by it's bookmark.
+    /** is the interface for deleting more than one row, identified by it's bookmark.
               The implementation is optional.
      */
     [optional] interface XDeleteRows;
@@ -126,6 +124,9 @@ service ResultSet
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/01/23 10:08:33  mi
+    optional interfaces now marked as [optional] instead of just a prosa description of this fact
+
     Revision 1.3  2000/11/08 12:43:39  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDeleteRows.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:36 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 
 
 // DocMerge from xml: interface com::sun::star::sdbcx::XDeleteRows
-/** provides for the deletion of more than one rows at a time.
+/** provides for the deletion of more than one row at a time.
  */
 interface XDeleteRows: com::sun::star::uno::XInterface
 {
@@ -81,14 +81,14 @@ interface XDeleteRows: com::sun::star::uno::XInterface
     // DocMerge from idl: method com::sun::star::sdbcx::XDeleteRows::deleteRows
     /** deletes one or more rows identified by their bookmarks.
              @param rows
-                list of bookmark identifying the rows.
+                list of bookmarks identifying the rows.
              @returns
                 an array of update counts containing one element for each
                  row. The array is ordered according to the order in
                 which bookmarks were given.
              @throws SQLException
-                if a fatal error occurs like the connection get lost if bookmarks
-                used which do not belong to the according result set.
+                if a fatal error occurs, for intance, the connection gets lost if bookmarks
+                are used which do not belong to the according result set.
      */
     sequence<long> deleteRows([in]sequence<any> rows)
         raises (com::sun::star::sdbc::SQLException);
@@ -100,6 +100,9 @@ interface XDeleteRows: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/16 16:41:36  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:40  mi
     moved from api
 

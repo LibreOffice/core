@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Descriptor.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:39 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,9 @@
 /** is used to create a new object within a database.
 
     <p>
-    A descriptor is commonly create by the container of specific objects like tables or views.
+    A descriptor is commonly created by the container of a specific object, such as, tables or views.
     After the the creation of the descriptor the properties have to be filled.
-    Afterwards you append the descriptor to the container and the container creates a new object based
+    Afterwards, you append the descriptor to the container and the container creates a new object based
     on the informations of the descriptor.
     </p>
     <p>A descriptor containes at least the informations of the name of an object.
@@ -99,6 +99,9 @@ service Descriptor
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:39  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:43  hjs
     initial import
 

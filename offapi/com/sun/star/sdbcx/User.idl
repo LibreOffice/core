@@ -2,9 +2,9 @@
  *
  *  $RCSfile: User.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:35 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@ interface XUser;
 
 
 // DocMerge from xml: service com::sun::star::sdbcx::User
-/** represents a user in the database who has certain access rights for the objects
-    of the database.
+/** represents a user of the database, who has certain access rights
+    for the objects of the database.
  */
 service User
 {
@@ -81,8 +81,8 @@ service User
     interface XUser;
 
     // DocMerge from xml: service com::sun::star::sdbcx::User: interface com::sun::star::sdbcx::XGroupsSupplier
-    /** optional for implementation if the database does not know the concept
-             of user groups. provides the access to the groups a user belongs.
+    /** optional for implementation, if the database does not know the concept
+             of user groups. Provides for access to the groups to which a user belongs.
      */
     [optional] interface XGroupsSupplier;
 
@@ -102,6 +102,9 @@ service User
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/01/23 10:08:35  mi
+    optional interfaces now marked as [optional] instead of just a prosa description of this fact
+
     Revision 1.3  2000/11/08 12:43:39  mi
     moved from api
 
