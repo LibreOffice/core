@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XRangeSelection.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:08:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,8 @@
 
  module com {  module sun {  module star {  module sheet {
 
-interface XRangeSelectionListener;
-interface XRangeSelectionChangeListener;
+ published interface XRangeSelectionListener;
+ published interface XRangeSelectionChangeListener;
 
 //=============================================================================
 
@@ -82,7 +82,7 @@ interface XRangeSelectionChangeListener;
 
     @see com::sun::star::sheet::SpreadsheetView
  */
-interface XRangeSelection: com::sun::star::uno::XInterface
+published interface XRangeSelection: com::sun::star::uno::XInterface
 {
     /** starts the range selection.
 
