@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltracer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:47:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,14 +152,14 @@ public:
     void                        TraceLog( XclTracerId eProblem, sal_Int32 nValue = 0 );
 
     /** Calls AddAttribute() to create the Context & Detail for known problems. */
-    void                        Context( XclTracerId eProblem, sal_uInt16 nTab = 0 );
+    void                        Context( XclTracerId eProblem, SCTAB nTab = 0 );
 
     /** Ensure that particular traces are logged once per document. */
-    void                        ProcessTraceOnce(XclTracerId eProblem, sal_uInt16 nTab = 0);
+    void                        ProcessTraceOnce(XclTracerId eProblem, SCTAB nTab = 0);
 
     void                        TraceInvalidAddress(const ScAddress& rPos, const ScAddress& rMaxPos);
-    void                        TraceInvalidRow( sal_uInt16 nTab,  sal_uInt32 nRow, sal_uInt32 nMaxrow );
-    void                        TraceInvalidTab( sal_uInt16 nTab, sal_uInt16 nMaxTab);
+    void                        TraceInvalidRow( SCTAB nTab,  sal_uInt32 nRow, sal_uInt32 nMaxrow );
+    void                        TraceInvalidTab( SCTAB nTab, SCTAB nMaxTab);
     void                        TracePrintRange();
     void                        TracePrintFitToPages(sal_uInt16 nFitWidth);
     void                        TraceDates(sal_uInt16 nNumFmt);
