@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 21:12:13 $
+ *  last change: $Author: rt $ $Date: 2001-03-06 09:03:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1178,7 +1178,7 @@ String RID_POPUP_AUDIT
     Text[ chinese_simplified ] = "ÕìÌ½-³äÌî-µ¯³öÊ½²Ëµ¥";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ğåæèìà çàëèâêè çàâèñèìîñòè";
     Text[ polish ] = "Menu podrêczne dla trybu wype³niania detektywa";
-    Text[ japanese ] = "ÄÚ°½QÆŒ³¾Ù–îˆó•\\¦Ó°ÄŞ‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
+    Text[ japanese ] = "•\\¦ÀsÓ°ÄŞ‚ÌÎß¯Ìß±¯ÌßÒÆ­°";
     Text[ chinese_traditional ] = "°»±´-¶ñ¤J-§ÖÅã¥\\¯àªí";
     Text[ arabic ] = "ŞÇÆãÉ ãäÈËŞÉ áæÖÚ ÊÚÈÆÉ ÇáãÎÈÑ";
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá ôçí êáôÜóôáóç ãåìßóìáôïò ôïõ áíé÷íåõôŞ";
@@ -1245,7 +1245,7 @@ Menu RID_POPUP_AUDIT
             Text [ spanish ] = "~Eliminar rastro a precedente" ;
             Text [ english_us ] = "~Remove Precedent" ;
             Text[ chinese_simplified ] = "É¾³ıÏòÇ°µÄ×·×Ù¼ıÍ·(~R)";
-            Text[ russian ] = "Óäàëèòü âëèÿşùèå ÿ÷åéêè";
+            Text[ russian ] = "Óáğàòü ñòğåëêè ê âëèÿşùèì ÿ÷åéêàì";
             Text[ polish ] = "Usuñ strza³ki poprzedników";
             Text[ japanese ] = "QÆŒ³ÄÚ°½‚Ìíœ(~R)";
             Text[ chinese_traditional ] = "§R°£Àx¦s®æ«e¾É°Ñ·Ó(~R)";
@@ -1307,7 +1307,7 @@ Menu RID_POPUP_AUDIT
             Text [ spanish ] = "~Eliminar rastro a dependiente" ;
             Text [ english_us ] = "Remove Dependent" ;
             Text[ chinese_simplified ] = "É¾³ıÏòºóµÄ×·×Ù¼ıÍ·";
-            Text[ russian ] = "Óäàëèòü çàâèñèìûå ÿ÷åéêè";
+            Text[ russian ] = "Óáğàòü ñòğåëêè ê çàâèñèìûì ÿ÷åéêàì";
             Text[ polish ] = "Usuñ strza³ki zale¿noœci";
             Text[ japanese ] = "QÆæÄÚ°½‚Ìíœ";
             Text[ chinese_traditional ] = "§R°£Àx¦s®æ±qÄİ°Ñ·Ó";
@@ -1367,7 +1367,7 @@ Menu RID_POPUP_AUDIT
             Text[ chinese_simplified ] = "½áÊø³äÌîÄ£Ê½(~F)";
             Text[ russian ] = "Çàêîí÷èòü ğåæèì çàëèâêè";
             Text[ polish ] = "Zakoñcz tryb wype³niania";
-            Text[ japanese ] = "ÄÚ°½QÆŒ³¾Ù–îˆó•\\¦Ó°ÄŞ‚ÌI—¹";
+            Text[ japanese ] = "•\\¦ÀsÓ°ÄŞ‚ÌI—¹";
             Text[ chinese_traditional ] = "µ²§ô¥R¶ñ¼Ò¦¡(~F)";
             Text[ arabic ] = "ÅäåÇÁ æÖÚ ÇáÊÚÈÆÉ";
             Text[ greek ] = "~Ôåñìáôéóìüò êáôÜóôáóçò ãåìßóìáôïò";
