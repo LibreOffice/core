@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:05:10 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,12 +99,15 @@ namespace sdr
             virtual void CalcPaintRectangle();
 
         protected:
-            // local paint methods
+            // local paint helper methods
             void DrawPaper(DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC);
-            void DrawPaperBorder(DisplayInfo& rDisplayInfo);
-            void DrawBorder(DisplayInfo& rDisplayInfo);
-            void DrawHelplines(DisplayInfo& rDisplayInfo);
-            void DrawGrid(DisplayInfo& rDisplayInfo);
+
+        public:
+            // #i37869# global paint helper methods
+            static void DrawPaperBorder(DisplayInfo& rDisplayInfo, const SdrPage& rPage);
+            static void DrawBorder(DisplayInfo& rDisplayInfo, const SdrPage& rPage);
+            static void DrawHelplines(DisplayInfo& rDisplayInfo);
+            static void DrawGrid(DisplayInfo& rDisplayInfo);
 
         public:
             // basic constructor, used from SdrPage.
