@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_adapter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 15:18:38 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,54 +128,10 @@ void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
     {
         PyRef excType, excValue, excTraceback;
         PyErr_Fetch( (PyObject **)&excType, (PyObject**)&excValue,(PyObject**)&excTraceback);
-        Any unoExc;
-
-        PyRef str;
-        if( excTraceback.is() )
-        {
-            PyRef extractTraceback(
-                PyDict_GetItemString(
-                    runtime.getImpl()->cargo->dictUnoModule.get(),
-                    "_uno_extract_printable_stacktrace" ) );
-            if( extractTraceback.is() )
-            {
-                PyRef args( PyTuple_New( 1), SAL_NO_ACQUIRE );
-                PyTuple_SetItem( args.get(), 0, excTraceback.getAcquired() );
-                str = PyRef( PyObject_CallObject( extractTraceback.get(),args.get() ), SAL_NO_ACQUIRE);
-            }
-            else
-            {
-                str = PyRef( PyString_FromString( "Couldn't find uno._uno_extract_printable_stacktrace" ),
-                             SAL_NO_ACQUIRE );
-            }
-        }
-        else
-        {
-            // it may occur, that no traceback is given (e.g. only native code below)
-            str = PyRef( PyString_FromString( "no traceback available" ), SAL_NO_ACQUIRE);
-        }
-
-        if( isInstanceOfStructOrException( runtime, excValue.get() ) )
-        {
-            unoExc = runtime.pyObject2Any( excValue );
-        }
-        else
-        {
-            OUStringBuffer buf;
-            PyRef typeName( PyObject_Str( excType.get() ), SAL_NO_ACQUIRE );
-            buf.appendAscii( PyString_AsString( typeName.get() ) );
-            buf.appendAscii( ": " );
-            PyRef valueRep( PyObject_Str( excValue.get() ), SAL_NO_ACQUIRE );
-            buf.appendAscii( PyString_AsString( valueRep.get())).appendAscii( ", traceback follows\n" );
-            buf.appendAscii( PyString_AsString( str.get() ) );
-            RuntimeException e;
-            e.Message = buf.makeStringAndClear();
-            unoExc = makeAny( e );
-        }
-        com::sun::star::uno::Exception e;
-        unoExc >>= e;
-        throw InvocationTargetException(((com::sun::star::uno::Exception*)unoExc.getValue())->Message,
-                                        Reference<XInterface>(), unoExc );
+        Any unoExc( runtime.extractUnoException( excType, excValue, excTraceback ) );
+        throw InvocationTargetException(
+            ((com::sun::star::uno::Exception*)unoExc.getValue())->Message,
+            Reference<XInterface>(), unoExc );
     }
 }
 
