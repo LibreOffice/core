@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:39:19 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,8 +843,6 @@ SwTOXBase & SwTOXBase::operator = (const SwTOXBase & rSource)
 {
     ByteString aTmpStr(aTitle, RTL_TEXTENCODING_ASCII_US);
     ByteString aTmpStr1(rSource.aTitle, RTL_TEXTENCODING_ASCII_US);
-    printf("%s, %d: \"%s\"->\"%s\"\n", __FILE__, __LINE__, aTmpStr.GetBuffer(),
-           aTmpStr1.GetBuffer());
 
     aForm = rSource.aForm;
     aName = rSource.aName;
