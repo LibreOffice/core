@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:08:44 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 09:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,16 @@ public:
         @returns true if a active function was aborted
     */
     virtual bool cancel();
+
+    // #i33136#
+    /** Decide if the object to be created should be created
+        orthogonal. Default implementation uses nSlotID
+        to decide. May be overloaded to use other criterias
+        for this decision
+
+        @returns true if the to be created object should be orthogonal.
+    */
+    virtual bool doConstructOrthogonal() const;
 
 protected:
     DECL_LINK( DelayHdl, Timer * );
