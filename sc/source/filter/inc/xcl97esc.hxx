@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:26:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,8 +211,8 @@ public:
     void                        WriteData( EscherEx& rEx ) const;
 
 protected:
-    BOOL                        FindNextCol( USHORT& nCol, short nDir );
-    BOOL                        FindNextRow( USHORT& nRow, short nDir );
+    BOOL                        FindNextCol( sal_uInt16& nCol, short nDir );
+    BOOL                        FindNextRow( sal_uInt16& nRow, short nDir );
 
 protected:  // for access in derived classes
     XclEscherAnchor             maAnchor;       /// The client anchor data.
