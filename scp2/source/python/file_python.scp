@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_python.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: is $ $Date: 2004-02-10 17:46:31 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:54:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,19 @@ File gid_File_Py_Scriptprovider
     RegistryID = gid_Starregistry_Services_Rdb;
     Styles = (PACKED,UNO_COMPONENT);
 End
+
+// substitute for the python Windows basic scripts
+
+#ifdef WNT
+
+File gid_File_Pythonmsi_Dll
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "pythonmsi.dll";
+    Styles = (PACKED);
+End
+
+#endif
  
 // Scripting Framework Python script proxy
 
