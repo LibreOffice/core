@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 19:25:27 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:28:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ ModalDialog DLG_START_PRESENTATION
     Text[ chinese_simplified ] = "·ÅÓ³ÑİÊ¾ÎÄ¸å";
     Text[ russian ] = "~Äåìîíñòğàöèÿ";
     Text[ polish ] = "Pokaz slajdów";
-    Text[ japanese ] = "½×²ÄŞ¼®°";
+    Text[ japanese ] = "½×²ÄŞ¼®°‚ÌÀs";
     Moveable = TRUE ;
 
     OKButton BTN_OK
@@ -647,7 +647,7 @@ ModalDialog DLG_START_PRESENTATION
         Text [ portuguese_brazilian ] = "Präsentation immer im ~Vordergrund" ;
         Text[ chinese_simplified ] = "×ÜÊÇÇ°¶ËÏÔÊ¾ÑİÊ¾ÎÄ¸å(~O)";
         Text[ russian ] = "Âñåãäà íà ïåğåäíåì ïëàíå";
-        Text[ polish ] = "Prezentacja zawsze na pierwszym planie";
+        Text[ polish ] = "Pokaz slajdów zawsze na pierwszym planie";
         Text[ japanese ] = "½×²ÄŞ¼®°‚ªí‚É‘OŒi(~O)";
         Text[ chinese_traditional ] = "Á`¬O«eºİÅã¥ÜÂ²³ø(~O)";
         Text[ arabic ] = "ÇáÚÑÖ ÏÇÆãÇğ İí ÇáÃãÇãíÉ";
