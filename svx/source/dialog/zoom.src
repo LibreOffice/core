@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zoom.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 08:20:31 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 16:48:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text [ ENGLISH ] = "~Page width" ;
         Text [ norwegian ] = "~Sidebredde" ;
         Text [ italian ] = "Larg~h. pagina" ;
-        Text [ portuguese_brazilian ] = "~Largura da p·gina" ;
+        Text [ portuguese_brazilian ] = "~Largura da p?gina" ;
         Text [ portuguese ] = "~Larg. de p·gina" ;
         Text [ finnish ] = "~Sivun leveys" ;
         Text [ danish ] = "Sidebredde" ;
@@ -167,7 +167,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text [ english_us ] = "~Page Width" ;
         Text[ chinese_simplified ] = "“≥øÌ(~P)";
         Text[ russian ] = "œÓ ¯ËËÌÂ ÒÚ‡ÌËˆ˚";
-        Text[ polish ] = "SzerokoúÊ strony";
+        Text[ polish ] = "Szeroko?Ê strony";
         Text[ japanese ] = "Õﬂ∞ºﬁïù(~P)";
         Text[ chinese_traditional ] = "≠∂ºe(~P)";
         Text[ arabic ] = "⁄—÷ «·’›Õ…";
@@ -185,7 +185,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text [ ENGLISH ] = "~Whole page" ;
         Text [ norwegian ] = "~Hele siden" ;
         Text [ italian ] = "~Pagina intera" ;
-        Text [ portuguese_brazilian ] = "~P·gina inteira" ;
+        Text [ portuguese_brazilian ] = "~P?gina inteira" ;
         Text [ portuguese ] = "~P·gina inteira" ;
         Text [ finnish ] = "~Koko sivu" ;
         Text [ danish ] = "Hele siden" ;
@@ -256,7 +256,7 @@ ModalDialog RID_SVXDLG_ZOOM
         Text [ ENGLISH ] = "Skalierung" ;
         Text [ norwegian ] = "Forst¯rrelse" ;
         Text [ italian ] = "Scala" ;
-        Text [ portuguese_brazilian ] = "MagnificaÁ„o" ;
+        Text [ portuguese_brazilian ] = "Magnifica??o" ;
         Text [ portuguese ] = "Escala" ;
         Text [ finnish ] = "Zoomaa kohteeseen" ;
         Text [ danish ] = "Skalering" ;
