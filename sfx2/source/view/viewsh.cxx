@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-26 08:02:38 $
+ *  last change: $Author: ssa $ $Date: 2002-08-29 16:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -847,6 +847,13 @@ void SfxViewShell::SetWindow
     // View-Port austauschen
     BOOL bHadFocus = pWindow ? pWindow->HasChildPathFocus( TRUE ) : FALSE;
     pWindow = pViewPort;
+
+    if( pWindow )
+    {
+        // Disable automatic GUI mirroring (right-to-left) for document windows
+        pWindow->EnableRTL( FALSE );
+    }
+
     if ( bHadFocus && pWindow )
         SFX_APP()->GrabFocus( pWindow );
 }
