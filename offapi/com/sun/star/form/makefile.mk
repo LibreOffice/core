@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 11:10:28 $
+#   last change: $Author: hjs $ $Date: 2004-06-28 17:02:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,6 +101,7 @@ IDLFILES=\
     XConfirmDeleteBroadcaster.idl\
     XConfirmDeleteListener.idl\
     XDatabaseParameterBroadcaster.idl\
+    XDatabaseParameterBroadcaster2.idl\
     XDatabaseParameterListener.idl\
     XDeleteListener.idl\
     XErrorBroadcaster.idl\
