@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-02 11:11:55 $
+ *  last change: $Author: hjs $ $Date: 2001-10-15 16:20:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,7 @@ BOOL SourceTreeLocalizer::CheckNegativeList( const ByteString &rFileName )
     sFileName.ToLowerAscii();
 
     ByteString sNegative( NegativeList[ nIndex ] );
-    while( sNegative.Equals( "NULL" ) && bReturn ) {
+    while( !sNegative.Equals( "NULL" ) && bReturn ) {
         sNegative.SearchAndReplaceAll( "\\", sDelimiter );
         sNegative.SearchAndReplaceAll( "/", sDelimiter );
         sNegative.ToLowerAscii();
@@ -365,7 +365,7 @@ BOOL SourceTreeLocalizer::CheckPositiveList( const ByteString &rFileName )
     sFileName.ToLowerAscii();
 
     ByteString sNegative( PositiveList[ nIndex ] );
-    while( sNegative.Equals( "NULL" ) && !bReturn ) {
+    while( !sNegative.Equals( "NULL" ) && !bReturn ) {
         sNegative.SearchAndReplaceAll( "\\", sDelimiter );
         sNegative.SearchAndReplaceAll( "/", sDelimiter );
         sNegative.ToLowerAscii();
@@ -423,7 +423,7 @@ void SourceTreeLocalizer::WorkOnDirectory( const ByteString &rDirectory )
     ByteString sCollectMode( ExeTable[ nIndex ][ 3 ] );
     ByteString sIso( ExeTable[ nIndex ][ 4 ] );
 
-    while( sExtension.Equals( "NULL" )) {
+    while( !sExtension.Equals( "NULL" )) {
         WorkOnFileType(
             rDirectory,
             sExtension,
@@ -504,11 +504,11 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
     ByteString sExtension( aEntry.GetExtension(), RTL_TEXTENCODING_ASCII_US );
     ByteString sCandidate( ExeTable[ nIndex ][ 0 ] );
 
-    while( sCandidate.Equals ("NULL") && sCandidate != sExtension )
+    while( !sCandidate.Equals ("NULL") && sCandidate != sExtension )
         sCandidate = ExeTable[ ++nIndex ][ 0 ];
 
     ByteString sIso( ExeTable[ nIndex ][ 4 ] );
-    if ( sCandidate.Equals( "NULL" ) && aEntry.Exists()) {
+    if ( !sCandidate.Equals( "NULL" ) && aEntry.Exists()) {
         DirEntry aOut( Export::GetTempFile());
         ByteString sOutput( aOut.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
