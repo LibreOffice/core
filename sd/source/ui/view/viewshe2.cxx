@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:18:37 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:35:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,8 @@
 #ifndef SD_FU_SEARCH_HXX
 #include "fusearch.hxx"
 #endif
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #include "sdpage.hxx"
 #ifndef SD_DRAW_VIEW_SHELL_HXX
@@ -153,6 +153,8 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
+
+#include "Window.hxx"
 
 #include <sfx2/viewfrm.hxx>
 #include <svtools/soerr.hxx>
@@ -802,9 +804,9 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
     {
         pView->SetActualWin(pWin);
     }
-    if (pFuSlideShow)
+    if (mpSlideShow)
     {
-        pFuSlideShow->SetWindow(pWin);
+        mpSlideShow->setWindow(pWin);
     }
     if (pFuActual)
     {
@@ -826,9 +828,9 @@ BOOL ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window* pWin)
 
     if (rHEvt.GetMode())
     {
-        if (pFuSlideShow)
+        if (mpSlideShow)
         {
-            bReturn = pFuSlideShow->RequestHelp(rHEvt);
+            bReturn = mpSlideShow->requestHelp(rHEvt);
         }
         else if (pFuActual)
         {
