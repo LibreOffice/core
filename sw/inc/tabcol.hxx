@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabcol.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 11:37:59 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:40:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,14 @@
 #include <svtools/svstdarr.hxx>
 #endif
 
+#ifndef INCLUDED_VECTOR
 #include <vector>
+#define INCLUDED_VECTOR
+#endif
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
 struct SwTabColsEntry
 {
@@ -83,7 +90,7 @@ struct SwTabColsEntry
 
 typedef std::vector< SwTabColsEntry > SwTabColsEntries;
 
-class SwTabCols
+class SW_DLLPUBLIC SwTabCols
 {
     long nLeftMin,      //Linker aeusserer Rand (Bezugspunkt) in
                         //Dokumentkordinaten.
