@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:33:11 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,7 +631,7 @@ void ExcTable::FillAsTable( void )
         // Scenarios
         Add( new ExcEScenarioManager( rDoc, nScTab ) );
         // list holding OBJ records and creating MSODRAWING per-sheet data
-        rR.pObjRecs = new XclObjList( rR );
+        rR.pObjRecs = new XclObjList( rRoot );
         // AutoFilter
         Add( new ExcAutoFilterRecs( rR, nScTab ) );
         // list of NOTE records
@@ -1063,6 +1063,7 @@ void ExcTable::NullTab( const String* pCodename )
     DBG_ASSERT( (nExcTab >= 0L) && (nExcTab <= MAXTAB), "-ExcTable::Table(): nExcTab - no ordinary table!" );
 
     RootData&       rR = *pExcRoot;
+    const XclExpRoot& rRoot = *rR.pER;
 
     if ( rR.eDateiTyp < Biff8 )
     {
@@ -1078,7 +1079,7 @@ void ExcTable::NullTab( const String* pCodename )
         else
         {
             // create at least the MSODRAWING per-sheet data
-            rR.pObjRecs = new XclObjList( rR );
+            rR.pObjRecs = new XclObjList( rRoot );
             // all drawing obects
             rR.pEscher->AddSdrPage( rR );
             //! close Escher group shape and ESCHER_DgContainer
@@ -1088,7 +1089,7 @@ void ExcTable::NullTab( const String* pCodename )
         }
         // WINDOW2
 
-        Add( new ExcWindow28( *rR.pER, nScTab ) );
+        Add( new ExcWindow28( rRoot , nScTab ) );
     }
     Add( new ExcEof );
 }
