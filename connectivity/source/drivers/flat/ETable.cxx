@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 12:07:47 $
+ *  last change: $Author: fs $ $Date: 2000-12-10 19:30:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,14 +547,22 @@ String OFlatTable::getEntry()
     ::rtl::OUString aURL;
     Reference< XResultSet > xDir = m_pConnection->getDir()->getStaticResultSet();
     Reference< XRow> xRow(xDir,UNO_QUERY);
-    ::rtl::OUString aName;
-    sal_Int32 nLen = m_pConnection->getExtension().Len()+1;
+    ::rtl::OUString sName;
+    ::rtl::OUString sExt;
+    ::rtl::OUString sNeededExt(m_pConnection->getExtension());
+    sal_Int32 nExtLen = sNeededExt.getLength();
+    sal_Int32 nExtLenWithSep = nExtLen + 1;
     xDir->beforeFirst();
     while(xDir->next())
     {
-        aName = xRow->getString(1);
-        aName = aName.replaceAt(aName.getLength()-nLen,nLen,::rtl::OUString());
-        if(aName == m_Name)
+        sName = xRow->getString(1);
+
+        // cut the extension
+        sExt = sName.copy(sName.getLength() - nExtLen);
+        sName = sName.copy(0, sName.getLength() - nExtLenWithSep);
+
+        // name and extension have to coincide
+        if ((sName == m_Name) && (sExt == sNeededExt))
         {
             Reference< XContentAccess > xContentAccess( xDir, UNO_QUERY );
 #if SUPD>611
