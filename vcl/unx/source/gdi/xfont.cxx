@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:07:30 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,7 @@ ExtendedFontStruct::GetDefaultWidth()
 // is compatible with iso8859-X at least in the range to 0x7f
 sal_Size
 ExtendedFontStruct::GetCharWidth8( sal_Unicode nFrom, sal_Unicode nTo,
-        long* pWidthArray, rtl_TextEncoding nEncoding )
+        sal_Int32* pWidthArray, rtl_TextEncoding nEncoding )
 {
     if ( !(nFrom <= nTo) )
         return 0;
@@ -481,7 +481,7 @@ ExtendedFontStruct::GetCharWidth8( sal_Unicode nFrom, sal_Unicode nTo,
 // Handle utf16 encoded fonts, which do not require conversion
 sal_Size
 ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
-        long* pWidthArray )
+        sal_Int32* pWidthArray )
 {
     if ( !(nFrom <= nTo) )
         return 0;
@@ -527,7 +527,7 @@ ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
 // font in fontstruct, 8 and 16 bit fonts are handled the same way
 sal_Size
 ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
-    long* pWidthArray, ExtendedFontStruct *pFallback )
+    sal_Int32* pWidthArray, ExtendedFontStruct *pFallback )
 {
     if ( nFrom > nTo )
         return 0;
@@ -612,8 +612,8 @@ ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
 }
 
 sal_Size
-ExtendedFontStruct::GetCharWidth( sal_Unicode cChar, long *pPhysicalWidth,
-    long *pLogicalWidth )
+ExtendedFontStruct::GetCharWidth( sal_Unicode cChar, sal_Int32 *pPhysicalWidth,
+    sal_Int32 *pLogicalWidth )
 {
     sal_Size nConverted = 0;
 
@@ -728,7 +728,7 @@ bool X11FontLayout::LayoutText( ImplLayoutArgs& rArgs )
                 nGlyphIndex = 0; // drop NotDef fallback glyphs
         }
 
-        long nPhysGlyphWidth, nLogGlyphWidth;
+        sal_Int32 nPhysGlyphWidth, nLogGlyphWidth;
         mrFont.GetCharWidth( cChar, &nPhysGlyphWidth, &nLogGlyphWidth );
         int nGlyphFlags = (nPhysGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
         if( bRightToLeft )
@@ -759,7 +759,7 @@ void X11FontLayout::DrawText( SalGraphics& rSalGraphics ) const
     int nMaxGlyphs = GetOrientation() ? 1 : MAXGLYPHS;
 
     Point aPos;
-    long aGlyphAry[ MAXGLYPHS ];
+    sal_Int32 aGlyphAry[ MAXGLYPHS ];
     sal_Unicode pStr[ MAXGLYPHS ];
     for( int nStart=0;;)
     {
