@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailconfigpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-29 09:25:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,8 +229,7 @@ SwMailConfigPage::SwMailConfigPage( Window* pParent, const SfxItemSet& rSet ) :
     m_aServerED( this, ResId(         ED_SERVER)),
     m_aPortFT( this, ResId(           FT_PORT)),
     m_aPortNF( this, ResId(           NF_PORT)),
-    m_aSecureFT( this, ResId(         FT_SECURE)),
-    m_aSecureLB( this, ResId(         LB_SECURE)),
+    m_aSecureCB( this, ResId(         CB_SECURE)),
     m_aServerAuthenticationPB( this, ResId( PB_AUTHENTICATION )),
     m_aSeparatorFL( this,            ResId( FL_SEPARATOR      )),
     m_aTestPB( this, ResId(           PB_TEST)),
@@ -276,8 +275,7 @@ BOOL SwMailConfigPage::FillItemSet( SfxItemSet& rSet )
     if(m_aPortNF.IsModified())
         m_pConfigItem->SetMailPort((sal_Int16)m_aPortNF.GetValue());
 
-    if(m_aSecureLB.GetSelectEntryPos() != m_aSecureLB.GetSavedValue())
-        m_pConfigItem->SetSecureConnection(m_aSecureLB.GetSelectEntryPos() == 1);
+    m_pConfigItem->SetSecureConnection(m_aSecureCB.IsChecked());
 
     m_pConfigItem->Commit();
     return sal_True;
@@ -297,7 +295,7 @@ void SwMailConfigPage::Reset( const SfxItemSet& rSet )
     m_aServerED.SetText(m_pConfigItem->GetMailServer());
     m_aPortNF.SetValue(m_pConfigItem->GetMailPort());
 
-    m_aSecureLB.SelectEntryPos(m_pConfigItem->IsSecureConnection() ? 1 : 0);
+    m_aSecureCB.Check(m_pConfigItem->IsSecureConnection());
 
     m_aDisplayNameED.SaveValue();
     m_aAddressED    .SaveValue();
@@ -305,7 +303,7 @@ void SwMailConfigPage::Reset( const SfxItemSet& rSet )
     m_aReplyToED    .SaveValue();
     m_aServerED     .SaveValue();
     m_aPortNF       .SaveValue();
-    m_aSecureLB     .SaveValue();
+    m_aSecureCB     .SaveValue();
 }
 /*-- 06.05.2004 10:59:41---------------------------------------------------
 
@@ -495,7 +493,7 @@ void SwTestAccountSettingsDialog::Test()
                         m_pParent->m_aServerED.GetText(),
                         m_pParent->m_aPortNF.GetValue(),
                         ::rtl::OUString::createFromAscii(
-                                m_pParent->m_aSecureLB.GetSelectEntryPos() == 1 ? "Ssl" : "Insecure"));
+                                m_pParent->m_aSecureCB.IsChecked() ? "Ssl" : "Insecure"));
             xMailService->connect(xConnectionContext, xAuthenticator);
             bIsLoggedIn = xMailService->isConnected();
             if( xInMailService.is() )
