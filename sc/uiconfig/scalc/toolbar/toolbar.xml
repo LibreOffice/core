@@ -5,6 +5,13 @@
  <toolbar:toolbaritem xlink:href=".uno:InsCellsCtrl" toolbar:helpid="helpid:26627" toolbar:text="" toolbar:style="dropdown" />
  <toolbar:toolbaritem xlink:href=".uno:InsObjCtrl" toolbar:helpid="helpid:26628" toolbar:text="" toolbar:style="dropdown" />
  <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:helpid="helpid:10244" toolbar:text="" toolbar:style="dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:FontworkGalleryFloater" toolbar:helpid="helpid:10977" />
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="helpid:11002" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:helpid="helpid:11003" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:helpid="helpid:11004" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:helpid="helpid:11005" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:helpid="helpid:11006" toolbar:text="" toolbar:style="radio dropdown" />
+ <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:helpid="helpid:11007" toolbar:text="" toolbar:style="radio dropdown" />
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:helpid="helpid:10593" toolbar:text="" toolbar:style="dropdown" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:AutoFormat" toolbar:helpid="helpid:10242" toolbar:text="" />
