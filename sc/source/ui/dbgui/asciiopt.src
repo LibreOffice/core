@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:48:53 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ russian ] = "–‡Á‰ÂÎ¸ÌÓ";
         Text[ polish ] = "Rozdzielony";
         Text[ japanese ] = "ãÊêÿÇÈ(~B)";
-        Text[ chinese_traditional ] = "§¿πj(~B)";
+        Text[ chinese_traditional ] = "§¿πj(~S)";
         Text[ arabic ] = "„›’Ê·";
         Text[ dutch ] = "~Gescheiden";
         Text[ chinese_simplified ] = "∑÷∏Ù(~B)";
@@ -239,7 +239,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ SPANISH ] = "Juego de caracteres" ;
         Text [ FRENCH ] = "Jeu de caractËres" ;
         Text [ ITALIAN ] = "Ti~po di carattere" ;
-        Text [ DUTCH ] = "~Tekenreeks" ;
+        Text [ DUTCH ] = "~Tekenset" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Zeichensatz" ;
         Text [ SWEDISH ] = "~Teckenupps‰ttning" ;
         Text [ PORTUGUESE ] = "Tabela de caracteres" ;
@@ -249,7 +249,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ japanese ] = "ï∂éöóÒ(~H)";
         Text[ chinese_traditional ] = "¶r´¨(~H)";
         Text[ arabic ] = "„Ã„Ê⁄… √Õ—›";
-        Text[ dutch ] = "~Tekenreeks";
+        Text[ dutch ] = "~Tekenset";
         Text[ chinese_simplified ] = "◊÷ÃÂ(~H)";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "”~ÂÙ ˜·Ò·ÍÙﬁÒ˘Ì";
@@ -447,7 +447,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ russian ] = "“Ó˜Í‡ Ò Á‡ÔˇÚÓÈ";
         Text[ polish ] = "årednik";
         Text[ japanese ] = "æ–∫€›(~S)";
-        Text[ chinese_traditional ] = "§¿∏π(~S)";
+        Text[ chinese_traditional ] = "§¿∏π(~E)";
         Text[ arabic ] = "›«’·… „‰ﬁÊÿ…";
         Text[ dutch ] = "~Puntkomma";
         Text[ chinese_simplified ] = "∑÷∫≈(~S)";
