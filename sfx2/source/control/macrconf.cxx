@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:07:31 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 07:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,14 +58,7 @@
  *
  *
  ************************************************************************/
-#if SUPD<582
-#ifndef _SFXSFXJS_HXX //autogen
-#include <sfxjs.hxx>
-#endif
-#ifndef _SJIMPL2_HXX //autogen
-#include <sj2/sjimpl2.hxx>
-#endif
-#endif
+
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
 #endif
@@ -93,6 +86,13 @@
 #include <com/sun/star/script/XEngine.hpp>
 
 #pragma hdrstop
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
+#endif
 
 #include "msgpool.hxx"
 #include "macrconf.hxx"
@@ -148,12 +148,12 @@ struct SfxMacroConfig_Impl
 SbMethod* SfxQueryMacro_Impl( BasicManager* pMgr , const String& rMacro,
     const String &rLibName, const String& rModule )
 {
-    const International &rInter = Application::GetAppInternational();
-
+    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
     sal_uInt16 nLibCount = pMgr->GetLibCount();
     for ( sal_uInt16 nLib = 0; nLib < nLibCount; ++nLib )
     {
-        if ( COMPARE_EQUAL == rInter.Compare( pMgr->GetLibName( nLib ), rLibName, INTN_COMPARE_IGNORECASE ) )
+        if ( COMPARE_EQUAL == pCollator->compareString( pMgr->GetLibName( nLib ), rLibName ) )
         {
             StarBASIC* pLib = pMgr->GetLib( nLib );
             if( !pLib )
@@ -168,11 +168,9 @@ SbMethod* SfxQueryMacro_Impl( BasicManager* pMgr , const String& rMacro,
                 for( sal_uInt16 nMod = 0; nMod < nModCount; ++nMod )
                 {
                     SbModule* pMod = (SbModule*)pLib->GetModules()->Get( nMod );
-                    if ( pMod &&
-                         COMPARE_EQUAL == rInter.Compare( pMod->GetName(), rModule, INTN_COMPARE_IGNORECASE ) )
+                    if ( pMod && COMPARE_EQUAL == pCollator->compareString( pMod->GetName(), rModule ) )
                     {
-                        SbMethod* pMethod =
-                                (SbMethod*)pMod->Find( rMacro, SbxCLASS_METHOD );
+                        SbMethod* pMethod = (SbMethod*)pMod->Find( rMacro, SbxCLASS_METHOD );
                         if( pMethod )
                             return pMethod;
                     }
