@@ -3,9 +3,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-17 12:29:40 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 19:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,12 +409,12 @@ TabPage RID_SVXPAGE_BORDER
         Text[ italian ] = "Distanza dal contenuto";
         Text[ danish ] = "Indstillinger";
         Text[ swedish ] = "Avstånd till innehåll";
-        Text[ polish ] = "Odstêp od zawarto?ci";
+        Text[ polish ] = "Odstêp od zawartoœci";
         Text[ portuguese_brazilian ] = "Settings";
         Text[ japanese ] = "“à—e‚Ü‚Å‚ÌŠÔŠu";
         Text[ korean ] = "³»¿ë¿¡ °£°Ý";
         Text[ chinese_simplified ] = "ÖÁÄÚÈÝµÄ¾àÀë";
-        Text[ chinese_traditional ] = "¦Ü¤º®eªº¶ZÂ÷";
+        Text[ chinese_traditional ] = "¦Ü¤º¤åªº¶ZÂ÷";
         Text[ arabic ] = "ÇáãÓÇÝÉ ÍÊì ÇáãÍÊæíÇÊ";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
@@ -465,6 +465,26 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "~Distanz" ;
         Text [ ENGLISH ] = "~Distance" ;
+        Text[ english_us ] = "Distan~ce";
+        Text[ portuguese ] = "~Tamanho";
+        Text[ russian ] = "Ðàññòîÿíèå";
+        Text[ greek ] = "ÌÝãåèïò";
+        Text[ dutch ] = "~Grootte";
+        Text[ french ] = "~Distance";
+        Text[ spanish ] = "~Distancia";
+        Text[ finnish ] = "~Koko";
+        Text[ italian ] = "~Dimensione";
+        Text[ danish ] = "Størrelse";
+        Text[ swedish ] = "~Distans";
+        Text[ polish ] = "Odstêp";
+        Text[ portuguese_brazilian ] = "Ta~manho";
+        Text[ japanese ] = "ŠÔŠu";
+        Text[ korean ] = "Å©±â(~Z)";
+        Text[ chinese_simplified ] = "¼ä¸ô";
+        Text[ chinese_traditional ] = "¶¡¹j(~Z)";
+        Text[ turkish ] = "~Büyüklük";
+        Text[ arabic ] = "ÇáÍÌã";
+        Text[ catalan ] = "~Tamaño";
     };
     MetricField ED_SHADOWSIZE
     {
