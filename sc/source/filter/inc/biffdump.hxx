@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:17:36 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_BIFFDUMP_HXX
 #define SC_BIFFDUMP_HXX
 
@@ -173,8 +172,11 @@ public:
 
 class Biff8RecDumper : public XclImpRoot
 {
-private:
 protected:
+    typedef ScfRef< ByteString >            ByteStringRef;
+    typedef ::std::vector< ByteStringRef >  ByteStringVec;
+
+
     static const sal_Char*      pLevelPreString;
     static const sal_Char*      pLevelPreStringNT;
     const sal_Char*             pLevelPre;
@@ -185,6 +187,8 @@ protected:
 
     SvFileStream*               pDumpStream;
     XclImpStream*               pIn;
+
+    ByteStringVec               maNames;            /// Defined names.
 
     UINT32                      nMaxBodyLines;
     BOOL                        bEndLoading;
