@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ldapuserprofilebe.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 14:38:54 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 17:49:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,14 +98,6 @@
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif // _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
-
-#ifndef _COM_SUN_STAR_LDAP_LDAPCONNECTIONEXCEPTION_HPP_
-#include <com/sun/star/ldap/LdapConnectionException.hpp>
-#endif // _COM_SUN_STAR_LDAP_LDAPCONNECTIONEXCEPTION_HPP_
-
-#ifndef _COM_SUN_STAR_LDAP_LDAPGENERICEXCEPTION_HPP_
-#include <com/sun/star/ldap/LdapGenericException.hpp>
-#endif // _COM_SUN_STAR_LDAP_LDAPGENERICEXCEPTION_HPP_
 
 #ifndef _CPPUHELPER_COMPBASE2_HXX_
 #include <cppuhelper/compbase2.hxx>
@@ -216,6 +208,19 @@ class LdapUserProfileBe : public BackendBase
         rtl::OUString mLoggedOnUser ;
         /** DN of currently logged in user */
         rtl::OString mUserDN;
+
+
+        /**
+          Because initialising the backend requires to read some configuration,
+          there's a risk of infinite recursion (the backend initialisation
+          taking place inside the configuration initialisation).
+          To prevent this, the following members ensure access to the LDAP
+          server details cannot recurse.
+          */
+        /** Whether we're in the constructor already. */
+        static bool mCanReadConfiguration ;
+        /** Access protection for mCanReadConfiguration. */
+        static osl::Mutex mReadConfigurationLock ;
 } ;
 //------------------------------------------------------------------------------
 }}}
