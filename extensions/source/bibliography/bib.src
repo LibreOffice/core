@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:03:58 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 05:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ String  RID_BIB_STR_SECTION
     Text[ arabic ] = "äØÇÞ";
     Text[ turkish ] = "Bölüm";
     Text[ catalan ] = "Sección";
+    Text[ finnish ] = "Osio";
 };
 
 String RID_BIB_STR_FIELDSELECTION
@@ -116,6 +117,7 @@ String RID_BIB_STR_FIELDSELECTION
     Text[ turkish ] = "Alan seçimi:";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Selección de campo:";
+    Text[ finnish ] = "Kenttävalinta:";
 };
 
 String RID_BIB_STR_TABWIN_PREFIX
@@ -141,6 +143,7 @@ String RID_BIB_STR_TABWIN_PREFIX
     Text[ arabic ] = "ÌÏæá;ÇÓÊÝÓÇÑ;Sql;Sql [Native]";
     Text[ turkish ] = "Tablo;Sorgu;Sql;Sql [Native]";
     Text[ catalan ] = "Tabla;Consulta;Sql;Sql [Native]";
+    Text[ finnish ] = "Taulukko;kysely;Sql;Sql [alkuperäinen]";
 };
 String RID_BIB_STR_FRAME_TITLE
 {
@@ -165,6 +168,7 @@ String RID_BIB_STR_FRAME_TITLE
     Text[ arabic ] = "ÞÇÚÏÉ ÈíÇäÇÊ ÇáãÑÇÌÚ";
     Text[ turkish ] = "Kaynakça veritabaný";
     Text[ catalan ] = "Base de datos bibliográfica";
+    Text[ finnish ] = "Bibliografiatietokanta";
 };
 String RID_MAP_QUESTION
 {
@@ -189,4 +193,5 @@ String RID_MAP_QUESTION
     Text[ arabic ] = "åá ÊÑíÏ ÊÍÑíÑ ÊÚííä ÇáÚãæÏ¿";
     Text[ turkish ] = "Sütunlarý düzenlemek istiyor musunuz?";
     Text[ catalan ] = "¿Desea modificar el orden de las columnas?";
+    Text[ finnish ] = "Haluatko muokata sarakejärjestystä?";
 };
