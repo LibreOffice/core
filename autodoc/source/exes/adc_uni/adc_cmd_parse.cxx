@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cmd_parse.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:34:00 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:36:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,8 @@ S_LanguageInfo::do_Init( opt_iter &          it,
                     break;
         case java:  aExtensions.push_back( C_FileEnding_java );
                     break;
-        // default: do nothing.
+        default:    //  do nothing.
+                    ;
     }
 
     ++it;   // Cur is next option.

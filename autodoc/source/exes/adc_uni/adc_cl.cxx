@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:33:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@ CommandLine * CommandLine::pTheInstance_ = 0;
 
 const char * const C_sUserGuide =
 "\n\n\n"
-"               Use of Autodoc\n"
-"               --------------\n"
+"               General Use of Autodoc\n"
+"               ----------------------\n"
 "\n"
 "   Example for C++:\n"
 "\n"
@@ -92,7 +92,7 @@ const char * const C_sUserGuide =
 "        -p <ProjName> <ProjectRootDirectory>\n"
 "            -t <SourceDir_relativeToProjectRoot>\n"
 "\n"
-"   There may be several Projects specified by -p.\n"
+"   There may be several projects specified by -p.\n"
 "\n"
 "\n"
 "   Example for IDL:\n"
@@ -100,10 +100,24 @@ const char * const C_sUserGuide =
 "   -html <OutputDirectory> -name \"UDK 3.x anything\" -lg idl\n"
 "         -t <SourceDir1> <SourceDir2>\n"
 "\n"
-"\n"
 "   For both languages, instead of or in addition to -t may be\n"
 "   used -d (no subdirectories) or -f (just one file). There can\n"
-"   be multiple arguments after each of these options (-t -d -f).\n";
+"   be multiple arguments after each of these options (-t -d -f).\n"
+"\n"
+"\n"
+"           Replacing @since Tag Content\n"
+"           ----------------------------\n"
+"\n"
+"   In both languages you can give a transformation file to replace\n"
+"   entries in @since tags by different entries.\n"
+"   This file is given by the option\n"
+"       -sincefile <TransformationFilePath>\n"
+"   This option has to appear between the -html and the -lg option.\n"
+"   Example:\n"
+"   -html <OutputDirectory> -sincefile replacesince.txt\n"
+"       -name \"UDK 3.x anything\" -lg idl -t <SourceDir>\n"
+"\n"
+"\n";
 
 
 #if 0   // FUTURE
@@ -319,18 +333,17 @@ CommandLine::Get_()
     return *pTheInstance_;
 }
 
-
 bool
-CommandLine::Display_SinceTag() const
+CommandLine::DoesTransform_SinceTag() const
 {
     return pSinceTransformator->DoesTransform();
 }
 
-bool
-CommandLine::Strip_SinceTagText( String & io_sSinceTagValue ) const
-{
-    return pSinceTransformator->StripSinceTagText(io_sSinceTagValue);
-}
+//bool
+//CommandLine::Strip_SinceTagText( String & io_sSinceTagValue ) const
+//{
+//    return pSinceTransformator->StripSinceTagText(io_sSinceTagValue);
+//}
 
 const String &
 CommandLine::DisplayOf_SinceTagValue( const String & i_sVersionNumber ) const
