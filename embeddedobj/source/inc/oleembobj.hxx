@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembobj.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:02:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 09:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper3
 
     sal_Int32 m_bDisposed;
     sal_Int32 m_nObjectState;
+    sal_Int32 m_nTargetState;
     sal_Int32 m_nUpdateMode;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
