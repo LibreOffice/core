@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:53:20 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,10 +604,11 @@ void SfxObjectShell::DocInfoDlg_Impl( SfxDocumentInfo &rDocInfo )
     if ( !GetSlotState( SID_DOCTEMPLATE ) )
         aDocInfoItem.SetTemplate(FALSE);
     SfxItemSet aSet(GetPool(), SID_DOCINFO, SID_DOCINFO,
-                    SID_EXPLORER_PROPS_START, SID_EXPLORER_PROPS_START,
+                    SID_EXPLORER_PROPS_START, SID_EXPLORER_PROPS_START, SID_BASEURL, SID_BASEURL,
                     0L );
     aSet.Put( aDocInfoItem );
     aSet.Put( SfxStringItem( SID_EXPLORER_PROPS_START, aTitle ) );
+    aSet.Put( SfxStringItem( SID_BASEURL, GetMedium()->GetBaseURL() ) );
 
     // Dialog via Factory erzeugen und ausf"uhren
     SfxDocumentInfoDialog *pDlg = CreateDocumentInfoDialog(0, aSet);
@@ -1341,9 +1342,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
     String aTemplName( pInfo->GetTemplateName() );
     String aTemplFileName( pInfo->GetTemplateFileName() );
     String aFoundName;
-    uno::Reference< embed::XStorage > xTemplStor;
 
-    String aURL;
     if ( aTemplName.Len() || aTemplFileName.Len() && !IsReadOnly() )
     {
         // try to locate template, first using filename
@@ -1356,15 +1355,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         {
             String aURL;
             if( ::utl::LocalFileHelper::ConvertSystemPathToURL( aTemplFileName, GetMedium()->GetName(), aURL ) )
-            {
-                try {
-                    xTemplStor =
-                        ::comphelper::OStorageHelper::GetStorageFromURL( aURL, embed::ElementModes::READ );
-                    aFoundName = aURL;
-                }
-                catch( uno::Exception& )
-                {}
-            }
+                aFoundName = aURL;
         }
 
         if( !aFoundName.Len() && aTemplName.Len() )
@@ -1377,18 +1368,9 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
         // check existence of template storage
         aTemplFileName = aFoundName;
         BOOL bLoad = FALSE;
-        if ( !xTemplStor.is() )
-        {
-            try {
-                xTemplStor =
-                    ::comphelper::OStorageHelper::GetStorageFromURL( aURL, embed::ElementModes::READ );
-            }
-            catch( uno::Exception& )
-            {}
-        }
 
         // should the document checked against changes in the template ?
-        if ( xTemplStor.is() && pInfo->IsQueryLoadTemplate() )
+        if ( pInfo->IsQueryLoadTemplate() )
         {
             // load document info of template
             BOOL bOK = FALSE;
@@ -1449,12 +1431,16 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 //TODO: testen!
                 SfxObjectShellLock xTemplDoc = CreateObjectByFactoryName( GetFactory().GetFactoryName(), SFX_CREATE_MODE_ORGANIZER );
                 xTemplDoc->DoInitNew(0);
-                String aOldBaseURL = INetURLObject::GetBaseURL();
-                INetURLObject::SetBaseURL( INetURLObject( aTemplFileName ).GetMainURL( INetURLObject::NO_DECODE ) );
+
+                // TODO/MBA: do we need a BaseURL? Then LoadFrom must be extended!
+                //xTemplDoc->SetBaseURL( aFoundName );
+
                 // TODO/LATER: make sure that we don't use binary templates!
-                if ( xTemplDoc->LoadFrom( xTemplStor ) )
+                SfxMedium aMedium( aFoundName, STREAM_STD_READ );
+                if ( xTemplDoc->LoadFrom( aMedium ) )
                 {
                     // transfer styles from xTemplDoc to this document
+                    // TODO/MBA: make sure that no BaseURL is needed in *this* document
                     LoadStyles(*xTemplDoc);
 
                     // remember date/time of check
@@ -1462,8 +1448,6 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 //REPLACE                   pInfo->SetTemplateDate(aTemplDate);
 //REPLACE                   pInfo->Save(xDocStor);
                 }
-
-                INetURLObject::SetBaseURL( aOldBaseURL );
             }
 /*
         SfxConfigManager *pCfgMgr = SFX_CFGMANAGER();
@@ -1585,38 +1569,25 @@ SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BO
 {
     // check for own format
     SfxObjectShellRef xDoc;
-    SfxMedium *pMed = new SfxMedium( aTargetURL, STREAM_STD_READ, FALSE, 0 );
+    sal_Int32 nMode = bForWriting ? embed::ElementModes::READWRITE : embed::ElementModes::READ;
+    SfxMedium *pMed = new SfxMedium( aTargetURL, nMode, FALSE, 0 );
     const SfxFilter* pFilter = NULL;
     if( SFX_APP()->GetFilterMatcher().GuessFilter( *pMed, &pFilter ) == ERRCODE_NONE && pFilter && pFilter->IsOwnFormat() )
     {
-        delete pMed;
-        try
+        // create document
+        xDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
+        if ( xDoc.Is() )
         {
-            sal_Int32 nMode = bForWriting ? embed::ElementModes::READWRITE : embed::ElementModes::READ;
-            uno::Reference< embed::XStorage > xStorage =
-                                            ::comphelper::OStorageHelper::GetStorageFromURL( aTargetURL, nMode );
-            if ( xStorage.is() )
+            // partially load, so don't use DoLoad!
+            xDoc->DoInitNew(0);
+            // TODO/LATER: make sure that we don't use binary templates!
+            if( xDoc->LoadFrom( *pMed ) )
             {
-                // create document
-                xDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
-                if ( xDoc.Is() )
-                {
-                    // partially load, so don't use DoLoad!
-                    xDoc->DoInitNew(0);
-                    // TODO/LATER: make sure that we don't use binary templates!
-                    if( xDoc->LoadFrom( xStorage ) )
-                    {
-                        // connect to storage, abandon temp. storage
-                        xDoc->DoSaveCompleted( xStorage );
-                    }
-                    else
-                        xDoc.Clear();
-                }
+                // connect to storage, abandon temp. storage
+                xDoc->DoSaveCompleted( pMed );
             }
-        }
-        catch( uno::Exception& )
-        {
-            // TODO: may need error handling
+            else
+                xDoc.Clear();
         }
     }
     else
