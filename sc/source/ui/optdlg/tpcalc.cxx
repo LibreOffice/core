@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcalc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:28:26 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:04:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
         aEdPrec         ( this, ScResId( ED_PREC ) ),
         aSeparatorFL    ( this, ScResId( FL_SEPARATOR ) ),
         aHSeparatorFL   ( this, ScResId( FL_H_SEPARATOR ) ),
-        aDecSep         ( ScGlobal::pLocaleData->getNumDecimalSep() ),
+        aDecSep         ( GetScGlobalpLocaleData()->getNumDecimalSep() ),//CHINA001 aDecSep         ( ScGlobal::pLocaleData->getNumDecimalSep() ),
         nWhichCalc      ( GetWhich( SID_SCDOCOPTIONS ) ),
         pOldOptions     ( new ScDocOptions(
                             ((const ScTpCalcItem&)rCoreAttrs.Get(
@@ -270,8 +270,8 @@ BOOL ScTpCalcOptions::GetEps( double& rEps )
     sal_Unicode const * pBegin = aStr.GetBuffer();
     sal_Unicode const * pEnd;
     rEps = rtl_math_uStringToDouble( pBegin, pBegin + aStr.Len(),
-        ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
-        ScGlobal::pLocaleData->getNumThousandSep().GetChar(0),
+        GetScGlobalpLocaleData()->getNumDecimalSep().GetChar(0),//CHINA001 ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0),
+        GetScGlobalpLocaleData()->getNumThousandSep().GetChar(0),//CHINA001 ScGlobal::pLocaleData->getNumThousandSep().GetChar(0),
         &eStatus, &pEnd );
     BOOL bOk = ( eStatus == rtl_math_ConversionStatus_Ok && *pEnd == '\0' && rEps > 0.0 );
 
