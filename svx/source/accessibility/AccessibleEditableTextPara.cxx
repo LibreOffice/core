@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:01:27 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1325,14 +1325,16 @@ namespace accessibility
         SvxTextForwarder& rCacheTF = GetTextForwarder();
         Rectangle aRect = rCacheTF.GetCharBounds( static_cast< USHORT >( GetParagraphIndex() ), static_cast< USHORT >( nIndex ) );
 
-        // offset from parent (paragraph)
-        Rectangle aParaRect = rCacheTF.GetParaBounds( static_cast< USHORT >( GetParagraphIndex() ) );
-        aRect.Move( -aParaRect.Left(), -aParaRect.Top() );
-
         // convert to screen
         Rectangle aScreenRect = AccessibleEditableTextPara::LogicToPixel( aRect,
                                                                           rCacheTF.GetMapMode(),
                                                                           GetViewForwarder() );
+        // #109864# offset from parent (paragraph), but in screen
+        // coordinates. This makes sure the internal text offset in
+        // the outline view forwarder gets cancelled out here
+        awt::Rectangle aParaRect( getBounds() );
+        aScreenRect.Move( -aParaRect.X, -aParaRect.Y );
+
         // offset from shape/cell
         Point aOffset = GetEEOffset();
 
