@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-23 13:38:21 $
+ *  last change: $Author: ama $ $Date: 2002-06-27 11:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,9 +228,6 @@ BOOL MA_FASTCALL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
             SwColumnFrm *pTmp = new SwColumnFrm( pNeighbourCol->GetFmt() );
             pTmp->SetMaxFtnHeight( nMax );
             pTmp->InsertBefore( pCont, NULL );
-#ifndef VERTICAL_LAYOUT
-            pTmp->bVarHeight = FALSE;
-#endif
             pNeighbourCol = (SwLayoutFrm*)pNeighbourCol->GetNext();
         }
     }
@@ -380,12 +377,8 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
         return;
     }
 
-#ifdef VERTICAL_LAYOUT
     const FASTBOOL bVert = IsVertical();
     SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
-#else
-    const SzPtr pDir = pWidth;
-#endif
 
     //Ist ein Pointer da, oder sollen wir die Attribute einstellen,
     //so stellen wir auf jeden Fall die Spaltenbreiten ein. Andernfalls
@@ -395,19 +388,11 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
         pAttr = &GetFmt()->GetCol();
         if ( !bAdjustAttributes )
         {
-#ifdef VERTICAL_LAYOUT
             long nAvail = (Prt().*fnRect->fnGetWidth)();
             for ( SwLayoutFrm *pCol = (SwLayoutFrm*)Lower();
                   pCol;
                   pCol = (SwLayoutFrm*)pCol->GetNext() )
                 nAvail -= (pCol->Frm().*fnRect->fnGetWidth)();
-#else
-            long nAvail = Prt().SSize().*pDir;
-            for ( SwLayoutFrm *pCol = (SwLayoutFrm*)Lower();
-                  pCol;
-                  pCol = (SwLayoutFrm*)pCol->GetNext() )
-                nAvail -= pCol->Frm().SSize().*pDir;
-#endif
             if ( !nAvail )
                 return;
         }
@@ -416,34 +401,28 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
     //Sodele, jetzt koennen die Spalten bequem eingestellt werden.
     //Die Breiten werden mitgezaehlt, damit wir dem letzten den Rest geben
     //koennen.
-#ifdef VERTICAL_LAYOUT
     SwTwips nAvail = (Prt().*fnRect->fnGetWidth)();
-#else
-    SwTwips nAvail = Prt().SSize().*pDir;
-#endif
+    const BOOL bR2L = IsRightToLeft();
     const BOOL bLine = pAttr->GetLineAdj() != COLADJ_NONE;
     USHORT nMin = 0;
     if ( bLine )
         nMin = USHORT(20 + (pAttr->GetLineWidth() / 2));
     SwFrm *pCol = Lower();
+    if( bR2L )
+        while( pCol->GetNext() )
+            pCol = pCol->GetNext();
     long nGutter = 0;
     BOOL bOrtho = pAttr->IsOrtho() && bAdjustAttributes &&
                   pAttr->GetNumCols() > 0;
-    for ( USHORT i = 0; i < pAttr->GetNumCols(); pCol = pCol->GetNext(), ++i )
+    for ( USHORT i = 0; i < pAttr->GetNumCols();
+            pCol = bR2L ? pCol->GetPrev() : pCol->GetNext(), ++i )
     {
         if( !bOrtho )
         {
-#ifdef VERTICAL_LAYOUT
             const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ? nAvail :
             pAttr->CalcColWidth( i, USHORT( (Prt().*fnRect->fnGetWidth)() ) );
             Size aColSz = bVert ? Size( Prt().Width(), nWidth ) :
                                   Size( nWidth, Prt().Height() );
-#else
-            const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ?
-                                    nAvail :
-                              pAttr->CalcColWidth( i, USHORT(Prt().SSize().*pDir) );
-            const Size aColSz( nWidth, Prt().Height() );
-#endif
             pCol->ChgSize( aColSz );
 
         // Hierdurch werden die ColumnBodyFrms von Seitenspalten angepasst und
@@ -467,25 +446,36 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
             //Beruecksichtigung finden. Ueberall wo zwei Spalten aufeinanderstossen
             //wird jeweils rechts bzw. links ein Sicherheitsabstand von 20 plus
             //der halben Penbreite einkalkuliert.
+                USHORT nRight, nLeft;
+                if( sal_False && bR2L )
+                {
+                    nRight = pC->GetLeft();
+                    nLeft = pC->GetRight();
+                }
+                else
+                {
+                    nLeft = pC->GetLeft();
+                    nRight = pC->GetRight();
+                }
                 if ( bLine )
                 {
                     if ( i == 0 )
-                    {   aLR.SetLeft ( pC->GetLeft() );
-                        aLR.SetRight( Max(pC->GetRight(), nMin) );
+                    {   aLR.SetLeft ( nLeft );
+                        aLR.SetRight( Max(nRight, nMin) );
                     }
                     else if ( i == (pAttr->GetNumCols() - 1) )
-                    {   aLR.SetLeft ( Max(pC->GetLeft(), nMin) );
-                        aLR.SetRight( pC->GetRight() );
+                    {   aLR.SetLeft ( Max(nLeft, nMin) );
+                        aLR.SetRight( nRight );
                     }
                     else
-                    {   aLR.SetLeft ( Max(pC->GetLeft(),  nMin) );
-                        aLR.SetRight( Max(pC->GetRight(), nMin) );
+                    {   aLR.SetLeft ( Max(nLeft,  nMin) );
+                        aLR.SetRight( Max(nRight, nMin) );
                     }
                 }
                 else
                 {
-                    aLR.SetLeft ( pC->GetLeft() );
-                    aLR.SetRight( pC->GetRight());
+                    aLR.SetLeft ( nLeft );
+                    aLR.SetRight( nRight);
                 }
                 aUL.SetUpper( pC->GetUpper());
                 aUL.SetLower( pC->GetLower());
@@ -497,11 +487,7 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
     }
     if( bOrtho )
     {
-#ifdef VERTICAL_LAYOUT
         nAvail = (Prt().*fnRect->fnGetWidth)();
-#else
-        nAvail = Prt().Width();
-#endif
         long nInnerWidth = ( nAvail - nGutter )/ pAttr->GetNumCols();
         pCol = Lower();
         for( USHORT i = 0; i < pAttr->GetNumCols(); pCol = pCol->GetNext(), ++i)
@@ -516,12 +502,8 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
             }
             if( nWidth < 0 )
                 nWidth = 0;
-#ifdef VERTICAL_LAYOUT
             Size aColSz = bVert ? Size( Prt().Width(), nWidth ) :
                                   Size( nWidth, Prt().Height() );
-#else
-            const Size aColSz( nWidth, Prt().Height() );
-#endif
             pCol->ChgSize( aColSz );
             if( IsBodyFrm() )
                 ((SwLayoutFrm*)pCol)->Lower()->ChgSize( aColSz );
