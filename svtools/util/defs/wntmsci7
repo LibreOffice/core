@@ -9527,3 +9527,5 @@ _real@8@3ffeccccccccccccd000
 ?Paste@TextView@@QAEXAAV?$Reference@VXClipboard@clipboard@datatransfer@star@sun@com@@@uno@star@sun@com@@@Z
 ?GetFilterCallback@GraphicFilter@@QBE?BVLink@@XZ
 ?ImportJPEG@@YAEAAVSvStream@@AAVGraphic@@PAXJ@Z
+?GetCurrentTempURL@SvtInternalOptions@@QBE?AVOUString@rtl@@XZ
+?SetCurrentTempURL@SvtInternalOptions@@QAEXABVOUString@rtl@@@Z
