@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 07:45:31 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ chinese_traditional ] = "ªν®ζ(~T)΅G";
         Text[ arabic ] = "ΜΟζα:";
         Text[ greek ] = "Πίνακας:";
-        Text[ korean ] = "µµΗ¥:(~T)";
+        Text[ korean ] = "Η¥:(~T)";
         Text[ turkish ] = "Tablo:";
     };
     ComboBox CB_TABLES
@@ -183,7 +183,7 @@ ModalDialog DLG_DBASE_INDEXES
         Text[ chinese_traditional ] = "ªν®ζΌΠ»x΅G";
         Text[ arabic ] = "έεΗΡΣ ΜΟζα:";
         Text[ greek ] = "Ευρετήρι~α πινάκων:";
-        Text[ korean ] = "µµΗ¥ »φΐΞ:(~A)";
+        Text[ korean ] = "Η¥ »φΐΞ:(~A)";
         Text[ turkish ] = "Tablo dizinleri:";
     };
     ListBox LB_TABLEINDEXES
@@ -273,6 +273,9 @@ ModalDialog DLG_DBASE_INDEXES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/11/27 07:45:31  kz
+ *  Merge SRC614: 27.11.00 - 08:45:08 (NoBranch)
+ *
  *  Revision 1.2  2000/10/27 15:17:13  kz
  *  Merge SRC610: 27.10.00 - 17:16:55 (NoBranch)
  *
