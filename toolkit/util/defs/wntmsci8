@@ -15357,3 +15357,6 @@ _TI2?AVbad_alloc@std@@
 ?lcl_setSpinButtonValue@?A0x867cab03@toolkit@@YAXAAVIMutex@vos@@PAVWindow@@P8SpinButton@@AEXJ@ZJ@Z
 ?VCLXMenuBar_CreateInstance@@YA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@2345@@Z
 ?VCLXPopupMenu_CreateInstance@@YA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXMultiServiceFactory@lang@star@sun@com@@@2345@@Z
+?lcl_getSpinButtonValue@?A0x8a54da4f@toolkit@@YAJAAVIMutex@vos@@PBVWindow@@P8SpinButton@@BEJXZ@Z
+?lcl_modifyStyle@?A0x8a54da4f@toolkit@@YAXPAVWindow@@_JE@Z
+?lcl_setSpinButtonValue@?A0x8a54da4f@toolkit@@YAXAAVIMutex@vos@@PAVWindow@@P8SpinButton@@AEXJ@ZJ@Z
