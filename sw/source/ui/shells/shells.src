@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:47:49 $
+ *  last change: $Author: os $ $Date: 2002-12-06 14:00:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1795,6 +1795,7 @@ ToolBox RID_DRAW_TEXT_TOOLBOX
             ITEM_TOOLBAR_ATTR_CHAR_COLOR
             Hide = TRUE;
         };
+        MN_TEXT_LTR_RTL
         ToolBoxItem
         {
             Type = TOOLBOXITEM_SEPARATOR ;
