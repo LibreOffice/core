@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-07 17:33:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1010,12 +1010,12 @@ void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
     const SwSpzFrmFmts* pSpz = pDoc->GetSpzFrmFmts();
     SwCntntNode* pCNd = (SwCntntNode*)rNd.GetCntntNode();
 
-    USHORT n = 0;
-    while( n < rSaveArr.Count() )
+    while( rSaveArr.Count() >= 2 )
     {
+        USHORT n = 0;
         _SwSaveTypeCountContent aSave( rSaveArr, n );
         if( aSave.GetContent() >= nChkLen )
-            rSaveArr[ n + 1 ] -= nChkLen;
+            rSaveArr[ 1 ] -= nChkLen;
         else
         {
             SwPosition* pPos = 0;
@@ -1140,8 +1140,7 @@ void _RestoreCntntIdx( SvULongs& rSaveArr, const SwNode& rNd,
                 pPos->nContent.Assign( pCNd, Min( aSave.GetContent(), nLen ) );
             }
 
-            rSaveArr.Remove( n, 2 );
-            n -= 2;
+            rSaveArr.Remove( 0, 2 );
         }
     }
 }
