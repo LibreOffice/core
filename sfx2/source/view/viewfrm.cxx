@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 08:42:19 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3496,6 +3496,16 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
         {
             switch(nWhich)
             {
+                case SID_CURRENT_URL:
+                {
+                    // Bei internem InPlace den ContainerFrame nehmen
+                    SfxViewFrame *pFrame = this;
+                    if ( pFrame->GetParentViewFrame_Impl() )
+                        pFrame = pFrame->GetParentViewFrame_Impl();
+                    rSet.Put( SfxStringItem( nWhich, pFrame->GetActualPresentationURL_Impl() ) );
+                    break;
+                }
+
                 case SID_RECORDMACRO :
                 {
                     ::rtl::OUString sProperty = rtl::OUString::createFromAscii("DispatchRecorderSupplier");
@@ -3819,11 +3829,17 @@ SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( USHORT nId )
     return pWork;
 }
 
+/*
 void SfxViewFrame::SetChildWindow(USHORT nId, BOOL bOn)
+{
+    SetChildWindow( nId, bOn, TRUE );
+} */
+
+void SfxViewFrame::SetChildWindow(USHORT nId, BOOL bOn, BOOL bSetFocus )
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
     if ( pWork )
-        pWork->SetChildWindow_Impl( nId, bOn );
+        pWork->SetChildWindow_Impl( nId, bOn, bSetFocus );
 }
 
 //--------------------------------------------------------------------
@@ -3832,7 +3848,7 @@ void SfxViewFrame::ToggleChildWindow(USHORT nId)
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
     if ( pWork )
-        pWork->ToggleChildWindow_Impl( nId );
+        pWork->ToggleChildWindow_Impl( nId, TRUE );
 }
 
 //--------------------------------------------------------------------
@@ -3857,7 +3873,7 @@ void SfxViewFrame::ShowChildWindow( USHORT nId, BOOL bVisible )
 {
     SfxWorkWindow* pWork = GetWorkWindow_Impl( nId );
     if ( pWork )
-        pWork->ShowChildWindow_Impl(nId, bVisible);
+        pWork->ShowChildWindow_Impl(nId, bVisible, TRUE );
 }
 
 //--------------------------------------------------------------------

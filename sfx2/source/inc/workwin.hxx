@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-23 17:07:50 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,11 +333,11 @@ public:
     void                    UpdateChildWindows_Impl();
     void                    ResetChildWindows_Impl();
     void                    SetChildWindowVisible_Impl( ULONG, BOOL, USHORT );
-    void                    ToggleChildWindow_Impl(USHORT);
+    void                    ToggleChildWindow_Impl(USHORT,BOOL);
     BOOL                    HasChildWindow_Impl(USHORT);
     BOOL                    KnowsChildWindow_Impl(USHORT);
-    void                    ShowChildWindow_Impl(USHORT, BOOL bVisible=TRUE);
-    void                    SetChildWindow_Impl(USHORT, BOOL bOn);
+    void                    ShowChildWindow_Impl(USHORT, BOOL bVisible, BOOL bSetFocus);
+    void                    SetChildWindow_Impl(USHORT, BOOL bOn, BOOL bSetFocus);
     SfxChildWindow*         GetChildWindow_Impl(USHORT);
     virtual void            InitializeChild_Impl(SfxChildWin_Impl*);
     SfxSplitWindow*         GetSplitWindow_Impl(SfxChildAlignment);
