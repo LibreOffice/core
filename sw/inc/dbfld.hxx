@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:33:12 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ public:
     inline const SwDBData&  GetRealDBData() { return aDBData; }
 
     SwDBData                GetDBData(SwDoc* pDoc);
-    inline void             SetDBData(const SwDBData& rDBData) { aDBData = rDBData; }
+    void                    SetDBData(const SwDBData& rDBData); // #111840#
 
     // Name oder Inhalt
     virtual String          GetCntnt(BOOL bName = FALSE) const;
