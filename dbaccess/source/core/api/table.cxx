@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:48:12 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,7 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables,const OConfigurati
         const ::rtl::OUString& _rName,
         const ::rtl::OUString& _rType,
         const ::rtl::OUString& _rDesc) throw(SQLException)
-    :OTable_Base(_pTables,_rxConn,_rxConn->getMetaData()->storesMixedCaseQuotedIdentifiers(), _rName, _rType, _rDesc, _rSchema, _rCatalog )
+    :OTable_Base(_pTables,_rxConn,_rxConn->getMetaData().is() && _rxConn->getMetaData()->storesMixedCaseQuotedIdentifiers(), _rName, _rType, _rDesc, _rSchema, _rCatalog )
     ,OConfigurationFlushable(m_aMutex,_rTableConfig.isValid() ? _rTableConfig.cloneAsRoot() : OConfigurationTreeRoot())
     ,m_nPrivileges(0)
 {
@@ -192,7 +192,7 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables,const OConfigurati
 // -----------------------------------------------------------------------------
 ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables,  const Reference< XConnection >& _rxConn )
                 throw(SQLException)
-    :OTable_Base(_pTables,_rxConn, _rxConn->getMetaData()->storesMixedCaseQuotedIdentifiers())
+    :OTable_Base(_pTables,_rxConn, _rxConn->getMetaData().is() && _rxConn->getMetaData()->storesMixedCaseQuotedIdentifiers())
     ,OConfigurationFlushable(m_aMutex)
     ,m_nPrivileges(-1)
 {
@@ -395,10 +395,13 @@ void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const 
     if(m_pColumns->hasByName(_rName))
     {
         ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote  = getMetaData()->getIdentifierQuoteString(  );
+        ::rtl::OUString aQuote;
+        Reference<XDatabaseMetaData> xMeta = getMetaData();
+        if ( xMeta.is() )
+            aQuote = xMeta->getIdentifierQuoteString(  );
         ::rtl::OUString sComposedName;
 
-        ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sComposedName,sal_True,::dbtools::eInTableDefinitions);
+        ::dbtools::composeTableName(xMeta,m_CatalogName,m_SchemaName,m_Name,sComposedName,sal_True,::dbtools::eInTableDefinitions);
         if(!sComposedName.getLength())
             ::dbtools::throwFunctionSequenceException(*this);
 
@@ -415,7 +418,7 @@ void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const 
         if(xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
             xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sDefaultValue;
 
-        if(sNewDefaultValue != sDefaultValue)
+        if(sNewDefaultValue != sDefaultValue && getMetaData().is() )
         {
             if(sNewDefaultValue.getLength())
             {
@@ -488,9 +491,10 @@ Reference< XPropertySet > ODBTable::createEmptyObject()
 // -----------------------------------------------------------------------------
 sdbcx::OCollection* ODBTable::createColumns(const TStringVector& _rNames)
 {
+    Reference<XDatabaseMetaData> xMeta = getMetaData();
     OColumns* pCol = new OColumns(*this, m_aMutex, NULL, isCaseSensitive(), _rNames, this,this,
-                                    getMetaData()->supportsAlterTableWithAddColumn(),
-                                    getMetaData()->supportsAlterTableWithDropColumn());
+                                    xMeta.is() && xMeta->supportsAlterTableWithAddColumn(),
+                                    xMeta.is() && xMeta->supportsAlterTableWithDropColumn());
     pCol->setParent(this);
     return pCol;
 }
