@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-09 10:54:13 $
+ *  last change: $Author: sj $ $Date: 2001-03-09 13:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,15 +407,7 @@ SoundEntry::SoundEntry( const String& rString ) :
         ::cppu::convertPropertyValue( nVal, aCnt.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ) ) );
         nFileSize = (sal_uInt32)nVal;
     }
-    catch( const ::com::sun::star::ucb::ContentCreationException& )
-    {
-
-    }
-    catch( const ::com::sun::star::uno::RuntimeException& )
-    {
-
-    }
-    catch( const ::com::sun::star::lang::IllegalArgumentException& )
+    catch( ::com::sun::star::uno::Exception& )
     {
 
     }
@@ -512,15 +504,7 @@ void SoundEntry::Write( SvStream& rSt, sal_uInt32 nId )
             delete pBuf;
         }
     }
-    catch( const ::com::sun::star::ucb::ContentCreationException& )
-    {
-
-    }
-    catch( const ::com::sun::star::uno::RuntimeException& )
-    {
-
-    }
-    catch( const ::com::sun::star::lang::IllegalArgumentException& )
+    catch( ::com::sun::star::uno::Exception& )
     {
 
     }
@@ -1012,10 +996,6 @@ sal_Bool PropValue::GetPropertyValue(
                     sal_Bool bTestPropertyAvailability )
 {
     sal_Bool bRetValue = sal_True;
-
-#ifdef UNX
-    bTestPropertyAvailability = sal_True;
-#endif
     if ( bTestPropertyAvailability )
     {
         bRetValue = sal_False;
@@ -1026,9 +1006,9 @@ sal_Bool PropValue::GetPropertyValue(
             if ( aXPropSetInfo.is() )
                 bRetValue = aXPropSetInfo->hasPropertyByName( rString );
         }
-        catch(...)
+        catch( ::com::sun::star::uno::Exception& )
         {
-            //...
+            bRetValue = sal_False;
         }
     }
     if ( bRetValue )
@@ -1039,7 +1019,7 @@ sal_Bool PropValue::GetPropertyValue(
             if ( !rAny.hasValue() )
                 bRetValue = sal_False;
         }
-        catch(...)
+        catch( ::com::sun::star::uno::Exception& )
         {
             bRetValue = sal_False;
         }
@@ -1061,7 +1041,7 @@ sal_Bool PropValue::GetPropertyValue(
         if ( aXPropState.is() )
             eRetValue = aXPropState->getPropertyState( rPropertyName );
     }
-    catch(...)
+    catch( ::com::sun::star::uno::Exception& )
     {
         //...
     }
@@ -1104,12 +1084,10 @@ sal_Bool PropStateValue::ImplGetPropertyValue( const String& rString, sal_Bool b
         else
             ePropState = ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
     }
-    catch(...)
+    catch( ::com::sun::star::uno::Exception& )
     {
         bRetValue = FALSE;
     }
-    END_CATCH;
-
     return bRetValue;
 }
 
@@ -1438,7 +1416,7 @@ sal_Bool PPTWriter::ImplGetStyleSheets()
 
                     if ( aXNameAccess.is() )
                     {
-                        TRY
+                        try
                         {
                             ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >xNameAccess;
                             if ( aXNameAccess->hasByName( aXNamed->getName() ) )
@@ -1488,11 +1466,10 @@ sal_Bool PPTWriter::ImplGetStyleSheets()
                                 }
                             }
                         }
-                        CATCH_ALL()
+                        catch( ::com::sun::star::uno::Exception& )
                         {
                         //
                         }
-                        END_CATCH;
                     }
                 }
             }
@@ -3780,7 +3757,7 @@ sal_Bool PPTWriter::ImplIsAutoShape ( const ::com::sun::star::uno::Reference< ::
                                                 Rectangle& rPolyBoundRect )
 {
     sal_Bool    bIsAutoShape = FALSE;
-    TRY
+    try
     {
         sal_uInt32  i;
         sal_uInt32  nSequenceCount = 0;
@@ -3945,13 +3922,10 @@ sal_Bool PPTWriter::ImplIsAutoShape ( const ::com::sun::star::uno::Reference< ::
         if ( bIsGroup ) // the groupshape is to be removed too
             nReplace++;
     }
-
-    CATCH_ALL()
+    catch ( ::com::sun::star::uno::Exception& )
     {
         bIsAutoShape = FALSE;
     }
-    END_CATCH;
-
     return bIsAutoShape;
 }
 
@@ -4425,7 +4399,7 @@ void PPTWriter::ImplWritePage( EscherSolverContainer& aSolverContainer, PageType
             else if ( mType == "drawing.Line" )
             {
                 ::com::sun::star::awt::Rectangle aNewRect;
-                aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_POLYLINE, sal_False, aNewRect, NULL );
+                aPropOpt.CreatePolygonProperties( mXPropSet, ESCHER_CREATEPOLYGON_LINE, sal_False, aNewRect, NULL );
                 maRect = ImplMapRectangle( aNewRect );
                 maPosition = ::com::sun::star::awt::Point( maRect.Left(), maRect.Top() );
                 maSize = ::com::sun::star::awt::Size( maRect.GetWidth(), maRect.GetHeight() );
