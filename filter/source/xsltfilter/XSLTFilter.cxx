@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSLTFilter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-27 12:10:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,13 @@ void XSLTFilter::started() throw (RuntimeException)
 }
 void XSLTFilter::error(const Any& a) throw (RuntimeException)
 {
+    Exception e;
+    if ( a >>= e)
+    {
+        OString aMessage("XSLTFilter::error was called: ");
+        aMessage += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
+        OSL_ENSURE(sal_False, aMessage);
+    }
     m_bError = sal_True;
     osl_setCondition(m_cTransformed);
 }
@@ -431,7 +438,7 @@ sal_Bool XSLTFilter::exporter(
         tsource->setOutputStream(m_rOutputStream);
 
         // don't start transformer yet but wait for buffer to be filled
-        //m_tcontrol->start();
+        // m_tcontrol->start();
 
         return sal_True;
     }
