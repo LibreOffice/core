@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-24 15:09:52 $
+ *  last change: $Author: jp $ $Date: 2001-10-31 20:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
     {
         // einige Sachen muessen vorm Loeschen der "Format-Attribute" erfolgen
         SwDoc* pDoc = GetDoc();
+        USHORT nDelMsg = 0;
         switch( pAttr->Which() )
         {
         case RES_TXTATR_FLYCNT:
@@ -341,6 +342,7 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
 
         case RES_TXTATR_FTN:
             ((SwTxtFtn*)pAttr)->SetStartNode( 0 );
+            nDelMsg = RES_FOOTNOTE_DELETED;
             break;
 
         case RES_TXTATR_FIELD:
@@ -378,9 +380,24 @@ void SwTxtNode::DestroyAttr( SwTxtAttr* pAttr )
                     break;
                 }
             }
+            nDelMsg = RES_FIELD_DELETED;
             break;
 
+        case RES_TXTATR_TOXMARK:
+            nDelMsg = RES_TOXMARK_DELETED;
+            break;
+
+        case RES_TXTATR_REFMARK:
+            nDelMsg = RES_REFMARK_DELETED;
+            break;
         }
+
+        if( nDelMsg && !pDoc->IsInDtor() && GetNodes().IsDocNodes() )
+        {
+            SwPtrMsgPoolItem aMsgHint( nDelMsg, (void*)&pAttr->GetAttr() );
+            pDoc->GetUnoCallBack()->Modify( &aMsgHint, &aMsgHint );
+        }
+
         pAttr->RemoveFromPool( pDoc->GetAttrPool() );
         delete pAttr;
     }
