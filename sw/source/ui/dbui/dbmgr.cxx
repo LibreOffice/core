@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:00:00 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -2771,7 +2774,8 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
                 if(aInfoAny.hasValue())
                     xDataProperties->setPropertyValue(C2U("Info"), aInfoAny);
 
-                Reference<XStorable> xStore(xNewInstance, UNO_QUERY_THROW);
+                Reference<XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
+                Reference<XStorable> xStore(xDS->getDatabaseDocument(), UNO_QUERY_THROW);
                 String sExt = String::CreateFromAscii(".odb");
                 String sTmpName;
                 {
