@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:14:00 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,8 @@ struct SwGetCurColNumPara
 #define SW_TABCOL_NONE  0
 #define SW_TABCOL_HORI  1
 #define SW_TABCOL_VERT  2
+#define SW_TABROW_HORI  3
+#define SW_TABROW_VERT  4
 
 class SwFEShell : public SwEditShell
 {
@@ -223,13 +225,14 @@ class SwFEShell : public SwEditShell
 
     void GetStartEndCell( SwLayoutFrm *&prStart, SwLayoutFrm *&prEnd );
 
-    const SwFrm *GetBox( const Point &rPt ) const;
+    const SwFrm *GetBox( const Point &rPt, bool* pbRow = 0 ) const;
 
     //0 == in keiner Spalte
     USHORT _GetCurColNum( const SwFrm *pFrm,
                           SwGetCurColNumPara* pPara ) const;
 
     void _GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const;
+    void _GetTabRows( SwTabCols &rToFill, const SwFrm *pBox ) const;
 
     BOOL ImpEndCreate();
 
@@ -651,11 +654,17 @@ public:
     BOOL GetRowBackground( SvxBrushItem &rToFill ) const; //FALSE uneindeutig
 
     BYTE WhichMouseTabCol( const Point &rPt ) const;
-    void GetMouseTabCols( SwTabCols &ToFill, const Point &rPt ) const;
-    void SetMouseTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
-                          const Point &rPt );
     void GetTabCols( SwTabCols &rToFill ) const; //Spalten- und Randinfo.
     void SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly = TRUE );
+    void GetMouseTabCols( SwTabCols &rToFill, const Point &rPt ) const;
+    void SetMouseTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
+                          const Point &rPt );
+
+    // #i24134# adjustment of table rows via Ruler
+    void GetTabRows( SwTabCols &rToFill ) const;
+    void SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly );
+    void GetMouseTabRows( SwTabCols &rToFill, const Point &rPt ) const;
+    void SetMouseTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const Point &rPt );
 
     void ProtectCells();    //Falls eine Tabselektion besteht, wird sie ver-
                             // nichtet, wenn der Cursor nicht in Readonly darf
