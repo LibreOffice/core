@@ -29,7 +29,7 @@ Public Tablename as String
 Public Const SBSIZETEXT = &quot;The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.&quot;
 Public bDisposeDoc as Boolean
 Public bDebug as Boolean
-Public bStartUp as Boolean
+&apos;Public bStartUp as Boolean
 Public bConnectionIsovergiven as Boolean
 
 &apos; The macro can be called in 4 possible scenarios:
@@ -101,7 +101,7 @@ Dim LocList() as String
 	InitializeLabelValues()
 	bNeedFieldRefresh = True
 	SetDialogLanguage()
-	bStartUp = true
+&apos;	bStartUp = true
 	With DialogModel
 		.cmdBack.Enabled = False
 		.cmdGoOn.Enabled = False
@@ -146,7 +146,7 @@ Dim LocList() as String
 				Else
 					LocList() = AddListToList(Array(sSelectDBTable), LocList())
 					DialogModel.lstTables.StringItemList() = LocList()
-					bSelectContent = True
+&apos;					bSelectContent = True
 					DialogModel.lstTables.SelectedItems() = Array(0)
 
 				End If
@@ -194,10 +194,10 @@ End Sub
 
 Sub FormGetFields()
 Dim i as Integer
-	If bSelectContent Then
-		bSelectContent = False
-		Exit Sub
-	End If
+&apos;	If bSelectContent Then
+&apos;		bSelectContent = False
+&apos;		Exit Sub
+&apos;	End If
 	DeleteFirstListBoxEntry(&quot;lstTables&quot;, sSelectDBTable)
 	ToggleDatabasePage(False)
 	FillUpFieldsListbox(True)
