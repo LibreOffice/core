@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftploaderthread.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 09:41:08 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:08:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,14 @@ CURL* FTPLoaderThread::handle() {
     CURL* ret;
     if(!(ret = osl_getThreadKeyData(m_threadKey))) {
         ret = curl_easy_init();
+        if (ret != 0) {
+            // Make sure curl is not internally using environment variables like
+            // "ftp_proxy":
+            if (curl_easy_setopt(ret, CURLOPT_PROXY, "") != CURLE_OK) {
+                curl_easy_cleanup(ret);
+                ret = 0;
+            }
+        }
         osl_setThreadKeyData(m_threadKey,static_cast<void*>(ret));
     }
 
