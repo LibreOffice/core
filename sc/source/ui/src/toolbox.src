@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 13:01:18 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 09:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
  // Toolbox - Resourcen
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: kz $ $Date: 2000-11-29 13:01:18 $ $Revision: 1.8 $
+ // $Author: kz $ $Date: 2000-12-01 09:11:13 $ $Revision: 1.9 $
  // $Logfile:   T:/sc/source/ui/src/toolbox.srv  $ $Workfile:   TOOLBOX.SRC  $
  //==================================================================
 
@@ -151,7 +151,7 @@ String SCSTR_QHELP_POSWND
     Text[ chinese_traditional ] = "¤u§@ªí°Ï°ì";
     Text[ arabic ] = "äØÇÞ ÇáÌÏæá";
     Text[ greek ] = "Ðåñéï÷Þ ðßíáêá";
-    Text[ korean ] = "µµÇ¥ ¿µ¿ª";
+    Text[ korean ] = "½ÃÆ® ¿µ¿ª";
     Text[ turkish ] = "Tablo bölümü";
     Text[ language_user1 ] = " ";
 };
