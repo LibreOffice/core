@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:42:57 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "sqlmessage.hxx"
+#endif
 #ifndef _SV_ACCEL_HXX
 #include <vcl/accel.hxx>
 #endif
@@ -122,6 +125,8 @@
 #include <vcl/button.hxx>
 #endif
 
+
+
 //.........................................................................
 namespace dbaui
 {
@@ -151,6 +156,7 @@ namespace dbaui
         :SfxTabPage(_pParent, _rId, _rAttrSet)
         ,m_pAdminDialog(NULL)
         ,m_pItemSetHelper(NULL)
+        ,m_pFT_HeaderText(NULL)
     {
         SetExchangeSupport(sal_True);
     }
@@ -158,6 +164,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     OGenericAdministrationPage::~OGenericAdministrationPage()
     {
+        DELETEZ(m_pFT_HeaderText);
     }
 
     //-------------------------------------------------------------------------
@@ -218,6 +225,7 @@ namespace dbaui
         SFX_ITEMSET_GET(_rSet, pReadonly, SfxBoolItem, DSID_READONLY, sal_True);
         _rReadonly = !_rValid || (pReadonly && pReadonly->GetValue());
     }
+
 
     // -----------------------------------------------------------------------
     IMPL_LINK(OGenericAdministrationPage, OnControlModified, Control*, EMPTYARG)
@@ -317,6 +325,76 @@ namespace dbaui
             _bChangedSomething = sal_True;
         }
     }
+
+    void OGenericAdministrationPage::SetControlFontWeight(Window* _pWindow, FontWeight _eWeight)
+    {
+        Font aFont = _pWindow->GetControlFont();
+        aFont.SetWeight( _eWeight );
+        _pWindow->SetControlFont( aFont );
+    }
+
+    // -----------------------------------------------------------------------
+    IMPL_LINK(OGenericAdministrationPage, OnTestConnectionClickHdl, PushButton*, _pButton)
+    {
+        OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
+        sal_Bool bSuccess = sal_False;
+        if ( m_pAdminDialog )
+        {
+            m_pAdminDialog->saveDatasource();
+            OGenericAdministrationPage::implInitControls(*m_pItemSetHelper->getOutputSet(), sal_True);
+            try
+            {
+                Reference< XConnection > xConnection = m_pAdminDialog->createConnection();
+                bSuccess = xConnection.is();
+                ::comphelper::disposeComponent(xConnection);
+            }
+            catch(Exception&)
+            {
+            }
+
+            OSQLMessageBox::MessageType eImage = OSQLMessageBox::Info;
+            String aMessage,sTitle;
+            sTitle = String (ModuleRes(STR_CONNECTION_TEST));
+            if ( bSuccess )
+            {
+                aMessage = String(ModuleRes(STR_CONNECTION_SUCCESS));
+            }
+            else
+            {
+                eImage = OSQLMessageBox::Error;
+                aMessage = String(ModuleRes(STR_CONNECTION_NO_SUCCESS));
+                m_pAdminDialog->clearPassword();
+            }
+            OSQLMessageBox aMsg(this,sTitle,aMessage);
+            aMsg.Execute();
+        }
+        return 0L;
+    }
+
+    void OGenericAdministrationPage::SetHeaderText( Window* _parent, USHORT _nFTResId, USHORT _StringResId)
+    {
+//        if (!m_pFT_HeaderText)
+//        {
+            delete(m_pFT_HeaderText);
+            m_pFT_HeaderText = new FixedText(_parent, ModuleRes(_nFTResId));
+ //       }
+        String sHeaderText = String(ModuleRes(_StringResId));
+        m_pFT_HeaderText->SetText(sHeaderText);
+        SetControlFontWeight(m_pFT_HeaderText);
+//        return m_pFT_HeaderText;
+    }
+
+
+    Point OGenericAdministrationPage::MovePoint(Point _aPixelBasePoint, sal_uInt32 _XShift, sal_uInt32 _YShift)
+    {
+        Point rLogicPoint = PixelToLogic( _aPixelBasePoint, MAP_APPFONT );
+        sal_uInt32 XPos = rLogicPoint.X() + _XShift;
+        sal_uInt32 YPos = rLogicPoint.Y() + _YShift;
+        Point aNewPixelPoint = LogicToPixel(Point(XPos, YPos), MAP_APPFONT);
+        return aNewPixelPoint;
+    }
+
+
 
 //.........................................................................
 }   // namespace dbaui
