@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:10:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,6 +458,7 @@ namespace sw
 
     namespace util
     {
+        SV_IMPL_OP_PTRARR_SORT(AuthorInfos, AuthorInfo_Ptr)
 
         SwTwips MakeSafePositioningValue(SwTwips nIn)
         {
@@ -809,6 +810,123 @@ namespace sw
             ASSERT(aGrTwipSz.Width() && aGrTwipSz.Height(), "0 x 0 graphic ?");
             return aGrTwipSz;
         }
+
+        void RedlineStack::open(const SwPosition& rPos, const SfxPoolItem& rAttr)
+        {
+            ASSERT(rAttr.Which() == RES_FLTR_REDLINE, "not a redline");
+            maStack.push_back(new SwFltStackEntry(rPos,rAttr.Clone()));
+        }
+
+
+        class SameOpenRedlineType :
+            public std::unary_function<const SwFltStackEntry*, bool>
+        {
+        private:
+            SwRedlineType meType;
+        public:
+            SameOpenRedlineType(SwRedlineType eType) : meType(eType) {}
+            bool operator()(const SwFltStackEntry *pEntry) const
+            {
+                const SwFltRedline *pTest = static_cast<const SwFltRedline *>
+                    (pEntry->pAttr);
+                return (pEntry->bLocked && (pTest->eType == meType));
+            }
+        };
+
+        void RedlineStack::close(const SwPosition& rPos, SwRedlineType eType)
+        {
+            //Search from end for same type
+            myriter aResult = std::find_if(maStack.rbegin(), maStack.rend(),
+                SameOpenRedlineType(eType));
+            ASSERT(aResult != maStack.rend(), "close without open!");
+            if (aResult != maStack.rend())
+                (*aResult)->SetEndPos(rPos);
+        }
+
+
+
+        void RedlineStack::closeall(const SwPosition& rPos)
+        {
+            std::for_each(maStack.begin(), maStack.end(), CloseIfOpen(rPos));
+        }
+
+
+        void SetInDocAndDelete::operator()(SwFltStackEntry *pEntry)
+        {
+            SwPaM aRegion(pEntry->nMkNode);
+            if (
+                pEntry->MakeRegion(&mrDoc, aRegion, true) &&
+                (*aRegion.GetPoint() != *aRegion.GetMark())
+            )
+            {
+                mrDoc.SetRedlineMode(REDLINE_ON | REDLINE_SHOW_INSERT |
+                    REDLINE_SHOW_DELETE);
+                const SwFltRedline *pFltRedline = static_cast<const SwFltRedline*>
+                    (pEntry->pAttr);
+
+                if (USHRT_MAX != pFltRedline->nAutorNoPrev)
+                {
+                    SwRedlineData aData(pFltRedline->eTypePrev,
+                        pFltRedline->nAutorNoPrev, pFltRedline->aStampPrev, aEmptyStr,
+                        0);
+
+                    mrDoc.AppendRedline(new SwRedline(aData, aRegion));
+                }
+
+                SwRedlineData aData(pFltRedline->eType, pFltRedline->nAutorNo,
+                        pFltRedline->aStamp, aEmptyStr, 0);
+
+                mrDoc.AppendRedline(new SwRedline(aData, aRegion));
+                mrDoc.SetRedlineMode(REDLINE_NONE | REDLINE_SHOW_INSERT |
+                    REDLINE_SHOW_DELETE );
+            }
+            delete pEntry;
+        }
+
+
+        bool CompareRedlines::operator()(const SwFltStackEntry *pOneE,
+            const SwFltStackEntry *pTwoE) const
+        {
+            const SwFltRedline *pOne= static_cast<const SwFltRedline*>
+                (pOneE->pAttr);
+            const SwFltRedline *pTwo= static_cast<const SwFltRedline*>
+                (pTwoE->pAttr);
+
+            //Return the earlier time, if two have the same time, prioritize
+            //inserts over deletes
+            if (pOne->aStamp == pTwo->aStamp)
+                return (pOne->eType == REDLINE_INSERT && pTwo->eType != REDLINE_INSERT);
+            else
+                return (pOne->aStamp < pTwo->aStamp) ? true : false;
+        }
+
+
+        RedlineStack::~RedlineStack()
+        {
+            std::sort(maStack.begin(), maStack.end(), CompareRedlines());
+            std::for_each(maStack.begin(), maStack.end(), SetInDocAndDelete(mrDoc));
+        }
+
+        USHORT WrtRedlineAuthor::AddName( const String& rNm )
+        {
+            USHORT nRet;
+            typedef std::vector<String>::iterator myiter;
+            myiter aIter = std::find(maAuthors.begin(), maAuthors.end(), rNm);
+            if (aIter != maAuthors.end())
+                nRet = aIter - maAuthors.begin();
+            else
+            {
+                nRet = maAuthors.size();
+                maAuthors.push_back(rNm);
+            }
+            return nRet;
+        }
+/*
+        std::vector<String> WrtRedlineAuthor::GetNames()
+        {
+            return maAuthors;
+        }
+*/
     }
 }
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
