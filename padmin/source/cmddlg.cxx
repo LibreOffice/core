@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmddlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-01 15:24:11 $
+ *  last change: $Author: pl $ $Date: 2002-06-19 09:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,10 +126,16 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
         {
             fgets( pBuffer, sizeof( pBuffer ), pPipe );
             int nLen = strlen( pBuffer );
-            if( nLen > 1 && strncmp( pBuffer, "no gs in", 8 ) )
+            if( pBuffer[nLen-1] == '\n' ) // strip newline
+                pBuffer[--nLen] = 0;
+            aCommand = String( ByteString( pBuffer ), aEncoding );
+            if( ( ( aCommand.GetChar( 0 ) == '/' )
+                  || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '/' )
+                  || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '.' && aCommand.GetChar( 2 ) == '/' ) )
+                && nLen > 2
+                && aCommand.GetChar( nLen-2 ) == 'g'
+                && aCommand.GetChar( nLen-1 ) == 's' )
             {
-                pBuffer[ nLen-1 ] = 0;
-                aCommand = String( ByteString( pBuffer ), aEncoding );
                 aCommand.AppendAscii( " -q -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=\"(OUTFILE)\" -" );
                 aSysCommands.push_back( aCommand );
             }
@@ -141,10 +147,15 @@ void CommandStore::getSystemPdfCommands( ::std::list< String >& rCommands )
         {
             fgets( pBuffer, sizeof( pBuffer ), pPipe );
             int nLen = strlen( pBuffer );
-            if( nLen > 1 && strncmp( pBuffer, "no distill in", 13 ) )
+            if( pBuffer[nLen-1] == '\n' ) // strip newline
+                pBuffer[--nLen] = 0;
+            aCommand = String( ByteString( pBuffer ), aEncoding );
+            if( ( ( aCommand.GetChar( 0 ) == '/' )
+                  || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '/' )
+                  || ( aCommand.GetChar( 0 ) == '.' && aCommand.GetChar( 1 ) == '.' && aCommand.GetChar( 2 ) == '/' ) )
+                && nLen > 7
+                && aCommand.Copy( nLen - 8 ).EqualsAscii( "/distill" ) )
             {
-                pBuffer[ nLen-1 ] = 0;
-                aCommand = String( ByteString( pBuffer ), aEncoding );
                 aCommand.AppendAscii( " (TMP) ; mv `echo (TMP) | sed s/\\.ps\\$/.pdf/` \"(OUTFILE)\"" );
                 aSysCommands.push_back( aCommand );
             }
