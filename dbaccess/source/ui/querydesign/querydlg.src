@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:47:13 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:51:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,13 +95,13 @@ ModalDialog DLG_QRY_JOIN
         Text[ swedish ] = "Alternativ";
         Text[ polish ] = "Opcje";
         Text[ portuguese_brazilian ] = "Options";
-        Text[ japanese ] = "µÌß¼®İ";
-        Text[ chinese_simplified ] = "Ñ¡Ïî";
-        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ japanese ] = "ï½µï¾Œï¾Ÿï½¼ï½®ï¾";
+        Text[ chinese_simplified ] = "é€‰é¡¹";
+        Text[ chinese_traditional ] = "é¸é …";
         Text[ dutch ] = "Opties";
-        Text[ chinese_simplified ] = "Ñ¡Ïî";
+        Text[ chinese_simplified ] = "é€‰é¡¹";
         Text[ greek ] = "Åğéëïãİò";
-        Text[ korean ] = "¿É¼Ç";
+        Text[ korean ] = "ì˜µì…˜";
         Text[ arabic ] = "ÎíÇÑÇÊ";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
@@ -127,13 +127,13 @@ ModalDialog DLG_QRY_JOIN
         Text[ swedish ] = "~Inre";
         Text[ polish ] = "Wewnêtrzne z³¹czenie";
         Text[ portuguese_brazilian ] = "~Inner";
-        Text[ japanese ] = "“à•”Œ‹‡(~I)";
-        Text[ chinese_simplified ] = "ÄÚ²¿Á¬½á(~I)";
-        Text[ chinese_traditional ] = "¤º³¡³sµ²(~I)";
+        Text[ japanese ] = "å†…éƒ¨çµåˆ(~I)";
+        Text[ chinese_simplified ] = "å†…éƒ¨è¿ç»“(~I)";
+        Text[ chinese_traditional ] = "å…§éƒ¨é€£çµ(~I)";
         Text[ dutch ] = "~Binnenste";
-        Text[ chinese_simplified ] = "ÄÚ²¿Á¬½á(~I)";
+        Text[ chinese_simplified ] = "å†…éƒ¨è¿ç»“(~I)";
         Text[ greek ] = "Åóùôåñ~éêüò";
-        Text[ korean ] = "ÀÌ³Ê Á¶ÀÎ(~I)";
+        Text[ korean ] = "ì´ë„ˆ ì¡°ì¸(~I)";
         Text[ arabic ] = "ÑÈØ ÏÇÎáí";
         Text[ turkish ] = "~İç";
         Text[ language_user1 ] = " ";
@@ -158,13 +158,13 @@ ModalDialog DLG_QRY_JOIN
         Text[ swedish ] = "~Vänster";
         Text[ polish ] = "Lewe z³¹czenie";
         Text[ portuguese_brazilian ] = "~Left";
-        Text[ japanese ] = "¶Œ‹‡(~L)";
-        Text[ chinese_simplified ] = "×óÏòÁ¬½á(~L)";
-        Text[ chinese_traditional ] = "¥ª¦V³sµ²(~L)";
+        Text[ japanese ] = "å·¦çµåˆ(~L)";
+        Text[ chinese_simplified ] = "å·¦å‘è¿ç»“(~L)";
+        Text[ chinese_traditional ] = "å·¦å‘é€£çµ(~L)";
         Text[ dutch ] = "~Linker";
-        Text[ chinese_simplified ] = "×óÏòÁ¬½á(~L)";
+        Text[ chinese_simplified ] = "å·¦å‘è¿ç»“(~L)";
         Text[ greek ] = "Áñéóôåñüò";
-        Text[ korean ] = "·¹ÇÁÆ® Á¶ÀÎ(~L)";
+        Text[ korean ] = "ë ˆí”„íŠ¸ ì¡°ì¸(~L)";
         Text[ arabic ] = "ÕáÉ íÓÑì";
         Text[ turkish ] = "~Sol";
         Text[ language_user1 ] = " ";
@@ -189,13 +189,13 @@ ModalDialog DLG_QRY_JOIN
         Text[ swedish ] = "~Höger";
         Text[ polish ] = "Prawe z³¹czenie";
         Text[ portuguese_brazilian ] = "~Right";
-        Text[ japanese ] = "‰EŒ‹‡(~R)";
-        Text[ chinese_simplified ] = "ÓÒÏòÁ¬½á(~R)";
-        Text[ chinese_traditional ] = "¥k¦V³sµ²(~R)";
+        Text[ japanese ] = "å³çµåˆ(~R)";
+        Text[ chinese_simplified ] = "å³å‘è¿ç»“(~R)";
+        Text[ chinese_traditional ] = "å³å‘é€£çµ(~R)";
         Text[ dutch ] = "~Rechter";
-        Text[ chinese_simplified ] = "ÓÒÏòÁ¬½á(~R)";
+        Text[ chinese_simplified ] = "å³å‘è¿ç»“(~R)";
         Text[ greek ] = "Äåîéüò";
-        Text[ korean ] = "¶óÀÌÆ® Á¶ÀÎ(~R)";
+        Text[ korean ] = "ë¼ì´íŠ¸ ì¡°ì¸(~R)";
         Text[ arabic ] = "ÕáÉ íãäì";
         Text[ turkish ] = "~Sağ";
         Text[ language_user1 ] = " ";
@@ -220,14 +220,14 @@ ModalDialog DLG_QRY_JOIN
         Text[ swedish ] = "~Fullständig";
         Text[ polish ] = "Pe³ne z³¹czenie";
         Text[ portuguese_brazilian ] = "~Full";
-        Text[ japanese ] = "Š®‘SŒ‹‡(~F)";
-        Text[ chinese_simplified ] = "ÍêÕûÁ¬½á(~F)";
-        Text[ chinese_traditional ] = "§¹¾ãªº³sµ²(~F)";
+        Text[ japanese ] = "å®Œå…¨çµåˆ(~F)";
+        Text[ chinese_simplified ] = "å®Œæ•´è¿ç»“(~F)";
+        Text[ chinese_traditional ] = "å®Œæ•´çš„é€£çµ(~F)";
         Text[ language_user1 ] = " ";
         Text[ dutch ] = "~Volledige";
-        Text[ chinese_simplified ] = "ÍêÕûÁ¬½á(~F)";
+        Text[ chinese_simplified ] = "å®Œæ•´è¿ç»“(~F)";
         Text[ greek ] = "Ïëüêëçñïò";
-        Text[ korean ] = "Ç® Á¶ÀÎ(~F)";
+        Text[ korean ] = "í’€ ì¡°ì¸(~F)";
         Text[ arabic ] = "ÕáÉ ßÇãáÉ";
         Text[ turkish ] = "Tam";
         Text[ catalan ] = "~Completa";
@@ -274,13 +274,13 @@ ModalDialog DLG_QRY_JOIN
     Text[ swedish ] = "Egenskaper för sammanslagning (join)";
     Text[ polish ] = "W³aœciowoœci po³¹czenia";
     Text[ portuguese_brazilian ] = "Join properties";
-    Text[ japanese ] = "Œ‹‡‘®«";
-    Text[ chinese_simplified ] = "Á¬½áÊôĞÔ";
-    Text[ chinese_traditional ] = "³sµ²Äİ©Ê";
+    Text[ japanese ] = "çµåˆå±æ€§";
+    Text[ chinese_simplified ] = "è¿ç»“å±æ€§";
+    Text[ chinese_traditional ] = "é€£çµå±¬æ€§";
     Text[ dutch ] = "Verbindingseigenschappen";
-    Text[ chinese_simplified ] = "Á¬½áÊôĞÔ";
+    Text[ chinese_simplified ] = "è¿ç»“å±æ€§";
     Text[ greek ] = "Éäéüôçôåò óõíäİóìïõ";
-    Text[ korean ] = "Á¶ÀÎ ¼Ó¼º";
+    Text[ korean ] = "ì¡°ì¸ ì†ì„±";
     Text[ arabic ] = "ÎÕÇÆÕ ÇáÑÈØ";
     Text[ turkish ] = "Birleşme özellikleri";
     Text[ language_user1 ] = " ";
@@ -303,13 +303,13 @@ String STR_QUERY_INNER_JOIN
     Text[ swedish ] = "Innehåller bara de dataposter där innehållet i de länkade fälten är lika i båda tabellerna.";
     Text[ polish ] = "Zawiera tylko te rekordy, których zawartoœci w po³¹czonych polach s¹ takie same w obydwu tabelach.";
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
-    Text[ japanese ] = "—¼•û‚ÌÃ°ÌŞÙ‚ÅØİ¸‚³‚ê‚½Ì¨°ÙÄŞ‚Ì“à—e‚ªˆê’v‚·‚éÚº°ÄŞ‚¾‚¯‚ğŠÜ‚İ‚Ü‚·B";
-    Text[ chinese_simplified ] = "Ö»°üº¬Á½¸ö±í¸ñÖĞÒıÓÃ×Ö¶ÎÏàÍ¬µÄÊı¾İÌõÄ¿¡£";
-    Text[ chinese_traditional ] = "¶È¥]§t¨â­Óªí®æ¤¤³sµ²Äæ¦ì¬Û¦Pªº¸ê®Æ±ø¥Ø¡C";
+    Text[ japanese ] = "ä¸¡æ–¹ã®ï¾ƒï½°ï¾Œï¾ï¾™ã§ï¾˜ï¾ï½¸ã•ã‚ŒãŸï¾Œï½¨ï½°ï¾™ï¾„ï¾ã®å†…å®¹ãŒä¸€è‡´ã™ã‚‹ï¾šï½ºï½°ï¾„ï¾ã ã‘ã‚’å«ã¿ã¾ã™ã€‚";
+    Text[ chinese_simplified ] = "åªåŒ…å«ä¸¤ä¸ªè¡¨æ ¼ä¸­å¼•ç”¨å­—æ®µç›¸åŒçš„æ•°æ®æ¡ç›®ã€‚";
+    Text[ chinese_traditional ] = "åƒ…åŒ…å«å…©å€‹è¡¨æ ¼ä¸­é€£çµæ¬„ä½ç›¸åŒçš„è³‡æ–™æ¢ç›®ã€‚";
     Text[ dutch ] = "Bevat alleen records waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
-    Text[ chinese_simplified ] = "Ö»°üº¬Á½¸ö±í¸ñÖĞÒıÓÃ×Ö¶ÎÏàÍ¬µÄÊı¾İÌõÄ¿¡£";
+    Text[ chinese_simplified ] = "åªåŒ…å«ä¸¤ä¸ªè¡¨æ ¼ä¸­å¼•ç”¨å­—æ®µç›¸åŒçš„æ•°æ®æ¡ç›®ã€‚";
     Text[ greek ] = "Ğåñéİ÷åé ìüíï ôéò åããñáöİò ôùí äåäïìİíùí óôéò ïğïßåò ôáõôßæïíôáé ôá ğåñéå÷üìåíá ôùí óõíäåäåìİíùí ğåäßùí êáé óôïõò äıï ğßíáêåò.";
-    Text[ korean ] = "µÎ Å×ÀÌºíÀÇ ¸µÅ©µÈ ÇÊµå ³»¿ëÀÌ °°Àº ·¹ÄÚµå¸¸À» Æ÷ÇÔÇÕ´Ï´Ù.";
+    Text[ korean ] = "ë‘ í…Œì´ë¸”ì˜ ë§í¬ëœ í•„ë“œ ë‚´ìš©ì´ ê°™ì€ ë ˆì½”ë“œë§Œì„ í¬í•¨í•©ë‹ˆë‹¤.";
     Text[ arabic ] = "ıáÇ íÍÊæí ÅáÇ Úáì ÇáÓÌáÇÊ ÇáÊí íÊØÇÈŞ İíåÇ ãÍÊæíÇÊ ÇáÍŞæá ÇáãÑÊÈØÉ İí ßáÇ ÇáÌÏæáíä.";
     Text[ turkish ] = "Yalnızca her iki tablodaki ilişkili alan içeriklerinin aynı olduğu kayıtları içerir.";
     Text[ language_user1 ] = " ";
@@ -332,13 +332,13 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ swedish ] = "Innehåller ALLA dataposter från '%1' och bara de dataposter från '%2' där innehållet i de länkade fälten är lika i båda tabellerna.";
     Text[ polish ] = "Zawiera WSZYSTKIE rekordy z %1 i tylko te rekordy z %2, których zawartoœci po³¹czonych pól w obu tabelach s¹ równe.";
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
-    Text[ japanese ] = "'%1' ‚Ì‚·‚×‚Ä‚ÌÚº°ÄŞA‚¨‚æ‚Ñ—¼•û‚ÌÃ°ÌŞÙ‚ÅØİ¸‚³‚ê‚½Ì¨°ÙÄŞ‚Ì“à—e‚ªˆê’v‚·‚é '%2' ‚ÌÚº°ÄŞ‚¾‚¯‚ğŠÜ‚İ‚Ü‚·B";
-    Text[ chinese_simplified ] = "º¬ÓĞ'%1'ÖĞµÄËùÓĞÊı¾İÌõÄ¿ºÍ'%2'ÖĞÁ½¸ö±í¸ñÒıÓÃ×Ö¶ÎÏàÍ¬µÄÊı¾İÌõÄ¿¡£";
-    Text[ chinese_traditional ] = "§t¦³'%1'¤¤ªº©Ò¦³¸ê®Æ±ø¥Ø©M'%2'¤¤¨â­Óªí®æªº³sµ²Äæ¦ì¬Û¦Pªº¸ê®Æ±ø¥Ø¡C";
+    Text[ japanese ] = "'%1' ã®ã™ã¹ã¦ã®ï¾šï½ºï½°ï¾„ï¾ã€ãŠã‚ˆã³ä¸¡æ–¹ã®ï¾ƒï½°ï¾Œï¾ï¾™ã§ï¾˜ï¾ï½¸ã•ã‚ŒãŸï¾Œï½¨ï½°ï¾™ï¾„ï¾ã®å†…å®¹ãŒä¸€è‡´ã™ã‚‹ '%2' ã®ï¾šï½ºï½°ï¾„ï¾ã ã‘ã‚’å«ã¿ã¾ã™ã€‚";
+    Text[ chinese_simplified ] = "å«æœ‰'%1'ä¸­çš„æ‰€æœ‰æ•°æ®æ¡ç›®å’Œ'%2'ä¸­ä¸¤ä¸ªè¡¨æ ¼å¼•ç”¨å­—æ®µç›¸åŒçš„æ•°æ®æ¡ç›®ã€‚";
+    Text[ chinese_traditional ] = "å«æœ‰'%1'ä¸­çš„æ‰€æœ‰è³‡æ–™æ¢ç›®å’Œ'%2'ä¸­å…©å€‹è¡¨æ ¼çš„é€£çµæ¬„ä½ç›¸åŒçš„è³‡æ–™æ¢ç›®ã€‚";
     Text[ dutch ] = "Bevat ALLE records uit '%1' en alleen de records uit '%2' waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
-    Text[ chinese_simplified ] = "º¬ÓĞ'%1'ÖĞµÄËùÓĞÊı¾İÌõÄ¿ºÍ'%2'ÖĞÁ½¸ö±í¸ñÒıÓÃ×Ö¶ÎÏàÍ¬µÄÊı¾İÌõÄ¿¡£";
+    Text[ chinese_simplified ] = "å«æœ‰'%1'ä¸­çš„æ‰€æœ‰æ•°æ®æ¡ç›®å’Œ'%2'ä¸­ä¸¤ä¸ªè¡¨æ ¼å¼•ç”¨å­—æ®µç›¸åŒçš„æ•°æ®æ¡ç›®ã€‚";
     Text[ greek ] = "Ğåñéİ÷åé ÏËÅÓ ôéò åããñáöİò ôïõ ğßíáêá '%1' êáé ôéò åããñáöİò ôïõ ğßíáêá '%2' óôéò ïğïßåò ôáõôßæïíôáé ôá ğåñéå÷üìåíá ôùí óõíäåäåìİíùí ğåäßùí ôùí ";
-    Text[ korean ] = "Å×ÀÌºí'%1'¿¡´Â ¸ğµç ·¹ÄÚµå, Å×ÀÌºí '%2'¿¡´Â µÎ Å×ÀÌºíÀÇ ¸µÅ©µÈ ÇÊµå ³»¿ëÀÌ °°Àº ·¹ÄÚµå¸¸ÀÌ Æ÷ÇÔµË´Ï´Ù .";
+    Text[ korean ] = "í…Œì´ë¸”'%1'ì—ëŠ” ëª¨ë“  ë ˆì½”ë“œ, í…Œì´ë¸” '%2'ì—ëŠ” ë‘ í…Œì´ë¸”ì˜ ë§í¬ëœ í•„ë“œ ë‚´ìš©ì´ ê°™ì€ ë ˆì½”ë“œë§Œì´ í¬í•¨ë©ë‹ˆë‹¤ .";
     Text[ arabic ] = "íÍÊæí Úáì ßá ÓÌáÇÊ '%1'¡ æÓÌáÇÊ '%2' ÇáÊí ÊÊØÇÈŞ İíåÇ ãÍÊæíÇÊ ÇáÍŞæá ÇáãÑÊÈØÉ İí ßáÇ ÇáÌÏæáíä İŞØ.";
     Text[ turkish ] = "'%1' tablosundaki kayıtların TAMAMINI ve '%2' tablosundaki kayıtlardan yalnızca her iki tablodaki ilişkili alan içerikleri aynı olan kayıtları içerir.";
     Text[ language_user1 ] = " ";
@@ -361,19 +361,20 @@ String STR_QUERY_FULL_JOIN
     Text[ swedish ] = "Innehåller ALLA dataposter från '%1' och från '%2'.";
     Text[ polish ] = "Zawiera WSZYSTKIE rekordy z %1' i z %2'.";
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
-    Text[ japanese ] = "'%1' ‚Æ '%2' ‚Ì‚·‚×‚Ä‚ÌÚº°ÄŞ‚ğŠÜ‚İ‚Ü‚·B";
-    Text[ chinese_simplified ] = "º¬ÓĞ '%1'ºÍ'%2'ÄÚÈ«²¿µÄÊı¾İÌõÄ¿";
-    Text[ chinese_traditional ] = "§t¦³ '%1'©M'%2'¤º¥ş³¡ªº¸ê®Æ±ø¥Ø";
+    Text[ japanese ] = "'%1' ã¨ '%2' ã®ã™ã¹ã¦ã®ï¾šï½ºï½°ï¾„ï¾ã‚’å«ã¿ã¾ã™ã€‚";
+    Text[ chinese_simplified ] = "å«æœ‰ '%1'å’Œ'%2'å†…å…¨éƒ¨çš„æ•°æ®æ¡ç›®";
+    Text[ chinese_traditional ] = "å«æœ‰ '%1'å’Œ'%2'å…§å…¨éƒ¨çš„è³‡æ–™æ¢ç›®";
     Text[ dutch ] = "Bevat ALLE records uit '%1' en '%2'.";
-    Text[ chinese_simplified ] = "º¬ÓĞ '%1'ºÍ'%2'ÄÚÈ«²¿µÄÊı¾İÌõÄ¿";
+    Text[ chinese_simplified ] = "å«æœ‰ '%1'å’Œ'%2'å†…å…¨éƒ¨çš„æ•°æ®æ¡ç›®";
     Text[ greek ] = "Ğåñéİ÷åé ÏËÅÓ ôéò åããñáöİò ôùí '%1' êáé '%2'.";
-    Text[ korean ] = "Å×ÀÌºí'%1' ¿Í '%2'ÀÇ ¸ğµç ·¹ÄÚµå¸¦ Æ÷ÇÔÇÕ´Ï´Ù.";
+    Text[ korean ] = "í…Œì´ë¸”'%1' ì™€ '%2'ì˜ ëª¨ë“  ë ˆì½”ë“œë¥¼ í¬í•¨í•©ë‹ˆë‹¤.";
     Text[ arabic ] = "íÍÊæí Úáì ßá ÇáÓÌáÇÊ ãä '%1' æ '%2'.";
     Text[ turkish ] = "'%1' ve '%2' tablolarındaki TÜM kayıtları içerir.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Contiene TODOS los registros de datos de '%1' y de '%2'";
     Text[ finnish ] = "Beinhaltet ALLE Datensätze aus '%1' und aus '%2'.";
 };
+
 
 
 
