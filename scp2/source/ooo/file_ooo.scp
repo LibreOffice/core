@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.68 $
+*  $Revision: 1.69 $
 *
-*  last change: $Author: rt $ $Date: 2005-01-27 19:48:17 $
+*  last change: $Author: rt $ $Date: 2005-01-28 17:25:51 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1695,6 +1695,20 @@ File gid_File_Oo_Typedetection_Types_Xcs
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Typedetection;
     Name = "/registry/schema/org/openoffice/TypeDetection/Types.xcs";
+End
+
+File gid_File_Oo_Typedetection_UISort_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Typedetection;
+    Name = "/registry/schema/org/openoffice/TypeDetection/UISort.xcs";
+End
+
+File gid_File_Oo_TypeDetection_UISort_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Typedetection;
+    Name = "/registry/data/org/openoffice/TypeDetection/UISort.xcu";
 End
 
 File gid_File_Oo_Ucb_Configuration_Xcs
