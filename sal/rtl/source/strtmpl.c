@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: th $ $Date: 2001-03-16 14:57:57 $
+ *  last change: $Author: th $ $Date: 2001-03-16 16:38:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,11 +158,10 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode )( const IMPL_RTL_STRCODE* pStr )
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCODE* pStr,
                                                             sal_Int32 nLen )
 {
-    sal_Int32 h;
+    sal_Int32 h = nLen;
 
     if ( nLen < 16 )
     {
-        h = 0;
         while ( nLen > 0 )
         {
             h = (h*37) + IMPL_RTL_USTRCODE( *pStr );
@@ -173,11 +172,11 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCO
     else
     {
         sal_Int32               nSkip;
-        const IMPL_RTL_STRCODE* pEndStr = pStr+nLen-4;
+        const IMPL_RTL_STRCODE* pEndStr = pStr+nLen-5;
 
         /* only sample some characters */
-        /* the first 3, some characters between, and the last 3 */
-        h = IMPL_RTL_USTRCODE( *pStr );
+        /* the first 3, some characters between, and the last 5 */
+        h = (h*39) + IMPL_RTL_USTRCODE( *pStr );
         pStr++;
         h = (h*39) + IMPL_RTL_USTRCODE( *pStr );
         pStr++;
@@ -188,7 +187,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCO
             nSkip = nLen / 4;
         else
             nSkip = nLen / 8;
-        nLen -= 6;
+        nLen -= 8;
         while ( nLen > 0 )
         {
             h = (h*39) + IMPL_RTL_USTRCODE( *pStr );
@@ -196,6 +195,10 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( hashCode_WithLength )( const IMPL_RTL_STRCO
             nLen -= nSkip;
         }
 
+        h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
+        pEndStr++;
+        h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
+        pEndStr++;
         h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
         pEndStr++;
         h = (h*39) + IMPL_RTL_USTRCODE( *pEndStr );
