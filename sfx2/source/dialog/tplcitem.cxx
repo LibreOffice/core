@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tplcitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-07 13:17:20 $
+ *  last change: $Author: os $ $Date: 2001-09-12 11:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,10 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
                 DBG_ASSERT(pStateItem != 0, "BoolItem erwartet");
                 nWaterCanState = pStateItem->GetValue() ? 1 : 0;
             }
-            nUserEventId = Application::PostUserEvent( STATIC_LINK(
-                        this, SfxTemplateControllerItem, SetWaterCanStateHdl_Impl ) );
+            //not necessary if the last event is still on the way
+            if(!nUserEventId)
+                nUserEventId = Application::PostUserEvent( STATIC_LINK(
+                            this, SfxTemplateControllerItem, SetWaterCanStateHdl_Impl ) );
             break;
         }
         case SID_STYLE_EDIT:
