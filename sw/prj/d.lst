@@ -1,55 +1,18 @@
-..\inc\sw.lst %_DEST%\inc%_EXT%\sw.lst
 mkdir: %_DEST%\inc%_EXT%\sw
-mkdir: %_DEST%\inc%_EXT%\uno
-mkdir: %_DEST%\inc%_EXT%\uno\one
-..\inc\swinter.h %_DEST%\ODK\inc%_EXT%\swinter.h
-..\inc\orntenum.hxx %_DEST%\inc%_EXT%\sw\orntenum.hxx
-..\inc\horiornt.hxx %_DEST%\inc%_EXT%\sw\horiornt.hxx
-..\%__SRC%\bin\sweb.res %_DEST%\bin%_EXT%\sweb.res
-..\%__SRC%\bin\*.ex$ %_DEST%\bin%_EXT%
-..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 touch: ..\%__SRC%\misc\sw.hid %_DEST%\bin%_EXT%\sw.hid
+..\inc\swdll.hxx %_DEST%\inc%_EXT%\sw\swdll.hxx
+..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 ..\%__SRC%\bin\soffice.pdb %_DEST%\bin%_EXT%\soffice.pdb
 ..\%__SRC%\bin\swslots.tlb %_DEST%\bin%_EXT%\swslots.tlb
 ..\%__SRC%\bin\wswslots.tlb %_DEST%\bin%_EXT%\wswslots.tlb
 ..\%__SRC%\bin\sw?????.dll %_DEST%\bin%_EXT%\sw?????.dll
 ..\%__SRC%\bin\sw?????.res %_DEST%\bin%_EXT%\sw?????.res
 ..\%__SRC%\bin\sw?????.res %_DEST%\bin%_EXT%\sw?????.res
-..\%__SRC%\lib\swinter.lib %_DEST%\lib%_EXT%\swinter.lib
-..\%__SRC%\misc\sw.csv %_DEST%\inc%_EXT%\sw.csv
 ..\%__SRC%\lib\swlib.lib %_DEST%\lib%_EXT%\swlib.lib
 ..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
-..\inc\swdll.hxx %_DEST%\inc%_EXT%\swdll.hxx
-..\%__SRC%\lib\swweblib.lib %_DEST%\lib%_EXT%\swweblib.lib
-hedabu: ..\inc\swwebdll.hxx %_DEST%\inc%_EXT%\sw\swwebdll.hxx
-hedabu: ..\inc\swdll.hxx %_DEST%\inc%_EXT%\sw\swdll.hxx
-hedabu: ..\inc\swinter.h %_DEST%\inc%_EXT%\sw\swinter.h
-hedabu: ..\%__SRC%\inc\sw\swobject.hxx %_DEST%\inc%_EXT%\sw\swobject.hxx
-hedabu: ..\%__SRC%\inc\sw\swtxtbl.hxx %_DEST%\inc%_EXT%\sw\swtxtbl.hxx
-hedabu: ..\%__SRC%\inc\sw\swtxfld.hxx %_DEST%\inc%_EXT%\sw\swtxfld.hxx
-hedabu: ..\%__SRC%\inc\sw\swdoccol.hxx %_DEST%\inc%_EXT%\sw\swdoccol.hxx
-hedabu: ..\%__SRC%\inc\sw\swtxtdoc.hxx %_DEST%\inc%_EXT%\sw\swtxtdoc.hxx
-hedabu: ..\%__SRC%\inc\sw\swtype.hxx %_DEST%\inc%_EXT%\sw\swtype.hxx
-hedabu: ..\%__SRC%\inc\sw\swtxtsel.hxx %_DEST%\inc%_EXT%\sw\swtxtsel.hxx
-hedabu: ..\%__SRC%\inc\sw\swtxview.hxx %_DEST%\inc%_EXT%\sw\swtxview.hxx
-hedabu: ..\%__SRC%\inc\sw\swservc.hxx %_DEST%\inc%_EXT%\sw\swservc.hxx
-hedabu: ..\%__SRC%\inc\sw\swmod.hxx %_DEST%\inc%_EXT%\sw\swmod.hxx
-hedabu: ..\%__SRC%\inc\sw\swobject.h %_DEST%\inc%_EXT%\uno\one\swobject.h
-hedabu: ..\%__SRC%\inc\sw\swtxtbl.h %_DEST%\inc%_EXT%\uno\one\swtxtbl.h
-hedabu: ..\%__SRC%\inc\sw\swtxfld.h %_DEST%\inc%_EXT%\uno\one\swtxfld.h
-hedabu: ..\%__SRC%\inc\sw\swdoccol.h %_DEST%\inc%_EXT%\uno\one\swdoccol.h
-hedabu: ..\%__SRC%\inc\sw\swtxtdoc.h %_DEST%\inc%_EXT%\uno\one\swtxtdoc.h
-hedabu: ..\%__SRC%\inc\sw\swtype.h %_DEST%\inc%_EXT%\uno\one\swtype.h
-hedabu: ..\%__SRC%\inc\sw\swtxtsel.h %_DEST%\inc%_EXT%\uno\one\swtxtsel.h
-hedabu: ..\%__SRC%\inc\sw\swtxview.h %_DEST%\inc%_EXT%\uno\one\swtxview.h
-hedabu: ..\%__SRC%\inc\sw\swservc.h %_DEST%\inc%_EXT%\uno\one\swservc.h
-hedabu: ..\%__SRC%\inc\sw\swmod.h %_DEST%\inc%_EXT%\uno\one\swmod.h
-
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
