@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-05 16:44:47 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:40:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,18 @@
 #include <drafts/com/sun/star/accessibility/XAccessibleValue.hpp>
 #endif
 
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+
 class ScTabViewShell;
 
+typedef cppu::ImplHelper1<::drafts::com::sun::star::accessibility::XAccessibleValue>
+                    ScAccessibleCellBaseImpl;
+
 class ScAccessibleCellBase
-    :   public  ::drafts::com::sun::star::accessibility::XAccessibleValue,
-        public  ScAccessibleContextBase
+    :   public ScAccessibleContextBase,
+        public ScAccessibleCellBaseImpl
 {
 public:
     //=====  internal  ========================================================
@@ -92,23 +99,15 @@ protected:
     virtual ~ScAccessibleCellBase();
 public:
 
-    ///=====  XInterface  ======================================================
+    ///=====  XInterface  =====================================================
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
-                    const ::com::sun::star::uno::Type & rType )
-                    throw(::com::sun::star::uno::RuntimeException);
+        ::com::sun::star::uno::Type const & rType )
+        throw (::com::sun::star::uno::RuntimeException);
 
-    /** Increase the reference count.
-    */
-    virtual void SAL_CALL
-                acquire(void)
-                    throw ();
+    virtual void SAL_CALL acquire() throw ();
 
-    /** Decrease the reference count.
-    */
-    virtual void SAL_CALL
-                release(void)
-                    throw ();
+    virtual void SAL_CALL release() throw ();
 
     ///=====  XAccessibleComponent  ============================================
 
@@ -162,10 +161,9 @@ public:
 
     ///=====  XTypeProvider  ===================================================
 
-    /** Returns a sequence of all supported interfaces.
-    */
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
-        getTypes(void)
+    /// returns the possible types
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL
+        getTypes()
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a implementation id.

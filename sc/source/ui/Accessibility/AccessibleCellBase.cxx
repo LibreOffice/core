@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-05 16:46:42 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
 #endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 
 #include <float.h>
 
@@ -124,36 +127,6 @@ ScAccessibleCellBase::~ScAccessibleCellBase()
 {
 }
 
-    //=====  XInterface  ======================================================
-
-uno::Any SAL_CALL
-    ScAccessibleCellBase::queryInterface(
-    const uno::Type & rType )
-    throw(uno::RuntimeException)
-{
-    SC_QUERYINTERFACE( XAccessibleValue )
-
-    return ScAccessibleContextBase::queryInterface( rType );
-}
-
-/** Increase the reference count.
-*/
-void SAL_CALL
-    ScAccessibleCellBase::acquire(void)
-    throw ()
-{
-    OWeakObject::acquire();
-}
-
-/** Decrease the reference count.
-*/
-void SAL_CALL
-    ScAccessibleCellBase::release(void)
-    throw ()
-{
-    OWeakObject::release();
-}
-
     //=====  XAccessibleComponent  ============================================
 
 sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
@@ -171,6 +144,27 @@ sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
             bVisible = sal_False;
     }
     return bVisible;
+}
+
+    //=====  XInterface  =====================================================
+
+uno::Any SAL_CALL ScAccessibleCellBase::queryInterface( uno::Type const & rType )
+    throw (uno::RuntimeException)
+{
+    uno::Any aAny (ScAccessibleCellBaseImpl::queryInterface(rType));
+    return aAny.hasValue() ? aAny : ScAccessibleContextBase::queryInterface(rType);
+}
+
+void SAL_CALL ScAccessibleCellBase::acquire()
+    throw ()
+{
+    ScAccessibleContextBase::acquire();
+}
+
+void SAL_CALL ScAccessibleCellBase::release()
+    throw ()
+{
+    ScAccessibleContextBase::release();
 }
 
     //=====  XAccessibleContext  ==============================================
@@ -283,20 +277,10 @@ uno::Any SAL_CALL
 
     //=====  XTypeProvider  ===================================================
 
-uno::Sequence< uno::Type> SAL_CALL ScAccessibleCellBase::getTypes(void)
+uno::Sequence< uno::Type > SAL_CALL ScAccessibleCellBase::getTypes()
         throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    uno::Sequence< uno::Type>
-        aTypeSequence = ScAccessibleContextBase::getTypes();
-    sal_Int32 nOldSize(aTypeSequence.getLength());
-    aTypeSequence.realloc(nOldSize + 1);
-    uno::Type* pTypes = aTypeSequence.getArray();
-
-    pTypes[nOldSize] = ::getCppuType((const uno::Reference<
-            XAccessibleValue>*)0);
-
-    return aTypeSequence;
+    return comphelper::concatSequences(ScAccessibleCellBaseImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
 uno::Sequence<sal_Int8> SAL_CALL
@@ -308,7 +292,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     if (aId.getLength() == 0)
     {
         aId.realloc (16);
-        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
+        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
     }
     return aId;
 }
