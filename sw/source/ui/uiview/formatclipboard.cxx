@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatclipboard.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-05 10:37:41 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 08:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,9 @@
 #ifndef _FMTROWSPLT_HXX
 #include <fmtrowsplt.hxx>
 #endif
-
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>           // fuer die UndoIds
+#endif
 
 //#define FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES 1
 
@@ -527,7 +529,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
     }
 
     rWrtShell.StartAction();
-    USHORT nUndoId = rWrtShell.StartUndo();
+    rWrtShell.StartUndo(UNDO_INSATTR);
 
     if(pPool) //to find the styles we need the pool
     {
@@ -609,7 +611,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
     if( m_pTableItemSet && nSelectionType & (SwWrtShell::SEL_TBL | SwWrtShell::SEL_TBL_CELLS) )
         lcl_setTableAttributes( *m_pTableItemSet, rWrtShell );
 
-    rWrtShell.EndUndo( nUndoId );
+    rWrtShell.EndUndo(UNDO_INSATTR);
     rWrtShell.EndAction();
 
     if(!m_bPersistentCopy)
