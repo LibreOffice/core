@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:16:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 09:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,9 @@ public:
     virtual void GetFocus (void);
     virtual void LoseFocus (void);
     virtual SdPage* GetActualPage (void);
+
+    /// inherited from sd::ViewShell
+    virtual SdPage* getCurrentPage() const;
 
     void ExecCtrl (SfxRequest& rRequest);
     virtual void GetCtrlState (SfxItemSet &rSet);
