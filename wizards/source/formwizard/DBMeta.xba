@@ -4,7 +4,8 @@
 Option Explicit
 
 Public sDatabaseList()
-
+Public iCommandTypes() as Integer
+Public CurCommandType as Integer
 
 Sub GetDatabaseNames()
 	If oDBContext.HasElements Then
@@ -23,13 +24,14 @@ Dim DBIndex as Integer
 		DBIndex = oDialogModel.lstDatabases.SelectedItems(0)
 		sDBName = sDatabaseList(DBIndex)
 		If GetConnection(sDBName) Then
-		bGetMetaData = GetDBMetaData()
+			bGetMetaData = GetDBMetaData()
 		End If
 		If bGetMetaData Then
 			With oDialogModel
 				.lstTables.Enabled = True
 				.lblTables.Enabled = True
 				.lstTables.StringItemList() = AddListToList(TableNames(), QueryNames())
+				iCommandTypes() = CreateCommandTypeList()
 				.lstFields.StringItemList() = NullList()
 				.lstSelFields.StringItemList() = NullList()
 			End With
@@ -47,9 +49,9 @@ Dim bExitLoop as Boolean
 Dim bGetConnection as Boolean
 Dim iMsg as Integer
 Dim Nulllist()
-&apos;	If Not IsNull(oDBConnection) Then
-&apos;		oDBConnection.Dispose()
-&apos;	End If
+	If Not IsNull(oDBConnection) Then
+		oDBConnection.Dispose()
+	End If
 	oDatabase = oDBContext.GetByName(sDBName)
 	If Not oDatabase.IsPasswordRequired Then
 		oDBConnection = oDBContext.GetByName(sDBName).GetConnection(&quot;&quot;,&quot;&quot;)
@@ -60,7 +62,7 @@ Dim Nulllist()
 		On Local Error Goto NOCONNECTION
 		Do
 			bExitLoop = True
-			oDBConnection = oDataSource.ConnectWithCompletion(oInteractionHandler) 
+			oDBConnection = oDataSource.ConnectWithCompletion(oInteractionHandler)
 			NOCONNECTION:
 			bGetConnection = Err = 0
 			If bGetConnection Then
@@ -76,7 +78,7 @@ Dim Nulllist()
 				CLERROR:
 			End If
 		Loop Until bExitLoop
-		On Local Error Goto 0		
+		On Local Error Goto 0
 		If Not bGetConnection Then
 			oDialogModel.lstDatabases.SelectedItems() = Nulllist()
 			oDialogModel.lstTables.StringItemList() = NullList()
@@ -90,6 +92,7 @@ End Function
 
 Function GetDBMetaData()
 	If oDBContext.HasElements Then
+		printdbgInfo oDBConnection
 		Tablenames() = oDBConnection.Tables.ElementNames()
 		Querynames() = oDBConnection.Queries.ElementNames()
 		GetDBMetaData = True
@@ -107,10 +110,9 @@ Dim Found as Boolean
 Dim i as Integer
 Dim sFieldName as String
 Dim n as Integer
-
+Dim WidthIndex as Integer
 	MaxIndex = Ubound(oDialogModel.lstSelFields.StringItemList())
-	Dim ColumnMap(MaxIndex)as Integer
-	
+	Dim ColumnMap(MaxIndex)as Integer	
 	FieldNames() = oDialogModel.lstSelFields.StringItemList()
 
 	&apos; Build a structure which maps the position of a selected field (within the selection) to the the column position within
@@ -132,10 +134,9 @@ Dim n as Integer
 		sFieldname = FieldNames(n)
 		iType = oColumns.GetByName(sFieldName).Type
 		FieldMetaValues(n,0) = iType
-		&apos; Todo: Geht das nicht etwas performanter?
-		FieldMetaValues(n,1) = GetValueoutofList(iType, WidthList(),1)
-		FieldMetaValues(n,2) = GetValueoutofList(iType, WidthList(),2)
-		FieldMetaValues(n,3) = GetValueoutofList(iType, WidthList(),4)
+		FieldMetaValues(n,1) = GetValueoutofList(iType, WidthList(),1, WidthIndex)		
+		FieldMetaValues(n,2) = WidthList(WidthIndex,2)
+		FieldMetaValues(n,3) = WidthList(WidthIndex,4)
 	Next
 	ReDim oDBShapeList(MaxIndex) as Object
 	ReDim oTCShapeList(MaxIndex) as Object
@@ -181,11 +182,7 @@ Sub CreateDBForm()
 	oDBForm.Name = &quot;Standard&quot;
 	oDBForm.DataSourceName = sDBName
 	oDBForm.Command = TableName
-	If bIsQuery Then
-		oDBForm.CommandType = 1 &apos; Abfrage
-	else
-		oDBForm.CommandType = 0 &apos; Tabelle
-	End If
+	oDBForm.CommandType = CurCommandType
 End Sub
 
 
@@ -209,7 +206,7 @@ Dim m as Integer
 		Next m
 		s = s + 1
 	Next n
-	FillUpFieldsListbox()
+	FillUpFieldsListbox(True)
 End Sub
 
 
@@ -217,5 +214,24 @@ Sub RemoveBinaryFieldsFromWidthList()
 Dim MaxIndex as Integer
 	MaxIndex = Ubound(WidthList(),1) - Ubound(ImgWidthList(),1) - 1
 	ReDim Preserve WidthList(MaxIndex, 4)
-	FillUpFieldsListbox()
-End Sub</script:module>
+	FillUpFieldsListbox(True)
+End Sub
+
+
+Function CreateCommandTypeList()
+Dim MaxTableIndex as Integer
+Dim MaxQueryIndex as Integer
+Dim i as Integer
+Dim a as Integer
+	MaxTableIndex = Ubound(TableNames()
+	MaxQueryIndex = Ubound(QueryNames()
+Dim LocCommandTypes(MaxTableIndex + MaxQueryIndex + 1)
+	For i = 0 To MaxTableIndex
+		LocCommandTypes(i) = com.sun.star.sdb.CommandType.TABLE
+	Next i  	
+	a = i + 1
+	For i = 0 To MaxQueryIndex
+		LocCommandTypes(a) = com.sun.star.sdb.CommandType.Query
+	Next i
+	CreateCommandTypeList() = LocCommandTypes()
+End Function</script:module>

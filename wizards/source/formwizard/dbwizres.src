@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:26:14 $
+ *  last change: $Author: bc $ $Date: 2001-07-11 13:16:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1317,9 +1317,9 @@ String RID_DB_FORM_WIZARD_START + 5
 
 String RID_DB_FORM_WIZARD_START + 6
 {
-    Text = ": Tabellenauswahl";
-    Text [ english_us ] = ": Table Selection";
-    Text[ portuguese ] = ": Selecção de tabela";
+    Text = "Tabellen oder Abfragen";
+    Text [ english_us ] = "Tables or Queries";
+    Text[ portuguese ] = "Tables or Queries";
     Text[ russian ] = ": Âûáîğ òàáëèöû";
     Text[ dutch ] = ": tabel selecteren";
     Text[ french ] = " : Sélection de table";
@@ -2017,9 +2017,9 @@ String RID_DB_FORM_WIZARD_START + 31
 
 String RID_DB_FORM_WIZARD_START + 32
 {
-    Text = "Beschriftungen";
-    Text [ english ] = "Alignment";
-    Text [ english_us ] = "Labels";
+    Text = "Ausrichtung der Beschriftungsfelder";
+    Text [ english ] = "Alignment of the labels";
+    Text [ english_us ] = "Alignment of the labels";
     Text[ portuguese ] = "Alignment";
     Text[ russian ] = "Ïîäïèñè";
     Text[ greek ] = "Alignment";
@@ -2037,15 +2037,16 @@ String RID_DB_FORM_WIZARD_START + 32
     Text[ chinese_simplified ] = "±êÇ©";
     Text[ chinese_traditional ] = "¼ĞÅÒ";
     Text[ turkish ] = "Alignment";
+    Text[ language_user1 ] = "Überschrift einer Option Button Gruppe ";
     Text[ arabic ] = "Alignment";
     Text[ catalan ] = "Alignment";
 };
 
 String RID_DB_FORM_WIZARD_START + 33
 {
-    Text = "Beschriftungsfelder linksbündig ausrichten";
-    Text [ english ] = "Align Labels on left Edge";
-    Text [ english_us ] = "Align labels to left edge";
+    Text = "Linksbündig";
+    Text [ english ] = "To left edge";
+    Text [ english_us ] = "To left edge";
     Text[ portuguese ] = "Align Labels on left Edge";
     Text[ russian ] = "Âûğîâíÿòü ïîëÿ ïîäïèñåé ïî ëåâîìó êğàş";
     Text[ greek ] = "Align Labels on left Edge";
@@ -2063,15 +2064,16 @@ String RID_DB_FORM_WIZARD_START + 33
     Text[ chinese_simplified ] = "±êÇ©×Ö¶ÎÏò×ó¶ÔÆë";
     Text[ chinese_traditional ] = "¼ĞÅÒÄæ¦ì¾a¥ª¹ï»ô";
     Text[ turkish ] = "Align Labels on left Edge";
+    Text[ language_user1 ] = "Label eines Option Buttons";
     Text[ arabic ] = "Align Labels on left Edge";
     Text[ catalan ] = "Align Labels on left Edge";
 };
 
 String RID_DB_FORM_WIZARD_START + 34
 {
-    Text = "Beschriftungsfelder rechtsbündig ausrichten";
-    Text [ english ] = "Align Labels on right Edge";
-    Text [ english_us ] = "Align labels to right edge";
+    Text = "Rechtsbündig";
+    Text [ english ] = "To right edge";
+    Text [ english_us ] = "To right edge";
     Text[ portuguese ] = "Align Labels on right Edge";
     Text[ russian ] = "Âûğîâíÿòü ïîëÿ ïîäïèñåé ïî ïğàâîìó êğàş";
     Text[ greek ] = "Align Labels on right Edge";
@@ -2089,6 +2091,7 @@ String RID_DB_FORM_WIZARD_START + 34
     Text[ chinese_simplified ] = "±êÇ©×Ö¶ÎÏòÓÒ¶ÔÆë";
     Text[ chinese_traditional ] = "¼ĞÅÒÄæ¦ì¾a¥k¹ï»ô";
     Text[ turkish ] = "Align Labels on right Edge";
+    Text[ language_user1 ] = "Label eines Option Buttons";
     Text[ arabic ] = "Align Labels on right Edge";
     Text[ catalan ] = "Align Labels on right Edge";
 };

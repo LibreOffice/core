@@ -36,8 +36,6 @@ Dim sMsgDatetime_TimeComponent as String
 Public sGoOn as String
 Public sReady as String
 Public sMsgNoConnection as String
-Public sReduceDialog as String
-Public sHeightenDialog as String
 Public sWriterFilterName as String		
 Public sWriterTemplateFiltername as String		
 
@@ -76,8 +74,8 @@ Sub SetDialogLanguage ()
 		.cmdHelp.Label = GetResText(RID_COMMON + 20)
 		sGoOn = GetResText(RID_COMMON + 3)
 		.cmdGoOn.Label = sGoOn
-		.lblDatabases.Label = GetResText(RID_COMMON + 4)
-		.lblTables.Label = GetResText(RID_FORM + 11)
+		.lblDatabases.Label = GetResText(RID_FORM + 11)
+		.lblTables.Label = GetResText(RID_FORM + 6)
 
 		.lblFields.Label = GetResText(RID_FORM + 12)
 		.lblSelFields.Label = GetResText(RID_FORM + 13)
@@ -99,21 +97,15 @@ Sub SetDialogLanguage ()
 		.optTiled.Label = GetResText(RID_FORM + 56)
 		.optArea.Label = GetResText(RID_FORM + 57)
 
-		.cmdAlign0.ImageURL = FormPath &amp; &quot;Align_0.bmp&quot;
-		.cmdAlign0.HelpText = GetResText(RID_FORM + 33)
-
-		.cmdAlign2.ImageURL = FormPath &amp; &quot;Align_2.bmp&quot;
-		.cmdAlign2.HelpText = GetResText(RID_FORM + 34)
-
-		.cmdBorder0.ImageURL = FormPath &amp; &quot;Border_0.bmp&quot;
-		.cmdBorder0.HelpText = GetResText(RID_FORM + 29)
-
-		.cmdBorder1.ImageURL = FormPath &amp; &quot;Border_1.bmp&quot;
-		.cmdBorder1.HelpText = GetResText(RID_FORM + 30)
-
-		.cmdBorder2.ImageURL = FormPath &amp; &quot;Border_2.bmp&quot;
-		.cmdBorder2.HelpText = GetResText(RID_FORM + 31)
-
+		.optBorder0.Label = GetResText(RID_FORM + 29)
+		.optBorder1.Label = GetResText(RID_FORM + 30)
+		.optBorder2.Label = GetResText(RID_FORM + 31)
+		.optBorder1.State = 1
+		
+		.optAlign0.Label = GetResText(RID_FORM + 33)
+		.optAlign2.Label = GetResText(RID_FORM + 34)
+		.optAlign0.State = 1
+		
 		.cmdArrange1.ImageURL = FormPath &amp; &quot;Arrange_1.bmp&quot;
 		.cmdArrange1.HelpText = GetResText(RID_FORM + 36)
 	
@@ -128,12 +120,6 @@ Sub SetDialogLanguage ()
 
 		.cmdArrange5.ImageURL = FormPath &amp; &quot;Arrange_5.bmp&quot;
 		.cmdArrange5.HelpText = GetResText(RID_FORM + 39)
-		
-		sHeightenDialog = GetResText(RID_FORM + 66)
-		sReduceDialog = GetResText(RID_FORM + 65)
-
-		.cmdSwitchHeight.HelpText = sReduceDialog
-		.cmdSwitchHeight.Label = CHR(9653)
 
 		sWriterFilterName = GetResText(RID_FORM + 70)
 		sWriterTemplateFilterName = GetResText(RID_FORM + 71)
@@ -240,7 +226,6 @@ Sub InitializeWidthList()
 	WidthList(14,3) = False
 	WidthList(14,4) = &quot;TimeField&quot;
 	
-&apos; Todo: Die folgenden Felder auffüllen!	
 	WidthList(15,0) = com.sun.star.sdbc.DataType.TIMESTAMP		&apos; =  93;
 	WidthList(15,1) = 20
 &apos; Todo: Dieses Control ist keine cDatebox sondern Kollektion aus Time und Datefield

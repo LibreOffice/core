@@ -7,7 +7,6 @@
 &apos; 		Was passiert, wenn Felder jenseits der Ränder positioniert werden?
 &apos; Todo: Die ObjektArrays oDBShapeList() und oTCShaplist könnten 3-Dimensional sein mit dem Model und dem Control 
 &apos; in den anderen beiden Dimensionen
-&apos; Todo: doppelte Liste für Tabellen und Abfragen mit der Angabe des Contenttypes
 
 Public oProgressbar as Object
 Public ProgressValue as Integer
@@ -171,7 +170,7 @@ Dim oModel as Object
 Dim i as Integer
 Dim oCurModel as Object
 	oModel = oEvent.Source.Model
-	SwitchBorderButtons(Val(Right(oModel.Name,1)))	
+	SwitchBorderMode(Val(Right(oModel.Name,1)))	
 	ToggleLayoutPage(False)
 &apos;	oDocument.LockControllers
 
@@ -199,7 +198,7 @@ Dim i as Integer
 Dim oCurModel as Object
 Dim oModel as Object
 	oModel = oEvent.Source.Model
-	SwitchAlignButtons(Val(Right(oModel.Name,1)))
+	SwitchAlignMode(Val(Right(oModel.Name,1)))
 	ToggleLayoutPage(False)
 &apos;	oDocument.LockControllers()
 	If OldAlignMode &lt;&gt; CurAlignMode Then
@@ -241,9 +240,9 @@ End Sub
 Sub	ToggleBorderGroup(bDoEnable as Boolean)
 	With oDialogModel
 		.hlnBorderLayout.Enabled = bDoEnable
-		.cmdBorder0.Enabled = bDoEnable	 	&apos; 0: No border
-		.cmdBorder1.Enabled = bDoEnable		&apos; 1: 3D border
-		.cmdBorder2.Enabled = bDoEnable		&apos; 2: simple border
+		.optBorder0.Enabled = bDoEnable	 	&apos; 0: No border
+		.optBorder1.Enabled = bDoEnable		&apos; 1: 3D border
+		.optBorder2.Enabled = bDoEnable		&apos; 2: simple border
 	End With
 End Sub
 
@@ -254,8 +253,8 @@ Sub	ToggleAlignGroup(ByVal bDoEnable as Boolean)
 			bDoEnable = CurArrangement &lt;&gt; cTabled
 		End If
 		.hlnAlign.Enabled = bDoEnable
-		.cmdAlign0.Enabled = bDoEnable
-		.cmdAlign2.Enabled = bDoEnable			&apos;
+		.optAlign0.Enabled = bDoEnable
+		.optAlign2.Enabled = bDoEnable			&apos;
 	End With
 End Sub
 
@@ -307,22 +306,14 @@ Sub SwitchArrangementButtons(ByVal LocArrangement as Integer)
 End Sub
 
 
-Sub SwitchBorderButtons(ByVal LocBorderType as Integer)
+Sub SwitchBorderMode(ByVal LocBorderType as Integer)
 	OldBorderType = CurBorderType
 	CurBorderType = LocBorderType
-&apos;	If OldArrangement &lt;&gt; 0 Then
-		DlgFormDB.GetControl(&quot;cmdBorder&quot; &amp; OldBorderType).Model.State = 0
-&apos;	End If
-	DlgFormDB.GetControl(&quot;cmdBorder&quot; &amp; CurBorderType).Model.State = 1
 End Sub
 
 
-Sub SwitchAlignButtons(ByVal LocAlignMode as Integer)
+Sub SwitchAlignMode(ByVal LocAlignMode as Integer)
 	OldAlignMode = CurAlignMode
 	CurAlignMode = LocAlignMode
-&apos;	If OldAlignMode &lt;&gt; 0 Then
-		DlgFormDB.GetControl(&quot;cmdAlign&quot; &amp; OldAlignMode).Model.State = 0
-&apos;	End If
-	DlgFormDB.GetControl(&quot;cmdAlign&quot; &amp; CurAlignMode).Model.State = 1
 End Sub
 </script:module>
