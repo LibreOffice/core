@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:49:21 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,14 +182,14 @@ String STR_NO_MIRROR
     Text [ danish ] = "spejlvend ikke" ;
     Text [ portuguese ] = "Não reflectir" ;
     Text [ portuguese_brazilian ] = "nicht Spiegeln" ;
-    Text[ chinese_simplified ] = "²»·´Ó³";
+    Text[ chinese_simplified ] = "²»·­×ª";
     Text[ russian ] = "íå îòğàæàòü";
     Text[ polish ] = "Nie przerzucaj";
     Text[ japanese ] = "”½“]‚µ‚È‚¢";
-    Text[ chinese_traditional ] = "¤£¤Ï¬M";
+    Text[ chinese_traditional ] = "¤£Â½Âà";
     Text[ arabic ] = "ÚÏã ÇáÇäÚßÇÓ";
     Text[ dutch ] = "niet spiegelen";
-    Text[ chinese_simplified ] = "²»·´Ó³";
+    Text[ chinese_simplified ] = "²»·­×ª";
     Text[ greek ] = "Íá ìçí ãßíåé áíôáíÜêëáóç";
     Text[ korean ] = "´ëÄª ¾ÈÇÔ";
     Text[ turkish ] = "Yansıtma";
@@ -208,14 +208,14 @@ String STR_VERT_MIRROR
     Text [ danish ] = "spejlvend lodret" ;
     Text [ portuguese ] = "Reflectir na vertical" ;
     Text [ portuguese_brazilian ] = "vertikal Spiegeln" ;
-    Text[ chinese_simplified ] = "´¹Ö±·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "´¹Ö±·­×ª";
     Text[ russian ] = "Îòğàçèòü ïî âåğòèêàëè";
     Text[ polish ] = "Przerzuæ w pionie";
     Text[ japanese ] = "¶‰E”½“]";
-    Text[ chinese_traditional ] = "««ª½¤Ï¬M";
+    Text[ chinese_traditional ] = "««ª½Â½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ ÑÃÓí";
     Text[ dutch ] = "verticaal spiegelen";
-    Text[ chinese_simplified ] = "´¹Ö±·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "´¹Ö±·­×ª";
     Text[ greek ] = "ïñéæüíôéá áíáóôñïöŞ";
     Text[ korean ] = "¼öÁ÷ ´ëÄª";
     Text[ turkish ] = "Dikey yansıt";
@@ -234,14 +234,14 @@ String STR_HORI_MIRROR
     Text [ danish ] = "spejlvend vandret" ;
     Text [ portuguese ] = "Reflectir na horizontal" ;
     Text [ portuguese_brazilian ] = "horizontal Spiegeln" ;
-    Text[ chinese_simplified ] = "Ë®Æ½·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "Ë®Æ½·­×ª";
     Text[ russian ] = "Îòğàçèòü ïî âåğòèêàëè";
     Text[ polish ] = "Przerzuæ w poziomie";
     Text[ japanese ] = "ã‰º”½“]";
-    Text[ chinese_traditional ] = "¤ô¥­¤Ï¬M";
+    Text[ chinese_traditional ] = "¤ô¥­Â½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ ÃİŞí";
     Text[ dutch ] = "horizontaal spiegelen";
-    Text[ chinese_simplified ] = "Ë®Æ½·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "Ë®Æ½·­×ª";
     Text[ greek ] = "ïñéæüíôéá áíáóôñïöŞ";
     Text[ korean ] = "¼öÆò ´ëÄª";
     Text[ turkish ] = "Yatay yansıt";
@@ -260,14 +260,14 @@ String STR_BOTH_MIRROR
     Text [ danish ] = "spejlvend lodret og vandret" ;
     Text [ portuguese_brazilian ] = "vert. und horizontal Spiegeln" ;
     Text [ portuguese ] = "Reflectir na vertical e na horizontal" ;
-    Text[ chinese_simplified ] = "´¹Ö±ºÍË®Æ½·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "´¹Ö±ºÍË®Æ½·­×ª";
     Text[ russian ] = "Îòğàçèòü ïî âåğòèêàëè è ãîğèçîíòàëè";
     Text[ polish ] = "Przerzuæ w pionie i w poziomie";
     Text[ japanese ] = "ã‰º‚Æ¶‰E‚É”½“]";
-    Text[ chinese_traditional ] = "««ª½©M¤ô¥­¤Ï¬M";
+    Text[ chinese_traditional ] = "««ª½©M¤ô¥­Â½Âà";
     Text[ arabic ] = "ÇäÚßÇÓ ÑÃÓí æÃİŞí";
     Text[ dutch ] = "Hoizontaal en verticaal spiegelen";
-    Text[ chinese_simplified ] = "´¹Ö±ºÍË®Æ½·½Ïò·´Ó³";
+    Text[ chinese_simplified ] = "´¹Ö±ºÍË®Æ½·­×ª";
     Text[ greek ] = "ïñéæüíôéá êáé êáôáêüñõöç áíáóôñïöŞ";
     Text[ korean ] = "¼öÆò°ú ¼öÁ÷ ´ëÄª";
     Text[ turkish ] = "Dikey ve yatay yansıt";
@@ -286,14 +286,14 @@ String STR_MIRROR_TOGGLE
     Text [ spanish ] = "+ reflejar horizontalmente en las páginas pares" ;
     Text [ french ] = "+ refléter horizontalement sur les pages paires" ;
     Text [ dutch ] = "+ op even pagina's horizontaal spiegelen" ;
-    Text[ chinese_simplified ] = "+ Ë®Æ½·½Ïò·´Ó³µ½Å¼ÊıÒ³Ãæ";
+    Text[ chinese_simplified ] = "+ Ë®Æ½·­×ªµ½Å¼ÊıÒ³Ãæ";
     Text[ russian ] = " +îòğàçèòü ïî ãîğèçîíòàëè íà ÷åòíûõ ñòğàíèöàõ";
     Text[ polish ] = "+ przerzuæ w poziomie na stronach parzystych";
     Text[ japanese ] = "+ ‹ô”Íß°¼Ş‚Éã‰º”½“]";
-    Text[ chinese_traditional ] = "+ ¤ô¥­¤Ï¬M¨ì°¸¼Æ­¶­±";
+    Text[ chinese_traditional ] = "+ ¤ô¥­Â½Âà¨ì°¸¼Æ­¶­±";
     Text[ arabic ] = "+ ÇäÚßÇÓ ÃİŞí Úáì ÇáÕİÍÇÊ ÇáÒæÌíÉ";
     Text[ dutch ] = "+ op even pagina's horizontaal spiegelen";
-    Text[ chinese_simplified ] = "+ Ë®Æ½·½Ïò·´Ó³µ½Å¼ÊıÒ³Ãæ";
+    Text[ chinese_simplified ] = "+ Ë®Æ½·­×ªµ½Å¼ÊıÒ³Ãæ";
     Text[ greek ] = "+ ïñéæüíôéá áíôáíÜêëáóç óå ìïíİò óåëßäåò";
     Text[ korean ] = "+ Á÷¸é¿¡¼­ ¼öÆòÀ¸·Î ´ëÄª";
     Text[ turkish ] = "+ çift numaralı sayfalarda yatay yansıt";
