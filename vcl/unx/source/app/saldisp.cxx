@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-23 17:21:32 $
+ *  last change: $Author: oisin $ $Date: 2001-01-31 15:00:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,6 +1157,27 @@ final void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
 #ifdef DBG_UTIL
         hRefWindow_         = (XLIB_Window)ILLEGAL_POINTER;
 #endif
+#if defined(_USE_PRINT_EXTENSION_)
+
+      pScreen_            = ScreenOfDisplay( pDisp_, nScreen_ );
+      hRootWindow_        = RootWindowOfScreen( pScreen_ );
+      pRootVisual_        = pVisual_;
+
+      XSetWindowAttributes aXWAttributes;
+      aXWAttributes.border_pixel              = 0;
+      aXWAttributes.background_pixel          = 0;
+      aXWAttributes.colormap                  = hXColmap;
+      hRefWindow_                             = XCreateWindow( pDisp_,
+                                                               hRootWindow_,
+                                                               0, 0, 16, 16, 0,
+                                                               pVisual_->GetDepth(),
+                                                               InputOutput,
+                                                               pVisual_->GetVisual(),
+                                                               CWBorderPixel|CWBackPixel|CWColormap,
+                                                               &aXWAttributes );
+
+#endif
+
         hInvert50_          = None;
         bLocal_             = TRUE; /* always true for xprinter */
         mbLocalIsValid      = TRUE; /* yes bLocal_ is initialized */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-23 17:33:29 $
+ *  last change: $Author: oisin $ $Date: 2001-01-31 15:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #include <string.h>
 #include <stdio.h>
 #include <errno.h>
+#ifdef FREEBSD
+#include <sys/types.h>
+#endif
 #include <sys/shm.h>
 #include <prex.h>
 #include <postx.h>
@@ -459,8 +462,19 @@ XImage* SalBitmap::ImplCreateXImage( SalDisplay *pSalDisp, long nDepth, const Sa
 }
 
 // -----------------------------------------------------------------------------
+#ifdef _USE_PRINT_EXTENSION_
+BOOL SalBitmap::ImplCreateFromDrawable(  SalDisplay* pDisplay, Drawable aDrawable, long nDrawableDepth,
+                                        long nX, long nY, long nWidth, long nHeight )
+{
+    Destroy();
 
-BOOL SalBitmap::ImplCreateFromDrawable( Drawable aDrawable, long nDrawableDepth,
+    if( aDrawable && nWidth && nHeight && nDrawableDepth )
+        mpDDB = new ImplSalDDB( pDisplay, aDrawable, nDrawableDepth, nX, nY, nWidth, nHeight );
+
+    return( mpDDB != NULL );
+}
+#else
+BOOL SalBitmap::ImplCreateFromDrawable(  Drawable aDrawable, long nDrawableDepth,
                                         long nX, long nY, long nWidth, long nHeight )
 {
     Destroy();
@@ -470,9 +484,64 @@ BOOL SalBitmap::ImplCreateFromDrawable( Drawable aDrawable, long nDrawableDepth,
 
     return( mpDDB != NULL );
 }
-
 // -----------------------------------------------------------------------------
+#endif
 
+#ifdef _USE_PRINT_EXTENSION_
+void SalBitmap::ImplDraw( SalDisplay *pDisplay, Drawable aDrawable, long nDrawableDepth,
+                          const SalTwoRect& rTwoRect, const GC& rGC ) const
+{
+    if( !mpDDB || !mpDDB->ImplMatches( nDrawableDepth, rTwoRect ) )
+    {
+        if( mpDDB )
+        {
+            // do we already have a DIB? if not, create aDIB from current DDB first
+            if( !mpDIB )
+            {
+                ( (SalBitmap*) this )->mpDIB = ImplCreateDIB( mpDDB->ImplGetPixmap(),
+                                                              mpDDB->ImplGetDepth(),
+                                                              0, 0,
+                                                              mpDDB->ImplGetWidth(),
+                                                              mpDDB->ImplGetHeight() );
+            }
+
+            delete mpDDB, ( (SalBitmap*) this )->mpDDB = NULL;
+        }
+
+        if( mpCache )
+            mpCache->ImplRemove( const_cast<SalBitmap*>(this) );
+
+        SalTwoRect aTwoRect( rTwoRect );
+
+        // create new DDB from DIB
+        if( aTwoRect.mnSrcWidth == aTwoRect.mnDestWidth &&
+            aTwoRect.mnSrcHeight == aTwoRect.mnDestHeight )
+        {
+            const Size aSize( GetSize() );
+
+            aTwoRect.mnSrcX = aTwoRect.mnSrcY = aTwoRect.mnDestX = aTwoRect.mnDestY = 0;
+            aTwoRect.mnSrcWidth = aTwoRect.mnDestWidth = aSize.Width();
+            aTwoRect.mnSrcHeight = aTwoRect.mnDestHeight = aSize.Height();
+        }
+
+        XImage* pImage = ImplCreateXImage( pDisplay,
+                nDrawableDepth, aTwoRect );
+
+        if( pImage )
+        {
+            ( (SalBitmap*) this )->mpDDB = new ImplSalDDB( pDisplay, pImage, aDrawable, aTwoRect );
+            delete[] pImage->data, pImage->data = NULL;
+            XDestroyImage( pImage );
+
+            if( mpCache )
+                mpCache->ImplAdd( const_cast<SalBitmap*>(this), mpDDB->ImplGetMemSize() );
+        }
+    }
+
+    if( mpDDB )
+        mpDDB->ImplDraw( pDisplay, aDrawable, nDrawableDepth, rTwoRect, rGC );
+}
+#else
 void SalBitmap::ImplDraw( Drawable aDrawable, long nDrawableDepth,
                           const SalTwoRect& rTwoRect, const GC& rGC ) const
 {
@@ -526,6 +595,7 @@ void SalBitmap::ImplDraw( Drawable aDrawable, long nDrawableDepth,
     if( mpDDB )
         mpDDB->ImplDraw( aDrawable, nDrawableDepth, rTwoRect, rGC );
 }
+#endif
 
 // -----------------------------------------------------------------------------
 
@@ -554,8 +624,10 @@ BOOL SalBitmap::Create( const SalBitmap& rSalBmp )
     }
     else if(  rSalBmp.mpDDB )
     {
+#ifndef _USE_PRINT_EXTENSION_
         ImplCreateFromDrawable( rSalBmp.mpDDB->ImplGetPixmap(), rSalBmp.mpDDB->ImplGetDepth(),
                                 0, 0, rSalBmp.mpDDB->ImplGetWidth(), rSalBmp.mpDDB->ImplGetHeight() );
+#endif
     }
 
     return( ( !rSalBmp.mpDIB && !rSalBmp.mpDDB ) ||
@@ -667,13 +739,22 @@ void SalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, BOOL bReadOnly )
 // - ImplSalDDB -
 // --------------
 
-ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable, const SalTwoRect& rTwoRect ) :
+ImplSalDDB::ImplSalDDB(
+#ifdef _USE_PRINT_EXTENSION_
+            SalDisplay* pDisplay,
+#endif
+            XImage* pImage, Drawable aDrawable, const SalTwoRect& rTwoRect ) :
     maPixmap    ( 0 ),
     maTwoRect   ( rTwoRect ),
     mnDepth     ( pImage->depth )
 {
+#if !defined(_USE_PRINT_EXTENSION_)
     SalDisplay* pSalDisp = GetSalData()->GetCurDisp();
     Display*    pXDisp = pSalDisp->GetDisplay();
+#else
+    Display*    pXDisp = pDisplay->GetDisplay();
+#endif
+
 
     if( maPixmap = XCreatePixmap( pXDisp, aDrawable, ImplGetWidth(), ImplGetHeight(), ImplGetDepth() ) )
     {
@@ -697,11 +778,19 @@ ImplSalDDB::ImplSalDDB( XImage* pImage, Drawable aDrawable, const SalTwoRect& rT
 
 // -----------------------------------------------------------------------------
 
-ImplSalDDB::ImplSalDDB( Drawable aDrawable, long nDrawableDepth, long nX, long nY, long nWidth, long nHeight ) :
+ImplSalDDB::ImplSalDDB(
+#ifdef _USE_PRINT_EXTENSION_
+            SalDisplay* pDisplay,
+#endif
+            Drawable aDrawable, long nDrawableDepth, long nX, long nY, long nWidth, long nHeight ) :
     mnDepth( nDrawableDepth )
 {
+#if !defined(_USE_PRINT_EXTENSION_)
     SalDisplay* pSalDisp = GetSalData()->GetCurDisp();
     Display*    pXDisp = pSalDisp->GetDisplay();
+#else
+    Display*    pXDisp = pDisplay->GetDisplay();
+#endif
 
     if( maPixmap = XCreatePixmap( pXDisp, aDrawable, nWidth, nHeight, nDrawableDepth ) )
     {
@@ -718,8 +807,13 @@ ImplSalDDB::ImplSalDDB( Drawable aDrawable, long nDrawableDepth, long nX, long n
         }
 
         aGC = XCreateGC( pXDisp, maPixmap, nValues, &aValues );
+#ifdef _USE_PRINT_EXTENSION_
+        ImplDraw( pDisplay, aDrawable, nDrawableDepth, maPixmap, mnDepth,
+                  nX, nY, nWidth, nHeight, 0, 0, aGC );
+#else
         ImplDraw( aDrawable, nDrawableDepth, maPixmap, mnDepth,
                   nX, nY, nWidth, nHeight, 0, 0, aGC );
+#endif
         XFreeGC( pXDisp, aGC );
 
         maTwoRect.mnSrcX = maTwoRect.mnSrcY = maTwoRect.mnDestX = maTwoRect.mnDestY = 0;
@@ -766,24 +860,43 @@ BOOL ImplSalDDB::ImplMatches( long nDepth, const SalTwoRect& rTwoRect ) const
 
 // -----------------------------------------------------------------------------
 
-void ImplSalDDB::ImplDraw( Drawable aDrawable, long nDrawableDepth, const SalTwoRect& rTwoRect, const GC& rGC ) const
+void ImplSalDDB::ImplDraw(
+#ifdef _USE_PRINT_EXTENSION_
+                SalDisplay* pDisplay,
+#endif
+                Drawable aDrawable, long nDrawableDepth, const SalTwoRect& rTwoRect, const GC& rGC ) const
 {
+#ifdef _USE_PRINT_EXTENSION_
+    ImplDraw( pDisplay, maPixmap, mnDepth, aDrawable, nDrawableDepth,
+              rTwoRect.mnSrcX - maTwoRect.mnSrcX, rTwoRect.mnSrcY - maTwoRect.mnSrcY,
+              rTwoRect.mnDestWidth, rTwoRect.mnDestHeight,
+              rTwoRect.mnDestX, rTwoRect.mnDestY, rGC );
+#else
     ImplDraw( maPixmap, mnDepth, aDrawable, nDrawableDepth,
               rTwoRect.mnSrcX - maTwoRect.mnSrcX, rTwoRect.mnSrcY - maTwoRect.mnSrcY,
               rTwoRect.mnDestWidth, rTwoRect.mnDestHeight,
               rTwoRect.mnDestX, rTwoRect.mnDestY, rGC );
+#endif
 }
 
 // -----------------------------------------------------------------------------
 
-void ImplSalDDB::ImplDraw( Drawable aSrcDrawable, long nSrcDrawableDepth,
+void ImplSalDDB::ImplDraw(
+#ifdef _USE_PRINT_EXTENSION_
+                        SalDisplay* pDisplay,
+#endif
+                        Drawable aSrcDrawable, long nSrcDrawableDepth,
                            Drawable aDstDrawable, long nDstDrawableDepth,
                            long nSrcX, long nSrcY,
                            long nDestWidth, long nDestHeight,
                            long nDestX, long nDestY, const GC& rGC )
 {
+#if !defined(_USE_PRINT_EXTENSION_)
     SalDisplay* pSalDisp = GetSalData()->GetCurDisp();
     Display*    pXDisp = pSalDisp->GetDisplay();
+#else
+    Display*    pXDisp = pDisplay->GetDisplay();
+#endif
 
     if( 1 == nSrcDrawableDepth )
     {

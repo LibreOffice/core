@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: cp $ $Date: 2000-11-17 18:42:12 $
+#   last change: $Author: oisin $ $Date: 2001-01-31 15:01:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,14 +99,18 @@ SLOFILES=	\
         $(SLO)$/xlfd_smpl.obj	\
         $(SLO)$/salgdi3.obj
 
-.IF "$(PSPRINT)" == ""
+.IF "$(PSPRINT)" != ""
+SLOFILES+=$(SLO)$/salprnpsp.obj
+.ELIF "$(USE_XPRINT)" == "TRUE"
+CFLAGS+=-D_USE_PRINT_EXTENSION_=1
+SLOFILES+=$(SLO)$/xprintext.obj
+.ELSE
 SLOFILES+=\
         $(SLO)$/salprn.obj 		\
         $(SLO)$/salpimpl.obj 	\
         $(SLO)$/salconfig.obj
-.ELSE
-SLOFILES+=$(SLO)$/salprnpsp.obj
 .ENDIF
+
 .IF "$(OS)"=="SOLARIS"
 SLOFILES+=$(SLO)$/cdeint.obj
 ENVCFLAGS+=-DUSE_CDE

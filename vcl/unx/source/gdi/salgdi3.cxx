@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-23 17:49:52 $
+ *  last change: $Author: oisin $ $Date: 2001-01-31 15:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 
-#if !defined(USE_PSPRINT) && !defined(PRINTER_DUMMY)
+#if !defined(USE_PSPRINT) && !defined(PRINTER_DUMMY) && !defined(_USE_PRINT_EXTENSION_)
 #define Font XLIB_Font
 #define Region XLIB_Region
 #include <xprinter/xp.h>
@@ -176,7 +176,9 @@ void SalGraphicsData::FaxPhoneComment( const sal_Unicode* pStr, USHORT nLen ) co
             aPhone = "PhoneNumber(";
             aPhone += aPhoneNumber;
             aPhone += ")\n";
+#if !defined(_USE_PRINT_EXTENSION_)
             XpPSComment( GetDisplay()->GetDisplay(), aPhone.GetBuffer() );
+#endif
 #else
             *m_pPhoneNr = String( aPhoneNumber, gsl_getSystemTextEncoding() );
 #endif
@@ -456,13 +458,22 @@ SalGraphicsData::SelectFont()
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
         values.graphics_exposures   = True;
         values.foreground           = nTextPixel_;
-
+#ifdef _USE_PRINT_EXTENSION_
+                values.background = xColormap_->GetWhitePixel();
+#endif
+#ifdef _USE_PRINT_EXTENSION_
         pFontGC_ = XCreateGC( pDisplay, hDrawable_,
                                 GCSubwindowMode | GCFillRule
-                              | GCGraphicsExposures | GCForeground,
+                              | GCGraphicsExposures | GCBackground | GCForeground,
                               &values );
     }
-
+#else
+            pFontGC_ = XCreateGC( pDisplay, hDrawable_,
+                                                            GCSubwindowMode | GCFillRule
+                                                          | GCGraphicsExposures | GCForeground,
+                                                          &values );
+        }
+#endif
     if( !bFontGC_ )
     {
         XSetForeground( pDisplay, pFontGC_, nTextPixel_ );
@@ -658,7 +669,7 @@ XPrinterDrawText16( Display* pDisplay, Drawable nDrawable, GC nGC,
         {
             // XXX FIXME this is broken, because nX and nY is not sufficiently updated
             XSetFont( pDisplay, nGC, pTextItem[ nItem ].font );
-#ifndef USE_PSPRINT
+#if !defined(USE_PSPRINT) && !defined(_USE_PRINT_EXTENSION_)
             if ( XSalCanDrawRotString(pDisplay, nGC) )
             {
                 XSalDrawRotString( pDisplay, nDrawable, nGC, nX, nY,
@@ -1303,7 +1314,7 @@ SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
     {
         pFont->ToImplFontMetricData( pMetric );
 
-        #ifndef USE_PSPRINT
+    #if !defined(USE_PSPRINT) && !defined(_USE_PRINT_EXTENSION_)
         if( XSalCanDrawRotString( maGraphicsData.GetXDisplay(), None ) )
             pMetric->mnOrientation = maGraphicsData.nFontOrientation_;
         #endif
@@ -1417,7 +1428,7 @@ SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
 {
     if( ! _IsPrinter() )
         return 0;
-#ifdef USE_PSPRINT
+#if  defined(USE_PSPRINT) || defined(_USE_PRINT_EXTENSION_)
     return 0;
 #else
     // get pair kerning table ( internal data from xprinter )
