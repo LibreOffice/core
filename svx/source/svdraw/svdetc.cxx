@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-01 13:39:17 $
+ *  last change: $Author: aw $ $Date: 2002-03-01 16:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,10 @@
 #include <svtools/syslocale.hxx>
 #endif
 
+// #97870#
+#ifndef _SVX_XFLBCKIT_HXX
+#include "xflbckit.hxx"
+#endif
 
 /******************************************************************************
 * Globale Daten der DrawingEngine
@@ -545,6 +549,13 @@ FASTBOOL GetDraftFillColor(const SfxItemSet& rSet, Color& rCol)
         case XFILL_HATCH: {
             Color aCol1(((XFillHatchItem&)rSet.Get(XATTR_FILLHATCH)).GetValue().GetColor());
             Color aCol2(COL_WHITE);
+
+            // #97870# when hatch background is activated, use object fill color as hatch color
+            sal_Bool bFillHatchBackground = ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue();
+            if(bFillHatchBackground)
+            {
+                aCol2 = ((const XFillColorItem&)(rSet.Get(XATTR_FILLCOLOR))).GetValue();
+            }
 
             // What the hell is this old color mixing try from JOE? It's bloody WRONG
             // USHORT nRt=(USHORT)(((ULONG)aCol1.GetRed  ()+(ULONG)aCol2.GetRed  ())/2);
