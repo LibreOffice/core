@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hjs $ $Date: 2000-12-22 10:58:39 $
+#   last change: $Author: hjs $ $Date: 2001-01-04 18:04:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,6 +61,7 @@
 #*************************************************************************
 
 MKFILENAME:=TARGET.MK
+
 # ------------------------------------------------------------------
 # INCLUDE-Path
 # ------------------------------------------------------------------
@@ -588,15 +589,15 @@ SRS9TARGET=$(RES)$/$(RES9TARGET).res
 .IF "$(JAVAFILES)$(JAVACLASSFILES)$(GENJAVAFILES)"!=""
 .IF "$(JAVAFILES)$(JAVACLASSFILES)"=="$(JAVAFILES)"
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-.ENDIF
+.ENDIF			# "$(JAVAFILES)$(JAVACLASSFILES)"=="$(JAVAFILES)"
 JAVATARGET:=$(MISC)$/$(TARGET)_dummy.java
-.ENDIF
+.ENDIF			# "$(JAVAFILES)$(JAVACLASSFILES)$(GENJAVAFILES)"!=""
 .IF "$(javauno)"!=""
 .IF "$(IDLFILES)"!=""
 JAVATARGET=$(MISC)$/$(TARGET)_dummy.java
 UNOIDLTARGETS+=$(MISC)$/$(TARGET)genjava.don
-.ENDIF
-.ENDIF
+.ENDIF			# "$(IDLFILES)"!=""
+.ENDIF			# "$(javauno)"!=""
 
 .IF "$(JARTARGET)"!=""
 JARCLASSDIRS*=.
@@ -607,9 +608,13 @@ JARTARGETN=$(JARTARGET)
 .IF "$(NOJARDEP)$(NEW_JAR_PACK)"==""
 JARTARGETDEP=$(JARTARGET).dep
 JARTARGETDEPN=$(MISC)$/$(JARTARGET).dep
-.ENDIF
-.ENDIF
-.ENDIF
+.ENDIF			# "$(NOJARDEP)$(NEW_JAR_PACK)"==""
+.ENDIF			# "$(JARTARGET)"!=""
+.ELSE			# "$(SOLAR_JAVA)"!=""
+JAVACLASSFILES:=
+JAVAFILES:=
+javauno:=
+.ENDIF			# "$(SOLAR_JAVA)"!=""
 
 .IF "$(RCFILES)"!=""
 RESNAME*=$(TARGET)
