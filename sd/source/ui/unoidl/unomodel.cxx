@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 16:13:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1937,9 +1937,6 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                 if ( pOldSdView )
                     pOldSdView->EndTextEdit();
 
-                ImplRenderPaintProc aImplRenderPaintProc( pDoc->GetLayerAdmin(),
-                    pOldSdView ? pOldSdView->GetPageViewPvNum( 0 ) : NULL, pPDFExtOutDevData );
-
                 pView->SetHlplVisible( sal_False );
                 pView->SetGridVisible( sal_False );
                 pView->SetBordVisible( sal_False );
@@ -1956,6 +1953,9 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                 {
                     pView->ShowPage( pDoc->GetSdPage( (USHORT)nPageNumber - 1, ePageKind ), aOrigin );
                     SdrPageView* pPV = pView->GetPageViewPvNum( 0 );
+
+                    ImplRenderPaintProc aImplRenderPaintProc( pDoc->GetLayerAdmin(),
+                        pPV, pPDFExtOutDevData );
 
                     // background color for outliner :o
                     SdPage* pPage = (SdPage*)pPV->GetPage();
@@ -2134,6 +2134,9 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                     if( xShapes.is() && xShapes->getCount() )
                     {
                        SdrPageView* pPV = NULL;
+
+                       ImplRenderPaintProc  aImplRenderPaintProc( pDoc->GetLayerAdmin(),
+                                        pOldSdView ? pOldSdView->GetPageViewPvNum( 0 ) : NULL, pPDFExtOutDevData );
 
                         for( sal_uInt32 i = 0, nCount = xShapes->getCount(); i < nCount; i++ )
                         {
