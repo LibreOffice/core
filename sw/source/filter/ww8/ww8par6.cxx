@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:13 $
+ *  last change: $Author: cmc $ $Date: 2002-07-29 16:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1353,7 +1353,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
                     }
                     while( nOldSectionNo && !nOldLen );
                 }
-                if( nLen > 2 || nOldLen )
+                if( nLen >= 2 || nOldLen )
                     nHdFtInfosStored |= nMask;
 
 
@@ -1361,7 +1361,7 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
                 {
                     if( nActSectionNo )
                     {
-                        if( nLen <=2 ||
+                        if( nLen < 2 ||
                             ((nOldStart == nStart) && (nOldLen == nLen)) )
                         {
                             // same Hd/Ft as in previous Section or NO Hd/Ft
@@ -1377,9 +1377,8 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos, BOOL bMustHaveBreak)
                                 nCorrIhdt &= ~nMask;// NO prev. Hd/Ft at all
                         }
                     }
-                    else
-                        if( nLen <= 2 )
-                            nCorrIhdt &= ~nMask;// 0 in 1.Sect.: Hd/Ft undefined
+                    else if (nLen < 2)
+                        nCorrIhdt &= ~nMask;// 0 in 1.Sect.: Hd/Ft undefined
                 }
             }
         }
@@ -3884,8 +3883,8 @@ void SwWW8ImplReader::ResetCharSetVars()
 */
 void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
 {
-    if( !bSymbol && !bIgnoreText )  // falls bSymbol, gilt der am Symbol
-    {                               // (siehe sprmCSymbol) gesetzte Font !
+    if (!bSymbol)           // falls bSymbol, gilt der am Symbol
+    {                       // (siehe sprmCSymbol) gesetzte Font !
         switch( nId )
         {
     //      case 0x4a51:    //font to bias towards all else being equal ?

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-25 18:00:08 $
+ *  last change: $Author: cmc $ $Date: 2002-07-29 16:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,11 +1131,11 @@ void SwWW8ImplReader::Read_HdFt1( BYTE nPara, BYTE nWhichItems, SwPageDesc* pPD 
             {
                 BOOL bOk = TRUE;
                 if( bVer67 )
-                    bOk = ( pHdFt->GetTextPos( nPara, nI, start, nLen ) && nLen > 2 );
+                    bOk = ( pHdFt->GetTextPos( nPara, nI, start, nLen ) && nLen >= 2 );
                 else
                 {
                     pHdFt->GetTextPosExact(nNumber+ (nActSectionNo+1)*6, start, nLen);
-                    bOk = ( 2 < nLen );
+                    bOk = ( 2 <= nLen );
                 }
                 if( bOk )
                 {
@@ -2190,6 +2190,10 @@ BOOL SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
             }
         }
     }
+
+    if (pPaM->GetPoint()->nContent.GetIndex())
+        AppendTxtNode(*pPaM->GetPoint());
+
     ReadAttrEnds( nNext, l );
     if (!bInHyperlink)
         bJoined = JoinNode( pPaM );
