@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:22:53 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 12:23:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1120,8 +1120,23 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
                 pOld->pEndNd = pInsPos->MakeNodeIdx();
                 pOld->nEndCnt = pInsPos->GetCntIdx();
 
+#if 0
                 if( IsChkStyleAttr() )
                     _ClearStyleAttr( *pOld );
+#else
+                /*
+                #i21422#
+                If the parent (pAkt) sets something e.g. , and the child (pOld)
+                unsets it and the style both are based on has it unset then
+                clearing the pOld by looking at the style is clearly a disaster
+                as the text ends up with pAkts bold and not pOlds no bold, this
+                should be rethought out. For the moment its safest to just do
+                the clean if we have no parent, all we suffer is too many
+                redundant properties.
+                */
+                if (IsChkStyleAttr() && !pAkt)
+                    _ClearStyleAttr( *pOld );
+#endif
 
                 if( pAkt )
                 {
@@ -1367,6 +1382,11 @@ void SvxRTFItemStackType::MoveFullNode(const SvxNodeIdx &rOldNode,
     }
 }
 
+bool SvxRTFParser::UncompressableStackEntry(const SvxRTFItemStackType &rSet) const
+{
+    return false;
+}
+
 void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
 {
     DBG_ASSERT( pChildList, "es gibt keine ChildListe" );
@@ -1400,6 +1420,9 @@ void SvxRTFItemStackType::Compress( const SvxRTFParser& rParser )
                     pTmp->Compress( rParser );
             return;
         }
+
+        if (rParser.UncompressableStackEntry(*pTmp))
+            return;
 
         if( n )
         {
