@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-21 09:18:58 $
+ *  last change: $Author: fs $ $Date: 2002-02-27 17:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -896,9 +896,11 @@ Reference< ::com::sun::star::frame::XDispatch> FmXFormShell::interceptedQueryDis
 
 
             Reference< XPropertySet> xFormProps(xAffectedForm, UNO_QUERY);
-            NavigationBarMode eMode;
-            xFormProps->getPropertyValue(FM_PROP_NAVIGATION) >>= eMode;
-            if (eMode != NavigationBarMode_CURRENT)
+            NavigationBarMode eMode = NavigationBarMode_CURRENT;
+            if  (   !xFormProps.is()
+                ||  !( xFormProps->getPropertyValue( FM_PROP_NAVIGATION ) >>= eMode )
+                ||  ( NavigationBarMode_CURRENT != eMode )
+                )
             {   // we can't supply a dispatcher for that : else we would have to listen to all operations on the parent
                 // form and to all ops on the affected form itself, just to keep the state up-to-date. This would be too much to do ...
                 // 73233 - 22.02.00 - FS
@@ -4995,7 +4997,7 @@ void FmFormNavigationDispatcher::SetStatus(SfxItemState eState, const SfxPoolIte
 }
 
 //------------------------------------------------------------------------------
-void FmFormNavigationDispatcher::StateChanged(sal_Int16 nSID, SfxItemState eState, const SfxPoolItem* pState)
+void FmFormNavigationDispatcher::StateChanged(USHORT nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     if (IsActive())
         FmSlotDispatch::StateChanged(nSID, eState, pState);

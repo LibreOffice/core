@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-16 11:40:35 $
+ *  last change: $Author: fs $ $Date: 2002-02-27 17:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ public:
 
 protected:
     // SfxControllerItem
-    virtual void StateChanged(sal_Int16 nSID, SfxItemState eState, const SfxPoolItem* pState);
+    virtual void StateChanged(USHORT nSID, SfxItemState eState, const SfxPoolItem* pState);
 
     virtual void NotifyState(SfxItemState eState, const SfxPoolItem* pState, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener>& rListener = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener>());
 };
