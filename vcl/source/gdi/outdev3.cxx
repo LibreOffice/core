@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hdu $ $Date: 2001-05-10 09:05:48 $
+ *  last change: $Author: hdu $ $Date: 2001-05-14 09:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2962,7 +2962,9 @@ static inline int CalcAsianKerning( sal_Unicode c, bool bLeft )
         nResult = nTable[ c - 0x3000 ];
     else switch( c )
     {
-        case ':': case ';': case '!': case 0x30FB:
+        // TODO: only for monospaced font, but how to test if it is all monospaced?
+        //case ':': case ';': case '!':
+        case 0x30FB:
             nResult = bLeft ? -1 : +1; break;   // 25% left and right
         default:
             nResult = 0; break;
@@ -3034,7 +3036,8 @@ long OutputDevice::ImplCalcKerning( const sal_Unicode* pStr, xub_StrLen nLen,
         }
     }
 
-    if( maFont.GetKerning() & KERNING_ASIAN )
+    if( maFont.GetKerning() & KERNING_ASIAN
+    && ImplGetCharWidth(0x3001)==ImplGetCharWidth(0x3007))    // monospaced font?
     {
         for( i = 0; i < nLen-1; ++i )
         {
@@ -3050,8 +3053,8 @@ long OutputDevice::ImplCalcKerning( const sal_Unicode* pStr, xub_StrLen nLen,
                 nAmount *= ImplGetCharWidth( nFirst );
                 nAmount /= 4 * mpFontEntry->mnWidthFactor;
                 nWidth += nAmount;
-                    for( USHORT n = i; n < nAryLen; ++n )
-                        pDXAry[n] += nAmount;
+                for( USHORT n = i; n < nAryLen; ++n )
+                    pDXAry[n] += nAmount;
             }
         }
     }
