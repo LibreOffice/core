@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galexpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:06:54 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 14:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,6 +180,32 @@ BOOL GalleryExplorer::FillObjList( ULONG nThemeId, List& rObjList )
 {
     Gallery* pGal = ImplGetGallery();
     return( pGal ? FillObjList( pGal->GetThemeName( nThemeId ), rObjList ) : FALSE );
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool GalleryExplorer::FillObjListTitle( const sal_uInt32 nThemeId, std::vector< rtl::OUString >& rList )
+{
+    Gallery* pGal = ImplGetGallery();
+    if( pGal )
+    {
+        GalleryTheme* pTheme = pGal->AcquireTheme( pGal->GetThemeName( nThemeId ), aDummyListener );
+        if( pTheme )
+        {
+            for( ULONG i = 0, nCount = pTheme->GetObjectCount(); i < nCount; i++ )
+            {
+                SgaObject*  pObj = pTheme->AcquireObject( i );
+                if ( pObj )
+                {
+                    rtl::OUString aTitle( pObj->GetTitle() );
+                    rList.push_back( aTitle );
+                    pTheme->ReleaseObject( pObj );
+                }
+            }
+            pGal->ReleaseTheme( pTheme, aDummyListener );
+        }
+    }
+    return( rList.size() > 0 );
 }
 
 // ------------------------------------------------------------------------
