@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-24 15:54:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,10 +134,11 @@ class SwXStyleFamilies :  public cppu::WeakImplHelper4
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxFrameStyles;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxPageStyles;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > *   pxNumberingStyles;
-
+protected:
+    virtual ~SwXStyleFamilies();
 public:
     SwXStyleFamilies(SwDocShell& rDocShell);
-    virtual ~SwXStyleFamilies();
+
 
     //XNameAccess
     virtual ::com::sun::star::uno::Any SAL_CALL getByName(const rtl::OUString& Name) throw( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
