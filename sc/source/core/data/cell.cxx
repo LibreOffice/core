@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 10:48:35 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,16 +157,16 @@ ScBaseCell* ScBaseCell::Clone(ScDocument* pDoc) const
     switch (eCellType)
     {
         case CELLTYPE_VALUE:
-            return new ScValueCell(*(const ScValueCell*)this);
+            return new ScValueCell(*(const ScValueCell*)this, pDoc);
         case CELLTYPE_STRING:
-            return new ScStringCell(*(const ScStringCell*)this);
+            return new ScStringCell(*(const ScStringCell*)this, pDoc);
         case CELLTYPE_EDIT:
             return new ScEditCell(*(const ScEditCell*)this, pDoc);
         case CELLTYPE_FORMULA:
             return new ScFormulaCell(pDoc, ((ScFormulaCell*)this)->aPos,
                 *(const ScFormulaCell*)this);
         case CELLTYPE_NOTE:
-            return new ScNoteCell(*(const ScNoteCell*)this);
+            return new ScNoteCell(*(const ScNoteCell*)this, pDoc);
         default:
             DBG_ERROR("Unbekannter Zellentyp");
             return NULL;
@@ -656,7 +656,7 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rNewPos,
                               const ScFormulaCell& rScFormulaCell, USHORT nCopyFlags ) :
-    ScBaseCell( rScFormulaCell ),
+    ScBaseCell( rScFormulaCell, pDoc ),
     SvtListener(),
     aErgString( rScFormulaCell.aErgString ),
     nErgValue( rScFormulaCell.nErgValue ),
