@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2001-10-23 12:06:51 $
+ *  last change: $Author: ab $ $Date: 2001-11-14 11:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1002,10 +1002,10 @@ BOOL SbModule::StoreData( SvStream& rStrm ) const
 // Store only image, no source
 BOOL SbModule::StoreBinaryData( SvStream& rStrm )
 {
-    BOOL bRet = SbxObject::StoreData( rStrm );
+    BOOL bRet = Compile();
     if( bRet )
     {
-        bRet = Compile();
+         bRet = SbxObject::StoreData( rStrm );
         if( bRet )
         {
             pImage->aSource = String();
