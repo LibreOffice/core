@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdglev.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,11 @@ void SdrGlueEditView::ImpDoMarkedGluePoints(PGlueDoFunc pDoFunc, BOOL bConst, co
                         (*pDoFunc)(rGP,pObj,p1,p2,p3,p4,p5);
                     }
                 }
-                if (!bConst) pObj->SendRepaintBroadcast();
+                if (!bConst)
+                {
+                    pObj->SetChanged();
+                    pObj->BroadcastObjectChange();
+                }
             }
         }
     }
@@ -288,7 +292,8 @@ void SdrGlueEditView::DeleteMarkedGluePoints()
                         pGPL->Delete(nGlueIdx);
                     }
                 }
-                pObj->SendRepaintBroadcast();
+                pObj->SetChanged();
+                pObj->BroadcastObjectChange();
             }
         }
     }
@@ -354,7 +359,8 @@ void SdrGlueEditView::ImpTransformMarkedGluePoints(PGlueTrFunc pTrFunc, const vo
                         rGP.SetAbsolutePos(aPos,*pObj);
                     }
                 }
-                pObj->SendRepaintBroadcast();
+                pObj->SetChanged();
+                pObj->BroadcastObjectChange();
             }
         }
     }
