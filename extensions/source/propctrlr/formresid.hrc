@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:27:09 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@
 #define RID_STR_DATASOURCE                  ( RID_FORMBROWSER_START +  45 )
 #define RID_STR_CURSORSOURCE                ( RID_FORMBROWSER_START +  46 )
 #define RID_STR_CURSORSOURCETYPE            ( RID_FORMBROWSER_START +  47 )
-#define RID_STR_FILTER_CRITERIA             ( RID_FORMBROWSER_START +  48 )
+#define RID_STR_FILTER                      ( RID_FORMBROWSER_START +  48 )
 #define RID_STR_SORT_CRITERIA               ( RID_FORMBROWSER_START +  49 )
 #define RID_STR_ALLOW_ADDITIONS             ( RID_FORMBROWSER_START +  50 )
 #define RID_STR_ALLOW_EDITS                 ( RID_FORMBROWSER_START +  51 )
@@ -179,7 +179,7 @@
 #define RID_STR_HELPTEXT                    ( RID_FORMBROWSER_START + 117 )
 #define RID_STR_HELPURL                     ( RID_FORMBROWSER_START + 118 )
 #define RID_STR_BORDER_TYPE                 ( RID_FORMBROWSER_START + 119 )
-#define RID_STR_COMMAND_TYPE                ( RID_FORMBROWSER_START + 120 )
+    // FREE
 #define RID_STR_CURSOR_TYPE                 ( RID_FORMBROWSER_START + 121 )
 #define RID_STR_LISTSOURCE_TYPE             ( RID_FORMBROWSER_START + 122 )
 #define RID_STR_ALIGNMENT                   ( RID_FORMBROWSER_START + 123 )
@@ -259,13 +259,21 @@
 #define RID_STR_REPEAT_DELAY                ( RID_FORMBROWSER_START + 197 )
 #define RID_STR_SYMBOLCOLOR                 ( RID_FORMBROWSER_START + 198 )
 #define RID_STR_REPEAT                      ( RID_FORMBROWSER_START + 199 )
-
+#define RID_STR_IMAGE_ALIGN                 ( RID_FORMBROWSER_START + 200 )
+#define RID_STR_DEFAULTTEXT                 ( RID_FORMBROWSER_START + 201 )
+#define RID_STR_DEFAULTDATE                 ( RID_FORMBROWSER_START + 202 )
+#define RID_STR_DEFAULTTIME                 ( RID_FORMBROWSER_START + 203 )
+#define RID_STR_WORDBREAK                   ( RID_FORMBROWSER_START + 204 )
+#define RID_STR_SHOW_SCROLLBARS             ( RID_FORMBROWSER_START + 205 )
+#define RID_STR_QUERYDESIGN_TITLE           ( RID_FORMBROWSER_START + 206 )
 
 // -----------------------------------------------------------------------
 // - dialogs
 
 #define RID_DLG_SELECTLABELCONTROL          ( RID_PROPCONTROLLER_START +  0 )
-
+#define RID_DLG_TABORDER                    ( RID_PROPCONTROLLER_START +  1 )
+#define RID_DLG_FORMLINKS                   ( RID_PROPCONTROLLER_START +  2 )
+#define RID_DLG_SELECTION                   ( RID_PROPCONTROLLER_START +  3 )
 
 // -----------------------------------------------------------------------
 // - tab dialogs
@@ -273,15 +281,16 @@
 #define RID_TABDLG_FONTDIALOG               ( RID_PROPCONTROLLER_START +  0 )
 
 // -----------------------------------------------------------------------
-// - external dialogs
-
-#define RID_SVXDLG_FMFONT                   18013
-
-// -----------------------------------------------------------------------
 // - ImageLists
 
 #define RID_IL_FORMEXPLORER                 ( RID_PROPCONTROLLER_START +  0 )
+#define RID_IL_FORMEXPLORER_HC              ( RID_PROPCONTROLLER_START +  1 )
 
+// -----------------------------------------------------------------------
+// - untyped resources
+
+#define RID_RSC_ENUM_SCROLLBARS             ( RID_PROPCONTROLLER_START +  0 )
+#define RID_RSC_ENUM_COMMAND_TYPE           ( RID_PROPCONTROLLER_START +  1 )
 
 // -----------------------------------------------------------------------
 // - ImageList - local ids
@@ -289,12 +298,36 @@
 // HACK HACK HACK
 // as long as we have no real property browser, but this outsourcing only,
 // we do not duplicate images. Instead we do some hard coding for the image ids
+
+
+#define RID_SVXIMG_CONTROL                          10144
+#define RID_SVXIMG_BUTTON                           10594
+#define RID_SVXIMG_RADIOBUTTON                      10595
+#define RID_SVXIMG_CHECKBOX                         10596
 #define RID_SVXIMG_FIXEDTEXT                        10597
 #define RID_SVXIMG_GROUPBOX                         10598
+#define RID_SVXIMG_EDIT                             10599
+#define RID_SVXIMG_LISTBOX                          10600
+#define RID_SVXIMG_COMBOBOX                         10601
+#define RID_SVXIMG_URLBUTTON                        10602
+#define RID_SVXIMG_GRID                             10603
+#define RID_SVXIMG_IMAGEBUTTON                      10604
+#define RID_SVXIMG_FILECONTROL                      10605
+#define RID_SVXIMG_DATEFIELD                        10704
+#define RID_SVXIMG_TIMEFIELD                        10705
+#define RID_SVXIMG_NUMERICFIELD                     10706
+#define RID_SVXIMG_CURRENCYFIELD                    10707
+#define RID_SVXIMG_PATTERNFIELD                     10708
+#define RID_SVXIMG_IMAGECONTROL                     10710
+#define RID_SVXIMG_HIDDEN                           18022
+#define RID_SVXIMG_FORMATTEDFIELD                   10728
+#define RID_SVXIMG_FILTER                           10715
 #define RID_SVXIMG_FORMS                            18013
 #define RID_SVXIMG_FORM                             10593
 #define RID_SVXIMG_COLLAPSEDNODE                    18002
 #define RID_SVXIMG_EXPANDEDNODE                     18003
+#define RID_SVXIMG_SCROLLBAR                        10768
+#define RID_SVXIMG_SPINBUTTON                       10769
 
 
 
