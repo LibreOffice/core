@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcli.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:49:11 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,18 +59,7 @@
  *
  ************************************************************************/
 
-
 #pragma hdrstop
-
-#ifndef _IPENV_HXX //autogen
-#include <so3/ipenv.hxx>
-#endif
-#ifndef _EMBOBJ_HXX //autogen
-#include <so3/embobj.hxx>
-#endif
-#ifndef _IPOBJ_HXX //autogen
-#include <so3/ipobj.hxx>
-#endif
 
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
@@ -88,19 +77,20 @@
 #include <swcli.hxx>
 #endif
 
+#include <toolkit/helper/vclunohelper.hxx>
 
-SwOleClient::SwOleClient( SwView *pView, SwEditWin *pWin ) :
-    SfxInPlaceClient( pView, pWin ), bInDoVerb( FALSE ),
+using namespace com::sun::star;
+
+SwOleClient::SwOleClient( SwView *pView, SwEditWin *pWin, const svt::EmbeddedObjectRef& xObj ) :
+    SfxInPlaceClient( pView, pWin, xObj.GetViewAspect() ), bInDoVerb( FALSE ),
     bOldCheckForOLEInCaption( pView->GetWrtShell().IsCheckForOLEInCaption() )
 {
+    SetObject( xObj.GetObject() );
 }
 
 
-void SwOleClient::RequestObjAreaPixel( const Rectangle & rObjRect )
+void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
 {
-    if ( !GetEnv() )
-        return;
-
     //Der Server moechte die Clientgrosse verandern.
     //Wir stecken die Wunschgroesse in die Core. Die Attribute des Rahmens
     //werden auf den Wunschwert eingestellt. Dieser Wert wird also auch an
@@ -111,18 +101,15 @@ void SwOleClient::RequestObjAreaPixel( const Rectangle & rObjRect )
     //eingestellt.
 
     SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
-    Window     *pWin = rSh.GetWin();
 
-    SvContainerEnvironment *pEnv  = GetEnv();
-    SvInPlaceEnvironment * pIPEnv = pEnv->GetIPEnv();
-    ASSERT( pIPEnv, "RequestObjAreaPixel, Environment not found" );
-
-    SvInPlaceObject * pIPObj = pIPEnv->GetIPObj();
     // Falls der Server nicht mit dem Maástab des Containers syncronisiert
     // ist, wird durch das Setzen und Abfragen der VisArea die Server
     // Einstellung ermittelt.
     // Niemals Koordinatentransformationen mit dem Rectangle vornehmen!!!
-    Rectangle aLogRect( pEnv->PixelObjVisAreaToLogic( rObjRect ) );
+
+    /*
+    Window *pWin = rSh.GetWin();
+    Rectangle aLogRect( PixelObjVisAreaToLogic( rObjRect ) );
     if ( pEnv->GetObjAreaPixel().GetSize() != rObjRect.GetSize() )
         // sichtbaren Ausschnitt setzen und abfragen
         aLogRect = pIPObj->SetGetVisArea( aLogRect );
@@ -136,38 +123,50 @@ void SwOleClient::RequestObjAreaPixel( const Rectangle & rObjRect )
     aLogRect.SetSize( pWin->LogicToLogic( aLogRect.GetSize(), aTmp, MAP_TWIP ) );
 
     //#52207# Hat sich die Position wirklich geaendert (Umrechnungsfehler vermeiden)?
-    if ( GetClientData()->GetObjAreaPixel().TopLeft() != rObjRect.TopLeft() )
+    if ( GetObjAreaPixel().TopLeft() != rObjRect.TopLeft() )
         aLogRect.SetPos ( pWin->PixelToLogic( rObjRect.TopLeft()));
     else
-        aLogRect.SetPos( Point( LONG_MIN, LONG_MIN ) );
+        aLogRect.SetPos( Point( LONG_MIN, LONG_MIN ) );*/
+
+    if ( aLogRect.GetSize() != GetScaledObjArea().GetSize() )
+    {
+        // size has changed, so first change visual area of the object before we resize its view
+        // without this the object always would be scaled - now it has the choice
+        MapMode aObjectMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) ) );
+        MapMode aClientMap( GetEditWin()->GetMapMode().GetMapUnit() );
+
+        Size aNewObjSize( Fraction( aLogRect.GetWidth() ) / GetScaleWidth(),
+                          Fraction( aLogRect.GetHeight() ) / GetScaleHeight() );
+
+        // convert to logical coordinates of the embedded object
+        Size aNewSize = GetEditWin()->LogicToLogic( aNewObjSize, &aClientMap, &aObjectMap );
+        GetObject()->setVisualAreaSize( GetAspect(), awt::Size( aNewSize.Width(), aNewSize.Height() ) );
+    }
 
     rSh.StartAllAction();
-    rSh.RequestObjectResize( SwRect( aLogRect ), GetIPObj());
+    rSh.RequestObjectResize( SwRect( aLogRect ), GetObject());
     rSh.EndAllAction();
 
+    SwRect aFrm( rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,     0, GetObject() )),
+           aPrt( rSh.GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, GetObject() ));
+    aLogRect.SetPos( aPrt.Pos() + aFrm.Pos() );
+    aLogRect.SetSize( aPrt.SSize() );
+}
 
-    SwRect aFrm( rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,     0, GetIPObj() )),
-           aPrt( rSh.GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, GetIPObj() ));
-    Size  aSz ( aPrt.SSize() );
-    Point aPos( aPrt.Pos() + aFrm.Pos() );
-    aSz  = pWin->LogicToPixel( aSz );
-    aPos = pWin->LogicToPixel( aPos);
-
-    Rectangle aPixRect( aPos, aSz );
-    SfxInPlaceClient::RequestObjAreaPixel( aPixRect );
-
+void SwOleClient::ObjectAreaChanged()
+{
+    SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
+    SwRect aFrm( rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,     0, GetObject() )),
+           aPrt( rSh.GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, 0, GetObject() ));
     if ( !aFrm.IsOver( rSh.VisArea() ) )
         rSh.MakeVisible( aFrm );
 }
 
-
-void SwOleClient::ViewChanged( USHORT nAspect )
+void SwOleClient::ViewChanged()
 {
-    SfxInPlaceClient::ViewChanged( nAspect );
-    if ( !GetEnv() || bInDoVerb )
+    if ( bInDoVerb )
         return;
 
-    const Rectangle aOldArea( GetEnv()->GetObjArea() );
     SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
     Window     *pWin = rSh.GetWin();
 
@@ -175,51 +174,34 @@ void SwOleClient::ViewChanged( USHORT nAspect )
     //beruecksichtigt werden. Rueckwirkung auf das Objekt werden von
     //CalcAndSetScale() der WrtShell beruecksichtig, wenn die Groesse/Pos des
     //Rahmens in der Core sich veraendert.
-    SvEmbeddedObject *pObj = GetEmbedObj();
-    Size aVisSize( pObj->GetVisArea().GetSize() );
+    awt::Size aSz = GetObject()->getVisualAreaSize( GetAspect() );
+    Size aVisSize( aSz.Width, aSz.Height );
 
     // Bug 24833: solange keine vernuenftige Size vom Object kommt,
     //              kann nichts skaliert werden
     if( !aVisSize.Width() || !aVisSize.Height() )
         return;
 
-    aVisSize.Width() = Fraction( aVisSize.Width()  ) * GetEnv()->GetScaleWidth();
-    aVisSize.Height()= Fraction( aVisSize.Height() ) * GetEnv()->GetScaleHeight();
+    // first convert to TWIPS before scaling, because scaling factors are calculated for
+    // the TWIPS mapping and so they will produce the best results if applied to TWIPS based
+    // coordinates
     const MapMode aMyMap ( MAP_TWIP );
-    const MapMode aObjMap( pObj->GetMapUnit() );
+    const MapMode aObjMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( GetObject()->getMapUnit( GetAspect() ) ) );
     aVisSize = OutputDevice::LogicToLogic( aVisSize, aObjMap, aMyMap );
+
+    aVisSize.Width() = Fraction( aVisSize.Width()  ) * GetScaleWidth();
+    aVisSize.Height()= Fraction( aVisSize.Height() ) * GetScaleHeight();
 
     SwRect aRect( Point( LONG_MIN, LONG_MIN ), aVisSize );
     rSh.LockView( TRUE );   //Scrollen im EndAction verhindern
     rSh.StartAllAction();
-    rSh.RequestObjectResize( aRect, GetIPObj() );
+    rSh.RequestObjectResize( aRect, GetObject() );
     rSh.EndAllAction();
     rSh.LockView( FALSE );
 }
 
-
 void SwOleClient::MakeVisible()
 {
-    SfxInPlaceClient::MakeVisible();
-
     const SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
-    SvEmbeddedObject *pObj = GetEmbedObj();
-    rSh.MakeObjVisible( pObj );
+    rSh.MakeObjVisible( GetObject() );
 }
-
-
-void SwOleClient::MakeViewData()
-{
-    SfxInPlaceClient::MakeViewData();
-
-    SvClientData *pCD = GetClientData();
-    if ( pCD )
-    {
-        SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
-        SvEmbeddedObjectRef xObj = GetEmbedObj();
-        rSh.CalcAndSetScale( xObj );
-    }
-}
-
-
-
