@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 19:35:36 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ Menu RID_SVXMNU_ROWS
             Text[ arabic ] = "ÍÐÝ ÕÝæÝ";
             Text[ turkish ] = "Satýrlarý sil";
             Text[ catalan ] = "Eliminar filas";
+            Text[ finnish ] = "Poista rivit";
         };
         MenuItem
         {
@@ -122,6 +123,7 @@ Menu RID_SVXMNU_ROWS
             Text[ arabic ] = "ÍÝÙ ÓÌá";
             Text[ turkish ] = "Veri kümesini kaydet";
             Text[ catalan ] = "Guardar registro";
+            Text[ finnish ] = "Tallenna tietue";
         };
         MenuItem
         {
@@ -150,6 +152,7 @@ Menu RID_SVXMNU_ROWS
             Text[ arabic ] = "ÊÑÇÌÚ: ÅÏÎÇá ÈíÇäÇÊ";
             Text[ turkish ] = "Geri al: Veri giriþi";
             Text[ catalan ] = "Deshacer: entrada de datos";
+            Text[ finnish ] = "Peruuta: tietomerkintä";
         };
     };
 };
@@ -203,6 +206,7 @@ Menu RID_SVXMNU_COLS
                         Text[ arabic ] = "ÍÞá äÕ";
                         Text[ turkish ] = "Metin alaný";
                         Text[ catalan ] = "Campo de texto";
+                        Text[ finnish ] = "Tekstikehys";
                     };
                     MenuItem
                     {
@@ -231,6 +235,7 @@ Menu RID_SVXMNU_COLS
                         Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
                         Text[ turkish ] = "Seçme kutusu";
                         Text[ catalan ] = "Casilla de verificación";
+                        Text[ finnish ] = "Valintaruutu";
                     };
                     MenuItem
                     {
@@ -259,6 +264,7 @@ Menu RID_SVXMNU_COLS
                         Text[ arabic ] = "ãÑÈÚ ÊÍÑíÑ æÓÑÏ";
                         Text[ turkish ] = "Kombinasyon alaný";
                         Text[ catalan ] = "Campo combinado";
+                        Text[ finnish ] = "Yhdistelmäruutu";
                     };
                     MenuItem
                     {
@@ -287,6 +293,7 @@ Menu RID_SVXMNU_COLS
                         Text[ arabic ] = "ãÑÈÚ ÞÇÆãÉ";
                         Text[ turkish ] = "Liste alaný";
                         Text[ catalan ] = "Listado";
+                        Text[ finnish ] = "Luetteloruutu";
                     };
                     MenuItem
                     {
@@ -315,6 +322,7 @@ Menu RID_SVXMNU_COLS
                         Text[ arabic ] = "ÍÞá ÇáÊÇÑíÎ";
                         Text[ turkish ] = "Tarih alaný";
                         Text[ catalan ] = "Campo de fecha";
+                        Text[ finnish ] = "Päivämääräkenttä";
                     };
                     MenuItem
                     {
@@ -343,6 +351,7 @@ Menu RID_SVXMNU_COLS
                         Text[ arabic ] = "ÍÞá ÇáæÞÊ";
                         Text[ turkish ] = "Zaman alaný";
                         Text[ catalan ] = "Campo horario";
+                        Text[ finnish ] = "Aikakenttä";
                     };
                     MenuItem
                     {
@@ -371,6 +380,7 @@ Menu RID_SVXMNU_COLS
                         Text[ arabic ] = "ÍÞá ÑÞãí";
                         Text[ turkish ] = "Sayýsal alan";
                         Text[ catalan ] = "Campo numérico";
+                        Text[ finnish ] = "Numeerinen kenttä";
                     };
                     MenuItem
                     {
@@ -399,6 +409,7 @@ Menu RID_SVXMNU_COLS
                         Text[ arabic ] = "ÍÞá ÇáÚãáÉ";
                         Text[ turkish ] = "Para birimi alaný";
                         Text[ catalan ] = "Campo de moneda";
+                        Text[ finnish ] = "Valuuttakenttä";
                     };
                     MenuItem
                     {
@@ -427,6 +438,7 @@ Menu RID_SVXMNU_COLS
                         Text[ arabic ] = "ÍÞá ãõÞäøóÚ";
                         Text[ turkish ] = "Maskelenmiþ alan";
                         Text[ catalan ] = "Campo enmascarado";
+                        Text[ finnish ] = "Kuviokenttä";
                     };
                     MenuItem
                     {
@@ -453,6 +465,7 @@ Menu RID_SVXMNU_COLS
                         Text[ arabic ] = "ÍÞá ãõäÓøóÞ";
                         Text[ turkish ] = "Formatlý alan";
                         Text[ catalan ] = "Campo formateado";
+                        Text[ finnish ] = "Muotoiltu kenttä";
                     };
                     MenuItem
                     {
@@ -480,6 +493,7 @@ Menu RID_SVXMNU_COLS
                         Text[ arabic ] = "ÍÞá ÊÇÑíÎ ææÞÊ";
                         Text[ turkish ] = "Tarih ve zaman alaný";
                         Text[ catalan ] = "Campo de fecha y hora";
+                        Text[ finnish ] = "Päivämäärä ja kellonaika -kenttä";
                     };
                 };
             };
@@ -495,6 +509,7 @@ Menu RID_SVXMNU_COLS
             Text[ arabic ] = "ÅÏÑÇÌ ÚãæÏ";
             Text[ turkish ] = "Sütun ekle";
             Text[ catalan ] = "~Insertar columna";
+            Text[ finnish ] = "~Lisää sarake";
         };
         MenuItem
         {
@@ -523,6 +538,7 @@ Menu RID_SVXMNU_COLS
             Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ";
             Text[ turkish ] = "Þununla deðiþtir...";
             Text[ catalan ] = "~Reemplazar con";
+            Text[ finnish ] = "~Korvaa kohteella";
         };
         MenuItem
         {
@@ -551,6 +567,7 @@ Menu RID_SVXMNU_COLS
             Text[ arabic ] = "ÍÐÝ ÚãæÏ";
             Text[ turkish ] = "Sütunu sil";
             Text[ catalan ] = "~Eliminar columna";
+            Text[ finnish ] = "Poista sarake";
         };
         MenuItem
         {
@@ -577,6 +594,7 @@ Menu RID_SVXMNU_COLS
             Text[ arabic ] = "ÅÎÝÇÁ ÇáÚãæÏ";
             Text[ turkish ] = "Sütunu gizle";
             Text[ catalan ] = "~Ocultar columna";
+            Text[ finnish ] = "~Piilota sarakkeet";
         };
         MenuItem
         {
@@ -614,6 +632,7 @@ Menu RID_SVXMNU_COLS
                         Text[ language_user1 ] = "(ÄÄ): Þ Ðåñéóóüôåñá Þ åðéðñüóèåôá; - - - -";
                         Text[ turkish ] = "Diðer...";
                         Text[ catalan ] = "~Más ...";
+                        Text[ finnish ] = "~Lisää ";
                     };
                     MenuItem
                     {
@@ -644,6 +663,7 @@ Menu RID_SVXMNU_COLS
                         Text[ arabic ] = "Çáßá";
                         Text[ turkish ] = "Tümü";
                         Text[ catalan ] = "~Todas";
+                        Text[ finnish ] = "~Kaikki";
                     };
                 };
             };
@@ -666,6 +686,7 @@ Menu RID_SVXMNU_COLS
             Text[ arabic ] = "ÅÙåÇÑ ÇáÃÚãÏÉ";
             Text[ turkish ] = "Sütunlarý göster";
             Text[ catalan ] = "~Mostrar columnas";
+            Text[ finnish ] = "~Näytä sarakkeet";
         };
         MenuItem
         {
@@ -694,6 +715,7 @@ Menu RID_SVXMNU_COLS
             Text[ arabic ] = "...ÚãæÏ";
             Text[ turkish ] = "Sütun...";
             Text[ catalan ] = "~Columna...";
+            Text[ finnish ] = "Sarake";
         };
     };
 };
