@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:55:57 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1065,7 +1065,8 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
     }
     else if (nCommand == SPELLCMD_STARTSPELLDLG)
     {
-        SfxViewFrame::Current()->GetDispatcher()->Execute( SID_SPELLING, SFX_CALLMODE_ASYNCHRON );
+        SfxViewFrame::Current()->GetDispatcher()->Execute( SID_SPELL_DIALOG,
+            SFX_CALLMODE_ASYNCHRON );
     }
 }
 #endif // !SVX_LIGHT
