@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: as $ $Date: 2001-08-27 10:41:26 $
+ *  last change: $Author: as $ $Date: 2001-10-15 12:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,8 +411,10 @@ class FilterCache   :   private ThreadHelpBase
             @onerror    We return empty structures.
         *//*-*****************************************************************************************************/
 
-        css::uno::Sequence< ::rtl::OUString >   implts_queryFilter_ByDocumentService              (   const   ::rtl::OUString&    sService    ) const;
-        css::uno::Sequence< ::rtl::OUString >   implts_queryFilter_ByDocumentService_WithDefault  (   const   ::rtl::OUString&    sService    ) const;
+        css::uno::Sequence< ::rtl::OUString >   implts_queryFilter_ByDocumentService              (   const   ::rtl::OUString&    sService    ,
+                                                                                                              sal_Bool            bForUI      ) const;
+        css::uno::Sequence< ::rtl::OUString >   implts_queryFilter_ByDocumentService_WithDefault  (   const   ::rtl::OUString&    sService    ,
+                                                                                                              sal_Bool            bForUI      ) const;
         css::uno::Sequence< ::rtl::OUString >   implts_queryFilter_ByFlags                        (           sal_Int32           nFlags      ) const;
         css::uno::Sequence< ::rtl::OUString >   implts_queryFilter_ByFirstUserData                (   const   ::rtl::OUString&    sIdentifier ) const;
 
