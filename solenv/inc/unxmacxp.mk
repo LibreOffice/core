@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:10:35 $
+#   last change: $Author: hr $ $Date: 2004-02-02 19:06:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,9 @@ LINKOUTPUT_FILTER=
 # -D_PTHREADS and -D_REENTRANT are needed for STLport, and must be specified when
 #  compiling STLport sources too, either internally or externally.
 CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY -DPOWERPC -DPPC -DSTLPORT_VERSION=400 -D_USE_NAMESPACE=1
+.IF "$(GUIBASE)"=="unx"
+CDEFS+= -DX_LOCALE
+.ENDIF
 
 # Name of library where static data members are initialized
 # STATICLIBNAME=static$(DLLPOSTFIX)
