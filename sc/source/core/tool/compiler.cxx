@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:54:33 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,7 +855,7 @@ BOOL ScCompiler::IsOpCode( const String& rName )
         }
     }
     if ( bFound && pRawToken->GetOpCode() == ocSub &&
-            (eLastOp == ocOpen || eLastOp == ocSep ||
+            (eLastOp == ocOpen || eLastOp == ocSep || eLastOp == ocNegSub ||
              (eLastOp > ocEndDiv && eLastOp < ocEndBinOp)))
         pRawToken->NewOpCode( ocNegSub );
         //! if ocNegSub had ForceArray we'd have to set it here
@@ -2063,10 +2063,8 @@ OpCode ScCompiler::NextToken()
                 ((eLastOp > ocEndDiv) && (eLastOp < ocEndUnOp))) )
         SetError(errOperatorExpected);
     // Operator and Plus => operator
-    BOOL bLastOp = ( eLastOp == ocOpen || eLastOp == ocSep ||
-          (eLastOp > ocEndDiv && eLastOp < ocEndUnOp)
-        );
-    if( bLastOp && eOp == ocAdd )
+    if (eOp == ocAdd && (eLastOp == ocOpen || eLastOp == ocSep ||
+                (eLastOp > ocEndDiv && eLastOp < ocEndUnOp)))
         eOp = NextToken();
     else
     {
@@ -2298,9 +2296,8 @@ void ScCompiler::Factor()
                 // ocIndirect otherwise would have to do StopListening and
                 // StartListening on a reference for every interpreted value.
             case ocIndirect:
-                // ocOffset and ocIndex result in indirect references.
+                // ocOffset results in indirect references.
             case ocOffset:
-            case ocIndex:
                 pArr->SetRecalcModeAlways();
             break;
                 // Functions recalculated on every document load.
@@ -2547,7 +2544,21 @@ void ScCompiler::Factor()
 
 //---------------------------------------------------------------------------
 
-void ScCompiler::Unary()
+void ScCompiler::UnionCutLine()
+{
+    Factor();
+    while (pToken->GetOpCode() == ocIntersect)
+    {
+        ScTokenRef p = pToken;
+        NextToken();
+        Factor();
+        PutCode(p);
+    }
+}
+
+//---------------------------------------------------------------------------
+
+void ScCompiler::UnaryLine()
 {
     if( pToken->GetOpCode() == ocAdd )
         GetToken();
@@ -2555,42 +2566,35 @@ void ScCompiler::Unary()
     {
         ScTokenRef p = pToken;
         NextToken();
-        Factor();
+        UnaryLine();
         PutCode( p );
     }
     else
-    {
-        Factor();
-        while ( pToken->GetOpCode() == ocPercentSign )
-        {   // this operator _follows_ its operand
-            PutCode( pToken );
-            NextToken();
-        }
-    }
+        UnionCutLine();
 }
 
-void ScCompiler::PowLine()
+//---------------------------------------------------------------------------
+
+void ScCompiler::PostOpLine()
 {
-    Unary();
-    while (pToken->GetOpCode() == ocPow)
-    {
-        ScTokenRef p = pToken;
+    UnaryLine();
+    while ( pToken->GetOpCode() == ocPercentSign )
+    {   // this operator _follows_ its operand
+        PutCode( pToken );
         NextToken();
-        Unary();
-        PutCode(p);
     }
 }
 
 //---------------------------------------------------------------------------
 
-void ScCompiler::UnionCutLine()
+void ScCompiler::PowLine()
 {
-    PowLine();
-    while (pToken->GetOpCode() == ocIntersect)
+    PostOpLine();
+    while (pToken->GetOpCode() == ocPow)
     {
         ScTokenRef p = pToken;
         NextToken();
-        PowLine();
+        PostOpLine();
         PutCode(p);
     }
 }
@@ -2599,12 +2603,12 @@ void ScCompiler::UnionCutLine()
 
 void ScCompiler::MulDivLine()
 {
-    UnionCutLine();
+    PowLine();
     while (pToken->GetOpCode() == ocMul || pToken->GetOpCode() == ocDiv)
     {
         ScTokenRef p = pToken;
         NextToken();
-        UnionCutLine();
+        PowLine();
         PutCode(p);
     }
 }
