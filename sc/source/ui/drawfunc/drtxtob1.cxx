@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:59:36 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,13 +72,13 @@
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
 #include "eetext.hxx"
+#include <svx/svxdlg.hxx>
 #include <svx/brkitem.hxx>
 #include <svx/hyznitem.hxx>
 #include <svx/orphitem.hxx>
 #include <svx/outliner.hxx>
 #include <svx/spltitem.hxx>
 #include <svx/widwitem.hxx>
-#include <so3/pastedlg.hxx>
 #include <sot/exchange.hxx>
 #include <vcl/msgbox.hxx>
 #include <svtools/transfer.hxx>
@@ -168,14 +168,15 @@ void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest &rReq )
 {
     SdrView* pView = pViewData->GetScDrawView();
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
-    SvPasteObjectDialog* pDlg = new SvPasteObjectDialog;
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( pViewData->GetDialogParent() );
 
     pDlg->Insert( SOT_FORMAT_STRING, EMPTY_STRING );
     pDlg->Insert( SOT_FORMAT_RTF,    EMPTY_STRING );
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pViewData->GetActiveWin() ) );
 
-    ULONG nFormat = pDlg->Execute( pViewData->GetDialogParent(), aDataHelper.GetTransferable() );
+    ULONG nFormat = pDlg->GetFormat( aDataHelper.GetTransferable() );
 
     //! test if outliner view is still valid
 
