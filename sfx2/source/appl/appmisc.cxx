@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-30 11:53:10 $
+ *  last change: $Author: mba $ $Date: 2000-11-03 12:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,9 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
+
+#include <osl/file.hxx>
+
 #include "sfxresid.hxx"
 #include "app.hxx"
 #include "picklist.hxx"
@@ -752,29 +755,12 @@ SfxIniManager* SfxApplication::CreateIniManager()
     }
 
     String aImageName( aSetupObj.PathToFileName() );
-    VOS_NAMESPACE(OProcess,vos) aProcess( aImageName.GetBuffer(), DEFINE_CONST_UNICODE("/officemode") );
-    if ( 0 != aProcess.execute( VOS_NAMESPACE(OProcess,vos)::TOption_Detached ) )
+    ::vos::OProcess aProcess( aImageName.GetBuffer() );
+    ::rtl::OUString aArg = ::rtl::OUString::createFromAscii( "/officemode" );
+    ::vos::OArgumentList aList( 1, &aArg );
+    if ( 0 != aProcess.execute( ::vos::OProcess::TOption_Detached, aList ) )
         Application::Abort( aMsg );
     exit(-1);
-/*
-    INetURLObject aSetupObj( Application::GetAppFileName(), INET_PROT_FILE );
-#if defined(UNX)
-    aSetupObj.setName( DEFINE_CONST_UNICODE("setup") );
-#endif
-#if defined(WIN) || defined(WNT) || defined(OS2)
-    aSetupObj.setName( DEFINE_CONST_UNICODE("setup.exe") );
-#endif
-#if defined(MAC)
-    aSetupObj.setName( DEFINE_CONST_UNICODE("Setup") );
-#endif
-    String aMsg = DEFINE_CONST_UNICODE("Configuration files could not be found.\n");
-    aMsg += DEFINE_CONST_UNICODE("Can't start neither StarOffice nor Setup.\n");
-    aMsg += DEFINE_CONST_UNICODE("Please try to start setup by yourself.");
-    String aImageName( aSetupObj.PathToFileName() );
-    VOS_NAMESPACE(OProcess,vos) aProcess( aImageName.GetBuffer(), DEFINE_CONST_UNICODE("/officemode") );
-    if ( 0 != aProcess.execute( VOS_NAMESPACE(OProcess,vos)::TOption_Detached ) )
-        Application::Abort( aMsg );
-    exit(0);*/
     return 0;
 }
 
