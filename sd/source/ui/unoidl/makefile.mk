@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2004-06-03 11:57:16 $
+#   last change: $Author: rt $ $Date: 2004-11-26 20:28:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,7 +110,8 @@ SLO1FILES =      \
         $(SLO)$/unopback.obj	\
         $(SLO)$/unovwcrs.obj	\
         $(SLO)$/unodoc.obj      \
-        $(SLO)$/unomodule.obj
+        $(SLO)$/unomodule.obj	\
+        $(SLO)$/randomnode.obj
 
 SLO2FILES = \
     $(SLO)$/sddetect.obj		\
