@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poly2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:20 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 14:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,24 @@
 
 #define _SV_POLY2_CXX
 
+#ifdef HAVE_GPC_H
+
 #ifndef __gpc_h
 extern "C"
 {
     #include <external/gpc/gpc.h>
 }
 #endif
+
+#else
+
+// No GPC
+#define GPC_INT 0
+#define GPC_UNION 0
+#define GPC_DIFF 0
+#define GPC_XOR 0
+
+#endif // HAVE_GPC_H
 
 #include <cstring>
 #include <cmath>
@@ -446,6 +458,8 @@ void PolyPolygon::GetXOR( const PolyPolygon& rPolyPoly, PolyPolygon& rResult ) c
 
 // -----------------------------------------------------------------------
 
+#ifdef HAVE_GPC_H
+
 void* PolyPolygon::ImplCreateGPCPolygon() const
 {
     gpc_polygon* pRet = new gpc_polygon;
@@ -522,6 +536,21 @@ void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rR
     gpc_free_polygon( pResult );
     delete pResult;
 }
+
+#else
+// No GPC implementation
+
+void* PolyPolygon::ImplCreateGPCPolygon() const
+{
+    return NULL;
+}
+
+void PolyPolygon::ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, ULONG nOperation ) const
+{
+    return;
+}
+
+#endif // HAVE_GPC_H
 
 // -----------------------------------------------------------------------
 
