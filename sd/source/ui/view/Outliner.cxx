@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:18:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1259,7 +1259,7 @@ void Outliner::PrepareSpellCheck (void)
             }
 
 
-        EnterEditMode ();
+        EnterEditMode( FALSE );
     }
 }
 
@@ -1354,7 +1354,7 @@ void Outliner::SetPage (EditMode eEditMode, USHORT nPageIndex)
 
 
 
-void Outliner::EnterEditMode (void)
+void Outliner::EnterEditMode (BOOL bGrabFocus)
 {
     if (mbViewShellValid && mpOutlineView != NULL)
     {
@@ -1379,7 +1379,7 @@ void Outliner::EnterEditMode (void)
 
         // Turn on the edit mode for the text object.
         mpView->BegTextEdit(mpTextObj, pPV, mpWindow, bIsNewObj, this,
-            mpOutlineView, TRUE, TRUE);
+            mpOutlineView, TRUE, TRUE, bGrabFocus);
 
 
         SetUpdateMode(TRUE);
