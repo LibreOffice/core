@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbcmds.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 16:40:25 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,9 @@ static rtl::OUString createDesiredName(
     {
         // calculate name using source URL
 
-        // @@@ It's not guaranteed that path separator is a slash.
+        // @@@ It's not guaranteed that slashes contained in the URL are
+        // actually path separators. This depends on the fact whether the
+        // URL is hierarchical. Only then the slashes are path separators.
         // Therefore this algorithm is not guaranteed to work! But, ATM
         // I don't know a better solution. It would have been better to
         // have a member for the clashing name in
@@ -1715,6 +1717,20 @@ static void globalTransfer(
 
             if ( xResultSet->first() )
             {
+                star::ucb::GlobalTransferCommandArgument aTransArg(
+                        rContext.aArg.Operation,      // Operation
+                        rtl::OUString(),              // SourceURL; filled later
+                        xNew->getIdentifier()
+                            ->getContentIdentifier(), // TargetURL
+                        rtl::OUString(),              // NewTitle;
+                        rContext.aArg.NameClash );    // NameClash
+
+                ucb_commands::TransferCommandContext aSubCtx(
+                        rContext.xSMgr,
+                        rContext.xProcessor,
+                        rContext.xEnv,
+                        rContext.xOrigEnv,
+                        aTransArg );
                 do
                 {
                     uno::Reference< star::ucb::XContent > xChild
@@ -1722,16 +1738,11 @@ static void globalTransfer(
                     if ( xChild.is() )
                     {
                         // Recursion!
-                        star::ucb::GlobalTransferCommandArgument aTransArg(
-                                rContext.aArg.Operation,      // Operation
-                                xChild->getIdentifier()
-                                    ->getContentIdentifier(), // SourceURL
-                                xNew->getIdentifier()
-                                    ->getContentIdentifier(), // TargetURL
-                                rtl::OUString(),              // NewTitle;
-                                rContext.aArg.NameClash );    // NameClash
 
-                        ucb_commands::globalTransfer( rContext,
+                        aSubCtx.aArg.SourceURL
+                            = xChild->getIdentifier()->getContentIdentifier();
+
+                        ucb_commands::globalTransfer( aSubCtx,
                                                       xChild,
                                                       xNew,
                                                       xChildRow );
