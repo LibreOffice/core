@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-24 08:49:02 $
+ *  last change: $Author: ssa $ $Date: 2001-11-01 14:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,8 +373,8 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
          (pParent->mpFrameData->mbNeedSysWindow && !(nSysWinMode & SYSTEMWINDOW_MODE_NOAUTOMODE)) ||
          (nSysWinMode & SYSTEMWINDOW_MODE_DIALOG) )
     {
-        // Fenster mit einem schmallen Border anlegen?
-        if ( (nStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE)) == WB_BORDER )
+        // create window with a small border ?
+        if ( (nStyle & (WB_BORDER | WB_NOBORDER /*| WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE*/)) == WB_BORDER )
         {
             ImplBorderWindow* pBorderWin  = new ImplBorderWindow( pParent, nStyle, BORDERWINDOW_STYLE_FRAME );
             SystemWindow::ImplInit( pBorderWin, nStyle & ~WB_BORDER, NULL );
@@ -388,7 +388,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
             mbFrame         = TRUE;
             mbOverlapWin    = TRUE;
             SystemWindow::ImplInit( pParent, nStyle & (WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_CLOSEABLE | WB_STANDALONE) | WB_CLOSEABLE, NULL );
-            // Jetzt alle StyleBits setzen
+            // Now set all style bits
             mnStyle = nStyle;
         }
     }
