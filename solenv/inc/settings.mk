@@ -7,8 +7,8 @@
 #*                      Entwicklungtools-Definitionen
 #*
 #*    Ersterstellung    TH 28.03.94
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-06 15:03:01 $
-#*    $Revision: 1.5 $
+#*    Letzte Aenderung  $Author: jmarmion $ $Date: 2000-10-06 15:09:56 $
+#*    $Revision: 1.6 $
 #*
 #*    $Logfile:   T:/solar/inc/settings.mkv  $
 #*
@@ -42,7 +42,6 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
 
 .INCLUDE : minor.mk
 
-.IF "$(BUILD_SOSL)"==""
 
 %minor.mk :
 .IF "$(SOURCEVERSION)"=="$(WORK_STAMP)"
@@ -64,7 +63,6 @@ SOLARVERSION=$(SOLARVER)$/$(UPD)
 
 .INCLUDE : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/$(UPD)minor.mk
 
-.ENDIF			# "$(BUILD_SOSL)"==""
 
 # --- vordefiniertes Environments zuruecksetzen --------------------
 .SUFFIXES:
