@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-07 15:01:07 $
+ *  last change: $Author: dv $ $Date: 2001-05-10 11:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,6 +598,8 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     if( WB_OPEN == ( nFlags & WB_OPEN ) )
         nFilterFlags = SFX_FILTER_IMPORT;
 
+    sal_Bool    bHasAll = sal_False;
+    OUString    aAllFilterName( String( SfxResId( STR_FILTERNAME_ALL ) ) );
     SfxFilterMatcherIter aIter( mpMatcher, nFilterFlags, SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG );
     const SfxFilter* pDef = aIter.First();
 
@@ -605,7 +607,13 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     {
         OUString aUIName( pFilter->GetUIName() );
         xFltMgr->appendFilter( aUIName, pFilter->GetWildcard().GetWildCard() );
+        if ( aUIName == aAllFilterName )
+            bHasAll = sal_True;
     }
+
+    // Add the filter for displaying all files, if there is none
+    if ( !bHasAll )
+        xFltMgr->appendFilter( aAllFilterName, DEFINE_CONST_UNICODE( FILEDIALOG_FILTER_ALL ) );
 }
 
 // ------------------------------------------------------------------------
