@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ContentInfo.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-23 11:23:13 $
+ *  last change: $Author: kso $ $Date: 2001-01-31 08:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module ucb {
 /** A structure for information about contents.
 
     @see XContentCreator
-    @see XCommandExecutor
+    @see XCommandProcessor
 */
 struct ContentInfo
 {
@@ -83,10 +83,15 @@ struct ContentInfo
     string Type;
 
     //-------------------------------------------------------------------------
-    /** Attributes. This may be any flags providing additional information
-        to the implemantation of the XContentCreator interface.
+    /** Additional attributes.
 
-        The value can be one of the <type>ContentInfoAttribute</type> constants.
+        <p>These flags contain extra information on the content, like it's kind
+        ( KIND_FOLDER, KIND_DOCUMENT, KIND_LINK ). It is highly recommended to
+        fill these flags very accurately, as they are very important when
+        transferring contents between different Content Providers.
+
+        <p>The value can be one of the <type>ContentInfoAttribute</type>
+           constants.
     */
     long Attributes;
 
