@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionary.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-04 15:49:40 $
+ *  last change: $Author: tl $ $Date: 2001-07-23 15:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,7 @@ interface XDictionary : com::sun::star::container::XNamed
     /** is used to set the language of the dictionary.
 
          @param aLocale
-             the (new) language of the dictionary.
-
-    <!-- Dennis: Why is "new" in parens? -->
+            the new language of the dictionary.
 
         @see    com::sun::star::lang::Locale
     */
@@ -283,9 +281,9 @@ interface XDictionary : com::sun::star::container::XNamed
 
         @returns
             <TRUE/> if the entry was successfully made, <FALSE/> otherwise.
-            If the object disposes it will always fail.
-
-      <!-- Dennis: Please reword the above sentence. Is "disposes" some kind of action? --> -->
+            If <member scope="com::sun::star::lang">
+            XEventListener::disposing</member> was called before it
+            will always fail.
 
         @see    removeDictionaryEventListener
          @see   com::sun::star::linguistic2::XDictionaryEventListener

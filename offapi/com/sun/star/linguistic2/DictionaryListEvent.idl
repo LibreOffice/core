@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DictionaryListEvent.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-03 18:45:12 $
+ *  last change: $Author: tl $ $Date: 2001-07-23 15:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,16 +79,13 @@ module com { module sun { module star { module linguistic2 {
 
     <P>This structure is used by the dictionary-list to inform
     its listeners about certain events.
-    Since the dictionary-list
-    is able to collect several single events before broadcasting
-    an to it's listeners the interger argument may be a
-    combination of several event types.
+    Since the dictionary-list is able to collect several single
+    events before broadcasting them to it's listeners the
+    integer argument may be a combination of several event types.
     If more specific information about the events is requested by a
     listener, a sequence of all dictionary-list events since the
     last broadcasting will be supplied. Otherwise, that list will
     be empty.</P>
-
-   <!-- Dennis: Second sentence above is incomplete -->
 
      @see   com::sun::star::linguistic2::XDictionaryList
     @see    com::sun::star::linguistic2::XDictionaryListEventListener
@@ -106,6 +103,7 @@ struct DictionaryListEvent : com::sun::star::lang::EventObject
         @see    com::sun::star::linguistic2::DictionaryListEventFlags
 
     <!-- Dennis: Does the <type> tag change the display of its contents -->
+    <!-- Thomas: AFAIK it should translate into a hyperlink or so. -->
     */
     short nCondensedEvent;
 
