@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 14:37:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,21 +974,8 @@ void SfxObjectShell::PostActivateEvent_Impl( SfxViewFrame* pFrame )
         pImp->nEventId = 0;
         if ( nId && !pImp->bHidden )
         {
-<<<<<<< objmisc.cxx
-        /*TODO_AS
-            if ( pFrame && !pFrame->GetFrame()->GetWindow().IsReallyShown() && !pImp->bHidden )
-                // not event before the document has become visible!
-                return;
-                */
-
-            sal_uInt16 nId = pImp->nEventId;
-            pImp->nEventId = 0;
-            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
-            if ( !pSalvageItem )
-=======
             // SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
             // if ( !pSalvageItem )
->>>>>>> 1.58.14.1
                 pSfxApp->NotifyEvent(SfxEventHint( nId, this ), sal_False);
         }
     }
@@ -1175,9 +1162,11 @@ sal_Bool SfxObjectShell::IsLoadingFinished() const
     return ( pImp->nLoadedFlags == SFX_LOADED_ALL );
 }
 
+void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& xModel);
 void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
 {
     sal_Bool bSetModifiedTRUE = sal_False;
+    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
     if( ( nFlags & SFX_LOADED_MAINDOCUMENT ) && !(pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ))
     {
         ((SfxHeaderAttributes_Impl*)GetHeaderAttributes())->SetAttributes();
@@ -1186,7 +1175,6 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
             PositionView_Impl();
 
         // Salvage
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
         if ( pSalvageItem )
             bSetModifiedTRUE = sal_True;
     }
@@ -1199,6 +1187,39 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         if( !bSetModifiedTRUE && IsEnableSetModified() )
             SetModified( sal_False );
         Invalidate( SID_SAVEASDOC );
+    }
+
+    if( ( nFlags & SFX_LOADED_MAINDOCUMENT ) && !(pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ))
+    {
+        ::rtl::OUString aTitle = GetTitle( SFX_TITLE_DETECT );
+
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
+        if ( pSalvageItem )
+        {
+            pImp->aTempName = pMedium->GetPhysicalName();
+            pMedium->GetItemSet()->ClearItem( SID_DOC_SALVAGE );
+            pMedium->GetItemSet()->ClearItem( SID_FILE_NAME );
+            pMedium->GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetOrigURL() ) );
+        }
+        else
+        {
+            pMedium->GetItemSet()->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
+            pMedium->GetItemSet()->ClearItem( SID_DOCUMENT );
+        }
+
+        pMedium->GetItemSet()->ClearItem( SID_REFERER );
+        uno::Reference< frame::XModel >  xModel ( GetModel(), uno::UNO_QUERY );
+        if ( xModel.is() )
+        {
+            ::rtl::OUString aURL = GetMedium()->GetOrigURL();
+            SfxItemSet *pSet = GetMedium()->GetItemSet();
+            if ( !GetMedium()->IsReadOnly() )
+                pSet->ClearItem( SID_INPUTSTREAM );
+            uno::Sequence< beans::PropertyValue > aArgs;
+            TransformItems( SID_OPENDOC, *pSet, aArgs );
+            xModel->attachResource( aURL, aArgs );
+            impl_addToModelCollection(xModel);
+        }
     }
 
     pImp->nLoadedFlags |= nFlags;
