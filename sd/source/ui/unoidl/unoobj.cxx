@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-14 15:04:17 $
+ *  last change: $Author: cl $ $Date: 2002-01-15 10:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,10 +301,10 @@ SdXShape::SdXShape() throw()
 
 SdXShape::SdXShape( SvxShape* pShape, SdXImpressDocument* pModel) throw()
 :   maPropSet( pModel?
-                    ImplGetShapePropertyMap(pModel->IsImpressDocument(), pShape->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_GraphicObjectShape)))
+                    ImplGetShapePropertyMap(pModel->IsImpressDocument(), pShape->getShapeKind() == OBJ_GRAF )
                 :   aEmpty_SdXShapePropertyMap_Impl ),
     mpMap( pModel?
-                    ImplGetShapePropertyMap(pModel->IsImpressDocument(), pShape->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_GraphicObjectShape)))
+                    ImplGetShapePropertyMap(pModel->IsImpressDocument(), pShape->getShapeKind() == OBJ_GRAF )
                 :   aEmpty_SdXShapePropertyMap_Impl ),
     mpModel(pModel),
     mpImplementationId( NULL ),
