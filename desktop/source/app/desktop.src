@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 16:24:38 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 18:55:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1360,5 +1360,4 @@ String STR_TITLE_EXPIRED
     Text[ hungarian ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text[ slovenian ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
-
 
