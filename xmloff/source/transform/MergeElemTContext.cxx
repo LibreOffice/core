@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MergeElemTContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 12:27:18 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 15:53:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,94 @@
 #ifndef _XMLOFF_ATTRTRANSFORMERACTION_HXX
 #include "AttrTransformerAction.hxx"
 #endif
+#ifndef _XMLOFF_ELEMTRANSFORMERACTION_HXX
+#include "ElemTransformerAction.hxx"
+#endif
+#ifndef _XMLOFF_IGNORETCONTEXT_HXX
+#include "IgnoreTContext.hxx"
+#endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
+#endif
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
+
+class XMLParagraphTransformerContext : public XMLTransformerContext
+{
+public:
+    TYPEINFO();
+
+    XMLParagraphTransformerContext( XMLTransformerBase& rTransformer,
+                           const ::rtl::OUString& rQName );
+
+    virtual ~XMLParagraphTransformerContext();
+
+    // Create a childs element context. By default, the import's
+    // CreateContext method is called to create a new default context.
+    virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
+                                   const ::rtl::OUString& rLocalName,
+                                   const ::rtl::OUString& rQName,
+                                   const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+    // StartElement is called after a context has been constructed and
+    // before a elements context is parsed. It may be used for actions that
+    // require virtual methods. The default is to do nothing.
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+    // EndElement is called before a context will be destructed, but
+    // after a elements context has been parsed. It may be used for actions
+    // that require virtual methods. The default is to do nothing.
+    virtual void EndElement();
+
+    // This method is called for all characters that are contained in the
+    // current element. The default is to ignore them.
+    virtual void Characters( const ::rtl::OUString& rChars );
+};
+
+TYPEINIT1( XMLParagraphTransformerContext, XMLTransformerContext );
+
+XMLParagraphTransformerContext::XMLParagraphTransformerContext(
+        XMLTransformerBase& rImp,
+        const OUString& rQName ) :
+    XMLTransformerContext( rImp, rQName )
+{
+}
+
+XMLParagraphTransformerContext::~XMLParagraphTransformerContext()
+{
+}
+
+XMLTransformerContext *XMLParagraphTransformerContext::CreateChildContext(
+        sal_uInt16 nPrefix,
+        const OUString& rLocalName,
+        const OUString& rQName,
+        const Reference< XAttributeList >& xAttrList )
+{
+    XMLTransformerContext *pContext = 0;
+
+    pContext = new XMLIgnoreTransformerContext( GetTransformer(),
+                                                rQName, sal_True );
+
+    return pContext;
+}
+
+void XMLParagraphTransformerContext::StartElement( const Reference< XAttributeList >& rAttrList )
+{
+    XMLTransformerContext::StartElement( rAttrList );
+}
+
+void XMLParagraphTransformerContext::EndElement()
+{
+    XMLTransformerContext::EndElement();
+}
+
+void XMLParagraphTransformerContext::Characters( const OUString& rChars )
+{
+    XMLTransformerContext::Characters( rChars );
+}
 
 class XMLPersTextContentRNGTransformTContext : public XMLPersTextContentTContext
 {
@@ -152,7 +235,37 @@ XMLMergeElemTransformerContext::~XMLMergeElemTransformerContext()
 void XMLMergeElemTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {
-    m_xAttrList = new XMLMutableAttributeList( rAttrList, sal_True );
+    XMLMutableAttributeList *pMutableAttrList =
+        new XMLMutableAttributeList( rAttrList, sal_True );
+    m_xAttrList = pMutableAttrList;
+
+    sal_Int16 nAttrCount = m_xAttrList.is() ? m_xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
+    {
+        const OUString& rAttrName = m_xAttrList->getNameByIndex( i );
+        OUString aLocalName;
+        sal_uInt16 nPrefix =
+            GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
+                                                                &aLocalName );
+        sal_Bool bRemove = sal_True;
+        if( XML_NAMESPACE_OFFICE == nPrefix)
+        {
+            if (IsXMLToken( aLocalName, XML_DISPLAY ) )
+                bRemove = sal_False;
+            else if (IsXMLToken( aLocalName, XML_AUTHOR ) )
+                bRemove = sal_False;
+            else if (IsXMLToken( aLocalName, XML_CREATE_DATE ) )
+                bRemove = sal_False;
+            else if (IsXMLToken( aLocalName, XML_CREATE_DATE_STRING ) )
+                bRemove = sal_False;
+        }
+        if (bRemove)
+        {
+            pMutableAttrList->RemoveAttributeByIndex( i );
+            --i;
+            --nAttrCount;
+        }
+    }
 }
 
 XMLTransformerContext *XMLMergeElemTransformerContext::CreateChildContext(
@@ -200,6 +313,16 @@ XMLTransformerContext *XMLMergeElemTransformerContext::CreateChildContext(
                         XMLPersTextContentTContextVector::value_type aVal(pTC);
                         m_aChildContexts.push_back( aVal );
                         pContext = pTC;
+                    }
+                    break;
+                case XML_ETACTION_EXTRACT_CHARACTERS:
+                    {
+                        if( !m_bStartElementExported )
+                            ExportStartElement();
+                        XMLParagraphTransformerContext* pPTC =
+                            new XMLParagraphTransformerContext( GetTransformer(),
+                            rQName);
+                        pContext = pPTC;
                     }
                     break;
                 default:
