@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-28 17:27:34 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 08:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                 pTabViewShell->UISort( aSortParam );        // Teilergebnisse bei Bedarf neu
 
-                rReq.Done( aArgSet );
+                rReq.Done();
             }
             break;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 17:01:25 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 08:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #pragma hdrstop
 
 #include <svx/svxids.hrc>
+#include "sc.hrc"
 #include "scitems.hxx"
 
 #define ITEMID_ADJUST           0
@@ -143,6 +144,7 @@
 #include <svx/crsditem.hxx>
 #include <svx/brkitem.hxx>
 #include <svx/charreliefitem.hxx>
+#include <svx/rotmodit.hxx>
 
 #include "attrib.hxx"
 

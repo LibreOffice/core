@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-19 13:32:53 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 08:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
 
                 pScMod->SetRefDialog( nId, pWnd ? FALSE : TRUE );
+                rReq.Ignore();
             }
             break;
 

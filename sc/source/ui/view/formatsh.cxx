@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-04 17:43:54 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 08:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,11 +936,22 @@ void ScFormatShell::ExecuteAlignment( SfxRequest& rReq )
     if( pSet )
     {
         const SfxPoolItem* pItem = NULL;
-        if( pSet->GetItemState((nSlot), TRUE, &pItem  ) == SFX_ITEM_SET )
+        if( pSet->GetItemState(GetPool().GetWhich(nSlot), TRUE, &pItem  ) == SFX_ITEM_SET )
         {
 
             switch ( nSlot )
             {
+                case SID_ATTR_ALIGN_HOR_JUSTIFY:
+                case SID_ATTR_ALIGN_VER_JUSTIFY:
+                case SID_ATTR_ALIGN_INDENT:
+                case SID_ATTR_ALIGN_HYPHENATION:
+                case SID_ATTR_ALIGN_DEGREES:
+                case SID_ATTR_ALIGN_LOCKPOS:
+                case SID_ATTR_ALIGN_MARGIN:
+                case SID_ATTR_ALIGN_ORIENTATION:
+                    pTabViewShell->ApplyAttr( *pItem );
+                    break;
+
                 case SID_H_ALIGNCELL:
                 {
                     pTabViewShell->ApplyAttr( SvxHorJustifyItem( (SvxCellHorJustify)((const SvxHorJustifyItem*)pItem)->GetValue() ) );
@@ -1292,6 +1303,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_CHAR_CONTOUR:
             case SID_ATTR_CHAR_SHADOWED:
             case SID_ATTR_CHAR_RELIEF:
+            case SID_SCATTR_PROTECTION :
                 pTabViewShell->ApplyAttr( pNewAttrs->Get( pNewAttrs->GetPool()->GetWhich( nSlot ) ) );
                 rBindings.Invalidate( nSlot );
                 rBindings.Update( nSlot );
@@ -1403,7 +1415,6 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                         //  Macro recording uses a SvxBoxItem with the real values (OutWidth > 0)
                         //  or NULL pointers for no lines.
                         //  -> Substitute existing lines with pDefLine only if widths are 0.
-
                         SvxBoxItem aBoxItem ( *(const SvxBoxItem*)pItem );
                         if ( aBoxItem.GetTop() && aBoxItem.GetTop()->GetOutWidth() == 0 )
                             aBoxItem.SetLine( pDefLine, BOX_LINE_TOP );
@@ -1414,6 +1425,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                         if ( aBoxItem.GetRight() && aBoxItem.GetRight()->GetOutWidth() == 0 )
                             aBoxItem.SetLine( pDefLine, BOX_LINE_RIGHT );
                         pNewSet->Put( aBoxItem );
+                        rReq.AppendItem( aBoxItem );
                     }
 
                     if ( pNewAttrs->GetItemState( ATTR_BORDER_INNER, TRUE, &pItem )
@@ -1425,6 +1437,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                         if ( aBoxInfoItem.GetVert() && aBoxInfoItem.GetVert()->GetOutWidth() == 0 )
                             aBoxInfoItem.SetLine( pDefLine, BOXINFO_LINE_VERT );
                         pNewSet->Put( aBoxInfoItem );
+                        rReq.AppendItem( aBoxInfoItem );
                     }
                     else
                     {
