@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:48:10 $
+ *  last change: $Author: rt $ $Date: 2004-01-20 13:39:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,11 @@
 
 #include <math.h>
 #include <rtl/ustring.hxx>
-#include <tools/string.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/i18n/XTransliteration.hpp>
 #include <com/sun/star/i18n/TransliterationType.hpp>
 #include <com/sun/star/i18n/TransliterationModulesNew.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
-#include <rtl/ustring.hxx>
-#include <tools/string.hxx>
 #include <bullet.h>
 
 using namespace com::sun::star;
@@ -120,7 +118,6 @@ DefaultNumberingProvider::getDefaultContinuousNumberingLevels( const Locale& rLo
      return LocaleData().getContinuousNumberingLevels( rLocale );
 }
 
-
 OUString toRoman( sal_Int32 n )
 {
 
@@ -128,39 +125,40 @@ OUString toRoman( sal_Int32 n )
 //                          (Dummy),1000,500,100,50,10,5,1
     static const sal_Char coRomanArr[] = "MDCLXVI--";   // +2 Dummy entries !!
     const sal_Char* cRomanStr = coRomanArr;
-    USHORT nMask = 1000;
-    xub_StrLen nOver1000 = n / nMask;
+    sal_uInt16 nMask = 1000;
+    sal_uInt32 nOver1000 = n / nMask;
     n -= ( nOver1000 * nMask );
 
-    String sTmp;
-    sTmp.Fill( nOver1000, *coRomanArr );
+    OUStringBuffer sTmp;
+    while(nOver1000--)
+        sTmp.append(sal_Unicode(*coRomanArr));
 
     while( nMask )
     {
-        BYTE nZahl = BYTE( n / nMask );
-        BYTE nDiff = 1;
+        sal_uInt8 nZahl = sal_uInt8( n / nMask );
+        sal_uInt8 nDiff = 1;
         n %= nMask;
 
         if( 5 < nZahl )
         {
             if( nZahl < 9 )
-                sTmp += *(cRomanStr-1);
+                sTmp.append(sal_Unicode(*(cRomanStr-1)));
             ++nDiff;
             nZahl -= 5;
         }
         switch( nZahl )
         {
-        case 3: sTmp += *cRomanStr;     //no break!
-        case 2: sTmp += *cRomanStr;     //no break!
-        case 1: sTmp += *cRomanStr;     break;
-        case 4: ( sTmp += *cRomanStr ) += *(cRomanStr-nDiff); break;
-        case 5: sTmp += *(cRomanStr-nDiff); break;
+        case 3: sTmp.append(sal_Unicode(*cRomanStr));       //no break!
+        case 2: sTmp.append(sal_Unicode(*cRomanStr));       //no break!
+        case 1: sTmp.append(sal_Unicode(*cRomanStr));       break;
+        case 4: sTmp.append(sal_Unicode(*cRomanStr)).append(sal_Unicode(*(cRomanStr-nDiff))); break;
+        case 5: sTmp.append(sal_Unicode(*(cRomanStr-nDiff)));   break;
         }
 
         nMask /= 10;            // to the next decade
         cRomanStr += 2;
     }
-    return OUString( sTmp );
+    return sTmp.makeStringAndClear();
 }
 
 static
@@ -460,7 +458,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
         if ( number > tableSize && !recycleSymbol)
         result += OUString::valueOf( number);
         else
-        result += OUString(table[--number % tableSize]);
+        result += OUString(&table[--number % tableSize], 1);
     }
 
     // append suffix
