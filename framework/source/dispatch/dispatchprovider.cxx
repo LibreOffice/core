@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-08-16 09:45:23 $
+ *  last change: $Author: as $ $Date: 2001-08-16 12:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,7 +547,6 @@ void SAL_CALL DispatchProvider::disposing( const css::lang::EventObject& aEvent 
         m_xBlankDispatcher      = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xSelfDispatcher       = css::uno::Reference< css::frame::XDispatch >()          ;
         m_xAppDispatchProvider  = css::uno::Reference< css::frame::XDispatchProvider >()  ;
-        m_xSyncDispatcher       = css::uno::Reference< css::frame::XDispatch >()          ;
 
         // Forget all other references too.
         m_xFactory              = css::uno::Reference< css::lang::XMultiServiceFactory >();
@@ -582,13 +581,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_searchProt
     // default value, if operation failed.
     css::uno::Reference< css::frame::XDispatch > xHandler;
 
-    //-------------------------------------------------------------------------------------------------------------
-    /*HACK ... search better place! */
-    if( aURL.Complete == DECLARE_ASCII("private:factory/sync") )
-    {
-        xHandler = implts_getOrCreateDispatchHelper( E_SYNCDISPATCHER );
-    }
-    else
     //-------------------------------------------------------------------------------------------------------------
     // May be - it's a "mailto:" URL ...?
     if( aURL.Complete.compareToAscii( "mailto:", 7 ) == 0 )
@@ -748,23 +740,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
             //-----------------------------------------------------------------------------------------------------
             case E_PLUGINDISPATCHER     :   {
                                                 LOG_WARNING( "DispatchProvider::implts_getOrCreateDispatchHelper( E_PLUGINDISPATCHER )", "Not implemented yet!" )
-                                            }
-                                            break;
-
-            //-----------------------------------------------------------------------------------------------------
-            case E_SYNCDISPATCHER       :   {
-                                                if( m_xSyncDispatcher.is() == sal_False )
-                                                {
-                                                    try
-                                                    {
-                                                        m_xSyncDispatcher = css::uno::Reference< css::frame::XDispatch >( m_xFactory->createInstance( SERVICENAME_SYNCDISPATCHER ), css::uno::UNO_QUERY );
-                                                    }
-                                                    catch( css::uno::Exception& )
-                                                    {
-                                                        LOG_ERROR( "DispatchProvider::getOrCreateDispatchHelper( E_SYNCDISPATCHER )", "unexpected situation")
-                                                    }
-                                                }
-                                                xDispatchHelper = m_xSyncDispatcher;
                                             }
                                             break;
         }

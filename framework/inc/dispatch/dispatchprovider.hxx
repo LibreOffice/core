@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-08-02 13:32:23 $
+ *  last change: $Author: as $ $Date: 2001-08-16 12:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,8 +152,7 @@ enum EDispatchHelper
     E_CREATEDISPATCHER      ,
     E_BLANKDISPATCHER       ,
     E_SELFDISPATCHER        ,
-    E_PLUGINDISPATCHER      ,
-    E_SYNCDISPATCHER
+    E_PLUGINDISPATCHER
 };
 
 //_________________________________________________________________________________________________________________
@@ -254,7 +253,6 @@ class DispatchProvider  :   // interfaces
         css::uno::Reference< css::frame::XDispatch >                m_xBlankDispatcher          ;
         css::uno::Reference< css::frame::XDispatch >                m_xSelfDispatcher           ;
         css::uno::Reference< css::frame::XDispatch >                m_xPlugInDispatcher         ;
-        css::uno::Reference< css::frame::XDispatch >                m_xSyncDispatcher           ;
 
 };      //  class DispatchProvider
 
