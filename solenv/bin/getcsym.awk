@@ -2,9 +2,9 @@
 #
 #   $RCSfile: getcsym.awk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hjs $ $Date: 2002-11-21 16:50:30 $
+#   last change: $Author: sb $ $Date: 2003-01-10 11:23:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,11 +59,11 @@
 #
 #
 #*************************************************************************
+
 BEGIN { global_found = "false" }
 /[ \t]*#/ { sub( substr( $0, index($0, "#")),"" ) }
 /[ \t]*local:/ { global_found = "false" }
+/[ \t]*}/ { global_found = "false" }
 /^[ \t]*$/ { next }
 global_found == "true"  { print $0 }
 /[ \t]*global:/ { global_found = "true" }
-
-
