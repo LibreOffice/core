@@ -42,7 +42,7 @@ using namespace std;
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #endif
 
-#include "ooo/attrlist.hxx"
+#include <xmloff/attrlist.hxx>
 
 class DocumentElement
 {

@@ -7,7 +7,6 @@ VERSION=$(UPD)
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1FILES= \
-    $(SLB)$/ooo.lib  \
     $(SLB)$/stream.lib  \
     $(SLB)$/filter.lib
 SHL1LIBS=$(LIB1TARGET) 
@@ -24,6 +23,7 @@ SHL1STDLIBS+= \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
     $(SALLIB) \
+    $(XMLOFFLIB) \
     -lwpd
 SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB = i$(SHL1TARGET)

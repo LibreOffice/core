@@ -1,9 +1,8 @@
 #ifndef WPXSVSTREAM_H
 #define WPXSVSTREAM_H
 
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_H_
+#include <sot/storage.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
-#endif
 
 #include <libwpd/WPXStream.h>
 
@@ -23,6 +22,8 @@ public:
     virtual bool atEOS();
 
 private:
+    SotStorageRef       mxChildStorage;
+    SotStorageStreamRef mxChildStream;
     ::com::sun::star::uno::Reference<
               ::com::sun::star::io::XInputStream > mxStream;
     ::com::sun::star::uno::Sequence< sal_Int8 > maData;

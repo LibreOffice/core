@@ -1,7 +1,6 @@
 #include "WPXSvStream.h"
 #include "libwpd_internal.h"
 
-#include <sot/storage.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -15,6 +14,8 @@ using namespace ::com::sun::star::io;
 
 WPXSvInputStream::WPXSvInputStream( Reference< XInputStream > xStream ) :
         WPXInputStream(true),
+        mxChildStorage(),
+        mxChildStream(),
         mxStream(xStream),
         mnOffset(0)
 {
@@ -44,7 +45,6 @@ int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
             mnOffset += offset;
             return FALSE;
     }
-
     Reference < XSeekable> xSeekable = Reference < XSeekable >(mxStream, UNO_QUERY);
 
     if (!xSeekable.is())
@@ -67,7 +67,7 @@ long WPXSvInputStream::tell()
 
 bool WPXSvInputStream::atEOS()
 {
-    return mnOffset < mnLength;
+    return mnOffset >= mnLength;
 }
 
 bool WPXSvInputStream::isOLEStream()
@@ -78,6 +78,8 @@ bool WPXSvInputStream::isOLEStream()
     bAns = pStream && SotStorage::IsOLEStorage( pStream );
     delete pStream;
 
+    seek (0, WPX_SEEK_SET);
+
     return bAns;
 }
 
@@ -85,19 +87,15 @@ WPXInputStream * WPXSvInputStream::getDocumentOLEStream()
 {
     SvStream *pStream = utl::UcbStreamHelper::CreateStream( mxStream );
 
-    SotStorage *pStorage = new SotStorage( pStream, TRUE );
+    mxChildStorage = new SotStorage( pStream, TRUE );
 
-    fprintf (stderr, "Dodgy\n");
-    SvStream *pContents = pStorage->OpenSotStream(
+    mxChildStream = mxChildStorage->OpenSotStream(
             rtl::OUString::createFromAscii( "PerfectOffice_MAIN" ),
             STREAM_STD_READ );
 
-    Reference < XInputStream > xContents = new utl::OInputStreamWrapper( pStream );
+    Reference < XInputStream > xContents = new utl::OInputStreamWrapper( mxChildStream );
     if (xContents.is())
         return new WPXSvInputStream( xContents );
-    else {
-        fprintf( stderr, "Badly wrong\n" );
+    else
         return NULL;
-    }
-    // FIXME: we leak pStorage - investigate protected destructor there.
 }
