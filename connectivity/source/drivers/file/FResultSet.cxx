@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-10 14:30:24 $
+ *  last change: $Author: oj $ $Date: 2001-05-11 06:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,7 +819,7 @@ void SAL_CALL OResultSet::insertRow(  ) throw(SQLException, RuntimeException)
     {
         sal_Int32 nPos = (*m_aInsertRow)[0];
         m_pFileSet->push_back(nPos);
-        m_aRow = m_aInsertRow;
+        *m_aRow = *m_aInsertRow;
         m_aBookmarksPositions.push_back(m_aBookmarks.insert(TInt2IntMap::value_type((sal_Int32)(*m_aRow)[0],m_aBookmarksPositions.size()+1)).first);
     }
 }
@@ -841,6 +841,9 @@ void SAL_CALL OResultSet::updateRow(  ) throw(SQLException, RuntimeException)
         {
             (*m_aRow)[nPos] = (*aIter);
         }
+        aIter->setBound(sal_False);
+        aIter->setModified(sal_False);
+        aIter->setNull();
     }
     //  m_aRow = m_aInsertRow;
 }

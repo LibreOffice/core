@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-07 10:37:51 $
+ *  last change: $Author: oj $ $Date: 2001-05-11 06:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1686,7 +1686,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
     // first search a key that exist already in the table
     for (i = 0; i < m_pColumns->getCount(); i++)
     {
-        ::cppu::extractInterface(xCol,m_pColumns->getByIndex(i));
+        m_pColumns->getByIndex(i) >>= xCol;
         xCol->getPropertyValue(PROPERTY_NAME) >>= aColName;
 
         //  const SdbFILEColumn *pColumn = (const SdbFILEColumn *)(*aOriginalColumns)[i];
@@ -1731,7 +1731,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 
     for (i = 0; i < m_pColumns->getCount(); i++)
     {
-        ::cppu::extractInterface(xCol,m_pColumns->getByIndex(i));
+        m_pColumns->getByIndex(i) >>= xCol;
         xCol->getPropertyValue(PROPERTY_NAME) >>= aColName;
 
         // Laengen je nach Datentyp:
@@ -1766,6 +1766,13 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
         }
 
         ++nPos; // the row values start at 1
+        // Ist die Variable ueberhaupt gebunden?
+        if (!rRow[nPos].isBound() )
+        {
+            // Nein - naechstes Feld.
+            nByteOffset += nLen;
+            continue;
+        }
         if (aIndexedCols[i].is())
         {
             Reference<XUnoTunnel> xTunnel(aIndexedCols[i],UNO_QUERY);
@@ -1782,13 +1789,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
             }
         }
 
-        // Ist die Variable ueberhaupt gebunden?
-        if (!rRow[nPos].isBound() )
-        {
-            // Nein - naechstes Feld.
-            nByteOffset += nLen;
-            continue;
-        }
+
 
         char* pData = (char *)(m_pBuffer + nByteOffset);
         if (rRow[nPos].isNull())
