@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonlingui.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:15:50 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 13:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,8 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ hebrew ] = "~Original";
         Text[ slovak ] = "Pôvod~né";
         Text[ hindi ] = "~यथार्थ";
+        Text[ hungarian ] = "Ere~deti";
+        Text[ slovenian ] = "Izvir~no";
     };
     Control FT_AKTWORD
     {
@@ -121,7 +123,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text [ portuguese_brazilian ] = "Palavra" ;
         Text [ portuguese ] = "~Palavra" ;
         Text [ finnish ] = "Sa~na" ;
-        Text [ danish ] = "Ord" ;
+        Text [ danish ] = "~Ord" ;
         Text [ french ] = "Mot" ;
         Text [ swedish ] = "Or~d" ;
         Text [ dutch ] = "~Woord" ;
@@ -143,6 +145,8 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ hebrew ] = "‮מילה‬";
         Text[ slovak ] = "~Slovo";
         Text[ hindi ] = "~शब्द";
+        Text[ hungarian ] = "~Szó";
+        Text[ slovenian ] = "~Beseda";
     };
 
     Edit ED_NEWWORD
@@ -161,7 +165,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text [ english_us ] = "~Suggestions" ;
         Text [ portuguese_brazilian ] = "Sugest�o" ;
         Text [ swedish ] = "~F�rslag" ;
-        Text [ danish ] = "Forslag" ;
+        Text [ danish ] = "~Forslag" ;
         Text [ italian ] = "~Proposte" ;
         Text [ spanish ] = "S~ugerencias" ;
         Text [ french ] = "Suggestions" ;
@@ -184,6 +188,8 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ hebrew ] = "~Vorschläge";
         Text[ slovak ] = "Náv~rhy";
         Text[ hindi ] = "~सुझावें";
+        Text[ hungarian ] = "~Javaslat";
+        Text[ slovenian ] = "~Predlogi";
     };
 
     PushButton BTN_IGNORE
@@ -197,7 +203,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text [ portuguese_brazilian ] = "~Ignorar" ;
         Text [ portuguese ] = "~Ignorar" ;
         Text [ finnish ] = "Oh~ita" ;
-        Text [ danish ] = "Ignorer" ;
+        Text [ danish ] = "~Ignorer" ;
         Text [ french ] = "Ignorer" ;
         Text [ swedish ] = "~Ignorera" ;
         Text [ dutch ] = "~Negeren" ;
@@ -219,6 +225,8 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ hebrew ] = "‮להתעלם‬";
         Text[ slovak ] = "~Ignorovať";
         Text[ hindi ] = "~उपेक्षा";
+        Text[ hungarian ] = "~Mellőzés";
+        Text[ slovenian ] = "Prezr~i";
     };
 
     PushButton BTN_IGNOREALL
@@ -254,6 +262,8 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ hebrew ] = "Immer i~gnorieren";
         Text[ slovak ] = "Vždy i~gnorovať";
         Text[ hindi ] = "सब उ~पेक्षा करो";
+        Text[ hungarian ] = "~Mindig mellőzi";
+        Text[ slovenian ] = "Vedno p~rezri";
     };
 
     PushButton BTN_CHANGE
@@ -267,7 +277,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text [ portuguese_brazilian ] = "~Substituir" ;
         Text [ portuguese ] = "~Substituir" ;
         Text [ finnish ] = "Ko~rvaa" ;
-        Text [ danish ] = "Erstat" ;
+        Text [ danish ] = "~Erstat" ;
         Text [ french ] = "Remplacer" ;
         Text [ swedish ] = "~Ers�tt" ;
         Text [ dutch ] = "~Vervangen" ;
@@ -290,6 +300,8 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ hebrew ] = "‮החלפה‬";
         Text[ slovak ] = "Nah~radiť";
         Text[ hindi ] = "प्रतिस्थाप~न";
+        Text[ hungarian ] = "~Csere";
+        Text[ slovenian ] = "~Zamenjaj";
     };
 
     PushButton BTN_CHANGEALL
@@ -303,7 +315,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Text [ portuguese_brazilian ] = "Substi~tui tudo" ;
         Text [ portuguese ] = "Substi~tuir sempre" ;
         Text [ finnish ] = "Kor~vaa aina" ;
-        Text [ danish ] = "Erstat alle" ;
+        Text [ danish ] = "Erstat a~lle" ;
         Text [ french ] = "Toujours remplacer" ;
         Text [ swedish ] = "Ers~�tt alltid" ;
         Text [ dutch ] = "~Altijd vervangen" ;
@@ -325,6 +337,8 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ hebrew ] = "I~mmer ersetzen";
         Text[ slovak ] = "Vž~dy nahradiť";
         Text[ hindi ] = "हमेशा प्रतिस्थापि~त करो";
+        Text[ hungarian ] = "Mindig ~cseréli";
+        Text[ slovenian ] = "Vedno z~amenjaj";
     };
 
     FixedText FT_STATUS
@@ -380,8 +394,14 @@ Window RID_SVX_WND_COMMON_LINGU
         Text[ hebrew ] = "‮סגירה‬";
         Text[ slovak ] = "~Zavrieť";
         Text[ hindi ] = "~बन्द करो";
+        Text[ hungarian ] = "~Bezárás";
+        Text[ slovenian ] = "~Zapri";
     };
 };
+
+
+
+
 
 
 
