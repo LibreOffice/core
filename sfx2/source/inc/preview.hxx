@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:34 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:59:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include "basedlgs.hxx"
 
 class SfxObjectShell;
-class SvStorageRef;
+//REMOVE    class SvStorageRef;
 class SfxFrameWindow;
 
 class SfxFrame;
