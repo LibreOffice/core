@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-07 10:19:58 $
+ *  last change: $Author: cd $ $Date: 2002-10-10 08:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,9 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
                     // remove old menu from our system window if it was set before
                      if ( m_pMenuManager->GetMenu() == (Menu *)pSysWindow->GetMenuBar() )
                         pSysWindow->SetMenuBar( NULL );
+
+                    // remove listener before we destruct ourself, so we cannot be called back afterwards
+                    m_pMenuManager->RemoveListener();
 
                     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)m_pMenuManager )->release();
                 }
