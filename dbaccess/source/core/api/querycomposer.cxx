@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 11:47:21 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 17:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_XAGGREGATION_HPP_
+#include <com/sun/star/uno/XAggregation.hpp>
+#endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
@@ -114,7 +117,7 @@
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #endif
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
-#include "connectivity/sdbcx/VCollection.hxx"
+#include <connectivity/sdbcx/VCollection.hxx>
 #endif
 
 
@@ -164,16 +167,14 @@ namespace dbaccess
                         const ::std::vector< ::rtl::OUString> &_rVector
                         ) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
                         ,m_aColumns(_rColumns)
-        {}
-        ~OPrivateColumns()
         {
-            disposing();
         }
         virtual void SAL_CALL disposing(void)
         {
-            // it is not allowed to call the parent disposing because we only increment the refcount
-            // and do NOT create our own columns
-            m_aColumns.clear();
+            clear_NoDispose();
+                // we're not owner of the objects we're holding, instead the object we got in our ctor is
+                // So we're not allowed to dispose our elements.
+            OPrivateTables_BASE::disposing();
         }
     };
     // -------------------------------------------------------------------------
@@ -182,7 +183,10 @@ namespace dbaccess
         return Reference< XNamed >(*find(m_aColumns.begin(),m_aColumns.end(),_rName,isCaseSensitive()),UNO_QUERY);
     }
     typedef connectivity::sdbcx::OCollection OPrivateTables_BASE;
-    // -------------------------------------------------------------------------
+
+    //==========================================================================
+    //= OPrivateTables
+    //==========================================================================
     class OPrivateTables : public OPrivateTables_BASE
     {
         OSQLTables  m_aTables;
@@ -194,18 +198,21 @@ namespace dbaccess
             return NULL;
         }
     public:
-        OPrivateTables(const OSQLTables& _rColumns,
+        OPrivateTables(const OSQLTables& _rTables,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
                         const ::std::vector< ::rtl::OUString> &_rVector
                         ) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
-                        ,m_aTables(_rColumns)
-        {}
+                        ,m_aTables(_rTables)
+        {
+        }
         virtual void SAL_CALL disposing(void)
         {
-            // it is not allowed to call the parent disposing because we only increment the refcount
-            // and do NOT create our own tables
+            clear_NoDispose();
+                // we're not owner of the objects we're holding, instead the object we got in our ctor is
+                // So we're not allowed to dispose our elements.
             m_aTables.clear();
+            OPrivateTables_BASE::disposing();
         }
     };
     // -------------------------------------------------------------------------
