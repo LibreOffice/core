@@ -56,4 +56,10 @@ mkdir: %_DEST%\pck%_EXT%
 ..\%__SRC%\misc\*.map %_DEST%\pck%_EXT%
 
 ..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%
+..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%
+
+mkdir: %_DEST%\xml%_EXT%\processing
+
+..\util\*.xsl %_DEST%\xml%_EXT%\processing
+..\registry\*.dtd %_DEST%\xml%_EXT%\registry
 
