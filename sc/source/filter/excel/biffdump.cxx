@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 14:59:37 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -578,7 +577,7 @@ static void AddString( ByteString& t, XclImpStream& r, const UINT16 nLen )
 }
 
 
-static BOOL AddUNICODEString( ByteString& rStr, XclImpStream& rStrm, const BOOL b16BitLen = TRUE, UINT16 nLen = 0 )
+static BOOL AddUNICODEString( ByteString& rStr, XclImpStream& rStrm, const BOOL b16BitLen = TRUE, UINT16 nLen = 0, ByteString* pRawName = 0 )
 {
     BOOL bRet = TRUE;
 
@@ -607,6 +606,7 @@ static BOOL AddUNICODEString( ByteString& rStr, XclImpStream& rStrm, const BOOL 
     rStr += ") '";
 
     ByteString aData( rStrm.ReadRawUniString( nLen, b16Bit ), RTL_TEXTENCODING_MS_1252 );
+    if( pRawName ) *pRawName = aData;
 
     xub_StrLen nIndex = 0;
     while( (nIndex < aData.Len()) && (nIndex < 255) )
@@ -1100,6 +1100,13 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 __AddDec( t, n );
                 PRINT();
                 FormulaDump( n, FT_CellFormula );
+                if( rIn.GetRecLeft() > 0 )
+                {
+                    LINESTART();
+                    ADDTEXT( "additional formula data" );
+                    PRINT();
+                    ContDump( rIn.GetRecLeft() );
+                }
             }
             break;
             case 0x0013:        // PASSWORD
@@ -1175,7 +1182,9 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     rIn.PopPosition();
                 }
                 ADDTEXT( "name=" );
-                AddUNICODEString( t, rIn, false, nNameLen );
+                maNames.push_back( ByteStringRef( new ByteString ) );
+                ByteString& rName = *maNames.back();
+                AddUNICODEString( t, rIn, false, nNameLen, &rName );
                 if( bBuiltIn )
                 {
                     static const sal_Char* const ppcNames[] = {
@@ -1183,6 +1192,8 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                         "Criteria", "Print_Area", "Print_Titles", "Recorder", "Data_Form",
                         "Auto_Activate", "Auto_Deactivate", "Sheet_Title", "_FilterDatabase" };
                     lcl_AddEnum( t, nBuiltIn, ppcNames, STATIC_TABLE_SIZE( ppcNames ) );
+                    if( (0 <= nBuiltIn) && (nBuiltIn < STATIC_TABLE_SIZE( ppcNames )) )
+                        rName.Assign( ppcNames[ nBuiltIn ] );
                 }
                 PRINT();
 
@@ -1203,21 +1214,21 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 if( nDescrLen )
                 {
                     LINESTART();
-                    ADDTEXT( "menu-text=" );
+                    ADDTEXT( "descr-text=" );
                     AddUNICODEString( t, rIn, false, nDescrLen );
                     PRINT();
                 }
                 if( nHelpLen )
                 {
                     LINESTART();
-                    ADDTEXT( "menu-text=" );
+                    ADDTEXT( "help-text=" );
                     AddUNICODEString( t, rIn, false, nHelpLen );
                     PRINT();
                 }
                 if( nStatusLen )
                 {
                     LINESTART();
-                    ADDTEXT( "menu-text=" );
+                    ADDTEXT( "status-text=" );
                     AddUNICODEString( t, rIn, false, nStatusLen );
                     PRINT();
                 }
@@ -3906,6 +3917,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                 PRINT();
             }
             break;
+            case 0x0021:    // ARRAY
             case 0x0221:
             {
                 UINT16  nR1, nR2;
@@ -6557,18 +6569,23 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
 
                 t += "flags=";              __AddHex( t, nOpt );
 
-                if( nOpt & 0x01 )                           // AttrSemi
+                if( nOpt & 0x01 ) t += " volatile";
+                if( nOpt & 0x02 ) t += " if";
+                if( nOpt & 0x04 ) t += " choose";
+                if( nOpt & 0x08 ) t += " skip";
+                if( nOpt & 0x10 ) t += " sum";
+                if( nOpt & 0x20 ) t += " assignment";
+                if( nOpt & 0x40 ) t += " space";
+                if( nOpt & 0x80 ) t += " unknown";
+
+                if( nOpt & 0x02 )
                 {
-                    t += " volatile";
-                }
-                else if( nOpt & 0x02 )                      // AttrIf
-                {
-                    t += " if   skip-to-false=";
+                    t += "   skip-to-false=";
                     __AddHex( t, nData );
                 }
-                else if( nOpt & 0x04 )
-                {// nFakt -> Bytes oder Words ueberlesen    AttrChoose
-                    t += " choose   count=";
+                if( nOpt & 0x04 )
+                {
+                    t += "   count=";
                     __AddDec( t, nData );
                     t += "   skip=";
                     for( sal_uInt16 nIdx = 0; nIdx <= nData; ++nIdx )
@@ -6577,32 +6594,23 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
                         __AddDec( t, pIn->ReaduInt16() );
                     }
                 }
-                else if( nOpt & 0x08 )                      // AttrGoto
+                if( nOpt & 0x08 )
                 {
-                    t += " goto   skip=";
+                    t += "   skip=";
                     __AddHex( t, nData );
                     t += " (";
                     __AddDec( t, sal_uInt8( nData + 1 ) );
                     t += " bytes)";
                 }
-                else if( nOpt & 0x10 )                      // AttrSum
-                {
-                    t += " sum";
+                if( nOpt & 0x10 )
                     aStack.PushFunction( "ATTRSUM", 1, nOp );
-                }
-                else if( nOpt & 0x20 )                      // AttrBaxcel
+                if( nOpt & 0x40 )
                 {
-                    t += " assignment";
-                }
-                else if( nOpt & 0x40 )                      // AttrSpace
-                {
-                    t += " space   type=";
+                    t += "   type=";
                     __AddDec( t, static_cast< sal_uInt8 >( nData ) );
                     t += "   count=";
                     __AddDec( t, static_cast< sal_uInt8 >( nData >> 8 ) );
                 }
-                else
-                    t += " unknown";
             }
             break;
             case 0x1C: // Error Value                           [314 266]
@@ -6681,11 +6689,15 @@ void Biff8RecDumper::FormulaDump( const UINT16 nL, const FORMULA_TYPE eFT )
             case 0x63:
             {
                 STARTTOKENCLASS( "Name" );
-                __AddDec( aOperand, pIn->ReaduInt16() );
+                sal_uInt16 nNameIdx = pIn->ReaduInt16();
+                __AddDec( aOperand, nNameIdx );
                 t += "internal name: index=";
                 t += aOperand;
                 pIn->Ignore( 2 );
-                aOperand.Insert( "NAME(", 0 ).Append( ')' );
+                if( (0 < nNameIdx) && (nNameIdx <= maNames.size()) )
+                    aOperand = *(maNames[ nNameIdx - 1 ]);
+                else
+                    aOperand.Insert( "NAME(", 0 ).Append( ')' );
                 aStack.PushOperand( aOperand, nOp );
             }
             break;
@@ -8468,7 +8480,7 @@ BOOL Biff8RecDumper::CreateOutStream( const UINT32 n )
         pOutName->EraseLeadingChars( '\t' );
         pOutName->EraseTrailingChars( '\t' );
 
-        pDumpStream = new SvFileStream( String::CreateFromAscii( pOutName->GetBuffer() ), STREAM_WRITE|STREAM_SHARE_DENYWRITE );
+        pDumpStream = new SvFileStream( String::CreateFromAscii( pOutName->GetBuffer() ), STREAM_WRITE|STREAM_SHARE_DENYWRITE|(bClearFile?STREAM_TRUNC:0) );
 
         if( pDumpStream->IsOpen() )
         {
