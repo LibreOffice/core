@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:45:49 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 11:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,6 +511,40 @@ TabDialog TAB_TEMPLATE
                 Text[ slovak ] = "Zarovnanie";
                 Text[ hungarian ] = "IgazÃ­tÃ¡s";
                 Text[ slovenian ] = "Poravnava";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXPAGE_PARA_ASIAN ;
+                PageResID = RID_SVXPAGE_PARA_ASIAN ;
+                Text = "Asiatische Typographie" ;
+                Text [ ENGLISH ] = "Asian typography" ;
+                Text[ english_us ] = "Asian Typography";
+                Text[ portuguese ] = "Tipografia asiática";
+                Text[ russian ] = "Àçèàòñêîå îôîğìëåíèå";
+                Text[ greek ] = "ÁóéáôéêŞ ôõğïãñáößá";
+                Text[ dutch ] = "Aziatische typografie";
+                Text[ french ] = "Typographie asiatique";
+                Text[ spanish ] = "Tipografía asiática";
+                Text[ italian ] = "Tipografia asiatica";
+                Text[ danish ] = "Asiatisk typografi";
+                Text[ swedish ] = "Asiatisk typografi";
+                Text[ polish ] = "Typografia azjatycka";
+                Text[ portuguese_brazilian ] = "Tipografia asiática";
+                Text[ japanese ] = "æ—¥æœ¬èªæ–‡ã®ä½“è£";
+                Text[ korean ] = "í•œê¸€ ì…ë ¥ ì²´ê³„";
+                Text[ chinese_simplified ] = "ä¸­æ—¥éŸ©æ–‡å­—";
+                Text[ chinese_traditional ] = "ä¸­æ—¥éŸ“æ–‡å­—";
+                Text[ turkish ] = "Asya tipi tipografi";
+                Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
+                Text[ catalan ] = "Tipografia asiàtica";
+                Text[ finnish ] = "Aasialaiset merkit";
+                Text[ thai ] = "à¸à¸²à¸£à¸à¸´à¸¡à¸à¹Œà¹à¸šà¸šà¹€à¸­à¹€à¸Šà¸µà¸¢";
+                Text[ czech ] = "AsijskÃ¡ typografie";
+                Text[ hebrew ] = "Asiatische Typographie";
+                Text[ hindi ] = "à¤à¤¶à¤¿à¤¯à¤¨ à¤Ÿà¤‡à¤ªà¥‹à¤—à¥à¤°à¤«à¥€";
+                Text[ slovak ] = "ÃzijskÃ¡ typografia";
+                Text[ hungarian ] = "Ãzsiai tipogrÃ¡fia";
+                Text[ slovenian ] = "Azijska tipografija";
             };
             PageItem
             {
