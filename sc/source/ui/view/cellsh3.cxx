@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:34:34 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,8 +517,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         }
                         else
                         {
+                            BOOL bSheetProtected = pDoc->IsTabProtected(nTab);
                             ScNewScenarioDlg* pNewDlg =
-                                new ScNewScenarioDlg( pTabViewShell->GetDialogParent(), aName );
+                                new ScNewScenarioDlg( pTabViewShell->GetDialogParent(), aName, FALSE, bSheetProtected );
 
                             if ( pNewDlg->Execute() == RET_OK )
                             {
