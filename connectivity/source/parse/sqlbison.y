@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.15 2001-02-05 16:38:15 rt Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.16 2001-02-06 08:14:11 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: rt $ $Date: 2001-02-05 16:38:15 $ $Revision: 1.15 $
+//	$Author: oj $ $Date: 2001-02-06 08:14:11 $ $Revision: 1.16 $
 //
 // Description:
 //
@@ -1911,7 +1911,7 @@ join_type:
 		}
 	;
 cross_union:
-		table_ref /*[SQL_TOKEN_CROSS]*/ SQL_TOKEN_CROSS SQL_TOKEN_JOIN table_ref %prec SQL_TOKEN_CROSS
+		table_ref /*[SQL_TOKEN_CROSS]*/ SQL_TOKEN_CROSS SQL_TOKEN_JOIN table_ref
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1923,7 +1923,7 @@ cross_union:
 
 qualified_join:
 		/* wenn SQL_TOKEN_NATURAL, dann keine join_spec */
-		table_ref /*[SQL_TOKEN_NATURAL]*/ SQL_TOKEN_NATURAL join_type SQL_TOKEN_JOIN table_ref %prec SQL_TOKEN_NATURAL
+		table_ref /*[SQL_TOKEN_NATURAL]*/ SQL_TOKEN_NATURAL join_type SQL_TOKEN_JOIN table_ref
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
