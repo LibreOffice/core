@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfobj.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:10:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 16:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,11 +130,10 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
         pPage->InsertObject(pSdrOle2Obj);
 
         pSdrOle2Obj->SetLogicRect(rRect);               // erst nach InsertObject !!!
-        uno::Reference < embed::XVisualObject > xVis( xObj, uno::UNO_QUERY );
         awt::Size aSz;
         aSz.Width = rRect.GetSize().Width();
         aSz.Height = rRect.GetSize().Height();
-        xVis->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, aSz );
+        xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, aSz );
 
             // hier kann das Chart noch nicht mit Daten gefuettert werden,
             // weil die Formeln noch nicht berechnet sind.
