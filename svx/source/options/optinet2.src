@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:58:36 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1588,7 +1588,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         };
         StringList [ portuguese_brazilian ] =
         {
-             < "Nie" ; > ;
+             < "Nunca" ; > ;
             < "Gemäß Pfadliste" ; > ;
             < "Immer" ; > ;
         };
@@ -1944,8 +1944,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     StringList [ dutch ] =
     {
-         < "Niemals" ; > ;
-        < "Mit Sicherheitsüberprüfung" ; > ;
+         < "Nooit" ; > ;
+        < "Met beveiligingscontrole" ; > ;
         < "Altijd" ; > ;
     };
     StringList [ french ] =
@@ -1974,8 +1974,8 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     StringList [ danish ] =
     {
-         < "Niemals" ; > ;
-        < "Mit Sicherheitsüberprüfung" ; > ;
+         < "Aldrig" ; > ;
+        < "Med sikkerhedskontrol" ; > ;
         < "Altid" ; > ;
     };
     StringList [ swedish ] =
@@ -1992,9 +1992,9 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
     };
     StringList [ portuguese_brazilian ] =
     {
-         < "Niemals" ; > ;
+         < "Nunca" ; > ;
         < "Mit Sicherheitsüberprüfung" ; > ;
-        < "Immer" ; > ;
+        < "Sempre" ; > ;
     };
     StringList [ japanese ] =
     {
