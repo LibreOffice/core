@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:35:14 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,12 @@
 #endif
 #ifndef _COM_SUN_STAR_PRESENTATION_CLICKACTION_HPP_
 #include <com/sun/star/presentation/ClickAction.hpp>
+#endif
+#ifndef _COM_SUN_STAR_MEDIA_XMANAGER_HPP_
+#include <com/sun/star/media/XManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_MEDIA_XPLAYER_HPP_
+#include <com/sun/star/media/XPlayer.hpp>
 #endif
 
 #ifndef _COMPHELPER_IMPLEMENTATIONREFERENCE_HXX
@@ -397,6 +403,9 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > mxPreviewDrawPage;
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxPreviewAnimationNode;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer > mxPlayer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::media::XManager > mxManager;
 };
 
 } // namespace ::sd
