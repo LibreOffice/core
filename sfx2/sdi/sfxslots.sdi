@@ -2,7 +2,7 @@
     module StarApplicationFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: kz $ $Date: 2004-02-25 15:40:30 $ $Revision: 1.13 $
+    $Author: rt $ $Date: 2004-05-19 08:32:17 $ $Revision: 1.14 $
     $Logfile:   T:/sfx2/sdi/sfxslots.sdv  $ $Workfile:   SFXSLOTS.SDI  $
 =========================================================================*/
 
@@ -114,6 +114,12 @@ TypeLibFile( "sfxslots.tlb" )
         INT32               Height          MID_SIZE_HEIGHT;
     };
     item SvxSize SvxSizeItem;
+
+    struct SfxScriptOrganizer
+    {
+        String Language MID_SCRIPT_ORGANIZER_LANGUAGE;
+    };
+    item SfxScriptOrganizer SfxScriptOrganizerItem;
 
     include "sfx.sdi"
     include "object.sdi"
