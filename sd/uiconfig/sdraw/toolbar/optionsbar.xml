@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="helpid:10126" toolbar:text="" toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:GlueEditMode" toolbar:helpid="helpid:27301" toolbar:text="" toolbar:style="auto" />
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ClickChangeRotation" toolbar:helpid="helpid:27170" toolbar:text="" toolbar:style="auto" />
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:helpid="helpid:27322" toolbar:text="" toolbar:style="auto" />
