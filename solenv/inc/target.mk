@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.118 $
+#   $Revision: 1.119 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-11 16:47:51 $
+#   last change: $Author: hjs $ $Date: 2002-07-17 15:26:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2201,14 +2201,11 @@ COMPVTMP:=$(mktmp iii)
 .ENDIF			# "$(UPDATER)"!=""
 
 .IF "$(JAVAVERMK)"!=""
-.IF "$(UPDATER)"!=""
 "$(JAVAVERMK)" : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
     @echo JAVAVER:=$(JAVAVER) > $@
     @echo JAVANUMVER:=$(JAVANUMVER) >> $@
     
 .ENDIF			# "$(JAVAVERMK)"!=""
-.ENDIF			# "$(UPDATER)"!=""
-
 
 # multi-list enabled
 .IF "$(IMGLSTTARGET)"!=""
