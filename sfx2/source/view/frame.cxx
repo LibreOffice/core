@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:32:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1146,6 +1146,18 @@ String SfxUsrAnyItem::GetValueText() const
 SfxPoolItem* SfxUsrAnyItem::Clone( SfxItemPool *) const
 {
     return new SfxUsrAnyItem( Which(), aValue );
+}
+
+sal_Bool SfxUsrAnyItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+{
+    rVal = aValue;
+    return sal_True;
+}
+
+sal_Bool SfxUsrAnyItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+{
+    aValue = rVal;
+    return sal_True;
 }
 
 sal_Bool SfxFrame::BrowseInFrame( int nDelta )
