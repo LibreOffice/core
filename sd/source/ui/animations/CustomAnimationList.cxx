@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationList.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:41:22 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,7 +544,8 @@ void CustomAnimationTriggerEntryItem::Clone( SvLBoxItem* pSource )
 
 CustomAnimationList::CustomAnimationList( ::Window* pParent, const ResId& rResId, ICustomAnimationListController* pController )
 : SvTreeListBox( pParent, rResId ), mpLastParentEntry(0),
-  mpController( pController )
+  mpController( pController ),
+  mbIgnorePaint( false )
 {
     SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT ) );
 
@@ -620,6 +621,12 @@ void CustomAnimationList::select( CustomAnimationEffectPtr pEffect, bool bSelect
         }
         pEntry = static_cast< CustomAnimationListEntry* >(Next( pEntry ));
     }
+
+    if( !pEntry && bSelect )
+    {
+        append( pEffect );
+        select( pEffect );
+    }
 }
 
 // --------------------------------------------------------------------
@@ -663,6 +670,8 @@ void stl_append_effect_func::operator()(CustomAnimationEffectPtr pEffect)
 
 void CustomAnimationList::update()
 {
+    mbIgnorePaint = true;
+
     CustomAnimationListEntry* pEntry = 0;
 
     std::list< CustomAnimationEffectPtr > aExpanded;
@@ -751,6 +760,7 @@ void CustomAnimationList::update()
         }
     }
 
+    mbIgnorePaint = false;
     Invalidate();
 }
 
@@ -1047,6 +1057,9 @@ void CustomAnimationList::notify_change()
 
 void CustomAnimationList::Paint( const Rectangle& rRect )
 {
+    if( mbIgnorePaint )
+        return;
+
     SvTreeListBox::Paint( rRect );
 
     // draw help text if list box is still empty
