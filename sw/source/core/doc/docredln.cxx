@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-26 18:08:21 $
+ *  last change: $Author: jp $ $Date: 2001-04-23 14:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2120,6 +2120,12 @@ void SwDoc::SetAutoFmtRedlineComment( const String* pTxt, USHORT nSeqNo )
         delete pAutoFmtRedlnComment, pAutoFmtRedlnComment = 0;
 
     nAutoFmtRedlnCommentNo = nSeqNo;
+}
+
+void SwDoc::SetRedlinePasswd(
+            const ::com::sun::star::uno::Sequence <sal_Int8>& rNew )
+{
+    aRedlinePasswd = rNew;
 }
 
 /*  */
