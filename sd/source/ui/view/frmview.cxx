@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-24 11:34:01 $
+ *  last change: $Author: sj $ $Date: 2001-05-07 13:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,7 +531,6 @@ void FrameView::Update(SdOptions* pOptions)
         SetBigHandles( pOptions->IsBigHandles() );
         SetDoubleClickTextEdit( pOptions->IsDoubleClickTextEdit() );
         SetClickChangeRotation( pOptions->IsClickChangeRotation() );
-        SetSummationOfParagraphs( pOptions->IsSummationOfParagraphs() );
         SetPreviewDrawMode( pOptions->GetPreviewQuality() );
     }
 }

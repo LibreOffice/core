@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 09:19:34 $
+ *  last change: $Author: sj $ $Date: 2001-05-07 13:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,11 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
     pRet->Put( SdOptionsContentsItem( ATTR_OPTIONS_CONTENTS, pOptions, pFrameView ) );
 
     // TP_OPTIONS_MISC:
-    pRet->Put( SdOptionsMiscItem( ATTR_OPTIONS_MISC, pOptions, pFrameView ) );
+    SdOptionsMiscItem aSdOptionsMiscItem( ATTR_OPTIONS_MISC, pOptions, pFrameView );
+    if ( pFrameView )
+        aSdOptionsMiscItem.SetSummationOfParagraphs( pDoc->IsSummationOfParagraphs() );
+    pRet->Put( aSdOptionsMiscItem );
+
 
     // TP_OPTIONS_SNAP:
     pRet->Put( SdOptionsSnapItem( ATTR_OPTIONS_SNAP, pOptions, pFrameView ) );
@@ -644,8 +648,9 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
             if( pInternalOutl )
                 pInternalOutl->SetDefTab( nDefTab );
         }
-        if ( bMiscOptions && ( eDocType == DOCUMENT_TYPE_IMPRESS ) )
+        if ( bMiscOptions )
         {
+            pDoc->SetSummationOfParagraphs( pMiscItem->IsSummationOfParagraphs() );
             sal_uInt32 nSum = pMiscItem->IsSummationOfParagraphs() ? EE_CNTRL_ULSPACESUMMATION : 0;
             sal_uInt32 nCntrl;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
+ *  last change: $Author: sj $ $Date: 2001-05-07 13:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,8 +419,14 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 
 #ifndef SVX_LIGHT
     nCntrl &= ~ EE_CNTRL_ULSPACESUMMATION;
-    if ( pOptions->IsSummationOfParagraphs() )
-        nCntrl |= EE_CNTRL_ULSPACESUMMATION;
+    if ( eDocType != DOCUMENT_TYPE_IMPRESS )
+        SetSummationOfParagraphs( sal_False );
+    else
+    {
+        SetSummationOfParagraphs( pOptions->IsSummationOfParagraphs() );
+        if ( pOptions->IsSummationOfParagraphs() )
+            nCntrl |= EE_CNTRL_ULSPACESUMMATION;
+    }
 #endif
     rOutliner.SetControlWord(nCntrl);
 

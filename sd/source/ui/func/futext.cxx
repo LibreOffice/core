@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-24 14:47:46 $
+ *  last change: $Author: sj $ $Date: 2001-05-07 13:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1003,12 +1003,8 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, BOOL bQuickDrag)
                 nCntrl |= EE_CNTRL_AUTOCORRECT;
 
                 nCntrl &= ~EE_CNTRL_ULSPACESUMMATION;
-                if ( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
-                {
-                    FrameView* pFrameView = pView->GetDocSh()->GetViewShell()->GetFrameView();
-                    if ( pFrameView && pFrameView->IsSummationOfParagraphs() )
-                        nCntrl |= EE_CNTRL_ULSPACESUMMATION;
-                }
+                if ( pDoc->IsSummationOfParagraphs() )
+                    nCntrl |= EE_CNTRL_ULSPACESUMMATION;
 
                 SetSpellOptions( nCntrl );
 

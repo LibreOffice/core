@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sj $ $Date: 2001-04-24 11:28:27 $
+ *  last change: $Author: sj $ $Date: 2001-05-07 13:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1051,6 +1051,7 @@ BOOL SdPPTImport::Import()
     }
     if ( bDocumentFound )
     {
+        pDoc->SetSummationOfParagraphs( sal_True );
         if ( pDocShell )
         {
             FrameView* pFrameView = pDoc->GetFrameView( 0 );
@@ -1066,8 +1067,6 @@ BOOL SdPPTImport::Import()
             }
             if ( pFrameView )
             {
-                pFrameView->SetSummationOfParagraphs( sal_True );
-
                 sal_uInt16  nSelectedPage = 0;
                 PageKind    ePageKind = PK_STANDARD;
                 EditMode    eEditMode = EM_PAGE;

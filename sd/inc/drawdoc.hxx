@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-27 14:22:52 $
+ *  last change: $Author: sj $ $Date: 2001-05-07 13:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,6 +216,8 @@ private:
     BOOL              bOnlineSpell;
     BOOL              bHideSpell;
     BOOL              bCustomShow;
+    BOOL              bSummationOfParagraphs;
+
     ULONG             nPresFirstPage;
     LanguageType      eLanguage;
     LanguageType      eLanguageCJK;
@@ -363,6 +365,10 @@ public:
 
     void  SetPresFullScreen (BOOL bNewFullScreen);
     BOOL  GetPresFullScreen() const { return bPresFullScreen; }
+
+       void  SetSummationOfParagraphs( BOOL bOn = TRUE ) { bSummationOfParagraphs = bOn; }
+    const BOOL  IsSummationOfParagraphs() const { return bSummationOfParagraphs; }
+
 
 #ifndef SVX_LIGHT
     void SetOnlineSpell( BOOL bIn );

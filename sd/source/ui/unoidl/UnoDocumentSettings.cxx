@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-04 14:24:32 $
+ *  last change: $Author: sj $ $Date: 2001-05-07 13:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,19 @@
 #include "sdattr.hxx"
 #endif
 #endif
+#ifndef _SD_VIEWSHEL_HXX
+#include "../inc/viewshel.hxx"
+#endif
+#ifndef _SD_FRMVIEW_HXX
+#include "../inc/frmview.hxx"
+#endif
+#ifndef _SD_SPOUTLINER_HXX
+#include <sdoutl.hxx>
+#endif
+#ifndef _EDITSTAT_HXX
+#include <svx/editstat.hxx>
+#endif
+
 #ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
 #endif
@@ -206,7 +219,7 @@ enum SdDocumentSettingsPropertyHandles
     HANDLE_PRINTHIDENPAGES, HANDLE_PRINTFITPAGE, HANDLE_PRINTTILEPAGE, HANDLE_PRINTBOOKLET, HANDLE_PRINTBOOKLETFRONT,
     HANDLE_PRINTBOOKLETBACK, HANDLE_PRINTQUALITY, HANDLE_COLORTABLEURL, HANDLE_DASHTABLEURL, HANDLE_LINEENDTABLEURL, HANDLE_HATCHTABLEURL,
     HANDLE_GRADIENTTABLEURL, HANDLE_BITMAPTABLEURL, HANDLE_FORBIDDENCHARS, HANDLE_APPLYUSERDATA, HANDLE_PAGENUMFMT,
-    HANDLE_PRINTERNAME, HANDLE_PRINTERJOB
+    HANDLE_PRINTERNAME, HANDLE_PRINTERJOB, HANDLE_PARAGRAPHSUMMATION
 };
 
 #define MID_PRINTER 1
@@ -261,6 +274,7 @@ enum SdDocumentSettingsPropertyHandles
             { MAP_LEN("ApplyUserData"),         HANDLE_APPLYUSERDATA,       &::getBooleanCppuType(),                0,  0 },
 
             { MAP_LEN("PageNumberFormat"),      HANDLE_PAGENUMFMT,          &::getCppuType((const sal_Int32*)0),    0,  0 },
+            { MAP_LEN("ParagraphSummation"),    HANDLE_PARAGRAPHSUMMATION,  &::getBooleanCppuType(),                0,  0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
 
@@ -678,6 +692,40 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                 }
                 break;
 
+            case HANDLE_PARAGRAPHSUMMATION :
+            {
+                sal_Bool bIsSummationOfParagraphs;
+                if ( *pValues >>= bIsSummationOfParagraphs )
+                {
+                    bOk = sal_True;
+                    bChanged = sal_True;
+                    if ( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+                    {
+                        sal_uInt32 nSum = bIsSummationOfParagraphs ? EE_CNTRL_ULSPACESUMMATION : 0;
+                        sal_uInt32 nCntrl;
+
+                        pDoc->SetSummationOfParagraphs( bIsSummationOfParagraphs );
+                        SdDrawDocument* pDocument = pDocSh->GetDoc();
+                        SdrOutliner& rOutl = pDocument->GetDrawOutliner( FALSE );
+                        nCntrl = rOutl.GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
+                        rOutl.SetControlWord( nCntrl | nSum );
+                        SdOutliner* pOutl = pDocument->GetOutliner( FALSE );
+                        if( pOutl )
+                        {
+                            nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
+                            pOutl->SetControlWord( nCntrl | nSum );
+                        }
+                        pOutl = pDocument->GetInternalOutliner( FALSE );
+                        if( pOutl )
+                        {
+                            nCntrl = pOutl->GetControlWord() &~ EE_CNTRL_ULSPACESUMMATION;
+                            pOutl->SetControlWord( nCntrl | nSum );
+                        }
+                    }
+                }
+            }
+            break;
+
             default:
                 throw UnknownPropertyException();
 
@@ -894,6 +942,14 @@ void DocumentSettings::_getPropertyValues( const PropertyMapEntry** ppEntries, A
 #endif
                 }
                 break;
+
+            case HANDLE_PARAGRAPHSUMMATION :
+            {
+                sal_Bool bIsSummationOfParagraphs = pDoc->IsSummationOfParagraphs();
+                *pValue <<= bIsSummationOfParagraphs;
+            }
+            break;
+
             default:
                 throw UnknownPropertyException();
         }
