@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-11-26 21:49:20 $
+#   last change: $Author: obo $ $Date: 2005-01-25 15:20:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,9 @@ PARFILES += \
 .ENDIF
 .ENDIF
 
+.IF "$(JDK)" == "gcj"
+SCPDEFS+=-DGCJ
+.ENDIF
 
 ULFFILES= \
         module_javafilter.ulf              \
