@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-15 15:37:42 $
+ *  last change: $Author: mav $ $Date: 2003-12-15 15:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         // and it holds reference to "incomplete" component
         // If the object is switched to running state later
         // the component will become "complete"
-        GetRidOfComponent( sal_False );
+        GetRidOfComponent();
     }
     else if ( nNewState == embed::EmbedStates::EMBED_RUNNING || nNewState == embed::EmbedStates::EMBED_ACTIVE )
     {
