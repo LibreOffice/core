@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-13 11:13:00 $
+ *  last change: $Author: fs $ $Date: 2002-12-05 09:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ namespace dbaccess
                                                 ::com::sun::star::sdbc::XRowSet,
                                                 ::com::sun::star::sdbc::XCloseable,
                                                 ::com::sun::star::lang::XUnoTunnel> ORowSetBase_BASE;
+
     class ORowSetCache;
     class ORowSetDataColumns;
     class ORowSetCacheIterator;
@@ -198,8 +199,18 @@ namespace dbaccess
 
         virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard) { }            // notify cursor moved
         virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard) { }                       // notify all that rowset changed
-        // check if the insert must be canceled
-        virtual void checkInsert() = 0;
+
+        // cancel the insertion, if necessary (means if we're on the insert row)
+        virtual void        doCancelModification( ) = 0;
+        // return <TRUE/> if and only if we're using the insert row (means: we're updating _or_ inserting)
+        virtual sal_Bool    isModification( ) = 0;
+        // return <TRUE/> if and only if the current row is modified
+        // TODO: isn't this the same as isModification?
+        virtual sal_Bool    isModified( ) = 0;
+        // return <TRUE/> if and only if the current row is the insert row
+        virtual sal_Bool    isNew( ) = 0;
+        // notify the change of a boolean property
+        void fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _bOld );
 
     // OPropertyContainer
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue,sal_Int32 nHandle) const;
@@ -317,7 +328,62 @@ namespace dbaccess
         {   // when not implemented by derived classes then throw
             throw ::com::sun::star::sdbc::SQLException();
         }
+
+        // ==========================================================
+        // granular access control
+        struct GrantNotifierAccess { friend class ORowSetNotifier; private: GrantNotifierAccess () { } };
+
+        // cancel the insertion, if necessary (means if we're on the insert row)
+        inline  void        doCancelModification( const GrantNotifierAccess& ) { doCancelModification(); }
+        inline  sal_Bool    isModification( const GrantNotifierAccess& ) { return isModification(); }
+        inline  sal_Bool    isModified( const GrantNotifierAccess& ) { return isModified(); }
+        inline  sal_Bool    isNew( const GrantNotifierAccess& ) { return isNew(); }
+        inline  void        fireProperty( sal_Int32 _nProperty, sal_Bool _bNew, sal_Bool _bOld, const GrantNotifierAccess& )
+        {
+            fireProperty( _nProperty, _bNew, _bOld );
+        }
     };
+
+    // ========================================================================
+    /** eases the handling of the doCancelModification and notifyCancelInsert methods
+
+        <p>The class can only be used on the stack, within a method of ORowSetBase (or derivees)</p>
+    */
+    class ORowSetNotifier
+    {
+    private:
+        ORowSetBase*    m_pRowSet;
+            // not aquired! This is not necessary because this class here is to be used on the stack within
+            // a method of ORowSetBase (or derivees)
+        sal_Bool        m_bWasNew;
+        sal_Bool        m_bWasModified;
+#ifdef DBG_UTIL
+        sal_Bool        m_bNotifyCalled;
+#endif
+
+    public:
+        /** constructs the object, and cancels the insertion
+
+            @see ORowSetBase::doCancelModification
+        */
+        ORowSetNotifier( ORowSetBase* m_pRowSet );
+
+        // destructs the object. <member>fire</member> has to be called before.
+        ~ORowSetNotifier( );
+
+        /** notifies the insertion
+
+            <p>This has <em>not</em> been put into the destructor by intention!<br/>
+
+            The destructor is called during stack unwinding in case of an exception, so if we would do
+            listener notification there, this would have the potential of another exception during stack
+            unwinding, which would terminate the application.</p>
+
+            @see ORowSetBase::notifyCancelInsert
+        */
+        void    fire();
+    };
+
 } // end of namespace
 
 #endif // DBACCESS_CORE_API_ROWSETBASE_HXX

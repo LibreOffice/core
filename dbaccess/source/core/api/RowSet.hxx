@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-13 11:13:00 $
+ *  last change: $Author: fs $ $Date: 2002-12-05 09:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,9 +226,12 @@ namespace dbaccess
         virtual sal_Bool notifyAllListenersCursorBeforeMove(::osl::ResettableMutexGuard& _rGuard);
         virtual void notifyAllListenersCursorMoved(::osl::ResettableMutexGuard& _rGuard);
         virtual void notifyAllListeners(::osl::ResettableMutexGuard& _rGuard);
-        virtual void checkInsert();
 
-        void fireProperty(sal_Int32 _nProperty,sal_Bool _bNew,sal_Bool _bOld);
+        virtual void        doCancelModification( );
+        virtual sal_Bool    isModification( );
+        virtual sal_Bool    isModified( );
+        virtual sal_Bool    isNew( );
+
     public:
         ORowSet(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
@@ -386,6 +389,8 @@ namespace dbaccess
 
         /// set m_xActiveConnection, fire a PropertyChangeEvent if necessary, do the event listener handling etc
         void setActiveConnection( ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxNewConn, sal_Bool _bFireEvent = sal_True );
+
+        void implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( ::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException ) );
     };
 
 
@@ -409,7 +414,11 @@ namespace dbaccess
 
     protected:
         // the clone can not insert anything
-        virtual void checkInsert() {}
+        virtual void        doCancelModification( );
+        virtual sal_Bool    isModification( );
+        virtual sal_Bool    isModified( );
+        virtual sal_Bool    isNew( );
+
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
     public:
         ORowSetClone(ORowSet& rParent,::osl::Mutex* _pMutex);
@@ -465,6 +474,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.31  2002/08/13 11:13:00  oj
+    #98095# clear mutex before calling our listeners
+
     Revision 1.30  2002/07/11 07:02:26  oj
     #100984# cancel insert after refreshRow
 

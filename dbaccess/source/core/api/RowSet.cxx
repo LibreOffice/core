@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-10 13:21:59 $
+ *  last change: $Author: fs $ $Date: 2002-12-05 09:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -996,22 +996,24 @@ void SAL_CALL ORowSet::insertRow(  ) throw(SQLException, RuntimeException)
         {
             ::osl::MutexGuard aCacheGuard( *m_pMutex);
             m_pCache->insertRow();
-            setCurrentRow(sal_False,aOldValues,aGuard); // we don't move here
-//          m_aBookmark     = m_pCache->getBookmark();
-//          OSL_ENSURE(m_aBookmark.hasValue(),"ORowSet::insertRow bookmark has no value!");
-//          m_aCurrentRow   = m_pCache->m_aMatrixIter;
-//          m_bAfterLast = m_bBeforeFirst = sal_False;   // we are on a valid row so this must be set to false
 
+            // notification order
+            // - column values
+            setCurrentRow(sal_False,aOldValues,aGuard); // we don't move here
+
+            // - rowChanged
             notifyAllListenersRowChanged(aGuard,aEvt);
-            // fire PROPERTY_ID_ISNEW
+
+            // - IsModified
+            if(!m_bModified)
+                fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
+            OSL_ENSURE( !m_bModified, "ORowSet::insertRow: just updated, but _still_ modified?" );
+
+            // - IsNew
             if(m_bNew != bOld)
                 fireProperty(PROPERTY_ID_ISNEW,m_bNew,bOld);
 
-            // fire property modified
-            if(!m_bModified)
-                fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
-
-            //  ORowSetBase::firePropertyChange(aOldValues);
+            // - RowCount/IsRowCountFinal
             fireRowcount();
         }
     }
@@ -1023,7 +1025,7 @@ sal_Int32 SAL_CALL ORowSet::getRow(  ) throw(SQLException, RuntimeException)
     checkCache();
 
     // check if we are inserting a row
-    return (m_pCache && m_pCache->m_bInserted) ? 0 : ORowSetBase::getRow();
+    return (m_pCache && ( m_pCache->m_bInserted || m_bModified )) ? 0 : ORowSetBase::getRow();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
@@ -1045,21 +1047,20 @@ void SAL_CALL ORowSet::updateRow(  ) throw(SQLException, RuntimeException)
             m_aBookmark     = m_pCache->getBookmark();
             m_aCurrentRow   = m_pCache->m_aMatrixIter;
             m_aOldRow       = (*m_aCurrentRow);
+
+            // notification order
+            // - column values
+            ORowSetBase::firePropertyChange(aOldValues);
+
+            // - rowChanged
             notifyAllListenersRowChanged(aGuard,aEvt);
 
-            ORowSetBase::firePropertyChange(aOldValues);
-            // fire property modified
+            // - IsModified
             if(!m_bModified)
                 fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
+            OSL_ENSURE( !m_bModified, "ORowSet::updateRow: just updated, but _still_ modified?" );
         }
     }
-}
-// -------------------------------------------------------------------------
-void ORowSet::fireProperty(sal_Int32 _nProperty,sal_Bool _bNew,sal_Bool _bOld)
-{
-    Any aNew = bool2any(_bNew);
-    Any aOld = bool2any(_bOld);
-    fire(&_nProperty, &aNew, &aOld, 1, sal_False );
 }
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
@@ -1094,14 +1095,23 @@ void SAL_CALL ORowSet::deleteRow(  ) throw(SQLException, RuntimeException)
         m_aCurrentRow   = NULL;
         m_aCurrentRow.setBookmark(Any());
 
+        ORowSetNotifier aNotifier( this );
+            // this will call cancelRowModification on the cache if necessary
+
+        // notification order
+        // - rowChanged
         notifyAllListenersRowChanged(aGuard,aEvt);
-        //  ORowSetBase::firePropertyChange(aOldValues);
+
+        // - IsModified
+        // - IsNew
+        aNotifier.fire( );
+
+        // - RowCount/IsRowCountFinal
         fireRowcount();
-        checkInsert();
     }
 }
 // -------------------------------------------------------------------------
-void SAL_CALL ORowSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
+void ORowSet::implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( SQLException, RuntimeException ) )
 {
     ::connectivity::checkDisposed(ORowSet_BASE1::rBHelper.bDisposed);
 
@@ -1124,11 +1134,20 @@ void SAL_CALL ORowSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException
     m_aCurrentRow   = m_pCache->m_aMatrixIter;
     m_aCurrentRow.setBookmark(m_aBookmark);
 
+    // notification order
+    // - column values
     ORowSetBase::firePropertyChange(aOldValues);
-    // fire property modified
-    if( !m_bModified )
+    // IsModified
+    if( !m_bModified && _bNotifyModified )
         fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
 }
+
+// -------------------------------------------------------------------------
+void SAL_CALL ORowSet::cancelRowUpdates(  ) throw(SQLException, RuntimeException)
+{
+    implCancelRowUpdates( sal_True );
+}
+
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSet::addRowSetListener( const Reference< XRowSetListener >& listener ) throw(RuntimeException)
 {
@@ -1215,17 +1234,26 @@ void SAL_CALL ORowSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 
         ORowSetMatrix::iterator aOldValues = m_pCache->m_aMatrixIter;    // remember the old values
 
-        sal_Bool bOld = m_bNew;
+        const sal_Bool bNewState = m_bNew;
+        const sal_Bool bModState = m_bModified;
 
         m_pCache->moveToInsertRow();
         m_aCurrentRow = m_pCache->m_aInsertRow;
-        notifyAllListenersCursorMoved(aGuard);
 
+        // notification order
+        // - column values
         ORowSetBase::firePropertyChange(aOldValues);
 
-        // fire PROPERTY_ID_ISNEW
-        if(m_bNew != bOld)
-            fireProperty(PROPERTY_ID_ISNEW,m_bNew,bOld);
+        // - cursorMoved
+        notifyAllListenersCursorMoved(aGuard);
+
+        // - IsModified
+        if ( bModState != m_bModified )
+            fireProperty( PROPERTY_ID_ISMODIFIED, m_bModified, bModState );
+
+        // - IsNew
+        if ( bNewState != m_bNew )
+            fireProperty( PROPERTY_ID_ISNEW, m_bNew, bNewState );
     }
 }
 // -------------------------------------------------------------------------
@@ -1237,15 +1265,23 @@ void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
 
     checkPositioningAllowed();
 
-    if(m_pCache && m_pCache->m_bInserted)
+    if(m_pCache && ( m_pCache->m_bInserted || m_bModified ))
     {
         if(notifyAllListenersCursorBeforeMove(aGuard))
         {
             positionCache();
             m_pCache->moveToCurrentRow();
+
+            ORowSetNotifier aNotifier( this );
+                // this will call cancelRowModification on the cache if necessary
+
+            // notification order
+            // - cursorMoved
             notifyAllListenersCursorMoved(aGuard);
 
-            checkInsert();
+            // - IsModified
+            // - IsNew
+            aNotifier.fire();
         }
     }
 }
@@ -1256,7 +1292,7 @@ sal_Bool SAL_CALL ORowSet::wasNull(  ) throw(SQLException, RuntimeException)
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
-    return (m_pCache && m_pCache->m_bInserted) ? (*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex].isNull() : ORowSetBase::wasNull();
+    return ( m_pCache && ( m_pCache->m_bInserted || m_bModified ) ) ? (*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex].isNull() : ORowSetBase::wasNull();
 }
 // -----------------------------------------------------------------------------
 const ORowSetValue& ORowSet::getInsertValue(sal_Int32 columnIndex)
@@ -1264,7 +1300,7 @@ const ORowSetValue& ORowSet::getInsertValue(sal_Int32 columnIndex)
     ::osl::MutexGuard aGuard( *m_pMutex );
     checkCache();
 
-    if (m_pCache && m_pCache->m_bInserted)
+    if ( m_pCache && ( m_pCache->m_bInserted || m_bModified ) )
         return  (*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex];
     else
         return getValue(columnIndex);
@@ -1333,7 +1369,7 @@ Sequence< sal_Int8 > SAL_CALL ORowSet::getBytes( sal_Int32 columnIndex ) throw(S
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    if(m_pCache && m_pCache->m_bInserted)
+    if(m_pCache && ( m_pCache->m_bInserted || m_bModified ))
     {
         checkCache();
         return new ::comphelper::SequenceInputStream((*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex].getSequence());
@@ -1345,7 +1381,7 @@ Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSet::getBinaryStrea
 Reference< ::com::sun::star::io::XInputStream > SAL_CALL ORowSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( *m_pMutex );
-    if(m_pCache && m_pCache->m_bInserted)
+    if(m_pCache && ( m_pCache->m_bInserted || m_bModified ))
     {
         checkCache();
         return new ::comphelper::SequenceInputStream((*(*m_pCache->m_aInsertRow))[m_nLastColumnIndex = columnIndex].getSequence());
@@ -1861,10 +1897,21 @@ Sequence< sal_Int32 > SAL_CALL ORowSet::deleteRows( const Sequence< Any >& rows 
         }
 
         aEvt.Rows = aRet.getLength();
-        notifyAllListenersRowChanged(aGuard,aEvt);
-        fireRowcount();
+
         // we have to check if we stand on the insert row and if so we have to reset it
-        checkInsert();
+        ORowSetNotifier aNotifier( this );
+            // this will call cancelRowModification on the cache if necessary
+
+        // notification order
+        // - rowChanged
+        notifyAllListenersRowChanged(aGuard,aEvt);
+
+        // - IsModified
+        // - IsNew
+        aNotifier.fire();
+
+        // - RowCount/IsRowCountFinal
+        fireRowcount();
     }
     return aRet;
 }
@@ -2266,16 +2313,33 @@ void ORowSet::firePropertyChange(sal_Int32 _nPos,const ::connectivity::ORowSetVa
     OSL_ENSURE(_nPos < (sal_Int32)m_aDataColumns.size(),"nPos is invalid!");
     m_aDataColumns[_nPos]->fireValueChange(_rOldValue);
 }
-// -------------------------------------------------------------------------
-void ORowSet::checkInsert()
+
+// -----------------------------------------------------------------------------
+void ORowSet::doCancelModification( )
 {
-    if(m_pCache && m_pCache->m_bInserted)
-    {
-        m_pCache->cancelInsert();
-        fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
-        fireProperty(PROPERTY_ID_ISNEW,sal_False,sal_True);
-    }
+    OSL_ENSURE( isModification(), "ORowSet::doCancelModification: invalid call (no cache!)!" );
+    if ( isModification() )
+        m_pCache->cancelRowModification();
 }
+
+// -----------------------------------------------------------------------------
+sal_Bool ORowSet::isModification( )
+{
+    return m_pCache && m_pCache->m_bInserted;
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool ORowSet::isModified( )
+{
+    return m_bModified;
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool ORowSet::isNew( )
+{
+    return m_bNew;
+}
+
 // -----------------------------------------------------------------------------
 void ORowSet::checkUpdateIterator()
 {
@@ -2294,12 +2358,19 @@ void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)
 // -----------------------------------------------------------------------------
 void SAL_CALL ORowSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
-    checkInsert();
-    if ( m_bModified && m_pCache )
-        cancelRowUpdates();
+    ORowSetNotifier aNotifier( this );
+        // this will call cancelRowModification on the cache if necessary
 
+    // notification order:
+    if ( m_bModified && m_pCache )
+        // - column values
+        implCancelRowUpdates( sal_False ); // do _not_ notify the IsModify - will do this ourself below
 
     ORowSetBase::refreshRow();
+
+    // - IsModified
+    // - IsNew
+    aNotifier.fire( );
 }
 // ***********************************************************
 //  ORowSetClone
@@ -2542,5 +2613,28 @@ void SAL_CALL ORowSetClone::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,c
 
 }
 
+// -----------------------------------------------------------------------------
+void ORowSetClone::doCancelModification( )
+{
+    OSL_ENSURE( sal_False, "ORowSetClone::doCancelModification: invalid call!" );
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool ORowSetClone::isModification( )
+{
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool ORowSetClone::isModified( )
+{
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
+sal_Bool ORowSetClone::isNew( )
+{
+    return sal_False;
+}
 
 }
