@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type_Test.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-13 17:23:54 $
+ *  last change: $Author: vg $ $Date: 2003-10-09 10:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,11 +124,16 @@ public final class Type_Test extends ComplexTestCase {
         Type ifc = new Type(com.sun.star.uno.XInterface.class);
         Type ctx = new Type(com.sun.star.uno.XComponentContext.class);
         Type exc = new Type(com.sun.star.uno.RuntimeException.class);
-        assure("", !Type.ANY.isSupertypeOf(ifc));
-        assure("", !ifc.isSupertypeOf(Type.ANY));
-        assure("", ifc.isSupertypeOf(ctx));
-        assure("", !ctx.isSupertypeOf(ifc));
-        assure("", ctx.isSupertypeOf(ctx));
-        assure("", !ifc.isSupertypeOf(exc));
+        assure("LONG :> LONG", Type.LONG.isSupertypeOf(Type.LONG));
+        assure("not ANY :> XInterface", !Type.ANY.isSupertypeOf(ifc));
+        assure("ANY :> ANY", Type.ANY.isSupertypeOf(Type.ANY));
+        assure("not ANY :> LONG", !Type.ANY.isSupertypeOf(Type.LONG));
+        assure("not XInterface :> ANY", !ifc.isSupertypeOf(Type.ANY));
+        assure("XInterface :> XInterface", ifc.isSupertypeOf(ifc));
+        assure("XInterface :> XComponentContext", ifc.isSupertypeOf(ctx));
+        assure("not XComponentContext :> XInterface", !ctx.isSupertypeOf(ifc));
+        assure("XComponentContext :> XComponentContext",
+               ctx.isSupertypeOf(ctx));
+        assure("not XInterface :> RuntimeException", !ifc.isSupertypeOf(exc));
     }
 }
