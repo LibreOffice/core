@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistentwindowstate.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-07-29 08:18:00 $
+ *  last change: $Author: mba $ $Date: 2002-10-11 18:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#include <vcl/wrkwin.hxx>
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -548,7 +549,12 @@ sal_Bool PersistentWindowState::implst_getFrameProps( const css::uno::Reference<
     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
     // check for system window is neccessary to guarantee correct pointer cast!
     if (pWindow!=NULL && pWindow->IsSystemWindow())
-        sWindowState = ((SystemWindow*)pWindow)->GetWindowState();
+    {
+        ULONG nMask = WINDOWSTATE_MASK_ALL;
+        nMask &= ~(WINDOWSTATE_STATE_MINIMIZED);
+        sWindowState = ((SystemWindow*)pWindow)->GetWindowState( nMask );
+    }
+
     aSolarGuard.clear();
     /* } SOLAR SAFE */
 
@@ -566,7 +572,7 @@ void PersistentWindowState::implst_setWindowState( const css::uno::Reference< cs
     ::vos::OClearableGuard aSolarGuard( Application::GetSolarMutex() );
     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
     // check for system window is neccessary to guarantee correct pointer cast!
-    if (pWindow!=NULL && pWindow->IsSystemWindow())
+    if ( pWindow!=NULL && pWindow->IsSystemWindow() && (pWindow->GetType() != WINDOW_WORKWINDOW || !((WorkWindow*)pWindow)->IsMinimized() ) )
         ((SystemWindow*)pWindow)->SetWindowState(U2B_ENC(sWindowState,RTL_TEXTENCODING_UTF8));
     aSolarGuard.clear();
     /* } SOLAR SAFE */
