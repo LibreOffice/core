@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:44 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:45:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,7 @@ void FmFieldWinListBox::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 
     TransferableHelper* pTransferColumn = new OColumnTransferable(
         pTabWin->GetDatabaseName(),
+        ::rtl::OUString(),
         pTabWin->GetObjectType(),
         pTabWin->GetObjectName(),
         GetEntryText( pSelected),
@@ -322,7 +323,8 @@ sal_Bool FmFieldWin::createSelectionControls( )
     {
         // build a descriptor for the currently selected field
         ODataAccessDescriptor aDescr;
-        aDescr[ daDataSource ]  <<= GetDatabaseName();
+        aDescr.setDataSource(GetDatabaseName());
+
         aDescr[ daCommand ]     <<= GetObjectName();
         aDescr[ daCommandType ] <<= GetObjectType();
         aDescr[ daColumnName ]  <<= ::rtl::OUString( pListBox->GetEntryText( pSelected) );
