@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-23 14:28:36 $
+ *  last change: $Author: jp $ $Date: 2001-02-27 16:49:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1091,7 +1091,7 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, const XubString& rText,
     const long* pOffsets = rOffsets.getConstArray();
     // now look for no 1-1 mapping -> move the indizies!
     xub_StrLen nI, nMyOff;
-    for( nI = 0, nMyOff = 0; nI < nLen; ++nI, ++nMyOff )
+    for( nI = 0, nMyOff = nPos; nI < nLen; ++nI, ++nMyOff )
     {
         xub_StrLen nOff = (xub_StrLen)pOffsets[ nI ];
         if( nOff < nMyOff )
@@ -1101,7 +1101,7 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, const XubString& rText,
             while( nI + nCnt < nLen && nOff == pOffsets[ nI + nCnt ] )
                 ++nCnt;
 
-            Update( SwIndex( this, nPos + nMyOff ), nCnt, TRUE );
+            Update( SwIndex( this, nMyOff ), nCnt, TRUE );
             nMyOff = nOff;
             //nMyOff -= nCnt;
             nI += nCnt - 1;
@@ -1109,13 +1109,13 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, const XubString& rText,
         else if( nOff > nMyOff )
         {
             // something is inserted
-            Update( SwIndex( this, nPos+nMyOff ), nOff - nMyOff, FALSE );
+            Update( SwIndex( this, nMyOff ), nOff - nMyOff, FALSE );
             nMyOff = nOff;
         }
     }
     if( nMyOff < rText.Len() )
         // something is inserted at the end
-        Update( SwIndex( this, nPos+nMyOff ), rText.Len()- nMyOff, FALSE );
+        Update( SwIndex( this, nMyOff ), rText.Len()- nMyOff, FALSE );
 
     // notify the layout!
     SwDelTxt aDelHint( nPos, nLen );
@@ -1124,4 +1124,6 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, const XubString& rText,
     SwInsTxt aHint( nPos, nLen );
     SwModify::Modify( 0, &aHint );
 }
+
+
 

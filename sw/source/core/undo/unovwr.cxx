@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unovwr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-23 14:17:56 $
+ *  last change: $Author: jp $ $Date: 2001-02-27 16:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,14 +477,14 @@ void SwUndoTransliterate::AddChanges( const SwTxtNode& rTNd,
     BOOL bOneToOne = TRUE;
     const long* p = pOffsets;
     for( long n = 0; n < nOffsLen; ++n, ++p )
-        if( *p != n )
+        if( *p != ( nStart + n ))
         {
             // create the Offset array
             pNew->pOffsets = new Sequence <long> ( nNewLen );
             long* pIdx = pNew->pOffsets->getArray();
             p = pOffsets;
-            long nMyOff, nNewVal = 0;
-            for( n = 0, nMyOff = 0; n < nOffsLen; ++p, ++n, ++nMyOff )
+            long nMyOff, nNewVal = nStart;
+            for( n = 0, nMyOff = nStart; n < nOffsLen; ++p, ++n, ++nMyOff )
             {
                 if( *p < nMyOff )
                 {
@@ -546,7 +546,7 @@ void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
         {
             long* p = aOffsets.getArray();
             for( xub_StrLen n = 0; n < nDataLen; ++n, ++p )
-                *p = n;
+                *p = n + nStart;
         }
         pTNd->ReplaceTextOnly( nStart, sText, aOffsets );
 
@@ -565,11 +565,14 @@ void _UndoTransliterate_Data::SetChangeAtNode( SwDoc& rDoc )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unovwr.cxx,v 1.6 2001-02-23 14:17:56 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unovwr.cxx,v 1.7 2001-02-27 16:53:28 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/02/23 14:17:56  jp
+      change transliteration from 1-1 to 1-n mapping
+
       Revision 1.5  2000/12/21 09:29:24  jp
       new: transliteration
 
