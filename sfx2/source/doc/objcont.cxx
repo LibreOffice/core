@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 13:08:35 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 20:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -1520,7 +1520,7 @@ SfxMenuBarManager* SfxObjectShell::CreateMenuBarManager_Impl( SfxViewFrame* pVie
     if ( pId )
     {
         Reference< com::sun::star::beans::XPropertySet > xPropSet( pViewFrame->GetBindings().GetActiveFrame(), UNO_QUERY );
-        Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
 
         if ( xPropSet.is() )
         {
