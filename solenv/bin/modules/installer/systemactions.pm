@@ -2,9 +2,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-07-05 13:26:13 $
+#   last change: $Author: rt $ $Date: 2004-07-06 15:04:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,7 @@ sub create_directory
         }
         else
         {
-            installer::exiter::exit_program("Error: Could not create directory: $directory", "create_directory");
+            installer::exiter::exit_program("ERROR: Could not create directory: $directory", "create_directory");
         }
     }
 }
@@ -123,7 +123,7 @@ sub remove_empty_directory
 
         if ($returnvalue)
         {
-            $infoline = "Error: Could not remove \"$directory\"!\n";
+            $infoline = "ERROR: Could not remove \"$directory\"!\n";
             push( @installer::globals::logfileinfo, $infoline);
         }
         else
@@ -229,7 +229,7 @@ sub rename_one_file
     }
     else
     {
-        $infoline = "Error: Could not rename $source to $dest\n";
+        $infoline = "ERROR: Could not rename $source to $dest\n";
         $returnvalue = 0;
     }
 
@@ -323,7 +323,6 @@ sub copy_complete_directory
 
         }
     }
-
 }
 
 #####################################################
@@ -540,6 +539,95 @@ sub make_numbered_dir
     return $returndir;
 }
 
+##############################################################
+# Determining the highest number in the install directory.
+##############################################################
+
+sub determine_maximum_number
+{
+    my ($dir, $languagestringref) = @_;
+
+    my $basedir = $dir;
+    installer::pathanalyzer::get_path_from_fullqualifiedname(\$basedir);
+
+    my $alldirs = get_all_directories($basedir);
+
+    my $maxnumber = 1;
+
+    # In control.pm the installation directory is determined as:
+    # $installer::globals::build . "_" . $installer::globals::lastminor . "_" .
+    # "native_inprogress-number_" . $$languagesref . "\." . $installer::globals::buildid;
+
+    # searching for the highest number extension after the first "-", which belongs to
+    # $installer::globals::build, $installer::globals::lastminor and $installer::globals::buildid
+    # In this step not looking for the language!
+
+    my @correctbuildiddirs = ();
+
+    for ( my $i = 0; $i <= $#{$alldirs}; $i++ )
+    {
+        my $onedir = ${$alldirs}[$i];
+        installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$onedir);
+
+        if ( $onedir =~ /^\s*\Q$installer::globals::build\E\_\Q$installer::globals::lastminor\E\_(.*?)\-(\d+)\_(.*?)\.\Q$installer::globals::buildid\E\s*$/ )
+        {
+            my $number = $2;
+            if ( $number > $maxnumber ) { $maxnumber = $number; }
+            push(@correctbuildiddirs, $onedir);
+        }
+    }
+
+    # From all directories with correct $installer::globals::build, $installer::globals::lastminor
+    # and $installer::globals::buildid, those directories, which already have the maximum number
+    # have to be selected
+
+    my @maximumnumberdirs = ();
+
+    for ( my $i = 0; $i <= $#correctbuildiddirs; $i++ )
+    {
+        my $onedir = $correctbuildiddirs[$i];
+
+        if ( $onedir =~ /^\s*(.*?)\-(\d+)\_(.*?)\.(.*?)\s*$/ )
+        {
+            my $number = $2;
+
+            if ( $number == $maxnumber )
+            {
+                push(@maximumnumberdirs, $onedir);
+            }
+        }
+    }
+
+    # @maximumnumberdirs contains only those directories with correct $installer::globals::build,
+    # $installer::globals::lastminor and $installer::globals::buildid, which already have the maximum number.
+    # If the current language is part of this directory, the number has to be increased.
+
+    my $increase_counter = 0;
+
+    for ( my $i = 0; $i <= $#maximumnumberdirs; $i++ )
+    {
+        my $onedir = $maximumnumberdirs[$i];
+
+        if ( $onedir =~ /^\s*(.*?)\-(\d+)\_(.*?)\.(.*?)\s*$/ )
+        {
+            my $number = $2;
+            my $languagestring = $3;
+
+            if ( $languagestring eq $$languagestringref )
+            {
+                $increase_counter = 1;
+            }
+        }
+    }
+
+    if ( $increase_counter )
+    {
+        $maxnumber = $maxnumber + 1;
+    }
+
+    return $maxnumber;
+}
+
 #####################################################################################
 # Renaming a directory by exchanging a string, for example from "01_inprogress_7"
 # to "01_with_error_7".
@@ -598,7 +686,7 @@ sub get_directoryname
 
     closedir(DIR);
 
-    if ( ! $founddir ) { installer::exiter::exit_program("Error: Did not find directory beginning with $startstring in directory $searchdir", "get_directoryname"); }
+    if ( ! $founddir ) { installer::exiter::exit_program("ERROR: Did not find directory beginning with $startstring in directory $searchdir", "get_directoryname"); }
 
     return $dirname;
 }
@@ -639,6 +727,8 @@ sub create_directory_next_to_directory
     my $basedir = $topdir;
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$basedir);
 
+    $basedir =~ s/\Q$installer::globals::separator\E\s*$//;
+
     my $newdir = $basedir . $installer::globals::separator . $dirname;
 
     create_directory($newdir);
@@ -656,6 +746,8 @@ sub get_all_directories
 
     my @alldirs = ();
     my $direntry;
+
+    $basedir =~ s/\Q$installer::globals::separator\E\s*$//;
 
     opendir(DIR, $basedir);
 
@@ -730,6 +822,59 @@ sub create_directory_structure
     }
 
     create_directory($directory);   # now it has to succeed
+}
+
+######################################################
+# Removing a complete directory with subdirectories
+######################################################
+
+sub remove_complete_directory
+{
+    my ($directory, $start) = @_;
+
+    my @content = ();
+
+    $directory =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    if ( -d $directory )
+    {
+        if ( $start )
+        {
+            my $infoline = "\n";
+            push(@installer::globals::logfileinfo, $infoline);
+            $infoline = "Removing directory $directory\n";
+            push(@installer::globals::logfileinfo, $infoline);
+        }
+
+        opendir(DIR, $directory);
+        @content = readdir(DIR);
+        closedir(DIR);
+
+        my $oneitem;
+
+        foreach $oneitem (@content)
+        {
+            if ((!($oneitem eq ".")) && (!($oneitem eq "..")))
+            {
+                my $item = $directory . $installer::globals::separator . $oneitem;
+
+                if ( -f $item )     # deleting files
+                {
+                    unlink($item);
+                }
+
+                if ( -d $item )     # recursive
+                {
+                    remove_complete_directory($item, 0);
+                }
+            }
+        }
+
+        # try to remove empty directory
+
+        rmdir $directory;
+
+    }
 }
 
 1;
