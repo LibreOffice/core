@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:14:04 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include <vcl/virdev.hxx>
 #include <vos/mutex.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/docfile.hxx>
 
 #include "transobj.hxx"
 #include "document.hxx"
@@ -427,7 +428,8 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                 ScImportExport* pImpEx = (ScImportExport*)pUserObject;
 
                 sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
-                if ( pImpEx->ExportStream( *rxOStm, nFormat ) )
+                // mba: no BaseURL for data exchange
+                if ( pImpEx->ExportStream( *rxOStm, String(), nFormat ) )
                     bRet = ( rxOStm->GetError() == ERRCODE_NONE );
             }
             break;
@@ -471,7 +473,10 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
 
                 // write document storage
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT );
-                bRet = pEmbObj->DoSaveAs( xWorkStore );
+
+                // mba: no relative ULRs for clipboard!
+                SfxMedium aMedium( xWorkStore, String() );
+                bRet = pEmbObj->DoSaveObjectAs( aMedium, FALSE );
                 pEmbObj->DoSaveCompleted();
 
                 uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );
