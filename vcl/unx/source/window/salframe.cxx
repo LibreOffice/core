@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-05 16:53:15 $
+ *  last change: $Author: cp $ $Date: 2001-04-24 07:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,10 +73,6 @@
 #include <prex.h>
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
-
-#ifndef _FOREIGN_WINDOW_SYSTEM_HXX
-#include "FWS.hxx"
-#endif
 
 #include <postx.h>
 
@@ -1309,12 +1305,6 @@ void SalFrameData::ShowFullScreen( BOOL bFullScreen )
         XMoveResizeWindow( GetXDisplay(), GetShellWindow(), 0, 0, aScreenSize.Width(), aScreenSize.Height() );
         XMoveResizeWindow( GetXDisplay(), GetWindow(), 0, 0, aScreenSize.Width(), aScreenSize.Height() );
 
-        if ( WMSupportsFWS(GetXDisplay(), pDisplay_->GetRootWindow()) )
-        {
-            AddFwsProtocols( GetXDisplay(), XtWindow(hShell_) );
-            RegisterFwsWindow( GetXDisplay(), XtWindow(hShell_) );
-        }
-
         aPosSize_ = Rectangle( Point( 0, 0 ), aScreenSize );
         nWidth_   = aPosSize_.GetWidth();
         nHeight_  = aPosSize_.GetHeight();
@@ -1324,7 +1314,7 @@ void SalFrameData::ShowFullScreen( BOOL bFullScreen )
 
         XRaiseWindow( GetXDisplay(), GetShellWindow() );
         if( GetStackingWindow() )
-            XRaiseWindow( GetXDisplay(), GetStackingWindow() );
+             XRaiseWindow( GetXDisplay(), GetStackingWindow() );
 
         Call( SALEVENT_RESIZE, NULL );
     }
