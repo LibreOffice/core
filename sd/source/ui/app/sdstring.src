@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: mh $ $Date: 2000-11-03 16:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ String STR_DESC_GRADIENT
     Text[ chinese_simplified ] = "ÇëÄúÊäÈëĞÂ²ÊÉ«Í¼°¸µÄÃû³Æ£º";
     Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ íîâîé ãğàäèåíòíîé:";
     Text[ polish ] = "Wstaw nazwê nowego gradientu:";
-    Text[ japanese ] = "‚±‚±‚ÉV‚µ‚¢¸Ş×ÃŞ°¼®İ‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢:";
+    Text[ japanese ] = "‚±‚±‚ÉV‚µ‚¢¸Ş×ÃŞ°¼®İ‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ü‚·:";
     Text[ chinese_traditional ] = "½Ğ±z¿é¤J·s±m¦â¹Ï®×ªº¦WºÙ¡G";
     Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáÊÏÑÌ ÇáÌÏíÏ ááæä:";
     Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ãéá ôç íİá äéáâÜèìéóç ÷ñşìáôïò:";
@@ -266,7 +266,7 @@ String STR_DESC_NEW_BITMAP
     Text[ chinese_simplified ] = "ÇëÄúÊäÈëÒ»¸öĞÂÎ»Í¼µÄÃû³Æ£º";
     Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ äëÿ íîâîãî bitmap:";
     Text[ polish ] = "Wstaw nazwê nowej mapy bitowej:";
-    Text[ japanese ] = "‚±‚±‚ÉV‚µ‚¢ËŞ¯ÄÏ¯Ìß‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢:";
+    Text[ japanese ] = "‚±‚±‚ÉV‚µ‚¢ËŞ¯ÄÏ¯Ìß‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ü‚·:";
     Text[ chinese_traditional ] = "½Ğ±z¿é¤J¤@­Ó·sÂI°}¹Ïªº¦WºÙ¡G";
     Text[ arabic ] = "ãä İÖáß ÇßÊÈ ÇÓã ÇáÕæÑÉ ÇáäŞØíÉ ÇáÌÏíÏÉ åäÇ:";
     Text[ language_user1 ] = ":";
@@ -293,7 +293,7 @@ String STR_DESC_EXT_BITMAP
     Text[ chinese_simplified ] = "ÇëÄúÊäÈëÒ»¸öÍâÀ´Î»Í¼µÄÃû³Æ£º";
     Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ âíåøíåãî bitmap:";
     Text[ polish ] = "Wstaw nazwê zewnêtrznej mapy bitowej:";
-    Text[ japanese ] = "‚±‚±‚ÉŠO•”ËŞ¯ÄÏ¯Ìß‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢:";
+    Text[ japanese ] = "‚±‚±‚ÉŠO•”ËŞ¯ÄÏ¯Ìß‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ü‚·:";
     Text[ chinese_traditional ] = "½Ğ±z¿é¤J¤@­Ó¥~¨ÓÂI°}¹Ïªº¦WºÙ¡G";
     Text[ arabic ] = "ãä İÖáß ÇßÊÈ ÇÓã ÇáÕæÑÉ ÇáäŞØíÉ ÇáÎÇÑÌíÉ åäÇ:";
     Text[ language_user1 ] = ":";
@@ -427,7 +427,7 @@ String STR_DESC_LINESTYLE
     Text[ chinese_simplified ] = "ÇëÄúÊäÈëÒ»¸öĞÂµÄÏßÌõÊ½ÑùÃû³Æ£º";
     Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ äëÿ íîâîãî ñòèëÿ ëèíèè:";
     Text[ polish ] = "Wstaw nazwê nowego stylu linii:";
-    Text[ japanese ] = "‚±‚±‚ÉV‚µ‚¢ü½À²Ù‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ä‰º‚³‚¢:";
+    Text[ japanese ] = "‚±‚±‚ÉV‚µ‚¢ü½À²Ù‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ü‚·:";
     Text[ chinese_traditional ] = "½Ğ±z¿é¤J¤@­Ó·s½u±ø¼Ë¦¡ªº¦WºÙ¡G";
     Text[ arabic ] = "ãä İÖáß ÇßÊÈ ÇÓã ÇáäãØ ÇáÌÏíÏ ááÎØ åäÇ:";
     Text[ language_user1 ] = ":";
