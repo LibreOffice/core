@@ -2,9 +2,9 @@
  *
  *  $RCSfile: curledit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:17:57 $
+ *  last change: $Author: hr $ $Date: 2001-08-16 13:35:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 namespace dbaui
 {
 //.........................................................................
-    DBG_NAME(OConnectionURLEdit);
+    DBG_NAME(OConnectionURLEdit)
 //=========================================================================
 //= OConnectionURLEdit
 //=========================================================================
@@ -187,6 +187,9 @@ String OConnectionURLEdit::GetText() const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/08/15 13:17:57  oj
+ *  #88644# insert some DBG's
+ *
  *  Revision 1.3  2000/10/24 12:08:19  fs
  *  S/GetTextNoPrefix
  *
