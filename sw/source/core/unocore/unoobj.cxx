@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2000-11-17 11:18:40 $
+ *  last change: $Author: os $ $Date: 2000-11-23 11:45:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3827,6 +3827,8 @@ uno::Reference< XTextRange >  SwXTextRange::getStart(void) throw( uno::RuntimeEx
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< XTextRange >  xRet;
     SwBookmark* pBkm = GetBookmark();
+    if(!xParentText.is())
+        getText();
     if(pBkm)
     {
         SwPaM aPam(pBkm->GetPos());
@@ -3849,6 +3851,8 @@ uno::Reference< XTextRange >  SwXTextRange::getEnd(void) throw( uno::RuntimeExce
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< XTextRange >  xRet;
     SwBookmark* pBkm = GetBookmark();
+    if(!xParentText.is())
+        getText();
     if(pBkm)
     {
         SwPaM aPam(pBkm->GetOtherPos()? *pBkm->GetOtherPos() : pBkm->GetPos());
