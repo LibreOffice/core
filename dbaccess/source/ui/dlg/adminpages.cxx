@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 12:42:07 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ namespace dbaui
         ,m_pAdminDialog(NULL)
         ,m_pItemSetHelper(NULL)
         ,m_pFT_HeaderText(NULL)
+        ,m_abEnableRoadmap(sal_False)
     {
         SetExchangeSupport(sal_True);
     }
@@ -368,11 +369,12 @@ namespace dbaui
                 {
                     eImage = OSQLMessageBox::Error;
                     aMessage = String(ModuleRes(STR_CONNECTION_NO_SUCCESS));
-                    m_pAdminDialog->clearPassword();
                 }
                 OSQLMessageBox aMsg(this,sTitle,aMessage);
                 aMsg.Execute();
             }
+            if ( !bSuccess )
+                m_pAdminDialog->clearPassword();
         }
         return 0L;
     }
