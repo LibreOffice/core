@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_factory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:31:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:35:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ class HtmlFactory_Idl : public HtmlFactory<HtmlEnvironment_Idl>
                             Xml::Element *      o_pOut = 0 )
                             :   HtmlFactory<Environment>(io_rEnv, o_pOut)
                             { }
+    virtual             ~HtmlFactory_Idl() {}
 
     /** The default version only calls ->produce_InternalLink().
         This may be overwritten by derived classes.
