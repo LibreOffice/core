@@ -576,11 +576,10 @@ sub AddEventToDocViaAPI( scriptName as string, eventName as string )
 	dim properties( 1 ) as new com.sun.star.beans.PropertyValue
 	properties( 0 ).Name = &quot;EventType&quot;
 	properties( 0 ).Value = &quot;Script&quot;
-	properties( 1 ).Name = &quot;URL&quot;
+	properties( 1 ).Name = &quot;Script&quot;
 	properties( 1 ).Value = scriptName
 		
 	eventSupplier = ThisComponent
-	&apos;eventSupplier = StarDesktop.ActiveFrame.Controller.Model
 	nameReplace = eventSupplier.getEvents()
 	nameReplace.replaceByName( eventName, properties() )
 end sub
