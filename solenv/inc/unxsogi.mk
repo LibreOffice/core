@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsogi.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:31:36 $
+#   last change: $Author: kz $ $Date: 2005-03-03 17:37:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-# mk file for unxsogs
+# mk file for unxsogi
 ASM=/usr/ccs/bin/as
 AFLAGS=-P
 
@@ -88,9 +88,9 @@ CFLAGSCC= -pipe
 CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-CFLAGSCXX= -pipe -fpermissive
+CFLAGSCXX= -pipe
 PICSWITCH:=-fPIC
-#STDOBJVCL=$(L)$/salmain.o
+
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
@@ -120,27 +120,35 @@ LINKFLAGSOPT=
 
 LINKVERSIONMAPFLAG=-Wl,--version-script
 
+# enable visibility define in "sal/types.h"
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CDEFS += -DHAVE_GCC_VISIBILITY_FEATURE
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+
 # Reihenfolge der libs NICHT egal!
 
 STDLIBCPP=-lstdc++
 
+STDOBJVCL=$(L)$/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-STDLIBGUIST=-lnsl -lsocket -ldl -lm
-STDLIBCUIST=-lnsl -lsocket -ldl -lm
-STDLIBGUIMT=-lpthread -lthread -ldl -lm
-STDLIBCUIMT=-lpthread -lthread -ldl -lm
+STDLIBGUIST=$(DYNAMIC) -lstdc++ -lm
+STDLIBCUIST=$(DYNAMIC) -lstdc++ -lm
+STDLIBGUIMT=$(DYNAMIC) -lpthread -lthread -lstdc++ -lm
+STDLIBCUIMT=$(DYNAMIC) -lpthread -lthread -lstdc++ -lm
 # libraries for linking shared libraries
-STDSHLGUIMT=-lpthread -lthread -lnsl -lsocket -ldl -lm
-STDSHLCUIMT=-lpthread -lthread -ldl -lm
+STDSHLGUIST=$(DYNAMIC) -lstdc++ -lm
+STDSHLCUIST=$(DYNAMIC) -lstdc++ -lm
+STDSHLGUIMT=$(DYNAMIC) -lpthread -lthread -lstdc++ -lm
+STDSHLCUIMT=$(DYNAMIC) -lpthread -lthread -lstdc++ -lm
 
 STDLIBGUIST+=-lX11
 STDLIBGUIMT+=-lX11
 
-LIBSTLPORT=$(DYNAMIC) -lstlport_gcc -lstdc++
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
 
 LIBMGR=ar
