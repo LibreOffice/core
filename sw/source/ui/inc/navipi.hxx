@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 11:31:16 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ class SwNavigationPI : public Window,
     DECL_LINK( DocListBoxSelectHdl, ListBox * );
     DECL_LINK( ToolBoxSelectHdl, ToolBox * );
     DECL_LINK( ToolBoxClickHdl, ToolBox * );
+    DECL_LINK( ToolBoxDropdownClickHdl, ToolBox* );
     DECL_LINK( EditAction, NumEditAction * );
     DECL_LINK( EditGetFocus, NumEditAction * );
     DECL_LINK( DoneLink, SfxPoolItem * );
