@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-04 13:58:43 $
+ *  last change: $Author: fs $ $Date: 2002-10-28 09:34:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2317,6 +2317,10 @@ void SdXMLExport::_ExportAutoStyles()
     exportAutoDataStyles();
 
     GetShapeExport()->exportAutoStyles();
+
+    sal_uInt16 nContentAutostyles = EXPORT_CONTENT | EXPORT_AUTOSTYLES;
+    if ( ( getExportFlags() & nContentAutostyles ) == nContentAutostyles )
+        GetFormExport()->exportAutoStyles( );
 
     // ...for text
     GetTextParagraphExport()->exportTextAutoStyles();
