@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-08-07 11:50:55 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:13:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,10 +166,9 @@ namespace svxform
     //--------------------------------------------------------------------
     sal_Bool OLocalExchange::hasFormat( const DataFlavorExVector& _rFormats, sal_uInt32 _nFormatId )
     {
-        for (   DataFlavorExVector::const_iterator aSearch = _rFormats.begin();
-                aSearch != _rFormats.end();
-                ++aSearch
-            )
+        DataFlavorExVector::const_iterator aSearch;
+
+        for ( aSearch = _rFormats.begin(); aSearch != _rFormats.end(); ++aSearch )
             if ( aSearch->mnSotId == _nFormatId )
                 break;
 
