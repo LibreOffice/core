@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:23:18 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:15:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "RIGA" ;
         Text [ portuguese_brazilian ] = "FILEIRA" ;
         Text [ portuguese ] = "LINHA" ;
-        Text [ finnish ] = "RIVI" ;
+        Text [ finnish ] = "ROW" ;
         Text [ danish ] = "RÆKKE" ;
         Text [ french ] = "LIGNE" ;
         Text [ swedish ] = "RAD" ;
@@ -117,7 +117,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Colonna" ;
         Text [ portuguese_brazilian ] = "COLUNA" ;
         Text [ portuguese ] = "COLUNA" ;
-        Text [ finnish ] = "SARAKE" ;
+        Text [ finnish ] = "COLUMN" ;
         Text [ danish ] = "KOLONNE" ;
         Text [ french ] = "COLONNE" ;
         Text [ swedish ] = "KOLUMN" ;
@@ -146,7 +146,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "DATI" ;
         Text [ portuguese_brazilian ] = "DADOS" ;
         Text [ portuguese ] = "DADOS" ;
-        Text [ finnish ] = "TIEDOT" ;
+        Text [ finnish ] = "DATA" ;
         Text [ danish ] = "DATA" ;
         Text [ french ] = "DONNEES" ;
         Text [ swedish ] = "DATA" ;
@@ -188,7 +188,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Trascinate i campi da destra nell'area desiderata usando il mouse." ;
         Text [ portuguese_brazilian ] = "Arraste os campos da direita para a área desejada usando o mouse." ;
         Text [ portuguese ] = "Com o rato arraste os campos da direita para as áreas desejadas." ;
-        Text [ finnish ] = "Vedä hiirellä kenttiä oikealta haluamallesi alueelle." ;
+        Text [ finnish ] = "Vedä oikealla olevat kentät haluamaasi kohtaan." ;
         Text [ danish ] = "Træk felterne på højre side til de ønskede områder ved hjælp af musen." ;
         Text [ french ] = "Faites glisser les champs de droite vers leur plage de destination à l'aide de la souris." ;
         Text [ swedish ] = "Dra fälten på den högra sidan till önskade områden med musen." ;
@@ -302,7 +302,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Risultato da" ;
         Text [ portuguese_brazilian ] = "Saída de" ;
         Text [ portuguese ] = "Saída de" ;
-        Text [ finnish ] = "Tulosten lähde" ;
+        Text [ finnish ] = "Tulokset kohteeseen" ;
         Text [ danish ] = "Output fra" ;
         Text [ french ] = "Plage de destination" ;
         Text [ swedish ] = "Utdata från" ;
@@ -366,6 +366,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
         QuickHelpText[ catalan ] = "Reducir";
+        QuickHelpText[ finnish ] = "Pienennä!";
     };
     CheckBox BTN_IGNEMPTYROWS
     {
@@ -408,7 +409,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "~Individuare categorie" ;
         Text [ portuguese_brazilian ] = "~Detectar Categorias" ;
         Text [ portuguese ] = "~Indicar categorias" ;
-        Text [ finnish ] = "~Tunnista ryhmät" ;
+        Text [ finnish ] = "~Tunnista luokat" ;
         Text [ danish ] = "Identificer kategorier" ;
         Text [ french ] = "~Identifier les catégories" ;
         Text [ swedish ] = "Identifiera k~ategorier" ;
@@ -457,6 +458,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ turkish ] = "Sütun ~toplamý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Columnas de totales";
+        Text[ finnish ] = "~Sarakkeita yhteensä";
     };
     CheckBox BTN_TOTALROW
     {
@@ -486,6 +488,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ turkish ] = "Satýr t~oplamý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Filas de totales";
+        Text[ finnish ] = "~Rivejä yhteensä";
     };
     String PIVOTSTR_SUM
     {
@@ -522,7 +525,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Numero - " ;
         Text [ portuguese_brazilian ] = "Contagem - " ;
         Text [ portuguese ] = "Contar  - " ;
-        Text [ finnish ] = "Määrä - " ;
+        Text [ finnish ] = "Laske - " ;
         Text [ danish ] = "Antal - " ;
         Text [ french ] = "Nombre - " ;
         Text [ swedish ] = "Antal -  " ;
@@ -576,7 +579,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Max - " ;
         Text [ portuguese_brazilian ] = "Max - " ;
         Text [ portuguese ] = "Máx - " ;
-        Text [ finnish ] = "Suurin - " ;
+        Text [ finnish ] = "Max - " ;
         Text [ danish ] = "Maks - " ;
         Text [ french ] = "Max - " ;
         Text [ swedish ] = "Max -  " ;
@@ -603,7 +606,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Min - " ;
         Text [ portuguese_brazilian ] = "Min - " ;
         Text [ portuguese ] = "Mín - " ;
-        Text [ finnish ] = "Pienin - " ;
+        Text [ finnish ] = "Min - " ;
         Text [ danish ] = "Min - " ;
         Text [ french ] = "Min - " ;
         Text [ swedish ] = "Min -  " ;
@@ -630,7 +633,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Prodotto - " ;
         Text [ portuguese_brazilian ] = "Produto - " ;
         Text [ portuguese ] = "Produto - " ;
-        Text [ finnish ] = "Tulo - " ;
+        Text [ finnish ] = "Tuote - " ;
         Text [ danish ] = "Produkt - " ;
         Text [ french ] = "Produit - " ;
         Text [ swedish ] = "Produkt -  " ;
@@ -658,7 +661,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Cont - " ;
         Text [ portuguese_brazilian ] = "Contagem - " ;
         Text [ portuguese ] = "Contar - " ;
-        Text [ finnish ] = "Määrä2 - " ;
+        Text [ finnish ] = "Laske - " ;
         Text [ danish ] = "Antal - " ;
         Text [ french ] = "Nombre - " ;
         Text [ swedish ] = "Antal -  " ;
@@ -685,7 +688,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Dev - " ;
         Text [ portuguese_brazilian ] = "Dev - " ;
         Text [ portuguese ] = "DesvP - " ;
-        Text [ finnish ] = "Hajonta - " ;
+        Text [ finnish ] = "StDev - " ;
         Text [ danish ] = "Stdafv - " ;
         Text [ french ] = "Ecartype -   " ;
         Text [ swedish ] = "StdAv - " ;
@@ -712,7 +715,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "DevP - " ;
         Text [ portuguese_brazilian ] = "DevP - " ;
         Text [ portuguese ] = "DesvPadP - " ;
-        Text [ finnish ] = "Hajonta2 - " ;
+        Text [ finnish ] = "StDevP - " ;
         Text [ danish ] = "StdafvP - " ;
         Text [ french ] = "EcarTypeP -    " ;
         Text [ swedish ] = "StdAvP - " ;
@@ -739,7 +742,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Var - " ;
         Text [ portuguese_brazilian ] = "Var - " ;
         Text [ portuguese ] = "Variância - " ;
-        Text [ finnish ] = "Varianssi - " ;
+        Text [ finnish ] = "Var - " ;
         Text [ danish ] = "Varians - " ;
         Text [ french ] = "Var - " ;
         Text [ swedish ] = "Varians -  " ;
@@ -766,7 +769,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ italian ] = "Var2 - " ;
         Text [ portuguese_brazilian ] = "Var2 - " ;
         Text [ portuguese ] = "Variâncias - " ;
-        Text [ finnish ] = "Varianssi2 - " ;
+        Text [ finnish ] = "VarP - " ;
         Text [ danish ] = "VariansP - " ;
         Text [ french ] = "VarP - " ;
         Text [ swedish ] = "VariansP - " ;
@@ -806,5 +809,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Text[ turkish ] = "Veri pilotu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Piloto de datos";
+    Text[ finnish ] = "Tietojen ohjaus";
 };
 
