@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeos2.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-19 05:07:21 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ ModalDialog DLG_EXPORT_EMET
         Text[ arabic ] = "ΗαζΦΪ";
         Text[ dutch ] = "Modus";
         Text[ chinese_simplified ] = "Δ£Κ½";
-        Text[ greek ] = "Κατάσταση";
+        Text[ greek ] = "Κατάσταση λειτουργίας";
         Text[ korean ] = "Έπµε";
         Text[ turkish ] = "Kip";
         Text[ language_user1 ] = " ";
@@ -330,3 +330,4 @@ ModalDialog DLG_EXPORT_EMET
     Text[ catalan ] = "Opciones MET";
     Text[ finnish ] = "MET-asetukset";
 };
+
