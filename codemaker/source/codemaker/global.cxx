@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 20:07:30 $
+ *  last change: $Author: jsc $ $Date: 2001-06-20 14:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,7 @@ FileStream::~FileStream()
 
 sal_Bool FileStream::isValid()
 {
-#if defined(SAL_UNX) || defined(SAL_OS2)
+#if defined(SAL_UNX) || defined(SAL_OS2) || !defined(D__STL_NO_NEW_IOSTREAMS)
 #if STLPORT_VERSION < 400
     if(rdbuf()->fd() < 0)
 #else
@@ -381,3 +381,14 @@ sal_Int32 FileStream::getSize()
     return size;
 }
 
+ostream &operator <<(ostream& o, OString* s)
+{
+    o << s->getStr();
+    return o;
+}
+
+ostream &operator <<(ostream& o, const OString& s)
+{
+    o << s.getStr();
+    return o;
+}

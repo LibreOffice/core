@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-13 12:04:21 $
+ *  last change: $Author: jsc $ $Date: 2001-06-20 14:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,11 @@ public:
 
     sal_Int32       getSize();
     ::rtl::OString  getName() { return m_name; }
+
+    // friend functions
+    friend ostream &operator<<(ostream& o, ::rtl::OString*);
+    friend ostream &operator<<(ostream& o, const ::rtl::OString&);
+
 protected:
     ::rtl::OString m_name;
 };
