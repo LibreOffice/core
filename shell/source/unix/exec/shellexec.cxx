@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellexec.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:34:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,10 @@ ShellExec::ShellExec( const Reference< XComponentContext >& xContext ) :
 void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
     throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
 {
-    OStringBuffer aBuffer;
+    OStringBuffer aBuffer, aLaunchBuffer;
+
+    // DESKTOP_LAUNCH, see http://freedesktop.org/pipermail/xdg/2004-August/004489.html
+    static const char *pDesktopLaunch = getenv( "DESKTOP_LAUNCH" );
 
     // Check wether aCommand contains a document url or not
     sal_Int32 nIndex = aCommand.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM(":/") ) );
@@ -259,10 +262,29 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
         aBuffer.append(" ");
         aBuffer.append(OUStringToOString(aURL, osl_getThreadTextEncoding()));
 
+        if ( pDesktopLaunch && *pDesktopLaunch )
+        {
+            aLaunchBuffer.append( pDesktopLaunch );
+            aLaunchBuffer.append( " " );
+            aLaunchBuffer.append(OUStringToOString(aURL, osl_getThreadTextEncoding()));
+        }
     } else {
         aBuffer.append(OUStringToOString(aCommand, osl_getThreadTextEncoding()));
         aBuffer.append(" ");
         aBuffer.append(OUStringToOString(aParameter, osl_getThreadTextEncoding()));
+    }
+
+    // Prefer DESKTOP_LAUNCH when available
+    if ( aLaunchBuffer.getLength() > 0 )
+    {
+        FILE *pLaunch = popen( aLaunchBuffer.makeStringAndClear().getStr(), "w" );
+        if ( pLaunch != NULL )
+        {
+            if ( 0 == pclose( pLaunch ) )
+                return;
+        }
+        // Failed, do not try DESKTOP_LAUNCH any more
+        pDesktopLaunch = NULL;
     }
 
     OString cmd = aBuffer.makeStringAndClear();
