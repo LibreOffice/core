@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:25:48 $
+ *  last change: $Author: kz $ $Date: 2004-05-17 17:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,12 @@
 #endif
 #ifndef _SVDHDL_HXX //autogen
 #include <svx/svdhdl.hxx>
+#endif
+#ifndef _SVDOUTL_HXX //autogen
+#include <svx/svdoutl.hxx>
+#endif
+#ifndef _MyEDITENG_HXX
+#include <svx/editeng.hxx>
 #endif
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
@@ -4204,6 +4210,12 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                     Point aDocPos( PixelToLogic( rCEvt.GetMousePosPixel() ) );
                     if ( !rCEvt.IsMouseEvent() )
                         aDocPos = rSh.GetCharRect().Center();
+                    else
+                    {
+                        if(SelectMenuPosition(rSh, rCEvt.GetMousePosPixel()))
+                            rView.StopShellTimer();
+
+                    }
                     const Point aPixPos = LogicToPixel( aDocPos );
 
                     if ( rView.GetDocShell()->IsReadOnly() )
@@ -4498,7 +4510,237 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
         Window::Command(rCEvt);
 }
 
+/* -----------------25.08.2003 10:12-----------------
+    #i18686#: select the object/cursor at the mouse
+    position of the context menu request
+ --------------------------------------------------*/
+BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
+{
+    BOOL bRet = FALSE;
+    Point aDocPos( PixelToLogic( rMousePos ) );
+    //create a synthetic mouse event out of the coordinates
+    MouseEvent aMEvt(rMousePos);
+    SdrView *pSdrView = rSh.GetDrawView();
+    if ( pSdrView )
+    {
+        // if draw text is active and there's a text selection
+        // at the mouse position then do nothing
+        if(rSh.GetSelectionType() & SwWrtShell::SEL_DRW_TXT)
+        {
+            OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+            ESelection aSelection = pOLV->GetSelection();
+            if(!aSelection.IsZero())
+            {
+                SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
+                BOOL bVertical = pOutliner->IsVertical();
+                const EditEngine& rEditEng = pOutliner->GetEditEngine();
+                Point aEEPos(aDocPos);
+                const Rectangle& rOutputArea = pOLV->GetOutputArea();
+                // regard vertical mode
+                if(bVertical)
+                {
+                    aEEPos -= rOutputArea.TopRight();
+                    //invert the horizontal direction and exchange X and Y
+                    long nTemp = -aEEPos.X();
+                    aEEPos.X() = aEEPos.Y();
+                    aEEPos.Y() = nTemp;
+                }
+                else
+                    aEEPos -= rOutputArea.TopLeft();
 
+                EPosition aDocPosition = rEditEng.FindDocPosition(aEEPos);
+                ESelection aCompare(aDocPosition.nPara, aDocPosition.nIndex);
+                // make it a forward selection - otherwise the IsLess/IsGreater do not work :-(
+                aSelection.Adjust();
+                if(!aCompare.IsLess(aSelection)  && !aCompare.IsGreater(aSelection))
+                {
+                    return FALSE;
+                }
+            }
+
+        }
+
+        if (pSdrView->MouseButtonDown( aMEvt, this ) )
+        {
+            pSdrView->MouseButtonUp( aMEvt, this );
+            rSh.GetView().GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+            return TRUE;
+        }
+    }
+    rSh.ResetCursorStack();
+
+    if ( EnterDrawMode( aMEvt, aDocPos ) )
+    {
+        return TRUE;
+    }
+    if ( rView.GetDrawFuncPtr() && bInsFrm )
+    {
+        StopInsFrm();
+        rSh.Edit();
+    }
+
+    if ( rSh.IsSelFrmMode())
+    {
+
+        if (rSh.IsInsideSelectedObj(aDocPos) )
+            rSh.EnterSelFrmMode( &aDocPos );
+    }
+    UpdatePointer( aDocPos, 0 );
+
+    if ( aActHitType != SDRHIT_NONE && !rSh.IsSelFrmMode() &&
+        !SFX_APP()->IsDispatcherLocked() )
+    {
+        // #107513#
+        // Test if there is a draw object at that position and if it should be selected.
+        sal_Bool bShould = rSh.ShouldObjectBeSelected(aDocPos);
+
+        if(bShould)
+        {
+            rView.NoRotate();
+            rSh.HideCrsr();
+
+            BOOL bUnLockView = !rSh.IsViewLocked();
+            rSh.LockView( TRUE );
+            BOOL bSelObj = rSh.SelectObj( aDocPos, 0);
+            if( bUnLockView )
+                rSh.LockView( FALSE );
+
+            if( bSelObj )
+            {
+                bRet = TRUE;
+                // falls im Macro der Rahmen deselektiert
+                // wurde, muss nur noch der Cursor
+                // wieder angezeigt werden.
+                if( FRMTYPE_NONE == rSh.GetSelFrmType() )
+                    rSh.ShowCrsr();
+                else
+                {
+                    if (rSh.IsFrmSelected() && rView.GetDrawFuncPtr())
+                    {
+                        rView.GetDrawFuncPtr()->Deactivate();
+                        rView.SetDrawFuncPtr(NULL);
+                        rView.LeaveDrawCreate();
+                        rView.AttrChangedNotify( &rSh );
+                    }
+
+                    rSh.EnterSelFrmMode( &aDocPos );
+                    bFrmDrag = TRUE;
+                    UpdatePointer( aDocPos, 0 );
+                }
+
+            }
+
+            if (!rView.GetDrawFuncPtr())
+                rSh.ShowCrsr();
+        }
+    }
+    else if ( rSh.IsSelFrmMode() &&
+              (aActHitType == SDRHIT_NONE ||
+               !rSh.IsInsideSelectedObj( aDocPos )))
+    {
+        rView.NoRotate();
+        BOOL bUnLockView = !rSh.IsViewLocked();
+        rSh.LockView( TRUE );
+        BYTE nFlag = 0;
+
+        if ( rSh.IsSelFrmMode() )
+        {
+            rSh.UnSelectFrm();
+            rSh.LeaveSelFrmMode();
+            rView.AttrChangedNotify(&rSh);
+            bRet = TRUE;
+        }
+
+        BOOL bSelObj = rSh.SelectObj( aDocPos, nFlag );
+        if( bUnLockView )
+            rSh.LockView( FALSE );
+
+        if( !bSelObj )
+        {
+            // Cursor hier umsetzen, damit er nicht zuerst
+            // im Rahmen gezeichnet wird; ShowCrsr() geschieht
+            // in LeaveSelFrmMode()
+            bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,FALSE));
+            rSh.LeaveSelFrmMode();
+            rView.LeaveDrawCreate();
+            rView.AttrChangedNotify( &rSh );
+            bRet = TRUE;
+        }
+        else
+        {
+            rSh.HideCrsr();
+            rSh.EnterSelFrmMode( &aDocPos );
+            rSh.SelFlyGrabCrsr();
+            rSh.MakeSelVisible();
+            bFrmDrag = TRUE;
+            if( rSh.IsFrmSelected() &&
+                rView.GetDrawFuncPtr() )
+            {
+                rView.GetDrawFuncPtr()->Deactivate();
+                rView.SetDrawFuncPtr(NULL);
+                rView.LeaveDrawCreate();
+                rView.AttrChangedNotify( &rSh );
+            }
+            UpdatePointer( aDocPos, 0 );
+            bRet = TRUE;
+        }
+    }
+//    BOOL bLockView = bWasShdwCrsr;
+
+/*            if( !rSh.IsViewLocked() )
+            {
+                SwContentAtPos aCntntAtPos( SwContentAtPos::SW_CLICKFIELD |
+                                            SwContentAtPos::SW_INETATTR );
+                if( rSh.GetContentAtPos( aDocPos, aCntntAtPos, FALSE ) &&
+                    !rSh.IsReadOnlyAvailable() &&
+                    aCntntAtPos.IsInProtectSect() )
+                    bLockView = TRUE;
+            }
+*/
+    if ( rSh.IsGCAttr() )
+    {
+        rSh.GCAttr();
+        rSh.ClearGCAttr();
+    }
+
+    BOOL bOverSelect = rSh.ChgCurrPam( aDocPos ), bOverURLGrf = FALSE;
+    if( !bOverSelect )
+        bOverURLGrf = bOverSelect = 0 != rSh.IsURLGrfAtPos( aDocPos );
+
+    if ( !bOverSelect )
+    {
+//        if( !rSh.IsViewLocked() && bLockView )
+//            rSh.LockView( TRUE );
+//        else
+//            bLockView = FALSE;
+
+        {   // nur temp. Move-Kontext aufspannen, da sonst die
+            // Abfrage auf die Inhaltsform nicht funktioniert!!!
+            MV_KONTEXT( &rSh );
+//            bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPos,bOnlyText));
+            (rSh.*rSh.fnSetCrsr)(&aDocPos, FALSE);
+//            bCallBase = FALSE;
+        }
+
+//        if( bLockView )
+//            rSh.LockView( FALSE );
+
+    }
+    if( !bOverURLGrf )
+    {
+        const int nSelType = rSh.GetSelectionType();
+        if( nSelType == SwWrtShell::SEL_OLE ||
+            nSelType == SwWrtShell::SEL_GRF )
+        {
+            MV_KONTEXT( &rSh );
+            if( !rSh.IsFrmSelected() )
+                rSh.GotoNextFly();
+            rSh.EnterSelFrmMode();
+            bRet = TRUE;
+        }
+    }
+    return bRet;
+}
 
 SfxShell* lcl_GetShellFromDispatcher( SwView& rView, TypeId nType )
 {
