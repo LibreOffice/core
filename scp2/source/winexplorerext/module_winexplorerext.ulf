@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_winexplorerext.ulf,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-11 14:10:46 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 11:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@ de = "Windows Explorer Erweiterung"
 en-US = "Windows Explorer Extension"
 
 [STR_DESC_MODULE_OPTIONAL_WINDOWS_EXPLORER_EXTENSIONS]
-de = "Ermöglicht dem Microsoft Windows Explorer erweiterte Informationen über %PRODUCTNAME Dokumente anzuzeigen, z.B. Miniaturansichten. (Administrator-Rechte sind erforderlich)"
-en-US = "Enables the Microsoft Windows Explorer to show information about %PRODUCTNAME documents, such as thumbnail previews. (administrator rights required)"
+de = "Ermöglicht dem Microsoft Windows Explorer erweiterte Informationen über %PRODUCTNAME Dokumente anzuzeigen, z.B. Miniaturansichten."
+en-US = "Enables the Microsoft Windows Explorer to show information about %PRODUCTNAME documents, such as thumbnail previews."
 
 
 
