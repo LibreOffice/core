@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 15:06:12 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,7 +441,13 @@ class SvxRTFItemStackType
 public:
     SvxRTFItemStackType( const SvxRTFItemStackType&, const SvxPosition&,
                         int bCopyAttr = FALSE );
+    //cmc, I'm very suspicios about SetStartPos, it doesn't change
+    //its children's starting position, and the implementation looks
+    //bad, consider this deprecated.
     void SetStartPos( const SvxPosition& rPos );
+
+    void MoveFullNode(const SvxNodeIdx &rOldNode,
+        const SvxNodeIdx &rNewNode);
 
     ULONG GetSttNodeIdx() const { return pSttNd->GetIdx(); }
     ULONG GetEndNodeIdx() const { return pEndNd->GetIdx(); }
