@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:50:31 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1942,6 +1942,26 @@ String Newsletter + 12
     Text[ hindi ] = "द्विगुणित-भाग";
     Text[ slovak ] = "Dvojité riadkovanie";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
