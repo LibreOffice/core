@@ -11,8 +11,18 @@ to a solvenv residing at a non-standard location.
 
 Running configure on Windows NT:
 
+* configure must be run from the Cygnus bash shell. On the bash command line
+type "bash configure <options>" to run the script. The generated winenv.bat
+file must then be executed from the 4NT shell in which you will be building
+OpenOffice.
+
 * The path to the Microsoft C/C++ compiler home directory must be given as
-an MS-DOS format path on the command line with --with-cl-home or entered 
-interactively when prompted. MS-DOS format names are <8 characters in length
-and don't contain spaces. To get the MS-DOS format of a Windows pathname select
-the directory in a window and right-click and choose properties.   
+an MS-DOS format path on the command line with the configure option --with-cl-home 
+or entered interactively when prompted. MS-DOS format names are <8 characters
+in length and don't contain spaces. To get the MS-DOS format of a Windows
+pathname select the directory in a window and right-click and choose properties.   
+
+* configure automatically copies the top level makefile.rc from the config_office
+directory to the top level directory when run. If you are not running configure and
+are using a pre-generated winenv.bat to set up the build environment, then you must 
+manually copy the makefile.rc file in config_office to the top level directory.
