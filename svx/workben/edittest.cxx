@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-14 06:26:34 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 12:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1483,7 +1483,7 @@ IMPL_LINK( EditMainWindow, ShowStatus, EditStatus *, pStat )
         {
             // Wird durch RGCHK_PAPERSZ1 'geklippt'
             if ( !( pEditEngine->GetControlWord() & EE_CNTRL_AUTOPAGESIZE) )
-                pEditView->Scroll( 0, -(long)pEditEngine->GetTextHeight(), RGCHK_PAPERSZ1 );
+                pEditView->Scroll( -(long)pEditEngine->CalcTextWidth(), -(long)pEditEngine->GetTextHeight(), RGCHK_PAPERSZ1 );
         }
         SetScrollBarRanges();
     }
@@ -1628,7 +1628,7 @@ void __EXPORT EditViewWindow::Resize()
 {
     Size aPaperSz( GetOutputSize() );
     pEditView->SetOutputArea( Rectangle( Point(0,0), aPaperSz ) );
-    pEditEngine->SetPaperSize( aPaperSz );
+    pEditEngine->SetPaperSize( Size( aPaperSz.Width()*1, aPaperSz.Height()*1 ) );
     pEditView->ShowCursor();
     Invalidate();
 }
