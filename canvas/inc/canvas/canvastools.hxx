@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvastools.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 11:49:06 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,35 @@ namespace canvas
             x |= x >> 16;
 
             return ++x;
+        }
+
+        /**
+         *
+         * Count the number of 1-bits of an n-bit value
+         *
+         */
+
+        // mickey's math tricks...
+        inline unsigned int powerof2( unsigned int c ) { return 0x1 << c; }
+        inline unsigned int mask( unsigned int c ) { return ((unsigned int)(-1)) / (powerof2(powerof2(c)) + 1); }
+        inline unsigned int count( unsigned int x, unsigned int c ) { return ((x) & mask(c)) + (((x) >> (powerof2(c))) & mask(c)); }
+        template<typename T>
+        inline unsigned int bitcount( T c ) {
+            unsigned int nByteIndex = 0;
+            unsigned int nNumBytes = sizeof(T)<<2;
+            do {
+                c=count(c,nByteIndex++);
+                nNumBytes >>= 1;
+            } while(nNumBytes);
+            return c;
+        }
+        inline unsigned int bitcount32( unsigned int c ) {
+            c=count(c,0);
+            c=count(c,1);
+            c=count(c,2);
+            c=count(c,3);
+            c=count(c,4);
+            return c;
         }
 
         /** Create a RealSize2D with both coordinate values set to +infinity
