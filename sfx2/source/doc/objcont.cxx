@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mba $ $Date: 2002-11-04 09:11:53 $
+ *  last change: $Author: hr $ $Date: 2002-11-14 14:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,7 +627,7 @@ BOOL SfxObjectShell::SaveInfoAndConfig_Impl( SvStorageRef pNewStg )
                         INetURLObject aURL( aTemplFileName );
                         DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
 
-                        SvStorageRef aStor = new SvStorage( aURL.GetMainURL() );
+                        SvStorageRef aStor = new SvStorage( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
                         if ( SVSTREAM_OK == aStor->GetError() )
                         {
                             GetConfigManager()->StoreConfiguration(aStor);
@@ -696,7 +696,7 @@ BOOL SfxObjectShell::SaveInfoAndConfig_Impl( SvStorageRef pNewStg )
                     INetURLObject aURL( aTemplFileName );
                     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
 
-                    SvStorageRef aStor = new SvStorage( aURL.GetMainURL() );
+                    SvStorageRef aStor = new SvStorage( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
                     if ( SVSTREAM_OK == aStor->GetError() )
                     {
                         GetConfigManager()->StoreConfiguration(aStor);
@@ -1751,7 +1751,7 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
                 SfxObjectShellLock xTemplDoc = GetFactory().CreateObject( SFX_CREATE_MODE_ORGANIZER );
                 xTemplDoc->DoInitNew(0);
                 String aOldBaseURL = INetURLObject::GetBaseURL();
-                INetURLObject::SetBaseURL( INetURLObject( aTemplFileName ).GetMainURL() );
+                INetURLObject::SetBaseURL( INetURLObject( aTemplFileName ).GetMainURL( INetURLObject::NO_DECODE ) );
                 if ( xTemplDoc->LoadFrom(aTemplStor) )
                 {
                     // transfer styles from xTemplDoc to this document

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2002-11-04 09:11:54 $
+ *  last change: $Author: hr $ $Date: 2002-11-14 14:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1367,7 +1367,7 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
             INetURLObject aObj;
             pDoc->GetMedium()->GetURLObject().GetNewAbsURL(
                 aURL.Copy( 4 ), &aObj );
-            rInfo.SetReloadURL( aObj.GetMainURL() );
+            rInfo.SetReloadURL( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
         }
         rInfo.EnableReload( sal_True );
         rInfo.SetReloadDelay( nTime );
@@ -1458,7 +1458,7 @@ sal_Bool SfxObjectShell::IsSecure()
         // bei neuen Dokumenten das Template als Referer nehmen
         String aTempl( GetDocInfo().GetTemplateFileName() );
         if ( aTempl.Len() )
-            aReferer = INetURLObject( aTempl ).GetMainURL();
+            aReferer = INetURLObject( aTempl ).GetMainURL( INetURLObject::NO_DECODE );
     }
 
     INetURLObject aURL( "macro:" );
@@ -1474,12 +1474,12 @@ sal_Bool SfxObjectShell::IsSecure()
     if( aOpt.GetBasicMode() == eNEVER_EXECUTE )
         return sal_False;
 
-    if ( aOpt.IsSecureURL( aURL.GetMainURL(), aReferer ) )
-    //if ( SvtSecurityOptions().IsSecureURL( aURL.GetMainURL(), aReferer ) )
+    if ( aOpt.IsSecureURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aReferer ) )
+    //if ( SvtSecurityOptions().IsSecureURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aReferer ) )
     {
         if ( GetMedium()->GetContent().is() )
         {
-            Any aAny( ::utl::UCBContentHelper::GetProperty( aURL.GetMainURL(), String( RTL_CONSTASCII_USTRINGPARAM("IsProtected")) ) );
+            Any aAny( ::utl::UCBContentHelper::GetProperty( aURL.GetMainURL( INetURLObject::NO_DECODE ), String( RTL_CONSTASCII_USTRINGPARAM("IsProtected")) ) );
             sal_Bool bIsProtected = FALSE;
             if ( ( aAny >>= bIsProtected ) && bIsProtected )
                 return sal_False;
@@ -1588,11 +1588,11 @@ void SfxObjectShell::AdjustMacroMode( const String& rScriptType )
                 // for documents made from a template: get the name of the template
                 String aTempl( GetDocInfo().GetTemplateFileName() );
                 if ( aTempl.Len() )
-                    aReferer = INetURLObject( aTempl ).GetMainURL();
+                    aReferer = INetURLObject( aTempl ).GetMainURL( INetURLObject::NO_DECODE );
             }
 
             // no referer means OLE object or new document not from template
-            sal_Bool bIsSecureByList = !aReferer.Len() || aOpt.IsSecureURL( aURL.GetMainURL(), aReferer );
+            sal_Bool bIsSecureByList = !aReferer.Len() || aOpt.IsSecureURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aReferer );
             sal_Bool bSecure = pImp->nMacroMode == eALWAYS_EXECUTE || bIsSecureByList;
             //sal_Bool bSecure = pImp->nMacroMode == MacroExecMode::ALWAYS_EXECUTE || IsSecure();
 

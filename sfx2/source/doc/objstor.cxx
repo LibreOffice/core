@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: mba $ $Date: 2002-11-04 09:11:55 $
+ *  last change: $Author: hr $ $Date: 2002-11-14 14:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1155,21 +1155,21 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     // SetModified must be enabled when SaveCompleted is called, otherwise the modified flag of child objects will not be cleared
     EnableSetModified( sal_True );
 
+    sal_Bool bCopyTo = sal_False;
+    SfxItemSet *pMedSet = rMedium.GetItemSet();
+    if( pMedSet )
+    {
+        SFX_ITEMSET_ARG( pMedSet, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
+        bCopyTo =   GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
+                    pSaveToItem && pSaveToItem->GetValue();
+    }
+
     if( bOk )
     {
         // remember new object storage, if it is a temporary one, because we will need it for a "SaveCompleted" later
         SvStorageRef xNewTempRef;
         if ( bOk && bPrepareForDirectAccess )
         {
-            sal_Bool bCopyTo = sal_False;
-            SfxItemSet *pSet = rMedium.GetItemSet();
-            if( pSet )
-            {
-                SFX_ITEMSET_ARG( pSet, pSaveToItem, SfxBoolItem, SID_SAVETO, sal_False );
-                bCopyTo =   GetCreateMode() == SFX_CREATE_MODE_EMBEDDED ||
-                            pSaveToItem && pSaveToItem->GetValue();
-            }
-
             // if the target medium is an alien format and the "old" medium was an own format, the object storage
             // must be exchanged, because now we need a new temporary storage as object storage
             BOOL bNeedsStorage = !bCopyTo && IsOwnStorageFormat_Impl(*pMedium) && !IsOwnStorageFormat_Impl(rMedium);
@@ -1226,7 +1226,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     {
         DBG_ASSERT( pFilter, "No filter after successful save?!" );
         if( pFilter )
-            if( pFilter->IsAlienFormat() )
+            if( !bCopyTo && pFilter->IsAlienFormat() )
                 // set flag, that the user will be warned for possible data loss on closing this document
                 pImp->bDidDangerousSave=sal_True;
             else
@@ -1992,6 +1992,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
     pMergedParams->ClearItem( SID_DOCINFO_TITLE );
 
     pMergedParams->ClearItem( SID_INPUTSTREAM );
+    pMergedParams->ClearItem( SID_CONTENT );
 
     // "SaveAs" will never store any version information - it's a complete new file !
     pMergedParams->ClearItem( SID_VERSION );
@@ -2229,7 +2230,7 @@ sal_Bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
                         INetURLObject aURL( aTemplFileName );
                         DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL !" );
 
-                        SvStorageRef aStor = new SvStorage( aURL.GetMainURL() );
+                        SvStorageRef aStor = new SvStorage( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
                         if ( SVSTREAM_OK == aStor->GetError() )
                         {
                             GetConfigManager()->StoreConfiguration(aStor);
