@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:18:23 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1325,7 +1325,7 @@ String S_UNKNOWN_TYPE
     Text[ korean ] = "UId로부터의  알려져　있지않은　개체 타입 ($Arg1)";
     Text[ chinese_simplified ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ chinese_traditional ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
-    Text[ arabic ] = "Unknown object type ($Arg1) from UId";
+    Text[ arabic ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
     Text[ turkish ] = "Unknown object type ($Arg1) from UId";
 };
 String S_UNPACKING_STORAGE_FAILED
@@ -1363,12 +1363,12 @@ String S_NO_LIST_BOX_BUTTON
     Text[ italian ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ danish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ swedish ] = "ListBoxButton does not exist in ($Arg1)";
-    Text[ polish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
+    Text[ polish ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ portuguese_brazilian ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ japanese ] = "ListBoxButton 궼 ($Arg1) 궸궇귟귏궧귪갃";
     Text[ korean ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ chinese_simplified ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ chinese_traditional ] = "ListBoxButton does not exist in ($Arg1)";
     Text[ turkish ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
-    Text[ arabic ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
+    Text[ arabic ] = "ListBoxButton does not exist in ($Arg1)";
 };
