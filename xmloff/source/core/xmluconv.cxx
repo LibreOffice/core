@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 12:59:10 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1120,7 +1120,9 @@ sal_Bool SvXMLUnitConverter::convertTime( ::com::sun::star::util::DateTime& rDat
 
 /** convert double to ISO Date Time String */
 void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
-                            const double& fDateTime, const com::sun::star::util::Date& aTempNullDate)
+        const double& fDateTime,
+        const com::sun::star::util::Date& aTempNullDate,
+        sal_Bool bAddTimeIf0AM )
 {
     double fValue = fDateTime;
     sal_Int32 nValue = static_cast <sal_Int32> (::rtl::math::approxFloor (fValue));
@@ -1189,7 +1191,7 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
     if (nTemp < 10)
         rBuffer.append( sal_Unicode('0'));
     rBuffer.append( sal_Int32( nTemp));
-    if(bHasTime)
+    if(bHasTime || bAddTimeIf0AM)
     {
         rBuffer.append( sal_Unicode('T'));
         if (fHoursValue < 10)
@@ -1325,8 +1327,10 @@ sal_Bool SvXMLUnitConverter::convertDateTime( double& fDateTime,
 }
 
 /** convert util::DateTime to ISO Date String */
-void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
-                                const com::sun::star::util::DateTime& rDateTime )
+void SvXMLUnitConverter::convertDateTime(
+                ::rtl::OUStringBuffer& rBuffer,
+                const com::sun::star::util::DateTime& rDateTime,
+                sal_Bool bAddTimeIf0AM )
 {
     String aString( String::CreateFromInt32( rDateTime.Year ) );
     aString += '-';
@@ -1340,7 +1344,8 @@ void SvXMLUnitConverter::convertDateTime( ::rtl::OUStringBuffer& rBuffer,
 
     if( rDateTime.Seconds != 0 ||
         rDateTime.Minutes != 0 ||
-        rDateTime.Hours   != 0 )
+        rDateTime.Hours   != 0 ||
+        bAddTimeIf0AM )
     {
         aString += 'T';
         if( rDateTime.Hours < 10 )
