@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews8.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-14 16:35:18 $
+ *  last change: $Author: ka $ $Date: 2002-07-04 15:21:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,17 +415,7 @@ void SdDrawViewShell::FuTemp01(SfxRequest& rReq)
                 }
                 catch(...)
                 {
-}
-            }
-
-            if( !bDone )
-            {
-#ifndef UNX
-                const USHORT nId = STR_TWAIN_NO_SOURCE;
-#else
-                const USHORT nId = STR_TWAIN_NO_SOURCE_UNX;
-#endif
-                InfoBox( pWindow, String( SdResId( nId ) ) ).Execute();
+                }
             }
 
             Cancel();
