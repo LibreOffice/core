@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberingtypelistbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-10-16 09:16:31 $
+ *  last change: $Author: os $ $Date: 2002-11-21 09:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@
 #ifndef _COM_SUN_STAR_TEXT_XNUMBERINGTYPEINFO_HPP_
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
 #endif
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
-#include <svtools/cjkoptions.hxx>
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 
 using namespace com::sun::star::uno;
@@ -160,7 +160,9 @@ void SwNumberingTypeListBox::Reload(USHORT nTypeFlags)
         }
     }
     //#104079# extended numberings are only insert when CJK support is switched on
-    if(0 != (nTypeFlags&INSERT_NUM_EXTENDED_TYPES) && SvtCJKOptions().IsCJKFontEnabled())
+    SvtLanguageOptions aLangOpt;
+    if(0 != (nTypeFlags&INSERT_NUM_EXTENDED_TYPES) &&
+            (aLangOpt.IsCJKFontEnabled() || aLangOpt.IsCTLFontEnabled()))
     {
         if(pImpl->xInfo.is())
         {

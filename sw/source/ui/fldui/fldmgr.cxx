@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2002-11-15 11:12:16 $
+ *  last change: $Author: os $ $Date: 2002-11-21 09:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,8 @@
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
-#include <svtools/cjkoptions.hxx>
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
@@ -852,7 +852,9 @@ USHORT SwFldMgr::GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode) co
             {
                 USHORT nCount = (USHORT)(nEnd - nStart);
                 GetNumberingInfo();
-                if(xNumberingInfo.is() && SvtCJKOptions().IsCJKFontEnabled())
+                SvtLanguageOptions aLangOpt;
+                if(xNumberingInfo.is() &&
+                    (aLangOpt.IsCJKFontEnabled()||aLangOpt.IsCTLFontEnabled()))
                 {
                     Sequence<sal_Int16> aTypes = xNumberingInfo->getSupportedNumberingTypes();
                     const sal_Int16* pTypes = aTypes.getConstArray();
@@ -1568,11 +1570,9 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
     }
     ASSERT(pFld, "Feld nicht vorhanden");
 
+    USHORT nLang = GetCurrLanguage();
 
     // Language
-    //the auto language flag has to be set prior to the language!
-    pFld->SetAutomaticLanguage(rData.bIsAutomaticLanguage);
-    USHORT nLang = GetCurrLanguage();
     pFld->SetLanguage(nLang);
 
     // Einfuegen
