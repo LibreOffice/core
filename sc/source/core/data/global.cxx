@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: er $ $Date: 2001-08-02 14:46:38 $
+ *  last change: $Author: nn $ $Date: 2001-11-01 18:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,9 @@ USHORT          ScGlobal::nStdRowHeight         = 257;
 
 long            ScGlobal::nLastRowHeightExtra   = 0;
 long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
+
+static USHORT nPPTZoom = 0;     // ScreenZoom used to determine nScreenPPTX/Y
+
 
 // ... oder so?
 
@@ -646,10 +649,7 @@ void ScGlobal::Init()
     pEmbeddedBrushItem = new SvxBrushItem( Color( COL_LIGHTCYAN ) );
     pProtectedBrushItem = new SvxBrushItem( Color( COL_LIGHTGRAY ) );
 
-    OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-    Point aPix1000 = pDefaultDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
-    nScreenPPTX = aPix1000.X() / 1000.0;
-    nScreenPPTY = aPix1000.Y() / 1000.0;
+    UpdatePPT(NULL);
     ScCompiler::Init();
 #if SOMA_FPSIGNAL_JUMP
     ScInterpreter::pSignalFunc = SC_DLL()->GetSignalFunc();
@@ -662,6 +662,25 @@ void ScGlobal::Init()
     *pStrClipDocName += '1';
 
     //  ScDocumentPool::InitVersionMaps() ist schon vorher gerufen worden
+}
+
+void ScGlobal::UpdatePPT( OutputDevice* pDev )
+{
+    USHORT nCurrentZoom = Application::GetSettings().GetStyleSettings().GetScreenZoom();
+    if ( nCurrentZoom != nPPTZoom )
+    {
+        //  Screen PPT values must be updated when ScreenZoom has changed.
+        //  If called from Window::DataChanged, the window is passed as pDev,
+        //  to make sure LogicToPixel uses a device which already uses the new zoom.
+        //  For the initial settings, NULL is passed and GetDefaultDevice used.
+
+        if ( !pDev )
+            pDev = Application::GetDefaultDevice();
+        Point aPix1000 = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
+        nScreenPPTX = aPix1000.X() / 1000.0;
+        nScreenPPTY = aPix1000.Y() / 1000.0;
+        nPPTZoom = nCurrentZoom;
+    }
 }
 
 const String& ScGlobal::GetClipDocName()
