@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: os $ $Date: 2002-11-21 13:21:38 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ Menu RID_MAIN_MENU
                 Checkable=TRUE;
                 Text[ english_us ] = "~Column Arrangement...";
                         Text[ portuguese ] = "~Dispor colunas...";
-                        Text[ russian ] = "~Ğàñïîëîæåíèå êîëîíîê...";
+                        Text[ russian ] = "~Ğàñïîëîæåíèå ñòîëáöîâ...";
                         Text[ greek ] = "Áíôéóôïß÷éóç ~óôŞëçò...";
                         Text[ dutch ] = "~Kolomindeling...";
                         Text[ french ] = "~Assignation de colonnes...";
@@ -291,7 +291,7 @@ Menu RID_MAIN_MENU
                         Text[ turkish ] = "~Sütun düzeni...";
                         Text[ language_user1 ] = " ";
                         Text[ catalan ] = "Disposició de les ~columnes...";
-                        Text[ finnish ] = "~Sarakejärjestys";
+                        Text[ finnish ] = "~Sarakejärjestys...";
                         Text[ thai ] = "à¸ˆà¸±à¸”à¹€à¸£à¸µà¸¢à¸‡~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ...";
                     };
             MenuItem
@@ -308,12 +308,12 @@ Menu RID_MAIN_MENU
                         Text[ chinese_simplified ] = "é€‰æ‹©æ•°æ®æº...";
                         Text[ chinese_traditional ] = "é¸æ“‡è³‡æ–™æº...";
                         Text[ portuguese ] = "~Fonte de dados...";
-                        Text[ russian ] = "~Èñõîäíûå äàííûå...";
+                        Text[ russian ] = "~Èñòî÷íèê äàííûõ...";
                         Text[ greek ] = "Ğñïİëåõóç ~äåäïìİíùí...";
                         Text[ dutch ] = "~Gegevensbron...";
                         Text[ french ] = "~Sélection de la source de données...";
                         Text[ spanish ] = "~Seleccionar fuente de datos...";
-                        Text[ finnish ] = "~Tietolähde";
+                        Text[ finnish ] = "~Tietolähde...";
                         Text[ italian ] = "~Seleziona sorgente dati...";
                         Text[ danish ] = "~Datakilde...";
                         Text[ polish ] = "ród³o danych...";
