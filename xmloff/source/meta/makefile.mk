@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: thb $ $Date: 2001-07-24 17:06:08 $
+#   last change: $Author: nn $ $Date: 2001-12-11 16:48:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,13 +87,4 @@ SVXLIGHTOBJFILES =	\
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-$(SLO)$/xmlmetae.obj : $(INCCOM)$/rscrev.hxx
-
-$(INCCOM)$/rscrev.hxx: makefile.mk
-.IF "$(GUI)"=="UNX"
-    echo #define RSCUPDVER \""$(RSCREVISION)"\" > $@
-.ELSE
-    echo #define RSCUPDVER "$(RSCREVISION)" > $@
-.ENDIF
 
