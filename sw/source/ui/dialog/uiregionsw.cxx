@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiregionsw.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 11:48:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1318,7 +1318,14 @@ IMPL_LINK( SwEditRegionDlg, FileNameHdl, Edit *, pEdit )
         {
             String sTmp(pEdit->GetText());
             if(sTmp.Len())
-                sTmp = URIHelper::SmartRelToAbs( sTmp );
+            {
+                SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
+                INetURLObject aAbs;
+                if( pMedium )
+                    aAbs = pMedium->GetURLObject();
+                sTmp = URIHelper::SmartRel2Abs(
+                    aAbs, sTmp, URIHelper::GetMaybeFileHdl() );
+            }
             pSectRepr->SetFile( sTmp );
             pSectRepr->SetFilePasswd( aEmptyStr );
         }
@@ -1763,7 +1770,12 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& rSet)
         {
             if(sFileName.Len())
             {
-                aLinkFile = URIHelper::SmartRelToAbs( sFileName );
+                SfxMedium* pMedium = pWrtSh->GetView().GetDocShell()->GetMedium();
+                INetURLObject aAbs;
+                if( pMedium )
+                    aAbs = pMedium->GetURLObject();
+                aLinkFile = URIHelper::SmartRel2Abs(
+                    aAbs, sFileName, URIHelper::GetMaybeFileHdl() );
                 aSection.SetLinkFilePassWd( sFilePasswd );
             }
 
