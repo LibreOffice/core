@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsPageSelector.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:15:13 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:29:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ void PageSelector::SelectPage (int nPageIndex)
 
 void PageSelector::SelectPage (const SdPage* pPage)
 {
-    int nPageIndex = pPage->GetPageNum() / 2;
+    int nPageIndex = (pPage->GetPageNum()-1) / 2;
     PageDescriptor* pDescriptor = mrModel.GetPageDescriptor(nPageIndex);
     if (pDescriptor!=NULL && pDescriptor->GetPage()==pPage)
         SelectPage (*pDescriptor);
@@ -203,7 +203,7 @@ void PageSelector::DeselectPage (int nPageIndex)
 
 void PageSelector::DeselectPage (const SdPage* pPage)
 {
-    int nPageIndex = pPage->GetPageNum() / 2;
+    int nPageIndex = (pPage->GetPageNum()-1) / 2;
     PageDescriptor* pDescriptor = mrModel.GetPageDescriptor(nPageIndex);
     if (pDescriptor!=NULL && pDescriptor->GetPage()==pPage)
         DeselectPage (*pDescriptor);
@@ -359,5 +359,31 @@ void PageSelector::DisableBroadcasting (void)
 }
 
 
+
+
+::std::auto_ptr<PageSelector::PageSelection>
+    PageSelector::GetPageSelection (void)
+{
+    ::std::auto_ptr<PageSelection> pSelection (new PageSelection());
+
+    int nPageCount = GetPageCount();
+    for (int nIndex=0; nIndex<nPageCount; nIndex++)
+    {
+        if (IsPageSelected(nIndex))
+            pSelection->insert (nIndex);
+    }
+
+    return pSelection;
+}
+
+
+
+
+void PageSelector::SetPageSelection (const PageSelection& rSelection)
+{
+    PageSelection::const_iterator iIndex;
+    for (iIndex=rSelection.begin(); iIndex!=rSelection.end(); ++iIndex)
+        SelectPage (*iIndex);
+}
 
 } } } // end of namespace ::sd::slidesorter::controller
