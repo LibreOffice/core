@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-05-29 10:54:23 $
+ *  last change: $Author: sj $ $Date: 2001-05-30 12:48:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,9 +142,9 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_TYPE
     {
-        Pos = MAP_APPFONT ( 18 , 56 ) ;
-        Size = MAP_APPFONT ( 43 , 8 ) ;
-        Text = "~Typ" ;
+        Pos = MAP_APPFONT ( 22 , 56 ) ;
+        Size = MAP_APPFONT ( 42 , 8 ) ;
+        Text = "Ty~p" ;
         Text [ ENGLISH ] = "Ty~pe" ;
         Text[ english_us ] = "Ty~pe";
         Text[ portuguese ] = "Ti~po";
@@ -385,8 +385,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_CENTER_X
     {
-        Pos = MAP_APPFONT ( 18 , 72 ) ;
-        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Pos = MAP_APPFONT ( 22 , 72 ) ;
+        Size = MAP_APPFONT ( 42 , 8 ) ;
         Text = "Zentrum ~X" ;
         Text [ ENGLISH ] = "Center ~X" ;
         Text[ english_us ] = "Center ~X";
@@ -428,8 +428,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_CENTER_Y
     {
-        Pos = MAP_APPFONT ( 18 , 88 ) ;
-        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Pos = MAP_APPFONT ( 22 , 88 ) ;
+        Size = MAP_APPFONT ( 42 , 8 ) ;
         Text = "Zentrum ~Y" ;
         Text [ ENGLISH ] = "Center ~Y" ;
         Text[ english_us ] = "Center ~Y";
@@ -471,8 +471,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_ANGLE
     {
-        Pos = MAP_APPFONT ( 18 , 104 ) ;
-        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Pos = MAP_APPFONT ( 22 , 104 ) ;
+        Size = MAP_APPFONT ( 42 , 8 ) ;
         Text = "~Winkel" ;
         Text [ ENGLISH ] = "~Angle" ;
         Text[ english_us ] = "~Angle";
@@ -534,8 +534,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_BORDER
     {
-        Pos = MAP_APPFONT ( 12 + TRANS_GRAD_OFFSET_X, 56 + TRANS_GRAD_OFFSET_Y) ;
-        Size = MAP_APPFONT ( 48, 8 ) ;
+        Pos = MAP_APPFONT ( 16 + TRANS_GRAD_OFFSET_X, 56 + TRANS_GRAD_OFFSET_Y) ;
+        Size = MAP_APPFONT ( 42, 8 ) ;
         Text = "~Rand" ;
         Text [ ENGLISH ] = "~Border" ;
         Text[ english_us ] = "~Border";
@@ -576,8 +576,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_START_VALUE
     {
-        Pos = MAP_APPFONT ( 18 , 136 ) ;
-        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Pos = MAP_APPFONT ( 22 , 136 ) ;
+        Size = MAP_APPFONT ( 42 , 8 ) ;
         Text = "~Startwert" ;
         Text [ ENGLISH ] = "~From value" ;
         Text[ english_us ] = "~Start value";
@@ -618,8 +618,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     };
     FixedText FT_TRGR_END_VALUE
     {
-        Pos = MAP_APPFONT ( 18 , 152 ) ;
-        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Pos = MAP_APPFONT ( 22 , 152 ) ;
+        Size = MAP_APPFONT ( 42 , 8 ) ;
         Text = "~Endwert" ;
         Text [ ENGLISH ] = "~To value" ;
         Text[ english_us ] = "~End value";
