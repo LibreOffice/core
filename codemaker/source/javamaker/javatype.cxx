@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:53:45 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:09:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,18 +109,45 @@ sal_Bool JavaType::dump(JavaOptions* pOptions)
     if (pOptions->isValid("-O"))
         outPath = pOptions->getOption("-O");
 
-    OString fileName = createFileNameFromType(outPath, m_typeName, ".java");
+    OString sFileName = createFileNameFromType(outPath, m_typeName, ".java");
+    sal_Bool bFileExists = fileExists( sFileName );
+    sal_Bool bFileCheck = sal_False;
 
-    FileStream javaFile(fileName);
+    if ( bFileExists && pOptions->isValid("-G") )
+        return sal_True;
+
+    if ( bFileExists && pOptions->isValid("-Gc") )
+        bFileCheck = sal_True;
+
+    OString sTmpDir = getTempDir(sFileName);
+    FileStream javaFile;
+    javaFile.createTempFile(sTmpDir);
+    OString sTmpFileName;
 
     if(!javaFile.isValid())
     {
         OString message("cannot open ");
-        message += fileName + " for writing";
+        message += sFileName + " for writing";
         throw CannotDumpException(message);
+    } else
+        sTmpFileName = javaFile.getName();
+
+    ret = dumpFile(javaFile);
+
+    javaFile.close();
+
+    if (ret) {
+        ret = makeValidTypeFile(sFileName, sTmpFileName, bFileCheck);
+    } else {
+        // remove existing type file if something goes wrong to ensure consistency
+        if (fileExists(sFileName))
+            removeTypeFile(sFileName);
+
+        // remove tmp file if something goes wrong
+        removeTypeFile(sTmpFileName);
     }
 
-    return dumpFile(javaFile);
+    return ret;
 }
 
 sal_Bool JavaType::dumpDependedTypes(JavaOptions* pOptions)
@@ -1257,14 +1284,21 @@ sal_Bool ModuleType::dump(JavaOptions* pOptions)
     if (pOptions->isValid("-O"))
         outPath = pOptions->getOption("-O");
 
-    sal_uInt32      fieldCount = m_reader.getFieldCount();
-    RTFieldAccess   access = RT_ACCESS_INVALID;
-    OString         fieldName;
-    OString         fieldType;
-    OString         fileName;
+    sal_uInt32    fieldCount = m_reader.getFieldCount();
+    RTFieldAccess access = RT_ACCESS_INVALID;
+    OString       fieldName;
+    OString       fieldType;
+    OString       fileName;
+    OString       sTmpDir;
+    OString       sTmpFileName;
+    sal_Bool      ret;
+    sal_Bool      bFileExists;
+    sal_Bool      bFileCheck;
 
     for (sal_uInt16 i=0; i < fieldCount; i++)
     {
+        ret = sal_False;
+        bFileCheck = sal_False;
         access = m_reader.getFieldAccess(i);
 
         if (access == RT_ACCESS_CONST)
@@ -1273,14 +1307,24 @@ sal_Bool ModuleType::dump(JavaOptions* pOptions)
             fieldType = m_reader.getFieldType(i);
 
             fileName = createFileNameFromType(outPath, m_typeName + "/" + fieldName, ".java");
-            FileStream o(fileName);
+            bFileExists = fileExists(fileName);
+            if ( bFileExists  && pOptions->isValid("-G") )
+                break;
+
+            if ( bFileExists && pOptions->isValid("-Gc") )
+                bFileCheck = sal_True;
+
+            sTmpDir = getTempDir(fileName);
+            FileStream o;
+            o.createTempFile(sTmpDir);
 
             if(!o.isValid())
             {
                 OString message("cannot open ");
                 message += fileName + " for writing";
                 throw CannotDumpException(message);
-            }
+            } else
+                sTmpFileName = o.getName();
 
             dumpPackage(o, sal_True);
             o << indent() << "public interface " << fieldName << "\n{\n";
@@ -1299,6 +1343,8 @@ sal_Bool ModuleType::dump(JavaOptions* pOptions)
 
             dec();
             o << "}\n";
+
+            makeValidTypeFile(fileName, sTmpFileName, bFileCheck);
         }
     }
 
