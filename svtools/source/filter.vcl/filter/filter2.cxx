@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-12-05 12:28:44 $
+ *  last change: $Author: sj $ $Date: 2002-04-18 17:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 
 #define DATA_SIZE           640
+
+BYTE* ImplSearchEntry( BYTE* , BYTE* , ULONG , ULONG  );
+
 
 /*************************************************************************
 |*
@@ -1144,11 +1147,18 @@ BOOL GraphicDescriptor::ImpDetectEPS( SvStream& rStm, BOOL bExtendedInfo )
     // es wird die EPS mit Vorschaubild Variante und die Extensionübereinstimmung
     // geprüft
 
-    UINT32 nFirstLong;
+    sal_uInt32  nFirstLong;
+    sal_uInt8   nFirstBytes[20];
+
     rStm.Seek( nStmPos );
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
     rStm >> nFirstLong;
-    if ( ( nFirstLong == 0xC5D0D3C6 ) || ( aPathExt.CompareToAscii( "eps", 3 ) == COMPARE_EQUAL ) )
+    rStm.SeekRel( -4 );
+    rStm.Read( &nFirstBytes, 20 );
+
+    if ( ( nFirstLong == 0xC5D0D3C6 ) || ( aPathExt.CompareToAscii( "eps", 3 ) == COMPARE_EQUAL ) ||
+        ( ImplSearchEntry( nFirstBytes, (sal_uInt8*)"%!PS-Adobe", 10, 10 )
+            && ImplSearchEntry( &nFirstBytes[15], (sal_uInt8*)"EPS", 3, 3 ) ) )
     {
         nFormat = GFF_EPS;
         return TRUE;
