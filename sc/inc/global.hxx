@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-01-30 14:58:32 $
+ *  last change: $Author: er $ $Date: 2001-02-02 12:54:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,6 +501,7 @@ class SvNumberFormatter;
 class ScUnitConverter;
 class CharClass;
 class LocaleDataWrapper;
+class CalendarWrapper;
 
 namespace com { namespace sun { namespace star { namespace lang {
     struct Locale;
@@ -541,6 +542,7 @@ public:
     static ::com::sun::star::lang::Locale*      pLocale;
     static CharClass*           pCharClass;
     static LocaleDataWrapper*   pLocaleData;
+    static CalendarWrapper*     pCalendar;
     static LanguageType         eLnge;
     static sal_Unicode          cListDelimiter;
     static ScDocument*          GetClipDoc();

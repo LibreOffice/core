@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-01-30 15:01:26 $
+ *  last change: $Author: er $ $Date: 2001-02-02 12:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
+#include <unotools/calendarwrapper.hxx>
+#endif
 
 #include "global.hxx"
 #include "scresid.hxx"
@@ -138,6 +141,7 @@ International*  ScGlobal::pScInternational = NULL;
 ::com::sun::star::lang::Locale*     ScGlobal::pLocale = NULL;
 CharClass*  ScGlobal::pCharClass = NULL;
 LocaleDataWrapper* ScGlobal::pLocaleData = NULL;
+CalendarWrapper* ScGlobal::pCalendar = NULL;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
 String*         ScGlobal::pEmptyString = NULL;
 String*         ScGlobal::pStrClipDocName = NULL;
@@ -630,6 +634,8 @@ void ScGlobal::Init()
     pLocale = new ::com::sun::star::lang::Locale( aLanguage, aCountry, EMPTY_STRING );
     pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), *pLocale );
     pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), *pLocale );
+    pCalendar = new CalendarWrapper( ::comphelper::getProcessServiceFactory() );
+    pCalendar->loadDefaultCalendar( *pLocale );
 
     ppRscString = new String *[ STR_COUNT+1 ];
     for( USHORT nC = 0 ; nC <= STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
@@ -734,6 +740,7 @@ void ScGlobal::Clear()
     DELETEZ(pOutlineBitmaps);
 //  DELETEZ(pAnchorBitmap);
 //  DELETEZ(pGrayAnchorBitmap);
+    DELETEZ(pCalendar);
     DELETEZ(pLocaleData);
     DELETEZ(pCharClass);
     DELETEZ(pLocale);
