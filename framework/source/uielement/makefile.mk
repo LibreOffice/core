@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 17:51:49 $
+#   last change: $Author: rt $ $Date: 2004-05-19 08:05:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,6 +86,7 @@ SLOFILES=			\
                     $(SLO)$/headermenucontroller.obj    \
                     $(SLO)$/footermenucontroller.obj    \
                     $(SLO)$/controlmenucontroller.obj   \
+                    $(SLO)$/macrosmenucontroller.obj   \
                     $(SLO)$/uicommanddescription.obj    \
                     $(SLO)$/itemcontainer.obj           \
                     $(SLO)$/constitemcontainer.obj      \
