@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XImplementationLoader.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:11:13 $
+ *  last change:$Date: 2003-05-27 12:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package ifc.loader;
 
 import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.loader.CannotActivateFactoryException;
 import com.sun.star.loader.XImplementationLoader;
 import com.sun.star.registry.CannotRegisterImplementationException;
@@ -123,11 +124,11 @@ public class _XImplementationLoader extends MultiMethodTest {
         XRegistryKey key ;
         XSimpleRegistry xReg = null ;
 
-        String tmpDir = util.utils.getOfficeTempDir(tParam.getMSF());
+        String tmpDir = util.utils.getOfficeTempDir((XMultiServiceFactory)tParam.getMSF());
 
         try {
             xReg = RegistryTools.createRegistryService
-                (tParam.getMSF()) ;
+                ((XMultiServiceFactory)tParam.getMSF()) ;
 
             xReg.open(tmpDir + "XImpLoader_tmp.rdb", false, true) ;
 

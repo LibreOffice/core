@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPersistObject.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:43 $
+ *  last change:$Date: 2003-05-27 12:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ import com.sun.star.io.XObjectInputStream;
 import com.sun.star.io.XObjectOutputStream;
 import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XPersistObject;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import lib.MultiMethodTest;
 import util.ValueComparer;
@@ -157,7 +158,7 @@ public class _XPersistObject extends MultiMethodTest {
                 XPropertySetInfo objpsi = objps.getPropertySetInfo();
                 Property[] objprops = objpsi.getProperties();
 
-                Object oCopy = tParam.getMSF().createInstance(sname);
+                Object oCopy = ((XMultiServiceFactory)tParam.getMSF()).createInstance(sname);
 
                 XPersistObject persCopy = (XPersistObject)
                         UnoRuntime.queryInterface(XPersistObject.class, oCopy);
@@ -197,7 +198,7 @@ public class _XPersistObject extends MultiMethodTest {
                     bResult &= locRes;
                 }
             } else {
-                Object oCopy = tParam.getMSF().createInstance(sname);
+                Object oCopy = ((XMultiServiceFactory)tParam.getMSF()).createInstance(sname);
                 XPersistObject persCopy = (XPersistObject)
                         UnoRuntime.queryInterface(XPersistObject.class, oCopy);
 
@@ -246,17 +247,17 @@ public class _XPersistObject extends MultiMethodTest {
         try {
             XPersistObject xpers = (XPersistObject)UnoRuntime.queryInterface
                 (XPersistObject.class,oObj);
-            Object aPipe = tParam.getMSF().createInstance
+            Object aPipe = ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.io.Pipe");
-            Object istream = tParam.getMSF().createInstance
+            Object istream = ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.io.ObjectInputStream");
-            Object ostream = tParam.getMSF().createInstance
+            Object ostream = ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.io.ObjectOutputStream");
 
             // Now the objects that aren't described anywhere
-            Object mistream = tParam.getMSF().createInstance
+            Object mistream = ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.io.MarkableInputStream");
-            Object mostream = tParam.getMSF().createInstance
+            Object mostream = ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.io.MarkableOutputStream");
 
             XActiveDataSink xdSi = (XActiveDataSink)
