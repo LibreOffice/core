@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import org.openoffice.idesupport.zip.ParcelZipper;
 
-import com.sun.star.script.framework.browse.ScriptEntry;
+import com.sun.star.script.framework.container.ScriptEntry;
 
 public class ExtensionFinder implements MethodFinder {
 
