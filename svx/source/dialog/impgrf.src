@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:34:56 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ String RID_SVXSTR_ALL_FILES
     Text[ czech ] = "<Všechny soubory>";
     Text[ hebrew ] = "<Alle Dateien>";
     Text[ hindi ] = "<सब फाइलें>";
+    Text[ slovak ] = "<všetky súbory>";
 };
 Resource RID_SVXRES_IMPORTGRAPHIC
 {
@@ -126,6 +127,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ czech ] = "<Všechny formáty>";
         Text[ hebrew ] = "<Alle Formate>";
         Text[ hindi ] = "<सब रचनाएँ>";
+        Text[ slovak ] = "<všetky formáty>";
     };
     String STR_UNKNOWN_FORMAT
     {
@@ -157,6 +159,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ czech ] = "Neznámý formát souboru!";
         Text[ hebrew ] = "Unbekanntes Dateiformat";
         Text[ hindi ] = "अज्ञात फाइल रचना!";
+        Text[ slovak ] = "Neznámy formát súboru!";
     };
     String STR_PATH_NOT_FOUND1
     {
@@ -188,6 +191,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ czech ] = "Adresář '";
         Text[ hebrew ] = "Das Verzeichnis '";
         Text[ hindi ] = "डैरक्टरी '";
+        Text[ slovak ] = "Adresár '";
     };
     String STR_PATH_NOT_FOUND2
     {
@@ -219,6 +223,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ czech ] = "' neexistuje";
         Text[ hebrew ] = "' existiert nicht.";
         Text[ hindi ] = "' अस्तित्व में नहीं है";
+        Text[ slovak ] = "' neexistuje";
     };
     String STR_FLT_BMP
     {
@@ -266,6 +271,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ czech ] = "Není možné otevřít grafický soubor";
         TEXT[ hebrew ] = "Grafikdatei kann nicht geöffnet werden";
         TEXT[ hindi ] = "सुचित्र फाइल को नहीं खोल सकते है";
+        TEXT[ slovak ] = "Nie je možné otvoriť grafický súbor";
     };
     String STR_GRFILTER_IOERROR
     {
@@ -297,6 +303,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ czech ] = "Není možné načíst grafický soubor";
         TEXT[ hebrew ] = "Grafikdatei kann nicht gelesen werden";
         TEXT[ hindi ] = "सुचित्र फाइल को नहीं पढ़ सकते है";
+        TEXT[ slovak ] = "Nie je možné načítať grafický súbor";
     };
     String STR_GRFILTER_FORMATERROR
     {
@@ -328,6 +335,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ czech ] = "Neznámý grafický formát";
         TEXT[ hebrew ] = "Unbekanntes Grafikformat";
         TEXT[ hindi ] = "अज्ञात सुचित्र रचना";
+        TEXT[ slovak ] = "Neznámy grafický formát";
     };
     String STR_GRFILTER_VERSIONERROR
     {
@@ -359,6 +367,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ czech ] = "Nepodporovaná verze obrázku";
         TEXT[ hebrew ] = "Die Version der Grafikdatei wird nicht unterstützt";
         TEXT[ hindi ] = "सुचित्र फाइल का आवृत्ति को समर्थन नहीं करता है";
+        TEXT[ slovak ] = "Nepodporovaná verzia obrázku";
     };
     String STR_GRFILTER_FILTERERROR
     {
@@ -390,6 +399,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ czech ] = "Grafický filtr nebyl nalezen";
         TEXT[ hebrew ] = "Grafikfilter nicht gefunden";
         TEXT[ hindi ] = "सुचित्र फ़िल्टर नहीं मिला";
+        TEXT[ slovak ] = "Grafický filter nebol nájdený";
     };
     String STR_GRFILTER_TOOBIG
     {
@@ -421,6 +431,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ czech ] = "Nedostatek paměti pro vložení obrázku";
         TEXT[ hebrew ] = "Nicht genug Speicher zum Einfügen der Grafik";
         TEXT[ hindi ] = "सुचित्र को जोड़ने केलिए अपर्याप्त मेमरी";
+        TEXT[ slovak ] = "Nedostatok pamäti na vloženie obrázku";
     };
     String STR_PROPERTIES
     {
@@ -452,6 +463,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ czech ] = "Vlastnosti...";
         Text[ hebrew ] = "‮מאפינים...‬";
         Text[ hindi ] = "~विशेषतायें...";
+        Text[ slovak ] = "Vlastnos~ti...";
     };
     String STR_HOME
     {
@@ -483,6 +495,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ czech ] = "Standardní";
         Text[ hebrew ] = "~Standard";
         Text[ hindi ] = "स्टान्डर्ड";
+        Text[ slovak ] = "Štandardný";
     };
     String STR_LINK
     {
@@ -514,6 +527,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ czech ] = "Odkaz";
         Text[ hebrew ] = "~Verknüpfen";
         Text[ hindi ] = "~लिंक";
+        Text[ slovak ] = "~Odkaz";
     };
     String STR_PREVIEW
     {
@@ -545,6 +559,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ czech ] = "Náhled";
         Text[ hebrew ] = "V~orschau";
         Text[ hindi ] = "पूर्व~दृश्य";
+        Text[ slovak ] = "~Náhľad";
     };
     String STR_FILTER
     {
@@ -575,9 +590,12 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ czech ] = "Filtr...";
         Text[ hebrew ] = "‮סינון‬";
         Text[ hindi ] = "~फ़िल्टर...";
+        Text[ slovak ] = "~Filter...";
     };
 };
  // ********************************************************************** EOF
+
+
 
 
 
