@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:33:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,9 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
     else if( 0 == (rEntry.nMemberId & MID_SW_FLAG_ELEMENT_ITEM_EXPORT) )
     {
         OUString aValue;
-        if( QueryXMLValue(rItem, aValue, rEntry.nMemberId & MID_SW_FLAG_MASK,
+        if( QueryXMLValue(rItem, aValue,
+                          static_cast< sal_uInt16 >(
+                                          rEntry.nMemberId & MID_SW_FLAG_MASK ),
                              rUnitConverter ) )
         {
             OUString sName(
@@ -351,7 +353,7 @@ void SvXMLExportItemMapper::exportElementItems(
     is set in the flags
 */
 const SfxPoolItem* SvXMLExportItemMapper::GetItem( const SfxItemSet& rSet,
-                                                   sal_uInt32 nWhichId,
+                                                   sal_uInt16 nWhichId,
                                                    sal_uInt16 nFlags )
 {
     // first get item from itemset
@@ -880,7 +882,9 @@ sal_Bool SvXMLExportItemMapper::QueryXMLValue(
             SvxFmtKeepItem* pFmtKeep = PTR_CAST(SvxFmtKeepItem, &rItem);
             DBG_ASSERT( pFmtKeep != NULL, "Wrong Which-ID" );
 
-            rUnitConverter.convertBool( aOut, pFmtKeep->GetValue() );
+            aOut.append( pFmtKeep->GetValue()
+                         ? GetXMLToken( XML_ALWAYS )
+                         : GetXMLToken( XML_AUTO ) );
             bOk = sal_True;
         }
         break;
