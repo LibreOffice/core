@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapaction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:54:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:23:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <drafts/com/sun/star/rendering/RenderState.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
+#include <com/sun/star/rendering/RenderState.hpp>
 #endif
 
 #include <cppcanvas/canvas.hxx>
@@ -78,10 +78,10 @@ class Size;
 class BitmapEx;
 class Color;
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class   XBitmap;
-} } } } }
+} } } }
 
 /* Definition of internal::BitmapAction class */
 
@@ -127,9 +127,9 @@ namespace cppcanvas
             BitmapAction& operator = ( const BitmapAction& );
 
             ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::rendering::XBitmap >  mxBitmap;
+                ::com::sun::star::rendering::XBitmap >  mxBitmap;
             CanvasSharedPtr                                     mpCanvas;
-            ::drafts::com::sun::star::rendering::RenderState    maState;
+            ::com::sun::star::rendering::RenderState    maState;
         };
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lineaction.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:54:46 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP_
-#include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP_
+#include <com/sun/star/rendering/XCanvas.hpp>
 #endif
 
 #ifndef _SV_GEN_HXX
@@ -89,7 +89,6 @@
 
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 namespace cppcanvas
 {
