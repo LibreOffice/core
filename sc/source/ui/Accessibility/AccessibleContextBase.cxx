@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-14 16:49:28 $
+ *  last change: $Author: vg $ $Date: 2002-02-18 13:43:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,9 +301,7 @@ sal_Int32 SAL_CALL
 
 uno::Reference<XAccessible> SAL_CALL
     ScAccessibleContextBase::getAccessibleChild (sal_Int32 nIndex)
-    throw (uno::RuntimeException/*,
-        lang::IndexOutOfBoundsException*/)
-{
+        throw (com::sun::star::lang::IndexOutOfBoundsException, com::sun::star::uno::RuntimeException) {
     DBG_ERROR("should be implemented in the abrevated class");
     return uno::Reference<XAccessible>();
 }
