@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXHeadFootText.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2004-09-08 15:56:42 $
+ *  last change:$Date: 2005-01-25 16:00:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ public class SwXHeadFootText extends TestCase {
             xTextDoc = SOF.createTextDoc( null );
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            throw new StatusException( "Couldn't create document", e );
         }
     }
 
