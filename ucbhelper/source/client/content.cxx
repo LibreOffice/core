@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-01 08:06:56 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 07:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <vos/refernce.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_UCB_CONTENTCREATIONERROR_HPP_
+#include <com/sun/star/ucb/ContentCreationError.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #endif
@@ -213,7 +216,9 @@ Content::Content( const OUString& rURL,
     ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
     if ( !pBroker )
         throw ContentCreationException(
-                    ContentCreationException::NO_CONTENT_BROKER );
+                    OUString::createFromAscii( "No Content Broker!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_NO_CONTENT_BROKER );
 
     VOS_ENSURE( pBroker->getContentProviderManagerInterface()
                                     ->queryContentProviders().getLength(),
@@ -223,19 +228,25 @@ Content::Content( const OUString& rURL,
                         = pBroker->getContentIdentifierFactoryInterface();
     if ( !xIdFac.is() )
         throw ContentCreationException(
-                    ContentCreationException::NO_IDENTIFIER_FACTORY );
+                    OUString::createFromAscii( "No Content Identifier factory!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_NO_IDENTIFIER_FACTORY );
 
     Reference< XContentIdentifier > xId
                         = xIdFac->createContentIdentifier( rURL );
     if ( !xId.is() )
         throw ContentCreationException(
-                    ContentCreationException::IDENTIFIER_CREATION_FAILED );
+                    OUString::createFromAscii( "No Content Identifier!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_IDENTIFIER_CREATION_FAILED );
 
     Reference< XContentProvider > xProvider
         = pBroker->getContentProviderInterface();
     if ( !xProvider.is() )
         throw ContentCreationException(
-                    ContentCreationException::NO_CONTENT_PROVIDER );
+                    OUString::createFromAscii( "No Content Provider!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_NO_CONTENT_PROVIDER );
 
     Reference< XContent > xContent;
     try
@@ -245,12 +256,16 @@ Content::Content( const OUString& rURL,
     catch ( IllegalIdentifierException )
     {
         throw ContentCreationException(
-                    ContentCreationException::CONTENT_CREATION_FAILED );
+                    OUString::createFromAscii( "No Content!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_CONTENT_CREATION_FAILED );
     }
 
     if ( !xContent.is() )
         throw ContentCreationException(
-                    ContentCreationException::CONTENT_CREATION_FAILED );
+                    OUString::createFromAscii( "No Content!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_CONTENT_CREATION_FAILED );
 
     m_xImpl = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
 }
@@ -263,7 +278,9 @@ Content::Content( const Reference< XContentIdentifier >& rId,
     ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
     if ( !pBroker )
         throw ContentCreationException(
-                    ContentCreationException::NO_CONTENT_BROKER );
+                    OUString::createFromAscii( "No Content Broker!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_NO_CONTENT_BROKER );
 
     VOS_ENSURE( pBroker->getContentProviderManagerInterface()
                                     ->queryContentProviders().getLength(),
@@ -273,7 +290,9 @@ Content::Content( const Reference< XContentIdentifier >& rId,
         = pBroker->getContentProviderInterface();
     if ( !xProvider.is() )
         throw ContentCreationException(
-                    ContentCreationException::NO_CONTENT_PROVIDER );
+                    OUString::createFromAscii( "No Content Provider!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_NO_CONTENT_PROVIDER );
 
     Reference< XContent > xContent;
     try
@@ -283,12 +302,16 @@ Content::Content( const Reference< XContentIdentifier >& rId,
     catch ( IllegalIdentifierException )
     {
         throw ContentCreationException(
-                    ContentCreationException::CONTENT_CREATION_FAILED );
+                    OUString::createFromAscii( "No Content!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_CONTENT_CREATION_FAILED );
     }
 
     if ( !xContent.is() )
         throw ContentCreationException(
-                    ContentCreationException::CONTENT_CREATION_FAILED );
+                    OUString::createFromAscii( "No Content!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_CONTENT_CREATION_FAILED );
 
     m_xImpl = new Content_Impl( pBroker->getServiceManager(), xContent, rEnv );
 }
@@ -300,7 +323,9 @@ Content::Content( const Reference< XContent >& rContent,
     ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
     if ( !pBroker )
         throw ContentCreationException(
-                    ContentCreationException::NO_CONTENT_BROKER );
+                    OUString::createFromAscii( "No Content Broker!" ),
+                    Reference< XInterface >(),
+                    ContentCreationError_NO_CONTENT_BROKER );
 
     VOS_ENSURE( pBroker->getContentProviderManagerInterface()
                                     ->queryContentProviders().getLength(),

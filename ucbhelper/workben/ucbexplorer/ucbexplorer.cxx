@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbexplorer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2000-11-29 10:22:23 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 07:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,7 +568,7 @@ BOOL UcbExplorerListBoxEntry::createNewContent( const ContentInfo& rInfo,
                 aSourceContent.openStream( xSourceData.getBodyPtr() );
                 xData = xSourceData->getInputStream();
             }
-            catch ( ::ucb::ContentCreationException& )
+            catch ( ContentCreationException& )
             {
                 DBG_ERROR( "UcbExplorerListBoxEntry::createNewContent - "
                               "No content for document data!" );
@@ -1124,7 +1124,7 @@ UcbExplorerListBoxEntry* UcbExplorerTreeListBox::InsertEntry(
         ::ucb::Content aContent( rURL, xEnv );
         return InsertEntry( aContent, pParent );
     }
-    catch ( ::ucb::ContentCreationException& )
+    catch ( ContentCreationException& )
     {
         DBG_ERROR(
             "UcbExplorerTreeListBox::InsertEntry - ContentCreationException!" );

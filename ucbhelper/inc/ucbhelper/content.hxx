@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:36 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 07:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _UCBHELPER_CONTENT_HXX
 #define _UCBHELPER_CONTENT_HXX
 
+#ifndef _COM_SUN_STAR_UCB_CONTENTCREATIONEXCEPTION_HPP_
+#include <com/sun/star/ucb/ContentCreationException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
@@ -98,34 +101,6 @@ namespace com { namespace sun { namespace star { namespace ucb {
 
 namespace ucb
 {
-
-//=========================================================================
-
-/**
-  * This exception will be thrown from class ucb::Content constructors.
-  */
-class ContentCreationException : public ::com::sun::star::uno::Exception
-{
-public:
-    enum Reason
-    {
-        UNKNOWN,
-        NO_CONTENT_BROKER,
-        NO_IDENTIFIER_FACTORY,
-        IDENTIFIER_CREATION_FAILED,
-        NO_CONTENT_PROVIDER,
-        CONTENT_CREATION_FAILED
-    };
-
-private:
-    Reason m_eReason;
-
-public:
-    ContentCreationException( Reason eReason = UNKNOWN )
-    : m_eReason( eReason ) {}
-
-    const Reason getReason() const { return m_eReason; }
-};
 
 //=========================================================================
 
@@ -171,7 +146,7 @@ public:
     Content( const rtl::OUString& rURL,
              const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv )
-        throw ( ContentCreationException,
+        throw ( ::com::sun::star::ucb::ContentCreationException,
                 ::com::sun::star::uno::RuntimeException );
     /**
       * Constructor.
@@ -186,7 +161,7 @@ public:
                      ::com::sun::star::ucb::XContentIdentifier >& rId,
              const ::com::sun::star::uno::Reference<
                     ::com::sun::star::ucb::XCommandEnvironment >& rEnv )
-        throw ( ContentCreationException,
+        throw ( ::com::sun::star::ucb::ContentCreationException,
                 ::com::sun::star::uno::RuntimeException );
     /**
       * Constructor.
@@ -200,7 +175,9 @@ public:
     Content( const ::com::sun::star::uno::Reference<
                      ::com::sun::star::ucb::XContent >& rContent,
              const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XCommandEnvironment >& rEnv );
+                    ::com::sun::star::ucb::XCommandEnvironment >& rEnv )
+        throw ( ::com::sun::star::ucb::ContentCreationException,
+                ::com::sun::star::uno::RuntimeException );
     /**
       * Copy Constructor.
       *

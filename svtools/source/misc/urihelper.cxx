@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-09 15:38:15 $
+ *  last change: $Author: kso $ $Date: 2000-12-01 07:56:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ inline UniString SmartRel2Abs_Impl(INetURLObject const & rTheBaseURIRef,
                                                      "Exists")))
                         >>= bExists;
                 }
-                catch (::ucb::ContentCreationException const &)
+                catch (com::sun::star::ucb::ContentCreationException const &)
                 {
                     DBG_ERROR("URIHelper::SmartRel2Abs(): UCB Exception");
                 }
