@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-27 16:06:56 $
+ *  last change: $Author: vg $ $Date: 2003-06-20 09:39:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,6 +748,9 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
     M_E( "DontBalanceTextColumns", TEXT, DONT_BALANCE_TEXT_COLUMNS, XML_TYPE_BOOL, 0 ),
 
     M_E( "WritingMode",      STYLE, WRITING_MODE,       XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
+
+    M_E( "SectionLeftMargin",      FO, MARGIN_LEFT,     XML_TYPE_MEASURE,  0),
+    M_E( "SectionRightMargin",     FO, MARGIN_RIGHT,        XML_TYPE_MEASURE,  0),
 
     // section footnote settings
     M_E( "FootnoteIsOwnNumbering",      TEXT,   _EMPTY, MID_FLAG_SPECIAL_ITEM|XML_TYPE_BOOL,    CTF_SECTION_FOOTNOTE_NUM_OWN ),
