@@ -226,6 +226,7 @@
 </LC_FORMAT>
 <LC_COLLATION ref="fr_FR"/>
 <LC_SEARCH ref="en_US"/>
+<LC_INDEX ref="fr_FR"/>
 <LC_CALENDAR ref="fr_FR"/>
 <LC_CURRENCY>
 <Currency default="false" usedInCompatibleFormatCodes="true">
