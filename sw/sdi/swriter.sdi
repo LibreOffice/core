@@ -9806,7 +9806,9 @@ SfxVoidItem EntireCell FN_TABLE_SELECT_CELL
 ]
 //--------------------------------------------------------------------------
 SfxVoidItem ConvertTableToText FN_CONVERT_TABLE_TO_TEXT
-()
+(
+    SfxStringItem Delimiter FN_PARAM_1,
+)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -9830,7 +9832,14 @@ SfxVoidItem ConvertTableToText FN_CONVERT_TABLE_TO_TEXT
 ]
 //--------------------------------------------------------------------------
 SfxVoidItem ConvertTextToTable FN_CONVERT_TEXT_TO_TABLE
-()
+(
+    SfxStringItem Delimiter FN_PARAM_1
+    SfxStringItem AutoFormat FN_PARAM_2,
+    SfxBoolItem   WithHeader FN_PARAM_3,
+    SfxInt16Item  RepeatHeaderLines FN_PARAM_4,
+    SfxBoolItem   WithBorder FN_PARAM_5,
+    SfxBoolItem   DontSplitTable FN_PARAM_6
+)
 [
     /* flags: */
     AutoUpdate = FALSE,
