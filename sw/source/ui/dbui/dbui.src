@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:24:52 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 08:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ ModelessDialog DLG_PRINTMONITOR
         CENTER = TRUE ;
         RIGHT = FALSE ;
         Text [ english_us ] = "is being printed on" ;
-        Text [ portuguese_brazilian ] = "está sendo impresso na" ;
+        Text [ portuguese_brazilian ] = "est? sendo impresso na" ;
         Text [ swedish ] = "skrivs ut på" ;
         Text [ danish ] = "udskrives som" ;
         Text [ italian ] = "viene stampato su" ;
@@ -285,7 +285,7 @@ ModelessDialog DLG_PRINTMONITOR
     };
     Text [ portuguese ] = "Monitor de impressão" ;
     Text [ english_us ] = "Print monitor" ;
-    Text [ portuguese_brazilian ] = "O monitor de impressão" ;
+    Text [ portuguese_brazilian ] = "O monitor de impress?o" ;
     Text [ swedish ] = "Skriv ut skärmbild" ;
     Text [ danish ] = "Gem-monitor" ;
     Text [ italian ] = "Controllo stampa" ;
