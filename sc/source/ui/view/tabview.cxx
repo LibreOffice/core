@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:17:54 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <sfx2/ipfrm.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/help.hxx>
 #include <rtl/logfile.hxx>
@@ -1140,7 +1140,7 @@ BOOL ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
     const CommandWheelData* pData = rCEvt.GetWheelData();
     if ( pData && pData->GetMode() == COMMAND_WHEEL_ZOOM )
     {
-        if ( !aViewData.GetViewShell()->GetViewFrame()->ISA(SfxInPlaceFrame) )
+        if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame()->IsInPlace() )
         {
             //  for ole inplace editing, the scale is defined by the visarea and client size
             //  and can't be changed directly
@@ -1581,7 +1581,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
         return;
 
     SCROW nEndPos = MAXROW;
-    if ( !aViewData.GetViewShell()->GetViewFrame()->ISA(SfxInPlaceFrame) )
+    if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame()->IsInPlace() )
     {
         //  fuer OLE Inplace immer MAXROW
 
