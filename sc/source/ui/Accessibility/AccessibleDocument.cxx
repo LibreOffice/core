@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-17 11:14:37 $
+ *  last change: $Author: sab $ $Date: 2002-06-20 13:18:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ private:
     ScAccessibleDocument* mpAccessibleDocument;
     ScSplitPos meSplitPos;
 
-    void FindSelectedShapesChanges(const com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>& xShapes, sal_Bool bCommitChange) const;
+    sal_Bool FindSelectedShapesChanges(const com::sun::star::uno::Reference<com::sun::star::drawing::XShapes>& xShapes, sal_Bool bCommitChange) const;
     void FillSelectionSupplier() const;
 
     ScAddress* GetAnchor(const uno::Reference<drawing::XShape>& xShape) const;
@@ -318,13 +318,15 @@ ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, Sc
     {
         SfxBroadcaster* pDrawBC = pViewShell->GetViewData()->GetDocument()->GetDrawBroadcaster();
         if (pDrawBC)
+        {
             StartListening(*pDrawBC);
 
-        maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(pViewShell->GetViewData()->GetDocument()->GetDrawLayer()) );
-        maShapeTreeInfo.SetSdrView(pViewShell->GetViewData()->GetScDrawView());
-        maShapeTreeInfo.SetController(NULL);
-        maShapeTreeInfo.SetWindow(pViewShell->GetWindowByPos(meSplitPos));
-        maShapeTreeInfo.SetViewForwarder(mpAccessibleDocument);
+            maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(pViewShell->GetViewData()->GetDocument()->GetDrawLayer()) );
+            maShapeTreeInfo.SetSdrView(pViewShell->GetViewData()->GetScDrawView());
+            maShapeTreeInfo.SetController(NULL);
+            maShapeTreeInfo.SetWindow(pViewShell->GetWindowByPos(meSplitPos));
+            maShapeTreeInfo.SetViewForwarder(mpAccessibleDocument);
+        }
     }
 }
 
@@ -344,7 +346,15 @@ void ScChildrenShapes::SetDrawBroadcaster()
     {
         SfxBroadcaster* pDrawBC = mpViewShell->GetViewData()->GetDocument()->GetDrawBroadcaster();
         if (pDrawBC)
+        {
             StartListening(*pDrawBC, TRUE);
+
+            maShapeTreeInfo.SetModelBroadcaster( new ScDrawModelBroadcaster(mpViewShell->GetViewData()->GetDocument()->GetDrawLayer()) );
+            maShapeTreeInfo.SetSdrView(mpViewShell->GetViewData()->GetScDrawView());
+            maShapeTreeInfo.SetController(NULL);
+            maShapeTreeInfo.SetWindow(mpViewShell->GetWindowByPos(meSplitPos));
+            maShapeTreeInfo.SetViewForwarder(mpAccessibleDocument);
+        }
     }
 }
 
@@ -561,17 +571,8 @@ sal_Bool ScChildrenShapes::SelectionChanged()
         throw uno::RuntimeException();
 
     uno::Reference<drawing::XShapes> xShapes(xSelectionSupplier->getSelection(), uno::UNO_QUERY);
-    sal_uInt32 nOldSelected(mnShapesSelected);
-    if (xShapes.is())
-        mnShapesSelected = xShapes->getCount();
-    else
-        mnShapesSelected = 0;
 
-    if (nOldSelected != mnShapesSelected)
-    {
-        FindSelectedShapesChanges(xShapes, sal_True);
-        bResult = sal_True;
-    }
+    bResult = FindSelectedShapesChanges(xShapes, sal_True);
 
     return bResult;
 }
@@ -749,8 +750,9 @@ utl::AccessibleRelationSetHelper* ScChildrenShapes::GetRelationSet(const ScAddre
     return aSetRelation.mpRelationSet;
 }
 
-void ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::XShapes>& xShapes, sal_Bool bCommitChange) const
+sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::XShapes>& xShapes, sal_Bool bCommitChange) const
 {
+    sal_Bool bResult(sal_False);
     SortedShapesList aShapesList;
     uno::Reference<container::XIndexAccess> xIndexAcc(xShapes, uno::UNO_QUERY);
     if (xIndexAcc.is())
@@ -793,6 +795,7 @@ void ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
                 {
                     aDataItr->pAccShape->SetState(AccessibleStateType::SELECTED);
                     aDataItr->pAccShape->ResetState(AccessibleStateType::FOCUSED);
+                    bResult = sal_True;
                 }
                 aFocusedItr = aDataItr;
             }
@@ -808,6 +811,7 @@ void ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
                 {
                     aDataItr->pAccShape->ResetState(AccessibleStateType::SELECTED);
                     aDataItr->pAccShape->ResetState(AccessibleStateType::FOCUSED);
+                    bResult = sal_True;
                 }
             }
             ++aDataItr;
@@ -821,6 +825,8 @@ void ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::X
     }
     if ((aFocusedItr != aDataEndItr) && aFocusedItr->pAccShape && (mnShapesSelected == 1))
         aFocusedItr->pAccShape->SetState(AccessibleStateType::FOCUSED);
+
+    return bResult;
 }
 
 void ScChildrenShapes::FillSelectionSupplier() const
@@ -1027,7 +1033,8 @@ sal_Bool ScChildrenShapes::FindShape(const uno::Reference<drawing::XShape>& xSha
 
 #ifndef PRODUCT // test whether it finds truly the correct shape (perhaps it is not really sorted)
     SortedShapesList::iterator aDebugItr = maSortedShapes.find(aShape);
-    DBG_ASSERT(rItr == aDebugItr, "wrong Shape found");
+    sal_Bool bResult2 = (aDebugItr != maSortedShapes.end());
+    DBG_ASSERT((bResult == bResult2) && ((bResult && (rItr == aDebugItr)) || !bResult), "wrong Shape found");
 #endif
     return bResult;
 }
@@ -1597,7 +1604,10 @@ Point ScAccessibleDocument::LogicToPixel (const Point& rPoint) const
     Point aPoint;
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
     if (pWin)
+    {
         aPoint = pWin->LogicToPixel(rPoint, pWin->GetDrawMapMode());
+        aPoint += pWin->GetWindowExtentsRelative(NULL).TopLeft();
+    }
     return aPoint;
 }
 
@@ -1619,7 +1629,10 @@ Point ScAccessibleDocument::PixelToLogic (const Point& rPoint) const
     Point aPoint;
     ScGridWindow* pWin = static_cast<ScGridWindow*>(mpViewShell->GetWindowByPos(meSplitPos));
     if (pWin)
+    {
         aPoint = pWin->PixelToLogic(rPoint, pWin->GetDrawMapMode());
+        aPoint -= pWin->GetWindowExtentsRelative(NULL).TopLeft();
+    }
     return aPoint;
 }
 
