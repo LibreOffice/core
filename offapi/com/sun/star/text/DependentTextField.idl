@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DependentTextField.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 /** is a <type>TextField</type> which is not specified by itself,
     but dependent on a <type>TextFieldMaster</type>.@see TextFieldMaster
  */
-service DependentTextField
+published service DependentTextField
 {
     // DocMerge: empty anyway
     service com::sun::star::text::TextField;
