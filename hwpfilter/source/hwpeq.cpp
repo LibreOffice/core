@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hwpeq.cpp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2003-10-15 14:41:09 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:16:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,14 +69,9 @@
 #include <ctype.h>
 
 // DVO: always use standard headers:
-//#ifdef WIN32
-//#include <strstrea.h>
-//#else
 #include <istream>
 #include <sstream>
-#include <strstream.h>
 using namespace std;
-//#endif
 
 #include "mzstring.h"
 #include "hwpeq.h"
@@ -787,12 +782,12 @@ void eq2latex(MzString& outs, char *s)
 
   MzString  tstr;
 
-  istrstream    tstrm((char *)s);
+  istringstream tstrm(s);
   bool eqnarray = eq_sentence(tstr, &tstrm);
 #ifdef TEST
   cout << "Step1: " << endl << tstr.c_str() << endl;
 #endif
-  istrstream    strm((char *)tstr);
+  istringstream strm(tstr.c_str());
 
   if( eqnarray )
     outs << "\\begin{array}{rllll}" << ENDL;
