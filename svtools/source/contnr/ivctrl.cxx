@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:23:15 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,9 @@
 #ifndef _VCL_CONTROLLAYOUT_HXX
 #include <vcl/controllayout.hxx>
 #endif
-
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
+#endif
 using namespace ::com::sun::star::accessibility;
 
 /*****************************************************************************
@@ -144,9 +146,7 @@ void SvxIconChoiceCtrlEntry::LockPos( BOOL bLock )
 
 String SvxIconChoiceCtrlEntry::GetDisplayText() const
 {
-    String aDisplayText = aText;
-    aDisplayText.EraseAllChars( '~' );
-    return aDisplayText;
+    return MnemonicGenerator::EraseAllMnemonicChars( aText );
 }
 
 // ----------------------------------------------------------------------------
