@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitools.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: avy $ $Date: 2001-08-21 16:35:35 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 14:56:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,6 +379,9 @@ protected:
 //----------------------------------------------------------------------------------
 #define DECL_PROP1_IFACE(varname, iface, attrib1)   \
     DECL_PROP_IMPL(varname, ::getCppuType(static_cast< ::com::sun::star::uno::Reference< iface >* >(NULL))) ::com::sun::star::beans::PropertyAttribute::##attrib1)
+//----------------------------------------------------------------------------------
+#define DECL_PROP2_IFACE(varname, iface, attrib1, attrib2)  \
+    DECL_PROP_IMPL(varname, ::getCppuType(static_cast< ::com::sun::star::uno::Reference< iface >* >(NULL))) ::com::sun::star::beans::PropertyAttribute::##attrib1 | ::com::sun::star::beans::PropertyAttribute::##attrib2)
 
 //----------------------------------------------------------------------------------
 #define DECL_PROP2(varname, type, attrib1, attrib2) \
