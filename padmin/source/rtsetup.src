@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:09:05 $
+ *  last change: $Author: kz $ $Date: 2002-02-21 21:08:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,7 +437,7 @@ TabPage RID_RTS_PAPERPAGE
         Text[ polish ] = "Skalowanie";
         Text[ portuguese_brazilian ] = "~Scale";
         Text[ japanese ] = "スケール(~S)";
-        Text[ korean ] = "배율(~S)";
+        Text[ korean ] = "확대(~S)";
         Text[ chinese_simplified ] = "显示比例(~S)";
         Text[ chinese_traditional ] = "顯示比例(~S)";
         Text[ turkish ] = "~Scale";
