@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: th $ $Date: 2001-07-25 15:50:35 $
+ *  last change: $Author: th $ $Date: 2001-07-30 10:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3058,6 +3058,17 @@ static void ImplHandleFocusMsg( HWND hWnd )
             {
                 if ( IsWindowVisible( hWnd ) && !pFrame->maFrameData.mbInShow )
                     UpdateWindow( hWnd );
+
+                // Feststellen, ob wir IME unterstuetzen
+                if ( pFrame->maFrameData.mbIME && pFrame->maFrameData.mhDefIMEContext )
+                {
+                    UINT nImeProps = ImmGetProperty( GetKeyboardLayout( 0 ), IGP_PROPERTY );
+
+                    pFrame->maFrameData.mbSpezIME = (nImeProps & IME_PROP_SPECIAL_UI) != 0;
+                    pFrame->maFrameData.mbAtCursorIME = (nImeProps & IME_PROP_AT_CARET) != 0;
+                    pFrame->maFrameData.mbHandleIME = !pFrame->maFrameData.mbSpezIME;
+                }
+
                 pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
                                             SALEVENT_GETFOCUS, 0 );
             }
