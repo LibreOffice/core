@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-26 11:13:08 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,9 +409,8 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
             {
                 case MM_LOENGLISH :
                 {
-                    fY2 *= -1;
                     fX2 -= mnWinOrgX;
-                    fY2 -= mnWinOrgY;
+                    fY2  = mnWinOrgY-fY2;
                     fX2 *= 25.40;
                     fY2 *= 25.40;
                     fX2 += mnDevOrgX;
@@ -420,9 +419,8 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
                 break;
                 case MM_HIENGLISH :
                 {
-                    fY2 *= -1;
                     fX2 -= mnWinOrgX;
-                    fY2 -= mnWinOrgY;
+                    fY2  = mnWinOrgY-fY2;
                     fX2 *= 2.540;
                     fY2 *= 2.540;
                     fX2 += mnDevOrgX;
@@ -431,9 +429,8 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
                 break;
                 case MM_LOMETRIC :
                 {
-                    fY2 *= -1;
                     fX2 -= mnWinOrgX;
-                    fY2 -= mnWinOrgY;
+                    fY2  = mnWinOrgY-fY2;
                     fX2 *= 10;
                     fY2 *= 10;
                     fX2 += mnDevOrgX;
@@ -442,9 +439,8 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
                 break;
                 case MM_HIMETRIC :
                 {
-                    fY2 *= -1;
                     fX2 -= mnWinOrgX;
-                    fY2 -= mnWinOrgY;
+                    fY2  = mnWinOrgY-fY2;
                     fX2 += mnDevOrgX;
                     fY2 += mnDevOrgY;
                 }
