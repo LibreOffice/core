@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.151 $
+ *  $Revision: 1.152 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:59:04 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:15:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -873,14 +873,6 @@ SwSectionFmt *wwSectionManager::InsertSection(
     }
 
     SetCols(*pFmt, rSection, rSection.GetTextAreaWidth());
-
-    //Set the columns to be UnBalanced if compatability option is set
-    if (mrReader.pWDop->fNoColumnBalance  )
-    {
-        SwSectionFmt *pFmt = rSection.mpSection->GetFmt();
-        pFmt->SetAttr(SwFmtNoBalancedColumns(true));
-    }
-
     return pFmt;
 }
 
