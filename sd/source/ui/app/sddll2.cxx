@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:14:58 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 13:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@
 #ifndef SD_GRAPHIC_VIEW_SHELL_HXX
 #include "GraphicViewShell.hxx"
 #endif
+#include <svx/xmlsecctrl.hxx>
 #ifndef _SVX_FORMATPAINTBRUSHCTRL_HXX
 #include <svx/formatpaintbrushctrl.hxx>
 #endif
@@ -311,6 +312,6 @@ void SdDLL::RegisterControllers()
     svx::ExtrusionLightingControl::RegisterControl( SID_EXTRUSION_LIGHTING_FLOATER, pMod );
     svx::ExtrusionSurfaceControl::RegisterControl( SID_EXTRUSION_SURFACE_FLOATER, pMod );
     svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
-
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
+    XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
 }
