@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 10:18:04 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #define STR_GRID_NONE                                   (RC_ATTR_BEGIN + 75)
 #define STR_GRID_LINES_ONLY                             (RC_ATTR_BEGIN + 76)
 #define STR_GRID_LINES_CHARS                            (RC_ATTR_BEGIN + 77)
+#define STR_FOLLOW_TEXT_FLOW                            (RC_ATTR_BEGIN + 78)
+#define STR_DONT_FOLLOW_TEXT_FLOW                       (RC_ATTR_BEGIN + 79)
+
 
 #define ATTR_ACT_END                                    STR_GRID_LINES_CHARS
 
