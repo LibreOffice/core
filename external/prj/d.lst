@@ -18,6 +18,9 @@ mkdir: %_DEST%\inc%_EXT%\audio
 mkdir: %_DEST%\inc%_EXT%\external\neon
 mkdir: %_DEST%\inc%_EXT%\X11
 mkdir: %_DEST%\inc%_EXT%\X11\extensions
+mkdir: %_DEST%\pck%_EXT%
+..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
+..\common.pro\bin\*.zip %_DEST%\pck%_EXT%\*.zip
 
 ..\audio\rtufiles\lib\audio\libaudio.a %_DEST%\lib%_EXT%\libaudio.a
 ..\audio\rtufiles\lib\audio\*.h %_DEST%\inc%_EXT%\audio\*
