@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-31 07:28:47 $
+ *  last change: $Author: pb $ $Date: 2002-06-21 06:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4428,27 +4428,28 @@ void SvxIconChoiceCtrl_Impl::Flush()
 
 BOOL SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
 {
-    if( !(rHEvt.GetMode() & HELPMODE_QUICK ) )
+    if ( !(rHEvt.GetMode() & HELPMODE_QUICK ) )
         return FALSE;
 
     Point aPos( pView->ScreenToOutputPixel(rHEvt.GetMousePosPixel() ) );
-    aPos -= pView->GetMapMode().GetOrigin(); // in Dok-Koord. umrechnen
+    aPos -= pView->GetMapMode().GetOrigin();
     SvxIconChoiceCtrlEntry* pEntry = GetEntry( aPos, TRUE );
 
-    if( !pEntry )
+    if ( !pEntry )
         return FALSE;
 
+    String sQuickHelpText = pEntry->GetQuickHelpText();
     String aEntryText( pView->GetEntryText( pEntry, FALSE ) );
-    Rectangle aTextRect( CalcTextRect(pEntry,0,FALSE,&aEntryText));
-    if( !aTextRect.IsInside( aPos ) || !aEntryText.Len() )
+    Rectangle aTextRect( CalcTextRect( pEntry, 0, FALSE, &aEntryText ) );
+    if ( ( !aTextRect.IsInside( aPos ) || !aEntryText.Len() ) && !sQuickHelpText.Len() )
         return FALSE;
 
     Rectangle aOptTextRect( aTextRect );
     aOptTextRect.Bottom() = LONG_MAX;
     USHORT nNewFlags = nCurTextDrawFlags;
-    nNewFlags &= ~(TEXT_DRAW_CLIP | TEXT_DRAW_ENDELLIPSIS);
+    nNewFlags &= ~( TEXT_DRAW_CLIP | TEXT_DRAW_ENDELLIPSIS );
     aOptTextRect = pView->GetTextRect( aOptTextRect, aEntryText, nNewFlags );
-    if( aOptTextRect != aTextRect )
+    if ( aOptTextRect != aTextRect || sQuickHelpText.Len() > 0 )
     {
         //aTextRect.Right() = aTextRect.Left() + aRealSize.Width() + 4;
         Point aPt( aOptTextRect.TopLeft() );
@@ -4458,8 +4459,14 @@ BOOL SvxIconChoiceCtrl_Impl::RequestHelp( const HelpEvent& rHEvt )
         aPt.Y() -= 1;
         aPt.X() -= 3;
         aOptTextRect.SetPos( aPt );
-        Help::ShowQuickHelp( (Window*)pView, aOptTextRect, aEntryText, QUICKHELP_LEFT | QUICKHELP_VCENTER );
+        String sHelpText;
+        if ( sQuickHelpText.Len() > 0 )
+            sHelpText = sQuickHelpText;
+        else
+            sHelpText = aEntryText;
+        Help::ShowQuickHelp( (Window*)pView, aOptTextRect, sHelpText, QUICKHELP_LEFT | QUICKHELP_VCENTER );
     }
+
     return TRUE;
 }
 
