@@ -29,6 +29,7 @@ mkdir: %_DEST%\xml%_EXT%\office\definition
 ..\%__SRC%\misc\org.openoffice.Office.Filter.WriterWeb.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Office.Filter.WriterWeb.xml
 ..\%__SRC%\misc\org.openoffice.Inet.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Inet.xml
 ..\%__SRC%\misc\org.openoffice.ucb.Hierarchy.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.ucb.Hierarchy.xml
+..\%__SRC%\misc\org.openoffice.ucb.Store.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.ucb.Store.xml
 ..\%__SRC%\misc\org.openoffice.Setup.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Setup.xml
 ..\%__SRC%\misc\org.openoffice.Templates.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.Templates.xml
 ..\%__SRC%\misc\org.openoffice.UserProfile.xml %_DEST%\xml%_EXT%\office\instance\org.openoffice.UserProfile.xml
