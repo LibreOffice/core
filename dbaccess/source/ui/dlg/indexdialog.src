@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 15:14:27 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 10:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ turkish ] = "new index";
                 Text[ arabic ] = "İåÑÓ ÌÏíÏ";
                 Text[ catalan ] = "Nou índex";
-                Text[ finnish ] = "Uusi hakemisto";
+                Text[ finnish ] = "Uusi indeksi";
                 Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¹ƒà¸«à¸¡à¹ˆ";
             };
             ToolBoxItem
@@ -208,7 +208,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ portuguese ] = "Eliminar índice activo";
                 Text[ russian ] = "Óäàëèòü òåêóùèé èíäåêñ";
                 Text[ greek ] = "ÄéáãñáöŞ ôñİ÷ïíôïò åõñåôçñßïõ";
-                Text[ dutch ] = "actuele index wissen";
+                Text[ dutch ] = "Huidig register wissen";
                 Text[ french ] = "Supprimer l'index actif";
                 Text[ spanish ] = "Eliminar el índice actual";
                 Text[ italian ] = "Elimina l'indice attuale";
@@ -223,7 +223,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ turkish ] = "drop current index";
                 Text[ arabic ] = "ÍĞİ ÇáİåÑÓ ÇáÍÇáí";
                 Text[ catalan ] = "Suprimeix l'índex actual";
-                Text[ finnish ] = "Poista nykyinen hakemisto";
+                Text[ finnish ] = "Poista nykyinen indeksi";
                 Text[ thai ] = "à¸¥à¸šà¸”à¸±à¸Šà¸™à¸µà¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
             };
             ToolBoxItem
@@ -237,7 +237,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ portuguese ] = "Mudar nome a índice activo";
                 Text[ russian ] = "Ïåğåèìåíîâàòü òåêóùèé èíäåêñ";
                 Text[ greek ] = "Ìåôïíïìáóßá ôñİ÷ïíôïò åõñåôçñßïõ";
-                Text[ dutch ] = "naam actuele index wijzigen";
+                Text[ dutch ] = "Naam huidig register wijzigen";
                 Text[ french ] = "Renommer l'index actif";
                 Text[ spanish ] = "Cambiar el nombre del índice actual";
                 Text[ italian ] = "Rinomina l'indice attuale";
@@ -252,7 +252,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ turkish ] = "rename current index";
                 Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ ÇáİåÑÓ ÇáÍÇáí";
                 Text[ catalan ] = "Reanomena l'índex actual";
-                Text[ finnish ] = "Nimeä nykyinen hakemisto uudelleen";
+                Text[ finnish ] = "Nimeä nykyinen indeksi uudelleen";
                 Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¸Šà¸·à¹ˆà¸­à¸”à¸±à¸Šà¸™à¸µà¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
             };
             ToolBoxItem
@@ -266,7 +266,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ portuguese ] = "Guardar índice activo";
                 Text[ russian ] = "Ñîõğàíèòü òåêóùèé èíäåêñ";
                 Text[ greek ] = "ÁğïèŞêåõóç ôñİ÷ïíôïò åõñåôçñßïõ";
-                Text[ dutch ] = "actuele index opslaan";
+                Text[ dutch ] = "Huidig register opslaan";
                 Text[ french ] = "Enregistrer l'index actif";
                 Text[ spanish ] = "Guardar el índice actual";
                 Text[ italian ] = "Salva l'indica attuale";
@@ -281,7 +281,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ turkish ] = "save current index";
                 Text[ arabic ] = "ÍİÙ ÇáİåÑÓ ÇáÍÇáí";
                 Text[ catalan ] = "Desa l'índex actual";
-                Text[ finnish ] = "Tallenna nykyinen hakemisto";
+                Text[ finnish ] = "Tallenna nykyinen indeksi";
                 Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸”à¸±à¸Šà¸™à¸µà¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™";
             };
             ToolBoxItem
@@ -295,7 +295,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ portuguese ] = "Restaurar índice activo";
                 Text[ russian ] = "Âîññòàíîâèòü òåêóùèé èíäåêñ";
                 Text[ greek ] = "ÅğáíáöïñÜ ôñİ÷ïíôïò åõñåôçñßïõ";
-                Text[ dutch ] = "actuele index terugzetten";
+                Text[ dutch ] = "Huidig register herstellen";
                 Text[ french ] = "Restaurer l'index actif";
                 Text[ spanish ] = "Restaurar el índice actual";
                 Text[ italian ] = "Ripristina l'indice attuale";
@@ -310,7 +310,7 @@ ModalDialog DLG_INDEXDESIGN
                 Text[ turkish ] = "reset current index";
                 Text[ arabic ] = "ÅÚÇÏÉ ÊÚííä ÇáİåÑÓ ÇáÍÇáí";
                 Text[ catalan ] = "Reinicia l'índex actual";
-                Text[ finnish ] = "Palauta nykyisen hakemiston asetukset";
+                Text[ finnish ] = "Palauta nykyisen indeksin asetukset";
                 Text[ thai ] = "à¸•à¸±à¹‰à¸‡à¸„à¹ˆà¸²à¸”à¸±à¸Šà¸™à¸µà¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™à¸­à¸µà¸à¸„à¸£à¸±à¹‰à¸‡";
             };
         };
@@ -333,9 +333,9 @@ ModalDialog DLG_INDEXDESIGN
         Text [ english ] = "Index details";
         Text [ english_us ] = "Index details";
         Text[ portuguese ] = "Índice: detalhes";
-        Text[ russian ] = "Äåòàëè èíäåêñà";
+        Text[ russian ] = "Ïîäğîáíîñòè èíäåêñà";
         Text[ greek ] = "Ëåğôïìİñåéåò åõñåôçñßïõ";
-        Text[ dutch ] = "Index details";
+        Text[ dutch ] = "Indexdetails";
         Text[ french ] = "Index : détails";
         Text[ spanish ] = "Detalles del índice";
         Text[ italian ] = "Dettagli indice";
@@ -350,7 +350,7 @@ ModalDialog DLG_INDEXDESIGN
         Text[ turkish ] = "Index details";
         Text[ arabic ] = "ÊİÇÕíá ÇáİåÑÓ";
         Text[ catalan ] = "Detalls de l'índex";
-        Text[ finnish ] = "Hakemiston tiedot";
+        Text[ finnish ] = "Indeksin tiedot";
         Text[ thai ] = "à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¸”à¸±à¸Šà¸™à¸µ";
     };
     FixedText FT_DESC_LABEL
@@ -380,7 +380,7 @@ ModalDialog DLG_INDEXDESIGN
         Text [ korean ] = "ìƒ‰ì¸ í™•ì¸ì:";
         Text[ turkish ] = "Index identifier:";
         Text[ catalan ] = "Identificador de l'índex:";
-        Text[ finnish ] = "Hakemiston tunniste:";
+        Text[ finnish ] = "Indeksin tunniste:";
         Text[ thai ] = "à¸•à¸±à¸§à¸£à¸°à¸šà¸¸à¸”à¸±à¸Šà¸™à¸µ:";
     };
     FixedText FT_DESCRIPTION
@@ -507,7 +507,7 @@ ModalDialog DLG_INDEXDESIGN
     Text[ turkish ] = "Indexes";
     Text[ arabic ] = "İåÇÑÓ";
     Text[ catalan ] = "Índexs";
-    Text[ finnish ] = "Hakemistot";
+    Text[ finnish ] = "Indeksit";
     Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µ";
 };
 
@@ -562,7 +562,7 @@ String STR_TAB_INDEX_FIELD
     Text[ turkish ] = "Index field";
     Text[ arabic ] = "ÍŞá İåÑÓ";
     Text[ catalan ] = "Camp índex";
-    Text[ finnish ] = "Hakemistokenttä";
+    Text[ finnish ] = "Indeksikenttä";
     Text[ thai ] = "à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸”à¸±à¸Šà¸™à¸µ";
 };
 String STR_ORDER_ASCENDING
@@ -645,7 +645,7 @@ String STR_CONFIRM_DROP_INDEX
     Text[ turkish ] = "Do you really want to drop the index '$name$'?";
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáİåÑÓ '$name$'¿";
     Text[ catalan ] = "Esteu segur que voleu suprimir l'índex '$name$'?";
-    Text[ finnish ] = "Haluatko varmasti poistaa hakemiston '$name$'?";
+    Text[ finnish ] = "Haluatko varmasti poistaa indeksin '$name$'?";
     Text[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸¥à¸šà¸”à¸±à¸Šà¸™à¸µ '$name$'à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
 };
 
@@ -660,7 +660,7 @@ String STR_LOGICAL_INDEX_NAME
     Text[ dutch ] = "index";
     Text[ french ] = "index";
     Text[ spanish ] = "Índice";
-    Text[ finnish ] = "Hakemisto";
+    Text[ finnish ] = "indeksi";
     Text[ italian ] = "indice";
     Text[ danish ] = "INDEKS";
     Text[ swedish ] = "index";
@@ -734,7 +734,7 @@ ErrorBox ERR_NEED_INDEX_FIELDS
     Title[ arabic ] = "ÍİÙ ÇáİåÑÓ";
     Message[ catalan ] = "L'índex ha de contenir un camp com a mínim.";
     Title[ catalan ] = "Desa l'índex";
-    Message[ finnish ] = "Hakemistossa on oltava vähintään yksi kenttä.";
+    Message[ finnish ] = "Indeksissä on oltava vähintään yksi kenttä.";
     Title[ finnish ] = "Tallenna hakemisto";
     Message[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸•à¹‰à¸­à¸‡à¸¡à¸µà¸­à¸¢à¹ˆà¸²à¸‡à¸™à¹‰à¸­à¸¢à¸«à¸™à¸¶à¹ˆà¸‡à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
     Title[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸”à¸±à¸Šà¸™à¸µ!";
@@ -753,9 +753,9 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Buttons = WB_YES_NO_CANCEL;
     DefButton = WB_DEF_YES;
     Message[ portuguese ] = "Guardar as modificações efectuadas no índice activo?";
-    Message[ russian ] = "Âû õîòèòå ñîõğàíèòü èçìåíåíèÿ â òåêóùåì èíäåêñå?";
+    Message[ russian ] = "Ñîõğàíèòü èçìåíåíèÿ â òåêóùåì èíäåêñå?";
     Message[ greek ] = "Èİëåôå íá áğïèçêåıóåôå ôéò áëëáãİò óôï ôñİ÷ïí åõñåôŞñéï;";
-    Message[ dutch ] = "Wilt u de veranderingen in de actuele index nog opslaan?";
+    Message[ dutch ] = "Wilt u de wijzigingen in het huidig register nog opslaan?";
     Message[ french ] = "Enregistrer les modification effectuées dans l'index actif ?";
     Message[ spanish ] = "¿Desea guardar las modificaciones realizadas en el índice?";
     Message[ italian ] = "Volete salvare le modifiche nell'indice attuale?";
@@ -788,7 +788,7 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
     Title[ arabic ] = "ÅÛáÇŞ ÊÕãíã ÇáİåÑÓ";
     Message[ catalan ] = "Voleu desar els canvis realitzats a l'índex actual?";
     Title[ catalan ] = "tanca el disseny de l'índex";
-    Message[ finnish ] = "Haluatko tallentaa nykyiseen hakemistoon tehdyt muutokset?";
+    Message[ finnish ] = "Haluatko tallentaa nykyiseen indeksiin tehdyt muutokset?";
     Title[ finnish ] = "Lopeta hakemiston suunnittelu";
     Message[ thai ] = "à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹à¸›à¸¥à¸‡à¸—à¸µà¹ˆà¸—à¸³à¹„à¸›à¸¢à¸±à¸‡à¸”à¸±à¸Šà¸™à¸µà¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™à¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
     Title[ thai ] = "à¸­à¸­à¸à¸ˆà¸²à¸à¸à¸²à¸£à¸­à¸­à¸à¹à¸šà¸šà¸”à¸±à¸Šà¸™à¸µ!";
@@ -800,7 +800,7 @@ String STR_INDEX_NAME_ALREADY_USED
     Text [ english ] = "There's already another index named \"$name$\".";
     Text [ english_us ] = "There is already another index named \"$name$\".";
     Text[ portuguese ] = "Já existe um índice com o nome \"$name$\".";
-    Text[ russian ] = "Ïîä èìåíåì \"$name$\" óæå èìååòñÿ äğóãîé èíäåêñ.";
+    Text[ russian ] = "Èíäåêñ ñ èìåíåì \"$name$\" óæå ñóùåñòâóåò.";
     Text[ greek ] = "There's already another index named \"$name$\".";
     Text[ dutch ] = "Er bestaat reeds een andere index met de naam \"$name$\".";
     Text[ french ] = "Un autre index nommé \"$name$\" existe déjà.";
@@ -817,7 +817,7 @@ String STR_INDEX_NAME_ALREADY_USED
     Text[ turkish ] = "There's already another index named \"$name$\".";
     Text[ arabic ] = "There's already another index named \"$name$\".";
     Text[ catalan ] = "Ja hi ha un altre índex anomenat \"$name$\".";
-    Text[ finnish ] = "Hakemisto $name$ on jo olemassa.";
+    Text[ finnish ] = "Indeksi nimeltään \"$name$\" on jo olemassa.";
     Text[ thai ] = "à¸¡à¸µà¸”à¸±à¸Šà¸™à¸µà¸Šà¸·à¹ˆà¸­ \"$name$\"à¹à¸¥à¹‰à¸§";
 };
 
@@ -828,9 +828,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
     Text [ english ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
     Text [ english_us ] = "In an index definition, no table column may occur more than once. However, you have entered column \"$name$\" twice.";
     Text[ portuguese ] = "Numa definição de índice, as colunas da tabela só devem aparecer uma vez, porém neste caso a coluna \"$name$\" foi utilizada duas vezes.";
-    Text[ russian ] = "Â îïğåäåëåíèè èíäåêñà ìîæåò áûòü òîëüêî îäíà êîëîíêà òàáëèöû. Âû æå èñïîëüçîâàëè êîëîíêó \"$name$\" äâà ğàçà.";
+    Text[ russian ] = "Â îïğåäåëåíèè èíäåêñà ñòîëáåö òàáëèöû íå ìîæåò èñïîëüçîâàòüñÿ áîëåå îäíîãî ğàçà. Âû óæå èñïîëüçîâàëè ñòîëáåö \"$name$\" äâàæäû.";
     Text[ greek ] = "Óôçí ğåñßğôùóç ôïõ ïñéóìïı åíüò åõñåôçñßïõ åğéôñİğåôáé ç åìöÜíéóç êÜèå óôŞëçò ìüíï ìéá öïñÜ. Ç óôŞëç \"$name$\" ÷ñçóéìïğïéŞèçêå üìùò äıï öïñİò.";
-    Text[ dutch ] = "In een index-definitie mag iedere tabelkolom hoogstens eenmaal voorkomen. U heeft echter de kolom \"$name$\" tweemaal gebruikt.";
+    Text[ dutch ] = "In een indexdefinitie mag iedere tabelkolom hoogstens éénmaal voorkomen. U heeft echter de kolom \"$name$\" tweemaal gebruikt.";
     Text[ french ] = "Dans une définition d'index, les colonnes de table ne peuvent exister qu'une seule fois. Or, vous avez utilisé la colonne \"$name$\" à deux reprises.";
     Text[ spanish ] = "En una definición de Índice, cada columna de tabla puede aparecer como máximo una vez; usted ha usado la columna \"$name$\" dos veces.";
     Text[ italian ] = "In una definizione di indice una colonna di tabella può apparire solo una volta, tuttavia la colonna \"$name$\" appare due volte.";
@@ -845,13 +845,16 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
     Text[ turkish ] = "In a index definition, every table column may occur at most once, but you entered column \"$name$\" twice.";
     Text[ arabic ] = "áÇ íõÓãÍ ÈÇÓÊÎÏÇã ÚãæÏ ÌÏæá ÃßËÑ ãä ãÑÉ İí ÊÚÑíİ ÇáİåÑÓ¡ ÅáÇ Ãäß ÇÓÊÎÏãÊ ÇáÚãæÏ \"$name$\" ãÑÊíä.";
     Text[ catalan ] = "En una definició d'índex, cap columna de la taula no pot estar repetida. Tanmateix, heu introduït la columna \"$name$\" dues vegades.";
-    Text[ finnish ] = "Taulukon sarakkeet voivat esiintyä vain kertaalleen hakemiston määrityksissä. Olet kuitenkin syöttänyt sarakkeen \"$name$\" kahdesti.";
+    Text[ finnish ] = "Taulun sarakkeet voivat esiintyä vain kertaalleen indeksin määrityksissä. Olet kuitenkin syöttänyt sarakkeen \"$name$\" kahdesti.";
     Text[ thai ] = "à¹ƒà¸™à¸„à¸³à¸ˆà¸³à¸à¸±à¸”à¸„à¸§à¸²à¸¡à¸‚à¸­à¸‡à¸”à¸±à¸Šà¸™à¸µ, à¹„à¸¡à¹ˆà¸¡à¸µà¸•à¸²à¸£à¸²à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸—à¸µà¹ˆà¸ˆà¸°à¸›à¸£à¸²à¸à¸à¸¡à¸²à¸à¸à¸§à¹ˆà¸²à¸«à¸™à¸¶à¹ˆà¸‡à¸„à¸£à¸±à¹‰à¸‡ à¸­à¸¢à¹ˆà¸²à¸‡à¹„à¸£à¸à¹‡à¸•à¸²à¸¡, à¸„à¸¸à¸“à¹„à¸”à¹‰à¹ƒà¸ªà¹ˆà¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ \"$name$\" à¹à¸¥à¹‰à¸§à¸ªà¸­à¸‡à¸„à¸£à¸±à¹‰à¸‡";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2002/11/25 15:14:27  kz
+ *  Merge SRX644: 25.11.02 - 16:10:35
+ *
  *  Revision 1.29  2002/09/05 13:50:12  kz
  *  Merge SRX643: 05.09.02 - 15:46:53
  *
