@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsLayouter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:27:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,18 +249,23 @@ bool Layouter::Rearrange (
         if (nTargetWidth > mnMaximalWidth)
             nTargetWidth = mnMaximalWidth;
 
+        // Initialize the device with some arbitrary zoom factor just in
+        // case that the current zoom factor is numerical instable when used
+        // in a multiplication.
+        MapMode aMapMode (pDevice->GetMapMode());
+        aMapMode.SetScaleX (Fraction(1,1));
+        aMapMode.SetScaleY (Fraction(1,1));
+        pDevice->SetMapMode (aMapMode);
+
         // Calculate the resulting scale factor and the page object size in
         // pixels.
         maPageObjectModelSize = rPageObjectSize;
-        MapMode aPixelMode (MAP_PIXEL);
-        int nPagePixelWidth
-            = pDevice->LogicToPixel (maPageObjectModelSize).Width();
+        int nPagePixelWidth (pDevice->LogicToPixel (maPageObjectModelSize).Width());
 
         // Adapt the layout of the given output device to the new layout of
         // page objects.  The zoom factor is set so that the page objects in
         // one row fill the screen.
-        Fraction aScaleFactor = Fraction (nTargetWidth, nPagePixelWidth);
-        MapMode aMapMode (pDevice->GetMapMode());
+        Fraction aScaleFactor (nTargetWidth, nPagePixelWidth);
         SetZoom (aMapMode.GetScaleX() * aScaleFactor, pDevice);
 
         return true;
