@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:47:14 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -628,6 +628,7 @@ void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 ::rtl::OUString aColumnAlias(getColumnAlias(pColumnRef)); // kann leer sein
                 ::rtl::OUString aColumnName;
                 ::rtl::OUString aTableRange;
+                sal_Int32 nType = DataType::VARCHAR;
                 sal_Bool bFkt(sal_False);
                 pColumnRef = pColumnRef->getChild(0);
                 if (SQL_ISRULE(pColumnRef,column_ref))
@@ -652,7 +653,23 @@ void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                     {
                         getColumnTableRange(pColumnRef,aTableRange);
                     }
-                    bFkt = sal_True;
+                    if ( pColumnRef->isRule() )
+                    {
+                        bFkt = sal_True;
+                        if ( SQL_ISRULE(pColumnRef,num_value_exp) || SQL_ISRULE(pColumnRef,term) || SQL_ISRULE(pColumnRef,factor) )
+                        {
+                            nType = DataType::DOUBLE;
+                        }
+                        else
+                        {
+                            ::rtl::OUString sFunctionName;
+                            if ( SQL_ISRULE(pColumnRef,length_exp) )
+                                pColumnRef->getChild(0)->getChild(0)->parseNodeToStr(sFunctionName,m_xDatabaseMetaData,NULL,sal_False,sal_False);
+                            else
+                                pColumnRef->getChild(0)->parseNodeToStr(sFunctionName,m_xDatabaseMetaData,NULL,sal_False,sal_False);
+                            nType = ::connectivity::OSQLParser::getFunctionReturnType(sFunctionName,m_pParser ? &m_pParser->getContext() : NULL);
+                        }
+                    }
                 }
                 /*
                 else
@@ -663,7 +680,7 @@ void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 */
                 if(!aColumnAlias.getLength())
                     aColumnAlias = aColumnName;
-                setSelectColumnName(aColumnName,aColumnAlias,aTableRange,bFkt);
+                setSelectColumnName(aColumnName,aColumnAlias,aTableRange,bFkt,nType);
             }
         }
 
@@ -1280,7 +1297,7 @@ void OSQLParseTreeIterator::appendColumns(const ::rtl::OUString& _rTableAlias,co
     }
 }
 //-----------------------------------------------------------------------------
-void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt)
+void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnName,const ::rtl::OUString & rColumnAlias, const ::rtl::OUString & rTableRange,sal_Bool bFkt,sal_Int32 _nType)
 {
 
     if(rColumnName.toChar() == '*' && !rTableRange.getLength())
@@ -1343,7 +1360,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
             ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
             OParseColumn* pColumn = new OParseColumn(aNewColName,::rtl::OUString(),::rtl::OUString(),
-                ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,sal_False,sal_False,m_aCaseEqual.isCaseSensitive());
+                ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,sal_False,sal_False,m_aCaseEqual.isCaseSensitive());
             pColumn->setFunction(bFkt);
             pColumn->setRealName(rColumnName);
 
@@ -1364,7 +1381,7 @@ void OSQLParseTreeIterator::setSelectColumnName(const ::rtl::OUString & rColumnN
                 ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
 
                 OParseColumn* pColumn = new OParseColumn(aNewColName,::rtl::OUString(),::rtl::OUString(),
-                    ColumnValue::NULLABLE_UNKNOWN,0,0,DataType::VARCHAR,sal_False,sal_False,m_aCaseEqual.isCaseSensitive());
+                    ColumnValue::NULLABLE_UNKNOWN,0,0,_nType,sal_False,sal_False,m_aCaseEqual.isCaseSensitive());
                 pColumn->setFunction(sal_True);
                 pColumn->setRealName(rColumnName);
                 pColumn->setTableName(aFind->first);
