@@ -17,7 +17,7 @@ CC=cc
 cc=cc
 objc=cc
 CFLAGS=-c $(INCLUDE)
-CFLAGSCC=-pipe
+CFLAGSCC=-pipe -traditional-cpp
 
 OBJCFLAGS=-no-precomp
 
