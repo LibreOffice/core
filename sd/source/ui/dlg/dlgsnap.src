@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:05:50 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,11 +324,11 @@ ModalDialog DLG_SNAPLINE
             MaskColor = IMAGE_MASK_STDCOLOR;
             ImageBitmap = Bitmap { File = "hlplhorz.bmp" ; };
         };
-        Text[ chinese_simplified ] = "ºáÏò(~H)";
+        Text[ chinese_simplified ] = "ºáÏò(~Z)";
         Text[ russian ] = "Ãîğèçîíòàëüíî";
         Text[ polish ] = "W poziomie";
-        Text[ japanese ] = "‰¡ˆÊ’u(~H)";
-        Text[ chinese_traditional ] = "¾î¦V(~H)";
+        Text[ japanese ] = "‰¡ˆÊ’u(~Z)";
+        Text[ chinese_traditional ] = "¾î¦V(~Z)";
         Text[ arabic ] = "ÃİŞí";
         Text[ greek ] = "Ïñéæüíôéá";
         Text[ korean ] = "¼öÆò(~Z)";
