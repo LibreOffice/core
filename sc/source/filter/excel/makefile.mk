@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 11:42:01 $
+#   last change: $Author: rt $ $Date: 2005-03-29 14:01:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..$/..
 
 PRJNAME=sc
@@ -81,13 +80,9 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/XclChartsApiHelper.obj		\
-        $(SLO)$/XclImpCharts.obj			\
-        $(SLO)$/XclImpChartsApi.obj			\
         $(SLO)$/XclExpCharts.obj			\
         $(SLO)$/biffdump.obj				\
         $(SLO)$/colrowst.obj				\
-        $(SLO)$/excchart.obj				\
         $(SLO)$/excdoc.obj					\
         $(SLO)$/excel.obj					\
         $(SLO)$/excform.obj					\
@@ -118,6 +113,7 @@ SLOFILES =	\
         $(SLO)$/xestyle.obj					\
         $(SLO)$/xetable.obj					\
         $(SLO)$/xeview.obj					\
+        $(SLO)$/xichart.obj					\
         $(SLO)$/xicontent.obj				\
         $(SLO)$/xiescher.obj				\
         $(SLO)$/xihelper.obj				\
@@ -130,6 +126,7 @@ SLOFILES =	\
         $(SLO)$/xistyle.obj					\
         $(SLO)$/xiview.obj					\
         $(SLO)$/xladdress.obj				\
+        $(SLO)$/xlchart.obj					\
         $(SLO)$/xlescher.obj				\
         $(SLO)$/xlformula.obj				\
         $(SLO)$/xlocx.obj					\
@@ -143,16 +140,16 @@ SLOFILES =	\
         $(SLO)$/xlview.obj
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
-NOOPTFILES= \
-                $(SLO)$/xiescher.obj
+NOOPTFILES = \
+        $(SLO)$/xiescher.obj
 .ENDIF
 
 EXCEPTIONSFILES = \
         $(SLO)$/excobj.obj					\
-        $(SLO)$/xlocx.obj					\
-        $(SLO)$/xehelper.obj				\
         $(SLO)$/xecontent.obj				\
-        $(SLO)$/XclImpChartsApi.obj			\
+        $(SLO)$/xehelper.obj				\
+        $(SLO)$/xichart.obj					\
+        $(SLO)$/xlocx.obj					\
         $(SLO)$/XclExpCharts.obj
 
 # --- Targets -------------------------------------------------------
