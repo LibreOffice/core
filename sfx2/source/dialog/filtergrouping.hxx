@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-20 09:22:52 $
+ *  last change: $Author: cd $ $Date: 2002-08-26 07:58:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,12 @@ namespace sfx2
         ::rtl::OUString& /* [out] */ _rFirstNonEmpty
     );
 
+    void appendExportFilters(
+        SfxFilterMatcherIter& _rFilterMatcher,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFilterManager >& _rFilterManager,
+        ::rtl::OUString& /* [out] */ _rFirstNonEmpty
+        );
+
     //--------------------------------------------------------------------
     /** adds the given filters to the filter manager.
         <p>To be used when opening generic files.</p>
@@ -112,6 +118,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2002/08/20 09:22:52  pb
+ *  fix: #92788# show extensions of filter
+ *
  *  Revision 1.1  2001/10/01 16:32:37  fs
  *  initial checkin - helpers for grouping and classifying filters in the file open dialog
  *

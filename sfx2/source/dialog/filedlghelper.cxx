@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-22 07:27:28 $
+ *  last change: $Author: cd $ $Date: 2002-08-26 07:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1660,6 +1660,8 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     ::rtl::OUString sFirstFilter;
     if ( WB_OPEN == ( nFlags & WB_OPEN ) )
         ::sfx2::appendFiltersForOpen( aIter, xFltMgr, sFirstFilter );
+    else if ( mbExport )
+        ::sfx2::appendExportFilters( aIter, xFltMgr, sFirstFilter );
     else
         ::sfx2::appendFiltersForSave( aIter, xFltMgr, sFirstFilter );
 

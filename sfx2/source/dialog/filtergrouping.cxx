@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtergrouping.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-20 09:22:52 $
+ *  last change: $Author: cd $ $Date: 2002-08-26 07:57:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _WLDCRD_HXX //autogen
+#include <tools/wldcrd.hxx>
 #endif
 
 #ifndef _LIST_
@@ -983,6 +986,90 @@ namespace sfx2
         }
     }
 
+    struct ExportFilter
+    {
+        ExportFilter( const rtl::OUString& _aUIName, const rtl::OUString& _aWildcard ) :
+            aUIName( _aUIName ), aWildcard( _aWildcard ) {}
+
+        rtl::OUString aUIName;
+        rtl::OUString aWildcard;
+    };
+
+    //--------------------------------------------------------------------
+    void appendExportFilters( SfxFilterMatcherIter& _rFilterMatcher, const Reference< XFilterManager >& _rxFilterManager, ::rtl::OUString& _rFirstNonEmpty )
+    {
+        DBG_ASSERT( _rxFilterManager.is(), "sfx2::appendExportFilters: invalid manager!" );
+        if ( !_rxFilterManager.is() )
+            return;
+
+        sal_Int32       nPDFIndex   = -1;
+        sal_Int32       nHTMLIndex  = -1;
+        sal_Int32       nCount      = 0;
+        ::rtl::OUString sUIName;
+        ::rtl::OUString sExtensions;
+        String          sPDFExtension = String::CreateFromAscii( "*.pdf" );
+        String          sHTMLExtension = String::CreateFromAscii( "*.htm*" );
+        std::vector< ExportFilter > aFilterVector;
+        WildCard        aHTMLWildcardMatcher( sHTMLExtension, ';' );
+        WildCard        aPDFWildcardMatcher( sPDFExtension, ';' );
+
+        for ( const SfxFilter* pFilter = _rFilterMatcher.First(); pFilter; pFilter = _rFilterMatcher.Next() )
+        {
+            sUIName     = pFilter->GetUIName();
+            sExtensions = pFilter->GetWildcard().GetWildCard();
+
+            ExportFilter aExportFilter( sUIName, sExtensions );
+
+            String aExt = sExtensions;
+            if ( nHTMLIndex == -1 && aHTMLWildcardMatcher.Matches( aExt ))
+            {
+                aFilterVector.insert( aFilterVector.begin(), aExportFilter );
+                nHTMLIndex = 0;
+                nCount++;
+            }
+            else if ( nPDFIndex == -1 && aPDFWildcardMatcher.Matches( aExt ))
+            {
+                std::vector< ExportFilter >::iterator aIter = aFilterVector.begin();
+                if ( nHTMLIndex == -1 )
+                    aFilterVector.insert( aIter, aExportFilter );
+                else
+                    aFilterVector.insert( ++aIter, aExportFilter );
+                nPDFIndex = 0;
+                nCount++;
+            }
+            else
+                aFilterVector.push_back( aExportFilter );
+        }
+
+        if ( nCount > 0 )
+        {
+            // Insert separator
+            ExportFilter aExportFilter( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Separator" )), rtl::OUString() );
+            std::vector< ExportFilter >::iterator aIter = aFilterVector.begin();
+            aIter += nCount;
+            aFilterVector.insert( aIter, aExportFilter );
+        }
+
+        for ( sal_Int32 n = 0; n < (sal_Int32)aFilterVector.size(); n++ )
+        {
+            try
+            {
+                _rxFilterManager->appendFilter( aFilterVector[n].aUIName, aFilterVector[n].aWildcard  );
+                if ( !_rFirstNonEmpty.getLength() )
+                    _rFirstNonEmpty = sUIName;
+
+            }
+            catch( IllegalArgumentException )
+            {
+    #ifdef DBG_UTIL
+                ByteString aMsg( "Could not append Filter" );
+                aMsg += ByteString( String( sUIName ), osl_getThreadTextEncoding() );
+                DBG_ERRORFILE( aMsg.GetBuffer() );
+    #endif
+            }
+        }
+    }
+
     //--------------------------------------------------------------------
     void appendFiltersForOpen( SfxFilterMatcherIter& _rFilterMatcher, const Reference< XFilterManager >& _rxFilterManager, ::rtl::OUString& _rFirstNonEmpty )
     {
@@ -1054,6 +1141,9 @@ namespace sfx2
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2002/08/20 09:22:52  pb
+ *  fix: #92788# show extensions of filter
+ *
  *  Revision 1.11  2002/06/20 09:43:46  aw
  *  #100545# ++pGlobalClassNames may exceed aGlobalClassNames.end()
  *
