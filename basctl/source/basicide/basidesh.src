@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 22:57:34 $
+ *  last change: $Author: tbe $ $Date: 2001-11-14 11:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1817,7 +1817,7 @@ ImageList RID_DEFAULTIMAGELIST_SC
         SID_INSERT_GROUPBOX ;
         SID_INSERT_LISTBOX ;
         SID_INSERT_COMBOBOX ;
-        SID_SHOW_BROWSER ;
+        SID_SHOW_PROPERTYBROWSER ;
         SID_DIALOG_TESTMODE ;
         SID_INSERT_SPINBUTTON ;
         SID_INSERT_HSCROLLBAR ;
@@ -1871,7 +1871,7 @@ ImageList RID_DEFAULTIMAGELIST_LC
         SID_INSERT_GROUPBOX ;
         SID_INSERT_LISTBOX ;
         SID_INSERT_COMBOBOX ;
-        SID_SHOW_BROWSER ;
+        SID_SHOW_PROPERTYBROWSER ;
         SID_DIALOG_TESTMODE ;
         SID_INSERT_SPINBUTTON ;
         SID_INSERT_HSCROLLBAR ;
@@ -2811,13 +2811,13 @@ Menu RID_POPUP_TABBAR
 };
 Menu RID_POPUP_DLGED
 {
-    DefaultItemId = SID_SHOW_BROWSER ;
+    DefaultItemId = SID_SHOW_PROPERTYBROWSER ;
     ItemList =
     {
         MenuItem
         {
-            Identifier = SID_SHOW_BROWSER ;
-            HelpId = SID_SHOW_BROWSER ;
+            Identifier = SID_SHOW_PROPERTYBROWSER ;
+            HelpId = SID_SHOW_PROPERTYBROWSER ;
             Text = "Eigenschaften..." ;
             Text [ ENGLISH ] = "Properties..." ;
             Text[ english_us ] = "Properties...";
