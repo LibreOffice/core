@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-13 09:44:38 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 16:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ OEvaluateSet* OOperand::preProcess(OBoolOperator* pOp, OOperand* pRight)
 //------------------------------------------------------------------
 void OOperandRow::bindValue(OValueRow _pRow)
 {
-    OSL_ENSHURE(_pRow.isValid(),"NO EMPTY row allowed!");
+    OSL_ENSURE(_pRow.isValid(),"NO EMPTY row allowed!");
     m_pRow = _pRow;
     (*m_pRow)[m_nRowPos].setBound(sal_True);
 }
@@ -147,7 +147,7 @@ void OOperandRow::bindValue(OValueRow _pRow)
 //------------------------------------------------------------------
 Any OOperandRow::getValue() const
 {
-    OSL_ENSHURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
+    OSL_ENSURE(m_pRow.isValid() && m_nRowPos < m_pRow->size(),"Invalid RowPos is >= vector.size()");
     return (*m_pRow)[m_nRowPos].makeAny();
 }
 //------------------------------------------------------------------
@@ -172,7 +172,7 @@ OEvaluateSet* OFILEOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)
     OEvaluateSet* pEvaluateSet = NULL;
     if (isIndexed())
     {
-        OSL_ENSHURE(0,"TODO: OFILEOperandAttr::preProcess");
+        OSL_ENSURE(0,"TODO: OFILEOperandAttr::preProcess");
 //      OFILEIndexIterator* pIter = pCol->GetIndex()->CreateIterator(pOp,pRight);
 //
 //      if (pIter->Status().IsSuccessful())
@@ -194,8 +194,8 @@ OEvaluateSet* OFILEOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)
 OOperandParam::OOperandParam(OSQLParseNode* pNode, ::vos::ORef<connectivity::OSQLColumns> _xParamColumns)
     : OOperandRow(_xParamColumns->size(), DataType::VARCHAR)         // Standard-Typ
 {
-    OSL_ENSHURE(SQL_ISRULE(pNode,parameter),"Argument ist kein Parameter");
-    OSL_ENSHURE(pNode->count() > 0,"Fehler im Parse Tree");
+    OSL_ENSURE(SQL_ISRULE(pNode,parameter),"Argument ist kein Parameter");
+    OSL_ENSURE(pNode->count() > 0,"Fehler im Parse Tree");
     OSQLParseNode *pMark = pNode->getChild(0);
 
     String aParameterName;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 10:30:58 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 16:46:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ namespace connectivity
     //-----------------------------------------------------------------------------
     inline OSQLParseNode* OSQLParseNode::getChild(sal_uInt32 nPos) const
     {
-        OSL_ENSHURE(nPos < m_aChilds.size(), "Invalid Position");
+        OSL_ENSURE(nPos < m_aChilds.size(), "Invalid Position");
         return m_aChilds[nPos];
     }
 

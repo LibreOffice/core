@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:53:01 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 16:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,19 +103,19 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
 
     if (SQL_ISRULE(pSQLParseNode,select_statement))
     {
-        OSL_ENSHURE(pSQLParseNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
+        OSL_ENSURE(pSQLParseNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
 
         OSQLParseNode * pTableExp = pSQLParseNode->getChild(3);
-        OSL_ENSHURE(pTableExp != NULL,"Fehler im Parse Tree");
-        OSL_ENSHURE(SQL_ISRULE(pTableExp,table_exp)," Fehler im Parse Tree");
-        OSL_ENSHURE(pTableExp->count() == 5,"Fehler im Parse Tree");
+        OSL_ENSURE(pTableExp != NULL,"Fehler im Parse Tree");
+        OSL_ENSURE(SQL_ISRULE(pTableExp,table_exp)," Fehler im Parse Tree");
+        OSL_ENSURE(pTableExp->count() == 5,"Fehler im Parse Tree");
 
         pWhereClause    = pTableExp->getChild(1);
         pOrderbyClause  = pTableExp->getChild(4);
     }
     else if (SQL_ISRULE(pSQLParseNode,update_statement_searched))
     {
-        OSL_ENSHURE(pSQLParseNode->count() == 5,"OFILECursor: Fehler im Parse Tree");
+        OSL_ENSURE(pSQLParseNode->count() == 5,"OFILECursor: Fehler im Parse Tree");
         pWhereClause = pSQLParseNode->getChild(4);
     }
     else if (SQL_ISRULE(pSQLParseNode,update_statement_positioned))
@@ -125,7 +125,7 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
     }
     else if (SQL_ISRULE(pSQLParseNode,delete_statement_searched))
     {
-        OSL_ENSHURE(pSQLParseNode->count() == 4,"Fehler im Parse Tree");
+        OSL_ENSURE(pSQLParseNode->count() == 4,"Fehler im Parse Tree");
         pWhereClause = pSQLParseNode->getChild(3);
     }
     else if (SQL_ISRULE(pSQLParseNode,delete_statement_positioned))
@@ -140,10 +140,10 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
     if (SQL_ISRULE(pWhereClause,where_clause))
     {
         // Wenn es aber eine where_clause ist, dann darf sie nicht leer sein:
-        OSL_ENSHURE(pWhereClause->count() == 2,"OFILECursor: Fehler im Parse Tree");
+        OSL_ENSURE(pWhereClause->count() == 2,"OFILECursor: Fehler im Parse Tree");
 
         OSQLParseNode * pComparisonPredicate = pWhereClause->getChild(1);
-        OSL_ENSHURE(pComparisonPredicate != NULL,"OFILECursor: Fehler im Parse Tree");
+        OSL_ENSURE(pComparisonPredicate != NULL,"OFILECursor: Fehler im Parse Tree");
 
         m_aCompiler.execute(pComparisonPredicate);
     }
@@ -151,7 +151,7 @@ void OSQLAnalyzer::start(OSQLParseNode* pSQLParseNode)
     {
         // Die Where Clause ist meistens optional, d. h. es koennte sich auch
         // um "optional_where_clause" handeln.
-        OSL_ENSHURE(SQL_ISRULE(pWhereClause,opt_where_clause),"OFILECursor: Fehler im Parse Tree");
+        OSL_ENSURE(SQL_ISRULE(pWhereClause,opt_where_clause),"OFILECursor: Fehler im Parse Tree");
     }
 }
 
@@ -275,7 +275,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
                     {
                         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
                         ::cppu::extractInterface(xCol,Reference< XIndexAccess>(m_aCompiler.getOrigColumns(),UNO_QUERY)->getByIndex(pLeft->getRowPos()));
-                        OSL_ENSHURE(xCol.is(), "Ungültige Struktur");
+                        OSL_ENSURE(xCol.is(), "Ungültige Struktur");
                         pParam->describe(xCol, aNewParamColumns);
                     }
                 }
@@ -286,8 +286,8 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
     OOperand* pOperand = aCodeStack.top();
     aCodeStack.pop();
 
-    OSL_ENSHURE(aCodeStack.size() == 0, "StackFehler");
-    OSL_ENSHURE(pOperand, "StackFehler");
+    OSL_ENSURE(aCodeStack.size() == 0, "StackFehler");
+    OSL_ENSURE(pOperand, "StackFehler");
     if (IS_TYPE(OOperandResult,pOperand))
         delete pOperand;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:19:19 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 16:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,8 +189,8 @@ namespace connectivity
             virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException)
             {
                 // this is only correct for tables who haven't a schema or catalog name
-                OSL_ENSHURE(!m_CatalogName.getLength(),"getName(): forgot to overload getName()!");
-                OSL_ENSHURE(!m_SchemaName.getLength(),"getName(): forgot to overload getName()!");
+                OSL_ENSURE(!m_CatalogName.getLength(),"getName(): forgot to overload getName()!");
+                OSL_ENSURE(!m_SchemaName.getLength(),"getName(): forgot to overload getName()!");
                 return m_Name;
             }
             virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
