@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macro.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:03:10 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 18:21:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,15 +109,15 @@ SfxMacroStatement::SfxMacroStatement
     Je nach Art der Subklasse von 'rShell' ergeben sich folgende
     Ausdr"ucke:
 
-                          |ÿabsolut                 relativ
+                          | absolut                  relativ
     -----------------------------------------------------------------------
     SfxApplication'       | 'StarCalc'              'Application'
-    SfxViewFrame'         |ÿ'[mydoc.sdc:1]'         'ActiveWindow'
+    SfxViewFrame'         | '[mydoc.sdc:1]'         'ActiveWindow'
     SfxViewShell'         | '[mydoc.sdc:1]'         'AvtiveWindow'
     SfxObjectShell'       | '[mydoc.sdc]'           'ActiveDocument'
     sonstige (Sub-Shells) | '[mydoc.sdc:1]'         'ActiveWindow'
 
-    Dabei sind 'StarCalc' stellvertretend fr den Namen der Applikation
+    Dabei sind 'StarCalc' stellvertretend fuer den Namen der Applikation
     (Application::GetAppName()const). In der absoluten Fassung k"onnte
     die Selektion auch deskriptiv z.B. als 'CellSelection("A5-D8")')
     angesprochen werden, dazu mu\ jedoch vom Anwendungsprogrammierer der
@@ -198,7 +198,7 @@ SfxMacroStatement::SfxMacroStatement
                 aStatement += String::CreateFromAscii("ViewShell");//pViewShell->GetViewFrame()->GetSbxObject()->GetName();
                 aStatement += 0x005D;
                 if ( !rShell.ISA(SfxViewFrame) )
-                    // an einer Sub-Shell zus"atlich ï.Selectionï anh"angen
+                    // an einer Sub-Shell zus"atlich ".Selection" anh"angen
                     aStatement += DEFINE_CONST_UNICODE(".Selection");
             }
         }
