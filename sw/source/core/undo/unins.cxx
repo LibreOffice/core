@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:00:19 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -988,10 +988,12 @@ SwUndoInsertLabel::SwUndoInsertLabel( const SwLabelType eTyp,
                                       const String &rTxt,
                                       const BOOL bBef,
                                       const USHORT nId,
+                                      const String& rCharacterStyle,
                                       const BOOL bCpyBorder )
     : SwUndo( UNDO_INSERTLABEL ),
       eType( eTyp ),
       sText( rTxt ),
+      sCharacterStyle( rCharacterStyle ),
       bBefore( bBef ),
       nFldId( nId ),
       nLayerId( 0 ),
@@ -1126,7 +1128,7 @@ void SwUndoInsertLabel::Repeat( SwUndoIter& rIter )
 
     if( nIdx )
     {
-        rDoc.InsertLabel( eType, sText, bBefore, nFldId, nIdx, bCpyBrd );
+        rDoc.InsertLabel( eType, sText, bBefore, nFldId, nIdx, sCharacterStyle, bCpyBrd );
     }
 }
 
