@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:37:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:12:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,11 @@
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
 #ifndef _ACCPAGE_HXX
@@ -100,11 +100,11 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using ::rtl::OUString;
-using ::drafts::com::sun::star::accessibility::XAccessibleContext;
+using ::com::sun::star::accessibility::XAccessibleContext;
 
-const sal_Char sServiceName[] = "drafts.com.sun.star.text.AccessiblePageView";
+const sal_Char sServiceName[] = "com.sun.star.text.AccessiblePageView";
 const sal_Char sImplementationName[] = "com.sun.star.comp.Writer.SwAccessiblePageView";
 
 sal_Bool SwAccessiblePage::IsSelected()
