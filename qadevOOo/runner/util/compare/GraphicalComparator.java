@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GraphicalComparator.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Date: 2005-01-25 15:39:47 $
+ *  last change: $Date: 2005-02-24 17:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,11 +227,24 @@ class GraphicalComparator implements DocComparator
         {
             try
             {
+                if (FileHelper.isDebugEnabled())
+                {
+                    System.err.println("    Inputpath: '" + m_aArguments.getInputPath() + "'");
+                    System.err.println("   Outputpath: '" + m_aArguments.getOutputPath() + "'");
+                    System.err.println("Referencepath: '" + m_aArguments.getReferencePath() + "'");
+                }
                 return GraphicalDifferenceCheck.check(m_aArguments.getInputPath(), m_aArguments.getOutputPath(), m_aArguments.getReferencePath(), m_aArguments);
             }
             catch(ConvWatchException e)
             {
                 // wrap it to IOException
+                if (FileHelper.isDebugEnabled())
+                {
+                    System.err.println("Exception caught");
+                    System.err.println("    Inputpath: '" + m_aArguments.getInputPath() + "'");
+                    System.err.println("   Outputpath: '" + m_aArguments.getOutputPath() + "'");
+                    System.err.println("Referencepath: '" + m_aArguments.getReferencePath() + "'");
+                }
                 throw new java.io.IOException(e.getMessage());
             }
         }
