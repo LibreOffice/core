@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-29 16:32:41 $
+ *  last change: $Author: mba $ $Date: 2001-09-10 15:37:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1138,6 +1138,12 @@ BOOL SfxDocumentInfo::Load(SvStorage* pStorage)
     if(!pStorage->IsStream( String::CreateFromAscii( pDocInfoSlot )))
         return FALSE;
 #endif
+    if ( pStorage->GetVersion() >= SOFFICE_FILEFORMAT_60 )
+    {
+        DBG_ERROR("This method only supports binary file format, use service StandaloneDocumentInfo!");
+        return FALSE;
+    }
+
     SvStorageStreamRef aStr = pStorage->OpenStream( String::CreateFromAscii( pDocInfoSlot ),STREAM_STD_READ);
     if(!aStr.Is())
         return FALSE;
