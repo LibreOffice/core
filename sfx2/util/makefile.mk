@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: kz $ $Date: 2004-05-20 21:26:14 $
+#   last change: $Author: hjs $ $Date: 2004-06-26 17:51:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -181,6 +181,7 @@ DEF1EXPORT7 = component_getFactory
 SFXSRSLIST=\
         $(SRS)$/accel.srs \
         $(SRS)$/appl.srs \
+        $(SRS)$/sfx.srs \
         $(SRS)$/doc.srs \
         $(SRS)$/view.srs \
         $(SRS)$/config.srs \
