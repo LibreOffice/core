@@ -2,7 +2,7 @@
     shell SfxViewFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-07-24 17:56:44 $ $Revision: 1.15 $
+    $Author: kz $ $Date: 2004-02-25 15:39:13 $ $Revision: 1.16 $
     $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
 =========================================================================*/
 
@@ -225,6 +225,7 @@ interface Window : Object
     SID_OBJECT // ole(no) api(no)
     [
         StateMethod = GetState_Impl ;
+        ExecMethod = ExecView_Impl ;
     ]
 }
 
@@ -396,5 +397,10 @@ shell SfxViewFrame
 
 {
         import BrowseWindow [Automation];
+
+        SID_FORMATMENUSTATE
+        [
+            StateMethod = MiscState_Impl ;
+        ]
 }
 
