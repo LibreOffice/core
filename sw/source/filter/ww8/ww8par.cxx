@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-11 12:51:27 $
+ *  last change: $Author: cmc $ $Date: 2002-10-25 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1847,7 +1847,6 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                     // reset the flags.
                     bObj = bEmbeddObj = false;
                     nObjLocFc = 0;
-                    pFmtOfJustInsertedGraphicOrOLE = pResult;
                     //##515## set nLastFlyNode so we can determine if a section
                     //has ended with this paragraph unclosed
                     nLastFlyNode = (*pPaM->GetPoint()).nNode.GetIndex();
@@ -2240,7 +2239,6 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     pWFlyPara       = 0;
     pSFlyPara       = 0;
     pFlyFmtOfJustInsertedGraphic   = 0;
-    pFmtOfJustInsertedGraphicOrOLE = 0;
     pFmtOfJustInsertedApo = 0;
     nColls = nAktColl = 0;
     nObjLocFc = nPicLocFc = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-15 11:27:50 $
+ *  last change: $Author: cmc $ $Date: 2002-10-25 16:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,10 +245,6 @@
 #endif
 
 using namespace ::com::sun::star;
-
-#define sEscherStream CREATE_CONST_ASC("tempEsher")
-#define sEscherPictStream   CREATE_CONST_ASC("EsherPicts")
-#define sBasicEscherPictStream  CREATE_CONST_ASC("BasicEsherPicts")
 
 PlcDrawObj::~PlcDrawObj()
 {
@@ -1108,11 +1104,9 @@ void SwWW8Writer::CreateEscher()
     if(pHFSdrObjs->size() || pSdrObjs->size())
     {
         ASSERT( !pEscher, "wer hat den Pointer nicht geloescht?" );
-        SvStream* pEscherStrm = pStg->OpenStream( sEscherStream,
-                                STREAM_READWRITE | STREAM_SHARE_DENYALL );
-        pEscherStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-
-        pEscher = new SwEscherEx( pEscherStrm, *this );
+        SvMemoryStream* pEscherStrm = new SvMemoryStream;
+        pEscherStrm->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
+        pEscher = new SwEscherEx(pEscherStrm, *this);
     }
 }
 
@@ -1143,7 +1137,6 @@ void SwEscherEx::WritePictures()
         rWrt.Strm() << *pPictStrm;
 
         delete pPictStrm, pPictStrm = 0;
-        rWrt.GetStorage().Remove(msEscherPictStream);
     }
     Flush();
 }
@@ -1155,7 +1148,7 @@ void SwEscherEx::WritePictures()
 SwBasicEscherEx::SwBasicEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt,
     UINT32 nDrawings)
     : EscherEx(*pStrm, nDrawings), rWrt(rWW8Wrt), pEscherStrm(pStrm),
-    pPictStrm(0), msEscherPictStream(sBasicEscherPictStream)
+    pPictStrm(0)
 {
     Init();
 }
@@ -1349,6 +1342,78 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTxtNode& rNd,
     // mirror ??
 }
 
+void SwBasicEscherEx::SetPicId(const SdrObject &, UINT32,
+    EscherPropertyContainer &)
+{
+}
+
+void SwEscherEx::SetPicId(const SdrObject &rSdrObj, UINT32 nShapeId,
+    EscherPropertyContainer &rPropOpt)
+{
+    pTxtBxs->Append(rSdrObj, nShapeId);
+    UINT32 nPicId = pTxtBxs->Count();
+    nPicId *= 0x10000;
+    rPropOpt.AddOpt( ESCHER_Prop_pictureId, nPicId );
+}
+
+INT32 SwBasicEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
+{
+    INT32 nBorderThick=0;
+    SwNodeIndex aIdx(*rFmt.GetCntnt().GetCntntIdx(), 1);
+    SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
+    const SvInPlaceObjectRef xObj(rOLENd.GetOLEObj().GetOleRef());
+
+    if (const SdrObject* pSdrObj = rFmt.FindRealSdrObject())
+    {
+        GDIMetaFile aMtf;
+        xObj->GetGDIMetaFile(aMtf);
+        Graphic aGraphic(aMtf);
+
+        /*
+        #i5970#
+        Export floating ole2 .doc ver 8+ wmf ole2 previews as emf previews
+        instead ==> allows unicode text to be preserved
+        */
+#ifdef OLE_PREVIEW_AS_EMF
+        wwUtility::MakeSafeGDIMetaFile(aGraphic);
+#endif
+        OpenContainer(ESCHER_SpContainer);
+
+        AddShape(ESCHER_ShpInst_PictureFrame, 0xa10, nShapeId);
+        EscherPropertyContainer aPropOpt;
+
+        GraphicObject aGraphicObject(aGraphic);
+        ByteString aId = aGraphicObject.GetUniqueID();
+        if (aId.Len())
+        {
+            Size aSz(rOLENd.GetTwipSize());
+            aSz.Width() = DrawModelToEmu(aSz.Width());
+            aSz.Height() = DrawModelToEmu(aSz.Height());
+            Rectangle aRect(Point(0,0), aSz);
+
+            sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aId, aRect, 0);
+            if (nBlibId)
+            {
+                aPropOpt.AddOpt(ESCHER_Prop_fillType, ESCHER_FillPicture);
+                aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
+            }
+        }
+
+        SetPicId(*pSdrObj, nShapeId, aPropOpt);
+
+        aPropOpt.AddOpt(ESCHER_Prop_pictureActive, 0x10000);
+        nBorderThick = WriteFlyFrameAttr(rFmt, mso_sptPictureFrame, aPropOpt);
+        WriteGrfAttr(rOLENd, aPropOpt);
+        aPropOpt.Commit(GetStream());
+
+        // store anchor attribute
+        WriteFrmExtraData( rFmt );
+
+        CloseContainer();   // ESCHER_SpContainer
+    }
+    return nBorderThick;
+}
+
 INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
     EscherPropertyContainer& rPropOpt)
 {
@@ -1477,6 +1542,26 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeTyp
         }
     }
 
+    const SdrObject* pObj = rFmt.FindRealSdrObject();
+    if( pObj && pObj->GetLayer() == GetHellLayerId() )
+        rPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
+
+    return nLineWidth;
+}
+
+INT32 SwEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
+    EscherPropertyContainer& rPropOpt)
+{
+    INT32 nLineWidth = SwBasicEscherEx::WriteFlyFrameAttr(rFmt, eShapeType,
+        rPropOpt);
+
+    /*
+     These are not in SwBasicEscherEx::WriteFlyFrameAttr because inline objs
+     can't do it in word and it hacks it in by stretching the graphic that
+     way, perhaps we should actually draw in this space into the graphic we
+     are exporting!
+     */
+    const SfxPoolItem* pItem;
     if (SFX_ITEM_SET == rFmt.GetItemState(RES_LR_SPACE, true, &pItem))
     {
         rPropOpt.AddOpt( ESCHER_Prop_dxWrapDistLeft,
@@ -1497,10 +1582,6 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeTyp
         rPropOpt.AddOpt( ESCHER_Prop_dyWrapDistBottom,
                 DrawModelToEmu( ((SvxULSpaceItem*)pItem)->GetLower() ) );
     }
-
-    const SdrObject* pObj = rFmt.FindRealSdrObject();
-    if( pObj && pObj->GetLayer() == GetHellLayerId() )
-        rPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
 
     return nLineWidth;
 }
@@ -1542,8 +1623,7 @@ SvStream* SwBasicEscherEx::QueryPicStream()
 {
     if (!pPictStrm)
     {
-        pPictStrm = rWrt.GetStorage().OpenStream(msEscherPictStream,
-            STREAM_READWRITE | STREAM_SHARE_DENYALL);
+        pPictStrm = new SvMemoryStream;
         pPictStrm->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
     }
     return pPictStrm;
@@ -1562,8 +1642,6 @@ void SwBasicEscherEx::WritePictures()
         *pEscherStrm << *pPictStrm;
 
         delete pPictStrm, pPictStrm = 0;
-        rWrt.GetStorage().Remove(msEscherPictStream);
-        rWrt.GetStorage().Commit();
     }
 }
 
@@ -1571,7 +1649,6 @@ SwEscherEx::SwEscherEx(SvStream* pStrm, SwWW8Writer& rWW8Wrt)
     : SwBasicEscherEx(pStrm, rWW8Wrt, rWW8Wrt.pHFSdrObjs->size() ? 2 : 1),
     pTxtBxs(0)
 {
-    msEscherPictStream = sEscherPictStream;
     aHostData.SetClientData(&aWinwordAnchoring);
     OpenContainer( ESCHER_DggContainer );
 
@@ -1690,12 +1767,9 @@ SwEscherEx::~SwEscherEx()
 
 void SwEscherEx::FinishEscher()
 {
-    pEscherStrm->Seek( 0 );
+    pEscherStrm->Seek(0);
     *rWrt.pTableStrm << *pEscherStrm;
-
     delete pEscherStrm, pEscherStrm = 0;
-    rWrt.GetStorage().Remove(sEscherStream);
-    rWrt.GetStorage().Commit();
 
     /*#82587# Everytime MS 2000 creates an escher stream there is always an
      ObjectPool dir (even if empty). It turns out that if a copy of MS 2000 is
@@ -2330,8 +2404,7 @@ INT32 SwEscherEx::WriteTxtFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId,
 
 void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
 {
-    const SdrObject* pSdrObj = rFmt.FindRealSdrObject();
-    if( pSdrObj)
+    if (const SdrObject* pSdrObj = rFmt.FindRealSdrObject())
     {
         OpenContainer( ESCHER_SpContainer );
 
@@ -2343,10 +2416,8 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
         aSz.Height() = DrawModelToEmu( aSz.Height() );
         Rectangle aRect( Point(0,0), aSz );
 
-        pTxtBxs->Append( *pSdrObj, nShapeId );
-        UINT32 nPicId = pTxtBxs->Count();
-        nPicId *= 0x10000;
-        aPropOpt.AddOpt( ESCHER_Prop_pictureId, nPicId );
+        SetPicId(*pSdrObj, nShapeId, aPropOpt);
+
         aPropOpt.AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
         WriteFlyFrameAttr( rFmt, mso_sptPictureFrame , aPropOpt );
         aPropOpt.Commit( GetStream() );
@@ -2358,79 +2429,36 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
     }
 }
 
-INT32 SwEscherEx::WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId)
+/*
+ I actually want to use EMF not PNG but until issue #i2192# is resolved then I
+ can't risk having a math object using starsymbol exported to word as it'll
+ not render correctly :-(
+
+ Optionally I would prefer to detect if a GDIMetafile is using
+ {Open|Star}Symbol and if it is then use PNG, and if not use EMF. That would
+ be a very acceptable compromise in my view.
+*/
+bool wwUtility::MakeSafeGDIMetaFile(Graphic &rGraphic)
 {
-    INT32 nBorderThick=0;
-    SwNodeIndex aIdx(*rFmt.GetCntnt().GetCntntIdx(), 1);
-    SwOLENode& rOLENd = *aIdx.GetNode().GetOLENode();
-    const SvInPlaceObjectRef xObj(rOLENd.GetOLEObj().GetOleRef());
+    bool bRet = false;
+    SvMemoryStream aStream;
 
-    if (const SdrObject* pSdrObj = rFmt.FindRealSdrObject())
+    sal_uInt32 nRet = GraphicConverter::Export(aStream, rGraphic, CVT_PNG);
+    if (nRet == ERRCODE_NONE)
     {
-        GDIMetaFile aMtf;
-        xObj->GetGDIMetaFile(aMtf);
-        Graphic aGraphic(aMtf);
-
-        /*
-        #i5970#
-        Export floating ole2 .doc ver 8+ wmf ole2 previews as emf previews
-        instead ==> allows unicode text to be preserved
-        */
-#define OLE_PREVIEW_AS_EMF
-#ifdef OLE_PREVIEW_AS_EMF
-        SvMemoryStream aStream;
-        sal_uInt32 nRet = GraphicConverter::Export(aStream, aGraphic, CVT_EMF);
-        if (nRet == ERRCODE_NONE)
+        const ULONG nBufSize = aStream.Tell();
+        if (nBufSize)
         {
-            const ULONG nBufSize = aStream.Tell();
-            if (nBufSize)
-            {
-                BYTE* pBuf = new BYTE[nBufSize];
-                aStream.Seek(0);
-                aStream.Read(pBuf, nBufSize);
-                aGraphic.SetLink(
-                    GfxLink(pBuf, nBufSize, GFX_LINK_TYPE_NATIVE_WMF, TRUE));
-            }
+            BYTE* pBuf = new BYTE[nBufSize];
+            aStream.Seek(0);
+            aStream.Read(pBuf, nBufSize);
+            rGraphic.SetLink(
+                GfxLink(pBuf, nBufSize, GFX_LINK_TYPE_NATIVE_PNG, TRUE));
+            bRet = true;
         }
-#endif
-
-        OpenContainer(ESCHER_SpContainer);
-
-        AddShape(ESCHER_ShpInst_PictureFrame, 0xa10, nShapeId);
-        EscherPropertyContainer aPropOpt;
-
-        GraphicObject aGraphicObject(aGraphic);
-        ByteString aId = aGraphicObject.GetUniqueID();
-        if (aId.Len())
-        {
-            Size aSz(rOLENd.GetTwipSize());
-            aSz.Width() = DrawModelToEmu(aSz.Width());
-            aSz.Height() = DrawModelToEmu(aSz.Height());
-            Rectangle aRect(Point(0,0), aSz);
-
-            sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aId, aRect, 0);
-            if (nBlibId)
-            {
-                aPropOpt.AddOpt(ESCHER_Prop_fillType, ESCHER_FillPicture);
-                aPropOpt.AddOpt(ESCHER_Prop_pib, nBlibId, sal_True);
-            }
-        }
-
-        pTxtBxs->Append(*pSdrObj, nShapeId);
-        UINT32 nPicId = pTxtBxs->Count();
-        nPicId *= 0x10000;
-        aPropOpt.AddOpt(ESCHER_Prop_pictureId, nPicId);
-        aPropOpt.AddOpt(ESCHER_Prop_pictureActive, 0x10000);
-        nBorderThick = WriteFlyFrameAttr(rFmt, mso_sptPictureFrame, aPropOpt);
-        WriteGrfAttr(rOLENd, aPropOpt);
-        aPropOpt.Commit(GetStream());
-
-        // store anchor attribute
-        WriteFrmExtraData( rFmt );
-
-        CloseContainer();   // ESCHER_SpContainer
     }
-    return nBorderThick;
+
+    return bRet;
 }
 
 void SwEscherEx::MakeZOrderArrAndFollowIds(

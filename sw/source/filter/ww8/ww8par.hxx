@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-24 12:06:00 $
+ *  last change: $Author: cmc $ $Date: 2002-10-25 16:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,7 +667,6 @@ friend class WW8FormulaControl;
     SwMSConvertControls *pFormImpl; // Control-Implementierung
 
     SwFlyFrmFmt* pFlyFmtOfJustInsertedGraphic;
-    SwFrmFmt* pFmtOfJustInsertedGraphicOrOLE;
     SwFrmFmt* pFmtOfJustInsertedApo;
 
     /*

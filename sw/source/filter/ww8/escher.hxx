@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escher.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-28 12:11:22 $
+ *  last change: $Author: cmc $ $Date: 2002-10-25 16:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,8 @@ protected:
     SvStream* pEscherStrm;
     SvStream* pPictStrm;
     long mnEmuMul, mnEmuDiv;
-    String msEscherPictStream;
 
-    INT32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
+    virtual INT32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
         EscherPropertyContainer& rPropOpt);
     void WriteGrfAttr(const SwNoTxtNode& rNd,EscherPropertyContainer& rPropOpt);
 
@@ -101,9 +100,12 @@ protected:
     INT32 ToFract16(INT32 nVal, UINT32 nMax) const;
 
     SvStream* QueryPicStream();
+
+    virtual void SetPicId(const SdrObject &, UINT32, EscherPropertyContainer &);
 public:
     SwBasicEscherEx(SvStream* pStrm, SwWW8Writer& rWrt, UINT32 nDrawings = 1);
     INT32 WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
+    INT32 WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
     virtual void WriteFrmExtraData(const SwFrmFmt& rFmt);
     virtual void WritePictures();
     virtual ~SwBasicEscherEx();
@@ -125,12 +127,15 @@ private:
     INT32 WriteFlyFrm(const SwFrmFmt& rFmt,UINT32 &rShapeId, short nDirection);
     INT32 WriteTxtFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId,
         UINT32 nTxtBox, short nDirection);
-    INT32 WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
     void WriteOCXControl(const SwFrmFmt& rFmt,UINT32 nShapeId);
+    virtual INT32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
+        EscherPropertyContainer& rPropOpt);
 
     virtual UINT32 QueryTextID(
         const com::sun::star::uno::Reference<
         com::sun::star::drawing::XShape > &,UINT32);
+    virtual void SetPicId(const SdrObject &rSdrObj, UINT32 nShapeId,
+        EscherPropertyContainer &rPropOpt);
 
     //No copying
     SwEscherEx(const SwEscherEx&);

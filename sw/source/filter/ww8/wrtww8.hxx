@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-15 11:27:51 $
+ *  last change: $Author: cmc $ $Date: 2002-10-25 16:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,8 @@ class SvxBrushItem;
 #define GRF_MAGIC_2 0x34
 #define GRF_MAGIC_3 0x56
 #define GRF_MAGIC_321 0x563412L
+
+#define OLE_PREVIEW_AS_EMF  //If we want to export ole2 previews as emf in ww8+
 
 enum FieldFlags // enums for InsertField- Method
 {
@@ -819,12 +821,12 @@ private:
     typedef std::vector<GraphicDetails>::iterator myiter;
     USHORT mnIdx;       // Index in File-Positionen
 
-    void Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
-        const SwFlyFrmFmt* pFly, UINT16 mm, UINT16 nWidth, UINT16 nHeight );
-    void Write1Grf1( SvStream& rStrm, const SwGrfNode* pGrfNd,
-        const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight );
-    void Write1Grf( SvStream& rStrm, const SwNoTxtNode* pNd,
-        const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight );
+    void WritePICFHeader(SvStream& rStrm, const SwNoTxtNode* pNd,
+        const SwFlyFrmFmt* pFly, UINT16 mm, UINT16 nWidth, UINT16 nHeight);
+    void WriteGraphicNode(SvStream& rStrm, const SwNoTxtNode* pGrfNd,
+        const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight);
+    void WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode* pNd,
+        const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight);
 
     //No copying
     SwWW8WrGrf(const SwWW8WrGrf&);

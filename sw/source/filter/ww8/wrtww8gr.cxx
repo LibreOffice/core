@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2002-10-15 11:27:51 $
+ *  last change: $Author: cmc $ $Date: 2002-10-25 16:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,8 +297,8 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
             if( xObj.Is() )
             {
                 SvInPlaceObject *pObj = &xObj;
-                UINT32 nPictureId = (long)pObj;
-                Set_UInt32( pDataAdr, nPictureId );
+                UINT32 nPictureId = (UINT32)pObj;
+                Set_UInt32(pDataAdr, nPictureId);
 
                 WW8OleMap *pMap = new WW8OleMap(nPictureId, pObj);
                 bool bDuplicate = false;
@@ -338,6 +338,9 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                     rWW8Wrt.OutField( 0, 58, sServer, WRITEFIELD_START |
                         WRITEFIELD_CMD_START | WRITEFIELD_CMD_END );
 
+                    rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
+                            nSize, pSpecOLE );
+
                     bool bEndCR = true;
                     /*
                     In the word filter we only need a preview image for
@@ -363,7 +366,9 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                         }
                     }
 
-                    if (bGraphicNeeded)
+                    if (!bGraphicNeeded)
+                        rWW8Wrt.WriteChar(0x1);
+                    else
                     {
                         /*
                         ##897##
@@ -372,20 +377,12 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                         has no place to find the dimensions of the ole
                         object, and will not be able to draw it
                         */
-                        rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
-                            nSize, pSpecOLE );
-                        rWW8Wrt.OutGrf( rNode.GetOLENode() );
-                    }
-                    else
-                    {
-                        rWW8Wrt.WriteChar( 0x1 );
-                        rWW8Wrt.pChpPlc->AppendFkpEntry( rWrt.Strm().Tell(),
-                            nSize, pSpecOLE );
+                        rWW8Wrt.OutGrf(rNode.GetOLENode());
                     }
 
                     rWW8Wrt.OutField( 0, 58, aEmptyStr,
-                                            WRITEFIELD_END |
-                                            WRITEFIELD_CLOSE );
+                        WRITEFIELD_END | WRITEFIELD_CLOSE );
+
                     if (bEndCR) //No newline in inline case
                         rWW8Wrt.WriteCR();
                 }
@@ -396,7 +393,6 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
     }
     return rWrt;
 }
-
 
 void SwWW8Writer::OutGrf( const SwNoTxtNode* pNd )
 {
@@ -522,9 +518,8 @@ void SwWW8WrGrf::Insert( const SwNoTxtNode* pNd, const SwFlyFrmFmt* pFly )
     maDetails.push_back(GraphicDetails(pNd, pFly, nWidth, nHeight));
 }
 
-void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
-                                const SwFlyFrmFmt* pFly,
-                            UINT16 mm, UINT16 nWidth, UINT16 nHeight )
+void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const SwNoTxtNode* pNd,
+    const SwFlyFrmFmt* pFly, UINT16 mm, UINT16 nWidth, UINT16 nHeight)
 {
     INT16 nXSizeAdd = 0, nYSizeAdd = 0;
     INT16 nCropL = 0, nCropR = 0, nCropT = 0, nCropB = 0;
@@ -556,10 +551,15 @@ void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
         aGrTwipSz = pNd->GetTwipSize();
     }
 
+#if 0
+    //I think this is a bad idea, if we really want to do this, then
+    //lets actually draw in the space we want here. And remember that
+    //there is a default 0.32 to the left and right in word already
     const SvxLRSpaceItem &rLR = (SvxLRSpaceItem &)pFly->GetAttr(RES_LR_SPACE);
     const SvxULSpaceItem &rUL = (SvxULSpaceItem &)pFly->GetAttr(RES_UL_SPACE);
     nWidth += (INT16)(rLR.GetLeft() + rLR.GetRight());
     nHeight += rUL.GetUpper() + rUL.GetLower();
+#endif
 
     bool bWrtWW8 = rWrt.bWrtWW8;
     UINT16 nHdrLen = bWrtWW8 ? 0x44 : 0x3A;
@@ -676,10 +676,10 @@ void SwWW8WrGrf::Write1GrfHdr( SvStream& rStrm, const SwNoTxtNode* pNd,
     rStrm.Write( aArr, nHdrLen );
 }
 
-void SwWW8WrGrf::Write1Grf1( SvStream& rStrm, const SwGrfNode* pGrfNd,
-                    const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight )
+void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode* pGrfNd,
+    const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight)
 {
-    if( pGrfNd->IsLinkedFile() )        // Linked File
+    if (pGrfNd->IsLinkedFile())     // Linked File
     {
         String aFileN, aFiltN;
         UINT16 mm;
@@ -700,120 +700,100 @@ void SwWW8WrGrf::Write1Grf1( SvStream& rStrm, const SwGrfNode* pGrfNd,
 //      else
             mm = 94;                    // 94 = BMP, GIF
 
-        Write1GrfHdr( rStrm, pGrfNd, pFly, mm, nWidth, nHeight );   // Header
+        WritePICFHeader(rStrm, pGrfNd, pFly, mm, nWidth, nHeight);  // Header
         rStrm << (BYTE)aFileN.Len();    // Pascal-String schreiben
         SwWW8Writer::WriteString8(rStrm, aFileN, false,
             RTL_TEXTENCODING_MS_1252);
     }
     else                                // Embedded File oder DDE oder so was
     {
-        Graphic& rGrf = (Graphic&)(pGrfNd->GetGrf());
-        bool bSwapped = rGrf.IsSwapOut() ? true : false;
-        ((SwGrfNode*)pGrfNd)->SwapIn(); // immer ueber den Node einswappen !!!
-
-        GDIMetaFile aMeta;
-
-        switch ( rGrf.GetType() )
-        {
-        case GRAPHIC_BITMAP:            // Bitmap -> in Metafile abspielen
-            {
-                VirtualDevice aVirt;
-                aMeta.Record( &aVirt );
-                aVirt.DrawBitmap( Point( 0,0 ), rGrf.GetBitmap() );
-                aMeta.Stop();
-                aMeta.WindStart();
-                aMeta.SetPrefMapMode( rGrf.GetPrefMapMode());
-                aMeta.SetPrefSize( rGrf.GetPrefSize());
-            }
-            break;
-        case GRAPHIC_GDIMETAFILE :      // GDI ( =SV ) Metafile
-                aMeta = rGrf.GetGDIMetaFile();
-                break;
-        default : return;
-        }
-
-//      ASSERT( aMeta.GetPrefMapMode().GetMapUnit() == MAP_100TH_MM,
-//              "MapMode der Grafik ist nicht 1/100mm!" );
-
-#ifdef DEBUG
-        bool bSchreibsRaus  = false;
-        bool bSchreibsRein  = false;
-        long nSchreibsRausA = rStrm.Tell();
-        long nSchreibsReinA = nSchreibsRausA;
-#endif
-
         if (rWrt.bWrtWW8 && pFly)
         {
-            Write1GrfHdr(rStrm, pGrfNd, pFly, 0x64, nWidth, nHeight);
+            WritePICFHeader(rStrm, pGrfNd, pFly, 0x64, nWidth, nHeight);
             SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
             aInlineEscher.WriteGrfFlyFrame(*pFly, 0x401);
             aInlineEscher.WritePictures();
         }
         else
         {
-            Write1GrfHdr(rStrm, pGrfNd, pFly, 8, nWidth, nHeight);
+            Graphic& rGrf = (Graphic&)(pGrfNd->GetGrf());
+            bool bSwapped = rGrf.IsSwapOut() ? true : false;
+            ((SwGrfNode*)pGrfNd)->SwapIn(); // immer ueber den Node einswappen!
+
+            GDIMetaFile aMeta;
+            switch (rGrf.GetType())
+            {
+                case GRAPHIC_BITMAP:        // Bitmap -> in Metafile abspielen
+                    {
+                        VirtualDevice aVirt;
+                        aMeta.Record(&aVirt);
+                        aVirt.DrawBitmap( Point( 0,0 ), rGrf.GetBitmap() );
+                        aMeta.Stop();
+                        aMeta.WindStart();
+                        aMeta.SetPrefMapMode( rGrf.GetPrefMapMode());
+                        aMeta.SetPrefSize( rGrf.GetPrefSize());
+                    }
+                    break;
+                case GRAPHIC_GDIMETAFILE :      // GDI ( =SV ) Metafile
+                    aMeta = rGrf.GetGDIMetaFile();
+                    break;
+                default:
+                    return;
+            }
+
+            WritePICFHeader(rStrm, pGrfNd, pFly, 8, nWidth, nHeight);
             WriteWindowMetafileBits(rStrm, aMeta);
-        }
 
-#ifdef DEBUG
-        if(  bSchreibsRaus )
-        {
-            long nSchreibsRausZ = rStrm.Tell();
-            SvFileStream aS(CREATE_CONST_ASC("e:\\ww-exp.wmf"), STREAM_WRITE);
-            rStrm.Seek( nSchreibsRausA );
-            UINT16 nRead1;
-            BYTE* pBuf = new BYTE[ 8192 ];
-            ULONG nRead = nSchreibsRausZ - nSchreibsRausA;
-            do{
-                nRead1 = ( nRead > 8192 ) ? 8192 : (UINT16)nRead;
-                rStrm.Read( pBuf, nRead1 );
-                aS.Write(   pBuf, nRead1 );
-                nRead -= nRead1;
-            }while( nRead );
-            aS.Close();
-            rStrm.Seek( nSchreibsRausZ );
-            delete[] pBuf;
+            if (bSwapped)
+                rGrf.SwapOut();
         }
-        if(  bSchreibsRein )
-        {
-            SvFileStream aS(CREATE_CONST_ASC("e:\\ww-imp.wmf"), STREAM_READ );
-            aS.Seek( STREAM_SEEK_TO_END );
-            ULONG nRead = aS.Tell();
-            aS.Seek( 0 );
-            rStrm.Seek( nSchreibsReinA );
-            UINT16 nRead1;
-            BYTE* pBuf = new BYTE[ 8192 ];
-            do{
-                nRead1 = ( nRead > 8192 ) ? 8192 : (UINT16)nRead;
-                aS.Read(     pBuf, nRead1 );
-                rStrm.Write( pBuf, nRead1 );
-                nRead -= nRead1;
-            }while( nRead );
-            aS.Close();
-            delete[] pBuf;
-            // kein Seek, da es hier im Stream weitergehen soll...
-        }
-#endif
-
-        if( bSwapped ) rGrf.SwapOut();
     }
 }
 
-void SwWW8WrGrf::Write1Grf( SvStream& rStrm, const SwNoTxtNode* pNd,
-                    const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight )
+void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const SwNoTxtNode* pNd,
+    const SwFlyFrmFmt* pFly, UINT16 nWidth, UINT16 nHeight)
 {
-    if( !pNd || ( !pNd->IsGrfNode() && !pNd->IsOLENode() ) )
+    if (!pNd || (!pNd->IsGrfNode() && !pNd->IsOLENode()))
         return;
 
     UINT32 nPos = rStrm.Tell();         // Grafik-Anfang merken
 
-    if( pNd->IsGrfNode() )
+    if (pNd->IsGrfNode())
+        WriteGrfFromGrfNode(rStrm, pNd->GetGrfNode(), pFly, nWidth, nHeight);
+    else if (pNd->IsOLENode())
     {
-        const SwGrfNode* pGrfNd = pNd->GetGrfNode();
-        Write1Grf1( rStrm, pGrfNd, pFly, nWidth, nHeight );
-    }
-    else if( pNd->IsOLENode() )
-    {
+#ifdef OLE_PREVIEW_AS_EMF
+        if (!rWrt.bWrtWW8)
+        {
+            // cast away const
+            SwOLENode *pOleNd = ((SwNoTxtNode*)pNd)->GetOLENode();
+            ASSERT( pOleNd, " Wer hat den OleNode versteckt ?" );
+            SwOLEObj&                   rSObj= pOleNd->GetOLEObj();
+            const SvInPlaceObjectRef    rObj(  rSObj.GetOleRef() );
+
+            GDIMetaFile aMtf;
+            rObj->GetGDIMetaFile(aMtf);
+
+            Size aS(aMtf.GetPrefSize());
+            aMtf.WindStart();
+            aMtf.Play(Application::GetDefaultDevice(), Point(0, 0),
+                Size(2880, 2880));
+
+            WritePICFHeader(rStrm, pNd, pFly, 8, nWidth, nHeight);  // Header
+            WriteWindowMetafileBits(rStrm, aMtf);
+        }
+        else
+        {
+            //Convert this ole2 preview in ww8+ to an EMF for better unicode
+            //support (note that at this moment this breaks StarSymbol
+            //using graphics because I need to embed starsymbol in exported
+            //documents.
+            WritePICFHeader(rStrm, pNd, pFly, 0x64, nWidth, nHeight);
+            SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
+            aInlineEscher.WriteOLEFlyFrame(*pFly, 0x401);
+            aInlineEscher.WritePictures();
+        }
+#else
         // cast away const
         SwOLENode *pOleNd = ((SwNoTxtNode*)pNd)->GetOLENode();
         ASSERT( pOleNd, " Wer hat den OleNode versteckt ?" );
@@ -821,38 +801,16 @@ void SwWW8WrGrf::Write1Grf( SvStream& rStrm, const SwNoTxtNode* pNd,
         const SvInPlaceObjectRef    rObj(  rSObj.GetOleRef() );
 
         GDIMetaFile aMtf;
-        rObj->GetGDIMetaFile( aMtf );
+        rObj->GetGDIMetaFile(aMtf);
 
-        Size aS( aMtf.GetPrefSize() );
-#ifdef DEBUG
-        MapMode aMap ( aMtf.GetPrefMapMode() );
-        ASSERT(aMtf.GetActionCount(), "OLE schreiben OK ? ( No Meta-Action )");
-        ASSERT(aMtf.GetPrefMapMode().GetMapUnit() == MAP_100TH_MM,
-                "MapMode des Ole ist nicht 1/100mm!");
-#endif
+        Size aS(aMtf.GetPrefSize());
         aMtf.WindStart();
-        aMtf.Play( Application::GetDefaultDevice(),
-                    Point( 0, 0 ), Size( 2880, 2880 ) );
-        Write1GrfHdr( rStrm, pNd, pFly, 8, nWidth, nHeight );   // Header
-        WriteWindowMetafileBits( rStrm, aMtf );             // eigentliche Grafik
+        aMtf.Play(Application::GetDefaultDevice(), Point(0, 0),
+            Size(2880, 2880));
 
-#ifdef DEBUG_KA
-
-        if( rWrt.GetIniFlags() & WWFL_KA_DEBUG )
-        {
-            SvFileStream aS(CREATE_CONST_ASC("d:\\xxx.svm"), STREAM_WRITE |
-                STREAM_TRUNC );
-
-            aS << aMtf;
-            aS.Close();
-
-            aS.Open( CREATE_CONST_ASC( "d:\\xxx.wmf" ), STREAM_WRITE |
-                STREAM_TRUNC );
-            WriteWindowMetafile( aS, aMtf );
-        }
-
-#endif // DEBUG_KA
-
+        WritePICFHeader( rStrm, pNd, pFly, 8, nWidth, nHeight );    // Header
+        WriteWindowMetafileBits( rStrm, aMtf );         // eigentliche Grafik
+#endif
     }
 
     UINT32 nPos2 = rStrm.Tell();                    // Ende merken
@@ -896,7 +854,8 @@ void SwWW8WrGrf::Write()
         if (!bDuplicated)
         {
             aIter->mnPos = rStrm.Tell();
-            Write1Grf(rStrm, pNd, aIter->mpFly, aIter->mnWid, aIter->mnHei);
+            WriteGraphicNode(rStrm, pNd, aIter->mpFly, aIter->mnWid,
+                aIter->mnHei);
         }
     }
 }
