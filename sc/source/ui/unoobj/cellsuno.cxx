@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-11 15:19:14 $
+ *  last change: $Author: nn $ $Date: 2000-12-18 19:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4933,7 +4933,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursor()
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return new ScCellTextCursor( GetUnoText() );
+    return new ScCellTextCursor( *this );
 }
 
 uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursorByRange(
@@ -4941,7 +4941,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScCellObj::createTextCursorByRange(
                                                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    SvxUnoTextCursor* pCursor = new ScCellTextCursor( GetUnoText() );
+    SvxUnoTextCursor* pCursor = new ScCellTextCursor( *this );
     uno::Reference<text::XTextCursor> xCursor = pCursor;
 
     SvxUnoTextRangeBase* pRange = SvxUnoTextRangeBase::getImplementation( aTextPosition );
