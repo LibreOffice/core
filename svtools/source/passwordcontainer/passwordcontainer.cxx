@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwordcontainer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2001-05-16 12:50:14 $
+ *  last change: $Author: mav $ $Date: 2001-05-18 14:46:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ OUString encodePasswords( vector< OUString > lines )
 sal_Bool shorterUrl( OUString& url )
 {
     sal_Int32 aInd = url.lastIndexOf( sal_Unicode( '/' ) );
-    if( aInd > 0  && url.search( OUString::createFromAscii( "://" ) ) != aInd-2 )
+    if( aInd > 0  && url.indexOf( OUString::createFromAscii( "://" ) ) != aInd-2 )
     {
         url = url.copy( 0, aInd );
         return sal_True;
@@ -524,8 +524,8 @@ void SAL_CALL PasswordContainer::remove( const OUString& url, const OUString& na
         if( aIter == container.end() )
         {
             sal_Int32 aInd = aUrl.lastIndexOf( sal_Unicode( '/' ) );
-            if( aInd > 0 && aUrl.len()-1 == aInd )
-                aUrl = aUrl.copy( 0, aUrl.len() - 1 );
+            if( aInd > 0 && aUrl.getLength()-1 == aInd )
+                aUrl = aUrl.copy( 0, aUrl.getLength() - 1 );
             else
                 aUrl += OUString::createFromAscii( "/" );
 
@@ -569,8 +569,8 @@ void SAL_CALL PasswordContainer::removePersistent( const OUString& url, const OU
         if( aIter == container.end() )
         {
             sal_Int32 aInd = aUrl.lastIndexOf( sal_Unicode( '/' ) );
-            if( aInd > 0 && aUrl.len()-1 == aInd )
-                aUrl = aUrl.copy( 0, aUrl.len() - 1 );
+            if( aInd > 0 && aUrl.getLength()-1 == aInd )
+                aUrl = aUrl.copy( 0, aUrl.getLength() - 1 );
             else
                 aUrl += OUString::createFromAscii( "/" );
 
