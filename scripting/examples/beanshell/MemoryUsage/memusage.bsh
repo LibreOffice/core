@@ -35,3 +35,5 @@ date = new Date();
 len = (int)(generator.nextFloat() * runtime.freeMemory() / 5);
 bytes = new byte[len];
 addEntry(date.toString(), runtime.totalMemory(), runtime.freeMemory());
+
+return 0;
