@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-11 14:05:49 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 13:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,6 +547,11 @@ FmXFormView::~FmXFormView()
 //------------------------------------------------------------------------------
 void SAL_CALL FmXFormView::disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException )
 {
+    if ( m_xWindow.is() && Source.Source == m_xWindow )
+    {
+        m_xWindow->removeFocusListener(this);
+        m_xWindow = NULL;
+    }
 }
 
 // ::com::sun::star::form::XFormControllerListener
@@ -1594,4 +1599,24 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
         m_aMark.Clear();
     }
 }
+// -----------------------------------------------------------------------------
+void SAL_CALL FmXFormView::focusGained( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException)
+{
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL FmXFormView::focusLost( const ::com::sun::star::awt::FocusEvent& e ) throw (::com::sun::star::uno::RuntimeException)
+{
+    if ( m_xWindow.is() )
+    {
+        m_xWindow->removeFocusListener(this);
+        if ( m_pView )
+        {
+            m_pView->SetMoveOutside(FALSE);
+            m_pView->RefreshAllIAOManagers();
+        }
+        m_xWindow = NULL;
+    }
+}
+// -----------------------------------------------------------------------------
+
 
