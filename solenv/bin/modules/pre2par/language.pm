@@ -2,9 +2,9 @@
 #
 #   $RCSfile: language.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 16:09:53 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:51:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,22 +113,22 @@ sub get_language_string_from_language_block
 
 sub get_language_block_from_language_file
 {
-    my ($searchstring, $ulffile) = @_;
+    my ($searchstring, $langfile) = @_;
 
     my @language_block = ();
 
-    for ( my $i = 0; $i <= $#{$ulffile}; $i++ )
+    for ( my $i = 0; $i <= $#{$langfile}; $i++ )
     {
-        if ( ${$ulffile}[$i] =~ /^\s*\[\s*$searchstring\s*\]\s*$/ )
+        if ( ${$langfile}[$i] =~ /^\s*\[\s*$searchstring\s*\]\s*$/ )
         {
             my $counter = $i;
 
-            push(@language_block, ${$ulffile}[$counter]);
+            push(@language_block, ${$langfile}[$counter]);
             $counter++;
 
-            while (( $counter <= $#{$ulffile} ) && (!( ${$ulffile}[$counter] =~ /^\s*\[/ )))
+            while (( $counter <= $#{$langfile} ) && (!( ${$langfile}[$counter] =~ /^\s*\[/ )))
             {
-                push(@language_block, ${$ulffile}[$counter]);
+                push(@language_block, ${$langfile}[$counter]);
                 $counter++;
             }
 
@@ -141,18 +141,18 @@ sub get_language_block_from_language_file
 
 ############################################
 # collecting all replace strings
-# in a ulf file
+# in a language file
 ############################################
 
 sub get_all_replace_strings
 {
-    my ($ulffile) = @_;
+    my ($langfile) = @_;
 
     my @allstrings = ();
 
-    for ( my $i = 0; $i <= $#{$ulffile}; $i++ )
+    for ( my $i = 0; $i <= $#{$langfile}; $i++ )
     {
-        if ( ${$ulffile}[$i] =~ /^\s*\[\s*(.*?)\s*\]\s*$/ )
+        if ( ${$langfile}[$i] =~ /^\s*\[\s*(.*?)\s*\]\s*$/ )
         {
             my $replacestring = $1;
             if (! pre2par::existence::exists_in_array($replacestring, \@allstrings))
@@ -167,14 +167,14 @@ sub get_all_replace_strings
 
 ############################################
 # localizing the par file with the
-# corresponding ulf file
+# corresponding language file
 ############################################
 
 sub localize
 {
-    my ($parfile, $ulffile) = @_;
+    my ($parfile, $langfile) = @_;
 
-    my $allreplacestrings = get_all_replace_strings($ulffile);
+    my $allreplacestrings = get_all_replace_strings($langfile);
 
     for ( my $i = 0; $i <= $#{$parfile}; $i++ )
     {
@@ -190,7 +190,7 @@ sub localize
                 {
                     my $language = $1;   # can be "01" or "en" or "en-US" or ...
 
-                    my $languageblock = get_language_block_from_language_file($oldstring, $ulffile);
+                    my $languageblock = get_language_block_from_language_file($oldstring, $langfile);
                     my $newstring = get_language_string_from_language_block($languageblock, $language);
 
                     if ( $newstring eq "" ) { $newstring = "\"" . $oldstring . "\""; }
@@ -206,7 +206,7 @@ sub localize
                 my $language = $1;
                 my $oldstring = ${$allreplacestrings}[$j];
 
-                my $languageblock = get_language_block_from_language_file($oldstring, $ulffile);
+                my $languageblock = get_language_block_from_language_file($oldstring, $langfile);
                 my $newstring = get_language_string_from_language_block($languageblock, $language);
 
                 $oldstring = $oldstring . "\#" . $language;
