@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 08:58:27 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,6 +949,8 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
     const sal_Int32 nLength = rSequence.getLength();
     if (nLength)
     {
+        const bool bImpress = dynamic_cast< SdDrawDocument* >(GetModel())->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
+
         sal_Bool bBool;
         sal_Int32 nInt32;
         sal_Int16 nInt16;
@@ -1399,19 +1401,19 @@ void FrameView::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence < :
             {
                 pValue->Value >>= aSnapGridWidthYDom;
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleLayers ) ) )
+            else if (!bImpress && pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_VisibleLayers ) ) )
             {
                 SetOfByte aSetOfBytes;
                 aSetOfBytes.PutValue( pValue->Value );
                 SetVisibleLayers( aSetOfBytes );
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_PrintableLayers ) ) )
+            else if (!bImpress && pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_PrintableLayers ) ) )
             {
                 SetOfByte aSetOfBytes;
                 aSetOfBytes.PutValue( pValue->Value );
                 SetPrintableLayers( aSetOfBytes );
             }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_LockedLayers ) ) )
+            else if (!bImpress && pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_View_LockedLayers ) ) )
             {
                 SetOfByte aSetOfBytes;
                 aSetOfBytes.PutValue( pValue->Value );
