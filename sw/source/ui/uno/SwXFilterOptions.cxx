@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXFilterOptions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:52:46 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,8 +266,7 @@ uno::Reference<uno::XInterface> SAL_CALL SwXFilterOptions_createInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
-    SW_DLL()->Load();       // load module
-
+    SwDLL::Init();
     return (::cppu::OWeakObject*) new SwXFilterOptions;
 }
 
