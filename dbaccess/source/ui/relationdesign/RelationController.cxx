@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:33:02 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,6 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
                         if ( haveDataSource() && getDataSource()->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION) )
                         {
                             Sequence<PropertyValue> aWindows;
-                            getDataSource()->getPropertyValue(PROPERTY_LAYOUTINFORMATION) >>= aWindows;
                             saveTableWindows(aWindows);
                             getDataSource()->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aWindows));
                             setModified(sal_False);
