@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:44:16 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,10 @@
 #include <mdiexp.hxx>           // Progress
 #endif
 
+#ifndef SW_WRITERWORDGLUE
+#include "writerwordglue.hxx"
+#endif
+
 #ifndef _WW8STRUC_HXX
 #include "ww8struc.hxx"
 #endif
@@ -167,6 +171,8 @@
 #ifndef _WW8GRAF_HXX
 #include "ww8graf.hxx"
 #endif
+
+using namespace sw::types;
 
 wwZOrderer::wwZOrderer(const sw::hack::SetLayer &rSetLayer, SdrPage* pDrawPg,
     const SvxMSDffShapeOrders *pShapeOrders)
@@ -586,8 +592,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
 
     ::SetProgressState( nProgress, rDoc.GetDocShell() );         // Update
 
-    if (!pDrawModel)    // 1. GrafikObjekt des Docs
-        GrafikCtor();
+    GrafikCtor();
 
     /*
         kleiner Spass von Microsoft: manchmal existiert ein Stream Namens DATA
@@ -634,9 +639,10 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
             //#i17200#, a bit of guesswork I'm afraid
             if (aPic.dxaGoal == 1000 && aPic.mx == 1)  //100% hack ?
             {
-                aPic.mx = maSectionManager.GetPageWidth() -
+                aPic.mx = msword_cast<sal_uInt16>(
+                    maSectionManager.GetPageWidth() -
                     maSectionManager.GetPageRight() -
-                    maSectionManager.GetPageLeft();
+                    maSectionManager.GetPageLeft());
             }
 
             WW8PicDesc aPD( aPic );
@@ -681,28 +687,23 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     //A graphic of this type in this location is always
                     //inline, and uses the pic in the same mould as ww6
                     //graphics.
-                    if (0x64 == aPic.MFP.mm)
+                    if (pWFlyPara && pWFlyPara->bGrafApo)
                     {
-                        if (pWFlyPara && pWFlyPara->bGrafApo)
-                        {
-                            WW8FlySet aFlySet(*this, pWFlyPara, pSFlyPara, true);
+                        WW8FlySet aFlySet(*this, pWFlyPara, pSFlyPara, true);
 
-                            SwFmtAnchor aAnchor(pSFlyPara->eAnchor);
-                            aAnchor.SetAnchor(pPaM->GetPoint());
-                            aFlySet.Put(aAnchor);
+                        SwFmtAnchor aAnchor(pSFlyPara->eAnchor);
+                        aAnchor.SetAnchor(pPaM->GetPoint());
+                        aFlySet.Put(aAnchor);
 
-                            aAttrSet.Put(aFlySet);
-                        }
-                        else
-                        {
-                            WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth,
-                                aPD.nHeight );
-
-                            aAttrSet.Put(aFlySet);
-                        }
+                        aAttrSet.Put(aFlySet);
                     }
                     else
-                        ProcessEscherAlign(pRecord, 0, aAttrSet, true);
+                    {
+                        WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth,
+                            aPD.nHeight );
+
+                        aAttrSet.Put(aFlySet);
+                    }
 
                     Rectangle aInnerDist(   pRecord->nDxTextLeft,
                         pRecord->nDyTextTop, pRecord->nDxTextRight,
