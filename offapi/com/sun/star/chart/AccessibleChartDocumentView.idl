@@ -1,0 +1,174 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AccessibleChartDocumentView.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:42:45 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_chart_AccessibleChartDocumentView_idl__
+#define __com_sun_star_chart_AccessibleChartDocumentView_idl__
+
+#ifndef __com_sun_star_accessibility_XAccessible_idl__
+#include <com/sun/star/accessibility/XAccessible.idl>
+#endif
+#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
+#include <com/sun/star/accessibility/XAccessibleContext.idl>
+#endif
+#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
+#include <com/sun/star/accessibility/XAccessibleComponent.idl>
+#endif
+
+module com {  module sun {  module star {  module chart {
+
+/** The <type>AccessibleChartDocumentView</type> service is supported
+    by a Component that represents the view of a Chart document to
+    provide an entry point to the document tree for accessibility.
+
+    <p>An object that implements the <type>AccessibleChartDocumentView</type>
+    service provides information about itself and about the chart
+    subcomponents contained in the chart document displayed in a
+    window.  This service gives a simplified view on the underlying
+    implementation.  It tries both to keep the structure of the
+    accessibility representation tree as simple as possible and
+    provide as much relevant information as possible.</p>
+*/
+service AccessibleChartDocumentView
+{
+    /** Base interface for being accessible.  It gives access to the
+        <type>XAccessibleContext</type> interface.
+    */
+    interface ::com::sun::star::accessibility::XAccessible;
+
+    /** Provide access to a Chart document's view.
+
+        <p>You can access the following information:</p>
+        <dl>
+         <dt>Role</dt>
+             <dd>The object's role is
+             <const scope="com::sun::star::accessibility">AccessibleRole::DOCUMENT</const>.</dd>
+         <dt>Name</dt>
+             <dd>Its name is the document's name or the base name of the filename if
+             no document name has been set explicitly.</dd>
+         <dt>Description</dt>
+             <dd>The description is the document's description or the
+             full filename if no description has been set
+             explicitly.</dd>
+          <dt>Children</dt>
+             <dd>The subcomponents of a chart.  This includes all kinds of
+             titles, a legend and the diagram.  The diagram and the legend are
+             the only children that themselves contain children.  The Chart
+             subcomponents support the service
+             <type>AccessibleChartElement</type>.  Additionally, there may be
+             shapes a user added via the clipboard.  For details see the
+             <type scope="::com::sun::star::drawing">AccessibleShape</type>.
+             </dd>
+         <dt>Parent</dt>
+             <dd>The parent will usually be the window that contains the
+             Chart document view.  It has to be set via implementation dependent
+             ways.</dd>
+         <dt>Relations</dt>
+             <dd>At the moment relations are not supported.  The method
+             <member scope="com::sun::star::accessibility">XAccessibleContext::getAccessibleRelationSet</member>
+             will always return an empty set.</dd>
+         <dt>States</dt>
+             <dd>The following states are supported:
+             <ul>
+              <li><const scope="com::sun::star::accessibility">AccessibleStateType::DEFUNC</const>
+                  is set if a document view becomes obsolete like when
+                  the window, which displays the view, is closed.</li>
+              <li><const scope="com::sun::star::accessibility">AccessibleStateType::ENABLED</const>
+                  is always set unless the
+                  <const scope="com::sun::star::accessibility">AccessibleStateType::DEFUNC</const>
+                  state is set.</li>
+              <li><const scope="com::sun::star::accessibility">AccessibleStateType::OPAQUE</const>
+                  is always set.</li>
+              <li><const scope="com::sun::star::accessibility">AccessibleStateType::SHOWING</const>
+                  is always set unless the
+                  <const scope="com::sun::star::accessibility">AccessibleStateType::DEFUNC</const>
+                  state is set.</li>
+              <li><const scope="com::sun::star::accessibility">AccessibleStateType::VISIBLE</const>
+                  is always set unless the
+                  <const scope="com::sun::star::accessibility">AccessibleStateType::DEFUNC</const>
+                  state is set.</li>
+             </ul>
+             </dd>
+         <dt>Locale</dt>
+             <dd>Is the locale set at the document.</dd>
+         <dt>Property change listeners</dt>
+             <dd>They are supported to inform the
+             listeners about changes in this object.</dd>
+        </dl>
+    */
+    interface ::com::sun::star::accessibility::XAccessibleContext;
+
+    /** Provide access to a Chart document's graphical representation.
+
+        <p>The main purpose of this interface is to provide a bounding
+        box of the currently visible area and to let the user find the
+        subcomponents of a chart that cover a given test point.</p>
+
+        <p>The accessible Chart subcomponents all support the service
+        <type>AccessibleChartElement</type></p>
+
+        @see AccessibleChartElement
+    */
+    interface ::com::sun::star::accessibility::XAccessibleComponent;
+};
+
+}; }; }; };
+
+#endif
