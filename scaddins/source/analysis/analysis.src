@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-19 17:56:46 $
+ *  last change: $Author: kz $ $Date: 2001-12-20 21:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -10154,7 +10154,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ greek ] = "Returns the price per $100 face value of a security that pays periodic interest";
             Text[ dutch ] = "Returns the price per $100 face value of a security that pays periodic interest";
             Text[ french ] = "Renvoie le prix, pour une valeur nominale de 100 unités monétaires, d'un titre rapportant des intérêts périodiques.";
-            Text[ spanish ] = "Devuelve el precio por 100 unidades monetarias de un valor que paga intereses periódicos.";
+            Text[ spanish ] = "Devuelve el precio, por un valor nominal de 100 unidades monetarias, de un título que paga intereses periódicos.";
             Text[ finnish ] = "Palauttaa joukkovelkakirjan (säännöllinen korko) hinnan nimellisarvoa (100) kohti";
             Text[ italian ] = "Restituisce il prezzo di un titolo dal valore nominale di 100 unità monetarie che paga interessi periodici.";
             Text[ danish ] = "Returns the price per $100 face value of a security that pays periodic interest";
@@ -10562,7 +10562,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ greek ] = "Returns the price per $100 face value of a discounted security";
             Text[ dutch ] = "Returns the price per $100 face value of a discounted security";
             Text[ french ] = "Renvoie le prix d'un titre escompté pour une valeur nominale de 100 unités monétaires.";
-            Text[ spanish ] = "Devuelve la cotización por 100 unidades monetarias de un valor con descuento.";
+            Text[ spanish ] = "Devuelve la cotización de un título sin intereses de un valor nominal de 100 unidades monetarias.";
             Text[ finnish ] = "Palauttaa joukkovelkakirjan (reaaliarvo nimellisarvoa pienempi) hinnan nimellisarvoa (100) kohti";
             Text[ italian ] = "Restituisce il prezzo di un titolo senza interessi del valore nominale di 100 unità monetarie.";
             Text[ danish ] = "Returns the price per $100 face value of a discounted security";
@@ -10862,7 +10862,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ greek ] = "Returns the price per $100 face value of a security that pays interest at maturity";
             Text[ dutch ] = "Returns the price per $100 face value of a security that pays interest at maturity";
             Text[ french ] = "Renvoie le prix, pour une valeur nominale de 100 unités monétaires, d'un titre rapportant des intérêts au terme de l'échéance.";
-            Text[ spanish ] = "Devuelve la cotización por 100 unidades monetarias de un valor que paga intereses al vencer.";
+            Text[ spanish ] = "Devuelve la cotización, por un valor nominal de 100 unidades monetarias, de un título que paga intereses al vencer.";
             Text[ finnish ] = "Palauttaa joukkovelkakirjan (korko maksetaan lainan erääntyessä) hinnan nimellisarvoa (100) kohti";
             Text[ italian ] = "Restituisce il prezzo di un titolo dal valore nominale di 100 unità monetarie che paga gli interessi alla scadenza.";
             Text[ danish ] = "Returns the price per $100 face value of a security that pays interest at maturity";
@@ -11216,7 +11216,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ greek ] = "Returns the Macauley modified duration for a security with an assumed par ";
             Text[ dutch ] = "Geeft als resultaat de aangepaste Macauley-duur van een waardepapier met een nominale waarde van fl 100.";
             Text[ french ] = "Renvoie la durée de Macaulay modifiée d'un titre pour une valeur nominale de 100 unités monétaires.";
-            Text[ spanish ] = "Devuelve la duración modificada de Macaulay para un valor de 100 unidades monetarias.";
+            Text[ spanish ] = "Devuelve la duración modificada de Macaulay de un título de un valor de 100 unidades monetarias.";
             Text[ finnish ] = "Palauttaa joukkovelkakirjan (nimellisarvo 100) Macauley-muokkauksen mukaisen  keston";
             Text[ italian ] = "Restituisce la durata Macauley modificata di un titolo con un valore nominale di 100 unità monetarie.";
             Text[ danish ] = "Returns the Macauley modified duration for a security with an assumed par ";
@@ -13233,7 +13233,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ greek ] = "Returns the price of $100 face value for a treasury bill";
             Text[ dutch ] = "Geeft als resultaat de koers per fl 100 nominale waarde voor een schatkistpapier.";
             Text[ french ] = "Renvoie le prix d'un bon du Trésor pour une valeur nominale de 100 unités monétaires.";
-            Text[ spanish ] = "Devuelve el precio por 100 (unidad monetaria) del valor nominal de una letra.";
+            Text[ spanish ] = "Devuelve la cotización de una letra del tesoro del valor nominal de 100 unidades monetarias.";
             Text[ finnish ] = "Palauttaa valtion obligaation nimellisarvon (100) hinnan";
             Text[ italian ] = "Restituisce il prezzo di un buono del tesoro dal valore nominale di 100 unità monetarie.";
             Text[ danish ] = "Returns the price of $100 face value for a treasury bill";
@@ -17858,6 +17858,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
         };
     };
 };
+
 
 
 
