@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:01:53 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,7 @@ void XMLVarFieldImportContext::ProcessAttribute(
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-                        GetKeyByAttrName( sAttrValue, &sTmp );
+                        _GetKeyByAttrName( sAttrValue, &sTmp, sal_False );
                 if( XML_NAMESPACE_OOOW == nPrefix )
                 {
                     sFormula = sTmp;
@@ -1451,7 +1451,7 @@ void XMLValueImportHelper::ProcessAttribute(
             {
                 OUString sTmp;
                 sal_uInt16 nPrefix = rImport.GetNamespaceMap().
-                        GetKeyByAttrName( sAttrValue, &sTmp );
+                        _GetKeyByAttrName( sAttrValue, &sTmp, sal_False );
                 if( XML_NAMESPACE_OOOW == nPrefix )
                 {
                     sFormula = sTmp;
