@@ -101,8 +101,8 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\geometry
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\rendering
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\form
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\browse
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\script\browse
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\script\provider
 #i20156 - add xmlsecurity module related
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\security
 mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml
@@ -297,10 +297,10 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\drafts\com\sun\star\drawing\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\drawing\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\drawing\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\drawing\*.hdl
 
-..\%__SRC%\inc\drafts\com\sun\star\script\browse\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\script\browse\*.hpp
-..\%__SRC%\inc\drafts\com\sun\star\script\browse\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\script\browse\*.hdl
-..\%__SRC%\inc\drafts\com\sun\star\script\provider\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider\*.hpp
-..\%__SRC%\inc\drafts\com\sun\star\script\provider\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider\*.hdl
+..\%__SRC%\inc\com\sun\star\script\browse\*.hpp %_DEST%\inc%_EXT%\com\sun\star\script\browse\*.hpp
+..\%__SRC%\inc\com\sun\star\script\browse\*.hdl %_DEST%\inc%_EXT%\com\sun\star\script\browse\*.hdl
+..\%__SRC%\inc\com\sun\star\script\provider\*.hpp %_DEST%\inc%_EXT%\com\sun\star\script\provider\*.hpp
+..\%__SRC%\inc\com\sun\star\script\provider\*.hdl %_DEST%\inc%_EXT%\com\sun\star\script\provider\*.hdl
 
 ..\%__SRC%\inc\drafts\com\sun\star\form\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\form\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\form\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\form\*.hdl
