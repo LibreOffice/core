@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unbkmk.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:37:54 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:07:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include "bookmrk.hxx"
 #include "rolbck.hxx"
 
-
+#include "SwRewriter.hxx"
 
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
@@ -110,7 +110,14 @@ void SwUndoBookmark::ResetInDoc( SwDoc* pDoc )
         }
 }
 
+SwRewriter SwUndoBookmark::GetRewriter() const
+{
+    SwRewriter aResult;
 
+    aResult.AddRule(UNDO_ARG1, pHBookmark->GetName());
+
+    return aResult;
+}
 
 SwUndoDelBookmark::SwUndoDelBookmark( const SwBookmark& rBkmk )
     : SwUndoBookmark( UNDO_DELBOOKMARK, rBkmk )
