@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-09-28 18:18:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 
 #include "appluno.hxx"
 #include "afmtuno.hxx"
+#include "funcuno.hxx"
 #include "miscuno.hxx"
 #include "scmod.hxx"
 #include "appoptio.hxx"
@@ -192,6 +193,15 @@ sal_Bool SAL_CALL component_writeInfo(
             for( i = 0; i < aSequ.getLength(); i++ )
                 xNewKey->createKey( pArray[i] );
 
+            aImpl = rtl::OUString::createFromAscii( "/" );
+            aImpl += ScFunctionAccess::getImplementationName_Static();
+            aImpl += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+            xNewKey = reinterpret_cast<registry::XRegistryKey*>(pRegistryKey)->createKey(aImpl);
+            aSequ = ScFunctionAccess::getSupportedServiceNames_Static();
+            pArray = aSequ.getConstArray();
+            for( i = 0; i < aSequ.getLength(); i++ )
+                xNewKey->createKey( pArray[i] );
+
             return sal_True;
         }
         catch (registry::InvalidRegistryException&)
@@ -238,6 +248,13 @@ void * SAL_CALL component_getFactory(
                 ScAutoFormatsObj::getImplementationName_Static(),
                 ScAutoFormatsObj_CreateInstance,
                 ScAutoFormatsObj::getSupportedServiceNames_Static() );
+
+    if ( aImpl == ScFunctionAccess::getImplementationName_Static() )
+        xFactory = cppu::createOneInstanceFactory(
+                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
+                ScFunctionAccess::getImplementationName_Static(),
+                ScFunctionAccess_CreateInstance,
+                ScFunctionAccess::getSupportedServiceNames_Static() );
 
     void* pRet = NULL;
     if (xFactory.is())
