@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-30 13:20:58 $
+ *  last change: $Author: oj $ $Date: 2002-01-24 07:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1201,6 +1201,16 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap(sal_Bool _bJetEngine)
 //  aMap[adArray]           = ADOS::MapADOType2Jdbc(adArray);
 
     m_aValueRange[2] = aMap;
+
+    // now adjust the column mapping
+    // OJ 24.01.2002  96860
+    TInt2IntMap aSerachMapping;
+    aSerachMapping[DB_UNSEARCHABLE]     = ColumnSearch::NONE;
+    aSerachMapping[DB_LIKE_ONLY]        = ColumnSearch::CHAR;
+    aSerachMapping[DB_ALL_EXCEPT_LIKE]  = ColumnSearch::BASIC;
+    aSerachMapping[DB_SEARCHABLE]       = ColumnSearch::FULL;
+
+    m_aValueRange[9] = aSerachMapping;
 
     ODatabaseMetaDataResultSetMetaData* pMetaData = new ODatabaseMetaDataResultSetMetaData(m_pRecordSet,this);
     pMetaData->setTypeInfoMap();
