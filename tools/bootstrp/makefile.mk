@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2005-03-15 08:52:14 $
+#   last change: $Author: obo $ $Date: 2005-03-16 10:16:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..
 
 PRJNAME=tools
-TARGET=bootstrp
+TARGET=btstrp
 TARGET1=bootstrp2
 TARGETTYPE=CUI
 LIBTARGET=NO
