@@ -1,7 +1,7 @@
 /**************************************************************************
 #*
-#*    last change   $Author: obo $ $Date: 2004-06-03 15:00:13 $
-#*    $Revision: 1.11 $
+#*    last change   $Author: rt $ $Date: 2004-07-23 14:47:25 $
+#*    $Revision: 1.12 $
 #*
 #*    $Logfile: $
 #*
@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMain.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/bridge/UnoUrlResolver.hpp>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Type.hxx"
@@ -195,28 +196,47 @@ static void assign( TestData & rData,
     rData.Sequence = rSequence;
 }
 
-template < class type >
-static sal_Bool testAny( const type & value , const Reference< XBridgeTest > &xLBT )
+namespace {
+
+template < typename T >
+bool testAny(
+    T const & value, Reference< XBridgeTest > const & xLBT,
+    char const * typeName = 0)
 {
     Any any;
     any <<=  value;
-
-    Any any2 = xLBT->transportAny( any );
-
-    if( ! ( any == any2 ) )
-    {
-        fprintf( stderr, "any is different after roundtrip: in %s, out %s\n",
-                 OUStringToOString( any.getValueType().getTypeName(), RTL_TEXTENCODING_ASCII_US ).getStr(),
-                 OUStringToOString( any2.getValueType().getTypeName(), RTL_TEXTENCODING_ASCII_US ).getStr());
+    Any any2 = xLBT->transportAny(any);
+    bool success = true;
+    if (any != any2) {
+        fprintf(
+            stderr, "any is different after roundtrip: in %s, out %s\n",
+            OUStringToOString(
+                any.getValueType().getTypeName(),
+                RTL_TEXTENCODING_ASCII_US).getStr(),
+            OUStringToOString(
+                any2.getValueType().getTypeName(),
+                RTL_TEXTENCODING_ASCII_US).getStr());
+        success = false;
     }
-    return any == any2;
+    if (typeName != 0
+        && !any2.getValueType().getTypeName().equalsAscii(typeName))
+    {
+        fprintf(
+            stderr, "any has wrong type after roundtrip: %s instead of %s\n",
+            OUStringToOString(
+                any2.getValueType().getTypeName(),
+                RTL_TEXTENCODING_ASCII_US).getStr(),
+            typeName);
+        success = false;
+    }
+    return success;
 }
 
-
+}
 
 static sal_Bool performAnyTest( const Reference< XBridgeTest > &xLBT, const TestData &data)
 {
-    sal_Bool bReturn = sal_True;
+    bool bReturn = true;
     bReturn = testAny( data.Byte ,xLBT ) && bReturn;
     bReturn = testAny( data.Short,xLBT ) && bReturn;
     bReturn = testAny( data.UShort,xLBT ) && bReturn;
@@ -230,6 +250,9 @@ static sal_Bool performAnyTest( const Reference< XBridgeTest > &xLBT, const Test
     bReturn = testAny( data.String,xLBT ) && bReturn;
     bReturn = testAny( data.Interface,xLBT ) && bReturn;
     bReturn = testAny( data, xLBT ) && bReturn;
+    bReturn &= testAny(
+        TestPolyStruct< sal_Unicode >(' '), xLBT,
+        "test.testtools.bridgetest.TestPolyStruct<char>");
 
     Any a;
     {
@@ -1080,12 +1103,8 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         Reference< XInterface > xOriginal;
         if( rArgs.getLength() > 1 && 0 == rArgs[0].compareToAscii( "-u" ) )
         {
-            Reference <XInterface > r =
-                m_xContext->getServiceManager()->createInstanceWithContext(
-                    OUString::createFromAscii(
-                        "com.sun.star.bridge.UnoUrlResolver" ), m_xContext );
-            Reference <XUnoUrlResolver> rResolver( r , UNO_QUERY );
-            xOriginal = rResolver->resolve( rArgs[1] );
+            xOriginal = UnoUrlResolver::create( m_xContext )->resolve(
+                rArgs[1] );
         }
         else
         {
