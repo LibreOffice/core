@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:40:15 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -560,7 +560,7 @@ StatementSlot::StatementSlot( ULONG nSlot, SfxPoolItem* pItem )
 : pItemArr(NULL)
 {
     QueStatement( NULL );
-    nFunctionId = nSlot;
+    nFunctionId = USHORT(nSlot);
 #if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Reading Slot: " );
     m_pDbgWin->AddText( String::CreateFromInt32( nFunctionId ) );
@@ -705,8 +705,8 @@ BOOL StatementSlot::Execute()
                 }
                 if ( !xFrame.is() )
                 {
-                    if ( GetFirstDocWin() )
-                        GetFirstDocWin()->ToTop();
+                    if ( GetFirstDocFrame() )
+                        GetFirstDocFrame()->ToTop();
                     xFrame = xDesktop->getActiveFrame();
                 }
             }
@@ -1217,7 +1217,7 @@ public:
 };
 
 DisplayHidWin::DisplayHidWin()
-: ToolBox( StatementList::GetFirstDocWin(), TTProperties::GetSvtResId(DisplayHidToolBox) )
+: ToolBox( StatementList::GetFirstDocFrame(), TTProperties::GetSvtResId(DisplayHidToolBox) )
 , bIsDraging( FALSE )
 , bIsPermanentDraging( FALSE )
 , pShow( NULL )
@@ -1242,8 +1242,8 @@ DisplayHidWin::DisplayHidWin()
 DisplayHidWin::~DisplayHidWin()
 {
     Application::RemoveEventHook( nEventHookID );
-    Hide(); // so GetFirstDocWin won't return ourselves (needed for SOPlayer)
-    SetParent( StatementList::GetFirstDocWin() );
+    Hide(); // so GetFirstDocFrame won't return ourselves (needed for SOPlayer)
+    SetParent( StatementList::GetFirstDocFrame() );
     delete pContainer;
     delete pEdit;
 }
@@ -1265,7 +1265,7 @@ void DisplayHidWin::SetDraging( BOOL bNewDraging )
 
 void DisplayHidWin::EnableButtons( ULONG nConf )
 {
-    BOOL bSend = nConf & DH_MODE_SEND_DATA;
+    BOOL bSend = BOOL(nConf & DH_MODE_SEND_DATA);
     EnableItem( TT_ALLWIN, bSend );
     EnableItem( TT_KURZNAME, bSend );
     EnableItem( TT_LANGNAME, bSend );
@@ -1455,7 +1455,7 @@ BOOL StatementCommand::DisplayHID()
             WinPtr->SetRasterOp( ROP_XOR );                         \
             Size aSz = WinPtr->PixelToLogic( WinPtr->GetSizePixel() );\
             ULONG nMaxCornerRadius = WinPtr->PixelToLogic( Point( 80, 0 ) ).X();\
-            USHORT iCorner = std::max ((ULONG) 8, (ULONG) std::min( nMaxCornerRadius, (ULONG) std::min((ULONG) (aSz.Width() / 6), (ULONG)(aSz.Height() / 6))));\
+            ULONG iCorner = std::max ((ULONG) 8, (ULONG) std::min( nMaxCornerRadius, (ULONG) std::min((ULONG) (aSz.Width() / 6), (ULONG)(aSz.Height() / 6))));\
             WinPtr->DrawRect(Rectangle(Point(),aSz), iCorner, iCorner);\
             WinPtr->SetLineColor( aLineColMem );                    \
             WinPtr->SetFillColor( aFillColMem );                    \
@@ -2205,7 +2205,7 @@ Window* StatementCommand::GetNextRecoverWin()
     {
         // zuerst weitere Fenster auf dem Fenster suchen und schliessen
         pControl = GetNextOverlap( pBase );
-        if ( pControl && pControl->IsVisible() && !IsFirstDocWin( pControl ) && !IsIMEWin( pControl ) )
+        if ( pControl && pControl->IsVisible() && !IsFirstDocFrame( pControl ) && !IsIMEWin( pControl ) )
         {
 /*            Window *pDock = GetWinByRT( pControl, WINDOW_DOCKINGWINDOW, FALSE );
             if ( pDock )
@@ -2217,7 +2217,7 @@ Window* StatementCommand::GetNextRecoverWin()
         // dann das Fenster selbst Schliessen
            // erstes DocWin überspringen
         // Assumption that Doc Windows are Borderwindows and ButtonDialog and such are not
-        if ( pBase->IsVisible() && !IsFirstDocWin( pBase ) && pBase->GetType() != WINDOW_BORDERWINDOW && !IsIMEWin( pBase ) )
+        if ( pBase->IsVisible() && !IsFirstDocFrame( pBase ) && pBase->GetType() != WINDOW_BORDERWINDOW && !IsIMEWin( pBase ) )
             return pBase;
 
         pBase = Application::GetNextTopLevelWindow( pBase );
@@ -2282,7 +2282,7 @@ BOOL StatementCommand::Execute()
                 nLNr1 = Time().GetTime() + nNr1/10;
                 bBool1 = TRUE;
             }
-            if ( Time().GetTime() < nLNr1 ) // Aktuelle Zeit kleiner Endzeit
+            if ( Time().GetTime() < long(nLNr1) )   // Aktuelle Zeit kleiner Endzeit
                 return FALSE;
             break;
         case RC_DisplayHid:
@@ -2301,7 +2301,7 @@ BOOL StatementCommand::Execute()
 
                     // So daß nacher auch wieder alles auf Default steht
                     nUseBindings = 0;
-                    nControlType = CONST_CTTreeListBox;
+                    nControlType = CONST_CTBrowseBox;
 
                     nSubMenuId1 = 0;
                     nSubMenuId2 = 0;
@@ -2510,12 +2510,12 @@ BOOL StatementCommand::Execute()
         case RC_GetClipboard:
             {
                 ::rtl::OUString aTemp;
-                ::svt::OStringTransfer::PasteString( aTemp, GetFirstDocWin() );
+                ::svt::OStringTransfer::PasteString( aTemp, GetFirstDocFrame() );
                 pRet->GenReturn ( RET_Value, nMethodId, String( aTemp ) );
             }
             break;
         case RC_SetClipboard:
-            ::svt::OStringTransfer::CopyString(aString1,GetFirstDocWin());
+            ::svt::OStringTransfer::CopyString(aString1,GetFirstDocFrame());
             break;
         case RC_WinTree:
             pRet->GenReturn ( RET_Value, nMethodId, Tree( NULL, 0));
@@ -2849,9 +2849,9 @@ BOOL StatementCommand::Execute()
             {
                 switch ( nNr1 )
                 {
-                    case CONST_CTTreeListBox:
                     case CONST_CTBrowseBox:
                     case CONST_CTProgressBar:
+                    case CONST_CTValueSet:
                         nControlType = nNr1;
                         break;
                     default:
@@ -3306,6 +3306,13 @@ BOOL StatementCommand::UnpackStorage( SotStorageRef xStorage, DirEntry &aBaseDir
 
 StatementControl::StatementControl( SCmdStream *pCmdIn )
 : StatementList()
+, nNr1( 0 )
+, nNr2( 0 )
+, nNr3( 0 )
+, nNr4( 0 )
+, nLNr1( 0 )
+, aString1()
+, aString2()
 , bBool1(FALSE)
 , bBool2(FALSE)
 {
@@ -3646,8 +3653,8 @@ BOOL StatementControl::HandleVisibleControls( Window *pControl )
                         nParams |= PARAM_USHORT_4;
                         nNr1 = (USHORT)-aStart.X();
                         nNr2 = (USHORT)-aStart.Y();
-                        nNr3 = pControl->GetSizePixel().Width() + 2*(USHORT)aStart.X();
-                        nNr4 = pControl->GetSizePixel().Height() + 2*(USHORT)aStart.Y();
+                        nNr3 = (USHORT)pControl->GetSizePixel().Width() + 2*(USHORT)aStart.X();
+                        nNr4 = (USHORT)pControl->GetSizePixel().Height() + 2*(USHORT)aStart.Y();
                     }
                     nNr1 = std::max((USHORT)-aStart.X(),nNr1);
                     nNr2 = std::max((USHORT)-aStart.Y(),nNr2);
@@ -4323,6 +4330,29 @@ BOOL StatementControl::Execute()
     }
 
 
+    if (   nRT == C_Window &&       // Search for WorkWindow to satisfy these commands
+         ( nMethodId == M_Close
+//      || nMethodId == M_Size
+//      || nMethodId == M_Move
+        || nMethodId == M_IsMax
+        || nMethodId == M_IsMin
+        || nMethodId == M_IsRestore
+        || nMethodId == M_Minimize
+        || nMethodId == M_Maximize
+        || nMethodId == M_Restore ) )
+    {
+        Window* pNewControl = pControl;
+        while ( pNewControl && pNewControl->GetType() != WINDOW_WORKWINDOW )
+            pNewControl = pNewControl->GET_REAL_PARENT();
+
+        if ( pNewControl )
+        {
+            pControl = pNewControl;
+            nRT = C_WorkWin;
+        }
+    }
+
+
 
 
     if ( (!ControlOK( pControl, "" )) && ( nMethodId != M_SnapShot ) && (nRetryCount--))
@@ -4366,6 +4396,7 @@ BOOL StatementControl::Execute()
             /*&& nMethodId != M_MouseDoubleClick*/ )
             pControl->GrabFocus();
 
+/*  leads to problems because settext sets the text whereas typekeys adds to the text.
         if ( bDoTypeKeysDelay && nMethodId == M_SetText && ( nParams & PARAM_STR_1 ) )
         {   // Hier wird das Statement auf ein TypeKeys umgebogen
             nMethodId = M_TypeKeys;
@@ -4373,7 +4404,7 @@ BOOL StatementControl::Execute()
             bBool1 = TRUE;
             pControl->GrabFocus();
         }
-
+*/
         if ( !HandleCommonMethods( pControl ) )
         {
             switch( nRT )
@@ -4587,6 +4618,12 @@ BOOL StatementControl::Execute()
                             pRet->GenReturn ( RET_Value, nUId, ((ListBox*)pControl)->GetSelectEntry(nNr1-1));
                             break;
                         case M_GetItemCount :
+#if OSL_DEBUG_LEVEL > 1
+                            if ( nUId == 1334644259 && ((ListBox*)pControl)->GetEntryCount() != 102 )
+                            {
+                                nUId = ((ListBox*)pControl)->GetEntryCount();
+                            }
+#endif
                             pRet->GenReturn ( RET_Value, nUId, ULONG(((ListBox*)pControl)->GetEntryCount()));
                             break;
                         case M_GetItemText :
@@ -4883,7 +4920,8 @@ BOOL StatementControl::Execute()
                             if ( nParams == PARAM_NONE )
                             {           // Wir fälschen einen Parameter
                                 nParams = PARAM_USHORT_1;
-                                nNr1 = nUId;
+                                DBG_ASSERT( nUId <= 0xFFFF, "ID on ToolBox > 0xFFFF" );
+                                nNr1 = USHORT(nUId);
                             }
                             else
                                 ReportError( nUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
@@ -5078,24 +5116,6 @@ BOOL StatementControl::Execute()
                     }
                     break;
 
-
-                case C_ValueSet:
-                    switch( nMethodId )
-                    {
-                        case M_AnimateMouse :
-                            AnimateMouse( pControl, Mitte);
-                            break;
-                        case M_Select :
-                            ((ValueSet*)pControl)->SelectItem( nNr1 );
-                            break;
-                        case M_SetNoSelection :
-                            ((ValueSet*)pControl)->SetNoSelection();
-                            break;
-                        default:
-                            ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "ValueSet" ) );
-                            break;
-                    }
-                    break;
                 case C_TreeListBox:
                     switch( nMethodId )
                     {
@@ -5503,6 +5523,43 @@ SvLBoxString* pItem = NULL;\
                                             break;
                                     }
                                     break;
+                                case CONST_CTValueSet:
+                                    {
+                                        ValueSet *pVS = (ValueSet*)pControl;
+                                        switch ( nMethodId )
+                                        {
+                                        case M_GetItemCount:
+                                            pRet->GenReturn ( RET_Value, nUId, ULONG( pVS->GetItemCount()));
+                                            break;
+                                        case M_GetItemText:
+                                            if ( ValueOK( nUId, MethodString( nMethodId ), nNr1, pVS->GetItemCount() ))
+                                                 pRet->GenReturn ( RET_Value, nUId, pVS->GetItemText( pVS->GetItemId( nNr1-1 ) ) );
+                                            break;
+                                        case M_Select:
+                                            if ( ValueOK( nUId, MethodString( nMethodId ), nNr1, pVS->GetItemCount() ))
+                                                 pVS->SelectItem( pVS->GetItemId( nNr1-1 ) );
+                                            break;
+                                        case M_GetSelIndex :
+                                            if ( pVS->IsNoSelection() )
+                                                pRet->GenReturn ( RET_Value, nUId, ULONG(0));
+                                            else
+                                                pRet->GenReturn ( RET_Value, nUId, ULONG( pVS->GetItemPos( pVS->GetSelectItemId() ) +1));
+                                            break;
+                                        case M_GetSelText :
+                                            if ( pVS->IsNoSelection() )
+                                                pRet->GenReturn ( RET_Value, nUId, String() );
+                                            else
+                                                pRet->GenReturn ( RET_Value, nUId, pVS->GetItemText( pVS->GetSelectItemId() ) );
+                                            break;
+                                        case M_SetNoSelection :
+                                            pVS->SetNoSelection();
+                                            break;
+                                        default:
+                                            ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "ValueSet" ) );
+                                            break;
+                                        }
+                                    }
+                                    break;
 
 
                                 case CONST_CTProgressBar:
@@ -5524,16 +5581,16 @@ SvLBoxString* pItem = NULL;\
                             switch( nControlType )
                             {
                                 case CONST_CTProgressBar:
-                                    switch ( nMethodId )
-                                    {
+//                                  switch ( nMethodId )
+//                                  {
                                         // Erstmal nichts, da sowiso nur Prozente abgefragt werden k"onnten
-                                        default:
+//                                      default:
                                             ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "ProgressBar" ) );
-                                            break;
-                                    }
+//                                          break;
+//                                  }
                                     break;
-                                case CONST_CTTreeListBox:
                                 case CONST_CTBrowseBox:
+                                case CONST_CTValueSet:
                                     ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "Window" ) );
                                     break;
                                 default:
@@ -5713,6 +5770,26 @@ SvLBoxString* pItem = NULL;\
                         case M_Move:
                             goto FloatWin;
                             break;
+                        case M_IsMax :
+                            pRet->GenReturn ( RET_Value, nUId, ((WorkWindow*)pControl)->IsMaximized() );
+                            break;
+                        case M_IsMin :
+                            pRet->GenReturn ( RET_Value, nUId, ((WorkWindow*)pControl)->IsMinimized() );
+                            break;
+                        case M_IsRestore :
+                            pRet->GenReturn ( RET_Value, nUId, BOOL (!((WorkWindow*)pControl)->IsMaximized() && !((WorkWindow*)pControl)->IsMinimized()) );
+                            break;
+                        case M_Minimize :
+                            ((WorkWindow*)pControl)->Maximize( FALSE );
+                            ((WorkWindow*)pControl)->Minimize();
+                            break;
+                        case M_Maximize :
+                            ((WorkWindow*)pControl)->Maximize();
+                            break;
+                        case M_Restore :
+                            ((WorkWindow*)pControl)->Maximize( FALSE );
+                            ((WorkWindow*)pControl)->Restore();
+                            break;
                         case M_Help:        // Alles was unten weiterbehandelt werden soll
                             goto MoreDialog;
                         default:
@@ -5721,9 +5798,7 @@ SvLBoxString* pItem = NULL;\
                     }
                     break;
                 case C_TabPage:
-                    switch( nMethodId )
-                    {
-                    }
+                    ReportError( nUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
                     break;
                 case C_MessBox:
                 case C_InfoBox:
@@ -5832,7 +5907,7 @@ SvLBoxString* pItem = NULL;\
                                 break;
                             case M_Default:
                                 {
-                                    USHORT Style = pControl->GetStyle();
+                                    WinBits Style = pControl->GetStyle();
                                     if      ( Style & WB_DEF_OK )
                                     {
                                         SET_WINP_CLOSING(pControl);
