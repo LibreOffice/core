@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-16 13:33:16 $
+#   last change: $Author: hjs $ $Date: 2005-02-17 18:57:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -140,6 +140,9 @@ BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install
 # ----------------------------------
 # WINDOWS
 # ----------------------------------
+PYTHONPATH:=..$/Lib
+.EXPORT : PYTHONPATH
+
 BUILD_DIR=PCbuild
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
