@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-16 09:57:52 $
+ *  last change: $Author: mtg $ $Date: 2001-02-22 14:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2041,24 +2041,21 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
  * --------------------------------------------------*/
 void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                             const SvStringsISortDtor& rLst,
-                            const sal_Char* pStrmName )
+                            const sal_Char* pStrmName,
+                            SvStorageRef &rStg,
+                            BOOL bConvert )
 {
-    MakeUserStorage_Impl();
-
-    SfxMedium aMedium( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
-    SvStorageRef xStg = aMedium.GetOutputStorage();
-
-    if( xStg.Is() )
+    if( rStg.Is() )
     {
         String sStrmName( pStrmName, RTL_TEXTENCODING_MS_1252 );
         if( !rLst.Count() )
         {
-            xStg->Remove( sStrmName );
-            xStg->Commit();
+            rStg->Remove( sStrmName );
+            rStg->Commit();
         }
         else
         {
-            SvStorageStreamRef xStrm = xStg->OpenStream( sStrmName,
+            SvStorageStreamRef xStrm = rStg->OpenStream( sStrmName,
                     ( STREAM_READ | STREAM_WRITE | STREAM_SHARE_DENYWRITE ) );
             if( xStrm.Is() )
             {
@@ -2089,23 +2086,18 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                 if( xStrm->GetError() == SVSTREAM_OK )
                 {
                     xStrm.Clear();
-                    xStg->Commit();
-                    if( SVSTREAM_OK != xStg->GetError() )
+                    if (!bConvert)
                     {
-                        xStg->Remove( sStrmName );
-                        xStg->Commit();
+                        rStg->Commit();
+                        if( SVSTREAM_OK != rStg->GetError() )
+                        {
+                            rStg->Remove( sStrmName );
+                            rStg->Commit();
+                        }
                     }
                 }
             }
         }
-
-        xStg = 0;
-        aMedium.Commit();
-
-        // Zeitstempel noch setzen
-        FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
-                                        &aModifiedDate, &aModifiedTime );
-        aLastCheckTime = Time();
     }
 }
 /* -----------------18.11.98 11:26-------------------
@@ -2380,7 +2372,20 @@ BOOL SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
 {
     String* pNew = new String( rNew );
     if( rNew.Len() && LoadCplSttExceptList()->Insert( pNew ) )
-        SaveExceptList_Imp( *pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr );
+    {
+        MakeUserStorage_Impl();
+        SfxMedium aMedium( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
+        SvStorageRef xStg = aMedium.GetStorage();
+
+        SaveExceptList_Imp( *pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr, xStg );
+
+        xStg = 0;
+        aMedium.Commit();
+        // Zeitstempel noch setzen
+        FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
+                                            &aModifiedDate, &aModifiedTime );
+        aLastCheckTime = Time();
+    }
     else
         delete pNew, pNew = 0;
     return 0 != pNew;
@@ -2392,7 +2397,20 @@ BOOL SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const String& rNew)
 {
     String* pNew = new String( rNew );
     if( rNew.Len() && LoadWrdSttExceptList()->Insert( pNew ) )
-        SaveExceptList_Imp( *pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr );
+    {
+        MakeUserStorage_Impl();
+        SfxMedium aMedium( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
+        SvStorageRef xStg = aMedium.GetStorage();
+
+        SaveExceptList_Imp( *pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
+
+        xStg = 0;
+        aMedium.Commit();
+        // Zeitstempel noch setzen
+        FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
+                                            &aModifiedDate, &aModifiedTime );
+        aLastCheckTime = Time();
+    }
     else
         delete pNew, pNew = 0;
     return 0 != pNew;
@@ -2420,7 +2438,18 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()
  * --------------------------------------------------*/
 void SvxAutoCorrectLanguageLists::SaveCplSttExceptList()
 {
-    SaveExceptList_Imp( *pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr );
+    MakeUserStorage_Impl();
+    SfxMedium aMedium( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
+    SvStorageRef xStg = aMedium.GetStorage();
+
+    SaveExceptList_Imp( *pCplStt_ExcptLst, pXMLImplCplStt_ExcptLstStr, xStg );
+
+    xStg = 0;
+    aMedium.Commit();
+    // Zeitstempel noch setzen
+    FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
+                                            &aModifiedDate, &aModifiedTime );
+    aLastCheckTime = Time();
 }
 
 /* -----------------18.11.98 11:26-------------------
@@ -2459,7 +2488,18 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
  * --------------------------------------------------*/
 void SvxAutoCorrectLanguageLists::SaveWrdSttExceptList()
 {
-    SaveExceptList_Imp( *pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr );
+    MakeUserStorage_Impl();
+    SfxMedium aMedium( sUserAutoCorrFile, STREAM_READWRITE, TRUE );
+    SvStorageRef xStg = aMedium.GetStorage();
+
+    SaveExceptList_Imp( *pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
+
+    xStg = 0;
+    aMedium.Commit();
+    // Zeitstempel noch setzen
+    FStatHelper::GetModifiedDateTimeOfFile( sUserAutoCorrFile,
+                                            &aModifiedDate, &aModifiedTime );
+    aLastCheckTime = Time();
 }
 /* -----------------18.11.98 11:26-------------------
  *
@@ -2517,11 +2557,44 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
         SvStorageRef xSrcStg = aSrcMedium.GetStorage();
         SfxMedium aDstMedium( sUserAutoCorrFile, STREAM_STD_WRITE, TRUE );
         // Copy it to a UCBStorage
-        SvStorageRef xDstStg = aDstMedium.GetOutputStorage(  );
+        SvStorageRef xDstStg = aDstMedium.GetOutputStorage( TRUE );
 
         if( xSrcStg.Is() && xDstStg.Is() )
         {
-            xSrcStg->CopyTo( &xDstStg );
+            String sWord        ( RTL_CONSTASCII_USTRINGPARAM ( pImplWrdStt_ExcptLstStr ) );
+            String sSentence    ( RTL_CONSTASCII_USTRINGPARAM ( pImplCplStt_ExcptLstStr ) );
+            String sXMLWord     ( RTL_CONSTASCII_USTRINGPARAM ( pXMLImplWrdStt_ExcptLstStr ) );
+            String sXMLSentence ( RTL_CONSTASCII_USTRINGPARAM ( pXMLImplCplStt_ExcptLstStr ) );
+            SvStringsISortDtor  *pTmpWordList = NULL;
+
+            if (xSrcStg->IsContained( sWord ) )
+                LoadExceptList_Imp( pTmpWordList, pImplWrdStt_ExcptLstStr, xSrcStg );
+            else if (xSrcStg->IsContained( sXMLWord ) )
+                LoadXMLExceptList_Imp( pTmpWordList, pXMLImplWrdStt_ExcptLstStr, xSrcStg );
+
+            if (pTmpWordList)
+            {
+                SaveExceptList_Imp( *pTmpWordList, pXMLImplWrdStt_ExcptLstStr, xDstStg, TRUE );
+                pTmpWordList->DeleteAndDestroy( ); // With no arguments, this deletes everything inside
+                pTmpWordList = NULL;
+            }
+
+
+            if (xSrcStg->IsContained( sSentence ) )
+                LoadExceptList_Imp( pTmpWordList, pImplCplStt_ExcptLstStr, xSrcStg );
+            else if (xSrcStg->IsContained( sXMLSentence ) )
+                LoadXMLExceptList_Imp( pTmpWordList, pXMLImplCplStt_ExcptLstStr, xSrcStg );
+
+            if (pTmpWordList)
+            {
+                SaveExceptList_Imp( *pTmpWordList, pXMLImplCplStt_ExcptLstStr, xDstStg, TRUE );
+                pTmpWordList->DeleteAndDestroy( ); // With no arguments, this deletes everything inside
+            }
+
+            GetAutocorrWordList();
+            MakeBlocklist_Imp( *xDstStg );
+            // xDstStg is committed in MakeBlocklist_Imp
+            /*xSrcStg->CopyTo( &xDstStg );*/
             sShareAutoCorrFile = sUserAutoCorrFile;
             xDstStg = 0;
             aDstMedium.Commit();
@@ -2642,7 +2715,10 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
     MakeUserStorage_Impl();
 
     SfxMedium aMedium( sUserAutoCorrFile, STREAM_STD_READWRITE, TRUE );
+    /*
     SvStorageRef xStg = aMedium.GetOutputStorage();
+    */
+    SvStorageRef xStg = aMedium.GetStorage();
     BOOL bRet = xStg.Is() && SVSTREAM_OK == xStg->GetError();
 
 /*  if( bRet )
@@ -2696,7 +2772,10 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
 
     String sLong;
     SfxMedium aMedium( sUserAutoCorrFile, STREAM_STD_READWRITE, TRUE );
+    /*
     SvStorageRef xStg = aMedium.GetOutputStorage();
+    */
+    SvStorageRef xStg = aMedium.GetStorage();
     BOOL bRet = xStg.Is() && SVSTREAM_OK == xStg->GetError();
 
     if( bRet )
@@ -2765,5 +2844,3 @@ BOOL SvxAutoCorrectLanguageLists::DeleteText( const String& rShort )
     }
     return bRet;
 }
-
-
