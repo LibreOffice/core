@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-01 14:08:06 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 14:48:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2674,7 +2674,10 @@ final long SalDisplay::Dispatch( XEvent *pEvent )
     // DtIntegrator::HandleXEvent( pEvent );
     SalInstance* pInstance = GetSalData()->pFirstInstance_;
     if( pInstance->maInstData.mpEventCallback )
+    {
+        YieldMutexReleaser aReleaser;
         pInstance->maInstData.mpEventCallback( pInstance->maInstData.mpEventInst, pEvent, sizeof( XEvent ) );
+    }
 
     switch( pEvent->type )
     {
