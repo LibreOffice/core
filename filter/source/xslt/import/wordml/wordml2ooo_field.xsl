@@ -51,7 +51,7 @@
    Contributor(s): _______________________________________
 
  -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core"  xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml"  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt fo v">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dom="http://www.w3.org/2001/xml-events" exclude-result-prefixes="w wx aml o dt fo v">
     <!--Generally, The MS fields can be represented in two forms, simple field w:fldsimple or complicated field
  w:fldChar, so when importing we have to take care of two possible forms of  the same type field -->
     <xsl:template match="w:instrText">
@@ -77,10 +77,10 @@
                     </xsl:if>
                 </xsl:variable>
                 <text:a xlink:type="simple" xlink:href="{concat( $hyper-dest, $hyper-bookmark)}">
-                        <xsl:call-template name="get-fldchar-content">
-                            <xsl:with-param name="next_node" select="../following-sibling::w:r[1]"/>
-                            <xsl:with-param name="sibling_number" select=" 1"/>
-                        </xsl:call-template>
+                    <xsl:call-template name="get-fldchar-content">
+                        <xsl:with-param name="next_node" select="../following-sibling::w:r[1]"/>
+                        <xsl:with-param name="sibling_number" select=" 1"/>
+                    </xsl:call-template>
                 </text:a>
             </xsl:when>
             <xsl:when test="substring( normalize-space(.),1,3) = 'REF' ">
@@ -365,13 +365,13 @@
                 </xsl:choose>
             </xsl:when>
             <xsl:when test="substring(normalize-space(.),1,10) = 'MERGEFIELD' ">
-            <text:database-display text:database-name="" text:table-name="" text:table-type="table" >
-				<xsl:attribute name="text:column-name"><xsl:value-of select="substring-before(substring-after(normalize-space(.), 'MERGEFIELD' ), ' ' ) "/></xsl:attribute>
-				<xsl:call-template name="get-fldchar-content">
+                <text:database-display text:database-name="" text:table-name="" text:table-type="table">
+                    <xsl:attribute name="text:column-name"><xsl:value-of select="substring-before(substring-after(normalize-space(.), 'MERGEFIELD' ), ' ' ) "/></xsl:attribute>
+                    <xsl:call-template name="get-fldchar-content">
                         <xsl:with-param name="next_node" select="../following-sibling::w:r[1]"/>
                         <xsl:with-param name="sibling_number" select=" 1"/>
                     </xsl:call-template>
-			</text:database-display>
+                </text:database-display>
             </xsl:when>
             <xsl:when test="substring(normalize-space(.),1,8) = 'MERGEREC' ">
                 <text:database-row-number text:database-name="" text:table-name="" text:table-type="table" style:num-format="A" text:value="0">
@@ -379,7 +379,7 @@
                         <xsl:with-param name="next_node" select="../following-sibling::w:r[1]"/>
                         <xsl:with-param name="sibling_number" select=" 1"/>
                     </xsl:call-template>
-			</text:database-row-number>
+                </text:database-row-number>
             </xsl:when>
             <xsl:when test="substring(normalize-space(.),1,4) = 'NEXT' ">
                 <text:database-next text:database-name="" text:table-name="" text:table-type="table" text:condition="">
@@ -425,7 +425,7 @@
                     </xsl:if>
                 </xsl:variable>
                 <text:a xlink:type="simple" xlink:href="{concat( $hyper-dest, $hyper-bookmark)}">
-                      <xsl:value-of select=" .//w:t"/>
+                    <xsl:value-of select=" .//w:t"/>
                 </text:a>
             </xsl:when>
             <xsl:when test="substring( normalize-space(@w:instr),1,3) = 'REF' ">
@@ -670,20 +670,20 @@
                     </xsl:when>
                 </xsl:choose>
             </xsl:when>
-              <xsl:when test="substring(normalize-space(@w:instr),1,10) = 'MERGEFIELD' ">
-            <text:database-display text:database-name="" text:table-name="" text:table-type="table" >
-				<xsl:attribute name="text:column-name"><xsl:value-of select="substring-before(substring-after(normalize-space(.), 'MERGEFIELD' ), ' ' ) "/></xsl:attribute>
-				  <xsl:value-of select=" .//w:t"/>
-			</text:database-display>
+            <xsl:when test="substring(normalize-space(@w:instr),1,10) = 'MERGEFIELD' ">
+                <text:database-display text:database-name="" text:table-name="" text:table-type="table">
+                    <xsl:attribute name="text:column-name"><xsl:value-of select="substring-before(substring-after(normalize-space(.), 'MERGEFIELD' ), ' ' ) "/></xsl:attribute>
+                    <xsl:value-of select=" .//w:t"/>
+                </text:database-display>
             </xsl:when>
             <xsl:when test="substring(normalize-space(@w:instr),1,8) = 'MERGEREC' ">
                 <text:database-row-number text:database-name="" text:table-name="" text:table-type="table" style:num-format="A" text:value="0">
-                      <xsl:value-of select=" .//w:t"/>
-			</text:database-row-number>
+                    <xsl:value-of select=" .//w:t"/>
+                </text:database-row-number>
             </xsl:when>
             <xsl:when test="substring(normalize-space(@w:instr),1,4) = 'NEXT' ">
                 <text:database-next text:database-name="" text:table-name="" text:table-type="table" text:condition="">
-                  <xsl:value-of select=" .//w:t"/>
+                    <xsl:value-of select=" .//w:t"/>
                 </text:database-next>
             </xsl:when>
             <xsl:otherwise>
@@ -1270,21 +1270,18 @@
             <xsl:when test="contains($input_MS_num_format, 'Arabic' ) ">
                 <xsl:text>1</xsl:text>
             </xsl:when>
-
             <xsl:when test="contains($input_MS_num_format, 'roman' ) ">
                 <xsl:text>i</xsl:text>
             </xsl:when>
             <xsl:when test="contains($input_MS_num_format, 'ROMAN' ) ">
                 <xsl:text>I</xsl:text>
             </xsl:when>
-
             <xsl:when test="contains($input_MS_num_format, 'alphabetic' ) ">
                 <xsl:text>a</xsl:text>
             </xsl:when>
             <xsl:when test="contains($input_MS_num_format, 'ALPHABETIC' ) ">
                 <xsl:text>A</xsl:text>
             </xsl:when>
-
             <xsl:otherwise>
                 <xsl:text>1</xsl:text>
             </xsl:otherwise>
