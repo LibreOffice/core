@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:24:11 $
+ *  last change: $Author: oj $ $Date: 2002-11-13 06:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ namespace dbaccess
         ORowSetMatrix::iterator& operator ->();
         const ORowSetMatrix::iterator& operator ->() const;
 
+        bool operator <=(const ORowSetMatrix::iterator& _rRH) const;
         bool operator !=(const ORowSetMatrix::iterator& _rRH) const;
         bool operator ==(const ORowSetMatrix::iterator& _rRH) const;
 

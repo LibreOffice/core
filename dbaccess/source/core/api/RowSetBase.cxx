@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 08:31:32 $
+ *  last change: $Author: oj $ $Date: 2002-11-13 06:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,8 +265,11 @@ const ORowSetValue& ORowSetBase::getValue(sal_Int32 columnIndex)
     checkCache();
     OSL_ENSURE(!(m_bBeforeFirst || m_bAfterLast),"Illegal call here!");
 
-    if(m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd() && !m_aCurrentRow.isNull() && m_aCurrentRow->isValid())
+    if ( m_aCurrentRow && m_aCurrentRow != m_pCache->getEnd() && !m_aCurrentRow.isNull() && m_aCurrentRow->isValid() )
+    {
+        OSL_ENSURE(m_aCurrentRow && m_aCurrentRow <= m_pCache->getEnd(),"Invalid iterator set for currentrow!");
         return (*(*m_aCurrentRow))[m_nLastColumnIndex = columnIndex];
+    }
     else
     {   // currentrow is null when the clone move the window
         if(!m_aCurrentRow || m_aCurrentRow.isNull())

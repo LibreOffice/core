@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCacheIterator.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-12 07:56:32 $
+ *  last change: $Author: oj $ $Date: 2002-11-13 06:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,11 @@ const ORowSetMatrix::iterator& ORowSetCacheIterator::operator ->() const
         m_aIter->second.aIterator = m_pCache->m_aMatrixIter;
     }
     return m_aIter->second.aIterator;
+}
+// -----------------------------------------------------------------------------
+bool ORowSetCacheIterator::operator <=(const ORowSetMatrix::iterator& _rRH) const
+{
+    return m_aIter->second.aIterator <= _rRH;
 }
 // -----------------------------------------------------------------------------
 bool ORowSetCacheIterator::operator !=(const ORowSetMatrix::iterator& _rRH) const
