@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:29:47 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:48:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,10 +95,6 @@ SHL1STDLIBS=	\
     $(SALLIB)
 
 # --- Targets ------------------------------------------------------
-
-.IF "$(depend)" != ""
-SRCFILES=$(SRC1FILES)
-.ENDIF
 
 .INCLUDE :  target.mk
 
