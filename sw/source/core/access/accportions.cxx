@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-17 18:44:23 $
+ *  last change: $Author: dvo $ $Date: 2002-04-24 13:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ void SwAccessiblePortionData::Special(
         break;
         case POR_FLYCNT:
         {
-            // fly-frame: text-box, graphic or OLE frame
+            // fly-frame: text-box, graphic or OLE frame, form controls...
             // Retrieve the Graphic/OLE-Node (as SwNoTxtNode) and ask
             // for the its description. If it's no SwNoTxtNode, or the
             // description is empty, use the SwFrmFmt name instead.
@@ -276,21 +276,31 @@ void SwAccessiblePortionData::Special(
 
             const SwFrmFmt* rFrameFmt = pAttr->GetFlyCnt().GetFrmFmt();
             const SfxPoolItem& rItem = rFrameFmt->GetAttr( RES_CNTNT, FALSE );
-            SwNodeIndex aIndex =
-                *( static_cast<const SwFmtCntnt&>( rItem ).GetCntntIdx() );
+            const SwNodeIndex* pFlyCntntIndex =
+                static_cast<const SwFmtCntnt&>( rItem ).GetCntntIdx();
+            if( pFlyCntntIndex != NULL )
+            {
+                SwNodeIndex aIndex = *pFlyCntntIndex;
 
-            aIndex++;
-            SwNoTxtNode* pNoTxtNode = aIndex.GetNode().GetNoTxtNode();
+                aIndex++;
+                SwNoTxtNode* pNoTxtNode = aIndex.GetNode().GetNoTxtNode();
 
-            // get the description or format name
-            OUString sDescription;
-            if( pNoTxtNode != NULL )
-                sDescription = OUString( pNoTxtNode->GetAlternateText() );
-            if( sDescription.getLength() == 0 )
-                sDescription = OUString( rFrameFmt->GetName() );
+                // get the description or format name
+                OUString sDescription;
+                if( pNoTxtNode != NULL )
+                    sDescription = OUString( pNoTxtNode->GetAlternateText() );
+                if( sDescription.getLength() == 0 )
+                    sDescription = OUString( rFrameFmt->GetName() );
 
-            sDisplay = SwAccessibleContext::GetResource(
-                STR_ACCESS_REPLACEMENT_FRAME, &sDescription );
+                sDisplay = SwAccessibleContext::GetResource(
+                     STR_ACCESS_REPLACEMENT_FRAME, &sDescription );
+            }
+            else
+            {
+                // a character-bound fly-frame without content node:
+                // form controls, etc.  No replacement text as of yet.
+                sDisplay = rText;
+            }
         }
         break;
         case POR_GRFNUM:
