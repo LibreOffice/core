@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 07:32:58 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ using namespace ::com::sun::star::lang;
 IMPLEMENT_SERVICE_INFO(OCatalog,"com.sun.star.comp.connectivity.OCatalog","com.sun.star.sdbcx.DatabaseDefinition")
 //------------------------------------------------------------------------------
 OCatalog::OCatalog(const Reference< XConnection> &_xConnection) : OCatalog_BASE(m_aMutex)
-            ,connectivity::OSubComponent<OCatalog>(_xConnection, this)
+            ,connectivity::OSubComponent<OCatalog, OCatalog_BASE>(_xConnection, this)
             ,m_pTables(NULL)
             ,m_pViews(NULL)
             ,m_pGroups(NULL)

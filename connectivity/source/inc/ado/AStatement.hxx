@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:32:56 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:10:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,10 +128,10 @@ namespace connectivity
                                         public  OStatement_BASE,
                                         public  ::cppu::OPropertySetHelper,
                                         public  ::comphelper::OPropertyArrayUsageHelper<OStatement_Base>,
-                                        public  connectivity::OSubComponent< OStatement_Base>
+                                        public  connectivity::OSubComponent<OStatement_Base, OStatement_BASE>
 
         {
-            friend class connectivity::OSubComponent< OStatement_Base>;
+            friend class connectivity::OSubComponent<OStatement_Base, OStatement_BASE>;
             friend class OResultSet;
 
             ::com::sun::star::sdbc::SQLWarning          m_aLastWarning;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:42 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,9 @@ namespace connectivity
 
         class OConnection : public OConnection_BASE,
                             public connectivity::OMetaConnection,
-                            public connectivity::OSubComponent<OConnection>
+                            public connectivity::OSubComponent<OConnection, OConnection_BASE>
         {
-            friend class connectivity::OSubComponent<OConnection>;
+            friend class connectivity::OSubComponent<OConnection, OConnection_BASE>;
 
         protected:
             ::osl::Mutex    m_aMutex;

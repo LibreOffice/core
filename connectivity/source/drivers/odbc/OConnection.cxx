@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-03 10:30:18 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:09:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ using namespace com::sun::star::sdbc;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          : OConnection_BASE(m_aMutex),
-                         OSubComponent<OConnection>((::cppu::OWeakObject*)_pDriver, this),
+                         OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          m_pDriverHandleCopy(_pDriverHandle),
                          m_pDriver(_pDriver),
                          m_bClosed(sal_False),

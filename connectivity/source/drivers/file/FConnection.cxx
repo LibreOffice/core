@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 14:08:05 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ using namespace rtl;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(OFileDriver*   _pDriver)
                          : OConnection_BASE(m_aMutex)
-                         ,OSubComponent<OConnection>((::cppu::OWeakObject*)_pDriver, this)
+                         ,OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
                          ,m_pDriver(_pDriver)
                          ,m_bClosed(sal_False)
                          ,m_xMetaData(NULL)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSubComponent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 09:44:39 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,17 +71,17 @@ namespace connectivity
     //************************************************************
     // OSubComponent
     //************************************************************
-    template <class T > class OSubComponent
+    template <class SELF, class WEAK> class OSubComponent
     {
     protected:
         // the parent must support the tunnel implementation
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
-        T*  m_pDerivedImplementation;
+        SELF*   m_pDerivedImplementation;
 
     public:
         OSubComponent(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xParent,
-                T* _pDerivedImplementation)
+                SELF* _pDerivedImplementation)
             :m_xParent(_xParent)
             ,m_pDerivedImplementation(_pDerivedImplementation)
         {
@@ -98,10 +98,10 @@ namespace connectivity
         {
             if (osl_decrementInterlockedCount( &m_pDerivedImplementation->m_refCount ) == 0)
             {
+                osl_incrementInterlockedCount( &m_pDerivedImplementation->m_refCount );
+
                 if (!m_pDerivedImplementation->rBHelper.bDisposed && !m_pDerivedImplementation->rBHelper.bInDispose)
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xHoldAlive( *m_pDerivedImplementation );
-
                     // remember the parent
                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xParent;
                     {
@@ -123,12 +123,14 @@ namespace connectivity
                         m_xParent = xParent;
                     }
 
-                    // destroy the object if xHoldAlive decrement the refcount to 0
-                    return;
+//                  // destroy the object if xHoldAlive decrement the refcount to 0
+//                  m_pDerivedImplementation->WEAK::release();
                 }
-                else
-                    delete m_pDerivedImplementation;
             }
+            else
+                osl_incrementInterlockedCount( &m_pDerivedImplementation->m_refCount );
+
+            m_pDerivedImplementation->WEAK::release();
         }
     };
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ IMPLEMENT_SERVICE_INFO(OConnection,"com.sun.star.sdbcx.AConnection","com.sun.sta
 OConnection::OConnection(const ::rtl::OUString& url, const Sequence< PropertyValue >& info,
                          ODriver*   _pDriver) throw(SQLException, RuntimeException)
                          : OConnection_BASE(m_aMutex),
-                         OSubComponent<OConnection>((::cppu::OWeakObject*)_pDriver, this),
+                         OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          m_bClosed(sal_False),
                          m_xMetaData(NULL),
                          m_xCatalog(NULL),

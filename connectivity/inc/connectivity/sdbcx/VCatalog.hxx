@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:19:19 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,9 @@ namespace connectivity
         class OCatalog :    public OCatalog_BASE,
                             public IRefreshableGroups,
                             public IRefreshableUsers,
-                            public connectivity::OSubComponent<OCatalog>
+                            public connectivity::OSubComponent<OCatalog, OCatalog_BASE>
         {
-            friend class connectivity::OSubComponent<OCatalog>;
+            friend class connectivity::OSubComponent<OCatalog, OCatalog_BASE>;
         protected:
 
             ::osl::Mutex        m_aMutex;

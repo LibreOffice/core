@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-12 12:31:30 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ using namespace com::sun::star::sdbc;
 //------------------------------------------------------------------------------
 OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(m_aMutex)
                                                         ,OPropertySetHelper(OStatement_BASE::rBHelper)
-                                                        ,OSubComponent< OStatement_Base>((::cppu::OWeakObject*)_pConnection, this)
+                                                        ,OSubComponent<OStatement_Base, OStatement_BASE>((::cppu::OWeakObject*)_pConnection, this)
                                                         ,m_pConnection(_pConnection)
                                                         ,m_nFetchSize(1)
                                                         ,m_nMaxRows(0)

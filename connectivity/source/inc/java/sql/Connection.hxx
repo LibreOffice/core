@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 13:54:44 $
+ *  last change: $Author: fs $ $Date: 2001-04-12 15:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,9 @@ namespace connectivity
 
     class java_sql_Connection : public java_sql_Connection_BASE,
                                 public java_lang_Object,
-                                public OSubComponent<java_sql_Connection>
+                                public OSubComponent<java_sql_Connection, java_sql_Connection_BASE>
     {
-        friend class OSubComponent<java_sql_Connection>;
+        friend class OSubComponent<java_sql_Connection, java_sql_Connection_BASE>;
 
         ::osl::Mutex    m_aMutex;
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
@@ -125,7 +125,7 @@ namespace connectivity
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
         java_sql_Connection( JNIEnv * pEnv, jobject myObj,java_sql_Driver* _pDriver ) :java_sql_Connection_BASE(m_aMutex),
                     java_lang_Object( pEnv, myObj ),
-                    OSubComponent<java_sql_Connection>((::cppu::OWeakObject*)_pDriver, this),
+                    OSubComponent<java_sql_Connection, java_sql_Connection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                     m_xMetaData(NULL),
                     m_pDriver(_pDriver){}
 
