@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-14 20:28:24 $
+ *  last change: $Author: nn $ $Date: 2001-11-30 10:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1559,7 +1559,8 @@ BOOL ScImportExport::Doc2RTF( SvStream& rStrm )
 
 BOOL ScImportExport::Doc2Dif( SvStream& rStrm )
 {
-    ScExportDif( rStrm, pDoc, aRange, gsl_getSystemTextEncoding() );
+    // for DIF in the clipboard, IBM_850 is always used
+    ScExportDif( rStrm, pDoc, aRange, RTL_TEXTENCODING_IBM_850 );
     return TRUE;
 }
 
@@ -1570,7 +1571,8 @@ BOOL ScImportExport::Dif2Doc( SvStream& rStrm )
     ScDocument* pImportDoc = new ScDocument( SCDOCMODE_UNDO );
     pImportDoc->InitUndo( pDoc, nTab, nTab );
 
-    ScImportDif( rStrm, pImportDoc, aRange.aStart, gsl_getSystemTextEncoding() );
+    // for DIF in the clipboard, IBM_850 is always used
+    ScImportDif( rStrm, pImportDoc, aRange.aStart, RTL_TEXTENCODING_IBM_850 );
 
     USHORT nEndCol, nEndRow;
     pImportDoc->GetCellArea( nTab, nEndCol, nEndRow );
