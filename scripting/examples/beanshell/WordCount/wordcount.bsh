@@ -15,10 +15,12 @@ void doDisplay(numWords) {
             frame.setVisible(false);
         }
     });
-    frame.getContentPane().setLayout(new GridLayout(2,1));
-    frame.getContentPane().add(wordsLabel);
-    frame.getContentPane().add(closeButton);
+    frame.getContentPane().setLayout(new BorderLayout());
+    frame.getContentPane().add(wordsLabel, BorderLayout.CENTER);
+    frame.getContentPane().add(closeButton, BorderLayout.SOUTH);
     frame.pack();
+    frame.setSize(190,90);
+    frame.setLocation(430,430);
     frame.setVisible(true);
 }
 
@@ -26,11 +28,15 @@ int wordcount() {
 
     result = 0;
 
+    // iterate through each of the selections
     count = xIndexAccess.getCount();
     for(i=0;i<count;i++) {
+        // get the XTextRange of the selection
         xTextRange = (XTextRange)
             UnoRuntime.queryInterface(XTextRange.class, xIndexAccess.getByIndex(i));
-        System.out.println("string: "+xTextRange.getString());
+        //System.out.println("string: "+xTextRange.getString());
+        // use the standard J2SE delimiters to tokenize the string
+        // obtained from the XTextRange
         strTok = new StringTokenizer(xTextRange.getString());
         result += strTok.countTokens();
     }
@@ -47,6 +53,7 @@ xModel = (XModel)
 xSelectionSupplier = (XSelectionSupplier)
     UnoRuntime.queryInterface(XSelectionSupplier.class, xModel.getCurrentController());
 //see section 7.5.1 of developers' guide
+// the getSelection provides an XIndexAccess to the one or more selections
 xIndexAccess = (XIndexAccess)
     UnoRuntime.queryInterface(XIndexAccess.class, xSelectionSupplier.getSelection());
 
