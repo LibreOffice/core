@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartPieSegmentProperties.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 /** specifies all the properties for the graphic object of a
     pie segment.@see PieDiagram
  */
-service ChartPieSegmentProperties
+published service ChartPieSegmentProperties
 {
     service com::sun::star::chart::ChartDataPointProperties;
     interface com::sun::star::beans::XPropertySet;
