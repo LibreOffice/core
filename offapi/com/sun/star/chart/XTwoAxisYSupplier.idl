@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTwoAxisYSupplier.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
 
 /** gives access to both the primary and the secondary y-axis of a diagram.@see        XChartDocument
  */
-interface XTwoAxisYSupplier: com::sun::star::chart::XAxisYSupplier
+published interface XTwoAxisYSupplier: com::sun::star::chart::XAxisYSupplier
 {
     //-------------------------------------------------------------------------
 
