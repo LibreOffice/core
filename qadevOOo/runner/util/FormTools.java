@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormTools.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 16:27:01 $
+ *  last change:$Date: 2003-01-31 11:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@ import com.sun.star.form.XForm;
 import com.sun.star.form.XLoadable;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
  * contains helper methods forms
@@ -253,7 +256,13 @@ public class FormTools {
         XLoadable formLoader = null;
 
         try {
-            XForm the_form = (XForm) FormTools.getForms(WriterTools.getDrawPage(aDoc)).getByName("Standard");
+            Object aForm = FormTools.getForms(WriterTools.getDrawPage(aDoc)).getByName("Standard");
+            XForm the_form = null;
+            try {
+                the_form = (XForm) AnyConverter.toObject(new Type(XForm.class), aForm);
+            } catch (com.sun.star.lang.IllegalArgumentException iae) {
+                System.out.println("### Couldn't convert Any");
+            }
             XPropertySet formProps = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, the_form);
             formProps.setPropertyValue("DataSourceName","Bibliography");
             formProps.setPropertyValue("Command","biblio");
