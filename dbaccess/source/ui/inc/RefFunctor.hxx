@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RefFunctor.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:30:51 $
+ *  last change: $Author: oj $ $Date: 2001-10-08 09:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace dbaui
     public:
         OUnaryRefFunctor(const ::std::mem_fun_t<bool,T>& _aFunc) : m_aFunction(_aFunc)
         {}
-        inline typename result_type operator()(const typename argument_type& _aType) const
+        inline result_type operator()(const argument_type& _aType) const
         {
             m_aFunction(_aType.getBodyPtr());
         }
