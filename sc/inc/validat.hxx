@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validat.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:34:11 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 07:47:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@ class ScValidationData : public ScConditionEntry
     BOOL                bIsUsed;            // temporaer beim Speichern
 
     BOOL            DoMacro( const ScAddress& rPos, const String& rInput,
+                                ScFormulaCell* pCell, Window* pParent ) const;
+
+    BOOL            DoScript( const ScAddress& rPos, const String& rInput,
                                 ScFormulaCell* pCell, Window* pParent ) const;
 
 public:
