@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:34:14 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ Image::Image( const ResId& rResId ) :
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
         BitmapEx    aBmpEx;
-        USHORT      nObjMask = pResMgr->ReadShort();
+        ULONG       nObjMask = pResMgr->ReadLong();
 
         if( nObjMask & RSC_IMAGE_IMAGEBITMAP )
         {
@@ -166,10 +166,6 @@ Image::Image( const ResId& rResId ) :
 
             ImplInit( aBmpEx );
         }
-    }
-    else
-    {
-        DBG_ERROR( "Image::Image( const ResId& rResId ): No resource!" );
     }
 }
 
@@ -519,7 +515,7 @@ ImageList::ImageList( const ResId& rResId ) :
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
         static ImplImageTreeSingletonRef    aImageTree;
-        USHORT                              nObjMask = pResMgr->ReadShort();
+        ULONG                               nObjMask = pResMgr->ReadLong();
         const String                        aPrefix( pResMgr->ReadString() );
         Color                               aMaskColor;
         BitmapEx                            aBmpEx;
@@ -531,14 +527,14 @@ ImageList::ImageList( const ResId& rResId ) :
 
         if( nObjMask & RSC_IMAGELIST_IDLIST )
         {
-            const USHORT nCount = pResMgr->ReadShort();
-            for( int i = 0; i < nCount; ++i )
-                pResMgr->ReadShort();
+            const ULONG nCount = pResMgr->ReadLong();
+            for( unsigned int i = 0; i < nCount; ++i )
+                pResMgr->ReadLong();
         }
 
         ::rtl::OUString aResMgrName( pResMgr->GetFileName() ), aUserImage;
         sal_Int32       nPos = aResMgrName.lastIndexOf( '\\' );
-        sal_Int32       nCount = pResMgr->ReadShort();
+        sal_Int32       nCount = pResMgr->ReadLong();
         USHORT*         pIdAry = new USHORT[ nCount ];
         String*         pStringAry = new String[ nCount ];
 
@@ -657,7 +653,7 @@ ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
         Size            aItemSizePixel;
         bool            bInit = false;
 
-        for( int i = 0; i < rNameVector.size(); ++i )
+        for( unsigned int i = 0; i < rNameVector.size(); ++i )
         {
             aImageName = rPrefix.getLength() ?
                         ( ( aImageName = rPrefix ) += rNameVector[ i ] ) :
