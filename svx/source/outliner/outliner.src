@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:44:34 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:25:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ String RID_OUTLUNDO_HEIGHT
     TEXT[ czech ] = "Přesunout";
     TEXT[ hebrew ] = "‮הזזה‬";
     TEXT[ hindi ] = "स्थानान्तर";
+    TEXT[ slovak ] = "Presunúť";
 };
 String RID_OUTLUNDO_DEPTH
 {
@@ -126,6 +127,7 @@ String RID_OUTLUNDO_DEPTH
     Text[ czech ] = "Odsadit";
     Text[ hebrew ] = "‮כניסה‬";
     Text[ hindi ] = "इन्डेन्ट";
+    Text[ slovak ] = "Odsadenie";
 };
 String RID_OUTLUNDO_EXPAND
 {
@@ -160,6 +162,7 @@ String RID_OUTLUNDO_EXPAND
     Text[ czech ] = "Zobrazit podbody";
     Text[ hebrew ] = "‮הצגת תת נקודות‬";
     Text[ hindi ] = "अधीनबिन्दुओं को दिखाओ";
+    Text[ slovak ] = "Zobraziť podbody";
 };
 String RID_OUTLUNDO_COLLAPSE
 {
@@ -194,6 +197,7 @@ String RID_OUTLUNDO_COLLAPSE
     Text[ czech ] = "Srolovat";
     Text[ hebrew ] = "‮כיווץ‬";
     Text[ hindi ] = "दबाओ";
+    Text[ slovak ] = "Skryť všetky súčasti";
 };
 String RID_OUTLUNDO_ATTR
 {
@@ -227,6 +231,7 @@ String RID_OUTLUNDO_ATTR
     TEXT[ czech ] = "Použít atributy";
     TEXT[ hebrew ] = "‮יישום תכונות‬";
     TEXT[ hindi ] = "ऐट्रिब्यूट्स लागू करो";
+    TEXT[ slovak ] = "Použiť atribúty";
 };
 String RID_OUTLUNDO_INSERT
 {
@@ -262,7 +267,10 @@ String RID_OUTLUNDO_INSERT
     TEXT[ czech ] = "Vložit";
     TEXT[ hebrew ] = "‮הוספה‬";
     TEXT[ hindi ] = "जोड़ो";
+    TEXT[ slovak ] = "Vložiť";
 };
+
+
 
 
 
