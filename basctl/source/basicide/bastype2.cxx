@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 16:59:06 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:18:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINERPASSWORD_HPP_
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -575,7 +575,7 @@ void BasicTreeListBox::GetRootEntryBitmaps( SfxObjectShell* pShell, Image& rImag
     {
         ::rtl::OUString sFactoryURL;
         Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
-        Reference< ::drafts::com::sun::star::frame::XModuleManager > xModuleManager;
+        Reference< ::com::sun::star::frame::XModuleManager > xModuleManager;
         if ( xMSF.is() )
         {
             xModuleManager.set( xMSF->createInstance( ::rtl::OUString::createFromAscii(
