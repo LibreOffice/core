@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-24 21:00:16 $
+ *  last change: $Author: rt $ $Date: 2001-09-27 20:51:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ Menu MN_SPELL_POPUP
             Text [ italian ] = "Controllo ~ortografico..." ;
             Text [ spanish ] = "Ortogra~fía..." ;
             Text [ french ] = "~Orthographe..." ;
-            Text [ dutch ] = "~Spellingcontrole" ;
+            Text [ dutch ] = "~Spellingcontrole..." ;
             Text [ swedish ] = "~Rättstavning..." ;
             Text [ danish ] = "Stavekont~rol" ;
             Text [ portuguese ] = "Or~tografia" ;
@@ -87,9 +87,9 @@ Menu MN_SPELL_POPUP
             Text[ russian ] = "Ïðàâ~îïèñàíèå...";
             Text[ polish ] = "~Pisownia...";
             Text[ japanese ] = "æ–‡ç« æ ¡æ­£(~S)...";
-            Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥(~S)";
+            Text[ chinese_traditional ] = "æ‹¼å¯«æª¢æŸ¥(~S)...";
             Text[ arabic ] = "~ÊÏÞíÞ ÅãáÇÆí";
-            Text[ dutch ] = "~Spellingcontrole";
+            Text[ dutch ] = "~Spellingcontrole...";
             Text[ chinese_simplified ] = "æ‹¼å†™æ£€æŸ¥...";
             Text[ greek ] = "Ïñèïã~ñáößá";
             Text[ korean ] = "ë§žì¶¤ë²•(~S)";
@@ -311,6 +311,7 @@ String STR_HYP_OK
     Text[ catalan ] = "La separación silábica ha finalizado";
     Text[ finnish ] = "Tavutus valmis";
 };
+
 
 
 
