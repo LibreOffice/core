@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:33:00 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:43:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@
 #include "arrdecl.hxx"
 #include "dispatch.hxx"
 #include "sfxresid.hxx"
-#include "interno.hxx"
+//#include "interno.hxx"
 #include "fcontnr.hxx"
 #include "viewsh.hxx"
 #include "intro.hxx"
@@ -123,9 +123,6 @@
 #include "app.hrc"
 #include "docfile.hxx"
 #include "workwin.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 
 #ifdef WNT
 #include <tools/svwin.h>
@@ -395,21 +392,6 @@ void SfxApplication::InsertLateInitHdl(const Link& rLink)
         *pLink = rLink;
         USHORT nCount = ( USHORT ) pAppData_Impl->pInitLinkList->Count();
         pAppData_Impl->pInitLinkList->Insert(pLink, nCount);
-    }
-}
-
-void SfxApplication::ForcePendingInitFactories()
-{
-    List& rList = Get_Impl()->aPendingInitFactories;
-    USHORT nPos = (USHORT) rList.Count();
-#if LATEINIT
-    DBG_ASSERT( !nPos, "Filter nicht im LateInit" );
-#endif
-    // FIXME - This needs a comment, it is confusing see dev list 12-jan-2002
-    while( (nPos = rList.Count()) )
-    {
-        SfxObjectFactory* pFac = (SfxObjectFactory*)rList.Remove( --nPos );
-        pFac->DoInitFactory();
     }
 }
 
