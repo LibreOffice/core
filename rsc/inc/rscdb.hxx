@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-05 14:44:05 $
+ *  last change: $Author: pl $ $Date: 2001-11-06 13:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,6 +409,7 @@ public:
     RscTop  *   GetRoot()         { return( pRoot ); };
     USHORT      PutSysName( USHORT nRscTyp, char * pName, USHORT nConst,
                             USHORT nId, BOOL bFirst );
+    void        ClearSysNames();
     ERRTYPE     WriteRc( FILE * fOutput );
     void        WriteSrc( FILE * fOutput, ULONG nFileIndex,
                           CharSet nCharSet, BOOL bName = TRUE );

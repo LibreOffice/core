@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rsc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2001-11-06 12:43:23 $
+ *  last change: $Author: pl $ $Date: 2001-11-06 13:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -855,6 +855,15 @@ ERRTYPE RscCompiler::Link()
             // rc-Datei schreiben
             ByteString aDir( it->aOutputRc );
             aDir.SetToken( aDir.GetTokenCount( PATHSEP )-1, PATHSEP, ByteString() );
+            if( ! aDir.Len() )
+            {
+                char aBuf[1024];
+                if( getcwd( aBuf, sizeof( aBuf ) ) )
+                {
+                    aDir = aBuf;
+                    aDir.Append( PATHSEP );
+                }
+            }
             aDir.Append( "rscXXXXXX" );
             char* pTmp = strdup( aDir.GetBuffer() );
             mktemp( pTmp );
@@ -870,6 +879,7 @@ ERRTYPE RscCompiler::Link()
             pTC->ChangeLanguage( it->nLangTypeId );
             pTC->ChangeDefLanguage( International::GetNeutralLanguage( it->nLangTypeId ) );
             pTC->SetSourceCharSet( it->nSourceCharSet );
+            pTC->ClearSysNames();
             aError = pTC->WriteRc( foutput );
 
             fclose( foutput );

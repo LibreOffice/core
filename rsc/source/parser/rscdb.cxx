@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdb.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:23 $
+ *  last change: $Author: pl $ $Date: 2001-11-06 13:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,14 @@ RscTypCont :: ~RscTypCont(){
         delete pRscTmp;
     };
 
+    while( NULL != (pSysEntry = aSysLst.Remove()) ){
+        delete pSysEntry;
+    };
+}
+
+void RscTypCont::ClearSysNames()
+{
+    RscSysEntry   * pSysEntry;
     while( NULL != (pSysEntry = aSysLst.Remove()) ){
         delete pSysEntry;
     };
