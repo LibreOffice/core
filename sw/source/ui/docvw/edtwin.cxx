@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:45:22 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -912,7 +912,13 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     SwRect aTmp = rSh.GetFlyRect();
-    if( !rSh.HasReadonlySel() && aTmp.HasArea() )
+    if( aTmp.HasArea() &&
+        // --> FME 2005-01-13 #i40348#
+        // IsSelObjProtected() seems to be the correct condition, not
+        // !HasReadonlySel(), otherwise frame is not moveable if content is
+        // protected.
+        !rSh.IsSelObjProtected( FlyProtectType(FLYPROTECT_POS|FLYPROTECT_SIZE) ) )
+        // <--
     {
         // OD 18.09.2003 #i18732# - add item <RES_FOLLOW_TEXT_FLOW>
         SfxItemSet aSet(rSh.GetAttrPool(),
@@ -922,12 +928,6 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
                         RES_PROTECT, RES_PROTECT,
                         RES_FOLLOW_TEXT_FLOW, RES_FOLLOW_TEXT_FLOW, 0);
         rSh.GetFlyFrmAttr( aSet );
-        const SvxProtectItem& rProtect = ((SvxProtectItem&)aSet.Get(RES_PROTECT));
-        if( rProtect.IsSizeProtected() ||
-            rProtect.IsPosProtected() )
-        {
-            return;
-        }
         RndStdIds eAnchorId = ((SwFmtAnchor&)aSet.Get(RES_ANCHOR)).GetAnchorId();
         Size aSnap;
         if(MOVE_LEFT_SMALL == nDir ||
@@ -1727,7 +1727,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                         // #i23725#
                         BOOL bDone = FALSE;
                         if (rSh.IsSttPara() &&
-                            NULL == rSh.GetCurNumRule())
+                            NULL == rSh.GetCurNumRule() &&
+                            !rSh.HasSelection() ) // i40834
                             bDone = rSh.TryRemoveIndent();
 
                         // -> #i23725#
