@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-22 14:54:51 $
+#   last change: $Author: kz $ $Date: 2004-10-04 20:32:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,8 +75,9 @@ TARGET=sot
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1ARCHIV= $(LB)$/lib$(TARGET)$(UPD)$(DLLPOSTFIX).a
-LIB1FILES=	$(SLB)$/base.lib				\
-            $(SLB)$/sdstor.lib
+LIB1FILES=	$(SLB)$/base.lib \
+            $(SLB)$/sdstor.lib \
+            $(SLB)$/unoolestorage.lib
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= $(TARGET)
