@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 20:29:53 $
+ *  last change: $Author: jbu $ $Date: 2001-05-11 14:07:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include <vector>
 
 #include <osl/diagnose.h>
-#include <osl/file.h>
+#include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <osl/module.h>
 
@@ -78,6 +78,7 @@
 #include <cppuhelper/shlib.hxx>
 
 using namespace ::rtl;
+using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::loader;
@@ -122,11 +123,10 @@ static const ::std::vector< OUString > * getAccessDPath() SAL_THROW( () )
                 {
                     OUString aStr( OStringToOUString(
                         aEnv.getToken( 0, ';', nIndex ), RTL_TEXTENCODING_ASCII_US ) );
-                    OUString aUNC;
-                    if (osl_File_E_None == ::osl_normalizePath( aStr.pData, &aUNC.pData ))
-                    {
-                        s_v.push_back( aUNC );
-                    }
+                    OUString aFileUrl;
+                    OSL_VERIFY(
+                        osl_File_E_None == FileBase::getFileURLFromSystemPath(aStr, aFileUrl) );
+                    s_v.push_back( aFileUrl );
                 } while( nIndex != -1 );
 #ifdef DEBUG
                 out( "> cpld: acknowledged following access path(s): \"" );
@@ -163,15 +163,14 @@ static bool checkAccessPath( OUString * pComp ) throw ()
 
     if (pPath)
     {
+        sal_Bool bAbsolute = (pComp->compareToAscii( "file://" , 7 ) == 0);
         for ( ::std::vector< OUString >::const_iterator iPos( pPath->begin() );
               iPos != pPath->end(); ++iPos )
         {
             OUString aBaseDir( *iPos );
             OUString aAbs;
 
-            if (pComp->getLength() > 2 &&
-                pComp->getStr()[0] == (sal_Unicode)'/' &&
-                pComp->getStr()[1] == (sal_Unicode)'/') // absolute unc path given?
+            if ( bAbsolute )
             {
                 aAbs = *pComp;
 #ifdef DEBUG
@@ -181,7 +180,7 @@ static bool checkAccessPath( OUString * pComp ) throw ()
             }
             else
             {
-                if (osl_File_E_None != ::osl_getAbsolutePath( aBaseDir.pData, pComp->pData, &aAbs.pData ))
+                if (osl_File_E_None != ::osl_getAbsoluteFileURL( aBaseDir.pData, pComp->pData, &aAbs.pData ))
                 {
                     continue;
                 }
@@ -238,6 +237,14 @@ static inline sal_Int32 endsWith( const OUString & rText, const OUString & rEnd 
 //==================================================================================================
 static OUString makeComponentPath( const OUString & rLibName, const OUString & rPath ) SAL_THROW( () )
 {
+#ifdef _DEBUG
+    // No system path allowed here !
+    {
+        OUString aComp;
+        OSL_ASSERT( osl_File_E_None == FileBase::getSystemPathFromFileURL( rLibName, aComp ) );
+        OSL_ASSERT( osl_File_E_None == FileBase::getSystemPathFromFileURL( rPath, aComp ) );
+    }
+#endif
     OUStringBuffer buf( rPath.getLength() + 32 );
 
     if (rPath.getLength())
