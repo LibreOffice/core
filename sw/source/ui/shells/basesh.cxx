@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-03-01 12:33:49 $
+ *  last change: $Author: jp $ $Date: 2001-03-23 15:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,9 +241,6 @@
 #endif
 #ifndef _MDIEXP_HXX
 #include <mdiexp.hxx>
-#endif
-#ifndef _DATAEX_HXX
-#include <dataex.hxx>
 #endif
 #ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
@@ -513,7 +510,6 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             {
                 TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard() );
-                int nRet;
                 if( aDataHelper.GetTransferable().is() &&
                     SwTransferable::IsPaste( rSh, aDataHelper ))
                 {
@@ -2535,6 +2531,9 @@ void SwBaseShell::ExecField( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/03/01 12:33:49  os
+    State contour dialog: not disabled in if swapped out anymore
+
     Revision 1.6  2001/02/27 12:21:02  os
     #82741# Enable image map editor also if graphic is swapped out
 

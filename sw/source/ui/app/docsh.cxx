@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:21:16 $
+ *  last change: $Author: jp $ $Date: 2001-03-23 15:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,9 +217,6 @@
 #endif
 #ifndef _DOC_HXX
 #include <doc.hxx>
-#endif
-#ifndef _DATAEX_HXX
-#include <dataex.hxx>
 #endif
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx>
