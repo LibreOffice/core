@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:27:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,11 @@ SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     SvxAutocorrWordList *pNewAutocorr_List,
     SvxAutoCorrect &rNewAutoCorrect,
-    SvStorageRef &rNewStorage)
+    const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rNewStorage)
 :   SvXMLImport( xServiceFactory ),
     pAutocorr_List (pNewAutocorr_List),
     rAutoCorrect ( rNewAutoCorrect ),
-    rStorage ( rNewStorage )
+    xStorage ( rNewStorage )
 {
     GetNamespaceMap().Add(
             sBlockList,
@@ -183,7 +183,7 @@ SvXMLWordContext::SvXMLWordContext(
     if( !bOnlyTxt )
     {
         String sLongSave( sRight );
-        if( !rLocalRef.rAutoCorrect.GetLongText( rLocalRef.rStorage, sWrong, sRight ) &&
+        if( !rLocalRef.rAutoCorrect.GetLongText( rLocalRef.xStorage, String(), sWrong, sRight ) &&
             sLongSave.Len() )
         {
             sRight = sLongSave;
