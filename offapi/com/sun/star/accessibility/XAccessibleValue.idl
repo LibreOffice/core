@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessibleValue.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 16:50:50 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com { module sun { module star { module accessibility {
     numerical value like scroll bars and spin boxes.  This interface lets
     you access the value and its upper and lower bounds.</p>
 
-    @since #107627#
+    @since OOo 1.1.2
 */
 published interface XAccessibleValue : ::com::sun::star::uno::XInterface
 {
