@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-07 13:07:31 $
+ *  last change: $Author: sj $ $Date: 2001-06-06 15:54:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,6 +286,29 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
         InitSvxMSDffManager( nDggContainerOfs, pStData, nSvxMSDffOLEConvFlags );
         SetSvxMSDffSettings( SVXMSDFF_SETTINGS_CROP_BITMAPS | 2 );              // SVXMSDFF_SETTINGS_IMPORT_PPT
         SetModel( pDoc, 576 );
+
+        if ( bOk )
+        {
+            if ( !pFonts )
+                ReadFontCollection();
+
+            // reading TxSI styles (default language setting ... )
+            PPTTextSpecInfoAtomInterpreter aTxSIStyle;
+            DffRecordHeader* pEnvHd = aDocRecManager.GetRecordHeader( PPT_PST_Environment );
+            if ( pEnvHd )
+            {
+                pEnvHd->SeekToContent( rStCtrl );
+                DffRecordHeader aTxSIStyleRecHd;
+                if ( SeekToRec( rStCtrl, PPT_PST_TxSIStyleAtom, pEnvHd->GetRecEndFilePos(), &aTxSIStyleRecHd ) )
+                    aTxSIStyle.Read( rStCtrl, aTxSIStyleRecHd, PPT_PST_TxSIStyleAtom );
+            }
+            PPTTextSpecInfo aTxSI( 0 );
+            if ( aTxSIStyle.bValid && aTxSIStyle.aList.Count() )
+                aTxSI = *( ( (PPTTextSpecInfo*)aTxSIStyle.aList.GetObject( 0 ) ) );
+
+            // creating stylesheets
+            pPPTStyleSheet = new PPTStyleSheet( rStCtrl, *this, aTxSI );
+        }
     }
 }
 
