@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-09 16:05:17 $
+ *  last change: $Author: hdu $ $Date: 2002-04-11 16:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1168,7 +1168,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
     mnIndex     ( nIndex ),
     mnLen       ( ( nLen == STRING_LEN ) ? rStr.Len() : nLen )
 {
-    const ULONG nAryLen = ( ( mnLen > 1 ) && pDXAry ) ? ( mnLen - 1 ) : 0UL;
+    const ULONG nAryLen = pDXAry ? mnLen : 0;
 
     if( nAryLen )
     {
@@ -1217,7 +1217,7 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
 
     if ( mpDXAry && mnLen )
     {
-        for ( USHORT i = 0, nCount = mnLen - 1; i < nCount; i++ )
+        for ( USHORT i = 0, nCount = mnLen; i < nCount; i++ )
             mpDXAry[ i ] = FRound( mpDXAry[ i ] * fScaleX );
     }
 }
@@ -1226,7 +1226,7 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
 
 void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
-    const ULONG nAryLen = ( ( mnLen > 1 ) && mpDXAry ) ? ( mnLen - 1 ) : 0UL;
+    const ULONG nAryLen = mpDXAry ? mnLen : 0;
 
     WRITE_BASE_COMPAT( rOStm, 1, pData );
     rOStm   << maStartPt;
