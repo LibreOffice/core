@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnPeer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:20:54 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,17 @@ OColumnPeer::OColumnPeer(Window* _pParent,const Reference<XMultiServiceFactory>&
         pFieldControl->SetComponentInterface(this);
     }
     osl_decrementInterlockedCount( &m_refCount );
+}
+// -----------------------------------------------------------------------------
+void OColumnPeer::setEditWidth(sal_Int32 _nWidth)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    OColumnControlWindow* pFieldControl = static_cast<OColumnControlWindow*>( GetWindow() );
+    if ( pFieldControl )
+    {
+        pFieldControl->setEditWidth(_nWidth);
+    }
 }
 // -----------------------------------------------------------------------------
 void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
