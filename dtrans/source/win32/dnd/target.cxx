@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-02 13:15:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-08 08:09:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ void SAL_CALL DropTarget::disposing()
 {
     HRESULT hr;
     hr= RevokeDragDrop( m_hWnd);
-    OSL_ENSURE( SUCCEEDED( hr), "HWND not valid!" );
+    //OSL_ENSURE( SUCCEEDED( hr), "HWND not valid!" );
     m_hWnd= NULL;
     if( m_pDropTarget)
     {
