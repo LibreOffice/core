@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: hjs $ $Date: 2001-08-07 14:04:44 $
+#   last change: $Author: hjs $ $Date: 2001-08-08 10:18:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1146,7 +1146,7 @@ COMPRDB*:=$(UNOUCRRDB)
 .ELSE			# "$(UNOUCRRDB)"!=""
 COMPRDB*:=$(SOLARBINDIR)$/applicat.rdb
 .ENDIF			# "$(UNOUCRRDB)"!=""
-.ENDIF
+.ENDIF          # "$(COMP1TYPELIST)$(COMP2TYPELIST)$(COMP3TYPELIST)$(COMP4TYPELIST)$(COMP5TYPELIST)$(COMP6TYPELIST)$(COMP7TYPELIST)$(COMP8TYPELIST)$(COMP9TYPELIST)"!=""
 .IF "$(COMP1TYPELIST)"!=""
 UNOTYPES+=$($(COMP1TYPELIST)_XML2CMPTYPES)
 .IF "$(NO_SHL1DESCRIPTION)"==""
