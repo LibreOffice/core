@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatedispatch.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-16 07:57:17 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:30:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ namespace configmgr
             sal_Int16 getUpdateAttributes(node::Attributes const & _aAttributes, bool bAdded);
             sal_Int16 getUpdateAttributeMask(node::Attributes const & _aAttributes);
 
-            bool testReplacedAndGetName(data::NodeAccess const & _aNode, OUString & _aName);
+            bool testReplacedAndGetName(data::NodeAccessRef const & _aNode, OUString & _aName);
         private:
             UpdateHandler   m_xUpdateHandler;
             OUString        m_aLocale;
