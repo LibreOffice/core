@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-02 15:15:12 $
+ *  last change: $Author: fs $ $Date: 2002-03-06 15:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #include <svtools/stringtransfer.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
+#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
 #endif
@@ -1545,20 +1548,34 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
     BrowserMode nOldMode = m_nMode;
     if (m_pSeekCursor)
     {
-        Reference< XPropertySet >  xSet(_xCursor, UNO_QUERY);
-        if (xSet.is())
+        try
         {
-            // feststellen welche Updatemöglichkeiten bestehen
-            sal_Int32 nPrivileges;
-            xSet->getPropertyValue(FM_PROP_PRIVILEGES) >>= nPrivileges;
-            // Insert Option should be set if insert only otherwise you won't see any rows
-            // and no insertion is possible
-            if ((m_nOptionMask & OPT_INSERT) && ((nPrivileges & Privilege::INSERT) == Privilege::INSERT) && (nOpts & OPT_INSERT))
-                m_nOptions |= OPT_INSERT;
-            if ((m_nOptionMask & OPT_UPDATE) && ((nPrivileges & Privilege::UPDATE) == Privilege::UPDATE) && (nOpts & OPT_UPDATE))
-                m_nOptions |= OPT_UPDATE;
-            if ((m_nOptionMask & OPT_DELETE) && ((nPrivileges & Privilege::DELETE) == Privilege::DELETE) && (nOpts & OPT_DELETE))
-                m_nOptions |= OPT_DELETE;
+            Reference< XPropertySet >  xSet(_xCursor, UNO_QUERY);
+            if (xSet.is())
+            {
+                // feststellen welche Updatemöglichkeiten bestehen
+                sal_Int32 nConcurrency = ResultSetConcurrency::READ_ONLY;
+                xSet->getPropertyValue(FM_PROP_RESULTSET_CONCURRENCY) >>= nConcurrency;
+
+                if ( ResultSetConcurrency::UPDATABLE == nConcurrency )
+                {
+                    sal_Int32 nPrivileges = 0;
+                    xSet->getPropertyValue(FM_PROP_PRIVILEGES) >>= nPrivileges;
+
+                    // Insert Option should be set if insert only otherwise you won't see any rows
+                    // and no insertion is possible
+                    if ((m_nOptionMask & OPT_INSERT) && ((nPrivileges & Privilege::INSERT) == Privilege::INSERT) && (nOpts & OPT_INSERT))
+                        m_nOptions |= OPT_INSERT;
+                    if ((m_nOptionMask & OPT_UPDATE) && ((nPrivileges & Privilege::UPDATE) == Privilege::UPDATE) && (nOpts & OPT_UPDATE))
+                        m_nOptions |= OPT_UPDATE;
+                    if ((m_nOptionMask & OPT_DELETE) && ((nPrivileges & Privilege::DELETE) == Privilege::DELETE) && (nOpts & OPT_DELETE))
+                        m_nOptions |= OPT_DELETE;
+                }
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "DbGridControl::setDataSource: caught an exception while checking the privileges!" );
         }
 
         sal_Bool bPermanentCursor = IsPermanentCursorEnabled();
