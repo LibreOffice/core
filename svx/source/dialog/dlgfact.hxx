@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:46:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,7 +723,6 @@ public:
                                                         const String& strContexts,
                                                         sal_Int16 nInitialContext,
                                                         const Link& lnkContextSupplier,
-                                                        const ResId& rResId,
                                                         FMSEARCH_MODE eMode = SM_ALLOWSCHEDULE);
     virtual AbstractGraphicFilterDialog *   CreateGraphicFilterEmboss (Window* pParent,  //add for GraphicFilterEmboss
                                             const Graphic& rGraphic,
