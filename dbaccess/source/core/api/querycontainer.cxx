@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:03:38 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,14 +145,16 @@ OQueryContainer::OQueryContainer(
         DBG_ASSERT(xContainer.is(), "OQueryContainer::OQueryContainer : the CommandDefinitions container is invalid !");
         xContainer->addContainerListener(m_pCommandsListener);
 
-//      // fill my structures with dummies
-//      Sequence< ::rtl::OUString > sDefinitionNames = m_xCommandDefinitions->getElementNames();
-//      const ::rtl::OUString* pIter = sDefinitionNames.getConstArray();
-//      const ::rtl::OUString* pEnd = pIter + sDefinitionNames.getLength();
-//      for (;pIter != pEnd; ++pIter)
-//      {
-//          implAppend(*pIter,Reference< XContent >());
-//      }
+        // fill my structures
+        ODefinitionContainer_Impl* pItem = static_cast<ODefinitionContainer_Impl*>(m_pImpl.get());
+        Sequence< ::rtl::OUString > sDefinitionNames = m_xCommandDefinitions->getElementNames();
+        const ::rtl::OUString* pIter = sDefinitionNames.getConstArray();
+        const ::rtl::OUString* pEnd = pIter + sDefinitionNames.getLength();
+        for (;pIter != pEnd; ++pIter)
+        {
+            pItem->m_aDocumentMap.insert(ODefinitionContainer_Impl::Documents::value_type(*pIter,TContentPtr()));
+            m_aDocuments.push_back(m_aDocumentMap.insert(Documents::value_type(*pIter,Documents::mapped_type())).first);
+        }
     }
     decrement(m_refCount);
 }
