@@ -74,6 +74,13 @@ mkdir: %_DEST%\pck%_EXT%
 ..\freetype\freetype-2.0.2\include\freetype\config\* %_DEST%\inc%_EXT%\external\freetype\config\*
 ..\freetype\freetype-2.0.2\include\freetype\internal\* %_DEST%\inc%_EXT%\external\freetype\internal\*
 
+..\dbghelp\dbghelp.dll %_DEST%\bin%_EXT%\dbghelp.dll
+
+..\msvcp70\msvcp70.dll %_DEST%\bin%_EXT%\msvcp70.dll
+..\msvcp70\msvcr70.dll %_DEST%\bin%_EXT%\msvcr70.dll
+
+..\unicows\unicows.dll %_DEST%\bin%_EXT%\unicows.dll
+
 ..\X11\extensions\*.h %_DEST%\inc%_EXT%\X11\extensions\*.h
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
