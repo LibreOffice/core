@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltlst.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 07:58:00 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ void SAL_CALL SfxFilterListener::flushed( const lang::EventObject& aSource ) thr
         (xContainer==m_xTypeCache || xContainer==m_xFilterCache)
       )
     {
-        SfxFilterContainer::ReadFilters_Impl();
+        SfxFilterContainer::ReadFilters_Impl( TRUE );
     }
 }
 
