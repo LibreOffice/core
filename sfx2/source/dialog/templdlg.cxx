@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-02-26 12:39:46 $
+ *  last change: $Author: gt $ $Date: 2002-05-14 13:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,6 +401,7 @@ SfxActionListBox::SfxActionListBox
 :       DropListBox_Impl(pParent->GetWindow(), nWinBits, pParent)
 
 {
+    EnableContextMenuHandling();
 }
 
 //-------------------------------------------------------------------------
@@ -409,16 +410,14 @@ SfxActionListBox::SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent,
                                     const ResId &rResId) :
     DropListBox_Impl(pParent->GetWindow(), rResId, pParent)
 {
+    EnableContextMenuHandling();
 }
 
 //-------------------------------------------------------------------------
 
-void SfxActionListBox::Command( const CommandEvent& rCEvt )
+PopupMenu* SfxActionListBox::CreateContextMenu( void )
 {
-    if ( COMMAND_CONTEXTMENU  == rCEvt.GetCommand() )
-        pDialog->ExecuteContextMenu_Impl( rCEvt.GetMousePosPixel(), this );
-    else
-        DropListBox_Impl::Command( rCEvt );
+    return pDialog->CreateContextMenu();
 }
 
 //-------------------------------------------------------------------------
@@ -517,11 +516,7 @@ void StyleTreeListBox_Impl::Command( const CommandEvent& rCEvt )
 
 */
 {
-    if(COMMAND_CONTEXTMENU  == rCEvt.GetCommand())
-//      pCommon->ExecuteContextMenu_Impl(OutputToScreenPixel(rCEvt.GetMousePosPixel()));
-        pCommon->ExecuteContextMenu_Impl( rCEvt.GetMousePosPixel(), this );
-    else
-        SvTreeListBox::Command(rCEvt);
+    SvTreeListBox::Command(rCEvt);
 }
 
 //-------------------------------------------------------------------------
@@ -2152,17 +2147,10 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, MenuSelectHdl, Menu *, pMenu )
 
 void SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl( const Point& rPos, Window* pWin )
 {
-    if ( bBindingUpdate )
-    {
-        pBindings->Invalidate( SID_STYLE_NEW, TRUE, FALSE );
-        pBindings->Update( SID_STYLE_NEW );
-        bBindingUpdate = FALSE;
-    }
-    PopupMenu* pMenu = new PopupMenu( SfxResId( MN_CONTEXT_TEMPLDLG ) );
-    pMenu->SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, MenuSelectHdl ) );
-    pMenu->EnableItem( ID_EDIT, bCanEdit );
-    pMenu->EnableItem( ID_DELETE, bCanDel );
-    pMenu->EnableItem( ID_NEW, bCanNew );
+    // Bug# 94152: This part should never be called, because before this happens, the TreeListBox should captured this!
+    DBG_ASSERT( FALSE, "+SfxCommonTemplateDialog_Impl::ExecuteContextMenu_Impl(): How could this happen? Please infirm developer ASAP!" );
+
+    PopupMenu* pMenu = CreateContextMenu();
     pMenu->Execute( pWin, rPos );
     delete pMenu;
 }
@@ -2191,6 +2179,25 @@ void SfxCommonTemplateDialog_Impl::EnableExample_Impl(USHORT nId, BOOL bEnable)
 
 void SfxCommonTemplateDialog_Impl::PrepareDeleteAction()
 {
+}
+
+// -----------------------------------------------------------------------
+
+PopupMenu* SfxCommonTemplateDialog_Impl::CreateContextMenu( void )
+{
+    if ( bBindingUpdate )
+    {
+        pBindings->Invalidate( SID_STYLE_NEW, TRUE, FALSE );
+        pBindings->Update( SID_STYLE_NEW );
+        bBindingUpdate = FALSE;
+    }
+    PopupMenu* pMenu = new PopupMenu( SfxResId( MN_CONTEXT_TEMPLDLG ) );
+    pMenu->SetSelectHdl( LINK( this, SfxCommonTemplateDialog_Impl, MenuSelectHdl ) );
+    pMenu->EnableItem( ID_EDIT, bCanEdit );
+    pMenu->EnableItem( ID_DELETE, bCanDel );
+    pMenu->EnableItem( ID_NEW, bCanNew );
+
+    return pMenu;
 }
 
 // ------------------------------------------------------------------------
@@ -2382,7 +2389,6 @@ void SfxTemplateDialog_Impl::Command( const CommandEvent& rCEvt )
 {
     if(COMMAND_CONTEXTMENU  == rCEvt.GetCommand())
         ExecuteContextMenu_Impl( rCEvt.GetMousePosPixel(), pFloat );
-//      ExecuteContextMenu_Impl(pFloat->OutputToScreenPixel(rCEvt.GetMousePosPixel()));
     else
         pFloat->Command(rCEvt);
 }

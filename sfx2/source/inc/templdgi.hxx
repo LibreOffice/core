@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2001-09-12 07:43:09 $
+ *  last change: $Author: gt $ $Date: 2002-05-14 13:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,11 +138,11 @@ public:
 class SfxActionListBox : public DropListBox_Impl
 {
 protected:
-    virtual void    Command( const CommandEvent& rMEvt );
-
 public:
     SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent, WinBits nWinBits );
     SfxActionListBox( SfxCommonTemplateDialog_Impl* pParent, const ResId &rResId );
+
+    virtual PopupMenu*  CreateContextMenu( void );
 };
 
 // class SfxCommonTemplateDialog_Impl ------------------------------------
@@ -292,6 +292,13 @@ public:
     SfxObjectShell*     GetObjectShell() const { return pCurObjShell; }
 
     virtual void        PrepareDeleteAction();  // disable buttons, change button text, etc. when del is going to happen
+
+    inline BOOL         CanEdit( void ) const   { return bCanEdit; }
+    inline BOOL         CanDel( void ) const    { return bCanDel; }
+    inline BOOL         CanNew( void ) const    { return bCanNew; }
+
+    // normaly for derivates from SvTreeListBoxes, but in this case the dialog handles context menus
+    virtual PopupMenu*  CreateContextMenu( void );
 };
 
 // class SfxTemplateDialog_Impl ------------------------------------------
