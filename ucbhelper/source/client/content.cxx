@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-05 15:54:42 $
+ *  last change: $Author: kso $ $Date: 2001-02-07 08:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
                                 TODO
  **************************************************************************
 
+ - Register content-event-listener to handle EXCHANGED and DELETED events.
+
  *************************************************************************/
 
 #ifndef _VOS_MUTEX_HXX_
@@ -95,6 +97,12 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_GLOBALTRANSFERCOMMANDARGUMENT_HPP_
+#include <com/sun/star/ucb/GlobalTransferCommandArgument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
+#include <com/sun/star/ucb/NameClash.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_OPENMODE_HPP_
 #include <com/sun/star/ucb/OpenMode.hpp>
@@ -162,6 +170,7 @@ namespace ucb
 
 class Content_Impl : public vos::OReference
 {
+    OUString                          m_aURL;
     Reference< XMultiServiceFactory > m_xSMgr;
     Reference< XContent >             m_xContent;
     Reference< XCommandProcessor >    m_xCommandProcessor;
@@ -177,13 +186,16 @@ public:
 
     virtual ~Content_Impl();
 
+    const OUString&                getURL()     const { return m_aURL; }
     Reference< XContent >          getContent() const { return m_xContent; }
     Reference< XCommandProcessor > getCommandProcessor();
     sal_Int32 getCommandId();
 
     Any  executeCommand( const Command& rCommand );
     void abortCommand();
-    Reference< XCommandEnvironment > getEnvironment() const { return m_xEnv; }
+    inline const Reference< XCommandEnvironment >& getEnvironment() const;
+    inline void setEnvironment(
+                        const Reference< XCommandEnvironment >& xNewEnv );
 };
 
 //=========================================================================
@@ -196,6 +208,26 @@ inline Content_Impl::Content_Impl(
   m_xEnv( rEnv ),
   m_aCommandId( 0 )
 {
+    if ( m_xContent.is() )
+    {
+        // @@@ register content-event-listener
+        m_aURL = m_xContent->getIdentifier()->getContentIdentifier();
+    }
+}
+
+//=========================================================================
+inline const Reference< XCommandEnvironment >&
+                                        Content_Impl::getEnvironment() const
+{
+    return m_xEnv;
+}
+
+//=========================================================================
+inline void Content_Impl::setEnvironment(
+                        const Reference< XCommandEnvironment >& xNewEnv )
+{
+    vos::OGuard aGuard( m_aMutex );
+    m_xEnv = xNewEnv;
 }
 
 //=========================================================================
@@ -465,6 +497,25 @@ Content& Content::operator=( const Content& rOther )
 Reference< XContent > Content::get() const
 {
     return m_xImpl->getContent();
+}
+
+//=========================================================================
+const OUString& Content::getURL() const
+{
+    return m_xImpl->getURL();
+}
+
+//=========================================================================
+const Reference< XCommandEnvironment >& Content::getCommandEnvironment() const
+{
+    return m_xImpl->getEnvironment();
+}
+
+//=========================================================================
+void Content::setCommandEnvironment(
+                        const Reference< XCommandEnvironment >& xNewEnv )
+{
+    m_xImpl->setEnvironment( xNewEnv );
 }
 
 //=========================================================================
@@ -1162,6 +1213,59 @@ sal_Bool Content::insertNewContent( const OUString& rContentType,
                                         rData,
                                         sal_False /* ReplaceExisting */ ) ) );
     rNewContent = aNewContent;
+    return sal_True;
+}
+
+//=========================================================================
+sal_Bool Content::insertNewContent( const Content& rSourceContent,
+                                    InsertOperation eOperation,
+                                    Content& rNewContent )
+    throw( CommandAbortedException, RuntimeException, Exception )
+{
+    ucb::ContentBroker* pBroker = ucb::ContentBroker::get();
+    if ( !pBroker )
+        throw CommandAbortedException();
+
+    Reference< XCommandProcessor > xCmdProc(
+                                    pBroker->getCommandProcessorInterface() );
+    if ( !xCmdProc.is() )
+        throw CommandAbortedException();
+
+    // Execute command "globalTransfer" at UCB.
+
+    TransferCommandOperation eTransOp;
+    switch ( eOperation )
+    {
+        case InsertOperation_COPY:
+            eTransOp = TransferCommandOperation_COPY;
+            break;
+
+        case InsertOperation_MOVE:
+            eTransOp = TransferCommandOperation_MOVE;
+            break;
+
+        case InsertOperation_LINK:
+            eTransOp = TransferCommandOperation_LINK;
+            break;
+
+        default:
+            VOS_ENSURE( sal_False,
+                        "Content::insertNewContent - Unknown operation!" );
+            throw CommandAbortedException();
+    }
+
+    GlobalTransferCommandArgument aTransferArg(
+                                        eTransOp,
+                                        rSourceContent.getURL(), // SourceURL
+                                        getURL(),   // TargetURL,
+                                        OUString(), // NewTitle
+                                        NameClash::ERROR );
+    Command aCommand;
+    aCommand.Name     = OUString::createFromAscii( "globalTransfer" );
+    aCommand.Handle   = -1; // n/a
+    aCommand.Argument <<= aTransferArg;
+
+    xCmdProc->execute( aCommand, 0, m_xImpl->getEnvironment() );
     return sal_True;
 }
 

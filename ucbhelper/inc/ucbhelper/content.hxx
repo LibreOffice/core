@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-05 15:54:10 $
+ *  last change: $Author: kso $ $Date: 2001-02-07 08:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,17 @@ enum ResultSetInclude
     INCLUDE_FOLDERS_ONLY,
     INCLUDE_DOCUMENTS_ONLY,
     INCLUDE_FOLDERS_AND_DOCUMENTS
+};
+
+/**
+  * These are the possible values for the parameter eOperation of method
+  * ucb::Content::insertNewContent.
+  */
+enum InsertOperation
+{
+    InsertOperation_COPY, // copy source data
+    InsertOperation_MOVE, // move source data
+    InsertOperation_LINK  // create a link to source
 };
 
 //=========================================================================
@@ -273,6 +284,39 @@ public:
     get() const;
 
     //////////////////////////////////////////////////////////////////////
+    // Object identity.
+    //////////////////////////////////////////////////////////////////////
+
+    /**
+      * This method returns the URL of the content.
+      *
+      * @return the URL of the content.
+      */
+    const ::rtl::OUString& getURL() const;
+
+    //////////////////////////////////////////////////////////////////////
+    // Command environment.
+    //////////////////////////////////////////////////////////////////////
+
+    /**
+      * This method returns the environment to use when executing commands.
+      *
+      * @return the command environment.
+      */
+    const ::com::sun::star::uno::Reference<
+            ::com::sun::star::ucb::XCommandEnvironment >&
+    getCommandEnvironment() const;
+
+    /**
+      * This method sets a new command environment.
+      *
+      * @param xNewEnv is the new command environment.
+      */
+    void setCommandEnvironment(
+            const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::ucb::XCommandEnvironment >& xNewEnv );
+
+    //////////////////////////////////////////////////////////////////////
     // Access to supported commands/properties.
     //////////////////////////////////////////////////////////////////////
 
@@ -280,7 +324,7 @@ public:
       * This methods provides access to meta data of the commands supported
       * by this content.
       *
-      * @return An XCommandInfo interface implementation, which can be used
+      * @return an XCommandInfo interface implementation, which can be used
       *         to obtain meta data of the commands supported by this content.
       */
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandInfo >
@@ -292,10 +336,11 @@ public:
       * This methods provides access to meta data of the properties supported
       * by this content.
       *
-      * @return An XPropertSetInfo interface implementation, which can be used
+      * @return an XPropertSetInfo interface implementation, which can be used
       *         to obtain meta data of the properties supported by this content.
       */
-    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySetInfo >
     getProperties()
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
@@ -777,12 +822,33 @@ public:
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
+    /**
+      * This method creates, initializes and inserts ( commits ) a new content.
+      * The data for the new content will be taken from a given source content
+      * object. Internally this method executes the command "globalTransfer"
+      * at the UCB.
+      *
+      * @param rSourceContent is the content that caontains the data for the
+      *        new UCB content.
+      * @param eOperation defines what shall be done with the source data
+      *        ( COPY, MOVE, LINK ).
+      * @param rNewContent will be filled by the implementation of this method
+      *        with the new content.
+      */
+    sal_Bool
+    insertNewContent( const Content& rSourceContent,
+                      InsertOperation eOperation,
+                      Content& rNewContent )
+        throw( ::com::sun::star::ucb::CommandAbortedException,
+               ::com::sun::star::uno::RuntimeException,
+               ::com::sun::star::uno::Exception );
 
     //////////////////////////////////////////////////////////////////////
     // Required properties.
     //////////////////////////////////////////////////////////////////////
 
-    /** This method returns the value of the content's property "IsFolder".
+    /**
+      * This method returns the value of the content's property "IsFolder".
       *
       * @return true, if the content is a folder ( it can contain other
       *         UCB contents). false, otherwise.
@@ -792,7 +858,8 @@ public:
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
-    /** This method returns the value of the content's property "IsDocument".
+    /**
+      * This method returns the value of the content's property "IsDocument".
       *
       * @return true, if the content is a document ( it has a content stream ).
       *         false, otherwise.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentbroker.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2001-02-07 08:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDERMANAGER_HPP_
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDPROCESSOR_HPP_
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
+#endif
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
@@ -114,6 +117,7 @@ class ContentBroker_Impl
     Reference< XContentIdentifierFactory >  m_xIdFac;
     Reference< XContentProvider >           m_xProvider;
     Reference< XContentProviderManager >    m_xProviderMgr;
+    Reference< XCommandProcessor >          m_xCommandProc;
     Sequence< Any >                         m_aArguments;
     vos::OMutex                             m_aMutex;
     sal_Bool                                m_bInitDone;
@@ -141,6 +145,9 @@ public:
 
     const Reference< XContentProviderManager >& getProviderManager() const
     { init(); return m_xProviderMgr; }
+
+    const Reference< XCommandProcessor >& getCommandProcessor() const
+    { init(); return m_xCommandProc; }
 };
 
 //=========================================================================
@@ -192,6 +199,13 @@ Reference< XContentProviderManager >
                 ContentBroker::getContentProviderManagerInterface() const
 {
     return m_pImpl->getProviderManager();
+}
+
+//=========================================================================
+Reference< XCommandProcessor >
+                ContentBroker::getCommandProcessorInterface() const
+{
+    return m_pImpl->getCommandProcessor();
 }
 
 //=========================================================================
@@ -291,6 +305,12 @@ void ContentBroker_Impl::init()
 
             VOS_ENSURE( m_xProviderMgr.is(),
                         "UCB without XContentProviderManager!" );
+
+            m_xCommandProc
+                = Reference< XCommandProcessor >( xIfc, UNO_QUERY );
+
+            VOS_ENSURE( m_xCommandProc.is(),
+                        "UCB without XCommandProcessor!" );
         }
     }
 }

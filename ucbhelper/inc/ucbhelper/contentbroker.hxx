@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentbroker.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:36 $
+ *  last change: $Author: kso $ $Date: 2001-02-07 08:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ namespace com { namespace sun { namespace star { namespace ucb {
     class XContentIdentifierFactory;
     class XContentProvider;
     class XContentProviderManager;
+    class XCommandProcessor;
 } } } }
 
 namespace ucb
@@ -199,6 +200,15 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::ucb::XContentProviderManager >
     getContentProviderManagerInterface() const;
+
+    /**
+      * This method returns the XCommandProcessor interface of the Broker.
+      *
+      * @return a XCommandProcessor interface.
+      */
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::ucb::XCommandProcessor >
+    getCommandProcessorInterface() const;
 };
 
 } /* namespace ucb */
