@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlout.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-06 13:24:26 $
+ *  last change: $Author: mib $ $Date: 2001-07-10 10:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,9 +369,16 @@ SvStream& HTMLOutFuncs::Out_Color( SvStream& rStream, const Color& rColor,
                                    rtl_TextEncoding )
 {
     rStream << "\"#";
-    Out_Hex( rStream, rColor.GetRed(), 2 );
-    Out_Hex( rStream, rColor.GetGreen(), 2 );
-    Out_Hex( rStream, rColor.GetBlue(), 2 );
+    if( rColor.GetColor() == COL_AUTO )
+    {
+        rStream << "000000";
+    }
+    else
+    {
+        Out_Hex( rStream, rColor.GetRed(), 2 );
+        Out_Hex( rStream, rColor.GetGreen(), 2 );
+        Out_Hex( rStream, rColor.GetBlue(), 2 );
+    }
     rStream << '\"';
 
     return rStream;
