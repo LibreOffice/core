@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-01 13:33:50 $
+ *  last change: $Author: hdu $ $Date: 2002-08-02 12:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,11 +277,11 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
             mpGlyphAdvances[ j ]    = nTempAdvance;
             mpGlyphs2Chars[ j ]     = i + (nMaxGlyphCount - mnGlyphCount);
         }
-       for(; i < nMaxGlyphCount; ++i )
+       for( i = mnGlyphCount; i < nMaxGlyphCount; ++i )
             mpGlyphs2Chars[ i ] = -1;
     }
 
-    // calculate mpChars2Glyphs
+    // calculate mpChars2Glyphs if glyph->char mapping also exists
     // note: glyph to char mapping is relative to first character
     if( mpGlyphs2Chars != NULL )
     {
@@ -419,7 +419,7 @@ void SimpleWinLayout::Draw() const
 
 // -----------------------------------------------------------------------
 
-/* TODO: remove because of WinLayout::GetOutline
+/* TODO: remove because of SalLayout::GetOutline
 bool SimpleWinLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
 {
     bool bRet = false;
@@ -1147,7 +1147,7 @@ void UniscribeLayout::Draw() const
 
 // -----------------------------------------------------------------------
 
-/* TODO: remove because of WinLayout::GetOutline
+/* TODO: remove because of SalLayout::GetOutline
 bool UniscribeLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyPoly ) const
 {
     Point aRelPos = Point(0,0);
@@ -1437,14 +1437,7 @@ void SalGraphics::DrawSalLayout( const SalLayout& rSalLayout )
 
 BOOL SalGraphics::GetLayoutOutline( const SalLayout& rSalLayout, PolyPolygon& rPolyPoly )
 {
-    rPolyPoly.Clear();
-
     return rSalLayout.GetOutline( *this, rPolyPoly );
-/*###
-    // we know the SalLayout created by this SalGraphics is a WinLayout
-    const WinLayout& rWinLayout = reinterpret_cast<const WinLayout&>( rSalLayout );
-    return rWinLayout.GetOutline( *this, rPolyPoly );
-*/
 }
 
 // =======================================================================
