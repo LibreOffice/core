@@ -10,7 +10,24 @@ wz      wizards\source\template                                 nmake           
 wz      wizards\source\tools                                    nmake           -       all     wz_toolswiz NULL
 wz      wizards\source\webwizard                                nmake           -       all     wz_webwizard NULL
 wz      wizards\source\depot                                    nmake           -       all     wz_depot NULL
+wz      wizards\source\tutorials                                nmake           -       all     wz_tutorials NULL
 wz      wizards\source\standard                                 nmake           -       all     wz_standard NULL
 wz      wizards\source\launcher                                 nmake           -       all     wz_launcher NULL
-wz      wizards\com\sun\star\wizards\report                     nmake           -       all     wz_reportwiz wz_commonwiz NULL
 wz      wizards\com\sun\star\wizards\common                     nmake           -       all     wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\db                         nmake           -       all     wz_dbwiz wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\ui\event                   nmake           -       all     wz_uieventwiz wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\ui                         nmake           -       all     wz_uiwiz wz_dbwiz wz_uieventwiz NULL
+wz      wizards\com\sun\star\wizards\document                   nmake           -       all     wz_documentwiz wz_commonwiz NULL
+wz      wizards\com\sun\star\wizards\text                       nmake           -       all     wz_textwiz wz_documentwiz NULL
+wz      wizards\com\sun\star\wizards\query                      nmake           -       all     wz_querywiz wz_uiwiz NULL
+wz      wizards\com\sun\star\wizards\report                     nmake           -       all     wz_reportwiz wz_uiwiz wz_textwiz wz_querywiz NULL
+wz      wizards\com\sun\star\wizards\letter                     nmake           -       all     wz_letterwiz wz_uiwiz wz_textwiz NULL
+wz      wizards\com\sun\star\wizards\web\data                   nmake           -       all     wz_webdata wz_documentwiz wz_uiwiz NULL
+wz      wizards\com\sun\star\wizards\web\export                 nmake           -       all     wz_webexport wz_webdata wz_textwiz NULL
+wz      wizards\com\sun\star\wizards\web                        nmake           -       all     wz_webwiz wz_webexport NULL
+wz      wizards\com\sun\star\wizards\tutorial\executer\util     nmake           -       all     wz_tutexeutil NULL
+wz      wizards\com\sun\star\wizards\tutorial\executer\officeHelper      nmake -       all     wz_tutexehelper wz_tutexeutil NULL
+wz      wizards\com\sun\star\wizards\tutorial\creator\frame\objectFinder  nmake -       all     wz_tutcrefrafinder wz_tutexehelper NULL
+wz      wizards\com\sun\star\wizards\tutorial\creator\frame     nmake           -       all     wz_tutcrefra wz_tutcrefrafinder NULL
+wz      wizards\com\sun\star\wizards\tutorial\creator           nmake           -       all     wz_tutcre wz_tutcrefra NULL
+wz      wizards\com\sun\star\wizards\tutorial\executer          nmake           -       all     wz_tutexe wz_tutcre NULL
