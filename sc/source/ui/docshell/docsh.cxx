@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:53:55 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
 
+
+#include "scabstdlg.hxx" //CHINA001
 #include <sot/formats.hxx>
 #define SOT_FORMATSTR_ID_STARCALC_30 SOT_FORMATSTR_ID_STARCALC
 
@@ -134,7 +136,7 @@ SO2_DECL_REF(SvStorageStream)
 #include "scresid.hxx"
 #include "sc.hrc"
 #include "globstr.hrc"
-#include "tpstat.hxx"
+//CHINA001 #include "tpstat.hxx"
 #include "scerrors.hxx"
 #include "brdcst.hxx"
 #include "stlpool.hxx"
@@ -2406,11 +2408,20 @@ SfxDocumentInfoDialog* __EXPORT ScDocShell::CreateDocumentInfoDialog(
     //aus dem Doc-Manager
 
     if( pDocSh == this )
+    {
+        ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+        ::CreateTabPage ScDocStatPageCreate =   pFact->GetTabPageCreatorFunc( RID_SCPAGE_STAT );
+        DBG_ASSERT(ScDocStatPageCreate, "Tabpage create fail!");//CHINA001
         pDlg->AddTabPage( 42,
-                          ScGlobal::GetRscString( STR_DOC_STAT ),
-                          ScDocStatPage::Create,
-                          NULL );
-
+            ScGlobal::GetRscString( STR_DOC_STAT ),
+            ScDocStatPageCreate,
+            NULL);
+//CHINA001      pDlg->AddTabPage( 42,
+//CHINA001      ScGlobal::GetRscString( STR_DOC_STAT ),
+//CHINA001      ScDocStatPage::Create,
+//CHINA001      NULL );
+    }
     return pDlg;
 }
 
