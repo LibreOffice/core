@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:17:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,9 +310,9 @@ void ScTabView::TabChanged()
             if (pGridWin[i])
                 pDrawView->VCRemoveWin(pGridWin[i]);    // fuer alte Page
 
-        USHORT nTab = aViewData.GetTabNo();
+        SCTAB nTab = aViewData.GetTabNo();
         pDrawView->HideAllPages();
-        pDrawView->ShowPagePgNum( nTab, Point() );
+        pDrawView->ShowPagePgNum( static_cast<sal_uInt16>(nTab), Point() );
 
         UpdateLayerLocks();
 
@@ -368,7 +368,7 @@ void ScTabView::UpdateLayerLocks()
 {
     if (pDrawView)
     {
-        USHORT nTab = aViewData.GetTabNo();
+        SCTAB nTab = aViewData.GetTabNo();
         BOOL bEx = aViewData.GetViewShell()->IsDrawSelMode();
         BOOL bProt = aViewData.GetDocument()->IsTabProtected( nTab ) ||
                      aViewData.GetSfxDocShell()->IsReadOnly();
@@ -606,7 +606,7 @@ void ScTabView::MakeVisible( const Rectangle& rHMMRect )
 {
     Window* pWin = GetActiveWin();
     Size aWinSize = pWin->GetOutputSizePixel();
-    USHORT nTab = aViewData.GetTabNo();
+    SCTAB nTab = aViewData.GetTabNo();
 
     Rectangle aRect = pWin->LogicToPixel( rHMMRect );
 
@@ -639,8 +639,8 @@ void ScTabView::MakeVisible( const Rectangle& rHMMRect )
         double nPPTX = aViewData.GetPPTX();
         double nPPTY = aViewData.GetPPTY();
         ScSplitPos eWhich = aViewData.GetActivePart();
-        USHORT nPosX = aViewData.GetPosX(WhichH(eWhich));
-        USHORT nPosY = aViewData.GetPosY(WhichV(eWhich));
+        SCCOL nPosX = aViewData.GetPosX(WhichH(eWhich));
+        SCROW nPosY = aViewData.GetPosY(WhichV(eWhich));
 
         long nLinesX=0, nLinesY=0;      // Spalten/Zeilen - um mindestens nScrollX/Y scrollen
 
