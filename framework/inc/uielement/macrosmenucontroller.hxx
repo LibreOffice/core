@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosmenucontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:04:53 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <drafts/com/sun/star/frame/XPopupMenuController.hpp>
+#include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/weak.hxx>
 #include <vcl/menu.hxx>
