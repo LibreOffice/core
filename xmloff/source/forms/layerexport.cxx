@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerexport.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2002-10-25 08:00:09 $
+ *  last change: $Author: obo $ $Date: 2002-11-06 10:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,10 +363,7 @@ namespace xmloff
     void OFormLayerXMLExport_Impl::exportAutoStyles()
     {
         m_rContext.GetAutoStylePool()->exportXML(
-            XML_STYLE_FAMILY_CONTROL_ID,
-            m_rContext.GetDocHandler(),
-            m_rContext.GetMM100UnitConverter(),
-            m_rContext.GetNamespaceMap()
+            XML_STYLE_FAMILY_CONTROL_ID
         );
     }
 
@@ -811,6 +808,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2002/10/25 08:00:09  fs
+ *  #104402# now exporting the style of a grid column (Align/formatting) as style
+ *
  *  Revision 1.17  2002/09/25 12:05:08  fs
  *  #103597# +excludeFromExport/m_aIgnoreList
  *
