@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:43:26 $
+ *  last change: $Author: obo $ $Date: 2003-11-12 17:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,10 @@ void TextView::ImpPaint( const Rectangle& rRect, BOOL bUseVirtDev )
     if ( !mpTextEngine->GetUpdateMode() || mpTextEngine->IsInUndo() )
         return;
 
+    TextSelection *pDrawSelection = NULL;
+    if ( !mbHighlightSelection && maSelection.HasRange() )
+        pDrawSelection = &maSelection;
+
     if ( bUseVirtDev )
     {
         VirtualDevice* pVDev = GetVirtualDevice();
@@ -426,13 +430,9 @@ void TextView::ImpPaint( const Rectangle& rRect, BOOL bUseVirtDev )
 
         Point aDocPos( maStartDocPos.X(), maStartDocPos.Y() + rRect.Top() );
         Point aStartPos = ImpGetOutputStartPos( aDocPos );
-
-        TextSelection *pTmpPtr = mbHighlightSelection ? NULL : &maSelection;
-        ImpPaint( pVDev, aStartPos, &aTmpRec, NULL, pTmpPtr );
-
+        ImpPaint( pVDev, aStartPos, &aTmpRec, NULL, pDrawSelection );
         mpWindow->DrawOutDev( rRect.TopLeft(), rRect.GetSize(),
                                 Point(0,0), rRect.GetSize(), *pVDev );
-
 //      ShowSelection();
         if ( mbHighlightSelection )
             ImpHighlight( maSelection );
@@ -440,8 +440,7 @@ void TextView::ImpPaint( const Rectangle& rRect, BOOL bUseVirtDev )
     else
     {
         Point aStartPos = ImpGetOutputStartPos( maStartDocPos );
-        TextSelection *pTmpPtr = mbHighlightSelection ? NULL : &maSelection;
-        ImpPaint( mpWindow, aStartPos, &rRect, NULL, pTmpPtr );
+        ImpPaint( mpWindow, aStartPos, &rRect, NULL, pDrawSelection );
 
 //      ShowSelection();
         if ( mbHighlightSelection )
@@ -1355,7 +1354,7 @@ TextPaM TextView::CursorWordLeft( const TextPaM& rPaM )
         i18n::Boundary aBoundary = xBI->getWordBoundary( pNode->GetText(), rPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES, sal_True );
         if ( aBoundary.startPos >= rPaM.GetIndex() )
             aBoundary = xBI->previousWord( pNode->GetText(), rPaM.GetIndex(), mpTextEngine->GetLocale(), i18n::WordType::ANYWORD_IGNOREWHITESPACES );
-        aPaM.GetIndex() = ( aBoundary.startPos != -1 ) ? aBoundary.startPos : 0;
+        aPaM.GetIndex() = ( aBoundary.startPos != -1 ) ? (USHORT)aBoundary.startPos : 0;
     }
     else if ( aPaM.GetPara() )
     {
@@ -1462,7 +1461,7 @@ TextPaM TextView::CursorUp( const TextPaM& rPaM )
     if ( mnTravelXPos == TRAVEL_X_DONTKNOW )
     {
         nX = mpTextEngine->GetEditCursor( rPaM, FALSE ).Left();
-        mnTravelXPos = nX+1;
+        mnTravelXPos = (USHORT)nX+1;
     }
     else
         nX = mnTravelXPos;
@@ -1500,7 +1499,7 @@ TextPaM TextView::CursorDown( const TextPaM& rPaM )
     if ( mnTravelXPos == TRAVEL_X_DONTKNOW )
     {
         nX = mpTextEngine->GetEditCursor( rPaM, FALSE ).Left();
-        mnTravelXPos = nX+1;
+        mnTravelXPos = (USHORT)nX+1;
     }
     else
         nX = mnTravelXPos;
