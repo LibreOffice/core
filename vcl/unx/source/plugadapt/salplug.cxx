@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salplug.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:58:24 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:20:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,49 @@ static bool is_gnome_desktop( Display* pDisplay )
                     ret = true;
                 }
             XFree( pProperties );
+        }
+    }
+    if( ! ret )
+    {
+        Atom nUTFAtom       = XInternAtom( pDisplay, "UTF8_STRING", True );
+        Atom nNetWMNameAtom = XInternAtom( pDisplay, "_NET_WM_NAME", True );
+        if( nUTFAtom && nNetWMNameAtom )
+        {
+            // another, more expensive check: search for a gnome-panel
+            XLIB_Window aRoot, aParent, *pChildren = NULL;
+            unsigned int nChildren = 0;
+            XQueryTree( pDisplay, DefaultRootWindow( pDisplay ),
+                        &aRoot, &aParent, &pChildren, &nChildren );
+            if( pChildren && nChildren )
+            {
+                for( unsigned int i = 0; i < nChildren && ! pRet; i++ )
+                {
+                    Atom nType = None;
+                    int nFormat = 0;
+                    unsigned long nItems = 0, nBytes = 0;
+                    unsigned char* pProp = NULL;
+                    XGetWindowProperty( pDisplay,
+                                        pChildren[i],
+                                        nNetWMNameAtom,
+                                        0, 8,
+                                        False,
+                                        nUTFAtom,
+                                        &nType,
+                                        &nFormat,
+                                        &nItems,
+                                        &nBytes,
+                                        &pProp );
+                    if( pProp && nType == nUTFAtom )
+                    {
+                        OString aWMName( (sal_Char*)pProp );
+                        if( aWMName.equalsIgnoreAsciiCase( "gnome-panel" ) )
+                            ret = true;
+                    }
+                    if( pProp )
+                        XFree( pProp );
+                }
+                XFree( pChildren );
+            }
         }
     }
 
@@ -397,14 +440,6 @@ SalInstance *CreateSalInstance()
 
     if( pUsePlugin && *pUsePlugin )
         pInst = tryInstance( OUString::createFromAscii( pUsePlugin ) );
-
-#ifdef ENABLE_GTK_AUTODETECT
-    if( ! pInst )
-        pInst = tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "gtk" ) ) );
-#endif
-
-    if( ! pInst )
-        pInst = tryInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "kde" ) ) );
 
     // fallback to gen
     if( ! pInst )
