@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msfilter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:13:35 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,30 @@
 #ifndef SW_MS_MSFILTER_HXX
 #define SW_MS_MSFILTER_HXX
 
+#include <set>
+
+#ifndef WW_WWSTYLES_HXX
+#   include "wwstyles.hxx"     //ww::sti
+#endif
 #ifndef _RTL_TEXTENC_H
-#include <rtl/textenc.h>    //rtl_TextEncoding
+#   include <rtl/textenc.h>    //rtl_TextEncoding
 #endif
 
 class SwDoc;
 class SwPaM;
 class String;
+namespace
+{
+    template<class C> class StyleMapperImpl;
+}
+class SwTxtFmtColl;
+class SwCharFmt;
+typedef StyleMapperImpl<SwTxtFmtColl> ParaMapper;
+typedef StyleMapperImpl<SwCharFmt> CharMapper;
 
 namespace sw
 {
-    namespace types
+    namespace ms
     {
         /** MSOffice appears to set the charset of unicode fonts to MS 932
 
@@ -112,10 +125,7 @@ namespace sw
         rtl_TextEncoding rtl_TextEncodingToWinCharsetAndBack(
             rtl_TextEncoding eTextEncoding);
 
-    }
 
-    namespace ms
-    {
         /** Import a MSWord XE field. Suitable for .doc and .rtf
 
             @param rDoc
@@ -131,6 +141,129 @@ namespace sw
                 <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         void ImportXE(SwDoc &rDoc, SwPaM &rPaM, const String &rXE);
+    }
+
+    namespace util
+    {
+        /** Knows which writer style a given word style should be imported as
+
+            Mapping a word style to a writer style has to consider mapping
+            the word builtin styles like "Normal" as the default root style
+            to our default root style which is called "Default" in english,
+            and "Normal" in german.
+
+            Additionally it then has to avoid name collisions such as
+
+            a) styles "Normal" and "Default" in a single document, where
+            we can use the original distinct names "Normal" and "Default" and..
+            b) styles "Normal" and "Default" in a single document, where
+            we can not use the original names, and must come up with an
+            alternative name for one of them..
+
+            And it needs to report to the importer if the style being mapped to
+            was already in existance, for the cut and paste/insert file mode we
+            should not modify the returned style if it is already in use as it
+            is does not belong to us to change.
+
+            @author
+                <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        class ParaStyleMapper
+        {
+        private:
+            //I hate these things stupid pImpl things, but its warranted here
+            ParaMapper *mpImpl;
+        public:
+            ParaStyleMapper(SwDoc &rDoc);
+            ~ParaStyleMapper();
+
+            /** StyleResult
+                StyleResult is a std::pair of a pointer to a style and a flag
+                which is true if the style existed previously in the document.
+            */
+            typedef std::pair<SwTxtFmtColl*, bool> StyleResult;
+
+            /** Get the writer style which the word style should map to
+
+                @param rName
+                The name of the word style
+
+                @param eSti
+                The style id of the word style, we are really only interested
+                in knowing if the style has either a builtin standard id, or is
+                a user defined style.
+
+                @return
+                The equivalent writer style packaged as a StyleResult to use
+                for this word style.
+
+                It will only return a failure in the pathological case of
+                catastropic failure elsewhere of there exist already styles
+                rName and WW-rName[0..SAL_MAX_INT32], which is both unlikely
+                and impossible.
+            */
+            StyleResult GetStyle(const String& rName, ww::sti eSti);
+        };
+
+        /** Knows which writer style a given word style should be imported as
+
+            Mapping a word style to a writer style has to consider mapping
+            the word builtin styles like "Normal" as the default root style
+            to our default root style which is called "Default" in english,
+            and "Normal" in german.
+
+            Additionally it then has to avoid name collisions such as
+
+            a) styles "Normal" and "Default" in a single document, where
+            we can use the original distinct names "Normal" and "Default" and..
+            b) styles "Normal" and "Default" in a single document, where
+            we can not use the original names, and must come up with an
+            alternative name for one of them..
+
+            And it needs to report to the importer if the style being mapped to
+            was already in existance, for the cut and paste/insert file mode we
+            should not modify the returned style if it is already in use as it
+            is does not belong to us to change.
+
+            @author
+                <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
+        */
+        class CharStyleMapper
+        {
+        private:
+            //I hate these things stupid pImpl things, but its warranted here
+            CharMapper *mpImpl;
+        public:
+            CharStyleMapper(SwDoc &rDoc);
+            ~CharStyleMapper();
+
+            /** StyleResult
+                StyleResult is a std::pair of a pointer to a style and a flag
+                which is true if the style existed previously in the document.
+            */
+            typedef std::pair<SwCharFmt*, bool> StyleResult;
+
+            /** Get the writer style which the word style should map to
+
+                @param rName
+                The name of the word style
+
+                @param eSti
+                The style id of the word style, we are really only interested
+                in knowing if the style has either a builtin standard id, or is
+                a user defined style.
+
+                @return
+                The equivalent writer style packaged as a StyleResult to use
+                for this word style.
+
+                It will only return a failure in the pathological case of
+                catastropic failure elsewhere of there exist already styles
+                rName and WW-rName[0..SAL_MAX_INT32], which is both unlikely
+                and impossible.
+            */
+            StyleResult GetStyle(const String& rName, ww::sti eSti);
+        };
     }
 }
 
