@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-01 16:21:55 $
+ *  last change: $Author: pl $ $Date: 2001-12-13 17:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,10 @@ PrinterGfx::Init (PrinterJob &rPrinterJob)
     rPrinterJob.GetResolution (mnDpiX, mnDpiY);
     rPrinterJob.GetScale (mfScaleX, mfScaleY);
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rPrinterJob.GetPrinterName() ) );
+    if( mpFontSubstitutes )
+        delete const_cast< ::std::hash_map<fontID,fontID>* >(mpFontSubstitutes);
     if( rInfo.m_bPerformFontSubstitution )
-        mpFontSubstitutes = &rInfo.m_aFontSubstitutions;
+        mpFontSubstitutes = new ::std::hash_map< fontID, fontID >( rInfo.m_aFontSubstitutions );
     else
         mpFontSubstitutes = NULL;
     mbUploadPS42Fonts = rInfo.m_pParser ? ( rInfo.m_pParser->isType42Capable() ? sal_True : sal_False ) : sal_False;
@@ -134,8 +136,10 @@ PrinterGfx::Init (const JobData& rData)
     mfScaleX        = (double)72.0 / (double)mnDpiX;
     mfScaleY        = (double)72.0 / (double)mnDpiY;
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rData.m_aPrinterName ) );
+    if( mpFontSubstitutes )
+        delete const_cast< ::std::hash_map<fontID,fontID>* >(mpFontSubstitutes);
     if( rInfo.m_bPerformFontSubstitution )
-        mpFontSubstitutes = &rInfo.m_aFontSubstitutions;
+        mpFontSubstitutes = new ::std::hash_map< fontID, fontID >( rInfo.m_aFontSubstitutions );
     else
         mpFontSubstitutes = NULL;
     mbUploadPS42Fonts = rInfo.m_pParser ? ( rInfo.m_pParser->isType42Capable() ? sal_True : sal_False ) : sal_False;
@@ -173,7 +177,8 @@ PrinterGfx::PrinterGfx() :
         maTextColor (0,0,0),
         mbTextVertical (false),
         mrFontMgr (PrintFontManager::get()),
-        mbCompressBmp (sal_True)
+        mbCompressBmp (sal_True),
+        mpFontSubstitutes( NULL )
 {
     maVirtualStatus.mfLineWidth = 1.0;
     maVirtualStatus.mnTextHeight = 12;
@@ -183,7 +188,18 @@ PrinterGfx::PrinterGfx() :
 }
 
 PrinterGfx::~PrinterGfx()
-{}
+{
+    /*
+     *  #95810# the original reasoning why mpFontSubstitutes is a pointer was
+     *  that applications should release all PrinterGfx when printers change
+     *  because they are really invalid; the corresponding printers may have
+     *  changed their settings or even not exist anymore.
+     *
+     *  Alas, this is not always done real time. So we keep a local copy of
+     *  the font substitutes now in case of bad timing.
+     */
+    delete const_cast< ::std::hash_map<fontID,fontID>* >(mpFontSubstitutes);
+}
 
 void
 PrinterGfx::Clear()
