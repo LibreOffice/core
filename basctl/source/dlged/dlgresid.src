@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-18 11:36:18 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 23:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ String RID_STR_BRWTITLE_PROPERTIES
     Text[ italian ] = "Proprietà: ";
     Text[ danish ] = "Properties: ";
     Text[ swedish ] = "Egenskaper: ";
-    Text[ polish ] = "W³a?ciwo?ci: ";
+    Text[ polish ] = "W³aœciwoœci: ";
     Text[ portuguese_brazilian ] = "Properties: ";
     Text[ japanese ] = "ÌßÛÊßÃ¨: ";
     Text[ korean ] = "¼Ó¼º: ";
@@ -161,7 +161,7 @@ String RID_STR_BRWTITLE_NO_PROPERTIES
     Text[ polish ] = "Nie zaznaczono formantu";
     Text[ portuguese_brazilian ] = "No Control marked";
     Text[ japanese ] = "ºÝÄÛ°Ù—v‘f‚Ì‘I‘ð‚È‚µ";
-    Text[ korean ] = "ÄÁÆ®·Ñ ¿ä¼Ò°¡ ¸¶Å·µÇÁö ¾Ê¾ÒÀ½";
+    Text[ korean ] = "ÄÁÆ®·Ñ ¿ä¼Ò°¡ ¼±ÅÃÇ¥½ÃµÇÁö ¾Ê¾ÒÀ½";
     Text[ chinese_simplified ] = "Ã»ÓÐÑ¡Ôñ¿ØÖÆÏî";
     Text[ chinese_traditional ] = "¨S¦³¿ï¨ú±±¨î¶µ";
     Text[ turkish ] = "No Control marked";
@@ -196,3 +196,4 @@ String RID_STR_BRWTITLE_MULTISELECT
 };
 
 // -----------------------------------------------------------------------
+
