@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layouter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:13:47 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:10:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,11 @@
 #include "cntfrm.hxx"
 #include "pagefrm.hxx"
 #include "ftnfrm.hxx"
+// --> OD 2004-06-23 #i28701#
+#ifndef _MOVEDFWDFRMSBYOBJPOS_HXX
+#include <movedfwdfrmsbyobjpos.hxx>
+#endif
+// <--
 
 #define LOOP_DETECT 250
 
@@ -252,7 +257,11 @@ void SwLooping::Control( SwPageFrm* pPage )
 |*
 |*************************************************************************/
 
-SwLayouter::SwLayouter() : pEndnoter( NULL ), pLooping( NULL )
+SwLayouter::SwLayouter()
+        : pEndnoter( NULL ),
+          pLooping( NULL ),
+          // --> OD 2004-06-23 #i28701#
+          mpMovedFwdFrms( 0L )
 {
 }
 
@@ -260,6 +269,8 @@ SwLayouter::~SwLayouter()
 {
     delete pEndnoter;
     delete pLooping;
+    // --> OD 2004-06-23 #i28701#
+    delete mpMovedFwdFrms;
 }
 
 void SwLayouter::_CollectEndnotes( SwSectionFrm* pSect )
@@ -339,4 +350,57 @@ BOOL SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
             pDoc->GetLayouter()->StartLooping( pPage );
 }
 
+// --> OD 2004-06-23 #i28701#
+// -----------------------------------------------------------------------------
+// methods to manage text frames, which are moved forward by the positioning
+// of its anchored objects
+// -----------------------------------------------------------------------------
+void SwLayouter::ClearMovedFwdFrms( const SwDoc& _rDoc )
+{
+    if ( _rDoc.GetLayouter() &&
+         _rDoc.GetLayouter()->mpMovedFwdFrms )
+    {
+        _rDoc.GetLayouter()->mpMovedFwdFrms->Clear();
+    }
+}
 
+void SwLayouter::InsertMovedFwdFrm( const SwDoc& _rDoc,
+                                    const SwTxtFrm& _rMovedFwdFrmByObjPos,
+                                    const sal_uInt32 _nToPageNum )
+{
+    if ( !_rDoc.GetLayouter() )
+    {
+        const_cast<SwDoc&>(_rDoc).SetLayouter( new SwLayouter() );
+    }
+
+    if ( !_rDoc.GetLayouter()->mpMovedFwdFrms )
+    {
+        const_cast<SwDoc&>(_rDoc).GetLayouter()->mpMovedFwdFrms =
+                                                new SwMovedFwdFrmsByObjPos();
+    }
+
+    _rDoc.GetLayouter()->mpMovedFwdFrms->Insert( _rMovedFwdFrmByObjPos,
+                                                 _nToPageNum );
+}
+
+bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
+                                      const SwTxtFrm& _rTxtFrm,
+                                      sal_uInt32& _ornToPageNum )
+{
+    if ( !_rDoc.GetLayouter() )
+    {
+        _ornToPageNum = 0;
+        return false;
+    }
+    else if ( !_rDoc.GetLayouter()->mpMovedFwdFrms )
+    {
+        _ornToPageNum = 0;
+        return false;
+    }
+    else
+    {
+        return _rDoc.GetLayouter()->mpMovedFwdFrms->
+                                FrmMovedFwdByObjPos( _rTxtFrm, _ornToPageNum );
+    }
+}
+// <--
