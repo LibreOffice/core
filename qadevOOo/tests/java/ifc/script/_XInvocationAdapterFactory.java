@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XInvocationAdapterFactory.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:27:46 $
+ *  last change:$Date: 2003-09-08 10:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 package ifc.script;
 
+import lib.MultiMethodTest;
+import lib.StatusException;
+
 import com.sun.star.io.XInputStream;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
@@ -69,8 +72,6 @@ import com.sun.star.script.XInvocationAdapterFactory;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import lib.MultiMethodTest;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.script.XInvocationAdapterFactory</code>
