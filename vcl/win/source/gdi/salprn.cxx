@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:49 $
+ *  last change: $Author: mba $ $Date: 2001-05-14 09:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,11 +514,14 @@ static BOOL ImplUpdateSalJobSetup( SalInfoPrinter* pPrinter, ImplJobSetup* pSetu
 
 // !!! UNICODE - NT Optimierung !!!
     // Release mutex, in the other case we don't get paints and so on
-    ULONG nMutexCount = ImplSalReleaseYieldMutex();
+    ULONG nMutexCount=0;
+    if ( pVisibleDlgParent )
+        nMutexCount = ImplSalReleaseYieldMutex();
     nRet = DocumentPropertiesA( hWnd, hPrn,
                                 (LPSTR)ImplSalGetWinAnsiString( pPrinter->maPrinterData.maDeviceName, TRUE ).GetBuffer(),
                                 pOutDevBuffer, pInDevBuffer, nMode );
-    ImplSalAcquireYieldMutex( nMutexCount );
+    if ( pVisibleDlgParent )
+        ImplSalAcquireYieldMutex( nMutexCount );
     ClosePrinter( hPrn );
 
     if ( (nRet < 0) || (pVisibleDlgParent && (nRet == IDCANCEL)) )
