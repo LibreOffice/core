@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-24 08:32:57 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 08:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,8 @@
 #endif
 
 using namespace ::com::sun::star::uno;
+using namespace ::svxform;
+
 TYPEINIT1(FmFormObj, SdrUnoObj);
 DBG_NAME(FmFormObj);
 //------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 10:07:35 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 07:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,7 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::beans;
 using namespace ::comphelper;
 using namespace ::dbtools;
+using namespace ::svxform;
 
 extern sal_uInt16 AutoSlotMap[];
 

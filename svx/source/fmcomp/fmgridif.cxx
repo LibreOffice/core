@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-16 16:06:34 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 07:56:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,8 @@
 #ifndef _CPPUHELPER_EXTRACT_HXX_
 #include <cppuhelper/extract.hxx>
 #endif
+
+using namespace ::svxform;
 
 //------------------------------------------------------------------
 ::com::sun::star::awt::FontDescriptor ImplCreateFontDescriptor( const Font& rFont )

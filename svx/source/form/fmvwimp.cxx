@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-07 16:02:36 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 08:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,8 +141,9 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
-using namespace dbtools;
-using namespace comphelper;
+using namespace ::dbtools;
+using namespace ::comphelper;
+using namespace ::svxform;
 
 DBG_NAME(FmXPageViewWinRec);
 //------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-24 14:38:27 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 08:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,13 +248,19 @@
 #include <cppuhelper/extract.hxx>
 #endif
 
+namespace svxform
+{
+
+    IMPLEMENT_CONSTASCII_USTRING(DATA_MODE,"DataMode");
+    IMPLEMENT_CONSTASCII_USTRING(FILTER_MODE,"FilterMode");
+
+}   // namespace svxform
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
-
-IMPLEMENT_CONSTASCII_USTRING(DATA_MODE,"DataMode");
-IMPLEMENT_CONSTASCII_USTRING(FILTER_MODE,"FilterMode");
+using namespace ::svxform;
 
 //==============================================================================
 //------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:53:20 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 07:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,8 @@
 #include <math.h>
 
 
-using namespace connectivity;
+using namespace ::connectivity;
+using namespace ::svxform;
 // An irgendeiner Stelle dieser include-Orgie hier gehen die defines fuer WB_LEFT und WB_RIGHT verloren, und ich habe einfach
 // nicht herausgefunden, wo. Also eben ein Hack.
 #define WB_LEFT                 ((WinBits)0x00004000)

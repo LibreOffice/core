@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcols.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:13:45 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 07:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,16 +79,22 @@
 #include "fmtools.hxx"
 #endif
 
-IMPLEMENT_CONSTASCII_USTRING(FM_COL_TEXTFIELD, "TextField");
-IMPLEMENT_CONSTASCII_USTRING(FM_COL_COMBOBOX, "ComboBox");
-IMPLEMENT_CONSTASCII_USTRING(FM_COL_CHECKBOX, "CheckBox");
-IMPLEMENT_CONSTASCII_USTRING(FM_COL_TIMEFIELD, "TimeField");
-IMPLEMENT_CONSTASCII_USTRING(FM_COL_DATEFIELD, "DateField");
-IMPLEMENT_CONSTASCII_USTRING(FM_COL_NUMERICFIELD, "NumericField");
-IMPLEMENT_CONSTASCII_USTRING(FM_COL_CURRENCYFIELD, "CurrencyField");
-IMPLEMENT_CONSTASCII_USTRING(FM_COL_PATTERNFIELD, "PatternField");
-IMPLEMENT_CONSTASCII_USTRING(FM_COL_LISTBOX, "ListBox");
-IMPLEMENT_CONSTASCII_USTRING(FM_COL_FORMATTEDFIELD, "FormattedField");
+namespace svxform
+{
+
+    IMPLEMENT_CONSTASCII_USTRING(FM_COL_TEXTFIELD, "TextField");
+    IMPLEMENT_CONSTASCII_USTRING(FM_COL_COMBOBOX, "ComboBox");
+    IMPLEMENT_CONSTASCII_USTRING(FM_COL_CHECKBOX, "CheckBox");
+    IMPLEMENT_CONSTASCII_USTRING(FM_COL_TIMEFIELD, "TimeField");
+    IMPLEMENT_CONSTASCII_USTRING(FM_COL_DATEFIELD, "DateField");
+    IMPLEMENT_CONSTASCII_USTRING(FM_COL_NUMERICFIELD, "NumericField");
+    IMPLEMENT_CONSTASCII_USTRING(FM_COL_CURRENCYFIELD, "CurrencyField");
+    IMPLEMENT_CONSTASCII_USTRING(FM_COL_PATTERNFIELD, "PatternField");
+    IMPLEMENT_CONSTASCII_USTRING(FM_COL_LISTBOX, "ListBox");
+    IMPLEMENT_CONSTASCII_USTRING(FM_COL_FORMATTEDFIELD, "FormattedField");
+
+}   // namespace svxform
+using namespace ::svxform;
 
 //------------------------------------------------------------------------------
 const ::comphelper::StringSequence& getColumnTypes()
@@ -131,7 +137,7 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
     const ::rtl::OUString aCompatibleModelPrefix = ::rtl::OUString::createFromAscii("stardiv.one.form.component.");
 
     sal_Int32 nTypeId = -1;
-    if (aModelName == FM_COMPONENT_EDIT)
+    if (aModelName == ::svxform::FM_COMPONENT_EDIT)
         nTypeId = TYPE_TEXTFIELD;
     else
     {

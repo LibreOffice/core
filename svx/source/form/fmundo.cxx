@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-24 07:01:26 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 08:20:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,8 @@
 #endif
 
 using namespace ::com::sun::star::uno;
+using namespace ::svxform;
+
 //------------------------------------------------------------------------------
 // some helper structs for caching property infos
 //------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 10:59:16 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 07:56:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,8 @@ String OBJECTTEXT   = String::CreateFromAscii("<OBJECT>");
 #include "trace.hxx"
 #endif
 
-using namespace dbtools;
+using namespace ::dbtools;
+using namespace ::svxform;
 using namespace ::com::sun::star::uno;
 
 #define ROWSTATUS(row)  !row.Is() ? "NULL" : row->GetStatus() == GRS_CLEAN ? "CLEAN" : row->GetStatus() == GRS_MODIFIED ? "MODIFIED" : row->GetStatus() == GRS_DELETED ? "DELETED" : "INVALID"

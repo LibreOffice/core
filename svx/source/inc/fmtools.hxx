@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 10:18:46 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 07:49:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,9 +270,14 @@ void displayException(const ::com::sun::star::sdb::SQLErrorEvent&, WinBits nStyl
 #define S(aUniCode)             \
     ::rtl::OUStringToOString(aUniCode, RTL_TEXTENCODING_ASCII_US)
 
-// modes for the XModeSelector
-DECLARE_CONSTASCII_USTRING(DATA_MODE);
-DECLARE_CONSTASCII_USTRING(FILTER_MODE);
+namespace svxform
+{
+
+    // modes for the XModeSelector
+    DECLARE_CONSTASCII_USTRING(DATA_MODE);
+    DECLARE_CONSTASCII_USTRING(FILTER_MODE);
+
+}   // namespace svxform
 
 
 // Kopieren von Persistenten Objecten

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 11:20:44 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 08:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
-using namespace cppu;
+using namespace ::cppu;
+using namespace ::svxform;
 
 static sal_uInt32 nFormat = 0;
 
@@ -1557,6 +1558,10 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
     {
         Reference< ::com::sun::star::beans::XPropertySet > xCol;
         ::cppu::extractInterface(xCol, xColumns->getByIndex(i));
+
+        Reference< XPropertySetInfo > xPropsInfo = xCol->getPropertySetInfo();
+        sal_Bool bHas = xPropsInfo->hasPropertyByName(FM_PROP_LABEL);
+
         aName  = (const sal_Unicode*)::comphelper::getString(xCol->getPropertyValue(FM_PROP_LABEL));
 
         aWidth = xCol->getPropertyValue(FM_PROP_WIDTH);
