@@ -42,10 +42,24 @@ const LPTSTR CXMergeFilter::m_pszPXLImportShortDesc = _T("Pocket Excel");
 
 CXMergeFilter::CXMergeFilter() : m_cRef(1)
 {
+    m_bHaveExcel = FALSE;
+    m_bHaveWord  = FALSE;
+
+    m_szClasspath   = NULL;
+    m_szJavaBaseDir = NULL;
 }
 
 CXMergeFilter::~CXMergeFilter()
 {
+    if (m_szClasspath != NULL)
+    {
+        delete m_szClasspath;
+    }
+
+    if (m_szJavaBaseDir != NULL)
+    {
+        delete m_szJavaBaseDir;
+    }
 
 }
 
@@ -153,20 +167,63 @@ STDMETHODIMP CXMergeFilter::NextConvertFile(int nConversion, CFF_CONVERTINFO *pc
     si.cb = sizeof(si);
 
 
-    // Locate Java Home
-    TCHAR* szJavaDir = GetJavaBaseDir();
-    if (szJavaDir == NULL)
+    /*
+     * First step: Locate Java and establish the classpath.  If these can't
+     *             be done succesfully, then avoid all further processing.
+     */
+
+    // Locate Java Home if it hasn't already been done.
+    if (m_szJavaBaseDir == NULL)
     {
-        *perr = ERR_NOJAVA;
+        m_szJavaBaseDir = GetJavaBaseDir();
+
+        if (m_szJavaBaseDir == NULL)
+        {
+            *perr = ERR_NOJAVA;
+            return HRESULT_FROM_WIN32(E_FAIL);
+        }
+    }
+
+    // Get the StarOffice/OpenOffice class directory
+    if (m_szClasspath == NULL)
+    {
+        m_szClasspath = GetXMergeClassPath();
+
+        if (m_szClasspath == NULL)
+        {
+            *perr = ERR_BADCLASSPATH;
+            return HRESULT_FROM_WIN32(E_FAIL);
+        }
+    }
+
+
+    /*
+     * Second step:  Check the files we're going to process.  If we don't have
+     *               an XMerge plugin for the file then we can't convert.
+     */
+    if ((!lstrcmp(psf->szExtension, "sxw")  || !lstrcmp(psf->szExtension, "psw"))
+            && !m_bHaveWord)
+    {
+        *perr = ERR_BADCLASSPATH;
+        return HRESULT_FROM_WIN32(E_FAIL);
+    }
+    else if ((!lstrcmp(psf->szExtension, "sxc")  || !lstrcmp(psf->szExtension, "pxl"))
+                 && !m_bHaveExcel)
+    {
+        *perr = ERR_BADCLASSPATH;
         return HRESULT_FROM_WIN32(E_FAIL);
     }
 
 
-    // Make sure that there is a Java executable
-    appName += szJavaDir;
+    /*
+     * Third step:  Locate the Java executable and build and execute the command
+     *              line to carry out the conversion.
+     */
+
+    // Find the Java executable and make sure it exists
+    appName += m_szJavaBaseDir;
     appName += "\\bin\\javaw.exe";
 
-    // Make sure that Java actually exists
     if (GetFileAttributes(appName.c_str()) == INVALID_FILE_SIZE)
     {
         *perr = ERR_NOJAVA;
@@ -178,19 +235,10 @@ STDMETHODIMP CXMergeFilter::NextConvertFile(int nConversion, CFF_CONVERTINFO *pc
     appName.append("\"");
 
 
-    // Get the StarOffice/OpenOffice class directory
-    TCHAR* szClassPath = GetXMergeClassPath();
-    if (szClassPath == NULL)
-    {
-        *perr = ERR_BADCLASSPATH;
-        delete szJavaDir;
-
-        return HRESULT_FROM_WIN32(E_FAIL);
-    }
 
     // Need to build the entire command line for calling out to Java
     appArgs =  appName + " -Djava.class.path=";
-    appArgs += szClassPath;
+    appArgs += m_szClasspath;
     appArgs += " org.openoffice.xmerge.util.ActiveSyncDriver ";
 
     if (!lstrcmp(psf->szExtension, "sxw"))
@@ -234,18 +282,12 @@ STDMETHODIMP CXMergeFilter::NextConvertFile(int nConversion, CFF_CONVERTINFO *pc
                   &si,
                   &pi))
     {
-        delete szClassPath;
-        delete szJavaDir;
-
         *perr = ERR_INITJAVA;
         return HRESULT_FROM_WIN32(E_FAIL);
     }
 
     // Wait for the new process to work
     WaitForSingleObject(pi.hProcess, INFINITE);
-
-    delete szClassPath;
-    delete szJavaDir;
 
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
@@ -331,154 +373,84 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
 
 TCHAR* CXMergeFilter::GetXMergeClassPath()
 {
-
     /*
-     * The Office base directory can be found in the sversion.ini file in the
-     * user's profile directory.
-     *
-     * Supposed to be platform agnostic, but not quite sure yet!
+     * The DLL will be installed by setup in the program directory of
+     * the installation.  The XMerge Jar files, if present, will be
+     * located in the classes directory below program.
      */
 
-    TCHAR szIniPath[MAX_PATH];
+    TCHAR szJarPath[MAX_PATH];
+    TCHAR szTmpPath[MAX_PATH];
 
+    ZeroMemory(szJarPath, MAX_PATH);
+    ZeroMemory(szTmpPath, MAX_PATH);
 
-    /*
-     * On Windows ME and Windows 2000, the SHGetFolderPath function is incorporated
-     * into SHELL32.dll.  Unfortunately, this is not the case in Windows 95/98 so
-     * the SHFOLDER library needs to be dynamically loaded to get an address for the
-     * procedure.
-     */
-    SHGETFOLDERPATH SHGetFolderPath;
-    HMODULE hModSHFolder = LoadLibrary("shfolder.dll");
-    if ( hModSHFolder != NULL )
-    {
-        SHGetFolderPath = (SHGETFOLDERPATH)GetProcAddress(hModSHFolder, "SHGetFolderPathA");
-    }
-    else
-    {
-        FreeLibrary(hModSHFolder);
-        SHGetFolderPath = NULL;
-    }
-
-
-    if (SHGetFolderPath != NULL )
-    {
-        if(SHGetFolderPath(NULL, CSIDL_APPDATA, NULL, NULL, szIniPath) != S_OK)
-        {
-            FreeLibrary(hModSHFolder);
-            return NULL;
-        }
-    }
-    else
-    {
-        FreeLibrary(hModSHFolder);
-        return NULL;
-    }
-
-    FreeLibrary(hModSHFolder);
-
-
-    lstrcat(szIniPath, "\\sversion.ini");
-
-
-    // Should check the existence of the file here
-    TCHAR* szSectVal;
     WIN32_FILE_ATTRIBUTE_DATA fInfo;
 
-    if (!GetFileAttributesEx(szIniPath, GetFileExInfoStandard, &fInfo))
-        return NULL;
+    std::string clsPath;
 
 
-    szSectVal = new char[fInfo.nFileSizeLow];
+    // Get the location of the module.
+    GetModuleFileName(_Module.m_hInst, szTmpPath, MAX_PATH);
 
-    if (!GetPrivateProfileSection("Versions", szSectVal, 3000, szIniPath))
+    // Strip off the xmergesync.dll component
+    char* modName = strstr(szTmpPath, "xmergesync.dll");
+    strncpy(szJarPath, szTmpPath, modName - szTmpPath);
+
+    // Append the classes directory
+    strncat(szJarPath, "classes\\", 8);
+
+
+    // The core xmerge.jar must be present
+    ZeroMemory(szTmpPath, MAX_PATH);
+    _snprintf(szTmpPath, MAX_PATH, "%s%s\0", szJarPath, "xmerge.jar");
+
+    if (!GetFileAttributesEx(szTmpPath, GetFileExInfoStandard, &fInfo))
     {
-        delete szSectVal;
         return NULL;
     }
-
-    char* token = szSectVal;
-    std::string clsDir;
-
-    while (*token != '\0')
+    else
     {
-        // Clear the clsDir each time we go around
-        clsDir = "";
-
-        // Check for a compatible StarOffice/OpenOffice version
-        if (!strncmp(token, "StarOffice 6", 12) || !strncmp(token, "OpenOffice.org 1", 12))
-        {
-            char* uri = token;
-
-            // Jump past the equals sign
-            uri = strchr(uri, '=') + 1;
-
-            // Lose the file:///
-            uri += 8;
-
-            for (int j = 0; j < strlen(uri); j++)
-            {
-                switch (uri[j])
-                {
-                case '/':
-                    clsDir += '\\';
-                    break;
-
-                case '%':
-                    // Read in the two following characters
-                    char* stop;
-                    char buf[3];
-                    buf[0] = uri[++j];  buf[1] = uri[++j];  buf[2] = '\0';
-                    clsDir += (char)strtol(buf, &stop, 16);
-                    break;
-
-                default:
-                    clsDir += uri[j];
-                }
-            }
-        }
-        else
-        {
-            token += strlen(token) + 1;
-            continue;
-        }
-
-
-        // Append the JAR file subdirectory
-        clsDir += "\\program\\classes\\";
-
-        // Check for the existence of the necessary JAR files
-        std::string jars[3] = { clsDir + "xmerge.jar", clsDir + "pocketword.jar", clsDir + "pexcel.jar" };
-        BOOL found = TRUE;
-
-        for (int k = 0; k < 3; k++)
-        {
-            if (!GetFileAttributesEx(jars[k].c_str(), GetFileExInfoStandard, &fInfo))
-            {
-                found = FALSE;
-                break;
-            }
-        }
-
-        if (!found)
-        {
-            token += strlen(token) + 1;
-            continue;
-        }
-
-        // All files are present so return the classpath.  Add in quotes in case of spaces
-        std::string clsPath = "\"" + jars[0] + ";" + jars[1] + ";" + jars[2] + ";" + "\"";
-
-        char* cPath = new char[clsPath.length() + 1];
-        ZeroMemory(cPath, clsPath.length() + 1);
-        strcpy(cPath, clsPath.c_str());
-
-        delete szSectVal;
-
-        return cPath;
+        clsPath += szTmpPath;
+        clsPath += ";";
     }
 
-    delete szSectVal;
 
-    return NULL;
+    // Now check for Pocket Word
+    ZeroMemory(szTmpPath, MAX_PATH);
+    _snprintf(szTmpPath, MAX_PATH, "%s%s\0", szJarPath, "pocketword.jar");
+
+    if (!GetFileAttributesEx(szTmpPath, GetFileExInfoStandard, &fInfo))
+    {
+        m_bHaveWord = FALSE;
+    }
+    else
+    {
+        m_bHaveWord = TRUE;
+        clsPath += szTmpPath;
+        clsPath += ";";
+    }
+
+    // Now check for Pocket Excel
+    ZeroMemory(szTmpPath, MAX_PATH);
+    _snprintf(szTmpPath, MAX_PATH, "%s%s\0", szJarPath, "pexcel.jar");
+
+    if (!GetFileAttributesEx(szTmpPath, GetFileExInfoStandard, &fInfo))
+    {
+        m_bHaveExcel = FALSE;
+    }
+    else
+    {
+        m_bHaveExcel = TRUE;
+        clsPath += szTmpPath;
+        clsPath += ";";
+    }
+
+    // Quotes may be need around the ClassPath
+    clsPath.insert(0, "\"");
+    clsPath += "\"";
+
+
+    // Return the data
+    return _strdup(clsPath.c_str());
 }

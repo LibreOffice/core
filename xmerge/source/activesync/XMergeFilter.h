@@ -22,6 +22,13 @@ private:
     TCHAR* GetXMergeClassPath();
     TCHAR* GetJavaBaseDir();
 
+    TCHAR* m_szJavaBaseDir;
+    TCHAR* m_szClasspath;
+
+    BOOL m_bHaveExcel;
+    BOOL m_bHaveWord;
+
+
 public:
     static const LPTSTR m_pszPSWExportCLSID;
     static const LPTSTR m_pszPSWExportExt;
