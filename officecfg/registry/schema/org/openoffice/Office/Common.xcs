@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 14:09:01 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2582,13 +2582,13 @@
 							<desc>Specifies the lowest number of undo steps possible.</desc>
 						</info>
 					</minInclusive>
-					<maxInclusive oor:value="100">
+					<maxInclusive oor:value="1000">
 						<info>
 							<desc>Specifies the highest number of undo steps possible.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
-				<value>20</value>
+				<value>100</value>
 			</prop>
 		</group>
 		<group oor:name="Setup">
