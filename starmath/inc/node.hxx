@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-11 13:01:56 $
+ *  last change: $Author: tl $ $Date: 2001-06-19 11:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,10 +137,10 @@ protected:
 public:
     virtual             ~SmNode();
 
-    virtual BOOL        IsVisible() const = 0;
+    virtual BOOL        IsVisible() const;
 
-    virtual USHORT      GetNumSubNodes() const = 0;
-    virtual SmNode *    GetSubNode(USHORT nIndex) = 0;
+    virtual USHORT      GetNumSubNodes() const;
+    virtual SmNode *    GetSubNode(USHORT nIndex);
             const SmNode * GetSubNode(USHORT nIndex) const
             {
                 return ((SmNode *) this)->GetSubNode(nIndex);
@@ -221,6 +221,7 @@ protected:
     {}
 
 public:
+            SmStructureNode( const SmStructureNode &rNode );
     virtual ~SmStructureNode();
 
     virtual BOOL        IsVisible() const;
@@ -232,6 +233,8 @@ public:
             void SetSubNodes(SmNode *pFirst, SmNode *pSecond,
                                 SmNode *pThird = NULL);
             void SetSubNodes(const SmNodeArray &rNodeArray);
+
+    virtual SmStructureNode & operator = ( const SmStructureNode &rNode );
 };
 
 

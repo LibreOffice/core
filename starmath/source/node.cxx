@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-19 14:46:59 $
+ *  last change: $Author: tl $ $Date: 2001-06-19 11:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,24 @@ SmNode::SmNode(SmNodeType eNodeType, const SmToken &rNodeToken)
 
 SmNode::~SmNode()
 {
+}
+
+
+BOOL SmNode::IsVisible() const
+{
+    return FALSE;
+}
+
+
+USHORT SmNode::GetNumSubNodes() const
+{
+    return 0;
+}
+
+
+SmNode * SmNode::GetSubNode(USHORT nIndex)
+{
+    return NULL;
 }
 
 
@@ -545,6 +563,23 @@ const SmNode * SmNode::FindRectClosestTo(const Point &rPoint) const
 
 ///////////////////////////////////////////////////////////////////////////
 
+SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
+    SmNode( rNode.GetType(), rNode.GetToken() )
+{
+    ULONG i;
+    for (i = 0;  i < aSubNodes.GetSize();  i++)
+        delete aSubNodes.Get(i);
+    aSubNodes.Clear();
+
+    ULONG nSize = rNode.aSubNodes.GetSize();
+    aSubNodes.SetSize( nSize );
+    for (i = 0;  i < nSize;  ++i)
+    {
+        SmNode *pNode = rNode.aSubNodes.Get(i);
+        aSubNodes.Put( i, pNode ? new SmNode( *pNode ) : 0 );
+    }
+}
+
 
 SmStructureNode::~SmStructureNode()
 {
@@ -553,6 +588,27 @@ SmStructureNode::~SmStructureNode()
     for (USHORT i = 0;  i < GetNumSubNodes();  i++)
         if (pNode = GetSubNode(i))
             delete pNode;
+}
+
+
+SmStructureNode & SmStructureNode::operator = ( const SmStructureNode &rNode )
+{
+    SmNode::operator = ( rNode );
+
+    ULONG i;
+    for (i = 0;  i < aSubNodes.GetSize();  i++)
+        delete aSubNodes.Get(i);
+    aSubNodes.Clear();
+
+    ULONG nSize = rNode.aSubNodes.GetSize();
+    aSubNodes.SetSize( nSize );
+    for (i = 0;  i < nSize;  ++i)
+    {
+        SmNode *pNode = rNode.aSubNodes.Get(i);
+        aSubNodes.Put( i, pNode ? new SmNode( *pNode ) : 0 );
+    }
+
+    return *this;
 }
 
 
