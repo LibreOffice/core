@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-11 10:18:06 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,14 +199,17 @@ namespace
         if ( pPageView )
         {
             // loop through all the views windows
-            const SdrPageViewWinList& rViewWins = pPageView->GetWinList();
-            USHORT nWins = rViewWins.GetCount();
-            for ( USHORT i=0; i<nWins; ++i )
+            // const SdrPageViewWinList& rViewWins = pPageView->GetWinList();
+            // const SdrPageViewWindows& rPageViewWindows = pPageView->GetPageViewWindows();
+            sal_uInt32 nWins(pPageView->WindowCount());
+
+            for(sal_uInt32 i=0L; i<nWins; ++i )
             {
-                const SdrPageViewWinRec& rWinData = rViewWins[i];
+                // const SdrPageViewWinRec& rWinData = rViewWins[i];
+                const SdrPageViewWindow& rPageViewWindow = *pPageView->GetWindow(i);
 
                 // loop through all controls in this window
-                const SdrUnoControlList& rControlsInThisWin = rWinData.GetControlList();
+                const SdrUnoControlList& rControlsInThisWin = rPageViewWindow.GetControlList();
                 USHORT nControlsInThisWin = rControlsInThisWin.GetCount();
                 for ( USHORT j=0; j<nControlsInThisWin; ++j )
                 {
@@ -351,7 +354,7 @@ class RestoreXViewGraphics
         }
 };
 
-FASTBOOL SdrUnoObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrUnoObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     const SdrPageView* pPV = rInfoRec.pPV;
     OutputDevice* pOut = rXOut.GetOutDev();
@@ -360,25 +363,28 @@ FASTBOOL SdrUnoObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRe
 
     if (pPV && xUnoControlModel.is())
     {
-        const SdrPageViewWinList& rWL = pPV->GetWinList();
-        USHORT nWinNum = rWL.Find(pOut);
+        // const SdrPageViewWinList& rWL = pPV->GetWinList();
+        // const SdrPageViewWindows& rPageViewWindows = pPV->GetPageViewWindows();
+        const SdrPageViewWindow* pWindow = pPV->FindWindow(*pOut);
 
-        if (nWinNum == SDRPAGEVIEWWIN_NOTFOUND && eOutDevType == OUTDEV_VIRDEV)
+        if(!pWindow)
         {
-            // Controls koennen sich z.Z. noch nicht ins VDev zeichnen,
-            // daher wird das korrespondierende, im ersten Window liegende
-            // Control invalidiert (s.u.)
-            if (rWL.GetCount() > 0)
+            if(eOutDevType == OUTDEV_VIRDEV)
             {
-                // Liste enhaelt Windows, daher nehmen wir das erste
-                nWinNum = 0;
+                // Controls koennen sich z.Z. noch nicht ins VDev zeichnen,
+                // daher wird das korrespondierende, im ersten Window liegende
+                // Control invalidiert (s.u.)
+                if(pPV->WindowCount() > 0)
+                {
+                    // Liste enhaelt Windows, daher nehmen wir das erste
+                    pWindow = pPV->GetWindow(0L);
+                }
             }
         }
 
-        if (nWinNum != SDRPAGEVIEWWIN_NOTFOUND)
+        if(pWindow)
         {
-            const SdrPageViewWinRec& rWR = rWL[nWinNum];
-            const SdrUnoControlList& rControlList = rWR.GetControlList();
+            const SdrUnoControlList& rControlList = pWindow->GetControlList();
             USHORT nCtrlNum = rControlList.Find(xUnoControlModel);
 
             if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
@@ -386,6 +392,32 @@ FASTBOOL SdrUnoObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRe
                 pControlRec = &rControlList[nCtrlNum];
             }
         }
+
+//      USHORT nWinNum = rWL.Find(pOut);
+//
+//      if (nWinNum == SDRPAGEVIEWWIN_NOTFOUND && eOutDevType == OUTDEV_VIRDEV)
+//      {
+//          // Controls koennen sich z.Z. noch nicht ins VDev zeichnen,
+//          // daher wird das korrespondierende, im ersten Window liegende
+//          // Control invalidiert (s.u.)
+//          if (rWL.GetCount() > 0)
+//          {
+//              // Liste enhaelt Windows, daher nehmen wir das erste
+//              nWinNum = 0;
+//          }
+//      }
+//
+//      if (nWinNum != SDRPAGEVIEWWIN_NOTFOUND)
+//      {
+//          const SdrPageViewWinRec& rWR = rWL[nWinNum];
+//          const SdrUnoControlList& rControlList = rWR.GetControlList();
+//          USHORT nCtrlNum = rControlList.Find(xUnoControlModel);
+//
+//          if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
+//          {
+//              pControlRec = &rControlList[nCtrlNum];
+//          }
+//      }
     }
 
     if (pControlRec && pControlRec->GetControl().is())
@@ -457,7 +489,7 @@ FASTBOOL SdrUnoObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRe
                     {
                         if( pPV->GetView().IsFillDraft() )
                         {
-                            const SfxItemSet& rSet = GetItemSet();
+                            const SfxItemSet& rSet = GetObjectItemSet();
 
                             // perepare ItemSet to avoid old XOut filling
                             SfxItemSet aEmptySet(*rSet.GetPool());
@@ -500,7 +532,7 @@ FASTBOOL SdrUnoObj::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRe
                 }
             }
             else
-                DBG_ERROR( "SdrUnoObj::Paint: Ehm - what kind of device is this?" );
+                DBG_ERROR( "SdrUnoObj::DoPaintObject: Ehm - what kind of device is this?" );
 
             if ( bInvalidatePeer )
             {
@@ -666,14 +698,16 @@ void SdrUnoObj::VisAreaChanged(const OutputDevice* pOut)
             if (pListener && pListener->ISA(SdrPageView))
             {
                 pPV = (SdrPageView*) pListener;
-                const SdrPageViewWinList& rWL = pPV->GetWinList();
-                USHORT nPos = rWL.GetCount();
+                // const SdrPageViewWinList& rWL = pPV->GetWinList();
+                // const SdrPageViewWindows& rPageViewWindows = pPV->GetPageViewWindows();
+                sal_uInt32 nPos(pPV->WindowCount());
 
                 for (; nPos ; )
                 {
                     // Controls aller OutDevs beruecksichtigen
-                    const SdrPageViewWinRec& rWR = rWL[--nPos];
-                    const SdrUnoControlList& rControlList = rWR.GetControlList();
+                    // const SdrPageViewWinRec& rWR = rWL[--nPos];
+                    const SdrPageViewWindow& rPageViewWindow = *pPV->GetWindow(--nPos);
+                    const SdrUnoControlList& rControlList = rPageViewWindow.GetControlList();
                     USHORT nCtrlNum = rControlList.Find(xUnoControlModel);
                     pControlRec = (nCtrlNum != SDRUNOCONTROL_NOTFOUND) ? &rControlList[nCtrlNum] : NULL;
                     if (pControlRec)
@@ -683,8 +717,9 @@ void SdrUnoObj::VisAreaChanged(const OutputDevice* pOut)
                         {
                             // #62560 Pixelverschiebung weil mit einem Rechteck
                             // und nicht mit Point, Size gearbeitet wurde
-                            aPixPos = rWR.GetOutputDevice()->LogicToPixel(aRect.TopLeft());
-                            aPixSize = rWR.GetOutputDevice()->LogicToPixel(aRect.GetSize());
+                            OutputDevice& rOut = rPageViewWindow.GetOutputDevice();
+                            aPixPos = rOut.LogicToPixel(aRect.TopLeft());
+                            aPixSize = rOut.LogicToPixel(aRect.GetSize());
                             xWindow->setPosSize(aPixPos.X(), aPixPos.Y(),
                                                 aPixSize.Width(), aPixSize.Height(),
                                                 awt::PosSize::POSSIZE);
@@ -946,17 +981,21 @@ uno::Reference< awt::XControl > SdrUnoObj::GetUnoControl(const OutputDevice* pOu
             {
                 // PageView gefunden
                 SdrPageView* pPV = (SdrPageView*) pListener;
-                const SdrPageViewWinList& rWL = pPV->GetWinList();
-                USHORT nWRCnt = rWL.GetCount();
-                for (USHORT nWR = 0; nWR < nWRCnt && !xUnoControl.is(); nWR++)
+                // const SdrPageViewWinList& rWL = pPV->GetWinList();
+                // const SdrPageViewWindows& rPageViewWindows = pPV->GetPageViewWindows();
+                sal_uInt32 nWRCnt(pPV->WindowCount());
+
+                for (sal_uInt32 nWR = 0L; nWR < nWRCnt && !xUnoControl.is(); nWR++)
                 {
                     // Alle WinRecords der PageView untersuchen
-                    const SdrPageViewWinRec& rWR = rWL[nWR];
-                    if (pOut == rWR.GetOutputDevice())
+                    // const SdrPageViewWinRec& rWR = rWL[nWR];
+                    const SdrPageViewWindow& rPageViewWindow = *pPV->GetWindow(nWR);
+
+                    if (pOut == &rPageViewWindow.GetOutputDevice())
                     {
                         // Richtiges OutputDevice gefunden
                         // Darin nun das Control suchen
-                        const SdrUnoControlList& rControlList = rWR.GetControlList();
+                        const SdrUnoControlList& rControlList = rPageViewWindow.GetControlList();
                         USHORT nCtrlNum = rControlList.Find(xUnoControlModel);
                         if (nCtrlNum != SDRUNOCONTROL_NOTFOUND)
                         {
@@ -990,15 +1029,21 @@ OutputDevice* SdrUnoObj::GetOutputDevice(uno::Reference< awt::XControl > _xContr
                 SdrPageView* pPV = (SdrPageView*) pListener;
                 if (pPV)
                 {
-                    const SdrPageViewWinList& rWL = pPV->GetWinList();
-                    USHORT nWRCnt = rWL.GetCount();
-                    for (USHORT nWR = 0; nWR < nWRCnt && !pOut; nWR++)
+                    // const SdrPageViewWinList& rWL = pPV->GetWinList();
+                    // const SdrPageViewWindows& rPageViewWindows = pPV->GetPageViewWindows();
+                    sal_uInt32 nWRCnt(pPV->WindowCount());
+
+                    for (sal_uInt32 nWR = 0L; nWR < nWRCnt && !pOut; nWR++)
                     {
                         // Alle WinRecords der PageView untersuchen
-                        const SdrPageViewWinRec& rWR = rWL[nWR];
-                        const SdrUnoControlList& rControlList = rWR.GetControlList();
-                        if (SDRUNOCONTROL_NOTFOUND != rWR.GetControlList().Find(_xControl))
-                            pOut = rWR.GetOutputDevice();
+                        // const SdrPageViewWinRec& rWR = rWL[nWR];
+                        const SdrPageViewWindow& rPageViewWindow = *pPV->GetWindow(nWR);
+                        const SdrUnoControlList& rControlList = rPageViewWindow.GetControlList();
+
+                        if (SDRUNOCONTROL_NOTFOUND != rControlList.Find(_xControl))
+                        {
+                            pOut = &rPageViewWindow.GetOutputDevice();
+                        }
                     }
                 }
             }
