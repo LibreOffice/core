@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:48:45 $
+ *  last change: $Author: kz $ $Date: 2001-06-14 00:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ PORTUGUESE ] = "Visualização de substituição" ;
         Text[ chinese_simplified ] = "Ìæ»»ÏÔÊ¾ÄÚÈİ";
         Text[ russian ] = "Àëüòåğíàòèâíûé ïîêàç";
-        Text[ polish ] = "Wyœwietlanie zastêpcze";
+        Text[ polish ] = "Widok opcjonalny";
         Text[ japanese ] = "‰¼•\\¦";
         Text[ chinese_traditional ] = "´À¥NÅã¥Ü¤º®e";
         Text[ arabic ] = "ÇáÚÑÖ ÇáÈÏíá";
@@ -153,7 +153,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ PORTUGUESE ] = "Delinear imagens e~xternas" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾ÆäËü¸ñÊ½Í¼ĞÎµÄ±ß¿ò(~P)";
         Text[ russian ] = "Îáîçíà÷èòü âíåøíèå ğèñóíêè";
-        Text[ polish ] = "Zastêpczy wskaŸnik obcych grafik";
+        Text[ polish ] = "Symbol zastêpczy grafik";
         Text[ japanese ] = "²Ò°¼Ş˜g‚Ì•\\¦(~P)";
         Text[ chinese_traditional ] = "Åã¥Ü¨ä¥L®æ¦¡¹Ï§ÎªºÃä®Ø(~P)";
         Text[ arabic ] = "ÊáãíÍ áÕæÑ ÎÇÑÌíÉ";
@@ -210,7 +210,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ portuguese_brazilian ] = "Text andeuten" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾ÎÄ×Ö¿ò(~T)";
         Text[ russian ] = "~Îáîçíà÷èòü òåêñò";
-        Text[ polish ] = "Zastêpczy wskaŸnik tekstu";
+        Text[ polish ] = "Symbol zastêpczy tekstu";
         Text[ japanese ] = "•¶š—ñ‚ÌÌßÚ°½ÎÙÀŞ(~T)";
         Text[ chinese_traditional ] = "¤å¦r¤è¶ô(~T)";
         Text[ arabic ] = "ÊáãíÍ Åáì ÇáäÕ";
@@ -241,7 +241,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ PORTUGUESE ] = "Mostrar só linhas finas" ;
         Text[ chinese_simplified ] = "Ö»ÏÔÊ¾ÂÖÀªÏß(~L)";
         Text[ russian ] = "Òîëüêî òîíêèé êîíòóğ";
-        Text[ polish ] = "Po~ka¿ tylko bardzo cienkie linie";
+        Text[ polish ] = "Tylko kontur";
         Text[ japanese ] = "ü‚Ì—ÖŠs‚¾‚¯‚ğ•\\¦(~L)";
         Text[ chinese_traditional ] = "¥uÅã¥Ü½ü¹ø½u(~L)";
         Text[ arabic ] = "ÅÙåÇÑ ÍÏæÏ ÇáÎØ İŞØ";
@@ -356,7 +356,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ portuguese ] = "~Todos os pontos de controlo do editor Bézier" ;
         Text[ chinese_simplified ] = "ÇúÏß±à¼­Æ÷Ö®ÄÚµÄÈ«²¿¿Øµã";
         Text[ russian ] = "~Âñå òî÷êè â ğåäàêòîğå Áåçüå";
-        Text[ polish ] = "~Wszystkie punkty sterown. w edytorze Beziera";
+        Text[ polish ] = "~Wszystkie punkty sterownicze w edytorze Beziera";
         Text[ japanese ] = "ÍŞ¼Şª‹Èü•ÒW‚Å§Œä“_‚ğ‚·‚×‚Ä•\\¦(~A)";
         Text[ chinese_traditional ] = "¦±½u½s¿èµ{¦¡¤ºªº¥ş³¡±±ÂI";
         Text[ arabic ] = "ßá äŞÇØ ÇáÊÍßã İí ãÍÑÑ Bézier";
@@ -556,7 +556,7 @@ TabPage TP_OPTIONS_MISC
         Text[ italian ] = "Avvia con il Pilota ~automatico";
         Text[ danish ] = "Start med AutoPiloter";
         Text[ swedish ] = "Starta med ~AutoPiloten";
-        Text[ polish ] = "Rozpocznij z AutoPilotem";
+        Text[ polish ] = "Generuj korzystaj¹c z AutoPilota";
         Text[ portuguese_brazilian ] = "Pr?sentationsdialoge zeigen";
         Text[ japanese ] = "µ°ÄÊß²Û¯Ä‚ÅŠJn";
         Text[ chinese_simplified ] = "ºÍ×Ô¶¯ÎÄ¼şÖúÀíÒ»ÆğÆô¶¯";
@@ -706,7 +706,7 @@ TabPage TP_OPTIONS_MISC
         Text[ chinese_simplified ] = "Éè¶¨³ÉÔ²ĞÎ£º²»±äĞÎ";
         Text[ russian ] = "Íå ïğåâğàùàòü îáúåêò â êğèâóş";
         Text[ polish ] = "OsadŸ na kole: nie zniekszta³caj";
-        Text[ japanese ] = "‰~Œ`‚É‚Ì‚¹‚éA‚ä‚ª‚ß‚È‚¢";
+        Text[ japanese ] = "‰~Œ`‚É‚·‚éA‚ä‚ª‚ß‚È‚¢";
         Text[ chinese_traditional ] = "³]©w¦¨¶ê§Î¡G¤£ÅÜ§Î";
         Text[ arabic ] = "ÚÏã ÊÔæíå ÇáßÇÆä";
         Text[ greek ] = "Ôïğïèİô. ó~å êıêëï: ¼÷é ğáñáìüñöùóç";
@@ -736,7 +736,7 @@ TabPage TP_OPTIONS_MISC
         Text[ russian ] = "Åäèíèöà èçìåğåíèÿ";
         Text[ polish ] = "Jednostka miary";
         Text[ japanese ] = "g‚¤’PˆÊ";
-        Text[ chinese_traditional ] = "­p¶q³æ¦ì";
+        Text[ chinese_traditional ] = "¤Ø¤o³æ¦ì";
         Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
         Text[ greek ] = "~ÌïíÜäá ìİôñçóçò";
         Text[ korean ] = "´ÜÀ§";
@@ -768,7 +768,7 @@ TabPage TP_OPTIONS_MISC
         Text [ portuguese_brazilian ] = "Tabulatorabstand" ;
         Text[ chinese_simplified ] = "ÖÆ±í·ûµÄ¼ä¸ô";
         Text[ russian ] = "Ïîçèöèÿ òàáóëÿòîğà";
-        Text[ polish ] = "Odstêp miêdzy tabulatorami";
+        Text[ polish ] = "Tabulatory";
         Text[ japanese ] = "ÀÌŞŠÔŠu";
         Text[ chinese_traditional ] = "»sªí²Åªº¶¡¹j";
         Text[ arabic ] = "ÚáÇãÇÊ ÇáÌÏæáÉ";
@@ -842,7 +842,7 @@ TabPage TP_OPTIONS_MISC
         Text [ portuguese ] = "~Sempre com página actual" ;
         Text[ chinese_simplified ] = "×ÜÊÇ´Óµ±Ç°µÄÒ³Ãæ¿ªÊ¼";
         Text[ russian ] = "~Âñåãäà ñ òåêóùåãî ñëàéäà";
-        Text[ polish ] = "Za~wsze z aktualn¹ stron¹";
+        Text[ polish ] = "Za~wsze od bie¿¹cej strony";
         Text[ japanese ] = "í‚ÉŒ»İ‚ÌÍß°¼Ş";
         Text[ chinese_traditional ] = "Á`¬O±q·í«eªº­¶­±¶}©l";
         Text[ arabic ] = "ÏÇÆãÇğ ãÚ ÇáÕİÍÉ ÇáÍÇáíÉ";
@@ -901,7 +901,7 @@ TabPage TP_OPTIONS_MISC
         Text[ japanese ] = "Œ»İ‚ÌÄŞ·­ÒİÄ‚Å‚·‚×‚Ä‚Ì’i—‚ÌŠÔŠu‚ğ‰ÁZ‚·‚é";
         Text[ korean ] = "ÇöÀç ¹®¼­ÀÇ ¸ğµç ´Ü¶ô °£°İ ÇÕ»ê";
         Text[ chinese_simplified ] = "µ±Ç°ÎÄµµÖ®ÖĞËùÓĞ¶ÎÂä¼ä¸ñÏà¼Ó";
-        Text[ chinese_traditional ] = "¦b·í«eªº¤å¥ó¤§¤¤¬Û¥[©Ò¦³ªº¬q¸¨¶¡¹j";
+        Text[ chinese_traditional ] = "·í«eªº¤å¥ó¤§¤¤©Ò¦³ªº¬q¸¨¶¡¹j¬Û¥[";
         Text[ turkish ] = "Add ~distances between paragraphs";
         Text[ arabic ] = "Add ~distances between paragraphs";
         Text[ finnish ] = "Im aktuellen Dokument alle ~Absatzabstände addieren";
@@ -1126,6 +1126,7 @@ TabPage TP_OPTIONS_MISC
     Text[ finnish ] = "Muu";
     Text[ catalan ] = "Otros";
 };
+
 
 
 
