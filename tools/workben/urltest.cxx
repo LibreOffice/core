@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2001-12-03 15:09:47 $
+ *  last change: $Author: oj $ $Date: 2002-01-15 09:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1083,6 +1083,43 @@ main()
                    rtl::OUStringToOString(aPath, RTL_TEXTENCODING_UTF8).
                        getStr());
             bSuccess = false;
+        }
+    }
+
+    if (true)
+    {
+        {
+            INetURLObject aUrl1(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.odma:")));
+            rtl::OUString aUrl2(aUrl1.GetMainURL());
+            if (!aUrl2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.odma:/")))
+            {
+                printf("BAD vnd.sun.star.odma: != %s\n",
+                       rtl::OUStringToOString(aUrl2, RTL_TEXTENCODING_UTF8).
+                           getStr());
+                bSuccess = false;
+            }
+        }
+        {
+            INetURLObject aUrl1(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.odma:/")));
+            rtl::OUString aUrl2(aUrl1.GetMainURL());
+            if (!aUrl2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.odma:/")))
+            {
+                printf("BAD vnd.sun.star.odma:/ != %s\n",
+                       rtl::OUStringToOString(aUrl2, RTL_TEXTENCODING_UTF8).
+                           getStr());
+                bSuccess = false;
+            }
+        }
+        {
+            INetURLObject aUrl1(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.odma:/bla/bla")));
+            rtl::OUString aUrl2(aUrl1.GetMainURL());
+            if (!aUrl2.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.odma:/bla%2Fbla")))
+            {
+                printf("BAD vnd.sun.star.odma:/bla/bla != %s\n",
+                       rtl::OUStringToOString(aUrl2, RTL_TEXTENCODING_UTF8).
+                           getStr());
+                bSuccess = false;
+            }
         }
     }
 

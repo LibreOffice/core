@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sb $ $Date: 2001-01-18 12:58:13 $
+#   last change: $Author: oj $ $Date: 2002-01-15 09:36:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,9 +86,9 @@ APP1LIBS = $(LB)$/itools.lib
 APP2TARGET = urltest
 APP2OBJS = $(OBJ)$/urltest.obj
 .IF "$(GUI)" == "UNX"
-APP2STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB)
+APP2STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
 .ELSE
-APP2STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib
+APP2STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib icppu.lib icppuhelper.lib
 .ENDIF
 
 # APP3TARGET = tldem
