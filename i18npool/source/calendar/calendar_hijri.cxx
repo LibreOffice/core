@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_hijri.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-06 18:34:17 $
+ *  last change: $Author: bustamam $ $Date: 2002-08-15 03:09:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,16 +100,38 @@ Calendar_hijri::Calendar_hijri()
     cCalendar = "com.sun.star.i18n.Calendar_hijri";
 }
 
-// TODO!!!
-// map field value from other calendar to gregorian calendar, it should be implemented.
+#define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR) | (1 << CalendarFieldIndex::MONTH) | (1 << CalendarFieldIndex::DAY_OF_MONTH))
+
+// map field value from hijri calendar to gregorian calendar
 void SAL_CALL Calendar_hijri::mapToGregorian() throw(RuntimeException)
 {
+    if (fieldSet & FIELDS) {
+        sal_Int32 day = (sal_Int32)fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH];
+        sal_Int32 month = (sal_Int32)fieldSetValue[CalendarFieldIndex::MONTH] + 1;
+        sal_Int32 year = (sal_Int32)fieldSetValue[CalendarFieldIndex::YEAR];
+        if (fieldSetValue[CalendarFieldIndex::ERA] == 0)
+        year = 1 - year;
+
+        ToGregorian(&day, &month, &year);
+
+        fieldSetValue[CalendarFieldIndex::ERA] = year <= 0 ? 0 : 1;
+        fieldSetValue[CalendarFieldIndex::MONTH] = (sal_Int32) (month - 1);
+        fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH] = (sal_Int16) day;
+        fieldSetValue[CalendarFieldIndex::YEAR] = (sal_Int16) year;
+        fieldSet |= FIELDS;
+    }
 }
 
-// map field value from gregorian calendar to other calendar, it can be overwritten by derived class.
+// map field value from gregorian calendar to hijri calendar
 void SAL_CALL Calendar_hijri::mapFromGregorian() throw(RuntimeException)
 {
     sal_Int32 month, day, year;
+
+    day = (sal_Int32)fieldValue[CalendarFieldIndex::DAY_OF_MONTH];
+    month = (sal_Int32)fieldValue[CalendarFieldIndex::MONTH] + 1;
+    year = (sal_Int32)fieldValue[CalendarFieldIndex::YEAR];
+    if (fieldValue[CalendarFieldIndex::ERA] == 0)
+        year = 1 - year;
 
     // Get Hijri date
     getHijri(&day, &month, &year);
@@ -195,8 +217,8 @@ Calendar_hijri::getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
     double julday;
     sal_Int32 synmonth;
 
-    // Get Julian Day in Gregorian
-    julday = getJulianDay();
+    // Get Julian Day from Gregorian
+    julday = getJulianDay(*day, *month, *year);
 
     // obtain approx. of how many Synodic months since the beginning of the year 1900
     synmonth = (sal_Int32)(0.5 + (julday - jd1900)/SynPeriod);
@@ -244,16 +266,79 @@ Calendar_hijri::getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
     }
 
     // If Before Hijri subtract 1
-    if (*year <= 0) {
-        *year--;
+    if (*year <= 0) *year--;
+}
+
+void
+Calendar_hijri::ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year)
+{
+    sal_Int32 nmonth;
+    double dayfraction;
+    double jday;
+    sal_Int32 dayint;
+
+    if ( *year < 0 ) *year++;
+
+    // Number of month from reference point
+    nmonth = (*month + 1) + *year * 12 - (GregRef * 12 + 1);
+
+    // Add Synodic Reference point
+    nmonth += SynRef;
+
+    // Get Julian days add time too
+    jday = NewMoon(nmonth) + *day;
+
+    // Convert the julian day to Gregorian
+    jday = jday - 1721119;
+    *year = (4 * jday - 1)/146097;
+    jday = 4 * jday - 1 - 146097 * *year;
+    *day = jday/4;
+    jday = (4 * *day + 3) /1461;
+    *day = 4 * *day + 3 - 1461 * jday;
+    *day = (*day + 4) /4;
+    *month = (5 * *day - 3) / 153;
+    *day = 5 * *day - 3 - 153 * *month;
+    *day = (*day + 5) / 5;
+    *year = 100 * *year + jday;
+    if ( *month < 10 ) {
+    *month = *month + 3;
+    } else {
+    *month = *month - 9;
+    *year = *year + 1;
     }
 }
 
 double
-Calendar_hijri::getJulianDay()
+Calendar_hijri::getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year)
 {
-    double r = getDateTime();
-    const double StartOfEpoch = 2440588.0;          // January 1, 1970 (Gregorian) in Julian day
+    double jy, jm;
 
-    return (StartOfEpoch + r);
+    if( year == 0 ) {
+    return -1.0;
+    }
+
+    if( year == 1582 && month == 10 && day > 4 && day < 15 ) {
+    return -1.0;
+    }
+
+    if( month > 2 ) {
+    jy = year;
+    jm = month + 1;
+    } else {
+    jy = year - 1;
+    jm = month + 13;
+    }
+
+    sal_Int32 intgr = (sal_Int32)((sal_Int32)(365.25 * jy) + (sal_Int32)(30.6001 * jm) + day + 1720995 );
+
+    //check for switch to Gregorian calendar
+    double gregcal = 15 + 31 * ( 10 + 12 * 1582 );
+
+    if( day + 31 * (month + 12 * year) >= gregcal ) {
+    double ja;
+    ja = (sal_Int32)(0.01 * jy);
+    intgr += 2 - ja + (sal_Int32)(0.25 * ja);
+    }
+
+    return (double) intgr;
 }
