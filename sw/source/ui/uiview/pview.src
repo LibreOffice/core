@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 09:55:35 $
+ *  last change: $Author: os $ $Date: 2002-12-05 09:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ spanish ] = "~Columnas";
         TEXT[ english_us ] = "~Columns";
     TEXT[ chinese_simplified ] = "Ê†è(~C)";
-        TEXT[ russian ] = " ÓÎÓÌÍË";
+        TEXT[ russian ] = "—ÚÓÎ·ˆ˚";
         TEXT[ polish ] = "Kolumny";
         TEXT[ japanese ] = "Ê®™(~C)";
         TEXT[ chinese_traditional ] = "Ê¨Ñ(~C)";
@@ -180,7 +180,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "~S¸tun";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Columnes";
-        TEXT[ finnish ] = "~Sarakkeet";
+        TEXT[ finnish ] = "Pal~stat";
         TEXT[ thai ] = "~‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå";
     };
     NumericField NF_COLS
@@ -227,7 +227,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "Kenarlar";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Marges";
-        TEXT[ finnish ] = "Reunat";
+        TEXT[ finnish ] = "Marginaalit";
         TEXT[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡∏Ç‡∏≠‡∏ö";
     };
     FixedText FT_LMARGIN
@@ -355,7 +355,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "~‹st";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Superior";
-        TEXT[ finnish ] = "~Yl‰osa";
+        TEXT[ finnish ] = "~Yl‰reuna";
         TEXT[ thai ] = "~‡∏ö‡∏ô";
     };
     MetricField MF_TMARGIN
@@ -403,7 +403,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "~Alt";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Part inferior";
-        TEXT[ finnish ] = "~Alaosa";
+        TEXT[ finnish ] = "~Alareuna";
         TEXT[ thai ] = "~‡∏•‡πà‡∏≤‡∏á";
     };
     MetricField MF_BMARGIN
@@ -439,7 +439,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ spanish ] = "Espacio";
         TEXT[ english_us ] = "Spacing";
         TEXT[ chinese_simplified ] = "Èó¥Èöî";
-        TEXT[ russian ] = "–‡ÒÒÚÓˇÌËÂ";
+        TEXT[ russian ] = "»ÌÚÂ‚‡Î";
         TEXT[ polish ] = "OdstÍp";
         TEXT[ japanese ] = "ÈñìÈöî";
         TEXT[ chinese_traditional ] = "ÈñìÈöî";
@@ -451,7 +451,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "Aral˝k";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Espaiat";
-        TEXT[ finnish ] = "Objektiv‰lit";
+        TEXT[ finnish ] = "V‰lit";
         TEXT[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á";
     };
     FixedText FT_HMARGIN
@@ -580,7 +580,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ turkish ] = "Format";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Formato";
-        TEXT[ finnish ] = "Muoto";
+        TEXT[ finnish ] = "Muotoilu";
         TEXT[ thai ] = "‡∏£‡∏π‡∏õ‡πÅ‡∏ö‡∏ö";
     };
     RadioButton RB_LANDSCAPE
@@ -701,7 +701,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ korean ] = "Í∏∞Î≥∏ Í∞í(~D)";
         TEXT[ turkish ] = "Standar~t";
         TEXT[ catalan ] = "~Per defecte";
-        TEXT[ finnish ] = "~Oletusarvo";
+        TEXT[ finnish ] = "~Oletus";
         TEXT[ thai ] = "~‡∏Ñ‡πà‡∏≤‡πÄ‡∏£‡∏¥‡πà‡∏°‡∏ï‡πâ‡∏ô";
     };
     TEXT[ italian ] = "Opzioni di stampa";
@@ -742,7 +742,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
     Text [ italian ] = "Zoom" ;
     Text [ portuguese_brazilian ] = "Zoom" ;
     Text [ portuguese ] = "Zoom" ;
-    Text [ finnish ] = "Zoomaa" ;
+    Text [ finnish ] = "Zoomaus" ;
     Text [ danish ] = "MÂlestok" ;
     Text [ french ] = "Zoom" ;
     Text [ swedish ] = "Skala" ;
@@ -760,7 +760,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text [ italian ] = "~Colonne" ;
         Text [ portuguese_brazilian ] = "~Colunas" ;
         Text [ portuguese ] = "~Colunas" ;
-        Text [ finnish ] = "~Sarakkeet" ;
+        Text [ finnish ] = "Pal~stat" ;
         Text [ danish ] = "Kolonner" ;
         Text [ french ] = "~Colonnes" ;
         Text [ swedish ] = "~Kolumner" ;
@@ -769,7 +769,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text [ english_us ] = "~Columns" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "Ê†è(~C)";
-        Text[ russian ] = " ÓÎÓÌÍË";
+        Text[ russian ] = "—ÚÓÎ·ˆ˚";
         Text[ polish ] = "Kolumny";
         Text[ japanese ] = "Ê®™(~C)";
         Text[ chinese_traditional ] = "Ê¨Ñ(~C)";
@@ -906,7 +906,7 @@ String RID_PVIEW_TOOLBOX
     Text[ turkish ] = "Sayfa ˆnizleme";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "VisualitzaciÛ prËvia de la p‡gina";
-    Text[ finnish ] = "Sivun esikatselu";
+    Text[ finnish ] = "Esikatselu";
     Text[ thai ] = "‡πÅ‡∏™‡∏î‡∏á‡∏ï‡∏±‡∏ß‡∏≠‡∏¢‡πà‡∏≤‡∏á‡∏´‡∏ô‡πâ‡∏≤";
 };
 ToolBox RID_PVIEW_TOOLBOX
