@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:12:45 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:44:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -930,7 +930,7 @@ int SwTransferable::Copy( BOOL bIsCut )
         pClpDocFac = new SwDocFac;
         pWrtShell->Copy( pClpDocFac->GetDoc() );
 
-        if (! pOrigGrf->GetBitmap().IsEmpty())
+        if (pOrigGrf && !pOrigGrf->GetBitmap().IsEmpty())
           AddFormat( SOT_FORMATSTR_ID_SVXB );
 
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
@@ -2364,8 +2364,10 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
         ImageMap aMap;
         SfxMedium aMed( INetURLObject(aBkmk.GetURL()).GetFull(),
                             STREAM_STD_READ, FALSE );
-        if( !aMed.GetInStream()->GetError() && IMAP_ERR_OK ==
-            aMap.Read( *aMed.GetInStream(), IMAP_FORMAT_DETECT ) &&
+        SvStream* pStream = aMed.GetInStream();
+        if( pStream != NULL  &&
+            !pStream->GetError()  &&
+            aMap.Read( *pStream, IMAP_FORMAT_DETECT ) == IMAP_ERR_OK &&
             aMap.GetIMapObjectCount() )
         {
             SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
