@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 16:57:57 $
+ *  last change: $Author: sab $ $Date: 2000-11-02 16:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,7 @@ void XMLTableHeaderFooterContext::EndElement()
 {
     if( xTextCursor.is() )
     {
-        GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
+        //GetImport().GetTextImport()->GetCursor()->gotoEnd(sal_False);
         if( GetImport().GetTextImport()->GetCursor()->goLeft( 1, sal_True ) )
         {
             OUString sEmpty;
