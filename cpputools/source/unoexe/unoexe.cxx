@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoexe.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 16:31:31 $
+ *  last change: $Author: dbo $ $Date: 2001-03-12 18:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/shlib.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <com/sun/star/lang/XMain.hpp>
@@ -208,169 +209,12 @@ static sal_Bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
 //##################################################################################################
 
 
-//==================================================================================================
-Reference< XSingleServiceFactory > loadLibComponentFactory(
-    const OUString & rLibName, const OUString & rImplName,
-    const Reference< XMultiServiceFactory > & xSF, const Reference< XRegistryKey > & xKey )
-{
-    Reference< XSingleServiceFactory > xRet;
-
-    OUStringBuffer aLibNameBuf( 32 );
-#ifdef SAL_UNX
-    aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
-    aLibNameBuf.append( rLibName );
-    aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".so") );
-#else
-    aLibNameBuf.append( rLibName );
-    aLibNameBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dll") );
-#endif
-    OUString aLibName( aLibNameBuf.makeStringAndClear() );
-    oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
-
-    if (lib)
-    {
-        void * pSym;
-
-        // ========================= LATEST VERSION =========================
-        OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
-        if (pSym = osl_getSymbol( lib, aGetEnvName.pData ))
-        {
-            uno_Environment * pCurrentEnv = 0;
-            uno_Environment * pEnv = 0;
-            const sal_Char * pEnvTypeName = 0;
-            (*((component_getImplementationEnvironmentFunc)pSym))( &pEnvTypeName, &pEnv );
-
-            sal_Bool bNeedsMapping =
-                (pEnv || 0 != rtl_str_compare( pEnvTypeName, CPPU_CURRENT_LANGUAGE_BINDING_NAME ));
-
-            OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
-
-            if (bNeedsMapping)
-            {
-                if (! pEnv)
-                    uno_getEnvironment( &pEnv, aEnvTypeName.pData, 0 );
-                if (pEnv)
-                {
-                    OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-                    uno_getEnvironment( &pCurrentEnv, aCppEnvTypeName.pData, 0 );
-                    if (pCurrentEnv)
-                        bNeedsMapping = (pEnv != pCurrentEnv);
-                }
-            }
-
-            OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
-            if (pSym = osl_getSymbol( lib, aGetFactoryName.pData ))
-            {
-                OString aImplName( OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
-
-                if (bNeedsMapping)
-                {
-                    if (pEnv && pCurrentEnv)
-                    {
-                        Mapping aCurrent2Env( pCurrentEnv, pEnv );
-                        Mapping aEnv2Current( pEnv, pCurrentEnv );
-
-                        if (aCurrent2Env.is() && aEnv2Current.is())
-                        {
-                            void * pSMgr = aCurrent2Env.mapInterface(
-                                xSF.get(), ::getCppuType( (const Reference< XMultiServiceFactory > *)0 ) );
-                            void * pKey = aCurrent2Env.mapInterface(
-                                xKey.get(), ::getCppuType( (const Reference< XRegistryKey > *)0 ) );
-
-                            void * pSSF = (*((component_getFactoryFunc)pSym))(
-                                aImplName.getStr(), pSMgr, pKey );
-
-                            if (pKey)
-                                (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pKey );
-                            if (pSMgr)
-                                (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pSMgr );
-
-                            if (pSSF)
-                            {
-                                aEnv2Current.mapInterface(
-                                    reinterpret_cast< void ** >( &xRet ),
-                                    pSSF, ::getCppuType( (const Reference< XSingleServiceFactory > *)0 ) );
-                                (*pEnv->pExtEnv->releaseInterface)( pEnv->pExtEnv, pSSF );
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    XSingleServiceFactory * pRet = (XSingleServiceFactory *)
-                        (*((component_getFactoryFunc)pSym))(
-                            aImplName.getStr(), xSF.get(), xKey.get() );
-                    if (pRet)
-                    {
-                        xRet = pRet;
-                        pRet->release();
-                    }
-                }
-            }
-
-            if (pEnv)
-                (*pEnv->release)( pEnv );
-            if (pCurrentEnv)
-                (*pCurrentEnv->release)( pCurrentEnv );
-        }
-
-        // ========================= PREVIOUS VERSION =========================
-        else
-        {
-            OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(CREATE_COMPONENT_FACTORY_FUNCTION) );
-            if (pSym = osl_getSymbol( lib, aGetFactoryName.pData ))
-            {
-                OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-                OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
-                Mapping aUno2Cpp( aUnoEnvTypeName, aCppEnvTypeName );
-                Mapping aCpp2Uno( aCppEnvTypeName, aUnoEnvTypeName );
-                OSL_ENSURE( aUno2Cpp.is() && aCpp2Uno.is(), "### cannot get uno mappings!" );
-
-                if (aUno2Cpp.is() && aCpp2Uno.is())
-                {
-                    uno_Interface * pUComponentFactory = 0;
-
-                    uno_Interface * pUSFactory = (uno_Interface *)aCpp2Uno.mapInterface(
-                        xSF.get(), ::getCppuType( (const Reference< XMultiServiceFactory > *)0 ) );
-                    uno_Interface * pUKey = (uno_Interface *)aCpp2Uno.mapInterface(
-                        xKey.get(), ::getCppuType( (const Reference< XRegistryKey > *)0 ) );
-
-                    pUComponentFactory = (*((CreateComponentFactoryFunc)pSym))(
-                        rImplName.getStr(), pUSFactory, pUKey );
-
-                    if (pUKey)
-                        (*pUKey->release)( pUKey );
-                    if (pUSFactory)
-                        (*pUSFactory->release)( pUSFactory );
-
-                    if (pUComponentFactory)
-                    {
-                        XSingleServiceFactory * pXFactory =
-                            (XSingleServiceFactory *)aUno2Cpp.mapInterface(
-                                pUComponentFactory, ::getCppuType( (const Reference< XSingleServiceFactory > *)0 ) );
-                        (*pUComponentFactory->release)( pUComponentFactory );
-
-                        if (pXFactory)
-                        {
-                            xRet = pXFactory;
-                            pXFactory->release();
-                        }
-                    }
-                }
-            }
-        }
-
-        if (! xRet.is())
-            osl_unloadModule( lib );
-    }
-
-    return xRet;
-}
 //--------------------------------------------------------------------------------------------------
 template< class T >
-void createInstance( Reference< T > & rxOut,
-                            const Reference< XMultiServiceFactory > & xMgr,
-                            const OUString & rServiceName )
+void createInstance(
+    Reference< T > & rxOut,
+    const Reference< XMultiServiceFactory > & xMgr,
+    const OUString & rServiceName )
     throw (Exception)
 {
     Reference< XInterface > x( xMgr->createInstance( rServiceName ), UNO_QUERY );
@@ -387,23 +231,23 @@ void createInstance( Reference< T > & rxOut,
                 if (xSet.is())
                 {
                     // acceptor
-                    xSet->insert( makeAny( loadLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("acceptor") ),
+                    xSet->insert( makeAny( loadSharedLibComponentFactory(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("acceptor") ), OUString(),
                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.io.Acceptor") ),
                         xMgr, Reference< XRegistryKey >() ) ) );
                     // connector
-                    xSet->insert( makeAny( loadLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("connectr") ),
+                    xSet->insert( makeAny( loadSharedLibComponentFactory(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("connectr") ), OUString(),
                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.io.Connector") ),
                         xMgr, Reference< XRegistryKey >() ) ) );
                     // iiop bridge
-                    xSet->insert( makeAny( loadLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge") ),
+                    xSet->insert( makeAny( loadSharedLibComponentFactory(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("remotebridge") ), OUString(),
                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.remotebridges.Bridge.various") ),
                         xMgr, Reference< XRegistryKey >() ) ) );
                     // bridge factory
-                    xSet->insert( makeAny( loadLibComponentFactory(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM("brdgfctr") ),
+                    xSet->insert( makeAny( loadSharedLibComponentFactory(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("brdgfctr") ), OUString(),
                         OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.remotebridges.BridgeFactory") ),
                         xMgr, Reference< XRegistryKey >() ) ) );
                 }
