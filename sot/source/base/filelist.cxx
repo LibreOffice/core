@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelist.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-22 13:54:11 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,6 @@ FileList& FileList::operator=( const FileList& rFileList )
     return *this;
 }
 
-
 /*************************************************************************
 |*
 |*    FileList::GetFormatName()
@@ -134,7 +133,6 @@ ULONG FileList::GetFormat()
 {
     return FORMAT_FILE_LIST;
 }
-
 
 /******************************************************************************
 |*
@@ -157,51 +155,11 @@ void FileList::Assign( const SvDataCopyStream& rCopyStream )
     *this = (const FileList&)rCopyStream;
 }
 
-
 /******************************************************************************
 |*
 |*  Stream-Operatoren
 |*
 \******************************************************************************/
-
-// Windows-Struktur nachdefinieren
-// Typen entsprechend der Groesse der Original-Typen gewaehlt
-// In den Kommentaren sind jeweils die Original-Typen angegeben.
-// Hier werden immer die 32-Bit-Varianten der Typen gewaehlt, um
-// eine einheitliche Struktur fuer alle Plattformen zu erhalten.
-// Diese Struktor ist zwar nicht Win16-kompatibel, dort kann aber
-// die Struktur auch nicht direkt per Drag&Drop uebertragen werden.
-struct Sv_DROPFILES
-{
-    /*DWORD = unsigned long*/   UINT32 pFiles;  // offset of file list
-    /*POINT = { long, long }*/  INT32 pt_x;     // drop point
-                                INT32 pt_y;
-    /*BOOL = int*/              INT32 fNC;
-    /*BOOL = int*/              INT32 fWide;    // wide character-flag
-
-    // Konstruktor
-    Sv_DROPFILES( void )
-    {
-        pFiles  = 20;   // 5 x 4 Bytes, sizeof gefaehrlich wegen alignment
-        pt_x    = 0L;
-        pt_y    = 0L;
-        fNC     = FALSE;
-        fWide   = FALSE; // NOTE: Unicode not allowed for Windows 95 !!
-    }
-
-};
-
-// Stream-Operatoren fuer Sv_DROPFILES
-SvStream& operator<<( SvStream& rOStm, const Sv_DROPFILES& r )
-{
-    rOStm << r.pFiles << r.pt_x << r.pt_y << r.fNC << r.fWide;
-    return rOStm;
-}
-SvStream& operator>>( SvStream& rIStm, Sv_DROPFILES& r )
-{
-    rIStm >> r.pFiles >> r.pt_x >> r.pt_y >> r.fNC >> r.fWide;
-    return rIStm;
-}
 
 /*
  * NOTE: to correctly handle this Protocol with Unicode, native Win32 must be called:
@@ -210,92 +168,43 @@ SvStream& operator>>( SvStream& rIStm, Sv_DROPFILES& r )
 
 SvStream& operator<<( SvStream& rOStm, const FileList& rFileList )
 {
-    // Windows-kompatible Struktur anlegen und streamen
-    Sv_DROPFILES aSv_DROPFILES;
-    rOStm << aSv_DROPFILES;
-
-    // String-Liste anhaengen
-    ULONG nCount = rFileList.pStrList->Count();
-    for( ULONG i = 0 ; i < nCount ; i++ )
-    {
-        String* pStr = rFileList.pStrList->GetObject( i );
-//      rOStm << pStr->GetBuffer();
-        rOStm << "invalid.txt"; //
-
-        // Noch eine 0 anhaengen
-        rOStm << (char)0;
-    }
-    // Noch eine 0 anhaengen
-    rOStm << (char)0;
-
+    OSL_ENSURE(false, "Not implemented!");
     return rOStm;
 }
 
+/* #i28176#
+   The Windows clipboard bridge now provides a double '\0'
+   terminated list of file names for format SOT_FORMAT_FILE_LIST
+   instead of the original Windows Sv_DROPFILES structure. All strings
+   in this list are UTF16 strings. Shell link files will be already
+   resolved by the Windows clipboard bridge.*/
 SvStream& operator>>( SvStream& rIStm, FileList& rFileList )
 {
-    // Windows-kompatible Struktur anlegen und aus Stream lesen
-    Sv_DROPFILES aSv_DROPFILES;
-    rIStm >> aSv_DROPFILES;
-
-    // Bestehende Liste loeschen und neue anlegen
     rFileList.ClearAll();
     rFileList.pStrList = new FileStringList();
 
-    // String-Liste aufbauen
-    // Unicode ?
-    if( aSv_DROPFILES.fWide )
+    String aStr;
+    sal_uInt16 c;
+
+    while (!rIStm.IsEof())
     {
-        // yes, Unicode
-        String aStr;
-        sal_uInt16 c;
+        aStr.Erase();
 
-        while( !rIStm.IsEof() )
+        // read first character of filepath; c==0 > reach end of stream
+        rIStm >> c;
+        if (!c)
+            break;
+
+        // read string till c==0
+        while (c && !rIStm.IsEof())
         {
-            aStr.Erase();
-
-            // read first character of filepath; c==0 > reach end of stream
+            aStr += (sal_Unicode)c;
             rIStm >> c;
-            if ( !c )
-                break;
-
-            // read string till c==0
-            while( c && !rIStm.IsEof() )
-            {
-                aStr += (sal_Unicode)c;
-                rIStm >> c;
-            }
-
-            // append the filepath
-            rFileList.AppendFile( aStr );
         }
+
+        // append the filepath
+        rFileList.AppendFile(aStr);
     }
-    else
-    {
-        // no, only ANSI
-        ByteString aStr;
-        sal_Char c;
-
-        while( !rIStm.IsEof() )
-        {
-            aStr.Erase();
-
-            // read first character of filepath; c==0 > reach end of stream
-            rIStm >> c;
-            if ( !c )
-                break;
-
-            // read string till c==0
-            while( c && !rIStm.IsEof() )
-            {
-                aStr += c;
-                rIStm >> c;
-            }
-
-            // append the filepath
-            rFileList.AppendFile( String( aStr, osl_getThreadTextEncoding() ) );
-        }
-    }
-
     return rIStm;
 }
 
