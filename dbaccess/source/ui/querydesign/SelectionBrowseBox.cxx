@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-14 14:51:05 $
+ *  last change: $Author: oj $ $Date: 2001-08-30 13:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2240,9 +2240,11 @@ void OSelectionBrowseBox::paste()
     {
         case BROW_FIELD_ROW:
             m_pFieldCell->Paste();
+            m_pTextCell->SetModifyFlag();
             break;
         default:
             m_pTextCell->Paste();
+            m_pTextCell->SetModifyFlag();
     }
     RowModified(GetBrowseRow(nRow), GetCurColumnId());
     OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
