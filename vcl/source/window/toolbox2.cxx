@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-17 16:02:38 $
+ *  last change: $Author: ssa $ $Date: 2002-10-23 09:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1220,6 +1220,9 @@ void ToolBox::SetItemText( USHORT nItemId, const XubString& rText )
         }
         else
             pItem->maText = ImplConvertMenuString( rText );
+
+        // Notify
+        ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMTEXTCHANGED, (void*) nPos );
     }
 }
 
