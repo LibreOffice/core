@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:10:48 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,6 +227,8 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
     if (!IsFldEdit())   // Neues Feld einfuegen
     {
         SwInsertFld_Data aData(nTypeId, nSubType, rPar1, rPar2, nFormatId, 0, cSeparator, bIsAutomaticLanguage );
+        //#i26566# provide parent for SwWrtShell::StartInputFldDlg
+        aData.pParent = &GetTabDialog()->GetOKButton();
         bRet = aMgr.InsertFld( aData );
 
         com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
