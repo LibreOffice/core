@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2005-01-18 14:35:13 $
+dnl * Date: $Date: 2005-01-18 14:55:20 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.83 $ )
+AC_REVISION( $Revision: 1.84 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -766,6 +766,13 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
       AC_MSG_ERROR([found version "$_gcc_version", use version 3+ of the gcc compiler])
    fi
    AC_MSG_RESULT([checked (gcc $_gcc_version)])
+   if test "$_os" = "SunOS"; then
+      AC_MSG_CHECKING([gcc linker])
+      if $CC -Wl,--version 2>&1 |head -n 1| grep -v GNU > /dev/null;then
+          AC_MSG_ERROR([failed (not GNU ld). Use GNU ld instead of Sun ld on Solaris])
+      fi
+      AC_MSG_RESULT([ok (GNU ld)])
+   fi
 fi  
 
 dnl ===================================================================
