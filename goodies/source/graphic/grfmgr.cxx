@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:49:13 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <vcl/metaact.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/salbtype.hxx>
+#include <vcl/pdfextoutdevdata.hxx>
 #include <svtools/cacheoptions.hxx>
 #include "grfmgr.hxx"
 
@@ -672,7 +673,31 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     const sal_uInt32    nOldDrawMode = pOut->GetDrawMode();
     BOOL                bCropped = aAttr.IsCropped();
     BOOL                bCached = FALSE;
+    BOOL                bWritingPdfLinkedGraphic = FALSE;
     BOOL                bRet;
+
+    // #i29534# Provide output rects for PDF writer
+    Rectangle           aCropRect;
+
+    // #i29534# Notify PDF writer about linked graphic (if any)
+    vcl::ExtOutDevData* pExtOutDevData;
+    if( (pExtOutDevData=pOut->GetExtOutDevData()) &&
+        pExtOutDevData->ISA(vcl::PDFExtOutDevData) )
+    {
+        // #i29534# Only delegate image handling to PDF, if no special
+        // treatment is necessary
+        if( GetGraphic().IsLink() &&
+            aSz.Width() > 0L &&
+            aSz.Height() > 0L &&
+            !aAttr.IsSpecialDrawMode() &&
+            !aAttr.IsMirrored() &&
+            !aAttr.IsRotated() &&
+            !aAttr.IsAdjusted() )
+        {
+            bWritingPdfLinkedGraphic = TRUE;
+            static_cast< vcl::PDFExtOutDevData* >( pExtOutDevData )->BeginGroup();
+        }
+    }
 
     if( !( GRFMGR_DRAW_USE_DRAWMODE_SETTINGS & nFlags ) )
         pOut->SetDrawMode( nOldDrawMode & ( ~( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT ) ) );
@@ -704,14 +729,38 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
         if( bCrop )
         {
             if( bRectClip )
-                pOut->IntersectClipRegion( aClipPolyPoly.GetBoundRect() );
+            {
+                // #i29534# Store crop rect for later forwarding to
+                // PDF writer
+                aCropRect = aClipPolyPoly.GetBoundRect();
+                pOut->IntersectClipRegion( aCropRect );
+            }
             else
+            {
                 pOut->IntersectClipRegion( aClipPolyPoly );
+            }
         }
     }
 
     bRet = mpMgr->DrawObj( pOut, aPt, aSz, *this, aAttr, nFlags, bCached );
 
+    if( bCropped )
+        pOut->Pop();
+
+    pOut->SetDrawMode( nOldDrawMode );
+
+    // #i29534# Notify PDF writer about linked graphic (if any)
+    if( bWritingPdfLinkedGraphic )
+    {
+        static_cast< vcl::PDFExtOutDevData* >( pExtOutDevData )->EndGroup(
+            const_cast< Graphic& >(GetGraphic()),
+            aAttr.GetTransparency(),
+            Rectangle( aPt, aSz ),
+            aCropRect );
+    }
+
+    // #i29534# Moved below OutDev restoration, to avoid multiple swap-ins
+    // (code above needs to call GetGraphic twice)
     if( bCached )
     {
         if( mpSwapOutTimer )
@@ -719,11 +768,6 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
         else
             FireSwapOutRequest();
     }
-
-    if( bCropped )
-        pOut->Pop();
-
-    pOut->SetDrawMode( nOldDrawMode );
 
     return bRet;
 }
