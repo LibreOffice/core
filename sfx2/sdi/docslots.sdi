@@ -2,7 +2,7 @@
     shell SfxObjectShell
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-05-27 13:49:05 $ $Revision: 1.4 $
+    $Author: mba $ $Date: 2002-07-03 16:25:54 $ $Revision: 1.5 $
     $Logfile:   T:/sfx2/sdi/docslots.sdv  $ $Workfile:   DOCSLOTS.SDI  $
 =========================================================================*/
 
@@ -15,30 +15,21 @@ interface Documents
     SID_NEWDOC // ole(opt) api(final/play/rec)
     [
         ExecMethod = NewDocExec_Impl ;
-        StateMethod = CreateDocState_Impl ;
     ]
      //---------------------------------------------------------------------
     SID_OPENDOC // ole(no) api(final/play/rec)
     [
         ExecMethod = OpenDocExec_Impl ;
-        StateMethod = CreateDocState_Impl ;
     ]
      //---------------------------------------------------------------------
     SID_OPENURL // ole(no) api(no)
     [
         ExecMethod = OpenDocExec_Impl ;
-        StateMethod = CreateDocState_Impl ;
-    ]
-     //---------------------------------------------------------------------
-    SID_CURRENT_URL // ole(no) api(no)
-    [
-        StateMethod = CreateDocState_Impl ;
     ]
      //---------------------------------------------------------------------
     SID_OPENTEMPLATE // ole(no) api(final/play/rec)
     [
         ExecMethod = OpenDocExec_Impl ;
-        StateMethod = CreateDocState_Impl ;
     ]
      //---------------------------------------------------------------------
     SID_CLOSEDOCS // ole(req) api(final/play/rec)

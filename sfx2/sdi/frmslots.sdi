@@ -2,7 +2,7 @@
     shell SfxViewFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2002-04-08 16:48:37 $ $Revision: 1.12 $
+    $Author: mba $ $Date: 2002-07-03 16:25:54 $ $Revision: 1.13 $
     $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
 =========================================================================*/
 
@@ -59,7 +59,7 @@ interface Window : Object
         StateMethod = ChildWindowState ;
     ]
 
-        SID_VIEW_DATA_SOURCE_BROWSER// ole(no) api()
+    SID_VIEW_DATA_SOURCE_BROWSER// ole(no) api()
     [
         ExecMethod = ChildWindowExecute ;
         StateMethod = ChildWindowState ;
@@ -149,11 +149,10 @@ interface Window : Object
         StateMethod = MiscState_Impl ;
     ]
 
-
     SID_RECORDMACRO // ole(no) api(final/play/norec)
     [
-                ExecMethod = MiscExec_Impl ;
-                StateMethod = MiscState_Impl ;
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
     ]
 
     SID_STYLE_DESIGNER // ole(no) api(final/play/rec)
@@ -205,9 +204,9 @@ interface Window : Object
         StateMethod = StateHistory_Impl ;
     ]
 
-    // Basic-only property: Window.View
-    SbxObject View SID_VIEW
+    SID_CURRENT_URL // ole(no) api(no)
     [
+        StateMethod = MiscState_Impl ;
     ]
 
     // Stringlist mit den Verben( SFX only )

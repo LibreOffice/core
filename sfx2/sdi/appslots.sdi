@@ -5,8 +5,8 @@
 #*    Description       shell SfxApplication
 #*
 #*    Creation date     MI  01/31/1995
-#*    last change       $Author: mba $ $Date: 2001-12-07 12:40:27 $
-#*    $Revision: 1.7 $
+#*    last change       $Author: mba $ $Date: 2002-07-03 16:26:15 $
+#*    $Revision: 1.8 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -348,21 +348,13 @@ shell SfxApplication
     SID_NEWDOCDIRECT // ole(no) api(no)
     [
         ExecMethod = NewDocDirectExec_Impl ;
-        StateMethod = CreateDocState_Impl ;
     ]
 
-        SID_CLOSEDOCS
-        [
+    SID_CLOSEDOCS
+    [
         ExecMethod = MiscExec_Impl ;
         StateMethod = MiscState_Impl ;
-        ]
-/*
-    SID_NEWFRAMESET
-    [
-        ExecMethod = NewFramesetExec_Impl ;
-        StateMethod = CreateDocState_Impl ;
     ]
-*/
 }
 
 shell SfxModule
