@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-10-23 11:53:19 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 16:03:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ String RID_POPUP_CELLS
     Text [ portuguese ] = "Menu instantâneo para células" ;
     Text [ finnish ] = "Solun kohovalikko" ;
     Text [ danish ] = "Popop-menu for celler" ;
-    Text [ french ] = "Menu Pop-Up pour les cellules" ;
+    Text [ french ] = "Menu Pop-up pour les cellules" ;
     Text [ swedish ] = "Popupmeny för celler" ;
     Text [ dutch ] = "PopUp-menu voor cellen" ;
     Text [ spanish ] = "Menú emergente para celdas" ;
@@ -159,7 +159,7 @@ Menu RID_POPUP_CELLS
             Text [ swedish ] = "~Formatera celler..." ;
             Text [ dutch ] = "Cellen ~opmaken..." ;
             Text [ spanish ] = "~Formatear celdas..." ;
-            Text [ english_us ] = "Format ~Cells..." ;
+            Text [ english_us ] = "~Format Cells..." ;
             Text[ chinese_simplified ] = "µ¥Ôª¸ñ¸ñÊ½»¯(~C)...";
             Text[ russian ] = "Ôîğìàò ÿ÷ååê...";
             Text[ polish ] = "Formatuj komórki...";
@@ -227,7 +227,7 @@ Menu RID_POPUP_CELLS
             Text [ swedish ] = "Radera ce~ller..." ;
             Text [ dutch ] = "Cellen ~wissen..." ;
             Text [ spanish ] = "~Eliminar celdas..." ;
-            Text [ english_us ] = "~Delete Cells..." ;
+            Text [ english_us ] = "De~lete Cells..." ;
             /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Zellen, Zeilen oder Spalten löschen : Ausgewõhlte Zellen, Zeilen oder Spalten l÷schen */
             Text[ chinese_simplified ] = "É¾³ıµ¥Ôª¸ñ(~D)...";
             Text[ russian ] = "Óäàëèòü ÿ÷åéêè...";
@@ -260,7 +260,7 @@ Menu RID_POPUP_CELLS
             Text [ swedish ] = "Ra~dera innehåll..." ;
             Text [ dutch ] = "I~nhoud wissen..." ;
             Text [ spanish ] = "Eliminar contenidos..." ;
-            Text [ english_us ] = "D~elete Contents..." ;
+            Text [ english_us ] = "Delete C~ontents..." ;
             /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
             Text[ chinese_simplified ] = "É¾³ıÄÚÈİ(~E)...";
             Text[ russian ] = "Óäàëèòü ñîäåğæèìîå...";
@@ -379,7 +379,7 @@ Menu RID_POPUP_CELLS
             Text [ swedish ] = "Klistra in innehåll..." ;
             Text [ dutch ] = "~Plakken speciaal..." ;
             Text [ spanish ] = "Pega~do especial..." ;
-            Text [ english_us ] = "Paste Special..." ;
+            Text [ english_us ] = "P~aste Special..." ;
             Text[ chinese_simplified ] = "²åÈëÄÚÈİ...";
             Text[ russian ] = "Ñï~åöèàëüíàÿ âñòàâêà...";
             Text[ polish ] = "~Wklej zawartoœæ...";
@@ -400,7 +400,7 @@ Menu RID_POPUP_CELLS
             HelpId = FID_NOTE_VISIBLE ;
             Text = "~Notiz anzeigen" ;
             Text [ ENGLISH ] = "Show ~Note" ;
-            Text [ english_us ] = "~Show Note" ;
+            Text [ english_us ] = "Sho~w Note" ;
             Text [ swedish ] = "~Visa anteckning" ;
             Text [ danish ] = "Vis note" ;
             Text [ italian ] = "Mostra nota" ;
@@ -432,7 +432,7 @@ Menu RID_POPUP_CELLS
             /* ### ACHTUNG: Neuer Text in Resource? Aus~wahlliste... : Auswahlliste... */
             Text = "Aus~wahlliste..." ;
             Text [ ENGLISH ] = "Select..." ;
-            Text [ english_us ] = "Se~lection List..." ;
+            Text [ english_us ] = "~Selection List..." ;
             Text [ italian ] = "Lista di scelta..." ;
             Text [ spanish ] = "~Lista de selección..." ;
             Text [ french ] = "~Liste de sélection..." ;
@@ -466,7 +466,7 @@ String RID_POPUP_TAB
     Text [ portuguese ] = "Menu instantâneo para barra de tabelas" ;
     Text [ finnish ] = "Taulukon hallinnan kohovalikko" ;
     Text [ danish ] = "Popup-menu for regnearkslinjen" ;
-    Text [ french ] = "Menu Pop-Up pour la barre des tables" ;
+    Text [ french ] = "Menu Pop-up pour la barre des tables" ;
     Text [ swedish ] = "Popupmeny för tabellist" ;
     Text [ dutch ] = "PopUp-menu voor werkbladenbalk" ;
     Text [ spanish ] = "Menú emergente para la barra de hojas" ;
@@ -570,7 +570,7 @@ Menu RID_POPUP_TAB
             Text[ japanese ] = "–¼‘O‚Ì•ÏX(~R)...";
             Text[ chinese_traditional ] = "­«·s©R¦W(~R)...";
             Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ...";
-            Text[ greek ] = "~Ìåôïíïìáóßá...";
+            Text[ greek ] = "Ìåôïíïìáóßá...";
             Text[ korean ] = "ÀÌ¸§ ¹Ù²Ù±â(~R)...";
             Text[ turkish ] = "Ye~niden adlandır...";
             Text[ language_user1 ] = " ";
@@ -648,7 +648,7 @@ String RID_POPUP_PIVOT
     Text [ italian ] = "Menu a scelta rapida DataPilot" ;
     Text [ portuguese_brazilian ] = "Data Pilot Popup Menu" ;
     Text [ portuguese ] = "Menu instantâneo para o piloto de dados" ;
-    Text [ french ] = "Menu Pop-Up pour le DataPilote" ;
+    Text [ french ] = "Menu Pop-up pour le DataPilote" ;
     Text [ dutch ] = "PopUp-menu voor DataPiloot" ;
     Text [ spanish ] = "Menú emergente del piloto de datos" ;
     Text [ danish ] = "Popup-menu for datapiloten" ;
@@ -777,7 +777,7 @@ String RID_POPUP_PREVIEW
     Text [ portuguese ] = "Menu instantâneo para visualizar página" ;
     Text [ finnish ] = "Page Preview Popup Menu" ;
     Text [ danish ] = "Popup-menu for sidevisning" ;
-    Text [ french ] = "Menu Pop-Up pour l'aperçu de page" ;
+    Text [ french ] = "Menu Pop-up pour l'aperçu de page" ;
     Text [ swedish ] = "Popupmeny för sidförhandsvisning" ;
     Text [ dutch ] = "PopUp-menu voor paginavoorbeeld" ;
     Text [ spanish ] = "Menú para previsualización" ;
@@ -930,7 +930,7 @@ String RID_POPUP_EDIT
     Text [ english_us ] = "Text Input pop-up menu" ;
     Text [ italian ] = "Menu a tendina per l'introduzione del testo" ;
     Text [ spanish ] = "Menú emergente para entrada de texto" ;
-    Text [ french ] = "Menu Pop-Up pour la saisie de texte" ;
+    Text [ french ] = "Menu Pop-up pour la saisie de texte" ;
     Text [ dutch ] = "PopUp-menu voor tekstinvoer" ;
     Text [ swedish ] = "Popupmeny för textinmatning" ;
     Text [ danish ] = "Popup-menu for tekstinput" ;
@@ -1170,7 +1170,7 @@ String RID_POPUP_AUDIT
     Text [ english_us ] = "Detective Fill Mode pop-up menu" ;
     Text [ italian ] = "Menu a tendina per il modo di riempimento detective" ;
     Text [ spanish ] = "Menú emergente para el modo Detective de relleno" ;
-    Text [ french ] = "Menu Pop-Up du mode Remplissage d'audit" ;
+    Text [ french ] = "Menu Pop-up du mode Remplissage d'audit" ;
     Text [ dutch ] = "PopUp-menu voor verkenner-opvul-modus" ;
     Text [ swedish ] = "Popupmeny för detektiv-fyllningsläge" ;
     Text [ danish ] = "Popup-menu for detektiv fyldmodus" ;
@@ -1302,7 +1302,7 @@ Menu RID_POPUP_AUDIT
             Text [ portuguese ] = "Remover depe~ndentes" ;
             Text [ finnish ] = "Poista seuraaja" ;
             Text [ danish ] = "Fjern underordnede pile" ;
-            Text [ french ] = "~Supprimer repérage des dépendants" ;
+            Text [ french ] = "~Supprimer le repérage des dépendants" ;
             Text [ swedish ] = "Ta bort spår till ~efterträdaren" ;
             Text [ dutch ] = "Spoor naar opvolger ve~rwijderen" ;
             Text [ spanish ] = "~Eliminar rastro a dependiente" ;
@@ -1391,7 +1391,7 @@ String RID_POPUP_PAGEBREAK
     Text [ danish ] = "Popup-menu for sideskiftsvisning" ;
     Text [ italian ] = "Menu a tendina per l'anteprima dell'impaginazione" ;
     Text [ spanish ] = "Menú emergente para previsualización de saltos de página" ;
-    Text [ french ] = "Menu Pop-Up pour l'aperçu des sauts de page" ;
+    Text [ french ] = "Menu Pop-up pour l'aperçu des sauts de page" ;
     Text [ dutch ] = "Popup-menu voor voorbeeld van paginaeinde" ;
     Text[ chinese_simplified ] = "Ò³ÃæÔ¤ÊÓµÄµ¯³öÊ½²Ëµ¥";
     Text[ russian ] = "Âñïëûâàşùåå ìåíş äëÿ ïğåäâàğèòåëüíîãî ïğîñìîòğà ğàçğûâà ñòğàíèö";
@@ -1454,7 +1454,7 @@ Menu RID_POPUP_PAGEBREAK
             Text [ swedish ] = "~Formatera celler..." ;
             Text [ dutch ] = "~Cellen opmaken..." ;
             Text [ spanish ] = "Formatear ~celdas..." ;
-            Text [ english_us ] = "Format ~Cells..." ;
+            Text [ english_us ] = "~Format Cells..." ;
             Text[ chinese_simplified ] = "µ¥Ôª¸ñ¸ñÊ½»¯(~C)...";
             Text[ russian ] = "Ôîğìàò ÿ÷ååê...";
             Text[ polish ] = "Formatuj komórki...";
@@ -1558,7 +1558,7 @@ Menu RID_POPUP_PAGEBREAK
             Text [ ENGLISH ] = "Reset Scale" ;
             Text [ english_us ] = "Reset Scale" ;
             Text [ portuguese_brazilian ] = "S~kalierung aufheben" ;
-            Text [ swedish ] = "Upphäv s~kalering" ;
+            Text [ swedish ] = "Upphäv s~kalning" ;
             Text [ danish ] = "Ophæv skalering" ;
             Text [ italian ] = "Elimina scala" ;
             Text [ spanish ] = "Restablecer ~escala" ;
@@ -1696,7 +1696,7 @@ Menu RID_POPUP_PAGEBREAK
             HelpId = FID_NOTE_VISIBLE ;
             Text = "~Notiz anzeigen" ;
             Text [ ENGLISH ] = "Show ~Note" ;
-            Text [ english_us ] = "Show Note" ;
+            Text [ english_us ] = "Sho~w Note" ;
             Text [ swedish ] = "~Visa anteckning" ;
             Text [ danish ] = "Vis note" ;
             Text [ italian ] = "Mostra nota" ;
