@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-31 22:02:35 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 23:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ String sBackButton
     Text[ arabic ] = "<< ~ÇáÓÇÈŞ";
     Text[ turkish ] = "<< ~Geri";
     Text[ catalan ] = "<< ~Back";
-    Text[ finnish ] = "<< Takaisin";
+    Text[ finnish ] = "<< Edellinen";
 };
 
 String sNextButton
@@ -258,7 +258,7 @@ String sNextButton
     Text[ arabic ] = "~ÇáÊÇáí >>";
     Text[ turkish ] = "İl~eri >>";
     Text[ catalan ] = "C~ontinue >>";
-    Text[ finnish ] = "Seuraava >>";
+    Text[ finnish ] = "~Jatka >>";
 };
 
 String sBeginButton
@@ -286,7 +286,7 @@ String sBeginButton
     Text[ arabic ] = "~ÊÍæíá";
     Text[ turkish ] = "~Al";
     Text[ catalan ] = "~Convert";
-    Text[ finnish ] = "~Konvertieren";
+    Text[ finnish ] = "~Muunna";
 };
 
 String sCloseButton
@@ -300,7 +300,7 @@ String sCloseButton
     Text[ dutch ] = "~Sluiten";
     Text[ french ] = "Fermer";
     Text[ spanish ] = "~Cerrar";
-    Text[ finnish ] = "~Close";
+    Text[ finnish ] = "~Sulje";
     Text[ italian ] = "~Chiudi";
     Text[ danish ] = "~Close";
     Text[ swedish ] = "~Stäng";
@@ -340,7 +340,7 @@ String sWelcometextLabel1
     Text[ arabic ] = "íŞæã åĞÇ ÇáãÑÔÏ ÇáÂáí ÈÊÍæíá ãÓÊäÏÇÊ StarOffice  ÇáŞÏíãÉ æãÓÊäÏÇÊ Microsoft Office  Åáì ÇáÊäÓíŞ %PRODUCTNAME XML ÇáÌÏíÏ.";
     Text[ turkish ] = "Bu OtoPilot, dizinlerde ve tüm alt dizinlerde Microsoft Office formatında dosyalar arar. Tüm belgeleri ve/veya şablonları %PRODUCTNAME formatına dönüştürebilirsiniz.";
     Text[ catalan ] = "This AutoPilot converts old StarOffice formats and Microsoft Office documents to the new %PRODUCTNAME XML format.";
-    Text[ finnish ] = "Tämä automaattinen ohjaus muuntaa vanhat StarOffice-muodot ja Microsoft Office -asiakirjat uuteen %PRODUCTNAME XML -muotoon.";
+    Text[ finnish ] = "Tämä automaattinen ohjaus muuntaa vanhojen versioiden StarOffice-asiakirjat ja Microsoft Office -asiakirjat uuteen %PRODUCTNAME XML -muotoon.";
 };
 
 String sWelcometextLabel2
@@ -453,7 +453,7 @@ String sMSTemplateCheckbox_2_
     Text[ arabic ] = "ŞæÇáÈ Excel";
     Text[ turkish ] = "Excel şablonları";
     Text[ catalan ] = "Excel Templates";
-    Text[ finnish ] = "Excel-mallit";
+    Text[ finnish ] = "Excel-asiakirjamalli";
 };
 
 String sMSTemplateCheckbox_3_
@@ -481,7 +481,7 @@ String sMSTemplateCheckbox_3_
     Text[ arabic ] = "ŞæÇáÈ PowerPoint";
     Text[ turkish ] = "PowerPoint şablonları";
     Text[ catalan ] = "PowerPoint Templates";
-    Text[ finnish ] = "PowerPoint-mallit";
+    Text[ finnish ] = "PowerPoint-asiakirjamalli";
 };
 
 String sMSDocumentCheckbox_1_
@@ -849,7 +849,7 @@ String sProgressMoreTemplates
     Text[ turkish ] = "Templates";
     Text[ arabic ] = "ŞæÇáÈ";
     Text[ catalan ] = "Templates";
-    Text[ finnish ] = "Tyylit";
+    Text[ finnish ] = "Mallipohjat";
 };
 
 
@@ -907,7 +907,7 @@ String sMsgDirNotThere
     Text[ arabic ] = "ÇáÏáíá '%1' ÛíÑ ãæÌæÏ.";
     Text[ turkish ] = "Aşağıdaki dizinler mevcut değil:";
     Text[ catalan ] = "The '%1' directory does not exist.";
-    Text[ finnish ] = "Das Verzeichnis '%1' ist nicht vorhanden!";
+    Text[ finnish ] = "Hakemistoa %1 ei ole olemassa:";
 };
 
 
@@ -934,7 +934,7 @@ String sQueryfornewCreation
     Text[ turkish ] = "Do you want to create it now?";
     Text[ arabic ] = "åá ÊÑíÏ ÅäÔÇÄå ÇáÂä¿";
     Text[ catalan ] = "Do you want to create it now?";
-    Text[ finnish ] = "Soll es erstellt werden?";
+    Text[ finnish ] = "Haluatko luoda sen nyt?";
     Text[ language_user1 ] = "Das 'es' bezieht sich auf ein bestimmtes Verzeichnis";
 };
 
@@ -964,7 +964,7 @@ String sFileExists
     Text[ arabic ] = "Çáãáİ '<1>' ãæÌæÏ ãÓÈŞÇğ. <CR>åá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
     Text[ turkish ] = "Bunları değiştirin.";
     Text[ catalan ] = "The '<1>' file already exists. Do you want to overwrite it?";
-    Text[ finnish ] = "Tiedosto '<1>' on jo olemassa. Haluatko korvata sen?";
+    Text[ finnish ] = "Tiedosto <1> on jo olemassa.<CR>Haluatko korvata tiedoston?";
 };
 
 String sMorePathsError3
@@ -1020,7 +1020,7 @@ String sConvertError1
     Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ŞØÚ ÚãáíÉ ÇáÊÍæíá İí åĞå ÇáãÑÍáÉ¿";
     Text[ turkish ] = "Dönüştürme işlemini gerçekten bu aşamada iptal etmek istiyor musunuz?";
     Text[ catalan ] = "Do you really want to terminate conversion at this point?";
-    Text[ finnish ] = "Möchten Sie das Konvertieren an dieser Stelle wirklich abbrechen ?";
+    Text[ finnish ] = "Haluatko varmasti lopettaa ohjauksen nyt?";
 };
 
 String sConvertError2
@@ -1185,7 +1185,7 @@ String sProgressPage1
     Text[ turkish ] = "Current Progress";
     Text[ arabic ] = "ÇáÊŞÏã";
     Text[ catalan ] = "Already completed";
-    Text[ finnish ] = "Tilanne";
+    Text[ finnish ] = "Valmis";
 };
 
 String sProgressPage2
@@ -1237,7 +1237,7 @@ String sProgressPage3
     Text[ turkish ] = "Converting the documents";
     Text[ arabic ] = "ÊÍæíá ÇáãÓÊäÏÇÊ";
     Text[ catalan ] = "Document conversion";
-    Text[ finnish ] = "Asiakirjan muunto";
+    Text[ finnish ] = "Muunnetaan asiakirjat";
 };
 
 
@@ -1347,7 +1347,7 @@ String sXMLTemplateCheckbox_1_
     Text[ arabic ] = "ŞæÇáÈ äÕ";
     Text[ turkish ] = "%PRODUCTNAME Writer şablonları";
     Text[ catalan ] = "Text templates";
-    Text[ finnish ] = "Tekstityylit";
+    Text[ finnish ] = "Tekstimallipohjat";
 };
 
 String sXMLTemplateCheckbox_2_
@@ -1375,7 +1375,7 @@ String sXMLTemplateCheckbox_2_
     Text[ arabic ] = "ŞæÇáÈ ÌÏæá";
     Text[ turkish ] = "%PRODUCTNAME Calc şablonları";
     Text[ catalan ] = "Spreadsheet templates";
-    Text[ finnish ] = "Tabellenvorlagen";
+    Text[ finnish ] = "Laskentataulukkomallipohjat";
 };
 
 String sXMLTemplateCheckbox_3_
@@ -1403,7 +1403,7 @@ String sXMLTemplateCheckbox_3_
     Text[ arabic ] = "ŞæÇáÈ ÑÓãÉ/ÚÑÖ ÊŞÏíãí";
     Text[ turkish ] = "%PRODUCTNAME Impress/%PRODUCTNAME Draw şablonları";
     Text[ catalan ] = "Drawing/presentation templates";
-    Text[ finnish ] = "Zeichnungs/Präsentationsvorlagen";
+    Text[ finnish ] = "Piirros-/esitysmallipohjat";
 };
 
 String sXMLTemplateCheckbox_4_
@@ -1429,7 +1429,7 @@ String sXMLTemplateCheckbox_4_
     Text[ turkish ] = "%PRODUCTNAME Math Documents";
     Text[ arabic ] = "ãÓÊäÏÇÊ ÔÇãáÉ";
     Text[ catalan ] = "Master documents";
-    Text[ finnish ] = "Globaldokumente";
+    Text[ finnish ] = "Pääasiakirjat";
 };
 
 
@@ -1458,7 +1458,7 @@ String sXMLDocumentCheckbox_1_
     Text[ arabic ] = "ãÓÊäÏÇÊ äÕ";
     Text[ turkish ] = "%PRODUCTNAME Writer belgeleri";
     Text[ catalan ] = "Text documents";
-    Text[ finnish ] = "Textdokumente";
+    Text[ finnish ] = "Tekstiasiakirjat";
 };
 
 String sXMLDocumentCheckbox_2_
@@ -1486,7 +1486,7 @@ String sXMLDocumentCheckbox_2_
     Text[ arabic ] = "ãÓÊäÏÇÊ ÌÏæá";
     Text[ turkish ] = "%PRODUCTNAME Calc belgeleri";
     Text[ catalan ] = "Spreadsheet documents";
-    Text[ finnish ] = "Tabellendokumente";
+    Text[ finnish ] = "Laskentataulukkoasiakirjat";
 };
 
 String sXMLDocumentCheckbox_3_
@@ -1514,7 +1514,7 @@ String sXMLDocumentCheckbox_3_
     Text[ arabic ] = "ãÓÊäÏÇÊ ÑÓãÉ/ÚÑÖ ÊŞÏíãí";
     Text[ turkish ] = "%PRODUCTNAME Impress/%PRODUCTNAME Draw belgeleri";
     Text[ catalan ] = "Drawing/presentation documents";
-    Text[ finnish ] = "Zeichnungs/Präsentationsdokumente";
+    Text[ finnish ] = "Piirros-/esitysasiakirjat";
 };
 
 
@@ -1541,7 +1541,7 @@ String sXMLDocumentCheckbox_4_
     Text[ turkish ] = "%PRODUCTNAME Math Documents";
     Text[ arabic ] = "ãÓÊäÏÇÊ ÔÇãáÉ/ÕíÛ";
     Text[ catalan ] = "Master documents/formulas";
-    Text[ finnish ] = "Globaldokumente/Formeln";
+    Text[ finnish ] = "Pääasiakirjat/kaavat";
 };
 
 String sXMLHelperApplications_1
@@ -1568,7 +1568,7 @@ String sXMLHelperApplications_1
     Text[ turkish ] = "Master Documents";
     Text[ arabic ] = "ãÓÊäÏÇÊ ÔÇãáÉ";
     Text[ catalan ] = "master documents";
-    Text[ finnish ] = "Globaldokumente";
+    Text[ finnish ] = "pääasiakirjat";
 };
 
 String sXMLHelperApplications_2
@@ -1609,7 +1609,7 @@ String sSourceDocuments
     Text[ dutch ] = "Brondocumenten";
     Text[ french ] = "Documents source";
     Text[ spanish ] = "Documentos fuente";
-    Text[ finnish ] = "Sourcedocuments";
+    Text[ finnish ] = "Lähdeasiakirjat";
     Text[ italian ] = "Documenti sorgente";
     Text[ danish ] = "Sourcedocuments";
     Text[ swedish ] = "Källdokument";
@@ -1636,7 +1636,7 @@ String sTargetDocuments
     Text[ dutch ] = "Doeldocumenten";
     Text[ french ] = "Documents cible";
     Text[ spanish ] = "Documentos destino";
-    Text[ finnish ] = "Targetdocuments";
+    Text[ finnish ] = "Kohdeasiakirjat";
     Text[ italian ] = "Documenti di destinazione";
     Text[ danish ] = "Targetdocuments";
     Text[ swedish ] = "Måldokument";
@@ -1662,7 +1662,7 @@ String sCreateLogfile
     Text[ dutch ] = "Logbestand maken";
     Text[ french ] = "Créer un fichier journal";
     Text[ spanish ] = "Crear archivo de operaciones";
-    Text[ finnish ] = "Creae Logfile";
+    Text[ finnish ] = "Luo lokitiedosto";
     Text[ italian ] = "Crea file di log";
     Text[ danish ] = "Creae Logfile";
     Text[ swedish ] = "Skapa loggfil";
@@ -1688,7 +1688,7 @@ String sLogfileHelpText
     Text[ dutch ] = "In uw werkdirectory wordt een logbestand aangelegd.";
     Text[ french ] = "Un fichier journal va être créé dans votre dossier de travail.";
     Text[ spanish ] = "Se creará un archivo de operaciones en su directorio de trabajo.";
-    Text[ finnish ] = "A Logfile will be created within your Working Directory";
+    Text[ finnish ] = "Lokitiedosto luodaan työhakemistoon";
     Text[ italian ] = "Il programma crea un file di log nella vostra cartella di lavoro.";
     Text[ danish ] = "A Logfile will be created within your Working Directory";
     Text[ swedish ] = "En loggfil kommer att skapas i din arbetskatalog";
@@ -1729,7 +1729,7 @@ String sSumInclusiveSubDir
     Text[ arabic ] = "ÓíÊã ãÑÇÚÇÉ ßá ÇáÏáÇÆá ÇáİÑÚíÉ";
     Text[ turkish ] = "Tüm alt dizinler dikkate alınacak";
     Text[ catalan ] = "All directories will be considered";
-    Text[ finnish ] = "Kaikki hakemistot huomioidaan";
+    Text[ finnish ] = "Kaikki alihakemistot huomioidaan";
 };
 
 String sSumSaveDokumente
@@ -1786,7 +1786,7 @@ String sSumSOTextDocuments
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME tekstiasiakirjat tuodaan:";
 };
 
 
@@ -1815,7 +1815,7 @@ String sSumSOTableDocuments
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME laskentataulukot tuodaan:";
 };
 
 
@@ -1844,7 +1844,7 @@ String sSumSODrawDocuments
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME piirrokset tuodaan:";
 };
 
 
@@ -1873,7 +1873,7 @@ String sSumSOMathDocuments
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME kaava-asiakirjat tuodaan:";
 };
 
 
@@ -1902,7 +1902,7 @@ String sSumSOTextTemplates
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME tekstimallipohjat tuodaan:";
 };
 
 
@@ -1931,7 +1931,7 @@ String sSumSOTableTemplates
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME taulukkomallipohjat tuodaan:";
 };
 
 
@@ -1960,7 +1960,7 @@ String sSumSODrawTemplates
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME esitysmallipohjat tuodaan:";
 };
 
 String sSumSOGlobalDocuments
@@ -1988,8 +1988,8 @@ String sSumSOGlobalDocuments
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "Kaavat";
-    Text[ finnish ] = "Kaavat";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME pääasiakirjat tuodaan:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa olevat ohjelman %PRODUCTNAME pääasiakirjat tuodaan:";
 };
 
 
@@ -2018,7 +2018,7 @@ String sSumMSTextDocuments
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa ovat Word-asiakirjat tuodaan:";
 };
 
 
@@ -2047,7 +2047,7 @@ String sSumMSTableDocuments
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa ovat Excel-asiakirjat tuodaan:";
 };
 
 
@@ -2076,7 +2076,7 @@ String sSumMSDrawDocuments
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa ovat PowerPoint-asiakirjat tuodaan:";
 };
 
 
@@ -2105,7 +2105,7 @@ String sSumMSTextTemplates
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa ovat Word-mallipohjat tuodaan:";
 };
 
 
@@ -2134,7 +2134,7 @@ String sSumMSTableTemplates
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa ovat Excel-mallipohjat tuodaan:";
 };
 
 
@@ -2163,8 +2163,9 @@ String sSumMSDrawTemplates
     Text[ arabic ] = "Óæİ íÊã ÇÓÊíÑÇÏ ßá %1 ãä ÇáÏáíá ÇáÊÇáí:";
     Text[ turkish ] = "İçe aktarılacak tüm Word şablonlarını içeren dizin:";
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
-    Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
+    Text[ finnish ] = "Kaikki seuraavassa hakemistossa ovat PowerPoint-mallipohjat tuodaan:";
 };
+
 
 
 
