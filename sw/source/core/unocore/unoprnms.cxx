@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 16:15:32 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 09:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,9 +739,9 @@ const SwPropNameTab aPropNameTab = {
 /* 0657 UNO_NAME_COMPONENT*/              {MAP_CHAR_LEN("Component")},
 /* 0658 UNO_NAME_SECT_LEFT_MARGIN*/              {MAP_CHAR_LEN("SectionLeftMargin")},
 /* 0659 UNO_NAME_SECT_RIGHT_MARGIN*/              {MAP_CHAR_LEN("SectionRightMargin")},
-/* 0660 UNO_NAME_PARA_IS_CONNECT_BORDER */{MAP_CHAR_LEN("ParaIsConnectBorder")}
+/* 0660 UNO_NAME_PARA_IS_CONNECT_BORDER */{MAP_CHAR_LEN("ParaIsConnectBorder")},
 /* 0661 UNO_NAME_ITEMS*/ {MAP_CHAR_LEN("Items")},
-/* 0662 UNO_NAME_SELITEM*/ {MAP_CHAR_LEN("SelectedItem")},
+/* 0662 UNO_NAME_SELITEM*/ {MAP_CHAR_LEN("SelectedItem")}
 };
 
 #ifndef PRODUCT
