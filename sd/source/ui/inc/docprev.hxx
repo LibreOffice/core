@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docprev.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:16:11 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:30:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ protected:
 public:
                     SdDocPreviewWin( Window* pParent, const ResId& rResId );
                     SdDocPreviewWin( Window* pParent );
-                    ~SdDocPreviewWin() { delete pMetaFile; }
+                    ~SdDocPreviewWin();
     void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
     void            SetGDIFile( GDIMetaFile* pFile );
     virtual void    Resize();
