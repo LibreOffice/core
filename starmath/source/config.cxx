@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ void SmConfig::ItemSetToConfig(const SfxItemSet &rSet)
         {
             SetIgnoreSpacesRight( bVal );
 
-            // (angezeigte) Formeln müssen entsprechen neu formatiert werden.
+            // (angezeigte) Formeln muessen entsprechen neu formatiert werden.
             // Das erreichen wir mit:
             Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
         }
