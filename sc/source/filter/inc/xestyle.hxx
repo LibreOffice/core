@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:10:56 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:43:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef SC_XESTYLE_HXX
 #define SC_XESTYLE_HXX
 
@@ -90,22 +91,21 @@
 #endif
 
 /* ============================================================================
-- Buffers for style records (PALETTE, FONT, FORMAT, XF).
-- Page styles export.
+- Buffers for style records (PALETTE, FONT, FORMAT, XF, STYLE).
 ============================================================================ */
 
 // PALETTE record - color information =========================================
 
 /** Different types of colors in a document. */
-enum XclColorType
+enum XclExpColorType
 {
-    xlColorCellText,        /// Text in a cell.
-    xlColorCellBorder,      /// Border of a cell.
-    xlColorCellArea,        /// Background area of a cell.
-    xlColorChartText,       /// Text color in a chart.
-    xlColorChartLine,       /// Line in a chart.
-    xlColorChartArea,       /// Area in a chart.
-    xlColorGrid             /// Spreadsheet grid color.
+    EXC_COLOR_CELLTEXT,         /// Text in a cell.
+    EXC_COLOR_CELLBORDER,       /// Border of a cell.
+    EXC_COLOR_CELLAREA,         /// Background area of a cell.
+    EXC_COLOR_CHARTTEXT,        /// Text color in a chart.
+    EXC_COLOR_CHARTLINE,        /// Line in a chart.
+    EXC_COLOR_CHARTAREA,        /// Area in a chart.
+    EXC_COLOR_GRID              /// Spreadsheet grid color.
 };
 
 // ----------------------------------------------------------------------------
@@ -135,7 +135,7 @@ public:
     /** Inserts the color into the list and updates weighting.
         @param nAutoDefault  The Excel palette index for automatic color.
         @return  A unique ID for this color. */
-    sal_uInt32          InsertColor( const Color& rColor, XclColorType eType, sal_uInt16 nAutoDefault = 0 );
+    sal_uInt32          InsertColor( const Color& rColor, XclExpColorType eType, sal_uInt16 nAutoDefault = 0 );
     /** Returns the color ID representing a fixed Excel palette index (i.e. for auto colors). */
     static sal_uInt32   GetColorIdFromIndex( sal_uInt16 nIndex );
 
