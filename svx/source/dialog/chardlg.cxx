@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-15 11:12:27 $
+ *  last change: $Author: os $ $Date: 2001-05-16 07:45:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3001,6 +3001,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
         m_aEastFontLanguageFT .Hide();
         m_aEastFontLanguageLB .Hide();
         FontNameBox* pTempName = new FontNameBox(this, m_pWestFontNameLB->GetStyle() & ~WB_DROPDOWN);
+        pTempName->SetHelpId(m_pWestFontNameLB->GetHelpId());
         Point aPos(m_pWestFontNameLB->GetPosPixel());
         Point aEastPos = m_aEastFontNameLB.GetPosPixel();
         long nHeight = aEastPos.Y() - aPos.Y();
@@ -3012,6 +3013,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
         m_pWestFontNameLB = pTempName;
 
         FontStyleBox* pTempStyle = new FontStyleBox( this, m_pWestFontStyleLB->GetStyle() & ~WB_DROPDOWN);
+        pTempStyle->SetHelpId(m_pWestFontStyleLB->GetHelpId());
         aSize = m_pWestFontStyleLB->GetSizePixel();
         aSize.Height() += nHeight;
         pTempStyle->SetPosSizePixel(m_pWestFontStyleLB->GetPosPixel(),  aSize);
@@ -3020,6 +3022,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
         m_pWestFontStyleLB = pTempStyle;
 
         FontSizeBox* pTempSize = new FontSizeBox( this, m_pWestFontSizeLB->GetStyle() & ~WB_DROPDOWN);
+        pTempSize->SetHelpId(m_pWestFontSizeLB->GetHelpId());
         aSize = m_pWestFontSizeLB->GetSizePixel();
         aSize.Height() += nHeight;
         pTempSize->SetPosSizePixel(m_pWestFontSizeLB->GetPosPixel(),  aSize);
@@ -3028,6 +3031,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
         m_pWestFontSizeLB = pTempSize;
 
         SvxLanguageBox* pTempLang = new SvxLanguageBox( this, m_pWestFontLanguageLB->GetStyle() & ~WB_DROPDOWN);
+        pTempLang->SetHelpId(m_pWestFontLanguageLB->GetHelpId());
         aSize = m_pWestFontLanguageLB->GetSizePixel();
         aSize.Height() += nHeight;
         pTempLang->SetPosSizePixel(m_pWestFontLanguageLB->GetPosPixel(),  aSize);
