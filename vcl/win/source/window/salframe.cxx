@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:59:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 12:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2731,7 +2731,7 @@ void SalFrame::UpdateSettings( AllSettings& rSettings )
         if ( aSalShlData.mbWXP )
         {
             // only xp supports a different menu bar color
-            bool bFlatMenues = false;
+            long bFlatMenues = 0;
             SystemParametersInfo( SPI_GETFLATMENU, 0, &bFlatMenues, 0);
             if( bFlatMenues )
             {
