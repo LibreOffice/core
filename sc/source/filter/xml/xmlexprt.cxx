@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-02 09:53:14 $
+ *  last change: $Author: sab $ $Date: 2000-11-02 10:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2819,7 +2819,7 @@ void ScXMLExport::_ExportAutoStyles()
                                         if (xCellRangeAddressable.is())
                                         {
                                             table::CellRangeAddress aRangeAddress = xCellRangeAddressable->getRangeAddress();
-                                            uno::Any aValidation = xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIDAT)));
+                                            uno::Any aValidation = xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML)));
                                             if (pValidations->AddValidation(aValidation, aRangeAddress))
                                             {
                                                 SetLastColumn(nTable, aRangeAddress.EndColumn);

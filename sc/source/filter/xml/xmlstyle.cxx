@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-20 06:24:53 $
+ *  last change: $Author: sab $ $Date: 2000-11-02 10:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     { "RotateAngle", XML_NAMESPACE_STYLE, sXML_rotation_angle, XML_SC_TYPE_ROTATEANGLE, 0 },
     { "RotateReference", XML_NAMESPACE_STYLE, sXML_rotation_align, XML_SC_TYPE_ROTATEREFERENCE, 0},
     { "ShadowFormat", XML_NAMESPACE_STYLE, sXML_shadow, XML_TYPE_TEXT_SHADOW, 0 },
-    { "ConditionalFormat", XML_NAMESPACE_STYLE, sXML_map, XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_MAP },
+    { "ConditionalFormatXML", XML_NAMESPACE_STYLE, sXML_map, XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_MAP },
     { "LeftBorder", XML_NAMESPACE_FO, sXML_border, XML_TYPE_BORDER, CTF_ALLBORDER },
     { "LeftBorder", XML_NAMESPACE_FO, sXML_border_left, XML_TYPE_BORDER, CTF_LEFTBORDER },
     { "RightBorder", XML_NAMESPACE_FO, sXML_border_right, XML_TYPE_BORDER, CTF_RIGHTBORDER },
