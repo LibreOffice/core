@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LineDiagram.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2001-01-23 10:08:03 $
+ *  last change: $Author: bm $ $Date: 2001-05-10 08:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #include <com/sun/star/chart/StackableDiagram.idl>
 #endif
 
+#ifndef __com_sun_star_awt_Size_idl__
+#include <com/sun/star/awt/Size.idl>
+#endif
 
 //=============================================================================
 
@@ -152,6 +155,14 @@ service LineDiagram
 
     //-------------------------------------------------------------------------
 
+    /** specifies the size of symbols.
+
+        @optional
+     */
+    [optional, property] com::sun::star::awt::Size SymbolSize;
+
+    //-------------------------------------------------------------------------
+
     /** specifies the type of symbol.
 
         @optional
@@ -187,6 +198,9 @@ service LineDiagram
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/01/23 10:08:03  mi
+    optional interfaces now marked as [optional] instead of just a prosa description of this fact
+
     Revision 1.4  2000/11/21 12:39:48  bm
     #80507# + property SymbolBitmapURL
 
