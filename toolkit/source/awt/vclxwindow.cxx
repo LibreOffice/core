@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-12 10:50:50 $
+ *  last change: $Author: fs $ $Date: 2002-06-12 13:15:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,7 +526,8 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XVclWindowPeer*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XLayoutConstrains*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XView*, this ),
-                                        SAL_STATIC_CAST( ::drafts::com::sun::star::accessibility::XAccessible*, this ) );
+                                        SAL_STATIC_CAST( ::drafts::com::sun::star::accessibility::XAccessible*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, this ) );
     return (aRet.hasValue() ? aRet : VCLXDevice::queryInterface( rType ));
 }
 
@@ -541,6 +542,7 @@ IMPL_XTYPEPROVIDER_START( VCLXWindow )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XLayoutConstrains>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView>* ) NULL ),
     VCLXDevice::getTypes()
 IMPL_XTYPEPROVIDER_END
