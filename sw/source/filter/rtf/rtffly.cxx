@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffly.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:51:06 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1367,17 +1367,6 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
                         ( pPicType->nCropT + pPicType->nCropB ))) / 100L;
     }
 
-    // sorge dafuer, das der Rahmen nicht groesser als der akt.
-    // Pagedescriptor wird.
-    Size aPgSize;
-    GetPageSize( aPgSize );
-
-    if( aSize.Height() > aPgSize.Height() )
-        aSize.Height() = aPgSize.Height();
-
-    if( aSize.Width() > aPgSize.Width() )
-        aSize.Width() = aPgSize.Width();
-
     //steht der Fly etwa in einer Tabelle ?
     const SwNode* pAnchorNd = pDoc->GetNodes()[ rAnchor ];
     const SwTableNode* pTblNd = pAnchorNd->FindTableNode();
@@ -1402,8 +1391,8 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
         pGrfNd->SetChgTwipSize( TRUE );
 
         // min. Werte einhalten !!
-    if( aSize.Width() < /*2268*/MINFLY )
-        aSize.Width() = /*2268*/MINFLY;
+    if( aSize.Width() < MINFLY )
+        aSize.Width() = MINFLY;
     if( aSize.Height() < MINFLY)
         aSize.Height() = MINFLY;
 
@@ -1442,25 +1431,21 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
         if( pPicType->nCropT )
         {
             aCrop.SetTop( pPicType->nCropT );
-//          aSize.Height() -= pPicType->nCropT;
             bChg = TRUE;
         }
         if( pPicType->nCropB )
         {
             aCrop.SetBottom( pPicType->nCropB );
-//          aSize.Height() -= pPicType->nCropB;
             bChg = TRUE;
         }
         if( pPicType->nCropL )
         {
             aCrop.SetLeft( pPicType->nCropL );
-//          aSize.Width() -= pPicType->nCropL;
             bChg = TRUE;
         }
         if( pPicType->nCropR )
         {
             aCrop.SetRight( pPicType->nCropR );
-//          aSize.Width() -= pPicType->nCropR;
             bChg = TRUE;
         }
 
