@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:16:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ using namespace ::com::sun::star;
 
 #define QUERYINT( xint ) \
     if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
-        aAny <<= uno::Reference< xint >(this)
+        return uno::makeAny(uno::Reference< xint >(this))
 
 // ====================================================================
 // SvxUnoTextContentEnumeration
@@ -195,9 +195,8 @@ SvxUnoTextContent::~SvxUnoTextContent() throw()
 // uno::XInterface
 uno::Any SAL_CALL SvxUnoTextContent::queryAggregation( const uno::Type & rType ) throw( uno::RuntimeException )
 {
-    uno::Any aAny;
-
     QUERYINT( text::XTextRange );
+//  else QUERYINT( beans::XTolerantMultiPropertySet );
     else QUERYINT( beans::XPropertySet );
     else QUERYINT( beans::XMultiPropertySet );
     else QUERYINT( beans::XPropertyState );
@@ -212,7 +211,7 @@ uno::Any SAL_CALL SvxUnoTextContent::queryAggregation( const uno::Type & rType )
     else
         return OWeakAggObject::queryAggregation( rType );
 
-    return aAny;
+    return OWeakAggObject::queryAggregation( rType );
 }
 
 uno::Any SAL_CALL SvxUnoTextContent::queryInterface( const uno::Type & rType ) throw( uno::RuntimeException )
@@ -243,6 +242,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextContent::getTypes()
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRange >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
+//      *pTypes++ = ::getCppuType(( const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextContent >*)0);
@@ -377,6 +377,23 @@ uno::Sequence< uno::Any > SAL_CALL SvxUnoTextContent::getPropertyValues( const u
 {
     return _getPropertyValues( aPropertyNames, nParagraph );
 }
+
+/*// XTolerantMultiPropertySet
+uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SvxUnoTextContent::setPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    return _setPropertyValuesTolerant(aPropertyNames, aValues, nParagraph);
+}
+
+uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SvxUnoTextContent::getPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (uno::RuntimeException)
+{
+    return _getPropertyValuesTolerant(aPropertyNames, nParagraph);
+}
+
+uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SvxUnoTextContent::getDirectPropertyValuesTolerant( const uno::Sequence< ::rtl::OUString >& aPropertyNames )
+    throw (uno::RuntimeException)
+{
+    return _getDirectPropertyValuesTolerant(aPropertyNames, nParagraph);
+}*/
 
 // beans::XPropertyState
 beans::PropertyState SAL_CALL SvxUnoTextContent::getPropertyState( const OUString& PropertyName )
@@ -532,11 +549,10 @@ SvxUnoTextCursor::~SvxUnoTextCursor() throw()
 uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const uno::Type & rType )
     throw(uno::RuntimeException)
 {
-    uno::Any aAny;
-
     if( rType == ::getCppuType((const uno::Reference< text::XTextRange >*)0) )
-        aAny <<= uno::Reference< text::XTextRange >((text::XText*)(this));
+        return uno::makeAny(uno::Reference< text::XTextRange >((text::XText*)(this)));
     else QUERYINT( text::XTextCursor );
+//  else QUERYINT( beans::XTolerantMultiPropertySet );
     else QUERYINT( beans::XPropertySet );
     else QUERYINT( beans::XMultiPropertySet );
     else QUERYINT( beans::XPropertyState );
@@ -547,7 +563,7 @@ uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const uno::Type & rType )
     else
         return OWeakAggObject::queryAggregation( rType );
 
-    return aAny;
+    return OWeakAggObject::queryAggregation( rType );
 }
 
 uno::Any SAL_CALL SvxUnoTextCursor::queryInterface( const uno::Type & rType )
@@ -579,6 +595,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextCursor::getTypes()
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextCursor >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XMultiPropertySet >*)0);
+//      *pTypes++ = ::getCppuType(( const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< beans::XPropertyState >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextRangeCompare >*)0);
         *pTypes++ = ::getCppuType(( const uno::Reference< lang::XServiceInfo >*)0);
