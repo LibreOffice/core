@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:43:14 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:09:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,10 +244,10 @@ class SfxPoolItem;
 class SfxItemSet;
 class ScStyleSheet;
 class ScStyleSheetPool;
+class SotStorage;
+class SotStorageRef;
+class SotStorageStreamRef;
 class SvStream;
-class SvStorage;
-class SvStorageRef;
-class SvStorageStreamRef;
 
 /** Contains static methods used anywhere in the filters. */
 class ScfTools : ScfNoInstance
@@ -285,14 +285,14 @@ public:
 // *** streams and storages *** -----------------------------------------------
 
     /** Tries to open an existing stream with the specified name in the passed storage (read-only). */
-    static SvStorageRef         OpenStorageRead( SvStorage* pStrg, const String& rStrgName );
+    static SotStorageRef         OpenStorageRead( SotStorage* pStrg, const String& rStrgName );
     /** Creates and opens a stream with the specified name in the passed storage (read/write). */
-    static SvStorageRef         OpenStorageWrite( SvStorage* pStrg, const String& rStrgName );
+    static SotStorageRef         OpenStorageWrite( SotStorage* pStrg, const String& rStrgName );
 
     /** Tries to open an existing stream with the specified name in the passed storage (read-only). */
-    static SvStorageStreamRef   OpenStorageStreamRead( SvStorage* pStrg, const String& rStrmName );
+    static SotStorageStreamRef   OpenStorageStreamRead( SotStorage* pStrg, const String& rStrmName );
     /** Creates and opens a stream with the specified name in the passed storage (read/write). */
-    static SvStorageStreamRef   OpenStorageStreamWrite( SvStorage* pStrg, const String& rStrmName );
+    static SotStorageStreamRef   OpenStorageStreamWrite( SotStorage* pStrg, const String& rStrmName );
 
 // *** item handling *** ------------------------------------------------------
 
