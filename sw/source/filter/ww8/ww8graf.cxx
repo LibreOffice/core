@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:29:43 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 12:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2341,11 +2341,12 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrmFmt* pFlyFmt)
 bool SwWW8ImplReader::MiserableRTLGraphicsHack(long &rLeft,  long nWidth,
     SwHoriOrient eHoriOri, SwRelationOrient eHoriRel)
 {
+    if (!IsRightToLeft())
+        return false;
     return RTLGraphicsHack(rLeft, nWidth, eHoriOri, eHoriRel,
             maSectionManager.GetPageLeft(),
             maSectionManager.GetPageRight(),
-            maSectionManager.GetPageWidth(),
-            IsRightToLeft());
+            maSectionManager.GetPageWidth());
 }
 
 RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
