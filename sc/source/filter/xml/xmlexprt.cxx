@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:15 $
+ *  last change: $Author: sab $ $Date: 2000-09-22 11:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -831,6 +831,7 @@ void ScMyEmptyDatabaseRanges::Sort()
 
 void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
 {
+    aCell.bHasAnnotation = sal_False;
     if (xTable.is())
     {
         uno::Reference<table::XCellRange> xCellRange(xTable, uno::UNO_QUERY);
@@ -854,7 +855,6 @@ void ScMyNotEmptyCellsIterator::HasAnnotation(ScMyCell& aCell)
             }
         }
     }
-    aCell.bHasAnnotation = sal_False;
 }
 
 ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport)
@@ -2207,28 +2207,38 @@ sal_Bool ScXMLExport::IsMatrix (const uno::Reference <table::XCellRange>& xCellR
 {
     bIsFirst = sal_False;
     uno::Reference <table::XCellRange> xMatrixCellRange = xCellRange->getCellRangeByPosition(nCol,nRow,nCol,nRow);
-    if (xMatrixCellRange.is())
+    uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange (xMatrixCellRange, uno::UNO_QUERY);
+    if (xMatrixCellRange.is() && xArrayFormulaRange.is())
     {
-        uno::Reference<sheet::XSheetCellRange> xMatrixSheetCellRange (xMatrixCellRange, uno::UNO_QUERY);
-        if (xMatrixSheetCellRange.is())
+        rtl::OUString sArrayFormula = xArrayFormulaRange->getArrayFormula();
+        if (sArrayFormula.getLength())
         {
-            uno::Reference<sheet::XSheetCellCursor> xMatrixSheetCursor = xTable->createCursorByRange(xMatrixSheetCellRange);
-            if (xMatrixSheetCursor.is())
+            uno::Reference<sheet::XSheetCellRange> xMatrixSheetCellRange (xMatrixCellRange, uno::UNO_QUERY);
+            if (xMatrixSheetCellRange.is())
             {
-                xMatrixSheetCursor->collapseToCurrentArray();
-                uno::Reference<sheet::XCellRangeAddressable> xMatrixCellAddress (xMatrixSheetCursor, uno::UNO_QUERY);
-                if (xMatrixCellAddress.is())
+                uno::Reference<sheet::XSheetCellCursor> xMatrixSheetCursor = xTable->createCursorByRange(xMatrixSheetCellRange);
+                if (xMatrixSheetCursor.is())
                 {
-                    aCellAddress = xMatrixCellAddress->getRangeAddress();
-                    if ((aCellAddress.StartColumn == nCol && aCellAddress.StartRow == nRow) &&
-                        (aCellAddress.EndColumn > nCol || aCellAddress.EndRow > nRow))
+                    xMatrixSheetCursor->collapseToCurrentArray();
+                    uno::Reference<sheet::XCellRangeAddressable> xMatrixCellAddress (xMatrixSheetCursor, uno::UNO_QUERY);
+                    if (xMatrixCellAddress.is())
                     {
-                        bIsFirst = sal_True;
-                        return sal_True;
+                        aCellAddress = xMatrixCellAddress->getRangeAddress();
+                        if ((aCellAddress.StartColumn == nCol && aCellAddress.StartRow == nRow) &&
+                            (aCellAddress.EndColumn > nCol || aCellAddress.EndRow > nRow))
+                        {
+                            bIsFirst = sal_True;
+                            return sal_True;
+                        }
+                        else if (aCellAddress.StartColumn != nCol || aCellAddress.StartRow != nRow ||
+                            aCellAddress.EndColumn != nCol || aCellAddress.EndRow != nRow)
+                            return sal_True;
+                        else
+                        {
+                            bIsFirst = sal_True;
+                            return sal_True;
+                        }
                     }
-                    else if (aCellAddress.StartColumn != nCol || aCellAddress.StartRow != nRow ||
-                        aCellAddress.EndColumn != nCol || aCellAddress.EndRow != nRow)
-                        return sal_True;
                 }
             }
         }
