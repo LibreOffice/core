@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-02 13:42:49 $
+#   last change: $Author: rt $ $Date: 2003-12-01 16:17:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,8 @@ use Text::ParseWords;
 #---------------------------------------------------------------------------
 # Define known parameter exceptions
 %knownpara = ( 'echo', [ '/TEST', 'QQQ', 'CCC' ],
+               'cl', [ '-clr:' ],
+               'csc', [ '-target:', '-out:', '-reference:' ],
                'lib', [ 'OUT:', 'EXTRACT:','out:', 'def:', 'machine:' ],
                'link', [ 'BASE:', 'DEBUG', 'DLL', 'LIBPATH', 'MACHINE:',
                          'MAP', 'NODEFAULTLIB', 'OPT', 'PDB', 'RELEASE',
