@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cmc $ $Date: 2001-02-08 13:12:37 $
+#   last change: $Author: os $ $Date: 2001-11-02 13:03:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ PROJECTPCHSOURCE=..\ui_1st\ui_pch
 
 CXXFILES = \
         cnttab.cxx \
+        cntex.cxx \
         idxmrk.cxx \
         multmrk.cxx \
         toxmgr.cxx
@@ -92,12 +93,13 @@ SRCFILES =  \
 
 SLOFILES =  \
         $(SLO)$/cnttab.obj \
+        $(SLO)$/cntex.obj \
         $(SLO)$/idxmrk.obj \
         $(SLO)$/multmrk.obj \
         $(SLO)$/toxmgr.obj
 
 EXCEPTIONSFILES =  \
-        $(SLO)$/cnttab.obj
+        $(SLO)$/cntex.obj
 
 # --- Tagets -------------------------------------------------------
 

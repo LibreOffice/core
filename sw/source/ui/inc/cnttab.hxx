@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-08-01 07:45:58 $
+ *  last change: $Author: os $ $Date: 2001-11-02 13:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,18 @@
 
 class SwWrtShell;
 class SwTOXMgr;
+namespace com{namespace sun{namespace star{
+    namespace text{
+        class XTextSection;
+        class XDocumentIndex;
+    }
+}}}
+
+#define TOX_PAGE_SELECT 1
+#define TOX_PAGE_ENTRY  2
+#define TOX_PAGE_STYLES 3
+
+
 /* -----------------14.06.99 12:12-------------------
 
  --------------------------------------------------*/
@@ -127,6 +139,12 @@ struct CurTOXType
        }
     USHORT GetFlatIndex() const;
 
+};
+//-----------------------------------------------------------------------------
+struct SwIndexSections_Impl
+{
+    com::sun::star::uno::Reference< com::sun::star::text::XTextSection >    xContainerSection;
+    com::sun::star::uno::Reference< com::sun::star::text::XDocumentIndex >    xDocumentIndex;
 };
 
 //-----------------------------------------------------------------------------
