@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:12:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1472,7 +1472,7 @@ namespace
                 ::rtl::OUString sCondition = ParseCondition(pController,pCondition,sDecimal,aLocale,1);
                 OTableFieldDescRef  aDragLeft = new OTableFieldDesc();
                 if ( eOk == ( eErrorCode = FillDragInfo(_pView,pCondition->getChild(0),aDragLeft)) )
-                _pSelectionBrw->AddCondition(aDragLeft, sCondition, nLevel);
+                    _pSelectionBrw->AddCondition(aDragLeft, sCondition, nLevel);
             }
         }
         else if( SQL_ISRULEOR2(pCondition,existence_test,unique_test) )
@@ -1952,7 +1952,7 @@ namespace
                                 if(SQL_ISTOKEN(pParseTree->getChild(1),DISTINCT))
                                 {
                                     pController->setDistinct(sal_True);
-                                    pController->InvalidateFeature(ID_BROWSER_QUERY_DISTINCT_VALUES);
+                                    pController->InvalidateFeature(SID_QUERY_DISTINCT_VALUES);
                                 }
                                 if ( (eErrorCode = InstallFields(_pView,pParseTree, pTableView->GetTabWinMap())) == eOk )
                                 {
@@ -2817,13 +2817,13 @@ void OQueryDesignView::setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable)
     sal_uInt16 nRow;
     switch (_nSlotId)
     {
-        case ID_BROWSER_QUERY_VIEW_FUNCTIONS:
+        case SID_QUERY_VIEW_FUNCTIONS:
             nRow = BROW_FUNCTION_ROW;
             break;
-        case ID_BROWSER_QUERY_VIEW_TABLES:
+        case SID_QUERY_VIEW_TABLES:
             nRow = BROW_TABLE_ROW;
             break;
-        case ID_BROWSER_QUERY_VIEW_ALIASES:
+        case SID_QUERY_VIEW_ALIASES:
             nRow = BROW_COLUMNALIAS_ROW;
             break;
         default:
@@ -2840,13 +2840,13 @@ sal_Bool OQueryDesignView::isSlotEnabled(sal_Int32 _nSlotId)
     sal_uInt16 nRow;
     switch (_nSlotId)
     {
-        case ID_BROWSER_QUERY_VIEW_FUNCTIONS:
+        case SID_QUERY_VIEW_FUNCTIONS:
             nRow = BROW_FUNCTION_ROW;
             break;
-        case ID_BROWSER_QUERY_VIEW_TABLES:
+        case SID_QUERY_VIEW_TABLES:
             nRow = BROW_TABLE_ROW;
             break;
-        case ID_BROWSER_QUERY_VIEW_ALIASES:
+        case SID_QUERY_VIEW_ALIASES:
             nRow = BROW_COLUMNALIAS_ROW;
             break;
         default:
