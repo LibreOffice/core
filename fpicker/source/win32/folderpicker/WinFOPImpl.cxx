@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinFOPImpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:15:52 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 15:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,6 @@
 #ifndef _FOPEVENTDISPATCHER_HXX_
 #include "FopEvtDisp.hxx"
 #endif
-
-#include <systools\win32\shell9x.h>
 
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>

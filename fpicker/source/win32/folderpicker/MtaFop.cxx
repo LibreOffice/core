@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hro $ $Date: 2002-01-30 09:28:24 $
+ *  last change: $Author: hro $ $Date: 2002-08-14 15:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,6 @@
 #include <wchar.h>
 #include <process.h>
 #include <comdef.h>
-
-#include <systools/win32/shell9x.h>
 
 #ifndef _RESOURCEPROVIDER_HXX_
 #include "..\misc\resourceprovider.hxx"
