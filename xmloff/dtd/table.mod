@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.18 2000-12-07 17:06:24 sab Exp $
+	$Id: table.mod,v 1.19 2000-12-11 11:25:28 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -411,5 +411,4 @@
 >
 <!ELEMENT table:dde-links (table:dde-link)+ >
 <!ELEMENT table:dde-link (office:dde-source, table:table) >
-<!ATTLIST table:dde-link table:conversion-mode (into-default-style-data-style|into-english-number|let-text) "into-default-style-data-style" >
 

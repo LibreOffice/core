@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.17 2000-12-07 14:56:21 ab Exp $
+	$Id: office.mod,v 1.18 2000-12-11 11:25:28 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -148,8 +148,10 @@
 
 <!-- DDE source: for text sections and tables -->
 <!ELEMENT office:dde-source EMPTY>
-<!ATTLIST office:dde-source text:dde-application CDATA #IMPLIED>
-<!ATTLIST office:dde-source text:dde-topic CDATA #IMPLIED>
-<!ATTLIST office:dde-source text:dde-item CDATA #IMPLIED>
-<!ATTLIST office:dde-source text:automatic-update %boolean; "false">
+<!ATTLIST office:dde-source office:dde-application CDATA #IMPLIED>
+<!ATTLIST office:dde-source office:dde-topic CDATA #IMPLIED>
+<!ATTLIST office:dde-source office:dde-item CDATA #IMPLIED>
+<!ATTLIST office:dde-source office:automatic-update %boolean; "false">
+<!ATTLIST office:dde-source office:name CDATA #IMPLIED>
+<!ATTLIST office:dde-source table:conversion-mode (into-default-style-data-style|into-english-number|let-text) "into-default-style-data-style" >
 
