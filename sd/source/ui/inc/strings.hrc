@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:41 $
+ *  last change: $Author: pw $ $Date: 2000-10-27 14:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,6 +680,8 @@
 
 #define STR_PAGE_BACKGROUND_TXT             (RID_APP_START+583)
 #define STR_PAGE_BACKGROUND_TITLE           (RID_APP_START+584)
+
+#define STR_SAVE_PACKED_DOCUMENT            (RID_APP_START+585)
 
 /******************************************************************************
 * Ab (RID_APP_START+700 beginnen die Ids in glob.hrc!
