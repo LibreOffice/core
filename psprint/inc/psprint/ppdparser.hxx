@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:45:33 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 20:15:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ public:
     void    rebuildFromStreamBuffer( void* pBuffer, ULONG nBytes );
 
     // convenience
-    void getResolution( int& rDPIx, int& rDPIy ) const;
+    int getRenderResolution() const;
 
     // width, height in points, paper will contain the name of the selected
     // paper after the call

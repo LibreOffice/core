@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printergfx.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-01 18:54:32 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 20:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,8 +227,7 @@ private:
     double          mfScaleX;
     double          mfScaleY;
 
-    sal_uInt32      mnDpiX;
-    sal_uInt32      mnDpiY;
+    sal_uInt32      mnDpi;
     sal_uInt16      mnDepth;
 
     sal_uInt16      mnPSLevel;

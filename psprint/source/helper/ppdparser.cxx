@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ppdparser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 15:34:13 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 20:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1486,24 +1486,28 @@ void PPDContext::rebuildFromStreamBuffer( void* pBuffer, ULONG nBytes )
 
 // -------------------------------------------------------------------
 
-void PPDContext::getResolution( int& rDPIx, int& rDPIy ) const
+int PPDContext::getRenderResolution() const
 {
     // initialize to reasonable default, if parser is not set
-    rDPIx = rDPIy = 300;
+    int nDPI = 300;
     if( m_pParser )
     {
+        int nDPIx = 300, nDPIy = 300;
         const PPDKey* pKey = m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ) );
         if( pKey )
         {
             const PPDValue* pValue = getValue( pKey );
             if( pValue )
-                m_pParser->getResolutionFromString( pValue->m_aOption, rDPIx, rDPIy );
+                m_pParser->getResolutionFromString( pValue->m_aOption, nDPIx, nDPIy );
             else
-                m_pParser->getDefaultResolution( rDPIx, rDPIy );
+                m_pParser->getDefaultResolution( nDPIx, nDPIy );
         }
         else
-            m_pParser->getDefaultResolution( rDPIx, rDPIy );
+            m_pParser->getDefaultResolution( nDPIx, nDPIy );
+
+        nDPI = (nDPIx > nDPIy) ? nDPIx : nDPIy;
     }
+    return  nDPI;
 }
 
 // -------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-01 10:06:17 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 20:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ PrinterGfx::Init (PrinterJob &rPrinterJob)
     mnPSLevel    = rPrinterJob.GetPostscriptLevel ();
     mbColor      = rPrinterJob.IsColorPrinter ();
 
-    rPrinterJob.GetResolution (mnDpiX, mnDpiY);
+    mnDpi = rPrinterJob.GetResolution();
     rPrinterJob.GetScale (mfScaleX, mfScaleY);
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rPrinterJob.GetPrinterName() ) );
     if( mpFontSubstitutes )
@@ -129,12 +129,10 @@ PrinterGfx::Init (const JobData& rData)
     mnDepth         = rData.m_nColorDepth;
     mnPSLevel       = rData.m_nPSLevel ? rData.m_nPSLevel : rData.m_pParser->getLanguageLevel();
     mbColor         = rData.m_nColorDevice ? ( rData.m_nColorDevice == -1 ? sal_False : sal_True ) : ( rData.m_pParser->isColorDevice() ? sal_True : sal_False );
-    int nResX, nResY;
-    rData.m_aContext.getResolution( nResX, nResY );
-    mnDpiX          = nResX;
-    mnDpiY          = nResY;
-    mfScaleX        = (double)72.0 / (double)mnDpiX;
-    mfScaleY        = (double)72.0 / (double)mnDpiY;
+    int nRes = rData.m_aContext.getRenderResolution();
+    mnDpi           = nRes;
+    mfScaleX        = (double)72.0 / (double)mnDpi;
+    mfScaleY        = (double)72.0 / (double)mnDpi;
     const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( rData.m_aPrinterName ) );
     if( mpFontSubstitutes )
         delete const_cast< ::std::hash_map<fontID,fontID>* >(mpFontSubstitutes);
@@ -150,15 +148,15 @@ PrinterGfx::Init (const JobData& rData)
 void
 PrinterGfx::GetResolution (sal_Int32 &rDpiX, sal_Int32 &rDpiY) const
 {
-    rDpiX = mnDpiX;
-    rDpiY = mnDpiY;
+    rDpiX = mnDpi;
+    rDpiY = mnDpi;
 }
 
 void
 PrinterGfx::GetScreenFontResolution (sal_Int32 &rDpiX, sal_Int32 &rDpiY) const
 {
-    rDpiX = mnDpiX;
-    rDpiY = mnDpiY;
+    rDpiX = mnDpi;
+    rDpiY = mnDpi;
 }
 
 sal_uInt16
@@ -216,8 +214,7 @@ PrinterGfx::Clear()
     maFillColor                     = PrinterColor();
     maTextColor                     = PrinterColor();
     mbCompressBmp                   = sal_True;
-    mnDpiX                          = 300;
-    mnDpiY                          = 300;
+    mnDpi                           = 300;
     mnDepth                         = 24;
     mnPSLevel                       = 2;
     mbColor                         = sal_True;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 15:32:51 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 20:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,7 @@ private:            // private data
 
     JobData                 m_aLastJobData;
 
-    sal_uInt32      mnResX;
-    sal_uInt32      mnResY;
+    sal_uInt32      mnResolution;
 
     sal_uInt32      mnWidthPt;
     sal_uInt32      mnHeightPt;
@@ -125,7 +124,7 @@ private:            // private methods
 
 public:             // for usage in PrinterGfx
 
-    void            GetResolution (sal_uInt32 &rDpiX, sal_uInt32 &rDpiY) const;
+    sal_uInt32      GetResolution () const { return mnResolution; }
     void            GetScale (double &rXScale, double &rYScale) const;
     sal_uInt16      GetDepth () const;
     sal_uInt16      GetPostscriptLevel (const JobData *pJobData = NULL) const;

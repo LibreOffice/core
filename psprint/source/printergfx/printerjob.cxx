@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 15:32:53 $
+ *  last change: $Author: pl $ $Date: 2002-11-13 20:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,13 +169,6 @@ PrinterJob::CreateSpoolFile (const rtl::OUString& rName, const rtl::OUString& rE
 /*
  * public methods of PrinterJob: for use in PrinterGfx
  */
-
-void
-PrinterJob::GetResolution (sal_uInt32 &rDpiX, sal_uInt32 &rDpiY) const
-{
-    rDpiX = mnResX;
-    rDpiY = mnResY;
-}
 
 void
 PrinterJob::GetScale (double &rXScale, double &rYScale) const
@@ -590,8 +583,7 @@ PrinterJob::AbortJob ()
 void
 PrinterJob::InitPaperSize (const JobData& rJobSetup)
 {
-    int nResX, nResY;
-    rJobSetup.m_aContext.getResolution (nResX, nResY);
+    int nRes = rJobSetup.m_aContext.getRenderResolution ();
 
     String aPaper;
     int nWidth, nHeight;
@@ -602,8 +594,7 @@ PrinterJob::InitPaperSize (const JobData& rJobSetup)
     if (pParser != NULL)
         pParser->getMargins (aPaper, nLeft, nRight, nUpper, nLower);
 
-    mnResX          = nResX;
-    mnResY          = nResY;
+    mnResolution    = nRes;
 
     mnWidthPt       = nWidth;
     mnHeightPt      = nHeight;
@@ -613,8 +604,8 @@ PrinterJob::InitPaperSize (const JobData& rJobSetup)
     mnTMarginPt     = nUpper;
     mnBMarginPt     = nLower;
 
-    mfXScale        = (double)72.0 / (double)mnResX;
-    mfYScale        = -1.0 * (double)72.0 / (double)mnResY;
+    mfXScale        = (double)72.0 / (double)mnResolution;
+    mfYScale        = -1.0 * (double)72.0 / (double)mnResolution;
 }
 
 
