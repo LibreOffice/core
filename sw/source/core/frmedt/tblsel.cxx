@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:43:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 08:43:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2055,7 +2055,8 @@ void MakeSelUnions( SwSelUnions& rUnions, const SwLayoutFrm *pStart,
             aEd.Y() = pTable->Frm().Bottom();
 #endif
 
-        SwRect aUnion( aSt, aEd );
+        const Point aDiff( aEd - aSt );
+        SwRect aUnion( aSt, Size( aDiff.X(), aDiff.Y() ) );
         aUnion.Justify();
 
         // fuers
