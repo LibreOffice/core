@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-14 09:16:28 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 11:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,21 +89,21 @@ Resource RSC_DATASOURCE_TYPES
         Text = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabellendokument" ;
         Text [ english ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet" ;
         Text [ english_us ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Spreadsheet" ;
-        Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;Texto";
-        Text[ russian ] = "Adabas;JDBC;ODBC;dBase;“ÂÍÒÚ";
-        Text[ greek ] = "Adabas;JDBC;ODBC;dBase; ÂﬂÏÂÌÔ";
-        Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;Tekst";
-        Text[ french ] = "Adabas;JDBC;ODBC;dBase;Texte";
+        Text[ portuguese ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Folha de c·lculo";
+        Text[ russian ] = "Adabas;JDBC;ODBC;dBase;ADO;“ÂÍÒÚ;ƒÓÍÛÏÂÌÚ ˝ÎÂÍÚÓÌÌÓÈ Ú‡·ÎËˆ˚";
+        Text[ greek ] = "Adabas;JDBC;ODBC;dBase;ADO; ÂﬂÏÂÌÔ;∏„„Ò·ˆÔ ﬂÌ·Í·";
+        Text[ dutch ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Werkbladdocument";
+        Text[ french ] = "Adabas;JDBC;ODBC;dBase;ADO;Texte;Classeur";
         Text[ spanish ] = "Adabas;JDBC;ODBC;dBase;ADO;Texto;Hoja de c·lculo";
-        Text[ italian ] = "Adabas;JDBC;ODBC;dBase;Testo";
+        Text[ italian ] = "Adabas;JDBC;ODBC;dBase;ADO;Testo;Foglio elettronico";
         Text[ danish ] = "Adabas;JDBC;ODBC;dBase;Tekst";
         Text[ swedish ] = "Adabas;JDBC;ODBC;dBase;ADO;Text;Tabelldokument";
         Text[ polish ] = "Adabas;JDBC;ODBC;dBase;ADO;Tekst;Arkusz kalkulacyjny";
         Text[ portuguese_brazilian ] = "Adabas;JDBC;ODBC;dBase;Text";
-        Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;√∑Ωƒ";
+        Text[ japanese ] = "Adabas;JDBC;ODBC;dBase;ADO;√∑Ωƒ;ï\\åvéZƒﬁ∑≠“››ƒ";
         Text[ korean ] = "Adabas;JDBC;ODBC;dBase;Text";
-        Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;Œƒ◊÷";
-        Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;§Â¶r";
+        Text[ chinese_simplified ] = "Adabas;JDBC;ODBC;dBase;ADO;Œƒ◊÷;π§◊˜±ÌŒƒµµ";
+        Text[ chinese_traditional ] = "Adabas;JDBC;ODBC;dBase;ADO;§Â¶r;§uß@™Ì§Â•Û";
         Text[ turkish ] = "Adabas;JDBC;ODBC;dBase;Text";
         Text[ arabic ] = "Adabas;JDBC;ODBC;dBase;ADO;‰’;„” ‰œ Ãœ«Ê·";
         Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
@@ -116,23 +116,23 @@ Resource RSC_CHARSETS
     {
         Text = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
         Text [ english ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-        Text [ english_us ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-        Text[ language_user1 ] = "Please take care of the numer of tokens in the translated string (Tokens are the units separated by ; characters). It must be exactly the same number as in the original (untranslated) string. Thanks.";
-        Text[ portuguese ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
-        Text[ russian ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);—ËÒÚÂÏ‡";
-        Text[ greek ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);”˝ÛÙÁÏ·";
-        Text[ dutch ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Systeem";
-        Text[ french ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);SystËme";
+        Text [ english_us ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
+        Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
+        Text[ portuguese ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
+        Text[ russian ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);—ËÒÚÂÏ‡";
+        Text[ greek ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);”˝ÛÙÁÏ·";
+        Text[ dutch ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Systeem";
+        Text[ french ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);SystËme";
         Text[ spanish ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
-        Text[ italian ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
+        Text[ italian ] = "Ansi;Mac;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
         Text[ danish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
         Text[ swedish ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
-        Text[ polish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
+        Text[ polish ] = "Ansi;Mac;IBMPC(473);IBMPC (850)/DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
         Text[ portuguese_brazilian ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema";
-        Text[ japanese ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ºΩ√—";
+        Text[ japanese ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);ºΩ√—";
         Text[ korean ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System";
-        Text[ chinese_simplified ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);œµÕ≥";
-        Text[ chinese_traditional ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);®t≤Œ";
+        Text[ chinese_simplified ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);œµÕ≥";
+        Text[ chinese_traditional ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);®t≤Œ";
         Text[ turkish ] = "Ansi;Mac;Dos;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistem";
         Text[ arabic ] = "Ansi;Mac;IBMPC (437);IBMPC (850)/ DOS;IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);‰Ÿ«„";
         Text[ language_user1 ] = "Please be carefull with the number/ordering of (semicolon-separated) tokens in the string.";
@@ -172,7 +172,7 @@ String STR_OBJECT_ALREADY_EXSISTS
     Text[ portuguese ] = "Erro ao criar objecto!";
     Text[ russian ] = "Œ¯Ë·Í‡ ‚Ó ‚ÂÏˇ ÒÓÁ‰‡ÌËˇ.";
     Text[ greek ] = "”ˆ‹ÎÏ· Í·Ù‹ ÙÁÌ ‰ÁÏÈÔıÒ„ﬂ·!";
-    Text[ dutch ] = "Error while creating!";
+    Text[ dutch ] = "Fout bij definiÎren!";
     Text[ french ] = "Erreur durant le processus de crÈation !";
     Text[ spanish ] = "°Error al crear el objeto!";
     Text[ italian ] = "Errore nella creazione dell'oggetto";
@@ -182,7 +182,7 @@ String STR_OBJECT_ALREADY_EXSISTS
     Text[ portuguese_brazilian ] = "Error while creating!";
     Text[ japanese ] = "çÏê¨Ç∑ÇÈÇ∆Ç´ÇÃ¥◊∞ÅB";
     Text[ korean ] = "Error while creating!";
-    Text[ chinese_simplified ] = "Error while creating!";
+    Text[ chinese_simplified ] = "‘⁄…˙≥… ±∑¢…˙“ª∏ˆ¥ÌŒÛ£°";
     Text[ chinese_traditional ] = "¶b´ÿ•ﬂÆ…µo•Õø˘ª~";
     Text[ turkish ] = "Error while creating!";
     Text[ arabic ] = "Œÿ√ √À‰«¡ «·≈‰‘«¡!";
@@ -191,6 +191,9 @@ String STR_OBJECT_ALREADY_EXSISTS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/03/14 09:16:28  fs
+ *  wrong texts in the semicolon-separated lists (english_us)
+ *
  *  Revision 1.13  2001/03/09 20:39:55  kz
  *  Merge SRC624: 09.03.01 - 21:40:01 (NoBranch)
  *
