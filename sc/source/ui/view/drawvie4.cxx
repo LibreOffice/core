@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:23:14 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:08:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,9 +309,8 @@ void ScDrawView::SetMarkedOriginalSize()
         Size aOriginalSize;
         if (nIdent == OBJ_OLE2)
         {
-            // TODO/LEAN: working with visual area needs running state
+            // TODO/LEAN: working with visual area can switch object to running state
             uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
-            svt::EmbeddedObjectRef::TryRunningState( xObj );
             MapUnit aUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( ((SdrOle2Obj*)pObj)->GetAspect() ) );
             awt::Size aSz = xObj->getVisualAreaSize( ((SdrOle2Obj*)pObj)->GetAspect() );
             aOriginalSize = OutputDevice::LogicToLogic(
