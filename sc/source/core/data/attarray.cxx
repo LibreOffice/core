@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-01-18 12:00:38 $
+ *  last change: $Author: er $ $Date: 2002-01-18 16:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,7 @@ void ScAttrArray::SetPatternArea(USHORT nStartRow, USHORT nEndRow, const ScPatte
                             pData[ni-1].nRow = pData[nj].nRow;
                             nj++;
                         }
-                        else if ( nj == nInsert && nj == ni )
+                        else if ( ni == nInsert )
                             pData[ni-1].nRow = nStartRow - 1;   // shrink
                     }
                     nInsert = MAXROW+1;
