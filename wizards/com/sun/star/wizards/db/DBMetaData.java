@@ -2,9 +2,9 @@
 *
 *  $RCSfile: DBMetaData.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-02 17:19:41 $
+*  last change: $Author: pjunck $ $Date: 2004-10-27 13:30:04 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -64,23 +64,30 @@ import java.util.*;
 
 import com.sun.star.io.IOException;
 import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.WrappedTargetException;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.VclWindowPeerAttribute;
+import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.UnknownPropertyException;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XChild;
+import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XHierarchicalNameContainer;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
+import com.sun.star.container.XNamed;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XModel;
+import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
 import com.sun.star.sdbc.DataType;
+import com.sun.star.sdbcx.XAppend;
 import com.sun.star.sdbcx.XColumnsSupplier;
+import com.sun.star.sdbcx.XDataDescriptorFactory;
 
-import com.sun.star.ucb.CommandAbortedException;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -88,6 +95,7 @@ import com.sun.star.uno.XInterface;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.util.MalformedNumberFormatException;
 import com.sun.star.util.NumberFormat;
+import com.sun.star.util.XCloseable;
 import com.sun.star.util.XNumberFormatTypes;
 import com.sun.star.util.XNumberFormatsSupplier;
 import com.sun.star.util.XNumberFormats;
@@ -98,18 +106,21 @@ import com.sun.star.task.XInteractionHandler;
 import com.sun.star.sdb.XFormDocumentsSupplier;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
 import com.sun.star.sdb.XBookmarksSupplier;
+import com.sun.star.sdb.XReportDocumentsSupplier;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XDatabaseMetaData;
 import com.sun.star.sdbc.XDataSource;
+import com.sun.star.sdbc.XResultSet;
+import com.sun.star.sdbc.XRow;
 import com.sun.star.sdb.XCompletedConnection;
 import com.sun.star.lang.Locale;
 import com.sun.star.util.XFlushable;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.sdb.XQueriesSupplier;
 import com.sun.star.sdbcx.XTablesSupplier;
-import com.sun.star.sdb.XReportDocumentsSupplier;
 
 public class DBMetaData {
+
     public XNameAccess xTableNames;
     public XNumberFormatsSupplier xNumberFormatsSupplier;
     public XNameAccess xQueryNames;
@@ -118,9 +129,12 @@ public class DBMetaData {
     private XInterface xDatabaseContext;
     public XDatabaseMetaData xDBMetaData;
     private XBookmarksSupplier xBookmarksSuppl;
-    private XDataSource xDataSource;
+    public XDataSource xDataSource;
     private XCompletedConnection xCompleted;
+    private XAppend xTableAppend;
+    private int[] nDataTypes = null;
     public XNumberFormats NumberFormats;
+    private XWindowPeer xWindowPeer;
     private boolean bConnectionOvergiven = true;
     public String[] DataSourceNames;
     public String[] CommandNames;
@@ -146,6 +160,7 @@ public class DBMetaData {
     public int iLogicalFormatKey;
     public long lDateCorrection;
     private boolean bPasswordIsRequired;
+    private boolean bFormatKeysareset = false;
     final int NOLIMIT = 9999999;
     final int RID_DB_COMMON = 1000;
 
@@ -167,24 +182,27 @@ public class DBMetaData {
     }
 
     private void setStandardFormatKeys(boolean bgetStandardBool) {
-        XNumberFormatTypes xNumberFormatTypes = (XNumberFormatTypes) UnoRuntime.queryInterface(XNumberFormatTypes.class, NumberFormats);
-        if (!bgetStandardBool) {
-            String FormatString = "[=1]" + '"' + (char)9745 + '"' + ";[=0]" + '"' + (char)58480 + '"' + ";";
-            iLogicalFormatKey = NumberFormats.queryKey(FormatString, CharLocale, true);
-            try {
-                if (iLogicalFormatKey == -1)
-                    iLogicalFormatKey = NumberFormats.addNew(FormatString, CharLocale);
-            } catch (MalformedNumberFormatException e) {
-                e.printStackTrace();
+        if (!bFormatKeysareset){
+            XNumberFormatTypes xNumberFormatTypes = (XNumberFormatTypes) UnoRuntime.queryInterface(XNumberFormatTypes.class, NumberFormats);
+            if (!bgetStandardBool) {
+                String FormatString = "[=1]" + '"' + (char)9745 + '"' + ";[=0]" + '"' + (char)58480 + '"' + ";";
+                iLogicalFormatKey = NumberFormats.queryKey(FormatString, CharLocale, true);
+                try {
+                    if (iLogicalFormatKey == -1)
+                        iLogicalFormatKey = NumberFormats.addNew(FormatString, CharLocale);
+                } catch (Exception e) {         //MalformedNumberFormat
+                    e.printStackTrace();
+                    iLogicalFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.LOGICAL, CharLocale);
+                }
+            } else
                 iLogicalFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.LOGICAL, CharLocale);
-            }
-        } else
-            iLogicalFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.LOGICAL, CharLocale);
-        iDateFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.DATE, CharLocale);
-        iDateTimeFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.DATETIME, CharLocale);
-        iTimeFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.TIME, CharLocale);
-        iNumberFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.NUMBER, CharLocale);
-        iTextFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.TEXT, CharLocale);
+            iDateFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.DATE, CharLocale);
+            iDateTimeFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.DATETIME, CharLocale);
+            iTimeFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.TIME, CharLocale);
+            iNumberFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.NUMBER, CharLocale);
+            iTextFormatKey = xNumberFormatTypes.getStandardFormat(NumberFormat.TEXT, CharLocale);
+            bFormatKeysareset = true;
+        }
     }
 
     void getInterfaces(XMultiServiceFactory xMSF) {
@@ -281,16 +299,23 @@ public class DBMetaData {
     }
 
     public void setCommandNames() {
-        XTablesSupplier xDBTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, DBConnection);
-        xTableNames = (XNameAccess) xDBTables.getTables();
-        TableNames = (String[]) xTableNames.getElementNames();
+        getTableNames();
         XQueriesSupplier xDBQueries = (XQueriesSupplier) UnoRuntime.queryInterface(XQueriesSupplier.class, DBConnection);
         xQueryNames = (XNameAccess) xDBQueries.getQueries();
         QueryNames = xQueryNames.getElementNames();
-        java.util.Arrays.sort(QueryNames);
 
     }
 
+    public String[] getTableNames(){
+        if (TableNames != null){
+            if (TableNames.length > 0)
+                return TableNames;
+        }
+        XTablesSupplier xDBTables = (XTablesSupplier) UnoRuntime.queryInterface(XTablesSupplier.class, DBConnection);
+        xTableNames = (XNameAccess) xDBTables.getTables();
+        TableNames = (String[]) xTableNames.getElementNames();
+        return TableNames;
+    }
 
     void InitializeWidthList() {
         WidthList = new int[16][2];
@@ -369,13 +394,15 @@ public class DBMetaData {
         xNumberFormatsSupplier = (XNumberFormatsSupplier) AnyConverter.toObject(XNumberFormatsSupplier.class,
                                                                                 Helper.getUnoPropertyValue(oDataSource, "NumberFormatsSupplier"));
         NumberFormats = xNumberFormatsSupplier.getNumberFormats();
+        lDateCorrection = Desktop.getNullDateCorrection(xNumberFormatsSupplier);
         CharLocale = Configuration.getOfficeLocale(xMSF);
-        this.setStandardFormatKeys(true);
+//      this.setStandardFormatKeys(false);
         setMaxColumnsInGroupBy();
         setMaxColumnsInSelect();
     } catch (SQLException e) {
         e.printStackTrace(System.out);
     }}
+
 
 
     private void setDataSourceByName(String _DataSourceName, boolean bgetInterfaces) {
@@ -413,11 +440,22 @@ public class DBMetaData {
                     DataSourceName = AnyConverter.toString(xPSet.getPropertyValue("Name"));
                 return getConnection(xConnection);
             }
-
         }
         if (Properties.hasPropertyValue(curproperties, "DataSourceName")){
             String sDataSourceName = AnyConverter.toString(Properties.getPropertyValue(curproperties, "DataSourceName"));
             return getConnection(sDataSourceName);
+        }
+        else if (Properties.hasPropertyValue(curproperties, "DataSource")){
+            xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, Properties.getPropertyValue(curproperties, "DataSource"));
+            return getConnection(xDataSource);
+        }
+        if (Properties.hasPropertyValue(curproperties, "DatabaseLocation")){
+            String sDataSourceName = AnyConverter.toString(Properties.getPropertyValue(curproperties, "DatabaseLocation"));
+            return getConnection(sDataSourceName);
+        }
+
+        else if (xConnection !=null){
+            return getConnection(xConnection);
         }
     } catch (IllegalArgumentException e){
         e.printStackTrace(System.out);
@@ -479,7 +517,7 @@ public class DBMetaData {
                 } catch (Exception exception) {
                     // Note:  WindowAttributes from toolkit/source/awt/vclxtoolkit.cxx
                     String sMsgNoConnection = oResource.getResText(RID_DB_COMMON + 14);
-                    iMsg = SystemDialog.showMessageBox(xMSF, "QueryBox", VclWindowPeerAttribute.RETRY_CANCEL, sMsgNoConnection);
+                    iMsg = showMessageBox( "QueryBox", VclWindowPeerAttribute.RETRY_CANCEL, sMsgNoConnection);
                     bExitLoop = iMsg == 0;
                     bgetConnection = false;
                 }
@@ -487,7 +525,7 @@ public class DBMetaData {
         }
         if (bgetConnection == false){
             String sMsgConnectionImpossible = oResource.getResText(RID_DB_COMMON + 35);
-            SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgConnectionImpossible);
+            showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sMsgConnectionImpossible);
         }
         else {
             xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, DBConnection);
@@ -496,16 +534,36 @@ public class DBMetaData {
         return bgetConnection;
     } catch (Exception exception) {
         String sMsgConnectionImpossible = oResource.getResText(RID_DB_COMMON + 35);
-        SystemDialog.showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgConnectionImpossible);
+        showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sMsgConnectionImpossible);
         exception.printStackTrace(System.out);
         return false;
     }}
 
 
-    /**
-     * @deprecated links in datasource are no longer possible since integration of cws insight01
-     * @param StorePath
-     */
+    public int getMaxColumnNameLength(){
+    try {
+        return xDBMetaData.getMaxColumnNameLength();
+    } catch (SQLException e) {
+        e.printStackTrace(System.out);
+        return -1;
+    }}
+
+
+
+    public boolean supportsCoreSQLGrammar(){
+    try {
+        return xDBMetaData.supportsCoreSQLGrammar();
+    } catch (SQLException e) {
+        e.printStackTrace(System.out);
+        return false;
+    }}
+
+
+    public boolean supportsAutoIncrementation(){
+        return false;
+    }
+
+
     public void createDBLink(String StorePath) {
         try {
             String BookmarkName = JavaTools.getFileDescription(StorePath);
@@ -549,70 +607,6 @@ public class DBMetaData {
     }
 
 
-    public XNameAccess getReportDocuments(){
-        XReportDocumentsSupplier xReportDocumentSuppl = (XReportDocumentsSupplier) UnoRuntime.queryInterface(XReportDocumentsSupplier.class, this.xDataSource);
-        return xReportDocumentSuppl.getReportDocuments();
-    }
-
-
-    public XNameAccess getFormDocuments(){
-        XFormDocumentsSupplier xFormDocumentSuppl = (XFormDocumentsSupplier) UnoRuntime.queryInterface(XFormDocumentsSupplier.class, this.xDataSource);
-        return xFormDocumentSuppl.getFormDocuments();
-    }
-
-
-    /**
-     * adds the passed document as a report or a form to the database. Afterwards the document is deleted.
-     * the document may not be open
-     * @param xComponent
-     * @param _bIsForm describes the type of the document: "form" or "report"
-     */
-    public void addDatabaseDocument(XComponent _xComponent, boolean _bIsForm,boolean bAsTemplate){
-    try {
-
-        XModel xDocumentModel = (XModel) UnoRuntime.queryInterface(XModel.class, _xComponent);
-        String sPath = xDocumentModel.getURL();
-        String sFileName = FileAccess.getFilename(sPath);
-        _xComponent.dispose();
-        XNameAccess xDocNameAccess;
-        if (_bIsForm)
-            xDocNameAccess = getFormDocuments();
-        else
-            xDocNameAccess = getReportDocuments();
-        PropertyValue[] aDocProperties = new PropertyValue[_bIsForm ? 3 : 4];
-        aDocProperties[0] = Properties.createProperty("Name", sFileName);
-        aDocProperties[1] = Properties.createProperty("Parent", xDocNameAccess);
-        aDocProperties[2] = Properties.createProperty("URL", sPath);
-                if ( !_bIsForm )
-                    aDocProperties[3] = Properties.createProperty("AsTemplate", new Boolean(bAsTemplate));
-
-        XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xDocNameAccess);
-        Object oDBDocument = xDocMSF.createInstanceWithArguments("com.sun.star.sdb.DocumentDefinition", aDocProperties);
-        XNameContainer xNamed = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, xDocNameAccess);
-        xNamed.insertByName(sFileName, oDBDocument);
-        XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
-        XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
-        xSimpleFileAccess.kill(sPath);
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }}
-
-
-    public void openReportDocument(String _sReportName){
-    try {
-        PropertyValue[] aArgs = new PropertyValue[2];
-        aArgs[0] = Properties.createProperty("ActiveConnection", DBConnection);
-        aArgs[1] = Properties.createProperty("OpenMode", "open");
-        XNameAccess xReportDocuments = getReportDocuments();
-        XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xReportDocuments);
-        XHierarchicalNameContainer xHierarchicalNameContainer = (XHierarchicalNameContainer) UnoRuntime.queryInterface(XHierarchicalNameContainer.class, xReportDocuments);
-        if (xHierarchicalNameContainer.hasByHierarchicalName(_sReportName))
-            xComponentLoader.loadComponentFromURL(_sReportName, "", 0, aArgs);
-    } catch (Exception e) {
-        e.printStackTrace(System.out);
-    }}
-
-
     public boolean isConnectionOvergiven() {
         return bConnectionOvergiven;
     }
@@ -621,5 +615,239 @@ public class DBMetaData {
     public void disposeDBMetaData() {
         if ((xComponent != null) && (!isConnectionOvergiven()))
             xComponent.dispose();
+    }
+
+    public XHierarchicalNameAccess getReportDocuments(){
+        XReportDocumentsSupplier xReportDocumentSuppl = (XReportDocumentsSupplier) UnoRuntime.queryInterface(XReportDocumentsSupplier.class, this.xDataSource);
+        xReportDocumentSuppl.getReportDocuments();
+        XHierarchicalNameAccess xReportHier = (XHierarchicalNameAccess) UnoRuntime.queryInterface(XHierarchicalNameAccess.class, xReportDocumentSuppl.getReportDocuments());
+        return xReportHier;
+    }
+
+
+    public XHierarchicalNameAccess getFormDocuments(){
+        XFormDocumentsSupplier xFormDocumentSuppl = (XFormDocumentsSupplier) UnoRuntime.queryInterface(XFormDocumentsSupplier.class, this.xDataSource);
+        XHierarchicalNameAccess xFormHier = (XHierarchicalNameAccess) UnoRuntime.queryInterface(XHierarchicalNameAccess.class, xFormDocumentSuppl.getFormDocuments());
+        return xFormHier;
+    }
+
+    public void addFormDocument(XComponent _xComponent){
+        XHierarchicalNameAccess _xFormDocNameAccess = getFormDocuments();
+        addDatabaseDocument(_xComponent, _xFormDocNameAccess, false);
+    }
+
+    public void addReportDocument(XComponent _xComponent, boolean _bcreatedynamicreport){
+        XHierarchicalNameAccess xReportDocNameAccess = getReportDocuments();
+        addDatabaseDocument(_xComponent, xReportDocNameAccess, _bcreatedynamicreport);
+    }
+
+    /**
+     * adds the passed document as a report or a form to the database. Afterwards the document is deleted.
+     * the document may not be open
+     * @param xComponent
+     * @param _bIsForm describes the type of the document: "form" or "report"
+     */
+    public void addDatabaseDocument(XComponent _xComponent, XHierarchicalNameAccess _xDocNameAccess, boolean _bcreateTemplate){
+    try {
+        PropertyValue[] aDocProperties;
+        XModel xDocumentModel = (XModel) UnoRuntime.queryInterface(XModel.class, _xComponent);
+        String sPath = xDocumentModel.getURL();
+        String basename = FileAccess.getBasename(sPath, "/");
+        XCloseable xCloseable = (XCloseable) UnoRuntime.queryInterface(XCloseable.class, _xComponent);
+        _xComponent.dispose();
+        xCloseable.close(false);
+        if (_bcreateTemplate)
+            aDocProperties = new PropertyValue[5];
+        else
+            aDocProperties = new PropertyValue[4];
+        aDocProperties[0] = Properties.createProperty("Name", basename);
+        aDocProperties[1] = Properties.createProperty("Parent", _xDocNameAccess);
+        aDocProperties[2] = Properties.createProperty("URL", sPath);
+        aDocProperties[3] = Properties.createProperty("DocumentTitle", basename);
+        if (_bcreateTemplate)
+            aDocProperties[4] = Properties.createProperty("AsTemplate", new Boolean(_bcreateTemplate));
+        XMultiServiceFactory xDocMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, _xDocNameAccess);
+        Object oDBDocument = xDocMSF.createInstanceWithArguments("com.sun.star.sdb.DocumentDefinition", aDocProperties);
+        XHierarchicalNameContainer xHier = (XHierarchicalNameContainer) UnoRuntime.queryInterface(XHierarchicalNameContainer.class, _xDocNameAccess);
+        String sdocname = Desktop.getUniqueName(_xDocNameAccess, basename);
+        xHier.insertByHierarchicalName(sdocname, oDBDocument);
+        XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+        XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
+        xSimpleFileAccess.kill(sPath);
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+    }}
+
+
+
+    public XComponent openDatabaseDocument(String _docname, boolean _bAsTemplate, boolean _bReadOnly, XHierarchicalNameAccess _xDocuments){
+    XComponent xRetComponent = null;
+    try {
+        XComponentLoader xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, _xDocuments);
+        PropertyValue[] aPropertyValues = new PropertyValue[4];
+        aPropertyValues[0] = Properties.createProperty("OpenMode", _bReadOnly ?  "openDesign": "open" );
+        aPropertyValues[1] = Properties.createProperty("ActiveConnection", this.DBConnection);
+        aPropertyValues[2] = Properties.createProperty("DocumentTitle", _docname);
+        aPropertyValues[3] = Properties.createProperty("AsTemplate", new Boolean(_bAsTemplate));
+        XHierarchicalNameContainer xHier = (XHierarchicalNameContainer) UnoRuntime.queryInterface(XHierarchicalNameContainer.class, _xDocuments);
+        if (xHier.hasByHierarchicalName(_docname)){
+            xRetComponent = xComponentLoader.loadComponentFromURL(_docname, "", 0, aPropertyValues);
+        }
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+    }
+        return xRetComponent;
+    }
+
+
+    public XComponent openFormDocument(String _sformname, boolean _bReadOnly){
+        XHierarchicalNameAccess xFormDocuments = getFormDocuments();
+        return openDatabaseDocument(_sformname, false, _bReadOnly, xFormDocuments);
+    }
+
+
+    public XComponent openReportDocument(String _sreportname, boolean _bAsTemplate, boolean _bReadOnly){
+        XHierarchicalNameAccess xReportDocuments = getReportDocuments();
+        return openDatabaseDocument(_sreportname, _bAsTemplate, _bReadOnly, xReportDocuments);
+    }
+
+
+    public int[] getsupportedDataTypes(){
+    try {
+        if (nDataTypes == null){
+            Vector oTypeVector = new Vector();
+            Integer[] aIntegerDataTypes = null;
+            XResultSet xResultSet = this.xDBMetaData.getTypeInfo();
+            XRow xRow = (XRow) UnoRuntime.queryInterface(XRow.class, xResultSet);
+            while (xResultSet.next())
+                oTypeVector.addElement(new Integer(xRow.getShort(2)));
+            aIntegerDataTypes = new Integer[oTypeVector.size()];
+            oTypeVector.toArray(aIntegerDataTypes);
+            nDataTypes = new int[aIntegerDataTypes.length];
+            for (int i = 0; i < aIntegerDataTypes.length; i++)
+                nDataTypes[i] = aIntegerDataTypes[i].intValue();
+        }
+        return nDataTypes;
+    } catch (SQLException e){
+        e.printStackTrace(System.out);
+        return null;
+    }}
+
+
+    public boolean supportsDataType(int _curDataType){
+        return (JavaTools.FieldInIntTable(nDataTypes, _curDataType)> -1);
+    }
+
+
+    public int getLastConversionFallbackDataType(){
+        if (supportsDataType(DataType.VARCHAR))
+            return DataType.VARCHAR;
+        else
+            return DataType.LONGVARCHAR;
+    }
+
+
+    public int convertDataType(int _curDataType){
+        int retDataType = _curDataType;
+        if (!supportsDataType(_curDataType)){
+            switch(_curDataType)
+            {
+                case DataType.TINYINT:
+                    retDataType = convertDataType(DataType.SMALLINT);
+                    break;
+                case DataType.SMALLINT:
+                    retDataType = convertDataType(DataType.INTEGER);
+                    break;
+                case DataType.INTEGER:
+                    retDataType = convertDataType(DataType.FLOAT);
+                    break;
+                case DataType.FLOAT:
+                    retDataType = convertDataType(DataType.REAL);
+                    break;
+                case DataType.DATE:
+                case DataType.TIME:
+                    retDataType = convertDataType(DataType.TIMESTAMP);
+                    break;
+                case DataType.TIMESTAMP:
+                case DataType.REAL:
+                case DataType.BIGINT:
+                    retDataType = convertDataType(DataType.DOUBLE);
+                    break;
+                case DataType.DOUBLE:
+                    retDataType = convertDataType(DataType.NUMERIC);
+                    break;
+                case DataType.NUMERIC:
+                    retDataType = convertDataType(DataType.DECIMAL);
+                    break;
+                case DataType.DECIMAL:
+                    if (supportsDataType(DataType.DOUBLE))
+                        retDataType = convertDataType(DataType.DOUBLE);
+                    else if (supportsDataType(DataType.NUMERIC))
+                        retDataType = DataType.NUMERIC;
+                    else
+                        retDataType = getLastConversionFallbackDataType();
+                    break;
+                case DataType.VARCHAR:
+                    retDataType = getLastConversionFallbackDataType();
+                    break;
+                default:
+                    retDataType = getLastConversionFallbackDataType();
+            }
+        }
+        return retDataType;
+    }
+
+
+
+    public boolean storeDatabaseDocumentToTempPath(XComponent _xcomponent, String _storename){
+    try {
+        XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
+        XSimpleFileAccess xSimpleFileAccess = (XSimpleFileAccess) UnoRuntime.queryInterface(XSimpleFileAccess.class, xInterface);
+        String storepath = FileAccess.getOfficePath(xMSF, "Temp", xSimpleFileAccess) + "/" + _storename;
+        XStorable xStoreable = (XStorable) UnoRuntime.queryInterface(XStorable.class, _xcomponent);
+        PropertyValue[] oStoreProperties = new PropertyValue[1];
+        oStoreProperties[0] = Properties.createProperty("FilterName", "writer8");
+        storepath += ".oot";
+        xStoreable.storeAsURL(storepath, oStoreProperties);
+        return true;
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+        return false;
+    }}
+
+
+    public int showMessageBox(String windowServiceName, int windowAttribute, String MessageText) {
+        if (getWindowPeer() != null)
+            return SystemDialog.showMessageBox(xMSF, xWindowPeer, windowServiceName, windowAttribute, MessageText);
+        else
+            return SystemDialog.showMessageBox(xMSF, windowServiceName, windowAttribute, MessageText);
+    }
+
+
+    /**
+     * @return Returns the xWindowPeer.
+     */
+    public XWindowPeer getWindowPeer() {
+        return xWindowPeer;
+    }
+    /**
+     * @param windowPeer The xWindowPeer to set.
+     * Should be called as soon as a Windowpeer of a wizard dialog is available
+     * The windowpeer is needed to call a Messagebox
+     */
+    public void setWindowPeer(XWindowPeer windowPeer) {
+        xWindowPeer = windowPeer;
+    }
+    /**
+     * @return Returns the lDateCorrection.
+     */
+    public long getNullDateCorrection() {
+        return lDateCorrection;
+    }
+    /**
+     * @param dateCorrection The lDateCorrection to set.
+     */
+    public void setNullDateCorrection(long dateCorrection) {
+        lDateCorrection = dateCorrection;
     }
 }
