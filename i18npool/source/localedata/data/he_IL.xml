@@ -17,7 +17,7 @@
 <ThousandSeparator>,</ThousandSeparator>
 <DecimalSeparator>.</DecimalSeparator>
 <TimeSeparator>:</TimeSeparator>
-<Time100SecSeparator>.</Time100SecSeparator>
+<Time100SecSeparator>:</Time100SecSeparator>
 <ListSeparator>;</ListSeparator>
 <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
 <LongDateDaySeparator> </LongDateDaySeparator>
@@ -36,7 +36,7 @@
 </LC_CTYPE>
 <LC_FORMAT>
 <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
-<FormatCode>M/D/YY</FormatCode>
+<FormatCode>D/M/YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey2" default="false" type="medium" usage="DATE" formatindex="28">
@@ -48,7 +48,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="35">
-<FormatCode>MMM DD</FormatCode>
+<FormatCode>DD MMM</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey5" default="false" type="medium" usage="DATE" formatindex="36">
@@ -60,39 +60,39 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="21">
-<FormatCode>MM/DD/YYYY</FormatCode>
+<FormatCode>DD/MM/YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
-<FormatCode>MM/DD/YY</FormatCode>
+<FormatCode>DD/MM/YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-<FormatCode>NNNNMMMM DD, YYYY</FormatCode>
+<FormatCode>NNNNDD MMMM, YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="22">
-<FormatCode>MMM D, YY</FormatCode>
+<FormatCode>D MMM, YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="23">
-<FormatCode>MMM D, YYYY</FormatCode>
+<FormatCode>D MMM, YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="25">
-<FormatCode>MMMM D, YYYY</FormatCode>
+<FormatCode>D MMM, YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="27">
-<FormatCode>NN, MMM D, YY</FormatCode>
+<FormatCode>NN, D MMM, YY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey14" default="false" type="long" usage="DATE" formatindex="29">
-<FormatCode>NN, MMMM D, YYYY</FormatCode>
+<FormatCode>NN, D MMM, YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-<FormatCode>NNNNMMMM D, YYYY</FormatCode>
+<FormatCode>NNNND MMMM, YYYY</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
@@ -104,7 +104,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
-<FormatCode>MM-DD</FormatCode>
+<FormatCode>DD-MM</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="32">
@@ -140,19 +140,19 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey6" default="false" type="short" usage="TIME"  formatindex="44">
-<FormatCode>MM:SS.00</FormatCode>
+<FormatCode>MM:SS:00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="TimeFormatskey7" default="false" type="medium" usage="TIME"  formatindex="45">
-<FormatCode>[HH]:MM:SS.00</FormatCode>
+<FormatCode>[HH]:MM:SS:00</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey1" default="true" type="medium" usage="DATE_TIME"  formatindex="46">
-<FormatCode>MM/DD/YY HH:MM</FormatCode>
+<FormatCode>DD/MM/YY HH:MM</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey2" default="false" type="medium" usage="DATE_TIME"  formatindex="47">
-<FormatCode>MM/DD/YYYY HH:MM:SS</FormatCode>
+<FormatCode>DD/MM/YYYY HH:MM:SS</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="FixedFormatskey1" default="true" type="medium" usage="FIXED_NUMBER"  formatindex="0">
@@ -180,19 +180,19 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode>[$$-40D]#,##0;-[$$-40D]#,##0</FormatCode>
+<FormatCode>#,##0[$$-40D];#,##0-[$$-40D]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode>[$$-40D]#,##0.00;-[$$-40D]#,##0.00</FormatCode>
+<FormatCode>#,##0.00[$$-40D];#,##0.00-[$$-40D]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode>[$$-40D]#,##0;[RED]-[$$-40D]#,##0</FormatCode>
+<FormatCode>#,##0[$$-40D];#,##0[RED]-[$$-40D]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode>[$$-40D]#,##0.00;[RED]-[$$-40D]#,##0.00</FormatCode>
+<FormatCode>#,##0.00[$$-40D];#,##0.00[RED]-[$$-40D]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
@@ -200,7 +200,7 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode>[$$-40D]#,##0.--;[RED]-[$$-40D]#,##0.--</FormatCode>
+<FormatCode>#,##0.--[$$-40D];#,##0.--[RED]-[$$-40D]</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
@@ -220,17 +220,8 @@
 <DefaultName></DefaultName>
 </FormatElement>
 </LC_FORMAT>
-<LC_COLLATION>
-<Collator unoid="alphanumeric" default="true"/>
-<CollationOptions>
-<TransliterationModules>IGNORE_CASE</TransliterationModules>
-</CollationOptions>
-</LC_COLLATION>
-<LC_SEARCH>
-<SearchOptions>
-<TransliterationModules>IGNORE_CASE</TransliterationModules>
-</SearchOptions>
-</LC_SEARCH>
+<LC_COLLATION ref="en_US"/>
+<LC_SEARCH ref="en_US"/>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek>
@@ -388,80 +379,80 @@
 <MonthsOfYear>
 <Month>
 <MonthID>Nissan</MonthID>
-<DefaultAbbrvName>Nissan</DefaultAbbrvName>
-<DefaultFullName>Nissan</DefaultFullName>
+<DefaultAbbrvName>ןסינ</DefaultAbbrvName>
+<DefaultFullName>ניסן</DefaultFullName>
 </Month>
 <Month>
-<MonthID>Lyar</MonthID>
-<DefaultAbbrvName>Lyar</DefaultAbbrvName>
-<DefaultFullName>Lyar</DefaultFullName>
+<MonthID>Iyar</MonthID>
+<DefaultAbbrvName>אייר</DefaultAbbrvName>
+<DefaultFullName>אייר</DefaultFullName>
 </Month>
 <Month>
 <MonthID>Sivan</MonthID>
-<DefaultAbbrvName>Sivan</DefaultAbbrvName>
-<DefaultFullName>Sivan</DefaultFullName>
+<DefaultAbbrvName>סיון</DefaultAbbrvName>
+<DefaultFullName>סיון</DefaultFullName>
 </Month>
 <Month>
 <MonthID>Tammuz</MonthID>
-<DefaultAbbrvName>Tammuz</DefaultAbbrvName>
-<DefaultFullName>Tammuz</DefaultFullName>
+<DefaultAbbrvName>תמוז</DefaultAbbrvName>
+<DefaultFullName>תמוז</DefaultFullName>
 </Month>
 <Month>
 <MonthID>Av</MonthID>
-<DefaultAbbrvName>Av</DefaultAbbrvName>
-<DefaultFullName>Av</DefaultFullName>
+<DefaultAbbrvName>אב</DefaultAbbrvName>
+<DefaultFullName>אב</DefaultFullName>
 </Month>
 <Month>
 <MonthID>Elul</MonthID>
-<DefaultAbbrvName>Elul</DefaultAbbrvName>
-<DefaultFullName>Elul</DefaultFullName>
+<DefaultAbbrvName>אלול</DefaultAbbrvName>
+<DefaultFullName>אלול</DefaultFullName>
 </Month>
 <Month>
 <MonthID>Tishri</MonthID>
-<DefaultAbbrvName>Tishri</DefaultAbbrvName>
-<DefaultFullName>Tishri</DefaultFullName>
+<DefaultAbbrvName>תשרי</DefaultAbbrvName>
+<DefaultFullName>תשרי</DefaultFullName>
 </Month>
 <Month>
 <MonthID>Heshvan</MonthID>
-<DefaultAbbrvName>Heshvan</DefaultAbbrvName>
-<DefaultFullName>Heshvan</DefaultFullName>
+<DefaultAbbrvName>>חשון</DefaultAbbrvName>
+<DefaultFullName>חשון</DefaultFullName>
 </Month>
 <Month>
 <MonthID>Kislev</MonthID>
-<DefaultAbbrvName>Kislev</DefaultAbbrvName>
-<DefaultFullName>Kislev</DefaultFullName>
+<DefaultAbbrvName>כסלו</DefaultAbbrvName>
+<DefaultFullName>כסלו</DefaultFullName>
 </Month>
 <Month>
 <MonthID>Tevet</MonthID>
-<DefaultAbbrvName>Tevet</DefaultAbbrvName>
-<DefaultFullName>Tevet</DefaultFullName>
+<DefaultAbbrvName>טבת</DefaultAbbrvName>
+<DefaultFullName>טבת</DefaultFullName>
 </Month>
 <Month>
 <MonthID>Shevat</MonthID>
-<DefaultAbbrvName>Shevat</DefaultAbbrvName>
-<DefaultFullName>Shevat</DefaultFullName>
+<DefaultAbbrvName>שבט</DefaultAbbrvName>
+<DefaultFullName>שבט</DefaultFullName>
 </Month>
 <Month>
 <MonthID>Adar</MonthID>
-<DefaultAbbrvName>Adar</DefaultAbbrvName>
-<DefaultFullName>Adar</DefaultFullName>
+<DefaultAbbrvName>אדר</DefaultAbbrvName>
+<DefaultFullName>אדר</DefaultFullName>
 </Month>
 <Month>
 <MonthID>ve-Adar</MonthID>
-<DefaultAbbrvName>ve-Adar</DefaultAbbrvName>
-<DefaultFullName>ve-Adar</DefaultFullName>
+<DefaultAbbrvName>אדר-ב</DefaultAbbrvName>
+<DefaultFullName>אדר-ב</DefaultFullName>
 </Month>
 </MonthsOfYear>
 <Eras>
 <Era>
 <EraID>before</EraID>
-<DefaultAbbrvName>לסה"נ</DefaultAbbrvName>
-<DefaultFullName>לסה"נ</DefaultFullName>
+<DefaultAbbrvName>לפנ"ה</DefaultAbbrvName>
+<DefaultFullName>לפנ"ה</DefaultFullName>
 </Era>
 <Era>
 <EraID>after</EraID>
-<DefaultAbbrvName>לפסה"נ</DefaultAbbrvName>
-<DefaultFullName>לפסה"נ</DefaultFullName>
+<DefaultAbbrvName>לסה"נ</DefaultAbbrvName>
+<DefaultFullName>לסה"נ</DefaultFullName>
 </Era>
 </Eras>
 <StartDayOfWeek><DayID>sun</DayID></StartDayOfWeek>
@@ -477,11 +468,7 @@
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
 </LC_CURRENCY>
-<LC_TRANSLITERATION>
-<Transliteration unoid="LOWERCASE_UPPERCASE"/>
-<Transliteration unoid="UPPERCASE_LOWERCASE"/>
-<Transliteration unoid="IGNORE_CASE"/>
-</LC_TRANSLITERATION>
+<LC_TRANSLITERATION ref="en_US"/>
 <LC_MISC>
 <ReservedWords>
 <trueWord>true</trueWord>
@@ -498,72 +485,6 @@
 <quarter4Abbreviation>Q4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
-<LC_NumberingLevel>
-<NumberingLevel Prefix=" " NumType="4" Suffix=")" />
-<NumberingLevel Prefix=" " NumType="4" Suffix="." />
-<NumberingLevel Prefix="(" NumType="4" Suffix="." />
-<NumberingLevel Prefix=" " NumType="2" Suffix="." />
-<NumberingLevel Prefix=" " NumType="0" Suffix=")" />
-<NumberingLevel Prefix=" " NumType="1" Suffix=")" />
-<NumberingLevel Prefix="(" NumType="1" Suffix=")" />
-<NumberingLevel Prefix=" " NumType="3" Suffix="." />
-</LC_NumberingLevel>
-<LC_OutLineNumberingLevel>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix="(" NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix="." BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="4" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="27A2"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="E006"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=")" BulletChar="E004"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-</LC_OutLineNumberingLevel>
+<LC_NumberingLevel ref="en_US"/>
+<LC_OutLineNumberingLevel ref="en_US"/>
 </Locale>

@@ -10,10 +10,6 @@
 <CountryID>IN</CountryID>
 <DefaultName>India</DefaultName>
 </Country>
-<Platform>
-<PlatformID>generic</PlatformID>
-</Platform>
-<Varient></Varient>
 </LC_INFO>
 <LC_CTYPE unoid="generic">
 <Separators>
@@ -38,7 +34,7 @@
 <TimePM>PM</TimePM>
 <MeasurementSystem>Metric</MeasurementSystem>
 </LC_CTYPE>
-<LC_FORMAT>
+<LC_FORMAT replaceFrom="[CURRENCY]" replaceTo="[$रु.-439]">
 <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
 <FormatCode>D-M-YY</FormatCode>
 <DefaultName>18</DefaultName>
@@ -184,19 +180,19 @@
 <DefaultName>5</DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-<FormatCode>[$रु.-439]#,##0;-[$रु.-439]#,##0</FormatCode>
+<FormatCode>[CURRENCY]#,##0;-[CURRENCY]#,##0</FormatCode>
 <DefaultName>12</DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-<FormatCode>[$रु.-439]#,##0.00;-[$रु.-439]#,##0.00</FormatCode>
+<FormatCode>[CURRENCY]#,##0.00;-[CURRENCY]#,##0.00</FormatCode>
 <DefaultName>13</DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-<FormatCode>[$रु.-439]#,##0;[RED]-[$रु.-439]#,##0</FormatCode>
+<FormatCode>[CURRENCY]#,##0;[RED]-[CURRENCY]#,##0</FormatCode>
 <DefaultName>14</DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-<FormatCode>[$रु.-439]#,##0.00;[RED]-[$रु.-439]#,##0.00</FormatCode>
+<FormatCode>[CURRENCY]#,##0.00;[RED]-[CURRENCY]#,##0.00</FormatCode>
 <DefaultName>15</DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
@@ -204,7 +200,7 @@
 <DefaultName>16</DefaultName>
 </FormatElement>
 <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-<FormatCode>[$रु.-439]#,##0.--;[RED]-[$रु.-439]#,##0.--</FormatCode>
+<FormatCode>[CURRENCY]#,##0.--;[RED]-[CURRENCY]#,##0.--</FormatCode>
 <DefaultName>17</DefaultName>
 </FormatElement>
 <FormatElement msgid="PercentFormatskey1" default="true" type="short" usage="PERCENT_NUMBER"  formatindex="8">
@@ -224,17 +220,8 @@
 <DefaultName>7</DefaultName>
 </FormatElement>
 </LC_FORMAT>
-<LC_COLLATION>
-<Collator unoid="alphanumeric" default="true"/>
-<CollationOptions>
-<TransliterationModules>IGNORE_CASE</TransliterationModules>
-</CollationOptions>
-</LC_COLLATION>
-<LC_SEARCH>
-<SearchOptions>
-<TransliterationModules>IGNORE_CASE</TransliterationModules>
-</SearchOptions>
-</LC_SEARCH>
+<LC_COLLATION ref="en_US"/>
+<LC_SEARCH ref="en_US"/>
 <LC_CALENDAR>
 <Calendar unoid="gregorian" default="true">
 <DaysOfWeek>
@@ -363,11 +350,7 @@
 <DecimalPlaces>2</DecimalPlaces>
 </Currency>
 </LC_CURRENCY>
-<LC_TRANSLITERATION>
-<Transliteration unoid="UPPERCASE_LOWERCASE"/>
-<Transliteration unoid="IGNORE_CASE"/>
-<Transliteration unoid="LOWERCASE_UPPERCASE" />
-</LC_TRANSLITERATION>
+<LC_TRANSLITERATION ref="en_US"/>
 <LC_MISC>
 <ReservedWords>
 <trueWord>सही</trueWord>
@@ -384,72 +367,6 @@
 <quarter4Abbreviation>Q4</quarter4Abbreviation>
 </ReservedWords>
 </LC_MISC>
-<LC_NumberingLevel>
-<NumberingLevel Prefix=" " NumType="4" Suffix=")" />
-<NumberingLevel Prefix=" " NumType="4" Suffix="." />
-<NumberingLevel Prefix="(" NumType="4" Suffix="" />
-<NumberingLevel Prefix=" " NumType="2" Suffix="" />
-<NumberingLevel Prefix=" " NumType="0" Suffix="" />
-<NumberingLevel Prefix=" " NumType="1" Suffix="" />
-<NumberingLevel Prefix="(" NumType="1" Suffix="" />
-<NumberingLevel Prefix=" " NumType="3" Suffix="" />
-</LC_NumberingLevel>
-<LC_OutLineNumberingLevel>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="0"   SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0x0020" BulletFontName=""         ParentNumbering="1" LeftMargin="50"  SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="0xF049" BulletFontName="StarBats" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="0xF049" BulletFontName="StarBats" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=":" BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="0"   SymbolTextDistance="50"   FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="50"  SymbolTextDistance="50"   FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="0xF095" BulletFontName="StarBats" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50"   FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="0xF095" BulletFontName="StarBats" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50"   FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="0xF095" BulletFontName="StarBats" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50"   FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="0"   SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix="(" NumType="1" Suffix=")" BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="50"  SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix="." BulletChar="0xF095" BulletFontName="StarBats" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0x0020" BulletFontName="" ParentNumbering="0" LeftMargin="0"   SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0x0020" BulletFontName="" ParentNumbering="0" LeftMargin="50"  SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0x0020" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0x0020" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0x0020" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="0"   SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="50"  SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="0xF095" BulletFontName="StarBats" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="0"   SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="50"  SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="0x0020" BulletFontName=""         ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="0xF095" BulletFontName="StarBats" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0x0020" BulletFontName="" ParentNumbering="0" LeftMargin="0"   SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0x0020" BulletFontName="" ParentNumbering="1" LeftMargin="50"  SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0x0020" BulletFontName="" ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0x0020" BulletFontName="" ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="0x0020" BulletFontName="" ParentNumbering="4" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-<OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="0xF02F" BulletFontName="StarBats" ParentNumbering="0" LeftMargin="0"   SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=""  NumType="6" Suffix=" " BulletChar="0xF030" BulletFontName="StarBats" ParentNumbering="0" LeftMargin="50"  SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=""  NumType="6" Suffix=")" BulletChar="0xF02D" BulletFontName="StarBats" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=""  NumType="6" Suffix=" " BulletChar="0xF095" BulletFontName="StarBats" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=""  NumType="6" Suffix=" " BulletChar="0xF095" BulletFontName="StarBats" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
-</OutlineStyle>
-</LC_OutLineNumberingLevel>
+<LC_NumberingLevel ref="en_US"/>
+<LC_OutLineNumberingLevel ref="en_US"/>
 </Locale>
