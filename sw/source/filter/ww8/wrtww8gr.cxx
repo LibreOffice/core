@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:28:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
 #endif
+#include "svtools/urihelper.hxx"
 
 #include <svtools/embedhlp.hxx>
 
@@ -674,8 +675,10 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
         UINT16 mm;
         rGrfNd.GetFileFilterNms( &aFileN, &aFiltN );
 
-        aFileN = INetURLObject::AbsToRel( aFileN, INetURLObject::WAS_ENCODED,
-                                        INetURLObject::DECODE_UNAMBIGUOUS);
+        aFileN = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
+                                          aFileN);
+
+
         INetURLObject aUrl( aFileN );
         if( aUrl.GetProtocol() == INET_PROT_FILE )
             aFileN = aUrl.PathToFileName();
