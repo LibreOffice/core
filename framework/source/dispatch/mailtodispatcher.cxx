@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailtodispatcher.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:40:25 $
+ *  last change: $Author: as $ $Date: 2002-05-03 08:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@ namespace framework{
 //  non exported const
 //_________________________________________________________________________________________________________________
 
+#define PROTOCOL_VALUE      "mailto:"
+#define PROTOCOL_LENGTH     7
+
 //_________________________________________________________________________________________________________________
 //  non exported definitions
 //_________________________________________________________________________________________________________________
@@ -122,16 +125,18 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XINTERFACE_4(MailToDispatcher                                ,
+DEFINE_XINTERFACE_5(MailToDispatcher                                ,
                     OWeakObject                                     ,
                     DIRECT_INTERFACE(css::lang::XTypeProvider      ),
                     DIRECT_INTERFACE(css::lang::XServiceInfo       ),
+                    DIRECT_INTERFACE(css::frame::XDispatchProvider ),
                     DIRECT_INTERFACE(css::frame::XNotifyingDispatch),
                     DIRECT_INTERFACE(css::frame::XDispatch         ))
 
-DEFINE_XTYPEPROVIDER_4(MailToDispatcher              ,
+DEFINE_XTYPEPROVIDER_5(MailToDispatcher              ,
                        css::lang::XTypeProvider      ,
                        css::lang::XServiceInfo       ,
+                       css::frame::XDispatchProvider ,
                        css::frame::XNotifyingDispatch,
                        css::frame::XDispatch         )
 
@@ -181,6 +186,51 @@ MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::lang::XMulti
 MailToDispatcher::~MailToDispatcher()
 {
     m_xFactory = NULL;
+}
+
+//_________________________________________________________________________________________________________________
+
+/**
+    @short      decide if this dispatch implementation can be used for requested URL or not
+    @descr      A protocol handler is registerd for an URL pattern inside configuration and will
+                be asked by the generic dispatch mechanism inside framework, if he can handle this
+                special URL wich match his registration. He can agree by returning of a valid dispatch
+                instance or disagree by returning <NULL/>.
+                We don't create new dispatch instances here realy - we return THIS as result to handle it
+                at the same implementation.
+
+    @modified   02.05.2002 15:25, as96863
+*/
+css::uno::Reference< css::frame::XDispatch > SAL_CALL MailToDispatcher::queryDispatch( const css::util::URL&  aURL    ,
+                                                                                       const ::rtl::OUString& sTarget ,
+                                                                                             sal_Int32        nFlags  ) throw( css::uno::RuntimeException )
+{
+    css::uno::Reference< css::frame::XDispatch > xDispatcher;
+    if (aURL.Complete.compareToAscii(PROTOCOL_VALUE,PROTOCOL_LENGTH)==0)
+        xDispatcher = this;
+    return xDispatcher;
+}
+
+//_________________________________________________________________________________________________________________
+
+/**
+    @short      do the same like dispatch() but for multiple requests at the same time
+    @descr      -
+
+    @modified   02.05.2002 15:27, as96863
+*/
+css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL MailToDispatcher::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException )
+{
+    sal_Int32 nCount = lDescriptor.getLength();
+    css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
+    for( sal_Int32 i=0; i<nCount; ++i )
+    {
+        lDispatcher[i] = this->queryDispatch(
+                            lDescriptor[i].FeatureURL,
+                            lDescriptor[i].FrameName,
+                            lDescriptor[i].SearchFlags);
+    }
+    return lDispatcher;
 }
 
 //_________________________________________________________________________________________________________________
@@ -272,35 +322,28 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
 {
     sal_Bool bSuccess = sal_False;
 
-    // don't accept other protocols
-    // Normaly we shouldn't be used for other URLs then "mailto" ...
-    // but ...
-    if (aURL.Protocol.compareToAscii("mailto:",7)==0)
-    {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xFactory;
-        /* SAFE */{
-            ReadGuard aReadLock( m_aLock );
-            xFactory = m_xFactory;
-        /* SAFE */}
+    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory;
+    /* SAFE */{
+        ReadGuard aReadLock( m_aLock );
+        xFactory = m_xFactory;
+    /* SAFE */}
 
-        css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute( xFactory->createInstance(SERVICENAME_SYSTEMSHELLEXECUTE), css::uno::UNO_QUERY );
-        if (xSystemShellExecute.is())
+    css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute( xFactory->createInstance(SERVICENAME_SYSTEMSHELLEXECUTE), css::uno::UNO_QUERY );
+    if (xSystemShellExecute.is())
+    {
+        try
         {
-            try
-            {
-                // start mail client
-                // Because there is no notofocation about success - we use case of
-                // no detected exception as SUCCESS - FAILED otherwhise.
-                ::rtl::OUString sURL( aURL.Complete );
-                xSystemShellExecute->execute( sURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
-                bSuccess = sal_True;
-            }
-            catch (css::lang::IllegalArgumentException&)
-            {
-            }
-            catch (css::system::SystemShellExecuteException&)
-            {
-            }
+            // start mail client
+            // Because there is no notofocation about success - we use case of
+            // no detected exception as SUCCESS - FAILED otherwhise.
+            xSystemShellExecute->execute( aURL.Complete, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS );
+            bSuccess = sal_True;
+        }
+        catch (css::lang::IllegalArgumentException&)
+        {
+        }
+        catch (css::system::SystemShellExecuteException&)
+        {
         }
     }
 

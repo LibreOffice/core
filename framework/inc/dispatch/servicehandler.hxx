@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicehandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:36:04 $
+ *  last change: $Author: as $ $Date: 2002-05-03 08:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
 #endif
@@ -150,7 +154,7 @@ namespace framework{
 
 /**
     @short          protocol handler for "service:*" URLs
-    @descr          It's a special dispatch object which is registered for such URL pattern and will
+    @descr          It's a special dispatch/provider object which is registered for such URL pattern and will
                     be automaticly used by the framework dispatch mechanism if such URL occured.
                     His job is to create any registered uno components which must be coded inside
                     dispatched URL (may with some optional given parameters). After that such created
@@ -169,6 +173,7 @@ namespace framework{
 class ServiceHandler : // interfaces
                        public  css::lang::XTypeProvider      ,
                        public  css::lang::XServiceInfo       ,
+                       public  css::frame::XDispatchProvider ,
                        public  css::frame::XNotifyingDispatch, // => XDispatch
                        // baseclasses
                        // Order is neccessary for right initialization!
@@ -192,6 +197,12 @@ class ServiceHandler : // interfaces
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
+
+        // XDispatchProvider
+        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL        ,
+                                                                                                             const ::rtl::OUString&                                      sTarget     ,
+                                                                                                                   sal_Int32                                             nFlags      ) throw( css::uno::RuntimeException );
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException );
 
         // XNotifyingDispatch
         virtual void SAL_CALL dispatchWithNotification( const css::util::URL&                                             aURL      ,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailtodispatcher.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:40:15 $
+ *  last change: $Author: as $ $Date: 2002-05-03 08:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
 #endif
@@ -165,6 +169,7 @@ namespace framework{
 class MailToDispatcher : // interfaces
                          public  css::lang::XTypeProvider      ,
                          public  css::lang::XServiceInfo       ,
+                         public  css::frame::XDispatchProvider ,
                          public  css::frame::XNotifyingDispatch, // => XDispatch
                          // baseclasses
                          // Order is neccessary for right initialization!
@@ -188,6 +193,12 @@ class MailToDispatcher : // interfaces
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
+
+        // XDispatchProvider
+        virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL        ,
+                                                                                                             const ::rtl::OUString&                                      sTarget     ,
+                                                                                                                   sal_Int32                                             nFlags      ) throw( css::uno::RuntimeException );
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException );
 
         // XNotifyingDispatch
         virtual void SAL_CALL dispatchWithNotification( const css::util::URL&                                             aURL      ,

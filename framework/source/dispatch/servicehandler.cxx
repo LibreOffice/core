@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicehandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:36:24 $
+ *  last change: $Author: as $ $Date: 2002-05-03 08:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@ namespace framework{
 //  non exported const
 //_________________________________________________________________________________________________________________
 
+#define PROTOCOL_VALUE      "service:"
+#define PROTOCOL_LENGTH     8
+
 //_________________________________________________________________________________________________________________
 //  non exported definitions
 //_________________________________________________________________________________________________________________
@@ -114,16 +117,18 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 // XInterface, XTypeProvider, XServiceInfo
 
-DEFINE_XINTERFACE_4(ServiceHandler                                  ,
+DEFINE_XINTERFACE_5(ServiceHandler                                  ,
                     OWeakObject                                     ,
                     DIRECT_INTERFACE(css::lang::XTypeProvider      ),
                     DIRECT_INTERFACE(css::lang::XServiceInfo       ),
+                    DIRECT_INTERFACE(css::frame::XDispatchProvider ),
                     DIRECT_INTERFACE(css::frame::XNotifyingDispatch),
                     DIRECT_INTERFACE(css::frame::XDispatch         ))
 
-DEFINE_XTYPEPROVIDER_4(ServiceHandler                ,
+DEFINE_XTYPEPROVIDER_5(ServiceHandler                ,
                        css::lang::XTypeProvider      ,
                        css::lang::XServiceInfo       ,
+                       css::frame::XDispatchProvider ,
                        css::frame::XNotifyingDispatch,
                        css::frame::XDispatch         )
 
@@ -173,6 +178,51 @@ ServiceHandler::ServiceHandler( const css::uno::Reference< css::lang::XMultiServ
 ServiceHandler::~ServiceHandler()
 {
     m_xFactory = NULL;
+}
+
+//_________________________________________________________________________________________________________________
+
+/**
+    @short      decide if this dispatch implementation can be used for requested URL or not
+    @descr      A protocol handler is registerd for an URL pattern inside configuration and will
+                be asked by the generic dispatch mechanism inside framework, if he can handle this
+                special URL wich match his registration. He can agree by returning of a valid dispatch
+                instance or disagree by returning <NULL/>.
+                We don't create new dispatch instances here realy - we return THIS as result to handle it
+                at the same implementation.
+
+    @modified   02.05.2002 15:25, as96863
+*/
+css::uno::Reference< css::frame::XDispatch > SAL_CALL ServiceHandler::queryDispatch( const css::util::URL&  aURL    ,
+                                                                                     const ::rtl::OUString& sTarget ,
+                                                                                           sal_Int32        nFlags  ) throw( css::uno::RuntimeException )
+{
+    css::uno::Reference< css::frame::XDispatch > xDispatcher;
+    if (aURL.Complete.compareToAscii(PROTOCOL_VALUE,PROTOCOL_LENGTH)==0)
+        xDispatcher = this;
+    return xDispatcher;
+}
+
+//_________________________________________________________________________________________________________________
+
+/**
+    @short      do the same like dispatch() but for multiple requests at the same time
+    @descr      -
+
+    @modified   02.05.2002 15:27, as96863
+*/
+css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL ServiceHandler::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException )
+{
+    sal_Int32 nCount = lDescriptor.getLength();
+    css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > lDispatcher( nCount );
+    for( sal_Int32 i=0; i<nCount; ++i )
+    {
+        lDispatcher[i] = this->queryDispatch(
+                            lDescriptor[i].FeatureURL,
+                            lDescriptor[i].FrameName,
+                            lDescriptor[i].SearchFlags);
+    }
+    return lDispatcher;
 }
 
 //_________________________________________________________________________________________________________________
@@ -263,25 +313,19 @@ css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( con
 {
     css::uno::Reference< css::uno::XInterface > xService;
 
-    // don't accept other protocols
-    // Normaly we shouldn't be used for other URLs then "service:" ...
-    // but ...
-    if (aURL.Complete.compareToAscii("service:",8)==0)
-    {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xFactory;
-        /* SAFE */{
-            ReadGuard aReadLock( m_aLock );
-            xFactory = m_xFactory;
-        /* SAFE */}
+    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory;
+    /* SAFE */{
+        ReadGuard aReadLock( m_aLock );
+        xFactory = m_xFactory;
+    /* SAFE */}
 
-        if (xFactory.is())
-        {
-            // extract service name from given URL and use it to create the component
-            // Arguments are not supported yet.
-            ::rtl::OUString sServiceName = aURL.Complete.copy(8);
-            if (sServiceName.getLength()>0)
-                xService = xFactory->createInstance(sServiceName);
-        }
+    if (xFactory.is())
+    {
+        // extract service name from given URL and use it to create the component
+        // Arguments are not supported yet.
+        ::rtl::OUString sServiceName = aURL.Complete.copy(PROTOCOL_LENGTH);
+        if (sServiceName.getLength()>0)
+            xService = xFactory->createInstance(sServiceName);
     }
 
     return xService;
