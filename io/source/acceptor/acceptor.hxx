@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:55 $
+ *  last change: $Author: jbu $ $Date: 2002-01-07 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ namespace io_acceptor {
 
         void stopAccepting();
 
+        ::osl::Mutex m_mutex;
         ::osl::Pipe m_pipe;
         ::rtl::OUString m_sPipeName;
         ::rtl::OUString m_sConnectionDescription;

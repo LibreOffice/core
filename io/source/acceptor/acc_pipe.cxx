@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acc_pipe.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:32:55 $
+ *  last change: $Author: jbu $ $Date: 2002-01-07 09:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,13 +193,30 @@ namespace io_acceptor
     void PipeAcceptor::init()
     {
         m_pipe = Pipe( m_sPipeName.pData , osl_Pipe_CREATE );
+        if( ! m_pipe.is() )
+        {
+            OUString error = OUString::createFromAscii( "io.acceptor: Couldn't setup pipe " );
+            error += m_sPipeName;
+            throw ConnectionSetupException( error, Reference< XInterface > () );
+        }
     }
 
     Reference< XConnection > PipeAcceptor::accept( )
     {
+        Pipe pipe;
+        {
+            MutexGuard guard( m_mutex );
+            pipe = m_pipe;
+        }
+        if( ! pipe.is() )
+        {
+            OUString error = OUString::createFromAscii( "io.acceptor: pipe already closed" );
+            error += m_sPipeName;
+            throw ConnectionSetupException( error, Reference< XInterface > () );
+        }
         PipeConnection *pConn = new PipeConnection( m_sPipeName , m_sConnectionDescription );
 
-        oslPipeError status = m_pipe.accept( pConn->m_pipe );
+        oslPipeError status = pipe.accept( pConn->m_pipe );
 
         if( m_bClosed )
         {
@@ -222,6 +239,15 @@ namespace io_acceptor
     void PipeAcceptor::stopAccepting()
     {
         m_bClosed = sal_True;
-        m_pipe.close();
+        Pipe pipe;
+        {
+            MutexGuard guard( m_mutex );
+            pipe = m_pipe;
+            m_pipe.clear();
+        }
+        if( pipe.is() )
+        {
+            pipe.close();
+        }
     }
 }
