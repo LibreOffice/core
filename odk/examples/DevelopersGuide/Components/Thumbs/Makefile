@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: rt $ $Date: 2005-01-31 16:16:32 $
+#  last change: $Author: rt $ $Date: 2005-03-29 12:09:02 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -69,7 +69,7 @@ ComponentsThumbsExample : $(COMPONENT_PACKAGE)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use one of the following command to execute the example!
 	@echo -
-	@echo make $(APP1_NAME).run
+	@echo $(MAKE) $(APP1_NAME).run
 	@echo --------
 	@echo The ImageShrink Java component was installed if SDK_AUTO_DEPLOYMENT = YES.
 	@echo You can use this component inside your office installation, see the example
