@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-13 10:31:12 $
+ *  last change: $Author: mt $ $Date: 2001-06-14 10:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -928,54 +928,57 @@ void TextView::Command( const CommandEvent& rCEvt )
         {
             const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
 
-            TextSelection aSel( mpTextEngine->mpIMEInfos->aPos );
-            aSel.GetEnd().GetIndex() += mpTextEngine->mpIMEInfos->nLen;
-            aSel = mpTextEngine->ImpDeleteText( aSel );
-            aSel = mpTextEngine->ImpInsertText( aSel, pData->GetText() );
-
-            if ( mpTextEngine->mpIMEInfos->bWasCursorOverwrite )
+            if ( !pData->IsOnlyCursorChanged() )
             {
-                USHORT nOldIMETextLen = mpTextEngine->mpIMEInfos->nLen;
-                USHORT nNewIMETextLen = pData->GetText().Len();
+                TextSelection aSel( mpTextEngine->mpIMEInfos->aPos );
+                aSel.GetEnd().GetIndex() += mpTextEngine->mpIMEInfos->nLen;
+                aSel = mpTextEngine->ImpDeleteText( aSel );
+                aSel = mpTextEngine->ImpInsertText( aSel, pData->GetText() );
 
-                if ( ( nOldIMETextLen > nNewIMETextLen ) &&
-                     ( nNewIMETextLen < mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+                if ( mpTextEngine->mpIMEInfos->bWasCursorOverwrite )
                 {
-                    // restore old characters
-                    USHORT nRestore = nOldIMETextLen - nNewIMETextLen;
-                    TextPaM aPaM( mpTextEngine->mpIMEInfos->aPos );
-                    aPaM.GetIndex() += nNewIMETextLen;
-                    mpTextEngine->ImpInsertText( aPaM, mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Copy( nNewIMETextLen, nRestore ) );
+                    USHORT nOldIMETextLen = mpTextEngine->mpIMEInfos->nLen;
+                    USHORT nNewIMETextLen = pData->GetText().Len();
+
+                    if ( ( nOldIMETextLen > nNewIMETextLen ) &&
+                         ( nNewIMETextLen < mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+                    {
+                        // restore old characters
+                        USHORT nRestore = nOldIMETextLen - nNewIMETextLen;
+                        TextPaM aPaM( mpTextEngine->mpIMEInfos->aPos );
+                        aPaM.GetIndex() += nNewIMETextLen;
+                        mpTextEngine->ImpInsertText( aPaM, mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Copy( nNewIMETextLen, nRestore ) );
+                    }
+                    else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
+                              ( nOldIMETextLen < mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+                    {
+                        // overwrite
+                        USHORT nOverwrite = nNewIMETextLen - nOldIMETextLen;
+                        if ( ( nOldIMETextLen + nOverwrite ) > mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() )
+                            nOverwrite = mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() - nOldIMETextLen;
+                        DBG_ASSERT( nOverwrite && (nOverwrite < 0xFF00), "IME Overwrite?!" );
+                        TextPaM aPaM( mpTextEngine->mpIMEInfos->aPos );
+                        aPaM.GetIndex() += nNewIMETextLen;
+                        TextSelection aSel( aPaM );
+                        aSel.GetEnd().GetIndex() += nOverwrite;
+                        mpTextEngine->ImpDeleteText( aSel );
+                    }
                 }
-                else if ( ( nOldIMETextLen < nNewIMETextLen ) &&
-                          ( nOldIMETextLen < mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() ) )
+
+                if ( pData->GetTextAttr() )
                 {
-                    // overwrite
-                    USHORT nOverwrite = nNewIMETextLen - nOldIMETextLen;
-                    if ( ( nOldIMETextLen + nOverwrite ) > mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() )
-                        nOverwrite = mpTextEngine->mpIMEInfos->aOldTextAfterStartPos.Len() - nOldIMETextLen;
-                    DBG_ASSERT( nOverwrite && (nOverwrite < 0xFF00), "IME Overwrite?!" );
-                    TextPaM aPaM( mpTextEngine->mpIMEInfos->aPos );
-                    aPaM.GetIndex() += nNewIMETextLen;
-                    TextSelection aSel( aPaM );
-                    aSel.GetEnd().GetIndex() += nOverwrite;
-                    mpTextEngine->ImpDeleteText( aSel );
+                    mpTextEngine->mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().Len() );
+                    mpTextEngine->mpIMEInfos->bCursor = pData->IsCursorVisible();
                 }
-            }
+                else
+                {
+                    mpTextEngine->mpIMEInfos->DestroyAttribs();
+                }
 
-            if ( pData->GetTextAttr() )
-            {
-                mpTextEngine->mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().Len() );
-                mpTextEngine->mpIMEInfos->bCursor = pData->IsCursorVisible();
+                TEParaPortion* pPPortion = mpTextEngine->mpTEParaPortions->GetObject( mpTextEngine->mpIMEInfos->aPos.GetPara() );
+                pPPortion->MarkSelectionInvalid( mpTextEngine->mpIMEInfos->aPos.GetIndex(), 0 );
+                mpTextEngine->FormatAndUpdate( this );
             }
-            else
-            {
-                mpTextEngine->mpIMEInfos->DestroyAttribs();
-            }
-
-            TEParaPortion* pPPortion = mpTextEngine->mpTEParaPortions->GetObject( mpTextEngine->mpIMEInfos->aPos.GetPara() );
-            pPPortion->MarkSelectionInvalid( mpTextEngine->mpIMEInfos->aPos.GetIndex(), 0 );
-            mpTextEngine->FormatAndUpdate( this );
 
             TextSelection aNewSel = TextPaM( mpTextEngine->mpIMEInfos->aPos.GetPara(), mpTextEngine->mpIMEInfos->aPos.GetIndex()+pData->GetCursorPos() );
             SetSelection( aNewSel );

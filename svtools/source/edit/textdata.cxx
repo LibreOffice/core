@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-03 12:53:23 $
+ *  last change: $Author: mt $ $Date: 2001-06-14 10:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,8 @@ TextHint::TextHint( ULONG nId, ULONG nValue ) : SfxSimpleHint( nId )
     mnValue = nValue;
 }
 
-TEIMEInfos::TEIMEInfos( const TextPaM& rPos )
+TEIMEInfos::TEIMEInfos( const TextPaM& rPos, const String& rOldTextAfterStartPos )
+: aOldTextAfterStartPos( rOldTextAfterStartPos )
 {
     aPos = rPos;
     nLen = 0;
