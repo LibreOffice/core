@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: abi $ $Date: 2001-07-09 11:50:39 $
+ *  last change: $Author: abi $ $Date: 2001-07-16 14:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ using namespace fileaccess;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
 using namespace com::sun::star::ucb;
 
 
@@ -237,10 +238,10 @@ FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServi
         rtl::OUString plugin = rtl::OUString::createFromAscii( "plugin" );
         Any aAny;
         aAny <<= plugin;
-        beans::PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
+        PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
                                     -1,
                                     aAny,
-                                    beans::PropertyState_DIRECT_VALUE );
+                                    PropertyState_DIRECT_VALUE );
 
         Sequence< Any > seq(1);
         seq[0] <<= aProp;
@@ -431,7 +432,7 @@ FileProvider::acquire(
 
 void SAL_CALL
 FileProvider::release(
-              void )
+    void )
   throw( RuntimeException )
 {
   OWeakObject::release();
@@ -444,11 +445,12 @@ FileProvider::queryInterface(
     throw( RuntimeException )
 {
     Any aRet = cppu::queryInterface( rType,
-                                          SAL_STATIC_CAST( XContentProvider*, this ),
-                                          SAL_STATIC_CAST( XContentIdentifierFactory*, this ),
-                                          SAL_STATIC_CAST( XServiceInfo*,     this ),
-                                          SAL_STATIC_CAST( XFileIdentifierConverter*,this ),
-                                          SAL_STATIC_CAST( beans::XPropertySet*, this ) );
+                                     SAL_STATIC_CAST( XContentProvider*, this ),
+                                     SAL_STATIC_CAST( XContentIdentifierFactory*, this ),
+                                     SAL_STATIC_CAST( XServiceInfo*,     this ),
+                                     SAL_STATIC_CAST( XTypeProvider*,    this ),
+                                     SAL_STATIC_CAST( XFileIdentifierConverter*,this ),
+                                     SAL_STATIC_CAST( XPropertySet*, this ) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
@@ -457,13 +459,14 @@ FileProvider::queryInterface(
 //
 // XTypeProvider methods.
 
+
 XTYPEPROVIDER_IMPL_6( FileProvider,
                          XTypeProvider,
                          XServiceInfo,
                       XContentIdentifierFactory,
-                      beans::XPropertySet,
-                      XFileIdentifierConverter,
-                         XContentProvider )
+                      XPropertySet,
+                        XFileIdentifierConverter,
+                           XContentProvider )
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -642,7 +645,7 @@ FileProvider::createContentIdentifier(
 
 class XPropertySetInfoImpl2
     : public cppu::OWeakObject,
-      public beans::XPropertySetInfo
+      public XPropertySetInfo
 {
 public:
     XPropertySetInfoImpl2();
@@ -665,15 +668,15 @@ public:
         throw( RuntimeException );
 
 
-    virtual Sequence< beans::Property > SAL_CALL
+    virtual Sequence< Property > SAL_CALL
     getProperties(
         void )
         throw( RuntimeException );
 
-    virtual beans::Property SAL_CALL
+    virtual Property SAL_CALL
     getPropertyByName(
         const rtl::OUString& aName )
-        throw( beans::UnknownPropertyException,
+        throw( UnknownPropertyException,
                RuntimeException);
 
     virtual sal_Bool SAL_CALL
@@ -682,22 +685,22 @@ public:
 
 
 private:
-    Sequence< beans::Property > m_seq;
+    Sequence< Property > m_seq;
 };
 
 
 XPropertySetInfoImpl2::XPropertySetInfoImpl2()
     : m_seq( 2 )
 {
-    m_seq[0] = beans::Property( rtl::OUString::createFromAscii( "HostName" ),
+    m_seq[0] = Property( rtl::OUString::createFromAscii( "HostName" ),
                                 -1,
                                 getCppuType( static_cast< rtl::OUString* >( 0 ) ),
-                                beans::PropertyAttribute::READONLY );
+                                PropertyAttribute::READONLY );
 
-    m_seq[1] = beans::Property( rtl::OUString::createFromAscii( "FileSystemNotation" ),
+    m_seq[1] = Property( rtl::OUString::createFromAscii( "FileSystemNotation" ),
                                 -1,
                                 getCppuType( static_cast< sal_Int32* >( 0 ) ),
-                                beans::PropertyAttribute::READONLY );
+                                PropertyAttribute::READONLY );
 }
 
 
@@ -731,27 +734,27 @@ XPropertySetInfoImpl2::queryInterface(
     throw( RuntimeException )
 {
     Any aRet = cppu::queryInterface( rType,
-                                          SAL_STATIC_CAST( beans::XPropertySetInfo*,this) );
+                                          SAL_STATIC_CAST( XPropertySetInfo*,this) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
 
-beans::Property SAL_CALL
+Property SAL_CALL
 XPropertySetInfoImpl2::getPropertyByName(
     const rtl::OUString& aName )
-    throw( beans::UnknownPropertyException,
+    throw( UnknownPropertyException,
            RuntimeException)
 {
     for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
         if( m_seq[i].Name == aName )
             return m_seq[i];
 
-    throw beans::UnknownPropertyException();
+    throw UnknownPropertyException();
 }
 
 
 
-Sequence< beans::Property > SAL_CALL
+Sequence< Property > SAL_CALL
 XPropertySetInfoImpl2::getProperties(
     void )
     throw( RuntimeException )
@@ -795,14 +798,14 @@ void SAL_CALL FileProvider::initProperties( void )
         // static const sal_Int32 MAC_NOTATION = (sal_Int32)3;
 
         XPropertySetInfoImpl2* p = new XPropertySetInfoImpl2();
-        m_xPropertySetInfo = Reference< beans::XPropertySetInfo >( p );
+        m_xPropertySetInfo = Reference< XPropertySetInfo >( p );
     }
 }
 
 
 // XPropertySet
 
-Reference< beans::XPropertySetInfo > SAL_CALL
+Reference< XPropertySetInfo > SAL_CALL
 FileProvider::getPropertySetInfo(  )
     throw( RuntimeException )
 {
@@ -814,8 +817,8 @@ FileProvider::getPropertySetInfo(  )
 void SAL_CALL
 FileProvider::setPropertyValue( const rtl::OUString& aPropertyName,
                                 const Any& aValue )
-    throw( beans::UnknownPropertyException,
-           beans::PropertyVetoException,
+    throw( UnknownPropertyException,
+           PropertyVetoException,
            IllegalArgumentException,
            WrappedTargetException,
            RuntimeException )
@@ -824,7 +827,7 @@ FileProvider::setPropertyValue( const rtl::OUString& aPropertyName,
         aPropertyName.compareToAscii( "HostName" ) == 0 )
         return;
     else
-        throw beans::UnknownPropertyException();
+        throw UnknownPropertyException();
 }
 
 
@@ -832,7 +835,7 @@ FileProvider::setPropertyValue( const rtl::OUString& aPropertyName,
 Any SAL_CALL
 FileProvider::getPropertyValue(
     const rtl::OUString& aPropertyName )
-    throw( beans::UnknownPropertyException,
+    throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException )
 {
@@ -850,15 +853,15 @@ FileProvider::getPropertyValue(
         return aAny;
     }
     else
-        throw beans::UnknownPropertyException();
+        throw UnknownPropertyException();
 }
 
 
 void SAL_CALL
 FileProvider::addPropertyChangeListener(
     const rtl::OUString& aPropertyName,
-    const Reference< beans::XPropertyChangeListener >& xListener )
-    throw( beans::UnknownPropertyException,
+    const Reference< XPropertyChangeListener >& xListener )
+    throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException)
 {
@@ -869,8 +872,8 @@ FileProvider::addPropertyChangeListener(
 void SAL_CALL
 FileProvider::removePropertyChangeListener(
     const rtl::OUString& aPropertyName,
-    const Reference< beans::XPropertyChangeListener >& aListener )
-    throw( beans::UnknownPropertyException,
+    const Reference< XPropertyChangeListener >& aListener )
+    throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException )
 {
@@ -880,8 +883,8 @@ FileProvider::removePropertyChangeListener(
 void SAL_CALL
 FileProvider::addVetoableChangeListener(
     const rtl::OUString& PropertyName,
-    const Reference< beans::XVetoableChangeListener >& aListener )
-    throw( beans::UnknownPropertyException,
+    const Reference< XVetoableChangeListener >& aListener )
+    throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException )
 {
@@ -892,8 +895,8 @@ FileProvider::addVetoableChangeListener(
 void SAL_CALL
 FileProvider::removeVetoableChangeListener(
     const rtl::OUString& PropertyName,
-    const Reference< beans::XVetoableChangeListener >& aListener )
-    throw( beans::UnknownPropertyException,
+    const Reference< XVetoableChangeListener >& aListener )
+    throw( UnknownPropertyException,
            WrappedTargetException,
            RuntimeException)
 {
