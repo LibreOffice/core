@@ -8,7 +8,7 @@ sx	svx\unx\res								get		-	all	sx_ures NULL
 sx	svx\source\inc							get		-	all	sx_sinc NULL
 sx	svx\mac\inc								get		-	all	sx_minc NULL
 sx	svx\sdi									nmake	-	all	sx_sdi NULL
-sx	svx\source\src							nmake	-	all	sx_src NULL
+sx	svx\source\src							nmake	-	all	sx_src sx_sdi NULL
 sx	svx\source\intro						nmake	-	all	sx_intro NULL
 sx	svx\source\items						nmake	-	all	sx_items sx_sdi NULL
 sx	svx\source\xoutdev						nmake	-	all	sx_xout sx_items NULL
