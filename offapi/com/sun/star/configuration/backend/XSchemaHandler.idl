@@ -1,0 +1,572 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSchemaHandler.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2003-04-17 14:18:55 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2002 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_configuration_backend_XSchemaHandler_idl__
+#define __com_sun_star_configuration_backend_XSchemaHandler_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_backend_TemplateIdentifier_idl__
+#include <com/sun/star/configuration/backend/TemplateIdentifier.idl>
+#endif
+
+#ifndef __com_sun_star_configuration_backend_MalformedDataException_idl__
+#include <com/sun/star/configuration/backend/MalformedDataException.idl>
+#endif
+
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module configuration { module backend {
+
+//=============================================================================
+
+/** receives a description of a configuration schema as a sequence of events.
+
+    @since #107956#
+ */
+interface XSchemaHandler: ::com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** receives notification that a schema description is started.
+
+        <p> The schema descrption may comprise components templates or both.
+        </p>
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            if a schema is already started (and has not been ended).
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+     */
+    void startSchema( )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+    //-------------------------------------------------------------------------
+
+    /** receives notification that the current schema description is complete.
+
+        <p> Must match a previous call to <member>startSchema</member>.
+        </p>
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if invalid data is detected in the schema</li>
+            <li>if there is a unfinished component or template in progress</li>
+            <li>if no schema is started at all</li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+     */
+    void endSchema(  )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+    //-------------------------------------------------------------------------
+
+    /** receives notification that the schema depends on templates
+        from a different component.
+
+        @param aName
+            specifies the name of the component.
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if there is a unfinished component or template in progress</li>
+            <li>if no schema is started at all</li>
+            <li>if the name is not a valid component name</li>
+            <li>if the requested component is not found</li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+     */
+    void importComponent( [in] string aName )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+    //-------------------------------------------------------------------------
+
+    /** receives notification that a component description is started.
+
+        <p> Subsequent calls describe the schema of the component
+            until a matching call to <member>endComponent</member>
+            is encountered.
+        </p>
+
+        @param aName
+            specifies the name of the component.
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if there is a unfinished component or template in progress </li>
+            <li>if no schema is started at all </li>
+            <li>if there already is a component data tree of this name</li>
+            <li>if the name is not a valid component name</li>
+            <li>if the instance supports no component schemas (only templates)</li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+     */
+    void startComponent( [in] string aName )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+    //-------------------------------------------------------------------------
+
+    /** receives notification that a component description is complete.
+
+        <p> Must match a previous call to <member>startComponent</member>.
+        </p>
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if invalid data is detected in the component<li>
+            <li>if there is a unfinished subnode in progress<li>
+            <li>if no component has been started at all<li>
+            <li>if the instance supports no component schemas (only templates)<li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+     */
+    void endComponent(  )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+    //-------------------------------------------------------------------------
+
+    /** receives notification that a template description is started for a group.
+
+        <p> Subsequent calls describe the members and properties of the template
+            until a matching call to <member>endTemplate</member>
+            is encountered.
+        </p>
+
+        @param aTemplate
+            specifies the identity of the template.
+
+        @param aAttributes
+            specifies the attributes of the template.
+
+            <p> The value is a combination of
+                <type>SchemaAttribute</type> flags.
+            </p>
+            <p> <const>SchemaAttribute::EXTENSIBLE</const> can be used
+                to describe a template for a node with an extensible
+                set of properties.
+            </p>
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if there is a unfinished component or template in progress</li>
+            <li>if no schema is started at all </li>
+            <li>if there already is a template with that identifier</li>
+            <li>if the name is not a valid template identifier </li>
+            <li>if the attributes are not valid for a group</li>
+            <li>if the instance supports no templates (only component schemas)</li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+
+        @see com::sun::star::configuration::backend::SchemaAttribute
+     */
+    void startGroupTemplate( [in] TemplateIdentifier aTemplate,
+                             [in] short  aAttributes  )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+    //-------------------------------------------------------------------------
+
+    /** receives notification that a template description is started for a set.
+
+        <p> Subsequent calls describe the members and properties of the template
+            until a matching call to <member>endTemplate</member>
+            is encountered.
+        </p>
+
+        @param aTemplate
+            specifies the identity of the template.
+
+        @param aAttributes
+            specifies the attributes of the template.
+
+            <p> The value is a combination of
+                <type>SchemaAttribute</type> flags.
+            </p>
+            <p> <const>SchemaAttribute::EXTENSIBLE</const> can be used
+                to describe a template for a node with an extensible
+                set of properties.
+            </p>
+
+        @param aItemType
+            specifies the (default) template for set items.
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if there is a unfinished component or template in progress</li>
+            <li>if no schema is started at all </li>
+            <li>if there already is a template with that identifier</li>
+            <li>if the item-type template is not found</li>
+            <li>if the name or item-type are not valid template identifiers </li>
+            <li>if the attributes are not valid for a set</li>
+            <li>if the instance supports no templates (only component schemas).</li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+
+        @see com::sun::star::configuration::backend::SchemaAttribute
+     */
+    void startSetTemplate(  [in] TemplateIdentifier aTemplate,
+                            [in] short  aAttributes,
+                            [in] TemplateIdentifier aItemType  )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+    //-------------------------------------------------------------------------
+
+    /** receives notification that a template description is complete.
+
+        <p> Must match a previous call to <member>startGroupTemplate</member>
+            or <member>startSetTemplate</member>.
+        </p>
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if invalid data is detected in the template</li>
+            <li>if there is a unfinished subnode in progress</li>
+            <li>if no template has been started at all</li>
+            <li>if the instance supports no templates (only component schemas)</li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+     */
+    void endTemplate(  )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+    //-------------------------------------------------------------------------
+
+    /** receives notification that a group description is started.
+
+        <p> Subsequent calls describe the members and properties of the group
+            until a matching call to <member>endNode</member>
+            is encountered.
+        </p>
+
+        @param aName
+            specifies the name of the group.
+
+        @param aAttributes
+            specifies the attributes of the node.
+
+            <p> The value is a combination of
+                <type>SchemaAttribute</type> flags.
+            </p>
+            <p> <const>SchemaAttribute::EXTENSIBLE</const> can be used
+                to describe a group with an extensible set of properties.
+            </p>
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if there isn't a group node in progress currently</li>
+            <li>if there already is a node with that name</li>
+            <li>if the name is not a valid node name</li>
+            <li>if the attributes are not valid for a group</li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+
+        @see com::sun::star::configuration::backend::SchemaAttribute
+     */
+    void startGroup( [in] string aName,
+                     [in] short  aAttributes )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+    //-------------------------------------------------------------------------
+
+    /** receives notification that a set description is started.
+
+        <p> Subsequent calls describe the item-types and properties of the set
+            until a matching call to <member>endNode</member>
+            is encountered.
+        </p>
+
+        @param aName
+            specifies the name of the set.
+
+        @param aAttributes
+            specifies the attributes of the node.
+
+            <p> The value is a combination of
+                <type>SchemaAttribute</type> flags.
+            </p>
+            <p> <const>SchemaAttribute::EXTENSIBLE</const> can be used
+                to describe a set with an extensible set of properties.
+            </p>
+
+        @param aItemType
+            specifies the (default) template for set items.
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if there isn't a group node in progress currently</li>
+            <li>if there already is a node with that name</li>
+            <li>if the item-type template is not found</li>
+            <li>if the name is not a valid node name</li>
+            <li>if the item-type is not a valid template identifier</li>
+            <li>if the attributes are not valid for a set</li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+
+        @see com::sun::star::configuration::backend::SchemaAttribute
+     */
+    void startSet( [in] string aName,
+                   [in] short  aAttributes,
+                   [in] TemplateIdentifier aItemType )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+    //-------------------------------------------------------------------------
+
+    /** receives notification that a node description is complete.
+
+        <p> Must match the last open call to <member>startGroup</member>
+            or <member>startSet</member>.
+        </p>
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if the name is not a the name of the node in progress</li>
+            <li>if invalid data is detected in the node</li>
+            <li>if no node has been started at all</li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+     */
+    void endNode(  )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+    //-------------------------------------------------------------------------
+
+    /** receives notification that a property is added to the current node.
+
+        <p> The property will have a default value of <NULL/>
+            (unless it is <const>SchemaAttribute::REQUIRED</const>).
+        </p>
+
+        @param aName
+            specifies the name of the new property.
+
+        @param aAttributes
+            specifies the attributes of the new property.
+
+            <p> The value is a combination of
+                <type>SchemaAttribute</type> flags.
+            </p>
+
+        @param aType
+            specifies the type of the new property.
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if there isn't a group or extensible node in progress currently</li>
+            <li>if a property with the same name already exists</li>
+            <li>if the specified type is not allowed</li>
+            <li>if the name is not a valid property name</li>
+            <li>if the attributes are not valid for a property</li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+
+        @see com::sun::star::configuration::backend::SchemaAttribute
+     */
+    void addProperty( [in] string aName,
+                       [in] short aAttributes,
+                      [in] type aType )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    /** receives notification that a property having a default value
+        is added to the current node.
+
+        @param aName
+            specifies the name of the new property.
+
+        @param aAttributes
+            specifies the attributes of the new property.
+
+            <p> The value is a combination of
+                <type>SchemaAttribute</type> flags.
+            </p>
+
+        @param aDefaultValue
+            specifies the value of the new property.
+
+            <p> The value also determines the type.
+                Therefore the value must not be <void/>.
+            </p>
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if there isn't a group or extensible node in progress currently</li>
+            <li>if a property with the same name already exists</li>
+            <li>if the type of the default value is not an allowed type,
+                or if the default value is <void/></li>
+            <li>if the name is not a valid property name</li>
+            <li>if the attributes are not valid for a property</li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+
+        @see com::sun::star::configuration::backend::SchemaAttribute
+     */
+    void addPropertyWithDefault( [in] string aName,
+                                  [in] short aAttributes,
+                                 [in] any aDefaultValue )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    /** receives notification that the current group has a child node
+        that is an instance of a specified template.
+
+        @param aName
+            specifies the name of the new node.
+
+        @param aTemplate
+            specifies a template that describes the new node.
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if there isn't a group node in progress currently</li>
+            <li>if there already is a node with that name</li>
+            <li>if the template is not found</li>
+            <li>if the name or template name are not valid</li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+     */
+    void addInstance( [in] string aName,
+                       [in] TemplateIdentifier aTemplate )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+    /** receives notification that the current set can contain items
+        that are instances of a specified template.
+
+        @param aItemType
+            specifies a template that is accepted as valid item type
+            for the current set node.
+
+        @throws com::sun::star::configuration::backend::MalformedDataException
+            <ul>
+            <li>if there isn't a set node in progress currently</li>
+            <li>if the template is not found</li>
+            <li>if the name is not a valid template name</li>
+            </ul>
+            <p><em>Not every implementation can detect each condition</em></p>
+
+        @throws com::sun::star::lang::WrappedTargetException
+            if an error occurs processing the event.
+     */
+    void addItemType( [in] TemplateIdentifier aItemType )
+            raises( MalformedDataException,
+                    com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif
