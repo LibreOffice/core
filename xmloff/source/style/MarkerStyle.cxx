@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MarkerStyle.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 15:00:32 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ sal_Bool XMLMarkerStyleImport::importXML(
 {
     sal_Bool bHasViewBox    = sal_False;
     sal_Bool bHasPathData   = sal_False;
+    OUString aDisplayName;
 
     SdXMLImExViewBox* pViewBox = NULL;
 
@@ -151,6 +152,10 @@ sal_Bool XMLMarkerStyleImport::importXML(
         if( IsXMLToken( aStrAttrName, XML_NAME ) )
         {
             rStrName = aStrValue;
+        }
+        else if( IsXMLToken( aStrAttrName, XML_DISPLAY_NAME ) )
+        {
+            aDisplayName = aStrValue;
         }
         else if( IsXMLToken( aStrAttrName, XML_VIEWBOX ) )
         {
@@ -203,6 +208,14 @@ sal_Bool XMLMarkerStyleImport::importXML(
 
             rValue <<= aSourcePolyPolygon;
         }
+
+        if( aDisplayName.getLength() )
+        {
+            rImport.AddStyleDisplayName( XML_STYLE_FAMILY_SD_MARKER_ID, rStrName,
+                                        aDisplayName );
+            rStrName = aDisplayName;
+        }
+
     }
 
     if( pViewBox )
@@ -247,8 +260,14 @@ sal_Bool XMLMarkerStyleExport::exportXML(
 
             /////////////////
             // Name
+            sal_Bool bEncoded = sal_False;
             OUString aStrName( rStrName );
-            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, aStrName );
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
+                                  rExport.EncodeStyleName( aStrName,
+                                                           &bEncoded ) );
+            if( bEncoded )
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
+                                      aStrName );
 
             /////////////////
             // Viewbox (viewBox="0 0 1500 1000")
