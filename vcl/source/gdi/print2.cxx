@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:31:24 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,8 +514,31 @@ static Rectangle ImplCalcActionBounds( const MetaAction& rAct, const OutputDevic
             break;
 
         case META_STRETCHTEXT_ACTION:
-            DBG_ERROR("META_STRETCHTEXT_ACTION not supported");
-            break;
+        {
+            const MetaStretchTextAction& rTextAct = static_cast<const MetaStretchTextAction&>(rAct);
+            const XubString              aString( rTextAct.GetText(), rTextAct.GetIndex(), rTextAct.GetLen() );
+            const long                   nLen = aString.Len();
+
+            // #i16195# Literate copy from TextArray action, the
+            // semantics for the ImplLayout call are copied from the
+            // OutDev::DrawStretchText() code. Unfortunately, also in
+            // this case, public outdev methods such as GetTextWidth()
+            // don't provide enough info.
+            if( nLen )
+            {
+                // #105987# ImplLayout takes everything in logical coordinates
+                SalLayout* pSalLayout = rOut.ImplLayout( rTextAct.GetText(), rTextAct.GetIndex(),
+                                                         rTextAct.GetLen(), rTextAct.GetPoint(),
+                                                         rTextAct.GetWidth() );
+                if( pSalLayout )
+                {
+                    Rectangle aBoundRect( const_cast<OutputDevice&>(rOut).ImplGetTextBoundRect( *pSalLayout ) );
+                    aActionBounds = rOut.PixelToLogic( aBoundRect );
+                    pSalLayout->Release();
+                }
+            }
+        }
+        break;
 
         case META_TEXTLINE_ACTION:
             DBG_ERROR("META_TEXTLINE_ACTION not supported");
