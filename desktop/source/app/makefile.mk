@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: lo $ $Date: 2002-10-17 10:46:30 $
+#   last change: $Author: jb $ $Date: 2002-10-21 09:02:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,8 +96,8 @@ OBJFILES = \
         $(OBJ)$/appsys.obj				\
         $(OBJ)$/desktopresid.obj		\
         $(OBJ)$/dispatchwatcher.obj		\
-        $(OBJ)$/ssoinit.obj				\
-        $(OBJ)$/ssodlg.obj				\
+         $(OBJ)$/ssoinit.obj				\
+        $(OBJ)$/configinit.obj		    \
         $(OBJ)$/officeipcmanager.obj	\
         $(OBJ)$/javainteractionhandler.obj		
 
@@ -118,6 +118,7 @@ SLOFILES = \
         $(SLO)$/dispatchwatcher.obj		\
         $(SLO)$/ssodlg.obj				\
         $(SLO)$/ssoinit.obj				\
+        $(SLO)$/configinit.obj			\
         $(SLO)$/officeipcmanager.obj	\
         $(SLO)$/javainteractionhandler.obj \
         $(SLO)$/lockfile.obj

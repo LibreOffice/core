@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-21 05:36:19 $
+ *  last change: $Author: jb $ $Date: 2002-10-21 09:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,8 @@
 #include "pluginacceptthread.hxx"
 #include "desktopresid.hxx"
 #include "dispatchwatcher.hxx"
-#ifndef BUILD_SOSL
 #include "ssoinit.hxx"
-#endif
+#include "configinit.hxx"
 #include "javainteractionhandler.hxx"
 #include "lockfile.hxx"
 
@@ -136,6 +135,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_CONFIGURATION_MISSINGBOOTSTRAPFILEEXCEPTION_HPP_
 #include <com/sun/star/configuration/MissingBootstrapFileException.hpp>
 #endif
@@ -145,6 +147,8 @@
 #ifndef _COM_SUN_STAR_CONFIGURATION_INSTALLATIONINCOMPLETEEXCEPTION_HPP_
 #include <com/sun/star/configuration/InstallationIncompleteException.hpp>
 #endif
+#include <drafts/com/sun/star/configuration/backend/BackendSetupException.hpp>
+#include <drafts/com/sun/star/configuration/backend/BackendAccessException.hpp>
 #ifndef _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
 #include <com/sun/star/container/XEnumeration.hpp>
 #endif
@@ -481,6 +485,52 @@ OUString Desktop::GetMsgString( USHORT nId, const OUString& aFaultBackMsg )
         return OUString( ResId( nId, pResMgr ));
 }
 
+OUString MakeStartupErrorMessage(OUString const & aErrorMessage)
+{
+    OUStringBuffer  aDiagnosticMessage( 100 );
+
+    ResMgr* pResMgr = Desktop::GetDesktopResManager();
+    if ( pResMgr )
+        aDiagnosticMessage.append( OUString(ResId(STR_BOOTSTRAP_ERR_CANNOT_START, pResMgr)) );
+    else
+        aDiagnosticMessage.appendAscii( "The program cannot be started." );
+
+    aDiagnosticMessage.appendAscii( "\n" );
+
+    aDiagnosticMessage.append( aErrorMessage );
+
+    return aDiagnosticMessage.makeStringAndClear();
+}
+
+void FatalErrorExit(OUString const & aMessage)
+{
+    if ( Application::IsRemoteServer() )
+    {
+        OString aTmpStr = OUStringToOString( aMessage, RTL_TEXTENCODING_ASCII_US );
+        fprintf( stderr, aTmpStr.getStr() );
+    }
+    else
+    {
+        OUString aProductKey = ::utl::Bootstrap::getProductKey();
+
+        if (!aProductKey.getLength())
+        {
+            ::vos::OStartupInfo aInfo;
+            aInfo.getExecutableFile( aProductKey );
+
+            sal_uInt32  lastIndex = aProductKey.lastIndexOf('/');
+            if ( lastIndex > 0 )
+                aProductKey = aProductKey.copy( lastIndex+1 );
+        }
+
+        ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
+        aBootstrapFailedBox.SetText( aProductKey );
+        aBootstrapFailedBox.Execute();
+    }
+
+    _exit( 333 );
+}
+
 CommandLineArgs* GetCommandLineArgs()
 {
     if ( !pArgs )
@@ -542,9 +592,9 @@ BOOL InitializeInstallation( const UniString& rAppFilename )
 
 Desktop aDesktop;
 
-void PreloadConfigTrees()
+sal_Bool InitConfiguration()
 {
-    RTL_LOGFILE_CONTEXT( aLog, "desktop (dg93727) ::PreloadConfigTrees" );
+    RTL_LOGFILE_CONTEXT( aLog, "desktop (jb99855) ::InitConfiguration" );
 
     // these tree are preloaded to get a faster startup for the office
     Sequence <rtl::OUString> aPreloadPathList(6);
@@ -555,20 +605,25 @@ void PreloadConfigTrees()
     aPreloadPathList[4] =  rtl::OUString::createFromAscii("org.openoffice.Office.Calc");
     aPreloadPathList[5] =  rtl::OUString::createFromAscii("org.openoffice.Office.Impress");
 
-    Reference< XMultiServiceFactory > xProvider(
-            ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), UNO_QUERY);
+    Reference< XMultiServiceFactory > xProvider( CreateApplicationConfigurationProvider( ) );
 
     if ( xProvider.is() )
     {
-        Any aValue;
-        aValue <<= aPreloadPathList;
+        Reference < com::sun::star::beans::XPropertySet > xPS(xProvider, UNO_QUERY);
+        if (xPS.is())
+        try
+        {
+            Any aValue;
+            aValue <<= aPreloadPathList;
 
-        Reference < com::sun::star::beans::XPropertySet > (xProvider, UNO_QUERY)->setPropertyValue(rtl::OUString::createFromAscii("PrefetchNodes"), aValue );
+            xPS->setPropertyValue(rtl::OUString::createFromAscii("PrefetchNodes"), aValue );
+        }
+        catch( UnknownPropertyException & )
+        {
+        }
     }
-    else
-    {
-        aDesktop.HandleBootstrapErrors( Desktop::BE_UNO_SERVICE_CONFIG_MISSING );
-    }
+
+    return xProvider.is();
 }
 
 static String aBrandName;
@@ -843,15 +898,9 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
     utl::Bootstrap::FailureCode nFailureCode,
     const ::rtl::OUString& aFileURL )
 {
-    OUStringBuffer  aDiagnosticMessage( 100 );
     OUString        aMsg;
     OUString        aFilePath;
     sal_Bool        bFileInfo = sal_True;
-
-    // First sentence. We cannot bootstrap office further!
-    aDiagnosticMessage.append( GetMsgString( STR_BOOTSTRAP_ERR_CANNOT_START,
-                                             OUString( RTL_CONSTASCII_USTRINGPARAM( "The program cannot be started." )) ));
-    aDiagnosticMessage.appendAscii( "\n" );
 
     switch ( nFailureCode )
     {
@@ -926,9 +975,7 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         aMsg = aMsgString;
     }
 
-    aDiagnosticMessage.append( aMsg );
-
-    return aDiagnosticMessage.makeStringAndClear();
+    return MakeStartupErrorMessage( aMsg );
 }
 
 void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
@@ -1016,15 +1063,8 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         else
         {
             // First sentence. We cannot bootstrap office further!
-            OUString            aProductKey;
             OUString            aMessage;
-            OUString            aTemp;
             OUStringBuffer      aDiagnosticMessage( 100 );
-            ::vos::OStartupInfo aInfo;
-
-            aDiagnosticMessage.append( GetMsgString( STR_BOOTSTRAP_ERR_CANNOT_START,
-                                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "The program cannot be started." )) ));
-            aDiagnosticMessage.appendAscii( "\n" );
 
             OUString aErrorMsg;
 
@@ -1046,20 +1086,9 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
                 OUString( RTL_CONSTASCII_USTRINGPARAM( "Start setup application to repair the installation from CD, or the folder containing the installation packages." )) ));
 
             aDiagnosticMessage.append( aStartSetupManually );
-            aMessage = aDiagnosticMessage.makeStringAndClear();
+            aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
 
-            aInfo.getExecutableFile( aProductKey );
-            sal_uInt32  lastIndex = aProductKey.lastIndexOf('/');
-            if ( lastIndex > 0 )
-                aProductKey = aProductKey.copy( lastIndex+1 );
-
-            aTemp = ::utl::Bootstrap::getProductKey( aProductKey );
-            if ( aTemp.getLength() > 0 )
-                aProductKey = aTemp;
-
-            ErrorBox aBootstrapFailedBox( NULL, WB_OK, aMessage );
-            aBootstrapFailedBox.SetText( aProductKey );
-            aBootstrapFailedBox.Execute();
+            FatalErrorExit( aMessage);
         }
     }
 
@@ -1304,19 +1333,22 @@ void Desktop::Main()
     // ----  Startup screen ----
     OpenStartupScreen();
 
-#ifndef BUILD_SOSL
     //  Initialise Single Signon
-    InitSSO();
-#endif
+    sal_Bool bCanceled = ! InitSSO();
+
 
     //  Read the common configuration items for optimization purpose
     //  do not do it if terminate flag was specified, to avoid exception
-    sal_Bool bTerminate = pCmdLineArgs->IsTerminateAfterInit();
+    sal_Bool bTerminate = bCanceled || pCmdLineArgs->IsTerminateAfterInit();
     if( !bTerminate )
     {
         try
         {
-            PreloadConfigTrees();
+            bCanceled = ! InitConfiguration();
+        }
+        catch( ::com::sun::star::lang::ServiceNotRegisteredException& )
+        {
+            this->HandleBootstrapErrors( Desktop::BE_UNO_SERVICE_CONFIG_MISSING );
         }
         catch( ::com::sun::star::configuration::MissingBootstrapFileException& e )
         {
@@ -1343,6 +1375,20 @@ void Desktop::Main()
 
             HandleBootstrapPathErrors( ::utl::Bootstrap::MISSING_USER_INSTALL, aMsg );
         }
+        catch ( drafts::com::sun::star::configuration::backend::BackendAccessException& exception)
+        {
+            // [cm122549] It is assumed in this case that the message
+            // coming from InitConfiguration (in fact CreateApplicationConf...)
+            // is suitable for display directly.
+            FatalErrorExit( MakeStartupErrorMessage( exception.Message ) );
+        }
+        catch ( drafts::com::sun::star::configuration::backend::BackendSetupException& exception)
+        {
+            // [cm122549] It is assumed in this case that the message
+            // coming from InitConfiguration (in fact CreateApplicationConf...)
+            // is suitable for display directly.
+            FatalErrorExit( MakeStartupErrorMessage( exception.Message ) );
+        }
         catch ( ::com::sun::star::configuration::CannotLoadConfigurationException& )
         {
             OUString aMsg( CreateErrorMsgString( utl::Bootstrap::INVALID_BOOTSTRAP_DATA,
@@ -1356,6 +1402,9 @@ void Desktop::Main()
             HandleBootstrapPathErrors( ::utl::Bootstrap::INVALID_BASE_INSTALL, aMsg );
         }
     }
+
+    if (bCanceled)
+        return;
 
     LanguageType aLanguageType;
     String aMgrName = String::CreateFromAscii( "iso" );

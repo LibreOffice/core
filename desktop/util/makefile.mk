@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2002-10-10 13:10:31 $
+#   last change: $Author: jb $ $Date: 2002-10-21 09:05:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -142,6 +142,7 @@ APP1OBJS= \
             $(OBJ)$/desktopresid.obj	\
             $(OBJ)$/dispatchwatcher.obj		\
             $(OBJ)$/ssoinit.obj				\
+            $(OBJ)$/configinit.obj			\
             $(OBJ)$/officeipcmanager.obj	\
             $(OBJ)$/javainteractionhandler.obj
 
@@ -239,6 +240,7 @@ SLOFILES =	\
     $(SLO)$/desktopresid.obj	\
     $(SLO)$/dispatchwatcher.obj	\
     $(SLO)$/ssoinit.obj			\
+    $(SLO)$/configinit.obj			\
     $(SLO)$/officeipcmanager.obj	\
     $(SLO)$/javainteractionhandler.obj
 
