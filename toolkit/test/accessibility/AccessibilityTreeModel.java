@@ -735,7 +735,7 @@ public class AccessibilityTreeModel
             System.out.println ("starting new queued listener");
 
             // initiate thread
-            new Thread(this).start();
+            new Thread(this, "QueuedListener").start();
         }
 
         /** The queue of event objects, LinkedList<Runnable>
