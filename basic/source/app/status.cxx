@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2002-11-12 16:53:40 $
+ *  last change: $Author: gh $ $Date: 2002-11-25 12:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ void StatusLine::LoadTaskToolBox()
     }
 
     pTaskToolBox->EndUpdateTask();
+    Resize();
 }
 
 
