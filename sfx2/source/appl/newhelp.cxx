@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 12:36:57 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 14:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,6 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define CONFIGNAME_INDEXWIN     DEFINE_CONST_UNICODE("OfficeHelpIndex")
 #define CONFIGNAME_SEARCHPAGE   DEFINE_CONST_UNICODE("OfficeHelpSearch")
 #define IMAGE_URL               DEFINE_CONST_UNICODE("private:factory/")
-#define SHARED_FACTORY          DEFINE_CONST_UNICODE("shared")
 
 #define PROPERTY_KEYWORDLIST    DEFINE_CONST_OUSTRING("KeywordList")
 #define PROPERTY_KEYWORDREF     DEFINE_CONST_OUSTRING("KeywordRef")
@@ -683,7 +682,6 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* 
     aIndexCB        ( this, ResId( CB_INDEX ) ),
     aOpenBtn        ( this, ResId( PB_OPEN_INDEX ) ),
 
-    sSharedFactory  ( SHARED_FACTORY ),
     bIsActivated    ( sal_False )
 
 {
@@ -961,15 +959,15 @@ void IndexTabPage_Impl::SetFactory( const String& rFactory )
 {
     String sNewFactory( rFactory );
     DBG_ASSERT( sNewFactory.Len() > 0, "empty factory" );
-    bool bShared = ( sNewFactory == sSharedFactory );
+    bool bValid = m_pIdxWin->IsValidFactory( rFactory );
 
-    if ( sFactory.Len() == 0 && bShared )
+    if ( sFactory.Len() == 0 && !bValid )
     {
         sNewFactory = SfxHelp::GetDefaultHelpModule();
-        bShared = false;
+        bValid = true;
     }
 
-    if ( sNewFactory != sFactory && !bShared )
+    if ( sNewFactory != sFactory && bValid )
     {
         sFactory = sNewFactory;
         ClearIndex();
@@ -2048,6 +2046,23 @@ String SfxHelpIndexWindow_Impl::GetSelectEntry() const
 void SfxHelpIndexWindow_Impl::AddBookmarks( const String& rTitle, const String& rURL )
 {
     GetBookmarksPage()->AddBookmarks( rTitle, rURL );
+}
+
+// -----------------------------------------------------------------------
+
+bool SfxHelpIndexWindow_Impl::IsValidFactory( const String& _rFactory )
+{
+    bool bValid = false;
+    for ( USHORT i = 0; i < aActiveLB.GetEntryCount(); ++i )
+    {
+        String* pFactory = (String*)(ULONG)aActiveLB.GetEntryData(i);
+        if ( *pFactory == _rFactory )
+        {
+            bValid = true;
+            break;
+        }
+    }
+    return bValid;
 }
 
 // -----------------------------------------------------------------------
