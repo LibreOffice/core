@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonmenu.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:13:19 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,10 +224,11 @@ PopupMenu* AddonMenuManager::CreatePopupMenuType( MenuType eMenuType, Reference<
 // Create the Add-Ons menu
 AddonMenu* AddonMenuManager::CreateAddonMenu( Reference< XFrame >& rFrame )
 {
+    AddonsOptions aOptions;
     AddonMenu*  pAddonMenu      = NULL;
     USHORT      nUniqueMenuId   = ADDONMENU_ITEMID_START;
 
-    const Sequence< Sequence< PropertyValue > >& rAddonMenuEntries = AddonsOptions().GetAddonsMenu();
+    const Sequence< Sequence< PropertyValue > >& rAddonMenuEntries = aOptions.GetAddonsMenu();
     if ( rAddonMenuEntries.getLength() > 0 )
     {
         pAddonMenu = (AddonMenu *)AddonMenuManager::CreatePopupMenuType( ADDON_MENU, rFrame );
@@ -265,9 +266,10 @@ void AddonMenuManager::MergeAddonHelpMenu( Reference< XFrame >& rFrame, MenuBar*
             USHORT nInsPos          = nRegPos;
             USHORT nInsSepAfterPos  = MENU_APPEND;
             USHORT nUniqueMenuId    = ADDONMENU_ITEMID_START;
+            AddonsOptions aOptions;
 
-            Sequence< Sequence< PropertyValue > >        aAddonSubMenu;
-            const Sequence< Sequence< PropertyValue > >& rAddonHelpMenuEntries = AddonsOptions().GetAddonsHelpMenu();
+            Sequence< Sequence< PropertyValue > > aAddonSubMenu;
+            const Sequence< Sequence< PropertyValue > >& rAddonHelpMenuEntries = aOptions.GetAddonsHelpMenu();
 
             nInsPos = AddonMenuManager::GetNextPos( nInsPos );
             if ( nInsPos < nItemCount && pHelpMenu->GetItemType( nInsPos ) != MENUITEM_SEPARATOR )
