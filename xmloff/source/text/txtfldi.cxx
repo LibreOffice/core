@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-11 14:59:35 $
+ *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,7 @@ const sal_Char sAPI_script_type[]       = "ScriptType";
 const sal_Char sAPI_is_hidden[]         = "IsHidden";
 const sal_Char sAPI_is_condition_true[] = "IsConditionTrue";
 const sal_Char sAPI_data_command_type[]  = "DataCommandType";
+const sal_Char sAPI_is_fixed_language[] = "IsFixedLanguage";
 
 const sal_Char sAPI_true[] = "TRUE";
 
@@ -1318,6 +1319,7 @@ XMLTimeFieldImportContext::XMLTimeFieldImportContext(
         nFormatKey(0),
         bFormatOK(sal_False),
         bIsDate(sal_False),
+        bIsDefaultLanguage( sal_True ),
         sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format)),
         sPropertyFixed(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed)),
         sPropertyDateTimeValue(RTL_CONSTASCII_USTRINGPARAM(
@@ -1325,7 +1327,8 @@ XMLTimeFieldImportContext::XMLTimeFieldImportContext(
         sPropertyDateTime(RTL_CONSTASCII_USTRINGPARAM(
             sAPI_date_time)),
         sPropertyAdjust(RTL_CONSTASCII_USTRINGPARAM(sAPI_adjust)),
-        sPropertyIsDate(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_date))
+        sPropertyIsDate(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_date)),
+        sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed_language))
 {
     bValid = sal_True;  // always valid!
 }
@@ -1363,7 +1366,8 @@ void XMLTimeFieldImportContext::ProcessAttribute(
         }
         case XML_TOK_TEXTFIELD_DATA_STYLE_NAME:
         {
-            sal_Int32 nKey = GetImportHelper().GetDataStyleKey(sAttrValue);
+            sal_Int32 nKey = GetImportHelper().GetDataStyleKey(
+                 sAttrValue, &bIsDefaultLanguage);
             if (-1 != nKey)
             {
                 nFormatKey = nKey;
@@ -1442,6 +1446,13 @@ void XMLTimeFieldImportContext::PrepareField(
     {
         aAny <<= nFormatKey;
         rPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
+
+        if( xPropertySetInfo->hasPropertyByName( sPropertyIsFixedLanguage ) )
+        {
+            sal_Bool bIsFixedLanguage = ! bIsDefaultLanguage;
+            aAny.setValue( &bIsFixedLanguage, ::getBooleanCppuType() );
+            rPropertySet->setPropertyValue( sPropertyIsFixedLanguage, aAny );
+        }
     }
 }
 
@@ -2017,8 +2028,10 @@ XMLDateTimeDocInfoImportContext::XMLDateTimeDocInfoImportContext(
                                       nToken, sal_False, sal_False),
         sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format)),
         sPropertyIsDate(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_date)),
+        sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed_language)),
         nFormat(0),
-        bFormatOK(sal_False)
+        bFormatOK(sal_False),
+        bIsDefaultLanguage(sal_True)
 {
     // we allow processing of EDIT_DURATION here, because import of actual
     // is not supported anyway. If it was, we'd need an extra import class
@@ -2059,7 +2072,8 @@ void XMLDateTimeDocInfoImportContext::ProcessAttribute(
     {
         case XML_TOK_TEXTFIELD_DATA_STYLE_NAME:
         {
-            sal_Int32 nKey = GetImportHelper().GetDataStyleKey(sAttrValue);
+            sal_Int32 nKey = GetImportHelper().GetDataStyleKey(sAttrValue,
+                                                               &bIsDefaultLanguage);
             if (-1 != nKey)
             {
                 nFormat = nKey;
@@ -2095,6 +2109,14 @@ void XMLDateTimeDocInfoImportContext::PrepareField(
     {
         aAny <<= nFormat;
         xPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
+
+        if( xPropertySet->getPropertySetInfo()->
+                hasPropertyByName( sPropertyIsFixedLanguage ) )
+        {
+            sal_Bool bIsFixedLanguage = ! bIsDefaultLanguage;
+            aAny.setValue( &bIsFixedLanguage, ::getBooleanCppuType() );
+            xPropertySet->setPropertyValue( sPropertyIsFixedLanguage, aAny );
+        }
     }
 
     // can't set date/time/duration value! Sorry.

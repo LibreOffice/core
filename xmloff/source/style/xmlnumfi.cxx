@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-23 17:12:18 $
+ *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2082,6 +2082,11 @@ void SvXMLNumFormatContext::UpdateCalendar( const rtl::OUString& rNewCalendar )
             aFormatCode.append( (sal_Unicode) ']' );    // end of "new" currency symbolcalendar code
         }
     }
+}
+
+sal_Bool SvXMLNumFormatContext::IsSystemLanguage()
+{
+    return nFormatLang == LANGUAGE_SYSTEM;
 }
 
 //-------------------------------------------------------------------------

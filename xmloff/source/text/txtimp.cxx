@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: dvo $ $Date: 2002-09-19 10:04:49 $
+ *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1736,7 +1736,8 @@ SvXMLImportContext *XMLTextImportHelper::CreateTableChildContext(
 }
 
 /// get data style key for use with NumberFormat property
-sal_Int32 XMLTextImportHelper::GetDataStyleKey(const OUString& sStyleName)
+sal_Int32 XMLTextImportHelper::GetDataStyleKey(const OUString& sStyleName,
+                                               sal_Bool* pIsSystemLanguage )
 {
     const SvXMLStyleContext* pStyle = ((SvXMLStylesContext *)&xAutoStyles)->
                   FindStyleChildContext( XML_STYLE_FAMILY_DATA_STYLE,
@@ -1746,6 +1747,9 @@ sal_Int32 XMLTextImportHelper::GetDataStyleKey(const OUString& sStyleName)
     SvXMLNumFormatContext* pNumStyle = PTR_CAST( SvXMLNumFormatContext, pStyle );
     if( pNumStyle )
     {
+        if( pIsSystemLanguage != NULL )
+            *pIsSystemLanguage = pNumStyle->IsSystemLanguage();
+
         // return key
         return pNumStyle->GetKey();
     }

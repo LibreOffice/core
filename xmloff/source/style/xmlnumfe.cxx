@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-23 17:12:15 $
+ *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1797,3 +1797,45 @@ void SvXMLNumFmtExport::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
         pUsedList->SetWasUsed(rWasUsed);
 }
 
+
+
+const SvNumberformat* lcl_GetFormat( SvNumberFormatter* pFormatter,
+                           sal_uInt32 nKey )
+{
+    return ( pFormatter != NULL ) ? pFormatter->GetEntry( nKey ) : NULL;
+}
+
+sal_uInt32 SvXMLNumFmtExport::ForceSystemLanguage( sal_uInt32 nKey )
+{
+    sal_uInt32 nRet = nKey;
+
+    const SvNumberformat* pFormat = lcl_GetFormat( pFormatter, nKey );
+    if( pFormat != NULL )
+    {
+        DBG_ASSERT( pFormatter != NULL, "format without formatter?" );
+
+        xub_StrLen nErrorPos;
+        short nType = pFormat->GetType();
+
+        sal_uInt32 nNewKey = pFormatter->GetFormatForLanguageIfBuiltIn(
+                       nKey, LANGUAGE_SYSTEM );
+
+        if( nNewKey != nKey )
+        {
+            nRet = nNewKey;
+        }
+        else
+        {
+            pFormatter->PutandConvertEntry(
+                            String( pFormat->GetFormatstring() ),
+                            nErrorPos, nType, nNewKey,
+                            pFormat->GetLanguage(), LANGUAGE_SYSTEM );
+
+            // success? Then use new key.
+            if( nErrorPos == 0 )
+                nRet = nNewKey;
+        }
+    }
+
+    return nRet;
+}

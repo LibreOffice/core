@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-19 13:14:43 $
+ *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1445,6 +1445,13 @@ OUString SvXMLExport::getDataStyleName(const sal_Int32 nNumberFormat, sal_Bool b
         sTemp = pNumExport->GetStyleName(nNumberFormat);
     return sTemp;
 }
+
+sal_Int32 SvXMLExport::dataStyleForceSystemLanguage(sal_Int32 nFormat) const
+{
+    return ( pNumExport != NULL )
+                 ? pNumExport->ForceSystemLanguage( nFormat ) : nFormat;
+}
+
 
 OUString SvXMLExport::AddEmbeddedGraphicObject( const OUString& rGraphicObjectURL )
 {

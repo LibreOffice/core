@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-28 10:17:39 $
+ *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,7 +361,8 @@ protected:
         sal_Bool bExportValue,  /// export value attribute?
         sal_Bool bExportValueType,  /// export value-type attribute?
         sal_Bool bExportStyle,  /// export style-sttribute?
-        sal_Bool bTimeStyle = sal_False);   // exporting a time style?
+        sal_Bool bForceSystemLanguage, /// no style language export
+        sal_Bool bTimeStyle = sal_False); /// exporting a time style?
 
     /// export times, dates and durations according to ISO 8601
     void ProcessDateTime(
@@ -517,6 +518,7 @@ private:
     const ::rtl::OUString sPropertyIsHidden;
     const ::rtl::OUString sPropertyIsConditionTrue;
     const ::rtl::OUString sPropertyDataCommandType;
+    const ::rtl::OUString sPropertyIsFixedLanguage;
 
     const ::rtl::OUString sEmpty;
 

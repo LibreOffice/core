@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-11 13:23:40 $
+ *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ class XMLValueImportHelper
     const ::rtl::OUString sPropertyValue;
     const ::rtl::OUString sPropertyFormula;
     const ::rtl::OUString sPropertyNumberFormat;
+    const ::rtl::OUString sPropertyIsFixedLanguage;
 
     SvXMLImport& rImport;
     XMLTextImportHelper& rHelper;
@@ -112,6 +113,7 @@ class XMLValueImportHelper
     sal_Int32 nFormatKey;       /// format key (only valid of bFormatOK)
     ::rtl::OUString sFormula;   /// formula string
     ::rtl::OUString sDefault;   /// default (see bStringDefault/bFormulaDef.)
+    sal_Bool bIsDefaultLanguage;/// format (of nFormatKey) has system language?
 
     sal_Bool bStringType;       /// is this a string (or a float) type?
     sal_Bool bFormatOK;         /// have we read a style:data-style-name attr.?

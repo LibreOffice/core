@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-28 10:17:41 $
+ *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,10 @@ SvXMLEnumStringMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
 // property accessor helper functions
 inline sal_Bool const GetBoolProperty(const OUString&,
                                       const Reference<XPropertySet> &);
+inline sal_Bool const GetOptionalBoolProperty(const OUString&,
+                                              const Reference<XPropertySet> &,
+                                              const Reference<XPropertySetInfo> &,
+                                              sal_Bool bDefault);
 inline double const GetDoubleProperty(const OUString&,
                                       const Reference<XPropertySet> &);
 inline OUString const GetStringProperty(const OUString&,
@@ -478,6 +482,7 @@ XMLTextFieldExport::XMLTextFieldExport( SvXMLExport& rExp,
       sPropertyIsHidden(RTL_CONSTASCII_USTRINGPARAM("IsHidden")),
       sPropertyIsConditionTrue(RTL_CONSTASCII_USTRINGPARAM("IsConditionTrue")),
       sPropertyDataCommandType(RTL_CONSTASCII_USTRINGPARAM("DataCommandType")),
+      sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM("IsFixedLanguage")),
       pCombinedCharactersPropertyState(pCombinedCharState)
 {
     SetExportOnlyUsedFieldDeclarations();
@@ -908,19 +913,32 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
 
     case FIELD_ID_DATE:
     case FIELD_ID_TIME:
-        // date and time fields are always number fields, but the
-        // NumberFormat property is optional (e.g. Calc doesn't
-        // support it)
-        if (xPropSet->getPropertySetInfo()->hasPropertyByName(
-                                                    sPropertyNumberFormat))
         {
-            sal_Int32 nFormat =
-                GetIntProperty(sPropertyNumberFormat, xPropSet);
+            // date and time fields are always number fields, but the
+            // NumberFormat property is optional (e.g. Calc doesn't
+            // support it)
+            Reference<XPropertySetInfo> xPropSetInfo(
+                xPropSet->getPropertySetInfo() );
+            if ( xPropSetInfo->hasPropertyByName( sPropertyNumberFormat ) )
+            {
+                sal_Int32 nFormat =
+                    GetIntProperty(sPropertyNumberFormat, xPropSet);
 
-            // nFormat may be -1 for numeric fields that display their
-            //  variable name. (Maybe this should be a field type, then?)
-            if (nFormat != -1) {
-                GetExport().addDataStyle(nFormat, nToken == FIELD_ID_TIME );
+                // nFormat may be -1 for numeric fields that display their
+                //  variable name. (Maybe this should be a field type, then?)
+                if (nFormat != -1)
+                {
+                    if( ! GetOptionalBoolProperty(
+                            sPropertyIsFixedLanguage,
+                            xPropSet, xPropSetInfo, sal_False ) )
+                    {
+                        nFormat =
+                            GetExport().dataStyleForceSystemLanguage(nFormat);
+                    }
+
+                    GetExport().addDataStyle( nFormat,
+                                              nToken == FIELD_ID_TIME );
+                }
             }
         }
         break;
@@ -946,7 +964,20 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
 
             // nFormat may be -1 for numeric fields that display their
             //  variable name. (Maybe this should be a field type, then?)
-            if (nFormat != -1) {
+            if (nFormat != -1)
+            {
+                // handle formats for fixed language fields
+                // for all these fields (except table formula)
+                if( ( nToken != FIELD_ID_TABLE_FORMULA ) &&
+                    ! GetOptionalBoolProperty(
+                          sPropertyIsFixedLanguage,
+                          xPropSet, xPropSet->getPropertySetInfo(),
+                          sal_False ) )
+                {
+                    nFormat =
+                        GetExport().dataStyleForceSystemLanguage(nFormat);
+                }
+
                 GetExport().addDataStyle(nFormat);
             }
         }
@@ -1135,7 +1166,10 @@ void XMLTextFieldExport::ExportFieldHelper(
                             GetStringProperty(sPropertyContent, rPropSet),
                             sPresentation,
                             GetDoubleProperty(sPropertyValue, rPropSet),
-                            sal_True, sal_True, sal_True);
+                            sal_True, sal_True, sal_True,
+                            ! GetOptionalBoolProperty(
+                                 sPropertyIsFixedLanguage,
+                                 rPropSet, xPropSetInfo, sal_False ) );
         ExportElement(XML_VARIABLE_SET, sPresentation);
         break;
     }
@@ -1150,7 +1184,10 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
                             sEmpty, sEmpty, 0.0, // values not used
-                            sal_False, !bCmd, !bCmd);
+                            sal_False, !bCmd, !bCmd,
+                            ! GetOptionalBoolProperty(
+                                 sPropertyIsFixedLanguage,
+                                 rPropSet, xPropSetInfo, sal_False ) );
         ExportElement(XML_VARIABLE_GET, sPresentation);
         break;
     }
@@ -1170,7 +1207,10 @@ void XMLTextFieldExport::ExportFieldHelper(
                             GetStringProperty(sPropertyContent, rPropSet),
                             sPresentation,
                             GetDoubleProperty(sPropertyValue, rPropSet),
-                            sal_True, sal_True, sal_True);
+                            sal_True, sal_True, sal_True,
+                            ! GetOptionalBoolProperty(
+                                 sPropertyIsFixedLanguage,
+                                 rPropSet, xPropSetInfo, sal_False ) );
         ExportElement(XML_VARIABLE_INPUT, sPresentation);
         break;
 
@@ -1183,7 +1223,10 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessValueAndType(IsStringField(nToken, rPropSet),
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
                             sEmpty, sEmpty, 0.0, // values not used
-                            sal_False, sal_False, !bCmd);
+                            sal_False, sal_False, !bCmd,
+                            ! GetOptionalBoolProperty(
+                                 sPropertyIsFixedLanguage,
+                                 rPropSet, xPropSetInfo, sal_False ) );
 
         // name from FieldMaster
         ProcessString(XML_NAME,
@@ -1237,7 +1280,10 @@ void XMLTextFieldExport::ExportFieldHelper(
                             GetStringProperty(sPropertyContent, rPropSet),
                             sPresentation,
                             GetDoubleProperty(sPropertyValue, rPropSet),
-                            !bCmd, !bCmd, !bCmd);
+                            !bCmd, !bCmd, !bCmd,
+                            ! GetOptionalBoolProperty(
+                                 sPropertyIsFixedLanguage,
+                                 rPropSet, xPropSetInfo, sal_False ) );
         ExportElement(XML_EXPRESSION, sPresentation);
         break;
     }
@@ -1256,7 +1302,11 @@ void XMLTextFieldExport::ExportFieldHelper(
             ProcessValueAndType(sal_False,
                                 GetIntProperty(sPropertyNumberFormat,rPropSet),
                                 sEmpty, sEmpty, 0.0, // not used
-                                sal_False, sal_False, sal_True, sal_True);
+                                sal_False, sal_False, sal_True,
+                                ! GetOptionalBoolProperty(
+                                    sPropertyIsFixedLanguage,
+                                    rPropSet, xPropSetInfo, sal_False ),
+                                sal_True);
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyDateTimeValue))
         {
@@ -1296,7 +1346,10 @@ void XMLTextFieldExport::ExportFieldHelper(
             ProcessValueAndType(sal_False,
                                 GetIntProperty(sPropertyNumberFormat,rPropSet),
                                 sEmpty, sEmpty, 0.0, // not used
-                                sal_False, sal_False, sal_True);
+                                sal_False, sal_False, sal_True,
+                                ! GetOptionalBoolProperty(
+                                    sPropertyIsFixedLanguage,
+                                    rPropSet, xPropSetInfo, sal_False ) );
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyDateTimeValue))
         {
@@ -1431,7 +1484,7 @@ void XMLTextFieldExport::ExportFieldHelper(
             ProcessValueAndType(sal_False,  // doesn't happen for text
                                 GetIntProperty(sPropertyNumberFormat,rPropSet),
                                 sEmpty, sEmpty, 0.0, // not used
-                                sal_False, sal_False, sal_True);
+                                sal_False, sal_False, sal_True, sal_False);
         }
         ExportElement(XML_DATABASE_DISPLAY, sPresentation);
         break;
@@ -1453,7 +1506,11 @@ void XMLTextFieldExport::ExportFieldHelper(
         ProcessValueAndType(sal_False,
                             GetIntProperty(sPropertyNumberFormat, rPropSet),
                             sEmpty, sEmpty, 0.0,
-                            sal_False, sal_False, sal_True);
+                            sal_False, sal_False, sal_True,
+                            ! GetOptionalBoolProperty(
+                                    sPropertyIsFixedLanguage,
+                                    rPropSet, xPropSetInfo, sal_False ) );
+
         // todo: export date/time value, but values not available -> core bug
         ProcessBoolean(XML_FIXED,
                        GetBoolProperty(sPropertyIsFixed, rPropSet), sal_False);
@@ -1750,8 +1807,9 @@ void XMLTextFieldExport::ExportFieldHelper(
                         sal_True );
         ProcessValueAndType( sal_False,
                              GetIntProperty(sPropertyNumberFormat, rPropSet),
-                             sEmpty, sEmpty,
-                             0.0f, sal_False, sal_False, sal_True, sal_False );
+                             sEmpty, sEmpty, 0.0f,
+                             sal_False, sal_False, sal_True,
+                             sal_False, sal_False );
         ExportElement( XML_TABLE_FORMULA, sPresentation );
         break;
 
@@ -1923,7 +1981,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                     bIsString,
                     GetIntProperty(sPropertyNumberFormat, xFieldPropSet),
                     sEmpty, sEmpty, 0.0,
-                    sal_False, sal_True, sal_False);
+                    sal_False, sal_True, sal_False, sal_False);
             }
             else
             {
@@ -1936,7 +1994,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                 ProcessValueAndType(
                     bIsString,
                     0, sEmpty, sEmpty, 0.0,
-                    sal_False, sal_True, sal_False);
+                    sal_False, sal_True, sal_False, sal_False);
             }
 
             ProcessString(XML_NAME, sVarName);
@@ -2020,6 +2078,7 @@ void XMLTextFieldExport::ExportFieldDeclarations(
                     GetDoubleProperty(sPropertyValue, xPropSet),
                     sal_True,
                     sal_True,
+                    sal_False,
                     sal_False);
             }
             else
@@ -2190,6 +2249,7 @@ void XMLTextFieldExport::ProcessValueAndType(
     sal_Bool bExportValue,  /// export value attribute?
     sal_Bool bExportValueType,  /// export value-type attribute?
     sal_Bool bExportStyle,  /// export style-sttribute?
+    sal_Bool bForceSystemLanguage, /// export language attributes?
     sal_Bool bTimeStyle)    // exporting a time style?
 {
     // String or number?
@@ -2228,6 +2288,11 @@ void XMLTextFieldExport::ProcessValueAndType(
 
             if (bExportStyle)
             {
+                // don't export language (if desired)
+                if( bForceSystemLanguage )
+                    nFormatKey =
+                        GetExport().dataStyleForceSystemLanguage( nFormatKey );
+
                 OUString sDataStyleName =
                     GetExport().getDataStyleName(nFormatKey, bTimeStyle);
                 if( sDataStyleName.getLength() > 0 )
@@ -3259,6 +3324,16 @@ inline sal_Bool const GetBoolProperty(
     Any aAny = xPropSet->getPropertyValue(sPropName);
     sal_Bool bBool = *(sal_Bool *)aAny.getValue();
     return bBool;
+}
+
+inline sal_Bool const GetOptionalBoolProperty(
+    const OUString& sPropName,
+    const Reference<XPropertySet> & xPropSet,
+    const Reference<XPropertySetInfo> & xPropSetInfo,
+    sal_Bool bDefault)
+{
+    return xPropSetInfo->hasPropertyByName( sPropName )
+        ? GetBoolProperty( sPropName, xPropSet ) : bDefault;
 }
 
 inline double const GetDoubleProperty(

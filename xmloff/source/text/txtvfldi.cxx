@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-09-27 14:44:07 $
+ *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ static const sal_Char sAPI_data_column_name[]   = "DataColumnName";
 static const sal_Char sAPI_is_data_base_format[]    = "DataBaseFormat";
 static const sal_Char sAPI_current_presentation[]   = "CurrentPresentation";
 static const sal_Char sAPI_sequence_value[]     = "SequenceValue";
+static const sal_Char sAPI_is_fixed_language[] = "IsFixedLanguage";
 
 
 using namespace ::rtl;
@@ -1305,13 +1306,15 @@ XMLValueImportHelper::XMLValueImportHelper(
         bStringType(sal_False),
         bStringDefault(sal_True),
         bFormulaDefault(sal_True),
+        bIsDefaultLanguage(sal_True),
         sValue(),
         fValue(0.0),
         nFormatKey(0),
         sDefault(),
         sPropertyContent(RTL_CONSTASCII_USTRINGPARAM(sAPI_content)),
         sPropertyValue(RTL_CONSTASCII_USTRINGPARAM(sAPI_value)),
-        sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format))
+        sPropertyNumberFormat(RTL_CONSTASCII_USTRINGPARAM(sAPI_number_format)),
+        sPropertyIsFixedLanguage(RTL_CONSTASCII_USTRINGPARAM(sAPI_is_fixed_language))
 {
 }
 
@@ -1420,7 +1423,8 @@ void XMLValueImportHelper::ProcessAttribute(
 
         case XML_TOK_TEXTFIELD_DATA_STYLE_NAME:
         {
-            sal_Int32 nKey = rHelper.GetDataStyleKey(sAttrValue);
+            sal_Int32 nKey = rHelper.GetDataStyleKey(sAttrValue,
+                                                     &bIsDefaultLanguage);
             if (-1 != nKey)
             {
                 nFormatKey = nKey;
@@ -1434,6 +1438,8 @@ void XMLValueImportHelper::ProcessAttribute(
 void XMLValueImportHelper::PrepareField(
     const Reference<XPropertySet> & xPropertySet)
 {
+    Any aAny;
+
     if (bSetType)
     {
         // ??? how to set type?
@@ -1441,7 +1447,6 @@ void XMLValueImportHelper::PrepareField(
 
     if (bSetFormula)
     {
-        Any aAny;
         aAny <<= (!bFormulaOK && bFormulaDefault) ? sDefault : sFormula;
         xPropertySet->setPropertyValue(sPropertyContent, aAny);
     }
@@ -1449,9 +1454,16 @@ void XMLValueImportHelper::PrepareField(
     // format/style
     if (bSetStyle && bFormatOK)
     {
-        Any aAny;
         aAny <<= nFormatKey;
         xPropertySet->setPropertyValue(sPropertyNumberFormat, aAny);
+
+        if( xPropertySet->getPropertySetInfo()->
+                hasPropertyByName( sPropertyIsFixedLanguage ) )
+        {
+            sal_Bool bIsFixedLanguage = ! bIsDefaultLanguage;
+            aAny.setValue( &bIsFixedLanguage, ::getBooleanCppuType() );
+            xPropertySet->setPropertyValue( sPropertyIsFixedLanguage, aAny );
+        }
     }
 
     // value: string or float
@@ -1459,13 +1471,11 @@ void XMLValueImportHelper::PrepareField(
     {
         if (bStringType)
         {
-            Any aAny;
             aAny <<= (!bStringValueOK && bStringDefault) ? sDefault : sValue;
             xPropertySet->setPropertyValue(sPropertyContent, aAny);
         }
         else
         {
-            Any aAny;
             aAny <<= fValue;
             xPropertySet->setPropertyValue(sPropertyValue, aAny);
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-28 10:17:38 $
+ *  last change: $Author: dvo $ $Date: 2002-11-21 17:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,7 @@ protected:
     const ::rtl::OUString sPropertyDateTime;
     const ::rtl::OUString sPropertyAdjust;
     const ::rtl::OUString sPropertyIsDate;
+    const ::rtl::OUString sPropertyIsFixedLanguage;
 
     double fTimeValue;
     ::com::sun::star::util::DateTime aDateTimeValue;
@@ -404,6 +405,7 @@ protected:
     sal_Bool bFixed;
     sal_Bool bIsDate;           // is this a date?
                                 // (for XMLDateFieldImportContext, really)
+    sal_Bool bIsDefaultLanguage;
 
 public:
 
@@ -714,11 +716,13 @@ class XMLDateTimeDocInfoImportContext : public XMLSimpleDocInfoImportContext
 {
     const ::rtl::OUString sPropertyNumberFormat;
     const ::rtl::OUString sPropertyIsDate;
+    const ::rtl::OUString sPropertyIsFixedLanguage;
 
     sal_Int32 nFormat;
     sal_Bool bFormatOK;
     sal_Bool bIsDate;
     sal_Bool bHasDateTime;
+    sal_Bool bIsDefaultLanguage;
 
 public:
 
