@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testintrosp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+ *  last change: $Author: dbo $ $Date: 2000-11-08 09:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1595,14 +1595,24 @@ int __cdecl main( int argc, char * argv[] )
         OUString libName;
 
         // CoreReflection
-        ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("corefl"), libName);
+#ifdef SAL_W32
+        libName = OUString::createFromAscii("corefl.dll");
+#else
+        libName = OUString::createFromAscii("libcorefl.so");
+#endif
+//          ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("corefl"), libName);
         xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );
         Reference< XIdlReflection > xRefl( xMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ), UNO_QUERY );
         VOS_ENSHURE( xRefl.is(), "### no corereflection!" );
 
         // Introspection
-        ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("insp"), libName);
+#ifdef SAL_W32
+        libName = OUString::createFromAscii("insp.dll");
+#else
+        libName = OUString::createFromAscii("libinsp.so");
+#endif
+//          ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("insp"), libName);
         xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
                                          libName, Reference< XSimpleRegistry >() );
         Reference< XIntrospection > xIntrosp( xMgr->createInstance( OUString::createFromAscii("com.sun.star.beans.Introspection") ), UNO_QUERY );

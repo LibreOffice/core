@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testloader.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:36 $
+ *  last change: $Author: dbo $ $Date: 2000-11-08 09:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,8 +108,11 @@ int _cdecl main( int argc, char * argv[] )
 
     OModule* pModule = new OModule(OUString());
 
-    OUString dllName;
-    NAMESPACE_VOS(ORealDynamicLoader)::computeLibraryName(OUString::createFromAscii("cpld"), dllName);
+#ifdef SAL_W32
+    OUString dllName( OUString::createFromAscii("cpld.dll") );
+#else
+    OUString dllName( OUString::createFromAscii("libcpld.so") );
+#endif
 
     if (pModule->load(dllName))
     {
