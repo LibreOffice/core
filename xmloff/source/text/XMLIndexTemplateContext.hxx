@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTemplateContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ class XMLIndexTemplateContext : public SvXMLImportContext
     sal_Int32 nOutlineLevel;
     sal_Bool bStyleNameOK;
     sal_Bool bOutlineLevelOK;
+    sal_Bool bTOC;
 
     // PropertySet of current index
     ::com::sun::star::uno::Reference<
@@ -178,7 +179,8 @@ public:
         const SvXMLEnumMapEntry* aLevelNameMap,
         enum ::xmloff::token::XMLTokenEnum eLevelAttrName,
         const sal_Char** aLevelStylePropNameMap,
-        const sal_Bool* aAllowedTokenTypes);
+        const sal_Bool* aAllowedTokenTypes,
+        sal_Bool bTOC=sal_False);
 
     ~XMLIndexTemplateContext();
 
