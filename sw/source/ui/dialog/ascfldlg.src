@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:20:39 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 13:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,29 +325,6 @@ ModalDialog DLG_ASCII_FILTER
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    String STR_NO_LANGUAGE
-    {
-        Text = "[Keine]" ;
-        Text [ ENGLISH ] = "[None]" ;
-        Text[ english_us ] = "[None]";
-        Text[ portuguese ] = "[Nenhum]";
-        Text[ russian ] = "[Áåç]";
-        Text[ greek ] = "[Êáìßá]";
-        Text[ dutch ] = "[Geen]";
-        Text[ french ] = "[Aucune]";
-        Text[ spanish ] = "[Ninguno]";
-        Text[ italian ] = "[Nessuna]";
-        Text[ danish ] = "[Ingen]";
-        Text[ swedish ] = "[Inget]";
-        Text[ polish ] = "[Brak]";
-        Text[ portuguese_brazilian ] = "[None]";
-        Text[ japanese ] = "[‚È‚µ]";
-        Text[ korean ] = "[¾øÀ½]";
-        Text[ chinese_simplified ] = "[ÎÞ]";
-        Text[ chinese_traditional ] = "[µL]";
-        Text[ arabic ] = "[ÈÏæä]";
-        Text[ turkish ] = "[Yok]";
-    };
     String STR_SYS_CHARSET
     {
         Text = "System" ;
@@ -371,170 +348,6 @@ ModalDialog DLG_ASCII_FILTER
         Text[ arabic ] = "ÇáäÙÇã";
         Text[ turkish ] = "Sistem";
         Text[ language_user1 ] = " ";
-    };
-    String STR_CHARSET
-    {
-        Text =  "Westeuropa (Window-1252/WinLatin 1);"
-                "Westeuropa (Apple Macintosh);"
-                "Westeuropa (DOS/OS2-850/International);"
-                "Westeuropa (DOS/OS2-437/US);"
-                "Westeuropa (DOS/OS2-860/Portugiesisch);"
-                "Westeuropa (DOS/OS2-861/Isländisch);"
-                "Westeuropa (DOS/OS2-863/Französisch (Kand.));"
-                "Westeuropa (DOS/OS2-865/Nordisch);"
-                "Westeuropa (ASCII/US);"
-                "Westeuropa (ISO-8859-1);"
-                "Osteuropa (ISO-8859-2);"
-                "Latin 3 (ISO-8859-3);"
-                "Baltisch (ISO-8859-4);"
-                "Kyrillisch (ISO-8859-5);"
-//      RTL_TEXTENCODING_ISO_8859_6,        // Arabic (ISO-8859-6)
-                "Griechisch (ISO-8859-7);"
-//      RTL_TEXTENCODING_ISO_8859_8,        // Hebrew (ISO-8859-8)
-                "Türkisch (ISO-8859-9);"
-                "Westeuropa (ISO-8859-14);"
-                "Westeuropa (ISO-8859-15/EURO);"
-                "Griechisch (DOS/OS2-737);"
-                "Baltisch (DOS/OS2-775);"
-                "Osteuropa (DOS/OS2-852);"
-                "Kyrillisch (DOS/OS2-855);"
-                "Türkisch (DOS/OS2-857);"
-//      RTL_TEXTENCODING_IBM_862,           // Hebrew (DOS/OS2-862)
-//      RTL_TEXTENCODING_IBM_864,           // Arabic (DOS/OS2-864)
-                "Kyrillisch (DOS/OS2-866/Russisch);"
-                "Griechisch (DOS/OS2-869/Modern);"
-//      RTL_TEXTENCODING_MS_874,            // Thai (Dos/Windows-874)
-                "Osteuropa (Windows-1250/WinLatin 2);"
-                "Kyrillisch (Windows-1251);"
-                "Griechisch (Windows-1253);"
-                "Türkisch (Windows-1254);"
-//      RTL_TEXTENCODING_MS_1255,           // Hebrew (Windows-1255)
-//      RTL_TEXTENCODING_MS_1256,           // Arabic (Windows-1256)
-                "Baltisch (Windows-1257);"
-//      RTL_TEXTENCODING_MS_1258,           // Vietnamese (Windows-1258)
-//      RTL_TEXTENCODING_APPLE_ARABIC,      // Arabic (Apple Macintosh)
-                "Osteuropa (Apple Macintosh);"
-                "Osteuropa (Apple Macintosh/Kroatisch);"
-                "Kyrillisch (Apple Macintosh);"
-//      RTL_TEXTENCODING_APPLE_DEVANAGARI,  // APPLE DEVANAGARI
-//      RTL_TEXTENCODING_APPLE_FARSI,       // APPLE FARSI
-                "Griechisch (Apple Macintosh);"
-//      RTL_TEXTENCODING_APPLE_GUJARATI,    // APPLE GUJARATI
-//      RTL_TEXTENCODING_APPLE_GURMUKHI,    // APPLE GURMUKHI
-//      RTL_TEXTENCODING_APPLE_HEBREW,      // Hebrew (Apple Macintosh)
-                "Westeuropa (Apple Macintosh/Isländisch);"
-                "Osteuropa (Apple Macintosh/Rumänisch);"
-//      RTL_TEXTENCODING_APPLE_THAI,        // Thai (Apple Macintosh)
-                "Türkisch (Apple Macintosh);"
-                "Kyrillisch (Apple Macintosh/Ukrainisch);"
-                "Chinesisch vereinfacht (Apple Macintosh);"
-                 "Chinesisch traditionell (Apple Macintosh);"
-                "Japanisch (Apple Macintosh);"
-                "Koreanisch (Apple Macintosh);"
-                "Japanisch (Windows-932);"
-                "Chinesisch vereinfacht (Windows-936);"
-                "Koreanisch (Windows-949);"
-                "Chinesisch traditionell (Windows-950);"
-                "Japanisch (Shift-JIS);"
-                "Chinesisch vereinfacht (GB-2312);"
-                "Chinesisch traditionell (GBT-12345);"
-                "Chinesisch vereinfacht (GBK/GB-2312-80);"
-                "Chinesisch traditionell (BIG5);"
-// "Japanisch (EUC-JP);"
-                "Chinesisch vereinfacht (EUC-CN);"
-// "Chinesisch traditionell (EUC-TW);"
-// "Japanisch (ISO-2022-JP);"
-// "Chinesisch vereinfacht (ISO-2022-CN);"
-                "Kyrillisch (KOI8-R);"
-                "Unicode (UTF-7);"
-                "Unicode (UTF-8);"
-                "Osteuropa (ISO-8859-10);"
-                "Osteuropa (ISO-8859-13);"
-                "Koreanisch (EUC-KR);"
-//              "Koreanisch (ISO-2022-KR);"
-                "Unicode;"
-                ;
-        Text[ English ] =
-                "Western (Window-1252/WinLatin 1);"
-                "Western (Apple Macintosh);"
-                "Western (DOS/OS2-850/International);"
-                "Western (DOS/OS2-437/US);"
-                "Western (DOS/OS2-860/Portugese);"
-                "Western (DOS/OS2-861/Icelandic);"
-                "Western (DOS/OS2-863/Canadian-French);"
-                "Western (DOS/OS2-865/Nordic);"
-                "Western (ASCII/US);"
-                "Western (ISO-8859-1);"
-                "Central European (ISO-8859-2);"
-                "Latin 3 (ISO-8859-3);"
-                "Baltic (ISO-8859-4);"
-                "Cyrillic (ISO-8859-5);"
-//      RTL_TEXTENCODING_ISO_8859_6,        // Arabic (ISO-8859-6)
-                "Greek (ISO-8859-7);"
-//      RTL_TEXTENCODING_ISO_8859_8,        // Hebrew (ISO-8859-8)
-                "Turkish (ISO-8859-9);"
-                "Western (ISO-8859-14);"
-                "Western (ISO-8859-15/EURO);"
-                "Greek (DOS/OS2-737);"
-                "Baltic (DOS/OS2-775);"
-                "Central European (DOS/OS2-852);"
-                "Cyrillic (DOS/OS2-855);"
-                "Turkish (DOS/OS2-857);"
-//      RTL_TEXTENCODING_IBM_862,           // Hebrew (DOS/OS2-862)
-//      RTL_TEXTENCODING_IBM_864,           // Arabic (DOS/OS2-864)
-                "Cyrillic (DOS/OS2-866/Russian);"
-                "Greek (DOS/OS2-869/Modern);"
-//      RTL_TEXTENCODING_MS_874,            // Thai (Dos/Windows-874)
-                "Central European (Windows-1250/WinLatin 2);"
-                "Cyrillic (Windows-1251);"
-                "Greek (Windows-1253);"
-                "Turkish (Windows-1254);"
-//      RTL_TEXTENCODING_MS_1255,           // Hebrew (Windows-1255)
-//      RTL_TEXTENCODING_MS_1256,           // Arabic (Windows-1256)
-                "Baltic (Windows-1257);"
-//      RTL_TEXTENCODING_MS_1258,           // Vietnamese (Windows-1258)
-//      RTL_TEXTENCODING_APPLE_ARABIC,      // Arabic (Apple Macintosh)
-                "Central European (Apple Macintosh);"
-                "Central European (Apple Macintosh/Croatian);"
-                "Cyrillic (Apple Macintosh);"
-//      RTL_TEXTENCODING_APPLE_DEVANAGARI,  // APPLE DEVANAGARI
-//      RTL_TEXTENCODING_APPLE_FARSI,       // APPLE FARSI
-                "Greek (Apple Macintosh);"
-//      RTL_TEXTENCODING_APPLE_GUJARATI,    // APPLE GUJARATI
-//      RTL_TEXTENCODING_APPLE_GURMUKHI,    // APPLE GURMUKHI
-//      RTL_TEXTENCODING_APPLE_HEBREW,      // Hebrew (Apple Macintosh)
-                "Western (Apple Macintosh/Icelandic);"
-                "Central European (Apple Macintosh/Romanian);"
-//      RTL_TEXTENCODING_APPLE_THAI,        // Thai (Apple Macintosh)
-                "Turkish (Apple Macintosh);"
-                "Cyrillic (Apple Macintosh/Ukrainian);"
-                "Chinese Simplified (Apple Macintosh);"
-                "Chinese Traditional (Apple Macintosh);"
-                "Japanese (Apple Macintosh);"
-                "Korean (Apple Macintosh);"
-                "Japanese (Windows-932);"
-                "Chinese Simplified (Windows-936);"
-                "Korean (Windows-949);"
-                "Chinese Traditional (Windows-950);"
-                "Japanese (Shift-JIS);"
-                "Chinese Simplified (GB-2312);"
-                "Chinese Traditional (GBT-12345);"
-                "Chinese Simplified (GBK/GB-2312-80);"
-                "Chinese Traditional (BIG5);"
-// "Japanese (EUC-JP);"
-                "Chinese Simplified (EUC-CN);"
-// "Chinese Traditional (EUC-TW);"
-// "Japanese (ISO-2022-JP);"
-// "Chinese Simplified (ISO-2022-CN);"
-                "Cyrillic (KOI8-R);"
-                "Unicode (UTF-7);"
-                "Unicode (UTF-8);"
-                "Central European (ISO-8859-10);"
-                "Central European (ISO-8859-13);"
-                "Korean (EUC-KR);"
-//              "Korean (ISO-2022-KR);"
-                "Unicode;"
-                ;
     };
     Text[ english_us ] = "ASCII Filter Options";
     Text[ portuguese ] = "Opções de filtro ASCII";

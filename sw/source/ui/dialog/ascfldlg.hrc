@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 13:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,8 +73,6 @@
 #define PB_OK               12
 #define PB_CANCEL           13
 #define PB_HELP             14
-#define STR_NO_LANGUAGE     15
-#define STR_CHARSET         16
-#define STR_SYS_CHARSET     17
+#define STR_SYS_CHARSET     15
 
 

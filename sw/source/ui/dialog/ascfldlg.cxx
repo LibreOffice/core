@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:34 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 13:48:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,90 +127,6 @@ const char __FAR_DATA sDialogImpExtraData[] = "EncImpDlg:{";
 const char __FAR_DATA sDialogExpExtraData[] = "EncExpDlg:{";
 const USHORT nDialogExtraDataLen = 11;      // 12345678901
 
-// in the resource exist an equal list - only with the names!
-static rtl_TextEncoding aCharSetArr[] = {
-        RTL_TEXTENCODING_MS_1252,           // Western (Window-1252/WinLatin 1)
-        RTL_TEXTENCODING_APPLE_ROMAN,       // Western (Apple Macintosh)
-        RTL_TEXTENCODING_IBM_850,           // Western (DOS/OS2-850/International)
-        RTL_TEXTENCODING_IBM_437,           // Western (DOS/OS2-437/US)
-        RTL_TEXTENCODING_IBM_860,           // Western (DOS/OS2-860/Portugese)
-        RTL_TEXTENCODING_IBM_861,           // Western (DOS/OS2-861/Icelandic)
-        RTL_TEXTENCODING_IBM_863,           // Western (DOS/OS2-863/Canadian-French)
-        RTL_TEXTENCODING_IBM_865,           // Western (DOS/OS2-865/Nordic)
-        RTL_TEXTENCODING_ASCII_US,          // Western (ASCII/US)
-        RTL_TEXTENCODING_ISO_8859_1,        // Western (ISO-8859-1)
-        RTL_TEXTENCODING_ISO_8859_2,        // Central European (ISO-8859-2)
-        RTL_TEXTENCODING_ISO_8859_3,        // Latin 3 (ISO-8859-3)
-        RTL_TEXTENCODING_ISO_8859_4,        // Baltic (ISO-8859-4)
-        RTL_TEXTENCODING_ISO_8859_5,        // Cyrillic (ISO-8859-5)
-//      RTL_TEXTENCODING_ISO_8859_6,        // Arabic (ISO-8859-6)
-        RTL_TEXTENCODING_ISO_8859_7,        // Greek (ISO-8859-7)
-//      RTL_TEXTENCODING_ISO_8859_8,        // Hebrew (ISO-8859-8)
-        RTL_TEXTENCODING_ISO_8859_9,        // Turkish (ISO-8859-9)
-        RTL_TEXTENCODING_ISO_8859_14,       // Western (ISO-8859-14)
-        RTL_TEXTENCODING_ISO_8859_15,       // Western (ISO-8859-15/EURO)
-        RTL_TEXTENCODING_IBM_737,           // Greek (DOS/OS2-737)
-        RTL_TEXTENCODING_IBM_775,           // Baltic (DOS/OS2-775)
-        RTL_TEXTENCODING_IBM_852,           // Central European (DOS/OS2-852)
-        RTL_TEXTENCODING_IBM_855,           // Cyrillic (DOS/OS2-855)
-        RTL_TEXTENCODING_IBM_857,           // Turkish (DOS/OS2-857)
-//      RTL_TEXTENCODING_IBM_862,           // Hebrew (DOS/OS2-862)
-//      RTL_TEXTENCODING_IBM_864,           // Arabic (DOS/OS2-864)
-        RTL_TEXTENCODING_IBM_866,           // Cyrillic (DOS/OS2-866/Russian)
-        RTL_TEXTENCODING_IBM_869,           // Greek (DOS/OS2-869/Modern)
-//      RTL_TEXTENCODING_MS_874,            // Thai (Dos/Windows-874)
-        RTL_TEXTENCODING_MS_1250,           // Central European (Windows-1250/WinLatin 2)
-        RTL_TEXTENCODING_MS_1251,           // Cyrillic (Windows-1251)
-        RTL_TEXTENCODING_MS_1253,           // Greek (Windows-1253)
-        RTL_TEXTENCODING_MS_1254,           // Turkish (Windows-1254)
-//      RTL_TEXTENCODING_MS_1255,           // Hebrew (Windows-1255)
-//      RTL_TEXTENCODING_MS_1256,           // Arabic (Windows-1256)
-        RTL_TEXTENCODING_MS_1257,           // Baltic (Windows-1257)
-//      RTL_TEXTENCODING_MS_1258,           // Vietnamese (Windows-1258)
-//      RTL_TEXTENCODING_APPLE_ARABIC,      // Arabic (Apple Macintosh)
-        RTL_TEXTENCODING_APPLE_CENTEURO,    // Central European (Apple Macintosh)
-        RTL_TEXTENCODING_APPLE_CROATIAN,    // Central European (Apple Macintosh/Croatian)
-        RTL_TEXTENCODING_APPLE_CYRILLIC,    // Cyrillic (Apple Macintosh)
-//      RTL_TEXTENCODING_APPLE_DEVANAGARI,  // APPLE DEVANAGARI
-//      RTL_TEXTENCODING_APPLE_FARSI,       // APPLE FARSI
-        RTL_TEXTENCODING_APPLE_GREEK,       // Greek (Apple Macintosh)
-//      RTL_TEXTENCODING_APPLE_GUJARATI,    // APPLE GUJARATI
-//      RTL_TEXTENCODING_APPLE_GURMUKHI,    // APPLE GURMUKHI
-//      RTL_TEXTENCODING_APPLE_HEBREW,      // Hebrew (Apple Macintosh)
-        RTL_TEXTENCODING_APPLE_ICELAND,     // Western (Apple Macintosh/Icelandic)
-        RTL_TEXTENCODING_APPLE_ROMANIAN,    // Central European (Apple Macintosh/Romanian)
-//      RTL_TEXTENCODING_APPLE_THAI,        // Thai (Apple Macintosh)
-        RTL_TEXTENCODING_APPLE_TURKISH,     // Turkish (Apple Macintosh)
-        RTL_TEXTENCODING_APPLE_UKRAINIAN,   // Cyrillic (Apple Macintosh/Ukrainian)
-        RTL_TEXTENCODING_APPLE_CHINSIMP,    // Chinese Simplified (Apple Macintosh)
-        RTL_TEXTENCODING_APPLE_CHINTRAD,    // Chinese Traditional (Apple Macintosh)
-        RTL_TEXTENCODING_APPLE_JAPANESE,    // Japanese (Apple Macintosh)
-        RTL_TEXTENCODING_APPLE_KOREAN,      // Korean (Apple Macintosh)
-        RTL_TEXTENCODING_MS_932,            // Japanese (Windows-932)
-        RTL_TEXTENCODING_MS_936,            // Chinese Simplified (Windows-936)
-        RTL_TEXTENCODING_MS_949,            // Korean (Windows-949)
-        RTL_TEXTENCODING_MS_950,            // Chinese Traditional (Windows-950)
-        RTL_TEXTENCODING_SHIFT_JIS,         // Japanese (Shift-JIS)
-        RTL_TEXTENCODING_GB_2312,           // Chinese Simplified (GB-2312)
-        RTL_TEXTENCODING_GBT_12345,         // Chinese Traditional (GBT-12345)
-        RTL_TEXTENCODING_GBK,               // Chinese Simplified (GBK/GB-2312-80)
-        RTL_TEXTENCODING_BIG5,              // Chinese Traditional (BIG5)
-//      RTL_TEXTENCODING_EUC_JP,            // Japanese (EUC-JP)
-        RTL_TEXTENCODING_EUC_CN,            // Chinese Simplified (EUC-CN)
-//      RTL_TEXTENCODING_EUC_TW,            // Chinese Traditional (EUC-TW)
-//      RTL_TEXTENCODING_ISO_2022_JP,       // Japanese (ISO-2022-JP)
-//      RTL_TEXTENCODING_ISO_2022_CN,       // Chinese Simplified (ISO-2022-CN)
-        RTL_TEXTENCODING_KOI8_R,            // Cyrillic (KOI8-R)
-        RTL_TEXTENCODING_UTF7,              // Unicode (UTF-7)
-        RTL_TEXTENCODING_UTF8,              // Unicode (UTF-8)
-        RTL_TEXTENCODING_ISO_8859_10,       // Central European (ISO-8859-10)
-        RTL_TEXTENCODING_ISO_8859_13,       // Central European (ISO-8859-13)
-        RTL_TEXTENCODING_EUC_KR,            // Korean (EUC-KR)
-//      RTL_TEXTENCODING_ISO_2022_KR,       // Korean (ISO-2022-KR)
-        RTL_TEXTENCODING_UCS2               // Unicode (2 byte)
-    };
-
-
 SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
     : SfxModalDialog( pParent, SW_RES( DLG_ASCII_FILTER )),
@@ -228,7 +144,6 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
     aOkPB( this, ResId( PB_OK )),
     aCancelPB( this, ResId( PB_CANCEL )),
     aHelpPB( this, ResId( PB_HELP )),
-    sCharSet( ResId( STR_CHARSET )),
     sSystemCharSet( ResId( STR_SYS_CHARSET )),
     bSaveLineStatus( TRUE )
 {
@@ -382,24 +297,11 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
     }
 
     // initialisiere Zeichensatz
-    {
-        rtl_TextEncoding eSystem = gsl_getSystemTextEncoding();
-        USHORT nToken = 0, nPos, nCnt = 0;
-        String sToken;
-        do {
-            if( 0 != (sToken = sCharSet.GetToken( 0, ';', nToken )).Len() )
-            {
-                rtl_TextEncoding eCode = aCharSetArr[ nCnt ];
-                if( eCode == eSystem )
-                    sToken = sSystemCharSet;
-                nPos = aCharSetLB.InsertEntry( sToken );
-                aCharSetLB.SetEntryData( nPos, (void*)(ULONG)eCode );
-                if( eCode == aOpt.GetCharSet() )
-                    aCharSetLB.SelectEntryPos( nPos );
-            }
-            ++nCnt;
-        } while( STRING_NOTFOUND != nToken );
-    }
+    aCharSetLB.FillFromTextEncodingTable();
+    rtl_TextEncoding eSystem = gsl_getSystemTextEncoding();
+    aCharSetLB.RemoveTextEncoding( eSystem );
+    aCharSetLB.InsertTextEncoding( eSystem, sSystemCharSet );
+    aCharSetLB.SelectTextEncoding( aOpt.GetCharSet()  );
 
     aCharSetLB.SetSelectHdl( LINK( this, SwAsciiFilterDlg, CharSetSelHdl ));
     aCRLF_RB.SetToggleHdl( LINK( this, SwAsciiFilterDlg, LineEndHdl ));
@@ -421,9 +323,7 @@ SwAsciiFilterDlg::~SwAsciiFilterDlg()
 
 void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
 {
-    ULONG nCCode = (ULONG)aCharSetLB.GetEntryData(
-                            aCharSetLB.GetSelectEntryPos() );
-
+    ULONG nCCode = aCharSetLB.GetSelectTextEncoding();
     String sFont;
     ULONG nLng = 0;
     if( aFontLB.IsVisible() )
@@ -485,7 +385,7 @@ LineEnd SwAsciiFilterDlg::GetCRLF() const
     return eEnd;
 }
 
-IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, ListBox*, pBox )
+IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
 {
     LineEnd eOldEnd = GetCRLF(), eEnd = (LineEnd)-1;
     ULONG nLng = aFontLB.IsVisible()
@@ -494,7 +394,7 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, ListBox*, pBox )
                     : 0,
             nOldLng = nLng;
 
-    ULONG nChrSet = (ULONG)pBox->GetEntryData( pBox->GetSelectEntryPos() );
+    rtl_TextEncoding nChrSet = pBox->GetSelectTextEncoding();
     if( nChrSet == gsl_getSystemTextEncoding() )
         eEnd = GetSystemLineEnd();
     else
@@ -632,6 +532,9 @@ IMPL_LINK( SwAsciiFilterDlg, LineEndHdl, RadioButton*, pBtn )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:34  hr
+      initial import
+
       Revision 1.13  2000/09/18 16:05:20  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: jp $ $Date: 2001-01-19 13:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #ifndef _ASCFLDLG_HXX
 #define _ASCFLDLG_HXX
 
-#ifndef _BASEDLGS_HXX
-#include <sfx2/basedlgs.hxx>
-#endif
 #ifndef _SV_GROUP_HXX
 #include <vcl/group.hxx>
 #endif
@@ -76,6 +73,12 @@
 #ifndef _SV_LSTBOX_HXX
 #include <vcl/lstbox.hxx>
 #endif
+#ifndef _BASEDLGS_HXX
+#include <sfx2/basedlgs.hxx>
+#endif
+#ifndef _SVX_TXENCBOX_HXX
+#include <svx/txencbox.hxx>
+#endif
 
 class SwAsciiOptions;
 class SvStream;
@@ -83,22 +86,22 @@ class SwDocShell;
 
 class SwAsciiFilterDlg : public SfxModalDialog
 {
-    GroupBox        aGB;
-    FixedText       aCharSetFT;
-    ListBox         aCharSetLB;
-    FixedText       aFontFT;
-    ListBox         aFontLB;
-    FixedText       aLanguageFT;
-    ListBox         aLanguageLB;
-    FixedText       aCRLF_FT;
-    RadioButton     aCRLF_RB, aCR_RB, aLF_RB;
-    OKButton        aOkPB;
-    CancelButton    aCancelPB;
-    HelpButton      aHelpPB;
-    String          sNoLanguage, sCharSet, sSystemCharSet;
-    BOOL            bSaveLineStatus;
+    GroupBox            aGB;
+    FixedText           aCharSetFT;
+    SvxTextEncodingBox  aCharSetLB;
+    FixedText           aFontFT;
+    ListBox             aFontLB;
+    FixedText           aLanguageFT;
+    ListBox             aLanguageLB;
+    FixedText           aCRLF_FT;
+    RadioButton         aCRLF_RB, aCR_RB, aLF_RB;
+    OKButton            aOkPB;
+    CancelButton        aCancelPB;
+    HelpButton          aHelpPB;
+    String              sSystemCharSet;
+    BOOL                bSaveLineStatus;
 
-    DECL_LINK( CharSetSelHdl, ListBox* );
+    DECL_LINK( CharSetSelHdl, SvxTextEncodingBox* );
     DECL_LINK( LineEndHdl, RadioButton* );
     void SetCRLF( LineEnd eEnd );
     LineEnd GetCRLF() const;
