@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gfxlink.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-19 12:59:17 $
+ *  last change: $Author: sj $ $Date: 2002-10-25 12:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,28 @@ GfxLink& GfxLink::operator=( const GfxLink& rGfxLink )
     }
 
     return *this;
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool GfxLink::IsEqual( const GfxLink& rGfxLink ) const
+{
+    sal_Bool bIsEqual = sal_False;
+
+    if ( ( mnBufSize == rGfxLink.mnBufSize ) && ( meType == rGfxLink.meType ) )
+    {
+        const sal_uInt8* pSource = GetData();
+        const sal_uInt8* pDest = rGfxLink.GetData();
+        sal_uInt32 nSourceSize = GetDataSize();
+        sal_uInt32 nDestSize = rGfxLink.GetDataSize();
+        if ( pSource && pDest && ( nSourceSize == nDestSize ) )
+        {
+            bIsEqual = memcmp( pSource, pDest, nSourceSize ) == 0;
+        }
+        else if ( ( pSource == 0 ) && ( pDest == 0 ) )
+            bIsEqual = sal_True;
+    }
+    return bIsEqual;
 }
 
 // ------------------------------------------------------------------------

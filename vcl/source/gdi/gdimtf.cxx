@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 09:58:51 $
+ *  last change: $Author: sj $ $Date: 2002-10-25 12:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,6 +351,34 @@ BOOL GDIMetaFile::operator==( const GDIMetaFile& rMtf ) const
         for( ULONG n = 0UL; n < nCount; n++ )
         {
             if( GetObject( n ) != rMtf.GetObject( n ) )
+            {
+                bRet = FALSE;
+                break;
+            }
+        }
+    }
+
+    return bRet;
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool GDIMetaFile::IsEqual( const GDIMetaFile& rMtf ) const
+{
+    const ULONG nCount = Count();
+    BOOL        bRet = FALSE;
+
+    if( this == &rMtf )
+        bRet = TRUE;
+    else if( rMtf.GetActionCount() == nCount &&
+             rMtf.GetPrefSize() == aPrefSize &&
+             rMtf.GetPrefMapMode() == aPrefMapMode )
+    {
+        bRet = TRUE;
+
+        for( ULONG n = 0UL; n < nCount; n++ )
+        {
+            if(!((MetaAction*)GetObject( n ))->IsEqual(*((MetaAction*)rMtf.GetObject( n ))))
             {
                 bRet = FALSE;
                 break;
