@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kr $ $Date: 2000-11-23 15:39:21 $
+#   last change: $Author: rt $ $Date: 2003-04-23 17:07:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,8 +74,8 @@ TARGET  := test_com_sun_star_lib_uno_bridges_java_remote
 
 
 JAVACLASSFILES= \
+    $(CLASSDIR)$/$(PACKAGE)$/ProxyTest.class \
     $(CLASSDIR)$/$(PACKAGE)$/TestInterface.class				\
-    $(CLASSDIR)$/$(PACKAGE)$/TestInterface_Object.class			\
     $(CLASSDIR)$/$(PACKAGE)$/java_remote_bridge_Test.class
 
 # --- Targets ------------------------------------------------------
