@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uri.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-04-23 09:16:14 $
+ *  last change: $Author: sb $ $Date: 2001-05-09 12:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,11 +120,13 @@ inline rtl::OUString Uri::encode(rtl::OUString const & rText,
                                  rtl_TextEncoding eCharset)
     SAL_THROW(())
 {
-    return rtl::OUString(rtl_uriEncode(const_cast< rtl::OUString & >(rText).
-                                           pData,
-                                       pCharClass,
-                                       eMechanism,
-                                       eCharset));
+    rtl::OUString aResult;
+    rtl_uriEncode(const_cast< rtl::OUString & >(rText).pData,
+                  pCharClass,
+                  eMechanism,
+                  eCharset,
+                  &aResult.pData);
+    return aResult;
 }
 
 inline rtl::OUString Uri::encode(rtl::OUString const & rText,
@@ -133,11 +135,13 @@ inline rtl::OUString Uri::encode(rtl::OUString const & rText,
                                  rtl_TextEncoding eCharset)
     SAL_THROW(())
 {
-    return rtl::OUString(rtl_uriEncode(const_cast< rtl::OUString & >(rText).
-                                           pData,
-                                       rtl_getUriCharClass(eCharClass),
-                                       eMechanism,
-                                       eCharset));
+    rtl::OUString aResult;
+    rtl_uriEncode(const_cast< rtl::OUString & >(rText).pData,
+                  rtl_getUriCharClass(eCharClass),
+                  eMechanism,
+                  eCharset,
+                  &aResult.pData);
+    return aResult;
 }
 
 inline rtl::OUString Uri::decode(rtl::OUString const & rText,
@@ -145,10 +149,12 @@ inline rtl::OUString Uri::decode(rtl::OUString const & rText,
                                  rtl_TextEncoding eCharset)
     SAL_THROW(())
 {
-    return rtl::OUString(rtl_uriDecode(const_cast< rtl::OUString & >(rText).
-                                           pData,
-                                       eMechanism,
-                                       eCharset));
+    rtl::OUString aResult;
+    rtl_uriDecode(const_cast< rtl::OUString & >(rText).pData,
+                  eMechanism,
+                  eCharset,
+                  &aResult.pData);
+    return aResult;
 }
 
 }
