@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-03-12 16:43:25 $
+ *  last change: $Author: nn $ $Date: 2001-03-13 09:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@ private:
     BOOL            bDoSort[MAXSORT];
     USHORT          nSortField[MAXSORT];
     BOOL            bAscending[MAXSORT];
+    ::com::sun::star::lang::Locale aSortLocale;
+    String          aSortAlgorithm;
     // QueryParam
     BOOL            bQueryInplace;
     BOOL            bQueryCaseSens;

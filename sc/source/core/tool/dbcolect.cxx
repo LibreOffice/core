@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcolect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-26 18:59:37 $
+ *  last change: $Author: nn $ $Date: 2001-03-13 09:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,8 @@ ScDBData::ScDBData( SvStream& rStream, ScMultipleReadHeader& rHdr ) :
             rStream >> aAdvSource;
     }
 
+    // aSortLocale / aSortAlgorithm are not in binary file format
+
     rHdr.EndEntry();
 
     // #43070# rottes Dokument?!?
@@ -393,6 +395,8 @@ BOOL ScDBData::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
         }
     }
 
+    // aSortLocale / aSortAlgorithm are not in binary file format
+
     rHdr.EndEntry();
     return TRUE;
 }
@@ -417,6 +421,8 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     nSortDestRow        (rData.nSortDestRow),
     bSortUserDef        (rData.bSortUserDef),
     nSortUserIndex      (rData.nSortUserIndex),
+    aSortLocale         (rData.aSortLocale),
+    aSortAlgorithm      (rData.aSortAlgorithm),
     bQueryInplace       (rData.bQueryInplace),
     bQueryCaseSens      (rData.bQueryCaseSens),
     bQueryRegExp        (rData.bQueryRegExp),
@@ -508,6 +514,8 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
     nSortDestRow        = rData.nSortDestRow;
     bSortUserDef        = rData.bSortUserDef;
     nSortUserIndex      = rData.nSortUserIndex;
+    aSortLocale         = rData.aSortLocale;
+    aSortAlgorithm      = rData.aSortAlgorithm;
     bQueryInplace       = rData.bQueryInplace;
     bQueryCaseSens      = rData.bQueryCaseSens;
     bQueryRegExp        = rData.bQueryRegExp;
@@ -758,6 +766,8 @@ void ScDBData::GetSortParam( ScSortParam& rSortParam ) const
         rSortParam.nField[i]     = nSortField[i];
         rSortParam.bAscending[i] = bAscending[i];
     }
+    rSortParam.aCollatorLocale = aSortLocale;
+    rSortParam.aCollatorAlgorithm = aSortAlgorithm;
 }
 
 void ScDBData::SetSortParam( const ScSortParam& rSortParam )
@@ -776,6 +786,8 @@ void ScDBData::SetSortParam( const ScSortParam& rSortParam )
         nSortField[i] = rSortParam.nField[i];
         bAscending[i] = rSortParam.bAscending[i];
     }
+    aSortLocale = rSortParam.aCollatorLocale;
+    aSortAlgorithm = rSortParam.aCollatorAlgorithm;
 }
 
 void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
