@@ -2,9 +2,9 @@
  *
  *  $RCSfile: afmtuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:04:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScAutoFormatsObj_CreateInstance(
 {
     ScUnoGuard aGuard;
     ScDLL::Init();
-    static uno::Reference< uno::XInterface > xInst = (::cppu::OWeakObject*) new ScAutoFormatsObj;
+    static uno::Reference< uno::XInterface > xInst((::cppu::OWeakObject*) new ScAutoFormatsObj);
     return xInst;
 }
 
@@ -322,7 +322,7 @@ ScAutoFormatObj* ScAutoFormatsObj::GetObjectByName_Impl(const rtl::OUString& aNa
     ScAutoFormat* pFormats = ScGlobal::GetAutoFormat();
     if (pFormats)
     {
-        String aString = aName;
+        String aString(aName);
         sal_uInt16 nIndex;
         if (lcl_FindAutoFormatIndex( *pFormats, aString, nIndex ))
             return GetObjectByIndex_Impl(nIndex);
@@ -339,13 +339,13 @@ void SAL_CALL ScAutoFormatsObj::insertByName( const rtl::OUString& aName, const 
     ScUnoGuard aGuard;
     sal_Bool bDone = sal_False;
     //  Reflection muss nicht uno::XInterface sein, kann auch irgendein Interface sein...
-    uno::Reference< uno::XInterface > xInterface;
-    if ( aElement >>= xInterface )
+    uno::Reference< uno::XInterface > xInterface(aElement, uno::UNO_QUERY);
+    if ( xInterface.is() )
     {
         ScAutoFormatObj* pFormatObj = ScAutoFormatObj::getImplementation( xInterface );
         if ( pFormatObj && !pFormatObj->IsInserted() )  // noch nicht eingefuegt?
         {
-            String aNameStr = aName;
+            String aNameStr(aName);
             ScAutoFormat* pFormats = ScGlobal::GetAutoFormat();
 
             sal_uInt16 nDummy;
@@ -402,7 +402,7 @@ void SAL_CALL ScAutoFormatsObj::removeByName( const rtl::OUString& aName )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNameStr = aName;
+    String aNameStr(aName);
     ScAutoFormat* pFormats = ScGlobal::GetAutoFormat();
 
     sal_uInt16 nIndex;
@@ -445,13 +445,10 @@ uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< container::XNamed >  xFormat = GetObjectByIndex_Impl((sal_uInt16)nIndex);
-    uno::Any aAny;
-    if (xFormat.is())
-        aAny <<= xFormat;
-    else
+    uno::Reference< container::XNamed >  xFormat(GetObjectByIndex_Impl((sal_uInt16)nIndex));
+    if (!xFormat.is())
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::makeAny(xFormat);
 }
 
 uno::Type SAL_CALL ScAutoFormatsObj::getElementType() throw(uno::RuntimeException)
@@ -473,13 +470,10 @@ uno::Any SAL_CALL ScAutoFormatsObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference< container::XNamed >  xFormat = GetObjectByName_Impl(aName);
-    uno::Any aAny;
-    if (xFormat.is())
-        aAny <<= xFormat;
-    else
+    uno::Reference< container::XNamed >  xFormat(GetObjectByName_Impl(aName));
+    if (!xFormat.is())
         throw container::NoSuchElementException();
-    return aAny;
+    return uno::makeAny(xFormat);
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
@@ -510,7 +504,7 @@ sal_Bool SAL_CALL ScAutoFormatsObj::hasByName( const rtl::OUString& aName )
     ScAutoFormat* pFormats = ScGlobal::GetAutoFormat();
     if (pFormats)
     {
-        String aString = aName;
+        String aString(aName);
         sal_uInt16 nDummy;
         return lcl_FindAutoFormatIndex( *pFormats, aString, nDummy );
     }
@@ -634,13 +628,9 @@ uno::Any SAL_CALL ScAutoFormatObj::getByIndex( sal_Int32 nIndex )
     if ( nIndex < 0 || nIndex >= getCount() )
         throw lang::IndexOutOfBoundsException();
 
-    uno::Any aAny;
     if (IsInserted())
-    {
-        uno::Reference< beans::XPropertySet >  xField = GetObjectByIndex_Impl((sal_uInt16)nIndex);
-        aAny <<= xField;
-    }
-    return aAny;
+        return uno::makeAny(uno::Reference< beans::XPropertySet >(GetObjectByIndex_Impl((sal_uInt16)nIndex)));
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScAutoFormatObj::getElementType() throw(uno::RuntimeException)
@@ -674,7 +664,7 @@ void SAL_CALL ScAutoFormatObj::setName( const rtl::OUString& aNewName )
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aNewString = aNewName;
+    String aNewString(aNewName);
     ScAutoFormat* pFormats = ScGlobal::GetAutoFormat();
 
     sal_uInt16 nDummy;
@@ -715,7 +705,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAutoFormatObj::getPropertySet
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference< beans::XPropertySetInfo > aRef = new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference< beans::XPropertySetInfo > aRef(new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -732,7 +722,7 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
         ScAutoFormatData* pData = (*pFormats)[nFormatIndex];
         DBG_ASSERT(pData,"AutoFormat Daten nicht da");
 
-        String aPropString = aPropertyName;
+        String aPropString(aPropertyName);
         sal_Bool bBool;
         if (aPropString.EqualsAscii( SC_UNONAME_INCBACK ) && (aValue >>= bBool))
             pData->SetIncludeBackground( bBool );
@@ -770,7 +760,7 @@ uno::Any SAL_CALL ScAutoFormatObj::getPropertyValue( const rtl::OUString& aPrope
         sal_Bool bValue;
         sal_Bool bError = sal_False;
 
-        String aPropString = aPropertyName;
+        String aPropString(aPropertyName);
         if (aPropString.EqualsAscii( SC_UNONAME_INCBACK ))
             bValue = pData->GetIncludeBackground();
         else if (aPropString.EqualsAscii( SC_UNONAME_INCBORD ))
@@ -820,7 +810,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAutoFormatFieldObj::getProper
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference< beans::XPropertySetInfo > aRef = new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference< beans::XPropertySetInfo > aRef(new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -832,7 +822,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
 {
     ScUnoGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetAutoFormat();
-    String aPropString = aPropertyName;
+    String aPropString(aPropertyName);
     const SfxItemPropertyMap* pMap =
             SfxItemPropertyMap::GetByName( lcl_GetAutoFieldMap(), aPropString );
 
@@ -919,7 +909,7 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const rtl::OUString& a
     uno::Any aVal;
 
     ScAutoFormat* pFormats = ScGlobal::GetAutoFormat();
-    String aPropString = aPropertyName;
+    String aPropString(aPropertyName);
     const SfxItemPropertyMap* pMap =
             SfxItemPropertyMap::GetByName( lcl_GetAutoFieldMap(), aPropString );
 
