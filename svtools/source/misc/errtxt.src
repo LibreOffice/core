@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 14:44:44 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 21:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij laden van sjabloon $(ARG1)";
         Text[ chinese_simplified ] = "$(ERR)·¢ÉúÔÚ×°ÈëÑùÊ½$(ARG1)Ê±";
         Text[ greek ] = "$(ERR) êáôÜ ôç öüñôùóç ôïõ ğñïôığïõ $(ARG1)";
-        Text[ korean ] = "¼­½ÄÆÄÀÏ $(ARG1)À»£¨¸¦£© ·ÎµåÇÏ´øÁß $(ERR)";
+        Text[ korean ] = "¼­½Ä ÆÄÀÏ $(ARG1)À»£¨¸¦£© ·ÎµåÇÏ´øÁß $(ERR)";
         Text[ turkish ] = "$(ARG1) şablonu yüklenirken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al cargar la plantilla $(ARG1)";
@@ -217,7 +217,7 @@ Resource RID_ERRCTX
         Text [ portuguese_brazilian ] = "$(ERR) beim Anzeigen der Docinfo des Dokumentes $(ARG1)" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾ÎÄµµ $(ARG1) ÎÄµµĞÅÏ¢Ê±·¢Éú $(ERR)";
         Text[ russian ] = "$(ERR) ïğè ïîêàçå èíôîğìàöèè ê äîêóìåíòó $(ARG1)";
-        Text[ polish ] = "$(ERR) przy wy?wietlaniu informacji o dokumencie dla dokumentu $(ARG1)";
+        Text[ polish ] = "$(ERR) przy wyœwietlaniu informacji o dokumencie dla dokumentu $(ARG1)";
         Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ$(ARG1)‚ÌÄŞ·­ÒİÄî•ñ‚Ì•\\¦‚ÌÛ";
         Text[ chinese_traditional ] = "Åã¥Ü¤å¥ó $(ARG1) ªº¤å¥ó¸ê°T®Éµo¥Í $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ ÅÙåÇÑ ãÚáæãÇÊ ÇáãÓÊäÏ ÇáÎÇÕÉ ÈÇáãÓÊäÏ $(ARG1)";
@@ -251,7 +251,7 @@ Resource RID_ERRCTX
         Text[ dutch ] = "$(ERR) bij opslaan van document $(ARG1) als sjabloon";
         Text[ chinese_simplified ] = "ÔÚ¸²Ğ´ÑùÊ½ÎÄµµ$(ARG1)Ê±·¢Éú $(ERR)";
         Text[ greek ] = "$(ERR) êáôÜ ôçí åããñáöŞ ôïõ åããñÜöïõ $(ARG1) ùò ğñüôõğï";
-        Text[ korean ] = "¹®¼­$(ARG1)À»£¨¸¦£© ¼­½ÄÆÄÀÏ·Î ±â·ÏÇÏ´ø Áß $(ERR)";
+        Text[ korean ] = "¹®¼­$(ARG1)À»£¨¸¦£© ¼­½Ä ÆÄÀÏ·Î¼­ ±â·ÏÇÏ´ø Áß $(ERR)";
         Text[ turkish ] = "$(ARG1) belgesi şablon olarak yazılırken $(ERR)";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "$(ERR) al escribir el documento $(ARG1) como plantilla";
@@ -272,7 +272,7 @@ Resource RID_ERRCTX
         Text [ dutch ] = "$(ERR) bij kopiëren of verplaatsen van documentinhoud" ;
         Text[ chinese_simplified ] = "¸´ÖÆ»òÒÆ¶¯ÎÄµµÄÚÈİÊ±·¢Éú $(ERR)";
         Text[ russian ] = "$(ERR) ïğè êîïèğîâàíèè èëè ïåğåìåùåíèè ñîäåğæèìîãî äîêóìåíòà";
-        Text[ polish ] = "$(ERR) przy kopiowaniu lub przenoszeniu zawarto?ci wiadomo?ci";
+        Text[ polish ] = "$(ERR) przy kopiowaniu lub przenoszeniu zawartoœci wiadomoœci";
         Text[ japanese ] = "$(ERR)ÄŞ·­ÒİÄ‚Ì“à—e‚ğºËß°‚Ü‚½‚ÍˆÚ“®‚·‚éÛ";
         Text[ chinese_traditional ] = "½Æ»s©M²¾°Ê¤å¥ó¤º®e®Éµo¥Í $(ERR)";
         Text[ arabic ] = "$(ERR) ÃËäÇÁ äÓÎ Ãæ ÅÒÇÍÉ ãÍÊæíÇÊ ÇáãÓÊäÏ";
@@ -553,7 +553,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Îáúåêò íå äîñòóïåí";
         Text[ polish ] = "Obiekt niedostêpny";
         Text[ japanese ] = "µÌŞ¼Şª¸Ä‚É±¸¾½‚Å‚«‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "¤£¯à°÷Åª¨úª«¥ó";
+        Text[ chinese_traditional ] = "µLªk¦s¨úª«¥ó";
         Text[ arabic ] = "áÇ íãßä ÇáæÕæá Åáì ÇáßÇÆä";
         Text[ dutch ] = "Geen toegang tot object";
         Text[ chinese_simplified ] = "²»ÄÜ¹»¶ÁÈ¡¶ÔÏó";
@@ -578,7 +578,7 @@ Resource RID_ERRHDL
         Text [ portuguese_brazilian ] = "Unzul?ssiger Pfad" ;
         Text[ chinese_simplified ] = "Â·¾¶ÎŞĞ§";
         Text[ russian ] = "Íåäîïóñòèìûé ïóòü";
-        Text[ polish ] = "Niedopuszczalna ?cie¿ka";
+        Text[ polish ] = "Niedopuszczalna œcie¿ka";
         Text[ japanese ] = "•s‹–‰Â‚ÌÊß½";
         Text[ chinese_traditional ] = "¸ô®|µL®Ä";
         Text[ arabic ] = "ãÓÇÑ ãÍÙæÑ";
@@ -904,7 +904,7 @@ Resource RID_ERRHDL
         Text [ portuguese_brazilian ] = "Unzul?ssiger Wert oder Datentyp" ;
         Text[ chinese_simplified ] = "ÎŞĞ§µÄÊıÖµ»òÊı¾İÀàĞÍ";
         Text[ russian ] = "Çíà÷åíèå èëè òèï äàííûõ íå äîïóñòèìû";
-        Text[ polish ] = "Niedopuszczalna warto?æ lub typ pliku";
+        Text[ polish ] = "Niedopuszczalna wartoœæ lub typ pliku";
         Text[ japanese ] = "•s‹–‰Â‚Ì’l‚Ü‚½‚ÍÃŞ°ÀÀ²Ìß";
         Text[ chinese_traditional ] = "¼Æ­È©Î¸ê®ÆÃş«¬µL®Ä";
         Text[ arabic ] = "ŞãíÉ ãÍÙæÑÉ¡ Ãæ äæÚ ÈíÇäÇÊ ãÍÙæÑ";
@@ -1013,7 +1013,7 @@ Resource RID_ERRHDL
         Text [ portuguese_brazilian ] = "Allgemeiner Ein-/Ausgabefehler" ;
         Text[ chinese_simplified ] = "Ò»°ãµÄÊäÈëÓëÊä³ö´íÎó";
         Text[ russian ] = "Îáùàÿ îøèáêà ââîäà-âûâîäà";
-        Text[ polish ] = "Ogólny b³¹d wej?cia/wyj?cia";
+        Text[ polish ] = "Ogólny b³¹d wejœcia/wyjœcia";
         Text[ japanese ] = "ˆê”Ê“I‚È I/O ´×°";
         Text[ chinese_traditional ] = "¤@¯ëªº¿é¤J/¿é¥X¿ù»~";
         Text[ arabic ] = "ÍÏË ÎØÃ ÅÏÎÇá/ÅÎÑÇÌ ÚÇã";
@@ -1171,7 +1171,7 @@ Resource RID_ERRHDL
         Text [ italian ] = "L'apparecchiatura indicata non è valida" ;
         Text [ spanish ] = "El dispositivo especificado no es válido." ;
         Text [ french ] = "Le périphérique indiqué est incorrect" ;
-        Text [ swedish ] = "Den angivna apparaten är ogiltig" ;
+        Text [ swedish ] = "Den angivna enheten är ogiltig" ;
         Text [ danish ] = "Den angivne enhed er ugyldig" ;
         Text [ portuguese ] = "O periférico indicado não é válido." ;
         Text [ portuguese_brazilian ] = "Das angebene Ger?t ist ung?tig" ;
@@ -1206,7 +1206,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Èç-çà îòñóòñòâóşùèõ ïğàâ äîñòóï ê îáúåêòó\níå ğàçğåøåí";
         Text[ polish ] = "Brak dostêpu do obiektu \n z powodu brakuj¹cych praw dostêpu";
         Text[ japanese ] = "Œ —˜‚ª‚È‚¢‚Ì‚Å\nµÌŞ¼Şª¸Ä‚É±¸¾½‚Å‚«‚Ü‚¹‚ñ";
-        Text[ chinese_traditional ] = "¯Ê¤ÖÅª¨úÅv§Q¡M\nµLªkÅª¨ú³o­Óª«¥ó";
+        Text[ chinese_traditional ] = "¯Ê¤Ö¬ÛÃöÅv§Q¡M\nµLªk¦s¨ú³o­Óª«¥ó";
         Text[ arabic ] = "áÇ íãßä ÇáæÕæá Åáì ÇáßÇÆä¡\náÚÏã ÊæİÑ ÇáÍŞæŞ ÇááÇÒãÉ";
         Text[ dutch ] = "Er bestaat geen recht op toegang\n tot object.";
         Text[ chinese_simplified ] = "È±ÉÙ¶ÁÈ¡È¨Àû£¬\nÎŞ·¨¶ÁÈ¡Õâ¸ö¶ÔÏó";
@@ -1233,7 +1233,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Îøèáêà ïğè êîëëåêòèâíîì äîñòóïå ê îáúåêòó";
         Text[ polish ] = "Nast¹pi³o naruszenie zasad wspó³u¿ytkowania podczas dostêpu do obiektu";
         Text[ japanese ] = "µÌŞ¼Şª¸Äã‚Ì‹¤—L±¸¾½‚ÌÛ‚Ì´×°";
-        Text[ chinese_traditional ] = "¦b¦P®ÉÅª¨ú³o­Óª«¥ó®Éµo¥Í¿ù»~";
+        Text[ chinese_traditional ] = "¦b¦P®É¦s¨ú³o­Óª«¥ó®Éµo¥Í¿ù»~";
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ãÍÇæáÉ ÇáæÕæá ÇáãÔÊÑß Åáì ÇáßÇÆä";
         Text[ dutch ] = "Fout bij gelijktijdige toegang tot object";
         Text[ chinese_simplified ] = "ÔÚÍ¬Ê±¶ÁÈ¡Õâ¸ö¶ÔÏóÊ±·¢Éú´íÎó";
@@ -1252,7 +1252,7 @@ Resource RID_ERRHDL
         Text [ italian ] = "Sul dispositivo non c'è più posto" ;
         Text [ spanish ] = "No hay espacio disponible en el dispositivo." ;
         Text [ french ] = "Les ressources du périphérique sont épuisées" ;
-        Text [ swedish ] = "Det finns ingen plats kvar på apparaten" ;
+        Text [ swedish ] = "Det finns ingen plats kvar på enheten" ;
         Text [ danish ] = "Der er ikke mere tilgængelig plads på enheden" ;
         Text [ portuguese ] = "Não há mais espaço no periférico." ;
         Text [ portuguese_brazilian ] = "Auf dem Ger?t ist kein Platz mehr verf?bar" ;
@@ -1583,7 +1583,7 @@ Resource RID_ERRHDL
         Text [ portuguese_brazilian ] = "Es trat ein unbekannter Ein-/Ausgabefehler auf" ;
         Text[ chinese_simplified ] = "³öÏÖÒ»¸ö²»Ã÷µÄÊäÈë/Êä³ö´íÎó";
         Text[ russian ] = "Ïğîèçîøëà íåèçâåñòíàÿ îøèáêà ââîäà-âûâîäà";
-        Text[ polish ] = "Wyst¹pi³ nieznany b³¹d wej?cia/wyj?cia";
+        Text[ polish ] = "Wyst¹pi³ nieznany b³¹d wejœcia/wyjœcia";
         Text[ japanese ] = "•s–¾‚ÈI/O ´×°‚ª”­¶";
         Text[ chinese_traditional ] = "¥X²{¤@­Ó¤£©úªº¿é¤J/¿é¥X¿ù»~";
         Text[ arabic ] = "ÍÏË ÎØÃ ÅÏÎÇá/ÅÎÑÇÌ ÛíÑ ãÚÑæİ";
@@ -1612,7 +1612,7 @@ Resource RID_ERRHDL
         Text[ russian ] = "Áûëà ñîâåğøåíà ïîïûòêà íåçàêîííûì ïóòåì ïîëó÷èòü äîñòóï ê ôàéëó";
         Text[ polish ] = "Nast¹pi³a próba uzyskania nieprawid³owego dostêpu do pliku";
         Text[ japanese ] = "–³Œø‚È‚â‚è•û‚Å‚ÌÌ§²Ù‚Ö‚Ì±¸¾½‚ª‚İ‚ç‚ê‚Ü‚µ‚½";
-        Text[ chinese_traditional ] = "Åª¨úÀÉ®×ªº¤è¦¡µL®Ä";
+        Text[ chinese_traditional ] = "¦s¨úÀÉ®×ªº¤è¦¡µL®Ä";
         Text[ arabic ] = "ÊãÊ ãÍÇæáÉ ÇáæÕæá Åáì Çáãáİ ÈÔßá ÛíÑ ÕÍíÍ";
         Text[ dutch ] = "Ongeldige poging tot openen van bestand";
         Text[ chinese_simplified ] = "¶ÁÈ¡ÎÄ¼şµÄ·½Ê½ÎŞĞ§";
@@ -1718,7 +1718,7 @@ Resource RID_ERRHDL
         Text [ portuguese_brazilian ] = "Der Pfad zu der Datei existiert nicht" ;
         Text[ chinese_simplified ] = "Ö¸ÏòÎÄ¼şµÄÂ·¾¶²»´æÔÚ";
         Text[ russian ] = "Ïóòü ê ôàéëó íå ñóùåñòâóåò";
-        Text[ polish ] = "?cie¿ka do pliku nie istnieje";
+        Text[ polish ] = "Œcie¿ka do pliku nie istnieje";
         Text[ japanese ] = "Ì§²Ù‚Ö‚ÌÊß½‚Í‚ ‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "«ü¦VÀÉ®×ªº¸ô®|¤£¦s¦b";
         Text[ arabic ] = "ÇáãÓÇÑ ÇáãÄÏí Åáì Çáãáİ ÛíÑ ãæÌæÏ";
@@ -2072,7 +2072,7 @@ Resource RID_ERRHDL
         Text [ portuguese_brazilian ] = "Daten konnten nicht ins Internet ?ertragen werden.\nServerfehlermeldung: $(ARG1)" ;
         Text[ chinese_simplified ] = "ÎŞ·¨Ïò¹ú¼Ê»¥ÁªÍø´«µİÊı¾İ¡£\n·şÎñÆ÷±¨¸æ´íÎó£º$(ARG1)";
         Text[ russian ] = "Ïåğåäàòü äàííûå â Èíòåğíåò íåâîçìîæíî.\nÑîîáùåíèå îøèáêè ñåğâåğà: $(ARG1)";
-        Text[ polish ] = "Danych nie mo¿na przenie?æ do sieci Internetu.\nKomunikat o b³êdzie z serwera: $(ARG1)";
+        Text[ polish ] = "Danych nie mo¿na przenieœæ do sieci Internetu.\nKomunikat o b³êdzie z serwera: $(ARG1)";
         Text[ japanese ] = "ÃŞ°À‚Í²İÀ°È¯Ä‚É“]‘—‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B\n»°ÊŞ° ´×° Ò¯¾°¼Ş: $(ARG1)";
         Text[ chinese_traditional ] = "µLªk¦V Internet µo°e¸ê®Æ¡C\n¦øªA¾¹³ø§i¡G$(ARG1)";
         Text[ arabic ] = "ÊÚĞÑ äŞá ÇáÈíÇäÇÊ ÚÈÑ ÇáÅäÊÑäÊ.\nÑÓÇáÉ ÎØÃ ãä ÇáãÒæøÏ: $(ARG1)";
@@ -2215,7 +2215,7 @@ Resource RID_ERRHDL
         Text [ portuguese_brazilian ] = "Das Original konnte nicht bestimmt werden" ;
         Text[ chinese_simplified ] = "ÎŞ·¨È·¶¨Ô­¼ş";
         Text[ russian ] = "Îïğåäåëèòü îğèãèíàë íåâîçìîæíî";
-        Text[ polish ] = "Orygina³u nie mo¿na by³o okre?liæ.";
+        Text[ polish ] = "Orygina³u nie mo¿na by³o okreœliæ.";
         Text[ japanese ] = "µØ¼ŞÅÙ‚ÍŒˆ’è‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
         Text[ chinese_traditional ] = "µLªk½T©w­ì¥ó";
         Text[ arabic ] = "ÊÚĞÑ ÊÍÏíÏ ÇáÃÕá";
@@ -2242,7 +2242,7 @@ Resource RID_ERRHDL
         Text [ portuguese_brazilian ] = "Der Inhalt konnte nicht erzeugt werden" ;
         Text[ chinese_simplified ] = "ÎŞ·¨Éú³ÉÄÚÈİ";
         Text[ russian ] = "Ñîçäàòü ñîäåğæàíèå íåâîçìîæíî";
-        Text[ polish ] = "Zawarto?æ nie mog³a zostaæ utworzona";
+        Text[ polish ] = "Zawartoœæ nie mog³a zostaæ utworzona";
         Text[ japanese ] = "“à—e‚Íì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
         Text[ chinese_traditional ] = "µLªk²£¥Í³o­Ó¤º®e";
         Text[ arabic ] = "ÊÚĞÑ ÅäÔÇÁ ÇáãÍÊæì";
@@ -2323,7 +2323,7 @@ Resource RID_ERRHDL
         Text [ portuguese_brazilian ] = "Die Konfiguration der Symbolanzeige ist ung?tig" ;
         Text[ chinese_simplified ] = "Í¼±êÏÔÊ¾µÄÅäÖÃÎÄ¼şÎŞĞ§";
         Text[ russian ] = "Íåïğàâèëüíàÿ êîíôèãóğàöèÿ ïîêàçà ñèìâîëîâ";
-        Text[ polish ] = "Konfiguracja wy?wietlania symboli jest nieprawid³owa.";
+        Text[ polish ] = "Konfiguracja wyœwietlania symboli jest nieprawid³owa.";
         Text[ japanese ] = "¼İÎŞÙ•\\¦‚Ìİ’è‚ª–³Œø‚Å‚·";
         Text[ chinese_traditional ] = "¥Î©ó¹Ï¥ÜÅã¥Üªº°t¸mÀÉ®×µL®Ä";
         Text[ arabic ] = "Êßæíä ÚÑÖ ÇáÑãæÒ ÛíÑ ÕÇáÍ";
@@ -2350,7 +2350,7 @@ Resource RID_ERRHDL
         Text [ portuguese_brazilian ] = "Die Konfiguration der Symbolanzeige kann nicht gespeichert werden" ;
         Text[ chinese_simplified ] = "ÎŞ·¨´æÅÌÍ¼±êÏÔÊ¾µÄÅäÖÃÎÄ¼ş";
         Text[ russian ] = "Ñîõğàíèòü êîíôèãóğàöèş ïîêàçà ñèìâîëà íåâîçìîæíî";
-        Text[ polish ] = "Konfiguracji wy?wietlania symboli nie mo¿na by³o zapisaæ.";
+        Text[ polish ] = "Konfiguracji wyœwietlania symboli nie mo¿na by³o zapisaæ.";
         Text[ japanese ] = "¼İÎŞÙ•\\¦‚Ìİ’è‚Í•Û‘¶‚Å‚«‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "µLªkÀx¦s¹Ï¥ÜÅã¥Üªº°t¸mÀÉ®×";
         Text[ arabic ] = "ÊÚĞÑÍİÙ Êßæíä ÚÑÖ ÇáÑãæÒ";
@@ -2377,7 +2377,7 @@ Resource RID_ERRHDL
         Text [ portuguese_brazilian ] = "Die Konfiguration der Symbolanzeige konnte nicht gel?cht werden" ;
         Text[ chinese_simplified ] = "ÎŞ·¨É¾³ıÍ¼±êÏÔÊ¾µÄÅäÖÃÎÄ¼ş";
         Text[ russian ] = "Óäàëèòü êîíôèãóğàöèş ïîêàçà ñèìâîëà íåâîçìîæíî";
-        Text[ polish ] = "Konfiguracja wy?wietlania symboli nie mo¿e zostaæ usuniêta.";
+        Text[ polish ] = "Konfiguracja wyœwietlania symboli nie mo¿e zostaæ usuniêta.";
         Text[ japanese ] = "¼İÎŞÙ•\\¦‚Ìİ’è‚Ííœ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
         Text[ chinese_traditional ] = "µLªk§R°£¹Ï¥ÜÅã¥Üªº°t¸mÀÉ®×";
         Text[ arabic ] = "ÊÚĞÑ ÍĞİ Êßæíä ÚÑÖ ÇáÑãæÒ.";
@@ -2404,7 +2404,7 @@ Resource RID_ERRHDL
         Text [ portuguese_brazilian ] = "Der Inhalt konnte nicht umbenannt werden" ;
         Text[ chinese_simplified ] = "ÎŞ·¨ÖØÃüÃûÄÚÈİ";
         Text[ russian ] = "Ïåğåèìåíîâàòü ñîäåğæèìîå íåâîçìîæíî";
-        Text[ polish ] = "Nazwa zawarto?ci nie mog³a zostaæ zmieniona.";
+        Text[ polish ] = "Nazwa zawartoœci nie mog³a zostaæ zmieniona.";
         Text[ japanese ] = "“à—e‚Ì–¼‘O‚Ì•ÏX‚Í‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
         Text[ chinese_traditional ] = "µLªk­«·s©R¦W¤º®e";
         Text[ arabic ] = "ÊÚĞÑÊ ÚãáíÉ ÅÚÇÏÉ ÊÓãíÉ ÇáãÍÊæíÇÊ";
@@ -2567,7 +2567,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Het pad naar de prullenbak is ongeldig" ;
         Text[ chinese_simplified ] = "»ØÊÕÕ¾Â·¾¶ÎŞĞ§";
         Text[ russian ] = "Íåïğàâèëüíûé ïóòü äëÿ êîğçèíû";
-        Text[ polish ] = "?cie¿ka dla kosza jest nieprawid³owa.";
+        Text[ polish ] = "Œcie¿ka dla kosza jest nieprawid³owa.";
         Text[ japanese ] = "‚²‚İ” ‚ÌÊß½‚ª–³Œø‚Å‚·";
         Text[ chinese_traditional ] = "¸ê·½¦^¦¬µ©ªº¸ô®|µL®Ä";
         Text[ arabic ] = "ãÓÇÑ ÓáÉ ÇáãÍĞæİÇÊ ÛíÑ ÕÇáÍ";
@@ -2838,7 +2838,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Onjuiste gegevenslengte" ;
         Text[ chinese_simplified ] = "ÎŞĞ§µÄÊı¾İ³¤¶È¡£";
         Text[ russian ] = "Íåïğàâèëüíàÿ äëèíà äàííûõ.";
-        Text[ polish ] = "Nieprawid³owa d³ugo?æ danych.";
+        Text[ polish ] = "Nieprawid³owa d³ugoœæ danych.";
         Text[ japanese ] = "–³Œø‚ÈÃŞ°À‚Ì’·‚³B";
         Text[ chinese_traditional ] = "¸ê®Æªø«×µL®Ä¡C";
         Text[ arabic ] = "Øæá ÇáÈíÇäÇÊ ÛíÑ ÕÇáÍ.";
@@ -2865,7 +2865,7 @@ Resource RID_ERRHDL
         Text [ dutch ] = "Functie niet mogelijk. Pad bevat actuele directory" ;
         Text[ chinese_simplified ] = "ÎŞ·¨Ö´ĞĞ¹¦ÄÜ£ºÂ·¾¶º¬ÓĞµ±Ç°µÄÄ¿Â¼";
         Text[ russian ] = "Íåâîçìîæíàÿ ôóíêöèÿ: ïóòü ñîäåğæèò òåêóùèé êàòàëîã";
-        Text[ polish ] = "Funkcja niemo¿liwa:?cie¿ka zawiera aktualny katalog";
+        Text[ polish ] = "Funkcja niemo¿liwa:Œcie¿ka zawiera aktualny katalog";
         Text[ japanese ] = "‹@”\\•s‰Â”\\FÊß½‚ªŒ»İ‚ÌÃŞ¨Ú¸ÄØ‚ğŠÜ‚ñ‚Å‚¢‚Ü‚·";
         Text[ chinese_traditional ] = "µLªk°õ¦æ¥\\¯à¡G¸ô®|§t¦³·í«eªº¥Ø¿ı";
         Text[ arabic ] = "åĞå ÇáãåãÉ ÛíÑ ããßäÉ: íÍÊæí ÇáãÓÇÑ Úáì ÇáÏáíá ÇáÍÇáí.";
@@ -2884,7 +2884,7 @@ Resource RID_ERRHDL
         Text [ portuguese ] = "Função impossível: periférico não é o mesmo (unidade)." ;
         Text [ english_us ] = "Function not possible: device (drive) not identical." ;
         Text [ portuguese_brazilian ] = "Funktion unm?lich: Nicht dasselbe Ger?t (Laufwerk)." ;
-        Text [ swedish ] = "Funktion omöjlig: Inte samma apparat (enhet)." ;
+        Text [ swedish ] = "Funktion omöjlig: Inte samma enhet." ;
         Text [ danish ] = "Funktion ikke mulig: ikke samme enhed (drev)." ;
         Text [ italian ] = "Funzione impossibile: apparecchio (drive) diverso." ;
         Text [ spanish ] = "Función imposible: No es el mismo dispositivo (unidad)." ;
@@ -2911,7 +2911,7 @@ Resource RID_ERRHDL
         Text [ portuguese ] = "Periférico (unidade) não está pronto." ;
         Text [ english_us ] = "Device (drive) not ready." ;
         Text [ portuguese_brazilian ] = "Ger?t (Laufwerk) nicht bereit." ;
-        Text [ swedish ] = "Apparat (enhet) ej redo." ;
+        Text [ swedish ] = "Enhet ej redo." ;
         Text [ danish ] = "Enheden (drevet) er ikke klar." ;
         Text [ italian ] = "Apparecchio (drive) non pronto." ;
         Text [ spanish ] = "Dispositivo (unidad) no listo." ;
@@ -2989,4 +2989,5 @@ Resource RID_ERRHDL
 };
 
 // eof ------------------------------------------------------------------------
+
 
