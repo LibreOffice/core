@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: gt $ $Date: 2002-06-04 12:26:52 $
+ *  last change: $Author: kz $ $Date: 2002-06-10 15:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -732,17 +732,17 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Text[ russian ] = "Use ~Asian vertical layout mode";
         Text[ greek ] = "Use ~Asian vertical layout mode";
         Text[ dutch ] = "Use ~Asian vertical layout mode";
-        Text[ french ] = "Use ~Asian vertical layout mode";
-        Text[ spanish ] = "Use ~Asian vertical layout mode";
+        Text[ french ] = "Utiliser le mode de mise en page vertical asiatique";
+        Text[ spanish ] = "~Utilizar dise�o vertical asi�tico ";
         Text[ finnish ] = "Use ~Asian vertical layout mode";
-        Text[ italian ] = "Use ~Asian vertical layout mode";
+        Text[ italian ] = "Usa il layout verticale asiatico";
         Text[ danish ] = "Use ~Asian vertical layout mode";
-        Text[ swedish ] = "Use ~Asian vertical layout mode";
+        Text[ swedish ] = "Anv�nd asiatiskt, vertikalt layoutl�ge";
         Text[ polish ] = "Use ~Asian vertical layout mode";
         Text[ portuguese_brazilian ] = "Use ~Asian vertical layout mode";
-        Text[ japanese ] = "Use ~Asian vertical layout mode";
+        Text[ japanese ] = "日本語縦書きレイアウトモードの使用";
         Text[ korean ] = "아시아 형식의 세로 방향 레이아웃 모드 사용 ";
-        Text[ chinese_simplified ] = "Use ~Asian vertical layout mode";
+        Text[ chinese_simplified ] = "使用中日韩竖写模式";
         Text[ chinese_traditional ] = "使用中日韓直書模式(~A)";
         Text[ turkish ] = "Use ~Asian vertical layout mode";
         Text[ arabic ] = "Use ~Asian vertical layout mode";
