@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-15 14:42:04 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 16:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,6 +913,19 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
             ScPostIt aNote(String(aMyAnnotation.sText), sDate, String(aMyAnnotation.sAuthor));
             aNote.SetShown(aMyAnnotation.bDisplay);
             pDoc->SetNote(static_cast<USHORT>(aCellAddress.Column), static_cast<USHORT>(aCellAddress.Row), aCellAddress.Sheet, aNote);
+            if (aMyAnnotation.bDisplay)
+            {
+                uno::Reference < drawing::XShapes > xShapes (GetScImport().GetTables().GetCurrentXShapes());    // make draw page
+                ScDetectiveFunc aDetFunc(pDoc, aCellAddress.Sheet);
+                aDetFunc.ShowComment(static_cast<USHORT>(aCellAddress.Column), static_cast<USHORT>(aCellAddress.Row), sal_False);
+                uno::Reference<container::XIndexAccess> xShapesIndex (xShapes, uno::UNO_QUERY);
+                if (xShapesIndex.is())
+                {
+                    sal_Int32 nShapes = xShapesIndex->getCount();
+                    uno::Reference < drawing::XShape > xShape;
+                    GetScImport().GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
+                }
+            }
         }
     }
 }
@@ -923,13 +936,13 @@ void ScXMLTableRowCellContext::SetDetectiveObj( const table::CellAddress& rPosit
     if( aDetectiveObjVec.size() )
     {
         ScDetectiveFunc aDetFunc( GetScImport().GetDocument(), rPosition.Sheet );
-        uno::Reference < drawing::XDrawPage > xDrawPage (GetScImport().GetTables().GetCurrentXDrawPage());  // make draw page
+        uno::Reference < drawing::XShapes > xShapes (GetScImport().GetTables().GetCurrentXShapes());    // make draw page
         for( ScMyImpDetectiveObjVec::iterator aItr = aDetectiveObjVec.begin(); aItr != aDetectiveObjVec.end(); aItr++ )
         {
             ScAddress aScAddress;
             ScUnoConversion::FillScAddress( aScAddress, rPosition );
             aDetFunc.InsertObject( aItr->eObjType, aScAddress, aItr->aSourceRange, aItr->bHasError );
-            uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
+            uno::Reference<container::XIndexAccess> xShapesIndex (xShapes, uno::UNO_QUERY);
             if (xShapesIndex.is())
             {
                 sal_Int32 nShapes = xShapesIndex->getCount();
