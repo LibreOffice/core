@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 13:25:10 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 19:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,24 +201,24 @@ void SwView::ExecDraw(SfxRequest& rReq)
         pEItem = (const SfxAllEnumItem*)pItem;
     }
 
-    if( SID_INSERT_DRAW == nSlotId && pEItem)
-        switch( pEItem->GetValue() )
+    if (SID_INSERT_DRAW == nSlotId && pEItem)
+        switch ( pEItem->GetValue() )
         {
-        case SVX_SNAP_DRAW_SELECT:          nSlotId = SID_OBJECT_SELECT;        break;
-        case SVX_SNAP_DRAW_LINE:            nSlotId = SID_DRAW_LINE;            break;
-        case SVX_SNAP_DRAW_RECT:            nSlotId = SID_DRAW_RECT;            break;
-        case SVX_SNAP_DRAW_ELLIPSE:         nSlotId = SID_DRAW_ELLIPSE;         break;
-        case SVX_SNAP_DRAW_POLYGON_NOFILL:  nSlotId = SID_DRAW_POLYGON_NOFILL;  break;
-        case SVX_SNAP_DRAW_BEZIER_NOFILL:   nSlotId = SID_DRAW_BEZIER_NOFILL;   break;
-        case SVX_SNAP_DRAW_FREELINE_NOFILL: nSlotId = SID_DRAW_FREELINE_NOFILL; break;
-        case SVX_SNAP_DRAW_ARC:             nSlotId = SID_DRAW_ARC;             break;
-        case SVX_SNAP_DRAW_PIE:             nSlotId = SID_DRAW_PIE;             break;
-        case SVX_SNAP_DRAW_CIRCLECUT:       nSlotId = SID_DRAW_CIRCLECUT;       break;
-        case SVX_SNAP_DRAW_TEXT:            nSlotId = SID_DRAW_TEXT;            break;
-        case SVX_SNAP_DRAW_TEXT_VERTICAL:   nSlotId = SID_DRAW_TEXT_VERTICAL;   break;
-        case SVX_SNAP_DRAW_TEXT_MARQUEE:    nSlotId = SID_DRAW_TEXT_MARQUEE;        break;
-        case SVX_SNAP_DRAW_CAPTION:         nSlotId = SID_DRAW_CAPTION;         break;
-        case SVX_SNAP_DRAW_CAPTION_VERTICAL: nSlotId = SID_DRAW_CAPTION_VERTICAL; break;
+            case SVX_SNAP_DRAW_SELECT:              nSlotId = SID_OBJECT_SELECT;            break;
+            case SVX_SNAP_DRAW_LINE:                nSlotId = SID_DRAW_LINE;                break;
+            case SVX_SNAP_DRAW_RECT:                nSlotId = SID_DRAW_RECT;                break;
+            case SVX_SNAP_DRAW_ELLIPSE:             nSlotId = SID_DRAW_ELLIPSE;             break;
+            case SVX_SNAP_DRAW_POLYGON_NOFILL:      nSlotId = SID_DRAW_POLYGON_NOFILL;      break;
+            case SVX_SNAP_DRAW_BEZIER_NOFILL:       nSlotId = SID_DRAW_BEZIER_NOFILL;       break;
+            case SVX_SNAP_DRAW_FREELINE_NOFILL:     nSlotId = SID_DRAW_FREELINE_NOFILL;     break;
+            case SVX_SNAP_DRAW_ARC:                 nSlotId = SID_DRAW_ARC;                 break;
+            case SVX_SNAP_DRAW_PIE:                 nSlotId = SID_DRAW_PIE;                 break;
+            case SVX_SNAP_DRAW_CIRCLECUT:           nSlotId = SID_DRAW_CIRCLECUT;           break;
+            case SVX_SNAP_DRAW_TEXT:                nSlotId = SID_DRAW_TEXT;                break;
+            case SVX_SNAP_DRAW_TEXT_VERTICAL:       nSlotId = SID_DRAW_TEXT_VERTICAL;       break;
+            case SVX_SNAP_DRAW_TEXT_MARQUEE:        nSlotId = SID_DRAW_TEXT_MARQUEE;        break;
+            case SVX_SNAP_DRAW_CAPTION:             nSlotId = SID_DRAW_CAPTION;             break;
+            case SVX_SNAP_DRAW_CAPTION_VERTICAL:    nSlotId = SID_DRAW_CAPTION_VERTICAL;    break;
         }
 
     if (nSlotId == SID_OBJECT_SELECT && nFormSfxId == nSlotId)
