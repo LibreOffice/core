@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-19 09:21:31 $
+ *  last change: $Author: sj $ $Date: 2001-06-20 11:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1603,13 +1603,13 @@ sal_Bool PPTWriter::ImplCreateSlide( int nPageNum )
                 nDirection++;
             case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_UPPERLEFT :
                 nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_TOP :
-                nDirection++;
-            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LEFT :
-                nDirection++;
             case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_BOTTOM :
                 nDirection++;
             case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_RIGHT :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_TOP :
+                nDirection++;
+            case ::com::sun::star::presentation::FadeEffect_UNCOVER_TO_LEFT :
                 nTransitionType = PPT_TRANSITION_TYPE_PULL;
             break;
 
