@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-09 10:10:34 $
+ *  last change: $Author: csaba $ $Date: 2000-12-07 18:35:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,9 @@
 #include <outline.hrc>
 #endif
 #include <algorithm>
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
 
 
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
@@ -1185,7 +1188,16 @@ void    NumberingPreview::Paint( const Rectangle& rRect )
                     nPreNum++;
                 }
                 pVDev->SetFont(aStdFont);
-                String sMsg(C2S("StarOffice"));
+
+                // Changed as per BugID 79541 Branding/Configuration
+                ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
+                UNOANY MyAny = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+                UNOOUSTRING aProductName;
+
+                MyAny >>= aProductName;
+                String sMsg(C2S("%PRODUCTNAME"));
+                sMsg.SearchAndReplaceAscii( "%PRODUCTNAME" , aProductName );
+
                 if(pOutlineNames)
                     sMsg = pOutlineNames[nLevel];
                 pVDev->DrawText( Point(nXStart + nTextOffset, nYStart), sMsg );
@@ -1211,6 +1223,9 @@ NumberingPreview::~NumberingPreview()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/09 10:10:34  obo
+    Without string include
+
     Revision 1.2  2000/11/07 12:25:18  hjs
     use min/max from stl
 
