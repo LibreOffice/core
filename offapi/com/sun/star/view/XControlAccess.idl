@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XControlAccess.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:11:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ module com {  module sun {  module star {  module view {
 
     @see com::sun::star::frame::XController
  */
-interface XControlAccess: com::sun::star::uno::XInterface
+published interface XControlAccess: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** is called to get the control from the specified control model.
