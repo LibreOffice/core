@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:44:31 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,11 +966,12 @@ BOOL ScDocShell::MoveTable( USHORT nSrcTab, USHORT nDestTab, BOOL bCopy, BOOL bR
 }
 
 
-IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScDBData*, pDBData )
+IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScRefreshTimer*, pRefreshTimer )
 {
     ScDBDocFunc aFunc(*this);
 
     BOOL bContinue = TRUE;
+    ScDBData* pDBData = static_cast<ScDBData*>(pRefreshTimer);
     ScImportParam aImportParam;
     pDBData->GetImportParam( aImportParam );
     if (aImportParam.bImport && !pDBData->HasImportSelection())
