@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-23 13:05:45 $
+ *  last change: $Author: mt $ $Date: 2001-03-07 17:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,8 @@
 
 #include <rtl/tencinfo.h>
 
+#include <svtools/rtfout.hxx>
+
 #ifndef SVX_LIGHT
 #include <edtspell.hxx>
 #endif
@@ -141,8 +143,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
-
-void lcl_MakeRTFString( XubString& rStr );
 
 void SwapUSHORTs( sal_uInt16& rX, sal_uInt16& rY )
 {
@@ -660,27 +660,22 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             }
             else
             {
-                // Attribute !!!
-                // Eine Portion kann auch durch einen Zeilenumbruch
-                // entstanden sein, dann brauch ich keine neuen Attribute schreiben...
                 aAttribItems.Clear();
                 lcl_FindValidAttribs( aAttribItems, pNode, nIndex, sal_False );
+
                 rOutput << '{';
                 if ( WriteItemListAsRTF( aAttribItems, rOutput, nNode, nIndex, aFontTable, aColorList ) )
                     rOutput << ' ';
-                XubString aTmpStr( *pNode, nIndex, pTextPortion->GetLen() );
-                if ( ( n == nStartPortion ) && nStartPos )
-                {
-                    aTmpStr.Erase( 0, nStartPos - nIndex );
-                }
-                if ( ( n == nEndPortion ) && ( nEndPos != pNode->Len() ) )
-                {
-                    sal_uInt16 nLen = pTextPortion->GetLen();
-                    sal_uInt16 nDelChars = nIndex+nLen-nEndPos;
-                    aTmpStr.Erase( aTmpStr.Len()-nDelChars, nDelChars );
-                }
-                lcl_MakeRTFString( aTmpStr );
-                rOutput << ByteString( aTmpStr, eDestEnc ).GetBuffer();
+
+                USHORT nS = nIndex;
+                USHORT nE = nIndex + pTextPortion->GetLen();
+                if ( n == nStartPortion )
+                    nS = nStartPos;
+                if ( n == nEndPortion )
+                    nE = nEndPos;
+
+                XubString aRTFStr = aEditDoc.GetParaAsString( pNode, nS, nE);
+                RTFOutFuncs::Out_String( rOutput, aRTFStr, eDestEnc );
                 rOutput << '}';
             }
             if ( bFinishPortion )
@@ -692,7 +687,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             nIndex += pTextPortion->GetLen();
         }
 
-        rOutput << sRTF_PAR << sRTF_PARD << sRTF_PLAIN;
+        rOutput << sRTF_PAR << sRTF_PARD << sRTF_PLAIN;;
         rOutput << endl;
     }
     // RTF-Nachspann...
@@ -929,24 +924,6 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
                 rOutput << sRTF_UP << aUpDown.GetBuffer();
         }
         break;
-    }
-}
-
-void lcl_MakeRTFString( XubString& rStr )
-{
-    for ( sal_uInt16 i = 0; i < rStr.Len(); i++ )
-    {
-        switch( rStr.GetChar(i) )
-        {
-            case '\\':
-            case '}':
-            case '{':
-            {
-                rStr.Insert( '\\', i );
-                i++;
-            }
-            break;
-        }
     }
 }
 
