@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:06 $
+ *  last change: $Author: mtg $ $Date: 2001-04-30 18:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@ class EntryInputStream : public cppu::WeakImplHelper2< com::sun::star::io::XInpu
 private:
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xStream;
     com::sun::star::uno::Reference< com::sun::star::io::XSeekable > xSeek;
-    sal_Int64 nEnd, nCurrent;
-    sal_Bool bDeflated, bHaveInMemory, bEncrypted;
+    sal_Int64 nEnd, nCurrent, nUncompressedSize;
+    sal_Bool bRawStream, bHaveInMemory, bEncrypted;
     com::sun::star::uno::Sequence < sal_Int8 > aSequence, aBuffer;
     const vos::ORef < EncryptionData > xEncryptionData;
     const com::sun::star::packages::ZipEntry & rEntry;
@@ -99,7 +99,7 @@ public:
              EntryInputStream( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xInput,
                                 const com::sun::star::packages::ZipEntry &rNewEntry,
                                const vos::ORef < EncryptionData > &xEncryptData,
-                                sal_Bool bIsDeflated );
+                               sal_Bool bGetRawStream = sal_False);
     virtual ~EntryInputStream();
 
     // XInputStream
