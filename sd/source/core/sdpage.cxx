@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-12 16:18:35 $
+ *  last change: $Author: aw $ $Date: 2001-11-20 11:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2357,7 +2357,25 @@ BOOL SdPage::InsertPresObj(SdrObject* pObj, PresObjKind eObjKind, BOOL bVertical
         if ( pObj->ISA(SdrTextObj) )
         {
             if( ((SdrTextObj*) pObj)->IsVerticalWriting() != bVertical )
+            {
                 ((SdrTextObj*) pObj)->SetVerticalWriting( bVertical );
+
+                // #94826# here make sure the correct anchoring is used when the object
+                // is re-used but orientation is changed
+                if(PRESOBJ_OUTLINE == eObjKind)
+                {
+                    if(bVertical)
+                    {
+                        // vertical activated on once horizontal outline object
+                        ((SdrTextObj*) pObj)->SetItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
+                    }
+                    else
+                    {
+                        // horizontal activated on once vertical outline object
+                        ((SdrTextObj*) pObj)->SetItem(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
+                    }
+                }
+            }
 
             if( !bMaster )
             {
