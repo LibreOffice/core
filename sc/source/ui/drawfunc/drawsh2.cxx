@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-16 13:09:13 $
+ *  last change: $Author: sab $ $Date: 2002-11-11 13:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,14 @@
 #include "viewdata.hxx"
 #include "sc.hrc"
 #include "tabvwsh.hxx"
+
+
+#ifndef _IPOBJ_HXX
+#include <so3/ipobj.hxx>
+#endif
+#ifndef _SVDOOLE2_HXX
+#include <svx/svdoole2.hxx>
+#endif
 
 USHORT ScGetFontWorkId();       // in drtxtob
 
@@ -192,6 +200,14 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         UINT16 nObjType = rMarkList.GetMark( 0 )->GetObj()->GetObjIdentifier();
         if ( nObjType == OBJ_OLE2 || nObjType == OBJ_GRAF || nObjType == OBJ_GRUP )
             bCanRename = TRUE;
+
+        // #91929#; don't show original size entry if not possible
+        if ( nObjType == OBJ_OLE2 )
+        {
+            SdrOle2Obj* pOleObj = static_cast<SdrOle2Obj*>(rMarkList.GetMark( 0 )->GetObj());
+            if (pOleObj && ((pOleObj->GetObjRef()->GetMiscStatus() & SVOBJ_MISCSTATUS_SERVERRESIZE) == SVOBJ_MISCSTATUS_SERVERRESIZE))
+                rSet.DisableItem(SID_ORIGINALSIZE);
+        }
     }
     if ( !bCanRename )
         rSet.DisableItem( SID_RENAME_OBJECT );
