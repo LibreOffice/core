@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablepg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:14:09 $
+ *  last change: $Author: os $ $Date: 2002-06-17 11:16:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,12 +117,17 @@ class SwFormatTablePage : public SfxTabPage
     FixedText       aBottomFT;
     MetricField     aBottomMF;
 
+    FixedLine       aPropertiesFL;
+    FixedText       aTextDirectionFT;
+    ListBox         aTextDirectionLB;
+
     SwTableRep*     pTblData;
     SwTwips         nSaveWidth;
     SwTwips         nMinTableWidth;
     USHORT          nOldAlign;
     BOOL            bModified;
     BOOL            bFull:1;
+    BOOL            bHtmlMode : 1;
 
     void        Init();
     void        ModifyHdl( Edit* pEdit );
