@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:06 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:15:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,13 @@
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
+#endif
+#ifndef _SFXPTITEM_HXX
+#include <svtools/ptitem.hxx>
+#endif
+#define ITEMID_SIZE SID_ATTR_SIZE
+#ifndef _SVX_SIZEITEM_HXX
+#include <svx/sizeitem.hxx>
 #endif
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
@@ -313,6 +320,9 @@
 #endif
 #ifndef _DOCVW_HRC
 #include <docvw.hrc>
+#endif
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
 #endif
 
 #include <charfmt.hxx>
@@ -2960,18 +2970,40 @@ void SwEditWin::MouseMove(const MouseEvent& rMEvt)
             StopDDTimer( &rSh, aDocPt );
     }
 
-    if ( bInsDraw && rView.GetDrawFuncPtr() )
+    if(rView.GetDrawFuncPtr())
     {
-        rView.GetDrawFuncPtr()->MouseMove( rMEvt );
-        if ( !bInsWin )
+        if( bInsDraw  )
         {
-            Point aTmp( aDocPt );
-            aTmp += rSh.VisArea().Pos() - aOldPt;
-            LeaveArea( aTmp );
+            rView.GetDrawFuncPtr()->MouseMove( rMEvt );
+            if ( !bInsWin )
+            {
+                Point aTmp( aDocPt );
+                aTmp += rSh.VisArea().Pos() - aOldPt;
+                LeaveArea( aTmp );
+            }
+            else
+                EnterArea();
+            return;
         }
-        else
-            EnterArea();
-        return;
+        else if(!rSh.IsFrmSelected() && !rSh.IsObjSelected())
+        {
+            SfxBindings &rBnd = rSh.GetView().GetViewFrame()->GetBindings();
+            Point aRelPos = rSh.GetRelativePagePosition(aDocPt);
+            if(aRelPos.X() >= 0)
+            {
+                FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
+                SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
+                const SfxPointItem aTmp1( SID_ATTR_POSITION, aRelPos );
+                rBnd.SetState( aTmp1 );
+            }
+            else
+            {
+                rBnd.Invalidate(SID_ATTR_POSITION);
+            }
+            rBnd.Invalidate(SID_ATTR_SIZE);
+            const SfxStringItem aCell( SID_TABLE_CELL, aEmptyStr );
+            rBnd.SetState( aCell );
+        }
     }
 
     BYTE nMouseTabCol;
@@ -3343,7 +3375,12 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                 rView.GetDrawFuncPtr()->Deactivate();
 
                 if (!rView.IsDrawMode())
+                {
                     rView.SetDrawFuncPtr(NULL);
+                    SfxBindings& rBind = rView.GetViewFrame()->GetBindings();
+                    rBind.Invalidate( SID_ATTR_SIZE );
+                    rBind.Invalidate( SID_TABLE_CELL );
+                }
             }
 
             if ( rSh.IsObjSelected() )
