@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 10:28:01 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -754,6 +754,7 @@ SvxShapeControlPropertyMapping[] =
     { MAP_CHAR_LEN("ControlBackground"), MAP_CHAR_LEN("BackgroundColor") },
     { MAP_CHAR_LEN("ControlForeground"), MAP_CHAR_LEN("SymbolColor") },
     { MAP_CHAR_LEN("ControlBorder"), MAP_CHAR_LEN("Border") },
+    { MAP_CHAR_LEN("ControlBorderColor"), MAP_CHAR_LEN("BorderColor") },
     { MAP_CHAR_LEN("ControlTextEmphasis"),  MAP_CHAR_LEN("FontEmphasisMark") },
     { NULL,0, NULL, 0 }
 };
