@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 14:00:36 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,27 @@ static const sal_Int32 mso_sptDefault16200and5400[] =
     2, 16200, 5400
 };
 
+static const SvxMSDffVertPair mso_sptArcVert[] =
+{
+    { 0, 0 }, { 21600, 21600 }, { 3 MSO_I, 1 MSO_I }, { 7 MSO_I, 5 MSO_I }, { 10800, 10800 },
+    { 0, 0 }, { 21600, 21600 }, { 3 MSO_I, 1 MSO_I }, { 7 MSO_I, 5 MSO_I }
+};
+static const sal_uInt16 mso_sptArcSegm[] =
+{
+    0xa504, 0xab00, 0x0001, 0x6001, 0x8000,
+    0xa504, 0xaa00, 0x8000
+};
+static const SvxMSDffCalculationData mso_sptArcCalc[] =
+{
+    { 0x4009, 10800, DFF_Prop_adjustValue, 0 },
+    { 0x2000, 0x400, 10800, 0 },
+    { 0x400a, 10800, DFF_Prop_adjustValue, 0 },
+    { 0x2000, 0x402, 10800, 0 },
+    { 0x4009, 10800, DFF_Prop_adjust2Value, 0 },
+    { 0x2000, 0x404, 10800, 0 },
+    { 0x400a, 10800, DFF_Prop_adjust2Value, 0 },
+    { 0x2000, 0x406, 10800, 0 }
+};
 static const sal_Int32 mso_sptArcDefault[] =
 {
     2, 270, 0
@@ -179,16 +200,16 @@ static const SvxMSDffVertPair mso_sptStandardGluePoints[] =
 };
 static const SvxMSDffHandle mso_sptArcHandle[] =
 {
-    {   MSDFF_HANDLE_FLAGS_POLAR,
-        10800, 0x100, 10800, 10800, 0x80000000, 0x7fffffff, 0x80000000, 0x7fffffff },
-    {   MSDFF_HANDLE_FLAGS_POLAR,
-        10800, 0x101, 10800, 10800, 0x80000000, 0x7fffffff, 0x80000000, 0x7fffffff }
+    {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
+        10800, 0x100, 10800, 10800, 10800, 10800, 0x80000000, 0x7fffffff },
+    {   MSDFF_HANDLE_FLAGS_POLAR | MSDFF_HANDLE_FLAGS_RADIUS_RANGE,
+        10800, 0x101, 10800, 10800, 10800, 10800, 0x80000000, 0x7fffffff }
 };
 static const mso_CustomShape msoArc =
 {
-    NULL, 0,
-    NULL, 0,
-    NULL, 0,
+    (SvxMSDffVertPair*)mso_sptArcVert, sizeof( mso_sptArcVert ) / sizeof( SvxMSDffVertPair ),
+    (sal_uInt16*)mso_sptArcSegm, sizeof( mso_sptArcSegm ) >> 1,
+    (SvxMSDffCalculationData*)mso_sptArcCalc, sizeof( mso_sptArcCalc ) / sizeof( SvxMSDffCalculationData ),
     (sal_Int32*)mso_sptArcDefault,
     NULL, 0,
     21600, 21600,
