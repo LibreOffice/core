@@ -96,11 +96,7 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star
 
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\frame
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\status
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\i18n
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\drawing
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\ui
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\geometry
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\rendering
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\form
@@ -291,22 +287,11 @@ mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\com\sun\star\ldap\*.hpp %_DEST%\inc%_EXT%\com\sun\star\ldap\*.hpp
 ..\%__SRC%\inc\com\sun\star\ldap\*.hdl %_DEST%\inc%_EXT%\com\sun\star\ldap\*.hdl
 
-..\%__SRC%\inc\drafts\com\sun\star\frame\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\*.hpp
-..\%__SRC%\inc\drafts\com\sun\star\frame\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\*.hdl
-..\%__SRC%\inc\drafts\com\sun\star\frame\status\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\status\*.hpp
-..\%__SRC%\inc\drafts\com\sun\star\frame\status\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\frame\status\*.hdl
-
-..\%__SRC%\inc\drafts\com\sun\star\ui\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\ui\*.hpp
-..\%__SRC%\inc\drafts\com\sun\star\ui\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\ui\*.hdl
-
 ..\%__SRC%\inc\drafts\com\sun\star\i18n\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\i18n\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\i18n\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\i18n\*.hdl
 
 ..\%__SRC%\inc\drafts\com\sun\star\geometry\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\geometry\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\geometry\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\geometry\*.hdl
-
-..\%__SRC%\inc\drafts\com\sun\star\drawing\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\drawing\*.hpp
-..\%__SRC%\inc\drafts\com\sun\star\drawing\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\drawing\*.hdl
 
 ..\%__SRC%\inc\drafts\com\sun\star\rendering\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\rendering\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\rendering\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\rendering\*.hdl
