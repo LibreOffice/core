@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddat.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-24 18:43:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 #endif
 
 #include "fldbas.hxx"
+
+class DateTime;
 
 /*--------------------------------------------------------------------
     Beschreibung: Formate
@@ -165,10 +167,10 @@ public:
         inline void             SetOffset(long nMinutes)    { nOffset = nMinutes; }
         inline long             GetOffset() const           { return nOffset; }
 
-        ULONG                   GetDate(BOOL bUseOffset = FALSE) const;
-        ULONG                   GetTime(BOOL bUseOffset = FALSE) const;
-        void                    SetDateTime(ULONG nDate, ULONG nTime);
-        static double           GetDateTime(SwDoc* pDoc, ULONG nDate, ULONG nTime);
+        Date                    GetDate(BOOL bUseOffset = FALSE) const;
+        Time                    GetTime(BOOL bUseOffset = FALSE) const;
+        void                    SetDateTime(const DateTime& rDT);
+        static double           GetDateTime(SwDoc* pDoc, const DateTime& rDT);
 
         virtual String          Expand() const;
         virtual SwField*        Copy() const;
