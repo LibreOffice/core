@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testimplhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-31 16:18:25 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 12:57:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,25 @@ static void dotest( const Reference< XInterface > & xOriginal )
     OSL_ENSURE( xg == xOriginal, "### root!" );
 }
 
+void rethrow()
+{
+    throw;
+}
+
+void throw_one(
+    lang::IllegalAccessException exc )
+{
+    try
+    {
+        throw exc;
+    }
+    catch (...)
+    {
+        rethrow();
+    }
+}
+
+
 //==================================================================================================
 void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & xSF )
 {
@@ -464,7 +483,52 @@ void test_ImplHelper( const Reference< lang::XMultiServiceFactory > & xSF )
         xTP7->getImplementationId() != xTP5->getImplementationId() );
     //
 
-    // exception helper test
+    bool exc_succ = false;
+    lang::IllegalAccessException exc(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("testtest") ),
+        xWeakAggImpl );
+    // exception helper tests
+    try
+    {
+        throw exc;
+    }
+    catch (Exception &)
+    {
+        Any a( getCaughtException() );
+        OSL_ASSERT( a == exc );
+
+        try
+        {
+            throwException( a );
+        }
+        catch (lang::IllegalAccessException & e)
+        {
+            OSL_ASSERT( exc.Message == e.Message && exc.Context == e.Context );
+
+            try
+            {
+                throw_one( exc );
+            }
+            catch (Exception &)
+            {
+                Any a2( getCaughtException() );
+                OSL_ASSERT( (a2 == a) && (a2 == exc) );
+
+                try
+                {
+                    throw_one( exc );
+                }
+                catch (lang::IllegalAccessException &)
+                {
+                    Any a3( getCaughtException() );
+                    OSL_ASSERT( (a3 == a) && (a3 == a2) && (a3 == exc) );
+                    exc_succ = true;
+                }
+            }
+        }
+    }
+    OSL_ASSERT( exc_succ );
+
     try
     {
         throwException( makeAny( RuntimeException(
