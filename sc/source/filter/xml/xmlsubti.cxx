@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:14:39 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,10 +813,10 @@ sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
         {
             if (nCurrentSheet > aItr->Sheet)
                 aItr = aMatrixRangeList.erase(aItr);
-            else if ((nRow >= aItr->EndRow) && (nColumn > aItr->EndColumn))
+            else if (nRow > aItr->EndRow)
                 aItr = aMatrixRangeList.erase(aItr);
-            else if (nColumn < aItr->StartColumn)
-                bReady = sal_True;
+            else if ((nRow == aItr->EndRow) && (nColumn > aItr->EndColumn))
+                aItr = aMatrixRangeList.erase(aItr);
             else if (nColumn >= aItr->StartColumn && nColumn <= aItr->EndColumn && nRow >= aItr->StartRow && nRow <= aItr->EndRow)
             {
                 bReady = sal_True;
