@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-01 17:36:04 $
+ *  last change: $Author: sab $ $Date: 2001-02-09 18:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,7 @@ using namespace ::com::sun::star;
 
 XMLTableShapeImportHelper::XMLTableShapeImportHelper(
         ScXMLImport& rImp, SvXMLImportPropertyMapper *pImpMapper ) :
-    XMLShapeImportHelper( rImp.GetModel(), pImpMapper ),
-    rImport( rImp )
+    XMLShapeImportHelper(rImp, rImp.GetModel(), pImpMapper )
 {
 }
 
@@ -134,19 +133,19 @@ void XMLTableShapeImportHelper::finishShape(
 
         rtl::OUString aLocalName;
         sal_uInt16 nPrefix =
-            rImport.GetNamespaceMap().GetKeyByAttrName( rAttrName,
+            static_cast<ScXMLImport&>(mrImporter).GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                             &aLocalName );
         if(nPrefix = XML_NAMESPACE_TABLE)
         {
             if (aLocalName.compareToAscii(sXML_end_cell_address) == 0)
             {
                 sal_Int32 nOffset(0);
-                ScXMLConverter::GetAddressFromString(aEndCell, rValue, rImport.GetDocument(), nOffset);
+                ScXMLConverter::GetAddressFromString(aEndCell, rValue, static_cast<ScXMLImport&>(mrImporter).GetDocument(), nOffset);
             }
             else if (aLocalName.compareToAscii(sXML_end_x) == 0)
-                rImport.GetMM100UnitConverter().convertMeasure(X, rValue);
+                static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(X, rValue);
             else if (aLocalName.compareToAscii(sXML_end_y) == 0)
-                rImport.GetMM100UnitConverter().convertMeasure(Y, rValue);
+                static_cast<ScXMLImport&>(mrImporter).GetMM100UnitConverter().convertMeasure(Y, rValue);
             else if (aLocalName.compareToAscii(sXML_table_background) == 0)
                 if (rValue.compareToAscii(sXML_true) == 0)
                     bBackground = sal_True;
@@ -167,7 +166,7 @@ void XMLTableShapeImportHelper::finishShape(
     if (!bOnTable)
     {
         if (X >= 0 && Y >= 0)
-            rImport.GetTables().AddShape(rShape, aStartCell, aEndCell, X, Y);
+            static_cast<ScXMLImport&>(mrImporter).GetTables().AddShape(rShape, aStartCell, aEndCell, X, Y);
         SvxShape* pShapeImp = SvxShape::getImplementation(rShape);
         if (pShapeImp)
         {
