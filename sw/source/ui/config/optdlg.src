@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-29 09:44:32 $
+ *  last change: $Author: kz $ $Date: 2001-12-04 18:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2936,8 +2936,8 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_simplified ] = "ε¶θ΅¨η¬¦";
         Text[ russian ] = "Òΰασλÿςξπϋ";
         Text[ polish ] = "Tabulatory";
-        Text[ japanese ] = "οΎ€οΎοΎ(~B)";
-        Text[ chinese_traditional ] = "θ£½θ΅¨η¬¦";
+        Text[ japanese ] = "οΎ€οΎοΎ";
+        Text[ chinese_traditional ] = "ε®δ½ιµ";
         Text[ arabic ] = "ΪαΗγΗΚ ΗαΜΟζαΙ";
         Text[ greek ] = "Στηλοθέτες";
         Text[ korean ] = "νƒ­";
@@ -3201,7 +3201,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ russian ] = "Òΰασλÿςξπϋ";
         Text[ polish ] = "Tabulator";
         Text[ japanese ] = "οΎ€οΎοΎ(~T)";
-        Text[ chinese_traditional ] = "θ£½θ΅¨η¬¦(~T)";
+        Text[ chinese_traditional ] = "ε®δ½ιµ(~T)";
         Text[ arabic ] = "ΪαΗγΙ ΜΟζαΙ";
         Text[ greek ] = "Στηλοθέτης";
         Text[ korean ] = "νƒ­(~T)";
@@ -3229,7 +3229,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ russian ] = "Òΰασλÿςξπϋ θ οπξαελϋ";
         Text[ polish ] = "Tabulator i ~spacja";
         Text[ japanese ] = "οΎ€οΎοΎγ¨ο½½οΎοΎο½°ο½½(~N)";
-        Text[ chinese_traditional ] = "θ£½θ΅¨η¬¦ε’η©Ίζ Ό(~N)";
+        Text[ chinese_traditional ] = "ε®δ½ιµε’η©Ίζ Ό(~N)";
         Text[ arabic ] = "ΪαΗγΗΚ ΜΟζαΙ ζΓΝΡέ γΣΗέΙ";
         Text[ greek ] = "Στηλοθέτες και κενά";
         Text[ korean ] = "νƒ­κ³Ό κ°„κ²©(~N)";
@@ -3331,6 +3331,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
