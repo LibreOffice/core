@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edsect.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:02:13 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,9 @@ BOOL SwEditShell::IsAnySectionInDoc( BOOL bChkReadOnly, BOOL bChkHidden, BOOL bC
 {
     const SwSectionFmts& rFmts = GetDoc()->GetSections();
     USHORT nCnt = rFmts.Count();
-    for( USHORT n = 0; n < nCnt; ++n )
+    USHORT n;
+
+    for( n = 0; n < nCnt; ++n )
     {
         SectionType eTmpType;
         const SwSectionFmt* pFmt = rFmts[ n ];
