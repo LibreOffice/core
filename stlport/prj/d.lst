@@ -20,6 +20,8 @@ mkdir: %_DEST%\inc%_EXT%\stl\wrap_std\h
 ..\%__SRC%\lib\lib*.so* %_DEST%\lib%_EXT%\lib*.so*
 ..\%__SRC%\lib\lib*.a %_DEST%\lib%_EXT%\lib*.a
 ..\%__SRC%\lib\lib*.dylib %_DEST%\lib%_EXT%\lib*.dylib
-..\%__SRC%\lib\lib*.dylib* %_DEST%\lib%_EXT%\lib*.dylib*
+..\%__SRC%\lib\lib*.dylib.* %_DEST%\lib%_EXT%\lib*.dylib.*
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+
+linklib: libstlport_gcc.dylib.*.*
