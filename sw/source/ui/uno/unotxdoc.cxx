@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 09:31:52 $
+ *  last change: $Author: mib $ $Date: 2001-05-22 12:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1907,6 +1907,22 @@ void SwXTextDocument::setPropertyValue(const OUString& rPropertyName,
             pDocShell->GetDoc()->SetRedlineMode( eMode );
         }
         break;
+        case  WID_DOC_CHANGES_PASSWORD:
+        {
+            Sequence <sal_Int8> aNew;
+            if(aValue >>= aNew)
+            {
+                SwDoc* pDoc = pDocShell->GetDoc();
+                pDoc->SetRedlinePasswd(aNew);
+                if(aNew.getLength())
+                {
+                    sal_uInt16 eMode = pDoc->GetRedlineMode();
+                    eMode = eMode|REDLINE_ON;
+                    pDoc->SetRedlineMode( eMode );
+                }
+            }
+        }
+        break;
         case WID_DOC_AUTO_MARK_URL :
         {
             OUString sURL;
@@ -2009,6 +2025,12 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
                 bSet = (eMode& REDLINE_ON)  != 0;
             }
             aAny.setValue(&bSet, ::getBooleanCppuType());
+        }
+        break;
+        case  WID_DOC_CHANGES_PASSWORD:
+        {
+            SwDoc* pDoc = pDocShell->GetDoc();
+            aAny <<= pDoc->GetRedlinePasswd();
         }
         break;
         case WID_DOC_AUTO_MARK_URL :
