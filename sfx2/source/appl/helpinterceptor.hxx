@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:38 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,6 @@ struct HelpHistoryEntry_Impl
 
 DECLARE_LIST(HelpHistoryList_Impl,HelpHistoryEntry_Impl*);
 
-class OpenStatusListener_Impl;
 class SfxHelpWindow_Impl;
 class HelpInterceptor_Impl : public ::cppu::WeakImplHelper3<
 
@@ -117,6 +116,7 @@ class HelpInterceptor_Impl : public ::cppu::WeakImplHelper3<
 {
 private:
 friend class HelpDispatch_Impl;
+friend class SfxHelpWindow_Impl;
 
     // the component which's dispatches we're intercepting
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception > m_xIntercepted;
@@ -128,7 +128,6 @@ friend class HelpDispatch_Impl;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > m_xListener;
 
     HelpHistoryList_Impl*       m_pHistory;
-    OpenStatusListener_Impl*    m_pOpenListener;
     SfxHelpWindow_Impl*         m_pWindow;
     ULONG                       m_nCurPos;
     String                      m_aCurrentURL;
@@ -175,8 +174,8 @@ public:
     virtual void SAL_CALL   removeStatusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >& xControl, const ::com::sun::star::util::URL& aURL ) throw(::com::sun::star::uno::RuntimeException);
 
     // extras
-    void                    InitWaiter( OpenStatusListener_Impl* pListener, SfxHelpWindow_Impl* pWindow )
-                                { m_pOpenListener = pListener; m_pWindow = pWindow; }
+    void                    InitWaiter( SfxHelpWindow_Impl* pWindow )
+                                { m_pWindow = pWindow; }
     SfxHelpWindow_Impl*     GetHelpWindow() const { return m_pWindow; }
 };
 
