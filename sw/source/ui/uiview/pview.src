@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:26:16 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Rozdělení";
         TEXT[ hebrew ] = "Aufteilung";
         TEXT[ hindi ] = "वितरण";
+        TEXT[ slovak ] = "Distribúcia";
     };
     FixedText FT_ROWS
     {
@@ -141,6 +142,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Řádky";
         TEXT[ hebrew ] = "~Zeilen";
         TEXT[ hindi ] = "पं~क्तियाँ";
+        TEXT[ slovak ] = "~Riadky";
     };
     NumericField NF_ROWS
     {
@@ -191,6 +193,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Sloupce";
         TEXT[ hebrew ] = "‮טורים‬";
         TEXT[ hindi ] = "~स्तंभें ";
+        TEXT[ slovak ] = "~Stĺpce";
     };
     NumericField NF_COLS
     {
@@ -241,6 +244,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Okraje";
         TEXT[ hebrew ] = "Ränder";
         TEXT[ hindi ] = "पृष्ठ-प्रान्त";
+        TEXT[ slovak ] = "Okraje";
     };
     FixedText FT_LMARGIN
     {
@@ -276,6 +280,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Vlevo";
         TEXT[ hebrew ] = "~Links";
         TEXT[ hindi ] = "बा~याँ";
+        TEXT[ slovak ] = "Vľa~vo";
     };
     MetricField MF_LMARGIN
     {
@@ -327,6 +332,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Vpravo";
         TEXT[ hebrew ] = "~Rechts";
         TEXT[ hindi ] = "~दाहिना";
+        TEXT[ slovak ] = "Vp~ravo";
     };
     MetricField MF_RMARGIN
     {
@@ -378,6 +384,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Nahoře";
         TEXT[ hebrew ] = "~Oben";
         TEXT[ hindi ] = "~ऊपर";
+        TEXT[ slovak ] = "~Hore";
     };
     MetricField MF_TMARGIN
     {
@@ -429,6 +436,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Dole";
         TEXT[ hebrew ] = "~Unten";
         TEXT[ hindi ] = "~नीचे";
+        TEXT[ slovak ] = "~Dole";
     };
     MetricField MF_BMARGIN
     {
@@ -480,6 +488,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Vzdálenost";
         TEXT[ hebrew ] = "‮ריווח‬";
         TEXT[ hindi ] = "अंतर देना";
+        TEXT[ slovak ] = "Vzdialenosť";
     };
     FixedText FT_HMARGIN
     {
@@ -515,6 +524,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Vodorovně";
         TEXT[ hebrew ] = "H~orizontal";
         TEXT[ hindi ] = "सम~तल";
+        TEXT[ slovak ] = "Vodo~rovne";
     };
 
     MetricField MF_HMARGIN
@@ -567,6 +577,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Svisle";
         TEXT[ hebrew ] = "~Vertikal";
         TEXT[ hindi ] = "~लंबरूप प्रकार से";
+        TEXT[ slovak ] = "~Zvisle";
     };
 
     MetricField MF_VMARGIN
@@ -618,6 +629,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Formát";
         TEXT[ hebrew ] = "‮עיצוב‬";
         TEXT[ hindi ] = "रचना";
+        TEXT[ slovak ] = "Formát";
     };
     RadioButton RB_LANDSCAPE
     {
@@ -654,6 +666,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Na šířku";
         TEXT[ hebrew ] = "‮לרוחב הדף‬";
         TEXT[ hindi ] = "लान्डस्के~प्";
+        TEXT[ slovak ] = "~Na šírku";
     };
     RadioButton RB_PORTRAIT
     {
@@ -688,6 +701,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Na výšku";
         TEXT[ hebrew ] = "‮לאורך הדף‬";
         TEXT[ hindi ] = "पो~र्टरैट्";
+        TEXT[ slovak ] = "Na ~výšku";
     };
     Window WIN_PREVIEW
     {
@@ -748,6 +762,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ czech ] = "Výchozí";
         TEXT[ hebrew ] = "‮ברירת מחדל‬";
         TEXT[ hindi ] = "~अनुपस्थिति";
+        TEXT[ slovak ] = "Výcho~dzie";
     };
     TEXT[ italian ] = "Opzioni di stampa";
     TEXT[ portuguese_brazilian ] = "Op��es de Impress�o";
@@ -776,6 +791,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     TEXT[ czech ] = "Volby tisku";
     TEXT[ hebrew ] = "Druckoptionen";
     TEXT[ hindi ] = "छपाई विकल्प";
+    TEXT[ slovak ] = "Nastavenia tlače";
 };
 ModalDialog DLG_PAGEPREVIEW_ZOOM
 {
@@ -821,6 +837,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text[ czech ] = "Sloupce";
         Text[ hebrew ] = "‮טורים‬";
         Text[ hindi ] = "~स्तंभें";
+        Text[ slovak ] = "~Stĺpce";
     };
     FixedText FT_ROW
     {
@@ -857,6 +874,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text[ czech ] = "Řádky";
         Text[ hebrew ] = "~Zeilen";
         Text[ hindi ] = "~पंक्तियाँ";
+        Text[ slovak ] = "~Riadky";
     };
     NumericField ED_COL
     {
@@ -932,6 +950,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
     Text[ hebrew ] = "‮זום‬";
     Text[ portuguese_brazilian ] = "Zoom";
     Text[ hindi ] = "झूम";
+    Text[ slovak ] = "Lupa";
 };
 String RID_PVIEW_TOOLBOX
 {
@@ -964,6 +983,7 @@ String RID_PVIEW_TOOLBOX
     Text[ czech ] = "Náhled stránky";
     Text[ hebrew ] = "‮מבט כללי‬";
     Text[ hindi ] = "पृष्ठ का पूर्वदृश्य";
+    Text[ slovak ] = "Náhľad stránky";
 };
 ToolBox RID_PVIEW_TOOLBOX
 {
@@ -1053,6 +1073,8 @@ ToolBox RID_PVIEW_TOOLBOX
     };
     Scroll = TRUE ;
 };
+
+
 
 
 
