@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:18:25 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ TabPage TP_FLD_VAR
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Typ";
     };
     ListBox LB_VARTYPE
     {
@@ -146,6 +147,7 @@ TabPage TP_FLD_VAR
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "‮בחירה‬";
         Text[ hindi ] = "चु~नाव";
+        Text[ slovak ] = "Výb~er";
     };
     ListBox LB_VARSELECTION
     {
@@ -187,6 +189,7 @@ TabPage TP_FLD_VAR
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "‮עיצוב‬";
         Text[ hindi ] = "रचना";
+        Text[ slovak ] = "Formát";
     };
     ListBox LB_VARFORMAT
     {
@@ -237,6 +240,7 @@ TabPage TP_FLD_VAR
         TEXT[ czech ] = "Neviditelný";
         TEXT[ hebrew ] = "~Unsichtbar";
         TEXT[ hindi ] = "अ~गोचर";
+        TEXT[ slovak ] = "Nevi~diteľný";
     };
     FixedText FT_VARCHAPTERHEADER
     {
@@ -270,6 +274,7 @@ TabPage TP_FLD_VAR
         Text[ czech ] = "Číslování podle kapitol";
         Text[ hebrew ] = "Kapitelweise Nummerierung";
         Text[ hindi ] = "अध्याय के अनुसार संख्या देना ";
+        Text[ slovak ] = "Číslovanie podľa kapitol";
     };
     FixedText FT_VARCHAPTERLEVEL
     {
@@ -303,6 +308,7 @@ TabPage TP_FLD_VAR
         Text[ czech ] = "Úroveň";
         Text[ hebrew ] = "E~bene";
         Text[ hindi ] = "~स्तर";
+        Text[ slovak ] = "Úro~veň";
     };
     ListBox LB_VARCHAPTERLEVEL
     {
@@ -420,6 +426,10 @@ TabPage TP_FLD_VAR
     {
          < "कोई नहीं" ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "Žiadne" ; > ;
+    };
     };
     FixedText FT_VARSEPARATOR
     {
@@ -453,6 +463,7 @@ TabPage TP_FLD_VAR
         Text[ czech ] = "Oddělovač";
         Text[ hebrew ] = "~Trenner";
         Text[ hindi ] = "~अलगानेवाला";
+        Text[ slovak ] = "O~ddeľovač";
     };
     Edit ED_VARSEPARATOR
     {
@@ -495,6 +506,7 @@ TabPage TP_FLD_VAR
         Text[ czech ] = "Název";
         Text[ hebrew ] = "Na~me";
         Text[ hindi ] = "ना~म";
+        Text[ slovak ] = "~Názov";
     };
     Edit ED_VARNAME
     {
@@ -537,6 +549,7 @@ TabPage TP_FLD_VAR
         Text[ czech ] = "Hodnota";
         Text[ hebrew ] = "~Wert";
         Text[ hindi ] = "~मूल्य";
+        Text[ slovak ] = "Ho~dnota";
     };
     Edit ED_VARVALUE
     {
@@ -590,6 +603,7 @@ TabPage TP_FLD_VAR
                 Text[ czech ] = "Použít";
                 Text[ hebrew ] = "‮יישום‬";
                 Text[ hindi ] = "लागू करो";
+                Text[ slovak ] = "Použiť";
             };
             ToolBoxItem
             {
@@ -628,6 +642,7 @@ TabPage TP_FLD_VAR
                 Text[ czech ] = "Smazat";
                 Text[ hebrew ] = "‮מחיקה‬";
                 Text[ hindi ] = "मिटाओ";
+                Text[ slovak ] = "Zmazať";
             };
         };
     };
@@ -644,7 +659,7 @@ TabPage TP_FLD_VAR
     Text[ russian ] = "����������";
     Text[ polish ] = "Zmienne";
     Text[ japanese ] = "変数";
-    Text[ chinese_traditional ] = "變量";
+    Text[ chinese_traditional ] = "變數";
     Text[ arabic ] = "�������";
     Text[ greek ] = "����������";
     Text[ korean ] = "변수";
@@ -656,7 +671,10 @@ TabPage TP_FLD_VAR
     Text[ czech ] = "Proměnné";
     Text[ hebrew ] = "Variablen";
     Text[ hindi ] = "वेरिऐबल";
+    Text[ slovak ] = "Premenné";
 };
+
+
 
 
 
