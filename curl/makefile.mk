@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2002-09-10 10:30:34 $
+#   last change: $Author: abi $ $Date: 2002-10-21 07:11:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ PATCH_FILE_NAME=unx1-curl-7.9.8.patch
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS= --without-ssl
+CONFIGURE_FLAGS= --without-ssl --enable-ftp --disable-http  --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_ACTION=make
