@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxdemo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:32:51 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:53:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,11 +555,8 @@ int main (int argc, char **argv)
     try
     {
         // Load dll for the tested component
-#ifdef SAL_W32
-        OUString aDllName = OStringToOUString( "sax" , RTL_TEXTENCODING_ASCII_US );
-#else
-        OUString aDllName = OUString::createFromAscii( "libsax.so" );
-#endif
+        OUString aDllName =
+            OUString::createFromAscii( "sax.uno" SAL_DLLEXTENSION );
         xReg->registerImplementation(
             OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
             aDllName,
