@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-14 10:56:28 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -455,11 +455,16 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
         {
             RTUik aUik;
             aReader.getUik( aUik );
+            sal_uInt16 n = aReader.getMISuperTypeCount();
+            com::sun::star::uno::Sequence< rtl::OUString > aSuperTypeNames(n);
+            for (sal_uInt16 i = 0; i < n; ++i) {
+                aSuperTypeNames[i] = aReader.getMISuperTypeName(i).replace(
+                    '/', '.');
+            }
             return com::sun::star::uno::Reference< XTypeDescription >(
                 new InterfaceTypeDescriptionImpl( xNameAccess,
                                                   aName,
-                                                  aReader.getSuperTypeName()
-                                                    .replace( '/', '.' ),
+                                                  aSuperTypeNames,
                                                   aUik,
                                                   rData ) );
         }
