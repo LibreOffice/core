@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:55:25 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,14 +275,16 @@ USHORT SdDrawDocument::GetPageByName(const String& rPgName, BOOL& rbIsMasterPage
 
     rbIsMasterPage = FALSE;
 
-    /**************************************************************************
-    * Zuerst alle Pages durchsuchen
-    **************************************************************************/
+    // Search all regular pages and all notes pages (handout pages are
+    // ignored.)
     while (nPage < nMaxPages && nPageNum == SDRPAGE_NOTFOUND)
     {
-        pPage = (SdPage*) GetPage(nPage);
+        pPage = const_cast<SdPage*>(static_cast<const SdPage*>(
+            GetPage(nPage)));
 
-        if (pPage && pPage->GetName() == rPgName)
+        if (pPage != NULL
+            && pPage->GetPageKind() != PK_HANDOUT
+            && pPage->GetName() == rPgName)
         {
             nPageNum = nPage;
         }
@@ -290,15 +292,14 @@ USHORT SdDrawDocument::GetPageByName(const String& rPgName, BOOL& rbIsMasterPage
         nPage++;
     }
 
-    /**************************************************************************
-    * Wenn nicht gefunden, dann alle MasterPages durchsuchen
-    **************************************************************************/
+    // Search all master pages when not found among non-master pages.
     const USHORT nMaxMasterPages = GetMasterPageCount();
     nPage = 0;
 
     while (nPage < nMaxMasterPages && nPageNum == SDRPAGE_NOTFOUND)
     {
-        pPage = (SdPage*) GetMasterPage(nPage);
+        pPage = const_cast<SdPage*>(static_cast<const SdPage*>(
+            GetMasterPage(nPage)));
 
         if (pPage && pPage->GetName() == rPgName)
         {
@@ -309,7 +310,7 @@ USHORT SdDrawDocument::GetPageByName(const String& rPgName, BOOL& rbIsMasterPage
         nPage++;
     }
 
-    return (nPageNum);
+    return nPageNum;
 }
 
 
