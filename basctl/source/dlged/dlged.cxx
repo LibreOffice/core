@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-20 09:05:27 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 11:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,6 +376,25 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
     bFirstDraw = TRUE;
 
     pSdrModel->SetChanged( FALSE );
+}
+
+//----------------------------------------------------------------------------
+
+Reference< util::XNumberFormatsSupplier > const & DlgEditor::GetNumberFormatsSupplier()
+{
+    if ( !m_xSupplier.is() )
+    {
+        Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        Reference< util::XNumberFormatsSupplier > xSupplier( xMSF->createInstance(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier") ) ), UNO_QUERY );
+
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if ( !m_xSupplier.is() )
+        {
+            m_xSupplier = xSupplier;
+        }
+    }
+    return m_xSupplier;
 }
 
 //----------------------------------------------------------------------------

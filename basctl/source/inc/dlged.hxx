@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-17 13:55:42 $
+ *  last change: $Author: tbe $ $Date: 2001-09-25 11:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#endif
 
 enum DlgEdMode { DLGED_INSERT, DLGED_SELECT, DLGED_TEST };
 
@@ -108,6 +111,7 @@ protected:
     DlgEdForm*          pDlgEdForm;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >     m_xUnoControlDialogModel;
     ::com::sun::star::uno::Sequence< ::com::sun::star::datatransfer::DataFlavor >       m_ClipboardDataFlavors;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xSupplier;
     DlgEdFactory*       pObjFac;
     Window*             pWindow;
     DlgEdFunc*          pFunc;
@@ -141,6 +145,8 @@ public:
                         ::com::sun::star::container::XNameContainer > xUnoControlDialogModel );
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetDialog() const
                         {return m_xUnoControlDialogModel;}
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier > const & GetNumberFormatsSupplier();
 
     SdrModel*       GetModel()      const { return pSdrModel; }
     SdrView*        GetView()       const { return pSdrView; }
