@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlannoi.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 07:47:42 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:50:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,12 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
+#endif
 
 class ScXMLImport;
 class ScXMLTableRowCellContext;
@@ -81,9 +87,13 @@ class ScXMLAnnotationContext : public SvXMLImportContext
     rtl::OUStringBuffer sCreateDateBuffer;
     rtl::OUStringBuffer sCreateDateStringBuffer;
     sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay : 1;
-    sal_Bool        bHasTextP : 1;
+    sal_Bool        bDisplay;
+    sal_Bool        bHasTextP;
+    sal_Bool        bHasPos;
     ScXMLTableRowCellContext*   pCellContext;
+    SvXMLImportContext*         pShapeContext;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape;
+    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xShapes;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -103,9 +113,14 @@ public:
                                      const ::com::sun::star::uno::Reference<
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
+    virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+
     virtual void Characters( const ::rtl::OUString& rChars );
 
     virtual void EndElement();
+
+    void SetShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xTempShape,
+        const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& xTempShapes) { xShape.set(xTempShape); xShapes.set(xTempShapes); }
 };
 
 
