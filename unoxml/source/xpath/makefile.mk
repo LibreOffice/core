@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 12:30:19 $
+#   last change: $Author: hr $ $Date: 2004-12-10 18:06:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,14 +62,13 @@
 
 PRJ=../..
 
-PRJNAME=libxml2
+PRJNAME=unoxml
 TARGET=xpathimpl
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
 # --- Files --------------------------------------------------------
 
