@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2002-06-06 13:11:36 $
+ *  last change: $Author: tl $ $Date: 2002-07-31 05:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,8 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     aSize = Size(rDev.GetTextWidth(rText), rDev.GetTextHeight());
 
     const FontMetric  aFM (rDev.GetFontMetric());
-    BOOL              bIsMath  = aFM.GetName().EqualsIgnoreCaseAscii( FONTNAME_MATH );
+    BOOL              bIsMath  = aFM.GetName().EqualsIgnoreCaseAscii( FONTNAME_MATH ) ||
+                                 aFM.GetName().EqualsIgnoreCaseAscii( FONTNAME_MATH2 );
     BOOL              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);
     const long        nFontHeight = rDev.GetFont().GetSize().Height();
 
