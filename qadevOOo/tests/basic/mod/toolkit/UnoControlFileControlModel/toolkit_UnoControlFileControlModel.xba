@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_UnoControlFileControlModel.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:05:52 $ 
+'*  last change:$Date: 2003-03-18 13:46:00 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -74,6 +74,7 @@ option explicit
 ' REQUIRED VARIABLES for interface/service tests:
 Global oComponentInstance As Object
 
+Global oPersistInstance As Object
 
 Sub CreateObj()
 
@@ -84,6 +85,7 @@ Sub CreateObj()
 On Error Goto ErrHndl
     oObj = createUnoService("com.sun.star.awt.UnoControlFileControlModel")
     oComponentInstance = createUnoService("com.sun.star.awt.UnoControlFileControlModel")
+    oPersistInstance = createUnoService("com.sun.star.awt.UnoControlFileControlModel")
 Exit Sub
 ErrHndl:
     Test.Exception()
