@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdviter.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:01 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #include <tools/solar.h>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class OutputDevice;
@@ -79,7 +83,7 @@ class SetOfByte;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class SdrViewIter {
+class SVX_DLLPUBLIC SdrViewIter {
     const SdrModel*  pModel;
     const SdrPage*   pPage;
     const SdrObject* pObject;
@@ -89,12 +93,12 @@ class SdrViewIter {
     USHORT     nPageViewNum;
     USHORT     nOutDevNum;
 private:
-    void          ImpInitVars();
-    SdrView*      ImpFindView();
-    SdrPageView*  ImpFindPageView();
-    OutputDevice* ImpFindOutDev();
-    Window*       ImpFindWindow();
-    FASTBOOL      ImpCheckPageView(SdrPageView* pPV) const;
+    SVX_DLLPRIVATE void          ImpInitVars();
+    SVX_DLLPRIVATE SdrView*      ImpFindView();
+    SVX_DLLPRIVATE SdrPageView*  ImpFindPageView();
+    SVX_DLLPRIVATE OutputDevice* ImpFindOutDev();
+    SVX_DLLPRIVATE Window*       ImpFindWindow();
+    SVX_DLLPRIVATE FASTBOOL      ImpCheckPageView(SdrPageView* pPV) const;
 public:
     SdrViewIter(const SdrModel*  pModel);
     SdrViewIter(const SdrPage*   pPage, FASTBOOL bNoMasterPage=FALSE);
