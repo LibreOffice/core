@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:03:08 $
+ *  last change: $Author: oj $ $Date: 2001-03-20 08:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ void ORelationControl::SetDef(const Reference< XPropertySet>& xDest,sal_Int32 _n
     if(xDest.is())
         ::dbaui::composeTableName(static_cast<ORelationDialog*>(GetParent())->getConnection()->getMetaData(),xDest,sComposedName,sal_False);
 
-    SetColumnTitle(_nPos, sComposedName);
+    SetColumnTitle((USHORT)_nPos, sComposedName);
 
     // beide (!) Spalten loeschen
     ::std::vector<OConnectionLineData*>* pLines = m_pConnData->GetConnLineDataList();
