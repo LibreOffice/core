@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:12 $
+ *  last change: $Author: jl $ $Date: 2001-03-14 09:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,9 @@
 #ifndef _VOS_MACROS_HXX_
 #define _VOS_MACROS_HXX_
 
-#ifndef _OSL_TYPES_H_
-#   include <osl/types.h>
+
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
 #endif
 
 // *********************************************************************
