@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ios2met.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:15 $
+ *  last change: $Author: sj $ $Date: 2000-09-28 14:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,9 +1023,8 @@ void OS2METReader::ReadChrStr(BOOL bGivenPos, BOOL bMove, BOOL bExtra, USHORT nO
     pChr = new char[nLen+1];
     for (i=0; i<nLen; i++)
         *pOS2MET >> pChr[i];
-    pChr[nLen]=0;
-    String aStr( String::CreateFromAscii( pChr ) );
-
+    pChr[nLen] = 0;
+    String aStr( (const sal_Char*)pChr, gsl_getSystemTextEncoding() );
     SetRasterOp(aAttr.eChrMix);
     if (pVirDev->GetFont()!=aFont)
         pVirDev->SetFont(aFont);
@@ -2304,11 +2303,10 @@ void OS2METReader::ReadFont(USHORT nFieldSize)
                         break;
                     case 0x08: { // Font Typeface
                         char str[33];
-                        String aStr;
                         pOS2MET->SeekRel(1);
-                        for (i=0; i<32; i++) *pOS2MET >> str[i];
-                        str[32]=0;
-                        aStr = String::CreateFromAscii( str );
+                        pOS2MET->Read( &str, 32 );
+                        str[ 32 ] = 0;
+                        String aStr( (const sal_Char*)str, gsl_getSystemTextEncoding() );
                         if ( aStr.CompareIgnoreCaseToAscii( "Helv" ) == COMPARE_EQUAL )
                             aStr = String::CreateFromAscii( "Helvetica" );
                         pF->aFont.SetName( aStr );

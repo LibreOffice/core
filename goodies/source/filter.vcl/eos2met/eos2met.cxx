@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eos2met.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:12 $
+ *  last change: $Author: sj $ $Date: 2000-09-28 14:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,7 +438,7 @@ void METWriter::CreateChrSet(const Font & rFont)
         pCS = new METChrSet;
         pCS->pSucc = pChrSetList; pChrSetList=pCS;
         pCS->nSet = nNextChrSetId++;
-        pCS->aName = ByteString( rFont.GetName(), RTL_TEXTENCODING_UTF8 );
+        pCS->aName = ByteString( rFont.GetName(), gsl_getSystemTextEncoding() );
         pCS->eWeight = rFont.GetWeight();
     }
 }
@@ -1399,7 +1399,7 @@ void METWriter::METPartialArcAtCurPos(Point aCenter, double fMultiplier,
 void METWriter::METChrStr( Point aPt, String aUniStr )
 {
     USHORT nLen,i;
-    ByteString aStr( aUniStr, RTL_TEXTENCODING_UTF8 );
+    ByteString aStr( aUniStr, gsl_getSystemTextEncoding() );
     nLen = aStr.Len();
     WillWriteOrder( 11 + nLen );
     *pMET << (BYTE)0xc3 << (BYTE)( 9 + nLen );
