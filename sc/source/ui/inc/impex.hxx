@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impex.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:34:41 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef SC_IMPEX_HXX
 #define SC_IMPEX_HXX
+
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 
 #ifndef _SOT_EXCHANGE_HXX //autogen
 #include <sot/exchange.hxx>
@@ -178,7 +182,7 @@ public:
 // static
 inline BOOL ScImportExport::IsEndianSwap( const SvStream& rStrm )
 {
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
     return rStrm.GetNumberFormatInt() != NUMBERFORMAT_INT_BIGENDIAN;
 #else
     return rStrm.GetNumberFormatInt() != NUMBERFORMAT_INT_LITTLEENDIAN;
