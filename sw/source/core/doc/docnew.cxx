@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-29 12:32:09 $
+ *  last change: $Author: jp $ $Date: 2001-06-01 13:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,14 +585,9 @@ SwDoc::~SwDoc()
     pCharFmtTbl->Remove( 0 );
 
     // Delete fuer pPrt
-    if( pPrt )
-        DELETEZ( pPrt );
-
-    if( pSwgInfo )
-        DELETEZ( pSwgInfo );
-
-    if (pNewDBMgr)
-        DELETEZ(pNewDBMgr);
+    DELETEZ( pPrt );
+    DELETEZ( pSwgInfo );
+    DELETEZ( pNewDBMgr );
 
     // Alle Flys muessen vor dem Drawing Model zerstoert werden,
     // da Flys noch DrawContacts enthalten koennen, wenn wegen
@@ -618,6 +613,7 @@ SwDoc::~SwDoc()
     delete pDfltGrfFmtColl;
     delete pNumRuleTbl;
 
+    delete pPrtData;
     delete pBookmarkTbl;
     delete pNumberFormatter;
     delete pFtnInfo;
