@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_nssimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+ *  last change: $Author: mmi $ $Date: 2004-07-14 08:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,11 @@
 #include "nspr.h"
 #include "nss.h"
 #include "secder.h"
+
+//MM : added by MM
+#include "secoid.h"
+//MM : end
+
 
 using namespace ::com::sun::star::uno ;
 using namespace ::com::sun::star::security ;
@@ -357,4 +362,80 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
     } else
         return NULL ;
 }
+
+// MM : added by MM
+::rtl::OUString getAlgorithmDescription(SECAlgorithmID *aid)
+{
+    SECOidTag tag;
+    tag = SECOID_GetAlgorithmTag(aid);
+
+    const char *pDesc = SECOID_FindOIDTagDescription(tag);
+
+    return rtl::OUString::createFromAscii( pDesc ) ;
+}
+
+::rtl::OUString SAL_CALL X509Certificate_NssImpl::getSubjectPublicKeyAlgorithm()
+    throw ( ::com::sun::star::uno::RuntimeException)
+{
+    if( m_pCert != NULL )
+    {
+        return getAlgorithmDescription(&(m_pCert->subjectPublicKeyInfo.algorithm));
+    }
+    else
+    {
+        return OUString() ;
+    }
+}
+
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getSubjectPublicKeyValue()
+    throw ( ::com::sun::star::uno::RuntimeException)
+{
+    if( m_pCert != NULL )
+    {
+        SECItem spk = m_pCert->subjectPublicKeyInfo.subjectPublicKey;
+        DER_ConvertBitString(&spk);
+
+        if ( spk.len>0)
+        {
+            Sequence< sal_Int8 > key( spk.len ) ;
+            for( unsigned int i = 0 ; i < spk.len ; i ++ )
+            {
+                key[i] = *( spk.data + i ) ;
+            }
+
+            return key ;
+        }
+    }
+
+    return NULL ;
+}
+
+::rtl::OUString SAL_CALL X509Certificate_NssImpl::getSignatureAlgorithm()
+    throw ( ::com::sun::star::uno::RuntimeException)
+{
+    if( m_pCert != NULL )
+    {
+        return getAlgorithmDescription(&(m_pCert->signature));
+    }
+    else
+    {
+        return OUString() ;
+    }
+}
+
+::rtl::OUString SAL_CALL X509Certificate_NssImpl::getThumbprintAlgorithm()
+    throw ( ::com::sun::star::uno::RuntimeException)
+{
+    //MM : dummy
+    return OUString();
+}
+
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getThumbprint()
+    throw ( ::com::sun::star::uno::RuntimeException)
+{
+    //MM : dummy
+    return NULL ;
+}
+
+// MM : end
 

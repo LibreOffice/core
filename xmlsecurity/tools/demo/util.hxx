@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:30 $
+ *  last change: $Author: mmi $ $Date: 2004-07-14 08:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 
 #include <xmlsecurity/xmlsignaturehelper.hxx>
 
-#include <drafts/com/sun/star/xml/crypto/XUriBinding.hpp>
+#include <com/sun/star/xml/crypto/XUriBinding.hpp>
 
 /*
  * get service manager and context
@@ -83,5 +83,5 @@
 
 ::rtl::OUString getSignatureInformations(
     const SignatureInformations& SignatureInformations,
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::xml::crypto::XSecurityEnvironment >& xSecurityEnvironment );
+    ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XSecurityEnvironment >& xSecurityEnvironment );
     

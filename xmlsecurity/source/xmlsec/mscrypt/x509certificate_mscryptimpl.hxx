@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_mscryptimpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: mmi $ $Date: 2004-07-14 08:12:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,24 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper2<
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL findCertExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& oid ) throw (::com::sun::star::uno::RuntimeException) ;
 
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getEncoded() throw ( ::com::sun::star::uno::RuntimeException) ;
+
+        // MM : added by MM
+        virtual ::rtl::OUString SAL_CALL getSubjectPublicKeyAlgorithm()
+            throw ( ::com::sun::star::uno::RuntimeException) ;
+
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getSubjectPublicKeyValue()
+            throw ( ::com::sun::star::uno::RuntimeException) ;
+
+        virtual ::rtl::OUString SAL_CALL getSignatureAlgorithm()
+            throw ( ::com::sun::star::uno::RuntimeException) ;
+
+        virtual ::rtl::OUString SAL_CALL getThumbprintAlgorithm()
+            throw ( ::com::sun::star::uno::RuntimeException) ;
+
+        virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getThumbprint()
+            throw ( ::com::sun::star::uno::RuntimeException) ;
+        // MM : end
+
 
         //Methods from XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (com::sun::star::uno::RuntimeException);

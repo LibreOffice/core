@@ -2,9 +2,9 @@
  *
  *  $RCSfile: x509certificate_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: mmi $ $Date: 2004-07-14 08:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,4 +389,70 @@ X509Certificate_MSCryptImpl* X509Certificate_MSCryptImpl :: getImplementation( c
     } else
         return NULL ;
 }
+
+// MM : added by MM
+::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectPublicKeyAlgorithm()
+    throw ( ::com::sun::star::uno::RuntimeException)
+{
+    if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )
+    {
+        CRYPT_ALGORITHM_IDENTIFIER algorithm = m_pCertContext->pCertInfo->SubjectPublicKeyInfo.Algorithm;
+        return OUString::createFromAscii( algorithm.pszObjId ) ;
+    }
+    else
+    {
+        return OUString() ;
+    }
+}
+
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSubjectPublicKeyValue()
+    throw ( ::com::sun::star::uno::RuntimeException)
+{
+    if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )
+    {
+        CRYPT_BIT_BLOB publicKey = m_pCertContext->pCertInfo->SubjectPublicKeyInfo.PublicKey;
+
+        Sequence< sal_Int8 > key( publicKey.cbData ) ;
+        for( unsigned int i = 0 ; i < publicKey.cbData ; i++ )
+        {
+            key[i] = *(publicKey.pbData + i) ;
+        }
+
+        return key;
+    }
+    else
+    {
+        return NULL ;
+    }
+}
+
+::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl::getSignatureAlgorithm()
+    throw ( ::com::sun::star::uno::RuntimeException)
+{
+    if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL )
+    {
+        CRYPT_ALGORITHM_IDENTIFIER algorithm = m_pCertContext->pCertInfo->SignatureAlgorithm;
+        return OUString::createFromAscii( algorithm.pszObjId ) ;
+    }
+    else
+    {
+        return OUString() ;
+    }
+}
+
+::rtl::OUString SAL_CALL X509Certificate_MSCryptImpl::getThumbprintAlgorithm()
+    throw ( ::com::sun::star::uno::RuntimeException)
+{
+    //MM : dummy
+    return OUString();
+}
+
+::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getThumbprint()
+    throw ( ::com::sun::star::uno::RuntimeException)
+{
+    //MM : dummy
+    return NULL ;
+}
+
+// MM : end
 

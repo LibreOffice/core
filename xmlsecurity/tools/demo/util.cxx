@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:30 $
+ *  last change: $Author: mmi $ $Date: 2004-07-14 08:12:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,23 @@ cssu::Reference< cssl::XMultiServiceFactory > serviceManager(
         for( int i = 0; i < xCertPath.getLength(); i++ )
         {
             result += xCertPath[i]->getSubjectName();
-                    result += rtl::OUString::createFromAscii( " << " );
+                    result += rtl::OUString::createFromAscii( "\n    Subject public key algorithm : " );
+                    result += xCertPath[i]->getSubjectPublicKeyAlgorithm();
+                    result += rtl::OUString::createFromAscii( "\n    Signature algorithm : " );
+                    result += xCertPath[i]->getSignatureAlgorithm();
+                    result += rtl::OUString::createFromAscii( "\n    Subject public key value : " );
+
+                    cssu::Sequence< sal_Int8 > keyValue = xCertPath[i]->getSubjectPublicKeyValue();
+            int length = keyValue.getLength();
+
+            char number[64];
+                    for (int j=0; j<length; j++)
+                    {
+                        sprintf(number, "%02X ", (unsigned char)keyValue[j]);
+                        result += rtl::OUString::createFromAscii( number );
+                    }
+
+                    result += rtl::OUString::createFromAscii( "\n  <<\n" );
         }
 
             result += rtl::OUString::createFromAscii( "\n" );
