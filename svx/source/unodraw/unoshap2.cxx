@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 18:14:28 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 18:30:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -955,7 +955,7 @@ uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aProper
             awt::Point* pSequence = aRetval.getArray();
 
             for(sal_Int32 b=0;b<nCount;b++)
-                *pSequence++ = awt::Point( rPoly[b].X(), rPoly[b].Y() );
+                *pSequence++ = awt::Point( rPoly[(USHORT)b].X(), rPoly[(USHORT)b].Y() );
         }
 
         return uno::Any( &aRetval, ::getCppuType((const drawing::PointSequence*)0) );
