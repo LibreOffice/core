@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:56:01 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include <svx/imapdlg.hxx>
 #include <svx/srchitem.hxx>
 #include <sfx2/templdlg.hxx>
+#include <sfx2/objface.hxx>
 #include <sfx2/app.hxx>
 #include <avmedia/mediaplayer.hxx>
 
