@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:40:27 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:06:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,11 @@ String SCSTR_APPLICATION
     Text[ portuguese ] = "%PRODUCTNAME Calc 6.0";
     Text[ russian ] = "%PRODUCTNAME Calc 6.0";
     Text[ greek ] = "%PRODUCTNAME Calc 6.0";
-    Text[ dutch ] = "%PRODUCTNAME Calc 6.0";
+    Text[ dutch ] = "%PRODUCTNAME Calc 1.0/6.0";
     Text[ french ] = "%PRODUCTNAME Calc 6.0";
     Text[ spanish ] = "%PRODUCTNAME Calc 6.0";
     Text[ italian ] = "%PRODUCTNAME Calc 6.0";
-    Text[ danish ] = "%PRODUCTNAME Calc 6.0";
+    Text[ danish ] = "StarOffice Calc 6.0";
     Text[ swedish ] = "%PRODUCTNAME Calc 6.0";
     Text[ polish ] = "%PRODUCTNAME Calc 6.0";
     Text[ portuguese_brazilian ] = "%PRODUCTNAME Calc 6.0";
@@ -93,6 +93,8 @@ String SCSTR_APPLICATION
     Text[ hebrew ] = "%PRODUCTNAME Calc 6.0";
     Text[ hindi ] = "%PRODUCTNAME गणना 6.0";
     Text[ slovak ] = "%PRODUCTNAME Calc 6.0";
+    Text[ hungarian ] = "%PRODUCTNAME Calc 6.0";
+    Text[ slovenian ] = "%PRODUCTNAME Calc 6.0";
 };
 String SCSTR_50_APPLICATION
 {
@@ -125,6 +127,8 @@ String SCSTR_50_APPLICATION
     Text[ hebrew ] = "StarCalc 5.0";
     Text[ hindi ] = "StarCalc  5.0";
     Text[ slovak ] = "StarCalc 5.0";
+    Text[ hungarian ] = "StarCalc 5.0";
+    Text[ slovenian ] = "StarCalc 5.0";
 };
 String SCSTR_40_APPLICATION
 {
@@ -157,6 +161,8 @@ String SCSTR_40_APPLICATION
     Text[ hebrew ] = "StarCalc 4.0";
     Text[ hindi ] = "StarCalc 4.0";
     Text[ slovak ] = "StarCalc 4.0";
+    Text[ hungarian ] = "StarCalc 4.0";
+    Text[ slovenian ] = "StarCalc 4.0";
 };
 String SCSTR_30_APPLICATION
 {
@@ -189,6 +195,8 @@ String SCSTR_30_APPLICATION
     Text[ hebrew ] = "StarCalc 3.0";
     Text[ hindi ] = "StarCalc 3.0";
     Text[ slovak ] = "StarCalc 3.0";
+    Text[ hungarian ] = "StarCalc 3.0";
+    Text[ slovenian ] = "StarCalc 3.0";
 };
 String SCSTR_LONG_SCDOC_NAME
 {
@@ -198,11 +206,11 @@ String SCSTR_LONG_SCDOC_NAME
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Folha de c�lculo";
     Text[ russian ] = "����������� ������� %PRODUCTNAME 6.0";
     Text[ greek ] = "%PRODUCTNAME 6.0 ������������ �����";
-    Text[ dutch ] = "%PRODUCTNAME 6.0 werkblad";
+    Text[ dutch ] = "%PRODUCTNAME 1.0/6.0 werkblad";
     Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION Classeur";
     Text[ spanish ] = "Hoja de c�lculo %PRODUCTNAME %PRODUCTVERSION ";
     Text[ italian ] = "Tabella %PRODUCTNAME %PRODUCTVERSION";
-    Text[ danish ] = "%PRODUCTNAME 6.0-tabel";
+    Text[ danish ] = "%PRODUCTNAME %PRODUCTVERSION-regneark";
     Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION-tabell";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Arkusz kalkulacyjny";
     Text[ portuguese_brazilian ] = "Planilha de C�lculo %PRODUCTNAME 6.0";
@@ -220,15 +228,17 @@ String SCSTR_LONG_SCDOC_NAME
     Text[ hebrew ] = "%PRODUCTNAME 6.0 Tabelle";
     Text[ hindi ] = "%PRODUCTNAME 6.0 स्प्रेडशीट्";
     Text[ slovak ] = "Zošit %PRODUCTNAME %PRODUCTVERSION";
+    Text[ hungarian ] = "%PRODUCTNAME %PRODUCTVERSION-munkafüzet";
+    Text[ slovenian ] = "Preglednica programa %PRODUCTNAME 6.0";
 };
 String SCSTR_50_LONG_DOCNAME
 {
     Text = "%PRODUCTNAME 5.0 Tabelle" ;
     Text [ ENGLISH ] = "StarOffice 5.0 Table" ;
-    Text [ dutch ] = "%PRODUCTNAME 5.0 werkblad" ;
+    Text [ dutch ] = "StarCalc 5.0 werkblad" ;
     Text [ english_us ] = "%PRODUCTNAME 5.0 Spreadsheet" ;
     Text [ swedish ] = "%PRODUCTNAME 5.0-tabell" ;
-    Text [ danish ] = "%PRODUCTNAME 5.0-tabel" ;
+    Text [ danish ] = "StarOffice 5.0-regneark" ;
     Text [ italian ] = "Tabella %PRODUCTNAME 5.0" ;
     Text [ spanish ] = "%PRODUCTNAME 5.0 - Hoja de c�lculo" ;
     Text [ french ] = "%PRODUCTNAME 5.0 Classeur" ;
@@ -251,15 +261,17 @@ String SCSTR_50_LONG_DOCNAME
     Text[ hebrew ] = "%PRODUCTNAME 5.0 Tabelle";
     Text[ hindi ] = "%PRODUCTNAME 5.0 स्प्रेडशीट्";
     Text[ slovak ] = "Zošit %PRODUCTNAME 5.0";
+    Text[ hungarian ] = "%PRODUCTNAME 5.0-munkafüzet";
+    Text[ slovenian ] = "Preglednica programa %PRODUCTNAME 5.0";
 };
 String SCSTR_40_LONG_DOCNAME
 {
     Text = "%PRODUCTNAME 4.0 Tabelle" ;
     Text [ ENGLISH ] = "StarOffice 4.0 Table" ;
-    Text [ dutch ] = "%PRODUCTNAME 4.0 Werkblad" ;
+    Text [ dutch ] = "StarCalc 4.0 Werkblad" ;
     Text [ english_us ] = "%PRODUCTNAME 4.0 Spreadsheet" ;
     Text [ swedish ] = "%PRODUCTNAME 4.0-tabell" ;
-    Text [ danish ] = "StarCalc 4.0 regneark" ;
+    Text [ danish ] = "StarCalc 4.0-regneark" ;
     Text [ italian ] = "Foglio elettronico %PRODUCTNAME 4.0" ;
     Text [ spanish ] = "%PRODUCTNAME 4.0 - Hoja de c�lculo" ;
     Text [ french ] = "%PRODUCTNAME 4.0 Classeur" ;
@@ -282,6 +294,8 @@ String SCSTR_40_LONG_DOCNAME
     Text[ hebrew ] = "%PRODUCTNAME 4.0 Tabelle";
     Text[ hindi ] = "%PRODUCTNAME 4.0 स्प्रेडशीट्";
     Text[ slovak ] = "Zošit %PRODUCTNAME 4.0";
+    Text[ hungarian ] = "%PRODUCTNAME 4.0-munkafüzet";
+    Text[ slovenian ] = "Preglednica programa %PRODUCTNAME 4.0";
 };
 String SCSTR_30_LONG_DOCNAME
 {
@@ -313,6 +327,8 @@ String SCSTR_30_LONG_DOCNAME
     Text[ hebrew ] = "StarCalc 3.0 Tabelle";
     Text[ hindi ] = "StarCalc 3.0 स्प्रेडशीट्";
     Text[ slovak ] = "Zošit StarCalc 3.0";
+    Text[ hungarian ] = "StarCalc 3.0-munkafüzet";
+    Text[ slovenian ] = "Preglednica programa StarCalc 3.0";
 };
 String SCSTR_SHORT_SCDOC_NAME
 {
@@ -345,6 +361,8 @@ String SCSTR_SHORT_SCDOC_NAME
     Text[ hebrew ] = "‮גליון אלקטרוני‬";
     Text[ hindi ] = "स्प्रेडशीट्";
     Text[ slovak ] = "Zošit";
+    Text[ hungarian ] = "Munkafüzet";
+    Text[ slovenian ] = "Preglednica";
 };
 String SCSTR_HUMAN_SCDOC_NAME
 {
@@ -377,6 +395,8 @@ String SCSTR_HUMAN_SCDOC_NAME
     Text[ hebrew ] = "‮גליון אלקטרוני‬";
     Text[ hindi ] = "स्प्रेडशीट्";
     Text[ slovak ] = "Zošit";
+    Text[ hungarian ] = "Munkafüzet";
+    Text[ slovenian ] = "Preglednica";
 };
 
 String SCSTR_DOCSHELL
@@ -410,6 +430,8 @@ String SCSTR_DOCSHELL
     Text[ hebrew ] = "Tabelle";
     Text[ hindi ] = "शीट्";
     Text[ slovak ] = "List";
+    Text[ hungarian ] = "Munkalap";
+    Text[ slovenian ] = "Delovni list";
 };
 
 String SCSTR_TABVIEWSHELL
@@ -443,6 +465,8 @@ String SCSTR_TABVIEWSHELL
     Text[ hebrew ] = "Zellen";
     Text[ hindi ] = "कोष्ठें";
     Text[ slovak ] = "Bunky";
+    Text[ hungarian ] = "Cellák";
+    Text[ slovenian ] = "Celice";
 };
 
 String SCSTR_CELLSHELL
@@ -475,6 +499,8 @@ String SCSTR_CELLSHELL
     Text[ hebrew ] = "Zellfunktionen";
     Text[ hindi ] = "कोष्ठों केलिए फ़ंक्शन्स";
     Text[ slovak ] = "Funkcie buniek";
+    Text[ hungarian ] = "Cellafüggvények";
+    Text[ slovenian ] = "Funkcije za celice";
 };
 
 String SCSTR_FORMATSHELL
@@ -507,6 +533,8 @@ String SCSTR_FORMATSHELL
     Text[ hebrew ] = "Zellformate";
     Text[ hindi ] = "कोष्ठों केलिए रचना";
     Text[ slovak ] = "Formáty buniek";
+    Text[ hungarian ] = "Cellák formázása";
+    Text[ slovenian ] = "Oblike za celice";
 };
 
 
@@ -541,6 +569,8 @@ String SCSTR_DRAWSHELL
     Text[ hebrew ] = "Grafikobjekte";
     Text[ hindi ] = "सुचित्र वस्तु";
     Text[ slovak ] = "Grafické objekty";
+    Text[ hungarian ] = "Képobjektumok";
+    Text[ slovenian ] = "Grafični predmeti";
 };
 
 String SCSTR_DRAWTEXTSHELL
@@ -574,6 +604,8 @@ String SCSTR_DRAWTEXTSHELL
     Text[ hebrew ] = "Textobjekte";
     Text[ hindi ] = "टेक्स्ट् वस्तु";
     Text[ slovak ] = "Textové objekty";
+    Text[ hungarian ] = "Szövegobjektumok";
+    Text[ slovenian ] = "Predmeti besedila";
 };
 
 String SCSTR_DRAWFORMSHELL
@@ -606,6 +638,8 @@ String SCSTR_DRAWFORMSHELL
     Text[ hebrew ] = "Formularobjekte";
     Text[ hindi ] = "फ़ॉर्म वस्तु";
     Text[ slovak ] = "Objekty formulára";
+    Text[ hungarian ] = "Űrlapobjektumok";
+    Text[ slovenian ] = "Predmeti obrazca";
 };
 
 String SCSTR_CHARTSHELL
@@ -616,11 +650,11 @@ String SCSTR_CHARTSHELL
     Text[ portuguese ] = "Objectos de gr�ficos";
     Text[ russian ] = "������� ���������";
     Text[ greek ] = "����������� ������������";
-    Text[ dutch ] = "Chart-objecten";
+    Text[ dutch ] = "Diagram-objecten";
     Text[ french ] = "Objets de diagramme";
     Text[ spanish ] = "Objetos de diagrama";
     Text[ italian ] = "Diagrammi";
-    Text[ danish ] = "Diagram-objekter";
+    Text[ danish ] = "Diagramobjekter";
     Text[ swedish ] = "Chart-objekt";
     Text[ polish ] = "Obiekty wykresu";
     Text[ portuguese_brazilian ] = "Objetos de gr�ficos";
@@ -637,6 +671,8 @@ String SCSTR_CHARTSHELL
     Text[ hebrew ] = "Chart-Objekte";
     Text[ hindi ] = "चार्ट वस्तु";
     Text[ slovak ] = "Objekty Grafu";
+    Text[ hungarian ] = "Diagramobjektumok";
+    Text[ slovenian ] = "Predmeti grafikona";
 };
 
 String SCSTR_OLEOBJECTSHELL
@@ -669,6 +705,8 @@ String SCSTR_OLEOBJECTSHELL
     Text[ hebrew ] = "OLE-Objekte";
     Text[ hindi ] = "OLE वस्तु";
     Text[ slovak ] = "OLE objekty";
+    Text[ hungarian ] = "OLE-objektumok";
+    Text[ slovenian ] = "OLE predmeti";
 };
 
 String SCSTR_GRAPHICSHELL
@@ -700,6 +738,8 @@ String SCSTR_GRAPHICSHELL
     Text[ hebrew ] = "‮גרפיקה‬";
     Text[ hindi ] = "सुचित्र";
     Text[ slovak ] = "Obrázky";
+    Text[ hungarian ] = "Kép";
+    Text[ slovenian ] = "Grafika";
 };
 String SCSTR_PAGEBREAKSHELL
 {
@@ -731,6 +771,8 @@ String SCSTR_PAGEBREAKSHELL
     Text[ hebrew ] = "Seitenumbruch";
     Text[ hindi ] = "पृष्ठ खण्डन";
     Text[ slovak ] = "Zalomenie stránky";
+    Text[ hungarian ] = "Oldaltörés";
+    Text[ slovenian ] = "Prelom strani";
 };
 
 String SCSTR_EDITSHELL
@@ -764,6 +806,8 @@ String SCSTR_EDITSHELL
     Text[ hebrew ] = "Textbearbeitung";
     Text[ hindi ] = "टेक्स्ट् संपादन";
     Text[ slovak ] = "Úprava textu";
+    Text[ hungarian ] = "Szövegszerkesztés";
+    Text[ slovenian ] = "Urejanje besedila";
 };
 
 String SCSTR_PREVIEWSHELL
@@ -797,6 +841,8 @@ String SCSTR_PREVIEWSHELL
     Text[ hebrew ] = "Druckvorschau";
     Text[ hindi ] = "छपाई पूर्वदृश्य";
     Text[ slovak ] = "Náhľad pred tlačou";
+    Text[ hungarian ] = "Nyomtatási kép";
+    Text[ slovenian ] = "Predogled tiskanja";
 };
 
 String SCSTR_PIVOTSHELL
@@ -830,6 +876,8 @@ String SCSTR_PIVOTSHELL
     Text[ hebrew ] = "Datenpilot-Tabellen";
     Text[ hindi ] = "ड़ॉटा पैलट् सारणी";
     Text[ slovak ] = "Tabuľka sprievodcu dátami";
+    Text[ hungarian ] = "Adattündértáblák";
+    Text[ slovenian ] = "Tabele programa Data pilot";
 };
 
 String SCSTR_AUDITSHELL
@@ -843,7 +891,7 @@ String SCSTR_AUDITSHELL
     Text [ spanish ] = "Modo Detective de relleno" ;
     Text [ french ] = "Mode Remplissage d'audit" ;
     Text [ swedish ] = "Detektiv-fyllningsl�ge" ;
-    Text [ danish ] = "Detektiv-fyldmodus" ;
+    Text [ danish ] = "Detektiv udfyldningstilstand" ;
     Text [ portuguese ] = "Modo preenchimento de auditoria" ;
     Text [ portuguese_brazilian ] = "Modo de Preenchimento do Auditor" ;
     Text[ chinese_simplified ] = "侦探-充填模式";
@@ -863,6 +911,8 @@ String SCSTR_AUDITSHELL
     Text[ hebrew ] = "Detektiv-Füll-Modus";
     Text[ hindi ] = "डिटेक्टिव भरने का प्रकार";
     Text[ slovak ] = "Mód detektívneho vyplňovania";
+    Text[ hungarian ] = "Detektív kitöltő módja";
+    Text[ slovenian ] = "Način polnitve z zaznavanjem";
 };
 
  // -----------------------------------------------------------------------
@@ -899,6 +949,8 @@ String STR_ROWHEIGHT
     Text[ hebrew ] = "‮גובה‬";
     Text[ hindi ] = "ऊँचाई";
     Text[ slovak ] = "Výška";
+    Text[ hungarian ] = "Magasság";
+    Text[ slovenian ] = "Višina";
 };
 String STR_OPT_ROWHEIGHT
 {
@@ -931,6 +983,8 @@ String STR_OPT_ROWHEIGHT
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
     Text[ slovak ] = "Pridať";
+    Text[ hungarian ] = "Hozzáadás";
+    Text[ slovenian ] = "Dodaj";
 };
 String STR_ROWHEIGHT_TITLE
 {
@@ -964,6 +1018,8 @@ String STR_ROWHEIGHT_TITLE
     Text[ hebrew ] = "‮גובה שורה‬";
     Text[ hindi ] = "पंक्ति ऊँचाई";
     Text[ slovak ] = "Výška riadku";
+    Text[ hungarian ] = "Sormagasság";
+    Text[ slovenian ] = "Višina vrstice";
 };
 String STR_OPT_ROWHEIGHT_TITLE
 {
@@ -997,6 +1053,8 @@ String STR_OPT_ROWHEIGHT_TITLE
     Text[ hebrew ] = "‮גובה שורה מיטבי‬";
     Text[ hindi ] = "Optimal Row Height";
     Text[ slovak ] = "Optimálna výška riadku";
+    Text[ hungarian ] = "Optimális sormagasság";
+    Text[ slovenian ] = "Optimalna višina vrstice";
 };
 String STR_COLWIDTH
 {
@@ -1029,6 +1087,8 @@ String STR_COLWIDTH
     Text[ hebrew ] = "‮רוחב‬";
     Text[ hindi ] = "चौड़ाई";
     Text[ slovak ] = "Šírka";
+    Text[ hungarian ] = "Szélesség";
+    Text[ slovenian ] = "Širina";
 };
 String STR_OPT_COLWIDTH
 {
@@ -1061,6 +1121,8 @@ String STR_OPT_COLWIDTH
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "जोड़ो";
     Text[ slovak ] = "Pridať";
+    Text[ hungarian ] = "Hozzáadás";
+    Text[ slovenian ] = "Dodaj";
 };
 String STR_COLWIDTH_TITLE
 {
@@ -1093,6 +1155,8 @@ String STR_COLWIDTH_TITLE
     Text[ hebrew ] = "Spaltenbreite";
     Text[ hindi ] = "स्तंभ चौड़ाई";
     Text[ slovak ] = "Šírka stĺpca";
+    Text[ hungarian ] = "Oszlopszélesség";
+    Text[ slovenian ] = "Širina stolpca";
 };
 String STR_OPT_COLWIDTH_TITLE
 {
@@ -1125,6 +1189,8 @@ String STR_OPT_COLWIDTH_TITLE
     Text[ hebrew ] = "‮רוחב טור מיטבי‬";
     Text[ hindi ] = "योग्य स्तंभ चौड़ाई";
     Text[ slovak ] = "Optimálna šírka stĺpca";
+    Text[ hungarian ] = "Optimális oszlopszélesség";
+    Text[ slovenian ] = "Optimalna širina stolpca";
 };
 String SCSTR_UNDEFINED
 {
@@ -1157,6 +1223,8 @@ String SCSTR_UNDEFINED
     Text[ hebrew ] = "- undefiniert -";
     Text[ hindi ] = "- नहीं परिभाषित -";
     Text[ slovak ] = "- nedefinované -";
+    Text[ hungarian ] = "- nincs megadva - ";
+    Text[ slovenian ] = "- nedefinirano -";
 };
 String SCSTR_NONE
 {
@@ -1189,6 +1257,8 @@ String SCSTR_NONE
     Text[ hebrew ] = "‮- ללא - ‬";
     Text[ hindi ] = "- कोई नहीं -";
     Text[ slovak ] = "- nič -";
+    Text[ hungarian ] = "- nincs -";
+    Text[ slovenian ] = "- brez -";
 };
 String SCSTR_EMPTY
 {
@@ -1221,6 +1291,8 @@ String SCSTR_EMPTY
     Text[ hebrew ] = "- leer -";
     Text[ hindi ] = "- खाली -";
     Text[ slovak ] = "- prázdny -";
+    Text[ hungarian ] = "- üres -";
+    Text[ slovenian ] = "- prazno -";
 };
 String SCSTR_NOTEMPTY
 {
@@ -1253,6 +1325,8 @@ String SCSTR_NOTEMPTY
     Text[ hebrew ] = "- nicht leer -";
     Text[ hindi ] = "- खाली नहीं -";
     Text[ slovak ] = "- neprázdny -";
+    Text[ hungarian ] = "- nem üres -";
+    Text[ slovenian ] = "- ni prazno -";
 };
 String SCSTR_NEWTABLE
 {
@@ -1285,6 +1359,8 @@ String SCSTR_NEWTABLE
     Text[ hebrew ] = "- neue Tabelle -";
     Text[ hindi ] = "- नया शीट् -";
     Text[ slovak ] = "- nový list -";
+    Text[ hungarian ] = "- új munkalap - ";
+    Text[ slovenian ] = "- nov list -";
 };
 String SCSTR_ALL
 {
@@ -1317,6 +1393,8 @@ String SCSTR_ALL
     Text[ hebrew ] = "- alle -";
     Text[ hindi ] = "- सब -";
     Text[ slovak ] = "- všetko -";
+    Text[ hungarian ] = "- minden -";
+    Text[ slovenian ] = "- vse -";
 };
 String SCSTR_STDFILTER
 {
@@ -1348,6 +1426,8 @@ String SCSTR_STDFILTER
     Text[ hebrew ] = "- Standard -";
     Text[ hindi ] = "- स्टान्डर्ड -";
     Text[ slovak ] = "- Štandardný -";
+    Text[ hungarian ] = "- Standard -";
+    Text[ slovenian ] = "- Standardno -";
 };
 String SCSTR_TOP10FILTER
 {
@@ -1379,6 +1459,8 @@ String SCSTR_TOP10FILTER
     Text[ hebrew ] = "- Top 10 -";
     Text[ hindi ] = "- ऊपर का 10 -";
     Text[ slovak ] = "- Top 10 -";
+    Text[ hungarian ] = "- Top 10 -";
+    Text[ slovenian ] = "- Prvih 10 -";
 };
 String SCSTR_NONAME
 {
@@ -1411,6 +1493,8 @@ String SCSTR_NONAME
     Text[ hebrew ] = "unbenannt";
     Text[ hindi ] = "नाम रहित";
     Text[ slovak ] = "nepomenované";
+    Text[ hungarian ] = "névtelen";
+    Text[ slovenian ] = "neimenovano";
 };
 String SCSTR_COLUMN
 {
@@ -1443,6 +1527,8 @@ String SCSTR_COLUMN
     Text[ hebrew ] = "Spalte";
     Text[ hindi ] = "स्तंभ";
     Text[ slovak ] = "Stĺpec";
+    Text[ hungarian ] = "Oszlop";
+    Text[ slovenian ] = "Stolpec";
 };
 String SCSTR_ROW
 {
@@ -1475,6 +1561,8 @@ String SCSTR_ROW
     Text[ hebrew ] = "Zeile";
     Text[ hindi ] = "पंक्ति";
     Text[ slovak ] = "Riadok";
+    Text[ hungarian ] = "Sor";
+    Text[ slovenian ] = "Vrstica";
 };
 String SCSTR_NEW
 {
@@ -1485,7 +1573,7 @@ String SCSTR_NEW
     Text [ portuguese_brazilian ] = "~Novo" ;
     Text [ portuguese ] = "~Novo" ;
     Text [ finnish ] = "~Uusi" ;
-    Text [ danish ] = "Ny" ;
+    Text [ danish ] = "~Ny(t)" ;
     Text [ french ] = "Nou~veau" ;
     Text [ swedish ] = "~Nytt" ;
     Text [ dutch ] = "~Nieuw" ;
@@ -1507,6 +1595,8 @@ String SCSTR_NEW
     Text[ hebrew ] = "‮חדש‬";
     Text[ hindi ] = "~नया";
     Text[ slovak ] = "~Nový";
+    Text[ hungarian ] = "Ú~j";
+    Text[ slovenian ] = "~Nov";
 };
 String SCSTR_ADD
 {
@@ -1518,7 +1608,7 @@ String SCSTR_ADD
     Text [ portuguese_brazilian ] = "~Adicionar" ;
     Text [ portuguese ] = "~Adicionar" ;
     Text [ finnish ] = "~Lis��" ;
-    Text [ danish ] = "Tilf�j" ;
+    Text [ danish ] = "~Tilf�j" ;
     Text [ french ] = "Ajouter" ;
     Text [ swedish ] = "~L�gg till" ;
     Text [ dutch ] = "To~evoegen" ;
@@ -1540,6 +1630,8 @@ String SCSTR_ADD
     Text[ hebrew ] = "‮הוספה‬";
     Text[ hindi ] = "~जोड़ो";
     Text[ slovak ] = "Prid~ať";
+    Text[ hungarian ] = "Hozzá~adás";
+    Text[ slovenian ] = "~Dodaj";
 };
 String SCSTR_REMOVE
 {
@@ -1551,7 +1643,7 @@ String SCSTR_REMOVE
     Text [ portuguese_brazilian ] = "~Excluir" ;
     Text [ portuguese ] = "~Eliminar" ;
     Text [ finnish ] = "~Poista" ;
-    Text [ danish ] = "Slet" ;
+    Text [ danish ] = "~Slet" ;
     Text [ french ] = "Supprimer" ;
     Text [ swedish ] = "~Radera" ;
     Text [ dutch ] = "~Wissen" ;
@@ -1573,6 +1665,8 @@ String SCSTR_REMOVE
     Text[ hebrew ] = "‮מחיקה‬";
     Text[ hindi ] = "~मिटाओ";
     Text[ slovak ] = "~Zmazať";
+    Text[ hungarian ] = "~Törlés";
+    Text[ slovenian ] = "~Izbriši";
 };
 String SCSTR_CANCEL
 {
@@ -1583,7 +1677,7 @@ String SCSTR_CANCEL
     Text [ portuguese_brazilian ] = "Cancela~r" ;
     Text [ portuguese ] = "Cancela~r" ;
     Text [ finnish ] = "Peruu~ta" ;
-    Text [ danish ] = "Annuller" ;
+    Text [ danish ] = "Annu~ller" ;
     Text [ french ] = "Annuler" ;
     Text [ swedish ] = "Av~bryt" ;
     Text [ dutch ] = "~Annuleren" ;
@@ -1605,6 +1699,8 @@ String SCSTR_CANCEL
     Text[ hebrew ] = "Ab~brechen";
     Text[ hindi ] = "रद्द ~करो";
     Text[ slovak ] = "Zr~ušiť";
+    Text[ hungarian ] = "Mégs~em";
+    Text[ slovenian ] = "Prek~liči";
 };
 String SCSTR_MODIFY
 {
@@ -1616,7 +1712,7 @@ String SCSTR_MODIFY
     Text [ portuguese_brazilian ] = "Modif~icar" ;
     Text [ portuguese ] = "Modif~icar" ;
     Text [ finnish ] = "~Muuta" ;
-    Text [ danish ] = "Modificer" ;
+    Text [ danish ] = "~Modificer" ;
     Text [ french ] = "Modifier" ;
     Text [ swedish ] = "~�ndra" ;
     Text [ dutch ] = "Wij~zigen" ;
@@ -1638,6 +1734,8 @@ String SCSTR_MODIFY
     Text[ hebrew ] = "~Ändern";
     Text[ hindi ] = "सुधा~रो";
     Text[ slovak ] = "Zmen~iť";
+    Text[ hungarian ] = "~Módosítás";
+    Text[ slovenian ] = "Sp~remeni";
 };
 
 
@@ -1672,6 +1770,8 @@ String SCSTR_SHOWTABLE
     Text[ hebrew ] = "Tabelle einblenden";
     Text[ hindi ] = "शीट् को दिखाओ";
     Text[ slovak ] = "Zobraziť list";
+    Text[ hungarian ] = "Munkalap megjelenítése";
+    Text[ slovenian ] = "Pokaži list";
 };
 String SCSTR_HIDDENTABLES
 {
@@ -1704,6 +1804,8 @@ String SCSTR_HIDDENTABLES
     Text[ hebrew ] = "Ausgeblendete Tabellen";
     Text[ hindi ] = "छिपाया हुआ शीट्";
     Text[ slovak ] = "Skryté listy";
+    Text[ hungarian ] = "Rejtett munkalapok";
+    Text[ slovenian ] = "Skriti listi";
 };
 String SCSTR_SELECTDB
 {
@@ -1715,7 +1817,7 @@ String SCSTR_SELECTDB
     Text [ portuguese_brazilian ] = "Selecionar Intervalo do Banco de Dados" ;
     Text [ portuguese ] = "Seleccionar �rea da base de dados" ;
     Text [ finnish ] = "Valitse tietokanta-alue" ;
-    Text [ danish ] = "V�lg databaseomr�de" ;
+    Text [ danish ] = "Marker databaseomr�de" ;
     Text [ french ] = "S�lectionner une plage de base de donn�es" ;
     Text [ swedish ] = "V�lj databasomr�de" ;
     Text [ dutch ] = "Databasebereik selecteren" ;
@@ -1737,6 +1839,8 @@ String SCSTR_SELECTDB
     Text[ hebrew ] = "Datenbankbereich wählen";
     Text[ hindi ] = "लेखासंचय फैलाव चुनो";
     Text[ slovak ] = "Vybrať databázovú oblasť";
+    Text[ hungarian ] = "Adatbázis-tartomány kiválasztása";
+    Text[ slovenian ] = "Izberi obseg zbirke podatkov";
 };
 String SCSTR_AREAS
 {
@@ -1747,7 +1851,7 @@ String SCSTR_AREAS
     Text [ portuguese_brazilian ] = "Intervalos" ;
     Text [ portuguese ] = "�~reas" ;
     Text [ finnish ] = "Alueet" ;
-    Text [ danish ] = "~Omr�der" ;
+    Text [ danish ] = "Omr�der" ;
     Text [ french ] = "~Plages" ;
     Text [ swedish ] = "~Omr�den" ;
     Text [ dutch ] = "~Bereiken" ;
@@ -1769,6 +1873,8 @@ String SCSTR_AREAS
     Text[ hebrew ] = "~Bereiche";
     Text[ hindi ] = "फैलाव";
     Text[ slovak ] = "Oblasti";
+    Text[ hungarian ] = "Tartományok";
+    Text[ slovenian ] = "Obsegi";
 };
 String SCSTR_TABLE
 {
@@ -1801,6 +1907,8 @@ String SCSTR_TABLE
     Text[ hebrew ] = "Tabelle";
     Text[ hindi ] = "शीट्";
     Text[ slovak ] = "List";
+    Text[ hungarian ] = "Munkalap";
+    Text[ slovenian ] = "Delovni list";
 };
 String SCSTR_NAME
 {
@@ -1833,6 +1941,8 @@ String SCSTR_NAME
     Text[ hebrew ] = "Name";
     Text[ hindi ] = "नाम";
     Text[ slovak ] = "Názov";
+    Text[ hungarian ] = "Név";
+    Text[ slovenian ] = "Ime";
 };
 String SCSTR_INSTABLE
 {
@@ -1866,6 +1976,8 @@ String SCSTR_INSTABLE
     Text[ hebrew ] = "Tabelle einfügen";
     Text[ hindi ] = "शीट् जोड़ो";
     Text[ slovak ] = "Vložiť list";
+    Text[ hungarian ] = "Munkalap beillesztése";
+    Text[ slovenian ] = "Vstavi list";
 };
 String SCSTR_APDTABLE
 {
@@ -1899,6 +2011,8 @@ String SCSTR_APDTABLE
     Text[ hebrew ] = "Tabelle anhängen";
     Text[ hindi ] = "शीट् जोड़ो";
     Text[ slovak ] = "Pripojiť tabuľku";
+    Text[ hungarian ] = "Munkalap hozzáfűzése";
+    Text[ slovenian ] = "Dodaj list";
 };
 String SCSTR_RENAMETAB
 {
@@ -1930,6 +2044,8 @@ String SCSTR_RENAMETAB
     Text[ hebrew ] = "Tabelle umbenennen";
     Text[ hindi ] = "शीट् को पुनः नाम दो";
     Text[ slovak ] = "Premenovať list";
+    Text[ hungarian ] = "Munkalap átnevezése";
+    Text[ slovenian ] = "Preimenuj list";
 };
 String SCSTR_RENAMEOBJECT
 {
@@ -1960,6 +2076,8 @@ String SCSTR_RENAMEOBJECT
     Text[ hebrew ] = "Objekt benennen";
     Text[ hindi ] = "Name object";
     Text[ slovak ] = "Názov objektu";
+    Text[ hungarian ] = "Objektum neve";
+    Text[ slovenian ] = "Poimenuj predmet";
 };
 String STR_INSERTGRAPHIC
 {
@@ -1993,6 +2111,8 @@ String STR_INSERTGRAPHIC
     Text[ hebrew ] = "‮הוספת גרפיקה‬";
     Text[ hindi ] = "सुचित्र जोड़ो";
     Text[ slovak ] = "Vložiť obrázok";
+    Text[ hungarian ] = "Kép beszúrása";
+    Text[ slovenian ] = "Vstavi grafiko";
 };
 
  //      Attribute
@@ -2009,7 +2129,7 @@ String SCSTR_HOR_JUSTIFY_LEFT
     Text [ danish ] = "Venstrejusteret" ;
     Text [ french ] = "Alignement � gauche" ;
     Text [ swedish ] = "V�nsterjustera" ;
-    Text [ dutch ] = "Linkslijnend" ;
+    Text [ dutch ] = "Links uitlijnen" ;
     Text [ spanish ] = "Alinear a la izquierda" ;
     Text [ english_us ] = "Align left" ;
     Text[ chinese_simplified ] = "向左对齐";
@@ -2028,6 +2148,8 @@ String SCSTR_HOR_JUSTIFY_LEFT
     Text[ hebrew ] = "Ausrichtung nach links";
     Text[ hindi ] = "बायाँ ओर पंक्तिकरण";
     Text[ slovak ] = "Zarovnať vľavo";
+    Text[ hungarian ] = "Balra igazítás";
+    Text[ slovenian ] = "Poravnaj levo";
 };
 String SCSTR_HOR_JUSTIFY_CENTER
 {
@@ -2060,6 +2182,8 @@ String SCSTR_HOR_JUSTIFY_CENTER
     Text[ hebrew ] = "Horizontal zentriert";
     Text[ hindi ] = "समतल प्रकार से केन्द्रित";
     Text[ slovak ] = "Vodorovne na stred";
+    Text[ hungarian ] = "Vízszintesen középre igazított";
+    Text[ slovenian ] = "Vodoravno na sredini";
 };
 String SCSTR_HOR_JUSTIFY_RIGHT
 {
@@ -2073,7 +2197,7 @@ String SCSTR_HOR_JUSTIFY_RIGHT
     Text [ danish ] = "H�jrejusteret" ;
     Text [ french ] = "Aligner � droite" ;
     Text [ swedish ] = "H�gerjustera" ;
-    Text [ dutch ] = "Rechtslijnend" ;
+    Text [ dutch ] = "Rechts uitlijnen" ;
     Text [ spanish ] = "Alinear a la derecha" ;
     Text [ english_us ] = "Align right" ;
     Text[ chinese_simplified ] = "向右对齐";
@@ -2092,6 +2216,8 @@ String SCSTR_HOR_JUSTIFY_RIGHT
     Text[ hebrew ] = "Ausrichtung nach rechts";
     Text[ hindi ] = "दाहिनी ओर पंक्तिकरण";
     Text[ slovak ] = "Zarovnať vpravo";
+    Text[ hungarian ] = "Jobbra igazítás";
+    Text[ slovenian ] = "Poravnaj desno";
 };
 String SCSTR_HOR_JUSTIFY_BLOCK
 {
@@ -2105,7 +2231,7 @@ String SCSTR_HOR_JUSTIFY_BLOCK
     Text [ danish ] = "Lige margener" ;
     Text [ french ] = "Justifier" ;
     Text [ swedish ] = "Marginaljustering" ;
-    Text [ dutch ] = "Uitgevuld" ;
+    Text [ dutch ] = "Uitvullen" ;
     Text [ spanish ] = "Justificado" ;
     Text [ english_us ] = "Justify" ;
     Text[ chinese_simplified ] = "左右对齐";
@@ -2124,6 +2250,8 @@ String SCSTR_HOR_JUSTIFY_BLOCK
     Text[ hebrew ] = "Blockausrichtung";
     Text[ hindi ] = "व्यवस्था करो";
     Text[ slovak ] = "Do bloku";
+    Text[ hungarian ] = "Sorkizárás";
+    Text[ slovenian ] = "Poravnaj obojestransko";
 };
 String SCSTR_HOR_JUSTIFY_REPEAT
 {
@@ -2134,7 +2262,7 @@ String SCSTR_HOR_JUSTIFY_REPEAT
     Text [ portuguese_brazilian ] = "Repetir alinhamento" ;
     Text [ portuguese ] = "Repetir alinhamento" ;
     Text [ finnish ] = "Toista tasaus" ;
-    Text [ danish ] = "Gentag justeringen" ;
+    Text [ danish ] = "Gentag justering" ;
     Text [ french ] = "R�p�ter l'alignement" ;
     Text [ swedish ] = "Upprepa justering" ;
     Text [ dutch ] = "Uitlijnen herhalen" ;
@@ -2156,6 +2284,8 @@ String SCSTR_HOR_JUSTIFY_REPEAT
     Text[ hebrew ] = "Ausrichtung wiederholen";
     Text[ hindi ] = "पंक्तिकरण दुहराना";
     Text[ slovak ] = "Opakovať zarovnanie";
+    Text[ hungarian ] = "Igazítás ismétlése";
+    Text[ slovenian ] = "Ponovi poravnavo";
 };
 String SCSTR_HOR_JUSTIFY_STANDARD
 {
@@ -2188,6 +2318,8 @@ String SCSTR_HOR_JUSTIFY_STANDARD
     Text[ hebrew ] = "Horizontale Ausrichtung Standard";
     Text[ hindi ] = "अनुपस्थिति में समतल पंक्तिकरण";
     Text[ slovak ] = "Východzie vodorovné zarovnanie";
+    Text[ hungarian ] = "Vízszintes igazítás alapértéke";
+    Text[ slovenian ] = "Privzeta poravnava vodoravno";
 };
 String SCSTR_VER_JUSTIFY_TOP
 {
@@ -2198,7 +2330,7 @@ String SCSTR_VER_JUSTIFY_TOP
     Text [ portuguese_brazilian ] = "Alinhar por cima" ;
     Text [ portuguese ] = "Ajustar para cima" ;
     Text [ finnish ] = "Tasaa yl�s" ;
-    Text [ danish ] = "Juster opad" ;
+    Text [ danish ] = "Juster til toppen" ;
     Text [ french ] = "Alignement au bord sup�rieur" ;
     Text [ swedish ] = "Justera upp�t" ;
     Text [ dutch ] = "Op bovenkant uitlijnen" ;
@@ -2220,6 +2352,8 @@ String SCSTR_VER_JUSTIFY_TOP
     Text[ hebrew ] = "Ausrichtung nach oben";
     Text[ hindi ] = "ऊपर केलिए पंक्तिकरण";
     Text[ slovak ] = "Zarovnať nahor";
+    Text[ hungarian ] = "Felülre igazítás";
+    Text[ slovenian ] = "Poravnaj na vrh";
 };
 String SCSTR_VER_JUSTIFY_CENTER
 {
@@ -2252,6 +2386,8 @@ String SCSTR_VER_JUSTIFY_CENTER
     Text[ hebrew ] = "Vertikal zentriert";
     Text[ hindi ] = "लंबरूप प्रकार से केन्द्रित";
     Text[ slovak ] = "Zvisle na stred";
+    Text[ hungarian ] = "Függőlegesen középre igazított";
+    Text[ slovenian ] = "Navpično na sredini";
 };
 String SCSTR_VER_JUSTIFY_BOTTOM
 {
@@ -2262,7 +2398,7 @@ String SCSTR_VER_JUSTIFY_BOTTOM
     Text [ portuguese_brazilian ] = "Alinhar por baixo" ;
     Text [ portuguese ] = "Ajustar para baixo" ;
     Text [ finnish ] = "Tasaa alareunaan" ;
-    Text [ danish ] = "Juster nedad" ;
+    Text [ danish ] = "Juster til bunden" ;
     Text [ french ] = "Alignement en bas" ;
     Text [ swedish ] = "Justera ned�t" ;
     Text [ dutch ] = "Op onderkant uitlijnen" ;
@@ -2284,6 +2420,8 @@ String SCSTR_VER_JUSTIFY_BOTTOM
     Text[ hebrew ] = "Ausrichtung nach unten";
     Text[ hindi ] = "तल केलिए पंक्तिकरण";
     Text[ slovak ] = "Zarovnať dole";
+    Text[ hungarian ] = "Alulra igazítás";
+    Text[ slovenian ] = "Poravnaj na dno";
 };
 String SCSTR_VER_JUSTIFY_STANDARD
 {
@@ -2316,6 +2454,8 @@ String SCSTR_VER_JUSTIFY_STANDARD
     Text[ hebrew ] = "Vertikale Ausrichtung Standard";
     Text[ hindi ] = "अनुपस्थिति में लंबरूप पंक्तिकरण";
     Text[ slovak ] = "Východzie zvislé zarovnanie";
+    Text[ hungarian ] = "Függőleges igazítás alapértéke";
+    Text[ slovenian ] = "Privzeta poravnava navpično";
 };
 String SCSTR_ORIENTATION_TOPBOTTOM
 {
@@ -2348,6 +2488,8 @@ String SCSTR_ORIENTATION_TOPBOTTOM
     Text[ hebrew ] = "Von oben nach unten";
     Text[ hindi ] = "ऊपर से नीचे तक";
     Text[ slovak ] = "Zhora dole";
+    Text[ hungarian ] = "Felülről lefelé";
+    Text[ slovenian ] = "Od zgoraj navzdol";
 };
 String SCSTR_ORIENTATION_BOTTOMTOP
 {
@@ -2380,6 +2522,8 @@ String SCSTR_ORIENTATION_BOTTOMTOP
     Text[ hebrew ] = "Von unten nach oben";
     Text[ hindi ] = "नीचे से ऊपर तक";
     Text[ slovak ] = "Zdola nahor";
+    Text[ hungarian ] = "Lentről felfelé";
+    Text[ slovenian ] = "Od spodaj navzgor";
 };
 String SCSTR_ORIENTATION_STANDARD
 {
@@ -2412,6 +2556,8 @@ String SCSTR_ORIENTATION_STANDARD
     Text[ hebrew ] = "Schreibrichtung Standard";
     Text[ hindi ] = "अनुपस्थिति व्यवस्था ";
     Text[ slovak ] = "Východzia orientácia";
+    Text[ hungarian ] = "Alapértelmezett irány";
+    Text[ slovenian ] = "Privzeta usmerjenost";
 };
 
 String SCSTR_PROTECTDOC
@@ -2446,6 +2592,8 @@ String SCSTR_PROTECTDOC
     Text[ hebrew ] = "Dokument schützen";
     Text[ hindi ] = "लेखपत्र को रक्षा करो";
     Text[ slovak ] = "Zamknúť dokument";
+    Text[ hungarian ] = "Dokumentum védelme";
+    Text[ slovenian ] = "Zaščiti dokument";
 };
 String SCSTR_UNPROTECTDOC
 {
@@ -2478,6 +2626,8 @@ String SCSTR_UNPROTECTDOC
     Text[ hebrew ] = "Dokumentschutz aufheben";
     Text[ hindi ] = "लेखपत्र को रक्षा मत करो";
     Text[ slovak ] = "Odomknúť dokument";
+    Text[ hungarian ] = "Dokumentum-védelem ki";
+    Text[ slovenian ] = "Odstrani zaščito dokumenta";
 };
 String SCSTR_PROTECTTAB
 {
@@ -2510,6 +2660,8 @@ String SCSTR_PROTECTTAB
     Text[ hebrew ] = "Tabelle schützen";
     Text[ hindi ] = "शीट् को रक्षा करो";
     Text[ slovak ] = "Zamknúť list";
+    Text[ hungarian ] = "Munkalap védelme";
+    Text[ slovenian ] = "Zaščiti list";
 };
 String SCSTR_UNPROTECTTAB
 {
@@ -2541,6 +2693,8 @@ String SCSTR_UNPROTECTTAB
     Text[ hebrew ] = "‮הסרת הגנה מגליון‬";
     Text[ hindi ] = "शीट् को रक्षा मत करो";
     Text[ slovak ] = "Odomknúť list";
+    Text[ hungarian ] = "Munkalapvédelem ki";
+    Text[ slovenian ] = "Odstrani zaščito lista";
 };
 String SCSTR_CHG_PROTECT
 {
@@ -2552,7 +2706,7 @@ String SCSTR_CHG_PROTECT
     Text [ spanish ] = "Proteger grabaci�n" ;
     Text [ french ] = "Prot�ger l'historique" ;
     Text [ swedish ] = "Skydda registrering" ;
-    Text [ danish ] = "Beskyt registrering" ;
+    Text [ danish ] = "Beskyt dataposter" ;
     Text [ portuguese ] = "Proteger hist�rico" ;
     Text [ portuguese_brazilian ] = "Proteger Registros" ;
     Text[ chinese_simplified ] = "保护记录";
@@ -2572,6 +2726,8 @@ String SCSTR_CHG_PROTECT
     Text[ hebrew ] = "‮הגנה‬";
     Text[ hindi ] = "लेखों को रक्षा करो";
     Text[ slovak ] = "Zamknúť záznamy";
+    Text[ hungarian ] = "Rekordvédelem";
+    Text[ slovenian ] = "Zaščiti zapise";
 };
 String SCSTR_CHG_UNPROTECT
 {
@@ -2583,7 +2739,7 @@ String SCSTR_CHG_UNPROTECT
     Text [ spanish ] = "Desactivar protecci�n de la grabaci�n" ;
     Text [ french ] = "D�sactiver la protection de l'historique" ;
     Text [ swedish ] = "Upph�v registreringsskydd" ;
-    Text [ danish ] = "Oph�v registreringsbeskyttelse" ;
+    Text [ danish ] = "Oph�v beskyttelse af dataposter" ;
     Text [ portuguese ] = "Desactivar protec��o do hist�rico" ;
     Text [ portuguese_brazilian ] = "Desproteger Registros" ;
     Text[ chinese_simplified ] = "取消保护记录";
@@ -2603,6 +2759,8 @@ String SCSTR_CHG_UNPROTECT
     Text[ hebrew ] = "Aufzeichnungsschutz aufheben";
     Text[ hindi ] = "लेखों को रक्षा मत करो";
     Text[ slovak ] = "Odomknúť záznamy";
+    Text[ hungarian ] = "Rekordvédelem feloldása";
+    Text[ slovenian ] = "Odstrani zaščito zapisov";
 };
 String SCSTR_PASSWORD
 {
@@ -2635,6 +2793,8 @@ String SCSTR_PASSWORD
     Text[ hebrew ] = "‮סיסמה:‬";
     Text[ hindi ] = "कूटशब्द:";
     Text[ slovak ] = "Heslo:";
+    Text[ hungarian ] = "Jelszó:";
+    Text[ slovenian ] = "Geslo:";
 };
 String SCSTR_PASSWORDOPT
 {
@@ -2667,6 +2827,8 @@ String SCSTR_PASSWORDOPT
     Text[ hebrew ] = "Kennwort (optional):";
     Text[ hindi ] = "कूटशब्द (वैकल्पिक):";
     Text[ slovak ] = "Heslo: (voliteľné)";
+    Text[ hungarian ] = "Jelszó (opcionális):";
+    Text[ slovenian ] = "Geslo (izbirno):";
 };
 
 String SCSTR_WRONGPASSWORD
@@ -2700,6 +2862,8 @@ String SCSTR_WRONGPASSWORD
     Text[ hebrew ] = "Falsches Kennwort";
     Text[ hindi ] = "गलत कूटशब्द";
     Text[ slovak ] = "Neplatné heslo";
+    Text[ hungarian ] = "Helytelen jelszó";
+    Text[ slovenian ] = "Napačno geslo";
 };
 
 String SCSTR_END
@@ -2711,7 +2875,7 @@ String SCSTR_END
     Text [ portuguese_brazilian ] = "~Fim" ;
     Text [ portuguese ] = "~Fim" ;
     Text [ finnish ] = "~Loppu" ;
-    Text [ danish ] = "Slutning" ;
+    Text [ danish ] = "~Slutning" ;
     Text [ french ] = "~Fin" ;
     Text [ swedish ] = "~Slut" ;
     Text [ dutch ] = "~Einde" ;
@@ -2733,6 +2897,8 @@ String SCSTR_END
     Text[ hebrew ] = "~Ende";
     Text[ hindi ] = "~अंत";
     Text[ slovak ] = "Koni~ec";
+    Text[ hungarian ] = "~Vége";
+    Text[ slovenian ] = "~Konec";
 };
 
 String SCSTR_STAT_PRINT
@@ -2766,6 +2932,8 @@ String SCSTR_STAT_PRINT
     Text[ hebrew ] = "Drucke...";
     Text[ hindi ] = "छपाई हो रहा है...";
     Text[ slovak ] = "Tlač...";
+    Text[ hungarian ] = "Nyomtatás...";
+    Text[ slovenian ] = "Tiskanje...";
 };
 
 String SCSTR_UNKNOWN
@@ -2799,6 +2967,8 @@ String SCSTR_UNKNOWN
     Text[ hebrew ] = "Unbekannt";
     Text[ hindi ] = "अज्ञात";
     Text[ slovak ] = "Neznáme";
+    Text[ hungarian ] = "Ismeretlen";
+    Text[ slovenian ] = "Neznano";
 };
 
 String SCSTR_CHAR_ATTRS
@@ -2812,7 +2982,7 @@ String SCSTR_CHAR_ATTRS
     Text [ french ] = "Attributs de caract�res" ;
     Text [ dutch ] = "Schriftteken-attributen" ;
     Text [ spanish ] = "Atributos de caracteres" ;
-    Text [ danish ] = "Tegnattributter" ;
+    Text [ danish ] = "Skrifttypeattributter" ;
     Text [ swedish ] = "Teckenattribut" ;
     Text [ finnish ] = "Fonttim��ritteet" ;
     Text [ english_us ] = "Font Attributes" ;
@@ -2832,6 +3002,8 @@ String SCSTR_CHAR_ATTRS
     Text[ hebrew ] = "Zeichenattribute";
     Text[ hindi ] = "फ़ॉन्ट ऐट्रिब्यूट्स";
     Text[ slovak ] = "Atribúty písma";
+    Text[ hungarian ] = "Betűjellemzők";
+    Text[ slovenian ] = "Atributi pisave";
 };
 
 
@@ -2867,6 +3039,8 @@ String SCSTR_CLPBRD_CLEAR
     Text[ hebrew ] = "Sie haben größere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verfügung gestellt werden?";
     Text[ hindi ] = "आपका क्लिपबोर्ड में बहुत अधिक परिमाण में ड़ॉटा को संचित किया गया है । \nआप क्लिपबोर्ड की विषयों को दूसरे ऐप्लिकेशनों में उपलब्ध करना चाहते है?";
     Text[ slovak ] = "V schránke je uložené veľké množstvo dát.\nChcete aby bol obsah schránky prístupný ostatným aplikáciám?";
+    Text[ hungarian ] = "A vágólapon nagy mennyiségű adat található. \nSzeretné, hogy a vágólap tartalmát más alkalmazás is használhassa?";
+    Text[ slovenian ] = "V odložišču imate shranjeno veliko podatkov.\nAli želite, da je vsebina odložišča na voljo tudi drugim aplikacijam?";
 };
 
 String SCSTR_CFG_APP
@@ -2899,6 +3073,8 @@ String SCSTR_CFG_APP
     Text[ hebrew ] = "Systemoptionen";
     Text[ hindi ] = "सिस्टम विकल्प";
     Text[ slovak ] = "Voľby systému";
+    Text[ hungarian ] = "Rendszerbeállítások";
+    Text[ slovenian ] = "Možnosti sistema";
 };
 
 String SCSTR_CFG_DOC
@@ -2931,6 +3107,8 @@ String SCSTR_CFG_DOC
     Text[ hebrew ] = "Dokumentoptionen";
     Text[ hindi ] = "लेखपत्र विकल्प";
     Text[ slovak ] = "Voľby dokumentu";
+    Text[ hungarian ] = "Dokumentumbeállítások";
+    Text[ slovenian ] = "Možnosti dokumenta";
 };
 
 String SCSTR_CFG_VIEW
@@ -2963,6 +3141,8 @@ String SCSTR_CFG_VIEW
     Text[ hebrew ] = "Ansichtoptionen";
     Text[ hindi ] = "दृश्य विकल्प";
     Text[ slovak ] = "Zobraziť voľby";
+    Text[ hungarian ] = "Nézetbeállítások";
+    Text[ slovenian ] = "Možnosti pogleda";
 };
 
 String SCSTR_CFG_INPUT
@@ -2995,6 +3175,8 @@ String SCSTR_CFG_INPUT
     Text[ hebrew ] = "Eingabeoptionen";
     Text[ hindi ] = "इनपुट विकल्प";
     Text[ slovak ] = "Nastavenia vstupu";
+    Text[ hungarian ] = "Bemeneti beállítások";
+    Text[ slovenian ] = "Možnosti vnosa";
 };
 
 String SCSTR_CFG_SPELLCHECK
@@ -3027,6 +3209,8 @@ String SCSTR_CFG_SPELLCHECK
     Text[ hebrew ] = "Rechtschreiboptionen";
     Text[ hindi ] = "अक्षर विकल्प";
     Text[ slovak ] = "Nastavenia kontroly pravopisu";
+    Text[ hungarian ] = "Helyesírás-ellenőrző beállításai";
+    Text[ slovenian ] = "Možnosti črkovanja";
 };
 
 String SCSTR_CFG_PRINT
@@ -3059,6 +3243,8 @@ String SCSTR_CFG_PRINT
     Text[ hebrew ] = "Druckoptionen";
     Text[ hindi ] = "छपाई विकल्प";
     Text[ slovak ] = "Nastavenia tlače";
+    Text[ hungarian ] = "Nyomtatási beállítások";
+    Text[ slovenian ] = "Možnosti tiskanja";
 };
 
 String SCSTR_CFG_NAVIPI
@@ -3091,6 +3277,8 @@ String SCSTR_CFG_NAVIPI
     Text[ hebrew ] = "Navigator-Einstellungen";
     Text[ hindi ] = "नॉविगेटर निर्धारण";
     Text[ slovak ] = "Nastavenie sprievodcu";
+    Text[ hungarian ] = "Navigátor beállításai";
+    Text[ slovenian ] = "Nastavitve Krmarja";
 };
 
 String SCSTR_VALID_MINIMUM
@@ -3100,7 +3288,7 @@ String SCSTR_VALID_MINIMUM
     Text [ dutch ] = "~Minimum" ;
     Text [ english_us ] = "~Minimum" ;
     Text [ swedish ] = "~Minimum" ;
-    Text [ danish ] = "Minimum" ;
+    Text [ danish ] = "~Minimum" ;
     Text [ italian ] = "~Minimo" ;
     Text [ spanish ] = "~M�nimo" ;
     Text [ french ] = "~Minimum" ;
@@ -3123,6 +3311,8 @@ String SCSTR_VALID_MINIMUM
     Text[ hebrew ] = "~Minimum";
     Text[ hindi ] = "~न्यूनतम";
     Text[ slovak ] = "~Minimum";
+    Text[ hungarian ] = "~Minimum";
+    Text[ slovenian ] = "N~ajmanj";
 };
 String SCSTR_VALID_MAXIMUM
 {
@@ -3131,7 +3321,7 @@ String SCSTR_VALID_MAXIMUM
     Text [ dutch ] = "~Maximum" ;
     Text [ english_us ] = "~Maximum" ;
     Text [ swedish ] = "~Maximum" ;
-    Text [ danish ] = "Maksimum" ;
+    Text [ danish ] = "M~aksimum" ;
     Text [ italian ] = "~Massimo" ;
     Text [ spanish ] = "~M�ximo" ;
     Text [ french ] = "~Maximum" ;
@@ -3154,6 +3344,8 @@ String SCSTR_VALID_MAXIMUM
     Text[ hebrew ] = "~Maximum";
     Text[ hindi ] = "~अधिकतम";
     Text[ slovak ] = "~Maximum";
+    Text[ hungarian ] = "~Maximum";
+    Text[ slovenian ] = "~Največ";
 };
 String SCSTR_VALID_VALUE
 {
@@ -3162,7 +3354,7 @@ String SCSTR_VALID_VALUE
     Text [ dutch ] = "~Waarde" ;
     Text [ english_us ] = "~Value" ;
     Text [ swedish ] = "~V�rde" ;
-    Text [ danish ] = "V�rdi" ;
+    Text [ danish ] = "~V�rdi" ;
     Text [ italian ] = "~Valore" ;
     Text [ spanish ] = "~Valor" ;
     Text [ french ] = "~Valeur" ;
@@ -3185,6 +3377,8 @@ String SCSTR_VALID_VALUE
     Text[ hebrew ] = "~Wert";
     Text[ hindi ] = "~मूल्य";
     Text[ slovak ] = "~Hodnota";
+    Text[ hungarian ] = "~Érték";
+    Text[ slovenian ] = "~Vrednost";
 };
 String SCSTR_VALID_RANGE
 {
@@ -3229,6 +3423,8 @@ String SCSTR_CHARSET_USER
     Text[ hebrew ] = "System";
     Text[ hindi ] = "सिस्टम";
     Text[ slovak ] = "Systém";
+    Text[ hungarian ] = "Rendszer";
+    Text[ slovenian ] = "Sistem";
 };
 
 String SCSTR_COLUMN_USER
@@ -3262,6 +3458,8 @@ String SCSTR_COLUMN_USER
     Text[ hebrew ] = "Standard;Text;Datum (TMJ);Datum (MTJ);Datum (JMT);US-Englisch;ausblenden";
     Text[ hindi ] = "स्टान्डर्ड;टेक्स्ट्;दिनांक (DMY);दिनांक (MDY);दिनांक (YMD);US अंग्रेजी;छिपाओ";
     Text[ slovak ] = "Štandardne;Text;Dátum (DMR);Dátum (MDR);Dátum (RMD);Anglicky (USA);Skryť";
+    Text[ hungarian ] = "Standard;Text;Date (DMY);Date (MDY);Date (YMD);US English;Hide";
+    Text[ slovenian ] = "Standardno;Besedilo;Datum (DML);Datum (MDL);Datum (LMD);US English;Skrij";
 };
 
 String SCSTR_FIELDSEP
@@ -3275,7 +3473,7 @@ String SCSTR_FIELDSEP
     Text [ french ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Espace}\t32" ;
     Text [ dutch ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Leeg}\t32" ;
     Text [ spanish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{espacio}\t32" ;
-    Text [ danish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{tom}\t32" ;
+    Text [ danish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{mellemrum}\t32 " ;
     Text [ swedish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{tom}\t32" ;
     Text [ finnish ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{space}\t32 " ;
     Text [ english_us ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{space}\t32 " ;
@@ -3295,6 +3493,8 @@ String SCSTR_FIELDSEP
     Text[ hebrew ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Leer}\t32";
     Text[ hindi ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{space}\t32 ";
     Text[ slovak ] = ",\t44\t;\t59\t:\t58\t{Tabulátor}\t9\t{Medzera}\t32 ";
+    Text[ hungarian ] = "      , 44 ; 59 : 58 {Tab} 9 {space} 32";
+    Text[ slovenian ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{space}\t32";
 };
 
 String SCSTR_TEXTSEP
@@ -3310,7 +3510,7 @@ String SCSTR_FORMULA_AUTOCORRECTION
     Text [ english_us ] = "%PRODUCTNAME Calc found an error in the formula entered.\nDo you want to accept the correction proposed below?\n\n" ;
     Text [ portuguese_brazilian ] = "O %PRODUCTNAME Calc encontrou um erro na f�rmula indicada. \nDeseja aceitar a corre��o proposta abaixo?\n\n" ;
     Text [ swedish ] = "%PRODUCTNAME Calc har hittat ett fel i den angivna formeln.\nSkall korrigeringen som f�resl�s nedan accepteras?\n\n" ;
-    Text [ danish ] = "%PRODUCTNAME Calc har fundet en fejl i den indtastede formel.\nVil du acceptere den rettelse, som foresl�s nedenfor?\n" ;
+    Text [ danish ] = "%PRODUCTNAME Calc har fundet en fejl i den indtastede formel.\nVil du acceptere den rettelse, som foresl�s nedenfor?\n\n" ;
     Text [ italian ] = "%PRODUCTNAME Calc ha trovato un errore nella formula digitata.\nVolete accettare la correzione proposta?\n\n" ;
     Text [ spanish ] = "%PRODUCTNAME Calc encontr� un error en la f�rmula dada.\n�Desea aceptar la correcci�n sugerida abajo?\n\n" ;
     Text [ french ] = "%PRODUCTNAME Calc a d�tect� une erreur dans la formule.\nAcceptez-vous la correction propos�e ci-dessous ?\n\n" ;
@@ -3332,6 +3532,8 @@ String SCSTR_FORMULA_AUTOCORRECTION
     Text[ hebrew ] = "%PRODUCTNAME Calc hat einen Fehler in der eingegebenen Formel gefunden.\nWollen Sie die unten vorgeschlagene Korrektur akzeptieren?\n\n";
     Text[ hindi ] = "प्रविष्ट की हुयी सूत्र में %PRODUCTNAME गणित को एक गलती मिला ।\nआप नीचे दिया हुआ सुधार को स्वीकृत करना चाहते है?\n\n";
     Text[ slovak ] = "%PRODUCTNAME Calc našiel vo vloženom vzorci chybu.\nChcete použiť opravu podľa návrhu?\n\n";
+    Text[ hungarian ] = "Az %PRODUCTNAME Calc hibát talált a beírt képletben. \nEl akarja fogadni a felajánlott javítást?\n\n";
+    Text[ slovenian ] = "%PRODUCTNAME Calc je našel napako v vnešeni formuli.\nAli želite sprejeti spodaj predlagani popravek?\n\n";
 };
 
 //! the graphics filter error strings should be moved to svx or offapp!
@@ -3345,7 +3547,7 @@ String SCSTR_GRFILTER_OPENERROR
     Text [ portuguese_brazilian ] = "N�o foi poss�vel abrir o arquivo da figura" ;
     Text [ portuguese ] = "Imposs�vel abrir ficheiro gr�fico." ;
     Text [ finnish ] = "Grafiikkatiedostoja ei voi avata." ;
-    Text [ danish ] = "Det er ikke muligt at �bne grafikfilen" ;
+    Text [ danish ] = "Grafikfil kan ikke �bnes" ;
     Text [ french ] = "Impossible d'ouvrir le fichier graphique !" ;
     Text [ swedish ] = "Grafikfil kan inte �ppnas" ;
     Text [ dutch ] = "Grafisch bestand kan niet worden geopend" ;
@@ -3369,6 +3571,8 @@ String SCSTR_GRFILTER_OPENERROR
     Text[ hebrew ] = "Grafikdatei kann nicht geöffnet werden";
     Text[ hindi ] = "सुचित्र फाइल को खोल नहीं सकते है";
     Text[ slovak ] = "Obrázky nemôžu byť otvorené";
+    Text[ hungarian ] = "A képfájl nem nyitható meg";
+    Text[ slovenian ] = "Grafične datoteke ni mogoče odpreti";
 };
 String SCSTR_GRFILTER_IOERROR
 {
@@ -3379,7 +3583,7 @@ String SCSTR_GRFILTER_IOERROR
     Text [ portuguese_brazilian ] = "N�o foi poss�vel ler o arquivo da figura" ;
     Text [ portuguese ] = "Imposs�vel ler o ficheiro gr�fico." ;
     Text [ finnish ] = "Grafiikkatiedostoja ei voi lukea." ;
-    Text [ danish ] = "Det er ikke muligt at l�se grafikfilen" ;
+    Text [ danish ] = "Grafikfil kan ikke l�ses" ;
     Text [ french ] = "Impossible de lire le fichier graphique !" ;
     Text [ swedish ] = "Grafikfil kan inte l�sas" ;
     Text [ dutch ] = "Grafisch bestand kan niet worden gelezen" ;
@@ -3403,6 +3607,8 @@ String SCSTR_GRFILTER_IOERROR
     Text[ hebrew ] = "Grafikdatei kann nicht gelesen werden";
     Text[ hindi ] = "सुचित्र फाइल को पढ़ नहीं सकते है";
     Text[ slovak ] = "Obrázky";
+    Text[ hungarian ] = "A képfájl nem olvasható";
+    Text[ slovenian ] = "Grafične datoteke ni mogoče brati";
 };
 String SCSTR_GRFILTER_FORMATERROR
 {
@@ -3437,6 +3643,8 @@ String SCSTR_GRFILTER_FORMATERROR
     Text[ hebrew ] = "Unbekanntes Grafikformat";
     Text[ hindi ] = "अज्ञात सुचित्र रचना";
     Text[ slovak ] = "Neznámy grafický formát";
+    Text[ hungarian ] = "Ismeretlen képformátum";
+    Text[ slovenian ] = "Neznana oblika zapisa grafike";
 };
 String SCSTR_GRFILTER_VERSIONERROR
 {
@@ -3447,7 +3655,7 @@ String SCSTR_GRFILTER_VERSIONERROR
     Text [ portuguese_brazilian ] = "A vers�o do arquivo da figura n�o tem suporte" ;
     Text [ portuguese ] = "Vers�o do ficheiro gr�fico n�o tem suporte." ;
     Text [ finnish ] = "T�t� grafiikkatiedoston versiota ei tueta." ;
-    Text [ danish ] = "Grafikfilens version bliver ikke underst�ttet" ;
+    Text [ danish ] = "Grafikfilens version underst�ttes ikke" ;
     Text [ french ] = "Cette version du fichier graphique n'est pas support�e !" ;
     Text [ swedish ] = "Grafikfilens version st�ds inte" ;
     Text [ dutch ] = "Deze versie van het grafische bestand wordt niet ondersteund" ;
@@ -3471,6 +3679,8 @@ String SCSTR_GRFILTER_VERSIONERROR
     Text[ hebrew ] = "Die Version der Grafikdatei wird nicht unterstützt";
     Text[ hindi ] = "इस सुचित्र फाइल अवृत्ति को समर्थन नहीं करता है";
     Text[ slovak ] = "Táto verzia grafického súboru nie je podporovaná";
+    Text[ hungarian ] = "Ez a képfájlverzió nem támogatott.";
+    Text[ slovenian ] = "Ta rezličica grafične datoteke ni podprta";
 };
 String SCSTR_GRFILTER_FILTERERROR
 {
@@ -3505,6 +3715,8 @@ String SCSTR_GRFILTER_FILTERERROR
     Text[ hebrew ] = "Grafikfilter nicht gefunden";
     Text[ hindi ] = "सुचित्र फिल्टर नहीं मिला";
     Text[ slovak ] = "Grafický filter nebol nájdený";
+    Text[ hungarian ] = "A grafikus szűrő nem található";
+    Text[ slovenian ] = "Grafičnega filtra ni mogoče najti";
 };
 String SCSTR_GRFILTER_TOOBIG
 {
@@ -3515,7 +3727,7 @@ String SCSTR_GRFILTER_TOOBIG
     Text [ portuguese_brazilian ] = "N�o h� mem�ria suficiente para inserir a figura." ;
     Text [ portuguese ] = "Mem�ria insuficiente para inserir a imagem." ;
     Text [ finnish ] = "Muisti ei riit� kuvien lis��miseen." ;
-    Text [ danish ] = "Ikke nok hukommelse til at inds�tte grafiken" ;
+    Text [ danish ] = "Ikke tilstr�kkelig hukommelse til at inds�tte grafiken" ;
     Text [ french ] = "Impossible d'ins�rer l'image, m�moire insuffisante !" ;
     Text [ swedish ] = "Inte tillr�ckligt med minne f�r att infoga grafiken" ;
     Text [ dutch ] = "Niet genoeg vrij geheugen om de afbeelding in te voegen" ;
@@ -3539,6 +3751,8 @@ String SCSTR_GRFILTER_TOOBIG
     Text[ hebrew ] = "Nicht genug Speicher zum Einfügen der Grafik";
     Text[ hindi ] = "सुचित्र को जोड़ने केलिए मेमरी अपर्याप्त है ।";
     Text[ slovak ] = "Nie je dostatok pamäte na vloženie obrázku.";
+    Text[ hungarian ] = "Nincs elég memória a kép beillesztéséhez.";
+    Text[ slovenian ] = "Ni dovolj pomnilnika za vstavljanje grafike.";
 };
 String SCSTR_UNDO_GRAFFILTER
 {
@@ -3569,6 +3783,8 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ hebrew ] = "Grafikfilter";
     Text[ hindi ] = "सुचित्र फिल्टर";
     Text[ slovak ] = "Grafický filter";
+    Text[ hungarian ] = "Grafikus szűrő";
+    Text[ slovenian ] = "Grafični filter";
 };
 
 // #98185#
@@ -3604,6 +3820,8 @@ String STR_CAPTION_DEFAULT_TEXT
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "Text";
     Text[ slovak ] = "Text";
+    Text[ hungarian ] = "Szöveg";
+    Text[ slovenian ] = "Besedilo";
 };
 
 // Select tables dialog title
@@ -3614,13 +3832,13 @@ String STR_DLG_SELECTTABLES_TITLE
     Text[ english_us ] = "Select Sheets";
     Text[ portuguese ] = "Select Sheets";
     Text[ russian ] = "Select Sheets";
-    Text[ greek ] = "Select Sheets";
-    Text[ dutch ] = "Select Sheets";
+    Text[ greek ] = "������� ������";
+    Text[ dutch ] = "Werkbladen selecteren";
     Text[ french ] = "S�lectionner des feuilles";
     Text[ spanish ] = "Seleccionar hojas";
     Text[ finnish ] = "Select Sheets";
     Text[ italian ] = "Seleziona tabelle";
-    Text[ danish ] = "Select Sheets";
+    Text[ danish ] = "V�lg ark";
     Text[ swedish ] = "Markera tabeller";
     Text[ polish ] = "Select Sheets";
     Text[ portuguese_brazilian ] = "Selecionar planilha";
@@ -3636,6 +3854,8 @@ String STR_DLG_SELECTTABLES_TITLE
     Text[ hebrew ] = "Tabellen auswählen";
     Text[ hindi ] = "Select Sheets";
     Text[ slovak ] = "Vybrať listy";
+    Text[ hungarian ] = "Munkalapok kijelölése";
+    Text[ slovenian ] = "Izberi delovne liste";
 };
 
 // Select tables dialog listbox
@@ -3647,12 +3867,12 @@ String STR_DLG_SELECTTABLES_LBNAME
     Text[ portuguese ] = "~Selected sheets";
     Text[ russian ] = "~Selected sheets";
     Text[ greek ] = "~Selected sheets";
-    Text[ dutch ] = "~Selected sheets";
+    Text[ dutch ] = "Ge~selecteerde werkbladen";
     Text[ french ] = "Feuilles s�lectionn�es";
     Text[ spanish ] = "~Hojas seleccionadas";
     Text[ finnish ] = "~Selected sheets";
     Text[ italian ] = "~Seleziona tabelle";
-    Text[ danish ] = "~Selected sheets";
+    Text[ danish ] = "~Valgte ark";
     Text[ swedish ] = "Markerade tabeller";
     Text[ polish ] = "~Selected sheets";
     Text[ portuguese_brazilian ] = "Planilhas ~selecionadas";
@@ -3668,6 +3888,8 @@ String STR_DLG_SELECTTABLES_LBNAME
     Text[ hebrew ] = "~Ausgewählte Tabellen";
     Text[ hindi ] = "~Selected sheets";
     Text[ slovak ] = "Vybrané li~sty";
+    Text[ hungarian ] = "~Kijelölt munkalapok";
+    Text[ slovenian ] = "I~zbrani delovni listi";
 };
 
 String STR_REPLCELLSWARN
@@ -3678,12 +3900,12 @@ String STR_REPLCELLSWARN
     Text[ portuguese ] = "Do you want to replace the contents of the destination cells?";
     Text[ russian ] = "Do you want to replace the contents of the destination cells?";
     Text[ greek ] = "Do you want to replace the contents of the destination cells?";
-    Text[ dutch ] = "Do you want to replace the contents of the destination cells?";
+    Text[ dutch ] = "U gaat gegevens in cellen plakken die reeds gegevens bevatten.\nWilt u werkelijk de huidige celinhouden vervangen?";
     Text[ french ] = "Les cellules dans lesquelles vous voulez ins�rer des donn�es contiennent d�j� des donn�es.\n�craser les donn�es existantes ?";
     Text[ spanish ] = "Las celdas en las que quiere insertar datos ya contienen datos.\n�Desea sobrescribir los datos existentes?";
     Text[ finnish ] = "Do you want to replace the contents of the destination cells?";
     Text[ italian ] = "Le celle in cui volete inserire i dati contengono gi� dei dati.\nVolete soprascriverli?";
-    Text[ danish ] = "Do you want to replace the contents of the destination cells?";
+    Text[ danish ] = "Du er ved at inds�tte data i celler, der allerede indeholder data.\nEr du sikker p�, at du vil overskrive eksisterende data?";
     Text[ swedish ] = "Cellerna som du vill klistra in data i inneh�ller redan data.\nVill du verkligen skriva �ver dessa data?";
     Text[ polish ] = "Do you want to replace the contents of the destination cells?";
     Text[ japanese ] = "データを挿入しようとしているセルには、すでにデータがあります。\n既存のデータに上書きしますか。";
@@ -3699,6 +3921,8 @@ String STR_REPLCELLSWARN
     Text[ thai ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
     Text[ hindi ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
     Text[ slovak ] = "Vkladáte dáta do buniek ktoré už dáta obsahujú.\nŽeláte si prepísať existujúce dáta?";
+    Text[ hungarian ] = "Olyan cellákba kísérelt meg adatokat beilleszteni, amelyek nem üresek.\nBiztos, hogy felülírja az ott lévő adatokat?";
+    Text[ slovenian ] = "Podatke lepite v celice, ki že vsebujejo podatke.\nAli ste prepričani, da želite prepisati obstoječe podatke?";
 };
 
 
@@ -3710,12 +3934,12 @@ String STR_ACC_CSVRULER_NAME
     Text[ portuguese ] = "Ruler";
     Text[ russian ] = "Ruler";
     Text[ greek ] = "Ruler";
-    Text[ dutch ] = "Ruler";
+    Text[ dutch ] = "Liniaal";
     Text[ french ] = "R�gle";
     Text[ spanish ] = "Regla";
     Text[ finnish ] = "Ruler";
     Text[ italian ] = "Righello";
-    Text[ danish ] = "Ruler";
+    Text[ danish ] = "Lineal";
     Text[ swedish ] = "Linjal";
     Text[ polish ] = "Ruler";
     Text[ portuguese_brazilian ] = "R�gua";
@@ -3731,6 +3955,8 @@ String STR_ACC_CSVRULER_NAME
     Text[ hebrew ] = "‮סרגל‬";
     Text[ hindi ] = "Ruler";
     Text[ slovak ] = "Pravítko";
+    Text[ hungarian ] = "Vonalzó";
+    Text[ slovenian ] = "Ravnilo";
 };
 
 String STR_ACC_CSVRULER_DESCR
@@ -3741,12 +3967,12 @@ String STR_ACC_CSVRULER_DESCR
     Text[ portuguese ] = "Ruler which manages objects at fixed positions.";
     Text[ russian ] = "Ruler which manages objects at fixed positions.";
     Text[ greek ] = "Ruler which manages objects at fixed positions.";
-    Text[ dutch ] = "Ruler which manages objects at fixed positions.";
+    Text[ dutch ] = "Liniaal die objecten op vaste posities beheert.";
     Text[ french ] = "Cette r�gle g�re les objets � des positions fixes.";
     Text[ spanish ] = "Esta regla administra los objetos en posiciones fijas. ";
     Text[ finnish ] = "Ruler which manages objects at fixed positions.";
     Text[ italian ] = "Il righello gestisce oggetti in posizione fissa.";
-    Text[ danish ] = "Ruler which manages objects at fixed positions.";
+    Text[ danish ] = "Denne lineal styrer objekter i faste postitioner.";
     Text[ swedish ] = "Den h�r linjalen hanterar objekt p� fasta positioner.";
     Text[ polish ] = "Ruler which manages objects at fixed positions.";
     Text[ portuguese_brazilian ] = "Esta r�gua gerencia objetos em posi��es fixas";
@@ -3762,6 +3988,8 @@ String STR_ACC_CSVRULER_DESCR
     Text[ hebrew ] = "Dieses Lineal verwaltet Objekte an festen Positionen.";
     Text[ hindi ] = "This ruler manages objects at fixed positions.";
     Text[ slovak ] = "Toto pravítko riadi objekty s pevným umiestnením.";
+    Text[ hungarian ] = "Ez a vonalzó rögzített pozíciójú objektumokat kezel.";
+    Text[ slovenian ] = "S pomočjo tega ravnila upravljate predmete na fiksnih položajih.";
 };
 
 String STR_ACC_CSVGRID_NAME
@@ -3772,12 +4000,12 @@ String STR_ACC_CSVGRID_NAME
     Text[ portuguese ] = "Preview table";
     Text[ russian ] = "Preview table";
     Text[ greek ] = "Preview table";
-    Text[ dutch ] = "Preview table";
+    Text[ dutch ] = "Afdrukvoorbeeld";
     Text[ french ] = "Aper�u";
     Text[ spanish ] = "Previsualizaci�n";
     Text[ finnish ] = "Preview table";
     Text[ italian ] = "Anteprima";
-    Text[ danish ] = "Preview table";
+    Text[ danish ] = "Eksempel";
     Text[ swedish ] = "F�rhandsvisning";
     Text[ polish ] = "Preview table";
     Text[ portuguese_brazilian ] = "Visualizar";
@@ -3793,6 +4021,8 @@ String STR_ACC_CSVGRID_NAME
     Text[ hebrew ] = "Vorschau";
     Text[ hindi ] = "पूर्वदृश्य";
     Text[ slovak ] = "Náhľad";
+    Text[ hungarian ] = "Előnézet";
+    Text[ slovenian ] = "Predogled";
 };
 
 String STR_ACC_CSVGRID_DESCR
@@ -3803,12 +4033,12 @@ String STR_ACC_CSVGRID_DESCR
     Text[ portuguese ] = "This sheet shows, how the data will be arranged in the document.";
     Text[ russian ] = "This sheet shows, how the data will be arranged in the document.";
     Text[ greek ] = "This sheet shows, how the data will be arranged in the document.";
-    Text[ dutch ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ dutch ] = "Dit werkblad toont hoe de gegevens geordend zullen worden in het document.";
     Text[ french ] = "Cette feuille montre la disposition des donn�es dans le document.";
     Text[ spanish ] = "Esta hoja muestra la disposici�n de los datos en el documento. ";
     Text[ finnish ] = "This sheet shows, how the data will be arranged in the document.";
     Text[ italian ] = "La tabella mostra la disposizione dei dati nel documento.";
-    Text[ danish ] = "This sheet shows, how the data will be arranged in the document.";
+    Text[ danish ] = "Dette ark viser, hvordan data vil blive placeret i dokumentet.";
     Text[ swedish ] = "Den h�r tabellen visar hur data ordnas i dokumentet.";
     Text[ polish ] = "This sheet shows, how the data will be arranged in the document.";
     Text[ portuguese_brazilian ] = "Esta planilha mostra como ser�o arranjados os dados no documento.";
@@ -3824,6 +4054,8 @@ String STR_ACC_CSVGRID_DESCR
     Text[ hebrew ] = "Diese Tabelle zeigt die Anordnung der Daten, wie sie im Dokument erscheinen.";
     Text[ hindi ] = "This sheet shows how the data will be arranged in the document.";
     Text[ slovak ] = "Tento list zobrazuje usporiadanie dát v dokumente..";
+    Text[ hungarian ] = "A lapon megnézheti, hogyan kerülnek elrendezésre az adatok a dokumentumban.";
+    Text[ slovenian ] = "Na tem delovnem listu lahko vidite, kako bodo podatki razvrščeni v dokumentu.";
 };
 
 String STR_ACC_DOC_NAME
@@ -3834,12 +4066,12 @@ String STR_ACC_DOC_NAME
     Text[ portuguese ] = "Document view";
     Text[ russian ] = "Document view";
     Text[ greek ] = "Document view";
-    Text[ dutch ] = "Document view";
+    Text[ dutch ] = "Document weergave";
     Text[ french ] = "Affichage du document";
     Text[ spanish ] = "Visualizaci�n del documento";
     Text[ finnish ] = "Document view";
     Text[ italian ] = "Vista documento";
-    Text[ danish ] = "Document view";
+    Text[ danish ] = "Dokumentvisning";
     Text[ swedish ] = "Dokumentvy";
     Text[ polish ] = "Document view";
     Text[ portuguese_brazilian ] = "Visualizar documento";
@@ -3855,6 +4087,8 @@ String STR_ACC_DOC_NAME
     Text[ hebrew ] = "Dokumentenansicht";
     Text[ hindi ] = "Document view";
     Text[ slovak ] = "Pohľad na dokument";
+    Text[ hungarian ] = "Dokumentumnézet";
+    Text[ slovenian ] = "Pogled dokumenta";
 };
 
 String STR_ACC_DOC_DESCR
@@ -3869,13 +4103,13 @@ String STR_ACC_TABLE_NAME
     Text[ english_us ] = "Sheet %1";
     Text[ portuguese ] = "Table %1";
     Text[ russian ] = "Table %1";
-    Text[ greek ] = "Table %1";
-    Text[ dutch ] = "Table %1";
+    Text[ greek ] = "����� %1";
+    Text[ dutch ] = "Werkblad %1";
     Text[ french ] = "Feuille %1";
     Text[ spanish ] = "Hoja %1";
     Text[ finnish ] = "Table %1";
     Text[ italian ] = "Tabella %1";
-    Text[ danish ] = "Table %1";
+    Text[ danish ] = "Ark %1";
     Text[ swedish ] = "Tabell %1";
     Text[ polish ] = "Table %1";
     Text[ portuguese_brazilian ] = "Planilha %1";
@@ -3891,6 +4125,8 @@ String STR_ACC_TABLE_NAME
     Text[ hebrew ] = "Tabelle %1";
     Text[ hindi ] = "Sheet %1";
     Text[ slovak ] = "List %1";
+    Text[ hungarian ] = "%1. munkalap";
+    Text[ slovenian ] = "Delovni list %1";
 };
 
 String STR_ACC_TABLE_DESCR
@@ -3906,12 +4142,12 @@ String STR_ACC_CELL_NAME
     Text[ portuguese ] = "Table Cell %1";
     Text[ russian ] = "Table Cell %1";
     Text[ greek ] = "Table Cell %1";
-    Text[ dutch ] = "Table Cell %1";
+    Text[ dutch ] = "Cel %1";
     Text[ french ] = "Cellule %1";
     Text[ spanish ] = "Celda %1";
     Text[ finnish ] = "Table Cell %1";
     Text[ italian ] = "Cella %1";
-    Text[ danish ] = "Table Cell %1";
+    Text[ danish ] = "Celle %1";
     Text[ swedish ] = "Cell %1";
     Text[ polish ] = "Table Cell %1";
     Text[ portuguese_brazilian ] = "C�lula %1";
@@ -3927,6 +4163,8 @@ String STR_ACC_CELL_NAME
     Text[ hebrew ] = "Tabellenzelle %1";
     Text[ hindi ] = "Cell %1";
     Text[ slovak ] = "Bunka %1";
+    Text[ hungarian ] = "%1. cella";
+    Text[ slovenian ] = "Celica %1";
 };
 
 String STR_ACC_CELL_DESCR
@@ -3942,12 +4180,12 @@ String STR_ACC_PREVIEWDOC_NAME
     Text[ portuguese ] = "Page preview";
     Text[ russian ] = "Page preview";
     Text[ greek ] = "Page preview";
-    Text[ dutch ] = "Page preview";
+    Text[ dutch ] = "Pagina-afdrukvoorbeeld";
     Text[ french ] = "Aper�u de page";
     Text[ spanish ] = "Vista preliminar";
     Text[ finnish ] = "Page preview";
     Text[ italian ] = "Anteprima di stampa";
-    Text[ danish ] = "Page preview";
+    Text[ danish ] = "Sidevisning";
     Text[ swedish ] = "F�rhandsgranskning";
     Text[ polish ] = "Page preview";
     Text[ portuguese_brazilian ] = "Visualizar p�gina";
@@ -3963,6 +4201,8 @@ String STR_ACC_PREVIEWDOC_NAME
     Text[ hebrew ] = "‮מבט כללי‬";
     Text[ hindi ] = "Page preview";
     Text[ slovak ] = "Náhľad stránky";
+    Text[ hungarian ] = "Oldal előnézete";
+    Text[ slovenian ] = "Predogled strani";
 };
 
 String STR_ACC_PREVIEWDOC_DESCR
@@ -3988,12 +4228,12 @@ String STR_ACC_LEFTAREA_NAME
     Text[ portuguese ] = "Left area";
     Text[ russian ] = "Left area";
     Text[ greek ] = "Left area";
-    Text[ dutch ] = "Left area";
+    Text[ dutch ] = "Linkergebied";
     Text[ french ] = "Plage gauche";
     Text[ spanish ] = "�rea izquierda";
     Text[ finnish ] = "Left area";
     Text[ italian ] = "Area sinistra";
-    Text[ danish ] = "Left area";
+    Text[ danish ] = "Venstre omr�de";
     Text[ swedish ] = "V�nster omr�de";
     Text[ polish ] = "Left area";
     Text[ portuguese_brazilian ] = "�rea esquerda";
@@ -4009,6 +4249,8 @@ String STR_ACC_LEFTAREA_NAME
     Text[ hebrew ] = "Linker Bereich";
     Text[ hindi ] = "Left area";
     Text[ slovak ] = "Ľavá oblasť";
+    Text[ hungarian ] = "Bal oldali terület";
+    Text[ slovenian ] = "Levo območje";
 };
 
 String STR_ACC_LEFTAREA_DESCR
@@ -4024,12 +4266,12 @@ String STR_ACC_CENTERAREA_NAME
     Text[ portuguese ] = "Center area";
     Text[ russian ] = "Center area";
     Text[ greek ] = "Center area";
-    Text[ dutch ] = "Center area";
+    Text[ dutch ] = "Middengebied";
     Text[ french ] = "Plage centrale";
     Text[ spanish ] = "�rea central";
     Text[ finnish ] = "Center area";
     Text[ italian ] = "Area centrale";
-    Text[ danish ] = "Center area";
+    Text[ danish ] = "Center omr�de";
     Text[ swedish ] = "Mittomr�de";
     Text[ polish ] = "Center area";
     Text[ portuguese_brazilian ] = "�rea central";
@@ -4045,6 +4287,8 @@ String STR_ACC_CENTERAREA_NAME
     Text[ hebrew ] = "Mittlerer Bereich";
     Text[ hindi ] = "Center area";
     Text[ slovak ] = "Stredná oblasť";
+    Text[ hungarian ] = "Középső terület";
+    Text[ slovenian ] = "Sredinsko območje";
 };
 
 String STR_ACC_CENTERAREA_DESCR
@@ -4060,12 +4304,12 @@ String STR_ACC_RIGHTAREA_NAME
     Text[ portuguese ] = "Right area";
     Text[ russian ] = "Right area";
     Text[ greek ] = "Right area";
-    Text[ dutch ] = "Right area";
+    Text[ dutch ] = "Rechtergebied";
     Text[ french ] = "Plage droite";
     Text[ spanish ] = "�rea derecha";
     Text[ finnish ] = "Right area";
     Text[ italian ] = "Area destra";
-    Text[ danish ] = "Right area";
+    Text[ danish ] = "H�jre omr�de";
     Text[ swedish ] = "H�ger omr�de";
     Text[ polish ] = "Right area";
     Text[ portuguese_brazilian ] = "�rea direita";
@@ -4081,6 +4325,8 @@ String STR_ACC_RIGHTAREA_NAME
     Text[ hebrew ] = "Rechter Bereich";
     Text[ hindi ] = "Right area";
     Text[ slovak ] = "Pravá oblasť";
+    Text[ hungarian ] = "Jobb oldali terület";
+    Text[ slovenian ] = "Desno območje";
 };
 
 String STR_ACC_RIGHTAREA_DESCR
@@ -4096,12 +4342,12 @@ String STR_ACC_HEADER_NAME
     Text[ portuguese ] = "Header";
     Text[ russian ] = "Header";
     Text[ greek ] = "Header";
-    Text[ dutch ] = "Header";
+    Text[ dutch ] = "Koptekst van pagina %1";
     Text[ french ] = "En-t�te de la page %1";
     Text[ spanish ] = "Encabezamiento de la p�gina %1";
     Text[ finnish ] = "Header";
     Text[ italian ] = "Riga d'intestazione della pagina %1";
-    Text[ danish ] = "Header";
+    Text[ danish ] = "Sidehoved p� side %1";
     Text[ swedish ] = "Sidhuvud sida %1";
     Text[ polish ] = "Header";
     Text[ portuguese_brazilian ] = "Cabe�alho da p�gina %1";
@@ -4117,6 +4363,8 @@ String STR_ACC_HEADER_NAME
     Text[ hebrew ] = "Kopfzeile Seite %1";
     Text[ hindi ] = "Header of page %1";
     Text[ slovak ] = "Záhlavie stránky %1";
+    Text[ hungarian ] = "%1. oldal élőfeje";
+    Text[ slovenian ] = "Glava strani %1";
 };
 
 String STR_ACC_HEADER_DESCR
@@ -4132,12 +4380,12 @@ String STR_ACC_FOOTER_NAME
     Text[ portuguese ] = "Footer";
     Text[ russian ] = "Footer";
     Text[ greek ] = "Footer";
-    Text[ dutch ] = "Footer";
+    Text[ dutch ] = "Voettekst van pagina %1";
     Text[ french ] = "Pied de page de la page %1";
     Text[ spanish ] = "Pie de p�gina de la p�gina %1";
     Text[ finnish ] = "Footer";
     Text[ italian ] = "Pi� di pagina della pagina %1";
-    Text[ danish ] = "Footer";
+    Text[ danish ] = "Sidefod p� side %1";
     Text[ swedish ] = "Sidfot sida %1";
     Text[ polish ] = "Footer";
     Text[ portuguese_brazilian ] = "Rodap� da p�gina %1";
@@ -4153,6 +4401,8 @@ String STR_ACC_FOOTER_NAME
     Text[ hebrew ] = "Fußzeile Seite %1";
     Text[ hindi ] = "Footer of page %1";
     Text[ slovak ] = "Zápätie stránky %1";
+    Text[ hungarian ] = "%1. oldal élőlába";
+    Text[ slovenian ] = "Noga strani %1";
 };
 
 String STR_ACC_FOOTER_DESCR
@@ -4168,12 +4418,12 @@ String STR_ACC_EDITLINE_NAME
     Text[ portuguese ] = "Editline";
     Text[ russian ] = "Editline";
     Text[ greek ] = "Editline";
-    Text[ dutch ] = "Editline";
+    Text[ dutch ] = "Invoerregel";
     Text[ french ] = "Ligne de saisie";
     Text[ spanish ] = "L�nea de edici�n";
     Text[ finnish ] = "Editline";
     Text[ italian ] = "Riga di modifica";
-    Text[ danish ] = "Editline";
+    Text[ danish ] = "Inputlinje";
     Text[ swedish ] = "Inmatningsrad";
     Text[ polish ] = "Editline";
     Text[ portuguese_brazilian ] = "linha de entrada";
@@ -4189,6 +4439,8 @@ String STR_ACC_EDITLINE_NAME
     Text[ hebrew ] = "Editzeile";
     Text[ hindi ] = "Input line";
     Text[ slovak ] = "Vstupný riadok";
+    Text[ hungarian ] = "Beviteli sor";
+    Text[ slovenian ] = "Vhodna vrstica";
 };
 
 String STR_ACC_EDITLINE_DESCR
@@ -4199,12 +4451,12 @@ String STR_ACC_EDITLINE_DESCR
     Text[ portuguese ] = "This is where you enter or edit text, numbers and formulas.";
     Text[ russian ] = "This is where you enter or edit text, numbers and formulas.";
     Text[ greek ] = "This is where you enter or edit text, numbers and formulas.";
-    Text[ dutch ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ dutch ] = "Hier maakt of bewerkt u tekst, getallen en formules.";
     Text[ french ] = "Saisie et �dition des textes, nombres et formules";
     Text[ spanish ] = "Aqu� se puede introducir y editar texto, n�meros y f�rmulas. ";
     Text[ finnish ] = "This is where you enter or edit text, numbers and formulas.";
     Text[ italian ] = "Spazio per scrivere o modificare testo, numeri e formule.";
-    Text[ danish ] = "This is where you enter or edit text, numbers and formulas.";
+    Text[ danish ] = "Her kan du indtaste eller redigere tekst, tal og formler.";
     Text[ swedish ] = "H�r kan du mata in och redigera text, tal och formler.";
     Text[ polish ] = "This is where you enter or edit text, numbers and formulas.";
     Text[ portuguese_brazilian ] = "Edi��o e digita��o de dados, n�meros e f�rmulas.";
@@ -4220,6 +4472,8 @@ String STR_ACC_EDITLINE_DESCR
     Text[ hebrew ] = "Hier können Sie Text, Zahlen und Formeln eingeben und bearbeiten.";
     Text[ hindi ] = "This is where you enter or edit text, numbers and formulas.";
     Text[ slovak ] = "Tu môžete zadať alebo upraviť text, čísla a vzorce.";
+    Text[ hungarian ] = "Itt begépelhet és szerkeszthet szöveget, számokat és képleteket.";
+    Text[ slovenian ] = "Tukaj lahko vnesete in urejate besedilo, števila in formule.";
 };
 
 String STR_ACC_EDITCELL_NAME
@@ -4230,12 +4484,12 @@ String STR_ACC_EDITCELL_NAME
     Text[ portuguese ] = "Table Cell %1";
     Text[ russian ] = "Table Cell %1";
     Text[ greek ] = "Table Cell %1";
-    Text[ dutch ] = "Table Cell %1";
+    Text[ dutch ] = "Cel %1";
     Text[ french ] = "Cellule %1";
     Text[ spanish ] = "Celda %1";
     Text[ finnish ] = "Table Cell %1";
     Text[ italian ] = "Cella %1";
-    Text[ danish ] = "Table Cell %1";
+    Text[ danish ] = "Celle %1";
     Text[ swedish ] = "Cell %1";
     Text[ polish ] = "Table Cell %1";
     Text[ portuguese_brazilian ] = "C�lula %1";
@@ -4251,6 +4505,8 @@ String STR_ACC_EDITCELL_NAME
     Text[ hebrew ] = "Tabellenzelle %1";
     Text[ hindi ] = "Cell %1";
     Text[ slovak ] = "Bunka %1";
+    Text[ hungarian ] = "%1. cella";
+    Text[ slovenian ] = "Celica %1";
 };
 
 String STR_ACC_EDITCELL_DESCR
@@ -4266,12 +4522,12 @@ String STR_ACC_DATAPILOT_ROW_DESCR
     Text[ portuguese ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
     Text[ russian ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
     Text[ greek ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
-    Text[ dutch ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ dutch ] = "Velden die u hier laat vallen zullen worden getoond als rijen in de uiteindelijke DataPiloot-tabel.";
     Text[ french ] = "Les champs que vous positionnez � cet endroit seront affich�s comme lignes dans la table finale du pilote de donn�es.";
     Text[ spanish ] = "Los campos que coloque aqu� se mostrar�n como filas en la tabla final del Piloto de datos. ";
     Text[ finnish ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
     Text[ italian ] = "I campi trascinati in questo spazio verranno visualizzati come righe nella tabella finale DataPilot.";
-    Text[ danish ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
+    Text[ danish ] = "Felter, du inds�tter her, vil blive vist som r�kker i den endelige DataPilot-tabel.";
     Text[ swedish ] = "F�lt som du placerar h�r visas som rader i den f�rdiga datapilottabellen.";
     Text[ polish ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
     Text[ portuguese_brazilian ] = "Os campos posicionados neste lugar ser�o mostrados como linhas na tabela din�mica final.";
@@ -4287,6 +4543,8 @@ String STR_ACC_DATAPILOT_ROW_DESCR
     Text[ hebrew ] = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle als Zeile angezeigt.";
     Text[ hindi ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
     Text[ slovak ] = "Polia ktoré presuniete tu budú zobrazené ako riadky v konečnej tabuľke sprievodcu dátami.";
+    Text[ hungarian ] = "Az ide áthúzott mezők az adattündérrel létrehozott táblában sorként jelennek meg.";
+    Text[ slovenian ] = "Tukaj odvržena polja bodo prikazana kot vrstice v končni tabeli programa DataPilot.";
 };
 
 String STR_ACC_DATAPILOT_COL_DESCR
@@ -4297,12 +4555,12 @@ String STR_ACC_DATAPILOT_COL_DESCR
     Text[ portuguese ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
     Text[ russian ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
     Text[ greek ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
-    Text[ dutch ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ dutch ] = "Velden die u hier laat vallen zullen worden getoond als kolommen in de uiteindelijke DataPiloot-tabel.";
     Text[ french ] = "Les champs que vous positionnez � cet endroit seront affich�s comme colonnes dans la table finale du pilote de donn�es.";
     Text[ spanish ] = "Los campos que coloque aqu� se mostrar�n como columnas en la tabla final del Piloto de datos. ";
     Text[ finnish ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
     Text[ italian ] = "I campi trascinati in questo spazio verranno visualizzati come colonne nella tabella finale DataPilot.";
-    Text[ danish ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
+    Text[ danish ] = "Felter, du inds�tter her, vil blive vist som kolonner i den endelige DataPilot-tabel.";
     Text[ swedish ] = "F�lt som du placerar h�r visas som kolumner i den f�rdiga datapilottabellen.";
     Text[ polish ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
     Text[ portuguese_brazilian ] = "Os campos posicionados neste lugar ser�o mostrados como colunas na tabela din�mica final.";
@@ -4318,6 +4576,8 @@ String STR_ACC_DATAPILOT_COL_DESCR
     Text[ hebrew ] = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle als Spalte angezeigt.";
     Text[ hindi ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
     Text[ slovak ] = "Polia ktoré presuniete tu budú zobrazené ako stĺpce v konečnej tabuľke sprievodcu dátami.";
+    Text[ hungarian ] = "Az ide áthúzott mezők az adattündérrel létrehozott táblában oszlopként jelennek meg.";
+    Text[ slovenian ] = "Tukaj odvržena polja bodo prikazana kot stolpci v končni tabeli programa DataPilot.";
 };
 
 String STR_ACC_DATAPILOT_DATA_DESCR
@@ -4328,12 +4588,12 @@ String STR_ACC_DATAPILOT_DATA_DESCR
     Text[ portuguese ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
     Text[ russian ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
     Text[ greek ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
-    Text[ dutch ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ dutch ] = "Velden die u hier laat vallen zullen worden gebruikt voor berekeningen in de uiteindelijke DataPiloot-tabel.";
     Text[ french ] = "Les champs que vous positionnez � cet endroit seront utilis�s pour les calculs dans la table finale du pilote de donn�es.";
     Text[ spanish ] = "Los campos que coloque aqu� se utilizar�n para realizar c�lculos en la tabla final del Piloto de datos. ";
     Text[ finnish ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
     Text[ italian ] = "I campi trascinati in questo spazio verranno utilizzati per eseguire calcoli nella tabella finale DataPilot.";
-    Text[ danish ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
+    Text[ danish ] = "Felter, du inds�tter her, vil blive vist som beregninger i den endelige DataPilot-tabel.";
     Text[ swedish ] = "F�lt som du placerar h�r anv�nds f�r ber�kningar i den f�rdiga datapilottabellen.";
     Text[ polish ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
     Text[ portuguese_brazilian ] = "Campos colocados aqui ser�o usados para os c�lculos na tabela din�mica final.";
@@ -4349,6 +4609,8 @@ String STR_ACC_DATAPILOT_DATA_DESCR
     Text[ hebrew ] = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle für Berechnungen genutzt.";
     Text[ hindi ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
     Text[ slovak ] = "Polia ktoré presuniete tu budú použité pre výpočty v konečnej tabuľke sprievodcu dátami.";
+    Text[ hungarian ] = "Az ide áthúzott mezőket az adattündér a végleges táblában számításokhoz használja.";
+    Text[ slovenian ] = "Tukaj odvržena polja bodo uporabljena za izračune v končni tabeli programa DataPilot.";
 };
 
 String STR_ACC_DATAPILOT_SEL_DESCR
@@ -4360,12 +4622,12 @@ String STR_ACC_DATAPILOT_SEL_DESCR
     Text[ portuguese ] = "List the fields that you can drag to one of the other three areas.";
     Text[ russian ] = "List the fields that you can drag to one of the other three areas.";
     Text[ greek ] = "List the fields that you can drag to one of the other three areas.";
-    Text[ dutch ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ dutch ] = "Opsomming van de velden die u in een van de andere drie gebieden kunt slepen.";
     Text[ french ] = "Liste des champs pouvant �tre d�plac�s vers l'une des trois zones.";
     Text[ spanish ] = "Lista de los campos que se pueden llevar hasta una de las otras tres �reas.";
     Text[ finnish ] = "List the fields that you can drag to one of the other three areas.";
     Text[ italian ] = "Elenco dei campi che potete trascinare in una delle tre aree.";
-    Text[ danish ] = "List the fields that you can drag to one of the other three areas.";
+    Text[ danish ] = "Angiv de felter, som du kan tr�kke til et af de tre andre omr�der.";
     Text[ swedish ] = "H�r �r f�lt listade som du kan dra till ett av de andra tre omr�dena.";
     Text[ polish ] = "List the fields that you can drag to one of the other three areas.";
     Text[ portuguese_brazilian ] = "Lista de campos que podem ser colocados numa das tr�s �reas.";
@@ -4381,7 +4643,11 @@ String STR_ACC_DATAPILOT_SEL_DESCR
     Text[ hebrew ] = "Hier sind die Felder aufgelistet, die Sie in einen der drei anderen Bereiche bewegen können.";
     Text[ hindi ] = "Lists the fields that you can drag to one of the other three areas.";
     Text[ slovak ] = "Zobrazí polia, ktoré môžete presunúť do jednej z troch ďalších oblastí.";
+    Text[ hungarian ] = "Felsorolja azokat a mezőket, amelyeket a többi három terület egyikére rá lehet húzni.";
+    Text[ slovenian ] = "Našteje polja, ki jih lahko povlečete v eno od ostalih treh območij.";
 };
+
+
 
 
 
