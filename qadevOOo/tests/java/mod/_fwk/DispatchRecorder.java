@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchRecorder.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:29 $
+ *  last change:$Date: 2003-05-27 12:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@ import com.sun.star.frame.XDispatchRecorder;
 import com.sun.star.frame.XDispatchRecorderSupplier;
 import com.sun.star.frame.XFrame;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
@@ -107,7 +108,7 @@ public class DispatchRecorder extends TestCase {
         XFrame xFrame = null;
 
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory(Param.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory((XMultiServiceFactory)Param.getMSF());
             oDoc = SOF.createTextDoc(null);
 
             try {
@@ -116,14 +117,14 @@ public class DispatchRecorder extends TestCase {
             catch (InterruptedException ex) {
             }
 
-            xFrame = SysUtils.getActiveFrame(Param.getMSF());
+            xFrame = SysUtils.getActiveFrame((XMultiServiceFactory)Param.getMSF());
 
             XPropertySet xFramePS = (XPropertySet) UnoRuntime.queryInterface
                 (XPropertySet.class, xFrame);
             Object oDRS = xFramePS.getPropertyValue("DispatchRecorderSupplier");
             XDispatchRecorderSupplier xDRS = null;
             if (oDRS == null) {
-                oDRS = Param.getMSF().createInstance(
+                oDRS = ((XMultiServiceFactory)Param.getMSF()).createInstance(
                     "com.sun.star.comp.framework.DispatchRecorderSupplier");
                 xFramePS.setPropertyValue("DispatchRecorderSupplier", oDRS);
             }
@@ -134,7 +135,7 @@ public class DispatchRecorder extends TestCase {
             if (xDR != null) {
                 oObj = xDR;
             } else {
-                oObj = (XInterface)Param.getMSF().createInstance(
+                oObj = (XInterface)((XMultiServiceFactory)Param.getMSF()).createInstance(
                     "com.sun.star.comp.framework.DispatchRecorder");
                 xDR = (XDispatchRecorder) UnoRuntime.queryInterface
                     (XDispatchRecorder.class, oObj);
