@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:45:22 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:28:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,31 +282,46 @@ namespace accessibility
         DBG_CHKTHIS( AccessibleEditableTextPara, NULL );
 
         SvxTextForwarder&   rCacheTF = GetTextForwarder();
-        sal_Int32           nParaIndex = GetParagraphIndex();
+        const sal_Int32     nParaIndex = GetParagraphIndex();
 
         DBG_ASSERT(nParaIndex >= 0 && nParaIndex <= USHRT_MAX,
-                   "AccessibleEditableTextPara::getTextAtIndex: paragraph index value overflow");
+                   "AccessibleEditableTextPara::implGetLineBoundary: paragraph index value overflow");
 
-        sal_Int32 nTextLen = rCacheTF.GetTextLen( static_cast< USHORT >( nParaIndex ) );
+        const sal_Int32 nTextLen = rCacheTF.GetTextLen( static_cast< USHORT >( nParaIndex ) );
 
-        CheckIndex(nIndex);
+        CheckPosition(nIndex);
 
-        USHORT nLine, nLineCount=rCacheTF.GetLineCount( static_cast< USHORT >( nParaIndex ) );
-        sal_Int32 nCurIndex;
-        for( nLine=0, nCurIndex=0; nLine<nLineCount; ++nLine )
+        rBoundary.startPos = rBoundary.endPos = -1;
+
+        const USHORT nLineCount=rCacheTF.GetLineCount( static_cast< USHORT >( nParaIndex ) );
+
+        if( nIndex == nTextLen )
         {
-            nCurIndex += rCacheTF.GetLineLen( static_cast< USHORT >( nParaIndex ), nLine);
+            // #i17014# Special-casing one-behind-the-end character
+            rBoundary.startPos = 0;
+            while( nLineCount > 1 )
+                rBoundary.startPos += rCacheTF.GetLineLen( static_cast< USHORT >( nParaIndex ),
+                                                          nLineCount-2 );
 
-            if( nCurIndex > nIndex )
+            rBoundary.endPos = nTextLen;
+        }
+        else
+        {
+            // normal line search
+            USHORT nLine;
+            sal_Int32 nCurIndex;
+            for( nLine=0, nCurIndex=0; nLine<nLineCount; ++nLine )
             {
-                rBoundary.startPos = nCurIndex - rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine);
-                rBoundary.endPos = nCurIndex;
-                break;
+                nCurIndex += rCacheTF.GetLineLen( static_cast< USHORT >( nParaIndex ), nLine);
+
+                if( nCurIndex > nIndex )
+                {
+                    rBoundary.startPos = nCurIndex - rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine);
+                    rBoundary.endPos = nCurIndex;
+                    break;
+                }
             }
         }
-
-        rBoundary.startPos = nTextLen;
-        rBoundary.endPos = nTextLen;
     }
 
     int AccessibleEditableTextPara::getNotifierClientId() const
@@ -834,7 +849,10 @@ namespace accessibility
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
                    "AccessibleEditableTextPara::getLocale: paragraph index value overflow");
 
-        return GetTextForwarder().GetAttributeRun( nStartIndex, nEndIndex, static_cast< USHORT >(GetParagraphIndex()), static_cast< USHORT >(nIndex) );
+        return GetTextForwarder().GetAttributeRun( nStartIndex,
+                                                   nEndIndex,
+                                                   static_cast< USHORT >(GetParagraphIndex()),
+                                                   static_cast< USHORT >(nIndex) );
     }
 
     uno::Any SAL_CALL AccessibleEditableTextPara::queryInterface (const uno::Type & rType) throw (uno::RuntimeException)
@@ -1501,7 +1519,7 @@ namespace accessibility
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
-                   "AccessibleEditableTextPara::getTextRange: paragraph index value overflow");
+                   "AccessibleEditableTextPara::getTextAtIndex: paragraph index value overflow");
 
         ::com::sun::star::accessibility::TextSegment aResult;
         aResult.SegmentStart = -1;
@@ -1509,43 +1527,28 @@ namespace accessibility
 
         switch( aTextType )
         {
+            // Not yet handled by OCommonAccessibleText. Missing
+            // implGetAttributeRunBoundary() method there
             case AccessibleTextType::ATTRIBUTE_RUN:
             {
-                USHORT nStartIndex, nEndIndex;
+                const sal_Int32 nTextLen = GetTextForwarder().GetTextLen( static_cast< USHORT >( GetParagraphIndex() ) );
 
-                if( GetAttributeRun(nStartIndex, nEndIndex, nIndex) )
+                if( nIndex == nTextLen )
                 {
-                    aResult.SegmentText = GetTextRange(nStartIndex, nEndIndex);
-                    aResult.SegmentStart = nStartIndex;
-                    aResult.SegmentEnd = nEndIndex;
+                    // #i17014# Special-casing one-behind-the-end character
+                    aResult.SegmentStart = aResult.SegmentEnd = nTextLen;
                 }
-
-                break;
-            }
-
-            case AccessibleTextType::LINE:
-            {
-                SvxTextForwarder&   rCacheTF = GetTextForwarder();
-                sal_Int32           nParaIndex = GetParagraphIndex();
-                sal_Int32 nTextLen = rCacheTF.GetTextLen( static_cast< USHORT >( nParaIndex ) );
-
-                CheckPosition(nIndex);
-
-                USHORT nLine, nLineCount=rCacheTF.GetLineCount( static_cast< USHORT >( nParaIndex ) );
-                sal_Int32 nCurIndex;
-                for( nLine=0, nCurIndex=0; nLine<nLineCount; ++nLine )
+                else
                 {
-                    nCurIndex += rCacheTF.GetLineLen( static_cast< USHORT >( nParaIndex ), nLine);
+                    USHORT nStartIndex, nEndIndex;
 
-                    if( nCurIndex > nIndex )
+                    if( GetAttributeRun(nStartIndex, nEndIndex, nIndex) )
                     {
-                        aResult.SegmentStart = nCurIndex - rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine);
-                        aResult.SegmentEnd = nCurIndex;
-                        aResult.SegmentText = GetTextRange( aResult.SegmentStart, aResult.SegmentEnd );
-                        break;
+                        aResult.SegmentText = GetTextRange(nStartIndex, nEndIndex);
+                        aResult.SegmentStart = nStartIndex;
+                        aResult.SegmentEnd = nEndIndex;
                     }
                 }
-
                 break;
             }
 
@@ -1564,7 +1567,7 @@ namespace accessibility
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
-                   "AccessibleEditableTextPara::getTextRange: paragraph index value overflow");
+                   "AccessibleEditableTextPara::getTextBeforeIndex: paragraph index value overflow");
 
         ::com::sun::star::accessibility::TextSegment aResult;
         aResult.SegmentStart = -1;
@@ -1572,16 +1575,32 @@ namespace accessibility
 
         switch( aTextType )
         {
+            // Not yet handled by OCommonAccessibleText. Missing
+            // implGetAttributeRunBoundary() method there
             case AccessibleTextType::ATTRIBUTE_RUN:
             {
+                const sal_Int32 nTextLen = GetTextForwarder().GetTextLen( static_cast< USHORT >( GetParagraphIndex() ) );
                 USHORT nStartIndex, nEndIndex;
 
-                if( GetAttributeRun(nStartIndex, nEndIndex, nIndex) )
+                if( nIndex == nTextLen )
                 {
-                    // already at the left border?
-                    if( nStartIndex != 0 )
+                    // #i17014# Special-casing one-behind-the-end character
+                    if( nIndex > 0 &&
+                        GetAttributeRun(nStartIndex, nEndIndex, nIndex-1) )
                     {
-                        if( GetAttributeRun(nStartIndex, nEndIndex, nStartIndex-1) )
+                        aResult.SegmentText = GetTextRange(nStartIndex, nEndIndex);
+                        aResult.SegmentStart = nStartIndex;
+                        aResult.SegmentEnd = nEndIndex;
+                    }
+                }
+                else
+                {
+                    if( GetAttributeRun(nStartIndex, nEndIndex, nIndex) )
+                    {
+                        // already at the left border? If not, query
+                        // one index further left
+                        if( nStartIndex > 0 &&
+                            GetAttributeRun(nStartIndex, nEndIndex, nStartIndex-1) )
                         {
                             aResult.SegmentText = GetTextRange(nStartIndex, nEndIndex);
                             aResult.SegmentStart = nStartIndex;
@@ -1589,37 +1608,6 @@ namespace accessibility
                         }
                     }
                 }
-
-                break;
-            }
-
-            case AccessibleTextType::LINE:
-            {
-                SvxTextForwarder&   rCacheTF = GetTextForwarder();
-                sal_Int32           nParaIndex = GetParagraphIndex();
-                sal_Int32 nTextLen = rCacheTF.GetTextLen( static_cast< USHORT >( nParaIndex ) );
-
-                CheckPosition(nIndex);
-
-                USHORT nLine, nLineCount=rCacheTF.GetLineCount( static_cast< USHORT >( nParaIndex ) );
-                sal_Int32 nCurIndex, nLastIndex, nCurLineLen;
-                // get the line before the line the index points into
-                for( nLine=0, nCurIndex=0, nLastIndex=0; nLine<nLineCount; ++nLine )
-                {
-                    nLastIndex = nCurIndex;
-                    nCurLineLen = rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine);
-                    nCurIndex += nCurLineLen;
-
-                    if( nCurIndex > nIndex &&
-                        nLastIndex > nCurLineLen )
-                    {
-                        aResult.SegmentStart = nLastIndex - nCurLineLen;
-                        aResult.SegmentEnd = static_cast< USHORT >( nLastIndex );
-                        aResult.SegmentText = GetTextRange( aResult.SegmentStart, aResult.SegmentEnd );
-                        break;
-                    }
-                }
-
                 break;
             }
 
@@ -1638,7 +1626,7 @@ namespace accessibility
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         DBG_ASSERT(GetParagraphIndex() >= 0 && GetParagraphIndex() <= USHRT_MAX,
-                   "AccessibleEditableTextPara::getTextRange: paragraph index value overflow");
+                   "AccessibleEditableTextPara::getTextBehindIndex: paragraph index value overflow");
 
         ::com::sun::star::accessibility::TextSegment aResult;
         aResult.SegmentStart = -1;
@@ -1663,35 +1651,6 @@ namespace accessibility
                         }
                     }
                 }
-
-                break;
-            }
-
-            case AccessibleTextType::LINE:
-            {
-                SvxTextForwarder&   rCacheTF = GetTextForwarder();
-                sal_Int32           nParaIndex = GetParagraphIndex();
-                sal_Int32 nTextLen = rCacheTF.GetTextLen( static_cast< USHORT >( nParaIndex ) );
-
-                CheckPosition(nIndex);
-
-                USHORT nLine, nLineCount=rCacheTF.GetLineCount( static_cast< USHORT >( nParaIndex ) );
-                sal_Int32 nCurIndex;
-                // get the line after the line the index points into
-                for( nLine=0, nCurIndex=0; nLine<nLineCount; ++nLine )
-                {
-                    nCurIndex += rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine);
-
-                    if( nCurIndex > nIndex &&
-                        nLine < nLineCount-1 )
-                    {
-                        aResult.SegmentStart = nCurIndex;
-                        aResult.SegmentEnd = nCurIndex + rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine+1);
-                        aResult.SegmentText = GetTextRange( aResult.SegmentStart, aResult.SegmentEnd );
-                        break;
-                    }
-                }
-
                 break;
             }
 
