@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:54:37 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:34:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #define _COMPHELPER_SEQUENCE_HXX_
+
+#include <algorithm> // copy algorithm
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
