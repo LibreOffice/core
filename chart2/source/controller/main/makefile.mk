@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: iha $ $Date: 2003-12-09 17:14:24 $
+#   last change: $Author: iha $ $Date: 2003-12-10 18:21:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,9 +75,11 @@ ENABLE_EXCEPTIONS=	TRUE
 
 #object files to build and link together to lib $(SLB)$/$(TARGET).lib
 SLOFILES =  \
+            $(SLO)$/ConfigurationAccess.obj	\
             $(SLO)$/ViewSingletons.obj	\
             $(SLO)$/ResId.obj \
             $(SLO)$/SelectionHelper.obj	\
+            $(SLO)$/PositionAndSizeHelper.obj	\
             $(SLO)$/ChartWindow.obj	\
             $(SLO)$/ChartController.obj	\
             $(SLO)$/ChartController_Window.obj	\
