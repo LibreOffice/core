@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwUndoTOXChange.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:05:59 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <SwUndoTOXChange.hxx>
 #include <swundo.hxx>
 #include <doctxm.hxx>
@@ -72,20 +71,29 @@ SwUndoTOXChange::~SwUndoTOXChange()
 {
 }
 
+void SwUndoTOXChange::UpdateTOXBaseSection()
+{
+    if (pTOX->ISA(SwTOXBaseSection))
+    {
+        SwTOXBaseSection * pTOXBase = static_cast<SwTOXBaseSection *>(pTOX);
+
+        pTOXBase->Update();
+        pTOXBase->UpdatePageNum();
+    }
+}
+
 void SwUndoTOXChange::Undo(SwUndoIter & rIter)
 {
     *pTOX = aOld;
 
-    if (pTOX->ISA(SwTOXBaseSection))
-        ((SwTOXBaseSection*) pTOX)->Update();
+    UpdateTOXBaseSection();
 }
 
 void SwUndoTOXChange::Redo(SwUndoIter & rIter)
 {
     *pTOX = aNew;
 
-    if (pTOX->ISA(SwTOXBaseSection))
-        ((SwTOXBaseSection*) pTOX)->Update();
+    UpdateTOXBaseSection();
 }
 
 void SwUndoTOXChange::Repeat(SwUndoIter & rIter)
