@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.5 $ 
+#   $Revision: 1.6 $ 
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 15:28:55 $ 
+#   last change: $Author: rt $ $Date: 2004-07-23 15:13:03 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -71,7 +71,7 @@ XCLASSPATH+=":$(XML_CLASSPATH)"
 CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
 #USE_UDK_EXTENDED_MANIFESTFILE=TRUE
 #USE_EXTENDED_MANIFESTFILE=TRUE
-JARFILES 		= sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar 
+JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar 
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 CUSTOMMANIFESTFILE = Manifest  
 #JARMANIFEST = Manifest
