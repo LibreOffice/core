@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: er $ $Date: 2000-12-05 14:57:52 $
+#   last change: $Author: os $ $Date: 2001-01-17 15:54:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,6 +92,7 @@ IDLFILES=\
     XCalendar.idl \
     XCharacterClassification.idl \
     XCollator.idl \
+    XForbiddenCharacters.idl \
     XLocaleData.idl \
     XNumberFormatCode.idl \
     XTransliteration.idl
