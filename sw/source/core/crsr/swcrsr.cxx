@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:39:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1159,7 +1159,7 @@ FASTBOOL SwCursor::IsStartWord() const
         bRet = pBreakIt->xBreak->isBeginWord(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos )),
-                            WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/);
+                            WordType::ANYWORD_IGNOREWHITESPACES );
     }
     return bRet;
 }
@@ -1174,7 +1174,7 @@ FASTBOOL SwCursor::IsEndWord() const
         bRet = pBreakIt->xBreak->isEndWord(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
-                            WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/ );
+                            WordType::ANYWORD_IGNOREWHITESPACES );
 
     }
     return bRet;
@@ -1190,7 +1190,7 @@ FASTBOOL SwCursor::IsInWord() const
         Boundary aBoundary = pBreakIt->xBreak->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
-                            WordType::ANY_WORD,
+                            WordType::ANYWORD_IGNOREWHITESPACES,
                             TRUE );
 
         bRet = aBoundary.startPos != aBoundary.endPos &&
@@ -1327,7 +1327,7 @@ FASTBOOL SwCursor::SelectWord( const Point* pPt )
         Boundary aBndry( pBreakIt->xBreak->getWordBoundary(
                             pTxtNd->GetTxt(), nPtPos,
                             pBreakIt->GetLocale( pTxtNd->GetLang( nPtPos ) ),
-                            WordType::ANY_WORD /*ANYWORD_IGNOREWHITESPACES*/,
+                            WordType::ANYWORD_IGNOREWHITESPACES,
                             bForward ));
 
         if( aBndry.startPos != aBndry.endPos )
