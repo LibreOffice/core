@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgwriter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-05 13:40:29 $
+ *  last change: $Author: ka $ $Date: 2003-12-15 13:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@
 #define REF( _def_Obj )         NMSP_UNO::Reference< _def_Obj >
 #define SEQ( _def_Obj )         NMSP_UNO::Sequence< _def_Obj >
 #define B2UCONST( _def_pChar )  (NMSP_RTL::OUString(RTL_CONSTASCII_USTRINGPARAM(_def_pChar )))
-#define SVG_DTD_STRING          B2UCONST( "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.0//EN\" \"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" )
+#define SVG_DTD_STRING          B2UCONST( "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">" )
 
 #define SVGWRITER_WRITE_NONE    0x00000000
 #define SVGWRITER_WRITE_FILL    0x00000001

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfilter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 17:57:52 $
+ *  last change: $Author: ka $ $Date: 2003-12-15 13:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ SVGFilter::~SVGFilter()
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
+    vos::OGuard aGuard( Application::GetSolarMutex() );
     Window*     pFocusWindow = Application::GetFocusWindow();
     sal_Bool    bRet;
 

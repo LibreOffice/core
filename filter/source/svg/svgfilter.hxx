@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfilter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 17:57:52 $
+ *  last change: $Author: ka $ $Date: 2003-12-15 13:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,12 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::std;
 
+// -----------
+// - Defines -
+// -----------
+
+#define SVG_EXPORT_ALLPAGES ((sal_Int32)-1)
+
 // -------------
 // - SVGExport -
 // -------------
@@ -268,17 +274,20 @@ private:
     sal_Bool                            implGenerateScript( const Reference< XDrawPages >& rxMasterPages,
                                                             const Reference< XDrawPages >& rxDrawPages );
 
-    sal_Bool                            implExportDocumemt( const Reference< XDrawPages >& rxMasterPages,
-                                                            const Reference< XDrawPages >& rxDrawPages );
+    sal_Bool                            implExportDocument( const Reference< XDrawPages >& rxMasterPages,
+                                                            const Reference< XDrawPages >& rxDrawPages,
+                                                            sal_Int32 nPageToExport );
 
-    sal_Bool                            implExportPages( const Reference< XDrawPages >& rxMasterPages,
+    sal_Bool                            implExportPages( const Reference< XDrawPages >& rxPages,
+                                                         sal_Int32 nFirstPage, sal_Int32 nLastPage,
                                                          sal_Int32 nVisiblePage, sal_Bool bMaster );
 
     sal_Bool                            implExportShapes( const Reference< XShapes >& rxShapes );
     sal_Bool                            implExportShape( const Reference< XShape >& rxShape );
 
     sal_Bool                            implCreateObjects( const Reference< XDrawPages >& rxMasterPages,
-                                                           const Reference< XDrawPages >& rxDrawPages );
+                                                           const Reference< XDrawPages >& rxDrawPages,
+                                                           sal_Int32 nPageToExport );
 
     sal_Bool                            implCreateObjectsFromShapes( const Reference< XShapes >& rxShapes );
     sal_Bool                            implCreateObjectsFromShape( const Reference< XShape >& rxShape );

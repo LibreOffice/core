@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfontexport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-16 10:56:13 $
+ *  last change: $Author: ka $ $Date: 2003-12-15 13:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 
 #include "svgfontexport.hxx"
+
+static const sal_uInt32 nFontEM = 1024;
 
 // -----------------
 // - SVGFontExport -
@@ -162,13 +164,13 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
 
     {
         SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "defs", TRUE, TRUE );
-        const sal_uInt32    nEM = 2048;
         ::rtl::OUString     aCurIdStr( aEmbeddedFontStr );
-        ::rtl::OUString     aUnitsPerEM( SVGActionWriter::GetValueString( nEM ) );
+        ::rtl::OUString     aUnitsPerEM( SVGActionWriter::GetValueString( nFontEM ) );
         VirtualDevice       aVDev;
-        const Font          aFont( rFontName, Size( 0, nEM ) );
+        Font                aFont( rFontName, Size( 0, nFontEM ) );
 
         aVDev.SetMapMode( MAP_100TH_MM );
+        aFont.SetAlign( ALIGN_BASELINE );
         aVDev.SetFont( aFont );
 
         mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", aCurIdStr += SVGActionWriter::GetValueString( ++mnCurFontId ) );
@@ -177,14 +179,16 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
         {
             SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "font", TRUE, TRUE );
             Point               aPos;
-            Size                aSize( nEM >> 1, nEM );
+            Size                aSize( nFontEM >> 1, nFontEM );
             PolyPolygon         aMissingGlyphPolyPoly( Rectangle( aPos, aSize ) );
 
-            aMissingGlyphPolyPoly.Move( 0, -aVDev.GetFontMetric().GetAscent() );
+            aMissingGlyphPolyPoly.Move( 0, -nFontEM );
             aMissingGlyphPolyPoly.Scale( 1.0, -1.0 );
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "font-family", GetMappedFontName( rFontName ) );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "units-per-em", aUnitsPerEM );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "ascent", SVGActionWriter::GetValueString( aVDev.GetFontMetric().GetAscent() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "descent", SVGActionWriter::GetValueString( aVDev.GetFontMetric().GetDescent() ) );
 
             {
                 SvXMLElementExport aExp( mrExport, XML_NAMESPACE_NONE, "font-face", TRUE, TRUE );
@@ -216,30 +220,27 @@ void SVGFontExport::implEmbedFont( const ::rtl::OUString& rFontName, const ::std
 
 void SVGFontExport::implEmbedGlyph( OutputDevice& rOut, const ::rtl::OUString& rGlyphs )
 {
-    ::std::vector< PolyPolygon > aPolyPolys;
+    PolyPolygon     aPolyPoly;
+    ::rtl::OUString aStr( rGlyphs[ 0 ] );
 
-    if( rOut.GetTextOutlines( aPolyPolys, rGlyphs, 0, 0, 1, sal_False ) )
+    if( rOut.GetTextOutline( aPolyPoly, aStr ) )
     {
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "unicode", rGlyphs );
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", SVGActionWriter::GetValueString( rOut.GetTextWidth( rGlyphs ) ) );
+        Rectangle aBoundRect;
+
+        if( !rOut.GetTextBoundRect( aBoundRect, aStr ) )
+            aBoundRect = Rectangle( Point( 0, 0 ), Size( rOut.GetTextWidth( aStr ), 0 ) );
+
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "unicode", aStr );
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "horiz-adv-x", SVGActionWriter::GetValueString( aBoundRect.GetWidth() ) );
 
         {
-            SvXMLElementExport                      aExp( mrExport, XML_NAMESPACE_NONE, "glyph", TRUE, TRUE );
-            ::std::vector< PolyPolygon >::iterator  pIter( aPolyPolys.begin() );
+            SvXMLElementExport  aExp( mrExport, XML_NAMESPACE_NONE, "glyph", TRUE, TRUE );
 
-            while( pIter != aPolyPolys.end() )
+            aPolyPoly.Scale( 1.0, -1.0 );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", SVGActionWriter::GetPathString( aPolyPoly, sal_False ) );
+
             {
-                PolyPolygon& rPolyPoly = *pIter;
-
-                rPolyPoly.Move( 0, -rOut.GetFontMetric().GetAscent() );
-                rPolyPoly.Scale( 1.0, -1.0 );
-                mrExport.AddAttribute( XML_NAMESPACE_NONE, "d", SVGActionWriter::GetPathString( rPolyPoly, sal_False ) );
-
-                {
-                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, B2UCONST( "path" ), TRUE, TRUE );
-                }
-
-                ++pIter;
+                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, B2UCONST( "path" ), TRUE, TRUE );
             }
         }
     }

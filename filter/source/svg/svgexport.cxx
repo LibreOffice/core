@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgexport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 15:56:22 $
+ *  last change: $Author: ka $ $Date: 2003-12-15 13:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,18 +135,36 @@ bool ObjectRepresentation::operator==( const ObjectRepresentation& rPresentation
 // - SVGFilter -
 // -------------
 
+#include <vcl/msgbox.hxx>
+
 sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     throw (RuntimeException)
 {
     Reference< XMultiServiceFactory >   xServiceFactory( ::comphelper::getProcessServiceFactory() ) ;
     Reference< XOutputStream >          xOStm;
+    SvStream*                           pOStm = NULL;
     sal_Int32                           nLength = rDescriptor.getLength();
+    sal_Int32                           nPageToExport = SVG_EXPORT_ALLPAGES;
     const PropertyValue*                pValue = rDescriptor.getConstArray();
     sal_Bool                            bRet = sal_False;
 
-    for ( sal_Int32 i = 0 ; ( i < nLength ) && !xOStm.is(); ++i)
+    for ( sal_Int32 i = 0 ; i < nLength; ++i)
+    {
         if( pValue[ i ].Name.equalsAscii( "OutputStream" ) )
             pValue[ i ].Value >>= xOStm;
+        else if( pValue[ i ].Name.equalsAscii( "FileName" ) )
+        {
+            ::rtl::OUString aFileName;
+
+            pValue[ i ].Value >>= aFileName;
+            pOStm = ::utl::UcbStreamHelper::CreateStream( aFileName, STREAM_WRITE | STREAM_TRUNC );
+
+            if( pOStm )
+                xOStm = Reference< XOutputStream >( new ::utl::OOutputStreamWrapper ( *pOStm ) );
+        }
+        else if( pValue[ i ].Name.equalsAscii( "PagePos" ) )
+            pValue[ i ].Value >>= nPageToExport;
+   }
 
     if( xOStm.is() && xServiceFactory.is() )
     {
@@ -169,9 +187,12 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                     mpObjects = new ObjectMap;
                     mpSVGExport = new SVGExport( xDocHandler );
 
+                    if( nPageToExport < 0 || nPageToExport >= xDrawPages->getCount() )
+                        nPageToExport = SVG_EXPORT_ALLPAGES;
+
                     try
                     {
-                        if( implCreateObjects( xMasterPages, xDrawPages ) )
+                        if( implCreateObjects( xMasterPages, xDrawPages, nPageToExport ) )
                         {
                             ObjectMap::const_iterator               aIter( mpObjects->begin() );
                             ::std::vector< ObjectRepresentation >   aObjects( mpObjects->size() );
@@ -186,9 +207,10 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                             mpSVGFontExport = new SVGFontExport( *mpSVGExport, aObjects );
                             mpSVGWriter = new SVGActionWriter( *mpSVGExport, *mpSVGFontExport );
 
-                            bRet = implExportDocumemt( xMasterPages, xDrawPages );
+                            bRet = implExportDocument( xMasterPages, xDrawPages, nPageToExport );
                         }
                     }
+
                     catch( ... )
                     {
                         delete mpSVGDoc, mpSVGDoc = NULL;
@@ -204,6 +226,8 @@ sal_Bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
             }
         }
     }
+
+    delete pOStm;
 
     return bRet;
 }
@@ -235,17 +259,22 @@ Reference< XDocumentHandler > SVGFilter::implCreateExportDocumentHandler( const 
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SVGFilter::implExportDocumemt( const Reference< XDrawPages >& rxMasterPages,
-                                        const Reference< XDrawPages >& rxDrawPages )
+sal_Bool SVGFilter::implExportDocument( const Reference< XDrawPages >& rxMasterPages,
+                                        const Reference< XDrawPages >& rxDrawPages,
+                                        sal_Int32 nPageToExport )
 {
-    sal_Bool                bSVGStarted = sal_False;
-    sal_Bool                bRet = sal_False;
+    DBG_ASSERT( ( SVG_EXPORT_ALLPAGES == nPageToExport ) ||
+                ( nPageToExport >= 0 && nPageToExport < rxDrawPages->getCount() ),
+                "SVGFilter::implCreateObjects: invalid page number to export" );
+
+    sal_Bool bSVGStarted = sal_False, bRet = sal_False;
 
     if( rxDrawPages->getCount() )
     {
-        Reference< XDrawPage > xDrawPage;
+        Reference< XDrawPage >  xDrawPage;
+        const sal_Int32         nFirstPage = ( ( SVG_EXPORT_ALLPAGES == nPageToExport ) ? 0 : nPageToExport );
 
-        rxDrawPages->getByIndex( 0 ) >>= xDrawPage;
+        rxDrawPages->getByIndex( nFirstPage ) >>= xDrawPage;
 
         if( xDrawPage.is() )
         {
@@ -257,7 +286,9 @@ sal_Bool SVGFilter::implExportDocumemt( const Reference< XDrawPages >& rxMasterP
                 OUString                                aAttr;
                 sal_Int32                               nDocWidth = 0, nDocHeight = 0;
                 sal_Int32                               nVisible = -1, nVisibleMaster = -1;
-                const sal_Bool                          bMultiPage = ( rxDrawPages->getCount() > 1 );
+                sal_Int32                               nCurPage = 0, nLastPage = ( rxDrawPages->getCount() - 1 );
+                const sal_Bool                          bSinglePage = ( rxDrawPages->getCount() == 1 ) ||
+                                                                      ( SVG_EXPORT_ALLPAGES != nPageToExport );
 
                 xPagePropSet->getPropertyValue( B2UCONST( "Width" ) ) >>= nDocWidth;
                 xPagePropSet->getPropertyValue( B2UCONST( "Height" ) ) >>= nDocHeight;
@@ -279,12 +310,14 @@ sal_Bool SVGFilter::implExportDocumemt( const Reference< XDrawPages >& rxMasterP
                 aAttr += OUString::valueOf( nDocWidth );
                 aAttr += B2UCONST( " " );
                 aAttr += OUString::valueOf( nDocHeight );
-                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
 
+                mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "viewBox", aAttr );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "preserveAspectRatio", B2UCONST( "xMidYMid" ) );
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "fill-rule", B2UCONST( "evenodd" ) );
 
-                if( bMultiPage )
+                if( bSinglePage )
+                    nCurPage = nLastPage = nFirstPage;
+                else
                 {
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "xmlns:ooo", B2UCONST( "http://xml.openoffice.org/svg/export" ) );
                     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "onclick", B2UCONST( "onClick(evt)" ) );
@@ -293,10 +326,11 @@ sal_Bool SVGFilter::implExportDocumemt( const Reference< XDrawPages >& rxMasterP
 
                 mpSVGDoc = new SvXMLElementExport( *mpSVGExport, XML_NAMESPACE_NONE, "svg", TRUE, TRUE );
 
-                for( sal_Int32 i = 0, nCount = rxDrawPages->getCount(); ( i < nCount ) && ( -1 == nVisible ); ++i )
+                while( ( nCurPage <= nLastPage ) && ( -1 == nVisible ) )
                 {
                     Reference< XDrawPage > xDrawPage;
-                    rxDrawPages->getByIndex( i ) >>= xDrawPage;
+
+                    rxDrawPages->getByIndex( nCurPage ) >>= xDrawPage;
 
                     if( xDrawPage.is() )
                     {
@@ -306,7 +340,8 @@ sal_Bool SVGFilter::implExportDocumemt( const Reference< XDrawPages >& rxMasterP
                         {
                             sal_Bool bVisible;
 
-                            if( !mbPresentation || ( ( xPropSet->getPropertyValue( B2UCONST( "Visible" ) ) >>= bVisible ) && bVisible ) )
+                            if( !mbPresentation || bSinglePage ||
+                                ( ( xPropSet->getPropertyValue( B2UCONST( "Visible" ) ) >>= bVisible ) && bVisible ) )
                             {
                                 Reference< XMasterPageTarget > xMasterTarget( xDrawPage, UNO_QUERY );
 
@@ -314,7 +349,7 @@ sal_Bool SVGFilter::implExportDocumemt( const Reference< XDrawPages >& rxMasterP
                                 {
                                     Reference< XDrawPage > xMasterPage( xMasterTarget->getMasterPage() );
 
-                                    nVisible = i;
+                                    nVisible = nCurPage;
 
                                     for( sal_Int32 nMaster = 0, nMasterCount = rxMasterPages->getCount(); ( nMaster < nMasterCount ) && ( -1 == nVisibleMaster ); ++nMaster )
                                     {
@@ -328,23 +363,30 @@ sal_Bool SVGFilter::implExportDocumemt( const Reference< XDrawPages >& rxMasterP
                             }
                         }
                     }
+
+                    ++nCurPage;
                 }
 
 #ifdef _SVG_EMBED_FONTS
                 mpSVGFontExport->EmbedFonts();
 #endif
 
-                if( bMultiPage )
+                if( -1 != nVisible )
                 {
-                    implGenerateMetaData( rxMasterPages, rxDrawPages );
-                    implGenerateScript( rxMasterPages, rxDrawPages );
+                    if( bSinglePage )
+                        implExportPages( rxMasterPages, nVisibleMaster, nVisibleMaster, nVisibleMaster, sal_True );
+                    else
+                    {
+                        implGenerateMetaData( rxMasterPages, rxDrawPages );
+                        implGenerateScript( rxMasterPages, rxDrawPages );
+                        implExportPages( rxMasterPages, 0, rxMasterPages->getCount() - 1, nVisibleMaster, sal_True );
+                    }
+
+                    implExportPages( rxDrawPages, nFirstPage, nLastPage, nVisible, sal_False );
+
+                    delete mpSVGDoc, mpSVGDoc = NULL;
+                    bRet = sal_True;
                 }
-
-                implExportPages( rxMasterPages, nVisibleMaster, sal_True );
-                implExportPages( rxDrawPages, nVisible, sal_False );
-
-                delete mpSVGDoc, mpSVGDoc = NULL;
-                bRet = sal_True;
             }
         }
     }
@@ -433,16 +475,20 @@ sal_Bool SVGFilter::implGenerateScript( const Reference< XDrawPages >& rxMasterP
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SVGFilter::implExportPages( const Reference< XDrawPages >& rxMasterPages,
+sal_Bool SVGFilter::implExportPages( const Reference< XDrawPages >& rxPages,
+                                     sal_Int32 nFirstPage, sal_Int32 nLastPage,
                                      sal_Int32 nVisiblePage, sal_Bool bMaster )
 {
+    DBG_ASSERT( nFirstPage <= nLastPage,
+                "SVGFilter::implExportPages: nFirstPage > nLastPage" );
+
     sal_Bool bRet = sal_False;
 
-    for( sal_Int32 i = 0, nCount = rxMasterPages->getCount(); i < nCount; ++i )
+    for( sal_Int32 i = nFirstPage; i <= nLastPage; ++i )
     {
         Reference< XDrawPage > xDrawPage;
 
-        rxMasterPages->getByIndex( i ) >>= xDrawPage;
+        rxPages->getByIndex( i ) >>= xDrawPage;
 
         if( xDrawPage.is() )
         {
@@ -609,40 +655,78 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
 // -----------------------------------------------------------------------------
 
 sal_Bool SVGFilter::implCreateObjects( const Reference< XDrawPages >& rxMasterPages,
-                                       const Reference< XDrawPages >& rxDrawPages )
+                                       const Reference< XDrawPages >& rxDrawPages,
+                                       sal_Int32 nPageToExport )
 {
-    sal_Int32 i, nCount;
-
-    for( i = 0, nCount = rxMasterPages->getCount(); i < nCount; ++i )
+    if( SVG_EXPORT_ALLPAGES == nPageToExport )
     {
-        Reference< XDrawPage > xDrawPage;
+        sal_Int32 i, nCount;
 
-        rxMasterPages->getByIndex( i ) >>= xDrawPage;
-
-        if( xDrawPage.is() )
+        for( i = 0, nCount = rxMasterPages->getCount(); i < nCount; ++i )
         {
-            Reference< XShapes > xShapes( xDrawPage, UNO_QUERY );
+            Reference< XDrawPage > xDrawPage;
 
-            implCreateObjectsFromBackground( xDrawPage );
+            rxMasterPages->getByIndex( i ) >>= xDrawPage;
 
-            if( xShapes.is() )
-                implCreateObjectsFromShapes( xShapes );
+            if( xDrawPage.is() )
+            {
+                Reference< XShapes > xShapes( xDrawPage, UNO_QUERY );
+
+                implCreateObjectsFromBackground( xDrawPage );
+
+                if( xShapes.is() )
+                    implCreateObjectsFromShapes( xShapes );
+            }
+        }
+
+        for( i = 0, nCount = rxDrawPages->getCount(); i < nCount; ++i )
+        {
+            Reference< XDrawPage > xDrawPage;
+
+            rxDrawPages->getByIndex( i ) >>= xDrawPage;
+
+            if( xDrawPage.is() )
+            {
+                Reference< XShapes > xShapes( xDrawPage, UNO_QUERY );
+
+                if( xShapes.is() )
+                    implCreateObjectsFromShapes( xShapes );
+            }
         }
     }
-
-    for( i = 0, nCount = rxDrawPages->getCount(); i < nCount; ++i )
+    else
     {
+        DBG_ASSERT( nPageToExport >= 0 && nPageToExport < rxDrawPages->getCount(),
+                    "SVGFilter::implCreateObjects: invalid page number to export" );
+
         Reference< XDrawPage > xDrawPage;
 
-        rxDrawPages->getByIndex( i ) >>= xDrawPage;
+          rxDrawPages->getByIndex( nPageToExport ) >>= xDrawPage;
 
-        if( xDrawPage.is() )
-        {
+          if( xDrawPage.is() )
+          {
+            Reference< XMasterPageTarget > xMasterTarget( xDrawPage, UNO_QUERY );
+
+            if( xMasterTarget.is() )
+            {
+                Reference< XDrawPage > xMasterPage( xMasterTarget->getMasterPage() );
+
+                if( xMasterPage.is() )
+                {
+                    Reference< XShapes > xShapes( xMasterPage, UNO_QUERY );
+
+                    implCreateObjectsFromBackground( xMasterPage );
+
+                    if( xShapes.is() )
+                        implCreateObjectsFromShapes( xShapes );
+                }
+            }
+
             Reference< XShapes > xShapes( xDrawPage, UNO_QUERY );
 
-            if( xShapes.is() )
-                implCreateObjectsFromShapes( xShapes );
-        }
+              if( xShapes.is() )
+                  implCreateObjectsFromShapes( xShapes );
+          }
     }
 
     return sal_True;
@@ -693,7 +777,7 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XShape >& rxSha
                 {
                     GDIMetaFile aMtf;
                     const Point aNullPt;
-                    const Size  aSize( pObj->GetCurrentBoundRect().GetSize() );
+                    const Size  aSize( pObj->GetBoundRect().GetSize() );
 
                     aMtf.AddAction( new MetaBmpExScaleAction( aNullPt, aSize, aGraphic.GetBitmapEx() ) );
                     aMtf.SetPrefSize( aSize );

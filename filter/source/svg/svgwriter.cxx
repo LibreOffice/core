@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgwriter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-05 13:40:24 $
+ *  last change: $Author: ka $ $Date: 2003-12-15 13:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,7 @@ NMSP_RTL::OUString SVGAttributeWriter::GetFontStyle( const Font& rFont )
     aStyle += SVGActionWriter::GetValueString( rFont.GetHeight() );
 
     // font style
+/*
     if( rFont.GetItalic() != ITALIC_NONE )
     {
         aStyle += B2UCONST( ";" );
@@ -308,6 +309,7 @@ NMSP_RTL::OUString SVGAttributeWriter::GetFontStyle( const Font& rFont )
         else
             aStyle += B2UCONST( "italic" );
     }
+*/
 
     // font weight
     sal_Int32 nFontWeight;
@@ -382,8 +384,7 @@ NMSP_RTL::OUString SVGAttributeWriter::GetPaintStyle( const Color& rLineColor, c
         {
             aStyle += B2UCONST( ";" );
             aStyle += B2UCONST( "stroke-opacity:" );
-            aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) ( ( 255 - (double) rLineColor.GetTransparency() ) / 2.55 ) );
-            aStyle += B2UCONST( "%" );
+            aStyle += NMSP_RTL::OUString::valueOf( ( 255 - (double) rLineColor.GetTransparency() ) / 255.0 );
         }
     }
 
@@ -409,8 +410,7 @@ NMSP_RTL::OUString SVGAttributeWriter::GetPaintStyle( const Color& rLineColor, c
         {
             aStyle += B2UCONST( ";" );
             aStyle += B2UCONST( "fill-opacity:" );
-            aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) ( ( 255 - (double) rFillColor.GetTransparency() ) / 2.55 ) );
-            aStyle += B2UCONST( "%" );
+            aStyle += NMSP_RTL::OUString::valueOf( ( 255 - (double) rFillColor.GetTransparency() ) / 255.0 );
         }
     }
 
@@ -776,6 +776,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         }
 
         // always adjust text position to match baseline alignment
+/*
         switch( rFont.GetAlign() )
         {
             case( ALIGN_TOP ):
@@ -789,12 +790,13 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             default:
             break;
         }
+*/
 
         // get mapped text position
         const Point aPt( ImplMap( aBaseLinePos ) );
 
-        // if text is rotated, set transform at new g element
-        if( rFont.GetOrientation() )
+        // if text is italic, set transform at new g element
+        if( ( rFont.GetItalic() != ITALIC_NONE ) || rFont.GetOrientation() )
         {
             String aTransform;
 
@@ -805,10 +807,21 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             aTransform += String( GetValueString( aPt.Y() ) );
             aTransform += ')';
 
-            aTransform += String( NMSP_RTL::OUString::createFromAscii( " rotate" ) );
-            aTransform += '(';
-            aTransform += String( NMSP_RTL::OUString::valueOf( rFont.GetOrientation() * -0.1 ) );
-            aTransform += ')';
+            if( rFont.GetOrientation() )
+            {
+                aTransform += String( NMSP_RTL::OUString::createFromAscii( " rotate" ) );
+                aTransform += '(';
+                aTransform += String( NMSP_RTL::OUString::valueOf( rFont.GetOrientation() * -0.1 ) );
+                aTransform += ')';
+            }
+
+            if( rFont.GetItalic() != ITALIC_NONE )
+            {
+                aTransform += String( NMSP_RTL::OUString::createFromAscii( " skewX" ) );
+                aTransform += '(';
+                aTransform += String( NMSP_RTL::OUString::valueOf( (sal_Int32) -10 ) );
+                aTransform += ')';
+            }
 
             aTransform += String( NMSP_RTL::OUString::createFromAscii( " translate" ) );
             aTransform += '(';
@@ -1192,8 +1205,15 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
 
                     if( rPolyPoly.Count() )
                     {
-                        mpContext->SetPaintAttr( mpVDev->GetLineColor(), mpVDev->GetFillColor() );
+                        const Color aOldLineColor( mpVDev->GetLineColor() ), aOldFillColor( mpVDev->GetFillColor() );
+                        Color       aNewLineColor( aOldLineColor ), aNewFillColor( aOldFillColor );
+
+                        aNewLineColor.SetTransparency( FRound( pA->GetTransparence() * 2.55 ) );
+                        aNewFillColor.SetTransparency( FRound( pA->GetTransparence() * 2.55 ) );
+
+                        mpContext->SetPaintAttr( aNewLineColor, aNewFillColor );
                         ImplWritePolyPolygon( rPolyPoly, sal_False, pStyle );
+                        mpContext->SetPaintAttr( aOldLineColor, aOldFillColor );
                     }
                 }
             }
