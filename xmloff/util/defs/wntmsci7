@@ -10969,3 +10969,6 @@ _real@8@3ffdaaaaaaaaaaaaa800
 ?Imp_SkipDoubleAndSpacesAndCommas@@YAXABVOUString@rtl@@AAJJ@Z
 ?ProcessCommandType@XMLTextFieldExport@@IAEXJ@Z
 ?CreateChildContext@SdXMLObjectShapeContext@@UAEPAVSvXMLImportContext@@GABVOUString@rtl@@ABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@@Z
+??1NativeNumberXmlAttributes@i18n@star@sun@com@drafts@@QAE@XZ
+??0Locale@lang@star@sun@com@@QAE@XZ
+?lcl_ExportPropertyString@@YAXAAVSvXMLExport@@ABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@VOUString@rtl@@W4XMLTokenEnum@token@xmloff@@AAVAny@3456@@Z
