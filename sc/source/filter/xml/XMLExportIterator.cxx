@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
+ *  last change: $Author: sab $ $Date: 2001-06-07 11:20:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,6 +637,8 @@ void ScMyNotEmptyCellsIterator::SetCellData( ScMyCell& rMyCell, table::CellAddre
     rMyCell.aCellAddress = rAddress;
     rMyCell.bHasStringValue = sal_False;
     rMyCell.bHasXText = sal_False;
+    rMyCell.bKnowWhetherIsEditCell = sal_False;
+    rMyCell.bIsEditCell = sal_False;
     if( (nCellCol == rAddress.Column) && (nCellRow == rAddress.Row) )
         pCellItr->GetNext( nCellCol, nCellRow );
 }
