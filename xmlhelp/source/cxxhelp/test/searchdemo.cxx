@@ -2,9 +2,9 @@
  *
  *  $RCSfile: searchdemo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-10 15:26:22 $
+ *  last change: $Author: abi $ $Date: 2001-05-11 12:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,10 +112,11 @@ int main( int argc,char* argv[] )
         rtl::OUString installDir = rtl::OUString::createFromAscii( "//./e|/index/" );
         QueryProcessor queryProcessor( installDir );
 
-        std::vector<rtl::OUString> Query(1);
-        Query[0] = ( rtl::OUString::createFromAscii( "text*" ) );
+        std::vector<rtl::OUString> Query(2);
+        Query[0] = rtl::OUString::createFromAscii( "text*" );
+        Query[1] = rtl::OUString::createFromAscii( "abbildung" );
         rtl::OUString Scope = rtl::OUString::createFromAscii( "" );
-        int HitCount = 10;
+        int HitCount = 40;
 
         QueryStatement queryStatement( HitCount,Query,Scope );
         queryResults = queryProcessor.processQuery( queryStatement );
@@ -128,7 +129,7 @@ int main( int argc,char* argv[] )
 
         QueryHitIterator* it = queryResults->makeQueryHitIterator();
         sal_Int32 j = 0;
-        while( it->next() )
+        while( j < 10 && it->next() )
         {
             printf( "Ergebnis %2d    ",j );
             QueryHitData* qhd = it->getHit( translator );
