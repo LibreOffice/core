@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:46 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabPage RID_SVXPAGE_BORDER
     Text [ English ] = "Border" ;
     Text [ norwegian ] = "Border" ;
     Text [ italian ] = "Bordo" ;
-    Text [ portuguese_brazilian ] = "Borda" ;
+    Text [ portuguese_brazilian ] = "Bordas" ;
     Text [ portuguese ] = "Contornos" ;
     Text [ finnish ] = "Reunat" ;
     Text [ danish ] = "Ramme" ;
@@ -87,7 +87,7 @@ TabPage RID_SVXPAGE_BORDER
     Text [ english_us ] = "Borders" ;
     Text[ chinese_simplified ] = "边框";
     Text[ russian ] = "����������";
-    Text[ polish ] = "Obramowanie";
+    Text[ polish ] = "Kraw�dzie";
     Text[ japanese ] = "枠線";
     Text[ chinese_traditional ] = "邊框";
     Text[ arabic ] = "������";
@@ -103,7 +103,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ ENGLISH ] = "Line positions" ;
         Text [ norwegian ] = "Border" ;
         Text [ italian ] = "Cornice" ;
-        Text [ portuguese_brazilian ] = "Borda" ;
+        Text [ portuguese_brazilian ] = "Disposi��o das linhas" ;
         Text [ portuguese ] = "Disposi��o de linhas" ;
         Text [ finnish ] = "Viivojen j�rjestys" ;
         Text [ danish ] = "Linjeplacering" ;
@@ -120,10 +120,13 @@ TabPage RID_SVXPAGE_BORDER
         Text[ arabic ] = "����";
         Text[ greek ] = "������� �������";
         Text[ korean ] = "선 배치";
-        Text[ turkish ] = "�er�eve";
+        Text[ turkish ] = "Sat�r ayarlamas�";
         Text[ language_user1 ] = "EM6A; EM6April01: Found in Text doc under Format - Page - Borders tab.";
         Text[ catalan ] = "Marc";
         Text[ thai ] = "จัดเรียงบรรทัด";
+        Text[ czech ] = "Uspořádání čar";
+        Text[ hebrew ] = "Linienanordnung";
+        Text[ hindi ] = "रेखा को क्रम में रखना";
     };
     FixedText FT_DEFAULT
     {
@@ -131,26 +134,29 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 64, 8) ;
         Text = "~Standard" ;
         Text[ english_us ] = "~Default";
-        Text[ portuguese ] = "~Default";
-        Text[ russian ] = "~Default";
-        Text[ greek ] = "~Default";
-        Text[ dutch ] = "~Default";
+        Text[ portuguese ] = "~Padr�o";
+        Text[ russian ] = "��������";
+        Text[ greek ] = "����������";
+        Text[ dutch ] = "Standaar~d";
         Text[ french ] = "Par d�faut";
         Text[ spanish ] = "~Predeterminado";
-        Text[ finnish ] = "~Default";
+        Text[ finnish ] = "~Oletusarvo";
         Text[ italian ] = "S~tandard";
-        Text[ danish ] = "~Default";
+        Text[ danish ] = "Standard";
         Text[ swedish ] = "~Standard";
-        Text[ polish ] = "~Default";
+        Text[ polish ] = "Domy�lnie";
         Text[ portuguese_brazilian ] = "~Default";
         Text[ japanese ] = "標準";
         Text[ korean ] = "기본값";
         Text[ chinese_simplified ] = "标准(~D)";
         Text[ chinese_traditional ] = "標準(~D)";
-        Text[ turkish ] = "~Default";
-        Text[ arabic ] = "~Default";
+        Text[ turkish ] = "~�ntan�ml�";
+        Text[ arabic ] = "�������";
         Text[ catalan ] = "~Est�ndard";
         Text[ thai ] = "~ค่าเริ่มต้น";
+        Text[ czech ] = "Výchozí";
+        Text[ hebrew ] = "‮ברירת מחדל‬";
+        Text[ hindi ] = "~Default";
     };
     Control WIN_PRESETS
     {
@@ -166,26 +172,29 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 64, 8) ;
         Text = "~Benutzerdefiniert" ;
         Text[ english_us ] = "~User-defined";
-        Text[ portuguese ] = "~User-defined";
-        Text[ russian ] = "~User-defined";
-        Text[ greek ] = "~User-defined";
-        Text[ dutch ] = "~User-defined";
+        Text[ portuguese ] = "Definido pelo ~utilizador";
+        Text[ russian ] = "������������ �������������";
+        Text[ greek ] = "��������� ��� ��� ������";
+        Text[ dutch ] = "Ge~bruikergedefinieerd";
         Text[ french ] = "D�fini par l'utilisateur";
         Text[ spanish ] = "Definido por el ~usuario";
-        Text[ finnish ] = "~User-defined";
+        Text[ finnish ] = "~K�ytt�j�n m��ritt�m�t";
         Text[ italian ] = "Personalizzato";
-        Text[ danish ] = "~User-defined";
+        Text[ danish ] = "Brugerdefineret";
         Text[ swedish ] = "~Anv�ndardefinierad";
-        Text[ polish ] = "~User-defined";
+        Text[ polish ] = "Ustawienia indywidualne";
         Text[ portuguese_brazilian ] = "~User-defined";
         Text[ japanese ] = "ユーザー定義(~U)";
         Text[ korean ] = "사용자 정의";
         Text[ chinese_simplified ] = "使用者自设(~U)";
         Text[ chinese_traditional ] = "使用者自訂(~U)";
-        Text[ turkish ] = "~User-defined";
-        Text[ arabic ] = "~User-defined";
+        Text[ turkish ] = "~Kullan�c�-tan�ml�";
+        Text[ arabic ] = "���� �� ��� ��������";
         Text[ catalan ] = "Definit per l'~usuari";
         Text[ thai ] = "ระบุ~ผู้ใช้";
+        Text[ czech ] = "Definované uživatelem";
+        Text[ hebrew ] = "~Benutzerdefiniert";
+        Text[ hindi ] = "~User-defined";
     };
     Control WIN_FRAMESEL
     {
@@ -209,7 +218,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ ENGLISH ] = "Lines" ;
         Text [ norwegian ] = "Linjer" ;
         Text [ italian ] = "Linea" ;
-        Text [ portuguese_brazilian ] = "Linhas" ;
+        Text [ portuguese_brazilian ] = "Linha" ;
         Text [ portuguese ] = "Linha" ;
         Text [ finnish ] = "Viiva" ;
         Text [ danish ] = "Linje" ;
@@ -230,6 +239,9 @@ TabPage RID_SVXPAGE_BORDER
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "L�nia";
         Text[ thai ] = "บรรทัด";
+        Text[ czech ] = "Čára";
+        Text[ hebrew ] = "Linie";
+        Text[ hindi ] = "रेखा";
     };
     FixedText FT_STYLE
     {
@@ -253,10 +265,13 @@ TabPage RID_SVXPAGE_BORDER
         Text[ korean ] = "스타일 ";
         Text[ chinese_simplified ] = "风格(~Y)";
         Text[ chinese_traditional ] = "風格";
-        Text[ turkish ] = "St~yle";
+        Text[ turkish ] = "B~i�em";
         Text[ arabic ] = "St~yle";
         Text[ catalan ] = "St~yle";
         Text[ thai ] = "St~yle";
+        Text[ czech ] = "Styl";
+        Text[ hebrew ] = "S~til";
+        Text[ hindi ] = "St~yle";
     };
     ListBox LB_LINESTYLE
     {
@@ -270,26 +285,29 @@ TabPage RID_SVXPAGE_BORDER
         Size = MAP_APPFONT ( 77, 8 ) ;
         Text = "~Farbe" ;
         Text[ english_us ] = "~Color";
-        Text[ portuguese ] = "~Color";
-        Text[ russian ] = "~Color";
-        Text[ greek ] = "~Color";
-        Text[ dutch ] = "~Color";
+        Text[ portuguese ] = "~Cor";
+        Text[ russian ] = "����";
+        Text[ greek ] = "�����";
+        Text[ dutch ] = "~Kleur";
         Text[ french ] = "Couleur";
         Text[ spanish ] = "~Color";
-        Text[ finnish ] = "~Color";
+        Text[ finnish ] = "~S�vy";
         Text[ italian ] = "Colore";
-        Text[ danish ] = "~Color";
+        Text[ danish ] = "Farve";
         Text[ swedish ] = "~F�rg";
-        Text[ polish ] = "~Color";
+        Text[ polish ] = "Kolor";
         Text[ portuguese_brazilian ] = "~Color";
         Text[ japanese ] = "色(~C)";
         Text[ korean ] = "색상";
         Text[ chinese_simplified ] = "彩色(~C)";
         Text[ chinese_traditional ] = "顏色(~C)";
-        Text[ turkish ] = "~Color";
-        Text[ arabic ] = "~Color";
+        Text[ turkish ] = "~Renkler";
+        Text[ arabic ] = "�����";
         Text[ catalan ] = "~Color";
         Text[ thai ] = "~สี";
+        Text[ czech ] = "Barva";
+        Text[ hebrew ] = "‮צבע‬";
+        Text[ hindi ] = "~Color";
     };
     ListBox LB_LINECOLOR
     {
@@ -321,8 +339,8 @@ TabPage RID_SVXPAGE_BORDER
         Text[ italian ] = "Sinistra";
         Text[ danish ] = "~Venstre";
         Text[ swedish ] = "~V�nster";
-        Text[ polish ] = "Z lewej";
-        Text[ portuguese_brazilian ] = "Left";
+        Text[ polish ] = "Od ~lewej";
+        Text[ portuguese_brazilian ] = "Esque~rda";
         Text[ japanese ] = "左(~L)";
         Text[ korean ] = "왼쪽(~L)";
         Text[ chinese_simplified ] = "左(~L)";
@@ -333,6 +351,9 @@ TabPage RID_SVXPAGE_BORDER
         Text[ catalan ] = "Es~querra";
         Text[ finnish ] = "~Vasen";
         Text[ thai ] = "~ซ้าย";
+        Text[ czech ] = "Vlevo";
+        Text[ hebrew ] = "~Links";
+        Text[ hindi ] = "~बायाँ";
     };
     MetricField MF_LEFT
     {
@@ -365,18 +386,21 @@ TabPage RID_SVXPAGE_BORDER
         Text[ italian ] = "Destra";
         Text[ danish ] = "H�jr~e";
         Text[ swedish ] = "H�g~er";
-        Text[ polish ] = "Z prawej";
-        Text[ portuguese_brazilian ] = "Right";
+        Text[ polish ] = "Od prawe~j";
+        Text[ portuguese_brazilian ] = "Direita";
         Text[ japanese ] = "右";
         Text[ korean ] = "오른쪽";
         Text[ chinese_simplified ] = "右";
         Text[ chinese_traditional ] = "右";
         Text[ arabic ] = "����";
-        Text[ turkish ] = "S~a�";
+        Text[ turkish ] = "Sa�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Dreta";
         Text[ finnish ] = "Oikea";
         Text[ thai ] = "ขวา";
+        Text[ czech ] = "Vpravo";
+        Text[ hebrew ] = "R~echts";
+        Text[ hindi ] = "दाहिना";
     };
     MetricField MF_RIGHT
     {
@@ -409,18 +433,21 @@ TabPage RID_SVXPAGE_BORDER
         Text[ italian ] = "~Alto";
         Text[ danish ] = "T~op";
         Text[ swedish ] = "~Uppe";
-        Text[ polish ] = "W g�rze";
-        Text[ portuguese_brazilian ] = "Top";
+        Text[ polish ] = "Od ~g�ry";
+        Text[ portuguese_brazilian ] = "Em ~Cima";
         Text[ japanese ] = "上(~T)";
         Text[ korean ] = "위(~T)";
         Text[ chinese_simplified ] = "上(~T)";
         Text[ chinese_traditional ] = "上(~T)";
         Text[ arabic ] = "����";
-        Text[ turkish ] = "~�st";
+        Text[ turkish ] = "�~st";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Su~perior";
         Text[ finnish ] = "~Yl�reuna";
         Text[ thai ] = "~บน";
+        Text[ czech ] = "Nahoře";
+        Text[ hebrew ] = "~Oben";
+        Text[ hindi ] = "~ऊपर";
     };
     MetricField MF_TOP
     {
@@ -453,17 +480,20 @@ TabPage RID_SVXPAGE_BORDER
         Text[ italian ] = "~Basso";
         Text[ danish ] = "~Bund";
         Text[ swedish ] = "~Nere";
-        Text[ polish ] = "W dole";
-        Text[ portuguese_brazilian ] = "Bottom";
+        Text[ polish ] = "Od ~do�u";
+        Text[ portuguese_brazilian ] = "Em ~Baixo";
         Text[ japanese ] = "下(~B)";
         Text[ korean ] = "아래(~B)";
         Text[ chinese_simplified ] = "下(~B)";
         Text[ chinese_traditional ] = "下(~B)";
         Text[ arabic ] = "����";
-        Text[ turkish ] = "Al~t";
+        Text[ turkish ] = "~Alt";
         Text[ catalan ] = "In~ferior";
         Text[ finnish ] = "Alare~una";
         Text[ thai ] = "~ล่าง";
+        Text[ czech ] = "Dole";
+        Text[ hebrew ] = "~Unten";
+        Text[ hindi ] = "~तल";
     };
     MetricField MF_BOTTOM
     {
@@ -496,18 +526,21 @@ TabPage RID_SVXPAGE_BORDER
         Text[ italian ] = "Sincronizza";
         Text[ danish ] = "S~ynkroniser";
         Text[ swedish ] = "S~ynkronisera";
-        Text[ polish ] = "Synchronizuj";
-        Text[ portuguese_brazilian ] = "Synchronize";
+        Text[ polish ] = "Sy~nchronizuj";
+        Text[ portuguese_brazilian ] = "Sincronizar";
         Text[ japanese ] = "比率を保つ";
         Text[ korean ] = "동기화";
         Text[ chinese_simplified ] = "同步化";
         Text[ chinese_traditional ] = "同步化";
         Text[ arabic ] = "�����";
-        Text[ turkish ] = "~E�itle";
+        Text[ turkish ] = "E�zamanlama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Sincronitza";
         Text[ finnish ] = "Synkronoi";
         Text[ thai ] = "ทำให้ข้อมูลตรงกัน";
+        Text[ czech ] = "Synchronizovat";
+        Text[ hebrew ] = "S~ynchronisieren";
+        Text[ hindi ] = "समीकरण करो";
     };
     FixedLine FL_DISTANCE
     {
@@ -526,17 +559,20 @@ TabPage RID_SVXPAGE_BORDER
         Text[ danish ] = "Afstand til indhold";
         Text[ swedish ] = "Avst�nd till inneh�ll";
         Text[ polish ] = "Odst�p od zawarto�ci";
-        Text[ portuguese_brazilian ] = "Settings";
+        Text[ portuguese_brazilian ] = "Afastamento at� o conte�do";
         Text[ japanese ] = "内容までの間隔";
         Text[ korean ] = "내용과의 간격";
         Text[ chinese_simplified ] = "至内容的距离";
         Text[ chinese_traditional ] = "至內文的距離";
         Text[ arabic ] = "������� ��� ���������";
-        Text[ turkish ] = "Ayarlar";
+        Text[ turkish ] = "��erik bo�lukar�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Espaiat al contingut";
         Text[ finnish ] = "Et�isyys sis�ll�st�";
         Text[ thai ] = "ระยะห่างถึงเนื้อหา";
+        Text[ czech ] = "Vzdálenost k obsahu";
+        Text[ hebrew ] = "Abstand zum Inhalt";
+        Text[ hindi ] = "विषयों के बीच अंतर देना";
     };
 
     FixedText FT_SHADOWPOS
@@ -547,7 +583,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ ENGLISH ] = "~Position" ;
         Text [ norwegian ] = "~Posisjon" ;
         Text [ italian ] = "Posizione" ;
-        Text [ portuguese_brazilian ] = "~Posi??o" ;
+        Text [ portuguese_brazilian ] = "~Posi��o" ;
         Text [ portuguese ] = "~Posi��o" ;
         Text [ finnish ] = "S~ijainti" ;
         Text [ danish ] = "Placering" ;
@@ -558,16 +594,19 @@ TabPage RID_SVXPAGE_BORDER
         Text [ english_us ] = "~Position" ;
         Text[ chinese_simplified ] = "位置(~P)";
         Text[ russian ] = "���������";
-        Text[ polish ] = "Pozycja";
+        Text[ polish ] = "~Pozycja";
         Text[ japanese ] = "位置(~P)";
         Text[ chinese_traditional ] = "位置(~P)";
         Text[ arabic ] = "������";
         Text[ greek ] = "����";
         Text[ korean ] = "위치(~P)";
-        Text[ turkish ] = "~Konum";
+        Text[ turkish ] = "Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Posici�";
         Text[ thai ] = "~ตำแหน่ง";
+        Text[ czech ] = "Umístění";
+        Text[ hebrew ] = "‮מיקום‬";
+        Text[ hindi ] = "~स्थान";
     };
     Control WIN_SHADOWS
     {
@@ -594,16 +633,19 @@ TabPage RID_SVXPAGE_BORDER
         Text[ italian ] = "Distan~za";
         Text[ danish ] = "~Afstand";
         Text[ swedish ] = "~Distans";
-        Text[ polish ] = "Odleg�o��";
-        Text[ portuguese_brazilian ] = "Ta~manho";
+        Text[ polish ] = "~Odleg�o��";
+        Text[ portuguese_brazilian ] = "Dist�n~cia";
         Text[ japanese ] = "間隔(~C)";
         Text[ korean ] = "거리(~C)";
         Text[ chinese_simplified ] = "间隔(~C)";
         Text[ chinese_traditional ] = "間隔(~C)";
-        Text[ turkish ] = "~B�y�kl�k";
+        Text[ turkish ] = "B�y�kl�k";
         Text[ arabic ] = "�����";
         Text[ catalan ] = "~Mida";
         Text[ thai ] = "ระ~ยะ";
+        Text[ czech ] = "Vzdálenost";
+        Text[ hebrew ] = "~Distanz";
+        Text[ hindi ] = "दू~री";
     };
     MetricField ED_SHADOWSIZE
     {
@@ -639,16 +681,19 @@ TabPage RID_SVXPAGE_BORDER
         Text [ english_us ] = "C~olor" ;
         Text[ chinese_simplified ] = "颜色(~O)";
         Text[ russian ] = "����";
-        Text[ polish ] = "Kolor";
+        Text[ polish ] = "~Kolor";
         Text[ japanese ] = "色(~O)";
         Text[ chinese_traditional ] = "顏色(~O)";
         Text[ arabic ] = "�����";
         Text[ greek ] = "�����";
         Text[ korean ] = "색상(~O)";
-        Text[ turkish ] = "Re~nk";
+        Text[ turkish ] = "Renk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "C~olor";
         Text[ thai ] = "~สี";
+        Text[ czech ] = "Barva";
+        Text[ hebrew ] = "Far~be";
+        Text[ hindi ] = "रं~ग";
     };
     ListBox LB_SHADOWCOLOR
     {
@@ -666,7 +711,7 @@ TabPage RID_SVXPAGE_BORDER
         Text [ ENGLISH ] = "Shadow" ;
         Text [ norwegian ] = "Shadow" ;
         Text [ italian ] = "Ombre" ;
-        Text [ portuguese_brazilian ] = "Sombra" ;
+        Text [ portuguese_brazilian ] = "Estilo de sombra" ;
         Text [ portuguese ] = "Sombras" ;
         Text [ finnish ] = "Varjotyyli" ;
         Text [ danish ] = "Skygger" ;
@@ -677,16 +722,19 @@ TabPage RID_SVXPAGE_BORDER
         Text [ english_us ] = "Shadow style" ;
         Text[ chinese_simplified ] = "阴影";
         Text[ russian ] = "����� ����";
-        Text[ polish ] = "Cie�";
+        Text[ polish ] = "Styl cienia";
         Text[ japanese ] = "影付き";
         Text[ chinese_traditional ] = "陰影";
         Text[ arabic ] = "����";
         Text[ greek ] = "����";
         Text[ korean ] = "그림자 스타일";
-        Text[ turkish ] = "G�lge";
+        Text[ turkish ] = "G�lge Bi�imi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Estil de l'ombra";
         Text[ thai ] = "ลักษณะการแรเงา";
+        Text[ czech ] = "Styl stínování";
+        Text[ hebrew ] = "Schatten";
+        Text[ hindi ] = "छाया शैली";
     };
 #define _PREVIEW_IDLIST_\
         IdList =                    \
@@ -740,6 +788,9 @@ TabPage RID_SVXPAGE_BORDER
     };
     Text[ catalan ] = "Borders";
     Text[ thai ] = "เส้นขอบ";
+    Text[ czech ] = "Okraje";
+    Text[ hebrew ] = "‮צסגרות‬";
+    Text[ hindi ] = "किनारें";
 };
 
 String RID_SVXSTR_TABLE_PRESET_NONE
@@ -755,7 +806,7 @@ String RID_SVXSTR_TABLE_PRESET_NONE
     Text[ portuguese_brazilian ] = "Set No Borders";
     Text[ japanese ] = "枠線なしを設定";
     Text[ korean ] = "테두리 표시하지 않음";
-    Text[ turkish ] = "Set No Borders";
+    Text[ turkish ] = "Kenarl�k Yok";
     Text[ thai ] = "Set No Borders";
     Text[ greek ] = "Set No Borders";
     Text[ dutch ] = "Set No Borders";
@@ -766,6 +817,9 @@ String RID_SVXSTR_TABLE_PRESET_NONE
     Text[ chinese_traditional ] = "設定沒有邊框";
     Text[ arabic ] = "Set No Borders";
     Text[ catalan ] = "Set No Borders";
+    Text[ czech ] = "Bez rámečku";
+    Text[ hebrew ] = "Keine Umrandung zeichnen";
+    Text[ hindi ] = "Set No Borders";
 };
 String RID_SVXSTR_TABLE_PRESET_ONLYOUTER
 {
@@ -780,7 +834,7 @@ String RID_SVXSTR_TABLE_PRESET_ONLYOUTER
     Text[ portuguese_brazilian ] = "Set Outer Border Only";
     Text[ japanese ] = "外枠のみを設定";
     Text[ korean ] = "바깥쪽 테두리만 표시";
-    Text[ turkish ] = "Set Outer Border Only";
+    Text[ turkish ] = "Sadece D�� Kenarl��� Se�";
     Text[ thai ] = "Set Outer Border Only";
     Text[ greek ] = "Set Outer Border Only";
     Text[ dutch ] = "Set Outer Border Only";
@@ -791,6 +845,9 @@ String RID_SVXSTR_TABLE_PRESET_ONLYOUTER
     Text[ chinese_traditional ] = "僅設定外側邊框";
     Text[ arabic ] = "Set Outer Border Only";
     Text[ catalan ] = "Set Outer Border Only";
+    Text[ czech ] = "Pouze vnější rámeček";
+    Text[ hebrew ] = "Nur äußere Umrandung zeichnen";
+    Text[ hindi ] = "Set Outer Border Only";
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERHORI
 {
@@ -805,7 +862,7 @@ String RID_SVXSTR_TABLE_PRESET_OUTERHORI
     Text[ portuguese_brazilian ] = "Set Outer Border and Horizontal Lines";
     Text[ japanese ] = "外枠と横線を設定";
     Text[ korean ] = "바깥쪽 테두리와 가로줄만 표시";
-    Text[ turkish ] = "Set Outer Border and Horizontal Lines";
+    Text[ turkish ] = "D�� Kenarl�k ve  Yatay �izgiler";
     Text[ thai ] = "Set Outer Border and Horizontal Lines";
     Text[ greek ] = "Set Outer Border and Horizontal Lines";
     Text[ dutch ] = "Set Outer Border and Horizontal Lines";
@@ -816,6 +873,9 @@ String RID_SVXSTR_TABLE_PRESET_OUTERHORI
     Text[ chinese_traditional ] = "設定外側邊框和水平線";
     Text[ arabic ] = "Set Outer Border and Horizontal Lines";
     Text[ catalan ] = "Set Outer Border and Horizontal Lines";
+    Text[ czech ] = "Vnější rámeček a vodorovné linky";
+    Text[ hebrew ] = "Äußere Umrandung und horizontale Linien zeichnen";
+    Text[ hindi ] = "Set Outer Border and Horizontal Lines";
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERALL
 {
@@ -830,7 +890,7 @@ String RID_SVXSTR_TABLE_PRESET_OUTERALL
     Text[ portuguese_brazilian ] = "Set Outer Border and All Inner Lines";
     Text[ japanese ] = "外枠と表内のすべての線を設定";
     Text[ korean ] = "바깥쪽 테두리 및 모든 안쪽 줄 표시";
-    Text[ turkish ] = "Set Outer Border and All Inner Lines";
+    Text[ turkish ] = "D�� Kenarl�klar� ve T�m �� �izgileri Ata";
     Text[ thai ] = "Set Outer Border and All Inner Lines";
     Text[ greek ] = "Set Outer Border and All Inner Lines";
     Text[ dutch ] = "Set Outer Border and All Inner Lines";
@@ -841,6 +901,9 @@ String RID_SVXSTR_TABLE_PRESET_OUTERALL
     Text[ chinese_traditional ] = "設定外側邊框和所有內側線";
     Text[ arabic ] = "Set Outer Border and All Inner Lines";
     Text[ catalan ] = "Set Outer Border and All Inner Lines";
+    Text[ czech ] = "Vnější rámeček a všechny vnitřní linky";
+    Text[ hebrew ] = "Äußere Umrandung und alle inneren Linien zeichnen";
+    Text[ hindi ] = "Set Outer Border and All Inner Lines";
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERINNER
 {
@@ -855,7 +918,7 @@ String RID_SVXSTR_TABLE_PRESET_OUTERINNER
     Text[ portuguese_brazilian ] = "Set Outer Border Without Changing Inner Lines";
     Text[ japanese ] = "表内の線を変更せず、外枠線を設定";
     Text[ korean ] = "안쪽 줄은 변경하지 않고 바깥쪽 테두리를 표시";
-    Text[ turkish ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ turkish ] = "�� �izgileri De�i�tirmeden D�� Kenarl�k Ata";
     Text[ thai ] = "Set Outer Border Without Changing Inner Lines";
     Text[ greek ] = "Set Outer Border Without Changing Inner Lines";
     Text[ dutch ] = "Set Outer Border Without Changing Inner Lines";
@@ -866,6 +929,9 @@ String RID_SVXSTR_TABLE_PRESET_OUTERINNER
     Text[ chinese_traditional ] = "設定外側邊框但不變更內側線";
     Text[ arabic ] = "Set Outer Border Without Changing Inner Lines";
     Text[ catalan ] = "Set Outer Border Without Changing Inner Lines";
+    Text[ czech ] = "Vnější rámeček bez změny vnitřních linek";
+    Text[ hebrew ] = "Äußere Umrandung zeichnen ohne innere Linien zu verändern";
+    Text[ hindi ] = "Set Outer Border Without Changing Inner Lines";
 };
 String RID_SVXSTR_PARA_PRESET_NONE
 {
@@ -880,7 +946,7 @@ String RID_SVXSTR_PARA_PRESET_NONE
     Text[ portuguese_brazilian ] = "Set No Border";
     Text[ japanese ] = "枠線なしを設定";
     Text[ korean ] = "테두리 표시하지 않음";
-    Text[ turkish ] = "Set No Border";
+    Text[ turkish ] = "Kenarl�k atama";
     Text[ thai ] = "Set No Border";
     Text[ greek ] = "Set No Border";
     Text[ dutch ] = "Set No Border";
@@ -891,6 +957,9 @@ String RID_SVXSTR_PARA_PRESET_NONE
     Text[ chinese_traditional ] = "設定沒有邊框";
     Text[ arabic ] = "Set No Border";
     Text[ catalan ] = "Set No Border";
+    Text[ czech ] = "Bez rámečku";
+    Text[ hebrew ] = "Keine Umrandung zeichnen";
+    Text[ hindi ] = "Set No Border";
 };
 String RID_SVXSTR_PARA_PRESET_ALL
 {
@@ -905,7 +974,7 @@ String RID_SVXSTR_PARA_PRESET_ALL
     Text[ portuguese_brazilian ] = "Set All Four Borders";
     Text[ japanese ] = "四辺の枠線を設定";
     Text[ korean ] = "테두리의 네면을 모두 표시";
-    Text[ turkish ] = "Set All Four Borders";
+    Text[ turkish ] = "T�m d�rt kenarl��� da se�";
     Text[ thai ] = "Set All Four Borders";
     Text[ greek ] = "Set All Four Borders";
     Text[ dutch ] = "Set All Four Borders";
@@ -916,6 +985,9 @@ String RID_SVXSTR_PARA_PRESET_ALL
     Text[ chinese_traditional ] = "設定所有四邊邊框";
     Text[ arabic ] = "Set All Four Borders";
     Text[ catalan ] = "Set All Four Borders";
+    Text[ czech ] = "Rámeček na všech 4 stranách ";
+    Text[ hebrew ] = "Komplette Umrandung zeichnen";
+    Text[ hindi ] = "Set All Four Borders";
 };
 String RID_SVXSTR_PARA_PRESET_LEFTRIGHT
 {
@@ -930,7 +1002,7 @@ String RID_SVXSTR_PARA_PRESET_LEFTRIGHT
     Text[ portuguese_brazilian ] = "Set Left and Right Borders Only";
     Text[ japanese ] = "左右の外枠線を設定";
     Text[ korean ] = "왼쪽과 오른쪽의 테두리만 표시";
-    Text[ turkish ] = "Set Left and Right Borders Only";
+    Text[ turkish ] = "Sadece Sol ve Sa� Kenarl�klar� Ay�kla";
     Text[ thai ] = "Set Left and Right Borders Only";
     Text[ greek ] = "Set Left and Right Borders Only";
     Text[ dutch ] = "Set Left and Right Borders Only";
@@ -941,6 +1013,9 @@ String RID_SVXSTR_PARA_PRESET_LEFTRIGHT
     Text[ chinese_traditional ] = "僅設定左側和右側邊框";
     Text[ arabic ] = "Set Left and Right Borders Only";
     Text[ catalan ] = "Set Left and Right Borders Only";
+    Text[ czech ] = "Rámeček pouze vlevo a vpravo";
+    Text[ hebrew ] = "Nur rechten und linken Rand zeichnen";
+    Text[ hindi ] = "Set Left and Right Borders Only";
 };
 String RID_SVXSTR_PARA_PRESET_TOPBOTTOM
 {
@@ -955,7 +1030,7 @@ String RID_SVXSTR_PARA_PRESET_TOPBOTTOM
     Text[ portuguese_brazilian ] = "Set Top and Bottom Borders Only";
     Text[ japanese ] = "上下の外枠線を設定";
     Text[ korean ] = "맨위와 맨아래의 테두리만 표시";
-    Text[ turkish ] = "Set Top and Bottom Borders Only";
+    Text[ turkish ] = "Sadece  �st ve Alt Kenarlar� Ayarla";
     Text[ thai ] = "Set Top and Bottom Borders Only";
     Text[ greek ] = "Set Top and Bottom Borders Only";
     Text[ dutch ] = "Set Top and Bottom Borders Only";
@@ -966,6 +1041,9 @@ String RID_SVXSTR_PARA_PRESET_TOPBOTTOM
     Text[ chinese_traditional ] = "僅設定上方和下方邊框";
     Text[ arabic ] = "Set Top and Bottom Borders Only";
     Text[ catalan ] = "Set Top and Bottom Borders Only";
+    Text[ czech ] = "Rámeček pouze nahoře a dole";
+    Text[ hebrew ] = "Nur oberen und unteren Rand zeichnen";
+    Text[ hindi ] = "Set Top and Bottom Borders Only";
 };
 String RID_SVXSTR_PARA_PRESET_ONLYLEFT
 {
@@ -980,7 +1058,7 @@ String RID_SVXSTR_PARA_PRESET_ONLYLEFT
     Text[ portuguese_brazilian ] = "Set Left Border Only";
     Text[ japanese ] = "左外枠を設定";
     Text[ korean ] = "왼쪽 테두리만 표시";
-    Text[ turkish ] = "Set Left Border Only";
+    Text[ turkish ] = "Sadece So Kenar� Ayarla";
     Text[ thai ] = "Set Left Border Only";
     Text[ greek ] = "Set Left Border Only";
     Text[ dutch ] = "Set Left Border Only";
@@ -991,31 +1069,37 @@ String RID_SVXSTR_PARA_PRESET_ONLYLEFT
     Text[ chinese_traditional ] = "僅設定左側邊框";
     Text[ arabic ] = "Set Left Border Only";
     Text[ catalan ] = "Set Left Border Only";
+    Text[ czech ] = "Rámeček pouze vlevo";
+    Text[ hebrew ] = "Nur linken Rand zeichnen";
+    Text[ hindi ] = "Set Left Border Only";
 };
 String RID_SVXSTR_SHADOW_STYLE_NONE
 {
     Text = "Kein Schatten" ;
     Text [ english_us ] = "No Shadow" ;
-    Text[ portuguese ] = "No Shadow";
-    Text[ russian ] = "No Shadow";
+    Text[ portuguese ] = "Sem sombras";
+    Text[ russian ] = "��� ����";
     Text[ spanish ] = "Sin sombra";
     Text[ italian ] = "Nessuna ombreggiatura";
     Text[ swedish ] = "Ingen skugga";
-    Text[ polish ] = "No Shadow";
-    Text[ portuguese_brazilian ] = "No Shadow";
+    Text[ polish ] = "Brak cienia";
+    Text[ portuguese_brazilian ] = "Sem Sombra";
     Text[ japanese ] = "影なし";
     Text[ korean ] = "그림자 없음";
-    Text[ turkish ] = "No Shadow";
-    Text[ thai ] = "No Shadow";
-    Text[ greek ] = "No Shadow";
-    Text[ dutch ] = "No Shadow";
+    Text[ turkish ] = "G�lgesiz";
+    Text[ thai ] = "ไม่มีเงา";
+    Text[ greek ] = "����� ����";
+    Text[ dutch ] = "Geen schaduw";
     Text[ french ] = "Sans ombre";
-    Text[ finnish ] = "No Shadow";
-    Text[ danish ] = "No Shadow";
+    Text[ finnish ] = "Ei varjoa";
+    Text[ danish ] = "Ingen skygge";
     Text[ chinese_simplified ] = "不带阴影";
     Text[ chinese_traditional ] = "不帶陰影";
-    Text[ arabic ] = "No Shadow";
-    Text[ catalan ] = "No Shadow";
+    Text[ arabic ] = "���� ��";
+    Text[ catalan ] = "Sense ombra";
+    Text[ czech ] = "Žádný stín";
+    Text[ hebrew ] = "Kein Schatten";
+    Text[ hindi ] = "कोई छाया नहीं";
 };
 String RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT
 {
@@ -1030,7 +1114,7 @@ String RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT
     Text[ portuguese_brazilian ] = "Cast Shadow to Bottom Right";
     Text[ japanese ] = "右下に影を付ける";
     Text[ korean ] = "오른쪽 아래 방향으로 그림자 효과내기";
-    Text[ turkish ] = "Cast Shadow to Bottom Right";
+    Text[ turkish ] = "Alt sa� tarafa g�lge d���r";
     Text[ thai ] = "Cast Shadow to Bottom Right";
     Text[ greek ] = "Cast Shadow to Bottom Right";
     Text[ dutch ] = "Cast Shadow to Bottom Right";
@@ -1041,6 +1125,9 @@ String RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT
     Text[ chinese_traditional ] = "右下方加上陰影";
     Text[ arabic ] = "Cast Shadow to Bottom Right";
     Text[ catalan ] = "Cast Shadow to Bottom Right";
+    Text[ czech ] = "Vrhat stín vpravo dolů";
+    Text[ hebrew ] = "Schatten nach rechts unten werfen";
+    Text[ hindi ] = "Cast Shadow to Bottom Right";
 };
 String RID_SVXSTR_SHADOW_STYLE_TOPRIGHT
 {
@@ -1055,7 +1142,7 @@ String RID_SVXSTR_SHADOW_STYLE_TOPRIGHT
     Text[ portuguese_brazilian ] = "Cast Shadow to Top Right";
     Text[ japanese ] = "右上に影を付ける";
     Text[ korean ] = "오른쪽 위 방향으로 그림자 효과내기";
-    Text[ turkish ] = "Cast Shadow to Top Right";
+    Text[ turkish ] = "Sa� �ste G�lge Ekle";
     Text[ thai ] = "Cast Shadow to Top Right";
     Text[ greek ] = "Cast Shadow to Top Right";
     Text[ dutch ] = "Cast Shadow to Top Right";
@@ -1066,6 +1153,9 @@ String RID_SVXSTR_SHADOW_STYLE_TOPRIGHT
     Text[ chinese_traditional ] = "右上方加上陰影";
     Text[ arabic ] = "Cast Shadow to Top Right";
     Text[ catalan ] = "Cast Shadow to Top Right";
+    Text[ czech ] = "Vrhat stín vpravo nahoru";
+    Text[ hebrew ] = "Schatten nach rechts oben werfen";
+    Text[ hindi ] = "Cast Shadow to Top Right";
 };
 String RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT
 {
@@ -1080,7 +1170,7 @@ String RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT
     Text[ portuguese_brazilian ] = "Cast Shadow to Bottom Left";
     Text[ japanese ] = "左下に影を付ける";
     Text[ korean ] = "왼쪽 아래 방향으로 그림자 효과내기";
-    Text[ turkish ] = "Cast Shadow to Bottom Left";
+    Text[ turkish ] = "Sol Alta G�lge Ekle";
     Text[ thai ] = "Cast Shadow to Bottom Left";
     Text[ greek ] = "Cast Shadow to Bottom Left";
     Text[ dutch ] = "Cast Shadow to Bottom Left";
@@ -1091,6 +1181,9 @@ String RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT
     Text[ chinese_traditional ] = "左下方加上陰影";
     Text[ arabic ] = "Cast Shadow to Bottom Left";
     Text[ catalan ] = "Cast Shadow to Bottom Left";
+    Text[ czech ] = "Vrhat stín vlevo dolů";
+    Text[ hebrew ] = "Schatten nach links unten werfen";
+    Text[ hindi ] = "Cast Shadow to Bottom Left";
 };
 String RID_SVXSTR_SHADOW_STYLE_TOPLEFT
 {
@@ -1105,7 +1198,7 @@ String RID_SVXSTR_SHADOW_STYLE_TOPLEFT
     Text[ portuguese_brazilian ] = "Cast Shadow to Top Left";
     Text[ japanese ] = "右上に影を付ける";
     Text[ korean ] = "왼쪽 위 방향으로 그림자 효과내기";
-    Text[ turkish ] = "Cast Shadow to Top Left";
+    Text[ turkish ] = "Sol �ste G�lge Ekle";
     Text[ thai ] = "Cast Shadow to Top Left";
     Text[ greek ] = "Cast Shadow to Top Left";
     Text[ dutch ] = "Cast Shadow to Top Left";
@@ -1116,9 +1209,25 @@ String RID_SVXSTR_SHADOW_STYLE_TOPLEFT
     Text[ chinese_traditional ] = "左上方加上陰影";
     Text[ arabic ] = "Cast Shadow to Top Left";
     Text[ catalan ] = "Cast Shadow to Top Left";
+    Text[ czech ] = "Vrhat stín vlevo nahoru";
+    Text[ hebrew ] = "Schatten nach links oben werfen";
+    Text[ hindi ] = "Cast Shadow to Top Left";
 };
 
 // **********************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
