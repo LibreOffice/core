@@ -506,7 +506,7 @@ End Sub
 
 
 Sub FinalizeDialogButtons()	
-	ImportDialog.cmdShowLogFile.Enabled = FileCount &gt; 0
+	ImportDialog.cmdShowLogFile.Enabled = ((FileCount &gt; 0) And (ImportDialog.chkLogfile.State = 1))
 	ImportDialog.cmdCancel.Enabled = False
 	ImportDialog.cmdGoOn.Label = sCloseButton
 	ImportDialog.cmdGoOn.Enabled = True
