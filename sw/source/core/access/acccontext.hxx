@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-27 09:32:33 $
+ *  last change: $Author: mib $ $Date: 2002-03-08 13:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ protected:
     virtual sal_Bool DisposeChild( const SwFrm *pFrm,
                                    sal_Bool bRecursive );
 
-    void AccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent );
+    void FireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent );
 
     ::rtl::OUString GetResource( sal_uInt16 nResId,
                                  const ::rtl::OUString *pArg1 = 0,
@@ -155,8 +155,10 @@ protected:
     // SHOWING(0/1), OPAQUE(0/1) and VISIBLE(1).
     virtual void SetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
+    virtual void _InvalidateContent( sal_Bool bVisibleDataFired );
+
     // broadcast visual data event
-    void _Moved();
+    void FireVisibleDataEvent();
 
     Window *GetWindow();
     SwAccessibleMap *GetMap() { return pMap; }
@@ -336,6 +338,10 @@ public:
 
     // The object has been moved by the layout
     void ChildPosChanged( const SwFrm *pFrm, const SwRect& rFrm );
+
+    // The content may have changed (but it hasn't tohave changed)
+    virtual void InvalidateContent();
+
 
     const ::rtl::OUString& GetName() const { return sName; }
 };

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-04 12:43:32 $
+ *  last change: $Author: mib $ $Date: 2002-03-08 13:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleTextType.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
@@ -152,6 +155,145 @@ using ::com::sun::star::beans::PropertyValue;
 const sal_Char sServiceName[] = "com.sun.star.text.AccessibleParagraphView";
 const sal_Char sImplementationName[] = "SwAccessibleParagraph";
 const xub_StrLen MAX_DESC_TEXT_LEN = 40;
+const SwTxtNode* SwAccessibleParagraph::GetTxtNode() const
+{
+    const SwFrm* pFrm = GetFrm();
+    DBG_ASSERT( pFrm->IsTxtFrm(), "The text frame has mutated!" );
+
+    const SwTxtNode* pNode = static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode();
+    DBG_ASSERT( pNode != NULL, "A text frame without a text node." );
+
+    return pNode;
+}
+
+OUString SwAccessibleParagraph::GetString()
+{
+    return GetPortionData().GetAccessibleString();
+}
+
+OUString SwAccessibleParagraph::GetDescription()
+{
+    const OUString& rText = GetString();
+
+    // the description contains the first sentence up to
+    // MAX_DESC_TEXT_LEN characters (including the next full word)
+    Boundary aBound;
+    if( rText.getLength() > 0 )
+    {
+        GetSentenceBoundary( aBound, rText, 0 );
+        if( aBound.endPos > MAX_DESC_TEXT_LEN )
+        {
+            GetWordBoundary( aBound, rText, MAX_DESC_TEXT_LEN );
+            aBound.startPos = 0;
+        }
+    }
+    else
+        GetEmptyBoundary( aBound );
+    OUString sArg1( rText.copy( aBound.startPos, aBound.endPos ) );
+
+    sal_Int16 nResId;
+    if( IsHeading() )
+    {
+        nResId = STR_ACCESS_HEADING_DESC;
+    }
+    else
+    {
+        nResId = STR_ACCESS_PARAGRAPH_DESC;
+    }
+
+    return GetResource( nResId, &sArg1 );
+}
+
+sal_Bool SwAccessibleParagraph::GetSelection(
+    sal_Int32& nStart, sal_Int32& nEnd)
+{
+    sal_Bool bRet = sal_False;
+    nStart = -1;
+    nEnd = -1;
+
+    // get the selection, and test whether it affects our text node
+    SwPaM* pCrsr = GetCrsr();
+    if( pCrsr != NULL )
+    {
+        // get SwPosition for my node
+        const SwTxtNode* pNode = GetTxtNode();
+        ULONG nHere = pNode->GetIndex();
+
+        // iterate over ring
+        SwPaM* pRingStart = pCrsr;
+        do
+        {
+            // ignore, if no mark
+            if( pCrsr->HasMark() )
+            {
+                // check whether nHere is 'inside' pCrsr
+                SwPosition* pStart = pCrsr->Start();
+                SwPosition* pEnd = pCrsr->End();
+                if( ( nHere >= pStart->nNode.GetIndex() ) &&
+                    ( nHere <= pEnd->nNode.GetIndex() )      )
+                {
+                    // Yup, we are selected!
+                    bRet = sal_True;
+                    nStart = static_cast<sal_Int32>(
+                        ( nHere > pStart->nNode.GetIndex() ) ? 0
+                        : pStart->nContent.GetIndex() );
+                    nEnd = static_cast<sal_Int32>(
+                        ( nHere < pEnd->nNode.GetIndex() ) ? pNode->Len()
+                        : pEnd->nContent.GetIndex() );
+                }
+                // else: this PaM doesn't point to this paragraph
+            }
+            // else: this PaM is collapsed and doesn't select anything
+
+            // next PaM in ring
+            pCrsr = static_cast<SwPaM*>( pCrsr->GetNext() );
+        }
+        while( !bRet && (pCrsr != pRingStart) );
+    }
+    // else: nocursor -> no selection
+
+    return bRet;
+}
+
+SwPaM* SwAccessibleParagraph::GetCrsr()
+{
+    // get the cursor shell; if we don't have any, we don't have a
+    // cursor/selection either
+    SwPaM* pCrsr = NULL;
+    SwCrsrShell* pCrsrShell = SwAccessibleParagraph::GetCrsrShell();
+    if( pCrsrShell != NULL )
+    {
+        // get the selection, and test whether it affects our text node
+        pCrsr = pCrsrShell->GetCrsr( FALSE /* ??? */ );
+    }
+
+    return pCrsr;
+}
+
+SwCrsrShell* SwAccessibleParagraph::GetCrsrShell()
+{
+    // first, get the view shell
+    DBG_ASSERT( GetMap() != NULL, "no map?" );
+    ViewShell* pViewShell = GetMap()->GetShell();
+    DBG_ASSERT( pViewShell != NULL,
+                "No view shell? Then what are you looking at?" );
+
+    SwCrsrShell* pCrsrShell = NULL;
+
+    // see if our view shell is a cursor shell
+    if( pViewShell->ISA( SwCrsrShell ) )
+    {
+        pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
+    }
+
+    return pCrsrShell;
+}
+
+sal_Bool SwAccessibleParagraph::IsHeading() const
+{
+    const SwTxtNode *pTxtNd = GetTxtNode();
+    return (pTxtNd->GetOutlineNum() && !pTxtNd->GetNum());
+}
 
 void SwAccessibleParagraph::SetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
@@ -167,6 +309,48 @@ void SwAccessibleParagraph::SetStates(
     // TODO: SELECTED
 }
 
+void SwAccessibleParagraph::_InvalidateContent( sal_Bool bVisibleDataFired )
+{
+    OUString sOldText( GetString() );
+
+    ClearPortionData();
+
+    const OUString& rText = GetString();
+
+    if( rText != sOldText )
+    {
+        // The text is changed
+        AccessibleEventObject aEvent;
+        aEvent.EventId = AccessibleEventId::ACCESSIBLE_TEXT_EVENT;
+
+        FireAccessibleEvent( aEvent );
+    }
+    else if( !bVisibleDataFired )
+    {
+        FireVisibleDataEvent();
+    }
+
+    sal_Bool bIsNowHeading = IsHeading();
+    if( bIsNowHeading != bIsHeading || rText != sOldText )
+    {
+        bIsHeading = bIsNowHeading;
+
+        OUString sNewDesc( GetDescription() );
+        if( sNewDesc != sDesc )
+        {
+            // The text is changed
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT;
+            aEvent.OldValue <<= sDesc;
+            aEvent.NewValue <<= sNewDesc;
+            sDesc = sNewDesc;
+
+            FireAccessibleEvent( aEvent );
+        }
+    }
+}
+
+
 SwAccessibleParagraph::SwAccessibleParagraph(
         SwAccessibleMap *pMap,
         sal_Int32 nPara,
@@ -176,10 +360,9 @@ SwAccessibleParagraph::SwAccessibleParagraph(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    const SwTxtNode *pTxtNd = pTxtFrm->GetTxtNode();
-    sal_uInt16 nResId = (pTxtNd->GetOutlineNum() && !pTxtNd->GetNum())
-                            ? STR_ACCESS_HEADING_NAME
-                            : STR_ACCESS_PARAGRAPH_NAME;
+    bIsHeading = IsHeading();
+    sal_uInt16 nResId = bIsHeading ? STR_ACCESS_HEADING_NAME
+                                   : STR_ACCESS_PARAGRAPH_NAME;
     OUString sArg( OUString::valueOf( nPara ) );
     SetName( GetResource( nResId, &sArg ) );
 }
@@ -309,24 +492,6 @@ void SwAccessibleParagraph::GetTextBoundary(
     }
 }
 
-
-const SwTxtNode* SwAccessibleParagraph::GetTxtNode()
-{
-    const SwFrm* pFrm = GetFrm();
-    DBG_ASSERT( pFrm->IsTxtFrm(), "The text frame has mutated!" );
-
-    const SwTxtNode* pNode = static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode();
-    DBG_ASSERT( pNode != NULL, "A text frame without a text node." );
-
-    return pNode;
-}
-
-OUString SwAccessibleParagraph::GetString()
-{
-    return GetPortionData().GetAccessibleString();
-}
-
-
 OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
         throw (::com::sun::star::uno::RuntimeException)
 {
@@ -334,36 +499,10 @@ OUString SAL_CALL SwAccessibleParagraph::getAccessibleDescription (void)
 
     CHECK_FOR_DEFUNC( XAccessibleContext );
 
-    const OUString& rText = GetString();
+    if( !sDesc.getLength() )
+        sDesc = GetDescription();
 
-    // the description contains the first sentence up to
-    // MAX_DESC_TEXT_LEN characters (including the next full word)
-    Boundary aBound;
-    if( rText.getLength() > 0 )
-    {
-        GetSentenceBoundary( aBound, rText, 0 );
-        if( aBound.endPos > MAX_DESC_TEXT_LEN )
-        {
-            GetWordBoundary( aBound, rText, MAX_DESC_TEXT_LEN );
-            aBound.startPos = 0;
-        }
-    }
-    else
-        GetEmptyBoundary( aBound );
-    OUString sArg1( rText.copy( aBound.startPos, aBound.endPos ) );
-
-    sal_uInt16 nResId;
-    const SwTxtNode* pTxtNd = GetTxtNode();
-    if( pTxtNd->GetOutlineNum() && !pTxtNd->GetNum() )
-    {
-        nResId = STR_ACCESS_HEADING_DESC;
-    }
-    else
-    {
-        nResId = STR_ACCESS_PARAGRAPH_DESC;
-    }
-
-    return GetResource( nResId, &sArg1 );
+    return sDesc;
 }
 
 Locale SAL_CALL SwAccessibleParagraph::getLocale (void)
@@ -821,92 +960,3 @@ sal_Bool SwAccessibleParagraph::setText( const OUString& sText )
     return replaceText(0, GetString().getLength(), sText);
 }
 
-
-
-
-
-
-SwCrsrShell* SwAccessibleParagraph::GetCrsrShell()
-{
-    // first, get the view shell
-    DBG_ASSERT( GetMap() != NULL, "no map?" );
-    ViewShell* pViewShell = GetMap()->GetShell();
-    DBG_ASSERT( pViewShell != NULL,
-                "No view shell? Then what are you looking at?" );
-
-    SwCrsrShell* pCrsrShell = NULL;
-
-    // see if our view shell is a cursor shell
-    if( pViewShell->ISA( SwCrsrShell ) )
-    {
-        pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
-    }
-
-    return pCrsrShell;
-}
-
-SwPaM* SwAccessibleParagraph::GetCrsr()
-{
-    // get the cursor shell; if we don't have any, we don't have a
-    // cursor/selection either
-    SwPaM* pCrsr = NULL;
-    SwCrsrShell* pCrsrShell = SwAccessibleParagraph::GetCrsrShell();
-    if( pCrsrShell != NULL )
-    {
-        // get the selection, and test whether it affects our text node
-        pCrsr = pCrsrShell->GetCrsr( FALSE /* ??? */ );
-    }
-
-    return pCrsr;
-}
-
-sal_Bool SwAccessibleParagraph::GetSelection(
-    sal_Int32& nStart, sal_Int32& nEnd)
-{
-    sal_Bool bRet = sal_False;
-    nStart = -1;
-    nEnd = -1;
-
-    // get the selection, and test whether it affects our text node
-    SwPaM* pCrsr = GetCrsr();
-    if( pCrsr != NULL )
-    {
-        // get SwPosition for my node
-        const SwTxtNode* pNode = GetTxtNode();
-        ULONG nHere = pNode->GetIndex();
-
-        // iterate over ring
-        SwPaM* pRingStart = pCrsr;
-        do
-        {
-            // ignore, if no mark
-            if( pCrsr->HasMark() )
-            {
-                // check whether nHere is 'inside' pCrsr
-                SwPosition* pStart = pCrsr->Start();
-                SwPosition* pEnd = pCrsr->End();
-                if( ( nHere >= pStart->nNode.GetIndex() ) &&
-                    ( nHere <= pEnd->nNode.GetIndex() )      )
-                {
-                    // Yup, we are selected!
-                    bRet = sal_True;
-                    nStart = static_cast<sal_Int32>(
-                        ( nHere > pStart->nNode.GetIndex() ) ? 0
-                        : pStart->nContent.GetIndex() );
-                    nEnd = static_cast<sal_Int32>(
-                        ( nHere < pEnd->nNode.GetIndex() ) ? pNode->Len()
-                        : pEnd->nContent.GetIndex() );
-                }
-                // else: this PaM doesn't point to this paragraph
-            }
-            // else: this PaM is collapsed and doesn't select anything
-
-            // next PaM in ring
-            pCrsr = static_cast<SwPaM*>( pCrsr->GetNext() );
-        }
-        while( !bRet && (pCrsr != pRingStart) );
-    }
-    // else: nocursor -> no selection
-
-    return bRet;
-}

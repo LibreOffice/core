@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-27 09:32:33 $
+ *  last change: $Author: mib $ $Date: 2002-03-08 13:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,12 +144,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::drafts::com::sun::star::accessibility;
 using namespace ::rtl;
 
-void SwAccessibleContext::_Moved()
+void SwAccessibleContext::FireVisibleDataEvent()
 {
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
 
-    AccessibleEvent( aEvent );
+    FireAccessibleEvent( aEvent );
     DBG_MSG( "AccessibleVisibleData" )
 }
 
@@ -176,7 +176,7 @@ sal_Bool SwAccessibleContext::ChildScrolledIn( const SwFrm *pFrm )
         Reference < XAccessible > xChild( xChildImpl.getBodyPtr() );
         aEvent.NewValue <<= xChild;
 
-        AccessibleEvent( aEvent );
+        FireAccessibleEvent( aEvent );
         DBG_MSG_PARAM( "AccessibleChild (added)", xChildImpl.getBodyPtr() )
 
         xWeakChild = xChild;
@@ -256,7 +256,7 @@ sal_Bool SwAccessibleContext::ChildScrolled( const SwFrm *pFrm )
             // the update event for the parent has been send.
             xChildImpl->SetVisArea( GetVisArea() );
 
-            xChildImpl->_Moved();
+            xChildImpl->FireVisibleDataEvent();
             bUpdateChildren = sal_False;
         }
     }
@@ -305,7 +305,7 @@ void SwAccessibleContext::Dispose( sal_Bool bRecursive )
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
         aEvent.OldValue <<= xThis;
-        pAcc->AccessibleEvent( aEvent );
+        pAcc->FireAccessibleEvent( aEvent );
         DBG_MSG_THIS_PARAM( "AccessibleChild (removed)", pAcc, this )
     }
 
@@ -329,7 +329,9 @@ void SwAccessibleContext::PosChanged()
     if( IsShowing() )
     {
         // The frame stays visible -> broadcast event
-        _Moved();
+        FireVisibleDataEvent();
+
+        _InvalidateContent( sal_True );
     }
     else
     {
@@ -364,8 +366,13 @@ void SwAccessibleContext::ChildPosChanged( const SwFrm *pFrm,
     }
 }
 
+void SwAccessibleContext::InvalidateContent()
+{
+    _InvalidateContent( sal_False );
+}
 
-void SwAccessibleContext::AccessibleEvent( AccessibleEventObject& rEvent )
+
+void SwAccessibleContext::FireAccessibleEvent( AccessibleEventObject& rEvent )
 {
     Reference < XAccessibleContext > xThis( this );
     rEvent.Source = xThis;
@@ -413,6 +420,12 @@ void SwAccessibleContext::SetStates(
         rStateSet.AddState( AccessibleStateType::DEFUNC );
     }
 }
+
+void SwAccessibleContext::_InvalidateContent( sal_Bool )
+{
+}
+
+
 
 OUString SwAccessibleContext::GetResource( sal_uInt16 nResId,
                                            const OUString *pArg1,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-01 16:07:57 $
+ *  last change: $Author: mib $ $Date: 2002-03-08 13:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@ namespace com { namespace sun { namespace star {
 class SwAccessibleParagraph : public    SwAccessibleContext,
                               public drafts::com::sun::star::accessibility::XAccessibleEditableText
 {
+    ::rtl::OUString sDesc;
+
     /// data for this paragraph's text portions; this contains the
     /// mapping from the core 'model string' to the accessible text
     /// string.
@@ -94,23 +96,33 @@ class SwAccessibleParagraph : public    SwAccessibleContext,
     /// Get/Clear/Has/UpdatePortionData() methods
     SwAccessiblePortionData* pPortionData;
 
+    sal_Bool bIsHeading;
 
-    // Set states for getAccessibleStateSet.
-    // This drived class additinaly sets MULTILINE(1), SELECTABLE(1) and
-    // SELECTED(0/1)
-    virtual void SetStates( ::utl::AccessibleStateSetHelper& rStateSet );
 
     /// get the SwTxtNode (requires frame; check before)
-    const SwTxtNode* GetTxtNode();
+    const SwTxtNode* GetTxtNode() const;
 
     /// get the (accessible) text string (requires frame; check before)
-    rtl::OUString GetString();
+    ::rtl::OUString GetString();
+
+    ::rtl::OUString GetDescription();
 
     /// determine whether the current selection. Fill the values with
     /// -1 if there is no selection in the this paragraph
     sal_Bool GetSelection(sal_Int32& nStart, sal_Int32& nEnd);
     SwPaM* GetCrsr();          /// helper for GetSelection and getCaretPosition
     SwCrsrShell* GetCrsrShell();    /// helper for GetCrsr and setSelection
+
+    sal_Bool IsHeading() const;
+
+protected:
+
+    // Set states for getAccessibleStateSet.
+    // This drived class additinaly sets MULTILINE(1), SELECTABLE(1) and
+    // SELECTED(0/1)
+    virtual void SetStates( ::utl::AccessibleStateSetHelper& rStateSet );
+
+    virtual void _InvalidateContent( sal_Bool bVisibleDataFired );
 
 public:
 
