@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:55:02 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ void ShowView::InvalidateOneWin (::Window& rWin, const Rectangle& rRect)
 |*
 \************************************************************************/
 
-void ShowView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
+void ShowView::InitRedraw(OutputDevice* pOutDev, const Region& rReg, const Link* pPaintProc /*=NULL*/)
 {
 // #110094#-7
 //  BOOL bMPCache = FALSE;
@@ -215,7 +215,7 @@ void ShowView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
 //      }
 //  }
 
-    FmFormView::InitRedraw(pOutDev, rReg, SDRPAINTMODE_ANILIKEPRN);
+    FmFormView::InitRedraw(pOutDev, rReg, SDRPAINTMODE_ANILIKEPRN, pPaintProc);
 }
 
 /*************************************************************************
