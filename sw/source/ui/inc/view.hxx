@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:57:28 $
+ *  last change: $Author: os $ $Date: 2002-03-15 07:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,6 +228,8 @@ class SwView: public SfxViewShell
     String              sSwViewData,
     //and the new cursor position if the user double click in the PagePreView
                         sNewCrsrPos;
+    // to support keyboard the number of the page to go to can be set too
+    USHORT              nNewPage;
 
     Point               aTabColFromDocPos;  //Verschieben von Tabellenspalten aus
                                             //aus dem Dokument heraus.

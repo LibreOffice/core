@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:45:09 $
+ *  last change: $Author: os $ $Date: 2002-03-15 07:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,8 @@ void ViewShell::PreViewPage(
         const Rectangle& rRect,     // Paint-Rect von Windows
         USHORT nRowCol,             // Anzahl Zeilen/Spalten
         USHORT nSttPage,            // Start ab dieser Seite, eine gueltige ??
-        const Size& rPageSize )     // MaxSize einer Seite
+        const Size& rPageSize,      // MaxSize einer Seite
+        sal_uInt16 nSelectedPage )  // Page to be highlighted
 {
     if( !GetWin() && !GetOut()->GetConnectMetaFile() )
         return;                     //Fuer den Drucker tun wir hier nix
@@ -397,7 +398,12 @@ void ViewShell::PreViewPage(
     aCalcPt = aFreePt;
     pPage = pSttPage;
     Font* pEmptyPgFont = 0;
-
+    nSelectedPage -= nSttPage;
+    Color aLineColor(COL_BLUE);
+    DBG_ASSERT(pWin, "no window available")
+    const StyleSettings& rSettings = GetWin()->GetSettings().GetStyleSettings();
+    if(rSettings.GetHighContrastMode())
+        aLineColor = rSettings.GetHighlightTextColor();
     for( nCntRow = 0; pPage && nCntRow < nRow; ++nCntRow )
     {
         aCalcPt.X() = aFreePt.X();
@@ -408,6 +414,7 @@ void ViewShell::PreViewPage(
             {
                 bFirstPg = FALSE;
                 aCalcPt.X() += pPage->Frm().Width()+1 + aFreePt.X();
+                nSelectedPage--;
                 continue;
             }
 
@@ -422,7 +429,16 @@ void ViewShell::PreViewPage(
 
                 if( GetOut()->GetFillColor() != aRetouche )
                     GetOut()->SetFillColor( aRetouche );
-                GetOut()->DrawRect( aRect );
+
+                if(!nSelectedPage)
+                {
+                    Color aLine(GetOut()->GetLineColor());
+                    GetOut()->SetLineColor(aLineColor);
+                    GetOut()->DrawRect( aRect );
+                    GetOut()->SetLineColor(aLine);
+                }
+                else
+                    GetOut()->DrawRect( aRect );
 
                 if( !pEmptyPgFont )
                 {
@@ -457,6 +473,7 @@ void ViewShell::PreViewPage(
                 GetOut()->SetMapMode( aMapMode );
 
                 Rectangle aSVRect( GetOut()->LogicToPixel( aVisArea.SVRect() ) );
+                Rectangle aMarkRect(aSVRect);
                 if( aPixRect.IsOver( aSVRect ) )
                 {
                     aSVRect.Intersection( aPixRect );
@@ -465,8 +482,20 @@ void ViewShell::PreViewPage(
                     Paint( aSVRect );
                 }
                 aCalcPt.X() += pPage->Frm().Width()+1 + aFreePt.X();
+                if(!nSelectedPage)
+                {
+                    aMarkRect = GetOut()->PixelToLogic( aMarkRect );
+                    Color aFill(GetOut()->GetFillColor());
+                    Color aLine(GetOut()->GetLineColor());
+                    GetOut()->SetFillColor(Color(COL_TRANSPARENT));
+                    GetOut()->SetLineColor(aLineColor);
+                    GetOut()->DrawRect(aMarkRect);
+                    GetOut()->SetFillColor(aFill);
+                    GetOut()->SetLineColor(aLine);
+                }
             }
             pPage = (SwPageFrm*)pPage->GetNext();
+            nSelectedPage--;
         }
         aCalcPt.Y() += nPageHeight;
     }
@@ -1271,6 +1300,9 @@ Size ViewShell::GetPagePreViewPrtMaxSize() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/05/10 08:45:09  os
+      store print options at the document
+
       Revision 1.2  2000/10/25 12:03:41  jp
       Spellchecker/Hyphenator are not longer member of the shells
 

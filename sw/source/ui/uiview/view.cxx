@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:55:16 $
+ *  last change: $Author: os $ $Date: 2002-03-15 07:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,12 +796,12 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
                     SVXRULER_SUPPORT_BORDERS |
                     SVXRULER_SUPPORT_NEGATIVE_MARGINS,
                     GetViewFrame()->GetBindings(),
-                    WB_STDRULER | WB_EXTRAFIELD | WB_3DLOOK | WB_BORDER)),
+                    WB_STDRULER | WB_EXTRAFIELD | WB_BORDER)),
     pVRuler(new SvxRuler(&GetViewFrame()->GetWindow(), pEditWin,
                             SVXRULER_SUPPORT_TABS | SVXRULER_SUPPORT_PARAGRAPH_MARGINS_VERTICAL|
                                 SVXRULER_SUPPORT_BORDERS,
                             GetViewFrame()->GetBindings(),
-                            WB_VSCROLL |  WB_3DLOOK | WB_EXTRAFIELD | WB_BORDER )),
+                            WB_VSCROLL |  WB_EXTRAFIELD | WB_BORDER )),
     pTogglePageBtn(0),
     pPageUpBtn(0),
     pPageDownBtn(0),
@@ -812,7 +812,8 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     nDrawSfxId( USHRT_MAX ),
     nFormSfxId( USHRT_MAX ),
     nSelectionType( INT_MAX ),
-    nLastPasteDestination( 0xFFFF )
+    nLastPasteDestination( 0xFFFF ),
+    nNewPage(USHRT_MAX)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwView::SwView" );
     bCenterCrsr = bTopCrsr = bAllwaysShowSel = bTabColFromDoc =
@@ -859,6 +860,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     {
         sSwViewData = ((SwPagePreView*)pOldSh)->GetPrevSwViewData();
         sNewCrsrPos = ((SwPagePreView*)pOldSh)->GetNewCrsrPos();
+        nNewPage = ((SwPagePreView*)pOldSh)->GetNewPage();
         bOldShellWasPagePreView = TRUE;
     }
     else if( pOldSh->IsA( TYPE( SwSrcView ) ) )

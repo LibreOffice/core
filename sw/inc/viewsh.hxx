@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2002-03-06 11:49:01 $
+ *  last change: $Author: os $ $Date: 2002-03-15 07:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,8 @@ public:
 
     // SS fuer Seitenvorschau anzeigen
     void PreViewPage( const Rectangle& rRect, sal_uInt16 nRowCol,
-                      sal_uInt16 nSttPage, const Size& rPageSize );
+                      sal_uInt16 nSttPage, const Size& rPageSize,
+                      sal_uInt16 nSelectedPage );
     void RepaintCoreRect( const SwRect& rRect, sal_uInt16 nRowCol,
                             sal_uInt16 nSttPage, const Size& rPageSize );
     // und jetzt mal auf den Drucker

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2002-03-07 08:55:16 $
+ *  last change: $Author: os $ $Date: 2002-03-15 07:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,11 @@ void SwView::Activate(BOOL bMDIActivate)
                       nY = sNewCrsrPos.GetToken( 1, ';' ).ToInt32();
                 pWrtShell->SwCrsrShell::SetCrsr( Point( nX, nY ), FALSE );
                 sNewCrsrPos.Erase();
+            }
+            else if(USHRT_MAX != nNewPage)
+            {
+                pWrtShell->GotoPage(nNewPage);
+                nNewPage = USHRT_MAX;
             }
             sSwViewData.Erase();
         }

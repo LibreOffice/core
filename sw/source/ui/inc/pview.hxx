@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:41 $
+ *  last change: $Author: os $ $Date: 2002-03-15 07:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ class CommandEvent;
 class SwPagePreViewWin : public Window
 {
     ViewShell*          pViewShell;
-    USHORT              nSttPage, nVirtPage;
+    USHORT              nSttPage, nVirtPage, nSelectedPage;
     BYTE                nRow, nCol;
     Size                aWinSize, aPgSize;
     Fraction            aScale;
@@ -125,6 +125,7 @@ public:
     void    SetSttPage( USHORT n )
         { nSttPage = nVirtPage = n; if( !n ) ++nVirtPage; }
 
+    USHORT& GetSelectedPage() {return nSelectedPage;}
     //JP 19.08.98: bei Einspaltigkeit gibt es keine 0. Seite!
     USHORT  GetDefSttPage() const   { return 1 == nCol ? 1 : 0; }
 
@@ -157,6 +158,8 @@ class SwPagePreView: public SfxViewShell
     String                  sSwViewData,
     //and the new cursor position if the user double click in the PagePreView
                             sNewCrsrPos;
+    // to support keyboard the number of the page to go to can be set too
+    USHORT                  nNewPage;
     // Sichtbarer Bereich
     String                  sPageStr;
     Size                    aDocSz;
@@ -236,6 +239,10 @@ public:
     const String&   GetPrevSwViewData() const       { return sSwViewData; }
     void            SetNewCrsrPos( const String& rStr ) { sNewCrsrPos = rStr; }
     const String&   GetNewCrsrPos() const           { return sNewCrsrPos; }
+
+    USHORT          GetNewPage() const {return nNewPage;}
+    USHORT          SetNewPage(USHORT nSet)  {nNewPage = nSet;}
+
         // Handler
     void            Execute(SfxRequest&);
     void            GetState(SfxItemSet&);

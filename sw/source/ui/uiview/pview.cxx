@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2002-02-26 15:54:02 $
+ *  last change: $Author: os $ $Date: 2002-03-15 07:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -781,7 +781,7 @@ SwPagePreViewWin::SwPagePreViewWin( Window *pParent, SwPagePreView& rPView )
     const SwMasterUsrPref *pUsrPref = SW_MOD()->GetUsrPref(FALSE);
     nRow = pUsrPref->GetPagePrevRow();      // 1 Zeile
     nCol = pUsrPref->GetPagePrevCol();      // 1 Spalte
-    nVirtPage = nSttPage = USHRT_MAX;
+    nVirtPage = nSttPage = nSelectedPage = USHRT_MAX;
 }
 
 /*--------------------------------------------------------------------
@@ -813,10 +813,10 @@ void  SwPagePreViewWin::Paint( const Rectangle& rRect )
             aWinSize = GetOutputSizePixel();
 
         Rectangle aRect( LogicToPixel( rRect ));
-        nSttPage = pViewShell->CalcPreViewPage( aWinSize, nRowCol,
+        nSelectedPage = nSttPage = pViewShell->CalcPreViewPage( aWinSize, nRowCol,
                                                 0, aPgSize, nVirtPage );
         pViewShell->PreViewPage( PixelToLogic( aRect ), nRowCol, nSttPage,
-                                    aPgSize );
+                                    aPgSize, nSelectedPage );
         nRow = BYTE( nRowCol >> 8 );
         nCol = BYTE( nRowCol & 0xff );
         SetPagePreview(nRow, nCol);
@@ -828,15 +828,13 @@ void  SwPagePreViewWin::Paint( const Rectangle& rRect )
         aMM.SetScaleX( aScale );
         aMM.SetScaleY( aScale );
         SetMapMode( aMM );
-        pViewShell->PreViewPage( rRect, nRowCol, nSttPage, aPgSize );
+        pViewShell->PreViewPage( rRect, nRowCol, nSttPage, aPgSize, nSelectedPage );
     }
 }
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
 void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
 {
     if( !pViewShell || !pViewShell->GetLayout() )
@@ -850,7 +848,7 @@ void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
     if( nSttPage > nLastSttPg )
         nSttPage = nLastSttPg;
 
-    nSttPage = pViewShell->CalcPreViewPage( aWinSize, nRowCol, nSttPage,
+    nSelectedPage = nSttPage = pViewShell->CalcPreViewPage( aWinSize, nRowCol, nSttPage,
                                             aPgSize, nVirtPage );
     nRow = BYTE( nRowCol >> 8 );
     nCol = BYTE( nRowCol & 0xff );
@@ -870,14 +868,6 @@ void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
         FN_SHOW_TWO_PAGES, FN_SHOW_FOUR_PAGES,
         0
     };
-#ifndef PRODUCT
-    {
-        const USHORT* pPtr = aInval + 1;
-        do {
-            ASSERT( *(pPtr - 1) < *pPtr, "falsche Sortierung!" );
-        } while( *++pPtr );
-    }
-#endif
     SfxBindings& rBindings = rView.GetViewFrame()->GetBindings();
     rBindings.Invalidate( aInval );
     rBindings.Update( FN_SHOW_TWO_PAGES );
@@ -902,14 +892,18 @@ int SwPagePreViewWin::MovePage( int eMoveMode )
     {
     case MV_PAGE_UP:    nNewSttPage = nSttPage > nPages
                                             ? nSttPage - nPages : nDefSttPg;
+                        nSelectedPage -= nPages;
                         break;
     case MV_PAGE_DOWN:  nNewSttPage = nSttPage + nPages;
                         if( nNewSttPage > nLastSttPg )
                             nNewSttPage = nLastSttPg;
+                        nSelectedPage += nPages;
                         break;
     case MV_DOC_STT:    nNewSttPage = nDefSttPg;
+                        nSelectedPage = nNewSttPage;
                         break;
     case MV_DOC_END:    nNewSttPage = nLastSttPg;
+                        nSelectedPage = nPageCount - 1;
                         break;
     default:
 
@@ -935,19 +929,9 @@ int SwPagePreViewWin::MovePage( int eMoveMode )
     {
         FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN, 0
     };
-#ifndef PRODUCT
-    {
-        const USHORT* pPtr = aInval + 1;
-        do {
-            ASSERT( *(pPtr - 1) < *pPtr, "falsche Sortierung!" );
-        } while( *++pPtr );
-    }
-#endif
 
     SfxBindings& rBindings = rView.GetViewFrame()->GetBindings();
     rBindings.Invalidate( aInval );
-//  rBindings.Update( FN_SHOW_TWO_PAGES );
-//  rBindings.Update( FN_SHOW_FOUR_PAGES );
 
     return TRUE;
 }
@@ -964,10 +948,12 @@ void SwPagePreViewWin::SetWinSize( const Size& rNewSize )
     USHORT nRowCol = ( nRow << 8 ) + nCol;  // Zeilen / DoppelSeiten
 
     if( USHRT_MAX == nSttPage )
-        nSttPage = GetDefSttPage();
+        nSelectedPage = nSttPage = GetDefSttPage();
     nSttPage = pViewShell->CalcPreViewPage( aWinSize, nRowCol,
                                             nSttPage, aPgSize,
                                             nVirtPage );
+    if(nSelectedPage < nSttPage || nSelectedPage > nSttPage + (nRow * nCol) )
+        nSelectedPage = nSttPage;
     nRow = BYTE( nRowCol >> 8 );
     nCol = BYTE( nRowCol & 0xff );
     SetPagePreview(nRow, nCol);
@@ -1112,11 +1098,7 @@ void SwPagePreViewWin::DataChanged( const DataChangedEvent& rDCEvt )
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-
-
 // dann mal alles fuer die SwPagePreView
-
-
 void  SwPagePreView::Execute( SfxRequest &rReq )
 {
     int eMvMode;
@@ -1125,7 +1107,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
 
     USHORT nSttPage = aViewWin.GetSttPage(),
             nPages = aViewWin.GetRow() * aViewWin.GetCol(),
-            nLineSz = 1 < nPages ? nPages / 2 : 1,
+            nLineSz = aViewWin.GetCol(),
             nLastSttPg = nPageCount+1 > nPages ? nPageCount+1 - nPages : 0,
             nDefSttPg = aViewWin.GetDefSttPage();
 
@@ -1162,6 +1144,9 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
         break;
 
         case FN_CHAR_LEFT:
+            //change the display only when the selection is already at the first position
+            if(aViewWin.GetSelectedPage()-- > nSttPage)
+                break;
             if( nDefSttPg == nSttPage-- )
             {
                 bRefresh = FALSE;
@@ -1171,6 +1156,9 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
             eMvMode = SwPagePreViewWin::MV_CALC;        goto MOVEPAGE;
 
         case FN_CHAR_RIGHT:
+            //change the display only when the selection is already at the last position
+            if(aViewWin.GetSelectedPage()++ < (nSttPage + nPages - 1))
+                break;
             if( //aViewWin.GetRow() * aViewWin.GetCol() >= nPageCount ||
                 nLastSttPg == nSttPage++ )
             {
@@ -1182,12 +1170,14 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
 
         case FN_LINE_UP:
         case FN_LINE_DOWN:
+        {
 //???       if( !nSttPage &&  1 < nLineSz )
 //              --nLineSz;
-
+            USHORT nOldSttPage = nSttPage;
             if( FN_LINE_UP == rReq.GetSlot() )
             {
                 if( nSttPage > nLineSz )
+
                     nSttPage -= nLineSz;
                 else
                     nSttPage = nDefSttPg;
@@ -1208,16 +1198,23 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
             }
 
             aViewWin.SetSttPage( nSttPage );
-            eMvMode = SwPagePreViewWin::MV_CALC;        goto MOVEPAGE;
+            aViewWin.GetSelectedPage() -= (nOldSttPage - nSttPage);
+            eMvMode = SwPagePreViewWin::MV_CALC;
+        }
+        goto MOVEPAGE;
 
         case FN_PAGEUP:
             eMvMode = SwPagePreViewWin::MV_PAGE_UP;     goto MOVEPAGE;
         case FN_PAGEDOWN:
             eMvMode = SwPagePreViewWin::MV_PAGE_DOWN;   goto MOVEPAGE;
 
+        case FN_START_OF_LINE:
         case FN_START_OF_DOCUMENT:
+            aViewWin.GetSelectedPage() = 0;
             eMvMode = SwPagePreViewWin::MV_DOC_STT; bRetVal = TRUE; goto MOVEPAGE;
+        case FN_END_OF_LINE:
         case FN_END_OF_DOCUMENT:
+            aViewWin.GetSelectedPage() = nPageCount;
             eMvMode = SwPagePreViewWin::MV_DOC_END; bRetVal = TRUE; goto MOVEPAGE;
 MOVEPAGE:
             {
@@ -1268,6 +1265,14 @@ MOVEPAGE:
             GetViewFrame()->GetBindings().Execute( SID_VIEWSHELL0, NULL, 0,
                                                     SFX_CALLMODE_ASYNCHRON );
             break;
+        case FN_INSERT_BREAK:
+        {
+            SetNewPage( aViewWin.GetSelectedPage() );
+            SfxViewFrame *pTmpFrm = GetViewFrame();
+            pTmpFrm->GetBindings().Execute( SID_VIEWSHELL0, NULL, 0,
+                                                    SFX_CALLMODE_ASYNCHRON );
+        }
+        break;
         default:
             ASSERT(!this, falscher Dispatcher);
             return;
@@ -1471,7 +1476,8 @@ SwPagePreView::SwPagePreView(SfxViewFrame *pFrame, SfxViewShell* pOldSh):
     pPageDownBtn(0),
     pScrollFill(0),
     sPageStr( SW_RES(STR_PAGE) ),
-    nPageCount( 0 )
+    nPageCount( 0 ),
+    nNewPage(USHRT_MAX)
 {
     SetName(String::CreateFromAscii("PageView" ));
     SetWindow( &aViewWin );
@@ -2248,6 +2254,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.11  2002/02/26 15:54:02  os
+      #97682# prevent division by zero if no printer can be found
+
       Revision 1.10  2001/11/30 12:54:23  jp
       Bug #95431#: DataChanged - react only on whished type/flags
 
