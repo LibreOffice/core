@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: aw $ $Date: 2003-02-19 16:14:55 $
+#   last change: $Author: thb $ $Date: 2003-10-17 12:32:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,19 +81,12 @@ SHL1TARGET= basegfx$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= ibasegfx
 
 SHL1STDLIBS=\
-        $(TOOLSLIB)		\
-        $(SALLIB)		\
-        $(VOSLIB)		\
-        $(VCLLIB)		\
-        $(SVTOOLLIB)	\
-        $(SVLLIB)		\
+        $(TOOLSLIB)		 \
+        $(SALLIB)		 \
+        $(VOSLIB)		 \
         $(CPPUHELPERLIB) \
-        $(CPPULIB)		\
+        $(CPPULIB)		 \
         $(UNOTOOLSLIB)	
-#		$(SVMEMLIB)		\
-#		$(SOTLIB)		\
-#		$(SO2LIB)		\
-#		$(INETLIBSH)	\
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=	$(SLB)$/basegfx.lib
