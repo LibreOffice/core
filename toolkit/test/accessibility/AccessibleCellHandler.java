@@ -9,15 +9,18 @@ class AccessibleCellHandler extends NodeHandler
 {
     public NodeHandler createHandler (XAccessibleContext xContext)
     {
-        XAccessibleContext xParent =
-            xContext.getAccessibleParent().getAccessibleContext();
-        XAccessibleTable xTable =
-            (XAccessibleTable) UnoRuntime.queryInterface (
-                XAccessibleTable.class, xParent);
-        if (xTable != null)
-            return new AccessibleCellHandler (xTable);
-        else
-            return null;
+        AccessibleCellHandler aCellHandler = null;
+        XAccessible xParent = xContext.getAccessibleParent();
+        if (xParent != null)
+        {
+            XAccessibleTable xTable =
+                (XAccessibleTable) UnoRuntime.queryInterface (
+                    XAccessibleTable.class, xParent.getAccessibleContext());
+            if (xTable != null)
+                aCellHandler = new AccessibleCellHandler (xTable);
+        }
+        return aCellHandler;
+
     }
 
     public AccessibleCellHandler ()
