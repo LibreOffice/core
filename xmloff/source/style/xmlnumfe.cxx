@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-12 19:28:27 $
+ *  last change: $Author: er $ $Date: 2001-01-26 17:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,13 +189,29 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     pFormatter( NULL ),
     pNamespaceMap( NULL ),
     sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
-    sWS( OUString::createFromAscii( sXML_WS ) )
+    sWS( OUString::createFromAscii( sXML_WS ) ),
+    pCharClass( NULL ),
+    pLocaleData( NULL )
 {
     //  supplier must be SvNumberFormatsSupplierObj
     SvNumberFormatsSupplierObj* pObj =
                     SvNumberFormatsSupplierObj::getImplementation( rSupp );
     if (pObj)
         pFormatter = pObj->GetNumberFormatter();
+
+    if ( pFormatter )
+    {
+        pCharClass = new CharClass( pFormatter->GetServiceManager(),
+            pFormatter->GetLocale() );
+        pLocaleData = new LocaleDataWrapper( pFormatter->GetServiceManager(),
+            pFormatter->GetLocale() );
+    }
+    else
+    {
+        lang::Locale aLocale( SvNumberFormatter::ConvertLanguageToLocale( ::GetSystemLanguage() ) );
+        pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), aLocale );
+        pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), aLocale );
+    }
 
     pAttrList = new SvXMLAttributeList;
     xAttrList = pAttrList;
@@ -206,6 +222,8 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
 SvXMLNumFmtExport::~SvXMLNumFmtExport()
 {
     delete pUsedList;
+    delete pLocaleData;
+    delete pCharClass;
 }
 
 //-------------------------------------------------------------------------
@@ -812,11 +830,12 @@ xub_StrLen lcl_FindSymbol( const String& sUpperStr, const String& sCurString )
 }
 
 void SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
-                                                const International& rIntl,
-                                                const CharClass& rCharClass )
+                            const ::com::sun::star::lang::Locale& rLocale )
 {
-    String sCurString = rIntl.GetCurrSymbol();
-    String sUpperStr = rCharClass.upper(rString);
+    pLocaleData->setLocale( rLocale );
+    pCharClass->setLocale( rLocale );
+    String sCurString = pLocaleData->getCurrSymbol();
+    String sUpperStr = pCharClass->upper(rString);
     xub_StrLen nPos = lcl_FindSymbol( sUpperStr, sCurString );
     if ( nPos != STRING_NOTFOUND )
     {
@@ -1221,11 +1240,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                         {
                             //  automatic currency symbol is implemented as part of
                             //  normal text -> search for the symbol
-                            International aIntl( nLang );
-                            String aLanguage, aCountry, aVariant;
-                            ConvertLanguageToIsoNames( International::GetRealLanguage( nLang ), aLanguage, aCountry );
-                            CharClass aChrCls(  ::comphelper::getProcessServiceFactory(), lang::Locale( aLanguage, aCountry, aVariant ) );
-                            WriteTextWithCurrency_Impl( *pElemStr, aIntl, aChrCls );
+                            WriteTextWithCurrency_Impl( *pElemStr,
+                                SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
                         }
                         else
                             AddToTextElement_Impl( *pElemStr );
@@ -1332,8 +1348,8 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                         if ( nElemType == NF_KEY_NNNN )
                         {
                             //  write additional text element for separator
-                            International aIntl( nLang );
-                            AddToTextElement_Impl( aIntl.GetLongDateDayOfWeekSep() );
+                            pLocaleData->setLocale( SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
+                            AddToTextElement_Impl( pLocaleData->getLongDateDayOfWeekSep() );
                         }
                     }
                     break;

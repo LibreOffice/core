@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-12 19:26:09 $
+ *  last change: $Author: er $ $Date: 2001-01-26 17:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <tools/isolang.hxx>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include "xmlnumfi.hxx"
 #include "xmltkmap.hxx"
@@ -105,7 +106,7 @@ class SvXMLNumImpData
     SvXMLTokenMap*      pStyleElemTokenMap;
     SvXMLTokenMap*      pStyleAttrTokenMap;
     SvXMLTokenMap*      pStyleElemAttrTokenMap;
-    International*      pInternational;
+    LocaleDataWrapper*  pLocaleData;
     SvXMLNumFmtEntryArr aNameEntries;
 
 public:
@@ -117,7 +118,7 @@ public:
     const SvXMLTokenMap&    GetStyleElemTokenMap();
     const SvXMLTokenMap&    GetStyleAttrTokenMap();
     const SvXMLTokenMap&    GetStyleElemAttrTokenMap();
-    const International&    GetInternational( LanguageType nLang );
+    const LocaleDataWrapper&    GetLocaleData( LanguageType nLang );
     sal_uInt32              GetKeyForName( const rtl::OUString& rName );
     void                    AddKey( sal_uInt32 nKey, const rtl::OUString& rName );
 };
@@ -408,7 +409,7 @@ SvXMLNumImpData::SvXMLNumImpData( SvNumberFormatter* pFmt ) :
     pStyleElemTokenMap(NULL),
     pStyleAttrTokenMap(NULL),
     pStyleElemAttrTokenMap(NULL),
-    pInternational(NULL)
+    pLocaleData(NULL)
 {
 }
 
@@ -418,7 +419,7 @@ SvXMLNumImpData::~SvXMLNumImpData()
     delete pStyleElemTokenMap;
     delete pStyleAttrTokenMap;
     delete pStyleElemAttrTokenMap;
-    delete pInternational;
+    delete pLocaleData;
 }
 
 sal_uInt32 SvXMLNumImpData::GetKeyForName( const rtl::OUString& rName )
@@ -468,14 +469,16 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
     return *pStyleElemAttrTokenMap;
 }
 
-const International& SvXMLNumImpData::GetInternational( LanguageType nLang )
+const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
 {
-    if ( !pInternational || pInternational->GetLanguage() != nLang )
-    {
-        delete pInternational;
-        pInternational = new International( nLang );
-    }
-    return *pInternational;
+    if ( !pLocaleData )
+        pLocaleData = new LocaleDataWrapper(
+            (pFormatter ? pFormatter->GetServiceManager() :
+            ::comphelper::getProcessServiceFactory()),
+            SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
+    else
+        pLocaleData->setLocale( SvNumberFormatter::ConvertLanguageToLocale( nLang ) );
+    return *pLocaleData;
 }
 
 //-------------------------------------------------------------------------
@@ -711,7 +714,7 @@ void SvXMLNumFmtElementContext::EndElement()
     {
         case XML_TOK_STYLE_TEXT:
             if ( rParent.HasLongDoW() &&
-                    rParent.GetInternational().GetLongDateDayOfWeekSep() ==
+                    rParent.GetLocaleData().getLongDateDayOfWeekSep() ==
                         String( aContent.getStr() ) )
             {
                 //  skip separator constant after long day of week
@@ -764,24 +767,33 @@ void SvXMLNumFmtElementContext::EndElement()
 
         case XML_TOK_STYLE_DAY:
             rParent.UpdateCalendar( sCalendar );
+#if 0
+//! I18N doesn't provide SYSTEM or extended date information yet
             if ( rParent.IsFromSystem() )
                 bEffLong = SvXMLNumFmtDefaults::IsSystemLongDay( rParent.GetInternational(), bLong );
+#endif
             rParent.AddNfKeyword( bEffLong ? NF_KEY_DD : NF_KEY_D );
             break;
         case XML_TOK_STYLE_MONTH:
             rParent.UpdateCalendar( sCalendar );
+#if 0
+//! I18N doesn't provide SYSTEM or extended date information yet
             if ( rParent.IsFromSystem() )
             {
                 bEffLong = SvXMLNumFmtDefaults::IsSystemLongMonth( rParent.GetInternational(), bLong );
                 bTextual = SvXMLNumFmtDefaults::IsSystemTextualMonth( rParent.GetInternational(), bLong );
             }
+#endif
             rParent.AddNfKeyword( bTextual ? ( bEffLong ? NF_KEY_MMMM : NF_KEY_MMM ) :
                                              ( bEffLong ? NF_KEY_MM : NF_KEY_M ) );
             break;
         case XML_TOK_STYLE_YEAR:
             rParent.UpdateCalendar( sCalendar );
+#if 0
+//! I18N doesn't provide SYSTEM or extended date information yet
             if ( rParent.IsFromSystem() )
                 bEffLong = SvXMLNumFmtDefaults::IsSystemLongYear( rParent.GetInternational(), bLong );
+#endif
             // Y after G (era) is replaced by E
             if ( rParent.HasEra() )
                 rParent.AddNfKeyword( bEffLong ? NF_KEY_EEC : NF_KEY_EC );
@@ -790,15 +802,21 @@ void SvXMLNumFmtElementContext::EndElement()
             break;
         case XML_TOK_STYLE_ERA:
             rParent.UpdateCalendar( sCalendar );
+#if 0
+//! I18N doesn't provide SYSTEM or extended date information yet
             if ( rParent.IsFromSystem() )
                 bEffLong = SvXMLNumFmtDefaults::IsSystemLongEra( rParent.GetInternational(), bLong );
+#endif
             rParent.AddNfKeyword( bEffLong ? NF_KEY_GGG : NF_KEY_G );
             //  HasEra flag is set
             break;
         case XML_TOK_STYLE_DAY_OF_WEEK:
             rParent.UpdateCalendar( sCalendar );
+#if 0
+//! I18N doesn't provide SYSTEM or extended date information yet
             if ( rParent.IsFromSystem() )
                 bEffLong = SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( rParent.GetInternational(), bLong );
+#endif
             rParent.AddNfKeyword( bEffLong ? NF_KEY_NNNN : NF_KEY_NN );
             break;
         case XML_TOK_STYLE_WEEK_OF_YEAR:
@@ -824,8 +842,11 @@ void SvXMLNumFmtElementContext::EndElement()
             if ( aNumInfo.nDecimals > 0 )
             {
                 //  manually add the decimal places
-                rParent.AddToCode( OUString::valueOf(
-                            rParent.GetInternational().GetNumDecimalSep() ) );
+                const String& rSep = rParent.GetLocaleData().getNumDecimalSep();
+                for ( xub_StrLen j=0; j<rSep.Len(); j++ )
+                {
+                    rParent.AddToCode( OUString::valueOf( rSep.GetChar(j) ) );
+                }
                 for (sal_Int32 i=0; i<aNumInfo.nDecimals; i++)
                     rParent.AddToCode( OUString::valueOf((sal_Unicode)'0') );
             }
@@ -1120,6 +1141,8 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
             }
         }
 
+#if 0
+//! I18N doesn't provide SYSTEM or extended date information yet
         if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND && !bFromSystem )
         {
             //  instead of automatic date format, use fixed formats if bFromSystem is not set
@@ -1168,6 +1191,7 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
                     nIndex = nNewIndex;
             }
         }
+#endif
 
         if ( nIndex != NUMBERFORMAT_ENTRY_NOT_FOUND && !bAutoOrder )
         {
@@ -1202,9 +1226,9 @@ void SvXMLNumFormatContext::Finish( sal_Bool bOverwrite )
 //  AddCondition();
 }
 
-const International& SvXMLNumFormatContext::GetInternational() const
+const LocaleDataWrapper& SvXMLNumFormatContext::GetLocaleData() const
 {
-    return pData->GetInternational( nFormatLang );
+    return pData->GetLocaleData( nFormatLang );
 }
 
 void SvXMLNumFormatContext::AddToCode( const rtl::OUString& rString )
@@ -1234,12 +1258,12 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
     {
         //  use language defaults for other than builtin formats
 
-        const International& rInt = pData->GetInternational( nFormatLang );
+        const LocaleDataWrapper& rLoc = pData->GetLocaleData( nFormatLang );
 
         if ( nType == XML_TOK_STYLES_CURRENCY_STYLE )
-            nPrec = rInt.GetCurrDigits();
+            nPrec = rLoc.getCurrDigits();
         else
-            nPrec = rInt.GetNumDigits();
+            nPrec = 2; //! was rInt.GetNumDigits(), how about LocaleData providing this?
     }
     if ( bAutoInt )
     {
@@ -1259,7 +1283,7 @@ void SvXMLNumFormatContext::AddNumber( const SvXMLNumberInfo& rInfo )
 
     if ( rInfo.bDecReplace && nPrec )       // add decimal replacement (dashes)
     {
-        aFormatCode.append( pData->GetInternational( nFormatLang ).GetNumDecimalSep() );
+        aFormatCode.append( pData->GetLocaleData( nFormatLang ).getNumDecimalSep() );
         for ( sal_uInt16 i=0; i<nPrec; i++)
             aFormatCode.append( (sal_Unicode)'-' );
     }
@@ -1272,7 +1296,7 @@ void SvXMLNumFormatContext::AddCurrency( const rtl::OUString& rContent, Language
     if ( aSymbol.getLength() == 0 )
     {
         //  get currency symbol for language
-        aSymbol = pData->GetInternational( nFormatLang ).GetCurrSymbol();
+        aSymbol = pData->GetLocaleData( nFormatLang ).getCurrSymbol();
         bAutomatic = sal_True;
     }
     else if ( nLang == LANGUAGE_SYSTEM && aSymbol.compareToAscii("CCC") == 0 )
@@ -1292,8 +1316,7 @@ void SvXMLNumFormatContext::AddCurrency( const rtl::OUString& rContent, Language
         {
             //  '-' sign and language code in hex:
             aFormatCode.append( (sal_Unicode) '-' );
-            //aFormatCode.append( OUString::valueOf( (sal_Int32)nLang, 16 ) );
-            aFormatCode.append( (sal_Int32)nLang, 16 );
+            aFormatCode.append( String::CreateFromInt32( sal_Int32( nLang ), 16 ).ToUpperAscii() );
         }
 
         aFormatCode.append( (sal_Unicode) ']' );    // end of "new" currency symbol
