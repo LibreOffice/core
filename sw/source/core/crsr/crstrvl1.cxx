@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crstrvl1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:13:10 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,11 @@ FASTBOOL SwCrsrShell::GoNextSentence()
 {
     return CallCrsrFN( &SwCursor::GoNextSentence );
 }
+FASTBOOL SwCrsrShell::GoEndSentence()
+{
+    return CallCrsrFN( &SwCursor::GoEndSentence );
+}
+
 FASTBOOL SwCrsrShell::GoPrevSentence()
 {
     return CallCrsrFN( &SwCursor::GoPrevSentence );
