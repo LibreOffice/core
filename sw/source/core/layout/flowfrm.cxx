@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 15:11:27 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 10:31:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1727,7 +1727,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                     // because of the page break. During formatting of
                     // the section frame, the tab frame moves to page 7 again and so on.
 
-                    if ( SwFlowFrm::IsMoveBwdJump() && 2 == nDiff &&
+                    if ( pFlow->IsInSct() && SwFlowFrm::IsMoveBwdJump() && 2 == nDiff &&
                          !((SwPageFrm*)pOldPage->GetPrev())->IsEmptyPage() &&
                          pNewUpper && pNewUpper->IsPageBodyFrm() )
                     {
@@ -1738,7 +1738,7 @@ BOOL SwFlowFrm::MoveBwd( BOOL &rbReformat )
                             if ( pLayout && pLayout->IsHeaderFrm() )
                                 pLayout = pLayout->GetNext();
 
-                            if ( pLayout->IsBodyFrm() )
+                            if ( pLayout && pLayout->IsBodyFrm() && !((SwLayoutFrm*)pLayout)->Lower() )
                             {
                                 pNewUpper = (SwLayoutFrm*)pLayout;
                                 SwFlowFrm::SetMoveBwdJump( FALSE );
