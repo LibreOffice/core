@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-07 13:50:55 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 13:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,7 +472,7 @@ void SvxStyleBox_Impl::Select()
     if ( !IsTravelSelect() )
     {
         Sequence< PropertyValue > aArgs( 2 );
-        aArgs[0].Name   = m_aCommand;
+        aArgs[0].Name   = OUString::createFromAscii( "Template" );
         aArgs[0].Value  = makeAny( OUString( GetSelectEntry() ));
         aArgs[1].Name   = OUString::createFromAscii( "Family" );
         aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
