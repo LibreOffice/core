@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:55:10 $
+ *  last change: $Author: rt $ $Date: 2004-05-26 07:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,8 +116,8 @@
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
 #include <sfx2/request.hxx> //add CHINA001
-#include <svx/ofaitem.hxx> //add CHINA001
-#include <svx/svxids.hrc> //add CHINA001
+#include <ofaitem.hxx> //add CHINA001
+#include <svxids.hrc> //add CHINA001
 #ifndef _SVX_WRITINGMODEITEM_HXX
 #include <writingmodeitem.hxx>
 #endif
