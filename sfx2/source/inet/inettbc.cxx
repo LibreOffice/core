@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-08 08:52:09 $
+ *  last change: $Author: pb $ $Date: 2001-06-11 09:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1009,8 +1009,16 @@ String SfxURLBox::GetURL()
 
     INetURLObject aObj( aText );
     if( aText.Search( '*' ) != STRING_NOTFOUND || aText.Search( '?' ) != STRING_NOTFOUND )
+    {
         // no autocompletion for wildcards
-        return aObj.GetMainURL();
+        INetURLObject aTempObj;
+        if ( eSmartProtocol != INET_PROT_NOT_VALID )
+            aTempObj.SetSmartProtocol( eSmartProtocol );
+        if ( aTempObj.SetSmartURL( aText ) )
+            return aTempObj.GetMainURL();
+        else
+            return aText;
+    }
 
     if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
     {
