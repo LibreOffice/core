@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CGDocument.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:16:57 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,26 +59,29 @@
  */
 package com.sun.star.wizards.web.data;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
+import org.w3c.dom.Node;
+
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.document.*;
+import com.sun.star.document.XDocumentInfoSupplier;
+import com.sun.star.document.XStandaloneDocumentInfo;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.DateTime;
-import com.sun.star.wizards.common.*;
+import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.FileAccess;
+import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.common.XMLHelper;
+import com.sun.star.wizards.common.XMLProvider;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.ui.event.Task;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-
-import org.w3c.dom.Node;
 
 /**
  * About the member fields Title, Decription and Author:
@@ -154,18 +157,11 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
     public CGDocument() {}
 
     public CGDocument(String url, XMultiServiceFactory xmsf,Task task) throws Exception {
-        cp_URL = JavaTools.converttoURLNotation(url);
+        cp_URL = getSettings().getFileAccess(xmsf).getURL(url);
         if (task==null) task = new Task("","",5);
         validate(xmsf,task);
     }
 
-    private static FileAccess fileAccess;
-
-    private static FileAccess getFileAccess(XMultiServiceFactory xmsf) throws Exception {
-        if (fileAccess==null)
-          fileAccess = new FileAccess(xmsf);
-        return fileAccess;
-    }
 
     /**
      * the task will advance 5 times during validate.
@@ -178,10 +174,10 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
                 IllegalArgumentException,
                 Exception {
 
-        if (!getFileAccess(xmsf).exists(cp_URL,false))
+        if (!getSettings().getFileAccess(xmsf).exists(cp_URL,false))
               throw new FileNotFoundException("The given URL does not point to a file");
 
-        if (getFileAccess(xmsf).isDirectory(cp_URL))
+        if (getSettings().getFileAccess(xmsf).isDirectory(cp_URL))
               throw new IllegalArgumentException("The given URL points to a directory");
 
         //create a TypeDetection service
@@ -196,8 +192,8 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
 
         task.advance(true); //2
 
-        String path = getFileAccess(xmsf).getPath(cp_URL,"");
-        localFilename = getFileAccess(xmsf).getFilename(path,File.separator);
+        String path = getSettings().getFileAccess(xmsf).getPath(cp_URL,"");
+        localFilename = FileAccess.getFilename(path,File.separator);
 
         /* if the type is a star office convertable document
          * We try to open the document to get some properties
@@ -234,7 +230,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
         }
         else { //get some information from OS.
             title = localFilename;
-            updateDate = getFileAccess(xmsf).getLastModified(cp_URL);
+            updateDate = getSettings().getFileAccess(xmsf).getLastModified(cp_URL);
         }
 
         task.advance(true); //5
@@ -275,7 +271,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
 
         String[] parts = media.split("_");
 
-        isSODocument = isSOOpenable  && ( parts[1].startsWith("Star") );
+        isSODocument = parts.length < 2 ? false : isSOOpenable  && ( parts[1].startsWith("Star") );
 
     }
 
@@ -300,14 +296,6 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
         else return TypeDetection.NO_TYPE;
     }
 
-
-    private String dateString(DateTime dateTime) {
-        if (dateTime == null) return "";
-        Date date = new Date(JavaTools.getMillis(dateTime));
-        DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.LONG,Locale.getDefault());
-        return dateFormatter.format(date);
-    }
-
     public Node createDOM(Node parent) {
         CGDesign d = getSettings().cp_DefaultSession.cp_Design;
         CGExporter exp = (CGExporter)getSettings().cp_Exporters.getElement(cp_Exporter);
@@ -320,22 +308,32 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
               d.cp_DisplayAuthor ? cp_Author : "",
               d.cp_DisplayFileFormat ? getTargetTypeName(exp) : "",
               d.cp_DisplayFilename ? localFilename : "",
-              d.cp_DisplayCreateDate ? createDate(dateString(createDate)) : "",
-              d.cp_DisplayUpdateDate ? updateDate(dateString(updateDate)) : "",
-              d.cp_DisplayPages && (pages > -1) ? "" + pages : "", //TODO when do i calculate pages?
-              d.cp_DisplaySize && (sizeKB > -1) ? "" + sizeKB: "", //TODO when do i calculate size?
+              d.cp_DisplayCreateDate ? createDate() : "",
+              d.cp_DisplayUpdateDate ? updateDate() : "",
+              d.cp_DisplayPages && (pages > -1) ? "" + pages() : "", //TODO when do i calculate pages?
+              d.cp_DisplaySize ? sizeKB() : "" ,//TODO when do i calculate size?
               d.cp_DisplayFormatIcon ? getIcon(exp) : "",
               dirName, urlFilename}
         );
     }
 
 
-    private String updateDate(String s) {
-        return JavaTools.replaceSubString(getSettings().resUpdated,s,"%DATE");
+    private String updateDate() {
+        if ( this.updateDate == null )
+            return "";
+        return getSettings().formatter.formatCreated(this.updateDate);
     }
 
-    private String createDate(String s) {
-            return JavaTools.replaceSubString(getSettings().resCreated,s,"%DATE");
+    private String createDate() {
+        if ( this.createDate == null )
+            return "";
+        return getSettings().formatter.formatCreated(this.createDate);
+    }
+
+    private String sizeKB() {
+        if (sizeKB == -1)
+            return "";
+        else return getSettings().formatter.formatFileSize(sizeKB);
     }
 
     private String pages() {
@@ -349,9 +347,9 @@ public class CGDocument extends ConfigSetItem implements XMLProvider {
             case PAGE_TYPE_UNKNOWN :
                 return "";
             case PAGE_TYPE_PAGE :
-                return getSettings().resPages;
+                return getSettings().resources[CGSettings.RESOURCE_PAGES_TEMPLATE];
             case PAGE_TYPE_SLIDE :
-                return getSettings().resSlides;
+                return getSettings().resources[CGSettings.RESOURCE_SLIDES_TEMPLATE];
             default : return "";
         }
     }
