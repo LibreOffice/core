@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:28:19 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 class ScEditEngineDefaulter;
 class ScHeaderEditEngine;
 class EditEngine;
+class ScExtDocOptions;
 class XclTracer;
 
 struct RootData;//!
@@ -88,6 +89,7 @@ struct XclRootData
     typedef ::std::auto_ptr< ScEditEngineDefaulter >    ScEditEngineDefaulterPtr;
     typedef ::std::auto_ptr< ScHeaderEditEngine >       ScHeaderEditEnginePtr;
     typedef ::std::auto_ptr< EditEngine >               EditEnginePtr;
+    typedef ::std::auto_ptr< ScExtDocOptions >          ScExtDocOptionsPtr;
     typedef ::std::auto_ptr< XclTracer >                XclTracerPtr;
 
     XclBiff                     meBiff;         /// Current BIFF version.
@@ -100,13 +102,16 @@ struct XclRootData
     LanguageType                meUILang;       /// UI language (import: from file, export: from system).
     ScAddress                   maScMaxPos;     /// Highest Calc cell position.
     ScAddress                   maXclMaxPos;    /// Highest Excel cell position.
+    ScAddress                   maMaxPos;       /// Highest position valid in Calc and Excel.
     long                        mnCharWidth;    /// Width of '0' in default font (twips).
-    SCTAB                       mnScTab;        /// Current Calc sheet index.
+    USHORT                      mnScTab;        /// Current Calc sheet index.
     bool                        mbTruncated;    /// Flag for the table truncated warning box.
 
     ScEditEngineDefaulterPtr    mpEditEngine;   /// Edit engine for rich strings etc.
     ScHeaderEditEnginePtr       mpHFEditEngine; /// Edit engine for header/footer.
     EditEnginePtr               mpDrawEditEng;  /// Edit engine for text boxes.
+
+    ScExtDocOptionsPtr          mpExtDocOpt;        /// Extended document options.
 
     XclTracerPtr                mpTracer;       /// Filter tracer.
 
@@ -162,7 +167,7 @@ public:
     /** Returns the UI language. */
     inline LanguageType         GetUILanguage() const { return mrData.meUILang; }
     /** Returns the current Calc sheet index. */
-    inline SCTAB                GetScTab() const { return mrData.mnScTab; }
+    inline USHORT               GetCurrScTab() const { return mrData.mnScTab; }
     /** Returns whether the "some cells have been cut" warning box should show. */
     inline bool                 IsTruncated() const { return mrData.mbTruncated; }
 
@@ -203,6 +208,9 @@ public:
     /** Returns the edit engine for import/export of drawing text boxes. */
     EditEngine&                 GetDrawEditEngine() const;
 
+    /** Returns the extended document options. */
+    ScExtDocOptions&            GetExtDocOptions() const;
+
     /** Returns the filter tracer. */
     XclTracer&                  GetTracer() const;
 
@@ -210,6 +218,8 @@ public:
     inline const ScAddress&     GetScMaxPos() const { return mrData.maScMaxPos; }
     /** Returns the highest possible cell address in an Excel document (using current BIFF version). */
     inline const ScAddress&     GetXclMaxPos() const { return mrData.maXclMaxPos; }
+    /** Returns the highest possible cell address valid in Calc and Excel (using current BIFF version). */
+    inline const ScAddress&     GetMaxPos() const { return mrData.maMaxPos; }
 
 protected:
     explicit                    XclRoot( XclRootData& rRootData );
@@ -226,7 +236,7 @@ protected:
         @param rFontData  The font used for the '0' character. */
     void                        SetCharWidth( const XclFontData& rFontData );
     /** Increases the current Calc sheet index by 1. */
-    inline void                 IncScTab() { ++mrData.mnScTab; }
+    inline void                 IncCurrScTab() { ++mrData.mnScTab; }
     /** Sets the maximum possible cell address according to the current BIFF version. */
     void                        SetMaxPos();
 
