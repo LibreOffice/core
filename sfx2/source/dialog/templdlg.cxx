@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:14:17 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 08:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,14 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
-#include <sfxhelp.hxx>
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
+#endif
+
+#include "sfxhelp.hxx"
 #include "app.hxx"
 #include "dispatch.hxx"
 #include "bindings.hxx"
@@ -107,15 +114,13 @@
 #include "fltfnc.hxx"
 #include "docfilt.hxx"
 #include "docfac.hxx"
-
 #include "docvor.hxx"
 #include "doctempl.hxx"
 #include "module.hxx"
 #include "imgmgr.hxx"
 #include "helpid.hrc"
 #include "appdata.hxx"
-#include <objshimp.hxx>
-
+#include "objshimp.hxx"
 #include "viewfrm.hxx"
 
 //=========================================================================
@@ -495,7 +500,6 @@ BOOL StyleTreeListBox_Impl::NotifyMoving(SvLBoxEntry*  pTarget,
 
 */
 {
-    const International aInter(Application::GetAppInternational());
     if(!pTarget || !pEntry)
         return FALSE;
     aParent = GetEntryText(pTarget);
@@ -503,8 +507,10 @@ BOOL StyleTreeListBox_Impl::NotifyMoving(SvLBoxEntry*  pTarget,
     const BOOL bRet = (BOOL)aDropLink.Call(this);
     rpNewParent = pTarget;
     lPos=0;
+    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
     for(SvLBoxEntry *pTmpEntry=FirstChild(pTarget);
-        pTmpEntry && COMPARE_LESS==aInter.Compare(
+        pTmpEntry && COMPARE_LESS==pCollator->compareString(
             GetEntryText(pTmpEntry),GetEntryText(pEntry));
         pTmpEntry=NextSibling(pTmpEntry),lPos++);
 
@@ -628,7 +634,6 @@ void StyleTree_Impl::Put(StyleTree_Impl* pIns, ULONG lPos)
 
 StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
 {
-    const International aInter(Application::GetAppInternational());
     const USHORT nCount = rArr.Count();
     // Alle unter ihren Parents einordnen
     USHORT i;
@@ -644,9 +649,11 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
                 {
                     // initial sortiert einfuegen
                     USHORT ii;
+                    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+                    const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
                     for ( ii = 0;
                          ii < pCmp->Count() && COMPARE_LESS ==
-                         aInter.Compare( (*pCmp->pChilds)[ii]->aName,
+                         pCollator->compareString( (*pCmp->pChilds)[ii]->aName,
                                         pEntry->aName);++ii);
                     pCmp->Put(pEntry,ii);
                     break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-03 09:54:59 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 08:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,12 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
+#include <unotools/localedatawrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
 #include <svtools/urihelper.hxx>
 #include <svtools/useroptions.hxx>
 #include <svtools/imagemgr.hxx>
@@ -97,13 +103,12 @@ TYPEINIT1_AUTOFACTORY(SfxDocumentInfoItem, SfxStringItem);
 
 //------------------------------------------------------------------------
 
-String ConvertDateTime_Impl( const SfxStamp& rStamp )
+String ConvertDateTime_Impl( const SfxStamp& rStamp, const LocaleDataWrapper& rWrapper )
 {
      const String pDelim ( DEFINE_CONST_UNICODE( ", "));
-     const International& rInter = Application::GetAppInternational();
-     String aStr( rInter.GetDate( rStamp.GetTime() ) );
+     String aStr( rWrapper.getDate( rStamp.GetTime() ) );
      aStr += pDelim;
-     aStr += rInter.GetTime( rStamp.GetTime(), TRUE, FALSE );
+     aStr += rWrapper.getTime( rStamp.GetTime(), TRUE, FALSE );
      String aAuthor = rStamp.GetName();
      aAuthor.EraseLeadingChars();
      if ( aAuthor.Len() )
@@ -352,13 +357,13 @@ IMPL_LINK( SfxDocumentPage, DeleteHdl, PushButton*, EMPTYARG )
     SfxStamp aCreated;
     if ( bEnableUseUserData && aUseUserDataCB.IsChecked() )
     aCreated.SetName( SvtUserOptions().GetFullName() );
-    aCreateValFt.SetText( ConvertDateTime_Impl( aCreated ) );
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    aCreateValFt.SetText( ConvertDateTime_Impl( aCreated, aLocaleWrapper ) );
     XubString aEmpty;
     aChangeValFt.SetText( aEmpty );
     aPrintValFt.SetText( aEmpty );
     const Time aTime( 0 );
-    const International& rInter = Application::GetAppInternational();
-    aTimeLogValFt.SetText( rInter.GetDuration( aTime ) );
+    aTimeLogValFt.SetText( aLocaleWrapper.getDuration( aTime ) );
     aDocNoValFt.SetText( '1' );
     bHandleDelete = TRUE;
     return 0;
@@ -547,20 +552,20 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         aFileValFt.SetText( aURL.GetPartBeforeLastName() );
 
     // Zugriffsdaten
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const SfxStamp& rCreated = rInfo.GetCreated();
-    aCreateValFt.SetText( ConvertDateTime_Impl( rCreated ) );
+    aCreateValFt.SetText( ConvertDateTime_Impl( rCreated, aLocaleWrapper ) );
     const SfxStamp& rChanged = rInfo.GetChanged();
     if ( rCreated != rChanged && rChanged.IsValid() )
-        aChangeValFt.SetText( ConvertDateTime_Impl( rChanged ) );
+        aChangeValFt.SetText( ConvertDateTime_Impl( rChanged, aLocaleWrapper ) );
     const SfxStamp& rPrinted = rInfo.GetPrinted();
     if ( rPrinted != rCreated && rPrinted.IsValid())
-        aPrintValFt.SetText( ConvertDateTime_Impl( rPrinted ) );
+        aPrintValFt.SetText( ConvertDateTime_Impl( rPrinted, aLocaleWrapper ) );
     const long nTime = rInfo.GetTime();
     if( 1 || nTime ) //!!!
     {
         const Time aTime( nTime );
-        const International& rInter = Application::GetAppInternational();
-        aTimeLogValFt.SetText( rInter.GetDuration( aTime ) );
+        aTimeLogValFt.SetText( aLocaleWrapper.getDuration( aTime ) );
     }
     aDocNoValFt.SetText( String::CreateFromInt32( rInfo.GetDocumentNumber() ) );
 
