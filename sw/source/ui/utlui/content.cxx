@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2002-10-08 14:08:47 $
+ *  last change: $Author: os $ $Date: 2002-11-22 07:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2515,6 +2515,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
             EditEntry(pEntry, EDIT_MODE_DELETE);
             bViewHasChanged = TRUE;
             GetParentWindow()->UpdateListBox();
+            TimerUpdate(&aUpdTimer);
             GrabFocus();
         }
     }
