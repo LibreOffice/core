@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:05:37 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ String RID_SVXSTR_FRAME_STYLE
     Text[ russian ] = "Ρςθλό ξαπΰμλενθÿ";
     Text[ polish ] = "Styl obramowania";
     Text[ japanese ] = "Og½ΐ²Ω";
-    Text[ chinese_traditional ] = "Γδ¬ΙΌΛ¦΅";
+    Text[ chinese_traditional ] = "Γδ®ΨΌΛ¦΅";
     Text[ arabic ] = "δγΨ ΗαΝΟζΟ";
     Text[ greek ] = "Στυλ περιγράμματος";
     Text[ korean ] = "ΕΧµΞΈ® ΐ―Ηό";
@@ -340,6 +340,7 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE
 };
 
 // ********************************************************************** EOF
+
 
 
 
