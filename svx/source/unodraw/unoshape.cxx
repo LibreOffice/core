@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-10 07:49:48 $
+ *  last change: $Author: cl $ $Date: 2001-07-11 15:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #define _SVX_USE_UNOGLOBALS_
+
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
+#include <cppuhelper/typeprovider.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_AWT_XBITMAP_HPP_
 #include <com/sun/star/awt/XBitmap.hpp>
