@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:27:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,11 +150,13 @@ public:
     /** Returns the end position in the Escher stream of this object (last position + 1). */
     inline sal_uInt32           GetStrmEnd() const      { return mnStrmEnd; }
     /** Returns the Calc sheet index of this object. */
-    inline sal_uInt16           GetTab() const          { return mnScTab; }
+    inline USHORT               GetScTab() const        { return mnScTab; }
     /** Returns the Excel object identifier. */
     inline sal_uInt16           GetObjId() const        { return mnObjId; }
     /** Returns true, if this Escher object contains an SdrObj and a valid anchor position. */
     inline bool                 IsValid() const         { return !mbSkip && GetSdrObj() && !GetAnchor().IsEmpty(); }
+    /** Returns true, if Escher object is printable. */
+    inline bool                 GetPrintable() const    { return mbPrintable; }
 
     /** Sets the position of this object in the draw page. */
     inline void                 SetAnchor( const Rectangle& rRect ) { maAnchorRect = rRect; }
@@ -165,6 +167,9 @@ public:
 
     /** Sets a new SdrObj for this Escher object. This object owns the passed SdrObj. */
     virtual void                SetSdrObj( SdrObject* pSdrObj );
+    /** Set true if Escher object is printable. */
+    inline void                 SetPrintable(bool bPrint) { mbPrintable = bPrint; }
+
     /** Initializes the progress bar according to the current object type and size.
         @descr  Currently used by charts and OLE objects. */
     virtual void                InitProgress( ScfProgressBar& rProgress );
@@ -178,9 +183,10 @@ protected:
     SdrObjectPtr                mpSdrObj;       /// SdrObj representing this Escher object.
     sal_uInt32                  mnStrmBegin;    /// Start position in Escher stream.
     sal_uInt32                  mnStrmEnd;      /// End position in Escher stream (last + 1).
-    sal_uInt16                  mnScTab;        /// Calc sheet index of the object.
+    USHORT                      mnScTab;        /// Calc sheet index of the object.
     sal_uInt16                  mnObjId;        /// The Excel object identifier (from OBJ record).
     bool                        mbSkip;         /// true = Skip creation (ignore this object).
+    bool                        mbPrintable;    /// true = Print this object.
 };
 
 
@@ -406,6 +412,28 @@ private:
 
 // Escher object data =========================================================
 
+/** Represents the position (anchor) of an Escher object in the Calc document. */
+struct XclImpEscherAnchor
+{
+    USHORT                      mnScTab;    /// Calc sheet index of the object.
+
+    sal_uInt16                  mnLCol;     /// Left column index.
+    sal_uInt16                  mnLX;       /// X offset in left column (1/1024 of column width).
+    sal_uInt16                  mnTRow;     /// Top row index.
+    sal_uInt16                  mnTY;       /// Y offset in top row (1/256 of row height).
+    sal_uInt16                  mnRCol;     /// Right column index.
+    sal_uInt16                  mnRX;       /// X offset in right column (1/1024 of column width).
+    sal_uInt16                  mnBRow;     /// Bottom row index.
+    sal_uInt16                  mnBY;       /// Y offset in bottom row (1/256 of row height).
+
+    explicit                    XclImpEscherAnchor( USHORT nScTab );
+};
+
+SvStream& operator>>( SvStream& rStrm, XclImpEscherAnchor& rAnchor );
+
+
+// ----------------------------------------------------------------------------
+
 /** Contains all information of an Escher object.
     @descr  This is the Escher object itself (XclImpEscherObj) and the position
     in the Calc document (XclEscherAnchor). */
@@ -451,7 +479,7 @@ public:
     void                        ReplaceLastObj( XclImpEscherObj* pEscherObj );
 
     /** Returns the object in the specified sheet by Excel object identifier. */
-    XclImpEscherObj*            GetObj( sal_uInt16 nScTab, sal_uInt16 nObjId ) const;
+    XclImpEscherObj*            GetObj( USHORT nScTab, sal_uInt16 nObjId ) const;
     /** Returns the object at the specified Escher stream position. */
     XclImpEscherObj*            GetObj( sal_uInt32 nStrmPos ) const;
     /** Returns the last inserted Escher object in the list. */
@@ -559,9 +587,9 @@ public:
     inline sal_uInt32           GetEscherObjCount() const { return maEscherObjList.GetObjCount(); }
 
     /** Returns the object in the specified sheet by Excel object identifier. */
-    const XclImpEscherObj*      GetEscherObj( sal_uInt16 nScTab, sal_uInt16 nObjId ) const;
+    const XclImpEscherObj*      GetEscherObj( USHORT nScTab, sal_uInt16 nObjId ) const;
     /** Returns access to the object in the specified sheet by Excel object identifier. */
-    XclImpEscherObj*            GetEscherObjAcc( sal_uInt16 nScTab, sal_uInt16 nObjId );
+    XclImpEscherObj*            GetEscherObjAcc( USHORT nScTab, sal_uInt16 nObjId );
 
     /** Returns the object at the specified Escher stream position. */
     const XclImpEscherObj*      GetEscherObj( sal_uInt32 nStrmPos ) const;
@@ -586,7 +614,7 @@ public:
     XclImpEscherTxo*            GetEscherTxoAcc( sal_uInt32 nStrmPos );
 
     /** Returns the note object in the specified sheet by Excel object identifier. */
-    const XclImpEscherNote*     GetEscherNote( sal_uInt16 nScTab, sal_uInt16 nObjId ) const;
+    const XclImpEscherNote*     GetEscherNote( USHORT nScTab, sal_uInt16 nObjId ) const;
 
 // *** Chart *** --------------------------------------------------------------
 
@@ -640,7 +668,7 @@ public:
     void                        UpdateConnectorRules( const DffObjData& rObjData, SdrObject* pSdrObj );
 
     /** Sets the object with the passed identification to be ignored on import. */
-    void                        SetSkipObj( sal_uInt16 nScTab, sal_uInt16 nObjId );
+    void                        SetSkipObj( USHORT nScTab, sal_uInt16 nObjId );
 
     /** Inserts all objects into the Calc document. */
     void                        Apply();
@@ -670,9 +698,9 @@ private:
     /** Identifies an Escher object to skip on import (will not be inserted into the Calc document). */
     struct XclSkipObj
     {
-        sal_uInt16                  mnScTab;        /// Calc sheet index.
+        USHORT                      mnScTab;        /// Calc sheet index.
         sal_uInt16                  mnObjId;        /// Excel object identifier.
-        inline explicit             XclSkipObj( sal_uInt16 nScTab, sal_uInt16 nObjId ) :
+        inline explicit             XclSkipObj( USHORT nScTab, sal_uInt16 nObjId ) :
                                         mnScTab( nScTab ), mnObjId( nObjId ) {}
     };
 
