@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-25 09:54:23 $
+ *  last change: $Author: cl $ $Date: 2002-05-06 07:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2738,6 +2738,22 @@ uno::Any SvxShape::GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertyMap* pM
     {
         // Hole Wert aus ItemSet
         aAny = aPropSet.getPropertyValue( pMap, aSet );
+
+        if( *pMap->pType != aAny.getValueType() )
+        {
+            // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
+            if( ( *pMap->pType == ::getCppuType((const sal_Int16*)0)) && aAny.getValueType() == ::getCppuType((const sal_Int32*)0) )
+            {
+                sal_Int32 nValue;
+                aAny >>= nValue;
+                aAny <<= (sal_Int16)nValue;
+            }
+            else
+            {
+                DBG_ERROR("SvxShape::GetAnyForItem() Returnvalue has wrong Type!" );
+            }
+        }
+
     }
     }
 
