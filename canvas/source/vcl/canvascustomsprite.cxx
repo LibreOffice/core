@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvascustomsprite.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:38:40 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,15 +59,12 @@
  *
  ************************************************************************/
 
+#include <canvas/debug.hxx>
+#include <canvas/verbosetrace.hxx>
+
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
 #endif
-
-#include <canvas/canvastools.hxx>
-
-#include "canvascustomsprite.hxx"
-#include "spritecanvas.hxx"
-#include "impltools.hxx"
 
 #ifndef _SV_OUTDEV_HXX
 #include <vcl/outdev.hxx>
@@ -75,11 +72,11 @@
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
 #endif
-#ifndef _SV_GDIMTF_HXX
-#include <vcl/gdimtf.hxx>
+#ifndef _SV_ALPHA_HXX
+#include <vcl/alpha.hxx>
 #endif
-#ifndef _SV_METAACT_HXX
-#include <vcl/metaact.hxx>
+#ifndef _SV_BITMAPEX_HXX
+#include <vcl/bitmapex.hxx>
 #endif
 #ifndef _VCL_CANVASTOOLS_HXX
 #include <vcl/canvastools.hxx>
@@ -94,159 +91,100 @@
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
 #endif
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
+#endif
+
+#include <canvas/canvastools.hxx>
+
+#include "canvascustomsprite.hxx"
+
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
 
+
 namespace vclcanvas
 {
 
-    CanvasCustomSprite::CanvasCustomSprite( const geometry::RealSize2D&     rSpriteSize,
-                                            const SpriteCanvas::ImplRef&    rSpriteCanvas ) :
-        maVDev( new VirtualDevice( rSpriteCanvas->getOutDev() ) ), // create from reference device
-        maMaskVDev( new VirtualDevice( rSpriteCanvas->getOutDev(), 1) ), // create from reference device, bit depth: one
-        maCanvasHelper(),
+    CanvasCustomSprite::CanvasCustomSprite( const geometry::RealSize2D&         rSpriteSize,
+                                            const WindowGraphicDevice::ImplRef& rDevice,
+                                            const SpriteCanvas::ImplRef&        rSpriteCanvas ) :
+        mpBackBuffer(),
+        mpBackBufferMask(),
         mpSpriteCanvas( rSpriteCanvas ),
+        maContent(),
         maPosition(0.0, 0.0),
         maSize( ::vcl::unotools::sizeFromRealSize2D( rSpriteSize ) ),
+        mxClipPoly(),
         mfAlpha(0.0),
-        mbActive( false )
+        mbActive(false)
     {
-        // setup outdev sizes to total sprite size
-        maVDev->SetOutputSizePixel( maSize );
-        maMaskVDev->SetOutputSizePixel( maSize );
+        ENSURE_AND_THROW( rDevice.get() && rSpriteCanvas.get(),
+                          "CanvasBitmap::CanvasBitmap(): Invalid device or sprite canvas" );
+
+        // to prevent truncations due to round-offs
+        maSize.Width() += 1; maSize.Height() += 1;
+
+        // setup graphic device
+        maCanvasHelper.setGraphicDevice( rDevice );
+
+
+        // setup back buffer
+        // -----------------
+
+        // create content backbuffer in screen depth
+        mpBackBuffer.reset( new BackBuffer( *rDevice->getOutDev() ) );
+        mpBackBuffer->getVirDev().SetOutputSizePixel( maSize );
+
+        // create mask backbuffer, with one bit color depth
+        mpBackBufferMask.reset( new BackBuffer( *rDevice->getOutDev(), true ) );
+        mpBackBufferMask->getVirDev().SetOutputSizePixel( maSize );
+
+        // TODO(F1): Implement alpha vdev (could prolly enable
+        // antialiasing again, then)
+
+        // disable font antialiasing (causes ugly shadows otherwise)
+        mpBackBuffer->getVirDev().SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
+        mpBackBufferMask->getVirDev().SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
 
         // set mask vdev drawmode, such that everything is painted
         // black. That leaves us with a binary image, white for
         // background, black for painted content
-        maMaskVDev->SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
-                                 DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
+        mpBackBufferMask->getVirDev().SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
+                                                   DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
 
-        maCanvasHelper.setOutDev( *maVDev );
-        maCanvasHelper.setBackgroundOutDev( *maMaskVDev );
+
+        // setup canvas helper
+        // -------------------
+
+        // always render into back buffer, don't preserve state
+        // (it's our private VDev, after all)
+        maCanvasHelper.setOutDev( mpBackBuffer, false );
+        maCanvasHelper.setBackgroundOutDev( mpBackBufferMask );
     }
 
     CanvasCustomSprite::~CanvasCustomSprite()
     {
-        hide();
     }
 
-    OutDevProvider::ImplRef CanvasCustomSprite::getImplRef()
-    {
-        return OutDevProvider::ImplRef::createFromQuery( this );
-    }
-
-    void SAL_CALL CanvasCustomSprite::drawPoint( const geometry::RealPoint2D&   aPoint,
-                                                 const rendering::ViewState&    viewState,
-                                                 const rendering::RenderState&  renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        // TODO: You might consider copying the SpriteCanvas
-        // background VDev behaviour here, notably the call to
-        // SpriteSurface::updateSprite(). But on the other hand, there
-        // are enough external cases that could mess that up (see
-        // comment on XCustomSprite), that we're maybe wise to keep it
-        // like this (i.e. invalidating the sprite content only once,
-        // for the call to getContentCanvas). This way, the inevitable
-        // errors will show up earlier, not only when multi-threading
-        // the updateScreen.
-        maCanvasHelper.drawPoint( aPoint, viewState, renderState, getImplRef() );
-    }
-
-    void SAL_CALL CanvasCustomSprite::drawLine( const geometry::RealPoint2D& aStartPoint, const geometry::RealPoint2D& aEndPoint, const rendering::ViewState& viewState, const rendering::RenderState& renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        maCanvasHelper.drawLine(aStartPoint, aEndPoint, viewState, renderState, getImplRef());
-    }
-
-    void SAL_CALL CanvasCustomSprite::drawBezier( const ::drafts::com::sun::star::geometry::RealBezierSegment2D&    aBezierSegment,
-                                                  const ::drafts::com::sun::star::geometry::RealPoint2D&            aEndPoint,
-                                                  const rendering::ViewState&                                       viewState,
-                                                  const rendering::RenderState&                                     renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        maCanvasHelper.drawBezier(aBezierSegment, aEndPoint, viewState, renderState, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasCustomSprite::drawPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        return maCanvasHelper.drawPolyPolygon(xPolyPolygon, viewState, renderState, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasCustomSprite::strokePolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState, const rendering::StrokeAttributes& strokeAttributes ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        return maCanvasHelper.strokePolyPolygon(xPolyPolygon, viewState, renderState, strokeAttributes, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasCustomSprite::strokeTexturedPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState, const uno::Sequence< rendering::Texture >& textures, const rendering::StrokeAttributes& strokeAttributes ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        return maCanvasHelper.strokeTexturedPolyPolygon(xPolyPolygon, viewState, renderState, textures, strokeAttributes, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasCustomSprite::strokeTextureMappedPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState, const uno::Sequence< rendering::Texture >& textures, const uno::Reference< geometry::XMapping2D >& xMapping, const rendering::StrokeAttributes& strokeAttributes ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        return maCanvasHelper.strokeTextureMappedPolyPolygon(xPolyPolygon, viewState, renderState, textures, xMapping, strokeAttributes, getImplRef());
-    }
-
-    uno::Reference< rendering::XPolyPolygon2D > SAL_CALL CanvasCustomSprite::queryStrokeShapes( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState, const rendering::StrokeAttributes& strokeAttributes ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        return maCanvasHelper.queryStrokeShapes(xPolyPolygon, viewState, renderState, strokeAttributes, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasCustomSprite::fillPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        return maCanvasHelper.fillPolyPolygon(xPolyPolygon, viewState, renderState, getImplRef() );
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasCustomSprite::fillTexturedPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState, const uno::Sequence< rendering::Texture >& textures ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        return maCanvasHelper.fillTexturedPolyPolygon(xPolyPolygon, viewState, renderState, textures, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasCustomSprite::fillTextureMappedPolyPolygon( const uno::Reference< rendering::XPolyPolygon2D >& xPolyPolygon, const rendering::ViewState& viewState, const rendering::RenderState& renderState, const uno::Sequence< rendering::Texture >& textures, const uno::Reference< geometry::XMapping2D >& xMapping ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        return maCanvasHelper.fillTextureMappedPolyPolygon(xPolyPolygon, viewState, renderState, textures, xMapping, getImplRef());
-    }
-
-    uno::Reference< rendering::XCanvasFont > SAL_CALL CanvasCustomSprite::queryFont( const rendering::FontRequest& fontRequest ) throw (uno::RuntimeException)
-    {
-        return maCanvasHelper.queryFont( fontRequest, getImplRef() );
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasCustomSprite::drawText( const rendering::StringContext&                    text,
-                                                                                         const uno::Reference< rendering::XCanvasFont >&    xFont,
-                                                                                         const rendering::ViewState&                        viewState,
-                                                                                         const rendering::RenderState&                      renderState,
-                                                                                         sal_Int8                                           textDirection ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        return maCanvasHelper.drawText(text, xFont, viewState, renderState, textDirection, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasCustomSprite::drawOffsettedText( const rendering::StringContext& text, const uno::Reference< rendering::XCanvasFont >& xFont, const uno::Sequence< double >& offsets, const rendering::ViewState& viewState, const rendering::RenderState& renderState, sal_Int8 textDirection ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        return maCanvasHelper.drawOffsettedText(text, xFont, offsets, viewState, renderState, textDirection, getImplRef());
-    }
-
-    uno::Reference< rendering::XCachedPrimitive > SAL_CALL CanvasCustomSprite::drawBitmap( const uno::Reference< rendering::XBitmap >& xBitmap, const rendering::ViewState& viewState, const rendering::RenderState& renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
-    {
-        return maCanvasHelper.drawBitmap(xBitmap, viewState, renderState, getImplRef());
-    }
-
-    uno::Reference< rendering::XGraphicDevice > SAL_CALL CanvasCustomSprite::getDevice() throw (uno::RuntimeException)
-    {
-        return maCanvasHelper.getDevice( getImplRef() );
-    }
-
-    void SAL_CALL CanvasCustomSprite::copyRect( const uno::Reference< rendering::XBitmapCanvas >&   sourceCanvas,
-                                                const geometry::RealRectangle2D&                    sourceRect,
-                                                const rendering::ViewState&                         sourceViewState,
-                                                const rendering::RenderState&                       sourceRenderState,
-                                                const geometry::RealRectangle2D&                    destRect,
-                                                const rendering::ViewState&                         destViewState,
-                                                const rendering::RenderState&                       destRenderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+    void SAL_CALL CanvasCustomSprite::disposing()
     {
         tools::LocalGuard aGuard;
+
+        mpSpriteCanvas.clear();
+
+        // forward to parent
+        CanvasCustomSprite_Base::disposing();
     }
 
     void SAL_CALL CanvasCustomSprite::setAlpha( double alpha ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
+        if( !mpSpriteCanvas.get() )
+            return; // we're disposed
+
         ::canvas::tools::checkRange(alpha, 0.0, 1.0);
 
         if( alpha != mfAlpha )
@@ -261,10 +199,15 @@ namespace vclcanvas
         }
     }
 
-    void SAL_CALL CanvasCustomSprite::move( const ::drafts::com::sun::star::geometry::RealPoint2D&  aNewPos,
-                                            const ::drafts::com::sun::star::rendering::ViewState&   viewState,
-                                            const ::drafts::com::sun::star::rendering::RenderState& renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+    void SAL_CALL CanvasCustomSprite::move( const geometry::RealPoint2D&  aNewPos,
+                                            const rendering::ViewState&   viewState,
+                                            const rendering::RenderState& renderState ) throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
+        if( !mpSpriteCanvas.get() )
+            return; // we're disposed
+
         ::basegfx::B2DHomMatrix aTransform;
         ::canvas::tools::mergeViewAndRenderTransform(aTransform,
                                                      viewState,
@@ -287,19 +230,43 @@ namespace vclcanvas
     void SAL_CALL CanvasCustomSprite::transform( const geometry::AffineMatrix2D& aTransformation ) throw (lang::IllegalArgumentException,
                                                                                                           uno::RuntimeException)
     {
-        // TODO
+        tools::LocalGuard aGuard;
+
+        // TODO(P3): Implement transformed sprites
+        if( mbActive )
+            mpSpriteCanvas->updateSprite( Sprite::ImplRef( this ),
+                                          ::vcl::unotools::pointFromB2DPoint( maPosition ),
+                                          Rectangle( ::vcl::unotools::pointFromB2DPoint( maPosition ),
+                                                     maSize ) );
     }
 
-    void SAL_CALL CanvasCustomSprite::clip( const uno::Reference< rendering::XPolyPolygon2D >&  aClip,
-                                            const rendering::ViewState&                         viewState,
-                                            const rendering::RenderState&                       renderState ) throw (lang::IllegalArgumentException,
-                                                                                                                     uno::RuntimeException)
+    void SAL_CALL CanvasCustomSprite::clip( const uno::Reference< rendering::XPolyPolygon2D >& xClip ) throw (uno::RuntimeException)
     {
-        // TODO
+        tools::LocalGuard aGuard;
+
+        mxClipPoly = xClip;
+
+        if( mbActive )
+            mpSpriteCanvas->updateSprite( Sprite::ImplRef( this ),
+                                          ::vcl::unotools::pointFromB2DPoint( maPosition ),
+                                          Rectangle( ::vcl::unotools::pointFromB2DPoint( maPosition ),
+                                                     maSize ) );
     }
 
-    void SAL_CALL CanvasCustomSprite::show(  ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL CanvasCustomSprite::setPriority( double nPriority ) throw (uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
+        // TODO(F2): Implement sprite priority
+    }
+
+    void SAL_CALL CanvasCustomSprite::show() throw (uno::RuntimeException)
+    {
+        tools::LocalGuard aGuard;
+
+        if( !mpSpriteCanvas.get() )
+            return; // we're disposed
+
         if( !mbActive )
         {
             mpSpriteCanvas->showSprite( Sprite::ImplRef( this ) );
@@ -315,8 +282,13 @@ namespace vclcanvas
         }
     }
 
-    void SAL_CALL CanvasCustomSprite::hide(  ) throw (::com::sun::star::uno::RuntimeException)
+    void SAL_CALL CanvasCustomSprite::hide() throw (uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
+        if( !mpSpriteCanvas.get() )
+            return; // we're disposed
+
         if( mbActive )
         {
             mpSpriteCanvas->hideSprite( Sprite::ImplRef( this ) );
@@ -334,6 +306,11 @@ namespace vclcanvas
 
     uno::Reference< rendering::XCanvas > SAL_CALL CanvasCustomSprite::getContentCanvas() throw (uno::RuntimeException)
     {
+        tools::LocalGuard aGuard;
+
+        if( !mpSpriteCanvas.get() || !mpBackBuffer.get() )
+            uno::Reference< rendering::XCanvas >(); // we're disposed
+
         if( mbActive )
         {
             // the client is about to render into the sprite. Thus,
@@ -344,27 +321,29 @@ namespace vclcanvas
                                                      maSize ) );
         }
 
-        // TODO: Locking! Everywhere!
-        tools::LocalGuard aGuard;
-
         // clear surface
-        maVDev->EnableMapMode( FALSE );
-        maVDev->SetFillColor( Color( COL_WHITE ) );
-        maVDev->SetLineColor();
-        maVDev->DrawRect( Rectangle(Point(), maSize) );
+        OutputDevice& rOutDev( mpBackBuffer->getOutDev() );
+        rOutDev.EnableMapMode( FALSE );
+        rOutDev.SetFillColor( Color( COL_WHITE ) );
+        rOutDev.SetLineColor();
+        rOutDev.DrawRect( Rectangle(Point(), maSize) );
 
-        maMaskVDev->SetDrawMode( DRAWMODE_DEFAULT );
-        maMaskVDev->EnableMapMode( FALSE );
-        maMaskVDev->SetFillColor( Color( COL_WHITE ) );
-        maMaskVDev->SetLineColor();
-        maMaskVDev->DrawRect( Rectangle(Point(), maSize) );
-        maMaskVDev->SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
+        OutputDevice& rMaskOutDev( mpBackBufferMask->getOutDev() );
+        rMaskOutDev.SetDrawMode( DRAWMODE_DEFAULT );
+        rMaskOutDev.EnableMapMode( FALSE );
+        rMaskOutDev.SetFillColor( Color( COL_WHITE ) );
+        rMaskOutDev.SetLineColor();
+        rMaskOutDev.DrawRect( Rectangle(Point(), maSize) );
+        rMaskOutDev.SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
                                  DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
+
+        // surface content has changed (we cleared it, at least)
+        mbSurfaceDirty = true;
 
         return this;
     }
 
-#define SERVICE_NAME "drafts.com.sun.star.rendering.Canvas"
+#define SERVICE_NAME "drafts.com.sun.star.rendering.CanvasCustomSprite"
 
     ::rtl::OUString SAL_CALL CanvasCustomSprite::getImplementationName() throw( uno::RuntimeException )
     {
@@ -387,58 +366,150 @@ namespace vclcanvas
     // Sprite
     void CanvasCustomSprite::redraw( OutputDevice& rTargetSurface ) const
     {
+        tools::LocalGuard aGuard;
+
         redraw( rTargetSurface,
                 ::vcl::unotools::pointFromB2DPoint( maPosition ) );
     }
 
     void CanvasCustomSprite::redraw( OutputDevice& rTargetSurface, const Point& rOutputPos ) const
     {
-        tools::OutDevStateKeeper aStateKeeper(rTargetSurface);
+        tools::LocalGuard aGuard;
 
-        const Point     aEmptyPoint;
-        const Bitmap    aMaskBitmap( maMaskVDev->GetBitmap( aEmptyPoint, maSize ) );
-        const Bitmap    aContentBitmap( maVDev->GetBitmap( aEmptyPoint, maSize ) );
+        if( !mpSpriteCanvas.get() || !mpBackBuffer.get() )
+            return; // we're disposed
 
-        // TODO: Support for alpha-VDev
+        const Point         aEmptyPoint;
+
+        // TODO(F3): Support for alpha-VDev
+
+        // Prepare the outdev
         rTargetSurface.EnableMapMode( FALSE );
+        rTargetSurface.SetClipRegion();
 
-        if( ::rtl::math::approxEqual(mfAlpha, 1.0) )
+        // apply clip (if any)
+        if( mxClipPoly.is() )
         {
-            // copy to output
-            rTargetSurface.DrawBitmapEx( rOutputPos,
-                                         BitmapEx( aContentBitmap, aMaskBitmap ) );
+            const ::basegfx::B2DPolyPolygon& rClipPoly( tools::polyPolygonFromXPolyPolygon2D( mxClipPoly ) );
+
+            if( rClipPoly.count() )
+            {
+                PolyPolygon aPolyPoly( rClipPoly );
+
+                aPolyPoly.Translate( rOutputPos );
+
+                const Region aClipRegion( aPolyPoly );
+
+                rTargetSurface.SetClipRegion( aClipRegion );
+            }
         }
-        else if( mfAlpha != 0.0 ) // TODO: be a little bit more tolerant here
+
+        // log output pos in device pixel
+        VERBOSE_TRACE( "CanvasCustomSprite::redraw(): output pos is (%f, %f)",
+                       maPosition.getX(),
+                       maPosition.getY() );
+
+        if( !::basegfx::fTools::equalZero( mfAlpha ) )
         {
-            // Only draw something if we're not completely transparent
-            BYTE nColor( static_cast<UINT8>(255.0*(1.0 - mfAlpha) + .5) );
-            AlphaMask aAlpha( maSize, &nColor );
+            // To we have to update our bitmaps (necessary when virdev was
+            // painted to)?
+            if( mbSurfaceDirty ||
+                maContent->IsEmpty() )
+            {
+                mbSurfaceDirty = false;
 
-            // mask out fully transparent areas
-            aAlpha.Replace( aMaskBitmap, 255 );
+                Bitmap aBmp( mpBackBuffer->getOutDev().GetBitmap( aEmptyPoint, maSize ) );
+                Bitmap aMask( mpBackBufferMask->getOutDev().GetBitmap( aEmptyPoint, maSize ) );
 
-            // alpha-blend to output
-            rTargetSurface.DrawBitmapEx( rOutputPos,
-                                         BitmapEx( aContentBitmap, aAlpha ) );
+                if( aMask.GetBitCount() != 1 )
+                {
+                    OSL_ENSURE(false,
+                               "CanvasCustomSprite::redraw(): Mask bitmap is not monochrome (performance!)");
+                    aMask.MakeMono(255);
+                }
+
+                maContent = BitmapEx( aBmp.CreateDisplayBitmap( &rTargetSurface ),
+                                      aMask.CreateDisplayBitmap( &rTargetSurface ) );
+            }
+
+            if( ::rtl::math::approxEqual(mfAlpha, 1.0) )
+            {
+                // fully opaque -> copy to output
+                rTargetSurface.DrawBitmapEx( rOutputPos, *maContent );
+            }
+            else
+            {
+                // TODO(P3): Switch to OutputDevice::DrawTransparent()
+                // here
+
+                // draw semi-transparent
+                BYTE nColor( static_cast<UINT8>( ::basegfx::fround( 255.0*(1.0 - mfAlpha) + .5) ) );
+                AlphaMask aAlpha( maSize, &nColor );
+
+                // mask out fully transparent areas
+                aAlpha.Replace( maContent->GetMask(), 255 );
+
+                // alpha-blend to output
+                rTargetSurface.DrawBitmapEx( rOutputPos,
+                                             BitmapEx( maContent->GetBitmap(),
+                                                       aAlpha ) );
+            }
         }
+
+        rTargetSurface.SetClipRegion();
+
+#if defined(VERBOSE) && defined(DBG_UTIL)
+        // Paint little red sprite area markers
+        rTargetSurface.SetLineColor( Color( 255,0,0 ) );
+        rTargetSurface.SetFillColor();
+        rTargetSurface.DrawLine( Point( rOutputPos.X(),
+                                        rOutputPos.Y() ),
+                                 Point( rOutputPos.X()+4,
+                                        rOutputPos.Y() ) );
+        rTargetSurface.DrawLine( Point( rOutputPos.X(),
+                                        rOutputPos.Y() ),
+                                 Point( rOutputPos.X(),
+                                        rOutputPos.Y()+4 ) );
+        rTargetSurface.DrawLine( Point( rOutputPos.X()+maSize.Width()-5,
+                                        rOutputPos.Y() ),
+                                 Point( rOutputPos.X()+maSize.Width()-1,
+                                        rOutputPos.Y() ) );
+        rTargetSurface.DrawLine( Point( rOutputPos.X()+maSize.Width()-1,
+                                        rOutputPos.Y() ),
+                                 Point( rOutputPos.X()+maSize.Width()-1,
+                                        rOutputPos.Y()+4 ) );
+        rTargetSurface.DrawLine( Point( rOutputPos.X(),
+                                        rOutputPos.Y()+maSize.Height()-1 ),
+                                 Point( rOutputPos.X()+4,
+                                        rOutputPos.Y()+maSize.Height()-1 ) );
+        rTargetSurface.DrawLine( Point( rOutputPos.X(),
+                                        rOutputPos.Y()+maSize.Height()-5 ),
+                                 Point( rOutputPos.X(),
+                                        rOutputPos.Y()+maSize.Height()-1 ) );
+        rTargetSurface.DrawLine( Point( rOutputPos.X()+maSize.Width()-5,
+                                        rOutputPos.Y()+maSize.Height()-1 ),
+                                 Point( rOutputPos.X()+maSize.Width()-1,
+                                        rOutputPos.Y()+maSize.Height()-1 ) );
+        rTargetSurface.DrawLine( Point( rOutputPos.X()+maSize.Width()-1,
+                                        rOutputPos.Y()+maSize.Height()-5 ),
+                                 Point( rOutputPos.X()+maSize.Width()-1,
+                                        rOutputPos.Y()+maSize.Height()-1 ) );
+#endif
+    }
+
+    ::basegfx::B2DPoint CanvasCustomSprite::getPos() const
+    {
+        tools::LocalGuard aGuard;
+
+        return maPosition;
     }
 
     ::basegfx::B2DSize CanvasCustomSprite::getSize() const
     {
-        // TODO: Use AW's wrappers once resynced
+        tools::LocalGuard aGuard;
+
+        // TODO(Q1): Use AW's wrappers once resynced
         return ::basegfx::B2DSize( maSize.Width(),
                                    maSize.Height() );
     }
-
-    // OutDevProvider
-    ::OutputDevice& CanvasCustomSprite::getOutDev()
-    {
-        return *maVDev;
-    }
-
-    const ::OutputDevice& CanvasCustomSprite::getOutDev() const
-    {
-        return *maVDev;
-    }
-
 }
