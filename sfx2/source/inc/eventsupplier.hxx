@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:00:18 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@
 #include <vos/mutex.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <svtools/lstner.hxx>
+#include <svtools/eventcfg.hxx>
 
 //--------------------------------------------------------------------------------------------------------
 
@@ -191,7 +192,7 @@ class SfxGlobalEvents_Impl : public ::cppu::WeakImplHelper3< ::com::sun::star::d
                         ::com::sun::star::document::XEventBroadcaster, ::com::sun::star::lang::XServiceInfo >,
                         public SfxListener
 {
-    SfxEvents_Impl*             pImp;
+    GlobalEventConfig*             pImp;
     REFERENCE < XNAMEREPLACE >  m_xEvents;
     WEAKREFERENCE < XJOBEXECUTOR > m_xJobsBinding;
     OINTERFACECONTAINERHELPER   m_aInterfaceContainer;
