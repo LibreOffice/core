@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-20 17:16:53 $
+ *  last change: $Author: dl $ $Date: 2001-06-29 14:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ static USHORT pEffectRanges[] =
 \************************************************************************/
 
 SdActionDlg::SdActionDlg( Window* pParent, const SfxItemSet* pAttr, SdView* pView ) :
-        SfxSingleTabDialog  ( pParent, *pAttr, TP_ANIMATION_ACTION, FALSE ),
+        SfxSingleTabDialog  ( pParent, *pAttr, TP_ANIMATION_ACTION ),
         rOutAttrs           ( *pAttr )
 {
     // FreeResource();
