@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepng.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:11:41 $
+ *  last change: $Author: hjs $ $Date: 2004-07-07 11:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,14 @@
 
 #ifndef _DLGEPNG_HXX_
 #define _DLGEPNG_HXX_
-#include <svtools/fltcall.hxx>
+#include <fltcall.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <svtools/stdctrl.hxx>
+#include <stdctrl.hxx>
 #ifndef _FILTER_CONFIG_ITEM_HXX_
-#include <svtools/FilterConfigItem.hxx>
+#include <FilterConfigItem.hxx>
 #endif
 
 
