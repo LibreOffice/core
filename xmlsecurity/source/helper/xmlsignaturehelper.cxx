@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-16 06:45:00 $
+ *  last change: $Author: mmi $ $Date: 2004-07-16 06:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 
 //MM : search for the default profile
 #include <unotools/streamhelper.hxx>
-#include <stdio.h>
 //MM : end
 
 /* SEInitializer component */
@@ -156,8 +155,6 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
     //MM : search for the default profile
     //mxSecurityContext = mxSEInitializer->createSecurityContext( rTokenPath );
     //MM : end
-
-    fprintf(stdout, "hello!");
 
     return mxSecurityContext.is();
 }
