@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-15 10:25:17 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-09-11 13:53:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1455,15 +1455,17 @@ OUString SwAccessibleParagraph::getTextBeforeIndex(
 
     const OUString rText = GetString();
 
-    // implement the silly specification that first position after
-    // text must return an empty string, rather than throwing an
-    // IndexOutOfBoundsException
-    if( nIndex == rText.getLength() )
-        return OUString();
-
-    // get first word
+    // get starting pos
     Boundary aBound;
-    GetTextBoundary( aBound, rText, nIndex, nTextType );
+    if (nIndex ==  rText.getLength())
+        aBound.startPos = aBound.endPos = nIndex;
+    else
+    {
+        sal_Bool bTmp = GetTextBoundary( aBound, rText, nIndex, nTextType );
+
+        if ( ! bTmp )
+            aBound.startPos = aBound.endPos = nIndex;
+    }
 
     // now skip to previous word
     sal_Bool bWord = sal_False;
