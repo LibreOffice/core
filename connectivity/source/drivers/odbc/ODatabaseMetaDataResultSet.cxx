@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:40 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,13 +1157,14 @@ void ODatabaseMetaDataResultSet::openForeignKeys( const Any& catalog, const ::rt
 void ODatabaseMetaDataResultSet::openImportedKeys(const Any& catalog, const ::rtl::OUString& schema,
                                   const ::rtl::OUString& table) throw(SQLException, RuntimeException)
 {
-    openForeignKeys(catalog,!schema.compareToAscii("%") ? &schema : NULL,&table,Any(),NULL,NULL);
+
+    openForeignKeys(Any(),NULL,NULL,catalog,!schema.compareToAscii("%") ? &schema : NULL,&table);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openExportedKeys(const Any& catalog, const ::rtl::OUString& schema,
                                   const ::rtl::OUString& table) throw(SQLException, RuntimeException)
 {
-    openForeignKeys(Any(),NULL,NULL,catalog,!schema.compareToAscii("%") ? &schema : NULL,&table);
+    openForeignKeys(catalog,!schema.compareToAscii("%") ? &schema : NULL,&table,Any(),NULL,NULL);
 }
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::openPrimaryKeys(const Any& catalog, const ::rtl::OUString& schema,

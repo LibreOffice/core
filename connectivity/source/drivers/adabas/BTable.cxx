@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 10:25:17 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ void OAdabasTable::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
 // -------------------------------------------------------------------------
 void OAdabasTable::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
 {
-    Reference< XResultSet > xResult = m_pConnection->getMetaData()->getExportedKeys(Any(),m_SchemaName,m_Name);
+    Reference< XResultSet > xResult = m_pConnection->getMetaData()->getImportedKeys(Any(),m_SchemaName,m_Name);
 
     if(xResult.is())
     {

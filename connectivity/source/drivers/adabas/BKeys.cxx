@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-30 16:29:17 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,23 +126,24 @@ Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)
 
     if(_rName.getLength())
     {
-        Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getExportedKeys(Any(),
+        Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getImportedKeys(Any(),
             m_pTable->getSchema(),m_pTable->getTableName());
 
         if(xResult.is())
         {
             Reference< XRow > xRow(xResult,UNO_QUERY);
-            ::rtl::OUString aName,aDot = ::rtl::OUString::createFromAscii(".");
+            ::rtl::OUString sName,aDot = ::rtl::OUString::createFromAscii(".");
             while(xResult->next())
             {
-                if(xRow->getString(13) == _rName)
+                sName = xRow->getString(2);
+                if(sName.getLength())
+                    sName += aDot;
+                sName += xRow->getString(3);
+                sal_Int32 nUpdateRule = xRow->getInt(10);
+                sal_Int32 nDeleteRule = xRow->getInt(11);
+                if(xRow->getString(12) == _rName)
                 {
-                    aName = xRow->getString(6);
-                    if(aName.getLength())
-                        aName += aDot;
-                    aName += xRow->getString(7);
-
-                    OAdabasKey* pRet = new OAdabasKey(m_pTable,_rName,aName,KeyType::FOREIGN,xRow->getInt(10),xRow->getInt(11));
+                    OAdabasKey* pRet = new OAdabasKey(m_pTable,_rName,sName,KeyType::FOREIGN,nUpdateRule,nDeleteRule);
                     xRet = pRet;
                     break;
                 }
@@ -176,7 +177,10 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
     ::rtl::OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
     ObjectMap::iterator aIter = m_aNameMap.find(aName);
     if( aIter != m_aNameMap.end())
-        throw ElementExistException(aName,*this);
+    {
+        if(aName.getLength() || getINT32(descriptor->getPropertyValue(PROPERTY_TYPE)) == KeyType::PRIMARY) // check if this isn't a primary key
+            throw ElementExistException(aName,*this);
+    }
     if(!m_pTable->isNew())
     {
         sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(PROPERTY_TYPE));
@@ -199,9 +203,10 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
 
         Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
         Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
-        Reference< XPropertySet > xColProp;
+
         for(sal_Int32 i=0;i<xColumns->getCount();++i)
         {
+            Reference< XPropertySet > xColProp;
             xColumns->getByIndex(i) >>= xColProp;
             aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_NAME)) + aQuote
                         +   ::rtl::OUString::createFromAscii(",");
@@ -210,17 +215,19 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
 
         if(nKeyType == KeyType::FOREIGN)
         {
-            sal_Int32 nDeleteRule   = getINT32(xColProp->getPropertyValue(PROPERTY_DELETERULE));
+            sal_Int32 nDeleteRule   = getINT32(descriptor->getPropertyValue(PROPERTY_DELETERULE));
 
-            ::rtl::OUString aName,aSchema,aRefTable = getString(xColProp->getPropertyValue(PROPERTY_REFERENCEDTABLE));
+            ::rtl::OUString aName,aSchema,aRefTable = getString(descriptor->getPropertyValue(PROPERTY_REFERENCEDTABLE));
             sal_Int32 nLen = aRefTable.indexOf('.');
             aSchema = aRefTable.copy(0,nLen);
             aName   = aRefTable.copy(nLen+1);
-            aSql = aSql + ::rtl::OUString::createFromAscii(" REFERENCES ")
+            aSql += ::rtl::OUString::createFromAscii(" REFERENCES ")
                         + aQuote + aSchema + aQuote + aDot + aQuote + aName + aQuote;
+            aSql += ::rtl::OUString::createFromAscii(" (");
 
             for(sal_Int32 i=0;i<xColumns->getCount();++i)
             {
+                Reference< XPropertySet > xColProp;
                 xColumns->getByIndex(i) >>= xColProp;
                 aSql = aSql + aQuote + getString(xColProp->getPropertyValue(PROPERTY_RELATEDCOLUMN)) + aQuote
                             +   ::rtl::OUString::createFromAscii(",");
@@ -248,6 +255,25 @@ void SAL_CALL OKeys::appendByDescriptor( const Reference< XPropertySet >& descri
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
+        // we need a name for the insertion
+        if(nKeyType == KeyType::FOREIGN)
+        {
+            Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getImportedKeys(Any(),m_pTable->getSchema(),m_pTable->getTableName());
+            if(xResult.is())
+            {
+                Reference< XRow > xRow(xResult,UNO_QUERY);
+                while(xResult->next())
+                {
+                    ::rtl::OUString sName = xRow->getString(12);
+                    ObjectMap::iterator aIter = m_aNameMap.find(sName);
+                    if( aIter == m_aNameMap.end()) // this name wasn't inserted yet so it must be te new one
+                    {
+                        descriptor->setPropertyValue(PROPERTY_NAME,makeAny(sName));
+                        break;
+                    }
+                }
+            }
+        }
     }
     OCollection_TYPE::appendByDescriptor(descriptor);
 }
@@ -266,8 +292,17 @@ void SAL_CALL OKeys::dropByName( const ::rtl::OUString& elementName ) throw(SQLE
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
         ::rtl::OUString aDot    = ::rtl::OUString::createFromAscii(".");
 
-        aSql = aSql + aQuote + m_pTable->getSchema() + aQuote + m_pTable->getTableName() + aQuote
-                    + ::rtl::OUString::createFromAscii(" DROP PRIMARY KEY");
+        Reference<XPropertySet> xKey(aIter->second,UNO_QUERY);
+        sal_Int32 nKeyType      = getINT32(xKey->getPropertyValue(PROPERTY_TYPE));
+
+        aSql += aQuote + m_pTable->getSchema() + aQuote + aDot + aQuote + m_pTable->getTableName() + aQuote;
+        if(nKeyType == KeyType::PRIMARY)
+            aSql += ::rtl::OUString::createFromAscii(" DROP PRIMARY KEY");
+        else
+        {
+            aSql += ::rtl::OUString::createFromAscii(" DROP FOREIGN KEY ");
+            aSql += aQuote + elementName + aQuote;
+        }
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndex.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-08 14:08:31 $
+ *  last change: $Author: oj $ $Date: 2001-02-28 10:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,20 +107,23 @@ void OAdabasIndex::refreshColumns()
         return;
 
     ::std::vector< ::rtl::OUString> aVector;
-    Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getIndexInfo(Any(),
-    m_pTable->getSchema(),m_pTable->getTableName(),sal_False,sal_False);
-
-    if(xResult.is())
+    if(!isNew())
     {
-                Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aColName;
-        while(xResult->next())
+        Reference< XResultSet > xResult = m_pTable->getConnection()->getMetaData()->getIndexInfo(Any(),
+        m_pTable->getSchema(),m_pTable->getTableName(),sal_False,sal_False);
+
+        if(xResult.is())
         {
-            if(xRow->getString(9) == m_Name)
+                    Reference< XRow > xRow(xResult,UNO_QUERY);
+            ::rtl::OUString aColName;
+            while(xResult->next())
             {
-                aColName = xRow->getString(9);
-                if(!xRow->wasNull())
-                    aVector.push_back(aColName);
+                if(xRow->getString(9) == m_Name)
+                {
+                    aColName = xRow->getString(9);
+                    if(!xRow->wasNull())
+                        aVector.push_back(aColName);
+                }
             }
         }
     }
