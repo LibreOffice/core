@@ -2,9 +2,9 @@
  *
  *  $RCSfile: units.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:30:36 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,6 +656,8 @@ ItemList [ language_user1 ] =
         < "%" ; FUNIT_PERCENT ; > ;
     };
     };
+
+
 
 
 
