@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.25 $
- *  last change: $Author: kz $ $Date: 2003-11-18 14:35:13 $
+ *  $Revision: 1.26 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ const void* IcuFontFromServerFont::getFontTable( LETag nICUTableTag ) const
     fprintf(stderr,"IcuGetTable(\"%s\") => %p\n", pTagName, pBuffer);
     int mnHeight = mrServerFont.GetFontSelData().mnHeight;
     const char* pName = mrServerFont.GetFontFileName()->getStr();
-    fprintf(stderr,"font( h=%d, s=%\"%s\" )\n", mnHeight, pName );
+    fprintf(stderr,"font( h=%d, \"%s\" )\n", mnHeight, pName );
 #endif
     return (const void*)pBuffer;
 }
@@ -503,6 +503,8 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
         aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
         nGlyphCount += nRunGlyphCount;
     }
+
+    rLayout.SortGlyphItems();
 
     // determine need for kashida justification
     if( (rArgs.mpDXArray || rArgs.mnLayoutWidth)
