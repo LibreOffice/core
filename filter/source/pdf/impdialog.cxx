@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:58:58 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 09:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
     maRbAll.Check();
     TogglePagesHdl( NULL );
 
+    maNfQuality.SetUnit( FUNIT_PERCENT );
+    maNfQuality.SetMin( 1, FUNIT_PERCENT );
+    maNfQuality.SetMax( 100, FUNIT_PERCENT );
 
     // check for selection
     try
@@ -189,7 +192,7 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
         maRbLosslessCompression.Check();
     else
         maRbJPEGCompression.Check();
-    maNfQuality.SetValue( maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 90 ) );
+    maNfQuality.SetValue( maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) ), 90 ), FUNIT_PERCENT );
     maNfQuality.Enable( bUseLosslessCompression == sal_False );
 
     maCbReduceImageResolution.SetToggleHdl( LINK( this, ImpPDFDialog, ToggleReduceImageResolutionHdl ) );
