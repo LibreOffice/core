@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-22 12:06:11 $
+#   last change: $Author: mba $ $Date: 2001-06-11 09:22:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,8 +120,6 @@ LIB3OBJFILES=\
     $(SLO)$/helpagentwindow.obj		\
     $(SLO)$/imagemgr.obj              \
     $(SLO)$/agprop.obj		\
-    $(SLO)$/config.obj		\
-    $(SLO)$/confitem.obj	\
     $(SLO)$/demo.obj		\
     $(SLO)$/ehdl.obj		\
     $(SLO)$/filearch.obj	\
@@ -130,8 +128,6 @@ LIB3OBJFILES=\
     $(SLO)$/imap.obj		\
     $(SLO)$/imap2.obj		\
     $(SLO)$/imap3.obj		\
-    $(SLO)$/iniman.obj		\
-    $(SLO)$/iniprop.obj		\
     $(SLO)$/lingucfg.obj	\
     $(SLO)$/lngmisc.obj		\
     $(SLO)$/ownlist.obj		\
@@ -144,7 +140,6 @@ LIB3OBJFILES=\
 
 EXCEPTIONSFILES=\
     $(SLO)$/strmadpt.obj	\
-    $(SLO)$/iniman.obj		\
     $(SLO)$/transfer.obj	\
     $(SLO)$/transfer2.obj	\
     $(SLO)$/stringtransfer.obj

@@ -59,8 +59,6 @@ hedabu: ..\inc\compat.hxx %_DEST%\inc%_EXT%\svtools\compat.hxx
 hedabu: ..\inc\ctrlbox.hxx %_DEST%\inc%_EXT%\svtools\ctrlbox.hxx
 hedabu: ..\inc\ctrltool.hxx %_DEST%\inc%_EXT%\svtools\ctrltool.hxx
 hedabu: ..\inc\collatorres.hxx %_DEST%\inc%_EXT%\svtools\collatorres.hxx
-hedabu: ..\inc\config.hxx %_DEST%\inc%_EXT%\svtools\config.hxx
-hedabu: ..\inc\confitem.hxx %_DEST%\inc%_EXT%\svtools\confitem.hxx
 hedabu: ..\inc\cntwids.hrc %_DEST%\inc%_EXT%\svtools\cntwids.hrc
 hedabu: ..\inc\currencyconfigitem.hxx %_DEST%\inc%_EXT%\svtools\currencyconfigitem.hxx
 hedabu: ..\inc\dateitem.hxx %_DEST%\inc%_EXT%\svtools\dateitem.hxx
