@@ -11485,3 +11485,4 @@ _TI2?AVbad_alloc@std@@
 ?getTypedModelNode@?$@VXModel@frame@star@sun@com@@@?A0x00c894e1@xmloff@@YA?AV?$Reference@VXModel@frame@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXInterface@uno@star@sun@com@@@4567@@Z
 ?isAsciiLetter@?A0x00c894e1@xmloff@@YA_NG@Z
 ?toUpperAscii@?A0x00c894e1@xmloff@@YAGG@Z
+?EVENT_SCRIPTURL@xmloff@@3UConstAsciiString@1@B
