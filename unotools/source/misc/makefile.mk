@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 13:22:33 $
+#   last change: $Author: rt $ $Date: 2004-07-06 13:14:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,8 @@ UNOTYPES+= com.sun.star.util.XAtomServer
 
 SLOFILES=	$(SLO)$/atom.obj \
             $(SLO)$/datetime.obj \
-            $(SLO)$/eventlisteneradapter.obj
+            $(SLO)$/eventlisteneradapter.obj \
+            $(SLO)$/desktopterminationobserver.obj
 
 # --- Targets ----------------------------------
 
