@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-10 09:31:26 $
+ *  last change: $Author: cmc $ $Date: 2001-07-13 14:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,11 +127,9 @@ String WW8Read_xstz(SvStream& rStrm,
 // attention: the *extra data* of each string are SKIPPED and ignored
 
 /*  to be optimized like this:    */
-void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm,
-                    UINT32 nStart, INT32 nLen, USHORT nSkip,
-                    rtl_TextEncoding eCS,
-                    SvStrings &rArray, SvStrings* pExtraArray = 0 );
-
+void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
+    USHORT nExtraLen, rtl_TextEncoding eCS, SvStrings &rArray,
+    SvStrings* pExtraArray = 0 );
 
 
 USHORT WW8GetSprmId(        BYTE nVersion, const BYTE* pSp, BYTE* pDelta = 0 );
@@ -1598,12 +1596,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.14 2001-07-10 09:31:26 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.15 2001-07-13 14:08:12 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2001/07/10 09:31:26  cmc
+      #89439# calculate style's even-byte offset relative to style start, not absolute
+
       Revision 1.13  2001/06/12 09:24:43  cmc
       #87558# #87591# ##976## ##980## Implement draw textbox attributes by using normal writer import and mapping to draw attributes using slotids
 

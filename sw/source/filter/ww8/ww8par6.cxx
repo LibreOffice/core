@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2001-06-06 12:46:32 $
+ *  last change: $Author: cmc $ $Date: 2001-07-13 14:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4933,7 +4933,7 @@ SprmReadInfo aSprmReadTab[] = {
 //0x085C, ? ? ?  , "sprmCFBoldBi", // ;;;
 //0x085D, ? ? ?  , "sprmCFItalicBi", // ;;;
 //0x4A5E, ? ? ?  , "sprmCFtcBi", // ;;;
-//0x485F, ? ? ?  , "sprmCLidBi", // ;;;
+    0x485F, (FNReadRecord)0, // "sprmCLidBi", // ;;;
 //0x4A60, ? ? ?  , "sprmCIcoBi", // ;;;
 //0x4A61, &SwWW8ImplReader::Read_FontSize,  // "sprmCHpsBi", // ;;;
     0xCA62, (FNReadRecord)0, //"sprmCDispFldRMark" // chp.fDispFldRMark, chp.ibstDispFldRMark, chp.dttmDispFldRMark ;Complex (see below);variable length always recorded as 39 bytes;
@@ -5047,7 +5047,14 @@ SprmReadInfo aSprmReadTab[] = {
     0xC64F, (FNReadRecord)0, //undocumented
     0xC650, (FNReadRecord)0, //undocumented
     0xC651, (FNReadRecord)0, //undocumented
-    0xF661, (FNReadRecord)0  //undocumented
+    0xF661, (FNReadRecord)0, //undocumented
+    0x4873, (FNReadRecord)0, //undocumented
+    0x4874, (FNReadRecord)0, //undocumented
+    0x6463, (FNReadRecord)0, //undocumented
+    0x6870, (FNReadRecord)0, //undocumented
+    0x2461, (FNReadRecord)0, //undocumented
+    0x845E, (FNReadRecord)0, //undocumented
+    0x8460, (FNReadRecord)0  //undocumented
 };
 
 //-----------------------------------------
@@ -5149,12 +5156,15 @@ short SwWW8ImplReader::ImportSprm( const BYTE* pPos, short nSprmsLen, USHORT nId
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.30 2001-06-06 12:46:32 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.31 2001-07-13 14:08:12 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.30  2001/06/06 12:46:32  cmc
+      #76673# ##1005## Fastsave table Insert/Delete Cell implementation, const reworking required
+
       Revision 1.29  2001/05/14 13:36:48  cmc
       ##887## Attribute toggling for bold etc must change character style settings if in use
 

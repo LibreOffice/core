@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-11 15:35:45 $
+ *  last change: $Author: cmc $ $Date: 2001-07-13 14:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2956,10 +2956,9 @@ BOOL WW8PLCFx_FLD::GetPara( long nIdx, WW8FieldDesc& rF )
 //-----------------------------------------
 
 /*  to be optimized like this:    */
-void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm,
-                    UINT32 nStart, INT32 nLen, USHORT nSkip,
-                    rtl_TextEncoding eCS,
-                    SvStrings &rArray, SvStrings* pExtraArray  )
+void WW8ReadSTTBF(BOOL bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
+    USHORT nExtraLen, rtl_TextEncoding eCS, SvStrings &rArray,
+    SvStrings* pExtraArray)
 {
     ULONG nOldPos = rStrm.Tell();
     rStrm.Seek( nStart );
@@ -2979,7 +2978,6 @@ void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm,
         else
             nStrings = nLen2;
 
-        UINT16 nExtraLen;
         rStrm >> nExtraLen;
 
         for( USHORT i=0; i < nStrings; i++ )
@@ -2991,7 +2989,8 @@ void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm,
                 BYTE nBChar;
                 rStrm >> nBChar;
                 ByteString aTmp;
-                sal_Size nWasRead = rStrm.Read( aTmp.AllocBuffer( nBChar ), nBChar );
+                sal_Size nWasRead = rStrm.Read( aTmp.AllocBuffer( nBChar ),
+                    nBChar );
                 if( nWasRead != nBChar )
                     aTmp.ReleaseBufferAccess( nWasRead );
                 pWork = new String( aTmp, eCS );
@@ -3005,7 +3004,8 @@ void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm,
                 if( pExtraArray )
                 {
                     ByteString aTmp;
-                    sal_Size nWasRead = rStrm.Read( aTmp.AllocBuffer( nExtraLen ), nExtraLen );
+                    sal_Size nWasRead = rStrm.Read( aTmp.AllocBuffer(
+                        nExtraLen ), nExtraLen );
                     if( nWasRead != nExtraLen )
                         aTmp.ReleaseBufferAccess( nWasRead );
                     pWork = new String( aTmp, eCS );
@@ -3031,7 +3031,8 @@ void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm,
             if( nBChar )
             {
                 ByteString aTmp;
-                sal_Size nWasRead = rStrm.Read( aTmp.AllocBuffer( nBChar ), nBChar );
+                sal_Size nWasRead = rStrm.Read( aTmp.AllocBuffer( nBChar ),
+                    nBChar );
                 if( nWasRead != nBChar )
                     aTmp.ReleaseBufferAccess( nWasRead );
                 pWork = new String( aTmp, eCS );
@@ -3039,12 +3040,31 @@ void WW8ReadSTTBF(  BOOL bVer8, SvStream& rStrm,
             }
             else
                 pWork = new String;
+
             rArray.Insert( pWork, rArray.Count() );
+
+            // #89125# Skip the extra data (for bVer67 versions this must come
+            // from external knowledge)
+            if( nExtraLen )
+            {
+                if( pExtraArray )
+                {
+                    ByteString aTmp;
+                    sal_Size nWasRead = rStrm.Read( aTmp.AllocBuffer(
+                        nExtraLen ), nExtraLen );
+                    if( nWasRead != nExtraLen )
+                        aTmp.ReleaseBufferAccess( nWasRead );
+                    pWork = new String( aTmp, eCS );
+                    pExtraArray->Insert( pWork, pExtraArray->Count() );
+                }
+                else
+                    rStrm.SeekRel( nExtraLen );
+                nRead+=nExtraLen;
+            }
         }
     }
     rStrm.Seek( nOldPos );
 }
-
 
 WW8PLCFx_Book::WW8PLCFx_Book( SvStream* pSt, SvStream* pTblSt, WW8Fib& rFib, WW8_CP nStartCp )
 : WW8PLCFx( rFib.nVersion, FALSE ), nIsEnd( 0 ),  pStatus( 0 )
@@ -6080,7 +6100,7 @@ static SprmInfo aWwSprmTab[] = {
 //0x085C, 0, L_FIX, // "sprmCFBoldBi" ;;;
 //0x085D, 0, L_FIX, // "sprmCFItalicBi" ;;;
 //0x4A5E, 0, L_FIX, // "sprmCFtcBi" ;;;
-//0x485F, 0, L_FIX, // "sprmCLidBi" ;;;
+    0x485F, 2, L_FIX, // "sprmCLidBi" ;;;
 //0x4A60, 0, L_FIX, // "sprmCIcoBi" ;;;
     0x4A61, 2, L_FIX, // "sprmCHpsBi" ;;;
     0xCA62, 0, L_VAR, // "sprmCDispFldRMark" chp.fDispFldRMark, chp.ibstDispFldRMark, chp.dttmDispFldRMark ;Complex (see below);variable length always recorded as 39 bytes;
@@ -6195,7 +6215,14 @@ static SprmInfo aWwSprmTab[] = {
     0xC64F, 0, L_VAR, // undocumented
     0xC650, 0, L_VAR, // undocumented
     0xC651, 0, L_VAR, // undocumented
-    0xF661, 3, L_FIX // undocumented
+    0xF661, 3, L_FIX, // undocumented
+    0x4873, 2, L_FIX, // undocumented
+    0x4874, 2, L_FIX, // undocumented
+    0x6463, 4, L_FIX, // undocumented
+    0x6870, 4, L_FIX, // undocumented
+    0x2461, 1, L_FIX, // undocumented
+    0x845E, 2, L_FIX, // undocumented
+    0x8460, 2, L_FIX  // undocumented
 };
 
 
@@ -6235,7 +6262,11 @@ SprmInfo& WW8GetSprmInfo( USHORT nId )
                         sizeof( aWwSprmTab[ 0 ] ),
                         CompSprmId )))
     {
-        // im Fehlerfall auf Nulltes Element verweisen
+#if 0
+        ASSERT( pFound,
+            "Unknown undocumented sprm, report to complete word import");
+#endif
+        // as a fallback use the null element
         pFound = (void*)aWwSprmTab;
     }
     return *(SprmInfo*) pFound;
@@ -6415,11 +6446,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.20 2001-07-11 15:35:45 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.21 2001-07-13 14:08:12 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.20  2001/07/11 15:35:45  cmc
+      #89029# #87601# old little endian timebomb defused
+
       Revision 1.19  2001/06/12 09:24:43  cmc
       #87558# #87591# ##976## ##980## Implement draw textbox attributes by using normal writer import and mapping to draw attributes using slotids
 
