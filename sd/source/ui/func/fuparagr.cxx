@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuparagr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 10:46:04 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #pragma hdrstop
 
+#include "fuparagr.hxx"
+
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
 #endif
@@ -85,12 +87,18 @@
 #ifndef _SVX_LRSPITEM_HXX //autogen
 #include <svx/lrspitem.hxx>
 #endif
+
 #include "app.hrc"
 #include "paragr.hxx"
-#include "sdview.hxx"
-#include "fuparagr.hxx"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "drawdoc.hxx"
+
+namespace sd {
 
 TYPEINIT1( FuParagraph, FuPoor );
 
@@ -100,9 +108,13 @@ TYPEINIT1( FuParagraph, FuPoor );
 |*
 \************************************************************************/
 
-FuParagraph::FuParagraph( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                          SdDrawDocument* pDoc, SfxRequest& rReq)
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+FuParagraph::FuParagraph (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
+    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
 
@@ -168,3 +180,4 @@ FuParagraph::FuParagraph( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
 
     pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
 }
+} // end of namespace sd
