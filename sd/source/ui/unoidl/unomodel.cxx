@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-15 10:56:01 $
+ *  last change: $Author: cl $ $Date: 2001-01-15 16:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1040,7 +1040,7 @@ sal_Bool SAL_CALL SdMasterPagesAccess::hasElements()
 }
 
 // XDrawPages
-uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIndex( sal_Int32 nIndex )
+uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIndex( sal_Int32 nInsertPos )
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -1052,16 +1052,16 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
     {
         // calculate internal index and check for range errors
         const sal_Int32 nMPageCount = pDoc->GetMasterPageCount();
-        nIndex = nIndex * 2 + 1;
-        if( nIndex < 0 || nIndex > nMPageCount )
-            nIndex = nMPageCount;
+        nInsertPos = nInsertPos * 2 + 1;
+        if( nInsertPos < 0 || nInsertPos > nMPageCount )
+            nInsertPos = nMPageCount;
 
         // now generate a unique name for the new masterpage
         const String aStdPrefix( SdResId(STR_LAYOUT_DEFAULT_NAME) );
         String aPrefix( aStdPrefix );
 
         sal_Bool bUnique = sal_True;
-        sal_Int32 nIndex = 0;
+        sal_Int32 i = 0;
         do
         {
             bUnique = sal_True;
@@ -1077,10 +1077,10 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
 
             if( !bUnique )
             {
-                nIndex++;
+                i++;
                 aPrefix = aStdPrefix;
                 aPrefix += sal_Unicode( ' ' );
-                aPrefix += String::CreateFromInt32( nIndex );
+                aPrefix += String::CreateFromInt32( i );
             }
 
         } while( !bUnique );
@@ -1102,7 +1102,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                            pPage->GetUppBorder(),
                            pPage->GetRgtBorder(),
                            pPage->GetLwrBorder() );
-        pDoc->InsertMasterPage(pMPage,  nIndex);
+        pDoc->InsertMasterPage(pMPage,  nInsertPos);
         pMPage->SetLayoutName( aLayoutName );
 
         { // insert background object
@@ -1124,7 +1124,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
                                 pRefNotesPage->GetUppBorder(),
                                 pRefNotesPage->GetRgtBorder(),
                                 pRefNotesPage->GetLwrBorder() );
-        pDoc->InsertMasterPage(pMNotesPage,  nIndex + 1);
+        pDoc->InsertMasterPage(pMNotesPage,  nInsertPos + 1);
         pMNotesPage->InsertMasterPage( pMPage->GetPageNum() );
         pMNotesPage->SetLayoutName( aLayoutName );
         pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, TRUE);
