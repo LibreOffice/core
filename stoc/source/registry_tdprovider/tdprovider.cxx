@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdprovider.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-13 16:01:21 $
+ *  last change: $Author: kso $ $Date: 2002-11-14 10:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,8 +466,9 @@ com::sun::star::uno::Reference< XTypeDescription > createTypeDescription(
 
         case RT_TYPE_MODULE:
         {
-            Reference< XTypeDescriptionEnumerationAccess > xTDEA(
-                xNameAccess, UNO_QUERY );
+            com::sun::star::uno::Reference<
+                XTypeDescriptionEnumerationAccess > xTDEA(
+                    xNameAccess, UNO_QUERY );
 
             OSL_ENSURE( xTDEA.is(),
                         "No XTypeDescriptionEnumerationAccess!" );
