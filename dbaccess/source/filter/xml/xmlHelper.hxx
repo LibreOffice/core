@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:21:49 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #define CTF_DB_ISVISIBLE                            (XML_DB_CTF_START + 2)
 #define CTF_DB_MASTERPAGENAME                       (XML_DB_CTF_START + 3)
 #define CTF_DB_NUMBERFORMAT                         (XML_DB_CTF_START + 4)
+#define CTF_DB_COLUMN_TEXT_ALIGN                    (XML_DB_CTF_START + 5)
 
 #define XML_DB_TYPE_EQUAL                           (XML_DB_TYPES_START + 1)
 
@@ -86,6 +87,7 @@ namespace dbaxml
     {
     protected:
         mutable ::std::auto_ptr<XMLConstantsPropertyHandler>    m_pDisplayHandler;
+        mutable ::std::auto_ptr<XMLPropertyHandler>             m_pTextAlignHandler;
     public:
         OPropertyHandlerFactory();
         virtual ~OPropertyHandlerFactory();
