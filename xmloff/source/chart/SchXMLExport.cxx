@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: bm $ $Date: 2001-04-06 08:39:18 $
+ *  last change: $Author: bm $ $Date: 2001-04-10 10:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,8 +653,29 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
     // table element
     // (is included as subelement of chart)
     // ------------------------------------
-    if( bExportContent && bIncludeTable )
-        exportTable( xData );
+    if( bExportContent )
+    {
+        sal_Bool bExportTable = bIncludeTable;
+        // check for clipboard flag on document => export Table
+        if( xDocPropSet.is() &&
+            ! bExportTable )
+        {
+            uno::Any aAny;
+            try
+            {
+                aAny = xDocPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( "ExportForClipboard" ));
+                aAny >>= bExportTable;
+            }
+            catch( uno::Exception )
+            {
+                DBG_ERROR( "Export for Clipboard flag not found" );
+            }
+        }
+
+        // export of table element
+        if( bExportTable )
+            exportTable( xData );
+    }
 
     // close <chart:chart> element
     if( pElChart )
