@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-04-02 10:57:35 $
+#   last change: $Author: obo $ $Date: 2004-11-16 10:43:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,12 @@ UNOTYPES+=	\
         com.sun.star.form.validation.XValidatable \
         com.sun.star.form.validation.XValidityConstraintListener \
         com.sun.star.form.validation.XValidatableFormComponent \
+        com.sun.star.form.submission.XSubmissionSupplier \
+        com.sun.star.xforms.XModel \
+        com.sun.star.xforms.XFormsSupplier \
+        com.sun.star.xforms.XSubmission \
+        com.sun.star.xsd.WhiteSpaceTreatment \
+        com.sun.star.xsd.XDataType \
 
 # --- Targets ----------------------------------
 
