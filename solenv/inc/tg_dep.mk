@@ -13,7 +13,12 @@ ALLDEP .PHONY:
     @+-$(RM) $(MISC)$/$(TARGET).dpc >& $(NULLDEV)
     @+-$(RM) $(MISC)$/$(TARGET).dpz >& $(NULLDEV)
 .IF "$(DEPFILES)" != ""
+#to keep win9x happy
+.IF "$(GROUPSHELL:b:l)"=="4dos"
+    @+-echo $(foreach,i,$(DEPFILES) $(shell +-del $i >& $(NULLDEV))) >& $(NULLDEV)
+.ELSE			# "$(GROUPSHELL:b)"=="4dos"
     @+-$(RM) $(DEPFILES) >& $(NULLDEV)
+.ENDIF			# "$(GROUPSHELL:b)"=="4dos"
 .ENDIF			# "$(DEPFILES)" != ""
     +@echo ---
     +@echo      Old dependency files removed
