@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-13 12:38:19 $
+ *  last change: $Author: dr $ $Date: 2001-06-27 15:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,8 @@ XclSupbook::XclSupbook( const String& rDocName ) :
     DBG_ASSERT( !aURLObj.HasError(), "XclSupbook::XclSupbook() - Corrupt external filename!" );
 
     sEncoded.Assign( aURLObj.getFSysPath( INetURLObject::FSYS_DOS ) );
+    if( !sEncoded.GetLen() )
+        sEncoded.Assign( rDocName );
     nLen = 2 + sEncoded.GetByteCount();
 }
 
