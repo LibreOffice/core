@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-24 07:39:11 $
+ *  last change: $Author: dr $ $Date: 2000-10-24 08:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,7 @@ XML_CONSTASCII_ACTION( sXML_d, "d" );
 XML_CONSTASCII_ACTION( sXML_dash, "dash" );
 XML_CONSTASCII_ACTION( sXML_dashed, "dashed" );
 XML_CONSTASCII_ACTION( sXML_data, "data");
+XML_CONSTASCII_ACTION( sXML_data_cell_range_address, "data-cell-range-address" );
 XML_CONSTASCII_ACTION( sXML_data_label_number, "data-label-number" );
 XML_CONSTASCII_ACTION( sXML_data_label_symbol, "data-label-symbol" );
 XML_CONSTASCII_ACTION( sXML_data_label_text, "data-label-text" );
@@ -567,6 +568,9 @@ XML_CONSTASCII_ACTION( sXML_keywords, "keywords" );
 XML_CONSTASCII_ACTION( sXML_label, "label" );
 XML_CONSTASCII_ACTION( sXML_label_arrangement, "label-arrangement" );
 XML_CONSTASCII_ACTION( sXML_label_cell_address, "label-cell-address" );
+XML_CONSTASCII_ACTION( sXML_label_cell_range_address, "label-cell-range-address" );
+XML_CONSTASCII_ACTION( sXML_label_range, "label-range" );
+XML_CONSTASCII_ACTION( sXML_label_ranges, "label-ranges" );
 XML_CONSTASCII_ACTION( sXML_landscape, "landscape" );
 XML_CONSTASCII_ACTION( sXML_language, "language" );
 XML_CONSTASCII_ACTION( sXML_left, "left" );
