@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-26 19:23:12 $
+ *  last change: $Author: pl $ $Date: 2001-06-27 17:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.5 2001-06-26 19:23:12 pl Exp $
+/* $Id: sft.c,v 1.6 2001-06-27 17:17:56 pl Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -1450,6 +1450,12 @@ static void GetKern(TrueTypeFont *ttf)
         for (i=0; i < ttf->nkern; i++) {
             ttf->kerntables[i] = ptr;
             ptr += GetUInt16(ptr, 2, 1);
+            // sanity check
+            if( ptr > ttf->ptr+ttf->fsize )
+            {
+                free( ttf->kerntables );
+                goto badtable;
+            }
         }
         return;
     }
@@ -1464,6 +1470,12 @@ static void GetKern(TrueTypeFont *ttf)
         for (i = 0; i < ttf->nkern; i++) {
             ttf->kerntables[i] = ptr;
             ptr += GetUInt32(ptr, 0, 1);
+            // sanity check; there are some fonts that are broken in this regard
+            if( ptr > ttf->ptr+ttf->fsize )
+            {
+                free( ttf->kerntables );
+                goto badtable;
+            }
         }
         return;
     }
