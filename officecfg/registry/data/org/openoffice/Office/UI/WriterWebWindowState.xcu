@@ -3,9 +3,9 @@
  *
  *  $RCSfile: WriterWebWindowState.xcu,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 10:09:28 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 15:43:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@
                     <value xml:lang="de">OLE Objekt</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/tableobjectbar" oor:op="replace">
@@ -195,7 +195,7 @@
                     <value xml:lang="de">Textobjekt</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/drawingobjectbar" oor:op="replace">
@@ -216,7 +216,7 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/bezierobjectbar" oor:op="replace">
@@ -246,7 +246,7 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/fontworkshapetypes" oor:op="replace">
@@ -294,7 +294,7 @@
                     <value>1</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -404,6 +404,9 @@
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>false</value>
+                </prop>
             </node>
             <node oor:name="private:resource/toolbar/previewobjectbar" oor:op="replace">
                 <prop oor:name="DockingArea" oor:type="xs:int">
@@ -423,7 +426,7 @@
                     <value xml:lang="de">Seitenvorschau</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
+                    <value>false</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/viewerbar" oor:op="replace">
