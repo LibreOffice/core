@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-18 08:17:50 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #endif
 
 #include "xmlparse.hxx"
+#include <fstream>
+#include <iostream>
+#include "osl/mutex.hxx"
+
+using namespace std;
+using namespace osl;
 
 //
 // class XMLChildNode
@@ -305,45 +311,70 @@ extern "C" void Signal_handler(int signo){
 BOOL XMLFile::Write( String &rFileName )
 /*****************************************************************************/
 {
+    ByteString aFilename( rFileName , RTL_TEXTENCODING_ASCII_US );
     if ( rFileName.Len()) {
-        signal( SIGINT, &::Signal_handler );
 
-        // -- Multithreading bug in SvStream ? Retry one time if creation fails
-        SvFileStream aStreamTest( rFileName, STREAM_STD_WRITE | STREAM_TRUNC );
-        ByteString sFileName( rFileName , RTL_TEXTENCODING_ASCII_US );
-        if( aStreamTest.IsOpen() ) aStreamTest.Close();
-        //else printf("Prozess ID = %d -> Can't create file %s\nRetrying ....\n" , getpid() , sFileName.GetBuffer() );
-        // -- --
+        //signal( SIGINT, &::Signal_handler );
 
-        SvFileStream aStream( rFileName, STREAM_STD_WRITE | STREAM_TRUNC );
-        if ( aStream.IsOpen()) {
-            BOOL bReturn = Write( aStream );
-            aStream.Close();
-            signal(SIGINT,SIG_DFL); // Enable Ctrl+C
-            return bReturn;
-        }else{
-            printf("ERROR: Can't create file %s\n" , ByteString( rFileName , RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
-            signal(SIGINT,SIG_DFL); // Enable Ctrl+C
-            exit( -1 );
+        // retry if there is a NFS problem
+        bool isOk = false;
+        for( int x = 0 ; !isOk && x < 200 ; x++ ){
+            DirEntry aTemp( Export::GetTempFile());
+            ByteString sTempFile( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
+
+            ofstream aFStream( sTempFile.GetBuffer() , ios::out | ios::trunc );
+
+            if( !aFStream ){
+                cerr << "ERROR: - helpex - Can't create tempfile " << sTempFile.GetBuffer() << " No#" << x << "\n";
+                //  signal(SIGINT,SIG_DFL); // Enable Ctrl+C
+                // isOk = false;
+                // exit ( -1 );
+            }
+            else
+            {
+                Write( aFStream );
+                aFStream.close();
+                // signal(SIGINT,SIG_DFL); // Enable Ctrl+C
+
+                DirEntry aTarget( aFilename );
+                aTarget.Kill();
+                aTemp.MoveTo( aTarget ) ;
+
+                FileStat aFileStat( aTarget );
+                if( aFileStat.GetSize() < 1 ){
+                    cerr << "WARNING: - helpex - Can't create file " << aFilename.GetBuffer() << " No#" << x << "\n";
+                    //exit( -1 );
+                    aTarget.Kill();
+                    aTemp.Kill();
+                }else{
+                    return true;
+                }
+
+            }
         }
-        signal(SIGINT,SIG_DFL); // Enable Ctrl+C
-    }
-
+        cerr << "ERROR: - helpex - Can't create file " << aFilename.GetBuffer() << "\nDisk full ? Mounted NFS volume broken ?\n";
+        exit( -1 );
+        return FALSE;
+    } // for
+    cerr << "ERROR: - helpex - Empty file name\n";
+    exit( -1 );
     return FALSE;
 }
 
 
 /*****************************************************************************/
-void XMLFile::WriteString( SvStream &rStream, const String &sString )
-/*****************************************************************************/
+//void XMLFile::WriteString( SvStream &rStream, const String &sString )
+void XMLFile::WriteString( ofstream &rStream, const String &sString )
+    /*****************************************************************************/
 {
     ByteString sText( sString, RTL_TEXTENCODING_UTF8 );
-      sText.ConvertLineEnd(LINEEND_CRLF);
+      //sText.ConvertLineEnd(LINEEND_CRLF);
     rStream << sText.GetBuffer();
 }
 
 /*****************************************************************************/
-BOOL XMLFile::Write( SvStream &rStream , XMLNode *pCur )
+//BOOL XMLFile::Write( SvStream &rStream , XMLNode *pCur )
+BOOL XMLFile::Write( ofstream &rStream , XMLNode *pCur )
 /*****************************************************************************/
 {
     XMLUtil& xmlutil=XMLUtil::Instance();
@@ -359,7 +390,7 @@ BOOL XMLFile::Write( SvStream &rStream , XMLNode *pCur )
             break;
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
-                rStream << "<";
+                rStream  << "<";
                 WriteString( rStream, pElement->GetName());
                 if ( pElement->GetAttributeList())
                     for ( ULONG j = 0; j < pElement->GetAttributeList()->Count(); j++ ) {
@@ -850,6 +881,7 @@ OUString XMLElement::ToOUString(){
 /*****************************************************************************/
 void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement){
 /*****************************************************************************/
+    const String COMMENT = String::CreateFromAscii("comment");
     XMLUtil& xmlutil=XMLUtil::Instance();
     if(pCur!=NULL){
         if(rootelement){
@@ -869,30 +901,33 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement)
         switch( pCur->GetNodeType()) {
             case XML_NODE_TYPE_ELEMENT: {
                 XMLElement *pElement = ( XMLElement * ) pCur;
-                buffer.append( OUString::createFromAscii("\\<") );
-                buffer.append( pElement->GetName() );
-                if ( pElement->GetAttributeList())
-                    for ( ULONG j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
-                        buffer.append( OUString::createFromAscii(" ") );
-                        buffer.append( *pElement->GetAttributeList()->GetObject( j ) );
-                        buffer.append( OUString::createFromAscii("=") );
-                        buffer.append( OUString::createFromAscii("\\\"") );
-                        buffer.append( pElement->GetAttributeList()->GetObject( j )->GetValue() );
-                        buffer.append( OUString::createFromAscii("\\\"") );
-                    }
-                if ( !pElement->GetChildList())
-                    buffer.append( OUString::createFromAscii("/\\>") );
-                else {
-                    buffer.append( OUString::createFromAscii("\\>") );
-                    XMLChildNode* tmp=NULL;
-                    for ( ULONG k = 0; k < pElement->GetChildList()->Count(); k++ ){
-                        tmp=pElement->GetChildList()->GetObject( k );
-                        Print( tmp, buffer , false);
-                    }
-                    buffer.append( OUString::createFromAscii("\\</") );
+                if(  !pElement->GetName().EqualsIgnoreCaseAscii( COMMENT ) ){
+                    buffer.append( OUString::createFromAscii("\\<") );
                     buffer.append( pElement->GetName() );
-                    buffer.append( OUString::createFromAscii("\\>") );
+                    if ( pElement->GetAttributeList())
+                        for ( ULONG j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
+                            buffer.append( OUString::createFromAscii(" ") );
+                            buffer.append( *pElement->GetAttributeList()->GetObject( j ) );
+                            buffer.append( OUString::createFromAscii("=") );
+                            buffer.append( OUString::createFromAscii("\\\"") );
+                            buffer.append( pElement->GetAttributeList()->GetObject( j )->GetValue() );
+                            buffer.append( OUString::createFromAscii("\\\"") );
+                        }
+                    if ( !pElement->GetChildList())
+                        buffer.append( OUString::createFromAscii("/\\>") );
+                    else {
+                        buffer.append( OUString::createFromAscii("\\>") );
+                        XMLChildNode* tmp=NULL;
+                        for ( ULONG k = 0; k < pElement->GetChildList()->Count(); k++ ){
+                            tmp=pElement->GetChildList()->GetObject( k );
+                            Print( tmp, buffer , false);
+                        }
+                        buffer.append( OUString::createFromAscii("\\</") );
+                        buffer.append( pElement->GetName() );
+                        buffer.append( OUString::createFromAscii("\\>") );
+                    }
                 }
+
             }
             break;
             case XML_NODE_TYPE_DATA: {
