@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:39:28 $
+ *  last change: $Author: kz $ $Date: 2004-01-19 17:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,7 @@ OptionsDialog::OptionsDialog( Window* pParent, const ResId& aResId )
     aTabCtrl.FreeResource();
     FreeResource();
     aTabCtrl.SetActivatePageHdl( LINK( this, OptionsDialog, ActivatePageHdl ) );
-    aTabCtrl.SetCurPageId( RID_TP_GEN );
+    aTabCtrl.SetCurPageId( RID_TP_PRO );
     ActivatePageHdl( &aTabCtrl );
 
     aOK.SetClickHdl( LINK( this, OptionsDialog, OKClick ) );
