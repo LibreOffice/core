@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:48:10 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1986,9 +1986,9 @@ String STR_WRITER_DOCUMENT_FULLTYPE_50
 };
 String STR_WRITER_DOCUMENT_FULLTYPE
 {
-    Text = "%PRODUCTNAME 6.0 Text Dokument" ;
-    Text [ English ] = "%PRODUCTNAME 6.0 Text Document" ;
-    Text[ english_us ] = "%PRODUCTNAME 6.0 Text Document";
+    Text = "%PRODUCTNAME %PRODUCTVERSION Textdokument" ;
+    Text [ English ] = "%PRODUCTNAME %PRODUCTVERSION Text Document" ;
+    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION Text Document";
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Texto";
     Text[ russian ] = "“екстовый документ (%PRODUCTNAME 6.0)";
     Text[ greek ] = "Єггсбцп кеймЁнпх %PRODUCTNAME 6.0";
