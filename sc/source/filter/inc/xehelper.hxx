@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:42:04 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:44:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,9 @@ public:
                             const EditTextObject& rEditObj,
                             XclStrFlags nFlags = EXC_STR_DEFAULT,
                             sal_uInt16 nMaxLen = EXC_STR_MAXLEN );
+
+    /** Returns the script type of the first character of the passed string. */
+    static sal_Int16    GetScriptType( const XclExpRoot& rRoot, const String& rString );
 };
 
 // Header/footer conversion ===================================================
