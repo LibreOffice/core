@@ -2,7 +2,7 @@ wz      wizards     :   rsc javaunohelper jut unoil qadevOOo NULL
 wz      wizards\util                                            nmake           -       all     wz_util NULL
 wz      wizards\source\config                                   nmake           -       all     wz_config NULL
 wz      wizards\source\euro                                     nmake           -       all     wz_eurowiz NULL
-wz      wizards\source\formwizard                               nmake           -       all     wz_formwiz NULL
+wz      wizards\source\formwizard                               nmake           -       all     wz_formwizres NULL
 wz      wizards\source\gimmicks                                 nmake           -       all     wz_gimmickswz NULL
 wz      wizards\source\importwizard                             nmake           -       all     wz_importwiz NULL
 wz      wizards\source\schedule                                 nmake           -       all     wz_schedulewiz NULL
