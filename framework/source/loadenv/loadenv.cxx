@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:45:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:32:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1480,8 +1480,9 @@ void LoadEnv::impl_reactForLoadingState()
         // Bring the new loaded document to front (if allowed!).
         // Note: We show new created frames here only.
         // We dont hide already visible frames here ...
-        css::uno::Reference< css::awt::XWindow > xWindow    = m_xTargetFrame->getContainerWindow();
-        sal_Bool                                 bHidden    = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN()   , sal_False);
+        css::uno::Reference< css::awt::XWindow > xWindow      = m_xTargetFrame->getContainerWindow();
+        sal_Bool                                 bHidden      = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN(), sal_False);
+        sal_Bool                                 bRecovered   = (m_lMediaDescriptor.find(::comphelper::MediaDescriptor::PROP_SALVAGEDFILE()) != m_lMediaDescriptor.end());
         sal_Bool                                 bMinimized = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_MINIMIZED(), sal_False);
 
         if (bMinimized)
@@ -1493,7 +1494,7 @@ void LoadEnv::impl_reactForLoadingState()
                 ((WorkWindow*)pWindow)->Minimize();
         }
         else
-        if (!bHidden)
+        if (!bHidden && !bRecovered)
         {
             xWindow->setVisible(sal_True);
             css::uno::Reference< css::awt::XTopWindow > xTopWindow(xWindow, css::uno::UNO_QUERY);
