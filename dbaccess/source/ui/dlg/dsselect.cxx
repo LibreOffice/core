@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-26 13:11:36 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 06:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,18 +139,7 @@ ODatasourceSelectDialog::ODatasourceSelectDialog(Window* _pParent, const StringB
         SetSizePixel(Size(aOldSize.Width() - nLostPixels, aOldSize.Height()));
     }
 
-    // fill the list
-    for (   ConstStringBagIterator aDS = _rDatasources.begin();
-            aDS != _rDatasources.end();
-            ++aDS
-        )
-    {
-        m_aDatasource.InsertEntry( aDS->getStr() );
-    }
-
-    // select the first entry
-    if (m_aDatasource.GetEntryCount())
-        m_aDatasource.SelectEntryPos(0);
+    fillListBox(_rDatasources);
 
     // allow ODBC datasource managenment
     if (DST_ODBC == _eType)
@@ -193,8 +182,31 @@ IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, pButton )
     }
 
     aOdbcConfig.manageDataSources(GetSystemData()->hWnd);
+    // now we have to look if there are any new datasources added
+    StringBag aOdbcDatasources;
+    OOdbcEnumeration aEnumeration;
+    aEnumeration.getDatasourceNames(aOdbcDatasources);
+    fillListBox(aOdbcDatasources);
+
     return 0L;
 #endif
+}
+// -----------------------------------------------------------------------------
+void ODatasourceSelectDialog::fillListBox(const StringBag& _rDatasources)
+{
+    m_aDatasource.Clear();
+    // fill the list
+    for (   ConstStringBagIterator aDS = _rDatasources.begin();
+            aDS != _rDatasources.end();
+            ++aDS
+        )
+    {
+        m_aDatasource.InsertEntry( *aDS );
+    }
+
+    // select the first entry
+    if (m_aDatasource.GetEntryCount())
+        m_aDatasource.SelectEntryPos(0);
 }
 
 //.........................................................................
@@ -204,6 +216,9 @@ IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/26 13:11:36  obo
+ *  #65293# cant compile for linux
+ *
  *  Revision 1.1  2000/10/24 12:13:30  fs
  *  initial checkin - dialog for selecting system datasources
  *
