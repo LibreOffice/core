@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:33:32 $
+ *  last change: $Author: rt $ $Date: 2002-11-27 16:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,13 +232,13 @@ TabPage RID_SCTAB_FUNCTION
             < "Viimeksi kдytetty" ; Default ; > ;
             < "Kaikki" ; Default ; > ;
             < "Tietokanta" ; Default ; > ;
-            < "Pдivдmддrд&Aika" ; Default ; > ;
+            < "Pдivдmддrд ja aika" ; Default ; > ;
             < "Rahoitus" ; Default ; > ;
             < "Tiedot" ; Default ; > ;
             < "Looginen" ; Default ; > ;
             < "Matemaattinen" ; Default ; > ;
-            < "Matriisi" ; Default ; > ;
-            < "Tilastolliset" ; Default ; > ;
+            < "Taulukko" ; Default ; > ;
+            < "Tilastollinen" ; Default ; > ;
             < "Laskentataulukko" ; Default ; > ;
             < "Teksti" ; Default ; > ;
             < "Lisдosa" ; Default ; > ;
@@ -321,7 +321,7 @@ TabPage RID_SCTAB_FUNCTION
             < "Finanzas" ; Default ; > ;
             < "Informaciуn" ; Default ; > ;
             < "Lуgico" ; Default ; > ;
-            < "Matemбticas" ; Default ; > ;
+            < "Matemбtica" ; Default ; > ;
             < "Matriz" ; Default ; > ;
             < "Estadнstica" ; Default ; > ;
             < "Hoja de cбlculo" ; Default ; > ;
@@ -347,7 +347,7 @@ TabPage RID_SCTAB_FUNCTION
     };
     StringList [ russian ] =
     {
-            < "Применено последним" ; Default ; > ;
+            < "Использовано последним" ; Default ; > ;
         < "Все" ; Default ; > ;
         < "База данных" ; Default ; > ;
         < "Дата и время" ; Default ; > ;
@@ -355,11 +355,11 @@ TabPage RID_SCTAB_FUNCTION
         < "Информация" ; Default ; > ;
         < "Логические" ; Default ; > ;
         < "Математические" ; Default ; > ;
-        < "Матрица" ; Default ; > ;
+        < "Массив" ; Default ; > ;
         < "Статистические" ; Default ; > ;
-        < "Таблица" ; Default ; > ;
-        < "Текст" ; Default ; > ;
-        < "Дополнительно (Add-in)" ; Default ; > ;
+        < "Электронная таблица" ; Default ; > ;
+        < "Текстовые" ; Default ; > ;
+        < "Подключаемый модуль" ; Default ; > ;
     };
     StringList [ polish ] =
     {
@@ -568,7 +568,7 @@ TabPage RID_SCTAB_FUNCTION
         Text [ italian ] = "~Funzione" ;
         Text [ portuguese_brazilian ] = "~Fun??o" ;
         Text [ portuguese ] = "~Funзгo" ;
-        Text [ finnish ] = "~Toiminto" ;
+        Text [ finnish ] = "~Funktio" ;
         Text [ danish ] = "Funktion" ;
         Text [ french ] = "~Fonction" ;
         Text [ swedish ] = "~Funktion" ;
@@ -762,7 +762,7 @@ ModelessDialog RID_SCDLG_FORMULA
                 Text[ korean ] = "н•Ём€";
                 Text[ turkish ] = "Fonksiyon";
                 Text[ catalan ] = "Funcions";
-                Text[ finnish ] = "Toiminnot";
+                Text[ finnish ] = "Funktiot";
                 Text[ thai ] = "аёџаё±аё‡аёЃа№ЊаёЉаё±а№€аё™";
             };
             PageItem
@@ -877,7 +877,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ dutch ] = "Tussenresultaat" ;
         Text [ portuguese ] = "Resultado de funзгo" ;
         Text[ chinese_simplified ] = "еЌ•йЎ№и®Ўз®—з»“жћњ";
-        Text[ russian ] = "Промежуточный итог";
+        Text[ russian ] = "Результат функции";
         Text[ polish ] = "Suma poњrednia";
         Text[ japanese ] = "ж•°ејЏгЃ®зµђжћњ";
         Text[ chinese_traditional ] = "е–®й …иЁ€з®—зµђжћњ";
@@ -950,7 +950,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ spanish ] = "Matri~z" ;
         Text [ french ] = "~Matrice" ;
         Text[ chinese_simplified ] = "зџ©йµ";
-        Text[ russian ] = "Матрица";
+        Text[ russian ] = "Массив";
         Text[ polish ] = "Macierz";
         Text[ japanese ] = "иЎЊе€—";
         Text[ chinese_traditional ] = "зџ©й™Ј";
@@ -959,7 +959,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ korean ] = "н–‰л ¬";
         Text[ turkish ] = "Matri~s";
         Text[ catalan ] = "Matriu";
-        Text[ finnish ] = "Matriisi";
+        Text[ finnish ] = "Taulukko";
         Text[ thai ] = "а№Ѓаё–аё§аёҐаёіаё”аё±аёљ";
     };
     Edit ED_REF
@@ -1022,7 +1022,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ italian ] = "<< Indietro" ;
         Text [ portuguese_brazilian ] = "<< ~Para Tr?s" ;
         Text [ portuguese ] = "<<~Anterior" ;
-        Text [ finnish ] = "<< Edellinen" ;
+        Text [ finnish ] = "<< ~Edellinen" ;
         Text [ danish ] = "<< Tilbage" ;
         Text [ french ] = "<< Prйcйdent" ;
         Text [ swedish ] = "<< ~Tillbaka" ;
@@ -1087,7 +1087,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ italian ] = "Pilota automatico di funzione" ;
         Text [ portuguese_brazilian ] = "Fun??o Piloto Autom?tico  -  Paso 1 de 2" ;
         Text [ portuguese ] = "Funзгo AutoPiloto" ;
-        Text [ finnish ] = "Automaattinen ohjaus: Toiminnot" ;
+        Text [ finnish ] = "Ohjattu toiminto: Funktiot" ;
         Text [ danish ] = "FunktionsAutoPilot" ;
         Text [ french ] = "AutoPilote de fonctions" ;
         Text [ swedish ] = "Funktionsautopilot" ;
@@ -1095,7 +1095,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ spanish ] = "AutoPiloto de funciones" ;
         Text [ english_us ] = "AutoPilot: Functions" ;
         Text[ chinese_simplified ] = "е‡Ѕж•°и‡ЄеЉЁеЉ©зђ†";
-        Text[ russian ] = "Автопилот функций";
+        Text[ russian ] = "Мастер: Функции";
         Text[ polish ] = "AutoPilot funkcji";
         Text[ japanese ] = "й–ўж•°г‚Єгѓјгѓ€гѓ‘г‚¤гѓ­гѓѓгѓ€";
         Text[ chinese_traditional ] = "е‡Ѕж•ёи‡Єе‹•еЉ©зђ†";
@@ -1114,7 +1114,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ italian ] = "Pilota automatico di funzione" ;
         Text [ portuguese_brazilian ] = "Fun??o Piloto Autom?tico  -  Paso 2 de 2" ;
         Text [ portuguese ] = "Funзгo AutoPiloto  -" ;
-        Text [ finnish ] = "Automaattinen ohjaus: Toiminnot  -" ;
+        Text [ finnish ] = "Ohjattu toiminto: Funktiot  -" ;
         Text [ danish ] = "FunktionsAutoPilot  -" ;
         Text [ french ] = "AutoPilote de fonctions -" ;
         Text [ swedish ] = "Funktionsautopilot  -  " ;
@@ -1122,7 +1122,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ spanish ] = "AutoPiloto de funciones  - " ;
         Text [ english_us ] = "AutoPilot: Functions  -" ;
         Text[ chinese_simplified ] = "е‡Ѕж•°и‡ЄеЉЁеЉ©зђ†  -";
-        Text[ russian ] = "Автопилот функций  -";
+        Text[ russian ] = "Мастер: Функции  -";
         Text[ polish ] = "AutoPilot funkcji  -";
         Text[ japanese ] = "й–ўж•°г‚Єгѓјгѓ€гѓ‘г‚¤гѓ­гѓѓгѓ€-";
         Text[ chinese_traditional ] = "е‡Ѕж•ёи‡Єе‹•еЉ©зђ†  -";
