@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:51:15 $
+ *  last change: $Author: oj $ $Date: 2001-07-30 11:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,17 +1145,31 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                             if(xElements->hasByName(m_sName))
                             {
                                 Reference<XDrop> xNameCont(xElements,UNO_QUERY);
-                                OSL_ENSURE(xNameCont.is(),"Can not drop query!");
                                 if(xNameCont.is())
                                     xNameCont->dropByName(m_sName);
+                                else
+                                {
+                                    Reference<XNameContainer> xCont(xElements,UNO_QUERY);
+                                    if(xCont.is())
+                                        xCont->removeByName(m_sName);
+                                }
                             }
 
                             Reference<XDataDescriptorFactory> xFact(xElements,UNO_QUERY);
-                            OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
-                            xProp = xFact->createDataDescriptor();
+                            if(xFact.is())
+                            {
+                                xProp = xFact->createDataDescriptor();
+                                // to set the name is only allowed when the wuery is new
+                                xProp->setPropertyValue(PROPERTY_NAME,makeAny(m_sName));
+                            }
+                            else
+                            {
+                                Reference<XSingleServiceFactory> xSingleFac(xElements,UNO_QUERY);
+                                OSL_ENSURE(xSingleFac.is(),"No XSingleServiceFactory available!");
+                                xProp = Reference<XPropertySet>(xSingleFac->createInstance(),UNO_QUERY);
+                            }
                             OSL_ENSURE(xProp.is(),"OQueryController::Execute ID_BROWSER_SAVEDOC: Create query failed!");
-                            // to set the name is only allowed when the wuery is new
-                            xProp->setPropertyValue(PROPERTY_NAME,makeAny(m_sName));
+
                         }
                         else
                         {
@@ -1199,8 +1213,14 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
                         if(bNew)
                         {
                             Reference<XAppend> xAppend(xElements,UNO_QUERY);
-                            OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
-                            xAppend->appendByDescriptor(xProp);
+                            if(xAppend.is())
+                                xAppend->appendByDescriptor(xProp);
+                            else
+                            {
+                                Reference<XNameContainer> xCont(xElements,UNO_QUERY);
+                                if(xCont.is())
+                                    xCont->insertByName(m_sName,makeAny(xProp));
+                            }
 
                             if(m_bCreateView)
                             {
