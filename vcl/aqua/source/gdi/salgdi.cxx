@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.26 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-12 01:23:12 $
+ *  $Revision: 1.27 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-14 19:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,20 +149,14 @@ static void CheckRectBounds ( Rect        *rSrcRect,
 // =======================================================================
 static unsigned long  Compress32BitRGBColor ( const RGBColor *pRGBColor ){   unsigned long nCTableIndex = 0;
 
-    const unsigned short kOneByte  = 8;
-    const unsigned short kTwoBytes = 16;
-           nCTableIndex  = ( pRGBColor->red   >> kOneByte ) << kTwoBytes; nCTableIndex |= ( pRGBColor->green >> kOneByte ) << kOneByte;  nCTableIndex |=   pRGBColor->blue  >> kOneByte;       return nCTableIndex;} // Compress32BitRGBColor    // -----------------------------------------------------------------------
+    nCTableIndex  = ( pRGBColor->red   >> kOneByte ) << kTwoBytes; nCTableIndex |= ( pRGBColor->green >> kOneByte ) << kOneByte;  nCTableIndex |=   pRGBColor->blue  >> kOneByte;       return nCTableIndex;} // Compress32BitRGBColor    // -----------------------------------------------------------------------
 
-static unsigned long  Compress16BitRGBColor ( const RGBColor *pRGBColor ){    unsigned long nCTableIndex = 0;           const unsigned short kFiveBits   = 5;
-    const unsigned short kTenBits    = 10;
-    const unsigned short kElevenBits = 11;
-           nCTableIndex  = ( pRGBColor->red   >> kElevenBits ) << kTenBits;   nCTableIndex |= ( pRGBColor->green >> kElevenBits ) << kFiveBits;  nCTableIndex |=   pRGBColor->blue  >> kElevenBits;        return nCTableIndex;} // Compress16BitRGBColor    // -----------------------------------------------------------------------
+static unsigned long  Compress16BitRGBColor ( const RGBColor *pRGBColor ){    unsigned long nCTableIndex = 0;           nCTableIndex  = ( pRGBColor->red   >> kElevenBits ) << kTenBits;   nCTableIndex |= ( pRGBColor->green >> kElevenBits ) << kFiveBits;  nCTableIndex |=   pRGBColor->blue  >> kElevenBits;        return nCTableIndex;} // Compress16BitRGBColor    // -----------------------------------------------------------------------
 
 static void CompressRGBColor ( const PixMapPtr   pPixMap,
                                const RGBColor   *pRGBColor,                               SalColor         *rSalColor
                              ){
-    const unsigned short k32BitScreenDepth = 32;
-   if ( pPixMap->pixelSize == k32BitScreenDepth ) {      *rSalColor = Compress32BitRGBColor( pRGBColor );   } // if    else   {      *rSalColor = Compress16BitRGBColor( pRGBColor );   } // else} // CompressRGBColor    // -----------------------------------------------------------------------
+    if ( pPixMap->pixelSize == k32BitScreenDepth ) {      *rSalColor = Compress32BitRGBColor( pRGBColor );   } // if    else   {      *rSalColor = Compress16BitRGBColor( pRGBColor );   } // else} // CompressRGBColor    // -----------------------------------------------------------------------
 
 static unsigned long AbsoluteValue ( const long  nValue ){    unsigned long   nAbsValue = 0;        if ( nValue < 0 )  {      nAbsValue = -nValue;   } // if    else   {      nAbsValue = nValue;    } // else             return nAbsValue;} // AbsoluteValue
 
@@ -191,8 +185,8 @@ static void GetBestSalColor ( const CTabPtr    pCTable,
         bRGBColorsMatch = QDColorsMatch( pRGBColor, pRGBNextColor );
        if ( bRGBColorsMatch == TRUE )     {          *pBestSalColor= nCTableIndex;      } // if        else       {          nRGBNewDistance = RGBDistance( pRGBColor, pRGBNextColor );                        if ( nRGBNewDistance < nRGBMinDistance )           {               nRGBMinDistance = nRGBNewDistance;                *pBestSalColor   = nCTableIndex;           } // if                               nCTableIndex++;        } //else   } // while} // GetBestSalColor    // -----------------------------------------------------------------------
 
-static void GetCTableIndex ( const  PixMapPtr   pPixMap,
-                             const RGBColor    *pRGBColor,                             SalColor          *rSalColor
+static void GetCTableIndex ( const PixMapPtr   pPixMap,
+                             const RGBColor   *pRGBColor,                             SalColor         *rSalColor
                            ){ CTabPtr pCTable = NULL;   pCTable = *(*pPixMap).pmTable;
     if ( pCTable != NULL )
     {          GetBestSalColor( pCTable, pRGBColor, rSalColor );                                                                 if ( *rSalColor > pCTable->ctSize )        {          *rSalColor = 255;      } // if
@@ -210,32 +204,34 @@ static SalColor RGBColor2SALColor ( const RGBColor *pRGBColor ){  GDPtr      p
         pPixMap = *(*pGDevice).gdPMap;
 
         if ( pPixMap != NULL )
-        {          if ( pGDevice->gdType == directType )          {              CompressRGBColor( pPixMap, pRGBColor, &nSalColor );            } // if            else           {              GetCTableIndex( pPixMap, pRGBColor, &nSalColor );          } // els
+        {          if ( pGDevice->gdType == directType )          {              CompressRGBColor( pPixMap, pRGBColor, &nSalColor );            } // if            else           {              GetCTableIndex( pPixMap, pRGBColor, &nSalColor );          } // else
         } // if
     } // if                   return  nSalColor;} // RGBColor2SALColor// =======================================================================
 // =======================================================================
-static unsigned short IndexTo32BitDeviceColor ( SalColor  *rSalColor ){  unsigned short  nDirectColor = 0;  unsigned short  nUpperByte   = 0;  unsigned short  nLowerByte   = 0;
+static unsigned short SalColorTo32BitDeviceColor ( SalColor  *rSalColor ){   unsigned short  nDirectColor = 0;  unsigned short  nUpperByte   = 0;  unsigned short  nLowerByte   = 0;
 
-    const unsigned short  kByteMask = 0xFF;    const unsigned short  kOneByte  = 8;           nLowerByte     = *rSalColor   & kByteMask;     nUpperByte     =  nLowerByte << kOneByte;  nDirectColor   =  nUpperByte  | nLowerByte;   *rSalColor    >>=  kOneByte;          return  nDirectColor;} // IndexTo32BitDeviceColor
+     nLowerByte     = *rSalColor   & kByteMask;     nUpperByte     =  nLowerByte << kOneByte;  nDirectColor   =  nUpperByte  | nLowerByte;   *rSalColor    >>=  kOneByte;          return  nDirectColor;} // SalColorTo32BitDeviceColor
 
 // -----------------------------------------------------------------------
 
-static void Index2DirectColor ( SalColor  *rSalColor,                                RGBColor  *rRGBColor
-                              ){  rRGBColor->blue  = IndexTo32BitDeviceColor ( rSalColor );  rRGBColor->green = IndexTo32BitDeviceColor ( rSalColor );  rRGBColor->red   = IndexTo32BitDeviceColor ( rSalColor );
-} // Index2DirectColor     
+static void SalColor2DirectColor ( const SalColor   nSalColor,                                   RGBColor        *rRGBColor
+                                 ){
+    SalColor  nIndexedColor = nSalColor;
+   rRGBColor->blue  = SalColorTo32BitDeviceColor( &nIndexedColor );   rRGBColor->green = SalColorTo32BitDeviceColor( &nIndexedColor );   rRGBColor->red   = SalColorTo32BitDeviceColor( &nIndexedColor );
+} // SalColor2DirectColor      
 // -----------------------------------------------------------------------
 
-static void Index2EightBitColor ( SalColor     *pSalColor,                                  RGBColor     *rRGBColor,
-                                  const GDPtr   pGDevice
-                                ){    CTabPtr    pCTable = NULL; PixMapPtr  pPixMap = NULL;        pPixMap = *(*pGDevice).gdPMap;
+static void SalColor2EightBitColor ( const GDPtr      pGDevice,
+                                     const SalColor   nSalColor,                                     RGBColor        *rRGBColor
+                                   ){ CTabPtr    pCTable = NULL; PixMapPtr  pPixMap = NULL;        pPixMap = *(*pGDevice).gdPMap;
 
     if ( pPixMap != NULL )
     {      pCTable = *(*pPixMap).pmTable;
 
         if ( pCTable != NULL )
-        {          if ( *pSalColor <= pCTable->ctSize )           {              RGBColor  aRGBColor;                      aRGBColor        = pCTable->ctTable[*pSalColor].rgb;               rRGBColor->red   = aRGBColor.red;              rRGBColor->green = aRGBColor.green;                rRGBColor->blue  = aRGBColor.blue;         } // if
+        {          if ( nSalColor <= pCTable->ctSize )            {              RGBColor  aRGBColor;                      aRGBColor        = pCTable->ctTable[nSalColor].rgb;                rRGBColor->red   = aRGBColor.red;              rRGBColor->green = aRGBColor.green;                rRGBColor->blue  = aRGBColor.blue;         } // if
         } // if
-    } // if} // Index2EightBitColor
+    } // if} // SalColor2EightBitColor
 // -----------------------------------------------------------------------
 //
 // Here we will convert SAL color to either 8-bit or 32-bit color.
@@ -247,16 +243,59 @@ static void Index2EightBitColor ( SalColor     *pSalColor,                     
 
 static RGBColor SALColor2RGBColor ( const SalColor nSalColor )
 {
-    SalColor   nIndexColor = nSalColor;
-    GDPtr      pGDevice    = NULL; RGBColor   aRGBColor;
+    GDPtr     pGDevice = NULL; RGBColor  aRGBColor;
            memset( &aRGBColor, 0, sizeof(RGBColor) );
    pGDevice = *GetGDevice();
     if ( pGDevice != NULL )
-    {          if ( pGDevice->gdType == directType )      {          Index2DirectColor ( &nIndexColor, &aRGBColor );        } // if        else       {          Index2EightBitColor ( &nIndexColor, &aRGBColor, pGDevice );        } // else
-    }
+    {          if ( pGDevice->gdType == directType )      {          SalColor2DirectColor( nSalColor, &aRGBColor );     } // if        else       {          SalColor2EightBitColor( pGDevice, nSalColor, &aRGBColor );     } // else
+    } // if
 
     return aRGBColor;
 } // SALColor2RGBColor
+
+// =======================================================================
+
+// =======================================================================
+
+static OSErr ClipRegionBegin ( SalGraphicsDataPtr rSalGraphicsData )
+{
+    if (    ( rSalGraphicsData->mbClipRegionChanged == TRUE )
+         && ( rSalGraphicsData->mhClipRgn != NULL )
+       )
+    {
+        Rect aPortRect;
+
+        GetPortBounds( rSalGraphicsData->mpCGrafPort, &aPortRect);
+
+        ClipRect( &aPortRect );
+
+        // Was there an error after clipping to a rectangle?
+
+        rSalGraphicsData->mnMacOSErr == QDErr();
+    } // if
+
+    return rSalGraphicsData->mnMacOSErr;
+} // ClipRegionBegin
+
+// -----------------------------------------------------------------------
+
+static OSErr ClipRegionEnd ( SalGraphicsDataPtr rSalGraphicsData )
+{
+    if ( rSalGraphicsData->mhClipRgn != NULL )
+    {
+        SetClip( rSalGraphicsData->mhClipRgn );
+
+        // Was there an error after setting the clipping region?
+
+        rSalGraphicsData->mnMacOSErr = QDErr();
+
+        // Set the new status flag for our port
+
+        rSalGraphicsData->mbClipRegionChanged = FALSE;
+    } // if
+
+    return rSalGraphicsData->mnMacOSErr;
+} // ClipRegionEnd
 
 // =======================================================================
 
@@ -303,7 +342,7 @@ static OSErr CloseQDPort ( SalGraphicsDataPtr rSalGraphicsData )
 
         VCLGraphics_UnLockFocusCGrafPort( rSalGraphicsData->mhDC );
 
-        // When we get here the the QD port must have changed(?)
+        // When we get here then the QD port must have changed(?)
 
         PortChanged( rSalGraphicsData->mpCGrafPort );
 
@@ -384,19 +423,14 @@ static void InitQD ( SalGraphicsDataPtr rSalGraphicsData )
 
 static void InitRegions ( SalGraphicsDataPtr rSalGraphicsData )
 {
-    rSalGraphicsData->mhClipRgn = NewRgn();
-    rSalGraphicsData->mhGrowRgn = NewRgn();
-    rSalGraphicsData->mhVisiRgn = NewRgn();
+    rSalGraphicsData->mhClipRgn = NULL;
+    rSalGraphicsData->mhGrowRgn = NULL;
 } // InitRegions
 
 // -----------------------------------------------------------------------
 
 static void InitStatusFlags ( SalGraphicsDataPtr rSalGraphicsData )
 {
-    rSalGraphicsData->mbPrinter  = FALSE;
-    rSalGraphicsData->mbVirDev   = TRUE;
-    rSalGraphicsData->mbWindow   = TRUE;
-    rSalGraphicsData->mbScreen   = TRUE;
     rSalGraphicsData->mnMacOSErr = noErr;
 } // InitStatusFlags
 
@@ -458,11 +492,6 @@ SalGraphics::~SalGraphics()
     {
         DisposeRgn( maGraphicsData.mhGrowRgn );
     } // if
-
-    if ( maGraphicsData.mhVisiRgn != NULL )
-    {
-        DisposeRgn( maGraphicsData.mhVisiRgn );
-    } // if
 } // SalGraphics Class Destructor
 
 // =======================================================================
@@ -512,27 +541,139 @@ USHORT SalGraphics::GetBitCount()
 
 void SalGraphics::ResetClipRegion()
 {
-}
+    if ( !maGraphicsData.mbWindow )
+    {
+        if ( maGraphicsData.mhClipRgn != NULL )
+        {
+            DisposeRgn( maGraphicsData.mhClipRgn );
+
+            maGraphicsData.mhClipRgn = NULL;
+        } // if
+    } // if
+    else
+    {
+        Rect   aClipRect;
+        short  nLeft   = 0;
+        short  nTop    = 0;
+        short  nRight  = 0;
+        short  nBottom = 0;
+
+        if ( maGraphicsData.mhClipRgn == NULL )
+        {
+            maGraphicsData.mhClipRgn = NewRgn();
+        } // if
+
+        GetPortBounds( maGraphicsData.mpCGrafPort, &aClipRect);
+
+        nRight  = aClipRect.right  - aClipRect.left;
+        nBottom = aClipRect.bottom - aClipRect.top;
+
+        MacSetRectRgn ( maGraphicsData.mhClipRgn,
+                        nLeft,
+                        nTop,
+                        nRight,
+                        nBottom
+                      );
+
+        if ( maGraphicsData.mhGrowRgn != NULL )
+        {
+            DiffRgn( maGraphicsData.mhClipRgn,
+                     maGraphicsData.mhGrowRgn,
+                     maGraphicsData.mhClipRgn
+                   );
+        } // if
+    } // else
+
+    maGraphicsData.mbClipRegionChanged = TRUE;
+} // SalGraphics::ResetClipRegion
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::BeginSetClipRegion( ULONG nRectCount )
 {
-}
+    #pragma unused(nRectCount)
 
+    if ( maGraphicsData.mhClipRgn != NULL )
+    {
+        DisposeRgn( maGraphicsData.mhClipRgn );
+
+        maGraphicsData.mhClipRgn = NULL;
+    } // if
+} // SalGraphics::BeginSetClipRegion
 
 // -----------------------------------------------------------------------
 
 BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
-    return TRUE;
-}
+    RgnHandle  hClipRegion        = NULL;
+    BOOL       bClipRegionsJoined = FALSE;
+
+    hClipRegion = NewRgn();
+
+    if ( hClipRegion != NULL )
+    {
+        short  nLeft   = nX;
+        short  nTop    = nY;
+        short  nRight  = nX+nWidth;
+        short  nBottom = nY+nHeight;
+
+        MacSetRectRgn ( hClipRegion,
+                        nLeft,
+                        nTop,
+                        nRight,
+                        nBottom
+                      );
+
+        if ( maGraphicsData.mhClipRgn != NULL )
+        {
+            UnionRgn( maGraphicsData.mhClipRgn,
+                      hClipRegion,
+                      maGraphicsData.mhClipRgn
+                    );
+
+            // Was there a QD error when joining clip regions?
+
+            maGraphicsData.mnMacOSErr = QDErr();
+
+            DisposeRgn( hClipRegion );
+        } // if
+        else
+        {
+            maGraphicsData.mhClipRgn = hClipRegion;
+
+            maGraphicsData.mnMacOSErr = noErr;
+        } // else
+
+        if ( maGraphicsData.mnMacOSErr == noErr )
+        {
+            bClipRegionsJoined = TRUE;
+        } // if
+    } // if
+
+    return bClipRegionsJoined;
+} // SalGraphics::UnionClipRegion
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::EndSetClipRegion()
 {
-}
+    if ( maGraphicsData.mhClipRgn != NULL )
+    {
+        if ( maGraphicsData.mhGrowRgn != NULL )
+        {
+            DiffRgn( maGraphicsData.mhClipRgn,
+                     maGraphicsData.mhGrowRgn,
+                     maGraphicsData.mhClipRgn
+                   );
+        } // if
+    } // if
+    else
+    {
+        ResetClipRegion();
+    } // else
+
+    maGraphicsData.mbClipRegionChanged = TRUE;
+} // SalGraphics::EndSetClipRegion
 
 // -----------------------------------------------------------------------
 
@@ -604,9 +745,16 @@ void SalGraphics::DrawPixel( long nX, long nY )
 
     if ( aQDErr == noErr )
     {
-        RGBColor aPixelRGBColor =  maGraphicsData.maPenColor;
+        aQDErr = ClipRegionBegin( &maGraphicsData );
 
-        SetCPixel( nX, nY, &aPixelRGBColor );
+        if ( aQDErr == noErr )
+        {
+            RGBColor aPixelRGBColor =  maGraphicsData.maPenColor;
+
+            SetCPixel( nX, nY, &aPixelRGBColor );
+
+            ClipRegionEnd( &maGraphicsData );
+        } // if
 
         CloseQDPort( &maGraphicsData );
     } // if
@@ -622,11 +770,18 @@ void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 
     if ( aQDErr == noErr )
     {
-        RGBColor aPixelRGBColor;
+        aQDErr = ClipRegionBegin( &maGraphicsData );
 
-        aPixelRGBColor = SALColor2RGBColor( nSalColor );
+        if ( aQDErr == noErr )
+        {
+            RGBColor aPixelRGBColor;
 
-        SetCPixel( nX, nY, &aPixelRGBColor );
+            aPixelRGBColor = SALColor2RGBColor( nSalColor );
+
+            SetCPixel( nX, nY, &aPixelRGBColor );
+
+            ClipRegionEnd( &maGraphicsData );
+        } // if
 
         CloseQDPort( &maGraphicsData );
     } // if
@@ -642,36 +797,43 @@ void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 
     if ( aQDErr == noErr )
     {
-        short       nPortPenMode = 0;
-        short       nPenMode     = maGraphicsData.mnPenMode;
-        CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
+        aQDErr = ClipRegionBegin( &maGraphicsData );
 
-        // What is the current pen mode associated with this graph port?
-
-        nPortPenMode = GetPortPenMode( pCGraf );
-
-        SetPortPenMode( pCGraf, nPenMode );
-
-        MoveTo( nX1, nY1 );
-
-        if ( maGraphicsData.mbTransparentPen == TRUE )
+        if ( aQDErr == noErr )
         {
-            SetBlackForeColor();
+            short       nPortPenMode = 0;
+            short       nPenMode     = maGraphicsData.mnPenMode;
+            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
+
+            // What is the current pen mode associated with this graph port?
+
+            nPortPenMode = GetPortPenMode( pCGraf );
+
+            SetPortPenMode( pCGraf, nPenMode );
+
+            MoveTo( nX1, nY1 );
+
+            if ( maGraphicsData.mbTransparentPen == TRUE )
+            {
+                SetBlackForeColor();
+            } // if
+            else
+            {
+                RGBColor  aPenColor = maGraphicsData.maPenColor;
+
+                RGBForeColor( &aPenColor );
+            } // else
+
+            MacLineTo( nX2, nY2 );
+
+            // Reset the port to its original pen mode
+
+            SetPortPenMode( pCGraf, nPortPenMode );
+
+            ClipRegionEnd( &maGraphicsData );
         } // if
-        else
-        {
-            RGBColor  aPenColor = maGraphicsData.maPenColor;
-
-            RGBForeColor( &aPenColor );
-        } // else
-
-        MacLineTo( nX2, nY2 );
 
         CloseQDPort( &maGraphicsData );
-
-        // Reset the port to its original pen mode
-
-        SetPortPenMode( pCGraf, nPortPenMode );
     } // if
 } // SalGraphics::DrawLine
 
@@ -685,44 +847,51 @@ void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
 
     if ( aQDErr == noErr )
     {
-        long      nEndX       = 0;
-        long      nEndY       = 0;
-        RGBColor  aBrushColor = maGraphicsData.maBrushColor;
-        Rect      aRect;
+        aQDErr = ClipRegionBegin( &maGraphicsData );
 
-        // Compute the second set of (nX,nY) coordinates
-
-        nEndX = nX + nWidth;
-        nEndY = nY + nHeight;
-
-        RGBForeColor( &aBrushColor );
-
-        MoveTo( nX, nY );
-
-        MacSetRect( &aRect, nX, nY, nEndX, nEndY );
-
-        if ( maGraphicsData.mbTransparentBrush == TRUE )
+        if ( aQDErr == noErr )
         {
-            short       nPortPenMode = 0;
-            short       nPenMode     = maGraphicsData.mnPenMode;
-            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
+            long      nEndX       = 0;
+            long      nEndY       = 0;
+            RGBColor  aBrushColor = maGraphicsData.maBrushColor;
+            Rect      aRect;
 
-            // What is the current pen mode associated with this graph port?
+            // Compute the second set of (nX,nY) coordinates
 
-            nPortPenMode = GetPortPenMode( pCGraf );
+            nEndX = nX + nWidth;
+            nEndY = nY + nHeight;
 
-            SetPortPenMode( pCGraf, nPenMode );
+            RGBForeColor( &aBrushColor );
 
-            MacFrameRect( &aRect );
+            MoveTo( nX, nY );
 
-            // Reset the port to its original pen mode
+            MacSetRect( &aRect, nX, nY, nEndX, nEndY );
 
-            SetPortPenMode( pCGraf, nPortPenMode );
+            if ( maGraphicsData.mbTransparentBrush == TRUE )
+            {
+                short       nPortPenMode = 0;
+                short       nPenMode     = maGraphicsData.mnPenMode;
+                CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
+
+                // What is the current pen mode associated with this graph port?
+
+                nPortPenMode = GetPortPenMode( pCGraf );
+
+                SetPortPenMode( pCGraf, nPenMode );
+
+                MacFrameRect( &aRect );
+
+                // Reset the port to its original pen mode
+
+                SetPortPenMode( pCGraf, nPortPenMode );
+            } // if
+            else
+            {
+                PaintRect( &aRect );
+            } // else
+
+            ClipRegionEnd( &maGraphicsData );
         } // if
-        else
-        {
-            PaintRect( &aRect );
-        } // else
 
         CloseQDPort( &maGraphicsData );
     } // if
@@ -740,52 +909,59 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 
         if ( aQDErr == noErr )
         {
-            long        nPolyEdges   = 0;
-            short       nPortPenMode = 0;
-            short       nPenMode     = maGraphicsData.mnPenMode;
-            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
-            PolyHandle  hPolygon     = NULL;
+            aQDErr = ClipRegionBegin( &maGraphicsData );
 
-            // What is the current pen mode associated with this graph port?
+            if ( aQDErr == noErr )
+            {
+                long        nPolyEdges   = 0;
+                short       nPortPenMode = 0;
+                short       nPenMode     = maGraphicsData.mnPenMode;
+                CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
+                PolyHandle  hPolygon     = NULL;
 
-            nPortPenMode = GetPortPenMode( pCGraf );
+                // What is the current pen mode associated with this graph port?
 
-            SetBlackForeColor();
+                nPortPenMode = GetPortPenMode( pCGraf );
 
-            SetPortPenMode( pCGraf, nPenMode );
+                SetBlackForeColor();
 
-            // Construct a polygon
+                SetPortPenMode( pCGraf, nPenMode );
 
-            hPolygon = OpenPoly();
+                // Construct a polygon
 
-                if ( hPolygon != NULL )
-                {
-                    MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
+                hPolygon = OpenPoly();
 
-                    for ( nPolyEdges = 1; nPolyEdges < nPoints; nPolyEdges ++ )
+                    if ( hPolygon != NULL )
                     {
-                        MacLineTo( pPtAry[nPolyEdges].mnX, pPtAry[nPolyEdges].mnY );
-                    } // for
+                        MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
 
-                    MacLineTo( pPtAry[0].mnX,  pPtAry[0].mnY );
+                        for ( nPolyEdges = 1; nPolyEdges < nPoints; nPolyEdges ++ )
+                        {
+                            MacLineTo( pPtAry[nPolyEdges].mnX, pPtAry[nPolyEdges].mnY );
+                        } // for
+
+                        MacLineTo( pPtAry[0].mnX,  pPtAry[0].mnY );
+                    } // if
+
+                ClosePoly();
+
+                // Did a QD error occur whilst constructing a polygon?
+
+                maGraphicsData.mnMacOSErr = QDErr();
+
+                if ( ( maGraphicsData.mnMacOSErr == noErr ) && ( hPolygon != NULL )  )
+                {
+                    FramePoly( hPolygon );
+
+                    KillPoly( hPolygon );
                 } // if
 
-            ClosePoly();
+                // Reset the port to its original pen mode
 
-            // Did a QD error occur whilst constructing a polygon?
+                SetPortPenMode( pCGraf, nPortPenMode );
 
-            maGraphicsData.mnMacOSErr = QDErr();
-
-            if ( ( maGraphicsData.mnMacOSErr == noErr ) && ( hPolygon != NULL )  )
-            {
-                FramePoly( hPolygon );
-
-                KillPoly( hPolygon );
+                ClipRegionEnd( &maGraphicsData );
             } // if
-
-            // Reset the port to its original pen mode
-
-            SetPortPenMode( pCGraf, nPortPenMode );
 
             CloseQDPort( &maGraphicsData );
         } // if
@@ -804,53 +980,60 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 
         if ( aQDErr == noErr )
         {
-            long        nPolyEdges   = 0;
-            short       nPortPenMode = 0;
-            short       nPenMode     = maGraphicsData.mnPenMode;
-            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
-            PolyHandle  hPolygon     = NULL;
-            RGBColor    aPolyColor   = maGraphicsData.maBrushColor;
+            aQDErr = ClipRegionBegin( &maGraphicsData );
 
-            // What is the current pen mode associated with this graph port?
+            if ( aQDErr == noErr )
+            {
+                long        nPolyEdges   = 0;
+                short       nPortPenMode = 0;
+                short       nPenMode     = maGraphicsData.mnPenMode;
+                CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
+                PolyHandle  hPolygon     = NULL;
+                RGBColor    aPolyColor   = maGraphicsData.maBrushColor;
 
-            nPortPenMode = GetPortPenMode( pCGraf );
+                // What is the current pen mode associated with this graph port?
 
-            RGBForeColor( &aPolyColor );
+                nPortPenMode = GetPortPenMode( pCGraf );
 
-            SetPortPenMode( pCGraf, nPenMode );
+                RGBForeColor( &aPolyColor );
 
-            // Construct a polygon
+                SetPortPenMode( pCGraf, nPenMode );
 
-            hPolygon = OpenPoly();
+                // Construct a polygon
 
-                if ( hPolygon != NULL )
-                {
-                    MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
+                hPolygon = OpenPoly();
 
-                    for ( nPolyEdges = 1; nPolyEdges < nPoints; nPolyEdges ++ )
+                    if ( hPolygon != NULL )
                     {
-                        MacLineTo( pPtAry[nPolyEdges].mnX, pPtAry[nPolyEdges].mnY );
-                    } // for
+                        MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
 
-                    MacLineTo( pPtAry[0].mnX,  pPtAry[0].mnY );
+                        for ( nPolyEdges = 1; nPolyEdges < nPoints; nPolyEdges ++ )
+                        {
+                            MacLineTo( pPtAry[nPolyEdges].mnX, pPtAry[nPolyEdges].mnY );
+                        } // for
+
+                        MacLineTo( pPtAry[0].mnX,  pPtAry[0].mnY );
+                    } // if
+
+                ClosePoly();
+
+                // Did a QD error occur whilst constructing a polygon?
+
+                maGraphicsData.mnMacOSErr = QDErr();
+
+                if ( ( maGraphicsData.mnMacOSErr == noErr ) && ( hPolygon != NULL )  )
+                {
+                    PaintPoly( hPolygon );
+
+                    KillPoly( hPolygon );
                 } // if
 
-            ClosePoly();
+                // Reset the port to its original pen mode
 
-            // Did a QD error occur whilst constructing a polygon?
+                SetPortPenMode( pCGraf, nPortPenMode );
 
-            maGraphicsData.mnMacOSErr = QDErr();
-
-            if ( ( maGraphicsData.mnMacOSErr == noErr ) && ( hPolygon != NULL )  )
-            {
-                PaintPoly( hPolygon );
-
-                KillPoly( hPolygon );
+                ClipRegionEnd( &maGraphicsData );
             } // if
-
-            // Reset the port to its original pen mode
-
-            SetPortPenMode( pCGraf, nPortPenMode );
 
             CloseQDPort( &maGraphicsData );
         } // if
@@ -877,78 +1060,89 @@ void SalGraphics::CopyBits( const SalTwoRect* pPosAry,
 
         if ( aQDErr == noErr )
         {
-            const BitMap  *pDstBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
+            aQDErr = ClipRegionBegin( &maGraphicsData );
 
-            if ( pDstBitMap != NULL )
+            if ( aQDErr == noErr )
             {
-                maGraphicsData.mnMacOSErr = LockPortBits( maGraphicsData.mpCGrafPort );
+                const BitMap  *pDstBitMap = GetPortBitMapForCopyBits( maGraphicsData.mpCGrafPort );
 
-                if ( maGraphicsData.mnMacOSErr == noErr )
+                if ( pDstBitMap != NULL )
                 {
-                    Rect       aSrcRect;
-                    Rect       aDstRect;
-                    Rect       aPortBoundsRect;
-                    RgnHandle  hMaskRgn  = NULL;  // Mask Region for QD CopyBits
-                    short      nCopyMode = 0;
+                    maGraphicsData.mnMacOSErr = LockPortBits( maGraphicsData.mpCGrafPort );
 
-                    SetRect( &aSrcRect,
-                              pPosAry->mnSrcX,
-                              pPosAry->mnSrcY,
-                              pPosAry->mnSrcX + pPosAry->mnSrcWidth,
-                              pPosAry->mnSrcY + pPosAry->mnSrcHeight
-                           );
-
-                    SetRect( &aDstRect,
-                              pPosAry->mnDestX,
-                              pPosAry->mnDestY,
-                              pPosAry->mnDestX + pPosAry->mnDestWidth,
-                              pPosAry->mnDestY + pPosAry->mnDestHeight
-                           );
-
-                    GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
-
-                    CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
-
-                    if ( maGraphicsData.mnPenMode == patCopy )
+                    if ( maGraphicsData.mnMacOSErr == noErr )
                     {
-                        nCopyMode = srcCopy;
-                    } // if
-                    else
-                    {
-                        nCopyMode = srcXor;
-                    } // else
+                        Rect       aSrcRect;
+                        Rect       aDstRect;
+                        Rect       aPortBoundsRect;
+                        RgnHandle  hMaskRgn  = NULL;  // Mask Region for QD CopyBits
+                        short      nCopyMode = 0;
 
-                    // Now we can call QD CopyBits to copy the bits from source rectangle
-                    // to the destination rectangle
+                        SetRect( &aSrcRect,
+                                  pPosAry->mnSrcX,
+                                  pPosAry->mnSrcY,
+                                  pPosAry->mnSrcX + pPosAry->mnSrcWidth,
+                                  pPosAry->mnSrcY + pPosAry->mnSrcHeight
+                               );
 
-                    if ( (  pSrcGraphics != NULL ) && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL ) )
-                    {
-                        const BitMap  *pSrcBitMap = GetPortBitMapForCopyBits( pSrcGraphics->maGraphicsData.mpCGrafPort );
+                        SetRect( &aDstRect,
+                                  pPosAry->mnDestX,
+                                  pPosAry->mnDestY,
+                                  pPosAry->mnDestX + pPosAry->mnDestWidth,
+                                  pPosAry->mnDestY + pPosAry->mnDestHeight
+                               );
 
-                        if ( pSrcBitMap != NULL )
+                        GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
+
+                        CheckRectBounds( &aSrcRect, &aDstRect, &aPortBoundsRect );
+
+                        if ( maGraphicsData.mnPenMode == patCopy )
                         {
-                            ::CopyBits (  pSrcBitMap,
+                            nCopyMode = srcCopy;
+                        } // if
+                        else
+                        {
+                            nCopyMode = srcXor;
+                        } // else
+
+                        // Now we can call QD CopyBits to copy the bits from source rectangle
+                        // to the destination rectangle
+
+                        if (    ( pSrcGraphics != NULL )
+                             && ( pSrcGraphics->maGraphicsData.mpCGrafPort != NULL )
+                           )
+                        {
+                            const BitMap  *pSrcBitMap
+                                = GetPortBitMapForCopyBits
+                                    ( pSrcGraphics->maGraphicsData.mpCGrafPort );
+
+                            if ( pSrcBitMap != NULL )
+                            {
+                                ::CopyBits (  pSrcBitMap,
+                                              pDstBitMap,
+                                             &aSrcRect,
+                                             &aDstRect,
+                                              nCopyMode,
+                                              hMaskRgn
+                                           );
+                            } // if
+                        } // if
+                        else
+                        {
+                            ::CopyBits (  pDstBitMap,
                                           pDstBitMap,
                                          &aSrcRect,
                                          &aDstRect,
                                           nCopyMode,
                                           hMaskRgn
                                        );
-                        } // if
-                    } // if
-                    else
-                    {
-                        ::CopyBits (  pDstBitMap,
-                                      pDstBitMap,
-                                     &aSrcRect,
-                                     &aDstRect,
-                                      nCopyMode,
-                                      hMaskRgn
-                                   );
-                    } // else
+                        } // else
 
-                    UnlockPortBits( maGraphicsData.mpCGrafPort );
+                        UnlockPortBits( maGraphicsData.mpCGrafPort );
+                    } // if
                 } // if
+
+                ClipRegionEnd( &maGraphicsData );
             } // if
 
             CloseQDPort( &maGraphicsData );

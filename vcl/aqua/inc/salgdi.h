@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-12-11 20:28:27 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-14 19:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,17 @@
 #endif
 
 // -------------------
-// - SalGraphicsData -
+// - Constants -
+// -------------------
+
+const unsigned short kByteMask = 0xFF;const unsigned short kOneByte  = 8;const unsigned short kTwoBytes = 16;
+const unsigned short kFiveBits   = 5;
+const unsigned short kTenBits    = 10;
+const unsigned short kElevenBits = 11;
+        const unsigned short k32BitScreenDepth = 32;
+
+// -------------------
+// - Structures -
 // -------------------
 
 struct SalGraphicsData
@@ -101,7 +111,6 @@ struct SalGraphicsData
 
     RgnHandle       mhClipRgn;      // Clip Region Handle
         RgnHandle       mhGrowRgn;      // Grow Region Handle
-    RgnHandle       mhVisiRgn;      // Visible Region Handle
 
     // Font attributes
 
@@ -123,6 +132,7 @@ struct SalGraphicsData
 
     // Miscellaneous status flags
 
+    BOOL            mbClipRegionChanged;    // Did the clip region change?
     BOOL            mbPrinter;      // Is a printer available?
     BOOL            mbVirDev;       // Is a virtual device available?
     BOOL            mbWindow;       // Is a window availble?
