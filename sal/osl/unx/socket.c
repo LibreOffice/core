@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:21:35 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 17:25:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1970,7 +1970,7 @@ void SAL_CALL osl_closeSocket(oslSocket pSocket)
 /*****************************************************************************/
 oslSocketAddr SAL_CALL osl_getLocalAddrOfSocket(oslSocket pSocket)
 {
-#ifdef LINUX || defined(FREEBSD)
+#if defined(LINUX) || defined(FREEBSD)
     socklen_t AddrLen;
 #else
     /* mfe: Solaris 'cc +w' means Addrlen should be signed! */
