@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:05:20 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,9 +180,9 @@ String STR_WRITER_WEBDOC_FULLTYPE_50
 };
 String STR_WRITER_WEBDOC_FULLTYPE
 {
-    Text = "%PRODUCTNAME 6.0 HTML-Dokument" ;
-    Text [ English ] = "%PRODUCTNAME 6.0 HTML Document" ;
-    Text[ english_us ] = "%PRODUCTNAME 6.0 HTML Document";
+    Text = "%PRODUCTNAME %PRODUCTVERSION HTML-Dokument" ;
+    Text [ English ] = "%PRODUCTNAME %PRODUCTVERSION HTML Document" ;
+    Text[ english_us ] = "%PRODUCTNAME %PRODUCTVERSION HTML Document";
     Text[ portuguese ] = "%PRODUCTNAME 6.0 Documento HTML";
     Text[ russian ] = "ֲוב-סענאםטצא (%PRODUCTNAME 6.0) ";
     Text[ greek ] = "%PRODUCTNAME 6.0 HTML - ¸דדסבצן";
