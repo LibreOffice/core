@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChainablePropertySet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 14:05:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #include <vos/mutex.hxx>
 #endif
 
+#include <memory>       // STL auto_ptr
+
+
 using namespace ::rtl;
 using namespace ::comphelper;
 using namespace ::com::sun::star;
@@ -102,15 +105,21 @@ void ChainablePropertySet::lockMutex()
     if (mpMutex)
         mpMutex->acquire();
 }
+
 void ChainablePropertySet::unlockMutex()
 {
     if (mpMutex)
         mpMutex->release();
 }
+
 void SAL_CALL ChainablePropertySet::setPropertyValue( const ::rtl::OUString& rPropertyName, const Any& rValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    lockMutex();
+    // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
+    std::auto_ptr< vos::OGuard > pMutexGuard;
+    if (mpMutex)
+        pMutexGuard = std::auto_ptr< vos::OGuard >( new vos::OGuard(mpMutex) );
+
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
     if( aIter == mpInfo->maMap.end())
@@ -119,13 +128,15 @@ void SAL_CALL ChainablePropertySet::setPropertyValue( const ::rtl::OUString& rPr
     _preSetValues();
     _setSingleValue( *((*aIter).second), rValue );
     _postSetValues();
-    unlockMutex();
 }
 
 Any SAL_CALL ChainablePropertySet::getPropertyValue( const ::rtl::OUString& rPropertyName )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    lockMutex();
+    // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
+    std::auto_ptr< vos::OGuard > pMutexGuard;
+    if (mpMutex)
+        pMutexGuard = std::auto_ptr< vos::OGuard >( new vos::OGuard(mpMutex) );
 
     PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
 
@@ -137,7 +148,6 @@ Any SAL_CALL ChainablePropertySet::getPropertyValue( const ::rtl::OUString& rPro
     _getSingleValue( *((*aIter).second), aAny );
     _postGetValues ();
 
-    unlockMutex();
     return aAny;
 }
 
@@ -169,7 +179,11 @@ void SAL_CALL ChainablePropertySet::removeVetoableChangeListener( const ::rtl::O
 void SAL_CALL ChainablePropertySet::setPropertyValues( const Sequence< ::rtl::OUString >& aPropertyNames, const Sequence< Any >& aValues )
     throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    lockMutex();
+    // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
+    std::auto_ptr< vos::OGuard > pMutexGuard;
+    if (mpMutex)
+        pMutexGuard = std::auto_ptr< vos::OGuard >( new vos::OGuard(mpMutex) );
+
     const sal_Int32 nCount = aPropertyNames.getLength();
 
     if( nCount != aValues.getLength() )
@@ -194,13 +208,16 @@ void SAL_CALL ChainablePropertySet::setPropertyValues( const Sequence< ::rtl::OU
 
         _postSetValues();
     }
-    unlockMutex();
 }
 
 Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues( const Sequence< ::rtl::OUString >& aPropertyNames )
     throw(RuntimeException)
 {
-    lockMutex();
+    // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
+    std::auto_ptr< vos::OGuard > pMutexGuard;
+    if (mpMutex)
+        pMutexGuard = std::auto_ptr< vos::OGuard >( new vos::OGuard(mpMutex) );
+
     const sal_Int32 nCount = aPropertyNames.getLength();
 
     Sequence < Any > aValues ( nCount );
@@ -224,7 +241,6 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues( const Sequence
 
         _postGetValues();
     }
-    unlockMutex();
     return aValues;
 }
 
