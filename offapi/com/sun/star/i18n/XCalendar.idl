@@ -1,0 +1,185 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XCalendar.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: er $ $Date: 2000-11-08 17:42:17 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_i18n_XCalendar_idl__
+#define __com_sun_star_i18n_XCalendar_idl__
+
+#include <com/sun/star/lang/Locale.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module i18n {
+
+//=============================================================================
+
+
+/**
+    This interface provides access to locale specific calendar systems.
+ */
+[ uik(721dcc9d-0503-4357-a56ecdae-ea36e29f), ident( "XCalendar", 1.0 ) ]
+interface XCalendar : com::sun::star::uno::XInterface
+{
+    /// load the default calendar for the given locale
+    void    loadDefaultCalendar( [in] ::com::sun::star::lang::Locale rLocale );
+
+    /// load a specific calendar for the given locale
+    void    loadCalendar( [in] string uniqueID, [in] ::com::sun::star::lang::Locale rLocale );
+
+    /// returns all available calendars for the given locale
+    sequence< string >  getAllCalendars( [in] ::com::sun::star::lang::Locale rLocale );
+
+    /// returns the ID string of the loaded calendar, e.g. <bold>gregorian</bold>
+    string  getUniqueID();
+
+    /**
+        Set the date/time as an offset to the start of the calendar at 30Dec1899 00:00
+        The integer part represents the number of days passed since start date.
+        The fractional part represents fractions of a day, thus 0.5 means 12 hours.
+     */
+    void    setDateTime( [in] double nTimeInDays );
+
+    /**
+         Get the date/time as an offset to the start of the calendar at 30Dec1899 00:00
+        The integer part represents the number of days passed since start date.
+        The fractional part represents fractions of a day, thus 0.5 means 12 hours.
+     */
+    double  getDateTime();
+
+    /**
+        Set the value of a field.
+
+        @param nCalendarFieldIndex
+            one of <type>CalendarFieldIndex</type> values
+
+        @param nValue
+            a value of the allowed range for the field index
+     */
+    void    setValue( [in] short nCalendarFieldIndex, [in] short nValue );
+
+    /**
+        Get the value of a field.
+
+        @param nCalendarFieldIndex
+            one of <type>CalendarFieldIndex</type> values
+     */
+    short   getValue( [in] short nCalendarFieldIndex );
+
+    /**
+        Add an amount to a field.
+
+        @param nCalendarFieldIndex
+            one of <type>CalendarFieldIndex</type> values
+
+        @param nAmount
+            the amount to add
+     */
+    void    addValue( [in] short nCalendarFieldIndex, [in] long nAmount );
+
+    /// returns the first day of a week, one of <type>Weekdays</type> values
+    short   getFirstDayOfWeek();
+
+    /// set the first day of a week, one of <type>Weekdays</type> values
+    void    setFirstDayOfWeek( [in] short nDay );
+
+    /// set how many days of a week must reside in the first week of a year
+    void    setMinimalDaysInFirstWeek( [in] short nDays );
+
+    /// returns how many days of a week must reside in the first week of a year
+    short   getMinimalDaysInFirstWeek();
+
+    /// returns the number of months in a year, e.g. <bold>12</bold>
+    short   getNumberOfMonthsInYear();
+
+    /// returns the number of days in a week, e.g. <bold>7</bold>
+    short   getNumberOfDaysInWeek();
+
+    /**
+        Returns a string (name to display) matching the given parameters.
+
+        @param nCalendarDisplayIndex
+            one of <type>CalendarDisplayIndex</type> values
+
+        @param nIdx
+            A value matching the <type>CalendarDisplayIndex</type> type:
+            <emp>AM_PM</emp> =&gt; one of <type>AmPmValue</type>
+            <emp>DAY</emp>   =&gt; one of <type>Weekdays</type>
+            <emp>MONTH</emp> =&gt; one of <type>Months</type>
+            <emp>YEAR</emp>  =&gt; <bold>not used, empty string returned</bold>
+            <emp>ERA</emp>   =&gt; one of ???
+
+            The value should be obtained by a previous call to
+             <method>XCalendar::getValue()</method> with an appropriate
+            <type>CalendarFieldIndex</type> argument.
+
+        @param nNameType
+            0 =&gt; abbreviated name, e.g. <bold>Jan</bold>
+            1 =&gt; full name, e.g. <bold>January</bold>
+
+            This parameter is not used if the <emp>nCalendarDisplayIndex<emp>
+            argument equals <type>CalendarDisplayIndex::AM_PM</type>
+     */
+    string  getDisplayName( [in] short nCalendarDisplayIndex, [in] short nIdx, [in] short nNameType );
+};
+
+//=============================================================================
+}; }; }; };
+//=============================================================================
+#endif
