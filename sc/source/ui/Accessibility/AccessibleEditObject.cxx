@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditObject.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-06-10 14:53:29 $
+ *  last change: $Author: sab $ $Date: 2002-06-11 06:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,11 @@ void ScAccessibleEditObject::CreateTextHelper()
         }
         else
         {
+            ::std::auto_ptr < ScAccessibleTextData > pAccessibleTextData
+                (new ScAccessibleEditLineTextData(NULL, mpWindow));
+            ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleTextData));
+
+            mpTextHelper = new accessibility::AccessibleTextHelper(this, pEditSource );
         }
     }
 }
