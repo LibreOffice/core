@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-18 11:31:11 $
+ *  last change: $Author: ka $ $Date: 2000-11-21 14:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,8 +255,26 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
 
             case( SID_GRFFILTER_POPART  ):
             {
-                DBG_ERROR( "SvxGraphicFilter: PopArt filter not yet implemented" );
-                nRet = SVX_GRAPHICFILTER_UNSUPPORTED_SLOT;
+                if( pShell )
+                    pShell->SetWaitCursor( TRUE );
+
+                if( rGraphic.IsAnimated() )
+                {
+                    Animation aAnimation( rGraphic.GetAnimation() );
+
+                    if( aAnimation.Filter( BMP_FILTER_POPART ) )
+                        aGraphic = aAnimation;
+                }
+                else
+                {
+                    BitmapEx aBmpEx( rGraphic.GetBitmapEx() );
+
+                    if( aBmpEx.Filter( BMP_FILTER_POPART ) )
+                        aGraphic = aBmpEx;
+                }
+
+                if( pShell )
+                    pShell->SetWaitCursor( FALSE );
             }
             break;
 
