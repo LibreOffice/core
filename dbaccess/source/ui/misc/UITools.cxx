@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-04 14:32:50 $
+ *  last change: $Author: fs $ $Date: 2002-02-25 12:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,36 +793,39 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
 {
     if (xAffectedCol.is() && xField.is())
     {
-        Reference< XPropertySetInfo >  xInfo = xAffectedCol->getPropertySetInfo();
-        sal_Bool bHasFormat = xInfo->hasPropertyByName(PROPERTY_FORMATKEY);
-        sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(PROPERTY_TYPE));
-
-        SvxCellHorJustify eJustify(SVX_HOR_JUSTIFY_STANDARD);
-        Any aAlignment = xAffectedCol->getPropertyValue(PROPERTY_ALIGN);
-        if (aAlignment.hasValue())
-            switch (::comphelper::getINT16(aAlignment))
-            {
-                case ::com::sun::star::awt::TextAlign::LEFT     : eJustify = SVX_HOR_JUSTIFY_LEFT; break;
-                case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
-                case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
-                default:
-                    OSL_ENSURE(0,"Invalid TextAlign!");
-            }
-        sal_uInt16 nFlags;
-        sal_Int32  nFormatKey = ::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY));
-        if(callColumnFormatDialog(_pParent,_pFormatter,nDataType,nFormatKey,eJustify,nFlags,bHasFormat))
+        try
         {
-            try
+            Reference< XPropertySetInfo >  xInfo = xAffectedCol->getPropertySetInfo();
+            sal_Bool bHasFormat = xInfo->hasPropertyByName(PROPERTY_FORMATKEY);
+            sal_Int32 nDataType = ::comphelper::getINT32(xField->getPropertyValue(PROPERTY_TYPE));
+
+            SvxCellHorJustify eJustify(SVX_HOR_JUSTIFY_STANDARD);
+            Any aAlignment = xAffectedCol->getPropertyValue(PROPERTY_ALIGN);
+            if (aAlignment.hasValue())
+                switch (::comphelper::getINT16(aAlignment))
+                {
+                    case ::com::sun::star::awt::TextAlign::LEFT     : eJustify = SVX_HOR_JUSTIFY_LEFT; break;
+                    case ::com::sun::star::awt::TextAlign::CENTER   : eJustify = SVX_HOR_JUSTIFY_CENTER; break;
+                    case ::com::sun::star::awt::TextAlign::RIGHT    : eJustify = SVX_HOR_JUSTIFY_RIGHT; break;
+                    default:
+                        OSL_ENSURE(0,"Invalid TextAlign!");
+                }
+            sal_Int32  nFormatKey = 0;
+            if ( bHasFormat )
+                nFormatKey = ::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY));
+
+            sal_uInt16 nFlags = 0;
+            if(callColumnFormatDialog(_pParent,_pFormatter,nDataType,nFormatKey,eJustify,nFlags,bHasFormat))
             {
                 xAffectedCol->setPropertyValue(PROPERTY_ALIGN, makeAny((sal_Int16)dbaui::mapTextAllign(eJustify)));
                 if (nFlags & TP_ATTR_NUMBER)
                     xAffectedCol->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nFormatKey));
-            }
-            catch(const Exception&)
-            {
-                // could not set the column properties here
-            }
 
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "::callColumnFormatDialog: caught an exception!" );
         }
     }
 }
