@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2004-04-29 16:22:16 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:52:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -200,7 +200,8 @@ EXCEPTIONSFILES=\
     $(SLO)$/multifil.obj	\
     $(SLO)$/optdict.obj	\
     $(SLO)$/cuigaldlg.obj \
-    $(SLO)$/showcols.obj
+    $(SLO)$/showcols.obj \
+    $(SLO)$/svxbmpnumvalueset.obj 
 
 SLOFILES=\
     $(EXCEPTIONSFILES)	\
@@ -310,6 +311,7 @@ SLOFILES=\
     $(SLO)$/optgenrl.obj	\
     $(SLO)$/optinet2.obj	\
     $(SLO)$/optctl.obj	\
+    $(SLO)$/svxbmpnumvalueset.obj	\
     $(SLO)$/svxgrahicitem.obj
 
 
@@ -326,7 +328,6 @@ LIB1OBJFILES= \
     $(SLO)$/rubydialog.obj  \
     $(SLO)$/thesdlg.obj     \
     $(SLO)$/spldlg.obj      \
-    $(SLO)$/numpages.obj    \
     $(SLO)$/splwrap.obj     \
     $(SLO)$/hangulhanja.obj \
     $(SLO)$/_contdlg.obj	\
@@ -341,10 +342,6 @@ LIB1OBJFILES= \
     $(SLO)$/measctrl.obj \
     $(SLO)$/passwd.obj \
     $(SLO)$/strarray.obj \
-    $(SLO)$/align.obj    \
-    $(SLO)$/backgrnd.obj \
-    $(SLO)$/border.obj   \
-    $(SLO)$/chardlg.obj  \
     $(SLO)$/checklbx.obj \
     $(SLO)$/ctrdial.obj    \
     $(SLO)$/ctredlin.obj \
@@ -353,20 +350,15 @@ LIB1OBJFILES= \
     $(SLO)$/dlgutil.obj  \
     $(SLO)$/fntctrl.obj  \
     $(SLO)$/fontwork.obj \
-    $(SLO)$/grfpage.obj \
     $(SLO)$/hdft.obj     \
     $(SLO)$/impgrf.obj   \
     $(SLO)$/langtab.obj \
     $(SLO)$/langbox.obj \
     $(SLO)$/linelink.obj \
     $(SLO)$/nforient.obj    \
-    $(SLO)$/numfmt.obj   \
-    $(SLO)$/page.obj     \
     $(SLO)$/pagectrl.obj \
-    $(SLO)$/paragrph.obj \
     $(SLO)$/paraprev.obj \
     $(SLO)$/pfiledlg.obj \
-    $(SLO)$/postdlg.obj  \
     $(SLO)$/prtqry.obj \
     $(SLO)$/relfld.obj   \
     $(SLO)$/rlrcitem.obj \
@@ -377,8 +369,6 @@ LIB1OBJFILES= \
     $(SLO)$/stddlg.obj   \
     $(SLO)$/svxbox.obj   \
     $(SLO)$/svxruler.obj \
-    $(SLO)$/tabstpge.obj \
-    $(SLO)$/textattr.obj \
     $(SLO)$/tparea.obj   \
     $(SLO)$/worient.obj    \
     $(SLO)$/txenctab.obj \
@@ -387,6 +377,7 @@ LIB1OBJFILES= \
     $(SLO)$/frmdirlbox.obj \
     $(SLO)$/commonlingui.obj \
     $(SLO)$/dialmgr.obj	\
+    $(SLO)$/svxbmpnumvalueset.obj	\
     $(SLO)$/svxgrahicitem.obj
 
 LIB2TARGET= $(SLB)$/cui.lib
@@ -453,7 +444,19 @@ LIB2OBJFILES= \
     $(SLO)$/tpbitmap.obj \
     $(SLO)$/tphatch.obj \
     $(SLO)$/tplneend.obj \
-    $(SLO)$/tplnedef.obj
+    $(SLO)$/tplnedef.obj \
+    $(SLO)$/numpages.obj \
+    $(SLO)$/paragrph.obj \
+    $(SLO)$/tabstpge.obj \
+    $(SLO)$/textattr.obj  	\
+    $(SLO)$/align.obj \
+    $(SLO)$/backgrnd.obj \
+    $(SLO)$/border.obj \
+    $(SLO)$/chardlg.obj \
+    $(SLO)$/numfmt.obj \
+    $(SLO)$/page.obj \
+    $(SLO)$/postdlg.obj \
+    $(SLO)$/grfpage.obj
 
 
 # --- Targets -------------------------------------------------------
