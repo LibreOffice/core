@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-23 15:55:21 $
+ *  last change: $Author: os $ $Date: 2001-04-03 13:39:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #ifndef _SFX_PRINTER_HXX //autogen
 #include <sfx2/printer.hxx>
 #endif
+#ifndef _SVX_ASIANCFG_HXX
+#include <svx/asiancfg.hxx>
+#endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
@@ -123,6 +126,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
+#include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #endif
 
 #ifndef _SFX_DOCFILT_HACK_HXX //autogen
@@ -241,9 +247,12 @@
 
 extern sal_Bool bNotLoadLayout;
 
-
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::rtl;
+#define C2U(cChar) OUString::createFromAscii(cChar)
 /*-----------------21.09.96 15.29-------------------
 
 --------------------------------------------------*/
@@ -355,6 +364,23 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
             SvEmbeddedObject* pObj = this;
             SwTransferable::InitOle( pObj, *pDoc );
         }
+        // set forbidden characters if necessary
+        SvxAsianConfig aAsian;
+        Sequence<Locale> aLocales =  aAsian.GetStartEndCharLocales();
+        if(aLocales.getLength())
+        {
+            const Locale* pLocales = aLocales.getConstArray();
+            for(sal_Int32 i = 0; i < aLocales.getLength(); i++)
+            {
+                ForbiddenCharacters aForbidden;
+                aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine);
+                LanguageType  eLang = SvxLocaleToLanguage(pLocales[i]);
+                pDoc->SetForbiddenCharacters( eLang, aForbidden);
+            }
+        }
+        pDoc->SetKernAsianPunctuation(!aAsian.IsKerningWesternTextOnly());
+        pDoc->SetCharCompressType((SwCharCompressType)aAsian.GetCharDistanceCompression());
+
         SubInitNew();
     }
     return bRet;
@@ -796,28 +822,38 @@ void SwDocShell::SubInitNew()
 
     sal_uInt16 nRange[] =   {
                             RES_CHRATR_LANGUAGE, RES_CHRATR_LANGUAGE,
+                            RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CJK_LANGUAGE,
+                            RES_CHRATR_CTL_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
                             0, 0, 0  };
     if(!bWeb)
     {
-        nRange[2] = RES_PARATR_TABSTOP;
-        nRange[3] = RES_PARATR_HYPHENZONE;
+        nRange[6] = RES_PARATR_TABSTOP;
+        nRange[7] = RES_PARATR_HYPHENZONE;
     }
     SfxItemSet aDfltSet( pDoc->GetAttrPool(), nRange );
     uno::Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
 
-    sal_Int16 nVal;
+    sal_Int16 nVal, eCJK, eCTL;
     if (xProp.is())
     {
-        xProp->getPropertyValue( OUString::createFromAscii(UPN_DEFAULT_LANGUAGE)) >>= nVal;
+        xProp->getPropertyValue( C2U(UPN_DEFAULT_LANGUAGE)) >>= nVal;
+        Locale aCJK, aCTL;
+        xProp->getPropertyValue( C2U(UPN_DEFAULT_LOCALE_CJK)) >>= aCJK;
+        eCJK = SvxLocaleToLanguage(aCJK);
+        xProp->getPropertyValue( C2U(UPN_DEFAULT_LOCALE_CTL)) >>= aCTL;
+        eCTL = SvxLocaleToLanguage(aCTL);
     }
     else
     {   // guess DefaultLanguage to be used from other sources
         nVal = SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
         if( nVal == LANGUAGE_SYSTEM )
             nVal = ::GetSystemLanguage();
+        eCJK = eCTL = nVal;
     }
 
     aDfltSet.Put( SvxLanguageItem( nVal, RES_CHRATR_LANGUAGE ) );
+    aDfltSet.Put( SvxLanguageItem( eCJK, RES_CHRATR_CJK_LANGUAGE ) );
+    aDfltSet.Put( SvxLanguageItem( eCTL, RES_CHRATR_CTL_LANGUAGE ) );
     if(!bWeb)
     {
         SvxHyphenZoneItem aHyp( (SvxHyphenZoneItem&) pDoc->GetDefault(
@@ -846,163 +882,5 @@ void SwDocShell::SubInitNew()
     pDoc->SetDefault( aDfltSet );
     pDoc->ResetModified();
 }
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.13  2001/03/06 11:07:24  mib
-    organizer support for XML file format
-
-    Revision 1.12  2001/02/26 07:56:31  mib
-    xml filters for templates and global docs
-
-    Revision 1.11  2001/02/08 15:51:15  mtg
-    Added InvalidateModel/ReactivateModel
-
-    Revision 1.10  2001/02/06 15:41:26  mib
-    real 6.0 file format
-
-    Revision 1.9  2001/02/01 14:30:13  mib
-    XML files now can be loaded/saved as own format
-
-    Revision 1.8  2000/11/20 09:12:09  jp
-    should change: use LocaleDataWrapper
-
-    Revision 1.7  2000/11/19 11:36:18  tl
-    lngprops.hxx include changed
-
-    Revision 1.6  2000/10/31 20:32:32  jp
-    change usage of filestream to medium
-
-    Revision 1.5  2000/10/31 15:44:59  hr
-    #65293#: includes
-
-    Revision 1.4  2000/10/30 20:30:08  jp
-    Bug #79779#: BrushGraphicCache removed
-
-    Revision 1.3  2000/10/09 18:15:05  jp
-    Bug #78395#: set fontcharset to systemcharset
-
-    Revision 1.2  2000/09/28 15:22:17  os
-    use of configuration service in view options
-
-    Revision 1.1.1.1  2000/09/18 17:14:31  hr
-    initial import
-
-    Revision 1.209  2000/09/18 16:05:11  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.208  2000/09/08 15:11:56  os
-    use configuration service
-
-    Revision 1.207  2000/07/13 12:36:19  os
-    new: SwXTextDocument::reactivate()
-
-    Revision 1.206  2000/07/05 10:28:14  os
-    invalidate model in ::RemoveLink()
-
-    Revision 1.205  2000/06/26 10:38:34  jp
-    must change: GetAppWindow->GetDefaultDevice
-
-    Revision 1.204  2000/04/11 08:01:30  os
-    UNICODE
-
-    Revision 1.203  2000/03/21 15:47:50  os
-    UNOIII
-
-    Revision 1.202  2000/03/03 15:16:58  os
-    StarView remainders removed
-
-    Revision 1.201  2000/02/02 17:00:37  jp
-    Task #72579#: interface of SwReader is changed
-
-    Revision 1.200  2000/01/19 18:26:37  jp
-    Bug #72117#: create numberformatter only if he is needed
-
-    Revision 1.199  1999/12/10 15:49:58  tl
-    #70667# shadowing of variable fixed
-
-    Revision 1.198  1999/12/10 13:05:52  tl
-    #70383# SvxGetLinguPropertySet => ::GetLinguPropertySet
-
-    Revision 1.197  1999/11/24 18:24:13  tl
-    check for Service availability
-
-    Revision 1.196  1999/11/19 16:40:22  os
-    modules renamed
-
-    Revision 1.195  1999/11/15 10:30:05  tl
-    some property name changes for ONE_LINGU
-
-    Revision 1.194  1999/10/25 19:10:08  tl
-    ongoing ONE_LINGU implementation
-
-    Revision 1.193  1999/08/31 08:34:00  TL
-    #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-
-      Rev 1.192   31 Aug 1999 10:34:00   TL
-   #if[n]def ONE_LINGU inserted (for transition of lingu to StarOne)
-
-      Rev 1.191   08 Jul 1999 15:59:34   MA
-   Use internal object to toggle wait cursor
-
-      Rev 1.190   07 Jul 1999 08:25:26   OS
-   extended indexes: create index types in SwDoc::Ctor
-
-      Rev 1.189   15 Mar 1999 15:07:32   JP
-   Task #61405#: AutoCompleteList wurde statisch
-
-      Rev 1.188   11 Mar 1999 23:58:40   JP
-   Task #63171#: Optionen fuer Feld-/LinkUpdate Doc oder Modul lokal, Task #61405: Optionen setzen
-
-      Rev 1.187   09 Mar 1999 15:36:10   OS
-   #62742# Invalidate am Model rufen, nicht InitNewDoc
-
-      Rev 1.186   04 Feb 1999 11:22:14   ER
-   #61415# OfaMiscCfg nach SFX verschoben
-
-      Rev 1.185   02 Feb 1999 08:42:48   OS
-   #61027# zweistellige Jahreszahlen
-
-      Rev 1.184   01 Feb 1999 08:23:24   OS
-   #56371# unnoetigen include wieder raus
-
-      Rev 1.183   27 Jan 1999 09:51:54   OS
-   #56371# TF_ONE51
-
-      Rev 1.182   10 Dec 1998 15:55:18   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.181   25 Nov 1998 11:26:54   OS
-   #59240##59637# SubInitNew vor dem Import, kein style::TabStop fuer HTML
-
-      Rev 1.180   23 Nov 1998 16:12:16   OM
-   #58216# Verknuepfungsoptionen pro Dokument
-
-      Rev 1.179   11 Nov 1998 09:04:20   OS
-   #59240# keine Defaults fuer style::TabStop und Hyphenation in der WebDocShell
-
-      Rev 1.178   19 Aug 1998 15:18:28   OM
-   #55274# Default-Datenbanknamen am Dokument nur OnDemand setzen
-
-      Rev 1.177   24 Apr 1998 17:17:30   JP
-   Bug #49791#: nur auf OLE casten wenn auch OLE drin ist (und nicht Grafik)
-
-      Rev 1.176   21 Apr 1998 12:37:56   JP
-   Bug #47798#: GlobalDocument ohne Inhalt laden - nicht referenzierte Objecte loeschen
-
-      Rev 1.175   17 Feb 1998 09:19:04   TJ
-   IFDEF TF _STARONE
-
-      Rev 1.174   12 Feb 1998 15:00:10   OS
-   Model im Dtor invalidieren
-
-      Rev 1.173   11 Feb 1998 16:31:30   OS
-   SwXTextDocument wieder aktiv
-
-      Rev 1.172   04 Feb 1998 17:22:50   OS
-   SetModel erstmal raus
-
-------------------------------------------------------------------------*/
 
 
