@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibletexthelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2002-09-18 13:48:28 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:27:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #include <comphelper/accessibletexthelper.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleTextType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETEXTTYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HPP_
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -82,8 +82,11 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#include <algorithm>
+#ifndef _COM_SUN_STAR_AWT_SELECTION_HPP_
+#include <com/sun/star/awt/Selection.hpp>
+#endif
 
+#include <algorithm>
 
 //..............................................................................
 namespace comphelper
@@ -94,7 +97,7 @@ namespace comphelper
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
-    using namespace ::drafts::com::sun::star::accessibility;
+    using namespace ::com::sun::star::accessibility;
 
     //==============================================================================
     // OCommonAccessibleText
@@ -639,6 +642,91 @@ namespace comphelper
         }
 
         return sResult;
+    }
+
+    // -----------------------------------------------------------------------------
+    bool OCommonAccessibleText::implInitTextChangedEvent(
+        const rtl::OUString& rOldString,
+        const rtl::OUString& rNewString,
+        ::com::sun::star::uno::Any& rDeleteSelection,
+        ::com::sun::star::uno::Any& rInsertSelection) // throw()
+    {
+        sal_uInt32 nLenOld = rOldString.getLength();
+        sal_uInt32 nLenNew = rNewString.getLength();
+
+        // equal
+        if ((0 == nLenOld) && (0 == nLenNew))
+            return false;
+
+        ::com::sun::star::awt::Selection DelSel;
+        ::com::sun::star::awt::Selection InsSel;
+
+        DelSel.Min = -1;
+        DelSel.Max = -1;
+        InsSel.Min = -1;
+        InsSel.Max = -1;
+
+        // insert only
+        if ((0 == nLenOld) && (nLenNew > 0))
+        {
+            InsSel.Min = 0;
+            InsSel.Max = nLenNew;
+            rInsertSelection <<= InsSel;
+            return true;
+        }
+
+        // delete only
+        if ((nLenOld > 0) && (0 == nLenNew))
+        {
+            DelSel.Min = 0;
+            DelSel.Max = nLenOld;
+            rDeleteSelection <<= DelSel;
+            return true;
+        }
+
+        const sal_Unicode* pFirstDiffOld = rOldString.getStr();
+        const sal_Unicode* pLastDiffOld  = rOldString.getStr() + nLenOld;
+        const sal_Unicode* pFirstDiffNew = rNewString.getStr();
+        const sal_Unicode* pLastDiffNew  = rNewString.getStr() + nLenNew;
+
+        // find first difference
+        while ((*pFirstDiffOld == *pFirstDiffNew) &&
+               (pFirstDiffOld  <  pLastDiffOld) &&
+               (pFirstDiffNew  <  pLastDiffNew))
+        {
+            pFirstDiffOld++;
+            pFirstDiffNew++;
+        }
+
+        // equality test
+        if ((0 == *pFirstDiffOld) && (0 == *pFirstDiffNew))
+            return false;
+
+        // find last difference
+        while (((pLastDiffOld - 1) > pFirstDiffOld) &&
+               ((pLastDiffNew - 1) > pFirstDiffNew) &&
+               (pLastDiffOld[-1]  == pLastDiffNew[-1]))
+        {
+            pLastDiffOld--;
+            pLastDiffNew--;
+        }
+
+        if (pFirstDiffOld < pLastDiffOld)
+        {
+            DelSel.Min = pFirstDiffOld - rOldString.getStr();
+            DelSel.Max = pLastDiffOld  - rOldString.getStr();
+
+            rDeleteSelection <<= DelSel;
+        }
+
+        if (pFirstDiffNew < pLastDiffNew)
+        {
+            InsSel.Min = pFirstDiffNew - rNewString.getStr();
+            InsSel.Max = pLastDiffNew  - rNewString.getStr();
+
+            rInsertSelection <<= InsSel;
+        }
+        return true;
     }
 
     //==============================================================================
