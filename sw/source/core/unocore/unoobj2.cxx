@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 14:35:14 $
+ *  last change: $Author: os $ $Date: 2000-12-19 15:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2178,79 +2178,4 @@ void    SwXParaFrameEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     }
 }
 
-/* -----------------22.04.99 11:24-------------------
- *
- * --------------------------------------------------*/
-SV_IMPL_PTRARR(SwEvtLstnrArray, XEventListenerPtr);
-
-/*-- 22.04.99 11:24:59---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwEventListenerContainer::SwEventListenerContainer( uno::XInterface* pxParent) :
-    pListenerArr(0),
-    pxParent(pxParent)
-{
-}
-/*-- 22.04.99 11:24:59---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-SwEventListenerContainer::~SwEventListenerContainer()
-{
-    if(pListenerArr && pListenerArr->Count())
-    {
-        pListenerArr->DeleteAndDestroy(0, pListenerArr->Count());
-    }
-    delete pListenerArr;
-}
-/*-- 22.04.99 11:24:59---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void    SwEventListenerContainer::AddListener(const uno::Reference< lang::XEventListener > & rxListener)
-{
-    if(!pListenerArr)
-        pListenerArr = new SwEvtLstnrArray;
-    uno::Reference< lang::XEventListener > * pInsert = new uno::Reference< lang::XEventListener > ;
-    *pInsert = rxListener;
-    pListenerArr->Insert(pInsert, pListenerArr->Count());
-}
-/*-- 22.04.99 11:25:00---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-sal_Bool    SwEventListenerContainer::RemoveListener(const uno::Reference< lang::XEventListener > & rxListener)
-{
-    if(!pListenerArr)
-        return sal_False;
-    else
-    {
-         lang::XEventListener* pLeft = rxListener.get();
-        for(sal_uInt16 i = 0; i < pListenerArr->Count(); i++)
-        {
-            XEventListenerPtr pElem = pListenerArr->GetObject(i);
-             lang::XEventListener* pRight = pElem->get();
-            if(pLeft == pRight)
-            {
-                pListenerArr->Remove(i);
-                delete pElem;
-                return sal_True;
-            }
-        }
-    }
-    return sal_False;
-}
-/*-- 22.04.99 11:25:00---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void    SwEventListenerContainer::Disposing()
-{
-    if(!pListenerArr)
-        return;
-
-    lang::EventObject aObj(pxParent);
-    for(sal_uInt16 i = 0; i < pListenerArr->Count(); i++)
-    {
-        XEventListenerPtr pElem = pListenerArr->GetObject(i);
-        (*pElem)->disposing(aObj);
-    }
-    pListenerArr->DeleteAndDestroy(0, pListenerArr->Count());
-}
 
