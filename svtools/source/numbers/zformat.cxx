@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 06:51:07 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 11:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,11 @@
 #include "zforlist.hxx"
 #include "numhead.hxx"
 
+#ifndef INCLUDED_SVTOOLS_NFSYMBOL_HXX
+#include "nfsymbol.hxx"
+#endif
+using namespace svt;
+
 namespace {
 struct Gregorian
     : public rtl::StaticWithInit<const ::rtl::OUString, Gregorian> {
@@ -203,16 +208,16 @@ void ImpSvNumberformatInfo::Save(SvStream& rStream, USHORT nAnz) const
         short nType = nTypeArray[i];
         switch ( nType )
         {   // der Krampf fuer Versionen vor SV_NUMBERFORMATTER_VERSION_NEW_CURR
-            case SYMBOLTYPE_CURRENCY :
-                rStream << short( SYMBOLTYPE_STRING );
+            case NF_SYMBOLTYPE_CURRENCY :
+                rStream << short( NF_SYMBOLTYPE_STRING );
             break;
-            case SYMBOLTYPE_CURRDEL :
-            case SYMBOLTYPE_CURREXT :
+            case NF_SYMBOLTYPE_CURRDEL :
+            case NF_SYMBOLTYPE_CURREXT :
                 rStream << short(0);        // werden ignoriert (hoffentlich..)
             break;
             default:
                 if ( nType > NF_KEY_LASTKEYWORD_SO5 )
-                    rStream << short( SYMBOLTYPE_STRING );  // all new keywords are string
+                    rStream << short( NF_SYMBOLTYPE_STRING );  // all new keywords are string
                 else
                     rStream << nType;
         }
@@ -448,7 +453,7 @@ BOOL ImpSvNumFor::HasNewCurrency() const
 {
     for ( USHORT j=0; j<nAnzStrings; j++ )
     {
-        if ( aI.nTypeArray[j] == SYMBOLTYPE_CURRENCY )
+        if ( aI.nTypeArray[j] == NF_SYMBOLTYPE_CURRENCY )
             return TRUE;
     }
     return FALSE;
@@ -460,10 +465,10 @@ BOOL ImpSvNumFor::GetNewCurrencySymbol( String& rSymbol,
 {
     for ( USHORT j=0; j<nAnzStrings; j++ )
     {
-        if ( aI.nTypeArray[j] == SYMBOLTYPE_CURRENCY )
+        if ( aI.nTypeArray[j] == NF_SYMBOLTYPE_CURRENCY )
         {
             rSymbol = aI.sStrArray[j];
-            if ( j < nAnzStrings-1 && aI.nTypeArray[j+1] == SYMBOLTYPE_CURREXT )
+            if ( j < nAnzStrings-1 && aI.nTypeArray[j+1] == NF_SYMBOLTYPE_CURREXT )
                 rExtension = aI.sStrArray[j+1];
             else
                 rExtension.Erase();
@@ -483,9 +488,9 @@ void ImpSvNumFor::SaveNewCurrencyMap( SvStream& rStream ) const
     {
         switch ( aI.nTypeArray[j] )
         {
-            case SYMBOLTYPE_CURRENCY :
-            case SYMBOLTYPE_CURRDEL :
-            case SYMBOLTYPE_CURREXT :
+            case NF_SYMBOLTYPE_CURRENCY :
+            case NF_SYMBOLTYPE_CURRDEL :
+            case NF_SYMBOLTYPE_CURREXT :
                 nCnt++;
             break;
         }
@@ -495,9 +500,9 @@ void ImpSvNumFor::SaveNewCurrencyMap( SvStream& rStream ) const
     {
         switch ( aI.nTypeArray[j] )
         {
-            case SYMBOLTYPE_CURRENCY :
-            case SYMBOLTYPE_CURRDEL :
-            case SYMBOLTYPE_CURREXT :
+            case NF_SYMBOLTYPE_CURRENCY :
+            case NF_SYMBOLTYPE_CURRDEL :
+            case NF_SYMBOLTYPE_CURREXT :
                 rStream << j << aI.nTypeArray[j];
             break;
         }
@@ -522,41 +527,41 @@ void ImpSvNumFor::LoadNewCurrencyMap( SvStream& rStream )
 
 /***********************Funktionen SvNumberformat************************/
 
-enum Sc_FormatSymbolType
+enum BracketFormatSymbolType
 {
-    SYMBOLTYPE_FORMAT   = -1,       // subformat string
-    SYMBOLTYPE_COLOR    = -2,       // color
-    SYMBOLTYPE_ERROR    = -3,       // error
-    SYMBOLTYPE_DBNUM1   = -4,       // DoubleByteNumber, represent numbers
-    SYMBOLTYPE_DBNUM2   = -5,       // using CJK characters, Excel compatible.
-    SYMBOLTYPE_DBNUM3   = -6,
-    SYMBOLTYPE_DBNUM4   = -7,
-    SYMBOLTYPE_DBNUM5   = -8,
-    SYMBOLTYPE_DBNUM6   = -9,
-    SYMBOLTYPE_DBNUM7   = -10,
-    SYMBOLTYPE_DBNUM8   = -11,
-    SYMBOLTYPE_DBNUM9   = -12,
-    SYMBOLTYPE_LOCALE   = -13,
-    SYMBOLTYPE_NATNUM0  = -14,      // Our NativeNumber support, ASCII
-    SYMBOLTYPE_NATNUM1  = -15,      // Our NativeNumber support, represent
-    SYMBOLTYPE_NATNUM2  = -16,      // numbers using CJK, CTL, ...
-    SYMBOLTYPE_NATNUM3  = -17,
-    SYMBOLTYPE_NATNUM4  = -18,
-    SYMBOLTYPE_NATNUM5  = -19,
-    SYMBOLTYPE_NATNUM6  = -20,
-    SYMBOLTYPE_NATNUM7  = -21,
-    SYMBOLTYPE_NATNUM8  = -22,
-    SYMBOLTYPE_NATNUM9  = -23,
-    SYMBOLTYPE_NATNUM10 = -24,
-    SYMBOLTYPE_NATNUM11 = -25,
-    SYMBOLTYPE_NATNUM12 = -26,
-    SYMBOLTYPE_NATNUM13 = -27,
-    SYMBOLTYPE_NATNUM14 = -28,
-    SYMBOLTYPE_NATNUM15 = -29,
-    SYMBOLTYPE_NATNUM16 = -30,
-    SYMBOLTYPE_NATNUM17 = -31,
-    SYMBOLTYPE_NATNUM18 = -32,
-    SYMBOLTYPE_NATNUM19 = -33
+    BRACKET_SYMBOLTYPE_FORMAT   = -1,   // subformat string
+    BRACKET_SYMBOLTYPE_COLOR    = -2,   // color
+    BRACKET_SYMBOLTYPE_ERROR    = -3,   // error
+    BRACKET_SYMBOLTYPE_DBNUM1   = -4,   // DoubleByteNumber, represent numbers
+    BRACKET_SYMBOLTYPE_DBNUM2   = -5,   // using CJK characters, Excel compatible.
+    BRACKET_SYMBOLTYPE_DBNUM3   = -6,
+    BRACKET_SYMBOLTYPE_DBNUM4   = -7,
+    BRACKET_SYMBOLTYPE_DBNUM5   = -8,
+    BRACKET_SYMBOLTYPE_DBNUM6   = -9,
+    BRACKET_SYMBOLTYPE_DBNUM7   = -10,
+    BRACKET_SYMBOLTYPE_DBNUM8   = -11,
+    BRACKET_SYMBOLTYPE_DBNUM9   = -12,
+    BRACKET_SYMBOLTYPE_LOCALE   = -13,
+    BRACKET_SYMBOLTYPE_NATNUM0  = -14,  // Our NativeNumber support, ASCII
+    BRACKET_SYMBOLTYPE_NATNUM1  = -15,  // Our NativeNumber support, represent
+    BRACKET_SYMBOLTYPE_NATNUM2  = -16,  //  numbers using CJK, CTL, ...
+    BRACKET_SYMBOLTYPE_NATNUM3  = -17,
+    BRACKET_SYMBOLTYPE_NATNUM4  = -18,
+    BRACKET_SYMBOLTYPE_NATNUM5  = -19,
+    BRACKET_SYMBOLTYPE_NATNUM6  = -20,
+    BRACKET_SYMBOLTYPE_NATNUM7  = -21,
+    BRACKET_SYMBOLTYPE_NATNUM8  = -22,
+    BRACKET_SYMBOLTYPE_NATNUM9  = -23,
+    BRACKET_SYMBOLTYPE_NATNUM10 = -24,
+    BRACKET_SYMBOLTYPE_NATNUM11 = -25,
+    BRACKET_SYMBOLTYPE_NATNUM12 = -26,
+    BRACKET_SYMBOLTYPE_NATNUM13 = -27,
+    BRACKET_SYMBOLTYPE_NATNUM14 = -28,
+    BRACKET_SYMBOLTYPE_NATNUM15 = -29,
+    BRACKET_SYMBOLTYPE_NATNUM16 = -30,
+    BRACKET_SYMBOLTYPE_NATNUM17 = -31,
+    BRACKET_SYMBOLTYPE_NATNUM18 = -32,
+    BRACKET_SYMBOLTYPE_NATNUM19 = -33
 };
 
 SvNumberformat::SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge )
@@ -604,37 +609,37 @@ BOOL lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
         return TRUE;        // conditions
     switch ( nSymbolType )
     {
-        case SYMBOLTYPE_COLOR :
-        case SYMBOLTYPE_DBNUM1 :
-        case SYMBOLTYPE_DBNUM2 :
-        case SYMBOLTYPE_DBNUM3 :
-        case SYMBOLTYPE_DBNUM4 :
-        case SYMBOLTYPE_DBNUM5 :
-        case SYMBOLTYPE_DBNUM6 :
-        case SYMBOLTYPE_DBNUM7 :
-        case SYMBOLTYPE_DBNUM8 :
-        case SYMBOLTYPE_DBNUM9 :
-        case SYMBOLTYPE_LOCALE :
-        case SYMBOLTYPE_NATNUM0 :
-        case SYMBOLTYPE_NATNUM1 :
-        case SYMBOLTYPE_NATNUM2 :
-        case SYMBOLTYPE_NATNUM3 :
-        case SYMBOLTYPE_NATNUM4 :
-        case SYMBOLTYPE_NATNUM5 :
-        case SYMBOLTYPE_NATNUM6 :
-        case SYMBOLTYPE_NATNUM7 :
-        case SYMBOLTYPE_NATNUM8 :
-        case SYMBOLTYPE_NATNUM9 :
-        case SYMBOLTYPE_NATNUM10 :
-        case SYMBOLTYPE_NATNUM11 :
-        case SYMBOLTYPE_NATNUM12 :
-        case SYMBOLTYPE_NATNUM13 :
-        case SYMBOLTYPE_NATNUM14 :
-        case SYMBOLTYPE_NATNUM15 :
-        case SYMBOLTYPE_NATNUM16 :
-        case SYMBOLTYPE_NATNUM17 :
-        case SYMBOLTYPE_NATNUM18 :
-        case SYMBOLTYPE_NATNUM19 :
+        case BRACKET_SYMBOLTYPE_COLOR :
+        case BRACKET_SYMBOLTYPE_DBNUM1 :
+        case BRACKET_SYMBOLTYPE_DBNUM2 :
+        case BRACKET_SYMBOLTYPE_DBNUM3 :
+        case BRACKET_SYMBOLTYPE_DBNUM4 :
+        case BRACKET_SYMBOLTYPE_DBNUM5 :
+        case BRACKET_SYMBOLTYPE_DBNUM6 :
+        case BRACKET_SYMBOLTYPE_DBNUM7 :
+        case BRACKET_SYMBOLTYPE_DBNUM8 :
+        case BRACKET_SYMBOLTYPE_DBNUM9 :
+        case BRACKET_SYMBOLTYPE_LOCALE :
+        case BRACKET_SYMBOLTYPE_NATNUM0 :
+        case BRACKET_SYMBOLTYPE_NATNUM1 :
+        case BRACKET_SYMBOLTYPE_NATNUM2 :
+        case BRACKET_SYMBOLTYPE_NATNUM3 :
+        case BRACKET_SYMBOLTYPE_NATNUM4 :
+        case BRACKET_SYMBOLTYPE_NATNUM5 :
+        case BRACKET_SYMBOLTYPE_NATNUM6 :
+        case BRACKET_SYMBOLTYPE_NATNUM7 :
+        case BRACKET_SYMBOLTYPE_NATNUM8 :
+        case BRACKET_SYMBOLTYPE_NATNUM9 :
+        case BRACKET_SYMBOLTYPE_NATNUM10 :
+        case BRACKET_SYMBOLTYPE_NATNUM11 :
+        case BRACKET_SYMBOLTYPE_NATNUM12 :
+        case BRACKET_SYMBOLTYPE_NATNUM13 :
+        case BRACKET_SYMBOLTYPE_NATNUM14 :
+        case BRACKET_SYMBOLTYPE_NATNUM15 :
+        case BRACKET_SYMBOLTYPE_NATNUM16 :
+        case BRACKET_SYMBOLTYPE_NATNUM17 :
+        case BRACKET_SYMBOLTYPE_NATNUM18 :
+        case BRACKET_SYMBOLTYPE_NATNUM19 :
             return TRUE;
     }
     return FALSE;
@@ -757,7 +762,7 @@ SvNumberformat::SvNumberformat(String& rString,
             {
                 switch ( eSymbolType )
                 {
-                    case SYMBOLTYPE_COLOR :
+                    case BRACKET_SYMBOLTYPE_COLOR :
                     {
                         if ( NumFor[nIndex].GetColor() != NULL )
                         {                           // error, more than one color
@@ -775,26 +780,26 @@ SvNumberformat::SvNumberformat(String& rString,
                         }
                     }
                     break;
-                    case SYMBOLTYPE_NATNUM0 :
-                    case SYMBOLTYPE_NATNUM1 :
-                    case SYMBOLTYPE_NATNUM2 :
-                    case SYMBOLTYPE_NATNUM3 :
-                    case SYMBOLTYPE_NATNUM4 :
-                    case SYMBOLTYPE_NATNUM5 :
-                    case SYMBOLTYPE_NATNUM6 :
-                    case SYMBOLTYPE_NATNUM7 :
-                    case SYMBOLTYPE_NATNUM8 :
-                    case SYMBOLTYPE_NATNUM9 :
-                    case SYMBOLTYPE_NATNUM10 :
-                    case SYMBOLTYPE_NATNUM11 :
-                    case SYMBOLTYPE_NATNUM12 :
-                    case SYMBOLTYPE_NATNUM13 :
-                    case SYMBOLTYPE_NATNUM14 :
-                    case SYMBOLTYPE_NATNUM15 :
-                    case SYMBOLTYPE_NATNUM16 :
-                    case SYMBOLTYPE_NATNUM17 :
-                    case SYMBOLTYPE_NATNUM18 :
-                    case SYMBOLTYPE_NATNUM19 :
+                    case BRACKET_SYMBOLTYPE_NATNUM0 :
+                    case BRACKET_SYMBOLTYPE_NATNUM1 :
+                    case BRACKET_SYMBOLTYPE_NATNUM2 :
+                    case BRACKET_SYMBOLTYPE_NATNUM3 :
+                    case BRACKET_SYMBOLTYPE_NATNUM4 :
+                    case BRACKET_SYMBOLTYPE_NATNUM5 :
+                    case BRACKET_SYMBOLTYPE_NATNUM6 :
+                    case BRACKET_SYMBOLTYPE_NATNUM7 :
+                    case BRACKET_SYMBOLTYPE_NATNUM8 :
+                    case BRACKET_SYMBOLTYPE_NATNUM9 :
+                    case BRACKET_SYMBOLTYPE_NATNUM10 :
+                    case BRACKET_SYMBOLTYPE_NATNUM11 :
+                    case BRACKET_SYMBOLTYPE_NATNUM12 :
+                    case BRACKET_SYMBOLTYPE_NATNUM13 :
+                    case BRACKET_SYMBOLTYPE_NATNUM14 :
+                    case BRACKET_SYMBOLTYPE_NATNUM15 :
+                    case BRACKET_SYMBOLTYPE_NATNUM16 :
+                    case BRACKET_SYMBOLTYPE_NATNUM17 :
+                    case BRACKET_SYMBOLTYPE_NATNUM18 :
+                    case BRACKET_SYMBOLTYPE_NATNUM19 :
                     {
                         if ( NumFor[nIndex].GetNatNum().IsSet() )
                         {
@@ -805,21 +810,21 @@ SvNumberformat::SvNumberformat(String& rString,
                         {
                             sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "NatNum" ) );
                             //! eSymbolType is negative
-                            BYTE nNum = 0 - (eSymbolType - SYMBOLTYPE_NATNUM0);
+                            BYTE nNum = 0 - (eSymbolType - BRACKET_SYMBOLTYPE_NATNUM0);
                             sStr += String::CreateFromInt32( nNum );
                             NumFor[nIndex].SetNatNumNum( nNum, FALSE );
                         }
                     }
                     break;
-                    case SYMBOLTYPE_DBNUM1 :
-                    case SYMBOLTYPE_DBNUM2 :
-                    case SYMBOLTYPE_DBNUM3 :
-                    case SYMBOLTYPE_DBNUM4 :
-                    case SYMBOLTYPE_DBNUM5 :
-                    case SYMBOLTYPE_DBNUM6 :
-                    case SYMBOLTYPE_DBNUM7 :
-                    case SYMBOLTYPE_DBNUM8 :
-                    case SYMBOLTYPE_DBNUM9 :
+                    case BRACKET_SYMBOLTYPE_DBNUM1 :
+                    case BRACKET_SYMBOLTYPE_DBNUM2 :
+                    case BRACKET_SYMBOLTYPE_DBNUM3 :
+                    case BRACKET_SYMBOLTYPE_DBNUM4 :
+                    case BRACKET_SYMBOLTYPE_DBNUM5 :
+                    case BRACKET_SYMBOLTYPE_DBNUM6 :
+                    case BRACKET_SYMBOLTYPE_DBNUM7 :
+                    case BRACKET_SYMBOLTYPE_DBNUM8 :
+                    case BRACKET_SYMBOLTYPE_DBNUM9 :
                     {
                         if ( NumFor[nIndex].GetNatNum().IsSet() )
                         {
@@ -830,13 +835,13 @@ SvNumberformat::SvNumberformat(String& rString,
                         {
                             sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DBNum" ) );
                             //! eSymbolType is negative
-                            BYTE nNum = 1 - (eSymbolType - SYMBOLTYPE_DBNUM1);
+                            BYTE nNum = 1 - (eSymbolType - BRACKET_SYMBOLTYPE_DBNUM1);
                             sStr += static_cast< sal_Unicode >('0' + nNum);
                             NumFor[nIndex].SetNatNumNum( nNum, TRUE );
                         }
                     }
                     break;
-                    case SYMBOLTYPE_LOCALE :
+                    case BRACKET_SYMBOLTYPE_LOCALE :
                     {
                         if ( NumFor[nIndex].GetNatNum().GetLang() != LANGUAGE_DONTKNOW )
                         {
@@ -878,7 +883,7 @@ SvNumberformat::SvNumberformat(String& rString,
         // The remaining format code string
         if ( !bCancel )
         {
-            if (eSymbolType == SYMBOLTYPE_FORMAT)
+            if (eSymbolType == BRACKET_SYMBOLTYPE_FORMAT)
             {
                 if (nIndex == 1 && eOp1 == NUMBERFORMAT_OP_NO)
                     eOp1 = NUMBERFORMAT_OP_GT;  // undefined condition, default: > 0
@@ -923,7 +928,7 @@ SvNumberformat::SvNumberformat(String& rString,
                     }
                 }
             }
-            else if (eSymbolType == SYMBOLTYPE_ERROR)   // error
+            else if (eSymbolType == BRACKET_SYMBOLTYPE_ERROR)   // error
             {
                 nCheckPos = nPosOld;
                 bCancel = TRUE;
@@ -944,7 +949,7 @@ SvNumberformat::SvNumberformat(String& rString,
         }
         if (rString.Len() == nPos)
         {
-            if ( nIndex == 2 && eSymbolType == SYMBOLTYPE_FORMAT &&
+            if ( nIndex == 2 && eSymbolType == BRACKET_SYMBOLTYPE_FORMAT &&
                     rString.GetChar(nPos-1) == ';' )
             {   // #83510# A 4th subformat explicitly specified to be empty
                 // hides any text. Need the type here for HasTextFormat()
@@ -1146,7 +1151,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                                  xub_StrLen& nPos,
                                  String& sSymbol)
 {
-    short eType = SYMBOLTYPE_FORMAT;
+    short eType = BRACKET_SYMBOLTYPE_FORMAT;
     sal_Unicode cToken;
     sal_Unicode cLetter = ' ';                               // Zwischenergebnis
     xub_StrLen nLen = rString.Len();
@@ -1170,12 +1175,12 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                 {
                     eState = SsGetString;
                     nPos--;
-                    eType = SYMBOLTYPE_FORMAT;
+                    eType = BRACKET_SYMBOLTYPE_FORMAT;
                 }
                 else if (cToken == ']')
                 {
                     eState = SsStop;
-                    eType = SYMBOLTYPE_ERROR;
+                    eType = BRACKET_SYMBOLTYPE_ERROR;
                 }
                 else if (cToken == ' ')             // Skip Blanks
                 {
@@ -1187,7 +1192,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                 {
                     sSymbol += cToken;
                     eState = SsGetString;
-                    eType = SYMBOLTYPE_FORMAT;
+                    eType = BRACKET_SYMBOLTYPE_FORMAT;
                 }
             }
             break;
@@ -1224,12 +1229,12 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                         if ( rString.GetChar(nPos) == '-' )
                         {   // [$-xxx] locale
                             sSymbol.EraseAllChars('[');
-                            eType = SYMBOLTYPE_LOCALE;
+                            eType = BRACKET_SYMBOLTYPE_LOCALE;
                             eState = SsGetPrefix;
                         }
                         else
                         {   // currency as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
-                            eType = SYMBOLTYPE_FORMAT;
+                            eType = BRACKET_SYMBOLTYPE_FORMAT;
                             eState = SsGetString;
                         }
                         sSymbol += cToken;
@@ -1237,7 +1242,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     break;
                     case '~' :
                     {   // calendarID as of SV_NUMBERFORMATTER_VERSION_CALENDAR
-                        eType = SYMBOLTYPE_FORMAT;
+                        eType = BRACKET_SYMBOLTYPE_FORMAT;
                         sSymbol += cToken;
                         eState = SsGetString;
                     }
@@ -1257,7 +1262,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                             sSymbol += rString.Copy( --nPos, aNatNum.Len()+1 );
                             nPos += aNatNum.Len()+1;
                             //! SymbolType is negative
-                            eType = (short) (SYMBOLTYPE_NATNUM0 - nNatNumNum);
+                            eType = (short) (BRACKET_SYMBOLTYPE_NATNUM0 - nNatNumNum);
                             eState = SsGetPrefix;
                         }
                         else if ( aUpperDBNum == aDBNum && '1' <= cDBNum && cDBNum <= '9' )
@@ -1266,7 +1271,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                             sSymbol += rString.Copy( --nPos, aDBNum.Len()+1 );
                             nPos += aDBNum.Len()+1;
                             //! SymbolType is negative
-                            eType = SYMBOLTYPE_DBNUM1 - (cDBNum - '1');
+                            eType = BRACKET_SYMBOLTYPE_DBNUM1 - (cDBNum - '1');
                             eState = SsGetPrefix;
                         }
                         else if (cUpper == pKeywords[NF_KEY_H].GetChar(0)   ||  // H
@@ -1281,7 +1286,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                         {
                             sSymbol.EraseAllChars('[');
                             sSymbol += cToken;
-                            eType = SYMBOLTYPE_COLOR;
+                            eType = BRACKET_SYMBOLTYPE_COLOR;
                             eState = SsGetPrefix;
                         }
                     }
@@ -1303,7 +1308,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                 {
                     sSymbol += cToken;
                     eState = SsGetString;
-                    eType = SYMBOLTYPE_FORMAT;
+                    eType = BRACKET_SYMBOLTYPE_FORMAT;
                 }
                 else
                 {
@@ -1328,7 +1333,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     {
                         sSymbol.EraseAllChars('[');
                         sSymbol += cToken;
-                        eType = SYMBOLTYPE_COLOR;
+                        eType = BRACKET_SYMBOLTYPE_COLOR;
                         eState = SsGetPrefix;
                     }
                 }
@@ -1341,7 +1346,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     case '<':
                     {
                         eState = SsStop;
-                        eType = SYMBOLTYPE_ERROR;
+                        eType = BRACKET_SYMBOLTYPE_ERROR;
                     }
                     break;
                     case '>':
@@ -1356,7 +1361,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                         else
                         {
                             eState = SsStop;
-                            eType = SYMBOLTYPE_ERROR;
+                            eType = BRACKET_SYMBOLTYPE_ERROR;
                         }
                     }
                     break;
@@ -1377,7 +1382,7 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                         else
                         {
                             eState = SsStop;
-                            eType = SYMBOLTYPE_ERROR;
+                            eType = BRACKET_SYMBOLTYPE_ERROR;
                         }
                     }
                     break;
@@ -1896,7 +1901,7 @@ BOOL SvNumberformat::GetOutputString(String& sString,
         {
             switch (rInfo.nTypeArray[i])
             {
-                case SYMBOLTYPE_STAR:
+                case NF_SYMBOLTYPE_STAR:
                     if( bStarFlag )
                     {
                         OutString += (sal_Unicode) 0x1B;
@@ -1904,12 +1909,12 @@ BOOL SvNumberformat::GetOutputString(String& sString,
                         bRes = TRUE;
                     }
                 break;
-                case SYMBOLTYPE_BLANK:
+                case NF_SYMBOLTYPE_BLANK:
                     InsertBlanks( OutString, OutString.Len(),
                         rInfo.sStrArray[i].GetChar(1) );
                 break;
                 case NF_KEY_GENERAL :   // #77026# "General" is the same as "@"
-                case SYMBOLTYPE_DEL :
+                case NF_SYMBOLTYPE_DEL :
                     OutString += sString;
                 break;
                 default:
@@ -2047,7 +2052,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                 {
                     switch (rInfo.nTypeArray[i])
                     {
-                        case SYMBOLTYPE_STAR:
+                        case NF_SYMBOLTYPE_STAR:
                             if( bStarFlag )
                             {
                                 OutString += (sal_Unicode) 0x1B;
@@ -2055,15 +2060,15 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                                 bRes = TRUE;
                             }
                             break;
-                        case SYMBOLTYPE_BLANK:
+                        case NF_SYMBOLTYPE_BLANK:
                             InsertBlanks( OutString, OutString.Len(),
                                 rInfo.sStrArray[i].GetChar(1) );
                             break;
-                        case SYMBOLTYPE_STRING:
-                        case SYMBOLTYPE_CURRENCY:
+                        case NF_SYMBOLTYPE_STRING:
+                        case NF_SYMBOLTYPE_CURRENCY:
                             OutString += rInfo.sStrArray[i];
                             break;
-                        case SYMBOLTYPE_THSEP:
+                        case NF_SYMBOLTYPE_THSEP:
                             if (rInfo.nThousand == 0)
                                 OutString += rInfo.sStrArray[i];
                         break;
@@ -2301,9 +2306,9 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
 
                 USHORT j = nAnz-1;                  // letztes Symbol->rueckw.
                 xub_StrLen k;                       // Nenner:
-                bRes |= ImpNumberFill(sDiv, fNumber, k, j, nIx, SYMBOLTYPE_FRAC);
+                bRes |= ImpNumberFill(sDiv, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRAC);
                 BOOL bCont = TRUE;
-                if (rInfo.nTypeArray[j] == SYMBOLTYPE_FRAC)
+                if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRAC)
                 {
                     if (rInfo.nCntPre > 0 && nFrac == 0)
                         sDiv.Insert(' ',0);
@@ -2319,8 +2324,8 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                     sFrac.Erase();
                 else
                 {
-                    bRes |= ImpNumberFill(sFrac, fNumber, k, j, nIx, SYMBOLTYPE_FRACBLANK);
-                    if (rInfo.nTypeArray[j] == SYMBOLTYPE_FRACBLANK)
+                    bRes |= ImpNumberFill(sFrac, fNumber, k, j, nIx, NF_SYMBOLTYPE_FRACBLANK);
+                    if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_FRACBLANK)
                     {
                         sFrac.Insert(rInfo.sStrArray[j],0);
                         if ( j )
@@ -2393,7 +2398,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                 }
                 USHORT j = nAnz-1;              // last symbol
                 xub_StrLen k;
-                bRes |= ImpNumberFill(ExpStr, fNumber, k, j, nIx, SYMBOLTYPE_EXP);
+                bRes |= ImpNumberFill(ExpStr, fNumber, k, j, nIx, NF_SYMBOLTYPE_EXP);
 
                 while (k > 0)                   // erase leading zeros
                 {
@@ -2402,7 +2407,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                         ExpStr.Erase(0,1);
                 }
                 BOOL bCont = TRUE;
-                if (rInfo.nTypeArray[j] == SYMBOLTYPE_EXP)
+                if (rInfo.nTypeArray[j] == NF_SYMBOLTYPE_EXP)
                 {
                     const String& rStr = rInfo.sStrArray[j];
                     if (nExpSign == -1)
@@ -2560,7 +2565,7 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
     {
         switch (rInfo.nTypeArray[i])
         {
-            case SYMBOLTYPE_STAR:
+            case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
                     OutString += (sal_Unicode) 0x1B;
@@ -2568,18 +2573,22 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
                     bRes = TRUE;
                 }
                 break;
-            case SYMBOLTYPE_BLANK:
+            case NF_SYMBOLTYPE_BLANK:
                 InsertBlanks( OutString, OutString.Len(),
                     rInfo.sStrArray[i].GetChar(1) );
                 break;
-            case SYMBOLTYPE_STRING:
-            case SYMBOLTYPE_CURRENCY:
+            case NF_SYMBOLTYPE_STRING:
+            case NF_SYMBOLTYPE_CURRENCY:
+            case NF_SYMBOLTYPE_DATESEP:
+            case NF_SYMBOLTYPE_TIMESEP:
+            case NF_SYMBOLTYPE_TIME100SECSEP:
                 OutString += rInfo.sStrArray[i];
                 break;
-            case SYMBOLTYPE_DIGIT:
+            case NF_SYMBOLTYPE_DIGIT:
             {
                 xub_StrLen nLen = ( bInputLine && i > 0 &&
-                    rInfo.nTypeArray[i-1] == SYMBOLTYPE_STRING ?
+                    (rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_STRING ||
+                     rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_TIME100SECSEP) ?
                     nCntPost : rInfo.sStrArray[i].Len() );
                 for (xub_StrLen j = 0; j < nLen && nSecPos < nCntPost; j++)
                 {
@@ -2652,7 +2661,7 @@ BOOL SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
     {
         switch ( rInfo.nTypeArray[i] )
         {
-            case SYMBOLTYPE_CALENDAR :
+            case NF_SYMBOLTYPE_CALENDAR :
                 return FALSE;
             break;
             case NF_KEY_EC :
@@ -2748,7 +2757,7 @@ BOOL SvNumberformat::ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
     const USHORT nAnz = rNumFor.GetnAnz();
     for ( USHORT i = 0; i < nAnz; i++ )
     {
-        if ( rInfo.nTypeArray[i] == SYMBOLTYPE_CALENDAR )
+        if ( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_CALENDAR )
         {
             CalendarWrapper& rCal = GetCal();
             if ( !rOrgCalendar.Len() )
@@ -2814,7 +2823,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
     {
         switch (rInfo.nTypeArray[i])
         {
-            case SYMBOLTYPE_CALENDAR :
+            case NF_SYMBOLTYPE_CALENDAR :
                 if ( !aOrgCalendar.Len() )
                 {
                     aOrgCalendar = rCal.getUniqueID();
@@ -2824,7 +2833,7 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                 rCal.setDateTime( fOrgDateTime );
                 ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime );
             break;
-            case SYMBOLTYPE_STAR:
+            case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
                     OutString += (sal_Unicode) 0x1B;
@@ -2832,12 +2841,15 @@ BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                     bRes = TRUE;
                 }
             break;
-            case SYMBOLTYPE_BLANK:
+            case NF_SYMBOLTYPE_BLANK:
                 InsertBlanks( OutString, OutString.Len(),
                     rInfo.sStrArray[i].GetChar(1) );
             break;
-            case SYMBOLTYPE_STRING:
-            case SYMBOLTYPE_CURRENCY:
+            case NF_SYMBOLTYPE_STRING:
+            case NF_SYMBOLTYPE_CURRENCY:
+            case NF_SYMBOLTYPE_DATESEP:
+            case NF_SYMBOLTYPE_TIMESEP:
+            case NF_SYMBOLTYPE_TIME100SECSEP:
                 OutString += rInfo.sStrArray[i];
             break;
             case NF_KEY_M:                  // M
@@ -2980,15 +2992,6 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     CalendarWrapper& rCal = GetCal();
     double fDiff = DateTime(*(rScan.GetNullDate())) - rCal.getEpochStart();
     fNumber += fDiff;
-    rCal.setLocalDateTime( fNumber );
-    String aOrgCalendar;        // empty => not changed yet
-    double fOrgDateTime;
-    BOOL bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
-    if ( bOtherCalendar )
-        SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
-    if ( ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime ) )
-        bOtherCalendar = FALSE;
-    sal_Int16 nNatNum = NumFor[nIx].GetNatNum().GetNatNum();
 
     const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
     BOOL bInputLine;
@@ -3006,8 +3009,24 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     }
     double fTime = (fNumber - floor( fNumber )) * 86400.0;
     fTime = ::rtl::math::round( fTime, int(nCntPost) );
-    ULONG nSeconds = (ULONG)floor( fTime );
+    if (fTime >= 86400.0)
+    {
+        // result of fNumber==x.999999999... rounded up, use correct date/time
+        fTime -= 86400.0;
+        fNumber = floor( fNumber + 0.5) + fTime;
+    }
+    rCal.setLocalDateTime( fNumber );
 
+    String aOrgCalendar;        // empty => not changed yet
+    double fOrgDateTime;
+    BOOL bOtherCalendar = ImpIsOtherCalendar( NumFor[nIx] );
+    if ( bOtherCalendar )
+        SwitchToOtherCalendar( aOrgCalendar, fOrgDateTime );
+    if ( ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime ) )
+        bOtherCalendar = FALSE;
+    sal_Int16 nNatNum = NumFor[nIx].GetNatNum().GetNatNum();
+
+    ULONG nSeconds = (ULONG)floor( fTime );
     String sSecStr( ::rtl::math::doubleToUString( fTime-nSeconds,
                 rtl_math_StringFormat_F, int(nCntPost), '.'));
     sSecStr.EraseLeadingChars('0');
@@ -3077,7 +3096,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
     {
         switch (rInfo.nTypeArray[i])
         {
-            case SYMBOLTYPE_CALENDAR :
+            case NF_SYMBOLTYPE_CALENDAR :
                 if ( !aOrgCalendar.Len() )
                 {
                     aOrgCalendar = rCal.getUniqueID();
@@ -3087,7 +3106,7 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                 rCal.setDateTime( fOrgDateTime );
                 ImpFallBackToGregorianCalendar( aOrgCalendar, fOrgDateTime );
                 break;
-            case SYMBOLTYPE_STAR:
+            case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
                     OutString += (sal_Unicode) 0x1B;
@@ -3095,18 +3114,22 @@ BOOL SvNumberformat::ImpGetDateTimeOutput(double fNumber,
                     bRes = TRUE;
                 }
                 break;
-            case SYMBOLTYPE_BLANK:
+            case NF_SYMBOLTYPE_BLANK:
                 InsertBlanks( OutString, OutString.Len(),
                     rInfo.sStrArray[i].GetChar(1) );
                 break;
-            case SYMBOLTYPE_STRING:
-            case SYMBOLTYPE_CURRENCY:
+            case NF_SYMBOLTYPE_STRING:
+            case NF_SYMBOLTYPE_CURRENCY:
+            case NF_SYMBOLTYPE_DATESEP:
+            case NF_SYMBOLTYPE_TIMESEP:
+            case NF_SYMBOLTYPE_TIME100SECSEP:
                 OutString += rInfo.sStrArray[i];
                 break;
-            case SYMBOLTYPE_DIGIT:
+            case NF_SYMBOLTYPE_DIGIT:
             {
                 xub_StrLen nLen = ( bInputLine && i > 0 &&
-                    rInfo.nTypeArray[i-1] == SYMBOLTYPE_STRING ?
+                    (rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_STRING ||
+                     rInfo.nTypeArray[i-1] == NF_SYMBOLTYPE_TIME100SECSEP) ?
                     nCntPost : rInfo.sStrArray[i].Len() );
                 for (xub_StrLen j = 0; j < nLen && nSecPos < nCntPost; j++)
                 {
@@ -3386,11 +3409,11 @@ BOOL SvNumberformat::ImpGetNumberOutput(double fNumber,
         BOOL bFilled = FALSE;           // ob aufgefuellt wurde ?
         short nType;
         while (j > 0 &&                 // rueckwaerts
-           (nType = rInfo.nTypeArray[j]) != SYMBOLTYPE_DECSEP)
+           (nType = rInfo.nTypeArray[j]) != NF_SYMBOLTYPE_DECSEP)
         {
             switch ( nType )
             {
-                case SYMBOLTYPE_STAR:
+                case NF_SYMBOLTYPE_STAR:
                     if( bStarFlag )
                     {
                         sStr.Insert( (sal_Unicode) 0x1B, k /*++*/ );
@@ -3398,18 +3421,19 @@ BOOL SvNumberformat::ImpGetNumberOutput(double fNumber,
                         bRes = TRUE;
                     }
                     break;
-                case SYMBOLTYPE_BLANK:
+                case NF_SYMBOLTYPE_BLANK:
                     /*k = */ InsertBlanks( sStr,k,rInfo.sStrArray[j].GetChar(1) );
                     break;
-                case SYMBOLTYPE_STRING:
-                case SYMBOLTYPE_CURRENCY:
+                case NF_SYMBOLTYPE_STRING:
+                case NF_SYMBOLTYPE_CURRENCY:
+                case NF_SYMBOLTYPE_PERCENT:
                     sStr.Insert(rInfo.sStrArray[j],k);
                     break;
-                case SYMBOLTYPE_THSEP:
+                case NF_SYMBOLTYPE_THSEP:
                     if (rInfo.nThousand == 0)
                         sStr.Insert(rInfo.sStrArray[j],k);
                 break;
-                case SYMBOLTYPE_DIGIT:
+                case NF_SYMBOLTYPE_DIGIT:
                 {
                     const String& rStr = rInfo.sStrArray[j];
                     const sal_Unicode* p1 = rStr.GetBuffer();
@@ -3500,14 +3524,15 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
             bStop = TRUE;
         switch (rInfo.nTypeArray[j])
         {
-            case SYMBOLTYPE_DECSEP:
-            case SYMBOLTYPE_STRING:
-            case SYMBOLTYPE_CURRENCY:
+            case NF_SYMBOLTYPE_DECSEP:
+            case NF_SYMBOLTYPE_STRING:
+            case NF_SYMBOLTYPE_CURRENCY:
+            case NF_SYMBOLTYPE_PERCENT:
                 sStr.Insert(rInfo.sStrArray[j],k);
                 if ( k == 0 )
                     nLeadingStringChars += rInfo.sStrArray[j].Len();
             break;
-            case SYMBOLTYPE_STAR:
+            case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
                     sStr.Insert( (sal_Unicode) 0x1B, k/*++*/ );
@@ -3515,10 +3540,10 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
                     bRes = TRUE;
                 }
                 break;
-            case SYMBOLTYPE_BLANK:
+            case NF_SYMBOLTYPE_BLANK:
                 /*k = */ InsertBlanks( sStr,k,rInfo.sStrArray[j].GetChar(1) );
                 break;
-            case SYMBOLTYPE_THSEP:
+            case NF_SYMBOLTYPE_THSEP:
             {
                 // #i7284# #102685# Insert separator also if number is divided
                 // by thousands and the separator is specified somewhere in
@@ -3531,8 +3556,8 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
                 // division), else do insert.
                 if ( !bDoThousands && j < NumFor[nIx].GetnAnz()-1 )
                     bDoThousands = ((j == 0) ||
-                            (rInfo.nTypeArray[j-1] != SYMBOLTYPE_DIGIT) ||
-                            (rInfo.nTypeArray[j+1] == SYMBOLTYPE_DIGIT));
+                            (rInfo.nTypeArray[j-1] != NF_SYMBOLTYPE_DIGIT) ||
+                            (rInfo.nTypeArray[j+1] == NF_SYMBOLTYPE_DIGIT));
                 if ( bDoThousands && k > 0 )
                 {
                     sStr.Insert(rInfo.sStrArray[j],k);
@@ -3540,7 +3565,7 @@ BOOL SvNumberformat::ImpNumberFillWithThousands(
                 }
             }
             break;
-            case SYMBOLTYPE_DIGIT:
+            case NF_SYMBOLTYPE_DIGIT:
             {
                 const String& rStr = rInfo.sStrArray[j];
                 const sal_Unicode* p1 = rStr.GetBuffer();
@@ -3652,7 +3677,7 @@ BOOL SvNumberformat::ImpNumberFill(String& sStr,        // Zahlstring
     {                                       // rueckwaerts:
         switch ( nType )
         {
-            case SYMBOLTYPE_STAR:
+            case NF_SYMBOLTYPE_STAR:
                 if( bStarFlag )
                 {
                     sStr.Insert( sal_Unicode(0x1B), k++ );
@@ -3660,10 +3685,10 @@ BOOL SvNumberformat::ImpNumberFill(String& sStr,        // Zahlstring
                     bRes = TRUE;
                 }
                 break;
-            case SYMBOLTYPE_BLANK:
+            case NF_SYMBOLTYPE_BLANK:
                 k = InsertBlanks( sStr,k,rInfo.sStrArray[j].GetChar(1) );
                 break;
-            case SYMBOLTYPE_DIGIT:
+            case NF_SYMBOLTYPE_DIGIT:
             {
                 const String& rStr = rInfo.sStrArray[j];
                 const sal_Unicode* p1 = rStr.GetBuffer();
@@ -3756,7 +3781,7 @@ void SvNumberformat::GetNumForInfo( USHORT nNumFor, short& rScannedType,
         while (!bStop && i < nAnz)
         {
             short nType = rInfo.nTypeArray[i];
-            if ( nType == SYMBOLTYPE_DIGIT)
+            if ( nType == NF_SYMBOLTYPE_DIGIT)
             {
                 register const sal_Unicode* p = rInfo.sStrArray[i].GetBuffer();
                 while ( *p == '#' )
@@ -3764,7 +3789,7 @@ void SvNumberformat::GetNumForInfo( USHORT nNumFor, short& rScannedType,
                 while ( *p++ == '0' )
                     nAnzLeading++;
             }
-            else if (nType == SYMBOLTYPE_DECSEP)
+            else if (nType == NF_SYMBOLTYPE_DECSEP)
                 bStop = TRUE;
             i++;
         }
@@ -3785,13 +3810,13 @@ const String* SvNumberformat::GetNumForString( USHORT nNumFor, USHORT nPos,
         if ( bString )
         {   // rueckwaerts
             short* pType = NumFor[nNumFor].Info().nTypeArray + nPos;
-            while ( nPos > 0 && (*pType != SYMBOLTYPE_STRING) &&
-                    (*pType != SYMBOLTYPE_CURRENCY) )
+            while ( nPos > 0 && (*pType != NF_SYMBOLTYPE_STRING) &&
+                    (*pType != NF_SYMBOLTYPE_CURRENCY) )
             {
                 pType--;
                 nPos--;
             }
-            if ( (*pType != SYMBOLTYPE_STRING) && (*pType != SYMBOLTYPE_CURRENCY) )
+            if ( (*pType != NF_SYMBOLTYPE_STRING) && (*pType != NF_SYMBOLTYPE_CURRENCY) )
                 return NULL;
         }
     }
@@ -3800,14 +3825,14 @@ const String* SvNumberformat::GetNumForString( USHORT nNumFor, USHORT nPos,
     else if ( bString )
     {   // vorwaerts
         short* pType = NumFor[nNumFor].Info().nTypeArray + nPos;
-        while ( nPos < nAnz && (*pType != SYMBOLTYPE_STRING) &&
-                (*pType != SYMBOLTYPE_CURRENCY) )
+        while ( nPos < nAnz && (*pType != NF_SYMBOLTYPE_STRING) &&
+                (*pType != NF_SYMBOLTYPE_CURRENCY) )
         {
             pType++;
             nPos++;
         }
-        if ( nPos >= nAnz || ((*pType != SYMBOLTYPE_STRING) &&
-                    (*pType != SYMBOLTYPE_CURRENCY)) )
+        if ( nPos >= nAnz || ((*pType != NF_SYMBOLTYPE_STRING) &&
+                    (*pType != NF_SYMBOLTYPE_CURRENCY)) )
             return NULL;
     }
     return &NumFor[nNumFor].Info().sStrArray[nPos];
@@ -3828,13 +3853,13 @@ short SvNumberformat::GetNumForType( USHORT nNumFor, USHORT nPos,
         if ( bString )
         {   // rueckwaerts
             short* pType = NumFor[nNumFor].Info().nTypeArray + nPos;
-            while ( nPos > 0 && (*pType != SYMBOLTYPE_STRING) &&
-                    (*pType != SYMBOLTYPE_CURRENCY) )
+            while ( nPos > 0 && (*pType != NF_SYMBOLTYPE_STRING) &&
+                    (*pType != NF_SYMBOLTYPE_CURRENCY) )
             {
                 pType--;
                 nPos--;
             }
-            if ( (*pType != SYMBOLTYPE_STRING) && (*pType != SYMBOLTYPE_CURRENCY) )
+            if ( (*pType != NF_SYMBOLTYPE_STRING) && (*pType != NF_SYMBOLTYPE_CURRENCY) )
                 return 0;
         }
     }
@@ -3843,13 +3868,13 @@ short SvNumberformat::GetNumForType( USHORT nNumFor, USHORT nPos,
     else if ( bString )
     {   // vorwaerts
         short* pType = NumFor[nNumFor].Info().nTypeArray + nPos;
-        while ( nPos < nAnz && (*pType != SYMBOLTYPE_STRING) &&
-                (*pType != SYMBOLTYPE_CURRENCY) )
+        while ( nPos < nAnz && (*pType != NF_SYMBOLTYPE_STRING) &&
+                (*pType != NF_SYMBOLTYPE_CURRENCY) )
         {
             pType++;
             nPos++;
         }
-        if ( (*pType != SYMBOLTYPE_STRING) && (*pType != SYMBOLTYPE_CURRENCY) )
+        if ( (*pType != NF_SYMBOLTYPE_STRING) && (*pType != NF_SYMBOLTYPE_CURRENCY) )
             return 0;
     }
     return NumFor[nNumFor].Info().nTypeArray[nPos];
@@ -4108,42 +4133,28 @@ String SvNumberformat::GetMappedFormatstring(
                 {
                     switch ( pType[j] )
                     {
-                        case SYMBOLTYPE_DECSEP :
+                        case NF_SYMBOLTYPE_DECSEP :
                             aStr += rLoc.getNumDecimalSep();
                         break;
-                        case SYMBOLTYPE_THSEP :
+                        case NF_SYMBOLTYPE_THSEP :
                             aStr += rLoc.getNumThousandSep();
                         break;
-                        case SYMBOLTYPE_STRING :
+                        case NF_SYMBOLTYPE_DATESEP :
+                            aStr += rLoc.getDateSep();
+                        break;
+                        case NF_SYMBOLTYPE_TIMESEP :
+                            aStr += rLoc.getTimeSep();
+                        break;
+                        case NF_SYMBOLTYPE_TIME100SECSEP :
+                            aStr += rLoc.getTime100SecSep();
+                        break;
+                        case NF_SYMBOLTYPE_STRING :
                             if( bDontQuote )
                                 aStr += pStr[j];
                             else if ( pStr[j].Len() == 1 )
                             {
-                                sal_Unicode cx = pStr[j].GetChar(0);
-                                switch ( cx )
-                                {
-                                    case '+' :
-                                    case '-' :
-                                    case ' ' :
-                                    case '%' :
-                                        aStr += cx;     // don't escape simple forms
-                                    break;
-                                    default:
-                                        // #i13399# Don't escape separators of
-                                        // target locale.
-                                        //! TODO: without binary filter all
-                                        // separators should become some
-                                        // SYMBOLTYPE_...SEP, which would also
-                                        // ease handling of
-                                        // PutandConvertEntry() and similar.
-                                        if ( !(((eType & NUMBERFORMAT_DATE) != 0)
-                                              && cx == rLoc.getDateSep().GetChar(0))
-                                          && !(((eType & NUMBERFORMAT_TIME) != 0)
-                                              && (cx == rLoc.getTimeSep().GetChar(0))
-                                               || cx == rLoc.getTime100SecSep().GetChar(0)))
-                                            aStr += '\\';
-                                        aStr += cx;
-                                }
+                                aStr += '\\';
+                                aStr += pStr[j];
                             }
                             else
                             {
@@ -4418,8 +4429,12 @@ USHORT SvNumberformat::ImpGetNumForStringElementCount( USHORT nNumFor ) const
     {
         switch ( pType[j] )
         {
-            case SYMBOLTYPE_STRING:
-            case SYMBOLTYPE_CURRENCY:
+            case NF_SYMBOLTYPE_STRING:
+            case NF_SYMBOLTYPE_CURRENCY:
+            case NF_SYMBOLTYPE_DATESEP:
+            case NF_SYMBOLTYPE_TIMESEP:
+            case NF_SYMBOLTYPE_TIME100SECSEP:
+            case NF_SYMBOLTYPE_PERCENT:
                 ++nCnt;
             break;
         }
