@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-15 14:30:32 $
+ *  last change: $Author: nn $ $Date: 2002-07-15 18:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,8 @@ void ScTransferObj::GetAreaSize( ScDocument* pDoc, USHORT nTab1, USHORT nTab2, U
     for( USHORT nTab = nTab1; nTab <= nTab2; nTab++ )
     {
         USHORT nLastCol = 0, nLastRow = 0;
-        if( pDoc->GetCellArea( nTab, nLastCol, nLastRow ) )
+        // GetPrintArea instead of GetCellArea - include drawing objects
+        if( pDoc->GetPrintArea( nTab, nLastCol, nLastRow ) )
         {
             if( nLastCol > nMaxCol )
                 nMaxCol = nLastCol;
