@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-19 09:31:57 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 10:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,7 +424,7 @@ sal_Bool CommandThread_Impl::DoIt()
     catch ( InteractiveIOException& r )
     {
         bException = true;
-        if ( r.Code == IOErrorCode_ACCESS_DENIED )
+        if ( r.Code == IOErrorCode_ACCESS_DENIED || IOErrorCode_LOCKING_VIOLATION )
             m_xLockBytes->SetError( ERRCODE_IO_ACCESSDENIED );
         else if ( r.Code == IOErrorCode_NOT_EXISTING )
             m_xLockBytes->SetError( ERRCODE_IO_NOTEXISTS );
