@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writersvc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:36:18 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:20:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
 #include <com/sun/star/lang/WrappedTargetException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETRUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -239,9 +242,18 @@ template <class BackendInterface>
 uno::Reference< sax::XDocumentHandler > WriterService<BackendInterface>::createHandler() const
     throw (uno::RuntimeException)
 {
-    static rtl::OUString const k_sSaxWriterSvc( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") );
+    try
+    {
+        static rtl::OUString const k_sSaxWriterSvc( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") );
 
-    return SaxHandler::query( getServiceFactory()->createInstance(k_sSaxWriterSvc) );
+        return SaxHandler::query( getServiceFactory()->createInstance(k_sSaxWriterSvc) );
+    }
+    catch (uno::RuntimeException& ) { throw; }
+    catch (uno::Exception& e)
+    {
+        lang::XInitialization * const pThis = const_cast<WriterService *>(this);
+        throw lang::WrappedTargetRuntimeException(e.Message, pThis, uno::makeAny(e));
+    }
 }
 
 // -----------------------------------------------------------------------------
