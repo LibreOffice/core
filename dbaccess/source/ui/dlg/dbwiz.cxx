@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwiz.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:14:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,6 +215,7 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState(WizardState _nCurr
             switch(m_eType)
             {
                 case DST_MOZILLA:
+                case DST_THUNDERBIRD:
                 case DST_OUTLOOK:
                 case DST_OUTLOOKEXP:
                 case DST_EVOLUTION:
