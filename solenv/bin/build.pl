@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.94 $
+#   $Revision: 1.95 $
 #
-#   last change: $Author: vg $ $Date: 2003-10-28 11:09:56 $
+#   last change: $Author: vg $ $Date: 2003-12-17 18:03:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.94 $ ';
+    $id_str = ' $Revision: 1.95 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -97,12 +97,15 @@
 #########################
 
     $perl = "";
+    $remove_commando = "";
     if ( $^O eq 'MSWin32' ) {
         $perl = "$ENV{COMSPEC} -c perl5";
+        $remove_commando = "rmdir /S /Q";
         $nul = '> NULL';
     } else {
         use Cwd 'chdir';
         $perl = 'perl';
+        $remove_commando = 'rm -rf';
         $nul = '> /dev/null';
     };
 
