@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-25 11:39:37 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1071,7 +1071,7 @@ void NeonSession::PUT( const rtl::OUString &                      inPath,
     m_aEnv = rEnv;
 
     uno::Sequence< sal_Int8 > aDataToSend;
-    if ( !getDataFromInputStream( inInputStream, aDataToSend ) )
+    if ( !getDataFromInputStream( inInputStream, aDataToSend, false ) )
     {
         // @@@ error
         return;
@@ -1101,7 +1101,7 @@ uno::Reference< io::XInputStream > NeonSession::POST(
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
     uno::Sequence< sal_Int8 > aDataToSend;
-    if ( !getDataFromInputStream( inInputStream, aDataToSend ) )
+    if ( !getDataFromInputStream( inInputStream, aDataToSend, true ) )
     {
         // @@@ error
         return uno::Reference< io::XInputStream >();
@@ -1139,7 +1139,7 @@ void NeonSession::POST( const rtl::OUString & inPath,
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
     uno::Sequence< sal_Int8 > aDataToSend;
-    if ( !getDataFromInputStream( inInputStream, aDataToSend ) )
+    if ( !getDataFromInputStream( inInputStream, aDataToSend, true ) )
     {
         // @@@ error
     }
@@ -1557,7 +1557,8 @@ int NeonSession::POST( ne_session * sess,
 // static
 bool NeonSession::getDataFromInputStream(
                             const uno::Reference< io::XInputStream > & xStream,
-                            uno::Sequence< sal_Int8 > & rData )
+                            uno::Sequence< sal_Int8 > & rData,
+                            bool bAppendTrailingZeroByte )
 {
     if ( xStream.is() )
     {
@@ -1571,8 +1572,11 @@ bool NeonSession::getDataFromInputStream(
 
                 if ( nRead == nSize )
                 {
-                    rData.realloc( nSize + 1 );
-                    rData[ nSize ] = sal_Int8( 0 );
+                    if ( bAppendTrailingZeroByte )
+                    {
+                        rData.realloc( nSize + 1 );
+                        rData[ nSize ] = sal_Int8( 0 );
+                    }
                     return true;
                 }
             }
@@ -1612,8 +1616,11 @@ bool NeonSession::getDataFromInputStream(
                     nRead = xStream->readSomeBytes( aBuffer, 65536 );
                 }
 
-                rData.realloc( nPos + 1 );
-                rData[ nPos ] = sal_Int8( 0 );
+                if ( bAppendTrailingZeroByte )
+                {
+                    rData.realloc( nPos + 1 );
+                    rData[ nPos ] = sal_Int8( 0 );
+                }
                 return true;
             }
             catch ( io::NotConnectedException const & )
