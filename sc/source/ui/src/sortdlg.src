@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:23:50 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1004,6 +1004,8 @@ TabDialog RID_SCDLG_SORT
     Text[ hindi ] = "सोर्ट";
     Text[ slovak ] = "Zoradiť";
 };
+
+
 
 
 
