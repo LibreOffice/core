@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-14 17:13:34 $
+ *  last change: $Author: sb $ $Date: 2000-12-15 08:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
-#include <osl/socket.h>
 #include <tools/debug.hxx>
 #include <tools/list.hxx>
 #include <ucbhelper/content.hxx>
@@ -122,7 +121,7 @@ sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& r
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
                 pBroker->getContentProviderManagerInterface();
-        aRet = ::ucb::getSystemPathFromFileURL( xManager, rName, rName );
+        aRet = ::ucb::getSystemPathFromFileURL( xManager, rName );
     }
 
     rReturn = aRet;
@@ -132,12 +131,12 @@ sal_Bool LocalFileHelper::ConvertURLToSystemPath( const String& rName, String& r
 sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String& rReturn )
 {
     rtl::OUString aRet;
-    ::rtl::OUString aTmp;
-    FileBase::normalizePath( rName, aTmp );
 
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
     if ( !pBroker )
     {
+        ::rtl::OUString aTmp;
+        FileBase::normalizePath( rName, aTmp );
         FileBase::getFileURLFromNormalizedPath( aTmp, aRet );
     }
     else
@@ -145,9 +144,8 @@ sal_Bool LocalFileHelper::ConvertPhysicalNameToURL( const String& rName, String&
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
                 pBroker->getContentProviderManagerInterface();
 
-        rtl::OUString aHost;
-        osl_getLocalHostname( &aHost.pData );
-        aRet = ::ucb::getFileURLFromNormalizedPath( xManager, aHost, aTmp );
+        rtl::OUString aBase( ::ucb::getLocalFileURL( xManager ) );
+        aRet = ::ucb::getFileURLFromSystemPath( xManager, aBase, rName );
     }
 
     rReturn = aRet;
@@ -160,21 +158,20 @@ sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String&
     ::ucb::ContentBroker* pBroker = ::ucb::ContentBroker::get();
     if ( !pBroker )
     {
-        FileBase::getNormalizedPathFromFileURL( rName, aRet );
+        ::rtl::OUString aTmp;
+        FileBase::getNormalizedPathFromFileURL( rName, aTmp );
+        FileBase::getSystemPathFromNormalizedPath( aTmp, aRet );
+        aRet = aTmp;
     }
     else
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProviderManager > xManager =
                 pBroker->getContentProviderManagerInterface();
 
-        rtl::OUString aHost;
-        osl_getLocalHostname( &aHost.pData );
-        aRet = ::ucb::getNormalizedPathFromFileURL( xManager, aHost, rName );
+        aRet = ::ucb::getSystemPathFromFileURL( xManager, rName );
     }
 
-    ::rtl::OUString aTmp;
-    FileBase::getSystemPathFromNormalizedPath( aRet, aTmp );
-    rReturn = aTmp;
+    rReturn = aRet;
     return sal_True;
 }
 

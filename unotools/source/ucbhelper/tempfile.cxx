@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-01 11:54:11 $
+ *  last change: $Author: sb $ $Date: 2000-12-15 08:40:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
-#include <osl/socket.h>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
 #include <stdio.h>
@@ -104,11 +103,12 @@ String ConstructTempDir_Impl( const String* pParent )
 
             // if parent given try to use it
             rtl::OUString aTmp( *pParent );
-            rtl::OUString aHost;
-            osl_getLocalHostname( &aHost.pData );
 
             // test for valid filename
-            rtl::OUString aRet = ::ucb::getNormalizedPathFromFileURL( xManager, aHost, aTmp );
+            rtl::OUString aRet;
+            ::osl::FileBase::normalizePath(
+                ::ucb::getSystemPathFromFileURL( xManager, aTmp ),
+                aRet );
             if ( aRet.getLength() )
             {
                 ::osl::DirectoryItem aItem;
