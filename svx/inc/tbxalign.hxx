@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxalign.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:07:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,11 @@
 class SvxTbxCtlAlign: public SfxToolBoxControl
 {
 public:
+    virtual ::sal_Bool SAL_CALL opensSubToolbar() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getSubToolbarName() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL functionSelected( const ::rtl::OUString& aCommand ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL updateImage() throw (::com::sun::star::uno::RuntimeException);
+
     virtual SfxPopupWindowType  GetPopupWindowType() const;
     virtual SfxPopupWindow*     CreatePopupWindow();
 
@@ -76,5 +81,9 @@ public:
 
             SvxTbxCtlAlign( USHORT nSlotId, USHORT nId, ToolBox& rTbx );
             ~SvxTbxCtlAlign() {}
+private:
+    rtl::OUString m_aSubTbName;
+    rtl::OUString m_aSubTbResName;
+    rtl::OUString m_aCommand;
 };
 #endif
