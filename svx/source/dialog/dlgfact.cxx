@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:43:55 $
+ *  last change: $Author: obo $ $Date: 2004-08-13 13:26:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1159,15 +1159,7 @@ VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( Window
 {
     OSL_TRACE("in ADF_Impl::CreateSvxScriptOrgDialog");
     Dialog* pDlg=NULL;
-    rtl::OUString aResName;
-    ResMgr* pBasResMgr = NULL;
-    OSL_TRACE("creating dialog");
-    aResName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "basctl" ));
-    aResName += rtl::OUString::valueOf( sal_Int32( SUPD ));
-
-    pBasResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
-
-    pDlg = new SvxScriptOrgDialog( pParent, pBasResMgr, rLanguage);
+    pDlg = new SvxScriptOrgDialog( pParent, rLanguage);
 
     if ( pDlg )
         return new VclAbstractDialog_Impl( pDlg );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:12:31 $
+ *  last change: $Author: obo $ $Date: 2004-08-13 13:26:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,26 @@ _SvxMacroTabPage::_SvxMacroTabPage( Window* pParent, const ResId& rResId, const 
     bInitialized(false)
 {
     mpImpl = new _SvxMacroTabPage_Impl;
+}
 
+_SvxMacroTabPage::~_SvxMacroTabPage()
+{
+    // need to delete the user data
+    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
+    SvLBoxEntry* pE = rListBox.GetEntry( 0 );
+    while( pE )
+    {
+        ::rtl::OUString* pEventName = (::rtl::OUString*)pE->GetUserData();
+        delete pEventName;
+        pE->SetUserData((void*)0);
+        pE = rListBox.NextSibling( pE );
+    }
+    aUIStrings.clear();
+    DELETEZ( mpImpl );
+}
+
+void _SvxMacroTabPage::InitResources()
+{
     OSL_TRACE("test event string is %s",::rtl::OUStringToOString( ::rtl::OUString(SVX_RES(RID_SVXSTR_EVENT_STARTAPP)), RTL_TEXTENCODING_ASCII_US ).pData->buffer);
     // the event name to UI string mappings for App Events
     aUIStrings[ ::rtl::OUString::createFromAscii("OnStartApp") ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_STARTAPP ));
@@ -281,39 +300,39 @@ _SvxMacroTabPage::_SvxMacroTabPage( Window* pParent, const ResId& rResId, const 
 
     // the event name to UI string mappings for forms & dialogs
     //
-    aUIStrings[ ::rtl::OUString::createFromAscii( "approveAction" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_APPROVEACTIONPERFORMED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "actionPerformed" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_ACTIONPERFORMED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "changed" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_CHANGED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "textChanged" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_TEXTCHANGED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "itemStateChanged" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_ITEMSTATECHANGED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "focusGained" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_FOCUSGAINED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "focusLost" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_FOCUSLOST ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "keyPressed" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_KEYTYPED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "keyReleased" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_KEYUP ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "mouseEntered" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_MOUSEENTERED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "mouseDragged" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_MOUSEDRAGGED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "mouseMoved" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_MOUSEMOVED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "mousePressed" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_MOUSEPRESSED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "mouseReleased" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_MOUSERELEASED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "mouseExited" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_MOUSEEXITED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "approveReset" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_APPROVERESETTED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "resetted" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_RESETTED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "approveSubmit" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_SUBMITTED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "approveUpdate" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_BEFOREUPDATE ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "updated" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_AFTERUPDATE ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "loaded" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_LOADED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "reloading" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_RELOADING ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "reloaded" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_RELOADED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "unloading" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_UNLOADING ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "unloaded" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_UNLOADED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "confirmDelete" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_CONFIRMDELETE ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "approveRowChange" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_APPROVEROWCHANGE ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "rowChanged" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_ROWCHANGE ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "approveCursorMove" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_POSITIONING ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "cursorMoved" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_POSITIONED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "approveParameter" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_APPROVEPARAMETER ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "errorOccured" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_ERROROCCURED ));
-    aUIStrings[ ::rtl::OUString::createFromAscii( "adjustmentValueChanged" ) ] = new ::rtl::OUString( ResId( RID_SVXSTR_EVENT_ADJUSTMENTVALUECHANGED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "approveAction" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_APPROVEACTIONPERFORMED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "actionPerformed" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_ACTIONPERFORMED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "changed" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_CHANGED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "textChanged" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_TEXTCHANGED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "itemStateChanged" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_ITEMSTATECHANGED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "focusGained" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_FOCUSGAINED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "focusLost" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_FOCUSLOST ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "keyPressed" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_KEYTYPED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "keyReleased" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_KEYUP ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "mouseEntered" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MOUSEENTERED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "mouseDragged" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MOUSEDRAGGED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "mouseMoved" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MOUSEMOVED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "mousePressed" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MOUSEPRESSED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "mouseReleased" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MOUSERELEASED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "mouseExited" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_MOUSEEXITED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "approveReset" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_APPROVERESETTED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "resetted" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_RESETTED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "approveSubmit" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_SUBMITTED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "approveUpdate" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_BEFOREUPDATE ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "updated" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_AFTERUPDATE ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "loaded" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_LOADED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "reloading" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_RELOADING ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "reloaded" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_RELOADED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "unloading" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_UNLOADING ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "unloaded" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_UNLOADED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "confirmDelete" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_CONFIRMDELETE ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "approveRowChange" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_APPROVEROWCHANGE ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "rowChanged" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_ROWCHANGE ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "approveCursorMove" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_POSITIONING ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "cursorMoved" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_POSITIONED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "approveParameter" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_APPROVEPARAMETER ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "errorOccured" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_ERROROCCURED ));
+    aUIStrings[ ::rtl::OUString::createFromAscii( "adjustmentValueChanged" ) ] = new ::rtl::OUString( SVX_RES( RID_SVXSTR_EVENT_ADJUSTMENTVALUECHANGED ));
 
     UIEventsStringHash::iterator ui_it = aUIStrings.begin();
     UIEventsStringHash::iterator ui_it_end = aUIStrings.end();
@@ -322,22 +341,6 @@ _SvxMacroTabPage::_SvxMacroTabPage( Window* pParent, const ResId& rResId, const 
         OSL_TRACE("event string %s",::rtl::OUStringToOString( *(ui_it->second), RTL_TEXTENCODING_ASCII_US ).pData->buffer);
     }
     OSL_TRACE("hash size %d",aUIStrings.size());
-}
-
-_SvxMacroTabPage::~_SvxMacroTabPage()
-{
-    // need to delete the user data
-    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
-    SvLBoxEntry* pE = rListBox.GetEntry( 0 );
-    while( pE )
-    {
-        ::rtl::OUString* pEventName = (::rtl::OUString*)pE->GetUserData();
-        delete pEventName;
-        pE->SetUserData((void*)0);
-        pE = rListBox.NextSibling( pE );
-    }
-    aUIStrings.clear();
-    DELETEZ( mpImpl );
 }
 
 // the following method is called when the user clicks OK

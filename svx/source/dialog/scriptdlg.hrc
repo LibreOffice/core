@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 13:10:12 $
+ *  last change: $Author: obo $ $Date: 2004-08-13 13:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,20 +76,14 @@
 #define SF_PB_DEL                       8
 #define SF_PB_HELP                      9
 
-#define IMG_PLUS                        1
-#define IMG_PLUS_HC                     2
-#define IMG_MINUS                       3
-#define IMG_MINUS_HC                    4
-#define IMG_HARDDISK                    5
-#define IMG_HARDDISK_HC                 6
-
-#define RID_IMGLST_OBJECTS      ( RID_BASICIDE_START +  7 )
-#define RID_IMGLST_OBJECTS_HC   ( RID_BASICIDE_START + 13 )
-
-#define IMGID_APPICON           ( SID_BASICIDE_IMAGESTART + 1 )
-#define IMGID_LIB               ( SID_BASICIDE_IMAGESTART + 2 )
-#define IMGID_MODULE            ( SID_BASICIDE_IMAGESTART + 3 )
-#define IMGID_DOCUMENT          ( SID_BASICIDE_IMAGESTART + 8 )
+#define IMG_HARDDISK                    1
+#define IMG_HARDDISK_HC                 2
+#define IMG_LIB                         3
+#define IMG_LIB_HC                      4
+#define IMG_MACRO                       5
+#define IMG_MACRO_HC                    6
+#define IMG_DOCUMENT                    7
+#define IMG_DOCUMENT_HC                 8
 
 // NewObjectDialog
 #define FT_NEWLIB                       10
@@ -99,6 +93,7 @@
 #define ED_LIBNAME                      14
 #define PB_OK                           15
 #define PB_CANCEL                       16
+#define DLG_NEWLIB                      17
 #define STR_FT_RENAME                   18
 #define STR_RENAME                      19
 
@@ -114,4 +109,3 @@ some of its own resource files to svx - where they are added to svx resource fil
 
 
 #endif  // _SCRIPTDLG_HRC
-

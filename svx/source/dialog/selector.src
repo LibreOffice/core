@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:18:03 $
+ *  last change: $Author: obo $ $Date: 2004-08-13 13:26:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,6 +179,36 @@ ModelessDialog RID_DLG_SCRIPTSELECTOR
     Image IMG_HARDDISK_HC
     {
         ImageBitmap = Bitmap { File = "harddisk_16_h.bmp" ; };
+        MASKCOLOR
+    };
+    Image IMG_LIB
+    {
+        ImageBitmap = Bitmap { File = "im30820.png"; };
+        MASKCOLOR
+    };
+    Image IMG_LIB_HC
+    {
+        ImageBitmap = Bitmap { File = "imh30820.png"; };
+        MASKCOLOR
+    };
+    Image IMG_MACRO
+    {
+        ImageBitmap = Bitmap { File = "im30821.png"; };
+        MASKCOLOR
+    };
+    Image IMG_MACRO_HC
+    {
+        ImageBitmap = Bitmap { File = "imh30821.png"; };
+        MASKCOLOR
+    };
+    Image IMG_DOC
+    {
+        ImageBitmap = Bitmap { File = "im30826.png"; };
+        MASKCOLOR
+    };
+    Image IMG_DOC_HC
+    {
+        ImageBitmap = Bitmap { File = "imh30826.png"; };
         MASKCOLOR
     };
   };

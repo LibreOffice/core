@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:54:55 $
+ *  last change: $Author: obo $ $Date: 2004-08-13 13:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,10 +182,15 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     SfxSlotPool*                    pSlotPool;
     BOOL                            bShowSF; // show Scripting Framework scripts
     BOOL                            bShowBasic; // show Basic scripts
-    ImageList m_aImagesNormal;
-    ImageList m_aImagesHighContrast;
     Image m_hdImage;
     Image m_hdImage_hc;
+    Image m_libImage;
+    Image m_libImage_hc;
+    Image m_macImage;
+    Image m_macImage_hc;
+    Image m_docImage;
+    Image m_docImage_hc;
+
     ::rtl::OUString m_sMyMacros;
     ::rtl::OUString m_sProdMacros;
     Image GetImage( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode > node, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast );

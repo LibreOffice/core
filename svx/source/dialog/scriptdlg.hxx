@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 13:10:25 $
+ *  last change: $Author: obo $ $Date: 2004-08-13 13:27:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,18 +110,21 @@ class SFTreeListBox : public SvTreeListBox
    friend class SvxScriptOrgDialog;
 private:
     USHORT          nMode;
-    ImageList m_aImagesNormal;
-    ImageList m_aImagesHighContrast;
     Image m_hdImage;
     Image m_hdImage_hc;
+    Image m_libImage;
+    Image m_libImage_hc;
+    Image m_macImage;
+    Image m_macImage_hc;
+    Image m_docImage;
+    Image m_docImage_hc;
+
     ::rtl::OUString m_sMyMacros;
     ::rtl::OUString m_sProdMacros;
 
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode >
         getLangNodeFromRootNode( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode >& root, ::rtl::OUString& language );
     void delUserData( SvLBoxEntry* pEntry );
-
-    void setEntryBitmap(SvLBoxEntry * pEntry, USHORT nBitmap);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
     ::rtl::OUString SFTreeListBox::xModelToDocTitle( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
@@ -140,7 +143,7 @@ protected:
 public:
     void                    Init( const ::rtl::OUString& language );
     void  RequestSubEntries(  SvLBoxEntry* pRootEntry, ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode >& node );
-                    SFTreeListBox( Window* pParent, const ResId& rRes, ResMgr* pBasResMgr );
+                    SFTreeListBox( Window* pParent, const ResId& rRes );
                     ~SFTreeListBox();
 
     void            UpdateEntries();
@@ -213,7 +216,6 @@ protected:
 
     ::rtl::OUString         m_sLanguage;
     static Selection_hash   m_lastSelection;
-/*
     const String m_delErrStr;
     const String m_delErrTitleStr;
     const String m_delQueryStr;
@@ -224,7 +226,6 @@ protected:
     const String m_renameErrStr;
     const String m_renameDupStr;
     const String m_renameErrTitleStr;
-*/
 
     DECL_LINK( MacroSelectHdl, SvTreeListBox * );
     DECL_LINK( MacroDoubleClickHdl, SvTreeListBox * );
@@ -248,8 +249,7 @@ protected:
 public:
                     // prob need another arg in the ctor
                     // to specify the language or provider
-                    SvxScriptOrgDialog( Window* pParent, ResMgr* pBasResMgr,
-                            ::rtl::OUString language );
+                    SvxScriptOrgDialog( Window* pParent, ::rtl::OUString language );
                     ~SvxScriptOrgDialog();
 
     virtual short   Execute();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:14:51 $
+ *  last change: $Author: obo $ $Date: 2004-08-13 13:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,10 +184,14 @@ class SvxConfigGroupListBox_Impl : public SvTreeListBox
     // show Basic scripts?
     BOOL    bShowBasic;
 
-    ImageList m_aImagesNormal;
-    ImageList m_aImagesHighContrast;
     Image m_hdImage;
     Image m_hdImage_hc;
+    Image m_libImage;
+    Image m_libImage_hc;
+    Image m_macImage;
+    Image m_macImage_hc;
+    Image m_docImage;
+    Image m_docImage_hc;
     ::rtl::OUString m_sMyMacros;
     ::rtl::OUString m_sProdMacros;
     Image GetImage( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode > node, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast );

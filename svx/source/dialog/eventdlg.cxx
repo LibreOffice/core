@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:11:49 $
+ *  last change: $Author: obo $ $Date: 2004-08-13 13:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 
 #include "eventdlg.hxx"
 
-#include "eventdlg.hrc"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/macrconf.hxx>
@@ -99,6 +98,7 @@
 
 #include "dialmgr.hxx"
 #include "dialogs.hrc"
+#include "eventdlg.hrc"
 
 
 using namespace ::com::sun::star;
@@ -114,13 +114,16 @@ SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet 
 
     bAppConfig  ( TRUE )
 {
-    mpImpl->pStrEvent           = new String( SVX_RES( STR_EVENT ) );
-    mpImpl->pAssignedMacro      = new String( SVX_RES( STR_ASSMACRO ) );
-    mpImpl->pEventLB            = new _HeaderTabListBox( this, SVX_RES( LB_EVENT ) );
-    mpImpl->pAssignPB           = new PushButton( this, SVX_RES( PB_ASSIGN ) );
-    mpImpl->pDeletePB           = new PushButton( this, SVX_RES( PB_DELETE ) );
+    mpImpl->pStrEvent           = new String( ResId( STR_EVENT ));
+    mpImpl->pAssignedMacro      = new String( ResId( STR_ASSMACRO ));
+    mpImpl->pEventLB            = new _HeaderTabListBox( this, ResId( LB_EVENT ));
+    mpImpl->pAssignPB           = new PushButton( this, ResId( PB_ASSIGN ));
+    mpImpl->pDeletePB           = new PushButton( this, ResId( PB_DELETE ));
 
     FreeResource();
+
+    // must be done after FreeResource is called
+    InitResources();
 
     aSaveInListBox.SetSelectHdl( LINK( this, SvxEventConfigPage,
                 SelectHdl_Impl ) );
