@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoSlideView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:32:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:57:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,10 @@ namespace sd {
 
 
 SdUnoSlideView::SdUnoSlideView (
-    View& rView,
-    ViewShell& rViewShell) throw()
-    : DrawSubController(rView, rViewShell)
+    ViewShellBase& rBase,
+    ViewShell& rViewShell,
+    View& rView) throw()
+    : DrawController(rBase, rViewShell, rView)
 {
 }
 
