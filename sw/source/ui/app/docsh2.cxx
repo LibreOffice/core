@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:12:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:09:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1336,7 +1336,16 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     pWrtShell->EndAllAction();
             }
             break;
-
+        case SID_MAIL_EXPORT_FINISHED:
+        {
+                if(pWrtShell)
+                    pWrtShell->StartAllAction();
+                //try to undo the removal of invisible content
+                pDoc->RestoreInvisibleContent();
+                if(pWrtShell)
+                    pWrtShell->EndAllAction();
+        }
+        break;
         case FN_NEW_HTML_DOC:
         case FN_NEW_GLOBAL_DOC:
             {
