@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-18 12:02:13 $
+ *  last change: $Author: dl $ $Date: 2001-11-23 11:14:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,23 +227,23 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                     const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aAttr.Get( ITEMID_ULSPACE );
                     SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
 
-                    USHORT nUpper = pNewItem->GetUpper();
+                    long nUpper = pNewItem->GetUpper();
                     if( nSlot == SID_PARASPACE_INCREASE )
                         nUpper += 100;
                     else
                     {
                         nUpper -= 100;
-                        nUpper = (USHORT) Max( (long) nUpper, 0L );
+                        nUpper = Max( (long) nUpper, 0L );
                     }
                     pNewItem->SetUpper( (USHORT) nUpper );
 
-                    USHORT nLower = pNewItem->GetLower();
+                    long nLower = pNewItem->GetLower();
                     if( nSlot == SID_PARASPACE_INCREASE )
                         nLower += 100;
                     else
                     {
                         nLower -= 100;
-                        nLower = (USHORT) Max( (long) nLower, 0L );
+                        nLower = Max( (long) nLower, 0L );
                     }
                     pNewItem->SetLower( (USHORT) nLower );
 
@@ -266,24 +266,24 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
                     SfxItemSet aNewAttrs(*(aEditAttr.GetPool()), aEditAttr.GetRanges());
                     const SvxULSpaceItem& rItem = (const SvxULSpaceItem&) aEditAttr.Get( ITEMID_ULSPACE );
                     SvxULSpaceItem* pNewItem = (SvxULSpaceItem*) rItem.Clone();
-                    USHORT nUpper = pNewItem->GetUpper();
+                    long nUpper = pNewItem->GetUpper();
 
                     if( nSlot == SID_PARASPACE_INCREASE )
                         nUpper += 100;
                     else
                     {
                         nUpper -= 100;
-                        nUpper = (USHORT) Max( (long) nUpper, 0L );
+                        nUpper = Max( (long) nUpper, 0L );
                     }
                     pNewItem->SetUpper( (USHORT) nUpper );
 
-                    USHORT nLower = pNewItem->GetLower();
+                    long nLower = pNewItem->GetLower();
                     if( nSlot == SID_PARASPACE_INCREASE )
                         nLower += 100;
                     else
                     {
                         nLower -= 100;
-                        nLower = (USHORT) Max( (long) nLower, 0L );
+                        nLower = Max( (long) nLower, 0L );
                     }
                     pNewItem->SetLower( (USHORT) nLower );
 
