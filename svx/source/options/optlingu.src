@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:32:38 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:23:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ greek ] = "Èçóáõñüò ëÝîåùí";
         Text[ dutch ] = "Thesaurus";
         Text[ french ] = "Dictionnaire des synonymes";
-        Text[ spanish ] = "Sinónimos";
+        Text[ spanish ] = "Diccionario de sinónimos";
         Text[ italian ] = "Sinonimi";
         Text[ danish ] = "Synonymordbog";
         Text[ swedish ] = "Synonymordlista";
@@ -560,7 +560,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ italian ] = "Moduli linguistici disponibili:";
         Text[ danish ] = "Available language modules:";
         Text[ swedish ] = "T~illgängliga språkmoduler";
-        Text[ polish ] = "Dostêpne modu³y jêzyków:";
+        Text[ polish ] = "Dostêpne modu³y jêzyków";
         Text[ portuguese_brazilian ] = "Available language modules:";
         Text[ japanese ] = "Žg—p‚Å‚«‚éŒ¾ŒêÓ¼Þ­°Ù";
         Text[ korean ] = "»ç¿ë °¡´ÉÇÑ ¾ð¾î ¸ðµâ:";
@@ -742,7 +742,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ italian ] = "Opzioni:";
         Text[ danish ] = "Options:";
         Text[ swedish ] = "Al~ternativ";
-        Text[ polish ] = "Opcje:";
+        Text[ polish ] = "Opcje";
         Text[ portuguese_brazilian ] = "Options:";
         Text[ japanese ] = "µÌß¼®Ý";
         Text[ korean ] = "¿É¼Ç:";
@@ -1190,6 +1190,7 @@ QueryBox RID_SFXQB_DEL_IGNORELIST
     Message[ finnish ] = "Haluatko poistaa ohitettavien luettelon?";
 };
  // ******************************************************************* EOF
+
 
 
 
