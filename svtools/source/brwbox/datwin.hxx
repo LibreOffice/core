@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 12:24:31 $
+ *  last change: $Author: dv $ $Date: 2001-07-11 06:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@
 #include <tools/list.hxx>
 #endif
 #ifndef _TRANSFER_HXX
-#include <svtools/transfer.hxx>
+#include "transfer.hxx"
 #endif
 
 //===================================================================
