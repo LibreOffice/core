@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndarr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-28 20:33:09 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,9 +293,18 @@ public:
         // fuege die Nodes fuer die Tabelle ein
         // wenn Lines angegeben, erzeuge die Matrix aus Lines & Boxen
         // ansonsten nur die Anzahl von Boxen.
+    /* #109161#
+
+       New parameter pAttrSet: If pAttrSet is non-null and contains an
+       adjust item it is propagated to the table cells. If there is an
+       adjust in pCntntTxtColl or pHeadlineTxtColl this adjust item
+       overrides the item in pAttrSet.
+
+     */
     SwTableNode* InsertTable( const SwNodeIndex& rNdIdx,
                         USHORT nBoxes, SwTxtFmtColl* pCntntTxtColl,
-                        USHORT nLines=0, SwTxtFmtColl* pHeadlineTxtColl=0 );
+                        USHORT nLines=0, SwTxtFmtColl* pHeadlineTxtColl=0,
+                              const SwAttrSet * pAttrSet = 0);
         // erzeuge aus dem makierten Bereich eine ausgeglichene Tabelle
     SwTableNode* TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
                                 SwTableFmt* pTblFmt,
