@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-13 08:56:11 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:24:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1792,8 +1792,12 @@ void SdrObjCustomShape::NbcSetSnapRect( const Rectangle& rRect )
 }
 void SdrObjCustomShape::SetSnapRect( const Rectangle& rRect )
 {
+    Rectangle aBoundRect0;
+    if ( pUserCall )
+        aBoundRect0 = GetLastBoundRect();
     NbcSetSnapRect( rRect );
-    InvalidateRenderGeometry();
+    BroadcastObjectChange();
+    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 void SdrObjCustomShape::NbcSetLogicRect( const Rectangle& rRect )
 {
@@ -1819,8 +1823,12 @@ void SdrObjCustomShape::NbcSetLogicRect( const Rectangle& rRect )
 }
 void SdrObjCustomShape::SetLogicRect( const Rectangle& rRect )
 {
+    Rectangle aBoundRect0;
+    if ( pUserCall )
+        aBoundRect0 = GetLastBoundRect();
     NbcSetLogicRect(rRect);
-    InvalidateRenderGeometry();
+    BroadcastObjectChange();
+    SendUserCall(SDRUSERCALL_RESIZE,aBoundRect0);
 }
 void SdrObjCustomShape::Move( const Size& rSiz )
 {
