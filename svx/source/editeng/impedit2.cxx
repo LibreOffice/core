@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-17 10:51:35 $
+ *  last change: $Author: mt $ $Date: 2001-08-21 11:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2006,9 +2006,9 @@ EditPaM ImpEditEngine::ImpInsertText( EditSelection aCurSel, const XubString& rS
             xub_StrLen nChars = aPaM.GetNode()->Len() + aLine.Len();
             if ( nChars > MAXCHARSINPARA )
             {
-                DBG_ERROR( "Info: MaxChars reached !" );
-                aLine.Erase( MAXCHARSINPARA-aPaM.GetNode()->Len() );
-                nEnd -= ( nChars - MAXCHARSINPARA );    // Dann landen die Zeichen im naechsten Absatz.
+                USHORT nMaxNewChars = MAXCHARSINPARA-aPaM.GetNode()->Len();
+                nEnd -= ( aLine.Len() - nMaxNewChars ); // Dann landen die Zeichen im naechsten Absatz.
+                aLine.Erase( nMaxNewChars );            // Del Rest...
             }
 #ifndef SVX_LIGHT
             if ( IsUndoEnabled() && !IsInUndo() )
