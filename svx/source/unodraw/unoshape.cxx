@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-21 11:10:12 $
+ *  last change: $Author: cl $ $Date: 2001-01-10 15:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1215,7 +1215,7 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
         }
         case SDRATTR_LAYERID:
         {
-            sal_Int32 nLayerId;
+            sal_Int16 nLayerId;
             if( rVal >>= nLayerId )
             {
                 SdrLayer* pLayer = pModel->GetLayerAdmin().GetLayerPerID((unsigned char)nLayerId);
@@ -1693,7 +1693,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 break;
             }
             case SDRATTR_LAYERID:
-                aAny <<= (sal_Int32)pObj->GetLayer();
+                aAny <<= (sal_Int16)pObj->GetLayer();
                 break;
             case SDRATTR_LAYERNAME:
                 {
