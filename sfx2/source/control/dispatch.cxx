@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-05 11:32:19 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 16:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,14 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XTASK_HPP_
 #include <com/sun/star/frame/XTask.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRECORDERSUPPLIER_HPP_
+#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #endif
 
 #ifndef _SFXITEMPOOL_HXX //autogen
@@ -275,9 +283,23 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
     if ( rSlot.IsMode(SFX_SLOT_FASTCALL) || rShell.CanExecuteSlot_Impl(rSlot) )
     {
         // ggf. Recording anwerfen
-        SfxMacro *pMacro = GetFrame() ? GetFrame()->GetRecordingMacro_Impl() : NULL;
-        if ( bRecord && pMacro && !rSlot.IsMode(SFX_SLOT_NORECORD) )
-            rReq.Record_Impl( rShell, rSlot, pMacro );
+        com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
+                GetFrame()->GetFrame()->GetFrameInterface(),
+                com::sun::star::uno::UNO_QUERY);
+
+        com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
+                xFrame,
+                com::sun::star::uno::UNO_QUERY);
+
+        com::sun::star::uno::Any aProp = xSet->getPropertyValue(::rtl::OUString::createFromAscii("DispatchRecorderSupplier"));
+        com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
+        com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
+        aProp >>= xSupplier;
+        if(xSupplier.is())
+            xRecorder = xSupplier->getDispatchRecorder();
+
+        if ( bRecord && xRecorder.is() && !rSlot.IsMode(SFX_SLOT_NORECORD) )
+            rReq.Record_Impl( rShell, rSlot, xRecorder );
 
         // ggf. die Bindings locken (MI: warum?)
         SfxBindings *pBindings = GetBindings();

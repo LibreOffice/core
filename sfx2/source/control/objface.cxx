@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 07:04:20 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 16:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,7 @@ const SfxSlot* SfxInterface::GetSlot( const String& rCommand ) const
     SfxSlotPool& rPool = SFX_SLOTPOOL();
     for ( USHORT n=0; n<nCount; n++ )
     {
-        if ( aCommand.CompareIgnoreCaseToAscii( (pSlots+n)->GetUnoName() ) == COMPARE_EQUAL )
+        if ( (pSlots+n)->pUnoName && aCommand.CompareIgnoreCaseToAscii( (pSlots+n)->GetUnoName() ) == COMPARE_EQUAL )
             return pSlots+n;
     }
 

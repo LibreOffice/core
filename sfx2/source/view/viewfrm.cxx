@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-08 16:45:05 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 16:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include <stdio.h>
 
 #include "viewfrm.hxx"
 
@@ -118,12 +120,24 @@
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRECORDERSUPPLIER_HPP_
+#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
+
+#include <basic/basmgr.hxx>
+#include <basic/sbmod.hxx>
+#include <basic/sbmeth.hxx>
+#include <svtools/sbx.hxx>
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
@@ -3153,7 +3167,6 @@ void SfxViewFrame::Resize()
             DoAdjustPosSizePixel( pShell, Point(), GetWindow().GetOutputSizePixel() );
             if ( pShell->UseObjectSize() )
                 ForceOuterResize_Impl(FALSE);
-
             SfxViewFrame* pActFrame = this;
             while ( pActFrame->GetActiveChildFrame_Impl() )
                 pActFrame = pActFrame->GetActiveChildFrame_Impl();
@@ -3170,6 +3183,237 @@ void SfxViewFrame::Resize()
     }
 }
 
+#define LINE_SEP 0x0A
+
+void CutLines( String& rStr, USHORT nStartLine, USHORT nLines, BOOL bEraseTrailingEmptyLines )
+{
+    rStr.ConvertLineEnd( LINEEND_LF );
+
+    USHORT nStartPos = 0;
+    USHORT nEndPos = 0;
+    USHORT nLine = 0;
+    while ( nLine < nStartLine )
+    {
+        nStartPos = rStr.Search( LINE_SEP, nStartPos );
+        nStartPos++;    // nicht das \n.
+        nLine++;
+    }
+
+    DBG_ASSERTWARNING( nStartPos != STRING_NOTFOUND, "CutLines: Startzeile nicht gefunden!" );
+
+    if ( nStartPos != STRING_NOTFOUND )
+    {
+        nEndPos = nStartPos;
+        for ( USHORT i = 0; i < nLines; i++ )
+            nEndPos = rStr.Search( LINE_SEP, nEndPos+1 );
+
+        if ( nEndPos != STRING_NOTFOUND ) // kann bei letzter Zeile passieren
+            nEndPos++;
+        if ( nEndPos > rStr.Len() )
+            nEndPos = rStr.Len();
+
+        rStr.Erase( nStartPos, nEndPos-nStartPos );
+    }
+    if ( bEraseTrailingEmptyLines )
+    {
+        USHORT n = nStartPos;
+        while ( ( n < rStr.Len() ) && ( rStr.GetChar( n ) == LINE_SEP ) )
+            n++;
+
+        if ( n > nStartPos )
+            rStr.Erase( nStartPos, n-nStartPos );
+    }
+}
+
+/*
+    add new recorded dispatch macro script into the application global basic lib container
+    It generates a new unique id for it and insert the macro by using this number as name for
+    the modul
+ */
+void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
+{
+    /*
+    // get lib and modul name from dialog
+    SfxModule *pMod = GetObjectShell()->GetModule();
+    SfxRequest aReq( SID_BASICCHOOSER, SFX_CALLMODE_SYNCHRON, pMod->GetPool() );
+    const SfxPoolItem* pRet = pMod->ExecuteSlot( aReq );
+    if ( pRet )
+        ::rtl::OUString = ((SfxStringItem*)pRet)->GetValue();
+    */
+
+    SfxApplication* pSfxApp = SFX_APP();
+    SfxRequest aReq( SID_BASICCHOOSER, SFX_CALLMODE_SYNCHRON, pSfxApp->GetPool() );
+    aReq.AppendItem( SfxBoolItem(SID_RECORDMACRO,TRUE) );
+    const SfxPoolItem* pRet = SFX_APP()->ExecuteSlot( aReq );
+    String aScriptURL;
+    if ( pRet )
+        aScriptURL = ((SfxStringItem*)pRet)->GetValue();
+    if ( aScriptURL.Len() )
+    {
+        // parse script URL
+        BOOL bFound;
+        String aValue;
+        INetURLObject aINetScriptURL( aScriptURL );
+
+        // get language
+        String aLanguage;
+        bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("language") ), &aValue );
+        if ( bFound )
+            aLanguage = aValue;
+
+        // get macro
+        String aMacro;
+        String aLibName;
+        String aModuleName;
+        String aMacroName;
+        bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("macro") ), &aValue );
+        if ( bFound )
+        {
+            aMacro = aValue;
+            aLibName    = aMacro.GetToken(0, sal_Unicode('.'));
+            aModuleName = aMacro.GetToken(1, sal_Unicode('.'));
+            aMacroName  = aMacro.GetToken(2, sal_Unicode('.'));
+        }
+
+        // get location
+        String aLocation;
+        bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("location") ), &aValue );
+        if ( bFound )
+            aLocation = aValue;
+
+        pSfxApp->EnterBasicCall();
+
+        SfxObjectShell* pShell = 0;
+        BasicManager* pBasMgr = 0;
+        if ( aLocation.EqualsIgnoreCaseAscii( "application" ) )
+        {
+            // application basic
+            pBasMgr = pSfxApp->GetBasicManager();
+        }
+        else if ( aLocation.EqualsIgnoreCaseAscii( "document" ) )
+        {
+            pBasMgr = GetObjectShell()->GetBasicManager();
+        }
+
+        String aSource;
+        if ( pBasMgr)
+        {
+            StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
+            if ( pBasic )
+            {
+                SbModule* pModule = pBasic->FindModule( aModuleName );
+                if ( pModule )
+                {
+                    SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD );
+                    aSource = pModule->GetSource();
+                    USHORT nStart, nEnd;
+                    pMethod->GetLineRange( nStart, nEnd );
+                    CutLines( aSource, nStart-1, nEnd-nStart+1, TRUE );
+                }
+            }
+        }
+
+        // open lib container and break operation if it couldn't be opened
+        com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibCont;
+        if ( aLocation.EqualsIgnoreCaseAscii( "application" ) )
+        {
+            xLibCont = SFX_APP()->GetBasicContainer();
+        }
+        else if ( aLocation.EqualsIgnoreCaseAscii( "document" ) )
+        {
+            xLibCont = GetObjectShell()->GetBasicContainer();
+        }
+
+        if(!xLibCont.is())
+        {
+            DBG_ERRORFILE("couldn't get access to the basic lib container. Adding of macro isn't possible.");
+            return;
+        }
+
+        // get LibraryContainer
+        com::sun::star::uno::Any aTemp;
+        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xRoot(
+                xLibCont,
+                com::sun::star::uno::UNO_QUERY);
+
+        ::rtl::OUString sLib( aLibName );
+        com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > xLib;
+        if(xRoot->hasByName(sLib))
+        {
+            // library must be loaded
+            aTemp = xRoot->getByName(sLib);
+            xLibCont->loadLibrary(sLib);
+            aTemp >>= xLib;
+        }
+        else
+        {
+            xLib = com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >(
+                        xLibCont->createLibrary(sLib),
+                        com::sun::star::uno::UNO_QUERY);
+        }
+
+        // pack the macro as direct usable "sub" routine
+        ::rtl::OUString sCode;
+        ::rtl::OUStringBuffer sRoutine(10000);
+        ::rtl::OUString sMacroName( aMacroName );
+        BOOL bReplace = FALSE;
+
+        // get module
+        ::rtl::OUString sModule( aModuleName );
+        if(xLib->hasByName(sModule))
+        {
+            if ( aSource.Len() )
+            {
+                sRoutine.append( aSource );
+            }
+            else
+            {
+                aTemp = xLib->getByName(sModule);
+                aTemp >>= sCode;
+                sRoutine.append( sCode );
+            }
+
+            bReplace = TRUE;
+        }
+
+        // append new method
+        sRoutine.appendAscii("\nsub "     );
+        sRoutine.append     (sMacroName   );
+        sRoutine.appendAscii("\n"         );
+        sRoutine.append     (sMacro       );
+        sRoutine.appendAscii("\nend sub\n");
+
+        // create the modul inside the library and insert the macro routine
+        aTemp <<= sRoutine.makeStringAndClear();
+        if ( bReplace )
+        {
+            com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xModulCont(
+                xLib,
+                com::sun::star::uno::UNO_QUERY);
+            xModulCont->replaceByName(sModule,aTemp);
+        }
+        else
+        {
+            com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xModulCont(
+                xLib,
+                com::sun::star::uno::UNO_QUERY);
+            xModulCont->insertByName(sModule,aTemp);
+        }
+
+        pSfxApp->LeaveBasicCall();
+    }
+    else
+    {
+        // add code for "session only" macro
+    }
+
+    /*
+    FILE* pFile = fopen( "macro.bas", "a" );
+    fprintf( pFile, "%s", ::rtl::OUStringToOString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8).getStr() );
+    fclose ( pFile );
+    */
+}
+
 void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
 {
     DBG_MEMTEST();
@@ -3178,10 +3422,51 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
     {
         case SID_RECORDMACRO :
         {
-            if ( pImp->pMacro )
-                DELETEZ( pImp->pMacro );
+            ::rtl::OUString sProperty = rtl::OUString::createFromAscii("DispatchRecorderSupplier");
+
+            // try to find any active recorder on this frame
+            com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
+                    GetFrame()->GetFrameInterface(),
+                    com::sun::star::uno::UNO_QUERY);
+
+            com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(xFrame,com::sun::star::uno::UNO_QUERY);
+            com::sun::star::uno::Any aProp = xSet->getPropertyValue(sProperty);
+            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
+            aProp >>= xSupplier;
+            com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
+            if (xSupplier.is())
+                xRecorder = xSupplier->getDispatchRecorder();
+
+            if ( xRecorder.is() )
+            {
+                // disable active recording and insert script into basic library container of application
+                xRecorder->endRecording();
+                aProp <<= com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier >();
+                xSet->setPropertyValue(sProperty,aProp);
+                AddDispatchMacroToBasic_Impl(xRecorder->getRecordedMacro());
+                xRecorder = NULL;
+            }
             else
-                pImp->pMacro = new SfxMacro( SFX_MACRO_RECORDINGRELATIVE );
+            {
+                // enable recording
+                com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xFactory(
+                        ::comphelper::getProcessServiceFactory(),
+                        com::sun::star::uno::UNO_QUERY);
+
+                xRecorder = com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder >(
+                        xFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.frame.DispatchRecorder")),
+                        com::sun::star::uno::UNO_QUERY);
+
+                com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier(
+                        xFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.frame.DispatchRecorderSupplier")),
+                        com::sun::star::uno::UNO_QUERY);
+
+                xSupplier->setDispatchRecorder(xRecorder);
+                xRecorder->startRecording(xFrame);
+                aProp <<= xSupplier;
+                xSet->setPropertyValue(sProperty,aProp);
+            }
+
             rReq.Done();
             break;
         }

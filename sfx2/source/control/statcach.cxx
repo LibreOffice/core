@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-22 07:04:20 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 16:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,11 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
         if ( xProv.is() )
         {
             DBG_ASSERT( !pDispatch, "Altes Dispatch nicht entfernt!" );
-            const SfxSlot* pSlot = SFX_APP()->GetSlotPool( rDispat.GetFrame() ).GetUnoSlot( nId );
+
+            // get the slot - even if it is disabled on the dispatcher
+            const SfxSlot* pSlot = SFX_APP()->GetSlotPool( rDispat.GetFrame() ).GetSlot( nId );
+
+            // create the dispatch name from the slot data
             ::com::sun::star::util::URL aURL;
             String aName( pSlot ? String::CreateFromAscii(pSlot->GetUnoName()) : String() );
             String aCmd;
@@ -317,12 +321,14 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                 aCmd += String::CreateFromInt32( nId );
             }
 
+            // try to get a dispatch object for this command
             aURL.Complete = aCmd;
             Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
             xTrans->parseStrict( aURL );
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
             if ( xDisp.is() )
             {
+                // test the dispatch object if it is just a wrapper for a SfxDispatcher
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > xTunnel( xDisp, ::com::sun::star::uno::UNO_QUERY );
                 SfxOfficeDispatch* pDisp = NULL;
                 if ( xTunnel.is() )
@@ -339,7 +345,7 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                     pDispatcher->_FindServer( nId, aSlotServ, sal_False );
                     SfxShell* pShell = pDispatcher->GetShell( aSlotServ.GetShellLevel() );
 
-                    // Check if this shell is active on the active dispatcher
+                    // Check if this shell is active on the active dispatcher, if not, we treat it like any other UNO component
                     sal_uInt16 nLevel = rDispat.GetShellLevel( *pShell );
                     if ( nLevel != USHRT_MAX )
                     {
@@ -351,46 +357,36 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                         //MI: wozu das? bItemDirty = sal_True;
                         return aSlotServ.GetSlot()? &aSlotServ: 0;
                     }
-                    else
-                    {
-                        rDispat._FindServer( nId, aSlotServ, sal_False );
-                        pDispatch = new BindDispatch_Impl( xDisp, aURL, this );
-                        pDispatch->acquire();
-
-                        // flags must be set before adding StatusListener because the dispatch object will set the state
-                        bSlotDirty = sal_False;
-                        bCtrlDirty = sal_True;
-                        xDisp->addStatusListener( pDispatch, aURL );
-                        aSlotServ.SetSlot(0);
-                        return NULL;
-                    }
                 }
-                else
-                {
-                    rDispat._FindServer( nId, aSlotServ, sal_False );
-                    pDispatch = new BindDispatch_Impl( xDisp, aURL, this );
-                    pDispatch->acquire();
 
-                    // flags must be set before adding StatusListener because the dispatch object will set the state
-                    bSlotDirty = sal_False;
-                    bCtrlDirty = sal_True;
-                    xDisp->addStatusListener( pDispatch, aURL );
-                    aSlotServ.SetSlot(0);
-                    return NULL;
-                }
+                // here we are if the dispatch object isn't a SfxDispatcher wrapper or if the wrapper uses another
+                // dispatcher, but not rDispat
+                // first we need the SlotServer temporarily, because the BindDispatch will need it to access the slot
+                rDispat._FindServer( nId, aSlotServ, sal_False );
+                pDispatch = new BindDispatch_Impl( xDisp, aURL, this );
+                pDispatch->acquire();
+
+                // flags must be set before adding StatusListener because the dispatch object will set the state
+                bSlotDirty = sal_False;
+                bCtrlDirty = sal_True;
+                xDisp->addStatusListener( pDispatch, aURL );
+
+                // now we must forget the SlotServer
+                aSlotServ.SetSlot(0);
+                return NULL;
             }
         }
         else
         {
-            // Don't find a server for every case. We have a configuration file that
-            // can disable specified commands. See bug #98419#
-    //      if ( !rDispat._TryIntercept_Impl( nId, aSlotServ, sal_False ) )
+            // Without a dispatch provider we are on our own!
+            // Don't find a server for the case "Dispatch Provider, but no dispatch".
+            // We have a configuration file that can disable specified commands. See bug #98419#
             rDispat._FindServer(nId, aSlotServ, sal_False);
-            //MI: wozu das? bItemDirty = sal_True;
         }
 
         bSlotDirty = sal_False;
         bCtrlDirty = sal_True;
+        //MI: wozu das? bItemDirty = sal_True;
     }
 
     return aSlotServ.GetSlot()? &aSlotServ: 0;

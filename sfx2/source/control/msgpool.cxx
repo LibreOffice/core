@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgpool.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *  last change: $Author: mba $ $Date: 2002-04-22 16:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,6 @@ SfxSlotPool::~SfxSlotPool()
         delete pIF;
     delete _pInterfaces;
     delete _pGroups;
-    delete _pUnoSlots;
     if ( _pTypes )
     {
         for ( USHORT n =_pTypes->Count(); n--; )
@@ -179,13 +178,6 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
     for ( USHORT nFunc = 0; nFunc < rInterface.Count(); ++nFunc )
     {
         SfxSlot *pDef = rInterface[nFunc];
-        if ( pDef->GetUnoName() )
-        {
-            if ( !_pUnoSlots )
-                _pUnoSlots = new SfxSlotArr_Impl;
-            _pUnoSlots->Insert( pDef, _pUnoSlots->Count() );
-        }
-
         if ( pDef->GetGroupId() && /* pDef->GetGroupId() != GID_INTERN && */
              !_pGroups->Contains(pDef->GetGroupId()) )
         {
@@ -579,44 +571,19 @@ void SfxSlotPool::ReleaseSID( const String &rGroup, const String &rName )
 {
 }
 
-const SfxSlot* SfxSlotPool::GetUnoSlot( USHORT nId )
-{
-    const SfxSlot *pSlot = NULL;
-    if ( _pParentPool )
-        pSlot = _pParentPool->GetUnoSlot( nId );
-
-    if ( !pSlot && _pUnoSlots )
-    {
-        USHORT nCount = _pUnoSlots->Count();
-        for ( USHORT n=0; n<nCount; n++ )
-        {
-            if ( (*_pUnoSlots)[n]->GetSlotId() == nId )
-            {
-                pSlot = (*_pUnoSlots)[n];
-                break;
-            }
-        }
-    }
-
-    return pSlot;
-}
-
 const SfxSlot* SfxSlotPool::GetUnoSlot( const String& rName )
 {
     const SfxSlot *pSlot = NULL;
     if ( _pParentPool )
         pSlot = _pParentPool->GetUnoSlot( rName );
 
-    if ( !pSlot && _pUnoSlots )
+    if ( !pSlot )
     {
-        USHORT nCount = _pUnoSlots->Count();
-        for ( USHORT n=0; n<nCount; n++ )
+        for ( USHORT nInterface=0; nInterface<_pInterfaces->Count(); nInterface++ )
         {
-            if ( rName.EqualsAscii((*_pUnoSlots)[n]->GetUnoName()) )
-            {
-                pSlot = (*_pUnoSlots)[n];
+            pSlot = (*_pInterfaces)[nInterface]->GetSlot( rName );
+            if ( pSlot )
                 break;
-            }
         }
     }
 

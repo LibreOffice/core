@@ -2,7 +2,7 @@
 // class SfxRequest
 //
 // (C) 1996 - 2000 StarDivision GmbH, Hamburg, Germany
-// $Author: mba $ $Date: 2002-04-11 08:05:49 $ $Revision: 1.4 $
+// $Author: mba $ $Date: 2002-04-22 16:56:18 $ $Revision: 1.5 $
 // $Logfile:   T:/sfx2/source/control/request.cxv  $ $Workfile:   REQUEST.CXX  $
 //------------------------------------------------------------------*/
 
@@ -12,6 +12,18 @@
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRECORDERSUPPLIER_HPP_
+#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #endif
 
 #ifndef _SFXITEMITER_HXX //autogen
@@ -25,6 +37,8 @@
 #ifndef _SVTOOLS_ITEMDEL_HXX
 #include <svtools/itemdel.hxx>
 #endif
+
+#include <comphelper/processfactory.hxx>
 
 #pragma hdrstop
 
@@ -50,7 +64,6 @@ struct SfxRequest_Impl: public SfxListener
     SfxRequest*         pAnti;       // Owner wegen sterbendem Pool
     SfxMacro*           pMacro;      // falls != 0, soll hierdrin recorded werden
     String              aTarget;     // ggf. von App gesetztes Zielobjekt
-    String              aStatement;  // Statement bei manuellem Recording
     SfxItemPool*        pPool;       // ItemSet mit diesem Pool bauen
     SfxPoolItem*        pRetVal;     // R"uckgabewert geh"ort sich selbst
     const SfxShell*     pShell;      // ausgef"uhrt an dieser Shell
@@ -63,6 +76,8 @@ struct SfxRequest_Impl: public SfxListener
     USHORT              nCallMode;   // Synch/Asynch/API/Record
     SfxAllItemSet*      pInternalArgs;
 
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
+
                         SfxRequest_Impl( SfxRequest *pOwner )
                         : pAnti( pOwner), bCancelled(FALSE),
                           nCallMode( SFX_CALLMODE_SYNCHRON ), nModifier(0),
@@ -73,7 +88,7 @@ struct SfxRequest_Impl: public SfxListener
 
     void                SetPool( SfxItemPool *pNewPool );
     virtual void        Notify( SfxBroadcaster &rBC, const SfxHint &rHint );
-    SfxMacroStatement*  CreateStatement( uno::Sequence < beans::PropertyValue > rArgs );
+    void                Record( const uno::Sequence < beans::PropertyValue >& rArgs );
 };
 
 
@@ -108,8 +123,8 @@ SfxRequest::~SfxRequest()
     DBG_MEMTEST();
 
     // nicht mit Done() marktierte Requests mit 'rem' rausschreiben
-    if ( pImp->pMacro && !pImp->bDone && !pImp->bIgnored )
-//        pImp->pMacro->Record( pImp->CreateStatement( *pImp->pSlot ) );
+    if ( pImp->xRecorder.is() && !pImp->bDone && !pImp->bIgnored )
+//        pImp->Record( uno::Sequence < beans::PropertyValue >() );
         Done();
 
     // Objekt abr"aumen
@@ -183,8 +198,8 @@ SfxRequest::SfxRequest
     pImp->pSlot = rShell.GetInterface()->GetSlot(nSlotId);
     DBG_ASSERT( pImp->pSlot, "recording slot unsupported by shell" );
     if ( pImp->pSlot ) // Hosentr"ager damit man besser testen kann
-        Record_Impl( rShell, *pImp->pSlot, GetRecordingMacro() );
-    DBG_ASSERTWARNING( GetRecordingMacro(), "recording without recording macro is overfluous" );
+        Record_Impl( rShell, *pImp->pSlot, SfxRequest::GetMacroRecorder() );
+    DBG_ASSERTWARNING( (SfxRequest::GetMacroRecorder().is()), "recording without recording macro is overfluous" );
 }
 //--------------------------------------------------------------------
 
@@ -280,9 +295,9 @@ const SfxItemSet* SfxRequest::GetInternalArgs_Impl() const
 //--------------------------------------------------------------------
 
 
-SfxMacroStatement* SfxRequest_Impl::CreateStatement
+void SfxRequest_Impl::Record
 (
-    uno::Sequence < beans::PropertyValue > rArgs    // aktuelle Parameter
+    const uno::Sequence < beans::PropertyValue >& rArgs    // aktuelle Parameter
 )
 
 /*  [Beschreibung]
@@ -295,12 +310,27 @@ SfxMacroStatement* SfxRequest_Impl::CreateStatement
 */
 
 {
-    if ( bUseTarget )
-        return new SfxMacroStatement( aTarget, *pSlot, bDone, rArgs );
-    else
-        return new SfxMacroStatement( *pShell, aTarget,
-            SFX_MACRO_RECORDINGABSOLUTE == pMacro->GetMode(),
-            *pSlot, bDone, rArgs );
+    String aCommand = String::CreateFromAscii(".uno:");
+    aCommand.AppendAscii( pSlot->GetUnoName() );
+    if(xRecorder.is())
+    {
+        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xFactory(
+                ::comphelper::getProcessServiceFactory(),
+                com::sun::star::uno::UNO_QUERY);
+
+        com::sun::star::uno::Reference< com::sun::star::util::XURLTransformer > xTransform(
+                xFactory->createInstance(rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")),
+                com::sun::star::uno::UNO_QUERY);
+
+        com::sun::star::util::URL aURL;
+        aURL.Complete = ::rtl::OUString(aCommand);
+        xTransform->parseStrict(aURL);
+
+        if (bDone)
+            xRecorder->recordDispatch(aURL,rArgs);
+        else
+            xRecorder->recordDispatchAsComment(aURL,rArgs);
+    }
 }
 
 //--------------------------------------------------------------------
@@ -309,7 +339,7 @@ void SfxRequest::Record_Impl
 (
     const SfxShell& rSh,    // die <SfxShell>, die den Request ausgef"uhrt hat
     const SfxSlot&  rSlot,  // der <SfxSlot>, der den Request ausgef"uhrt hat
-    SfxMacro*       pMacro  // das <SfxMakro>, in dem aufgezeichnet wird
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder  // der Recorder, mit dem aufgezeichnet wird
 )
 
 /*  [Beschreibung]
@@ -325,7 +355,7 @@ void SfxRequest::Record_Impl
     DBG_MEMTEST();
     pImp->pShell = &rSh;
     pImp->pSlot = &rSlot;
-    pImp->pMacro = pMacro;
+    pImp->xRecorder = xRecorder;
     pImp->aTarget = rSh.GetName();
 }
 
@@ -603,7 +633,7 @@ void SfxRequest::Done_Impl
     pImp->bDone = TRUE;
 
     // nicht Recorden
-    if ( !pImp->pMacro )
+    if ( !pImp->xRecorder.is() )
         return;
 
     // wurde ein anderer Slot ausgef"uhrt als angefordert (Delegation)
@@ -634,12 +664,10 @@ void SfxRequest::Done_Impl
         USHORT nWhich = rPool.GetWhich(pImp->pSlot->GetSlotId());
         SfxItemState eState = pSet ? pSet->GetItemState( nWhich, FALSE, &pItem ) : SFX_ITEM_UNKNOWN;
         DBG_ASSERT( eState == SFX_ITEM_SET, "recording property not available" );
+        uno::Sequence < beans::PropertyValue > aSeq;
         if ( eState == SFX_ITEM_SET )
-        {
-            uno::Sequence < beans::PropertyValue > aSeq;
             TransformItems( pImp->pSlot->GetSlotId(), *pSet, aSeq, pImp->pSlot );
-            pImp->pMacro->Record( pImp->CreateStatement( aSeq ) );
-        }
+        pImp->Record( aSeq );
     }
 
     // alles in ein einziges Statement aufzeichnen?
@@ -648,7 +676,7 @@ void SfxRequest::Done_Impl
         uno::Sequence < beans::PropertyValue > aSeq;
         if ( pSet )
             TransformItems( pImp->pSlot->GetSlotId(), *pSet, aSeq, pImp->pSlot );
-        pImp->pMacro->Record( pImp->CreateStatement( aSeq ) );
+        pImp->Record( aSeq );
     }
 
     // jedes Item als einzelnes Statement recorden
@@ -681,13 +709,9 @@ void SfxRequest::Done_Impl
         else
         {
             HACK(hierueber nochmal nachdenken)
-            pImp->pMacro->Record( pImp->CreateStatement( uno::Sequence < beans::PropertyValue >() ) );
+            pImp->Record( uno::Sequence < beans::PropertyValue >() );
         }
     }
-
-    // manual Recording?
-    else if ( pImp->pSlot->IsMode(SFX_SLOT_RECORDMANUAL) )
-        pImp->pMacro->Record( new SfxMacroStatement( pImp->aStatement ) );
 }
 
 //--------------------------------------------------------------------
@@ -726,7 +750,39 @@ SfxMacro* SfxRequest::GetRecordingMacro()
 */
 
 {
-    return SfxViewFrame::Current()->GetRecordingMacro_Impl();
+//    return SfxViewFrame::Current()->GetRecordingMacro_Impl();
+    return NULL;
+}
+
+//--------------------------------------------------------------------
+
+com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > SfxRequest::GetMacroRecorder()
+
+/*  [Beschreibung]
+
+    Hier wird versucht einen Recorder fuer dispatch() Aufrufe vom Frame zu bekommen.
+    Dieser ist dort per Property an einem Supplier verfuegbar - aber nur dann, wenn
+    recording angeschaltet wurde.
+    (Siehe auch SfxViewFrame::MiscExec_Impl() und SID_RECORDING)
+*/
+
+{
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
+
+    com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > xSet(
+        SfxViewFrame::Current()->GetFrame()->GetFrameInterface(),
+        com::sun::star::uno::UNO_QUERY);
+
+    if(xSet.is())
+    {
+        com::sun::star::uno::Any aProp = xSet->getPropertyValue(rtl::OUString::createFromAscii("DispatchRecorderSupplier"));
+        com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
+        aProp >>= xSupplier;
+        if(xSupplier.is())
+            xRecorder = xSupplier->getDispatchRecorder();
+    }
+
+    return xRecorder;
 }
 
 //--------------------------------------------------------------------
@@ -805,6 +861,9 @@ void SfxRequest::SetTarget( const String &rTarget )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2002/04/11 08:05:49  mba
+    #98405#: support macro recorder
+
     Revision 1.3  2002/04/05 11:32:19  mba
     #98405#: support macro recording
 
