@@ -52,6 +52,8 @@ Dim SystemPath as String
 	DlgUserFields = LoadDialog(&quot;Gimmicks&quot;,&quot;UserfieldDlg&quot;)
 	SystemPath = ConvertFromUrl(FilePath)
 	DlgUserFields.Model.Label10.Label = ReplaceString(DlgUserFields.Model.Label10.Label, &quot;&apos;&quot; &amp; SystemPath &amp; &quot;&apos;&quot;, &quot;&lt;ConfigDir&gt;&quot;)
+	DlgUserFields.Model.Label10.Label = ReplaceString(DlgUserFields.Model.Label10.Label, GetProductName(), &quot;&lt;PRODUCTNAME&gt;&quot;)
+	DlgUserFields.Model.cmdSelect.HelpText = ReplaceString(DlgUserFields.Model.cmdSelect.HelpText, GetProductName(), &quot;&lt;PRODUCTNAME&gt;&quot;)
 	ScrollBarValue = 0
 	oUserDataAccess = GetRegistryKeyContent(&quot;org.openoffice.UserProfile/Data&quot;, True)
 	InitializeUserFamily()
@@ -124,8 +126,6 @@ Dim i as Integer
 	DlgUserFields.Model.cmdNextUser.Enabled = CurFieldIndex &lt;&gt; Ubound(UserFieldFamily(), 1)
 	DlgUserFields.Model.cmdPrevUser.Enabled = CurFieldIndex &lt;&gt; 0
 End Sub
-
-
 
 
 Sub InitializeUserFamily()

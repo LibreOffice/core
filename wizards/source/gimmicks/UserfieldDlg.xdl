@@ -21,7 +21,7 @@
   <dlg:textfield dlg:id="TextField8" dlg:tab-index="16" dlg:left="65" dlg:top="158" dlg:width="193" dlg:height="12"/>
   <dlg:textfield dlg:id="TextField9" dlg:tab-index="17" dlg:left="65" dlg:top="174" dlg:width="193" dlg:height="12"/>
   <dlg:scrollbar dlg:id="ScrollBar1" dlg:tab-index="18" dlg:left="263" dlg:top="46" dlg:width="12" dlg:height="140" dlg:align="vertical">
-   <script:event script:event-name="on-mouseup" script:location="application" script:macro-name="Gimmicks.Userfields.ScrollControls" script:language="StarBasic"/>
+   <script:event script:event-name="on-adjustmentvaluechange" script:location="application" script:macro-name="Gimmicks.Userfields.ScrollControls" script:language="StarBasic"/>
   </dlg:scrollbar>
   <dlg:button dlg:id="cmdQuit" dlg:tab-index="19" dlg:left="6" dlg:top="193" dlg:width="35" dlg:height="14" dlg:help-text="Exit Macro" dlg:value="Exit">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Gimmicks.Userfields.StopMacro" script:language="StarBasic"/>
@@ -29,7 +29,7 @@
   <dlg:button dlg:id="cmdSave" dlg:tab-index="20" dlg:left="45" dlg:top="193" dlg:width="35" dlg:height="14" dlg:help-text="Save All Data of All Users to File" dlg:value="~Save">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Gimmicks.Userfields.SaveSettings" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="cmdTakeOver" dlg:tab-index="21" dlg:left="84" dlg:top="193" dlg:width="35" dlg:height="14" dlg:help-text="Replace the User Data in &lt;PRODUCTNAME&gt; With the User Data Above" dlg:value="Se~lect">
+  <dlg:button dlg:id="cmdSelect" dlg:tab-index="21" dlg:left="84" dlg:top="193" dlg:width="35" dlg:height="14" dlg:help-text="Replace the User Data in &lt;PRODUCTNAME&gt; With the User Data Above" dlg:value="Se~lect">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Gimmicks.Userfields.SelectCurrentFields" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="cmdNextUser" dlg:tab-index="22" dlg:left="162" dlg:top="193" dlg:width="35" dlg:height="14" dlg:tag="1" dlg:help-text="Show Data of Next User" dlg:value="Next &gt;&gt;">
