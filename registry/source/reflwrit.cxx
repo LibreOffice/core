@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflwrit.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-01-10 10:15:53 $
+ *  last change: $Author: svesik $ $Date: 2001-02-02 13:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ using namespace vos;
 static sal_Char NULL_STRING[1] = { 0 };
 static sal_Unicode NULL_WSTRING[1] = { 0 };
 
-#if defined ( GCC ) && ( defined ( SCO ) || defined ( NETBSD ) || defined ( OS2 ) )
+#if defined ( GCC ) && ( defined ( SCO ) || defined ( OS2 ) )
 ORealDynamicLoader* ODynamicLoader<RegistryTypeWriter_Api>::m_pLoader = NULL;
 #endif
 
