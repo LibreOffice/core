@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2002-05-31 08:00:17 $
+ *  last change: $Author: sab $ $Date: 2002-06-10 15:07:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,7 +488,6 @@ void SAL_CALL
     if (xListener.is())
     {
         ScUnoGuard aGuard;
-        IsObjectValid();
         if (!IsDefunc() && mpEventListeners)
             mpEventListeners->removeInterface(xListener);
     }
