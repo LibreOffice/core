@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofored.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-15 09:00:04 $
+ *  last change: $Author: thb $ $Date: 2002-02-25 16:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,16 +332,6 @@ USHORT SvxEditEngineForwarder::GetItemState( USHORT nPara, USHORT nWhich ) const
     return rSet.GetItemState( nWhich );
 }
 
-EditView* SvxEditEngineForwarder::GetView() const
-{
-    EditView* pEditView = rEditEngine.GetActiveView();
-
-    if( pEditView )
-        return pEditView;
-    else
-        return rEditEngine.GetView();
-}
-
 void SvxEditEngineForwarder::SetNotifyHdl( const Link& rLink )
 {
     rEditEngine.SetNotifyHdl( rLink );
@@ -352,32 +342,19 @@ LanguageType SvxEditEngineForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) 
     return rEditEngine.GetLanguage(nPara, nIndex);
 }
 
-sal_Bool SvxEditEngineForwarder::GetSelection( ESelection& rSelection ) const
-{
-    EditView* pView = GetView();
-
-    if( pView )
-    {
-        rSelection = pView->GetSelection();
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
-awt::Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
+Rectangle SvxEditEngineForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
 {
     // TODO
-    return awt::Rectangle();
+    return Rectangle();
 }
 
-awt::Rectangle SvxEditEngineForwarder::GetParaBounds( USHORT nPara ) const
+Rectangle SvxEditEngineForwarder::GetParaBounds( USHORT nPara ) const
 {
     // TODO
-    return awt::Rectangle();
+    return Rectangle();
 }
 
-sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const awt::Point&, USHORT& nPara, USHORT& nIndex ) const
+sal_Bool SvxEditEngineForwarder::GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const
 {
     // TODO
     return sal_False;
@@ -399,58 +376,6 @@ USHORT SvxEditEngineForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
     return rEditEngine.GetLineLen(nPara, nLine);
 }
 
-sal_Bool SvxEditEngineForwarder::SetSelection( const ESelection& rSelection )
-{
-    EditView* pView = GetView();
-
-    if( pView )
-    {
-        pView->SetSelection( rSelection );
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
-sal_Bool SvxEditEngineForwarder::Copy()
-{
-    EditView* pView = GetView();
-
-    if( pView )
-    {
-        pView->Copy();
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
-sal_Bool SvxEditEngineForwarder::Cut()
-{
-    EditView* pView = GetView();
-
-    if( pView )
-    {
-        pView->Cut();
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
-sal_Bool SvxEditEngineForwarder::Paste()
-{
-    EditView* pView = GetView();
-
-    if( pView )
-    {
-        pView->Paste();
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
 sal_Bool SvxEditEngineForwarder::Delete( const ESelection& rSelection )
 {
     EditEngine& rCacheEE = rEditEngine;
@@ -461,19 +386,14 @@ sal_Bool SvxEditEngineForwarder::Delete( const ESelection& rSelection )
     return sal_True;
 }
 
-sal_Bool SvxEditEngineForwarder::InsertText( String sStr, const ESelection& rSelection )
+sal_Bool SvxEditEngineForwarder::InsertText( const String& rStr, const ESelection& rSelection )
 {
     EditEngine& rCacheEE = rEditEngine;
 
-    rCacheEE.QuickInsertText( sStr, rSelection );
+    rCacheEE.QuickInsertText( rStr, rSelection );
     rCacheEE.QuickFormatDoc();
 
     return sal_True;
-}
-
-void SvxEditEngineForwarder::SetText( USHORT nPara, String sStr )
-{
-    rEditEngine.SetText( nPara, sStr );
 }
 
 //------------------------------------------------------------------------

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: unoedsrc.cxx,v $
+ *  $RCSfile: unoviwed.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: thb $ $Date: 2002-02-25 16:29:45 $
  *
@@ -59,94 +59,86 @@
  *
  ************************************************************************/
 
-#pragma hdrstop
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
+#endif
 
-#include "unoedsrc.hxx"
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
+#endif
 
-//------------------------------------------------------------------------
+#include "unoviwed.hxx"
+#include "editview.hxx"
 
-SvxTextForwarder::~SvxTextForwarder()
+SvxEditEngineViewForwarder::SvxEditEngineViewForwarder( EditView& rView ) :
+    mrView ( rView )
 {
 }
 
-//------------------------------------------------------------------------
-
-SvxViewForwarder::~SvxViewForwarder()
+SvxEditEngineViewForwarder::~SvxEditEngineViewForwarder()
 {
 }
 
-//------------------------------------------------------------------------
-
-SvxEditViewForwarder::~SvxEditViewForwarder()
+BOOL SvxEditEngineViewForwarder::IsValid() const
 {
+    return sal_True;
 }
 
-//------------------------------------------------------------------------
-
-SvxEditSource::~SvxEditSource()
+Rectangle SvxEditEngineViewForwarder::GetVisArea() const
 {
+    return mrView.GetVisArea();
 }
 
-SvxViewForwarder* SvxEditSource::GetViewForwarder()
+Point SvxEditEngineViewForwarder::LogicToPixel( const Point& rPoint ) const
 {
-    return NULL;
+    OutputDevice* pOutDev = mrView.GetWindow();
+
+    if( pOutDev )
+    {
+        return pOutDev->LogicToPixel( rPoint );
+    }
+
+    return Point();
 }
 
-SvxEditViewForwarder* SvxEditSource::GetEditViewForwarder( sal_Bool bCreate )
+Point SvxEditEngineViewForwarder::PixelToLogic( const Point& rPoint ) const
 {
-    return NULL;
+    OutputDevice* pOutDev = mrView.GetWindow();
+
+    if( pOutDev )
+    {
+        return pOutDev->PixelToLogic( rPoint );
+    }
+
+    return Point();
 }
 
-SfxBroadcaster& SvxEditSource::GetBroadcaster() const
+sal_Bool SvxEditEngineViewForwarder::GetSelection( ESelection& rSelection ) const
 {
-    DBG_ERROR("SvxEditSource::GetBroadcaster called for implementation missing this feature!");
-
-    static SfxBroadcaster aBroadcaster;
-
-    return aBroadcaster;
+    rSelection = mrView.GetSelection();
+    return sal_True;
 }
 
-//------------------------------------------------------------------------
-
-TYPEINIT1( SvxEditSourceHint, TextHint );
-
-SvxEditSourceHint::SvxEditSourceHint( ULONG nId ) : TextHint( nId )
+sal_Bool SvxEditEngineViewForwarder::SetSelection( const ESelection& rSelection )
 {
+    mrView.SetSelection( rSelection );
+    return sal_True;
 }
 
-SvxEditSourceHint::SvxEditSourceHint( ULONG nId, ULONG nValue, ULONG nStart, ULONG nEnd ) :
-    TextHint( nId, nValue ),
-    mnStart( nStart),
-    mnEnd( nEnd )
+sal_Bool SvxEditEngineViewForwarder::Copy()
 {
+    mrView.Copy();
+    return sal_True;
 }
 
-ULONG SvxEditSourceHint::GetValue() const
+sal_Bool SvxEditEngineViewForwarder::Cut()
 {
-    return TextHint::GetValue();
+    mrView.Cut();
+    return sal_True;
 }
 
-ULONG SvxEditSourceHint::GetStartValue() const
+sal_Bool SvxEditEngineViewForwarder::Paste()
 {
-    return mnStart;
-}
-
-ULONG SvxEditSourceHint::GetEndValue() const
-{
-    return mnEnd;
-}
-
-void SvxEditSourceHint::SetValue( ULONG n )
-{
-    TextHint::SetValue( n );
-}
-
-void SvxEditSourceHint::SetStartValue( ULONG n )
-{
-    mnStart = n;
-}
-
-void SvxEditSourceHint::SetEndValue( ULONG n )
-{
-    mnEnd = n;
+    mrView.Paste();
+    return sal_True;
 }

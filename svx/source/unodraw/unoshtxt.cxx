@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-11 12:28:32 $
+ *  last change: $Author: thb $ $Date: 2002-02-25 16:26:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #ifndef _SVDOBJ_HXX
 #include <svdobj.hxx>
 #endif
+#ifndef _SVDVIEW_HXX
+#include <svdview.hxx>
+#endif
 #ifndef _SVDETC_HXX
 #include <svdetc.hxx>
 #endif
@@ -105,6 +108,9 @@
 #endif
 #ifndef _SVX_UNOFOROU_HXX
 #include <unoforou.hxx>
+#endif
+#ifndef _SVX_UNOVIWOU_HXX
+#include <unoviwou.hxx>
 #endif
 #ifndef _OUTLOBJ_HXX
 #include "outlobj.hxx"
@@ -128,23 +134,51 @@ namespace css = ::com::sun::star;
 // SvxTextEditSourceImpl
 //------------------------------------------------------------------------
 
+/** @descr
+    <p>This class essentially provides the text and view forwarders. If
+    no SdrView is given, this class handles the UNO objects, which are
+    currently not concerned with view issues. In this case,
+    GetViewForwarder() always returns NULL and the underlying
+    EditEngine of the SvxTextForwarder is a background one (i.e. not
+    the official DrawOutliner, but one created exclusively for this
+    object, with no relation to a view).
+    </p>
+
+    <p>If a SdrView is given at construction time, the caller is
+    responsible for destroying this object when the view becomes
+    invalid (the views cannot notify). If GetViewForwarder(sal_True)
+    is called, the underlying shape is put into edit mode, the view
+    forwarder returned encapsulates the OutlinerView and the next call
+    to GetTextForwarder() yields a forwarder encapsulating the actual
+    DrawOutliner. Thus, changes on that Outliner are immediately
+    reflected on the screen. If the object leaves edit mode, the old
+    behaviour is restored.</p>
+ */
 class SvxTextEditSourceImpl : public SfxListener, public SfxBroadcaster
 {
 private:
     oslInterlockedCount maRefCount;
 
-    SdrObject*              mpObject;
-    SdrModel*               mpModel;
-    SdrOutliner*            mpOutliner;
-    SvxOutlinerForwarder*   mpTextForwarder;
-    BOOL                    mbDataValid;
-    BOOL                    mbDestroyed;
-    BOOL                    mbIsLocked;
-    BOOL                    mbNeedsUpdate;
-    BOOL                    mbOldUndoMode;
+    SdrObject*                      mpObject;
+    SdrView*                        mpView;
+    const Window*                   mpWindow;
+    SdrModel*                       mpModel;
+    SdrOutliner*                    mpOutliner;
+    SvxOutlinerForwarder*           mpTextForwarder;
+    SvxDrawOutlinerViewForwarder*   mpViewForwarder;    // if non-NULL, use GetEditModeTextForwarder text forwarder
+    BOOL                            mbDataValid;
+    BOOL                            mbDestroyed;
+    BOOL                            mbIsLocked;
+    BOOL                            mbNeedsUpdate;
+    BOOL                            mbOldUndoMode;
+
+    SvxTextForwarder*               GetBackgroundTextForwarder();
+    SvxTextForwarder*               GetEditModeTextForwarder();
+    SvxDrawOutlinerViewForwarder*   CreateViewForwarder();
 
 public:
     SvxTextEditSourceImpl( SdrObject* pObject );
+    SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView, const Window& rWindow );
     ~SvxTextEditSourceImpl();
 
     void SAL_CALL acquire();
@@ -152,14 +186,21 @@ public:
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    SvxEditSource*      Clone() const;
-    SvxTextForwarder*   GetTextForwarder();
-    void                UpdateData();
+    SvxEditSource*          Clone() const;
+    SvxTextForwarder*       GetTextForwarder();
+    SvxEditViewForwarder*   GetEditViewForwarder( sal_Bool );
+    void                    UpdateData();
 
-    SdrObject* GetSdrObject() const { return mpObject; }
+    SdrObject*              GetSdrObject() const { return mpObject; }
 
-    void lock();
-    void unlock();
+    void                    lock();
+    void                    unlock();
+
+    BOOL                    IsValid() const;
+
+    Rectangle               GetVisArea() const;
+    Point                   LogicToPixel( const Point& ) const;
+    Point                   PixelToLogic( const Point& ) const;
 
     DECL_LINK( NotifyHdl, EENotify* );
 
@@ -170,6 +211,8 @@ public:
 SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject )
 :   mpObject        ( pObject ),
     mpModel         ( pObject ? pObject->GetModel() : NULL ),
+    mpView          ( NULL ),
+    mpWindow        ( NULL ),
     mpOutliner      ( NULL ),
     mpTextForwarder ( NULL ),
     mbDataValid     ( FALSE ),
@@ -187,6 +230,26 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject )
 
 //------------------------------------------------------------------------
 
+SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject& rObject, SdrView& rView, const Window& rWindow )
+:   mpObject        ( &rObject ),
+    mpModel         ( rObject.GetModel() ),
+    mpView          ( &rView ),
+    mpWindow        ( &rWindow ),
+    mpOutliner      ( NULL ),
+    mpTextForwarder ( NULL ),
+    mbDataValid     ( FALSE ),
+    mbDestroyed     ( FALSE ),
+    mbIsLocked      ( FALSE ),
+    mbNeedsUpdate   ( FALSE ),
+    mbOldUndoMode   ( FALSE ),
+    maRefCount      ( 0 )
+{
+    if( mpModel )
+        StartListening( *mpModel );
+}
+
+//------------------------------------------------------------------------
+
 SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
 {
     DBG_ASSERT( mbIsLocked == sal_False, "text edit source was not unlocked before dispose!" );
@@ -195,6 +258,7 @@ SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
         EndListening( *mpModel );
 
     delete mpTextForwarder;
+    delete mpViewForwarder;
     if( mpOutliner )
     {
         if( mpModel )
@@ -264,11 +328,11 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
     if( mbDestroyed )
     {
-        if( mpTextForwarder )
-        {
-            delete mpTextForwarder;
-            mpTextForwarder = NULL;
-        }
+        delete mpTextForwarder;
+        mpTextForwarder = NULL;
+
+        delete mpViewForwarder;
+        mpViewForwarder = NULL;
 
         if( mpOutliner )
         {
@@ -290,6 +354,8 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
 
         mpObject = NULL;
+        mpView = NULL;
+        mpWindow = NULL;
 
         Broadcast( TextHint( SFX_HINT_DYING ) );
     }
@@ -304,17 +370,9 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 #include <comphelper/processfactory.hxx>
 #endif
 
-SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
+
+SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 {
-    if( mbDestroyed || mpObject == NULL )
-        return NULL;
-
-    if( mpModel == NULL )
-        mpModel = mpObject->GetModel();
-
-    if( mpModel == NULL )
-        return NULL;
-
     if (!mpTextForwarder)
     {
         if( mpOutliner == NULL )
@@ -425,23 +483,159 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
 
 //------------------------------------------------------------------------
 
-void SvxTextEditSourceImpl::UpdateData()
+SvxTextForwarder* SvxTextEditSourceImpl::GetEditModeTextForwarder()
 {
-    if( mbIsLocked )
+    // are we still in edit mode?
+    SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+    if( pTextObj && pTextObj->IsTextEditActive() )
     {
-        mbNeedsUpdate = sal_True;
+        if (!mpTextForwarder)
+        {
+            mpTextForwarder = new SvxOutlinerForwarder( mpModel->GetDrawOutliner() );
+
+            // register as listener - need to broadcast state change messages
+            mpTextForwarder->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
+        }
+
+        return mpTextForwarder;
     }
     else
     {
-        if( mpOutliner && mpObject && !mbDestroyed )
-        {
-            if( mpOutliner->GetParagraphCount() != 1 || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
-                mpObject->SetOutlinerParaObject( mpOutliner->CreateParaObject() );
-            else
-                mpObject->SetOutlinerParaObject( NULL );
+        // no, have left it. Revert to background mode
+        delete mpTextForwarder;
+        mpTextForwarder = NULL;
 
-            if( mpObject->IsEmptyPresObj() )
-                mpObject->SetEmptyPresObj(sal_False);
+        return GetBackgroundTextForwarder();
+    }
+}
+
+//------------------------------------------------------------------------
+
+SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
+{
+    if( mbDestroyed || mpObject == NULL )
+        return NULL;
+
+    if( mpModel == NULL )
+        mpModel = mpObject->GetModel();
+
+    if( mpModel == NULL )
+        return NULL;
+
+    // distinguish the cases
+    // a) background Outliner, reflect changes into ParaOutliner
+    // b) edit mode active, work directly on the EditOutliner
+    if( mpViewForwarder )
+        return GetEditModeTextForwarder();
+    else
+        return GetBackgroundTextForwarder();
+}
+
+//------------------------------------------------------------------------
+
+SvxDrawOutlinerViewForwarder* SvxTextEditSourceImpl::CreateViewForwarder()
+{
+    if( mpView->GetTextEditOutlinerView() )
+        return new SvxDrawOutlinerViewForwarder( *mpView->GetTextEditOutlinerView() );
+    else
+        return NULL;
+}
+
+SvxEditViewForwarder* SvxTextEditSourceImpl::GetEditViewForwarder( sal_Bool bCreate )
+{
+    if( mbDestroyed || mpObject == NULL )
+        return NULL;
+
+    if( mpModel == NULL )
+        mpModel = mpObject->GetModel();
+
+    if( mpModel == NULL )
+        return NULL;
+
+    if( mpViewForwarder )
+    {
+        // are we still in edit mode?
+        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        if( !pTextObj || !pTextObj->IsTextEditActive() )
+        {
+            // no, destroy all forwarders (no need for UpdateData(),
+            // it's been synched on EndTextEdit)
+            delete mpViewForwarder;
+            mpViewForwarder = NULL;
+
+            delete mpTextForwarder;
+            mpTextForwarder = NULL;
+        }
+    }
+    else if( bCreate && mpView )
+    {
+        // dispose old text forwarder
+        UpdateData();
+
+        delete mpTextForwarder;
+        mpTextForwarder = NULL;
+
+        SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+        if( pTextObj )
+        {
+            // edit mode already active?
+            if( pTextObj->IsTextEditActive() )
+            {
+                // create new view forwarder
+                mpViewForwarder = CreateViewForwarder();
+            }
+            else
+            {
+                // enter edit mode
+                mpView->EndTextEdit();
+                if( mpView->BegTextEdit( mpObject, NULL, NULL, (SdrOutliner*)NULL, NULL, FALSE, FALSE ) )
+                {
+                    SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
+                    if( pTextObj && pTextObj->IsTextEditActive() )
+                    {
+                        // create new view forwarder
+                        mpViewForwarder = CreateViewForwarder();
+                    }
+                    else
+                    {
+                        // failure. Somehow, BegTextEdit did not set
+                        // our SdrTextObj into edit mode
+                        mpView->EndTextEdit();
+                    }
+                }
+            }
+        }
+    }
+
+    return mpViewForwarder;
+}
+
+//------------------------------------------------------------------------
+
+void SvxTextEditSourceImpl::UpdateData()
+{
+    // if we have a view forwarder, we're in edit mode and working
+    // with the DrawOutliner. Thus, all changes made on the text
+    // forwarder are reflected on the view and committed to the model
+    // on EndTextEdit(). Thus, no need for explicit updates here.
+    if( !mpViewForwarder )
+    {
+        if( mbIsLocked  )
+        {
+            mbNeedsUpdate = sal_True;
+        }
+        else
+        {
+            if( mpOutliner && mpObject && !mbDestroyed )
+            {
+                if( mpOutliner->GetParagraphCount() != 1 || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
+                    mpObject->SetOutlinerParaObject( mpOutliner->CreateParaObject() );
+                else
+                    mpObject->SetOutlinerParaObject( NULL );
+
+                if( mpObject->IsEmptyPresObj() )
+                    mpObject->SetEmptyPresObj(sal_False);
+            }
         }
     }
 }
@@ -472,6 +666,41 @@ void SvxTextEditSourceImpl::unlock()
         ((EditEngine*)&(mpOutliner->GetEditEngine()))->SetUpdateMode( sal_True );
         ((EditEngine*)&(mpOutliner->GetEditEngine()))->EnableUndo( mbOldUndoMode );
     }
+}
+
+BOOL SvxTextEditSourceImpl::IsValid() const
+{
+    return mpView && mpWindow ? TRUE : FALSE;
+}
+
+Rectangle SvxTextEditSourceImpl::GetVisArea() const
+{
+    if( IsValid() )
+    {
+        return mpView->GetVisibleArea( mpView->FindWin( const_cast< Window* > (mpWindow) ) );
+    }
+
+    return Rectangle();
+}
+
+Point SvxTextEditSourceImpl::LogicToPixel( const Point& rPoint ) const
+{
+    if( IsValid() )
+    {
+        return mpWindow->LogicToPixel( rPoint );
+    }
+
+    return Point();
+}
+
+Point SvxTextEditSourceImpl::PixelToLogic( const Point& rPoint ) const
+{
+    if( IsValid() )
+    {
+        return mpWindow->PixelToLogic( rPoint );
+    }
+
+    return Point();
 }
 
 IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
@@ -530,6 +759,13 @@ SvxTextEditSource::SvxTextEditSource( SdrObject* pObject )
 }
 
 // --------------------------------------------------------------------
+SvxTextEditSource::SvxTextEditSource( SdrObject& rObj, SdrView& rView, const Window& rWindow )
+{
+    mpImpl = new SvxTextEditSourceImpl( rObj, rView, rWindow );
+    mpImpl->acquire();
+}
+
+// --------------------------------------------------------------------
 
 SvxTextEditSource::SvxTextEditSource( SvxTextEditSourceImpl* pImpl )
 {
@@ -558,6 +794,18 @@ SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
 }
 
 //------------------------------------------------------------------------
+SvxEditViewForwarder* SvxTextEditSource::GetEditViewForwarder( sal_Bool bCreate )
+{
+    return mpImpl->GetEditViewForwarder( bCreate );
+}
+
+//------------------------------------------------------------------------
+SvxViewForwarder* SvxTextEditSource::GetViewForwarder()
+{
+    return this;
+}
+
+//------------------------------------------------------------------------
 void SvxTextEditSource::UpdateData()
 {
     mpImpl->UpdateData();
@@ -581,6 +829,26 @@ void SvxTextEditSource::lock()
 void SvxTextEditSource::unlock()
 {
     mpImpl->unlock();
+}
+
+BOOL SvxTextEditSource::IsValid() const
+{
+    return mpImpl->IsValid();
+}
+
+Rectangle SvxTextEditSource::GetVisArea() const
+{
+    return mpImpl->GetVisArea();
+}
+
+Point SvxTextEditSource::LogicToPixel( const Point& rPoint ) const
+{
+    return mpImpl->LogicToPixel( rPoint );
+}
+
+Point SvxTextEditSource::PixelToLogic( const Point& rPoint ) const
+{
+    return mpImpl->PixelToLogic( rPoint );
 }
 
 /** this method returns true if the outliner para object of the given shape has

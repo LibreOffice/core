@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoforou.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-15 09:00:04 $
+ *  last change: $Author: thb $ $Date: 2002-02-25 16:29:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,12 +302,6 @@ void SvxOutlinerForwarder::flushCache()
     }
 }
 
-OutlinerView* SvxOutlinerForwarder::GetView() const
-{
-    // TODO: GetActiveView also for OutlinerView?
-    return rOutliner.GetView(0);
-}
-
 void SvxOutlinerForwarder::SetNotifyHdl( const Link& rLink )
 {
     rOutliner.SetNotifyHdl( rLink );
@@ -318,32 +312,19 @@ LanguageType SvxOutlinerForwarder::GetLanguage( USHORT nPara, USHORT nIndex ) co
     return rOutliner.GetLanguage(nPara, nIndex);
 }
 
-sal_Bool SvxOutlinerForwarder::GetSelection( ESelection& rSelection ) const
-{
-    OutlinerView* pView = GetView();
-
-    if( pView )
-    {
-        rSelection = pView->GetSelection();
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
-awt::Rectangle SvxOutlinerForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
+Rectangle SvxOutlinerForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
 {
     // TODO
-    return awt::Rectangle();
+    return Rectangle();
 }
 
-awt::Rectangle SvxOutlinerForwarder::GetParaBounds( USHORT nPara ) const
+Rectangle SvxOutlinerForwarder::GetParaBounds( USHORT nPara ) const
 {
     // TODO
-    return awt::Rectangle();
+    return Rectangle();
 }
 
-sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const awt::Point&, USHORT& nPara, USHORT& nIndex ) const
+sal_Bool SvxOutlinerForwarder::GetIndexAtPoint( const Point&, USHORT& nPara, USHORT& nIndex ) const
 {
     // TODO
     return sal_False;
@@ -365,58 +346,6 @@ USHORT SvxOutlinerForwarder::GetLineLen( USHORT nPara, USHORT nLine ) const
     return rOutliner.GetLineLen(nPara, nLine);
 }
 
-sal_Bool SvxOutlinerForwarder::SetSelection( const ESelection& rSelection )
-{
-    OutlinerView* pView = GetView();
-
-    if( pView )
-    {
-        pView->SetSelection( rSelection );
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
-sal_Bool SvxOutlinerForwarder::Copy()
-{
-    OutlinerView* pView = GetView();
-
-    if( pView )
-    {
-        pView->Copy();
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
-sal_Bool SvxOutlinerForwarder::Cut()
-{
-    OutlinerView* pView = GetView();
-
-    if( pView )
-    {
-        pView->Cut();
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
-sal_Bool SvxOutlinerForwarder::Paste()
-{
-    OutlinerView* pView = GetView();
-
-    if( pView )
-    {
-        pView->Paste();
-        return sal_True;
-    }
-
-    return sal_False;
-}
-
 sal_Bool SvxOutlinerForwarder::Delete( const ESelection& rSelection )
 {
     rOutliner.QuickDelete( rSelection );
@@ -425,17 +354,12 @@ sal_Bool SvxOutlinerForwarder::Delete( const ESelection& rSelection )
     return sal_True;
 }
 
-sal_Bool SvxOutlinerForwarder::InsertText( String sStr, const ESelection& rSelection )
+sal_Bool SvxOutlinerForwarder::InsertText( const String& rStr, const ESelection& rSelection )
 {
-    rOutliner.QuickInsertText( sStr, rSelection );
+    rOutliner.QuickInsertText( rStr, rSelection );
     rOutliner.QuickFormatDoc();
 
     return sal_True;
-}
-
-void SvxOutlinerForwarder::SetText( USHORT nPara, String sStr )
-{
-    rOutliner.SetText( sStr, rOutliner.GetParagraph( nPara ) );
 }
 
 //------------------------------------------------------------------------

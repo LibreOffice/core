@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltxtexp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2002-02-11 15:51:43 $
+ *  last change: $Author: thb $ $Date: 2002-02-25 16:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,7 @@ class SvxEditEngineSourceImpl;
 
 ///////////////////////////////////////////////////////////////////////
 
-class SvxEditEngineSourceImpl : public SfxBroadcaster
+class SvxEditEngineSourceImpl
 {
 private:
     oslInterlockedCount maRefCount;
@@ -190,7 +190,7 @@ public:
     void SAL_CALL acquire();
     void SAL_CALL release();
 
-    SvxTextForwarder*   GetTextForwarder();
+    SvxTextForwarder*       GetTextForwarder();
 };
 
 ///////////////////////////////////////////////////////////////////////
@@ -281,12 +281,6 @@ SvxTextForwarder* SvxEditEngineSource::GetTextForwarder()
 void SvxEditEngineSource::UpdateData()
 {
 }
-
-SfxBroadcaster& SvxEditEngineSource::GetBroadcaster() const
-{
-    return *mpImpl;
-}
-
 
 class SvxSimpleUnoModel : public cppu::WeakAggImplHelper4<
                                     ::com::sun::star::frame::XModel,
