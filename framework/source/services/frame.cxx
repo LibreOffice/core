@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-13 12:02:25 $
+ *  last change: $Author: as $ $Date: 2000-10-18 12:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,14 @@
 #include <services/frame.hxx>
 #endif
 
+/*OBSOLETE
 #ifndef __FRAMEWORK_HELPER_ODISPATCHPROVIDER_HXX_
 #include <helper/odispatchprovider.hxx>
+#endif
+*/
+
+#ifndef __FRAMEWORK_HELPER_OINTERCEPTIONHELPER_HXX_
+#include <helper/ointerceptionhelper.hxx>
 #endif
 
 #ifndef __FRAMEWORK_HELPER_OFRAMES_HXX_
@@ -193,10 +199,16 @@ Frame::Frame( const Reference< XMultiServiceFactory >& xFactory )
     // We cant create the dispatchhelper and frameshelper, because they hold wekreferences to us!
     // But with a HACK (++refcount) its "OK" :-(
     ++m_refCount ;
-
+/*OBSOLETE
     // Initialize a new dispatchhelper-object to handle dispatches PRIVATE!
     ODispatchProvider* pDispatchHelper = new ODispatchProvider( m_xFactory, this, m_aMutex );
     m_xDispatchHelper = Reference< XDispatchProvider >( (OWeakObject*)pDispatchHelper, UNO_QUERY );
+*/
+    // Initialize a new dispatch helper object to handle dispatches and interceptor mechanism PRIVATE!
+    // These helper use an ODispatchProvider which hold a weakreference to us.
+    // OInterceptionHelper don't do it.
+    OInterceptionHelper* pDispatchHelper = new OInterceptionHelper( m_xFactory, this, m_aMutex );
+    m_xDispatchHelper = Reference< XDispatchProvider >( static_cast< OWeakObject* >(pDispatchHelper), UNO_QUERY );
 
     // Initialize a new frameshelper-object to handle indexaccess and elementaccess!
     // Attention: OFrames need the this-pointer for initializing. You must use "this" directly.
@@ -204,12 +216,12 @@ Frame::Frame( const Reference< XMultiServiceFactory >& xFactory )
     // forget to clear this reference BEFORE "--m_refCount" (!), your refcount will be less then 0
     // and the new Desktop-instance will be destroyed instantly!!!...
     OFrames* pFramesHelper  = new OFrames( m_xFactory, m_aMutex, this, &m_aChildFrameContainer );
-    m_xFramesHelper = Reference< XFrames >( (OWeakObject*)pFramesHelper, UNO_QUERY );
+    m_xFramesHelper = Reference< XFrames >( static_cast< OWeakObject* >(pFramesHelper), UNO_QUERY );
 
     // Safe impossible cases
     // We can't work without these helpers!
     LOG_ASSERT( !(m_xDispatchHelper.is()==sal_False), "Frame::Frame()\nDispatchHelper is not valid. XDispatchProvider and XDispatch are not supported!\n"       )
-    LOG_ASSERT( !(m_xFramesHelper.is  ()==sal_False), "Frame::Frame()\nFramesHelper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!\n")
+    LOG_ASSERT( !(m_xFramesHelper.is  ()==sal_False), "Frame::Frame()\nFramesHelper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!\n" )
 
     // Don't forget these - or we live for ever!
     --m_refCount ;
@@ -334,6 +346,7 @@ Reference< XDispatch > SAL_CALL Frame::queryDispatch(   const   URL&        aURL
                                                         const   OUString&   sTargetFrameName,
                                                                 sal_Int32   nSearchFlags    ) throw( RuntimeException )
 {
+/*OBSOLETE
     // Ready for multithreading
     LOCK_MUTEX( aGuard, m_aMutex, "Frame::queryDispatch()" )
     // Safe impossible cases
@@ -357,6 +370,11 @@ Reference< XDispatch > SAL_CALL Frame::queryDispatch(   const   URL&        aURL
 
     // Return results of this operation.
     return xReturn;
+*/
+    // We use a helper to support these interface and an interceptor mechanism.
+    // These helper implementation use the same mutex and check incoming parameter!
+    // We don't must do it!
+    return m_xDispatchHelper->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
 }
 
 //*****************************************************************************************************************
@@ -364,6 +382,7 @@ Reference< XDispatch > SAL_CALL Frame::queryDispatch(   const   URL&        aURL
 //*****************************************************************************************************************
 Sequence< Reference< XDispatch > > SAL_CALL Frame::queryDispatches( const Sequence< DispatchDescriptor >& seqDescriptor ) throw( RuntimeException )
 {
+/*OBSOLETE
     // Ready for multithreading
     LOCK_MUTEX( aGuard, m_aMutex, "Frame::queryDispatches()" )
     // Safe impossible cases
@@ -387,6 +406,11 @@ Sequence< Reference< XDispatch > > SAL_CALL Frame::queryDispatches( const Sequen
 
     // Return results of this operation.
     return seqReturn;
+*/
+    // We use a helper to support these interface and an interceptor mechanism.
+    // These helper implementation use the same mutex and check incoming parameter!
+    // We don't must do it!
+    return m_xDispatchHelper->queryDispatches( seqDescriptor );
 }
 
 //*****************************************************************************************************************
@@ -394,9 +418,9 @@ Sequence< Reference< XDispatch > > SAL_CALL Frame::queryDispatches( const Sequen
 //*****************************************************************************************************************
 void SAL_CALL Frame::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& xInterceptor ) throw( RuntimeException )
 {
+/*OBSOLETE
     // Ready for multithreading
     LOCK_MUTEX( aGuard, m_aMutex, "Frame::registerDispatchProviderInterceptor()" )
-
     // Safe impossible cases
     LOG_ASSERT( impldbg_checkParameter_registerDispatchProviderInterceptor( xInterceptor ), "Frame::registerDispatchProviderInterceptor()\nInvalid parameter detected.\n" )
 
@@ -416,6 +440,12 @@ void SAL_CALL Frame::registerDispatchProviderInterceptor( const Reference< XDisp
     // Frame is the master of the first interceptor.
     m_xInterceptor = xInterceptor;
     m_xInterceptor->setMasterDispatchProvider( this );
+*/
+    // We use a helper to support these interface and an interceptor mechanism.
+    // These helper implementation use the same mutex and check incoming parameter!
+    // We don't must do it!
+    Reference< XDispatchProviderInterception > xHelper( m_xDispatchHelper, UNO_QUERY );
+    xHelper->registerDispatchProviderInterceptor( xInterceptor );
 }
 
 //*****************************************************************************************************************
@@ -423,9 +453,9 @@ void SAL_CALL Frame::registerDispatchProviderInterceptor( const Reference< XDisp
 //*****************************************************************************************************************
 void SAL_CALL Frame::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& xInterceptor ) throw( RuntimeException )
 {
+/*OBSOLETE
     // Ready for multithreading
     LOCK_MUTEX( aGuard, m_aMutex, "Frame::releaseDispatchProviderInterceptor()" )
-
     // Safe impossible cases
     LOG_ASSERT( impldbg_checkParameter_releaseDispatchProviderInterceptor( xInterceptor ), "Frame::releaseDispatchProviderInterceptor()\nInvalid parameter detected.\n" )
 
@@ -455,6 +485,12 @@ void SAL_CALL Frame::releaseDispatchProviderInterceptor( const Reference< XDispa
         // First interceptor was removed; its old slave will become the new interceptor.
         m_xInterceptor = Reference< XDispatchProviderInterceptor >( xSlave, UNO_QUERY );
     }
+*/
+    // We use a helper to support these interface and an interceptor mechanism.
+    // These helper implementation use the same mutex and check incoming parameter!
+    // We don't must do it!
+    Reference< XDispatchProviderInterception > xHelper( m_xDispatchHelper, UNO_QUERY );
+    xHelper->releaseDispatchProviderInterceptor( xInterceptor );
 }
 
 //*****************************************************************************************************************
@@ -482,25 +518,11 @@ void SAL_CALL Frame::windowResized( const WindowEvent& aEvent ) throw( RuntimeEx
 {
     // Ready for multithreading
     LOCK_MUTEX( aGuard, m_aMutex, "Frame::windowResized()" )
-
     // Safe impossible cases
     LOG_ASSERT( impldbg_checkParameter_windowResized( aEvent ), "Frame::windowResized()\nInvalid parameter detected.\n" )
 
     // If we have a current component window - we must resize it!
     impl_resizeComponentWindow();
-
-    /*ASMUSS
-    if ( pIndicator && pIndicator->IsVisible() )
-    {
-        // substract height of indicator window
-        Point aPos( aRectangleObject.TopLeft() );
-        long nHeight = pIndicator->GetSizePixel().Height();
-        aSize.Height() -= nHeight;
-
-        // reposition indicatorwindow at the bottom its parent
-        pIndicator->SetPosSizePixel( 0, aPos.Y() + aSize.Height(), aSize.Width(), nHeight, WINDOW_POSSIZE_POSSIZE );
-    }
-    */
 }
 
 //*****************************************************************************************************************
@@ -951,402 +973,6 @@ Reference< XFrame > SAL_CALL Frame::findFrame(  const   OUString&   sTargetFrame
     return xReturn;
 }
 
-/*
-Reference< XFrame > SAL_CALL Frame::findFrame(  const   OUString&   sTargetFrameName    ,
-                                                            sal_Int32   nSearchFlags        ) throw( RuntimeException )
-{
-    // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Frame::findFrame()" )
-    // Safe impossible cases
-    LOG_ASSERT( impldbg_checkParameter_findFrame( sTargetFrameName, nSearchFlags ), "Frame::findFrame()\nInvalid parameter detected.\n" )
-    // Log some special informations about search. (Active in debug version only, if special mode in debug.h is set!)
-    LOG_PARAMETER_FINDFRAME( "Frame", m_sName, sTargetFrameName, nSearchFlags )
-
-    // Set default return Value, if method failed
-    Reference< XFrame > xReturn = Reference< XFrame >();
-
-    // protect against recursion while searching in parent frames!
-    if ( m_bRecursiveSearchProtection == sal_False )
-    {
-        // Attention: First look for special target frame names! Then use searchflags.
-
-        //*************************************************************************************************************
-        //  1)  Search for "_self" or ""!. We handle this as self too!
-        //*************************************************************************************************************
-        if  (
-                ( xReturn.is()      ==  sal_False       )   &&
-                (
-                    ( sTargetFrameName              ==  FRAMETYPE_SELF  )   ||
-                    ( sTargetFrameName.getLength()  <   1               )
-                )
-            )
-        {
-            xReturn = Reference< XFrame >( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            // Log some special informations about search. (Active in debug version only, if special mode in debug.h is set!)
-            LOG_TARGETINGSTEP( "Frame", m_sName, xReturn.is() ? "_self found" : "_self failed" )
-        }
-
-        //*************************************************************************************************************
-        //  2)  If "_parent" searched and we have any one, set it for return.
-        //*************************************************************************************************************
-        if  (
-                ( xReturn.is()      ==  sal_False           )   &&
-                ( m_xParent.is()    ==  sal_True            )   &&
-                ( sTargetFrameName  ==  FRAMETYPE_PARENT    )
-            )
-        {
-            xReturn = Reference< XFrame >( m_xParent, UNO_QUERY );
-            // Log some special informations about search. (Active in debug version only, if special mode in debug.h is set!)
-            LOG_TARGETINGSTEP( "Frame", m_sName, xReturn.is() ? "_parent found" : "_parent failed" )
-        }
-
-        //*************************************************************************************************************
-        //  3)  If "_top" searched and we have no parent set us for return himself.
-        //*************************************************************************************************************
-        if  (
-                ( xReturn.is()      ==  sal_False       )   &&
-                ( sTargetFrameName  ==  FRAMETYPE_TOP   )
-            )
-        {
-            if( m_xParent.is() ==  sal_False )
-            {
-                // If no parent well known we are the top frame!
-                xReturn = Reference< XFrame >( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            }
-            else
-            {
-                // If parent well kwnown we must forward search to it.
-                xReturn = m_xParent->findFrame( FRAMETYPE_TOP, 0 );
-            }
-            // Log some special informations about search. (Active in debug version only, if special mode in debug.h is set!)
-            LOG_TARGETINGSTEP( "Frame", m_sName, xReturn.is() ? "_top found" : "_top failed" )
-        }
-
-        //*************************************************************************************************************
-        //  4)  Forward "_blank" to parent. Desktop can create new task only!
-        //      (Look for existing parent!)
-        //*************************************************************************************************************
-        if  (
-                ( xReturn.is()      ==  sal_False       )   &&
-                ( m_xParent.is()    ==  sal_True        )   &&
-                ( sTargetFrameName  ==  FRAMETYPE_BLANK )
-            )
-        {
-            xReturn = m_xParent->findFrame( FRAMETYPE_BLANK, 0 );
-            // Log some special informations about search. (Active in debug version only, if special mode in debug.h is set!)
-            LOG_TARGETINGSTEP( "Frame", m_sName, xReturn.is() ? "_blank found" : "_blank failed" )
-        }
-
-        //*************************************************************************************************************
-        //  5)  Search for SELF.
-        //*************************************************************************************************************
-        if  (
-                ( xReturn.is()      ==  sal_False               )   &&
-                ( nSearchFlags      &   FrameSearchFlag::SELF   )   &&
-                ( sTargetFrameName  ==  m_sName                 )
-            )
-        {
-            xReturn = Reference< XFrame >( static_cast< OWeakObject* >( this ), UNO_QUERY );
-            // Log some special informations about search. (Active in debug version only, if special mode in debug.h is set!)
-            LOG_TARGETINGSTEP( "Frame", m_sName, xReturn.is() ? "SELF found" : "SELF failed" )
-        }
-
-        //*************************************************************************************************************
-        //  6)  Search for PARENT.
-        //*************************************************************************************************************
-        if  (
-                ( xReturn.is()      ==  sal_False               )   &&
-                ( m_xParent.is()    ==  sal_True                )   &&
-                ( nSearchFlags      &   FrameSearchFlag::PARENT )
-            )
-        {
-            m_bRecursiveSearchProtection = sal_True  ;
-
-            xReturn = m_xParent->findFrame( sTargetFrameName, nSearchFlags );
-            // Log some special informations about search. (Active in debug version only, if special mode in debug.h is set!)
-//          LOG_SEARCHRESULT( m_sName, xReturn.is() ? "PARENT found" : "PARENT failed" )
-
-            m_bRecursiveSearchProtection = sal_False ;
-        }
-
-        //*************************************************************************************************************
-        //  7)  Search for SIBLINGS.
-        //      Attention:
-        //      Continue search on brothers ( subframes of parent ) but don't let them search their brothers too ...
-        //      If FrameSearchFlag_CHILDREN is set, the children of the brothers will be searched also, otherwise not.
-        //*************************************************************************************************************
-        if  (
-                ( xReturn.is()      ==  sal_False                   )   &&
-                ( m_xParent.is()    ==  sal_True                    )   &&
-                ( nSearchFlags      &   FrameSearchFlag::SIBLINGS   )
-            )
-        {
-            // Get all siblings from ouer parent and collect some informations about result set.
-            // Count of siblings, access to list ...
-            Reference< XFrames >            xFrames     = m_xParent->getFrames();
-            Sequence< Reference< XFrame > > seqFrames   = xFrames->queryFrames( FrameSearchFlag::SIBLINGS );
-            Reference< XFrame >*            pArray      = seqFrames.getArray();
-            sal_uInt16                      nCount      = (sal_uInt16)seqFrames.getLength();
-
-            Reference< XFrame >             xThis       ( (OWeakObject*)this, UNO_QUERY );
-            Reference< XFrame >             xSearchFrame;
-
-            // Search siblings "pure" - no search on brothers of brothers - no search at children of siblings!
-            // Break loop, if something was found or all items was treated.
-            sal_uInt16 nPosition = 0;
-            while   (
-                        ( xReturn.is()  ==  sal_False   )   &&
-                        ( nPosition     <   nCount      )
-                    )
-            {
-                // Exclude THIS frame! We are a child of ouer parent and exist in result list of "queryFrames()" to.
-                if ( pArray[nPosition] != xThis )
-                {
-                    xReturn = pArray[nPosition]->findFrame( sTargetFrameName, FrameSearchFlag::SELF );
-                }
-                ++nPosition;
-            }
-
-            // If no sibling match ouer search, try it again with children of ouer siblings.
-            nPosition = 0;
-            while   (
-                        ( xReturn.is()  ==  sal_False   )   &&
-                        ( nPosition     <   nCount      )
-                    )
-            {
-                // Exclude THIS frame again.
-                if ( pArray[nPosition] != xThis )
-                {
-                    xReturn = pArray[nPosition]->findFrame( sTargetFrameName, FrameSearchFlag::CHILDREN );
-                }
-                ++nPosition;
-            }
-            // Log some special informations about search. (Active in debug version only, if special mode in debug.h is set!)
-//          LOG_SEARCHRESULT( m_sName, xReturn.is() ? "SIBLINGS found" : "SIBLINGS failed" )
-        }
-
-        //*************************************************************************************************************
-        //  8)  Search for TASKS.
-        //      Attention:
-        //      The Task-implementation control these flag to! But if search started from the bottom of the tree, we must
-        //      forward it to ouer parents. They can be tasks only!
-        //*************************************************************************************************************
-        if  (
-                ( xReturn.is()      ==  sal_False               )   &&
-                ( m_xParent.is()    ==  sal_True                )   &&
-                ( nSearchFlags      &   FrameSearchFlag::TASKS  )
-            )
-        {
-            m_bRecursiveSearchProtection = sal_True ;
-
-            Reference< XFrame > xParentFrame( m_xParent, UNO_QUERY );
-            xReturn = xParentFrame->findFrame( sTargetFrameName, nSearchFlags | FrameSearchFlag::CHILDREN | FrameSearchFlag::SIBLINGS );
-            // Log some special informations about search. (Active in debug version only, if special mode in debug.h is set!)
-//          LOG_SEARCHRESULT( m_sName, xReturn.is() ? "TASKS found" : "TASKS failed" )
-
-            m_bRecursiveSearchProtection = sal_False;
-        }
-
-        //*************************************************************************************************************
-        //  9)  Search for CHILDREN.
-        //*************************************************************************************************************
-        if  (
-                ( xReturn.is()                          ==  sal_False                   )   &&
-                ( m_aChildFrameContainer.hasElements()  ==  sal_True                    )   &&
-                ( nSearchFlags                          &   FrameSearchFlag::CHILDREN   )
-            )
-        {
-            // Search at own container of childframes if allowed.
-            // Lock the container. Nobody should append or remove elements during next time.
-            // But don't forget to unlock it again!
-            m_aChildFrameContainer.lock();
-
-            // First search only for direct subframes.
-            // Break loop, if something was found or all container items was compared.
-            sal_uInt32 nCount       = m_aChildFrameContainer.getCount();
-            sal_uInt32 nPosition    = 0;
-            while   (
-                        ( xReturn.is()  ==  sal_False   )   &&
-                        ( nPosition     <   nCount      )
-                    )
-            {
-                xReturn = m_aChildFrameContainer[nPosition]->findFrame( sTargetFrameName, FrameSearchFlag::SELF );
-                ++nPosition;
-            }
-
-            // If no direct subframe was found, search now subframes of subframes.
-            nPosition = 0;
-            while   (
-                        ( xReturn.is()  ==  sal_False   )   &&
-                        ( nPosition     <   nCount      )
-                    )
-            {
-                xReturn = m_aChildFrameContainer[nPosition]->findFrame( sTargetFrameName, FrameSearchFlag::CHILDREN );
-                ++nPosition;
-            }
-
-            // Don't forget to unlock the container!
-            m_aChildFrameContainer.unlock();
-            // Log some special informations about search. (Active in debug version only, if special mode in debug.h is set!)
-//          LOG_SEARCHRESULT( m_sName, xReturn.is() ? "CHILDREN found" : "CHILDREN failed" )
-        }
-
-
-
-/*
-
-
-        //*************************************************************************************************************
-        if  (
-                ( xParentFrame.is()                                 ==  sal_True    )   &&
-                ( sTargetFrameName.compareToAscii( "_tool:", 6 )    ==  STRINGEQUAL )   &&
-                ( nSearchFlags & FrameSearchFlag::PARENT                            )
-            )
-        {
-            // Maybe the tool frame lies above.
-            // Return ouer parent as found frame.
-            xReturn = xParentFrame;
-        }
-        //*************************************************************************************************************
-        //*************************************************************************************************************
-        if  (
-                ( xParentFrame.is()                                 ==  sal_True    )   &&
-                ( sTargetFrameName.compareTo( FRAMETYPE_PARENT )    ==  STRINGEQUAL )   &&
-                ( xParentFrame.is()                                 ==  sal_True    )
-            )
-        {
-            // Return the XFrame interface from the parent container.
-            xReturn = xParentFrame;
-        }
-        else
-        //*************************************************************************************************************
-        if  (
-                ( sTargetFrameName.compareTo( FRAMETYPE_TOP     ) == STRINGEQUAL    )   ||
-                ( sTargetFrameName.compareTo( FRAMETYPE_DOCUMENT) == STRINGEQUAL    )
-            )
-        {
-            // Return the XFrame interface of the uppermost XFrameContainer.
-            // If there no parent - we are the topframe himself!
-            if ( m_bIsFrameTop == sal_True )
-            {
-                xReturn = Reference< XFrame >( (OWeakObject*)this, UNO_QUERY );
-            }
-            else
-            if ( xParentFrame.is() == sal_True )
-            {
-                xReturn = xParentFrame->findFrame( sTargetFrameName, nSearchFlags );
-            }
-        }
-        else
-        //*************************************************************************************************************
-        if  (
-                ( sTargetFrameName.compareTo( FRAMETYPE_BEAMER      )   ==  STRINGEQUAL )   ||
-                ( sTargetFrameName.compareTo( FRAMETYPE_EXPLORER    )   ==  STRINGEQUAL )   ||
-                ( sTargetFrameName.compareTo( FRAMETYPE_PARTWINDOW  )   ==  STRINGEQUAL )
-            )
-        {
-            //ASMUSS
-            sal_uInt16 nID;
-
-            if  (   sTargetFrameName.compareToAscii( "_beamer" ) == COMPARE_EQUAL )
-                nId = SID_BROWSER;
-            else if ( aName.CompareToAscii("_explorer") == COMPARE_EQUAL )
-                nId = SID_EXPLORER;
-            else if ( aName.CompareToAscii("_partwindow") == COMPARE_EQUAL )
-                nId = SID_PARTWIN;
-
-            SfxApplication *pApp = SFX_APP();
-            if ( !pApp->HasChildWindow( nId ) )
-            {
-                // Beamer nicht da
-                if ( ( nSearchFlags & ::com::sun::star::frame::FrameSearchFlag::CREATE ) == 0 )
-                    return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > ();
-
-                pApp->SetChildWindow( nId, sal_True );
-                pApp->GetBindings().Invalidate( nId );
-            }
-
-            SfxChildWindow *pChild = pApp->GetChildWindow( nId );
-            if ( pChild )
-            {
-                // SBI: #62242 der _explorer hat kein SfxExplorerHorizDockWnd_Impl - ChildWindow
-                // sodern ein SfxExplorerDockWnd_Impl
-                if ( SID_BROWSER == nId )
-                {
-                    // Einen versteckten Beamer gebe ich nur raus, wenn ich zum Erzeugen
-                    // gen"otigt werde
-                    SfxExplorerHorizDockWnd_Impl *pBeamer = (SfxExplorerHorizDockWnd_Impl*) pChild->GetWindow();
-                    if ( pBeamer->IsAutoHide_Impl() && ( ( nSearchFlags & ::com::sun::star::frame::FrameSearchFlag::CREATE ) == 0  ) )
-                        return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > ();
-                }
-
-                return pChild->GetFrame();
-            }
-            else
-                return ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > ();
-        }
-        else
-        //*************************************************************************************************************
-        // Get a new TaskFrame and a TopFrame inside the task.
-        if  ( sTargetFrameName.compareTo( FRAMETYPE_BLANK ) == STRINGEQUAL )
-        {
-            //ASMUSS
-            SfxTask *pTask = SfxTaskManager::CreateTask();
-            SfxFrame *pFrame = pTask->CreateFrame();
-            return pFrame->GetFrameInterface();
-        }
-        else
-        //*************************************************************************************************************
-        // Search parent if allowed; parent may create a new frame.
-        if  (
-                ( nSearchFlags      &   FrameSearchFlag::PARENT )   &&
-                ( xParentFrame.is() ==  sal_True                )   &&
-                (
-                    ( m_bIsFrameTop ==  sal_True                )   ||
-                    ( nSearchFlags  &   FrameSearchFlag::TASKS  )
-                )
-            )
-        {
-            m_bRecursiveSearchProtection = sal_True ;
-            xReturn = xParentFrame->findFrame( sTargetFrameName, nSearchFlags | FrameSearchFlag::CHILDREN | FrameSearchFlag::SIBLINGS );
-            m_bRecursiveSearchProtection = sal_False;
-        }
-        else
-        //*************************************************************************************************************
-        // Create a new TopFrame.
-        if  (
-                ( m_bIsFrameTop ==  sal_True                                                )   &&
-                ( nSearchFlags  &   ( FrameSearchFlag::CREATE | FrameSearchFlag::TASKS )    )
-            )
-        {
-            /*ASMUSS
-            if ( pOwner )
-            {
-                SfxTask *pTask = pOwner->GetTask();
-                if ( pTask )
-                {
-                    SfxFrame *pFrame = pTask->CreateFrame();
-                    pFrame->SetFrameName( aTargetframename );
-                    return pFrame->GetFrameInterface();
-                }
-            }
-            else if ( nSearchFlags & ::com::sun::star::frame::FrameSearchFlag::TASKS )
-            {
-                SfxTask* pTask = SfxTaskManager::CreateTask();
-                SfxFrame *pFrame = pTask->CreateFrame();
-                pFrame->SetFrameName( aTargetframename );
-                return pFrame->GetFrameInterface();
-            }
-        }
-    }
-
-    // Log some special informations about search. (Active in debug version only, if special mode in debug.h is set!)
-//  LOG_SEARCHRESULT( m_sName, "End of search in Frame" )
-
-    // Return result of this operation.
-    return xReturn;
-}
-*/
 //*****************************************************************************************************************
 //   XFrame
 //*****************************************************************************************************************
@@ -1702,13 +1328,13 @@ void SAL_CALL Frame::dispose() throw( RuntimeException )
             m_xParent->getFrames()->remove( xThis );
             m_xParent=Reference< XFramesSupplier >();
         }
-
+/*OBSOLETE
         // Release current interceptor.
         while ( m_xInterceptor.is() == sal_True )
         {
             releaseDispatchProviderInterceptor( m_xInterceptor );
         }
-
+*/
         // Release current indicator factory helper.
         m_xIndicatorFactoryHelper = Reference< XStatusIndicatorFactory >();
 
@@ -1723,7 +1349,8 @@ void SAL_CALL Frame::dispose() throw( RuntimeException )
 
         // Free memory for container and other helper.
         m_aChildFrameContainer.clear();
-        m_xFramesHelper = Reference< XFrames >();
+        m_xFramesHelper     = Reference< XFrames >();
+        m_xDispatchHelper   = Reference< XDispatchProvider >();
 
         // Reset flags and other members ...
         m_eActiveState                  = DEFAULT_EACTIVESTATE              ;
@@ -2163,7 +1790,7 @@ sal_Bool Frame::impldbg_checkParameter_setActiveFrame( const Reference< XFrame >
     // Return result of check.
     return bOK ;
 }
-
+/*OBSOLETE
 //*****************************************************************************************************************
 sal_Bool Frame::impldbg_checkParameter_queryDispatch(   const   URL&        aURL            ,
                                                           const OUString&   sTargetFrameName,
@@ -2254,7 +1881,7 @@ sal_Bool Frame::impldbg_checkParameter_releaseDispatchProviderInterceptor( const
     // Return result of check.
     return bOK ;
 }
-
+*/
 //*****************************************************************************************************************
 sal_Bool Frame::impldbg_checkParameter_updateViewData( const Any& aValue )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-10-12 10:50:11 $
+ *  last change: $Author: as $ $Date: 2000-10-18 12:22:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1323,12 +1323,14 @@ class Frame :   public XTYPEPROVIDER                    ,
         sal_Bool impldbg_checkParameter_queryFrames                         (           sal_Int32                                   nSearchFlags        );
         sal_Bool impldbg_checkParameter_remove                              (   const   REFERENCE< XFRAME >&                        xFrame              );
         sal_Bool impldbg_checkParameter_setActiveFrame                      (   const   REFERENCE< XFRAME >&                        xFrame              );
-        sal_Bool impldbg_checkParameter_queryDispatch                       (   const   UNOURL&                                     aURL                ,
+/*OBSOLETE
+         sal_Bool impldbg_checkParameter_queryDispatch                      (   const   UNOURL&                                     aURL                ,
                                                                                   const OUSTRING&                                   sTargetFrameName    ,
                                                                                           sal_Int32                                 nSearchFlags        );
         sal_Bool impldbg_checkParameter_queryDispatches                     (   const   SEQUENCE< DISPATCHDESCRIPTOR >&             seqDescriptor       );
         sal_Bool impldbg_checkParameter_registerDispatchProviderInterceptor (   const   REFERENCE< XDISPATCHPROVIDERINTERCEPTOR >&  xInterceptor        );
         sal_Bool impldbg_checkParameter_releaseDispatchProviderInterceptor  (   const   REFERENCE< XDISPATCHPROVIDERINTERCEPTOR >&  xInterceptor        );
+*/
         sal_Bool impldbg_checkParameter_updateViewData                      (   const   ANY&                                        aValue              );
         sal_Bool impldbg_checkParameter_createNewEntry                      (   const   OUSTRING&                                   sURL                ,
                                                                                   const SEQUENCE< PROPERTYVALUE >&                  seqArguments        ,
@@ -1383,7 +1385,7 @@ class Frame :   public XTYPEPROVIDER                    ,
         // Make it protected for directly access.
         OUSTRING                                        m_sName                             ;   /// name of this frame
         REFERENCE< XFRAMESSUPPLIER >                    m_xParent                           ;   /// parent of this frame
-        REFERENCE< XDISPATCHPROVIDERINTERCEPTOR >       m_xInterceptor                      ;   /// current interceptor for dispatches
+//OBSOLETE      REFERENCE< XDISPATCHPROVIDERINTERCEPTOR >       m_xInterceptor                      ;   /// current interceptor for dispatches
         REFERENCE< XDISPATCHPROVIDER >                  m_xDispatchHelper                   ;   /// helper for XDispatchProvider and XDispatch interfaces
         REFERENCE< XMULTISERVICEFACTORY >               m_xFactory                          ;   /// reference to factory, which has create this instance
         REFERENCE< XWINDOW >                            m_xContainerWindow                  ;   /// containerwindow of this frame for embedded components
