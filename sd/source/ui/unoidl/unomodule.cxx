@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodule.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:18:50 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 13:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTSTATE_HPP_
+#include <com/sun/star/frame/DispatchResultState.hpp>
+#endif
+
 #include "sdmod.hxx"
 #include "unomodule.hxx"
 #include <sfx2/objface.hxx>
@@ -99,17 +103,42 @@ uno::Reference< uno::XInterface > SAL_CALL SdUnoModule_createInstance(
     return uno::Reference< frame::XDispatch >( new SdUnoModule( rSMgr ) );
 }
 
-    // XDispatch
-void SAL_CALL SdUnoModule::dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw( ::com::sun::star::uno::RuntimeException )
+    // XNotifyingDispatch
+void SAL_CALL SdUnoModule::dispatchWithNotification( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
+    // there is no guarantee, that we are holded alive during this method!
+    // May the outside dispatch container will be updated by a CONTEXT_CHANGED
+    // asynchronous ...
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xThis(static_cast< ::com::sun::star::frame::XNotifyingDispatch* >(this));
+
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SdDLL::Init();
     const SfxSlot* pSlot = SD_MOD()->GetInterface()->GetSlot( aURL.Complete );
-    if ( pSlot )
+
+    sal_Int16 aState = ::com::sun::star::frame::DispatchResultState::DONTKNOW;
+    if ( !pSlot )
+        aState = ::com::sun::star::frame::DispatchResultState::FAILURE;
+    else
     {
         SfxRequest aReq( pSlot, aArgs, SFX_CALLMODE_SYNCHRON, SD_MOD()->GetPool() );
-        SD_MOD()->ExecuteSlot( aReq );
+        const SfxPoolItem* pResult = SD_MOD()->ExecuteSlot( aReq );
+        if ( pResult )
+            aState = ::com::sun::star::frame::DispatchResultState::SUCCESS;
+        else
+            aState = ::com::sun::star::frame::DispatchResultState::FAILURE;
     }
+
+    if ( xListener.is() )
+    {
+        xListener->dispatchFinished(
+            ::com::sun::star::frame::DispatchResultEvent(
+                    xThis, aState, ::com::sun::star::uno::Any()));
+    }
+}
+    // XDispatch
+void SAL_CALL SdUnoModule::dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw( ::com::sun::star::uno::RuntimeException )
+{
+    dispatchWithNotification(aURL, aArgs, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >());
 }
 
 void SAL_CALL SdUnoModule::addStatusListener(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( ::com::sun::star::uno::RuntimeException )
