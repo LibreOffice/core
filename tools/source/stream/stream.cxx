@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mhu $ $Date: 2002-06-28 18:04:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <stdlib.h> // strtol, _crotl
 
 /*
-#if defined( DBG_UTIL ) && defined( DEBUG )
+#if defined( DBG_UTIL ) && (OSL_DEBUG_LEVEL > 1)
 // prueft Synchronisation des Buffers nach allen Read, Write, Seek
 #define OV_DEBUG
 #endif
