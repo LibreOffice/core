@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlkey2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-22 14:12:34 $
+ *  last change: $Author: mib $ $Date: 2001-11-09 15:53:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,7 @@ sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_S_beta, "beta" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_S_bull, "bull" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_S_cap, "cap" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_S_chi, "chi" );
+sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_S_Chi, "Chi" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_S_circ, "circ" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_S_clubs, "clubs" );
 sal_Char __FAR_DATA SVTOOLS_CONSTASCII_DEF( sHTML_S_cong, "cong" );
