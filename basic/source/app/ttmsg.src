@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-10 15:16:36 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:17:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,7 @@ String S_NO_INCLUDE_FILE_WARNINGS_DETECTED
     Text[ polish ] = "** Nie wyst¹pi³y ¿adne ostrze¿enia podczas inicjalizacji";
     Text[ portuguese_brazilian ] = "** Keine Warnungen aufgetreten";
     Text[ japanese ] = "** ‰Šú‰»’†‚ÉŒx‚È‚µ";
-    Text[ korean ] = "** ¹ß»ıµÈ °æ°í°¡ ¾ø½À´Ï´Ù.";
+    Text[ korean ] = "** ÃÊ±âÈ­¿¡¼­  °æ°í´Â  ¹ß»ıÇÏÁö ¾Ê¾Ò½À´Ï´Ù.";
     Text[ chinese_simplified ] = "** ÔÚ³õÊ¼»¯Ê±Ã»ÓĞ³öÏÖ¾¯¸æ";
     Text[ chinese_traditional ] = "** ¦bªì©l¤Æ®É¨S¦³µo¥XÄµ§i";
     Text[ arabic ] = "** áã ÊÍÏË ÃíÉ ÊÍĞíÑÇÊ ÃËäÇÁ ÇáÊåíÆÉ";
