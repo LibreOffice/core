@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:57:14 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 11:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2198,7 +2198,20 @@ void UnoListBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(u
 {
     ImplUpdateSelectedItemsProperty();
     if ( maItemListeners.getLength() )
-        maItemListeners.itemStateChanged( rEvent );
+    {
+        try
+        {
+            maItemListeners.itemStateChanged( rEvent );
+        }
+        catch( const Exception& e )
+        {
+#if OSL_DEBUG_LEVEL > 0
+            ::rtl::OString sMessage( "UnoListBoxControl::itemStateChanged: caught an exception:\n" );
+            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
+            OSL_ENSURE( sal_False, sMessage.getStr() );
+#endif
+        }
+    }
 }
 
 awt::Size UnoListBoxControl::getMinimumSize(  ) throw(uno::RuntimeException)
