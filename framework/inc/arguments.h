@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arguments.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2002-07-29 08:19:13 $
+ *  last change: $Author: as $ $Date: 2002-08-22 10:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace framework{
 #define ARGUMENTNAME_OUTPUTSTREAM                           DECLARE_ASCII("OutputStream"        )   // Reference< XOutputStream >
 #define ARGUMENTNAME_PATTERN                                DECLARE_ASCII("Pattern"             )   // string
 #define ARGUMENTNAME_POSSIZE                                DECLARE_ASCII("PosSize"             )   // rectangle
-#define ARGUMENTNAME_POSTDATA                               DECLARE_ASCII("PostData"            )   // string
+#define ARGUMENTNAME_POSTDATA                               DECLARE_ASCII("PostData"            )   // Reference< XInputStream >
 #define ARGUMENTNAME_POSTSTRING                             DECLARE_ASCII("PostString"          )   // string
 #define ARGUMENTNAME_PREVIEW                                DECLARE_ASCII("Preview"             )   // bool
 #define ARGUMENTNAME_READONLY                               DECLARE_ASCII("ReadOnly"            )   // bool

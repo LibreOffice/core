@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: as $ $Date: 2002-08-12 11:43:24 $
+ *  last change: $Author: as $ $Date: 2002-08-22 10:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@
 
 #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
 #include <threadhelp/writeguard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_PROTOCOLS_H_
+#include <protocols.h>
 #endif
 
 #ifndef __FRAMEWORK_SERVICES_H_
@@ -939,13 +943,8 @@ sal_Bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL 
     }
     // no else here!
     // (c) such special URL indicates a given input stream - it should be loadable too
-    if(
-        ( bLoadable                                            == sal_False )  &&
-        ( aURL.Complete.compareToAscii( "private:stream", 15 ) == 0         )
-      )
-    {
+    if( !bLoadable && ProtocolCheck::isProtocol(aURL.Complete,ProtocolCheck::E_PRIVATE_STREAM) )
         bLoadable = sal_True;
-    }
 
     return bLoadable;
 }

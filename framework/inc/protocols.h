@@ -2,9 +2,9 @@
  *
  *  $RCSfile: protocols.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-08-12 11:40:06 $
+ *  last change: $Author: as $ $Date: 2002-08-22 10:05:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,93 @@ namespace framework{
     a real visible component.
  */
 
-#define SPECIALPROTOCOL_STREAMLOADING           DECLARE_ASCII("private:stream*" )                   // indicates loading of components using a stream only
-#define SPECIALPROTOCOL_NEWDOCUMENT             DECLARE_ASCII("private:factory*")                   // indicates creation of empty documents
-#define SPECIALPROTOCOL_SLOT                    DECLARE_ASCII("slot:*"          )                   // internal protocol of the sfx project for generic dispatch funtionality
-#define SPECIALPROTOCOL_UNO                     DECLARE_ASCII(".uno:*"          )                   // external representation of the slot protocol using names instead of id's
-#define SPECIALPROTOCOL_MACRO                   DECLARE_ASCII("macro:*"         )                   // special sfx protocol to execute macros
-#define SPECIALPROTOCOL_SERVICE                 DECLARE_ASCII("service:*"       )                   // generic way to start uno services during dispatch
-#define SPECIALPROTOCOL_MAILTO                  DECLARE_ASCII("mailto:*"        )                   // for sending mails
-#define SPECIALPROTOCOL_NEWS                    DECLARE_ASCII("news:*"          )                   // for sending news
+#define SPECIALPROTOCOL_PRIVATE_STREAM    DECLARE_ASCII("private:stream" )       // indicates loading of components using a stream only
+#define SPECIALPROTOCOL_PRIVATE_FACTORY   DECLARE_ASCII("private:factory")       // indicates creation of empty documents
+#define SPECIALPROTOCOL_SLOT              DECLARE_ASCII("slot:"          )       // internal protocol of the sfx project for generic dispatch funtionality
+#define SPECIALPROTOCOL_UNO               DECLARE_ASCII(".uno:"          )       // external representation of the slot protocol using names instead of id's
+#define SPECIALPROTOCOL_MACRO             DECLARE_ASCII("macro:"         )       // special sfx protocol to execute macros
+#define SPECIALPROTOCOL_SERVICE           DECLARE_ASCII("service:"       )       // generic way to start uno services during dispatch
+#define SPECIALPROTOCOL_MAILTO            DECLARE_ASCII("mailto:"        )       // for sending mails
+#define SPECIALPROTOCOL_NEWS              DECLARE_ASCII("news:"          )       // for sending news
+
+class ProtocolCheck
+{
+    public:
+
+    //_______________________________________________________________________
+    /**
+        enums for well known protocols
+     */
+    enum EProtocol
+    {
+        E_UNKNOWN_PROTOCOL  ,
+        E_PRIVATE_STREAM    ,
+        E_PRIVATE_FACTORY   ,
+        E_SLOT              ,
+        E_UNO               ,
+        E_MACRO             ,
+        E_SERVICE           ,
+        E_MAILTO            ,
+        E_NEWS
+    };
+
+    //_______________________________________________________________________
+    /**
+        it checks, if the given URL string match one of the well known protocols.
+        It returns the right enum value.
+        Protocols are defined above ...
+     */
+    static EProtocol specifyProtocol( const ::rtl::OUString& sURL )
+    {
+        if (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_STREAM,SPECIALPROTOCOL_PRIVATE_STREAM.getLength()) == 0)
+            return E_PRIVATE_STREAM;
+        else
+        if (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_FACTORY,SPECIALPROTOCOL_PRIVATE_FACTORY.getLength()) == 0)
+            return E_PRIVATE_FACTORY;
+        else
+        if (sURL.compareTo(SPECIALPROTOCOL_SLOT,SPECIALPROTOCOL_SLOT.getLength()) == 0)
+            return E_SLOT;
+        else
+        if (sURL.compareTo(SPECIALPROTOCOL_UNO,SPECIALPROTOCOL_UNO.getLength()) == 0)
+            return E_UNO;
+        else
+        if (sURL.compareTo(SPECIALPROTOCOL_MACRO,SPECIALPROTOCOL_MACRO.getLength()) == 0)
+            return E_MACRO;
+        else
+        if (sURL.compareTo(SPECIALPROTOCOL_SERVICE,SPECIALPROTOCOL_SERVICE.getLength()) == 0)
+            return E_SERVICE;
+        else
+        if (sURL.compareTo(SPECIALPROTOCOL_MAILTO,SPECIALPROTOCOL_MAILTO.getLength()) == 0)
+            return E_MAILTO;
+        else
+        if (sURL.compareTo(SPECIALPROTOCOL_NEWS,SPECIALPROTOCOL_NEWS.getLength()) == 0)
+            return E_NEWS;
+        else
+            return E_UNKNOWN_PROTOCOL;
+    }
+
+    //_______________________________________________________________________
+    /**
+        it checks if given URL match the required protocol only
+        It should be used instead of specifyProtocol() if only this question
+        is interesting to perform the code. We must not check for all possible protocols here...
+     */
+    static sal_Bool isProtocol( const ::rtl::OUString& sURL, EProtocol eRequired )
+    {
+        switch(eRequired)
+        {
+            case E_PRIVATE_STREAM    : return (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_STREAM ,SPECIALPROTOCOL_PRIVATE_STREAM.getLength() ) == 0); break;
+            case E_PRIVATE_FACTORY   : return (sURL.compareTo(SPECIALPROTOCOL_PRIVATE_FACTORY,SPECIALPROTOCOL_PRIVATE_FACTORY.getLength()) == 0); break;
+            case E_SLOT              : return (sURL.compareTo(SPECIALPROTOCOL_SLOT           ,SPECIALPROTOCOL_SLOT.getLength()           ) == 0); break;
+            case E_UNO               : return (sURL.compareTo(SPECIALPROTOCOL_UNO            ,SPECIALPROTOCOL_UNO.getLength()            ) == 0); break;
+            case E_MACRO             : return (sURL.compareTo(SPECIALPROTOCOL_MACRO          ,SPECIALPROTOCOL_MACRO.getLength()          ) == 0); break;
+            case E_SERVICE           : return (sURL.compareTo(SPECIALPROTOCOL_SERVICE        ,SPECIALPROTOCOL_SERVICE.getLength()        ) == 0); break;
+            case E_MAILTO            : return (sURL.compareTo(SPECIALPROTOCOL_MAILTO         ,SPECIALPROTOCOL_MAILTO.getLength()         ) == 0); break;
+            case E_NEWS              : return (sURL.compareTo(SPECIALPROTOCOL_NEWS           ,SPECIALPROTOCOL_NEWS.getLength()           ) == 0); break;
+        }
+        return sal_False;
+    }
+};
 
 } // namespace framework
 
