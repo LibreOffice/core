@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:17:58 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,15 +694,23 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         // #i23726#
         if (pNumRuleNodeFromDoc)
         {
+            // --> FME 2005-02-22 #i42922# Mouse move of numbering label
+            // has to consider the left indent of the paragraph
+            SfxItemSet aSet( GetPool(), RES_LR_SPACE, RES_LR_SPACE );
+            rSh.GetAttr( aSet );
+            const SvxLRSpaceItem& rLR =
+                    static_cast<const SvxLRSpaceItem&>(aSet.Get(RES_LR_SPACE));
+            // <--
+
             SwPosition aPos(*pNumRuleNodeFromDoc);
-            rSh.NumIndent(aParaMargin.GetTxtLeft(), aPos);
+            rSh.NumIndent(aParaMargin.GetTxtLeft() - rLR.GetTxtLeft(), aPos);
             // --> OD 2005-02-18 #i42921# - invalidate state of indent in order
             // to get a ruler update.
             aParaMargin.SetWhich( nSlot );
             GetViewFrame()->GetBindings().SetState( aParaMargin );
             // <--
         }
-        else if(    pColl && pColl->IsAutoUpdateFmt() )
+        else if( pColl && pColl->IsAutoUpdateFmt() )
         {
             SfxItemSet aSet(GetPool(), RES_LR_SPACE, RES_LR_SPACE);
             aSet.Put(aParaMargin);
@@ -1175,9 +1183,16 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     // #i23726#
                     if (pNumRuleNodeFromDoc)
                     {
-                        short nFLOffset =
-                            pNumRuleNodeFromDoc->GetLeftMarginWithNum();
-                        aLR.SetLeft(nFLOffset);
+                        short nOffset = aLR.GetTxtLeft() +
+                                        // --> FME 2005-02-22 #i42922# Mouse move of numbering label
+                                        // has to consider the left indent of the paragraph
+                                        pNumRuleNodeFromDoc->GetLeftMarginWithNum( TRUE );
+                                       // <--
+
+                        short nFLOffset;
+                        pNumRuleNodeFromDoc->GetFirstLineOfsWithNum( nFLOffset );
+
+                        aLR.SetLeft( nOffset + nFLOffset );
                     }
                 }
                 aLR.SetWhich(nWhich);
