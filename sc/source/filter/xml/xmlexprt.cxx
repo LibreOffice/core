@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.187 $
+ *  $Revision: 1.188 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:49:34 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:14:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2816,7 +2816,7 @@ void ScXMLExport::exportAnnotationMeta( const uno::Reference < drawing::XShape >
             if (pNumForm->IsNumberFormat(aDate, nfIndex, fDate))
             {
                 rtl::OUStringBuffer sBuf;
-                GetMM100UnitConverter().convertDateTime(sBuf, fDate);
+                GetMM100UnitConverter().convertDateTime(sBuf, fDate,sal_True);
                 SvXMLElementExport aDateElem( *this, XML_NAMESPACE_DC,
                                                 XML_DATE, sal_True,
                                                 sal_False );
