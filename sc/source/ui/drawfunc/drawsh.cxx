@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:26:52 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,6 +399,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
         case SID_ATTR_FILL_GRADIENT:
         case SID_ATTR_FILL_HATCH:
         case SID_ATTR_FILL_BITMAP:
+
+        // #i25616#
+        case SID_ATTR_FILL_SHADOW:
             {
                 // Wenn ToolBar vertikal :
                 if ( !rReq.GetArgs() )
@@ -417,6 +420,10 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                         case SID_ATTR_FILL_GRADIENT:
                         case SID_ATTR_FILL_HATCH:
                         case SID_ATTR_FILL_BITMAP:
+
+                        // #i25616#
+                        case SID_ATTR_FILL_SHADOW:
+
                             ExecuteAreaDlg( rReq );
                             break;
 
