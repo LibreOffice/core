@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-16 11:47:05 $
+#   last change: $Author: hr $ $Date: 2004-08-02 17:15:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,6 +65,7 @@ PRJ=..$/..
 PRJNAME=connectivity
 TARGET=sql
 
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -75,20 +76,20 @@ YACCTARGET= $(MISC)$/sqlbison.cxx
 YACCFILES= sqlbison.y
 YACCFLAGS=-v -d -l -pSQLyy -bsql
 
-SLOFILES =  \
-        $(SLO)$/sqlNoException.obj	\
-        $(SLO)$/sqlbison.obj		\
-        $(SLO)$/sqlflex.obj			\
-        $(SLO)$/PColumn.obj			\
-        $(SLO)$/sqliterator.obj		\
-        $(SLO)$/sqlnode.obj			\
-        $(SLO)$/internalnode.obj
-
 EXCEPTIONSFILES =  \
+        $(SLO)$/dbregistration.obj	\
+        $(SLO)$/ParameterSubstitution.obj	\
         $(SLO)$/PColumn.obj			\
         $(SLO)$/sqliterator.obj		\
         $(SLO)$/sqlnode.obj         \
         $(SLO)$/sqlNoException.obj
+
+SLOFILES =  \
+        $(EXCEPTIONSFILES)			\
+        $(SLO)$/sqlbison.obj		\
+        $(SLO)$/sqlflex.obj			\
+        $(SLO)$/internalnode.obj
+
 
 # --- Targets -------------------------------------------------------
 
