@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-02-15 12:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,9 @@
 #endif
 #ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 
 #ifndef _FMTPDSC_HXX //autogen
@@ -490,6 +493,45 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt,const WW8PLCFx_SEPX* pSep)
 //    aGrid.SetNoChars(nTextareaWidth/nRubyWidth);
 
     rFmt.SetAttr(aGrid);
+
+    //sprmSFBiDi
+    BYTE bIsBiDi = ReadBSprm(pSep, 0x3228, 0);
+    SvxFrameDirection eDir=FRMDIR_HORI_LEFT_TOP;
+
+    //sprmSTextFlow
+    if (short nGridType = ReadULSprm(pSep, 0x5033, 0))
+    {
+        switch(nGridType)
+        {
+            default:
+                ASSERT(0,"Unknown layout type");
+            case 0:
+                eDir=FRMDIR_HORI_LEFT_TOP;
+                break;
+            case 1:
+                eDir=FRMDIR_VERT_TOP_RIGHT;
+                break;
+            case 2:
+                //asian letters are not rotated, western are. We can't import
+                //bottom to top going left to right, we can't do this in
+                //pages, (in drawboxes we could partly hack it with a rotated
+                //drawing box, though not frame)
+                eDir=FRMDIR_VERT_TOP_RIGHT;
+                break;
+            case 3:
+                //asian letters are not rotated, western are. We can't import
+                eDir=FRMDIR_VERT_TOP_RIGHT;
+                break;
+            case 4:
+                //asian letters are rotated, western not. We can't import
+                eDir=FRMDIR_HORI_LEFT_TOP;
+                break;
+        }
+    }
+    if ((eDir == FRMDIR_HORI_LEFT_TOP) && bIsBiDi)
+        eDir = FRMDIR_HORI_RIGHT_TOP;
+    if (eDir != FRMDIR_HORI_LEFT_TOP)
+        rFmt.SetAttr(SvxFrameDirectionItem(eDir));
 }
 
 BOOL SwWW8ImplReader::SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-02-15 12:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,9 +195,11 @@
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
 #endif
-
 #ifndef _OUTLINER_HXX
 #include <svx/outliner.hxx>         // #79453#
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 
 #ifndef _IPOBJ_HXX //autogen
@@ -2641,9 +2643,21 @@ SwFrmFmt * SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         Rectangle aInnerDist(pRecord->nDxTextLeft, pRecord->nDyTextTop,
             pRecord->nDxTextRight, pRecord->nDyTextBottom);
 
-        rFlySet.Put(
-            SwFmtFrmSize(pRecord->bLastBoxInChain ? ATT_MIN_SIZE : ATT_FIX_SIZE,
-                pF->nXaRight - pF->nXaLeft, pF->nYaBottom - pF->nYaTop));
+        SdrTextObj *pSdrTextObj = PTR_CAST(SdrTextObj, rpObject);
+        if (pSdrTextObj && pSdrTextObj->IsVerticalWriting())
+        {
+            rFlySet.Put(SvxFrameDirectionItem(FRMDIR_VERT_TOP_RIGHT));
+
+            rFlySet.Put(SwFmtFrmSize(pRecord->bLastBoxInChain ? ATT_MIN_SIZE
+                : ATT_FIX_SIZE, pF->nYaBottom - pF->nYaTop,
+                pF->nXaRight - pF->nXaLeft));
+        }
+        else
+        {
+            rFlySet.Put(SwFmtFrmSize(pRecord->bLastBoxInChain ? ATT_MIN_SIZE
+                : ATT_FIX_SIZE, pF->nXaRight - pF->nXaLeft,
+                pF->nYaBottom - pF->nYaTop));
+        }
 
         MatchSdrItemsIntoFlySet( rpObject, rFlySet, pRecord->eLineStyle,
             pRecord->eShapeType, aInnerDist, !pRecord->bLastBoxInChain);

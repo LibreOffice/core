@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-02-15 12:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,9 @@
 #endif
 #ifndef _SVX_PGRDITEM_HXX
 #include <svx/pgrditem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 
 #ifndef _FMTFLD_HXX //autogen
@@ -2805,13 +2808,44 @@ static Writer& OutWW8_SwFmtBreak( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
+static Writer& OutWW8_SvxFrameDirection( Writer& rWrt, const SfxPoolItem& rHt )
+{
+    SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
+    if (rWrtWW8.bOutPageDescs && rWrtWW8.bWrtWW8)
+    {
+        const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rHt;
+        UINT16 nTextFlow=0;
+        BOOL bBiDi=FALSE;
+        switch (rItem.GetValue())
+        {
+            default:
+                ASSERT(0,"Unknown grid type");
+            case FRMDIR_HORI_LEFT_TOP:
+                nTextFlow = 0;
+                break;
+            case FRMDIR_HORI_RIGHT_TOP:
+                nTextFlow = 0;
+                bBiDi=TRUE;
+                break;
+            case FRMDIR_VERT_TOP_LEFT:  //word doesn't have this
+            case FRMDIR_VERT_TOP_RIGHT:
+                nTextFlow = 1;
+                break;
+        }
+        rWrtWW8.InsUInt16(0x5033);
+        rWrtWW8.InsUInt16(nTextFlow);
+        rWrtWW8.InsUInt16(0x3228);
+        rWrtWW8.pO->Insert(bBiDi, rWrtWW8.pO->Count() );
+    }
+    return rWrt;
+}
+
 static Writer& OutWW8_SwTextGrid( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwWW8Writer& rWrtWW8 = (SwWW8Writer&)rWrt;
-    const SwTextGridItem& rItem = (const SwTextGridItem&)rHt;
-
     if (rWrtWW8.bOutPageDescs && rWrtWW8.bWrtWW8)
     {
+        const SwTextGridItem& rItem = (const SwTextGridItem&)rHt;
         UINT16 nGridType=0;
         switch (rItem.GetGridType())
         {
@@ -2867,7 +2901,6 @@ static Writer& OutWW8_SvxPaperBin( Writer& rWrt, const SfxPoolItem& rHt )
     }
     return rWrt;
 }
-
 
 static Writer& OutWW8_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -4029,10 +4062,10 @@ SwAttrFnTab aWW8AttrFnTab = {
 /* RES_CHAIN */                     0,
 /* RES_TEXTGRID*/                   OutWW8_SwTextGrid,
 /* RES_LINENUMBER */                OutWW8_SwFmtLineNumber, // Line Numbering
-/* RES_FRMATR_DUMMY4 */             0, // Dummy:
-/* RES_FRMATR_DUMMY5 */             0, // Dummy:
-/* RES_FRMATR_DUMMY6 */             0, // Dummy:
-/* RES_FRMATR_DUMMY7 */             0, // Dummy:
+/* RES_FTN_AT_TXTEND*/              0, // Dummy:
+/* RES_END_AT_TXTEND*/              0, // Dummy:
+/* RES_COLUMNBALANCE*/              0, // Dummy:
+/* RES_FRAMEDIR*/                   OutWW8_SvxFrameDirection,
 /* RES_FRMATR_DUMMY8 */             0, // Dummy:
 /* RES_FRMATR_DUMMY9 */             0, // Dummy:
 

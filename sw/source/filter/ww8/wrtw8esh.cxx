@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cmc $ $Date: 2002-02-13 11:53:40 $
+ *  last change: $Author: cmc $ $Date: 2002-02-15 12:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #endif
 #ifndef _MyEDITENG_HXX
 #include <svx/editeng.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 
 #ifndef _SVX_FMGLOB_HXX
@@ -1898,6 +1901,39 @@ INT32 SwEscherEx::WriteTxtFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId,
             aPropOpt.AddOpt( ESCHER_Prop_hspNext, aFollowShpIds[ nPos ] );
     }
     nBorderThick = WriteFlyFrameAttr( rFmt, mso_sptTextBox, aPropOpt );
+
+    const SvxFrameDirectionItem &rDirection =
+        (const SvxFrameDirectionItem &)rFmt.GetAttr(RES_FRAMEDIR);
+    MSO_TextFlow nFlow=mso_txflHorzN;
+    switch (rDirection.GetValue())
+    {
+        case FRMDIR_ENVIRONMENT: //to do
+            {
+                BOOL bVert=FALSE;
+#if 0           //How to find out if its really vert or horz ??
+                rFmt.FindLayoutRect(FALSE,0,FALSE,&bVert);
+#endif
+                if (bVert)
+                    nFlow=mso_txflTtoBA;
+                else
+                    nFlow=mso_txflHorzN;
+            }
+            break;
+        default:
+            ASSERT(0,"unknown direction type");
+        case FRMDIR_HORI_LEFT_TOP:
+            nFlow=mso_txflHorzN;
+        break;
+        case FRMDIR_HORI_RIGHT_TOP:
+            nFlow=mso_txflHorzN;
+        break;
+        case FRMDIR_VERT_TOP_LEFT: //not really possible in word
+        case FRMDIR_VERT_TOP_RIGHT:
+            nFlow=mso_txflTtoBA;
+        break;
+    }
+    aPropOpt.AddOpt( ESCHER_Prop_txflTextFlow, nFlow );
+
     aPropOpt.Commit( GetStream() );
 
     // store anchor attribute
