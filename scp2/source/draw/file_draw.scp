@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_draw.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:24:31 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,16 +74,16 @@ File gid_File_Help_Sdraw_Zip
     EXTRA_ALL_LANG(sdraw);
 End
 
-#ifdef UNX
-
 File gid_File_Exe_Sdraw
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Name = EXENAME(sdraw);
+  #ifdef WNT
+    Styles = (PACKED, PATCH_SO_NAME);
+  #else
     Styles = (PACKED);
+  #endif
 End
-
-#endif
 
 // new user interface configuration files
 File gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml
