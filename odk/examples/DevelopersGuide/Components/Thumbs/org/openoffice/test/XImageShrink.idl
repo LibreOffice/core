@@ -1,0 +1,18 @@
+#ifndef __org_openoffice_test_XImageShrink_idl__
+#define __org_openoffice_test_XImageShrink_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/awt/Size.idl>
+
+module org { module openoffice { module test {
+
+interface XImageShrink : com::sun::star::uno::XInterface {
+
+  [attribute] string SourceDirectory;
+  [attribute] string DestinationDirectory;
+  [attribute] com::sun::star::awt::Size Dimension;
+
+};
+
+}; }; };
+
+#endif
