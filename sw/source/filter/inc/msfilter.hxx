@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msfilter.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:18:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:51:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,11 @@
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
 #endif
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
+#endif
+
+#define CREATE_CONST_ASC(s) String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(s))
 
 class SwDoc;
 class SwPaM;
@@ -163,6 +168,28 @@ namespace sw
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
         long DateTime2DTTM( const DateTime& rDT );
+
+        /** Convert from Word Date/Time field str to Writer's Date Time str
+
+            @author
+                <a href="mailto:mmaher@openoffice.org">Martin Maher</a
+        */
+        ULONG MSDateTimeFormatToSwFormat(String& rParams, SvNumberFormatter *pFormatter, USHORT &rLang, bool bHijri);
+
+        /** Used by MSDateTimeFormatToSwFormat to identify AM time fields
+
+            @author
+                <a href="mailto:mmaher@openoffice.org">Martin Maher</a
+        */
+        bool IsNotAM(String& rParams, xub_StrLen nPos);
+
+        /** Another function used by MSDateTimeFormatToSwFormat
+
+            @author
+                <a href="mailto:mmaher@openoffice.org">Martin Maher</a
+        */
+        void SwapQuotesInField(String &rFmt);
+
     }
 
     namespace util
