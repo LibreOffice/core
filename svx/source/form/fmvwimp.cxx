@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:56:51 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:01:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,7 +433,7 @@ void FmXPageViewWinRec::setController(const Reference< XForm > & xForm,
 
     Reference< XInteractionHandler > xHandler;
     if ( pParent )
-        xHandler = pController->getInteractionHandler();
+        xHandler = pParent->getInteractionHandler();
     else
         // TODO: should we create a default handler? Not really necessary, since the
         // FormController itself has a default fallback
@@ -1482,13 +1482,13 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
         // Feststellen ob eine form erzeugt werden muss
         // Dieses erledigt die Page fuer uns bzw. die PageImpl
         Reference< XFormComponent >  xContent(pLabel->GetUnoControlModel(), UNO_QUERY);
-        Reference< XIndexContainer >  xContainer(rPage.GetImpl()->SetDefaults(xContent, xDataSource, sDataSource, sCommand, nCommandType), UNO_QUERY);
+        Reference< XIndexContainer >  xContainer(rPage.GetImpl()->placeInFormComponentHierarchy(xContent, xDataSource, sDataSource, sCommand, nCommandType), UNO_QUERY);
         if (xContainer.is())
             xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
         implInitializeNewControlModel( Reference< XPropertySet >( xContent, UNO_QUERY ), pLabel );
 
         xContent = Reference< XFormComponent > (pControl->GetUnoControlModel(), UNO_QUERY);
-        xContainer = Reference< XIndexContainer > (rPage.GetImpl()->SetDefaults(xContent, xDataSource,
+        xContainer = Reference< XIndexContainer > (rPage.GetImpl()->placeInFormComponentHierarchy(xContent, xDataSource,
             sDataSource, sCommand, nCommandType), UNO_QUERY);
         if (xContainer.is())
             xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
@@ -1539,12 +1539,7 @@ SdrObject* FmXFormView::implCreateXFormsControl()
     if ( !m_pView->IsDesignMode() )
         return NULL;
 
-    // the very basic information
-    ::rtl::OUString sDataSource, sCommand, sFieldName;
-    sal_Int32 nCommandType = CommandType::COMMAND;
-
     Reference< XComponent > xKeepFieldsAlive;
-    Reference< XDataSource > xDataSource;
 
     // go
     try
@@ -1603,12 +1598,12 @@ SdrObject* FmXFormView::implCreateXFormsControl()
         // Feststellen ob eine ::com::sun::star::form erzeugt werden muss
         // Dieses erledigt die Page fuer uns bzw. die PageImpl
         Reference< XFormComponent >  xContent(pLabel->GetUnoControlModel(), UNO_QUERY);
-        Reference< XIndexContainer >  xContainer(rPage.GetImpl()->SetDefaults(xContent, xDataSource, sDataSource, sCommand, nCommandType), UNO_QUERY);
+        Reference< XIndexContainer >  xContainer(rPage.GetImpl()->placeInFormComponentHierarchy( xContent ), UNO_QUERY);
         if (xContainer.is())
             xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
 
         xContent = Reference< XFormComponent > (pControl->GetUnoControlModel(), UNO_QUERY);
-        xContainer = Reference< XIndexContainer > (rPage.GetImpl()->SetDefaults(xContent, xDataSource, sDataSource, sCommand, nCommandType), UNO_QUERY);
+        xContainer = Reference< XIndexContainer > (rPage.GetImpl()->placeInFormComponentHierarchy( xContent ), UNO_QUERY);
         if (xContainer.is())
             xContainer->insertByIndex(xContainer->getCount(), makeAny(xContent));
         implInitializeNewControlModel( Reference< XPropertySet >( xContent, UNO_QUERY ), pControl );
