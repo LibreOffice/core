@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawvie3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-06 12:10:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ ScDrawView::ScDrawView( OutputDevice* pOut, ScViewData* pData ) :
     Construct();
 }
 
-ScDrawView::ScDrawView( OutputDevice* pOut, ScDocument* pDocument, USHORT nTable ) :
+ScDrawView::ScDrawView( OutputDevice* pOut, ScDocument* pDocument, SCTAB nTable ) :
     FmFormView( pDocument->GetDrawLayer(), pOut ),
     pViewData( NULL ),
     pDev( pOut ),
@@ -166,9 +166,9 @@ void __EXPORT ScDrawView::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
 {
     if (rHint.ISA(ScTabDeletedHint))                        // Tabelle geloescht
     {
-        USHORT nDelTab = ((ScTabDeletedHint&)rHint).GetTab();
-        if (nDelTab <= MAXTAB)
-            HidePagePgNum(nDelTab);
+        SCTAB nDelTab = ((ScTabDeletedHint&)rHint).GetTab();
+        if (ValidTab(nDelTab))
+            HidePagePgNum(static_cast<sal_uInt16>(nDelTab));
     }
     else if (rHint.ISA(ScTabSizeChangedHint))               // Groesse geaendert
     {
