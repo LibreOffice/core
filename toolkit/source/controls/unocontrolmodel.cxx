@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-29 12:03:16 $
+ *  last change: $Author: fs $ $Date: 2001-08-22 10:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,30 +77,55 @@
 #ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
 #endif
-// #ifndef _COM_SUN_STAR_AWT_IMAGEALIGN_HPP_
-// #include <com/sun/star/awt/ImageAlign.hpp>
-// #endif
 
 #ifndef _COM_SUN_STAR_IO_XMARKABLESTREAM_HPP_
 #include <com/sun/star/io/XMarkableStream.hpp>
 #endif
 
+#ifndef _TOOLKIT_AWT_UNOCONTROLMODEL_HXX_
 #include <toolkit/controls/unocontrolmodel.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
+#endif
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
+#endif
+#ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
+#endif
 
+#ifndef _STRING_HXX
 #include <tools/string.hxx>
+#endif
+#ifndef _TOOLS_TABLE_HXX
 #include <tools/table.hxx>
+#endif
+#ifndef _DATE_HXX
 #include <tools/date.hxx>
+#endif
+#ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
+#endif
+#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
 
+#ifndef _TOOLKIT_HELPER_PROPERTY_HXX_
 #include <toolkit/helper/property.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_EMPTYFONTDESCRIPTOR_HXX_
 #include <toolkit/helper/emptyfontdescriptor.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -118,11 +143,14 @@
 #include <comphelper/sequence.hxx>
 #endif
 
+#ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::i18n;
 
 struct ImplControlProperty
 {
@@ -379,14 +407,39 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 nPropId )
             break;
             case BASEPROPERTY_CURRENCYSYMBOL:
             {
-                ::com::sun::star::uno::Any aUserLocale = ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::LOCALE);
-                ::rtl::OUString sUserLocale;
-                aUserLocale >>= sUserLocale;
-                ::com::sun::star::lang::Locale aLocale;
-                aLocale.Language = sUserLocale.copy(0, sUserLocale.indexOf('-'));
-                aLocale.Country = sUserLocale.copy(sUserLocale.indexOf('-') + 1);
-                LocaleDataWrapper aLocaleInfo(::comphelper::getProcessServiceFactory(), aLocale);
-                aDefault <<= ::rtl::OUString( aLocaleInfo.getCurrSymbol() );
+                Any aDefaultCurrency = ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::DEFAULTCURRENCY);
+                DBG_ASSERT( TypeClass_STRING == aDefaultCurrency.getValueTypeClass(), "UnoControlModel::ImplGetDefaultValue: invalid currency config value!" );
+
+                ::rtl::OUString sDefaultCurrency;
+                aDefaultCurrency >>= sDefaultCurrency;
+
+                // extract the bank symbol
+                sal_Int32 nSepPos = sDefaultCurrency.indexOf( '-' );
+                ::rtl::OUString sBankSymbol = sDefaultCurrency.copy( 0, nSepPos );
+                sDefaultCurrency = sDefaultCurrency.copy( nSepPos + 1 );
+
+                // the remaming is the locale
+                Locale aLocale;
+                nSepPos = sDefaultCurrency.indexOf( '-' );
+                aLocale.Language = sDefaultCurrency.copy( 0, nSepPos );
+                aLocale.Country = sDefaultCurrency.copy( nSepPos + 1 );
+
+                LocaleDataWrapper aLocaleInfo( ::comphelper::getProcessServiceFactory(), aLocale );
+
+                ::rtl::OUString sCurrencySymbol = aLocaleInfo.getCurrSymbol();
+                // look for the currency entry (for this language) which has the given bank symbol
+                Sequence< Currency > aAllCurrencies = aLocaleInfo.getAllCurrencies();
+                const Currency* pAllCurrencies      =                       aAllCurrencies.getConstArray();
+                const Currency* pAllCurrenciesEnd   =   pAllCurrencies  +   aAllCurrencies.getLength();
+                for ( ;pAllCurrencies != pAllCurrenciesEnd; ++pAllCurrencies )
+                    if ( pAllCurrencies->BankSymbol == sBankSymbol )
+                    {
+                        sCurrencySymbol = pAllCurrencies->Symbol;
+                        break;
+                    }
+                DBG_ASSERT( pAllCurrencies != pAllCurrenciesEnd, "UnoControlModel::ImplGetDefaultValue: did not find the given bank symbol!" );
+
+                aDefault <<= sCurrencySymbol;
             }
             break;
             default:    DBG_ERROR( "ImplGetDefaultValue - unknown Property" );
