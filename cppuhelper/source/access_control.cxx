@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_control.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-11 10:06:02 $
+ *  last change: $Author: dbo $ $Date: 2002-01-11 10:15:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,7 @@ AccessControl::AccessControl( AccessControl const & ac )
 #endif
 
 //--------------------------------------------------------------------------------------------------
-inline __checkPermission(
+inline void __checkPermission(
     Reference< security::XAccessController > const & xController,
     Type const & type, rtl_uString * str1, rtl_uString * str2 )
     SAL_THROW( (RuntimeException) )
