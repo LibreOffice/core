@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-09 11:37:32 $
+ *  last change: $Author: ama $ $Date: 2000-11-24 15:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,8 @@ protected:
     sal_Bool bMulti : 1;        // inside a multiportion
     sal_Bool bFirstMulti : 1;   // the multiportion is the first lineportion
     sal_Bool bRuby : 1;         // during the formatting of a phonetic line
+    sal_Bool bHanging : 1;      // formatting of hanging punctuation allowed
+    sal_Bool bScriptSpace : 1;  // space between different scripts (Asian/Latin)
 
 protected:
     void _NoteAnimation();
@@ -233,6 +235,10 @@ public:
     inline void SetFirstMulti( const sal_Bool bNew ) { bFirstMulti = bNew; }
     inline sal_Bool IsRuby() const { return bRuby; }
     inline void SetRuby( const sal_Bool bNew ) { bRuby = bNew; }
+    inline sal_Bool IsHanging() const { return bHanging; }
+    inline void SetHanging( const sal_Bool bNew ) { bHanging = bNew; }
+    inline sal_Bool HasScriptSpace() const { return bScriptSpace; }
+    inline void SetScriptSpace( const sal_Bool bNew ) { bScriptSpace = bNew; }
     inline ViewShell *GetVsh() { return pVsh; }
     inline const ViewShell *GetVsh() const { return pVsh; }
     inline OutputDevice *GetOut() { return pOut; }

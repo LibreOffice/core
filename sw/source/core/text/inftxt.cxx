@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-21 11:25:16 $
+ *  last change: $Author: ama $ $Date: 2000-11-24 15:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,12 @@
 #ifndef _SVX_ESCPITEM_HXX //autogen
 #include <svx/escpitem.hxx>
 #endif
-
+#ifndef _SVX_HNGPNCTITEM_HXX
+#include <svx/hngpnctitem.hxx>
+#endif
+#ifndef _SVX_SRIPTSPACEITEM_HXX
+#include <svx/scriptspaceitem.hxx>
+#endif
 #ifndef _SVX_SPLWRAP_HXX
 #include <svx/splwrap.hxx>
 #endif
@@ -275,7 +280,9 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bStopUnderFlow( rNew.StopUnderFlow() ),
       bMulti( rNew.IsMulti() ),
       bFirstMulti( rNew.IsFirstMulti() ),
-      bRuby( rNew.IsRuby() )
+      bRuby( rNew.IsRuby() ),
+      bHanging( rNew.IsHanging() ),
+      bScriptSpace( rNew.HasScriptSpace() )
 {
 #ifndef PRODUCT
     ChkOutDev( *this );
@@ -344,7 +351,7 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     bNotEOL = sal_False;
     bStopUnderFlow = sal_False;
     bSpecialUnderline = sal_False;
-    bMulti = bFirstMulti = bRuby = sal_False;
+    bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace = sal_False;
     SetLen( GetMinLen( *this ) );
 }
 
@@ -367,7 +374,9 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bStopUnderFlow( rNew.StopUnderFlow() ),
       bMulti( rNew.IsMulti() ),
       bFirstMulti( rNew.IsFirstMulti() ),
-      bRuby( rNew.IsRuby() )
+      bRuby( rNew.IsRuby() ),
+      bHanging( rNew.IsHanging() ),
+      bScriptSpace( rNew.HasScriptSpace() )
 {
 #ifndef PRODUCT
     ChkOutDev( *this );
@@ -737,6 +746,8 @@ void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
 sal_Bool SwTxtFormatInfo::InitHyph( const sal_Bool bAutoHyph )
 {
     const SwAttrSet& rAttrSet = GetTxtFrm()->GetTxtNode()->GetSwAttrSet();
+    SetHanging( rAttrSet.GetHangingPunctuation().GetValue() );
+    SetScriptSpace( rAttrSet.GetScriptSpace().GetValue() );
     const SvxHyphenZoneItem &rAttr = rAttrSet.GetHyphenZone();
     MaxHyph() = rAttr.GetMaxHyphens();
     sal_Bool bAuto = bAutoHyph || rAttr.IsHyphen();
@@ -923,7 +934,7 @@ SwTxtFormatInfo::SwTxtFormatInfo( const SwTxtFormatInfo& rInf,
     nLeft = rInf.nLeft;
     nRight = rInf.nRight;
     nFirst = rInf.nLeft;
-    nRealWidth = nActWidth;
+    nRealWidth = KSHORT(nActWidth);
     nWidth = nRealWidth;
     nLineHeight = 0;
     nForcedLeftMargin = 0;
