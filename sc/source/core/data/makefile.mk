@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 13:44:29 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:23:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -149,7 +149,8 @@ NOOPTFILES= \
         $(SLO)$/table3.obj \
         $(SLO)$/table4.obj  \
         $(SLO)$/documen4.obj \
-        $(SLO)$/conditio.obj
+        $(SLO)$/conditio.obj \
+        $(SLO)$/validat.obj
 .ENDIF
 
 EXCEPTIONSFILES= \
