@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-16 10:13:09 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ ViewShellManager::ViewShellManager (ViewShellBase& rBase)
               new ActiveShellList())),
       mpCache (new ViewShellCache(*this)),
       mnUpdateLockCount(0),
-      mbKeepMainViewShellOnTop(true),
+      mbKeepMainViewShellOnTop(false),
       mbIsValid (true),
       mbTakeShellsFromStackPending(false),
       mbShellStackIsUpToDate(true)
