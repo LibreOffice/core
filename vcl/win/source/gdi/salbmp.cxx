@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:54:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:20:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef _SV_SALBMP_H
 #include <salbmp.h>
+#endif
+#ifndef _SV_BITMAP_HXX
+#include <bitmap.hxx> // for BitmapSystemData
 #endif
 #include <string.h>
 
@@ -665,4 +668,16 @@ void WinSalBitmap::ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
         }
         while( !bEndDecoding && ( pDIB <= pLast ) );
     }
+}
+
+bool WinSalBitmap::GetSystemData( BitmapSystemData& rData )
+{
+    bool bRet = false;
+    if( mhDIB || mhDDB )
+    {
+        bRet = true;
+        rData.pDIB = mhDIB;
+        rData.pDDB = mhDDB;
+    }
+    return bRet;
 }
