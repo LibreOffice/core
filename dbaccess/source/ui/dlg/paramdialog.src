@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 21:12:03 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 22:35:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ ModalDialog DLG_PARAMETERS
         Text[ japanese ] = "入力値は <$name$> 列で有効な値に変換できませんでした。";
         Text[ korean ] = "입력은 열\"$name$\"의 유효한 값으로 변환될 수 없었습니다.";
         Text[ chinese_simplified ] = "输入的内容无法转换成一个用于列\"$name$\"的有效数值。";
-        Text[ chinese_traditional ] = "這個輸入值無法轉換成欄\"$name$\"的有效值。";
+        Text[ chinese_traditional ] = "這個輸入值無法轉換成欄<$name$>的有效值。";
         Text[ arabic ] = "���� ����� ������� ��� ���� ����� ������ \"$name$\".";
         Text[ turkish ] = "Giri�, \"$name$\" s�tunu i�in ge�erli bir de�ere d�n��t�r�lemedi.";
         Text[ catalan ] = "La entrada no se pudo convertir en un valor v�lido para la columna \"$name$\".";
@@ -243,6 +243,9 @@ ModalDialog DLG_PARAMETERS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.18  2001/08/13 21:12:03  kz
+ *  Merge SRC638: 13.08.01 - 23:11:23
+ *
  *  Revision 1.17  2001/08/07 15:15:34  kz
  *  Merge SRC638: 07.08.01 - 17:15:12
  *
@@ -297,6 +300,7 @@ ModalDialog DLG_PARAMETERS
  *
  *  Revision 1.0 26.10.00 15:14:44  fs
  ************************************************************************/
+
 
 
 
