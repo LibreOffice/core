@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2001-02-26 11:14:29 $
+ *  last change: $Author: ab $ $Date: 2001-03-03 15:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,24 @@
 #include <idetemp.hxx>
 #include <helpid.hrc>
 
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#include <xmlscript/xmldlg_imexp.hxx>
+
+using namespace comphelper;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
+
+
 TYPEINIT1( DialogWindow, IDEBaseWindow );
 
 DialogWindow::DialogWindow( Window* pParent, VCSbxDialogRef aDialog,
@@ -119,12 +137,7 @@ DialogWindow::DialogWindow( Window* pParent, VCSbxDialogRef aDialog,
 
     pEditor = new VCDlgEditor( GetBasic() );
     pEditor->SetWindow( this );
-#ifdef _DLGEDITOR_
-    //pEditor->SetScrollBars( GetHScrollBar(), GetVScrollBar() );
-    pEditor->SetDialog();
-#else
     pEditor->SetVCSbxForm( pDialog );
-#endif
 
     // Undo einrichten
     pUndoMgr = new SfxUndoManager;
@@ -136,6 +149,93 @@ DialogWindow::DialogWindow( Window* pParent, VCSbxDialogRef aDialog,
 
     SetHelpId( HID_BASICIDE_DIALOGWINDOW );
 }
+
+#ifdef _DLGEDITOR_
+// This Ctor can only be used in a _DLGEDITOR_ environment
+DialogWindow::DialogWindow( Window* pParent, VCSbxDialogRef aDialog, StarBASIC* pBasic,
+    const Reference< script::XLibraryContainer >& xLibContainer, String aLibName, String aDlgName )
+        : IDEBaseWindow( pParent, pBasic )
+        , pUndoMgr(NULL)
+        , mxLibContainer( xLibContainer )
+        , maLibName( aLibName )
+        , maDlgName( aDlgName )
+{
+    // TODO: Remove!
+    // Bitte kein Show() !
+    if( aDialog.Is() )
+        pDialog = aDialog;
+    else
+    {
+        pDialog = new VCSbxDialog;
+        pDialog->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Dialog" ) ) );
+        GetBasic()->Insert( pDialog );
+    }
+
+
+    // It has to be checked before that the library exists
+    // and that it supports XNameContainer
+    Reference< container::XNameContainer > xLib;
+    rtl::OUString aOULibName( maLibName );
+    Any aElement = mxLibContainer->getByName( aOULibName );
+    aElement >>= xLib;
+    if( !mxLibContainer->isLibraryLoaded( aOULibName ) )
+        mxLibContainer->loadLibrary( aOULibName );
+
+    // Does the dialog exist?
+    Reference< container::XNameContainer > xDialogModel;
+    rtl::OUString aOUDlgName( maDlgName );
+    if( xLib->hasByName( aOUDlgName ) )
+    {
+        // Get dialog data
+        Any aElement = xLib->getByName( aOUDlgName );
+        Sequence< sal_Int8 > aDialogsSeq;
+        aElement >>= aDialogsSeq;
+
+        // Create a DialogModel
+        Sequence< Reference< container::XNameContainer > > aModelSeq;
+        xmlscript::importDialogModelsFromByteSequence( &aModelSeq, aDialogsSeq );
+        xDialogModel = aModelSeq.getConstArray()[0];
+    }
+    else
+    {
+        // Create new uno dialog
+        Reference< lang::XMultiServiceFactory > xMSF = getProcessServiceFactory();
+        xDialogModel = Reference< container::XNameContainer >( xMSF->createInstance
+            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), uno::UNO_QUERY );
+
+        // Also set name as property
+        Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
+        Any aValue;
+        aValue <<= aOUDlgName;
+        xDlgPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Name" ) ), aValue );
+
+        Sequence< Reference< container::XNameContainer > > aModelSeq( 1 );
+        aModelSeq.getArray()[0] = xDialogModel;
+        Sequence< sal_Int8 > aSeq;
+
+        xmlscript::exportDialogModelsToByteSequence( &aSeq, aModelSeq );
+        Any aSeqAny;
+        aSeqAny <<= aSeq;
+        xLib->insertByName( aOUDlgName, aSeqAny );
+    }
+
+    InitSettings( TRUE, TRUE, TRUE );
+
+    pEditor = new VCDlgEditor( GetBasic() );
+    pEditor->SetWindow( this );
+    pEditor->SetDialog( xDialogModel );
+
+    // Undo einrichten
+    pUndoMgr = new SfxUndoManager;
+
+    Link aDummyLink;
+    aOldNotifyUndoActionHdl = pEditor->GetModel()->GetNotifyUndoActionHdl();
+    pEditor->GetModel()->SetNotifyUndoActionHdl(
+        LINK(this, DialogWindow, NotifyUndoActionHdl));
+
+    SetHelpId( HID_BASICIDE_DIALOGWINDOW );
+}
+#endif
 
 DialogWindow::DialogWindow( DialogWindow* pOrgWin ) :
         IDEBaseWindow( pOrgWin->GetParent(), pOrgWin->GetBasic() )
@@ -579,6 +679,34 @@ void DialogWindow::StoreData()
     // Die Daten befinden sich schon im Basic...
 //  pDialog->SetModified( FALSE );  // dann wird das Modify vom Basic geloescht
 #if 1
+    // New uno dialogs
+    if( mxLibContainer.is() && (pEditor->IsModified() || (pDialog->GetFlags() & SBX_MODIFIED)!=0 ) )
+    {
+        // It has to be checked before that the library exists
+        // and that it supports XNameContainer
+        Reference< container::XNameContainer > xLib;
+        rtl::OUString aOULibName( maLibName );
+        Any aElement = mxLibContainer->getByName( aOULibName );
+        aElement >>= xLib;
+
+        Reference< container::XNameContainer > xDialogModel = pEditor->GetDialog();
+
+        if( xDialogModel.is() )
+        {
+            Sequence< Reference< container::XNameContainer > > aModelSeq( 1 );
+            aModelSeq.getArray()[0] = xDialogModel;
+            Sequence< sal_Int8 > aSeq;
+
+            xmlscript::exportDialogModelsToByteSequence( &aSeq, aModelSeq );
+            Any aSeqAny;
+            aSeqAny <<= aSeq;
+            xLib->replaceByName( rtl::OUString( maDlgName ), aSeqAny );
+
+            // HACK: Modify via old dialog to force SaveBasicManager()
+            pDialog->SetModified( TRUE );
+        }
+    }
+
     if( pEditor->IsModified() )
         BasicIDE::MarkDocShellModified( pEditor->GetBasic() );
     pDialog->ResetFlag( SBX_MODIFIED );
