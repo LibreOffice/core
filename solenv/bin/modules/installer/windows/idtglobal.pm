@@ -2,9 +2,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-02 13:46:30 $
+#   last change: $Author: hr $ $Date: 2004-08-02 14:20:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1003,7 +1003,7 @@ sub add_custom_action_to_install_table
         my $actionposition = 0;
 
         if ( $position eq "end" ) { $actionposition = get_last_position_in_sequencetable($installtable) + 25; }
-        if ( $position eq "InstallWelcome" ) { $actionposition = get_position_in_sequencetable($position, $installtable) - 5; }
+        if ( $position ne "end" ) { $actionposition = get_position_in_sequencetable($position, $installtable) - 2; }
 
         my $line = $actionname . "\t" . $actioncondition . "\t" . $actionposition . "\n";
         push(@{$installtable}, $line);
