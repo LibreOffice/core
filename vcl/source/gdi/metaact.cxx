@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metaact.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:18:08 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1494,8 +1494,13 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         const ULONG nIntAryLen( ::std::max(nAryLen, static_cast<ULONG>(mnLen)) );
         mpDXAry = new long[ nIntAryLen ];
 
-        for( ULONG i = 0UL; i < nAryLen; i++ )
+        ULONG i;
+        for( i = 0UL; i < nAryLen; i++ )
             rIStm >> mpDXAry[ i ];
+
+        // #106172# setup remainder
+        for( ; i < nIntAryLen; i++ )
+            mpDXAry[ i ] = 0;
     }
     else
         mpDXAry = NULL;
