@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-03 14:15:32 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2532,6 +2532,8 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
                 pFact->CreateSvxNameDialog(
                     0, aNewName, aDesc, ResId(RID_SVXDLG_NAME) );
 
+            pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU );
+
             bool ret = pNameDialog->Execute();
 
             if ( ret == RET_OK ) {
@@ -2590,6 +2592,8 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
                 pFact->CreateSvxNameDialog(
                     0, aNewName, aDesc, ResId(RID_SVXDLG_NAME) );
 
+            pNameDialog->SetHelpId( HID_SVX_CONFIG_NAME_SUBMENU );
+
             bool ret = pNameDialog->Execute();
 
             if ( ret == RET_OK ) {
@@ -2638,6 +2642,8 @@ IMPL_LINK( SvxMenuConfigPage, EntrySelectHdl, MenuButton *, pButton )
             AbstractSvxNameDialog* pNameDialog =
                 pFact->CreateSvxNameDialog(
                     0, aNewName, aDesc, ResId(RID_SVXDLG_NAME) );
+
+            pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_MENU_ITEM );
 
             bool ret = pNameDialog->Execute();
 
@@ -2705,6 +2711,9 @@ IMPL_LINK( SvxMenuConfigPage, AddCommandsHdl, Button *, pButton )
 
         pSelectorDlg->SetAddHdl(
             LINK( this, SvxMenuConfigPage, AddFunctionHdl ) );
+
+        pSelectorDlg->SetDialogDescription( String(
+            ResId( RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION, DIALOG_MGR() ) ) );
     }
 
     // Position the Script Selector over the Add button so it is
@@ -3239,6 +3248,11 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
     aContentsListBox->SetZOrder( &aAddCommandsButton, WINDOW_ZORDER_BEFOR );
 
     aContentsListBox->SetHelpId( HID_SVX_CONFIG_TOOLBAR_CONTENTS );
+    aNewTopLevelButton.SetHelpId( HID_SVX_NEW_TOOLBAR );
+    aModifyTopLevelButton.SetHelpId( HID_SVX_MODIFY_TOOLBAR );
+    aAddCommandsButton.SetHelpId( HID_SVX_NEW_TOOLBAR_ITEM );
+    aModifyCommandButton.SetHelpId( HID_SVX_MODIFY_TOOLBAR_ITEM );
+    aSaveInListBox.SetHelpId( HID_SVX_SAVE_IN );
 
     aTopLevelSeparator.SetText(
         ResId ( RID_SVXSTR_PRODUCTNAME_TOOLBARS, DIALOG_MGR() ) );
@@ -3434,6 +3448,8 @@ IMPL_LINK( SvxToolbarConfigPage, ToolbarSelectHdl, MenuButton *, pButton )
                 pFact->CreateSvxNameDialog(
                     0, aNewName, aDesc, ResId(RID_SVXDLG_NAME) );
 
+            pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR );
+
             bool ret = pNameDialog->Execute();
 
             if ( ret == RET_OK )
@@ -3527,6 +3543,8 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton )
             AbstractSvxNameDialog* pNameDialog =
                 pFact->CreateSvxNameDialog(
                     0, aNewName, aDesc, ResId(RID_SVXDLG_NAME) );
+
+            pNameDialog->SetHelpId( HID_SVX_CONFIG_RENAME_TOOLBAR_ITEM );
 
             bool ret = pNameDialog->Execute();
 
