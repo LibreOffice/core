@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:10:47 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ const char *ExeTable[][5] = {
     { "src", "transex3", "-UTF8 -e", "negative", "noiso" },
     { "hrc", "transex3", "-UTF8 -e", "positive", "noiso" },
     { "lng", "lngex", "-UTF8 -e", "negative", "noiso" },
+    { "ulf", "lngex", "-UTF8 -ULF -e", "negative", "noiso" },
     { "xrb", "xmlex", "-UTF8 -e", "negative", "iso" },
     { "xxl", "xmlex", "-UTF8 -e", "negative", "iso" },
     { "xgf", "xmlex", "-UTF8 -e -t:xgf", "negative", "iso" },
@@ -295,7 +296,7 @@ void SourceTreeLocalizer::WorkOnFile(
                 sCommand += " -l ";
                 sCommand += sLanguageRestriction;
             }
-            if ( rIso.Equals("iso")) {
+            if ( rIso.Equals("iso") && sIsoCode99.Len()) {
                 sCommand += " -ISO99 ";
                 sCommand += sIsoCode99;
             }
@@ -556,7 +557,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
         sCommand += sOutput;
         sCommand += " ";
         sCommand += ByteString( ExeTable[ nIndex ][ 2 ] );
-        if ( sIso.Equals( "iso" )) {
+        if ( sIso.Equals( "iso" ) && sIsoCode99.Len()) {
             sCommand += " -ISO99 ";
             sCommand += sIsoCode99;
         }
@@ -718,8 +719,8 @@ void Help()
         "\t-e: Extract mode\n"
         "\t-m: Merge mode\n"
         "\tFileName: Output file when extract mode, input file when merge mode\n"
-        "\tl1...ln: supported languages\n"
-        "\tf1...fn: fallback languages for supported languages\n\n"
+        "\tl1...ln: supported languages (\"all\" for all languages).\n"
+        "\tf1...fn: fallback languages for supported languages\n"
         "\tISO-Code: The full qualified ISO language code for language 99 (en-US, de, ...)"
     );
 
@@ -769,6 +770,18 @@ BOOL CheckLanguages( ByteString &rLanguages )
 {
     BOOL bReturn = TRUE;
 
+    ByteString sTmp( rLanguages );
+    if ( sTmp.ToUpperAscii() == "ALL" ) {
+        rLanguages = "";
+        for ( USHORT i = 0; i < LANGUAGES; i++ ) {
+            if ( LANGUAGE_ALLOWED( i )) {
+                if ( rLanguages.Len())
+                    rLanguages += ",";
+                rLanguages += ByteString::CreateFromInt32( Export::LangId[ i ] );
+            }
+        }
+        fprintf( stdout, "\nExpanded -l all to %s\n", rLanguages.GetBuffer());
+    }
     for ( USHORT i = 0; i < rLanguages.GetTokenCount( ',' ); i++ ) {
         ByteString sCur = rLanguages.GetToken( i, ',' );
         ByteString sLang = sCur.GetToken( 0, '=' );
@@ -793,9 +806,9 @@ BOOL CheckLanguages( ByteString &rLanguages )
         if ( !rLanguages.Len()) {
             rLanguages = "01,99=01";
         }
-        if ( rLanguages.Search( "99" ) == STRING_NOTFOUND ) {
+/*      if ( rLanguages.Search( "99" ) == STRING_NOTFOUND ) {
             rLanguages += ",99=01";
-        }
+        } */
     }
 
     return bReturn;
@@ -888,7 +901,7 @@ int _cdecl main( int argc, char *argv[] )
     if ( !CheckLanguages( sLanguages ))
         return 2;
 
-    if ( !sIsoCode.Len()) {
+    if ( !sIsoCode.Len() && ( sLanguages.Search( "99" ) != STRING_NOTFOUND )) {
         fprintf( stderr, "ERROR: No ISO code given\n" );
         return 3;
     }
@@ -901,25 +914,29 @@ int _cdecl main( int argc, char *argv[] )
     ByteString sMode( "merge" );
     if ( bExport )
         sMode = "extract";
+
+    ByteString sICode( sIsoCode );
+    if ( !sICode.Len())
+        sICode = "not given, support for language 99 disabled";
     fprintf( stdout,
         "\n"
-        "=======================================================\n"
+        "============================================================\n"
         "Current settings:\n"
-        "=======================================================\n"
+        "============================================================\n"
         "Mode:          %s\n"
         "Workspace:     %s\n"
         "Source tree:   %s\n"
         "Languages:     %s\n"
         "ISO code (99): %s\n"
         "Filename:      %s\n"
-        "=======================================================\n"
+        "============================================================\n"
         "\n"
         ,
         sMode.GetBuffer(),
         sVersion.GetBuffer(),
         sRoot.GetBuffer(),
         sLanguages.GetBuffer(),
-        sIsoCode.GetBuffer(),
+        sICode.GetBuffer(),
         sFileName.GetBuffer()
      );
 
