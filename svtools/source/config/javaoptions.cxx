@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:47:03 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,9 @@
  *
  *
  ************************************************************************/
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifndef _SVTOOLS_JAVAPTIONS_HXX
 #include <javaoptions.hxx>
@@ -152,14 +153,14 @@ struct SvtJavaOptions_Impl
     sal_Bool                bROUserClassPath;
 
     SvtJavaOptions_Impl() :
-        bROEnabled          (CFG_READONLY_DEFAULT),
-        bROSecurity         (CFG_READONLY_DEFAULT),
-        bRONetAccess        (CFG_READONLY_DEFAULT),
-        bROUserClassPath    (CFG_READONLY_DEFAULT),
+        aPropertyNames(4),
         bEnabled            (sal_False),
         bSecurity           (sal_False),
         nNetAccess          (0),
-        aPropertyNames(4)
+        bROEnabled          (CFG_READONLY_DEFAULT),
+        bROSecurity         (CFG_READONLY_DEFAULT),
+        bRONetAccess        (CFG_READONLY_DEFAULT),
+        bROUserClassPath    (CFG_READONLY_DEFAULT)
         {
             OUString* pNames = aPropertyNames.getArray();
             pNames[0] = C2U("Enable");
