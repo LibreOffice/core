@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementformatter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-10-21 13:17:59 $
+ *  last change: $Author: ssmith $ $Date: 2002-10-21 13:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,15 +179,14 @@ void ElementFormatter::addName(OUString const & _aName)
 
     if ( m_aElementType == ElementType::layer )
     {
-        _aIndex = _aName.lastIndexOf ( '.');
-
         if (_aName.getLength())
         {
+            _aIndex = _aName.lastIndexOf ( '.');
             _aNodeName = _aName.copy(++_aIndex);
             addAttribute(ATTR_NAME, _aNodeName);
+            _aContext = _aName.copy( 0, --_aIndex);
+            addAttribute(ATTR_CONTEXT, _aContext);
         }
-        _aContext = _aName.copy( 0, --_aIndex);
-        addAttribute(ATTR_CONTEXT, _aContext);
     }
     else
     {
