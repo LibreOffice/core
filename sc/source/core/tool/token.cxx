@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:35:19 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,17 +81,11 @@
 #include <tools/debug.hxx>
 #endif
 
+#include "token.hxx"
+#include "tokenarray.hxx"
 #include "compiler.hxx"
 #include "rechead.hxx"
-
-struct ImpTokenIterator
-{
-    ImpTokenIterator* pNext;
-    ScTokenArray* pArr;
-    short nPC;
-
-    DECL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator );
-};
+#include "parclass.hxx"
 
 // ImpTokenIterator wird je Interpreter angelegt, mehrfache auch durch
 // SubCode via ScTokenIterator Push/Pop moeglich
@@ -163,7 +157,11 @@ void ScRawToken::SetOpCode( OpCode e )
     else if( eOp == ocMissing )
         eType = svMissing;
     else
-        eType = svByte, cByte = 0;
+    {
+        eType = svByte;
+        sbyte.cByte = 0;
+        sbyte.bHasForceArray = ScParameterClassification::HasForceArray( eOp);
+    }
     nRefCnt = 0;
 }
 
@@ -207,14 +205,6 @@ void ScRawToken::SetReference( ComplRefData& rRef )
     aRef = rRef;
     if( GetType() == svSingleRef )
         aRef.Ref2 = aRef.Ref1;
-}
-
-void ScRawToken::SetByte( BYTE c )
-{
-    eOp   = ocPush;
-    eType = svByte;
-    cByte = c;
-    nRefCnt = 0;
 }
 
 void ScRawToken::SetDouble(double rVal)
@@ -280,10 +270,10 @@ ScRawToken* ScRawToken::Clone() const
     }
     else
     {
-        USHORT n = offsetof( ScRawToken, cByte );
+        USHORT n = offsetof( ScRawToken, sbyte );
         switch( eType )
         {
-            case svByte:        n++; break;
+            case svByte:        n += sizeof(ScRawToken::sbyte); break;
             case svDouble:      n += sizeof(double); break;
             case svString:      n += GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ); break;
             case svSingleRef:
@@ -308,7 +298,7 @@ ScToken* ScRawToken::CreateToken() const
     switch ( GetType() )
     {
         case svByte :
-            return new ScByteToken( eOp, cByte );
+            return new ScByteToken( eOp, sbyte.cByte, sbyte.bHasForceArray );
         break;
         case svDouble :
             return new ScDoubleToken( eOp, nValue );
@@ -332,10 +322,10 @@ ScToken* ScRawToken::CreateToken() const
             return new ScJumpToken( eOp, (short*) nJump );
         break;
         case svExternal :
-            return new ScExternalToken( eOp, cByte, String( cStr+1 ) );
+            return new ScExternalToken( eOp, sbyte.cByte, String( cStr+1 ) );
         break;
         case svFAP :
-            return new ScFAPToken( eOp, cByte, NULL );
+            return new ScFAPToken( eOp, sbyte.cByte, NULL );
         break;
         case svMissing :
             return new ScMissingToken( eOp );
@@ -430,6 +420,8 @@ BYTE ScToken::GetParamCount() const
         return 0;           // no parameter
     else if ( ocEndNoPar < eOp && eOp <= ocEnd1Par )
         return 1;           // one parameter
+    else if ( eOp == ocIf || eOp == ocChose )
+        return 1;           // only the condition counts as parameter
     else
         return 0;           // all the rest, no Parameter, or
                             // if so then it should be in cByte
@@ -484,6 +476,9 @@ ScToken* ScToken::Clone() const
         break;
         case svJump :
             return new ScJumpToken( *static_cast<const ScJumpToken*>(this) );
+        break;
+        case svJumpMatrix :
+            return new ScJumpMatrixToken( *static_cast<const ScJumpMatrixToken*>(this) );
         break;
         case svExternal :
             return new ScExternalToken( *static_cast<const ScExternalToken*>(this) );
@@ -606,6 +601,17 @@ void ScToken::SetByte( BYTE n )
     DBG_ERRORFILE( "ScToken::SetByte: virtual dummy called" );
 }
 
+bool ScToken::HasForceArray() const
+{
+    // ok to be called for any derived class
+    return false;
+}
+
+void ScToken::SetForceArray( bool b )
+{
+    DBG_ERRORFILE( "ScToken::SetForceArray: virtual dummy called" );
+}
+
 double ScToken::GetDouble() const
 {
     DBG_ERRORFILE( "ScToken::GetDouble: virtual dummy called" );
@@ -687,6 +693,12 @@ short* ScToken::GetJump() const
     return NULL;
 }
 
+ScJumpMatrix* ScToken::GetJumpMatrix() const
+{
+    DBG_ERRORFILE( "ScToken::GetJumpMatrix: virtual dummy called" );
+    return NULL;
+}
+
 const String& ScToken::GetExternal() const
 {
     DBG_ERRORFILE( "ScToken::GetExternal: virtual dummy called" );
@@ -710,16 +722,19 @@ ScToken* ScToken::GetFAPOrigToken() const
 
 BYTE ScByteToken::GetByte() const                       { return nByte; }
 void ScByteToken::SetByte( BYTE n )                     { nByte = n; }
+bool ScByteToken::HasForceArray() const                 { return bHasForceArray; }
+void ScByteToken::SetForceArray( bool b )               { bHasForceArray = b; }
 BOOL ScByteToken::operator==( const ScToken& r ) const
 {
-    return ScToken::operator==( r ) && nByte == r.GetByte();
+    return ScToken::operator==( r ) && nByte == r.GetByte() &&
+        bHasForceArray == r.HasForceArray();
 }
 
 
 ScToken* ScFAPToken::GetFAPOrigToken() const            { return pOrigToken; }
 BOOL ScFAPToken::operator==( const ScToken& r ) const
 {
-    return ScToken::operator==( r ) && pOrigToken == r.GetFAPOrigToken();
+    return ScByteToken::operator==( r ) && pOrigToken == r.GetFAPOrigToken();
 }
 
 
@@ -789,6 +804,13 @@ BOOL ScJumpToken::operator==( const ScToken& r ) const
 ScJumpToken::~ScJumpToken()
 {
     delete [] pJump;
+}
+
+
+ScJumpMatrix* ScJumpMatrixToken::GetJumpMatrix() const  { return pJumpMatrix; }
+BOOL ScJumpMatrixToken::operator==( const ScToken& r ) const
+{
+    return ScToken::operator==( r ) && pJumpMatrix == r.GetJumpMatrix();
 }
 
 
@@ -1831,7 +1853,8 @@ void ScRawToken::Load30( SvStream& rStream )
             switch( eType )
             {
                 case svByte:
-                    rStream >> cByte;
+                    rStream >> sbyte.cByte;
+                    sbyte.bHasForceArray = false;
                     break;
                 case svDouble:
                     rStream >> nValue;
@@ -1925,7 +1948,8 @@ void ScRawToken::Load30( SvStream& rStream )
         }
         default:
             eType = svByte;
-            cByte = 0;
+            sbyte.cByte = 0;
+            sbyte.bHasForceArray = false;
     }
 }
 
@@ -1943,7 +1967,8 @@ void ScRawToken::Load( SvStream& rStream, USHORT nVer )
     switch( eType )
     {
         case svByte:
-            rStream >> cByte;
+            rStream >> sbyte.cByte;
+            sbyte.bHasForceArray = false;
             break;
         case svDouble:
             rStream >> nValue;
@@ -1951,7 +1976,7 @@ void ScRawToken::Load( SvStream& rStream, USHORT nVer )
         case svExternal:
         {
             sal_Char c[ MAXSTRLEN+1 ];
-            rStream >> cByte >> n;
+            rStream >> sbyte.cByte >> n;
             if( n > MAXSTRLEN-2 )
             {
                 DBG_ERRORFILE( "bad string array boundary" );
@@ -1962,7 +1987,7 @@ void ScRawToken::Load( SvStream& rStream, USHORT nVer )
             }
             else
                 rStream.Read( c+1, n );
-            //! parameter count is in cByte (cStr[0] little endian)
+            //! parameter count is in sbyte.cByte (cStr[0] little endian)
             CharSet eSrc = rStream.GetStreamCharSet();
             for ( BYTE j=1; j<n+1; j++ )
                 cStr[j] = ByteString::ConvertToUnicode( c[j], eSrc );
@@ -2152,7 +2177,7 @@ void ScToken::Store( SvStream& rStream ) const
 ScTokenIterator::ScTokenIterator( const ScTokenArray& rArr )
 {
     pCur = NULL;
-    Push( (ScTokenArray*) &rArr );
+    Push( &rArr );
 }
 
 ScTokenIterator::~ScTokenIterator()
@@ -2161,11 +2186,12 @@ ScTokenIterator::~ScTokenIterator()
         Pop();
 }
 
-void ScTokenIterator::Push( ScTokenArray* pArr )
+void ScTokenIterator::Push( const ScTokenArray* pArr )
 {
     ImpTokenIterator* p = new ImpTokenIterator;
     p->pArr  = pArr;
     p->nPC   = -1;
+    p->nStop = SHRT_MAX;
     p->pNext = pCur;
     pCur     = p;
 }
@@ -2196,29 +2222,44 @@ const ScToken* ScTokenIterator::First()
 const ScToken* ScTokenIterator::Next()
 {
     const ScToken* t = NULL;
-    if( ++pCur->nPC < pCur->pArr->nRPN )
+    ++pCur->nPC;
+    if( pCur->nPC < pCur->pArr->nRPN && pCur->nPC < pCur->nStop )
     {
         t = pCur->pArr->pRPN[ pCur->nPC ];
-        // ein derartiger Opcode endet einen WENN- oder WAHL-Bereich
+        // such an OpCode ends an IF() or CHOOSE() path
         if( t->GetOpCode() == ocSep || t->GetOpCode() == ocClose )
             t = NULL;
     }
     if( !t && pCur->pNext )
     {
-        Pop(); t = Next();
+        Pop();
+        t = Next();
     }
     return t;
 }
 
-// Die PC-Werte sind -1!
+//! The nPC counts after a Push() are -1
 
-void ScTokenIterator::Jump( short nStart, short nNext )
+void ScTokenIterator::Jump( short nStart, short nNext, short nStop )
 {
     pCur->nPC = nNext;
     if( nStart != nNext )
     {
         Push( pCur->pArr );
         pCur->nPC = nStart;
+        pCur->nStop = nStop;
     }
+}
+
+bool ScTokenIterator::IsEndOfPath() const
+{
+    USHORT nTest = pCur->nPC + 1;
+    if( nTest < pCur->pArr->nRPN  && nTest < pCur->nStop )
+    {
+        const ScToken* t = pCur->pArr->pRPN[ nTest ];
+        // such an OpCode ends an IF() or CHOOSE() path
+        return t->GetOpCode() == ocSep || t->GetOpCode() == ocClose;
+    }
+    return true;
 }
 
