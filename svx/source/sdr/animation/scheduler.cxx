@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scheduler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 14:30:26 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:54:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,8 @@ namespace sdr
     {
         Scheduler::Scheduler()
         :   mnTime(0L),
-            mnDeltaTime(0L)
+            mnDeltaTime(0L),
+            mbIsPaused(false)
         {
         }
 
@@ -240,7 +241,7 @@ namespace sdr
             }
 
             // re-start timer for next event to be scheduled (if any)
-            if(maList.GetFirst())
+            if(!IsPaused() && maList.GetFirst())
             {
                 mnDeltaTime = maList.GetFirst()->GetTime() - mnTime;
 
@@ -266,7 +267,7 @@ namespace sdr
 
         void Scheduler::Execute()
         {
-            if(!IsActive() && maList.GetFirst())
+            if(!IsPaused() && !IsActive() && maList.GetFirst())
             {
                 mnDeltaTime = 0L;
                 Timeout();
@@ -286,6 +287,23 @@ namespace sdr
             if(pOld && maList.GetFirst())
             {
                 maList.Remove(pOld);
+            }
+        }
+
+        void Scheduler::SetPaused(bool bNew)
+        {
+            if(bNew != mbIsPaused)
+            {
+                mbIsPaused = bNew;
+
+                if(mbIsPaused)
+                {
+                    Timeout();
+                }
+                else
+                {
+                    Execute();
+                }
             }
         }
     } // end of namespace animation
