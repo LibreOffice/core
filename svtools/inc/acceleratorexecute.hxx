@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceleratorexecute.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-24 09:03:52 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
 
-#ifndef __DRAFTS_COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
-#include <drafts/com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#ifndef __com_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #endif
 
 #ifndef __COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
@@ -168,9 +168,9 @@ class AcceleratorExecute : private TMutexInit
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > m_xDispatcher;
 
         /** TODO document me */
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > m_xGlobalCfg;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > m_xModuleCfg;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > m_xDocCfg;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xGlobalCfg;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xModuleCfg;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > m_xDocCfg;
 
         /** TODO document me */
         TCommandQueue m_lCommandQueue;
@@ -265,16 +265,16 @@ class AcceleratorExecute : private TMutexInit
 
         //---------------------------------------
         /** TODO document me */
-        static ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > st_openGlobalConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMGR);
+        static ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > st_openGlobalConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMGR);
 
         //---------------------------------------
         /** TODO document me */
-        static ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > st_openModuleConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMGR ,
+        static ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > st_openModuleConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xSMGR ,
                                                                                               const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&              xFrame);
 
         //---------------------------------------
         /** TODO document me */
-        static ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > st_openDocConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
+        static ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration > st_openDocConfig(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
 
     //-------------------------------------------
     // internal
