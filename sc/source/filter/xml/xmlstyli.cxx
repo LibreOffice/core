@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-14 15:24:02 $
+ *  last change: $Author: sab $ $Date: 2000-12-21 09:37:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,12 +340,15 @@ void XMLTableStyleContext::SetBaseCellAddress(com::sun::star::uno::Sequence<bean
     aProps.realloc(aProps.getLength() + 1);
     beans::PropertyValue aProp;
     table::CellAddress aBaseAddress;
-    ScXMLConverter::GetAddressFromString( aBaseAddress, sBaseCell, GetScImport().GetDocument() );
-    uno::Any aAnyBase;
-    aAnyBase <<= aBaseAddress;
-    aProp.Value = aAnyBase;
-    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCEPOS));
-    aProps[aProps.getLength() - 1] = aProp;
+    sal_Int32 nOffset(0);
+    if ( ScXMLConverter::GetAddressFromString( aBaseAddress, sBaseCell, GetScImport().GetDocument(), nOffset ))
+    {
+        uno::Any aAnyBase;
+        aAnyBase <<= aBaseAddress;
+        aProp.Value = aAnyBase;
+        aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCEPOS));
+        aProps[aProps.getLength() - 1] = aProp;
+    }
 }
 
 void XMLTableStyleContext::SetStyle(com::sun::star::uno::Sequence<beans::PropertyValue>& aProps,
@@ -585,7 +588,7 @@ void XMLTableStyleContext::FillPropertySet(
             XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_False);
         if (!pStyle)
         {
-            XMLTableStylesContext* pMyStyles = (XMLTableStylesContext *)&GetScImport().GetStyles();
+            XMLTableStylesContext* pMyStyles = (XMLTableStylesContext *)GetScImport().GetStyles();
             pStyle = (SvXMLNumFormatContext *)pMyStyles->
                 FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
         }
