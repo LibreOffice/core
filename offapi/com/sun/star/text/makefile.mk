@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: tl $ $Date: 2002-10-10 11:15:15 $
+#   last change: $Author: os $ $Date: 2002-11-13 12:45:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ PACKAGE=com$/sun$/star$/text
 
 IDLFILES=\
     BaseFrame.idl\
+    BaseFrameProperties.idl\
     WritingMode.idl\
     AdvancedTextDocument.idl\
     AutoTextContainer.idl\
