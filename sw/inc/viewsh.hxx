@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:52:21 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,8 @@
 #endif
 
 #ifdef ACCESSIBLE_LAYOUT
-namespace drafts {
-    namespace com { namespace sun { namespace star { namespace accessibility {
-           class XAccessible; } } } } }
+namespace com { namespace sun { namespace star { namespace accessibility {
+           class XAccessible; } } } }
 #endif
 
 class SwDoc;
@@ -443,12 +442,12 @@ public:
     const Size& GetBrowseBorder() const{ return aBrowseBorder; }
     void SetBrowseBorder( const Size& rNew );
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     // OD 15.01.2003 #103492# - change method signature due to new page preview
     // functionality.
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible >
+        ::com::sun::star::accessibility::XAccessible >
             CreateAccessiblePreview();
 
     void ShowPreViewSelection( sal_uInt16 nSelPage );
