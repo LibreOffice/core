@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.25 $
+*  $Revision: 1.26 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-03-12 15:54:17 $
+*  last change: $Author: dfoster $ $Date: 2003-05-21 09:06:24 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-
+#include <drafts/com/sun/star/script/framework/storage/XScriptInfoAccess.hpp>
 
 #include "ScriptStorageManager.hxx"
 #include <util/util.hxx>
@@ -483,17 +483,37 @@ ScriptStorageManager::disposing( const ::com::sun::star::lang::EventObject& Sour
 throw ( ::com::sun::star::uno::RuntimeException )
 {
     OSL_TRACE( "ScriptStorageManager::disposing started" );
-    Reference< frame::XModel > xModel;
-    OUString docURI;
+    OSL_TRACE( "event object type=%s",
+                      ::rtl::OUStringToOString( getCppuType( &Source ).getTypeName(),
+                                                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+    OUString storageURI;
+    bool removeSecurityPermission = true;
     try
     {
         Reference< XInterface > xInterface = Source.Source;
-        xModel = Reference< frame::XModel > ( xInterface, UNO_QUERY_THROW );
-        docURI = xModel->getURL();
-        if ( docURI.getLength() > 0 )
+        // no UNO_QUERY_THROW since we want a 2nd change to query if it's
+        // not a document being disposed
+        Reference< frame::XModel > xModel = Reference< frame::XModel > ( xInterface, UNO_QUERY );
+        if( xModel.is() )
         {
-            OSL_TRACE( "Document disposing is ... %s",
-                      ::rtl::OUStringToOString( docURI,
+            storageURI = xModel->getURL();
+        }
+        else
+        {
+            // UNO_QURY_THROW here since it's supposed to be either a doc
+            // or a XScriptInfo (in the case of a filesys script)
+            Reference< storage::XScriptInfo > xScriptInfo = Reference< storage::XScriptInfo > ( xInterface, UNO_QUERY_THROW );
+            storageURI = xScriptInfo->getParcelURI().concat( xScriptInfo->getFunctionName() );
+            // to save the user seeing the security dialogs every time they
+            // run the script we hang on to the permission for a given script
+            // for the lifetime of the Office
+            removeSecurityPermission = false;
+            // possibly need to encode it??
+        }
+        if ( storageURI.getLength() > 0 )
+        {
+            OSL_TRACE( "URI disposing is ... %s",
+                      ::rtl::OUStringToOString( storageURI,
                                                 RTL_TEXTENCODING_ASCII_US ).pData->buffer );
         }
     }
@@ -510,7 +530,7 @@ throw ( ::com::sun::star::uno::RuntimeException )
 
 
     // grab storage id.
-    sal_Int32 scriptStorageID = getScriptStorageID( docURI );
+    sal_Int32 scriptStorageID = getScriptStorageID( storageURI );
 
     // no need to do anything if there's no doc storage
     if( scriptStorageID == -1 )
@@ -533,8 +553,11 @@ throw ( ::com::sun::star::uno::RuntimeException )
 
     // erase the entry from the hash
     m_ScriptStorageMap.erase( scriptStorageID );
-    removeScriptDocURIHashEntry( docURI );
-    m_securityMgr.removePermissionSettings ( docURI );
+    removeScriptDocURIHashEntry( storageURI );
+    if ( removeSecurityPermission )
+    {
+        m_securityMgr.removePermissionSettings ( storageURI );
+    }
 }
 
 
