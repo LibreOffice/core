@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:18:19 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 13:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1302,7 +1302,7 @@ static Writer& OutRTF_SwTxtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
                 sURL = aTmp.GetFull();
             }
 */          rWrt.Strm() << '\"';
-            RTFOutFuncs::Out_String( rWrt.Strm(), sURL, DEF_ENCODING,
+            RTFOutFuncs::Out_String( rWrt.Strm(), sURL, rRTFWrt.eCurrentCharSet,
                                     rRTFWrt.bWriteHelpFmt ) << "\" ";
             sURL = aTmp.GetMark();
         }
@@ -1311,7 +1311,7 @@ static Writer& OutRTF_SwTxtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
         {
             rWrt.Strm() << "\\\\l \"";
             sURL.Erase( 0, 1 );
-            RTFOutFuncs::Out_String( rWrt.Strm(), sURL, DEF_ENCODING,
+            RTFOutFuncs::Out_String( rWrt.Strm(), sURL, rRTFWrt.eCurrentCharSet,
                                     rRTFWrt.bWriteHelpFmt ) << "\" ";
         }
 
@@ -1590,7 +1590,7 @@ static Writer& OutRTF_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
         if (nStrPos != nEnde)
         {
             RTFOutFuncs::Out_String(rWrt.Strm(), String(rStr.GetChar(nStrPos)),
-                DEF_ENCODING, rRTFWrt.bWriteHelpFmt);
+                rRTFWrt.eCurrentCharSet, rRTFWrt.bWriteHelpFmt);
         }
     }
 
@@ -2373,6 +2373,7 @@ static Writer& OutRTF_SwFont( Writer& rWrt, const SfxPoolItem& rHt )
         const sal_Char* pCmd = bAssoc ? sRTF_AF : sRTF_F;
         rWrt.Strm() << pCmd;
         rWrt.OutULong(rRTFWrt.GetId(rFont));
+        rRTFWrt.eCurrentCharSet = rFont.GetCharSet();
     }
     return rWrt;
 }
