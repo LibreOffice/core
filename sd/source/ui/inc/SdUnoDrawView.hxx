@@ -57,7 +57,7 @@ class SdUnoDrawView :   public SdUnoDrawViewBase,
                         public SfxBaseController
 {
 public:
-    enum SdUnoDrawViewKind { presentation = 0, drawing, slideshow, preview, notes, handout };
+    enum SdUnoDrawViewKind { unknown=-1,presentation = 0, drawing, slideshow, preview, notes, handout };
 
     SdUnoDrawView(SdView* pSdView, SdDrawViewShell* pSdViewSh) throw();
     virtual ~SdUnoDrawView() throw();
@@ -180,7 +180,12 @@ protected:
     */
     void setActiveLayer (const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>& rxLayer) throw ();
 
-    SdUnoDrawViewKind   meKind;
+    /** Return the current type of the view.
+        @return The returned value may be any of the enum values of
+            <type>SdUnoDrawViewKind</type> with the exception of
+            <const>unknown</const> which is used internally.
+    */
+    SdUnoDrawViewKind GetDrawViewKind (void) const;
 
 private:
     com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getWindow();
@@ -195,6 +200,7 @@ private:
     sal_Bool mbOldMasterPageMode;
     sal_Bool mbOldLayerMode;
     SdPage* mpCurrentPage;
+    mutable SdUnoDrawViewKind  meKind;
 };
 
 #endif
