@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:11:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:45:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
         _base_ini.reset( new Bootstrap_Impl( base_ini ) );
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OString sFile = OUStringToOString(_iniName, RTL_TEXTENCODING_ASCII_US);
     OSL_TRACE(__FILE__" -- Bootstrap_Impl() - %s\n", sFile.getStr());
 #endif
@@ -431,7 +431,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
                     line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8 );
                 OString name_tmp = OUStringToOString(nameValue.sName, RTL_TEXTENCODING_ASCII_US);
                 OString value_tmp = OUStringToOString(nameValue.sValue, RTL_TEXTENCODING_UTF8);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 OSL_TRACE(
                     __FILE__" -- pushing: name=%s value=%s\n",
                     name_tmp.getStr(), value_tmp.getStr() );
@@ -441,7 +441,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
         }
         osl_closeFile(handle);
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     else
     {
         OString file_tmp = OUStringToOString(_iniName, RTL_TEXTENCODING_ASCII_US);
@@ -664,7 +664,7 @@ void SAL_CALL rtl_bootstrap_set( rtl_uString * pName, rtl_uString * pValue )
         }
     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     OString cstr_name( OUStringToOString( name, RTL_TEXTENCODING_ASCII_US ) );
     OString cstr_value( OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ) );
     OSL_TRACE(
