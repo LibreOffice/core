@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtuno.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dv $ $Date: 2001-06-28 07:04:44 $
+ *  last change: $Author: fs $ $Date: 2001-09-18 14:45:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #define UNOOTYPECOLLECTION              ::cppu::OTypeCollection
 #define UNOOUSTRING                     ::rtl::OUString
 #define UNOPROPERTYVALUE                ::com::sun::star::beans::PropertyValue
+#define UNOSTRINGPAIR                   ::com::sun::star::beans::StringPair
 #define UNOREFERENCE                    ::com::sun::star::uno::Reference
 #define UNORUNTIMEEXCEPTION             ::com::sun::star::uno::RuntimeException
 #define UNOINVALIDREGISTRYEXCEPTION     ::com::sun::star::registry::InvalidRegistryException
