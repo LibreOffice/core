@@ -2,9 +2,9 @@
  *
  *  $RCSfile: protocolhandlercache.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:34:36 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,12 @@
 #ifndef __FRAMEWORK_CLASSES_PROTOCOLHANDLERCACHE_HXX_
 #define __FRAMEWORK_CLASSES_PROTOCOLHANDLERCACHE_HXX_
 
+/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
+               with solaris headers ...
+*/
+#include <hash_map>
+#include <vector>
+
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
@@ -84,8 +90,6 @@
 
 #include <unotools/configitem.hxx>
 #include <rtl/ustring.hxx>
-#include <hash_map>
-#include <vector>
 
 //_________________________________________________________________________________________________________________
 //  namespace

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: cd $ $Date: 2002-10-11 14:32:34 $
+#   last change: $Author: hr $ $Date: 2003-03-25 18:21:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,7 +80,6 @@ SLOFILES=			$(SLO)$/servicemanager.obj						\
                     $(SLO)$/wildcard.obj							\
                     $(SLO)$/framecontainer.obj						\
                     $(SLO)$/taskcreator.obj							\
-                    $(SLO)$/asyncquit.obj							\
                     $(SLO)$/targetfinder.obj						\
                     $(SLO)$/argumentanalyzer.obj					\
                     $(SLO)$/menumanager.obj							\
@@ -106,11 +105,13 @@ SLOFILES=			$(SLO)$/servicemanager.obj						\
                     $(SLO)$/protocolhandlercache.obj				\
                     $(SLO)$/addonmenu.obj							\
                     $(SLO)$/addonsoptions.obj						\
-                    $(SLO)$/fwkresid.obj
+                    $(SLO)$/fwkresid.obj                            \
+                    $(SLO)$/colorlistener.obj                       \
+                    $(SLO)$/framelistanalyzer.obj
 
 SRCFILES =\
     resource.src
-    
+
 RESLIB1NAME=		fwe
 RESLIB1SRSFILES= 	$(SRS)$/$(TARGET).srs
 RESLIB1DEPN=		resource.src	\

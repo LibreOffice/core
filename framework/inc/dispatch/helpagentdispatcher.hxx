@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentdispatcher.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-07-02 13:23:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,20 +206,4 @@ namespace framework
 //........................................................................
 
 #endif // _FRAMEWORK_DISPATCH_HELPAGENTDISPATCHER_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2001/06/11 10:14:25  as
- *  #85529# use new lock mechanism
- *
- *  Revision 1.2  2001/05/07 15:05:17  fs
- *  moved the HelpAgentWindow implementation to SVTOOLS (prevent creating a new resource file here)
- *
- *  Revision 1.1  2001/05/07 13:39:50  fs
- *  initial checkin - help agent dispatcher
- *
- *
- *  Revision 1.0 03.05.01 11:28:28  fs
- ************************************************************************/
 

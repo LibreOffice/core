@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-24 12:25:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 #include <general.h>
 #endif
 
+#ifndef __FRAMEWORK_PROPERTIES_H_
+#include <properties.h>
+#endif
+
 #include <services/documentlist.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -161,12 +165,20 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONAPPROVE_HPP_
+#include <com/sun/star/task/XInteractionApprove.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_DOCUMENT_XINTERACTIONFILTERSELECT_HPP_
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_AMBIGOUSFILTERREQUEST_HPP_
 #include <com/sun/star/document/AmbigousFilterRequest.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_ERRORCODEREQUEST_HPP_
+#include <com/sun/star/task/ErrorCodeRequest.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
@@ -233,6 +245,10 @@
 #include <vcl/svapp.hxx>
 #endif
 
+#ifndef __RSC
+#include <tools/errinf.hxx>
+#endif
+
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -246,21 +262,6 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 //  non exported const
 //_________________________________________________________________________________________________________________
-
-// names of properties
-#define PROPERTYNAME_ACTIVECOMPONENT            DECLARE_ASCII("ActiveComponent"         )
-#define PROPERTYNAME_ACTIVEFRAME                DECLARE_ASCII("ActiveFrame"             )
-#define PROPERTYNAME_ISPLUGGED                  DECLARE_ASCII("IsPlugged"               )
-#define PROPERTYNAME_SUSPENDQUICKSTARTVETO      DECLARE_ASCII("SuspendQuickstartVeto"   )
-
-// handle of properties
-#define PROPERTYHANDLE_ACTIVECOMPONENT          1
-#define PROPERTYHANDLE_ACTIVEFRAME              2
-#define PROPERTYHANDLE_ISPLUGGED                3
-#define PROPERTYHANDLE_SUSPENDQUICKSTARTVETO    4
-
-// count of ALL properties
-#define PROPERTYCOUNT                           4
 
 //_________________________________________________________________________________________________________________
 //  non exported definitions
@@ -958,7 +959,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
 
         css::uno::Reference< css::frame::XNotifyingDispatch > xNotifyer( xDispatcher, css::uno::UNO_QUERY );
         if ( xNotifyer.is() )
-            xNotifyer->dispatchWithNotification( aURL, lArguments, this );
+            xNotifyer->dispatchWithNotification( aURL, aAnalyzer.getArgumentsConst(), this );
         else
         {
             // We can't work without any notification!
@@ -1775,8 +1776,10 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
 
     // extract continuations from request
     css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
-    css::uno::Reference< css::task::XInteractionAbort >                              xAbort ;
-    css::uno::Reference< css::document::XInteractionFilterSelect >                   xSelect;
+    css::uno::Reference< css::task::XInteractionAbort >                              xAbort         ;
+    css::uno::Reference< css::task::XInteractionApprove >                            xApprove       ;
+    css::uno::Reference< css::document::XInteractionFilterSelect >                   xFilterSelect  ;
+    sal_Bool                                                                         bAbort         = sal_False;
 
     sal_Int32 nCount=lContinuations.getLength();
     for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
@@ -1784,35 +1787,56 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
         if( ! xAbort.is() )
             xAbort  = css::uno::Reference< css::task::XInteractionAbort >( lContinuations[nStep], css::uno::UNO_QUERY );
 
-        if( ! xSelect.is() )
-            xSelect = css::uno::Reference< css::document::XInteractionFilterSelect >( lContinuations[nStep], css::uno::UNO_QUERY );
+        if( ! xApprove.is() )
+            xApprove  = css::uno::Reference< css::task::XInteractionApprove >( lContinuations[nStep], css::uno::UNO_QUERY );
+
+        if( ! xFilterSelect.is() )
+            xFilterSelect = css::uno::Reference< css::document::XInteractionFilterSelect >( lContinuations[nStep], css::uno::UNO_QUERY );
     }
 
     // differ between abortable interactions (error, unknown filter ...)
     // and other ones (ambigous but not unknown filter ...)
+    css::task::ErrorCodeRequest          aErrorCodeRequest     ;
     css::document::AmbigousFilterRequest aAmbigousFilterRequest;
     if( aRequest >>= aAmbigousFilterRequest )
     {
-        if( xSelect.is() )
+        if( xFilterSelect.is() )
         {
-            xSelect->setFilter( aAmbigousFilterRequest.SelectedFilter ); // user selected filter wins!
-            xSelect->select();
+            xFilterSelect->setFilter( aAmbigousFilterRequest.SelectedFilter ); // user selected filter wins!
+            xFilterSelect->select();
         }
     }
     else
+    if( aRequest >>= aErrorCodeRequest )
     {
-        if( xAbort.is() )
+        sal_Bool bWarning = (aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK == ERRCODE_WARNING_MASK);
+        if (xApprove.is() && bWarning)
+            xApprove->select();
+        else
+        if (xAbort.is())
         {
             xAbort->select();
+            bAbort = sal_True;
         }
+    }
+    else
+    if( xAbort.is() )
+    {
+        xAbort->select();
+        bAbort = sal_True;
     }
 
     /* SAFE AREA ------------------------------------------------------------------------------------------- */
-    WriteGuard aWriteLock( m_aLock );
-    // Ok now it's time to break yield loop of loadComponentFromURL()!
-    m_eLoadState          = E_INTERACTION;
-    m_aInteractionRequest = aRequest     ;
-    aWriteLock.unlock();
+    // Ok now it's time to break yield loop of loadComponentFromURL().
+    // But only for realy aborted requests!
+    // For example warnings will be approved and we wait for any success story ...
+    if (bAbort)
+    {
+        WriteGuard aWriteLock( m_aLock );
+        m_eLoadState          = E_INTERACTION;
+        m_aInteractionRequest = aRequest     ;
+        aWriteLock.unlock();
+    }
     /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 }
 
@@ -1820,7 +1844,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     @short      try to convert a property value
     @descr      This method is called from helperclass "OPropertySetHelper".
                 Don't use this directly!
-                You must try to convert the value of given propertyhandle and
+                You must try to convert the value of given DESKTOP_PROPHANDLE and
                 return results of this operation. This will be used to ask vetoable
                 listener. If no listener has a veto, we will change value realy!
                 ( in method setFastPropertyValue_NoBroadcast(...) )
@@ -1830,7 +1854,6 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
 
     @seealso    class OPropertySetHelper
     @seealso    method setFastPropertyValue_NoBroadcast()
-    @seealso    method impl_tryToChangeProperty()
 
     @param      "aConvertedValue"   new converted value of property
     @param      "aOldValue"         old value of property
@@ -1850,20 +1873,33 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
     // Register transaction and reject wrong calls.
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    //  Attention: Method "impl_tryToChangeProperty()" can throw the IllegalArgumentException for us !!!
-
     //  Initialize state with FALSE !!!
     //  (Handle can be invalid)
     sal_Bool bReturn = sal_False;
 
     switch( nHandle )
     {
-        case PROPERTYHANDLE_ACTIVECOMPONENT     :
-        case PROPERTYHANDLE_ACTIVEFRAME         :
-        case PROPERTYHANDLE_ISPLUGGED           :   bReturn = sal_False; // These variables are readonly(!) and can't be changed.
-                                                    break;
-        case PROPERTYHANDLE_SUSPENDQUICKSTARTVETO:  bReturn = impl_tryToChangeProperty( m_bSuspendQuickstartVeto, aValue, aOldValue, aConvertedValue );
-                                                    break;
+        case DESKTOP_PROPHANDLE_SUSPENDQUICKSTARTVETO:
+                bReturn = PropHelper::willPropertyBeChanged(
+                    css::uno::makeAny(m_bSuspendQuickstartVeto),
+                    aValue,
+                    aOldValue,
+                    aConvertedValue);
+                break;
+        case DESKTOP_PROPHANDLE_DISPATCHRECORDERSUPPLIER :
+                bReturn = PropHelper::willPropertyBeChanged(
+                    css::uno::makeAny(m_xDispatchRecorderSupplier),
+                    aValue,
+                    aOldValue,
+                    aConvertedValue);
+                break;
+        case DESKTOP_PROPHANDLE_TITLE :
+                bReturn = PropHelper::willPropertyBeChanged(
+                    css::uno::makeAny(m_sTitle),
+                    aValue,
+                    aOldValue,
+                    aConvertedValue);
+                break;
     }
 
     // Return state of operation.
@@ -1895,11 +1931,11 @@ void SAL_CALL Desktop::setFastPropertyValue_NoBroadcast(       sal_Int32        
 
     switch( nHandle )
     {
-        case PROPERTYHANDLE_ACTIVECOMPONENT     :
-        case PROPERTYHANDLE_ACTIVEFRAME         :
-        case PROPERTYHANDLE_ISPLUGGED           :   LOG_ERROR( "Desktop::setFastPropertyValue_NoBroadcast()", "Set of readonly property not allowed." )
+        case DESKTOP_PROPHANDLE_SUSPENDQUICKSTARTVETO:    aValue >>= m_bSuspendQuickstartVeto;
                                                     break;
-        case PROPERTYHANDLE_SUSPENDQUICKSTARTVETO:  aValue >>= m_bSuspendQuickstartVeto;
+        case DESKTOP_PROPHANDLE_DISPATCHRECORDERSUPPLIER:    aValue >>= m_xDispatchRecorderSupplier;
+                                                    break;
+        case DESKTOP_PROPHANDLE_TITLE:    aValue >>= m_sTitle;
                                                     break;
     }
 }
@@ -1929,14 +1965,15 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
 
     switch( nHandle )
     {
-        case PROPERTYHANDLE_ACTIVECOMPONENT     :   //aValue <<= getCurrentComponent(); ... not available in const method :-(
-                                                    aValue <<= css::uno::Reference< css::lang::XComponent >();
+        case DESKTOP_PROPHANDLE_ACTIVEFRAME           :   aValue <<= m_aChildTaskContainer.getActive();
                                                     break;
-        case PROPERTYHANDLE_ACTIVEFRAME         :   aValue <<= m_aChildTaskContainer.getActive();
+        case DESKTOP_PROPHANDLE_ISPLUGGED           :   aValue <<= impl_checkPlugInState();
                                                     break;
-        case PROPERTYHANDLE_ISPLUGGED           :   aValue <<= impl_checkPlugInState();
+        case DESKTOP_PROPHANDLE_SUSPENDQUICKSTARTVETO:    aValue <<= m_bSuspendQuickstartVeto;
                                                     break;
-        case PROPERTYHANDLE_SUSPENDQUICKSTARTVETO:  aValue <<= m_bSuspendQuickstartVeto;
+        case DESKTOP_PROPHANDLE_DISPATCHRECORDERSUPPLIER:    aValue <<= m_xDispatchRecorderSupplier;
+                                                    break;
+        case DESKTOP_PROPHANDLE_TITLE:    aValue <<= m_sTitle;
                                                     break;
     }
 }
@@ -2087,60 +2124,6 @@ css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( co
 }
 
 /*-************************************************************************************************************//**
-    @short      test, if a property will change his value
-    @descr      These methods will test, if a property will change his current value, with given parameter.
-                We use a helperclass for properties. These class promote this behaviour.
-                We implement a helper function for every property-type!
-
-    @seealso    method convertFastPropertyValue()
-
-    @param      "...Property"       ,   the property with his current value
-    @param      "aNewValue"         ,   new value for property
-    @param      "aOldValue"         ,   old value of property as Any for convertFastPropertyValue
-    @param      "aConvertedValue"   ,   new value of property as Any for convertFastPropertyValue(it can be the old one, if nothing is changed!)
-    @return     sal_True  ,if value will be changed
-    @return     sal_FALSE ,otherwise.
-
-    @onerror    IllegalArgumentException, if convert failed.
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-sal_Bool Desktop::impl_tryToChangeProperty(         sal_Bool        bProperty       ,
-                                            const   css::uno::Any&  aNewValue       ,
-                                                    css::uno::Any&  aOldValue       ,
-                                                    css::uno::Any&  aConvertedValue ) throw( css::lang::IllegalArgumentException )
-{
-    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
-
-    // Set default return value.
-    sal_Bool bReturn = sal_False;
-
-    // Clear information of return parameter!
-    aOldValue.clear();
-    aConvertedValue.clear();
-
-    // Get new value from any.
-    // IllegalArgumentException() can be thrown!
-    sal_Bool bNewValue;
-    ::cppu::convertPropertyValue( bNewValue, aNewValue );
-
-    // If value change ...
-    if( bNewValue != bProperty )
-    {
-        // ... set information of change.
-        // Attention:   Use setValue and getCppuBooleanType to set value in any!
-        //              It's necessary, if BOOL can be int or char.
-        aOldValue.setValue      ( &bProperty, ::getCppuBooleanType() );
-        aConvertedValue.setValue( &bNewValue, ::getCppuBooleanType() );
-        // Return OK - "value will be change ..."
-        bReturn = sal_True;
-    }
-
-    return bReturn;
-}
-
-/*-************************************************************************************************************//**
     @short      create table with information about properties
     @descr      We use a helper class to support properties. These class need some information about this.
                 These method create a new static description table with name, type, r/w-flags and so on ...
@@ -2165,13 +2148,14 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
 
     static const css::beans::Property pProperties[] =
     {
-        css::beans::Property( PROPERTYNAME_ACTIVECOMPONENT      , PROPERTYHANDLE_ACTIVECOMPONENT        , ::getCppuType((const css::uno::Reference< css::lang::XComponent >*)NULL), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( PROPERTYNAME_ACTIVEFRAME          , PROPERTYHANDLE_ACTIVEFRAME            , ::getCppuType((const css::uno::Reference< css::lang::XComponent >*)NULL), css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( PROPERTYNAME_ISPLUGGED            , PROPERTYHANDLE_ISPLUGGED              , ::getBooleanCppuType()                                                  , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
-        css::beans::Property( PROPERTYNAME_SUSPENDQUICKSTARTVETO, PROPERTYHANDLE_SUSPENDQUICKSTARTVETO  , ::getBooleanCppuType()                                                  , css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( DESKTOP_PROPNAME_ACTIVEFRAME              , DESKTOP_PROPHANDLE_ACTIVEFRAME             , ::getCppuType((const css::uno::Reference< css::lang::XComponent >*)NULL)                , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( DESKTOP_PROPNAME_DISPATCHRECORDERSUPPLIER , DESKTOP_PROPHANDLE_DISPATCHRECORDERSUPPLIER, ::getCppuType((const css::uno::Reference< css::frame::XDispatchRecorderSupplier >*)NULL), css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( DESKTOP_PROPNAME_ISPLUGGED                , DESKTOP_PROPHANDLE_ISPLUGGED               , ::getBooleanCppuType()                                                                  , css::beans::PropertyAttribute::TRANSIENT | css::beans::PropertyAttribute::READONLY ),
+        css::beans::Property( DESKTOP_PROPNAME_SUSPENDQUICKSTARTVETO    , DESKTOP_PROPHANDLE_SUSPENDQUICKSTARTVETO   , ::getBooleanCppuType()                                                                  , css::beans::PropertyAttribute::TRANSIENT ),
+        css::beans::Property( DESKTOP_PROPNAME_TITLE                    , DESKTOP_PROPHANDLE_TITLE                   , ::getCppuType((const ::rtl::OUString*)NULL)                                             , css::beans::PropertyAttribute::TRANSIENT ),
     };
     // Use it to initialize sequence!
-    static const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, PROPERTYCOUNT );
+    static const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, DESKTOP_PROPCOUNT );
     // Return static "PropertyDescriptor"
     return lPropertyDescriptor;
 }

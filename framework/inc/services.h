@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: as $ $Date: 2002-10-11 13:41:06 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ namespace framework{
 #define SERVICENAME_ADMINPROVIDER                           DECLARE_ASCII("com.sun.star.configuration.AdministrationProvider"   )   // describe cfg-provider service for sun webtop
 #define SERVICENAME_CFGUPDATEACCESS                         DECLARE_ASCII("com.sun.star.configuration.ConfigurationUpdateAccess")   // provides read/write access to the configuration
 #define SERVICENAME_CFGREADACCESS                           DECLARE_ASCII("com.sun.star.configuration.ConfigurationAccess"      )   // provides readonly access to the configuration
-#define SERVICENAME_SOUNDHANDLER                            DECLARE_ASCII("com.sun.star.frame.ContentHandler"                   )
+#define SERVICENAME_CONTENTHANDLER                          DECLARE_ASCII("com.sun.star.frame.ContentHandler"                   )
 #define SERVICENAME_CONTENTHANDLERFACTORY                   DECLARE_ASCII("com.sun.star.frame.ContentHandlerFactory"            )
 #define SERVICENAME_APPDISPATCHPROVIDER                     DECLARE_ASCII("com.sun.star.comp.sfx2.AppDispatchProvider"          )
 #define SERVICENAME_UCBCONTENTBROKER                        DECLARE_ASCII("com.sun.star.ucb.UniversalContentBroker"             )
@@ -116,6 +116,7 @@ namespace framework{
 #define SERVICENAME_PROTOCOLHANDLER                         DECLARE_ASCII("com.sun.star.frame.ProtocolHandler"                  )
 #define SERVICENAME_SUBSTITUTEPATHVARIABLES                 DECLARE_ASCII("com.sun.star.util.PathSubstitution"                  )
 #define SERVICENAME_PATHSETTINGS                            DECLARE_ASCII("com.sun.star.util.PathSettings"                      )
+#define SERVICENAME_DISPATCHHELPER                          DECLARE_ASCII("com.sun.star.frame.DispatchHelper"                   )
 
 //_________________________________________________________________________________________________________________
 //  used implementationnames by framework
@@ -145,7 +146,8 @@ namespace framework{
 #define IMPLEMENTATIONNAME_UIINTERACTIONHANDLER             DECLARE_ASCII("com.sun.star.comp.uui.UUIInteractionHandler"         )
 #define IMPLEMENTATIONNAME_SUBSTITUTEPATHVARIABLES          DECLARE_ASCII("com.sun.star.comp.framework.PathSubstitution"        )
 #define IMPLEMENTATIONNAME_PATHSETTINGS                     DECLARE_ASCII("com.sun.star.comp.framework.PathSettings"            )
-#define IMPLEMENTATIONNAME_JOBHANDLER                       DECLARE_ASCII("com.sun.star.comp.framework.JobHandler"              )
+#define IMPLEMENTATIONNAME_JOBDISPATCH                      DECLARE_ASCII("com.sun.star.comp.framework.jobs.JobDispatch"        )
+#define IMPLEMENTATIONNAME_DISPATCHHELPER                   DECLARE_ASCII("com.sun.star.comp.framework.services.DispatchHelper" )
 
 }       //  namespace framework
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2002-10-11 13:41:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,38 @@ css::uno::Sequence< css::beans::PropertyValue > Converter::convert_seqAny2seqPro
     if (nRealCount!=nCount)
         lDestination.realloc(nRealCount);
 
+    return lDestination;
+}
+
+//-----------------------------------------------------------------------------
+/**
+ * converts a sequence of NamedValue to a sequence of PropertyValue.
+ */
+css::uno::Sequence< css::beans::PropertyValue > Converter::convert_seqNamedVal2seqPropVal( const css::uno::Sequence< css::beans::NamedValue >& lSource )
+{
+    sal_Int32 nCount = lSource.getLength();
+    css::uno::Sequence< css::beans::PropertyValue > lDestination(nCount);
+    for (sal_Int32 nItem=0; nItem<nCount; ++nItem)
+    {
+        lDestination[nItem].Name  = lSource[nItem].Name ;
+        lDestination[nItem].Value = lSource[nItem].Value;
+    }
+    return lDestination;
+}
+
+//-----------------------------------------------------------------------------
+/**
+ * converts a sequence of PropertyValue to a sequence of NamedValue.
+ */
+css::uno::Sequence< css::beans::NamedValue > Converter::convert_seqPropVal2seqNamedVal( const css::uno::Sequence< css::beans::PropertyValue >& lSource )
+{
+    sal_Int32 nCount = lSource.getLength();
+    css::uno::Sequence< css::beans::NamedValue > lDestination(nCount);
+    for (sal_Int32 nItem=0; nItem<nCount; ++nItem)
+    {
+        lDestination[nItem].Name  = lSource[nItem].Name ;
+        lDestination[nItem].Value = lSource[nItem].Value;
+    }
     return lDestination;
 }
 

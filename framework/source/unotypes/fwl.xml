@@ -51,7 +51,7 @@
         <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
         <language> c++ </language>
         <status value="final"/>
-        <supported-service> com.sun.star.document.ContentHandlerFactory </supported-service>
+        <supported-service> com.sun.star.frame.ContentHandlerFactory </supported-service>
     </component-description>
 
     <component-description>

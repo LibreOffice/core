@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interaction.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-12-19 13:18:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,18 @@
 
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
 #include <com/sun/star/task/XInteractionAbort.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONAPPROVE_HPP_
+#include <com/sun/star/task/XInteractionApprove.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONDISAPPROVE_HPP_
+#include <com/sun/star/task/XInteractionDisapprove.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONRETRY_HPP_
+#include <com/sun/star/task/XInteractionRetry.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XINTERACTIONFILTERSELECT_HPP_
@@ -216,6 +228,9 @@ class ContinuationBase : public ::cppu::WeakImplHelper1< TContinuationType >
     @threadsafe     no (used on once position only!)
 *//*-*************************************************************************************************************/
 typedef ContinuationBase< ::com::sun::star::task::XInteractionAbort > ContinuationAbort;
+typedef ContinuationBase< ::com::sun::star::task::XInteractionApprove > ContinuationApprove;
+typedef ContinuationBase< ::com::sun::star::task::XInteractionDisapprove > ContinuationDisapprove;
+typedef ContinuationBase< ::com::sun::star::task::XInteractionRetry > ContinuationRetry;
 
 /*-************************************************************************************************************//**
     @short          declaration of special continuation for filter selection
@@ -332,6 +347,51 @@ class RequestAmbigousFilter : public ::cppu::WeakImplHelper1< ::com::sun::star::
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >    m_lContinuations;
         ContinuationAbort*                                                                                                         m_pAbort        ;
         ContinuationFilterSelect*                                                                                                  m_pFilter       ;
+
+};  // class RequestFilterSelect
+
+/*-************************************************************************************************************//**
+    @short          special request for interaction
+    @descr          User must decide between a preselected and another detected filter.
+                    It capsulate communication with any interaction handler and supports an easy
+                    access on interaction results for user of these class.
+
+    @implements     XInteractionRequest
+
+    @base           WeakImplHelper1
+
+    @devstatus      ready to use
+    @threadsafe     no (used on once position only!)
+*//*-*************************************************************************************************************/
+class InteractionRequest : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+{
+    // c++ interface
+    public:
+        InteractionRequest( const ::com::sun::star::uno::Any&                                                                                             aRequest       ,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations )
+        {
+            m_aRequest       = aRequest      ;
+            m_lContinuations = lContinuations;
+        }
+
+    // uno interface
+    public:
+        virtual ::com::sun::star::uno::Any SAL_CALL getRequest()
+            throw( ::com::sun::star::uno::RuntimeException )
+            {
+                return m_aRequest;
+            }
+
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > SAL_CALL getContinuations()
+            throw( ::com::sun::star::uno::RuntimeException )
+            {
+                return m_lContinuations;
+            }
+
+    // member
+    private:
+        ::com::sun::star::uno::Any                                                                                                 m_aRequest      ;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > >    m_lContinuations;
 
 };  // class RequestFilterSelect
 

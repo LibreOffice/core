@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonsoptions.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 14:16:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #define ADDONSMENUITEM_PROPERTYNAME_TARGET              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Target"            ))
 #define ADDONSMENUITEM_PROPERTYNAME_SUBMENU             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Submenu"           ))
 #define ADDONSMENUITEM_PROPERTYNAME_COMPONENTID         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ComponentID"       ))
+#define ADDONSMENUITEM_PROPERTYNAME_CONTEXT             ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Context"           ))
+
+#define ADDONSPOPUPMENU_URL_PREFIX                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:menu/Addon" ))
 
 namespace framework
 {
@@ -208,17 +211,43 @@ class AddonsOptions
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsMenu() const;
 
         /*-****************************************************************************************************//**
-            @short      Get the popup menu or menu item of the specified component
+            @short      Get the popup-menu/menu entries of the specified component
             @descr      Call it to add a addons popup menu or menu item for a component
 
             @seealso    -
 
-            @return     sal_True if operation has been successfully completed
+            @return     A list of menu items which belongs to the specified component
 
             @onerror    We return sal_False
         *//*-*****************************************************************************************************/
 
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetAddonsComponentMenu( const ::rtl::OUString aComponentID ) const;
+
+        /*-****************************************************************************************************//**
+            @short      Gets the menu bar part of all addon components registered
+            @descr      -
+
+            @seealso    -
+
+            @return     A complete
+
+            @onerror    We return sal_False
+        *//*-*****************************************************************************************************/
+
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsMenuBarPart() const;
+
+        /*-****************************************************************************************************//**
+            @short      Gets the toolbar part of all addon components registered
+            @descr      -
+
+            @seealso    -
+
+            @return     A complete
+
+            @onerror    We return sal_False
+        *//*-*****************************************************************************************************/
+
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > >& GetAddonsToolBarPart() const;
 
         /*-****************************************************************************************************//**
             @short      Retrieve an image for a command URL which is defined inside the addon menu configuration

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathsettings.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-20 10:13:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,517 +59,678 @@
  *
  ************************************************************************/
 
-//_________________________________________________________________________________________________________________
-//  my own includes
-//_________________________________________________________________________________________________________________
+// ______________________________________________
+// my own includes
+
+/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
+               with solaris headers ...
+*/
+#include <vector>
 
 #ifndef __FRAMEWORK_SERVICES_PATHSETTINGS_HXX_
 #include <services/pathsettings.hxx>
 #endif
 
-#ifndef __FRAMEWORK_THREADHELP_RESETABLEGUARD_HXX_
-#include <threadhelp/resetableguard.hxx>
+#ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
+#include <threadhelp/readguard.hxx>
+#endif
+
+#ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
+#include <threadhelp/writeguard.hxx>
 #endif
 
 #ifndef __FRAMEWORK_SERVICES_H_
 #include <services.h>
 #endif
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
+// ______________________________________________
+// interface includes
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
-//_________________________________________________________________________________________________________________
-//  includes of other projects
-//_________________________________________________________________________________________________________________
-
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
-#include <cppuhelper/queryinterface.hxx>
-#endif
-
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-
-#ifndef _CPPUHELPER_FACTORY_HXX_
-#include <cppuhelper/factory.hxx>
-#endif
-
-#ifndef _CPPUHELPER_PROPTYPEHLP_HXX
-#include <cppuhelper/proptypehlp.hxx>
-#endif
-
-#ifndef _UTL_CONFIGITEM_HXX_
-#include <unotools/configitem.hxx>
-#endif
-
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-
-#ifndef _TOOLS_STRING_HXX
-#include <tools/string.hxx>
-#endif
+// ______________________________________________
+// includes of other projects
 
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
 
-#include <vector>
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
-//_________________________________________________________________________________________________________________
+// ______________________________________________
 //  non exported const
-//_________________________________________________________________________________________________________________
 
-// ascii strings of the properties
-#define STRING_ASCII_ADDIN              "Addin"
-#define STRING_ASCII_AUTOCORRECT        "AutoCorrect"
-#define STRING_ASCII_AUTOTEXT           "AutoText"
-#define STRING_ASCII_BACKUP             "Backup"
-#define STRING_ASCII_BASIC              "Basic"
-#define STRING_ASCII_BITMAP             "Bitmap"
-#define STRING_ASCII_CONFIG             "Config"
-#define STRING_ASCII_DICTIONARY         "Dictionary"
-#define STRING_ASCII_FAVORITES          "Favorite"
-#define STRING_ASCII_FILTER             "Filter"
-#define STRING_ASCII_GALLERY            "Gallery"
-#define STRING_ASCII_GRAPHIC            "Graphic"
-#define STRING_ASCII_HELP               "Help"
-#define STRING_ASCII_LINGUISTIC         "Linguistic"
-#define STRING_ASCII_MODULE             "Module"
-#define STRING_ASCII_PALETTE            "Palette"
-#define STRING_ASCII_PLUGIN             "Plugin"
-#define STRING_ASCII_STORAGE            "Storage"
-#define STRING_ASCII_TEMP               "Temp"
-#define STRING_ASCII_TEMPLATE           "Template"
-#define STRING_ASCII_UICONFIG           "UIConfig"
-#define STRING_ASCII_USERCONFIG         "UserConfig"
-#define STRING_ASCII_USERDICTIONARY     "UserDictionary"
-#define STRING_ASCII_WORK               "Work"
+#define CFG_READONLY_DEFAULT    sal_False
 
-// name of properties
-#define PROPERTYNAME_ADDIN                      DECLARE_ASCII(STRING_ASCII_ADDIN)
-#define PROPERTYNAME_AUTOCORRECT                DECLARE_ASCII(STRING_ASCII_AUTOCORRECT)
-#define PROPERTYNAME_AUTOTEXT                   DECLARE_ASCII(STRING_ASCII_AUTOTEXT)
-#define PROPERTYNAME_BACKUP                     DECLARE_ASCII(STRING_ASCII_BACKUP)
-#define PROPERTYNAME_BASIC                      DECLARE_ASCII(STRING_ASCII_BASIC)
-#define PROPERTYNAME_BITMAP                     DECLARE_ASCII(STRING_ASCII_BITMAP)
-#define PROPERTYNAME_CONFIG                     DECLARE_ASCII(STRING_ASCII_CONFIG)
-#define PROPERTYNAME_DICTIONARY                 DECLARE_ASCII(STRING_ASCII_DICTIONARY)
-#define PROPERTYNAME_FAVORITES                  DECLARE_ASCII(STRING_ASCII_FAVORITES)
-#define PROPERTYNAME_FILTER                     DECLARE_ASCII(STRING_ASCII_FILTER)
-#define PROPERTYNAME_GALLERY                    DECLARE_ASCII(STRING_ASCII_GALLERY)
-#define PROPERTYNAME_GRAPHIC                    DECLARE_ASCII(STRING_ASCII_GRAPHIC)
-#define PROPERTYNAME_HELP                       DECLARE_ASCII(STRING_ASCII_HELP)
-#define PROPERTYNAME_LINGUISTIC                 DECLARE_ASCII(STRING_ASCII_LINGUISTIC)
-#define PROPERTYNAME_MODULE                     DECLARE_ASCII(STRING_ASCII_MODULE)
-#define PROPERTYNAME_PALETTE                    DECLARE_ASCII(STRING_ASCII_PALETTE)
-#define PROPERTYNAME_PLUGIN                     DECLARE_ASCII(STRING_ASCII_PLUGIN)
-#define PROPERTYNAME_STORAGE                    DECLARE_ASCII(STRING_ASCII_STORAGE)
-#define PROPERTYNAME_TEMP                       DECLARE_ASCII(STRING_ASCII_TEMP)
-#define PROPERTYNAME_TEMPLATE                   DECLARE_ASCII(STRING_ASCII_TEMPLATE)
-#define PROPERTYNAME_UICONFIG                   DECLARE_ASCII(STRING_ASCII_UICONFIG)
-#define PROPERTYNAME_USERCONFIG                 DECLARE_ASCII(STRING_ASCII_USERCONFIG)
-#define PROPERTYNAME_USERDICTIONARY             DECLARE_ASCII(STRING_ASCII_USERDICTIONARY)
-#define PROPERTYNAME_WORK                       DECLARE_ASCII(STRING_ASCII_WORK)
-
-
-// handle of properties
-#define PROPERTYHANDLE_ADDIN                    PathSettingsData::PS_ADDINPATH
-#define PROPERTYHANDLE_AUTOCORRECT              PathSettingsData::PS_AUTOCORRECTPATH
-#define PROPERTYHANDLE_AUTOTEXT                 PathSettingsData::PS_AUTOTEXTPATH
-#define PROPERTYHANDLE_BACKUP                   PathSettingsData::PS_BACKUPPATH
-#define PROPERTYHANDLE_BASIC                    PathSettingsData::PS_BASICPATH
-#define PROPERTYHANDLE_BITMAP                   PathSettingsData::PS_BITMAPPATH
-#define PROPERTYHANDLE_CONFIG                   PathSettingsData::PS_CONFIGPATH
-#define PROPERTYHANDLE_DICTIONARY               PathSettingsData::PS_DICTIONARYPATH
-#define PROPERTYHANDLE_FAVORITES                PathSettingsData::PS_FAVORITESPATH
-#define PROPERTYHANDLE_FILTER                   PathSettingsData::PS_FILTERPATH
-#define PROPERTYHANDLE_GALLERY                  PathSettingsData::PS_GALLERYPATH
-#define PROPERTYHANDLE_GRAPHIC                  PathSettingsData::PS_GRAPHICPATH
-#define PROPERTYHANDLE_HELP                     PathSettingsData::PS_HELPPATH
-#define PROPERTYHANDLE_LINGUISTIC               PathSettingsData::PS_LINGUISTICPATH
-#define PROPERTYHANDLE_MODULE                   PathSettingsData::PS_MODULEPATH
-#define PROPERTYHANDLE_PALETTE                  PathSettingsData::PS_PALETTEPATH
-#define PROPERTYHANDLE_PLUGIN                   PathSettingsData::PS_PLUGINPATH
-#define PROPERTYHANDLE_STORAGE                  PathSettingsData::PS_STORAGEPATH
-#define PROPERTYHANDLE_TEMP                     PathSettingsData::PS_TEMPPATH
-#define PROPERTYHANDLE_TEMPLATE                 PathSettingsData::PS_TEMPLATEPATH
-#define PROPERTYHANDLE_UICONFIG                 PathSettingsData::PS_UICONFIGPATH
-#define PROPERTYHANDLE_USERCONFIG               PathSettingsData::PS_USERCONFIGPATH
-#define PROPERTYHANDLE_USERDICTIONARY           PathSettingsData::PS_USERDICTIONARYPATH
-#define PROPERTYHANDLE_WORK                     PathSettingsData::PS_WORKPATH
-
-// count of ALL properties
-#define PROPERTYCOUNT                           PathSettingsData::PS_COUNT
-
-using namespace com::sun::star::uno;
-using namespace com::sun::star::beans;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::util;
-
-//_________________________________________________________________________________________________________________
+// ______________________________________________
 //  namespace
-//_________________________________________________________________________________________________________________
 
 namespace framework
 {
 
-static const char* aPropNames[] =
+const ::rtl::OUString PathSettingsCfg::PropNames[] =
 {
-    STRING_ASCII_ADDIN,             // PS_ADDIN
-    STRING_ASCII_AUTOCORRECT,       // PS_AUTOCORRECT
-    STRING_ASCII_AUTOTEXT,          // PS_AUTOTEXT
-    STRING_ASCII_BACKUP,            // PS_BACKUP
-    STRING_ASCII_BASIC,             // PS_BASIC
-    STRING_ASCII_BITMAP,            // PS_BITMAP
-    STRING_ASCII_CONFIG,            // PS_CONFIG
-    STRING_ASCII_DICTIONARY,        // PS_DICTIONARY
-    STRING_ASCII_FAVORITES,         // PS_FAVORITES
-    STRING_ASCII_FILTER,            // PS_FILTER
-    STRING_ASCII_GALLERY,           // PS_GALLERY
-    STRING_ASCII_GRAPHIC,           // PS_GRAPHIC
-    STRING_ASCII_HELP,              // PS_HELP
-    STRING_ASCII_LINGUISTIC,        // PS_LINGUISTIC
-    STRING_ASCII_MODULE,            // PS_MODULE
-    STRING_ASCII_PALETTE,           // PS_PALETTE
-    STRING_ASCII_PLUGIN,            // PS_PLUGIN
-    STRING_ASCII_STORAGE,           // PS_STORAGE
-    STRING_ASCII_TEMP,              // PS_TEMP
-    STRING_ASCII_TEMPLATE,          // PS_TEMPLATE
-    STRING_ASCII_UICONFIG,          // PS_USERCONFIG
-    STRING_ASCII_USERCONFIG,        // PS_USERDICTIONARY
-    STRING_ASCII_USERDICTIONARY,    // PS_UICONFIG
-    STRING_ASCII_WORK               // PS_WORK
+    PATHSETTINGS_PROPNAME_ADDIN         ,
+    PATHSETTINGS_PROPNAME_AUTOCORRECT   ,
+    PATHSETTINGS_PROPNAME_AUTOTEXT      ,
+    PATHSETTINGS_PROPNAME_BACKUP        ,
+    PATHSETTINGS_PROPNAME_BASIC         ,
+    PATHSETTINGS_PROPNAME_BITMAP        ,
+    PATHSETTINGS_PROPNAME_CONFIG        ,
+    PATHSETTINGS_PROPNAME_DICTIONARY    ,
+    PATHSETTINGS_PROPNAME_FAVORITE      ,
+    PATHSETTINGS_PROPNAME_FILTER        ,
+    PATHSETTINGS_PROPNAME_GALLERY       ,
+    PATHSETTINGS_PROPNAME_GRAPHIC       ,
+    PATHSETTINGS_PROPNAME_HELP          ,
+    PATHSETTINGS_PROPNAME_LINGUISTIC    ,
+    PATHSETTINGS_PROPNAME_MODULE        ,
+    PATHSETTINGS_PROPNAME_PALETTE       ,
+    PATHSETTINGS_PROPNAME_PLUGIN        ,
+    PATHSETTINGS_PROPNAME_STORAGE       ,
+    PATHSETTINGS_PROPNAME_TEMP          ,
+    PATHSETTINGS_PROPNAME_TEMPLATE      ,
+    PATHSETTINGS_PROPNAME_UICONFIG      ,
+    PATHSETTINGS_PROPNAME_USERCONFIG    ,
+    PATHSETTINGS_PROPNAME_USERDICTIONARY,
+    PATHSETTINGS_PROPNAME_WORK
 };
 
-Sequence< rtl::OUString > GetPathPropertyNames()
+const css::beans::Property PathSettingsCfg::Properties[] =
 {
-    const int nCount = sizeof( aPropNames ) / sizeof( const char* );
-    Sequence< rtl::OUString > aNames( nCount );
-    rtl::OUString* pNames = aNames.getArray();
-    for ( int i = 0; i < nCount; i++ )
-        pNames[i] = rtl::OUString::createFromAscii( aPropNames[i] );
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_ADDIN],
+        PathSettingsCfg::E_ADDIN,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
 
-    return aNames;
-}
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_AUTOCORRECT],
+        PathSettingsCfg::E_AUTOCORRECT,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
 
-//_________________________________________________________________________________________________________________
-//  Implementation helper class
-//_________________________________________________________________________________________________________________
-//
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_AUTOTEXT],
+        PathSettingsCfg::E_AUTOTEXT,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
 
-void PathSettingsData::SetValue( PathSettingsId nId, rtl::OUString& aValue )
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_BACKUP],
+        PathSettingsCfg::E_BACKUP,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_BASIC],
+        PathSettingsCfg::E_BASIC,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_BITMAP],
+        PathSettingsCfg::E_BITMAP,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_CONFIG],
+        PathSettingsCfg::E_CONFIG,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_DICTIONARY],
+        PathSettingsCfg::E_DICTIONARY,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_FAVORITE],
+        PathSettingsCfg::E_FAVORITE,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_FILTER],
+        PathSettingsCfg::E_FILTER,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_GALLERY],
+        PathSettingsCfg::E_GALLERY,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_GRAPHIC],
+        PathSettingsCfg::E_GRAPHIC,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_HELP],
+        PathSettingsCfg::E_HELP,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_LINGUISTIC],
+        PathSettingsCfg::E_LINGUISTIC,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_MODULE],
+        PathSettingsCfg::E_MODULE,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_PALETTE],
+        PathSettingsCfg::E_PALETTE,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_PLUGIN],
+        PathSettingsCfg::E_PLUGIN,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_STORAGE],
+        PathSettingsCfg::E_STORAGE,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_TEMP],
+        PathSettingsCfg::E_TEMP,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_TEMPLATE],
+        PathSettingsCfg::E_TEMPLATE,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_UICONFIG],
+        PathSettingsCfg::E_UICONFIG,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_USERCONFIG],
+        PathSettingsCfg::E_USERCONFIG,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_USERDICTIONARY],
+        PathSettingsCfg::E_USERDICTIONARY,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND),
+
+    css::beans::Property(
+        PathSettingsCfg::PropNames[PathSettingsCfg::E_WORK],
+        PathSettingsCfg::E_WORK,
+        ::getCppuType((rtl::OUString*)NULL),
+        css::beans::PropertyAttribute::BOUND)
+};
+
+// ______________________________________________
+
+/** it fill this new cache instance and prepare all neccessary structures.
+    Note: It's very important for our work, that another helper service PathSubstitution could be created here.
+    It's needed later .. and without its work the pathes which are provided here will not valid.
+    That's why we throw a RuntimeException in case this service couldn't be created!
+ */
+
+PathSettingsCfg::PathSettingsCfg( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
+    :   ::utl::ConfigItem( DECLARE_ASCII("Office.Common/Path/Current") )
 {
-    switch ( nId )
+    // create the needed substitution service.
+    // We must replace all used variables inside readed path values.
+    // In case we can't do so ... the whole office can't work realy.
+    // That's why it seams to be OK to throw a RuntimeException then.
+    if (xSMGR.is())
     {
-        case PathSettingsData::PS_ADDINPATH:            m_aAddinPath = aValue;          break;
-        case PathSettingsData::PS_AUTOCORRECTPATH:      m_aAutoCorrectPath = aValue;    break;
-        case PathSettingsData::PS_AUTOTEXTPATH:         m_aAutoTextPath = aValue;       break;
-        case PathSettingsData::PS_BACKUPPATH:           m_aBackupPath = aValue;         break;
-        case PathSettingsData::PS_BASICPATH:            m_aBasicPath = aValue;          break;
-        case PathSettingsData::PS_BITMAPPATH:           m_aBitmapPath = aValue;         break;
-        case PathSettingsData::PS_CONFIGPATH:           m_aConfigPath = aValue;         break;
-        case PathSettingsData::PS_DICTIONARYPATH:       m_aDictionaryPath = aValue;     break;
-        case PathSettingsData::PS_FAVORITESPATH:        m_aFavoritesPath = aValue;      break;
-        case PathSettingsData::PS_FILTERPATH:           m_aFilterPath = aValue;         break;
-        case PathSettingsData::PS_GALLERYPATH:          m_aGalleryPath = aValue;        break;
-        case PathSettingsData::PS_GRAPHICPATH:          m_aGraphicPath = aValue;        break;
-        case PathSettingsData::PS_HELPPATH:             m_aHelpPath = aValue;           break;
-        case PathSettingsData::PS_LINGUISTICPATH:       m_aLinguisticPath = aValue;     break;
-        case PathSettingsData::PS_MODULEPATH:           m_aModulePath = aValue;         break;
-        case PathSettingsData::PS_PALETTEPATH:          m_aPalettePath = aValue;        break;
-        case PathSettingsData::PS_PLUGINPATH:           m_aPluginPath = aValue;         break;
-        case PathSettingsData::PS_STORAGEPATH:          m_aStoragePath = aValue;        break;
-        case PathSettingsData::PS_TEMPPATH:             m_aTempPath = aValue;           break;
-        case PathSettingsData::PS_TEMPLATEPATH:         m_aTemplatePath = aValue;       break;
-        case PathSettingsData::PS_USERCONFIGPATH:       m_aUserConfigPath = aValue;     break;
-        case PathSettingsData::PS_USERDICTIONARYPATH:   m_aUserDictionaryPath = aValue; break;
-        case PathSettingsData::PS_WORKPATH:             m_aWorkPath = aValue;           break;
-        case PathSettingsData::PS_UICONFIGPATH:         m_aUIConfigPath = aValue;       break;
-
-        default:
-            DBG_ERRORFILE( "invalid index to load a path" );
+        m_xSubstitution = css::uno::Reference< css::util::XStringSubstitution >(
+                            xSMGR->createInstance(SERVICENAME_SUBSTITUTEPATHVARIABLES),
+                            css::uno::UNO_QUERY);
     }
+    if (!m_xSubstitution.is())
+        throw css::uno::RuntimeException(DECLARE_ASCII("Could not create substitution service. Path settings will not work."),css::uno::Reference< css::uno::XInterface >());
+
+    // create mapping for path names to her ID's
+    // This hash content is fix and already defined by some fix arrays of the class PathSettingsCfg.
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_ADDIN         ]] = PathSettingsCfg::E_ADDIN         ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_AUTOCORRECT   ]] = PathSettingsCfg::E_AUTOCORRECT   ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_AUTOTEXT      ]] = PathSettingsCfg::E_AUTOTEXT      ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_BACKUP        ]] = PathSettingsCfg::E_BACKUP        ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_BASIC         ]] = PathSettingsCfg::E_BASIC         ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_BITMAP        ]] = PathSettingsCfg::E_BITMAP        ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_CONFIG        ]] = PathSettingsCfg::E_CONFIG        ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_DICTIONARY    ]] = PathSettingsCfg::E_DICTIONARY    ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_FAVORITE      ]] = PathSettingsCfg::E_FAVORITE      ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_FILTER        ]] = PathSettingsCfg::E_FILTER        ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_GALLERY       ]] = PathSettingsCfg::E_GALLERY       ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_GRAPHIC       ]] = PathSettingsCfg::E_GRAPHIC       ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_HELP          ]] = PathSettingsCfg::E_HELP          ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_LINGUISTIC    ]] = PathSettingsCfg::E_LINGUISTIC    ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_MODULE        ]] = PathSettingsCfg::E_MODULE        ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_PALETTE       ]] = PathSettingsCfg::E_PALETTE       ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_PLUGIN        ]] = PathSettingsCfg::E_PLUGIN        ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_STORAGE       ]] = PathSettingsCfg::E_STORAGE       ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_TEMP          ]] = PathSettingsCfg::E_TEMP          ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_TEMPLATE      ]] = PathSettingsCfg::E_TEMPLATE      ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_UICONFIG      ]] = PathSettingsCfg::E_UICONFIG      ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_USERCONFIG    ]] = PathSettingsCfg::E_USERCONFIG    ;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_USERDICTIONARY]] = PathSettingsCfg::E_USERDICTIONARY;
+    m_lIDMap[PathSettingsCfg::PropNames[PathSettingsCfg::E_WORK          ]] = PathSettingsCfg::E_WORK          ;
+
+    // use fix list of all needed path names to read her values from the configuration.
+    // Call impl_read() method mit optimization parameter "bSearchID=sal_False"!
+    // So hash map isn't used to map from given property name to the corresponding ID.
+    // It's not neccessary here. Because we have a fix list of names, which correspond
+    // directly to an ID by it's position inside the array ...
+    const css::uno::Sequence< ::rtl::OUString > lNames(PathSettingsCfg::PropNames,PATHSETTINGS_PROPCOUNT);
+    impl_read(lNames,sal_False);
 }
 
-const rtl::OUString& PathSettingsData::GetValue( PathSettingsId nId ) const
+// ______________________________________________
+
+/** nothing to do here ...
+    Because we are a write-through cache ... all items should be already saved.
+    But may it's better to check it for debug purposes.
+ */
+
+PathSettingsCfg::~PathSettingsCfg()
 {
-    switch ( nId )
+    LOG_ASSERT(!IsModified(), "PathSettingsCfg::~PathSettingsCfg()\nModified state of a write-through cache shouldn't be possible at the end of lifetime.\n")
+}
+
+// ______________________________________________
+
+/** There are some outside changed items, which should be updated inside this cache too.
+ */
+
+void PathSettingsCfg::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& lPropertyNames )
+{
+    // Attention: These list of pathes isn't well known nor fix. We can't use our optimization here,
+    // that the prop ID/Handle is the same as the current array position.
+    // That's why we must use our special hash for mapping path names to her corresponding ID.
+    // => second parameter bSearchID=sal_True must be used here
+    impl_read(lPropertyNames,sal_True);
+}
+
+// ______________________________________________
+
+/** return the current path value for this entry.
+ */
+
+::rtl::OUString PathSettingsCfg::getPath( EPropHandle nID ) const
+{
+    // SAFE {
+    ReadGuard aReadLock(m_aLock);
+    return m_lPathes[nID].sValue;
+}
+
+// ______________________________________________
+
+/** set he new path value for this entry.
+    But it's done only, if it will change realy.
+    And because this class is implemented as a write through cache,
+    this new value is written immediatly to the configuration.
+ */
+
+void PathSettingsCfg::setPath(       EPropHandle      nID    ,
+                               const ::rtl::OUString& sValue )
+{
+    // SAFE {
+    WriteGuard aWriteLock(m_aLock);
+
+    // has somthing changed?
+    if (m_lPathes[nID].sValue.equals(sValue))
+        return;
+
+    // is it readonly?
+    // It's an implementation error if this method is called for readonly properties!
+    // Our helper class OPropertySetHelper throws normaly a PropertyVetoExceptio, if somehwere
+    // tries to call setPropertyValue() for readonly properties.
+    if (m_lPathes[nID].bReadOnly)
     {
-        case PathSettingsData::PS_ADDINPATH:            return m_aAddinPath;
-        case PathSettingsData::PS_AUTOCORRECTPATH:      return m_aAutoCorrectPath;
-        case PathSettingsData::PS_AUTOTEXTPATH:         return m_aAutoTextPath;
-        case PathSettingsData::PS_BACKUPPATH:           return m_aBackupPath;
-        case PathSettingsData::PS_BASICPATH:            return m_aBasicPath;
-        case PathSettingsData::PS_BITMAPPATH:           return m_aBitmapPath;
-        case PathSettingsData::PS_CONFIGPATH:           return m_aConfigPath;
-        case PathSettingsData::PS_DICTIONARYPATH:       return m_aDictionaryPath;
-        case PathSettingsData::PS_FAVORITESPATH:        return m_aFavoritesPath;
-        case PathSettingsData::PS_FILTERPATH:           return m_aFilterPath;
-        case PathSettingsData::PS_GALLERYPATH:          return m_aGalleryPath;
-        case PathSettingsData::PS_GRAPHICPATH:          return m_aGraphicPath;
-        case PathSettingsData::PS_HELPPATH:             return m_aHelpPath;
-        case PathSettingsData::PS_LINGUISTICPATH:       return m_aLinguisticPath;
-        case PathSettingsData::PS_MODULEPATH:           return m_aModulePath;
-        case PathSettingsData::PS_PALETTEPATH:          return m_aPalettePath;
-        case PathSettingsData::PS_PLUGINPATH:           return m_aPluginPath;
-        case PathSettingsData::PS_STORAGEPATH:          return m_aStoragePath;
-        case PathSettingsData::PS_TEMPPATH:             return m_aTempPath;
-        case PathSettingsData::PS_TEMPLATEPATH:         return m_aTemplatePath;
-        case PathSettingsData::PS_USERCONFIGPATH:       return m_aUserConfigPath;
-        case PathSettingsData::PS_USERDICTIONARYPATH:   return m_aUserDictionaryPath;
-        case PathSettingsData::PS_WORKPATH:             return m_aWorkPath;
-        case PathSettingsData::PS_UICONFIGPATH:         return m_aUIConfigPath;
-
-        default:
-            DBG_ERRORFILE( "invalid index to load a path" );
-            return m_aEmptyStr;
+        LOG_WARNING("PathSettingsCfg::setPath()", "Unexpected set call for readonly path detected!")
+        return;
     }
-}
 
+    // take over the new value into our cache structures
+    m_lPathes[nID].sValue = sValue;
 
-PathSettings_Impl::PathSettings_Impl( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xSMgr, const Link& aNotifyLink ) :
-    utl::ConfigItem( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Path/Current" ))),
-    m_aListenerNotify( aNotifyLink ),
-    m_xFactory( xSMgr )
-{
-    m_xPathVariableSubstitution = Reference< XStringSubstitution >( m_xFactory->createInstance(
-        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSubstitution" ))), UNO_QUERY );
+    aWriteLock.unlock();
+    // } SAFE
 
-    // Create a hash map to have a quick way to find the handle of a property name!
-    for ( sal_Int32 n = 0; n < PROPERTYCOUNT; n++ )
-        m_aPropNameToHandleMap.insert( PropToHandleHashMap::value_type(
-            rtl::OUString::createFromAscii( aPropNames[n] ), (PathSettingsData::PathSettingsId)n ) );
-}
+    // update the configuration immediatly
+    sal_Bool bMultiPath = isMultiPath(nID);
 
-PathSettings_Impl::~PathSettings_Impl()
-{
-}
+    css::uno::Sequence< ::rtl::OUString > lNames  (1);
+    css::uno::Sequence< css::uno::Any >   lValues (1);
+    ::rtl::OUString*                      pNames  = lNames.getArray();
+    css::uno::Any*                        pValues = lValues.getArray();
+    ::rtl::OUString                       sReSubst;
 
-int PathSettings_Impl::GetHandleFromPropertyName( const rtl::OUString& aPropertyName )
-{
-
-    PropToHandleHashMap::const_iterator pIter = m_aPropNameToHandleMap.find( aPropertyName );
-    if ( pIter != m_aPropNameToHandleMap.end() )
-        return pIter->second;
+    // SAFE {
+    ReadGuard aReadLock(m_aLock);
+    if (bMultiPath)
+    {
+        css::uno::Sequence< ::rtl::OUString > lMulti;
+        sal_Int32 nToken = 0;
+        do
+        {
+            ::rtl::OUString sToken = m_lPathes[nID].sValue.getToken(0, ';', nToken);
+            if (sToken.getLength())
+            {
+                sReSubst = m_xSubstitution->reSubstituteVariables(sToken);
+                lMulti.realloc(lMulti.getLength()+1);
+                lMulti[lMulti.getLength()-1] = sReSubst;
+            }
+        }
+        while(nToken>=0);
+        pNames[0]    = m_lPathes[nID].sPath;
+        pValues[0] <<= lMulti;
+    }
     else
-        return -1;
-}
-
-sal_Bool PathSettings_Impl::ReadConfigurationData( PathSettingsData& rSettingsData, const Sequence< rtl::OUString >& aNames )
-{
-    Sequence< Any >         aValues     = GetProperties( aNames );
-    const rtl::OUString*    pNames      = aNames.getConstArray();
-    const Any*              pValues     = aValues.getConstArray();
-
-    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-    if ( aValues.getLength() == aNames.getLength() )
     {
-        rtl::OUString aTempStr, aFullPath;
-
-        for ( int n = 0; n < aNames.getLength(); n++ )
-        {
-            if ( pValues[n].hasValue() )
-            {
-                switch ( pValues[n].getValueTypeClass() )
-                {
-                    case ::com::sun::star::uno::TypeClass_STRING :
-                    {
-                        // single pathes
-                        if ( pValues[n] >>= aTempStr )
-                            aFullPath = m_xPathVariableSubstitution->substituteVariables( aTempStr, sal_False );
-                        else
-                        {
-                            DBG_ERRORFILE( "any operator >>= failed" );
-                        }
-                        break;
-                    }
-
-                    case ::com::sun::star::uno::TypeClass_SEQUENCE :
-                    {
-                        // multi pathes
-                        aFullPath = rtl::OUString();
-                        Sequence < rtl::OUString > aList;
-                        if ( pValues[n] >>= aList )
-                        {
-                            sal_Int32 nCount = aList.getLength();
-                            for ( sal_Int32 nPosition = 0; nPosition < nCount; ++nPosition )
-                            {
-                                aTempStr = m_xPathVariableSubstitution->substituteVariables( aList[ nPosition ], sal_False  );
-                                aFullPath += aTempStr;
-                                if ( nPosition < nCount-1 )
-                                    aFullPath += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(";") );
-                            }
-                        }
-                        else
-                        {
-                            DBG_ERROR( "Unknown property name used!!" );
-                        }
-                        break;
-                    }
-
-                    default:
-                    {
-                        DBG_ERROR( "Unknown property name used!!" );
-                    }
-                }
-
-                // Get property handle for the property name and set value
-                int nProp = GetHandleFromPropertyName( pNames[n] );
-                if ( nProp >= 0 )
-                    rSettingsData.SetValue( (PathSettingsData::PathSettingsId)nProp, aFullPath );
-                else
-                    DBG_ERROR( "Unknown property name used!!" );
-            }
-        }
+        pNames[0]    = m_lPathes[nID].sPath;
+        sReSubst     = m_xSubstitution->reSubstituteVariables(m_lPathes[nID].sValue);
+        pValues[0] <<= sReSubst;
     }
+    aReadLock.unlock();
+    // } SAFE
 
-    return sal_True;
+    PutProperties(lNames, lValues);
 }
 
-sal_Bool PathSettings_Impl::WriteConfigurationData( const PathSettingsData& rSettingsData, const Sequence< rtl::OUString >& aNames )
+// ______________________________________________
+
+/** return the readonly state of a path entry.
+ */
+
+sal_Bool PathSettingsCfg::isReadOnly( EPropHandle nID ) const
 {
-    rtl::OUString           aTempStr;
-    const rtl::OUString*    pNames  = aNames.getConstArray();
-    Sequence< Any >         aValues( aNames.getLength() );
-    Any*                    pValues = aValues.getArray();
-    const Type&             rType   = ::getBooleanCppuType();
+    // SAFE {
+    ReadGuard aReadLock(m_aLock);
+    return m_lPathes[nID].bReadOnly;
+}
 
-    for ( int n = 0; n < aNames.getLength(); n++ )
+// ______________________________________________
+
+/** return information about the path type of a path entry.
+    We know single and multi paths.
+ */
+
+sal_Bool PathSettingsCfg::isMultiPath( EPropHandle nID ) const
+{
+    // multi paths are fix be definition!
+    sal_Bool bKnownMulti = (nID == PathSettingsCfg::E_AUTOCORRECT||
+                            nID == PathSettingsCfg::E_AUTOTEXT   ||
+                            nID == PathSettingsCfg::E_BASIC      ||
+                            nID == PathSettingsCfg::E_GALLERY    ||
+                            nID == PathSettingsCfg::E_PLUGIN     ||
+                            nID == PathSettingsCfg::E_TEMPLATE   ||
+                            nID == PathSettingsCfg::E_UICONFIG   );
+    #ifdef ENABLE_ASSERTIONS
+        // But we detected it during reading from the configuration too.
+        // We should use this information to check if something was changed for this definition.
+        // May our method returns the wrong state then!
+        // SAFE {
+        ReadGuard aReadLock(m_aLock);
+        LOG_ASSERT(bKnownMulti==m_lPathes[nID].bMultiPath, "PathSettingsCfg::isMultiPath()\nThere seams to be a difference between known and detected multi pathes!\n")
+        aReadLock.unlock();
+        // } SAFE
+    #endif
+    return bKnownMulti;
+}
+
+// ______________________________________________
+
+/** return a descriptor for all supported properties.
+    Normaly this descriptor is fix. So you can use the static const value "Properties".
+    But the readonly state of a property must be detected during runtime.
+    So we must path this structure on demand.
+ */
+
+const css::uno::Sequence< css::beans::Property > PathSettingsCfg::getPropertyDescriptor() const
+{
+    sal_Int32                                  nCount = PATHSETTINGS_PROPCOUNT;
+    css::uno::Sequence< css::beans::Property > lDesc  (Properties,nCount);
+    css::beans::Property*                      pDesc  = lDesc.getArray();
+
+    // SAFE {
+    ReadGuard aReadLock(m_aLock);
+    for (sal_Int32 p=0; p<nCount; ++p)
     {
-        sal_Bool bList = sal_False;
-
-        // Get property handle for the property name
-        int nProp = GetHandleFromPropertyName( pNames[n] );
-        if ( nProp >= 0 )
-        {
-            switch ( nProp )
-            {
-                // multi pathes
-                case PathSettingsData::PS_AUTOCORRECTPATH:
-                case PathSettingsData::PS_AUTOTEXTPATH:
-                case PathSettingsData::PS_BASICPATH:
-                case PathSettingsData::PS_GALLERYPATH:
-                case PathSettingsData::PS_PLUGINPATH:
-                case PathSettingsData::PS_TEMPLATEPATH:
-                case PathSettingsData::PS_UICONFIGPATH:
-                    bList = sal_True;
-            }
-
-            aTempStr = rSettingsData.GetValue( (PathSettingsData::PathSettingsId)nProp );
-
-            if ( bList )
-            {
-                String aFullPath( aTempStr );
-                USHORT nCount = aFullPath.GetTokenCount(), nIdx = 0;
-                if ( nCount > 0  )
-                {
-                    sal_Int32 nPos = 0;
-                    Sequence < rtl::OUString > aList( nCount );
-                    while ( STRING_NOTFOUND != nIdx )
-                        aList[nPos++] = m_xPathVariableSubstitution->reSubstituteVariables( aFullPath.GetToken( 0, ';', nIdx ) );
-                    pValues[n] <<= aList;
-                }
-            }
-            else
-            {
-                pValues[n] <<= m_xPathVariableSubstitution->reSubstituteVariables( aTempStr );
-            }
-        }
+        if (m_lPathes[p].bReadOnly)
+            pDesc[p].Attributes |= css::beans::PropertyAttribute::READONLY;
         else
-        {
-            DBG_ERROR( "Unknown property name used!!" );
-            return sal_False;
-        }
+            pDesc[p].Attributes &= ~css::beans::PropertyAttribute::READONLY;
     }
-
-    PutProperties( aNames, aValues );
-    return sal_True;
+    aReadLock.unlock();
+    // } SAFE
+    return lDesc;
 }
 
-sal_Bool PathSettings_Impl::CheckPath( PathSettingsData::PathSettingsId nId, const rtl::OUString& aNewPathValue )
-{
-    // Check the new path value
-    sal_Bool bList      = sal_False;
-    sal_Bool bValueOk   = sal_False;
+// ______________________________________________
 
-    switch ( nId )
+/** return the corresponding property handle for the given property name.
+    We use an internal fix hash map to do so.
+    Attention: If you call this method e.g. with an unknown property name
+    the returned ID will be undefined! Please check the returned boolean
+    state of this method everytimes. Otherwhise we try to let it crash then :-)
+ */
+
+sal_Bool PathSettingsCfg::mapName2Handle( const ::rtl::OUString& sName ,
+                                                EPropHandle&     rID   ) const
+{
+    // SAFE {
+    ReadGuard aReadLock(m_aLock);
+    NameToHandleHash::const_iterator pIt      = m_lIDMap.find(sName);
+    sal_Bool                         bSuccess = (pIt!=m_lIDMap.end());
+    aReadLock.unlock();
+    // } SAFE
+
+    if (bSuccess)
+        rID = (EPropHandle)(pIt->second);
+    else
+        // let it crash :-) Better to find wrong using of this method!
+        rID = (EPropHandle)-1;
+    return bSuccess;
+}
+
+// ______________________________________________
+
+/** read the path values from the configuration.
+    The special parameter bSearchID enable/disable optional mapping of
+    property names to her property handle. As optimization it can be disabled
+    if the caller is hure, that the array index inside the parameter lNames
+    can be used as such handle without any check. That can be true for
+    sorted, fix and full filled lists of properties only! See struct PropNames/EPropHandle too!
+ */
+
+void PathSettingsCfg::impl_read( const css::uno::Sequence< ::rtl::OUString >& lNames    ,
+                                       sal_Bool                               bSearchID )
+{
+    sal_Int32                                   nCount    = lNames.getLength();
+    const css::uno::Sequence< css::uno::Any >   lValues   = ConfigItem::GetProperties(lNames);
+    const css::uno::Sequence< sal_Bool >        lROStates = ConfigItem::GetReadOnlyStates(lNames);
+    const ::rtl::OUString*                      pNames    = lNames.getConstArray();
+    const css::uno::Any*                        pValues   = lValues.getConstArray();
+    const sal_Bool*                             pROStates = lROStates.getConstArray();
+
+    // All getted list (names, values, readonly states) must work together.
+    // They must have the same size. Otherwhise combination of it can produce wrong results!
+    if ( lValues.getLength()!=lNames.getLength() || lROStates.getLength()!=lNames.getLength() )
     {
-        // multi pathes
-        case PathSettingsData::PS_AUTOCORRECTPATH:
-        case PathSettingsData::PS_AUTOTEXTPATH:
-        case PathSettingsData::PS_BASICPATH:
-        case PathSettingsData::PS_GALLERYPATH:
-        case PathSettingsData::PS_PLUGINPATH:
-        case PathSettingsData::PS_TEMPLATEPATH:
-        case PathSettingsData::PS_UICONFIGPATH:
-            bList = sal_True;
+        LOG_WARNING("PathSettingsCfg::impl_read()", "GetProperties() or GetReadOnlyStates does not return valid count of items.")
+        return;
     }
 
-    if ( bList )
+    for (sal_Int32 n=0; n<nCount; ++n)
     {
-        String aFullPath( aNewPathValue );
-        USHORT nCount = aFullPath.GetTokenCount(), nIdx = 0;
-        if ( nCount > 0  )
+        // Dont define these variables outside of this loop scope!
+        // Otherwhise you have to be shure that they will be reseted for every new loop ...
+        ::rtl::OUString sTempVal;
+        ::rtl::OUString sPathVal;
+        sal_Bool        bMulti  = sal_False;
+
+        if (!pValues[n].hasValue())
         {
-            bValueOk = sal_True;
-            while ( STRING_NOTFOUND != nIdx && bValueOk )
-                bValueOk = !( INetURLObject( aFullPath.GetToken( 0, ';', nIdx ) ).HasError() );
+            LOG_WARNING("PathSettingsCfg::impl_read()", "Missing a path value. Item will be ignored.")
+            continue;
         }
+
+        // get the path value
+        switch (pValues[n].getValueTypeClass())
+        {
+            // single pathes
+            case ::com::sun::star::uno::TypeClass_STRING :
+            {
+                if (!(pValues[n]>>=sTempVal))
+                {
+                    LOG_WARNING("PathSettingsCfg::impl_read()", "Could not unpack path value.")
+                    continue;
+                }
+
+                sPathVal = m_xSubstitution->substituteVariables(sTempVal,sal_False);
+                bMulti   = sal_False;
+                break;
+            }
+
+            // multi pathes
+            case ::com::sun::star::uno::TypeClass_SEQUENCE :
+            {
+                css::uno::Sequence< ::rtl::OUString > lMulti;
+                if (!(pValues[n]>>=lMulti))
+                {
+                    LOG_WARNING("PathSettingsCfg::impl_read()", "Could not unpack multi path value.")
+                    continue;
+                }
+
+                ::rtl::OUStringBuffer  sBuffer     (256);
+                const ::rtl::OUString* pMulti      = lMulti.getConstArray();
+                sal_Int32              nMultiCount = lMulti.getLength();
+                for (sal_Int32 m=0; m<nMultiCount; ++m)
+                {
+                    sTempVal = m_xSubstitution->substituteVariables(pMulti[m],sal_False);
+                    sBuffer.append(sTempVal);
+                    if (m<nMultiCount-1)
+                        sBuffer.appendAscii(";");
+                }
+                sPathVal = sBuffer.makeStringAndClear();
+                bMulti   = sal_True;
+                break;
+            }
+
+            // unknown!
+            default:
+            {
+                LOG_WARNING("PathSettingsCfg::impl_read()", "Unknown path type detected!")
+                continue;
+            }
+        }
+
+        // insert new value inside internal structures
+        EPropHandle nID = (EPropHandle)n;
+        if (bSearchID)
+        {
+            if (!mapName2Handle(pNames[n],nID))
+            {
+                LOG_WARNING("PathSettingsCfg::impl_read()", "Mapping from name to ID failed!")
+                continue;
+            }
+        }
+
+        m_lPathes[nID].sPath      = pNames[n];
+        m_lPathes[nID].sValue     = sPathVal;
+        m_lPathes[nID].bReadOnly  = pROStates[n];
+        m_lPathes[nID].bMultiPath = bMulti;
+    }
+}
+
+// ______________________________________________
+
+/** check if the given path value seams to be a valid URL or system path.
+ */
+
+sal_Bool PathSettingsCfg::isValidValue( const ::rtl::OUString& sValue     ,
+                                              sal_Bool         bMultiPath ) const
+{
+    sal_Bool bOk = sal_True;
+
+    if (bMultiPath)
+    {
+        sal_Int32 nToken = 0;
+        do
+        {
+            ::rtl::OUString sToken = sValue.getToken(0, ';', nToken);
+            if (sToken.getLength())
+                bOk = !INetURLObject(sToken).HasError();
+        }
+        while(nToken>=0 && bOk);
     }
     else
-        bValueOk = !( INetURLObject( aNewPathValue ).HasError() );
+    {
+        bOk = !INetURLObject(sValue).HasError();
+    }
 
-    return bValueOk;
+    return bOk;
 }
 
-// Checks if we have a valid URL otherwise it tries to substitute the value to support variables setting for a path setting!
-sal_Bool PathSettings_Impl::CheckAndReplaceNewPathValue( PathSettingsData::PathSettingsId nId, rtl::OUString& aNewPathValue )
+// ______________________________________________
+
+/** it checks the given path value and tries to correct it.
+    Correction can be done by substitution of variables.
+    May the user tried to set a value which includes such variables.
+ */
+
+sal_Bool PathSettingsCfg::checkAndSubstituteValue( ::rtl::OUString& sValue     ,
+                                                   sal_Bool         bMultiPath ) const
 {
-    sal_Bool bValueOk = CheckPath( nId, aNewPathValue );
+    sal_Bool bOk = isValidValue(sValue,bMultiPath);
 
-    if ( !bValueOk )
+    if (!bOk)
     {
-        rtl::OUString aResult;
-
-        // Support the usage of path variables set through setPropertyValue
         try
         {
-            aResult = m_xPathVariableSubstitution->substituteVariables( aNewPathValue, sal_True );
+            // SAFE {
+            ReadGuard aReadLock(m_aLock);
+            ::rtl::OUString sSubst = m_xSubstitution->substituteVariables(sValue,sal_True);
+            aReadLock.unlock();
+            // } SAFE
+            bOk = PathSettingsCfg::isValidValue(sSubst,bMultiPath);
+            if (bOk)
+                sValue = sSubst;
         }
-        catch( com::sun::star::container::NoSuchElementException& )
+        catch(const css::container::NoSuchElementException&)
         {
-            // Substitution doesn't work => don't try further and give up
-            bValueOk = sal_False;
-        }
-
-        if ( bValueOk )
-        {
-            bValueOk = CheckPath( nId, aResult );
-            if ( bValueOk )
-                aNewPathValue = aResult;
+            bOk = sal_False;
         }
     }
 
-    return bValueOk;
+    return bOk;
 }
 
-void PathSettings_Impl::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames )
-{
-    if ( m_aListenerNotify.IsSet() )
-        m_aListenerNotify.Call( this );
-}
-
-
-//_________________________________________________________________________________________________________________
-//  Implementation service class
-//_________________________________________________________________________________________________________________
-//
+// ______________________________________________
+// XInterface, XTypeProvider, XServiceInfo
 
 DEFINE_XINTERFACE_5                     (   PathSettings                                             ,
                                             OWeakObject                                              ,
@@ -625,23 +786,19 @@ DEFINE_INIT_SERVICE                     (   PathSettings,
 
     @onerror    We throw an ASSERT in debug version or do nothing in relaese version.
 *//*-*************************************************************************************************************/
-PathSettings::PathSettings( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
+PathSettings::PathSettings( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR )
         //  Init baseclasses first
         //  Attention: Don't change order of initialization!
         //      ThreadHelpBase is a struct with a lock as member. We can't use a lock as direct member!
         //      We must garant right initialization and a valid value of this to initialize other baseclasses!
-        :   ThreadHelpBase          (                                                                   )
+        :   PathSettingsCfg             ( xSMGR                                             )
         ,   ::cppu::OBroadcastHelperVar< ::cppu::OMultiTypeInterfaceContainerHelper, ::cppu::OMultiTypeInterfaceContainerHelper::keyType >           ( m_aLock.getShareableOslMutex()         )
-        ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this))             )
-        ,   ::cppu::OWeakObject     (                                                                   )
+        ,   ::cppu::OPropertySetHelper  ( *(static_cast< ::cppu::OBroadcastHelper* >(this)) )
+        ,   ::cppu::OWeakObject         (                                                   )
         // Init member
-        ,   m_xFactory              ( xFactory                                                          )
-        ,   m_aImpl                 ( xFactory, LINK( this, PathSettings, implts_ConfigurationNotify )  )
+        ,   m_xSMGR                     ( xSMGR                                             )
 {
-    // Read initialy the configuration data
-    m_aImpl.ReadConfigurationData( m_aPathSettingsData, GetPathPropertyNames() );
 }
-
 
 /*-************************************************************************************************************//**
     @short      standard destructor
@@ -688,66 +845,12 @@ sal_Bool SAL_CALL PathSettings::convertFastPropertyValue(   css::uno::Any&      
                                                             sal_Int32               nHandle         ,
                                                             const css::uno::Any&    aValue          ) throw( css::lang::IllegalArgumentException )
 {
-    //  Attention: Method "impl_tryToChangeProperty()" can throw the IllegalArgumentException for us !!!
-
-    //  Initialize state with FALSE !!!
-    //  (Handle can be invalid)
-    sal_Bool bReturn = sal_False;
-
-    switch( nHandle )
-    {
-        case PROPERTYHANDLE_ADDIN       :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aAddinPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_AUTOCORRECT :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aAutoCorrectPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_AUTOTEXT    :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aAutoTextPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_BACKUP      :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aBackupPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_BASIC       :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aBasicPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_BITMAP      :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aBitmapPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_CONFIG      :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aConfigPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_DICTIONARY  :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aDictionaryPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_FAVORITES   :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aFavoritesPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_FILTER      :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aFilterPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_GALLERY     :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aGalleryPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_GRAPHIC     :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aGraphicPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_HELP        :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aHelpPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_LINGUISTIC  :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aLinguisticPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_MODULE      :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aModulePath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_PALETTE     :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aPalettePath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_PLUGIN      :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aPluginPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_STORAGE     :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aStoragePath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_TEMP        :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aTempPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_TEMPLATE    :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aTemplatePath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_UICONFIG    :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aUIConfigPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_USERCONFIG  :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aUserConfigPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_USERDICTIONARY: bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aUserDictionaryPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-        case PROPERTYHANDLE_WORK        :   bReturn = impl_tryToChangeProperty( m_aPathSettingsData.m_aWorkPath, aValue, aOldValue, aConvertedValue );
-                                            break;
-    }
-
-    // Return state of operation.
-    return bReturn ;
+    EPropHandle nID = (EPropHandle)nHandle;
+    return PropHelper::willPropertyBeChanged(
+        css::uno::makeAny(getPath(nID)),
+        aValue,
+        aOldValue,
+        aConvertedValue);
 }
 
 /*-************************************************************************************************************//**
@@ -768,100 +871,31 @@ sal_Bool SAL_CALL PathSettings::convertFastPropertyValue(   css::uno::Any&      
 *//*-*************************************************************************************************************/
 void SAL_CALL PathSettings::setFastPropertyValue_NoBroadcast(   sal_Int32               nHandle ,
                                                                 const css::uno::Any&    aValue  )
-throw( css::uno::Exception )
+    throw( css::uno::Exception )
 {
-    sal_Bool        bValueValid = sal_False;
-    rtl::OUString   aPropertyName;
-    rtl::OUString   aNewValue;
+    EPropHandle     nID        = (EPropHandle)nHandle;
+    sal_Bool        bReadOnly  = isReadOnly(nID);
+    sal_Bool        bMultiPath = isMultiPath(nID);
+    ::rtl::OUString sValue     ;
 
-    // Check value before setting it
-    aValue >>= aNewValue;
-    if ( !m_aImpl.CheckAndReplaceNewPathValue( (PathSettingsData::PathSettingsId)nHandle, aNewValue ))
+    // Is this value a valid one?
+    if (
+        (!(aValue >>= sValue                       )) ||
+        !(checkAndSubstituteValue(sValue,bMultiPath))
+       )
     {
-        rtl::OUString aInvalidURL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "This is not a valid file URL: " )));
-        aInvalidURL += aNewValue;
-        throw css::lang::IllegalArgumentException( aInvalidURL, (cppu::OWeakObject *)this, 0 );
+        ::rtl::OUStringBuffer sBuffer(256);
+        sBuffer.appendAscii("\""                    );
+        sBuffer.append     (sValue                  );
+        sBuffer.appendAscii("\" is not a valid URL!");
+        throw css::lang::IllegalArgumentException(
+                sBuffer.makeStringAndClear(),
+                static_cast< cppu::OWeakObject *>(this),
+                0);
     }
 
-    switch( nHandle )
-    {
-        case PROPERTYHANDLE_ADDIN       :   m_aPathSettingsData.m_aAddinPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_ADDIN] );
-                                            break;
-        case PROPERTYHANDLE_AUTOCORRECT :   m_aPathSettingsData.m_aAutoCorrectPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_AUTOCORRECT] );
-                                            break;
-        case PROPERTYHANDLE_AUTOTEXT    :   m_aPathSettingsData.m_aAutoTextPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_AUTOTEXT] );
-                                            break;
-        case PROPERTYHANDLE_BACKUP      :   m_aPathSettingsData.m_aBackupPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_BACKUP] );
-                                            break;
-        case PROPERTYHANDLE_BASIC       :   m_aPathSettingsData.m_aBasicPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_BASIC] );
-                                            break;
-        case PROPERTYHANDLE_BITMAP      :   m_aPathSettingsData.m_aBitmapPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_BITMAP] );
-                                            break;
-        case PROPERTYHANDLE_CONFIG      :   m_aPathSettingsData.m_aConfigPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_CONFIG] );
-                                            break;
-        case PROPERTYHANDLE_DICTIONARY  :   m_aPathSettingsData.m_aDictionaryPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_DICTIONARY] );
-                                            break;
-        case PROPERTYHANDLE_FAVORITES   :   m_aPathSettingsData.m_aFavoritesPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_FAVORITES] );
-                                            break;
-        case PROPERTYHANDLE_FILTER      :   m_aPathSettingsData.m_aFilterPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_FILTER] );
-                                            break;
-        case PROPERTYHANDLE_GALLERY     :   m_aPathSettingsData.m_aGalleryPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_GALLERY] );
-                                            break;
-        case PROPERTYHANDLE_GRAPHIC     :   m_aPathSettingsData.m_aGraphicPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_GRAPHIC] );
-                                            break;
-        case PROPERTYHANDLE_HELP        :   m_aPathSettingsData.m_aHelpPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_HELP] );
-                                            break;
-        case PROPERTYHANDLE_LINGUISTIC  :   m_aPathSettingsData.m_aLinguisticPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_LINGUISTIC] );
-                                            break;
-        case PROPERTYHANDLE_MODULE      :   m_aPathSettingsData.m_aModulePath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_MODULE] );
-                                            break;
-        case PROPERTYHANDLE_PALETTE     :   m_aPathSettingsData.m_aPalettePath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_PALETTE] );
-                                            break;
-        case PROPERTYHANDLE_PLUGIN      :   m_aPathSettingsData.m_aPluginPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_PLUGIN] );
-                                            break;
-        case PROPERTYHANDLE_STORAGE     :   m_aPathSettingsData.m_aStoragePath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_STORAGE] );
-                                            break;
-        case PROPERTYHANDLE_TEMP        :   m_aPathSettingsData.m_aTempPath = aNewValue;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_TEMP] );
-                                            break;
-        case PROPERTYHANDLE_TEMPLATE    :   aValue >>= m_aPathSettingsData.m_aTemplatePath;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_TEMPLATE] );
-                                            break;
-        case PROPERTYHANDLE_UICONFIG    :   aValue >>= m_aPathSettingsData.m_aUIConfigPath;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_UICONFIG] );
-                                            break;
-        case PROPERTYHANDLE_USERCONFIG  :   aValue >>= m_aPathSettingsData.m_aUserConfigPath;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_USERCONFIG] );
-                                            break;
-        case PROPERTYHANDLE_USERDICTIONARY: aValue >>= m_aPathSettingsData.m_aUserDictionaryPath;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_USERDICTIONARY] );
-                                            break;
-        case PROPERTYHANDLE_WORK        :   aValue >>= m_aPathSettingsData.m_aWorkPath;
-                                            aPropertyName = rtl::OUString::createFromAscii( aPropNames[PROPERTYHANDLE_WORK] );
-                                            break;
-    }
-
-    Sequence< rtl::OUString > aProperties( 1 );
-    aProperties[0] = aPropertyName;
-    m_aImpl.WriteConfigurationData( m_aPathSettingsData, aProperties );
+    // update cache and config
+    setPath(nID, sValue);
 }
 
 /*-************************************************************************************************************//**
@@ -883,109 +917,8 @@ throw( css::uno::Exception )
 void SAL_CALL PathSettings::getFastPropertyValue(   css::uno::Any& aValue  ,
                                                     sal_Int32      nHandle ) const
 {
-    switch( nHandle )
-    {
-        case PROPERTYHANDLE_ADDIN       :   aValue <<= m_aPathSettingsData.m_aAddinPath;
-                                            break;
-        case PROPERTYHANDLE_AUTOCORRECT :   aValue <<= m_aPathSettingsData.m_aAutoCorrectPath;
-                                            break;
-        case PROPERTYHANDLE_AUTOTEXT    :   aValue <<= m_aPathSettingsData.m_aAutoTextPath;
-                                            break;
-        case PROPERTYHANDLE_BACKUP      :   aValue <<= m_aPathSettingsData.m_aBackupPath;
-                                            break;
-        case PROPERTYHANDLE_BASIC       :   aValue <<= m_aPathSettingsData.m_aBasicPath;
-                                            break;
-        case PROPERTYHANDLE_BITMAP      :   aValue <<= m_aPathSettingsData.m_aBitmapPath;
-                                            break;
-        case PROPERTYHANDLE_CONFIG      :   aValue <<= m_aPathSettingsData.m_aConfigPath;
-                                            break;
-        case PROPERTYHANDLE_DICTIONARY  :   aValue <<= m_aPathSettingsData.m_aDictionaryPath;
-                                            break;
-        case PROPERTYHANDLE_FAVORITES   :   aValue <<= m_aPathSettingsData.m_aFavoritesPath;
-                                            break;
-        case PROPERTYHANDLE_FILTER      :   aValue <<= m_aPathSettingsData.m_aFilterPath;
-                                            break;
-        case PROPERTYHANDLE_GALLERY     :   aValue <<= m_aPathSettingsData.m_aGalleryPath;
-                                            break;
-        case PROPERTYHANDLE_GRAPHIC     :   aValue <<= m_aPathSettingsData.m_aGraphicPath;
-                                            break;
-        case PROPERTYHANDLE_HELP        :   aValue <<= m_aPathSettingsData.m_aHelpPath;
-                                            break;
-        case PROPERTYHANDLE_LINGUISTIC  :   aValue <<= m_aPathSettingsData.m_aLinguisticPath;
-                                            break;
-        case PROPERTYHANDLE_MODULE      :   aValue <<= m_aPathSettingsData.m_aModulePath;
-                                            break;
-        case PROPERTYHANDLE_PALETTE     :   aValue <<= m_aPathSettingsData.m_aPalettePath;
-                                            break;
-        case PROPERTYHANDLE_PLUGIN      :   aValue <<= m_aPathSettingsData.m_aPluginPath;
-                                            break;
-        case PROPERTYHANDLE_STORAGE     :   aValue <<= m_aPathSettingsData.m_aStoragePath;
-                                            break;
-        case PROPERTYHANDLE_TEMP        :   aValue <<= m_aPathSettingsData.m_aTempPath;
-                                            break;
-        case PROPERTYHANDLE_TEMPLATE    :   aValue <<= m_aPathSettingsData.m_aTemplatePath;
-                                            break;
-        case PROPERTYHANDLE_UICONFIG    :   aValue <<= m_aPathSettingsData.m_aUIConfigPath;
-                                            break;
-        case PROPERTYHANDLE_USERCONFIG  :   aValue <<= m_aPathSettingsData.m_aUserConfigPath;
-                                            break;
-        case PROPERTYHANDLE_USERDICTIONARY: aValue <<= m_aPathSettingsData.m_aUserDictionaryPath;
-                                            break;
-        case PROPERTYHANDLE_WORK        :   aValue <<= m_aPathSettingsData.m_aWorkPath;
-                                            break;
-    }
-}
-
-/*-************************************************************************************************************//**
-    @short      test, if a property will change his value
-    @descr      These methods will test, if a property will change his current value, with given parameter.
-                We use a helperclass for properties. These class promote this behaviour.
-                We implement a helper function for every property-type!
-
-    @seealso    method convertFastPropertyValue()
-
-    @param      "...Property"       ,   the property with his current value
-    @param      "aNewValue"         ,   new value for property
-    @param      "aOldValue"         ,   old value of property as Any for convertFastPropertyValue
-    @param      "aConvertedValue"   ,   new value of property as Any for convertFastPropertyValue(it can be the old one, if nothing is changed!)
-    @return     sal_True  ,if value will be changed
-    @return     sal_FALSE ,otherwise.
-
-    @onerror    IllegalArgumentException, if convert failed.
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-sal_Bool PathSettings::impl_tryToChangeProperty(    rtl::OUString           sCurrentValue   ,
-                                                    const css::uno::Any&    aNewValue       ,
-                                                    css::uno::Any&          aOldValue       ,
-                                                    css::uno::Any&          aConvertedValue )
-throw( css::lang::IllegalArgumentException )
-{
-    // Set default return value if method failed.
-    sal_Bool bReturn = sal_False;
-    // Get new value from any.
-    // IllegalArgumentException() can be thrown!
-    rtl::OUString sValue ;
-    cppu::convertPropertyValue( sValue, aNewValue );
-
-    // If value change ...
-    if( sValue != sCurrentValue )
-    {
-        // ... set information of change.
-        aOldValue       <<= sCurrentValue   ;
-        aConvertedValue <<= sValue          ;
-        // Return OK - "value will be change ..."
-        bReturn = sal_True;
-    }
-    else
-    {
-        // ... clear information of return parameter!
-        aOldValue.clear         () ;
-        aConvertedValue.clear   () ;
-        // Return NOTHING - "value will not be change ..."
-        bReturn = sal_False;
-    }
-
-    return bReturn;
+    PathSettingsCfg::EPropHandle nID = (PathSettingsCfg::EPropHandle)nHandle;
+    aValue <<= getPath(nID);
 }
 
 /*-************************************************************************************************************//**
@@ -1020,9 +953,11 @@ throw( css::lang::IllegalArgumentException )
         if( pInfoHelper == NULL )
         {
             // Define static member to give structure of properties to baseclass "OPropertySetHelper".
-            // "impl_getStaticPropertyDescriptor" is a non exported and static funtion, who will define a static propertytable.
-            // "sal_True" say: Table is sorted by name.
-            static ::cppu::OPropertyArrayHelper aInfoHelper( impl_getStaticPropertyDescriptor(), sal_True );
+            // "getPropertyDescriptor" is a non exported function of our base class PathSettingsCfg
+            // which creates the right descriptor on demand and patch against some fix informations
+            // e.g. the readonly attribute!
+            // Last parameter set to "sal_True" indicates => table is sorted by name.
+            static ::cppu::OPropertyArrayHelper aInfoHelper(getPropertyDescriptor(), sal_True);
             pInfoHelper = &aInfoHelper;
         }
     }
@@ -1071,96 +1006,6 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL PathSettings::getPr
     }
 
     return (*pInfo);
-}
-
-/*-************************************************************************************************************//**
-    @short      create table with information about properties
-    @descr      We use a helper class to support properties. These class need some information about this.
-                These method create a new static description table with name, type, r/w-flags and so on ...
-
-    @seealso    class OPropertySetHelper
-    @seealso    method getInfoHelper()
-
-    @param      -
-    @return     Static table with information about properties.
-
-    @onerror    -
-    @threadsafe yes
-*//*-*************************************************************************************************************/
-const css::uno::Sequence< css::beans::Property > PathSettings::impl_getStaticPropertyDescriptor()
-{
-    // Create a new static property array to initialize sequence!
-    // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
-    // Don't forget to change the defines (see begin of this file), if you add, change or delete a property in this list!!!
-    // It's necessary for methods of OPropertySetHelper.
-    // ATTENTION:
-    //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
-    static const css::beans::Property pProperties[] =
-    {
-        css::beans::Property( PROPERTYNAME_ADDIN            , PROPERTYHANDLE_ADDIN              , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_AUTOCORRECT      , PROPERTYHANDLE_AUTOCORRECT        , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_AUTOTEXT         , PROPERTYHANDLE_AUTOTEXT           , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_BACKUP           , PROPERTYHANDLE_BACKUP             , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_BASIC            , PROPERTYHANDLE_BASIC              , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_BITMAP           , PROPERTYHANDLE_BITMAP             , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_CONFIG           , PROPERTYHANDLE_CONFIG             , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_DICTIONARY       , PROPERTYHANDLE_DICTIONARY         , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_FAVORITES        , PROPERTYHANDLE_FAVORITES          , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_FILTER           , PROPERTYHANDLE_FILTER             , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_GALLERY          , PROPERTYHANDLE_GALLERY            , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_GRAPHIC          , PROPERTYHANDLE_GRAPHIC            , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_HELP             , PROPERTYHANDLE_HELP               , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_LINGUISTIC       , PROPERTYHANDLE_LINGUISTIC         , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_MODULE           , PROPERTYHANDLE_MODULE             , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_PALETTE          , PROPERTYHANDLE_PALETTE            , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_PLUGIN           , PROPERTYHANDLE_PLUGIN             , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_STORAGE          , PROPERTYHANDLE_STORAGE            , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_TEMP             , PROPERTYHANDLE_TEMP               , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_TEMPLATE         , PROPERTYHANDLE_TEMPLATE           , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_UICONFIG         , PROPERTYHANDLE_UICONFIG           , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_USERCONFIG       , PROPERTYHANDLE_USERCONFIG         , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_USERDICTIONARY   , PROPERTYHANDLE_USERDICTIONARY     , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND ),
-        css::beans::Property( PROPERTYNAME_WORK             , PROPERTYHANDLE_WORK               , ::getCppuType((rtl::OUString*)NULL), css::beans::PropertyAttribute::BOUND )
-    };
-
-    // Use it to initialize sequence!
-    static const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, PROPERTYCOUNT );
-    // Return static "PropertyDescriptor"
-    return lPropertyDescriptor;
-}
-
-IMPL_LINK( PathSettings, implts_ConfigurationNotify, PathSettingsNotify*, pPathSettingsNotify )
-{
-    if ( pPathSettingsNotify != NULL )
-    {
-        Sequence< ::rtl::OUString >&    rSettingsChanged = pPathSettingsNotify->aPathSettingsChanged;
-        std::vector< int >              aHandleVector( rSettingsChanged.getLength() );
-        PathSettingsData                aNewPathSettings;
-
-        {
-            // Thread-safe reading from configuration
-            ResetableGuard aGuard( m_aLock );
-            m_aImpl.ReadConfigurationData( aNewPathSettings, rSettingsChanged );
-
-            const rtl::OUString* pNames = rSettingsChanged.getConstArray();
-            for ( sal_Int32 i = 0; i < rSettingsChanged.getLength(); i++ )
-            {
-                int nHandle = m_aImpl.GetHandleFromPropertyName( pNames[i] );
-                if ( nHandle >= 0 )
-                    aHandleVector.push_back( nHandle );
-            }
-        }
-
-        // Set the values through our API implementation to have automically listener notifications
-        for ( sal_uInt32 i = 0; i < aHandleVector.size(); i++ )
-        {
-            Any aAny;
-            aAny <<= aNewPathSettings.GetValue( (PathSettingsData::PathSettingsId)aHandleVector[i] );
-            setPropertyValue( rtl::OUString::createFromAscii( aPropNames[ aHandleVector[i] ]), aAny );
-        }
-    }
-
-    return 0;
 }
 
 } // namespace framework

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2002-04-24 09:50:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,7 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
-#include <string>       // prevent clash between STLport 3.2.1 and C50 compiler includes
 #include <algorithm>
-#include <time.h>
 
 #ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
 #include <helper/statusindicatorfactory.hxx>
@@ -135,6 +132,7 @@
 #include <rtl/logfile.hxx>
 #endif
 
+#include <time.h>
 //_________________________________________________________________________________________________________________
 //  namespace
 //_________________________________________________________________________________________________________________
@@ -185,32 +183,28 @@ DEFINE_XINTERFACE_3     (   StatusIndicatorFactory                              
                 Calling of interface methods will throw an UninitializedException then!
     @threadsafe yes
 *//*-*************************************************************************************************************/
-StatusIndicatorFactory::StatusIndicatorFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >&  xFactory      ,
-                                                const css::uno::Reference< css::frame::XFrame >&               xOwner        ,
-                                                const css::uno::Reference< css::awt::XWindow >&                xParentWindow )
+StatusIndicatorFactory::StatusIndicatorFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory      ,
+                                                const css::uno::Reference< css::awt::XWindow >&               xParentWindow ,
+                                                      sal_Bool                                                bShowStatusBar)
         //  Init baseclasses first
         :   ThreadHelpBase      ( &Application::GetSolarMutex() )
         ,   TransactionBase     (                               )
         ,   ::cppu::OWeakObject (                               )
         // Init member
         ,   m_xFactory          ( xFactory                      )
-        ,   m_xOwner            ( xOwner                        )
         ,   m_xParentWindow     ( xParentWindow                 )
-        ,   m_pStatusBar (NULL)
+        ,   m_pStatusBar        ( NULL                          )
+        ,   m_bProgressMode     ( sal_False                     )
 {
-    // Safe impossible cases
-    LOG_ASSERT2( implcp_StatusIndicatorFactory( xFactory, xOwner, xParentWindow ), "StatusIndicatorFactory::StatusIndicatorFactory()", "Invalid parameter detected!" )
-
     try
     {
         m_xParentWindow->addWindowListener( this );
 
-        // We must be listener for disposing of our owner frame too.
-        // We must die, if he die!
-        m_xOwner->addEventListener( this );
-
         // Don't forget to open instance for normal working!
         m_aTransactionManager.setWorkingMode( E_WORK );
+
+        if (bShowStatusBar)
+            impl_createStatusBar();
     }
     catch( css::uno::RuntimeException& )
     {
@@ -368,14 +362,8 @@ void SAL_CALL StatusIndicatorFactory::disposing( const css::lang::EventObject& a
 
     try
     {
-        // Stop listening on parent window and owner first.
-        m_xParentWindow->removeWindowListener( this );
-        m_xOwner->removeEventListener        ( this );
-
-
         // Let owner, parent and all other references die ...
         m_xParentWindow     = css::uno::Reference< css::awt::XWindow >();
-        m_xOwner            = css::uno::Reference< css::frame::XFrame >();
         m_xFactory          = css::uno::Reference< css::lang::XMultiServiceFactory >();
         m_xActiveIndicator  = css::uno::Reference< css::task::XStatusIndicator >();
 
@@ -383,6 +371,12 @@ void SAL_CALL StatusIndicatorFactory::disposing( const css::lang::EventObject& a
         // We mustn't dispose these objects! The hold weak references to us ...
         // and if these references are not valid ... they will die automaticly.
         m_aStack.clear();
+
+        if (m_pStatusBar)
+        {
+            delete m_pStatusBar;
+            m_pStatusBar = NULL;
+        }
 
         // Mark object as dead!
         m_aTransactionManager.setWorkingMode( E_CLOSE );
@@ -456,27 +450,16 @@ void StatusIndicatorFactory::start( const css::uno::Reference< css::task::XStatu
         vos::OGuard aGuard( Application::GetSolarMutex() );
 
         // Create status indicator window to shared it for all created indictaor objects by this factory.
-        sal_Bool bNew = sal_False;
-        if( m_pStatusBar == NULL )
-        {
-            m_pStatusBar = new StatusBar( VCLUnoHelper::GetWindow( m_xParentWindow ), WB_3DLOOK|WB_BORDER );
-            bNew = sal_True;
-        }
+        if(!m_pStatusBar)
+            impl_createStatusBar();
 
-        // force repaint!
-        Window* pParentWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
-        if ( pParentWindow )
-        {
-            pParentWindow->Invalidate( INVALIDATE_CHILDREN );
-            pParentWindow->Flush();
-        }
-
-        if(bNew)
+        if(!m_bProgressMode)
         {
             m_xParentWindow->setVisible( sal_True );
             implts_recalcLayout();
             m_pStatusBar->Show();
             m_pStatusBar->StartProgressMode( sText );
+            m_bProgressMode = sal_True;
         }
 
         m_nStartTime = impl_get10ThSec();
@@ -487,6 +470,34 @@ void StatusIndicatorFactory::start( const css::uno::Reference< css::task::XStatu
 
     aLock.unlock();
     impl_reschedule();
+}
+
+void StatusIndicatorFactory::impl_createStatusBar()
+{
+    /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    // Register transaction and reject wrong calls.
+    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ResetableGuard aLock( m_aLock );
+
+    Window* pParentWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
+    if ( pParentWindow )
+    {
+        /* SOLAR SAFE { */
+        ::vos::OClearableGuard aSolarLock(Application::GetSolarMutex());
+        m_pStatusBar = new StatusBar( pParentWindow, WB_3DLOOK|WB_BORDER );
+        implts_recalcLayout();
+        m_pStatusBar->Show();
+        // force repaint!
+        pParentWindow->Show();
+        pParentWindow->Invalidate( INVALIDATE_CHILDREN );
+        pParentWindow->Flush();
+        aSolarLock.clear();
+        /* } SOLAR SAFE */
+    }
+
+    aLock.unlock();
 }
 
 /*-************************************************************************************************************//**
@@ -548,6 +559,8 @@ void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusI
                 m_pStatusBar = NULL;
 
                 m_xActiveIndicator = css::uno::Reference< css::task::XStatusIndicator >();
+
+                m_bProgressMode = sal_False;
             }
         }
         catch( css::uno::RuntimeException& )
@@ -771,67 +784,5 @@ void StatusIndicatorFactory::implts_recalcLayout()
     {
     }
 }
-
-//_________________________________________________________________________________________________________________
-//  debug methods
-//_________________________________________________________________________________________________________________
-
-/*-************************************************************************************************************//**
-    @short      debug-method to check incoming parameter of some other mehods of this class
-    @descr      The following methods are used to check parameters for other methods
-                of this class. The return value is used directly for an ASSERT(...).
-
-    @seealso    ASSERTs in implementation!
-
-    @param      references to checking variables
-    @return     sal_False ,on invalid parameter
-    @return     sal_True  ,otherwise
-
-    @onerror    We return sal_False.
-*//*-*************************************************************************************************************/
-#ifdef ENABLE_ASSERTIONS
-
-//*****************************************************************************************************************
-// We need a valid servicemanager (xFactory) to create our shared indicator object and a parent window to initialize the indicator peer!
-// The owner is used to get informations about disposing of it. We must die then too!
-sal_Bool StatusIndicatorFactory::implcp_StatusIndicatorFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >&  xFactory      ,
-                                                                const css::uno::Reference< css::frame::XFrame >&               xOwner        ,
-                                                                const css::uno::Reference< css::awt::XWindow >&                xParentWindow )
-{
-    return(
-            ( &xFactory          ==  NULL        )   ||
-            ( &xOwner            ==  NULL        )   ||
-            ( &xParentWindow     ==  NULL        )   ||
-            ( xFactory.is()      ==  sal_False   )   ||
-            ( xOwner.is()        ==  sal_False   )   ||
-            ( xParentWindow.is() ==  sal_False   )
-          );
-}
-
-//*****************************************************************************************************************
-// We can test for null pointer only. I can't say if an integer of 0 is valid or not ...
-sal_Bool StatusIndicatorFactory::implcp_windowResized( const css::awt::WindowEvent& aEvent )
-{
-    return( &aEvent == NULL );
-}
-
-//*****************************************************************************************************************
-// We can test for null pointer only. I can't say if an integer of 0 is valid or not ...
-sal_Bool StatusIndicatorFactory::implcp_windowMoved( const css::awt::WindowEvent& aEvent )
-{
-    return( &aEvent == NULL );
-}
-
-//*****************************************************************************************************************
-// We check for null pointer and look for a valid source of this event. We will know who send us these message!
-sal_Bool StatusIndicatorFactory::implcp_disposing( const css::lang::EventObject& aEvent )
-{
-    return(
-            (   &aEvent             ==  NULL        )   ||
-            (   aEvent.Source.is()  ==  sal_False   )
-          );
-}
-
-#endif  //  #ifdef ENABLE_ASSERTIONS
 
 }       //  namespace framework

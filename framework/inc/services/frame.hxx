@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-07 10:19:26 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,10 +136,6 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHRECORDERSUPPLIER_HPP_
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
-#endif
-
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
-#include <drafts/com/sun/star/frame/XDispatchInformationProvider.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
@@ -298,7 +294,6 @@ class Frame :   // interfaces
                 public  css::lang::XServiceInfo                     ,
                 public  css::frame::XFramesSupplier                 ,   // => XFrame => XComponent
                 public  css::frame::XDispatchProvider               ,
-                public  dcss::frame::XDispatchInformationProvider   ,
                 public  css::frame::XDispatchProviderInterception   ,
                 public  css::task::XStatusIndicatorFactory          ,
                 public  css::awt::XWindowListener                   ,   // => XEventListener
@@ -409,7 +404,7 @@ class Frame :   // interfaces
         virtual void                                                SAL_CALL windowResized                      (   const   css::awt::WindowEvent&                                              aEvent              ) throw( css::uno::RuntimeException );
         virtual void                                                SAL_CALL windowMoved                        (   const   css::awt::WindowEvent&                                              aEvent              ) throw( css::uno::RuntimeException ) {};
         virtual void                                                SAL_CALL windowShown                        (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
-        virtual void                                                SAL_CALL windowHidden                       (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException ) {};
+        virtual void                                                SAL_CALL windowHidden                       (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XFocusListener
@@ -434,14 +429,6 @@ class Frame :   // interfaces
         //  XEventListener
         //---------------------------------------------------------------------------------------------------------
         virtual void                                                SAL_CALL disposing                          (   const   css::lang::EventObject&                                             aEvent              ) throw( css::uno::RuntimeException );
-
-        //---------------------------------------------------------------------------------------------------------
-        //  XDispatchInformationProvider
-        //---------------------------------------------------------------------------------------------------------
-        virtual ::rtl::OUString                                       SAL_CALL queryDescription                  ( const ::rtl::OUString&                       sURL          ) throw( css::uno::RuntimeException );
-        virtual void                                                  SAL_CALL queryDescriptions                 ( const css::uno::Sequence< ::rtl::OUString >& lURLs         ,
-                                                                                                                         css::uno::Sequence< ::rtl::OUString >& lDescriptions ) throw( css::uno::RuntimeException );
-        virtual css::uno::Sequence< dcss::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(                                                            ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XActionLockable
@@ -510,18 +497,11 @@ class Frame :   // interfaces
         DECL_LINK( implts_windowClosing, void* );
 
         // non threadsafe
-        void                                                    CheckMenuCloser_Impl();
+        void                                                    impl_checkMenuCloser            (                                                                        );
+        void                                                    impl_setCloser                  ( const css::uno::Reference< css::frame::XFrame >&      xFrame           ,
+                                                                                                        sal_Bool                                        bState           );
         void                                                    impl_disposeContainerWindow     (       css::uno::Reference< css::awt::XWindow >&       xWindow          );
-        sal_Bool                                                impl_tryToChangeProperty        ( const ::rtl::OUString&                                sProperty        ,
-                                                                                                  const css::uno::Any&                                  aValue           ,
-                                                                                                        css::uno::Any&                                  aOldValue        ,
-                                                                                                        css::uno::Any&                                  aConvertedValue  ) throw( css::lang::IllegalArgumentException );
-        sal_Bool                                                impl_tryToChangeProperty        ( const css::uno::Reference< css::frame::XDispatchRecorderSupplier >& xProperty        ,
-                                                                                                  const css::uno::Any&                                                aValue           ,
-                                                                                                        css::uno::Any&                                                aOldValue        ,
-                                                                                                        css::uno::Any&                                                aConvertedValue  ) throw( css::lang::IllegalArgumentException );
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor(                                                                        );
-        static void                                             impl_filterSpecialTargets       (       ::rtl::OUString&                                sTarget          );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
@@ -596,6 +576,9 @@ class Frame :   // interfaces
         SvtCommandOptions                                                       m_aCommandOptions                   ;   /// ref counted class to support disabling commands defined by configuration file
         sal_Bool                                                                m_bSelfClose                        ;   /// in case of CloseVetoException on method close() wqs thrown by ourself - we must close ourself later if no internal processes are running
         ::vcl::EventPoster                                                      m_aPoster                           ;
+        sal_Bool                                                                m_bIsHidden                         ;   /// indicates, if this frame is used in hidden mode or not
+        static css::uno::WeakReference< css::frame::XFrame >                    m_xCloserFrame                      ;   /// holds the only frame, which must show the special closer menu item (can be NULL!)
+        sal_Bool                                                                m_bIsBackingMode                    ;   /// indicates, that the current component must be the backing component (will be set from outside and reseted inside setComponent() hardly!)
 
     protected:
 

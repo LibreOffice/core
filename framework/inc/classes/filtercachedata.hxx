@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:38:42 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,13 @@
 #ifndef __FRAMEWORK_CLASSES_FILTERCACHEDATA_HXX_
 #define __FRAMEWORK_CLASSES_FILTERCACHEDATA_HXX_
 
+/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
+               with solaris headers ...
+*/
+#include <hash_map>
+#include <vector>
+#include <iterator>
+
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
@@ -114,18 +121,6 @@
 
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-
-#ifndef __SGI_STL_HASH_MAP
-#include <hash_map>
-#endif
-
-#ifndef __SGI_STL_VECTOR
-#include <vector>
-#endif
-
-#ifndef __SGI_STL_ITERATOR
-#include <iterator>
 #endif
 
 //_________________________________________________________________________________________________________________

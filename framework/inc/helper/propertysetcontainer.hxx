@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertysetcontainer.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-04 07:41:59 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,11 @@
 #ifndef __FRAMEWORK_HELPER_PROPERTYSETCONTAINER_HXX_
 #define __FRAMEWORK_HELPER_PROPERTYSETCONTAINER_HXX_
 
+/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
+               with solaris headers ...
+*/
+#include <vector>
+
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -81,8 +86,6 @@
 #ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
 #endif
-
-#include <vector>
 
 namespace framework
 {

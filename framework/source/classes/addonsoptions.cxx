@@ -2,9 +2,8 @@
  *
  *  $RCSfile: addonsoptions.cxx,v $
  *
- *  $Revision: 1.1 $
- *
- *  last change: $Author: cd $ $Date: 2002-10-11 14:22:13 $
+ *  $Revision: 1.2 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +129,7 @@ using namespace ::com::sun::star::beans ;
 
 #define PROPERTYNAME_SUBMENU                            ADDONSMENUITEM_PROPERTYNAME_SUBMENU
 #define PROPERTYNAME_COMPONENTID                        ADDONSMENUITEM_PROPERTYNAME_COMPONENTID
+#define PROPERTYNAME_CONTEXT                            ADDONSMENUITEM_PROPERTYNAME_CONTEXT
 
 #define PROPERTYNAME_IMAGESMALL                         OUString(RTL_CONSTASCII_USTRINGPARAM("ImageSmall" ))
 #define PROPERTYNAME_IMAGEBIG                           OUString(RTL_CONSTASCII_USTRINGPARAM("ImageBig" ))
@@ -139,6 +139,7 @@ using namespace ::com::sun::star::beans ;
 #define IMAGES_NODENAME                                 OUString(RTL_CONSTASCII_USTRINGPARAM("Images" ))
 
 #define PROPERTYCOUNT_ROOT                              6   // Used for C++ interface
+#define PROPERTYCOUNT_UI_ROOT                           7
 #define PROPERTYCOUNT                                   5
 #define CFG_PROPERTYCOUNT                               4
 #define PROPERTYIMAGES_COUNT                            4
@@ -149,6 +150,15 @@ using namespace ::com::sun::star::beans ;
 #define OFFSET_IMAGEIDENTIFIER                          3
 #define OFFSET_SUBMENU                                  4
 #define OFFSET_COMPONENTID                              5
+
+#define CFG_UITYPE_PROPERTYCOUNT                        5
+#define OFFSET_UITYPE_TITLE                             0
+#define OFFSET_UITYPE_TARGET                            1
+#define OFFSET_UITYPE_IMAGEIDENTIFIER                   2
+#define OFFSET_UITYPE_CONTEXT                           3
+#define OFFSET_UITYPE_SUBMENU                           4
+#define OFFSET_UITYPE_COMPONENTID                       5
+#define OFFSET_UITYPE_URL                               6
 
 #define OFFSET_IMAGESMALL                               0
 #define OFFSET_IMAGEBIG                                 1
@@ -180,7 +190,7 @@ struct AddonMenuEntry
                          const OUString&        sNewTitle           ,
                          const OUString&        sNewImageIdentifier ,
                          const OUString&        sNewTarget          ,
-                         const AddonSubMenu& aNewSubMenu                ) :
+                         const AddonSubMenu&    aNewSubMenu             ) :
             sURL( sNewURL ),
             sTitle( sNewTitle ),
             sImageIdentifier( sNewImageIdentifier ),
@@ -213,12 +223,14 @@ struct AddonMenuRootEntry
                              const OUString&        sNewTitle           ,
                              const OUString&        sNewTarget          ,
                              const OUString&        sNewImageIdentifier ,
-                             const AddonSubMenu& aNewSubMenu                ) :
+                             const OUString&        sNewContext         ,
+                             const AddonSubMenu&    aNewSubMenu             ) :
             sName( sNewComponentID ),
             sURL( sNewURL ),
             sTitle( sNewTitle ),
             sImageIdentifier( sNewImageIdentifier ),
             sTarget( sNewTarget ),
+            sContext( sNewContext ),
             aSubMenu( aNewSubMenu )
         {
         }
@@ -229,6 +241,7 @@ struct AddonMenuRootEntry
         OUString        sTitle              ;
         OUString        sTarget             ;
         OUString        sImageIdentifier    ;
+        OUString        sContext            ;
         AddonSubMenu    aSubMenu            ;
 };
 
@@ -304,6 +317,16 @@ class SvAddonMenu
         //           special strings "sEmpty" and "sSeperator" to perform too ...
         Sequence< Sequence< PropertyValue > > GetSubMenuList( const AddonSubMenu& rSubMenu ) const;
 
+        //---------------------------------------------------------------------------------------------------------
+        // convert internal menu bar list to external format
+        // for using it on right menus realy
+        // Notice:   We build a property list with 4 entries and set it on result list then.
+        //           The while-loop starts with pointer on internal member list lSetupEntries, change to
+        //           lUserEntries then and stop after that with NULL!
+        //           Separator entries will be packed in another way then normal entries! We define
+        //           special strings "sEmpty" and "sSeperator" to perform too ...
+        Sequence< Sequence< PropertyValue > > SvAddonMenu::GetMenuBarList() const;
+
     private:
         //---------------------------------------------------------------------------------------------------------
         // search for an entry named "ux" with x=[0..i] inside our menu
@@ -330,17 +353,17 @@ class SvAddonMenu
 
 Sequence< Sequence< PropertyValue > > SvAddonMenu::GetList() const
 {
-    sal_Int32                               nCount  = (sal_Int32)aAddonsMenuList.size();
+    sal_Int32                               nCount      = (sal_Int32)aAddonsMenuList.size();
     sal_Int32                               nStep       = 0;
     Sequence< PropertyValue >               lRootProperties ( PROPERTYCOUNT_ROOT );
     Sequence< Sequence< PropertyValue > >   lResult     ( nCount );
-    const vector< AddonMenuRootEntry >*  pList       = &aAddonsMenuList;
+    const vector< AddonMenuRootEntry >*     pList       = &aAddonsMenuList;
 
     // Root menu item properites
     lRootProperties[OFFSET_URL              ].Name = PROPERTYNAME_URL               ;
     lRootProperties[OFFSET_TITLE            ].Name = PROPERTYNAME_TITLE             ;
     lRootProperties[OFFSET_IMAGEIDENTIFIER  ].Name = PROPERTYNAME_IMAGEIDENTIFIER   ;
-    lRootProperties[OFFSET_IMAGEIDENTIFIER  ].Name = PROPERTYNAME_TARGET            ;
+    lRootProperties[OFFSET_TARGET           ].Name = PROPERTYNAME_TARGET            ;
     lRootProperties[OFFSET_SUBMENU          ].Name = PROPERTYNAME_SUBMENU           ;
     lRootProperties[OFFSET_COMPONENTID      ].Name = PROPERTYNAME_COMPONENTID       ;
 
@@ -359,6 +382,46 @@ Sequence< Sequence< PropertyValue > > SvAddonMenu::GetList() const
         else
             lRootProperties[OFFSET_SUBMENU].Value <<= Sequence< Sequence< PropertyValue > >();
         lRootProperties[OFFSET_COMPONENTID      ].Value <<= pItem->sName            ;
+
+        lResult[nStep++] = lRootProperties;
+    }
+
+    return lResult;
+}
+
+Sequence< Sequence< PropertyValue > > SvAddonMenu::GetMenuBarList() const
+{
+    sal_Int32                               nCount      = (sal_Int32)aAddonsMenuList.size();
+    sal_Int32                               nStep       = 0;
+    Sequence< PropertyValue >               lRootProperties ( PROPERTYCOUNT_UI_ROOT );
+    Sequence< Sequence< PropertyValue > >   lResult     ( nCount );
+    const vector< AddonMenuRootEntry >*     pList       = &aAddonsMenuList;
+
+    // Root menu bar item properites
+    lRootProperties[OFFSET_UITYPE_URL               ].Name = PROPERTYNAME_URL               ;
+    lRootProperties[OFFSET_UITYPE_TITLE             ].Name = PROPERTYNAME_TITLE             ;
+    lRootProperties[OFFSET_UITYPE_IMAGEIDENTIFIER   ].Name = PROPERTYNAME_IMAGEIDENTIFIER   ;
+    lRootProperties[OFFSET_UITYPE_IMAGEIDENTIFIER   ].Name = PROPERTYNAME_TARGET            ;
+    lRootProperties[OFFSET_UITYPE_SUBMENU           ].Name = PROPERTYNAME_SUBMENU           ;
+    lRootProperties[OFFSET_UITYPE_COMPONENTID       ].Name = PROPERTYNAME_COMPONENTID       ;
+    lRootProperties[OFFSET_UITYPE_CONTEXT           ].Name = PROPERTYNAME_CONTEXT           ;
+
+    for( vector< AddonMenuRootEntry >::const_iterator pItem =pList->begin();
+                                                pItem!=pList->end()  ;
+                                                ++pItem              )
+    {
+        lRootProperties[OFFSET_UITYPE_URL               ].Value <<= pItem->sURL             ;
+        lRootProperties[OFFSET_UITYPE_TITLE             ].Value <<= pItem->sTitle           ;
+        lRootProperties[OFFSET_UITYPE_TARGET            ].Value <<= pItem->sTarget          ;
+        lRootProperties[OFFSET_UITYPE_IMAGEIDENTIFIER   ].Value <<= pItem->sImageIdentifier ;
+        lRootProperties[OFFSET_UITYPE_CONTEXT           ].Value <<= pItem->sContext         ;
+
+        sal_Int32 nSubMenuCount = pItem->aSubMenu.size();
+        if ( nSubMenuCount > 0 )
+            lRootProperties[OFFSET_UITYPE_SUBMENU].Value <<= GetSubMenuList( pItem->aSubMenu );
+        else
+            lRootProperties[OFFSET_SUBMENU].Value <<= Sequence< Sequence< PropertyValue > >();
+        lRootProperties[OFFSET_UITYPE_COMPONENTID       ].Value <<= pItem->sName            ;
 
         lResult[nStep++] = lRootProperties;
     }
@@ -398,7 +461,7 @@ Sequence< Sequence< PropertyValue > > SvAddonMenu::GetSubMenuList( const AddonSu
         {
             lProperties[OFFSET_URL              ].Value <<= pItem->sURL             ;
             lProperties[OFFSET_TITLE            ].Value <<= pItem->sTitle           ;
-            lProperties[OFFSET_TARGET           ].Value <<= sEmpty                  ;
+            lProperties[OFFSET_TARGET           ].Value <<= pItem->sTarget          ;
             lProperties[OFFSET_IMAGEIDENTIFIER  ].Value <<= pItem->sImageIdentifier ;
 
             sal_Int32 nSubMenuCount = pItem->aSubMenu.size();
@@ -483,6 +546,8 @@ class AddonsOptions_Impl : public ConfigItem
 
         sal_Bool                                        HasAddonsMenu   () const ;
         const Sequence< Sequence< PropertyValue > >&    GetAddonsMenu   () const ;
+        const Sequence< Sequence< PropertyValue > >&    GetAddonsMenuBarPart() const;
+        const Sequence< Sequence< PropertyValue > >&    GetAddonsToolBarPart() const;
         Sequence< PropertyValue >                       GetAddonsComponentMenu( const ::rtl::OUString aComponentID ) const;
         Image                                           GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const;
 
@@ -506,9 +571,12 @@ class AddonsOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
 
         sal_Bool             ReadRootMenuEntry( const OUString& aRootMenuNodeName, AddonMenuRootEntry& rRootMenuEntry );
+        sal_Bool             ReadRootMenuBarEntry( const OUString& aRootMenuBarNodeName, AddonMenuRootEntry& rRootMenuBarEntry );
+
         sal_Bool             ReadSubMenuEntries( const Sequence< OUString >& aSubMenuNodeNames, AddonSubMenu& rSubMenuContainer );
         sal_Bool             ReadSubMenuEntry( const OUString& aMenuEntryNodeName, AddonSubMenu& rSubMenuContainer );
         Sequence< OUString > GetPropertyNames( const OUString& aPropertyRootNode ) const;
+        Sequence< OUString > GetUITypePropertyNames( const OUString& aPropertyRootNode ) const;
         Sequence< OUString > GetImagesPropertyNames( const OUString& aPropertyRootNode ) const;
         sal_Bool             CreateImageFromSequence( Image& rImage, sal_Bool bBig, Sequence< sal_Int8 >& rBitmapDataSeq ) const;
 
@@ -538,13 +606,20 @@ class AddonsOptions_Impl : public ConfigItem
 
         typedef std::hash_map< OUString, ImageEntry, OUStringHashCode, ::std::equal_to< OUString > > ImageManager;
 
+        sal_Int32                               m_nRootAddonPopupMenuId;
         OUString                                m_aPropNames[PROPERTYCOUNT_ROOT];
+        OUString                                m_aPropUINames[PROPERTYCOUNT_UI_ROOT];
         OUString                                m_aPropImagesNames[PROPERTYIMAGES_COUNT];
         OUString                                m_aEmpty;
         OUString                                m_aPathDelimiter;
         OUString                                m_aSeparator;
+        OUString                                m_aRootAddonPopupMenuURLPrexfix;
         SvAddonMenu                             m_aAddonMenu;
+        SvAddonMenu                             m_aAddonMenuBarPart;
+        SvAddonMenu                             m_aAddonToolBarPart;
         Sequence< Sequence< PropertyValue > >   m_aCachedMenuProperties;
+        Sequence< Sequence< PropertyValue > >   m_aCachedMenuBarPartProperties;
+        Sequence< Sequence< PropertyValue > >   m_aCachedToolBarPartProperties;
         ImageManager                            m_aImageManager;
 };
 
@@ -559,7 +634,9 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     // Init baseclasses first
     :   ConfigItem( ROOTNODE_ADDONMENU ),
     m_aPathDelimiter( PATHDELIMITER ),
-    m_aSeparator( SEPARATOR_URL )
+    m_aSeparator( SEPARATOR_URL ),
+    m_nRootAddonPopupMenuId( 0 ),
+    m_aRootAddonPopupMenuURLPrexfix( ADDONSPOPUPMENU_URL_PREFIX )
 {
     // initialize array with fixed property names
     m_aPropNames[ OFFSET_URL             ] = PROPERTYNAME_URL;
@@ -568,6 +645,15 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     m_aPropNames[ OFFSET_IMAGEIDENTIFIER ] = PROPERTYNAME_IMAGEIDENTIFIER;
     m_aPropNames[ OFFSET_SUBMENU         ] = PROPERTYNAME_SUBMENU;      // Submenu set!
     m_aPropNames[ OFFSET_COMPONENTID     ] = PROPERTYNAME_COMPONENTID;  // External property
+
+    // initialize array with fixed property names
+    m_aPropUINames[ OFFSET_UITYPE_URL               ] = PROPERTYNAME_URL;
+    m_aPropUINames[ OFFSET_UITYPE_TITLE             ] = PROPERTYNAME_TITLE;
+    m_aPropUINames[ OFFSET_UITYPE_TARGET            ] = PROPERTYNAME_TARGET;
+    m_aPropUINames[ OFFSET_UITYPE_IMAGEIDENTIFIER   ] = PROPERTYNAME_IMAGEIDENTIFIER;
+    m_aPropUINames[ OFFSET_UITYPE_CONTEXT           ] = PROPERTYNAME_CONTEXT;       // Context
+    m_aPropUINames[ OFFSET_UITYPE_SUBMENU           ] = PROPERTYNAME_SUBMENU;       // Submenu set!
+    m_aPropUINames[ OFFSET_UITYPE_COMPONENTID       ] = PROPERTYNAME_COMPONENTID;   // External property
 
     // initialize array with fixed images property names
     m_aPropImagesNames[ OFFSET_IMAGESMALL   ] = PROPERTYNAME_IMAGESMALL;
@@ -593,6 +679,25 @@ AddonsOptions_Impl::AddonsOptions_Impl()
     // Save values to the external representation structure to save memory and time.
     // Currently this is possible as there is no way to register components during Office runtime!
     m_aCachedMenuProperties = m_aAddonMenu.GetList();
+
+    // Read the extended OfficeMenuBar definition that allows external component to integrate their
+    // popup-menu into the Office menu bar!
+    OUString                aAddonMenuBarNodeName( RTL_CONSTASCII_USTRINGPARAM( "AddonUI/OfficeMenuBar" ));
+    Sequence< OUString >    aAddonRootMenuBarNodeSeq = GetNodeNames( aAddonMenuBarNodeName );
+    OUString                aAddonMenuBarTreeNode( aAddonMenuBarNodeName + m_aPathDelimiter );
+
+    nCount = aAddonRootMenuBarNodeSeq.getLength();
+    for ( n = 0; n < nCount; n++ )
+    {
+        AddonMenuRootEntry   aItem;
+        OUString aRootMenuNode( aAddonMenuBarTreeNode + aAddonRootMenuBarNodeSeq[n] );
+        if ( ReadRootMenuBarEntry( aRootMenuNode, aItem ) )
+            m_aAddonMenuBarPart.AppendRootMenuEntry( aItem );
+    }
+
+    // Save values to the external representation structure to save memory and time.
+    // Currently this is possible as there is no way to register components during Office runtime!
+    m_aCachedMenuBarPartProperties = m_aAddonMenuBarPart.GetMenuBarList();
 
 /*TODO: Not used in the moment! see Notify() ...
     // Enable notification mechanism of ouer baseclass.
@@ -684,6 +789,22 @@ Sequence< PropertyValue > AddonsOptions_Impl::GetAddonsComponentMenu( const ::rt
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
+const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsMenuBarPart() const
+{
+    return m_aCachedMenuBarPartProperties;
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+const Sequence< Sequence< PropertyValue > >& AddonsOptions_Impl::GetAddonsToolBarPart() const
+{
+    return m_aCachedToolBarPartProperties;
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
 
 Image AddonsOptions_Impl::GetImageFromURL( const rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast ) const
 {
@@ -723,7 +844,7 @@ sal_Bool AddonsOptions_Impl::ReadRootMenuEntry( const OUString& aRootMenuNodeNam
             for ( sal_uInt32 n = 0; n < (sal_uInt32)aRootSubMenuNodeNames.getLength(); n++ )
                 aRootSubMenuNodeNames[n] = OUString( aSubMenuRootNodeName + aRootSubMenuNodeNames[n] );
             ReadSubMenuEntries( aRootSubMenuNodeNames, rRootMenuEntry.aSubMenu );
-            rRootMenuEntry.sName = aRootMenuNodeName.copy( aRootMenuNodeName.lastIndexOf( '/' ));
+            rRootMenuEntry.sName = aRootMenuNodeName.copy( aRootMenuNodeName.lastIndexOf( '/' )+1);
             bResult = sal_True;
         }
         else
@@ -735,7 +856,7 @@ sal_Bool AddonsOptions_Impl::ReadRootMenuEntry( const OUString& aRootMenuNodeNam
                 aRootMenuNodePropValues[ OFFSET_IMAGEIDENTIFIER ] >>= rRootMenuEntry.sImageIdentifier;
 
                 // Set the name/component id of the root menu
-                rRootMenuEntry.sName = aRootMenuNodeName.copy( aRootMenuNodeName.lastIndexOf( '/' ));
+                rRootMenuEntry.sName = aRootMenuNodeName.copy( aRootMenuNodeName.lastIndexOf( '/' )+1);
 
                 // Store bitmap data defined for this menu item into the internal image manager
                 ImageEntry* pImageEntry = ReadOptionalImageData( aRootMenuNodeName );
@@ -744,6 +865,48 @@ sal_Bool AddonsOptions_Impl::ReadRootMenuEntry( const OUString& aRootMenuNodeNam
 
                 bResult = sal_True;
             }
+        }
+    }
+
+    return bResult;
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
+sal_Bool AddonsOptions_Impl::ReadRootMenuBarEntry( const OUString& aRootMenuBarNodeName, AddonMenuRootEntry& rRootMenuBarEntry )
+{
+    sal_Bool            bResult = sal_False;
+    OUString            aAddonRootMenuBarTreeNode( aRootMenuBarNodeName + m_aPathDelimiter );
+    Sequence< Any >     aRootMenuBarNodePropValues;
+
+    aRootMenuBarNodePropValues = GetProperties( GetUITypePropertyNames( aAddonRootMenuBarTreeNode ) );
+    if ( aRootMenuBarNodePropValues[ OFFSET_UITYPE_TITLE    ] >>= rRootMenuBarEntry.sTitle  )
+    {
+        // A top-level popup menu needs a title and prefixed url
+        OUStringBuffer aBuf( m_aRootAddonPopupMenuURLPrexfix.getLength() + 3 );
+        aBuf.append( m_aRootAddonPopupMenuURLPrexfix );
+        aBuf.append( OUString::valueOf( ++m_nRootAddonPopupMenuId ));
+        rRootMenuBarEntry.sURL = aBuf.makeStringAndClear();
+
+        OUString aRootSubMenuName( aAddonRootMenuBarTreeNode + m_aPropUINames[ OFFSET_UITYPE_SUBMENU ] );
+        Sequence< OUString > aRootSubMenuNodeNames = GetNodeNames( aRootSubMenuName );
+        if ( aRootSubMenuNodeNames.getLength() > 0 )
+        {
+            // Read optional context information and continue to read sub menu nodes
+            aRootMenuBarNodePropValues[ OFFSET_UITYPE_CONTEXT ] >>= rRootMenuBarEntry.sContext;
+
+            OUString aSubMenuRootNodeName( aRootSubMenuName + m_aPathDelimiter );
+            for ( sal_uInt32 n = 0; n < (sal_uInt32)aRootSubMenuNodeNames.getLength(); n++ )
+                aRootSubMenuNodeNames[n] = OUString( aSubMenuRootNodeName + aRootSubMenuNodeNames[n] );
+            ReadSubMenuEntries( aRootSubMenuNodeNames, rRootMenuBarEntry.aSubMenu );
+            rRootMenuBarEntry.sName = aRootMenuBarNodeName.copy( aRootMenuBarNodeName.lastIndexOf( '/' )+1);
+            bResult = sal_True;
+        }
+        else
+        {
+            // Not allowed to have a single menu item on a top-level menu bar!
+            return sal_False;
         }
     }
 
@@ -916,6 +1079,23 @@ Sequence< OUString > AddonsOptions_Impl::GetPropertyNames( const OUString& aProp
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
+Sequence< OUString > AddonsOptions_Impl::GetUITypePropertyNames( const OUString& aPropertyRootNode ) const
+{
+    Sequence< OUString > lResult( CFG_UITYPE_PROPERTYCOUNT );
+
+    // Create property names dependent from the root node name
+    lResult[0] = OUString( aPropertyRootNode + m_aPropUINames[ OFFSET_UITYPE_TITLE              ] );
+    lResult[1] = OUString( aPropertyRootNode + m_aPropUINames[ OFFSET_UITYPE_TARGET             ] );
+    lResult[2] = OUString( aPropertyRootNode + m_aPropUINames[ OFFSET_UITYPE_IMAGEIDENTIFIER    ] );
+    lResult[3] = OUString( aPropertyRootNode + m_aPropUINames[ OFFSET_UITYPE_CONTEXT            ] );
+    lResult[4] = OUString( aPropertyRootNode + m_aPropUINames[ OFFSET_UITYPE_SUBMENU            ] );
+
+    return lResult;
+}
+
+//*****************************************************************************************************************
+//  private method
+//*****************************************************************************************************************
 Sequence< OUString > AddonsOptions_Impl::GetImagesPropertyNames( const OUString& aPropertyRootNode ) const
 {
     Sequence< OUString > lResult( PROPERTYIMAGES_COUNT );
@@ -996,6 +1176,24 @@ Sequence< PropertyValue > AddonsOptions::GetAddonsComponentMenu( const ::rtl::OU
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->GetAddonsComponentMenu( aComponentID );
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsMenuBarPart() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetAddonsMenuBarPart();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+const Sequence< Sequence< PropertyValue > >& AddonsOptions::GetAddonsToolBarPart() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->GetAddonsToolBarPart();
 }
 
 //*****************************************************************************************************************

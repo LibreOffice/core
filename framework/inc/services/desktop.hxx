@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:50:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,10 @@
 
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRECORDERSUPPLIER_HPP_
+#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -388,10 +392,6 @@ class Desktop   :   // interfaces
     private:
 
         css::uno::Reference< css::lang::XComponent >            impl_getFrameComponent          ( const css::uno::Reference< css::frame::XFrame >&  xFrame          ) const;
-        sal_Bool                                                impl_tryToChangeProperty        (       sal_Bool                                    bProperty       ,
-                                                                                                  const css::uno::Any&                              aNewValue       ,
-                                                                                                        css::uno::Any&                              aOldValue       ,
-                                                                                                        css::uno::Any&                              aConvertedValue ) throw( css::lang::IllegalArgumentException  );
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor(                                                                   );
         void                                                    impl_sendQueryTerminationEvent  (                                                                   ) throw( css::frame::TerminationVetoException );
         void                                                    impl_sendNotifyTerminationEvent (                                                                   );
@@ -437,6 +437,8 @@ class Desktop   :   // interfaces
         sal_Bool                                                        m_bSuspendQuickstartVeto    ;   /// don't ask quickstart for a veto
         SvtCommandOptions                                               m_aCommandOptions           ;   /// ref counted class to support disabling commands defined by configuration file
         ::rtl::OUString                                                 m_sName                     ;
+        ::rtl::OUString                                                 m_sTitle                    ;
+        css::uno::Reference< css::frame::XDispatchRecorderSupplier >    m_xDispatchRecorderSupplier ;
 
 };      //  class Desktop
 

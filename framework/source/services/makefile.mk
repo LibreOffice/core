@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: cd $ $Date: 2002-08-20 10:20:35 $
+#   last change: $Author: hr $ $Date: 2003-03-25 18:21:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,9 +92,11 @@ SLOFILES=			\
                     $(SLO)$/attributelist.obj						\
                     $(SLO)$/saxnamespacefilter.obj					\
                     $(SLO)$/contenthandlerfactory.obj				\
-                    $(SLO)$/jobexecutor.obj							\
                     $(SLO)$/substitutepathvars.obj					\
-                    $(SLO)$/pathsettings.obj
+                    $(SLO)$/pathsettings.obj                        \
+                    $(SLO)$/backingcomp.obj							\
+                    $(SLO)$/dispatchhelper.obj
+
 
 SRCFILES=			logindialog.src \
                     documentlist.src

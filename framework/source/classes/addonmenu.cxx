@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonmenu.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 14:22:14 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -133,12 +135,6 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-/*
-extern "C"
-{
-    int bla();
-}
-*/
 namespace framework
 {
 
@@ -148,6 +144,7 @@ static void GetMenuEntry(
     ::rtl::OUString&                        rURL,
     ::rtl::OUString&                        rTarget,
     ::rtl::OUString&                        rImageId,
+    ::rtl::OUString&                        rContext,
     Sequence< Sequence< PropertyValue > >&  rAddonSubMenu );
 
 
@@ -246,6 +243,7 @@ void AddonMenu::Initialize()
     ::rtl::OUString aURL;
     ::rtl::OUString aTarget;
     ::rtl::OUString aImageId;
+    ::rtl::OUString aContext;
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     BOOL bIsHiContrastMode  = rSettings.GetMenuColor().IsDark();
@@ -254,7 +252,7 @@ void AddonMenu::Initialize()
     UINT32 i, nCount = rAddonMenuEntries.getLength();
     for ( i = 0; i < nCount; ++i )
     {
-        GetMenuEntry( rAddonMenuEntries[i], aTitle, aURL, aTarget, aImageId, aAddonSubMenu );
+        GetMenuEntry( rAddonMenuEntries[i], aTitle, aURL, aTarget, aImageId, aContext, aAddonSubMenu );
 
         if ( !aTitle.getLength() && !aURL.getLength() )
             continue;
@@ -322,10 +320,11 @@ PopupMenu* AddonMenu::BuildSubMenu( Sequence< Sequence< PropertyValue > > aAddon
     ::rtl::OUString aURL;
     ::rtl::OUString aTarget;
     ::rtl::OUString aImageId;
+    ::rtl::OUString aContext;
 
     for ( i = 0; i < nCount; ++i )
     {
-        GetMenuEntry( aAddonSubMenuDefinition[i], aTitle, aURL, aTarget, aImageId, aAddonSubMenu );
+        GetMenuEntry( aAddonSubMenuDefinition[i], aTitle, aURL, aTarget, aImageId, aContext, aAddonSubMenu );
 
         if ( !aTitle.getLength() && !aURL.getLength() )
             continue;
@@ -386,6 +385,294 @@ USHORT AddonMenu::CreateMenuId()
     return AddonMenu_Impl::GetMID();
 }
 
+// ------------------------------------------------------------------------
+
+AddonPopupMenu::AddonPopupMenu( Reference< XFrame >& xFrame ) :
+    m_xFrame( xFrame )
+{
+    _pImp = new AddonMenu_Impl();
+}
+
+// ------------------------------------------------------------------------
+
+AddonPopupMenu::~AddonPopupMenu()
+{
+    delete _pImp;
+
+    for ( int i = 0; i < GetItemCount(); i++ )
+    {
+        if ( GetItemType( i ) != MENUITEM_SEPARATOR )
+        {
+            // delete user attributes created with new!
+            USHORT nId = GetItemId( i );
+            MenuConfiguration::Attributes* pUserAttributes = (MenuConfiguration::Attributes*)GetUserValue( nId );
+            delete pUserAttributes;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+
+USHORT AddonPopupMenu::CreateMenuId()
+{
+    return AddonMenu_Impl::GetMID();
+}
+
+// ------------------------------------------------------------------------
+
+sal_Bool AddonPopupMenu::IsCorrectContext( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel ) const
+{
+    if ( rModel.is() )
+    {
+        Reference< com::sun::star::lang::XServiceInfo > xServiceInfo( rModel, UNO_QUERY );
+        if ( xServiceInfo.is() )
+        {
+            sal_Int32 nIndex = 0;
+            do
+            {
+                OUString aToken = m_aContext.getToken( 0, ',', nIndex );
+
+                if ( xServiceInfo->supportsService( aToken ))
+                    return sal_True;
+            }
+            while ( nIndex >= 0 );
+        }
+    }
+
+    return sal_False;
+}
+
+// ------------------------------------------------------------------------
+// Get the top-level popup menus for addons. The menubar is used as a container. Every popup menu is from type AddonPopupMenu!
+void AddonPopupMenu::GetAddonPopupMenus( Reference< XFrame >& rFrame, MenuBar* pContainer )
+{
+    if ( pContainer )
+    {
+        AddonsOptions aAddonsOptions;
+
+        const Sequence< Sequence< PropertyValue > >&    rAddonMenuEntries = aAddonsOptions.GetAddonsMenuBarPart();
+        for ( sal_Int32 i = 0; i < rAddonMenuEntries.getLength(); i++ )
+        {
+            AddonPopupMenu* pAddonPopupMenu = new AddonPopupMenu( rFrame );
+            const Sequence< PropertyValue > aAddonPopupMenu = rAddonMenuEntries[i];
+            pAddonPopupMenu->Initialize( aAddonPopupMenu );
+
+            // A valid top-level addon popup menu must have an ID, title and URL
+            if ( pAddonPopupMenu->GetId() &&
+                 pAddonPopupMenu->GetTitle().getLength() &&
+                 pAddonPopupMenu->GetCommandURL().getLength() )
+            {
+                pContainer->InsertItem( pAddonPopupMenu->GetId(), pAddonPopupMenu->GetTitle() );
+                pContainer->SetPopupMenu( pAddonPopupMenu->GetId(), pAddonPopupMenu );
+            }
+            else
+                delete pAddonPopupMenu;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+
+void AddonPopupMenu::MergeAddonPopupMenus(
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel,
+    USHORT                  nMergeAtPos,
+    MenuBar*                pMergeMenuBar )
+{
+    if ( pMergeMenuBar )
+    {
+        AddonsOptions   aAddonsOptions;
+        USHORT          nInsertPos = nMergeAtPos;
+
+        const Sequence< Sequence< PropertyValue > >&    rAddonMenuEntries = aAddonsOptions.GetAddonsMenuBarPart();
+        for ( sal_Int32 i = 0; i < rAddonMenuEntries.getLength(); i++ )
+        {
+            AddonPopupMenu* pAddonPopupMenu = new AddonPopupMenu( rFrame );
+            const Sequence< PropertyValue > aAddonPopupMenu = rAddonMenuEntries[i];
+            pAddonPopupMenu->Initialize( aAddonPopupMenu );
+
+            // A valid top-level addon popup menu must have an ID, title and URL
+            if ( pAddonPopupMenu->GetId() &&
+                 pAddonPopupMenu->GetTitle().getLength() &&
+                 pAddonPopupMenu->GetCommandURL().getLength() &&
+                 pAddonPopupMenu->IsCorrectContext( rModel ))
+            {
+                pMergeMenuBar->InsertItem( pAddonPopupMenu->GetId(), pAddonPopupMenu->GetTitle(), 0, nInsertPos++ );
+                pMergeMenuBar->SetPopupMenu( pAddonPopupMenu->GetId(), pAddonPopupMenu );
+            }
+            else
+                delete pAddonPopupMenu;
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+
+void AddonPopupMenu::Initialize( const Sequence< PropertyValue >& rAddonPopupMenuDefinition )
+{
+    if( _pImp->m_bInitialized )
+        return;
+
+    _pImp->m_bInitialized = TRUE;
+
+    ::rtl::OUString aTitle;
+    ::rtl::OUString aURL;
+    ::rtl::OUString aTarget;
+    ::rtl::OUString aImageId;
+    ::rtl::OUString aContext;
+    AddonsOptions   aAddonsOptions;
+    Sequence< Sequence< PropertyValue > > aAddonSubMenu;
+
+    GetMenuEntry( rAddonPopupMenuDefinition, aTitle, aURL, aTarget, aImageId, aContext, aAddonSubMenu );
+    if ( aTitle.getLength() && aURL.getLength() )
+    {
+        // Set id, title and command URL of this popup menu
+        m_nId           = CreateMenuId();
+        m_aCommandURL   = aURL;
+        m_aTitle        = aTitle;
+        m_aContext      = aContext;
+
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        BOOL bIsHiContrastMode  = rSettings.GetMenuColor().IsDark();
+        BOOL bShowMenuImages    = SvtMenuOptions().IsMenuIconsEnabled();
+
+        UINT32 i, nCount = aAddonSubMenu.getLength();
+        for ( i = 0; i < nCount; ++i )
+        {
+            Sequence< Sequence< PropertyValue > > aNextAddonSubMenu;
+            GetMenuEntry( aAddonSubMenu[i], aTitle, aURL, aTarget, aImageId, aContext, aNextAddonSubMenu );
+
+            if ( !aTitle.getLength() && !aURL.getLength() )
+                continue;
+
+            if ( aURL == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:separator" )))
+                InsertSeparator();
+            else
+            {
+                sal_Bool    bImageSet = sal_False;
+                USHORT      nId = CreateMenuId();
+
+                if ( bShowMenuImages )
+                {
+                    if ( aImageId.getLength() > 0 )
+                    {
+                        Image aImage = GetImageFromURL( m_xFrame, aImageId, FALSE, bIsHiContrastMode );
+                        if ( !!aImage )
+                        {
+                            bImageSet = sal_True;
+                            InsertItem( nId, aTitle, aImage );
+                        }
+                    }
+
+                    if ( !bImageSet )
+                    {
+                        Image aImage = GetImageFromURL( m_xFrame, aURL, FALSE, bIsHiContrastMode );
+                        if ( !aImage )
+                            aImage = aAddonsOptions.GetImageFromURL( aURL, FALSE, bIsHiContrastMode );
+
+                        if ( !aImage )
+                            InsertItem( nId, aTitle );
+                        else
+                            InsertItem( nId, aTitle, aImage );
+                    }
+                }
+                else
+                    InsertItem( nId, aTitle );
+
+                // Store values from configuration to the New and Wizard menu entries to enable
+                // sfx2 based code to support high contrast mode correctly!
+                MenuConfiguration::Attributes* pUserAttributes = new MenuConfiguration::Attributes;
+                pUserAttributes->aTargetFrame = aTarget;
+                pUserAttributes->aImageId = aImageId;
+                SetUserValue( nId, (ULONG)pUserAttributes );
+
+                SetItemCommand( nId, aURL );
+
+                if ( aNextAddonSubMenu.getLength() > 0 )
+                    SetPopupMenu( nId, BuildSubMenu( aNextAddonSubMenu ));
+            }
+        }
+    }
+}
+
+// ------------------------------------------------------------------------
+
+PopupMenu* AddonPopupMenu::BuildSubMenu( Sequence< Sequence< PropertyValue > > aAddonSubMenuDefinition )
+{
+    Sequence< Sequence< PropertyValue > >   aAddonSubMenu;
+    const StyleSettings&                    rSettings           = Application::GetSettings().GetStyleSettings();
+    BOOL                                    bIsHiContrastMode   = rSettings.GetMenuColor().IsDark();
+    BOOL                                    bShowMenuImages     = SvtMenuOptions().IsMenuIconsEnabled();
+    UINT32                                  i, nCount           = aAddonSubMenuDefinition.getLength();
+    PopupMenu*                              pPopupMenu          = new PopupMenu;
+    AddonsOptions                           aAddonsOptions;
+
+    ::rtl::OUString aTitle;
+    ::rtl::OUString aURL;
+    ::rtl::OUString aTarget;
+    ::rtl::OUString aImageId;
+    ::rtl::OUString aContext;
+
+    for ( i = 0; i < nCount; ++i )
+    {
+        GetMenuEntry( aAddonSubMenuDefinition[i], aTitle, aURL, aTarget, aImageId, aContext, aAddonSubMenu );
+
+        if ( !aTitle.getLength() && !aURL.getLength() )
+            continue;
+
+        if ( aURL == ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:separator" )))
+            pPopupMenu->InsertSeparator();
+        else
+        {
+            sal_Bool    bImageSet = sal_False;
+            USHORT      nId = CreateMenuId();
+
+            if ( bShowMenuImages )
+            {
+                if ( aImageId.getLength() > 0 )
+                {
+                    Image aImage = GetImageFromURL( m_xFrame, aImageId, FALSE, bIsHiContrastMode );
+                    if ( !!aImage )
+                    {
+                        bImageSet = sal_True;
+                        pPopupMenu->InsertItem( nId, aTitle, aImage );
+                    }
+                }
+
+                if ( !bImageSet )
+                {
+                    Image aImage = GetImageFromURL( m_xFrame, aURL, FALSE, bIsHiContrastMode );
+                    if ( !aImage )
+                        aImage = aAddonsOptions.GetImageFromURL( aURL, FALSE, bIsHiContrastMode );
+
+                    if ( !aImage )
+                        pPopupMenu->InsertItem( nId, aTitle );
+                    else
+                        pPopupMenu->InsertItem( nId, aTitle, aImage );
+                }
+            }
+            else
+                pPopupMenu->InsertItem( nId, aTitle );
+
+            // Store values from configuration to the New and Wizard menu entries to enable
+            // sfx2 based code to support high contrast mode correctly!
+            MenuConfiguration::Attributes* pUserAttributes = new MenuConfiguration::Attributes;
+            pUserAttributes->aTargetFrame   = aTarget;
+            pUserAttributes->aImageId       = aImageId;
+            pPopupMenu->SetUserValue( nId, (ULONG)pUserAttributes );
+
+            pPopupMenu->SetItemCommand( nId, aURL );
+
+            if ( aAddonSubMenu.getLength() > 0 )
+                pPopupMenu->SetPopupMenu( nId, BuildSubMenu( aAddonSubMenu ));
+        }
+    }
+
+    return pPopupMenu;
+}
+
+// ------------------------------------------------------------------------
+
 void GetMenuEntry
 (
     const Sequence< PropertyValue >&                rAddonMenuEntry,
@@ -393,6 +680,7 @@ void GetMenuEntry
     ::rtl::OUString&                                rURL,
     ::rtl::OUString&                                rTarget,
     ::rtl::OUString&                                rImageId,
+    ::rtl::OUString&                                rContext,
     Sequence< Sequence< PropertyValue > >&          rAddonSubMenu
 )
 {
@@ -401,16 +689,19 @@ void GetMenuEntry
 
     for ( int i = 0; i < rAddonMenuEntry.getLength(); i++ )
     {
-        if ( rAddonMenuEntry[i].Name == ADDONSMENUITEM_PROPERTYNAME_URL )
+        OUString aMenuEntryPropName = rAddonMenuEntry[i].Name;
+        if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_URL )
             rAddonMenuEntry[i].Value >>= rURL;
-        else if ( rAddonMenuEntry[i].Name == ADDONSMENUITEM_PROPERTYNAME_TITLE )
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_TITLE )
             rAddonMenuEntry[i].Value >>= rTitle;
-        else if ( rAddonMenuEntry[i].Name == ADDONSMENUITEM_PROPERTYNAME_TARGET )
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_TARGET )
             rAddonMenuEntry[i].Value >>= rTarget;
-        else if ( rAddonMenuEntry[i].Name == ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER )
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_IMAGEIDENTIFIER )
             rAddonMenuEntry[i].Value >>= rImageId;
-        else if ( rAddonMenuEntry[i].Name == ADDONSMENUITEM_PROPERTYNAME_SUBMENU )
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_SUBMENU )
             rAddonMenuEntry[i].Value >>= rAddonSubMenu;
+        else if ( aMenuEntryPropName == ADDONSMENUITEM_PROPERTYNAME_CONTEXT )
+            rAddonMenuEntry[i].Value >>= rContext;
     }
 }
 

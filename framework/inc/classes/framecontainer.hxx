@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: as $ $Date: 2002-07-02 07:23:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,13 @@
 #ifndef __FRAMEWORK_CLASSES_FRAMECONTAINER_HXX_
 #define __FRAMEWORK_CLASSES_FRAMECONTAINER_HXX_
 
+/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
+               with solaris headers ...
+*/
+#include <vector>
+#include <stdexcept>
+#include <algorithm>
+
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
@@ -76,10 +83,6 @@
 
 #ifndef __FRAMEWORK_CLASSES_TARGETFINDER_HXX_
 #include <classes/targetfinder.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_ASYNCQUIT_HXX_
-#include <classes/asyncquit.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
@@ -98,16 +101,20 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
 
-//_________________________________________________________________________________________________________________
-//  other includes
-//_________________________________________________________________________________________________________________
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
-#ifndef __SGI_STL_VECTOR
-#include <vector>
+//_________________________________________________________________________________________________________________
+//  other includes
+//_________________________________________________________________________________________________________________
+
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
 #endif
 
 #ifndef _VOS_REF_HXX_
@@ -118,9 +125,9 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#include <vector>
-#include <stdexcept>
-#include <algorithm>
+#ifndef _VCL_EVNTPOST_HXX
+#include <vcl/evntpost.hxx>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -166,8 +173,14 @@ class FrameContainer : private ThreadHelpBase
         TFrameContainer m_aContainer;
         /// one container item can be the current active frame. Its neccessary for Desktop or Frame implementation.
         css::uno::Reference< css::frame::XFrame > m_xActiveFrame;
-        /// if an instance of this class is used at the desktop and last frame will be removed we must terminate the desktop
-        ::vos::ORef< AsyncQuit > m_rQuitTimer;
+/*DEPRECATEME
+        /// indicates using of the automatic async quit feature in case last task will be closed
+        sal_Bool m_bAsyncQuit;
+        /// used to execute the terminate request asyncronous
+        ::vcl::EventPoster m_aAsyncCall;
+        /// used for async quit feature (must be weak to prevent us against strange situations!)
+        css::uno::WeakReference< css::frame::XDesktop > m_xDesktop;
+*/
 
     //_______________________________________
     // interface
@@ -195,25 +208,15 @@ class FrameContainer : private ThreadHelpBase
 
         /// replacement for deprectaed index access
         css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > getAllElements() const;
-
         /// for special feature "async quit timer" of desktop only!
         void enableQuitTimer ( const css::uno::Reference< css::frame::XDesktop >& xDesktop );
-        void disableQuitTimer(                                                             );
-
+        void disableQuitTimer();
+/*DEPRECATEME
+        DECL_LINK( implts_asyncQuit, void* );
+*/
         /// special helper for Frame::findFrame()
         css::uno::Reference< css::frame::XFrame > searchOnAllChildrens   ( const ::rtl::OUString& sName ) const;
         css::uno::Reference< css::frame::XFrame > searchOnDirectChildrens( const ::rtl::OUString& sName ) const;
-
-    //_______________________________________
-    // debug!
-
-    #ifdef ENABLE_ASSERTIONS
-
-    public:
-
-        void impldbg_checkForZombie() const;
-
-    #endif  // #ifdef ENABLE_ASSERTIONS
 
 }; // class FrameContainer
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:50:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ enum EDispatchHelper
     E_CREATEDISPATCHER      ,
     E_BLANKDISPATCHER       ,
     E_SELFDISPATCHER        ,
+    E_CLOSEDISPATCHER       ,
     E_PLUGINDISPATCHER
 };
 

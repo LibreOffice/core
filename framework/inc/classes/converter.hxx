@@ -2,9 +2,9 @@
  *
  *  $RCSfile: converter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2002-10-11 13:41:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+
 #ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
 #endif
@@ -110,9 +114,18 @@ namespace framework{
 class Converter
 {
     public:
+        // Seq<Any> <=> Seq<beans.PropertyValue>
         static css::uno::Sequence< css::uno::Any >             convert_seqProp2seqAny          ( const css::uno::Sequence< css::beans::PropertyValue >& lSource );
         static css::uno::Sequence< css::beans::PropertyValue > convert_seqAny2seqProp          ( const css::uno::Sequence< css::uno::Any >&             lSource );
+
+        // Seq<beans.NamedValue> <=> Seq<beans.PropertyValue>
+        static css::uno::Sequence< css::beans::PropertyValue > convert_seqNamedVal2seqPropVal  ( const css::uno::Sequence< css::beans::NamedValue >&    lSource );
+        static css::uno::Sequence< css::beans::NamedValue >    convert_seqPropVal2seqNamedVal  ( const css::uno::Sequence< css::beans::PropertyValue >& lSource );
+
+        // Seq<String> => Vector<String>
         static OUStringList                                    convert_seqOUString2OUStringList( const css::uno::Sequence< ::rtl::OUString >&           lSource );
+
+        // String <=> tools.DateTime
         static DateTime                                        convert_String2DateTime         ( const ::rtl::OUString&                                 sSource );
         static ::rtl::OUString                                 convert_DateTime2String         ( const DateTime&                                        aSource );
 };

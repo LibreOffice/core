@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2002-07-29 08:24:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,12 +115,20 @@
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_VCLWINDOWPEERATTRIBUTE_HPP_
+#include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
+#endif
+
+#ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
+#include <svtools/colorcfg.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -281,11 +289,12 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::implts_createSystemTask( 
     aDescriptor.WindowAttributes    =   css::awt::WindowAttribute::BORDER               |
                                         css::awt::WindowAttribute::MOVEABLE             |
                                         css::awt::WindowAttribute::SIZEABLE             |
-                                        css::awt::WindowAttribute::CLOSEABLE            ;
+                                        css::awt::WindowAttribute::CLOSEABLE            |
+                                        css::awt::VclWindowPeerAttribute::CLIPCHILDREN  ;
     // create a new blank container window and get access to parent container to append new created task.
     css::uno::Reference< css::awt::XWindowPeer > xPeer      = xToolkit->createWindow( aDescriptor );
     css::uno::Reference< css::awt::XWindow >     xWindow    ( xPeer, css::uno::UNO_QUERY );
-    xPeer->setBackground( 0xFFFFFFFF );
+    xPeer->setBackground(::svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
     css::uno::Reference< css::frame::XFrames >   xContainer = xDesktop->getFrames();
     if (
         ( xWindow.is()    ) &&

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-10-11 13:41:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,22 @@ ConfigAccess::~ConfigAccess()
 
 //________________________________
 /**
+    @short  return the internal mode of this instance
+    @descr  May be the outside user need any information about successfully opened
+            or closed config access point objects. He can control the internal mode to do so.
+
+    @return The internal open state of this object.
+ */
+ConfigAccess::EOpenMode ConfigAccess::getMode() const
+{
+    /* SAFE { */
+    ReadGuard aReadLock(m_aLock);
+    return m_eMode;
+    /* } SAFE */
+}
+
+//________________________________
+/**
     @short  open the configuration access in the specified mode
     @descr  We set the opened configuration access as our member. So any following method,
             which needs cfg access, can use it. That prevent us against multiple open/close requests.
@@ -215,11 +231,18 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
             lParams[0] <<= aParam;
 
             // open it
-            if (eMode==E_READONLY)
-                m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS  , lParams);
-            else
-            if (eMode==E_READWRITE)
-                m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGUPDATEACCESS, lParams);
+            try
+            {
+                if (eMode==E_READONLY)
+                    m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS  , lParams);
+                else
+                if (eMode==E_READWRITE)
+                    m_xConfig = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGUPDATEACCESS, lParams);
+            }
+            catch(css::uno::Exception& ex)
+            {
+                LOG_WARNING("open config ...", U2B(ex.Message))
+            }
 
             m_eMode = E_CLOSED;
             if (m_xConfig.is())

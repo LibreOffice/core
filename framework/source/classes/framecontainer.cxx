@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: as $ $Date: 2002-07-02 07:25:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ namespace framework{
 
 /**-***************************************************************************************************************
     @short      initialize an empty container
-    @descr      The container will be empty then - special features (e.g. the async quit timer) are disabled.
+    @descr      The container will be empty then - special features (e.g. the async quit mechanism) are disabled.
 
     @threadsafe not neccessary - its not a singleton
     @modified   01.07.2002 14:42,as96863
@@ -123,7 +123,11 @@ namespace framework{
 FrameContainer::FrameContainer()
         // initialize base classes first.
         // Order is neccessary for right initilization of his and OUR member ... m_aLock
-        : ThreadHelpBase ( &Application::GetSolarMutex() )
+        : ThreadHelpBase ( &Application::GetSolarMutex()                  )
+/*DEPRECATEME
+        , m_bAsyncQuit   ( sal_False                                      ) // default must be "disabled"!
+        , m_aAsyncCall   ( LINK( this, FrameContainer, implts_asyncQuit ) )
+*/
 {
 }
 
@@ -136,9 +140,6 @@ FrameContainer::FrameContainer()
  *****************************************************************************************************************/
 FrameContainer::~FrameContainer()
 {
-    // Disable possible active quit timer!
-    // He can be active for owner=desktop only.
-    disableQuitTimer();
     // Don't forget to free memory!
     clear();
 }
@@ -168,7 +169,7 @@ void FrameContainer::append( const css::uno::Reference< css::frame::XFrame >& xF
 
 /**-***************************************************************************************************************
     @short      remove a frame from the container
-    @descr      In case we remove the last frame and our internal special feature (the async quit timer)
+    @descr      In case we remove the last frame and our internal special feature (the async quit mechanism)
                 was enabled by the desktop instance, we start it.
 
     @param      xFrame
@@ -196,15 +197,16 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
         // We don't need the write lock any longer ...
         // downgrade to read access.
         aWriteLock.downgrade();
-
-        // If last frame was removed and special quit timer is enabled by the desktop
-        // we must terminate the desktop by using this timer!
-        if (m_aContainer.size()<1 && m_rQuitTimer.isValid())
-            m_rQuitTimer->start();
+/*DEPRECATEME
+        // If last frame was removed and special quit mode is enabled by the desktop
+        // we must terminate the application by using this asynchronous callback!
+        if (m_aContainer.size()<1 && m_bAsyncQuit)
+            m_aAsyncCall.Post(0);
+*/
     }
 
     aWriteLock.unlock();
-    /* } SAFE */
+    // } SAFE
 }
 
 /**-***************************************************************************************************************
@@ -237,7 +239,7 @@ sal_Bool FrameContainer::exist( const css::uno::Reference< css::frame::XFrame >&
  *****************************************************************************************************************/
 void FrameContainer::clear()
 {
-    /* SAFE { */
+    // SAFE {
     WriteGuard aWriteLock( m_aLock );
 
     // Clear the container ...
@@ -246,13 +248,15 @@ void FrameContainer::clear()
     // Its an reference to a valid container-item.
     // But no container item => no active frame!
     m_xActiveFrame = css::uno::Reference< css::frame::XFrame >();
-    // If special quit timer is used - we must terminate the desktop.
+/*DEPRECATEME
+    // If special quit mode is used - we must terminate the desktop.
     // He is the owner of this container and can't work without any visible tasks/frames!
-    if (m_rQuitTimer.isValid())
-        m_rQuitTimer->start();
+    if (m_bAsyncQuit)
+        m_aAsyncCall.Post(0);
+*/
 
     aWriteLock.unlock();
-    /* } SAFE */
+    // } SAFE
 }
 
 /**-***************************************************************************************************************
@@ -398,72 +402,87 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::getActive() const
 }
 
 /**-***************************************************************************************************************
-    @short      enables the async quit timer, which terminates the office if last task will be closed
-    @descr      If the last visible task will gone, nobody shows any UI then. But without any UI the user
+    @short      enables the async quit mode, which terminates the office if last task will be closed
+    @descr      If the last visible task will gone, nobody show any UI then. But without any UI the user
                 has no chance to quit the application realy. So we must shutdown by ourself.
-                We do that by an async quit timer, which will be initialized and check after hi times out,
-                if any new task was opened. In case it wasn't ... it calls Desktop::terminate().
+                We do that by an async quit call.
 
-                But note: It's not neccessary to start this timer if using the office doesn't require it.
+                But note: It's not neccessary to use this mechanism, if using the office doesn't require it.
                 e.g. the command line parameters "-invisible", -headless" starts the office in a server mode.
                 In this case the outside user controls the lifetime of it and must terminate it manually.
 
     @param      xDesktop
-                    only the child frame container of the desktop instance can use this special quit timer
-                    Because only top level frames are used for cehcking.
+                    only the child frame container of the desktop instance can use this special quit mode.
+                    Because only top level frames are used for checking.
 
     @threadsafe yes
-    @modified   01.07.2002 14:30,as96863
+    @modified   30.01.2003 11:26,as96863
  *****************************************************************************************************************/
 void FrameContainer::enableQuitTimer( const css::uno::Reference< css::frame::XDesktop >& xDesktop )
 {
-    /* SAFE { */
+/*DEPRECATEME
+    // SAFE {
     WriteGuard aWriteLock( m_aLock );
-
-    // If no current timer exist - create a new one.
-    if( m_rQuitTimer.isEmpty() == sal_True )
-    {
-        // How can we distinguish between the different office modes?
-        // a) Office is plugged if command argument "-plugin" could be detected.                                => timeout = 2 min
-        // b) Office runs in special "server" mode if "-headless", "-invisible" or "-server" could be detected. => timout disabled!
-        // c) Otherwise office runs in normal mode.                                                             => timeout = 5 sec
-
-        // Parse command line for right parameter.
-        if( c_existCommand( COMMAND_PLUGIN ) == sal_True )
-        {
-            m_rQuitTimer.bind( new AsyncQuit( xDesktop, E_PLUGIN ) );
-        }
-        else
-        if(
-            ! c_existCommand( COMMAND_HEADLESS  ) &&
-            ! c_existCommand( COMMAND_INVISIBLE ) &&
-            ! c_existCommand( COMMAND_SERVER    )
-          )
-        {
-            m_rQuitTimer.bind( new AsyncQuit( xDesktop, E_FATOFFICE ) );
-        }
-    }
-    /* } SAFE */
+    m_xDesktop   = xDesktop;
+    m_bAsyncQuit = xDesktop.is();
+    aWriteLock.unlock();
+    // } SAFE
+*/
 }
 
 /**-***************************************************************************************************************
-    @short      disable the async quit timer again
-    @descr      Delete current quit timer.
-                If user wish to create it again he must do it with "enableQuitTimer()".
+    @short      disable the async quit mechanism again
+    @descr      Set the right state internaly and forget the desktop reference.
+                It's not neccessary to save this information any longer.
+                If user wish to establish this mode again he must do it with "enableQuitTimer()".
 
     @threadsafe yes
-    @modified   01.07.2002 14:37,as96863
+    @modified   30.01.2003 11:23,as96863
  *****************************************************************************************************************/
 void FrameContainer::disableQuitTimer()
 {
-    /* SAFE { */
+/*DEPRECATEME
+    // SAFE {
     WriteGuard aWriteLock( m_aLock );
-
-    if (m_rQuitTimer.isValid())
-        m_rQuitTimer.unbind();
-    /* } SAFE */
+    m_bAsyncQuit = sal_False;
+    m_xDesktop   = css::uno::WeakReference< css::frame::XDesktop >();
+    aWriteLock.unlock();
+    // } SAFE
+*/
 }
 
+/**-***************************************************************************************************************
+    @short      asyncronous callback for our special quit feature
+    @descr      In case the last frame was removed from this container and our owner is the desktop itself,
+                we have to terminate the whole application.
+                But we have to check, between starting this mechanism and now no new frame was opened.
+
+    @threadsafe yes
+    @modified   30.01.2003 11:24,as96863
+ *****************************************************************************************************************/
+/*DEPRECATEME
+IMPL_LINK( FrameContainer, implts_asyncQuit, void*, pVoid )
+{
+    // SAFE {
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::frame::XDesktop > xDesktop ( m_xDesktop.get(), css::uno::UNO_QUERY );
+    aReadLock.unlock();
+    // } SAFE
+
+    css::uno::Reference< css::frame::XFramesSupplier > xSupplier( xDesktop, css::uno::UNO_QUERY );
+    if (xSupplier.is())
+    {
+        css::uno::Reference< css::container::XElementAccess > xFrames( xSupplier->getFrames(), css::uno::UNO_QUERY );
+        if (!xFrames.is() || !xFrames->hasElements() )
+        {
+            LOG_WARNING("FrameContainer::implts_asyncQuit()", "force terminate ...\nPlease check if it's realy neccessary!")
+            xDesktop->terminate();
+        }
+    }
+
+    return 0;
+}
+*/
 /**-***************************************************************************************************************
     @short      implements a simple search based on current container items
     @descr      It can be used for findFrame() and implements a deep down search.
@@ -533,34 +552,5 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnDirectChildren
     /* } SAFE */
     return xSearchedFrame;
 }
-
-
-/**-***************************************************************************************************************
-    @short      special debug mode!
-    @descr      Sometimes frames will be inserted in this container which hold no component inside!
-                Or they will be empty after inserting. ALLOWED FOR DEBUG ONLY!
-                We show assertion then.
-
-    @threadsafe yes
-    @modified   01.07.2002 15:39,as96863
- *****************************************************************************************************************/
-
-#ifdef ENABLE_ASSERTIONS
-void FrameContainer::impldbg_checkForZombie() const
-{
-    /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
-    for (TConstFrameIterator pItem=m_aContainer.begin(); pItem!=m_aContainer.end(); ++pItem)
-    {
-        if ((*pItem)->getComponentWindow().is())
-        {
-            LOG_WARNING("FrameContainer::impldbg_checkForZombie()", "Zombie found! Please check your frame tree ...")
-            break;
-        }
-    }
-    aReadLock.unlock();
-    /* } SAFE */
-}
-#endif // #ifdef ENABLE_ASSERTIONS
 
 } //  namespace framework

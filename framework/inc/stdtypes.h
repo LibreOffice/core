@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtypes.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:37:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef __FRAMEWORK_STDTYPES_H_
 #define __FRAMEWORK_STDTYPES_H_
+
+#include <vector>
+#include <queue>
 
 //_________________________________________________________________________________________________________________
 // own includes
@@ -130,6 +133,15 @@ class OUStringList : public ::std::vector< ::rtl::OUString >
 //_________________________________________________________________________________________________________________
 
 /**
+    Basic string queue based on a std::queue()
+    It implements some additional funtionality which can be usefull but
+    is missing at the normal std implementation.
+*/
+typedef ::std::queue< ::rtl::OUString > OUStringQueue;
+
+//_________________________________________________________________________________________________________________
+
+/**
     Basic hash based on a std::hash_map() which provides key=[OUString] and value=[template type] pairs
     It implements some additional funtionality which can be usefull but
     is missing at the normal hash implementation.
@@ -148,6 +160,15 @@ class BaseHash : public ::std::hash_map< ::rtl::OUString                    ,
             BaseHash().swap( *this );
         }
 };
+
+//_________________________________________________________________________________________________________________
+
+/**
+    It can be used to map names (e.g. of properties) to her corresponding handles.
+    Our helper class OPropertySetHelper works optimized with handles but sometimes we have only a property name.
+    Mapping between these two parts of a property should be done in the fastest way :-)
+*/
+typedef BaseHash< sal_Int32 > NameToHandleHash;
 
 //_________________________________________________________________________________________________________________
 

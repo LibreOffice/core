@@ -2,9 +2,9 @@
  *
  *  $RCSfile: job.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-10-11 13:41:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,18 +59,26 @@
  *
  ************************************************************************/
 
-#ifndef __FRAMEWORK_JOBS_JOBDISPATCH_HXX_
-#define __FRAMEWORK_JOBS_JOBDISPATCH_HXX_
+#ifndef __FRAMEWORK_JOBS_JOB_HXX_
+#define __FRAMEWORK_JOBS_JOB_HXX_
 
 //_______________________________________
 // my own includes
 
-#ifndef __FRAMEWORK_CONFIG_CONFIGACCESS_HXX_
-#include <jobs/configaccess.hxx>
+#ifndef __FRAMEWORK_JOBS_JOBRESULT_HXX_
+#include <jobs/jobresult.hxx>
+#endif
+
+#ifndef __FRAMEWORK_JOBS_JOBDATA_HXX_
+#include <jobs/jobdata.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
+#endif
+
+#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
+#include <macros/debug.hxx>
 #endif
 
 #ifndef __FRAMEWORK_MACROS_XINTERFACE_HXX_
@@ -79,10 +87,6 @@
 
 #ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
 #include <macros/xtypeprovider.hxx>
-#endif
-
-#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
-#include <macros/debug.hxx>
 #endif
 
 #ifndef __FRAMEWORK_STDTYPES_H_
@@ -100,44 +104,32 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XNOTIFYINGDISPATCH_HPP_
-#include <com/sun/star/frame/XNotifyingDispatch.hpp>
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
-#include <com/sun/star/frame/XDispatch.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
-#include <com/sun/star/frame/XStatusListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRESULTLISTENER_HPP_
-#include <com/sun/star/frame/XDispatchResultListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_TASK_XJOBLISTENER_HPP_
-#include <com/sun/star/task/XJobListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
-#include <com/sun/star/frame/XTerminateListener.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
-#include <com/sun/star/uno/XInterface.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRESULTLISTENER_HPP_
+#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
-#include <com/sun/star/beans/NamedValue.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XTERMINATELISTENER_HPP_
+#include <com/sun/star/frame/XtERMINATEListener.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_FEATURESTATEEVENT_HPP_
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
+#ifndef _COM_SUN_STAR_TASK_XJOBLISTENER_HPP_
+#include <com/sun/star/task/XJobListener.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCLOSELISTENER_HPP_
+#include <com/sun/star/util/XCloseListener.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTEVENT_HPP_
@@ -147,10 +139,6 @@
 //_______________________________________
 // other includes
 
-#ifndef _DATETIME_HXX
-#include <tools/datetime.hxx>
-#endif
-
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -158,8 +146,6 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-
-#include <queue>
 
 //_______________________________________
 // namespace
@@ -170,215 +156,148 @@ namespace framework{
 // public const
 
 //_______________________________________
+// definitions
+
 /**
-    @short  implements a dispatch object for jobs
-    @descr  Such dispatch object will be used by the JobHandler if
-            an URL "vnd.sun.star.job:alias=<name>" occures.
-            Then an instance of this class will be created and used.
-            This new instance will be called within his method
-            dispatch() or dispatchWithNotification() for executing the
-            real job. We do it, control the life cycle of this internal
-            wrapped job and inform any interested listener if it finish.
+    @short  it represent a job; execute it and control it's lifetime
 
-    @see    JobHandler
+    @descr  This implemetation can be used to wrapp jobs, execute it
+            synchronously or asynchronous, control it's lifetime
+            and differe between jobs with and without configuration.
  */
-class JobDispatch : public  css::lang::XTypeProvider
-                  , public  css::frame::XNotifyingDispatch // => XDispatch
-                  , public  css::task::XJobListener
-                  , public  css::frame::XTerminateListener
-                  , private ThreadHelpBase
-                  , public  ::cppu::OWeakObject
+class Job : public  css::lang::XTypeProvider
+          , public  css::task::XJobListener
+          , public  css::frame::XTerminateListener
+          , public  css::util::XCloseListener
+          , private ThreadHelpBase
+          , public  ::cppu::OWeakObject
 {
-    //___________________________________
-    // types
-
-    struct JobData
-    {
-        JobData( const ::rtl::OUString& sAlias )
-            : m_sAlias( sAlias )
-        {}
-
-        /**
-            the alias name of this job
-            Is used as entry of configuration set for job registration, to find all
-            neccessary properties of it..
-         */
-        ::rtl::OUString m_sAlias;
-
-        /**
-            the uno implementation name of this job
-            It's readed from the configuration. Don't set it from outside!
-         */
-        ::rtl::OUString m_sService;
-
-        /**
-            job specific configuration items ... unknown for us!
-            It's readed from the configuration. Don't set it from outside!
-         */
-        css::uno::Sequence< css::beans::NamedValue > m_lArguments;
-
-        /**
-            time stamp of the admin layer for reactivation of a deactivated job
-            It's readed from the configuration. Don't set it from outside!
-         */
-        DateTime m_aAdminTime;
-
-        /**
-            time stamp of the user layer to deactivate it after finishing his work
-            It's readed from the configuration. Don't set it from outside!
-         */
-        DateTime m_aUserTime;
-
-        /**
-            if the admin time stamp is newer then the user time ... this job is ready for execute
-            It's set by comparing the two timetamp values m_aAdminTime & m_aUserTime.
-         */
-        sal_Bool m_bActive;
-
-        /**
-            mark it as an asyncronoues or synchronoues job
-            It's readed from the configuration. Don't set it from outside!
-         */
-        sal_Bool m_bAsync;
-    };
-
-    struct ExecuteInfo
-    {
-        /** This (possible) listener is interested on the result of this executed job. */
-        css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
-    };
-
-    struct DispatchParameter
-    {
-        DispatchParameter( const css::util::URL&                                             aURL      ,
-                           const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
-                           const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ,
-                                 JobDispatch*                                                pOwner    )
-        {
-            m_xOwnerHold = css::uno::Reference< css::uno::XInterface >( static_cast< ::cppu::OWeakObject* >(pOwner), css::uno::UNO_QUERY );
-            m_aURL       = aURL     ;
-            m_lArgs      = lArgs    ;
-            m_xListener  = xListener;
-        }
-
-        DispatchParameter( const DispatchParameter& aCopy )
-        {
-            m_xOwnerHold = aCopy.m_xOwnerHold;
-            m_aURL       = aCopy.m_aURL      ;
-            m_lArgs      = aCopy.m_lArgs     ;
-            m_xListener  = aCopy.m_xListener ;
-        }
-
-        void operator=( const DispatchParameter& aCopy )
-        {
-            m_xOwnerHold = aCopy.m_xOwnerHold;
-            m_aURL       = aCopy.m_aURL      ;
-            m_lArgs      = aCopy.m_lArgs     ;
-            m_xListener  = aCopy.m_xListener ;
-        }
-
-        /** the dispatch URL */
-        css::util::URL m_aURL;
-
-        /** the dispatch arguments */
-        css::uno::Sequence< css::beans::PropertyValue > m_lArgs;
-
-        /** an interested listener for dispatch results */
-        css::uno::Reference< css::frame::XDispatchResultListener > m_xListener;
-
-        /**
-            every instance of this struct indicates an outstanding dispatch request
-            We have to work till all this jobs are done. So we hold the outside
-            JobDispatch object alive by using references.
-            So the JobDispatch can die be ref count ...
-         */
-        css::uno::Reference< css::uno::XInterface > m_xOwnerHold;
-    };
-
     //___________________________________
     // member
 
     private:
 
-        /** reference to the uno service manager */
+        /**
+            hold all neccessary informations about this job.
+            It can be used for both modes: with and without configuration.
+         */
+        JobData m_aJobCfg;
+
+        /**
+            We need it to create own services on demand.
+         */
         css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
 
         /**
-            knows anything about the internal wrapped job
-            and is filled from the configuration access.
-         */
-        JobData m_aJobData;
-
-        /**
-            a list of all outstanding dispatch requests
-         */
-        ::std::queue< DispatchParameter > m_lDispatchQueue;
-
-        /**
-            hold the currently running job service alive (important for async jobs, wich leave the scope of the start method)
-            Normaly they should hold itself alive ... but if some implementations don't do it - we do it.
+            Hold the (may asynchronous) job alive.
          */
         css::uno::Reference< css::uno::XInterface > m_xJob;
 
         /**
-            hold the opened configuration access alive
-            Because we need this instance in different methods,
-            we transport it as a member.
+            Used to wait for finishing of asynchronous started jobs.
          */
-        ConfigAccess m_aConfig;
+        ::osl::Condition m_aAsyncWait;
+
+        /**
+            For some special cases we must know the environment, in which
+            this job runs. Means the frame inside which we may was triggered.
+            We use it too, to listen for closing events of this ressource.
+         */
+        css::uno::Reference< css::frame::XFrame > m_xFrame;
+
+        /**
+            We are registered at this instance to listen for office shutdown events.
+            It's neccessary supress it (if possible) or to react in the right way.
+         */
+        css::uno::Reference< css::frame::XDesktop > m_xDesktop;
+
+        /**
+            A job can return a dispatch result event after finishing its work.
+            We have to transport it to any outside interested listener then.
+            (see m_xResultSourceFake for further informations too!)
+         */
+        css::uno::Reference< css::frame::XDispatchResultListener > m_xResultListener;
+
+        /**
+            We can't set ourself as source of a dispatch result event ... nor our job.
+            Because the listener (set as m_xResultListener) expect the original instance,
+            where it was registered. This original instance is the user of this class.
+            It must be set explicitly and will be used to fake the source of the event!
+         */
+        css::uno::Reference< css::uno::XInterface > m_xResultSourceFake;
+
+        /**
+            Holds the state, if we are listen for frame closing events or not.
+            The used frame reference isn't realy enough - we use this additional
+            information here too.
+         */
+        sal_Bool m_bCloseListening;
+
+        /**
+            In case we got a close request from our frame (on which we listen) ... and
+            the ownership was delivered there ... we have to close ourself and this frame
+            in case the internal wrapped and running job finish his work.
+         */
+        sal_Bool m_bPendingCloseFrame;
+
+        /**
+            indicates a still running internal job.
+            We can use this information to throw any suitable veto exception
+            to prevent the environment against dieing.
+         */
+        sal_Bool m_bRuns;
 
     //___________________________________
-    // native interface methods
+    // native interface
 
     public:
 
-                  JobDispatch( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
-                               const ::rtl::OUString&                                        sAlias );
-         virtual ~JobDispatch();
+                 Job( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+                      const css::uno::Reference< css::frame::XFrame >&              xFrame );
+        virtual ~Job(                                                                      );
+
+        void     setDispatchResultFake( const css::uno::Reference< css::frame::XDispatchResultListener >& xListener    ,
+                                        const css::uno::Reference< css::uno::XInterface >&                xSourceFake  );
+        void     setJobData           ( const JobData&                                                    aData        );
+        JobData  getJobData           (                                                                                );
+        JobData& getJobDataRef        (                                                                                );
+        void     execute              ( const css::uno::Sequence< css::beans::NamedValue >&               lDynamicArgs );
+        void     die                  (                                                                                );
+
+    private:
+
+        css::uno::Sequence< css::beans::NamedValue > impl_generateJobArgs  ( const css::uno::Sequence< css::beans::NamedValue >& lDynamicArgs );
+        void                                         impl_reactForJobResult( const css::uno::Any&                                aResult      );
+        void                                         impl_startListening   (                                                                  );
+        void                                         impl_stopListening    (                                                                  );
 
     //___________________________________
-    // uno interface methods
+    // uno interface
 
     public:
 
-        // XInterface, XTypeProvider
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
 
-        // XNotifyingDispatch
-        virtual void SAL_CALL dispatchWithNotification( const css::util::URL&                                             aURL      ,
-                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
-                                                        const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw(css::uno::RuntimeException);
-        // XDispatch
-        virtual void SAL_CALL dispatch            ( const css::util::URL&                                     aURL      ,
-                                                    const css::uno::Sequence< css::beans::PropertyValue >&    lArgs     ) throw(css::uno::RuntimeException);
-        virtual void SAL_CALL addStatusListener   ( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
-                                                    const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException);
-        virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener ,
-                                                    const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException);
         // XJobListener
-        virtual void SAL_CALL jobFinished( const css::uno::Reference< css::task::XAsyncJob >& xJob    ,
+        virtual void SAL_CALL jobFinished( const css::uno::Reference< css::task::XAsyncJob >& xJob,
                                            const css::uno::Any&                               aResult ) throw(css::uno::RuntimeException);
+
         // XTerminateListener
         virtual void SAL_CALL queryTermination ( const css::lang::EventObject& aEvent ) throw(css::frame::TerminationVetoException,
                                                                                               css::uno::RuntimeException          );
         virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException          );
+
+        // XCloseListener
+        virtual void SAL_CALL queryClosing ( const css::lang::EventObject& aEvent         ,
+                                                   sal_Bool                bGetsOwnership ) throw(css::util::CloseVetoException,
+                                                                                                  css::uno::RuntimeException   );
+        virtual void SAL_CALL notifyClosing( const css::lang::EventObject& aEvent         ) throw(css::uno::RuntimeException   );
+
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException);
-
-    //___________________________________
-    // internal methods
-
-    private:
-
-        void impl_startJob          (                                                );
-        void impl_finishJob         ( const css::uno::Any&                   aResult );
-        void impl_readConfig        (                                                );
-        void impl_saveArguments     (                                                );
-        void impl_deactivateJob     (                                                );
-        void impl_sendDispatchResult( const css::frame::DispatchResultEvent& aResult );
 };
 
 } // namespace framework
 
-#endif // __FRAMEWORK_JOBS_JOBDISPATCH_HXX_
+#endif // __FRAMEWORK_JOBS_JOB_HXX_

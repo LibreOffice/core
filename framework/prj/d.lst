@@ -5,7 +5,6 @@ mkdir: %_DEST%\inc%_EXT%\framework
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\login %_DEST%\bin%_EXT%\login.bin
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
-..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
 ..\dtd\menubar.dtd %_DEST%\bin%_EXT%\menubar.dtd
 ..\dtd\toolbar.dtd %_DEST%\bin%_EXT%\toolbar.dtd
@@ -16,14 +15,24 @@ mkdir: %_DEST%\inc%_EXT%\framework
 
 ..\%__SRC%\lib\ifwe.lib %_DEST%\lib%_EXT%\ifwe.lib
 hedabu: ..\inc\helper\imageproducer.hxx %_DEST%\inc%_EXT%\framework\imageproducer.hxx
+hedabu: ..\inc\helper\acceleratorinfo.hxx %_DEST%\inc%_EXT%\framework\acceleratorinfo.hxx
+hedabu: ..\inc\helper\actiontriggerhelper.hxx %_DEST%\inc%_EXT%\framework\actiontriggerhelper.hxx
 hedabu: ..\inc\classes\menuconfiguration.hxx %_DEST%\inc%_EXT%\framework\menuconfiguration.hxx
 hedabu: ..\inc\classes\bmkmenu.hxx %_DEST%\inc%_EXT%\framework\bmkmenu.hxx
 hedabu: ..\inc\classes\toolboxconfiguration.hxx %_DEST%\inc%_EXT%\framework\toolboxconfiguration.hxx
 hedabu: ..\inc\classes\statusbarconfiguration.hxx %_DEST%\inc%_EXT%\framework\statusbarconfiguration.hxx
 hedabu: ..\inc\classes\eventsconfiguration.hxx %_DEST%\inc%_EXT%\framework\eventsconfiguration.hxx
 hedabu: ..\inc\classes\imagesconfiguration.hxx %_DEST%\inc%_EXT%\framework\imagesconfiguration.hxx
-hedabu: ..\inc\helper\actiontriggerhelper.hxx %_DEST%\inc%_EXT%\framework\actiontriggerhelper.hxx
+hedabu: ..\inc\classes\addonsoptions.hxx %_DEST%\inc%_EXT%\framework\addonsoptions.hxx
 hedabu: ..\inc\dispatch\interaction.hxx %_DEST%\inc%_EXT%\framework\interaction.hxx
 hedabu: ..\inc\classes\addonsoptions.hxx %_DEST%\inc%_EXT%\framework\addonsoptions.hxx
+hedabu: ..\inc\classes\addonmenu.hxx %_DEST%\inc%_EXT%\framework\addonmenu.hxx
+
+..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
 
 ..\source\unotypes\fw?.xml %_DEST%\xml\*.xml
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathsettings.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-20 10:10:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,14 @@
 #include <stdtypes.h>
 #endif
 
+#ifndef __FRAMEWORK_PROPERTIES_H_
+#include <properties.h>
+#endif
+
+#ifndef __FRAMEWORK_STDTYPES_H_
+#include <stdtypes.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -126,191 +134,204 @@
 #include <unotools/configitem.hxx>
 #endif
 
-#ifndef _LINK_HXX
-#include <tools/link.hxx>
-#endif
-
-
 namespace framework
 {
 
-struct PathSettingsNotify
+struct PathInfo
 {
-    com::sun::star::uno::Sequence< rtl::OUString > aPathSettingsChanged;
+    ::rtl::OUString sPath       ;
+    ::rtl::OUString sValue      ;
+    sal_Bool        bReadOnly   ;
+    sal_Bool        bMultiPath  ;
 };
 
-struct PathSettingsData
+/** implements the data container for the path settings service.
+    It can be used to read/write the right config items; (re-)substitute
+    her path values; check her readonly states and to provide an easy and fast
+    access by using an ID instead of a name. */
+class PathSettingsCfg : protected ThreadHelpBase
+                      , public    utl::ConfigItem
 {
-    // ID's for the supported pathes. Must be sorted by name!!
-    enum PathSettingsId
-    {
-        PS_ADDINPATH,
-        PS_AUTOCORRECTPATH,
-        PS_AUTOTEXTPATH,
-        PS_BACKUPPATH,
-        PS_BASICPATH,
-        PS_BITMAPPATH,
-        PS_CONFIGPATH,
-        PS_DICTIONARYPATH,
-        PS_FAVORITESPATH,
-        PS_FILTERPATH,
-        PS_GALLERYPATH,
-        PS_GRAPHICPATH,
-        PS_HELPPATH,
-        PS_LINGUISTICPATH,
-        PS_MODULEPATH,
-        PS_PALETTEPATH,
-        PS_PLUGINPATH,
-        PS_STORAGEPATH,
-        PS_TEMPPATH,
-        PS_TEMPLATEPATH,
-        PS_UICONFIGPATH,
-        PS_USERCONFIGPATH,
-        PS_USERDICTIONARYPATH,
-        PS_WORKPATH,
-        PS_COUNT
-    };
+    // ______________________________________
+    // const
 
-    void SetValue( PathSettingsId nId, rtl::OUString& aValue );
-    const rtl::OUString& GetValue( PathSettingsId nId ) const;
+    protected:
 
-    // Strings for all supported pathes
-    ::rtl::OUString         m_aAddinPath;
-    ::rtl::OUString         m_aAutoCorrectPath;
-    ::rtl::OUString         m_aAutoTextPath;
-    ::rtl::OUString         m_aBackupPath;
-    ::rtl::OUString         m_aBasicPath;
-    ::rtl::OUString         m_aBitmapPath;
-    ::rtl::OUString         m_aConfigPath;
-    ::rtl::OUString         m_aDictionaryPath;
-    ::rtl::OUString         m_aFavoritesPath;
-    ::rtl::OUString         m_aFilterPath;
-    ::rtl::OUString         m_aGalleryPath;
-    ::rtl::OUString         m_aGraphicPath;
-    ::rtl::OUString         m_aHelpPath;
-    ::rtl::OUString         m_aLinguisticPath;
-    ::rtl::OUString         m_aModulePath;
-    ::rtl::OUString         m_aPalettePath;
-    ::rtl::OUString         m_aPluginPath;
-    ::rtl::OUString         m_aStoragePath;
-    ::rtl::OUString         m_aTempPath;
-    ::rtl::OUString         m_aTemplatePath;
-    ::rtl::OUString         m_aUIConfigPath;
-    ::rtl::OUString         m_aUserConfigPath;
-    ::rtl::OUString         m_aUserDictionaryPath;
-    ::rtl::OUString         m_aWorkPath;
-
-    ::rtl::OUString         m_aEmptyStr;
-};
-
-class PathSettings;
-class PathSettings_Impl : public utl::ConfigItem
-{
-    friend class PathSettings;
-
-    public:
-        PathSettings_Impl( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xSMgr, const Link& aNotifyLink );
-        virtual ~PathSettings_Impl();
-
-        /** is called from the ConfigManager before application ends or from the
-            PropertyChangeListener if the sub tree broadcasts changes. */
-        virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
-
-        sal_Bool        ReadConfigurationData( PathSettingsData& rSettingsData, const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
-        sal_Bool        WriteConfigurationData( const PathSettingsData& rSettingsData, const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
-        sal_Bool        CheckAndReplaceNewPathValue( PathSettingsData::PathSettingsId nId, rtl::OUString& aNewPathValue );
-
-        int             GetHandleFromPropertyName( const rtl::OUString& aPropertyName );
-
-    private:
-        sal_Bool        CheckPath( PathSettingsData::PathSettingsId nId, const rtl::OUString& aNewPathValue );
-
-        class PropToHandleHashMap : public ::std::hash_map< ::rtl::OUString,
-                                                            PathSettingsData::PathSettingsId,
-                                                            OUStringHashCode,
-                                                            ::std::equal_to< ::rtl::OUString > >
+        enum EPropHandle
         {
-            public:
-                inline void free()
-                {
-                    PropToHandleHashMap().swap( *this );
-                }
+            E_ADDIN         = PATHSETTINGS_PROPHANDLE_ADDIN         ,
+            E_AUTOCORRECT   = PATHSETTINGS_PROPHANDLE_AUTOCORRECT   ,
+            E_AUTOTEXT      = PATHSETTINGS_PROPHANDLE_AUTOTEXT      ,
+            E_BACKUP        = PATHSETTINGS_PROPHANDLE_BACKUP        ,
+            E_BASIC         = PATHSETTINGS_PROPHANDLE_BASIC         ,
+            E_BITMAP        = PATHSETTINGS_PROPHANDLE_BITMAP        ,
+            E_CONFIG        = PATHSETTINGS_PROPHANDLE_CONFIG        ,
+            E_DICTIONARY    = PATHSETTINGS_PROPHANDLE_DICTIONARY    ,
+            E_FAVORITE      = PATHSETTINGS_PROPHANDLE_FAVORITE      ,
+            E_FILTER        = PATHSETTINGS_PROPHANDLE_FILTER        ,
+            E_GALLERY       = PATHSETTINGS_PROPHANDLE_GALLERY       ,
+            E_GRAPHIC       = PATHSETTINGS_PROPHANDLE_GRAPHIC       ,
+            E_HELP          = PATHSETTINGS_PROPHANDLE_HELP          ,
+            E_LINGUISTIC    = PATHSETTINGS_PROPHANDLE_LINGUISTIC    ,
+            E_MODULE        = PATHSETTINGS_PROPHANDLE_MODULE        ,
+            E_PALETTE       = PATHSETTINGS_PROPHANDLE_PALETTE       ,
+            E_PLUGIN        = PATHSETTINGS_PROPHANDLE_PLUGIN        ,
+            E_STORAGE       = PATHSETTINGS_PROPHANDLE_STORAGE       ,
+            E_TEMP          = PATHSETTINGS_PROPHANDLE_TEMP          ,
+            E_TEMPLATE      = PATHSETTINGS_PROPHANDLE_TEMPLATE      ,
+            E_UICONFIG      = PATHSETTINGS_PROPHANDLE_UICONFIG      ,
+            E_USERCONFIG    = PATHSETTINGS_PROPHANDLE_USERCONFIG    ,
+            E_USERDICTIONARY= PATHSETTINGS_PROPHANDLE_USERDICTIONARY,
+            E_WORK          = PATHSETTINGS_PROPHANDLE_WORK
         };
 
-        Link                                                                            m_aListenerNotify ;
-        PropToHandleHashMap                                                             m_aPropNameToHandleMap ;
-        com::sun::star::uno::Reference< com::sun::star::util::XStringSubstitution >     m_xPathVariableSubstitution ;
-        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >    m_xFactory ;
+        static const ::rtl::OUString PropNames[];
+        static const css::beans::Property Properties[];
+
+    // ______________________________________
+    // member
+
+    private:
+
+        /** list of all supported path variables.
+            Correspond to the defined lists of names/handles of static class PathSettingsPropHelp.
+            see file "properties.h" for further informations. */
+        PathInfo m_lPathes[PATHSETTINGS_PROPCOUNT];
+
+        /** is used to map path names faster to her corresponding ID. */
+        NameToHandleHash m_lIDMap;
+
+        /** helper needed to (re-)substitute all internal save path values. */
+        css::uno::Reference< css::util::XStringSubstitution > m_xSubstitution;
+
+    // ______________________________________
+    // interface
+
+    public:
+
+        /** initialize this instance and read all needed config values immediatly.
+            The given uno manager is used to create own needed helper services. */
+        PathSettingsCfg( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
+
+        /** destroy this instance and free all used memory.
+            Further it write all changed items back to the configguration, if it was not already done. */
+        virtual ~PathSettingsCfg();
+
+        /** is called from the ConfigManager before application ends or from the
+            PropertyChangeListener if the sub tree broadcasts changes.
+            We have to update the specified config items and actualize our cache. */
+        virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& lPropertyNames );
+
+        /** returns the path value for the given path handle.
+            It returns an empty string for invalid calls. */
+        ::rtl::OUString getPath( EPropHandle nID ) const;
+
+        /** set the new path value for the given path handle.
+            Invalid calls will be ignored and do nothing. */
+        void setPath(       EPropHandle      nID    ,
+                      const ::rtl::OUString& sValue );
+
+        /** returns the readonly state for theiven path handle.
+            It returns false as default and answer for invalid calls! */
+        sal_Bool isReadOnly( EPropHandle nID ) const;
+
+        /** some of our pathes are multi pathes.
+            They contain a list of values instead of one string only.
+            This method returns true, if the given handle match to a
+            multi path (they are well known and fix!); false if not. */
+        sal_Bool isMultiPath( EPropHandle nID ) const;
+
+        /** returns a descriptor for all path properties.
+            It contains against some fix informations some dynamic ones too (e.g. readonly states).
+            But note: This method can return valid results only, if all neccessary data was readed
+            before from the configuration! */
+        const css::uno::Sequence< css::beans::Property > getPropertyDescriptor() const;
+
+        /** map given path name to it's corresponding ID.
+            But the out parameter is set to a valid enum value only in case
+            mapping was successfully. If method returns false - rID will be undefined!
+            Using of such "invalid" ID can produce crashes ... */
+        sal_Bool mapName2Handle( const ::rtl::OUString& sName ,
+                                       EPropHandle&     rID   ) const;
+
+        /** it checks, if the given path value seams to be a valid URL or system path.
+            To do it right it must be called with an information about the path type (single/multi path)! */
+        sal_Bool isValidValue( const ::rtl::OUString& sValue     ,
+                                     sal_Bool         bMultiPath ) const;
+
+        /** it prepares the given path for saving.
+            Doing so the path value must be checked and substituted.
+            Further this method must know the path type (single/multi path) */
+        sal_Bool checkAndSubstituteValue( ::rtl::OUString& sValue     ,
+                                          sal_Bool         bMultiPath ) const;
+
+    // ______________________________________
+    // helper
+
+    private:
+
+        /** read the given list of path entries from the configuration and update
+            all internal structures. And additional parameter "bSearchID" can be used
+            to optimize this method and disable mapping of path names to her corresponding ID.
+            If it's set to "FALSE" ... the method require that the array position of a path name
+            entry inside "lNames" is equal to it's property handle! */
+        void impl_read( const css::uno::Sequence< ::rtl::OUString >& lNames    ,
+                              sal_Bool                               bSearchID );
 };
 
-
-class PathSettings  :   // interfaces
-                    public  css::lang::XTypeProvider             ,
-                    public  css::lang::XServiceInfo              ,
-                    // base classes
-                    // Order is neccessary for right initialization!
-                    private ThreadHelpBase                       ,
-                    public  ::cppu::OBroadcastHelper             ,
-                    public  ::cppu::OPropertySetHelper           ,
-                    public  ::cppu::OWeakObject
+class PathSettings : public  css::lang::XTypeProvider             ,
+                     public  css::lang::XServiceInfo              ,
+                     // base classes
+                     // Order is neccessary for right initialization!
+                     private PathSettingsCfg                      ,
+                     public  ::cppu::OBroadcastHelper             ,
+                     public  ::cppu::OPropertySetHelper           , // => XPropertySet / XFastPropertySet / XMultiPropertySet
+                     public  ::cppu::OWeakObject                    // => XWeak, XInterface
 {
-    friend class PathSettings_Impl;
+    // ___________________________________________
+    // member
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  public methods
-    //-------------------------------------------------------------------------------------------------------------
+    private:
+
+        /** reference to factory, which has create this instance. */
+        css::uno::Reference< css::lang::XMultiServiceFactory > m_xSMGR;
+
+    // ___________________________________________
+    // interface
+
     public:
-                 PathSettings( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
-        virtual ~PathSettings(                                                                        );
 
-        //  XInterface, XTypeProvider, XServiceInfo
+        /** initialize a new instance of this class.
+            Attention: It's neccessary for right function of this class, that the order of base
+            classes is the right one. Because we transfer information from one base to another
+            during this ctor runs! */
+        PathSettings( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
+
+        /** free all used ressources ... if it was not already done. */
+        virtual ~PathSettings();
+
+        /** declaration of XInterface, XTypeProvider, XServiceInfo */
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
 
+    // ___________________________________________
+    // helper
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
-    protected:
+    private:
 
         //  OPropertySetHelper
         virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        (       css::uno::Any&  aConvertedValue ,
                                                                                                                      css::uno::Any&  aOldValue       ,
                                                                                                                      sal_Int32       nHandle         ,
-                                                                                                               const css::uno::Any&  aValue          )
-            throw( css::lang::IllegalArgumentException );
-
+                                                                                                               const css::uno::Any&  aValue          ) throw(css::lang::IllegalArgumentException);
         virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast(       sal_Int32       nHandle         ,
-                                                                                                               const css::uno::Any&  aValue          )
-            throw( css::uno::Exception                 );
-
+                                                                                                               const css::uno::Any&  aValue          ) throw(css::uno::Exception);
         virtual void                                                SAL_CALL getFastPropertyValue            (       css::uno::Any&  aValue          ,
                                                                                                                      sal_Int32       nHandle         ) const;
         virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper                   (                                       );
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo              (                                       ) throw(::com::sun::star::uno::RuntimeException);
 
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-            throw (::com::sun::star::uno::RuntimeException);
-
-        DECL_LINK( implts_ConfigurationNotify, PathSettingsNotify* );
-
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
-    private:
-        sal_Bool                                                impl_tryToChangeProperty        (       rtl::OUString   sCurrentValue   ,
-                                                                                                  const css::uno::Any&  aNewValue       ,
-                                                                                                        css::uno::Any&  aOldValue       ,
-                                                                                                        css::uno::Any& aConvertedValue )
-            throw( css::lang::IllegalArgumentException  );
-
-        static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
-
-        // Members
-        css::uno::Reference< css::lang::XMultiServiceFactory >                      m_xFactory                  ;   /// reference to factory, which has create this instance
-        PathSettings_Impl                                                           m_aImpl                     ;
-        PathSettingsData                                                            m_aPathSettingsData         ;
 };
 
 } // namespace framework

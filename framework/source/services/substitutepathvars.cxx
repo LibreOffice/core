@@ -2,9 +2,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-20 10:13:34 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,7 +614,7 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
     const rtl::OUString& aSharePointNodeName,
     SubstituteRuleVector& rRuleSet )
 {
-    Sequence< rtl::OUString > aSharePointMappingsNodeNames = GetNodeNames( aSharePointNodeName );
+    Sequence< rtl::OUString > aSharePointMappingsNodeNames = GetNodeNames( aSharePointNodeName, utl::CONFIG_NAME_LOCAL_PATH );
 
     sal_Int32 nSharePointMapping = 0;
     while ( nSharePointMapping < aSharePointMappingsNodeNames.getLength() )
@@ -624,8 +624,6 @@ void SubstitutePathVariables_Impl::ReadSharePointRuleSetFromConfiguration(
         aSharePointMapping += aSharePointMappingsNodeNames[ nSharePointMapping ];
 
         // Read SharePointMapping
-        Sequence< rtl::OUString > aSharePointMappingNodeNames = GetNodeNames( aSharePointMapping );
-
         rtl::OUString aDirValue;
         rtl::OUString aDirProperty( aSharePointMapping );
         aDirProperty += m_aDirPropertyName;
@@ -1051,10 +1049,11 @@ throw ( NoSuchElementException, RuntimeException )
             sal_Int32       nReplaceLength  = 0;
             rtl::OUString   aReplacement;
             rtl::OUString   aSubString      = aWorkText.copy( nPosition, nLength );
+            rtl::OUString   aSubVarString;
 
             // Path variables are not case sensitive!
-            aSubString = aSubString.toAsciiLowerCase();
-            VarNameToIndexMap::const_iterator pIter = m_aPreDefVarMap.find( aSubString );
+            aSubVarString = aSubString.toAsciiLowerCase();
+            VarNameToIndexMap::const_iterator pIter = m_aPreDefVarMap.find( aSubVarString );
             if ( pIter != m_aPreDefVarMap.end() )
             {
                 // Fixed/Predefined variable found

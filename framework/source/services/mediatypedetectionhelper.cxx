@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediatypedetectionhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-07-04 13:32:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,32 +167,4 @@ sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(
 }
 
 }   // namespace framework
-/*-------------------------------------------------------------------------
 
-    $Log: not supported by cvs2svn $
-    Revision 1.4  2001/03/29 13:17:15  as
-    no TF_FILTER, split defines.hxx, namespaces, new thread helper, some threadsafe code
-
-    Revision 1.3  2001/01/26 06:42:14  as
-    change baeh_services/BAEHSERVICES to services/SERVICES
-
-    Revision 1.2  2000/11/28 14:45:30  as
-    #79040# new version of new type detection
-
-    Revision 1.1  2000/11/23 14:52:10  as
-    #79040# implement new filter detection - use TF_FILTER to enable
-
-    Revision 1.1.1.1  2000/09/18 16:29:23  hr
-    initial import
-
-    Revision 1.4  2000/09/15 15:08:57  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.3  2000/09/01 13:05:41  as
-    new targeting, new macros, new dispatching ...
-
-    Revision 1.2  2000/07/31 10:13:38  iha
-    typemapping
-
-
--------------------------------------------------------------------------*/

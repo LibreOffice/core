@@ -2,6 +2,11 @@
 #ifndef __FRAMEWORK_RECORDING_DISPATCHRECORDER_HXX_
 #define __FRAMEWORK_RECORDING_DISPATCHRECORDER_HXX_
 
+/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
+               with solaris headers ...
+*/
+#include <vector>
+
 // own includes
 #ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
 #include <threadhelp/threadhelpbase.hxx>
@@ -78,8 +83,6 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-
-#include <vector>
 
 namespace framework{
 

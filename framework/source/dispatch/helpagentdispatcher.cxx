@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpagentdispatcher.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:52:47 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,32 +425,4 @@ namespace framework
 //........................................................................
 }   // namespace framework
 //........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.4  2001/11/05 10:06:23  oj
- *  #94279# set Listener to NULL in dtor
- *
- *  Revision 1.3  2001/10/11 09:21:51  pb
- *  fix: #93014# dont show tooltip
- *
- *  Revision 1.2  2001/08/17 08:47:41  pb
- *  fix: #91160# ignore the url also on click closer
- *
- *  Revision 1.1  2001/07/02 13:27:02  as
- *  #79955# move to dispatch dir
- *
- *  Revision 1.3  2001/06/11 10:27:57  as
- *  #85529# use new lock mechanism
- *
- *  Revision 1.2  2001/05/07 15:07:20  fs
- *  moved the HelpAgentWindow implementation to SVTOOLS (prevent creating a new resource file here)
- *
- *  Revision 1.1  2001/05/07 13:42:24  fs
- *  initial checkin - help agent dispatcher
- *
- *
- *  Revision 1.0 03.05.01 11:28:01  fs
- ************************************************************************/
 

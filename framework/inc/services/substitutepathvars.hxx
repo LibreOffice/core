@@ -2,9 +2,9 @@
  *
  *  $RCSfile: substitutepathvars.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2002-09-04 16:58:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 
 #ifndef __FRAMEWORK_SERVICES_SUBSTPATHVARS_HXX_
 #define __FRAMEWORK_SERVICES_SUBSTPATHVARS_HXX_
+
+/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
+               with solaris headers ...
+*/
+#include <vector>
+#include <list>
+#include <hash_map>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -137,11 +144,6 @@
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
 #endif
-
-#include <vector>
-#include <list>
-#include <hash_map>
-
 
 namespace framework
 {
@@ -285,7 +287,7 @@ struct ReSubstFixedVarOrder
     sal_Int32       nVarValueLength;
     PreDefVariable  eVariable;
 
-    bool operator< ( const ReSubstFixedVarOrder& aFixedVarOrder ) const
+    bool ReSubstFixedVarOrder::operator< ( const ReSubstFixedVarOrder& aFixedVarOrder ) const
     {
         // Reverse operator< to have high to low ordering
         return ( nVarValueLength > aFixedVarOrder.nVarValueLength );
@@ -297,7 +299,7 @@ struct ReSubstUserVarOrder
     sal_Int32       nVarValueLength;
     rtl::OUString   aVarName;
 
-    bool operator< ( const ReSubstUserVarOrder& aUserVarOrder ) const
+    bool ReSubstUserVarOrder::operator< ( const ReSubstUserVarOrder& aUserVarOrder ) const
     {
         // Reverse operator< to have high to low ordering
         return ( nVarValueLength > aUserVarOrder.nVarValueLength );

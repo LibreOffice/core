@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmkmenu.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-11 11:45:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #include <vcl/config.hxx>
 #include <vcl/svapp.hxx>
 #include <svtools/dynamicmenuoptions.hxx>
+#ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
+#include <svtools/menuoptions.hxx>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  namespace
@@ -227,6 +230,7 @@ void BmkMenu::Initialize()
         aDynamicMenuEntries = SvtDynamicMenuOptions().GetMenu( E_NEWMENU );
     else if ( m_nType == BmkMenu::BMK_WIZARDMENU )
         aDynamicMenuEntries = SvtDynamicMenuOptions().GetMenu( E_WIZARDMENU );
+    BOOL bShowMenuImages = SvtMenuOptions().IsMenuIconsEnabled();
 
     ::rtl::OUString aTitle;
     ::rtl::OUString aURL;
@@ -251,24 +255,29 @@ void BmkMenu::Initialize()
             sal_Bool    bImageSet = sal_False;
             USHORT      nId = CreateMenuId();
 
-            if ( aImageId.getLength() > 0 )
+            if ( bShowMenuImages )
             {
-                Image aImage = GetImageFromURL( m_xFrame, aImageId, FALSE, bIsHiContrastMode );
-                if ( !!aImage )
+                if ( aImageId.getLength() > 0 )
                 {
-                    bImageSet = sal_True;
-                    InsertItem( nId, aTitle, aImage );
+                    Image aImage = GetImageFromURL( m_xFrame, aImageId, FALSE, bIsHiContrastMode );
+                    if ( !!aImage )
+                    {
+                        bImageSet = sal_True;
+                        InsertItem( nId, aTitle, aImage );
+                    }
+                }
+
+                if ( !bImageSet )
+                {
+                    Image aImage = GetImageFromURL( m_xFrame, aURL, FALSE, bIsHiContrastMode );
+                    if ( !aImage )
+                        InsertItem( nId, aTitle );
+                    else
+                        InsertItem( nId, aTitle, aImage );
                 }
             }
-
-            if ( !bImageSet )
-            {
-                Image aImage = GetImageFromURL( m_xFrame, aURL, FALSE, bIsHiContrastMode );
-                if ( !aImage )
-                    InsertItem( nId, aTitle );
-                else
-                    InsertItem( nId, aTitle, aImage );
-            }
+            else
+                InsertItem( nId, aTitle );
 
             // Store values from configuration to the New and Wizard menu entries to enable
             // sfx2 based code to support high contrast mode correctly!

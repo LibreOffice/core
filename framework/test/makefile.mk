@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: as $ $Date: 2002-08-13 12:20:58 $
+#   last change: $Author: hr $ $Date: 2003-03-25 18:21:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,8 +61,9 @@
 #*************************************************************************
 PRJ=..
 
-PRJNAME=            framework
-TARGET=             test
+PRJNAME=			framework
+TARGET=				test
+LIBTARGET=			NO
 ENABLE_EXCEPTIONS=	TRUE
 USE_DEFFILE=		TRUE
 NO_BSYMBOLIC=		TRUE
@@ -77,33 +78,64 @@ NO_BSYMBOLIC=		TRUE
 LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
 .ENDIF
 
-CDEFS += -DENABLE_COMPONENT_SELF_CHECK
+# --- applikation: "test" --------------------------------------------------
 
-# --- debug lib: "fwkdbg.dll" --------------------------------------------------
+#APP1TARGET= 	test
 
-SHL1TARGET=     fwkdbg
+#APP1OBJS=		$(SLO)$/test.obj
 
-SHL1IMPLIB=     ifwkdbg
+#APP1LIBS=		$(SLB)$/fwk_classes.lib				\
+#				$(SLB)$/fwk_helper.lib
 
-SHL1OBJS=       $(SLO)$/debugservice.obj                            \
-                $(SLO)$/register.obj                                \
-                $(SLO)$/argumentanalyzer.obj
+#APP1STDLIBS=	$(CPPULIB)							\
+#				$(CPPUHELPERLIB)					\
+#				$(OSLLIB)							\
+#				$(SALLIB)							\
+#				$(VOSLIB)							\
+#				$(TOOLSLIB) 						\
+#				$(SVTOOLLIB)						\
+#				$(TKLIB)							\
+#				$(COMPHELPERLIB)					\
+#				$(SVLIB)
 
-SHL1STDLIBS=    $(CPPULIB)                                          \
-                $(CPPUHELPERLIB)                                    \
-                $(COMPHELPERLIB)                                    \
-                $(UNOTOOLSLIB)                                      \
-                $(TOOLSLIB)                                         \
-                $(VOSLIB)                                           \
-                $(SVLLIB)                                           \
-                $(SALLIB)                                           \
-                $(FWILIB)
+#APP1DEPN=		$(SLB)$/fwk_helper.lib				\
+#				$(SLB)$/fwk_classes.lib
 
-SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
+#.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
+#APP1DEF=		$(MISC)$/test.def
+#.ENDIF
 
-DEF1NAME=       $(SHL1TARGET)
+# --- application: "threadtest" --------------------------------------------------
 
-DEF1EXPORTFILE=	exports.dxp
+APP2TARGET= 	threadtest
+
+APP2OBJS=		$(SLO)$/threadtest.obj				\
+                $(SLO)$/transactionmanager.obj		\
+                $(SLO)$/transactionguard.obj		\
+                $(SLO)$/fairrwlock.obj				\
+                $(SLO)$/resetableguard.obj			\
+                $(SLO)$/gate.obj					\
+                $(SLO)$/readguard.obj				\
+                $(SLO)$/writeguard.obj
+
+APP2STDLIBS=	$(CPPULIB)							\
+                $(CPPUHELPERLIB)					\
+                $(OSLLIB)							\
+                $(SALLIB)							\
+                $(VOSLIB)							\
+                $(SVLIB)
+
+APP2DEPN=		$(SLO)$/fairrwlock.obj				\
+                $(SLO)$/transactionmanager.obj		\
+                $(SLO)$/transactionguard.obj		\
+                $(SLO)$/resetableguard.obj			\
+                $(SLO)$/gate.obj					\
+                $(SLO)$/readguard.obj				\
+                $(SLO)$/writeguard.obj
+
+.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
+APP2DEF=		$(MISC)$/threadtest.def
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

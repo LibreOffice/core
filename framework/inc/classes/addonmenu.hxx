@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonmenu.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 14:15:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,9 +95,9 @@ class AddonMenu : public PopupMenu
                         AddonMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
                         ~AddonMenu();
 
-    void                Initialize(); // Synchrones Laden der Eintraege
+        void            Initialize(); // Synchrones Laden der Eintraege
 
-    static sal_Bool     HasElements();
+        static sal_Bool HasElements();
 
     protected:
         USHORT          CreateMenuId();
@@ -108,6 +108,44 @@ class AddonMenu : public PopupMenu
 
         AddonMenu_Impl* _pImp;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& m_xFrame;
+};
+
+class AddonPopupMenu : public PopupMenu
+{
+    public:
+                                ~AddonPopupMenu();
+
+        const rtl::OUString&    GetContext() const { return m_aContext; }
+        const rtl::OUString&    GetCommandURL() const { return m_aCommandURL; }
+        const rtl::OUString&    GetTitle() const { return m_aTitle; }
+        USHORT                  GetId() const { return m_nId; }
+
+        // Get the top-level popup menus for addons. The menubar is used as a container. Every popup menu is from type AddonPopupMenu!
+        static void             GetAddonPopupMenus( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                                    MenuBar* pAddonPopupMenus );
+
+        // Merge the addon popup menus into the given menu bar at the provided pos.
+        static void             MergeAddonPopupMenus( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                                                      ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel,
+                                                      USHORT                nMergeAtPos,
+                                                      MenuBar*              pMergeMenuBar );
+
+    protected:
+        void                    Initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rAddonPopupMenuDefinition );
+        USHORT                  CreateMenuId();
+        sal_Bool                IsCorrectContext( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel ) const;
+
+    private:
+                                AddonPopupMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+
+        PopupMenu*              BuildSubMenu( ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > > aAddonSubMenuDefinition );
+
+        USHORT                                                                  m_nId;
+        rtl::OUString                                                           m_aCommandURL;
+        rtl::OUString                                                           m_aTitle;
+        rtl::OUString                                                           m_aContext;
+        AddonMenu_Impl*                                                         _pImp;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&    m_xFrame;
 };
 
 } // namespace framework

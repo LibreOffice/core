@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.69 $
+#   $Revision: 1.70 $
 #
-#   last change: $Author: cd $ $Date: 2002-10-14 11:44:05 $
+#   last change: $Author: hr $ $Date: 2003-03-25 18:22:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,9 +69,9 @@ ENABLE_EXCEPTIONS=	TRUE
 NO_BSYMBOLIC=		TRUE
 GEN_HID=                TRUE
 
-COMP3TYPELIST=		fwl
-COMP4TYPELIST=		fwk
-COMP5TYPELIST=		lgd
+#COMP3TYPELIST=		fwl
+#COMP4TYPELIST=		fwk
+#COMP5TYPELIST=		lgd
 
 # --- Settings -----------------------------------------------------
 
@@ -90,7 +90,8 @@ LIB1OBJFILES=   $(SLO)$/wildcard.obj                            \
                 $(SLO)$/filtercachedata.obj                     \
                 $(SLO)$/protocolhandlercache.obj				\
                 $(SLO)$/networkdomain.obj                       \
-                $(SLO)$/configaccess.obj
+                $(SLO)$/configaccess.obj                        \
+                $(SLO)$/framelistanalyzer.obj
 
 # --- export library for sfx2 -------------------------------------------------
 
@@ -123,7 +124,8 @@ LIB2OBJFILES=   $(SLO)$/attributelist.obj                       \
                 $(SLO)$/interaction.obj							\
                 $(SLO)$/addonmenu.obj							\
                 $(SLO)$/addonsoptions.obj						\
-                $(SLO)$/fwkresid.obj
+                $(SLO)$/fwkresid.obj							\
+                $(SLO)$/acceleratorinfo.obj
 
 
 # --- import classes library ---------------------------------------------------
@@ -222,8 +224,7 @@ SHL4TARGET=		fwk$(UPD)$(DLLPOSTFIX)
 
 SHL4IMPLIB=		ifwk
 
-SHL4OBJS=       $(SLO)$/asyncquit.obj               \
-                $(SLO)$/basedispatcher.obj			\
+SHL4OBJS=       $(SLO)$/basedispatcher.obj          \
                 $(SLO)$/blankdispatcher.obj			\
                 $(SLO)$/createdispatcher.obj		\
                 $(SLO)$/desktop.obj					\
@@ -244,6 +245,7 @@ SHL4OBJS=       $(SLO)$/asyncquit.obj               \
                 $(SLO)$/pluginframe.obj				\
                 $(SLO)$/registerservices.obj		\
                 $(SLO)$/selfdispatcher.obj			\
+                $(SLO)$/closedispatcher.obj         \
                 $(SLO)$/soundhandler.obj			\
                 $(SLO)$/statusindicator.obj			\
                 $(SLO)$/statusindicatorfactory.obj	\
@@ -253,9 +255,12 @@ SHL4OBJS=       $(SLO)$/asyncquit.obj               \
                 $(SLO)$/urltransformer.obj			\
                 $(SLO)$/documentlist.obj            \
                 $(SLO)$/xmldocproperties.obj        \
-                $(SLO)$/jobexecutor.obj				\
-                $(SLO)$/jobhandler.obj              \
-                $(SLO)$/jobdispatch.obj                     \
+                $(SLO)$/configaccess.obj            \
+                $(SLO)$/job.obj                     \
+                $(SLO)$/jobdata.obj                 \
+                $(SLO)$/jobdispatch.obj             \
+                $(SLO)$/jobexecutor.obj             \
+                $(SLO)$/jobresult.obj               \
                 $(SLO)$/joburl.obj                  \
                 $(SLO)$/dispatchrecordersupplier.obj\
                 $(SLO)$/dispatchrecorder.obj		\
@@ -265,7 +270,10 @@ SHL4OBJS=       $(SLO)$/asyncquit.obj               \
                 $(SLO)$/loadeventlistener.obj		\
                 $(SLO)$/asyncloadthread.obj         \
                 $(SLO)$/componentloader.obj         \
-                $(SLO)$/persistentwindowstate.obj
+                $(SLO)$/persistentwindowstate.obj   \
+                $(SLO)$/colorlistener.obj           \
+                $(SLO)$/backingcomp.obj				\
+                $(SLO)$/dispatchhelper.obj
 
 SHL4STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\

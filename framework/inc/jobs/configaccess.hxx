@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configaccess.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-10-11 13:41:07 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,9 @@ class ConfigAccess : public ThreadHelpBase
                                const ::rtl::OUString&                                        sRoot );
         virtual ~ConfigAccess();
 
-        virtual void open ( EOpenMode eMode );
-        virtual void close(                 );
+        virtual void      open   ( EOpenMode eMode );
+        virtual void      close  (                 );
+        virtual EOpenMode getMode(                 ) const;
 
         virtual const css::uno::Reference< css::uno::XInterface >& cfg();
 };

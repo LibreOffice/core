@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oframes.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:16:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@
 #include <macros/xinterface.hxx>
 #endif
 
+#ifndef __FRAMEWORK_MACROS_XTYPEPROVIDER_HXX_
+#include <macros/xtypeprovider.hxx>
+#endif
+
 #ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
 #include <macros/debug.hxx>
 #endif
@@ -152,7 +156,8 @@ namespace framework{
     @devstatus      deprecated
 *//*-*************************************************************************************************************/
 
-class OFrames   :   public css::frame::XFrames  ,   //=> XIndexAccess => XElementAccess
+class OFrames   :   public css::lang::XTypeProvider ,
+                    public css::frame::XFrames  ,   //=> XIndexAccess => XElementAccess
                     private ThreadHelpBase      ,   // Must be the first of baseclasses - Is neccessary for right initialization of objects!
                     public ::cppu::OWeakObject
 {
@@ -190,6 +195,7 @@ class OFrames   :   public css::frame::XFrames  ,   //=> XIndexAccess => XElemen
         //---------------------------------------------------------------------------------------------------------
 
         DECLARE_XINTERFACE
+        DECLARE_XTYPEPROVIDER
 
         //---------------------------------------------------------------------------------------------------------
         //  XFrames

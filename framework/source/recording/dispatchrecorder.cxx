@@ -27,6 +27,9 @@ using namespace ::com::sun::star::uno;
 
 namespace framework{
 
+// used to mark a dispatch as comment (mostly it indicates an error) Changing of this wdefine will impact all using of such comments ...
+#define REM_AS_COMMENT    "rem "
+
 //*****************************************************************************************************************
 //  XInterface, XTypeProvider, XServiceInfo
 //*****************************************************************************************************************
@@ -180,13 +183,10 @@ void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException
     aScriptBuffer.appendAscii("rem define variables\n");
     aScriptBuffer.appendAscii("dim document   as object\n");
     aScriptBuffer.appendAscii("dim dispatcher as object\n");
-    aScriptBuffer.appendAscii("dim parser     as object\n");
-    aScriptBuffer.appendAscii("dim disp     as object\n");
-    aScriptBuffer.appendAscii("dim url        as new com.sun.star.util.URL\n");
     aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
     aScriptBuffer.appendAscii("rem get access to the document\n");
-    aScriptBuffer.appendAscii("document = ThisComponent.CurrentController.Frame\n");
-    aScriptBuffer.appendAscii("parser   = createUnoService(\"com.sun.star.util.URLTransformer\")\n\n");
+    aScriptBuffer.appendAscii("document   = ThisComponent.CurrentController.Frame\n");
+    aScriptBuffer.appendAscii("dispatcher = createUnoService(\"com.sun.star.frame.DispatchHelper\")\n\n");
 
     std::vector< com::sun::star::frame::DispatchStatement>::iterator p;
     for ( p = m_aStatements.begin(); p != m_aStatements.end(); p++ )
@@ -351,7 +351,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
 
             // add arg().Name
             if(bAsComment)
-                aArgumentBuffer.appendAscii("rem ");
+                aArgumentBuffer.appendAscii(REM_AS_COMMENT);
             aArgumentBuffer.append     (sArrayName);
             aArgumentBuffer.appendAscii("(");
             aArgumentBuffer.append     (i);
@@ -361,7 +361,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
 
             // add arg().Value
             if(bAsComment)
-                aArgumentBuffer.appendAscii("rem ");
+                aArgumentBuffer.appendAscii(REM_AS_COMMENT);
             aArgumentBuffer.append     (sArrayName);
             aArgumentBuffer.appendAscii("(");
             aArgumentBuffer.append     (i);
@@ -375,7 +375,7 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
     if(nValidArgs>0)
     {
         if(bAsComment)
-            aScriptBuffer.appendAscii("rem ");
+            aScriptBuffer.appendAscii(REM_AS_COMMENT);
         aScriptBuffer.appendAscii("dim ");
         aScriptBuffer.append     (sArrayName);
         aScriptBuffer.appendAscii("(");
@@ -385,32 +385,20 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
         aScriptBuffer.appendAscii("\n");
     }
 
-    // add code for parsing urls
-    if(bAsComment)
-        aScriptBuffer.appendAscii("rem ");
-    aScriptBuffer.appendAscii("url.Complete = \"");
-    aScriptBuffer.append     (aURL);
-    aScriptBuffer.appendAscii("\"\n");
-    if(bAsComment)
-        aScriptBuffer.appendAscii("rem ");
-    aScriptBuffer.appendAscii("parser.parseStrict(url)\n");
-
     // add code for dispatches
     if(bAsComment)
-        aScriptBuffer.appendAscii("rem ");
-    aScriptBuffer.appendAscii("disp = document.queryDispatch(url,\"\",0)\n");
-    if(bAsComment)
-        aScriptBuffer.appendAscii("rem ");
+        aScriptBuffer.appendAscii(REM_AS_COMMENT);
+    aScriptBuffer.appendAscii("dispatcher.executeDispatch(document, \"");
+    aScriptBuffer.append     (aURL);
+    aScriptBuffer.appendAscii("\", \"\", 0, ");
     if(nValidArgs<1)
-        aScriptBuffer.appendAscii("disp.dispatch(url,Array())\n");
+        aScriptBuffer.appendAscii("Array()");
     else
     {
-        aScriptBuffer.appendAscii("disp.dispatch(url,");
         aScriptBuffer.append( sArrayName.getStr() );
-        aScriptBuffer.appendAscii("())\n");
+        aScriptBuffer.appendAscii("()");
     }
-
-    aScriptBuffer.appendAscii("\n");
+    aScriptBuffer.appendAscii(")\n\n");
 
     /* SAFE { */
     m_nRecordingID++;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: timerhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:18:30 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,14 +115,4 @@ namespace framework
 //........................................................................
 
 #endif // _FRAMEWORK_HELPER_TIMERHELPER_HXX_
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/05/07 13:40:22  fs
- *  initial checkin - a vos-based timer using a callback on expiration
- *
- *
- *  Revision 1.0 03.05.01 16:10:30  fs
- ************************************************************************/
 

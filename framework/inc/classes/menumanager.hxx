@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 14:17:53 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,11 @@
 #ifndef __FRAMEWORK_CLASSES_MENUMANAGER_HXX_
 #define __FRAMEWORK_CLASSES_MENUMANAGER_HXX_
 
+/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
+               with solaris headers ...
+*/
+#include <vector>
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -94,10 +99,6 @@
 #include <vcl/menu.hxx>
 #endif
 
-#ifndef __SGI_STL_VECTOR
-#include <vector>
-#endif
-
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -125,6 +126,7 @@ namespace framework
 
 class BmkMenu;
 class AddonMenu;
+class AddonPopupMenu;
 class MenuManager : public XSTATUSLISTENER      ,
                     public ThreadHelpBase           ,
                     public ::cppu::OWeakObject
@@ -142,6 +144,11 @@ class MenuManager : public XSTATUSLISTENER      ,
 
         MenuManager( REFERENCE< XFRAME >& rFrame,
                      AddonMenu*         pAddonMenu,
+                     sal_Bool           bDelete,
+                     sal_Bool           bDeleteChildren );
+
+        MenuManager( REFERENCE< XFRAME >& rFrame,
+                     AddonPopupMenu*    pAddonMenu,
                      sal_Bool           bDelete,
                      sal_Bool           bDeleteChildren );
 

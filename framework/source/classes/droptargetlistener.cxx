@@ -2,9 +2,9 @@
  *
  *  $RCSfile: droptargetlistener.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: as $ $Date: 2002-07-05 08:00:39 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,28 +253,12 @@ void SAL_CALL DropTargetListener::dropActionChanged( const css::datatransfer::dn
 
 void DropTargetListener::implts_BeginDrag( const css::uno::Sequence< css::datatransfer::DataFlavor >& rSupportedDataFlavors )
 {
-    DataFlavorEx aFlavorEx;
-    const css::datatransfer::DataFlavor* pFlavor = rSupportedDataFlavors.getConstArray();
-
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
     m_pFormats->clear();
+    TransferableDataHelper::FillDataFlavorExVector(rSupportedDataFlavors,*m_pFormats);
     aWriteLock.unlock();
     /* } SAFE */
-
-    for( sal_uInt32 i = 0, nCount = rSupportedDataFlavors.getLength(); i < nCount; i++, pFlavor++ )
-    {
-        aFlavorEx.MimeType = pFlavor->MimeType;
-        aFlavorEx.HumanPresentableName = pFlavor->HumanPresentableName;
-        aFlavorEx.DataType = pFlavor->DataType;
-        aFlavorEx.mnSotId = SotExchange::RegisterFormat( *pFlavor );
-
-        /* SAFE { */
-        aWriteLock.lock();
-        m_pFormats->push_back( aFlavorEx );
-        aWriteLock.unlock();
-        /* } SAFE */
-    }
 }
 
 void DropTargetListener::implts_EndDrag()

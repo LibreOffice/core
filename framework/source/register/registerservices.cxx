@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: as $ $Date: 2002-10-11 13:41:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,6 @@
 //  includes of my own project
 //_________________________________________________________________________________________________________________
 
-#include <limits>
-#include <ostream>
-
 #ifndef __FRAMEWORK_MACROS_REGISTRATION_HXX_
 #include <macros/registration.hxx>
 #endif
@@ -114,8 +111,8 @@
 #include <services/frame.hxx>
 #endif
 
-#ifndef __FRAMEWORK_SERVICES_JOBEXECUTOR_HXX_
-#include <services/jobexecutor.hxx>
+#ifndef __FRAMEWORK_JOBS_JOBEXECUTOR_HXX_
+#include <jobs/jobexecutor.hxx>
 #endif
 
 #ifndef __FRAMEWORK_DISPATCH_SOUNDHANDLER_HXX_
@@ -138,8 +135,16 @@
 #include <dispatch/servicehandler.hxx>
 #endif
 
-#ifndef __FRAMEWORK_JOBS_JOBHANDLER_HXX_
-#include <jobs/jobhandler.hxx>
+#ifndef __FRAMEWORK_JOBS_JOBDISPATCH_HXX_
+#include <jobs/jobdispatch.hxx>
+#endif
+
+#ifndef __FRAMEWORK_SERVICES_BACKINGCOMP_HXX_
+#include <services/backingcomp.hxx>
+#endif
+
+#ifndef __FRAMEWORK_SERVICES_DISPATCHHELPER_HXX_
+#include <services/dispatchhelper.hxx>
 #endif
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
@@ -155,7 +160,9 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::DispatchRecorder            )
                         COMPONENTINFO( ::framework::MailToDispatcher            )
                         COMPONENTINFO( ::framework::ServiceHandler              )
-                        COMPONENTINFO( ::framework::JobHandler                  )
+                        COMPONENTINFO( ::framework::JobDispatch                 )
+                        COMPONENTINFO( ::framework::BackingComp                 )
+                        COMPONENTINFO( ::framework::DispatchHelper              )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  )   else
@@ -169,5 +176,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::DispatchRecorder                )   else
                         IFFACTORY( ::framework::MailToDispatcher                )   else
                         IFFACTORY( ::framework::ServiceHandler                  )   else
-                        IFFACTORY( ::framework::JobHandler                      )
+                        IFFACTORY( ::framework::JobDispatch                     )   else
+                        IFFACTORY( ::framework::BackingComp                     )   else
+                        IFFACTORY( ::framework::DispatchHelper                  )
                     )

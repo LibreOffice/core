@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 14:35:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,7 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
     m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
     m_bShowMenuImages   = SvtMenuOptions().IsMenuIconsEnabled();
 
+    sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
     ::std::vector< USHORT > aQueryLabelItemIdVector;
 
     int nItemCount = pMenu->GetItemCount();
@@ -275,60 +276,79 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
         PopupMenu* pPopupMenu = pMenu->GetPopupMenu( nItemId );
         if ( pPopupMenu )
         {
-            MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
-
-            // store menu item command as we later have to know which menu is active (see Activate handler)
-            pSubMenuManager->m_aMenuItemCommand = aItemCommand;
-
-            REFERENCE< XDISPATCH > aXDispatchRef;
-            MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
-                                                        nItemId,
-                                                        pSubMenuManager,
-                                                        aXDispatchRef );
-            m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
-
-            if ( pMenu->GetItemText( nItemId ).Len() == 0 )
-                aQueryLabelItemIdVector.push_back( nItemId );
-
-            // Create addon popup menu if there exists elements and this is the tools popup menu
-            if (( nItemId == SID_ADDONLIST ||
-                  aItemCommand == aSlotSpecialToolsMenu ) &&
-                  AddonMenu::HasElements() )
+            if (( aItemCommand.getLength() > nAddonsURLPrefixLength ) &&
+                ( aItemCommand.indexOf( ADDONSPOPUPMENU_URL_PREFIX ) == 0 ))
             {
-                AddonMenu* pSubMenu = new AddonMenu( rFrame );
-                USHORT nCount = pPopupMenu->GetItemCount();
-                if ( nCount > 0 )
-                {
-                    if ( pPopupMenu->GetItemType( nCount-1 ) != MENUITEM_SEPARATOR )
-                        pPopupMenu->InsertSeparator();
-                }
+                // A special addon popup menu, must be created with a different ctor
+                MenuManager* pSubMenuManager = new MenuManager( rFrame, (AddonPopupMenu *)pPopupMenu, bDeleteChildren, bDeleteChildren );
 
-                // Use resource to load popup menu title
-                String aAddonsStrRes = String( FwkResId( STR_MENU_ADDONS ));
-                pPopupMenu->InsertItem( ITEMID_ADDONLIST, aAddonsStrRes );
-                pPopupMenu->SetPopupMenu( ITEMID_ADDONLIST, pSubMenu );
+                // store menu item command as we later have to know which menu is active (see Activate handler)
+                pSubMenuManager->m_aMenuItemCommand = aItemCommand;
 
-                // Set item command for popup menu to enable it for GetImageFromURL
-                aItemCommand = aSlotString;
-                aItemCommand += ::rtl::OUString::valueOf( (sal_Int32)ITEMID_ADDONLIST );
-                pPopupMenu->SetItemCommand( ITEMID_ADDONLIST, aItemCommand );
-
-                MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
                 REFERENCE< XDISPATCH > aXDispatchRef;
                 MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
                                                             nItemId,
                                                             pSubMenuManager,
                                                             aXDispatchRef );
-                if ( pMenu->GetItemText( nItemId ).Len() == 0 )
-                    aQueryLabelItemIdVector.push_back( nItemId );
+                m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
+            }
+            else
+            {
+                MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+
+                // store menu item command as we later have to know which menu is active (see Activate handler)
+                pSubMenuManager->m_aMenuItemCommand = aItemCommand;
+
+                REFERENCE< XDISPATCH > aXDispatchRef;
+                MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
+                                                            nItemId,
+                                                            pSubMenuManager,
+                                                            aXDispatchRef );
                 m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
 
-                // Set image for the addon popup menu item
-                if ( m_bShowMenuImages && !pPopupMenu->GetItemImage( ITEMID_ADDONLIST ))
+                if ( pMenu->GetItemText( nItemId ).Len() == 0 )
+                    aQueryLabelItemIdVector.push_back( nItemId );
+
+                // Create addon popup menu if there exists elements and this is the tools popup menu
+                if (( nItemId == SID_ADDONLIST ||
+                    aItemCommand == aSlotSpecialToolsMenu ) &&
+                    AddonMenu::HasElements() )
                 {
-                    Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
-                    if ( !!aImage )
-                           pPopupMenu->SetItemImage( ITEMID_ADDONLIST, aImage );
+                    AddonMenu* pSubMenu = new AddonMenu( rFrame );
+                    USHORT nCount = pPopupMenu->GetItemCount();
+                    if ( nCount > 0 )
+                    {
+                        if ( pPopupMenu->GetItemType( nCount-1 ) != MENUITEM_SEPARATOR )
+                            pPopupMenu->InsertSeparator();
+                    }
+
+                    // Use resource to load popup menu title
+                    String aAddonsStrRes = String( FwkResId( STR_MENU_ADDONS ));
+                    pPopupMenu->InsertItem( ITEMID_ADDONLIST, aAddonsStrRes );
+                    pPopupMenu->SetPopupMenu( ITEMID_ADDONLIST, pSubMenu );
+
+                    // Set item command for popup menu to enable it for GetImageFromURL
+                    aItemCommand = aSlotString;
+                    aItemCommand += ::rtl::OUString::valueOf( (sal_Int32)ITEMID_ADDONLIST );
+                    pPopupMenu->SetItemCommand( ITEMID_ADDONLIST, aItemCommand );
+
+                    MenuManager* pSubMenuManager = new MenuManager( rFrame, pSubMenu, sal_True, sal_False );
+                    REFERENCE< XDISPATCH > aXDispatchRef;
+                    MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
+                                                                nItemId,
+                                                                pSubMenuManager,
+                                                                aXDispatchRef );
+                    if ( pMenu->GetItemText( nItemId ).Len() == 0 )
+                        aQueryLabelItemIdVector.push_back( nItemId );
+                    m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
+
+                    // Set image for the addon popup menu item
+                    if ( m_bShowMenuImages && !pPopupMenu->GetItemImage( ITEMID_ADDONLIST ))
+                    {
+                        Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
+                        if ( !!aImage )
+                               pPopupMenu->SetItemImage( ITEMID_ADDONLIST, aImage );
+                    }
                 }
             }
         }
@@ -555,6 +575,76 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, AddonMenu* pAddonMenu, sa
                 {
                     // read additional attributes from attributes struct and AddonMenu implementation will delete all attributes itself!!
                     pMenuItemHandler->aTargetFrame = pAddonAttributes->aTargetFrame;
+                }
+
+                m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
+            }
+        }
+    }
+
+    m_pVCLMenu->SetHighlightHdl( LINK( this, MenuManager, Highlight ));
+    m_pVCLMenu->SetActivateHdl( LINK( this, MenuManager, Activate ));
+    m_pVCLMenu->SetDeactivateHdl( LINK( this, MenuManager, Deactivate ));
+    m_pVCLMenu->SetSelectHdl( LINK( this, MenuManager, Select ));
+}
+
+
+MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, AddonPopupMenu* pAddonPopupMenu, sal_Bool bDelete, sal_Bool bDeleteChildren ) :
+    ThreadHelpBase( &Application::GetSolarMutex() ), OWeakObject()
+{
+    m_bActive           = sal_False;
+    m_bDeleteMenu       = bDelete;
+    m_bDeleteChildren   = bDeleteChildren;
+    m_pVCLMenu          = pAddonPopupMenu;
+    m_xFrame            = rFrame;
+    m_bInitialized      = sal_False;
+    m_bIsBookmarkMenu   = sal_True;
+
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
+
+    SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
+
+    int nItemCount = pAddonPopupMenu->GetItemCount();
+    for ( int i = 0; i < nItemCount; i++ )
+    {
+        USHORT nItemId = pAddonPopupMenu->GetItemId( i );
+
+        ::rtl::OUString aItemCommand = pAddonPopupMenu->GetItemCommand( nItemId );
+        if ( !aItemCommand.getLength() )
+        {
+            aItemCommand = aSlotString;
+            aItemCommand += ::rtl::OUString::valueOf( (sal_Int32)nItemId );
+            pAddonPopupMenu->SetItemCommand( nItemId, aItemCommand );
+        }
+
+        PopupMenu* pPopupMenu = pAddonPopupMenu->GetPopupMenu( nItemId );
+        if ( pPopupMenu )
+        {
+            MenuManager* pSubMenuManager = new MenuManager( rFrame, pPopupMenu, bDeleteChildren, bDeleteChildren );
+
+            // store menu item command as we later have to know which menu is active (see Acivate handler)
+            pSubMenuManager->m_aMenuItemCommand = aItemCommand;
+
+            REFERENCE< XDISPATCH > aXDispatchRef;
+            MenuItemHandler* pMenuItemHandler = new MenuItemHandler(
+                                                        nItemId,
+                                                        pSubMenuManager,
+                                                        aXDispatchRef );
+            m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
+        }
+        else
+        {
+            if ( pAddonPopupMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
+            {
+                MenuConfiguration::Attributes* pAttributes = (MenuConfiguration::Attributes *)(pAddonPopupMenu->GetUserValue( nItemId ));
+                REFERENCE< XDISPATCH > aXDispatchRef;
+                MenuItemHandler* pMenuItemHandler = new MenuItemHandler( nItemId, NULL, aXDispatchRef );
+
+                if ( pAttributes )
+                {
+                    // read additional attributes from attributes struct and BmkMenu implementation will delete all attributes itself!!
+                    pMenuItemHandler->aTargetFrame = pAttributes->aTargetFrame;
                 }
 
                 m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
@@ -1015,7 +1105,7 @@ void MenuManager::UpdateSpecialWindowMenu( Menu* pMenu )
 
 void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList, const MenuItemHandler* pMenuItemHandler )
 {
-    const int NUM_OF_PICKLIST_ARGS = 4;
+    int NUM_OF_PICKLIST_ARGS = 3;
 
     Any a;
     aArgsList.realloc( NUM_OF_PICKLIST_ARGS );
@@ -1029,23 +1119,26 @@ void MenuManager::CreatePicklistArguments( Sequence< PropertyValue >& aArgsList,
     aArgsList[1].Value = a;
 
     ::rtl::OUString aFilter( pMenuItemHandler->aFilter );
-    ::rtl::OUString aFilterOptions;
 
     sal_Int32 nPos = aFilter.indexOf( '|' );
-    if( nPos >= 0 )
+    if ( nPos >= 0 )
     {
-        if ( nPos < ( aFilter.getLength() - 1 ))
+        ::rtl::OUString aFilterOptions;
+
+        if ( nPos < ( aFilter.getLength() - 1 ) )
             aFilterOptions = aFilter.copy( nPos+1 );
+
+        aArgsList[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
+        a <<= aFilterOptions;
+        aArgsList[2].Value = a;
+
         aFilter = aFilter.copy( 0, nPos-1 );
+        aArgsList.realloc( ++NUM_OF_PICKLIST_ARGS );
     }
 
-    aArgsList[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterOptions" ));
-    a <<= aFilterOptions;
-    aArgsList[2].Value = a;
-
-    aArgsList[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
+    aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
     a <<= aFilter;
-    aArgsList[3].Value = a;
+    aArgsList[NUM_OF_PICKLIST_ARGS-1].Value = a;
 }
 
 

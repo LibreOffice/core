@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobresult.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-10-11 13:41:08 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,20 +84,12 @@
 //_______________________________________
 // interface includes
 
-#ifndef _COM_SUN_STAR_FRAME_FEATURESTATEEVENT_HPP_
-#include <com/sun/star/frame/FeatureStateEvent.hpp>
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_DISPATCHRESULTEVENT_HPP_
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
-#include <com/sun/star/frame/XStatusListener.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRESULTLISTENER_HPP_
-#include <com/sun/star/frame/XDispatchResultListener.hpp>
 #endif
 
 //_______________________________________
@@ -121,75 +113,88 @@ namespace framework{
     @descr  Such result instance transport all neccessarry
             data from the code place where the job was finished
             to the outside code, where e.g. listener must be notified.
-
-    @see    Job
-    @see    com::sun::star::frame::ProtocolHandler
  */
 class JobResult : private ThreadHelpBase
 {
     //___________________________________
     // types
 
-    private:
+    public:
 
-        enum EEventType
+        /**
+            These enum values are used to build a flag mask of possible set
+            parts of an analyzed pure job execution result.
+            An user of this class can decide, if a member of us can be valid
+            or not. So it can indicate, if a job used the special part inside
+            his returned result protocol.
+            To be usable as flags - it must be values of set {0,1,2,4,8,16 ...}!
+         */
+        enum EParts
         {
-            E_UNKNOWN        ,
-            E_FEATURESTATE   ,
-            E_DISPATCHRESULT ,
-            E_BOTH
+            E_NOPART            =   0,
+            E_ARGUMENTS         =   1,
+            E_DEACTIVATE        =   2,
+            E_DISPATCHRESULT    =   4
         };
 
+    //___________________________________
+    // member
+
     private:
-        EEventType                      m_eEventType     ;
-        css::frame::FeatureStateEvent   m_aFeatureState  ;
+
+        /** hold the original pure result, which was given back by an
+            executed job
+            We analyze it and use it to set all our other members.
+         */
+        css::uno::Any m_aPureResult;
+
+        /**
+            an user of us must know, which (possible) parts of
+            a "pure result" was realy set by an executed job.
+            Means which other members of this class are valid.
+            This mask can be used to find it out.
+         */
+        sal_uInt32 m_eParts;
+
+        /**
+            a job can have persistent data
+            They are part of the pure result and will be used to
+            write it to the configuration. But that's part of any
+            user of us. We provide this information here only.
+         */
+        css::uno::Sequence< css::beans::NamedValue > m_lArguments;
+
+        /**
+            an executed job can force his deactivation
+            But we provide this information here only.
+            Doing so is part of any user of us.
+         */
+        sal_Bool m_bDeactivate;
+
+        /**
+            represent the part "DispatchResult"
+            It's a full filled event type, which was given
+            back by the executed job. Any user of us can send
+            it to his registered result listener directly.
+         */
         css::frame::DispatchResultEvent m_aDispatchResult;
 
+    //___________________________________
+    // native interface
+
     public:
-    JobResult()
-    {
-        m_eEventType = E_UNKNOWN;
-    }
 
-    JobResult( const css::frame::FeatureStateEvent& aState )
-    {
-        m_eEventType    = E_FEATURESTATE;
-        m_aFeatureState = aState;
-    }
+                 JobResult(                                         );
+                 JobResult( const com::sun::star::uno::Any& aResult );
+                 JobResult( const JobResult&                rCopy   );
+        virtual ~JobResult(                                         );
 
-    JobResult( const css::frame::DispatchResultEvent& aResult )
-    {
-        m_eEventType      = E_DISPATCHRESULT;
-        m_aDispatchResult = aResult;
-    }
+        void operator=( const JobResult& rCopy );
 
-    JobResult( const css::frame::FeatureStateEvent&   aState  ,
-               const css::frame::DispatchResultEvent& aResult )
-    {
-        m_eEventType      = E_BOTH ;
-        m_aFeatureState   = aState ;
-        m_aDispatchResult = aResult;
-    }
-
-    void sendFeatureState( const ListenerHash& lListener ) const
-    {
-        /* TODO */
-        LOG_WARNING("JobHandler::addStatusListener()", "not yet implemented")
-    }
-
-    void sendDispatchResult( const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) const
-    {
-        if (
-            (xListener.is()) &&
-            (
-                (m_eEventType==E_DISPATCHRESULT) ||
-                (m_eEventType==E_BOTH          )
-            )
-           )
-        {
-            xListener->dispatchFinished(m_aDispatchResult);
-        }
-    }
+        sal_Bool                                     existPart        ( sal_uInt32 eParts ) const;
+        css::uno::Sequence< css::beans::NamedValue > getArguments     (                   ) const;
+        sal_Bool                                     getDeactivate    (                   ) const;
+        css::frame::DispatchResultEvent              getDispatchResult(                   ) const;
 };
 
 } // namespace framework

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2002-04-24 09:50:03 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:19:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,11 @@
 
 #ifndef __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
 #define __FRAMEWORK_HELPER_STATUSINDICATORFACTORY_HXX_
+
+/** Attention: stl headers must(!) be included at first. Otherwhise it can make trouble
+               with solaris headers ...
+*/
+#include <vector>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -140,10 +145,6 @@
 
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
-#endif
-
-#ifndef __SGI_STL_VECTOR
-#include <vector>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -252,8 +253,8 @@ class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
         //  constructor / destructor
         //---------------------------------------------------------------------------------------------------------
         StatusIndicatorFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory      ,
-                                const css::uno::Reference< css::frame::XFrame >&              xOwner        ,
-                                const css::uno::Reference< css::awt::XWindow >&               xParentWindow );
+                                const css::uno::Reference< css::awt::XWindow >&               xParentWindow ,
+                                      sal_Bool                                                bShowStatusBar);
 
         //---------------------------------------------------------------------------------------------------------
         //  XInterface
@@ -304,22 +305,7 @@ class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
         void implts_recalcLayout();
         void impl_reschedule();
         sal_uInt32 impl_get10ThSec();
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  debug methods
-    //  (should be private everyway!)
-    //-------------------------------------------------------------------------------------------------------------
-    #ifdef ENABLE_ASSERTIONS
-
-    private:
-        static sal_Bool implcp_StatusIndicatorFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory      ,
-                                                       const css::uno::Reference< css::frame::XFrame >&              xOwner        ,
-                                                       const css::uno::Reference< css::awt::XWindow >&               xParentWindow );
-        static sal_Bool implcp_windowResized         ( const css::awt::WindowEvent&                                  aEvent        );
-        static sal_Bool implcp_windowMoved           ( const css::awt::WindowEvent&                                  aEvent        );
-        static sal_Bool implcp_disposing             ( const css::lang::EventObject&                                 aEvent        );
-
-    #endif  // #ifdef ENABLE_ASSERTIONS
+        void impl_createStatusBar();
 
     //-------------------------------------------------------------------------------------------------------------
     //  variables
@@ -330,7 +316,7 @@ class StatusIndicatorFactory   :   public  css::task::XStatusIndicatorFactory  ,
         IndicatorStack                                          m_aStack                    ;   /// stack with all current indicator childs
         StatusBar*                                              m_pStatusBar                ;   /// status bar as progress bar
         css::uno::Reference< css::lang::XMultiServiceFactory >  m_xFactory                  ;   /// uno service manager to create new services
-        css::uno::Reference< css::frame::XFrame >               m_xOwner                    ;   /// Reference to our owner frame. We are listener for disposing() to die if he die!
+        sal_Bool                                                m_bProgressMode             ;
 
         css::uno::Reference< css::task::XStatusIndicator >      m_xActiveIndicator          ;   /// most active indicator child, which could work with our shared indicator window only
         css::uno::Reference< css::awt::XWindow >                m_xParentWindow             ;   /// we are listener on this window to resize shared statrus indicator

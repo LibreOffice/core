@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oframes.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 12:53:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,11 +151,19 @@ OFrames::~OFrames()
 //*****************************************************************************************************************
 //  XInterface
 //*****************************************************************************************************************
-DEFINE_XINTERFACE_3     (   OFrames                         ,
+DEFINE_XINTERFACE_4     (   OFrames                         ,
                             OWeakObject                     ,
+                            DIRECT_INTERFACE(XTypeProvider  ),
                             DIRECT_INTERFACE(XFrames        ),
                             DIRECT_INTERFACE(XIndexAccess   ),
                             DIRECT_INTERFACE(XElementAccess )
+                        )
+
+DEFINE_XTYPEPROVIDER_4  (   OFrames        ,
+                            XTypeProvider  ,
+                            XFrames        ,
+                            XIndexAccess   ,
+                            XElementAccess
                         )
 
 //*****************************************************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-24 12:24:54 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 
 #ifndef __FRAMEWORK_DISPATCH_SELFDISPATCHER_HXX_
 #include <dispatch/selfdispatcher.hxx>
+#endif
+
+#ifndef __FRAMEWORK_DISPATCH_CLOSEDISPATCHER_HXX_
+#include <dispatch/closedispatcher.hxx>
 #endif
 
 #ifndef __FRAMEWORK_DISPATCH_MENUDISPATCHER_HXX_
@@ -515,6 +519,21 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     /* } STATIC SAFE */
 
     //-----------------------------------------------------------------------------------------------------
+    // 0) Some URLs are dispatched in a generic way (e.g. by the menu) using the default target "".
+    //    But they are specified to use her own fix target. Detect such URLs here and use the correct target.
+    //-----------------------------------------------------------------------------------------------------
+
+    ::rtl::OUString sTargetName = sTargetFrameName;
+
+    if (
+        (aURL.Complete.equalsAscii(".uno:CloseDoc")) ||
+        (aURL.Complete.equalsAscii(".uno:CloseWin"))
+       )
+    {
+        sTargetName = SPECIALTARGET_TOP;
+    }
+
+    //-----------------------------------------------------------------------------------------------------
     // I) handle special cases which not right for using findFrame() first
     //-----------------------------------------------------------------------------------------------------
 
@@ -526,8 +545,8 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //  Another eason is a possible plugin mode!
     //-----------------------------------------------------------------------------------------------------
     if (
-        (sTargetFrameName==SPECIALTARGET_BLANK  ) ||
-        (sTargetFrameName==SPECIALTARGET_DEFAULT)
+        (sTargetName==SPECIALTARGET_BLANK  ) ||
+        (sTargetName==SPECIALTARGET_DEFAULT)
        )
     {
         if (xPlugin.is())
@@ -539,7 +558,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         {
             css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
             if (xParent.is())
-                xDispatcher = xParent->queryDispatch(aURL, sTargetFrameName, 0); // its a special target - ignore search flags
+                xDispatcher = xParent->queryDispatch(aURL, sTargetName, 0); // its a special target - ignore search flags
         }
     }
 
@@ -548,7 +567,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //  Special mode on frame or task to receive the local menu. Not supported by findFrame()
     //-----------------------------------------------------------------------------------------------------
     else
-    if (sTargetFrameName==SPECIALTARGET_MENUBAR)
+    if (sTargetName==SPECIALTARGET_MENUBAR)
     {
         xDispatcher = implts_getOrCreateDispatchHelper( E_MENUDISPATCHER, xFrame );
     }
@@ -559,7 +578,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //  It's defined for top level frames only.
     //-----------------------------------------------------------------------------------------------------
     else
-    if (sTargetFrameName==SPECIALTARGET_HELPAGENT)
+    if (sTargetName==SPECIALTARGET_HELPAGENT)
     {
         if (xFrame->isTop())
             xDispatcher = implts_getOrCreateDispatchHelper( E_HELPAGENTDISPATCHER, xFrame );
@@ -581,7 +600,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //  Only the sfx (means the controller) can create it it.
     //-----------------------------------------------------------------------------------------------------
     else
-    if (sTargetFrameName==SPECIALTARGET_BEAMER)
+    if (sTargetName==SPECIALTARGET_BEAMER)
     {
         css::uno::Reference< css::frame::XDispatchProvider > xBeamer( xFrame->findFrame( SPECIALTARGET_BEAMER, css::frame::FrameSearchFlag::CHILDREN | css::frame::FrameSearchFlag::SELF ), css::uno::UNO_QUERY );
         if (xBeamer.is())
@@ -599,7 +618,57 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     }
 
     //-----------------------------------------------------------------------------------------------------
-    // I.V) "_self", ""
+    // I.V) "_parent"
+    //  Our parent frame (if it exist) should handle this URL.
+    //-----------------------------------------------------------------------------------------------------
+    else
+    if (sTargetName==SPECIALTARGET_PARENT)
+    {
+        css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
+        if (xParent.is())
+            // SELF => we must adress the parent directly... and not his parent or any other parent!
+            xDispatcher = xParent->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+    // I.VI) "_top"
+    //  This request must be forwarded to any parent frame, till we reach a top frame.
+    //  If no parent exist, we can handle itself.
+    //-----------------------------------------------------------------------------------------------------
+    else
+    if (sTargetName==SPECIALTARGET_TOP)
+    {
+        if (xFrame->isTop())
+        {
+            // There exist a hard coded interception for special URLs.
+            if (
+                (aURL.Complete.equalsAscii(".uno:CloseDoc"  )) ||
+                (aURL.Complete.equalsAscii(".uno:CloseWin"  )) ||
+                (aURL.Complete.equalsAscii(".uno:CloseFrame"))
+               )
+            {
+                xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
+            }
+            else
+            {
+                // If we are this top frame itself (means our owner frame)
+                // we should call ourself recursiv with a better target "_self".
+                // So we can share the same code! (see reaction for "_self" inside this methode too.)
+                xDispatcher = this->queryDispatch(aURL,SPECIALTARGET_SELF,0);
+            }
+        }
+        else
+        {
+            css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
+            // Normaly if isTop() returned FALSE ... the parent frame MUST(!) exist ...
+            // But it seams to be better to check that here to prevent us against an access violation.
+            if (xParent.is())
+                xDispatcher = xParent->queryDispatch(aURL, SPECIALTARGET_TOP, 0);
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+    // I.VII) "_self", ""
     //  Our owner frame should handle this URL. But we can't do it for all of them.
     //  So we ask the internal setted controller first. If he disagree we try to find a registered
     //  protocol handler. If this failed too - we check for a loadable content and in case of true
@@ -607,41 +676,34 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     //-----------------------------------------------------------------------------------------------------
     else
     if (
-        (sTargetFrameName==SPECIALTARGET_SELF)  ||
-        (sTargetFrameName.getLength()<1      )
+        (sTargetName==SPECIALTARGET_SELF)  ||
+        (sTargetName.getLength()<1      )
        )
     {
-        if ( aURL.Complete.equalsAscii(".uno:CloseDoc") || aURL.Complete.equalsAscii(".uno:CloseWin") )
+        // Ask our controller for his agreement for these dispatched URL ...
+        // because some URLs are internal and can be handled faster by SFX - which most is the current controller!
+        // But in case of e.g. the bibliography not all queries will be handled successfully here.
+        css::uno::Reference< css::frame::XDispatchProvider > xController( xFrame->getController(), css::uno::UNO_QUERY );
+        if (xController.is())
+            xDispatcher = xController->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
+
+        // If controller has no fun to dispatch these URL - we must search another right dispatcher.
+        // Search for any registered protocol handler first.
+        if (!xDispatcher.is())
+            xDispatcher = implts_searchProtocolHandler(aURL);
+
+        // Not for controller - not for protocol handler
+        // It should be a loadable content - may be a file. Check it ...
+        // This check is neccessary to found out, that
+        // support for some protocols isn't installed by user. May be
+        // "ftp" isn't available. So we suppress creation of our self dispatcher.
+        // The result will be clear. He can't handle it - but he would try it.
+        if (
+            ( ! xDispatcher.is()             )  &&
+            ( implts_isLoadableContent(aURL) )
+           )
         {
             xDispatcher = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER, xFrame );
-        }
-        else
-        {
-            // Ask our controller for his agreement for these dispatched URL ...
-            // because some URLs are internal and can be handled faster by SFX - which most is the current controller!
-            // But in case of e.g. the bibliography not all queries will be handled successfully here.
-            css::uno::Reference< css::frame::XDispatchProvider > xController( xFrame->getController(), css::uno::UNO_QUERY );
-            if (xController.is())
-                xDispatcher = xController->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
-
-            // If controller has no fun to dispatch these URL - we must search another right dispatcher.
-            // Search for any registered protocol handler first.
-            if (!xDispatcher.is())
-                xDispatcher = implts_searchProtocolHandler(aURL);
-
-            // Not for controller - not for protocol handler
-            // It should be a loadable content - may be a file. Check it ...
-            // This check is neccessary to found out, that
-            // support for some protocols isn't installed by user. May be
-            // "ftp" isn't available. So we suppress creation of our self dispatcher.
-            // The result will be clear. He can't handle it - but he would try it.
-            if (
-                ( ! xDispatcher.is()             )  &&
-                ( implts_isLoadableContent(aURL) )
-               )
-            {
-                xDispatcher = implts_getOrCreateDispatchHelper( E_SELFDISPATCHER, xFrame );
-            }
         }
     }
 
@@ -657,7 +719,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
                   nRightFlags &= ~css::frame::FrameSearchFlag::CREATE;
 
         // try to find any existing target and ask him for his dispatcher
-        css::uno::Reference< css::frame::XFrame > xFoundFrame = xFrame->findFrame(sTargetFrameName, nRightFlags);
+        css::uno::Reference< css::frame::XFrame > xFoundFrame = xFrame->findFrame(sTargetName, nRightFlags);
         if (xFoundFrame.is())
         {
             // Attention: Found target is our own owner frame!
@@ -686,13 +748,13 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
             if (xPlugin.is())
             {
                 css::uno::Reference< css::frame::XDispatchProvider > xProvider( xPlugin, css::uno::UNO_QUERY );
-                xDispatcher = xProvider->queryDispatch(aURL, sTargetFrameName, css::frame::FrameSearchFlag::CREATE);
+                xDispatcher = xProvider->queryDispatch(aURL, sTargetName, css::frame::FrameSearchFlag::CREATE);
             }
             else
             {
                 css::uno::Reference< css::frame::XDispatchProvider > xParent( xFrame->getCreator(), css::uno::UNO_QUERY );
                 if (xParent.is())
-                    xDispatcher = xParent->queryDispatch(aURL, sTargetFrameName, css::frame::FrameSearchFlag::CREATE);
+                    xDispatcher = xParent->queryDispatch(aURL, sTargetName, css::frame::FrameSearchFlag::CREATE);
             }
         }
     }
@@ -926,6 +988,13 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
         case E_SELFDISPATCHER :
                 {
                     SelfDispatcher* pDispatcher = new SelfDispatcher( xFactory, xOwner );
+                    xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
+                }
+                break;
+
+        case E_CLOSEDISPATCHER :
+                {
+                    CloseDispatcher* pDispatcher = new CloseDispatcher( xFactory, xOwner );
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;

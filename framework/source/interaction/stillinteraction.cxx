@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stillinteraction.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2002-08-12 11:45:04 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONAPPROVE_HPP_
+#include <com/sun/star/task/XInteractionApprove.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_DOCUMENT_XINTERACTIONFILTERSELECT_HPP_
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
 #endif
@@ -97,12 +101,20 @@
 #include <com/sun/star/document/AmbigousFilterRequest.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_TASK_ERRORCODEREQUEST_HPP_
+#include <com/sun/star/task/ErrorCodeRequest.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+
+#ifndef __RSC
+#include <tools/errinf.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -153,8 +165,9 @@ void SAL_CALL StillInteraction::handle( const css::uno::Reference< css::task::XI
     // We need XAbort as possible continuation as minimum!
     // An optional filter selection we can handle too.
     css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
-    css::uno::Reference< css::task::XInteractionAbort >                              xAbort ;
-    css::uno::Reference< css::document::XInteractionFilterSelect >                   xFilter;
+    css::uno::Reference< css::task::XInteractionAbort >                              xAbort     ;
+    css::uno::Reference< css::task::XInteractionApprove >                            xApprove   ;
+    css::uno::Reference< css::document::XInteractionFilterSelect >                   xFilter    ;
 
     sal_Int32 nCount=lContinuations.getLength();
     for (sal_Int32 i=0; i<nCount; ++i)
@@ -162,13 +175,18 @@ void SAL_CALL StillInteraction::handle( const css::uno::Reference< css::task::XI
         if ( ! xAbort.is() )
             xAbort = css::uno::Reference< css::task::XInteractionAbort >( lContinuations[i], css::uno::UNO_QUERY );
 
+        if( ! xApprove.is() )
+            xApprove  = css::uno::Reference< css::task::XInteractionApprove >( lContinuations[i], css::uno::UNO_QUERY );
+
         if ( ! xFilter.is() )
             xFilter = css::uno::Reference< css::document::XInteractionFilterSelect >( lContinuations[i], css::uno::UNO_QUERY );
     }
 
     // differ between abortable interactions (error, unknown filter ...)
     // and other ones (ambigous but not unknown filter ...)
+    css::task::ErrorCodeRequest          aErrorCodeRequest     ;
     css::document::AmbigousFilterRequest aAmbigousFilterRequest;
+
     if (aRequest>>=aAmbigousFilterRequest)
     {
         if (xFilter.is())
@@ -179,10 +197,20 @@ void SAL_CALL StillInteraction::handle( const css::uno::Reference< css::task::XI
         }
     }
     else
-    if (xAbort.is())
+    if( aRequest >>= aErrorCodeRequest )
     {
-        xAbort->select();
+        // warnings can be ignored   => approve
+        // errors must break loading => abort
+        sal_Bool bWarning = (aErrorCodeRequest.ErrCode & ERRCODE_WARNING_MASK == ERRCODE_WARNING_MASK);
+        if (xApprove.is() && bWarning)
+            xApprove->select();
+        else
+        if (xAbort.is())
+            xAbort->select();
     }
+    else
+    if (xAbort.is())
+        xAbort->select();
 }
 
 //_________________________________________________________________________________________________________________

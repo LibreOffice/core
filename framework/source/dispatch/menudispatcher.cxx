@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-28 12:40:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 
 #ifndef __FRAMEWORK_CLASSES_MENUCONFIGURATION_HXX_
 #include <classes/menuconfiguration.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_ADDONMENU_HXX_
+#include <classes/addonmenu.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -168,6 +172,8 @@ using namespace ::vos                           ;
 //_________________________________________________________________________________________________________________
 //  non exported const
 //_________________________________________________________________________________________________________________
+
+const USHORT SLOTID_HELPPOPUPMENU = 5410;
 
 //_________________________________________________________________________________________________________________
 //  non exported definitions
@@ -355,7 +361,7 @@ void SAL_CALL MenuDispatcher::dispatch(    const   URL&                        a
                     {
                         aMenuConfiguration.StoreMenuBar( pMenuBar, xOutputStream );
                         bStoreSuccessfull = sal_True;
-                        xOutputStream->flush(); // test!!!!
+                        xOutputStream->flush();
                     }
                     catch ( WrappedTargetException& )
                     {
@@ -568,6 +574,21 @@ sal_Bool MenuDispatcher::impl_setMenuBar( MenuBar* pMenuBar, sal_Bool bMenuFromR
             {
                 OGuard aSolarGuard( Application::GetSolarMutex() );
                 {
+                    USHORT nPos = pMenuBar->GetItemPos( SLOTID_HELPPOPUPMENU );
+                    if ( nPos != MENU_ITEM_NOTFOUND )
+                    {
+                        OUString aNoContext;
+
+                        Reference< XModel >         xModel;
+                        Reference< XController >    xController( xFrame->getController(), UNO_QUERY );
+
+                        if ( xController.is() )
+                            xModel = Reference< XModel >( xController->getModel(), UNO_QUERY );
+
+                        // retrieve addon popup menus and add them to our menu bar
+                        AddonPopupMenu::MergeAddonPopupMenus( xFrame, xModel, nPos, pMenuBar );
+                    }
+
                     // set new menu on our system window and create new menu manager
                     if ( bMenuFromResource )
                         m_pMenuManager = new MenuManager( xFrame, pMenuBar, sal_True, sal_False );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 16:18:02 $
+ *  last change: $Author: hr $ $Date: 2003-03-25 18:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,20 +70,22 @@ String STR_MENU_ADDONS
     Text[ russian ] = "Add-Ons";
     Text[ greek ] = "Add-Ons";
     Text[ dutch ] = "Add-Ons";
-    Text[ french ] = "Add-Ons";
+    Text[ french ] = "Add-ons";
     Text[ spanish ] = "Add-Ons";
     Text[ finnish ] = "Add-Ons";
-    Text[ italian ] = "Add-Ons";
+    Text[ italian ] = "Complementari";
     Text[ danish ] = "Add-Ons";
-    Text[ swedish ] = "Add-Ons";
+    Text[ swedish ] = "Till�gg";
     Text[ polish ] = "Add-Ons";
     Text[ portuguese_brazilian ] = "Add-Ons";
-    Text[ japanese ] = "Add-Ons";
+    Text[ japanese ] = "アドオン";
     Text[ korean ] = "Add-Ons";
     Text[ chinese_simplified ] = "Add-Ons";
-    Text[ chinese_traditional ] = "Add-Ons";
+    Text[ chinese_traditional ] = "附加元件";
     Text[ turkish ] = "Add-Ons";
     Text[ arabic ] = "Add-Ons";
     Text[ catalan ] = "Add-Ons";
     Text[ thai ] = "Add-Ons";
 };
+
+
