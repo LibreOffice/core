@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:02:29 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2447,7 +2447,7 @@ sal_Bool SAL_CALL ODatabaseForm::getGroupControl() throw(com::sun::star::uno::Ru
 {
     ReusableMutexGuard aGuard(m_aMutex);
 
-    // Sollen Controls in einer TabOrder gruppe zusammengefaﬂt werden?
+    // Sollen Controls in einer TabOrder gruppe zusammengefasst werden?
     if (m_aCycle.hasValue())
     {
         sal_Int32 nCycle;
