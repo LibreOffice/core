@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-08 10:45:44 $
+ *  last change: $Author: cl $ $Date: 2001-10-16 09:30:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,8 @@ SfxItemSet& __EXPORT SdStyleSheet::GetItemSet()
 
                                          EE_PARA_START,                 EE_CHAR_END,
 
+                                         SDRATTR_XMLATTRIBUTES,         SDRATTR_XMLATTRIBUTES,
+
                                          SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
                                          0, 0 };
 
@@ -256,7 +258,9 @@ SfxItemSet& __EXPORT SdStyleSheet::GetItemSet()
 
                                              EE_PARA_START,                 EE_CHAR_END,
 
-                                             SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
+                                            SDRATTR_XMLATTRIBUTES,          SDRATTR_XMLATTRIBUTES,
+
+                                            SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
                                              0, 0 };
 
                 pSet = new SfxItemSet(GetPool().GetPool(), nWhichPairTable);

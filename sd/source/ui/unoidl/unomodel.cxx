@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-12 16:25:40 $
+ *  last change: $Author: cl $ $Date: 2001-10-16 09:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,7 +792,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     {
         static sal_uInt16 aWhichIds[] = { SDRATTR_XMLATTRIBUTES, EE_CHAR_XMLATTRIBS, EE_PARA_XMLATTRIBS, 0 };
 
-        return svx::NamespaceMap_createInstance( aWhichIds, &pDoc->GetItemPool(), pDoc->GetStyleSheetPool() ? &pDoc->GetStyleSheetPool()->GetPool() : NULL );
+        return svx::NamespaceMap_createInstance( aWhichIds, &pDoc->GetItemPool() );
     }
 
     uno::Reference< uno::XInterface > xRet;
