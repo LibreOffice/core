@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_adapter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:46:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:29:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::XInterface;
+using com::sun::star::uno::Type;
 using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::lang::IllegalArgumentException;
 using com::sun::star::beans::UnknownPropertyException;
@@ -95,8 +96,10 @@ using com::sun::star::reflection::XIdlClass;
 namespace pyuno
 {
 
-Adapter::Adapter( const PyRef & ref, const Runtime & runtime):
-    mWrappedObject( ref ), mInterpreter( (PyThreadState_Get()->interp) )
+Adapter::Adapter( const PyRef & ref, const Runtime & runtime, const Sequence< Type > &types )
+    : mWrappedObject( ref ),
+      mInterpreter( (PyThreadState_Get()->interp) ),
+      mTypes( types )
 {}
 
 Adapter::~Adapter()
@@ -117,7 +120,7 @@ Sequence<sal_Int8> Adapter::getUnoTunnelImplementationId()
 sal_Int64 Adapter::getSomething( const Sequence< sal_Int8 > &id) throw (RuntimeException)
 {
     if( id == g_id.getImplementationId() )
-        return (sal_Int64)this;
+        return reinterpret_cast<sal_Int64>(this);
     return 0;
 }
 
@@ -142,6 +145,84 @@ Reference< XIntrospectionAccess > Adapter::getIntrospection()
     return Reference< XIntrospectionAccess > ();
 }
 
+Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
+{
+    Sequence< sal_Int16 > ret;
+    MethodOutIndexMap::const_iterator ii = m_methodOutIndexMap.find( functionName );
+    if( ii == m_methodOutIndexMap.end() )
+    {
+
+        Runtime runtime;
+        {
+            PyThreadDetach antiguard;
+
+            // retrieve the adapter object again. It will be the same instance as before,
+            // (the adapter factory keeps a weak map inside, which I couldn't have outside)
+            Reference< XInterface > unoAdapterObject =
+                runtime.getImpl()->cargo->xAdapterFactory->createAdapter( this, mTypes );
+
+            // uuuh, that's really expensive. The alternative would have been, to store
+            // an instance of the introspection at (this), but this results in a cyclic
+            // reference, which is never broken (as it is up to OOo1.1.0).
+            Reference< XIntrospectionAccess > introspection =
+                runtime.getImpl()->cargo->xIntrospection->inspect( makeAny( unoAdapterObject ) );
+
+            if( !introspection.is() )
+            {
+                throw RuntimeException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "pyuno bridge: Couldn't inspect uno adapter ( the python class must implement com.sun.star.lang.XTypeProvider !)" ) ),
+                    Reference< XInterface > () );
+            }
+
+            Reference< XIdlMethod > method = introspection->getMethod(
+                functionName, com::sun::star::beans::MethodConcept::ALL );
+            if( ! method.is( ) )
+            {
+                throw RuntimeException(
+                    OUStringBuffer().appendAscii("pyuno bridge: Couldn't get reflection for method "
+                        ).append( functionName ).makeStringAndClear(),
+                    Reference< XInterface > () );
+            }
+
+            Sequence< ParamInfo > seqInfo = method->getParameterInfos();
+            int i;
+            int nOuts = 0;
+            for( i = 0 ; i < seqInfo.getLength() ; i ++ )
+            {
+                if( seqInfo[i].aMode == com::sun::star::reflection::ParamMode_OUT ||
+                    seqInfo[i].aMode == com::sun::star::reflection::ParamMode_INOUT )
+                {
+                    // sequence must be interpreted as return value/outparameter tuple !
+                    nOuts ++;
+                    break;
+                }
+            }
+
+            if( nOuts )
+            {
+                ret.realloc( nOuts );
+                sal_Int32 nOutsAssigned = 0;
+                for( i = 0 ; i < seqInfo.getLength() ; i ++ )
+                {
+                    if( seqInfo[i].aMode == com::sun::star::reflection::ParamMode_OUT ||
+                        seqInfo[i].aMode == com::sun::star::reflection::ParamMode_INOUT )
+                    {
+                        ret[nOutsAssigned] = (sal_Int16) i;
+                        nOutsAssigned ++;
+                    }
+                }
+            }
+        }
+        // guard active again !
+        m_methodOutIndexMap[ functionName ] = ret;
+    }
+    else
+    {
+        ret = ii->second;
+    }
+    return ret;
+}
+
 Any Adapter::invoke( const OUString &aFunctionName,
                      const Sequence< Any >& aParams,
                      Sequence< sal_Int16 > &aOutParamIndex,
@@ -149,6 +230,17 @@ Any Adapter::invoke( const OUString &aFunctionName,
     throw (IllegalArgumentException,CannotConvertException,InvocationTargetException,RuntimeException)
 {
     Any ret;
+
+    // special hack for the uno object identity concept. The XUnoTunnel.getSomething() call is
+    // always handled by the adapter directly.
+    if( aParams.getLength() == 1 && 0 == aFunctionName.compareToAscii( "getSomething" ) )
+    {
+        Sequence< sal_Int8 > id;
+        if( aParams[0] >>= id )
+            return com::sun::star::uno::makeAny( getSomething( id ) );
+
+    }
+
     PyThreadAttach guard( mInterpreter );
     {
         // convert parameters to python args
@@ -205,110 +297,46 @@ Any Adapter::invoke( const OUString &aFunctionName,
                 //     and the following elements are interpreted as the outparameter
                 // I can only decide for one solution by checking the method signature,
                 // so I need the reflection of the adapter !
-//                 if( ! mReflection.is() )
-//                 {
-//                     Reference< XInterface > unoAdapter = mWeakUnoAdapter;
-//                     if( ! unoAdapter.is() )
-//                         throw RuntimeException(
-//                             OUString(RTL_CONSTASCII_USTRINGPARAM(
-//                                           "pyuno bridge: Couldn't retrieve uno adapter reference")),*this);
-//                     mReflection = runtime.getImpl()->cargo->xCoreReflection->getType(
-//                         makeAny( unoAdapter  ));
-//                     mWeakUnoAdapter = com::sun::star::uno::WeakReference< XInterface > ();
-//                 }
-                if( ! mIntrospectionAccess.is() )
-                    throw RuntimeException(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "pyuno bridge: Couldn't inspect uno adapter ( the python class must implement com.sun.star.lang.XTypeProvider !)" ) ),
-                        Reference< XInterface > () );
-
+                aOutParamIndex = getOutIndexes( aFunctionName );
+                if( aOutParamIndex.getLength() )
                 {
-                    PyThreadDetach antiguard;
-                    Reference< XIdlMethod > method = mIntrospectionAccess->getMethod(
-                        aFunctionName, com::sun::star::beans::MethodConcept::ALL );
-                    if( ! method.is( ) )
+                    // out parameters exist, extract the sequence
+                    Sequence< Any  > seq;
+                    if( ! ( ret >>= seq ) )
                     {
                         throw RuntimeException(
-                            OUStringBuffer().appendAscii("pyuno bridge: Couldn't get reflection for method "
+                            OUStringBuffer().appendAscii(
+                                "pyuno bridge: Couldn't extract out parameters for method "
                                 ).append( aFunctionName ).makeStringAndClear(),
                             Reference< XInterface > () );
                     }
 
-                    Sequence< ParamInfo > seqInfo = method->getParameterInfos();
-                    int i;
-                    int nOuts = 0;
-                    for( i = 0 ; i < seqInfo.getLength() ; i ++ )
+                    if( aOutParamIndex.getLength() +1 != seq.getLength() )
                     {
-                        if( seqInfo[i].aMode == com::sun::star::reflection::ParamMode_OUT ||
-                            seqInfo[i].aMode == com::sun::star::reflection::ParamMode_INOUT )
-                        {
-                            // sequence must be interpreted as return value/outparameter tuple !
-                            nOuts ++;
-                            break;
-                        }
+                        OUStringBuffer buf;
+                        buf.appendAscii( "pyuno bridge: expected for method " );
+                        buf.append( aFunctionName );
+                        buf.appendAscii( " one return value and " );
+                        buf.append( (sal_Int32) aOutParamIndex.getLength() );
+                        buf.appendAscii( " out parameters, got a sequence of " );
+                        buf.append( seq.getLength() );
+                        buf.appendAscii( " elements as return value." );
+                        throw RuntimeException(buf.makeStringAndClear(), *this );
                     }
 
-                    if( nOuts )
+                    aOutParam.realloc( aOutParamIndex.getLength() );
+                    ret = seq[0];
+                    for( i = 0 ; i < aOutParamIndex.getLength() ; i ++ )
                     {
-                        Sequence< Any  > seq;
-                        if( ! ( ret >>= seq ) )
-                        {
-                            throw RuntimeException(
-                                OUStringBuffer().appendAscii(
-                                    "pyuno bridge: Couldn't extract out parameters for method "
-                                    ).append( aFunctionName ).makeStringAndClear(),
-                                Reference< XInterface > () );
-                        }
-                        if( nOuts +1 != seq.getLength() )
-                        {
-                            OUStringBuffer buf;
-                            buf.appendAscii( "pyuno bridge: expected for method " );
-                            buf.append( aFunctionName );
-                            buf.appendAscii( " one return value and " );
-                            buf.append( (sal_Int32) nOuts );
-                            buf.appendAscii( " out parameters, got a sequence of " );
-                            buf.append( seq.getLength() );
-                            buf.appendAscii( " elements as return value." );
-                            throw RuntimeException(buf.makeStringAndClear(), *this );
-                        }
-                        aOutParamIndex.realloc( nOuts );
-                        aOutParam.realloc( nOuts );
-                        ret = seq[0];
-                        sal_Int32 nOutsAssigned = 0;
-                        for( i = 0 ; i < seqInfo.getLength() ; i ++ )
-                        {
-                            if( seqInfo[i].aMode == com::sun::star::reflection::ParamMode_OUT ||
-                                seqInfo[i].aMode == com::sun::star::reflection::ParamMode_INOUT )
-                            {
-                                aOutParamIndex[nOutsAssigned] = (sal_Int16) i;
-                                aOutParam[nOutsAssigned] = seq[1+nOutsAssigned];
-                                nOutsAssigned ++;
-                            }
-                        }
+                        aOutParam[i] = seq[1+i];
                     }
                 }
                 // else { sequence is a return value !}
             }
         }
-
     }
     PYUNO_DEBUG_1( "leaving Adapter::invoke normally\n" );
     return ret;
-}
-
-void Adapter::setUnoAdapter( const Reference< XInterface > & unoAdapter )
-{
-    // A performance nightmare. Every UNO object implemented in python needs to be introspected
-    // to get the knowledge about parameters. Must be solved differently
-
-    // Even worse, the adapters do not support XWeak !
-//     mWeakUnoAdapter = unoAdapter;
-
-    Runtime runtime;
-    Reference< XIntrospection > xIntrospection =runtime.getImpl()->cargo->xIntrospection;
-    {
-        PyThreadDetach antiguard;
-        mIntrospectionAccess = xIntrospection->inspect(makeAny( unoAdapter ));
-    }
 }
 
 void Adapter::setValue( const OUString & aPropertyName, const Any & value )
