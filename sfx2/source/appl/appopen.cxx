@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-28 13:58:01 $
+ *  last change: $Author: mba $ $Date: 2001-09-06 11:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,14 +800,16 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
         DBG_ASSERT( pFrame, "This call we not work correctly in StarPortal !" );
         if ( pFrame )
         {
-            if ( pFrame->PrepareClose_Impl( TRUE, TRUE ) == TRUE )
+            if ( pFrame->GetCurrentDocument() == xDoc || pFrame->PrepareClose_Impl( TRUE, TRUE ) == TRUE )
             {
                 if ( pHidden && pHidden->GetValue() )
                 {
                     xDoc->RestoreNoDelete();
                     xDoc->OwnerLock( TRUE );
                 }
-                pFrame->InsertDocument( xDoc );
+
+                if ( pFrame->GetCurrentDocument() != xDoc )
+                    pFrame->InsertDocument( xDoc );
                 pViewFrame = pFrame->GetCurrentViewFrame();
             }
             else
