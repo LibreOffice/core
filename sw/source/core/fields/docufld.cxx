@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-07-10 13:50:15 $
+ *  last change: $Author: os $ $Date: 2001-07-17 10:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -695,7 +695,7 @@ BOOL SwFileNameField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
     if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FILE_FORMAT)))
     {
-        sal_Int16 nType;
+        sal_Int32 nType;
         rAny >>= nType;
         BOOL bFixed = IsFixed();
         switch( nType )
@@ -844,7 +844,7 @@ BOOL SwTemplNameField::PutValue( const uno::Any& rAny, const String& rProperty )
 {
     if(rProperty.EqualsAscii(SW_PRPNM_EQLASCI(UNO_NAME_FILE_FORMAT)))
     {
-        sal_Int16 nType;
+        sal_Int32 nType;
         rAny >>= nType;
         switch( nType )
         {

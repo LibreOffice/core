@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: os $ $Date: 2001-07-12 11:05:32 $
+ *  last change: $Author: os $ $Date: 2001-07-17 10:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
             static SfxItemPropertyMap aFileNameFieldPropMap [] =
             {
                 {SW_PROP_NAME(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, &::getCppuType((const OUString*)0),  PROPERTY_NONE, 0},
-                {SW_PROP_NAME(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
                 {SW_PROP_NAME(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL2, &::getBooleanCppuType(),      PROPERTY_NONE, 0},
                 {0,0,0,0}
             };
@@ -510,7 +510,7 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
         {
             static SfxItemPropertyMap aTmplNameFieldPropMap [] =
             {
-                {SW_PROP_NAME(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, 0},
+                {SW_PROP_NAME(UNO_NAME_FILE_FORMAT), FIELD_PROP_FORMAT, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
                 {0,0,0,0}
             };
             pRet = aTmplNameFieldPropMap;
@@ -1977,6 +1977,8 @@ void SwXTextField::attachToRange(
                 pFld = new SwFileNameField((SwFileNameFieldType*)pFldType, nFormat);
                 if(m_pProps->sPar3.Len())
                     ((SwFileNameField*)pFld)->SetExpansion(m_pProps->sPar3);
+                Any aFormat(&m_pProps->nFormat, ::getCppuType(&m_pProps->nFormat));
+                pFld->PutValue(aFormat, C2U(SW_PROP_NAME_STR(UNO_NAME_FILE_FORMAT)));
             }
             break;
             case SW_SERVICE_FIELDTYPE_TEMPLATE_NAME:
@@ -1984,6 +1986,8 @@ void SwXTextField::attachToRange(
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_TEMPLNAMEFLD);
                 pFld = new SwTemplNameField((SwTemplNameFieldType*)pFldType,
                                                     m_pProps->nFormat);
+                Any aFormat(&m_pProps->nFormat, ::getCppuType(&m_pProps->nFormat));
+                pFld->PutValue(aFormat, C2U(SW_PROP_NAME_STR(UNO_NAME_FILE_FORMAT)));
             }
             break;
             case SW_SERVICE_FIELDTYPE_CHAPTER:
