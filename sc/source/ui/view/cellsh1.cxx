@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-12 12:02:00 $
+ *  last change: $Author: mba $ $Date: 2002-07-12 16:42:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1840,7 +1840,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     USHORT nType = (USHORT) pHyper->GetInsertMode();
 
                     pTabViewShell->InsertURL( rName, rURL, rTarget, nType );
+                    rReq.Done();
                 }
+                else
+                    rReq.Ignore();
             }
             break;
 
@@ -1867,8 +1870,54 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_EXTERNAL_SOURCE:
             {
-                ScLinkedAreaDlg* pDlg = new ScLinkedAreaDlg( pTabViewShell->GetDialogParent() );
-                if (pDlg->Execute() == RET_OK)
+                String aFile;
+                String aFilter;
+                String aOptions;
+                String aSource;
+                ULONG nRefresh=0;
+
+                SFX_REQUEST_ARG( rReq, pFile, SfxStringItem, SID_FILE_NAME, sal_False );
+                SFX_REQUEST_ARG( rReq, pSource, SfxStringItem, FN_PARAM_1, sal_False );
+                if ( pFile && pSource )
+                {
+                    aFile = pFile->GetValue();
+                    aSource = pSource->GetValue();
+                    SFX_REQUEST_ARG( rReq, pFilter, SfxStringItem, SID_FILTER_NAME, sal_False );
+                    if ( pFilter )
+                        aFilter = pFilter->GetValue();
+                    SFX_REQUEST_ARG( rReq, pOptions, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
+                    if ( pOptions )
+                        aOptions = pOptions->GetValue();
+                    SFX_REQUEST_ARG( rReq, pRefresh, SfxUInt32Item, FN_PARAM_2, sal_False );
+                    if ( pRefresh )
+                        nRefresh = pRefresh->GetValue();
+                }
+                else
+                {
+                    ScLinkedAreaDlg* pDlg = new ScLinkedAreaDlg( pTabViewShell->GetDialogParent() );
+                    if (pDlg->Execute() == RET_OK)
+                    {
+                        aFile = pDlg->GetURL();
+                        aFilter = pDlg->GetFilter();
+                        aOptions = pDlg->GetOptions();
+                        aSource = pDlg->GetSource();
+                        nRefresh = pDlg->GetRefresh();
+                        if ( aFile.Len() )
+                            rReq.AppendItem( SfxStringItem( SID_FILE_NAME, aFile ) );
+                        if ( aFilter.Len() )
+                            rReq.AppendItem( SfxStringItem( SID_FILTER_NAME, aFilter ) );
+                        if ( aOptions.Len() )
+                            rReq.AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
+                        if ( aSource.Len() )
+                            rReq.AppendItem( SfxStringItem( FN_PARAM_1, aSource ) );
+                        if ( nRefresh )
+                            rReq.AppendItem( SfxUInt32Item( FN_PARAM_2, nRefresh ) );
+                    }
+
+                    delete pDlg;
+                }
+
+                if ( aFile.Len() && aSource.Len() )         // filter may be empty
                 {
                     ScRange aLinkRange;
                     BOOL bMove = FALSE;
@@ -1884,19 +1933,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     else
                         aLinkRange = ScRange( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
 
-                    String aFile = pDlg->GetURL();
-                    String aFilter = pDlg->GetFilter();
-                    String aOptions = pDlg->GetOptions();
-                    String aSource = pDlg->GetSource();
-                    ULONG nRefresh = pDlg->GetRefresh();
-                    if ( aFile.Len() && aSource.Len() )         // filter may be empty
-                    {
-                        ScDocFunc aFunc(*pViewData->GetDocShell());
-                        aFunc.InsertAreaLink( aFile, aFilter, aOptions, aSource,
-                                                aLinkRange, nRefresh, bMove, FALSE );
-                    }
+                    ScDocFunc aFunc(*pViewData->GetDocShell());
+                    aFunc.InsertAreaLink( aFile, aFilter, aOptions, aSource,
+                                            aLinkRange, nRefresh, bMove, FALSE );
+                    rReq.Done();
                 }
-                delete pDlg;
+                else
+                    rReq.Ignore();
             }
             break;
 
