@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:59 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,12 +136,12 @@ void OTableWindowListBox::dragFinished( )
 //------------------------------------------------------------------------------
 OTableWindowListBox::~OTableWindowListBox()
 {
+    DBG_DTOR(OTableWindowListBox,NULL);
     if (m_nDropEvent)
         Application::RemoveUserEvent(m_nDropEvent);
     if( m_aScrollTimer.IsActive() )
         m_aScrollTimer.Stop();
     m_pTabWin = NULL;
-    DBG_DTOR(OTableWindowListBox,NULL);
 }
 
 //------------------------------------------------------------------------------
