@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserline.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-01-18 13:20:45 $
+ *  last change: $Author: fs $ $Date: 2002-11-05 09:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,8 +414,21 @@ namespace pcr
     void OBrowserLine::SetTitle(const XubString& rString )
     {
         String aText(rString);
-        aText.AppendAscii("......................................................");
+        // #99102# --------------
         m_aFtTitle.SetText(aText);
+        FullFillTitleString();
+    }
+
+    // #99102# ---------------------------------------------------------
+    void OBrowserLine::FullFillTitleString()
+    {
+        if( m_pTheParent )
+        {
+            String aText = m_aFtTitle.GetText();
+            while( m_pTheParent->GetTextWidth( aText ) < m_nNameWidth )
+                aText.AppendAscii("...........");
+            m_aFtTitle.SetText(aText);
+        }
     }
 
     //------------------------------------------------------------------
@@ -513,6 +526,8 @@ namespace pcr
             m_nNameWidth = nWidth+10;
             SetControlPosSize(m_aLinePos,m_aOutputSize);
         }
+        // #99102# ---------
+        FullFillTitleString();
     }
 
     //------------------------------------------------------------------
@@ -540,6 +555,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/01/18 13:20:45  rt
+ *  #65293# extra semicolon removed
+ *
  *  Revision 1.1  2001/01/12 11:25:06  fs
  *  initial checkin - outsourced the form property browser
  *

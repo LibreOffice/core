@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserline.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 11:25:14 $
+ *  last change: $Author: fs $ $Date: 2002-11-05 09:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,8 @@ namespace pcr
                 void                        SetHelpId(sal_uInt32 nCtrHelpId,sal_uInt32 nBtUniqueId);
 
                 void                        SetTitle(const String& rString );
+                // #99102# ---------------
+                void                        FullFillTitleString();
                 String                      GetTitle() const;
                 void                        SetTitleWidth(sal_uInt16);
 
@@ -164,6 +166,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/01/12 11:25:14  fs
+ *  initial checkin - outsourced the form property browser
+ *
  *
  *  Revision 1.0 08.01.01 16:36:15  fs
  ************************************************************************/
