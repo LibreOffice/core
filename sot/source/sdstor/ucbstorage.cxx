@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: mav $ $Date: 2002-02-19 17:05:30 $
+ *  last change: $Author: mav $ $Date: 2002-02-21 13:00:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1069,13 +1069,25 @@ ULONG UCBStorageStream_Impl::SeekPos( ULONG nPos )
             // the temp stream pointer points to the end now
                 aResult = m_pStream->Tell();
 
-            if( m_bSourceRead && aResult < nPos )
+            if( aResult < nPos )
             {
-                aResult += ReadSourceWriteTemporary( nPos - aResult );
-                if( aResult < nPos )
-                    m_bSourceRead = FALSE;
+                if( m_bSourceRead )
+                {
+                    aResult += ReadSourceWriteTemporary( nPos - aResult );
+                    if( aResult < nPos )
+                        m_bSourceRead = FALSE;
 
-                DBG_ASSERT( aResult == m_pStream->Tell(), "Error in stream arithmetic!\n" );
+                    DBG_ASSERT( aResult == m_pStream->Tell(), "Error in stream arithmetic!\n" );
+                }
+
+                if( !m_bSourceRead )
+                {
+                    // it means that all the Source stream was copied already
+                    // but the required position still was not reached
+                    m_pStream->SetStreamSize( nPos );
+                    aResult = m_pStream->Seek( STREAM_SEEK_TO_END );
+                    DBG_ASSERT( aResult == nPos, "Error in stream arithmetic!\n" );
+                }
             }
         }
     }
