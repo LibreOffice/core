@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-23 10:15:25 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 13:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1780,10 +1780,10 @@ bool ODatabaseForm::fillParameters(ReusableMutexGuard& _rClearForNotifies, const
 }
 
 //------------------------------------------------------------------------------
-void ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler)
+sal_Bool ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst, const Reference< XInteractionHandler >& _rxCompletionHandler)
 {
     if (!m_xAggregateAsRowSet.is())
-        return;
+        return sal_False;
 
     fillParameters(_rClearForNotifies, _rxCompletionHandler);
     sal_Bool bInsertOnly = sal_False;
@@ -1865,9 +1865,11 @@ void ODatabaseForm::executeRowSet(ReusableMutexGuard& _rClearForNotifies, sal_Bo
                 else
                     onError(eDB, FRM_RES_STRING(RID_STR_READERROR));
                 _rClearForNotifies.attach(m_aMutex);
+                bSuccess = sal_False;
             }
         }
     }
+    return bSuccess;
 }
 
 //------------------------------------------------------------------
@@ -2952,21 +2954,25 @@ void ODatabaseForm::load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirs
     // (and there were no relevant changes between these two listener calls, the "load" of a form is quite an
     // atomar operation.)
 
+    sal_Bool bSuccess = sal_False;
     if (bExecute)
     {
         m_sCurrentErrorContext = FRM_RES_STRING(RID_ERR_LOADING_FORM);
-        executeRowSet(aGuard, bMoveToFirst, _rxCompletionHandler);
+        bSuccess = executeRowSet(aGuard, bMoveToFirst, _rxCompletionHandler);
     }
 
-    m_bLoaded = sal_True;
-    aGuard.clear();
-    EventObject aEvt(static_cast<XWeak*>(this));
-    NOTIFY_LISTENERS(m_aLoadListeners, XLoadListener, loaded, aEvt);
+    if (bSuccess)
+    {
+        m_bLoaded = sal_True;
+        aGuard.clear();
+        EventObject aEvt(static_cast<XWeak*>(this));
+        NOTIFY_LISTENERS(m_aLoadListeners, XLoadListener, loaded, aEvt);
 
-    // if we are on the insert row, we have to reset all controls
-    // to set the default values
-    if (bExecute && getBOOL(m_xAggregateSet->getPropertyValue(PROPERTY_ISNEW)))
-        reset();
+        // if we are on the insert row, we have to reset all controls
+        // to set the default values
+        if (bExecute && getBOOL(m_xAggregateSet->getPropertyValue(PROPERTY_ISNEW)))
+            reset();
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -3040,10 +3046,11 @@ void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst, const Reference< XInterac
         }
     }
 
+    sal_Bool bSuccess = sal_True;
     try
     {
         m_sCurrentErrorContext = FRM_RES_STRING(RID_ERR_REFRESHING_FORM);
-        executeRowSet(aGuard, bMoveToFirst, _rxCompletionHandler);
+        bSuccess = executeRowSet(aGuard, bMoveToFirst, _rxCompletionHandler);
     }
     catch(SQLException& e)
     {
@@ -3051,6 +3058,7 @@ void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst, const Reference< XInterac
         e;
     }
 
+    if (bSuccess)
     {
         ::cppu::OInterfaceIteratorHelper aIter(m_aLoadListeners);
         aGuard.clear();
@@ -3062,6 +3070,8 @@ void ODatabaseForm::reload_impl(sal_Bool bMoveToFirst, const Reference< XInterac
         if (getBOOL(m_xAggregateSet->getPropertyValue(PROPERTY_ISNEW)))
             reset();
     }
+    else
+        m_bLoaded = sal_False;
 }
 
 //------------------------------------------------------------------------------
