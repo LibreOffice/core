@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:42:52 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #pragma hdrstop
 
+#include "objsh.hxx"
+#include "app.hxx"
+#include "appdata.hxx"
 #include "workwin.hxx"
 #include "topfrm.hxx"
 #include "clientsh.hxx"
@@ -79,12 +82,89 @@
 #include "msgpool.hxx"
 #include "stbmgr.hxx"
 #include "sfxresid.hxx"
-#include <vcl/taskpanelist.hxx>
 #include "objsh.hxx"
+#include <vcl/taskpanelist.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XUIELEMENT_HPP_
+#include <drafts/com/sun/star/ui/XUIElement.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+using namespace com::sun::star::uno;
+
+struct ResIdToResName
+{
+    USHORT      nId;
+    const char* pName;
+};
+
+static const ResIdToResName pToolBarResToName[] =
+{
+    { 558,      "fullscreenbar"        },
+    { 560,      "standardbar",         },
+    { 18003,    "formsnavigationbar"   },
+    { 18004,    "formsfilterbar"       },
+    { 20050,    "toolbar"              },      //math
+    { 30001,    "objectbar"            },      //chart
+    { 30513,    "toolbar"              },      //chart
+    { 25005,    "textobjectbar"        },      //calc
+    { 25047,    "formsobjectbar"       },
+    { 25053,    "drawobjectbar"        },
+    { 25054,    "grapicobjectbar"      },
+    { 25001,    "formatobjectbar"      },
+    { 25006,    "previewbar"           },
+    { 25035,    "toolbar"              },      //calc
+    { 23015,    "bezierobjectbar"      },      //draw
+    { 23019,    "gluepointsobjectbar"  },
+    { 23030,    "graphicobjectbar"     },      //impress
+    { 23013,    "drawingobjectbar"     },
+    { 23016,    "textobjectbar"        },      //impress
+    { 23028,    "textobjectbar"        },      //draw
+    { 23011,    "toolbar"              },      //impres
+    { 23020,    "optionsbar"           },
+    { 23021,    "commontaskbar"        },
+    { 23025,    "toolbar"              },      //draw
+    { 23026,    "optionsbar"           },
+    { 23027,    "graphicobjectbar"     },      //draw
+    { 23017,    "outlinetoolbar"       },      //impress
+    { 23012,    "slideviewtoolbar"     },
+    { 23014,    "slideviewobjectbar"   },
+    { 23283,    "bezierobjectbar"      },      //writer
+    { 23269,    "drawingobjectbar"     },
+    { 23299,    "formsobjectbar"       },
+    { 23270,    "drawtextobjectbar"    },
+    { 23267,    "frameobjectbar"       },
+    { 23268,    "graphicobjectbar"     },
+    { 23271,    "numobjectbar"         },
+    { 23272,    "oleobjectbar"         },
+    { 23266,    "tableobjectbar"       },
+    { 23265,    "textobjectbar"        },
+    { 20631,    "previewobjectbar"     },      //writer
+    { 20402,    "toolbar"              },      //web
+    { 20403,    "textobjectbar"        },
+    { 23273,    "toolbar"              },      //writer
+    { 20408,    "frameobjectbar"       },      //web
+    { 20410,    "graphicobjectbar"     },
+    { 20411,    "oleobjectbar"         },
+    { 14850,    "macrobar"             },
+    { 23310,    "writerviewerbar"      },
+    { 25000,    "calcviewerbar"        },
+    { 23023,    "impressviewerbar"     },
+    { 23024,    "drawviewerbar"        },
+    { 10987,    "fontworkobjectbar"    },      //global
+    { 10986,    "extrusionobjectbar"   },
+    { 0,        ""                     }
+};
 
 DBG_NAME(SfxWorkWindow);
 
-SV_IMPL_OBJARR( SfxObjectBarArr_Impl, SfxObjectBar_Impl );
+//SV_IMPL_OBJARR( SfxObjectBarArr_Impl, SfxObjectBar_Impl );
 
 //====================================================================
 // Sortiert die Children nach ihrem Alignment
@@ -92,6 +172,37 @@ SV_IMPL_OBJARR( SfxObjectBarArr_Impl, SfxObjectBar_Impl );
 //
 
 // Hilfe, um die "Anderungen am Alignment kompatibal zu machen!
+
+typedef std::hash_map< sal_Int32, rtl::OUString > ToolBarResIdToResourceURLMap;
+
+static sal_Bool bMapInitialized = sal_False;
+static ToolBarResIdToResourceURLMap aResIdToResourceURLMap;
+
+static rtl::OUString GetResourceURLFromResId( USHORT nResId )
+{
+    if ( !bMapInitialized )
+    {
+        osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+        if ( !bMapInitialized )
+        {
+            sal_Int32 nIndex( 0 );
+            while ( pToolBarResToName[nIndex].nId != 0 )
+            {
+                rtl::OUString aResourceURL( rtl::OUString::createFromAscii( pToolBarResToName[nIndex].pName ));
+                aResIdToResourceURLMap.insert( ToolBarResIdToResourceURLMap::value_type(
+                                                    sal_Int32( pToolBarResToName[nIndex].nId ), aResourceURL ));
+                ++nIndex;
+            }
+            bMapInitialized = sal_True;
+        }
+    }
+
+    ToolBarResIdToResourceURLMap::const_iterator pIter = aResIdToResourceURLMap.find( nResId );
+    if ( pIter != aResIdToResourceURLMap.end() )
+        return pIter->second;
+    else
+        return rtl::OUString();
+}
 
 BOOL IsAppWorkWinToolbox_Impl( USHORT nPos )
 {
@@ -290,7 +401,8 @@ SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( Window *pWin, SfxFrame *pFrm )
     if ( pConfigShell && pConfigShell->GetObjectShell() )
     {
         bShowStatusBar = ( !pConfigShell->GetObjectShell()->IsInPlaceActive() );
-        bDockingAllowed = bShowStatusBar;
+        bDockingAllowed = sal_True;
+        bInternalDockingAllowed = sal_True;
     }
 
     // Die ben"otigten SplitWindows (je eins f"ur jede Seite) werden erzeugt
@@ -308,7 +420,8 @@ SfxFrameWorkWin_Impl::SfxFrameWorkWin_Impl( Window *pWin, SfxFrame *pFrm )
         pSplit[n] = pWin;
     }
 
-    nOrigMode = SFX_VISIBILITY_CLIENT;
+    //nOrigMode = SFX_VISIBILITY_CLIENT;
+    nOrigMode = SFX_VISIBILITY_STANDARD;
     nUpdateMode = SFX_VISIBILITY_STANDARD;
 }
 
@@ -335,8 +448,10 @@ SfxIPWorkWin_Impl::SfxIPWorkWin_Impl( WorkWindow *pWin, SfxBindings& rB,
         pSplit[n] = pWin;
     }
 
-    nOrigMode = SFX_VISIBILITY_SERVER;
-    nUpdateMode = SFX_VISIBILITY_SERVER;
+    nOrigMode = SFX_VISIBILITY_STANDARD;
+    nUpdateMode = SFX_VISIBILITY_STANDARD;
+    //nOrigMode = SFX_VISIBILITY_SERVER;
+    //nUpdateMode = SFX_VISIBILITY_SERVER;
     if ( !pParent )
         aStatBar.bOn = sal_True;
 }
@@ -350,13 +465,15 @@ SfxWorkWindow::SfxWorkWindow( Window *pWin, SfxBindings& rB, SfxWorkWindow* pPar
     bSorted( TRUE ),
     pBindings(&rB),
     bDockingAllowed(TRUE),
+    bInternalDockingAllowed(TRUE),
     bAllChildsVisible(TRUE),
     nChilds( 0 ),
     nOrigMode( 0 ),
     pConfigShell( 0 ),
     pActiveChild( 0 ),
     bIsFullScreen( FALSE ),
-    bShowStatusBar( TRUE )
+    bShowStatusBar( TRUE ),
+    bLocked( FALSE )
 {
     DBG_CTOR(SfxWorkWindow, 0);
     DBG_ASSERT (pBindings, "Keine Bindings!");
@@ -401,6 +518,11 @@ SystemWindow* SfxWorkWindow::GetTopWindow() const
     while ( pRet && !pRet->IsSystemWindow() )
         pRet = pRet->GetParent();
     return (SystemWindow*) pRet;
+}
+
+void SfxWorkWindow::Lock_Impl( BOOL bLock )
+{
+    bLocked = bLock;
 }
 
 void SfxWorkWindow::ChangeWindow_Impl( Window *pNew )
@@ -499,18 +621,33 @@ void SfxWorkWindow::DeleteControllers_Impl()
     }
 
     // ObjectBars l"oschen( zuletzt, damit pChilds nicht tote Pointer enh"alt )
-    for (n=0; n<SFX_OBJECTBAR_MAX; n++)
+    SfxBindings& rBindings = GetBindings();
+    Reference< com::sun::star::frame::XFrame > xFrame = rBindings.GetActiveFrame();
+    Reference< com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+    if ( xPropSet.is() )
     {
-        delete (*pChilds)[TbxMatch(n)];
-
-        // Nicht jede Position mu\s belegt sein
-        SfxToolBoxManager *pTbx = aObjBars[n].pTbx;
-        if (pTbx)
+        try
         {
-            // Release siehe unten
-            pTbx->StoreConfig();
-            pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( &pTbx->GetToolBox() );
-            delete(pTbx);
+            Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+            aValue >>= xLayoutManager;
+
+            rtl::OUString aTbxType( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
+            for ( USHORT i = 0; i < aObjBarList.size(); i++ )
+            {
+                // Nicht jede Position mu\s belegt sein
+                USHORT nId = aObjBarList[i].nId;
+                if ( nId )
+                {
+                    rtl::OUString aTbxId( aTbxType );
+                    aTbxId += GetResourceURLFromResId( aObjBarList[i].nId );
+                    xLayoutManager->destroyElement( aTbxId );
+                    aObjBarList[i].nId = 0;
+                }
+            }
+        }
+        catch ( Exception& )
+        {
         }
     }
 
@@ -563,7 +700,7 @@ void SfxIPWorkWin_Impl::ArrangeChilds_Impl()
 
 void SfxFrameWorkWin_Impl::ArrangeChilds_Impl()
 {
-    if ( pFrame->IsClosing_Impl() )
+    if ( pFrame->IsClosing_Impl() || bLocked )
         return;
 
     aClientArea = GetTopRect_Impl();
@@ -817,7 +954,7 @@ void SfxWorkWindow::AlignChild_Impl( Window& rWindow,
                                             SfxChildAlignment eAlign )
 {
     DBG_CHKTHIS(SfxWorkWindow, 0);
-    DBG_ASSERT( pChilds, "aligning unregistered child" );
+//  DBG_ASSERT( pChilds, "aligning unregistered child" );
     DBG_ASSERT( SfxChildAlignValid(eAlign), "invalid align" );
 
     SfxChild_Impl *pChild = FindChild_Impl(rWindow);
@@ -839,7 +976,7 @@ void SfxWorkWindow::AlignChild_Impl( Window& rWindow,
 void SfxWorkWindow::ReleaseChild_Impl( Window& rWindow )
 {
     DBG_CHKTHIS(SfxWorkWindow, 0);
-    DBG_ASSERT( pChilds, "releasing unregistered child" );
+//  DBG_ASSERT( pChilds, "releasing unregistered child" );
 
     SfxChild_Impl *pChild = 0;
     USHORT nCount = pChilds->Count();
@@ -964,12 +1101,16 @@ void SfxWorkWindow::HideChilds_Impl()
 void SfxWorkWindow::ResetObjectBars_Impl()
 {
     USHORT n;
+/*
     for ( n = 0; n < SFX_OBJECTBAR_MAX; ++n )
     {
         aObjBars[n].nId = 0;
         aObjBarLists[n].aArr.Remove(0, aObjBarLists[n].aArr.Count() );
         aObjBarLists[n].nAct = 0;
     }
+*/
+    for ( n = 0; n < aObjBarList.size(); n++ )
+        aObjBarList[n].bDestroy = sal_True;
 
     for ( n = 0; n < pChildWins->Count(); ++n )
         (*pChildWins)[n]->nId = 0;
@@ -980,6 +1121,7 @@ void SfxWorkWindow::ResetObjectBars_Impl()
 
 void SfxWorkWindow::NextObjectBar_Impl( USHORT nPos )
 {
+/*
     USHORT nCount = aObjBarLists[nPos].aArr.Count();
     if ( nCount > 1 )
     {
@@ -989,10 +1131,12 @@ void SfxWorkWindow::NextObjectBar_Impl( USHORT nPos )
         aObjBars[nPos] = aObjBarLists[nPos].Actual();
         UpdateObjectBars_Impl();
     }
+*/
 }
 
 USHORT SfxWorkWindow::HasNextObjectBar_Impl( USHORT nPos, String *pStr )
 {
+/*
     USHORT nCount = aObjBarLists[nPos].aArr.Count();
     if ( nCount > 1 )
     {
@@ -1004,7 +1148,7 @@ USHORT SfxWorkWindow::HasNextObjectBar_Impl( USHORT nPos, String *pStr )
             *pStr = rObjbar.aName;
         return rObjbar.nId;
     }
-
+*/
     return 0;
 }
 
@@ -1023,27 +1167,30 @@ void SfxWorkWindow::SetObjectBar_Impl( USHORT nPos, const ResId& rResId,
         return;
     }
 
-    SfxObjectBar_Impl& rObjBar = aObjBars[nRealPos];
-    rObjBar.pIFace = pIFace;
-    rObjBar.nId = rResId.GetId();
-    rObjBar.pResMgr = rResId.GetResMgr();
-    rObjBar.nMode = (nPos & SFX_VISIBILITY_MASK);
+    SfxObjectBar_Impl aObjBar; // = aObjBars[nRealPos];
+    aObjBar.pIFace = pIFace;
+    aObjBar.nId = rResId.GetId();
+//  rObjBar.pResMgr = rResId.GetResMgr();
+    aObjBar.nPos = nRealPos;
+    aObjBar.nMode = (nPos & SFX_VISIBILITY_MASK);
     if (pName)
-        rObjBar.aName = *pName;
+        aObjBar.aName = *pName;
     else
-        rObjBar.aName.Erase();
+        aObjBar.aName.Erase();
 
-    SfxObjectBarArr_Impl& rArr = aObjBarLists[nRealPos].aArr;
-    for ( USHORT n=0; n<rArr.Count(); n++ )
+//  SfxObjectBarArr_Impl& rArr = aObjBarLists[nRealPos].aArr;
+    for ( USHORT n=0; n<aObjBarList.size(); n++ )
     {
-        if ( rArr[n].nId == rObjBar.nId )
+        if ( aObjBarList[n].nId == aObjBar.nId )
         {
-            aObjBarLists[nRealPos].nAct = n;
+            aObjBarList[n] = aObjBar;
+//          aObjBarLists[nRealPos].nAct = n;
             return;
         }
     }
 
-    rArr.Insert( rObjBar, 0 );
+    aObjBarList.push_back( aObjBar );
+//  rArr.Insert( rObjBar, 0 );
 }
 
 //------------------------------------------------------------------------
@@ -1062,7 +1209,14 @@ FASTBOOL SfxWorkWindow::KnowsObjectBar_Impl( USHORT nPos ) const
     if ( pParent && IsAppWorkWinToolbox_Impl( nRealPos ) )
         return pParent->KnowsObjectBar_Impl( nPos );
 
-    return 0 != aObjBars[nPos & SFX_POSITION_MASK].nId;
+    for ( USHORT n=0; n<aObjBarList.size(); n++ )
+    {
+        if ( aObjBarList[n].nPos == nRealPos )
+            return TRUE;
+    }
+
+    return FALSE;
+//    return 0 != aObjBars[nPos & SFX_POSITION_MASK].nId;
 }
 
 //------------------------------------------------------------------------
@@ -1088,6 +1242,7 @@ BOOL SfxWorkWindow::IsVisible_Impl( USHORT nMode ) const
 
 Window* SfxWorkWindow::GetObjectBar_Impl( USHORT nPos, ResId& rResId )
 {
+/*
     USHORT nRealPos = nPos & SFX_POSITION_MASK;
     DBG_ASSERT( nRealPos < SFX_OBJECTBAR_MAX,
                 "object bar position overflow" );
@@ -1099,6 +1254,8 @@ Window* SfxWorkWindow::GetObjectBar_Impl( USHORT nPos, ResId& rResId )
     rResId.SetResMgr(aObjBars[nPos & SFX_POSITION_MASK].pResMgr);
 
     return &aObjBars[nPos].pTbx->GetToolBox();
+*/
+    return NULL;
 }
 
 //------------------------------------------------------------------------
@@ -1181,126 +1338,64 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
     SfxApplication *pSfxApp = SFX_APP();
     SfxToolBoxConfig *pTbxCfg = GetBindings().GetToolBoxConfig();
 
-    // "uber alle Toolbox-Positionen iterieren
-    for ( n = 0; n < SFX_OBJECTBAR_MAX; ++n )
-    {
-        SfxChild_Impl *&rpCli = (*pChilds)[TbxMatch(n)];
+    Reference< com::sun::star::beans::XPropertySet > xPropSet( GetBindings().GetActiveFrame(), UNO_QUERY );
+    Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
 
-        // Toolbox und/oder Id an der Position 'n'
-        USHORT nId = aObjBars[n].nId;
-        SfxToolBoxManager *&rpTbx = aObjBars[n].pTbx;
-        FASTBOOL bToolBoxVisible = pTbxCfg->IsToolBoxPositionVisible(n);
+    if ( xPropSet.is() )
+    {
+        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+        aValue >>= xLayoutManager;
+    }
+
+    if ( !xLayoutManager.is() )
+        return;
+
+    // "uber alle Toolboxen iterieren
+    xLayoutManager->lock();
+    rtl::OUString aTbxType( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
+    for ( n = 0; n < aObjBarList.size(); ++n )
+    {
+        USHORT      nId      = aObjBarList[n].nId;
+        sal_Bool    bDestroy = aObjBarList[n].bDestroy;
 
         // die Modi bestimmen, f"ur die die ToolBox gilt
-        USHORT nTbxMode = aObjBars[n].nMode;
+        USHORT nTbxMode = aObjBarList[n].nMode;
         FASTBOOL bFullScreenTbx = SFX_VISIBILITY_FULLSCREEN ==
-                    ( nTbxMode & SFX_VISIBILITY_FULLSCREEN );
+                                  ( nTbxMode & SFX_VISIBILITY_FULLSCREEN );
         nTbxMode &= ~SFX_VISIBILITY_FULLSCREEN;
         nTbxMode &= ~SFX_VISIBILITY_VIEWER;
 
         // wird in diesem Kontext eine ToolBox gefordert?
-        FASTBOOL bModesMatching = nUpdateMode && ( nTbxMode & nUpdateMode) == nUpdateMode;
-        if ( nId != 0 && bToolBoxVisible == TRUE &&
-             ( ( bModesMatching && !bIsFullScreen ) ||
-               ( bIsFullScreen && bFullScreenTbx ) ) )
+        FASTBOOL bModesMatching = ( nUpdateMode && ( nTbxMode & nUpdateMode) == nUpdateMode );
+        if ( bDestroy )
         {
-            // keine oder falsche Toolbox an der Position 'n' vorhanden?
-            if ( !rpTbx || ( rpTbx && rpTbx->GetType() != nId ) )
+            rtl::OUString aTbxId( aTbxType );
+            aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
+            xLayoutManager->destroyElement( aTbxId );
+        }
+        else if ( nId != 0 && ( ( bModesMatching && !bIsFullScreen ) ||
+                                ( bIsFullScreen && bFullScreenTbx ) ) )
+        {
+            rtl::OUString aTbxId( aTbxType );
+            aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
+            if ( !IsDockingAllowed() && !xLayoutManager->isElementFloating( aTbxId ))
             {
-                // (falsche) Toolbox vorhanden?
-                if (rpTbx)
-                {
-                    // dann Toolbox-Inhalt autauschen
-                    rpTbx = new SfxToolBoxManager(
-                                    ResId( aObjBars[n].nId,
-                                           aObjBars[n].pResMgr ),
-                                    aObjBars[n].pIFace,
-                                    aObjBars[n].aName,
-                                    rpTbx, pConfigShell);
-                    rpCli->pWin = &rpTbx->GetToolBox();
-                }
-                else
-                {
-                    // sonst Toolbox neu erzeugen
-                    rpTbx = new SfxToolBoxManager( pWorkWin,
-                                    GetBindings(),
-                                    ResId( aObjBars[n].nId,
-                                           aObjBars[n].pResMgr ),
-                                    aObjBars[n].pIFace,
-                                    n, pConfigShell );
-
-                    rpTbx->Initialize();
-                    SfxToolbox& rTbx = (SfxToolbox&) rpTbx->GetToolBox();
-                    if ( !rpCli )
-                    {
-                        rpCli = new SfxChild_Impl( rTbx, Size(),
-                                rTbx.IsFloatingMode() ? SFX_ALIGN_NOALIGNMENT : rTbx.GetAlignment(), TRUE );
-                    }
-                    else
-                    {
-                        rpCli->pWin = &rTbx;
-                    }
-
-                    bSorted = FALSE;
-                    nChilds++;
-                }
-
-                // make toolbar keyboard accessible
-                pWorkWin->GetSystemWindow()->GetTaskPaneList()->AddWindow( &rpTbx->GetToolBox() );
-
-                ToolBox& rTbx = rpTbx->GetToolBox();
-                rTbx.SetText(aObjBars[n].aName);
-                if ( rTbx.IsFloatingMode() )
-                    rpCli->aSize = rTbx.GetFloatingWindow()->GetSizePixel();
-                else
-                {
-                    rpCli->bResize = TRUE;
-                    rpCli->aSize = rTbx.GetSizePixel();
-                }
-
-                // Schnelles Statusupdate wirkt optisch besser
-                rpTbx->UpdateControls_Impl();
+                xLayoutManager->destroyElement( aTbxId );
             }
             else
             {
-                ToolBox& rTbx = rpTbx->GetToolBox();
-                BOOL bWasFloating = rTbx.IsFloatingMode();
-                rpTbx->Reconfigure_Impl( pTbxCfg );
-                rTbx.SetText(aObjBars[n].aName);
-                String aNext;
-                rpTbx->GetNextToolBox_Impl( &aNext );
-                rTbx.SetNextToolBox( aNext );
-
-                if ( bWasFloating && !rTbx.IsFloatingMode() )
-                {
-                    // Toolbox einer nicht aktiven Task wurde angedockt und
-                    // jetzt wurde sie wieder aktiviert.
-                    // Falls angedockte Toolboxen sichtbar sein sollen, mu\s
-                    // sie geshowed werden, da sie vorher in HidePopups
-                    // gehidet wurde
-                    if ( IsDockingAllowed() && bAllChildsVisible )
-                        rpCli->nVisible |= CHILD_ACTIVE;
-                    if ( CHILD_VISIBLE == (rpCli->nVisible & CHILD_VISIBLE) )
-                        rTbx.Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-                }
+                xLayoutManager->createElement( aTbxId );
+                xLayoutManager->requestElement( aTbxId );
             }
         }
-        else
+        else if ( nId != 0 )
         {
             // ggf. Toolbox an dieser Position l"oschen
-            if (rpTbx)
-            {
-                rpTbx->StoreConfig();
-                pWorkWin->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( rpCli->pWin );
-                rpCli->pWin = 0;
-                SfxToolBoxManager *p = rpTbx;
-                rpTbx = 0;
-                p->Delete();
-                bSorted = FALSE;
-                nChilds--;
-            }
+            rtl::OUString aTbxId( aTbxType );
+            aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
+            xLayoutManager->destroyElement( aTbxId );
         }
-
+/*
         if ( rpTbx && !IsDockingAllowed() )
         {
             // Presentation mode
@@ -1319,7 +1414,10 @@ void SfxWorkWindow::UpdateObjectBars_Impl()
                 // angedockte Toolboxen bis zum Livemodus hiden
                 rpCli->nVisible &= ~CHILD_ACTIVE;
         }
+*/
     }
+    xLayoutManager->unlock();
+    xLayoutManager->doLayout();
 
     UpdateChildWindows_Impl();
 
@@ -1348,7 +1446,7 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
             // ist es auch eingeschaltet ?
             if ( pChildWin == 0 && pCW->bCreate )
             {
-                if ( !IsDockingAllowed() || bIsFullScreen )
+                if ( !IsDockingAllowed() || bIsFullScreen || !bInternalDockingAllowed )
                 {
                     // im PresentationMode oder FullScreen nur FloatingWindows
                     SfxChildAlignment eAlign;
@@ -1379,10 +1477,10 @@ void SfxWorkWindow::UpdateChildWindows_Impl()
                     if ( pCW->pCli )
                     {
                         // Fenster ist direktes Child
-                        if ( bAllChildsVisible && ( IsDockingAllowed() || pCW->pCli->eAlign == SFX_ALIGN_NOALIGNMENT ) )
+                        if ( bAllChildsVisible && ( IsDockingAllowed() && bInternalDockingAllowed || pCW->pCli->eAlign == SFX_ALIGN_NOALIGNMENT ) )
                             pCW->pCli->nVisible |= CHILD_NOT_HIDDEN;
                     }
-                    else if ( pCW->bCreate && IsDockingAllowed() )
+                    else if ( pCW->bCreate && IsDockingAllowed() && bInternalDockingAllowed )
                         // Fenster liegt in einem SplitWindow
                         ((SfxDockingWindow*)pChildWin->GetWindow())->Reappear_Impl();
 
@@ -1507,6 +1605,7 @@ void SfxWorkWindow::RemoveChildWin_Impl( SfxChildWin_Impl *pCW )
     USHORT nPos = pChildWin->GetPosition();
     if (nPos != CHILDWIN_NOPOS)
     {
+/*
         // ChildWindow "uberlagert einen ObjectBar
         DBG_ASSERT(nPos < SFX_OBJECTBAR_MAX, "Illegal objectbar position!");
         if ((*pChilds)[TbxMatch(nPos)] &&
@@ -1516,6 +1615,7 @@ void SfxWorkWindow::RemoveChildWin_Impl( SfxChildWin_Impl *pCW )
             // ObjectBar war "uberlagert; jetzt wieder anzeigen
             (*pChilds)[TbxMatch(nPos)]->nVisible ^= CHILD_NOT_HIDDEN;
         }
+*/
     }
 
     // Information in der INI-Datei sichern
@@ -1557,7 +1657,7 @@ void SfxWorkWindow::ResetStatusBar_Impl()
 //--------------------------------------------------------------------
 void SfxWorkWindow::SetStatusBar_Impl( const ResId& rResId, SfxShell *pSh, SfxBindings& rBindings )
 {
-    if ( rResId.GetId() && bShowStatusBar )
+    if ( rResId.GetId() && bShowStatusBar && nOrigMode != SFX_VISIBILITY_UNVISIBLE )
     {
         aStatBar.nId = rResId.GetId();
         aStatBar.pShell = pSh;
@@ -1567,7 +1667,7 @@ void SfxWorkWindow::SetStatusBar_Impl( const ResId& rResId, SfxShell *pSh, SfxBi
 
 void SfxWorkWindow::SetTempStatusBar_Impl( BOOL bSet )
 {
-    if ( aStatBar.bTemp != bSet && bShowStatusBar )
+    if ( aStatBar.bTemp != bSet && bShowStatusBar && nOrigMode != SFX_VISIBILITY_UNVISIBLE )
     {
         BOOL bOn = FALSE;
         SfxToolBoxConfig *pTbxCfg = GetBindings().GetToolBoxConfig();
@@ -1649,7 +1749,7 @@ void SfxWorkWindow::UpdateStatusBar_Impl()
 
     // keine Statusleiste, wenn keine Id gew"unscht oder bei FullScreenView
     // oder wenn ausgeschaltet
-    if ( aStatBar.nId && IsDockingAllowed() && bShowStatusBar &&
+    if ( aStatBar.nId && IsDockingAllowed() && bInternalDockingAllowed && bShowStatusBar &&
             ( aStatBar.bOn && !bIsFullScreen && ( !pTbxCfg || pTbxCfg->IsStatusBarVisible() ) || aStatBar.bTemp ) )
     {
         if ( aStatBar.nId != nActId || aStatBar.pStatusBar && aStatBar.pStatusBar->GetBindings_Impl() != aStatBar.pBindings )
@@ -1718,26 +1818,28 @@ void SfxWorkWindow::HidePopups_Impl(BOOL bHide, BOOL bParent, USHORT nId )
 {
     if ( nId && pChilds->Count() )
     {
-        for ( USHORT n = 0; n < SFX_OBJECTBAR_MAX; ++n )
+/*
+        Reference< com::sun::star::beans::XPropertySet > xPropSet( GetBindings().GetActiveFrame(), UNO_QUERY );
+        Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+        aValue >>= xLayoutManager;
+
+        rtl::OUString aTbxType( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ));
+        for ( USHORT n = 0; n < aObjBarList.size(); ++n )
         {
-            SfxChild_Impl *pCli = (*pChilds)[TbxMatch(n)];
-            if ( pCli && pCli->eAlign == SFX_ALIGN_NOALIGNMENT )
+            rtl::OUString aTbxId( aTbxType );
+            aTbxId += GetResourceURLFromResId( aObjBarList[n].nId );
+            if ( nId &&
+                 xLayoutManager->getElement( aTbxId ).is() &&
+                 xLayoutManager->isElementFloating( aTbxId ))
             {
-                BOOL bHasTbx = ( aObjBars[n].pTbx != 0 );
-                if (bHide)
-                {
-                    pCli->nVisible &= ~CHILD_ACTIVE;
-                    if ( bHasTbx )
-                        aObjBars[n].pTbx->GetToolBox().Hide();
-                }
+                if ( bHide )
+                    xLayoutManager->hideElement( aTbxId );
                 else
-                {
-                    pCli->nVisible |= CHILD_ACTIVE;
-                    if ( bHasTbx && CHILD_VISIBLE == (pCli->nVisible & CHILD_VISIBLE) )
-                        aObjBars[n].pTbx->GetToolBox().Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );
-                }
+                    xLayoutManager->showElement( aTbxId );
             }
         }
+*/
     }
 
     for ( USHORT n = 0; n < pChildWins->Count(); ++n )
@@ -1778,6 +1880,8 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
     if ( eChild == SFX_CHILDWIN_OBJECTBAR )
     {
+        return;
+/*
         // configure toolbar
         USHORT n;
         for (n=0; n<SFX_OBJECTBAR_MAX; n++)
@@ -1786,7 +1890,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                 break;
         }
 
-        DBG_ASSERT( pParent || n<SFX_OBJECTBAR_MAX, "Unknown toolbox!" );
+//        DBG_ASSERT( pParent || n<SFX_OBJECTBAR_MAX, "Unknown toolbox!" );
         if (n>=SFX_OBJECTBAR_MAX)
         {
             if (pParent)
@@ -1795,6 +1899,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
         }
 
         pWin = pBox = (SfxToolbox*) &aObjBars[n].pTbx->GetToolBox();
+*/
     }
     else
     {
@@ -2588,7 +2693,7 @@ void SfxIPWorkWin_Impl::SaveStatus_Impl(SfxChildWindow *pChild, const SfxChildWi
 void SfxWorkWindow::SaveStatus_Impl(SfxChildWindow *pChild, const SfxChildWinInfo &rInfo)
 {
     // Den Status vom Presentation mode wollen wir nicht sichern
-    if ( IsDockingAllowed() )
+    if ( IsDockingAllowed() && bInternalDockingAllowed )
         pChild->SaveStatus(rInfo);
 }
 
@@ -2685,7 +2790,7 @@ void SfxWorkWindow::MakeChildsVisible_Impl( BOOL bVis )
         for ( USHORT n=0; n<aSortedList.Count(); ++n )
         {
             SfxChild_Impl* pCli = (*pChilds)[aSortedList[n]];
-            if ( pCli->eAlign == SFX_ALIGN_NOALIGNMENT || IsDockingAllowed() )
+            if ( pCli->eAlign == SFX_ALIGN_NOALIGNMENT || IsDockingAllowed() && bInternalDockingAllowed )
                 pCli->nVisible |= CHILD_ACTIVE;
         }
     }
@@ -2733,6 +2838,9 @@ void SfxWorkWindow::EndAutoShow_Impl( Point aPos )
 
 void SfxWorkWindow::ArrangeAutoHideWindows( SfxSplitWindow *pActSplitWin )
 {
+    if ( bLocked )
+        return;
+
     if ( pParent )
         pParent->ArrangeAutoHideWindows( pActSplitWin );
 
@@ -3049,6 +3157,7 @@ BOOL SfxWorkWindow::ActivateNextChild_Impl( BOOL bForward )
 
 void SfxWorkWindow::SetObjectBarCustomizeMode_Impl( BOOL bSet )
 {
+/*
     if ( bSet )
         GetBindings().GetImageManager()->StartCustomize();
     else
@@ -3060,6 +3169,7 @@ void SfxWorkWindow::SetObjectBarCustomizeMode_Impl( BOOL bSet )
         if ( aObjBars[n].pTbx )
             aObjBars[n].pTbx->GetToolBox().SetCustomizeMode( bSet );
     }
+*/
 }
 
 void SfxWorkWindow::DataChanged_Impl( const DataChangedEvent& rDCEvt )
@@ -3071,13 +3181,14 @@ void SfxWorkWindow::DataChanged_Impl( const DataChangedEvent& rDCEvt )
     }
 
     USHORT n;
+/*
     for (n=0; n<SFX_OBJECTBAR_MAX; n++)
     {
         SfxToolBoxManager *pTbx = aObjBars[n].pTbx;
         if ( pTbx )
             pTbx->GetToolBox().UpdateSettings( Application::GetSettings() );
     }
-
+*/
     USHORT nCount = pChildWins->Count();
     for (n=0; n<nCount; n++)
     {
