@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-04 09:01:35 $
+ *  last change: $Author: mt $ $Date: 2001-05-11 07:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,8 +183,6 @@ public:
 
     UnoControlModel*    Clone() const;
 
-    ::rtl::OUString     getServiceName() const;
-
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlModel::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     void                        SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)   { OWeakAggObject::acquire(); }
@@ -225,6 +223,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     DECLIMPL_SERVICEINFO( UnoControlDialogModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlDialogModel ) )
@@ -310,7 +310,8 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlEditModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -395,8 +396,8 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlFormattedFieldModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -437,8 +438,8 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlFileControlModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -479,8 +480,6 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlButtonModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlModel::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     void                        SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)   { OWeakAggObject::acquire(); }
@@ -493,6 +492,9 @@ public:
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO( UnoControlButtonModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlButtonModel ) )
@@ -582,8 +584,6 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlImageControlModel( *this ); }
 
-    ::rtl::OUString                 getServiceName() const;
-
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlModel::queryInterface(rType); }
     ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
     void                        SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)   { OWeakAggObject::acquire(); }
@@ -596,6 +596,9 @@ public:
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO( UnoControlImageControlModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlImageControlModel ) )
@@ -678,8 +681,8 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlRadioButtonModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -763,8 +766,8 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlCheckBoxModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -842,8 +845,8 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlFixedTextModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -907,8 +910,8 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlGroupBoxModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -949,13 +952,13 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlListBoxModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
     void                ImplPropertyChanged( sal_uInt16 nPropId );
-
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO( UnoControlListBoxModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlListBoxModel ) )
@@ -1050,8 +1053,8 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlComboBoxModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -1121,8 +1124,8 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlDateFieldModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -1191,8 +1194,8 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlTimeFieldModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -1260,8 +1263,8 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlNumericFieldModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -1331,8 +1334,8 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlCurrencyFieldModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -1401,8 +1404,8 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlPatternFieldModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
@@ -1462,10 +1465,11 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlProgressBarModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     DECLIMPL_SERVICEINFO( UnoControlProgressBarModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel ) )
@@ -1517,10 +1521,11 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlScrollBarModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
     DECLIMPL_SERVICEINFO( UnoControlScrollBarModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBarModel ) )
@@ -1592,11 +1597,11 @@ public:
 
     UnoControlModel*    Clone() const { return new UnoControlFixedLineModel( *this ); }
 
-    ::rtl::OUString     getServiceName() const;
-
-
     // ::com::sun::star::beans::XMultiPropertySet
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO( UnoControlFixedLineModel, ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel ) )
