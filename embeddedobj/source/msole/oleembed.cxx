@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oleembed.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:10:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,8 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 // and it holds reference to "incomplete" component
                 // If the object is switched to running state later
                 // the component will become "complete"
-                GetRidOfComponent();
+                m_pOleComponent->CloseObject();
+                // GetRidOfComponent();
                 m_nObjectState = nNewState;
                 StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
             }
@@ -211,6 +212,18 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                     SwitchComponentToRunningState_Impl();
                     m_nObjectState = embed::EmbedStates::RUNNING;
                     StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
+
+#ifdef WNT
+                    if ( m_pOleComponent && m_bHasSizeToSet )
+                    {
+                        try {
+                            m_pOleComponent->SetExtent( m_aCachedSize, m_nCachedAspect );
+                            m_bHasSizeToSet = sal_False;
+                        }
+                        catch( uno::Exception& ) {}
+                    }
+#endif
+
                     if ( m_nObjectState == nNewState )
                         return;
                 }
@@ -221,6 +234,19 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 {
                     // execute OPEN verb, if object does not reach active state it is an object's problem
                     m_pOleComponent->ExecuteVerb( embed::EmbedVerbs::MS_OLEVERB_OPEN );
+
+#ifdef WNT
+                    // some objects do not allow to set the size even in running state
+                    if ( m_pOleComponent && m_bHasSizeToSet )
+                    {
+                        try {
+                            m_pOleComponent->SetExtent( m_aCachedSize, m_nCachedAspect );
+                            m_bHasSizeToSet = sal_False;
+                        }
+                        catch( uno::Exception& ) {}
+                    }
+#endif
+
                     m_nObjectState = nNewState;
                 }
                 else if ( m_nObjectState == embed::EmbedStates::ACTIVE && nNewState == embed::EmbedStates::RUNNING )
@@ -398,11 +424,12 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
 #ifdef WNT
     if ( m_pOleComponent )
     {
-        if ( m_nObjectState == embed::EmbedStates::LOADED )
-        {
-            // the list of supported verbs can be retrieved only when object is in running state
-            throw embed::NeedsRunningStateException(); // TODO:
-        }
+        // registry could be used in this case
+        // if ( m_nObjectState == embed::EmbedStates::LOADED )
+        // {
+        //  // the list of supported verbs can be retrieved only when object is in running state
+        //  throw embed::NeedsRunningStateException(); // TODO:
+        // }
 
         return m_pOleComponent->GetVerbList();
     }
@@ -504,13 +531,18 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64 nAspect )
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
 #ifdef WNT
-    if ( m_pOleComponent )
+    if ( m_bGotStatus && m_nStatusAspect == nAspect )
+        return m_nStatus;
+    else if ( m_pOleComponent )
     {
-        // TODO: probably a temporary solution before a helper is implemented
-        if ( m_nObjectState == embed::EmbedStates::LOADED )
-            changeState( m_nObjectState == embed::EmbedStates::RUNNING );
+        // OLE should allow to get status even in loaded state
+        // if ( m_nObjectState == embed::EmbedStates::LOADED )
+        //  changeState( m_nObjectState == embed::EmbedStates::RUNNING );
 
-        return m_pOleComponent->GetMiscStatus( nAspect );
+        m_nStatus = m_pOleComponent->GetMiscStatus( nAspect );
+        m_nStatusAspect = nAspect;
+        m_bGotStatus = sal_True;
+        return m_nStatus;
     }
     else
 #endif
