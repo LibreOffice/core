@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcppu.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-17 13:30:08 $
+ *  last change: $Author: jsc $ $Date: 2001-04-23 10:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,34 +807,45 @@ static void testMappingCallback()
     OSL_ASSERT( ! s_aAddPurpose.getLength() );
 }
 
-static void testEnvironment(void)
+static void testEnvironments(void)
 {
-    uno_Environment * pEnv = 0;
-    void ** ppInterfaces = 0;
+    uno_Environment ** ppEnv;
     sal_Int32 nLen;
+    OUString aTypeName;
 
-    OUString aUnoEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) );
-    ::uno_getEnvironment( &pEnv, aUnoEnvTypeName.pData, 0 );
-    ::uno_dumpEnvironment( stderr, pEnv, 0 );
-    (*pEnv->pExtEnv->getRegisteredInterfaces)( pEnv->pExtEnv, &ppInterfaces, &nLen, rtl_allocateMemory );
-    while (nLen--)
-    {
-        uno_Interface * pUnoI = (uno_Interface *)ppInterfaces[nLen];
-        (*pUnoI->release)( pUnoI );
-    }
-    ::rtl_freeMemory( ppInterfaces );
+    ::uno_getRegisteredEnvironments(
+        &ppEnv, &nLen, ::rtl_allocateMemory, aTypeName.pData );
 
-    OUString aCppEnvTypeName( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
-    ::uno_getEnvironment( &pEnv, aCppEnvTypeName.pData, 0 );
-    ::uno_dumpEnvironment( stderr, pEnv, 0 );
-    (*pEnv->pExtEnv->getRegisteredInterfaces)( pEnv->pExtEnv, &ppInterfaces, &nLen, rtl_allocateMemory );
-    while (nLen--)
+    if (nLen)
     {
-        XInterface * p = (XInterface *)ppInterfaces[nLen];
-        p->release();
+        for ( sal_Int32 nPos = 0; nPos < nLen; ++nPos )
+        {
+            uno_Environment * pEnv = ppEnv[ nPos ];
+
+            // dump out infos
+            ::uno_dumpEnvironment( stderr, pEnv, 0 );
+
+            // call some releases
+            void ** ppInterfaces = 0;
+            sal_Int32 nInterfaces;
+
+            uno_ExtEnvironment * pExtEnv = pEnv->pExtEnv;
+            (*pExtEnv->getRegisteredInterfaces)(
+                pExtEnv, &ppInterfaces, &nInterfaces, ::rtl_allocateMemory );
+            if (nInterfaces)
+            {
+                while (nInterfaces--)
+                {
+                    void * p = ppInterfaces[ nInterfaces ];
+                    (*pExtEnv->releaseInterface)( pExtEnv, p );
+                }
+                ::rtl_freeMemory( ppInterfaces );
+            }
+
+            (*pEnv->release)( pEnv );
+        }
+        ::rtl_freeMemory( ppEnv );
     }
-    ::rtl_freeMemory( ppInterfaces );
-    (*pEnv->release)( pEnv );
 }
 
 inline const ::com::sun::star::uno::Type& SAL_CALL getCppuType( const Sequence< OUString[2][4] >* ) SAL_THROW( () )
@@ -1000,7 +1011,7 @@ int SAL_CALL main(int argc, char **argv)
     Reference< XMultiServiceFactory > xMgr( cppu::createRegistryServiceFactory(
         OUString( RTL_CONSTASCII_USTRINGPARAM("testcppu.rdb") ) ) );
 #endif
-    testEnvironment();
+    testEnvironments();
     testMappingCallback();
 
 //      // security test
@@ -1010,8 +1021,10 @@ int SAL_CALL main(int argc, char **argv)
     // C++, C bridges test
     void test_CppBridge(void);
     void test_CBridge(void);
+    void test_CBridge2(void);
     test_CppBridge();
-//      test_CBridge();
+      test_CBridge();
+    test_CBridge2();
 
     testAssignment();
     testCppu();
@@ -1030,7 +1043,7 @@ int SAL_CALL main(int argc, char **argv)
     xMgr.clear();
 #endif
     typelib_setCacheSize( 0 );
-    testEnvironment();
+    testEnvironments();
 
     return 0;
 }

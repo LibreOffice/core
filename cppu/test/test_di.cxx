@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-16 16:21:16 $
+ *  last change: $Author: jsc $ $Date: 2001-04-23 10:21:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #include <uno/environment.h>
 #include <uno/mapping.hxx>
 #include <uno/data.h>
+
+#include <uno/cuno.h>
+#include <test/XLanguageBindingTest.h>
 
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/queryinterface.hxx>
@@ -655,11 +658,11 @@ void test_CppBridge(void)
 
             if (perform_test( xMapped, xDummy ))
             {
-                ::fprintf( stderr, "> C++-UNO test succeeded!\n" );
+                ::fprintf( stderr, "> C++-UNO test (c++ <-> uno <-> c++ [component impl]) succeeded!\n" );
             }
             else
             {
-                ::fprintf( stderr, "### C++-UNO test failed!\n" );
+                ::fprintf( stderr, "> C++-UNO test (c++ <-> uno <-> c++ [component impl]) failed!\n" );
                 exit( 1 );
             }
         }
@@ -727,11 +730,11 @@ void test_CBridge(void)
 
             if (perform_test( xMapped, xDummy ))
             {
-                ::fprintf( stderr, "> C-UNO test succeeded!\n" );
+                ::fprintf( stderr, "> C-UNO test (c++ <-> uno <-> c <-> uno <-> c++ [component impl]) succeeded!\n" );
             }
             else
             {
-                ::fprintf( stderr, "### C-UNO test failed!\n" );
+                ::fprintf( stderr, "> C-UNO test (c++ <-> uno <-> c <-> uno <-> c++ [component impl]) failed!\n" );
                 exit( 1 );
             }
         }
@@ -739,4 +742,54 @@ void test_CBridge(void)
     }
     OSL_ENSURE( p->getRefCount() == 1, "### dummy object ref count > 1 !" );
     }
+}
+
+//==================================================================================================
+extern "C" com_sun_star_uno_XInterface* SAL_CALL createTestObject();
+
+void test_CBridge2(void)
+{
+    // C-UNO test
+    {
+        TestDummy * p = new TestDummy();
+        Reference< XInterface > xDummy( *p );
+        {
+            com_sun_star_uno_XInterface* pXIface = createTestObject();
+            test_XLanguageBindingTest* pXLBTest = 0;
+            uno_Any aExc;
+            Reference< XLanguageBindingTest > xMapped;
+
+            OSL_ENSURE( pXIface != 0, "create test object failed\n");
+
+            /* Get interface XFoo2 */
+            if (CUNO_EXCEPTION_OCCURED( CUNO_CALL(pXIface)->queryInterface( pXIface, &aExc, (com_sun_star_uno_XInterface**)&pXLBTest, ::getCppuType( &xMapped ).getTypeLibType()) ))
+            {
+                uno_any_destruct( &aExc, 0 );
+            }
+            OSL_ENSURE( pXLBTest != 0, "query_Interface XLanguageBindingTest failed\n");
+
+            Mapping aC2Cpp(
+                OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_C) ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) );
+            aC2Cpp.mapInterface( (void **)&xMapped, pXLBTest, ::getCppuType( &xMapped ) );
+
+            OSL_ENSURE( xMapped.is(), "mapping interface failed\n");
+
+            if (perform_test( xMapped, xDummy ))
+            {
+                ::fprintf( stderr, "> second C-UNO test (c++ <-> uno <-> c [component impl]) succeeded!\n" );
+            }
+            else
+            {
+                ::fprintf( stderr, "> second C-UNO test (c++ <-> uno <-> c [component impl]) failed!\n" );
+                exit( 1 );
+            }
+
+
+            CUNO_CALL(pXIface)->release( pXIface );
+            CUNO_CALL(pXLBTest)->release( (com_sun_star_uno_XInterface *)pXLBTest );
+        }
+        OSL_ENSURE( p->getRefCount() == 1, "### dummy object ref count > 1 !" );
+    }
+
 }
