@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivotsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-30 14:36:32 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,8 @@
 #include "dpshttab.hxx"
 #include "dbdocfun.hxx"
 #include "uiitems.hxx"
-#include "pfiltdlg.hxx"
-
+//CHINA001 #include "pfiltdlg.hxx"
+#include "scabstdlg.hxx" //CHINA001
 //------------------------------------------------------------------------
 
 #define ScPivotShell
@@ -153,8 +153,16 @@ void ScPivotShell::Execute( SfxRequest& rReq )
                     SCITEM_QUERYDATA, SCITEM_QUERYDATA );
                 aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, pViewData, &aQueryParam ) );
 
-                ScPivotFilterDlg* pDlg = new ScPivotFilterDlg(
-                    pViewShell->GetDialogParent(), aArgSet, nSrcTab );
+                //CHINA001 ScPivotFilterDlg* pDlg = new ScPivotFilterDlg(
+                //CHINA001     pViewShell->GetDialogParent(), aArgSet, nSrcTab );
+
+                ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
+
+                AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg( pViewShell->GetDialogParent(),
+                                                                                aArgSet, nSrcTab,
+                                                                                ResId(RID_SCDLG_PIVOTFILTER));
+                DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                 if( pDlg->Execute() == RET_OK )
                 {
