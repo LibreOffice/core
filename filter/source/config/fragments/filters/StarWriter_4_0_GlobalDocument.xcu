@@ -1,4 +1,4 @@
-    <node oor:name="StarWriter 4.0/GlobalDocument" oor:op="replace">
+    <node oor:name="StarWriter 4.0/GlobalDocument" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>3580</value></prop>
         <prop oor:name="Type"><value>writer_globaldocument_StarWriter_40GlobalDocument</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
@@ -13,10 +13,10 @@
             <value xml:lang="es">StarWriter 4.0 - Documento maestro</value>
             <value xml:lang="tr">StarWriter 4.0 Ana Belgesi</value>
             <value xml:lang="ru">StarWriter 4.0 Главный документ</value>
-            <value xml:lang="th">เอกสารต้นฉบับ StarWriter 4.0 </value>
+            <value xml:lang="th">เอ�?สารต้นฉบับ StarWriter 4.0 </value>
             <value xml:lang="x-comment">StarWriter 4.0 Globaldokument</value>
             <value xml:lang="ca">Document mestre de l</value>
-            <value xml:lang="el">StarWriter 4.0 Κύριο έγγραφο</value>
+            <value xml:lang="el">StarWriter 4.0 Κ�?�?ιο έγγ�?αφο</value>
             <value xml:lang="zh-CN">StarWriter 4.0 主控文档</value>
             <value xml:lang="pt">StarWriter 4.0 Documento-mestre</value>
             <value xml:lang="cs">Hlavní dokument StarWriter 4.0</value>
@@ -28,7 +28,7 @@
             <value xml:lang="hi-IN">StarWriter 4.0 Master Document</value>
             <value xml:lang="en-US">StarWriter 4.0 Master Document</value>
             <value xml:lang="sk">Hlavný dokument StarWriter 4.0</value>
-            <value xml:lang="he">‮מסמך אב StarWriter 4.0‬</value>
+            <value xml:lang="he">‮מסמך �?ב StarWriter 4.0‬</value>
             <value xml:lang="sv">StarWriter 4.0 samlingsdokument</value>
             <value xml:lang="da">StarWriter 4.0-hoveddokument</value>
             <value xml:lang="de">StarWriter 4.0 Globaldokument</value>
