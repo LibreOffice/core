@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:18:21 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 14:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ english_us ] = "AND" ;
         Text[ chinese_simplified ] = "AND";
         Text[ russian ] = "È";
-        Text[ polish ] = "I";
+        Text[ polish ] = "ORAZ";
         Text[ japanese ] = "AND";
         Text[ chinese_traditional ] = "AND";
         Text[ arabic ] = "AND";
@@ -1178,7 +1178,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ dutch ] = "INTEGERSNIJPUNT";
         Text[ chinese_simplified ] = "INT";
         Text[ greek ] = "INT";
-        Text[ korean ] = "INT";
+        Text[ korean ] = "Á¤¼ö";
         Text[ turkish ] = "INT";
         Text[ language_user1 ] = " ";
     };
@@ -4540,7 +4540,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ dutch ] = "ADRES";
         Text[ chinese_simplified ] = "ADDRESS";
         Text[ greek ] = "ADDRESS";
-        Text[ korean ] = "ÁÖ¼Ò";
+        Text[ korean ] = "ADDRESS";
         Text[ turkish ] = "ADDRESS";
         Text[ language_user1 ] = " ";
     };
@@ -7114,7 +7114,7 @@ Resource RID_SC_FUNCTION_NAMES
         Text[ dutch ] = "CONVERTEREN";
         Text[ chinese_simplified ] = "CONVERT";
         Text[ greek ] = "CONVERT";
-        Text[ korean ] = "º¯Çü";
+        Text[ korean ] = "CONVERT";
         Text[ turkish ] = "CONVERT";
         Text[ language_user1 ] = " ";
     };
