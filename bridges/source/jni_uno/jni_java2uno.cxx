@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:29:17 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
         // notify RuntimeException
         OString cstr_msg(
             OUStringToOString(
-                buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ) );
+                buf.makeStringAndClear(), RTL_TEXTENCODING_JAVA_UTF8 ) );
         OSL_ENSURE( 0, cstr_msg.getStr() );
         jint res = jni->ThrowNew(
             jni_info->m_class_RuntimeException, cstr_msg.getStr() );
@@ -635,7 +635,7 @@ JNICALL Java_com_sun_star_bridges_jni_1uno_JNI_1proxy_dispatch_1call(
                 "[jni_uno bridge error] "
                 "attaching current thread to java failed!") ) +
             OUStringToOString(
-                jni.get_stack_trace(), RTL_TEXTENCODING_ASCII_US ) );
+                jni.get_stack_trace(), RTL_TEXTENCODING_JAVA_UTF8 ) );
         OSL_ENSURE( 0, cstr_msg.getStr() );
         jint res = jni->ThrowNew(
             jni_info->m_class_RuntimeException, cstr_msg.getStr() );
