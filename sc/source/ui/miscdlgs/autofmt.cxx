@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-25 13:24:38 $
+ *  last change: $Author: dr $ $Date: 2002-08-13 09:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,10 @@
 #include <svtools/zforlist.hxx>
 #include <vcl/msgbox.hxx>
 #include <comphelper/processfactory.hxx>
+#include <svtools/accessibilityoptions.hxx>
 
 #include "sc.hrc"
+#include "scmod.hxx"
 #include "attrib.hxx"
 #include "zforauto.hxx"
 #include "scitems.hxx"
@@ -797,6 +799,32 @@ void AutoFmtPreview::GetLines( USHORT nIndex, AutoFmtLine eLine,
 
 //------------------------------------------------------------------------
 
+void lcl_DrawHorizontalLine( OutputDevice& rDev, const Point& rStart, const Point& rEnd )
+{
+    DBG_ASSERT( rStart.Y() <= rEnd.Y(), "lcl_DrawHorizontalLine - wrong point order" );
+    Point aLineStart( rStart );
+    Point aLineEnd( rEnd.X(), rStart.Y() );
+    while( aLineStart.Y() <= rEnd.Y() )
+    {
+        rDev.DrawLine( aLineStart, aLineEnd );
+        ++aLineStart.Y();
+        ++aLineEnd.Y();
+    }
+}
+
+void lcl_DrawVerticalLine( OutputDevice& rDev, const Point& rStart, const Point& rEnd )
+{
+    DBG_ASSERT( rStart.X() <= rEnd.X(), "lcl_DrawVerticalLine - wrong point order" );
+    Point aLineStart( rStart );
+    Point aLineEnd( rStart.X(), rEnd.Y() );
+    while( aLineStart.X() <= rEnd.X() )
+    {
+        rDev.DrawLine( aLineStart, aLineEnd );
+        ++aLineStart.X();
+        ++aLineEnd.X();
+    }
+}
+
 void AutoFmtPreview::DrawFrameLine( const SvxBorderLine&    rLineD,
                                     Point                   from,
                                     Point                   to,
@@ -838,8 +866,7 @@ void AutoFmtPreview::DrawFrameLine( const SvxBorderLine&    rLineD,
             Point   from2    = from;
             Point   to2      = to;
 
-            aVD.SetLineColor();
-            aVD.SetFillColor( rLineD.GetColor() );
+            aVD.SetLineColor( rLineD.GetColor() );
 
             ScLinkLine( dLine,
                         ltLine, lLine, lbLine,
@@ -855,7 +882,7 @@ void AutoFmtPreview::DrawFrameLine( const SvxBorderLine&    rLineD,
                 from.X() += dxArr[0];
                 to.X()   += dxArr[2];
 
-                aVD.DrawRect( Rectangle( from, to ) );
+                lcl_DrawHorizontalLine( aVD, from, to );
 
                 // noch eine zweite Linie zu malen?
                 if ( dLine.nRight != 0 )
@@ -869,7 +896,7 @@ void AutoFmtPreview::DrawFrameLine( const SvxBorderLine&    rLineD,
                     from2.X() += dxArr[1];
                     to2.X()   += dxArr[3];
 
-                    aVD.DrawRect( Rectangle( from2, to2 ) );
+                    lcl_DrawHorizontalLine( aVD, from2, to2 );
                 }
             }
             else
@@ -881,7 +908,7 @@ void AutoFmtPreview::DrawFrameLine( const SvxBorderLine&    rLineD,
                 from.Y() += dxArr[0];
                 to.Y()   += dxArr[2];
 
-                aVD.DrawRect( Rectangle( from, to ) );
+                lcl_DrawVerticalLine( aVD, from, to );
 
                 // noch eine zweite Linie zu malen?
                 if ( dLine.nRight != 0 )
@@ -893,7 +920,7 @@ void AutoFmtPreview::DrawFrameLine( const SvxBorderLine&    rLineD,
                     from2.Y() += dxArr[1];
                     to2.Y()   += dxArr[3];
 
-                    aVD.DrawRect( Rectangle( from2, to2 ) );
+                    lcl_DrawVerticalLine( aVD, from2, to2 );
                 }
             }
 
@@ -1400,6 +1427,11 @@ void AutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 
 void AutoFmtPreview::DoPaint( const Rectangle& rRect )
 {
+    sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
+    if( GetSettings().GetStyleSettings().GetHighContrastMode() &&
+            SC_MOD()->GetAccessOptions().GetIsForBorders() )
+        aVD.SetDrawMode( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
+
     Size aWndSize( GetSizePixel() );
     Font aFont( aVD.GetFont() );
     Color aBackCol( GetSettings().GetStyleSettings().GetWindowColor() );
@@ -1414,13 +1446,14 @@ void AutoFmtPreview::DoPaint( const Rectangle& rRect )
     aVD.DrawRect( aRect );
 
     PaintCells();
-
     SetLineColor();
     SetFillColor( aBackCol );
     DrawRect( aRect );
 
     Point aPos( (aWndSize.Width() - aPrvSize.Width()) / 2, (aWndSize.Height() - aPrvSize.Height()) / 2 );
     DrawOutDev( aPos, aWndSize, Point(), aWndSize, aVD );
+
+    aVD.SetDrawMode( nOldDrawMode );
 }
 
 //------------------------------------------------------------------------
@@ -1429,6 +1462,4 @@ void __EXPORT AutoFmtPreview::Paint( const Rectangle& rRect )
 {
     DoPaint( rRect );
 }
-
-
 
