@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sj $ $Date: 2002-10-30 16:40:30 $
+ *  last change: $Author: sj $ $Date: 2002-11-26 18:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1455,6 +1455,46 @@ void WinMtfOutput::DrawText( Point& rPosition, String& rText, sal_Int32* pDXArry
 
 //-----------------------------------------------------------------------------------
 
+void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx rBitmap )
+{
+    BitmapEx aBmpEx( rBitmap );
+    if ( aClipPath.GetType() == COMPLEX )
+    {
+        VirtualDevice aVDev;
+        MapMode aMapMode( MAP_100TH_MM );
+        aMapMode.SetOrigin( Point( -rPos.X(), -rPos.Y() ) );
+        Size aOutputSizePixel( aVDev.LogicToPixel( rSize, aMapMode ) );
+        Size aSizePixel( rBitmap.GetSizePixel() );
+        if ( aOutputSizePixel.Width() && aOutputSizePixel.Height() )
+        {
+            aMapMode.SetScaleX( Fraction( aSizePixel.Width(), aOutputSizePixel.Width() ) );
+            aMapMode.SetScaleY( Fraction( aSizePixel.Height(), aOutputSizePixel.Height() ) );
+        }
+        aVDev.SetMapMode( aMapMode );
+        aVDev.SetOutputSizePixel( aSizePixel );
+        aVDev.SetFillColor( Color( COL_BLACK ) );
+        PolyPolygon aClip( aClipPath.GetClipPath() );
+        aVDev.DrawPolyPolygon( aClip );
+        Bitmap aMask( aVDev.GetBitmap( rPos, rSize ).CreateMask( Color( COL_WHITE ) ) );
+        if ( aBmpEx.IsTransparent() )
+        {
+            if ( rBitmap.GetTransparentColor() == Color( COL_WHITE ) )
+                aMask.CombineSimple( rBitmap.GetMask(), BMP_COMBINE_OR );
+            else
+                aMask.CombineSimple( rBitmap.GetMask(), BMP_COMBINE_AND );
+            aBmpEx = BitmapEx( rBitmap.GetBitmap(), aMask );
+        }
+        else
+            aBmpEx = BitmapEx( rBitmap.GetBitmap(), aMask );
+    }
+    if ( aBmpEx.IsTransparent() )
+        mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( rPos, rSize, aBmpEx ) );
+    else
+        mpGDIMetaFile->AddAction( new MetaBmpScaleAction( rPos, rSize, aBmpEx.GetBitmap() ) );
+}
+
+//-----------------------------------------------------------------------------------
+
 void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
 {
     UpdateClipRegion();
@@ -1521,7 +1561,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                             {
                                 Bitmap aMask( pSave->aBmp ); aMask.Invert();
                                 BitmapEx aBmpEx( pSave2->aBmp, aMask );
-                                mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( aPos, aSize, aBmpEx ) );
+                                ImplDrawBitmap( aPos, aSize, aBmpEx );
                                 bDrawn = sal_True;
                                 i++;
                             }
@@ -1541,12 +1581,12 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                         case 0xe :
                         {
                             SetRasterOp( R2_XORPEN );
-                            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( aPos, aSize, aBitmap ) );
+                            ImplDrawBitmap( aPos, aSize, aBitmap );
                             SetRasterOp( R2_COPYPEN );
                             Bitmap  aMask( aBitmap );
                             aMask.Invert();
                             BitmapEx aBmpEx( aBitmap, aMask );
-                            mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( aPos, aSize, aBmpEx ) );
+                            ImplDrawBitmap( aPos, aSize, aBmpEx );
                             if ( nOperation == 0x1 )
                             {
                                 SetRasterOp( R2_NOT );
@@ -1559,7 +1599,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                         {
                             Bitmap  aMask( aBitmap );
                             BitmapEx aBmpEx( aBitmap, aMask );
-                            mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( aPos, aSize, aBmpEx ) );
+                            ImplDrawBitmap( aPos, aSize, aBmpEx );
                             if ( nOperation == 0x7 )
                             {
                                 SetRasterOp( R2_NOT );
@@ -1577,9 +1617,9 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                             Bitmap  aMask( aBitmap );
                             aBitmap.Invert();
                             BitmapEx aBmpEx( aBitmap, aMask );
-                            mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( aPos, aSize, aBmpEx ) );
+                            ImplDrawBitmap( aPos, aSize, aBmpEx );
                             SetRasterOp( R2_XORPEN );
-                            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( aPos, aSize, aBitmap ) );
+                            ImplDrawBitmap( aPos, aSize, aBitmap );
                             if ( nOperation == 0xb )
                             {
                                 SetRasterOp( R2_NOT );
@@ -1594,9 +1634,9 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                             Bitmap  aMask( aBitmap );
                             aMask.Invert();
                             BitmapEx aBmpEx( aBitmap, aMask );
-                            mpGDIMetaFile->AddAction( new MetaBmpExScaleAction( aPos, aSize, aBmpEx ) );
+                            ImplDrawBitmap( aPos, aSize, aBmpEx );
                             SetRasterOp( R2_XORPEN );
-                            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( aPos, aSize, aBitmap ) );
+                            ImplDrawBitmap( aPos, aSize, aBitmap );
                             if ( nOperation == 0xd )
                             {
                                 SetRasterOp( R2_NOT );
@@ -1608,7 +1648,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                         case 0x9 :
                         {
                             SetRasterOp( R2_XORPEN );
-                            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( aPos, aSize, aBitmap ) );
+                            ImplDrawBitmap( aPos, aSize, aBitmap );
                             if ( nOperation == 0x9 )
                             {
                                 SetRasterOp( R2_NOT );
@@ -1631,7 +1671,7 @@ void WinMtfOutput::ResolveBitmapActions( List& rSaveList )
                         {
                             if ( nRasterOperation == 0x33 )
                                 aBitmap.Invert();
-                            mpGDIMetaFile->AddAction( new MetaBmpScaleAction( aPos, aSize, aBitmap ) );
+                            ImplDrawBitmap( aPos, aSize, aBitmap );
                         }
                         break;
 

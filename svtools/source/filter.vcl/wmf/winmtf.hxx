@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-01 13:50:18 $
+ *  last change: $Author: sj $ $Date: 2002-11-26 18:13:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,6 +612,7 @@ class WinMtfOutput
         void                ImplResizeObjectArry( UINT32 nNewEntry );
         void                ImplSetNonPersistentLineColorTransparenz();
         void                ImplDrawClippedPolyPolygon( const PolyPolygon& rPolyPoly );
+        void                ImplDrawBitmap( const Point& rPos, const Size& rSize, const BitmapEx rBitmap );
 
     public:
 
