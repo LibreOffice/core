@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgimport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:38:44 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,8 @@ private:
     Reference<XModel>                                               m_xModel;
     Reference<XPropertySet>                                         m_xCurrentObject; /// can either be a query or a table
     Reference<XPropertySet>                                         m_xCurrentColumn;
-    Sequence< ::rtl::OUString>                                      m_aProperties;
-    Sequence< Any>                                                  m_aValues;
+    ::std::map< sal_Int16 ,Sequence< ::rtl::OUString> >         m_aProperties;
+    ::std::map< sal_Int16 ,Sequence< Any> >                      m_aValues;
     ::rtl::OUString                                                 m_sCurrentDataSourceName;
     ::rtl::OUString                                                 m_sBookmarkName;
     ::rtl::OUString                                                 m_sDocumentLocation;
@@ -146,7 +146,7 @@ private:
     void convert();
     void createDataSource(const ::rtl::OUString& _sName);
     void createObject(sal_Bool _bQuery ,const ::rtl::OUString& _sName);
-    void setProperties();
+    void setProperties(sal_Int16 _eType);
 
 protected:
     virtual ~OCfgImport()  throw();
