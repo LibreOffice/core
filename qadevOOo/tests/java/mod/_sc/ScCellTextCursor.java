@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellTextCursor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:37 $
+ *  last change:$Date: 2003-01-31 15:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
@@ -173,8 +176,7 @@ public class ScCellTextCursor extends TestCase {
     * </ul>
     * @see com.sun.star.text.XText
     */
-    public TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log)  throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface oObj = null;
         XCell aCell = null;
@@ -189,7 +191,8 @@ public class ScCellTextCursor extends TestCase {
             XSpreadsheets oSheets = xSheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
                 UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
-            XSpreadsheet oSheet = (XSpreadsheet) oIndexSheets.getByIndex(0);
+            XSpreadsheet oSheet = (XSpreadsheet) AnyConverter.toObject(
+                    new Type(XSpreadsheet.class),oIndexSheets.getByIndex(0));
 
             log.println("Getting a cell from sheet") ;
             aCell = oSheet.getCellByPosition(1,1) ;
@@ -199,6 +202,10 @@ public class ScCellTextCursor extends TestCase {
             throw new StatusException(
                 "Error getting cell object from spreadsheet document",e) ;
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log) ;
+            throw new StatusException(
+                "Error getting cell object from spreadsheet document",e) ;
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log) ;
             throw new StatusException(
                 "Error getting cell object from spreadsheet document",e) ;

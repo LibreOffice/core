@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScCellsEnumeration.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:37 $
+ *  last change:$Date: 2003-01-31 15:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@ import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+
 /**
 * Test for object which is represented by service
 * <code>com.sun.star.sheet.CellsEnumeration</code>. <p>
@@ -142,8 +145,7 @@ public class ScCellsEnumeration extends TestCase {
     * @see com.sun.star.sheet.XCellRangesQuery
     * @see com.sun.star.container.XEnumerationAccess
     */
-    public synchronized TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log ) throws StatusException {
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
         XInterface oInterface = null;
         XInterface oObj = null;
@@ -158,7 +160,8 @@ public class ScCellsEnumeration extends TestCase {
             UnoRuntime.queryInterface(XIndexAccess.class, oSheets);
         XCellRange oSheet = null;
         try {
-            oSheet = (XCellRange)oIndexAccess.getByIndex(0);
+            oSheet = (XCellRange) AnyConverter.toObject(
+                    new Type(XCellRange.class),oIndexAccess.getByIndex(0));
 
             XCell oCell_1 = (XCell)oSheet.getCellByPosition(0, 0);
             XTextRange oTextRange = (XTextRange)
@@ -180,6 +183,10 @@ public class ScCellsEnumeration extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create test object", e);
         } catch(com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println ("Exception occured while creating test Object.");
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create test object", e);
+        } catch(com.sun.star.lang.IllegalArgumentException e) {
             log.println ("Exception occured while creating test Object.");
             e.printStackTrace(log);
             throw new StatusException("Couldn't create test object", e);
