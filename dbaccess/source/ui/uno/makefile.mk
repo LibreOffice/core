@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.6 $
+ #  $Revision: 1.7 $
  #
- #  last change: $Author: kz $ $Date: 2004-05-19 13:57:52 $
+ #  last change: $Author: hr $ $Date: 2004-08-02 16:23:59 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -85,6 +85,13 @@ SLOFILES=	\
         $(SLO)$/unoorder.obj	\
         $(SLO)$/unosqlmessage.obj	\
         $(SLO)$/unoadmin.obj	\
+        $(SLO)$/admindlg.obj	\
+        $(SLO)$/TableFilterDlg.obj	\
+        $(SLO)$/AdvancedSettingsDlg.obj	\
+        $(SLO)$/unoDirectSql.obj	\
+        $(SLO)$/DBTypeWizDlg.obj	\
+        $(SLO)$/AdabasSettingsDlg.obj	\
+        $(SLO)$/UserSettingsDlg.obj \
         $(SLO)$/ColumnModel.obj	\
         $(SLO)$/ColumnControl.obj	\
         $(SLO)$/ColumnPeer.obj	\
