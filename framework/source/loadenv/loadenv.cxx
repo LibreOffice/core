@@ -2,9 +2,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 14:37:23 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 10:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
           css::io::IOException               ,
           css::uno::RuntimeException         )
 {
+    /*
     TargetHelper::ESpecialTarget eTarget = TargetHelper::classifyTarget(sTarget);
     if (
         (eTarget != TargetHelper::E_NOT_SPECIAL) &&
@@ -338,7 +339,7 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
                 ::rtl::OUString::createFromAscii("The given target name is not supported at the desktop instance!"),
                 xLoader,
                 2);
-
+                */
     css::uno::Reference< css::lang::XComponent > xComponent;
 
     try
@@ -515,7 +516,8 @@ void LoadEnv::startLoading()
     // used descriptor member afterwards and is needed
     // for all following operations!
     // Note: An exception will be thrown, in case operation was not successfully ...
-    impl_detectTypeAndFilter();
+    if (m_eContentType != E_CAN_BE_SET)/* Attention: special feature to set existing component on a frame must ignore type detection! */
+        impl_detectTypeAndFilter();
 
     // start loading the content ...
     // Attention: Dont check m_eContentType deeper then UNSUPPORTED/SUPPORTED!
@@ -523,8 +525,13 @@ void LoadEnv::startLoading()
     // And such simple detection can fail some times .-)
     // Use another strategy here. Try it and let it run into the case "loading not possible".
     sal_Bool bStarted = sal_False;
-    if ((m_eFeature & E_ALLOW_CONTENTHANDLER) == E_ALLOW_CONTENTHANDLER)
+    if (
+        ((m_eFeature & E_ALLOW_CONTENTHANDLER) == E_ALLOW_CONTENTHANDLER) &&
+        (m_eContentType                        != E_CAN_BE_SET          )   /* Attention: special feature to set existing component on a frame must ignore type detection! */
+       )
+    {
         bStarted = impl_handleContent();
+    }
 
     if (!bStarted)
         bStarted = impl_loadContent();
@@ -760,7 +767,7 @@ void LoadEnv::impl_setResult(sal_Bool bResult)
 }
 
 /*-----------------------------------------------
-    23.07.2003 13:22
+    06.02.2004 14:03
     TODO: Is it a good idea to change Sequence<>
           parameter to stl-adapter?
 -----------------------------------------------*/
@@ -830,10 +837,10 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     {
         pIt = stlMediaDescriptor.find(::framework::constant::MediaDescriptor::PROP_MODEL);
         css::uno::Reference< css::frame::XModel > xModel;
-        if (pIt == stlMediaDescriptor.end())
+        if (pIt != stlMediaDescriptor.end())
             pIt->second >>= xModel;
         if (xModel.is())
-            return E_CAN_BE_LOADED;
+            return E_CAN_BE_SET;
         LOG_WARNING("LoadEnv::classifyContent()", "loading with object with right URL but invalid object detected")
         return E_UNSUPPORTED_CONTENT;
     }
@@ -1076,12 +1083,6 @@ sal_Bool LoadEnv::impl_loadContent()
     css::uno::Reference< css::document::XActionLockable > xTargetLock(xTargetFrame, css::uno::UNO_QUERY);
     m_aTargetLock.setResource(xTargetLock);
 
-    // We need this type information to locate an registered frame loader
-    // Without such information we cant work!
-    ::rtl::OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_TYPENAME, ::rtl::OUString());
-    if (!sType.getLength())
-        throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
-
     // Add status indicator to descriptor. Loader can show an progresses then.
     // But don't do it, if loading should be hidden or preview is used ...!
     // So we prevent our code against wrong using. Why?
@@ -1109,10 +1110,79 @@ sal_Bool LoadEnv::impl_loadContent()
     ::rtl::OUString sURL = m_aURL.Complete;
 
     // try to locate any interested frame loader
+    css::uno::Reference< css::uno::XInterface >                xLoader     = impl_searchLoader();
+    css::uno::Reference< css::frame::XFrameLoader >            xAsyncLoader(xLoader, css::uno::UNO_QUERY);
+    css::uno::Reference< css::frame::XSynchronousFrameLoader > xSyncLoader (xLoader, css::uno::UNO_QUERY);
+
+    if (xAsyncLoader.is())
+    {
+        // SAFE -> -----------------------------------
+        WriteGuard aWriteLock(m_aLock);
+        m_xAsynchronousJob = xAsyncLoader;
+        m_pCheck           = this;
+        LoadEnvListener* pListener = new LoadEnvListener(m_pCheck, this);
+        aWriteLock.unlock();
+        // <- SAFE -----------------------------------
+
+        css::uno::Reference< css::frame::XLoadEventListener > xListener(static_cast< css::frame::XLoadEventListener* >(pListener), css::uno::UNO_QUERY);
+        xAsyncLoader->load(xTargetFrame, sURL, lDescriptor, xListener);
+
+        return sal_True;
+    }
+    else
+    if (xSyncLoader.is())
+    {
+        sal_Bool bResult = xSyncLoader->load(lDescriptor, xTargetFrame);
+        // react for the result here, so the outside waiting
+        // code can ask for it later.
+        impl_setResult(bResult);
+        // But the return value indicates a valid started(!) operation.
+        // And thats true everxtimes, we reach this line :-)
+        return sal_True;
+    }
+
+    aWriteLock.unlock();
+    // <- SAFE
+
+    return sal_False;
+}
+
+/*-----------------------------------------------
+    06.02.2004 14:40
+-----------------------------------------------*/
+css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
+{
+    // SAFE -> -----------------------------------
+    ReadGuard aReadLock(m_aLock);
+
+    // special mode to set an existing component on this frame
+    // In such case the laoder is fix. It must be the SFX based implementation,
+    // which can create a view on top of such xModel components :-)
+    if (m_eContentType == E_CAN_BE_SET)
+    {
+        try
+        {
+            return m_xSMGR->createInstance(IMPLEMENTATIONNAME_GENERICFRAMELOADER);
+        }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
+        catch(const css::uno::Exception&)
+            {}
+        throw LoadEnvException(LoadEnvException::ID_INVALID_ENVIRONMENT);
+    }
+
+    // Otherwhise ...
+    // We need this type information to locate an registered frame loader
+    // Without such information we cant work!
+    ::rtl::OUString sType = m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_TYPENAME, ::rtl::OUString());
+    if (!sType.getLength())
+        throw LoadEnvException(LoadEnvException::ID_INVALID_MEDIADESCRIPTOR);
+
+    // try to locate any interested frame loader
     css::uno::Reference< css::lang::XMultiServiceFactory > xLoaderFactory(m_xSMGR->createInstance(SERVICENAME_FRAMELOADERFACTORY), css::uno::UNO_QUERY);
     css::uno::Reference< css::container::XContainerQuery > xQuery        (xLoaderFactory                                         , css::uno::UNO_QUERY);
 
-    aWriteLock.unlock();
+    aReadLock.unlock();
     // <- SAFE -----------------------------------
 
     css::uno::Sequence< ::rtl::OUString > lTypesReg(1);
@@ -1133,49 +1203,16 @@ sal_Bool LoadEnv::impl_loadContent()
         try
         {
             xLoader = xLoaderFactory->createInstance(sLoader);
-            if (!xLoader.is())
-                continue;
+            if (xLoader.is())
+                return xLoader;
         }
         catch(const css::uno::RuntimeException&)
             { throw; }
         catch(const css::uno::Exception&)
             { continue; }
-
-        css::uno::Reference< css::frame::XFrameLoader >            xAsyncLoader(xLoader, css::uno::UNO_QUERY);
-        css::uno::Reference< css::frame::XSynchronousFrameLoader > xSyncLoader (xLoader, css::uno::UNO_QUERY);
-
-        if (xAsyncLoader.is())
-        {
-            // SAFE -> -----------------------------------
-            WriteGuard aWriteLock(m_aLock);
-            m_xAsynchronousJob = xAsyncLoader;
-            m_pCheck           = this;
-            LoadEnvListener* pListener = new LoadEnvListener(m_pCheck, this);
-            aWriteLock.unlock();
-            // <- SAFE -----------------------------------
-
-            css::uno::Reference< css::frame::XLoadEventListener > xListener(static_cast< css::frame::XLoadEventListener* >(pListener), css::uno::UNO_QUERY);
-            xAsyncLoader->load(xTargetFrame, sURL, lDescriptor, xListener);
-
-            return sal_True;
-        }
-        else
-        if (xSyncLoader.is())
-        {
-            sal_Bool bResult = xSyncLoader->load(lDescriptor, xTargetFrame);
-            // react for the result here, so the outside waiting
-            // code can ask for it later.
-            impl_setResult(bResult);
-            // But the return value indicates a valid started(!) operation.
-            // And thats true everxtimes, we reach this line :-)
-            return sal_True;
-        }
     }
 
-    aWriteLock.unlock();
-    // <- SAFE
-
-    return sal_False;
+    return css::uno::Reference< css::uno::XInterface >();
 }
 
 /*-----------------------------------------------
@@ -1441,9 +1478,19 @@ void LoadEnv::impl_reactForLoadingState()
                 xTopWindow->toFront();
         }
 
-        ::rtl::OUString sFrameName = m_lMediaDescriptor.getUnpackedValueOrDefault(::framework::constant::MediaDescriptor::PROP_FRAMENAME, ::rtl::OUString());
-        if (TargetHelper::isValidNameForFrame(sFrameName))
-            m_xTargetFrame->setName(sFrameName);
+        // Note: Only if an existing property "FrameName" is given by this media descriptor,
+        // it should be used. Otherwhise we should do nothing. May be the outside code has already
+        // set a frame name on the target!
+        ::comphelper::SequenceAsHashMap::const_iterator pFrameName = m_lMediaDescriptor.find(::framework::constant::MediaDescriptor::PROP_FRAMENAME);
+        if (pFrameName != m_lMediaDescriptor.end())
+        {
+            ::rtl::OUString sFrameName;
+            pFrameName->second >>= sFrameName;
+            // Check the name again. e.g. "_default" isnt allowed.
+            // On the other side "_beamer" is a valid name :-)
+            if (TargetHelper::isValidNameForFrame(sFrameName))
+                m_xTargetFrame->setName(sFrameName);
+        }
     }
     else
     if (m_bReactivateControllerOnError)
