@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:04:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "AccessibleDocumentViewBase.hxx"
 #endif
 
+
 namespace accessibility {
 
 
@@ -83,8 +84,8 @@ class AccessibleDrawDocumentView :
 public:
     //=====  internal  ========================================================
 
-    AccessibleDrawDocumentView (SdWindow* pSdWindow,
-        SdViewShell* pViewShell,
+    AccessibleDrawDocumentView (::sd::Window* pSdWindow,
+        ::sd::ViewShell* pViewShell,
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::frame::XController>& rxController,
         const ::com::sun::star::uno::Reference<
