@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 10:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <svx/unolingu.hxx>
 #endif
 
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 
 #include "futext.hxx"
 #include "app.hxx"

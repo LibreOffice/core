@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: ka $ $Date: 2001-02-13 13:11:08 $
+#   last change: $Author: cl $ $Date: 2001-03-19 10:19:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -220,7 +220,8 @@ ALL:    \
 LIB5TARGET= $(LB)$/sdl.lib
 LIB5ARCHIV= $(LB)$/libsdl.a
 LIB5FILES=  \
-            $(LB)$/sxl_core.lib
+            $(LB)$/sxl_core.lib\
+            $(LB)$/sxl_unoidl.lib
 .ENDIF
 
 # --- Targets -------------------------------------------------------------
