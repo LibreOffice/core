@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-22 12:40:41 $
+ *  last change: $Author: os $ $Date: 2001-05-31 10:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1706,6 +1706,7 @@ void    SwXTextDocument::InitNewDoc()
 /*-- 11.03.99 11:51:40---------------------------------------------------
 
   -----------------------------------------------------------------------*/
+#define COM_SUN_STAR__DRAWING_LENGTH 13
 Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServiceName)
                                         throw( Exception, RuntimeException )
 {
@@ -1722,7 +1723,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
     {
         if( rServiceName.compareToAscii( "com.sun.star.", 13 ) == 0 )
         {
-            sal_Int32 nIndex = 13;
+            sal_Int32 nIndex = COM_SUN_STAR__DRAWING_LENGTH;
             OUString sCategory = rServiceName.getToken( 0, '.', nIndex );
             sal_Bool bShape = sCategory == C2U("drawing");
             if( bShape || sCategory == C2U("form"))
@@ -1759,7 +1760,13 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
                 //hier den Draw - Service suchen
                 Reference< XInterface >  xTmp = SvxFmMSFactory::createInstance(rServiceName);
                 if(bShape)
-                    xRet = *new SwXShape( xTmp );
+                {
+                    nIndex = COM_SUN_STAR__DRAWING_LENGTH;
+                    if(!rServiceName.getToken( 1, '.', nIndex ).compareToAscii("GroupShape"))
+                        xRet = *new SwXGroupShape( xTmp );
+                    else
+                        xRet = *new SwXShape( xTmp );
+                }
                 else
                     xRet = xTmp;
             }

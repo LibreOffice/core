@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-05-22 13:33:37 $
+ *  last change: $Author: os $ $Date: 2001-05-31 10:13:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,11 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
             xShapeTunnel = 0;
             uno::Reference< uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
             xRet = 0;
-            uno::Reference< XPropertySet >  xPrSet = new SwXShape( xCreate );
+            Reference< XPropertySet >  xPrSet;
+            if(pObj->IsGroupObject())
+                xPrSet = new SwXGroupShape( xCreate );
+            else
+                xPrSet = new SwXShape( xCreate );
             xRet = uno::Reference< drawing::XShape >(xPrSet, uno::UNO_QUERY);
         }
     }
@@ -538,7 +542,6 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     vos::OGuard  aGuard(Application::GetSolarMutex());
     if(!pDoc)
         throw uno::RuntimeException();
-//  uno::Reference< uno::XInterface >  xInt(xShape, uno::UNO_QUERY);
     uno::Reference< XUnoTunnel > xShapeTunnel(xShape, uno::UNO_QUERY);
     SwXShape* pShape = 0;
     SvxShape* pSvxShape = 0;
@@ -601,7 +604,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
 
     pSvxShape->setPosition(aMM100Pos);
     SdrObject* pObj = pSvxShape->GetSdrObject();
-    pObj->SetLayer( bOpaque ? pDoc->GetHellId() : pDoc->GetHeavenId() );
+    pObj->SetLayer( bOpaque ? pDoc->GetHeavenId() : pDoc->GetHellId() );
 
     SwPaM* pPam = new SwPaM(pDoc->GetNodes().GetEndOfContent());
     SwUnoInternalPaM* pInternalPam = 0;
@@ -1016,7 +1019,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     {
                         SdrObject* pObj = pSvxShape->GetSdrObject();
                         pObj->SetLayer( *(sal_Bool*)aValue.getValue() ?
-                                    pDoc->GetHellId() : pDoc->GetHeavenId() );
+                                    pDoc->GetHeavenId() : pDoc->GetHellId() );
                     }
 
                 }
@@ -1114,7 +1117,6 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
     vos::OGuard  aGuard(Application::GetSolarMutex());
     uno::Any aRet;
     SwFrmFmt*   pFmt = GetFrmFmt();
-    //TODO: Descriptor interface
     if(xShapeAgg.is())
     {
         const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
@@ -1123,8 +1125,22 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
         {
             if(pFmt)
             {
-                const SwAttrSet& rSet = pFmt->GetAttrSet();
-                aRet = aPropSet.getPropertyValue(*pMap, rSet);
+                if(RES_OPAQUE == pMap->nWID)
+                {
+                    SvxShape* pSvxShape = GetSvxShape();
+                    DBG_ASSERT(pSvxShape, "No SvxShape found!")
+                    if(pSvxShape)
+                    {
+                        SdrObject* pObj = pSvxShape->GetSdrObject();
+                        sal_Bool bOpaque = pObj->GetLayer() == pFmt->GetDoc()->GetHeavenId();
+                        aRet.setValue(&bOpaque, ::getBooleanCppuType());
+                    }
+                }
+                else
+                {
+                    const SwAttrSet& rSet = pFmt->GetAttrSet();
+                    aRet = aPropSet.getPropertyValue(*pMap, rSet);
+                }
             }
             else
             {
@@ -1198,6 +1214,10 @@ Sequence< PropertyState > SwXShape::getPropertyStates(
     Sequence< PropertyState > aRet(aPropertyNames.getLength());
     if(xShapeAgg.is())
     {
+        SvxShape* pSvxShape = GetSvxShape();
+        sal_Bool bGroupMember = sal_False;
+        if(pSvxShape->GetSdrObject())
+            bGroupMember = pSvxShape->GetSdrObject()->GetUpGroup() != 0;
         const OUString* pNames = aPropertyNames.getConstArray();
         PropertyState* pRet = aRet.getArray();
         Reference< XPropertyState >  xShapePrState;
@@ -1207,7 +1227,11 @@ Sequence< PropertyState > SwXShape::getPropertyStates(
                                         _pMap, pNames[nProperty]);
             if(pMap)
             {
-                if(pFmt)
+                if(RES_OPAQUE == pMap->nWID || FN_TEXT_RANGE == pMap->nWID)
+                    pRet[nProperty] = PropertyState_DIRECT_VALUE;
+                else if(bGroupMember)
+                    pRet[nProperty] = PropertyState_DEFAULT_VALUE;
+                else if(pFmt)
                 {
                     const SwAttrSet& rSet = pFmt->GetAttrSet();
                     SfxItemState eItemState = rSet.GetItemState(pMap->nWID, FALSE);
@@ -1240,11 +1264,6 @@ Sequence< PropertyState > SwXShape::getPropertyStates(
                         break;
                         case  RES_SURROUND:
                             pItem = pImpl->GetSurround();
-                        break;
-                        case FN_TEXT_RANGE :
-                        case RES_OPAQUE :
-                            pRet[nProperty] = PropertyState_DIRECT_VALUE;
-                            continue;
                         break;
                     }
                     if(pItem)
@@ -1527,4 +1546,156 @@ SvxShape*   SwXShape::GetSvxShape()
     }
     return pSvxShape;
 }
+/*-- 31.05.01 09:59:19---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXGroupShape::SwXGroupShape(Reference< XInterface > & xShape) :
+        SwXShape(xShape)
+{
+#ifdef DBG_UTIL
+    Reference<XShapes> xShapes(xShapeAgg, UNO_QUERY);
+    DBG_ASSERT(xShapes.is(), "no SvxShape found or shape is not a group shape")
+#endif
+}
+
+/*-- 31.05.01 09:59:19---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SwXGroupShape::~SwXGroupShape()
+{
+}
+/*-- 31.05.01 09:59:19---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Any SwXGroupShape::queryInterface( const uno::Type& rType ) throw(RuntimeException)
+{
+    Any aRet;
+    if(rType == ::getCppuType((Reference<XShapes>*)0))
+        aRet <<= Reference<XShapes>(this);
+    else
+        aRet = SwXShape::queryInterface(rType);
+    return aRet;
+}
+/*-- 31.05.01 09:59:19---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXGroupShape::acquire(  ) throw()
+{
+    SwXShape::acquire();
+}
+/*-- 31.05.01 09:59:19---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXGroupShape::release(  ) throw()
+{
+    SwXShape::release();
+}
+/*-- 31.05.01 09:59:19---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXGroupShape::add( const Reference< XShape >& xShape ) throw (RuntimeException)
+{
+    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SvxShapeGroup* pSvxShape = (SvxShapeGroup*)GetSvxShape();
+    SwFrmFmt* pFmt = GetFrmFmt();
+    if(pSvxShape && pFmt)
+    {
+        pSvxShape->add(xShape);
+        Reference<XUnoTunnel> xTunnel(xShape, UNO_QUERY);
+        SwXShape* pSwShape = 0;
+        if(xShape.is())
+            pSwShape = (SwXShape*)xTunnel->getSomething(SwXShape::getUnoTunnelId());
+        if(pSwShape && pSwShape->m_bDescriptor)
+        {
+            SvxShape* pAddShape = (SvxShape*)xTunnel->getSomething(SvxShape::getUnoTunnelId());
+            if(pAddShape)
+            {
+                SdrObject* pObj = pAddShape->GetSdrObject();
+                if(pObj)
+                {
+                    SwDoc* pDoc = pFmt->GetDoc();
+                    pObj->SetLayer( pSwShape->pImpl->GetOpaque() ?
+                                        pDoc->GetHeavenId() : pDoc->GetHellId() );
+                }
+            }
+            pSwShape->m_bDescriptor = sal_False;
+            //add the group member to the format of the group
+            SwFrmFmt* pFmt = ::FindFrmFmt( pSvxShape->GetSdrObject() );
+            if(pFmt)
+                pFmt->Add(pSwShape);
+        }
+    }
+    else
+        throw RuntimeException();
+}
+/*-- 31.05.01 09:59:20---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwXGroupShape::remove( const Reference< XShape >& xShape ) throw (RuntimeException)
+{
+    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SvxShapeGroup* pSvxShape = (SvxShapeGroup*)GetSvxShape();
+    if(pSvxShape)
+        pSvxShape->remove(xShape);
+    else
+        throw RuntimeException();
+}
+/*-- 31.05.01 09:59:20---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int32 SwXGroupShape::getCount(void) throw( uno::RuntimeException )
+{
+    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SvxShapeGroup* pSvxShape = (SvxShapeGroup*)GetSvxShape();
+    sal_Int32 nRet = 0;
+    if(pSvxShape)
+        nRet = pSvxShape->getCount();
+    else
+        throw RuntimeException();
+    return nRet;
+}
+/*-- 31.05.01 09:59:20---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Any SwXGroupShape::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
+{
+    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SvxShapeGroup* pSvxShape = (SvxShapeGroup*)GetSvxShape();
+    Any aRet;
+    if(pSvxShape)
+        aRet = pSvxShape->getByIndex(nIndex);
+    else
+        throw RuntimeException();
+    return aRet;
+}
+/*-- 31.05.01 09:59:20---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Type SwXGroupShape::getElementType(  ) throw(RuntimeException)
+{
+    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SvxShapeGroup* pSvxShape = (SvxShapeGroup*)GetSvxShape();
+    uno::Type aRet;
+    if(pSvxShape)
+        aRet = pSvxShape->getElementType();
+    else
+        throw RuntimeException();
+    return aRet;
+}
+/*-- 31.05.01 09:59:22---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Bool SwXGroupShape::hasElements(  ) throw(RuntimeException)
+{
+    vos::OGuard  aGuard(Application::GetSolarMutex());
+    SvxShapeGroup* pSvxShape = (SvxShapeGroup*)GetSvxShape();
+    sal_Bool bRet = sal_False;
+    if(pSvxShape)
+        bRet = pSvxShape->hasElements();
+    else
+        throw RuntimeException();
+    return bRet;
+}
+
+
 

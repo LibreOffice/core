@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-22 13:34:07 $
+ *  last change: $Author: os $ $Date: 2001-05-31 10:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
+#include <com/sun/star/drawing/XShapes.hpp>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx> // helper for implementations
@@ -177,6 +180,7 @@ public:
  *
  * --------------------------------------------------*/
 class SwShapeDescriptor_Impl;
+class SwXGroupShape;
 typedef
 cppu::WeakAggImplHelper5
 <
@@ -192,6 +196,7 @@ class SwXShape : public SwXShapeBaseClass,
 {
     friend class SwHTMLImageWatcher;
     friend class SwHTMLParser;
+    friend class SwXGroupShape;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >                 xShapeAgg;
     SfxItemPropertySet          aPropSet;
@@ -253,6 +258,33 @@ public:
 
     SwShapeDescriptor_Impl*     GetDescImpl() {return pImpl;}
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >                 GetAggregationInterface() {return xShapeAgg;}
+};
+/* -----------------------------31.05.01 09:54--------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SwXGroupShape :
+    public SwXShape,
+    public ::com::sun::star::drawing::XShapes
+{
+public:
+    SwXGroupShape(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xShape);
+    virtual ~SwXGroupShape();
+
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  ) throw();
+    virtual void SAL_CALL release(  ) throw();
+
+    //XShapes
+    virtual void SAL_CALL add( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL remove( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw (::com::sun::star::uno::RuntimeException);
+
+    //XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException );
+
+    //XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements(  ) throw(::com::sun::star::uno::RuntimeException);
 };
 #endif
 
