@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: sab $ $Date: 2001-07-31 15:41:15 $
+#   last change: $Author: sab $ $Date: 2002-09-24 16:06:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -128,7 +128,8 @@ CXXFILES = \
         xmlfonte.cxx \
         XMLChangeTrackingImportHelper.cxx \
         XMLTrackedChangesContext.cxx \
-        XMLExportSharedData.cxx
+        XMLExportSharedData.cxx \
+        XMLEmptyContext.cxx
 
 SLOFILES =  \
         $(SLO)$/xmlwrap.obj \
@@ -176,7 +177,8 @@ SLOFILES =  \
         $(SLO)$/xmlfonte.obj \
         $(SLO)$/XMLChangeTrackingImportHelper.obj \
         $(SLO)$/XMLTrackedChangesContext.obj \
-        $(SLO)$/XMLExportSharedData.obj
+        $(SLO)$/XMLExportSharedData.obj \
+        $(SLO)$/XMLEmptyContext.obj
 
 
 # --- Tagets -------------------------------------------------------
