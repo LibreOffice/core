@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checklbx.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-21 05:02:06 $
+ *  last change: $Author: dr $ $Date: 2002-07-19 07:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,8 +217,12 @@ void* SvxCheckListBox::GetEntryData( USHORT nPos ) const
 
 void SvxCheckListBox::ToggleCheckButton( SvLBoxEntry* pEntry )
 {
-    if ( pEntry && IsSelected( pEntry ) )
+    if ( pEntry )
+    {
+        if ( !IsSelected( pEntry ) )
+            Select( pEntry );
         CheckEntryPos( GetSelectEntryPos(), !IsChecked( GetSelectEntryPos() ) );
+    }
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2002-02-26 14:46:06 $
+ *  last change: $Author: dr $ $Date: 2002-07-19 07:59:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ arabic ] = "�����";
                 Text[ catalan ] = "Fuente";
                 Text[ finnish ] = "Fontti";
+                Text[ thai ] = "ตัวอักษร";
             };
             PageItem
             {
@@ -136,6 +137,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ arabic ] = "������� ������";
                 Text[ catalan ] = "Efectos de fuente";
                 Text[ finnish ] = "Fonttitehosteet";
+                Text[ thai ] = "ลักษณะตัวอักษร";
             };
             PageItem
             {
@@ -161,6 +163,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ arabic ] = "������";
                 Text[ catalan ] = "Posici�n";
                 Text[ finnish ] = "Sijainti";
+                Text[ thai ] = "ตำแหน่ง";
             };
             PageItem
             {
@@ -186,6 +189,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ arabic ] = "����� �����";
                 Text[ catalan ] = "Dise�o asi�tico";
                 Text[ finnish ] = "Aasialainen asettelu";
+                Text[ thai ] = "เค้าโครงแบบเอเชีย";
             };
             PageItem
             {
@@ -214,6 +218,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ turkish ] = "Girinti ve Aral�klar";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sangr�as y espacios";
+                Text[ thai ] = "ระยะเยื้องและระยะห่าง";
             };
             PageItem
             {
@@ -241,6 +246,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Alineaci�n";
                 Text[ finnish ] = "Tasaus";
+                Text[ thai ] = "จัดตำแหน่ง";
             };
             PageItem
             {
@@ -269,6 +275,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ turkish ] = "Metin ak���";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Flujo del texto";
+                Text[ thai ] = "การไหลของข้อความ";
             };
             PageItem
             {
@@ -295,6 +302,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ arabic ] = "����� ������� ��������";
                 Text[ catalan ] = "Tipograf�a asi�tica";
                 Text[ finnish ] = "Aasialaiset merkit";
+                Text[ thai ] = "การพิมพ์แบบเอเชีย";
             };
             PageItem
             {
@@ -323,6 +331,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Fondo";
+                Text[ thai ] = "พื้นหลัง";
             };
         };
     };
@@ -337,6 +346,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
     Text[ turkish ] = "Metin �znitelikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos de texto ";
+    Text[ thai ] = "รูปแบบข้อความ";
 };
  // RID_SVXDLG_SEARCHATTRIBUTE --------------------------------------------
 ModalDialog RID_SVXDLG_SEARCHATTR
@@ -364,15 +374,16 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         HelpId = HID_SEARCHATTR_CTL_ATTR ;
         ClipChildren = TRUE ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 114 , 108 ) ;
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 120 , 108 ) ;
     };
-    FixedLine FL_ATTR
+    FixedText FL_ATTR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text = "Auswahl" ;
-        Text [ English ] = "Choice" ;
+        Text = "~Auswahl" ;
+        Text [ english ] = "~Options" ;
         Text [ norwegian ] = "Choice" ;
         Text [ italian ] = "Selezione" ;
         Text [ portuguese_brazilian ] = "Escolha" ;
@@ -383,7 +394,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text [ swedish ] = "Urval" ;
         Text [ dutch ] = "Selectie" ;
         Text [ spanish ] = "Selecci�n" ;
-        Text [ english_us ] = "Options" ;
+        Text [ english_us ] = "~Options" ;
         Text[ chinese_simplified ] = "选择";
         Text[ russian ] = "�����";
         Text[ polish ] = "Wyb�r";
@@ -395,6 +406,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text[ turkish ] = "Se�enekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selecci�n";
+        Text[ thai ] = "ตัวเลือก";
     };
     OKButton BTN_ATTR_OK
     {
@@ -423,6 +435,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
     Text[ turkish ] = "�znitelikler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos";
+    Text[ thai ] = "คุณลักษณะ";
 };
  // RID_SVXDLG_SEARCHSIMILARITY -------------------------------------------
 ModalDialog RID_SVXDLG_SEARCHSIMILARITY
@@ -466,6 +479,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cambiar caracteres";
         Text[ finnish ] = "~Vaihda merkit";
+        Text[ thai ] = "แ~ลกเปลี่ยนตัวอักขระ";
     };
     NumericField NF_OTHER
     {
@@ -509,6 +523,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~A�adir caracteres";
         Text[ finnish ] = "~Lis�� merkkej�";
+        Text[ thai ] = "เ~พิ่มตัวอักขระ";
     };
     NumericField NF_LONGER
     {
@@ -552,6 +567,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar caracteres";
         Text[ finnish ] = "~Poista merkit";
+        Text[ thai ] = "เ~อาตัวอักขระออก";
     };
     NumericField NF_SHORTER
     {
@@ -596,6 +612,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Co~mbinar";
         Text[ finnish ] = "~Yhdist�";
+        Text[ thai ] = "เ~ชื่อม";
     };
     FixedLine FL_SIMILARITY
     {
@@ -624,6 +641,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Configuraci�n";
         Text[ finnish ] = "Asetukset";
+        Text[ thai ] = "กำหนด";
     };
     OKButton BTN_ATTR_OK
     {
@@ -659,9 +677,9 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "B�squeda por semejanza";
     Text[ finnish ] = "Vastaavuushaku";
+    Text[ thai ] = "ค้นหาสิ่งที่คล้ายกัน";
 };
  // ********************************************************************** EOF
-
 
 
 
