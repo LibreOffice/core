@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:05:38 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,11 +155,7 @@ namespace configmgr
                 BasicContainerInfo() : pInterface(0), pContainer(0) {}
             };
             typedef std::vector<BasicContainerInfo>         BasicContainerHelperArray;
-            #if defined(_MSC_VER) && (_MSC_VER > 1300 )
             typedef typename BasicContainerHelperArray::size_type   Index;
-            #else
-            typedef BasicContainerHelperArray::size_type    Index;
-            #endif
 
             typedef Key_ Key;
             typedef typename KeyToIndex_::KeyFinder KeyFinder;
