@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:57:20 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,11 +141,6 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-
-#ifndef PRODUCT
-#include <com/sun/star/io/XTextOutputStream.hpp>
-#include <com/sun/star/io/XActiveDataSource.hpp>
-#endif
 
 using namespace comphelper;
 using namespace rtl;
@@ -433,7 +428,7 @@ RTLFUNC(Asc)
         else
         {
             sal_Unicode aCh = aStr.GetBuffer()[0];
-            rPar.Get(0)->PutInteger( (INT16)aCh );
+            rPar.Get(0)->PutLong( aCh );
         }
     }
 }
@@ -1029,15 +1024,16 @@ RTLFUNC(InStr)
         USHORT nFirstStringPos = 1;
         if ( nArgCount >= 3 )
         {
-            nStartPos = (USHORT)(rPar.Get(1)->GetInteger());
-            if ( nStartPos == 0 )
+            INT32 lStartPos = rPar.Get(1)->GetLong();
+            if( lStartPos <= 0 || lStartPos > 0xffff )
             {
                 StarBASIC::Error( SbERR_BAD_ARGUMENT );
-                nStartPos = 1;
+                lStartPos = 1;
             }
+            nStartPos = (USHORT)lStartPos;
             nFirstStringPos++;
         }
-        int bNotCaseSensitive = 1;  // wird noch nicht ausgewertet
+        int bNotCaseSensitive = 1;
         if ( nArgCount == 4 )
             bNotCaseSensitive = rPar.Get(4)->GetInteger();
 
@@ -1076,7 +1072,78 @@ RTLFUNC(InStr)
                     nPos++;
             }
         }
-        rPar.Get(0)->PutInteger( (int)nPos );
+        rPar.Get(0)->PutLong( nPos );
+    }
+}
+
+
+// InstrRev(string1, string2[, start[, compare]])
+
+RTLFUNC(InStrRev)
+{
+    ULONG nArgCount = rPar.Count()-1;
+    if ( nArgCount < 2 )
+        StarBASIC::Error( SbERR_BAD_ARGUMENT );
+    else
+    {
+        String aStr1 = rPar.Get(1)->GetString();
+        String aToken = rPar.Get(2)->GetString();
+
+        INT32 lStartPos = -1;
+        if ( nArgCount >= 3 )
+        {
+            lStartPos = rPar.Get(3)->GetLong();
+            if( (lStartPos <= 0 && lStartPos != -1) || lStartPos > 0xffff )
+            {
+                StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                lStartPos = -1;
+            }
+        }
+        int bNotCaseSensitive = 1;
+        if ( nArgCount == 4 )
+            bNotCaseSensitive = rPar.Get(4)->GetInteger();
+
+        USHORT nStrLen = aStr1.Len();
+        USHORT nStartPos = lStartPos == -1 ? nStrLen : (USHORT)lStartPos;
+
+        USHORT nPos = 0;
+        if( nStartPos <= nStrLen )
+        {
+            USHORT nTokenLen = aToken.Len();
+            if( !nTokenLen )
+            {
+                // Always find empty string
+                nPos = nStartPos;
+            }
+            else if( nStrLen > 0 )
+            {
+                if( !bNotCaseSensitive )
+                {
+                    OUString aOUStr1 ( aStr1 );
+                    OUString aOUToken( aToken );
+                    sal_Int32 nRet = aOUStr1.lastIndexOf( aOUToken, nStartPos );
+                    if( nRet == -1 )
+                        nPos = 0;
+                    else
+                        nPos = (USHORT)nRet + 1;
+                }
+                else
+                {
+                    aStr1.ToUpperAscii();
+                    aToken.ToUpperAscii();
+
+                    OUString aOUStr1 ( aStr1 );
+                    OUString aOUToken( aToken );
+                    sal_Int32 nRet = aOUStr1.lastIndexOf( aOUToken, nStartPos );
+
+                    if( nRet == -1 )
+                        nPos = 0;
+                    else
+                        nPos = (USHORT)nRet + 1;
+                }
+            }
+        }
+        rPar.Get(0)->PutLong( nPos );
     }
 }
 
@@ -1145,14 +1212,18 @@ RTLFUNC(Left)
     else
     {
         String aStr( rPar.Get(1)->GetString() );
-        short nCount = (USHORT)( rPar.Get(2)->GetLong() );
-        if ( nCount < 0 )
-            StarBASIC::Error( SbERR_BAD_ARGUMENT );
-        else
+        INT32 lResultLen = rPar.Get(2)->GetLong();
+        if( lResultLen > 0xffff )
         {
-            aStr.Erase( (USHORT)nCount );
-            rPar.Get(0)->PutString( aStr );
+            lResultLen = 0xffff;
         }
+        else if( lResultLen < 0 )
+        {
+            lResultLen = 0;
+            StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        }
+        aStr.Erase( (USHORT)lResultLen );
+        rPar.Get(0)->PutString( aStr );
     }
 }
 
@@ -1254,13 +1325,28 @@ RTLFUNC(Right)
     else
     {
         const String& rStr = rPar.Get(1)->GetString();
-        USHORT nResultLen = (USHORT)(rPar.Get(2)->GetLong() );
+        INT32 lResultLen = rPar.Get(2)->GetLong();
+        if( lResultLen > 0xffff )
+        {
+            lResultLen = 0xffff;
+        }
+        else if( lResultLen < 0 )
+        {
+            lResultLen = 0;
+            StarBASIC::Error( SbERR_BAD_ARGUMENT );
+        }
+        USHORT nResultLen = (USHORT)lResultLen;
         USHORT nStrLen = rStr.Len();
         if ( nResultLen > nStrLen )
             nResultLen = nStrLen;
         String aResultStr = rStr.Copy( nStrLen-nResultLen );
         rPar.Get(0)->PutString( aResultStr );
     }
+}
+
+RTLFUNC(RTL)
+{
+    rPar.Get( 0 )->PutObject( pBasic->getRTL() );
 }
 
 RTLFUNC(RTrim)
@@ -3953,37 +4039,3 @@ RTLFUNC(FileExists)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
 }
 
-#ifndef PRODUCT
-// For debugging only
-void dbg_SaveDisassembly( SbModule* pModule )
-{
-    Reference< XSimpleFileAccess3 > xSFI;
-    Reference< XTextOutputStream > xTextOut;
-    Reference< XOutputStream > xOut;
-    Reference< XMultiServiceFactory > xSMgr = getProcessServiceFactory();
-    if( xSMgr.is() )
-    {
-        Reference< XSimpleFileAccess3 > xSFI = Reference< XSimpleFileAccess3 >( xSMgr->createInstance
-            ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
-        if( xSFI.is() )
-        {
-            String aFile( RTL_CONSTASCII_USTRINGPARAM("file:///d:/BasicAsm.txt") );
-            if( xSFI->exists( aFile ) )
-                xSFI->kill( aFile );
-            xOut = xSFI->openFileWrite( aFile );
-            Reference< XInterface > x = xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.io.TextOutputStream" ) );
-            Reference< XActiveDataSource > xADS( x, UNO_QUERY );
-            xADS->setOutputStream( xOut );
-            xTextOut = Reference< XTextOutputStream >( x, UNO_QUERY );
-        }
-    }
-
-    if( xTextOut.is() )
-    {
-        String aDisassemblyStr;
-        pModule->Disassemble( aDisassemblyStr );
-        xTextOut->writeString( aDisassemblyStr );
-    }
-    xOut->closeOutput();
-}
-#endif
