@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-28 14:58:12 $
+ *  last change: $Author: er $ $Date: 2002-12-05 16:08:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2863,15 +2863,45 @@ void ScDocument::StyleSheetChanged( const SfxStyleSheetBase* pStyleSheet, BOOL b
 }
 
 
-BOOL ScDocument::IsStyleSheetUsed( const SfxStyleSheetBase& rStyle ) const
+BOOL ScDocument::IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const
 {
-    BOOL bIsUsed = FALSE;
+    if ( bStyleSheetUsageInvalid || rStyle.GetUsage() == ScStyleSheet::UNKNOWN )
+    {
+        if ( bGatherAllStyles )
+        {
+            SfxStyleSheetIterator aIter( xPoolHelper->GetStylePool(),
+                    SFX_STYLE_FAMILY_PARA );
+            for ( const SfxStyleSheetBase* pStyle = aIter.First(); pStyle;
+                                           pStyle = aIter.Next() )
+            {
+                const ScStyleSheet* pScStyle = PTR_CAST( ScStyleSheet, pStyle );
+                if ( pScStyle )
+                    pScStyle->SetUsage( ScStyleSheet::NOTUSED );
+            }
+        }
 
-    for ( USHORT i=0; (i<=MAXTAB) && !bIsUsed; i++ )
-        if ( pTab[i] )
-            bIsUsed = pTab[i]->IsStyleSheetUsed( rStyle );
+        BOOL bIsUsed = FALSE;
 
-    return bIsUsed;
+        for ( USHORT i=0; i<=MAXTAB; i++ )
+        {
+            if ( pTab[i] )
+            {
+                if ( pTab[i]->IsStyleSheetUsed( rStyle, bGatherAllStyles ) )
+                {
+                    if ( !bGatherAllStyles )
+                        return TRUE;
+                    bIsUsed = TRUE;
+                }
+            }
+        }
+
+        if ( bGatherAllStyles )
+            bStyleSheetUsageInvalid = FALSE;
+
+        return bIsUsed;
+    }
+
+    return rStyle.GetUsage() == ScStyleSheet::USED;
 }
 
 

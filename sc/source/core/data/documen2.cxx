@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: er $ $Date: 2002-10-01 17:15:54 $
+ *  last change: $Author: er $ $Date: 2002-12-05 16:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,8 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         bPastingDrawFromOtherDoc( FALSE ),
         pCacheFieldEditEngine( NULL ),
         nInDdeLinkUpdate( 0 ),
-        nXMLImportedFormulaCount( 0 )
+        nXMLImportedFormulaCount( 0 ),
+        bStyleSheetUsageInvalid( TRUE )
 {
     eSrcSet = gsl_getSystemTextEncoding();
     nSrcVer = SC_CURRENT_VERSION;

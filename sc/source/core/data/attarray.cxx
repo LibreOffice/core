@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2002-01-18 16:58:59 $
+ *  last change: $Author: er $ $Date: 2002-12-05 16:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1747,14 +1747,25 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pU
 }
 
 
-BOOL ScAttrArray::IsStyleSheetUsed( const SfxStyleSheetBase& rStyle ) const
+BOOL ScAttrArray::IsStyleSheetUsed( const ScStyleSheet& rStyle,
+        BOOL bGatherAllStyles ) const
 {
     BOOL    bIsUsed = FALSE;
     short   nPos    = 0;
 
-    while ( !bIsUsed && ( nPos < (short)nCount ) )
+    while ( nPos < (short)nCount )
     {
-        bIsUsed = ( pData[nPos].pPattern->GetStyleSheet() == &rStyle );
+        const ScStyleSheet* pStyle = pData[nPos].pPattern->GetStyleSheet();
+        if ( pStyle )
+        {
+            pStyle->SetUsage( ScStyleSheet::USED );
+            if ( pStyle == &rStyle )
+            {
+                if ( !bGatherAllStyles )
+                    return TRUE;
+                bIsUsed = TRUE;
+            }
+        }
         nPos++;
     }
 

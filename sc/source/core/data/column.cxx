@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-11-27 21:25:17 $
+ *  last change: $Author: er $ $Date: 2002-12-05 16:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,9 +613,9 @@ void ScColumn::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pUsed
 }
 
 
-BOOL ScColumn::IsStyleSheetUsed( const SfxStyleSheetBase& rStyle ) const
+BOOL ScColumn::IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const
 {
-    return pAttrArray->IsStyleSheetUsed( rStyle );
+    return pAttrArray->IsStyleSheetUsed( rStyle, bGatherAllStyles );
 }
 
 

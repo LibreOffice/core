@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: er $ $Date: 2002-11-27 21:35:19 $
+ *  last change: $Author: er $ $Date: 2002-12-05 16:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1673,12 +1673,19 @@ const ScStyleSheet* ScTable::GetAreaStyle( BOOL& rFound, USHORT nCol1, USHORT nR
 }
 
 
-BOOL ScTable::IsStyleSheetUsed( const SfxStyleSheetBase& rStyle ) const
+BOOL ScTable::IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const
 {
     BOOL bIsUsed = FALSE;
 
-    for ( USHORT i=0; (i<=MAXCOL) && !bIsUsed; i++ )
-        bIsUsed = aCol[i].IsStyleSheetUsed( rStyle );
+    for ( USHORT i=0; i<=MAXCOL; i++ )
+    {
+        if ( aCol[i].IsStyleSheetUsed( rStyle, bGatherAllStyles ) )
+        {
+            if ( !bGatherAllStyles )
+                return TRUE;
+            bIsUsed = TRUE;
+        }
+    }
 
     return bIsUsed;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 13:57:54 $
+ *  last change: $Author: er $ $Date: 2002-12-05 16:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,13 +101,15 @@ ScStyleSheet::ScStyleSheet( const String&       rName,
                             USHORT              nMask )
 
     :   SfxStyleSheet   ( rName, rPool, eFamily, nMask )
+    , eUsage( UNKNOWN )
 {
 }
 
 //------------------------------------------------------------------------
 
-ScStyleSheet::ScStyleSheet( const ScStyleSheet& rStyle ) :
-    SfxStyleSheet   ( rStyle )
+ScStyleSheet::ScStyleSheet( const ScStyleSheet& rStyle )
+    : SfxStyleSheet ( rStyle )
+    , eUsage( UNKNOWN )
 {
 }
 
@@ -285,8 +287,14 @@ BOOL __EXPORT ScStyleSheet::IsUsed() const
 {
     if ( GetFamily() == SFX_STYLE_FAMILY_PARA )
     {
+        // Always query the document to let it decide if a rescan is necessary,
+        // and store the state.
         ScDocument* pDoc = ((ScStyleSheetPool&)rPool).GetDocument();
-        return pDoc && pDoc->IsStyleSheetUsed( *this );
+        if ( pDoc && pDoc->IsStyleSheetUsed( *this, TRUE ) )
+            eUsage = USED;
+        else
+            eUsage = NOTUSED;
+        return eUsage == USED;
     }
     else
         return TRUE;
