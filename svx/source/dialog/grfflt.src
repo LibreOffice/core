@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:33:23 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,11 +666,11 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
     Text[ dutch ] = "Poster" ;
     Text[ spanish ] = "Póster" ;
     Text[ english_us ] = "Posterize" ;
-    Text[ chinese_simplified ] = "ÕĞÌù»­";
+    Text[ chinese_simplified ] = "º£±¨";
     Text[ russian ] = "Ïëàêàò";
     Text[ polish ] = "Plakat";
     Text[ japanese ] = "Îß½À°";
-    Text[ chinese_traditional ] = "©Û¶Kµe";
+    Text[ chinese_traditional ] = "®ü³ø";
     Text[ arabic ] = "ãõáÕŞ";
     Text[ greek ] = "Áößóá";
     Text[ korean ] = "Æ÷½ºÅÍ";
@@ -749,11 +749,11 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ dutch ] = "Posterkleuren" ;
         Text[ spanish ] = "Colores del póster" ;
         Text[ english_us ] = "Poster colors" ;
-        Text[ chinese_simplified ] = "ÕĞÌù»­ÑÕÉ«";
+        Text[ chinese_simplified ] = "º£±¨ÑÕÉ«";
         Text[ russian ] = "Öâåòà ïëàêàòà";
         Text[ polish ] = "Kolory plakatu";
         Text[ japanese ] = "Îß½À°¶×°";
-        Text[ chinese_traditional ] = "©Û¶KµeÃC¦â";
+        Text[ chinese_traditional ] = "®ü³øÃC¦â";
         Text[ arabic ] = "ÃáæÇä ÇáãõáÕŞ";
         Text[ greek ] = "×ñşìáôá áößóáò";
         Text[ korean ] = "Æ÷½ºÅÍ »ö»ó";
