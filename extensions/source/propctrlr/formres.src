@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 16:33:11 $
+ *  last change: $Author: fs $ $Date: 2001-03-21 15:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _EXTENSIONS_PROPCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
+#include "formlocalid.hrc"
 #endif
 
 String RID_STR_FORMS
@@ -3961,9 +3964,96 @@ String RID_STR_STEP
     Text[ arabic ] = "Step";
 };
 
+TabDialog RID_TABDLG_FONTDIALOG
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Zeichen" ;
+    Text [ ENGLISH ] = "Character" ;
+    Text [ norwegian ] = "Character" ;
+    Text [ italian ] = "Carattere" ;
+    Text [ portuguese_brazilian ] = "Caractere" ;
+    Text [ portuguese ] = "Caracteres" ;
+    Text [ finnish ] = "Merkki" ;
+    Text [ danish ] = "Tegn" ;
+    Text [ french ] = "Caractère" ;
+    Text [ swedish ] = "Tecken" ;
+    Text [ dutch ] = "Teken" ;
+    Text [ spanish ] = "Caracteres" ;
+    Text [ english_us ] = "Character" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TABPAGE_CHARACTERS ;
+                PageResID = TABPAGE_CHARACTERS ;
+                Text = "Schrift" ;
+                Text [ english ] = "Font" ;
+                Text [ english_us ] = "Font" ;
+                Text [ norwegian ] = "Character" ;
+                Text [ italian ] = "Carattere" ;
+                Text [ portuguese_brazilian ] = "Caractere" ;
+                Text [ portuguese ] = "Tipo de letra" ;
+                Text [ finnish ] = "Merkki" ;
+                Text [ danish ] = "Skrifttype" ;
+                Text [ french ] = "Police" ;
+                Text [ swedish ] = "Teckensnitt" ;
+                Text [ dutch ] = "Lettertype" ;
+                Text [ spanish ] = "Fuente" ;
+                Text [ chinese_simplified ] = "×ÖÌå";
+                Text [ russian ] = "Øðèôò";
+                Text [ polish ] = "Czcionka";
+                Text [ japanese ] = "Ì«ÝÄ";
+                Text [ chinese_traditional ] = "¦r«¬";
+                Text [ arabic ] = "ÇáÎØ";
+                Text [ dutch ] = "Lettertype";
+                Text [ chinese_simplified ] = "×ÖÌå";
+                Text [ greek ] = "ÃñáììáôïóåéñÜ";
+                Text [ korean ] = "±Û²Ã";
+                Text [ turkish ] = "Yazýtipi";
+            };
+            PageItem
+            {
+                Identifier = TABPAGE_CHARACTERS_EXT ;
+                PageResID = TABPAGE_CHARACTERS_EXT ;
+                Text = "Schrifteffekt" ;
+                Text [ english ] = "Font Effects" ;
+                Text [ english_us ] = "Font Effects" ;
+                Text [ norwegian ] = "Character Extension" ;
+                Text [ italian ] = "Effetto carattere" ;
+                Text [ portuguese_brazilian ] = "Extensão de Caracter" ;
+                Text [ portuguese ] = "Efeitos do tipo de letra" ;
+                Text [ finnish ] = "Merkin tehosteet" ;
+                Text [ danish ] = "Skrifteffekt" ;
+                Text [ french ] = "Effets de caractères" ;
+                Text [ swedish ] = "Teckensnittseffekt" ;
+                Text [ dutch ] = "Schrifteffecten" ;
+                Text [ spanish ] = "Efectos de fuente" ;
+                Text [ chinese_simplified ] = "×ÖÌåÐ§¹û";
+                Text [ russian ] = "Ýôôåêòû øðèôòà";
+                Text [ polish ] = "Efekty czcionek";
+                Text [ japanese ] = "Ì«ÝÄŒø‰Ê";
+                Text [ chinese_traditional ] = "¤å¦r®ÄªG";
+                Text [ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
+                Text [ dutch ] = "Schrifteffecten";
+                Text [ chinese_simplified ] = "×ÖÌåÐ§¹û";
+                Text [ greek ] = "ÅöÝ ÷áñáêôÞñùí";
+                Text [ korean ] = "±Û²Ã È¿°ú";
+                Text [ turkish ] = "Yazýtipi efektleri";
+            };
+        };
+    };
+};
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/03/20 16:33:11  fs
+ *  removed some english duplicates
+ *
  *  Revision 1.7  2001/03/09 20:46:22  kz
  *  Merge SRC624: 09.03.01 - 21:46:00 (NoBranch)
  *

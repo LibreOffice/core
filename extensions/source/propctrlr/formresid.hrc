@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-07 14:36:55 $
+ *  last change: $Author: fs $ $Date: 2001-03-21 15:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 
 // -----------------------------------------------------------------------
 // - Strings
-// -----------------------------------------------------------------------
 
 #define RID_STR_FORMS                       ( RID_FORMBROWSER_START +   1 )
 #define RID_STR_PROPTITLE_DBGRID            ( RID_FORMBROWSER_START +   2 )
@@ -234,22 +233,23 @@
 
 
 // -----------------------------------------------------------------------
-// - Dialogs
-// -----------------------------------------------------------------------
+// - dialogs
 
 #define RID_DLG_SELECTLABELCONTROL          ( RID_PROPCONTROLLER_START +  0 )
 
 
 // -----------------------------------------------------------------------
-// - Dialogs
+// - tab dialogs
+
+#define RID_TABDLG_FONTDIALOG               ( RID_PROPCONTROLLER_START +  0 )
+
 // -----------------------------------------------------------------------
+// - external dialogs
 
 #define RID_SVXDLG_FMFONT                   18013
 
-
 // -----------------------------------------------------------------------
 // - ImageLists
-// -----------------------------------------------------------------------
 
 #define RID_IL_FORMEXPLORER                 ( RID_PROPCONTROLLER_START +  0 )
 
@@ -274,6 +274,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/03/07 14:36:55  tbe
+ *  added step property
+ *
  *  Revision 1.5  2001/03/02 16:29:01  tbe
  *  added title property
  *
