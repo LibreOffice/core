@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-17 10:31:47 $
+ *  last change: $Author: mt $ $Date: 2001-07-17 16:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,6 +327,7 @@ IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
     else
         mpImplLB->SelectEntry( 0 , TRUE );
     mpBtn->SetPressed( TRUE );
+    SetSelection( Selection( 0, SELECTION_MAX ) );
     mpFloatWin->StartFloat( TRUE );
     return 0;
 }
@@ -712,6 +713,7 @@ long ComboBox::Notify( NotifyEvent& rNEvt )
                     mpBtn->SetPressed( TRUE );
                     if ( mpImplLB->GetEntryList()->GetMRUCount() )
                         mpImplLB->SelectEntry( 0 , TRUE );
+                    SetSelection( Selection( 0, SELECTION_MAX ) );
                     mpFloatWin->StartFloat( FALSE );
                     nDone = 1;
                 }
