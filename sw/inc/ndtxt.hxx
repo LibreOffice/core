@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:36:51 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,6 +367,16 @@ public:
         return bWholePara ? bHiddenCharsHidePara : bContainsHiddenChars;
     }
     inline void SetCalcHiddenCharFlags() const { bRecalcHiddenCharFlags = TRUE; }
+
+// --> FME 2004-06-08 #i12836# enhanced pdf
+    //
+    // Returns if the node is hidden due to
+    // 1. HiddenParaField
+    // 2. HiddenCharAttribute
+    // 3. HiddenSection
+    //
+    bool IsHidden() const;
+// <--
 
     //
     // Footnotes:
