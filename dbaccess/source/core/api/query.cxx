@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-16 10:32:56 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 13:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _DBA_CORE_REGISTRYHELPER_HXX_
 #include "registryhelper.hxx"
 #endif
+#ifndef DBA_CORE_WARNINGS_HXX
+#include "warnings.hxx"
+#endif
 
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
@@ -106,6 +109,7 @@ using namespace dbaccess;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
@@ -137,6 +141,7 @@ OQuery_LINUX::OQuery_LINUX(const Reference< XPropertySet >& _rxCommandDefinition
     ,m_xCommandDefinition(_rxCommandDefinition)
     ,m_eDoingCurrently(NONE)
     ,m_xConnection(_rxConn)
+    ,m_pWarnings( NULL )
 {
     DBG_CTOR(OQuery_LINUX, NULL);
 
@@ -186,32 +191,54 @@ Reference< XNameAccess > SAL_CALL OQuery_LINUX::getColumns() throw(RuntimeExcept
     {
         m_pColumns->clearColumns();
 
-        // fill the columns with columns from teh statement
-        Reference< XStatement > xStmt = m_xConnection->createStatement();
-        OSL_ENSURE(xStmt.is(),"No Statement created!");
-        if(xStmt.is())
+        try
         {
-            Reference< XColumnsSupplier > xRs(xStmt->executeQuery(m_sCommand),UNO_QUERY);
-            OSL_ENSURE(xRs.is(),"No Resultset created!");
-            if(xRs.is())
+            // fill the columns with columns from teh statement
+            Reference< XStatement > xStmt = m_xConnection->createStatement();
+            OSL_ENSURE(xStmt.is(),"No Statement created!");
+            if(xStmt.is())
             {
-                Reference< XNameAccess > xColumns = xRs->getColumns();
-                if(xColumns.is())
+                Reference< XColumnsSupplier > xRs(xStmt->executeQuery(m_sCommand),UNO_QUERY);
+                OSL_ENSURE(xRs.is(),"No Resultset created!");
+                if(xRs.is())
                 {
-                    Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-                    const ::rtl::OUString* pBegin = aNames.getConstArray();
-                    const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
-                    for(;pBegin != pEnd;++pBegin)
+                    Reference< XNameAccess > xColumns = xRs->getColumns();
+                    if(xColumns.is())
                     {
-                        Reference<XPropertySet> xSource;
-                        xColumns->getByName(*pBegin) >>= xSource;
-                        OTableColumn* pColumn = new OTableColumn(xSource);
-                        m_pColumns->append(*pBegin,pColumn);
+                        Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
+                        const ::rtl::OUString* pBegin = aNames.getConstArray();
+                        const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
+                        for(;pBegin != pEnd;++pBegin)
+                        {
+                            Reference<XPropertySet> xSource;
+                            xColumns->getByName(*pBegin) >>= xSource;
+                            OTableColumn* pColumn = new OTableColumn(xSource);
+                            m_pColumns->append(*pBegin,pColumn);
+                        }
                     }
+                    ::comphelper::disposeComponent(xRs);
                 }
-                ::comphelper::disposeComponent(xRs);
+                ::comphelper::disposeComponent(xStmt);
             }
-            ::comphelper::disposeComponent(xStmt);
+        }
+        catch( const SQLContext& e )
+        {
+            if ( m_pWarnings )
+                m_pWarnings->appendWarning( e );
+        }
+        catch( const SQLWarning& e )
+        {
+            if ( m_pWarnings )
+                m_pWarnings->appendWarning( e );
+        }
+        catch( const SQLException& e )
+        {
+            if ( m_pWarnings )
+                m_pWarnings->appendWarning( e );
+        }
+        catch( const Exception& )
+        {
+            DBG_ERROR( "OQuery_LINUX::getColumns: caught a strange exception!" );
         }
 
         m_bColumnsOutOfDate = sal_False;
@@ -307,6 +334,8 @@ void SAL_CALL OQuery_LINUX::dispose()
     }
     m_aConfigurationNode.clear();
     OQueryDescriptor::dispose();
+
+    m_pWarnings = NULL;
 }
 
 //--------------------------------------------------------------------------

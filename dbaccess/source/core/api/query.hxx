@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-16 14:02:31 $
+ *  last change: $Author: fs $ $Date: 2001-08-24 13:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ namespace dbaccess
 {
 //........................................................................
 
+    class IWarningsContainer;
 //==========================================================================
 //= OQuery_LINUX - an object implementing the sdb.Query service
 //==========================================================================
@@ -116,6 +117,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                         m_xConnection;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > m_xCommandPropInfo;
+    IWarningsContainer* m_pWarnings;
     sal_Bool            m_bCaseSensitiv : 1;        // assume case sensitivity of the column names ?
     sal_Bool            m_bColumnsOutOfDate : 1;    // the columns have to be rebuild on the next getColumns ?
 
@@ -140,8 +142,10 @@ protected:
     ~OQuery_LINUX();
 
 public:
-    OQuery_LINUX(   const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxCommandDefinition,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
+    OQuery_LINUX(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxCommandDefinition,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn
+        );
 
 // ::com::sun::star::uno::XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
@@ -177,6 +181,10 @@ public:
                     sal_Int32 nHandle,
                     const ::com::sun::star::uno::Any& rValue )
             throw (::com::sun::star::uno::Exception);
+
+    // the caller is responsible for the lifetime!
+    void                setWarningsContainer( IWarningsContainer* _pWarnings )  { m_pWarnings = _pWarnings; }
+    IWarningsContainer* getWarningsContainer( ) const                           { return m_pWarnings; }
 
 public:
 // helper
