@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:35:47 $
+ *  last change: $Author: rt $ $Date: 2003-05-21 07:59:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,13 @@
 #endif
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"
 #endif
 
 
@@ -203,9 +210,12 @@ void XclFontData::FillFromFont( const Font& rFont )
     SetScCharSet( rFont.GetCharSet() );
     SetScPosture( rFont.GetItalic() );
     SetScStrikeout( rFont.GetStrikeout() );
-    mbOutline = !!rFont.IsOutline();  // BOOL->bool
-    mbShadow = !!rFont.IsShadow();    // BOOL->bool
+    mbOutline = rFont.IsOutline();
+    mbShadow = rFont.IsShadow();
 }
+
+
+// *** conversion of VCL/SVX constants *** ------------------------------------
 
 FontFamily XclFontData::GetScFamily( CharSet eDefCharSet ) const
 {
@@ -365,6 +375,45 @@ void XclFontData::SetScStrikeout( FontStrikeout eScStrikeout )
         (eScStrikeout == STRIKEOUT_BOLD) || (eScStrikeout == STRIKEOUT_SLASH) ||
         (eScStrikeout == STRIKEOUT_X);
 }
+
+
+// *** conversion of API constants *** ----------------------------------------
+
+float XclFontData::GetApiHeight() const
+{
+    return static_cast< float >( mnHeight / TWIPS_PER_POINT );
+}
+
+::com::sun::star::awt::FontSlant XclFontData::GetApiPosture() const
+{
+    return mbItalic ? ::com::sun::star::awt::FontSlant_ITALIC : ::com::sun::star::awt::FontSlant_NONE;
+}
+
+float XclFontData::GetApiWeight() const
+{
+    return VCLUnoHelper::ConvertFontWeight( GetScWeight() );
+}
+
+sal_Int16 XclFontData::GetApiUnderline() const
+{
+    sal_Int16 nApiUnderl = ::com::sun::star::awt::FontUnderline::NONE;
+    switch( meUnderline )
+    {
+        case xlUnderlSingle:
+        case xlUnderlSingleAcc:     nApiUnderl = ::com::sun::star::awt::FontUnderline::SINGLE; break;
+        case xlUnderlDouble:
+        case xlUnderlDoubleAcc:     nApiUnderl = ::com::sun::star::awt::FontUnderline::DOUBLE; break;
+    }
+    return nApiUnderl;
+}
+
+sal_Int16 XclFontData::GetApiStrikeout() const
+{
+    return mbStrikeout ? ::com::sun::star::awt::FontStrikeout::SINGLE : ::com::sun::star::awt::FontStrikeout::NONE;
+}
+
+
+// ----------------------------------------------------------------------------
 
 bool operator==( const XclFontData& rLeft, const XclFontData& rRight )
 {
