@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmduicollector.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-01 16:58:32 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 15:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+
 
 #include <hash_map>
 #include <vector>
@@ -104,45 +108,45 @@ const unsigned short MENUBAR_DBACCESS_QUERY     = 19211;
 const unsigned short MENUBAR_DBACCESS_RELATION  = 19212;
 
 
-struct ConvertIDToISO
+struct ISO_code
 {
-    int         nLangID;
-    const char* pISO;
+    const char* pLanguage;
+    const char* pCountry;
 };
 
 const int NUM_LANGUAGES = 27;
 //const int NUM_LANGUAGES = 2;
 
-ConvertIDToISO Language_Mapping[] =
+ISO_code Language_codes[] =
 {
-    { 49, "de"        },
-    { 1,  "en-US"     },
-    { 96, "ar"        },
-    { 47, "no"        },
-    { 37, "ca"        },
-    { 88, "zh-TW"     },
-    { 42, "cs"        },
-    { 45, "da"        },
-    { 30, "el"        },
-    { 34, "es"        },
-    { 35, "fi"        },
-    { 33, "fr"        },
-    { 97, "he"        },
-    { 39, "it"        },
-    { 81, "ja"        },
-    { 82, "ko"        },
-    { 31, "nl"        },
-    { 48, "pl"        },
-    { 55, "pt-BR"     },
-    { 7,  "ru"        },
-    { 43, "sk"        },
-    { 46, "sv"        },
-    { 66, "th"        },
-    { 90, "tr"        },
-    { 91, "hi"        },
-    { 86, "zh-CN"     },
-    { 3,  "pt"        },
-    { 0,  0           }
+    { "de", ""       },
+    { "en", "US "    },
+    { "ar", ""       },
+    { "no", ""       },
+    { "ca", ""       },
+    { "zh", "TW"     },
+    { "cs", ""       },
+    { "da", ""       },
+    { "el", ""       },
+    { "es", ""       },
+    { "fi", ""       },
+    { "fr", ""       },
+    { "he", ""       },
+    { "it", ""       },
+    { "ja", ""       },
+    { "ko", ""       },
+    { "nl", ""       },
+    { "pl", ""       },
+    { "pt", "BR"     },
+    { "ru", ""       },
+    { "sk", ""       },
+    { "sv", ""       },
+    { "th", ""       },
+    { "tr", ""       },
+    { "hi", ""       },
+    { "zh", "CN"     },
+    { "pt", ""       },
+    { 0,  0          }
 };
 
 enum MODULES
@@ -575,10 +579,13 @@ bool ReadResourceFile( int nLangIndex, const OUString& aResourceDirURL, const OU
 
     String aSysDirPathStr( aSysDirPath );
 
-    String aLangString( String::CreateFromAscii( Language_Mapping[nLangIndex].pISO ));
-    LanguageType aLangtype = ConvertIsoStringToLanguage( aLangString );
+//    String aLangString( String::CreateFromAscii( Language_Mapping[nLangIndex].pISO ));
+//    LanguageType aLangtype = ConvertIsoStringToLanguage( aLangString );
+    ::com::sun::star::lang::Locale aLocale;
+    aLocale.Language = OUString::createFromAscii( Language_codes[nLangIndex].pLanguage );
+    aLocale.Country = OUString::createFromAscii( Language_codes[nLangIndex].pCountry );
     ResMgr* pResMgr = ResMgr::CreateResMgr( aResFilePrefix.getStr(),
-                                            aLangtype,
+                                            aLocale,
                                             NULL,
                                             &aSysDirPathStr );
     if ( pResMgr )
@@ -906,8 +913,15 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
 
                             if ( aLabel.getLength() > 0 )
                             {
+                                char mystr[255];
+                                strncat( mystr, Language_codes[j].pLanguage, 2);
+                                if ( strlen(Language_codes[j].pCountry))
+                                {
+                                    strncat( mystr, "-", 1);
+                                    strncat( mystr, Language_codes[j].pCountry, 2);
+                                }
                                 aXMLFile.write( ValueNodeStart, strlen( ValueNodeStart ), nWritten );
-                                aXMLFile.write( Language_Mapping[j].pISO, strlen( Language_Mapping[j].pISO ), nWritten );
+                                aXMLFile.write( mystr, strlen( mystr ), nWritten );
                                 aXMLFile.write( ValueNodeMid, strlen( ValueNodeMid ), nWritten );
                                 aXMLFile.write( aLabel.getStr(), aLabel.getLength(), nWritten );
                                 aXMLFile.write( ValueNodeEnd, strlen( ValueNodeEnd ), nWritten );
@@ -953,8 +967,16 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
                                         bLabels = sal_True;
                                         OString aLabel( OUStringToOString( rCmdLabels.aLabels[k], RTL_TEXTENCODING_UTF8 ));
 
+                                        char mystr[255];
+                                        strncat( mystr, Language_codes[k].pLanguage, 2);
+                                        if ( strlen(Language_codes[k].pCountry))
+                                        {
+                                            strncat( mystr, "-", 1);
+                                            strncat( mystr, Language_codes[k].pCountry, 2);
+                                        }
+
                                         aXMLFile.write( ValueNodeStart, strlen( ValueNodeStart ), nWritten );
-                                        aXMLFile.write( Language_Mapping[k].pISO, strlen( Language_Mapping[k].pISO ), nWritten );
+                                        aXMLFile.write( mystr, strlen( mystr ), nWritten );
                                         aXMLFile.write( ValueNodeMid, strlen( ValueNodeMid ), nWritten );
                                         aXMLFile.write( aLabel.getStr(), aLabel.getLength(), nWritten );
                                         aXMLFile.write( ValueNodeEnd, strlen( ValueNodeEnd ), nWritten );
@@ -1189,10 +1211,13 @@ bool ReadResourceWriteMenuBarXML( const OUString& aOutDirURL,
 
     String aSysDirPathStr( aSysDirPath );
 
-    String aLangString( String::CreateFromAscii( Language_Mapping[0].pISO ));
-    LanguageType aLangtype = ConvertIsoStringToLanguage( aLangString );
+//    String aLangString( String::CreateFromAscii( Language_Mapping[0].pISO ));
+//    LanguageType aLangtype = ConvertIsoStringToLanguage( aLangString );
+    ::com::sun::star::lang::Locale aLocale;
+    aLocale.Language = OUString::createFromAscii( Language_codes[1].pLanguage );
+    aLocale.Country = OUString::createFromAscii( Language_codes[1].pCountry );
     ResMgr* pResMgr = ResMgr::CreateResMgr( aResFilePrefix.getStr(),
-                                            aLangtype,
+                                            aLocale,
                                             NULL,
                                             &aSysDirPathStr );
     if ( pResMgr )
