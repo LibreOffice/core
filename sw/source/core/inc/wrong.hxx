@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrong.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-27 14:44:31 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,6 @@ public:
     xub_StrLen NextWrong( xub_StrLen nChk ) const;
     xub_StrLen LastWrong( xub_StrLen nChk ) const;
     void Move( xub_StrLen nPos, long nDiff );
-    void Clear();
-    void Clear( xub_StrLen nBegin, xub_StrLen nEnd );
 
     // Divide the list into two part, the wrong words until nSplitPos will be
     // removed and transferred to a new SwWrongList.
