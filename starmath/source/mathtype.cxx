@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-18 14:57:19 $
+ *  last change: $Author: cmc $ $Date: 2001-04-10 14:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,6 +648,23 @@ int MathType::HandleRecords(int nLevel,BYTE nSelector,
             {
                 rRet.InsertAscii(" ital \"",nTextStart);
                 rRet += '\"';
+            }
+            else
+            {
+                if (nRecord == END)
+                {
+                    sal_Unicode cChar = rRet.GetChar(rRet.Len()-1);
+                    if ((cChar == '=') || (cChar == '+') || (cChar == '-'))
+                        APPEND(rRet,"{}");
+                }
+
+                if ((rRet.GetChar(nTextStart) == '=') &&
+                    ((nTextStart == 0) ||
+                    (rRet.GetChar(nTextStart-1) == '{'))
+                   )
+                {
+                    rRet.InsertAscii(" {}",nTextStart);
+                }
             }
         }
 
