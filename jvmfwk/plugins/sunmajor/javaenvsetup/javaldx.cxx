@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaldx.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-03 14:27:16 $
+ *  last change: $Author: jl $ $Date: 2004-05-04 10:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,18 @@ int main(int argc, char **argv)
     javaFrameworkError errcode = JFW_E_NONE;
     errcode = jfw_getSelectedJRE( & pInfo);
 
-    if (errcode == JFW_E_NO_SELECT)
+    if (errcode == JFW_E_INVALID_SETTINGS)
+    {
+        fprintf(stderr,"javaldx failed. User must select a JRE from options dialog!");
+        return -1;
+    }
+    else if (errcode != JFW_E_NONE)
+    {
+        fprintf(stderr,"javaldx failed! \n");
+        return -1;
+    }
+
+    if (pInfo == NULL)
     {
         errcode = jfw_findAndSelectJRE( & pInfo);
         if (errcode == JFW_E_NO_JAVA_FOUND)
@@ -119,17 +130,6 @@ int main(int argc, char **argv)
             return -1;
         }
     }
-    else if (errcode == JFW_E_INVALID_SETTINGS)
-    {
-        fprintf(stderr,"javaldx failed. User must select a JRE from options dialog!");
-        return -1;
-    }
-    else if (errcode != JFW_E_NONE)
-    {
-        fprintf(stderr,"javaldx failed! \n");
-        return -1;
-    }
-
     rtl::OString sPaths = getLD_LIBRARY_PATH(pInfo->arVendorData);
     fprintf(stdout, "%s\n", sPaths.getStr());
     jfw_freeJavaInfo(pInfo);
