@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationexport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:31:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 11:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1726,7 +1726,23 @@ void AnimationsExporter::exportAnimations( Reference< XAnimationNode > xRootNode
     try
     {
         if( xRootNode.is() )
-            mpImpl->exportNode( xRootNode );
+        {
+            // first check if there are no animations
+            Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+            if( xEnumeration->hasMoreElements() )
+            {
+                // first child node may be an empty main sequence, check this
+                Reference< XAnimationNode > xMainNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
+                Reference< XEnumerationAccess > xMainEnumerationAccess( xMainNode, UNO_QUERY_THROW );
+                Reference< XEnumeration > xMainEnumeration( xMainEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
+
+                // only export if the main sequence is not empty or if there are additional
+                // trigger sequences
+                if( xMainEnumeration->hasMoreElements() || xEnumeration->hasMoreElements() )
+                    mpImpl->exportNode( xRootNode );
+            }
+        }
     }
     catch( RuntimeException& )
     {
