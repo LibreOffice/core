@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:14:17 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 20:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabDialog RID_SCDLG_ATTR
     Text [ italian ] = "Attributi cella" ;
     Text [ portuguese_brazilian ] = "Atributos da C?lula" ;
     Text [ portuguese ] = "Atributos de célula" ;
-    Text [ finnish ] = "Solun määritteet" ;
+    Text [ finnish ] = "Solun m??ritteet" ;
     Text [ danish ] = "Celleattributter" ;
     Text [ french ] = "Attributs de cellule" ;
     Text [ swedish ] = "Cellattribut" ;
@@ -102,7 +102,7 @@ TabDialog RID_SCDLG_ATTR
                 Text [ italian ] = "Numeri" ;
                 Text [ portuguese_brazilian ] = "N?ero" ;
                 Text [ portuguese ] = "Números" ;
-                Text [ finnish ] = "Luvut" ;
+                Text [ finnish ] = "Numerot" ;
                 Text [ danish ] = "Tal" ;
                 Text [ french ] = "Nombres" ;
                 Text [ swedish ] = "Tal" ;
@@ -301,7 +301,7 @@ TabDialog RID_SCDLG_ATTR
                 Text [ italian ] = "Protezione" ;
                 Text [ portuguese_brazilian ] = "Prote??o" ;
                 Text [ portuguese ] = "Protecção de célula" ;
-                Text [ finnish ] = "Solun suojaus" ;
+                Text [ finnish ] = "Solujen suojaus" ;
                 Text [ danish ] = "Cellebeskyttelse" ;
                 Text [ french ] = "Protection" ;
                 Text [ swedish ] = "Cellskydd" ;
@@ -449,7 +449,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text [ italian ] = "Per attivare la protezione cella, è necessario proteggere la tabella attiva.\n\nScegliete 'Proteggi documento' dal menu 'Strumenti' e quindi il comando 'Tabella'." ;
         Text [ portuguese_brazilian ] = "Para ativar a prote??o da c?lula, , preciso proteger a tabelaativa.\n\nEscolha 'Proteger Documento' no menu 'Extras' e,em seguida, o comando 'Tabela'." ;
         Text [ portuguese ] = "Para activar a protecção da célula, é necessário proteger a tabela activa.\n\nSeleccione 'Proteger documento' no menu 'Ferramentas' e em seguida o comando 'Tabela'." ;
-        Text [ finnish ] ="Solun suojaus on voimassa vasta, kun käsiteltävänä oleva lomake on suojattu. \n\nValitse Työkalut-valikosta Suojaa asiakirja ja määritä sitten Lomake." ;
+        Text [ finnish ] ="Solun suojaus on voimassa vasta, kun k?sitelt?v?n? oleva lomake on suojattu. \n\nValitse Ty?alut-valikosta Suojaa asiakirja ja m??rit? sitten Lomake." ;
         Text [ danish ] = "Cellebeskyttelsen er kun effektiv, når det aktive regneark er beskyttet.\n\nVælg 'Bekyt dokument' i menuen 'Funktioner'og derefter 'Regneark' for at beskytte regnearket." ;
         Text [ french ] = "Pour activer la protection d'une cellule, vous devez protéger la feuille active.\n\nChoisissez 'Protection' dans le menu 'Outils' puis la commande 'Feuille'." ;
         Text [ swedish ] = "Cellskyddet är endast verksamt om den aktiva tabellen är skyddad.\n\nVälj kommandot 'Skydda dokument' i menyn 'Verktyg' och därefter kommandot 'Tabell' för att skydda tabellen." ;
@@ -587,6 +587,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ catalan ] = "Impresión";
     };
 };
+
 
 
 
