@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: gt $ $Date: 2001-08-23 16:13:18 $
+ *  last change: $Author: gt $ $Date: 2001-08-24 07:16:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1557,21 +1557,41 @@ double GetOddfprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
 {
     double      fN = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase ) - 1.0;
     double      fNq = GetCoupnum( nNullDate, nSettle, nFirstCoup, nFreq, nBase ) - 1.0;
-    double      fDSC_E = GetCoupdaysnc( nNullDate, nSettle, nFirstCoup, nFreq, nBase ) /
-                        GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase );
+    double      fDSC = GetCoupdaysnc( nNullDate, nSettle, nFirstCoup, nFreq, nBase );
+    double      fDSC_E = fDSC / GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase );
     double      fNC = GetCoupnum( nNullDate, nIssue, nFirstCoup, nFreq, nBase );
     sal_uInt32  nNC = sal_uInt32( fNC );
-
+    sal_uInt16  nMonthDelta = 12 / sal_uInt16( nFreq );
 
     sal_uInt32  i;
     double      f1YieldFreq = 1.0 + fYield / double( nFreq );
     double      f100RateFreq = 100.0 * fRate / double( nFreq );
 
-    double*     pDC = nNC? new double[ nNC + 1 ] : NULL;
-    double*     pNL = nNC? new double[ nNC + 1 ] : NULL;
-    double*     pA = nNC? new double[ nNC + 1 ] : NULL;
-    for( i = 0 ; i <= nNC ; i++ )
-        pDC[ i ] = pNL[ i ] = pA[ i ] = 0.0;
+    double*     pDC = new double[ nNC + 1 ];
+    double*     pNL = new double[ nNC + 1 ];
+    double*     pA = new double[ nNC + 1 ];
+
+    pDC[ 0 ] = pNL[ 0 ] = pA[ 0 ] = 1.0;
+
+    ScAddInDate aStartDate( nNullDate, nSettle, nBase );
+    ScAddInDate aNextCoup( nNullDate, nFirstCoup, nBase );
+    if( nNC )
+    {
+        pDC[ 1 ] = ScAddInDate::GetDiff( aStartDate, aNextCoup );
+        pNL[ 1 ] = GetCoupdays( nNullDate, nSettle, nFirstCoup, nFreq, nBase );
+        pA[ 1 ] = pDC[ 1 ];
+        ScAddInDate aPre;
+        for( i = 1 ; i <= nNC ; i++ )
+        {
+            aPre = aStartDate;
+            aStartDate.AddMonths( nMonthDelta );
+            aNextCoup.AddMonths( nMonthDelta );
+            pDC[ i ] = ScAddInDate::GetDiff( aPre, aStartDate );
+            pNL[ i ] = GetCoupdays( nNullDate, aStartDate.GetDate( nNullDate ), aNextCoup.GetDate( nNullDate ),
+                                        nFreq, nBase );
+            pA[ i ] = ScAddInDate::GetDiff( aStartDate, aNextCoup );
+        }
+    }
 
     double      fT1 = fRedemp / pow( f1YieldFreq, fN + fNq + fDSC_E );
 
@@ -1680,7 +1700,54 @@ double GetOddfyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
     sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq,
     sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    return f_Ret;
+    //GetOddfprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
+    //sal_Int32 nFirstCoup, double fRate, double fYield, double fRedemp, sal_Int32 nFreq,
+    //sal_Int32 nBase )
+    double      fPriceN = 0.0;
+    double      fYield1 = 0.0;
+    double      fYield2 = 1.0;
+    double      fPrice1 = GetOddfprice( nNullDate, nSettle, nMat, nIssue, nFirstCoup, fRate, fYield1, fRedemp, nFreq, nBase );
+    double      fPrice2 = GetOddfprice( nNullDate, nSettle, nMat, nIssue, nFirstCoup, fRate, fYield2, fRedemp, nFreq, nBase );
+    double      fYieldN = ( fYield2 - fYield1 ) * 0.5;
+
+    for( sal_uInt32 nIter = 0 ; nIter < 100 && fPriceN != fPrice ; nIter++ )
+    {
+        fPriceN = GetOddfprice( nNullDate, nSettle, nMat, nIssue, nFirstCoup, fRate, fYieldN, fRedemp, nFreq, nBase );
+
+        if( fPrice == fPrice1 )
+            return fYield1;
+        else if( fPrice == fPrice2 )
+            return fYield2;
+        else if( fPrice == fPriceN )
+            return fYieldN;
+        else if( fPrice < fPrice2 )
+        {
+            fYield2 *= 2.0;
+            fPrice2 = GetOddfprice( nNullDate, nSettle, nMat, nIssue, nFirstCoup, fRate, fYield2, fRedemp, nFreq, nBase );
+
+            fYieldN = ( fYield2 - fYield1 ) * 0.5;
+        }
+        else
+        {
+            if( fPrice < fPriceN )
+            {
+                fYield1 = fYieldN;
+                fPrice1 = fPriceN;
+            }
+            else
+            {
+                fYield2 = fYieldN;
+                fPrice2 = fPriceN;
+            }
+
+            fYieldN = fYield2 - ( fYield2 - fYield1 ) * ( ( fPrice - fPrice2 ) / ( fPrice1 - fPrice2 ) );
+        }
+    }
+
+    if( fabs( fPrice - fPriceN ) > fPrice / 100.0 )
+        THROW_IAE;      // result not precise enough
+
+    return fYieldN;
 }
 
 
