@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:13:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:19:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,12 @@
 #include <rtl/ustring>
 #endif
 
+#include "hlmarkwn_def.hxx" //ADD CHINA001
 class SvxHyperlinkTabPageBase;
 
-#define LERR_NOERROR        0
-#define LERR_NOENTRIES      1
-#define LERR_DOCNOTOPEN     2
+//CHINA001 #define LERR_NOERROR     0
+//CHINA001 #define LERR_NOENTRIES       1
+//CHINA001 #define LERR_DOCNOTOPEN      2
 
 //########################################################################
 //#                                                                      #
