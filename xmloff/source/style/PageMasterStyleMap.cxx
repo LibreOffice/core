@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterStyleMap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
+ *  last change: $Author: sab $ $Date: 2000-10-25 16:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,8 +147,8 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     { "HeaderShadowFormat",         XML_NAMESPACE_STYLE,    sXML_shadow,                    XML_TYPE_TEXT_SHADOW,   CTF_PM_HEADERFLAG },
     { "HeaderBackColor",            XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_COLORTRANSPARENT | MID_FLAG_MULTI_PROPERTY,    CTF_PM_HEADERFLAG },
     { "HeaderBackTransparent",      XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_ISTRANSPARENT | MID_FLAG_MERGE_ATTRIBUTE,      CTF_PM_HEADERFLAG },
-    { "HeaderBackGraphicLocation",  XML_NAMESPACE_STYLE,    sXML_position,                  XML_TYPE_BUILDIN_CMP_ONLY,                              CTF_PM_HEADERGRAPHICPOSITION },
-    { "HeaderBackGraphicFilter",    XML_NAMESPACE_STYLE,    sXML_filter_name,               XML_TYPE_STRING,                                        CTF_PM_HEADERGRAPHICFILTER },
+    { "HeaderBackGraphicLocation",  XML_NAMESPACE_STYLE,    sXML_position,                  XML_TYPE_BUILDIN_CMP_ONLY | MID_FLAG_SPECIAL_ITEM,      CTF_PM_HEADERGRAPHICPOSITION },
+    { "HeaderBackGraphicFilter",    XML_NAMESPACE_STYLE,    sXML_filter_name,               XML_TYPE_STRING | MID_FLAG_SPECIAL_ITEM,                CTF_PM_HEADERGRAPHICFILTER },
     { "HeaderBackGraphicURL",       XML_NAMESPACE_STYLE,    sXML_background_image,          XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM,                CTF_PM_HEADERGRAPHICURL },
 // footer
     { "FooterHeight",               XML_NAMESPACE_SVG,      sXML_height,                    XML_TYPE_MEASURE,       CTF_PM_FOOTERHEIGHT },
@@ -175,8 +175,8 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     { "FooterShadowFormat",         XML_NAMESPACE_STYLE,    sXML_shadow,                    XML_TYPE_TEXT_SHADOW,   CTF_PM_FOOTERFLAG },
     { "FooterBackColor",            XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_COLORTRANSPARENT | MID_FLAG_MULTI_PROPERTY,    CTF_PM_FOOTERFLAG },
     { "FooterBackTransparent",      XML_NAMESPACE_FO,       sXML_background_color,          XML_TYPE_ISTRANSPARENT | MID_FLAG_MERGE_ATTRIBUTE,      CTF_PM_FOOTERFLAG },
-    { "FooterBackGraphicLocation",  XML_NAMESPACE_STYLE,    sXML_position,                  XML_TYPE_BUILDIN_CMP_ONLY,                              CTF_PM_FOOTERGRAPHICPOSITION },
-    { "FooterBackGraphicFilter",    XML_NAMESPACE_STYLE,    sXML_filter_name,               XML_TYPE_STRING,                                        CTF_PM_FOOTERGRAPHICFILTER },
+    { "FooterBackGraphicLocation",  XML_NAMESPACE_STYLE,    sXML_position,                  XML_TYPE_BUILDIN_CMP_ONLY | MID_FLAG_SPECIAL_ITEM,      CTF_PM_FOOTERGRAPHICPOSITION },
+    { "FooterBackGraphicFilter",    XML_NAMESPACE_STYLE,    sXML_filter_name,               XML_TYPE_STRING | MID_FLAG_SPECIAL_ITEM,                CTF_PM_FOOTERGRAPHICFILTER },
     { "FooterBackGraphicURL",       XML_NAMESPACE_STYLE,    sXML_background_image,          XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM,                CTF_PM_FOOTERGRAPHICURL },
     { 0L }
 };
