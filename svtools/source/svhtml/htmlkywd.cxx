@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlkywd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:59:05 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 16:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-
-#include <segmentc.hxx>
 
 #include "svparser.hxx"
 #include "htmlkywd.hxx"
