@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-20 12:59:37 $
+#   last change: $Author: obo $ $Date: 2004-11-15 15:15:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ IDLFILES = \
     LocalHierarchyBrowser.idl	\
     DataImporter.idl		\
     LocalDataImporter.idl	\
+    LayerFilter.idl	\
     LayerUpdateMerger.idl	\
     Importer.idl			\
     MergeImporter.idl		\
