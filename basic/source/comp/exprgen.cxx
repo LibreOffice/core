@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exprgen.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:33:10 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:53:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,9 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
                     (aVar.pDef->IsGlobal() ? _FIND_G : _FIND);
         }
 
+        if( eOp == _FIND && pGen->GetParser()->bClassModule )
+            eOp = _FIND_CM;
+
         for( SbiExprNode* p = this; p; p = p->aVar.pNext )
         {
             if( p == this && pWithParent != NULL )
@@ -178,7 +181,7 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
 void SbiExprNode::GenElement( SbiOpcode eOp )
 {
 #ifndef PRODUCT
-    if( (eOp < _RTL || eOp > _CALLC) && eOp != _FIND_G )
+    if( (eOp < _RTL || eOp > _CALLC) && eOp != _FIND_G && eOp != _FIND_CM )
         pGen->GetParser()->Error( SbERR_INTERNAL_ERROR, "Opcode" );
 #endif
     SbiSymDef* pDef = aVar.pDef;
