@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:02:29 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:17:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,6 +620,8 @@ UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< 
         case FormComponentType::PATTERNFIELD:   nResId = RID_STR_PATTERNFIELD_CLASSNAME;    break;
         case FormComponentType::IMAGECONTROL:   nResId = RID_STR_IMAGECONTROL_CLASSNAME;    break;
         case FormComponentType::HIDDENCONTROL:  nResId = RID_STR_HIDDEN_CLASSNAME;      break;
+        case FormComponentType::SCROLLBAR:      nResId = RID_STR_CLASSNAME_SCROLLBAR;   break;
+        case FormComponentType::SPINBUTTON:     nResId = RID_STR_CLASSNAME_SPINBUTTON;  break;
 
         case FormComponentType::TEXTFIELD:
             nResId = RID_STR_EDIT_CLASSNAME;
