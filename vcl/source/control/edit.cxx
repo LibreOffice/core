@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mt $ $Date: 2001-02-27 12:32:45 $
+ *  last change: $Author: mt $ $Date: 2001-03-06 16:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,10 @@
 #endif
 #ifndef _SV_EDIT_HXX
 #include <edit.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <svapp.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
@@ -2132,7 +2136,9 @@ void Edit::Copy()
         if ( xClipboard.is() )
         {
             TextDataObject* pDataObj = new TextDataObject( GetSelected() );
+            const sal_uInt32 nRef = Application::ReleaseSolarMutex();
             xClipboard->setContents( pDataObj, NULL );
+            Application::AcquireSolarMutex( nRef );
         }
     }
 }
