@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:06:45 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,9 +507,10 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 pWrtShell->SetRedlineMode( nMode );
             }
             break;
+        case FN_MAILMERGE_SENDMAIL_CHILDWINDOW:
         case FN_REDLINE_ACCEPT:
-            GetViewFrame()->ToggleChildWindow(FN_REDLINE_ACCEPT);
-            break;
+            GetViewFrame()->ToggleChildWindow(nSlot);
+        break;
 
         case SID_DOCUMENT_COMPARE:
         case SID_DOCUMENT_MERGE:
@@ -547,8 +548,9 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         }
         break;
         case FN_SYNC_LABELS:
-            GetViewFrame()->ShowChildWindow(FN_SYNC_LABELS, TRUE);
-            break;
+        case FN_MAILMERGE_CHILDWINDOW:
+            GetViewFrame()->ShowChildWindow(nSlot, TRUE);
+        break;
         case FN_ESCAPE:
         {
             if ( pWrtShell->HasDrawView() && pWrtShell->GetDrawView()->IsDragObj() )
