@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-12 15:54:54 $
+ *  last change: $Author: jp $ $Date: 2001-10-16 07:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,16 +118,6 @@
 #include "lboxctrl.hrc"
 
 class SvxPopupWindowListBox;
-
-#define A2S(x)  String::CreateFromAscii(x)
-
-/////////////////////////////////////////////////////////////////
-
-static void ReleaseTbxBtn_Impl( ToolBox &rBox, const Point &rPos )
-{
-    MouseEvent      aMEvt( rPos, 1, 0, 0, 0 );
-    rBox.Tracking( TrackingEvent( aMEvt, ENDTRACK_END ) );
-}
 
 /////////////////////////////////////////////////////////////////
 
@@ -285,7 +275,7 @@ void SvxListBoxControl::Impl_SetInfo( USHORT nCount )
 {
     DBG_ASSERT( pPopupWin, "NULL pointer, PopupWindow missing" );
     String aText( aActionStr );
-    aText.SearchAndReplaceAll( A2S("$(ARG1)"), String::CreateFromInt32( nCount ) );
+    aText.SearchAndReplaceAllAscii( "$(ARG1)", String::CreateFromInt32( nCount ) );
     pPopupWin->GetInfo().SetText( aText );
 }
 
@@ -359,7 +349,14 @@ SfxPopupWindow* SvxUndoRedoControl::CreatePopupWindow()
         Rectangle aItemRect( rBox.GetItemRect( nId ) );
         aItemRect.Bottom() += aItemRect.GetHeight() - 2;
 
-        ReleaseTbxBtn_Impl( rBox, rBox.GetItemRect( nId ).TopLeft() );
+        {
+            MouseEvent aMEvt( aItemRect.TopLeft(), 1, 0, 0, 0 );
+            Link aSave( rBox.GetSelectHdl() );
+            rBox.SetSelectHdl( Link() );
+            rBox.Tracking( TrackingEvent( aMEvt, ENDTRACK_END ) );
+            rBox.SetSelectHdl( aSave );
+        }
+
         pPopupWin->StartPopupMode( aItemRect );
         pPopupWin->StartSelection();
     }
