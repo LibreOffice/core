@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-09 06:53:37 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ QueryBox MSG_QUERY_LOAD_TEMPLATE
     MESSAGE[ arabic ] = "αΗ ΚΚΨΗΘή ήζΗαΘ ΚδΣνή εΠΗ ΗαγΣΚδΟ γΪ ΗαήζΗαΘ ΗαΝΗανΙ ΗαΞΗΥΙ Θί. εα ΚΡνΟ ΚΨΘνή ΗαήζΗαΘ ΗαΝΗανΙ ΗαΞΗΥΙ Θί Ϊαμ εΠΗ ΗαγΣΚδΟΏ";
     MESSAGE[ dutch ] = "De sjablonen bij dit document komen niet overeen met uw actuele sjablonen. Wilt u dat uw actuele sjablonen op dit documentworden toegepast?";
     MESSAGE[ chinese_simplified ] = "ΥβΈφΞΔµµµΔΈρΚ½ΡωΚ½ÒΡΎ­±»ΈόΈΔ΅£\nΔϊÒªΣΓµ±Η°µΔΠΒΡωΚ½ΐ΄Έ²Π΄ΥβΈφΞΔµµΒπ£Ώ";
-    MESSAGE[ greek ] = "Τα πρότυπα μορφής αυτού του εγγράφου δεν συμπίπτουν με το τρέχον πρότυπο. Θέλετε να εφαρμοστούν τα τρέχων πρότυπα σε αυτό το έγγραφο;";
+    MESSAGE[ greek ] = "Τα πρότυπα μορφοποίησης αυτού του εγγράφου δεν συμπίπτουν με τα τρέχοντα πρότυπα. Να εφαρμοστούν τα πρότυπα αυτά στο έγγραφο;";
     MESSAGE[ korean ] = "ΐΜ Ή®Ό­ΐΗ Ό­½Δ ΐ―ΗόΐΊ Ηφΐη ΐ―Ηό°ϊ ΐΟΔ΅ΗΟΑφ ΎΚ½ΐ΄Ο΄Ω. Ηφΐη ΐ―Ηόΐ» ΐΜ Ή®Ό­Ώ΅ ΐϋΏλΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     MESSAGE[ turkish ] = "Bu belgenin biηimleri, yόrόrlόkteki biηimlerle φrtόώmόyor. Yόrόrlόkteki biηimler bu belgenize uygulansύn mύ?";
     MESSAGE[ language_user1 ] = " ";
@@ -373,7 +373,7 @@ String STR_PRINT_STYLES_HEADER
     Text[ arabic ] = "δγΗΠΜ ααΚδΣνή έν ";
     Text[ dutch ] = "Opmaakprofielen in  ";
     Text[ chinese_simplified ] = "ΈρΚ½ΡωΚ½ΤΪ ";
-    Text[ greek ] = "Πρότυπα μορφοποίησης σε ";
+    Text[ greek ] = "Πρότυπα μορφοποίησης στο  ";
     Text[ korean ] = "Ό­½Δ ΐ―Ηό ";
     Text[ turkish ] = "Biηimler: ";
     Text[ language_user1 ] = " ";
@@ -521,7 +521,7 @@ InfoBox MSG_CANT_OPEN_TEMPLATE
     Message[ arabic ] = "αΗ νγίδ έΚΝ ήΗαΘ ΗαγΣΚδΟ.";
     Message[ dutch ] = "De documentsjabloon kan niet worden geopend.";
     Message[ chinese_simplified ] = "Ξή·¨΄ςΏªΞΔΌώΡωΚ½΅΅";
-    Message[ greek ] = "Δεν ήταν δυνατόν να ανοιχθεί το πρότυπο εγγράφου.";
+    Message[ greek ] = "Δεν ήταν δυνατόν να ανοιχθεί το πρότυπο του εγγράφου.";
     Message[ korean ] = "Ή®Ό­ΐΗ Ό­½Δ ΖΔΐΟΐ» Ώ­Αφ ΈψΗί½ΐ΄Ο΄Ω.";
     Message[ turkish ] = "Belge ώablonu aηύlamύyor.";
     Message[ language_user1 ] = " ";
@@ -607,7 +607,7 @@ String STR_TEMPLATE_FILTER
     Text[ arabic ] = "ήζΗαΘ γΣΚδΟ";
     Text[ dutch ] = "Sjablonen";
     Text[ chinese_simplified ] = "ΞΔµµΡωΚ½";
-    Text[ greek ] = "Πρότυπα εγγράφων";
+    Text[ greek ] = "Πρότυπα εγγράφου";
     Text[ korean ] = "Ή®Ό­ Ό­½Δ ΖΔΐΟ";
     Text[ turkish ] = "Belge ώablonlarύ";
     Text[ language_user1 ] = " ";
@@ -707,7 +707,7 @@ ErrorBox MSG_ERROR_RESCAN
     Message [ finnish ] = "Pδivityksiδ ei voitu tallentaa." ;
     Message [ danish ] = "Det var ikke muligt at gemme opdateringen." ;
     Message [ french ] = "Impossible d'enregistrer les actualisations !" ;
-    Message [ swedish ] = "Uppdateringen kunde inte sparas." ;
+    Message [ swedish ] = "Det gick inte att spara uppdateringen." ;
     Message [ dutch ] = "De wijzigingen kunnen niet worden opgeslagen." ;
     Message [ spanish ] = "No se pudieron guardar las actualizaciones." ;
     Message [ english_us ] = "The updates could not be saved." ;
@@ -798,7 +798,7 @@ ErrorBox MSG_ERROR_RENAME_TEMPLATE_REGION
     Message [ swedish ] = "Fel vid namnδndring pε mallomrεde." ;
     Message [ dutch ] = "Fout bij de naamsverandering van het bereik." ;
     Message [ spanish ] = "Error al cambiar el nombre del αrea." ;
-    Message [ english_us ] = "Error renaming template catagory." ;
+    Message [ english_us ] = "Error renaming template category." ;
     Message[ chinese_simplified ] = "ΦΨΓόΓϋΗψΣςΚ±·ΆΙϊ΄νΞσ΅£";
     Message[ russian ] = "Ξψθακΰ οπθ οεπεθμενξβΰνθθ κΰςεγξπθθ.";
     Message[ polish ] = "B³Ήd przy zmianie nazwy obszaru.";
