@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:45 $
+ *  last change: $Author: sj $ $Date: 2000-10-13 09:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4325,7 +4325,10 @@ void PPTWriter::ImplWritePage( SolverContainer& aSolverContainer, PageType ePage
                 for ( nAdjCount = 0; nAdjCount < aAdjustmentList.Count(); nAdjCount++ )
                     mp_EscherEx->AddOpt( _Escher_Prop_adjustValue + nAdjCount, (sal_uInt32)aAdjustmentList.GetObject( nAdjCount ) );
 
-                ImplWriteFillBundle( TRUE );
+                if ( bPolyLine || bOpenBezier )
+                    ImplWriteLineBundle( FALSE );
+                else
+                    ImplWriteFillBundle( TRUE );
                 ImplWriteTextBundle();
             }
             else if ( mType == "drawing.Rectangle" )
