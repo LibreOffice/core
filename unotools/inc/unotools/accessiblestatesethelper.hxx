@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-23 13:23:25 $
+ *  last change: $Author: sab $ $Date: 2002-01-30 15:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,13 +82,14 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
 #endif
-#include <list>
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
 #include <cppuhelper/implbase1.hxx>
 #include <unotools/servicehelper.hxx>
+
+class AccessibleStateSetHelperImpl;
 
 //=========================================================================
 //= XAccessibleStateSet helper classes
@@ -111,7 +112,9 @@ class AccessibleStateSetHelper
 public:
     //=====  internal  ========================================================
     AccessibleStateSetHelper ();
+protected:
     virtual ~AccessibleStateSetHelper   (void);
+public:
 
     //=====  XAccessibleStateSet  ==============================================
 
@@ -179,8 +182,8 @@ protected:
     ::vos::OMutex maMutex;
 
 private:
-    /// List of all currently visible children.
-    ::std::list< sal_Int16 >    maStates;
+    /// The implementation of this helper interface.
+    AccessibleStateSetHelperImpl*   mpHelperImpl;
 };
 
 //.........................................................................

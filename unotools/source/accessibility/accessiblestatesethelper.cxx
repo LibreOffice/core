@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-23 13:24:31 $
+ *  last change: $Author: sab $ $Date: 2002-01-30 15:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,21 +65,72 @@
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
 #endif
+#include <map>
 
 using namespace ::utl;
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
 
+class AccessibleStateSetHelperImpl
+{
+public:
+    AccessibleStateSetHelperImpl();
+    ~AccessibleStateSetHelperImpl();
+
+    sal_Bool IsEmpty ()
+        throw (uno::RuntimeException);
+    sal_Bool Contains (sal_Int16 aState)
+        throw (uno::RuntimeException);
+    void AddState(sal_Int16 aState)
+        throw (uno::RuntimeException);
+
+private:
+    std::map<sal_Int16, sal_Bool> maStates;
+};
+
+AccessibleStateSetHelperImpl::AccessibleStateSetHelperImpl()
+{
+}
+
+AccessibleStateSetHelperImpl::~AccessibleStateSetHelperImpl()
+{
+}
+
+sal_Bool AccessibleStateSetHelperImpl::IsEmpty ()
+    throw (uno::RuntimeException)
+{
+    return maStates.empty();
+}
+
+sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState)
+    throw (uno::RuntimeException)
+{
+    std::map<sal_Int16, sal_Bool>::const_iterator aItr(maStates.find(aState));
+    return (aItr != maStates.end());
+}
+
+void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
+    throw (uno::RuntimeException)
+{
+    std::pair< sal_Int16, sal_Bool > aStatePair;
+    aStatePair.first = aState;
+    aStatePair.second = sal_True;
+    maStates.insert(aStatePair);
+}
+
 //=====  internal  ============================================================
 
 AccessibleStateSetHelper::AccessibleStateSetHelper ()
+    : mpHelperImpl(NULL)
 {
+    mpHelperImpl = new AccessibleStateSetHelperImpl();
 }
 
 
 AccessibleStateSetHelper::~AccessibleStateSetHelper(void)
 {
+    delete mpHelperImpl;
 }
 
 //=====  XAccessibleStateSet  ==============================================
@@ -93,7 +144,8 @@ AccessibleStateSetHelper::~AccessibleStateSetHelper(void)
 sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
     throw (uno::RuntimeException)
 {
-    return maStates.empty();
+    ::vos::OGuard aGuard (maMutex);
+    return mpHelperImpl->IsEmpty();
 }
 
     /** Checks if the given state is a member of the state set of this
@@ -110,14 +162,8 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
 sal_Bool SAL_CALL AccessibleStateSetHelper::contains (sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    std::list<sal_Int16>::const_iterator aItr = maStates.begin();
-    sal_Bool bFound(sal_False);
-    while ((aItr != maStates.end()) && !bFound)
-    {
-        bFound = (*aItr == aState);
-        aItr++;
-    }
-    return bFound;
+    ::vos::OGuard aGuard (maMutex);
+    return mpHelperImpl->Contains(aState);
 }
 
     /** Checks if all of the given states are in this object's state
@@ -139,13 +185,14 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
     (const uno::Sequence<sal_Int16>& rStateSet)
     throw (uno::RuntimeException)
 {
+    ::vos::OGuard aGuard (maMutex);
     sal_Int32 nCount(rStateSet.getLength());
     const sal_Int16* pStates = rStateSet.getConstArray();
     sal_Int32 i = 0;
     sal_Bool bFound(sal_True);
     while (i < nCount)
     {
-        bFound = contains(pStates[i]);
+        bFound = mpHelperImpl->Contains(pStates[i]);
         i++;
     }
     return bFound;
@@ -154,7 +201,7 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
 void AccessibleStateSetHelper::AddState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    maStates.push_back(aState);
+    mpHelperImpl->AddState(aState);
 }
 
 
@@ -164,6 +211,7 @@ uno::Sequence< ::com::sun::star::uno::Type>
     AccessibleStateSetHelper::getTypes (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OGuard aGuard (maMutex);
     const ::com::sun::star::uno::Type aTypeList[] = {
         ::getCppuType((const uno::Reference<
             XAccessibleStateSet>*)0),
@@ -179,6 +227,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     AccessibleStateSetHelper::getImplementationId (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
+    ::vos::OGuard aGuard (maMutex);
     static uno::Sequence<sal_Int8> aId;
     if (aId.getLength() == 0)
     {
