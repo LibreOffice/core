@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-11 14:04:40 $
+ *  last change: $Author: ama $ $Date: 2002-04-24 15:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1155,6 +1155,15 @@ void SwTabFrm::MakeAll()
                 bONECalcLowers = FALSE;
             }
             continue;
+        }
+
+        if ( bCalcLowers && IsValid() )
+        {
+            ::lcl_Recalc( this, 0, aNotify );
+            bLowersFormatted = TRUE;
+            bCalcLowers = FALSE;
+            if( !IsValid() )
+                continue;
         }
 
         //Der erste Versuch muss natuerlich das Aufspalten der Tabelle sein.
