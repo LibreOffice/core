@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewutil.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:39:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ BOOL ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
 
 //------------------------------------------------------------------
 
-ScUpdateRect::ScUpdateRect( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 )
+ScUpdateRect::ScUpdateRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
 {
     PutInOrder( nX1, nX2 );
     PutInOrder( nY1, nY2 );
@@ -303,7 +303,7 @@ ScUpdateRect::ScUpdateRect( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 )
     nOldEndY = nY2;
 }
 
-void ScUpdateRect::SetNew( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 )
+void ScUpdateRect::SetNew( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
 {
     PutInOrder( nX1, nX2 );
     PutInOrder( nY1, nY2 );
@@ -314,7 +314,7 @@ void ScUpdateRect::SetNew( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 )
     nNewEndY = nY2;
 }
 
-BOOL ScUpdateRect::GetDiff( USHORT& rX1, USHORT& rY1, USHORT& rX2, USHORT& rY2 )
+BOOL ScUpdateRect::GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
 {
     if ( nNewStartX == nOldStartX && nNewEndX == nOldEndX &&
          nNewStartY == nOldStartY && nNewEndY == nOldEndY )
@@ -361,7 +361,7 @@ BOOL ScUpdateRect::GetDiff( USHORT& rX1, USHORT& rY1, USHORT& rX2, USHORT& rY2 )
     return TRUE;
 }
 
-BOOL ScUpdateRect::GetXorDiff( USHORT& rX1, USHORT& rY1, USHORT& rX2, USHORT& rY2, BOOL& rCont )
+BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, BOOL& rCont )
 {
     rCont = FALSE;
 
@@ -502,7 +502,7 @@ BOOL ScUpdateRect::GetXorDiff( USHORT& rX1, USHORT& rY1, USHORT& rX2, USHORT& rY
     return TRUE;
 }
 
-void ScUpdateRect::GetContDiff( USHORT& rX1, USHORT& rY1, USHORT& rX2, USHORT& rY2 )
+void ScUpdateRect::GetContDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
 {
     rX1 = nContX1;
     rY1 = nContY1;
