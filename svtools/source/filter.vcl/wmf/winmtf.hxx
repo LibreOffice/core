@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-22 14:41:18 $
+ *  last change: $Author: sj $ $Date: 2001-09-28 08:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,6 +403,25 @@ struct WinMtfLineStyle
 
 // -----------------------------------------------------------------------------
 
+struct XForm
+{
+    float   eM11;
+    float   eM12;
+    float   eM21;
+    float   eM22;
+    float   eDx;
+    float   eDy;
+    XForm()
+    {
+        eM11 =  eM22 = 1.0f;
+        eDx = eDy = eM12 = eM21 = 0.0f;
+    };
+
+    friend SvStream& operator>>( SvStream& rIn, XForm& rXForm );
+};
+
+// -----------------------------------------------------------------------------
+
 struct SaveStruct
 {
     UINT32              nBkMode;
@@ -420,6 +439,7 @@ struct SaveStruct
     sal_Bool            bRecordPath;
     WinMtfPathObj       aPathObj;
     WinMtfClipPath      aClipPath;
+    XForm               aXForm;
 };
 
 DECLARE_STACK( SaveStack, SaveStruct* );
@@ -484,25 +504,6 @@ struct GDIObj
 
 // -----------------------------------------------------------------------------
 
-struct XForm
-{
-    float   eM11;
-    float   eM12;
-    float   eM21;
-    float   eM22;
-    float   eDx;
-    float   eDy;
-    XForm()
-    {
-        eM11 = eM12 = eM21 = eM22 = 1.0f;
-        eDx = eDx = 0.0f;
-    };
-
-    friend SvStream& operator>>( SvStream& rIn, XForm& rXForm );
-};
-
-// -----------------------------------------------------------------------------
-
 class WinMtfOutput
 {
 
@@ -512,13 +513,13 @@ class WinMtfOutput
         WinMtfFillStyle     maLatestFillStyle;
 
         GDIObj**            mpGDIObj;
-        UINT32              mnEntrys;
-        UINT32              mnActTextAlign;         // Aktuelle Textausrichtung (im MS-Windows-Format)
-        UINT32              mnBkMode;               // Aktueller Modus, wie der Hintergrund uebermalt
+        sal_uInt32          mnEntrys;
+        sal_uInt32          mnActTextAlign;         // Aktuelle Textausrichtung (im MS-Windows-Format)
+        sal_uInt32          mnBkMode;               // Aktueller Modus, wie der Hintergrund uebermalt
         Point               maActPos;               // wird. (ist gleich TRANSPARENT oder nicht)
 
 
-        BOOL                mbFontChanged;
+        sal_Bool            mbFontChanged;
         Font                maFont;
         WinMtfLineStyle     maLineStyle;
         WinMtfFillStyle     maFillStyle;
@@ -526,12 +527,13 @@ class WinMtfOutput
         Color               maTextColor;
         Color               maBkColor;
 
-        UINT32              mnRop;
+        sal_uInt32          mnRop;
         RasterOp            meRasterOp;
         BOOL                mbNopMode;
 
         SaveStack           maSaveStack;                // Stapel fuer aktuelle Zustaende bzw. DCs (Drawing-Contexts)
 
+        sal_uInt32          mnMapMode;
         XForm               maXForm;
         long                mnDevOrgX, mnDevOrgY;
         long                mnDevWidth, mnDevHeight;
@@ -566,6 +568,7 @@ class WinMtfOutput
         void                SetWinExt( const Size& rSize );
         void                ScaleWinExt( double fX, double fY );
 
+        void                SetMapMode( sal_uInt32 mnMapMode );
         void                SetWorldTransform( const XForm& rXForm );
         void                ModifyWorldTransform( const XForm& rXForm, UINT32 nMode );
 

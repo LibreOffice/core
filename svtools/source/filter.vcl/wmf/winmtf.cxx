@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: avy $ $Date: 2001-03-30 09:40:56 $
+ *  last change: $Author: sj $ $Date: 2001-09-28 08:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,10 +335,23 @@ Color WinMtf::ReadColor()
 
 Point WinMtfOutput::ImplMap( const Point& rPt )
 {
-    if( mnWinExtX && mnWinExtY )
+    if ( mnWinExtX && mnWinExtY )
     {
-        return Point( FRound( ( ( (double) rPt.X() - mnWinOrgX ) * mnDevWidth / mnWinExtX + mnDevOrgX ) * maXForm.eM11 ),
-                      FRound( ( ( (double) rPt.Y() - mnWinOrgY ) * mnDevHeight / mnWinExtY + mnDevOrgY ) * maXForm.eM12 ) );
+        double fX2, fX = rPt.X();
+        double fY2, fY = rPt.Y();
+
+        fX -= mnWinOrgX;
+        fY -= mnWinOrgY;
+        fX /= mnWinExtX;
+        fY /= mnWinExtY;
+        fX2 = fX * maXForm.eM11 + fY * maXForm.eM21 + maXForm.eDx;
+        fY2 = fX * maXForm.eM12 + fY * maXForm.eM22 + maXForm.eDy;
+        fX2 *= mnDevWidth;
+        fY2 *= mnDevHeight;
+        fX2 += mnDevOrgX;
+        fY2 += mnDevOrgY;
+
+        return Point( FRound( fX2 ), FRound( fY2 ) );
     }
     else
         return Point();
@@ -348,10 +361,19 @@ Point WinMtfOutput::ImplMap( const Point& rPt )
 
 Size WinMtfOutput::ImplMap( const Size& rSz )
 {
-    if( mnWinExtX && mnWinExtY )
+    if ( mnWinExtX && mnWinExtY )
     {
-        return Size( FRound( ( (double) rSz.Width() * mnDevWidth / mnWinExtX ) * maXForm.eM11 ),
-                     FRound( ( (double) rSz.Height() * mnDevHeight / mnWinExtY ) * maXForm.eM12 ) );
+        double fWidth = rSz.Width();
+        double fHeight = rSz.Height();
+
+        fWidth /= mnWinExtX;
+        fHeight /= mnWinExtY;
+        fWidth *= maXForm.eM11;
+        fHeight *= maXForm.eM22;
+        fWidth *= mnDevWidth;
+        fHeight *= mnDevHeight;
+
+        return Size( FRound( fWidth ), FRound( fHeight ) );
     }
     else
         return Size();
@@ -713,8 +735,9 @@ WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
     mnActTextAlign      ( TA_LEFT | TA_TOP | TA_NOUPDATECP ),
     mnBkMode            ( OPAQUE ),
     maBkColor           ( COL_WHITE ),
-    mbNopMode           ( FALSE ),
-    mbFontChanged       ( FALSE ),
+    mnMapMode           ( MM_ANISOTROPIC ),
+    mbNopMode           ( sal_False ),
+    mbFontChanged       ( sal_False ),
     maActPos            ( Point() ),
     meRasterOp          ( ROP_OVERPAINT ),
     mnEntrys            ( 16 )
@@ -1562,6 +1585,13 @@ void WinMtfOutput::ScaleWinExt( double fX, double fY )
 
 //-----------------------------------------------------------------------------------
 
+void WinMtfOutput::SetMapMode( sal_uInt32 nMapMode )
+{
+    mnMapMode = nMapMode;
+}
+
+//-----------------------------------------------------------------------------------
+
 void WinMtfOutput::SetWorldTransform( const XForm& rXForm )
 {
     maXForm.eM11 = rXForm.eM11;
@@ -1608,6 +1638,7 @@ void WinMtfOutput::Push( BOOL bExtSet )
     pSave->aTextColor = maTextColor;
     pSave->aFont = maFont;
     pSave->bFontChanged = mbFontChanged;
+    pSave->aXForm = maXForm;
 
     if ( bExtSet )
     {
@@ -1660,6 +1691,7 @@ void WinMtfOutput::Pop()
         maTextColor = pSave->aTextColor;
         maFont = pSave->aFont;
         mbFontChanged = pSave->bFontChanged;
+        maXForm = pSave->aXForm;
 
         if ( pSave->bWinExtSet )
         {

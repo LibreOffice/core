@@ -2,9 +2,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-22 14:40:59 $
+ *  last change: $Author: sj $ $Date: 2001-09-28 08:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,10 +413,9 @@ BOOL EnhWMFReader::ReadEnhWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMeta
 
             case EMR_SETMAPMODE :
             {
-                UINT32 nMapMode;
+                sal_uInt32 nMapMode;
                 *pWMF >> nMapMode;
-                if ( nMapMode )
-                    break;
+                pOut->SetMapMode( nMapMode );
             }
             break;
 
