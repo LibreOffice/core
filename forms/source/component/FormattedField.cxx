@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-26 11:19:37 $
+ *  last change: $Author: fs $ $Date: 2002-10-09 13:49:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,17 +538,29 @@ void OFormattedModel::fillProperties(
         DECL_IFACE_PROP2(CONTROLLABEL,  com::sun::star::beans::XPropertySet,BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
 
-        // der Supplier ist fuer uns nur read-only
-        ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATSSUPPLIER, com::sun::star::beans::PropertyAttribute::READONLY, 0);
+        // the supplier is readonly for us
+//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATSSUPPLIER, PropertyAttribute::READONLY, 0);
+            // remove this. The property does not need to be readonly anymore.
+            //
+            // The original idea why we made this readonly is that we change the supplier ourself when
+            // the form which we belong to is loaded, and then we use the supplier from the data source
+            // the for is bound to.
+            // But this does not contradict (like I originally thought) the possibility to change the
+            // formatter from outside as well. If it is changed when the form is not yet loaded,
+            // then we will overwrite this upon loading, anyway. If it is changed while the form
+            // is loaded, then this does no harm, too: The format is preserved (the aggregate cares for this),
+            // and upon unloading, we restore the old formatter.
+            //
+            // 84794 - 2002-10-09 - fs@openoffice.org
 
         // TreatAsNumeric nicht transient : wir wollen es an der UI anbinden (ist noetig, um dem EffectiveDefault
         // - der kann Text oder Zahl sein - einen Sinn zu geben)
-        ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TREATASNUMERIC, 0, com::sun::star::beans::PropertyAttribute::TRANSIENT);
+        ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TREATASNUMERIC, 0, PropertyAttribute::TRANSIENT);
         // same for FormatKey
         // (though the paragraph above for the TreatAsNumeric does not hold anymore - we do not have an UI for this.
         // But we have for the format key ...)
         // 25.06.2001 - 87862 - frank.schoenheit@sun.com
-        ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATKEY, 0, com::sun::star::beans::PropertyAttribute::TRANSIENT);
+        ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATKEY, 0, PropertyAttribute::TRANSIENT);
 
         RemoveProperty(_rAggregateProps, PROPERTY_STRICTFORMAT);
             // no strict format property for formatted fields: it does not make sense, 'cause
@@ -608,7 +620,7 @@ Any OFormattedModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
     if (nHandle == PROPERTY_ID_FORMATSSUPPLIER)
     {
-        Reference<XNumberFormatsSupplier>  xSupplier = calcFormFormatsSupplier();
+        Reference<XNumberFormatsSupplier>  xSupplier = calcDefaultFormatsSupplier();
         return makeAny(xSupplier);
     }
     else
@@ -672,7 +684,7 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormatsSupplier() const
 
         m_xAggregateSet->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xSupplier;
     if (!xSupplier.is())
-        // testen, ob meine Parent-starform einen Formatter hat
+        // check if my parent form has a supplier
         xSupplier = calcFormFormatsSupplier();
 
     if (!xSupplier.is())
@@ -697,8 +709,8 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
     Reference<XForm>  xNextParentForm(xParent, UNO_QUERY);
     while (!xNextParentForm.is() && xParent.is())
     {
-        xParent         = Reference<XChild> (xParent->getParent(), UNO_QUERY);
-        xNextParentForm = Reference<XForm> (xParent, UNO_QUERY);
+        xParent         = xParent.query( xParent->getParent() );
+        xNextParentForm = xNextParentForm.query( xParent );
     }
 
     if (!xNextParentForm.is())
@@ -708,8 +720,8 @@ Reference<XNumberFormatsSupplier>  OFormattedModel::calcFormFormatsSupplier() co
     }
 
     // den FormatSupplier von meinem Vorfahren (falls der einen hat)
-        Reference<XRowSet>  xRowSet(xNextParentForm, UNO_QUERY);
-        Reference<XNumberFormatsSupplier>  xSupplier;
+    Reference< XRowSet > xRowSet( xNextParentForm, UNO_QUERY );
+    Reference< XNumberFormatsSupplier > xSupplier;
     if (xRowSet.is())
         xSupplier = getNumberFormats(getConnection(xRowSet), sal_True, m_xServiceFactory);
     return xSupplier;
