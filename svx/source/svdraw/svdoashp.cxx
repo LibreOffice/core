@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoashp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 09:49:06 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 11:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,6 @@
 #include "../customshapes/EnhancedCustomShapeTypeNames.hxx"
 #endif
 
-
 //      textitem.hxx        editdata.hxx
 #define ITEMID_COLOR        EE_CHAR_COLOR
 #define ITEMID_FONT         EE_CHAR_FONTINFO
@@ -188,6 +187,39 @@
 #include <svx/sdr/contact/viewcontactofsdrobjcustomshape.hxx>
 #endif
 
+// #i37011#
+#ifndef _SVX_XLNCLIT_HXX //autogen
+#include <xlnclit.hxx>
+#endif
+
+#ifndef _SVX_XLNTRIT_HXX
+#include <xlntrit.hxx>
+#endif
+
+#ifndef _SVX_XFLTRIT_HXX
+#include <xfltrit.hxx>
+#endif
+
+#ifndef _SVX_XFLCLIT_HXX
+#include <xflclit.hxx>
+#endif
+
+#ifndef _SVX_XFLGRIT_HXX
+#include <xflgrit.hxx>
+#endif
+
+#ifndef _SVX_XFLHTIT_HXX
+#include <xflhtit.hxx>
+#endif
+
+#ifndef _SVX_XBTMPIT_HXX
+#include <xbtmpit.hxx>
+#endif
+
+#ifndef _SV_BMPACC_HXX
+#include <vcl/bmpacc.hxx>
+#endif
+
 // #104018# replace macros above with type-safe methods
 inline double ImplTwipsToMM(double fVal) { return (fVal * (127.0 / 72.0)); }
 inline double ImplMMToTwips(double fVal) { return (fVal * (72.0 / 127.0)); }
@@ -202,6 +234,190 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::drafts::com::sun::star::drawing;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// #i37011# create a clone with all attributes changed to shadow attributes
+// and translation executed, too.
+SdrObject* ImpCreateShadowObjectClone(const SdrObject& rOriginal, const SfxItemSet& rOriginalSet)
+{
+    SdrObject* pRetval = 0L;
+    const sal_Bool bShadow(((SdrShadowItem&)rOriginalSet.Get(SDRATTR_SHADOW)).GetValue());
+
+    if(bShadow)
+    {
+        // create a shadow representing object
+        const sal_Int32 nXDist(((SdrShadowXDistItem&)(rOriginalSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
+        const sal_Int32 nYDist(((SdrShadowYDistItem&)(rOriginalSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
+        const Color aShadowColor(((SdrShadowColorItem&)(rOriginalSet.Get(SDRATTR_SHADOWCOLOR))).GetValue());
+        const sal_uInt16 nShadowTransparence(((SdrShadowTransparenceItem&)(rOriginalSet.Get(SDRATTR_SHADOWTRANSPARENCE))).GetValue());
+        pRetval = rOriginal.Clone();
+        DBG_ASSERT(pRetval, "ImpCreateShadowObjectClone: Could not clone object (!)");
+
+        // look for used stuff
+        SdrObjListIter aIterator(rOriginal);
+        sal_Bool bLineUsed(sal_False);
+        sal_Bool bAllFillUsed(sal_False);
+        sal_Bool bSolidFillUsed(sal_False);
+        sal_Bool bGradientFillUsed(sal_False);
+        sal_Bool bHatchFillUsed(sal_False);
+        sal_Bool bBitmapFillUsed(sal_False);
+
+        while(aIterator.IsMore())
+        {
+            SdrObject* pObj = aIterator.Next();
+            XFillStyle eFillStyle = ((XFillStyleItem&)(pObj->GetMergedItem(XATTR_FILLSTYLE))).GetValue();
+
+            if(!bLineUsed)
+            {
+                XLineStyle eLineStyle = ((XLineStyleItem&)(pObj->GetMergedItem(XATTR_LINESTYLE))).GetValue();
+
+                if(XLINE_NONE != eLineStyle)
+                {
+                    bLineUsed = sal_True;
+                }
+            }
+
+            if(!bAllFillUsed)
+            {
+                if(!bSolidFillUsed && XFILL_SOLID == eFillStyle)
+                {
+                    bSolidFillUsed = sal_True;
+                    bAllFillUsed = (bSolidFillUsed || bGradientFillUsed || bHatchFillUsed || bBitmapFillUsed);
+                }
+                if(!bGradientFillUsed && XFILL_GRADIENT == eFillStyle)
+                {
+                    bGradientFillUsed = sal_True;
+                    bAllFillUsed = (bSolidFillUsed || bGradientFillUsed || bHatchFillUsed || bBitmapFillUsed);
+                }
+                if(!bHatchFillUsed && XFILL_HATCH == eFillStyle)
+                {
+                    bHatchFillUsed = sal_True;
+                    bAllFillUsed = (bSolidFillUsed || bGradientFillUsed || bHatchFillUsed || bBitmapFillUsed);
+                }
+                if(!bBitmapFillUsed && XFILL_BITMAP == eFillStyle)
+                {
+                    bBitmapFillUsed = sal_True;
+                    bAllFillUsed = (bSolidFillUsed || bGradientFillUsed || bHatchFillUsed || bBitmapFillUsed);
+                }
+            }
+        }
+
+        // translate to shadow coordinates
+        pRetval->NbcMove(Size(nXDist, nYDist));
+
+        // set items as needed
+        SfxItemSet aTempSet(rOriginalSet);
+
+        // no shadow
+        aTempSet.Put(SdrShadowItem(sal_False));
+        aTempSet.Put(SdrShadowXDistItem(0L));
+        aTempSet.Put(SdrShadowYDistItem(0L));
+
+        // line color and transparence like shadow
+        if(bLineUsed)
+        {
+            aTempSet.Put(XLineColorItem(String(), aShadowColor));
+            aTempSet.Put(XLineTransparenceItem(nShadowTransparence));
+        }
+
+        // fill color and transparence like shadow
+        if(bSolidFillUsed)
+        {
+            aTempSet.Put(XFillColorItem(String(), aShadowColor));
+            aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
+        }
+
+        // gradient and transparence like shadow
+        if(bGradientFillUsed)
+        {
+            XGradient aGradient(((XFillGradientItem&)(rOriginalSet.Get(XATTR_FILLGRADIENT))).GetValue());
+            sal_uInt8 nStartLuminance(aGradient.GetStartColor().GetLuminance());
+            sal_uInt8 nEndLuminance(aGradient.GetEndColor().GetLuminance());
+
+            if(aGradient.GetStartIntens() != 100)
+            {
+                nStartLuminance = (sal_uInt8)(nStartLuminance * ((double)aGradient.GetStartIntens() / 100.0));
+            }
+
+            if(aGradient.GetEndIntens() != 100)
+            {
+                nEndLuminance = (sal_uInt8)(nEndLuminance * ((double)aGradient.GetEndIntens() / 100.0));
+            }
+
+            Color aStartColor(
+                (sal_uInt8)((nStartLuminance * aShadowColor.GetRed()) / 256),
+                (sal_uInt8)((nStartLuminance * aShadowColor.GetGreen()) / 256),
+                (sal_uInt8)((nStartLuminance * aShadowColor.GetBlue()) / 256));
+
+            Color aEndColor(
+                (sal_uInt8)((nEndLuminance * aShadowColor.GetRed()) / 256),
+                (sal_uInt8)((nEndLuminance * aShadowColor.GetGreen()) / 256),
+                (sal_uInt8)((nEndLuminance * aShadowColor.GetBlue()) / 256));
+
+            aGradient.SetStartColor(aStartColor);
+            aGradient.SetEndColor(aEndColor);
+            aTempSet.Put(XFillGradientItem(aTempSet.GetPool(), aGradient));
+            aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
+        }
+
+        // hatch and transparence like shadow
+        if(bHatchFillUsed)
+        {
+            XHatch aHatch(((XFillHatchItem&)(rOriginalSet.Get(XATTR_FILLHATCH))).GetValue());
+            aHatch.SetColor(aShadowColor);
+            aTempSet.Put(XFillHatchItem(aTempSet.GetPool(), aHatch));
+            aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
+        }
+
+        // bitmap and transparence like shadow
+        if(bBitmapFillUsed)
+        {
+            XOBitmap aFillBitmap(((XFillBitmapItem&)(rOriginalSet.Get(XATTR_FILLBITMAP))).GetValue());
+            Bitmap aSourceBitmap(aFillBitmap.GetBitmap());
+            BitmapReadAccess* pReadAccess = aSourceBitmap.AcquireReadAccess();
+
+            if(!aSourceBitmap.IsEmpty())
+            {
+                if(pReadAccess)
+                {
+                    Bitmap aDestBitmap(aSourceBitmap.GetSizePixel(), 24L);
+                    BitmapWriteAccess* pWriteAccess = aDestBitmap.AcquireWriteAccess();
+
+                    if(pWriteAccess)
+                    {
+                        for(sal_Int32 y(0L); y < pReadAccess->Height(); y++)
+                        {
+                            for(sal_Int32 x(0L); x < pReadAccess->Width(); x++)
+                            {
+                                sal_uInt16 nLuminance((sal_uInt16)pReadAccess->GetLuminance(y, x) + 1);
+                                const BitmapColor aDestColor(
+                                    (sal_uInt8)((nLuminance * (sal_uInt16)aShadowColor.GetRed()) >> 8L),
+                                    (sal_uInt8)((nLuminance * (sal_uInt16)aShadowColor.GetGreen()) >> 8L),
+                                    (sal_uInt8)((nLuminance * (sal_uInt16)aShadowColor.GetBlue()) >> 8L));
+                                pWriteAccess->SetPixel(y, x, aDestColor);
+                            }
+                        }
+
+                        aDestBitmap.ReleaseAccess(pWriteAccess);
+                        aFillBitmap.SetBitmap(aDestBitmap);
+                    }
+
+                    aSourceBitmap.ReleaseAccess(pReadAccess);
+                }
+            }
+
+            aTempSet.Put(XFillBitmapItem(aTempSet.GetPool(), aFillBitmap));
+            aTempSet.Put(XFillTransparenceItem(nShadowTransparence));
+        }
+
+        // set attributes and paint shadow object
+        pRetval->SetMergedItemSet(aTempSet);
+    }
+
+    return pRetval;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Reference< XCustomShapeEngine > SdrObjCustomShape::GetCustomShapeEngine( const SdrObjCustomShape* pCustomShape ) const
 {
@@ -241,6 +457,29 @@ const SdrObject* SdrObjCustomShape::GetSdrObjectFromCustomShape() const
                 ? GetSdrObjectFromXShape( mXRenderedCustomShape )
                 : NULL;
     return pRenderedCustomShape;
+}
+
+// #i37011# Shadow geometry creation
+const SdrObject* SdrObjCustomShape::GetSdrObjectShadowFromCustomShape() const
+{
+    if(!mpLastShadowGeometry)
+    {
+        const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
+        if(pSdrObject)
+        {
+            const SfxItemSet& rOriginalSet = GetObjectItemSet();
+            const sal_Bool bShadow(((SdrShadowItem&)rOriginalSet.Get( SDRATTR_SHADOW )).GetValue());
+
+            if(bShadow)
+            {
+                // create a clone with all attributes changed to shadow attributes
+                // and translation executed, too.
+                ((SdrObjCustomShape*)this)->mpLastShadowGeometry = ImpCreateShadowObjectClone(*pSdrObject, rOriginalSet);
+            }
+        }
+    }
+
+    return mpLastShadowGeometry;
 }
 
 const sal_Bool SdrObjCustomShape::IsTextPath() const
@@ -399,13 +638,16 @@ sdr::properties::BaseProperties* SdrObjCustomShape::CreateObjectSpecificProperti
 TYPEINIT1(SdrObjCustomShape,SdrTextObj);
 SdrObjCustomShape::SdrObjCustomShape() :
     SdrTextObj(),
-    fObjectRotation( 0.0 )
+    fObjectRotation( 0.0 ),
+    mpLastShadowGeometry(0L)
 {
     bTextFrame = TRUE;
 }
 
 SdrObjCustomShape::~SdrObjCustomShape()
 {
+    // delete buffered display geometry
+    InvalidateRenderGeometry();
 }
 
 void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
@@ -422,6 +664,44 @@ void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bShearAllowed     =FALSE;
     rInfo.bEdgeRadiusAllowed=FALSE;
     rInfo.bNoContortion     =TRUE;
+
+    // #i37011#
+    if ( mXRenderedCustomShape.is() )
+    {
+        const SdrObject* pRenderedCustomShape = GetSdrObjectFromXShape( mXRenderedCustomShape );
+        if ( pRenderedCustomShape )
+        {
+            // #i37262#
+            // Iterate self over the contained objects, since there are combinations of
+            // polygon and curve objects. In that case, aInfo.bCanConvToPath and
+            // aInfo.bCanConvToPoly would be false. What is needed here is an or, not an and.
+            SdrObjListIter aIterator(*pRenderedCustomShape);
+            while(aIterator.IsMore())
+            {
+                SdrObject* pCandidate = aIterator.Next();
+                SdrObjTransformInfoRec aInfo;
+                pCandidate->TakeObjInfo(aInfo);
+
+                // set path and poly conversion if one is possible since
+                // this object will first be broken
+                const sal_Bool bCanConvToPathOrPoly(aInfo.bCanConvToPath || aInfo.bCanConvToPoly);
+                if(rInfo.bCanConvToPath != bCanConvToPathOrPoly)
+                {
+                    rInfo.bCanConvToPath = bCanConvToPathOrPoly;
+                }
+
+                if(rInfo.bCanConvToPoly != bCanConvToPathOrPoly)
+                {
+                    rInfo.bCanConvToPoly = bCanConvToPathOrPoly;
+                }
+
+                if(rInfo.bCanConvToContour != aInfo.bCanConvToContour)
+                {
+                    rInfo.bCanConvToContour = aInfo.bCanConvToContour;
+                }
+            }
+        }
+    }
 }
 
 UINT16 SdrObjCustomShape::GetObjIdentifier() const
@@ -443,7 +723,20 @@ void SdrObjCustomShape::RecalcBoundRect()
 
     const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
     if ( pSdrObject )
+    {
         aOutRect = pSdrObject->GetCurrentBoundRect();
+
+        // #i37011#
+        if(pSdrObject->ISA(SdrObjGroup))
+        {
+            const sal_Bool bShadow(((SdrShadowItem&)GetObjectItem( SDRATTR_SHADOW )).GetValue());
+
+            if(bShadow)
+            {
+                ImpAddShadowToBoundRect();
+            }
+        }
+    }
 
     // add text to ImpAddTextToBoundrect:
     if ( pOutlinerParaObject )
@@ -501,12 +794,12 @@ void SdrObjCustomShape::NbcSetSnapRect( const Rectangle& rRect )
     ImpCheckShear();
     SetRectsDirty();
     SetChanged();
-    mXRenderedCustomShape = NULL;
+    InvalidateRenderGeometry();
 }
 void SdrObjCustomShape::SetSnapRect( const Rectangle& rRect )
 {
     NbcSetSnapRect( rRect );
-    mXRenderedCustomShape = NULL;
+    InvalidateRenderGeometry();
 }
 void SdrObjCustomShape::NbcSetLogicRect( const Rectangle& rRect )
 {
@@ -528,12 +821,12 @@ void SdrObjCustomShape::NbcSetLogicRect( const Rectangle& rRect )
     }
     SetRectsDirty();
     SetChanged();
-    mXRenderedCustomShape = NULL;
+    InvalidateRenderGeometry();
 }
 void SdrObjCustomShape::SetLogicRect( const Rectangle& rRect )
 {
     NbcSetLogicRect(rRect);
-    mXRenderedCustomShape = NULL;
+    InvalidateRenderGeometry();
 }
 void SdrObjCustomShape::Move( const Size& rSiz )
 {
@@ -558,16 +851,22 @@ void SdrObjCustomShape::NbcMove( const Size& rSiz )
         if ( pRenderedCustomShape )
             pRenderedCustomShape->NbcMove( rSiz );
     }
+
+    // #i37011# adapt geometry shadow
+    if(mpLastShadowGeometry)
+    {
+        mpLastShadowGeometry->NbcMove( rSiz );
+    }
 }
 void SdrObjCustomShape::Resize( const Point& rRef, const Fraction& xFact, const Fraction& yFact )
 {
     SdrTextObj::Resize( rRef, xFact, yFact );
-    mXRenderedCustomShape = NULL;
+    InvalidateRenderGeometry();
 }
 void SdrObjCustomShape::NbcResize( const Point& rRef, const Fraction& xFact, const Fraction& yFact )
 {
     SdrTextObj::NbcResize( rRef, xFact, yFact );
-    mXRenderedCustomShape = NULL;
+    InvalidateRenderGeometry();
 }
 void SdrObjCustomShape::NbcRotate( const Point& rRef, long nWink, double sn, double cs )
 {
@@ -611,7 +910,7 @@ void SdrObjCustomShape::NbcRotate( const Point& rRef, long nWink, double sn, dou
         fObjectRotation = 360 + fObjectRotation;
 
     SdrTextObj::NbcRotate( rRef, nWink, sn, cs );                           // applying text rotation
-    mXRenderedCustomShape = NULL;
+    InvalidateRenderGeometry();
 }
 
 void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
@@ -677,18 +976,18 @@ void SdrObjCustomShape::NbcMirror( const Point& rRef1, const Point& rRef2 )
         SetMergedItem( aGeometryItem );
     }
     SdrTextObj::NbcMirror( rRef1, rRef2 );
-    mXRenderedCustomShape = NULL;
+    InvalidateRenderGeometry();
 }
 
 void SdrObjCustomShape::Shear( const Point& rRef, long nWink, double tn, FASTBOOL bVShear )
 {
     SdrTextObj::Shear( rRef, nWink, tn, bVShear );
-    mXRenderedCustomShape = NULL;
+    InvalidateRenderGeometry();
 }
 void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, FASTBOOL bVShear )
 {
     SdrTextObj::NbcShear(rRef,nWink,tn,bVShear);
-    mXRenderedCustomShape = NULL;
+    InvalidateRenderGeometry();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -698,25 +997,37 @@ void SdrObjCustomShape::NbcShear( const Point& rRef, long nWink, double tn, FAST
 sal_Bool SdrObjCustomShape::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     sal_Bool bOk = sal_True;
-
-    //if( ( rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE ) && bNotVisibleAsMaster )    // maybe this should
-    //  return sal_True;                                                            // be removed
-    // AW: Yes, it should be removed :-)
-
     const SdrObject* pSdrObject = GetSdrObjectFromCustomShape();
-    if ( pSdrObject )
+
+    if(pSdrObject)
     {
-        ((SdrObject*)pSdrObject)->SetLayer( GetLayer() );
-        if ( pSdrObject->ISA( SdrObjGroup ) )
-            ((SdrObject*)pSdrObject)->SingleObjectPainter( rXOut, rInfoRec );
+        // #i37011#
+        ((SdrObject*)pSdrObject)->SetLayer(GetLayer());
+
+        if(pSdrObject->ISA(SdrObjGroup))
+        {
+            const SdrObject* pShadowGeometry = GetSdrObjectShadowFromCustomShape();
+            if(pShadowGeometry)
+            {
+                ((SdrObject*)pShadowGeometry)->SingleObjectPainter(rXOut, rInfoRec);
+            }
+
+            // paint object itself
+            ((SdrObject*)pSdrObject)->SingleObjectPainter(rXOut, rInfoRec);
+        }
         else
-            pSdrObject->DoPaintObject( rXOut, rInfoRec );
+        {
+            // paint object itself
+            pSdrObject->DoPaintObject(rXOut, rInfoRec);
+        }
     }
-    if ( HasText() )
+
+    if(HasText() && !IsTextPath())
     {
-        if ( IsInEditMode() || ( IsTextPath() == sal_False ) )
-            SdrTextObj::DoPaintObject( rXOut, rInfoRec );
+        // paint text over object
+        SdrTextObj::DoPaintObject(rXOut, rInfoRec);
     }
+
     return bOk;
 }
 
@@ -900,7 +1211,7 @@ FASTBOOL SdrObjCustomShape::EndDrag( SdrDragStat& rDrag )
         }
 
         SetRectsDirty();
-        mXRenderedCustomShape = NULL;
+        InvalidateRenderGeometry();
         SetChanged();
     //  SendRepaintBroadcast();
         BroadcastObjectChange();
@@ -1193,7 +1504,7 @@ FASTBOOL SdrObjCustomShape::NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FAST
 
             SetRectsDirty();
             SetChanged();
-            mXRenderedCustomShape = NULL;
+            InvalidateRenderGeometry();
         }
     }
     return bRet;
@@ -1226,7 +1537,7 @@ FASTBOOL SdrObjCustomShape::AdjustTextFrameWidthAndHeight(FASTBOOL bHgt, FASTBOO
             aRect.Bottom() += (sal_Int32)fBottomDiff;
 
             SetRectsDirty();
-            mXRenderedCustomShape = NULL;
+            InvalidateRenderGeometry();
             SetChanged();
     //      SendRepaintBroadcast();
             BroadcastObjectChange();
@@ -1337,7 +1648,7 @@ void SdrObjCustomShape::TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Recta
 void SdrObjCustomShape::EndTextEdit( SdrOutliner& rOutl )
 {
     SdrTextObj::EndTextEdit( rOutl );
-    mXRenderedCustomShape = NULL;
+    InvalidateRenderGeometry();
 }
 void SdrObjCustomShape::TakeTextAnchorRect( Rectangle& rAnchorRect ) const
 {
@@ -1511,7 +1822,7 @@ void SdrObjCustomShape::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject
     SdrTextObj::NbcSetOutlinerParaObject( pTextObject );
     bBoundRectDirty = TRUE;
     SetRectsDirty(TRUE);
-    mXRenderedCustomShape = NULL;
+    InvalidateRenderGeometry();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1554,6 +1865,7 @@ void SdrObjCustomShape::operator=(const SdrObject& rObj)
     SdrTextObj::operator=( rObj );
     aName =((SdrObjCustomShape&)rObj).aName;
     fObjectRotation = ((SdrObjCustomShape&)rObj).fObjectRotation;
+    InvalidateRenderGeometry();
 }
 
 
@@ -1588,9 +1900,45 @@ void SdrObjCustomShape::TakeContour(XPolyPolygon& rXPoly ) const
 
 SdrObject* SdrObjCustomShape::DoConvertToPolyObj(BOOL bBezier) const
 {
-    SdrObject* pGroup = new SdrObjCustomShape;
-    pGroup->SetModel(GetModel());
-    return pGroup;
+    // #i37011#
+    SdrObject* pRetval = 0L;
+    SdrObject* pRenderedCustomShape = 0L;
+
+    if ( !mXRenderedCustomShape.is() )
+    {
+        // force CustomShape
+        ((SdrObjCustomShape*)this)->GetSdrObjectFromCustomShape();
+    }
+
+    if ( mXRenderedCustomShape.is() )
+    {
+        pRenderedCustomShape = GetSdrObjectFromXShape( mXRenderedCustomShape );
+    }
+
+    if ( pRenderedCustomShape )
+    {
+        SdrObject* pCandidate = pRenderedCustomShape->Clone();
+        DBG_ASSERT(pCandidate, "SdrObjCustomShape::DoConvertToPolyObj: Could not clone SdrObject (!)");
+        pCandidate->SetModel(GetModel());
+        pRetval = pCandidate->DoConvertToPolyObj(bBezier);
+        delete pCandidate;
+
+        if(pRetval)
+        {
+            const sal_Bool bShadow(((SdrShadowItem&)GetMergedItem(SDRATTR_SHADOW)).GetValue());
+            if(bShadow)
+            {
+                pRetval->SetMergedItem(SdrShadowItem(sal_True));
+            }
+        }
+
+        if(HasText() && !IsTextPath())
+        {
+            pRetval = ImpConvertAddText(pRetval, bBezier);
+        }
+    }
+
+    return pRetval;
 }
 
 void SdrObjCustomShape::NbcSetStyleSheet( SfxStyleSheet* pNewStyleSheet, sal_Bool bDontRemoveHardAttr )
@@ -1636,7 +1984,7 @@ void SdrObjCustomShape::RestGeoData(const SdrObjGeoData& rGeo)
     fObjectRotation = rAGeo.fObjectRotation;
     SetMirroredX( rAGeo.bMirroredX );
     SetMirroredY( rAGeo.bMirroredY );
-    mXRenderedCustomShape = NULL;
+    InvalidateRenderGeometry();
 }
 
 void SdrObjCustomShape::TRSetBaseGeometry(const Matrix3D& rMat, const XPolyPolygon& rPolyPolygon)
@@ -1880,6 +2228,14 @@ bool SdrObjCustomShape::doConstructOrthogonal(const ::rtl::OUString& rName)
     }
 
     return bRetval;
+}
+
+// #i37011# centralize throw-away of render geometry
+void SdrObjCustomShape::InvalidateRenderGeometry()
+{
+    mXRenderedCustomShape = 0L;
+    delete mpLastShadowGeometry;
+    mpLastShadowGeometry = 0L;
 }
 
 // eof
