@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:28:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1088,7 +1088,7 @@ namespace configmgr
     class TreeUpdater : public ChangeTreeAction
     {
         ISubtree* m_pCurrentSubtree;
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 1
         std::vector<rtl::OString> aLog;
 #endif
 
@@ -1200,7 +1200,7 @@ namespace configmgr
 
         if (pValue)
             aValueNode.applyChangeNoRecover(*pValue);
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         else
         {
             ::rtl::OString aStr("TreeUpdater: Can't find value with name:=");
@@ -1220,7 +1220,7 @@ namespace configmgr
             {
                 std::auto_ptr<INode> aOldNode = m_pCurrentSubtree->removeChild(aAddNode.getNodeName());
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 OSL_ENSURE(aOldNode.get(), "TreeUpdater:AddNode: can't recover node being replaced");
                 if (aOldNode.get() == NULL)
                     aLog.push_back(rtl::OString("TreeUpdater: can't recover node being replaced (for AddNode)"));
@@ -1233,7 +1233,7 @@ namespace configmgr
 
             OIdPropagator::propagateIdToChildren(*m_pCurrentSubtree);
         }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         else
             aLog.push_back(rtl::OString("TreeUpdater: no CurrentSubtree for AddNode"));
 #endif
@@ -1247,7 +1247,7 @@ namespace configmgr
         {
             std::auto_ptr<INode> aOldNode = m_pCurrentSubtree->removeChild(aRemoveNode.getNodeName());
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             if (NULL == aOldNode.get())
             {
                 ::rtl::OString aStr("TreeUpdater: Can't remove child with name:=");
@@ -1269,7 +1269,7 @@ namespace configmgr
         OSL_ENSURE(pChild, "TreeUpdater::handle : invalid subtree change ... no child for change !");
         m_pCurrentSubtree = pChild ? pChild->asISubtree() : NULL;
 
-#if DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if (!m_pCurrentSubtree)
         {
             ::rtl::OString aStr("TreeUpdater: there is no Subtree for name:=");
