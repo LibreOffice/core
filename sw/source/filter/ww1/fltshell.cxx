@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:52:16 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 14:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,8 +187,6 @@
 
 #define MAX_FIELDLEN 64000
 
-SV_IMPL_PTRARR(SwFltControlStackEntries, SwFltStackEntryPtr)
-
 static SwCntntNode* GetCntntNode(SwDoc* pDoc, SwNodeIndex& rIdx, BOOL bNext)
 {
     SwCntntNode* pCNd = pDoc->GetNodes()[ rIdx ]->GetCntntNode();
@@ -283,8 +281,7 @@ BOOL SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, BOOL bCheck )
 
 
 SwFltControlStack::SwFltControlStack(SwDoc* pDo, ULONG nFieldFl)
-    : SwFltControlStackEntries(10, 5), nFieldFlags(nFieldFl), pDoc(pDo),
-    bIsEndStack(false)
+    : nFieldFlags(nFieldFl), pDoc(pDo), bIsEndStack(false)
 {
 }
 
@@ -364,7 +361,18 @@ void SwFltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem & rAtt
     SetAttr(rPos, nWhich);// Ende von evtl. gleichen Attributen auf dem Stack
                                 // Setzen, damit sich die Attribute nicht auf
                                 // dem Stack haeufen
-    Insert(pTmp, Count());
+    maEntries.push_back(pTmp);
+}
+
+void SwFltControlStack::DeleteAndDestroy(Entries::size_type nCnt)
+{
+    ASSERT(nCnt < maEntries.size(), "Out of range!");
+    if (nCnt < maEntries.size())
+    {
+        myEIter aElement = maEntries.begin() + nCnt;
+        delete *aElement;
+        maEntries.erase(aElement);
+    }
 }
 
 // SwFltControlStack::StealAttr() loescht Attribute des angegebenen Typs vom Stack.
@@ -420,7 +428,7 @@ void SwFltControlStack::KillUnlockedAttrs(const SwPosition& pPos)
 // alle anderen im Document setzen und wieder aus dem Stack loeschen
 // Returned, ob das gesuchte Attribut / die gesuchten Attribute
 // ueberhaupt auf dem Stack standen
-BOOL SwFltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId,
+void SwFltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId,
                                 BOOL bTstEnde, long nHand )
 {
     ASSERT(!nAttrId ||
@@ -428,7 +436,6 @@ BOOL SwFltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId,
         (RES_FLTRATTR_BEGIN <= nAttrId && RES_FLTRATTR_END > nAttrId),
         "Falsche Id fuers Attribut")
 
-    BOOL bFound = FALSE;
     USHORT nCnt = Count();
 
     SwFltStackEntry* pEntry;
@@ -439,28 +446,19 @@ BOOL SwFltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId,
         if (pEntry->bLocked)
         {
             // setze das Ende vom Attribut
-            BOOL bF = FALSE;
+            bool bF = false;
             if (!nAttrId ){
-                bF = TRUE;
+                bF = true;
             }else if( nAttrId == pEntry->pAttr->Which()){
                 if( nAttrId != RES_FLTR_BOOKMARK ){     // Handle abfragen
-                    bF = TRUE;
+                    bF = true;
                 }else if( nHand == ((SwFltBookmark*)(pEntry->pAttr))->GetHandle() )
                 {
-                    bF = TRUE;
+                    bF = true;
                 }
             }
-            if( bF ){
+            if (bF)
                 pEntry->SetEndPos(rPos);
-                bFound = TRUE;
-            }
-#if 0
-            if (!nAttrId || nAttrId == pEntry->pAttr->Which())
-            {
-                pEntry->SetEndPos(rPos);
-                bFound = TRUE;
-            }
-#endif
             continue;
         }
 
@@ -478,7 +476,6 @@ BOOL SwFltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId,
         DeleteAndDestroy(i);        // loesche aus dem Stack
         i--; nCnt--;        // Danach rutschen alle folgenden nach unten
     }
-    return bFound;
 }
 
 static void MakePoint(SwFltStackEntry* pEntry, SwDoc* pDoc, SwPaM& rRegion)
@@ -2171,3 +2168,5 @@ void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset)
     for (sal_uInt16 i = nInPageDescOffset; i < rDoc.GetPageDescCnt(); ++i)
         rDoc.ChgPageDesc(i, rDoc.GetPageDesc(i));
 }
+
+/* vi:set tabstop=4 shiftwidth=4 expandtab: */
