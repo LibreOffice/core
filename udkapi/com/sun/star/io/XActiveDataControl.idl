@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XActiveDataControl.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:36 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@ interface XActiveDataControl: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::XActiveDataControl::addListener
     /** registers an object to receive events from this data source.
+
+       <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
      */
     void addListener( [in] com::sun::star::io::XStreamListener aListener );
 
@@ -95,6 +98,9 @@ interface XActiveDataControl: com::sun::star::uno::XInterface
 
     // DocMerge from xml: method com::sun::star::io::XActiveDataControl::removeListener
     /** unregisters an object to receive events from this data source.
+
+       <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
      */
     void removeListener( [in] com::sun::star::io::XStreamListener aListener );
 
@@ -133,6 +139,9 @@ interface XActiveDataControl: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/16 15:10:36  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.5  2000/12/11 16:09:49  mi
     documentation syntax fixed and some minor semantic documentation fixes
 

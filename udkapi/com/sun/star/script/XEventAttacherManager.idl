@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEventAttacherManager.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 15:09:06 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:34:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,7 +278,12 @@ interface XEventAttacherManager: com::sun::star::uno::XInterface
     /** adds an <type>XScriptListener</type> that will be notified when an
         event takes place.  For that a
         <type>ScriptEventDescriptor</type> is registered at and
-        attached to an object by an <type>XEventAttacherManager</type>.@see removeScriptListener
+        attached to an object by an <type>XEventAttacherManager</type>.
+
+       <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
+
+        @see removeScriptListener
      */
     void addScriptListener( [in] com::sun::star::script::XScriptListener xListener )
             raises( com::sun::star::lang::IllegalArgumentException );
@@ -288,11 +293,12 @@ interface XEventAttacherManager: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::script::XEventAttacherManager::removeScriptListener
     /** removes a <type>XScriptListener</type> from the listener list.
 
-
-
         <p>Nothing happens if the listener is not registered.
 
-        </p>@see addScriptListener
+       <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
+
+        @see addScriptListener
      */
     void removeScriptListener( [in] com::sun::star::script::XScriptListener Listener )
             raises( com::sun::star::lang::IllegalArgumentException );
@@ -306,6 +312,9 @@ interface XEventAttacherManager: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/11/16 15:09:06  mi
+    proofing by Richard Holt
+
     Revision 1.6  2001/03/16 15:10:40  jsc
     remove interfaceheader with uik and remove [const] in method definitions
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTest.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:42 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,14 +88,14 @@ interface XTest: com::sun::star::uno::XInterface
     /**
         Test the object TestObject against the test specified with TestName. This test
         does not change the semantic state of the object, so it can be called on a existing
-        component that will used further on.
-        Note : This can be a strong test limitation. There are some components, that cannot
-        perform their full test scenario.
-        @param TestName     the name of the test. Must be an interface, service or implementation name.
-        Note : The name is only used by the test component to distinguish
-        between test scenarios.
-        @param  TestObject  The instance to be tested.
-
+        component that will used further on. Note: This can be a strong test limitation.
+        There are some components, that cannot perform their full test scenario.
+        @param TestName
+            the name of the test. Must be an interface, service, or implementation name.
+            Note: The name is only used by the test component to distinguish between test
+            scenarios.
+        @param TestObject
+                The instance to be tested.
         @throws IllegalArgumentException
             if the test does not support TestName or TestObject is null.
     */
@@ -107,23 +107,25 @@ interface XTest: com::sun::star::uno::XInterface
     /**
         Test the object TestObject against the test specified with TestName.
         This test changes the state of the object. The object may be useless
-        afterwards (e.g. a closed XOutputStream). The method in general may
-        be called multipe times with a new test object instance.
-        Note : Each test scenario should be independent of each other, so even if a scenario
-        didn't pass the test, the other test can still be performed. The error messages
-        are cumulative.
+        afterwards (e.g., a closed XOutputStream). The method in general may
+        be called multiple times with a new test object instance. Note: Each test
+        scenario should be independent of each other, so even if a scenario
+        didn't pass the test, the other test can still be performed.
+        The error messages are cumulative.
 
-        @param TestName The name of the test. Must be an interface, service or
-            implementation name. Note : The name is only used by the test component
+        @param TestName
+            The name of the test. Must be an interface, service, or
+            implementation name. Note: The name is only used by the test component
             to distinguish between test scenarios.
-        @param TestObject The instance to be tested.
-        @param hTestHandle Internal test handle. Handle for first test is always 0.
+        @param TestObject
+                The instance to be tested.
+        @param hTestHandle
+                Internal test handle. Handle for first test is always 0.
             Handle of next test is  returned by the method.
         @return Handle of the next test. -1 if this was the last test.
 
         @throws IllegalArgumentException
-            if the test does not support TestName
-            or TestObject is null.
+            if the test does not support TestName or TestObject is null.
     */
     long test( [in] string TestName,
              [in] com::sun::star::uno::XInterface TestObject,
@@ -135,22 +137,25 @@ interface XTest: com::sun::star::uno::XInterface
         Test the object TestObject against the test specified with TestName using
         several threads. That does NOT mean that testMultiThread should implement
         a test using several threads but that this test method should be designed
-        to be called by several threads. So for example it has to take into consi-
-        deration that a test object state that is changed by the method can be
-        changed again by another thread. So it's not necessarely a mistake if an
-        expected state can't be confirmed after setting it. Besides of that every-
-        thing is the same as decribed for the test method.
+        to be called by several threads. So for example, it has to take into consideration
+        that a test object state that is changed by the method  can be
+        changed again by another thread. So it's not necessarily a mistake if an
+        expected state can't be confirmed after setting it. Besides that, everything
+        is the same as described for the test method.
 
         If this way of testing with multiple threads is not appropriate for the
         component to be tested this method should not be implemented (it should
         only return -1) and a special multithread test adapted to the special
         needs of testing this component should be integrated in the test method.
 
-        @param TestName The name of the test. Must be an interface, service or
-            implementation name. Note : The name is only used by the test component
+        @param TestName
+            The name of the test. Must be an interface, service or
+            implementation name. Note: The name is only used by the test component
             to distinguish between test scenarios.
-        @param TestObject The instance to be tested.
-        @param hTestHandle Internal test handle. Handle for first test is always 0.
+        @param TestObject
+            The instance to be tested.
+        @param hTestHandle
+            Internal test handle. Handle for first test is always 0.
             Handle of next test is  returned by the method.
         @return Handle of the next test. -1 if this was the last test.
 

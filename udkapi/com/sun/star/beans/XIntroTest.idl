@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XIntroTest.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-16 14:06:25 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,13 +222,20 @@ interface XIntroTest: com::sun::star::uno::XInterface
     void setMultiSequence( [in] sequence< sequence< sequence< short > > > Seq );
 
     //-------------------------------------------------------------------------
-    /**Add a PropertiesChangeListener
+    /** adds a listener which is called, when one of the specified properties
+        changes its value.
+
+       <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
     */
     [oneway] void addPropertiesChangeListener( [in] sequence< string > PropertyNames,
              [in] XPropertiesChangeListener Listener );
 
     //-------------------------------------------------------------------------
-    /**Remove a PropertiesChangeListener
+    /** removes a listener.
+
+       <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
     */
     [oneway] void removePropertiesChangeListener( [in] XPropertiesChangeListener Listener );
 

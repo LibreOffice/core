@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XComponent.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 13:39:36 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:33:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@ interface XComponent: com::sun::star::uno::XInterface
         <p>The broadcaster fires the disposing method of this listener
         if the <member>XComponent::dispose</member> method is called.  </p>
 
+       <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
+
         @see XComponent::removeEventListener
      */
     void addEventListener( [in] XEventListener xListener );
@@ -140,6 +143,9 @@ interface XComponent: com::sun::star::uno::XInterface
     /** removes an event listener from the listener list.
 
         <p>It is a "noop" if the specified listener is not registered.  </p>
+
+       <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
 
         @see XComponent::addEventListener
      */
@@ -154,6 +160,9 @@ interface XComponent: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2002/01/18 13:39:36  jbu
+    #96701# API review
+
     Revision 1.8  2001/11/16 14:57:39  mi
     proofing by Richard Holt
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnectionBroadcaster.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 13:34:15 $
+ *  last change: $Author: mi $ $Date: 2002-08-05 09:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,18 @@ interface XConnectionBroadcaster: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** registers an object to receive events from this connection.
+
+       <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
      */
     void addStreamListener( [in] com::sun::star::io::XStreamListener aListener );
 
     //-------------------------------------------------------------------------
 
     /** unregisters an object to receive events from this connection.
+
+       <p>It is suggested to allow multiple registration of the same listener,
+        thus for each time a listener is added, it has to be removed.
      */
     void removeStreamListener( [in] com::sun::star::io::XStreamListener aListener );
 };
