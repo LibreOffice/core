@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:23:52 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:16:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ String RID_SVXSTR_SOLID
     Text[ korean ] = "ÀÏ¹Ý";
     Text[ turkish ] = "Sürekli";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Continuo";
 };
 String RID_SVXSTR_GRADIENT
 {
@@ -116,6 +117,7 @@ String RID_SVXSTR_GRADIENT
     Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç";
     Text[ turkish ] = "Gradyan";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Gradiente de color";
 };
 String RID_SVXSTR_DESC_GRADIENT
 {
@@ -144,6 +146,7 @@ String RID_SVXSTR_DESC_GRADIENT
     Text[ korean ] = "¿©±â¿¡ ±×¶óµ¥ÀÌ¼ÇÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
     Text[ turkish ] = "Gradyan için bir ad girin:";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Inserte aquí el nombre para el gradiente:";
 };
 String RID_SVXSTR_DEL_GRADIENT
 {
@@ -172,6 +175,7 @@ String RID_SVXSTR_DEL_GRADIENT
     Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç »èÁ¦";
     Text[ turkish ] = "Gradyaný sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar gradiente de color";
 };
 String RID_SVXSTR_ASK_DEL_GRADIENT
 {
@@ -200,6 +204,7 @@ String RID_SVXSTR_ASK_DEL_GRADIENT
     Text[ korean ] = "±×¶óµ¥ÀÌ¼ÇÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Gradyan gerçekten silinsin mi?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea realmente eliminar el gradiente de color?";
 };
 String RID_SVXSTR_ASK_CHANGE_GRADIENT
 {
@@ -228,6 +233,7 @@ String RID_SVXSTR_ASK_CHANGE_GRADIENT
     Text[ korean ] = "±×¶óµ¥ÀÌ¼ÇÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù.\n¼±ÅÃµÈ ±×¶óµ¥ÀÌ¼ÇÀ» º¯°æÇÏ°Å³ª \n»õ ±×¶óµ¥ÀÌ¼ÇÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Gradyan deðiþtirildi ancak kaydedilmedi.\nSeçili gradyaný deðiþtirebilir ya da\nyeni bir gradyan ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El gradiente de color ha sido modificado sin guardar.\nPuede modificarlo\no añadir uno nuevo.";
 };
 String RID_SVXSTR_BITMAP
 {
@@ -260,6 +266,7 @@ String RID_SVXSTR_DESC_NEW_BITMAP
     Text[ korean ] = "¿©±â¿¡ ºñÆ®¸ÊÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
     Text[ turkish ] = "Bit eþlem için bir ad girin:";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Inserte aquí el nombre para la bitmap:";
 };
 String RID_SVXSTR_DESC_EXT_BITMAP
 {
@@ -288,6 +295,7 @@ String RID_SVXSTR_DESC_EXT_BITMAP
     Text[ korean ] = "¿©±â¿¡ ¿ÜºÎ ºñÆ®¸ÊÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
     Text[ turkish ] = "Dýþ bit eþlem için bir ad girin:";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Inserte aquí el nombre para la bitmap externa:";
 };
 String RID_SVXSTR_DEL_BITMAP
 {
@@ -316,6 +324,7 @@ String RID_SVXSTR_DEL_BITMAP
     Text[ korean ] = "ºñÆ®¸Ê »èÁ¦";
     Text[ turkish ] = "Bit eþlemi sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar bitmap";
 };
 String RID_SVXSTR_ASK_DEL_BITMAP
 {
@@ -344,6 +353,7 @@ String RID_SVXSTR_ASK_DEL_BITMAP
     Text[ korean ] = "ºñÆ®¸ÊÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Bit eþlem gerçekten silinsin mi?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea realmente eliminar el bitmap?";
 };
 String RID_SVXSTR_ASK_CHANGE_BITMAP
 {
@@ -372,6 +382,7 @@ String RID_SVXSTR_ASK_CHANGE_BITMAP
     Text[ korean ] = "ºñÆ®¸ÊÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. \n¼±ÅÃµÈ ºñÆ®¸ÊÀ» º¯°æÇÏ°Å³ª \n»õ ºñÆ®¸ÊÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Bit eþlem deðiþtirildi ancak kaydedilmedi.\nSeçili bit eþlemi deðiþtirebilir ya da\nyeni bir bit eþlem ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El bitmap ha sido modificado sin guardar.\nPuede modificar el bitmap seleccionado\no añadir uno nuevo.";
 };
 String RID_SVXSTR_LINESTYLE
 {
@@ -398,6 +409,7 @@ String RID_SVXSTR_LINESTYLE
     Text[ korean ] = "¼± À¯Çü";
     Text[ turkish ] = "Çizgi biçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de línea";
 };
 String RID_SVXSTR_DESC_LINESTYLE
 {
@@ -426,6 +438,7 @@ String RID_SVXSTR_DESC_LINESTYLE
     Text[ korean ] = "¿©±â¿¡ »õ ¼± À¯ÇüÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
     Text[ turkish ] = "Çizgi biçimi için bir ad girin:";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Inserte aquí el nombre para el estilo de línea:";
 };
 String RID_SVXSTR_DEL_LINESTYLE
 {
@@ -454,6 +467,7 @@ String RID_SVXSTR_DEL_LINESTYLE
     Text[ korean ] = "¼± À¯Çü »èÁ¦";
     Text[ turkish ] = "Çizgi biçimini sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar estilo de línea";
 };
 String RID_SVXSTR_ASK_DEL_LINESTYLE
 {
@@ -482,6 +496,7 @@ String RID_SVXSTR_ASK_DEL_LINESTYLE
     Text[ korean ] = "¼± À¯ÇüÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Çizgi biçimi gerçekten silinsin mi?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea realmente eliminar el estilo de línea?";
 };
 String RID_SVXSTR_ASK_CHANGE_LINESTYLE
 {
@@ -510,6 +525,7 @@ String RID_SVXSTR_ASK_CHANGE_LINESTYLE
     Text[ korean ] = "¼± À¯ÇüÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù.\n¼±ÅÃµÈ ¼± À¯ÇüÀ» º¯°æÇÏ°Å³ª \n»õ ¼± À¯ÇüÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Çizgi biçimi deðiþtirildi ancak kaydedilmedi. \nSeçili çizgi biçimini deðiþtirebilir ya da \nyeni bir çizgi biçimi ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El estilo de línea ha sido modificado sin guardar.\nPuede modificar el estilo de línea seleccionado\no añadir uno nuevo.";
 };
 String RID_SVXSTR_INVISIBLE
 {
@@ -536,6 +552,7 @@ String RID_SVXSTR_INVISIBLE
     Text[ korean ] = "º¸ÀÌÁö ¾Ê°Ô";
     Text[ turkish ] = "Gizle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Invisible";
 };
 String RID_SVXSTR_COLOR
 {
@@ -562,6 +579,7 @@ String RID_SVXSTR_COLOR
     Text[ korean ] = "»ö»ó";
     Text[ turkish ] = "Renk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Color";
 };
 String RID_SVXSTR_HATCH
 {
@@ -588,6 +606,7 @@ String RID_SVXSTR_HATCH
     Text[ korean ] = "ÇØÄª";
     Text[ turkish ] = "Tarama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Trama";
 };
 String RID_SVXSTR_DESC_HATCH
 {
@@ -616,6 +635,7 @@ String RID_SVXSTR_DESC_HATCH
     Text[ korean ] = "¿©±â¿¡ ÇØÄªÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
     Text[ turkish ] = "Tarama için bir ad girin:";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Inserte aquí el nombre para la trama:";
 };
 String RID_SVXSTR_DEL_HATCH
 {
@@ -644,6 +664,7 @@ String RID_SVXSTR_DEL_HATCH
     Text[ korean ] = "ÇØÄª »èÁ¦";
     Text[ turkish ] = "Taramayý sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar trama";
 };
 String RID_SVXSTR_ASK_DEL_HATCH
 {
@@ -672,6 +693,7 @@ String RID_SVXSTR_ASK_DEL_HATCH
     Text[ korean ] = "ÇØÄªÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Tarama gerçekten silinsin mi?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea realmente eliminar el entramado?";
 };
 String RID_SVXSTR_ASK_CHANGE_HATCH
 {
@@ -700,6 +722,7 @@ String RID_SVXSTR_ASK_CHANGE_HATCH
     Text[ korean ] = "ÇØÄªÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. \n¼±ÅÃµÈ ÇØÄªÀ» º¯°æÇÏ°Å³ª \n»õ ÇØÄªÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Tarama deðiþtirildi ancak kaydedilmedi.\nSeçili deseni deðiþtirebilir ya da\nyeni bir tarama ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "La trama ha sido modificada sin guardar.\nPuede modificar la trama seleccionada\no añadir una nueva.";
 };
 String RID_SVXSTR_CHANGE
 {
@@ -728,6 +751,7 @@ String RID_SVXSTR_CHANGE
     Text[ korean ] = "º¯°æ";
     Text[ turkish ] = "Deðiþtir";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Modificar";
 };
 String RID_SVXSTR_ADD
 {
@@ -756,6 +780,7 @@ String RID_SVXSTR_ADD
     Text[ korean ] = "Ãß°¡";
     Text[ turkish ] = "Ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Añadir";
 };
 String RID_SVXSTR_DESC_COLOR
 {
@@ -784,6 +809,7 @@ String RID_SVXSTR_DESC_COLOR
     Text[ korean ] = "¿©±â¿¡¼­  »õ·Î¿î »ö»óÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
     Text[ turkish ] = "Yeni rengin adýný girin:";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Inserte aquí el nombre para el nuevo color:";
 };
 String RID_SVXSTR_DEL_COLOR
 {
@@ -812,6 +838,7 @@ String RID_SVXSTR_DEL_COLOR
     Text[ korean ] = "»ö »èÁ¦";
     Text[ turkish ] = "Rengi sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar color";
 };
 String RID_SVXSTR_ASK_DEL_COLOR
 {
@@ -840,6 +867,7 @@ String RID_SVXSTR_ASK_DEL_COLOR
     Text[ korean ] = "»öÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Renk gerçekten silinsin mi?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea realmente eliminar el color?";
 };
 String RID_SVXSTR_ASK_CHANGE_COLOR
 {
@@ -868,6 +896,7 @@ String RID_SVXSTR_ASK_CHANGE_COLOR
     Text[ korean ] = "»ö»óÀÌ º¯°æµÇ¾úÁö¸¸  ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù.\n¼±ÅÃµÈ »öÀ» º¯°æÇÏ°Å³ª \n»õ·Î¿î »öÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
     Text[ turkish ] = "Renk deðiþtirildi ancak kaydedilmedi.\nSeçili rengi deðiþtirebilir ya da\nyeni bir renk ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El color ha sido modificado sin guardar.\nPuede modificar el color seleccionado\no añadir uno nuevo.";
 };
 String RID_SVXSTR_TABLE
 {
@@ -894,6 +923,7 @@ String RID_SVXSTR_TABLE
     Text[ korean ] = "Å×ÀÌºí";
     Text[ turkish ] = "Tablo";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Tabla";
 };
 String RID_SVXSTR_WRITE_DATA_ERROR
 {
@@ -920,6 +950,7 @@ String RID_SVXSTR_WRITE_DATA_ERROR
     Text[ korean ] = "ÆÄÀÏÀ» ÀúÀåÇÏÁö ¸øÇß½À´Ï´Ù!";
     Text[ turkish ] = "Dosya kaydedilemedi!";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¡No se pudo guardar el archivo!";
 };
 String RID_SVXSTR_READ_DATA_ERROR
 {
@@ -946,6 +977,7 @@ String RID_SVXSTR_READ_DATA_ERROR
     Text[ korean ] = "ÆÄÀÏÀ» ·ÎµåÇÏÁö ¸øÇß½À´Ï´Ù!";
     Text[ turkish ] = "Dosya yüklenemedi!";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¡No se pudo cargar el archivo!";
 };
 String RID_SVXSTR_WARN_TABLE_OVERWRITE
 {
@@ -974,6 +1006,7 @@ String RID_SVXSTR_WARN_TABLE_OVERWRITE
     Text[ korean ] = "Å×ÀÌºíÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. \nÅ×ÀÌºíÀ» ÀúÀåÇÒ±î¿ä?";
     Text[ turkish ] = "Tablo deðiþtirildi ancak kaydedilmedi. Tablo \n kaydedilsin mi?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "La tabla ha sido modificada sin guardar.\n¿Desea guardarla?";
 };
 String RID_SVXSTR_WARN_NAME_DUPLICATE
 {
@@ -1000,6 +1033,7 @@ String RID_SVXSTR_WARN_NAME_DUPLICATE
     Text[ korean ] = "ÀÔ·ÂÇÑ ÀÌ¸§ÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù. \n´Ù¸¥ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À.";
     Text[ turkish ] = "Girdiðiniz ad zaten mevcut. Yeni bir \nad girin.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Este nombre ya existe. \nIntroduzca otro nombre por favor.";
 };
 String RID_SVXSTR_LINEEND
 {
@@ -1026,6 +1060,7 @@ String RID_SVXSTR_LINEEND
     Text[ korean ] = "¼± ³¡";
     Text[ turkish ] = "Çizgi ucu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Fin de línea";
 };
 String RID_SVXSTR_DESC_LINEEND
 {
@@ -1054,6 +1089,7 @@ String RID_SVXSTR_DESC_LINEEND
     Text[ korean ] = "¿©±â¿¡ »õ ¼± ³¡ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
     Text[ turkish ] = "Yeni çizgi ucu için bir ad girin:";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Inserte aquí el nombre para el nuevo fin de línea:";
 };
 String RID_SVXSTR_DEL_LINEEND
 {
@@ -1082,6 +1118,7 @@ String RID_SVXSTR_DEL_LINEEND
     Text[ korean ] = "¼± ³¡ »èÁ¦";
     Text[ turkish ] = "Çizgi ucunu sil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Eliminar fin de línea";
 };
 String RID_SVXSTR_ASK_DEL_LINEEND
 {
@@ -1110,6 +1147,7 @@ String RID_SVXSTR_ASK_DEL_LINEEND
     Text[ korean ] = "¼± ³¡À» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Çizgi ucu gerçekten silinsin mi?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "¿Desea realmente eliminar el final de línea?";
 };
 String RID_SVXSTR_ASK_CHANGE_LINEEND
 {
@@ -1136,6 +1174,7 @@ String RID_SVXSTR_ASK_CHANGE_LINEEND
     Text[ korean ] = "¼±ÀÇ ¾ç³¡ÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù .\nÁö±Ý ¼± ³¡À» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Çizgi ucu deðiþtirildi ancak kaydedilmedi.\nÇizgi ucunu þimdi kaydetmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "El final de línea ha sido modificado pero no guardado. \n¿Desea guardar ahora el final de línea?";
 };
 String RID_SVXSTR_CLOSE
 {
@@ -1164,6 +1203,7 @@ String RID_SVXSTR_CLOSE
     Text[ korean ] = "´Ý±â";
     Text[ turkish ] = "Kapat";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cerrar";
 };
 String RID_SVXSTR_BLACK
 {
@@ -1190,6 +1230,7 @@ String RID_SVXSTR_BLACK
     Text[ korean ] = "°ËÀº»ö";
     Text[ turkish ] = "Siyah";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Negro";
 };
 String RID_SVXSTR_BLUE
 {
@@ -1216,6 +1257,7 @@ String RID_SVXSTR_BLUE
     Text[ korean ] = "Ã»»ö";
     Text[ turkish ] = "Mavi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Azul";
 };
 String RID_SVXSTR_GREEN
 {
@@ -1244,6 +1286,7 @@ String RID_SVXSTR_GREEN
     Text[ korean ] = "³ì»ö";
     Text[ turkish ] = "Yeþil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Verde";
 };
 String RID_SVXSTR_CYAN
 {
@@ -1272,6 +1315,7 @@ String RID_SVXSTR_CYAN
     Text[ korean ] = "Ã»·Ï»ö";
     Text[ turkish ] = "Turkuaz";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Turquesa";
 };
 String RID_SVXSTR_RED
 {
@@ -1298,6 +1342,7 @@ String RID_SVXSTR_RED
     Text[ korean ] = "Àû»ö";
     Text[ turkish ] = "Kýrmýzý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rojo";
 };
 String RID_SVXSTR_MAGENTA
 {
@@ -1325,6 +1370,7 @@ String RID_SVXSTR_MAGENTA
     Text[ korean ] = "¼±È«»ö";
     Text[ turkish ] = "Mor";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Magenta";
 };
 String RID_SVXSTR_BROWN
 {
@@ -1351,6 +1397,7 @@ String RID_SVXSTR_BROWN
     Text[ korean ] = "°¥»ö";
     Text[ turkish ] = "Kahverengi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Marrón";
 };
 String RID_SVXSTR_GREY
 {
@@ -1377,6 +1424,7 @@ String RID_SVXSTR_GREY
     Text[ korean ] = "È¸»ö";
     Text[ turkish ] = "Gri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Gris";
 };
 String RID_SVXSTR_LIGHTGREY
 {
@@ -1403,6 +1451,7 @@ String RID_SVXSTR_LIGHTGREY
     Text[ korean ] = "¹àÀº È¸»ö";
     Text[ turkish ] = "Açýk gri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Gris claro";
 };
 String RID_SVXSTR_LIGHTBLUE
 {
@@ -1429,6 +1478,7 @@ String RID_SVXSTR_LIGHTBLUE
     Text[ korean ] = "¹àÀº Ã»»ö";
     Text[ turkish ] = "Açýk mavi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Azul claro";
 };
 String RID_SVXSTR_LIGHTGREEN
 {
@@ -1457,6 +1507,7 @@ String RID_SVXSTR_LIGHTGREEN
     Text[ korean ] = "¹àÀº ³ì»ö";
     Text[ turkish ] = "Açýk yeþil";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Verde claro";
 };
 String RID_SVXSTR_LIGHTCYAN
 {
@@ -1485,6 +1536,7 @@ String RID_SVXSTR_LIGHTCYAN
     Text[ korean ] = "¹àÀº Ã»·Ï»ö";
     Text[ turkish ] = "Açýk turkuaz";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Turquesa claro";
 };
 String RID_SVXSTR_LIGHTRED
 {
@@ -1511,6 +1563,7 @@ String RID_SVXSTR_LIGHTRED
     Text[ korean ] = "¹àÀº Àû»ö";
     Text[ turkish ] = "Açýk kýrmýzý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Rojo claro";
 };
 String RID_SVXSTR_LIGHTMAGENTA
 {
@@ -1538,6 +1591,7 @@ String RID_SVXSTR_LIGHTMAGENTA
     Text[ korean ] = "¹àÀº ¼±È«»ö";
     Text[ turkish ] = "Eflatun";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Magenta claro";
 };
 String RID_SVXSTR_YELLOW
 {
@@ -1564,6 +1618,7 @@ String RID_SVXSTR_YELLOW
     Text[ korean ] = "È²»ö";
     Text[ turkish ] = "Sarý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Amarillo";
 };
 String RID_SVXSTR_WHITE
 {
@@ -1592,6 +1647,7 @@ String RID_SVXSTR_WHITE
     Text[ korean ] = "Èò»ö";
     Text[ turkish ] = "Beyaz";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Blanco";
 };
 String RID_SVXSTR_BLUEGREY
 {
@@ -1618,6 +1674,7 @@ String RID_SVXSTR_BLUEGREY
     Text[ korean ] = "È¸Ã»»ö";
     Text[ turkish ] = "Mavi-gri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Gris azulado";
 };
 String RID_SVXSTR_ORANGE
 {
@@ -1644,6 +1701,7 @@ String RID_SVXSTR_ORANGE
     Text[ korean ] = "ÁÖÈ²»ö";
     Text[ turkish ] = "Turuncu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Naranja";
 };
 String RID_SVXSTR_ARROW
 {
@@ -1670,6 +1728,7 @@ String RID_SVXSTR_ARROW
     Text[ korean ] = "È­»ìÇ¥";
     Text[ turkish ] = "Ok";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Flecha";
 };
 String RID_SVXSTR_SQUARE
 {
@@ -1696,6 +1755,7 @@ String RID_SVXSTR_SQUARE
     Text[ korean ] = "Á¤»ç°¢Çü";
     Text[ turkish ] = "Kare";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Cuadrado";
 };
 String RID_SVXSTR_CIRCLE
 {
@@ -1722,6 +1782,7 @@ String RID_SVXSTR_CIRCLE
     Text[ korean ] = "¿ø";
     Text[ turkish ] = "Daire";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Círculo";
 };
 String RID_SVXSTR_NONE
 {
@@ -1746,6 +1807,7 @@ String RID_SVXSTR_NONE
     Text[ korean ] = "- ¾øÀ½ -";
     Text[ turkish ] = "- yok -";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "- sin -";
 };
 String RID_SVXSTR_TRANSPARENCE
 {
@@ -1770,6 +1832,7 @@ String RID_SVXSTR_TRANSPARENCE
     Text[ korean ] = "Åõ¸í";
     Text[ turkish ] = "Saydamlýk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Transparencia";
 };
 String RID_SVXSTR_CENTERED
 {
@@ -1794,6 +1857,7 @@ String RID_SVXSTR_CENTERED
     Text[ korean ] = "°¡¿îµ¥";
     Text[ turkish ] = "Ortala";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Centrado";
 };
 String RID_SVXSTR_NOTCENTERED
 {
@@ -1818,6 +1882,7 @@ String RID_SVXSTR_NOTCENTERED
     Text[ korean ] = "°¡¿îµ¥·Î ¸ÂÃßÁö ¾ÊÀ½";
     Text[ turkish ] = "Ortalanmamýþ";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sin centrar";
 };
 String RID_SVXSTR_GRAFMODE_STANDARD
 {
@@ -1841,6 +1906,7 @@ String RID_SVXSTR_GRAFMODE_STANDARD
     Text[ chinese_traditional ] = "¼Ð·Ç";
     Text[ arabic ] = "ÞíÇÓí";
     Text[ turkish ] = "Standart";
+    Text[ catalan ] = "Predeterminado";
 };
 String RID_SVXSTR_GRAFMODE_GREYS
 {
@@ -1865,6 +1931,7 @@ String RID_SVXSTR_GRAFMODE_GREYS
     Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
     Text[ turkish ] = "Gri tonlama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Escala de grises";
 };
 String RID_SVXSTR_GRAFMODE_MONO
 {
@@ -1888,6 +1955,7 @@ String RID_SVXSTR_GRAFMODE_MONO
     Text[ chinese_traditional ] = "¶Â¥Õ";
     Text[ arabic ] = "ÃÓæÏ/ÃÈíÖ";
     Text[ turkish ] = "Siyah/Beyaz";
+    Text[ catalan ] = "Blanco/Negro";
 };
 String RID_SVXSTR_GRAFMODE_WATERMARK
 {
@@ -1911,6 +1979,7 @@ String RID_SVXSTR_GRAFMODE_WATERMARK
     Text[ chinese_traditional ] = "¥­·Æ";
     Text[ arabic ] = "ÚáÇãÉ ãÇÆíÉ";
     Text[ turkish ] = "Filigran";
+    Text[ catalan ] = "Marca de agua";
 };
 String STR_INSERT_VIDEO_EXTFILTER_IVF
 {
@@ -1934,6 +2003,7 @@ String STR_INSERT_VIDEO_EXTFILTER_IVF
     Text[ chinese_traditional ] = "Intel Indeo Video (*.ivf)";
     Text[ arabic ] = "Intel Indeo Video (*.ivf)";
     Text[ turkish ] = "Intel Indeo Video (*.ivf)";
+    Text[ catalan ] = "Intel Indeo Video (*.ivf)";
 };
 
 String STR_INSERT_VIDEO_EXTFILTER_AVI
@@ -1958,6 +2028,7 @@ String STR_INSERT_VIDEO_EXTFILTER_AVI
     Text[ chinese_traditional ] = "Video for Windows (*.avi)";
     Text[ arabic ] = "ÝíÏíæ áÜ (*.avi) Windows";
     Text[ turkish ] = "Video for Windows (*.avi)";
+    Text[ catalan ] = "Vídeo para Windows (*.avi)";
 };
 
 String STR_INSERT_VIDEO_EXTFILTER_MOV
@@ -1982,6 +2053,7 @@ String STR_INSERT_VIDEO_EXTFILTER_MOV
     Text[ chinese_traditional ] = "QuickTime Movie (*.mov)";
     Text[ arabic ] = "QuickTime Movie (*.mov)";
     Text[ turkish ] = "QuickTime Movie (*.mov)";
+    Text[ catalan ] = "QuickTime Movie (*.mov)";
 };
 
 String STR_INSERT_VIDEO_EXTFILTER_MPEG
@@ -2006,6 +2078,7 @@ String STR_INSERT_VIDEO_EXTFILTER_MPEG
     Text[ chinese_traditional ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ arabic ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
     Text[ turkish ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ catalan ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
 };
 
 String STR_EXTFILTER_ALL
@@ -2030,6 +2103,7 @@ String STR_EXTFILTER_ALL
     Text[ chinese_traditional ] = "<¥þ³¡>";
     Text[ arabic ] = "<Çáßá>";
     Text[ turkish ] = "<Tümü>";
+    Text[ catalan ] = "<Todos>";
 };
 
 String STR_INSERT_SOUND_TITLE
@@ -2055,6 +2129,7 @@ String STR_INSERT_SOUND_TITLE
     Text[ arabic ] = "ÅÏÑÇÌ ÕæÊ";
     Text[ turkish ] = "Ses ekle";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Insertar sonido";
 };
 
 String STR_INSERT_VIDEO_TITLE
@@ -2079,6 +2154,7 @@ String STR_INSERT_VIDEO_TITLE
     Text[ chinese_traditional ] = "´¡¤J¼vµø";
     Text[ arabic ] = "ÅÏÑÇÌ ÝíÏíæ";
     Text[ turkish ] = "Film ekle";
+    Text[ catalan ] = "Insertar vídeo";
 };
 
 
@@ -2106,6 +2182,7 @@ String RID_SVXSTR_VIOLET
     Text[ chinese_traditional ] = "µµ¦â";
     Text[ arabic ] = "ÈäÝÓÌí";
     Text[ turkish ] = "Menekþe";
+    Text[ catalan ] = "Violeta";
 };
 
 String RID_SVXSTR_BORDEAUX
@@ -2130,6 +2207,7 @@ String RID_SVXSTR_BORDEAUX
     Text[ chinese_traditional ] = "²`¬õ¦â";
     Text[ arabic ] = "ÃÍãÑ ÞÇäò";
     Text[ turkish ] = "Bordo";
+    Text[ catalan ] = "Burdeos";
 };
 
 String RID_SVXSTR_PALE_YELLOW
@@ -2154,6 +2232,7 @@ String RID_SVXSTR_PALE_YELLOW
     Text[ chinese_traditional ] = "²L¶À¦â";
     Text[ arabic ] = "ÃÕÝÑ ÔÇÍÈ";
     Text[ turkish ] = "Solgun sarý";
+    Text[ catalan ] = "Amarillo pastel";
 };
 
 String RID_SVXSTR_PALE_GREEN
@@ -2178,6 +2257,7 @@ String RID_SVXSTR_PALE_GREEN
     Text[ chinese_traditional ] = "²Lºñ¦â";
     Text[ arabic ] = "ÃÎÖÑ ÔÇÍÈ";
     Text[ turkish ] = "Solgun yeþil";
+    Text[ catalan ] = "Verde pastel";
 };
 
 String RID_SVXSTR_DKVIOLET
@@ -2202,6 +2282,7 @@ String RID_SVXSTR_DKVIOLET
     Text[ chinese_traditional ] = "²`µµ¦â";
     Text[ arabic ] = "ÈäÝÓÌí ÛÇãÞ";
     Text[ turkish ] = "Koyu lila";
+    Text[ catalan ] = "Violeta oscuro";
 };
 
 String RID_SVXSTR_SALMON
@@ -2226,6 +2307,7 @@ String RID_SVXSTR_SALMON
     Text[ chinese_traditional ] = "¾í¬õ¦â";
     Text[ arabic ] = "ÞÑäÝáí";
     Text[ turkish ] = "Somon";
+    Text[ catalan ] = "Salmón";
 };
 
 String RID_SVXSTR_SEABLUE
@@ -2250,6 +2332,7 @@ String RID_SVXSTR_SEABLUE
     Text[ chinese_traditional ] = "®ü¤ôÂÅ";
     Text[ arabic ] = "ÃÒÑÞ äíáí";
     Text[ turkish ] = "Deniz mavisi";
+    Text[ catalan ] = "Azul marino";
 };
 
 String RID_SVXSTR_COLOR_SUN
@@ -2277,6 +2360,7 @@ String RID_SVXSTR_COLOR_SUN
     Text[ arabic ] = "Sun";
     Text[ turkish ] = "Sun";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Sun";
 };
 
 String RID_SVXSTR_TBLAFMT_3D
@@ -2302,6 +2386,7 @@ String RID_SVXSTR_TBLAFMT_3D
     Text[ arabic ] = "ËáÇËí ÇáÃÈÚÇÏ";
     Text[ turkish ] = "3B";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "3D";
 };
 String RID_SVXSTR_TBLAFMT_BLACK1
 {
@@ -2326,6 +2411,7 @@ String RID_SVXSTR_TBLAFMT_BLACK1
     Text[ arabic ] = "ÃÓæÏ 1";
     Text[ turkish ] = "Siyah 1";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Negro 1";
 };
 String RID_SVXSTR_TBLAFMT_BLACK2
 {
@@ -2350,6 +2436,7 @@ String RID_SVXSTR_TBLAFMT_BLACK2
     Text[ arabic ] = "ÃÓæÏ 2";
     Text[ turkish ] = "Siyah 2";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Negro 2";
 };
 String RID_SVXSTR_TBLAFMT_BLUE
 {
@@ -2373,6 +2460,7 @@ String RID_SVXSTR_TBLAFMT_BLUE
     Text[ chinese_traditional ] = "ÂÅ¦â";
     Text[ arabic ] = "ÃÒÑÞ";
     Text[ turkish ] = "Mavi";
+    Text[ catalan ] = "Azul";
 };
 String RID_SVXSTR_TBLAFMT_BROWN
 {
@@ -2396,6 +2484,7 @@ String RID_SVXSTR_TBLAFMT_BROWN
     Text[ chinese_traditional ] = "´Ä¦â";
     Text[ arabic ] = "Èäí";
     Text[ turkish ] = "Kahverengi";
+    Text[ catalan ] = "Marrón";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY
 {
@@ -2419,6 +2508,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY
     Text[ chinese_traditional ] = "³f¹ô";
     Text[ arabic ] = "ÇáÚãáÉ";
     Text[ turkish ] = "Para birimi";
+    Text[ catalan ] = "Moneda";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_3D
 {
@@ -2442,6 +2532,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_3D
     Text[ chinese_traditional ] = "³f¹ô 3D";
     Text[ arabic ] = "ÚãáÉ ËáÇËíÉ ÇáÃÈÚÇÏ";
     Text[ turkish ] = "Para birimi 3B";
+    Text[ catalan ] = "Moneda 3D";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_GRAY
 {
@@ -2465,6 +2556,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_GRAY
     Text[ chinese_traditional ] = "³f¹ô ¦Ç¦â";
     Text[ arabic ] = "ÚãáÉ ÑãÇÏíÉ";
     Text[ turkish ] = "Para birimi gri";
+    Text[ catalan ] = "Moneda gris";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER
 {
@@ -2488,6 +2580,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER
     Text[ chinese_traditional ] = "³f¹ô ²Hµµ¦â";
     Text[ arabic ] = "ÚãáÉ ÃÑÌæÇäíÉ ÝÇÊÍ";
     Text[ turkish ] = "Para birimi eflatun";
+    Text[ catalan ] = "Moneda lavanda";
 };
 String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
 {
@@ -2511,6 +2604,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
     Text[ chinese_traditional ] = "³f¹ô ÂÅ¥É¦â";
     Text[ arabic ] = "ÚãáÉ ÊÑßæÇÒ";
     Text[ turkish ] = "Para birimi turkuaz";
+    Text[ catalan ] = "Moneda turquesa";
 };
 String RID_SVXSTR_TBLAFMT_GRAY
 {
@@ -2534,6 +2628,7 @@ String RID_SVXSTR_TBLAFMT_GRAY
     Text[ chinese_traditional ] = "¦Ç¦â";
     Text[ arabic ] = "ÑãÇÏí";
     Text[ turkish ] = "Gri";
+    Text[ catalan ] = "Gris";
 };
 String RID_SVXSTR_TBLAFMT_GREEN
 {
@@ -2557,6 +2652,7 @@ String RID_SVXSTR_TBLAFMT_GREEN
     Text[ chinese_traditional ] = "ºñ¦â";
     Text[ arabic ] = "ÃÎÖÑ";
     Text[ turkish ] = "Yeþil";
+    Text[ catalan ] = "Verde";
 };
 String RID_SVXSTR_TBLAFMT_LAVENDER
 {
@@ -2580,6 +2676,7 @@ String RID_SVXSTR_TBLAFMT_LAVENDER
     Text[ chinese_traditional ] = "²Hµµ¦â";
     Text[ arabic ] = "ÃÑÌæÇäí ÝÇÊÍ";
     Text[ turkish ] = "Eflatun";
+    Text[ catalan ] = "Lavanda";
 };
 String RID_SVXSTR_TBLAFMT_RED
 {
@@ -2603,6 +2700,7 @@ String RID_SVXSTR_TBLAFMT_RED
     Text[ chinese_traditional ] = "¬õ¦â";
     Text[ arabic ] = "ÃÍãÑ";
     Text[ turkish ] = "Kýrmýzý";
+    Text[ catalan ] = "Rojo";
 };
 String RID_SVXSTR_TBLAFMT_TURQUOISE
 {
@@ -2626,6 +2724,7 @@ String RID_SVXSTR_TBLAFMT_TURQUOISE
     Text[ chinese_traditional ] = "ÂÅ¥É¦â";
     Text[ arabic ] = "ÊÑßæÇÒ";
     Text[ turkish ] = "Turkuaz";
+    Text[ catalan ] = "Turquesa";
 };
 String RID_SVXSTR_TBLAFMT_YELLOW
 {
@@ -2649,6 +2748,7 @@ String RID_SVXSTR_TBLAFMT_YELLOW
     Text[ chinese_traditional ] = "¶À¦â";
     Text[ arabic ] = "ÃÕÝÑ";
     Text[ turkish ] = "Sarý";
+    Text[ catalan ] = "Amarillo";
 };
 
 String RID_SVXSTR_LINEJOINT_MIDDLE
@@ -2673,6 +2773,7 @@ String RID_SVXSTR_LINEJOINT_MIDDLE
     Text[ chinese_traditional ] = "¥­§¡­È«¬½u±ø±µ¦X";
     Text[ arabic ] = "æÕáÉ ÎØæØ ãÊæÓØÉ";
     Text[ turkish ] = "Ortalanmýþ çizgi geçiþi";
+    Text[ catalan ] = "Juntas de línea, media";
 };
 String RID_SVXSTR_LINEJOINT_BEVEL
 {
@@ -2696,6 +2797,7 @@ String RID_SVXSTR_LINEJOINT_BEVEL
     Text[ chinese_traditional ] = "Ápµ²«¬½u±ø±µ¦X";
     Text[ arabic ] = "æÕáÉ ÎØæØ ãÊÕáÉ";
     Text[ turkish ] = "Birleþtirilmiþ çizgi geçiþi";
+    Text[ catalan ] = "Junta de líneas unida";
 };
 String RID_SVXSTR_LINEJOINT_MITER
 {
@@ -2719,6 +2821,7 @@ String RID_SVXSTR_LINEJOINT_MITER
     Text[ chinese_traditional ] = "°Å±µ«¬½u±ø±µ¦X";
     Text[ arabic ] = "æÕáÉ ÎØæØ ãÊÞÇØÚÉ";
     Text[ turkish ] = "Çizgi kesiþme noktasý";
+    Text[ catalan ] = "Junta de líneas cortada";
 };
 String RID_SVXSTR_LINEJOINT_ROUND
 {
@@ -2742,6 +2845,7 @@ String RID_SVXSTR_LINEJOINT_ROUND
     Text[ chinese_traditional ] = "¶ê§Î½u±ø±µ¦X";
     Text[ arabic ] = "æÕáÉ ÎØæØ¡ ÏÇÆÑíÉ";
     Text[ turkish ] = "Yuvarlak çizgi geçiþi";
+    Text[ catalan ] = "Junta de líneas redonda";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2959,6 +3063,7 @@ String RID_SVXSTR_GRDT0
     Text[ chinese_traditional ] = "±m¦â¹Ï®×";
     Text[ arabic ] = "ÊÏÑÌ Çááæä";
     Text[ turkish ] = "Gradyan";
+    Text[ catalan ] = "Gradiente";
 };
 String RID_SVXSTR_GRDT1
 {
@@ -2982,6 +3087,7 @@ String RID_SVXSTR_GRDT1
     Text[ chinese_traditional ] = "½u±øÂÅ/¥Õ";
     Text[ arabic ] = "ÎØí ÃÒÑÞ/ÃÈíÖ";
     Text[ turkish ] = "Doðrusal mavi/beyaz";
+    Text[ catalan ] = "Lineal azul/blanco";
 };
 String RID_SVXSTR_GRDT2
 {
@@ -3005,6 +3111,7 @@ String RID_SVXSTR_GRDT2
     Text[ chinese_traditional ] = "½u±ø¬õµµ¦â/ºñ¦â";
     Text[ arabic ] = "ÎØí ÃÑÌæÇäí/ÃÎÖÑ";
     Text[ turkish ] = "Doðrusal menekþe/yeþil";
+    Text[ catalan ] = "Lineal magenta/verde";
 };
 String RID_SVXSTR_GRDT3
 {
@@ -3028,6 +3135,7 @@ String RID_SVXSTR_GRDT3
     Text[ chinese_traditional ] = "½u±ø¶À¦â/´Ä¦â";
     Text[ arabic ] = "ÎØí ÃÕÝÑ/Èäí";
     Text[ turkish ] = "Doðrusal sarý/kahverengi";
+    Text[ catalan ] = "Lineal amarillo/marrón";
 };
 String RID_SVXSTR_GRDT4
 {
@@ -3051,6 +3159,7 @@ String RID_SVXSTR_GRDT4
     Text[ chinese_traditional ] = "¥ú½uª¬ºñ¦â/¶Â¦â";
     Text[ arabic ] = "ÔÚÇÚí ÃÎÖÑ/ÃÓæÏ";
     Text[ turkish ] = "Radyal yeþil/siyah";
+    Text[ catalan ] = "Radial verde/negro";
 };
 String RID_SVXSTR_GRDT5
 {
@@ -3074,6 +3183,7 @@ String RID_SVXSTR_GRDT5
     Text[ chinese_traditional ] = "¥ú½uª¬¬õ¦â/¶À¦â";
     Text[ arabic ] = "ÔÚÇÚí ÃÍãÑ/ÃÕÝÑ";
     Text[ turkish ] = "Radyal kýrmýzý/sarý";
+    Text[ catalan ] = "Radial rojo/amarillo";
 };
 String RID_SVXSTR_GRDT6
 {
@@ -3097,6 +3207,7 @@ String RID_SVXSTR_GRDT6
     Text[ chinese_traditional ] = "¯x§Î¬õ¦â/¥Õ¦â";
     Text[ arabic ] = "ãÓÊØíá ÃÍãÑ/ÃÈíÖ";
     Text[ turkish ] = "Dikdörtgen kýrmýzý/beyaz";
+    Text[ catalan ] = "Rectangular rojo/blanco";
 };
 String RID_SVXSTR_GRDT7
 {
@@ -3120,6 +3231,7 @@ String RID_SVXSTR_GRDT7
     Text[ chinese_traditional ] = "¥¿¤è§Î¶À¦â/¥Õ¦â";
     Text[ arabic ] = "ãÑÈÚ ÃÕÝÑ/ÃÈíÖ";
     Text[ turkish ] = "Kare sarý/beyaz";
+    Text[ catalan ] = "Cuadrado amarillo/blanco";
 };
 String RID_SVXSTR_GRDT8
 {
@@ -3143,6 +3255,7 @@ String RID_SVXSTR_GRDT8
     Text[ chinese_traditional ] = "¾ò¶êÂÅ¦Ç¦â/²L¦Ç¦â";
     Text[ arabic ] = "ÈíÖæí ÑãÇÏí ãÒÑÞ/ÃÒÑÞ ÝÇÊÍ";
     Text[ turkish ] = "Elipsoid mavi gri/açýk mavi";
+    Text[ catalan ] = "Elipsoide azul gris/azul claro";
 };
 String RID_SVXSTR_GRDT9
 {
@@ -3166,6 +3279,7 @@ String RID_SVXSTR_GRDT9
     Text[ chinese_traditional ] = "¶b§Î²L¬õ¦â/¥Õ¦â";
     Text[ arabic ] = "ãÍæÑí ÃÍãÑ ÝÇÊÍ/ÃÈíÖ";
     Text[ turkish ] = "Eksen açýk kýrmýzý/beyaz";
+    Text[ catalan ] = "Axial rojo claro/blanco";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3251,6 +3365,7 @@ String RID_SVXSTR_HATCH0
     Text[ chinese_traditional ] = "¶Â¦â 45 «×¼e";
     Text[ arabic ] = "ÃÓæÏ 45 ÏÑÌÉ æÇÓÚ";
     Text[ turkish ] = "Siyah 45 derece geniþ";
+    Text[ catalan ] = "Negro 45 grados ancho";
 };
 String RID_SVXSTR_HATCH1
 {
@@ -3274,6 +3389,7 @@ String RID_SVXSTR_HATCH1
     Text[ chinese_traditional ] = "¶Â¦â 45 «×";
     Text[ arabic ] = "ÃÓæÏ 45 ÏÑÌÉ";
     Text[ turkish ] = "Siyah 45 derece";
+    Text[ catalan ] = "Negro 45 grados";
 };
 String RID_SVXSTR_HATCH2
 {
@@ -3297,6 +3413,7 @@ String RID_SVXSTR_HATCH2
     Text[ chinese_traditional ] = "¶Â¦â -45 «×";
     Text[ arabic ] = "ÃÓæÏ -45 ÏÑÌÉ";
     Text[ turkish ] = "Siyah -45 derece";
+    Text[ catalan ] = "Negro -45 grados";
 };
 String RID_SVXSTR_HATCH3
 {
@@ -3320,6 +3437,7 @@ String RID_SVXSTR_HATCH3
     Text[ chinese_traditional ] = "¶Â¦â 90 «×";
     Text[ arabic ] = "ÃÓæÏ 90 ÏÑÌÉ";
     Text[ turkish ] = "Siyah 90 derece";
+    Text[ catalan ] = "Negro 90 grados";
 };
 String RID_SVXSTR_HATCH4
 {
@@ -3343,6 +3461,7 @@ String RID_SVXSTR_HATCH4
     Text[ chinese_traditional ] = "¬õºôª¬ 45 «×";
     Text[ arabic ] = "ÃÍãÑ ÔÈßÉ 45 ÏÑÌÉ";
     Text[ turkish ] = "Kýrmýzý ýzgaralý 45 derece";
+    Text[ catalan ] = "Rojo red 45 grados";
 };
 String RID_SVXSTR_HATCH5
 {
@@ -3366,6 +3485,7 @@ String RID_SVXSTR_HATCH5
     Text[ chinese_traditional ] = "¬õºô 0 «×";
     Text[ arabic ] = "ÃÍãÑ ÔÈßÉ 0 ÏÑÌÉ";
     Text[ turkish ] = "Kýrmýzý ýzgaralý 0 derece";
+    Text[ catalan ] = "Rojo red 0 grados";
 };
 String RID_SVXSTR_HATCH6
 {
@@ -3389,6 +3509,7 @@ String RID_SVXSTR_HATCH6
     Text[ chinese_traditional ] = "ÂÅºô 45 «×";
     Text[ arabic ] = "ÃÒÑÞ ÔÈßÉ 45 ÏÑÌÉ";
     Text[ turkish ] = "Mavi ýzgaralý 45 derece";
+    Text[ catalan ] = "Azul red 45 grados";
 };
 String RID_SVXSTR_HATCH7
 {
@@ -3412,6 +3533,7 @@ String RID_SVXSTR_HATCH7
     Text[ chinese_traditional ] = "ÂÅºô 0 «×";
     Text[ arabic ] = "ÃÒÑÞ ÔÈßÉ 0 ÏÑÌÉ";
     Text[ turkish ] = "Mavi ýzgaralý 0 derece";
+    Text[ catalan ] = "Azul red 0 grados";
 };
 String RID_SVXSTR_HATCH8
 {
@@ -3435,6 +3557,7 @@ String RID_SVXSTR_HATCH8
     Text[ chinese_traditional ] = "ÂÅ¦â¤Tºô 90 «×";
     Text[ arabic ] = "ÃÒÑÞ ÔÈßÉ ËáÇËíÉ 90 ÏÑÌÉ";
     Text[ turkish ] = "Mavi 3'lü ýzgaralý 90 derece";
+    Text[ catalan ] = "Azul red triple 90 grados";
 };
 String RID_SVXSTR_HATCH9
 {
@@ -3458,6 +3581,7 @@ String RID_SVXSTR_HATCH9
     Text[ chinese_traditional ] = "¶Â¦â 0 «×";
     Text[ arabic ] = "ÃÓæÏ 0 ÏÑÌÉ";
     Text[ turkish ] = "Siyah 0 derece";
+    Text[ catalan ] = "Negro 0 grados";
 };
 String RID_SVXSTR_HATCH10
 {
@@ -3484,6 +3608,7 @@ String RID_SVXSTR_HATCH10
     Text[ korean ] = "ÇØÄª";
     Text[ turkish ] = "Tarama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Trama";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -3625,6 +3750,7 @@ String RID_SVXSTR_BMP0
     Text[ chinese_traditional ] = "ªÅ¥Õ";
     Text[ arabic ] = "ÝÇÑÛ";
     Text[ turkish ] = "Boþ";
+    Text[ catalan ] = "Vacío";
 };
 String RID_SVXSTR_BMP1
 {
@@ -3648,6 +3774,7 @@ String RID_SVXSTR_BMP1
     Text[ chinese_traditional ] = "¤ÑªÅ";
     Text[ arabic ] = "ÇáÓãÇÁ";
     Text[ turkish ] = "Gökyüzü";
+    Text[ catalan ] = "Cielo";
 };
 String RID_SVXSTR_BMP2
 {
@@ -3671,6 +3798,7 @@ String RID_SVXSTR_BMP2
     Text[ chinese_traditional ] = "¤ô";
     Text[ arabic ] = "ãíÇå";
     Text[ turkish ] = "Su";
+    Text[ catalan ] = "Agua";
 };
 String RID_SVXSTR_BMP3
 {
@@ -3694,6 +3822,7 @@ String RID_SVXSTR_BMP3
     Text[ chinese_traditional ] = "²`ÂÅ";
     Text[ arabic ] = "ÍõÈóíúÈöíø ÎÔä";
     Text[ turkish ] = "Ýri taneler";
+    Text[ catalan ] = "Grano grueso";
 };
 String RID_SVXSTR_BMP4
 {
@@ -3717,6 +3846,7 @@ String RID_SVXSTR_BMP4
     Text[ chinese_traditional ] = "¤ô»È";
     Text[ arabic ] = "ÒÆÈÞ";
     Text[ turkish ] = "Çikolata";
+    Text[ catalan ] = "Mercurio";
 };
 String RID_SVXSTR_BMP5
 {
@@ -3740,6 +3870,7 @@ String RID_SVXSTR_BMP5
     Text[ chinese_traditional ] = "¤ÓªÅ";
     Text[ arabic ] = "ÇáÝÖÇÁ";
     Text[ turkish ] = "Uzay";
+    Text[ catalan ] = "Espacio";
 };
 String RID_SVXSTR_BMP6
 {
@@ -3763,6 +3894,7 @@ String RID_SVXSTR_BMP6
     Text[ chinese_traditional ] = "ª÷ÄÝ";
     Text[ arabic ] = "ãÚÏä";
     Text[ turkish ] = "Metal";
+    Text[ catalan ] = "Metal";
 };
 String RID_SVXSTR_BMP7
 {
@@ -3786,6 +3918,7 @@ String RID_SVXSTR_BMP7
     Text[ chinese_traditional ] = "¤ôºw";
     Text[ arabic ] = "ÞØÑÇÊ";
     Text[ turkish ] = "Damla";
+    Text[ catalan ] = "Gota";
 };
 String RID_SVXSTR_BMP8
 {
@@ -3809,6 +3942,7 @@ String RID_SVXSTR_BMP8
     Text[ chinese_traditional ] = "¤j²z¥Û";
     Text[ arabic ] = "ÑÎÇã";
     Text[ turkish ] = "Mermer";
+    Text[ catalan ] = "Mármol";
 };
 String RID_SVXSTR_BMP9
 {
@@ -3832,6 +3966,7 @@ String RID_SVXSTR_BMP9
     Text[ chinese_traditional ] = "¨È³Â";
     Text[ arabic ] = "ßÊøÇä";
     Text[ turkish ] = "Keten";
+    Text[ catalan ] = "Lino";
 };
 String RID_SVXSTR_BMP10
 {
@@ -3855,6 +3990,7 @@ String RID_SVXSTR_BMP10
     Text[ chinese_traditional ] = "¥ÛÀY";
     Text[ arabic ] = "ÍÌÑ";
     Text[ turkish ] = "Taþ";
+    Text[ catalan ] = "Piedra";
 };
 String RID_SVXSTR_BMP11
 {
@@ -3878,6 +4014,7 @@ String RID_SVXSTR_BMP11
     Text[ chinese_traditional ] = "¸H¥Û";
     Text[ arabic ] = "ÍÕì";
     Text[ turkish ] = "Çakýl";
+    Text[ catalan ] = "Grava";
 };
 String RID_SVXSTR_BMP12
 {
@@ -3901,6 +4038,7 @@ String RID_SVXSTR_BMP12
     Text[ chinese_traditional ] = "ùÙ";
     Text[ arabic ] = "ÓæÑ";
     Text[ turkish ] = "Duvar";
+    Text[ catalan ] = "Muralla";
 };
 String RID_SVXSTR_BMP13
 {
@@ -3924,6 +4062,7 @@ String RID_SVXSTR_BMP13
     Text[ chinese_traditional ] = "¿j¥Û";
     Text[ arabic ] = "ÞæÇáÈ ØæÈ";
     Text[ turkish ] = "Tuðla";
+    Text[ catalan ] = "Ladrillo";
 };
 String RID_SVXSTR_BMP14
 {
@@ -3947,6 +4086,7 @@ String RID_SVXSTR_BMP14
     Text[ chinese_traditional ] = "½sÂ´ª«";
     Text[ arabic ] = "ÔÈßÉ";
     Text[ turkish ] = "Hasýr";
+    Text[ catalan ] = "Malla";
 };
 String RID_SVXSTR_BMP15
 {
@@ -3970,6 +4110,7 @@ String RID_SVXSTR_BMP15
     Text[ chinese_traditional ] = "¾ð¸­";
     Text[ arabic ] = "æÑÞ ÃÔÌÇÑ";
     Text[ turkish ] = "Yapraklar";
+    Text[ catalan ] = "Follaje";
 };
 String RID_SVXSTR_BMP16
 {
@@ -3993,6 +4134,7 @@ String RID_SVXSTR_BMP16
     Text[ chinese_traditional ] = "¤H³y¯ó¦a";
     Text[ arabic ] = "äÌíá ÕäÇÚí";
     Text[ turkish ] = "Yapay çim";
+    Text[ catalan ] = "Césped sintético";
 };
 String RID_SVXSTR_BMP17
 {
@@ -4016,6 +4158,7 @@ String RID_SVXSTR_BMP17
     Text[ chinese_traditional ] = "Âúµâ";
     Text[ arabic ] = "ÒåÑÉ ÇáÑÈíÚ";
     Text[ turkish ] = "Papatya";
+    Text[ catalan ] = "Margarita";
 };
 String RID_SVXSTR_BMP18
 {
@@ -4039,6 +4182,7 @@ String RID_SVXSTR_BMP18
     Text[ chinese_traditional ] = "¾í¦â";
     Text[ arabic ] = "ÈÑÊÞÇáí";
     Text[ turkish ] = "Turuncu";
+    Text[ catalan ] = "Naranja";
 };
 String RID_SVXSTR_BMP19
 {
@@ -4062,6 +4206,7 @@ String RID_SVXSTR_BMP19
     Text[ chinese_traditional ] = "¤õ¬õ¦â";
     Text[ arabic ] = "äÇÑí";
     Text[ turkish ] = "Ateþ";
+    Text[ catalan ] = "Fogoso";
 };
 String RID_SVXSTR_BMP20
 {
@@ -4085,6 +4230,7 @@ String RID_SVXSTR_BMP20
     Text[ chinese_traditional ] = "ª´ºÀ";
     Text[ arabic ] = "æÑÏ";
     Text[ turkish ] = "Gül";
+    Text[ catalan ] = "Rosas";
 };
 
 String RID_SVXSTR_BMP21
@@ -4109,6 +4255,7 @@ String RID_SVXSTR_BMP21
     Text[ chinese_traditional ] = "ÂI°}¹Ï";
     Text[ turkish ] = "Bitmap";
     Text[ arabic ] = "ÕæÑÉ äÞØíÉ";
+    Text[ catalan ] = "Bitmap";
 };
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -4198,6 +4345,7 @@ String RID_SVXSTR_DASH0
     Text[ chinese_traditional ] = "¶W²ÓÂI¹º½u";
     Text[ arabic ] = "ÔõÑØ ÑÝíÚÉ ÌÏÇð";
     Text[ turkish ] = "Çok ince kesik çizgili";
+    Text[ catalan ] = "Trazos ultrafinos";
 };
 String RID_SVXSTR_DASH1
 {
@@ -4221,6 +4369,7 @@ String RID_SVXSTR_DASH1
     Text[ chinese_traditional ] = "²ÓÂI¹º½u";
     Text[ arabic ] = "ÔõÑØ ÑÝíÚÉ";
     Text[ turkish ] = "Ýnce kesik çizgili";
+    Text[ catalan ] = "Trazos finos";
 };
 String RID_SVXSTR_DASH2
 {
@@ -4244,6 +4393,7 @@ String RID_SVXSTR_DASH2
     Text[ chinese_traditional ] = "¶W²Ó¨âÂI¤T¦E½u";
     Text[ arabic ] = "2 äÞØÉ 3 ÔÑØ¡ ÑÝíÚÉ ÌÏÇð";
     Text[ turkish ] = "Çok ince 2 nokta 3 çizgi";
+    Text[ catalan ] = "Ultrafino 2 puntos 2 trazos";
 };
 String RID_SVXSTR_DASH3
 {
@@ -4267,6 +4417,7 @@ String RID_SVXSTR_DASH3
     Text[ chinese_traditional ] = "²ÓÂI";
     Text[ arabic ] = "äÞÇØ ÑÝíÚÉ";
     Text[ turkish ] = "Ýnce noktalý";
+    Text[ catalan ] = "Punteado fino";
 };
 String RID_SVXSTR_DASH4
 {
@@ -4290,6 +4441,7 @@ String RID_SVXSTR_DASH4
     Text[ chinese_traditional ] = "²ÓÂI½u±ø";
     Text[ arabic ] = "ÎØ Ðæ äÞÇØ ÑÝíÚÉ";
     Text[ turkish ] = "Ýnce noktalý çizgi";
+    Text[ catalan ] = "Trazo con puntos finos";
 };
 String RID_SVXSTR_DASH5
 {
@@ -4313,6 +4465,7 @@ String RID_SVXSTR_DASH5
     Text[ chinese_traditional ] = "²ÓÂI¹º½u(¥iÅÜ)";
     Text[ arabic ] = "ÔõÑØ ÑÝíÚÉ (ãÊÛíÑÉ)";
     Text[ turkish ] = "Ýnce kesik çizgili (deðiþken)";
+    Text[ catalan ] = "Trazos finos (variable)";
 };
 String RID_SVXSTR_DASH6
 {
@@ -4336,6 +4489,7 @@ String RID_SVXSTR_DASH6
     Text[ chinese_traditional ] = "3 ¦E½u 3 ÂI(¥iÅÜ)";
     Text[ arabic ] = "3 ÔõÑØ 3 äÞÇØ (ãÊÛíÑÉ)";
     Text[ turkish ] = "3 çizgi 3 nokta (deðiþken)";
+    Text[ catalan ] = "3 trazos 3 puntos (variable)";
 };
 String RID_SVXSTR_DASH7
 {
@@ -4359,6 +4513,7 @@ String RID_SVXSTR_DASH7
     Text[ chinese_traditional ] = "¶W²ÓÂI(¥iÅÜ)";
     Text[ arabic ] = "äÞÇØ ÑÝíÚÉ ÌÏÇð (ãÊÛíÑÉ)";
     Text[ turkish ] = "Çok ince noktalý (deðiþken)";
+    Text[ catalan ] = "Punteado ultrafino (variable)";
 };
 String RID_SVXSTR_DASH8
 {
@@ -4382,6 +4537,7 @@ String RID_SVXSTR_DASH8
     Text[ chinese_traditional ] = "½u±ø­·®æ 9";
     Text[ arabic ] = "äãØ ÇáÎØ 9";
     Text[ turkish ] = "Çizgi biçimi 9";
+    Text[ catalan ] = "Estilo de línea 9";
 };
 String RID_SVXSTR_DASH9
 {
@@ -4405,6 +4561,7 @@ String RID_SVXSTR_DASH9
     Text[ chinese_traditional ] = "2 ÂI 1 ¦E½u";
     Text[ arabic ] = "2 äÞØÉ 1 ÔÑØÉ";
     Text[ turkish ] = "2 nokta 1 çizgi";
+    Text[ catalan ] = "2 puntos 1 trazo";
 };
 String RID_SVXSTR_DASH10
 {
@@ -4428,6 +4585,7 @@ String RID_SVXSTR_DASH10
     Text[ chinese_traditional ] = "ÂI¹º½u(¥iÅÜ)";
     Text[ arabic ] = "ÔõÑØ (ãÊÛíÑÉ)";
     Text[ turkish ] = "Kesik çizgili (deðiþken)";
+    Text[ catalan ] = "Trazos (variable)";
 };
 String RID_SVXSTR_DASH11
 {
@@ -4451,6 +4609,7 @@ String RID_SVXSTR_DASH11
     Text[ chinese_traditional ] = "¯}§é¸¹";
     Text[ turkish ] = "Dashed";
     Text[ arabic ] = "ÔõÑØ";
+    Text[ catalan ] = "Dashed";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4541,6 +4700,7 @@ String RID_SVXSTR_LEND0
     Text[ chinese_traditional ] = "½bÀY¥W§Î";
     Text[ arabic ] = "Óåã ãÞÚÑ";
     Text[ turkish ] = "Ýçbükey ok";
+    Text[ catalan ] = "Flecha cóncava";
 };
 String RID_SVXSTR_LEND1
 {
@@ -4564,6 +4724,7 @@ String RID_SVXSTR_LEND1
     Text[ chinese_traditional ] = "¥¿¤è§Î 45 «×";
     Text[ arabic ] = "ãÑÈÚ 45";
     Text[ turkish ] = "Kare 45";
+    Text[ catalan ] = "Cuadrado 45";
 };
 String RID_SVXSTR_LEND2
 {
@@ -4587,6 +4748,7 @@ String RID_SVXSTR_LEND2
     Text[ chinese_traditional ] = "²Ó¤p½bÀY";
     Text[ arabic ] = "Óåã ÑÝíÚ";
     Text[ turkish ] = "Ýnce ok";
+    Text[ catalan ] = "Flecha estrecha";
 };
 String RID_SVXSTR_LEND3
 {
@@ -4610,6 +4772,7 @@ String RID_SVXSTR_LEND3
     Text[ chinese_traditional ] = "¤Ø«×½u±ø";
     Text[ arabic ] = "ÎØæØ ÞíÇÓ";
     Text[ turkish ] = "Boyutlandýrma çizgileri";
+    Text[ catalan ] = "Fines de dimensiones";
 };
 String RID_SVXSTR_LEND4
 {
@@ -4633,6 +4796,7 @@ String RID_SVXSTR_LEND4
     Text[ chinese_traditional ] = "Âù½bÀY";
     Text[ arabic ] = "Óåã ãÒÏæÌ";
     Text[ turkish ] = "Ýki uçlu ok";
+    Text[ catalan ] = "Flecha doble";
 };
 String RID_SVXSTR_LEND5
 {
@@ -4656,6 +4820,7 @@ String RID_SVXSTR_LEND5
     Text[ chinese_traditional ] = "¶ê§Îµu½bÀY";
     Text[ arabic ] = "Óåã ÞÕíÑ ãÓÊÏíÑ";
     Text[ turkish ] = "Yuvarlatýlmýþ kýsa ok";
+    Text[ catalan ] = "Flecha corta redondeada";
 };
 String RID_SVXSTR_LEND6
 {
@@ -4679,6 +4844,7 @@ String RID_SVXSTR_LEND6
     Text[ chinese_traditional ] = "¹ïºÙ¦¡½bÀY";
     Text[ arabic ] = "Óåã ãÊäÇÓÞ";
     Text[ turkish ] = "Simetrik ok";
+    Text[ catalan ] = "Flecha simétrica";
 };
 String RID_SVXSTR_LEND7
 {
@@ -4702,6 +4868,7 @@ String RID_SVXSTR_LEND7
     Text[ chinese_traditional ] = "¦E½u½bÀY";
     Text[ arabic ] = "Óåã ÎØí";
     Text[ turkish ] = "Çizgili ok";
+    Text[ catalan ] = "Flecha línea";
 };
 String RID_SVXSTR_LEND8
 {
@@ -4725,6 +4892,7 @@ String RID_SVXSTR_LEND8
     Text[ chinese_traditional ] = "¶ê§Î¤j½bÀY";
     Text[ arabic ] = "Óåã Øæíá ãÓÊÏíÑ";
     Text[ turkish ] = "Yuvarlatýlmýþ uzun ok";
+    Text[ catalan ] = "Flecha larga redondeada";
 };
 String RID_SVXSTR_LEND9
 {
@@ -4748,6 +4916,7 @@ String RID_SVXSTR_LEND9
     Text[ chinese_traditional ] = "¶ê§Î";
     Text[ arabic ] = "ÏÇÆÑÉ";
     Text[ turkish ] = "Daire";
+    Text[ catalan ] = "Círculo";
 };
 String RID_SVXSTR_LEND10
 {
@@ -4771,6 +4940,7 @@ String RID_SVXSTR_LEND10
     Text[ chinese_traditional ] = "¥¿¤è§Î";
     Text[ arabic ] = "ãÑÈÚ";
     Text[ turkish ] = "Kare";
+    Text[ catalan ] = "Cuadrado";
 };
 String RID_SVXSTR_LEND11
 {
@@ -4794,6 +4964,7 @@ String RID_SVXSTR_LEND11
     Text[ chinese_traditional ] = "½bÀY";
     Text[ arabic ] = "Óåã";
     Text[ turkish ] = "Ok";
+    Text[ catalan ] = "Flecha";
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -4831,6 +5002,7 @@ String RID_SVXSTR_TRASNGR0
     Text[ greek ] = "ÄéáöÜíåéá åðéöÜíåéáò";
     Text[ korean ] = "Åõ¸í Ã¤¿ì±â";
     Text[ turkish ] = "Yüzey saydamlýðý";
+    Text[ catalan ] = "Transparencia";
 };
 
  // ********************************************************************** EOF
