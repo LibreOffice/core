@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:08:51 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@
 #endif
 #include "sdresid.hxx"
 #ifndef SD_FU_SLIDE_SHOW_DLG_HXX
-#include "fuslshow.hxx"
+#include "slideshow.hxx"
 #endif
 #ifndef SD_PREVIEW_WINDOW_HXX
 #include "PreviewWindow.hxx"
@@ -370,11 +370,11 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
             case SID_CLOSEDOC:
             {
                 BOOL bDisabled = FALSE;
-
+/* with new slide show, closing document should always be possible
                 if (pViewShell && pViewShell->GetSlideShow() &&
                     pViewShell->GetSlideShow()->IsInputLocked())
                 {
-                    // Es laeuft ein Effekt in der SlideShow
+                    // Es laeuft ein Effekt in der Slideshow
                     bDisabled = TRUE;
                 }
                 else if (pViewShell && pViewShell->GetView() && pViewShell->GetView()->ISA(DrawView) &&
@@ -405,7 +405,7 @@ void DrawDocShell::GetState(SfxItemSet &rSet)
                         bDisabled = TRUE;
                     }
                 }
-
+*/
                 if (bDisabled)
                 {
                     rSet.DisableItem(SID_CLOSEDOC);
