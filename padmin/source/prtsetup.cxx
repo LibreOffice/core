@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtsetup.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:36 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,7 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
     else
         m_aLevelBox.SelectEntry( String::CreateFromInt32( m_pParent->m_aJobData.m_nPSLevel ) );
 
-    m_aDepthBox.SelectEntry( String::CreateFromInt32( m_pParent->m_aJobData.m_nColorDepth ) );
+    m_aDepthBox.SelectEntry( String::CreateFromInt32( m_pParent->m_aJobData.m_nColorDepth ).AppendAscii( " Bit" ) );
 
     // fill ppd boxes
     for( int i = 0; i < m_pParent->m_aJobData.m_pParser->getKeys(); i++ )

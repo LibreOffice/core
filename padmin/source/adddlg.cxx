@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-08 12:06:50 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef _SVT_FILEDLG_HXX
 #include <filedlg.hxx>
 #endif
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
 
 using namespace rtl;
 using namespace psp;
@@ -100,6 +103,8 @@ APChooseDevicePage::APChooseDevicePage( Window* pParent ) :
     m_aFaxBtn.Check( FALSE );
     m_aPDFBtn.Check( FALSE );
     m_aOldBtn.Check( FALSE );
+    if( ! AddPrinterDialog::getOldPrinterLocation().Len() )
+        m_aOldBtn.Enable( FALSE );
 }
 
 APChooseDevicePage::~APChooseDevicePage()
@@ -158,16 +163,21 @@ void APChooseDriverPage::fill( PrinterInfo& rInfo )
     USHORT nPos = m_aDriverBox.GetSelectEntryPos();
     String* pDriver = (String*)m_aDriverBox.GetEntryData( nPos );
     rInfo.m_aDriverName = *pDriver;
-    if( ! rInfo.m_aPrinterName.getLength() )
+#ifdef DEBUG
+    fprintf( stderr, "m_aLastPrinterName = \"%s\", rInfo.m_aPrinterName = \"%s\"\n",
+             OUStringToOString( m_aLastPrinterName, RTL_TEXTENCODING_ISO_8859_1 ).getStr(),
+             OUStringToOString( rInfo.m_aPrinterName, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+#endif
+    if( rInfo.m_aPrinterName.equals( m_aLastPrinterName ) )
     {
         String aPrinter( AddPrinterDialog::uniquePrinterName( m_aDriverBox.GetEntry( nPos ) ) );
-        rInfo.m_aPrinterName = aPrinter;
+        rInfo.m_aPrinterName = m_aLastPrinterName = aPrinter;
     }
 }
 
 void APChooseDriverPage::updateDrivers()
 {
-    rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
     for( int k = 0; k < m_aDriverBox.GetEntryCount(); k++ )
         delete (String*)m_aDriverBox.GetEntryData( k );
@@ -222,7 +232,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
     }
     else if( pButton == &m_aRemBtn )
     {
-        rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
+        rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
         PrinterInfoManager& rPIManager( PrinterInfoManager::get() );
 
         for( int i = 0; i < m_aDriverBox.GetSelectEntryCount(); i++ )
@@ -458,157 +468,151 @@ APOldPrinterPage::APOldPrinterPage( Window* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_OLDPRINTERS ) ),
           m_aOldPrinterTxt( this, PaResId( RID_ADDP_OLD_TXT_PRINTERS ) ),
           m_aOldPrinterBox( this, PaResId( RID_ADDP_OLD_BOX_PRINTERS ) ),
-          m_aRemBtn( this, PaResId( RID_ADDP_OLD_BTN_REMOVE ) ),
-          m_aRestBtn( this, PaResId( RID_ADDP_OLD_BTN_RESTORE ) )
+          m_aSelectAllBtn( this, PaResId( RID_ADDP_OLD_BTN_SELECTALL ) )
 {
     FreeResource();
 
-    m_aRemBtn.SetClickHdl( LINK( this, APOldPrinterPage, ClickBtnHdl ) );
-    m_aRestBtn.SetClickHdl( LINK( this, APOldPrinterPage, ClickBtnHdl ) );
-    m_aOldPrinterBox.setDelPressedLink( LINK( this, APOldPrinterPage, DelPressedHdl ) );
+    m_aSelectAllBtn.SetClickHdl( LINK( this, APOldPrinterPage, ClickBtnHdl ) );
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
 
-    static const char* pHome = getenv( "HOME" );
-    rtl_TextEncoding aEncoding = gsl_getSystemTextEncoding();
-    PrinterInfoManager& rManager( PrinterInfoManager::get() );
-    if( pHome )
+    String aFileName( AddPrinterDialog::getOldPrinterLocation() );
+    Config aConfig( aFileName );
+
+    // read defaults
+    aConfig.SetGroup( "Xprinter,PostScript" );
+    ByteString aDefPageSize( aConfig.ReadKey( "PageSize" ) );
+    ByteString aDefOrientation( aConfig.ReadKey( "Orientation" ) );
+    ByteString aDefMarginLeft( aConfig.ReadKey( "MarginLeft" ) );
+    ByteString aDefMarginRight( aConfig.ReadKey( "MarginRight" ) );
+    ByteString aDefMarginTop( aConfig.ReadKey( "MarginTop" ) );
+    ByteString aDefMarginBottom( aConfig.ReadKey( "MarginBottom" ) );
+    ByteString aDefScale( aConfig.ReadKey( "Scale" ) );
+    ByteString aDefCopies( aConfig.ReadKey( "Copies" ) );
+    ByteString aDefDPI( aConfig.ReadKey( "DPI" ) );
+
+    aConfig.SetGroup( "devices" );
+    int nDevices = aConfig.GetKeyCount();
+    for( int nKey = 0; nKey < nDevices; nKey++ )
     {
-        String aFileName = String( ByteString( pHome ), aEncoding );
-        aFileName.AppendAscii( "/.Xpdefaults" );
-        Config aConfig( aFileName );
-
-        // read defaults
-        aConfig.SetGroup( "Xprinter,PostScript" );
-        ByteString aDefPageSize( aConfig.ReadKey( "PageSize" ) );
-        ByteString aDefOrientation( aConfig.ReadKey( "Orientation" ) );
-        ByteString aDefMarginLeft( aConfig.ReadKey( "MarginLeft" ) );
-        ByteString aDefMarginRight( aConfig.ReadKey( "MarginRight" ) );
-        ByteString aDefMarginTop( aConfig.ReadKey( "MarginTop" ) );
-        ByteString aDefMarginBottom( aConfig.ReadKey( "MarginBottom" ) );
-        ByteString aDefScale( aConfig.ReadKey( "Scale" ) );
-        ByteString aDefCopies( aConfig.ReadKey( "Copies" ) );
-        ByteString aDefDPI( aConfig.ReadKey( "DPI" ) );
-
         aConfig.SetGroup( "devices" );
-        int nDevices = aConfig.GetKeyCount();
-        for( int nKey = 0; nKey < nDevices; nKey++ )
+        ByteString aPrinter( aConfig.GetKeyName( nKey ) );
+        ByteString aValue( aConfig.ReadKey( aPrinter ) );
+        ByteString aPort( aValue.GetToken( 1, ',' ) );
+        ByteString aDriver( aValue.GetToken( 0, ' ' ) );
+        ByteString aPS( aValue.GetToken( 0, ',' ).GetToken( 1, ' ' ) );
+        ByteString aNewDriver( aDriver );
+        if( aDriver == "GENERIC" )
+            aNewDriver = "SGENPRT";
+
+        if( aPS != "PostScript" )
+            continue;
+
+        const PPDParser* pParser = PPDParser::getParser( String( aNewDriver, aEncoding ) );
+        if( pParser == NULL )
         {
-            aConfig.SetGroup( "devices" );
-            ByteString aPrinter( aConfig.GetKeyName( nKey ) );
-            ByteString aValue( aConfig.ReadKey( aPrinter ) );
-            ByteString aPort( aValue.GetToken( 1, ',' ) );
-            ByteString aDriver( aValue.GetToken( 0, ' ' ) );
-            ByteString aPS( aValue.GetToken( 0, ',' ).GetToken( 1, ' ' ) );
-
-            if( aPS != "PostScript" )
-                continue;
-
-            const PPDParser* pParser = PPDParser::getParser( String( aDriver, aEncoding ) );
-            if( pParser == NULL )
-            {
-                String aText( PaResId( RID_TXT_DRIVERDOESNOTEXIST ) );
-                aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s1" ) ), String( aPrinter, aEncoding ) );
-                aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s2" ) ), String( aDriver, aEncoding ) );
-                InfoBox aBox( this, aText );
-                aBox.Execute();
-                continue;
-            }
-
-            // read the command
-            aConfig.SetGroup( "ports" );
-            ByteString aCommand( aConfig.ReadKey( aPort ) );
-            if( ! aCommand.Len() )
-            {
-                String aText( PaResId( RID_TXT_PRINTERWITHOUTCOMMAND ) );
-                aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), String( aPrinter, aEncoding ) );
-                InfoBox aBox( this, aText );
-                aBox.Execute();
-                continue;
-            }
-
-
-            String aUPrinter( AddPrinterDialog::uniquePrinterName( String( aPrinter, aEncoding ) ) );
-
-            PrinterInfo aInfo;
-            aInfo.m_aDriverName     = String( aDriver, aEncoding );
-            aInfo.m_pParser         = pParser;
-            aInfo.m_aContext.setParser( pParser );
-            aInfo.m_aPrinterName    = aUPrinter;
-            aInfo.m_aCommand        = String( aCommand, aEncoding );
-
-            // read the printer settings
-            ByteString aGroup( aDriver );
-            aGroup += ",PostScript,";
-            aGroup += aPort;
-            aConfig.SetGroup( aGroup );
-
-            aValue = aConfig.ReadKey( "PageSize", aDefPageSize );
-            int nLeft, nRight, nTop, nBottom;
-            if( aValue.Len() &&
-                aInfo.m_pParser->getMargins( String( aValue, aEncoding ),
-                                             nLeft, nRight, nTop, nBottom ) )
-            {
-                const PPDKey* pKey = aInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
-                const PPDValue* pValue = pKey ? pKey->getValue( String( aValue, aEncoding ) ) : NULL;
-                if( pKey && pValue )
-                    aInfo.m_aContext.setValue( pKey, pValue );
-                aValue = aConfig.ReadKey( "MarginLeft", aDefMarginLeft );
-                if( aValue.Len() )
-                    aInfo.m_nLeftMarginAdjust = aValue.ToInt32() - ((double)nLeft * 35.27777778 );
-                aValue = aConfig.ReadKey( "MarginRight", aDefMarginRight );
-                if( aValue.Len() )
-                    aInfo.m_nRightMarginAdjust = aValue.ToInt32() - ((double)nRight * 35.27777778 );
-                aValue = aConfig.ReadKey( "MarginTop", aDefMarginTop );
-                if( aValue.Len() )
-                    aInfo.m_nTopMarginAdjust = aValue.ToInt32() - ((double)nTop * 35.27777778 );
-                aValue = aConfig.ReadKey( "MarginBottom", aDefMarginBottom );
-                if( aValue.Len() )
-                    aInfo.m_nBottomMarginAdjust = aValue.ToInt32() - ((double)nBottom * 35.27777778 );
-            }
-
-            aValue = aConfig.ReadKey( "Scale", aDefScale );
-            if( aValue.Len() )
-                aInfo.m_nScale = 100.0 * StringToDouble( aValue );
-
-            aValue = aConfig.ReadKey( "Copies", aDefScale );
-            if( aValue.Len() )
-                aInfo.m_nCopies = aValue.ToInt32();
-
-            aValue = aConfig.ReadKey( "Comment" );
-            aInfo.m_aComment = String( aValue, aEncoding );
-
-            aValue = aConfig.ReadKey( "Level" );
-            if( aValue.Len() )
-                aInfo.m_nPSLevel = aValue.ToInt32();
-
-            aValue = aConfig.ReadKey( "Orientation", aDefOrientation );
-            if( aValue.Len() )
-                aInfo.m_eOrientation = aValue.CompareIgnoreCaseToAscii( "landscape" ) == COMPARE_EQUAL ? orientation::Landscape : orientation::Portrait;
-            int nGroupKeys = aConfig.GetKeyCount();
-            for( int nPPDKey = 0; nPPDKey < nGroupKeys; nPPDKey++ )
-            {
-                ByteString aPPDKey( aConfig.GetKeyName( nPPDKey ) );
-                // ignore page region
-                // there are some ppd keys in old Xpdefaults that
-                // should never have been writte because they are defaults
-                // PageRegion leads to problems in conjunction
-                // with a not matching PageSize
-                if( aPPDKey.CompareTo( "PPD_", 4 ) == COMPARE_EQUAL &&
-                    aPPDKey != "PPD_PageRegion"
-                    )
-                {
-                    aValue = aConfig.ReadKey( nPPDKey );
-                    aPPDKey.Erase( 0, 4 );
-                    const PPDKey* pKey = aInfo.m_pParser->getKey( String( aPPDKey, RTL_TEXTENCODING_ISO_8859_1 ) );
-                    const PPDValue* pValue = pKey ? ( aValue.Equals( "*nil" ) ? NULL : pKey->getValue( String( aValue, RTL_TEXTENCODING_ISO_8859_1 ) ) ) : NULL;
-                    if( pKey )
-                        aInfo.m_aContext.setValue( pKey, pValue, true );
-                }
-            }
-
-            m_aOldPrinters.push_back( aInfo );
-            int nPos = m_aOldPrinterBox.InsertEntry( aInfo.m_aPrinterName );
-            m_aOldPrinterBox.SetEntryData( nPos, & m_aOldPrinters.back() );
+            String aText( PaResId( RID_TXT_DRIVERDOESNOTEXIST ) );
+            aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s1" ) ), String( aPrinter, aEncoding ) );
+            aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s2" ) ), String( aDriver, aEncoding ) );
+            InfoBox aBox( this, aText );
+            aBox.Execute();
+            continue;
         }
+
+        // read the command
+        aConfig.SetGroup( "ports" );
+        ByteString aCommand( aConfig.ReadKey( aPort ) );
+        if( ! aCommand.Len() )
+        {
+            String aText( PaResId( RID_TXT_PRINTERWITHOUTCOMMAND ) );
+            aText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ), String( aPrinter, aEncoding ) );
+            InfoBox aBox( this, aText );
+            aBox.Execute();
+            continue;
+        }
+
+
+        String aUPrinter( AddPrinterDialog::uniquePrinterName( String( aPrinter, aEncoding ) ) );
+
+        PrinterInfo aInfo;
+        aInfo.m_aDriverName     = String( aNewDriver, aEncoding );
+        aInfo.m_pParser         = pParser;
+        aInfo.m_aContext.setParser( pParser );
+        aInfo.m_aPrinterName    = aUPrinter;
+        aInfo.m_aCommand        = String( aCommand, aEncoding );
+
+        // read the printer settings
+        ByteString aGroup( aDriver );
+        aGroup += ",PostScript,";
+        aGroup += aPort;
+        aConfig.SetGroup( aGroup );
+
+        aValue = aConfig.ReadKey( "PageSize", aDefPageSize );
+        int nLeft, nRight, nTop, nBottom;
+        if( aValue.Len() &&
+            aInfo.m_pParser->getMargins( String( aValue, aEncoding ),
+                                         nLeft, nRight, nTop, nBottom ) )
+        {
+            const PPDKey* pKey = aInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+            const PPDValue* pValue = pKey ? pKey->getValue( String( aValue, aEncoding ) ) : NULL;
+            if( pKey && pValue )
+                aInfo.m_aContext.setValue( pKey, pValue );
+            aValue = aConfig.ReadKey( "MarginLeft", aDefMarginLeft );
+            if( aValue.Len() )
+                aInfo.m_nLeftMarginAdjust = aValue.ToInt32() - ((double)nLeft * 35.27777778 );
+            aValue = aConfig.ReadKey( "MarginRight", aDefMarginRight );
+            if( aValue.Len() )
+                aInfo.m_nRightMarginAdjust = aValue.ToInt32() - ((double)nRight * 35.27777778 );
+            aValue = aConfig.ReadKey( "MarginTop", aDefMarginTop );
+            if( aValue.Len() )
+                aInfo.m_nTopMarginAdjust = aValue.ToInt32() - ((double)nTop * 35.27777778 );
+            aValue = aConfig.ReadKey( "MarginBottom", aDefMarginBottom );
+            if( aValue.Len() )
+                aInfo.m_nBottomMarginAdjust = aValue.ToInt32() - ((double)nBottom * 35.27777778 );
+        }
+
+        aValue = aConfig.ReadKey( "Scale", aDefScale );
+        if( aValue.Len() )
+            aInfo.m_nScale = 100.0 * StringToDouble( aValue );
+
+        aValue = aConfig.ReadKey( "Copies", aDefScale );
+        if( aValue.Len() )
+            aInfo.m_nCopies = aValue.ToInt32();
+
+        aValue = aConfig.ReadKey( "Comment" );
+        aInfo.m_aComment = String( aValue, aEncoding );
+
+        aValue = aConfig.ReadKey( "Level" );
+        if( aValue.Len() )
+            aInfo.m_nPSLevel = aValue.ToInt32();
+
+        aValue = aConfig.ReadKey( "Orientation", aDefOrientation );
+        if( aValue.Len() )
+            aInfo.m_eOrientation = aValue.CompareIgnoreCaseToAscii( "landscape" ) == COMPARE_EQUAL ? orientation::Landscape : orientation::Portrait;
+        int nGroupKeys = aConfig.GetKeyCount();
+        for( int nPPDKey = 0; nPPDKey < nGroupKeys; nPPDKey++ )
+        {
+            ByteString aPPDKey( aConfig.GetKeyName( nPPDKey ) );
+            // ignore page region
+            // there are some ppd keys in old Xpdefaults that
+            // should never have been writte because they are defaults
+            // PageRegion leads to problems in conjunction
+            // with a not matching PageSize
+            if( aPPDKey.CompareTo( "PPD_", 4 ) == COMPARE_EQUAL &&
+                aPPDKey != "PPD_PageRegion"
+                )
+            {
+                aValue = aConfig.ReadKey( nPPDKey );
+                aPPDKey.Erase( 0, 4 );
+                const PPDKey* pKey = aInfo.m_pParser->getKey( String( aPPDKey, RTL_TEXTENCODING_ISO_8859_1 ) );
+                const PPDValue* pValue = pKey ? ( aValue.Equals( "*nil" ) ? NULL : pKey->getValue( String( aValue, RTL_TEXTENCODING_ISO_8859_1 ) ) ) : NULL;
+                if( pKey )
+                    aInfo.m_aContext.setValue( pKey, pValue, true );
+            }
+        }
+
+        m_aOldPrinters.push_back( aInfo );
+        int nPos = m_aOldPrinterBox.InsertEntry( aInfo.m_aPrinterName );
+        m_aOldPrinterBox.SetEntryData( nPos, & m_aOldPrinters.back() );
     }
 }
 
@@ -616,40 +620,22 @@ APOldPrinterPage::~APOldPrinterPage()
 {
 }
 
-IMPL_LINK( APOldPrinterPage, DelPressedHdl, ListBox*, pBox )
-{
-    if( pBox == &m_aOldPrinterBox )
-        ClickBtnHdl( &m_aRemBtn );
-    return 0;
-}
-
 IMPL_LINK( APOldPrinterPage, ClickBtnHdl, PushButton*, pButton )
 {
-    if( pButton == &m_aRemBtn )
+    if( pButton == &m_aSelectAllBtn )
     {
-        while( m_aOldPrinterBox.GetSelectEntryCount() )
-            m_aOldPrinterBox.RemoveEntry( m_aOldPrinterBox.GetSelectEntryPos( 0 ) );
+        for( int i = 0; i < m_aOldPrinterBox.GetEntryCount(); i++ )
+            m_aOldPrinterBox.SelectEntryPos( i );
     }
-    else if( pButton == &m_aRestBtn )
-    {
-        m_aOldPrinterBox.Clear();
-
-        for( ::std::list< PrinterInfo >::iterator it = m_aOldPrinters.begin(); it != m_aOldPrinters.end(); ++it )
-        {
-            int nPos = m_aOldPrinterBox.InsertEntry( it->m_aPrinterName );
-            m_aOldPrinterBox.SetEntryData( nPos, &(*it) );
-        }
-    }
-
     return 0;
 }
 
 void APOldPrinterPage::addOldPrinters()
 {
     PrinterInfoManager& rManager( PrinterInfoManager::get() );
-    for( int i = 0; i < m_aOldPrinterBox.GetEntryCount(); i++ )
+    for( int i = 0; i < m_aOldPrinterBox.GetSelectEntryCount(); i++ )
     {
-        PrinterInfo* pInfo = (PrinterInfo*)m_aOldPrinterBox.GetEntryData( i );
+        PrinterInfo* pInfo = (PrinterInfo*)m_aOldPrinterBox.GetEntryData( m_aOldPrinterBox.GetSelectEntryPos( i ) );
         pInfo->m_aPrinterName = AddPrinterDialog::uniquePrinterName( pInfo->m_aPrinterName );
         if( ! rManager.addPrinter( pInfo->m_aPrinterName, pInfo->m_aDriverName ) )
         {
@@ -848,6 +834,8 @@ void AddPrinterDialog::advance()
     {
         if( ! m_pNamePage )
             m_pNamePage = new APNamePage( this, m_aPrinter.m_aPrinterName, DeviceKind::Printer );
+        else
+            m_pNamePage->setText( m_aPrinter.m_aPrinterName );
         m_pCurrentPage = m_pNamePage;
         m_aFinishPB.Enable( TRUE );
         m_aNextPB.Enable( FALSE );
@@ -1065,3 +1053,42 @@ String AddPrinterDialog::uniquePrinterName( const String& rBase )
     return aResult;
 }
 
+String AddPrinterDialog::getOldPrinterLocation()
+{
+    static const char* pHome = getenv( "HOME" );
+    String aRet;
+    ByteString aFileName;
+
+    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
+    PrinterInfoManager& rManager( PrinterInfoManager::get() );
+    if( pHome )
+    {
+        aFileName = pHome;
+        aFileName.Append( "/.Xpdefaults" );
+        if( access( aFileName.GetBuffer(), F_OK ) )
+        {
+            aFileName = pHome;
+            aFileName.Append( "/.sversionrc" );
+            Config aSVer( String( aFileName, aEncoding ) );
+            aSVer.SetGroup( "Versions" );
+            aFileName = aSVer.ReadKey( "StarOffice 5.2" );
+            if( aFileName.Len() )
+                aFileName.Append( "/share/xp3/Xpdefaults" );
+            else if(
+                    (aFileName = aSVer.ReadKey( "StarOffice 5.1" ) ).Len()
+                    ||
+                    (aFileName = aSVer.ReadKey( "StarOffice 5.0" ) ).Len()
+                    ||
+                    (aFileName = aSVer.ReadKey( "StarOffice 4.0" ) ).Len()
+                    )
+            {
+                aFileName.Append( "/xp3/Xpdefaults" );
+            }
+            if( aFileName.Len() && access( aFileName.GetBuffer(), F_OK ) )
+                aFileName.Erase();
+        }
+    }
+    if( aFileName.Len() )
+        aRet = String( aFileName, aEncoding );
+    return aRet;
+}

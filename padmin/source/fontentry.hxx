@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-06 13:54:31 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ namespace padmin {
         CancelButton                        m_aCancelBtn;
         PushButton                          m_aSelectAllBtn;
         ListBox                             m_aNewFontsBox;
-        GroupBox                            m_aFromBox;
+        FixedLine                           m_aFromFL;
         Edit                                m_aFromDirEdt;
         PushButton                          m_aFromBtn;
         CheckBox                            m_aLinkOnlyBox;

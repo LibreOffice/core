@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmddlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-06 13:53:25 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,9 +260,9 @@ void CommandStore::setFaxCommands( const ::std::list< String >& rCommands )
 RTSCommandPage::RTSCommandPage( RTSDialog* pParent ) :
         TabPage( &pParent->m_aTabControl, PaResId( RID_RTS_COMMANDPAGE ) ),
         m_pParent( pParent ),
-        m_aCommandTitle( this, PaResId( RID_RTS_CMD_GROUP_INSTALL ) ),
+        m_aCommandTitle( this, PaResId( RID_RTS_CMD_FL_INSTALL ) ),
         m_aPrinterName( this, PaResId( RID_RTS_CMD_TXT_PRTNAME ) ),
-        m_aPrinterGroup( this, PaResId( RID_RTS_CMD_GROUP_DEFAULT ) ),
+        m_aPrinterFL( this, PaResId( RID_RTS_CMD_FL_DEFAULT ) ),
         m_aCommandsCB( this, PaResId( RID_RTS_CMD_CB_COMMANDS ) ),
         m_aConfigureText( this, PaResId( RID_RTS_CMD_TXT_CONFIGURE ) ),
         m_aConfigureBox( this, PaResId( RID_RTS_CMD_LB_CONFIGURE ) ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontentry.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-06 13:54:31 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,7 +398,7 @@ FontImportDialog::FontImportDialog( Window* pParent ) :
         ModalDialog( pParent, PaResId( RID_FONTIMPORT_DIALOG ) ),
         m_aOKBtn( this, PaResId( RID_FIMP_BTN_OK ) ),
         m_aCancelBtn( this, PaResId( RID_FIMP_BTN_CANCEL ) ),
-        m_aFromBox( this, PaResId( RID_FIMP_GRP_FROM ) ),
+        m_aFromFL( this, PaResId( RID_FIMP_FL_FROM ) ),
         m_aFromDirEdt( this, PaResId( RID_FIMP_EDT_FROM ) ),
         m_aFromBtn( this, PaResId( RID_FIMP_BTN_FROM ) ),
         m_aLinkOnlyBox( this, PaResId( RID_FIMP_BOX_LINKONLY ) ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adddlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:34 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ class APChooseDriverPage : public APTabPage
     PushButton              m_aRemBtn;
 
     String                  m_aRemStr;
+    String                  m_aLastPrinterName;
 
     DECL_LINK( ClickBtnHdl, PushButton* );
     DECL_LINK( DelPressedHdl, ListBox* );
@@ -157,6 +158,8 @@ public:
 
     bool isDefault() { return m_aDefaultBox.IsChecked(); }
     bool isFaxSwallow() { return m_aFaxSwallowBox.IsChecked(); }
+
+    void setText( const String& rText ) { m_aNameEdt.SetText( rText ); }
 
     virtual bool check();
     virtual void fill( ::psp::PrinterInfo& rInfo );
@@ -189,14 +192,12 @@ public:
 class APOldPrinterPage : public APTabPage
 {
     FixedText                           m_aOldPrinterTxt;
-    DelMultiListBox                     m_aOldPrinterBox;
-    PushButton                          m_aRemBtn;
-    PushButton                          m_aRestBtn;
+    MultiListBox                        m_aOldPrinterBox;
+    PushButton                          m_aSelectAllBtn;
 
     ::std::list< ::psp::PrinterInfo >   m_aOldPrinters;
 
     DECL_LINK( ClickBtnHdl, PushButton* );
-    DECL_LINK( DelPressedHdl, ListBox* );
 public:
     APOldPrinterPage( Window* pParent );
     ~APOldPrinterPage();
@@ -270,11 +271,13 @@ class AddPrinterDialog : public ModalDialog
     void advance();
     void back();
     void addPrinter();
+
 public:
     AddPrinterDialog( Window* pParent );
     ~AddPrinterDialog();
 
     static String uniquePrinterName( const String& rString );
+    static String getOldPrinterLocation();
 };
 
 } // namespace

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-05 17:33:50 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ namespace padmin {
         PushButton                          m_aStdPB;
         PushButton                          m_aRemPB;
         PushButton                          m_aTestPagePB;
-        GroupBox                            m_aGroupBox;
+        FixedLine                           m_aPrintersFL;
         FixedText                           m_aDriverTxt;
         FixedText                           m_aDriver;
         FixedText                           m_aLocationTxt;
@@ -116,6 +116,7 @@ namespace padmin {
         FixedText                           m_aCommentTxt;
         FixedText                           m_aComment;
 
+        FixedLine                           m_aSepButtonFL;
         PushButton                          m_aAddPB;
         PushButton                          m_aFontsPB;
         CancelButton                        m_aCancelButton;

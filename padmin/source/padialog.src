@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:54:29 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ ModalDialog RID_FONTIMPORT_DIALOG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 230 , 170 ) ;
+    Size = MAP_APPFONT ( 230 , 160 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "Schriften hinzufügen" ;
@@ -77,11 +77,11 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Sort=TRUE;
         AutoHScroll = TRUE;
         Pos = MAP_APPFONT( 5, 5 );
-        Size = MAP_APPFONT( 160, 75 );
+        Size = MAP_APPFONT( 155, 75 );
     };
     FixedText RID_FIMP_TXT_HELP
     {
-        Pos = MAP_APPFONT( 5, 135 );
+        Pos = MAP_APPFONT( 5, 130 );
         Size = MAP_APPFONT( 220, 24 );
         WordBreak=TRUE;
         Text = "Bitte wählen Sie zunächst den Ordner aus dem Sie Schriften importieren möchten an. Starten Sie dann das Hinzufügen der selektierten Schriften mit der OK-Schaltfläche.";
@@ -107,10 +107,10 @@ ModalDialog RID_FONTIMPORT_DIALOG
         Text[ arabic ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
         Text[ catalan ] = "Please choose the directory from which to import fonts. Add the selected fonts by pressing the OK button.";
     };
-    GroupBox RID_FIMP_GRP_FROM
+    FixedLine RID_FIMP_FL_FROM
     {
         Pos = MAP_APPFONT( 5, 85 );
-        Size = MAP_APPFONT( 160, 45 );
+        Size = MAP_APPFONT( 160, 8 );
         Text = "Quellverzeichnis";
         Text [ English ] = "Source directory";
         Text[ english_us ] = "Source directory";
@@ -178,17 +178,17 @@ ModalDialog RID_FONTIMPORT_DIALOG
     {
         DefButton = TRUE;
         Pos = MAP_APPFONT( 175, 10 );
-        Size = MAP_APPFONT( 50, 14 );
+        Size = MAP_APPFONT( 50, 12 );
     };
     CancelButton RID_FIMP_BTN_CANCEL
     {
-        Pos = MAP_APPFONT( 175, 29 );
-        Size = MAP_APPFONT( 50, 14 );
+        Pos = MAP_APPFONT( 175, 27 );
+        Size = MAP_APPFONT( 50, 12 );
     };
     PushButton RID_FIMP_BTN_SELECTALL
     {
-        Pos = MAP_APPFONT( 175, 48 );
-        Size = MAP_APPFONT( 50, 14 );
+        Pos = MAP_APPFONT( 175, 44 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "~Alle markieren";
         Text [ English ] = "~Select all";
         Text[ english_us ] = "~Select All";
@@ -465,16 +465,21 @@ ModalDialog RID_PADIALOG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 1 , 1 ) ;
-    Size = MAP_APPFONT ( 280 , 170 ) ;
+    Size = MAP_APPFONT ( 260 , 167 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text = "Druckerinstallation" ;
-    Text [ English ] = "Printer installation" ;
+    Text = "Druckerverwaltung" ;
+    Text [ English ] = "Printer administrattion" ;
 
+    FixedLine RID_PA_FL_SEPBUTTON
+    {
+        Pos = MAP_APPFONT( 0, 145 );
+        Size = MAP_APPFONT( 260, 2 );
+    };
     CancelButton RID_PA_BTN_CANCEL
     {
-        Pos = MAP_APPFONT( 225, 150 );
-        Size = MAP_APPFONT( 50, 15 );
+        Pos = MAP_APPFONT( 200, 150 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "Schließen";
         Text [ english ] = "Close";
         Text[ english_us ] = "Close";
@@ -499,10 +504,10 @@ ModalDialog RID_PADIALOG
         Text[ catalan ] = "~Cerrar";
     };
 
-    GroupBox RID_PA_GROUP_INSTALL
+    FixedLine RID_PA_FL_PRINTERS
     {
-        Pos = MAP_APPFONT( 5, 5 );
-        Size = MAP_APPFONT( 270, 140 );
+        Pos = MAP_APPFONT( 6, 5 );
+        Size = MAP_APPFONT( 248, 8 );
         Text = "Installierte Drucker";
         Text [ english ]  = "Installed printers";
         Text[ english_us ] = "Installed printers";
@@ -528,143 +533,143 @@ ModalDialog RID_PADIALOG
     };
     ListBox RID_PA_LB_DEV
     {
-        Pos = MAP_APPFONT( 10, 15 );
-        Size = MAP_APPFONT( 200, 80 );
+        Pos = MAP_APPFONT( 12, 15 );
+        Size = MAP_APPFONT( 176, 80 );
         Border = TRUE;
         Sort = TRUE;
     };
     FixedText RID_PA_TXT_COMMAND
     {
         Pos = MAP_APPFONT( 10, 100 );
-        Size = MAP_APPFONT( 60, 8 );
-        Text = "Kommando :";
-        Text [english] = "Command :";
-        Text[ english_us ] = "Command :";
-        Text[ portuguese ] = "Comando :";
-        Text[ russian ] = "Êîìàíäà :";
-        Text[ greek ] = "ÅíôïëÞ :";
-        Text[ dutch ] = "Commando :";
-        Text[ french ] = "Commande :";
-        Text[ spanish ] = "Comando :";
+        Size = MAP_APPFONT( 40, 8 );
+        Text = "Kommando:";
+        Text [english] = "Command:";
+        Text[ english_us ] = "Command:";
+        Text[ portuguese ] = "Comando:";
+        Text[ russian ] = "Êîìàíäà:";
+        Text[ greek ] = "ÅíôïëÞ:";
+        Text[ dutch ] = "Commando:";
+        Text[ french ] = "Commande:";
+        Text[ spanish ] = "Comando:";
         Text[ italian ] = "Comando :";
-        Text[ danish ] = "Command :";
-        Text[ swedish ] = "Kommando :";
-        Text[ polish ] = "Polecenie :";
-        Text[ portuguese_brazilian ] = "Command :";
+        Text[ danish ] = "Command:";
+        Text[ swedish ] = "Kommando:";
+        Text[ polish ] = "Polecenie:";
+        Text[ portuguese_brazilian ] = "Command:";
         Text[ japanese ] = "ºÏÝÄÞ:";
         Text[ korean ] = "¸í·É :";
         Text[ chinese_simplified ] = "ÃüÁî£º";
         Text[ chinese_traditional ] = "«ü¥O¡G";
-        Text[ turkish ] = "Command :";
-        Text[ arabic ] = "ÇáÃãÑ :";
-        Text[ finnish ] = "Kommando :";
-        Text[ catalan ] = "Command :";
+        Text[ turkish ] = "Command:";
+        Text[ arabic ] = "ÇáÃãÑ:";
+        Text[ finnish ] = "Kommando:";
+        Text[ catalan ] = "Command:";
     };
     FixedText RID_PA_TXT_COMMAND_STRING
     {
-        Pos = MAP_APPFONT( 75, 100 );
+        Pos = MAP_APPFONT( 55, 100 );
         Size = MAP_APPFONT( 135, 8 );
     };
     FixedText RID_PA_TXT_DRIVER
     {
         Pos = MAP_APPFONT( 10, 110 );
-        Size = MAP_APPFONT( 60, 8 );
-        Text = "Treiber :";
-        Text [english] = "Driver :";
-        Text[ english_us ] = "Driver :";
-        Text[ portuguese ] = "Controlador :";
-        Text[ russian ] = "Äðàéâåð :";
-        Text[ greek ] = "Ðñüãñáììá ïäÞãçóçò :";
-        Text[ dutch ] = "Driver :";
-        Text[ french ] = "Pilote :";
-        Text[ spanish ] = "Controlador :";
-        Text[ italian ] = "Driver :";
-        Text[ danish ] = "Driver :";
-        Text[ swedish ] = "Drivrutin :";
-        Text[ polish ] = "Sterownik :";
-        Text[ portuguese_brazilian ] = "Driver :";
+        Size = MAP_APPFONT( 40, 8 );
+        Text = "Treiber:";
+        Text [english] = "Driver:";
+        Text[ english_us ] = "Driver:";
+        Text[ portuguese ] = "Controlador:";
+        Text[ russian ] = "Äðàéâåð:";
+        Text[ greek ] = "Ðñüãñáììá ïäÞãçóçò:";
+        Text[ dutch ] = "Driver:";
+        Text[ french ] = "Pilote:";
+        Text[ spanish ] = "Controlador:";
+        Text[ italian ] = "Driver:";
+        Text[ danish ] = "Driver:";
+        Text[ swedish ] = "Drivrutin:";
+        Text[ polish ] = "Sterownik:";
+        Text[ portuguese_brazilian ] = "Driver:";
         Text[ japanese ] = "ÄÞ×²ÊÞ:";
-        Text[ korean ] = "µå¶óÀÌ¹ö :";
+        Text[ korean ] = "µå¶óÀÌ¹ö:";
         Text[ chinese_simplified ] = "Çý¶¯³ÌÐò£º";
         Text[ chinese_traditional ] = "ÅX°Êµ{¦¡¡G";
-        Text[ turkish ] = "Driver :";
-        Text[ arabic ] = "ÈÑäÇãÌ ÇáÊÔÛíá :";
-        Text[ finnish ] = "Treiber :";
-        Text[ catalan ] = "Driver :";
+        Text[ turkish ] = "Driver:";
+        Text[ arabic ] = "ÈÑäÇãÌ ÇáÊÔÛíá:";
+        Text[ finnish ] = "Treiber:";
+        Text[ catalan ] = "Driver:";
     };
     FixedText RID_PA_TXT_DRIVER_STRING
     {
-        Pos = MAP_APPFONT( 75, 110 );
+        Pos = MAP_APPFONT( 55, 110 );
         Size = MAP_APPFONT( 135, 8 );
     };
     FixedText RID_PA_TXT_LOCATION
     {
         Pos = MAP_APPFONT( 10, 120 );
-        Size = MAP_APPFONT( 60, 8 );
-        Text = "Ort :";
-        Text [english] = "Location :";
-        Text[ english_us ] = "Location :";
-        Text[ portuguese ] = "Posição :";
-        Text[ russian ] = "Ðàñïîëîæåíèå :";
-        Text[ greek ] = "Ôïðïèåóßá :";
-        Text[ dutch ] = "Locatie :";
-        Text[ french ] = "Emplacement :";
-        Text[ spanish ] = "Ubicación :";
-        Text[ italian ] = "Posizione :";
-        Text[ danish ] = "Location :";
-        Text[ swedish ] = "Plats :";
-        Text[ polish ] = "Miejsce :";
-        Text[ portuguese_brazilian ] = "Location :";
+        Size = MAP_APPFONT( 40, 8 );
+        Text = "Ort:";
+        Text [english] = "Location:";
+        Text[ english_us ] = "Location:";
+        Text[ portuguese ] = "Posição:";
+        Text[ russian ] = "Ðàñïîëîæåíèå:";
+        Text[ greek ] = "Ôïðïèåóßá:";
+        Text[ dutch ] = "Locatie:";
+        Text[ french ] = "Emplacement:";
+        Text[ spanish ] = "Ubicación:";
+        Text[ italian ] = "Posizione:";
+        Text[ danish ] = "Location:";
+        Text[ swedish ] = "Plats:";
+        Text[ polish ] = "Miejsce:";
+        Text[ portuguese_brazilian ] = "Location:";
         Text[ japanese ] = "êŠ:";
-        Text[ korean ] = "À§Ä¡ :";
+        Text[ korean ] = "À§Ä¡:";
         Text[ chinese_simplified ] = "Î»ÖÃ£º";
         Text[ chinese_traditional ] = "¦ì¸m¡G";
-        Text[ turkish ] = "Location :";
-        Text[ arabic ] = "ÇáãæÞÚ :";
-        Text[ finnish ] = "Ort :";
-        Text[ catalan ] = "Location :";
+        Text[ turkish ] = "Location:";
+        Text[ arabic ] = "ÇáãæÞÚ:";
+        Text[ finnish ] = "Ort:";
+        Text[ catalan ] = "Location:";
     };
     FixedText RID_PA_TXT_LOCATION_STRING
     {
-        Pos = MAP_APPFONT( 75, 120 );
+        Pos = MAP_APPFONT( 55, 120 );
         Size = MAP_APPFONT( 135, 8 );
     };
     FixedText RID_PA_TXT_COMMENT
     {
         Pos = MAP_APPFONT( 10, 130 );
-        Size = MAP_APPFONT( 60, 8 );
-        Text = "Kommentar :";
-        Text [english] = "Comment :";
-        Text[ english_us ] = "Comment :";
-        Text[ portuguese ] = "Comentário :";
-        Text[ russian ] = "Êîììåíòàðèé :";
-        Text[ greek ] = "Ó÷üëéï :";
-        Text[ dutch ] = "Commentaar :";
-        Text[ french ] = "Commentaire :";
-        Text[ spanish ] = "Comentario :";
-        Text[ italian ] = "Commento :";
-        Text[ danish ] = "Comment :";
-        Text[ swedish ] = "Kommentar :";
-        Text[ polish ] = "Komentarz :";
-        Text[ portuguese_brazilian ] = "Comment :";
+        Size = MAP_APPFONT( 40, 8 );
+        Text = "Kommentar:";
+        Text [english] = "Comment:";
+        Text[ english_us ] = "Comment:";
+        Text[ portuguese ] = "Comentário:";
+        Text[ russian ] = "Êîììåíòàðèé:";
+        Text[ greek ] = "Ó÷üëéï:";
+        Text[ dutch ] = "Commentaar:";
+        Text[ french ] = "Commentaire:";
+        Text[ spanish ] = "Comentario:";
+        Text[ italian ] = "Commento:";
+        Text[ danish ] = "Comment:";
+        Text[ swedish ] = "Kommentar:";
+        Text[ polish ] = "Komentarz:";
+        Text[ portuguese_brazilian ] = "Comment:";
         Text[ japanese ] = "ºÒÝÄ:";
-        Text[ korean ] = "ÁÖ¼® :";
+        Text[ korean ] = "ÁÖ¼®:";
         Text[ chinese_simplified ] = "×¢½â£º";
         Text[ chinese_traditional ] = "ª`¸Ñ¡G";
-        Text[ turkish ] = "Comment :";
-        Text[ arabic ] = "ÇáÊÚáíÞ :";
-        Text[ finnish ] = "Kommentar :";
-        Text[ catalan ] = "Comment :";
+        Text[ turkish ] = "Comment:";
+        Text[ arabic ] = "ÇáÊÚáíÞ:";
+        Text[ finnish ] = "Kommentar:";
+        Text[ catalan ] = "Comment:";
     };
     FixedText RID_PA_TXT_COMMENT_STRING
     {
-        Pos = MAP_APPFONT( 75, 130 );
+        Pos = MAP_APPFONT( 55, 130 );
         Size = MAP_APPFONT( 135, 8 );
     };
     PushButton RID_PA_BTN_CONF
     {
-        Pos = MAP_APPFONT( 215, 15 );
-        Size = MAP_APPFONT( 55, 15 );
+        Pos = MAP_APPFONT( 200, 15 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "~Eigenschaften...";
         Text [english] = "~Properties...";
         Text[ english_us ] = "Properties...";
@@ -690,8 +695,8 @@ ModalDialog RID_PADIALOG
     };
     PushButton RID_PA_BTN_RENAME
     {
-        Pos = MAP_APPFONT( 215, 35 );
-        Size = MAP_APPFONT( 55, 15 );
+        Pos = MAP_APPFONT( 200, 32 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "~Umbenennen...";
         Text [english] = "~Rename...";
         Text[ english_us ] = "R~ename...";
@@ -717,8 +722,8 @@ ModalDialog RID_PADIALOG
     };
     PushButton RID_PA_BTN_STD
     {
-        Pos = MAP_APPFONT( 215, 55 );
-        Size = MAP_APPFONT( 55, 15 );
+        Pos = MAP_APPFONT( 200, 49 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "~Standard";
         Text [english] = "~Default";
         Text[ language_user1 ] = "EM30.3.01 this refers to the Default Printer";
@@ -745,8 +750,8 @@ ModalDialog RID_PADIALOG
     };
     PushButton RID_PA_BTN_DEL
     {
-        Pos = MAP_APPFONT( 215, 75 );
-        Size = MAP_APPFONT( 55, 15 );
+        Pos = MAP_APPFONT( 200, 66 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "E~ntfernen...";
         Text [english] = "~Remove...";
         Text[ english_us ] = "Remove...";
@@ -772,8 +777,8 @@ ModalDialog RID_PADIALOG
     };
     PushButton RID_PA_TESTPAGE
     {
-        Pos = MAP_APPFONT( 215, 95 );
-        Size = MAP_APPFONT( 55, 15 );
+        Pos = MAP_APPFONT( 200, 83 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "~Testseite";
         Text [english] = "~Test page";
         Text[ english_us ] = "Test ~Page";
@@ -801,7 +806,7 @@ ModalDialog RID_PADIALOG
     PushButton RID_PA_BTN_FONTS
     {
         Pos = MAP_APPFONT( 70, 150 );
-        Size = MAP_APPFONT( 50, 15 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "S~chriften...";
         Text [english] = "~Fonts...";
         Text[ english_us ] = "Fon~ts...";
@@ -828,7 +833,7 @@ ModalDialog RID_PADIALOG
     PushButton RID_PA_BTN_ADD
     {
         Pos = MAP_APPFONT( 5, 150 );
-        Size = MAP_APPFONT( 60, 15 );
+        Size = MAP_APPFONT( 60, 12 );
         Text = "~Neuer Drucker...";
         Text [english] = "~Add printer...";
         Text[ english_us ] = "New Printer...";
@@ -903,26 +908,6 @@ ModalDialog RID_PADIALOG
         Text[ finnish ] = "Nimeä uudelleen";
         Text[ catalan ] = "Rename";
     };
-    Text[ english_us ] = "Printer Installation";
-    Text[ portuguese ] = "Instalação de impressora";
-    Text[ russian ] = "Èíñòàëëÿöèÿ ïðèíòåðà";
-    Text[ greek ] = "ÅãêáôÜóôáóç åêôõðùôÞ";
-    Text[ dutch ] = "Printerinstallatie";
-    Text[ french ] = "Installation de l'imprimante";
-    Text[ spanish ] = "Instalación de impresora";
-    Text[ italian ] = "Installazione stampante";
-    Text[ danish ] = "Printer installation";
-    Text[ swedish ] = "Skrivarinstallation";
-    Text[ polish ] = "Instalacja drukarki";
-    Text[ portuguese_brazilian ] = "Printer installation";
-    Text[ japanese ] = "ÌßØÝÀ‚Ì²Ý½Ä°Ù";
-    Text[ korean ] = "ÇÁ¸°ÅÍ¡¡¼³Ä¡";
-    Text[ chinese_simplified ] = "°²×°´òÓ¡»ú";
-    Text[ chinese_traditional ] = "¦w¸Ë¦Lªí¾÷";
-    Text[ turkish ] = "Printer installation";
-    Text[ arabic ] = "ÊËÈíÊ ØÇÈÚÉ";
-    Text[ finnish ] = "Printer Installation";
-    Text[ catalan ] = "Instalación de impresora";
 };
 
 ModalDialog RID_STRINGQUERYDLG
@@ -930,7 +915,7 @@ ModalDialog RID_STRINGQUERYDLG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 10 , 10 ) ;
-    Size = MAP_APPFONT ( 200 , 46 ) ;
+    Size = MAP_APPFONT ( 200 , 42 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     FixedText RID_STRQRY_TXT_RENAME
@@ -941,19 +926,19 @@ ModalDialog RID_STRINGQUERYDLG
     Edit RID_STRQRY_EDT_NEWNAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 24 ) ;
-        Size = MAP_APPFONT ( 130 , 14 ) ;
+        Pos = MAP_APPFONT ( 6 , 23 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
     };
     OKButton RID_STRQRY_BTN_OK
     {
         DefButton = TRUE ;
         Pos = MAP_APPFONT ( 145 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
     };
     CancelButton RID_STRQRY_BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 145 , 24 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 145 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
     };
 };
 
@@ -1011,28 +996,8 @@ String RID_PA_TXT_TESTPAGE_PRINTED
 
 String RID_QRY_PRTNAME
 {
-    Text = "Bitte geben Sie den neuen Namen\ndes Druckers ein." ;
-    Text [ English ] = "Please enter the printer's new name." ;
-    Text[ english_us ] = "Please enter the new name\nof the printer.";
-    Text[ portuguese ] = "Indique o novo nome\nda impressora.";
-    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà,\nèìÿ íîâîãî ïðèíòåðà.";
-    Text[ greek ] = "Ðáñáêáëþ åéóÜãåôå ôï íÝï üíïìá ôïõ\nåêôõðùôÞ.";
-    Text[ dutch ] = "Vermeld de nieuwe naam van de printer.";
-    Text[ french ] = "Indiquez le nouveau nom\nde l'imprimante.";
-    Text[ spanish ] = "Escriba por favor el nuevo nombre\nde la impresora.";
-    Text[ italian ] = "Indicate il nuovo nome\ndella stampante.";
-    Text[ danish ] = "Please enter the printer's new name.";
-    Text[ swedish ] = "Ange det nya namnet\npå skrivaren.";
-    Text[ polish ] = "Nale¿y podaæ now¹ nazwê\ndrukarki.";
-    Text[ portuguese_brazilian ] = "Please enter the printer's new name.";
-    Text[ japanese ] = "V‚µ‚¢ÌßØÝÀ–¼‚ð“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
-    Text[ korean ] = "ÇÁ¸°ÅÍÀÇ¡¡»õ¡¡ÀÌ¸§À»¡¡ÀÔ·ÂÇÏ½Ê½Ã¿À£®";
-    Text[ chinese_simplified ] = "ÇëÄúÊäÈëÐÂ´òÓ¡»úµÄÃû³Æ¡£";
-    Text[ chinese_traditional ] = "½Ð±z¿é¤J¦Lªí¾÷ªº·s¦WºÙ¡C";
-    Text[ turkish ] = "Please enter the printer's new name.";
-    Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇáÇÓã ÇáÌÏíÏ\nááØÇÈÚÉ.";
-    Text[ finnish ] = "Please enter the new name\nof the printer.";
-    Text[ catalan ] = "Escriba por favor el nuevo nombre\nde la impresora.";
+    Text = "Neuer Druckername" ;
+    Text [ English ] = "New name" ;
 };
 
 String RID_TXT_TESTPAGE_MODEL
@@ -1205,7 +1170,7 @@ ModalDialog RID_FONTNAMEDIALOG
     {
         DefButton = TRUE ;
         Pos = MAP_APPFONT ( 196 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
         Text = "Schließen" ;
         Text [ English ] = "Close" ;
         Text[ english_us ] = "Close";
@@ -1231,8 +1196,8 @@ ModalDialog RID_FONTNAMEDIALOG
     };
     PushButton RID_FNTNM_BTN_REMOVE
     {
-        Pos = MAP_APPFONT ( 196 , 44 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 196 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
         Text = "~Entfernen..." ;
         Text [ English ] = "~Remove..." ;
         Text[ english_us ] = "~Remove...";
@@ -1258,8 +1223,8 @@ ModalDialog RID_FONTNAMEDIALOG
     };
     PushButton RID_FNTNM_BTN_IMPORT
     {
-        Pos = MAP_APPFONT ( 196 , 63 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 196 , 65 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
         Text = "~Hinzufügen...";
         Text [ English ] = "~Add...";
         Text[ english_us ] = "~Add...";
@@ -2203,7 +2168,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 240 , 165 ) ;
+    Size = MAP_APPFONT ( 240 , 162 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "Drucker hinzufügen" ;
@@ -2211,14 +2176,14 @@ ModalDialog RID_ADD_PRINTER_DIALOG
 
     FixedLine RID_ADDP_LINE
     {
-        Pos = MAP_APPFONT( 5, 140 );
-        Size = MAP_APPFONT( 230, 2 );
+        Pos = MAP_APPFONT( 0, 140 );
+        Size = MAP_APPFONT( 240, 2 );
     };
 
     OKButton RID_ADDP_BTN_FINISH
     {
         Pos = MAP_APPFONT( 185, 145 );
-        Size = MAP_APPFONT( 50, 15 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "~Fertig stellen";
         Text [english] = "~Finish";
         Text[ english_us ] = "~Finish";
@@ -2245,12 +2210,12 @@ ModalDialog RID_ADD_PRINTER_DIALOG
     CancelButton RID_ADDP_BTN_CANCEL
     {
         Pos = MAP_APPFONT( 5, 145 );
-        Size = MAP_APPFONT( 50, 15 );
+        Size = MAP_APPFONT( 50, 12 );
     };
     PushButton RID_ADDP_BTN_NEXT
     {
         Pos = MAP_APPFONT( 130, 145 );
-        Size = MAP_APPFONT( 50, 15 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "~Weiter >>";
         Text [english] = "~Next >>";
         Text[ english_us ] = "~Next >>";
@@ -2277,7 +2242,7 @@ ModalDialog RID_ADD_PRINTER_DIALOG
     PushButton RID_ADDP_BTN_PREV
     {
         Pos = MAP_APPFONT( 75, 145 );
-        Size = MAP_APPFONT( 50, 15 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "<< ~Zurück";
         Text [english] = "<< ~Back";
         Text[ english_us ] = "<< ~Back";
@@ -2364,7 +2329,7 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
     PushButton RID_ADDP_CHDRV_BTN_ADD
     {
         Pos = MAP_APPFONT( 185, 15 );
-        Size = MAP_APPFONT( 50, 15 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "~Importieren...";
         Text [english] = "~Import...";
         Text[ english_us ] = "~Import...";
@@ -2390,8 +2355,8 @@ TabPage RID_ADDP_PAGE_CHOOSEDRIVER
     };
     PushButton RID_ADDP_CHDRV_BTN_REMOVE
     {
-        Pos = MAP_APPFONT( 185, 35 );
-        Size = MAP_APPFONT( 50, 15 );
+        Pos = MAP_APPFONT( 185, 32 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "~Löschen";
         Text [english] = "~Delete";
         Text[ english_us ] = "~Delete";
@@ -2504,55 +2469,15 @@ TabPage RID_ADDP_PAGE_CHOOSEDEV
     {
         Pos = MAP_APPFONT ( 40, 60 );
         Size = MAP_APPFONT( 200, 10 );
-        Text = "ein Fa~x einrichten";
-        Text [english] = "add a fa~x";
-        Text[ english_us ] = "Add a fa~x";
-        Text[ portuguese ] = "Adicionar ~fax";
-        Text[ russian ] = "Êîíôèãóðàöèÿ ôàêñà";
-        Text[ greek ] = "add a fa~x";
-        Text[ dutch ] = "een fa~x inrichten";
-        Text[ french ] = "Ajouter un périphérique fa~x";
-        Text[ spanish ] = "añadir un fa~x";
-        Text[ italian ] = "Aggingi un fa~x";
-        Text[ danish ] = "add a fa~x";
-        Text[ swedish ] = "Lägg till en fa~x";
-        Text[ polish ] = "Do³¹cz faks";
-        Text[ portuguese_brazilian ] = "add a fa~x";
-        Text[ japanese ] = "Fa~x ‚Ì’Ç‰Á";
-        Text[ korean ] = "ÆÑ½º Ãß°¡";
-        Text[ chinese_simplified ] = "ÅäÖÃÒ»¸ö´«ÕæÉè±¸";
-        Text[ chinese_traditional ] = "³]¸m¤@¥x¶Ç¯u¾÷";
-        Text[ turkish ] = "add a fa~x";
-        Text[ arabic ] = "ÅÖÇÝÉ ÝÇßÓ";
-        Text[ finnish ] = "ein Fa~x einrichten";
-        Text[ catalan ] = "add a fa~x";
+        Text = "eine Fa~xlösung anbinden";
+        Text [english] = "connect to a fa~x solution";
     };
     RadioButton RID_ADDP_CHDEV_BTN_PDF
     {
         Pos = MAP_APPFONT ( 40, 70 );
         Size = MAP_APPFONT( 200, 10 );
-        Text = "einen ~PDF-Konverter anlegen";
-        Text [english] = "add a P~DF converter";
-        Text[ english_us ] = "Add a P~DF converter";
-        Text[ portuguese ] = "Adicionar um conversor ~PDF";
-        Text[ russian ] = "Ñîçäàòü ïðåîáðàçîâàòåëü P~DF";
-        Text[ greek ] = "add a P~DF printer";
-        Text[ dutch ] = "een P~DF-converter definiëren";
-        Text[ french ] = "Ajouter un convertisseur P~DF";
-        Text[ spanish ] = "añadir un convertidor P~DF";
-        Text[ italian ] = "Aggiungi un convertitore ~PDF";
-        Text[ danish ] = "add a P~DF printer";
-        Text[ swedish ] = "Skapa en ~PDF-konverterare";
-        Text[ polish ] = "Dodaj konwerter PDF";
-        Text[ portuguese_brazilian ] = "add a P~DF printer";
-        Text[ japanese ] = "P~DF ºÝÊÞ°À‚Ì’Ç‰Á";
-        Text[ korean ] = "PDF ÄÁ¹öÅÍ Ãß°¡";
-        Text[ chinese_simplified ] = "ÅäÖÃÒ»¸ö PDF ×ª»»Æ÷";
-        Text[ chinese_traditional ] = "·s¼W PDF Âà´«¾¹";
-        Text[ turkish ] = "add a P~DF printer";
-        Text[ arabic ] = "ÅÖÇÝÉ ãÍæá PDF";
-        Text[ finnish ] = "einen ~PDF-Konverter anlegen";
-        Text[ catalan ] = "add a P~DF printer";
+        Text = "einen ~PDF-Konverter anbinden";
+        Text [english] = "connect to a P~DF converter";
     };
     RadioButton RID_ADDP_CHDEV_BTN_OLD
     {
@@ -2591,8 +2516,8 @@ TabPage RID_ADDP_PAGE_NAME
     {
         Pos = MAP_APPFONT( 40, 35 );
         Size = MAP_APPFONT( 220, 8 );
-        Text = "Bitte geben Sie einen Namen für den Drucker ein";
-        Text [english] = "Please enter a name for the printer";
+        Text = "Bitte geben Sie einen ~Namen für den Drucker ein";
+        Text [english] = "Please enter a ~name for the printer";
         Text[ english_us ] = "Please enter a name for the printer";
         Text[ portuguese ] = "Indique um nome para a impressora.";
         Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ ïðèíòåðà";
@@ -2618,55 +2543,15 @@ TabPage RID_ADDP_PAGE_NAME
     {
         Pos = MAP_APPFONT( 40, 35 );
         Size = MAP_APPFONT( 220, 8 );
-        Text = "Bitte geben Sie einen Namen für das Faxgerät ein";
-        Text [english] = "Please enter a name for the fax device";
-        Text[ english_us ] = "Please enter a name for the fax device";
-        Text[ portuguese ] = "Indique um nome para o fax.";
-        Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ ôàêñà";
-        Text[ greek ] = "Please enter a name for the fax device";
-        Text[ dutch ] = "Geef een naam aan voor het faxapparaat";
-        Text[ french ] = "Spécifiez un nom pour le périphérique fax.";
-        Text[ spanish ] = "Introduzca un nombre para el dispositivo de fax";
-        Text[ italian ] = "Indicate il nome del fax:";
-        Text[ danish ] = "Please enter a name for the fax device";
-        Text[ swedish ] = "Ange ett namn för faxen";
-        Text[ polish ] = "Podaj nazwê faksu";
-        Text[ portuguese_brazilian ] = "Please enter a name for the fax device";
-        Text[ japanese ] = "Fax ‹@‚Ì–¼‘O‚ð“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
-        Text[ korean ] = "ÆÑ½º ±â±âÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À";
-        Text[ chinese_simplified ] = "ÇëÊäÈëÒ»¸ö´«ÕæÉè±¸µÄÃû³Æ¡£";
-        Text[ chinese_traditional ] = "½Ð±z¿é¤J¤@­Ó¶Ç¯u¾÷ªº¦WºÙ¡C";
-        Text[ turkish ] = "Please enter a name for the fax device";
-        Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã áÌåÇÒ ÇáÝÇßÓ";
-        Text[ finnish ] = "Bitte geben Sie einen Namen für das Faxgerät ein";
-        Text[ catalan ] = "Please enter a name for the fax device";
+        Text = "Bitte geben Sie einen ~Namen für die Faxanbindung ein";
+        Text [english] = "Please enter a ~name for the fax connection";
     };
     FixedText RID_ADDP_NAME_TXT_PDFNAME
     {
         Pos = MAP_APPFONT( 40, 35 );
         Size = MAP_APPFONT( 220, 8 );
-        Text = "Bitte geben Sie einen Namen für den PDF-Konverter ein";
-        Text [english] = "Please enter a name for the PDF converter";
-        Text[ english_us ] = "Please enter a name for the PDF converter";
-        Text[ portuguese ] = "Indique um nome para o conversor PDF.";
-        Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ ïðåîáðàçîâàòåëÿ PDF";
-        Text[ greek ] = "Please enter a name for the PDF printer";
-        Text[ dutch ] = "Geef een naam aan voor de PDF-converter";
-        Text[ french ] = "Spécifiez un nom pour le convertisseur PDF.";
-        Text[ spanish ] = "Introduzca un nombre para el convertidor PDF";
-        Text[ italian ] = "Indicate il nome della stampante PDF";
-        Text[ danish ] = "Please enter a name for the PDF printer";
-        Text[ swedish ] = "Ange ett namn för PDF-konverteraren";
-        Text[ polish ] = "Nadaj konwerterowi PDF dowoln¹ nazwê";
-        Text[ portuguese_brazilian ] = "Please enter a name for the PDF printer";
-        Text[ japanese ] = "PDF ºÝÊÞ°À‚Ì–¼‘O‚ð“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
-        Text[ korean ] = "PDF ÄÁ¹öÅÍÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À";
-        Text[ chinese_simplified ] = "ÇëÊäÈëÒ»¸ö PDF ×ª»»Æ÷µÄÃû³Æ¡£";
-        Text[ chinese_traditional ] = "½Ð±z¿é¤J¤@­Ó PDF Âà´«¾¹¦WºÙ¡C";
-        Text[ turkish ] = "Please enter a name for the PDF printer";
-        Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ãÍæá PDF";
-        Text[ finnish ] = "Bitte geben Sie einen Namen für den PDF-Konverter ein";
-        Text[ catalan ] = "Please enter a name for the PDF printer";
+        Text = "Bitte geben Sie einen ~Namen für die PDF Anbindung ein";
+        Text [english] = "Please enter a ~name for the PDF connection";
     };
     Edit RID_ADDP_NAME_EDT_NAME
     {
@@ -2872,7 +2757,7 @@ TabPage RID_ADDP_PAGE_COMMAND
     PushButton RID_ADDP_CMD_BTN_HELP
     {
         Pos = MAP_APPFONT( 180, 10 );
-        Size = MAP_APPFONT( 50, 15 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "~Hilfe";
         Text [english] = "~Help";
         Text[ english_us ] = "~Help";
@@ -2923,28 +2808,8 @@ TabPage RID_ADDP_PAGE_COMMAND
     };
     String RID_ADDP_CMD_STR_FAXHELP
     {
-        Text = "Die Kommandozeile bei Faxgeräten wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe)." ;
-        Text [ English ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ english_us ] = "The command line for fax devices is executed as follows: for each fax sent, \"(TMP)\" in the command line is replaced by a temporary file and \"(PHONE)\" in the command line is replaced by the fax number. If \"(TMP)\" appears in the command line, the PostScript code will be supplied via a file, otherwise it is passed as standard input (i.e. as a pipe).";
-        Text[ portuguese ] = "A linha de comando para aparelhos de telefax é executada da seguinte forma: em todos os faxes enviados o \"(TMP)\" é substituído por um ficheiro temporário e \"(PHONE)\" pelo número de fax. Quando \"(TMP)\" aparece na linha de comando, o código PostScript é transmitido para um ficheiro, caso contrário para a entrada padrão (na forma de pipe).";
-        Text[ russian ] = "Êîìàíäíàÿ ñòðîêà äëÿ ôàêñîâ îáðàáàòûâàåòñÿ ñëåäóþùèì îáðàçîì: âî âðåìÿ ïåðåäà÷è êàæäîãî ôàêñà â êîìàíäíîé ñòðîêå \"(TMP)\" çàìåíÿåòñÿ âðåìåííûì ôàéëîì, à \"(PHONE)\" - íîìåðîì ôàêñà. Åñëè â êîìàíäíîé ñòðîêå óæå ñóùåñòâóåò \"(TMP)\", òî êîä PostScript ïåðåäàåòñÿ â ôàéëå, â ïðîòèâíîì ñëó÷àå ïîñðåäñòâîì ñòàíäàðòíîãî ââîäà (ò.å. êàê pipe).";
-        Text[ greek ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ dutch ] = "De commandoregel voor fax wordt als volgt uitgevoerd: op iedere fax wordt bij het verzenden de variabele \"(TMP)\" in de commandoregel vervangen door een tijdelijk bestand en de variabele \"(PHONE)\" door het faxnummer. Als er \"(TMP)\" staat in de commandoregel wordt de PostScript-code in een bestand opgeslagen, in het andere geval via de standaardinvoer (bijv. als Pipe) doorgegeven.";
-        Text[ french ] = "Traitement de la ligne de commande pour les périphériques fax : pour chaque envoi de fax, \"(TMP)\" est remplacé par un fichier temporaire et \"(PHONE)\" par le numéro de fax. Si \"(TMP)\" apparaît dans la ligne de commande, le code PostScript est transmis dans un fichier ; en cas contraire, il est transmis via l'entrée par défaut (c'est-à-dire comme tube (pipe)).";
-        Text[ spanish ] = "La línea de comando en dispositivos de fax se ejecutará de esta forma: Para cada fax enviado se sustituirá en la fila de comando \"(TMP)\" por un archivo temporal y \"(PHONE)\" por un número de fax. Si \"(TMP)\" aparece en la fila de comando se transmitirá el código PostScript a un archivo; en caso contrario se hará mediante entrada estándar (es decir, como pipe).";
-        Text[ italian ] = "La riga comandi degli apparecchi fax verrà impostata come segue: per ogni fax inviato ogni \"(TMP)\" della riga comandi verrà sostituito da un file temporaneo e \"(PHONE)\" sarà sostituito dal numero di fax. Se \"(TMP)\" appare nella riga comandi, il codice PostScript verrà trasmesso a un file, altrimenti verrà trasemsso come immissione standard (cioè come pipe).";
-        Text[ danish ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ swedish ] = "Kommandoraden för faxar bearbetas på följande sätt: på varje fax som skickas ersätts \"(TMP)\" och \"(PHONE)\" i kommandoraden av en temporär fil resp. av faxnumret. Om \"(TMP)\" förekommer i kommandoraden överförs PostScript-koden i en fil, i annat fall via standardinmatningen (d.v.s som pipe).";
-        Text[ polish ] = "Wiersz poleceñ w faksach przetwarzany jest w nastêpuj¹cy sposób: Podczas wysy³ania faksu, \"(TMP)\" w wierszu poleceñ zamieniane jest na plik tymczasowy, a \"(PHON)\" na numer faksu. Je¿eli wiersz poleceñ zawiera \"(TMP)\", kod PostScript przekazany zostanie w pliku. W innym przypadku przekazany zostanie domyœlnie (tzn jako potok (pipe)).";
-        Text[ portuguese_brazilian ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ japanese ] = "Fax ‹@‚Å‚ÌºÏÝÄÞs‚ÍŽŸ‚Ì‚æ‚¤‚ÉŽÀs‚³‚ê‚Ü‚·: Fax ‘—M‚·‚é‚½‚Ñ‚ÉAºÏÝÄÞs‚Ì \"(TMP)\" ‚ÍˆêŽžÌ§²Ù‚ÅA\"(PHONE)\" ‚ÍÌ§¯¸½”Ô†‚Å’uŠ·‚³‚ê‚Ü‚·BºÏÝÄÞs‚É \"(TMP)\" ‚ª‚ ‚é‚ÆAPostScript º°ÄÞ‚ÍÌ§²Ù‚É“Ç‚Ýž‚Ü‚ê‚Ü‚·B‚»‚¤‚Å‚È‚¢ê‡‚ÍA•W€‰ñ˜H‚Ì“ü—ÍA‚Â‚Ü‚èÊß²Ìß×²Ýˆ—‚ªs‚í‚ê‚Ü‚·B";
-        Text[ korean ] = "ÆÑ½º ±â±âÀÇ ¸í·ÉÇàÀº ´ÙÀ½°ú °°ÀÌ ½ÇÇàµË´Ï´Ù: ¸Å¹ø ÆÑ½º ¼Û½Å½Ã, ÀÓ½Ã ÆÄÀÏ¿¡ ÀÇÇØ¼­´Â \"(TMP)\", ÆÑ½º ¹øÈ£¿¡ ÀÇÇØ¼­´Â \"(PHONE)\"À¸·Î ´ëÃ¼µË´Ï´Ù. ¸í·ÉÇà¿¡ \"(TMP)\"°¡ ³ªÅ¸³ª¸é PostScript ÄÚµå°¡ ÀÓ½Ã ÆÄÀÏÀ» ÅëÇØ Á¦°øµÇ°í, ±× ¿ÜÀÇ °æ¿ì¿¡´Â ±âº» ÀÔ·ÂÀ» ÅëÇØ Á¦°øµË´Ï´Ù (ÆÄÀÌÇÁ·Î¼­).";
-        Text[ chinese_simplified ] = "´«Õæ»úµ¥ÏîÃüÁîµÄ´¦Àí·½Ê½ÈçÏÂ£º¼Ä·¢´«ÕæÊ±Í¨¹ýÃüÁîÊäÈëÐÐÓÃÒ»¸öÔÝÊ±ÎÄ¼þÌæ´ú\"(TMP)\" £¬ÓÃ´«ÕæºÅÂëÌæ´ú \"(PHONE)\" ¡£Èç¹ûÃüÁîÐÐº¬ÓÐ \"(TMP)\" £¬PostScript Ô´´úÂë¾Í»á×ª»»³ÉÒ»¸öÎÄ¼þ£¬·ñÔò¾Í»áµ±×÷±ê×¼ÊäÈë(µ±×÷pipe)¡£";
-        Text[ chinese_traditional ] = "¶Ç¯uÉó³æ¶µ«ü¥Oªº³B²z¤è¦¡¦p¤U¡G±Hµo¶Ç¯u®É³q¹L«ü¥O¦æ¥Î¤@­Ó¼È®ÉÀÉ®×´À¥N\"(TMP)\" ¡A¥Î¶Ç¯u¸¹½X´À¥N \"(PHONE)\" ¡C¦pªG«ü¥O¦æ§t¦³ \"(TMP)\" ¡APostScript ·½¥N½X´N·|Âà´«¦¨¤@­ÓÀÉ®×¡A§_«h·|·í§@¼Ð·Ç¿é¤J(·í§@pipe)¡C";
-        Text[ turkish ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
-        Text[ arabic ] = "ÓíÊã ÊäÝíÐ ÓØÑ ÇáÃãÑ Ýí ÃÌåÒÉ ÇáÝÇßÓ ßÇáÂÊí: Ýí ßá ãÑÉ íÊã ÝíåÇ ÅÑÓÇá ÑÓÇáÉ ÝÇßÓ¡ ÓæÝ íÊã ÇÓÊÈÏÇá \"(TMP)\" Ýí ÓØÑ ÇáÃãÑ ÈãáÝ ãÄÞÊ æ \"(PHONE)\" ÈÑÞã ÇáÝÇßÓ. ÅÐÇ æÑÏÊ \"(TMP)\" Ýí ÓØÑ ÇáÃæÇãÑ¡ ÝÓíÊã ÊãÑíÑ ÔíÝÑÉPostScript  Ýí ãáÝ¡ ÝíãÇ ÚÏÇ Ðáß¡ íÊã ÊãÑíÑåÇ ßÅÏÎÇá ÞíÇÓí (åÐÇ íÚäí ßÜ Pipe).";
-        Text[ finnish ] = "Die Kommandozeile bei Faxgeräten wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe).";
-        Text[ catalan ] = "The command line for fax devices is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
+        Text = "Die Kommandozeile bei Faxanbindungen wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe)." ;
+        Text [ English ] = "The command line for fax connections is executed in the following way: on each fax sent in the command line \"(TMP)\" will be replaced by a temporary file and \"(PHONE)\" by the fax number. If \"(TMP)\" exists in the command line the PostScript code will be delivered via a temporary file else as standard input (as a pipe).";
     };
 };
 
@@ -2957,28 +2822,8 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Pos = MAP_APPFONT( 10, 10 );
         Size = MAP_APPFONT( 165, 25 );
         WordBreak = TRUE;
-        Text = "Diese Drucker können importiert werden. Bitte entfernen Sie diejenigen, die Sie nicht importieren möchten.";
-        Text [english] = "These printers can be imported. Please remove the ones you do not want to import.";
-        Text[ english_us ] = "These printers can be imported. Please remove the ones you do not want to import.";
-        Text[ portuguese ] = "É possível importar estas impressoras. Remova as que não pretende importar.";
-        Text[ russian ] = "Ýòè ïðèíòåðû ìîæíî èìïîðòèðîâàòü. Óäàëèòå òå ïðèíòåðû, êîòîðûå èìïîðòèðîâàòüñÿ íå áóäóò.";
-        Text[ greek ] = "These printers can be imported. Please remove the ones you do not want to import.";
-        Text[ dutch ] = "Deze printers kunnen worden geïmporteerd. Verwijder de printers die u niet wilt importeren.";
-        Text[ french ] = "Vous pouvez importer ces imprimantes. Supprimez celles que vous ne souhaitez pas importer.";
-        Text[ spanish ] = "Estas impresoras se pueden importar. Elimine las que no desee importar.";
-        Text[ italian ] = "È possibile importare queste stampanti. Eliminate quelle che non volete importare.";
-        Text[ danish ] = "These printers can be imported. Please remove the ones you do not want to import.";
-        Text[ swedish ] = "De här skrivarna kan importeras. Ta bort de som du inte vill importera.";
-        Text[ polish ] = "Dane drukarki mo¿na importowaæ. Usuñ te, które nie maj¹ byæ importowane.";
-        Text[ portuguese_brazilian ] = "These printers can be imported. Please remove the ones you do not want to import.";
-        Text[ japanese ] = "‚±‚ê‚ç‚ÌÌßØÝÀ‚Í²ÝÎß°Ä‚Å‚«‚Ü‚·B²ÝÎß°Ä‚µ‚È‚¢‚à‚Ì‚Ííœ‚µ‚Ä‚­‚¾‚³‚¢B";
-        Text[ korean ] = "ÀÌ ÇÁ¸°ÅÍ´Â °¡Á®¿Ã ¼ö ÀÖ½À´Ï´Ù. °¡Á®¿À°í ½ÍÁö ¾ÊÀº °ÍµéÀ» Á¦°ÅÇÏ¿© ÁÖ½Ê½Ã¿À.";
-        Text[ chinese_simplified ] = "ÄÜ¹»ÊäÈëÕâ¸ö´òÓ¡»ú¡£ÇëÄúÒÆ³ý²»ÐèÒªÊäÈëµÄÆäËû´òÓ¡»ú¡£";
-        Text[ chinese_traditional ] = "¯à°÷¶×¤J³o¨Ç¦Lªí¾÷¡C½Ð±z²¾°£¤£»Ý­n¶×¤Jªº³]³Æ¡C";
-        Text[ turkish ] = "These printers can be imported. Please remove the ones you do not want to import.";
-        Text[ arabic ] = "íãßä ÇÓÊíÑÇÏ ÇáØÇÈÚÇÊ ÇáÊÇáíÉ. ÇáÑÌÇÁ ÅÒÇáÉ ÇáØÇÈÚÇÊ ÇáÊí áÇ ÊÑíÏ ÇÓÊíÑÇÏåÇ.";
-        Text[ finnish ] = "Diese Drucker können importiert werden. Bitte entfernen Sie diejenigen, die Sie nicht importieren möchten.";
-        Text[ catalan ] = "These printers can be imported. Please remove the ones you do not want to import.";
+        Text = "Diese Drucker können importiert werden. Bitte wählen Sie diejenigen, die Sie importieren möchten.";
+        Text [english] = "These printers can be imported. Please select those you want to import.";
     };
     MultiListBox RID_ADDP_OLD_BOX_PRINTERS
     {
@@ -2986,59 +2831,12 @@ TabPage RID_ADDP_PAGE_OLDPRINTERS
         Size = MAP_APPFONT( 165, 100 );
         Border = TRUE;
     };
-    PushButton RID_ADDP_OLD_BTN_REMOVE
+    PushButton RID_ADDP_OLD_BTN_SELECTALL
     {
         Pos = MAP_APPFONT( 180, 35 );
-        Size = MAP_APPFONT( 50, 15 );
-        Text = "~Entfernen";
-        Text [english] = "~Remove";
-        Text[ english_us ] = "~Remove";
-        Text[ portuguese ] = "~Remover";
-        Text[ russian ] = "Óáðàòü";
-        Text[ greek ] = "Äéá~ãñáöÞ";
-        Text[ dutch ] = "~Verwijderen";
-        Text[ french ] = "~Supprimer";
-        Text[ spanish ] = "~Eliminar";
-        Text[ italian ] = "~Rimuovi";
-        Text[ danish ] = "~Remove";
-        Text[ swedish ] = "~Ta bort";
-        Text[ polish ] = "Usuñ";
-        Text[ portuguese_brazilian ] = "~Remove";
-        Text[ japanese ] = "íœ";
-        Text[ korean ] = "Á¦°Å";
-        Text[ chinese_simplified ] = "ÒÆ³ý";
-        Text[ chinese_traditional ] = "§R°£";
-        Text[ turkish ] = "~Remove";
-        Text[ arabic ] = "ÅÒÇáÉ";
-        Text[ finnish ] = "Poista";
-        Text[ catalan ] = "~Remove";
-    };
-    PushButton RID_ADDP_OLD_BTN_RESTORE
-    {
-        Pos = MAP_APPFONT( 180, 55 );
-        Size = MAP_APPFONT( 50, 15 );
-        Text = "~Zurücknehmen";
-        Text [english] = "~Undo";
-        Text[ english_us ] = "~Undo";
-        Text[ portuguese ] = "~Restaurar";
-        Text[ russian ] = "~Îòìåíà";
-        Text[ greek ] = "Á~íáßñåóç";
-        Text[ dutch ] = "~Ongedaan maken";
-        Text[ french ] = "~Restaurer";
-        Text[ spanish ] = "~Deshacer";
-        Text[ italian ] = "~Cancella";
-        Text[ danish ] = "~Undo";
-        Text[ swedish ] = "~Ångra";
-        Text[ polish ] = "~Cofnij";
-        Text[ portuguese_brazilian ] = "~Undo";
-        Text[ japanese ] = "Œ³‚É–ß‚·";
-        Text[ korean ] = "½ÇÇàÃë¼Ò";
-        Text[ chinese_simplified ] = "³·Ïû";
-        Text[ chinese_traditional ] = "´_­ì";
-        Text[ turkish ] = "~Undo";
-        Text[ arabic ] = "ÊÑÇÌÚ";
-        Text[ finnish ] = "~Zurücknehmen";
-        Text[ catalan ] = "~Undo";
+        Size = MAP_APPFONT( 50, 12 );
+        Text = "~Alle auswählen";
+        Text [english] = "~Select all";
     };
 };
 
@@ -3051,28 +2849,8 @@ TabPage RID_ADDP_PAGE_FAXDRIVER
         Pos = MAP_APPFONT( 40, 40 );
         Size = MAP_APPFONT( 160, 19 );
         WordBreak = TRUE;
-        Text = "Für dieses Faxgerät soll folgender Treiber verwendet werden:";
-        Text [english] = "Use the following driver for this fax device:";
-        Text[ english_us ] = "Use the following driver for this fax device:";
-        Text[ portuguese ] = "Utilizar o seguinte controlador para o fax:";
-        Text[ russian ] = "Äëÿ ýòîãî ôàêñà íåîáõîäìèî èñïîëüçîâàòü ñëåäóþùèé äðàéâåð:";
-        Text[ greek ] = "Use the following driver for this fax device:";
-        Text[ dutch ] = "Voor dit faxapparaat moet u de volgende driver gebruiken:";
-        Text[ french ] = "Pilote à utiliser pour le périphérique fax :";
-        Text[ spanish ] = "Para este dispositivo de fax se debe usar el siguiente controlador:";
-        Text[ italian ] = "Per questo fax utilizzate il driver seguente:";
-        Text[ danish ] = "Use the following driver for this fax device:";
-        Text[ swedish ] = "Använd följande drivrutin för den här faxen:";
-        Text[ polish ] = "Dany faks ma korzystaæ z nastêpuj¹cego sterownika:";
-        Text[ portuguese_brazilian ] = "Use the following driver for this fax device:";
-        Text[ japanese ] = "‚±‚Ì Fax ‹@‚É‚ÍŽŸ‚ÌÄÞ×²ÊÞ‚ªŽg—p‚Å‚«‚Ü‚·:";
-        Text[ korean ] = "ÀÌ ÆÑ½º ±â±â¸¦ À§ÇØ¼­´Â ´ÙÀ½°ú °°Àº µå¶óÀÌ¹ö¸¦ »ç¿ëÇØ¾ß ÇÕ´Ï´Ù:";
-        Text[ chinese_simplified ] = "Õâ¸ö´«ÕæÉè±¸Ê¹ÓÃÒÔÏÂµÄÇý¶¯³ÌÐò£º";
-        Text[ chinese_traditional ] = "½Ð¿ï¾Ü¥H¤UÓì¥Î©ó³o­Ó¶Ç¯u¾÷ªºÅX°Êµ{¦¡¡G";
-        Text[ turkish ] = "Use the following driver for this fax device:";
-        Text[ arabic ] = "ÇÓÊÎÏã ÈÑäÇãÌ ÇáÊÔÛíá ÇáÊÇáí áÌåÇÒ ÇáÝÇßÓ åÐÇ:";
-        Text[ finnish ] = "Für dieses Faxgerät soll folgender Treiber verwendet werden:";
-        Text[ catalan ] = "Use the following driver for this fax device:";
+        Text = "Für diese Faxanbindung soll folgender Treiber verwendet werden:";
+        Text [english] = "Use the following driver for this fax connection:";
     };
     RadioButton RID_ADDP_FAXDRV_BTN_DEFAULT
     {

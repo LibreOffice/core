@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-05 17:33:50 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,12 +131,13 @@ PADialog::PADialog( Window* pParent, BOOL bAdmin ) :
         m_aDevicesLB( this, PaResId( RID_PA_LB_DEV ) ),
         m_aStdPB( this, PaResId( RID_PA_BTN_STD ) ),
         m_aRemPB( this, PaResId( RID_PA_BTN_DEL ) ),
-        m_aGroupBox( this, PaResId( RID_PA_GROUP_INSTALL ) ),
+        m_aPrintersFL( this, PaResId( RID_PA_FL_PRINTERS ) ),
         m_aFontsPB( this, PaResId( RID_PA_BTN_FONTS ) ),
         m_aConfPB( this, PaResId( RID_PA_BTN_CONF ) ),
         m_aRenamePB( this, PaResId( RID_PA_BTN_RENAME ) ),
         m_aTestPagePB( this, PaResId( RID_PA_TESTPAGE ) ),
         m_aDriverTxt( this, PaResId( RID_PA_TXT_DRIVER ) ),
+        m_aSepButtonFL( this, PaResId( RID_PA_FL_SEPBUTTON ) ),
         m_aDriver( this, PaResId( RID_PA_TXT_DRIVER_STRING ) ),
         m_aLocationTxt( this, PaResId( RID_PA_TXT_LOCATION ) ),
         m_aLocation( this, PaResId( RID_PA_TXT_LOCATION_STRING ) ),
@@ -232,7 +233,7 @@ IMPL_LINK( PADialog, SelectHdl, ListBox*, pListBox )
     {
         String sSelect = getSelectedDevice();
         String sDefPrt = m_rPIManager.getDefaultPrinter();
-        if( sDefPrt == sSelect )
+        if( sDefPrt == sSelect || ! m_rPIManager.removePrinter( sSelect, true ) )
             m_aRemPB.Enable( FALSE );
         else
             m_aRemPB.Enable( TRUE );

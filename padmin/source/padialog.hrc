@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-06 13:54:31 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,14 @@
 #define RID_PA_BTN_STD                      2
 #define RID_PA_BTN_DEL                      3
 #define RID_PA_LB_DEV                       4
-#define RID_PA_GROUP_INSTALL                5
-#define RID_PA_BTN_CONF                 6
+#define RID_PA_FL_PRINTERS                   5
+#define RID_PA_BTN_CONF                     6
 #define RID_PA_BTN_RENAME                   7
-#define RID_PA_TESTPAGE                 8
+#define RID_PA_TESTPAGE                     8
 #define RID_PA_BTN_FONTS                    9
 #define RID_PA_TXT_DRIVER                   10
 #define RID_PA_TXT_DRIVER_STRING            11
-#define RID_PA_TXT_LOCATION             12
+#define RID_PA_TXT_LOCATION                 12
 #define RID_PA_TXT_LOCATION_STRING          13
 #define RID_PA_TXT_COMMAND                  14
 #define RID_PA_TXT_COMMAND_STRING           15
@@ -82,8 +82,9 @@
 #define RID_PA_TXT_COMMENT_STRING           17
 #define RID_PA_STR_DEFPRT                   18
 #define RID_PA_BTN_ADD                      19
-#define RID_PA_BTN_ADDFONTS             20
+#define RID_PA_BTN_ADDFONTS                 20
 #define RID_PA_STR_RENAME                   21
+#define RID_PA_FL_SEPBUTTON              22
 
 #define RID_STRINGQUERYDLG         1003
 #define RID_STRQRY_TXT_RENAME         1
@@ -163,7 +164,7 @@
 #define RID_FIMP_BTN_CANCEL                     2
 #define RID_FIMP_EDT_FROM                       3
 #define RID_FIMP_BTN_FROM                       4
-#define RID_FIMP_GRP_FROM                       5
+#define RID_FIMP_FL_FROM                        5
 #define RID_FIMP_BTN_SELECTALL                  6
 #define RID_FIMP_BOX_NEWFONTS                   7
 #define RID_FIMP_TXT_HELP                        8
@@ -279,8 +280,7 @@
 #define RID_ADDP_PAGE_OLDPRINTERS               2005
 #define RID_ADDP_OLD_TXT_PRINTERS               1
 #define RID_ADDP_OLD_BOX_PRINTERS               2
-#define RID_ADDP_OLD_BTN_REMOVE                 3
-#define RID_ADDP_OLD_BTN_RESTORE                4
+#define RID_ADDP_OLD_BTN_SELECTALL              3
 
 #define RID_ADDP_PAGE_FAXDRIVER                 2006
 #define RID_ADDP_FAXDRV_TXT_DRIVER              1

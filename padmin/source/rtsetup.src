@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-14 21:49:41 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,8 +677,8 @@ TabPage RID_RTS_DEVICEPAGE
         Size = MAP_APPFONT( 105, 200 );
         StringList =
         {
-            "8";
-            "24";
+            "8 Bit";
+            "24 Bit";
         };
     };
 };
@@ -755,7 +755,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
     PushButton RID_RTS_FS_ADD_BTN
     {
         Pos = MAP_APPFONT( 5, 125 );
-        Size = MAP_APPFONT( 107, 15 );
+        Size = MAP_APPFONT( 107, 12 );
         Text = "~Hinzufügen";
         Text [ english ] = "~Add";
         Text[ english_us ] = "~Add";
@@ -782,7 +782,7 @@ TabPage RID_RTS_FONTSUBSTPAGE
     PushButton RID_RTS_FS_REMOVE_BTN
     {
         Pos = MAP_APPFONT( 117, 125 );
-        Size = MAP_APPFONT( 107, 15 );
+        Size = MAP_APPFONT( 107, 12 );
         Text = "~Entfernen";
         Text [ english ] = "~Remove";
         Text[ english_us ] = "~Remove";
@@ -890,10 +890,10 @@ TabPage RID_RTS_COMMANDPAGE
         Pos = MAP_APPFONT ( 11 , 75 ) ;
         Size = MAP_APPFONT ( 150 , 65 ) ;
     };
-    GroupBox RID_RTS_CMD_GROUP_INSTALL
+    FixedLine RID_RTS_CMD_FL_INSTALL
     {
         Pos = MAP_APPFONT ( 6 , 44 ) ;
-        Size = MAP_APPFONT ( 220 , 127 ) ;
+        Size = MAP_APPFONT ( 220 , 8 ) ;
         Text = "Kommando auswählen" ;
         Text [ English ] = "Select command" ;
         Text[ english_us ] = "Select command";
@@ -1126,10 +1126,10 @@ TabPage RID_RTS_COMMANDPAGE
         Text[ finnish ] = "Kommando: ";
         Text[ catalan ] = "Command: ";
     };
-    GroupBox RID_RTS_CMD_GROUP_DEFAULT
+    FixedLine RID_RTS_CMD_FL_DEFAULT
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 220 , 33 ) ;
+        Size = MAP_APPFONT ( 220 , 8 ) ;
         Text = "Drucker" ;
         Text [ English ] = "Printer" ;
         Text[ english_us ] = "Printer";
@@ -1156,7 +1156,7 @@ TabPage RID_RTS_COMMANDPAGE
     PushButton RID_RTS_CMD_BTN_HELP
     {
         Pos = MAP_APPFONT( 170, 55 );
-        Size = MAP_APPFONT( 50, 14 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "~Hilfe";
         Text [ English ] = "~Help";
         Text[ english_us ] = "~Help";
@@ -1182,8 +1182,8 @@ TabPage RID_RTS_COMMANDPAGE
     };
     PushButton RID_RTS_CMD_BTN_REMOVE
     {
-        Pos = MAP_APPFONT( 170, 75 );
-        Size = MAP_APPFONT( 50, 14 );
+        Pos = MAP_APPFONT( 170, 72 );
+        Size = MAP_APPFONT( 50, 12 );
         Text = "~Entfernen";
         Text [ English ] = "~Remove";
         Text[ english_us ] = "~Remove";
@@ -1293,34 +1293,34 @@ TabPage RID_RTS_OTHERPAGE
     {
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 85, 8 );
-        Text = "~Linke Randkorrektur :" ;
-        Text [ English ] = "~Left margin adjustment :" ;
-        Text[ english_us ] = "~Left margin adjustment :";
-        Text[ portuguese ] = "~Ajuste da margem esquerda:";
-        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñëåâà :";
-        Text[ greek ] = "Äéüñèùóç áñéóôåñïı ğåñéèùñßïõ :";
-        Text[ dutch ] = "~Linker marge :";
-        Text[ french ] = "Correction de la marge ~gauche :";
-        Text[ spanish ] = "~Corrección del margen izquierdo :";
-        Text[ italian ] = "Correggi margine ~sinistro:";
-        Text[ danish ] = "~Left margin adjustment :";
-        Text[ swedish ] = "Vänster margina~lkorrigering :";
-        Text[ polish ] = "Wyrównanie lewego marginesu :";
-        Text[ portuguese_brazilian ] = "~Left margin adjustment :";
-        Text[ japanese ] = "¶—]”’‚Ì’²®(~L):";
+        Text = "~Linke Randkorrektur" ;
+        Text [ English ] = "~Left margin adjustment" ;
+        Text[ english_us ] = "~Left margin adjustment";
+        Text[ portuguese ] = "~Ajuste da margem esquerda";
+        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñëåâà";
+        Text[ greek ] = "Äéüñèùóç áñéóôåñïı ğåñéèùñßïõ";
+        Text[ dutch ] = "~Linker marge";
+        Text[ french ] = "Correction de la marge ~gauche";
+        Text[ spanish ] = "~Corrección del margen izquierdo";
+        Text[ italian ] = "Correggi margine ~sinistro";
+        Text[ danish ] = "~Left margin adjustment";
+        Text[ swedish ] = "Vänster margina~lkorrigering";
+        Text[ polish ] = "Wyrównanie lewego marginesu";
+        Text[ portuguese_brazilian ] = "~Left margin adjustment";
+        Text[ japanese ] = "¶—]”’‚Ì’²®(~L)";
         Text[ korean ] = "¿ŞÂÊ¡¡¿©¹é¡¡Á¶Á¤(~L)";
         Text[ chinese_simplified ] = "µ÷Õû×ó±ß¾à(~L)£º";
         Text[ chinese_traditional ] = "½Õ¾ã¥ªÃä¶Z(~L)¡G";
-        Text[ turkish ] = "~Left margin adjustment :";
-        Text[ arabic ] = "ÖÈØ ÇáåÇãÔ ÇáÃíÓÑ :";
-        Text[ finnish ] = "~Left margin adjustment :";
-        Text[ catalan ] = "~Corrección del margen izquierdo :";
+        Text[ turkish ] = "~Left margin adjustment";
+        Text[ arabic ] = "ÖÈØ ÇáåÇãÔ ÇáÃíÓÑ";
+        Text[ finnish ] = "~Left margin adjustment";
+        Text[ catalan ] = "~Corrección del margen izquierdo";
     };
     MetricField RID_RTS_OTHER_LEFTMARGIN_BOX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 120 , 5 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( 100 , 5 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
         StrictFormat = TRUE ;
         Spin = TRUE;
         Repeat = TRUE;
@@ -1331,34 +1331,34 @@ TabPage RID_RTS_OTHERPAGE
     {
         Pos = MAP_APPFONT( 5, 20 );
         Size = MAP_APPFONT( 85, 8 );
-        Text = "~Obere Randkorrektur :" ;
-        Text [ English ] = "~Top margin adjustment :" ;
-        Text[ english_us ] = "~Top margin adjustment :";
-        Text[ portuguese ] = "Aju~ste da margem superior:";
-        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñâåğõó :";
-        Text[ greek ] = "Äéüñèùóç ğÜíù ğåñéèùñß~ïõ :";
-        Text[ dutch ] = "~Marge boven :";
-        Text[ french ] = "Correction de la marge ~supérieure :";
-        Text[ spanish ] = "~Corrección del margen superior:";
-        Text[ italian ] = "Correggi margine s~uperiore:";
-        Text[ danish ] = "~Top margin adjustment :";
-        Text[ swedish ] = "Övre marginalj~ustering :";
-        Text[ polish ] = "Wyrównanie górnego marginesu :";
-        Text[ portuguese_brazilian ] = "~Top margin adjustment :";
-        Text[ japanese ] = "ã—]”’‚Ì’²®(~T):";
-        Text[ korean ] = "À§¡¡¿©¹é¡¡Á¶Á¤(~T):";
+        Text = "~Obere Randkorrektur" ;
+        Text [ English ] = "~Top margin adjustment" ;
+        Text[ english_us ] = "~Top margin adjustment";
+        Text[ portuguese ] = "Aju~ste da margem superior";
+        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñâåğõó";
+        Text[ greek ] = "Äéüñèùóç ğÜíù ğåñéèùñß~ïõ";
+        Text[ dutch ] = "~Marge boven";
+        Text[ french ] = "Correction de la marge ~supérieure";
+        Text[ spanish ] = "~Corrección del margen superior";
+        Text[ italian ] = "Correggi margine s~uperiore";
+        Text[ danish ] = "~Top margin adjustment";
+        Text[ swedish ] = "Övre marginalj~ustering";
+        Text[ polish ] = "Wyrównanie górnego marginesu";
+        Text[ portuguese_brazilian ] = "~Top margin adjustment";
+        Text[ japanese ] = "ã—]”’‚Ì’²®(~T)";
+        Text[ korean ] = "À§¡¡¿©¹é¡¡Á¶Á¤(~T)";
         Text[ chinese_simplified ] = "µ÷ÕûÉÏ±ß¾à(~T)£º";
         Text[ chinese_traditional ] = "½Õ¾ã¤WÃä¶Z(~T)¡G";
-        Text[ turkish ] = "~Top margin adjustment :";
-        Text[ arabic ] = "ÖÈØ ÇáåÇãÔ ÇáÚáæí :";
-        Text[ finnish ] = "~Top margin adjustment :";
-        Text[ catalan ] = "~Corrección del margen superior:";
+        Text[ turkish ] = "~Top margin adjustment";
+        Text[ arabic ] = "ÖÈØ ÇáåÇãÔ ÇáÚáæí";
+        Text[ finnish ] = "~Top margin adjustment";
+        Text[ catalan ] = "~Corrección del margen superior";
     };
     MetricField RID_RTS_OTHER_TOPMARGIN_BOX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 120 , 20 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( 100 , 20 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
         StrictFormat = TRUE ;
         Spin = TRUE;
         Repeat = TRUE;
@@ -1369,34 +1369,34 @@ TabPage RID_RTS_OTHERPAGE
     {
         Pos = MAP_APPFONT( 5, 35 );
         Size = MAP_APPFONT( 85, 8 );
-        Text = "~Rechte Randkorrektur :" ;
-        Text [ English ] = "~Right margin adjustment :" ;
-        Text[ english_us ] = "~Right margin adjustment :";
-        Text[ portuguese ] = "Ajuste ~da margem direita:";
-        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñïğàâà :";
-        Text[ greek ] = "Äéüñèùóç äåîéïı ğå~ñéèùñßïõ :";
-        Text[ dutch ] = "~Rechter marge :";
-        Text[ french ] = "Correction de la marge ~droite :";
-        Text[ spanish ] = "~Corrección del margen derecho:";
-        Text[ italian ] = "Correzione margine ~destro:";
-        Text[ danish ] = "~Right margin adjustment :";
-        Text[ swedish ] = "Höge~r marginalkorrigering :";
-        Text[ polish ] = "Wyrównanie prawego marginesu :";
-        Text[ portuguese_brazilian ] = "~Right margin adjustment :";
-        Text[ japanese ] = "‰E—]”’‚Ì’²®(~R):";
-        Text[ korean ] = "~¿À¸¥ÂÊ¡¡¿©¹é¡¡Á¶Á¤:";
+        Text = "~Rechte Randkorrektur" ;
+        Text [ English ] = "~Right margin adjustment" ;
+        Text[ english_us ] = "~Right margin adjustment";
+        Text[ portuguese ] = "Ajuste ~da margem direita";
+        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñïğàâà";
+        Text[ greek ] = "Äéüñèùóç äåîéïı ğå~ñéèùñßïõ";
+        Text[ dutch ] = "~Rechter marge";
+        Text[ french ] = "Correction de la marge ~droite";
+        Text[ spanish ] = "~Corrección del margen derecho";
+        Text[ italian ] = "Correzione margine ~destro";
+        Text[ danish ] = "~Right margin adjustment";
+        Text[ swedish ] = "Höge~r marginalkorrigering";
+        Text[ polish ] = "Wyrównanie prawego marginesu";
+        Text[ portuguese_brazilian ] = "~Right margin adjustment";
+        Text[ japanese ] = "‰E—]”’‚Ì’²®(~R)";
+        Text[ korean ] = "~¿À¸¥ÂÊ¡¡¿©¹é¡¡Á¶Á¤";
         Text[ chinese_simplified ] = "µ÷ÕûÓÒ±ß¾à(~R)£º";
         Text[ chinese_traditional ] = "½Õ¾ã¥kÃä¶Z(~R)¡G";
-        Text[ turkish ] = "~Right margin adjustment :";
-        Text[ arabic ] = "ÖÈØ ÇáåÇãÔ ÇáÃíãä :";
-        Text[ finnish ] = "~Right margin adjustment :";
-        Text[ catalan ] = "~Corrección del margen derecho:";
+        Text[ turkish ] = "~Right margin adjustment";
+        Text[ arabic ] = "ÖÈØ ÇáåÇãÔ ÇáÃíãä";
+        Text[ finnish ] = "~Right margin adjustment";
+        Text[ catalan ] = "~Corrección del margen derecho";
     };
     MetricField RID_RTS_OTHER_RIGHTMARGIN_BOX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 120 , 35 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( 100 , 35 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
         StrictFormat = TRUE ;
         Spin = TRUE;
         Repeat = TRUE;
@@ -1407,34 +1407,34 @@ TabPage RID_RTS_OTHERPAGE
     {
         Pos = MAP_APPFONT( 5, 50 );
         Size = MAP_APPFONT( 85, 8 );
-        Text = "~Untere Randkorrektur :" ;
-        Text [ English ] = "~Bottom margin adjustment :" ;
-        Text[ english_us ] = "~Bottom margin adjustment :";
-        Text[ portuguese ] = "Ajuste da margem ~inferior:";
-        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñíèçó :";
-        Text[ greek ] = "Äéüñèùóç êÜôù ğåñéèùñßï~õ :";
-        Text[ dutch ] = "M~arge beneden :";
-        Text[ french ] = "Correction de la marge ~inférieure :";
-        Text[ spanish ] = "~Corrección del margen inferior:";
-        Text[ italian ] = "Correggi margine ~inferiore:";
-        Text[ danish ] = "~Bottom margin adjustment :";
-        Text[ swedish ] = "~Undre marginalkorrigering :";
-        Text[ polish ] = "Wyrównanie dolnego marginesu :";
-        Text[ portuguese_brazilian ] = "~Bottom margin adjustment :";
-        Text[ japanese ] = "‰º—]”’‚Ì’²®(~B):";
-        Text[ korean ] = "¾Æ·¡¡¡¿©¹é¡¡Á¶Á¤ (~B):";
+        Text = "~Untere Randkorrektur" ;
+        Text [ English ] = "~Bottom margin adjustment" ;
+        Text[ english_us ] = "~Bottom margin adjustment";
+        Text[ portuguese ] = "Ajuste da margem ~inferior";
+        Text[ russian ] = "~Âûğàâíèâàíèå ïîëÿ ñíèçó";
+        Text[ greek ] = "Äéüñèùóç êÜôù ğåñéèùñßï~õ";
+        Text[ dutch ] = "M~arge beneden";
+        Text[ french ] = "Correction de la marge ~inférieure";
+        Text[ spanish ] = "~Corrección del margen inferior";
+        Text[ italian ] = "Correggi margine ~inferiore";
+        Text[ danish ] = "~Bottom margin adjustment";
+        Text[ swedish ] = "~Undre marginalkorrigering";
+        Text[ polish ] = "Wyrównanie dolnego marginesu";
+        Text[ portuguese_brazilian ] = "~Bottom margin adjustment";
+        Text[ japanese ] = "‰º—]”’‚Ì’²®(~B)";
+        Text[ korean ] = "¾Æ·¡¡¡¿©¹é¡¡Á¶Á¤ (~B)";
         Text[ chinese_simplified ] = "µ÷ÕûÏÂ±ß¾à(~B)£º";
         Text[ chinese_traditional ] = "½Õ¾ã¤pÃä¶Z(~B)¡G";
-        Text[ turkish ] = "~Bottom margin adjustment :";
-        Text[ arabic ] = "ÖÈØ ÇáåÇãÔ ÇáÓİáí :";
-        Text[ finnish ] = "~Bottom margin adjustment :";
-        Text[ catalan ] = "~Corrección del margen inferior:";
+        Text[ turkish ] = "~Bottom margin adjustment";
+        Text[ arabic ] = "ÖÈØ ÇáåÇãÔ ÇáÓİáí";
+        Text[ finnish ] = "~Bottom margin adjustment";
+        Text[ catalan ] = "~Corrección del margen inferior";
     };
     MetricField RID_RTS_OTHER_BOTTOMMARGIN_BOX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 120 , 50 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( 100 , 50 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
         StrictFormat = TRUE ;
         Spin = TRUE;
         Repeat = TRUE;
@@ -1445,61 +1445,41 @@ TabPage RID_RTS_OTHERPAGE
     {
         Pos = MAP_APPFONT( 5, 65 );
         Size = MAP_APPFONT( 85, 8 );
-        Text = "~Kommentar :" ;
-        Text [ English ] = "~Comment :" ;
-        Text[ english_us ] = "~Comment :";
-        Text[ portuguese ] = "~Comentário:";
-        Text[ russian ] = "~Êîììåíòàğèé :";
-        Text[ greek ] = "ĞáñáôŞñçóç :";
-        Text[ dutch ] = "~Commentaar :";
-        Text[ french ] = "Co~mmentaire :";
-        Text[ spanish ] = "~Comentario:";
-        Text[ italian ] = "Co~mmento:";
-        Text[ danish ] = "~Comment :";
-        Text[ swedish ] = "~Kommentar :";
-        Text[ polish ] = "Komentarz :";
-        Text[ portuguese_brazilian ] = "~Comment :";
-        Text[ japanese ] = "ºÒİÄ(~C):";
-        Text[ korean ] = "ÁÖ¼® (~C):";
+        Text = "~Kommentar" ;
+        Text [ English ] = "~Comment" ;
+        Text[ english_us ] = "~Comment";
+        Text[ portuguese ] = "~Comentário";
+        Text[ russian ] = "~Êîììåíòàğèé";
+        Text[ greek ] = "ĞáñáôŞñçóç";
+        Text[ dutch ] = "~Commentaar";
+        Text[ french ] = "Co~mmentaire";
+        Text[ spanish ] = "~Comentario";
+        Text[ italian ] = "Co~mmento";
+        Text[ danish ] = "~Comment";
+        Text[ swedish ] = "~Kommentar";
+        Text[ polish ] = "Komentarz";
+        Text[ portuguese_brazilian ] = "~Comment";
+        Text[ japanese ] = "ºÒİÄ(~C)";
+        Text[ korean ] = "ÁÖ¼® (~C)";
         Text[ chinese_simplified ] = "±¸×¢(~C)£º";
         Text[ chinese_traditional ] = "³Æª`(~C)¡G";
-        Text[ turkish ] = "~Comment :";
-        Text[ arabic ] = "ÇáÊÚáíŞ :";
-        Text[ finnish ] = "~Comment :";
-        Text[ catalan ] = "~Comentario:";
+        Text[ turkish ] = "~Comment";
+        Text[ arabic ] = "ÇáÊÚáíŞ";
+        Text[ finnish ] = "~Comment";
+        Text[ catalan ] = "~Comentario";
     };
     Edit RID_RTS_OTHER_COMMENT_EDT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 120 , 65 ) ;
-        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Pos = MAP_APPFONT ( 5 , 75 ) ;
+        Size = MAP_APPFONT ( 220 , 12 ) ;
     };
     PushButton RID_RTS_OTHER_DEFAULT_BTN
     {
-        Pos = MAP_APPFONT( 70, 80 );
-        Size = MAP_APPFONT( 100, 15 );
-        Text = "~Standardwerte";
-        Text [ English ] = "~Default values";
-        Text[ english_us ] = "~Default Values";
-        Text[ portuguese ] = "~Valores padrão";
-        Text[ russian ] = "~Ñòàíäàğòíûå çíà÷åíèÿ";
-        Text[ greek ] = "Ôéìİ~ò ğñïåğéëïãŞò";
-        Text[ dutch ] = "~Standaardwaarden";
-        Text[ french ] = "~Valeurs par défaut";
-        Text[ spanish ] = "~Valores estándar";
-        Text[ italian ] = "~Valori standard";
-        Text[ danish ] = "~Default values";
-        Text[ swedish ] = "~Standardvärden";
-        Text[ polish ] = "Wartoœci domyœlne";
-        Text[ portuguese_brazilian ] = "~Default values";
-        Text[ japanese ] = "Šù’è’l(~D)";
-        Text[ korean ] = "~±âº»°ª";
-        Text[ chinese_simplified ] = "Ä¬ÈÏÖµ(~D)";
-        Text[ chinese_traditional ] = "Àq»{ªº¼Æ­È(~D)";
-        Text[ turkish ] = "~Default values";
-        Text[ arabic ] = "Şíã ÇİÊÑÇÖíÉ";
-        Text[ finnish ] = "~Default Values";
-        Text[ catalan ] = "~Valores estándar";
+        Pos = MAP_APPFONT( 175, 5 );
+        Size = MAP_APPFONT( 50, 12 );
+        Text = "~Standard";
+        Text [ English ] = "~Standard";
     };
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmddlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:56:35 $
+ *  last change: $Author: pl $ $Date: 2001-06-15 15:30:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,10 +119,10 @@ private:
     RTSDialog*                      m_pParent;
 
     ComboBox                        m_aCommandsCB;
-    GroupBox                        m_aCommandTitle;
+    FixedLine                       m_aCommandTitle;
     FixedText                       m_aPrinterName;
     FixedText                       m_aConnectedTo;
-    GroupBox                        m_aPrinterGroup;
+    FixedLine                       m_aPrinterFL;
 
     FixedText                       m_aConfigureText;
     ListBox                         m_aConfigureBox;
