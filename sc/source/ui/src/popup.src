@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2002-06-10 15:21:42 $
+ *  last change: $Author: dr $ $Date: 2002-08-07 14:11:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ String RID_POPUP_CELLS
     Text[ korean ] = "셀 팝업 메뉴";
     Text[ turkish ] = "H�creler i�in popup m�n�";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Men� emergent de la cel�la";
+    Text[ catalan ] = "Men� emergent de la cel.la";
     Text[ thai ] = "เซลล์เมนูแบบผุดขึ้น";
 };
 
@@ -158,7 +158,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "셀 서식 지정(~F)...";
             Text[ turkish ] = "H�creleri formatla...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Formata les cel�les...";
+            Text[ catalan ] = "~Formata les cel.les...";
             Text[ thai ] = "~รูปแบบเซลล์...";
         };
          //------------------------------
@@ -191,7 +191,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "셀 삽입(~E)...";
             Text[ turkish ] = "H�cre ekle...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Insereix ~cel�les...";
+            Text[ catalan ] = "Insereix ~cel.les...";
             Text[ thai ] = "แทรกเซ~ลล์...";
         };
         MenuItem
@@ -221,7 +221,7 @@ Menu RID_POPUP_CELLS
             Text[ korean ] = "셀 삭제(~L)...";
             Text[ turkish ] = "H�cre sil...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Supr~imeix les cel�les...";
+            Text[ catalan ] = "Supr~imeix les cel.les...";
             Text[ thai ] = "ล~บเซลล์...";
         };
         MenuItem
@@ -484,7 +484,7 @@ Menu RID_POPUP_TAB
         {
             Identifier = FID_INS_TABLE ;
             HelpId = FID_INS_TABLE ;
-            Text = "~Einf�gen..." ;
+            Text = "Tabelle ~einf�gen..." ;
             Text [ ENGLISH ] = "~Insert..." ;
             Text [ norwegian ] = "Insert..." ;
             Text [ italian ] = "~Inserisci..." ;
@@ -514,7 +514,7 @@ Menu RID_POPUP_TAB
         {
             Identifier = FID_DELETE_TABLE ;
             HelpId = FID_DELETE_TABLE ;
-            Text = "~L�schen..." ;
+            Text = "Tabelle ~l�schen..." ;
             Text [ ENGLISH ] = "~Delete..." ;
             Text [ norwegian ] = "Slett..." ;
             Text [ italian ] = "Elimina..." ;
@@ -544,7 +544,7 @@ Menu RID_POPUP_TAB
         {
             Identifier = FID_TAB_MENU_RENAME ;
             HelpId = FID_TAB_MENU_RENAME ;
-            Text = "~Umbenennen..." ;
+            Text = "Tabelle ~umbenennen..." ;
             Text [ ENGLISH ] = "~Rename..." ;
             Text [ norwegian ] = "Rename..." ;
             Text [ italian ] = "Rinomina..." ;
@@ -574,7 +574,7 @@ Menu RID_POPUP_TAB
         {
             Identifier = FID_TAB_MOVE ;
             HelpId = FID_TAB_MOVE ;
-            Text = "~Verschieben/kopieren..." ;
+            Text = "Tabelle ~verschieben/kopieren..." ;
             Text [ ENGLISH ] = "~Move/Copy..." ;
             Text [ norwegian ] = "Move/Copy..." ;
             Text [ italian ] = "Sposta/copia..." ;
@@ -733,26 +733,14 @@ Menu RID_POPUP_PIVOT
             Text = "~Filter..." ;
             Text [ ENGLISH ] = "~Filter..." ;
             Text [ english_us ] = "~Filter..." ;
-            Text[ portuguese ] = "~Filter...";
-            Text[ russian ] = "~Filter...";
-            Text[ greek ] = "~Filter...";
-            Text[ dutch ] = "~Filter...";
             Text[ french ] = "~Filtre...";
             Text[ spanish ] = "~Filtro...";
-            Text[ finnish ] = "~Filter...";
             Text[ italian ] = "~Filtro...";
-            Text[ danish ] = "~Filter...";
             Text[ swedish ] = "~Filter...";
-            Text[ polish ] = "~Filter...";
-            Text[ portuguese_brazilian ] = "~Filter...";
             Text[ japanese ] = "フィルタ(F)...";
             Text[ korean ] = "필터(F)...";
             Text[ chinese_simplified ] = "筛选(~F)...";
             Text[ chinese_traditional ] = "篩選(~F)...";
-            Text[ turkish ] = "~Filter...";
-            Text[ arabic ] = "~Filter...";
-            Text[ catalan ] = "~Filter...";
-            Text[ thai ] = "~Filter...";
         };
         MenuItem
         {
@@ -1501,7 +1489,7 @@ Menu RID_POPUP_PAGEBREAK
             Text[ korean ] = "셀 서식 지정(~F)...";
             Text[ turkish ] = "H�creleri formatla...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Formata les cel�les...";
+            Text[ catalan ] = "~Formata les cel.les...";
             Text[ thai ] = "~รูปแบบเซลล์...";
         };
          //------------------------------
