@@ -3,9 +3,9 @@
  *
  *  $RCSfile: schema_trim.xsl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-22 11:48:55 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,26 @@
 <!-- suppress the constraints of the schema
 	<xsl:template match = "constraints"/>  -->
 
-<!-- suppress all documentation items -->
-	<xsl:template match = "info"/>
+<!-- suppress all documentation items
+	<xsl:template match = "info"/> -->
+
+<!-- suppress constraints for deprecated items -->
+	<xsl:template match = "constraints[../info/deprecated]"/>
+
+<!-- suppress all documentation for deprecated items -->
+	<xsl:template match = "desc[../deprecated]"/>
+	<xsl:template match = "label[../deprecated]"/>
+
+<!-- copy all other documentation with content -->
+	<xsl:template match="desc|label">
+		<xsl:copy>
+			<xsl:apply-templates select="@*"/>
+			<xsl:value-of select="."/>
+		</xsl:copy>		
+	</xsl:template>
+
+<!-- suppress all author items -->
+	<xsl:template match = "author"/>
 
 <!-- suppress values, which are marked as nil -->
 	<xsl:template match="value[@xsi:nil='true']" />
