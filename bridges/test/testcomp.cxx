@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testcomp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:29:38 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:32:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ void parseCommandLine( char *argv[] ,
 }
 
 Any OInstanceProvider::queryInterface( const  Type & aType )
+    throw (RuntimeException)
 {
     Any a = ::cppu::queryInterface( aType ,
             SAL_STATIC_CAST( XInstanceProvider * , this ) );
@@ -195,9 +196,9 @@ public:
         }
         return aRet;
     }
-    virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL acquire() throw()
         { osl_incrementInterlockedCount( &_nRef ); }
-    virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)
+    virtual void SAL_CALL release() throw()
         { if (! osl_decrementInterlockedCount( &_nRef )) delete this; }
 
     // XServiceInfo
@@ -328,7 +329,7 @@ Sequence< OUString > ServiceImpl::getSupportedServiceNames()
  *
  *****************/
 
-Any OCallMe::queryInterface( const  Type & aType )
+Any OCallMe::queryInterface( const  Type & aType ) throw (RuntimeException)
 {
     Any a = ::cppu::queryInterface( aType,
             SAL_STATIC_CAST( XCallMe * , this ) );
@@ -425,6 +426,7 @@ void OCallMe::callAgain( const Reference< ::test::XCallMe >& callAgain,
  *
  *******************/
 Any OInterfaceTest::queryInterface( const Type & aType )
+    throw (RuntimeException)
 {
     Any a = ::cppu::queryInterface( aType,
             SAL_STATIC_CAST( XInterfaceTest * , this ) );
@@ -476,7 +478,7 @@ void OInterfaceTest::call()
 }
 
 
-Any OTestFactory::queryInterface( const Type & aType )
+Any OTestFactory::queryInterface( const Type & aType ) throw (RuntimeException)
 {
     Any a = ::cppu::queryInterface( aType,
             SAL_STATIC_CAST( XTestFactory * , this ) );
@@ -854,13 +856,7 @@ Reference <XInterface > createComponent( const ::rtl::OUString &sService ,
             UNO_QUERY );
 
         OSL_ASSERT( rReg.is() );
-#ifdef SAL_W32
         OUString aDllName = sDllName;
-#else
-        OUString aDllName = OUString( RTL_CONSTASCII_USTRINGPARAM("lib"));
-        aDllName += sDllName;
-        aDllName += OUString( RTL_CONSTASCII_USTRINGPARAM(".so"));
-#endif
 
         try
         {
