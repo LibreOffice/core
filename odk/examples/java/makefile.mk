@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-10 10:46:16 $
+#   last change: $Author: kz $ $Date: 2003-08-27 16:46:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,7 +147,7 @@ PROPERTYSET_FILES= \
     $(DESTDIRJAVAEXAMPLES)$/PropertySet$/PropertySet.sxw \
     $(DESTDIRJAVAEXAMPLES)$/PropertySet$/Makefile
 
-EXAMPLESLIST= \
+DIR_FILE_LIST= \
     $(DRAWING_FILES) \
     $(SPREADSHEET_FILES) \
     $(TEXT_FILES) \
@@ -159,15 +159,20 @@ EXAMPLESLIST= \
     $(MINIMALCOMPONENT_FILES) \
     $(PROPERTYSET_FILES)
 
+DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
+DIR_CREATE_FLAG=$(MISC)$/ex_java_dirs_created.txt
+DIR_FILE_FLAG=$(MISC)$/ex_java_files.txt
 
 #--------------------------------------------------
 # TARGETS
 #--------------------------------------------------
 all : \
-    $(EXAMPLESLIST)
+    $(DIR_FILE_LIST) \
+    $(DIR_FILE_FLAG)
 
 #--------------------------------------------------
 # use global rules
 #--------------------------------------------------   
 .INCLUDE: $(PRJ)$/util$/odk_rules.pmk
-    
+
+
