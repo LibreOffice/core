@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:11:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XIESCHER_HXX
 #define SC_XIESCHER_HXX
 
@@ -209,6 +208,8 @@ public:
     /** Constructor takes ownership of the members of rSrcObj, which will be invalidated.
         @param bAreaObj  true = Width and height of the object must be greater than 0. */
     explicit            XclImpEscherDrawing( XclImpEscherObj& rSrcObj, bool bAreaObj );
+
+    virtual void                Apply( ScfProgressBar& rProgress );
 };
 
 // ----------------------------------------------------------------------------
