@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-04-09 09:46:33 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ russian ] = "Îáíîâëåíèå";
         Text[ greek ] = "Åíçìİñùóç";
         Text[ dutch ] = "Updating";
-        Text[ french ] = "Updating";
+        Text[ french ] = "Actualisation";
         Text[ spanish ] = "Updating";
         Text[ italian ] = "Updating";
         Text[ danish ] = "Updating";
@@ -111,7 +111,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ russian ] = "Îáíîâëÿòü ññûëêè ïğè çàãğóçêå";
         Text[ greek ] = "Åíçìİñùóç óõíäİóåùí êáôÜ ôç öüñôùóç";
         Text[ dutch ] = "Update links when loading";
-        Text[ french ] = "Update links when loading";
+        Text[ french ] = "Actualiser les liens lors du chargement";
         Text[ spanish ] = "Update links when loading";
         Text[ italian ] = "Update links when loading";
         Text[ danish ] = "Update links when loading";
@@ -321,7 +321,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese_brazilian ] = "Automatic";
         Text[ portuguese ] = "~Automático";
         Text[ danish ] = "Automatisk";
-        Text[ french ] = "~Automatiquement";
+        Text[ french ] = "~Automatique";
         Text[ swedish ] = "~Automatiskt";
         Text[ dutch ] = "~Automatisch";
         Text[ spanish ] = "~Automático";
@@ -381,7 +381,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ russian ] = "Íàñòğîéêè";
         Text[ greek ] = "Ñõèìßóåéò";
         Text[ dutch ] = "Settings";
-        Text[ french ] = "Settings";
+        Text[ french ] = "Paramètres";
         Text[ spanish ] = "Settings";
         Text[ italian ] = "Settings";
         Text[ danish ] = "Settings";
@@ -440,7 +440,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ portuguese_brazilian ] = "Default Tab distance";
         Text [ portuguese ] = "Intervalo entre tabulações";
         Text [ danish ] = "Tabulatorafstand";
-        Text [ french ] = "Tabulations";
+        Text [ french ] = "Espace entre les tabulations";
         Text [ swedish ] = "Tabulatoravstånd";
         Text [ dutch ] = "Tabstops";
         Text [ spanish ] = "Distancia entre tabuladores";
@@ -959,7 +959,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text [ danish ] = "Separator" ;
         Text [ italian ] = "~Separatore" ;
         Text [ spanish ] = "~Separador" ;
-        Text [ french ] = "~Séparateurs" ;
+        Text [ french ] = "~Séparateur" ;
         Text [ dutch ] = "~Scheidingsteken" ;
         Text [ portuguese ] = "~Separador" ;
         Text[ chinese_simplified ] = "·Ö¸ô·û";
