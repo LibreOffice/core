@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 04:35:48 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:52:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -957,6 +957,10 @@ Menu MENU_BROWSER_QUERYCONTEXT
         MenuItem
         {
             Separator = TRUE;
+        };
+        MenuItem
+        {
+            MID_QUERY_WIZARD
         };
         MenuItem
         {
