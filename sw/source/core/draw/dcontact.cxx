@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:05:46 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,10 @@
 
 // OD 18.06.2003 #108784#
 #include <algorithm>
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
 
 TYPEINIT1( SwContact, SwClient )
@@ -611,7 +615,8 @@ void SwFlyDrawContact::MoveObjToVisibleLayer( SdrObject* _pDrawObj )
     {
         for ( sal_uInt8 i = 0; i < pFlyFrm->GetDrawObjs()->Count(); ++i)
         {
-            SdrObject* pObj = (*pFlyFrm->GetDrawObjs())[i];
+            // --> OD 2004-07-01 #i28701# - consider type of objects in sorted object list.
+            SdrObject* pObj = (*pFlyFrm->GetDrawObjs())[i]->DrawObj();
             SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
             pContact->MoveObjToVisibleLayer( pObj );
         }
@@ -654,7 +659,8 @@ void SwFlyDrawContact::MoveObjToInvisibleLayer( SdrObject* _pDrawObj )
     {
         for ( sal_uInt8 i = 0; i < pFlyFrm->GetDrawObjs()->Count(); ++i)
         {
-            SdrObject* pObj = (*pFlyFrm->GetDrawObjs())[i];
+            // --> OD 2004-07-01 #i28701# - consider type of objects in sorted object list.
+            SdrObject* pObj = (*pFlyFrm->GetDrawObjs())[i]->DrawObj();
             SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
             pContact->MoveObjToInvisibleLayer( pObj );
         }
@@ -695,7 +701,6 @@ SwDrawContact::SwDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ) :
     SwContact( pToRegisterIn ),
     maAnchoredDrawObj(),
     mbMasterObjCleared( false ),
-    mpPageFrm( 0 ),
     // OD 10.10.2003 #112299#
     mbDisconnectInProgress( false )
 {
@@ -1343,7 +1348,6 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     {
         // JP 10.04.95: nicht auf ein Reset Anchor reagieren !!!!!
         if ( SFX_ITEM_SET ==
-                //((SwFrmFmt*)pRegisteredIn)->GetAttrSet().GetItemState( RES_ANCHOR, FALSE ) )
                 GetFmt()->GetAttrSet().GetItemState( RES_ANCHOR, FALSE ) )
         {
             // OD 10.10.2003 #112299# - no connect to layout during disconnection
@@ -1366,35 +1370,55 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         else
             DisconnectFromLayout();
     }
+    // --> OD 2004-07-01 #i28701# - on change of wrapping style, hell|heaven layer,
+    // or wrapping style influence an update of the <SwSortedObjs> list,
+    // the drawing object is registered in, has to be performed. This is triggered
+    // by the 1st parameter of method call <_InvalidateObjs(..)>.
     else if ( RES_SURROUND == nWhich ||
-              RES_UL_SPACE == nWhich || RES_LR_SPACE == nWhich ||
+              RES_OPAQUE == nWhich ||
+              RES_WRAP_INFLUENCE_ON_OBJPOS == nWhich ||
               ( RES_ATTRSET_CHG == nWhich &&
                 ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
                             RES_SURROUND, FALSE ) ||
                   SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                            RES_OPAQUE, FALSE ) ||
+                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                            RES_WRAP_INFLUENCE_ON_OBJPOS, FALSE ) ) ) )
+    {
+        lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
+        NotifyBackgrdOfAllVirtObjs( 0L );
+        _InvalidateObjs( true );
+    }
+    else if ( RES_UL_SPACE == nWhich || RES_LR_SPACE == nWhich ||
+              RES_HORI_ORIENT == nWhich || RES_VERT_ORIENT == nWhich ||
+              // --> OD 2004-07-01 #i28701# - add attribute 'Follow text flow'
+              RES_FOLLOW_TEXT_FLOW == nWhich ||
+              ( RES_ATTRSET_CHG == nWhich &&
+                ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
                             RES_LR_SPACE, FALSE ) ||
                   SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                            RES_UL_SPACE, FALSE ) ) ) )
+                            RES_UL_SPACE, FALSE ) ||
+                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                            RES_HORI_ORIENT, FALSE ) ||
+                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                            RES_VERT_ORIENT, FALSE ) ||
+                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
+                            RES_FOLLOW_TEXT_FLOW, FALSE ) ) ) )
     {
         lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
         NotifyBackgrdOfAllVirtObjs( 0L );
         _InvalidateObjs();
     }
-    else if ( RES_HORI_ORIENT == nWhich || RES_VERT_ORIENT == nWhich ||
-              ( RES_ATTRSET_CHG == nWhich &&
-                ( SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                            RES_HORI_ORIENT, FALSE ) ||
-                  SFX_ITEM_SET == ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState(
-                            RES_VERT_ORIENT, FALSE ) ) ) )
+    else
     {
-        lcl_NotifyBackgroundOfObj( *this, *GetMaster(), 0L );
-        NotifyBackgrdOfAllVirtObjs( 0L );
-        _InvalidateObjs();
+        ASSERT( false,
+                "<SwDrawContact::Modify(..)> - unhandled attribute? - please inform od@openoffice.org" );
     }
 }
 
 // OD 2004-03-31 #i26791#
-void SwDrawContact::_InvalidateObjs()
+// --> OD 2004-07-01 #i28701# - added parameter <_bUpdateSortedObjsList>
+void SwDrawContact::_InvalidateObjs( const bool _bUpdateSortedObjsList )
 {
     // invalidate position of existing 'virtual' drawing objects
     for ( std::list<SwDrawVirtObj*>::iterator aDisconnectIter = maDrawVirtObjs.begin();
@@ -1403,13 +1427,24 @@ void SwDrawContact::_InvalidateObjs()
     {
         SwDrawVirtObj* pDrawVirtObj = (*aDisconnectIter);
         pDrawVirtObj->AnchoredObj()->InvalidateObjPos();
+        // --> OD 2004-07-01 #i28701#
+        if ( _bUpdateSortedObjsList )
+        {
+            pDrawVirtObj->AnchoredObj()->UpdateObjInSortedList();
+        }
+        // <--
     }
 
     // invalidate position of 'master' drawing object
-    GetAnchoredObj()->InvalidateObjPos();
+    SwAnchoredObject* pAnchoredObj = GetAnchoredObj();
+    pAnchoredObj->InvalidateObjPos();
+    // --> OD 2004-07-01 #i28701#
+    if ( _bUpdateSortedObjsList )
+    {
+        pAnchoredObj->UpdateObjInSortedList();
+    }
+    // <--
 }
-
-
 
 /*************************************************************************
 |*
@@ -1436,9 +1471,9 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
         pDrawVirtObj->RemoveFromDrawingPage();
     }
 
-    if ( GetAnchorFrm() )
+    if ( maAnchoredDrawObj.GetAnchorFrm() )
     {
-        GetAnchorFrm()->RemoveDrawObj( this );
+        maAnchoredDrawObj.AnchorFrm()->RemoveDrawObj( maAnchoredDrawObj );
     }
 
     if ( _bMoveMasterToInvisibleLayer && GetMaster() && GetMaster()->IsInserted() )
@@ -1511,10 +1546,10 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
             pDrawVirtObj->RemoveFromWriterLayout();
             pDrawVirtObj->RemoveFromDrawingPage();
             // disconnect 'master' drawing object from current frame
-            GetAnchorFrm()->RemoveDrawObj( this );
+            GetAnchorFrm()->RemoveDrawObj( maAnchoredDrawObj );
             // re-connect 'master' drawing object to frame of found 'virtual'
             // drawing object.
-            pNewAnchorFrmOfMaster->AppendDrawObj( this );
+            pNewAnchorFrmOfMaster->AppendDrawObj( maAnchoredDrawObj );
         }
         else
         {
@@ -1579,7 +1614,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     switch ( pAnch->GetAnchorId() )
     {
         case FLY_PAGE:
-            {
+                {
                 USHORT nPgNum = pAnch->GetPageNum();
                 SwPageFrm *pPage = static_cast<SwPageFrm*>(pRoot->Lower());
 
@@ -1590,13 +1625,13 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
 
                 if ( pPage )
                 {
-                    pPage->SwFrm::AppendDrawObj( this );
+                    pPage->AppendDrawObj( maAnchoredDrawObj );
                 }
                 else
                     //Sieht doof aus, ist aber erlaubt (vlg. SwFEShell::SetPageObjsNewPage)
                     pRoot->SetAssertFlyPages();
-            }
-            break;
+                }
+                break;
 
         case FLY_AUTO_CNTNT:
         case FLY_AT_CNTNT:
@@ -1701,7 +1736,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                             }
                             // append 'master' drawing object
                             pAnchorFrmOfMaster = pFrm;
-                            pFrm->AppendDrawObj( this );
+                            pFrm->AppendDrawObj( maAnchoredDrawObj );
                         }
                         else
                         {
@@ -1711,7 +1746,7 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
                             {
                                 ClrContourCache( pDrawVirtObj );
                             }
-                            pFrm->AppendVirtDrawObj( this, pDrawVirtObj );
+                            pFrm->AppendDrawObj( *(pDrawVirtObj->AnchoredObj()) );
 
                             // for repaint, use new ActionChanged()
                             // pDrawVirtObj->SendRepaintBroadcast();
@@ -1762,6 +1797,7 @@ void SwDrawContact::InsertMasterIntoDrawPage()
 
 SwPageFrm* SwDrawContact::FindPage( const SwRect &rRect )
 {
+    // --> OD 2004-07-01 #i28701# - use method <GetPageFrm()>
     SwPageFrm* pPg = GetPageFrm();
     if ( !pPg && GetAnchorFrm() )
         pPg = GetAnchorFrm()->FindPageFrm();
@@ -1780,23 +1816,28 @@ void SwDrawContact::ChkPage()
         return;
     }
 
-    SwPageFrm* pPg = GetAnchorFrm() && GetAnchorFrm()->IsPageFrm() ?
-        GetPageFrm() : FindPage( GetMaster()->GetCurrentBoundRect() );
+    // --> OD 2004-07-01 #i28701#
+    SwPageFrm* pPg = ( maAnchoredDrawObj.GetAnchorFrm() &&
+                       maAnchoredDrawObj.GetAnchorFrm()->IsPageFrm() )
+                     ? GetPageFrm()
+                     : FindPage( GetMaster()->GetCurrentBoundRect() );
     if ( GetPageFrm() != pPg )
     {
         // OD 27.06.2003 #108784# - if drawing object is anchor in header/footer
         // a change of the page is a dramatic change. Thus, completely re-connect
         // to the layout
-        if ( GetAnchorFrm() && GetAnchorFrm()->FindFooterOrHeader() )
+        if ( maAnchoredDrawObj.GetAnchorFrm() &&
+             maAnchoredDrawObj.GetAnchorFrm()->FindFooterOrHeader() )
         {
             ConnectToLayout();
         }
         else
         {
+            // --> OD 2004-07-01 #i28701# - use methods <GetPageFrm()> and <SetPageFrm>
             if ( GetPageFrm() )
-                GetPageFrm()->SwPageFrm::RemoveDrawObj( this );
-            pPg->SwPageFrm::AppendDrawObj( this );
-            ChgPage( pPg );
+                GetPageFrm()->RemoveDrawObjFromPage( maAnchoredDrawObj );
+            pPg->AppendDrawObjToPage( maAnchoredDrawObj );
+            SetPageFrm( pPg );
         }
     }
 }
@@ -1812,12 +1853,10 @@ void SwDrawContact::ChkPage()
 // OD 10.07.2003 #110742# - Important note:
 // method is called by method <SwDPage::ReplaceObject(..)>, which called its
 // corresponding superclass method <FmFormPage::ReplaceObject(..)>.
-// Note: 'master' drawing object *has* to be connected to layout (GetAnchor()
-//       returns a frame), if method is called.
+// Note: 'master' drawing object *has* to be connected to layout triggered
+//       by the caller of this, if method is called.
 void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
 {
-    const SwFrm& rAnchorFrmOfMaster = *GetAnchorFrm();
-
     DisconnectFromLayout( false );
     // OD 10.07.2003 #110742# - consider 'virtual' drawing objects
     RemoveAllVirtObjs();
@@ -1846,7 +1885,6 @@ SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
     : SdrVirtObj( _rNewObj ),
       // OD 2004-03-29 #i26791# - init new member <maAnchoredDrawObj>
       maAnchoredDrawObj(),
-      mpPageFrm( 0 ),
       mrDrawContact( _rDrawContact )
 {
     // OD 2004-03-29 #i26791#
@@ -1859,7 +1897,6 @@ SwDrawVirtObj::SwDrawVirtObj( SdrObject&        _rNewObj,
     : SdrVirtObj( _rNewObj, _rAnchorPos ),
       // OD 2004-03-29 #i26791# - init new member <maAnchoredDrawObj>
       maAnchoredDrawObj(),
-      mpPageFrm( 0 ),
       mrDrawContact( _rDrawContact )
 {
     // OD 2004-03-29 #i26791#
@@ -1878,7 +1915,7 @@ const Point SwDrawVirtObj::GetOffset() const
 void SwDrawVirtObj::operator=( const SdrObject& rObj )
 {
     SdrVirtObj::operator=(rObj);
-    // Note: Members <maAnchoredDrawObj>, <mpPageFrm> and <mrDrawContact>
+    // Note: Members <maAnchoredDrawObj> and <mrDrawContact>
     //       haven't to be considered.
 }
 
@@ -1889,7 +1926,7 @@ SdrObject* SwDrawVirtObj::Clone() const
     if ( pObj )
     {
         pObj->operator=(static_cast<const SdrObject&>(*this));
-        // Note: Members <maAnchoredDrawObj> and <mpPageFrm> haven't to be considered.
+        // Note: Member <maAnchoredDrawObj> hasn't to be considered.
     }
 
     return pObj;
@@ -1929,12 +1966,14 @@ SwFrm* SwDrawVirtObj::AnchorFrm()
 
 void SwDrawVirtObj::SetPageFrm( SwPageFrm* _pNewPageFrm )
 {
-    mpPageFrm = _pNewPageFrm;
+    // --> OD 2004-06-30 #i28701# - page frame is now stored at member <maAnchoredDrawObj>
+    maAnchoredDrawObj.SetPageFrm( _pNewPageFrm );
 }
 
 SwPageFrm* SwDrawVirtObj::GetPageFrm()
 {
-    return mpPageFrm;
+    // --> OD 2004-06-30 #i28701# - page frame is now stored at member <maAnchoredDrawObj>
+    return maAnchoredDrawObj.GetPageFrm();
 }
 
 void SwDrawVirtObj::RemoveFromWriterLayout()
@@ -1943,7 +1982,7 @@ void SwDrawVirtObj::RemoveFromWriterLayout()
     // OD 2004-03-29 #i26791# - use new member <maAnchoredDrawObj>
     if ( maAnchoredDrawObj.GetAnchorFrm() )
     {
-        maAnchoredDrawObj.AnchorFrm()->RemoveVirtDrawObj( &mrDrawContact, this );
+        maAnchoredDrawObj.AnchorFrm()->RemoveDrawObj( maAnchoredDrawObj );
     }
 }
 
@@ -1982,10 +2021,13 @@ bool SwDrawVirtObj::IsConnected() const
     return bRetVal;
 }
 
+void SwDrawVirtObj::NbcSetAnchorPos(const Point& rPnt)
+{
+    SdrObject::NbcSetAnchorPos( rPnt );
+}
+
 const Rectangle& SwDrawVirtObj::GetCurrentBoundRect() const
 {
-//    ((SwDrawVirtObj*)this)->aOutRect = rRefObj.GetCurrentBoundRect(); // Hier noch optimieren
-//    ((SwDrawVirtObj*)this)->aOutRect += GetOffset();
     if (bBoundRectDirty)
     {
         const_cast<SwDrawVirtObj*>(this)->RecalcBoundRect();
@@ -1996,9 +2038,6 @@ const Rectangle& SwDrawVirtObj::GetCurrentBoundRect() const
 
 const Rectangle& SwDrawVirtObj::GetLastBoundRect() const
 {
-//    ((SwDrawVirtObj*)this)->aOutRect = rRefObj.GetLastBoundRect(); // Hier noch optimieren
-//    ((SwDrawVirtObj*)this)->aOutRect += GetOffset();
-
     return aOutRect;
 }
 
@@ -2102,8 +2141,6 @@ SdrHdl* SwDrawVirtObj::GetPlusHdl(const SdrHdl& rHdl, USHORT nPlNum) const
 void SwDrawVirtObj::NbcMove(const Size& rSiz)
 {
     SdrObject::NbcMove( rSiz );
-//    rRefObj.NbcMove( rSiz );
-//    SetRectsDirty();
 }
 
 void SwDrawVirtObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
