@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxydecider.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-28 16:05:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:45:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hXX>
 #endif
+#ifndef INCLUDED_UCBHELPERDLLAPI_H
+#include "ucbhelper/ucbhelperdllapi.h"
+#endif
 
 namespace com { namespace sun { namespace star { namespace lang {
     class XMultiServiceFactory;
@@ -109,7 +112,7 @@ namespace proxydecider_impl { class InternetProxyDecider_Impl; }
  * should not cache results obtained from InternetProxyDecider instances. One
  * instance should be kept to be queried multiple times instead.
  */
-class InternetProxyDecider
+class UCBHELPER_DLLPUBLIC InternetProxyDecider
 {
 public:
     /**
