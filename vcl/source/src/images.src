@@ -2,9 +2,9 @@
  *
  *  $RCSfile: images.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-01 16:23:24 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,11 @@ Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_UNIXOFFSET)
     File = "checkunx.bmp";
 };
 
+Bitmap (SV_RESID_BITMAP_CHECK + SV_RESID_MONOOFFSET)
+{
+    File = "checkmono.bmp";
+};
+
 Bitmap (SV_RESID_BITMAP_SCROLLBMP)
 {
     File = "scrbmp.bmp";
@@ -127,6 +132,11 @@ Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_MACOFFSET)
 Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_UNIXOFFSET)
 {
     File = "radiounx.bmp";
+};
+
+Bitmap (SV_RESID_BITMAP_RADIO + SV_RESID_MONOOFFSET)
+{
+    File = "radiomono.bmp";
 };
 
 // -----------------------------------------------------------------------
