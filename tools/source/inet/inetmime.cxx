@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetmime.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 17:06:45 $
+ *  last change: $Author: sb $ $Date: 2002-03-19 15:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #include <limits>
+
+#include "rtl/tencinfo.h"
 
 #ifndef _DATETIME_HXX
 #include <datetime.hxx>
@@ -1547,96 +1549,11 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
 // static
 const sal_Char * INetMIME::getCharsetName(rtl_TextEncoding eEncoding)
 {
-    if (eEncoding < RTL_TEXTENCODING_STD_COUNT)
+    if (rtl_isOctetTextEncoding(eEncoding))
     {
-        // The source for the following table is <ftp://ftp.iana.org/in-notes/
-        // iana/assignments/character-sets> as of Jan, 21 2000 12:46:00,
-        // unless otherwise noted:
-        static const sal_Char * aMap[RTL_TEXTENCODING_STD_COUNT]
-            = { 0, // RTL_TEXTENCODING_DONTKNOW
-                0, // RTL_TEXTENCODING_MS_1252
-                "macintosh", // RTL_TEXTENCODING_APPLE_ROMAN
-                "IBM437", // RTL_TEXTENCODING_IBM_437
-                "IBM850", // RTL_TEXTENCODING_IBM_850
-                "IBM860", // RTL_TEXTENCODING_IBM_860
-                "IBM861", // RTL_TEXTENCODING_IBM_861
-                "IBM863", // RTL_TEXTENCODING_IBM_863
-                "IBM865", // RTL_TEXTENCODING_IBM_865
-                0, // CHARSET_SYSTEM
-                0, // RTL_TEXTENCODING_SYMBOL
-                "US-ASCII", // RTL_TEXTENCODING_ASCII_US
-                "ISO-8859-1", // RTL_TEXTENCODING_ISO_8859_1
-                "ISO-8859-2", // RTL_TEXTENCODING_ISO_8859_2
-                "ISO-8859-3", // RTL_TEXTENCODING_ISO_8859_3
-                "ISO-8859-4", // RTL_TEXTENCODING_ISO_8859_4
-                "ISO-8859-5", // RTL_TEXTENCODING_ISO_8859_5
-                "ISO-8859-6", // RTL_TEXTENCODING_ISO_8859_6
-                "ISO-8859-7", // RTL_TEXTENCODING_ISO_8859_7
-                "ISO-8859-8", // RTL_TEXTENCODING_ISO_8859_8
-                "ISO-8859-9", // RTL_TEXTENCODING_ISO_8859_9
-                "ISO-8859-14", // RTL_TEXTENCODING_ISO_8859_14, RFC 2047
-                "ISO_8859-15", // RTL_TEXTENCODING_ISO_8859_15
-                0, // RTL_TEXTENCODING_IBM_737
-                "IBM775", // RTL_TEXTENCODING_IBM_775
-                "IBM852", // RTL_TEXTENCODING_IBM_852
-                "IBM855", // RTL_TEXTENCODING_IBM_855
-                "IBM857", // RTL_TEXTENCODING_IBM_857
-                "IBM862", // RTL_TEXTENCODING_IBM_862
-                "IBM864", // RTL_TEXTENCODING_IBM_864
-                "IBM866", // RTL_TEXTENCODING_IBM_866
-                "IBM869", // RTL_TEXTENCODING_IBM_869
-                0, // RTL_TEXTENCODING_MS_874
-                "windows-1250", // RTL_TEXTENCODING_MS_1250
-                "windows-1251", // RTL_TEXTENCODING_MS_1251
-                "windows-1253", // RTL_TEXTENCODING_MS_1253
-                "windows-1254", // RTL_TEXTENCODING_MS_1254
-                "windows-1255", // RTL_TEXTENCODING_MS_1255
-                "windows-1256", // RTL_TEXTENCODING_MS_1256
-                "windows-1257", // RTL_TEXTENCODING_MS_1257
-                "windows-1258", // RTL_TEXTENCODING_MS_1258
-                0, // RTL_TEXTENCODING_APPLE_ARABIC
-                0, // RTL_TEXTENCODING_APPLE_CENTEURO
-                0, // RTL_TEXTENCODING_APPLE_CROATIAN
-                0, // RTL_TEXTENCODING_APPLE_CYRILLIC
-                0, // RTL_TEXTENCODING_APPLE_DEVANAGARI
-                0, // RTL_TEXTENCODING_APPLE_FARSI
-                0, // RTL_TEXTENCODING_APPLE_GREEK
-                0, // RTL_TEXTENCODING_APPLE_GUJARATI
-                0, // RTL_TEXTENCODING_APPLE_GURMUKHI
-                0, // RTL_TEXTENCODING_APPLE_HEBREW
-                0, // RTL_TEXTENCODING_APPLE_ICELAND
-                0, // RTL_TEXTENCODING_APPLE_ROMANIAN
-                0, // RTL_TEXTENCODING_APPLE_THAI
-                0, // RTL_TEXTENCODING_APPLE_TURKISH
-                0, // RTL_TEXTENCODING_APPLE_UKRAINIAN
-                0, // RTL_TEXTENCODING_APPLE_CHINSIMP
-                0, // RTL_TEXTENCODING_APPLE_CHINTRAD
-                0, // RTL_TEXTENCODING_APPLE_JAPANESE
-                0, // RTL_TEXTENCODING_APPLE_KOREAN
-                0, // RTL_TEXTENCODING_MS_932
-                0, // RTL_TEXTENCODING_MS_936
-                0, // RTL_TEXTENCODING_MS_949
-                0, // RTL_TEXTENCODING_MS_950
-                "Shift_JIS", // RTL_TEXTENCODING_SHIFT_JIS
-                "GB2312", // RTL_TEXTENCODING_GB_2312
-                0, // RTL_TEXTENCODING_GBT_12345
-                0, // RTL_TEXTENCODING_GBK
-                "Big5", // RTL_TEXTENCODING_BIG5
-                "EUC-JP", // RTL_TEXTENCODING_EUC_JP
-                0, // RTL_TEXTENCODING_EUC_CN
-                0, // RTL_TEXTENCODING_EUC_TW
-                "ISO-2022-JP", // RTL_TEXTENCODING_ISO_2022_JP
-                "ISO-2022-CN", // RTL_TEXTENCODING_ISO_2022_CN
-                "KOI8-R", // RTL_TEXTENCODING_KOI8_R
-                "UTF-7", // RTL_TEXTENCODING_UTF7
-                "UTF-8", // RTL_TEXTENCODING_UTF8
-                "ISO-8859-10", // RTL_TEXTENCODING_ISO_8859_10, RFC 2047
-                "ISO-8859-13", // RTL_TEXTENCODING_ISO_8859_13, RFC 2047
-                "EUC-KR", // RTL_TEXTENCODING_EUC_KR
-                "ISO-2022-KR" }; // RTL_TEXTENCODING_ISO_2022_KR
-        DBG_ASSERT(aMap[eEncoding],
-                   "INetMIME::getCharsetName(): Unsupported encoding");
-        return aMap[eEncoding];
+        char const * p = rtl_getMimeCharsetFromTextEncoding(eEncoding);
+        DBG_ASSERT(p, "INetMIME::getCharsetName(): Unsupported encoding");
+        return p;
     }
     else
         switch (eEncoding)
