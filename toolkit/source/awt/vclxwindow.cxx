@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pb $ $Date: 2002-03-05 08:27:51 $
+ *  last change: $Author: ssa $ $Date: 2002-03-13 09:37:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,6 +522,13 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
 
     mxViewGraphics = NULL;
 
+    if ( mxAccessibleContext.get().is() )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent( mxAccessibleContext.get(), ::com::sun::star::uno::UNO_QUERY );
+        if ( xComponent.is() )
+            xComponent->dispose();
+    }
+
     if ( GetWindow() && !mbDisposing )
     {
         mbDisposing = sal_True;
@@ -547,12 +554,6 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
         mbDisposing = sal_False;
     }
 
-    if ( mxAccessibleContext.get().is() )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent( mxAccessibleContext.get(), ::com::sun::star::uno::UNO_QUERY );
-        if ( xComponent.is() )
-            xComponent->dispose();
-    }
 }
 
 void VCLXWindow::addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
