@@ -1,8 +1,8 @@
 ### 109883 ###
 dbaccess.SbaXGridControl::com::sun::star::form::XUpdateBroadcaster
 
-### 111118 ###
-dbaccess.ConnectionLineAccessibility::com::sun::star::accessibility::XAccessibleContext
+### i25950 ###
+dbaccess.ConnectionLineAccessibility::com::sun::star::accessibility::XAccessibleEventBroadcaster
 
 ### 111120 ###
 dbaccess.JoinViewAccessibility::com::sun::star::accessibility::XAccessibleContext
