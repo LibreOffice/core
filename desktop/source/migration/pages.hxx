@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pages.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:49:20 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@ class WelcomePage : public svt::OWizardPage
 private:
     FixedText m_ftHead;
     FixedText m_ftBody;
+    svt::OWizardMachine *m_pParent;
     enum OEMType
     {
         OEM_NONE, OEM_NORMAL, OEM_EXTENDED
@@ -87,6 +88,8 @@ private:
 
 public:
     WelcomePage( svt::OWizardMachine* parent, const ResId& resid);
+protected:
+    virtual void ActivatePage();
 };
 
 class LicenseView : public MultiLineEdit, public SfxListener
@@ -134,6 +137,7 @@ private:
     DECL_LINK(ScrolledHdl, LicenseView*);
 protected:
     virtual sal_Bool determineNextButtonState();
+    virtual void ActivatePage();
 };
 
 class MigrationPage : public svt::OWizardPage
@@ -147,6 +151,8 @@ public:
     MigrationPage( svt::OWizardMachine* parent, const ResId& resid);
     virtual sal_Bool commitPage(COMMIT_REASON _eReason);
 
+protected:
+    virtual void ActivatePage();
 };
 
 class UserPage : public svt::OWizardPage
@@ -155,18 +161,20 @@ private:
     FixedText m_ftHead;
     FixedText m_ftBody;
     FixedText m_ftFirst;
-    FixedText m_ftLast;
-    FixedText m_ftInitials;
-    FixedText m_ftFather;
     Edit m_edFirst;
+    FixedText m_ftLast;
     Edit m_edLast;
+    FixedText m_ftInitials;
     Edit m_edInitials;
+    FixedText m_ftFather;
     Edit m_edFather;
     LanguageType m_lang;
 
 public:
     UserPage( svt::OWizardMachine* parent, const ResId& resid);
     virtual sal_Bool commitPage(COMMIT_REASON _eReason);
+protected:
+    virtual void ActivatePage();
 };
 
 
@@ -187,6 +195,7 @@ public:
     virtual sal_Bool commitPage(COMMIT_REASON _eReason);
 protected:
     virtual sal_Bool determineNextButtonState();
+    virtual void ActivatePage();
 };
 
 }
