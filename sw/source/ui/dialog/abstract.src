@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:31:29 $
+ *  last change: $Author: rt $ $Date: 2001-08-07 15:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,16 +90,16 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text [ french ] = "Propriétés" ;
         Text [ dutch ] = "Eigenschappen" ;
         Text [ portuguese ] = "Propriedades" ;
-        Text[ chinese_simplified ] = "ÊôĞÔ";
+        Text[ chinese_simplified ] = "å±æ€§";
         Text[ russian ] = "Ñâîéñòâà";
         Text[ polish ] = "W³aœciwoœci";
-        Text[ japanese ] = "‘®«";
-        Text[ chinese_traditional ] = "Äİ©Ê";
+        Text[ japanese ] = "å±æ€§";
+        Text[ chinese_traditional ] = "å±¬æ€§";
         Text[ arabic ] = "ÎÕÇÆÕ";
         Text[ dutch ] = "Eigenschappen";
-        Text[ chinese_simplified ] = "ÊôĞÔ";
+        Text[ chinese_simplified ] = "å±æ€§";
         Text[ greek ] = "Éäéüôçôåò";
-        Text[ korean ] = "µî·ÏÁ¤º¸";
+        Text[ korean ] = "ë“±ë¡ì •ë³´";
         Text[ turkish ] = "Özellikler";
         Text[ catalan ] = "Propiedades";
         Text[ finnish ] = "Ominaisuudet";
@@ -119,16 +119,16 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text [ french ] = "Niveaux de plan à inclure" ;
         Text [ dutch ] = "Aantal overzichtsniveau's" ;
         Text [ portuguese ] = "Níveis de capítulo incluídos" ;
-        Text[ chinese_simplified ] = "°üº¬µÄÕÂ½Ú´ó¸Ù¼¶";
+        Text[ chinese_simplified ] = "åŒ…å«çš„ç« èŠ‚å¤§çº²çº§";
         Text[ russian ] = "Âêëş÷åííûå óğîâíè ğàçäåëîâ";
         Text[ polish ] = "£¹cznie z poziomami rozdzia³u";
-        Text[ japanese ] = "’Šo‚·‚éÍÚÍŞÙ”";
-        Text[ chinese_traditional ] = "¥]§tªº³¹¸`¤jºõ";
+        Text[ japanese ] = "æŠ½å‡ºã™ã‚‹ç« ï¾šï¾ï¾ï¾™æ•°";
+        Text[ chinese_traditional ] = "åŒ…å«çš„ç« ç¯€å¤§ç¶±";
         Text[ arabic ] = "ãÓÊæíÇÊ ÇáİÕá ÇáãÖãäÉ";
         Text[ dutch ] = "Aantal overzichtsniveau's";
-        Text[ chinese_simplified ] = "°üº¬µÄÕÂ½Ú´ó¸Ù¼¶";
+        Text[ chinese_simplified ] = "åŒ…å«çš„ç« èŠ‚å¤§çº²çº§";
         Text[ greek ] = "Óõìğåñéëáìâáíüìåíá åğßğåäá êåöáëáßùí";
-        Text[ korean ] = "°ü·ÃµÈ¡¡Àå¼öÁØ.";
+        Text[ korean ] = "ê´€ë ¨ëœã€€ì¥ìˆ˜ì¤€.";
         Text[ turkish ] = "Dahil edilen bölüm düzeyleri";
         Text[ catalan ] = "Niveles del capítulo incluidos";
         Text[ finnish ] = "Sisällytetyt rajaustasot";
@@ -161,19 +161,19 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text [ danish ] = "Afsnit per kapitel" ;
         Text [ italian ] = "Paragrafi per capitolo" ;
         Text [ spanish ] = "Párrafos por capítulo" ;
-        Text [ french ] = "Nbre resp. de paragraphes" ;
+        Text [ french ] = "Paragraphes par niveau" ;
         Text [ dutch ] = "Alinea's per kop" ;
         Text [ portuguese ] = "Parágrafos por capítulo" ;
-        Text[ chinese_simplified ] = "Ã¿ÕÂ½Ú°üº¬µÄ¶ÎÂä";
+        Text[ chinese_simplified ] = "æ¯ç« èŠ‚åŒ…å«çš„æ®µè½";
         Text[ russian ] = "Àáçàöåâ â ãëàâå";
         Text[ polish ] = "Akapity w rozdziale";
-        Text[ japanese ] = "Í‚ ‚½‚è‚Ì’i—”";
-        Text[ chinese_traditional ] = "¨C³¹¸`¥]§tªº¬q¸¨";
+        Text[ japanese ] = "ç« ã‚ãŸã‚Šã®æ®µè½æ•°";
+        Text[ chinese_traditional ] = "æ¯ç« ç¯€åŒ…å«çš„æ®µè½";
         Text[ arabic ] = "İŞÑÇÊ İí ßá İÕá";
         Text[ dutch ] = "Alinea's per kop";
-        Text[ chinese_simplified ] = "Ã¿ÕÂ½Ú°üº¬µÄ¶ÎÂä";
+        Text[ chinese_simplified ] = "æ¯ç« èŠ‚åŒ…å«çš„æ®µè½";
         Text[ greek ] = "ĞáñÜãñáöïé áíÜ êåöÜëáéï";
-        Text[ korean ] = "Àå´ç ´Ü¶ô";
+        Text[ korean ] = "ì¥ë‹¹ ë‹¨ë½";
         Text[ turkish ] = "Beher bölüm paragraf sayısı";
         Text[ catalan ] = "Párrafos por capítulo";
         Text[ finnish ] = "Alipisteitä tasolla";
@@ -210,16 +210,16 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text [ french ] = "La synthèse reprendra, pour chaque niveau de plan inclus, le nombre de paragraphes indiqué." ;
         Text [ dutch ] = "In het extract verschijnt het geselecteerde aantal alinea´s van de erbij betrokken overzichtsniveaus." ;
         Text [ portuguese ] = "O Abstracto contém a quantidade de parágrafos seleccionada dos níveis de capítulos incluídos." ;
-        Text[ chinese_simplified ] = "´Ó°üÀ¨µÄÕÂ½Ú¼¶ÖĞÑ¡³öµÄÒ»¶¨ÊıÄ¿µÄ¶ÎÂäÏÔÊ¾ÔÚÕªÒªÖĞ¡£";
+        Text[ chinese_simplified ] = "ä»åŒ…æ‹¬çš„ç« èŠ‚çº§ä¸­é€‰å‡ºçš„ä¸€å®šæ•°ç›®çš„æ®µè½æ˜¾ç¤ºåœ¨æ‘˜è¦ä¸­ã€‚";
         Text[ russian ] = "Â Ïğîñìîòğå ïîÿâèòñÿ âûáğàííîå ÷èñëî àáçàöåâ èç âêëş÷åííûõ óğîâíåé ãëàâ";
         Text[ polish ] = "Abstrakt zawiera wybran¹ iloœæ akapitów z awieraj¹cych w³¹czone poziomy akapitu.";
-        Text[ japanese ] = "—v–ñ‚É‚ÍAw’è”‚Ì’i—‚ªŠeÍÚÍŞÙ‚©‚ç’Šo‚³‚ê‚Ü‚·B";
-        Text[ chinese_traditional ] = "ºK­n¼Ò¦¡Åã¥Ü¬ÛÃö³¹¸`¤¤¿ï¨úªº¤@©w¼Æ¥Øªº¬q¸¨";
+        Text[ japanese ] = "è¦ç´„ã«ã¯ã€æŒ‡å®šæ•°ã®æ®µè½ãŒå„ç« ï¾šï¾ï¾ï¾™ã‹ã‚‰æŠ½å‡ºã•ã‚Œã¾ã™ã€‚";
+        Text[ chinese_traditional ] = "æ‘˜è¦æ¨¡å¼é¡¯ç¤ºç›¸é—œç« ç¯€ä¸­é¸å–çš„ä¸€å®šæ•¸ç›®çš„æ®µè½";
         Text[ arabic ] = "Óæİ íÙåÑ İí ÇáÊáÎíÕ ÚÏÏ ÇáİŞÑÇÊ ÇáÊí Êã ÊÍÏíÏåÇ ãä Èíä ãÓÊæíÇÊ ÇáİÕæá ÇáãÖãäÉ.";
         Text[ dutch ] = "In het extract verschijnt het geselecteerde aantal alinea´s van de erbij betrokken overzichtsniveaus.";
-        Text[ chinese_simplified ] = "´Ó°üÀ¨µÄÕÂ½Ú¼¶ÖĞÑ¡³öµÄÒ»¶¨ÊıÄ¿µÄ¶ÎÂäÏÔÊ¾ÔÚÕªÒªÖĞ¡£";
+        Text[ chinese_simplified ] = "ä»åŒ…æ‹¬çš„ç« èŠ‚çº§ä¸­é€‰å‡ºçš„ä¸€å®šæ•°ç›®çš„æ®µè½æ˜¾ç¤ºåœ¨æ‘˜è¦ä¸­ã€‚";
         Text[ greek ] = "Óôï Abstract åìöáíßæåôáé ôï åğéëåãìİíï ğëŞèïò ğáñáãñÜöùí áğü ôá óõìğåñéëáìâáíüìåíá åğßğåäá êåöáëáßùí.";
-        Text[ korean ] = "¿ä¾à¿¡¼­´Â °ü·ÃµÈ Àå ¼öÁØ¿¡¼­ ¼±ÅÃÇÑ ´Ü¶ôÀÇ ¼ö°¡ ³ªÅ¸³³´Ï´Ù.";
+        Text[ korean ] = "ìš”ì•½ì—ì„œëŠ” ê´€ë ¨ëœ ì¥ ìˆ˜ì¤€ì—ì„œ ì„ íƒí•œ ë‹¨ë½ì˜ ìˆ˜ê°€ ë‚˜íƒ€ë‚©ë‹ˆë‹¤.";
         Text[ turkish ] = "Özet içinde, dahil edilen bölüm düzeylerinden seçilen paragraflar bulunuyor.";
         Text[ catalan ] = "En el extracto aparece la cantidad deseada de párrafos de los niveles de los capítulos incluidos.";
         Text[ finnish ] = "Tiivistelmässä on valittu määrä kappaleita sisällytetyistä jäsennystasoista.";
@@ -252,20 +252,21 @@ ModalDialog DLG_INSERT_ABSTRACT
     Text [ french ] = "Création d'une AutoSynthèse" ;
     Text [ dutch ] = "AutoExtract maken" ;
     Text [ portuguese ] = "Criar AutoAbstracto" ;
-    Text[ chinese_simplified ] = "Éú³É×Ô¶¯ÕªÒª";
+    Text[ chinese_simplified ] = "ç”Ÿæˆè‡ªåŠ¨æ‘˜è¦";
     Text[ russian ] = "Ñîçäàòü Àâòîğåôåğàò";
     Text[ polish ] = "Utwórz Autokonspekt";
-    Text[ japanese ] = "©“®’Šo‚Ìì¬";
-    Text[ chinese_traditional ] = "²£¥Í¦Û°ÊºK­n";
+    Text[ japanese ] = "è‡ªå‹•æŠ½å‡ºã®ä½œæˆ";
+    Text[ chinese_traditional ] = "ç”¢ç”Ÿè‡ªå‹•æ‘˜è¦";
     Text[ arabic ] = "ÅäÔÇÁ ÊáÎíÕ ÊáŞÇÆí";
     Text[ dutch ] = "AutoExtract maken";
-    Text[ chinese_simplified ] = "Éú³É×Ô¶¯ÕªÒª";
+    Text[ chinese_simplified ] = "ç”Ÿæˆè‡ªåŠ¨æ‘˜è¦";
     Text[ greek ] = "Äçìéïõñãßá AutoAbstract";
-    Text[ korean ] = "ÀÚµ¿Ãß»ó ¸¸µé±â";
+    Text[ korean ] = "ìë™ì¶”ìƒ ë§Œë“¤ê¸°";
     Text[ turkish ] = "Otomatik özet oluştur";
     Text[ catalan ] = "Crear AutoAbstracto";
     Text[ finnish ] = "Luo automaattinen tiivistelmä";
 };
+
 
 
 
