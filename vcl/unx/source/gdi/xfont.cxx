@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:29:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:39:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ ExtendedFontStruct::GetAsciiEncoding( int *pAsciiRange ) const
 FontPitch
 ExtendedFontStruct::GetSpacing( rtl_TextEncoding nEncoding )
 {
-    return mpXlfd->GetSpacing( nEncoding );
+    return mpXlfd->GetPitch( nEncoding );
 }
 
 static XFontStruct*
@@ -167,6 +167,9 @@ LoadXFont (Display* pDisplay, const char* pFontName)
     if ((pFont != NULL) && (pFont->fid == 0))
          pFont->fid = XLoadFont(pDisplay, pFontName);
 
+#ifdef HDU_DEBUG
+    fprintf( stderr, "XLoadFont \"%s\" => %d\n", pFontName, (pFont!= NULL) );
+#endif
     return pFont;
 }
 
@@ -212,7 +215,7 @@ ExtendedFontStruct::GetFontStruct( rtl_TextEncoding nEncoding )
     return nIdx < 0 ? NULL : mpXFontStruct[nIdx] ;
 }
 
-Bool
+bool
 ExtendedFontStruct::GetFontBoundingBox( XCharStruct *pCharStruct,
         int *pAscent, int *pDescent )
 {
@@ -228,9 +231,9 @@ ExtendedFontStruct::GetFontBoundingBox( XCharStruct *pCharStruct,
     int nIdx;
 
     // check if there is at least one encoding already loaded
-    Bool bEmpty = True;
+    bool bEmpty = true;
     for ( nIdx = 0; nIdx < mpXlfd->NumEncodings(); nIdx++ )
-        bEmpty = bEmpty && (mpXFontStruct[nIdx] == NULL);
+        bEmpty &= (mpXFontStruct[nIdx] == NULL);
     if ( bEmpty )
         LoadEncoding( mpXlfd->GetAsciiEncoding() );
 
@@ -273,19 +276,19 @@ ExtendedFontStruct::GetFontBoundingBox( XCharStruct *pCharStruct,
     return (pCharStruct->width > 0);
 }
 
-Bool
+bool
 ExtendedFontStruct::ToImplFontMetricData(ImplFontMetricData *pFontMetric)
 {
     pFontMetric->mnOrientation  = 0;
     pFontMetric->mnSlant        = 0;
-    pFontMetric->mbDevice       = TRUE;
-
-    pFontMetric->meCharSet  = mpXlfd->GetEncoding( );
-    pFontMetric->meFamily   = mpXlfd->GetFamily();
+    pFontMetric->mbDevice       = true;
+    pFontMetric->mbScalableFont = mpXlfd->IsScalable();
+    pFontMetric->mbKernableFont = false;
+    pFontMetric->mbSymbolFlag= (mpXlfd->GetEncoding() != RTL_TEXTENCODING_UNICODE);
+    pFontMetric->meFamily   = mpXlfd->GetFamilyType();
     pFontMetric->meWeight   = mpXlfd->GetWeight();
-    pFontMetric->mePitch    = mpXlfd->GetSpacing();
-    pFontMetric->meItalic   = mpXlfd->GetItalic();
-    pFontMetric->meType     = mpXlfd->GetFontType();
+    pFontMetric->mePitch    = mpXlfd->GetPitch();
+    pFontMetric->meItalic   = mpXlfd->GetSlant();
 
     int nAscent, nDescent;
     XCharStruct aBoundingBox;
@@ -297,24 +300,20 @@ ExtendedFontStruct::ToImplFontMetricData(ImplFontMetricData *pFontMetric)
         pFontMetric->mnIntLeading = std::max(0, aBoundingBox.ascent  - nAscent
                                           + aBoundingBox.descent - nDescent );
         pFontMetric->mnExtLeading = 0; // TODO!!!
-        // XXX Fix me
-        pFontMetric->mnFirstChar =   0;
-        pFontMetric->mnLastChar  = 255;
-
-        return True;
+        return true;
     }
     else
     {
-        return False;
+        return false;
     }
 }
 
-Bool
+bool
 ExtendedFontStruct::Match( const ExtendedXlfd *pXlfd,
     const Size& rPixelSize, sal_Bool bVertical ) const
 {
     if( mpXlfd != pXlfd )
-        return FALSE;
+        return false;
 
     return (maPixelSize == rPixelSize) && (mbVertical == bVertical);
 }
@@ -368,11 +367,11 @@ ExtendedFontStruct::GetFontStruct( sal_Unicode nChar, rtl_TextEncoding *pEncodin
 // calculate charwidth information
 // ---------------------------------------------------------------------------
 
-static Bool
+static bool
 CharExists( const XCharStruct* pChar )
 {
     if ( pChar == NULL )
-        return False;
+        return false;
 
     return  pChar->width
             || pChar->ascent   || pChar->descent
@@ -487,7 +486,7 @@ ExtendedFontStruct::GetCharWidthUTF16( sal_Unicode nFrom, sal_Unicode nTo,
         return 0;
 
     XFontStruct* pXFontStruct = GetFontStruct( RTL_TEXTENCODING_UNICODE );
-    FontPitch    nSpacing = mpXlfd->GetSpacing( RTL_TEXTENCODING_UNICODE );
+    FontPitch    nSpacing = mpXlfd->GetPitch( RTL_TEXTENCODING_UNICODE );
 
     if ( pXFontStruct == NULL )
         return 0;
