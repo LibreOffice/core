@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScStyleFamilyObj.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:16:14 $
+ *  last change:$Date: 2003-02-04 14:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@ import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 /**
 * Test for object which is represented by service
@@ -151,8 +154,7 @@ public class ScStyleFamilyObj extends TestCase {
     * </ul>
     * @see com.sun.star.style.CellStyle
     */
-    public TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log) throws StatusException {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam, PrintWriter log) {
 
         XInterface oObj = null;
 
@@ -171,13 +173,18 @@ public class ScStyleFamilyObj extends TestCase {
         XIndexAccess oStyleFamiliesIndexAccess = (XIndexAccess)
             UnoRuntime.queryInterface(XIndexAccess.class, oStyleFamilies);
         try {
-            oStyleFamilyNameAccess = (XNameAccess)
-                oStyleFamiliesIndexAccess.getByIndex(0);
+            oStyleFamilyNameAccess = (XNameAccess) AnyConverter.toObject(
+                new Type(XNameAccess.class),
+                    oStyleFamiliesIndexAccess.getByIndex(0));
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace(log);
             throw new StatusException(
                 "Exception occured while getting StyleFamily", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            e.printStackTrace(log);
+            throw new StatusException(
+                "Exception occured while getting StyleFamily", e);
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace(log);
             throw new StatusException(
                 "Exception occured while getting StyleFamily", e);
@@ -215,7 +222,10 @@ public class ScStyleFamilyObj extends TestCase {
         //second instance for insertByName in XNameContainer
         tEnv.addObjRelation("SecondInstance", oInstance);
 
-        int THRCNT = Integer.parseInt((String)tParam.get("THRCNT"));
+        int THRCNT = 1;
+        if ((String)tParam.get("THRCNT") != null) {
+            THRCNT = Integer.parseInt((String)tParam.get("THRCNT"));
+        }
 
         log.println( "adding XNameReplaceINDEX as mod relation to environment" );
         tEnv.addObjRelation("XNameReplaceINDEX", new Integer(2*THRCNT).toString());
