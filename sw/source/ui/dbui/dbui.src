@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:12:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,3 +296,92 @@ String STR_FILTER_CSV
     Text [ en-US ] = "Text Comma Separated (*.csv)" ;
 };
 
+ // DLG_MM_CREATIONMONITOR ------------------------------------------------------
+ModelessDialog DLG_MM_CREATIONMONITOR
+{
+    HelpID = HID_MERGE_PRINTMONITOR  ;
+    SVLOOK = TRUE ;
+    HIDE = TRUE ;
+    OUTPUTSIZE = TRUE ;
+    _WHMAPMODE = MAP_APPFONT ;
+    _WIDTH = 140 ;
+    _HEIGHT = 52 ;
+    MOVEABLE = TRUE ;
+    APP = FALSE ;
+
+    Text [ de ] = "Serienbrief" ;
+    Text [ en-US ] = "Mail Merge" ;
+
+    FixedText FT_STATUS
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 6 ;
+        _Y = 6 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 35 ;
+        _HEIGHT = 8 ;
+        Text [ de ] = "Status:" ;
+        Text [ en-US ] = "Status:" ;
+        LEFT = FALSE ;
+        CENTER = FALSE ;
+        RIGHT = TRUE ;
+    };
+    FixedText FT_PROGRESS
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 6 ;
+        _Y = 17 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 35 ;
+        _HEIGHT = 8 ;
+        Text [ de ] = "Fortschritt:" ;
+        Text [ en-US ] = "Progress:" ;
+        LEFT = FALSE ;
+        CENTER = FALSE ;
+        RIGHT = TRUE ;
+    };
+    FixedText FT_CREATEDOCUMENTS
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 45 ;
+        _Y = 6 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 91 ;
+        _HEIGHT = 8 ;
+        Text [ de ] = "Die Dokumente werden erstellt..." ;
+        Text [ en-US ] = "Creating documents...";
+        LEFT = TRUE ;
+        CENTER = FALSE ;
+        RIGHT = FALSE ;
+    };
+    FixedText FT_COUNTING
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 45 ;
+        _Y = 17 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 91 ;
+        _HEIGHT = 8 ;
+        Text [ de ] = "%X von %Y" ;
+        Text [ en-US ] = "%X of %Y";
+        Text [ x-comment ] = "%X and %Y are variables, please do not translate them";
+        LEFT = TRUE ;
+        CENTER = FALSE ;
+        RIGHT = FALSE ;
+    };
+    CancelButton PB_CANCELPRNMON
+    {
+        HIDE = FALSE ;
+        _XYMAPMODE = MAP_APPFONT ;
+        _X = 74 ;
+        _Y = 32 ;
+        _WHMAPMODE = MAP_APPFONT ;
+        _WIDTH = 50 ;
+        _HEIGHT = 14 ;
+        TABSTOP = TRUE ;
+    };
+};
