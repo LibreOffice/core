@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 17:56:07 $
+#   last change: $Author: vg $ $Date: 2005-02-16 16:44:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -149,14 +149,15 @@ DYNAMIC = -Wl,-Bdynamic
 # name of linker
 LINK*=gcc 
 # default linker flags
-LINKFLAGS= 
+LINKFLAGS=-Wl,-rpath,\''$$ORIGIN'\'
+
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic 
 LINKFLAGSAPPCUI= -Wl,-export-dynamic 
 # linker flags for linking shared libraries
-LINKFLAGSSHLGUI= -shared 
-LINKFLAGSSHLCUI= -shared 
+LINKFLAGSSHLGUI= -shared
+LINKFLAGSSHLCUI= -shared
 
 LINKFLAGSTACK= 
 LINKFLAGSPROF= 
