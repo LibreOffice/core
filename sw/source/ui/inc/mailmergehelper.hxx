@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergehelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-27 11:43:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@ namespace com{ namespace sun{ namespace star{
     namespace lang{
         class XMultiServiceFactory;
     }
+    namespace mail{
+        class XSmtpService;
+        class XMailService;
+    }
 }}}
 /*-- 14.06.2004 12:27:42---------------------------------------------------
 
@@ -115,6 +119,12 @@ namespace SwMailMergeHelper
 {
     SW_DLLPUBLIC String  CallSaveAsDialog(String& rFilter);
     SW_DLLPUBLIC bool    CheckMailAddress( const ::rtl::OUString& rMailAddress );
+    SW_DLLPUBLIC com::sun::star::uno::Reference< com::sun::star::mail::XSmtpService >
+                         ConnectToSmtpServer( SwMailMergeConfigItem& rConfigItem,
+                            com::sun::star::uno::Reference< com::sun::star::mail::XMailService >&  xInMailService,
+                            const String& rInMailServerPassword,
+                            const String& rOutMailServerPassword,
+                            Window* pDialogParentWindow = 0 );
 }
 /* -----------------06.04.2004 10:29-----------------
 
