@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigItem.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sj $ $Date: 2001-02-28 13:49:33 $
+ *  last change: $Author: sj $ $Date: 2001-03-05 20:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,10 @@ using namespace ::com::sun::star::lang      ;   // XMultiServiceFactory
 using namespace ::com::sun::star::beans     ;   // PropertyValue
 using namespace ::com::sun::star::uno       ;   // Reference
 using namespace ::com::sun::star::util      ;   // XChangesBatch
+using namespace ::com::sun::star::awt       ;   // Size
 
-FilterConfigItem::FilterConfigItem( const OUString& rSubTree )
+FilterConfigItem::FilterConfigItem( const OUString& rSubTree ) :
+    bModified   ( sal_False )
 {
     OUString sTree( ConfigManager::GetConfigBaseURL() );
     sTree += rSubTree;
@@ -156,11 +158,11 @@ FilterConfigItem::~FilterConfigItem()
     }
 }
 
-sal_Bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const OUString& rString, sal_Bool bTestPropertyAvailability )
+sal_Bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const Reference< XPropertySet >& rXPropSet, const OUString& rString, sal_Bool bTestPropertyAvailability )
 {
     sal_Bool bRetValue = sal_True;
 
-    if ( xPropSet.is() )
+    if ( rXPropSet.is() )
     {
         if ( bTestPropertyAvailability )
         {
@@ -168,7 +170,7 @@ sal_Bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const OUString& rStr
             try
             {
                 Reference< XPropertySetInfo >
-                    aXPropSetInfo( xPropSet->getPropertySetInfo() );
+                    aXPropSetInfo( rXPropSet->getPropertySetInfo() );
                 if ( aXPropSetInfo.is() )
                     bRetValue = aXPropSetInfo->hasPropertyByName( rString );
             }
@@ -181,7 +183,7 @@ sal_Bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const OUString& rStr
         {
             try
             {
-                rAny = xPropSet->getPropertyValue( rString );
+                rAny = rXPropSet->getPropertyValue( rString );
                 if ( !rAny.hasValue() )
                     bRetValue = sal_False;
             }
@@ -201,7 +203,7 @@ sal_Bool FilterConfigItem::ReadBool( const OUString& rKey, sal_Bool bDefault )
     sal_Bool bRetValue = bDefault;
     Any aAny;
 
-    if ( ImplGetPropertyValue( aAny, rKey, sal_True ) )
+    if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
         aAny >>= bRetValue;
     return bRetValue;
 }
@@ -211,9 +213,36 @@ sal_Int32 FilterConfigItem::ReadInt32( const OUString& rKey, sal_Int32 nDefault 
     sal_Int32 nRetValue = nDefault;
     Any aAny;
 
-    if ( ImplGetPropertyValue( aAny, rKey, sal_True ) )
+    if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
         aAny >>= nRetValue;
     return nRetValue;
+}
+
+
+Size FilterConfigItem::ReadSize( const OUString& rKey, const Size& rDefault )
+{
+    Size aRetValue( rDefault );
+    Any aAny;
+
+    if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
+    {
+        try
+        {
+            Reference< XPropertySet > aXPropSet;
+            if ( aAny >>= aXPropSet )
+            {
+                if ( ImplGetPropertyValue( aAny, aXPropSet, OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), sal_True ) )
+                    aAny >>= aRetValue.Width;
+                if ( ImplGetPropertyValue( aAny, aXPropSet, OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), sal_True ) )
+                    aAny >>= aRetValue.Height;
+            }
+        }
+        catch ( ::com::sun::star::uno::Exception& )
+        {
+            DBG_ERROR( "FilterConfigItem::ReadSize - could not read PropertyValue" );
+        }
+    }
+    return aRetValue;
 }
 
 void FilterConfigItem::WriteBool( const OUString& rKey, sal_Bool bNewValue )
@@ -222,7 +251,7 @@ void FilterConfigItem::WriteBool( const OUString& rKey, sal_Bool bNewValue )
     {
         Any aAny;
 
-        if ( ImplGetPropertyValue( aAny, rKey, sal_True ) )
+        if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
         {
             sal_Bool bOldValue;
             if ( aAny >>= bOldValue )
@@ -251,7 +280,7 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
     {
         Any aAny;
 
-        if ( ImplGetPropertyValue( aAny, rKey, sal_True ) )
+        if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
         {
             sal_Int32 nOldValue;
             if ( aAny >>= nOldValue )
@@ -269,6 +298,43 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
                         DBG_ERROR( "FilterConfigItem::WriteInt32 - could not set PropertyValue" );
                     }
                 }
+            }
+        }
+    }
+}
+
+void FilterConfigItem::WriteSize( const OUString& rKey, const Size& rNewValue )
+{
+    if ( xPropSet.is() )
+    {
+        Any aAny;
+        sal_Int32 nOldWidth = rNewValue.Width;
+        sal_Int32 nOldHeight = rNewValue.Height;
+
+        if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
+        {
+            try
+            {
+                Reference< XPropertySet > aXPropSet;
+                if ( aAny >>= aXPropSet )
+                {
+                    if ( ImplGetPropertyValue( aAny, aXPropSet, OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), sal_True ) )
+                        aAny >>= nOldWidth;
+                    if ( ImplGetPropertyValue( aAny, aXPropSet, OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), sal_True ) )
+                        aAny >>= nOldHeight;
+                }
+                if ( ( nOldWidth != rNewValue.Width ) || ( nOldHeight != rNewValue.Height ) )
+                {
+                    aAny <<= rNewValue.Width;
+                    aXPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) ), aAny );
+                    aAny <<= rNewValue.Height;
+                    aXPropSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ) ), aAny );
+                    bModified = sal_True;
+                }
+            }
+            catch ( ::com::sun::star::uno::Exception& )
+            {
+                DBG_ERROR( "FilterConfigItem::WriteSize - could not read PropertyValue" );
             }
         }
     }
