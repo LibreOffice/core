@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-10 16:05:29 $
+ *  last change: $Author: fs $ $Date: 2001-09-28 15:20:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,12 +576,12 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
             this
         );
         aApplFont.SetSize( Size( 0, nH - 2 ) );
-        m_aAbsolute.SetFont(aApplFont);
+        m_aAbsolute.SetControlFont( aApplFont );
 
         aApplFont.SetTransparent( sal_True );
-        m_aRecordText.SetFont( aApplFont );
-        m_aRecordOf.SetFont( aApplFont );
-        m_aRecordCount.SetFont( aApplFont );
+        m_aRecordText.SetControlFont( aApplFont );
+        m_aRecordOf.SetControlFont( aApplFont );
+        m_aRecordCount.SetControlFont( aApplFont );
     }
     return nX;
 }
