@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controls.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-15 11:44:20 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:31:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-#define NOOLDSV
-
 #include <tools/debug.hxx>
 
 #include <vcl/window.hxx>
