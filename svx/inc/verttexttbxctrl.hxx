@@ -2,9 +2,9 @@
  *
  *  $RCSfile: verttexttbxctrl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-05-02 12:16:29 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:38:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,19 +67,39 @@
 /* -----------------------------27.04.01 15:38--------------------------------
     control to remove/insert cjk settings dependent vertical text toolbox item
  ---------------------------------------------------------------------------*/
-class SvxVertTextTbxCtrl : public SfxToolBoxControl
+class SvxVertCTLTextTbxCtrl : public SfxToolBoxControl
 {
+    sal_Bool bCheckVertical; //determines whether vertical mode or CTL mode has to be checked
 public:
-    SvxVertTextTbxCtrl( USHORT nId, ToolBox& rTbx, SfxBindings& );
-    ~SvxVertTextTbxCtrl();
-
-    SFX_DECL_TOOLBOX_CONTROL();
+    SvxVertCTLTextTbxCtrl( USHORT nId, ToolBox& rTbx, SfxBindings& );
+    ~SvxVertCTLTextTbxCtrl();
 
     virtual void                StateChanged( USHORT nSID, SfxItemState eState,
                                               const SfxPoolItem* pState );
+    void    SetVert(sal_Bool bSet) {bCheckVertical = bSet;}
 
 };
+/* -----------------------------12.09.2002 11:50------------------------------
 
+ ---------------------------------------------------------------------------*/
+class SvxCTLTextTbxCtrl : public SvxVertCTLTextTbxCtrl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+    SvxCTLTextTbxCtrl(USHORT nId, ToolBox& rTbx, SfxBindings& rBind) :
+        SvxVertCTLTextTbxCtrl( nId, rTbx, rBind ){SetVert(FALSE);};
+
+};
+/* -----------------------------12.09.2002 11:50------------------------------
+
+ ---------------------------------------------------------------------------*/
+class SvxVertTextTbxCtrl : public SvxVertCTLTextTbxCtrl
+{
+public:
+    SFX_DECL_TOOLBOX_CONTROL();
+    SvxVertTextTbxCtrl(USHORT nId, ToolBox& rTbx, SfxBindings& rBind) :
+        SvxVertCTLTextTbxCtrl( nId, rTbx, rBind ){SetVert(TRUE);};
+};
 
 #endif
 

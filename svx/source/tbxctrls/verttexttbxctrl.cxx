@@ -2,9 +2,9 @@
  *
  *  $RCSfile: verttexttbxctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-07-13 12:31:02 $
+ *  last change: $Author: os $ $Date: 2002-09-13 13:38:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #ifndef _SVX_VERT_TEXT_TBXCTRL_HXX
 #include <verttexttbxctrl.hxx>
 #endif
-#ifndef _SVTOOLS_CJKOPTIONS_HXX
-#include <svtools/cjkoptions.hxx>
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
@@ -80,29 +80,34 @@
 #include <vcl/toolbox.hxx>
 #endif
 
+SFX_IMPL_TOOLBOX_CONTROL(SvxCTLTextTbxCtrl, SfxBoolItem);
 SFX_IMPL_TOOLBOX_CONTROL(SvxVertTextTbxCtrl, SfxBoolItem);
 /* -----------------------------27.04.01 15:50--------------------------------
 
  ---------------------------------------------------------------------------*/
-SvxVertTextTbxCtrl::SvxVertTextTbxCtrl( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings ) :
-    SfxToolBoxControl( nId, rTbx, rBindings )
+SvxVertCTLTextTbxCtrl::SvxVertCTLTextTbxCtrl( USHORT nId, ToolBox& rTbx, SfxBindings& rBindings ) :
+    SfxToolBoxControl( nId, rTbx, rBindings ),
+    bCheckVertical(sal_True)
 {
 }
 /* -----------------------------27.04.01 15:53--------------------------------
 
  ---------------------------------------------------------------------------*/
-SvxVertTextTbxCtrl::~SvxVertTextTbxCtrl( )
+SvxVertCTLTextTbxCtrl::~SvxVertCTLTextTbxCtrl( )
 {
 }
 /* -----------------------------27.04.01 15:50--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SvxVertTextTbxCtrl::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxVertCTLTextTbxCtrl::StateChanged( USHORT nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
 {
     BOOL bVisible = GetToolBox().IsItemVisible(GetId());
     BOOL bCalc = sal_False;
-    if(SvtCJKOptions().IsVerticalTextEnabled())
+    SvtLanguageOptions aLangOptions;
+    sal_Bool bEnabled = bCheckVertical ?
+                aLangOptions.IsVerticalTextEnabled() : aLangOptions.IsCTLFontEnabled();
+    if(bEnabled)
     {
         if(!bVisible)
         {
