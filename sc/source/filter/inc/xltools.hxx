@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:51:18 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,23 +218,17 @@ public:
 // built-in defined names -----------------------------------------------------
 
     /** Returns the raw English UI representation of a built-in defined name used in NAME records.
-        @param nBuiltInIndex  Excel index of the built-in name. */
-    static String       GetXclBuiltInDefName( sal_Unicode nBuiltInIndex );
+        @param cBuiltIn  Excel index of the built-in name. */
+    static String       GetXclBuiltInDefName( sal_Unicode cBuiltIn );
     /** Returns the Calc UI representation of a built-in defined name used in NAME records.
         @descr  Adds a prefix to the representation returned by GetXclBuiltInDefName().
-        @param nBuiltInIndex  Excel index of the built-in name. */
-    static String       GetBuiltInDefName( sal_Unicode nBuiltInIndex );
-    /** Tests on valid built-in name with sheet index.
-        @param rnXclTab  Here the parsed sheet index is returned.
-        @param rString  The string to be determined.
-        @param nIndex  Index to built-in name to be compared with the string.
-        @return  true = The string is valid. */
-    static bool         IsBuiltInDefName( sal_uInt16& rnXclTab, const String& rName, sal_Unicode nIndex );
+        @param cBuiltIn  Excel index of the built-in name. */
+    static String       GetBuiltInDefName( sal_Unicode cBuiltIn );
     /** Returns the Excel built-in name index of the passed defined name from Calc.
         @descr  Ignores any characters following a valid representation of a built-in name.
-        @param pnBuiltInIndex  0, the index of the built-in name will be returned here.
-        @return  true = passed string is a built-in name, false = user-defined name. */
-    static bool         IsBuiltInDefName( const String& rDefName, sal_Unicode* pnBuiltInIndex = 0 );
+        @param pcBuiltIn  (out-param) If not 0, the index of the built-in name will be returned here.
+        @return  true = passed string is a built-in name; false = user-defined name. */
+    static sal_Unicode  GetBuiltInDefNameIndex( const String& rDefName );
 
 // built-in style names -------------------------------------------------------
 
