@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-07 10:49:18 $
+ *  last change: $Author: nn $ $Date: 2001-06-18 16:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1563,6 +1563,8 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const USHORT* pPos
 
     if (nEndPos>10000)
         nEndPos = 10000;
+    else if (nEndPos<1)     // avoid extra step at 0 (when only one row is visible)
+        nEndPos = 1;
     long nWidth = nBig - ( 10000 - nEndPos ) * nDiff / 10000;
 
     if ( nWidth != pRowBar[SC_SPLIT_BOTTOM]->GetWidth() && !bInUpdateHeader )
