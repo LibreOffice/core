@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:22:53 $
+ *  last change: $Author: kz $ $Date: 2002-04-30 09:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ TabPage TP_LAB_PRT
         Text[ korean ] = "전체 페이지(~E)";
         Text[ turkish ] = "~Tam sayfa";
         Text[ catalan ] = "~Toda la p�gina";
+        Text[ thai ] = "~ทั้งหน้า";
     };
     RadioButton BTN_SINGLE
     {
@@ -126,6 +127,7 @@ TabPage TP_LAB_PRT
         Text[ korean ] = "각 라벨(~S)";
         Text[ turkish ] = "Tek Eti~ket";
         Text[ catalan ] = "~Una etiqueta";
+        Text[ thai ] = "ป้ายชื่อเ~ดียว";
     };
     FixedText TXT_COL
     {
@@ -155,6 +157,7 @@ TabPage TP_LAB_PRT
         Text[ korean ] = "열(~M)";
         Text[ turkish ] = "~S�tun";
         Text[ catalan ] = "C~olumna";
+        Text[ thai ] = "คอลัม~น์";
     };
     NumericField FLD_COL
     {
@@ -196,6 +199,7 @@ TabPage TP_LAB_PRT
         Text[ korean ] = "행()(~W)";
         Text[ turkish ] = "S~at�r";
         Text[ catalan ] = "~Fila";
+        Text[ thai ] = "แถ~ว";
     };
     NumericField FLD_ROW
     {
@@ -236,6 +240,7 @@ TabPage TP_LAB_PRT
         Text[ turkish ] = "��eri�i �o�alt";
         Text[ finnish ] = "~Synkronoi sis�lt�";
         Text[ catalan ] = "~Sincronizar contenidos";
+        Text[ thai ] = "เนื้อหาที่ตร~งกัน";
     };
     FixedLine FL_DONTKNOW
     {
@@ -263,6 +268,7 @@ TabPage TP_LAB_PRT
         Text[ turkish ] = "Divide";
         Text[ arabic ] = "Divide";
         Text[ catalan ] = "Divide";
+        Text[ thai ] = "แบ่ง";
     };
     FixedText INF_PRINTER
     {
@@ -291,6 +297,7 @@ TabPage TP_LAB_PRT
         Text[ turkish ] = "Yaz�c� ad�";
         Text[ finnish ] = "Tulostimen nimi";
         Text[ catalan ] = "Nombre de la impresora";
+        Text[ thai ] = "ชื่อเครื่องพิมพ์";
     };
     PushButton BTN_PRTSETUP
     {
@@ -319,6 +326,7 @@ TabPage TP_LAB_PRT
         Text[ turkish ] = "Ayarlar...";
         Text[ finnish ] = "Asennus";
         Text[ catalan ] = "Configurar...";
+        Text[ thai ] = "ติดตั้ง...";
     };
     FixedLine FL_PRINTER
     {
@@ -346,6 +354,7 @@ TabPage TP_LAB_PRT
         Text[ turkish ] = "Yaz�c� ";
         Text[ finnish ] = " Tulostin";
         Text[ catalan ] = "Impresora  ";
+        Text[ thai ] = " เครื่องพิมพ์ ";
     };
 };
  // **************************************************************************
