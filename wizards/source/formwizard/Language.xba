@@ -79,7 +79,6 @@ Dim slblFields as String
 		.cmdHelp.Label = GetResText(RID_COMMON + 20)
 		sGoOn = GetResText(RID_COMMON + 3)
 		.cmdGoOn.Label = sGoOn
-		.lblDatabases.Label = GetResText(RID_FORM + 11)
 		.lblTables.Label = GetResText(RID_FORM + 6)
 
 		slblFields = GetResText(RID_FORM + 12)
@@ -277,4 +276,5 @@ Sub InitializeWidthList()
 	oModelService(cNumericBox) = &quot;com.sun.star.form.component.FormattedField&quot;
 	oModelService(cGridControl) = &quot;com.sun.star.form.component.GridControl&quot;
 	oModelService(cImageControl) = &quot;com.sun.star.form.component.DatabaseImageControl&quot;
-End Sub</script:module>
+End Sub
+</script:module>
