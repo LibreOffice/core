@@ -572,9 +572,10 @@ sub WriteEventsToDoc()
 		endif
 		&apos;Otherwise it is a StarBasic binding - leave alone
 	next n
-
+	&apos;Mark document as modified ( should happen automatically as a result of calling the API )
+	ThisComponent.CurrentController.getModel().setModified( True )
 	exit sub
-
+	
 	ErrorHandler:
 	reset
 	msgbox( &quot;Error calling UNO API for writing event bindings to the document&quot; )
@@ -1003,7 +1004,7 @@ sub PopulateScriptList( lang as String, loc as String )
 					if ( lang = implementations( n ).getLanguage() ) then
 						if ( detailedView ) then
 							tempDisplayList( n ).Name = logicalName _
-								+ &quot; [&quot; + logicalName + &quot;]&quot;  
+								+ &quot; [&quot; + implementations( n ).getFunctionName() + &quot;]&quot;  
 							tempDisplayList( n ).Value = implementations( n )
 						else
 							tempDisplayList( n ).Name = logicalName
@@ -1083,8 +1084,9 @@ sub PopulateSubMenuList( menuItemPosition as integer )
 
 	subMenuList.removeItems( 0, subMenuList.getItemCount() )
 	&apos;If there are no sub-menus i.e. a dynamically generated menu like Format
-	if subMenuCount = 1 then
-		subMenuList.addItem( &quot;Unable to Assign Scripts to this menu&quot;, 0 )
+	&apos;if subMenuCount = 1 then
+	if menuItems( menuItemPosition ) = &quot;Format&quot; then
+			subMenuList.addItem( &quot;Unable to Assign Scripts to this menu&quot;, 0 )
 	else	
 		for n = 1 to subMenuCount - 1
 			subMenuList.addItem( subMenuItems( n ), n - 1 )
