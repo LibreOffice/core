@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:47:15 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 21:15:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5209,7 +5209,7 @@ String STR_OPEN_DOCUMENT
 };
 String STR_SAVE_DOCUMENT
 {
-    Text[ chinese_simplified ] = "±£´æÎÄµµ";
+    Text[ chinese_simplified ] = "´æÅÌÎÄµµ";
     Text[ russian ] = "Ñîõğàíèòü äîêóìåíò";
     Text[ polish ] = "Zapisz dokument";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ì•Û‘¶";
@@ -13371,6 +13371,7 @@ String STR_UNDO_GRAFTRANSPARENCY
     Text[ catalan ] = "Transparencia";
     Text[ finnish ] = "Läpikuultavuus";
 };
+
 
 
 
