@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:35:02 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,7 +430,8 @@ ExcScenario::ExcScenario( XclImpStream& rIn, const RootData& rR ) : nTab( rR.pIR
     UINT8           nName, nComment;
 
     rIn >> nCref;
-    rIn.Ignore( 2 );
+    rIn >> nProtected;
+    rIn.Ignore( 1 );                // Hide
     rIn >> nName >> nComment;
     rIn.Ignore( 1 );        // statt nUser!
 
@@ -496,7 +497,7 @@ void ExcScenario::Apply( ScDocument& r, const BOOL bLast )
 
     ExcScenarioCell*    p = EXCSCFIRST();
     String              aSzenName( *pName );
-    r.CreateValidTabName( aSzenName );
+    ScfTools::ConvertToScSheetName( aSzenName );
     UINT16              nNewTab = nTab + 1;
 
     if( !r.InsertTab( nNewTab, aSzenName ) )
@@ -504,7 +505,7 @@ void ExcScenario::Apply( ScDocument& r, const BOOL bLast )
 
     r.SetScenario( nNewTab, TRUE );
     // #112621# do not show scenario frames
-    r.SetScenarioData( nNewTab, *pComment, COL_LIGHTGRAY, /*SC_SCENARIO_SHOWFRAME|*/SC_SCENARIO_COPYALL );
+    r.SetScenarioData( nNewTab, *pComment, COL_LIGHTGRAY, /*SC_SCENARIO_SHOWFRAME|*/SC_SCENARIO_COPYALL|(nProtected ? SC_SCENARIO_PROTECT : 0) );
 
     while( p )
     {
