@@ -2,9 +2,9 @@
  *
  *  $RCSfile: View.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:49:24 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ class Graphic;
 class SdrOutliner;
 class TransferableDataHelper;
 struct StyleRequestData;
+class Outliner;
 
 namespace sd {
 
@@ -209,6 +210,9 @@ public:
     virtual BOOL        Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst=NULL, UINT32 nOptions=0);
 
 protected:
+    DECL_LINK( ParagraphInsertedHdl, ::Outliner * );
+    DECL_LINK( ParagraphRemovingHdl, ::Outliner * );
+
     SdDrawDocument*         pDoc;
     DrawDocShell*       pDocSh;
     ViewShell* pViewSh;
