@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 11:30:11 $
+ *  last change: $Author: os $ $Date: 2002-06-24 10:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2634,151 +2634,19 @@ TabPage TP_FRM_ADD
         StringList =
         {
             < "Links-nach-rechts (horizontal)" ; 0; > ;
-//          < "Rechts-nach-links (horizontal)" ; 1; > ;
+            < "Rechts-nach-links (horizontal)" ; 1; > ;
             < "Rechts-nach-links (vertikal)" ; 2; > ;
 //          < "Links-nach-rechts (vertikal)" ; 3; > ;
             < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
         };
         StringList [ ENGLISH ] =
         {
-            < "Horizontal from left" ; 0; > ;
-//          < "Horizontal from right" ; 1; > ;
-            < "Vertical from right" ; 2; > ;
-//          < "Vertical from left" ; 3; > ;
+            < "Left-to-right (horizontal)" ; 0; > ;
+            < "Right-to-left (horizontal)" ; 1; > ;
+            < "Right-to-left (vertical)" ; 2; > ;
+//          < "Left-to-right (vertical)" ; 3; > ;
             < "Like the environment" ; 4; > ;
         };
-    StringList [ language_user1 ] =
-    {
-         < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts nach links (vertikal)" ; 2; > ;
-        < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ english_us ] =
-    {
-         < "Left-to-right (horizontal)" ; 0; > ;
-        < "Right-to-left (vertical)" ; 2; > ;
-        < "Use superordinate object setting" ; 4; > ;
-    };
-    StringList [ portuguese ] =
-    {
-         < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts-nach-links (vertikal)" ; 2; > ;
-        < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ russian ] =
-    {
-         < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts-nach-links (vertikal)" ; 2; > ;
-        < "Einstellung des ?bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ greek ] =
-    {
-         < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts-nach-links (vertikal)" ; 2; > ;
-        < "Einstellung des ?bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ dutch ] =
-    {
-         < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts-nach-links (vertikal)" ; 2; > ;
-        < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ french ] =
-    {
-         < "De gauche � droite (horizontal)" ; 0; > ;
-        < "De droite � gauche (vertical)" ; 2; > ;
-        < "Utiliser le param�tre de l'objet sup�rieur" ; 4; > ;
-    };
-    StringList [ spanish ] =
-    {
-         < "De izquierda a derecha (horizontal)" ; 0; > ;
-        < "De derecha a izquierda (vertical)" ; 2; > ;
-        < "Utilizar la configuraci�n del objeto superior " ; 4; > ;
-    };
-    StringList [ finnish ] =
-    {
-         < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts-nach-links (vertikal)" ; 2; > ;
-        < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ italian ] =
-    {
-         < "Sinistra-verso-destra (orizzontale)" ; 0; > ;
-        < "Destra verso sinistra (verticale)" ; 2; > ;
-        < "Usa le impostazioni dell'oggetto superiore" ; 4; > ;
-    };
-    StringList [ danish ] =
-    {
-         < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts-nach-links (vertikal)" ; 2; > ;
-        < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ swedish ] =
-    {
-         < "V�nster-till-h�ger (horisontellt)" ; 0; > ;
-        < "H�ger-till-v�nster (vertikalt)" ; 2; > ;
-        < "Anv�nd det �verordnade objektets inst�llning" ; 4; > ;
-    };
-    StringList [ polish ] =
-    {
-         < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts-nach-links (vertikal)" ; 2; > ;
-        < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-         < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts-nach-links (vertikal)" ; 2; > ;
-        < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ japanese ] =
-    {
-         < "左から右へ (横書き)" ; 0; > ;
-        < "右から左へ (縦書き)" ; 2; > ;
-        < "上位オブジェクトの設定を使用" ; 4; > ;
-    };
-    StringList [ korean ] =
-    {
-         < "왼쪽에서 오른쪽으로(가로)" ; 0; > ;
-        < "오른쪽에서 왼쪽으로 (세로)" ; 2; > ;
-        < "고급 설정 적용" ; 4; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-         < "从左向右(横写)" ; 0; > ;
-        < "从右向左(竖写)" ; 2; > ;
-        < "沿用现有的文字方向的设定" ; 4; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-         < "從左向右(橫書)" ; 0; > ;
-        < "從右向左(直書)" ; 2; > ;
-        < "沿用現有的文字方向的設定" ; 4; > ;
-    };
-    StringList [ turkish ] =
-    {
-         < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts-nach-links (vertikal)" ; 2; > ;
-        < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ arabic ] =
-    {
-         < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts-nach-links (vertikal)" ; 2; > ;
-        < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ catalan ] =
-    {
-         < "Links-nach-rechts (horizontal)" ; 0; > ;
-        < "Rechts-nach-links (vertikal)" ; 2; > ;
-        < "Einstellung des �bergeordneten Objektes verwenden" ; 4; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "Horizontal von links" ; 0; > ;
-        < "Vertikal von rechts" ; 2; > ;
-        < "Wie die Umgebung" ; 4; > ;
-    };
     };
 };
 
