@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-13 08:44:24 $
+ *  last change: $Author: mib $ $Date: 2000-11-14 08:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,8 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
         return ERR_SWG_WRITE_ERROR;
 
     pDoc = rPaM.GetDoc();
-    PutNumFmtFontsInAttrPool();
-    PutEditEngFontsInAttrPool();
+//  PutNumFmtFontsInAttrPool();
+//  PutEditEngFontsInAttrPool();
 
     Reference< io::XOutputStream > xOut = rMed.GetDataSink();
     Reference< io::XActiveDataSource > xSrc( xWriter, UNO_QUERY );
@@ -178,11 +178,14 @@ void GetXMLWriter( const String&, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.2 2000-11-13 08:44:24 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.3 2000-11-14 08:03:32 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/11/13 08:44:24  mib
+      font declarations and asian/complex font properties
+
       Revision 1.1.1.1  2000/09/18 17:14:59  hr
       initial import
 
