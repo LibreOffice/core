@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-20 11:15:52 $
+ *  last change: $Author: jp $ $Date: 2000-11-27 19:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,14 +507,14 @@ void Writer::PutEditEngFontsInAttrPool( BOOL bIncl_CJK_CTL )
     if( !pImpl )
         pImpl = new Writer_Impl( *pDoc );
 
-    SfxItemPool* pPool = pDoc->GetAttrPool().GetSecondaryPool();
-    if( pPool )
+    SfxItemPool& rPool = pDoc->GetAttrPool();
+    if( rPool.GetSecondaryPool() )
     {
-        _AddFontItems( *pPool, EE_CHAR_FONTINFO );
+        _AddFontItems( rPool, EE_CHAR_FONTINFO );
         if( bIncl_CJK_CTL )
         {
-            _AddFontItems( *pPool, EE_CHAR_FONTINFO_CJK );
-            _AddFontItems( *pPool, EE_CHAR_FONTINFO_CTL );
+            _AddFontItems( rPool, EE_CHAR_FONTINFO_CJK );
+            _AddFontItems( rPool, EE_CHAR_FONTINFO_CTL );
         }
     }
 }
@@ -658,11 +658,14 @@ ULONG StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const String* pFName )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.5 2000-11-20 11:15:52 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/writer/writer.cxx,v 1.6 2000-11-27 19:09:58 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/11/20 11:15:52  mib
+      create impl when adding fonts to pool (required for XML filter)
+
       Revision 1.4  2000/11/13 17:26:24  jp
       new method PutCJKandCTLFontsInAttrPool
 
