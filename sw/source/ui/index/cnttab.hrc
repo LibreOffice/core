@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2002-03-05 08:04:38 $
+ *  last change: $Author: oj $ $Date: 2002-08-06 12:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,8 @@
 #define LB_LANGUAGE             146
 #define FT_SORTALG              147
 #define LB_SORTALG              148
+#define IMG_SORTUP_HC           149
+#define IMG_SORTDOWN_HC         150
 #define TO_CONTENT          1
 #define TO_INDEX            2
 #define TO_ILLUSTRATION     4
@@ -303,4 +305,7 @@
 #define MN_AUTOMARK_OPEN    1
 #define MN_AUTOMARK_NEW     2
 #define MN_AUTOMARK_EDIT    3
+
+
+
 

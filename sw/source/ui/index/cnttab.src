@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: os $ $Date: 2002-03-05 08:37:34 $
+ *  last change: $Author: oj $ $Date: 2002-08-06 12:42:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3772,6 +3772,24 @@ TabPage TP_TOX_ENTRY
         Border = TRUE;
         DropDown = TRUE;
     };
+    Image IMG_SORTUP_HC
+    {
+        ImageBitmap = Bitmap{File = "sch10712.bmp"; };
+        MaskColor   = Color {
+        Red   = 0xffff;
+        Green = 0x0000;
+        Blue  = 0xffff;
+        };
+    };
+    Image IMG_SORTDOWN_HC
+    {
+        ImageBitmap = Bitmap{File = "sch10713.bmp"; };
+        MaskColor   = Color {
+        Red   = 0xffff;
+        Green = 0x0000;
+        Blue  = 0xffff;
+        };
+    };
     ImageRadioButton RB_SORTUP1
     {
         Pos = MAP_APPFONT ( 222 , 138 ) ;
@@ -4756,6 +4774,7 @@ ModalDialog DLG_CREATE_AUTOMARK
         Text[ catalan ] = "Entradas";
         Text[ finnish ] = "Merkinn‰t";
     };
+
     Text[ english_us ] = "Edit Concordance File";
     Text[ portuguese ] = "Editar ficheiro de concord‚ncia";
     Text[ russian ] = "œ‡‚Í‡ Ù‡ÈÎ‡-ÍÓÌÍÓ‰‡ÌÒ‡";
@@ -4777,5 +4796,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+// -----------------------------------------------------------------------------
+
 
 

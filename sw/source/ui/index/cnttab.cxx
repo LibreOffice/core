@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-02 15:18:55 $
+ *  last change: $Author: oj $ $Date: 2002-08-06 12:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2146,6 +2146,15 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     pCurrentForm(0),
     bInLevelHdl(sal_False)
 {
+    Image aSortUpHC(ResId(IMG_SORTUP_HC ));
+    aFirstSortUpRB.SetModeImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
+    aSecondSortUpRB.SetModeImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
+    aThirdSortUpRB.SetModeImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
+
+    Image aSortDownHC(ResId(IMG_SORTDOWN_HC ));
+    aFirstSortDownRB.SetModeImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
+    aSecondSortDownRB.SetModeImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
+    aThirdSortDownRB.SetModeImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
     FreeResource();
 
     sLevelStr = aLevelFT.GetText();
