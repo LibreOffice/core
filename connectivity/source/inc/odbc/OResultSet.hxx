@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-29 16:33:10 $
+ *  last change: $Author: vg $ $Date: 2002-02-08 10:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ namespace connectivity
         struct TBookmarkPosMapCompare : ::std::less< ::com::sun::star::uno::Sequence<sal_Int8> >
         {
             inline bool operator()( const ::com::sun::star::uno::Sequence<sal_Int8>& _rLH,
-                                    const ::com::sun::star::uno::Sequence<sal_Int8>& _rRH)
+                                    const ::com::sun::star::uno::Sequence<sal_Int8>& _rRH) const
             {
                 if(_rLH.getLength() == _rRH.getLength())
                 {
