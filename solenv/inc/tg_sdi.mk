@@ -46,7 +46,7 @@ $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND)
     -fx$(SDI$(TNR)EXPORT).sdi		\
     -fy$(MISCX)$/xx$(PRJNAME).csv		\
     -fz$(MISCX)$/$(SDI$(TNR)NAME).sid	\
-    $(SDI$(TNR)NAME).sdi -I$(MISCX) -I$(SVSDIINC) -I$(SOLARINCXDIR) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
+    $(SDI$(TNR)NAME).sdi -I$(MISCX) -I$(SVSDIINC) -I$(INC) -I$(INCLUDE) -I$(SOLARVER)$/$(UPD)$/$(INPATH)$/inc )
 
 .IF "$(NO_SRS_PATCH)"==""
         @+$(COPY) $(SRSX)$/$(SDI$(TNR)NAME).srs $(TEMP)$/$(SDI$(TNR)NAME).srs
