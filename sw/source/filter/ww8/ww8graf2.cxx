@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:27:58 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:42:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,10 +168,10 @@
 #include "ww8graf.hxx"
 #endif
 
-wwZOrderer::wwZOrderer(SdrPage* pDrawPg,
-    const SvxMSDffShapeOrders *pShapeOrders, sal_Int8 nHeaven, sal_Int8 nHell)
-    : mnInlines(0), mpDrawPg(pDrawPg), mpShapeOrders(pShapeOrders),
-    mnHeaven(nHeaven), mnHell(nHell)
+wwZOrderer::wwZOrderer(const sw::hack::SetLayer &rSetLayer, SdrPage* pDrawPg,
+    const SvxMSDffShapeOrders *pShapeOrders)
+    : maSetLayer(rSetLayer), mnInlines(0), mpDrawPg(pDrawPg),
+    mpShapeOrders(pShapeOrders)
 {
     mnNoInitialObjects = mpDrawPg->GetObjCount();
     ASSERT(mpDrawPg,"Missing draw page impossible!");
@@ -255,16 +255,16 @@ void wwZOrderer::InsertDrawingObject(SdrObject* pObj, short nWwHeight)
 {
     ULONG nPos = GetDrawingObjectPos(nWwHeight);
     if (nWwHeight & 0x2000)                 // Heaven ?
-        pObj->SetLayer(mnHeaven);
+        maSetLayer.SendObjectToHeaven(*pObj);
     else
-        pObj->SetLayer(mnHell);
+        maSetLayer.SendObjectToHell(*pObj);
 
     InsertObject(pObj, nPos + mnNoInitialObjects + mnInlines);
 }
 
 void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)
 {
-    pObject->SetLayer(mnHeaven);
+    maSetLayer.SendObjectToHeaven(*pObject);
     if (maIndexes.empty())
     {
         InsertObject(pObject, mnNoInitialObjects + mnInlines);
@@ -346,8 +346,9 @@ bool SwWW8ImplReader::ReadGrafFile(String& rFileName, Graphic*& rpGraphic,
         case 99: // TIFF-File ( nicht embeddet )
             pSt->Seek(nPosFc);
             // Name als P-String einlesen
-            rFileName = URIHelper::SmartRelToAbs(
-                WW8ReadPString(*pSt, eStructCharSet, 0));
+            rFileName = WW8ReadPString(*pSt, eStructCharSet, 0);
+            if (rFileName.Len())
+                rFileName = URIHelper::SmartRelToAbs(rFileName);
             *pbInDoc = false;       // Datei anschliessend nicht loeschen
             return rFileName.Len() != 0;        // Einlesen OK
     }
@@ -629,6 +630,15 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
         {
             // verlinkte Grafik im Escher-Objekt
             SdrObject* pObject = 0;
+
+            //#i17200#, a bit of guesswork I'm afraid
+            if (aPic.dxaGoal == 1000 && aPic.mx == 1)  //100% hack ?
+            {
+                aPic.mx = maSectionManager.GetPageWidth() -
+                    maSectionManager.GetPageRight() -
+                    maSectionManager.GetPageLeft();
+            }
+
             WW8PicDesc aPD( aPic );
             String aGrName;
             if (!pMSDffManager)
