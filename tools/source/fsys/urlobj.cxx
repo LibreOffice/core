@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:35:00 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,14 +298,6 @@ using namespace com::sun;
 
 
    ; private
-   vnd-sun-star-script-url = "VND.SUN.STAR.SCRIPT:" parameter *("," parameter)
-   parameter = key "=" value
-   key = 1*parmchar
-   value = *parmchar
-   parmchar = unreserved / escaped / "$" / "&" / "+" / "/" / ":" / "?" / "@" / "[" / "]"
-
-
-   ; private
    vnd-sun-star-url = "VND.SUN.STAR.ODMA:" ["/" *uric_no_slash]
    uric_no_slash = unreserved / escaped / ";" / "?" / ":" / "@" / "&" / "=" / "+" / "$" / ","
 
@@ -449,8 +441,6 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false },
         { "vnd.sun.star.cmd", "vnd.sun.star.cmd:", 0, false, false, false,
           false, false, false, false, false },
-        { "vnd.sun.star.script", "vnd.sun.star.script:", 0, false, false,
-          false, false, false, false, false, false },
         { "vnd.sun.star.odma", "vnd.sun.star.odma:", 0, false, false, false,
           false, false, false, true, false },
         { "telnet", "telnet://", 23, true, true, false, true, true, true, true,
@@ -2076,8 +2066,6 @@ INetURLObject::getPrefix(sal_Unicode const *& rBegin,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.pkg:", 0, INET_PROT_VND_SUN_STAR_PKG,
               PrefixInfo::OFFICIAL },
-            { "vnd.sun.star.script:", 0, INET_PROT_VND_SUN_STAR_SCRIPT,
-              PrefixInfo::OFFICIAL },
             { "vnd.sun.star.webdav:", 0, INET_PROT_VND_SUN_STAR_WEBDAV,
               PrefixInfo::OFFICIAL },
             { "vnd.sun.star.wfs:", 0, INET_PROT_VND_SUN_STAR_WFS,
@@ -2779,65 +2767,6 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                            '%', eCharset, true);
                 ePart = PART_URIC;
             }
-            break;
-        }
-
-        case INET_PROT_VND_SUN_STAR_SCRIPT:
-        {
-            enum State { STATE_INITIAL, STATE_COMMA, STATE_KEY, STATE_VALUE };
-            State eState = STATE_INITIAL;
-            while (pPos != pEnd && *pPos != nFragmentDelimiter)
-            {
-                EscapeType eEscapeType;
-                sal_uInt32 nUTF32 = getUTF32(pPos, pEnd, bOctets,
-                                             '%', eMechanism,
-                                             eCharset, eEscapeType);
-                switch (eState)
-                {
-                case STATE_INITIAL:
-                case STATE_COMMA:
-                    if (eEscapeType == ESCAPE_NO
-                        && (nUTF32 == '=' || nUTF32 == ','))
-                        return false;
-                    eState = STATE_KEY;
-                    appendUCS4(aTheSynPath, INetMIME::toLowerCase(nUTF32),
-                               eEscapeType, bOctets, PART_UNO_PARAM_VALUE,
-                               '%', eCharset, true);
-                    break;
-
-                case STATE_KEY:
-                    if (eEscapeType == ESCAPE_NO)
-                        if (nUTF32 == '=')
-                        {
-                            eState = STATE_VALUE;
-                            aTheSynPath += sal_Unicode(nUTF32);
-                            break;
-                        }
-                        else if (nUTF32 == ',')
-                            return false;
-                    appendUCS4(aTheSynPath, INetMIME::toLowerCase(nUTF32),
-                               eEscapeType, bOctets, PART_UNO_PARAM_VALUE,
-                               '%', eCharset, true);
-                    break;
-
-                case STATE_VALUE:
-                    if (eEscapeType == ESCAPE_NO)
-                        if (nUTF32 == ',')
-                        {
-                            eState = STATE_COMMA;
-                            aTheSynPath += sal_Unicode(nUTF32);
-                            break;
-                        }
-                        else if (nUTF32 == '=')
-                            return false;
-                    appendUCS4(aTheSynPath, nUTF32, eEscapeType, bOctets,
-                               PART_UNO_PARAM_VALUE, '%', eCharset,
-                               true);
-                    break;
-                }
-            }
-            if (eState == STATE_COMMA || eState == STATE_KEY)
-                return false;
             break;
         }
 
@@ -4884,50 +4813,6 @@ UniString INetURLObject::GetMsgId(DecodeMechanism eMechanism,
         if (*p == '<')
             return decode(p, pEnd, getEscapePrefix(), eMechanism, eCharset);
     return UniString();
-}
-
-//============================================================================
-bool INetURLObject::getParameter(UniString const & rKey,
-                                 UniString * pValue)
-{
-    if (m_eScheme != INET_PROT_VND_SUN_STAR_SCRIPT || rKey.Len() == 0)
-        return false;
-    UniString aEncodedKey(rKey);
-    aEncodedKey.ToLowerAscii();
-    aEncodedKey = encode(aEncodedKey, PART_UNO_PARAM_VALUE, '%', ENCODE_ALL);
-    sal_Unicode const * pKeyBegin = aEncodedKey.GetBuffer();
-    sal_Unicode const * pKeyEnd = pKeyBegin + aEncodedKey.Len();
-    sal_Unicode const * p = m_aAbsURIRef.GetBuffer() + m_aPath.getBegin();
-    sal_Unicode const * pEnd = p + m_aPath.getLength();
-    while (p != pEnd)
-    {
-        sal_Unicode const * pKey = pKeyBegin;
-        while (p != pEnd && pKey != pKeyEnd && *p == *pKey)
-        {
-            ++p;
-            ++pKey;
-        }
-        if (pKey == pKeyEnd && p != pEnd && *p == '=')
-        {
-            if (pValue)
-            {
-                ++p;
-                UniString aValue;
-                while (p != pEnd && *p != ',')
-                {
-                    EscapeType eEscapeType;
-                    sal_uInt32 nUTF32
-                        = getUTF32(p, pEnd, false, '%', WAS_ENCODED,
-                                   RTL_TEXTENCODING_UTF8, eEscapeType);
-                    appendUTF32(aValue, nUTF32);
-                }
-                *pValue = aValue;
-            }
-            return true;
-        }
-        while (p != pEnd && *p++ != ',');
-    }
-    return false;
 }
 
 //============================================================================
