@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngconvex.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:30:39 $
+ *  last change: $Author: obo $ $Date: 2004-09-14 09:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,8 +395,12 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
         StreamExceptionsEnabler sexc_in(in);
 
         //skip the byte-order-mark 0xEF 0xBB 0xBF, identifying UTF8 files
-        char dummy;
-        in >> dummy; in >> dummy; in >> dummy;
+        char BOM[3] = {0xEF, 0xBB, 0xBF};
+        char buff[3];
+        in.read(&buff[0], 3);
+
+        if (memcmp(buff, BOM, 3) != 0)
+            in.seekg(0);
 
         std::string line;
         while (std::getline(in, line))
@@ -564,6 +568,8 @@ void inflate_rc_template_to_file(
 
 int main(int argc, char* argv[])
 {
+    OSL_ASSERT(0);
+
     try
     {
         CommandLine cmdline(argc, argv);
