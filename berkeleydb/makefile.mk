@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-02 09:41:38 $
+#   last change: $Author: vg $ $Date: 2003-06-04 10:41:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,10 +77,6 @@ TARFILE_NAME=db-3.2.9
 PATCH_FILE_NAME=db-3.2.9.patch
 
 .IF "$(GUI)"=="UNX"
-.IF "$(SYSBASE)"!=""
-.EXPORT : CC CXX
-.ENDIF
-
 CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=..$/dist$/configure
