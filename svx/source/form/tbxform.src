@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:16:44 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 16:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,6 +510,11 @@ FloatingWindow RID_SVXTBX_FORM
             {
                 Identifier = SID_FM_OPEN_READONLY ;
                 HelpID = SID_FM_OPEN_READONLY ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_AUTOCONTROLFOCUS ;
+                HelpID = SID_FM_AUTOCONTROLFOCUS ;
             };
             ToolBoxItem
             {
