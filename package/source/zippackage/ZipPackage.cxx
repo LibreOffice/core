@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:17:32 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ class DummyInputStream : public ::cppu::WeakImplHelper1< XInputStream >
 
 //===========================================================================
 
-static void copyInputToOutput( Reference< XInputStream >& aIn, Reference< XOutputStream >& aOut )
+void copyInputToOutput_Impl( Reference< XInputStream >& aIn, Reference< XOutputStream >& aOut )
 {
     sal_Int32 nRead;
     Sequence < sal_Int8 > aSequence ( n_ConstBufferSize );
@@ -292,7 +292,7 @@ ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
 , bForceRecovery ( sal_False )
 , eMode ( e_IMode_None )
 {
-    xRootFolder = pRootFolder = new ZipPackageFolder();
+    xRootFolder = pRootFolder = new ZipPackageFolder( xFactory );
 }
 
 ZipPackage::~ZipPackage( void )
@@ -342,7 +342,7 @@ void ZipPackage::getZipFileContents()
                     break;
                 if ( !pCurrent->hasByName( sTemp ) )
                 {
-                    pPkgFolder = new ZipPackageFolder();
+                    pPkgFolder = new ZipPackageFolder( xFactory );
                     pPkgFolder->setName( sTemp );
                     pPkgFolder->doSetParent( pCurrent, sal_True );
                     pCurrent = pPkgFolder;
@@ -358,7 +358,7 @@ void ZipPackage::getZipFileContents()
         {
             nStreamIndex++;
             sTemp = rName.copy( nStreamIndex, rName.getLength() - nStreamIndex);
-            pPkgStream = new ZipPackageStream( *this );
+            pPkgStream = new ZipPackageStream( *this, xFactory );
             pPkgStream->SetPackageMember( sal_True );
             pPkgStream->setZipEntry( rEntry );
             pPkgStream->setName( sTemp );
@@ -783,7 +783,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
 Reference< XInterface > SAL_CALL ZipPackage::createInstance(  )
         throw(Exception, RuntimeException)
 {
-    Reference < XInterface > xRef = *(new ZipPackageStream ( *this ));
+    Reference < XInterface > xRef = *(new ZipPackageStream ( *this, xFactory ));
     return xRef;
 }
 Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const Sequence< Any >& aArguments )
@@ -794,9 +794,9 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
     if ( aArguments.getLength() )
         aArguments[0] >>= bArg;
     if (bArg)
-        xRef = *new ZipPackageFolder ( );
+        xRef = *new ZipPackageFolder ( xFactory );
     else
-        xRef = *new ZipPackageStream ( *this );
+        xRef = *new ZipPackageStream ( *this, xFactory );
 
     return xRef;
 }
@@ -1019,7 +1019,7 @@ sal_Bool ZipPackage::writeFileIsTemp()
         xTempSeek->seek ( 0 );
 
         // then copy the contents of the tempfile to our output stream
-        copyInputToOutput( xTempIn, xOutputStream );
+        copyInputToOutput_Impl( xTempIn, xOutputStream );
         xOutputStream->flush();
     }
 
@@ -1142,7 +1142,7 @@ void SAL_CALL ZipPackage::commitChanges(  )
                     aOrigFileStream = xStr->getOutputStream();
                     if( aOrigFileStream.is() )
                     {
-                        copyInputToOutput( xContentStream, aOrigFileStream );
+                        copyInputToOutput_Impl( xContentStream, aOrigFileStream );
                         aOrigFileStream->closeOutput();
                         xContentSeek->seek ( 0 );
                     }
