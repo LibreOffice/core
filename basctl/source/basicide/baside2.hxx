@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
+ *  last change: $Author: tbe $ $Date: 2001-08-15 13:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,6 +411,7 @@ public:
 
 
     SbModule*       GetModule() { return xModule; }
+    void            SetModule( SbModule* pModule ) { xModule = pModule; }
     String          GetModuleName();
 
     BOOL            CompileBasic();
