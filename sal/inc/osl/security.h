@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:43:55 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 13:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 
 #ifndef _RTL_USTRING_H_
 #   include <rtl/ustring.h>
-#endif
-
-#ifndef _OSL_TYPES_H_
-#   include <osl/types.h>
 #endif
 
 #ifdef __cplusplus

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mfe $ $Date: 2001-03-01 15:01:19 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 13:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 
 #ifndef _RTL_USTRING_H
 #   include <rtl/ustring.h>
-#endif
-
-#ifndef _OSL_TYPES_H_
-#   include <osl/types.h>
 #endif
 
 #ifndef _RTL_TENCINFO_H

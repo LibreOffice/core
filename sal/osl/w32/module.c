@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mfe $ $Date: 2001-03-01 15:02:14 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 13:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #include "system.h"
 
 #include <osl/module.h>
-#include <osl/types.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
 #include <osl/file.h>

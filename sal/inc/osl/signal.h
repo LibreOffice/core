@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: martin.maher $ $Date: 2000-09-29 14:45:05 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 13:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,6 @@
 
 #ifndef _OSL_SIGNAL_H_
 #define _OSL_SIGNAL_H_
-
-#ifndef _OSL_TYPES_H_
-#   include <osl/types.h>
-#endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pipe.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-14 16:28:31 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 13:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #   include <rtl/ustring.h>
 #endif
 
-#ifndef _OSL_TYPES_H_
-#   include <osl/types.h>
-#endif
 
 #ifndef _OSL_SECURITY_H_
 #   include <osl/security.h>

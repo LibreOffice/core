@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditn.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 09:50:26 $
+ *  last change: $Author: jl $ $Date: 2001-03-16 13:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,6 @@
 #include "system.h"
 
 #include <osl/conditn.h>
-#include <osl/types.h>
 #include <osl/diagnose.h>
 
 #ifndef _OSL_TIME_H_
