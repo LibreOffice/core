@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:56:55 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
         TEXT[ chinese_simplified ] = "ΞΔΧΦΧª»»³Ι±νΈρ";
         TEXT[ russian ] = "Οπεξαπΰηξβΰςό ςεκρς β ςΰαλθφσ";
         TEXT[ polish ] = "Konwertuj tekst na tabelκ";
-        TEXT[ japanese ] = "•¶—ρ‚π•\\‚Ι‚·‚ι";
+        TEXT[ japanese ] = "Γ·½Δ‚π•\\‚Ι‚·‚ι";
         TEXT[ chinese_traditional ] = "¤ε¦rΒΰ΄«¦¨ªν®ζ";
         TEXT[ arabic ] = "ΚΝζνα ΗαδΥ Εαμ ΜΟζα";
         TEXT[ greek ] = "Μετατροπή κειμένου σε πίνακα";
@@ -475,7 +475,7 @@ ModalDialog DLG_CONV_TEXT_TABLE
     TEXT[ chinese_simplified ] = "Χª»»±νΈρ³ΙΞΔΧΦ";
     TEXT[ russian ] = "Οπεξαπΰηξβΰςό ςΰαλθφσ β ςεκρς";
     TEXT[ polish ] = "Konwertuj tabelκ na tekst";
-    TEXT[ japanese ] = "•\\‚π•¶‘‚Ι‚·‚ι";
+    TEXT[ japanese ] = "•\\‚πΓ·½Δ‚Ι‚·‚ι";
     TEXT[ chinese_traditional ] = "Βΰ΄«ªν®ζ¦¨¤ε¦r";
     TEXT[ arabic ] = "ΚΝζνα ΗαΜΟζα Εαμ δΥ";
     TEXT[ greek ] = "Μετατροπή πίνακα σε κείμενο";
