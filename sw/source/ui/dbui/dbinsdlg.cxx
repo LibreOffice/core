@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-07 16:34:42 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -955,8 +955,7 @@ IMPL_LINK( SwInsertDBColAutoPilot, TblFmtHdl, PushButton*, pButton )
             for( USHORT n = 0, nStep = nWidth / (nCols+1), nW = nStep;
                     n < nCols; ++n, nW += nStep )
             {
-                aTabCols.Insert( nW, n );
-                aTabCols.InsertHidden( n, FALSE );
+                aTabCols.Insert( nW, FALSE, n );
             }
         delete pRep;
         pRep = new SwTableRep( aTabCols, FALSE );
