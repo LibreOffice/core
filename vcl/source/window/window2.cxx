@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:41:43 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_WINDOW_CXX
-
 #include <limits.h>
 #ifndef _SV_SVSYS_HXX
 #include <svsys.h>
@@ -103,10 +101,7 @@
 #ifndef _SV_OUTDEV_H
 #include <outdev.h>
 #endif
-#ifndef _SV_ACCESS_HXX
-#include <access.hxx>
-#endif
-#ifndef _POLY_HXX
+#ifndef _TL_POLY_HXX
 #include <tools/poly.hxx>
 #endif
 #ifndef _SV_VIRDEV_HXX
@@ -872,7 +867,6 @@ void Window::SaveBackground( const Point& rPos, const Size& rSize,
         {
             const Region    aOldClip( rSaveDevice.GetClipRegion() );
             const Point     aPixOffset( rSaveDevice.LogicToPixel( rDestOff ) );
-            const Point     aPixTopLeft( aClip.GetBoundRect().TopLeft() );
             const BOOL      bMap = rSaveDevice.IsMapModeEnabled();
 
             // move clip region to have the same distance to DestOffset
@@ -1330,13 +1324,4 @@ void Window::ImplHandleScroll( ScrollBar* pHScrl, long nX,
 
         pVScrl->DoScroll( nNewPos );
     }
-}
-
-// -----------------------------------------------------------------------
-
-void Window::GetAccessObject( AccessObjectRef& rAcc ) const
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    rAcc = new AccessObject( (void*) this, ACCESS_TYPE_WND );
 }
