@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 16:25:27 $
+ *  last change: $Author: fs $ $Date: 2002-04-03 16:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef SVX_TYPECONVERSION_CLIENT_HXX
 #include "typeconversionclient.hxx"
 #endif
+#ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
+#include <comphelper/propmultiplex.hxx>
+#endif
 
 class DbCellControl;
 class Edit;
@@ -139,7 +142,7 @@ class DbGridColumn
     ::svt::CellControllerRef m_xController; // Struktur zum Verwalten der Controls fuer eine Spalte
                                         // diese wird von der DbBrowseBox auf die jeweiligen Zellen
                                         // einer Spalte positioniert
-    FmXGridCell*        m_pCell;
+    FmXGridCell*                m_pCell;
 
 protected:
     DbGridControl&      m_rParent;
@@ -183,12 +186,14 @@ public:
         ,m_bHidden(sal_False)
         ,m_nLastVisibleWidth(-1)
         ,m_nTypeId(0)
-        ,m_bLocked(sal_False) {}
+        ,m_bLocked(sal_False)
+    {
+    }
 
     ~DbGridColumn();
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& getModel() const {return m_xModel;}
-    void  setModel(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xModel) {m_xModel = _xModel;}
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& getModel() const { return m_xModel; }
+    void  setModel(::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  _xModel) { m_xModel = _xModel; }
 
 
     sal_uInt16  GetId() const {return m_nId;}
@@ -264,37 +269,81 @@ public:
 class DbCellControl
         :public ::svxform::OTypeConversionClient
         ,public ::svxform::OStaticDataAccessTools
+        ,public FmMutexHelper           // _before_ the listener, so the listener is to be destroyed first!
+        ,public ::comphelper::OPropertyChangeListener
 {
+private:
+    ::comphelper::OPropertyChangeMultiplexer*   m_pModelChangeBroadcaster;
+
+private:
+    sal_Bool                    m_bTransparent : 1;
+    sal_Bool                    m_bAlignedController : 1;
+    sal_Bool                    m_bAccessingValueProperty : 1;
+
 protected:
-    DbGridColumn&   m_rColumn;
-    Window*         m_pWindow;
-    Window*         m_pPainter;
-    sal_Bool        m_bTransparent : 1;
-    sal_Bool        m_bAlignedController : 1;
+    DbGridColumn&               m_rColumn;
+    Window*                     m_pPainter;
+    Window*                     m_pWindow;
+
+protected:
+    // control transparency
+    inline  sal_Bool    isTransparent( ) const { return m_bTransparent; }
+    inline  void        setTransparent( sal_Bool _bSet ) { m_bTransparent = _bSet; }
+
+    // control alignment
+    inline  void        setAlignedController( sal_Bool _bAlign = sal_True ) { m_bAlignedController = _bAlign; }
+
+
+    /** determined whether or not the value property is locked
+    @see lockValueProperty
+    */
+    inline  sal_Bool    isValuePropertyLocked() const;
+
+    /** locks the listening at the value property.
+        <p>This means that every subsequent change now done on the value property of the model ("Text", or "Value",
+        or whatever) is then ignored.<br/>
+        This base class uses this setting in <method>Commit</method>.</p>
+    @precond
+        Value locking can't be nested
+    @see unlockValueProperty
+    */
+    inline  void        lockValueProperty();
+    /** unlocks the listening at the value property
+    @see lockValueProperty
+    */
+    inline  void        unlockValueProperty();
+
+protected:
+    // adds the given property to the list of properties which we listen for
+    void    doPropertyListening( const ::rtl::OUString& _rPropertyName );
+
+    // called whenever a property which affects field settings in general is called
+    // you should overwrite this method for every property you add yourself as listener to
+    // with doPropertyListening
+    virtual void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+
+    // called by _propertyChanged if a property which denotes the column value has changed
+            void    implValuePropertyChanged( );
 
 public:
-    DbCellControl(DbGridColumn& _rColumn, sal_Bool _bText = sal_True)
-        :m_rColumn(_rColumn)
-        ,m_pWindow(NULL)
-        ,m_pPainter(NULL)
-        ,m_bTransparent(sal_False)
-        ,m_bAlignedController(sal_True){}
+    DbCellControl(DbGridColumn& _rColumn, sal_Bool _bText = sal_True);
 
     virtual ~DbCellControl();
-    Window* GetControl() const {return m_pWindow;}
+    Window* GetControl() const { return m_pWindow; }
+
+    // control alignment
+    inline  sal_Bool    isAlignedController() const { return m_bAlignedController; }
+            void        AlignControl(sal_Int16 nAlignment);
 
     void SetTextLineColor();
     void SetTextLineColor(const Color& _rColor);
-
-    sal_Bool IsAlignedController() const { return m_bAlignedController; }
-    void AlignControl(sal_Int16 nAlignment);
 
     // Initialisieren bevor ein Control angezeigt wird
     virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor);
     virtual ::svt::CellControllerRef CreateController() const = 0;
 
     // Schreiben des Wertes in das Model
-    virtual sal_Bool Commit() = 0;
+    sal_Bool Commit();
 
     // Formatting the field data to output text
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL) { return XubString(); }
@@ -313,17 +362,97 @@ public:
 protected:
     double GetValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
 
-    void invalidatedController();
+    void    invalidatedController();
+
+    /** commits the content of the control (e.g. the text of an edit field) into the column model
+        (e.g. the "Text" property of the model).
+        <p>To be overwritten in derived classes.</p>
+    @see updateFromModel
+    */
+    virtual sal_Bool commitControl( ) = 0;
+
+    /** updates the current content of the control (e.g. the text of an edit field) from the column model
+        (e.g. the "Text" property of the model).
+        <p>To be overwritten in derived classes.</p>
+    @precond
+        NULL != _rxModel
+    @precond
+        NULL != m_pWindow
+
+    @see commitControl
+    */
+    virtual void    updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel ) = 0;
+
+protected:
+// OPropertyChangeListener
+    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
+
+private:
+    void implDoPropertyListening( const ::rtl::OUString& _rPropertyName, sal_Bool _bWarnIfNotExistent = sal_True );
+
+    /// updates the "readonly" setting on m_pWindow, according to the respective property value in the given model
+    void implAdjustReadOnly( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+
+    /// updates the "enabled" setting on m_pWindow, according to the respective property value in the given model
+    void implAdjustEnabled( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
 //==================================================================
-class DbFormattedField
-        :public DbCellControl
-        ,public FmMutexHelper           // _before_ the listener, so the listener is to be destroyed first!
-        ,public ::comphelper::OPropertyChangeListener
+//------------------------------------------------------------------
+inline  sal_Bool    DbCellControl::isValuePropertyLocked() const
+{
+    return m_bAccessingValueProperty;
+}
+
+//------------------------------------------------------------------
+inline  void        DbCellControl::lockValueProperty()
+{
+    OSL_ENSURE( !isValuePropertyLocked(), "DbCellControl::lockValueProperty: not to be nested!" );
+    m_bAccessingValueProperty = sal_True;
+}
+
+//------------------------------------------------------------------
+inline  void        DbCellControl::unlockValueProperty()
+{
+    OSL_ENSURE( isValuePropertyLocked(), "DbCellControl::lockValueProperty: not locked so far!" );
+    m_bAccessingValueProperty = sal_False;
+}
+
+//==================================================================
+/** a field which is bound to a column which supports the MaxTextLen property
+*/
+class DbLimitedLengthField : public DbCellControl
 {
 protected:
-    ::comphelper::OPropertyChangeMultiplexer*       m_pFormatListener;
+    DbLimitedLengthField( DbGridColumn& _rColumn );
+
+protected:
+    // DbCellControl
+    virtual void implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+};
+
+//==================================================================
+class DbTextField : public DbLimitedLengthField
+{
+    sal_Int16         m_nKeyType;
+
+public:
+    DbTextField(DbGridColumn& _rColumn);
+    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
+    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
+    virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
+    virtual ::svt::CellControllerRef CreateController() const;
+
+protected:
+    // DbCellControl
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+};
+
+//==================================================================
+class DbFormattedField : public DbLimitedLengthField
+{
+protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xSupplier;
     sal_Int16                       m_nKeyType;
 
@@ -335,44 +464,36 @@ public:
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
-    virtual sal_Bool Commit();
 
 protected:
-    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
-};
+    // DbCellControl
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 
-//==================================================================
-class DbTextField : public DbCellControl
-{
-    sal_Int16         m_nKeyType;
-public:
-    DbTextField(DbGridColumn& _rColumn);
-    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
-    virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
-    virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
-    virtual ::svt::CellControllerRef CreateController() const;
-    virtual sal_Bool Commit();
+    // OPropertyChangeListener
+    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 };
 
 //==================================================================
 class DbCheckBox : public DbCellControl
 {
 public:
-    DbCheckBox(DbGridColumn& _rColumn):DbCellControl(_rColumn, sal_True) { m_bAlignedController = sal_False; };
+    DbCheckBox(DbGridColumn& _rColumn);
     virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
-    virtual sal_Bool Commit();
     virtual void Paint(OutputDevice& rDev, const Rectangle& rRect,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
 
+protected:
+    // DbCellControl
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 };
 
 //==================================================================
-class DbComboBox    :public DbCellControl
-                    ,public FmMutexHelper           // _before_ the listener, so the listener is to be destroyed first!
-                    ,public ::comphelper::OPropertyChangeListener
+class DbComboBox : public DbCellControl
 {
     sal_Int16         m_nKeyType;
 
@@ -383,18 +504,22 @@ public:
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
-    virtual sal_Bool Commit();
-
-// OPropertyChangeListener
-    virtual void _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& ) throw(::com::sun::star::uno::RuntimeException);
 
     void SetList(const ::com::sun::star::uno::Any& rItems);
+
+protected:
+    // DbCellControl
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+
+    virtual void        implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+
+    // OPropertyChangeListener
+    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 };
 
 //==================================================================
 class DbListBox     :public DbCellControl
-                    ,public FmMutexHelper           // _before_ the listener, so the listener is to be destroyed first!
-                    ,public ::comphelper::OPropertyChangeListener
 {
     sal_Bool              m_bBound  : 1;
     ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aValueList;
@@ -406,77 +531,158 @@ public:
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
-    virtual sal_Bool Commit();
-
-// OPropertyChangeListener
-    virtual void _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& ) throw(::com::sun::star::uno::RuntimeException);
 
     void SetList(const ::com::sun::star::uno::Any& rItems);
+
+protected:
+    // DbCellControl
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+
+    virtual void        implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
+
+    // OPropertyChangeListener
+    virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 };
 
 //==================================================================
 class DbPatternField : public DbCellControl
 {
 public:
-    DbPatternField(DbGridColumn& _rColumn):DbCellControl(_rColumn){};
+    DbPatternField(DbGridColumn& _rColumn);
     virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
     virtual ::svt::CellControllerRef CreateController() const;
-    virtual sal_Bool Commit();
+
+protected:
+    /// DbCellControl
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+
+    virtual void        implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
 //==================================================================
-class DbDateField : public DbCellControl
+class DbSpinField : public DbCellControl
+{
+private:
+    sal_Int16   m_nStandardAlign;
+
+protected:
+    DbSpinField( DbGridColumn& _rColumn, sal_Int16 _nStandardAlign = com::sun::star::awt::TextAlign::RIGHT );
+
+public:
+    virtual void                        Init( Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxCursor );
+    virtual ::svt::CellControllerRef    CreateController() const;
+
+protected:
+    virtual SpinField*  createField(
+                            Window* _pParent,
+                            WinBits _nFieldStyle,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
+                        ) = 0;
+};
+
+//==================================================================
+class DbDateField : public DbSpinField
 {
 public:
-    DbDateField(DbGridColumn& _rColumn):DbCellControl(_rColumn){};
-    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
+    DbDateField(DbGridColumn& _rColumn);
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
-    virtual ::svt::CellControllerRef CreateController() const;
-    virtual sal_Bool Commit();
+
+protected:
+    // DbCellControl
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+
+    // DbSpinField
+    virtual SpinField*  createField(
+                            Window* _pParent,
+                            WinBits _nFieldStyle,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
+                        );
+
+    /// initializes everything which relates to the properties describing the numeric behaviour
+    virtual void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
 //==================================================================
-class DbTimeField : public DbCellControl
+class DbTimeField : public DbSpinField
 {
 public:
-    DbTimeField(DbGridColumn& _rColumn):DbCellControl(_rColumn){};
-    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
+    DbTimeField(DbGridColumn& _rColumn);
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
-    virtual ::svt::CellControllerRef CreateController() const;
-    virtual sal_Bool Commit();
+
+protected:
+    // DbCellControl
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+
+    // DbSpinField
+    virtual SpinField*  createField(
+                            Window* _pParent,
+                            WinBits _nFieldStyle,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
+                        );
+
+    /// initializes everything which relates to the properties describing the numeric behaviour
+    virtual void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
 //==================================================================
-class DbCurrencyField : public DbCellControl
+class DbCurrencyField : public DbSpinField
 {
     sal_Int16  m_nScale;
 
 public:
-    DbCurrencyField(DbGridColumn& _rColumn):DbCellControl(_rColumn),m_nScale(0){};
-    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
+    DbCurrencyField(DbGridColumn& _rColumn);
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
-    virtual ::svt::CellControllerRef CreateController() const;
-    virtual sal_Bool Commit();
 
 protected:
     double GetCurrency(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter) const;
+
+protected:
+    // DbCellControl
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+
+    // DbSpinField
+    virtual SpinField*  createField(
+                            Window* _pParent,
+                            WinBits _nFieldStyle,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
+                        );
+
+    /// initializes everything which relates to the properties describing the numeric behaviour
+    virtual void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
 //==================================================================
-class DbNumericField : public DbCellControl
+class DbNumericField : public DbSpinField
 {
 public:
-    DbNumericField(DbGridColumn& _rColumn):DbCellControl(_rColumn){};
-    virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor );
+    DbNumericField(DbGridColumn& _rColumn);
     virtual XubString GetFormatText(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter, Color** ppColor = NULL);
     virtual void UpdateFromField(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _xVariant, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xFormatter);
-    virtual ::svt::CellControllerRef CreateController() const;
-    virtual sal_Bool Commit();
+
+protected:
+    // DbCellControl
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
+
+    // DbSpinField
+    virtual SpinField*  createField(
+                            Window* _pParent,
+                            WinBits _nFieldStyle,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel
+                        );
+
+    /// initializes everything which relates to the properties describing the numeric behaviour
+    void    implAdjustGenericFieldSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel );
 };
 
 //==================================================================
@@ -499,7 +705,6 @@ public:
     virtual void Init(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& xCursor);
     virtual ::svt::CellControllerRef CreateController() const;
     virtual void Paint(OutputDevice& rDev, const Rectangle& rRect);
-    virtual sal_Bool Commit();
     virtual void Update();
 
     const XubString& GetText() const {return m_aText;}
@@ -507,6 +712,11 @@ public:
 
     void SetCommitHdl( const Link& rLink ) { m_aCommitLink = rLink; }
     const Link& GetCommitHdl() const { return m_aCommitLink; }
+
+protected:
+    // DbCellControl
+    virtual sal_Bool    commitControl( );
+    virtual void        updateFromModel( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > _rxModel );
 
 protected:
     void SetList(const ::com::sun::star::uno::Any& rItems, sal_Bool bComboBox);
@@ -569,7 +779,7 @@ public:
     void ImplInitSettings(Window* pParent, sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground)
         { m_pCellControl->ImplInitSettings(pParent, bFont, bForeground, bBackground); }
 
-    sal_Bool IsAlignedController() const { return m_pCellControl->IsAlignedController(); }
+    sal_Bool isAlignedController() const { return m_pCellControl->isAlignedController(); }
     void AlignControl(sal_Int16 nAlignment)
         { m_pCellControl->AlignControl(nAlignment);}
 };
