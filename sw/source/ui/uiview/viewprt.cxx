@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:39:40 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:25:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,9 @@
 #include <svtools/flagitem.hxx>
 #endif
 
+#ifndef _MODOPT_HXX //autogen
+#include <modcfg.hxx>
+#endif
 #ifndef _EDTWIN_HXX
 #include <edtwin.hxx>
 #endif
@@ -280,7 +283,10 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
     SwNewDBMgr* pMgr = pSh->GetNewDBMgr();
 
     int bPrintSelection = -1;
-    if( DBMGR_MERGE_MAILMERGE != pMgr->GetMergeType() && !pDlg && !bSilent
+    USHORT nMergeType = pMgr->GetMergeType();
+    if( DBMGR_MERGE_MAILMERGE != nMergeType &&
+        DBMGR_MERGE_DOCUMENTS != nMergeType &&
+            !pDlg && !bSilent
         && !bIsApi && ( pSh->IsSelection() || pSh->IsFrmSelected() ||
         pSh->IsObjSelected() ) )
     {
@@ -325,11 +331,16 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
         SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
         SwPrtOptions aOpts( pObjShell->GetTitle(0) );
         BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
-        if( pMgr->GetMergeType() == DBMGR_MERGE_MAILMERGE )
+        USHORT nMergeType = pMgr->GetMergeType();
+        if( nMergeType == DBMGR_MERGE_MAILMERGE ||
+                DBMGR_MERGE_DOCUMENTS == nMergeType )
         {
             SwView::MakeOptions( pDlg, aOpts, 0, bWeb, GetPrinter(),
                             pSh->GetPrintData() );
-            bStartJob = pMgr->MergePrint( *this, aOpts, *pProgress );
+            if(DBMGR_MERGE_DOCUMENTS == nMergeType)
+                bStartJob = pMgr->MergePrintDocuments( *this, aOpts, *pProgress );
+            else
+                bStartJob = pMgr->MergePrint( *this, aOpts, *pProgress );
         }
         else
         {
@@ -546,10 +557,18 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
             if(pPrintFromMergeItem)
                 rReq.RemoveItem(FN_QRY_MERGE);
             BOOL bFromMerge = pPrintFromMergeItem ? pPrintFromMergeItem->GetValue() : FALSE;
-            if(!bSilent && !bFromMerge && pSh->IsAnyDatabaseFieldInDoc())
+            SwMiscConfig aMiscConfig;
+            if(!bSilent && !bFromMerge &&
+                    SW_MOD()->GetModuleConfig()->IsAskForMailMerge() && pSh->IsAnyDatabaseFieldInDoc())
             {
                 QueryBox aBox( &GetEditWin(), SW_RES( MSG_PRINT_AS_MERGE ));
-                if(RET_YES == aBox.Execute())
+                aBox.SetCheckBoxText( SW_RESSTR( STR_DONT_ASK_AGAIN ));
+                short nRet = aBox.Execute();
+                if(RET_CANCEL != nRet && aBox.GetCheckBoxState())
+                {
+                    SW_MOD()->GetModuleConfig()->SetAskForMailMerge(sal_False);
+                }
+                if(RET_YES == nRet)
                 {
                     SfxBoolItem aBool(FN_QRY_MERGE, TRUE);
                     GetViewFrame()->GetDispatcher()->Execute(
