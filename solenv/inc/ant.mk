@@ -99,7 +99,7 @@ jar .PHONY:
     $(ANT) $(ANT_FLAGS) $@
 
 compile .PHONY:
-    $(ANT) $(ANTFLAGS) $@
+    $(ANT) $(ANT_FLAGS) $@
 
 javadoc .PHONY:
     $(ANT) $(ANT_FLAGS) $@
