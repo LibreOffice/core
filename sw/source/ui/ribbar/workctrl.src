@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:25:49 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 22:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,7 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         Text[ chinese_simplified ] = "±ΈΧΆ";
         Text[ russian ] = "Οπθμεχΰνθε";
         Text[ polish ] = "Notatka";
-        Text[ japanese ] = "ÒΣ";
+        Text[ japanese ] = "ΊÒέΔ";
         Text[ chinese_traditional ] = "³Ζµω";
         Text[ arabic ] = "γαΗΝΩΙ";
         Text[ greek ] = "Σημείωση";
