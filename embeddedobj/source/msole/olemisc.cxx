@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-26 10:27:47 $
+ *  last change: $Author: mav $ $Date: 2003-12-02 15:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ void OleEmbeddedObject::GetRidOfComponent()
         }
 
         m_pOleComponent->removeCloseListener( m_xClosePreventer );
+        m_pOleComponent->close( sal_True );
         m_pOleComponent->disconnectEmbeddedObject();
         m_pOleComponent->release();
         m_pOleComponent = NULL;
