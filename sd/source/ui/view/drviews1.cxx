@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:17:41 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,10 @@
  *
  *
  ************************************************************************/
-#include <so3/iface.hxx>
+
+#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HPP_
+#include <com/sun/star/embed/EmbedStates.hpp>
+#endif
 
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -90,9 +93,7 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
 #endif
@@ -184,18 +185,11 @@
 #endif
 #include "LayerTabBar.hxx"
 
-#ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
-#define SO2_DECL_SVINPLACEOBJECT_DEFINED
-SO2_DECL_REF(SvInPlaceObject)
-#endif
-#ifndef SO2_DECL_SVSTORAGE_DEFINED
-#define SO2_DECL_SVSTORAGE_DEFINED
-SO2_DECL_REF(SvStorage)
-#endif
-
 #ifdef WNT
 #pragma optimize ( "", off )
 #endif
+
+using namespace com::sun::star;
 
 namespace sd {
 
@@ -228,9 +222,9 @@ void DrawViewShell::Activate(BOOL bIsMDIActivate)
     }
 }
 
-void DrawViewShell::UIActivate( SvInPlaceObject *pIPObj )
+void DrawViewShell::UIActivating( SfxInPlaceClient* pCli )
 {
-    ViewShell::UIActivate(pIPObj);
+    ViewShell::UIActivating(pCli);
 
     // #94252# Disable own controls
     aTabControl.Disable();
@@ -238,15 +232,16 @@ void DrawViewShell::UIActivate( SvInPlaceObject *pIPObj )
         GetLayerTabControl()->Disable();
 }
 
-void DrawViewShell::UIDeactivate( SvInPlaceObject *pIPObj )
+void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 {
     // #94252# Enable own controls
     aTabControl.Enable();
     if (GetLayerTabControl() != NULL)
         GetLayerTabControl()->Enable();
 
-    ViewShell::UIDeactivate(pIPObj);
+    ViewShell::UIDeactivated(pCli);
 }
+
 
 /*************************************************************************
 |*
@@ -310,7 +305,7 @@ void DrawViewShell::SelectionHasChanged (void)
     ViewShellBase& rBase = GetViewShellBase();
     Client* pIPClient = static_cast<Client*>(rBase.GetIPClient());
 
-    if ( pIPClient && pIPClient->IsInPlaceActive() )
+    if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
     {
         /**********************************************************************
         * Ggf. OLE-Objekt beruecksichtigen und deaktivieren
@@ -320,54 +315,41 @@ void DrawViewShell::SelectionHasChanged (void)
         // we need to deselect it now
         if (!pOleObj)
         {
-            pIPClient->GetProtocol().Reset2Open();
-
+            pIPClient->GetObject()->changeState( embed::EmbedStates::RUNNING );
             SFX_APP()->SetViewFrame( GetViewFrame() );
             rBase.SetVerbs(0);
             pDrView->ShowMarkHdl(NULL);
         }
         else
         {
-            SvInPlaceObjectRef aIPObj = pOleObj->GetObjRef();
-
-            if ( aIPObj.Is() )
+            uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
+            if ( xObj.is() )
             {
-                rBase.SetVerbs( &aIPObj->GetVerbList() );
+                rBase.SetVerbs( xObj->getSupportedVerbs() );
             }
             else
             {
-                rBase.SetVerbs(NULL);
+                rBase.SetVerbs( uno::Sequence < embed::VerbDescriptor >() );
             }
         }
     }
     else
     {
-#ifdef STARIMAGE_AVAILABLE
-        if ( pGrafObj && pGrafObj->GetGraphicType() == GRAPHIC_BITMAP && SFX_APP()->HasFeature(SFX_FEATURE_SIMAGE))
-        {
-            SvVerb aVerb( 0, String( SdResId(STR_EDIT_OBJ) ) );
-            SvVerbList aVerbList;
-            aVerbList.Append( aVerb );
-            rBase.SetVerbs( &aVerbList );
-        }
-        else
-#endif
         if ( pOleObj )
         {
-            SvInPlaceObjectRef aIPObj = pOleObj->GetObjRef();
-
-            if ( aIPObj.Is() )
+            uno::Reference < embed::XEmbeddedObject > xObj = pOleObj->GetObjRef();
+            if ( xObj.is() )
             {
-                rBase.SetVerbs( &aIPObj->GetVerbList() );
+                rBase.SetVerbs( xObj->getSupportedVerbs() );
             }
             else
             {
-                rBase.SetVerbs(NULL);
+                rBase.SetVerbs( uno::Sequence < embed::VerbDescriptor >() );
             }
         }
         else
         {
-            rBase.SetVerbs(NULL);
+            rBase.SetVerbs( uno::Sequence < embed::VerbDescriptor >() );
         }
     }
 
@@ -980,11 +962,8 @@ BOOL DrawViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         OSL_ASSERT(GetViewShell()!=NULL);
         Client* pClient = static_cast<Client*>(GetViewShell()->GetIPClient());
-
         if (pClient)
-        {
             pClient->SetSdrGrafObj(NULL);
-        }
     }
 
     return(bActivated);
