@@ -11,6 +11,7 @@ dt	desktop\source\offacc					nmake	-	all	dt_offac NULL
 dt	desktop\source\splash					nmake	-	all	dt_spl NULL
 dt	desktop\win32\source					nmake	-	w	dt_wrapper NULL
 dt	desktop\win32\source\setup				nmake	-	w	dt_setup NULL
+dt	desktop\win32\source\officeloader		nmake	-	w	dt_officeloader NULL
 dt	desktop\win32\source\applauncher		nmake	-	w	dt_applauncher NULL
 dt	desktop\win32\source\applauncher\ooo	nmake	-	w	dt_applauncher_ooo dt_applauncher.w NULL
 dt	desktop\source\pagein					nmake	-	u	dt_pagein NULL
