@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-16 14:30:39 $
+ *  last change: $Author: kso $ $Date: 2001-01-18 07:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1848,9 +1848,15 @@ sal_Bool Content::loadData( ContentProvider* pProvider,
             {
                 try
                 {
+#if SUPD>617
+                    Any aCompressed
+                        = xPropSet->getPropertyValue(
+                            OUString::createFromAscii( "Compressed" ) );
+#else
                     Any aCompressed
                         = xPropSet->getPropertyValue(
                             OUString::createFromAscii( "Compress" ) ); // Not Compressed !!!
+#endif
                     if ( !( aCompressed >>= rProps.bCompressed ) )
                     {
                         VOS_ENSURE( sal_False,
@@ -2039,9 +2045,15 @@ sal_Bool Content::storeData( const Reference< XInputStream >& xStream )
                                     makeAny( m_aProps.aMediaType ) );
 
 #if SUPD>616
+#if SUPD>617
+        if ( !isFolder() )
+            xPropSet->setPropertyValue( OUString::createFromAscii( "Compressed" ),
+                                        makeAny( m_aProps.bCompressed ) );
+#else
         if ( !isFolder() )
             xPropSet->setPropertyValue( OUString::createFromAscii( "Compress" ), // Not Compressed !!!
                                         makeAny( m_aProps.bCompressed ) );
+#endif
 #endif
 
         //////////////////////////////////////////////////////////////////
