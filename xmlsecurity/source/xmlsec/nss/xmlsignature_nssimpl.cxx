@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignature_nssimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:59:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@
 #include "xmlelementwrapper_xmlsecimpl.hxx"
 #endif
 
+#ifndef _SECURITYENVIRONMENT_NSSIMPL_HXX_
+#include "securityenvironment_nssimpl.hxx"
+#endif
+
 #ifndef _XMLSECURITYCONTEXT_NSSIMPL_HXX_
 #include "xmlsecuritycontext_nssimpl.hxx"
 #endif
@@ -106,6 +110,7 @@ using ::com::sun::star::xml::wrapper::XXMLDocumentWrapper ;
 using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSignature ;
 using ::com::sun::star::xml::crypto::XXMLSignatureTemplate ;
+using ::com::sun::star::xml::crypto::XSecurityEnvironment ;
 using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 using ::com::sun::star::xml::crypto::XUriBinding ;
 using ::com::sun::star::xml::crypto::XMLSignatureException ;
@@ -120,7 +125,7 @@ XMLSignature_NssImpl :: ~XMLSignature_NssImpl() {
 Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_NssImpl :: generate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
-    const Reference< XXMLSecurityContext >& aSecurityCtx
+    const Reference< XSecurityEnvironment >& aEnvironment
 ) throw( com::sun::star::xml::crypto::XMLSignatureException,
          com::sun::star::uno::SecurityException )
 {
@@ -131,7 +136,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
     if( !aTemplate.is() )
         throw RuntimeException() ;
 
-    if( !aSecurityCtx.is() )
+    if( !aEnvironment.is() )
         throw RuntimeException() ;
 
     //Get the xml node
@@ -161,23 +166,33 @@ SAL_CALL XMLSignature_NssImpl :: generate(
     }
 
     //Get Keys Manager
-    Reference< XUnoTunnel > xSecTunnel( aSecurityCtx , UNO_QUERY ) ;
+    Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
     if( !xSecTunnel.is() ) {
          throw RuntimeException() ;
     }
 
+#if 0 //i39448 : the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
     XMLSecurityContext_NssImpl* pSecCtxt = ( XMLSecurityContext_NssImpl* )xSecTunnel->getSomething( XMLSecurityContext_NssImpl::getUnoTunnelId() ) ;
     if( pSecCtxt == NULL )
         throw RuntimeException() ;
+#endif
 
-    pMngr = pSecCtxt->keysManager() ;
+    SecurityEnvironment_NssImpl* pSecEnv = ( SecurityEnvironment_NssImpl* )xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ) ;
+    if( pSecEnv == NULL )
+        throw RuntimeException() ;
 
      setErrorRecorder( aTemplate );
+
+    pMngr = pSecEnv->createKeysManager() ; //i39448
+    if( !pMngr ) {
+        throw RuntimeException() ;
+    }
 
     //Create Signature context
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
     if( pDsigCtx == NULL )
     {
+        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
         //throw XMLSignatureException() ;
         clearErrorRecorder();
         return aTemplate;
@@ -186,6 +201,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
     //Sign the template
     if( xmlSecDSigCtxSign( pDsigCtx , pNode ) < 0 ) {
         xmlSecDSigCtxDestroy( pDsigCtx ) ;
+        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
         //Unregistered the stream/URI binding
         if( xUriBinding.is() )
@@ -197,6 +213,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
     }
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
+    pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
@@ -249,54 +266,51 @@ SAL_CALL XMLSignature_NssImpl :: validate(
             throw RuntimeException() ;
     }
 
-    //added for test: save the result
-    /*
-    {
-        FILE *dstFile = fopen( "c:\\1.txt", "w" ) ;
-        xmlDocDump( dstFile, pNode->doc) ;
-        fclose( dstFile ) ;
-    }
-    */
-
-    //Get Keys Manager
-    Reference< XUnoTunnel > xSecTunnel( aSecurityCtx , UNO_QUERY ) ;
-    if( !xSecTunnel.is() ) {
-         throw RuntimeException() ;
-    }
-
-    XMLSecurityContext_NssImpl* pSecCtxt = ( XMLSecurityContext_NssImpl* )xSecTunnel->getSomething( XMLSecurityContext_NssImpl::getUnoTunnelId() ) ;
-    if( pSecCtxt == NULL )
-        throw RuntimeException() ;
-
-    pMngr = pSecCtxt->keysManager() ;
-
      setErrorRecorder( aTemplate );
 
-    //Create Signature context
-    pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
-    if( pDsigCtx == NULL )
+    sal_Int32 nSecurityEnvironment = aSecurityCtx->getSecurityEnvironmentNumber();
+    sal_Int32 i;
+
+    for (i=0; i<nSecurityEnvironment; ++i)
     {
-        //throw XMLSignatureException() ;
-        clearErrorRecorder();
-        return aTemplate;
-    }
+        Reference< XSecurityEnvironment > aEnvironment = aSecurityCtx->getSecurityEnvironmentByIndex(i);
 
-    //Verify signature
-    if( xmlSecDSigCtxVerify( pDsigCtx , pNode ) < 0 ) {
+        //Get Keys Manager
+        Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
+        if( !xSecTunnel.is() ) {
+             throw RuntimeException() ;
+        }
+
+        SecurityEnvironment_NssImpl* pSecEnv = ( SecurityEnvironment_NssImpl* )xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ) ;
+        if( pSecEnv == NULL )
+            throw RuntimeException() ;
+
+        pMngr = pSecEnv->createKeysManager() ; //i39448
+        if( !pMngr ) {
+            throw RuntimeException() ;
+        }
+
+        //Create Signature context
+        pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
+        if( pDsigCtx == NULL )
+        {
+            pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+            //throw XMLSignatureException() ;
+            clearErrorRecorder();
+            return aTemplate;
+        }
+
+        //Verify signature
+        int rs = xmlSecDSigCtxVerify( pDsigCtx , pNode );
+
         xmlSecDSigCtxDestroy( pDsigCtx ) ;
+        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
 
-            //Unregistered the stream/URI binding
-            if( xUriBinding.is() )
-                xmlUnregisterStreamInputCallbacks() ;
-
-        //throw XMLSignatureException() ;
-        clearErrorRecorder();
-        return aTemplate;
+        if (rs >= 0)
+        {
+            break;
+        }
     }
-
-    //valid = ( pDsigCtx->status == xmlSecDSigStatusSucceeded ) ;
-
-    xmlSecDSigCtxDestroy( pDsigCtx ) ;
 
     //Unregistered the stream/URI binding
     if( xUriBinding.is() )
