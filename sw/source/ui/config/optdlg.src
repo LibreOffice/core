@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:34:18 $
+ *  last change: $Author: os $ $Date: 2001-09-21 13:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2833,7 +2833,7 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "~Weiche Trenner" ;
+        Text = "~Benutzerdefinierte Trenner" ;
         Text [ ENGLISH ] = "Soft hyphens" ;
         Text [ norwegian ] = "Soft hyphens" ;
         Text [ italian ] = "Sillabazione ~manuale" ;
