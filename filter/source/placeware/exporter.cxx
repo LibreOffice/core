@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exporter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-25 10:24:37 $
+ *  last change: $Author: cl $ $Date: 2002-09-25 12:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,7 @@ static void addFile( Reference< XInterface > xRootFolder, Reference< XSingleServ
     }
 }
 
-sal_Bool PlaceWareExporter::export( Reference< XComponent > xDoc, Reference < XOutputStream > xOutputStream, const rtl::OUString& rURL, Reference < XInterface > xHandler )
+sal_Bool PlaceWareExporter::doExport( Reference< XComponent > xDoc, Reference < XOutputStream > xOutputStream, const rtl::OUString& rURL, Reference < XInterface > xHandler )
 {
     mxGraphicExporter = Reference< XExporter >::query( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicExportFilter") ) ) );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-25 10:24:38 $
+ *  last change: $Author: cl $ $Date: 2002-09-25 12:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const ::com::sun::star::uno::Se
     }
 
     PlaceWareExporter aExporter( mxMSF );
-    return aExporter.export( mxDoc, xOutputStream, sURL, xInteractionHandler );
+    return aExporter.doExport( mxDoc, xOutputStream, sURL, xInteractionHandler );
 }
 
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exporter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-25 10:24:37 $
+ *  last change: $Author: cl $ $Date: 2002-09-25 12:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ public:
     PlaceWareExporter( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxMSF );
     ~PlaceWareExporter();
 
-    sal_Bool export( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc, ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOutputStream, const rtl::OUString& rURL, ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > xHandler );
+    sal_Bool doExport( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xDoc, ::com::sun::star::uno::Reference < ::com::sun::star::io::XOutputStream > xOutputStream, const rtl::OUString& rURL, ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > xHandler );
 
 private:
     PageEntry* exportPage( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >&xDrawPage );
