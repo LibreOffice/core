@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hro $ $Date: 2001-08-20 15:50:40 $
+ *  last change: $Author: hro $ $Date: 2001-08-27 12:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,8 @@ OUString ShutdownIcon::GetResString( int id )
 
 OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
     return OUString( SvFileInformationManager::GetDescription( INetURLObject( aUrl ) ) );
 }
 
