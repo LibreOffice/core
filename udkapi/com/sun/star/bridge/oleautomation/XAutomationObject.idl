@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAutomationObject.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 13:40:37 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com {  module sun {  module star {  module bridge { module oleautomation 
     By providing <type>XAutomationObject</type> an object declares
     to be representing an Automation object.
 
-    @since #112685#
+    @since OOo1.1.2
  */
 interface XAutomationObject: com::sun::star::uno::XInterface
 {
