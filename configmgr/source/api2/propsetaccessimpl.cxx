@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-19 08:39:44 $
+ *  last change: $Author: jb $ $Date: 2001-02-07 16:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,7 +497,7 @@ void implSetPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& 
             }
 
             NodeChange aChange = impl->getNodeUpdater().validateSetValue( aChild, aValues[i] );
-            if (aChange.isChange())
+            if (aChange.maybeChange())
             {
                 aChanges.add(aChange);
             }
@@ -643,7 +643,7 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
             OSL_ASSERT(aNestedNode.isValid());
 
             NodeChange aChange = impl->getNodeUpdater().validateSetDeepValue( aNestedTree, aNestedNode, aRelPath, aValues[i] );
-            if (aChange.isChange())
+            if (aChange.maybeChange())
             {
                 aChanges.add(aChange);
             }
