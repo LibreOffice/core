@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-13 12:51:46 $
+ *  last change: $Author: kso $ $Date: 2001-06-13 16:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@ namespace com { namespace sun { namespace star {
     namespace ucb
     {
         struct OpenCommandArgument2;
-        struct SplitCommandArgument;
         struct TransferInfo;
     }
 } } }
@@ -272,12 +271,6 @@ private:
         throw( ::com::sun::star::ucb::CommandAbortedException,
                 ::com::sun::star::ucb::InteractiveBadTransferURLException );
 
-
-    void split( const ::com::sun::star::ucb::SplitCommandArgument& rArg,
-                const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv,
-                ::com::sun::star::uno::Sequence< ::rtl::OUString > & rResult )
-        throw( ::com::sun::star::uno::Exception );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
     getInputStream();

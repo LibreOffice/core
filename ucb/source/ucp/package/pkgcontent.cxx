@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-13 12:51:46 $
+ *  last change: $Author: kso $ $Date: 2001-06-13 16:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,6 @@
 #ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
-#ifndef _COM_SUN_STAR_PACKAGES_XPACKAGESPLITTER_HPP_
-#include <com/sun/star/packages/XPackageSplitter.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -114,9 +111,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_SPLITCOMMANDARGUMENT_HPP_
-#include <com/sun/star/ucb/SplitCommandArgument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
 #include <com/sun/star/ucb/TransferInfo.hpp>
@@ -608,29 +602,6 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         //////////////////////////////////////////////////////////////////
 
         flushData();
-    }
-    else if ( aCommand.Name.compareToAscii( "split" ) == 0 )
-    {
-        //////////////////////////////////////////////////////////////////
-        // split
-        //  ( Only available at root folder content )
-        //////////////////////////////////////////////////////////////////
-
-        star::ucb::SplitCommandArgument aArg;
-        if ( !( aCommand.Argument >>= aArg ) )
-        {
-            OSL_ENSURE( sal_False,
-                        "Content::execute - invalid parameter!" );
-            throw star::ucb::CommandAbortedException();
-        }
-
-        uno::Sequence< rtl::OUString > aSegments;
-        split( aArg, Environment, aSegments );
-
-        if ( aSegments.getLength() == 0 )
-            throw star::ucb::CommandAbortedException();
-
-        aRet <<= aSegments;
     }
     else
     {
@@ -1736,30 +1707,6 @@ void Content::transfer( const TransferInfo& rInfo,
                                "Caught IllegalIdentifierException!" );
         throw CommandAbortedException();
     }
-}
-
-//=========================================================================
-void Content::split( const star::ucb::SplitCommandArgument& rArg,
-                     const uno::Reference<
-                                star::ucb::XCommandEnvironment > & xEnv,
-                     uno::Sequence< rtl::OUString > & rResult )
-    throw( uno::Exception )
-{
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-    uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage();
-    if ( !xNA.is() )
-        return;
-
-    uno::Reference< packages::XPackageSplitter > xSplitter(
-                                                    xNA, uno::UNO_QUERY );
-    OSL_ENSURE( xSplitter.is(),
-                "Content::split - Got no XPackageSplitter interface!" );
-
-    if ( xSplitter.is() )
-        rResult = xSplitter->split( rArg.SegmentSize,
-                                    rArg.TargetFolderURL,
-                                    rArg.SegmentNamePrefix );
 }
 
 //=========================================================================
