@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:18:35 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,32 @@ class SwDrawContact : public SwContact
         void DestroyVirtObj( SwDrawVirtObj* pVirtObj );
         void RemoveAllVirtObjs();
 
+        /** method to move object to visible/invisible layer
+
+            OD 21.08.2003 #i18447#
+            Implementation for the public method <MoveObjToVisibleLayer(..)>
+            and <MoveObjToInvisibleLayer(..)>
+            If object is in invisble respectively visible layer, its moved to
+            the corresponding visible respectively invisible layers.
+            For group object the members are individually moved to the corresponding
+            layer, because <SdrObjGroup::GetLayer()> does return 0, if members
+            aren't on the same layer as the group object, and
+            <SdrObjGroup::SetLayer(..)|NbcSetLayer(..)> sets also the layer of
+            the members.
+
+            @author OD
+
+            @param _bToVisible
+            input parameter - boolean indicating, if object has to be moved to
+            visible (== true) or invisible (== false) layer.
+
+            @param _pDrawObj
+            input parameter, which will be changed - drawing object, which will
+            change its layer.
+        */
+        void _MoveObjToLayer( const bool _bToVisible,
+                              SdrObject* _pDrawObj );
+
     public:
         TYPEINFO();
 
@@ -381,7 +407,30 @@ class SwDrawContact : public SwContact
         void MoveOffsetOfVirtObjs( const Size& _rMoveSize );
         void InvalidateAnchorOfVirtObjs();
         void NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect );
+
+        /** method to move drawing object to corresponding visible layer
+
+            OD 21.08.2003 #i18447#
+            uses method <_MoveObjToLayer(..)>
+
+            @author OD
+
+            @param _pDrawObj
+            drawing object, which will be moved to the visible layer
+        */
+        void MoveObjToVisibleLayer( SdrObject* _pDrawObj );
+
+        /** method to move drawing object to corresponding invisible layer
+
+            OD 21.08.2003 #i18447#
+            uses method <_MoveObjToLayer(..)>
+
+            @author OD
+
+            @param _pDrawObj
+            drawing object, which will be moved to the visible layer
+        */
+        void MoveObjToInvisibleLayer( SdrObject* _pDrawObj );
 };
 
 #endif
-
