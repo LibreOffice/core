@@ -118,7 +118,7 @@ File gid_File_Share_Xdg_Math
 	TXT_FILE_BODY;
 	Dir = gid_Dir_Share_Xdg;
 	Name = "math.desktop";
-	Styles = (PACKED);
+	Styles = (PACKED,SCPZIP_REPLACE);
 End
 
 #endif
