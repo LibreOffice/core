@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailsuppl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:34:39 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,20 @@
 #include <osl/diagnose.h>
 #endif
 
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
+#endif
+
 #ifndef _OSL_PROCESS_H_
 #include <osl/process.h>
 #endif
 
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
+#endif
+
+#ifndef _RTL_STRBUF_HXX_
+#include <rtl/strbuf.hxx>
 #endif
 
 #ifndef _CMDMAILSUPPL_HXX_
@@ -103,6 +111,10 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
 
+#include <string.h>
+#include <errno.h>
+#include <unistd.h>
+
 //------------------------------------------------------------------------
 // namespace directives
 //------------------------------------------------------------------------
@@ -115,6 +127,8 @@ using com::sun::star::container::XNameAccess;
 using com::sun::star::container::NoSuchElementException;
 using rtl::OUString;
 using rtl::OUStringToOString;
+using rtl::OString;
+using rtl::OStringBuffer;
 using osl::MutexGuard;
 using osl::FileBase;
 
@@ -127,7 +141,8 @@ using namespace com::sun::star::lang;
 // defines
 //------------------------------------------------------------------------
 
-#define COMP_IMPL_NAME  "com.sun.star.comp.system.SimpleCommandMail"
+#define COMP_IMPL_NAME  "com.sun.star.comp.system.SimpleCommandMail2"
+#define SMGR_SINGLETON "/singleton/com.sun.star.lang.theServiceManager"
 
 //------------------------------------------------------------------------
 // helper functions
@@ -148,10 +163,17 @@ namespace // private
 //
 //-------------------------------------------------
 
-CmdMailSuppl::CmdMailSuppl( const Reference< XMultiServiceFactory >& xServiceManager ) :
-    WeakComponentImplHelper4< XSimpleMailClientSupplier, XSimpleMailClient, XEventListener, XServiceInfo >( m_aMutex ),
-    m_xServiceManager( xServiceManager )
+CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
+    WeakImplHelper3< XSimpleMailClientSupplier, XSimpleMailClient, XServiceInfo >()
 {
+    Reference< XMultiComponentFactory > xServiceManager = xContext->getServiceManager();
+
+    if ( xServiceManager.is() ) {
+        m_xConfigurationProvider = Reference< XMultiServiceFactory > (
+            xServiceManager->createInstanceWithContext(
+                OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ), xContext ),
+            UNO_QUERY );
+    }
 }
 
 //-------------------------------------------------
@@ -189,74 +211,164 @@ Reference< XSimpleMailMessage > SAL_CALL CmdMailSuppl::createSimpleMailMessage( 
 void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 aFlag )
     throw (IllegalArgumentException, Exception, RuntimeException)
 {
-    MutexGuard aGuard( m_aMutex );
-    OUString aCommandLine;
-
-    // create config manager if not already done so
-    if( m_xServiceManager.is() && !m_xConfigurationProvider.is() )
+    if ( ! xSimpleMailMessage.is() )
     {
-        try
-        {
-            m_xConfigurationProvider = Reference< XMultiServiceFactory > (
-                m_xServiceManager->createInstance(
-                    OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ) ),
-                UNO_QUERY );
-
-            Reference< XComponent > xComponent =
-                Reference< XComponent >( m_xConfigurationProvider, UNO_QUERY );
-
-            if( xComponent.is() )
-                xComponent->addEventListener( static_cast < XEventListener * > (this) );
-        }
-
-        // release service manager instance on runtime exceptions
-        catch ( RuntimeException e )
-        {
-            m_xServiceManager.clear();
-            OSL_TRACE( "ShellExec: can not instanciate configuration provider." );
-            throw e;
-        }
+        throw ::com::sun::star::lang::IllegalArgumentException(
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "No message specified" )),
+            static_cast < XSimpleMailClient * > (this), 1 );
     }
 
-    if( m_xConfigurationProvider.is() )
+    if( ! m_xConfigurationProvider.is() )
     {
-        try
+        throw ::com::sun::star::uno::Exception(
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "Can not access configuration" )),
+            static_cast < XSimpleMailClient * > (this) );
+    }
+
+    OStringBuffer aBuffer;
+
+    OUString aProgramURL;
+    if ( osl_Process_E_None != osl_getExecutableFile(&aProgramURL.pData) )
+    {
+        throw ::com::sun::star::uno::Exception(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Cound not determine executable path")),
+            static_cast < XSimpleMailClient * > (this));
+    }
+
+    OUString aProgram;
+    if ( FileBase::E_None != FileBase::getSystemPathFromFileURL(aProgramURL, aProgram))
+    {
+        throw ::com::sun::star::uno::Exception(
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Cound not convert executable path")),
+            static_cast < XSimpleMailClient * > (this));
+    }
+
+    // The mail client launchers are expected to be in the same directory as the main
+    // executable, so prefixing the launchers with the path of the executable including
+    // the last slash
+    OString aTmp = OUStringToOString(aProgram, osl_getThreadTextEncoding());
+    sal_Int32 nIndex = aTmp.lastIndexOf('/');
+    if (nIndex > 0)
+        aBuffer.append(aTmp.copy(0, nIndex+1));
+
+    aBuffer.append("senddoc ");
+
+    try
+    {
+        // Query XNameAccess interface of the org.openoffice.Office.Common/ExternalMailer
+        // configuration node to retriece the users preferred email application. This may
+        // transparently by redirected to e.g. the corresponding GConf setting in GNOME.
+        OUString aConfigRoot = OUString(
+            RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Common/ExternalMailer" ) );
+
+        PropertyValue aProperty;
+        aProperty.Name = OUString::createFromAscii( "nodepath" );
+        aProperty.Value = makeAny( aConfigRoot );
+
+        Sequence< Any > aArgumentList( 1 );
+        aArgumentList[0] = makeAny( aProperty );
+
+        Reference< XNameAccess > xNameAccess =
+            Reference< XNameAccess > (
+                m_xConfigurationProvider->createInstanceWithArguments(
+                    OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
+                    aArgumentList ),
+                UNO_QUERY );
+
+        if( xNameAccess.is() )
         {
-            OUString aConfigRoot = OUString::createFromAscii( "org.openoffice.Office.Common/ExternalMailer" );
+            OUString aMailer;
 
-            PropertyValue aProperty;
-            aProperty.Name = OUString::createFromAscii( "nodepath" );
-            aProperty.Value = makeAny( aConfigRoot );
+            // Retrieve the value for "Program" node and append it feed senddoc with it
+            // using the (undocumented) --mailclient switch
+            xNameAccess->getByName( OUString::createFromAscii( "Program" ) ) >>= aMailer;
 
-            Sequence< Any > aArgumentList( 1 );
-            aArgumentList[0] = makeAny( aProperty );
-
-            // query the configured external mail program
-            Reference< XNameAccess > xNameAccess =
-                Reference< XNameAccess > (
-                    m_xConfigurationProvider->createInstanceWithArguments(
-                        OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" ),
-                        aArgumentList ),
-                    UNO_QUERY );
-
-            if( xNameAccess.is() )
+            if( aMailer.getLength() )
             {
-                OUString aProgram, aProfile;
+                // make sure we have a system path
+                FileBase::getSystemPathFromFileURL( aMailer, aMailer );
 
-                // save the registered program and commmand line profile
-                xNameAccess->getByName( OUString::createFromAscii( "Program" ) ) >>= aProgram;
-                xNameAccess->getByName( OUString::createFromAscii( "CommandProfile" ) ) >>= aProfile;
+                aBuffer.append("--mailclient ");
+                aBuffer.append(OUStringToOString( aMailer, osl_getThreadTextEncoding() ));
+                aBuffer.append(" ");
+            }
+        }
 
-                if( aProgram.getLength() )
-                {
-                    // convert to file url
-                    FileBase::getFileURLFromSystemPath( aProgram, aProgram );
+    }
 
-                    OUString aProgramConfig = OUString::createFromAscii( "base" );
+    catch( RuntimeException e )
+    {
+        m_xConfigurationProvider.clear();
+        OSL_TRACE( "RuntimeException caught accessing configuration provider." );
+        OSL_TRACE( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        throw e;
+    }
 
-                    aConfigRoot += OUString::createFromAscii( "/Profiles/['" );
-                    aConfigRoot += aProfile;
-                    aConfigRoot += OUString::createFromAscii( "']" );
+    // Append originator if set in the message
+    if ( xSimpleMailMessage->getOriginator().getLength() > 0 )
+    {
+        aBuffer.append("--from \"");
+        aBuffer.append(OUStringToOString(xSimpleMailMessage->getOriginator(), osl_getThreadTextEncoding()));
+        aBuffer.append("\" ");
+    }
+
+    // Append receipient if set in the message
+    if ( xSimpleMailMessage->getRecipient().getLength() > 0 )
+    {
+        aBuffer.append("--to \"");
+        aBuffer.append(OUStringToOString(xSimpleMailMessage->getRecipient(), osl_getThreadTextEncoding()));
+        aBuffer.append("\" ");
+    }
+
+    // Append carbon copy receipients set in the message
+    Sequence< OUString > aStringList = xSimpleMailMessage->getCcRecipient();
+    sal_Int32 n, nmax = aStringList.getLength();
+    for ( n = 0; n < nmax; n++ )
+    {
+        aBuffer.append("--cc \"");
+        aBuffer.append(OUStringToOString(aStringList[n], osl_getThreadTextEncoding()));
+        aBuffer.append("\" ");
+    }
+
+    // Append blind carbon copy receipients set in the message
+    aStringList = xSimpleMailMessage->getBccRecipient();
+    nmax = aStringList.getLength();
+    for ( n = 0; n < nmax; n++ )
+    {
+        aBuffer.append("--bcc \"");
+        aBuffer.append(OUStringToOString(aStringList[n], osl_getThreadTextEncoding()));
+        aBuffer.append("\" ");
+    }
+
+    // Append subject if set in the message
+    if ( xSimpleMailMessage->getSubject().getLength() > 0 )
+    {
+        aBuffer.append("--subject \"");
+        aBuffer.append(OUStringToOString(xSimpleMailMessage->getSubject(), osl_getThreadTextEncoding()));
+        aBuffer.append("\" ");
+    }
+
+    // Append attachments set in the message
+    aStringList = xSimpleMailMessage->getAttachement();
+    nmax = aStringList.getLength();
+    for ( n = 0; n < nmax; n++ )
+    {
+        aBuffer.append("--attach \"");
+        aBuffer.append(OUStringToOString(aStringList[n], RTL_TEXTENCODING_UTF8));
+        aBuffer.append("\" ");
+    }
+
+    OString cmd = aBuffer.makeStringAndClear();
+    if ( 0 != pclose(popen(cmd.getStr(), "w")) )
+    {
+        throw ::com::sun::star::uno::Exception(
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "No mail client configured" )),
+            static_cast < XSimpleMailClient * > (this) );
+    }
+
+
+#if 0
+    OUString aCommandLine;
 
                     // create name access to format strings
                     aProperty.Value = makeAny( aConfigRoot + OUString::createFromAscii( "/FormatStrings" ) );
@@ -442,13 +554,6 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
             OSL_TRACE( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
         }
 
-        catch( RuntimeException e )
-        {
-            m_xConfigurationProvider.clear();
-            OSL_TRACE( "CmdMail: configuration provider." );
-            OSL_TRACE( OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            throw e;
-        }
 
         catch( Exception e )
         {
@@ -457,27 +562,8 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         }
     }
 
-    throw ::com::sun::star::uno::Exception( OUString(), static_cast < XSimpleMailClient * > (this) );
-}
 
-//------------------------------------------------
-// XEventListener
-//------------------------------------------------
-
-void SAL_CALL CmdMailSuppl::disposing( const ::com::sun::star::lang::EventObject& aEvent )
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    MutexGuard aGuard( m_aMutex );
-
-    if( m_xServiceManager == aEvent.Source )
-    {
-        m_xServiceManager.clear();
-    }
-
-    else if( m_xConfigurationProvider == aEvent.Source )
-    {
-        m_xConfigurationProvider.clear();
-    }
+#endif
 }
 
 // -------------------------------------------------
