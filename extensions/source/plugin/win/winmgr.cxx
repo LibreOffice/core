@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-02 14:37:04 $
+ *  last change: $Author: dbo $ $Date: 2001-05-16 12:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
 #else
         OString aName( aFindData.cFileName );
 #endif
-        aName.toLowerCase();
+        aName.toAsciiLowerCase();
 
         // no netscape default plugin anymore...
         // and no double plugin dlls
@@ -321,26 +321,51 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
 #endif
                     aMIME.trim();
 
-                    USHORT nToken  = aExt.getTokenCount( '|' );
-                    USHORT nMToken = aMIME.getTokenCount( '|' );
-                    if (nToken != nMToken)
+                    // count mime tokens
+                    USHORT nToken = 0;
+                    sal_Int32 nIndex = 0, nIndex2 = 0;
+                    if (aExt.getLength())
                     {
-                        DBG_ERROR( "### mime type count differ to extension count!" );
-                        nToken = (nToken > nMToken ? nMToken : nToken);
+                        ++nToken;
+                        for ( ; nIndex < aExt.getLength(); ++nIndex )
+                        {
+                            if (aExt[ nIndex ] == '|')
+                            {
+                                ++nToken;
+                            }
+                        }
                     }
+                    nIndex = 0;
 
                     UINT32 nStart = s_aDescriptions.getLength();
                     s_aDescriptions.realloc( nStart + nToken );
                     PluginDescription* pDescriptions = s_aDescriptions.getArray();
                     // for every MIME Type
-                    for ( ; nToken--; )
+                    sal_Int32 nTok = 0;
+                    do
                     {
-                        PluginDescription & rDescr = pDescriptions[nStart+nToken];
-                        rDescr.PluginName          = aName;
-                        rDescr.Description         = aComment;
-                        rDescr.Mimetype            = OStringToOUString( aMIME.getToken( nToken, '|' ), RTL_TEXTENCODING_MS_1252 );
+                        PluginDescription & rDescr = pDescriptions[nStart+nTok];
+#ifdef UNICODE
+                        rDescr.Mimetype = aMIME.getToken( 0, '|', nIndex );
+#else
+                        OString aMIMEToken( aMIME.getToken( 0, '|', nIndex ) );
+                        rDescr.Mimetype = OUString(
+                            aMIMEToken.getStr(), aMIMEToken.getLength(), RTL_TEXTENCODING_MS_1252 );
+#endif
+                        if (! rDescr.Mimetype.getLength())
+                            break;
+#ifdef UNICODE
+                        OUString aExtToken( aExt.getToken( 0, '|', nIndex2 ) );
+#else
+                        OString aExtToken2( aExt.getToken( 0, '|', nIndex2 ) );
+                        OUString aExtToken( aExtToken2.getStr(), aExtToken2.getLength(), RTL_TEXTENCODING_MS_1252 );
+#endif
+                        if (! aExtToken.getLength())
+                            break;
 
-                        OUString aExtToken( OStringToOUString( aExt.getToken( nToken, '|' ), RTL_TEXTENCODING_MS_1252 ) );
+                        rDescr.PluginName = aName;
+                        rDescr.Description = aComment;
+
                         USHORT nPos = 0, nLen = aExtToken.getLength();
                         OUString aExtensions( OUString::createFromAscii( nLen ? "*." : "*.*" ) );
 
@@ -365,6 +390,15 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
                             }
                         }
                         rDescr.Extension = aExtensions;
+
+                        ++nTok;
+                    }
+                    while (nIndex >= 0);
+
+                    OSL_ASSERT( nToken == nTok );
+                    if (nToken != nTok)
+                    {
+                        s_aDescriptions.realloc( nTok );
                     }
                 }
 #if DEBUG
