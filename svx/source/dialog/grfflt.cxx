@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:27:41 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,6 +326,13 @@ ULONG SvxGraphicFilter::ExecuteGrfFilterSlot( SfxRequest& rReq, GraphicObject& r
                 }
             }
             break;
+
+            case SID_GRFFILTER :
+            {
+                // do nothing; no error
+                nRet = SVX_GRAPHICFILTER_ERRCODE_NONE;
+                break;
+            }
 
             default:
             {
