@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:18:11 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ ENGLISH ] = "Paragraph" ;
                 Text [ norwegian ] = "Avsnitt" ;
                 Text [ italian ] = "Rientri e distanze" ;
-                Text [ portuguese_brazilian ] = "Recuos & Afastamento" ;
+                Text [ portuguese_brazilian ] = "Recuo & Afastamento" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
                 Text [ finnish ] = "Sisennykset ja välit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
@@ -435,14 +435,14 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text [ dutch ] = "Selectie" ;
         Text [ spanish ] = "~Selección" ;
         Text [ english_us ] = "~Options" ;
-        Text[ chinese_simplified ] = "é€‰é¡¹";
+        Text[ chinese_simplified ] = "é€‰é¡¹(~O)";
         Text[ russian ] = "Âûáîğ";
         Text[ polish ] = "Wybór";
-        Text[ japanese ] = "é¸æŠ";
-        Text[ chinese_traditional ] = "é¸é …";
+        Text[ japanese ] = "é¸æŠ(~O)";
+        Text[ chinese_traditional ] = "é¸é …(~O)";
         Text[ arabic ] = "ÇÎÊíÇÑ";
         Text[ greek ] = "ÅğéëïãŞ";
-        Text[ korean ] = "ì„ íƒ";
+        Text[ korean ] = "ì„ íƒ(~O)";
         Text[ turkish ] = "~Seçenekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selecciona";
@@ -752,6 +752,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text[ slovak ] = "HÄ¾adanie synonÃ½m";
 };
  // ********************************************************************** EOF
+
 
 
 
