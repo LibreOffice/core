@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 14:04:04 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,7 +1014,8 @@ SwFltShell::SwFltShell(SwDoc* pDoc, SwPaM& rPaM, BOOL bNew, ULONG nFieldFl)
         if( bReadNoTbl )
             pOutDoc->SetReadNoTable();
     }
-    pCurrentPageDesc =  &((SwPageDesc&)pDoc->GetPageDesc( 0 )); // Standard
+    pCurrentPageDesc =  &((SwPageDesc&)const_cast<const SwDoc *>(pDoc)
+                          ->GetPageDesc( 0 ));  // Standard
 
 }
 
@@ -1061,10 +1062,13 @@ SwFltShell::~SwFltShell()
         // Pagedescriptoren am Dokument updaten (nur so werden auch die
         // linken Seiten usw. eingestellt).
 
-    GetDoc().ChgPageDesc( 0, GetDoc().GetPageDesc( 0 ));    // PageDesc "Standard"
+    GetDoc().ChgPageDesc( 0,
+                          const_cast<const SwDoc &>(GetDoc()).
+                          GetPageDesc( 0 ));    // PageDesc "Standard"
     for (i=nPageDescOffset;i<GetDoc().GetPageDescCnt();i++)
     {
-        const SwPageDesc& rPD = GetDoc().GetPageDesc(i);
+        const SwPageDesc& rPD = const_cast<const SwDoc &>(GetDoc()).
+            GetPageDesc(i);
         GetDoc().ChgPageDesc(i, rPD);
     }
 
@@ -2099,7 +2103,8 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
                                    GetDoc().GetPageDescCnt(), FALSE, bFollow ),
                                 pFirstPageDesc, FALSE );
 
-    pNewPD =  &((SwPageDesc&)GetDoc().GetPageDesc(nPos));
+    pNewPD =  &((SwPageDesc&)const_cast<const SwDoc &>(GetDoc()).
+                GetPageDesc(nPos));
     if (bFollow)
     {               // Dieser ist der folgende von pPageDesc
         pFirstPageDesc->SetFollow(pNewPD);
@@ -2164,11 +2169,11 @@ void UpdatePageDescs(SwDoc &rDoc, sal_uInt16 nInPageDescOffset)
     // linken Seiten usw. eingestellt).
 
     // PageDesc "Standard"
-    rDoc.ChgPageDesc(0, rDoc.GetPageDesc(0));
+    rDoc.ChgPageDesc(0, const_cast<const SwDoc &>(rDoc).GetPageDesc(0));
 
     // PageDescs "Konvert..."
     for (sal_uInt16 i = nInPageDescOffset; i < rDoc.GetPageDescCnt(); ++i)
-        rDoc.ChgPageDesc(i, rDoc.GetPageDesc(i));
+        rDoc.ChgPageDesc(i, const_cast<const SwDoc &>(rDoc).GetPageDesc(i));
 }
 
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */
