@@ -1383,9 +1383,9 @@ sub createAllEventTypes()
 	allEventTypes( 12 ).Name = &quot;OnPrint&quot;
 	allEventTypes( 12 ).Value = &quot;Print Document&quot;
 	REM The following are document-only events
-	allEventTypes( 13 ).Name = &quot;on-mail-merge&quot;
+	allEventTypes( 13 ).Name = &quot;OnMailMerge&quot;
 	allEventTypes( 13 ).Value = &quot;Print form letters&quot;
-	allEventTypes( 14 ).Name = &quot;page-count-change&quot;
+	allEventTypes( 14 ).Name = &quot;OnPageCountChange&quot;
 	allEventTypes( 14 ).Value = &quot;Changing the page count&quot;
 end sub
 
