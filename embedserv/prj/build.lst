@@ -1,4 +1,4 @@
-sf	embedserv	:	sal cppu cppuhelper NULL
-sf	embedserv								usr1	-	w	es_mkout NULL
-sf	embedserv\source\embed					nmake	-	w	es_embed NULL
-sf	embedserv\util							nmake	-	w	es_util es_embed.w NULL
+es	embedserv	:	sal cppu cppuhelper NULL
+es	embedserv								usr1	-	w	es_mkout NULL
+es	embedserv\source\embed					nmake	-	w	es_embed NULL
+es	embedserv\util							nmake	-	w	es_util es_embed.w NULL
