@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 10:14:22 $
+ *  last change: $Author: fs $ $Date: 2001-03-13 10:34:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1037,7 +1037,12 @@ sal_Bool OBoundControlModel::convertFastPropertyValue(
                 bModified = m_xLabelControl.is();
             }
             else
+            {
                 bModified = tryPropertyValue(_rConvertedValue, _rOldValue, _rValue, m_xLabelControl);
+                if (!m_xLabelControl.is())
+                    // an empty interface is interpreted as VOID
+                    _rOldValue.clear();
+            }
             break;
         default:
             bModified = OControlModel::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue);
