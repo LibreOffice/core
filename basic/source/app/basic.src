@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-07 15:37:11 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2264,7 +2264,7 @@ Menu RID_EDIT {
             TEXT[ polish ] = "~Delete ";
             TEXT[ portuguese_brazilian ] = "~Lˆschen";
             TEXT[ japanese ] = "çÌèú(~D)";
-            TEXT[ korean ] = "¡ˆøÏ±‚(~D)";
+            TEXT[ korean ] = "ªË¡¶";
             TEXT[ chinese_simplified ] = "~Delete";
             TEXT[ chinese_traditional ] = "~Delete";
             TEXT[ arabic ] = "~Delete";
