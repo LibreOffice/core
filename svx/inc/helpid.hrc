@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 14:01:32 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,6 +731,22 @@
 #define HID_OPTIONS_JAVA_PARAMETER                  (HID_SVX_EXT0_START + 130)
 #define HID_OPTIONS_JAVA_CLASSPATH                  (HID_SVX_EXT0_START + 131)
 
+#define HID_SVXTBX_TEXT_CONTROL_ATTRIBUTES          (HID_SVX_EXT0_START + 132)
+
+// listbox for event config
+#define HID_SVX_MACRO_LB_EVENT                      (HID_SVX_EXT0_START + 133)
+#define HID_SVX_CONFIG_EVENT                        (HID_SVX_EXT0_START + 134)
+#define HID_CONFIG_EVENT_OFFICE_BASED               (HID_SVX_EXT0_START + 135)
+#define HID_CONFIG_EVENT_DOCUMENT_BASED             (HID_SVX_EXT0_START + 136)
+#define HID_SCRIPTSBOX                              (HID_SVX_EXT0_START + 137)
+#define HID_SELECTOR_CATEGORIES                     (HID_SVX_EXT0_START + 138)
+#define HID_SELECTOR_COMMANDS                       (HID_SVX_EXT0_START + 139)
+#define HID_SELECTOR_DIALOG                         (HID_SVX_EXT0_START + 140)
+#define HID_SVX_CONFIG_MENU                         (HID_SVX_EXT0_START + 141)
+#define HID_SVX_CONFIG_MENU_CONTENTS                (HID_SVX_EXT0_START + 142)
+#define HID_SVX_CONFIG_TOOLBAR                      (HID_SVX_EXT0_START + 143)
+#define HID_SVX_CONFIG_TOOLBAR_CONTENTS             (HID_SVX_EXT0_START + 144)
+
 // please adjust ACT_SVX_HID_END2 below if you add entries here!
 
 // -----------------------------------------------------------------------
@@ -744,7 +760,7 @@
 #endif
 
 // overrun check 2
-#define ACT_SVX_HID_END2        HID_OPTIONS_JAVA_CLASSPATH
+#define ACT_SVX_HID_END2        HID_SVX_CONFIG_TOOLBAR_CONTENTS
 
 #if ACT_SVX_HID2_END > HID_SVX_EXT0_END
 #error resource overrun in #line, #file
