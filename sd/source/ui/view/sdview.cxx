@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 10:39:13 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:55:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,8 +106,23 @@
 #ifndef _SVDOUTL_HXX //autogen
 #include <svx/svdoutl.hxx>
 #endif
+#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
+#include <svx/sdr/contact/displayinfo.hxx>
+#endif
 
 #include <svx/dialogs.hrc>
+#include <svx/xoutx.hxx>
+#include <svx/svdopage.hxx>
+
+#ifndef _SVX_XLNDSIT_HXX
+#include <svx/xlndsit.hxx>
+#endif
+#ifndef _SVX_XLINEIT0_HXX
+#include <svx/xlineit0.hxx>
+#endif
+#ifndef _SVX_XLNCLIT_HXX
+#include <svx/xlnclit.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -234,7 +249,7 @@ View::~View()
 |*
 \************************************************************************/
 
-void View::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
+void View::InitRedraw(OutputDevice* pOutDev, const Region& rReg, const Link* pPaintProc /*=NULL*/)
 {
     // ausfuehren ??
     if (nLockRedrawSmph == 0)
@@ -251,7 +266,8 @@ void View::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
             }
         }
 
-        FmFormView::InitRedraw(pOutDev, rReg);
+        const Link aPaintProcLink( LINK( this, View, PaintProc ) );
+        FmFormView::InitRedraw(pOutDev, rReg, 0, pPaintProc ? pPaintProc : &aPaintProcLink);
 
         USHORT nDemoKind =  SFX_APP()->GetDemoKind();
 
@@ -285,6 +301,195 @@ void View::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
     }
 }
 
+
+IMPL_LINK( View, PaintProc, SdrPaintProcRec *, pRecord )
+{
+    SdrObject* pObj = pRecord->pObj;
+
+    UINT16 nID = 0;
+    if( pObj )
+        nID = pObj->GetObjIdentifier();
+
+    if( (pObj->GetPage() == NULL) || !pObj->GetPage()->checkVisibility( pRecord, true ) )
+        return 0;
+
+    bool bPaintOutline = false;
+    PresObjKind eKind = PRESOBJ_NONE;
+
+    const bool bMasterObj = (pRecord->rInfoRec.nPaintMode & SDRPAINTMODE_MASTERPAGE) != 0;
+    const bool bIsPrinting = pRecord->rOut.GetOutDev()->GetOutDevType() == OUTDEV_PRINTER;
+
+    const SdrPageView* pPV = pRecord->rInfoRec.pPV;
+
+    // check if we need to draw a placeholder border
+    if( (pPV == NULL) || (pPV->GetCurrentPaintingDisplayInfo() != NULL && (pPV->GetCurrentPaintingDisplayInfo()->GetProcessedPage() == pPV->GetPage())) )
+    {
+        // we never draw for objects inside SdrPageObj
+
+        if( pObj->IsEmptyPresObj() && pObj->ISA(SdrTextObj) )
+        {
+            if( !bMasterObj || !pObj->IsNotVisibleAsMaster() )
+            {
+                SdPage* pPage = (SdPage*)pObj->GetPage();
+                eKind = pPage ? pPage->GetPresObjKind(pObj) : PRESOBJ_NONE;
+
+                if( eKind != PRESOBJ_BACKGROUND )
+                    bPaintOutline = true;
+            }
+        }
+        else if( ( pObj->GetObjInventor() == SdrInventor ) && ( pObj->GetObjIdentifier() == OBJ_TEXT ) )
+        {
+            SdPage* pPage = (SdPage*)pObj->GetPage();
+            if( pPage )
+            {
+                eKind = pPage->GetPresObjKind(pObj);
+
+                if((eKind == PRESOBJ_FOOTER) || (eKind == PRESOBJ_HEADER) || (eKind == PRESOBJ_DATETIME) || (eKind == PRESOBJ_SLIDENUMBER) )
+                {
+                    if( !bMasterObj )
+                    {
+                        // only draw a boundary for header&footer objects on the masterpage itself
+                        bPaintOutline = true;
+                    }
+                }
+            }
+        }
+
+        if( bPaintOutline && !bIsPrinting )
+        {
+            SdrTextObj* pTextObj = (SdrTextObj*)pRecord->pObj;
+
+            // leere Praesentationsobjekte bekommen einen grauen Rahmen
+            svtools::ColorConfig aColorConfig;
+            svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( svtools::OBJECTBOUNDARIES ) );
+
+            if( aColor.bIsVisible )
+            {
+                pRecord->rOut.GetOutDev()->Push();
+                pRecord->rOut.GetOutDev()->SetFillColor();
+                pRecord->rOut.GetOutDev()->SetLineColor( aColor.nColor );
+
+                {
+                    XDash aDash( XDASH_RECT, 1, 80, 1, 80, 80);
+                    SfxItemSet aSet( pObj->GetModel()->GetItemPool() );
+                    String aEmpty;
+                    aSet.Put( XLineDashItem( aEmpty, aDash ) );
+                    aSet.Put( XLineStyleItem( XLINE_DASH ) );
+                    aSet.Put( XLineColorItem(aEmpty,Color(aColor.nColor)) );
+                    aSet.Put( XFillStyleItem( XFILL_NONE ) );
+                    pRecord->rOut.SetLineAttr(aSet);
+                    pRecord->rOut.SetFillAttr(aSet);
+                }
+                pRecord->rOut.GetOutDev()->Pop();
+
+                const GeoStat& aGeo = pTextObj->GetGeoStat();
+                const Rectangle &aRect = pTextObj->GetGeoRect();
+
+                if( aGeo.nDrehWink!=0 || aGeo.nShearWink!=0 )
+                {
+                    Polygon aPoly(aRect);
+                    if(aGeo.nShearWink!=0)
+                        ShearPoly(aPoly,aRect.TopLeft(),aGeo.nTan);
+
+                    if(aGeo.nDrehWink!=0)
+                        RotatePoly(aPoly,aRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+
+                    pRecord->rOut.DrawPolyLine(aPoly);
+                }
+                else
+                {
+                    pRecord->rOut.DrawRect(aRect);
+
+                    // now paint the placeholder description, but only on the masterpage
+                    if( !bMasterObj && (pTextObj->GetPage()->IsMasterPage()) )
+                    {
+                        String aOut;
+                        switch( eKind )
+                        {
+                        case PRESOBJ_TITLE:
+                        {
+                            static String aTitleAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_TITLE ) );
+                            if( ((SdPage*)pTextObj->GetPage())->GetPageKind() == PK_STANDARD)
+                                aOut = aTitleAreaStr;
+                            break;
+                        }
+                        case PRESOBJ_OUTLINE:
+                        {
+                            static String aOutlineAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_OUTLINE ) );
+                            aOut = aOutlineAreaStr;
+                            break;
+                        }
+                        case PRESOBJ_FOOTER:
+                        {
+                            static String aFooterAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_FOOTER ) );
+                            aOut = aFooterAreaStr;
+                            break;
+                        }
+                        case PRESOBJ_HEADER:
+                        {
+                            static String aHeaderAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_HEADER ) );
+                            aOut = aHeaderAreaStr;
+                            break;
+                        }
+                        case PRESOBJ_DATETIME:
+                        {
+                            static String aDateTimeStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_DATETIME ) );
+                            aOut = aDateTimeStr;
+                            break;
+                        }
+                        case PRESOBJ_NOTES:
+                        {
+                            static String aDateTimeStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_NOTES ) );
+                            aOut = aDateTimeStr;
+                            break;
+                        }
+                        case PRESOBJ_SLIDENUMBER:
+                        {
+                            static String aNumberAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_NUMBER ) );
+                            static String aSlideAreaStr( SdResId( STR_PLACEHOLDER_DESCRIPTION_SLIDE ) );
+
+                            if( ((SdPage*)pTextObj->GetPage())->GetPageKind() == PK_STANDARD)
+                                aOut = aSlideAreaStr;
+                            else
+                                aOut = aNumberAreaStr;
+                            break;
+                        }
+                        }
+
+                        if( aOut.Len() )
+                        {
+                            SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)pTextObj->GetMergedItem(SDRATTR_TEXT_VERTADJUST)).GetValue();
+
+                            pRecord->rOut.GetOutDev()->Push();
+
+                            Font aFont;
+                            aFont.SetHeight( 500 );
+                            aFont.SetAlign( (eTVA == SDRTEXTVERTADJUST_BOTTOM) ? ALIGN_TOP : ALIGN_BOTTOM );
+                            pRecord->rOut.GetOutDev()->SetFont( aFont );
+                            pRecord->rOut.GetOutDev()->SetTextColor( Color(aColor.nColor) );
+                            pRecord->rOut.GetOutDev()->SetBackground();
+
+                            Point aPos;
+                            if(eTVA == SDRTEXTVERTADJUST_BOTTOM)
+                                aPos = aRect.TopRight();
+                            else
+                                aPos = aRect.BottomRight();
+
+                            aPos.X() -= pRecord->rOut.GetOutDev()->GetTextWidth( aOut );
+
+                            pRecord->rOut.GetOutDev()->DrawText( aPos, aOut );
+                            pRecord->rOut.GetOutDev()->Pop();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    pRecord->pObj->DoPaintObject( pRecord->rOut, pRecord->rInfoRec );
+
+    return 0;
+}
 
 /*************************************************************************
 |*
@@ -329,7 +534,7 @@ BOOL View::GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr ) const
 |*
 \************************************************************************/
 
-BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresObjListOnly) const
+BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresObjListOnly, BOOL bCheckLayoutOnly) const
 {
     /**************************************************************************
     * Ist ein Presentationsobjekt selektiert?
@@ -359,7 +564,7 @@ BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresOb
     long nMark;
     long nMarkMax = pMarkList->GetMarkCount() - 1;
 
-    for (nMark = nMarkMax; nMark >= 0; nMark--)
+    for (nMark = nMarkMax; (nMark >= 0) && !bSelected; nMark--)
     {
         // Rueckwaerts durch die Marklist
         pMark = pMarkList->GetMark(nMark);
@@ -372,10 +577,19 @@ BOOL View::IsPresObjSelected(BOOL bOnPage, BOOL bOnMasterPage, BOOL bCheckPresOb
 
             if (bMasterPage && bOnMasterPage || !bMasterPage && bOnPage)
             {
-                if ( pPage && pPage->GetPresObjList()->GetPos(pObj) != LIST_ENTRY_NOTFOUND )
+                if ( pPage && pPage->IsPresObj(pObj) )
                 {
-                    bSelected = TRUE;
-                    break;
+                    if( bCheckLayoutOnly )
+                    {
+                        PresObjKind eKind = pPage->GetPresObjKind(pObj);
+
+                        if((eKind != PRESOBJ_FOOTER) && (eKind != PRESOBJ_HEADER) && (eKind != PRESOBJ_DATETIME) && (eKind != PRESOBJ_SLIDENUMBER) )
+                            bSelected = TRUE;
+                    }
+                    else
+                    {
+                        bSelected = TRUE;
+                    }
                 }
             }
         }
@@ -513,6 +727,7 @@ SdrEndTextEditKind View::EndTextEdit(BOOL bDontDeleteReally)
 
             if (eKind == SDRENDTEXTEDIT_CHANGED && !bDefaultTextRestored)
                 ( (FuText*) pFunc)->ObjectChanged();
+
             // Tell the text function that the text object is not
             // edited anymore and must not be accessed.
             static_cast<FuText*>(pFunc)->TextEditingHasEnded(pTextObj);
