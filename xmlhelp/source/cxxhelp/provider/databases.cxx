@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-18 12:10:12 $
+ *  last change: $Author: abi $ $Date: 2001-06-28 14:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
 
 
 
+
 rtl::OUString Databases::lang( const rtl::OUString& Language )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -314,22 +315,27 @@ rtl::OUString Databases::lang( const rtl::OUString& Language )
     if( it == m_aLangSet.end() )
     {
         sal_Int32 idx;
-        if( ( idx = Language.indexOf( '-' ) ) != -1 ||
-            ( idx = Language.indexOf( '_' ) ) != -1 )
-            ret = Language.copy( 0,idx );
-        else
-            ret = Language;
-
         osl::DirectoryItem aDirItem;
-        if( osl::FileBase::E_None == osl::DirectoryItem::get( getInstallPathAsURL() + ret,aDirItem ) )
+
+        if( osl::FileBase::E_None == osl::DirectoryItem::get( getInstallPathAsURL() + Language,aDirItem ) )
+        {
+            ret = Language;
             m_aLangSet[ Language ] = ret;
+        }
+        else if( ( ( idx = Language.indexOf( '-' ) ) != -1 ||
+                   ( idx = Language.indexOf( '_' ) ) != -1 ) &&
+                 osl::FileBase::E_None == osl::DirectoryItem::get( getInstallPathAsURL() + Language.copy( 0,idx ),
+                                                                   aDirItem ) )
+        {
+            ret = Language.copy( 0,idx );
+            m_aLangSet[ Language ] = ret;
+        }
     }
     else
         ret = it->second;
 
     return ret;
 }
-
 
 
 rtl::OUString Databases::country( const rtl::OUString& Language )
