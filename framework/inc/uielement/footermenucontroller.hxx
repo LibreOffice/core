@@ -2,9 +2,9 @@
  *
  *  $RCSfile: footermenucontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:37:07 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ namespace framework
 
             // XPopupMenuController
             virtual void SAL_CALL setPopupMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu >& PopupMenu ) throw (::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL updatePopupMenu() throw (::com::sun::star::uno::RuntimeException);
 
             // XInitialization
             virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -165,6 +166,8 @@ namespace framework
 
         private:
             void fillPopupMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel, com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu );
+
+            ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xModel;
     };
 }
 
