@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaunohelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-24 15:47:12 $
+ *  last change: $Author: dbo $ $Date: 2002-11-14 15:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,72 +59,38 @@
  *
  ************************************************************************/
 
-#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
-#endif
-#ifndef _OSL_MODULE_H_
 #include <osl/module.h>
-#endif
-#ifndef _OSL_THREAD_H_
-#include <osl/thread.h>
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-#ifndef _RTL_STRBUF_HXX_
-#include <rtl/strbuf.hxx>
-#endif
 
-#ifndef _UNO_ENVIRONMENT_H_
-#include <uno/environment.h>
-#endif
-#ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
-#endif
-
-#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
-#include <cppuhelper/queryinterface.hxx>
-#endif
-#ifndef _CPPUHELPER_WEAK_HXX_
-#include <cppuhelper/weak.hxx>
-#endif
-#ifndef _CPPUHELPER_FACTORY_HXX_
-#include <cppuhelper/factory.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE3_HXX_
-#include <cppuhelper/implbase3.hxx>
-#endif
-
-#include <bridges/java/jvmcontext.hxx>
 
 #include <cppuhelper/servicefactory.hxx>
+#include <cppuhelper/factory.hxx>
 
-#include <com/sun/star/loader/XImplementationLoader.hpp>
-#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
+#include "jvm_uno_helper.h"
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::loader;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
-using namespace cppu;
-using namespace rtl;
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
-#define JAVA_ENV_NAME "java"
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::cppu;
+using namespace ::rtl;
+using namespace ::jvm_uno_helper;
 
 /*
  * Class:     com_sun_star_comp_helper_SharedLibraryLoader
  * Method:    component_writeInfo
  * Signature: (Ljava/lang/String;Lcom/sun/star/lang/XMultiServiceFactory;Lcom/sun/star/registry/XRegistryKey;)Z
  */
-extern "C" JNIEXPORT jboolean JNICALL Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo
-  (JNIEnv * pJEnv, jclass jClass, jstring jLibName, jobject jSMgr, jobject jRegKey)
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1writeInfo(
+    JNIEnv * pJEnv, jclass jClass, jstring jLibName, jobject jSMgr, jobject jRegKey )
 {
-    OUString sMessage;
     sal_Bool bRet = sal_False;
 
     const jchar* pJLibName = pJEnv->GetStringChars( jLibName, NULL );
@@ -132,7 +98,6 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_sun_star_comp_helper_SharedLibrar
     pJEnv->ReleaseStringChars( jLibName, pJLibName);
 
     oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
-
     if (lib)
     {
         void * pSym;
@@ -141,64 +106,49 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_sun_star_comp_helper_SharedLibrar
         OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
         if (pSym = osl_getSymbol( lib, aGetEnvName.pData ))
         {
-            uno_Environment * pJavaEnv = 0;
-            uno_Environment * pLoaderEnv = 0;
+            Environment java_env, loader_env;
+
             const sal_Char * pEnvTypeName = 0;
-
-            (*((component_getImplementationEnvironmentFunc)pSym))( &pEnvTypeName, &pLoaderEnv );
-            OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
-
-            if (! pLoaderEnv)
-                uno_getEnvironment( &pLoaderEnv, aEnvTypeName.pData, 0 );
-
-            JavaVM * pJVM;
-            pJEnv->GetJavaVM( &pJVM );
-
-            JavaVMContext * pVMContext = new JavaVMContext(pJVM);
-            uno_getEnvironment(&pJavaEnv, OUString::createFromAscii("java").pData, pVMContext);
+            (*((component_getImplementationEnvironmentFunc)pSym))(
+                &pEnvTypeName, (uno_Environment **)&loader_env );
+            if (! loader_env.is())
+            {
+                OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
+                uno_getEnvironment( (uno_Environment **)&loader_env, aEnvTypeName.pData, 0 );
+            }
+            get_java_env( &java_env, pJEnv );
+            JVM_registration_guard jvm_guard( java_env.get() );
 
             OUString aWriteInfoName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_WRITEINFO) );
             if (pSym = osl_getSymbol( lib, aWriteInfoName.pData ))
             {
-                if (pJavaEnv && pLoaderEnv)
+                if (loader_env.is() && java_env.is())
                 {
-                    Mapping java2dest(pJavaEnv, pLoaderEnv);
+                    Mapping java2dest(java_env.get(), loader_env.get());
 
                     if ( java2dest.is() )
                     {
-                        typelib_InterfaceTypeDescription * pType = 0;
+                        void * pSMgr =
+                            java2dest.mapInterface(
+                                jSMgr, getCppuType((Reference< lang::XMultiServiceFactory > *) 0) );
+                        void * pKey =
+                            java2dest.mapInterface(
+                                jRegKey, getCppuType((Reference< registry::XRegistryKey > *) 0) );
 
-                        getCppuType((Reference< XMultiServiceFactory > *) 0).getDescription((typelib_TypeDescription **) & pType);
-                        void * pSMgr  = java2dest.mapInterface(jSMgr, pType);
-
-                        getCppuType((Reference< XRegistryKey > *) 0).getDescription((typelib_TypeDescription **) & pType);
-                        void * pKey = java2dest.mapInterface(jRegKey, pType);
-
+                        uno_ExtEnvironment * env = loader_env.get()->pExtEnv;
                         if (pKey)
                         {
                             bRet = (*((component_writeInfoFunc)pSym))( pSMgr, pKey );
 
-                            if (pLoaderEnv->pExtEnv)
-                            (*pLoaderEnv->pExtEnv->releaseInterface)( pLoaderEnv->pExtEnv, pKey );
+                            if (env)
+                                (*env->releaseInterface)( env, pKey );
                         }
 
-                        if (pSMgr && pLoaderEnv->pExtEnv)
-                            (*pLoaderEnv->pExtEnv->releaseInterface)( pLoaderEnv->pExtEnv, pSMgr );
+                        if (pSMgr && env)
+                            (*env->releaseInterface)( env, pSMgr );
                     }
                 }
-            } else
-            {
-                sMessage = OUString::createFromAscii("symbol \"");
-                sMessage += aWriteInfoName;
-                sMessage += OUString::createFromAscii("\" could not be found in \"");
-                sMessage += aLibName;
-                sMessage += OUString::createFromAscii("\"");
             }
-
-            if (pLoaderEnv)
-                (*pLoaderEnv->release)( pLoaderEnv );
-            if (pJavaEnv)
-                (*pJavaEnv->release)( pJavaEnv );
         }
     }
 
@@ -210,21 +160,18 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_sun_star_comp_helper_SharedLibrar
  * Method:    component_getFactory
  * Signature: (Ljava/lang/String;Ljava/lang/String;Lcom/sun/star/lang/XMultiServiceFactory;Lcom/sun/star/registry/XRegistryKey;)Ljava/lang/Object;
  */
-extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory
-  (JNIEnv * pJEnv, jclass jClass, jstring jLibName, jstring jImplName, jobject jSMgr, jobject jRegKey)
-{   OUString sMessage;
-
+extern "C" JNIEXPORT jobject JNICALL
+Java_com_sun_star_comp_helper_SharedLibraryLoader_component_1getFactory(
+    JNIEnv * pJEnv, jclass jClass, jstring jLibName, jstring jImplName,
+    jobject jSMgr, jobject jRegKey )
+{
     const jchar* pJLibName = pJEnv->GetStringChars(jLibName, NULL);
     OUString aLibName( pJLibName );
     pJEnv->ReleaseStringChars( jLibName, pJLibName);
 
-    //OUString aLibName = OUString::createFromAscii("cpld");
-
+    jobject joSLL_cpp = 0;
 
     oslModule lib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
-
-    jobject joSLL_cpp;
-
     if (lib)
     {
         void * pSym;
@@ -233,101 +180,66 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_SharedLibrary
         OUString aGetEnvName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETENV) );
         if (pSym = osl_getSymbol( lib, aGetEnvName.pData ))
         {
-            uno_Environment * pJavaEnv = 0;
-            uno_Environment * pLoaderEnv = 0;
+            Environment java_env, loader_env;
+
             const sal_Char * pEnvTypeName = 0;
+            (*((component_getImplementationEnvironmentFunc)pSym))(
+                &pEnvTypeName, (uno_Environment **)&loader_env );
 
-            (*((component_getImplementationEnvironmentFunc)pSym))( &pEnvTypeName, &pLoaderEnv );
-            OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
-
-            if (! pLoaderEnv)
-                uno_getEnvironment( &pLoaderEnv, aEnvTypeName.pData, 0 );
-
-            JavaVM * pJVM;
-
-            pJEnv->GetJavaVM( &pJVM );
-
-            JavaVMContext * pVMContext = new JavaVMContext(pJVM);
-            uno_getEnvironment(&pJavaEnv, OUString::createFromAscii("java").pData, pVMContext);
+            if (! loader_env.is())
+            {
+                OUString aEnvTypeName( OUString::createFromAscii( pEnvTypeName ) );
+                uno_getEnvironment( (uno_Environment **)&loader_env, aEnvTypeName.pData, 0 );
+            }
+            get_java_env( &java_env, pJEnv );
+            JVM_registration_guard jvm_guard( java_env.get() );
 
             OUString aGetFactoryName( RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY) );
-
             if (pSym = osl_getSymbol( lib, aGetFactoryName.pData ))
             {
-                if (pJavaEnv && pLoaderEnv)
+                if (loader_env.is() && java_env.is())
                 {
-                    Mapping java2dest( pJavaEnv, pLoaderEnv );
-                    Mapping dest2java( pLoaderEnv, pJavaEnv );
+                    Mapping java2dest( java_env.get(), loader_env.get() );
+                    Mapping dest2java( loader_env.get(), java_env.get() );
 
                     if (dest2java.is() && java2dest.is())
                     {
-                        typelib_InterfaceTypeDescription * pType = 0;
-
-                        getCppuType((Reference< XMultiServiceFactory > *) 0).getDescription((typelib_TypeDescription **) & pType);
-                        void * pSMgr  = java2dest.mapInterface(jSMgr, pType);
-
-                        getCppuType((Reference< XRegistryKey > *) 0).getDescription((typelib_TypeDescription **) & pType);
-                        void * pKey = java2dest.mapInterface(jRegKey, pType);
+                        void * pSMgr =
+                            java2dest.mapInterface(
+                                jSMgr, ::getCppuType((Reference< lang::XMultiServiceFactory > *) 0) );
+                        void * pKey =
+                            java2dest.mapInterface(
+                                jRegKey, ::getCppuType((Reference< registry::XRegistryKey > *) 0) );
 
                         const char* pImplName = pJEnv->GetStringUTFChars( jImplName, NULL );
 
-                        //com.sun.star.comp.stoc.DLLComponentLoader
-                        //void * pSSF = (*((component_getFactoryFunc)pSym))( "com.sun.star.comp.stoc.DLLComponentLoader", pSMgr, pKey );
-                        void * pSSF = (*((component_getFactoryFunc)pSym))( pImplName, pSMgr, pKey );
+                        void * pSSF = (*((component_getFactoryFunc)pSym))(
+                            pImplName, pSMgr, pKey );
 
                         pJEnv->ReleaseStringUTFChars( jImplName, pImplName );
 
-                        if (pKey && pLoaderEnv->pExtEnv)
-                            (*pLoaderEnv->pExtEnv->releaseInterface)( pLoaderEnv->pExtEnv, pKey );
-                        if (pSMgr && pLoaderEnv->pExtEnv)
-                            (*pLoaderEnv->pExtEnv->releaseInterface)( pLoaderEnv->pExtEnv, pSMgr );
+                        uno_ExtEnvironment * env = loader_env.get()->pExtEnv;
+
+                        if (pKey && env)
+                            (*env->releaseInterface)( env, pKey );
+                        if (pSMgr && env)
+                            (*env->releaseInterface)( env, pSMgr );
 
                         if (pSSF)
                         {
-                            typelib_InterfaceTypeDescription * pXSharedLibraryLoader_Type = 0;
-                            getCppuType((Reference< XServiceInfo > *) 0).getDescription((typelib_TypeDescription **) & pXSharedLibraryLoader_Type);
-
-                            pXSharedLibraryLoader_Type = 0;
-                            getCppuType((Reference< XSingleServiceFactory > *) 0).getDescription((typelib_TypeDescription **) & pXSharedLibraryLoader_Type);
-
-                            joSLL_cpp = (jobject) dest2java.mapInterface( pSSF, getCppuType((Reference< XSingleServiceFactory > *) 0));
-
-                            /*
-                            XSingleServiceFactory * pRet = (XSingleServiceFactory *)
-                                aDest2Java.mapInterface(
-                                    pSSF, ::getCppuType( (const Reference< XSingleServiceFactory > *)0 ) );
-                            if (pRet)
-                            {
-                                xRet = pRet;
-                                pRet->release();
-                            }
-                            */
-                            if (pLoaderEnv->pExtEnv)
-                            (*pLoaderEnv->pExtEnv->releaseInterface)( pLoaderEnv->pExtEnv, pSSF );
-                        }
-                        else
-                        {
-                            sMessage = OUString::createFromAscii("got no factory from component \"");
-                            sMessage += aLibName;
-                            sMessage += OUString::createFromAscii("\"!");
+                            jobject jglobal = (jobject) dest2java.mapInterface(
+                                pSSF, getCppuType((Reference< XInterface > *) 0) );
+                            joSLL_cpp = pJEnv->NewLocalRef( jglobal );
+                            pJEnv->DeleteGlobalRef( jglobal );
+                            if (env)
+                                (*env->releaseInterface)( env, pSSF );
                         }
                     }
                 }
-            } else
-            {
-                sMessage = OUString::createFromAscii("symbol \"");
-                sMessage += aGetFactoryName;
-                sMessage += OUString::createFromAscii("\" could not be found in \"");
-                sMessage += aLibName;
-                sMessage += OUString::createFromAscii("\"");
             }
-
-            if (pLoaderEnv)
-                (*pLoaderEnv->release)( pLoaderEnv );
-            if (pJavaEnv)
-                (*pJavaEnv->release)( pJavaEnv );
         }
     }
+
     return joSLL_cpp;
 }
 
@@ -336,19 +248,15 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_SharedLibrary
  * Method:    createRegistryServiceFactory
  * Signature: (Ljava/lang/String;Ljava/lang/String;Z)Ljava/lang/Object;
  */
-extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory
-    (JNIEnv * pJEnv, jclass jClass, jstring jWriteRegFile, jstring jReadRegFile, jboolean jbReadOnly )
+extern "C" JNIEXPORT jobject JNICALL
+Java_com_sun_star_comp_helper_RegistryServiceFactory_createRegistryServiceFactory(
+    JNIEnv * pJEnv, jclass jClass, jstring jWriteRegFile,
+    jstring jReadRegFile, jboolean jbReadOnly )
 {
-    uno_Environment * pJavaEnv = 0;
-    uno_Environment * pCurrEnv = 0;
-
-    JavaVMContext * pVMContext = NULL;
-    JavaVM * pJVM;
-    pJEnv->GetJavaVM(&pJVM);
-    jobject joGlobalRegServiceFac = 0;
     jobject joRegServiceFac = 0;
 
-    try {
+    try
+    {
         OUString aWriteRegFile;
         OUString aReadRegFile;
 
@@ -366,94 +274,42 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_RegistryServi
             pJEnv->ReleaseStringChars(jWriteRegFile, pjWriteRegFile);
         }
 
-        Reference<XMultiServiceFactory> rMSFac;
+        Reference< lang::XMultiServiceFactory > rMSFac;
         if (aReadRegFile.getLength() == 0)
             rMSFac = createRegistryServiceFactory( aWriteRegFile, bReadOnly);
-
         else
             rMSFac = createRegistryServiceFactory(aWriteRegFile, aReadRegFile, bReadOnly);
 
+        Environment java_env, curr_env;
+        OUString aCurrentEnv(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
+        uno_getEnvironment((uno_Environment **)&curr_env, aCurrentEnv.pData, NULL);
+        get_java_env( &java_env, pJEnv );
+        JVM_registration_guard jvm_guard( java_env.get() );
 
-        JavaVMContext * pVMContext = NULL;
-
-        // possible race ?
-        { // get the java environment
-            uno_Environment ** ppEnviroments = NULL;
-            sal_Int32 size = 0;
-            OUString java(RTL_CONSTASCII_USTRINGPARAM("java"));
-
-            uno_getRegisteredEnvironments(&ppEnviroments, &size, (uno_memAlloc)malloc, java.pData);
-            if(size) { // did we find an existing java environment?
-                OSL_TRACE("javaunohelper.cxx: RegistryServiceFactory.createRegistryServiceFactory: found an existing java environment");
-
-                pJavaEnv = ppEnviroments[0];
-                pVMContext = (JavaVMContext *)pJavaEnv->pContext;
-
-                for(sal_Int32 i = 1; i < size; ++ i)
-                    ppEnviroments[i]->release(ppEnviroments[i]);
-
-                free(ppEnviroments);
-            }
-            else { // no, create one
-                pVMContext = new JavaVMContext(pJVM);
-
-                uno_getEnvironment(&pJavaEnv, java.pData, pVMContext);
-                if(!pJavaEnv) throw RuntimeException();
-            }
+        Mapping curr_java(curr_env.get(), java_env.get());
+        if (! curr_java.is())
+        {
+            throw RuntimeException(
+                OUSTR("no C++ <-> Java mapping available!"), Reference< XInterface >() );
         }
 
-
-
-        pVMContext->registerThread();
-
-        OUString aCurrentEnv(RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME));
-        uno_getEnvironment(&pCurrEnv, aCurrentEnv.pData, NULL);
-        if(!pCurrEnv) throw RuntimeException();
-
-        Mapping curr_java(pCurrEnv, pJavaEnv);
-        if (!curr_java.is()) throw RuntimeException();
-
-        pJavaEnv->release(pJavaEnv);
-        pJavaEnv = NULL;
-
-        pCurrEnv->release(pCurrEnv);
-        pCurrEnv = NULL;
-
-
-        joGlobalRegServiceFac = (jobject)curr_java.mapInterface(rMSFac.get(), getCppuType((Reference<XMultiServiceFactory > *)0));
-        if(!joGlobalRegServiceFac) throw RuntimeException();
-
-        // we need a local reference have to delete the global reference to the mapped object
-        jclass jcObject = pJEnv->FindClass("java/lang/Object");
-        if(pJEnv->ExceptionOccurred()) throw RuntimeException();
-
-        jobjectArray jaTmp = pJEnv->NewObjectArray(1, jcObject, joGlobalRegServiceFac);
-        if(pJEnv->ExceptionOccurred()) throw RuntimeException();
-
-        // delete the global reference
+        jobject joGlobalRegServiceFac =
+            (jobject)curr_java.mapInterface(
+                rMSFac.get(),
+                getCppuType((Reference< lang::XMultiServiceFactory > *)0) );
+        joRegServiceFac = pJEnv->NewLocalRef( joGlobalRegServiceFac );
           pJEnv->DeleteGlobalRef(joGlobalRegServiceFac);
-          joGlobalRegServiceFac = 0;
-
-        // get the local reference
-        joRegServiceFac = pJEnv->GetObjectArrayElement(jaTmp, 0);
-        if(pJEnv->ExceptionOccurred()) throw RuntimeException();
-
-
-        pVMContext->revokeThread();
-        pVMContext = NULL;
     }
-    catch (RuntimeException & runtimeException) {
-        if(joGlobalRegServiceFac)
-            pJEnv->DeleteGlobalRef(joGlobalRegServiceFac);
-
-        if(pVMContext)
-            pVMContext->revokeThread();
-
-        if (pJavaEnv)
-            (*pJavaEnv->release)(pJavaEnv);
-
-        if (pCurrEnv)
-            (*pCurrEnv->release)(pCurrEnv);
+    catch (Exception & exc)
+    {
+        jclass c = pJEnv->FindClass( "com/sun/star/uno/RuntimeException" );
+        if (0 != c)
+        {
+            OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
+            pJEnv->ThrowNew( c, cstr.getStr() );
+        }
+        return 0;
     }
 
     OSL_TRACE("javaunohelper.cxx: object %i", joRegServiceFac);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2002-11-05 09:31:35 $
+ *  last change: $Author: dbo $ $Date: 2002-11-14 15:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,39 +64,47 @@
 #include <rtl/bootstrap.hxx>
 #include <rtl/string.hxx>
 
-#include <uno/environment.hxx>
 #include <uno/mapping.hxx>
-
 #include <cppuhelper/bootstrap.hxx>
 
-#include <bridges/java/jvmcontext.hxx>
-
-#include <jni.h>
+#include "jvm_uno_helper.h"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
+using namespace ::jvm_uno_helper;
 
-//--------------------------------------------------------------------------------------------------
-inline OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
+namespace jvm_uno_helper
 {
-    OSL_ASSERT( sizeof (sal_Unicode) == sizeof (jchar) );
-    jsize len = jni_env->GetStringLength( jstr );
-    rtl_uString * ustr =
-        (rtl_uString *)rtl_allocateMemory( sizeof (rtl_uString) + (len * sizeof (sal_Unicode)) );
-    jni_env->GetStringRegion( jstr, 0, len, ustr->buffer );
-    if (JNI_FALSE != jni_env->ExceptionCheck())
+//==================================================================================================
+void get_java_env( Environment * java_env, JNIEnv * jni_env ) SAL_THROW( () )
+{
+    OUString java_env_name = OUSTR(UNO_LB_JAVA);
+
+    uno_Environment ** java_envs;
+    sal_Int32 nSize;
+    uno_getRegisteredEnvironments(
+        &java_envs, &nSize, (uno_memAlloc)rtl_allocateMemory, java_env_name.pData );
+    if (0 < nSize)
     {
-        jni_env->ExceptionClear();
-        rtl_freeMemory( ustr );
-        throw RuntimeException( OUSTR("string error!"), Reference< XInterface >() );
+        java_env->operator = ( java_envs[ 0 ] );
+        while (nSize--)
+        {
+            (*java_envs[ nSize ]->release)( java_envs[ nSize ] );
+        }
+        rtl_freeMemory( java_envs );
     }
-    ustr->refCount = 1;
-    ustr->length = len;
-    ustr->buffer[ len ] = '\0';
-    return OUString( ustr, SAL_NO_ACQUIRE );
+    else
+    {
+        JavaVM * vm;
+        jni_env->GetJavaVM( &vm );
+        ::JavaVMContext * jvm_context = new JavaVMContext( vm );
+        JVM_registration_guard guard( jvm_context );
+        uno_getEnvironment( (uno_Environment **)java_env, java_env_name.pData, jvm_context );
+    }
+}
 }
 
 //==================================================================================================
@@ -141,9 +149,20 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
             }
         }
 
-        Reference< XComponentContext > xContext;
+        // env
+        OUString cpp_env_name = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
+        Environment cpp_env, java_env;
+        uno_getEnvironment( (uno_Environment **)&cpp_env, cpp_env_name.pData, 0 );
+        if (! cpp_env.is())
+            throw RuntimeException( OUSTR("cannot get cpp env!"), Reference< XInterface >() );
+        get_java_env( &java_env, jni_env );
+        if (! java_env.is())
+            throw RuntimeException( OUSTR("cannot get java env!"), Reference< XInterface >() );
+        // register before doing any complex uno that may call java (beware of detaching!)
+        JVM_registration_guard( java_env.get() );
 
         // bootstrap uno
+        Reference< XComponentContext > xContext;
         if (0 == juno_rc)
         {
             xContext = ::cppu::defaultBootstrap_InitialComponentContext();
@@ -155,52 +174,18 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_sun_star_comp_helper_Bootstrap_cpp
         }
 
         // map to java
-        OUString java_env_name = OUSTR(UNO_LB_JAVA);
-        OUString cpp_env_name = OUSTR(CPPU_CURRENT_LANGUAGE_BINDING_NAME);
-        Environment cpp_env, java_env;
-        uno_getEnvironment( (uno_Environment **)&cpp_env, cpp_env_name.pData, 0 );
-        if (! cpp_env.is())
-            throw RuntimeException( OUSTR("cannot get cpp env!"), Reference< XInterface >() );
-
-        JavaVMContext * jvm_context;
-
-        uno_Environment ** java_envs;
-        sal_Int32 nSize;
-        uno_getRegisteredEnvironments(
-            &java_envs, &nSize, (uno_memAlloc)rtl_allocateMemory, java_env_name.pData );
-        if (nSize)
-        {
-            *(uno_Environment **)&java_env = java_envs[ 0 ];
-            jvm_context = (JavaVMContext *)java_env.getContext();
-
-            for( sal_Int32 i = 1; i < nSize; ++ i )
-            {
-                (*java_envs[ i ]->release)( java_envs[ i ] );
-            }
-            rtl_freeMemory( java_envs );
-        }
-        else
-        {
-            JavaVM * vm;
-            jni_env->GetJavaVM( &vm );
-            jvm_context = new JavaVMContext( vm );
-            uno_getEnvironment( (uno_Environment **)&java_env, java_env_name.pData, jvm_context );
-        }
-
-        if (! java_env.is())
-            throw RuntimeException( OUSTR("cannot get java env!"), Reference< XInterface >() );
-
-        jvm_context->registerThread();
-
         Mapping mapping( cpp_env.get(), java_env.get() );
         if (! mapping.is())
-            throw RuntimeException( OUSTR("cannot get mapping!"), Reference< XInterface >() );
+        {
+            throw RuntimeException(
+                OUSTR("cannot get mapping C++ <-> Java!"),
+                Reference< XInterface >() );
+        }
 
         jobject jret = (jobject)mapping.mapInterface( xContext.get(), ::getCppuType( &xContext ) );
         jobject jlocal = jni_env->NewLocalRef( jret );
         jni_env->DeleteGlobalRef( jret );
 
-        jvm_context->revokeThread();
         return jlocal;
     }
     catch (RuntimeException & exc)
