@@ -8,3 +8,9 @@ mkdir: %_DEST%\pck%_EXT%
 ..\unx\source\fonts\truetype\fonts.dir %_DEST%\pck%_EXT%\fonts.dir
 ..\source\shellnew\soffice.* %_DEST%\pck%_EXT%\soffice.*
 ..\unx\source\fonts\fonts\type1\fontunxtype1portal.zip %_DEST%\pck%_EXT%\fontunxtype1portal.zip
+
+..\%__SRC%\lib\libstatic*.dylib %_DEST%\lib%_EXT%\libstatic*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.hxx %_DEST%\inc%_EXT%\*staticdatamembers.hxx
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
