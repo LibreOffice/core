@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:04:28 $
+ *  last change: $Author: kz $ $Date: 2004-11-27 14:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include "DrawViewShell.hxx"
+#include "slideshow.hxx"
 
 #include "ViewShellHint.hxx"
 
@@ -196,8 +197,8 @@
 #include "fucon3d.hxx"
 #endif
 #include "sdresid.hxx"
-#ifndef SD_FU_SLIDE_SHOW_HXX
-#include "fuslshow.hxx"
+#ifndef _SD_SLIDESHOW_HXX
+#include "slideshow.hxx"
 #endif
 #ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
@@ -238,6 +239,16 @@
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
 #endif
+
+// #110496#
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+#include "Window.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -290,7 +301,7 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 {
     // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
 
-    if (pFuSlideShow && !pFuSlideShow->IsLivePresentation())
+    if (mpSlideShow)
         return;
 
     USHORT nSId = rReq.GetSlot();
@@ -776,9 +787,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         GetDocSh()->SetStyleFamily(((SfxUInt16Item&)rReq.GetArgs()->Get( SID_STYLE_FAMILY )).GetValue());
 
     // Waehrend einer Native-Diashow wird nichts ausgefuehrt!
-    if (pFuSlideShow && !pFuSlideShow->IsLivePresentation() &&
+    if(mpSlideShow &&
         (rReq.GetSlot() != SID_PRESENTATION_END &&
-         rReq.GetSlot() != SID_LIVE_PRESENTATION &&
          rReq.GetSlot() != SID_SIZE_PAGE))
         return;
 
@@ -817,23 +827,29 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_PRESENTATION:
         case SID_REHEARSE_TIMINGS:
         {
-            if( !pFuSlideShow )
+            if( mpSlideShow )
+            {
+                mpSlideShow->deactivate();
+                delete mpSlideShow;
+                mpSlideShow = 0;
+            }
+
+            if( !mpSlideShow )
             {
                 if( pDrView->IsTextEdit() )
                     pDrView->EndTextEdit();
 
                 SFX_REQUEST_ARG( rReq, pFullScreen, SfxBoolItem, ATTR_PRESENT_FULLSCREEN, FALSE );
-                const BOOL bFullScreen = ( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) && pFullScreen ) ? pFullScreen->GetValue() : GetDoc()->GetPresFullScreen();
+                const BOOL bFullScreen = ( ( SID_REHEARSE_TIMINGS != rReq.GetSlot() ) && pFullScreen ) ? pFullScreen->GetValue() : GetDoc()->getPresentationSettings().mbFullScreen;
 
                 if( bFullScreen )
                     PresentationViewShell::CreateFullScreenShow( this, rReq );
                 else
                 {
                     pFrameView->SetPreviousViewShellType(GetShellType());
-                    pFuSlideShow = new FuSlideShow(
-                        this, GetActiveWindow(), pDrView, GetDoc(), rReq );
-                    pFuSlideShow->StartShow();
-                    pFuSlideShow->Activate();
+
+                    mpSlideShow = new Slideshow( this, pDrView, GetDoc() );
+                    mpSlideShow->startShow();
                 }
             }
 
@@ -844,21 +860,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_PRESENTATION_END:
         {
             StopSlideShow(true);
-            rReq.Ignore ();
-        }
-        break;
 
-        case SID_LIVE_PRESENTATION:
-        {
-            if( pFuSlideShow && !pFuSlideShow->IsInputLocked() )
-            {
-                if (pDrView->IsTextEdit())
-                {
-                    pDrView->EndTextEdit();
-                }
-
-                pFuSlideShow->ReceiveRequest(rReq);
-            }
             rReq.Ignore ();
         }
         break;
@@ -1038,28 +1040,6 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             pDrView->SetPixelMode(!bPixelMode);
 
             Invalidate(SID_PIXELMODE);
-       }
-       break;
-
-       case SID_ANIMATIONMODE:
-       {
-            const SfxItemSet* pReqArgs = rReq.GetArgs();
-            BOOL  bAnimationMode = FALSE;
-
-            if (pDrView->GetSlideShow())
-            {
-                bAnimationMode = TRUE;
-            }
-
-            if (pReqArgs)
-            {
-                SFX_REQUEST_ARG(rReq, pIsActive, SfxBoolItem, SID_ANIMATIONMODE, FALSE);
-                bAnimationMode = pIsActive->GetValue();
-            }
-
-            pDrView->SetAnimationMode(!bAnimationMode);
-
-            Invalidate(SID_ANIMATIONMODE);
        }
        break;
 
@@ -1864,14 +1844,14 @@ void DrawViewShell::ShowUIControls (bool bVisible)
 
 void DrawViewShell::StopSlideShow (bool bCloseFrame)
 {
-    if (pFuSlideShow != NULL)
+    if (mpSlideShow != NULL)
     {
         if( pDrView->IsTextEdit() )
             pDrView->EndTextEdit();
 
-        pFuSlideShow->Deactivate();
-        pFuSlideShow->Destroy();
-        pFuSlideShow = NULL;
+        mpSlideShow->Deactivate();
+        delete mpSlideShow;
+        mpSlideShow = NULL;
 
         if( ISA(PresentationViewShell))
         {
@@ -1893,7 +1873,6 @@ void DrawViewShell::StopSlideShow (bool bCloseFrame)
         }
     }
 }
-
 
 #ifdef WNT
 #pragma optimize ( "", on )
