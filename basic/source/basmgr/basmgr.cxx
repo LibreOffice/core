@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ab $ $Date: 2001-12-19 15:53:38 $
+ *  last change: $Author: ab $ $Date: 2002-01-09 16:43:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -932,6 +932,41 @@ BasicManager::BasicManager()
 BOOL BasicManager::HasBasicManager( const SotStorage& rStorage )
 {
     return rStorage.IsStream( ManagerStreamName );
+}
+
+BOOL BasicManager::HasBasicWithModules( const SotStorage& rStorage )
+{
+    if( !rStorage.IsStream( ManagerStreamName ) )
+        return FALSE;
+
+    StarBASIC* pDummyParentBasic = new StarBASIC();
+    BasicManager* pBasMgr = new BasicManager( (SotStorage&)rStorage, pDummyParentBasic );
+    BOOL bRet = FALSE;
+
+    USHORT nLibs = pBasMgr->GetLibCount();
+    for( USHORT nL = 0; nL < nLibs; nL++ )
+    {
+        BasicLibInfo* pInfo = pBasMgr->pLibs->GetObject( nL );
+        StarBASIC* pLib = pInfo->GetLib();
+        if( !pLib )
+        {
+            BOOL bLoaded = pBasMgr->ImpLoadLibary( pInfo, NULL, FALSE );
+            if( bLoaded )
+                pLib = pInfo->GetLib();
+        }
+        if( pLib )
+        {
+            SbxArray* pModules = pLib->GetModules();
+            if( pModules->Count() )
+            {
+                bRet = TRUE;
+                break;
+            }
+        }
+    }
+
+    delete pBasMgr;
+    return bRet;
 }
 
 void BasicManager::ImpMgrNotLoaded( const String& rStorageName )
