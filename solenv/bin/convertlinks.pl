@@ -13,6 +13,14 @@ use vars qw/*name *dir/;
 *dir    = *File::Find::dir;
 @files = ();
 
+if($#ARGV == 1)
+{
+    $pattern = "www";
+} else
+{
+    $pattern = $ARGV[2];
+}
+
 find(\&wanted, "$ARGV[0]");
 
 $return = 1;
@@ -21,10 +29,14 @@ foreach $i (@files)
     open ( FILEIN, $i->{filename} ) || die "could not open $i->{filename} for reading";
 
     $relPath = ".";
-    if( $i->{directory} =~ /.*www((\/|\\)(.*))/ )
+    if( $i->{directory} =~ /.*$pattern((\/|\\)(.*))/ )
     {
         $relPath = $3;
-        $relPath =~ s#\w+#\.\.#go
+        $relPath =~ s#\w+#\.\.#go;
+        if($pattern eq "examples")
+        {
+            $relPath = "\.\.\/$relPath";
+        }
     }
 
     @lines = <FILEIN>;
@@ -40,6 +52,10 @@ foreach $i (@files)
         }
 
         s#((http:\/\/api\.openoffice\.org\/)(common\/ref[^\"]+))#$relPath\/$3#go;
+        if($pattern eq "examples")
+        {
+            s#((http:\/\/api\.openoffice\.org\/)(basic\/man\/tutorial\/tutorial.pdf))#$relPath\/www\/$3#go;
+        }
         print FILEOUT $_;
     }
     close FILEOUT;
@@ -48,7 +64,6 @@ foreach $i (@files)
 }
 
 exit $return;
-
 
 sub wanted {
     %file = (
