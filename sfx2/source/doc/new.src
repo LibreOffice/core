@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:16:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:20:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,6 +721,8 @@ ModalDialog DLG_NEW_FILE
     Text[ hindi ] = "नया";
     Text[ slovak ] = "Nový";
 };
+
+
 
 
 
