@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibilityoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-05-24 11:05:03 $
+ *  last change: $Author: os $ $Date: 2002-06-17 08:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,6 @@ private:
     sal_Bool        m_bAllowAnimatedText;
     sal_Bool        m_bAutomaticFontColor;
     sal_Bool        m_bSystemFont;
-    sal_Bool        m_bAssisitiveTool;
     sal_Int16       m_nHelpTipSeconds;
 
     typedef sal_Bool SvtAccessibilityOptions_Impl:: *BoolPtr;
@@ -117,7 +116,6 @@ private:
                             , ALLOWANIMATEDTEXT
                             , AUTOMATICFONTCOLOR
                             , SYSTEMFONT
-                            , ASSISITIVETOOL
                         };
 
     static Sequence< OUString > GetPropertyNames();
@@ -144,8 +142,6 @@ public:
                     {return GetToken( &SvtAccessibilityOptions_Impl::m_bAutomaticFontColor );}
     sal_Bool    GetIsSystemFont() const
                     {return GetToken( &SvtAccessibilityOptions_Impl::m_bSystemFont );}
-    sal_Bool    GetIsAssisitiveTool() const
-                    {return GetToken( &SvtAccessibilityOptions_Impl::m_bAssisitiveTool );}
     sal_Int16   GetHelpTipSeconds() const
                     {return m_nHelpTipSeconds;}
 
@@ -165,8 +161,6 @@ public:
                     { SetToken( &SvtAccessibilityOptions_Impl::m_bAutomaticFontColor, bSet ); }
     void        SetIsSystemFont(sal_Bool bSet)
                     { SetToken( &SvtAccessibilityOptions_Impl::m_bSystemFont, bSet ); }
-    void        SetIsAssisitiveTool(sal_Bool bSet)
-                    { SetToken( &SvtAccessibilityOptions_Impl::m_bAssisitiveTool, bSet ); }
     void        SetHelpTipSeconds(sal_Int16 nSet)
                     {
                         if(m_nHelpTipSeconds!=nSet)
@@ -199,7 +193,6 @@ Sequence< OUString > SvtAccessibilityOptions_Impl::GetPropertyNames()
         ,"IsAllowAnimatedText"      // ALLOWANIMATEDTEXT
         ,"IsAutomaticFontColor"     // AUTOMATICFONTCOLOR
         ,"IsSystemFont"             // SYSTEMFONT
-        ,"IsAssisitiveTool"         // ASSISITIVETOOL
     };
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
     Sequence< OUString > aNames( nCount );
@@ -246,7 +239,6 @@ void SvtAccessibilityOptions_Impl::Load()
                         case ALLOWANIMATEDTEXT:     m_bAllowAnimatedText = bTemp;   break;
                         case AUTOMATICFONTCOLOR:    m_bAutomaticFontColor = bTemp;  break;
                         case SYSTEMFONT:            m_bSystemFont = bTemp;          break;
-                        case ASSISITIVETOOL:        m_bAssisitiveTool = bTemp;      break;
                         default:
                             DBG_ERRORFILE( "invalid index to load a user token" );
                     }
@@ -295,7 +287,6 @@ void SvtAccessibilityOptions_Impl::Commit()
             case ALLOWANIMATEDTEXT:     bTemp = m_bAllowAnimatedText;   break;
             case AUTOMATICFONTCOLOR:    bTemp = m_bAutomaticFontColor;  break;
             case SYSTEMFONT:            bTemp = m_bSystemFont;          break;
-            case ASSISITIVETOOL:        bTemp = m_bAssisitiveTool;      break;
             default:
                 DBG_ERRORFILE( "invalid index to save a user token" );
         }
@@ -413,10 +404,6 @@ sal_Bool SvtAccessibilityOptions::GetIsSystemFont() const
 {
     return sm_pSingleImplConfig->GetIsSystemFont();
 }
-sal_Bool SvtAccessibilityOptions::GetIsAssisitiveTool() const
-{
-    return sm_pSingleImplConfig->GetIsAssisitiveTool();
-}
 sal_Int16 SvtAccessibilityOptions::GetHelpTipSeconds() const
 {
     return sm_pSingleImplConfig->GetHelpTipSeconds();
@@ -455,10 +442,6 @@ void SvtAccessibilityOptions::SetIsAutomaticFontColor(sal_Bool bSet)
 void SvtAccessibilityOptions::SetIsSystemFont(sal_Bool bSet)
 {
     sm_pSingleImplConfig->SetIsSystemFont(bSet);
-}
-void SvtAccessibilityOptions::SetIsAssisitiveTool(sal_Bool bSet)
-{
-    sm_pSingleImplConfig->SetIsAssisitiveTool(bSet);
 }
 void SvtAccessibilityOptions::SetHelpTipSeconds(sal_Int16 nSet)
 {
