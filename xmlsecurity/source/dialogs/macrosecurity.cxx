@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2004-08-04 06:13:56 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,6 +299,16 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMTYARG )
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
         maTrustFileLocLB.RemoveEntry( nSel );
+        // --> PB 2004-09-21 #i33584#
+        // after remove an entry, select another one if exists
+        USHORT nNewCount = maTrustFileLocLB.GetEntryCount();
+        if ( nNewCount > 0 )
+        {
+            if ( nSel >= nNewCount )
+                nSel = nNewCount - 1;
+            maTrustFileLocLB.SelectEntryPos( nSel );
+        }
+        // <--
         ImplCheckButtons();
     }
 
@@ -404,6 +414,12 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
 
         mpDlg->maSecOptions.SetSecureURLs( aSecureURLs );
     }
+    // --> PB 2004-09-21 #i33584#
+    // don't forget to remove the old saved SecureURLs
+    else
+        mpDlg->maSecOptions.SetSecureURLs( cssu::Sequence< rtl::OUString >() );
+    // <--
 
     mpDlg->maSecOptions.SetTrustedAuthors( maTrustedAuthors );
 }
+
