@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcache.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 09:44:32 $
+ *  last change: $Author: jp $ $Date: 2000-11-13 13:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,12 @@
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
 #endif
-#include "errhdl.hxx"
-#include "swcache.hxx"
+#ifndef _ERRHDL_HXX
+#include <errhdl.hxx>
+#endif
+#ifndef _SWCACHE_HXX
+#include <swcache.hxx>
+#endif
 
 #ifndef PRODUCT
     #include <stdlib.h>         // getenv()
@@ -193,8 +197,8 @@ SwCache::~SwCache()
 #ifndef MAC
     static USHORT nOpenMode = STREAM_WRITE | STREAM_TRUNC;
     String sExt(String::CreateFromAscii(".log"));
-    utl::TempFile aTempFile(String::CreateFromAscii("swcache"), &sExt);
-    SvFileStream aStream( aTempFile.GetFileName(), nOpenMode );
+    utl::TempFile aTempFile( String::CreateFromAscii("swcache"), &sExt );
+    SvFileStream* pStream = aTempFile.GetStream( nOpenMode );
     nOpenMode = STREAM_WRITE;
 
     if( !aStream.GetError() )
