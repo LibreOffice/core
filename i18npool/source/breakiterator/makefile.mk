@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.5 $
+#*  $Revision: 1.6 $
 #*
-#*  last change: $Author: obo $ $Date: 2004-05-28 16:33:17 $
+#*  last change: $Author: vg $ $Date: 2005-02-25 10:08:26 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -59,7 +59,6 @@
 #*
 #************************************************************************/
 PRJ=..$/..
-
 PRJNAME=i18npool
 TARGET=breakiterator
 
@@ -74,13 +73,16 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
+# grab all .txt files under data directory, which are breakiterator rule files.
+MY_BRK_TXTFILES=$(shell ls data/*.txt)
+
+# insert "OpenOffice" as icu package name in front of the  name of each rule file for searching on application provided data
+MY_BRK_BRKFILES=$(subst,data/,$(MISC)$/OpenOffice_ $(MY_BRK_TXTFILES:s/.txt/.brk/))
+
+# OpenOffice_icu_dat.c is a generated file from the rule file list by gencmn
 MY_MISC_CXXFILES = \
-        $(MISC)$/dict_word_brk.c \
-        $(MISC)$/dict_word_ca_brk.c \
-        $(MISC)$/dict_word_hu_brk.c \
-        $(MISC)$/edit_word_brk.c \
-        $(MISC)$/count_word_brk.c \
-        $(MISC)$/line_brk.c
+        $(MISC)$/OpenOffice_icu_dat.c \
+        $(MY_BRK_BRKFILES:s/.brk/_brk.c/)
 
 SLOFILES=   \
         $(SLO)$/breakiteratorImpl.obj \
@@ -90,12 +92,7 @@ SLOFILES=   \
         $(SLO)$/breakiterator_hi.obj \
         $(SLO)$/breakiterator_unicode.obj \
         $(SLO)$/xdictionary.obj \
-        $(SLO)$/dict_word_brk.obj \
-        $(SLO)$/dict_word_ca_brk.obj \
-        $(SLO)$/dict_word_hu_brk.obj \
-        $(SLO)$/edit_word_brk.obj \
-        $(SLO)$/count_word_brk.obj \
-        $(SLO)$/line_brk.obj
+        $(subst,$(MISC)$/,$(SLO)$/ $(MY_MISC_CXXFILES:s/.c/.obj/))
 
 APP1TARGET = gendict
 
@@ -108,8 +105,10 @@ APP1STDLIBS = $(SALLIB) \
 
 .INCLUDE :	target.mk
 
-
-# 'genbrk' and 'genccode' are tools generated and delivered by icu project to process icu breakiterator rules.
-$(MISC)$/%_brk.c : data/%.txt
-    +$(WRAPCMD) $(SOLARBINDIR)$/genbrk -r $< -o $(MISC)$/$*.brk
+# 'gencmn', 'genbrk' and 'genccode' are tools generated and delivered by icu project to process icu breakiterator rules.
+$(MISC)$/OpenOffice_icu_dat.c :  $(MY_BRK_BRKFILES)
+    +$(WRAPCMD) $(SOLARBINDIR)$/gencmn -e OpenOffice_icu -n OpenOffice_icu -S -d $(MISC) O $(mktmp $(MY_BRK_BRKFILES:t"\n"))
+$(MISC)$/OpenOffice_%.brk : data/%.txt
+    +$(WRAPCMD) $(SOLARBINDIR)$/genbrk -r $< -o $(MISC)$/OpenOffice_$*.brk
+$(MISC)$/%_brk.c : $(MISC)$/%.brk
     +$(WRAPCMD) $(SOLARBINDIR)$/genccode -d $(MISC)$ $(MISC)$/$*.brk
