@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sb $ $Date: 2002-07-19 15:14:05 $
+#   last change: $Author: rt $ $Date: 2004-09-20 11:55:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,33 +64,69 @@ PRJNAME = svtools
 TARGET = qa
 
 ENABLE_EXCEPTIONS = true
-USE_DEFFILE = true
 
-.INCLUDE: settings.mk
+# --- Settings -----------------------------------------------------
 
-.IF "$(OS)" == "WNT"
-REGEXP = "s/^[\#].*$$//"
-.ELSE # OS, WNT
-REGEXP = 's/^[\#].*$$//'
-.ENDIF # OS, WNT
+.INCLUDE :  settings.mk
 
-SHL1TARGET = URIHelper
-SHL1OBJS = \
+# BEGIN ----------------------------------------------------------------
+# auto generated Target:job by codegen.pl 
+SHL1OBJS=  \
     $(SLO)$/test_URIHelper.obj
-SHL1STDLIBS = \
-    $(CPPULIB) \
-    $(CPPUHELPERLIB) \
-    $(SALLIB) \
-    $(SVTOOLLIB) \
-    $(TOOLSLIB) \
-    $(UNOTOOLSLIB)
 
-DEF1NAME = $(SHL1TARGET)
-DEF1EXPORTFILE = $(MISC)$/$(SHL1TARGET).dxp
+SHL1TARGET= URIHelper
+SHL1STDLIBS=\
+     $(CPPULIB) \
+     $(CPPUHELPERLIB) \
+     $(SALLIB) \
+     $(SVTOOLLIB) \
+     $(TOOLSLIB) \
+     $(UNOTOOLSLIB) \
+   $(CPPUNITLIB) 
 
-.INCLUDE: target.mk
+SHL1IMPLIB= i$(SHL1TARGET)
+DEF1NAME    =$(SHL1TARGET)
+SHL1VERSIONMAP= export.map
+# auto generated Target:job
+# END ------------------------------------------------------------------
 
-$(MISC)$/$(SHL1TARGET).dxp: sce$/$(SHL1TARGET).sce
-    + $(TYPE) $< | sed $(REGEXP) > $@
-    + $(TYPE) $@ | sed "s/^/test_/" > $(MISC)$/$(SHL1TARGET).tst
-    + $(TYPE) $(MISC)$/$(SHL1TARGET).tst | sed "/test_./ w $@"
+#------------------------------- All object files -------------------------------
+# do this here, so we get right dependencies
+# SLOFILES=$(SHL1OBJS)
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE :  target.mk
+.INCLUDE : _cppunit.mk
+
+# LLA: old stuff
+# USE_DEFFILE = true
+# 
+# .INCLUDE: settings.mk
+# 
+# .IF "$(OS)" == "WNT"
+# REGEXP = "s/^[\#].*$$//"
+# .ELSE # OS, WNT
+# REGEXP = 's/^[\#].*$$//'
+# .ENDIF # OS, WNT
+# 
+# SHL1TARGET = URIHelper
+# SHL1OBJS = \
+# 	$(SLO)$/test_URIHelper.obj
+# SHL1STDLIBS = \
+#     $(CPPULIB) \
+#     $(CPPUHELPERLIB) \
+#     $(SALLIB) \
+#     $(SVTOOLLIB) \
+#     $(TOOLSLIB) \
+#     $(UNOTOOLSLIB)
+# 
+# DEF1NAME = $(SHL1TARGET)
+# DEF1EXPORTFILE = $(MISC)$/$(SHL1TARGET).dxp
+# 
+# .INCLUDE: target.mk
+# 
+# $(MISC)$/$(SHL1TARGET).dxp: sce$/$(SHL1TARGET).sce
+#     + $(TYPE) $< | sed $(REGEXP) > $@
+#     + $(TYPE) $@ | sed "s/^/test_/" > $(MISC)$/$(SHL1TARGET).tst
+#     + $(TYPE) $(MISC)$/$(SHL1TARGET).tst | sed "/test_./ w $@"
