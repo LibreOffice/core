@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-28 16:50:15 $
+ *  last change: $Author: sab $ $Date: 2001-04-06 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,9 +99,13 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
 
-//ASDBG #ifndef _USR_SMARTCONV_HXX_
-//ASDBG #include <usr/smartconv.hxx>
-//ASDBG #endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXCONTAINER_HPP_
+#include <com/sun/star/container/XIndexContainer.hpp>
+#endif
 
 #ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
@@ -185,6 +189,8 @@
 #include "sfxsids.hrc"
 #endif
 
+#include <topfrm.hxx>
+
 //________________________________________________________________________________________________________
 //  defines
 //________________________________________________________________________________________________________
@@ -208,6 +214,7 @@
 #define OTYPECOLLECTION                         ::cppu::OTypeCollection
 #define OIMPLEMENTATIONID                       ::cppu::OImplementationId
 #define MUTEXGUARD                              ::osl::MutexGuard
+#define XINDEXCONTAINER                         ::com::sun::star::container::XIndexContainer
 
 //________________________________________________________________________________________________________
 //  namespaces
@@ -219,7 +226,7 @@
 //using namespace ::osl                             ;
 //using namespace ::rtl                             ;
 //using namespace ::cppu                            ;
-//using namespace ::com::sun::star::uno             ;
+using namespace ::com::sun::star::uno               ;
 //using namespace ::com::sun::star::container       ;
 //using namespace ::com::sun::star::frame           ;
 //using namespace ::com::sun::star::document        ;
@@ -247,6 +254,7 @@ struct IMPL_SfxBaseModel_DataContainer
 #endif
     SEQUENCE< PROPERTYVALUE>                        m_seqArguments          ;
     SEQUENCE< REFERENCE< XCONTROLLER > >            m_seqControllers        ;
+    REFERENCE< XINDEXACCESS >                       m_contViewData          ;
 
     IMPL_SfxBaseModel_DataContainer::IMPL_SfxBaseModel_DataContainer(   MUTEX&          aMutex          ,
                                                                         SfxObjectShell* pObjectShell    )
@@ -1605,13 +1613,51 @@ void SfxBaseModel::postEvent_Impl( const SfxEventHint& rHint )
     }
 }
 
-::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData()
+REFERENCE < XINDEXACCESS > SAL_CALL SfxBaseModel::getViewData()
 {
-    return ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess >();
+    if ( m_pData->m_pObjectShell && !m_pData->m_contViewData.is() )
+    {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
+        SfxViewFrame *pActFrame = SfxViewFrame::Current();
+        if ( !pActFrame || pActFrame->GetObjectShell() != m_pData->m_pObjectShell )
+            pActFrame = SfxViewFrame::GetFirst(m_pData->m_pObjectShell, TYPE(SfxTopViewFrame));
+
+        if ( !pActFrame )
+            // currently no frame for this document at all
+            return REFERENCE < XINDEXACCESS >();
+
+        m_pData->m_contViewData = Reference < XINDEXACCESS >(
+                ::comphelper::getProcessServiceFactory()->createInstance(
+                DEFINE_CONST_UNICODE("com.sun.star.document.IndexedPropertyValues") ),
+                UNO_QUERY );
+
+        if ( !m_pData->m_contViewData.is() )
+        {
+            // error: no container class available!
+            return REFERENCE < XINDEXACCESS >();
+        }
+
+        REFERENCE < XINDEXCONTAINER > xCont( m_pData->m_contViewData, UNO_QUERY );
+        sal_Int32 nCount = 0;
+        SEQUENCE < PROPERTYVALUE > aSeq;
+        ::com::sun::star::uno::Any aAny;
+        for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(m_pData->m_pObjectShell, TYPE(SfxTopViewFrame) ); pFrame;
+                pFrame = SfxViewFrame::GetNext(*pFrame, m_pData->m_pObjectShell, TYPE(SfxTopViewFrame) ) )
+        {
+            BOOL bIsActive = ( pFrame == pActFrame );
+            pFrame->GetViewShell()->WriteUserDataSequence( aSeq );
+            aAny <<= aSeq;
+            xCont->insertByIndex( bIsActive ? 0 : nCount, aAny );
+            nCount++;
+        }
+    }
+
+    return m_pData->m_contViewData;
 }
 
-void SAL_CALL SfxBaseModel::setViewData( const ::com::sun::star::uno::Reference < ::com::sun::star::container::XIndexAccess >& aData )
+void SAL_CALL SfxBaseModel::setViewData( const REFERENCE < XINDEXACCESS >& aData )
 {
+    m_pData->m_contViewData = aData;
 }
 
 #endif

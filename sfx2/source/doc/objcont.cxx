@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-22 11:45:17 $
+ *  last change: $Author: sab $ $Date: 2001-04-06 15:27:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@
 #include "doctempl.hxx"
 #include "doc.hrc"
 #include "appdata.hxx"
+#include <sfxbasemodel.hxx>
 
 //====================================================================
 
@@ -241,7 +242,7 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
     if( GetMedium() && ( pFilter = GetMedium()->GetFilter() ) && !pFilter->UsesStorage() )
         return 0;
 
-    // Modus bestimmen
+    // get correct mode
     SfxApplication *pSfxApp = SFX_APP();
     SfxViewFrame *pPrefered = pPreferedFrame ? pPreferedFrame->GetCurrentViewFrame() : 0;
     SvtSaveOptions aOpt;
@@ -249,46 +250,97 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
     BOOL bLoadDocView = aOpt.IsSaveDocView();
 
     // In a StarPortal not possible at the moment
-    bLoadDocWins = FALSE;
+    if ( Application::IsRemoteServer() )
+        bLoadDocWins = FALSE;
 
-    // gar nichts laden?
     if ( !bLoadDocView )
         return 0;
 
-    // Sub-Stream "offnen
+    // try to get viewdata information for XML format
+    REFERENCE < XVIEWDATASUPPLIER > xViewDataSupplier( GetModel(), ::com::sun::star::uno::UNO_QUERY );
+    REFERENCE < XINDEXACCESS > xViewData;
+    SvStorageStreamRef xStream;
+
+    // get viewdata information for binary format
     SvStorage *pStor = HasName() ? GetStorage() : NULL;
-    SvStorageStreamRef xStream = pStor ? pStor->OpenStream( DEFINE_CONST_UNICODE( SFX_WINDOWS_STREAM ), STREAM_STD_READ ) : 0;
-    if ( !xStream )
-        return 0;
+    xStream = pStor ? pStor->OpenStream( DEFINE_CONST_UNICODE( SFX_WINDOWS_STREAM ), STREAM_STD_READ ) : 0;
+    if ( xStream.Is() && xStream->GetError() == ERRCODE_NONE )
+    {
+        xStream->SetVersion( pStor->GetVersion() );
+        xStream->SetBufferSize(1024);
+    }
+    else if ( xViewDataSupplier.is() )
+    {
+        xViewData = xViewDataSupplier->getViewData();
+        if ( !xViewData.is() )
+            return NULL;
+    }
+    else
+        return NULL;
 
-    BOOL bOldFormat = TRUE;
-    xStream->SetVersion( pStor->GetVersion() );
-    xStream->SetBufferSize(1024);
-
-    // alle gespeicherten Fenster "offnen
+    BOOL bOldFormat = TRUE;             // old format : not in StarDesktop 5.x
     SfxViewFrame *pActiveFrame = 0;
     String aWinData;
-#if SUPD<613//MUSTINI
-    char cToken = SfxIniManager::GetToken();
-#else
     char cToken =',';
-#endif
     SfxItemSet *pSet = GetMedium()->GetItemSet();
 
     pImp->bLoadingWindows = TRUE;
     BOOL bLoaded = FALSE;
-    while ( xStream->ReadByteString( aWinData ), aWinData.Len() )
+    sal_Int32 nView = 0;
+
+    // get saved information for all views
+    while ( TRUE )
     {
-        if ( aWinData.GetToken( 0, cToken ).EqualsAscii( "TASK" ) )
+        USHORT nViewId = 0;
+        FASTBOOL bActive=FALSE, bMaximized=FALSE;
+        String aPosSize;
+        String aUserData;                   // used in the binary format
+        SEQUENCE < PROPERTYVALUE > aSeq;    // used in the XML format
+        if ( xViewData.is() )
         {
-            // doesn't make any sense with the new task handling using system tasks or browser windows
-            bOldFormat = FALSE;
+            // XML format
+            // active view is the first view in the container
+            bActive = ( nView == 0 );
+
+            if ( nView == xViewData->getCount() )
+                // finished
+                break;
+
+            // get viewdata and look for the stored ViewId
+            ::com::sun::star::uno::Any aAny = xViewData->getByIndex( nView++ );
+            if ( aAny >>= aSeq )
+            {
+                for ( sal_Int32 n=0; n<aSeq.getLength(); n++ )
+                {
+                    const PROPERTYVALUE& rProp = aSeq[n];
+                    if ( rProp.Name.compareToAscii("ViewId") == COMPARE_EQUAL )
+                    {
+                        ::rtl::OUString aId;
+                        rProp.Value >>= aId;
+                        String aTmp( aId );
+                        aTmp.Erase( 0, 4 );  // format is like in "view3"
+                        nViewId = (USHORT) aTmp.ToInt32();
+                        break;
+                    }
+                }
+            }
         }
         else
         {
-            USHORT nViewId = (USHORT) aWinData.GetToken( 0, cToken ).ToInt32();
-            FASTBOOL bActive=FALSE, bMaximized=FALSE;
-            String aUserData, aPosSize;
+            // binary format
+            xStream->ReadByteString( aWinData );
+            if ( !aWinData.Len() )
+                // reading finished
+                break;
+
+            if ( aWinData.GetToken( 0, cToken ).EqualsAscii( "TASK" ) )
+            {
+                // doesn't make any sense with the new task handling using system tasks or browser windows
+                bOldFormat = FALSE;
+                continue;
+            }
+
+            nViewId = (USHORT) aWinData.GetToken( 0, cToken ).ToInt32();
             if ( bOldFormat )
             {
                 // Old format
@@ -296,16 +348,6 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
                 aPosSize.ToLowerAscii();
                 aUserData = aWinData.GetToken( 2, cToken );
                 bActive = aWinData.GetToken( 3, cToken ).ToInt32();
-
-                if ( aPosSize.EqualsAscii( "min" ) )
-                    bMaximized = TRUE;
-                else if ( aPosSize.EqualsAscii( "min" ) )
-                {
-                    bMaximized = TRUE;
-                    bActive = FALSE;
-                }
-                else
-                    bMaximized = FALSE;
             }
             else
             {
@@ -314,91 +356,120 @@ SfxViewFrame* SfxObjectShell::LoadWindows_Impl( SfxTopFrame *pPreferedFrame )
                 bActive = aWinData.GetToken( 3, cToken, nPos ).ToInt32();
                 aUserData = aWinData.Copy( nPos );
             }
+        }
 
-            Point aPt;
-            Size aSz;
+        // load only active view, but current item is not the active one ?
+        if ( !bLoadDocWins && !bActive )
+        {
+            if ( xViewData.is() )
+                // in XML format the active view is the first one
+                break;
+            else
+                continue;
+        }
+
+        // check for minimized/maximized/size
+        if ( aPosSize.EqualsAscii( "min" ) )
+            bMaximized = TRUE;
+        else if ( aPosSize.EqualsAscii( "min" ) )
+        {
+            bMaximized = TRUE;
+            bActive = FALSE;
+        }
+        else
+            bMaximized = FALSE;
+
+        Point aPt;
+        Size aSz;
 #if SUPD<613//MUSTINI
-            if ( !bMaximized )
-                SfxIniManager::GetPosSize( aPosSize, aPt, aSz );
+        if ( !bMaximized )
+            SfxIniManager::GetPosSize( aPosSize, aPt, aSz );
 #endif
 
-            // nur aktives soll geladen werden, es ist aber nicht das aktive?
-            if ( !bLoadDocWins && !bActive )
-                continue;
-
-            pSet->ClearItem( SID_USER_DATA );
-
-            SfxViewFrame *pFrame = 0;
-            if ( pPrefered )
+        pSet->ClearItem( SID_USER_DATA );
+        SfxViewFrame *pFrame = 0;
+        if ( pPrefered )
+        {
+            // use the frame from the arguments, but don't set a window size
+            pFrame = pPrefered;
+            if ( pFrame->GetViewShell() || !pFrame->GetObjectShell() )
             {
-                // dann den mitgegebenen Frame verwenden, aber keine Gr"o\se
-                // am Window setzen
-                pFrame = pPrefered;
-                if ( pFrame->GetViewShell() || !pFrame->GetObjectShell() )
-                {
-                    pSet->ClearItem( SID_VIEW_POS_SIZE );
-                    pSet->ClearItem( SID_WIN_POSSIZE );
-                    pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
+                pSet->ClearItem( SID_VIEW_POS_SIZE );
+                pSet->ClearItem( SID_WIN_POSSIZE );
+                pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
 
-                    // Flackern vermeiden
-                    SfxBindings &rBind = pFrame->GetBindings();
-                    rBind.ENTERREGISTRATIONS();
+                // avoid flickering controllers
+                SfxBindings &rBind = pFrame->GetBindings();
+                rBind.ENTERREGISTRATIONS();
 
-                    // dann ausr"aumen und das eigene Doc reinsetzen
-                    pPreferedFrame->InsertDocument( this );
+                // set document into frame
+                pPreferedFrame->InsertDocument( this );
 
-                    // Updating reaktivieren
-                    rBind.LEAVEREGISTRATIONS();
-                }
-                else
-                {
-                    // sonst neue View erzeugen
-                    pFrame->CreateView_Impl( nViewId );
-                }
+                // restart controller updating
+                rBind.LEAVEREGISTRATIONS();
             }
             else
             {
-                if ( bLoadDocWins )
-                {
-                    // Im Hintergrund "offnen
-                    pSet->Put( SfxUInt16Item( SID_VIEW_ZOOM_MODE, 0 ) );
-                    if ( !bMaximized )
-                        pSet->Put( SfxRectangleItem( SID_VIEW_POS_SIZE, Rectangle( aPt, aSz ) ) );
-                }
-
-                pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
-                pPreferedFrame->InsertDocument( this );
-                pFrame = pPreferedFrame->GetCurrentViewFrame();
-
-                // Wird nicht mehr gebraucht
-                pSet->ClearItem( SID_VIEW_POS_SIZE );
-                pSet->ClearItem( SID_WIN_POSSIZE );
-                pSet->ClearItem( SID_VIEW_ZOOM_MODE );
+                // create new view
+                pFrame->CreateView_Impl( nViewId );
+            }
+        }
+        else
+        {
+            if ( bLoadDocWins )
+            {
+                // open in the background
+                pSet->Put( SfxUInt16Item( SID_VIEW_ZOOM_MODE, 0 ) );
+                if ( !bMaximized )
+                    pSet->Put( SfxRectangleItem( SID_VIEW_POS_SIZE, Rectangle( aPt, aSz ) ) );
             }
 
-            bLoaded = TRUE;
+            pSet->Put( SfxUInt16Item( SID_VIEW_ID, nViewId ) );
 
-            // UserData hier einlesen, da es ansonsten immer mit bBrowse=TRUE
-            // aufgerufen wird, beim Abspeichern wurde aber bBrowse=FALSE verwendet
-            if ( pFrame && pFrame->GetViewShell() )
-                pFrame->GetViewShell()->ReadUserData( aUserData, !bLoadDocWins );
+            if ( pPreferedFrame )
+            {
+                // Frame "ubergeben, allerdings ist der noch leer
+                pPreferedFrame->InsertDocument( this );
+                pFrame = pPreferedFrame->GetCurrentViewFrame();
+            }
+            else
+            {
+                pFrame = SfxTopFrame::Create( this, nViewId, FALSE, pSet )->GetCurrentViewFrame();
+            }
 
-            // Evtl. sollen noch weitere Fenster geladen werden
-            pPreferedFrame = NULL;
-
-            if ( bActive )
-                pActiveFrame = pFrame;
-
-            if( pPrefered || !bLoadDocWins )
-                // Es sollte nur das aktive Window geladen werden
-                break;
+            // only temporary data, don't hold it in the itemset
+            pSet->ClearItem( SID_VIEW_POS_SIZE );
+            pSet->ClearItem( SID_WIN_POSSIZE );
+            pSet->ClearItem( SID_VIEW_ZOOM_MODE );
         }
+
+        bLoaded = TRUE;
+
+        // UserData hier einlesen, da es ansonsten immer mit bBrowse=TRUE
+        // aufgerufen wird, beim Abspeichern wurde aber bBrowse=FALSE verwendet
+        if ( pFrame && pFrame->GetViewShell() )
+        {
+            if ( aUserData.Len() )
+                pFrame->GetViewShell()->ReadUserData( aUserData, !bLoadDocWins );
+            else if ( aSeq.getLength() )
+                pFrame->GetViewShell()->ReadUserDataSequence( aSeq );
+        }
+
+        // perhaps there are more windows to load
+        pPreferedFrame = NULL;
+
+        if ( bActive )
+            pActiveFrame = pFrame;
+
+        if( pPrefered || !bLoadDocWins )
+            // load only active window
+            break;
     }
 
     if ( pActiveFrame )
     {
         if ( !pPrefered )
-            // Den zu aktivierenden Frame aktivieren
+            // activate frame
             pActiveFrame->MakeActive_Impl( TRUE );
     }
 
@@ -1696,5 +1767,4 @@ SfxEventConfigItem_Impl* SfxObjectShell::GetEventConfig_Impl( BOOL bForce )
 
     return pImp->pEventConfig;
 }
-
 
