@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: cd $ $Date: 2002-02-26 08:16:22 $
+ *  last change: $Author: mba $ $Date: 2002-03-18 13:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include "desktopresid.hxx"
 #include "dispatchwatcher.hxx"
 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
 #endif
@@ -1691,11 +1694,18 @@ void Desktop::OpenClients()
                 ::com::sun::star::uno::UNO_QUERY );
 
         // create the parameter array
-        Sequence < PropertyValue > aArgs( 4 );
+        Sequence < PropertyValue > aArgs( 5 );
         aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
         aArgs[1].Name = ::rtl::OUString::createFromAscii("AsTemplate");
         aArgs[2].Name = ::rtl::OUString::createFromAscii("FilterName");
         aArgs[3].Name = ::rtl::OUString::createFromAscii("SalvagedFile");
+
+        Reference < com::sun::star::task::XInteractionHandler > xInteraction(
+            ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.task.InteractionHandler") ),
+            com::sun::star::uno::UNO_QUERY );
+
+        aArgs[4].Name = OUString::createFromAscii( "InteractionHandler" );
+        aArgs[4].Value <<= xInteraction;
 
         // mark it as a user request
         aArgs[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
@@ -1832,11 +1842,18 @@ void Desktop::OpenDefault()
             return;
     }
 
-    Sequence < PropertyValue > aNoArgs;
+    Sequence < PropertyValue > aArgs(1);
+    Reference < com::sun::star::task::XInteractionHandler > xInteraction(
+        ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.task.InteractionHandler") ),
+        com::sun::star::uno::UNO_QUERY );
+
+    aArgs[0].Name = OUString::createFromAscii( "InteractionHandler" );
+    aArgs[0].Value <<= xInteraction;
+
     Reference< XComponentLoader > xDesktop(
             ::comphelper::getProcessServiceFactory()->createInstance( OUSTRING(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ),
             ::com::sun::star::uno::UNO_QUERY );
-    xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii( "_blank" ), 0, aNoArgs );
+    xDesktop->loadComponentFromURL( aName, ::rtl::OUString::createFromAscii( "_blank" ), 0, aArgs );
 }
 
 
@@ -1883,7 +1900,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 ::com::sun::star::uno::UNO_QUERY );
 
         // create parameter array
-        sal_Int32 nCount = rAppEvent.IsPrintEvent() ? 5 : 1;
+        sal_Int32 nCount = rAppEvent.IsPrintEvent() ? 5 : 2;
         Sequence < PropertyValue > aArgs( nCount );
         aArgs[0].Name = ::rtl::OUString::createFromAscii("Referer");
 
@@ -1893,6 +1910,15 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
             aArgs[2].Name = ::rtl::OUString::createFromAscii("OpenNewView");
             aArgs[3].Name = ::rtl::OUString::createFromAscii("Hidden");
             aArgs[4].Name = ::rtl::OUString::createFromAscii("Silent");
+        }
+        else
+        {
+            Reference < com::sun::star::task::XInteractionHandler > xInteraction(
+                ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.task.InteractionHandler") ),
+                com::sun::star::uno::UNO_QUERY );
+
+            aArgs[1].Name = OUString::createFromAscii( "InteractionHandler" );
+            aArgs[1].Value <<= xInteraction;
         }
 
         // mark request as user interaction from outside
@@ -1932,6 +1958,8 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("_blank") );
             }
 
+            try
+            {
             Reference < XPrintable > xDoc;
             if(
                 ( aName.CompareToAscii( ".uno"  , 4 ) == COMPARE_EQUAL )  ||
@@ -2015,6 +2043,10 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 Reference < XComponent > xComp( xDoc, UNO_QUERY );
                 if ( xComp.is() )
                     xComp->dispose();
+            }
+            }
+            catch ( com::sun::star::uno::Exception& )
+            {
             }
         }
 

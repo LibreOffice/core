@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchwatcher.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2002-02-26 08:16:22 $
+ *  last change: $Author: mba $ $Date: 2002-03-18 13:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_URL_HPP_
 #include <com/sun/star/util/URL.hpp>
 #endif
@@ -192,7 +195,7 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
         const DispatchRequest&  aDispatchRequest = *p;
 
         // create parameter array
-        sal_Int32 nCount = 1;
+        sal_Int32 nCount = 2;
 
         // we need more properties for a print/print to request
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
@@ -209,6 +212,15 @@ void DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatchRequ
             aArgs[2].Name = ::rtl::OUString::createFromAscii("OpenNewView");
             aArgs[3].Name = ::rtl::OUString::createFromAscii("Hidden");
             aArgs[4].Name = ::rtl::OUString::createFromAscii("Silent");
+        }
+        else
+        {
+            Reference < com::sun::star::task::XInteractionHandler > xInteraction(
+                ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.task.InteractionHandler") ),
+                com::sun::star::uno::UNO_QUERY );
+
+            aArgs[1].Name = OUString::createFromAscii( "InteractionHandler" );
+            aArgs[1].Value <<= xInteraction;
         }
 
         // mark request as user interaction from outside
