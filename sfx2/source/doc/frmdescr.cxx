@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdescr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-26 08:29:19 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,7 +178,7 @@ void SfxFrameSetDescriptor::InsertFrame
     USHORT nPos
 )
 {
-    // fucking SvPtrArrs ...
+    // complicated SvPtrArrs ...
     if ( nPos == 0xFFFF )
         nPos = aFrames.Count();
 
