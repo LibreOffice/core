@@ -13263,3 +13263,8 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?release@VCLXWindow@@WM@AAXXZ
 ?s_cd@?$WeakAggComponentImplHelper2@VXAccessibleContext@accessibility@star@sun@com@drafts@@VXAccessibleEventBroadcaster@23456@@cppu@@0Uclass_data2@2@A
 ?s_cd@?$WeakAggComponentImplHelper5@VXAccessible@accessibility@star@sun@com@drafts@@VXAccessibleContext@23456@VXAccessibleComponent@23456@VXAccessibleEditableText@23456@VXAccessibleEventBroadcaster@23456@@cppu@@0Uclass_data5@2@A
+?ImpAppendEraG@SvNumberformat@@CAXAAVString@@ABVCalendarWrapper@@F@Z
+?ImpCopyNumberformat@SvNumberformat@@AAEXABV1@@Z
+?ImpFallBackToGregorianCalendar@SvNumberformat@@AAEEAAVString@@AAN@Z
+?ImpSwitchToGregorianCalendar@SvNumberformat@@AAEXABVString@@N@Z
+?ImpSwitchToOtherCalendar@SvNumberformat@@AAEXAAVString@@AAN@Z
