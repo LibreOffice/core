@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-08 19:16:53 $
+ *  last change: $Author: sj $ $Date: 2000-11-10 08:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,9 @@
 #ifndef _SO_CLSIDS_HXX
 #include <so3/clsids.hxx>
 #endif
+#ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#endif
 #include <svtools/fltcall.hxx>
 
 //#include <svx/xbtmpit.hxx>
@@ -360,12 +363,12 @@ void GroupTable::SkipCurrentGroup()
 Collection::~Collection()
 {
     for( void* pStr = List::First(); pStr; pStr = List::Next() )
-        delete (ByteString*) pStr;
+        delete (String*) pStr;
 }
 
 // ---------------------------------------------------------------------------------------------
 
-sal_uInt32 Collection::GetId( const ByteString& rString )
+sal_uInt32 Collection::GetId( const String& rString )
 {
     if( rString.Len() )
     {
@@ -375,7 +378,7 @@ sal_uInt32 Collection::GetId( const ByteString& rString )
             if( *GetById( i ) == rString )
                 return i;
 
-        List::Insert( new ByteString( rString ), LIST_APPEND );
+        List::Insert( new String( rString ), LIST_APPEND );
         return nCount;
     }
     return 0;
@@ -386,9 +389,9 @@ sal_uInt32 Collection::GetCount() const
     return List::Count();
 }
 
-const ByteString* Collection::GetById( sal_uInt32 nId )
+const String* Collection::GetById( sal_uInt32 nId )
 {
-    return (ByteString*) List::GetObject( nId );
+    return (String*) List::GetObject( nId );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -889,7 +892,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
         {
             for ( sal_uInt32 i = 0; i < maSoundCollection.GetCount(); i++ )
             {
-                const ByteString* pSoundFile = maSoundCollection.GetById( i );
+                const String* pSoundFile = maSoundCollection.GetById( i );
                 if ( pSoundFile )
                 {
                     USHORT nStringLen = pSoundFile->Len();
@@ -897,7 +900,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
                     {
                         try
                         {
-                            ::ucb::Content aCnt( String( *pSoundFile, RTL_TEXTENCODING_UTF8 ),
+                            ::ucb::Content aCnt( *pSoundFile,
                                                     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
                             sal_Int64 nVal;
 
@@ -909,7 +912,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
                                 nSound += 2 * nStringLen + 8;   // Name Of Sound ( instance 0 )
                                 if ( nStringLen > 4 )
                                 {
-                                    if ( (sal_Char)'.' == pSoundFile->GetChar( nStringLen - 4 ) )
+                                    if ( '.' == pSoundFile->GetChar( nStringLen - 4 ) )
                                         nSound += 16;           // Type Of Sound ( instance 1 )
                                 }
                                 String aString = UniString::CreateFromInt32( i + 1 );
@@ -965,19 +968,14 @@ sal_Bool PPTWriter::ImplCloseDocument()
         for ( sal_uInt32 i = 0; i < maFontCollection.GetCount(); i++ )
         {
             mp_EscherEx->AddAtom( 68, EPP_FontEnityAtom, 0, i );
-            const ByteString* pEntry = maFontCollection.GetById( i );   // the following byte/unicode conversion
-            sal_uInt32 nFontLen = pEntry->Len();                        // is to optimize in future
-            for ( sal_uInt32 n = 0; n < 68; n++ )
+            const String* pEntry = maFontCollection.GetById( i );
+            sal_uInt32 nFontLen = pEntry->Len();
+            for ( sal_uInt32 n = 0; n < 34; n++ )
             {
-                char nByte = 0;
-                if ( ! ( n & 1 ) )
-                {
-                    if ( ( n < 62 ) && ( ( n >> 1 ) < nFontLen ) )
-                    {
-                        nByte = pEntry->GetChar( n >> 1 );
-                    }
-                }
-                *mpStrm << nByte;
+                sal_Unicode nUniCode = 0;
+                if ( ( n < 31 ) && ( n < nFontLen ) )
+                    nUniCode = pEntry->GetChar( n );
+                *mpStrm << nUniCode;
             }
         }
         mp_EscherEx->AddAtom( 10, EPP_TxSIStyleAtom );
@@ -1012,7 +1010,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
 
             for ( sal_uInt32 i = 0; i < maSoundCollection.GetCount(); i++ )
             {
-                const ByteString* pSoundFile = maSoundCollection.GetById( i );
+                const String* pSoundFile = maSoundCollection.GetById( i );
                 if ( pSoundFile )
                 {
                     USHORT nStringLen = pSoundFile->Len();
@@ -1020,7 +1018,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
                     {
                         try
                         {
-                            ::ucb::Content aCnt( String( *pSoundFile, RTL_TEXTENCODING_UTF8 ),
+                            ::ucb::Content aCnt( *pSoundFile,
                                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
                             sal_Int64 nVal;
 
@@ -1053,13 +1051,17 @@ sal_Bool PPTWriter::ImplCloseDocument()
                                 mp_EscherEx->AddAtom( nSizeOfSound, EPP_SoundData );
 
                                 sal_uInt32 nBytesLeft = nSizeOfSound;
-                                SvFileStream aSourceFile( String( *pSoundFile, RTL_TEXTENCODING_UTF8 ), STREAM_READ );
-                                while ( nBytesLeft )
+                                SvStream* pSourceFile = ::utl::UcbStreamHelper::CreateStream( *pSoundFile, STREAM_READ );
+                                if ( pSourceFile )
                                 {
-                                    sal_uInt32 nToDo = ( nBytesLeft > 0x10000 ) ? 0x10000 : nBytesLeft;
-                                    aSourceFile.Read( pBuf, nToDo );
-                                    mpStrm->Write( pBuf, nToDo );
-                                    nBytesLeft -= nToDo;
+                                    while ( nBytesLeft )
+                                    {
+                                        sal_uInt32 nToDo = ( nBytesLeft > 0x10000 ) ? 0x10000 : nBytesLeft;
+                                        pSourceFile->Read( pBuf, nToDo );
+                                        mpStrm->Write( pBuf, nToDo );
+                                        nBytesLeft -= nToDo;
+                                    }
+                                    delete pSourceFile;
                                 }
                                 sal_uInt32 nCurSoundPos = mpStrm->Tell();
                                 mpStrm->Seek( nOldSoundPos );
@@ -1876,7 +1878,7 @@ void PPTWriter::ImplWriteParagraphs( SvStream& rOut, TextObj& rTextObj, sal_uInt
         if ( nPropertyFlags & 0x80 )
             rOut << (sal_uInt16)( pPara->cBulletId );
         if ( nPropertyFlags & 0x10 )
-            rOut << (sal_uInt16)( maFontCollection.GetId( ByteString( String( pPara->aFontDesc.Name ), RTL_TEXTENCODING_UTF8 ) ) );
+            rOut << (sal_uInt16)( maFontCollection.GetId( String( pPara->aFontDesc.Name ) ) );
         if ( nPropertyFlags & 0x40 )
             rOut << (sal_Int16)nBuRealSize;
         if ( nPropertyFlags & 0x20 )
@@ -2084,14 +2086,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
         {
             mpFieldEntry = new FieldEntry( nFieldType, 0, mnTextSize );
             if ( ( nFieldType >> 28 == 4 ) )
-            {
-                INetURLObject aUrl;
-                if ( aURL.Len() )
-                    aUrl.SetSmartURL( aString );
-                else
-                    aUrl.SetSmartURL( aString );
-                mpFieldEntry->aFieldUrl = aUrl.GetMainURL();
-            }
+                mpFieldEntry->aFieldUrl = aString;
         }
 
         sal_Bool bSymbol = FALSE;
@@ -2196,7 +2191,7 @@ void PortionObj::ImplGetPortionValues( Collection& rFontCollection, sal_Bool bGe
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharFontName" ) ), bGetPropStateValue ) )
     {
         String aString( *(::rtl::OUString*)mAny.getValue() );
-        mnFont = (sal_uInt16)rFontCollection.GetId( ByteString( aString, RTL_TEXTENCODING_UTF8 ) );
+        mnFont = (sal_uInt16)rFontCollection.GetId( aString );
     }
     meFontName = ePropState;
 
@@ -3809,7 +3804,7 @@ void PPTWriter::ImplWriteObjectEffect( SvStream& rSt,
                 String aString( *(::rtl::OUString*)mAny.getValue() );
                 if ( aString.Len() )
                 {
-                    nSoundRef = maSoundCollection.GetId( ByteString( aString, RTL_TEXTENCODING_UTF8 ) ) + 1;
+                    nSoundRef = maSoundCollection.GetId( aString ) + 1;
                     nFlags |= 0x10;
                 }
             }
@@ -3895,7 +3890,7 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
             if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Bookmark" ) ) ) )
             {
                 String aString( *(::rtl::OUString*)mAny.getValue() );
-                nSoundRef = maSoundCollection.GetId( ByteString( aString, RTL_TEXTENCODING_UTF8 ) ) + 1;
+                nSoundRef = maSoundCollection.GetId( aString ) + 1;
             }
         }
         break;

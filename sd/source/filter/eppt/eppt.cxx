@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-08 19:16:11 $
+ *  last change: $Author: sj $ $Date: 2000-11-10 08:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ PPTWriter::PPTWriter( SvStorageRef& rSvStorage, SvStorageRef& xOleSource,
     if ( !ImplInitSOIface() )
         return;
 
-    maFontCollection.GetId( "Times New Roman" );            // default: immer ein times new roman
+    maFontCollection.GetId( String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ) );       // default: immer ein times new roman
 
     if ( !ImplGetPageByIndex( 0, NOTICE ) )
         return;
@@ -2181,7 +2181,7 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
                 rLev.mnTextOfs = aParagraphObj.nTextOfs;
                 rLev.mnBulletOfs = aParagraphObj.nBulletOfs;
                 rLev.mnBulletChar = aParagraphObj.cBulletId;
-                rLev.mnBulletFont = rFontCollection.GetId( ByteString( String( aParagraphObj.aFontDesc.Name ), RTL_TEXTENCODING_UTF8 ) );
+                rLev.mnBulletFont = rFontCollection.GetId( String( aParagraphObj.aFontDesc.Name ) );
                 rLev.mnBulletHeight = aParagraphObj.nBulletRealSize;
                 rLev.mnBulletColor = aParagraphObj.nBulletColor;
 

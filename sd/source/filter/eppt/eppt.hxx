@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-08 19:15:51 $
+ *  last change: $Author: sj $ $Date: 2000-11-10 08:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,8 +360,8 @@ public:
                                 ~Collection();
 
         sal_uInt32              GetCount() const;
-        sal_uInt32              GetId( const ByteString& );
-        const ByteString*       GetById( sal_uInt32 nId );
+        sal_uInt32              GetId( const String& );
+        const String*       GetById( sal_uInt32 nId );
 };
 
 // ------------------------------------------------------------------------
