@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagectrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-02-27 13:43:08 $
+ *  last change: $Author: os $ $Date: 2002-06-17 14:19:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,13 @@
 #pragma hdrstop
 
 #define ITEMID_BOX          0
-
+#define ITEMID_FRAMEDIR     0
 #ifndef _SV_BITMAP_HXX
 #include <vcl/bitmap.hxx>
 #endif
-
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <frmdiritem.hxx>
+#endif
 #include "pageitem.hxx"
 #include "pagectrl.hxx"
 #include "boxitem.hxx"
@@ -82,8 +84,19 @@ struct PageWindow_Impl
     SvxBoxItem*     pBorder;
     Bitmap          aBitmap;
     FASTBOOL        bBitmap;
+    sal_Bool        bFrameDirection;
+    sal_Int32       nFrameDirection;
 
-    PageWindow_Impl() : pBorder(0), bBitmap(FALSE) {}
+
+    PageWindow_Impl() :
+        pBorder(0),
+        bBitmap(FALSE),
+        bFrameDirection(sal_False),
+        nFrameDirection(0) {}
+
+    void        EnableFrameDirection(sal_Bool bEnable){bFrameDirection = bEnable;}
+    void        SetFrameDirection(sal_Int32 nDirection){nFrameDirection = nDirection;}
+
 };
 
 // STATIC DATA -----------------------------------------------------------
@@ -291,6 +304,58 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const BOOL bSecond, const BOOL 
     else
         DrawRect( aRect );
 
+    if(pImpl->bFrameDirection)
+    {
+       //pImpl->nFrameDirection
+        Point aPos;
+        Font aFont(GetFont());
+        const Size aSaveSize = aFont.GetSize();
+        Size aDrawSize( 0, aRect.GetHeight() / 6);
+        aFont.SetSize(aDrawSize);
+        SetFont(aFont);
+        String sText('A');
+        Point aMove(GetTextWidth(sText), GetTextHeight());
+        sal_Unicode cArrow = 0x2193;
+        switch(pImpl->nFrameDirection)
+        {
+            case FRMDIR_HORI_LEFT_TOP:
+                aPos = aRect.TopLeft();
+                aPos.X() += PixelToLogic(Point(1,1)).X();
+                aMove.Y() = 0;
+                cArrow = 0x2192;
+            break;
+            case FRMDIR_HORI_RIGHT_TOP:
+                aPos = aRect.TopRight();
+                aPos.X() -= aMove.X();
+                aMove.Y() = 0;
+                aMove.X() *= -1;
+                cArrow = 0x2190;
+            break;
+            case FRMDIR_VERT_TOP_LEFT:
+                aPos = aRect.TopLeft();
+                aPos.X() += PixelToLogic(Point(1,1)).X();
+                aMove.X() = 0;
+            break;
+            case FRMDIR_VERT_TOP_RIGHT:
+                aPos = aRect.TopRight();
+                aPos.X() -= aMove.X();
+                aMove.X() = 0;
+            break;
+        }
+        DrawText(aPos, sText);
+        aPos += aMove;
+        sText.Assign('B');
+        DrawText(aPos, sText);
+        aPos += aMove;
+        sText.Assign('C');
+        DrawText(aPos, sText);
+        aPos += aMove;
+        sText.Assign(cArrow);
+        DrawText(aPos, sText);
+        aFont.SetSize(aSaveSize);
+        SetFont(aFont);
+
+    }
     if ( bTable )
     {
         // Tabelle malen, ggf. zentrieren
@@ -353,5 +418,19 @@ void SvxPageWindow::SetFtBorder( const SvxBoxItem& rNew )
 {
     delete pFtBorder;
     pFtBorder = new SvxBoxItem( rNew );
+}
+/* -----------------------------13.06.2002 16:16------------------------------
+
+ ---------------------------------------------------------------------------*/
+void  SvxPageWindow::EnableFrameDirection(sal_Bool bEnable)
+{
+    pImpl->EnableFrameDirection(bEnable);
+}
+/* -----------------------------13.06.2002 16:16------------------------------
+
+ ---------------------------------------------------------------------------*/
+void  SvxPageWindow::SetFrameDirection(sal_Int32 nFrameDirection)
+{
+    pImpl->SetFrameDirection(nFrameDirection);
 }
 
