@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: svesik $ $Date: 2001-03-16 13:33:48 $
+#   last change: $Author: svesik $ $Date: 2001-03-25 18:56:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -151,7 +151,6 @@ RC_SUBDIRS =  \
 	sd \
 	setup2 \
 	sfx2 \
-	sim2 \
 	sj2 \
 	so3 \
 	sot \
@@ -205,7 +204,7 @@ udk_modules :	xml2cmp sal vos store registry unoidl udkapi codemaker \
 		sandbox ridljar jurt cppu cppuhelper javaunohelper \
 		jut rdbmaker io bridges cpputools io stoc remotebridges
 
-non_vcl :	udk_modules ucbhelper offuh unoil unoidl sax officecfg UnoControls \
+non_vcl :	udk_modules ucbhelper offuh unoil unoidl officecfg UnoControls \
 		rsc sot eventattacher idl transex3 inet
 
 # 
@@ -240,7 +239,7 @@ goodies : so3
 i18n : bridges stoc svtools unotools
 idl : tools
 inet : ldapber tools
-instsetoo : non_vcl chaos configmgr dbaccess desktop extensions extras forms framework i18n scaddins scp wizards readlicense xmlhelp
+instsetoo : non_vcl chaos configmgr dbaccess desktop extensions extras forms framework i18n scaddins scp sax wizards readlicense xmlhelp ucb package
 io : rdbmaker
 javaunohelper : cppuhelper jurt bridges
 jurt : codemaker ridljar sandbox
@@ -248,7 +247,7 @@ jut : javaunohelper
 lingu : linguistic
 linguistic : sfx2
 offapi : udkapi
-offmgr : basctl sch sim2 starmath uui
+offmgr : basctl sch starmath uui
 offuh : codemaker drafts
 package : tools unotools
 rdbmaker : cppuhelper
@@ -266,7 +265,6 @@ scptools : setup2
 sd : offmgr sc
 setup2 : automation basic transex3 unoil unzip
 sfx2 : idl setup2 xmloff xmlscript
-sim2 : svx
 sj2 : sandbox svtools
 so3 : inet sj2
 sot : tools ucbhelper unotools
@@ -274,7 +272,7 @@ starmath : svx
 stoc : bridges rdbmaker
 store : vos
 svtools : toolkit ucbhelper unotools
-svx : connectivity xmloff sfx2
+svx : lingu linguistic connectivity xmloff sfx2
 sw : connectivity offmgr sd
 toolkit : vcl
 tools : external vos
@@ -291,7 +289,7 @@ vos : sal
 wizards : offmgr
 xmlhelp : external jut XmlSearch
 xmloff : goodies
-xmlscript : offapi
+xmlscript : offapi comphelper
 
 # 
 # central target makefile
