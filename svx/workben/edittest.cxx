@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:29 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 11:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,8 +115,12 @@
 
 #define SERVICE_SIMPLEREGISTRY             "com.sun.star.registry.SimpleRegistry"
 
-#include <unotools/processfactory.hxx>
-#include <unotools/regpathhelper.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COMPHELPER_REGPATHHELPER_HXX_
+#include <comphelper/regpathhelper.hxx>
+#endif
 #include <cppuhelper/servicefactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -230,8 +234,8 @@ BOOL bURLClicked = FALSE;
         if ( xInit.is() )
         {
             sal_Bool                bLocalCreate = sal_True;
-            ::rtl::OUString                 localRegistry = ::utl::getPathToUserRegistry();
-            ::rtl::OUString                 systemRegistry = ::utl::getPathToSystemRegistry();
+            ::rtl::OUString                 localRegistry = ::comphelper::getPathToUserRegistry();
+            ::rtl::OUString                 systemRegistry = ::comphelper::getPathToSystemRegistry();
 
 //            if ( localRegistry.getLength() == 0)
 //            {
@@ -766,7 +770,7 @@ EditMainWindow::EditMainWindow() :
     aToolBox.InsertItem( TB_HYPH, String( RTL_CONSTASCII_USTRINGPARAM( "Hyph" ) ) );
     aToolBox.InsertItem( TB_STDSEL, String( RTL_CONSTASCII_USTRINGPARAM( "StdSel" ) ) );
     aToolBox.InsertItem( TB_FLAT, String( RTL_CONSTASCII_USTRINGPARAM( "FlatMode" ) ) );
-    aToolBox.InsertItem( TB_OUTL, String( RTL_CONSTASCII_USTRINGPARAM( "Outl" ) ) );
+    aToolBox.InsertItem( TB_OUTL, String( RTL_CONSTASCII_USTRINGPARAM( "Ocomphelper" ) ) );
     aToolBox.InsertItem( TB_POLY, String( RTL_CONSTASCII_USTRINGPARAM( "Poly" ) ) );
     aToolBox.InsertItem( TB_COLORS, String( RTL_CONSTASCII_USTRINGPARAM( "Colors" ) ));
     aToolBox.InsertItem( TB_IDLE, String( RTL_CONSTASCII_USTRINGPARAM( "Idle!" ) ) );
@@ -1522,7 +1526,7 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                             aDebStr += (USHORT)((SvxPostureItem&)rItem).GetPosture();
                         break;
                         case EE_CHAR_OUTLINE:
-                            aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "FontOutline=" ) );
+                            aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "FontOcomphelperine=" ) );
                             aDebStr += (USHORT)((SvxContourItem&)rItem).GetValue();
                         break;
                         case EE_CHAR_SHADOW:
@@ -2158,7 +2162,7 @@ void __EXPORT EditApp::Main()
 #endif
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xSMgr = createApplicationServiceManager();
-    ::utl::setProcessServiceFactory( xSMgr );
+    ::comphelper::setProcessServiceFactory( xSMgr );
 
     EditDLL aEditDll;
     SvxGlobalItemData aItemData;
