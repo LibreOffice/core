@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-03 13:37:05 $
+ *  last change: $Author: nn $ $Date: 2000-11-03 19:27:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,11 +67,11 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/fsys.hxx>       //! Test !!!
-
 #include <tools/urlobj.hxx>
 #include <svtools/converter.hxx>
 #include <svtools/zforlist.hxx>
+#include <unotools/types.hxx>
+#include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -93,6 +93,11 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
+#include <com/sun/star/ucb/NameClash.hpp>
+#include <com/sun/star/ucb/TransferInfo.hpp>
+#include <com/sun/star/ucb/XCommandInfo.hpp>
 
 #include "scerrors.hxx"
 #include "docsh.hxx"
@@ -127,6 +132,113 @@ using namespace com::sun::star;
 #define SC_DBPROP_CHARSET           "CharSet"
 
 #define SC_ROWCOUNT_ERROR       (-1)
+
+// -----------------------------------------------------------------------
+// MoveFile/KillFile/IsDocument: similar to SfxContentHelper
+
+// static
+BOOL ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject& rDestObj )
+{
+    sal_Bool bMoveData = sal_True;
+    sal_Bool bRet = sal_True, bKillSource = sal_False;
+    if ( rSourceObj.GetProtocol() != rDestObj.GetProtocol() )
+    {
+        bMoveData = sal_False;
+        bKillSource = sal_True;
+    }
+    String aName = rDestObj.getName();
+    INetURLObject aDestPathObj = rDestObj;
+    aDestPathObj.removeSegment();
+    aDestPathObj.setFinalSlash();
+
+    try
+    {
+        ::ucb::Content aDestPath( aDestPathObj.GetMainURL(),
+                            uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        uno::Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
+        rtl::OUString aTransferName = rtl::OUString::createFromAscii( "transfer" );
+        if ( xInfo->hasCommandByName( aTransferName ) )
+        {
+            aDestPath.executeCommand( aTransferName, uno::makeAny(
+                ::com::sun::star::ucb::TransferInfo( bMoveData, rSourceObj.GetMainURL(), aName,
+                                                       ::com::sun::star::ucb::NameClash::ERROR ) ) );
+        }
+        else
+        {
+            DBG_ERRORFILE( "transfer command not available" );
+        }
+    }
+    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    {
+        bRet = sal_False;
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERRORFILE( "Any other exception" );
+        bRet = sal_False;
+    }
+
+    if ( bKillSource )
+        KillFile( rSourceObj );
+
+    return bRet;
+}
+
+
+// static
+BOOL ScDocShell::KillFile( const INetURLObject& rURL )
+{
+    sal_Bool bRet = sal_True;
+    try
+    {
+        ::ucb::Content aCnt( rURL.GetMainURL(),
+                        uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        aCnt.executeCommand( rtl::OUString::createFromAscii( "delete" ),
+                                utl::makeBoolAny( sal_True ) );
+    }
+    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    {
+        DBG_ERRORFILE( "CommandAbortedException" );
+        bRet = sal_False;
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERRORFILE( "Any other exception" );
+        bRet = sal_False;
+    }
+
+    return bRet;
+}
+
+// static
+BOOL ScDocShell::IsDocument( const INetURLObject& rURL )
+{
+    sal_Bool bRet = sal_False;
+    try
+    {
+        ::ucb::Content aCnt( rURL.GetMainURL(),
+                        uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        bRet = aCnt.isDocument();
+    }
+    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    {
+        DBG_ERRORFILE( "CommandAbortedException" );
+    }
+    catch( ::com::sun::star::ucb::IllegalIdentifierException& )
+    {
+        DBG_WARNING( "IllegalIdentifierException" );
+    }
+    catch( ::ucb::ContentCreationException& )
+    {
+        DBG_WARNING( "ContentCreationException" );
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERRORFILE( "Any other exception" );
+    }
+
+    return bRet;
+}
 
 // -----------------------------------------------------------------------
 
@@ -642,12 +754,9 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
 
 ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BOOL& bHasMemo )
 {
-    //! Test !!!
-    DirEntry aDirEntry( rFullFileName );
-    if ( aDirEntry.Exists() )
-        aDirEntry.Kill();
-    //! Test !!!
-
+    // remove the file so the dBase driver doesn't find an invalid file
+    INetURLObject aDeleteObj( rFullFileName, INET_PROT_FILE );
+    KillFile( aDeleteObj );
 
     ULONG nErr = eERR_OK;
     uno::Any aAny;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 19:00:10 $
+ *  last change: $Author: nn $ $Date: 2000-11-03 19:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 
 #include "scitems.hxx"
 
-#include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
@@ -1733,7 +1732,6 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         else
         {
             WaitObject aWait( GetDialogParent() );
-            DirEntry aTmpFile( rMed.GetPhysicalName() );
 // HACK damit Sba geoffnetes TempFile ueberschreiben kann
             rMed.CloseOutStream();
             BOOL bHasMemo = FALSE;
@@ -1749,14 +1747,16 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             }
 //!         else if ( aDocument.GetTableCount() > 1 && !rMed.GetError() )
 //!             rMed.SetError( SCWARN_EXPORT_ASCII );
+
+            INetURLObject aTmpFile( rMed.GetPhysicalName(), INET_PROT_FILE );
             if ( bHasMemo )
-                aTmpFile.SetExtension( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("dbt")) );
+                aTmpFile.setExtension( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("dbt")) );
             if ( eError != eERR_OK )
             {
                 if (!GetError())
                     SetError(eError);
-                if ( bHasMemo && aTmpFile.Exists() )
-                    aTmpFile.Kill();
+                if ( bHasMemo && IsDocument( aTmpFile ) )
+                    KillFile( aTmpFile );
             }
             else
             {
@@ -1765,16 +1765,15 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 {
                     SfxStringItem* pNameItem =
                         (SfxStringItem*) rMed.GetItemSet()->GetItem( SID_FILE_NAME );
-                    DirEntry aDbtFile( pNameItem->GetValue() );
-                    aDbtFile.SetExtension( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("dbt")) );
-                    if ( aDbtFile.Exists() && aDbtFile.Kill() )
+                    INetURLObject aDbtFile( pNameItem->GetValue(), INET_PROT_FILE );
+                    aDbtFile.setExtension( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("dbt")) );
+                    if ( IsDocument( aDbtFile ) && !KillFile( aDbtFile ) )
                         bRet = FALSE;
-                    if ( bRet && aTmpFile.MoveTo( aDbtFile ) )
+                    if ( bRet && !MoveFile( aTmpFile, aDbtFile ) )
                         bRet = FALSE;
                     if ( !bRet )
                     {
-                        if ( aTmpFile.Exists() )
-                            aTmpFile.Kill();
+                        KillFile( aTmpFile );
                         if ( !GetError() )
                             SetError( SCERR_EXPORT_DATA );
                     }
