@@ -2,9 +2,9 @@
  *
  *  $RCSfile: model.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 12:06:16 $
+ *  last change: $Author: hr $ $Date: 2001-11-02 11:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,9 @@ class PluginModel : public BroadcasterHelperHolder,
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& rType ) throw( ::com::sun::star::uno::RuntimeException )
         { return OWeakAggObject::queryInterface( rType ); }
-    virtual void SAL_CALL acquire()  throw( ::com::sun::star::uno::RuntimeException )
+    virtual void SAL_CALL acquire()  throw()
     { OWeakAggObject::acquire(); }
-    virtual void SAL_CALL release()  throw( ::com::sun::star::uno::RuntimeException )
+    virtual void SAL_CALL release()  throw()
     { OWeakAggObject::release(); }
 
     virtual Any SAL_CALL queryAggregation( const Type& ) throw( ::com::sun::star::uno::RuntimeException );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-23 17:31:19 $
+ *  last change: $Author: hr $ $Date: 2001-11-02 11:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,9 +285,9 @@ public:
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& ) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL acquire()  throw( ::com::sun::star::uno::RuntimeException )
+    virtual void SAL_CALL acquire()  throw()
     { OWeakAggObject::acquire(); }
-    virtual void SAL_CALL release()  throw( ::com::sun::star::uno::RuntimeException )
+    virtual void SAL_CALL release()  throw()
     { OWeakAggObject::release(); }
 
     // OWeakAggObject
