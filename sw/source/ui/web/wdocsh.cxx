@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wdocsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:58:02 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:50:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,12 +73,11 @@
 #include <svx/svxids.hrc>
 #endif
 
-#ifndef _SO_CLSIDS_HXX
-#include <so3/clsids.hxx>
-#endif
+#include <sot/clsids.hxx>
+#include <sfx2/fcontnr.hxx>
 
 #include "itemdef.hxx"
-
+#include "cfgid.h"
 #include "cmdid.h"
 #include "swtypes.hxx"
 
@@ -94,25 +93,20 @@
 
 SFX_IMPL_INTERFACE( SwWebDocShell, SfxObjectShell, SW_RES(0) )
 {
-    SwWebDocShell::Factory().RegisterHelpFile(C2S("swriter.svh"));
-    SwWebDocShell::Factory().RegisterHelpPIFile(C2S("swriter.svh"));
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Alle Filter registrieren
- --------------------------------------------------------------------*/
-
-// 4.0: 0xf0caa840, 0x7821, 0x11d0, 0xa4, 0xa7, 0x0, 0xa0, 0x24, 0x9d, 0x57, 0xb1, Sw)
-// 5.0: 0xc20cf9d2, 0x85ae, 0x11d1, 0xaa, 0xb4, 0x0, 0x60, 0x97, 0xda, 0x56, 0x1a
-
-SFX_IMPL_OBJECTFACTORY_LOD(SwWebDocShell, SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, /*swriter4/web,*/ \
-            SvGlobalName(SO3_SWWEB_CLASSID), Sw)
-/*{
-    ::RegisterWebFilterInSfxFactory( (SfxObjectFactory&)Factory(), RC_WEB_ICON );
-} */
-
-
 TYPEINIT1(SwWebDocShell, SwDocShell);
+
+SFX_IMPL_OBJECTFACTORY(SwWebDocShell, SFXOBJECTSHELL_STD_NORMAL|SFXOBJECTSHELL_HASMENU, swriter/web, SvGlobalName(SO3_SWWEB_CLASSID) )
+{
+    SfxObjectFactory& rFactory = (SfxObjectFactory&)Factory();
+    rFactory.SetDocumentServiceName(C2S("com.sun.star.text.WebDocument"));
+    //rFactory.GetFilterContainer()->SetDetectFilter( &SwDLL::DetectFilter );
+    SwWebDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SWWEB_MENU));
+    SwWebDocShell::Factory().RegisterAccel(SW_RES(CFG_SWWEB_ACCEL));
+    SwWebDocShell::Factory().RegisterHelpFile(C2S("swriter.svh"));
+    //SwWebDocShell::Factory().RegisterHelpPIFile(C2S("swriter.svh"));
+}
 
 /*-----------------22.01.97 09.29-------------------
 
