@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-28 09:15:19 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 10:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,6 @@ namespace connectivity
             DBFMemoHeader   m_aMemoHeader;
             SvStream*       m_pMemoStream;
             sal_Bool        m_bWriteableMemo;
-            sal_Bool        m_bValid;       // set to false when this isn't a correct dbase table
-            String          m_sInvalidityMessage;
 
             void readHeader();
             void fillColumns();

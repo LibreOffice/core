@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-28 09:16:40 $
+ *  last change: $Author: oj $ $Date: 2001-03-01 10:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,8 +169,7 @@ void ODbaseTable::readHeader()
         ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file '");
         sMessage += getEntry();
         sMessage += ::rtl::OUString::createFromAscii(" is an invalid (or unrecognized) dBase file.");
-        m_sInvalidityMessage = sMessage;
-        m_bValid = sal_False;
+        throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
     }
     else
     {
@@ -196,8 +195,7 @@ void ODbaseTable::readHeader()
                 ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii("[StarOffice Base dbase] The file ");
                 sMessage += getEntry();
                 sMessage += ::rtl::OUString::createFromAscii(" is an invalid (or unrecognized) dBase file.");
-                m_sInvalidityMessage = sMessage;
-                m_bValid = sal_False;
+                throwGenericSQLException(sMessage, static_cast<XNamed*>(this));
             }
         }
     }
@@ -500,11 +498,11 @@ void ODbaseTable::refreshIndexes()
         aURL.setExtension(String::CreateFromAscii("inf"));
         Config aInfFile(aURL.GetURLNoPass());
         aInfFile.SetGroup(dBASE_III_GROUP);
-        sal_Int32 nKeyCnt = aInfFile.GetKeyCount();
+        USHORT nKeyCnt = aInfFile.GetKeyCount();
         ByteString aKeyName;
         ByteString aIndexName;
 
-        for (sal_Int32 nKey = 0,nPos=0; nKey < nKeyCnt; nKey++)
+        for (USHORT nKey = 0,nPos=0; nKey < nKeyCnt; nKey++)
         {
             // Verweist der Key auf ein Indexfile?...
             aKeyName = aInfFile.GetKeyName( nKey );
@@ -766,7 +764,7 @@ sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,
         {
             char cLast = pData[nLen];
             pData[nLen] = 0;
-            String aStr(pData,nLen,getConnection()->getTextEncoding());
+            String aStr(pData,(xub_StrLen)nLen,getConnection()->getTextEncoding());
             aStr.EraseTrailingChars();
 
             if (!aStr.Len())                // keine StringLaenge, dann NULL
@@ -787,7 +785,7 @@ sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,
                     pData[k] = ' ';
             }
 
-            String aStr(pData, nLen,getConnection()->getTextEncoding());        // Spaces am Anfang und am Ende entfernen:
+            String aStr(pData, (xub_StrLen)nLen,getConnection()->getTextEncoding());        // Spaces am Anfang und am Ende entfernen:
             aStr.EraseLeadingChars();
             aStr.EraseTrailingChars();
 
@@ -807,9 +805,9 @@ sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,
                         (*_rRow)[i].setNull();
                         break;
                     }
-                    sal_Int32  nYear   = aStr.Copy( 0, 4 ).ToInt32();
-                    sal_Int32  nMonth  = aStr.Copy( 4, 2 ).ToInt32();
-                    sal_Int32  nDay    = aStr.Copy( 6, 2 ).ToInt32();
+                    sal_uInt16  nYear   = (sal_uInt16)aStr.Copy( 0, 4 ).ToInt32();
+                    sal_uInt16  nMonth  = (sal_uInt16)aStr.Copy( 4, 2 ).ToInt32();
+                    sal_uInt16  nDay    = (sal_uInt16)aStr.Copy( 6, 2 ).ToInt32();
 
                     ::com::sun::star::util::Date aDate(nDay,nMonth,nYear);
                     (*_rRow)[i] = aDate;
@@ -1089,7 +1087,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
     m_pFileStream->Write(aBuffer, 20);
 
     USHORT nRecLength = 1;                                                                                          // Länge 1 für deleted flag
-    ULONG  nMaxFieldLength = m_pConnection->getMetaData()->getMaxColumnNameLength();
+    sal_Int32  nMaxFieldLength = m_pConnection->getMetaData()->getMaxColumnNameLength();
     Reference<XIndexAccess> xColumns(getColumns(),UNO_QUERY);
 
     ::rtl::OUString aName;
@@ -1193,7 +1191,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                 }
                 else
                 {
-                    UINT16 nPrec = SvDbaseConverter::ConvertPrecisionToDbase(nPrecision,nScale);
+                    sal_Int32 nPrec = SvDbaseConverter::ConvertPrecisionToDbase(nPrecision,nScale);
 
                     (*m_pFileStream) << (BYTE)( nPrec);
                     (*m_pFileStream) << (BYTE)nScale;
@@ -1301,7 +1299,7 @@ BOOL ODbaseTable::DropImpl()
     // jetzt noch die Indices loeschen
     String aIndexName;
     //  aFile.SetExtension(String::CreateFromAscii("ndx"));
-    USHORT nCount = m_pIndexes->getCount(),
+    sal_Int32 nCount = m_pIndexes->getCount(),
            i      = 0;
     while (i < nCount)
     {
@@ -1655,7 +1653,7 @@ double toDouble(const ByteString& rString)
 //------------------------------------------------------------------
 BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Reference<XIndexAccess>& _xCols)
 {
-    USHORT nByteOffset  = 1;
+    sal_Int32 nByteOffset  = 1;
 
     // Felder aktualisieren:
     Reference<XPropertySet> xCol;
@@ -1719,7 +1717,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 
         // Laengen je nach Datentyp:
         // nyi: eine zentrale Funktion, die die Laenge liefert!
-        USHORT nLen = (USHORT)getINT32(xCol->getPropertyValue(PROPERTY_PRECISION));
+        sal_Int32 nLen = getINT32(xCol->getPropertyValue(PROPERTY_PRECISION));
         sal_Int32 nType = getINT32(xCol->getPropertyValue(PROPERTY_TYPE));
         switch (nType)
         {
@@ -1864,7 +1862,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                     memset(pData,' ',nLen); // Zuruecksetzen auf NULL
                     ByteString aStr(rRow[nPos].getString().getStr(),getConnection()->getTextEncoding());
                     // Zeichen kopieren:
-                    memcpy(pData, aStr.GetBuffer(), min(nLen,aStr.Len()));
+                    memcpy(pData, aStr.GetBuffer(), min(nLen,(sal_Int32)aStr.Len()));
                 }   break;
             }
         }
