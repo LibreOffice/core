@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-12 13:13:11 $
+ *  last change: $Author: mba $ $Date: 2000-12-13 10:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,27 +162,54 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
 
 
     // try to find the help frame
-    Reference < XDispatchProvider > xFrame(
-        xActiveTask->findFrame( ::rtl::OUString::createFromAscii( "OFFICE_HELP" ),
-        FrameSearchFlag::GLOBAL ), UNO_QUERY );
-
+    ::rtl::OUString aTarget = ::rtl::OUString( DEFINE_CONST_UNICODE("OFFICE_HELP") );
+    Reference < XDispatchProvider > xFrame( xActiveTask->findFrame( aTarget, FrameSearchFlag::GLOBAL ), UNO_QUERY );
     Sequence < PropertyValue > aProps;
     sal_Int32 nFlag = FrameSearchFlag::GLOBAL;
     String aHelpModuleName = GetHelpModuleName( nHelpId );
-    sal_Bool bNewWin = sal_False;
+
+    // build up the help URL
+    sal_Bool bNewWin = !( xFrame.is() );
+    String aHelpURL( String::CreateFromAscii("vnd.sun.star.help://") );
+    aHelpURL += aHelpModuleName;
+
+#if SUPD == 614
+    if ( 1 )
+#else
+    if ( !nHelpId || bNewWin )
+#endif
+    {
+        aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
+    }
+    else
+    {
+        aHelpURL += '/';
+        aHelpURL += String::CreateFromInt32( nHelpId );
+    }
+
     if ( aTicket.Len() )
     {
         // if there is a ticket, we are inside a plugin, so a request including the URL must be posted
         if ( !xFrame.is() )
             // must be created on dispatch
             nFlag |= FrameSearchFlag::CREATE;
+        String aURL;
+        aURL = DEFINE_CONST_UNICODE("vnd.sun.star.cmd://help?");
+        aURL += DEFINE_CONST_UNICODE("HELP_Request_Mode=contextIndex,HELP_Session_Mode=context,HELP_Url=");
+        aURL += aHelpURL;
+        aURL += '&';
+        aURL += DEFINE_CONST_UNICODE("HELP_User=");
+        aURL += aUser;
+        aURL += '&';
+        aURL += DEFINE_CONST_UNICODE("HELP_Ticket=");
+        aURL += aTicket;
+        aHelpURL = aURL;
     }
     else
     {
         // otherwise the URL can be dispatched to the help frame
         if ( !xFrame.is() )
         {
-            bNewWin = sal_True;
             Reference < XFrame > xTask = xActiveTask->findFrame( DEFINE_CONST_UNICODE( "_blank" ), 0 );
             xFrame = Reference < XDispatchProvider >( xTask, UNO_QUERY );
             Window* pWin = VCLUnoHelper::GetWindow( xTask->getContainerWindow() );
@@ -202,20 +229,6 @@ BOOL SfxHelp_Impl::Start( ULONG nHelpId )
         }
     }
 
-    // build up the help URL
-    String aHelpURL(String::CreateFromAscii("vnd.sun.star.help://") );
-    aHelpURL += aHelpModuleName;
-#if SUPD == 614
-    if ( 1 )
-#else
-    if ( !nHelpId || bNewWin )
-#endif
-        aHelpURL += String( DEFINE_CONST_UNICODE("/start") );
-    else
-    {
-        aHelpURL += '/';
-        aHelpURL += String::CreateFromInt32( nHelpId );
-    }
     ::com::sun::star::util::URL aURL;
     aURL.Complete = aHelpURL;
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
