@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-21 13:38:49 $
+ *  last change: $Author: nn $ $Date: 2001-03-15 20:34:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
 
 long ScSortDescriptor::GetPropertyCount()
 {
-    return 10;      // TableSortDescriptor und SheetSortDescriptor
+    return 12;      // TableSortDescriptor and SheetSortDescriptor
 }
 
 void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq, const ScSortParam& rParam )
@@ -383,6 +383,12 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
 
     pArray[9].Name = rtl::OUString::createFromAscii( SC_UNONAME_UINDEX );
     pArray[9].Value <<= (sal_Int32) rParam.nUserIndex;
+
+    pArray[10].Name = rtl::OUString::createFromAscii( SC_UNONAME_COLLLOC );
+    pArray[10].Value <<= rParam.aCollatorLocale;
+
+    pArray[11].Name = rtl::OUString::createFromAscii( SC_UNONAME_COLLALG );
+    pArray[11].Value <<= rtl::OUString( rParam.aCollatorAlgorithm );
 }
 
 void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
@@ -459,6 +465,16 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             sal_Int32 nVal;
             if ( rProp.Value >>= nVal )
                 rParam.nUserIndex = (USHORT)nVal;
+        }
+        else if (aPropName.EqualsAscii( SC_UNONAME_COLLLOC ))
+        {
+            rProp.Value >>= rParam.aCollatorLocale;
+        }
+        else if (aPropName.EqualsAscii( SC_UNONAME_COLLALG ))
+        {
+            rtl::OUString sStr;
+            if ( rProp.Value >>= sStr )
+                rParam.aCollatorAlgorithm = sStr;
         }
     }
 }
