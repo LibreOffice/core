@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscibas.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:25:15 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,6 +616,7 @@ RscEnum * RscTypCont::InitMessButtons(){
     SETCONST( pMessButtons, "WB_YES_NO",                  WB_YES_NO );
     SETCONST( pMessButtons, "WB_YES_NO_CANCEL",           WB_YES_NO_CANCEL );
     SETCONST( pMessButtons, "WB_RETRY_CANCEL",            WB_RETRY_CANCEL );
+    SETCONST( pMessButtons, "WB_ABORT_RETRY_IGNORE",      WB_ABORT_RETRY_IGNORE );
     return( pMessButtons );
 }
 
@@ -638,6 +639,7 @@ RscEnum * RscTypCont::InitMessDefButton(){
     SETCONST( pMessDefButton, "WB_DEF_RETRY",               WB_DEF_RETRY );
     SETCONST( pMessDefButton, "WB_DEF_YES",                 WB_DEF_YES );
     SETCONST( pMessDefButton, "WB_DEF_NO",                  WB_DEF_NO );
+    SETCONST( pMessDefButton, "WB_DEF_IGNORE",              WB_DEF_IGNORE );
     return( pMessDefButton );
 }
 
