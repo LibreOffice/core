@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTypeInfo.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:24 $
+ *  last change: $Author: oj $ $Date: 2001-04-12 12:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,6 @@
 
 namespace connectivity
 {
-    namespace starsdbc2 = ::com::sun::star::sdbc;
-
     struct OTypeInfo
     {
         ::rtl::OUString aTypeName;      // Name des Types in der Datenbank
@@ -106,9 +104,9 @@ namespace connectivity
                 ,bUnsigned(sal_False)
                 ,nMaximumScale(0)
                 ,nMinimumScale(0)
-                ,nType(starsdbc2::DataType::OTHER)
+                ,nType( ::com::sun::star::sdbc::DataType::OTHER)
                 ,nPrecision(0)
-                ,nSearchType(starsdbc2::ColumnSearch::FULL)
+                ,nSearchType( ::com::sun::star::sdbc::ColumnSearch::FULL)
         {}
         sal_Bool operator == (const OTypeInfo& lh) const { return lh.nType == nType; }
         sal_Bool operator != (const OTypeInfo& lh) const { return lh.nType != nType; }
