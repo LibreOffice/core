@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: as $ $Date: 2001-12-19 13:16:40 $
+ *  last change: $Author: mba $ $Date: 2002-04-30 07:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,10 +483,10 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
     // now some parameters that can already be in the array, but may be overwritten or new inserted here
     // remember their indices in the case new values must be added to the array
     sal_Int32 nPropertyCount = lDescriptor.getLength();
-    sal_Int32 nIndexOfFilterName = nPropertyCount;
-    sal_Int32 nIndexOfInputStream = lDescriptor.getLength();
-    sal_Int32 nIndexOfReadOnlyFlag = lDescriptor.getLength();
-    sal_Int32 nIndexOfTemplateFlag = lDescriptor.getLength();
+    sal_Int32 nIndexOfFilterName = -1;
+    sal_Int32 nIndexOfInputStream = -1;
+    sal_Int32 nIndexOfReadOnlyFlag = -1;
+    sal_Int32 nIndexOfTemplateFlag = -1;
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         // extract properties
@@ -570,13 +570,14 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         {
             // use format without prefix
             aFilterName = pFilter->GetFilterName();
-            if ( nIndexOfFilterName < nPropertyCount )
+            if ( nIndexOfFilterName != -1 )
                 lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString( aFilterName );
             else
             {
                 lDescriptor.realloc( nPropertyCount + 1 );
                 lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("FilterName");
                 lDescriptor[nPropertyCount].Value <<= ::rtl::OUString( aFilterName );
+                nPropertyCount++;
             }
         }
         else
@@ -778,7 +779,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             aFilterName = pExternalFilter->GetFilterName();
         else
             aFilterName = pFilter->GetFilterName();
-        if ( nIndexOfFilterName < nPropertyCount )
+        if ( nIndexOfFilterName != -1 )
             // convert to format with factory ( makes load more easy to implement )
             lDescriptor[nIndexOfFilterName].Value <<= ::rtl::OUString( aFilterName );
         else
@@ -786,13 +787,15 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             lDescriptor.realloc( nPropertyCount + 1 );
             lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("FilterName");
             lDescriptor[nPropertyCount].Value <<= ::rtl::OUString( aFilterName );
+            nPropertyCount++;
         }
 
-        if ( pFilter->IsOwnTemplateFormat() && nIndexOfTemplateFlag == nPropertyCount )
+        if ( pFilter->IsOwnTemplateFormat() && nIndexOfTemplateFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
             lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
             lDescriptor[nPropertyCount].Value <<= sal_True;
+            nPropertyCount++;
         }
     }
     else
@@ -801,23 +804,23 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
         aTypeName = ::rtl::OUString();
     }
 
-    if ( nIndexOfInputStream == nPropertyCount && xStream.is() )
+    if ( nIndexOfInputStream == -1 && xStream.is() )
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
-        sal_Int32 nIndex = lDescriptor.getLength();
-        lDescriptor.realloc( lDescriptor.getLength() + 1 );
-        lDescriptor[nIndex].Name = ::rtl::OUString::createFromAscii("InputStream");
-        lDescriptor[nIndex].Value <<= xStream;
+        lDescriptor.realloc( nPropertyCount + 1 );
+        lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("InputStream");
+        lDescriptor[nPropertyCount].Value <<= xStream;
+        nPropertyCount++;
     }
 
     if ( bReadOnly != bWasReadOnly )
     {
-        if ( nIndexOfReadOnlyFlag == nPropertyCount )
+        if ( nIndexOfReadOnlyFlag == -1 )
         {
-            sal_Int32 nIndex = lDescriptor.getLength();
-            lDescriptor.realloc( lDescriptor.getLength() + 1 );
-            lDescriptor[nIndex].Name = ::rtl::OUString::createFromAscii("ReadOnly");
-            lDescriptor[nIndex].Value <<= bReadOnly;
+            lDescriptor.realloc( nPropertyCount + 1 );
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("ReadOnly");
+            lDescriptor[nPropertyCount].Value <<= bReadOnly;
+            nPropertyCount++;
         }
         else
             lDescriptor[nIndexOfReadOnlyFlag].Value <<= bReadOnly;
