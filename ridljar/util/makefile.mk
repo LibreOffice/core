@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 15:44:58 $
+#   last change: $Author: vg $ $Date: 2003-12-17 17:43:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,10 +84,12 @@ ZIP1FLAGS=-u -r
 ZIP1DIR=$(PRJ)
 ZIP1LIST=com -x "*makefile.mk"
 
+.IF "$(SOLAR_JAVA)"!=""
 ZIP2TARGET=$(TARGET)2_src
 ZIP2FLAGS=-u -r
 ZIP2DIR=$(MISC)$/java
 ZIP2LIST=com
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
