@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:46:09 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2747,7 +2747,7 @@ TabPage RID_PRINTOPTIONPAGE
         Text[ japanese ] = "Ú×µÌß¼®İ";
         Text[ chinese_simplified ] = "ÆäËûÑ¡Ïî";
         Text[ chinese_traditional ] = "¨ä¥L¿ï¶µ";
-        Text[ arabic ] = "ÚãáíÇÊ ÃÎÑì";
+        Text[ arabic ] = "ÎíÇÑÇÊ ÃÎÑì";
         Text[ greek ] = "¢ëëåò åğéëïãİò";
         Text[ korean ] = "°¢Á¾ ¿É¼Ç";
         Text[ turkish ] = "Diğer seçenekler";
@@ -8997,7 +8997,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ chinese_simplified ] = "ÓÃÓÚÈ«²¿";
                 TEXT[ russian ] = "Äëÿ âñåõ";
                 TEXT[ polish ] = "Dla wszystkich";
-                TEXT[ japanese ] = "”CˆÓ‚Ì";
+                TEXT[ japanese ] = "‚·‚×‚Ä‚Ì";
                 TEXT[ chinese_traditional ] = "¾A¥Î¥ş³¡";
                 TEXT[ arabic ] = "ááßá";
                 TEXT[ greek ] = "Ãéá üëá";
