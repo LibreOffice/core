@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:15:38 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,6 @@ service RowSet
 
     service com::sun::star::sdb::ResultSet;
 
-
     /** can be used to allow an interaction handler to supply missing data during a execute process.
 
         <p>If you want a row set to be based on a parametrized query, you will usually use
@@ -213,9 +212,36 @@ service RowSet
     interface com::sun::star::sdb::XCompletedExecution;
 
     /** approving of actions performed on the rowset.
+
+        <p>The support of this interface implies a sematical extension to the <type scope="com::sun::star::sdbc">XResultSetUpdate</type>
+        interface which is supported via the <type scope="com::sun::star::sdbc">ResultSet</type>.</p>
+
+        @see XResultSetUpdate
      */
     interface XRowSetApproveBroadcaster;
 
+    /** is the interface for updating row data to the database.
+
+        <p>The optional support of this interface is already implied with the support of the <type scope="com::sun::star::sdbc">ResultSet</type>.</p>
+
+        <p>However, note that the additional support of the <type>XRowSetApproveBroadcaster</type> interface results
+        in a sematical extension: the methods <member scope="com::sun::star::sdbc">XResultSetUpdate::insertRow</member>,
+        <member scope="com::sun::star::sdbc">XResultSetUpdate::updateRow</member> and <member scope="com::sun::star::sdbc">XResultSetUpdate::deleteRow</member>
+        will now throw the <type>RowSetVetoException</type> if the action which is to be performed was vetoed
+        by one of the <type>XRowSetApproveListener</type>'s.</p>
+     */
+    [optional] interface com::sun::star::sdbc::XResultSetUpdate;
+
+    /** is the interface for deleting more than one row, identified by it's bookmark.
+
+        <p>The optional support of this interface is already implied with the support of the <type scope="com::sun::star::sdbcx">ResultSet</type>.</p>
+
+        <p>However, note that the additional support of the <type>XRowSetApproveBroadcaster</type> interface results
+        in a sematical extension: the method <member scope="com::sun::star::sdbc">XDeleteRows::deleteRows</member>
+        will now throw the <type>RowSetVetoException</type> if the deletion was vetoed
+        by one of the <type>XRowSetApproveListener</type>'s.</p>
+     */
+    [optional] interface com::sun::star::sdbcx::XDeleteRows;
 
     /** creates a second result set which is based on the same data.
         <p>
