@@ -16,19 +16,19 @@ $(LIB1TARGET) :	$(LIB1FILES) \
 .ENDIF
 .IF "$(GUI)"=="UNX"
     @+$(RM) $@
-    @+echo $(LIB1OBJFILES:s/.obj/.o/) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    +echo $(LIB1OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#_$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB1FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
-    @+nm `cat $(LIB1TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @+nm `cat $(LIB1TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .IF "$(LIB1ARCHIV)" != ""
     @+-$(RM) $(MISC)$/$(LIB1ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
     @+-$(RM) $(MISC)$/$(LIB1ARCHIV:b)_closetempl.cmd
-    @+echo $(LINK) +inst_close -c `cat $(LIB1TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB1ARCHIV:b)_closetempl.cmd
+    @+echo $(LINK) +inst_close -c `cat $(LIB1TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB1ARCHIV:b)_closetempl.cmd
     @cat $(MISC)$/$(LIB1ARCHIV:b)_closetempl.cmd
     @source $(MISC)$/$(LIB1ARCHIV:b)_closetempl.cmd
 .ENDIF
-    @+echo $(LIBMGR) $(LIB1FLAGS) $(LIBFLAGS) $(LIB1ARCHIV) `cat $(LIB1TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB1ARCHIV:b).cmd
+    @+echo $(LIBMGR) $(LIB1FLAGS) $(LIBFLAGS) $(LIB1ARCHIV) `cat $(LIB1TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB1ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB1ARCHIV) >> $(MISC)$/$(LIB1ARCHIV:b).cmd
 .ENDIF
@@ -38,11 +38,11 @@ $(LIB1TARGET) :	$(LIB1FILES) \
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
-    @+echo $(LIB1OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    @+echo $(LIB1OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#_$(ROUT)\#g | xargs -n 1 > $@
     @+cat /dev/null $(LIB1FILES) | xargs -n 1 >> $@
 .IF "$(LIB1ARCHIV)" != ""
     @+$(RM) $(LIB1ARCHIV)
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB1ARCHIV) `cat /dev/null $@ | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
+    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB1ARCHIV) `cat /dev/null $@ | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
 .ENDIF			# "$(LIB1ARCHIV)" != ""
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(COM)" == "BLC"
@@ -91,19 +91,19 @@ $(LIB2TARGET) :	$(LIB2FILES) \
 .ENDIF
 .IF "$(GUI)"=="UNX"
     @+$(RM) $@
-    @+echo $(LIB2OBJFILES:s/.obj/.o/) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    +echo $(LIB2OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#_$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB2FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
-    @+nm `cat $(LIB2TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @+nm `cat $(LIB2TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .IF "$(LIB2ARCHIV)" != ""
     @+-$(RM) $(MISC)$/$(LIB2ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
     @+-$(RM) $(MISC)$/$(LIB2ARCHIV:b)_closetempl.cmd
-    @+echo $(LINK) +inst_close -c `cat $(LIB2TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB2ARCHIV:b)_closetempl.cmd
+    @+echo $(LINK) +inst_close -c `cat $(LIB2TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB2ARCHIV:b)_closetempl.cmd
     @cat $(MISC)$/$(LIB2ARCHIV:b)_closetempl.cmd
     @source $(MISC)$/$(LIB2ARCHIV:b)_closetempl.cmd
 .ENDIF
-    @+echo $(LIBMGR) $(LIB2FLAGS) $(LIBFLAGS) $(LIB2ARCHIV) `cat $(LIB2TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB2ARCHIV:b).cmd
+    @+echo $(LIBMGR) $(LIB2FLAGS) $(LIBFLAGS) $(LIB2ARCHIV) `cat $(LIB2TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB2ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB2ARCHIV) >> $(MISC)$/$(LIB2ARCHIV:b).cmd
 .ENDIF
@@ -113,11 +113,11 @@ $(LIB2TARGET) :	$(LIB2FILES) \
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
-    @+echo $(LIB2OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    @+echo $(LIB2OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#_$(ROUT)\#g | xargs -n 1 > $@
     @+cat /dev/null $(LIB2FILES) | xargs -n 1 >> $@
 .IF "$(LIB2ARCHIV)" != ""
     @+$(RM) $(LIB2ARCHIV)
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB2ARCHIV) `cat /dev/null $@ | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
+    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB2ARCHIV) `cat /dev/null $@ | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
 .ENDIF			# "$(LIB2ARCHIV)" != ""
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(COM)" == "BLC"
@@ -166,19 +166,19 @@ $(LIB3TARGET) :	$(LIB3FILES) \
 .ENDIF
 .IF "$(GUI)"=="UNX"
     @+$(RM) $@
-    @+echo $(LIB3OBJFILES:s/.obj/.o/) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    +echo $(LIB3OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#_$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB3FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
-    @+nm `cat $(LIB3TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @+nm `cat $(LIB3TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .IF "$(LIB3ARCHIV)" != ""
     @+-$(RM) $(MISC)$/$(LIB3ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
     @+-$(RM) $(MISC)$/$(LIB3ARCHIV:b)_closetempl.cmd
-    @+echo $(LINK) +inst_close -c `cat $(LIB3TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB3ARCHIV:b)_closetempl.cmd
+    @+echo $(LINK) +inst_close -c `cat $(LIB3TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB3ARCHIV:b)_closetempl.cmd
     @cat $(MISC)$/$(LIB3ARCHIV:b)_closetempl.cmd
     @source $(MISC)$/$(LIB3ARCHIV:b)_closetempl.cmd
 .ENDIF
-    @+echo $(LIBMGR) $(LIB3FLAGS) $(LIBFLAGS) $(LIB3ARCHIV) `cat $(LIB3TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB3ARCHIV:b).cmd
+    @+echo $(LIBMGR) $(LIB3FLAGS) $(LIBFLAGS) $(LIB3ARCHIV) `cat $(LIB3TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB3ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB3ARCHIV) >> $(MISC)$/$(LIB3ARCHIV:b).cmd
 .ENDIF
@@ -188,11 +188,11 @@ $(LIB3TARGET) :	$(LIB3FILES) \
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
-    @+echo $(LIB3OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    @+echo $(LIB3OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#_$(ROUT)\#g | xargs -n 1 > $@
     @+cat /dev/null $(LIB3FILES) | xargs -n 1 >> $@
 .IF "$(LIB3ARCHIV)" != ""
     @+$(RM) $(LIB3ARCHIV)
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB3ARCHIV) `cat /dev/null $@ | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
+    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB3ARCHIV) `cat /dev/null $@ | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
 .ENDIF			# "$(LIB3ARCHIV)" != ""
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(COM)" == "BLC"
@@ -241,19 +241,19 @@ $(LIB4TARGET) :	$(LIB4FILES) \
 .ENDIF
 .IF "$(GUI)"=="UNX"
     @+$(RM) $@
-    @+echo $(LIB4OBJFILES:s/.obj/.o/) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    +echo $(LIB4OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#_$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB4FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
-    @+nm `cat $(LIB4TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @+nm `cat $(LIB4TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .IF "$(LIB4ARCHIV)" != ""
     @+-$(RM) $(MISC)$/$(LIB4ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
     @+-$(RM) $(MISC)$/$(LIB4ARCHIV:b)_closetempl.cmd
-    @+echo $(LINK) +inst_close -c `cat $(LIB4TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB4ARCHIV:b)_closetempl.cmd
+    @+echo $(LINK) +inst_close -c `cat $(LIB4TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB4ARCHIV:b)_closetempl.cmd
     @cat $(MISC)$/$(LIB4ARCHIV:b)_closetempl.cmd
     @source $(MISC)$/$(LIB4ARCHIV:b)_closetempl.cmd
 .ENDIF
-    @+echo $(LIBMGR) $(LIB4FLAGS) $(LIBFLAGS) $(LIB4ARCHIV) `cat $(LIB4TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB4ARCHIV:b).cmd
+    @+echo $(LIBMGR) $(LIB4FLAGS) $(LIBFLAGS) $(LIB4ARCHIV) `cat $(LIB4TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB4ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB4ARCHIV) >> $(MISC)$/$(LIB4ARCHIV:b).cmd
 .ENDIF
@@ -263,11 +263,11 @@ $(LIB4TARGET) :	$(LIB4FILES) \
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
-    @+echo $(LIB4OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    @+echo $(LIB4OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#_$(ROUT)\#g | xargs -n 1 > $@
     @+cat /dev/null $(LIB4FILES) | xargs -n 1 >> $@
 .IF "$(LIB4ARCHIV)" != ""
     @+$(RM) $(LIB4ARCHIV)
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB4ARCHIV) `cat /dev/null $@ | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
+    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB4ARCHIV) `cat /dev/null $@ | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
 .ENDIF			# "$(LIB4ARCHIV)" != ""
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(COM)" == "BLC"
@@ -316,19 +316,19 @@ $(LIB5TARGET) :	$(LIB5FILES) \
 .ENDIF
 .IF "$(GUI)"=="UNX"
     @+$(RM) $@
-    @+echo $(LIB5OBJFILES:s/.obj/.o/) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    +echo $(LIB5OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#_$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB5FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
-    @+nm `cat $(LIB5TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @+nm `cat $(LIB5TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .IF "$(LIB5ARCHIV)" != ""
     @+-$(RM) $(MISC)$/$(LIB5ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
     @+-$(RM) $(MISC)$/$(LIB5ARCHIV:b)_closetempl.cmd
-    @+echo $(LINK) +inst_close -c `cat $(LIB5TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB5ARCHIV:b)_closetempl.cmd
+    @+echo $(LINK) +inst_close -c `cat $(LIB5TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB5ARCHIV:b)_closetempl.cmd
     @cat $(MISC)$/$(LIB5ARCHIV:b)_closetempl.cmd
     @source $(MISC)$/$(LIB5ARCHIV:b)_closetempl.cmd
 .ENDIF
-    @+echo $(LIBMGR) $(LIB5FLAGS) $(LIBFLAGS) $(LIB5ARCHIV) `cat $(LIB5TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB5ARCHIV:b).cmd
+    @+echo $(LIBMGR) $(LIB5FLAGS) $(LIBFLAGS) $(LIB5ARCHIV) `cat $(LIB5TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB5ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB5ARCHIV) >> $(MISC)$/$(LIB5ARCHIV:b).cmd
 .ENDIF
@@ -338,11 +338,11 @@ $(LIB5TARGET) :	$(LIB5FILES) \
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
-    @+echo $(LIB5OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    @+echo $(LIB5OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#_$(ROUT)\#g | xargs -n 1 > $@
     @+cat /dev/null $(LIB5FILES) | xargs -n 1 >> $@
 .IF "$(LIB5ARCHIV)" != ""
     @+$(RM) $(LIB5ARCHIV)
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB5ARCHIV) `cat /dev/null $@ | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
+    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB5ARCHIV) `cat /dev/null $@ | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
 .ENDIF			# "$(LIB5ARCHIV)" != ""
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(COM)" == "BLC"
@@ -391,19 +391,19 @@ $(LIB6TARGET) :	$(LIB6FILES) \
 .ENDIF
 .IF "$(GUI)"=="UNX"
     @+$(RM) $@
-    @+echo $(LIB6OBJFILES:s/.obj/.o/) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    +echo $(LIB6OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#_$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB6FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
-    @+nm `cat $(LIB6TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @+nm `cat $(LIB6TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .IF "$(LIB6ARCHIV)" != ""
     @+-$(RM) $(MISC)$/$(LIB6ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
     @+-$(RM) $(MISC)$/$(LIB6ARCHIV:b)_closetempl.cmd
-    @+echo $(LINK) +inst_close -c `cat $(LIB6TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB6ARCHIV:b)_closetempl.cmd
+    @+echo $(LINK) +inst_close -c `cat $(LIB6TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB6ARCHIV:b)_closetempl.cmd
     @cat $(MISC)$/$(LIB6ARCHIV:b)_closetempl.cmd
     @source $(MISC)$/$(LIB6ARCHIV:b)_closetempl.cmd
 .ENDIF
-    @+echo $(LIBMGR) $(LIB6FLAGS) $(LIBFLAGS) $(LIB6ARCHIV) `cat $(LIB6TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB6ARCHIV:b).cmd
+    @+echo $(LIBMGR) $(LIB6FLAGS) $(LIBFLAGS) $(LIB6ARCHIV) `cat $(LIB6TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB6ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB6ARCHIV) >> $(MISC)$/$(LIB6ARCHIV:b).cmd
 .ENDIF
@@ -413,11 +413,11 @@ $(LIB6TARGET) :	$(LIB6FILES) \
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
-    @+echo $(LIB6OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    @+echo $(LIB6OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#_$(ROUT)\#g | xargs -n 1 > $@
     @+cat /dev/null $(LIB6FILES) | xargs -n 1 >> $@
 .IF "$(LIB6ARCHIV)" != ""
     @+$(RM) $(LIB6ARCHIV)
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB6ARCHIV) `cat /dev/null $@ | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
+    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB6ARCHIV) `cat /dev/null $@ | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
 .ENDIF			# "$(LIB6ARCHIV)" != ""
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(COM)" == "BLC"
@@ -466,19 +466,19 @@ $(LIB7TARGET) :	$(LIB7FILES) \
 .ENDIF
 .IF "$(GUI)"=="UNX"
     @+$(RM) $@
-    @+echo $(LIB7OBJFILES:s/.obj/.o/) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    +echo $(LIB7OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#_$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB7FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
-    @+nm `cat $(LIB7TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @+nm `cat $(LIB7TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .IF "$(LIB7ARCHIV)" != ""
     @+-$(RM) $(MISC)$/$(LIB7ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
     @+-$(RM) $(MISC)$/$(LIB7ARCHIV:b)_closetempl.cmd
-    @+echo $(LINK) +inst_close -c `cat $(LIB7TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB7ARCHIV:b)_closetempl.cmd
+    @+echo $(LINK) +inst_close -c `cat $(LIB7TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB7ARCHIV:b)_closetempl.cmd
     @cat $(MISC)$/$(LIB7ARCHIV:b)_closetempl.cmd
     @source $(MISC)$/$(LIB7ARCHIV:b)_closetempl.cmd
 .ENDIF
-    @+echo $(LIBMGR) $(LIB7FLAGS) $(LIBFLAGS) $(LIB7ARCHIV) `cat $(LIB7TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB7ARCHIV:b).cmd
+    @+echo $(LIBMGR) $(LIB7FLAGS) $(LIBFLAGS) $(LIB7ARCHIV) `cat $(LIB7TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB7ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB7ARCHIV) >> $(MISC)$/$(LIB7ARCHIV:b).cmd
 .ENDIF
@@ -488,11 +488,11 @@ $(LIB7TARGET) :	$(LIB7FILES) \
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
-    @+echo $(LIB7OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    @+echo $(LIB7OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#_$(ROUT)\#g | xargs -n 1 > $@
     @+cat /dev/null $(LIB7FILES) | xargs -n 1 >> $@
 .IF "$(LIB7ARCHIV)" != ""
     @+$(RM) $(LIB7ARCHIV)
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB7ARCHIV) `cat /dev/null $@ | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
+    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB7ARCHIV) `cat /dev/null $@ | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
 .ENDIF			# "$(LIB7ARCHIV)" != ""
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(COM)" == "BLC"
@@ -541,19 +541,19 @@ $(LIB8TARGET) :	$(LIB8FILES) \
 .ENDIF
 .IF "$(GUI)"=="UNX"
     @+$(RM) $@
-    @+echo $(LIB8OBJFILES:s/.obj/.o/) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    +echo $(LIB8OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#_$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB8FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
-    @+nm `cat $(LIB8TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @+nm `cat $(LIB8TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .IF "$(LIB8ARCHIV)" != ""
     @+-$(RM) $(MISC)$/$(LIB8ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
     @+-$(RM) $(MISC)$/$(LIB8ARCHIV:b)_closetempl.cmd
-    @+echo $(LINK) +inst_close -c `cat $(LIB8TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB8ARCHIV:b)_closetempl.cmd
+    @+echo $(LINK) +inst_close -c `cat $(LIB8TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB8ARCHIV:b)_closetempl.cmd
     @cat $(MISC)$/$(LIB8ARCHIV:b)_closetempl.cmd
     @source $(MISC)$/$(LIB8ARCHIV:b)_closetempl.cmd
 .ENDIF
-    @+echo $(LIBMGR) $(LIB8FLAGS) $(LIBFLAGS) $(LIB8ARCHIV) `cat $(LIB8TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB8ARCHIV:b).cmd
+    @+echo $(LIBMGR) $(LIB8FLAGS) $(LIBFLAGS) $(LIB8ARCHIV) `cat $(LIB8TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB8ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB8ARCHIV) >> $(MISC)$/$(LIB8ARCHIV:b).cmd
 .ENDIF
@@ -563,11 +563,11 @@ $(LIB8TARGET) :	$(LIB8FILES) \
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
-    @+echo $(LIB8OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    @+echo $(LIB8OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#_$(ROUT)\#g | xargs -n 1 > $@
     @+cat /dev/null $(LIB8FILES) | xargs -n 1 >> $@
 .IF "$(LIB8ARCHIV)" != ""
     @+$(RM) $(LIB8ARCHIV)
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB8ARCHIV) `cat /dev/null $@ | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
+    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB8ARCHIV) `cat /dev/null $@ | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
 .ENDIF			# "$(LIB8ARCHIV)" != ""
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(COM)" == "BLC"
@@ -616,19 +616,19 @@ $(LIB9TARGET) :	$(LIB9FILES) \
 .ENDIF
 .IF "$(GUI)"=="UNX"
     @+$(RM) $@
-    @+echo $(LIB9OBJFILES:s/.obj/.o/) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    +echo $(LIB9OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#_$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB9FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
-    @+nm `cat $(LIB9TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @+nm `cat $(LIB9TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .IF "$(LIB9ARCHIV)" != ""
     @+-$(RM) $(MISC)$/$(LIB9ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
     @+-$(RM) $(MISC)$/$(LIB9ARCHIV:b)_closetempl.cmd
-    @+echo $(LINK) +inst_close -c `cat $(LIB9TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB9ARCHIV:b)_closetempl.cmd
+    @+echo $(LINK) +inst_close -c `cat $(LIB9TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB9ARCHIV:b)_closetempl.cmd
     @cat $(MISC)$/$(LIB9ARCHIV:b)_closetempl.cmd
     @source $(MISC)$/$(LIB9ARCHIV:b)_closetempl.cmd
 .ENDIF
-    @+echo $(LIBMGR) $(LIB9FLAGS) $(LIBFLAGS) $(LIB9ARCHIV) `cat $(LIB9TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB9ARCHIV:b).cmd
+    @+echo $(LIBMGR) $(LIB9FLAGS) $(LIBFLAGS) $(LIB9ARCHIV) `cat $(LIB9TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB9ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB9ARCHIV) >> $(MISC)$/$(LIB9ARCHIV:b).cmd
 .ENDIF
@@ -638,11 +638,11 @@ $(LIB9TARGET) :	$(LIB9FILES) \
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
-    @+echo $(LIB9OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    @+echo $(LIB9OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#_$(ROUT)\#g | xargs -n 1 > $@
     @+cat /dev/null $(LIB9FILES) | xargs -n 1 >> $@
 .IF "$(LIB9ARCHIV)" != ""
     @+$(RM) $(LIB9ARCHIV)
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB9ARCHIV) `cat /dev/null $@ | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
+    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB9ARCHIV) `cat /dev/null $@ | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
 .ENDIF			# "$(LIB9ARCHIV)" != ""
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(COM)" == "BLC"
@@ -691,19 +691,19 @@ $(LIB10TARGET) :	$(LIB10FILES) \
 .ENDIF
 .IF "$(GUI)"=="UNX"
     @+$(RM) $@
-    @+echo $(LIB10OBJFILES:s/.obj/.o/) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    +echo $(LIB10OBJFILES:s/.obj/.o/) | sed "s#$(PRJ:s/./\./)$/$(ROUT)#_$(ROUT)#g" | xargs -n 1 > $@
     @+cat /dev/null $(LIB10FILES:s/.obj/.o/) | xargs -n 1 >> $@
     @+$(RM) $(@:d)$(@:b).dump
-    @+nm `cat $(LIB10TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @+nm `cat $(LIB10TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .IF "$(LIB10ARCHIV)" != ""
     @+-$(RM) $(MISC)$/$(LIB10ARCHIV:b).cmd
 .IF "$(OS)" =="HPUX_FRAG_HR"
     @+-$(RM) $(MISC)$/$(LIB10ARCHIV:b)_closetempl.cmd
-    @+echo $(LINK) +inst_close -c `cat $(LIB10TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB10ARCHIV:b)_closetempl.cmd
+    @+echo $(LINK) +inst_close -c `cat $(LIB10TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB10ARCHIV:b)_closetempl.cmd
     @cat $(MISC)$/$(LIB10ARCHIV:b)_closetempl.cmd
     @source $(MISC)$/$(LIB10ARCHIV:b)_closetempl.cmd
 .ENDIF
-    @+echo $(LIBMGR) $(LIB10FLAGS) $(LIBFLAGS) $(LIB10ARCHIV) `cat $(LIB10TARGET) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB10ARCHIV:b).cmd
+    @+echo $(LIBMGR) $(LIB10FLAGS) $(LIBFLAGS) $(LIB10ARCHIV) `cat $(LIB10TARGET) | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB10ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB10ARCHIV) >> $(MISC)$/$(LIB10ARCHIV:b).cmd
 .ENDIF
@@ -713,11 +713,11 @@ $(LIB10TARGET) :	$(LIB10FILES) \
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="MAC"
     @+$(RM) $@
-    @+echo $(LIB10OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#$(ROUT)\#g | xargs -n 1 > $@
+    @+echo $(LIB10OBJFILES) | sed s\#$(PRJ)$/$(ROUT)\#_$(ROUT)\#g | xargs -n 1 > $@
     @+cat /dev/null $(LIB10FILES) | xargs -n 1 >> $@
 .IF "$(LIB10ARCHIV)" != ""
     @+$(RM) $(LIB10ARCHIV)
-    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB10ARCHIV) `cat /dev/null $@ | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
+    +$(LIBMGR) $(LIBFLAGS) -o $(shell $(UNIX2MACPATH) $(LIB10ARCHIV) `cat /dev/null $@ | sed s\#_$(ROUT)\#$(PRJ)$/$(ROUT)\#g`)
 .ENDIF			# "$(LIB10ARCHIV)" != ""
 .ELSE                   # "$(GUI)"=="MAC"
 .IF "$(COM)" == "BLC"
