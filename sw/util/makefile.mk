@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2000-10-24 15:57:30 $
+#   last change: $Author: rt $ $Date: 2000-11-15 17:28:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -192,6 +192,7 @@ SHL2STDLIBS= \
     $(CPPULIB) \
     $(CPPUHELPERLIB) \
     $(UNOTOOLSLIB) \
+    $(DBTOOLSLIB) \
     $(VOSLIB) \
     $(TKLIB) \
     $(SDLIB) \
