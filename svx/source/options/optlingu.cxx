@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:49:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,8 @@
 #define ITEMID_SPELLCHECK   0
 #define ITEMID_HYPHENREGION 0
 
-#include "optdict.hxx"
+//CHINA001 #include "optdict.hxx"
+#include "svxdlg.hxx" //CHINA001
 #include "optitems.hxx"
 #include "optlingu.hxx"
 #include "dialmgr.hxx"
@@ -1788,19 +1789,26 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     else if (&aLinguDicsNewPB == pBtn)
     {
         Reference< XSpellChecker1 > xSpellChecker1;
-        SvxNewDictionaryDialog aDlg( this,  xSpellChecker1);
-        Reference< XDictionary >  xNewDic;
-        if ( aDlg.Execute() == RET_OK )
-            xNewDic = Reference< XDictionary >( aDlg.GetNewDictionary(), UNO_QUERY );
-        if ( xNewDic.is() )
+        //CHINA001 SvxNewDictionaryDialog aDlg( this,  xSpellChecker1);
+        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+        if(pFact)
         {
-            // add new dics to the end
-            INT32 nLen = aDics.getLength();
-            aDics.realloc( nLen + 1 );
+            AbstractSvxNewDictionaryDialog* aDlg = pFact->CreateSvxNewDictionaryDialog( this, xSpellChecker1, ResId(RID_SFXDLG_NEWDICT) );
+            DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
+            Reference< XDictionary >  xNewDic;
+            if ( aDlg->Execute() == RET_OK ) //CHINA001 if ( aDlg.Execute() == RET_OK )
+                xNewDic = Reference< XDictionary >( aDlg->GetNewDictionary(), UNO_QUERY ); //CHINA001 xNewDic = Reference< XDictionary >( aDlg.GetNewDictionary(), UNO_QUERY );
+            if ( xNewDic.is() )
+            {
+                // add new dics to the end
+                INT32 nLen = aDics.getLength();
+                aDics.realloc( nLen + 1 );
 
-            aDics.getArray()[ nLen ] = xNewDic;
+                aDics.getArray()[ nLen ] = xNewDic;
 
-            AddDicBoxEntry( xNewDic, (USHORT) nLen );
+                AddDicBoxEntry( xNewDic, (USHORT) nLen );
+            }
+            delete aDlg; //add by CHINA001
         }
     }
     else if (&aLinguDicsEditPB == pBtn)
@@ -1818,9 +1826,16 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                 if (xDic.is())
                 {
                     Reference< XSpellChecker1 > xSpellChecker1;
-                    SvxEditDictionaryDialog aDlg( this,
-                            xDic->getName(), xSpellChecker1 );
-                    aDlg.Execute();
+                    //CHINA001 SvxEditDictionaryDialog aDlg( this,
+                    //CHINA001      xDic->getName(), xSpellChecker1 );
+                    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                    if(pFact)
+                    {
+                        VclAbstractDialog* aDlg = pFact->CreateSvxEditDictionaryDialog( this, xDic->getName(), xSpellChecker1, ResId(RID_SFXDLG_EDITDICT) );
+                        DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
+                        aDlg->Execute(); //CHINA001 aDlg.Execute();
+                        delete aDlg; //add by CHINA001
+                    }
                 }
             }
         }
