@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-08 07:11:31 $
+ *  last change: $Author: pb $ $Date: 2002-05-13 09:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,8 +219,8 @@
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
 #endif
-#ifndef _SVTOOLS_ASIANLANGUAGESOPTIONS_HXX
-#include <svtools/asianlanguagesoptions.hxx>
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_INTERNALOPTIONS_HXX
 #include <svtools/internaloptions.hxx>
@@ -1448,10 +1448,10 @@ void Desktop::Main()
     {
         Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
 
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtAsianLanguagesOptions" );
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
         SvtPathOptions* pPathOptions = new SvtPathOptions;
-        SvtAsianLanguagesOptions* pAsianLangOptions = new SvtAsianLanguagesOptions(sal_True);
-        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtAsianLanguagesOptions" );
+        SvtLanguageOptions* pLanguageOptions = new SvtLanguageOptions(sal_True);
+        RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create SvtPathOptions and SvtLanguageOptions" );
         registerServices( xSMgr );
 
         OUString        aDescription;
@@ -1607,7 +1607,7 @@ void Desktop::Main()
         xWrapper->dispose();
         xWrapper = 0;
 
-        delete pAsianLangOptions;
+        delete pLanguageOptions;
         delete pPathOptions;
     }
 
