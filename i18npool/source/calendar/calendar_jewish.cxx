@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_jewish.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-08-06 18:34:17 $
+ *  last change: $Author: vg $ $Date: 2002-08-08 15:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,8 +293,8 @@ void SAL_CALL Calendar_jewish::mapFromGregorian() throw(RuntimeException)
     int y = fieldValue[CalendarFieldIndex::YEAR];
     if (fieldValue[CalendarFieldIndex::ERA] == 0)
         y = 1 - y;
-    HebrewDate hd(GregorianDate(fieldValue[CalendarFieldIndex::MONTH] + 1,
-        fieldValue[CalendarFieldIndex::DAY_OF_MONTH], y));
+    GregorianDate Temp(fieldValue[CalendarFieldIndex::MONTH] + 1, fieldValue[CalendarFieldIndex::DAY_OF_MONTH], y);
+    HebrewDate hd(Temp);
 
     fieldValue[CalendarFieldIndex::ERA] = hd.GetYear() <= 0 ? 0 : 1;
     fieldValue[CalendarFieldIndex::MONTH] = hd.GetMonth() - 1;
@@ -310,8 +310,8 @@ void SAL_CALL Calendar_jewish::mapToGregorian() throw(RuntimeException)
         sal_Int16 y = fieldSetValue[CalendarFieldIndex::YEAR];
         if (fieldSetValue[CalendarFieldIndex::ERA] == 0)
         y = 1 - y;
-        GregorianDate gd(HebrewDate(fieldSetValue[CalendarFieldIndex::MONTH] + 1,
-            fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH], y));
+        HebrewDate Temp(fieldSetValue[CalendarFieldIndex::MONTH] + 1, fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH], y);
+        GregorianDate gd(Temp);
 
         fieldSetValue[CalendarFieldIndex::ERA] = gd.GetYear() <= 0 ? 0 : 1;
         fieldSetValue[CalendarFieldIndex::MONTH] = gd.GetMonth() - 1;
