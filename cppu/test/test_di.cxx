@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-13 10:05:20 $
+ *  last change: $Author: jl $ $Date: 2001-03-27 13:55:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,7 +610,7 @@ void test_di(void)
 
             Mapping aMapping( pCppEnv1, pCppEnv2, OUString( RTL_CONSTASCII_USTRINGPARAM("prot") ) );
             aMapping.mapInterface( (void **)&xLBT, xOriginal.get(), ::getCppuType( &xOriginal ) );
-            OSL_ENSHURE( aMapping.is(), "### cannot get mapping!" );
+            OSL_ENSURE( aMapping.is(), "### cannot get mapping!" );
 
             (*pCppEnv2->release)( pCppEnv2 );
             (*pCppEnv1->release)( pCppEnv1 );
