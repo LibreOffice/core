@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:00:39 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:30:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,7 +435,13 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
             DBG_ERRORFILE( "ConvertToMacro: Unknown macro type" );
 
         if ( aMacroName.getLength() )
+        {
+            if ( aLibrary.compareToAscii("application") == 0 )
+                aLibrary = SFX_APP()->GetName();
+            else
+                aLibrary = ::rtl::OUString();
             pMacro = new SvxMacro( aMacroName, aLibrary, eType );
+        }
         else if ( eType == EXTENDED_STYPE )
             pMacro = new SvxMacro( aScriptURL, aType );
     }
@@ -445,6 +451,9 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* p
 
 void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* pDoc )
 {
+    if ( !pDoc )
+        pDoc = SfxObjectShell::Current();
+
     SEQUENCE < PROPERTYVALUE > aInProps;
     SEQUENCE < PROPERTYVALUE > aOutProps(2);
 
@@ -489,40 +498,38 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
     if ( aType.compareToAscii( STAR_BASIC ) == 0 )
     {
         aOutProps.realloc(4);
-        if ( aScript.getLength() && ( ! aMacroName.getLength() || ! aLibrary.getLength() ) )
+        if ( aScript.getLength() )
         {
-            sal_Int32 nHashPos = aScript.indexOf( '/', 8 );
-            sal_Int32 nArgsPos = aScript.indexOf( '(' );
-
-            if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
+            if( ! aMacroName.getLength() || ! aLibrary.getLength() )
             {
-                OUSTRING aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
-                if ( !pDoc )
-                    pDoc = SfxObjectShell::Current();
+                sal_Int32 nHashPos = aScript.indexOf( '/', 8 );
+                sal_Int32 nArgsPos = aScript.indexOf( '(' );
+                if ( ( nHashPos != STRING_NOTFOUND ) && ( nHashPos < nArgsPos ) )
+                {
+                    OUSTRING aBasMgrName( INetURLObject::decode( aScript.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
+                    if ( aBasMgrName.compareToAscii(".") == 0 )
+                        aLibrary = pDoc->GetTitle( SFX_TITLE_APINAME );
+/*
+                    else if ( aBasMgrName.getLength() )
+                        aLibrary = aBasMgrName;
+ */
+                    else
+                        aLibrary = SFX_APP()->GetName();
 
-                if ( aBasMgrName.compareToAscii(".") == 0 )
-                    aLibrary = pDoc->GetTitle( SFX_TITLE_APINAME );
-                else if ( aBasMgrName.getLength() )
-                    aLibrary = aBasMgrName;
+                    // Get the macro name
+                    aMacroName = aScript.copy( nHashPos+1, nArgsPos - nHashPos - 1 );
+                }
                 else
-                    aLibrary = SFX_APP()->GetName();
-
-                // Get the macro name
-                aMacroName = aScript.copy( nHashPos+1, nArgsPos - nHashPos - 1 );
-            }
-            else
-            {
-                DBG_ERRORFILE( "ConvertToMacro: Unknown macro url format" );
+                {
+                    DBG_ERRORFILE( "ConvertToMacro: Unknown macro url format" );
+                }
             }
         }
-        else if ( !aScript.getLength() && aMacroName.getLength() )
+        else if ( aMacroName.getLength() )
         {
             aScript = OUSTRING( RTL_CONSTASCII_USTRINGPARAM( MACRO_PRFIX ) );
-            if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0
-                    && aLibrary.compareToAscii("StarDesktop") != 0 )
-            {
+            if ( aLibrary.compareTo( SFX_APP()->GetName() ) != 0 && aLibrary.compareToAscii("StarDesktop") != 0 && aLibrary.compareToAscii("application") != 0 )
                 aScript += OUSTRING('.');
-            }
 
             aScript += OUSTRING('/');
             aScript += aMacroName;
@@ -531,6 +538,14 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
         else
             // wrong properties
             return;
+
+        if ( aLibrary.compareToAscii("document") != 0 )
+        {
+            if ( !aLibrary.getLength() || pDoc && String(aLibrary) == pDoc->GetTitle( SFX_TITLE_APINAME ) )
+                aLibrary = String::CreateFromAscii("document");
+            else
+                aLibrary = String::CreateFromAscii("application");
+        }
 
         aOutProps[1].Name = OUSTRING::createFromAscii( PROP_SCRIPT );
         aOutProps[1].Value <<= aScript;
