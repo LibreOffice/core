@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-04 10:20:54 $
+ *  last change: $Author: vg $ $Date: 2003-06-11 16:16:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,9 @@
 #ifndef _COM_SUN_STAR_TEXT_TEXTCONTENTANCHORTYPE_HPP_
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
 
 #ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
@@ -309,11 +312,19 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
     return FLD_OK;
 }
 
-eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc*, String& )
+eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
 {
-    return FLD_TAGIGN;
-}
+    WW8FormulaListBox aFormula(*this);
 
+    if( !pFormImpl )
+        pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
+
+    if (0x01 == rStr.GetChar(pF->nLCode-1))
+        ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_DROPDOWN);
+
+    pFormImpl->InsertFormula(aFormula);
+    return FLD_OK;
+}
 
 void SwWW8ImplReader::DeleteFormImpl()
 {
@@ -1772,13 +1783,14 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     SvStream *pDataStream)
 {
     UINT8 nField;
-    UINT8 nTest;
+    UINT8 nHeaderByte;
 
     int nType=0;
-    pDataStream->Read(&nTest, 1);
-    if (nTest == 0xFF) //Guesswork time, difference between 97 and 95 ?
+    *pDataStream >> nHeaderByte;
+    if (nHeaderByte == 0xFF) //Guesswork time, difference between 97 and 95 ?
     {
-        pDataStream->SeekRel(4);
+        pDataStream->SeekRel(3);
+        *pDataStream >> nHeaderByte;
         nType=1;
     }
     *pDataStream >> nField;
@@ -1799,6 +1811,29 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
                     : WW8Read_xstz(*pDataStream, 0, true);
 
     if (nWhich == WW8_CT_CHECKBOX)
+    {
+        *pDataStream >> nChecked;
+        //Don't know the details yet
+        switch (nHeaderByte)
+        {
+            case 0x65: //01100101
+                //use defaults ?
+                break;
+            case 0x1: //00000001
+                ASSERT(nChecked, "expected to see checked, report to cmc (minor)");
+                //swap to unchecked from checked ?
+                nChecked = false;
+                break;
+            case 0x5: //00000101
+                //change to checked
+                nChecked = true;
+                break;
+            default:
+                ASSERT(!this, "unknown option, please report to cmc");
+                break;
+        }
+    }
+    else if (nWhich == WW8_CT_DROPDOWN)
         *pDataStream >> nChecked;
     else
         sDefault = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
@@ -1810,9 +1845,261 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     sHelp = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
                      : WW8Read_xstz(*pDataStream, 0, true);
 
+    if (nWhich == WW8_CT_DROPDOWN)      //is this the case ?
+        fToolTip = true;
+
     if( fToolTip )
         sToolTip = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
                                : WW8Read_xstz(*pDataStream, 0, true);
+
+    if (nWhich == WW8_CT_DROPDOWN)
+    {
+        bool bAllOk = true;
+        pDataStream->SeekRel(4 * (nType ? 2 : 1));
+        sal_uInt16 nDummy;
+        *pDataStream >> nDummy;
+        sal_uInt32 nNoStrings;
+        if (!nType)
+        {
+            sal_uInt16 nWord95NoStrings;
+            *pDataStream >> nWord95NoStrings;
+            nNoStrings = nWord95NoStrings;
+            *pDataStream >> nWord95NoStrings;
+            if (nNoStrings != nWord95NoStrings)
+                bAllOk = false;
+            nNoStrings = nWord95NoStrings;
+            sal_uInt16 nDummy2;
+            *pDataStream >> nDummy2;
+            if (nDummy2 != 0)
+                bAllOk = false;
+            *pDataStream >> nDummy2;
+            if (nDummy2 != 0xA)
+                bAllOk = false;
+            if (!bAllOk)    //Not as expected, don't risk it at all.
+                nNoStrings = 0;
+            for (sal_uInt16 nI = 0; nI < nNoStrings; ++nI)
+                pDataStream->SeekRel(2);
+        }
+        else
+        {
+            if (nDummy != 0xFFFF)
+                bAllOk = false;
+            *pDataStream >> nNoStrings;
+        }
+        ASSERT(bAllOk,
+            "Unknown formfield dropdown list structure. Report to cmc");
+        if (!bAllOk)    //Not as expected, don't risk it at all.
+            nNoStrings = 0;
+        maListEntries.reserve(nNoStrings);
+        for (sal_uInt32 nI = 0; nI < nNoStrings; ++nI)
+        {
+            String sEntry = !nType ? WW8ReadPString(*pDataStream, eEnc, false)
+                           : WW8Read_xstz(*pDataStream, 0, false);
+            maListEntries.push_back(sEntry);
+        }
+    }
+}
+
+WW8FormulaListBox::WW8FormulaListBox(SwWW8ImplReader &rR)
+    : WW8FormulaControl( CREATE_CONST_ASC(SL::aListBox), rR)
+{
+}
+
+//Miserable hack to get a hardcoded guesstimate of the size of a list dropdown
+//box's first entry to set as the lists default size
+awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
+    uno::Reference<beans::XPropertySet>& rPropSet)
+{
+    awt::Size aRet;
+    const struct CtrlFontMapEntry
+    {
+        USHORT nWhichId;
+        const sal_Char* pPropNm;
+    }
+    aMapTable [] =
+    {
+        RES_CHRATR_COLOR,           "TextColor",
+        RES_CHRATR_FONT,            "FontName",
+        RES_CHRATR_FONTSIZE,        "FontHeight",
+        RES_CHRATR_WEIGHT,          "FontWeight",
+        RES_CHRATR_UNDERLINE,       "FontUnderline",
+        RES_CHRATR_CROSSEDOUT,      "FontStrikeout",
+        RES_CHRATR_POSTURE,         "FontSlant",
+        0,                          0
+    };
+
+
+    Font aFont;
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
+        rPropSet->getPropertySetInfo();
+
+    uno::Any aTmp;
+    for( const CtrlFontMapEntry* pMap = aMapTable; pMap->nWhichId; ++pMap )
+    {
+        BOOL bSet = TRUE;
+        const SfxPoolItem* pItem = GetFmtAttr( pMap->nWhichId );
+        ASSERT(pItem, "Impossible");
+        if (!pItem)
+            continue;
+
+        switch ( pMap->nWhichId )
+        {
+        case RES_CHRATR_COLOR:
+            {
+                String pNm;
+                if (xPropSetInfo->hasPropertyByName(pNm = C2U("TextColor")))
+                {
+                    aTmp <<= (sal_Int32)((SvxColorItem*)pItem)->GetValue().GetColor();
+                    rPropSet->setPropertyValue(pNm, aTmp);
+                }
+            }
+            aFont.SetColor(((SvxColorItem*)pItem)->GetValue());
+            break;
+        case RES_CHRATR_FONT:
+            {
+                const SvxFontItem *pFontItem = (SvxFontItem *)pItem;
+                String pNm;
+                if (xPropSetInfo->hasPropertyByName(pNm = C2U("FontStyleName")))
+                {
+                    aTmp <<= rtl::OUString( pFontItem->GetStyleName());
+                    rPropSet->setPropertyValue( pNm, aTmp );
+                }
+                if (xPropSetInfo->hasPropertyByName(pNm = C2U("FontFamily")))
+                {
+                    aTmp <<= (sal_Int16)pFontItem->GetFamily();
+                    rPropSet->setPropertyValue( pNm, aTmp );
+                }
+                if (xPropSetInfo->hasPropertyByName(pNm = C2U("FontCharset")))
+                {
+                    aTmp <<= (sal_Int16)pFontItem->GetCharSet();
+                    rPropSet->setPropertyValue( pNm, aTmp );
+                }
+                if (xPropSetInfo->hasPropertyByName(pNm = C2U("FontPitch")))
+                {
+                    aTmp <<= (sal_Int16)pFontItem->GetPitch();
+                    rPropSet->setPropertyValue( pNm, aTmp );
+                }
+
+                aTmp <<= rtl::OUString( pFontItem->GetFamilyName());
+                aFont.SetName( pFontItem->GetFamilyName() );
+                aFont.SetStyleName( pFontItem->GetStyleName() );
+                aFont.SetFamily( pFontItem->GetFamily() );
+                aFont.SetCharSet( pFontItem->GetCharSet() );
+                aFont.SetPitch( pFontItem->GetPitch() );
+            }
+            break;
+
+        case RES_CHRATR_FONTSIZE:
+            {
+                Size aSize( aFont.GetSize().Width(),
+                            ((SvxFontHeightItem*)pItem)->GetHeight() );
+                aTmp <<= ((float)aSize.Height()) / 20.0;
+
+                aFont.SetSize(OutputDevice::LogicToLogic(aSize, MAP_TWIP,
+                    MAP_100TH_MM));
+            }
+            break;
+
+        case RES_CHRATR_WEIGHT:
+            aTmp <<= (float)VCLUnoHelper::ConvertFontWeight(
+                                        ((SvxWeightItem*)pItem)->GetWeight() );
+            aFont.SetWeight( ((SvxWeightItem*)pItem)->GetWeight() );
+            break;
+
+        case RES_CHRATR_UNDERLINE:
+            aTmp <<= (sal_Int16)(((SvxUnderlineItem*)pItem)->GetUnderline());
+            aFont.SetUnderline(((SvxUnderlineItem*)pItem)->GetUnderline());
+            break;
+
+        case RES_CHRATR_CROSSEDOUT:
+            aTmp <<= (sal_Int16)( ((SvxCrossedOutItem*)pItem)->GetStrikeout() );
+            aFont.SetStrikeout( ((SvxCrossedOutItem*)pItem)->GetStrikeout() );
+            break;
+
+        case RES_CHRATR_POSTURE:
+            aTmp <<= (sal_Int16)( ((SvxPostureItem*)pItem)->GetPosture() );
+            aFont.SetItalic( ((SvxPostureItem*)pItem)->GetPosture() );
+            break;
+
+        default:
+            bSet = FALSE;
+            break;
+        }
+
+        if (bSet && xPropSetInfo->hasPropertyByName(C2U(pMap->pPropNm)))
+            rPropSet->setPropertyValue(C2U(pMap->pPropNm), aTmp);
+    }
+    // now calculate the size of the control
+    OutputDevice* pOut = Application::GetDefaultDevice();
+    ASSERT(pOut, "Impossible");
+    if (pOut)
+    {
+        pOut->Push( PUSH_FONT | PUSH_MAPMODE );
+        pOut->SetMapMode( MapMode( MAP_100TH_MM ));
+        pOut->SetFont( aFont );
+        aRet.Width  = pOut->GetTextWidth(rString);
+        aRet.Width += 500; //plus size of button, total hack territory
+        aRet.Height = pOut->GetTextHeight();
+        pOut->Pop();
+    }
+    return aRet;
+}
+
+sal_Bool WW8FormulaListBox::Import(const uno::Reference <
+    lang::XMultiServiceFactory> &rServiceFactory,
+    uno::Reference <form::XFormComponent> &rFComp,awt::Size &rSz )
+{
+    uno::Reference<uno::XInterface> xCreate = rServiceFactory->createInstance(
+        C2U("com.sun.star.form.component.ComboBox"));
+    if( !xCreate.is() )
+        return sal_False;
+
+    rFComp = uno::Reference<form::XFormComponent>(xCreate, uno::UNO_QUERY);
+    if( !rFComp.is() )
+        return sal_False;
+
+    uno::Reference<beans::XPropertySet> xPropSet(xCreate, uno::UNO_QUERY);
+
+    uno::Any aTmp;
+    if (sTitle.Len())
+        aTmp <<= rtl::OUString(sTitle);
+    else
+        aTmp <<= rtl::OUString(sName);
+    xPropSet->setPropertyValue(C2U("Name"), aTmp );
+
+    if (sToolTip.Len())
+    {
+        aTmp <<= rtl::OUString(sToolTip);
+        xPropSet->setPropertyValue(C2U("HelpText"), aTmp );
+    }
+
+    sal_Bool bDropDown(sal_True);
+    xPropSet->setPropertyValue(C2U("Dropdown"), cppu::bool2any(bDropDown));
+
+    if (!maListEntries.empty())
+    {
+        sal_uInt32 nLen = maListEntries.size();
+        uno::Sequence< ::rtl::OUString > aListSource(nLen);
+        for (sal_uInt32 nI = 0; nI < nLen; ++nI)
+            aListSource[nI] = rtl::OUString(maListEntries[nI]);
+        aTmp <<= aListSource;
+        xPropSet->setPropertyValue(C2U("StringItemList"), aTmp );
+
+        aTmp <<= aListSource[0];
+        xPropSet->setPropertyValue(C2U("DefaultText"), aTmp );
+
+        rSz = rRdr.MiserableDropDownFormHack(maListEntries[0], xPropSet);
+    }
+    else
+    {
+        static const sal_Unicode aBlank[] =
+        {
+            0x2002,0x2002,0x2002,0x2002,0x2002
+        };
+        rSz = rRdr.MiserableDropDownFormHack(String(aBlank), xPropSet);
+    }
+
+    return sal_True;
 }
 
 WW8FormulaCheckBox::WW8FormulaCheckBox(SwWW8ImplReader &rR)
@@ -1856,139 +2143,6 @@ sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
 
     return sal_True;
 
-}
-
-void WW8FormulaControl::SetOthersFromDoc(awt::Size &rSz,
-    uno::Reference< beans::XPropertySet >& rPropSet)
-{
-    const struct CtrlFontMapEntry
-    {
-        USHORT nWhichId;
-        const sal_Char* pPropNm;
-    }
-    aMapTable [] =
-    {
-        {RES_CHRATR_COLOR,      "TextColor"},
-        {RES_CHRATR_COLOR,      "TextColor"},
-        {RES_CHRATR_FONT,       "FontName"},
-        {RES_CHRATR_FONTSIZE,   "FontHeight"},
-        {RES_CHRATR_WEIGHT,     "FontWeight"},
-        {RES_CHRATR_UNDERLINE,  "FontUnderline"},
-        {RES_CHRATR_CROSSEDOUT, "FontStrikeout"},
-        {RES_CHRATR_POSTURE,    "FontSlant"},
-        {0,                     0}
-    };
-
-    USHORT nDefSize;
-    Font aFont;
-    uno::Reference< beans::XPropertySetInfo > xPropSetInfo =
-        rPropSet->getPropertySetInfo();
-
-    if (nSize)
-        nDefSize = nSize;
-    else if( sDefault.Len() )
-        nDefSize = sDefault.Len();
-    else
-        nDefSize = 18;           //no chars, ms actually uses
-                                //5 0x96 chars (-) as its default, but thats
-                                //the default for an empty text area, which
-                                //stretchs in size as text is entered so...
-
-    uno::Any aTmp;
-    for( const CtrlFontMapEntry* pMap = aMapTable; pMap->nWhichId; ++pMap )
-    {
-        bool bSet = true;
-        const SfxPoolItem* pItem = rRdr.GetFmtAttr( pMap->nWhichId );
-
-        switch ( pMap->nWhichId )
-        {
-        case RES_CHRATR_COLOR:
-            aTmp <<= (sal_Int32)((SvxColorItem*)pItem)->GetValue().GetRGBColor();
-            aFont.SetColor( ((SvxColorItem*)pItem)->GetValue() );
-            break;
-
-        case RES_CHRATR_FONT:
-            {
-                const SvxFontItem *pFontItem = (SvxFontItem *)pItem;
-                rtl::OUString sNm;
-                if (xPropSetInfo->hasPropertyByName(sNm = C2U("FontStyleName")))
-                {
-                    aTmp <<= rtl::OUString(pFontItem->GetStyleName());
-                    rPropSet->setPropertyValue( sNm, aTmp );
-                }
-                if (xPropSetInfo->hasPropertyByName(sNm = C2U("FontFamily")))
-                {
-                    aTmp <<= (sal_Int16)pFontItem->GetFamily();
-                    rPropSet->setPropertyValue( sNm, aTmp );
-                }
-                if( xPropSetInfo->hasPropertyByName(sNm = C2U("FontCharset")))
-                {
-                    aTmp <<= (sal_Int16)pFontItem->GetCharSet();
-                    rPropSet->setPropertyValue( sNm, aTmp );
-                }
-                if( xPropSetInfo->hasPropertyByName(sNm = C2U("FontPitch")))
-                {
-                    aTmp <<= (sal_Int16)pFontItem->GetPitch();
-                    rPropSet->setPropertyValue( sNm, aTmp );
-                }
-
-                aTmp <<= rtl::OUString(pFontItem->GetFamilyName());
-                aFont.SetName( pFontItem->GetFamilyName() );
-                aFont.SetStyleName( pFontItem->GetStyleName() );
-                aFont.SetFamily( pFontItem->GetFamily() );
-                aFont.SetCharSet( pFontItem->GetCharSet() );
-                aFont.SetPitch( pFontItem->GetPitch() );
-            }
-            break;
-        case RES_CHRATR_FONTSIZE:
-            {
-                Size aSize( aFont.GetSize().Width(),
-                            ((SvxFontHeightItem*)pItem)->GetHeight() );
-                aTmp <<= ((float)aSize.Height()) / 20. ;
-
-                aFont.SetSize( OutputDevice::LogicToLogic( aSize, MAP_TWIP,
-                    MAP_100TH_MM ) );
-            }
-            break;
-        case RES_CHRATR_WEIGHT:
-            aTmp <<= (float)VCLUnoHelper::ConvertFontWeight(
-                ((SvxWeightItem*)pItem)->GetWeight() );
-            aFont.SetWeight( ((SvxWeightItem*)pItem)->GetWeight() );
-            break;
-        case RES_CHRATR_UNDERLINE:
-            aTmp <<= (sal_Int16)( ((SvxUnderlineItem*)pItem)->GetUnderline() );
-            aFont.SetUnderline( ((SvxUnderlineItem*)pItem)->GetUnderline() );
-            break;
-        case RES_CHRATR_CROSSEDOUT:
-            aTmp <<= (sal_Int16)( ((SvxCrossedOutItem*)pItem)->GetStrikeout() );
-            aFont.SetStrikeout( ((SvxCrossedOutItem*)pItem)->GetStrikeout() );
-            break;
-        case RES_CHRATR_POSTURE:
-            aTmp <<= (sal_Int16)( ((SvxPostureItem*)pItem)->GetPosture() );
-            aFont.SetItalic( ((SvxPostureItem*)pItem)->GetPosture() );
-            break;
-        default:
-            bSet = false;
-            break;
-        }
-
-        rtl::OUString sNm;
-        if( bSet && xPropSetInfo->hasPropertyByName( sNm = C2U(pMap->pPropNm)) )
-        {
-            rPropSet->setPropertyValue(sNm, aTmp);
-        }
-    }
-    // now calculate the size of the control
-    String sExpText;
-    sExpText.Fill( nDefSize, 'M' );
-    OutputDevice* pOut = Application::GetDefaultDevice();
-    pOut->Push( PUSH_FONT | PUSH_MAPMODE );
-    pOut->SetMapMode( MapMode( MAP_100TH_MM ));
-    pOut->SetFont( aFont );
-    rSz.Width  = pOut->GetTextWidth( sExpText );
-    rSz.Height = pOut->GetTextHeight();
-
-    pOut->Pop();
 }
 
 WW8FormulaEditBox::WW8FormulaEditBox(SwWW8ImplReader &rR)
