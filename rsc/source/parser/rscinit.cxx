@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2002-03-06 13:30:51 $
+ *  last change: $Author: ssa $ $Date: 2002-07-02 14:44:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,6 +429,8 @@ void RscTypCont::Init()
     aWinBits.SetConstant( nVertId, WB_VERT );
     nSingleLineId       = pHS->Insert( "WB_SINGLELINE" );
     aWinBits.SetConstant( nSingleLineId, WB_SINGLELINE );
+    nSysWinId            = pHS->Insert( "WB_SYSTEMWINDOW" );
+    aWinBits.SetConstant( nSysWinId, WB_SYSTEMWINDOW );
 }
 {
     /********** I n i t   B a s i c   T y p e s **************************/
