@@ -2,9 +2,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-08 07:38:48 $
+ *  last change: $Author: bm $ $Date: 2002-08-01 11:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,15 @@
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_ACCESSIBILITYOPTIONS_HXX
+#include <svtools/accessibilityoptions.hxx>
+#endif
 
+// Draw modes
+#define OUTPUT_DRAWMODE_COLOR       (DRAWMODE_DEFAULT)
+#define OUTPUT_DRAWMODE_GRAYSCALE   (DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT)
+#define OUTPUT_DRAWMODE_BLACKWHITE  (DRAWMODE_BLACKLINE | DRAWMODE_BLACKTEXT | DRAWMODE_WHITEFILL | DRAWMODE_GRAYBITMAP | DRAWMODE_WHITEGRADIENT)
+#define OUTPUT_DRAWMODE_CONTRAST    (DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT)
 
 //========================================================================
 
@@ -252,6 +260,11 @@ SfxPreviewWin::SfxPreviewWin(
     : Window(pParent, rResId), rDocShell( rDocSh )
 {
     SetHelpId( HID_PREVIEW_FRAME );
+
+    // adjust contrast mode initially
+    SvtAccessibilityOptions aAccOptions;
+    bool bUseContrast = aAccOptions.GetIsForDrawings() && GetSettings().GetStyleSettings().GetHighContrastMode();
+    SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 }
 
 void SfxPreviewWin::Paint( const Rectangle& rRect )
@@ -259,6 +272,20 @@ void SfxPreviewWin::Paint( const Rectangle& rRect )
     GDIMetaFile* pFile = rDocShell->GetPreviewMetaFile();
     SfxPreviewWin_Impl::ImpPaint( rRect, pFile, this );
     delete pFile;
+}
+
+void SfxPreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    Window::DataChanged( rDCEvt );
+
+    if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+        (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        // adjust contrast mode initially
+        SvtAccessibilityOptions aAccOptions;
+        bool bUseContrast = aAccOptions.GetIsForDrawings() && GetSettings().GetStyleSettings().GetHighContrastMode();
+        SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+    }
 }
 
 
