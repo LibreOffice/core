@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dr $ $Date: 2002-07-11 10:55:10 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:20:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,7 +112,8 @@ SLOFILES =  \
     $(SLO)$/linkarea.obj		\
     $(SLO)$/warnbox.obj
 
-SRCFILES = \
+SRS1NAME=$(TARGET)
+SRC1FILES = \
     instbdlg.src				\
     acredlin.src				\
     highred.src					\
