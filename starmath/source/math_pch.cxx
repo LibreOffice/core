@@ -2,9 +2,9 @@
  *
  *  $RCSfile: math_pch.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-09 15:57:37 $
+ *  last change: $Author: rt $ $Date: 2001-08-10 10:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -783,7 +783,6 @@
 #include <so3/factory.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/objface.hxx>
-#include <so3/advise.hxx>
 #include <vcl/event.hxx>
 #include <svtools/eitem.hxx>
 #include <svtools/intitem.hxx>
