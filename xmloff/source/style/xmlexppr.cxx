@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-06 05:44:47 $
+ *  last change: $Author: mib $ $Date: 2001-04-18 08:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,6 @@ public:
     const uno::Sequence<OUString>& GetApiNames();
     void FillPropertyStateArray(
             vector< XMLPropertyState >& rPropStates,
-            const Sequence < PropertyState >& rStates,
             const Reference< XPropertySet >& xPropSet,
             const UniReference< XMLPropertySetMapper >& maPropMapper,
             const sal_Bool bDefault = sal_False);
@@ -377,74 +376,117 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
 
 void FilterPropertiesInfo_Impl::FillPropertyStateArray(
         vector< XMLPropertyState >& rPropStates,
-        const Sequence < PropertyState >& rStates,
         const Reference< XPropertySet >& rPropSet,
         const UniReference< XMLPropertySetMapper >& rPropMapper,
         const sal_Bool bDefault )
 {
     XMLPropertyStates_Impl aPropStates;
 
+    const uno::Sequence<OUString>& rApiNames = GetApiNames();
+
+    Sequence < PropertyState > aStates;
+    const PropertyState *pStates = 0;
+    Reference< XPropertyState > xPropState( rPropSet, UNO_QUERY );
+       if( xPropState.is() )
+    {
+        aStates = xPropState->getPropertyStates( rApiNames );
+        pStates = aStates.getConstArray();
+    }
+
     Reference < XMultiPropertySet > xMultiPropSet( rPropSet, UNO_QUERY );
     if( xMultiPropSet.is() && !bDefault )
     {
-        sal_uInt32 nValueCount = 0;
-        const PropertyState *pStates = rStates.getConstArray();
-        // step 1: get value count
-        for( sal_uInt32 i = 0; i < nCount; i++, pStates++ )
+        Sequence < Any > aValues;
+        if( pStates )
         {
-            if( *pStates == PropertyState_DIRECT_VALUE )
-                nValueCount++;
-        }
-
-        if( nValueCount )
-        {
-            // step 2: collect property names
-            Sequence < OUString > aAPINames( nValueCount );
-            OUString *pAPINames = aAPINames.getArray();
-
-            FilterPropertyInfoList_Impl::iterator *aPropIters =
-                new FilterPropertyInfoList_Impl::iterator[nValueCount];
-            FilterPropertyInfoList_Impl::iterator *pPropIter = aPropIters;
-
-            FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-
-            pStates = rStates.getConstArray();
-            for( i = 0; i < nCount; i++, aItr++, pStates++ )
+            // step 1: get value count
+            sal_uInt32 nValueCount = 0;
+            for( sal_uInt32 i = 0; i < nCount; i++, pStates++ )
             {
                 if( *pStates == PropertyState_DIRECT_VALUE )
-                {
-                    *pAPINames++ = aItr->GetApiName();
-                    *pPropIter++ = aItr;
-                }
+                    nValueCount++;
             }
 
-            Sequence < Any > aValues =
-                xMultiPropSet->getPropertyValues( aAPINames );
-            const Any *pValues = aValues.getConstArray();
-            pPropIter = aPropIters;
-            for( i = 0; i < nValueCount; i++, pPropIter++, pValues++ )
+            if( nValueCount )
             {
+                // step 2: collect property names
+                Sequence < OUString > aAPINames( nValueCount );
+                OUString *pAPINames = aAPINames.getArray();
+
+                FilterPropertyInfoList_Impl::iterator *aPropIters =
+                    new FilterPropertyInfoList_Impl::iterator[nValueCount];
+                FilterPropertyInfoList_Impl::iterator *pPropIter = aPropIters;
+
+                FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
+
+                pStates = aStates.getConstArray();
+                i = 0;
+                while( i < nValueCount )
+                {
+                    if( *pStates == PropertyState_DIRECT_VALUE )
+                    {
+                        *pAPINames++ = aItr->GetApiName();
+                        *pPropIter++ = aItr;
+                        i++;
+                    }
+                    aItr++;
+                    pStates++;
+                }
+
+                aValues = xMultiPropSet->getPropertyValues( aAPINames );
+                const Any *pValues = aValues.getConstArray();
+                pPropIter = aPropIters;
+                for( i = 0; i < nValueCount; i++ )
+                {
+                    XMLPropertyState aNewProperty( -1 );
+                    aNewProperty.maValue = *pValues;
+
+                    for( std::list<sal_uInt32>::iterator aIndexItr =
+                                (*pPropIter)->GetIndexes().begin();
+                        aIndexItr != (*pPropIter)->GetIndexes().end();
+                        aIndexItr++ )
+                    {
+                        aNewProperty.mnIndex = *aIndexItr;
+                        aPropStates.AddPropertyState( aNewProperty );
+                    }
+
+                    pPropIter++;
+                    pValues++;
+                }
+                delete aPropIters;
+            }
+        }
+        else
+        {
+            aValues = xMultiPropSet->getPropertyValues( rApiNames );
+            const Any *pValues = aValues.getConstArray();
+
+            FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
+            for(sal_uInt32 i = 0; i < nCount; i++ )
+            {
+                // The value is stored in the PropertySet itself, add to list.
+                sal_Bool bGotValue = sal_False;
                 XMLPropertyState aNewProperty( -1 );
                 aNewProperty.maValue = *pValues;
                 for( std::list<sal_uInt32>::iterator aIndexItr =
-                            (*pPropIter)->GetIndexes().begin();
-                    aIndexItr != (*pPropIter)->GetIndexes().end();
+                        aItr->GetIndexes().begin();
+                    aIndexItr != aItr->GetIndexes().end();
                     aIndexItr++ )
                 {
                     aNewProperty.mnIndex = *aIndexItr;
                     aPropStates.AddPropertyState( aNewProperty );
                 }
+                aItr++;
             }
-            delete aPropIters;
         }
     }
     else
     {
         FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-        const PropertyState *pStates = rStates.getConstArray();
-        for(sal_uInt32 i = 0; i < nCount; i++, aItr++, pStates++ )
+        for(sal_uInt32 i = 0; i < nCount; i++ )
         {
-            sal_Bool bDirectValue = *pStates == PropertyState_DIRECT_VALUE;
+            sal_Bool bDirectValue =
+                !pStates || *pStates == PropertyState_DIRECT_VALUE;
             if( bDirectValue || bDefault )
             {
                 // The value is stored in the PropertySet itself, add to list.
@@ -479,6 +521,10 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     }
                 }
             }
+
+            aItr++;
+            if( pStates )
+                pStates++;
         }
     }
     aPropStates.FillPropertyStateVector(rPropStates);
@@ -541,124 +587,87 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
 
     // Retrieve XPropertySetInfo and XPropertyState
     Reference< XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
+    if( !xInfo.is() )
+        return aPropStateArray;
 
-    if( xInfo.is() )
+    sal_Int32 nProps = maPropMapper->GetEntryCount();
+
+    FilterPropertiesInfo_Impl aFilterInfo;
+    sal_Bool bInfoValid = sal_False;
+
+    FilterPropertiesInfo_Impl *pFilterInfo = 0;
+
+    Reference < XTypeProvider > xTypeProv( xPropSet, UNO_QUERY );
+    if( xTypeProv.is() )
     {
-        Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
-        sal_Int32 nProps = maPropMapper->GetEntryCount();
-
-        if( xPropState.is() )
+        Sequence< sal_Int8  > aImplId( xTypeProv->getImplementationId() );
+        if( aImplId.getLength() == 16 )
         {
-            FilterPropertiesInfo_Impl aFilterInfo;
-            sal_Bool bInfoValid = sal_False;
-
-            FilterPropertiesInfo_Impl *pFilterInfo = 0;
-
-            Reference < XTypeProvider > xTypeProv( xPropSet, UNO_QUERY );
-            if( xTypeProv.is() )
+            if( pCache )
             {
-                Sequence< sal_Int8  > aImplId( xTypeProv->getImplementationId() );
-                if( aImplId.getLength() == 16 )
+                aFilterInfo.setImplementationId( aImplId );
+                sal_uInt32 nPos = 0;
+                if( pCache->Seek_Entry( &aFilterInfo, &nPos ) )
                 {
-                    if( pCache )
-                    {
-                        aFilterInfo.setImplementationId( aImplId );
-                        sal_uInt32 nPos = 0;
-                        if( pCache->Seek_Entry( &aFilterInfo, &nPos ) )
-                        {
-                            pFilterInfo = pCache->GetObject( nPos );
-                            bInfoValid = sal_True;
-                        }
-                    }
-                    if( !pFilterInfo )
-                    {
-                        pFilterInfo = new FilterPropertiesInfo_Impl( aImplId );
-                        if( !pCache )
-                            ((SvXMLExportPropertyMapper *)this)->pCache =
-                                new FilterPropertiesInfos_Impl( 10, 5 );
-                        pCache->Insert( pFilterInfo );
-                    }
+                    pFilterInfo = pCache->GetObject( nPos );
+                    bInfoValid = sal_True;
                 }
             }
             if( !pFilterInfo )
-                pFilterInfo = &aFilterInfo;
-
-            if( !bInfoValid )
             {
-                for( sal_Int32 i=0; i < nProps; i++ )
-                {
-                    // Are we allowed to ask for the property? (MID_FLAG_NO_PROP..)
-                    // Does the PropertySet contain name of mpEntries-array ?
-                    const OUString& rAPIName = maPropMapper->GetEntryAPIName( i );
-                    const sal_Int32 nFlags = maPropMapper->GetEntryFlags( i );
-                    if( (0 == (nFlags & MID_FLAG_NO_PROPERTY_EXPORT)) &&
-                        xInfo->hasPropertyByName( rAPIName ) )
-                        pFilterInfo->AddProperty(rAPIName, i);
-                }
-            }
-
-            if( pFilterInfo->GetPropertyCount() )
-            {
-                const uno::Sequence<OUString>& rApiNames =
-                    pFilterInfo->GetApiNames();
-
-                try
-                {
-                    Sequence < PropertyState > aStates =
-                        xPropState->getPropertyStates( rApiNames );
-
-                    pFilterInfo->FillPropertyStateArray(aPropStateArray,
-                                                        aStates,
-                                                        xPropSet, maPropMapper,
-                                                        bDefault);
-                }
-                catch( UnknownPropertyException& )
-                {
-                    // might be a problem of getImplemenetationId
-                    OSL_ENSURE( !this, "unknown property in getPropertyStates" );
-                }
+                pFilterInfo = new FilterPropertiesInfo_Impl( aImplId );
+                if( !pCache )
+                    ((SvXMLExportPropertyMapper *)this)->pCache =
+                        new FilterPropertiesInfos_Impl( 10, 5 );
+                pCache->Insert( pFilterInfo );
             }
         }
-        else
-        {
-            for( sal_Int32 i=0; i < nProps; i++ )
-            {
-                // Are we allowed to ask for the property? (MID_FLAG_NO_PROP..)
-                // Does the PropertySet contain name of mpEntries-array ?
-                const OUString& rAPIName = maPropMapper->GetEntryAPIName( i );
-                const sal_Int32 nFlags = maPropMapper->GetEntryFlags( i );
-                if( (0 == (nFlags & MID_FLAG_NO_PROPERTY_EXPORT)) &&
-                    xInfo->hasPropertyByName( rAPIName ) )
-                {
-                    // If there isn't a XPropertyState we can't filter by its state
-                    if( !xPropState.is() ||
-                        xPropState->getPropertyState( rAPIName ) ==
-                                PropertyState_DIRECT_VALUE ||
-                        (bDefault && ((maPropMapper->GetEntryFlags( i ) &
-                    MID_FLAG_DEFAULT_ITEM_EXPORT) != 0) ))
-                    {
-                        // The value is stored in the PropertySet itself, add to list.
-                        XMLPropertyState aNewProperty( i,
-                            xPropSet->getPropertyValue( rAPIName ) );
-                        aPropStateArray.push_back( aNewProperty );
-                    }
-                }
-            }
-        }
-
-        // Call centext-filter
-        ContextFilter( aPropStateArray, xPropSet );
-
-        // Have to do if we change from a vector to a list or something like that
-        /*vector< XMLPropertyState >::iterator aItr = aPropStateArray.begin();
-        while (aItr != aPropStateArray.end())
-        {
-            if (aItr->mnIndex == -1)
-                aItr = aPropStateArray.erase(aItr);
-            else
-                aItr++;
-        }*/
     }
+    if( !pFilterInfo )
+        pFilterInfo = &aFilterInfo;
+
+    if( !bInfoValid )
+    {
+        for( sal_Int32 i=0; i < nProps; i++ )
+        {
+            // Are we allowed to ask for the property? (MID_FLAG_NO_PROP..)
+            // Does the PropertySet contain name of mpEntries-array ?
+            const OUString& rAPIName = maPropMapper->GetEntryAPIName( i );
+            const sal_Int32 nFlags = maPropMapper->GetEntryFlags( i );
+            if( (0 == (nFlags & MID_FLAG_NO_PROPERTY_EXPORT)) &&
+                ( (0 != (nFlags & MID_FLAG_MUST_EXIST)) ||
+                  xInfo->hasPropertyByName( rAPIName ) ) )
+                pFilterInfo->AddProperty(rAPIName, i);
+        }
+    }
+
+    if( pFilterInfo->GetPropertyCount() )
+    {
+        try
+        {
+            pFilterInfo->FillPropertyStateArray(aPropStateArray,
+                                                xPropSet, maPropMapper,
+                                                bDefault);
+        }
+        catch( UnknownPropertyException& )
+        {
+            // might be a problem of getImplemenetationId
+            OSL_ENSURE( !this, "unknown property in getPropertyStates" );
+        }
+    }
+
+    // Call centext-filter
+    ContextFilter( aPropStateArray, xPropSet );
+
+    // Have to do if we change from a vector to a list or something like that
+    /*vector< XMLPropertyState >::iterator aItr = aPropStateArray.begin();
+    while (aItr != aPropStateArray.end())
+    {
+        if (aItr->mnIndex == -1)
+            aItr = aPropStateArray.erase(aItr);
+        else
+            aItr++;
+    }*/
 
     return aPropStateArray;
 }
@@ -878,7 +887,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                 // element items do not add any properties,
                 // we export it later
                 if( pIndexArray )
-                    pIndexArray->Insert( nIndex, pIndexArray->Count() );
+                    pIndexArray->Insert( (sal_uInt16)nIndex, pIndexArray->Count() );
             }
             else
             {
