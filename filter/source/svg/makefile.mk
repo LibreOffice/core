@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 14:37:06 $
+#   last change: $Author: vg $ $Date: 2003-12-17 15:25:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,10 +99,12 @@ UNOTYPES=\
 
 SLOFILES=	$(SLO)$/svguno.obj			\
             $(SLO)$/svgfilter.obj		\
-            $(SLO)$/svgimport.obj		\
             $(SLO)$/svgexport.obj		\
             $(SLO)$/svgfontexport.obj	\
             $(SLO)$/svgwriter.obj	
+.IF "$(SOLAR_JAVA)"!=""
+SLOFILES+=		$(SLO)$/svgimport.obj
+.ENDIF
 
 # --- Library -----------------------------------
 
@@ -112,7 +114,6 @@ SHL1STDLIBS=\
     $(SVXLIB)			\
     $(XMLOFFLIB)		\
     $(GOODIESLIB)		\
-    $(SJLIB)			\
     $(VCLLIB)			\
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
@@ -120,7 +121,10 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
     $(SALLIB)
-
+.IF "$(SOLAR_JAVA)"!=""
+SHL1STDLIBS+=\
+    $(SJLIB)
+.ENDIF
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
