@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 10:27:21 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 11:50:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -830,7 +830,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
             } while (!bReady && !m_aMemoStream.IsEof() && aBStr.Len() < STRING_MAXLEN);
 
             ::rtl::OUString aStr(aBStr.GetBuffer(), aBStr.Len(),getConnection()->getTextEncoding());
-            aVariable = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),aStr.getLength());
+            aVariable = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),sizeof(sal_Unicode)*aStr.getLength());
 
         } break;
         case MemoFoxPro:
@@ -881,7 +881,7 @@ BOOL ODbaseTable::ReadMemo(ULONG nBlockNo, ORowSetValue& aVariable)
                 m_aMemoStream.Read(aBStr.AllocBuffer((USHORT)nLength),nLength);
                 aBStr.ReleaseBufferAccess();
                 ::rtl::OUString aStr(aBStr.GetBuffer(),aBStr.Len(), getConnection()->getTextEncoding());
-                aVariable = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),aStr.getLength());
+                aVariable = Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aStr.getStr()),sizeof(sal_Unicode)*aStr.getLength());
             }
             else
             {
