@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 19:14:24 $
+ *  last change: $Author: bm $ $Date: 2000-12-13 17:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,6 +546,7 @@ XML_CONSTASCII_ACTION( sXML_error_lower_limit, "error-lower-limit" );
 XML_CONSTASCII_ACTION( sXML_error_macro, "error-macro" );
 XML_CONSTASCII_ACTION( sXML_error_margin, "error-margin" );
 XML_CONSTASCII_ACTION( sXML_error_message, "error-message" );
+XML_CONSTASCII_ACTION( sXML_error_percentage, "error-percentage" );
 XML_CONSTASCII_ACTION( sXML_error_upper_indicator, "error-upper-indicator" );
 XML_CONSTASCII_ACTION( sXML_error_upper_limit, "error-upper-limit" );
 XML_CONSTASCII_ACTION( sXML_escapement_sub, "sub" );
@@ -1157,6 +1158,7 @@ XML_CONSTASCII_ACTION( sXML_region_left, "region-left" );
 XML_CONSTASCII_ACTION( sXML_region_right, "region-right" );
 XML_CONSTASCII_ACTION( sXML_register_true, "register-true" );
 XML_CONSTASCII_ACTION( sXML_register_truth_ref_style_name, "register-truth-ref-style-name" );
+XML_CONSTASCII_ACTION( sXML_regression_type, "regression-type" );
 XML_CONSTASCII_ACTION( sXML_rel_column_width, "rel-column-width" );
 XML_CONSTASCII_ACTION( sXML_rel_width, "rel-width" );
 XML_CONSTASCII_ACTION( sXML_relative, "relative" ) ;
