@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:00:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,26 +102,26 @@
 #ifndef _COM_SUN_STAR_AWT_KEY_HPP_
 #include <com/sun/star/awt/Key.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleContext.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
+#include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleComponent.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
+#include <com/sun/star/accessibility/XAccessibleComponent.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ILLEGALACCESSIBLECOMPONENTSTATEEXCEPTION_HDL_
-#include <drafts/com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ILLEGALACCESSIBLECOMPONENTSTATEEXCEPTION_HDL_
+#include <com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HDL_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HDL_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HDL_
-#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HDL_
+#include <com/sun/star/accessibility/AccessibleRelationType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HDL_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HDL_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -150,7 +150,7 @@
 #include <com/sun/star/awt/XFocusListener.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 using namespace ::rtl;
 
 // struct SvxFrameSelector_Impl ------------------------------------------------
@@ -202,9 +202,9 @@ inline const Color& SvxFrameSelector_Impl::GetPaintLineCol( void ) const
 
 class SvxFrameSelectorAccessible_Impl :
     public ::cppu::WeakImplHelper4<
-                ::drafts::com::sun::star::accessibility::XAccessible,
-                ::drafts::com::sun::star::accessibility::XAccessibleContext,
-                ::drafts::com::sun::star::accessibility::XAccessibleComponent,
+                ::com::sun::star::accessibility::XAccessible,
+                ::com::sun::star::accessibility::XAccessibleContext,
+                ::com::sun::star::accessibility::XAccessibleComponent,
                 ::com::sun::star::lang::XServiceInfo
                 >,
     public Resource
@@ -227,25 +227,25 @@ public:
     ~SvxFrameSelectorAccessible_Impl();
 
     //XAccessible
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
 
     //XAccessibleContext
     virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addPropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removePropertyChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
     //XAccessibleComponent
-    virtual sal_Bool SAL_CALL contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL containsPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -376,7 +376,7 @@ sal_Int32 SvxFrameSelectorAccessible_Impl::getAccessibleIndexInParent(  )
   -----------------------------------------------------------------------*/
 sal_Int16 SvxFrameSelectorAccessible_Impl::getAccessibleRole(  ) throw (uno::RuntimeException)
 {
-    return AccessibleRole::OPTIONPANE;
+    return AccessibleRole::OPTION_PANE;
 }
 /*-- 04.02.2002 14:11:57---------------------------------------------------
 
@@ -441,7 +441,7 @@ uno::Reference< XAccessibleStateSet > SvxFrameSelectorAccessible_Impl::getAccess
         {
             AccessibleStateType::EDITABLE,
             AccessibleStateType::FOCUSABLE,
-            AccessibleStateType::MULTISELECTABLE,
+            AccessibleStateType::MULTI_SELECTABLE,
             AccessibleStateType::SELECTABLE,
             AccessibleStateType::SHOWING,
             AccessibleStateType::VISIBLE,
@@ -496,7 +496,7 @@ void SvxFrameSelectorAccessible_Impl::removePropertyChangeListener( const uno::R
 /*-- 04.02.2002 14:11:59---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SvxFrameSelectorAccessible_Impl::contains( const awt::Point& aPt )
+sal_Bool SvxFrameSelectorAccessible_Impl::containsPoint( const awt::Point& aPt )
     throw (uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -514,7 +514,7 @@ sal_Bool SvxFrameSelectorAccessible_Impl::contains( const awt::Point& aPt )
 /*-- 04.02.2002 14:12:00---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-uno::Reference< XAccessible > SvxFrameSelectorAccessible_Impl::getAccessibleAt(
+uno::Reference< XAccessible > SvxFrameSelectorAccessible_Impl::getAccessibleAtPoint(
     const awt::Point& aPt )
         throw (uno::RuntimeException)
 {
