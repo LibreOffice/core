@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 11:42:25 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,7 @@ ModalDialog RID_MACROOPTIONS
         Text[ korean ] = "¼³¸í";
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Descripción";
     };
     MultiLineEdit RID_ME_DESCR
     {
@@ -173,6 +174,7 @@ ModalDialog RID_MACROOPTIONS
         Text[ korean ] = "µµ¿ò¸» Á¤º¸";
         Text[ turkish ] = "Yardým bilgileri";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Informaciones - Ayuda";
     };
     FixedText RID_FT_HELPID
     {
@@ -202,6 +204,7 @@ ModalDialog RID_MACROOPTIONS
         Text[ korean ] = "µµ¿ò¸» ID";
         Text[ turkish ] = "Yardým tanýtýcýsý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Identificación de ayuda";
     };
     NumericField RID_NF_HELPID
     {
@@ -241,6 +244,7 @@ ModalDialog RID_MACROOPTIONS
         Text[ korean ] = "µµ¿ò¸» ÆÄÀÏ ÀÌ¸§";
         Text[ turkish ] = "Yardým dosyasý adý";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Nombre del archivo de ayuda";
     };
     Edit RID_ED_HELPNAME
     {
@@ -259,4 +263,5 @@ ModalDialog RID_MACROOPTIONS
     Text[ korean ] = "¼³¸í";
     Text[ turkish ] = "Açýklama";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Descripción";
 };
