@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaDescriptor.idl,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:05:46 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,11 @@ published service MediaDescriptor
     [optional,property] any ComponentData;
 
     //-------------------------------------------------------------------------
+    /** The base URL of the document to be used to resolve relative links.
+     */
+    [optional,property] string DocumentBaseURL;
+
+    //-------------------------------------------------------------------------
     /** document title
 
         <p>
@@ -244,6 +249,11 @@ published service MediaDescriptor
         </p>
      */
     [optional,property] boolean Hidden;
+
+    //-------------------------------------------------------------------------
+    /** The hierarchical path to the embedded document from topmost container.
+     */
+    [optional,property] string HierarchicalDocumentName;
 
     //-------------------------------------------------------------------------
     /** a stream to receive the document data.
@@ -574,6 +584,7 @@ published service MediaDescriptor
         @since OOo 1.1.2
      */
     [optional,property] short UpdateDocMode;
+
 };
 
 //=============================================================================
