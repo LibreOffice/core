@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multistratumbackend.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 12:54:03 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 13:35:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,7 @@ uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
     {
         return listLayers(aComponent, mOwnerEntity ) ;
     }
-    return NULL;
+    return uno::Sequence<uno::Reference<backenduno::XLayer> >() ;
 }
 //------------------------------------------------------------------------------
 
@@ -564,7 +564,7 @@ uno::Sequence<uno::Reference<backenduno::XLayer> > SAL_CALL
         }
         return searchSupportingStrata(nNumSupportedLayers,aEntity,aComponent);
     }
-    return NULL;
+    return uno::Sequence<uno::Reference<backenduno::XLayer> >();
 }
 //------------------------------------------------------------------------------
 sal_Int32 MultiStratumBackend::findSupportingStratum(const rtl::OUString& aEntity)
