@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-19 20:11:41 $
+ *  last change: $Author: obo $ $Date: 2001-07-24 20:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,7 +575,7 @@ Resource RID_SVXERRCODE
         Text[ japanese ] = "Ì«°Ñ‘w‚Ì“Ç‚İæ‚è’†‚ÉƒGƒ‰[”­¶B‚±‚ÌÌ«°Ñ‘w‚Í“Ç‚İ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñB";
         Text[ korean ] = "¾ç½Ä ÄÁÆ®·ÑÀ» ÀĞÀ» ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ¾ç½Ä °èÃşÀÌ ·ÎµåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡±íµ¥¿ØÖÆÇøÊ±·¢ÉúÒ»¸ö´íÎó¡£ÎŞ·¨×°Èë±íµ¥·Ö²ãĞÅÏ¢¡£";
-        Text[ chinese_traditional ] = "¦bÅª¨úªí³æ±±¨î¶µ®Éµo¥Í¿ù»~¡CµLªk¸ü¤Jªí³æ¼h¦¸¡C";
+        Text[ chinese_traditional ] = "¦bÅª¨úªí³æ±±»s¶µ®Éµo¥Í¿ù»~¡CµLªk¸ü¤Jªí³æ¼h¦¸¡C";
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ÚäÇÕÑ ÊÍßã ÇáÇÓÊãÇÑÉ. áã íÊã ÊÍãíá ØÈŞÉ ÇáÇÓÊãÇÑÉ";
         Text[ turkish ] = "Form komut öğeleri okunurken bir hata oluştu. Form düzeyi yüklenemedi.";
         Text[ catalan ] = "Ha ocurrido un error al leer los controles de formulario. No se cargó la capa de formulario.";
@@ -600,7 +600,7 @@ Resource RID_SVXERRCODE
         Text[ japanese ] = "Ì«°Ñ‘w‚Ì‘‚«‚İ’†‚ÉƒGƒ‰[”­¶BÌ«°Ñ‘w‚Í•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
         Text[ korean ] = "¾ç½Ä ÄÁÆ®·ÑÀ» ±â·ÏÇÒ ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ¾ç½Ä °èÃşÀÌ ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
         Text[ chinese_simplified ] = "ÔÚĞ´Èë±íµ¥¿ØÖÆÇøÊ±·¢ÉúÒ»¸ö´íÎó¡£ÎŞ·¨´æÅÌ±íµ¥·Ö²ãĞÅÏ¢¡£";
-        Text[ chinese_traditional ] = "¦b¼g¤Jªí³æ±±¨î¶µ®Éµo¥Í¤@­Ó¿ù»~¡C¨S¦³Àx¦sªí³æ¼h¦¸¡C";
+        Text[ chinese_traditional ] = "¦b¼g¤Jªí³æ±±»s¶µ®Éµo¥Í¤@­Ó¿ù»~¡C¨S¦³Àx¦sªí³æ¼h¦¸¡C";
         Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ÚäÇÕÑ ÊÍßã ÇáÇÓÊãÇÑÉ. áã íÊã ÍİÙ ØÈŞÉ ÇáÇÓÊãÇÑÉ";
         Text[ turkish ] = "Form komut öğeleri yazılırken bir hata oluştu. Form düzeyi kaydedilemedi.";
         Text[ catalan ] = "Ha ocurrido un error al escribir los controles de formulario. No se guardó la capa de formulario.";
@@ -687,6 +687,7 @@ Resource RID_SVXERRCODE
     };
 };
  // ********************************************************************** EOF
+
 
 
 
