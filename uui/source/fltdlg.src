@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltdlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:53:27 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,8 @@ ModalDialog DLG_FILTER_SELECT
     Text[ hindi ] = "Filter Selection";
     Text[ slovak ] = "Výber filtra";
 };
+
+
 
 
 
