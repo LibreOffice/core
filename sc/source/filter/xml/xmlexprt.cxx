@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-20 18:35:05 $
+ *  last change: $Author: sab $ $Date: 2000-11-22 19:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1493,7 +1493,7 @@ void ScXMLExport::_ExportAutoStyles()
                                                 uno::Reference<text::XText> xText(xCell, uno::UNO_QUERY);
                                                 if (xText.is())
                                                 {
-                                                    GetTextParagraphExport()->collectTextAutoStyles(xText);
+                                                    GetTextParagraphExport()->collectTextAutoStyles(xText, sal_False, sal_False);
                                                 }
                                             }
                                         }
@@ -1834,7 +1834,7 @@ void ScXMLExport::WriteCell (const ScMyCell& aCell)
         {
             uno::Reference<text::XText> xText(aCell.xCell, uno::UNO_QUERY);
             if ( xText.is())
-                GetTextParagraphExport()->exportText(xText);
+                GetTextParagraphExport()->exportText(xText, sal_False);
         }
         else
         {
