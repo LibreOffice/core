@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ins_paste.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-29 10:33:17 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 15:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,4 +98,4 @@ public:
     BOOL            IsInsertBefore() const;
 };
 
-#endif _SD_INS_PASTE_HXX_
+#endif // _SD_INS_PASTE_HXX_
