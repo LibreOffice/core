@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 08:23:34 $
+ *  last change: $Author: af $ $Date: 2002-04-22 11:50:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ ChildrenManagerImpl::ChildrenManagerImpl (
     AccessibleContextBase& rContext)
     : mxShapeList (rxShapeList),
       mxParent (rxParent),
-      mrShapeTreeInfo (rShapeTreeInfo),
+      mpShapeTreeInfo (&rShapeTreeInfo),
       mrContext (rContext)
 {
     OSL_TRACE ("creating new children manager with %d children", rxShapeList->getCount());
@@ -106,8 +106,8 @@ ChildrenManagerImpl::~ChildrenManagerImpl (void)
 void ChildrenManagerImpl::Init (void)
 {
     // Register as document::XEventListener.
-    if (mrShapeTreeInfo.GetControllerBroadcaster().is())
-        mrShapeTreeInfo.GetControllerBroadcaster()->addEventListener (
+    if (mpShapeTreeInfo->GetControllerBroadcaster().is())
+        mpShapeTreeInfo->GetControllerBroadcaster()->addEventListener (
             static_cast<document::XEventListener*>(this));
 }
 
@@ -145,8 +145,7 @@ uno::Reference<XAccessible>
     yet in the cache.
 */
 uno::Reference<XAccessible>
-    ChildrenManagerImpl::GetChild (ChildDescriptor& rChildDescriptor,
-        bool bSendEventOnCreation)
+    ChildrenManagerImpl::GetChild (ChildDescriptor& rChildDescriptor)
     throw (::com::sun::star::uno::RuntimeException)
 {
     bool bChildHasBeenCreated = false;
@@ -165,7 +164,7 @@ uno::Reference<XAccessible>
                 ShapeTypeHandler::Instance().CreateAccessibleObject (
                     rChildDescriptor.mxShape,
                     mxParent,
-                    mrShapeTreeInfo);
+                    *mpShapeTreeInfo);
             //            rChildDescriptor.mpAccessibleShape = pShape;
             rChildDescriptor.mxAccessibleShape = uno::Reference<XAccessible> (
                 static_cast<uno::XWeak*>(pShape),
@@ -210,7 +209,7 @@ uno::Reference<XAccessible>
 */
 void ChildrenManagerImpl::Update (bool bCreateNewObjectsOnDemand)
 {
-    Rectangle aVisibleArea = mrShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
+    Rectangle aVisibleArea = mpShapeTreeInfo->GetViewForwarder()->GetVisibleArea();
     OSL_TRACE ("ChildrenManagerImpl::update called with VisibleArea = %d %d %d %d",
         aVisibleArea.getX(), aVisibleArea.getY(),
         aVisibleArea.getWidth(), aVisibleArea.getHeight());
@@ -268,7 +267,7 @@ void ChildrenManagerImpl::CreateListOfVisibleShapes (
     if (xShapeAccess.is())
     {
         sal_Int32 nShapeCount = xShapeAccess->getCount();
-        Rectangle aVisibleArea = mrShapeTreeInfo.GetViewForwarder()->GetVisibleArea();
+        Rectangle aVisibleArea = mpShapeTreeInfo->GetViewForwarder()->GetVisibleArea();
         for (sal_Int32 i=0; i<nShapeCount; i++)
         {
             uno::Reference<drawing::XShape> xShape;
@@ -364,7 +363,7 @@ void ChildrenManagerImpl::SendVisibleAreaEvents (
         if (pShape != NULL)
             pShape->ViewForwarderChanged (
                 IAccessibleViewForwarderListener::VISIBLE_AREA,
-                mrShapeTreeInfo.GetViewForwarder());
+                mpShapeTreeInfo->GetViewForwarder());
     }
 }
 
@@ -449,15 +448,15 @@ void ChildrenManagerImpl::SetInfo (AccessibleShapeTreeInfo& rShapeTreeInfo)
     uno::Reference<document::XEventBroadcaster> xCurrentBroadcaster;
     {
         ::vos::OGuard aGuard (maMutex);
-        xCurrentBroadcaster = mrShapeTreeInfo.GetControllerBroadcaster();
-        mrShapeTreeInfo = rShapeTreeInfo;
+        xCurrentBroadcaster = mpShapeTreeInfo->GetControllerBroadcaster();
+        mpShapeTreeInfo = &rShapeTreeInfo;
     }
 
-    if (mrShapeTreeInfo.GetControllerBroadcaster() != xCurrentBroadcaster)
+    if (mpShapeTreeInfo->GetControllerBroadcaster() != xCurrentBroadcaster)
     {
         // Register at new broadcaster.
-        if (mrShapeTreeInfo.GetControllerBroadcaster().is())
-            mrShapeTreeInfo.GetControllerBroadcaster()->addEventListener (
+        if (mpShapeTreeInfo->GetControllerBroadcaster().is())
+            mpShapeTreeInfo->GetControllerBroadcaster()->addEventListener (
                 static_cast<document::XEventListener*>(this));
 
         // Unregister at old broadcaster.
@@ -527,7 +526,7 @@ long int ChildrenManagerImpl::GetChildIndex (const ::com::sun::star::uno::Refere
     throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard (maMutex);
-    for (long i=0; i<maVisibleChildren.size(); i++)
+    for (unsigned long i=0; i<maVisibleChildren.size(); i++)
     {
         // Is this equality comparison valid?
         if (maVisibleChildren[i].mxAccessibleShape == xChild)
@@ -549,7 +548,7 @@ void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
     else
     {
         ::vos::OGuard aGuard (maMutex);
-        for (long i=0; i<maVisibleChildren.size(); i++)
+        for (unsigned long i=0; i<maVisibleChildren.size(); i++)
         {
             AccessibleShape* pShape = maVisibleChildren[i].GetAccessibleShape();
             if (pShape != NULL)

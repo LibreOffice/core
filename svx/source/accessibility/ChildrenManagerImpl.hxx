@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 08:19:42 $
+ *  last change: $Author: af $ $Date: 2002-04-22 11:50:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,9 +194,6 @@ public:
         @param aChildDescriptor
             This object contains references to the original shape and its
             associated accessible object.
-        @param bSendEventOnCreation
-            If true and the requested child has to be created then send an
-            event.  Otherwise, the default, be quiet.
         @return
             Returns a reference to the requested accessible child.  This
             reference is empty if it has not been possible to create the
@@ -204,8 +201,7 @@ public:
     */
     ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessible>
-        GetChild (ChildDescriptor& aChildDescriptor,
-            bool bSendEventOnCreation = false)
+        GetChild (ChildDescriptor& aChildDescriptor)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Return the requested accessible child given a shape.  This method
@@ -351,7 +347,7 @@ protected:
 
     /** Bundel of information passed down the shape tree.
     */
-    const AccessibleShapeTreeInfo& mrShapeTreeInfo;
+    const AccessibleShapeTreeInfo* mpShapeTreeInfo;
 
     /** Reference to an accessible context object that is used to inform its
         listeners of new and remved children.
