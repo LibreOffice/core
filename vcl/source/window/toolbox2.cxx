@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-13 08:42:31 $
+ *  last change: $Author: cd $ $Date: 2002-08-27 08:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,6 +649,9 @@ void ToolBox::MoveItem( USHORT nItemId, USHORT nNewPos )
 
     if ( nPos == nNewPos )
         return;
+
+    if ( nPos < nNewPos )
+        nNewPos--;
 
     // Existiert Item
     if ( nPos != TOOLBOX_ITEM_NOTFOUND )
