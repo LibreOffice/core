@@ -19,7 +19,7 @@
 <TimeSeparator>:</TimeSeparator>
 <Time100SecSeparator>,</Time100SecSeparator>
 <ListSeparator>;</ListSeparator>
-<LongDateDayOfWeekSeparator></LongDateDayOfWeekSeparator>
+<LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
 <LongDateDaySeparator>. </LongDateDaySeparator>
 <LongDateMonthSeparator>ta </LongDateMonthSeparator>
 <LongDateYearSeparator></LongDateYearSeparator>
@@ -92,28 +92,28 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-<FormatCode>NNNN P. KKKK"ta" VVVV</FormatCode>
-<DefaultName>DIN 5008 (EN 28601) </DefaultName>
+<FormatCode>NNNNP. KKKK"ta" VVVV</FormatCode>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey16" default="false" type="long" usage="DATE" formatindex="24">
 <FormatCode>P. KKK. VVVV</FormatCode>
-<DefaultName>DIN 5008 (EN 28601) </DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey17" default="false" type="long" usage="DATE" formatindex="26">
 <FormatCode>P. KKKK VVVV</FormatCode>
-<DefaultName>DIN 5008 (EN 28601) </DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
 <FormatCode>KK-PP</FormatCode>
-<DefaultName>DIN 5008 (EN 28601) </DefaultName>
+<DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="32">
 <FormatCode>VV-KK-PP</FormatCode>
-<DefaultName>DIN 5008 (EN 28601) </DefaultName>
+<DefaultName>ISO 8601 (EN 28601)</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="33">
 <FormatCode>VVVV-KK-PP</FormatCode>
-<DefaultName></DefaultName>
+<DefaultName>ISO 8601 (EN 28601)</DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
 <FormatCode>WW</FormatCode>
