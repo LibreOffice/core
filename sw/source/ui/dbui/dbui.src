@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbui.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:33:37 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 21:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ ModelessDialog DLG_PRINTMONITOR
         TEXT[ turkish ] = "Alýcý";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "se envía a";
-        TEXT[ finnish ] = "lähetetään kohteelle";
+        TEXT[ finnish ] = "l?hetet??n kohteelle";
     };
     FixedText FT_PRINTER
     {
@@ -281,7 +281,7 @@ ModelessDialog DLG_PRINTMONITOR
         Text[ turkish ] = "Gönderme ekraný";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Enviar-Monitor";
-        Text[ finnish ] = "Lähetysvalvonta";
+        Text[ finnish ] = "L?hetysvalvonta";
     };
     Text [ portuguese ] = "Monitor de impressão" ;
     Text [ english_us ] = "Print monitor" ;
@@ -330,8 +330,9 @@ String STR_DB_EMAIL
     Text[ turkish ] = "E-posta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "E-mail";
-    Text[ finnish ] = "Sähköposti";
+    Text[ finnish ] = "S?hk?osti";
 };
+
 
 
 
