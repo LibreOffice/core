@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:46:18 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -677,7 +677,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0xD608, 0, L_VAR}, // "sprmTDefTable" tap.rgtc;complex
         {0xD609, 0, L_VAR}, // "sprmTDefTableShd" tap.rgshd;complex
         {0x740A, 4, L_FIX}, // "sprmTTlp" tap.tlp;TLP;4 bytes;
-        {0x560B, 1, L_FIX}, // "sprmTFBiDi" ;;;
+        {0x560B, 2, L_FIX}, // "sprmTFBiDi" ;;;
         {0x740C, 1, L_FIX}, // "sprmTHTMLProps" ;;;
         {0xD620, 0, L_VAR}, // "sprmTSetBrc" tap.rgtc[].rgbrc;complex
         {0x7621, 4, L_FIX}, // "sprmTInsert" tap.rgdxaCenter, tap.rgtc;complex
@@ -2030,7 +2030,7 @@ static ULONG SafeReadString(ByteString &rStr,USHORT nLen,SvStream &rStrm)
     return nWasRead;
 }
 
-USHORT WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
+xub_StrLen WW8ScannerBase::WW8ReadString( SvStream& rStrm, String& rStr,
     WW8_CP nAktStartCp, long nTotalLen, rtl_TextEncoding eEnc ) const
 {
     // Klartext einlesen, der sich ueber mehrere Pieces erstrecken kann
@@ -2270,7 +2270,9 @@ void WW8PLCF::GeneratePLCF( SvStream* pSt, long nPN, long ncpN )
     INT32 nFc;
     USHORT i;
 
-    for( i = 0; i < ncpN; i++ ){        // Baue FC-Eintraege
+    for (i = 0; i < ncpN; ++i)
+    {
+        // Baue FC-Eintraege
         pSt->Seek( ( nPN + i ) << 9 );  // erster FC-Eintrag jedes Fkp
         *pSt >> nFc;
         pPLCF_PosArray[i] = nFc;
@@ -2287,9 +2289,9 @@ void WW8PLCF::GeneratePLCF( SvStream* pSt, long nPN, long ncpN )
     pPLCF_Contents = (BYTE*)&pPLCF_PosArray[nIMax + 1];
     BYTE* p = pPLCF_Contents;
 
-    for( i = 0; i < ncpN; i++ )         // Baue PNs
+    for (i = 0; i < ncpN; ++i)         // Baue PNs
     {
-        ShortToSVBT16(nPN + i, p);
+        ShortToSVBT16(static_cast<sal_uInt16>(nPN + i), p);
         p+=2;
     }
 }
@@ -5910,12 +5912,21 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 if ((eEnc == RTL_TEXTENCODING_SYMBOL) || (eEnc == RTL_TEXTENCODING_DONTKNOW))
                     eEnc = RTL_TEXTENCODING_MS_1252;
                 p->sFontname = String(pVer6->szFfn, eEnc);
-//              p->sFontname = String(pVer6->szFfn, RTL_TEXTENCODING_MS_1252);
                 if (p->ibszAlt)
                 {
                     p->sFontname.Append(';');
                     p->sFontname += String(pVer6->szFfn+p->ibszAlt, eEnc);
-//                      RTL_TEXTENCODING_MS_1252 );
+                }
+                else
+                {
+                    //#i18369# if its a symbol font set Symbol as fallback
+                    if (
+                         RTL_TEXTENCODING_SYMBOL == WW8Fib::GetFIBCharset(p->chs)
+                         && !p->sFontname.EqualsAscii("Symbol")
+                       )
+                    {
+                        p->sFontname.APPEND_CONST_ASC(";Symbol");
+                    }
                 }
                 pVer6 = (WW8_FFN_Ver6*)( ((BYTE*)pVer6) + pVer6->cbFfnM1 + 1 );
             }
@@ -5954,6 +5965,17 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 {
                     p->sFontname.Append(';');
                     p->sFontname.Append(pVer8->szFfn+p->ibszAlt);
+                }
+                else    //No alternative name
+                {
+                    //#i18369# if its a symbol font set Symbol as fallback
+                    if (
+                         RTL_TEXTENCODING_SYMBOL == WW8Fib::GetFIBCharset(p->chs)
+                         && !p->sFontname.EqualsAscii("Symbol")
+                       )
+                    {
+                        p->sFontname.APPEND_CONST_ASC(";Symbol");
+                    }
                 }
 
                 // Zeiger auf Ursprungsarray einen Font nach hinten setzen
