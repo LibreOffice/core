@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:00:26 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ void ScDrawView::AddCustomHdl()
 {
     BOOL bNegativePage = pDoc->IsNegativePage( nTab );
 
-    const SdrMarkList &rMrkList = GetMarkList();
+    const SdrMarkList &rMrkList = GetMarkedObjectList();
     UINT32 nCount = rMrkList.GetMarkCount();
     for(UINT32 nPos=0; nPos<nCount; nPos++ )
     {
@@ -354,13 +354,13 @@ void ScDrawView::DrawMarks( OutputDevice* pOut ) const
 
 void ScDrawView::SetMarkedToLayer( BYTE nLayerNo )
 {
-    if (HasMarkedObj())
+    if (AreObjectsMarked())
     {
         //  #i11702# use SdrUndoObjectLayerChange for undo
         //  STR_UNDO_SELATTR is "Attributes" - should use a different text later
         BegUndo( ScGlobal::GetRscString( STR_UNDO_SELATTR ) );
 
-        const SdrMarkList& rMark = GetMarkList();
+        const SdrMarkList& rMark = GetMarkedObjectList();
         ULONG nCount = rMark.GetMarkCount();
         for (ULONG i=0; i<nCount; i++)
         {
@@ -386,9 +386,9 @@ void ScDrawView::SetMarkedToLayer( BYTE nLayerNo )
 
 BOOL ScDrawView::HasMarkedControl() const
 {
-    if (HasMarkedObj())
+    if (AreObjectsMarked())
     {
-        const SdrMarkList& rMark = GetMarkList();
+        const SdrMarkList& rMark = GetMarkedObjectList();
         ULONG nCount = rMark.GetMarkCount();
         for (ULONG i=0; i<nCount; i++)
         {
@@ -502,7 +502,7 @@ void __EXPORT ScDrawView::MarkListHasChanged()
         pViewSh->Unmark();      // Selektion auff'm Doc entfernen
 
         //  #65379# end cell edit mode if drawing objects are selected
-        if ( GetMarkList().GetMarkCount() )
+        if ( GetMarkedObjectList().GetMarkCount() )
             SC_MOD()->InputEnterHandler();
     }
 
@@ -527,7 +527,7 @@ void __EXPORT ScDrawView::MarkListHasChanged()
     SdrOle2Obj* pOle2Obj = NULL;
     SdrGrafObj* pGrafObj = NULL;
 
-    const SdrMarkList& rMarkList = GetMarkList();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
 
     if ( nMarkCount == 0 && !pViewData->GetViewShell()->IsDrawSelMode() && !bInConstruct )
@@ -798,7 +798,7 @@ String ScDrawView::GetSelectedChartName() const
     //  used for modifying a chart's data area - PersistName must always be used
     //  (as in ScDocument::FindChartData and UpdateChartArea)
 
-    const SdrMarkList& rMarkList = GetMarkList();
+    const SdrMarkList& rMarkList = GetMarkedObjectList();
     if (rMarkList.GetMarkCount() == 1)
     {
         SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
