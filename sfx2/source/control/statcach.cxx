@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statcach.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:33:23 $
+ *  last change: $Author: as $ $Date: 2002-07-05 07:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@
 #include "sfxuno.hxx"
 #include "unoctitm.hxx"
 #include "msgpool.hxx"
+#include "viewfrm.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -371,6 +372,14 @@ const SfxSlotServer* SfxStateCache::GetSlotServer( SfxDispatcher &rDispat , cons
                 // now we must forget the SlotServer
                 aSlotServ.SetSlot(0);
                 return NULL;
+            }
+
+            else if ( rDispat.GetFrame() )
+            {
+                ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatchProvider > xFrameProv(
+                        rDispat.GetFrame()->GetFrame()->GetFrameInterface(), ::com::sun::star::uno::UNO_QUERY );
+                if ( xFrameProv != xProv )
+                    return GetSlotServer( rDispat, xFrameProv );
             }
         }
         else
