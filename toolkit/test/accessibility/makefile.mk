@@ -18,7 +18,7 @@ JAR_PATH = $(STAR_RESOURCEPATH)$/
 
 # The rest of this makefile should not need to be touched.
 
-all : AccessibilityWorkBench
+all : AccessibilityWorkBench dist
 
 JAR_FILES =		\
     unoil.jar	\
@@ -82,10 +82,7 @@ AccessibilityWorkBench : $(JAVA_FILES:b:+".class")
 
 # Create a jar file of all files neccessary to build and run the work bench.
 dist:
-    jar -cf AccessibilityWorkBench.jar \
-        $(JAVA_FILES)\
-        *.class
-#		$(JAVA_FILES:b:+".class")
+    jar -cfm AccessibilityWorkBench.jar jawb.mf *.class
 
 # Example of how to run the work bench.
 run:
