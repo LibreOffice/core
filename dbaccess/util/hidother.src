@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-17 11:30:09 $
+ *  last change: $Author: jmarmion $ $Date: 2002-07-04 14:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,8 @@ hidspecial HID_DLG_REL_CASC_UPD                         { HelpId = HID_DLG_REL_C
 hidspecial HID_DLG_REL_NO_CASC_UPD                      { HelpId = HID_DLG_REL_NO_CASC_UPD ; };
 hidspecial HID_DLG_REL_CASC_UPD_NULL                    { HelpId = HID_DLG_REL_CASC_UPD_NULL ; };
 hidspecial HID_DLG_REL_CASC_UPD_DEFAULT                 { HelpId = HID_DLG_REL_CASC_UPD_DEFAULT ; };
+hidspecial HID_BROWSER_SAVE_RECORD                      { HelpId = HID_BROWSER_SAVE_RECORD ; };
+hidspecial HID_BROWSER_UNDO_RECORD                      { HelpId = HID_BROWSER_UNDO_RECORD ; };
 
 // missing pre processor for helpids so we have to include them here
 hidspecial SID_SBA_ADD_RELATION                         { HelpId = SID_SBA_ADD_RELATION ; };
@@ -320,6 +322,9 @@ hidspecial SID_FM_EXECUTE                               { HelpId = SID_FM_EXECUT
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.40  2002/05/17 11:30:09  oj
+ *  #98913# helpids inserted for SBA slot ids
+ *
  *  Revision 1.39  2002/02/27 10:25:40  oj
  *  #97666##97667# insert new helpids and unique ids
  *

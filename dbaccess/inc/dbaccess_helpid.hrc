@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-27 10:20:16 $
+ *  last change: $Author: jmarmion $ $Date: 2002-07-04 14:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,8 @@
 #define HID_DLG_REL_NO_CASC_UPD                     (HID_DBACCESS_START + 220)
 #define HID_DLG_REL_CASC_UPD_NULL                   (HID_DBACCESS_START + 221)
 #define HID_DLG_REL_CASC_UPD_DEFAULT                (HID_DBACCESS_START + 222)
+#define HID_BROWSER_SAVE_RECORD                 (HID_DBACCESS_START + 223)
+#define HID_BROWSER_UNDO_RECORD                 (HID_DBACCESS_START + 224)
 
 // don't forget to update the file util/hidother.src
 
@@ -326,6 +328,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.46  2002/02/27 10:20:16  oj
+ *  #97666##97667# insert new helpids and unique ids
+ *
  *  Revision 1.45  2002/02/06 09:01:50  oj
  *  #90580# introduce new file for relation control
  *
