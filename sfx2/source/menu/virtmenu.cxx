@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:47:41 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,9 @@
 #include <tools/urlobj.hxx>
 #endif
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "virtmenu.hxx"
 #include "msgpool.hxx"
@@ -130,8 +132,6 @@ using namespace ::com::sun::star::uno;
 //=========================================================================
 
 DBG_NAME(SfxVirtualMenu);
-
-static long nAutoDeactivateTimeout_Impl = -1;
 
 //=========================================================================
 
@@ -257,7 +257,9 @@ SfxVirtualMenu::SfxVirtualMenu( USHORT nOwnId,
     pBindings(&rBindings),
     pResMgr(0),
     pImageControl(0),
-    nLocks(0), pAutoDeactivate(0), bHelpInitialized( bWithHelp ),
+    pAutoDeactivate(0),
+    nLocks(0),
+    bHelpInitialized( bWithHelp ),
     bWasHighContrast( FALSE ),
     bIsAddonPopupMenu( bIsAddonMenu )
 {
@@ -291,7 +293,9 @@ SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, BOOL bWithHelp,
     pBindings(&rBindings),
     pResMgr(0),
     pImageControl(0),
-    nLocks(0), pAutoDeactivate(0),  bHelpInitialized( bWithHelp ),
+    pAutoDeactivate(0),
+    nLocks(0),
+    bHelpInitialized( bWithHelp ),
     bWasHighContrast( FALSE ),
     bIsAddonPopupMenu( bIsAddonMenu )
 {
@@ -347,14 +351,7 @@ SfxVirtualMenu::~SfxVirtualMenu()
 
     if (pItems)
     {
-#ifdef MPW
-        // der MPW-Compiler ruft sonst keine Dtoren!
-        for ( USHORT n = 0; n < nCount; ++n )
-            (pItems+n)->SfxMenuControl::~SfxMenuControl();
-        delete (void*) pItems;
-#else
         delete [] pItems;
-#endif
     }
 
     delete pAppCtrl;
@@ -449,7 +446,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
         pItems = new SfxMenuControl[nCount];
 
     // remember some values
-    SfxApplication *pSfxApp = SFX_APP();
+    SFX_APP();
     const int bOleServer = FALSE;
     const int bMac = FALSE;
     SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
@@ -491,7 +488,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 // gel"oscht werden
                 if ( pSVMenu->GetPopupMenu( nId ) == pPopup )
                     pSVMenu->SetPopupMenu( nId, NULL );
-                DELETEZ( pPopup );
+                delete pPopup;
+                pPopup = 0;
 
                 SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                 rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count() );
@@ -633,6 +631,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 case MENUITEM_SEPARATOR:
                     //! not implemented
                     break;
+                default:
+                    break; // DONTKNOW and STRINGIMAGE not handled.
             }
         }
     }
@@ -652,7 +652,7 @@ IMPL_LINK( SfxVirtualMenu, Highlight, Menu *, pMenu )
     if ( pMenu == pSVMenu )
     {
         // AutoDeactivate ist jetzt nicht mehr n"otig
-        USHORT nId = pMenu->GetCurItemId();
+        //USHORT nId = pMenu->GetCurItemId();
         if ( pAutoDeactivate )
             pAutoDeactivate->Stop();
     }
@@ -1064,7 +1064,6 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
                 }
             }
 
-            int nRemoveItemCount = 0;
             int nItemCount       = pMenu->GetItemCount();
 
             if ( nItemCount > 0 )
