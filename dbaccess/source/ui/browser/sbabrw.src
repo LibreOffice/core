@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 13:40:03 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:26:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,22 +842,22 @@ Menu MENU_BROWSER_QUERYCONTEXT
             HelpId = HID_BROWSER_QUERY_PASTE ;
             Text = "Abfrage e~infügen..." ;
             Text [ english ] = "~insert query..." ;
-            Text [ english_us ] = "~Insert Query..." ;
-            Text[ portuguese ] = "~Insert Query...";
+            Text [ english_us ] = "~Paste Query..." ;
+            Text[ portuguese ] = "~Inserir consulta...";
             Text[ russian ] = "~Insert Query...";
             Text[ greek ] = "~Insert Query...";
-            Text[ dutch ] = "~Insert Query...";
-            Text[ french ] = "~Insert Query...";
-            Text[ spanish ] = "~Insert Query...";
+            Text[ dutch ] = "Qu~ery invoegen...";
+            Text[ french ] = "~Insérer une requête...";
+            Text[ spanish ] = "~Insertar consulta...";
             Text[ finnish ] = "~Insert Query...";
             Text[ italian ] = "~Insert Query...";
             Text[ danish ] = "~Insert Query...";
             Text[ swedish ] = "~Infoga sökning...";
             Text[ polish ] = "~Wstaw kwerendê...";
             Text[ portuguese_brazilian ] = "~Insert Query...";
-            Text[ japanese ] = "~Insert Query...";
+            Text[ japanese ] = "¸´Ø°‚Ì‘}“ü...";
             Text[ korean ] = "~Insert Query...";
-            Text[ chinese_simplified ] = "~Insert Query...";
+            Text[ chinese_simplified ] = "²åÈë²éÑ¯(~I)...";
             Text[ chinese_traditional ] = "~Insert Query...";
             Text[ turkish ] = "~Insert Query...";
             Text[ arabic ] = "~Insert Query...";
@@ -913,7 +913,7 @@ Menu MENU_BROWSER_TABLECONTEXT
             HelpId = HID_BROWSER_TABLE_PASTE ;
             Text = "Tabelle e~infügen..." ;
             Text [ english ] = "~insert table..." ;
-            Text [ english_us ] = "~Insert Table..." ;
+            Text [ english_us ] = "~Paste Table..." ;
             Text[ portuguese ] = "~Inserir tabela...";
                 Text[ russian ] = "~Âñòàâèòü òàáëèöó...";
                 Text[ greek ] = "Å~éóáãùãÞ ðßíáêá...";
@@ -1013,7 +1013,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
             HelpId = HID_BROWSER_VIEW_PASTE ;
             Text = "Ansicht e~infügen" ;
             Text [ english ] = "~insert view" ;
-            Text [ english_us ] = "~Insert View" ;
+            Text [ english_us ] = "~Paste View" ;
             Text[ portuguese ] = "~Inserir vista";
                 Text[ russian ] = "Âñòàâèòü âèä";
                 Text[ greek ] = "Å~éóáãùãÞ ðñïâïëÞò";
@@ -1336,21 +1336,21 @@ String STR_DSBROWSER_TITLE
     Text = "Datenquellen Ansicht" ;
     Text [ english ] = "Data source browser" ;
     Text [ english_us ] = "Data sources view" ;
-    Text[ portuguese ] = "Data source browser";
+    Text[ portuguese ] = "Ver fontes de dados";
         Text[ russian ] = "Data source browser";
         Text[ greek ] = "Data source browser";
-        Text[ dutch ] = "Data source browser";
-        Text[ french ] = "Data source browser";
-        Text[ spanish ] = "Data source browser";
+        Text[ dutch ] = "Weergave gegevensbron";
+        Text[ french ] = "Vue des sources de données";
+        Text[ spanish ] = "Vista de fuente de datos";
         Text[ finnish ] = "Data source browser";
         Text[ italian ] = "Data source browser";
         Text[ danish ] = "Data source browser";
         Text[ swedish ] = "Datakällor vy";
         Text[ polish ] = "Widok Ÿróde³ danych";
         Text[ portuguese_brazilian ] = "Data source browser";
-        Text[ japanese ] = "Data source browser";
+        Text[ japanese ] = "ÃÞ°À¿°½‚Ì•\\Ž¦";
         Text[ korean ] = "Data source browser";
-        Text[ chinese_simplified ] = "Data source browser";
+        Text[ chinese_simplified ] = "Êý¾ÝÔ´¼ìÊÓ";
         Text[ chinese_traditional ] = "Data source browser";
         Text[ turkish ] = "Data source browser";
         Text[ arabic ] = "Data source browser";
@@ -1363,6 +1363,7 @@ String STR_NO_TABLE_FORMAT_INSIDE
     Text [ english ] = "No table format found." ;
     Text [ english_us ] = "No table format found." ;
 };
+
 
 
 
