@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-15 17:06:51 $
+ *  last change: $Author: cp $ $Date: 2002-04-16 17:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1059,7 +1059,7 @@ void SalFrameData::SetWindowGravity (int nGravity, const Point& rPosition) const
     long        nFlag;
 
     XGetWMNormalHints (GetXDisplay(), GetShellWindow(), pHint, &nFlag);
-    pHint->flags       |= PWinGravity | PPosition | PSize;
+    pHint->flags       |= PWinGravity | PPosition;
     pHint->win_gravity  = nGravity;
     pHint->x            = rPosition.X();
     pHint->y            = rPosition.Y();
@@ -2744,7 +2744,7 @@ long SalFrameData::HandleSizeEvent( XConfigureEvent *pEvent )
                 nMaxHeight_ = pHints->max_height;
                 DBG_ASSERT( nMaxWidth_ && nMaxHeight_, "!MaxWidth^!MaxHeight" )
             }
-            pHints->flags       = pHints->flags | PWinGravity | PPosition | PSize;
+            pHints->flags       = pHints->flags | PWinGravity;
             pHints->win_gravity = pDisplay_->getWMAdaptor()->getPositionWinGravity();
             XSetWMNormalHints( pEvent->display,
                                GetShellWindow(),
@@ -2860,6 +2860,7 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
 
     if( GetStackingWindow() == None
         && hWM_Parent != hPresentationWindow
+        && hWM_Parent != GetShellWindow()
         && ( ! pDisableStackingCheck || ! *pDisableStackingCheck )
         )
     {
