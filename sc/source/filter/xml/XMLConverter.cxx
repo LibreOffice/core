@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:08:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ sal_Int32 ScXMLConverter::IndexOf(
         bExitLoop = (cCode == cSearchChar) && !bQuoted;
         bQuoted = (bQuoted != (cCode == cQuote));
         if( !bExitLoop )
-            nIndex++;
+            ++nIndex;
     }
     return (nIndex < nLength) ? nIndex : -1;
 }
@@ -163,7 +163,7 @@ sal_Int32 ScXMLConverter::IndexOfDifferent(
     {
         bExitLoop = (rString[ nIndex ] != cSearchChar);
         if( !bExitLoop )
-            nIndex++;
+            ++nIndex;
     }
     return (nIndex < nLength) ? nIndex : -1;
 }
@@ -204,7 +204,7 @@ sal_Int32 ScXMLConverter::GetTokenCount( const OUString& rString )
     {
         GetTokenByOffset( sToken, rString, nOffset );
         if( nOffset >= 0 )
-            nCount++;
+            ++nCount;
     }
     return nCount;
 }
@@ -407,7 +407,7 @@ void ScXMLConverter::GetStringFromRangeList(
     if( pRangeList )
     {
         sal_Int32 nCount = pRangeList->Count();
-        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+        for( sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex )
         {
             const ScRange* pRange = pRangeList->GetObject( nIndex );
             if( pRange )
@@ -465,7 +465,7 @@ void ScXMLConverter::GetStringFromRangeList(
 {
     OUString sRangeListStr;
     sal_Int32 nCount = rRangeSeq.getLength();
-    for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+    for( sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex )
     {
         const table::CellRangeAddress& rRange = rRangeSeq[ nIndex ];
         GetStringFromRange( sRangeListStr, rRange, pDocument, sal_True, nFormatFlags );
@@ -723,7 +723,7 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
     sal_Bool bInDoubleQuotationMarks(sal_False);
     sal_Int16 nCountBraces(0);
     sal_Unicode chPrevious('=');
-    for (sal_Int32 i = 0; i < sFormula.getLength(); i++)
+    for (sal_Int32 i = 0; i < sFormula.getLength(); ++i)
     {
         if (sFormula[i] == '\'' && !bInDoubleQuotationMarks &&
             chPrevious != '\\')
@@ -733,7 +733,7 @@ void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
         if (bInQuotationMarks || bInDoubleQuotationMarks)
             sBuffer.append(sFormula[i]);
         else if (sFormula[i] == '[')
-            nCountBraces++;
+            ++nCountBraces;
         else if (sFormula[i] == ']')
             nCountBraces--;
         else if ((sFormula[i] != '.') ||
