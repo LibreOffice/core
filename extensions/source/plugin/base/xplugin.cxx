@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-03 10:31:37 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:17:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #include <sys/socket.h>
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -585,7 +585,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const ::rtl::OUString& mimetype,
     // but e.g. the acrobat reader plugin does not WANT a file
     // NP_ASFILE or NP_ASFILEONLY if the new stream is seekable
     // the reason for this behaviour is unknown
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "new stream \"%s\" of MIMEType \"%s\"\nfor plugin \"%s\"\n", aURL.getStr(), aMIME.getStr(), getPluginComm()->getLibName().getStr() );
 
 #endif
@@ -594,7 +594,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const ::rtl::OUString& mimetype,
                                         &stype ) )
     {
         getPluginComm()->NPP_SetWindow( getNPPInstance(), &m_aNPWindow );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         char* pType;
         switch( stype )
         {
@@ -683,7 +683,7 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "XPlugin_Impl::setPosSize( %d, %d, %d, %d, %d )\n",
              nX_, nY_, nWidth_, nHeight_, nFlags );
 #endif
