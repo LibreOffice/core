@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:03:46 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,7 @@ void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName,
             aCam.SetPosAndLookAt(aCamPos, aLookAt);
             aCam.SetFocalLength(fCamFocal / 100.0);
             aCam.SetDefaults(Vector3D(0.0, 0.0, fCamPosZ), aLookAt, fCamFocal / 100.0);
-            aCam.SetDeviceWindow(Rectangle(0, 0, fW, fH));
+            aCam.SetDeviceWindow(Rectangle(0, 0, (long)fW, (long)fH));
 
             // set at scene
             pScene->SetCamera(aCam);
