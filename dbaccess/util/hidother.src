@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-03 10:36:03 $
+ *  last change: $Author: fs $ $Date: 2000-12-05 11:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,9 +123,14 @@ hidspecial HID_DSADMIN_SELECT_TABLES                    { HelpId = HID_DSADMIN_S
 hidspecial HID_DSADMIN_TABLE_SELECTOR                   { HelpId = HID_DSADMIN_TABLE_SELECTOR; };
 hidspecial HID_DSADMIN_SUPPRESS_VERSIONCL               { HelpId = HID_DSADMIN_SUPPRESS_VERSIONCL; };
 
+hidspecial HID_GENERIC_SQL_ERROR                        { HelpId = HID_GENERIC_SQL_ERROR; };
+
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/03 10:36:03  fs
+ *  #79820# some new help ids
+ *
  *  Revision 1.2  2000/10/30 14:08:43  fs
  *  typo
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-03 10:32:39 $
+ *  last change: $Author: fs $ $Date: 2000-12-05 11:39:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,11 +134,16 @@
 #define HID_DSADMIN_TABLE_SELECTOR                  (HID_DBACCESS_START + 58)
 #define HID_DSADMIN_SUPPRESS_VERSIONCL              (HID_DBACCESS_START + 59)
 
+#define HID_GENERIC_SQL_ERROR                       (HID_DBACCESS_START + 60)
+
 #endif // _DBA_DBACCESS_HELPID_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2000/12/03 10:32:39  fs
+ *  #79820# some new help ids
+ *
  *  Revision 1.5  2000/12/01 13:24:37  oj
  *  #81036# new helpids
  *
