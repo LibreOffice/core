@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dependencies.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:45:24 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:27:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-#include <hash_map>
 #include <vector>
 
 using codemaker::Dependencies;
