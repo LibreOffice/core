@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: er $ $Date: 2001-06-10 21:20:49 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 09:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #include <unotools/numberformatcodewrapper.hxx>
 #endif
 
-#include "iniman.hxx"
+//#include "iniman.hxx"
 #include "zforlist.hxx"
 #include "zformat.hxx"
 
