@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:21:10 $
+ *  last change: $Author: vg $ $Date: 2003-07-11 10:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,15 +757,19 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
                     if ( xInteraction.is() )
                     {
                         OUString empty;
-                        InteractiveAppException xException( empty,
+                        try
+                        {
+                            InteractiveAppException xException( empty,
                                                             REFERENCE< XInterface >(),
                                                             InteractionClassification_ERROR,
                                                             aMedium.GetError() );
 
-                        REFERENCE< XInteractionRequest > xRequest(
-                            new ucbhelper::SimpleInteractionRequest( makeAny( xException ),
+                            REFERENCE< XInteractionRequest > xRequest(
+                                new ucbhelper::SimpleInteractionRequest( makeAny( xException ),
                                                                       ucbhelper::CONTINUATION_APPROVE ) );
-                        xInteraction->handle( xRequest );
+                            xInteraction->handle( xRequest );
+                        }
+                        catch ( Exception & ) {};
                     }
                 }
             }
@@ -864,24 +868,28 @@ IMPL_LINK( SfxFrameLoader_Impl, LoadDone_Impl, void*, pVoid )
                         ::rtl::OUString aSelectedFilter( aPreselectedFilterName );  // name of pOldFilter
                         ::rtl::OUString aDetectedFilter( pFilter->GetName()     );
 
-                        ::framework::RequestAmbigousFilter* pRequest = new ::framework::RequestAmbigousFilter( aURL, aSelectedFilter, aDetectedFilter );
-                        REFERENCE< ::com::sun::star::task::XInteractionRequest > xRequest( static_cast< ::com::sun::star::task::XInteractionRequest* >(pRequest), ::com::sun::star::uno::UNO_QUERY );
+                        try
+                        {
+                            ::framework::RequestAmbigousFilter* pRequest = new ::framework::RequestAmbigousFilter( aURL, aSelectedFilter, aDetectedFilter );
+                            REFERENCE< ::com::sun::star::task::XInteractionRequest > xRequest( static_cast< ::com::sun::star::task::XInteractionRequest* >(pRequest), ::com::sun::star::uno::UNO_QUERY );
 
-                        xInteraction->handle( xRequest );
-                        if( pRequest->isAbort() )
-                        {
-                            nErr = ERRCODE_ABORT;
-                            aMedium.SetError(nErr);
-                        }
-                        else
-                        {
-                            if( pRequest->getFilter() == aSelectedFilter )
+                            xInteraction->handle( xRequest );
+                            if( pRequest->isAbort() )
                             {
-                                nErr = ERRCODE_NONE;
+                                nErr = ERRCODE_ABORT;
                                 aMedium.SetError(nErr);
-                                pFilter = pOldFilter;
+                            }
+                            else
+                            {
+                                if( pRequest->getFilter() == aSelectedFilter )
+                                {
+                                    nErr = ERRCODE_NONE;
+                                    aMedium.SetError(nErr);
+                                    pFilter = pOldFilter;
+                                }
                             }
                         }
+                        catch ( Exception & ) {};
                     }
                 }
             }
