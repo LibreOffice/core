@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_old_testowstring.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 09:19:11 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 10:31:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,15 +368,21 @@ void oldtests::test_OUString()
     // toInt64
     OUString s9( OUString::createFromAscii(" -3223372036854775807") );
     sal_Int64 ln1 = s9.toInt64();
+#ifdef UNX
+    TEST_ENSURE( ln1 == -3223372036854775807LL, "test_OWString error 67" );
+#else
     TEST_ENSURE( ln1 == -3223372036854775807, "test_OWString error 67" );
-
+#endif
     OUString s10( OUString::createFromAscii("13243A65f1H45") );
     sal_Int64 ln2 = s10.toInt64();
     TEST_ENSURE( ln2 == 13243, "test_OWString error 68" );
 
     sal_Int64 ln3 = s10.toInt64( 16 );
+#ifdef UNX
+    TEST_ENSURE( ln3 == 0x13243A65F1LL, "test_OWString error 69" );
+#else
     TEST_ENSURE( ln3 == 0x13243A65F1, "test_OWString error 69" );
-
+#endif
     // Exotic base
     OUString s11( OUString::createFromAscii("H4A") );
     sal_Int64 ln4 = s11.toInt64( 23 );
