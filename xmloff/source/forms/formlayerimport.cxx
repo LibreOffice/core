@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlayerimport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 14:59:18 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 13:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,14 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
+    XMLPropStyleContext* OFormLayerXMLImport::createControlStyleContext( sal_uInt16 _nPrefix, const ::rtl::OUString& _rLocalName,
+        const Reference< sax::XAttributeList >& _rxAttrList, SvXMLStylesContext& _rParentStyles,
+        sal_uInt16 _nFamily, sal_Bool _bDefaultStyle )
+    {
+        return m_pImpl->createControlStyleContext( _nPrefix, _rLocalName, _rxAttrList, _rParentStyles, _nFamily, _bDefaultStyle );
+    }
+
+    //---------------------------------------------------------------------
     void OFormLayerXMLImport::applyControlNumberStyle(const Reference< XPropertySet >& _rxControlModel, const ::rtl::OUString& _rControlNumerStyleName)
     {
         m_pImpl->applyControlNumberStyle(_rxControlModel, _rControlNumerStyleName);
@@ -160,6 +168,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/05/28 14:59:18  fs
+ *  #86712# added control number style related functionality
+ *
  *  Revision 1.7  2001/03/20 13:38:42  fs
  *  #83970# +createOfficeFormsContext
  *
