@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-04 13:37:38 $
+ *  last change: $Author: mba $ $Date: 2001-12-14 15:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -978,7 +978,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
 
             // watch: if the document was successfully saved into an own format, no "SaveCompleted" was called,
             // this must be done by the caller ( because they want to do different calls )
-            if ( xNewTempRef.Is() )
+            if ( xNewTempRef.Is() && xNewTempRef != GetStorage() )
                 // if the new object storage is a temporary one, because the target format is an alien format
                 SaveCompleted( xNewTempRef );
         }
