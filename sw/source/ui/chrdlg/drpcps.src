@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:49:41 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabDialog DLG_DROPCAPS
     Text [ portuguese_brazilian ] = "Capitular" ;
     Text [ portuguese ] = "Capitulares" ;
     Text [ finnish ] = "Anfangit" ;
-    Text [ danish ] = "Initialer" ;
+    Text [ danish ] = "Uncialer" ;
     Text [ french ] = "Lettrines" ;
     Text [ swedish ] = "Anfanger" ;
     Text [ dutch ] = "Initialen" ;
@@ -98,7 +98,7 @@ TabDialog DLG_DROPCAPS
                 Text [ portuguese_brazilian ] = "Capitular" ;
                 Text [ portuguese ] = "Capitulares" ;
                 Text [ finnish ] = "Anfangit" ;
-                Text [ danish ] = "Initialer" ;
+                Text [ danish ] = "Uncialer" ;
                 Text [ french ] = "Lettrines" ;
                 Text [ swedish ] = "Anfanger" ;
                 Text [ dutch ] = "Initialen" ;
@@ -121,6 +121,8 @@ TabDialog DLG_DROPCAPS
                 Text[ hebrew ] = "‮השמטת אותיות גדולות‬";
                 Text[ hindi ] = "बड़े अक्षरों को मिटाओ ";
                 Text[ slovak ] = "Stránkovanie veľkými písmenami";
+                Text[ hungarian ] = "Iniciálék";
+                Text[ slovenian ] = "Ozaljšana začetnica";
             };
         };
     };
@@ -140,6 +142,8 @@ TabDialog DLG_DROPCAPS
     Text[ hebrew ] = "‮השמטת אותיות גדולות‬";
     Text[ hindi ] = "बड़े अक्षरों को मिटाओ";
     Text[ slovak ] = "Stránkovanie veľkými písmenami";
+    Text[ hungarian ] = "Iniciálék";
+    Text[ slovenian ] = "Ozaljšana začetnica";
 };
  // TabPage ******************************************************************
 TabPage TP_DROPCAPS
@@ -159,7 +163,7 @@ TabPage TP_DROPCAPS
         Text [ french ] = "~Premi�re(s) lettre(s)" ;
         Text [ dutch ] = "I~nitialen weergeven" ;
         Text [ swedish ] = "Visa a~nfanger" ;
-        Text [ danish ] = "Vis initialer" ;
+        Text [ danish ] = "Vis uncialer" ;
         Text [ portuguese_brazilian ] = "Exibir capitula��o" ;
         Text [ portuguese ] = "Mostrar ~capitulares" ;
         Text[ chinese_simplified ] = "显示字首大写";
@@ -179,6 +183,8 @@ TabPage TP_DROPCAPS
         Text[ hebrew ] = "I~nitialen anzeigen";
         Text[ hindi ] = "बड़े अक्षरों को मिटाकर दिखाओ";
         Text[ slovak ] = "Zobrazovať iniciály";
+        Text[ hungarian ] = "Iniciálék megjelenítése";
+        Text[ slovenian ] = "Prikaži ozaljšano začetnico";
     };
     CheckBox CB_WORD
     {
@@ -189,7 +195,7 @@ TabPage TP_DROPCAPS
         Text [ english_us ] = "~Whole word" ;
         Text [ portuguese_brazilian ] = "~Palavra inteira" ;
         Text [ swedish ] = "Helt ~ord" ;
-        Text [ danish ] = "Helt ord" ;
+        Text [ danish ] = "~Helt ord" ;
         Text [ italian ] = "Parola intera" ;
         Text [ spanish ] = "Toda la pala~bra" ;
         Text [ french ] = "~Mot entier" ;
@@ -212,6 +218,8 @@ TabPage TP_DROPCAPS
         Text[ hebrew ] = "Ganzes ~Wort";
         Text[ hindi ] = "~पूर्ण शब्द";
         Text[ slovak ] = "~Celé slovo";
+        Text[ hungarian ] = "~Egész szó";
+        Text[ slovenian ] = "~Cela beseda";
     };
     FixedText FT_DROPCAPS
     {
@@ -225,7 +233,7 @@ TabPage TP_DROPCAPS
         Text [ french ] = "~Largeur (en caract�res)" ;
         Text [ dutch ] = "~Aantal tekens" ;
         Text [ swedish ] = "Antal te~cken" ;
-        Text [ danish ] = "Antal tegn" ;
+        Text [ danish ] = "Antal ~tegn" ;
         Text [ portuguese_brazilian ] = "N�mero de ~caracteres:" ;
         Text [ portuguese ] = "N�mero de ~caracteres" ;
         Text[ chinese_simplified ] = "字符数目(~C)";
@@ -245,6 +253,8 @@ TabPage TP_DROPCAPS
         Text[ hebrew ] = "Anzahl der Ze~ichen";
         Text[ hindi ] = "~अक्षरों की संख्या:";
         Text[ slovak ] = "Počet ~znakov:";
+        Text[ hungarian ] = "A ~karakterek száma:";
+        Text[ slovenian ] = "Število ~znakov:";
     };
     NumericField FLD_DROPCAPS
     {
@@ -272,7 +282,7 @@ TabPage TP_DROPCAPS
         Text [ portuguese_brazilian ] = "~Linhas" ;
         Text [ portuguese ] = "~Linhas" ;
         Text [ finnish ] = "~Rivit" ;
-        Text [ danish ] = "R�kker" ;
+        Text [ danish ] = "~Linjer" ;
         Text [ french ] = "~Hauteur (en lignes)" ;
         Text [ swedish ] = "~Rader" ;
         Text [ dutch ] = "~Regels" ;
@@ -294,6 +304,8 @@ TabPage TP_DROPCAPS
         Text[ hebrew ] = "Zei~len";
         Text[ hindi ] = "~रेखाएँ";
         Text[ slovak ] = "~Riadkov";
+        Text[ hungarian ] = "S~orok";
+        Text[ slovenian ] = "~Vrstice";
     };
     NumericField FLD_LINES
     {
@@ -343,6 +355,8 @@ TabPage TP_DROPCAPS
         Text[ hebrew ] = "A~bstand zum Text";
         Text[ hindi ] = "टेक्स्ट् के बीच अंतर";
         Text[ slovak ] = "Vzdialenosť k textu";
+        Text[ hungarian ] = "Távolság a szövegtől";
+        Text[ slovenian ] = "Razmik do besedila";
     };
     MetricField FLD_DISTANCE
     {
@@ -394,6 +408,8 @@ TabPage TP_DROPCAPS
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Nastavitve";
     };
     Control CNT_PICT
     {
@@ -413,7 +429,7 @@ TabPage TP_DROPCAPS
         Text [ portuguese_brazilian ] = "~Texto" ;
         Text [ portuguese ] = "~Texto" ;
         Text [ finnish ] = "~Teksti" ;
-        Text [ danish ] = "Initialtekst" ;
+        Text [ danish ] = "~Tekst" ;
         Text [ french ] = "~Texte" ;
         Text [ swedish ] = "Anfangs~text" ;
         Text [ dutch ] = "~Initialentekst" ;
@@ -435,6 +451,8 @@ TabPage TP_DROPCAPS
         Text[ hebrew ] = "Initialen~text";
         Text[ hindi ] = "~टेक्स्ट्";
         Text[ slovak ] = "~Text";
+        Text[ hungarian ] = "S~zöveg";
+        Text[ slovenian ] = "~Besedilo";
     };
     Edit EDT_TEXT
     {
@@ -457,7 +475,7 @@ TabPage TP_DROPCAPS
         Text [ portuguese_brazilian ] = "E~stilo do Caracter" ;
         Text [ portuguese ] = "Es~tilo de caracteres" ;
         Text [ finnish ] = "~Merkkityyli" ;
-        Text [ danish ] = "Tegntypografi" ;
+        Text [ danish ] = "Te~gntypografi" ;
         Text [ french ] = "Style de caract�res" ;
         Text [ swedish ] = "Tecken~formatmall" ;
         Text [ dutch ] = "~Tekenopmaakprofiel" ;
@@ -479,6 +497,8 @@ TabPage TP_DROPCAPS
         Text[ hebrew ] = "Zeichen~vorlage";
         Text[ hindi ] = "अक्षर शै~ली";
         Text[ slovak ] = "Štýl ~znaku:";
+        Text[ hungarian ] = "Ka~rakterstílus";
+        Text[ slovenian ] = "Znakovni slo~g";
     };
     ListBox BOX_TEMPLATE
     {
@@ -520,9 +540,13 @@ TabPage TP_DROPCAPS
         Text[ hebrew ] = "‮תוכן עיניינים‬";
         Text[ hindi ] = "विषयें";
         Text[ slovak ] = "Obsah";
+        Text[ hungarian ] = "Tartalom";
+        Text[ slovenian ] = "Vsebina";
     };
 };
  // ********************************************************************** EOF
+
+
 
 
 
