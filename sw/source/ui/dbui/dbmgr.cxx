@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 10:12:48 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 13:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,10 +1023,11 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
             {
                 SfxMedium* pOrig = pSh->GetView().GetDocShell()->GetMedium();
 
-                pSfxFlt = SwIoSystem::GetFileFilter( pOrig->GetPhysicalName(), ::aEmptyStr );
+                pSfxFlt = SwIoSystem::GetFileFilter( pOrig->GetPhysicalName(),
+                                                        ::aEmptyStr );
 
-                String sFileName = ::GetTmpFileName();
-                String sTmpName = URIHelper::SmartRelToAbs(sFileName);
+                String sTmpName = URIHelper::SmartRelToAbs(
+                                utl::TempFile::CreateTempName(0) );
 
                 BOOL bCopyCompleted = TRUE;
                 try

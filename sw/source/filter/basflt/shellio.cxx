@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-06 09:27:12 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 13:50:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #endif
 #ifndef _TIME_HXX
 #include <tools/time.hxx>
-#endif
-#ifndef _UNOTOOLS_TEMPFILE_HXX
-#include <unotools/tempfile.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -1062,13 +1059,6 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
 
 /*  */
 
-String GetTmpFileName()
-{
-    String sRet = utl::TempFile::CreateTempName(0);
-    return sRet;
-}
-
-
 // ----------------------------------------------------------------------
 
 
@@ -1096,6 +1086,9 @@ BOOL SetHTMLTemplate( SwDoc & rDoc )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/06 09:27:12  jp
+      must changes: tempfile
+
       Revision 1.3  2000/10/25 12:04:22  jp
       Spellchecker/Hyphenator are not longer member of the shells
 

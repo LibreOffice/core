@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 17:26:12 $
+ *  last change: $Author: jp $ $Date: 2000-12-21 13:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,10 +689,6 @@ extern sal_Char __FAR_DATA FILTER_SWW4V[];  // SW/Web Storage Vorlagen Filter
 extern sal_Char __FAR_DATA FILTER_SWW5V[];  // SW/Web Storage Vorlagen Filter
 extern sal_Char __FAR_DATA FILTER_TEXT_DLG[];   // text filter with encoding dialog
 extern sal_Char __FAR_DATA FILTER_XML[];    // XML filter
-
-
-// gebe einen gueltigen temp-Filenamen zurueck
-String GetTmpFileName();
 
 
 #endif
