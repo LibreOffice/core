@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pythonloader.py,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: jbu $ $Date: 2003-03-23 12:12:53 $
+#   last change: $Author: jbu $ $Date: 2003-04-06 17:16:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,6 +59,8 @@
 #*************************************************************************
 import uno
 import unohelper
+import imp
+import os
 from com.sun.star.uno import Exception,RuntimeException
 from com.sun.star.loader import XImplementationLoader
 from com.sun.star.lang import XServiceInfo
@@ -69,53 +71,78 @@ DEBUG = 0
 g_supportedServices  = "com.sun.star.loader.Python",      # referenced by the native C++ loader !
 g_implementationName = "org.openoffice.comp.pyuno.Loader" # referenced by the native C++ loader !
 
+def splitUrl( url ):
+      nColon = url.find( ":" )
+      if -1 == nColon:
+            raise RuntimeException( "PythonLoader: No protocol in url " + url )
+      return url[0:nColon], url[nColon+1:len(url)]
+
+g_loadedComponents = {}
+
 class Loader( XImplementationLoader, XServiceInfo, unohelper.Base ):
       def __init__(self, ctx ):
 	  if DEBUG:
 	     print "pythonloader.Loader ctor" 
 	  self.ctx = ctx
 
-      def extractModuleFromUrl( self, url ):
-	  if url.startswith( MODULE_PROTOCOL ):
-	     return url[len(MODULE_PROTOCOL):len(url)]
-	  else:
-             nColon = url.find( ":" )
-	     if -1 == nColon:
-		raise RuntimeException( "PythonLoader: No protocol in url " + url )
-             else:
-	        raise RuntimeException( "PythonLoader: Unknown protocol "+url[0:nColon] 
-				     + " in " + url )
+      def getModuleFromUrl( self, url ):
+          if DEBUG:
+                print "pythonloader: interpreting url " +url
+          protocol, dependent = splitUrl( url )
+          if "vnd.sun.star.expand" == protocol:
+                exp = self.ctx.getValueByName( "/singletons/com.sun.star.util.theMacroExpander" )
+                url = exp.expandMacros(dependent)
+                protocol,dependent = splitUrl( url )
+
+          if DEBUG:
+                print "pythonloader: after expansion " +protocol +":" + dependent
+                
+          try:
+                if "file" == protocol:
+                      mod = g_loadedComponents.get( url )
+                      if not mod:
+                            mod = imp.new_module("uno_component")
+                            # remove \..\ sequence, which may be useful e.g. in the build env
+                            url = unohelper.absolutize( url, url )
+
+                            # read the file
+                            fileHandle = file( unohelper.fileUrlToSystemPath( url ) )
+                            src = fileHandle.read()
+
+                            # execute the module
+                            exec src in mod.__dict__
+                            g_loadedComponents[url] = mod
+                      return mod
+                elif "vnd.openoffice.pymodule" == protocol:
+                      return  __import__( dependent )
+                else:
+                      raise RuntimeException( "PythonLoader: Unknown protocol " +
+                                              protocol + " in url " +url, self )
+          except ImportError, e:
+                raise RuntimeException( "Couldn't load "+url+ " for reason "+str(e), None)
+          return None
 	   
       def activate( self, implementationName, dummy, locationUrl, regKey ):
 	  if DEBUG:
 	     print "pythonloader.Loader.activate"
-	  moduleName = self.extractModuleFromUrl( locationUrl )
-  	  if DEBUG:
-	     print "extracting modulname " + moduleName + " from url " + locationUrl
 
-          try:	     
-	     mod = __import__( moduleName )
-	     implHelper = mod.__dict__.get( "g_ImplementationHelper" , None )
-	     if implHelper == None:
+	  mod = self.getModuleFromUrl( locationUrl )
+          implHelper = mod.__dict__.get( "g_ImplementationHelper" , None )
+          if implHelper == None:
 		return mod.getComponentFactory( implementationName, self.ctx.ServiceManager, regKey )
-	     else:
+          else:
 		return implHelper.getComponentFactory( implementationName,regKey,self.ctx.ServiceManager)
-          except ImportError,e:
-	     raise RuntimeException( "Couldn't import module " + moduleName + " for reason ("+str(e)+")", None)
 	     
       def writeRegistryInfo( self, regKey, dummy, locationUrl ):
 	  if DEBUG:
 	     print "pythonloader.Loader.writeRegistryInfo"
-	  moduleName = self.extractModuleFromUrl( locationUrl )
-	  try:
-	     mod = __import__( moduleName )
-	     implHelper = mod.__dict__.get( "g_ImplementationHelper" , None )
-	     if implHelper == None:
+             
+	  mod = self.getModuleFromUrl( locationUrl )
+          implHelper = mod.__dict__.get( "g_ImplementationHelper" , None )
+          if implHelper == None:
 	        return mod.writeRegistryInfo( self.ctx.ServiceManager, regKey )
-	     else:
+          else:
 	        return implHelper.writeRegistryInfo( regKey, self.ctx.ServiceManager )
-	  except ImportError,e:
-	     raise RuntimeException( "Couldn't import module " + moduleName + " for reason ("+str(e)+")", None)
 
       def getImplementationName( self ):
 	  return g_implementationName
