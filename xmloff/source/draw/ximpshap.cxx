@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-09 13:59:28 $
+ *  last change: $Author: aw $ $Date: 2001-08-16 10:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,8 +446,12 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
         if( mnShapeId != -1 )
             xImp->createShapeId( xShape, mnShapeId );
 
-        // #80365# increment progress bar at load once for each draw object
-        GetImport().GetProgressBarHelper()->Increment();
+        // #91065# count only if counting for shape import is enabled
+        if(GetImport().GetShapeImport()->IsHandleProgressBarEnabled())
+        {
+            // #80365# increment progress bar at load once for each draw object
+            GetImport().GetProgressBarHelper()->Increment();
+        }
     }
 
     mxLockable = uno::Reference< document::XActionLockable >::query( xShape );
