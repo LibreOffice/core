@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-15 10:06:21 $
+ *  last change: $Author: mtg $ $Date: 2001-10-15 13:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1291,10 +1291,24 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
     else if(IsDescriptor())
     {
         pProps->SetProperty(pCur->nWID, pCur->nMemberId, aValue);
-        if(FN_UNO_FRAME_STYLE_NAME == pCur->nWID)
+        if( FN_UNO_FRAME_STYLE_NAME == pCur->nWID )
         {
-            Any aAny = mxStyleFamily->getByName ( rPropertyName );
-            aAny >>= mxStyleData;
+            OUString sStyleName;
+            aValue >>= sStyleName;
+            try
+            {
+                Any aAny = mxStyleFamily->getByName ( sStyleName );
+                aAny >>= mxStyleData;
+            }
+            catch ( container::NoSuchElementException& )
+            {
+            }
+            catch ( WrappedTargetException& )
+            {
+            }
+            catch ( RuntimeException& )
+            {
+            }
         }
     }
     else
@@ -1783,7 +1797,6 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
         pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
                                 SwXTextCursor::getUnoTunnelId());
     }
-
 
     SwDoc* pDoc = pRange ? (SwDoc*)pRange->GetDoc() : pCursor ? (SwDoc*)pCursor->GetDoc() : 0;
     if(pDoc)
