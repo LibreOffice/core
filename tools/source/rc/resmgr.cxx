@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 08:40:04 $
+ *  last change: $Author: kz $ $Date: 2004-12-07 14:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1446,11 +1446,11 @@ ResMgr* ResMgr::SearchCreateResMgr(
         if( rLocale.Country.getLength() )
         {
             aLanguage += "-";
-            aLanguage = ByteString(rtl::OUStringToOString(rLocale.Country, RTL_TEXTENCODING_UTF8));
+            aLanguage += ByteString(rtl::OUStringToOString(rLocale.Country, RTL_TEXTENCODING_UTF8));
             if( rLocale.Variant.getLength() )
             {
                 aLanguage += "-";
-                aLanguage = ByteString(rtl::OUStringToOString(rLocale.Variant, RTL_TEXTENCODING_UTF8));
+                aLanguage += ByteString(rtl::OUStringToOString(rLocale.Variant, RTL_TEXTENCODING_UTF8));
             }
         }
     }
