@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-20 08:04:24 $
+ *  last change: $Author: fs $ $Date: 2001-05-28 15:06:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,48 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
     sWS( OUString::createFromAscii( sXML_WS ) ),
     pCharClass( NULL ),
-    pLocaleData( NULL )
+    pLocaleData( NULL ),
+    sPrefix( OUString::createFromAscii( "N" ) )
+{
+    //  supplier must be SvNumberFormatsSupplierObj
+    SvNumberFormatsSupplierObj* pObj =
+                    SvNumberFormatsSupplierObj::getImplementation( rSupp );
+    if (pObj)
+        pFormatter = pObj->GetNumberFormatter();
+
+    if ( pFormatter )
+    {
+        pCharClass = new CharClass( pFormatter->GetServiceManager(),
+            pFormatter->GetLocale() );
+        pLocaleData = new LocaleDataWrapper( pFormatter->GetServiceManager(),
+            pFormatter->GetLocale() );
+    }
+    else
+    {
+        lang::Locale aLocale( SvNumberFormatter::ConvertLanguageToLocale( ::GetSystemLanguage() ) );
+        pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), aLocale );
+        pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), aLocale );
+    }
+
+    pAttrList = new SvXMLAttributeList;
+    xAttrList = pAttrList;
+
+    pUsedList = new SvXMLNumUsedList_Impl;
+}
+
+SvXMLNumFmtExport::SvXMLNumFmtExport( const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::xml::sax::XDocumentHandler >& rHdl,
+                       const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::util::XNumberFormatsSupplier >& rSupp,
+                       const rtl::OUString& rPrefix ) :
+    xHandler( rHdl ),
+    pFormatter( NULL ),
+    pNamespaceMap( NULL ),
+    sCDATA( OUString::createFromAscii( sXML_CDATA ) ),
+    sWS( OUString::createFromAscii( sXML_WS ) ),
+    pCharClass( NULL ),
+    pLocaleData( NULL ),
+    sPrefix( rPrefix )
 {
     //  supplier must be SvNumberFormatsSupplierObj
     SvNumberFormatsSupplierObj* pObj =
@@ -257,10 +298,10 @@ SvXMLNumFmtExport::~SvXMLNumFmtExport()
 //  helper methods
 //
 
-OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, sal_Bool bDefPart )
+OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, sal_Bool bDefPart, const rtl::OUString& rPrefix )
 {
     OUStringBuffer aFmtName( 10L );
-    aFmtName.append( (sal_Unicode)'N' );
+    aFmtName.append( rPrefix );
     aFmtName.append( nKey );
     if (!bDefPart)
     {
@@ -808,7 +849,7 @@ void SvXMLNumFmtExport::WriteMapElement_Impl( sal_Int32 nOp, double fLimit,
 
         sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_STYLE,
                        OUString::createFromAscii( sXML_apply_style_name ) );
-        sAttrValue = lcl_CreateStyleName( nKey, nPart, sal_False );
+        sAttrValue = lcl_CreateStyleName( nKey, nPart, sal_False, sPrefix );
         pAttrList->AddAttribute( sAttrName, sCDATA, sAttrValue );
 
         xHandler->ignorableWhitespace( sWS );
@@ -1095,7 +1136,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
 
     //  format name (generated from key) - style namespace
     sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_STYLE, OUString::createFromAscii(sXML_name) );
-    sAttrValue = lcl_CreateStyleName( nKey, nPart, bDefPart );
+    sAttrValue = lcl_CreateStyleName( nKey, nPart, bDefPart, sPrefix );
     pAttrList->AddAttribute( sAttrName, sCDATA, sAttrValue );
     sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_STYLE, OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_family)));
     sAttrValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_DATA_STYLE_NAME));
@@ -1572,7 +1613,7 @@ void SvXMLNumFmtExport::Export( const SvXMLNamespaceMap& rNamespaceMap, sal_Bool
 OUString SvXMLNumFmtExport::GetStyleName( sal_uInt32 nKey )
 {
     DBG_ASSERT(pUsedList->IsUsed(nKey) || pUsedList->IsWasUsed(nKey), "There is no written Data-Style");
-    return lcl_CreateStyleName( nKey, 0, sal_True );
+    return lcl_CreateStyleName( nKey, 0, sal_True, sPrefix );
 }
 
 void SvXMLNumFmtExport::SetUsed( sal_uInt32 nKey )
