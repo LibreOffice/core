@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-05 14:35:10 $
+ *  last change: $Author: mba $ $Date: 2001-02-06 16:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ sal_Bool TransferableHelper::SetGraphic( const Graphic& rGraphic, const DataFlav
     {
         SvMemoryStream aMemStm( 65535, 65535 );
 
-        aMemStm.SetVersion( SOFFICE_FILEFORMAT_NOW );
+        aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
         aMemStm << rGraphic;
         maAny <<= Sequence< sal_Int8 >( (sal_Int8*) aMemStm.GetData(), aMemStm.Seek( STREAM_SEEK_TO_END ) );
     }
@@ -399,7 +399,7 @@ sal_Bool TransferableHelper::SetImageMap( const ImageMap& rIMap, const ::com::su
 {
     SvMemoryStream aMemStm( 65535, 65535 );
 
-    aMemStm.SetVersion( SOFFICE_FILEFORMAT_NOW );
+    aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
     aMemStm << rIMap;
     maAny <<= Sequence< sal_Int8 >( (sal_Int8*) aMemStm.GetData(), aMemStm.Seek( STREAM_SEEK_TO_END ) );
 
@@ -514,7 +514,7 @@ sal_Bool TransferableHelper::SetINetImage( const INetImage& rINtImg,
 {
     SvMemoryStream aMemStm( 1024, 1024 );
 
-    aMemStm.SetVersion( SOFFICE_FILEFORMAT_NOW );
+    aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
     rINtImg.Write( aMemStm, SotExchange::GetFormat( rFlavor ) );
 
     maAny <<= Sequence< sal_Int8 >( (sal_Int8*) aMemStm.GetData(),
@@ -530,7 +530,7 @@ sal_Bool TransferableHelper::SetFileList( const FileList& rFileList,
 {
     SvMemoryStream aMemStm( 4096, 4096 );
 
-    aMemStm.SetVersion( SOFFICE_FILEFORMAT_NOW );
+    aMemStm.SetVersion( SOFFICE_FILEFORMAT_50 );
     aMemStm << rFileList;
 
     maAny <<= Sequence< sal_Int8 >( (sal_Int8*) aMemStm.GetData(),
@@ -545,7 +545,7 @@ sal_Bool TransferableHelper::SetObject( void* pUserObject, sal_uInt32 nUserObjec
 {
     SotStorageStreamRef xStm( new SotStorageStream( String() ) );
 
-    xStm->SetVersion( SOFFICE_FILEFORMAT_NOW );
+    xStm->SetVersion( SOFFICE_FILEFORMAT_50 );
 
     if( pUserObject && WriteObject( xStm, pUserObject, nUserObjectId, rFlavor ) )
     {
