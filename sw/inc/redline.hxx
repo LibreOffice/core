@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redline.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 16:21:38 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,6 @@ class SwRedline : public SwPaM
 
 public:
     SwRedline( SwRedlineType eType, const SwPaM& rPam );
-    SwRedline( SwRedlineType eTyp, const SwPosition& rPos );
     SwRedline( const SwRedlineData& rData, const SwPaM& rPam );
     SwRedline( const SwRedlineData& rData, const SwPosition& rPos );
     // fuer sw3io: pData geht in eigenen Besitz ueber!
