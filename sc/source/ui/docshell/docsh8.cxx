@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-08 18:14:52 $
+ *  last change: $Author: nn $ $Date: 2001-06-11 09:06:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,7 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
                                         INetURLObject::DECODE_UNAMBIGUOUS );
         String aExtension = aURL.getExtension();
         aURL.removeSegment();
+        aURL.removeFinalSlash();
         String aPath = aURL.GetMainURL();
 
         uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
@@ -777,6 +778,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
     String aTabName = aURL.getBase();
     String aExtension = aURL.getExtension();
     aURL.removeSegment();
+    aURL.removeFinalSlash();
     String aPath = aURL.GetMainURL();
 
     try
