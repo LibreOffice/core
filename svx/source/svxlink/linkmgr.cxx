@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-09 16:00:57 $
+ *  last change: $Author: jp $ $Date: 2001-11-19 15:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -311,6 +314,17 @@ BOOL SvxLinkManager::GetGraphicFromAny( const String& rMimeType,
 
 
 // ----------------------------------------------------------------------
+String lcl_DDE_RelToAbs( const String& rTopic )
+{
+    String sRet;
+    INetURLObject aURL( rTopic );
+    if( INET_PROT_NOT_VALID == aURL.GetProtocol() )
+        utl::LocalFileHelper::ConvertSystemPathToURL( rTopic,
+                                        INetURLObject::GetBaseURL(), sRet );
+    if( !sRet.Len() )
+        sRet = URIHelper::SmartRelToAbs( rTopic );
+    return sRet;
+}
 
 BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
 {
@@ -324,7 +338,7 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
         // Namen heraussuchen:
 
         CharClass aCC( SvxCreateLocale( LANGUAGE_SYSTEM ));
-        String sNm( sTopic ), sNmURL( URIHelper::SmartRelToAbs( sTopic ) ),
+        String sNm( sTopic ), sNmURL( lcl_DDE_RelToAbs( sTopic ) ),
                sTmp;
         aCC.toLower( sNm );
         aCC.toLower( sNmURL );
@@ -387,7 +401,7 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
         // dann versuche die Datei zu laden:
         INetURLObject aURL( sTopic );
         INetProtocol eOld = aURL.GetProtocol();
-        aURL.SetURL( sTopic = URIHelper::SmartRelToAbs( sTopic ) );
+        aURL.SetURL( sTopic = lcl_DDE_RelToAbs( sTopic ) );
         if( INET_PROT_NOT_VALID != eOld ||
             INET_PROT_HTTP != aURL.GetProtocol() )
         {
