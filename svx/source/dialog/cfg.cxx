@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:10:25 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,8 +853,14 @@ sal_Int16 GetImageType()
         ( Application::GetSettings().GetStyleSettings().GetToolbarIconSize()
             == STYLE_TOOLBAR_ICONSIZE_LARGE );
 
-    bool bHiContrast =
-        Application::GetActiveTopWindow()->GetDisplayBackground().GetColor().IsDark();
+    bool bHiContrast = FALSE;
+    Window* topwin = Application::GetActiveTopWindow();
+
+    if ( topwin != NULL &&
+         topwin->GetDisplayBackground().GetColor().IsDark() )
+    {
+        bHiContrast = TRUE;
+    }
 
     if ( bBig )
     {
@@ -1381,24 +1387,29 @@ BOOL SvxMenuEntriesListBox::NotifyMoving(
     SvLBoxEntry* pTarget, SvLBoxEntry* pSource,
     SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos)
 {
-    if ( pPage->MoveEntryData( pSource, pTarget ) == TRUE )
+    // only try to do a move if we are dragging within the list box
+    if ( m_bIsInternalDrag )
     {
-        SvTreeListBox::NotifyMoving(
-            pTarget, pSource, rpNewParent, rNewChildPos );
+        if ( pPage->MoveEntryData( pSource, pTarget ) == TRUE )
+        {
+            SvTreeListBox::NotifyMoving(
+                pTarget, pSource, rpNewParent, rNewChildPos );
+            return TRUE;
+        }
+        else
+        {
+            return FALSE;
+        }
     }
     else
     {
-        return FALSE;
+        return NotifyCopying( pTarget, pSource, rpNewParent, rNewChildPos );
     }
-
-    return TRUE;
 }
 
 BOOL SvxMenuEntriesListBox::NotifyCopying(
-    SvLBoxEntry*  pTarget,
-    SvLBoxEntry*  pSource,
-    SvLBoxEntry*& rpNewParent,
-    ULONG&      rNewChildPos)
+    SvLBoxEntry* pTarget, SvLBoxEntry* pSource,
+    SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos)
 {
     if ( !m_bIsInternalDrag )
     {
@@ -3657,8 +3668,13 @@ void ToolbarSaveInData::SetSystemStyle(
         uno::Reference< dcss::ui::XUIElement > xUIElement =
             xLayoutManager->getElement( rResourceURL );
 
-        uno::Reference< com::sun::star::awt::XWindow >
-            xWindow( xUIElement->getRealInterface(), uno::UNO_QUERY );
+        // check reference before we call getRealInterface. The layout manager
+        // can only provide references for elements that have been created
+        // before. It's possible that the current element is not available.
+        uno::Reference< com::sun::star::awt::XWindow > xWindow;
+        if ( xUIElement.is() )
+            xWindow = uno::Reference< com::sun::star::awt::XWindow >(
+                        xUIElement->getRealInterface(), uno::UNO_QUERY );
 
         window = VCLUnoHelper::GetWindow( xWindow );
     }
