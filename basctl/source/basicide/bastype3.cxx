@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: ab $ $Date: 2001-04-23 11:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,18 @@
 #include <svtools/sbx.hxx>
 #include <sidll.hxx>
 #include <bastype2.hxx>
+#include <basobj.hxx>
 #include <baside2.hrc>
 #include <iderid.hxx>
 #include <bastypes.hxx>
+
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
+
 
 SV_DECL_VARARR( EntryArray, SvLBoxEntry*, 4, 4 );
 
@@ -103,6 +112,27 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
         DBG_ASSERT( pUser->GetType() == OBJTYPE_BASICMANAGER, "BasicManager?" );
         BasicManager* pBasMgr = ((BasicManagerEntry*)pUser)->GetBasicManager();
         USHORT nLib = pBasMgr->GetLibId( aLibName );
+
+        // New library container
+        Reference< script::XLibraryContainer > xLibContainer;
+        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+        if ( pShell )
+        {
+            xLibContainer = uno::Reference< script::XLibraryContainer >
+                ( pShell->GetBasicContainer(), uno::UNO_QUERY );
+        }
+        else
+        {
+            xLibContainer = uno::Reference< script::XLibraryContainer >
+                ( SFX_APP()->GetBasicContainer(), uno::UNO_QUERY );
+        }
+
+        if( xLibContainer.is() && xLibContainer->hasByName( aLibName ) &&
+            !xLibContainer->isLibraryLoaded( aLibName ) )
+        {
+            xLibContainer->loadLibrary( aLibName );
+        }
+
 
         BOOL bOK = TRUE;
         if ( pBasMgr->HasPassword( nLib ) &&

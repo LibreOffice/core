@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: ab $ $Date: 2001-04-23 11:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,12 @@
 #include <svtools/sbx.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
+#include <com/sun/star/script/XLibraryContainer.hpp>
+#endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 
 
 BasicTreeListBox::BasicTreeListBox( Window* pParent, const ResId& rRes ) :
@@ -116,12 +122,32 @@ void BasicTreeListBox::ScanBasic( BasicManager* pBasMgr, const String& rName )
         pBasicManagerRootEntry->SetUserData( new BasicManagerEntry( pBasMgr ) );
     }
 
+    Reference< script::XLibraryContainer > xLibContainer;
+    SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+    if ( pShell )
+    {
+        xLibContainer = uno::Reference< script::XLibraryContainer >
+            ( pShell->GetBasicContainer(), uno::UNO_QUERY );
+    }
+    else
+    {
+        xLibContainer = uno::Reference< script::XLibraryContainer >
+            ( SFX_APP()->GetBasicContainer(), uno::UNO_QUERY );
+    }
+
     // Zweite Ebene: Libs ( Standard, ... )
     USHORT nLibs = pBasMgr->GetLibCount();
     for ( USHORT nLib = 0; nLib < nLibs; nLib++ )
     {
         StarBASIC* pLib = pBasMgr->GetLib( nLib );
         String aLibName = pBasMgr->GetLibName( nLib );
+
+        // New library container
+        if( xLibContainer.is() && xLibContainer->hasByName( aLibName ) &&
+            !xLibContainer->isLibraryLoaded( aLibName ) )
+        {
+            pLib = NULL;
+        }
 
         // Jetzt LoadOnDemand...
 //      if ( !pLib )    // Nicht geladen...
