@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optaccessibility.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2002-07-30 11:00:13 $
+ *  last change: $Author: oj $ $Date: 2002-08-01 08:40:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,29 +74,9 @@ TabPage RID_SVXPAGE_ACCESSIBILITYCONFIG
     {
         Pos = MAP_APPFONT ( COL0, ROWA_0 ) ;
         Size = MAP_APPFONT ( GB_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text = "Einstellungen f�r Kontrastdarstellung verwenden" ;
-        Text [ English ] = "Use settings for high contrast appearance" ;
-        Text[ english_us ] = "Settings for high contrast appearance";
-        Text[ portuguese ] = "Settings for high contrast appearance";
-        Text[ russian ] = "Settings for high contrast appearance";
-        Text[ greek ] = "Settings for high contrast appearance";
-        Text[ dutch ] = "Settings for high contrast appearance";
-        Text[ french ] = "Utiliser les param�tres pour l'affichage du contraste �lev�";
-        Text[ spanish ] = "Utilizar configuraci�n de la visualizaci�n del contraste";
-        Text[ finnish ] = "Settings for high contrast appearance";
-        Text[ italian ] = "Impostazioni per immagine schermo a contrasto elevato";
-        Text[ danish ] = "Settings for high contrast appearance";
-        Text[ swedish ] = "Anv�nd inst�llningar f�r h�gkontrastvisning";
-        Text[ polish ] = "Settings for high contrast appearance";
-        Text[ portuguese_brazilian ] = "Settings for high contrast appearance";
-        Text[ japanese ] = "画面表示にハイコントラストを使用";
-        Text[ korean ] = "고대비 디스플레이 설정 사용";
-        Text[ chinese_simplified ] = "使用高对比度的设定";
-        Text[ chinese_traditional ] = "使用高對比度的設定";
-        Text[ turkish ] = "Settings for high contrast appearance";
-        Text[ arabic ] = "Settings for high contrast appearance";
-        Text[ catalan ] = "Settings for high contrast appearance";
-        Text[ thai ] = "Settings for high contrast appearance";
+        Text = "Systemeinstellungen in Kontrastdarstellung verwenden" ;
+        Text [ English ] = "Use system settings in high contrast appearance" ;
+        Text[ english_us ] = "Use system settings in high contrast appearance";
     };
     CheckBox CB_DRAWINGS
     {
