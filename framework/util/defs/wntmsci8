@@ -4236,3 +4236,5 @@ __CTA2?AVIndexOutOfBoundsException@lang@star@sun@com@@
 ?s_pType_com_sun_star_uno_XComponentContext@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXComponentContext@uno@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?s_pType_com_sun_star_util_XMacroExpander@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXMacroExpander@util@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?set@?$Reference@VXMacroExpander@util@star@sun@com@@@uno@star@sun@com@@QAAEPAVXMacroExpander@util@345@@Z
+?ReadImageFromURL@AddonsOptions_Impl@framework@@AAE?AVImage@@W4ImageSize@12@ABVOUString@rtl@@@Z
+?SubstituteVariables@AddonsOptions_Impl@framework@@AAEXAAVOUString@rtl@@@Z
