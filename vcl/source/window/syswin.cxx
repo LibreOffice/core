@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-22 09:09:23 $
+ *  last change: $Author: ssa $ $Date: 2002-02-28 18:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ SystemWindow::SystemWindow( WindowType nType ) :
 
 long SystemWindow::Notify( NotifyEvent& rNEvt )
 {
-    // Abfangen von KeyEvents fuer Menu-Steuerung
+    // capture KeyEvents for menu handling
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         MenuBar* pMBar = mpMenuBar;
@@ -166,9 +166,17 @@ long SystemWindow::Notify( NotifyEvent& rNEvt )
 
 long SystemWindow::PreNotify( NotifyEvent& rNEvt )
 {
+    // capture KeyEvents for taskpane cycling
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        if( mpTaskPaneList && mpTaskPaneList->HandleKeyEvent( *rNEvt.GetKeyEvent() ) )
+        TaskPaneList *pTList = mpTaskPaneList;
+        if( !pTList && ( GetType() == WINDOW_FLOATINGWINDOW ) )
+        {
+            SystemWindow* pW = (SystemWindow*)ImplGetFrameWindow()->ImplGetWindow();
+            if ( pW )
+                pTList = pW->mpTaskPaneList;
+        }
+        if( pTList && pTList->HandleKeyEvent( *rNEvt.GetKeyEvent() ) )
             return TRUE;
     }
     return Window::PreNotify( rNEvt );
