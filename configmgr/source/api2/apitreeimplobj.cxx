@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-08 11:19:25 $
+ *  last change: $Author: jb $ $Date: 2000-12-08 18:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,19 +555,18 @@ void ApiRootTreeImpl::implSetLocation()
 {
     osl::MutexGuard aGuard(getApiTree().getApiLock());
 
-    OUString aLocationPath;
     Tree aTree = getApiTree().getTree();
     if (!aTree.isEmpty())
     {
         configuration::Name aRootName = aTree.getRootNode().getName();
-        aLocationPath = aTree.getContextPath().compose( configuration::RelativePath(aRootName) ).toString();
+        m_aLocationPath = aTree.getContextPath().compose( configuration::RelativePath(aRootName) ).toString();
     }
     else
     {
         OSL_ENSURE(false, "Setting up a RootTree without data");
-        aLocationPath = OUString();
+        m_aLocationPath = OUString();
     }
-    OSL_ENSURE(aLocationPath.getLength() > 0, "Setting up a RootTree without location");
+    OSL_ENSURE(m_aLocationPath.getLength() > 0, "Setting up a RootTree without location");
 
     if (!m_pNotificationListener.isValid())
         m_pNotificationListener = new NodeListener(*this);
@@ -575,7 +574,7 @@ void ApiRootTreeImpl::implSetLocation()
     OSL_ENSURE(m_aLocationPath.getLength() > 0, "Cannot reregister for notifications: setting empty location");
     OSL_ENSURE( m_xOptions.isValid(), "Cannot reregister for notifications: no options available" );
 
-    m_pNotificationListener->setLocation(aLocationPath, m_xOptions);
+    m_pNotificationListener->setLocation(m_aLocationPath, m_xOptions);
 }
 // ---------------------------------------------------------------------------------------------------
 
