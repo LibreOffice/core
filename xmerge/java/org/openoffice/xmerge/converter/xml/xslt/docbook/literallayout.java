@@ -1,4 +1,4 @@
-<!--
+/*
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
  #
@@ -50,7 +50,7 @@
  #  Contributor(s): _______________________________________
  #
  #
- -->
+*/
 package org.openoffice.xmerge.converter.xml.xslt.docbook;
 import  java.lang.String;
 
