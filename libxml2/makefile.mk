@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-28 16:07:43 $
+#   last change: $Author: rt $ $Date: 2005-02-04 11:29:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ all:
 
 # --- Files --------------------------------------------------------
 
-LIBXML2VERSION=2.5.11
+LIBXML2VERSION=2.6.17
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
@@ -87,13 +87,13 @@ PATCH_FILE_NAME=$(TARFILE_NAME).patch
 .IF "$(OS)"=="WNT"
 CONFIGURE_DIR=win32
 CONFIGURE_ACTION=cscript configure.js
-CONFIGURE_FLAGS=iconv=no
+CONFIGURE_FLAGS=iconv=no sax1=yes
 BUILD_ACTION=nmake
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no --with-sax1=yes
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -105,8 +105,8 @@ OUTDIR2INC=include$/libxml
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=.libs$/libxml2.*.dylib
 .ELIF "$(OS)"=="WNT"
-OUT2LIB+=win32$/binaries$/*.lib
-OUT2BIN+=win32$/binaries$/*.dll
+OUT2LIB+=win32$/bin.msvc$/*.lib
+OUT2BIN+=win32$/bin.msvc$/*.dll
 .ELSE
 OUT2LIB+=.libs$/libxml2.so*
 .ENDIF
