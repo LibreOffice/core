@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-10 12:35:10 $
+ *  last change: $Author: pw $ $Date: 2000-11-22 13:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,9 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
 BOOL SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos, BOOL bDisConnectDlg )
 {
     BOOL bReturn =  mpMarkWnd->MoveTo ( aNewPos );
-    mpMarkWnd->ConnectToDialog( !bDisConnectDlg );
+
+    if( bDisConnectDlg )
+        mpMarkWnd->ConnectToDialog( FALSE );
 
     return ( !bReturn && IsMarkWndVisible() );
 }
