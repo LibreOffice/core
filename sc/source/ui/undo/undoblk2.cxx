@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:07 $
+ *  last change: $Author: nn $ $Date: 2000-11-16 13:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,24 +166,30 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
         }
     }
 
+    //! outlines from all tables?
     if (pUndoTab)                                           // Outlines mit gespeichert?
         pDoc->SetOutlineTable( nStartTab, pUndoTab );
 
     USHORT nPaintStart = nStart ? nStart-1 : 0;
-    if (bWidth) // Width
-    {
-        pUndoDoc->CopyToDocument( nStart, 0, nStartTab, nEnd, MAXROW, nEndTab, IDF_NONE, FALSE, pDoc );
-        for (USHORT i=nStartTab; i<=nEndTab; i++)
-            pDoc->UpdatePageBreaks( i );
-        pDocShell->PostPaint( nPaintStart, 0, nStartTab, MAXCOL, MAXROW, nEndTab, PAINT_GRID | PAINT_TOP );
-    }
-    else        // Height
-    {
-        pUndoDoc->CopyToDocument( 0, nStart, nStartTab, MAXCOL, nEnd, nEndTab, IDF_NONE, FALSE, pDoc );
-        for (USHORT i=nStartTab; i<=nEndTab; i++)
-            pDoc->UpdatePageBreaks( i );
-        pDocShell->PostPaint( 0, nPaintStart, nStartTab, MAXCOL, MAXROW, nEndTab, PAINT_GRID | PAINT_LEFT );
-    }
+
+    USHORT nTabCount = pDoc->GetTableCount();
+    USHORT nTab;
+    for (nTab=0; nTab<nTabCount; nTab++)
+        if (aMarkData.GetTableSelect(nTab))
+        {
+            if (bWidth) // Width
+            {
+                pUndoDoc->CopyToDocument( nStart, 0, nTab, nEnd, MAXROW, nTab, IDF_NONE, FALSE, pDoc );
+                pDoc->UpdatePageBreaks( nTab );
+                pDocShell->PostPaint( nPaintStart, 0, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_TOP );
+            }
+            else        // Height
+            {
+                pUndoDoc->CopyToDocument( 0, nStart, nTab, MAXCOL, nEnd, nTab, IDF_NONE, FALSE, pDoc );
+                pDoc->UpdatePageBreaks( nTab );
+                pDocShell->PostPaint( 0, nPaintStart, nTab, MAXCOL, MAXROW, nTab, PAINT_GRID | PAINT_LEFT );
+            }
+        }
 
     if (pDrawUndo)
         DoSdrUndoAction( pDrawUndo );
@@ -192,8 +198,8 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
     {
         pViewShell->UpdateScrollBars();
 
-        USHORT nTab = pViewShell->GetViewData()->GetTabNo();
-        if ( nTab < nStartTab || nTab > nEndTab )
+        USHORT nCurrentTab = pViewShell->GetViewData()->GetTabNo();
+        if ( nCurrentTab < nStartTab || nCurrentTab > nEndTab )
             pViewShell->SetTabNo( nStartTab );
     }
 
@@ -225,7 +231,7 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
     }
 
     // SetWidthOrHeight aendert aktuelle Tabelle !
-    pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, FALSE );
+    pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, FALSE, TRUE, &aMarkData );
 
     EndRedo();
 }
@@ -244,6 +250,9 @@ BOOL __EXPORT ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:45:07  hr
+    initial import
+
     Revision 1.18  2000/09/17 14:09:28  willem.vandorp
     OpenOffice header added.
 
