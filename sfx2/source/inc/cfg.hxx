@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-16 12:44:42 $
+ *  last change: $Author: mba $ $Date: 2001-08-24 08:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,7 @@ public:
 
     virtual BOOL                FillItemSet( SfxItemSet& );
     virtual void                Reset( const SfxItemSet& );
-    void                        Apply( SfxMenuManager* );
+    void                        Apply( SfxMenuManager*, BOOL );
     void                        SetModified( BOOL bSet ) { bModified = bSet; }
     void                        SetDefault( BOOL bSet ) { bDefault = bSet; }
 };
@@ -362,7 +362,7 @@ public:
     virtual void                Reset( const SfxItemSet& );
 
     void                        SelectMacro(const SfxMacroInfoItem*);
-    void                        Apply( SfxAcceleratorManager* );
+    void                        Apply( SfxAcceleratorManager*, BOOL );
 };
 
 class SfxConfigDialog : public SfxTabDialog
@@ -442,7 +442,7 @@ public:
 
     virtual BOOL                FillItemSet( SfxItemSet& );
     virtual void                Reset( const SfxItemSet& );
-    void                        Apply( SfxStatusBarManager* );
+    void                        Apply( SfxStatusBarManager*, BOOL );
 };
 
 

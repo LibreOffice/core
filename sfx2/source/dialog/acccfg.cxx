@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-16 12:46:33 $
+ *  last change: $Author: mba $ $Date: 2001-08-24 07:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,21 +471,15 @@ void SfxAcceleratorConfigPage::ResetConfig()
         aConfigAccelArr[i] = 0;
 }
 
-void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr )
+void SfxAcceleratorConfigPage::Apply( SfxAcceleratorManager* pAccMgr, BOOL bIsDefault )
 {
-    if ( !bModified )
-        return;
-
-    if ( bDefault )
+    if ( bIsDefault )
     {
         pAccMgr->UseDefault();
         pAccMgr->SetDefault(TRUE);
         pAccMgr->StoreConfig();
-        bModified = FALSE;
         return;
     }
-
-    bModified = FALSE;
 
     SvUShorts aListOfIds;
 
@@ -651,13 +645,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, Save, Button *, pButton )
         {
             // create new AcceleratorManager and apply changes
             SfxAcceleratorManager* pAccMgr = new SfxAcceleratorManager( *pMgr, pCfgMgr );
-
-            // We want to save the current accelerator configuration
-            // Set bDefault and bModified to ensure this!
-            bDefault = FALSE;
-            bModified = TRUE;
-
-            Apply( pAccMgr );
+            Apply( pAccMgr, FALSE );
             pAccMgr->SetDefault( FALSE );
             pCfgMgr->StoreConfigItem( *pAccMgr );
             if ( !bLoadedDocument )
@@ -913,7 +901,7 @@ BOOL SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
 {
     if ( bModified )
     {
-        Apply( pMgr );
+        Apply( pMgr, bDefault );
         bModified = FALSE;
         pMgr->StoreConfig();
         return TRUE;

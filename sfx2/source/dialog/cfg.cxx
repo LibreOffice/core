@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-10 06:11:33 $
+ *  last change: $Author: mba $ $Date: 2001-08-24 07:59:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,15 +1035,12 @@ IMPL_LINK( SfxStatusBarConfigPage, SelectHdl, SvTreeListBox *, pBox )
 }
 
 
-void SfxStatusBarConfigPage::Apply( SfxStatusBarManager* pStbMgr )
+void SfxStatusBarConfigPage::Apply( SfxStatusBarManager* pStbMgr, BOOL bIsDefault )
 {
     if ( !pStbMgr )
         return;
 
-    if (!aEntriesBox.bModified)
-        return;
-
-    if ( aEntriesBox.bDefault )
+    if ( bIsDefault )
     {
         pStbMgr->UseDefault();
         pStbMgr->SetDefault(TRUE);
@@ -1063,6 +1060,7 @@ void SfxStatusBarConfigPage::Apply( SfxStatusBarManager* pStbMgr )
             pStbMgr->AddItem(nId, nWidth);
         }
     }
+
     pStbMgr->StoreConfig();
 }
 
@@ -1205,7 +1203,7 @@ IMPL_LINK( SfxStatusBarConfigPage, Save, Button *, pButton )
         {
             // create new StatusBarManager and apply changes
             SfxStatusBarManager* pStbMgr = new SfxStatusBarManager( this, *pMgr, pCfgMgr );
-            Apply( pStbMgr );
+            Apply( pStbMgr, FALSE );
             pStbMgr->SetDefault( FALSE );
             pCfgMgr->StoreConfigItem( *pStbMgr );
             pCfgMgr->StoreConfiguration();
@@ -1340,7 +1338,7 @@ BOOL SfxStatusBarConfigPage::FillItemSet( SfxItemSet& )
 {
     if ( aEntriesBox.bModified )
     {
-        Apply( pMgr );
+        Apply( pMgr, aEntriesBox.bDefault );
         aEntriesBox.bModified = FALSE;
         pMgr->StoreConfig();
         return TRUE;
