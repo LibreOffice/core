@@ -2,9 +2,9 @@
  *
  *  $RCSfile: permissions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-04 17:43:21 $
+ *  last change: $Author: dbo $ $Date: 2002-03-05 12:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -557,11 +557,9 @@ Sequence< OUString > PermissionCollection::toStrings() const SAL_THROW( () )
 {
     vector< OUString > strings;
     strings.reserve( 8 );
-    ::rtl::Reference< Permission > perm( m_head );
-    while (perm.is())
+    for ( Permission * perm = m_head.get(); perm; perm = perm->m_next.get() )
     {
         strings.push_back( perm->toString() );
-        perm = perm->m_next;
     }
     return Sequence< OUString >( &strings[ 0 ], strings.size() );
 }
@@ -569,12 +567,10 @@ Sequence< OUString > PermissionCollection::toStrings() const SAL_THROW( () )
 inline static bool __implies(
     ::rtl::Reference< Permission > const & head, Permission const & demanded ) SAL_THROW( () )
 {
-    ::rtl::Reference< Permission > perm( head );
-    while (perm.is())
+    for ( Permission * perm = head.get(); perm; perm = perm->m_next.get() )
     {
         if (perm->implies( demanded ))
             return true;
-        perm = perm->m_next;
     }
     return false;
 }
