@@ -2,9 +2,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 16:02:38 $
+ *  last change: $Author: mib $ $Date: 2001-03-23 07:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,13 @@ extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL SmXMLImportMeta_createInstance(const ::com::sun::star::uno::Reference<
     ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw(
     ::com::sun::star::uno::Exception );
+extern ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+SmXMLImportSettings_getSupportedServiceNames() throw();
+extern ::rtl::OUString SAL_CALL SmXMLImportSettings_getImplementationName() throw();
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+SAL_CALL SmXMLImportSettings_createInstance(const ::com::sun::star::uno::Reference<
+    ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw(
+    ::com::sun::star::uno::Exception );
 
 //MathML export
 extern ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
@@ -99,6 +106,13 @@ SmXMLExportMeta_getSupportedServiceNames() throw();
 extern ::rtl::OUString SAL_CALL SmXMLExportMeta_getImplementationName() throw();
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
 SAL_CALL SmXMLExportMeta_createInstance(const ::com::sun::star::uno::Reference<
+    ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw(
+    ::com::sun::star::uno::Exception );
+extern ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+SmXMLExportSettings_getSupportedServiceNames() throw();
+extern ::rtl::OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw();
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+SAL_CALL SmXMLExportSettings_createInstance(const ::com::sun::star::uno::Reference<
     ::com::sun::star::lang::XMultiServiceFactory > & rSMgr) throw(
     ::com::sun::star::uno::Exception );
 
@@ -178,6 +192,23 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     for(i = 0; i < rServices.getLength(); i++ )
         xNewKey->createKey( rServices.getConstArray()[i]);
 
+    xNewKey = xKey->createKey(::rtl::OUString(
+    RTL_CONSTASCII_USTRINGPARAM("/") ) + SmXMLImportSettings_getImplementationName() +
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
+
+    rServices = SmXMLImportSettings_getSupportedServiceNames();
+    for(i = 0; i < rServices.getLength(); i++ )
+        xNewKey->createKey( rServices.getConstArray()[i]);
+
+    xNewKey = xKey->createKey(::rtl::OUString(
+    RTL_CONSTASCII_USTRINGPARAM("/") ) + SmXMLExportSettings_getImplementationName() +
+    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") )  );
+
+    rServices = SmXMLExportSettings_getSupportedServiceNames();
+    for(i = 0; i < rServices.getLength(); i++ )
+        xNewKey->createKey( rServices.getConstArray()[i]);
+
+
 
     return sal_True;
 }
@@ -229,6 +260,22 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
             SmXMLExportMeta_getImplementationName(),
             SmXMLExportMeta_createInstance,
             SmXMLExportMeta_getSupportedServiceNames() );
+        }
+        else if( SmXMLImportSettings_getImplementationName().equalsAsciiL(
+            pImplementationName, strlen(pImplementationName)) )
+        {
+            xFactory = ::cppu::createSingleFactory( xServiceManager,
+            SmXMLImportSettings_getImplementationName(),
+            SmXMLImportSettings_createInstance,
+            SmXMLImportSettings_getSupportedServiceNames() );
+        }
+        else if( SmXMLExportSettings_getImplementationName().equalsAsciiL(
+            pImplementationName, strlen(pImplementationName)) )
+        {
+            xFactory = ::cppu::createSingleFactory( xServiceManager,
+            SmXMLExportSettings_getImplementationName(),
+            SmXMLExportSettings_createInstance,
+            SmXMLExportSettings_getSupportedServiceNames() );
         }
 
         // Factory is valid - service was found.

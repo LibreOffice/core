@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-07 15:34:06 $
+ *  last change: $Author: mib $ $Date: 2001-03-23 07:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,6 +295,11 @@ sal_Bool SmXMLWrapper::Import(SfxMedium &rMedium)
         bRet = ReadThroughComponent(
            rMedium.GetStorage(), xModelComp, "content.xml", "Content.xml", xServiceFactory,
            "com.sun.star.comp.Math.XMLImporter" );
+
+        ReadThroughComponent(
+            rMedium.GetStorage(), xModelComp, "settings.xml", 0, xServiceFactory,
+            "com.sun.star.comp.Math.XMLSettingsImporter" );
+
     }
     else
     {
@@ -436,6 +441,46 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMeta_createInstance(
     throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new SmXMLExport( EXPORT_META );
+}
+
+OUString SAL_CALL SmXMLImportSettings_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLSettingsImporter" ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SmXMLImportSettings_getSupportedServiceNames()
+        throw()
+{
+    const OUString aServiceName( SmXMLImportSettings_getImplementationName() );
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+        return aSeq;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+    throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SmXMLImport( IMPORT_SETTINGS );
+}
+
+OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw()
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLSettingsExporter" ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SmXMLExportSettings_getSupportedServiceNames()
+        throw()
+{
+    const OUString aServiceName( SmXMLExportSettings_getImplementationName());
+    const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
+        return aSeq;
+}
+
+uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettings_createInstance(
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
+    throw( uno::Exception )
+{
+    return (cppu::OWeakObject*)new SmXMLExport( EXPORT_SETTINGS );
 }
 
 
@@ -624,12 +669,16 @@ sal_Bool SmXMLWrapper::Export(SfxMedium &rMedium)
     {
         SvStorage *pStg = rMedium.GetOutputStorage(sal_True);
         bRet = WriteThroughComponent(
-            pStg, xModelComp, "meta.xml", xServiceFactory,
-            "com.sun.star.comp.Math.XMLMetaExporter", sal_False );
+                pStg, xModelComp, "meta.xml", xServiceFactory,
+                "com.sun.star.comp.Math.XMLMetaExporter", sal_False );
         if( bRet )
-            WriteThroughComponent(
-                pStg, xModelComp, "content.xml", xServiceFactory,
-                "com.sun.star.comp.Math.XMLExporter" );
+            bRet = WriteThroughComponent(
+                    pStg, xModelComp, "content.xml", xServiceFactory,
+                    "com.sun.star.comp.Math.XMLExporter" );
+        if( bRet )
+            bRet = WriteThroughComponent(
+                    pStg, xModelComp, "settings.xml", xServiceFactory,
+                    "com.sun.star.comp.Math.XMLSettingsExporter" );
     }
     else
     {
@@ -1913,6 +1962,11 @@ SvXMLImportContext *SmXMLOfficeContext_Impl::CreateChildContext(sal_uInt16 nPref
         pContext = new SfxXMLMetaContext( GetImport(),
                                     XML_NAMESPACE_OFFICE, rLocalName,
                                     GetImport().GetModel() );
+    else if( XML_NAMESPACE_OFFICE == nPrefix &&
+        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_settings) ) )
+        pContext = new XMLDocumentSettingsContext( GetImport(),
+                                    XML_NAMESPACE_OFFICE, rLocalName,
+                                    xAttrList );
     else
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
 
@@ -2698,8 +2752,7 @@ SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
     const OUString &rLocalName,
     const uno::Reference <xml::sax::XAttributeList> &xAttrList)
 {
-    if( XML_NAMESPACE_OFFICE == nPrefix &&
-        rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sXML_document_meta ) ) )
+    if( XML_NAMESPACE_OFFICE == nPrefix )
         return new SmXMLOfficeContext_Impl( *this,nPrefix,rLocalName);
     else
         return new SmXMLDocContext_Impl(*this,nPrefix,rLocalName);
@@ -2928,6 +2981,61 @@ SmXMLImport::~SmXMLImport()
     delete pAnnotationAttrTokenMap;
 }
 
+void SmXMLImport::SetViewSettings(const Sequence<beans::PropertyValue>& aViewProps)
+{
+    uno::Reference <frame::XModel> xModel = GetModel();
+    if( !xModel.is() )
+        return;
+
+    uno::Reference <lang::XUnoTunnel> xTunnel;
+    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+    SmModel *pModel = reinterpret_cast<SmModel *>
+        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+
+    if( !pModel )
+        return;
+
+    SmDocShell *pDocShell =
+        static_cast<SmDocShell*>(pModel->GetObjectShell());
+    if( !pDocShell )
+        return;
+
+    Rectangle aRect( pDocShell->GetVisArea() );
+
+    sal_Int32 nCount = aViewProps.getLength();
+    const beans::PropertyValue *pValue = aViewProps.getConstArray();
+
+    long nTmp;
+    sal_Bool bShowDeletes = sal_False, bShowInserts = sal_False, bShowFooter = sal_False, bShowHeader = sal_False;
+
+    for (sal_Int32 i = 0; i < nCount ; i++)
+    {
+        if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaTop" ) ) )
+        {
+            pValue->Value >>= nTmp;
+            aRect.setY( nTmp );
+        }
+        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaLeft" ) ) )
+        {
+            pValue->Value >>= nTmp;
+            aRect.setX( nTmp );
+        }
+        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaWidth" ) ) )
+        {
+            pValue->Value >>= nTmp;
+            aRect.setWidth( nTmp );
+        }
+        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaHeight" ) ) )
+        {
+            pValue->Value >>= nTmp;
+            aRect.setHeight( nTmp );
+        }
+        pValue++;
+    }
+
+    pDocShell->SetVisArea ( aRect );
+}
+
 void SmXMLExport::_ExportContent()
 {
     SvXMLElementExport aEquation(*this,XML_NAMESPACE_MATH,sXML_math, sal_False,
@@ -2949,6 +3057,45 @@ void SmXMLExport::_ExportContent()
             sXML_annotation,sal_True, sal_False);
         GetDocHandler()->characters(*pText);
     }
+}
+
+void SmXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
+{
+    uno::Reference <frame::XModel> xModel = GetModel();
+    if( !xModel.is() )
+        return;
+
+    uno::Reference <lang::XUnoTunnel> xTunnel;
+    xTunnel = uno::Reference <lang::XUnoTunnel> (xModel,uno::UNO_QUERY);
+    SmModel *pModel = reinterpret_cast<SmModel *>
+        (xTunnel->getSomething(SmModel::getUnoTunnelId()));
+
+    if( !pModel )
+        return;
+
+    SmDocShell *pDocShell =
+        static_cast<SmDocShell*>(pModel->GetObjectShell());
+    if( !pDocShell )
+        return;
+
+    aProps.realloc( 4 );
+    beans::PropertyValue *pValue = aProps.getArray();
+    sal_Int32 nIndex = 0;
+
+    const Rectangle &rRect =
+        pDocShell->GetVisArea();
+
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaTop") );
+    pValue[nIndex++].Value <<= rRect.Top();
+
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaLeft") );
+    pValue[nIndex++].Value <<= rRect.Left();
+
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaWidth") );
+    pValue[nIndex++].Value <<= rRect.GetWidth();
+
+    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaHeight") );
+    pValue[nIndex++].Value <<= rRect.GetHeight();
 }
 
 void SmXMLExport::ExportLine(const SmNode *pNode,int nLevel)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-08 16:53:42 $
+ *  last change: $Author: mib $ $Date: 2001-03-23 07:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #endif
 #ifndef _SDXMLEXP_HXX
 #include <xmloff/xmlexp.hxx>
+#endif
+#ifndef _XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
+#include <xmloff/DocumentSettingsContext.hxx>
 #endif
 
 
@@ -291,6 +294,9 @@ public:
     SmNode *GetTree() { return aNodeStack.Pop();}
     sal_Bool GetSuccess() { return bSuccess; }
     String &GetText() { return aText;}
+
+    virtual void SetViewSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
+
 private:
         SvXMLTokenMap *pMathElemTokenMap;
         SvXMLTokenMap *pPresLayoutElemTokenMap;
@@ -403,6 +409,8 @@ public:
     void _ExportMasterStyles() {}
     void _ExportContent();
     sal_uInt32 exportDoc(const sal_Char *pClass);
+
+    virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps);
 
     sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
         sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException);
