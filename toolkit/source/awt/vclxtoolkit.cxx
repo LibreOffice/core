@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:08:49 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,8 +752,8 @@ void SAL_CALL VCLXToolkit::disposing()
         else
         {
             pNewComp->SetCreatedWithToolkit( TRUE );
-            pNewWindow->SetComponentInterface( pNewComp );
             xRef = pNewComp;
+            pNewWindow->SetComponentInterface( xRef );
         }
 
         if ( rDescriptor.WindowAttributes & ::com::sun::star::awt::WindowAttribute::SHOW )
