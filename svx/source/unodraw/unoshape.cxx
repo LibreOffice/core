@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: aw $ $Date: 2001-04-19 16:52:22 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 10:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1400,7 +1400,24 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             }
             break;
         }
-
+        case OWN_ATTR_OLE_VISAREA:
+        {
+#ifndef SVX_LIGHT
+            awt::Rectangle aVisArea;
+            if( (rVal >>= aVisArea) && pObj->ISA(SdrOle2Obj))
+            {
+                SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
+                const SvInPlaceObjectRef& xInplace = aObj.GetObjRef();
+                if( xInplace.Is() )
+                {
+                    Rectangle aTmpArea( aVisArea.X, aVisArea.Y, aVisArea.X + aVisArea.Width, aVisArea.Y + aVisArea.Height );
+                    xInplace->SetVisArea( aTmpArea );
+                    return;
+                }
+#endif
+            }
+            break;
+        }
         case XATTR_FILLBITMAP:
         case XATTR_FILLGRADIENT:
         case XATTR_FILLHATCH:
@@ -1668,6 +1685,24 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 Reference< awt::XBitmap > xBmp( VCLUnoHelper::CreateBitmap( aBmp ) );
 
                 aAny <<= xBmp;
+                break;
+            }
+            case OWN_ATTR_OLE_VISAREA:
+            {
+                awt::Rectangle aVisArea;
+#ifndef SVX_LIGHT
+                if( pObj->ISA(SdrOle2Obj))
+                {
+                    SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
+                    const SvInPlaceObjectRef& xInplace = aObj.GetObjRef();
+                    if( xInplace.Is() )
+                    {
+                        Rectangle aTmpArea( xInplace->GetVisArea() );
+                        aVisArea = awt::Rectangle( aTmpArea.Left(), aTmpArea.Top(), aTmpArea.GetWidth(), aTmpArea.GetHeight() );
+                    }
+                }
+#endif
+                aAny <<= aVisArea;
                 break;
             }
             case OWN_ATTR_OLESIZE:

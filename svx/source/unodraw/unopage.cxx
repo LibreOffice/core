@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-30 12:18:08 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 10:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,12 @@
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
+#ifndef _PERSIST_HXX
+#include <so3/persist.hxx>
+#endif
+#ifndef _SOT_CLSIDS_HXX
+#include <sot/clsids.hxx>
+#endif
 #endif
 
 /*
@@ -87,7 +93,7 @@
 #include "svdview.hxx"
 #include "svdpagv.hxx"
 #include "unopage.hxx"
-#include "unoshape.hxx"
+#include "shapeimpl.hxx"
 #include "globl3d.hxx"
 #include "polysc3d.hxx"
 #include "unoprov.hxx"
@@ -542,6 +548,15 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, sal_uInt32& rInventor, 
     {
         rInventor = SdrInventor;
         rType = (sal_uInt16)nTempType;
+
+        switch( rType )
+        {
+            case OBJ_FRAME:
+            case OBJ_OLE2_PLUGIN:
+            case OBJ_OLE2_APPLET:
+                rType = OBJ_OLE2;
+                break;
+        }
     }
 }
 
@@ -628,9 +643,59 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                 case OBJ_GRAF:
                     pRet = new SvxGraphicObject( pObj );
                     break;
+                case OBJ_FRAME:
+#ifndef SVX_LIGHT
+                    pRet = new SvxFrameShape( pObj );
+                    break;
+#endif
+                case OBJ_OLE2_APPLET:
+#ifndef SVX_LIGHT
+                    pRet = new SvxAppletShape( pObj );
+                    break;
+#endif
+                case OBJ_OLE2_PLUGIN:
+#ifndef SVX_LIGHT
+                    pRet = new SvxPluginShape( pObj );
+                    break;
+#endif
                  case OBJ_OLE2:
-                     pRet = new SvxShape( pObj, ImplGetSvxOle2PropertyMap() );
-                     break;
+                     {
+#ifndef SVX_LIGHT
+                        SvPersist *pPersist = pPage->GetSdrPage()->GetModel()->GetPersist();
+
+                        if( pObj )
+                        {
+                            const SvInfoObject *pInfo = pPersist->Find( pObj->GetName() );
+                            DBG_ASSERT( pInfo, "no info object for OLE object found" );
+
+                            const SvGlobalName aClassId( pInfo->GetClassName() );
+                            const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
+                            const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
+                            const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
+
+                            if( aPluginClassId == aClassId )
+                            {
+                                pRet = new SvxPluginShape( pObj );
+                                nType = OBJ_OLE2_PLUGIN;
+                            }
+                            else if( aAppletClassId == aClassId )
+                            {
+                                pRet = new SvxAppletShape( pObj );
+                                nType = OBJ_OLE2_APPLET;
+                            }
+                            else if( aIFrameClassId == aClassId )
+                            {
+                                pRet = new SvxFrameShape( pObj );
+                                nType = OBJ_FRAME;
+                            }
+                        }
+#endif
+                        if( pRet == NULL )
+                        {
+                            pRet = new SvxOle2Shape( pObj, ImplGetSvxOle2PropertyMap() );
+                        }
+                        break;
+                     }
                 case OBJ_EDGE:
                     pRet = new SvxShapeConnector( pObj );
                     break;
@@ -647,8 +712,6 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                     pRet = new SvxShapeDimensioning( pObj );
                     break;
 //              case OBJ_DUMMY:
-//                  break;
-//              case OBJ_FRAME:
 //                  break;
                 case OBJ_UNO:
                     pRet = new SvxShapeControl( pObj );

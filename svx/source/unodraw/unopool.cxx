@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 16:39:05 $
+ *  last change: $Author: cl $ $Date: 2001-04-30 10:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,12 +163,12 @@ void SvxUnoDrawPool::getAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
             break;
         }
     default:
-        pPool->GetDefaultItem( pEntry->mnHandle ).QueryValue( rValue, pEntry->mnMemberId );
+        pPool->GetDefaultItem( (USHORT)pEntry->mnHandle ).QueryValue( rValue, pEntry->mnMemberId );
     }
 
 
     // check for needed metric translation
-    const SfxMapUnit eMapUnit = pPool->GetMetric(pEntry->mnHandle);
+    const SfxMapUnit eMapUnit = pPool->GetMetric((USHORT)pEntry->mnHandle);
     if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         // map the metric of the itempool to 100th mm
@@ -220,7 +220,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
 {
     Any aValue( rValue );
 
-    const SfxMapUnit eMapUnit = pPool->GetMetric(pEntry->mnHandle);
+    const SfxMapUnit eMapUnit = pPool->GetMetric((USHORT)pEntry->mnHandle);
     if(pEntry->mnMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
         switch(eMapUnit)
@@ -244,7 +244,7 @@ void SvxUnoDrawPool::putAny( SfxItemPool* pPool, const comphelper::PropertyMapEn
         }
     }
 
-    const sal_uInt16 nWhich = pEntry->mnHandle;
+    const sal_uInt16 nWhich = (sal_uInt16)pEntry->mnHandle;
     switch( nWhich )
     {
         case OWN_ATTR_FILLBMP_MODE:
@@ -317,7 +317,7 @@ void SvxUnoDrawPool::_getPropertyStates( const comphelper::PropertyMapEntry** pp
     {
         while( *ppEntries )
         {
-            const sal_uInt16 nWhich = (*ppEntries)->mnHandle;
+            const sal_uInt16 nWhich = (sal_uInt16)(*ppEntries)->mnHandle;
 
             switch( nWhich )
             {
@@ -366,7 +366,7 @@ void SvxUnoDrawPool::_setPropertyToDefault( const comphelper::PropertyMapEntry* 
     SfxItemPool* pPool = getModelPool( sal_True );
 
     if( pPool && pPool != mpDefaultsPool )
-        pPool->Put( mpDefaultsPool->GetDefaultItem( pEntry->mnHandle ), pEntry->mnHandle );
+        pPool->Put( mpDefaultsPool->GetDefaultItem( (USHORT)pEntry->mnHandle ), (USHORT)pEntry->mnHandle );
 }
 
 Any SvxUnoDrawPool::_getPropertyDefault( const comphelper::PropertyMapEntry* pEntry )

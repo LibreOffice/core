@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: cl $ $Date: 2001-03-19 09:13:49 $
+#   last change: $Author: cl $ $Date: 2001-04-30 10:06:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ CXXFILES =				\
         unoshape.cxx	\
         unoshap2.cxx	\
         unoshap3.cxx	\
+        unoshap4.cxx	\
         unopage.cxx		\
         unoshtxt.cxx	\
         unoshcol.cxx	\
@@ -109,6 +110,7 @@ SVXLIGHTOBJFILES=\
         $(OBJ)$/unoctabl.obj	\
         $(OBJ)$/unoshap2.obj	\
         $(OBJ)$/unoshap3.obj	\
+        $(OBJ)$/unoshap4.obj	\
         $(OBJ)$/unopage.obj		\
         $(OBJ)$/unoshtxt.obj	\
         $(OBJ)$/unoshcol.obj	\
@@ -134,6 +136,7 @@ SLOFILES =	\
         $(SLO)$/unoctabl.obj	\
         $(SLO)$/unoshap2.obj	\
         $(SLO)$/unoshap3.obj	\
+        $(SLO)$/unoshap4.obj	\
         $(SLO)$/unopage.obj		\
         $(SLO)$/unoshtxt.obj	\
         $(SLO)$/unoshcol.obj	\
