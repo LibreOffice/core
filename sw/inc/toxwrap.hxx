@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxwrap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:07:50 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _SWUNODEF_HXX
 #include <swunodef.hxx>
 #endif
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
 namespace com { namespace sun { namespace star {
 namespace i18n {
@@ -88,7 +91,7 @@ namespace lang {
 
 class String;
 
-class IndexEntrySupplierWrapper
+class SW_DLLPUBLIC IndexEntrySupplierWrapper
 {
     STAR_NMSPC::lang::Locale aLcl;
     STAR_NMSPC::uno::Reference < com::sun::star::i18n::XExtendedIndexEntrySupplier > xIES;
