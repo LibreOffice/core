@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-19 11:55:13 $
+#   last change: $Author: oj $ $Date: 2000-11-22 14:42:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -142,6 +142,7 @@ SLOFILES=\
         $(SLO)$/OResultSetMetaData.obj			\
         $(SLO)$/OResultSet.obj					\
         $(SLO)$/OTools.obj						\
+        $(SLO)$/ODatabaseMetaDataResultSet.obj	\
         $(SLO)$/ODatabaseMetaData.obj			\
         $(SLO)$/ODriver.obj						\
         $(SLO)$/OFunctions.obj					\
