@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:38:46 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,11 +86,11 @@ TabPage TP_DOC_STAT
         Text [ spanish ] = "Número de páginas:" ;
         Text [ english_us ] = "Number of Pages:" ;
         Left = TRUE ;
-        Text[ chinese_simplified ] = "Ò³ÃæÊıÄ¿£º";
+        Text[ chinese_simplified ] = "Ò³Êı£º";
         Text[ russian ] = "Êîëè÷åñòâî ñòğàíèö:";
         Text[ polish ] = "Liczba stron:";
         Text[ japanese ] = "Íß°¼Ş‘”:";
-        Text[ chinese_traditional ] = "¼Æ¥Ø ­¶¡G";
+        Text[ chinese_traditional ] = "­¶¼Æ¡G";
         Text[ arabic ] = "ÚÏÏ ÇáÕİÍÇÊ:";
         Text[ greek ] = "Áñéèìüò óåëßäùí:";
         Text[ korean ] = "ÂÊ ¼ö:";
@@ -420,6 +420,7 @@ TabPage TP_DOC_STAT
         Text[ finnish ] = "~Päivitä";
     };
 };
+
 
 
 
