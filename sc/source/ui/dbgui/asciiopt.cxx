@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-01 12:48:29 $
+ *  last change: $Author: dr $ $Date: 2002-08-15 09:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,24 +172,22 @@ void ScAsciiOptions::SetColInfo( USHORT nCount, const xub_StrLen* pStart, const 
 }
 
 
-void ScAsciiOptions::SetColumnInfo( const ScCsvExtColPosVec& rColPosVec, const ScCsvExtColTypeVec& rColTypeVec )
+void ScAsciiOptions::SetColumnInfo( const ScCsvExpDataVec& rDataVec )
 {
-    DBG_ASSERT( rColPosVec.size() == rColTypeVec.size(), "ScAsciiOptions::SetColInfo - vector sizes not equal" );
-
     delete[] pColStart;
     pColStart = NULL;
     delete[] pColFormat;
     pColFormat = NULL;
 
-    nInfoCount = static_cast< sal_uInt16 >( rColPosVec.size() );
+    nInfoCount = static_cast< sal_uInt16 >( rDataVec.size() );
     if( nInfoCount )
     {
         pColStart = new xub_StrLen[ nInfoCount ];
         pColFormat = new sal_uInt8[ nInfoCount ];
         for( sal_uInt16 nIx = 0; nIx < nInfoCount; ++nIx )
         {
-            pColStart[ nIx ] = rColPosVec[ nIx ];
-            pColFormat[ nIx ] = rColTypeVec[ nIx ];
+            pColStart[ nIx ] = rDataVec[ nIx ].mnIndex;
+            pColFormat[ nIx ] = rDataVec[ nIx ].mnType;
         }
     }
 }

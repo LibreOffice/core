@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvruler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-01 12:47:41 $
+ *  last change: $Author: dr $ $Date: 2002-08-15 09:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 
 
+class ScAccessibleCsvControl;
+
+
 // ============================================================================
 
 /** A ruler control for the CSV import dialog. Supports setting and moving
@@ -105,13 +108,10 @@ private:
 
     // ------------------------------------------------------------------------
 public:
-                                ScCsvRuler( ScCsvControl& rParent );
+    explicit                    ScCsvRuler( ScCsvControl& rParent );
 
-    // ruler handling ---------------------------------------------------------
-
-    /** Redraws the entire ruler. */
-    void                        ImplRedraw();
-
+    // common ruler handling --------------------------------------------------
+public:
     /** Sets position and size of the ruler. The height is calculated internally. */
     virtual void                SetPosSizePixel(
                                     sal_Int32 nX, sal_Int32 nY,
@@ -121,6 +121,24 @@ public:
     /** Apply current layout data to the ruler. */
     void                        ApplyLayout( const ScCsvLayoutData& rOldData );
 
+private:
+    /** Reads colors from system settings. */
+    void                        InitColors();
+    /** Initializes all data dependent from the control's size. */
+    void                        InitSizeData();
+
+    /** Moves cursor to a new position.
+        @param bScroll  TRUE = The method may scroll the ruler. */
+    void                        MoveCursor( sal_Int32 nPos, bool bScroll = true );
+    /** Moves cursor to the given direction. */
+    void                        MoveCursorRel( ScMoveMode eDir );
+    /** Sets cursor to an existing split, according to eDir. */
+    void                        MoveCursorToSplit( ScMoveMode eDir );
+    /** Scrolls data grid vertically. */
+    void                        ScrollVertRel( ScMoveMode eDir );
+
+    // split handling ---------------------------------------------------------
+public:
     /** Returns the split array. */
     inline const ScCsvSplits&   GetSplits() const { return maSplits; }
     /** Returns the number of splits. */
@@ -145,6 +163,15 @@ public:
     /** Removes all splits of the ruler. */
     void                        RemoveAllSplits();
 
+private:
+    /** Finds next position without a split. */
+    sal_Int32                   FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const;
+
+    /** Moves split and cursor to nNewPos and commits event. */
+    void                        MoveCurrSplit( sal_Int32 nNewPos );
+    /** Moves split and cursor to the given direction and commits event. */
+    void                        MoveCurrSplitRel( ScMoveMode eDir );
+
     // event handling ---------------------------------------------------------
 protected:
     virtual void                Resize();
@@ -158,36 +185,7 @@ protected:
 
     virtual void                KeyInput( const KeyEvent& rKEvt );
 
-    // initialization ---------------------------------------------------------
 private:
-    /** Reads colors from system settings. */
-    void                        InitColors();
-    /** Initializes all data dependent from the control's size. */
-    void                        InitSizeData();
-
-    // ruler handling ---------------------------------------------------------
-
-    /** Returns the height the ruler needs to draw itself. */
-    sal_Int32                   GetRequiredHeight() const;
-
-    /** Finds next position without a split. */
-    sal_Int32                   FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const;
-
-    /** Moves cursor to a new position.
-        @param bScroll  TRUE = The method may scroll the ruler. */
-    void                        MoveCursor( sal_Int32 nPos, bool bScroll = true );
-    /** Moves cursor to the given direction. */
-    void                        MoveCursorRel( ScMoveMode eDir );
-    /** Sets cursor to an existing split, according to eDir. */
-    void                        MoveCursorToSplit( ScMoveMode eDir );
-    /** Scrolls data grid vertically. */
-    void                        ScrollVertRel( ScMoveMode eDir );
-
-    /** Moves split and cursor to nNewPos and commits event. */
-    void                        MoveCurrSplit( sal_Int32 nNewPos );
-    /** Moves split and cursor to the given direction and commits event. */
-    void                        MoveCurrSplitRel( ScMoveMode eDir );
-
     /** Starts tracking at the specified position. */
     void                        StartMouseTracking( sal_Int32 nPos );
     /** Moves tracking to a new position. */
@@ -199,6 +197,10 @@ private:
     // painting ---------------------------------------------------------------
 protected:
     virtual void                Paint( const Rectangle& );
+
+public:
+    /** Redraws the entire ruler. */
+    void                        ImplRedraw();
 
 private:
     /** Returns the width of the control. */
@@ -225,6 +227,11 @@ private:
 
     /** Sets arrow or horizontal split pointer. */
     void                        ImplSetMousePointer( sal_Int32 nPos );
+
+    // accessibility ----------------------------------------------------------
+protected:
+    /** Creates a new accessible object. */
+    virtual ScAccessibleCsvControl* ImplCreateAccessible();
 };
 
 

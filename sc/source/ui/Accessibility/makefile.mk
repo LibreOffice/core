@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-14 12:59:48 $
+#   last change: $Author: dr $ $Date: 2002-08-15 09:27:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,64 +81,45 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES =						\
-        AccessibleContextBase.cxx		\
-        AccessibleTableBase.cxx			\
-        AccessibleDocument.cxx			\
-        AccessibleSpreadsheet.cxx		\
-        AccessibleCell.cxx			\
-        AccessibleSpreadsheet.cxx		\
-        AccessibilityHints.cxx			\
-        AccessibleDocumentBase.cxx		\
-        AccessibleCellBase.cxx			\
-        AccessibleDocumentPagePreview.cxx	\
-        AccessiblePreviewTable.cxx		\
-        AccessiblePreviewCell.cxx		\
-        AccessiblePreviewHeaderCell.cxx		\
-        AccessiblePageHeader.cxx		\
-        AccessibleText.cxx              \
-        AccessiblePageHeaderArea.cxx    \
-        DrawModelBroadcaster.cxx        \
-        AccessibleEditObject.cxx        \
-        AccessibleDataPilotControl.cxx
+SLOFILES =  										\
+        $(SLO)$/AccessibleContextBase.obj			\
+        $(SLO)$/AccessibleTableBase.obj				\
+        $(SLO)$/AccessibleDocument.obj				\
+        $(SLO)$/AccessibleSpreadsheet.obj			\
+        $(SLO)$/AccessibleCell.obj					\
+        $(SLO)$/AccessibilityHints.obj				\
+        $(SLO)$/AccessibleDocumentBase.obj			\
+        $(SLO)$/AccessibleCellBase.obj				\
+        $(SLO)$/AccessibleDocumentPagePreview.obj	\
+        $(SLO)$/AccessiblePreviewTable.obj			\
+        $(SLO)$/AccessiblePreviewCell.obj			\
+        $(SLO)$/AccessiblePreviewHeaderCell.obj		\
+        $(SLO)$/AccessiblePageHeader.obj			\
+        $(SLO)$/AccessibleText.obj					\
+        $(SLO)$/AccessiblePageHeaderArea.obj		\
+        $(SLO)$/DrawModelBroadcaster.obj			\
+        $(SLO)$/AccessibleEditObject.obj			\
+        $(SLO)$/AccessibleDataPilotControl.obj		\
+        $(SLO)$/AccessibleCsvControl.obj
 
-EXCEPTIONSFILES=\
-        $(SLO)$/AccessibleContextBase.obj	\
-        $(SLO)$/AccessibleTableBase.obj		\
-        $(SLO)$/AccessibleDocument.obj		\
-        $(SLO)$/AccessibleSpreadsheet.obj	\
-        $(SLO)$/AccessibleCell.obj		\
-        $(SLO)$/AccessibleDocumentBase.obj	\
-        $(SLO)$/AccessibleCellBase.obj		\
-        $(SLO)$/AccessibleDocumentPagePreview.obj \
-        $(SLO)$/AccessiblePreviewTable.obj	\
-        $(SLO)$/AccessiblePreviewCell.obj	\
-        $(SLO)$/AccessiblePreviewHeaderCell.obj \
-        $(SLO)$/AccessiblePageHeader.obj    \
-        $(SLO)$/AccessiblePageHeaderArea.obj \
-        $(SLO)$/DrawModelBroadcaster.obj    \
-        $(SLO)$/AccessibleEditObject.obj    \
-        $(SLO)$/AccessibleDataPilotControl.obj
-
-SLOFILES =  						\
-        $(SLO)$/AccessibleContextBase.obj	\
-        $(SLO)$/AccessibleTableBase.obj		\
-        $(SLO)$/AccessibleDocument.obj		\
-        $(SLO)$/AccessibleSpreadsheet.obj	\
-        $(SLO)$/AccessibleCell.obj		\
-        $(SLO)$/AccessibilityHints.obj		\
-        $(SLO)$/AccessibleDocumentBase.obj	\
-        $(SLO)$/AccessibleCellBase.obj		\
-        $(SLO)$/AccessibleDocumentPagePreview.obj \
-        $(SLO)$/AccessiblePreviewTable.obj	\
-        $(SLO)$/AccessiblePreviewCell.obj	\
-        $(SLO)$/AccessiblePreviewHeaderCell.obj	\
-        $(SLO)$/AccessiblePageHeader.obj	\
-        $(SLO)$/AccessibleText.obj          \
-        $(SLO)$/AccessiblePageHeaderArea.obj \
-        $(SLO)$/DrawModelBroadcaster.obj    \
-        $(SLO)$/AccessibleEditObject.obj    \
-        $(SLO)$/AccessibleDataPilotControl.obj
+EXCEPTIONSFILES=									\
+        $(SLO)$/AccessibleContextBase.obj			\
+        $(SLO)$/AccessibleTableBase.obj				\
+        $(SLO)$/AccessibleDocument.obj				\
+        $(SLO)$/AccessibleSpreadsheet.obj			\
+        $(SLO)$/AccessibleCell.obj					\
+        $(SLO)$/AccessibleDocumentBase.obj			\
+        $(SLO)$/AccessibleCellBase.obj				\
+        $(SLO)$/AccessibleDocumentPagePreview.obj	\
+        $(SLO)$/AccessiblePreviewTable.obj			\
+        $(SLO)$/AccessiblePreviewCell.obj			\
+        $(SLO)$/AccessiblePreviewHeaderCell.obj		\
+        $(SLO)$/AccessiblePageHeader.obj			\
+        $(SLO)$/AccessiblePageHeaderArea.obj		\
+        $(SLO)$/DrawModelBroadcaster.obj			\
+        $(SLO)$/AccessibleEditObject.obj			\
+        $(SLO)$/AccessibleDataPilotControl.obj		\
+        $(SLO)$/AccessibleCsvControl.obj
 
 # --- Tagets -------------------------------------------------------
 

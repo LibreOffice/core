@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-01 12:47:39 $
+ *  last change: $Author: dr $ $Date: 2002-08-15 09:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ public:
     void    SetStartRow( long nRow)             { nStartRow= nRow; }
 
     void    SetColInfo( USHORT nCount, const xub_StrLen* pStart, const BYTE* pFormat );
-    void    SetColumnInfo( const ScCsvExtColPosVec& rColPosVec, const ScCsvExtColTypeVec& rColTypeVec );
+    void    SetColumnInfo( const ScCsvExpDataVec& rDataVec );
 };
 
 

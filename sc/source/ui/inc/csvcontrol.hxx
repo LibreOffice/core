@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-01 12:47:40 $
+ *  last change: $Author: dr $ $Date: 2002-08-15 09:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,18 +75,18 @@
 #include "csvsplits.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include <com/sun/star/uno/Reference.hxx>
+#endif
+
+
+class ScAccessibleCsvControl;
+namespace drafts { namespace com { namespace sun { namespace star { namespace accessibility {
+    class XAccessible;
+} } } } }
+
 
 // ============================================================================
-
-typedef ::std::vector< String >             ScCsvStringVec;
-typedef ::std::vector< ScCsvStringVec >     ScCsvStringVecVec;
-
-// types for exported data
-typedef ::std::vector< xub_StrLen >         ScCsvExtColPosVec;
-typedef ::std::vector< sal_uInt8 >          ScCsvExtColTypeVec;
-
-
-// ----------------------------------------------------------------------------
 
 /** Minimum character count for a column in separators mode. */
 const sal_Int32 CSV_MINCOLWIDTH         = 8;
@@ -117,6 +117,22 @@ const sal_uInt8 SC_COL_DMY              = 4;
 const sal_uInt8 SC_COL_YMD              = 5;
 const sal_uInt8 SC_COL_SKIP             = 9;
 const sal_uInt8 SC_COL_ENGLISH          = 10;
+
+
+// ============================================================================
+
+/** Exported data of a column (data used in the dialog). */
+struct ScCsvExpData
+{
+    xub_StrLen                  mnIndex;        /// Index of a column.
+    sal_uInt8                   mnType;         /// External type of the column.
+
+    inline                      ScCsvExpData() : mnIndex( 0 ), mnType( SC_COL_STANDARD ) {}
+    inline                      ScCsvExpData( xub_StrLen nIndex, sal_uInt8 nType ) :
+                                    mnIndex( nIndex ), mnType( nType ) {}
+};
+
+typedef ::std::vector< ScCsvExpData > ScCsvExpDataVec;
 
 
 // ============================================================================
@@ -184,7 +200,7 @@ struct ScCsvLayoutData
 
     mutable sal_Int32           mnNoRepaint;        /// >0 = no repaint.
 
-                                ScCsvLayoutData();
+    explicit                    ScCsvLayoutData();
 
     /** Returns differences to rData.
         @descr  For each difference the appropriate bit is set in the returned value. */
@@ -260,7 +276,7 @@ private:
     sal_Int32                   mnParam2;       /// Second parameter.
 
 public:
-    inline                      ScCsvCmd() : meType( CSVCMD_NONE ),
+    inline explicit             ScCsvCmd() : meType( CSVCMD_NONE ),
                                     mnParam1( POS_INVALID ), mnParam2( POS_INVALID ) {}
 
     inline void                 Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nParam2 );
@@ -281,19 +297,46 @@ inline void ScCsvCmd::Set( ScCsvCmdType eType, sal_Int32 nParam1, sal_Int32 nPar
 /** Base class for the CSV ruler and the data grid control. Implements command handling. */
 class ScCsvControl : public Control
 {
+protected:
+    typedef ::std::vector< String >     StringVec;
+    typedef ::std::vector< StringVec >  StringVecVec;
+
+    typedef ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible > XAccessibleRef;
+
 private:
     Link                        maCmdHdl;           /// External command handler.
     ScCsvCmd                    maCmd;              /// Data of last command.
-
     const ScCsvLayoutData&      mrData;             /// Shared layout data.
 
+    XAccessibleRef              mxAccessible;       /// The accessible object of the control.
+    ScAccessibleCsvControl*     mpAccessible;       /// Pointer to the accessible implementation object.
     bool                        mbValidGfx;         /// Content of virtual devices valid?
 
     // ------------------------------------------------------------------------
 public:
-                                ScCsvControl( ScCsvControl& rParent );
-                                ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, WinBits nStyle = 0 );
-                                ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, const ResId& rResId );
+    explicit                    ScCsvControl( ScCsvControl& rParent );
+    explicit                    ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, WinBits nStyle = 0 );
+    explicit                    ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, const ResId& rResId );
+    virtual                     ~ScCsvControl();
+
+    // event handling ---------------------------------------------------------
+
+    virtual void                GetFocus();
+    virtual void                LoseFocus();
+
+    /** Sends a GetFocus or LoseFocus event to the accessibility object. */
+    void                        AccSendFocusEvent( bool bFocused );
+    /** Sends a caret changed event to the accessibility object. */
+    void                        AccSendCaretEvent();
+    /** Sends a selection changed event to the accessibility object. */
+    void                        AccSendSelectionEvent();
+    /** Sends a table model changed event for changed cell contents to the accessibility object. */
+    void                        AccSendTableUpdateEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn, bool bAllRows = true );
+    /** Sends a table model changed event for an inserted column to the accessibility object. */
+    void                        AccSendInsertColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn );
+    /** Sends a table model changed event for a removed column to the accessibility object. */
+    void                        AccSendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn );
 
     // repaint helpers --------------------------------------------------------
 
@@ -382,6 +425,8 @@ public:
     inline sal_Int32            GetLineHeight() const { return mrData.mnLineHeight; }
     /** Returns output Y coordinate of the specified line. */
     sal_Int32                   GetY( sal_Int32 nLine ) const;
+    /** Returns line index from output coordinate. */
+    sal_Int32                   GetLineFromY( sal_Int32 nY ) const;
 
     /** Returns the ruler cursor position. */
     inline sal_Int32            GetRulerCursorPos() const { return mrData.mnPosCursor; }
@@ -399,6 +444,16 @@ public:
     /** Returns direction code for the keys UP, DOWN, HOME, END, PAGE UP, PAGE DOWN.
         @param bHomeEnd  false = ignore HOME and END key. */
     static ScMoveMode           GetVertDirection( sal_uInt16 nCode, bool bHomeEnd );
+
+    // accessibility ----------------------------------------------------------
+public:
+    /** Creates and returns the accessible object of this control. Do not overwrite in
+        derived classes, use ImplCreateAccessible() instead. */
+    virtual XAccessibleRef     CreateAccessible();
+
+protected:
+    /** Derived classes create a new accessible object here. */
+    virtual ScAccessibleCsvControl* ImplCreateAccessible() = NULL;
 };
 
 

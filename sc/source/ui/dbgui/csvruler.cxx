@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvruler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-01 12:48:32 $
+ *  last change: $Author: dr $ $Date: 2002-08-15 09:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include "csvruler.hxx"
 #endif
 
+#ifndef _SC_ACCESSIBLECSVCONTROL_HXX
+#include "AccessibleCsvControl.hxx"
+#endif
+
 
 // ============================================================================
 
@@ -79,10 +83,40 @@ ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
 {
     InitColors();
     InitSizeData();
+    maBackgrDev.SetFont( GetFont() );
+    maRulerDev.SetFont( GetFont() );
 }
 
 
-// initialization -------------------------------------------------------------
+// common ruler handling ------------------------------------------------------
+
+void ScCsvRuler::SetPosSizePixel(
+        sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_uInt16 nFlags )
+{
+    if( nFlags & WINDOW_POSSIZE_HEIGHT )
+        nHeight = GetTextHeight() + mnSplitSize + 2;
+    ScCsvControl::SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
+}
+
+void ScCsvRuler::ApplyLayout( const ScCsvLayoutData& rOldData )
+{
+    ScCsvDiff nDiff = GetLayoutData().GetDiff( rOldData ) & (CSV_DIFF_HORIZONTAL | CSV_DIFF_RULERCURSOR);
+    if( nDiff == CSV_DIFF_EQUAL ) return;
+
+    DisableRepaint();
+    if( nDiff & CSV_DIFF_HORIZONTAL )
+    {
+        InitSizeData();
+        if( GetRulerCursorPos() >= GetPosCount() )
+            MoveCursor( GetPosCount() - 1 );
+    }
+    if( nDiff & CSV_DIFF_RULERCURSOR )
+    {
+        ImplInvertCursor( rOldData.mnPosCursor );
+        ImplInvertCursor( GetRulerCursorPos() );
+    }
+    EnableRepaint();
+}
 
 void ScCsvRuler::InitColors()
 {
@@ -112,55 +146,6 @@ void ScCsvRuler::InitSizeData()
     InvalidateGfx();
 }
 
-
-// ruler handling -------------------------------------------------------------
-
-void ScCsvRuler::ApplyLayout( const ScCsvLayoutData& rOldData )
-{
-    ScCsvDiff nDiff = GetLayoutData().GetDiff( rOldData );
-
-    if( nDiff & (CSV_DIFF_HORIZONTAL | CSV_DIFF_RULERCURSOR) )
-    {
-        DisableRepaint();
-        if( nDiff & CSV_DIFF_HORIZONTAL )
-        {
-            InitSizeData();
-            if( GetRulerCursorPos() >= GetPosCount() )
-                MoveCursor( GetPosCount() - 1 );
-        }
-        if( nDiff & CSV_DIFF_RULERCURSOR )
-        {
-            ImplInvertCursor( rOldData.mnPosCursor );
-            ImplInvertCursor( GetRulerCursorPos() );
-        }
-        EnableRepaint();
-    }
-}
-
-sal_Int32 ScCsvRuler::FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const
-{
-    sal_Int32 nNewPos = nPos;
-    if( nNewPos != POS_INVALID )
-    {
-        switch( eDir )
-        {
-            case MOVE_FIRST:
-                nNewPos = Min( nPos, FindEmptyPos( 0, MOVE_NEXT ) );
-            break;
-            case MOVE_LAST:
-                nNewPos = Max( nPos, FindEmptyPos( GetPosCount(), MOVE_PREV ) );
-            break;
-            case MOVE_PREV:
-                while( HasSplit( --nNewPos ) );
-            break;
-            case MOVE_NEXT:
-                while( HasSplit( ++nNewPos ) );
-            break;
-        }
-    }
-    return IsValidSplitPos( nNewPos ) ? nNewPos : POS_INVALID;
-}
-
 void ScCsvRuler::MoveCursor( sal_Int32 nPos, bool bScroll )
 {
     DisableRepaint();
@@ -168,6 +153,7 @@ void ScCsvRuler::MoveCursor( sal_Int32 nPos, bool bScroll )
         Execute( CSVCMD_MAKEPOSVISIBLE, nPos );
     Execute( CSVCMD_MOVERULERCURSOR, IsVisibleSplitPos( nPos ) ? nPos : POS_INVALID );
     EnableRepaint();
+    AccSendCaretEvent();
 }
 
 void ScCsvRuler::MoveCursorRel( ScMoveMode eDir )
@@ -212,6 +198,22 @@ void ScCsvRuler::MoveCursorToSplit( ScMoveMode eDir )
     }
 }
 
+void ScCsvRuler::ScrollVertRel( ScMoveMode eDir )
+{
+    sal_Int32 nLine = GetFirstVisLine();
+    switch( eDir )
+    {
+        case MOVE_PREV:     --nLine;                        break;
+        case MOVE_NEXT:     ++nLine;                        break;
+        case MOVE_PREVPAGE: nLine -= GetVisLineCount() - 1; break;
+        case MOVE_NEXTPAGE: nLine += GetVisLineCount() - 1; break;
+    }
+    Execute( CSVCMD_SETLINEOFFSET, nLine );
+}
+
+
+// split handling -------------------------------------------------------------
+
 sal_Int32 ScCsvRuler::GetNoScrollPos( sal_Int32 nPos ) const
 {
     sal_Int32 nNewPos = nPos;
@@ -229,19 +231,6 @@ sal_Int32 ScCsvRuler::GetNoScrollPos( sal_Int32 nPos ) const
         }
     }
     return nNewPos;
-}
-
-void ScCsvRuler::ScrollVertRel( ScMoveMode eDir )
-{
-    sal_Int32 nLine = GetFirstVisLine();
-    switch( eDir )
-    {
-        case MOVE_PREV:     --nLine;                        break;
-        case MOVE_NEXT:     ++nLine;                        break;
-        case MOVE_PREVPAGE: nLine -= GetVisLineCount() - 1; break;
-        case MOVE_NEXTPAGE: nLine += GetVisLineCount() - 1; break;
-    }
-    Execute( CSVCMD_SETLINEOFFSET, nLine );
 }
 
 void ScCsvRuler::InsertSplit( sal_Int32 nPos )
@@ -290,6 +279,30 @@ void ScCsvRuler::RemoveAllSplits()
     Repaint( true );
 }
 
+sal_Int32 ScCsvRuler::FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const
+{
+    sal_Int32 nNewPos = nPos;
+    if( nNewPos != POS_INVALID )
+    {
+        switch( eDir )
+        {
+            case MOVE_FIRST:
+                nNewPos = Min( nPos, FindEmptyPos( 0, MOVE_NEXT ) );
+            break;
+            case MOVE_LAST:
+                nNewPos = Max( nPos, FindEmptyPos( GetPosCount(), MOVE_PREV ) );
+            break;
+            case MOVE_PREV:
+                while( HasSplit( --nNewPos ) );
+            break;
+            case MOVE_NEXT:
+                while( HasSplit( ++nNewPos ) );
+            break;
+        }
+    }
+    return IsValidSplitPos( nNewPos ) ? nNewPos : POS_INVALID;
+}
+
 void ScCsvRuler::MoveCurrSplit( sal_Int32 nNewPos )
 {
     DisableRepaint();
@@ -308,63 +321,8 @@ void ScCsvRuler::MoveCurrSplitRel( ScMoveMode eDir )
     }
 }
 
-void ScCsvRuler::StartMouseTracking( sal_Int32 nPos )
-{
-    mnPosMTStart = mnPosMTCurr = nPos;
-    mbPosMTMoved = false;
-    maOldSplits = maSplits;
-    Execute( CSVCMD_INSERTSPLIT, nPos );
-    if( HasSplit( nPos ) )
-        StartTracking( STARTTRACK_BUTTONREPEAT );
-}
-
-void ScCsvRuler::MoveMouseTracking( sal_Int32 nPos )
-{
-    if( mnPosMTCurr != nPos )
-    {
-        DisableRepaint();
-        MoveCursor( nPos );
-        if( (mnPosMTCurr != mnPosMTStart) && maOldSplits.HasSplit( mnPosMTCurr ) )
-            Execute( CSVCMD_INSERTSPLIT, nPos );
-        else
-            Execute( CSVCMD_MOVESPLIT, mnPosMTCurr, nPos );
-        mnPosMTCurr = nPos;
-        mbPosMTMoved = true;
-        EnableRepaint();
-    }
-}
-
-void ScCsvRuler::EndMouseTracking( bool bApply )
-{
-    if( bApply )    // tracking finished successfully
-    {
-        // remove on simple click on an existing split
-        if( (mnPosMTCurr == mnPosMTStart) && maOldSplits.HasSplit( mnPosMTCurr ) && !mbPosMTMoved )
-            Execute( CSVCMD_REMOVESPLIT, mnPosMTCurr );
-    }
-    else            // tracking cancelled
-    {
-        MoveCursor( mnPosMTStart );
-        // move split to origin
-        if( maOldSplits.HasSplit( mnPosMTStart ) )
-            MoveMouseTracking( mnPosMTStart );
-        // remove temporarily inserted split
-        else if( !maOldSplits.HasSplit( mnPosMTCurr ) )
-            Execute( CSVCMD_REMOVESPLIT, mnPosMTCurr );
-    }
-    mnPosMTStart = POS_INVALID;
-}
-
 
 // event handling -------------------------------------------------------------
-
-void ScCsvRuler::SetPosSizePixel(
-        sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_uInt16 nFlags )
-{
-    if( nFlags & WINDOW_POSSIZE_HEIGHT )
-        nHeight = GetTextHeight() + mnSplitSize + 2;
-    ScCsvControl::SetPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
-}
 
 void ScCsvRuler::Resize()
 {
@@ -480,6 +438,53 @@ void ScCsvRuler::KeyInput( const KeyEvent& rKEvt )
 
     if( rKCode.GetGroup() != KEYGROUP_CURSOR )
         ScCsvControl::KeyInput( rKEvt );
+}
+
+void ScCsvRuler::StartMouseTracking( sal_Int32 nPos )
+{
+    mnPosMTStart = mnPosMTCurr = nPos;
+    mbPosMTMoved = false;
+    maOldSplits = maSplits;
+    Execute( CSVCMD_INSERTSPLIT, nPos );
+    if( HasSplit( nPos ) )
+        StartTracking( STARTTRACK_BUTTONREPEAT );
+}
+
+void ScCsvRuler::MoveMouseTracking( sal_Int32 nPos )
+{
+    if( mnPosMTCurr != nPos )
+    {
+        DisableRepaint();
+        MoveCursor( nPos );
+        if( (mnPosMTCurr != mnPosMTStart) && maOldSplits.HasSplit( mnPosMTCurr ) )
+            Execute( CSVCMD_INSERTSPLIT, nPos );
+        else
+            Execute( CSVCMD_MOVESPLIT, mnPosMTCurr, nPos );
+        mnPosMTCurr = nPos;
+        mbPosMTMoved = true;
+        EnableRepaint();
+    }
+}
+
+void ScCsvRuler::EndMouseTracking( bool bApply )
+{
+    if( bApply )    // tracking finished successfully
+    {
+        // remove on simple click on an existing split
+        if( (mnPosMTCurr == mnPosMTStart) && maOldSplits.HasSplit( mnPosMTCurr ) && !mbPosMTMoved )
+            Execute( CSVCMD_REMOVESPLIT, mnPosMTCurr );
+    }
+    else            // tracking cancelled
+    {
+        MoveCursor( mnPosMTStart );
+        // move split to origin
+        if( maOldSplits.HasSplit( mnPosMTStart ) )
+            MoveMouseTracking( mnPosMTStart );
+        // remove temporarily inserted split
+        else if( !maOldSplits.HasSplit( mnPosMTCurr ) )
+            Execute( CSVCMD_REMOVESPLIT, mnPosMTCurr );
+    }
+    mnPosMTStart = POS_INVALID;
 }
 
 
@@ -617,6 +622,14 @@ void ScCsvRuler::ImplDrawTrackingRect()
 void ScCsvRuler::ImplSetMousePointer( sal_Int32 nPos )
 {
     SetPointer( Pointer( HasSplit( nPos ) ? POINTER_HSPLIT : POINTER_ARROW ) );
+}
+
+
+// accessibility ==============================================================
+
+ScAccessibleCsvControl* ScCsvRuler::ImplCreateAccessible()
+{
+    return new ScAccessibleCsvRuler( *this );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-01 12:47:40 $
+ *  last change: $Author: dr $ $Date: 2002-08-15 09:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@
 namespace svx { class ColorConfig; }
 class ScEditEngineDefaulter;
 class ScAsciiOptions;
+class ScAccessibleCsvControl;
 
 
 // ============================================================================
@@ -138,7 +139,7 @@ typedef ::std::vector< ScCsvColState > ScCsvColStateVec;
 class ScCsvGrid : public ScCsvControl, public SfxListener
 {
 private:
-    typedef ::std::auto_ptr< ScEditEngineDefaulter >    ScEditEnginePtr;
+    typedef ::std::auto_ptr< ScEditEngineDefaulter > ScEditEnginePtr;
 
     VirtualDevice               maBackgrDev;        /// Grid background, headers, cell texts.
     VirtualDevice               maGridDev;          /// Data grid with selection and cursor.
@@ -161,8 +162,8 @@ private:
 
     ScCsvSplits                 maSplits;           /// Vector with split positions.
     ScCsvColStateVec            maColStates;        /// State of each column.
-    ScCsvStringVec              maTypeNames;        /// UI names of data types.
-    ScCsvStringVecVec           maTexts;            /// 2D-vector for cell texts.
+    StringVec                   maTypeNames;        /// UI names of data types.
+    StringVecVec                maTexts;            /// 2D-vector for cell texts.
 
     sal_Int32                   mnFirstImpLine;     /// First imported line (0-based).
     sal_uInt32                  mnRecentSelCol;     /// Index of most recently selected column.
@@ -171,14 +172,11 @@ private:
 
     // ------------------------------------------------------------------------
 public:
-                                ScCsvGrid( ScCsvControl& rParent );
+    explicit                    ScCsvGrid( ScCsvControl& rParent );
     virtual                     ~ScCsvGrid();
 
-    // grid handling ----------------------------------------------------------
-
-    /** Redraws the entire data grid. */
-    void                        ImplRedraw();
-
+    // common grid handling ---------------------------------------------------
+public:
     /** Updates layout data dependent from the control's state. */
     void                        UpdateLayoutData();
     /** Updates X coordinate of first visible position dependent from line numbers. */
@@ -191,6 +189,16 @@ public:
     /** Finds a column position nearest to nPos which does not cause scrolling the visible area. */
     sal_Int32                   GetNoScrollCol( sal_Int32 nPos ) const;
 
+private:
+    /** Reads colors from system settings. */
+    void                        InitColors();
+    /** Initializes all font settings. */
+    void                        InitFonts();
+    /** Initializes all data dependent from the control's size. */
+    void                        InitSizeData();
+
+    // split handling ---------------------------------------------------------
+public:
     /** Inserts a split. */
     void                        InsertSplit( sal_Int32 nPos );
     /** Removes a split. */
@@ -202,54 +210,7 @@ public:
     /** Removes all splits and inserts the splits from rSplits. */
     void                        SetSplits( const ScCsvSplits& rSplits );
 
-    /** Returns the vector with the states of all columns. */
-    inline const ScCsvColStateVec& GetColumnStates() const { return maColStates; }
-    /** Sets all column states to the values in the passed vector. */
-    void                        SetColumnStates( const ScCsvColStateVec& rColStates );
-    /** Returns the data type of the selected columns (or -1, if different types are selected). */
-    sal_Int32                   GetSelColumnType() const;
-    /** Changes the data type of all selected columns. */
-    void                        SetSelColumnType( sal_Int32 nType );
-    /** Sets new UI data type names. */
-    void                        SetTypeNames( const ScCsvStringVec& rTypeNames );
-
-    /** Fills all cells of a line with the passed text (separators mode). */
-    void                        ImplSetTextLineSep(
-                                    sal_Int32 nLine, const String& rTextLine,
-                                    const String& rSepChars, sal_Unicode cTextSep, bool bMergeSep );
-    /** Fills all cells of a line with the passed text (fixed width mode). */
-    void                        ImplSetTextLineFix( sal_Int32 nLine, const String& rTextLine );
-
-    /** Fills the options object with column data for separators mode. */
-    void                        FillColumnDataSep( ScAsciiOptions& rOptions ) const;
-    /** Fills the options object with column data for fixed width mode. */
-    void                        FillColumnDataFix( ScAsciiOptions& rOptions ) const;
-
-    // event handling ---------------------------------------------------------
-protected:
-    virtual void                Resize();
-    virtual void                GetFocus();
-    virtual void                LoseFocus();
-
-    virtual void                MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void                Tracking( const TrackingEvent& rTEvt );
-    virtual void                KeyInput( const KeyEvent& rKEvt );
-    virtual void                Command( const CommandEvent& rCEvt );
-
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
-
-    // initialization ---------------------------------------------------------
 private:
-    /** Reads colors from system settings. */
-    void                        InitColors();
-    /** Initializes all font settings. */
-    void                        InitFonts();
-    /** Initializes all data dependent from the control's size. */
-    void                        InitSizeData();
-
-    // grid handling ----------------------------------------------------------
-
     /** Inserts a split and adjusts column data. */
     bool                        ImplInsertSplit( sal_Int32 nPos );
     /** Removes a split and adjusts column data. */
@@ -257,14 +218,10 @@ private:
     /** Clears the split array and re-inserts boundary splits. */
     void                        ImplClearSplits();
 
+    // columns/column types ---------------------------------------------------
+public:
     /** Returns the number of columns. */
     inline sal_uInt32           GetColumnCount() const { return maColStates.size(); }
-    /** Returns start position of the column with the specified index. */
-    inline sal_Int32            GetColumnPos( sal_uInt32 nColIndex ) const { return maSplits[ nColIndex ]; }
-    /** Returns the character width of the column with the specified index. */
-    sal_Int32                   GetColumnWidth( sal_uInt32 nColIndex ) const;
-    /** Returns column index from position. A split counts to its following column. */
-    sal_uInt32                  GetColumnFromPos( sal_Int32 nPos ) const;
     /** Returns the index of the first visible column. */
     sal_uInt32                  GetFirstVisColumn() const;
     /** Returns the index of the last visible column. */
@@ -279,15 +236,37 @@ private:
     sal_Int32                   GetColumnX( sal_uInt32 nColIndex ) const;
     /** Returns column index from output coordinate. */
     sal_uInt32                  GetColumnFromX( sal_Int32 nX ) const;
-    /** Returns column index from output coordinate, jumps to previous/next column, if nX is out of bounds. */
-    sal_uInt32                  GetTrackingColumnFromX( sal_Int32 nX ) const;
 
+    /** Returns start position of the column with the specified index. */
+    inline sal_Int32            GetColumnPos( sal_uInt32 nColIndex ) const { return maSplits[ nColIndex ]; }
+    /** Returns column index from position. A split counts to its following column. */
+    sal_uInt32                  GetColumnFromPos( sal_Int32 nPos ) const;
+    /** Returns the character width of the column with the specified index. */
+    sal_Int32                   GetColumnWidth( sal_uInt32 nColIndex ) const;
+
+    /** Returns the vector with the states of all columns. */
+    inline const ScCsvColStateVec& GetColumnStates() const { return maColStates; }
+    /** Sets all column states to the values in the passed vector. */
+    void                        SetColumnStates( const ScCsvColStateVec& rColStates );
+    /** Returns the data type of the selected columns. */
+    sal_Int32                   GetSelColumnType() const;
+    /** Changes the data type of all selected columns. */
+    void                        SetSelColumnType( sal_Int32 nType );
+    /** Sets new UI data type names. */
+    void                        SetTypeNames( const StringVec& rTypeNames );
+    /** Returns the UI type name of the specified column. */
+    const String&               GetColumnTypeName( sal_uInt32 nColIndex ) const;
+
+    /** Fills the options object with column data for separators mode. */
+    void                        FillColumnDataSep( ScAsciiOptions& rOptions ) const;
+    /** Fills the options object with column data for fixed width mode. */
+    void                        FillColumnDataFix( ScAsciiOptions& rOptions ) const;
+
+private:
     /** Returns the data type of the specified column. */
     sal_Int32                   GetColumnType( sal_uInt32 nColIndex ) const;
     /** Returns the data type of the specified column. */
     void                        SetColumnType( sal_uInt32 nColIndex, sal_Int32 nColType );
-    /** Returns the UI type name of the specified column. */
-    const String&               GetColumnTypeName( sal_uInt32 nColIndex ) const;
 
     /** Scrolls data grid vertically. */
     void                        ScrollVertRel( ScMoveMode eDir );
@@ -295,17 +274,7 @@ private:
     void                        ExecutePopup( const Point& rPos );
 
     // selection handling -----------------------------------------------------
-
-    /** Returns index of the focused column. */
-    inline sal_uInt32           GetFocusColumn() const { return GetColumnFromPos( GetGridCursorPos() ); }
-    /** Moves column cursor to a new position. */
-    void                        MoveCursor( sal_uInt32 nColIndex );
-    /** Moves column cursor to the given direction. */
-    void                        MoveCursorRel( ScMoveMode eDir );
-
-    /** Clears the entire selection without notify. */
-    void                        ImplClearSelection();
-
+public:
     /** Returns true, if the specified column is selected. */
     bool                        IsSelected( sal_uInt32 nColIndex ) const;
     /** Returns index of the first selected column. */
@@ -321,15 +290,57 @@ private:
     void                        ToggleSelect( sal_uInt32 nColIndex );
     /** Selects or deselects the specified column range. */
     void                        SelectRange( sal_uInt32 nColIndex1, sal_uInt32 nColIndex2, bool bSelect = true );
-    /** Selects all columns. */
-    inline void                 SelectAll() { SelectRange( 0, GetColumnCount() - 1 ); }
+    /** Selects or deselects all columns. */
+    void                        SelectAll( bool bSelect = true );
+
+    /** Returns index of the focused column. */
+    inline sal_uInt32           GetFocusColumn() const { return GetColumnFromPos( GetGridCursorPos() ); }
+
+private:
+    /** Moves column cursor to a new position. */
+    void                        MoveCursor( sal_uInt32 nColIndex );
+    /** Moves column cursor to the given direction. */
+    void                        MoveCursorRel( ScMoveMode eDir );
+
+    /** Clears the entire selection without notify. */
+    void                        ImplClearSelection();
 
     /** Executes selection action for a specific column. */
     void                        DoSelectAction( sal_uInt32 nColIndex, sal_uInt16 nModifier );
 
+    // cell contents ----------------------------------------------------------
+public:
+    /** Fills all cells of a line with the passed text (separators mode). */
+    void                        ImplSetTextLineSep(
+                                    sal_Int32 nLine, const String& rTextLine,
+                                    const String& rSepChars, sal_Unicode cTextSep, bool bMergeSep );
+    /** Fills all cells of a line with the passed text (fixed width mode). */
+    void                        ImplSetTextLineFix( sal_Int32 nLine, const String& rTextLine );
+
+    /** Returns the text of the specified cell. */
+    const String&               GetCellText( sal_uInt32 nColIndex, sal_Int32 nLine ) const;
+
+    // event handling ---------------------------------------------------------
+protected:
+    virtual void                Resize();
+    virtual void                GetFocus();
+    virtual void                LoseFocus();
+
+    virtual void                MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void                Tracking( const TrackingEvent& rTEvt );
+    virtual void                KeyInput( const KeyEvent& rKEvt );
+    virtual void                Command( const CommandEvent& rCEvt );
+
+    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
     // painting ---------------------------------------------------------------
 protected:
     virtual void                Paint( const Rectangle& );
+
+public:
+    /** Redraws the entire data grid. */
+    void                        ImplRedraw();
 
 private:
     /** Returns the width of the control. */
@@ -369,6 +380,11 @@ private:
 
     /** Draws directly tracking rectangle to the column with the specified index. */
     void                        ImplDrawTrackingRect( sal_uInt32 nColIndex );
+
+    // accessibility ----------------------------------------------------------
+protected:
+    /** Creates a new accessible object. */
+    virtual ScAccessibleCsvControl* ImplCreateAccessible();
 };
 
 

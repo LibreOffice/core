@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvcontrol.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-01 12:48:30 $
+ *  last change: $Author: dr $ $Date: 2002-08-15 09:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <tools/debug.hxx>
 #endif
 
+#ifndef _SC_ACCESSIBLECSVCONTROL_HXX
+#include "AccessibleCsvControl.hxx"
+#endif
+
 
 // ============================================================================
 
@@ -116,6 +120,7 @@ ScCsvDiff ScCsvLayoutData::GetDiff( const ScCsvLayoutData& rData ) const
 ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
     Control( &rParent, WB_TABSTOP | WB_NODIALOGCONTROL ),
     mrData( rParent.GetLayoutData() ),
+    mpAccessible( NULL ),
     mbValidGfx( false )
 {
 }
@@ -123,6 +128,7 @@ ScCsvControl::ScCsvControl( ScCsvControl& rParent ) :
 ScCsvControl::ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, WinBits nStyle ) :
     Control( pParent, nStyle ),
     mrData( rData ),
+    mpAccessible( NULL ),
     mbValidGfx( false )
 {
 }
@@ -130,8 +136,66 @@ ScCsvControl::ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, WinBi
 ScCsvControl::ScCsvControl( Window* pParent, const ScCsvLayoutData& rData, const ResId& rResId ) :
     Control( pParent, rResId ),
     mrData( rData ),
+    mpAccessible( NULL ),
     mbValidGfx( false )
 {
+}
+
+ScCsvControl::~ScCsvControl()
+{
+    if( mpAccessible )
+        mpAccessible->dispose();
+}
+
+
+// event handling -------------------------------------------------------------
+
+void ScCsvControl::GetFocus()
+{
+    Control::GetFocus();
+    AccSendFocusEvent( true );
+}
+
+void ScCsvControl::LoseFocus()
+{
+    Control::LoseFocus();
+    AccSendFocusEvent( false );
+}
+
+void ScCsvControl::AccSendFocusEvent( bool bFocused )
+{
+    if( mpAccessible )
+        mpAccessible->SendFocusEvent( bFocused );
+}
+
+void ScCsvControl::AccSendCaretEvent()
+{
+    if( mpAccessible )
+        mpAccessible->SendCaretEvent();
+}
+
+void ScCsvControl::AccSendSelectionEvent()
+{
+    if( mpAccessible )
+        mpAccessible->SendSelectionEvent();
+}
+
+void ScCsvControl::AccSendTableUpdateEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn, bool bAllRows )
+{
+    if( mpAccessible )
+        mpAccessible->SendTableUpdateEvent( nFirstColumn, nLastColumn, bAllRows );
+}
+
+void ScCsvControl::AccSendInsertColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn )
+{
+    if( mpAccessible )
+        mpAccessible->SendInsertColumnEvent( nFirstColumn, nLastColumn );
+}
+
+void ScCsvControl::AccSendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn )
+{
+    if( mpAccessible )
+        mpAccessible->SendRemoveColumnEvent( nFirstColumn, nLastColumn );
 }
 
 
@@ -229,6 +293,11 @@ sal_Int32 ScCsvControl::GetY( sal_Int32 nLine ) const
     return GetOffsetY() + (nLine - GetFirstVisLine()) * GetLineHeight();
 }
 
+sal_Int32 ScCsvControl::GetLineFromY( sal_Int32 nY ) const
+{
+    return (nY - GetOffsetY()) / GetLineHeight() + GetFirstVisLine();
+}
+
 
 // static helpers -------------------------------------------------------------
 
@@ -270,6 +339,16 @@ ScMoveMode ScCsvControl::GetVertDirection( sal_uInt16 nCode, bool bHomeEnd )
         case KEY_END:       return MOVE_LAST;
     }
     return MOVE_NONE;
+}
+
+
+// accessibility --------------------------------------------------------------
+
+ScCsvControl::XAccessibleRef ScCsvControl::CreateAccessible()
+{
+    mpAccessible = ImplCreateAccessible();
+    mxAccessible = mpAccessible;
+    return mxAccessible;
 }
 
 

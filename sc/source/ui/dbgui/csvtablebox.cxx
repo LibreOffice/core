@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvtablebox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-01 12:48:33 $
+ *  last change: $Author: dr $ $Date: 2002-08-15 09:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,46 @@ ScCsvTableBox::ScCsvTableBox( Window* pParent, const ResId& rResId ) :
 }
 
 
-// initialization -------------------------------------------------------------
+// common table box handling --------------------------------------------------
+
+void ScCsvTableBox::SetSeparatorsMode()
+{
+    if( mbFixedMode )
+    {
+        // rescue data for fixed width mode
+        mnFixedWidth = GetPosCount();
+        maFixColStates = maGrid.GetColumnStates();
+        // switch to separators mode
+        mbFixedMode = false;
+        // reset and reinitialize controls
+        DisableRepaint();
+        Execute( CSVCMD_SETLINEOFFSET, 0 );
+        Execute( CSVCMD_SETPOSCOUNT, 1 );
+        Execute( CSVCMD_NEWCELLTEXTS );
+        maGrid.SetColumnStates( maSepColStates );
+        InitControls();
+        EnableRepaint();
+    }
+}
+
+void ScCsvTableBox::SetFixedWidthMode()
+{
+    if( !mbFixedMode )
+    {
+        // rescue data for separators mode
+        maSepColStates = maGrid.GetColumnStates();
+        // switch to fixed width mode
+        mbFixedMode = true;
+        // reset and reinitialize controls
+        DisableRepaint();
+        Execute( CSVCMD_SETLINEOFFSET, 0 );
+        Execute( CSVCMD_SETPOSCOUNT, mnFixedWidth );
+        maGrid.SetSplits( maRuler.GetSplits() );
+        maGrid.SetColumnStates( maFixColStates );
+        InitControls();
+        EnableRepaint();
+    }
+}
 
 void ScCsvTableBox::Init()
 {
@@ -190,56 +229,19 @@ void ScCsvTableBox::InitVScrollBar()
     maVScroll.SetThumbPos( GetFirstVisLine() );
 }
 
-void ScCsvTableBox::InitTypes( const ListBox& rListBox )
+void ScCsvTableBox::MakePosVisible( sal_Int32 nPos )
 {
-    sal_uInt16 nTypeCount = rListBox.GetEntryCount();
-    ScCsvStringVec aTypeNames( nTypeCount );
-    for( sal_uInt16 nIndex = 0; nIndex < nTypeCount; ++nIndex )
-        aTypeNames[ nIndex ] = rListBox.GetEntry( nIndex );
-    maGrid.SetTypeNames( aTypeNames );
-}
-
-
-// control handling -----------------------------------------------------------
-
-void ScCsvTableBox::SetSeparatorsMode()
-{
-    if( mbFixedMode )
+    if( (0 <= nPos) && (nPos < GetPosCount()) )
     {
-        // rescue data for fixed width mode
-        mnFixedWidth = GetPosCount();
-        maFixColStates = maGrid.GetColumnStates();
-        // switch to separators mode
-        mbFixedMode = false;
-        // reset and reinitialize controls
-        DisableRepaint();
-        Execute( CSVCMD_SETLINEOFFSET, 0 );
-        Execute( CSVCMD_SETPOSCOUNT, 1 );
-        Execute( CSVCMD_NEWCELLTEXTS );
-        maGrid.SetColumnStates( maSepColStates );
-        InitControls();
-        EnableRepaint();
+        if( nPos - CSV_SCROLL_DIST + 1 <= GetFirstVisPos() )
+            Execute( CSVCMD_SETPOSOFFSET, nPos - CSV_SCROLL_DIST );
+        else if( nPos + CSV_SCROLL_DIST >= GetLastVisPos() )
+            Execute( CSVCMD_SETPOSOFFSET, nPos - GetVisPosCount() + CSV_SCROLL_DIST + 1 );
     }
 }
 
-void ScCsvTableBox::SetFixedWidthMode()
-{
-    if( !mbFixedMode )
-    {
-        // rescue data for separators mode
-        maSepColStates = maGrid.GetColumnStates();
-        // switch to fixed width mode
-        mbFixedMode = true;
-        // reset and reinitialize controls
-        DisableRepaint();
-        Execute( CSVCMD_SETLINEOFFSET, 0 );
-        Execute( CSVCMD_SETPOSCOUNT, mnFixedWidth );
-        maGrid.SetSplits( maRuler.GetSplits() );
-        maGrid.SetColumnStates( maFixColStates );
-        InitControls();
-        EnableRepaint();
-    }
-}
+
+// cell contents --------------------------------------------------------------
 
 void ScCsvTableBox::SetUniStrings(
         const String* pTextLines, const String& rSepChars,
@@ -279,23 +281,24 @@ void ScCsvTableBox::SetByteStrings(
     EnableRepaint();
 }
 
+
+// column settings ------------------------------------------------------------
+
+void ScCsvTableBox::InitTypes( const ListBox& rListBox )
+{
+    sal_uInt16 nTypeCount = rListBox.GetEntryCount();
+    StringVec aTypeNames( nTypeCount );
+    for( sal_uInt16 nIndex = 0; nIndex < nTypeCount; ++nIndex )
+        aTypeNames[ nIndex ] = rListBox.GetEntry( nIndex );
+    maGrid.SetTypeNames( aTypeNames );
+}
+
 void ScCsvTableBox::FillColumnData( ScAsciiOptions& rOptions ) const
 {
     if( mbFixedMode )
         maGrid.FillColumnDataFix( rOptions );
     else
         maGrid.FillColumnDataSep( rOptions );
-}
-
-void ScCsvTableBox::MakePosVisible( sal_Int32 nPos )
-{
-    if( (0 <= nPos) && (nPos < GetPosCount()) )
-    {
-        if( nPos - CSV_SCROLL_DIST + 1 <= GetFirstVisPos() )
-            Execute( CSVCMD_SETPOSOFFSET, nPos - CSV_SCROLL_DIST );
-        else if( nPos + CSV_SCROLL_DIST >= GetLastVisPos() )
-            Execute( CSVCMD_SETPOSOFFSET, nPos - GetVisPosCount() + CSV_SCROLL_DIST + 1 );
-    }
 }
 
 
@@ -476,6 +479,20 @@ IMPL_LINK( ScCsvTableBox, ScrollEndHdl, ScrollBar*, pScrollBar )
     }
 
     return 0;
+}
+
+
+// accessibility --------------------------------------------------------------
+
+ScCsvTableBox::XAccessibleRef ScCsvTableBox::CreateAccessible()
+{
+    // do not use the ScCsvControl mechanism, return default accessible object
+    return Control::CreateAccessible();
+}
+
+ScAccessibleCsvControl* ScCsvTableBox::ImplCreateAccessible()
+{
+    return NULL;    // not used, see CreateAccessible()
 }
 
 

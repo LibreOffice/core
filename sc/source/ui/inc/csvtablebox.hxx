@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvtablebox.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-01 12:47:42 $
+ *  last change: $Author: dr $ $Date: 2002-08-15 09:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,6 @@
 #endif
 
 
-// ----------------------------------------------------------------------------
-
 class ListBox;
 class ScAsciiOptions;
 
@@ -120,51 +118,16 @@ private:
 
     // ------------------------------------------------------------------------
 public:
-                                ScCsvTableBox( Window* pParent );
-                                ScCsvTableBox( Window* pParent, const ResId& rResId );
+    explicit                    ScCsvTableBox( Window* pParent );
+    explicit                    ScCsvTableBox( Window* pParent, const ResId& rResId );
 
-    // initialization ---------------------------------------------------------
-
-    /** Reads UI strings for data types from the list box. */
-    void                        InitTypes( const ListBox& rListBox );
-
-    /** Sets a new handler for "update cell texts" requests. */
-    inline void                 SetUpdateTextHdl( const Link& rHdl ) { maUpdateTextHdl = rHdl; }
-    /** Returns the handler for "update cell texts" requests. */
-    inline const Link&          GetUpdateTextHdl() const { return maUpdateTextHdl; }
-    /** Sets a new handler for "column selection changed" events. */
-    inline void                 SetColTypeHdl( const Link& rHdl ) { maColTypeHdl = rHdl; }
-    /** Returns the handler for "column selection changed" events. */
-    inline const Link&          GetColTypeHdl() const { return maColTypeHdl; }
-
-    // control handling -------------------------------------------------------
-
+    // common table box handling ----------------------------------------------
+public:
     /** Sets the control to separators mode. */
     void                        SetSeparatorsMode();
     /** Sets the control to fixed width mode. */
     void                        SetFixedWidthMode();
 
-    /** Returns the data type of the selected columns. */
-    inline sal_Int32            GetSelColumnType() const { return maGrid.GetSelColumnType(); }
-
-    /** Fills all cells of all lines with the passed texts (Unicode strings). */
-    void                        SetUniStrings(
-                                    const String* pTextLines, const String& rSepChars,
-                                    sal_Unicode cTextSep, bool bMergeSep );
-    /** Fills all cells of all lines with the passed texts (ByteStrings). */
-    void                        SetByteStrings(
-                                    const ByteString* pLineTexts, CharSet eCharSet,
-                                    const String& rSepChars, sal_Unicode cTextSep, bool bMergeSep );
-
-    /** Fills the options object with current column data. */
-    void                        FillColumnData( ScAsciiOptions& rOptions ) const;
-
-    // event handling ---------------------------------------------------------
-protected:
-    virtual void                Resize();
-    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
-
-    // initialization ---------------------------------------------------------
 private:
     /** Initialisation on construction. */
     void                        Init();
@@ -175,8 +138,6 @@ private:
     /** Initializes size and position data of vertical scrollbar. */
     void                        InitVScrollBar();
 
-    // control handling -------------------------------------------------------
-
     /** Calculates and sets valid position offset nearest to nPos. */
     inline void                 ImplSetPosOffset( sal_Int32 nPos )
                                     { maData.mnPosOffset = Max( Min( nPos, GetMaxPosOffset() ), 0L ); }
@@ -186,11 +147,55 @@ private:
     /** Moves controls (not cursors!) so that nPos becomes visible. */
     void                        MakePosVisible( sal_Int32 nPos );
 
-    // event handling ---------------------------------------------------------
+    // cell contents ----------------------------------------------------------
+public:
+    /** Fills all cells of all lines with the passed texts (Unicode strings). */
+    void                        SetUniStrings(
+                                    const String* pTextLines, const String& rSepChars,
+                                    sal_Unicode cTextSep, bool bMergeSep );
+    /** Fills all cells of all lines with the passed texts (ByteStrings). */
+    void                        SetByteStrings(
+                                    const ByteString* pLineTexts, CharSet eCharSet,
+                                    const String& rSepChars, sal_Unicode cTextSep, bool bMergeSep );
 
+    // column settings --------------------------------------------------------
+public:
+    /** Reads UI strings for data types from the list box. */
+    void                        InitTypes( const ListBox& rListBox );
+    /** Returns the data type of the selected columns. */
+    inline sal_Int32            GetSelColumnType() const { return maGrid.GetSelColumnType(); }
+
+    /** Fills the options object with current column data. */
+    void                        FillColumnData( ScAsciiOptions& rOptions ) const;
+
+    // event handling ---------------------------------------------------------
+public:
+    /** Sets a new handler for "update cell texts" requests. */
+    inline void                 SetUpdateTextHdl( const Link& rHdl ) { maUpdateTextHdl = rHdl; }
+    /** Returns the handler for "update cell texts" requests. */
+    inline const Link&          GetUpdateTextHdl() const { return maUpdateTextHdl; }
+    /** Sets a new handler for "column selection changed" events. */
+    inline void                 SetColTypeHdl( const Link& rHdl ) { maColTypeHdl = rHdl; }
+    /** Returns the handler for "column selection changed" events. */
+    inline const Link&          GetColTypeHdl() const { return maColTypeHdl; }
+
+protected:
+    virtual void                Resize();
+    virtual void                DataChanged( const DataChangedEvent& rDCEvt );
+
+private:
                                 DECL_LINK( CsvCmdHdl, ScCsvControl* );
                                 DECL_LINK( ScrollHdl, ScrollBar* );
                                 DECL_LINK( ScrollEndHdl, ScrollBar* );
+
+    // accessibility ----------------------------------------------------------
+public:
+    /** Creates and returns the accessible object of this control. */
+    virtual XAccessibleRef      CreateAccessible();
+
+protected:
+    /** Creates a new accessible object. */
+    virtual ScAccessibleCsvControl* ImplCreateAccessible();
 };
 
 
