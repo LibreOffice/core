@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-15 10:54:49 $
+ *  last change: $Author: hr $ $Date: 2003-06-16 11:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -901,6 +901,15 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
 
     // Jetzt UpdateTitle, hidden TopFrames haben sonst keinen Namen!
     pFrame->UpdateTitle();
+
+    if ( pFrame->GetViewShell()->UseObjectSize() )
+    {
+        GetCurrentViewFrame()->UnlockAdjustPosSizePixel();
+        GetCurrentViewFrame()->Resize(TRUE);
+        GetCurrentViewFrame()->ForceInnerResize_Impl( FALSE );
+        GetCurrentViewFrame()->Resize(TRUE);
+    }
+
     return sal_True;
 }
 
@@ -1094,6 +1103,8 @@ SfxTopViewFrame::SfxTopViewFrame
     {
         // Zuerst die logischen Koordinaten von IP-Objekt und EditWindow
         // ber"ucksichtigen
+        LockAdjustPosSizePixel();
+        ForceInnerResize_Impl( TRUE );
         SfxInPlaceObject *pIPObj = GetObjectShell()->GetInPlaceObject();
         DBG_ASSERT( pIPObj, "UseObjectSize aber kein IP-Object" );
         Window *pWindow = GetViewShell()->GetWindow();
@@ -1176,9 +1187,21 @@ sal_Bool SfxTopViewFrame::SetBorderPixelImpl( const SfxViewShell *pVSh, const Sv
         if ( IsResizeInToOut_Impl() )
         {
             Size aSize = pVSh->GetWindow()->GetOutputSizePixel();
-            aSize.Width() += rBorder.Left() + rBorder.Right();
-            aSize.Height() += rBorder.Top() + rBorder.Bottom();
-            GetWindow().SetOutputSizePixel( aSize );
+            if ( aSize.Width() && aSize.Height() )
+            {
+                aSize.Width() += rBorder.Left() + rBorder.Right();
+                aSize.Height() += rBorder.Top() + rBorder.Bottom();
+
+                Size aOldSize = GetWindow().GetOutputSizePixel();
+                GetWindow().SetOutputSizePixel( aSize );
+                Window* pParent = &GetWindow();
+                while ( pParent->GetParent() )
+                    pParent = pParent->GetParent();
+                Size aOuterSize = pParent->GetOutputSizePixel();
+                aOuterSize.Width() += ( aSize.Width() - aOldSize.Width() );
+                aOuterSize.Height() += ( aSize.Height() - aOldSize.Height() );
+                pParent->SetOutputSizePixel( aOuterSize );
+            }
         }
         else
         {
