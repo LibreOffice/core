@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShapeInfo.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-05-06 09:32:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ AccessibleShapeInfo::AccessibleShapeInfo (
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShape>& rxShape,
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+            ::com::sun::star::accessibility::XAccessible>& rxParent,
         IAccessibleParent* pChildrenManager,
         sal_Int32 nIndex)
     : mxShape (rxShape),
@@ -89,7 +89,7 @@ AccessibleShapeInfo::AccessibleShapeInfo (
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::XShape>& rxShape,
         const ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+            ::com::sun::star::accessibility::XAccessible>& rxParent,
         sal_Int32 nIndex)
     : mxShape (rxShape),
       mxParent (rxParent),
