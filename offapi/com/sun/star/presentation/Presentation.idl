@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Presentation.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 21:27:24 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 17:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,8 @@ published service Presentation
     //-------------------------------------------------------------------------
 
     /** With this property, you can set the presentation to live mode.
+        <p>Implementations that have no live mode capability may ignore this
+        property and always return false.
      */
     [property] boolean IsLivePresentation;
 
