@@ -59,6 +59,7 @@ import java.io.DataInputStream;
 import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
@@ -67,10 +68,21 @@ import org.openoffice.xmerge.util.EndianConverter;
  * Represents a BIFF Record that describes the value of a formula that
  * evaluates to a string
  */
-public class StringValue implements BIFFRecord {
+public class StringValue extends CellValue implements BIFFRecord {
 
-    private byte    cch;
+    private byte[]  cch     = new byte[2];
     private byte[]  rgch;
+
+    /**
+      * Constructs a StringValue Record from an <code>InputStream</code>
+      *
+      * @param  is InputStream containing a StringValue Record
+      */
+    public StringValue(String str) throws IOException {
+        cch = EndianConverter.writeShort((short) str.length());
+        rgch = new byte[str.length()];
+        rgch = str.getBytes("UTF-16LE");
+    }
 
     /**
       * Constructs a StringValue Record from an <code>InputStream</code>
@@ -97,11 +109,13 @@ public class StringValue implements BIFFRecord {
       */
     public int read(InputStream input) throws IOException {
 
-        cch = (byte) input.read();
+        cch[0] = (byte) input.read();
+        cch[1] = (byte) input.read();
         int numOfBytesRead = 1;
 
-        rgch = new byte[cch*2];
-        numOfBytesRead  += input.read(rgch, 0, cch*2);
+        int strlen = EndianConverter.readShort(cch)*2;
+        rgch = new byte[strlen];
+        numOfBytesRead  += input.read(rgch, 0, strlen);
 
         Debug.log(Debug.TRACE,"\tcch : "+ cch +
                             " rgch : " + rgch);
@@ -117,4 +131,21 @@ public class StringValue implements BIFFRecord {
 
         Debug.log(Debug.TRACE,"Writing StringValue record");
     }
+
+    /**
+     * Gets the <code>String</code> representing the cells contents
+     *
+     * @return the <code>String</code> representing the cells contents
+     */
+    public String getString() throws IOException {
+        String name;
+
+        try {
+            name = new String(rgch, "UTF-16LE");
+        } catch (UnsupportedEncodingException e){
+            name = "unknown";
+        }
+        return name;
+    }
+
 }

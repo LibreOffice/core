@@ -61,15 +61,19 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.util.Vector;
 import java.util.Enumeration;
+import java.util.Calendar;
+import java.util.Date;
+import java.text.DateFormat;
 
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
+import org.openoffice.xmerge.converter.xml.OfficeConstants;
+import org.openoffice.xmerge.converter.xml.sxc.Format;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.records.formula.FormulaHelper;
-
 /**
  * Represents a BIFF Record describing a formula
  */
-public class Formula extends CellValue {
+public class Formula extends CellValue implements OfficeConstants {
 
     private byte[] ixfe     = new byte[2];
     private byte[] num      = new byte[8];
@@ -87,16 +91,18 @@ public class Formula extends CellValue {
      * @param ixfe font index
      * @param value the value of the cell
       */
-    public Formula(int row, int column, String cellContents, int ixfe, String value)
+    public Formula(int row, int column, String cellContents, int ixfe, Format fmt)
     throws Exception {
 
         this.ixfe   = EndianConverter.writeShort((short)ixfe);
         setRow(row);
         setCol(column);
         setFormula(cellContents);
-        if(value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+        String category = fmt.getCategory();
+        if(category.equalsIgnoreCase(CELLTYPE_BOOLEAN)) {
             num[0]=(byte)0x01;
             num[1]=(byte)0x00;
+            String value = fmt.getValue();
             if(value.equalsIgnoreCase("true")) {
                 num[2]=(byte)0x01;
             } else {
@@ -104,8 +110,30 @@ public class Formula extends CellValue {
             }
             num[3]=(byte)0x00;num[4]=(byte)0x00;num[5]=(byte)0x00;
             num[6]=(byte)0xFF;num[7]=(byte)0xFF;
+        } else if(category.equalsIgnoreCase(CELLTYPE_DATE)) {
+            Debug.log(Debug.TRACE,"Date Formula");
+            num = EndianConverter.writeDouble(toExcelSerialDate(fmt.getValue()));
+        } else if(category.equalsIgnoreCase(CELLTYPE_TIME)) {
+            Debug.log(Debug.TRACE,"Time Formula");
+        } else if(category.equalsIgnoreCase(CELLTYPE_PERCENT)) {
+            Debug.log(Debug.TRACE,"Percent Formula");
+            double percent = (double) Double.parseDouble(fmt.getValue());
+            num = EndianConverter.writeDouble(percent);
+        } else if(category.equalsIgnoreCase(CELLTYPE_CURRENCY)) {
+            Debug.log(Debug.TRACE,"Currency Formula");
+        } else if(category.equalsIgnoreCase(CELLTYPE_STRING)) {
+            Debug.log(Debug.TRACE,"String Formula");
+            num[0]=(byte)0x00;
+            num[1]=(byte)0x00;
+            num[2]=(byte)0x00;
+            num[3]=(byte)0x00;
+            num[4]=(byte)0x00;
+            num[5]=(byte)0x00;
+            num[6]=(byte)0xFF;
+            num[7]=(byte)0xFF;
         } else {
-            double cellLong = (double) Double.parseDouble(value);
+            Debug.log(Debug.TRACE,"Float Formula");
+            double cellLong = (double) Double.parseDouble(fmt.getValue());
             num = EndianConverter.writeDouble(cellLong);
         }
     }
@@ -213,6 +241,27 @@ public class Formula extends CellValue {
     public String getString() throws IOException {
 
         return fh.convertPXLToCalc(rgce);
+    }
+
+    /**
+     * Excel dates are the number of days since 1/1/1900. This method converts
+     * to this date.
+     *
+     * @param s String representing a date in the form YYYY-MM-DD
+     * @return The excel serial date
+     */
+    public long toExcelSerialDate(String s) throws IOException {
+
+        int year = Integer.parseInt(s.substring(0,4));
+        int month = Integer.parseInt(s.substring(5,7));
+        int day = Integer.parseInt(s.substring(8,10));
+
+        long serialDate =   (1461 * (year + 4800 + (month - 14) / 12)) / 4 +
+                            (367 * (month - 2 - 12 * ((month - 14) / 12))) / 12 -
+                            (3 * ((year + 4900 + (month - 14) / 12)) / 100) / 4 +
+                            day - 2415019 - 32075;
+
+        return serialDate;
     }
 
 }
