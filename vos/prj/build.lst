@@ -1,4 +1,4 @@
-vo	vos	:	sal NULL
+vo	vos	:	sal solenv NULL
 vo	vos										usr1	-	all	vo_mkout NULL
 vo	vos\inc\vos								get		-	all	vo_inc NULL
 vo	vos\jobs								get		-	all	vo_jobs NULL
