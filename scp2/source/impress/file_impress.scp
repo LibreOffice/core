@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_impress.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:08:32 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 11:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,12 +80,16 @@ File gid_File_Oo_Office_Embedding_Impress_Pkg
     Name = "embedding_impress.zip";
 End
 
+#ifdef SOLAR_JAVA
+
 File gid_File_Help_Simpress_Zip
     Dir = gid_Dir_Help_Isolanguage;
     TXT_FILE_BODY;
     Styles = (ARCHIVE,DONT_OVERWRITE);
     EXTRA_ALL_LANG(simpress);
 End
+
+#endif
 
 File gid_File_Exe_Simpress
     BIN_FILE_BODY;
