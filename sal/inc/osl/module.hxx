@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-14 08:55:38 $
+ *  last change: $Author: kr $ $Date: 2001-09-03 11:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,10 @@ class Module
     Module& operator = ( const Module&);
 
 public:
+    static sal_Bool getUrlFromAddress(void * addr, ::rtl::OUString & libraryUrl) {
+        return osl_getModuleURLFromAddress(addr, &libraryUrl.pData);
+    }
+
 
     Module(): m_Module(0){}
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: svesik $ $Date: 2001-05-14 15:30:58 $
+ *  last change: $Author: kr $ $Date: 2001-09-03 11:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 #endif
 
 #ifdef LINUX
+#define __USE_GNU
 #if GLIBC >= 2
 #   include <shadow.h>
 #   include <asm/sigcontext.h>

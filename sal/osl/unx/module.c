@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obr $ $Date: 2001-05-18 07:47:11 $
+ *  last change: $Author: kr $ $Date: 2001-09-03 11:08:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,3 +438,30 @@ void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolNam
 
 #endif /* MACOSX */
 }
+
+sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibraryUrl)
+{
+    sal_Bool result = sal_False;
+    Dl_info dl_info;
+
+    if(result = dladdr(addr, &dl_info))
+    {
+        rtl_uString * workDir = NULL;
+        osl_getProcessWorkingDir(&workDir);
+
+#ifdef DEBUG
+        OSL_TRACE("module.c::osl_getModuleUrl - %s\n", dl_info.dli_fname);
+#endif
+
+        rtl_string2UString(ppLibraryUrl, dl_info.dli_fname, strlen(dl_info.dli_fname), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS);
+
+        osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl); // convert it to be a file url
+
+        osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl); // ensure it is an abosolute file url
+
+        result = sal_True;
+    }
+
+    return result;
+}
+
