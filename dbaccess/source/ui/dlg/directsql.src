@@ -2,9 +2,9 @@
  *
  *  $RCSfile: directsql.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:00:18 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,6 +404,13 @@ String STR_DIRECTSQL_CONNECTIONLOST
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19.6.1  2003/07/16 17:11:09  ihi
+ *  rc-3 merge all languages
+ *
+ *  Revision 1.19  2003/07/03 18:00:18  hr
+ *  INTEGRATION: CWS rc2merge (1.18.8); FILE MERGED
+ *  2003/07/03 14:44:11 ihi 1.18.8.1: rc-2 merge all languages
+ *
  *  Revision 1.18.8.1  2003/07/03 14:44:11  ihi
  *  rc-2 merge all languages
  *
@@ -493,6 +500,8 @@ String STR_DIRECTSQL_CONNECTIONLOST
  *
  *  Revision 1.0 18.06.01 17:01:52  fs
  ************************************************************************/
+
+
 
 
 
