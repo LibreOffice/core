@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xformsexport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 13:00:08 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:26:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/xsd/XDataType.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Time.hpp>
+#include <com/sun/star/util/DateTime.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -111,6 +114,8 @@ using com::sun::star::beans::PropertyValue;
 using com::sun::star::xsd::XDataType;
 using com::sun::star::xforms::XDataTypeRepository;
 using com::sun::star::xforms::XFormsSupplier;
+using com::sun::star::util::Date;
+using com::sun::star::util::DateTime;
 
 void exportXForms( SvXMLExport& rExport )
 {
@@ -159,11 +164,21 @@ void lcl_export( const Reference<XPropertySet>& rPropertySet,
 
 
 // any conversion functions
-OUString lcl_toString( const Any& rAny );
-OUString lcl_bool( const Any& rAny );
-OUString lcl_int32( const Any& rAny );
-OUString lcl_double( const Any& rAny );
-OUString lcl_whitespace( const Any& rAny );
+OUString lcl_string( const Any& );
+OUString lcl_bool( const Any& );
+OUString lcl_whitespace( const Any& );
+template<typename T, void (*FUNC)( OUStringBuffer&, T )> OUString lcl_convert( const Any& );
+template<typename T, void (*FUNC)( OUStringBuffer&, const T& )> OUString lcl_convertRef( const Any& );
+
+void lcl_formatDate( OUStringBuffer& aBuffer, const Date& aDate );
+void lcl_formatTime( OUStringBuffer& aBuffer, const com::sun::star::util::Time& aTime );
+void lcl_formatDateTime( OUStringBuffer& aBuffer, const DateTime& aDateTime );
+
+convert_t lcl_int32    = &lcl_convert<sal_Int32,&SvXMLUnitConverter::convertNumber>;
+convert_t lcl_double   = &lcl_convert<double,&SvXMLUnitConverter::convertDouble>;
+convert_t lcl_dateTime = &lcl_convertRef<DateTime,&lcl_formatDateTime>;
+convert_t lcl_date     = &lcl_convertRef<Date,&lcl_formatDate>;
+convert_t lcl_time     = &lcl_convertRef<com::sun::star::util::Time,&lcl_formatTime>;
 
 // other functions
 OUString lcl_getXSDType( SvXMLExport& rExport,
@@ -176,8 +191,8 @@ OUString lcl_getXSDType( SvXMLExport& rExport,
 
 static const ExportTable aXFormsModelTable[] =
 {
-    TABLE_ENTRY( "ID", NONE, ID, lcl_toString ),
-    TABLE_ENTRY( "SchemaRef", NONE, SCHEMA, lcl_toString ),
+    TABLE_ENTRY( "ID", NONE, ID, lcl_string ),
+    TABLE_ENTRY( "SchemaRef", NONE, SCHEMA, lcl_string ),
     TABLE_END
 };
 
@@ -237,7 +252,7 @@ void exportXFormsModel( SvXMLExport& rExport,
 
 static const ExportTable aXFormsInstanceTable[] =
 {
-    TABLE_ENTRY( "InstanceURL", NONE, SRC, lcl_toString ),
+    TABLE_ENTRY( "InstanceURL", NONE, SRC, lcl_string ),
     TABLE_END
 };
 
@@ -284,15 +299,15 @@ void exportXFormsInstance( SvXMLExport& rExport,
 
 static const ExportTable aXFormsBindingTable[] =
 {
-    TABLE_ENTRY( "BindingID",            NONE, ID,         lcl_toString ),
-    TABLE_ENTRY( "BindingExpression",    NONE, NODESET,    lcl_toString ),
-    TABLE_ENTRY( "ReadonlyExpression",   NONE, READONLY,   lcl_toString ),
-    TABLE_ENTRY( "RelevantExpression",   NONE, RELEVANT,   lcl_toString ),
-    TABLE_ENTRY( "RequiredExpression",   NONE, REQUIRED,   lcl_toString ),
-    TABLE_ENTRY( "ConstraintExpression", NONE, CONSTRAINT, lcl_toString ),
-    TABLE_ENTRY( "CalculateExpression",  NONE, CALCULATE,  lcl_toString ),
+    TABLE_ENTRY( "BindingID",            NONE, ID,         lcl_string ),
+    TABLE_ENTRY( "BindingExpression",    NONE, NODESET,    lcl_string ),
+    TABLE_ENTRY( "ReadonlyExpression",   NONE, READONLY,   lcl_string ),
+    TABLE_ENTRY( "RelevantExpression",   NONE, RELEVANT,   lcl_string ),
+    TABLE_ENTRY( "RequiredExpression",   NONE, REQUIRED,   lcl_string ),
+    TABLE_ENTRY( "ConstraintExpression", NONE, CONSTRAINT, lcl_string ),
+    TABLE_ENTRY( "CalculateExpression",  NONE, CALCULATE,  lcl_string ),
     // type handled separatly, for type name <-> XSD type conversion
-    // TABLE_ENTRY( "Type",                 NONE, TYPE,       lcl_toString ),
+    // TABLE_ENTRY( "Type",                 NONE, TYPE,       lcl_string ),
     TABLE_END
 };
 
@@ -362,7 +377,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
     // to do so, we will write out all missing namespace declaractions.
     const SvXMLNamespaceMap& rMap = rExport.GetNamespaceMap();
     Reference<XNameAccess> xNamespaces(
-        xBinding->getPropertyValue( OUSTRING("BindingNamespaces")), UNO_QUERY);
+        xBinding->getPropertyValue( OUSTRING("ModelNamespaces") ), UNO_QUERY);
     if( xNamespaces.is() )
     {
         // iterate over Prefixes for this binding
@@ -378,7 +393,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
             // check whether prefix/URI pair is in map; else write declaration
             // (we don't need to change the map, since this element has no
             // other content)
-            sal_Int16 nKey = rMap.GetKeyByPrefix( rPrefix );
+            sal_uInt16 nKey = rMap.GetKeyByPrefix( rPrefix );
             if( nKey == XML_NAMESPACE_UNKNOWN  ||
                 rMap.GetNameByKey( nKey ) != sURI )
             {
@@ -398,21 +413,21 @@ void exportXFormsBinding( SvXMLExport& rExport,
 
 static const ExportTable aXFormsSubmissionTable[] =
 {
-    TABLE_ENTRY( "ID",         NONE, ID,        lcl_toString ),
-    TABLE_ENTRY( "Bind",       NONE, BIND,      lcl_toString ),
-    TABLE_ENTRY( "Ref",        NONE, REF,       lcl_toString ),
-    TABLE_ENTRY( "Action",     NONE, ACTION,    lcl_toString ),
-    TABLE_ENTRY( "Method",     NONE, METHOD,    lcl_toString ),
-    TABLE_ENTRY( "Version",    NONE, VERSION,   lcl_toString ),
+    TABLE_ENTRY( "ID",         NONE, ID,        lcl_string ),
+    TABLE_ENTRY( "Bind",       NONE, BIND,      lcl_string ),
+    TABLE_ENTRY( "Ref",        NONE, REF,       lcl_string ),
+    TABLE_ENTRY( "Action",     NONE, ACTION,    lcl_string ),
+    TABLE_ENTRY( "Method",     NONE, METHOD,    lcl_string ),
+    TABLE_ENTRY( "Version",    NONE, VERSION,   lcl_string ),
     TABLE_ENTRY( "Indent",     NONE, INDENT,    lcl_bool ),
-    TABLE_ENTRY( "MediaType",  NONE, MEDIATYPE, lcl_toString ),
-    TABLE_ENTRY( "Encoding",   NONE, ENCODING, lcl_toString ),
+    TABLE_ENTRY( "MediaType",  NONE, MEDIATYPE, lcl_string ),
+    TABLE_ENTRY( "Encoding",   NONE, ENCODING, lcl_string ),
     TABLE_ENTRY( "OmitXmlDeclaration",  NONE, OMIT_XML_DECLARATION, lcl_bool ),
     TABLE_ENTRY( "Standalone", NONE, STANDALONE, lcl_bool ),
-    TABLE_ENTRY( "CDataSectionElement", NONE, CDATA_SECTION_ELEMENTS, lcl_toString ),
-    TABLE_ENTRY( "Replace",    NONE, REPLACE, lcl_toString ),
-    TABLE_ENTRY( "Separator",  NONE, SEPARATOR, lcl_toString ),
-    TABLE_ENTRY( "IncludeNamespacePrefixes", NONE, INCLUDENAMESPACEPREFIXES, lcl_toString ),
+    TABLE_ENTRY( "CDataSectionElement", NONE, CDATA_SECTION_ELEMENTS, lcl_string ),
+    TABLE_ENTRY( "Replace",    NONE, REPLACE, lcl_string ),
+    TABLE_ENTRY( "Separator",  NONE, SEPARATOR, lcl_string ),
+    TABLE_ENTRY( "IncludeNamespacePrefixes", NONE, INCLUDENAMESPACEPREFIXES, lcl_string ),
     TABLE_END
 };
 
@@ -432,18 +447,34 @@ void exportXFormsSubmission( SvXMLExport& rExport,
 
 static const ExportTable aDataTypeFacetTable[] =
 {
-    TABLE_ENTRY( "Length",         XSD, LENGTH,         lcl_int32 ),
-    TABLE_ENTRY( "MinLength",      XSD, MINLENGTH,      lcl_int32 ),
-    TABLE_ENTRY( "MaxLength",      XSD, MAXLENGTH,      lcl_int32 ),
-    TABLE_ENTRY( "MinInclusive",   XSD, MININCLUSIVE,   lcl_double ),
-    TABLE_ENTRY( "MinExclusive",   XSD, MINEXCLUSIVE,   lcl_double ),
-    TABLE_ENTRY( "MaxInclusive",   XSD, MAXINCLUSIVE,   lcl_double ),
-    TABLE_ENTRY( "MaxExclusive",   XSD, MAXEXCLUSIVE,   lcl_double ),
-    TABLE_ENTRY( "Pattern",        XSD, PATTERN,        lcl_toString ),
+    TABLE_ENTRY( "Length",               XSD, LENGTH,         lcl_int32 ),
+    TABLE_ENTRY( "MinLength",            XSD, MINLENGTH,      lcl_int32 ),
+    TABLE_ENTRY( "MaxLength",            XSD, MAXLENGTH,      lcl_int32 ),
+    TABLE_ENTRY( "MinInclusiveInt",      XSD, MININCLUSIVE,   lcl_int32 ),
+    TABLE_ENTRY( "MinExclusiveInt",      XSD, MINEXCLUSIVE,   lcl_int32 ),
+    TABLE_ENTRY( "MaxInclusiveInt",      XSD, MAXINCLUSIVE,   lcl_int32 ),
+    TABLE_ENTRY( "MaxExclusiveInt",      XSD, MAXEXCLUSIVE,   lcl_int32 ),
+    TABLE_ENTRY( "MinInclusiveDouble",   XSD, MININCLUSIVE,   lcl_double ),
+    TABLE_ENTRY( "MinExclusiveDouble",   XSD, MINEXCLUSIVE,   lcl_double ),
+    TABLE_ENTRY( "MaxInclusiveDouble",   XSD, MAXINCLUSIVE,   lcl_double ),
+    TABLE_ENTRY( "MaxExclusiveDouble",   XSD, MAXEXCLUSIVE,   lcl_double ),
+    TABLE_ENTRY( "MinInclusiveDate",     XSD, MININCLUSIVE,   lcl_date ),
+    TABLE_ENTRY( "MinExclusiveDate",     XSD, MINEXCLUSIVE,   lcl_date ),
+    TABLE_ENTRY( "MaxInclusiveDate",     XSD, MAXINCLUSIVE,   lcl_date ),
+    TABLE_ENTRY( "MaxExclusiveDate",     XSD, MAXEXCLUSIVE,   lcl_date ),
+    TABLE_ENTRY( "MinInclusiveTime",     XSD, MININCLUSIVE,   lcl_time ),
+    TABLE_ENTRY( "MinExclusiveTime",     XSD, MINEXCLUSIVE,   lcl_time ),
+    TABLE_ENTRY( "MaxInclusiveTime",     XSD, MAXINCLUSIVE,   lcl_time ),
+    TABLE_ENTRY( "MaxExclusiveTime",     XSD, MAXEXCLUSIVE,   lcl_time ),
+    TABLE_ENTRY( "MinInclusiveDateTime", XSD, MININCLUSIVE,   lcl_dateTime ),
+    TABLE_ENTRY( "MinExclusiveDateTime", XSD, MINEXCLUSIVE,   lcl_dateTime ),
+    TABLE_ENTRY( "MaxInclusiveDateTime", XSD, MAXINCLUSIVE,   lcl_dateTime ),
+    TABLE_ENTRY( "MaxExclusiveDateTime", XSD, MAXEXCLUSIVE,   lcl_dateTime ),
+    TABLE_ENTRY( "Pattern",              XSD, PATTERN,        lcl_string ),
     // ??? XML_ENUMERATION,
-    TABLE_ENTRY( "WhiteSpace",     XSD, WHITESPACE,     lcl_whitespace ),
-    TABLE_ENTRY( "TotalDigits",    XSD, TOTALDIGITS,    lcl_int32 ),
-    TABLE_ENTRY( "FractionDigits", XSD, FRACTIONDIGITS, lcl_int32 ),
+    TABLE_ENTRY( "WhiteSpace",           XSD, WHITESPACE,     lcl_whitespace ),
+    TABLE_ENTRY( "TotalDigits",          XSD, TOTALDIGITS,    lcl_int32 ),
+    TABLE_ENTRY( "FractionDigits",       XSD, FRACTIONDIGITS, lcl_int32 ),
     TABLE_END
 };
 
@@ -507,14 +538,24 @@ OUString lcl_getXSDType( SvXMLExport& rExport,
     case com::sun::star::xsd::DataTypeClass::DATETIME:
         eToken = XML_DATETIME_XSD;
         break;
-    case com::sun::star::xsd::DataTypeClass::DURATION:
     case com::sun::star::xsd::DataTypeClass::TIME:
+        eToken = XML_TIME;
+        break;
     case com::sun::star::xsd::DataTypeClass::DATE:
-    case com::sun::star::xsd::DataTypeClass::gYearMonth:
+        eToken = XML_DATE;
+        break;
     case com::sun::star::xsd::DataTypeClass::gYear:
-    case com::sun::star::xsd::DataTypeClass::gMonthDay:
+        eToken = XML_YEAR;
+        break;
     case com::sun::star::xsd::DataTypeClass::gDay:
+        eToken = XML_DAY;
+        break;
     case com::sun::star::xsd::DataTypeClass::gMonth:
+        eToken = XML_MONTH;
+        break;
+    case com::sun::star::xsd::DataTypeClass::DURATION:
+    case com::sun::star::xsd::DataTypeClass::gYearMonth:
+    case com::sun::star::xsd::DataTypeClass::gMonthDay:
     case com::sun::star::xsd::DataTypeClass::hexBinary:
     case com::sun::star::xsd::DataTypeClass::base64Binary:
     case com::sun::star::xsd::DataTypeClass::QName:
@@ -628,7 +669,31 @@ void lcl_export( const Reference<XPropertySet>& rPropertySet,
 // any conversion functions
 //
 
-OUString lcl_toString( const Any& rAny )
+template<typename T, void (*FUNC)( OUStringBuffer&, T )>
+OUString lcl_convert( const Any& rAny )
+{
+    OUStringBuffer aBuffer;
+    T aData;
+    if( rAny >>= aData )
+    {
+        FUNC( aBuffer, aData );
+    }
+    return aBuffer.makeStringAndClear();
+}
+
+template<typename T, void (*FUNC)( OUStringBuffer&, const T& )>
+OUString lcl_convertRef( const Any& rAny )
+{
+    OUStringBuffer aBuffer;
+    T aData;
+    if( rAny >>= aData )
+    {
+        FUNC( aBuffer, aData );
+    }
+    return aBuffer.makeStringAndClear();
+}
+
+OUString lcl_string( const Any& rAny )
 {
     OUString aResult;
     rAny >>= aResult;
@@ -644,26 +709,28 @@ OUString lcl_bool( const Any& rAny )
     return OUString();
 }
 
-OUString lcl_int32( const Any& rAny )
+void lcl_formatDate( OUStringBuffer& aBuffer, const Date& rDate )
 {
-    OUStringBuffer aBuffer;
-    sal_Int32 nResult;
-    if( rAny >>= nResult )
-    {
-        SvXMLUnitConverter::convertNumber( aBuffer, nResult );
-    }
-    return aBuffer.makeStringAndClear();
+    aBuffer.append( static_cast<sal_Int32>( rDate.Year ) );
+    aBuffer.append( sal_Unicode('-') );
+    aBuffer.append( static_cast<sal_Int32>( rDate.Month ) );
+    aBuffer.append( sal_Unicode('-') );
+    aBuffer.append( static_cast<sal_Int32>( rDate.Day ) );
 }
 
-OUString lcl_double( const Any& rAny )
+void lcl_formatTime( OUStringBuffer& aBuffer, const com::sun::star::util::Time& rTime )
 {
-    OUStringBuffer aBuffer;
-    double d;
-    if( rAny >>= d )
-    {
-        SvXMLUnitConverter::convertDouble( aBuffer, d );
-    }
-    return aBuffer.makeStringAndClear();
+    DateTime aDateTime;
+    aDateTime.Hours = rTime.Hours;
+    aDateTime.Minutes = rTime.Minutes;
+    aDateTime.Seconds = rTime.Seconds;
+    aDateTime.HundredthSeconds = rTime.HundredthSeconds;
+    SvXMLUnitConverter::convertTime( aBuffer, aDateTime );
+}
+
+void lcl_formatDateTime( OUStringBuffer& aBuffer, const DateTime& aDateTime )
+{
+    SvXMLUnitConverter::convertDateTime( aBuffer, aDateTime );
 }
 
 OUString lcl_whitespace( const Any& rAny )
