@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMasterPageContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:38:09 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )
     if( xStyle.is() && (IsNew() || bOverwrite) )
     {
         Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
-        if ( sPageMasterName.getLength() )
+        if( sPageMasterName.getLength() )
         {
             XMLPropStyleContext* pStyle =
                 GetImport().GetTextImport()->FindPageMaster( sPageMasterName );
@@ -322,9 +322,6 @@ void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )
         if( !xPageStyles.is() )
             return;
 
-        if( !sFollow.getLength() || !xPageStyles->hasByName( sFollow ) )
-            sFollow = xStyle->getName();
-
         Reference< XPropertySetInfo > xPropSetInfo =
             xPropSet->getPropertySetInfo();
         if( xPropSetInfo->hasPropertyByName( sFollowStyle ) )
@@ -332,6 +329,10 @@ void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )
             OUString sDisplayFollow(
                 GetImport().GetStyleDisplayName(
                         XML_STYLE_FAMILY_MASTER_PAGE, sFollow ) );
+            if( !sDisplayFollow.getLength() ||
+                !xPageStyles->hasByName( sDisplayFollow ) )
+                sDisplayFollow = xStyle->getName();
+
             Any aAny = xPropSet->getPropertyValue( sFollowStyle );
             OUString sCurrFollow;
             aAny >>= sCurrFollow;
