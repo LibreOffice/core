@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-16 13:23:43 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 10:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1999,10 +1999,9 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
 //------------------------------------------------------------------------
 
-sal_Bool SfxObjectShell::LoadFrom(  SvStorage *pStor )
+sal_Bool SfxObjectShell::LoadFrom( SvStorage *pStor )
 {
-    if (pStor->IsStream(SfxConfigManager::GetStreamName()))
-        SetConfigManager (new SfxConfigManager( pStor, 0));
+    GetConfigManager();
     GetDocInfo().Load(pStor);
     return sal_True;
 }
@@ -2056,9 +2055,6 @@ sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
     SvStorageRef xStor = rMedium.GetStorage();
     if ( xStor.Is() )
     {
-        // Config
-        if ( xStor->IsStream(SfxConfigManager::GetStreamName()) )
-            SetConfigManager (new SfxConfigManager( xStor, SFX_CFGMANAGER()));
         if ( rMedium.GetFileVersion() )
             xStor->SetVersion( rMedium.GetFileVersion() );
 
