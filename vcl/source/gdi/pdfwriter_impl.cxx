@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:52:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -548,15 +548,40 @@ void PDFWriterImpl::PDFPage::appendPolygon( const Polygon& rPoly, OStringBuffer&
     /*
      *  #108582# applications do weird things
      */
+    sal_uInt32 nBufLen = rBuffer.getLength();
     if( nPoints > 0 )
     {
+        const BYTE* pFlagArray = rPoly.GetConstFlagAry();
+
         appendPoint( rPoly[0], rBuffer );
         rBuffer.append( " m\r\n" );
         for( int i = 1; i < nPoints; i++ )
         {
-            appendPoint( rPoly[i], rBuffer );
-            rBuffer.append( " l" );
-            rBuffer.append( (i & 3) ? " " : "\r\n" );
+            if( pFlagArray && pFlagArray[i] == POLY_CONTROL && nPoints-i > 2 )
+            {
+                // bezier
+                DBG_ASSERT( pFlagArray[i+1] == POLY_CONTROL && pFlagArray[i+2] != POLY_CONTROL, "unexpected sequence of control points" );
+                appendPoint( rPoly[i], rBuffer );
+                rBuffer.append( " " );
+                appendPoint( rPoly[i+1], rBuffer );
+                rBuffer.append( " " );
+                appendPoint( rPoly[i+2], rBuffer );
+                rBuffer.append( " c" );
+                i += 2; // add additionally consumed points
+            }
+            else
+            {
+                // line
+                appendPoint( rPoly[i], rBuffer );
+                rBuffer.append( " l" );
+            }
+            if( (rBuffer.getLength() - nBufLen) > 65 )
+            {
+                rBuffer.append( "\r\n" );
+                nBufLen = rBuffer.getLength();
+            }
+            else
+                rBuffer.append( " " );
         }
         if( bClose )
             rBuffer.append( "h\r\n" );
@@ -826,6 +851,7 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
         sal_Int32       nDPI;
 
         m_pReferenceDevice = pVDev;
+        pVDev->SetReferenceDevice();
 
         switch( m_eCompression )
         {
@@ -991,12 +1017,26 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
                 cChar -= 0xf000;
             else
             {
-                String aString( cChar);
-                ByteString aChar( aString, RTL_TEXTENCODING_MS_1252 );
-                cChar = ((sal_Unicode)aChar.GetChar( 0 )) & 0x00ff;
+                sal_Char aBuf[4];
+                sal_uInt32 nInfo;
+                sal_Size nSrcCvtChars;
+
+                rtl_UnicodeToTextConverter aConv = rtl_createTextToUnicodeConverter( RTL_TEXTENCODING_MS_1252 );
+                sal_Size nConv = rtl_convertUnicodeToText( aConv,
+                                                           NULL,
+                                                           &cChar, 1,
+                                                           aBuf, 1,
+                                                           RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,
+                                                           &nInfo, &nSrcCvtChars );
+                // check whether conversion was possible
+                // else fallback font is needed as the standard fonts
+                // are handled via WinAnsi encoding
+                if( nConv > 0 )
+                    cChar = ((sal_Unicode)aBuf[0]) & 0x00ff;
+
+                rtl_destroyUnicodeToTextConverter( aConv );
             }
         }
-        DBG_ASSERT( cChar < 256, "invalid character index requested for builtin font" );
         if( cChar & 0xff00 )
         {
             cChar = 0;   // NotDef glyph
@@ -1059,6 +1099,11 @@ sal_Int32 PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, P
     endPage();
     m_aPages.push_back( PDFPage(this, nPageWidth, nPageHeight, eOrientation ) );
     m_aPages.back().beginStream();
+
+    // setup global graphics state
+    // linewidth is 0 (as thin as possible) by default
+    writeBuffer( "0 w\r\n", 5 );
+
     return ++m_nCurrentPage;
 }
 
@@ -2519,16 +2564,18 @@ void PDFWriterImpl::registerGlyphs(
                                    sal_Int32* pMappedFontObjects,
                                    ImplFontData* pFallbackFonts[] )
 {
-    ImplFontData* pCurrentFont = m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData;
-    FontSubset* pCurrentSubset = &m_aSubsets[ pCurrentFont ];
-    if( pCurrentFont->mbSubsettable )
+    ImplFontData* pDevFont = m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData;
+    for( int i = 0; i < nGlyphs; i++ )
     {
-        for( int i = 0; i < nGlyphs; i++ )
-        {
-            if( ! pGlyphs[i] )
-                continue;
+        if( ! pGlyphs[i] )
+            continue;
 
-            FontSubset& rSubset = pFallbackFonts[i] ? m_aSubsets[pFallbackFonts[i]] : *pCurrentSubset;
+        ImplFontData* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
+
+        if( pCurrentFont->mbSubsettable )
+        {
+
+            FontSubset& rSubset = m_aSubsets[ pCurrentFont ];
             // search for glyphID
             FontMapping::iterator it = rSubset.m_aMapping.find( pGlyphs[i] );
             if( it != rSubset.m_aMapping.end() )
@@ -2562,30 +2609,28 @@ void PDFWriterImpl::registerGlyphs(
                 rNewGlyph.m_nSubsetGlyphID = nNewId;
             }
         }
-    }
-    else
-    {
-        sal_Int32 nFontID = 0;
-        FontEmbedData::iterator it = m_aEmbeddedFonts.find( pCurrentFont );
-        if( it != m_aEmbeddedFonts.end() )
-            nFontID = it->second.m_nNormalFontID;
         else
         {
-            nFontID = m_nNextFID++;
-            m_aEmbeddedFonts[ pCurrentFont ] = EmbedFont();
-            m_aEmbeddedFonts[ pCurrentFont ].m_nNormalFontID = nFontID;
-        }
-        EmbedFont& rEmbedFont = m_aEmbeddedFonts[pCurrentFont];
+            sal_Int32 nFontID = 0;
+            FontEmbedData::iterator it = m_aEmbeddedFonts.find( pCurrentFont );
+            if( it != m_aEmbeddedFonts.end() )
+                nFontID = it->second.m_nNormalFontID;
+            else
+            {
+                nFontID = m_nNextFID++;
+                m_aEmbeddedFonts[ pCurrentFont ] = EmbedFont();
+                m_aEmbeddedFonts[ pCurrentFont ].m_nNormalFontID = nFontID;
+            }
+            EmbedFont& rEmbedFont = m_aEmbeddedFonts[pCurrentFont];
 
-        const std::map< sal_Unicode, sal_Int32 >* pEncoding = NULL;
-        const std::map< sal_Unicode, rtl::OString >* pNonEncoded = NULL;
-        getReferenceDevice()->ImplGetGraphics();
-        pEncoding = m_pReferenceDevice->mpGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded );
+            const std::map< sal_Unicode, sal_Int32 >* pEncoding = NULL;
+            const std::map< sal_Unicode, rtl::OString >* pNonEncoded = NULL;
+            getReferenceDevice()->ImplGetGraphics();
+            pEncoding = m_pReferenceDevice->mpGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded );
 
-        std::map< sal_Unicode, sal_Int32 >::const_iterator enc_it;
-        std::map< sal_Unicode, rtl::OString >::const_iterator nonenc_it;
-        for( int i = 0; i < nGlyphs; i++ )
-        {
+            std::map< sal_Unicode, sal_Int32 >::const_iterator enc_it;
+            std::map< sal_Unicode, rtl::OString >::const_iterator nonenc_it;
+
             sal_Int32 nCurFontID = nFontID;
             sal_Unicode cChar = pUnicodes[i];
             if( pEncoding )
@@ -2916,7 +2961,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 if( ( nGlyphFlags[n] & GF_ROTMASK ) == GF_ROTL )
                 {
                     fDeltaAngle = M_PI/2.0;
-                    aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetAscent() - m_pReferenceDevice->GetFontMetric().GetDescent();
+                    aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetAscent();
                     aDeltaPos.Y() = (int)((double)m_pReferenceDevice->GetFontMetric().GetDescent() * fXScale);
                     fYScale = fXScale;
                     fTempXScale = 1.0;
@@ -2927,7 +2972,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 {
                     fDeltaAngle = -M_PI/2.0;
                     aDeltaPos.X() = (int)((double)m_pReferenceDevice->GetFontMetric().GetDescent()*fXScale);
-                    aDeltaPos.Y() = -m_pReferenceDevice->GetFontMetric().GetAscent() + m_pReferenceDevice->GetFontMetric().GetDescent();
+                    aDeltaPos.Y() = -m_pReferenceDevice->GetFontMetric().GetAscent();
                     fYScale = fXScale;
                     fTempXScale = 1.0;
                     fSkewA = fSkewB;
@@ -3422,11 +3467,10 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop )
         return;
 
     OStringBuffer aLine;
-    aLine.append( "q 0 w " );
     m_aPages.back().appendPoint( rStart, aLine );
-    aLine.append( " m " );
+    aLine.append( "m " );
     m_aPages.back().appendPoint( rStop, aLine );
-    aLine.append( " l S Q\r\n" );
+    aLine.append( " l S\r\n" );
 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
@@ -3439,7 +3483,6 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
     if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) )
         return;
 
-#if 1
     if( rInfo.GetStyle() == LINE_SOLID && rInfo.GetWidth() < 2 )
     {
         drawLine( rStart, rStop );
@@ -3456,27 +3499,6 @@ void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop, const Lin
     aLine.append( " l S Q\r\n" );
 
     writeBuffer( aLine.getStr(), aLine.getLength() );
-#else
-    Polygon             aPoly( 2 ); aPoly[ 0 ] = rStart; aPoly[ 1 ] = rStop;
-    ImplLineConverter   aLineCvt( aPoly, rInfo, NULL );
-
-    if( rInfo.GetWidth() > 1 )
-    {
-        Color aOldLineColor = m_aGraphicsStack.front().m_aLineColor;
-        Color aOldFillColor = m_aGraphicsStack.front().m_aFillColor;
-        setFillColor( m_aGraphicsStack.front().m_aLineColor );
-        setLineColor( Color( COL_TRANSPARENT ) );
-        for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-            drawPolygon( *pPoly );
-        setLineColor( aOldLineColor );
-        setFillColor( aOldFillColor );
-    }
-    else
-    {
-        for( const Polygon* pPoly = aLineCvt.ImplGetFirst(); pPoly; pPoly = aLineCvt.ImplGetNext() )
-            drawLine( (*pPoly)[0], (*pPoly)[1] );
-    }
-#endif
 }
 
 void PDFWriterImpl::drawWaveLine( const Point& rStart, const Point& rStop, sal_Int32 nDelta, sal_Int32 nLineWidth )
@@ -4172,15 +4194,18 @@ void PDFWriterImpl::drawEllipse( const Rectangle& rRect )
 
 static double calcAngle( const Rectangle& rRect, const Point& rPoint )
 {
-    Point aOrigin((rRect.TopLeft().X()+rRect.BottomRight().X()+1)/2,
-                  (rRect.TopLeft().Y()+rRect.BottomRight().Y()+1)/2);
+    Point aOrigin((rRect.Left()+rRect.Right()+1)/2,
+                  (rRect.Top()+rRect.Bottom()+1)/2);
     Point aPoint = rPoint - aOrigin;
-    aPoint.Y() = -aPoint.Y();
+
+    double fX = (double)aPoint.X();
+    double fY = (double)-aPoint.Y();
+
     if( rRect.GetWidth() > rRect.GetHeight() )
-        aPoint.Y() = aPoint.Y()*rRect.GetWidth()/rRect.GetHeight();
+        fY = fY*((double)rRect.GetWidth()/(double)rRect.GetHeight());
     else if( rRect.GetHeight() > rRect.GetWidth() )
-        aPoint.X() = aPoint.X()*rRect.GetHeight()/rRect.GetWidth();
-    return atan2( (double)aPoint.Y(), (double)aPoint.X() );
+        fX = fX*((double)rRect.GetHeight()/(double)rRect.GetWidth());
+    return atan2( fY, fX );
 }
 
 void PDFWriterImpl::drawArc( const Rectangle& rRect, const Point& rStart, const Point& rStop, bool bWithPie, bool bWithChord )
@@ -4204,8 +4229,8 @@ void PDFWriterImpl::drawArc( const Rectangle& rRect, const Point& rStart, const 
     double halfWidth = (double)rRect.GetWidth()/2.0;
     double halfHeight = (double)rRect.GetHeight()/2.0;
 
-    Point aCenter( (rRect.TopLeft().X()+rRect.BottomRight().X()+1)/2,
-                   (rRect.TopLeft().Y()+rRect.BottomRight().Y()+1)/2 );
+    Point aCenter( (rRect.Left()+rRect.Right()+1)/2,
+                   (rRect.Top()+rRect.Bottom()+1)/2 );
 
     OStringBuffer aLine( 30*nFragments );
     Point aPoint( (int)(halfWidth * cos(fStartAngle) ),
@@ -4235,18 +4260,22 @@ void PDFWriterImpl::drawArc( const Rectangle& rRect, const Point& rStart, const 
         m_aPages.back().appendPoint( aPoint, aLine );
         aLine.append( " c\r\n" );
     }
-    if( bWithPie )
+    if( bWithChord || bWithPie )
     {
-        m_aPages.back().appendPoint( aCenter, aLine );
-        aLine.append( " l " );
+        if( bWithPie )
+        {
+            m_aPages.back().appendPoint( aCenter, aLine );
+            aLine.append( " l " );
+        }
+        aLine.append( "h " );
     }
     if( ! bWithChord && ! bWithPie )
         aLine.append( "S\r\n" );
     else if( m_aGraphicsStack.front().m_aLineColor != Color( COL_TRANSPARENT ) &&
         m_aGraphicsStack.front().m_aFillColor != Color( COL_TRANSPARENT ) )
-        aLine.append( "b*\r\n" );
+        aLine.append( "B*\r\n" );
     else if( m_aGraphicsStack.front().m_aLineColor != Color( COL_TRANSPARENT ) )
-        aLine.append( "s\r\n" );
+        aLine.append( "S\r\n" );
     else
         aLine.append( "f*\r\n" );
 
@@ -4267,9 +4296,8 @@ void PDFWriterImpl::drawPolyLine( const Polygon& rPoly )
         return;
 
     OStringBuffer aLine( 20 * nPoints );
-    aLine.append( "q 0 w " );
     m_aPages.back().appendPolygon( rPoly, aLine, rPoly[0] == rPoly[nPoints-1] );
-    aLine.append( "S Q\r\n" );
+    aLine.append( "S\r\n" );
 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
@@ -4570,7 +4598,7 @@ bool PDFWriterImpl::writeJPG( JPGEmit& rObject )
     CHECK_RETURN( writeBuffer( rObject.m_pStream->GetData(), nLength ) );
 
     aLine.setLength( 0 );
-    aLine.append( "\r\nendstream\r\n\r\n" );
+    aLine.append( "\r\nendstream\r\nendobj\r\n\r\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
     if( nMaskObject )
