@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:14:32 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:29:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,9 @@ SERVICE( XMLDrawContentExportOOO );
 SERVICE( XMLDrawMetaExportOOO );
 SERVICE( XMLDrawSettingsExportOOO );
 
+// impress animation import
+SERVICE( AnimationsImport );
+
 // drawing layer export
 SERVICE( XMLDrawingLayerExport );
 
@@ -178,6 +181,14 @@ SERVICE( XMLAutoTextEventImport );
 // writer autotext event export OOo
 SERVICE( XMLAutoTextEventExportOOO );
 
+// writer autotext event import OOo
+SERVICE( XMLAutoTextEventImportOOO );
+
+// Oasis2OOo transformer
+SERVICE( Oasis2OOoTransformer );
+
+// OOo2Oasis transformer
+SERVICE( OOo2OasisTransformer );
 
 //
 #ifdef __cplusplus
@@ -224,6 +235,9 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             WRITEINFO( XMLImpressContentExportOasis );
             WRITEINFO( XMLImpressMetaExportOasis );
             WRITEINFO( XMLImpressSettingsExportOasis );
+
+            // animation import
+            WRITEINFO( AnimationsImport );
 
             // impress OOo export
             WRITEINFO( XMLImpressExportOOO );
@@ -314,7 +328,6 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
 
         const sal_Int32 nImplNameLen = strlen( pImplName );
 
-
         // impress oasis import
         SINGLEFACTORY( XMLImpressImportOasis )
         else SINGLEFACTORY( XMLImpressStylesImportOasis )
@@ -328,6 +341,8 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
         else SINGLEFACTORY( XMLImpressContentExportOasis )
         else SINGLEFACTORY( XMLImpressMetaExportOasis )
         else SINGLEFACTORY( XMLImpressSettingsExportOasis )
+
+        else SINGLEFACTORY( AnimationsImport )
 
         // impress OOo export
         else SINGLEFACTORY( XMLImpressExportOOO )
