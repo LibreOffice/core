@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2000-12-14 10:11:10 $
+ *  last change: $Author: os $ $Date: 2000-12-14 10:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,7 +631,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_RED;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_GREEN;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_BLUE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_GAMMA;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_INVERSION;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_IS_INVERTED;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_TRANSPARENCY;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_GRAPHIC_COLOR_MODE;
 
