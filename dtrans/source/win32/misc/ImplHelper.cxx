@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:25:42 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 12:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,14 @@
 
 #include <windows.h>
 #include <systools/win32/user9x.h>
+
+//------------------------------------------------------------------------
+// defines
+//------------------------------------------------------------------------
+
+#define FORMATETC_EXACT_MATCH    1
+#define FORMATETC_PARTIAL_MATCH -1
+#define FORMATETC_NO_MATCH       0
 
 //------------------------------------------------------------------------
 // namespace directives
@@ -167,10 +175,16 @@ sal_Bool SAL_CALL operator==( const DataFlavor& lhs, const DataFlavor& rhs )
 //    SCODE  -  S_OK if successful
 //-------------------------------------------------------------------------
 
-void SAL_CALL DeleteTargetDevice(DVTARGETDEVICE* ptd)
+void SAL_CALL DeleteTargetDevice( DVTARGETDEVICE* ptd )
 {
-    if ( ptd != NULL )
+    __try
+    {
         CoTaskMemFree( ptd );
+    }
+    __except( EXCEPTION_EXECUTE_HANDLER )
+    {
+        OSL_ENSURE( sal_False, "Error DeleteTargetDevice" );
+    }
 }
 
 
@@ -193,16 +207,19 @@ void SAL_CALL DeleteTargetDevice(DVTARGETDEVICE* ptd)
 //    if ptdSrc!=NULL and memory allocation fails, then NULL is returned
 //-------------------------------------------------------------------------
 
-DVTARGETDEVICE* SAL_CALL CopyTargetDevice(DVTARGETDEVICE* ptdSrc)
+DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
 {
-    DVTARGETDEVICE* ptdDest = NULL;
+    DVTARGETDEVICE* ptdDest;
 
-    if (ptdSrc == NULL)
-        return NULL;
-
-    ptdDest = static_cast< DVTARGETDEVICE* >( CoTaskMemAlloc(ptdSrc->tdSize) );
-    if ( NULL != ptdDest )
-        rtl_copyMemory( ptdDest, ptdSrc, (size_t)ptdSrc->tdSize );
+    __try
+    {
+        ptdDest = static_cast< DVTARGETDEVICE* >( CoTaskMemAlloc( ptdSrc->tdSize ) );
+        rtl_copyMemory( ptdDest, ptdSrc, static_cast< size_t >( ptdSrc->tdSize ) );
+    }
+    __except( EXCEPTION_EXECUTE_HANDLER )
+    {
+        ptdDest = NULL;
+    }
 
     return ptdDest;
 }
@@ -232,58 +249,83 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice(DVTARGETDEVICE* ptdSrc)
 //    returns TRUE is copy is successful; retuns FALSE if not successful
 //-------------------------------------------------------------------------
 
-sal_Bool SAL_CALL CopyFormatEtc(LPFORMATETC petcDest, LPFORMATETC petcSrc)
+sal_Bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
 {
-    if ((petcDest == NULL) || (petcSrc == NULL))
-        return sal_False;
+    sal_Bool bRet = sal_False;
 
-    petcDest->cfFormat = petcSrc->cfFormat;
-    petcDest->ptd      = CopyTargetDevice(petcSrc->ptd);
-    petcDest->dwAspect = petcSrc->dwAspect;
-    petcDest->lindex   = petcSrc->lindex;
-    petcDest->tymed    = petcSrc->tymed;
+    __try
+    {
+        petcDest->cfFormat = petcSrc->cfFormat;
+        petcDest->ptd      = CopyTargetDevice(petcSrc->ptd);
+        petcDest->dwAspect = petcSrc->dwAspect;
+        petcDest->lindex   = petcSrc->lindex;
+        petcDest->tymed    = petcSrc->tymed;
 
-    return sal_True;
+        bRet = sal_True;
+    }
+    __except( EXCEPTION_EXECUTE_HANDLER )
+    {
+        OSL_ENSURE( sal_False, "Error CopyFormatEtc" );
+    }
+
+    return bRet;
 }
 
 //-------------------------------------------------------------------------
 // returns:
-//  0 for exact match,
-//  1 for no match,
+//  1 for exact match,
+//  0 for no match,
 // -1 for partial match (which is defined to mean the left is a subset
-// of the right: fewer aspects, null target device, fewer medium).
+//    of the right: fewer aspects, null target device, fewer medium).
 //-------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL CompareFormatEtc(FORMATETC* pFetcLeft, FORMATETC* pFetcRight)
+sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC* pFetcRhs )
 {
-    sal_Bool bExact = sal_True;
+    sal_Int32 nMatch = FORMATETC_NO_MATCH;
 
-    if (pFetcLeft->cfFormat != pFetcRight->cfFormat)
-        return 1;
-    else if (!CompareTargetDevice (pFetcLeft->ptd, pFetcRight->ptd))
-        return 1;
+    __try
+    {
+        if ( ( pFetcLhs->cfFormat != pFetcRhs->cfFormat ) ||
+             ( pFetcLhs->lindex    != pFetcRhs->lindex ) ||
+             !CompareTargetDevice( pFetcLhs->ptd, pFetcRhs->ptd ) )
+        {
+            nMatch = FORMATETC_NO_MATCH;
+            __leave;
+        }
 
-    if (pFetcLeft->dwAspect == pFetcRight->dwAspect)
-        // same aspects; equal
-        ;
-    else if ((pFetcLeft->dwAspect & ~pFetcRight->dwAspect) != 0)
-        // left not subset of aspects of right; not equal
-        return 1;
-    else
-        // left subset of right
-        bExact = sal_False;
+        if ( pFetcLhs->dwAspect == pFetcRhs->dwAspect )
+            // same aspects; equal
+            ;
+        else if ( ( pFetcLhs->dwAspect & ~pFetcRhs->dwAspect ) != 0 )
+        {
+            // left not subset of aspects of right; not equal
+            nMatch = FORMATETC_NO_MATCH;
+            __leave;
+        }
+        else
+            // left subset of right
+            nMatch = FORMATETC_PARTIAL_MATCH;
 
-    if (pFetcLeft->tymed == pFetcRight->tymed)
-        // same medium flags; equal
-        ;
-    else if ((pFetcLeft->tymed & ~pFetcRight->tymed) != 0)
-        // left not subset of medium flags of right; not equal
-        return 1;
-    else
-        // left subset of right
-        bExact = sal_False;
+        if ( pFetcLhs->tymed == pFetcRhs->tymed )
+            // same medium flags; equal
+            ;
+        else if ( ( pFetcLhs->tymed & ~pFetcRhs->tymed ) != 0 )
+        {
+            // left not subset of medium flags of right; not equal
+            nMatch = FORMATETC_NO_MATCH;
+            __leave;
+        }
+        else
+            // left subset of right
+            nMatch = FORMATETC_PARTIAL_MATCH;
+    }
+    __except( EXCEPTION_EXECUTE_HANDLER )
+    {
+        OSL_ENSURE( sal_False, "Error CompareFormatEtc" );
+        nMatch = FORMATETC_NO_MATCH;
+    }
 
-    return bExact ? 0 : -1;
+    return nMatch;
 }
 
 
@@ -291,19 +333,41 @@ sal_Int32 SAL_CALL CompareFormatEtc(FORMATETC* pFetcLeft, FORMATETC* pFetcRight)
 //
 //-------------------------------------------------------------------------
 
-sal_Bool SAL_CALL CompareTargetDevice(DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* ptdRight)
+sal_Bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* ptdRight )
 {
-    if (ptdLeft == ptdRight)
-        // same address of td; must be same (handles NULL case)
-        return sal_True;
-    else if ((ptdRight == NULL) || (ptdLeft == NULL))
-        return sal_False;
-    else if (ptdLeft->tdSize != ptdRight->tdSize)
-        // different sizes, not equal
-        return sal_False;
-    else if (rtl_compareMemory( ptdLeft, ptdRight, ptdLeft->tdSize ) != 0 )
-        // not same target device, not equal
-        return sal_False;
+    sal_Bool bRet = sal_False;
 
-    return sal_True;
+    __try
+    {
+        if ( ( ptdRight == NULL ) || ( ptdLeft == NULL ) )
+        {
+            bRet = sal_False;
+            __leave;
+        }
+
+        if ( ptdLeft == ptdRight )
+        {
+            // same address of td; must be same (handles NULL case)
+            bRet = sal_True;
+            __leave;
+        }
+
+
+        if ( ptdLeft->tdSize != ptdRight->tdSize )
+        {
+            // different sizes, not equal
+            bRet = sal_False;
+            __leave;
+        }
+
+        if ( rtl_compareMemory( ptdLeft, ptdRight, ptdLeft->tdSize ) == 0 )
+            bRet = sal_True;
+    }
+    __except( EXCEPTION_EXECUTE_HANDLER )
+    {
+        OSL_ENSURE( sal_False, "Error CompareTargetDevice" );
+        bRet = sal_False;
+    }
+
+    return bRet;
 }

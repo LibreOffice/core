@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImplHelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-02-27 07:25:35 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 12:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ extern "C" {
 // target device and formatetc helper
 void      SAL_CALL DeleteTargetDevice(DVTARGETDEVICE* ptd);
 sal_Bool  SAL_CALL CopyFormatEtc(LPFORMATETC petcDest, LPFORMATETC petcSrc);
-sal_Int32 SAL_CALL CompareFormatEtc(FORMATETC* pFetcLeft, FORMATETC* pFetcRight);
+sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLeft, const FORMATETC* pFetcRight);
 sal_Bool  SAL_CALL CompareTargetDevice(DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* ptdRight);
 DVTARGETDEVICE* SAL_CALL CopyTargetDevice(DVTARGETDEVICE* ptdSrc);
 
@@ -108,6 +108,7 @@ sal_Int32     SAL_CALL getWinCodePageFromMimeCharset( const rtl::OUString& chars
 UINT          SAL_CALL GetWinCPFromMime( const rtl::OUString& mimeType );
 sal_Bool      SAL_CALL IsOEMCP( UINT codepage );
 rtl::OUString SAL_CALL CodePageToString( sal_Int32 codepage );
+
 
 sal_Bool SAL_CALL operator==( const ::com::sun::star::datatransfer::DataFlavor& lhs,
                               const ::com::sun::star::datatransfer::DataFlavor& rhs );
