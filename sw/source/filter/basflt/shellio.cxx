@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-14 16:26:03 $
+ *  last change: $Author: mib $ $Date: 2001-12-06 13:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef SVTOOLS_FSTATHELPER_HXX
 #include <svtools/fstathelper.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 #ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
@@ -627,22 +630,30 @@ SwDoc* Reader::GetTemplateDoc()
             }
             if( nVersion >= SOFFICE_FILEFORMAT_60 )
             {
-                SwDocShell *pDocSh =
-                    new SwDocShell ( SFX_CREATE_MODE_INTERNAL );
-                SvEmbeddedObjectRef xDocSh = pDocSh;
-                if( pDocSh->DoInitNew( 0 ) )
+                // #95605#: If the writer module is not installed,
+                // we cannot create a SwDocShell. We could create a
+                // SwWebDocShell however, because this exists always
+                // for the help.
+                SvtModuleOptions aModuleOptions;
+                if( aModuleOptions.IsWriter() )
                 {
-                    pTemplate = pDocSh->GetDoc();
-                    pTemplate->SetOle2Link( Link() );
-                    pTemplate->DoUndo( FALSE );     // always FALSE
-                    pTemplate->SetBrowseMode( bTmplBrowseMode );
+                    SwDocShell *pDocSh =
+                        new SwDocShell ( SFX_CREATE_MODE_INTERNAL );
+                    SvEmbeddedObjectRef xDocSh = pDocSh;
+                    if( pDocSh->DoInitNew( 0 ) )
+                    {
+                        pTemplate = pDocSh->GetDoc();
+                        pTemplate->SetOle2Link( Link() );
+                        pTemplate->DoUndo( FALSE );     // always FALSE
+                        pTemplate->SetBrowseMode( bTmplBrowseMode );
 
-                    ReadXML->SetOrganizerMode( TRUE );
-                    SwReader aRdr( *xStor, aEmptyStr, pTemplate );
-                    aRdr.Read( *ReadXML );
-                    ReadXML->SetOrganizerMode( FALSE );
+                        ReadXML->SetOrganizerMode( TRUE );
+                        SwReader aRdr( *xStor, aEmptyStr, pTemplate );
+                        aRdr.Read( *ReadXML );
+                        ReadXML->SetOrganizerMode( FALSE );
 
-                    pTemplate->AddLink();
+                        pTemplate->AddLink();
+                    }
                 }
             }
             else
