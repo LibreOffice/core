@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:53:34 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:52:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1551,7 +1551,7 @@ sal_Bool SvXMLUnitConverter::convertVector3D( Vector3D& rVector,
             sal_Unicode(','), &eStatus, NULL);
 
 
-    return ( eStatus != rtl_math_ConversionStatus_Ok );
+    return ( eStatus == rtl_math_ConversionStatus_Ok );
 }
 
 /** convert vector3D to string */
@@ -1565,6 +1565,57 @@ void SvXMLUnitConverter::convertVector3D( OUStringBuffer &rBuffer,
     rBuffer.append(sal_Unicode(' '));
     convertDouble(rBuffer, rVector.Z());
     rBuffer.append(sal_Unicode(')'));
+}
+
+/** convert string to Position3D */
+sal_Bool SvXMLUnitConverter::convertPosition3D( drawing::Position3D& rPosition,
+    const OUString& rValue )
+{
+    if(!rValue.getLength() || rValue[0] != '(')
+        return sal_False;
+
+    sal_Int32 nPos(1L);
+    sal_Int32 nFound = rValue.indexOf(sal_Unicode(' '), nPos);
+
+    if(nFound == -1 || nFound <= nPos)
+        return sal_False;
+
+    OUString aContentX = rValue.copy(nPos, nFound - nPos);
+
+    nPos = nFound + 1;
+    nFound = rValue.indexOf(sal_Unicode(' '), nPos);
+
+    if(nFound == -1 || nFound <= nPos)
+        return sal_False;
+
+    OUString aContentY = rValue.copy(nPos, nFound - nPos);
+
+    nPos = nFound + 1;
+    nFound = rValue.indexOf(sal_Unicode(')'), nPos);
+
+    if(nFound == -1 || nFound <= nPos)
+        return sal_False;
+
+    OUString aContentZ = rValue.copy(nPos, nFound - nPos);
+
+    if ( !convertDouble( rPosition.PositionX, aContentX, sal_True ) )
+        return sal_False;
+    if ( !convertDouble( rPosition.PositionY, aContentY, sal_True ) )
+        return sal_False;
+    return convertDouble( rPosition.PositionZ, aContentZ, sal_True );
+}
+
+/** convert Position3D to string */
+void SvXMLUnitConverter::convertPosition3D( OUStringBuffer &rBuffer,
+                                           const drawing::Position3D& rPosition )
+{
+    rBuffer.append( sal_Unicode('(') );
+    convertDouble( rBuffer, rPosition.PositionX, sal_True );
+    rBuffer.append( sal_Unicode(' ') );
+    convertDouble( rBuffer, rPosition.PositionY, sal_True );
+    rBuffer.append( sal_Unicode(' ') );
+    convertDouble( rBuffer, rPosition.PositionZ, sal_True );
+    rBuffer.append( sal_Unicode(')') );
 }
 
 const
