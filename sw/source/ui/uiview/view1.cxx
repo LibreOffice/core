@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:49:51 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:07:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ void SwView::Deactivate(BOOL bMDIActivate)
     extern BOOL bFlushCharBuffer ;
         // Befinden sich noch Zeichen im Input Buffer?
     if( bFlushCharBuffer )
-        GetEditWin().FlushInBuffer( pWrtShell );
+        GetEditWin().FlushInBuffer();
 
     if( bMDIActivate )
     {
