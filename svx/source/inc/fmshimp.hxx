@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 14:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,33 +154,27 @@
 #ifndef _SFXMNUITEM_HXX //autogen
 #include <sfx2/mnuitem.hxx>
 #endif
-
 #ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
 #endif
-
 #ifndef _FMSEARCH_HXX
 #include "fmsearch.hxx"
 #endif
-
 #ifndef _FMSRCCF_HXX_
 #include "fmsrccfg.hxx"
 #endif
-
+#ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
-
+#endif
 #ifndef _VOS_THREAD_HXX_ //autogen
 #include <vos/thread.hxx>
 #endif
-
 #ifndef _SFXCANCEL_HXX //autogen
 #include <svtools/cancel.hxx>
 #endif
-
 #ifndef _TOOLS_DEBUG_HXX //autogen wg. DBG_WARNING
 #include <tools/debug.hxx>
 #endif
-
 #ifndef _CPPUHELPER_COMPONENT_HXX_
 #include <cppuhelper/component.hxx>
 #endif
@@ -193,7 +187,9 @@
 #ifndef _FM_IMPLEMENTATION_IDS_HXX_
 #include "fmimplids.hxx"
 #endif
-
+#ifndef _CPPUHELPER_COMPBASE6_HXX_
+#include <cppuhelper/compbase6.hxx>
+#endif
 
 SV_DECL_PTRARR(SdrObjArray, SdrObject*, 32, 16);
 //  SV_DECL_OBJARR(FmFormArray, ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>, 32, 16);
@@ -273,15 +269,15 @@ struct CursorActionDescription
 
 //========================================================================
 class SfxViewFrame;
-class FmXFormShell : public ::com::sun::star::sdbc::XRowSetListener,
-                     public ::com::sun::star::beans::XPropertyChangeListener,
-                     public ::com::sun::star::util::XModifyListener,
-                     public ::com::sun::star::container::XContainerListener,
-                     public ::com::sun::star::view::XSelectionChangeListener,
-                     public ::com::sun::star::form::XFormControllerListener,
-                     public ::cppu::OComponentHelper,
+typedef ::cppu::WeakComponentImplHelper6<   ::com::sun::star::sdbc::XRowSetListener,
+                                            ::com::sun::star::beans::XPropertyChangeListener,
+                                            ::com::sun::star::util::XModifyListener,
+                                            ::com::sun::star::container::XContainerListener,
+                                            ::com::sun::star::view::XSelectionChangeListener,
+                                            ::com::sun::star::form::XFormControllerListener> FmXFormShell_BASE;
+
+class FmXFormShell : public FmXFormShell_BASE,
                      public FmDispatchInterceptor
-                     // public ::cppu::OWeakObject
 {
     friend class FmFormShell;
     friend class FmFormView;
@@ -394,7 +390,7 @@ public:
     ~FmXFormShell();
 
     // UNO Anbindung
-    DECLARE_UNO3_DEFAULTS(FmXFormShell, OComponentHelper);
+    DECLARE_UNO3_DEFAULTS(FmXFormShell, FmXFormShell_BASE);
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 14:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,7 +634,7 @@ sal_Bool isControlList(const SdrMarkList& rMarkList)
 //========================================================================
 //------------------------------------------------------------------------
 FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
-        : ::cppu::OComponentHelper(m_aMutex)
+        :FmXFormShell_BASE(m_aMutex)
         ,m_pShell(_pShell)
         ,m_bDatabaseBar(sal_False)
         ,m_eNavigate(::com::sun::star::form::NavigationBarMode_NONE)
@@ -672,7 +672,7 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
         xUnoFrame = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame>(NULL);
 
     // to prevent deletion of this we acquire our refcounter once
-    ::comphelper::increment(OComponentHelper::m_refCount);
+    ::comphelper::increment(FmXFormShell_BASE::m_refCount);
 
     // dispatch interception for the frame
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterception> xSupplier(xUnoFrame, ::com::sun::star::uno::UNO_QUERY);
@@ -682,7 +682,7 @@ FmXFormShell::FmXFormShell( FmFormShell* _pShell, SfxViewFrame* _pViewFrame )
     m_xAttachedFrame = xUnoFrame;
 
     // correct the refcounter
-    ::comphelper::decrement(OComponentHelper::m_refCount);
+    ::comphelper::decrement(FmXFormShell_BASE::m_refCount);
 }
 
 //------------------------------------------------------------------------
@@ -711,36 +711,12 @@ FmXFormShell::~FmXFormShell()
 //------------------------------------------------------------------
 ::com::sun::star::uno::Any SAL_CALL FmXFormShell::queryInterface( const ::com::sun::star::uno::Type& type) throw ( ::com::sun::star::uno::RuntimeException )
 {
-
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface(type,
-        //  static_cast< ::com::sun::star::lang::XEventListener*>(this),
-        static_cast< ::com::sun::star::container::XContainerListener*>(this),
-        static_cast< ::com::sun::star::view::XSelectionChangeListener*>(this),
-        static_cast< ::com::sun::star::sdbc::XRowSetListener*>(this),
-        static_cast< ::com::sun::star::beans::XPropertyChangeListener*>(this),
-        static_cast< ::com::sun::star::util::XModifyListener*>(this),
-        //  static_cast< ::com::sun::star::frame::XDispatchProviderInterceptor*>(this),
-        //  static_cast< ::com::sun::star::frame::XDispatchProvider*>(this),
-        static_cast< ::com::sun::star::form::XFormControllerListener*>(this));
-    if(aRet.hasValue())
-        return aRet;
-    return OComponentHelper::queryInterface(type);
+    return FmXFormShell_BASE::queryInterface(type);
 }
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL FmXFormShell::getTypes(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypes(OComponentHelper::getTypes());
-    aTypes.realloc(6);
-    ::com::sun::star::uno::Type* pTypes = aTypes.getArray();
-
-    pTypes[aTypes.getLength()-6] = ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>*)0);
-    pTypes[aTypes.getLength()-5] = ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener>*)0);
-    pTypes[aTypes.getLength()-4] = ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSetListener>*)0);
-    pTypes[aTypes.getLength()-3] = ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener>*)0);
-    pTypes[aTypes.getLength()-2] = ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener>*)0);
-    pTypes[aTypes.getLength()-1] = ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener>*)0);
-
-    return aTypes;
+    return FmXFormShell_BASE::getTypes();
 }
 //------------------------------------------------------------------------------
 ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL FmXFormShell::getImplementationId() throw(::com::sun::star::uno::RuntimeException)
@@ -1006,7 +982,7 @@ void SAL_CALL FmXFormShell::formDeactivated(const ::com::sun::star::lang::EventO
 //------------------------------------------------------------------------------
 void FmXFormShell::disposing()
 {
-    OComponentHelper::disposing();
+    FmXFormShell_BASE::disposing();
 
     // dispose our interceptor helpers
     if (m_pMainFrameInterceptor)
@@ -2421,6 +2397,11 @@ void FmXFormShell::setActiveController(const ::com::sun::star::uno::Reference< :
         m_xActiveController = xController;
         if (m_xActiveController.is())
         {
+            // set eventlistener to know when it is disposed
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xComp(m_xActiveController, ::com::sun::star::uno::UNO_QUERY);
+            if (xComp.is())
+                xComp->addEventListener((::com::sun::star::lang::XEventListener*)(::com::sun::star::beans::XPropertyChangeListener*)this);
+
             m_xActiveForm = getInternalForm(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>(m_xActiveController->getModel(), ::com::sun::star::uno::UNO_QUERY));
         }
         else
