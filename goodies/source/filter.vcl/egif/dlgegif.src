@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:09:05 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ ModalDialog DLG_EXPORT_GIF
         Text [ french ] = "Mode" ;
         Text [ dutch ] = "Modus" ;
         Text [ swedish ] = "L�ge" ;
-        Text [ danish ] = "Modus" ;
+        Text [ danish ] = "Tilstand" ;
         Text [ portuguese_brazilian ] = "Modo" ;
         Text [ portuguese ] = "Modo" ;
         Text[ chinese_simplified ] = "模式";
@@ -131,6 +131,8 @@ ModalDialog DLG_EXPORT_GIF
         Text[ hebrew ] = "‮מצב עבודה‬";
         Text[ hindi ] = "प्रकार";
         Text[ slovak ] = "Režim";
+        Text[ hungarian ] = "Mód";
+        Text[ slovenian ] = "Način";
     };
     CheckBox CBX_INTERLACED
     {
@@ -142,7 +144,7 @@ ModalDialog DLG_EXPORT_GIF
         Text [ english_us ] = "~Interlaced" ;
         Text [ portuguese_brazilian ] = "~Entrela�ado" ;
         Text [ swedish ] = "~Interlaced" ;
-        Text [ danish ] = "~Interlaced" ;
+        Text [ danish ] = "~Sammenflettet" ;
         Text [ italian ] = "Interlaced" ;
         Text [ spanish ] = "~Entrelazado" ;
         Text [ french ] = "~Entrelac�" ;
@@ -167,6 +169,8 @@ ModalDialog DLG_EXPORT_GIF
         Text[ hebrew ] = "‮גרפיקה משולבת‬";
         Text[ hindi ] = "~मिला हुआ";
         Text[ slovak ] = "P~rekladaný";
+        Text[ hungarian ] = "~Váltottsoros";
+        Text[ slovenian ] = "~Prepleteno";
     };
     FixedLine GRP_DRAW
     {
@@ -206,6 +210,8 @@ ModalDialog DLG_EXPORT_GIF
         Text[ hebrew ] = "‮עצמי סרטוט‬";
         Text[ hindi ] = "रेखाचित्र वस्तु";
         Text[ slovak ] = "Grafické objekty";
+        Text[ hungarian ] = "Rajzobjektumok";
+        Text[ slovenian ] = "Risani predmeti";
     };
     CheckBox CBX_TRANSLUCENT
     {
@@ -217,7 +223,7 @@ ModalDialog DLG_EXPORT_GIF
         Text [ english_us ] = "Save ~transparency" ;
         Text [ portuguese_brazilian ] = "Salvar ~transpar�ncia" ;
         Text [ swedish ] = "Spara ~transparent" ;
-        Text [ danish ] = "Gem ~transparent" ;
+        Text [ danish ] = "Gem ~transparens" ;
         Text [ italian ] = "Salva in modo trasparente" ;
         Text [ spanish ] = "Guardar en modo ~transparente" ;
         Text [ french ] = "Enregistrer en t~ransparence" ;
@@ -242,6 +248,8 @@ ModalDialog DLG_EXPORT_GIF
         Text[ hebrew ] = "‮שמירת שקף‬";
         Text[ hindi ] = "~पारदर्शकता संचित करो";
         Text[ slovak ] = "Uložiť p~riehľadnosť";
+        Text[ hungarian ] = "Átlát~szóság mentése";
+        Text[ slovenian ] = "Shrani pr~osojnico";
     };
     Text[ chinese_simplified ] = "GIF 选项";
     Text[ russian ] = "��������� GIF";
@@ -262,7 +270,10 @@ ModalDialog DLG_EXPORT_GIF
     Text[ hebrew ] = "‮אפשרויות GIF‬";
     Text[ hindi ] = "GIF विकल्प";
     Text[ slovak ] = "Voľby pre formát GIF";
+    Text[ hungarian ] = "GIF-beállítások";
+    Text[ slovenian ] = "Možnosti za GIF";
 };
+
 
 
 
