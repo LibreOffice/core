@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.3 $
+#*  $Revision: 1.4 $
 #*
-#*  last change: $Author: bustamam $ $Date: 2001-12-14 16:26:11 $
+#*  last change: $Author: bustamam $ $Date: 2002-03-15 19:09:54 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -63,20 +63,57 @@ PRJ=..$/..
 
 
 PRJNAME=i18npool
-TARGET=localedata
+TARGET=locale
 
+TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :	settings.mk
+.INCLUDE :  svpre.mk
+.INCLUDE :  settings.mk
+.INCLUDE :  sv.mk
 
+.IF "$(OS)" == "SOLARIS"
+# the xmlparser build breaks in this header file
+# 
+#      /opt/SUNWspro/WS6U1/include/CC/Cstd/./limits
+#
+# which defines a class with member functions called min() and max().
+# the build breaks because in solar.h, there is something like this
+# 
+#      #define max(x,y) ((x) < (y) ? (y) : (x))
+#      #define min(x,y) ((x) < (y) ? (x) : (y))
+#
+# so the only choice is to prevent "CC/Cstd/./limits" from being 
+# included:
+CDEFS+=-D__STD_LIMITS
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=   \
-            $(SLO)$/localedata.obj
+SLOFILES=   $(SLO)$/localedata.obj
 
+APP1TARGET = saxparser
+
+APP1OBJS   = \
+        $(OBJ)$/saxparser.obj \
+        $(OBJ)$/LocaleNode.obj \
+        $(OBJ)$/filewriter.obj
+
+
+APP1STDLIBS = \
+        $(SALLIB) \
+        $(CPPULIB) \
+        $(TOOLSLIB)\
+        $(CPPUHELPERLIB)
+
+# Since saxparser is used to build other directories in this project, we need
+# to invoke deliver to push our updated libstatic*.dylib to $(SOLARLIBDIR)
+.IF "$(OS)"=="MACOSX"
+ALL : ALLTAR
+    @+-deliver
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
