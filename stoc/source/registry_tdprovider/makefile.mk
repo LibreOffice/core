@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kso $ $Date: 2002-11-13 16:01:19 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:11:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,16 +62,16 @@
 PRJ=..$/..
 
 PRJNAME=	stoc
-TARGET=		rdbtdp
-USE_DEFFILE=	TRUE
-NO_BSYMBOLIC=	TRUE
+TARGET = regtypeprov.uno
 ENABLE_EXCEPTIONS=TRUE
+NO_BSYMBOLIC = TRUE
 BOOTSTRAP_SERVICE=TRUE
-COMP1TYPELIST=$(TARGET)
+COMP1TYPELIST = rdbtdp
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
@@ -101,7 +101,7 @@ SHL1STDLIBS=	\
         $(SALLIB)
 
 SHL1DEPN=
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP = rdbtdp.map
 SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
