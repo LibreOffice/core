@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2000-10-31 11:14:33 $
+#   last change: $Author: hr $ $Date: 2000-11-13 15:49:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -772,7 +772,7 @@ $(MISC)$/%_description.cxx : %.xml
     +xml2cmp -func $(MISC)$/$*_description.cxx $<
 
 #generate private rdb
-$(BIN)$/%.rdb: $(SOLARBINDIR)$/applicat.rdb $(MISC)$/%.mk
+$(BIN)$/%.rdb: $(COMPRDB) $(MISC)$/%.mk
     +rdbmaker -BUCR -O$(BIN)$/$*.rdb $(foreach,i,$($(@:b)_XML2CMPTYPES) -T$i ) $(COMPRDB)
 
 #strip dos lineends
