@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Merger.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 15:55:27 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 13:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,11 +104,13 @@ public class Merger
     private static final java.lang.String PROP_TEMPDIR         = "tempdir"                  ; // <= cmdline
     private static final java.lang.String PROP_OUTDIR          = "outdir"                   ; // <= cmdline
     private static final java.lang.String PROP_PKG             = "pkg"                      ; // <= cmdline
+    private static final java.lang.String PROP_DEBUG           = "debug"                    ; // <= cmdline
 
     private static final java.lang.String PROP_TCFG            = "tcfg"                     ; // <= cmdline
     private static final java.lang.String PROP_FCFG            = "fcfg"                     ; // <= cmdline
     private static final java.lang.String PROP_LCFG            = "lcfg"                     ; // <= cmdline
     private static final java.lang.String PROP_CCFG            = "ccfg"                     ; // <= cmdline
+    private static final java.lang.String PROP_LANGUAGEPACK    = "languagepack"             ; // <= cmdline
 
     private static final java.lang.String PROP_ITEMS           = "items"                    ; // <= pkg cfg files!
 
@@ -165,7 +167,7 @@ public class Merger
 
         m_aFragmentsDir = new java.io.File(m_aCfg.getString(PROP_FRAGMENTSDIR));
         m_aTempDir      = new java.io.File(m_aCfg.getString(PROP_TEMPDIR     ));
-        m_aOutDir       = new java.io.File(m_aCfg.getString(PROP_OUTDIR      ));
+//        m_aOutDir       = new java.io.File(m_aCfg.getString(PROP_OUTDIR      ));
 
         java.lang.String sDelimiter = m_aCfg.getString(PROP_DELIMITER);
         boolean          bTrim      = m_aCfg.getBoolean(PROP_TRIM);
@@ -176,28 +178,44 @@ public class Merger
             ConfigHelper aFcfg = new ConfigHelper(m_aCfg.getString(PROP_TCFG), null);
             m_lTypes = aFcfg.getStringList(PROP_ITEMS, sDelimiter, bTrim, bDecode);
         }
-        catch(java.util.NoSuchElementException ex1) { m_lTypes = new java.util.Vector(); }
+        catch(java.util.NoSuchElementException ex1)
+        {
+            m_lTypes = new java.util.Vector();
+            //m_aLog.setWarning("Fragment list of types is missing. Parameter \"items\" seems to be invalid.");
+        }
 
         try
         {
             ConfigHelper aFcfg = new ConfigHelper(m_aCfg.getString(PROP_FCFG), null);
             m_lFilters = aFcfg.getStringList(PROP_ITEMS, sDelimiter, bTrim, bDecode);
         }
-        catch(java.util.NoSuchElementException ex1) { m_lFilters = new java.util.Vector(); }
+        catch(java.util.NoSuchElementException ex1)
+        {
+            m_lFilters = new java.util.Vector();
+            //m_aLog.setWarning("Fragment list of filters is missing. Parameter \"items\" seems to be invalid.");
+        }
 
         try
         {
             ConfigHelper aFcfg = new ConfigHelper(m_aCfg.getString(PROP_LCFG), null);
             m_lLoaders = aFcfg.getStringList(PROP_ITEMS, sDelimiter, bTrim, bDecode);
         }
-        catch(java.util.NoSuchElementException ex1) { m_lLoaders = new java.util.Vector(); }
+        catch(java.util.NoSuchElementException ex1)
+        {
+            m_lLoaders = new java.util.Vector();
+            //m_aLog.setWarning("Fragment list of frame loader objects is missing. Parameter \"items\" seems to be invalid.");
+        }
 
         try
         {
             ConfigHelper aFcfg = new ConfigHelper(m_aCfg.getString(PROP_CCFG), null);
             m_lHandlers = aFcfg.getStringList(PROP_ITEMS, sDelimiter, bTrim, bDecode);
         }
-        catch(java.util.NoSuchElementException ex1) { m_lHandlers = new java.util.Vector(); }
+        catch(java.util.NoSuchElementException ex1)
+        {
+            m_lHandlers = new java.util.Vector();
+            //m_aLog.setWarning("Fragment list of content handler objects is missing. Parameter \"items\" seems to be invalid.");
+        }
     }
 
     //-------------------------------------------
@@ -213,10 +231,11 @@ public class Merger
 
         sBuffer.append(
             XMLHelper.generateHeader(
-                m_aCfg.getString(PROP_XMLVERSION ),
-                m_aCfg.getString(PROP_XMLENCODING),
-                m_aCfg.getString(PROP_XMLPATH    ),
-                m_aCfg.getString(PROP_XMLPACKAGE )));
+                m_aCfg.getString (PROP_XMLVERSION         ),
+                m_aCfg.getString (PROP_XMLENCODING        ),
+                m_aCfg.getString (PROP_XMLPATH            ),
+                m_aCfg.getString (PROP_XMLPACKAGE         ),
+                m_aCfg.getBoolean(PROP_LANGUAGEPACK, false)));
 
         // counts all transfered fragments
         // Can be used later to decide, if a generated package file
@@ -310,16 +329,30 @@ public class Merger
                               java.lang.StringBuffer sBuffer    )
         throws java.lang.Exception
     {
+        if (lFragments.size()<1)
+        {
+            m_aLog.setWarning("List of fragments is empty!? Will be ignored ...");
+            return;
+        }
+
         java.util.Enumeration  pFragments = lFragments.elements();
         java.lang.String       sExtXcu    = m_aCfg.getString(PROP_EXTENSION_XCU);
-
-        if (lFragments.size()<1)
-            return;
 
         for (int tabs=0; tabs<nPrettyTabs; ++tabs)
             sBuffer.append("\t");
         sBuffer.append("<node oor:name=\""+sSetName+"\">\n");
         ++nPrettyTabs;
+
+        // special mode for generating language packs.
+        // In such case we must live with some missing fragment files.
+        // Reason behind; Not all filters are realy localized.
+        // But we dont use a different fragment list. We try to locate
+        // any fragment file in its language-pack version ...
+        boolean bHandleLanguagePacks = m_aCfg.getBoolean(PROP_LANGUAGEPACK, false);
+        boolean bDebug               = m_aCfg.getBoolean(PROP_DEBUG       , false);
+        java.lang.String sEncoding   = "UTF-8";
+        if (bDebug)
+            sEncoding = "UTF-8Special";
 
         while(pFragments.hasMoreElements())
         {
@@ -328,7 +361,15 @@ public class Merger
 
             // handle simple files only and check for existence!
             if (!aFragment.exists())
-                throw new java.io.IOException("fragment \""+aFragment.getPath()+"\" does not exists.");
+            {
+                if (bHandleLanguagePacks)
+                {
+                    m_aLog.setWarning("language fragment \""+aFragment.getPath()+"\" does not exist. Will be ignored.");
+                    continue;
+                }
+                else
+                    throw new java.io.IOException("fragment \""+aFragment.getPath()+"\" does not exists.");
+            }
 
             if (!aFragment.isFile())
             {
@@ -341,7 +382,7 @@ public class Merger
             // used reader objects. Let it break this method too. Our calli is interested
             // on such errors :-)
             m_aLog.setDetailedInfo("merge fragment \""+aFragment.getPath()+"\" ...");
-            FileHelper.readEncodedBufferFromFile(aFragment, "UTF-8", sBuffer);
+            FileHelper.readEncodedBufferFromFile(aFragment, sEncoding, sBuffer);
 
             sBuffer.append("\n");
         }
