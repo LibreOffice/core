@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 16:21:41 $
+ *  last change: $Author: os $ $Date: 2001-02-27 08:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ const InsCaptionOpt* SwModuleOptions::GetCapOption(
         sal_Bool bFound = FALSE;
         if(eType == OLE_CAP && pOleId)
         {
-            for( USHORT nId = 0; nId <= GLOB_NAME_CHART; nId++)
+            for( USHORT nId = 0; nId <= GLOB_NAME_CHART && !bFound; nId++)
                 bFound = *pOleId == aInsertConfig.aGlobalNames[nId  ];
             if(!bFound)
                 return aInsertConfig.pOLEMiscOpt;
@@ -580,7 +580,7 @@ SwInsertConfig::SwInsertConfig(sal_Bool bWeb) :
     pCapOptions(0),
     pOLEMiscOpt(0)
 {
-    aGlobalNames[GLOB_NAME_CALC   ] = SvGlobalName(SO3_SC_CLASSID);;
+    aGlobalNames[GLOB_NAME_CALC   ] = SvGlobalName(SO3_SC_CLASSID);
     aGlobalNames[GLOB_NAME_IMPRESS] = SvGlobalName(SO3_SIMPRESS_CLASSID);
     aGlobalNames[GLOB_NAME_DRAW   ] = SvGlobalName(SO3_SDRAW_CLASSID);
     aGlobalNames[GLOB_NAME_MATH   ] = SvGlobalName(SO3_SM_CLASSID);
