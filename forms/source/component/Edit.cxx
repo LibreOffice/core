@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-20 11:56:19 $
+ *  last change: $Author: jl $ $Date: 2001-03-22 16:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ void OEditControl::keyPressed(const KeyEvent& e)
         {
             //  Any aElement(xElements->getByIndex(nIndex));
             xElements->getByIndex(nIndex) >>= xFCSet;
-            OSL_ENSHURE(xFCSet.is(),"OEditControl::keyPressed: No XPropertySet!");
+            OSL_ENSURE(xFCSet.is(),"OEditControl::keyPressed: No XPropertySet!");
 
             if (hasProperty(PROPERTY_CLASSID, xFCSet) &&
                 getINT16(xFCSet->getPropertyValue(PROPERTY_CLASSID)) == FormComponentType::TEXTFIELD)
