@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utils.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-07-23 10:44:13 $
+ *  last change:$Date: 2004-11-02 11:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@ import com.sun.star.uno.Type;
 //For database connection
 import java.sql.*;
 import java.util.Collections;
+import java.util.regex.Pattern;
 
 public class utils {
 
@@ -167,7 +168,7 @@ public class utils {
 
    public static String getFullURL( String sDocName ) {
         String fullDocPath = sDocName;
-        System.out.println("##### getFullURL (in): "+sDocName);
+//        System.out.println("##### getFullURL (in): "+sDocName);
         if (fullDocPath.startsWith("http:")) {
             return fullDocPath;
         }
@@ -193,7 +194,7 @@ public class utils {
             }
         }
         String fulldocURL = prefix+fullDocPath;
-        System.out.println("##### getFullURL (out): "+fulldocURL);
+//        System.out.println("##### getFullURL (out): "+fulldocURL);
         return fulldocURL;
     }
 
@@ -555,6 +556,118 @@ public class utils {
         String[] names = new String[l.size()];
         names = (String[])l.toArray(names);
         return names;
+    }
+
+
+    /** Causes the thread to sleep some time.
+     * It can be used f.e. like:
+     * util.utils.shortWait(tParam.getInt("ShortWait"));
+     */
+    public static void shortWait(int milliseconds) {
+        try {
+            Thread.currentThread().sleep(milliseconds);
+        } catch (InterruptedException e) {
+            System.out.println("While waiting :" + e);
+        }
+    }
+
+    /**
+     * Validate the AppExecutionCommand. Returned is an error message, starting
+     * with "Error:", or a warning, if the command might work.
+     * @param appExecCommand The application execution command that is checked.
+     * @param os The operating system where the check runs.
+     * @return The error message, or OK, if no error was detected.
+     */
+    public static String validateAppExecutionCommand(String appExecCommand, String os) {
+        String errorMessage = "OK";
+        StringTokenizer commandTokens = new StringTokenizer(appExecCommand, " \t");
+        String officeExecutable = "";
+        String officeExecCommand = "soffice";
+        // is there a 'soffice' in the command? 2do: eliminate case sensitivity on windows
+        int index = -1;
+        while (commandTokens.hasMoreTokens() && index == -1) {
+            officeExecutable += commandTokens.nextToken() + " ";
+            index = officeExecutable.indexOf(officeExecCommand);
+        }
+        if (index == -1) {
+            errorMessage = "Error: Your 'AppExecutionCommand' parameter does not " +
+            "contain '" + officeExecCommand + "'.";
+        } else {
+            // does the directory exist?
+            officeExecutable = officeExecutable.trim();
+            String officePath = officeExecutable.substring(0, index);
+            File f = new File(officePath);
+            if (!f.exists() || !f.isDirectory()) {
+                errorMessage = "Error: Your 'AppExecutionCommand' parameter does not " +
+                    "point to a valid system directory.";
+            }
+            else {
+                // is it an office installation?
+                f = new File(officeExecutable);
+                // one try for windows platform can't be wrong...
+                if (!f.exists() || !f.isFile())
+                    f = new File(officeExecutable + ".exe");
+                if (!f.exists() || !f.isFile()) {
+                    errorMessage = "Error: Your 'AppExecutionCommand' parameter does not " +
+                        "point to a valid office installation.";
+                }
+                else {
+                    // do we have the accept parameter?
+                    boolean gotNoAccept = true;
+                    while (commandTokens.hasMoreElements()) {
+                        String officeParam = commandTokens.nextToken();
+                        if (officeParam.indexOf("-accept=") != -1) {
+                            gotNoAccept = false;
+                            errorMessage = validateConnectString(officeParam, true);
+                        }
+                    }
+                    if (gotNoAccept)
+                        errorMessage = "Error: Your 'AppExecutionCommand' parameter does not " +
+                                       "contain a '-accept' parameter for connecting the office.";
+                }
+            }
+        }
+        return errorMessage;
+    }
+
+    /**
+     * Validate the connection string. Returned is an error message, starting
+     * with "Error:", or a warning, if the command might work.
+     * @param connectString The connection string that is checked.
+     * @param checkAppExecutionCommand If the AppExecutionCommand is checked, the error messages willbe different.
+     * @return The error message, or OK, if no error was detected.
+     */
+    public static String validateConnectString(String connectString, boolean checkAppExecutionCommand) {
+        String acceptPrefix = "";
+        if (checkAppExecutionCommand) {
+            acceptPrefix="-accept=";
+        }
+
+        String errorMessage = "OK";
+        // a warning, if an unknown connection method is used
+        if (connectString.indexOf("socket") != -1) {
+            if (connectString.indexOf(acceptPrefix + "socket,host=") == -1 ||
+                connectString.indexOf("port=") == -1 ) {
+                if (checkAppExecutionCommand)
+                    errorMessage = "Error: The '-accept' parameter contains a syntax error: It should be like: '-accept=socket,host=localhost,port=8100;urp;";
+                else
+                    errorMessage = "Error: The 'ConnectionString' parameter contains a syntax error: It should be like: 'socket,host=localhost,port=8100'";
+            }
+        }
+        else if (connectString.indexOf("pipe") != -1) {
+            if (connectString.indexOf(acceptPrefix + "pipe,name=") == -1)
+                if (checkAppExecutionCommand)
+                    errorMessage = "Error: The '-accept' parameter contains a syntax error: It should be like: '-accept=pipe,name=myuniquename;urp;'";
+                else
+                    errorMessage = "Error: The 'ConnectionString' parameter contains a syntax error: It should be like: 'pipe,name=myuniquename'";
+        }
+        else {
+            if (checkAppExecutionCommand)
+                errorMessage = "Warning: The '-accept' parameter contains an unknown connection method.";
+            else
+                errorMessage = "Warning: The 'ConnectionString' parameter contains an unknown connection method.";
+        }
+        return errorMessage;
     }
 
 }
