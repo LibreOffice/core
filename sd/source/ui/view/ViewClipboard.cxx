@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewClipboard.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:52:24 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,8 +269,8 @@ USHORT ViewClipboard::InsertSlides (
     {
         // Otherwise all pages of the document of the transferable are
         // inserted.
-        SvEmbeddedObject* pObj = rTransferable.GetDocShell();
-        pDataDocSh = (DrawDocShell*) pObj;
+        SfxObjectShell* pShell = rTransferable.GetDocShell();
+        pDataDocSh = (DrawDocShell*) pShell;
         SdDrawDocument* pDataDoc = pDataDocSh->GetDoc();
         pBookmarkList = NULL;
         if (pDataDoc!=NULL && pDataDoc->GetSdPageCount(PK_STANDARD))
