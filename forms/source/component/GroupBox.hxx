@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupBox.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:32 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ protected:
 };
 
 //==================================================================
-// OGroupBoxControl (nur aus Kompatibilität zur 5.0)
+// OGroupBoxControl (nur aus Kompatibilitaet zur 5.0)
 //==================================================================
 class OGroupBoxControl : public OControl
 {
