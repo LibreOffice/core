@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-24 15:27:15 $
+ *  last change: $Author: mba $ $Date: 2002-02-05 09:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1736,9 +1736,9 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     Window *pWin=0;
     SfxChildWin_Impl *pCW = 0;
 
-    if (eChild == SFX_CHILDWIN_OBJECTBAR)
+    if ( eChild == SFX_CHILDWIN_OBJECTBAR )
     {
-        // Es soll eine Toolbox konfiguriert werden
+        // configure toolbar
         USHORT n;
         for (n=0; n<SFX_OBJECTBAR_MAX; n++)
         {
@@ -1746,7 +1746,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                 break;
         }
 
-        DBG_ASSERT( pParent || n<SFX_OBJECTBAR_MAX, "Unbekannte ToolBox!" );
+        DBG_ASSERT( pParent || n<SFX_OBJECTBAR_MAX, "Unknown toolbox!" );
         if (n>=SFX_OBJECTBAR_MAX)
         {
             if (pParent)
@@ -1758,16 +1758,21 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     }
     else
     {
-        // Es soll ein DockingWindow als direktes Child konfiguriert werden
+        // configure direct childwindow
         for (USHORT n=0; n<pChildWins->Count(); n++)
         {
             pCW = (*pChildWins)[n];
             SfxChildWindow *pChild = pCW->pWin;
-            if (pChild)
+            if ( pChild )
             {
-                if (pChild->GetType() == nId)
+                if ( pChild->GetType() == nId )
                 {
-                    pDockWin = (SfxDockingWindow*) pChild->GetWindow();
+                    if ( pChild->GetWindow()->GetType() == RSC_DOCKINGWINDOW )
+                        // it's a DockingWindow
+                        pDockWin = (SfxDockingWindow*) pChild->GetWindow();
+                    else
+                        // FloatingWindow or ModelessDialog
+                        pWin = pChild->GetWindow();
                     break;
                 }
             }
@@ -1775,14 +1780,12 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
         if ( pDockWin )
         {
-            if ( eChild == SFX_CHILDWIN_DOCKINGWINDOW ||
-                pDockWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT )
+            if ( eChild == SFX_CHILDWIN_DOCKINGWINDOW || pDockWin->GetAlignment() == SFX_ALIGN_NOALIGNMENT )
             {
                 if ( eChild == SFX_CHILDWIN_SPLITWINDOW && eConfig == SFX_TOGGLEFLOATMODE)
                 {
-                    // Ein DockingWindow wurde aus einem SplitWindow rausgezogen
-                    pCW->pCli =
-                        RegisterChild_Impl(*pDockWin, pDockWin->GetAlignment(), pCW->pWin->CanGetFocus());
+                    // DockingWindow was dragged out of a SplitWindow
+                    pCW->pCli = RegisterChild_Impl(*pDockWin, pDockWin->GetAlignment(), pCW->pWin->CanGetFocus());
                     pCW->pCli->nVisible = CHILD_VISIBLE;
                 }
 
@@ -1792,10 +1795,10 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             {
                 SfxSplitWindow *pSplitWin = GetSplitWindow_Impl(pDockWin->GetAlignment());
 
-                // Es soll ein DockingWindow in einem SplitWindow konfiguriert werden
+                // configure DockingWindow inside a SplitWindow
                 if ( eConfig == SFX_TOGGLEFLOATMODE)
                 {
-                    // Ein DockingWindow wurde in ein SplitWindow hineingezogen
+                    // DockingWindow was dragged into a SplitWindow
                     pCW->pCli = 0;
                     ReleaseChild_Impl(*pDockWin);
                 }
@@ -1806,16 +1809,16 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             }
         }
 
-        DBG_ASSERT( pDockWin, "Unbekanntes DockingWindow!" );
-        if ( !pDockWin && pParent )
+        DBG_ASSERT( pCW, "Unknown window!" );
+        if ( !pCW && pParent )
         {
             pParent->ConfigChild_Impl( eChild, eConfig, nId );
             return;
         }
     }
 
-    // Eventuell sind Childs an - oder abgemeldet worden
-    if (!bSorted)
+    if ( !bSorted )
+        // windows may have been registered and released without an update until now
         Sort_Impl();
 
     SfxChild_Impl *pChild = 0;
@@ -1841,9 +1844,8 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
             SfxChild_Impl *pChild = (*pChilds)[nPos];
             Rectangle aOuterRect( GetTopRect_Impl() );
-            aOuterRect.SetPos(
-                pWorkWin->OutputToScreenPixel( aOuterRect.TopLeft() ));
-            Rectangle aInnerRect(aOuterRect);
+            aOuterRect.SetPos( pWorkWin->OutputToScreenPixel( aOuterRect.TopLeft() ));
+            Rectangle aInnerRect( aOuterRect );
             BOOL bTbx = (eChild == SFX_CHILDWIN_OBJECTBAR);
 
             // Das gerade betroffene Fenster wird bei der Berechnung des
@@ -1954,7 +1956,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                 }
             }
 
-            if (pBox)
+            if ( pBox )
                 pBox->SetDockingRects(aOuterRect, aInnerRect);
             else
                 pDockWin->SetDockingRects(aOuterRect, aInnerRect);
@@ -1968,7 +1970,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             if ( nPos == USHRT_MAX && !pCW )
                 return;
 
-            SfxChildAlignment eAlign;
+            SfxChildAlignment eAlign = SFX_ALIGN_NOALIGNMENT;
             SfxChild_Impl *pCli = ( nPos != USHRT_MAX ) ? (*pChilds)[nPos] : 0;
             if ( pBox )
             {
@@ -1989,14 +1991,12 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                         pCli->aSize.Height() = aActSize.Height();
                 }
             }
-            else if ( pCli )
+            else if ( pCli && pDockWin )
             {
                 eAlign = pDockWin->GetAlignment();
-                if ( eChild == SFX_CHILDWIN_DOCKINGWINDOW ||
-                    eAlign == SFX_ALIGN_NOALIGNMENT)
+                if ( eChild == SFX_CHILDWIN_DOCKINGWINDOW || eAlign == SFX_ALIGN_NOALIGNMENT)
                 {
-                    // wenn innerhalb eines SplitWindows umkonfiguriert
-                    // wurde, "andert sich am SplitWindow selbst nichts
+                    // configuration inside the SplitWindow, no change for the SplitWindows' configuration
                     pCli->bResize = TRUE;
                     pCli->aSize = pDockWin->GetSizePixel();
                 }
@@ -2014,9 +2014,9 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                 ShowChilds_Impl();
             }
 
-            // INI schreiben
             if ( pCW && pCW->pWin )
             {
+                // store changed configuration
                 BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
                 pCW->aInfo = pCW->pWin->GetInfo();
                 if ( bTask )
@@ -2024,6 +2024,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                 if ( eConfig != SFX_MOVEDOCKINGWINDOW )
                     SaveStatus_Impl( pCW->pWin, pCW->aInfo);
             }
+
             break;
         }
     }
