@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XBreakIterator.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:38 $
+ *  last change:$Date: 2003-09-08 10:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,12 @@
 
 package ifc.i18n;
 
+import java.util.Vector;
+
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.i18n.Boundary;
 import com.sun.star.i18n.LineBreakHyphenationOptions;
 import com.sun.star.i18n.LineBreakResults;
@@ -69,10 +75,6 @@ import com.sun.star.i18n.ScriptType;
 import com.sun.star.i18n.WordType;
 import com.sun.star.i18n.XBreakIterator;
 import com.sun.star.lang.Locale;
-import java.util.Vector;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.i18n.XBreakIterator</code>
@@ -185,7 +187,6 @@ public class _XBreakIterator extends MultiMethodTest {
         short nCharacterIteratorMode =
             com.sun.star.i18n.CharacterIteratorMode.SKIPCHARACTER;
 
-        int strLength = UnicodeString.length();
 
         //Start from position : Travel ... chars : Actual position after :
         //How many chars traveled
