@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transitionfactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:57:12 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,13 +145,13 @@ namespace presentation
                 transition effect
              */
             static SlideChangeAnimationSharedPtr createSlideTransition(
-                const SlideSharedPtr&                           rLeavingSlide,
-                const SlideSharedPtr&                           rEnteringSlide,
-                sal_Int16                                       nTransitionType,
-                sal_Int16                                       nTransitionSubType,
-                bool                                            bTransitionDirection,
-                const ::comphelper::OptionalValue< RGBColor >&  rTransitionFadeColor,
-                const SoundPlayerSharedPtr&                     rSoundPlayer );
+                const SlideSharedPtr&       rLeavingSlide,
+                const SlideSharedPtr&       rEnteringSlide,
+                sal_Int16                   nTransitionType,
+                sal_Int16                   nTransitionSubType,
+                bool                        bTransitionDirection,
+                const RGBColor&             rTransitionFadeColor,
+                const SoundPlayerSharedPtr& rSoundPlayer );
 
         private:
             static const TransitionInfo* getTransitionInfo(
