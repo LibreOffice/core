@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: aw $ $Date: 2002-06-20 14:28:34 $
+ *  last change: $Author: er $ $Date: 2002-11-15 13:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,8 +253,9 @@ using namespace ::vos;
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
-#ifndef _UNOTOOLS_CHARCLASS_HXX
-#include <unotools/charclass.hxx>
+
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
 #endif
 
 #include "app.hxx"
@@ -303,10 +304,7 @@ struct FlagMapping_Impl
 //----------------------------------------------------------------
 inline String ToUpper_Impl( const String &rStr )
 {
-    String aRet( rStr );
-    CharClass aCharClass( Application::GetSettings().GetLocale() );
-    aCharClass.toUpper( aRet );
-    return aRet;
+    return SvtSysLocale().GetCharClass().upper( rStr );
 }
 
 //----------------------------------------------------------------
