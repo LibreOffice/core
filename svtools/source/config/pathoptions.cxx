@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-23 09:50:28 $
+ *  last change: $Author: pb $ $Date: 2000-11-23 14:07:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ using namespace com::sun::star::uno;
 #define SUBSTITUTE_USER                 ASCII_STR("$(user)")
 #define SUBSTITUTE_INSTPATH             ASCII_STR("$(inst)")
 #define SUBSTITUTE_PROGPATH             ASCII_STR("$(prog)")
-#define SUBSTITUTE_USERPATH             ASCII_STR("$(user)")
+#define SUBSTITUTE_USERPATH             ASCII_STR("$(userpath)")
 #define SUBSTITUTE_INSTURL              ASCII_STR("$(insturl)")
 #define SUBSTITUTE_PROGURL              ASCII_STR("$(progurl)")
 #define SUBSTITUTE_USERURL              ASCII_STR("$(userurl)")
@@ -399,6 +399,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
         // $(user) - directory of the user installation (== dir of soffice.ini)
         if ( SUBSTITUTE_USER == aSubString || SUBSTITUTE_USERPATH == aSubString )
         {
+            DBG_ASSERT( SUBSTITUTE_USERPATH == aSubString, "don't user $(user) any longer" );
             nReplaceLength = REPLACELENGTH_USER;
             aReplacement = m_aUserPath;
         }
