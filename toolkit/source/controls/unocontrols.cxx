@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-07 16:17:46 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,12 @@
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_LINEENDFORMAT_HPP_
+#include <com/sun/star/awt/LineEndFormat.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
 #endif
-
 
 #ifndef TOOLKIT_FORMATTED_CONTROL_HXX
 #include <toolkit/controls/formattedcontrol.hxx>
@@ -199,6 +201,7 @@ UnoControlEditModel::UnoControlEditModel()
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_HSCROLL );
+    ImplRegisterProperty( BASEPROPERTY_LINE_END_FORMAT );
     ImplRegisterProperty( BASEPROPERTY_MAXTEXTLEN );
     ImplRegisterProperty( BASEPROPERTY_MULTILINE );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
@@ -215,14 +218,21 @@ UnoControlEditModel::UnoControlEditModel()
 
 uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
-    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
-    {
-        uno::Any aAny;
-        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlEdit );
-        return aAny;
-    }
+    uno::Any aReturn;
 
-    return UnoControlModel::ImplGetDefaultValue( nPropId );
+    switch ( nPropId )
+    {
+    case BASEPROPERTY_LINE_END_FORMAT:
+        aReturn <<= (sal_Int16)awt::LineEndFormat::LINE_FEED;   // LF
+        break;
+    case BASEPROPERTY_DEFAULTCONTROL:
+        aReturn <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlEdit );
+        break;
+    default:
+        aReturn = UnoControlModel::ImplGetDefaultValue( nPropId );
+        break;
+    }
+    return aReturn;
 }
 
 ::cppu::IPropertyArrayHelper& UnoControlEditModel::getInfoHelper()
