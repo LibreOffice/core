@@ -2,7 +2,7 @@
     shell SfxViewFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: mba $ $Date: 2001-09-13 11:40:49 $ $Revision: 1.8 $
+    $Author: mba $ $Date: 2001-11-15 15:02:11 $ $Revision: 1.9 $
     $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
 =========================================================================*/
 
@@ -11,6 +11,7 @@ interface Window : Object
     Automation = FALSE ;
 ]
 {
+     //---------------------------------------------------------------------
     SID_CUSTOMIZETOOLBOX // ole(no) api(final/play/rec)
     [
         ExecMethod = ChildWindowExecute ;
@@ -391,6 +392,20 @@ interface TopWindow : BrowseWindow
         ExecMethod = INetExecute_Impl ;
         StateMethod = INetState_Impl ;
     ]
+
+     //---------------------------------------------------------------------
+    SID_FOCUSURLBOX // ole(no) api(final/play/rec)
+    [
+        ExecMethod = INetExecute_Impl ;
+        StateMethod = INetState_Impl ;
+    ]
+
+    SID_BROWSE_STOP // ole(no) api()
+    [
+        ExecMethod = INetExecute_Impl ;
+        StateMethod = INetState_Impl ;
+    ]
+
 }
 
  //=========================================================================
@@ -423,6 +438,9 @@ shell SfxViewFrame
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.8  2001/09/13 11:40:49  mba
+    #88873#: some slots didn't have confignames or are overfluous
+
     Revision 1.7  2001/09/06 09:58:12  pb
     fix: #91191# SID_HELP_PI removed
 
