@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-23 15:55:45 $
+ *  last change: $Author: jp $ $Date: 2001-05-07 14:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,7 @@ JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
                 bCleanup = TRUE;
             }
             // keine positionsgeschuetzten Objecte verschieben!
-            else if( DROP_MOVE == rEvt.mnAction &&
+            else if( DND_ACTION_MOVE == rEvt.mnAction &&
                      pSrcSh->IsSelObjProtected( FLYPROTECT_POS ) )
             {
                 bCleanup = TRUE;
@@ -487,8 +487,8 @@ JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
 //!!                // JP 13.08.98: internes Drag&Drop: bei gleichem Doc ein Move
 //!!                //              ansonten ein Copy - Task 54974
 //!!                nEventAction = pSrcSh->GetDoc() == rSh.GetDoc()
-//!!                                    ? DROP_MOVE
-//!!                                    : DROP_COPY;
+//!!                                    ? DND_ACTION_MOVE
+//!!                                    : DND_ACTION_COPY;
 //!!            }
             if ( bCleanup )
             {
@@ -501,8 +501,8 @@ JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
         {
             //D&D von ausserhalb des SW soll per default ein Copy sein.
             if( EXCHG_IN_ACTION_DEFAULT == nEventAction &&
-                DROP_MOVE == rEvt.mnAction )
-                nEventAction = DROP_COPY;
+                DND_ACTION_MOVE == rEvt.mnAction )
+                nEventAction = DND_ACTION_COPY;
 
             if( (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE == nDropFormat &&
                  EXCHG_IN_ACTION_LINK != nDropAction) ||
@@ -568,6 +568,9 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2001/03/23 15:55:45  jp
+    use new Drag&Drop / Clipboard API
+
     Revision 1.2  2001/02/02 17:45:49  jp
     SwDataExchange interfaces renamed
 
