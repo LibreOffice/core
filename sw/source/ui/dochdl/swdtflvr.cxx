@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-30 12:12:49 $
+ *  last change: $Author: jp $ $Date: 2002-02-14 11:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1459,7 +1459,11 @@ ASSERT( pPt, "EXCHG_OUT_ACTION_MOVE_PRIVATE: was soll hier passieren?" );
     }
 
     if( !bPasteSelection && rSh.IsFrmSelected() )
+    {
         rSh.EnterSelFrmMode();
+        //force ::SelectShell
+        rSh.GetView().StopShellTimer();
+    }
 
     if( pAction )
         delete pAction;
