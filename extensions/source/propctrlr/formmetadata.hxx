@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:42:13 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:26:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ namespace pcr
     #define PROPERTY_ID_MULTI                70
     #define PROPERTY_ID_MULTILINE            71
     #define PROPERTY_ID_MULTISELECTION       72
-    #define PROPERTY_ID_HARDLINEBREAKS       73
+        // free
     #define PROPERTY_ID_HSCROLL              74
     #define PROPERTY_ID_VSCROLL              75
     #define PROPERTY_ID_SPIN                 76
@@ -264,6 +264,16 @@ namespace pcr
     #define PROPERTY_ID_BOUND_CELL           121
     #define PROPERTY_ID_LIST_CELL_RANGE      122
     #define PROPERTY_ID_CELL_EXCHANGE_TYPE   123
+    #define PROPERTY_ID_SCROLLVALUE_MIN      124
+    #define PROPERTY_ID_DEFAULT_SCROLLVALUE  125
+    #define PROPERTY_ID_REPEAT_DELAY         126
+    #define PROPERTY_ID_SYMBOLCOLOR          127
+    #define PROPERTY_ID_SPINVALUE            128
+    #define PROPERTY_ID_SPINVALUE_MIN        129
+    #define PROPERTY_ID_SPINVALUE_MAX        130
+    #define PROPERTY_ID_DEFAULT_SPINVALUE    131
+    #define PROPERTY_ID_SPININCREMENT        132
+    #define PROPERTY_ID_REPEAT               133
 
 //............................................................................
 } // namespace pcr
