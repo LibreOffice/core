@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavdatasupplier.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-08-29 12:28:55 $
+ *  last change: $Author: kso $ $Date: 2001-09-06 08:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,6 +451,7 @@ sal_Bool DataSupplier::getData()
         if ( aPath.getStr()[ aPath.getLength() - 1 ] == sal_Unicode( '/' ) )
             aPath = aPath.copy( 0, aPath.getLength() - 1 );
 
+        aPath = NeonUri::unescape( aPath );
         bool bFoundParent = false;
 
         for ( sal_uInt32 n = 0; n < resources.size(); ++n )
@@ -466,6 +467,7 @@ sal_Bool DataSupplier::getData()
                         aCurrPath.getLength() - 1 ] == sal_Unicode( '/' ) )
                     aCurrPath = aCurrPath.copy( 0, aCurrPath.getLength() - 1 );
 
+                aCurrPath = NeonUri::unescape( aCurrPath );
                 if ( aPath == aCurrPath )
                 {
                     bFoundParent = true;
