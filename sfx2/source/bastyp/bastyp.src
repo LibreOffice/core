@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastyp.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 16:58:53 $
+ *  last change: $Author: mh $ $Date: 2000-11-10 15:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,7 +439,7 @@ Resource RID_DLSTATUS2
         Text = "Verbindung zu: $(HOST). Warten auf Antwort..." ;
         Text [ ENGLISH ] = "Connection to: $(HOST). Waiting for response..." ;
         Text [ dutch ] = "Verbinding met: $(HOST). Wacht op antwoord..." ;
-        Text [ english_us ] = "Connection to: $(HOST). Waiting for response..." ;
+        Text [ english_us ] = "Connecting to: $(HOST). Waiting for response..." ;
         Text [ italian ] = "Collegamento con: $(HOST). in attesa di risposta..." ;
         Text [ spanish ] = "Conexión con: $(HOST). Esperando respuesta..." ;
         Text [ french ] = "Connexion à : $(HOST). Attend réponse..." ;
@@ -447,14 +447,14 @@ Resource RID_DLSTATUS2
         Text [ danish ] = "Forbindelse til: $(HOST). Venter på svar..." ;
         Text [ portuguese_brazilian ] = "Verbindung zu: $(HOST). Warten auf Antwort..." ;
         Text [ portuguese ] = "Ligação com: $(HOST). Esperando resposta ..." ;
-        Text[ chinese_simplified ] = "Á¬½Ó£º$(HOST)¡£ÕıÔÚµÈºò´ğ¸´...";
+        Text[ chinese_simplified ] = "Á¬½Ó£º$(HOST)¡£ÕıÔÚµÈºò»ØÓ¦...";
         Text[ russian ] = "Ïîäêëş÷åíèå ê: $(HOST). Æäèòå îòâåòà...";
         Text[ polish ] = "Po³¹czenie z: $(HOST). Czekanie na odpowiedŸ...";
         Text[ japanese ] = "Ú‘±:$(HOST)B‰“š‚ğ‘Ò‚Á‚Ä‚¢‚Ü‚·...";
         Text[ chinese_traditional ] = "³s½u¡G$(HOST)¡C¥¿¦bµ¥­Ôµª´_...";
         Text[ arabic ] = "ÇáÇÊÕÇá ÈÜ: $(HOST). İí ÇäÊÙÇÑ ÇáÑÏ...";
         Text[ dutch ] = "Verbinding met: $(HOST). Wacht op antwoord...";
-        Text[ chinese_simplified ] = "Á¬½Ó£º$(HOST)¡£ÕıÔÚµÈºò´ğ¸´...";
+        Text[ chinese_simplified ] = "Á¬½Ó£º$(HOST)¡£ÕıÔÚµÈºò»ØÓ¦...";
         Text[ greek ] = "Óıíäåóç ìå: $(HOST). Ğåñéìİíïíôáò áğÜíôçóç...";
         Text[ korean ] = "¿¬°á ´ë»ó: $(HOST). È¸´äÀ» ±â´Ù¸®½Ê½Ã¿À...";
         Text[ turkish ] = "Bağlanılan: $(HOST). Yanıt bekleniyor...";
@@ -465,7 +465,7 @@ Resource RID_DLSTATUS2
         Text = "Geöffnet wird: $(TARGET) auf $(HOST)" ;
         Text [ ENGLISH ] = "Opening $(TARGET) at $(HOST)" ;
         Text [ dutch ] = "Geopend wordt: $(TARGET) op $(HOST)" ;
-        Text [ english_us ] = "Opening $(TARGET) at $(HOST)" ;
+        Text [ english_us ] = "Opening $(TARGET) on $(HOST)" ;
         Text [ italian ] = "Viene aperto: $(TARGET) su $(HOST)" ;
         Text [ spanish ] = "Abriendo: $(TARGET) en $(HOST)" ;
         Text [ french ] = "En cours d'ouverture : $(TARGET) sur $(HOST)" ;
@@ -475,7 +475,7 @@ Resource RID_DLSTATUS2
         Text [ portuguese_brazilian ] = "Geöffnet wird: $(TARGET) auf $(HOST)" ;
         Text[ chinese_simplified ] = "´ò¿ª£º $(HOST)ÉÏµÄ$(TARGET)";
         Text[ russian ] = "$(TARGET) áóäåò îòêğûò â $(HOST)";
-        Text[ polish ] = "Otwieranie: $(TARGET) na $(HOST)";
+        Text[ polish ] = "Otwarte zostanie: $(TARGET) na $(HOST)";
         Text[ japanese ] = "ŠJ‚©‚ê‚é:$(HOST)‚Ì$(TARGET)";
         Text[ chinese_traditional ] = "¶}±Ò¡G$(HOST)¤Wªº$(TARGET)";
         Text[ arabic ] = "íÊã İÊÍ: $(TARGET) Úáì $(HOST)";
@@ -490,7 +490,7 @@ Resource RID_DLSTATUS2
     {
         Text = "Übertragen wird: $(TARGET) Gelesen: $(BYTE)" ;
         Text [ ENGLISH ] = "Loading: $(TARGET) Loaded: $(BYTE)" ;
-        Text [ english_us ] = "Loading: $(TARGET) Loaded: $(BYTE)" ;
+        Text [ english_us ] = "Transferring: $(TARGET) Read: $(BYTE)" ;
         Text [ italian ] = "Viene trasferito: $(TARGET) Letti: $(BYTE)" ;
         Text [ spanish ] = "Transfiriendo: $(TARGET) Leído: $(BYTE)" ;
         Text [ french ] = "En cours de transfert : $(TARGET) Lu : $(BYTE)" ;
@@ -501,7 +501,7 @@ Resource RID_DLSTATUS2
         Text [ portuguese ] = "Transferir: $(TARGET) Lidos: $(BYTE)" ;
         Text[ chinese_simplified ] = "´«µİ£º$(TARGET)ÒÑ¾­ÔÄ¶Á£º$(BYTE)";
         Text[ russian ] = "Ïåğåäàåòñÿ: $(TARGET) Ïğî÷èòàíî: $(BYTE)";
-        Text[ polish ] = "£adowanie: $(TARGET) Za³adowano: $(BYTE)";
+        Text[ polish ] = "Przetransmitowane zostanie: $(TARGET) Przeczytano: $(BYTE)";
         Text[ japanese ] = "“]‘—‚·‚é:$(TARGET) “Ç‚İæ‚è:$(BYTE)";
         Text[ chinese_traditional ] = "¶Ç»¼¡G$(TARGET)¤w¸g¾\\Åª¡G$(BYTE)";
         Text[ arabic ] = "íÊã ÊÍãíá: $(TARGET) ÊãÊ ŞÑÇÁÉ: $(BYTE)";
@@ -521,7 +521,7 @@ Resource RID_DLSTATUS2
         Text [ spanish ] = "Desconectado" ;
         Text [ french ] = "Déconnexion connexion" ;
         Text [ dutch ] = "Verbinding verbroken" ;
-        Text [ swedish ] = "Nedkopplad" ;
+        Text [ swedish ] = "Föbindelse är bruten" ;
         Text [ danish ] = "Forbindelse afbrudt" ;
         Text [ portuguese_brazilian ] = "Verbindung abgebaut" ;
         Text [ portuguese ] = "Ligação cancelada" ;
