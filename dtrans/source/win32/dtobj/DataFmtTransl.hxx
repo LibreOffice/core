@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-22 14:15:51 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
