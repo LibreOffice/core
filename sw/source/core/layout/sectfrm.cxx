@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: od $ $Date: 2002-10-17 14:10:01 $
+ *  last change: $Author: od $ $Date: 2002-11-01 11:07:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1163,6 +1163,8 @@ void SwSectionFrm::SimpleFormat()
         bValidPos = TRUE;
     }
     SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
+    // OD 22.10.2002 #97265# - call always method <lcl_ColumnRefresh(..)>, in
+    // order to get calculated lowers, not only if there space left in its upper.
     if( (Frm().*fnRect->fnBottomDist)( nDeadLine ) > 0 )
     {
         const Size aOldSz( Prt().SSize() );
@@ -1172,8 +1174,8 @@ void SwSectionFrm::SimpleFormat()
         if( nTop > nHeight )
             nTop = nHeight;
         (this->*fnRect->fnSetYMargins)( nTop, 0 );
-        lcl_ColumnRefresh( this, FALSE );
     }
+    lcl_ColumnRefresh( this, FALSE );
     UnlockJoin();
 }
 
