@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.74 2002-01-17 14:11:54 mib Exp $
+	$Id: drawing.mod,v 1.75 2002-01-17 14:22:05 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -96,10 +96,11 @@
 <!ATTLIST draw:rect draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:line ( office:events?, %draw-text; )>
-<!ATTLIST draw:line svg:x1 %length; #REQUIRED>
-<!ATTLIST draw:line svg:y1 %length; #REQUIRED>
+<!ATTLIST draw:line svg:x1 %length; #IMPLIED>
+<!ATTLIST draw:line svg:y1 %length; #IMPLIED>
 <!ATTLIST draw:line svg:x2 %length; #REQUIRED>
 <!ATTLIST draw:line svg:y2 %length; #REQUIRED>
+<!ATTLIST draw:line svg:y %coordinate; #IMPLIED>
 <!ATTLIST draw:line %draw-style-name; >
 <!ATTLIST draw:line %draw-transform; >
 <!ATTLIST draw:line %zindex;>
