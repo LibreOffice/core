@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astconstant.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:44:23 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,8 @@ AstConstant::~AstConstant()
 
 }
 
-sal_Bool AstConstant::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
+sal_Bool AstConstant::dumpBlob(
+    typereg::Writer & rBlob, sal_uInt16 index, bool published)
 {
     RTConstValue    aConst;
     sal_Unicode*    str = NULL;
@@ -173,7 +174,8 @@ sal_Bool AstConstant::dumpBlob(typereg::Writer & rBlob, sal_uInt16 index)
     }
 
     rBlob.setFieldData(
-        index, getDocumentation(), fileName, RT_ACCESS_CONST,
+        index, getDocumentation(), fileName,
+        RT_ACCESS_CONST | (published ? RT_ACCESS_PUBLISHED : 0),
         OStringToOUString(name, RTL_TEXTENCODING_UTF8), type, aConst);
     if (str)
         delete[] str;
