@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-16 11:39:04 $
+ *  last change: $Author: aw $ $Date: 2001-08-22 10:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,23 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 |*
 \************************************************************************/
 
+// #83525#
+struct ImpRememberOrigAndClone
+{
+    SdrObject*      pOrig;
+    SdrObject*      pClone;
+};
+
+SdrObject* ImpGetClone(Container& aConnectorContainer, SdrObject* pConnObj)
+{
+    for(sal_uInt32 a(0); a < aConnectorContainer.Count(); a++)
+    {
+        if(pConnObj == ((ImpRememberOrigAndClone*)aConnectorContainer.GetObject(a))->pOrig)
+            return ((ImpRememberOrigAndClone*)aConnectorContainer.GetObject(a))->pClone;
+    }
+    return 0L;
+}
+
 BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                          const Point& rPos, sal_Int8& rDnDAction, BOOL bDrag,
                          ULONG nFormat, USHORT nPage, USHORT nLayer )
@@ -291,34 +308,126 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
                                 pMarkList->ForceSort();
 
-                                for( ULONG nM = 0; nM < pMarkList->GetMarkCount(); nM++ )
+                                // #83525# stuff to remember originals and clones
+                                Container aConnectorContainer(0);
+                                sal_uInt32 a;
+                                sal_uInt32 nConnectorCount(0L);
+                                Size aVector(
+                                    aDropPos.X() - pOwnData->GetStartPos().X(),
+                                    aDropPos.Y() - pOwnData->GetStartPos().Y());
+
+                                for(a = 0; a < pMarkList->GetMarkCount(); a++)
                                 {
-                                    SdrMark*    pM = pMarkList->GetMark( nM );
-                                    SdrObject*  pObj = pM->GetObj()->Clone();
+                                    SdrMark* pM = pMarkList->GetMark(a);
+                                    SdrObject* pObj = pM->GetObj()->Clone();
 
-                                    if( pObj )
+                                    if(pObj)
                                     {
-                                        if( !bDropOnTabBar )
+                                        if(!bDropOnTabBar)
                                         {
-                                            Rectangle   aRect( pObj->GetLogicRect() );
-                                            Point       aPos( aRect.TopLeft() );
-                                            Size        aSize( aRect.GetSize() );
-                                            Size        aVector( aDropPos.X() - pOwnData->GetStartPos().X(),
-                                                                 aDropPos.Y() - pOwnData->GetStartPos().Y() );
-
-                                            aPos.X() += aVector.Width();
-                                            aPos.Y() += aVector.Height();
-                                            aRect.SetPos( aPos );
-                                            pObj->SetLogicRect( aRect );
+                                            // #83525# do a NbcMove(...) instead of setting SnapRects here
+                                            pObj->NbcMove(aVector);
                                         }
 
                                         pPage->InsertObject(pObj);
 
-                                        BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
-                                        AddUndo( new SdrUndoNewObj( *pObj ) );
+                                        BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+                                        AddUndo(new SdrUndoNewObj(*pObj));
                                         EndUndo();
+
+                                        // #83525#
+                                        ImpRememberOrigAndClone* pRem = new ImpRememberOrigAndClone;
+                                        pRem->pOrig = pM->GetObj();
+                                        pRem->pClone = pObj;
+                                        aConnectorContainer.Insert(pRem, CONTAINER_APPEND);
+
+                                        if(pObj->ISA(SdrEdgeObj))
+                                            nConnectorCount++;
                                     }
                                 }
+
+                                // #83525# try to re-establish connections at clones
+                                if(nConnectorCount)
+                                {
+                                    for(a = 0; a < aConnectorContainer.Count(); a++)
+                                    {
+                                        ImpRememberOrigAndClone* pRem = (ImpRememberOrigAndClone*)aConnectorContainer.GetObject(a);
+
+                                        if(pRem->pClone->ISA(SdrEdgeObj))
+                                        {
+                                            SdrEdgeObj* pOrigEdge = (SdrEdgeObj*)pRem->pOrig;
+                                            SdrEdgeObj* pCloneEdge = (SdrEdgeObj*)pRem->pClone;
+
+                                            // test first connection
+                                            SdrObjConnection& rConn0 = pOrigEdge->GetConnection(FALSE);
+                                            SdrObject* pConnObj = rConn0.GetObject();
+                                            if(pConnObj)
+                                            {
+                                                SdrObject* pConnClone = ImpGetClone(aConnectorContainer, pConnObj);
+                                                if(pConnClone)
+                                                {
+                                                    // if dest obj was cloned, too, re-establish connection
+                                                    pCloneEdge->ConnectToNode(FALSE, pConnClone);
+                                                    pCloneEdge->GetConnection(FALSE).SetConnectorId(rConn0.GetConnectorId());
+                                                }
+                                                else
+                                                {
+                                                    // set position of connection point of original connected object
+                                                    const SdrGluePointList* pGlueList = pConnObj->GetGluePointList();
+                                                    if(pGlueList)
+                                                    {
+                                                        sal_uInt16 nInd = pGlueList->FindGluePoint(rConn0.GetConnectorId());
+
+                                                        if(SDRGLUEPOINT_NOTFOUND != nInd)
+                                                        {
+                                                            const SdrGluePoint& rGluePoint = (*pGlueList)[nInd];
+                                                            Point aPosition = rGluePoint.GetAbsolutePos(*pConnObj);
+                                                            aPosition.X() += aVector.A();
+                                                            aPosition.Y() += aVector.B();
+                                                            pCloneEdge->SetTailPoint(FALSE, aPosition);
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            // test second connection
+                                            SdrObjConnection& rConn1 = pOrigEdge->GetConnection(TRUE);
+                                            pConnObj = rConn1.GetObject();
+                                            if(pConnObj)
+                                            {
+                                                SdrObject* pConnClone = ImpGetClone(aConnectorContainer, pConnObj);
+                                                if(pConnClone)
+                                                {
+                                                    // if dest obj was cloned, too, re-establish connection
+                                                    pCloneEdge->ConnectToNode(TRUE, pConnClone);
+                                                    pCloneEdge->GetConnection(TRUE).SetConnectorId(rConn1.GetConnectorId());
+                                                }
+                                                else
+                                                {
+                                                    // set position of connection point of original connected object
+                                                    const SdrGluePointList* pGlueList = pConnObj->GetGluePointList();
+                                                    if(pGlueList)
+                                                    {
+                                                        sal_uInt16 nInd = pGlueList->FindGluePoint(rConn1.GetConnectorId());
+
+                                                        if(SDRGLUEPOINT_NOTFOUND != nInd)
+                                                        {
+                                                            const SdrGluePoint& rGluePoint = (*pGlueList)[nInd];
+                                                            Point aPosition = rGluePoint.GetAbsolutePos(*pConnObj);
+                                                            aPosition.X() += aVector.A();
+                                                            aPosition.Y() += aVector.B();
+                                                            pCloneEdge->SetTailPoint(TRUE, aPosition);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // #83525# cleanup remember classes
+                                for(a = 0; a < aConnectorContainer.Count(); a++)
+                                    delete (ImpRememberOrigAndClone*)aConnectorContainer.GetObject(a);
 
                                 if( pMarkList != pDragSrcMarkList )
                                     delete pMarkList;
