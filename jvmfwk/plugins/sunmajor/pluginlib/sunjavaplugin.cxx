@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-27 15:22:14 $
+ *  last change: $Author: jl $ $Date: 2004-04-30 06:22:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ javaPluginError startJavaVirtualMachine(
         osl_loadModule(sRuntimeLib.pData, SAL_LOADMODULE_DEFAULT);
 #if defined(LINUX)
     if ((moduleRt = osl_loadModule(sRuntimeLib.pData,
-                                   SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_NOW))
+                                   SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_NOW)))
 #else
     if ((moduleRt = osl_loadModule(sRuntimeLib.pData, SAL_LOADMODULE_DEFAULT)) == 0)
 #endif
