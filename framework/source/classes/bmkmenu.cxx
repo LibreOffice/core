@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmkmenu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:13:47 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,9 @@
 //  includes of other projects
 //_________________________________________________________________________________________________________________
 
-#include <vcl/config.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
+#endif
 #include <vcl/svapp.hxx>
 #include <svtools/dynamicmenuoptions.hxx>
 #ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
