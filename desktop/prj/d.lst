@@ -17,16 +17,18 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 
 ..\%__SRC%\bin\soffice.exe %_DEST%\bin%_EXT%\soffice.exe
 ..\%__SRC%\bin\*.exe.manifest %_DEST%\bin%_EXT%\*.exe.manifest
-..\%__SRC%\bin\wrp?????.dll %_DEST%\bin%_EXT%\wrp?????.dll
-..\%__SRC%\bin\spl?????.dll %_DEST%\bin%_EXT%\spl?????.dll
+..\%__SRC%\bin\wrp*.dll %_DEST%\bin%_EXT%\wrp*.dll
+..\%__SRC%\bin\spl*.dll %_DEST%\bin%_EXT%\spl*.dll
 ..\%__SRC%\bin\socomp.dll %_DEST%\bin%_EXT%\socomp.dll
-..\%__SRC%\lib\libwrp?????.so %_DEST%\lib%_EXT%\libwrp?????.so
+..\%__SRC%\lib\libwrp*.so %_DEST%\lib%_EXT%\libwrp*.so
 ..\%__SRC%\lib\libwrp*.dylib %_DEST%\lib%_EXT%\libwrp*.dylib
-..\%__SRC%\lib\libspl?????.so %_DEST%\lib%_EXT%\libspl?????.so
+..\%__SRC%\lib\libspl*.so %_DEST%\lib%_EXT%\libspl*.so
 ..\%__SRC%\lib\libspl*.dylib %_DEST%\lib%_EXT%\libspl*.dylib
 ..\%__SRC%\lib\libsocomp.so %_DEST%\lib%_EXT%\libsocomp.so
-..\%__SRC%\bin\offacc?????.dll %_DEST%\bin%_EXT%\offacc?????.dll
-..\%__SRC%\lib\liboffacc?????.so %_DEST%\lib%_EXT%\liboffacc?????.so
+..\%__SRC%\lib\libsocomp.dylib %_DEST%\lib%_EXT%\libsocomp.dylib
+..\%__SRC%\bin\offacc*.dll %_DEST%\bin%_EXT%\offacc*.dll
+..\%__SRC%\lib\liboffacc*.so %_DEST%\lib%_EXT%\liboffacc*.so
+..\%__SRC%\lib\liboffacc*.dylib %_DEST%\lib%_EXT%\liboffacc*.dylib
 
 ..\%__SRC%\bin\soffice %_DEST%\bin%_EXT%\soffice.bin
 ..\%__SRC%\bin\so\soffice %_DEST%\bin%_EXT%\so\soffice.bin
@@ -35,8 +37,9 @@ mkdir: %_DEST%\bin%_EXT%\remote2
 
 ..\%__SRC%\bin\pkgchk.exe %_DEST%\bin%_EXT%\pkgchk.exe
 ..\%__SRC%\bin\pkgchk %_DEST%\bin%_EXT%\pkgchk.bin
-..\%__SRC%\bin\pkgchk?????.dll %_DEST%\bin%_EXT%\pkgchk?????.dll
-..\%__SRC%\lib\libpkgchk?????.so %_DEST%\lib%_EXT%\libpkgchk?????.so
+..\%__SRC%\bin\pkgchk*.dll %_DEST%\bin%_EXT%\pkgchk*.dll
+..\%__SRC%\lib\libpkgchk*.so %_DEST%\lib%_EXT%\libpkgchk*.so
+..\%__SRC%\lib\libpkgchk*.dylib %_DEST%\lib%_EXT%\libpkgchk*.dylib
 
 ..\%__SRC%\bin\pagein %_DEST%\bin%_EXT%\pagein
 ..\%__SRC%\misc\pagein-* %_DEST%\bin%_EXT%\pagein-*
