@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:33:05 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:05:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2941,6 +2941,23 @@ void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
     SwCntntNode::Modify( pOldValue, pNewValue );
 }
 
+// #111840#
+SwPosition * SwTxtNode::GetPosition(const SwTxtAttr * pAttr)
+{
+    SwPosition * pResult = NULL;
+
+    for (xub_StrLen i = 0; i < Len(); i++)
+    {
+        if (GetTxtAttr(i, pAttr->Which()) == pAttr)
+        {
+            pResult = new SwPosition(*this, SwIndex(this, i));
+
+            break;
+        }
+    }
+
+    return pResult;
+}
 
 const SwNodeNum * SwTxtNode::GetOutlineNum() const
 {
