@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-06 08:36:34 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,14 +82,14 @@ ModalDialog DLG_DOC_TEMPLATE
     Text [ dutch ] = "Sjablonen" ;
     Text [ spanish ] = "Plantilla de documento" ;
     Text [ english_us ] = "Templates" ;
-    Text[ chinese_simplified ] = "ÎÄµµÑùÊ½";
+    Text[ chinese_simplified ] = "æ–‡æ¡£æ ·å¼";
     Text[ russian ] = "Øàáëîíû";
     Text[ polish ] = "Szablony dokumentu";
-    Text[ japanese ] = "ÄŞ·­ÒİÄÃİÌßÚ°Ä";
-    Text[ chinese_traditional ] = "¤å¥ó¼Ë¦¡";
+    Text[ japanese ] = "æŸ´é…ŒåŸ·é¹¿è€…çˆµæŸ´å²çˆµæ¨é‡ˆå°ºé´«æŸ´";
+    Text[ chinese_traditional ] = "æ–‡ä»¶æ¨£å¼";
     Text[ arabic ] = "ŞæÇáÈ ãÓÊäÏ";
     Text[ greek ] = "Ğñüôõğá åããñÜöïõ";
-    Text[ korean ] = "¹®¼­ ¼­½ÄÆÄÀÏ";
+    Text[ korean ] = "ë¬¸ì„œ ì„œì‹íŒŒì¼";
     Text[ turkish ] = "Belge şablonu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Plantilla de documento";
@@ -109,14 +109,14 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ danish ] = "Ny dokumentskabelon" ;
         Text [ portuguese_brazilian ] = "Neue Dokumentvorlage" ;
         Text [ portuguese ] = "Novo modelo" ;
-        Text[ chinese_simplified ] = "ĞÂ½¨ÎÄµµÑùÊ½";
+        Text[ chinese_simplified ] = "æ–°å»ºæ–‡æ¡£æ ·å¼";
         Text[ russian ] = "Íîâûé øàáëîí";
         Text[ polish ] = "Nowy szablon dokumentu";
-        Text[ japanese ] = "V‚µ‚¢ÄŞ·­ÒİÄÃİÌßÚ°Ä";
-        Text[ chinese_traditional ] = "¶}±Ò·s¤å¥ó¼Ë¦¡";
+        Text[ japanese ] = "æ–°ã—ã„ï¾„ï¾ï½·ï½­ï¾’ï¾ï¾„ï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„";
+        Text[ chinese_traditional ] = "é–‹å•Ÿæ–°æ–‡ä»¶æ¨£å¼";
         Text[ arabic ] = "ŞÇáÈ ãÓÊäÏ ÌÏíÏ";
         Text[ greek ] = "Äçìéïõñãßá ğñüôõğïõ åããñÜöïõ";
-        Text[ korean ] = "»õ ¼­½ÄÆÄÀÏ";
+        Text[ korean ] = "ìƒˆ ì„œì‹íŒŒì¼";
         Text[ turkish ] = "Yeni belge şablonu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nueva plantilla";
@@ -145,14 +145,14 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ dutch ] = "Sjablonen" ;
         Text [ spanish ] = "Plantillas" ;
         Text [ english_us ] = "Templates" ;
-        Text[ chinese_simplified ] = "ÑùÊ½";
+        Text[ chinese_simplified ] = "æ ·å¼";
         Text[ russian ] = "Øàáëîíû";
         Text[ polish ] = "Szablony";
-        Text[ japanese ] = "ÃİÌßÚ°Ä";
-        Text[ chinese_traditional ] = "¼Ë¦¡";
+        Text[ japanese ] = "ï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„";
+        Text[ chinese_traditional ] = "æ¨£å¼";
         Text[ arabic ] = "ŞæÇáÈ";
         Text[ greek ] = "Ğñüôõğá";
-        Text[ korean ] = "¼­½Ä ÆÄÀÏ";
+        Text[ korean ] = "ì„œì‹ íŒŒì¼";
         Text[ turkish ] = "Şablon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Plantillas";
@@ -174,14 +174,14 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ dutch ] = "~Bereiken" ;
         Text [ spanish ] = "~Áreas" ;
         Text [ english_us ] = "~Categories" ;
-        Text[ chinese_simplified ] = "·ÖÀà(~C)";
+        Text[ chinese_simplified ] = "åˆ†ç±»(~C)";
         Text[ russian ] = "Êàòåãîğèè";
         Text[ polish ] = "Obszary";
-        Text[ japanese ] = "”ÍˆÍ(~C)";
-        Text[ chinese_traditional ] = "¤ÀÃş(~C)";
+        Text[ japanese ] = "ç¯„å›²(~C)";
+        Text[ chinese_traditional ] = "åˆ†é¡(~C)";
         Text[ arabic ] = "äØÇŞÇÊ";
         Text[ greek ] = "Êáôçãïñßåò";
-        Text[ korean ] = "¿µ¿ª(~C)";
+        Text[ korean ] = "ì˜ì—­(~C)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Áreas";
@@ -209,14 +209,14 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ dutch ] = "S~jablonen" ;
         Text [ spanish ] = "P~lantillas" ;
         Text [ english_us ] = "~Templates" ;
-        Text[ chinese_simplified ] = "ÑùÊ½(~T)";
+        Text[ chinese_simplified ] = "æ ·å¼(~T)";
         Text[ russian ] = "Øàáëîíû";
         Text[ polish ] = "Szablony";
-        Text[ japanese ] = "ÃİÌßÚ°Ä(~T)";
-        Text[ chinese_traditional ] = "¼Ë¦¡(~T)";
+        Text[ japanese ] = "ï¾ƒï¾ï¾Œï¾Ÿï¾šï½°ï¾„(~T)";
+        Text[ chinese_traditional ] = "æ¨£å¼(~T)";
         Text[ arabic ] = "ŞæÇáÈ";
         Text[ greek ] = "Ğñüôõğá";
-        Text[ korean ] = "¼­½Ä ÆÄÀÏ(~T)";
+        Text[ korean ] = "ì„œì‹ íŒŒì¼(~T)";
         Text[ turkish ] = "~Şablon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P~lantillas";
@@ -259,14 +259,14 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ danish ] = "Rediger" ;
         Text [ portuguese ] = "~Editar" ;
         Text [ portuguese_brazilian ] = "~Bearbeiten" ;
-        Text[ chinese_simplified ] = "±à¼­(~E)";
+        Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
         Text[ russian ] = "~Ïğàâêà";
         Text[ polish ] = "~Edytuj";
-        Text[ japanese ] = "•ÒW(~E)";
-        Text[ chinese_traditional ] = "½s¿è(~E)";
+        Text[ japanese ] = "ç·¨é›†(~E)";
+        Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
         Text[ arabic ] = "ÊÍÑíÑ";
         Text[ greek ] = "~Åğåîåñãáóßá";
-        Text[ korean ] = "ÆíÁı(~E)";
+        Text[ korean ] = "í¸ì§‘(~E)";
         Text[ turkish ] = "~Düzenle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Editar";
@@ -289,19 +289,20 @@ ModalDialog DLG_DOC_TEMPLATE
         Text [ dutch ] = "Be~heren..." ;
         Text [ spanish ] = "~Administrar..." ;
         Text [ english_us ] = "~Organizer..." ;
-        Text[ chinese_simplified ] = "¹ÜÀí(~O)...";
+        Text[ chinese_simplified ] = "ç®¡ç†(~O)...";
         Text[ russian ] = "Îğãàíèçîâàòü...";
         Text[ polish ] = "Zarz¹dzaj...";
-        Text[ japanese ] = "ŠÇ—(~O)...";
-        Text[ chinese_traditional ] = "ºŞ²z(~O)...";
+        Text[ japanese ] = "ç®¡ç†(~O)...";
+        Text[ chinese_traditional ] = "ç®¡ç†(~O)...";
         Text[ arabic ] = "ÇáÅÏÑÇÉ...";
         Text[ greek ] = "Äéá÷åßñéóç...";
-        Text[ korean ] = "°ü¸®(~O)...";
+        Text[ korean ] = "ê´€ë¦¬(~O)...";
         Text[ turkish ] = "Yönet...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Administrar...";
     };
 };
+
 
 
 
