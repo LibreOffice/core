@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:01:02 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:50:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,6 +585,8 @@ TabDialog DLG_DRAWPARA
     Text[ hindi ] = "परिच्छेद";
     Text[ slovak ] = "Odstavec";
 };
+
+
 
 
 
