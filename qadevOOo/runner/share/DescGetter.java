@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DescGetter.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-11-18 16:16:15 $
+ *  last change:$Date: 2004-05-03 08:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,13 @@
  *
  *
  ************************************************************************/
-
-
 package share;
 
-import java.util.Vector;
 import java.io.BufferedReader;
 import java.io.FileReader;
+
+import java.util.Vector;
+
 
 /**
  *
@@ -72,15 +72,19 @@ import java.io.FileReader;
  *
  */
 public abstract class DescGetter {
-
     public abstract DescEntry[] getDescriptionFor(String entry,
-                                    String DescPath, boolean debug);
+                                                  String DescPath,
+                                                  boolean debug);
 
-    protected abstract DescEntry getDescriptionForSingleJob(
-                                    String job, String descPath, boolean debug);
+    protected abstract DescEntry getDescriptionForSingleJob(String job,
+                                                            String descPath,
+                                                            boolean debug);
+
+    protected abstract String[] createScenario(String descPath, String job,
+                                               boolean debug);
 
     protected DescEntry[] getScenario(String url, String descPath,
-                                                        boolean debug) {
+                                      boolean debug) {
         Vector entryList = new Vector();
         String line = "";
         BufferedReader scenario = null;
@@ -89,39 +93,59 @@ public abstract class DescGetter {
         try {
             scenario = new BufferedReader(new FileReader(url));
         } catch (java.io.FileNotFoundException fnfe) {
-            System.out.println("Couldn't find file "+url);
+            System.out.println("Couldn't find file " + url);
+
             return entries;
         }
+
         while (line != null) {
             try {
                 if (line.startsWith("-o")) {
                     entryList.add(getDescriptionForSingleJob(
-                                    line.substring(3).trim(), descPath, debug));
-                }
-                else if (line.startsWith("-sce")) {
-                    DescEntry[] subs = getScenario(
-                                    line.substring(5,line.length()).trim(),
-                                                        descPath, debug);
-                    for (int i=0; i<subs.length; i++) {
+                                          line.substring(3).trim(), descPath,
+                                          debug));
+                } else if (line.startsWith("-sce")) {
+                    DescEntry[] subs = getScenario(line.substring(5,
+                                                                  line.length())
+                                                       .trim(), descPath,
+                                                   debug);
+
+                    for (int i = 0; i < subs.length; i++) {
                         entryList.add(subs[i]);
                     }
+                } else if (line.startsWith("-p")) {
+                    String[] perModule = createScenario(descPath,
+                                                        line.substring(3)
+                                                            .trim(), debug);
+
+                    for (int i = 0; i < perModule.length; i++) {
+                        DescEntry aEntry = getDescriptionForSingleJob(
+                                                   perModule[i].substring(3)
+                                                               .trim(),
+                                                   descPath, debug);
+                        entryList.add(aEntry);
+                    }
                 }
+
                 line = scenario.readLine();
             } catch (java.io.IOException ioe) {
-                if (debug)
+                if (debug) {
                     System.out.println("Exception while reading scenario");
+                }
             }
         }
+
         try {
             scenario.close();
         } catch (java.io.IOException ioe) {
-            if (debug)
+            if (debug) {
                 System.out.println("Exception while closeing scenario");
+            }
         }
+
         entries = new DescEntry[entryList.size()];
-        entries = (DescEntry[])entryList.toArray(entries);
+        entries = (DescEntry[]) entryList.toArray(entries);
+
         return entries;
     }
-
 }
-
