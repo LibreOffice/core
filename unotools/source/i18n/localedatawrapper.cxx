@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-05-31 16:52:36 $
+ *  last change: $Author: er $ $Date: 2001-06-28 12:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/numberformatcodewrapper.hxx>
+#include <unotools/calendarwrapper.hxx>
 
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -96,6 +97,14 @@
 
 #ifndef _COM_SUN_STAR_I18N_KNUMBERFORMATTYPE_HPP_
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_CALENDARFIELDINDEX_HPP_
+#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_CALENDARDISPLAYINDEX_HPP_
+#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #endif
 
 #pragma hdrstop
@@ -1059,88 +1068,7 @@ void LocaleDataWrapper::getDateFormatsImpl()
 }
 
 
-String LocaleDataWrapper::getDate( const Date& rDate ) const
-{
-    String aStr;
-    USHORT nDay = rDate.GetDay();
-    USHORT nMonth = rDate.GetMonth();
-    USHORT nYear = rDate.GetYear();
-    const String& rSep = getDateSep();
-//!TODO: how about leading zeros et al?
-    switch ( getDateFormat() )
-    {
-        case DMY :
-            if ( nDay < 10 )
-                aStr += '0';
-            aStr += String::CreateFromInt32( nDay );
-            aStr += rSep;
-            if ( nMonth < 10 )
-                aStr += '0';
-            aStr += String::CreateFromInt32( nMonth );
-            aStr += rSep;
-            aStr += String::CreateFromInt32( nYear );
-        break;
-        case MDY :
-            if ( nMonth < 10 )
-                aStr += '0';
-            aStr += String::CreateFromInt32( nMonth );
-            aStr += rSep;
-            if ( nDay < 10 )
-                aStr += '0';
-            aStr += String::CreateFromInt32( nDay );
-            aStr += rSep;
-            aStr += String::CreateFromInt32( nYear );
-        break;
-        case YMD :
-        default:
-            aStr += String::CreateFromInt32( nYear );
-            aStr += rSep;
-            if ( nMonth < 10 )
-                aStr += '0';
-            aStr += String::CreateFromInt32( nMonth );
-            aStr += rSep;
-            if ( nDay < 10 )
-                aStr += '0';
-            aStr += String::CreateFromInt32( nDay );
-    }
-    return aStr;
-}
-
-
-String LocaleDataWrapper::getTime( const Time& rTime, BOOL bSec, BOOL b100Sec ) const
-{
-    String aStr;
-    const String& rSep = getTimeSep();
-    USHORT nTmp;
-//!TODO: AM/PM if locale says so
-    nTmp = rTime.GetHour();
-    if ( nTmp < 10 )
-        aStr += '0';
-    aStr += String::CreateFromInt32( nTmp );
-    aStr += rSep;
-    nTmp = rTime.GetMin();
-    if ( nTmp < 10 )
-        aStr += '0';
-    aStr += String::CreateFromInt32( nTmp );
-    if ( bSec )
-    {
-        aStr += rSep;
-        nTmp = rTime.GetSec();
-        if ( nTmp < 10 )
-            aStr += '0';
-        aStr += String::CreateFromInt32( nTmp );
-        if ( b100Sec )
-        {
-            aStr += getTime100SecSep();
-            nTmp = rTime.Get100Sec();
-            aStr += String::CreateFromInt32( nTmp );
-        }
-    }
-    return aStr;
-}
-
-
-// --- simple number formatting ---------------------------------------
+// --- simple number formatting helpers -------------------------------
 
 // The ImplAdd... methods are taken from class International and modified to
 // suit the needs.
@@ -1171,7 +1099,69 @@ static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, ULONG nNumber )
 }
 
 
-inline sal_Unicode* ImplAddStringToBuffer( sal_Unicode* pBuf, const String& rStr )
+static sal_Unicode* ImplAddUNum( sal_Unicode* pBuf, ULONG nNumber, int nMinLen )
+{
+    // fill temp buffer with digits
+    sal_Unicode aTempBuf[30];
+    sal_Unicode* pTempBuf = aTempBuf;
+    do
+    {
+        *pTempBuf = (sal_Unicode)(nNumber % 10) + '0';
+        pTempBuf++;
+        nNumber /= 10;
+        nMinLen--;
+    }
+    while ( nNumber );
+
+    // fill with zeros up to the minimal length
+    while ( nMinLen > 0 )
+    {
+        *pBuf = '0';
+        pBuf++;
+        nMinLen--;
+    }
+
+    // copy temp buffer to real buffer
+    do
+    {
+        pTempBuf--;
+        *pBuf = *pTempBuf;
+        pBuf++;
+    }
+    while ( pTempBuf != aTempBuf );
+
+    return pBuf;
+}
+
+
+static sal_Unicode* ImplAdd2UNum( sal_Unicode* pBuf, USHORT nNumber, int bLeading )
+{
+    DBG_ASSERT( nNumber < 100, "ImplAdd2UNum() - Number >= 100" );
+
+    if ( nNumber < 10 )
+    {
+        if ( bLeading )
+        {
+            *pBuf = '0';
+            pBuf++;
+        }
+        *pBuf = nNumber + '0';
+    }
+    else
+    {
+        USHORT nTemp = nNumber % 10;
+        nNumber /= 10;
+        *pBuf = nNumber + '0';
+        pBuf++;
+        *pBuf = nTemp + '0';
+    }
+
+    pBuf++;
+    return pBuf;
+}
+
+
+inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const String& rStr )
 {
     if ( rStr.Len() == 1 )
         *pBuf++ = rStr.GetChar(0);
@@ -1186,8 +1176,23 @@ inline sal_Unicode* ImplAddStringToBuffer( sal_Unicode* pBuf, const String& rStr
 }
 
 
+inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, sal_Unicode c )
+{
+    *pBuf = c;
+    pBuf++;
+    return pBuf;
+}
+
+
+inline sal_Unicode* ImplAddString( sal_Unicode* pBuf, const sal_Unicode* pCopyBuf, xub_StrLen nLen )
+{
+    memcpy( pBuf, pCopyBuf, nLen * sizeof(sal_Unicode) );
+    return pBuf + nLen;
+}
+
+
 sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
-                               long nNumber, USHORT nDecimals ) const
+        long nNumber, USHORT nDecimals, BOOL bUseThousandSep ) const
 {
     sal_Unicode aNumBuf[32];
     sal_Unicode* pNumBuf;
@@ -1229,7 +1234,7 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
             }
 
             // append decimal separator
-            pBuf = ImplAddStringToBuffer( pBuf, getNumDecimalSep() );
+            pBuf = ImplAddString( pBuf, getNumDecimalSep() );
 
             // fill with zeros
             while ( i < (nDecimals-nNumLen) )
@@ -1263,14 +1268,14 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
             i++;
 
             // add thousand separator?
-            if ( !((nNumLen2-i)%3) /* && rIntn.IsNumThousandSep() */ && (i < nNumLen2) )
-                pBuf = ImplAddStringToBuffer( pBuf, rThoSep );
+            if ( bUseThousandSep && !((nNumLen2-i)%3) && (i < nNumLen2) )
+                pBuf = ImplAddString( pBuf, rThoSep );
         }
 
         // append decimals
         if ( nDecimals )
         {
-            pBuf = ImplAddStringToBuffer( pBuf, getNumDecimalSep() );
+            pBuf = ImplAddString( pBuf, getNumDecimalSep() );
 
             BOOL bNullEnd = TRUE;
             while ( i < nNumLen )
@@ -1294,24 +1299,430 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
 }
 
 
-String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals ) const
+// --- simple date and time formatting --------------------------------
+
+String LocaleDataWrapper::getDate( const Date& rDate ) const
 {
-    sal_Unicode aBuf[48];       // big enough for 64-bit long
+//!TODO: leading zeros et al
+    sal_Unicode aBuf[128];
+    sal_Unicode* pBuf = aBuf;
+    USHORT  nDay    = rDate.GetDay();
+    USHORT  nMonth  = rDate.GetMonth();
+    USHORT  nYear   = rDate.GetYear();
+    USHORT  nYearLen;
+
+    if ( TRUE /* IsDateCentury() */ )
+        nYearLen = 4;
+    else
+    {
+        nYearLen = 2;
+        nYear %= 100;
+    }
+
+    switch ( getDateFormat() )
+    {
+        case DMY :
+            pBuf = ImplAdd2UNum( pBuf, nDay, TRUE /* IsDateDayLeadingZero() */ );
+            pBuf = ImplAddString( pBuf, getDateSep() );
+            pBuf = ImplAdd2UNum( pBuf, nMonth, TRUE /* IsDateMonthLeadingZero() */ );
+            pBuf = ImplAddString( pBuf, getDateSep() );
+            pBuf = ImplAddUNum( pBuf, nYear, nYearLen );
+        break;
+        case MDY :
+            pBuf = ImplAdd2UNum( pBuf, nMonth, TRUE /* IsDateMonthLeadingZero() */ );
+            pBuf = ImplAddString( pBuf, getDateSep() );
+            pBuf = ImplAdd2UNum( pBuf, nDay, TRUE /* IsDateDayLeadingZero() */ );
+            pBuf = ImplAddString( pBuf, getDateSep() );
+            pBuf = ImplAddUNum( pBuf, nYear, nYearLen );
+        break;
+        default:
+            pBuf = ImplAddUNum( pBuf, nYear, nYearLen );
+            pBuf = ImplAddString( pBuf, getDateSep() );
+            pBuf = ImplAdd2UNum( pBuf, nMonth, TRUE /* IsDateMonthLeadingZero() */ );
+            pBuf = ImplAddString( pBuf, getDateSep() );
+            pBuf = ImplAdd2UNum( pBuf, nDay, TRUE /* IsDateDayLeadingZero() */ );
+    }
+
+    return String( aBuf, (xub_StrLen)(ULONG)(pBuf-aBuf) );
+}
+
+
+String LocaleDataWrapper::getTime( const Time& rTime, BOOL bSec, BOOL b100Sec ) const
+{
+//!TODO: leading zeros et al
+    sal_Unicode aBuf[128];
+    sal_Unicode* pBuf = aBuf;
+    USHORT  nHour = rTime.GetHour();
+    BOOL bHour12 = FALSE;   //!TODO: AM/PM from default time format code
+
+    if ( bHour12 )
+    {
+        nHour %= 12;
+        // 0:00 -> 12:00
+        if ( !nHour )
+            nHour = 12;
+    }
+    else
+        nHour %= 24;
+
+    pBuf = ImplAdd2UNum( pBuf, nHour, TRUE /* IsTimeLeadingZero() */ );
+    pBuf = ImplAddString( pBuf, getTimeSep() );
+    pBuf = ImplAdd2UNum( pBuf, rTime.GetMin(), TRUE );
+    if ( bSec )
+    {
+        pBuf = ImplAddString( pBuf, getTimeSep() );
+        pBuf = ImplAdd2UNum( pBuf, rTime.GetSec(), TRUE );
+
+        if ( b100Sec )
+        {
+            pBuf = ImplAddString( pBuf, getTime100SecSep() );
+            pBuf = ImplAdd2UNum( pBuf, rTime.Get100Sec(), TRUE );
+        }
+    }
+
+    String aStr( aBuf, (xub_StrLen)(ULONG)(pBuf-aBuf) );
+
+    if ( bHour12 )
+    {
+        if ( (rTime.GetHour() % 24) >= 12 )
+            aStr += getTimePM();
+        else
+            aStr += getTimeAM();
+    }
+#if 0
+//!TODO: do we need a time string? like "o'clock" or "Uhr" or similar
+    else
+        aStr += getTimeStr();
+#endif
+
+    return aStr;
+}
+
+
+String LocaleDataWrapper::getLongDate( const Date& rDate, CalendarWrapper& rCal,
+        sal_Int16 nDisplayDayOfWeek, sal_Bool bDayOfMonthWithLeadingZero,
+        sal_Int16 nDisplayMonth, sal_Bool bTwoDigitYear ) const
+{
+    using namespace ::com::sun::star::i18n;
+    sal_Unicode     aBuf[20];
+    sal_Unicode*    pBuf;
+    String aStr;
+    sal_Int16 nVal;
+    rCal.setGregorianDateTime( rDate );
+    // day of week
+    nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_WEEK );
+    aStr += rCal.getDisplayName( CalendarDisplayIndex::DAY, nVal, nDisplayDayOfWeek );
+    aStr += getLongDateDayOfWeekSep();
+    // day of month
+    nVal = rCal.getValue( CalendarFieldIndex::DAY_OF_MONTH );
+    pBuf = ImplAdd2UNum( aBuf, nVal, bDayOfMonthWithLeadingZero );
+    String aDay( aBuf, (xub_StrLen)(ULONG)(pBuf-aBuf) );
+    // month of year
+    nVal = rCal.getValue( CalendarFieldIndex::MONTH );
+    String aMonth( rCal.getDisplayName( CalendarDisplayIndex::MONTH, nVal, nDisplayMonth ) );
+    // year
+    nVal = rCal.getValue( CalendarFieldIndex::YEAR );
+    if ( bTwoDigitYear )
+        pBuf = ImplAddUNum( aBuf, nVal % 100, 2 );
+    else
+        pBuf = ImplAddUNum( aBuf, nVal );
+    String aYear( aBuf, (xub_StrLen)(ULONG)(pBuf-aBuf) );
+    // concatenate
+    switch ( getLongDateFormat() )
+    {
+        case DMY :
+            aStr += aDay;
+            aStr += getLongDateDaySep();
+            aStr += aMonth;
+            aStr += getLongDateMonthSep();
+            aStr += aYear;
+        break;
+        case MDY :
+            aStr += aMonth;
+            aStr += getLongDateMonthSep();
+            aStr += aDay;
+            aStr += getLongDateDaySep();
+            aStr += aYear;
+        break;
+        default:    // YMD
+            aStr += aYear;
+            aStr += getLongDateYearSep();
+            aStr += aMonth;
+            aStr += getLongDateMonthSep();
+            aStr += aDay;
+    }
+    return aStr;
+}
+
+
+String LocaleDataWrapper::getDuration( const Time& rTime, BOOL bSec, BOOL b100Sec ) const
+{
+    sal_Unicode aBuf[128];
+    sal_Unicode* pBuf = aBuf;
+
+    if ( rTime < Time( 0 ) )
+        pBuf = ImplAddString( pBuf, ' ' );
+
+    if ( TRUE /* IsTimeLeadingZero() */ )
+        pBuf = ImplAddUNum( pBuf, rTime.GetHour(), 2 );
+    else
+        pBuf = ImplAddUNum( pBuf, rTime.GetHour() );
+    pBuf = ImplAddString( pBuf, getTimeSep() );
+    pBuf = ImplAdd2UNum( pBuf, rTime.GetMin(), TRUE );
+    if ( bSec )
+    {
+        pBuf = ImplAddString( pBuf, getTimeSep() );
+        pBuf = ImplAdd2UNum( pBuf, rTime.GetSec(), TRUE );
+
+        if ( b100Sec )
+        {
+            pBuf = ImplAddString( pBuf, getTime100SecSep() );
+            pBuf = ImplAdd2UNum( pBuf, rTime.Get100Sec(), TRUE );
+        }
+    }
+
+    return String( aBuf, (xub_StrLen)(ULONG)(pBuf-aBuf) );
+}
+
+
+// --- simple number formatting ---------------------------------------
+
+inline long ImplGetNumberStringLengthGuess( const LocaleDataWrapper& rLoc, USHORT nDecimals )
+{
     // approximately 3.2 bits per digit
     const long nDig = ((sizeof(long) * 8) / 3) + 1;
+    // digits, separators, leading zero, sign
+    long nGuess = ((nDecimals < nDig) ?
+        ((((nDig - nDecimals) / 3) * rLoc.getNumThousandSep().Len()) + nDig) :
+        nDecimals) + rLoc.getNumDecimalSep().Len() + 3;
+    return nGuess;
+}
+
+
+String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals, BOOL bUseThousandSep ) const
+{
+    sal_Unicode aBuf[48];       // big enough for 64-bit long
     // check if digits and separators will fit into fixed buffer or allocate
-    const long nGuess = ((nDecimals < nDig) ?
-        ((((nDig - nDecimals) / 3) * getNumThousandSep().Len()) + nDig) :
-        nDecimals) + getNumDecimalSep().Len() + 3;
+    long nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
     sal_Unicode* const pBuffer = (nGuess < 42 ? aBuf :
         new sal_Unicode[nGuess + 16]);
 
-    sal_Unicode* pBuf = ImplAddFormatNum( pBuffer, nNumber, nDecimals );
+    sal_Unicode* pBuf = ImplAddFormatNum( pBuffer, nNumber, nDecimals,
+        bUseThousandSep );
     String aStr( pBuffer, (xub_StrLen)(ULONG)(pBuf-pBuffer) );
 
     if ( pBuffer != aBuf )
         delete [] pBuffer;
     return aStr;
+}
+
+
+#if SUPD < 637
+String LocaleDataWrapper::getNum( long nNumber, USHORT nDecimals ) const
+{
+    return getNum( nNumber, nDecimals, TRUE );
+}
+#endif
+
+
+String LocaleDataWrapper::getCurr( long nNumber, USHORT nDecimals,
+        const String& rCurrencySymbol, BOOL bUseThousandSep ) const
+{
+    sal_Unicode aBuf[75];
+    sal_Unicode aNumBuf[48];    // big enough for 64-bit long
+    sal_Unicode cZeroChar = getCurrZeroChar();
+
+    // check if digits and separators will fit into fixed buffer or allocate
+    long nGuess = ImplGetNumberStringLengthGuess( *this, nDecimals );
+    sal_Unicode* const pNumBuffer = (nGuess < 42 ? aNumBuf :
+        new sal_Unicode[nGuess + 16]);
+
+    sal_Unicode* const pBuffer =
+        ((rCurrencySymbol.Len() + nGuess + 20) < sizeof(aBuf) ? aBuf :
+        new sal_Unicode[ rCurrencySymbol.Len() + nGuess + 20 ]);
+    sal_Unicode* pBuf = pBuffer;
+
+    BOOL bNeg;
+    if ( nNumber < 0 )
+    {
+        bNeg = TRUE;
+        nNumber *= -1;
+    }
+    else
+        bNeg = FALSE;
+
+    // convert number
+    sal_Unicode* pEndNumBuf = ImplAddFormatNum( pNumBuffer, nNumber, nDecimals,
+        bUseThousandSep );
+    xub_StrLen nNumLen = (xub_StrLen)(ULONG)(pEndNumBuf-pNumBuffer);
+
+    // replace zeros with zero character
+    if ( (cZeroChar != '0') && nDecimals /* && IsNumTrailingZeros() */ )
+    {
+        sal_Unicode* pTempBuf;
+        USHORT  i;
+        BOOL    bZero = TRUE;
+
+        pTempBuf = pNumBuffer+nNumLen-nDecimals;
+        i = 0;
+        do
+        {
+            if ( *pTempBuf != '0' )
+            {
+                bZero = FALSE;
+                break;
+            }
+
+            pTempBuf++;
+            i++;
+        }
+        while ( i < nDecimals );
+
+        if ( bZero )
+        {
+            pTempBuf = pNumBuffer+nNumLen-nDecimals;
+            i = 0;
+            do
+            {
+                *pTempBuf = cZeroChar;
+                pTempBuf++;
+                i++;
+            }
+            while ( i < nDecimals );
+        }
+    }
+
+    if ( !bNeg )
+    {
+        switch( getCurrPositiveFormat() )
+        {
+            case 0:
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                break;
+            case 1:
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                break;
+            case 2:
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, ' ' );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                break;
+            case 3:
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, ' ' );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                break;
+        }
+    }
+    else
+    {
+        switch( getCurrNegativeFormat() )
+        {
+            case 0:
+                pBuf = ImplAddString( pBuf, '(' );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, ')' );
+                break;
+            case 1:
+                pBuf = ImplAddString( pBuf, '-' );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                break;
+            case 2:
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, '-' );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                break;
+            case 3:
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, '-' );
+                break;
+            case 4:
+                pBuf = ImplAddString( pBuf, '(' );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, ')' );
+                break;
+            case 5:
+                pBuf = ImplAddString( pBuf, '-' );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                break;
+            case 6:
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, '-' );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                break;
+            case 7:
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, '-' );
+                break;
+            case 8:
+                pBuf = ImplAddString( pBuf, '-' );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, ' ' );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                break;
+            case 9:
+                pBuf = ImplAddString( pBuf, '-' );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, ' ' );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                break;
+            case 10:
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, ' ' );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, '-' );
+                break;
+            case 11:
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, ' ' );
+                pBuf = ImplAddString( pBuf, '-' );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                break;
+            case 12:
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, ' ' );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, '-' );
+                break;
+            case 13:
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, '-' );
+                pBuf = ImplAddString( pBuf, ' ' );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                break;
+            case 14:
+                pBuf = ImplAddString( pBuf, '(' );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, ' ' );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, ')' );
+                break;
+            case 15:
+                pBuf = ImplAddString( pBuf, '(' );
+                pBuf = ImplAddString( pBuf, pNumBuffer, nNumLen );
+                pBuf = ImplAddString( pBuf, ' ' );
+                pBuf = ImplAddString( pBuf, rCurrencySymbol );
+                pBuf = ImplAddString( pBuf, ')' );
+                break;
+        }
+    }
+
+    String aNumber( pBuffer, (xub_StrLen)(ULONG)(pBuf-pBuffer) );
+
+    if ( pBuffer != aBuf )
+        delete pBuffer;
+    if ( pNumBuffer != aNumBuf )
+        delete pNumBuffer;
+
+    return aNumber;
 }
 
 

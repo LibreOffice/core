@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedatawrapper.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:15:45 $
+ *  last change: $Author: er $ $Date: 2001-06-28 12:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,8 @@ namespace com { namespace sun { namespace star {
 }}}
 
 
+class CalendarWrapper;
+
 class LocaleDataWrapper
 {
     static ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xInstalledLocales;
@@ -142,7 +144,8 @@ class LocaleDataWrapper
 
 
             sal_Unicode*        ImplAddFormatNum( sal_Unicode* pBuf,
-                                    long nNumber, USHORT nDecimals ) const;
+                                    long nNumber, USHORT nDecimals,
+                                    BOOL bUseThousandSep ) const;
 
 public:
                                 LocaleDataWrapper(
@@ -238,15 +241,60 @@ public:
             USHORT              getCurrNegativeFormat() const;
             USHORT              getCurrDigits() const;
 
-    // date and time
+    // simple date and time formatting
             DateFormat          getDateFormat() const;
             DateFormat          getLongDateFormat() const;
+                                /// only numerical values of Gregorian calendar
             String              getDate( const Date& rDate ) const;
             String              getTime( const Time& rTime, BOOL bSec = TRUE,
                                     BOOL b100Sec = FALSE ) const;
+            String              getDuration( const Time& rTime,
+                                    BOOL bSec = TRUE, BOOL b100Sec = FALSE ) const;
 
-    // simple number formatting
+                                /** The CalendarWrapper already <b>MUST</b>
+                                    have loaded a calendar.
+                                    @param nDisplayDayOfWeek
+                                        0 := abbreviated name
+                                        1 := full name
+                                    @param bDayOfMonthWithLeadingZero
+                                        <FALSE/> := without leading zero
+                                        <TRUE/>  := with leading zero if <10
+                                    @param nDisplayMonth
+                                        0 := abbreviated name
+                                        1 := full name
+                                    @param bTwoDigitYear
+                                        <FALSE/> := full year
+                                        <TRUE/>  := year % 100
+                                 */
+            String              getLongDate( const Date& rDate,
+                                    CalendarWrapper& rCal,
+                                    sal_Int16 nDisplayDayOfWeek = 1,
+                                    sal_Bool bDayOfMonthWithLeadingZero = sal_False,
+                                    sal_Int16 nDisplayMonth = 1,
+                                    sal_Bool bTwoDigitYear = sal_False
+                                    ) const;
+
+    // simple number formatting, nNumber is  value * 10**nDecimals
+#if SUPD >= 637
+            String              getNum( long nNumber, USHORT nDecimals,
+                                    BOOL bUseThousandSep = TRUE ) const;
+#else
+            String              getNum( long nNumber, USHORT nDecimals,
+                                    BOOL bUseThousandSep ) const;
             String              getNum( long nNumber, USHORT nDecimals ) const;
+#endif
+
+                                /// "Secure" currency formatted string.
+            String              getCurr( long nNumber, USHORT nDecimals,
+                                    const String& rCurrencySymbol,
+                                    BOOL bUseThousandSep = TRUE ) const;
+                                /// Default currency formatted string, use with
+                                /// care as default currency may change in any
+                                /// locale, for example, DEM -> EUR
+            String              getCurr( long nNumber, USHORT nDecimals,
+                                        BOOL bUseThousandSep = TRUE ) const
+                                    { return getCurr( nNumber, nDecimals,
+                                        getCurrSymbol(), bUseThousandSep ); }
 
     // dummy returns, to be implemented
     inline  sal_Unicode         getCurrZeroChar() const
