@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-09 17:16:29 $
+ *  last change: $Author: ama $ $Date: 2001-04-24 10:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,6 +744,7 @@ BOOL SwWrtShell::FinishOLEObj()                     // Server wird beendet
     BOOL bRet = pIPClient && pIPClient->IsInPlaceActive();
     if( bRet )
     {
+        ClearAutomaticContour();
         //  Link fuer Daten-Highlighting im Chart zuruecksetzen
         SvtModuleOptions aMOpt;
         if( aMOpt.IsChart() )
@@ -1577,6 +1578,9 @@ void SwWrtShell::NewCoreSelection()
 /*************************************************************************
 
    $Log: not supported by cvs2svn $
+   Revision 1.9  2001/03/09 17:16:29  jp
+   remove SvData usage
+
    Revision 1.8  2001/03/01 12:33:03  jp
    Bug #74707#: use new flag CheckForOLEInCaption
 

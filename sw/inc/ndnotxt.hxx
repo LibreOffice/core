@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnotxt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: ama $ $Date: 2001-04-24 10:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ class SwNoTxtNode : public SwCntntNode
     String aAlternateText;      // alternativer Text  (HTML)
 
     PolyPolygon *pContour;      // Polygon fuer Konturumlauf
+    BOOL bAutomaticContour;     // automatic contour polygon, not manipulated
 
     // erzeugt fuer alle Ableitungen einen AttrSet mit Bereichen
     // fuer Frame- und Grafik-Attributen (wird nur vom SwCntntNode gerufen)
@@ -105,10 +106,12 @@ public:
     const String& GetAlternateText() const      { return aAlternateText; }
     void SetAlternateText( const String& rTxt ) { aAlternateText = rTxt; }
 
-    void               SetContour( const PolyPolygon *pPoly );
+    void               SetContour( const PolyPolygon *pPoly,
+                                   BOOL bAutomatic = FALSE );
     const PolyPolygon *HasContour() const { return pContour; }
     void               GetContour( PolyPolygon &rPoly ) const;
     void               CreateContour();
+    const BOOL         HasAutomaticContour() const { return bAutomaticContour; }
 
     //Besorgt die Graphic, mit SwapIn fuer GrfNode, per GetData fuer OLE.
     Graphic GetGraphic() const;

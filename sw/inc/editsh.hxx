@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-09 07:17:26 $
+ *  last change: $Author: ama $ $Date: 2001-04-24 10:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,6 +591,10 @@ public:
 
     const PolyPolygon *GetGraphicPolygon() const;
     void SetGraphicPolygon( const PolyPolygon *pPoly );
+
+    // If there's an automatic, not manipulated polygon at the selected
+    // notxtnode, it has to be deleted, e.g. cause the object has changed.
+    void ClearAutomaticContour();
 
     /*
      * liefert die Groesse einer Graphic in Twips, wenn der Cursor

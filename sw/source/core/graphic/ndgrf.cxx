@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-06 10:56:07 $
+ *  last change: $Author: ama $ $Date: 2001-04-24 10:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1101,7 +1101,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
                                                     &aTmpGrf, pColl,
                                             (SwAttrSet*)GetpSwAttrSet() );
     pGrfNd->SetAlternateText( GetAlternateText() );
-    pGrfNd->SetContour( HasContour() );
+    pGrfNd->SetContour( HasContour(), HasAutomaticContour() );
     return pGrfNd;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:20:13 $
+ *  last change: $Author: ama $ $Date: 2001-04-24 10:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     pOLENd->SetChartTblName( GetChartTblName() );
     pOLENd->SetAlternateText( GetAlternateText() );
-    pOLENd->SetContour( HasContour() );
+    pOLENd->SetContour( HasContour(), HasAutomaticContour() );
 
     pOLENd->SetOLESizeInvalid( TRUE );
     pDoc->SetOLEPrtNotifyPending();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-09 15:51:18 $
+ *  last change: $Author: ama $ $Date: 2001-04-24 10:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,6 +414,21 @@ void SwEditShell::SetGraphicPolygon( const PolyPolygon *pPoly )
     EndAllAction();
 }
 
+void SwEditShell::ClearAutomaticContour()
+{
+    SwNoTxtNode *pNd = GetCrsr()->GetNode()->GetNoTxtNode();
+    if( pNd->HasAutomaticContour() )
+    {
+        StartAllAction();
+        pNd->SetContour( NULL, FALSE );
+        SwFlyFrm *pFly = (SwFlyFrm*)pNd->GetFrm()->GetUpper();
+        const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
+        pFly->GetFmt()->SwModify::Modify( (SwFmtSurround*)&rSur,
+                                          (SwFmtSurround*)&rSur );
+        GetDoc()->SetModified();
+        EndAllAction();
+    }
+}
 
 /******************************************************************************
  *      liefert Pointer auf ein SvInPlaceObjectRef, wenn CurCrsr->GetPoint() auf

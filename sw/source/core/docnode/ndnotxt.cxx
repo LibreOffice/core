@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndnotxt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-09 13:53:33 $
+ *  last change: $Author: ama $ $Date: 2001-04-24 10:02:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,8 @@ SwNoTxtNode::SwNoTxtNode( const SwNodeIndex & rWhere,
                   SwGrfFmtColl *pGrfColl,
                   SwAttrSet* pAutoAttr ) :
     SwCntntNode( rWhere, nNdType, pGrfColl ),
-    pContour( 0 )
+    pContour( 0 ),
+    bAutomaticContour( FALSE )
 {
     // soll eine Harte-Attributierung gesetzt werden?
     if( pAutoAttr )
@@ -146,20 +147,22 @@ BOOL SwNoTxtNode::SavePersistentData()
 }
 
 
-void SwNoTxtNode::SetContour( const PolyPolygon *pPoly )
+void SwNoTxtNode::SetContour( const PolyPolygon *pPoly, BOOL bAutomatic )
 {
     delete pContour;
     if ( pPoly )
         pContour = new PolyPolygon( *pPoly );
     else
         pContour = 0;
+    bAutomaticContour = bAutomatic;
 }
 
 
 void SwNoTxtNode::CreateContour()
 {
     ASSERT( !pContour, "Contour available." );
-    pContour = new PolyPolygon( SvxContourDlg::CreateAutoContour( GetGraphic() ) );
+    pContour = new PolyPolygon(SvxContourDlg::CreateAutoContour(GetGraphic()));
+    bAutomaticContour = TRUE;
 }
 
 
