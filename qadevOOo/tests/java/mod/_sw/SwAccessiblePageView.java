@@ -2,7 +2,7 @@
  *
  *  $RCSfile: SwAccessiblePageView.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
  *  last change: $Author: vg $
  *
@@ -61,6 +61,7 @@
 package mod._sw;
 
 import lib.TestCase;
+import com.sun.star.lang.XMultiServiceFactory;
 import lib.TestParameters;
 import java.io.PrintWriter;
 import lib.TestEnvironment;
@@ -150,7 +151,7 @@ public class SwAccessiblePageView extends TestCase {
                 UnoRuntime.queryInterface(XDispatchProvider.class, xController);
             XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
                 UnoRuntime.queryInterface(XURLTransformer.class,
-            Param.getMSF().createInstance("com.sun.star.util.URLTransformer"));
+            ((XMultiServiceFactory)Param.getMSF()).createInstance("com.sun.star.util.URLTransformer"));
             // Because it's an in/out parameter we must use an array of URL objects.
             URL[] aParseURL = new URL[1];
             aParseURL[0] = new URL();
@@ -169,7 +170,7 @@ public class SwAccessiblePageView extends TestCase {
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow(Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         at.printAccessibleTree(log, xRoot);
@@ -247,7 +248,7 @@ public class SwAccessiblePageView extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         log.println( "creating a text document" );
-        xTextDoc = WriterTools.createTextDoc(Param.getMSF());
+        xTextDoc = WriterTools.createTextDoc((XMultiServiceFactory)Param.getMSF());
     }
 
     /**
