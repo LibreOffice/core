@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-25 13:43:25 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 21:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2029,9 +2029,7 @@ PropertyState SwXTextCursor::GetPropertyState(
     {
         if (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_HIDDEN_TEXT)) ||
             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_IS_SKIP_PROTECTED_TEXT)))
-        {
-            eRet = beans::PropertyState_DEFAULT_VALUE;
-        }
+            return beans::PropertyState_DEFAULT_VALUE;
         else
         {
             UnknownPropertyException aExcept;
