@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 14:48:23 $
+#   last change: $Author: hr $ $Date: 2004-02-02 18:27:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -91,12 +91,6 @@ SUBLIBS= \
     $(SLB)$/ww8.lib \
     $(SLB)$/xml.lib
 
-.IF "$(product)" == ""
-.IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT" || "$(GUI)" == "UNX"
-SUBLIBS+= \
-    $(SLB)$/debug.lib
-.ENDIF
-.ENDIF
 .IF "$(compact)" == ""
 SUBLIBS+= \
      $(SLB)$/sw6.lib
