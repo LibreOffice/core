@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-09 13:25:22 $
+ *  last change: $Author: ab $ $Date: 2002-11-01 14:38:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,11 @@ bool lcl_ParseText( String aText, USHORT& rLineNr )
     // number n.  (Maybe it would be better to ignore all whitespace instead
     // of just spaces.)
     aText.EraseAllChars(' ');
-    if (aText.GetChar(0) != '#')
+    sal_Unicode cFirst = aText.GetChar(0);
+    if (cFirst != '#' && !(cFirst >= '0' && cFirst <= '9'))
         return false;
-    aText.Erase(0, 1);
+    if (cFirst == '#')
+        aText.Erase(0, 1);
     // XXX Assumes that USHORT is contained within sal_Int32:
     sal_Int32 n = aText.ToInt32();
     if (n <= 0 || n > std::numeric_limits< USHORT >::max())
