@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-29 11:06:27 $
+ *  last change: $Author: ssa $ $Date: 2001-11-29 13:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,6 +448,17 @@ static void ImplSetMenuItemData( MenuItemData* pData, USHORT nPos )
         pData->eType = MENUITEM_STRINGIMAGE;
 }
 
+static ULONG ImplChangeTipTimeout( ULONG nTimeout, Window *pWindow )
+{
+       AllSettings aAllSettings( pWindow->GetSettings() );
+       HelpSettings aHelpSettings( aAllSettings.GetHelpSettings() );
+       ULONG nRet = aHelpSettings.GetTipTimeout();
+       aHelpSettings.SetTipTimeout( nTimeout );
+       aAllSettings.SetHelpSettings( aHelpSettings );
+       pWindow->SetSettings( aAllSettings );
+       return nRet;
+}
+
 static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighlightedItem, const HelpEvent& rHEvt )
 {
     BOOL bDone = FALSE;
@@ -471,9 +482,10 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
         {
             if( pMenu->GetTipHelpText( nId ).Len() )
             {
-                Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
                 // give user a chance to read the full filename
-                pSVData->maHelpData.mbNoHide = TRUE;
+                USHORT oldTimeout=ImplChangeTipTimeout( 60000, pMenuWindow );
+                Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
+                ImplChangeTipTimeout( oldTimeout, pMenuWindow );
             }
         }
         bDone = TRUE;
@@ -484,9 +496,10 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
         Rectangle aRect( aPos, Size() );
         if( pMenu->GetTipHelpText( nId ).Len() )
         {
-            Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
             // give user a chance to read the full filename
-            pSVData->maHelpData.mbNoHide = TRUE;
+            USHORT oldTimeout=ImplChangeTipTimeout( 60000, pMenuWindow );
+            Help::ShowQuickHelp( pMenuWindow, aRect, pMenu->GetTipHelpText( nId ) );
+            ImplChangeTipTimeout( oldTimeout, pMenuWindow );
         }
         bDone = TRUE;
     }
