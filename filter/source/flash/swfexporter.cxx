@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfexporter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-11 16:47:53 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,12 +631,13 @@ void FlashExporter::exportShape( Reference< XShape >& xShape, bool bMaster )
             {
                 OUString aShapeType( xShape->getShapeType() );
                 if( (0 == aShapeType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.TitleTextShape" ))) ||
-                    (0 == aShapeType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.OutlinerShape" ))))
+                    (0 == aShapeType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.OutlinerShape" ))) ||
+                    (0 == aShapeType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.HeaderShape" ))) ||
+                    (0 == aShapeType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.FooterShape" ))) ||
+                    (0 == aShapeType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.SlideNumberShape" ))) ||
+                    (0 == aShapeType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.DateTimeShape" ))))
                     return;
             }
-
-
-
         }
         catch( Exception& )
         {
