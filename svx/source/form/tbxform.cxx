@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 18:08:33 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 #ifndef _SVX_FMITEMS_HXX //autogen
 #include "fmitems.hxx"
 #endif
+#ifndef SVX_SOURCE_INC_FORMTOOLBARS_HXX
+#include "formtoolbars.hxx"
+#endif
+
 
 #ifndef _SV_SOUND_HXX //autogen
 #include <vcl/sound.hxx>
@@ -130,10 +134,6 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-
-#ifndef IMPROVEFORMS_SVX_SOURCE_FORM_FORMTOOLBARS_HXX
-#include "formtoolbars.hxx"
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -324,42 +324,8 @@ SfxPopupWindow* SvxFmTbxCtlConfig::CreatePopupWindow()
 {
     if ( GetSlotId() == SID_FM_CONFIG )
     {
-        ::svxform::DocumentType eDocType = ::svxform::eUnknownDocumentType;
-        try
-        {
-            Reference< XController > xController;
-            if ( m_xFrame.is() ) xController = m_xFrame->getController();
-            Reference< XModel > xModel;
-            if ( xController.is() ) xModel = xController->getModel();
-
-            OSL_ENSURE( xModel.is(), "SvxFmTbxCtlConfig::CreatePopupWindow: can't determine the document model!" );
-            if ( xModel.is() )
-                eDocType = ::svxform::DocumentClassification::classifyDocument( xModel );
-        }
-        catch( const Exception& )
-        {
-            OSL_ENSURE( sal_False, "SvxFmTbxCtlConfig::CreatePopupWindow: : caught an exception!" );
-        }
-
-        const sal_Char* pToolbarAsciiName = NULL;
-        switch ( eDocType )
-        {
-        case ::svxform::eDatabaseForm:
-            pToolbarAsciiName = "databasecontrols";
-            break;
-
-        case ::svxform::eEnhancedForm:
-            pToolbarAsciiName = "xformcontrols";
-            break;
-
-        default:
-            pToolbarAsciiName = "formcontrols";
-            break;
-        }
-
-        ::rtl::OUString aToolBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/" ) );
-        aToolBarResStr += ::rtl::OUString::createFromAscii( pToolbarAsciiName );
-        createAndPositionSubToolBar( aToolBarResStr );
+        ::svxform::FormToolboxes aToolboxes( m_xFrame, ::svxform::eUnknownDocumentType );
+        createAndPositionSubToolBar( aToolboxes.getToolboxResourceName( SID_FM_CONFIG ) );
     }
     return NULL;
 }
