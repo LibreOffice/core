@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:50:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,11 @@ class SwTxtFrm: public SwCntntFrm
     sal_Bool bHasAnimation  : 1;        // enthaelt animierte SwGrfNumPortion
     sal_Bool bIsSwapped     : 1;        // during text formatting we swap the
                                         // width and height for vertical formatting
+    // OD 14.03.2003 #i11760# - flag to control, if follow is formatted in
+    // method <CalcFollow(..)>.
+    // E.g., avoid formatting of follow, if method <SwLayoutFrm::FormatWidthCols(..)>
+    // is running.
+    sal_Bool mbFollowFormatAllowed : 1;
 
     void ResetPreps();
     inline void Lock() { bLocked = sal_True; }
@@ -219,6 +224,7 @@ class SwTxtFrm: public SwCntntFrm
 
     void ChgThisLines();//Muss immer gerufen werden, wenn sich die Zeilenazahl
                         //veraendert haben kann.
+
 public:
 
     //public, weil der eine oder andere die Methode rufen darf um das
@@ -516,6 +522,19 @@ public:
 
 #endif
 
+    // OD 14.03.2003 #i11760# - access to new member <mbNoFollowFormat>
+    inline const bool FollowFormatAllowed() const
+    {
+        return mbFollowFormatAllowed;
+    }
+    inline void AllowFollowFormat()
+    {
+        mbFollowFormatAllowed = true;
+    }
+    inline void ForbidFollowFormat()
+    {
+        mbFollowFormatAllowed = false;
+    }
 };
 
 /*************************************************************************
