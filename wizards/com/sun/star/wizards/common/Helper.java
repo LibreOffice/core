@@ -2,9 +2,9 @@
 *
 *  $RCSfile: Helper.java,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: vg $ $Date: 2005-02-21 13:51:02 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:13:52 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -288,8 +288,7 @@ public class Helper {
             com.sun.star.util.Date date = (com.sun.star.util.Date)Helper.getUnoPropertyValue( formatSettings, "NullDate");
 
             calendar.set(date.Year, date.Month - 1 , date.Day);
-
-            docNullTime = calendar.getTimeInMillis();
+            docNullTime = getTimeInMillis();
 
             formatter  = NumberFormatter.createNumberFormatter(xmsf, formatSupplier );
         }
@@ -306,6 +305,10 @@ public class Helper {
             return formatter;
         }
 
+        private long getTimeInMillis(){
+            java.util.Date dDate = calendar.getTime();
+            return dDate.getTime();
+        }
         /**
          * @param date a VCL date in form of 20041231
          * @return a document relative date
@@ -316,8 +319,7 @@ public class Helper {
                         ( date % 10000 ) / 100 - 1 ,
                           date % 100 ) ;
 
-            long date1 = calendar.getTimeInMillis();
-
+            long date1 = getTimeInMillis();
             /*
              * docNullTime and date1 are in millis, but
              * I need a day...
@@ -335,7 +337,7 @@ public class Helper {
             calendar.clear();
             calendar.setTimeInMillis( javaTimeInMillis ) ;
 
-            long date1 = calendar.getTimeInMillis();
+            long date1 = getTimeInMillis();
 
             /*
              * docNullTime and date1 are in millis, but
