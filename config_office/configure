@@ -11737,13 +11737,45 @@ echo "${ECHO_T}found" >&6
          { { echo "$as_me:$LINENO: error: msvcp71.dll and/or msvcr71.dll are/is missing in the default location.
 These dlls are part of the .NET installation and should be found in a directory
 similar to:
-\"c:\\Program Files\\Microsoft Visual Studio .NET\\Visual C++ .NET Professional - English\\\"
+\"c:\\Program Files\\Microsoft Visual Studio .NET 2003\\Visual C++ .NET Professional - English\\\"
 As the automatic detection fails please copy the files to external/msvcp71/." >&5
 echo "$as_me: error: msvcp71.dll and/or msvcr71.dll are/is missing in the default location.
 These dlls are part of the .NET installation and should be found in a directory
 similar to:
-\"c:\\Program Files\\Microsoft Visual Studio .NET\\Visual C++ .NET Professional - English\\\"
+\"c:\\Program Files\\Microsoft Visual Studio .NET 2003\\Visual C++ .NET Professional - English\\\"
 As the automatic detection fails please copy the files to external/msvcp71/." >&2;}
+   { (exit 1); exit 1; }; }
+      else
+         echo "$as_me:$LINENO: result: found and copied" >&5
+echo "${ECHO_T}found and copied" >&6
+      fi
+   fi
+fi
+
+if test "$_os" = "WINNT" -a "$COMEX" = "10"; then
+   echo "$as_me:$LINENO: checking instmsia.exe/instmsiw.exe" >&5
+echo $ECHO_N "checking instmsia.exe/instmsiw.exe... $ECHO_C" >&6
+   if test -x ../external/msi/instmsia.exe -a -x ../external/msi/instmsiw.exe; then
+      echo "$as_me:$LINENO: result: found" >&5
+echo "${ECHO_T}found" >&6
+   else
+      MSIAPATH=`/bin/find "$COMPATH/../.." -iname instmsia.exe | head -n 1`
+      MSIWPATH=`/bin/find "$COMPATH/../.." -iname instmsiw.exe | head -n 1`
+      if test -n "$MSIAPATH" -a -n "$MSIWPATH"; then
+         cp "$MSIAPATH" ../external/msi/ && chmod +x ../external/msi/instmsia.exe && MSIACOPY="OK"
+         cp "$MSIWPATH" ../external/msi/ && chmod +x ../external/msi/instmsiw.exe && MSIWCOPY="OK"
+      fi
+      if test -z "$MSIACOPY" -o -z "$MSIWCOPY"; then
+         { { echo "$as_me:$LINENO: error: instmsia.exe and/or instmsiw.exe are/is missing in the default location.
+These programs are part of the .NET installation and should be found in a
+directory similar to:
+\"c:\\Program Files\\Microsoft Visual Studio .NET 2003\\Common7\\Tools\\Deployment\\MsiRedist\\\"
+As the automatic detection fails please copy the files to external/msi/." >&5
+echo "$as_me: error: instmsia.exe and/or instmsiw.exe are/is missing in the default location.
+These programs are part of the .NET installation and should be found in a
+directory similar to:
+\"c:\\Program Files\\Microsoft Visual Studio .NET 2003\\Common7\\Tools\\Deployment\\MsiRedist\\\"
+As the automatic detection fails please copy the files to external/msi/." >&2;}
    { (exit 1); exit 1; }; }
       else
          echo "$as_me:$LINENO: result: found and copied" >&5
