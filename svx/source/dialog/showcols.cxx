@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showcols.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:50:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 16:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,12 +63,6 @@
 #include "showcols.hxx"
 #endif
 
-//CHINA001 #ifndef _SVX_FMPROP_HRC
-//CHINA001 #include "fmprop.hrc"
-//CHINA001 #endif
-#ifndef _SVX_FMTOOLS_HXX
-#include "fmtools.hxx"
-#endif
 #ifndef _SVX_FMRESIDS_HRC
 #include "fmresids.hrc"
 #endif
@@ -85,6 +79,9 @@
 #include <vcl/msgbox.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
@@ -127,7 +124,7 @@ IMPL_LINK( FmShowColsDialog, OnClickedOk, Button*, pButton )
     if (m_xColumns.is())
     {
         ::com::sun::star::uno::Any aCol;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>  xCol;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xCol;
         for (sal_uInt16 i=0; i<m_aList.GetSelectEntryCount(); ++i)
         {
             m_xColumns->getByIndex(reinterpret_cast<sal_Int64>(m_aList.GetEntryData(m_aList.GetSelectEntryPos(i)))) >>= xCol;
