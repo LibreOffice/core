@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: tbe $ $Date: 2002-07-25 11:01:58 $
+ *  last change: $Author: ssa $ $Date: 2002-08-20 14:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2618,7 +2618,12 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
 
     pWin->SetFocusId( nFocusId );
     pWin->SetOutputSizePixel( aSz );
-    pWin->GrabFocus();
+    // #102158# menues must never grab the focus, otherwise
+    // they will be closed immediately
+    // from now on focus grabbing is only prohibited automatically if
+    // FLOATWIN_POPUPMODE_GRABFOCUS was set (which is done below), because some
+    // floaters (like floating toolboxes) may grab the focus
+    // pWin->GrabFocus();
     if ( GetItemCount() )
     {
         pWin->StartPopupMode( aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS );
