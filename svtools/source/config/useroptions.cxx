@@ -2,9 +2,9 @@
  *
  *  $RCSfile: useroptions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-08-14 14:26:00 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,25 +80,6 @@ using namespace utl;
 using namespace rtl;
 using namespace com::sun::star::uno;
 
-// define ----------------------------------------------------------------
-
-    #define USER_CITY               0
-    #define USER_COMPANY            1
-    #define USER_COUNTRY            2
-    #define USER_EMAIL              3
-    #define USER_FAX                4
-    #define USER_FIRSTNAME          5
-    #define USER_LASTNAME           6
-    #define USER_POSITION           7
-    #define USER_STATE              8
-    #define USER_STREET             9
-    #define USER_TELEPHONEHOME      10
-    #define USER_TELEPHONEWORK      11
-    #define USER_TITLE              12
-    #define USER_ID                 13
-    #define USER_ZIP                14
-
-
 // class SvtUserOptions_Impl ---------------------------------------------
 
 class SvtUserOptions_Impl : public utl::ConfigItem
@@ -125,12 +106,26 @@ private:
     String          m_aFullName;
     String          m_aLocale;
 
-    ::osl::Mutex    m_aMutex;
+    sal_Bool        m_bIsROCompany;
+    sal_Bool        m_bIsROFirstName;
+    sal_Bool        m_bIsROLastName;
+    sal_Bool        m_bIsROID;
+    sal_Bool        m_bIsROStreet;
+    sal_Bool        m_bIsROCity;
+    sal_Bool        m_bIsROState;
+    sal_Bool        m_bIsROZip;
+    sal_Bool        m_bIsROCountry;
+    sal_Bool        m_bIsROPosition;
+    sal_Bool        m_bIsROTitle;
+    sal_Bool        m_bIsROTelephoneHome;
+    sal_Bool        m_bIsROTelephoneWork;
+    sal_Bool        m_bIsROFax;
+    sal_Bool        m_bIsROEmail;
+    sal_Bool        m_bIsROCustomerNumber;
 
     typedef String SvtUserOptions_Impl:: *StrPtr;
 
-    // not const because of using a mutex
-    const String&   GetToken( StrPtr pPtr );
+    const String&   GetToken( StrPtr pPtr ) const;
     void            SetToken( StrPtr pPtr, const String& rNewToken );
     void            InitFullName();
     void            Load();
@@ -141,23 +136,23 @@ public:
     virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
     virtual void    Commit();
 
-    // get the user token, not const because of using a mutex
-    const String&   GetCompany() { return GetToken( &SvtUserOptions_Impl::m_aCompany ); }
-    const String&   GetFirstName() { return GetToken( &SvtUserOptions_Impl::m_aFirstName ); }
-    const String&   GetLastName() { return GetToken( &SvtUserOptions_Impl::m_aLastName ); }
-    const String&   GetID() { return GetToken( &SvtUserOptions_Impl::m_aID ); }
-    const String&   GetStreet() { return GetToken( &SvtUserOptions_Impl::m_aStreet ); }
-    const String&   GetCity() { return GetToken( &SvtUserOptions_Impl::m_aCity ); }
-    const String&   GetState() { return GetToken( &SvtUserOptions_Impl::m_aState ); }
-    const String&   GetZip() { return GetToken( &SvtUserOptions_Impl::m_aZip ); }
-    const String&   GetCountry() { return GetToken( &SvtUserOptions_Impl::m_aCountry ); }
-    const String&   GetPosition() { return GetToken( &SvtUserOptions_Impl::m_aPosition ); }
-    const String&   GetTitle() { return GetToken( &SvtUserOptions_Impl::m_aTitle ); }
-    const String&   GetTelephoneHome() { return GetToken( &SvtUserOptions_Impl::m_aTelephoneHome ); }
-    const String&   GetTelephoneWork() { return GetToken( &SvtUserOptions_Impl::m_aTelephoneWork ); }
-    const String&   GetFax() { return GetToken( &SvtUserOptions_Impl::m_aFax ); }
-    const String&   GetEmail() { return GetToken( &SvtUserOptions_Impl::m_aEmail ); }
-    const String&   GetCustomerNumber() { return GetToken( &SvtUserOptions_Impl::m_aCustomerNumber ); }
+    // get the user token
+    const String&   GetCompany() const { return GetToken( &SvtUserOptions_Impl::m_aCompany ); }
+    const String&   GetFirstName() const { return GetToken( &SvtUserOptions_Impl::m_aFirstName ); }
+    const String&   GetLastName() const { return GetToken( &SvtUserOptions_Impl::m_aLastName ); }
+    const String&   GetID() const { return GetToken( &SvtUserOptions_Impl::m_aID ); }
+    const String&   GetStreet() const { return GetToken( &SvtUserOptions_Impl::m_aStreet ); }
+    const String&   GetCity() const { return GetToken( &SvtUserOptions_Impl::m_aCity ); }
+    const String&   GetState() const { return GetToken( &SvtUserOptions_Impl::m_aState ); }
+    const String&   GetZip() const { return GetToken( &SvtUserOptions_Impl::m_aZip ); }
+    const String&   GetCountry() const { return GetToken( &SvtUserOptions_Impl::m_aCountry ); }
+    const String&   GetPosition() const { return GetToken( &SvtUserOptions_Impl::m_aPosition ); }
+    const String&   GetTitle() const { return GetToken( &SvtUserOptions_Impl::m_aTitle ); }
+    const String&   GetTelephoneHome() const { return GetToken( &SvtUserOptions_Impl::m_aTelephoneHome ); }
+    const String&   GetTelephoneWork() const { return GetToken( &SvtUserOptions_Impl::m_aTelephoneWork ); }
+    const String&   GetFax() const { return GetToken( &SvtUserOptions_Impl::m_aFax ); }
+    const String&   GetEmail() const { return GetToken( &SvtUserOptions_Impl::m_aEmail ); }
+    const String&   GetCustomerNumber() const { return GetToken( &SvtUserOptions_Impl::m_aCustomerNumber ); }
 
     const String&   GetFullName();
     const String&   GetLocale() const { return m_aLocale; }
@@ -195,6 +190,8 @@ public:
                         { SetToken( &SvtUserOptions_Impl::m_aEmail, rNewToken ); }
     void            SetCustomerNumber( const String& rNewToken )
                         { SetToken( &SvtUserOptions_Impl::m_aCustomerNumber, rNewToken ); }
+
+    sal_Bool        IsTokenReadonly( USHORT nToken ) const;
 };
 
 // global ----------------------------------------------------------------
@@ -202,42 +199,43 @@ public:
 static SvtUserOptions_Impl* pOptions = NULL;
 static sal_Int32            nRefCount = 0;
 
+#define READONLY_DEFAULT    sal_False
+
 // functions -------------------------------------------------------------
 
 Sequence< OUString > GetUserPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Data/l",           // USER_CITY
-        "Data/o",           // USER_COMPANY
-        "Data/c",           // USER_COUNTRY
-        "Data/mail",            // USER_EMAIL
-        "Data/facsimiletelephonenumber",                // USER_FAX
-        "Data/givenname",       // USER_FIRSTNAME
-        "Data/sn",      // USER_LASTNAME
-        "Data/position",        // USER_POSITION
-        "Data/st",          // USER_STATE
-        "Data/street",          // USER_STREET
-        "Data/homephone",   // USER_TELEPHONEHOME
-        "Data/telephonenumber", // USER_TELEPHONEWORK
-        "Data/title",           // USER_TITLE
-        "Data/initials",        // USER_ID
-        "Data/postalcode",              // USER_ZIP
+        "Data/l",                       // USER_OPT_CITY
+        "Data/o",                       // USER_OPT_COMPANY
+        "Data/c",                       // USER_OPT_COUNTRY
+        "Data/mail",                    // USER_OPT_EMAIL
+        "Data/facsimiletelephonenumber",// USER_OPT_FAX
+        "Data/givenname",               // USER_OPT_FIRSTNAME
+        "Data/sn",                      // USER_OPT_LASTNAME
+        "Data/position",                // USER_OPT_POSITION
+        "Data/st",                      // USER_OPT_STATE
+        "Data/street",                  // USER_OPT_STREET
+        "Data/homephone",               // USER_OPT_TELEPHONEHOME
+        "Data/telephonenumber",         // USER_OPT_TELEPHONEWORK
+        "Data/title",                   // USER_OPT_TITLE
+        "Data/initials",                // USER_OPT_ID
+        "Data/postalcode",              // USER_OPT_ZIP
     };
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
-    Sequence< OUString > aNames( nCount );
-    OUString* pNames = aNames.getArray();
+    Sequence< OUString > seqNames( nCount );
+    OUString* pNames = seqNames.getArray();
     for ( int i = 0; i < nCount; i++ )
         pNames[i] = OUString::createFromAscii( aPropNames[i] );
 
-    return aNames;
+    return seqNames;
 }
 
 // class SvtUserOptions_Impl ---------------------------------------------
 
-const String& SvtUserOptions_Impl::GetToken( StrPtr pPtr )
+const String& SvtUserOptions_Impl::GetToken( StrPtr pPtr ) const
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
     return this->*pPtr;
 }
 
@@ -245,7 +243,6 @@ const String& SvtUserOptions_Impl::GetToken( StrPtr pPtr )
 
 void SvtUserOptions_Impl::SetToken( StrPtr pPtr, const String& rNewToken )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
     this->*pPtr = rNewToken;
     SetModified();
 }
@@ -265,7 +262,26 @@ void SvtUserOptions_Impl::InitFullName()
 // -----------------------------------------------------------------------
 
 SvtUserOptions_Impl::SvtUserOptions_Impl() :
-    ConfigItem( OUString::createFromAscii("UserProfile") )
+
+    ConfigItem( OUString::createFromAscii("UserProfile") ),
+
+    m_bIsROCompany( READONLY_DEFAULT ),
+    m_bIsROFirstName( READONLY_DEFAULT ),
+    m_bIsROLastName( READONLY_DEFAULT ),
+    m_bIsROID( READONLY_DEFAULT ),
+    m_bIsROStreet( READONLY_DEFAULT ),
+    m_bIsROCity( READONLY_DEFAULT ),
+    m_bIsROState( READONLY_DEFAULT ),
+    m_bIsROZip( READONLY_DEFAULT ),
+    m_bIsROCountry( READONLY_DEFAULT ),
+    m_bIsROPosition( READONLY_DEFAULT ),
+    m_bIsROTitle( READONLY_DEFAULT ),
+    m_bIsROTelephoneHome( READONLY_DEFAULT ),
+    m_bIsROTelephoneWork( READONLY_DEFAULT ),
+    m_bIsROFax( READONLY_DEFAULT ),
+    m_bIsROEmail( READONLY_DEFAULT ),
+    m_bIsROCustomerNumber( READONLY_DEFAULT )
+
 {
     Load();
     Any aAny = ConfigManager::GetConfigManager()->GetDirectConfigProperty( ConfigManager::LOCALE );
@@ -274,47 +290,71 @@ SvtUserOptions_Impl::SvtUserOptions_Impl() :
         m_aLocale = String( aLocale );
     else
     {
-        DBG_ERRORFILE( "no locale found" );
+        DBG_ERRORFILE( "SvtUserOptions_Impl::SvtUserOptions_Impl(): no locale found" );
     }
 }
 // -----------------------------------------------------------------------
 void SvtUserOptions_Impl::Load()
 {
-    Sequence< OUString > aNames = GetUserPropertyNames();
-    Sequence< Any > aValues = GetProperties( aNames );
-    EnableNotification( aNames );
-    const Any* pValues = aValues.getConstArray();
-    DBG_ASSERT( aValues.getLength() == aNames.getLength(), "GetProperties failed" );
-    if ( aValues.getLength() == aNames.getLength() )
+    Sequence< OUString > seqNames = GetUserPropertyNames();
+    Sequence< Any > seqValues = GetProperties( seqNames );
+    Sequence< sal_Bool > seqRO = GetReadOnlyStates( seqNames );
+    EnableNotification( seqNames );
+    const Any* pValues = seqValues.getConstArray();
+    DBG_ASSERT( seqValues.getLength() == seqNames.getLength(), "GetProperties failed" );
+    if ( seqValues.getLength() == seqNames.getLength() )
     {
         OUString aTempStr;
 
-        for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
+        for ( int nProp = 0; nProp < seqNames.getLength(); nProp++ )
         {
             if ( pValues[nProp].hasValue() )
             {
                 if ( pValues[nProp] >>= aTempStr )
                 {
+                    String* pToken = NULL;
+                    sal_Bool* pBool = NULL;
+
                     switch ( nProp )
                     {
-                        case USER_COMPANY:          m_aCompany = String( aTempStr );        break;
-                        case USER_FIRSTNAME:        m_aFirstName = String( aTempStr );      break;
-                        case USER_LASTNAME:         m_aLastName = String( aTempStr );       break;
-                        case USER_ID:               m_aID = String( aTempStr );             break;
-                        case USER_STREET:           m_aStreet = String( aTempStr );         break;
-                        case USER_CITY:             m_aCity = String( aTempStr );           break;
-                        case USER_STATE:            m_aState = String( aTempStr );          break;
-                        case USER_ZIP:              m_aZip = String( aTempStr );            break;
-                        case USER_COUNTRY:          m_aCountry = String( aTempStr );        break;
-                        case USER_POSITION:         m_aPosition = String( aTempStr );       break;
-                        case USER_TITLE:            m_aTitle = String( aTempStr );          break;
-                        case USER_TELEPHONEHOME:    m_aTelephoneHome = String( aTempStr );  break;
-                        case USER_TELEPHONEWORK:    m_aTelephoneWork = String( aTempStr );  break;
-                        case USER_FAX:              m_aFax = String( aTempStr );            break;
-                        case USER_EMAIL:            m_aEmail = String( aTempStr );          break;
+                        case USER_OPT_COMPANY:
+                            pToken = &m_aCompany; pBool = &m_bIsROCompany; break;
+                        case USER_OPT_FIRSTNAME:
+                            pToken = &m_aFirstName; pBool = &m_bIsROFirstName; break;
+                        case USER_OPT_LASTNAME:
+                            pToken = &m_aLastName; pBool = &m_bIsROLastName; break;
+                        case USER_OPT_ID:
+                            pToken = &m_aID; pBool = &m_bIsROID; break;
+                        case USER_OPT_STREET:
+                            pToken = &m_aStreet; pBool = &m_bIsROStreet; break;
+                        case USER_OPT_CITY:
+                            pToken = &m_aCity; pBool = &m_bIsROCity; break;
+                        case USER_OPT_STATE:
+                            pToken = &m_aState; pBool = &m_bIsROState; break;
+                        case USER_OPT_ZIP:
+                            pToken = &m_aZip; pBool = &m_bIsROZip; break;
+                        case USER_OPT_COUNTRY:
+                            pToken = &m_aCountry; pBool = &m_bIsROCountry; break;
+                        case USER_OPT_POSITION:
+                            pToken = &m_aPosition; pBool = &m_bIsROPosition; break;
+                        case USER_OPT_TITLE:
+                            pToken = &m_aTitle; pBool = &m_bIsROTitle; break;
+                        case USER_OPT_TELEPHONEHOME:
+                            pToken = &m_aTelephoneHome; pBool = &m_bIsROTelephoneHome; break;
+                        case USER_OPT_TELEPHONEWORK:
+                            pToken = &m_aTelephoneWork; pBool = &m_bIsROTelephoneWork; break;
+                        case USER_OPT_FAX:
+                            pToken = &m_aFax; pBool = &m_bIsROFax; break;
+                        case USER_OPT_EMAIL:
+                            pToken = &m_aEmail; pBool = &m_bIsROEmail; break;
                         default:
                             DBG_ERRORFILE( "invalid index to load a user token" );
                     }
+
+                    if ( pToken )
+                        *pToken = String( aTempStr );
+                    if ( pBool )
+                        *pBool = seqRO[nProp];
                 }
                 else
                 {
@@ -329,39 +369,67 @@ void SvtUserOptions_Impl::Load()
 
 void SvtUserOptions_Impl::Commit()
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    Sequence< OUString > seqOrgNames = GetUserPropertyNames();
+    sal_Int32 nOrgCount = seqOrgNames.getLength();
 
-    Sequence< OUString > aNames = GetUserPropertyNames();
-    OUString* pNames = aNames.getArray();
-    Sequence< Any > aValues( aNames.getLength() );
-    Any* pValues = aValues.getArray();
-    const Type& rType = ::getBooleanCppuType();
+    Sequence< OUString > seqNames( nOrgCount );
+    Sequence< Any > seqValues( nOrgCount );
+    sal_Int32 nRealCount = 0;
+
     OUString aTempStr;
-    for ( int nProp = 0; nProp < aNames.getLength(); nProp++ )
+
+    for ( int nProp = 0; nProp < nOrgCount; nProp++ )
     {
+        sal_Bool* pbReadonly = NULL;
+
         switch ( nProp )
         {
-            case USER_COMPANY:          aTempStr = OUString( m_aCompany );          break;
-            case USER_FIRSTNAME:        aTempStr = OUString( m_aFirstName );        break;
-            case USER_LASTNAME:         aTempStr = OUString( m_aLastName );         break;
-            case USER_ID:               aTempStr = OUString( m_aID );               break;
-            case USER_STREET:           aTempStr = OUString( m_aStreet );           break;
-            case USER_CITY:             aTempStr = OUString( m_aCity );             break;
-            case USER_STATE:            aTempStr = OUString( m_aState );            break;
-            case USER_ZIP:              aTempStr = OUString( m_aZip );              break;
-            case USER_COUNTRY:          aTempStr = OUString( m_aCountry );          break;
-            case USER_POSITION:         aTempStr = OUString( m_aPosition );         break;
-            case USER_TITLE:            aTempStr = OUString( m_aTitle );            break;
-            case USER_TELEPHONEHOME:    aTempStr = OUString( m_aTelephoneHome );    break;
-            case USER_TELEPHONEWORK:    aTempStr = OUString( m_aTelephoneWork );    break;
-            case USER_FAX:              aTempStr = OUString( m_aFax );              break;
-            case USER_EMAIL:            aTempStr = OUString( m_aEmail );            break;
+            case USER_OPT_COMPANY:
+                aTempStr = OUString( m_aCompany ); pbReadonly = &m_bIsROCompany; break;
+            case USER_OPT_FIRSTNAME:
+                aTempStr = OUString( m_aFirstName ); pbReadonly = &m_bIsROFirstName; break;
+            case USER_OPT_LASTNAME:
+                aTempStr = OUString( m_aLastName ); pbReadonly = &m_bIsROLastName; break;
+            case USER_OPT_ID:
+                aTempStr = OUString( m_aID ); pbReadonly = &m_bIsROID; break;
+            case USER_OPT_STREET:
+                aTempStr = OUString( m_aStreet ); pbReadonly = &m_bIsROStreet; break;
+            case USER_OPT_CITY:
+                aTempStr = OUString( m_aCity ); pbReadonly = &m_bIsROCity; break;
+            case USER_OPT_STATE:
+                aTempStr = OUString( m_aState ); pbReadonly = &m_bIsROState; break;
+            case USER_OPT_ZIP:
+                aTempStr = OUString( m_aZip ); pbReadonly = &m_bIsROZip; break;
+            case USER_OPT_COUNTRY:
+                aTempStr = OUString( m_aCountry ); pbReadonly = &m_bIsROCountry; break;
+            case USER_OPT_POSITION:
+                aTempStr = OUString( m_aPosition ); pbReadonly = &m_bIsROPosition; break;
+            case USER_OPT_TITLE:
+                aTempStr = OUString( m_aTitle ); pbReadonly = &m_bIsROTitle; break;
+            case USER_OPT_TELEPHONEHOME:
+                aTempStr = OUString( m_aTelephoneHome ); pbReadonly = &m_bIsROTelephoneHome; break;
+            case USER_OPT_TELEPHONEWORK:
+                aTempStr = OUString( m_aTelephoneWork ); pbReadonly = &m_bIsROTelephoneWork; break;
+            case USER_OPT_FAX:
+                aTempStr = OUString( m_aFax ); pbReadonly = &m_bIsROFax; break;
+            case USER_OPT_EMAIL:
+                aTempStr = OUString( m_aEmail ); pbReadonly = &m_bIsROEmail; break;
             default:
                 DBG_ERRORFILE( "invalid index to save a user token" );
         }
-        pValues[nProp] <<= aTempStr;
+
+        if ( pbReadonly && !(*pbReadonly) )
+        {
+            seqValues[nRealCount] <<= aTempStr;
+            seqNames[nRealCount] = seqOrgNames[nProp];
+            ++nRealCount;
+        }
     }
-    PutProperties( aNames, aValues );
+
+    // Set properties in configuration.
+    seqNames.realloc( nRealCount );
+    seqValues.realloc( nRealCount );
+    PutProperties( seqNames, seqValues );
 }
 
 // -----------------------------------------------------------------------
@@ -380,12 +448,43 @@ void SvtUserOptions_Impl::Notify( const Sequence<rtl::OUString>& aPropertyNames 
     Load();
 }
 
+// -----------------------------------------------------------------------
+
+sal_Bool SvtUserOptions_Impl::IsTokenReadonly( USHORT nToken ) const
+{
+    sal_Bool bRet = sal_False;
+
+    switch ( nToken )
+    {
+        case USER_OPT_COMPANY:          bRet = m_bIsROCompany;          break;
+        case USER_OPT_FIRSTNAME:        bRet = m_bIsROFirstName;        break;
+        case USER_OPT_LASTNAME:         bRet = m_bIsROLastName;         break;
+        case USER_OPT_ID:               bRet = m_bIsROID;               break;
+        case USER_OPT_STREET:           bRet = m_bIsROStreet;           break;
+        case USER_OPT_CITY:             bRet = m_bIsROCity;             break;
+        case USER_OPT_STATE:            bRet = m_bIsROState;            break;
+        case USER_OPT_ZIP:              bRet = m_bIsROZip;              break;
+        case USER_OPT_COUNTRY:          bRet = m_bIsROCountry;          break;
+        case USER_OPT_POSITION:         bRet = m_bIsROPosition;         break;
+        case USER_OPT_TITLE:            bRet = m_bIsROTitle;            break;
+        case USER_OPT_TELEPHONEHOME:    bRet = m_bIsROTelephoneHome;    break;
+        case USER_OPT_TELEPHONEWORK:    bRet = m_bIsROTelephoneWork;    break;
+        case USER_OPT_FAX:              bRet = m_bIsROFax;              break;
+        case USER_OPT_EMAIL:            bRet = m_bIsROEmail;            break;
+        default:
+            DBG_ERRORFILE( "SvtUserOptions_Impl::IsTokenReadonly(): invalid token" );
+    }
+
+    return bRet;
+}
+
 // class SvtUserOptions --------------------------------------------------
 
 SvtUserOptions::SvtUserOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() );
+    ::osl::MutexGuard aGuard( GetInitMutex() );
+
     if ( !pOptions )
         pOptions = new SvtUserOptions_Impl;
     ++nRefCount;
@@ -397,7 +496,8 @@ SvtUserOptions::SvtUserOptions()
 SvtUserOptions::~SvtUserOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+    ::osl::MutexGuard aGuard( GetInitMutex() );
+
     if ( !--nRefCount )
     {
         if ( pOptions->IsModified() )
@@ -408,8 +508,34 @@ SvtUserOptions::~SvtUserOptions()
 
 // -----------------------------------------------------------------------
 
+::osl::Mutex& SvtUserOptions::GetInitMutex()
+{
+    // Initialize static mutex only for one time!
+    static ::osl::Mutex* pMutex = NULL;
+    // If these method first called (Mutex not already exist!) ...
+    if ( pMutex == NULL )
+    {
+        // ... we must create a new one. Protect follow code with the global mutex -
+        // It must be - we create a static variable!
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        // We must check our pointer again -
+        // because another instance of our class will be faster then this instance!
+        if ( pMutex == NULL )
+        {
+            // Create the new mutex and set it for return on static variable.
+            static ::osl::Mutex aMutex;
+            pMutex = &aMutex;
+        }
+    }
+    // Return new created or already existing mutex object.
+    return *pMutex;
+}
+
+// -----------------------------------------------------------------------
+
 const String& SvtUserOptions::GetCompany() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetCompany();
 }
 
@@ -417,6 +543,7 @@ const String& SvtUserOptions::GetCompany() const
 
 const String& SvtUserOptions::GetFirstName() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetFirstName();
 }
 
@@ -424,6 +551,7 @@ const String& SvtUserOptions::GetFirstName() const
 
 const String& SvtUserOptions::GetLastName() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetLastName();
 }
 
@@ -431,6 +559,7 @@ const String& SvtUserOptions::GetLastName() const
 
 const String& SvtUserOptions::GetID() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetID();
 }
 
@@ -438,6 +567,7 @@ const String& SvtUserOptions::GetID() const
 
 const String& SvtUserOptions::GetStreet() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetStreet();
 }
 
@@ -445,6 +575,7 @@ const String& SvtUserOptions::GetStreet() const
 
 const String& SvtUserOptions::GetCity() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetCity();
 }
 
@@ -452,6 +583,7 @@ const String& SvtUserOptions::GetCity() const
 
 const String& SvtUserOptions::GetState() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetState();
 }
 
@@ -459,6 +591,7 @@ const String& SvtUserOptions::GetState() const
 
 const String& SvtUserOptions::GetZip() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetZip();
 }
 
@@ -466,6 +599,7 @@ const String& SvtUserOptions::GetZip() const
 
 const String& SvtUserOptions::GetCountry() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetCountry();
 }
 
@@ -473,6 +607,7 @@ const String& SvtUserOptions::GetCountry() const
 
 const String& SvtUserOptions::GetPosition() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetPosition();
 }
 
@@ -480,6 +615,7 @@ const String& SvtUserOptions::GetPosition() const
 
 const String& SvtUserOptions::GetTitle() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetTitle();
 }
 
@@ -487,6 +623,7 @@ const String& SvtUserOptions::GetTitle() const
 
 const String& SvtUserOptions::GetTelephoneHome() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetTelephoneHome();
 }
 
@@ -494,6 +631,7 @@ const String& SvtUserOptions::GetTelephoneHome() const
 
 const String& SvtUserOptions::GetTelephoneWork() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetTelephoneWork();
 }
 
@@ -501,6 +639,7 @@ const String& SvtUserOptions::GetTelephoneWork() const
 
 const String& SvtUserOptions::GetFax() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetFax();
 }
 
@@ -508,6 +647,7 @@ const String& SvtUserOptions::GetFax() const
 
 const String& SvtUserOptions::GetEmail() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetEmail();
 }
 
@@ -515,6 +655,7 @@ const String& SvtUserOptions::GetEmail() const
 
 const String& SvtUserOptions::GetCustomerNumber() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetCustomerNumber();
 }
 
@@ -522,6 +663,7 @@ const String& SvtUserOptions::GetCustomerNumber() const
 
 const String& SvtUserOptions::GetFullName() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetFullName();
 }
 
@@ -529,6 +671,7 @@ const String& SvtUserOptions::GetFullName() const
 
 const String& SvtUserOptions::GetLocale() const
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     return pImp->GetLocale();
 }
 
@@ -536,6 +679,7 @@ const String& SvtUserOptions::GetLocale() const
 
 void SvtUserOptions::SetCompany( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetCompany( rNewToken );
 }
 
@@ -543,6 +687,7 @@ void SvtUserOptions::SetCompany( const String& rNewToken )
 
 void SvtUserOptions::SetFirstName( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetFirstName( rNewToken );
 }
 
@@ -550,6 +695,7 @@ void SvtUserOptions::SetFirstName( const String& rNewToken )
 
 void SvtUserOptions::SetLastName( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetLastName( rNewToken );
 }
 
@@ -557,6 +703,7 @@ void SvtUserOptions::SetLastName( const String& rNewToken )
 
 void SvtUserOptions::SetID( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetID( rNewToken );
 }
 
@@ -564,6 +711,7 @@ void SvtUserOptions::SetID( const String& rNewToken )
 
 void SvtUserOptions::SetStreet( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetStreet( rNewToken );
 }
 
@@ -571,6 +719,7 @@ void SvtUserOptions::SetStreet( const String& rNewToken )
 
 void SvtUserOptions::SetCity( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetCity( rNewToken );
 }
 
@@ -578,6 +727,7 @@ void SvtUserOptions::SetCity( const String& rNewToken )
 
 void SvtUserOptions::SetState( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetState( rNewToken );
 }
 
@@ -585,6 +735,7 @@ void SvtUserOptions::SetState( const String& rNewToken )
 
 void SvtUserOptions::SetZip( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetZip( rNewToken );
 }
 
@@ -592,6 +743,7 @@ void SvtUserOptions::SetZip( const String& rNewToken )
 
 void SvtUserOptions::SetCountry( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetCountry( rNewToken );
 }
 
@@ -599,6 +751,7 @@ void SvtUserOptions::SetCountry( const String& rNewToken )
 
 void SvtUserOptions::SetPosition( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetPosition( rNewToken );
 }
 
@@ -606,6 +759,7 @@ void SvtUserOptions::SetPosition( const String& rNewToken )
 
 void SvtUserOptions::SetTitle( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetTitle( rNewToken );
 }
 
@@ -613,6 +767,7 @@ void SvtUserOptions::SetTitle( const String& rNewToken )
 
 void SvtUserOptions::SetTelephoneHome( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetTelephoneHome( rNewToken );
 }
 
@@ -620,6 +775,7 @@ void SvtUserOptions::SetTelephoneHome( const String& rNewToken )
 
 void SvtUserOptions::SetTelephoneWork( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetTelephoneWork( rNewToken );
 }
 
@@ -627,6 +783,7 @@ void SvtUserOptions::SetTelephoneWork( const String& rNewToken )
 
 void SvtUserOptions::SetFax( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetFax( rNewToken );
 }
 
@@ -634,6 +791,7 @@ void SvtUserOptions::SetFax( const String& rNewToken )
 
 void SvtUserOptions::SetEmail( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetEmail( rNewToken );
 }
 
@@ -641,6 +799,15 @@ void SvtUserOptions::SetEmail( const String& rNewToken )
 
 void SvtUserOptions::SetCustomerNumber( const String& rNewToken )
 {
+    ::osl::MutexGuard aGuard( GetInitMutex() );
     pImp->SetCustomerNumber( rNewToken );
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SvtUserOptions::IsTokenReadonly( USHORT nToken ) const
+{
+    ::osl::MutexGuard aGuard( GetInitMutex() );
+    return pImp->IsTokenReadonly( nToken );
 }
 
