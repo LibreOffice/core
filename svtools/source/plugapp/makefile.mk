@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-29 17:41:18 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:43:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,23 +61,15 @@
 #*************************************************************************
 PRJ=..$/..
 
-PRJNAME=SVTOOLS
+PRJNAME=svtools
 TARGET=plugapp
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-    ttprops.cxx \
-    communi.cxx \
-    brooker.cxx
-
 
 SLOFILES = \
     $(SLO)$/ttprops.obj \
@@ -87,8 +79,8 @@ SLOFILES = \
 
 OBJFILES =    $(OBJ)$/commtest.obj	$(OBJ)$/brooker.obj
 
-
-SRCFILES=   testtool.src
+SRS2NAME=$(TARGET)
+SRC2FILES=   testtool.src
 
 
 LIB1TARGET= $(SLB)$/plugapp.lib
@@ -104,3 +96,4 @@ SRS1NAME=	commtest
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+
