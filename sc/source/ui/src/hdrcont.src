@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:55:44 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
         Text = "~Zellen formatieren..." ; \
         Text [ ENGLISH ] = "Format Cells..." ; \
         Text [ finnish ] = "~Muotoile solut..." ; \
-        Text [ danish ] = "Formater celler..." ; \
+        Text [ danish ] = "~Formater celler..." ; \
         Text [ french ] = "Formater les ~cellules..." ; \
         Text [ swedish ] = "Formatera ~celler..." ; \
         Text [ dutch ] = "~Cellen opmaken..." ; \
@@ -95,6 +95,8 @@
         Text[ hebrew ] = "~Zellen formatieren...";\
         Text[ hindi ] = "कोष्ठों का ~रचना करो...";\
         Text[ slovak ] = "~Formát buniek...";\
+        Text[ hungarian ] = "~Cellák formázása...";\
+        Text[ slovenian ] = "~Oblikuj celice...";\
     };
 
 
@@ -106,7 +108,7 @@
         Text = "Auss~chneiden" ; \
         Text [ ENGLISH ] = "Cut" ; \
         Text [ finnish ] = "~Leikkaa" ; \
-        Text [ danish ] = "Klip" ; \
+        Text [ danish ] = "~Klip" ; \
         Text [ french ] = "Couper" ; \
         Text [ swedish ] = "Klipp ~ut" ; \
         Text [ dutch ] = "K~nippen" ; \
@@ -132,6 +134,8 @@
         Text[ hebrew ] = "‮גזירה‬";\
         Text[ hindi ] = "का~टो";\
         Text[ slovak ] = "Vys~trihnúť";\
+        Text[ hungarian ] = "~Kivágás";\
+        Text[ slovenian ] = "I~zreži";\
     };\
     MenuItem\
     {\
@@ -140,7 +144,7 @@
         Text = "Kopie~ren" ; \
         Text [ ENGLISH ] = "Copy" ; \
         Text [ finnish ] = "K~opioi" ; \
-        Text [ danish ] = "Kopier" ; \
+        Text [ danish ] = "K~opier" ; \
         Text [ french ] = "Copier" ; \
         Text [ swedish ] = "Kopie~ra" ; \
         Text [ dutch ] = "~Kopi�ren" ; \
@@ -165,6 +169,8 @@
         Text[ hebrew ] = "‮העתקה‬";\
         Text[ hindi ] = "~प्रतिलिपि";\
         Text[ slovak ] = "~Kopírovať";\
+        Text[ hungarian ] = "~Másolás";\
+        Text[ slovenian ] = "Kopir~aj";\
     };\
     MenuItem\
     {\
@@ -200,6 +206,8 @@
         Text[ hebrew ] = "‮הדבקה‬";\
         Text[ hindi ] = "~छिपकाओ";\
         Text[ slovak ] = "~Vložiť";\
+        Text[ hungarian ] = "~Beillesztés";\
+        Text[ slovenian ] = "P~rilepi";\
     };
 
  //-------------------------------------------------------------------------------
@@ -220,7 +228,7 @@ Menu RID_POPUP_ROWHEADER
             Text = "Zeile~nh�he..." ;
             Text [ ENGLISH ] = "Row height..." ;
             Text [ finnish ] = "~Korkeus..." ;
-            Text [ danish ] = "R�kkeh�jde..." ;
+            Text [ danish ] = "R�kke~h�jde..." ;
             Text [ french ] = "Hauteur ~de ligne..." ;
             Text [ swedish ] = "R~adh�jd..." ;
             Text [ dutch ] = "~Rijhoogte..." ;
@@ -246,6 +254,8 @@ Menu RID_POPUP_ROWHEADER
             Text[ hebrew ] = "‮גובה...‬";
             Text[ hindi ] = "ऊँ~चाई...";
             Text[ slovak ] = "Výš~ka...";
+            Text[ hungarian ] = "~Sormagasság...";
+            Text[ slovenian ] = "Viši~na...";
         };
         MenuItem
         {
@@ -255,7 +265,7 @@ Menu RID_POPUP_ROWHEADER
             Text = "~Optimale Zeilenh�he..." ;
             Text [ ENGLISH ] = "Optimize row height..." ;
             Text [ finnish ] = "~Optimaalinen rivikorkeus..." ;
-            Text [ danish ] = "Optimal r�kkeh�jde..." ;
+            Text [ danish ] = "Optimal ~r�kkeh�jde..." ;
             Text [ french ] = "Hauteur de ligne ~optimale..." ;
             Text [ swedish ] = "~Optimal radh�jd..." ;
             Text [ dutch ] = "~Optimale rijhoogte..." ;
@@ -281,6 +291,8 @@ Menu RID_POPUP_ROWHEADER
             Text[ hebrew ] = "~Optimale Zeilenhöhe...";
             Text[ hindi ] = "योग्य ~पंक्ति की ऊँचाई...";
             Text[ slovak ] = "Optimálna výška ~riadka...";
+            Text[ hungarian ] = "~Optimális sormagasság...";
+            Text[ slovenian ] = "Optimalna višina v~rstice...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -293,7 +305,7 @@ Menu RID_POPUP_ROWHEADER
             Text = "Zeilen ~einf�gen" ;
             Text [ ENGLISH ] = "Insert rows" ;
             Text [ finnish ] = "~Lis�� rivit" ;
-            Text [ danish ] = "Inds�t r�kker" ;
+            Text [ danish ] = "~Inds�t r�kker" ;
             Text [ french ] = "I~ns�rer des lignes" ;
             Text [ swedish ] = "Infoga rad~er" ;
             Text [ dutch ] = "Rijen ~invoegen" ;
@@ -319,6 +331,8 @@ Menu RID_POPUP_ROWHEADER
             Text[ hebrew ] = "Zeilen ~einfügen";
             Text[ hindi ] = "पंक्तियों को ~जोड़ो";
             Text[ slovak ] = "Vložiť r~iadky";
+            Text[ hungarian ] = "Sorok ~beszúrása";
+            Text[ slovenian ] = "~Vstavi vrstice";
         };
         MenuItem
         {
@@ -334,7 +348,7 @@ Menu RID_POPUP_ROWHEADER
             Text [ spanish ] = "~Borrar filas" ;
             Text [ french ] = "~Supprimer des lignes" ;
             Text [ swedish ] = "Radera ra~der" ;
-            Text [ danish ] = "Slet r�kker" ;
+            Text [ danish ] = "~Slet r�kker" ;
             Text [ portuguese ] = "E~liminar linhas" ;
             Text [ portuguese_brazilian ] = "~Excluir Linhas" ;
             Text[ chinese_simplified ] = "删除行(~D)";
@@ -354,6 +368,8 @@ Menu RID_POPUP_ROWHEADER
             Text[ hebrew ] = "Zeilen ~löschen";
             Text[ hindi ] = "पंक्तियों को ~मिटाओ";
             Text[ slovak ] = "Zmazať ria~dky";
+            Text[ hungarian ] = "~Sorok törlése";
+            Text[ slovenian ] = "~Izbriši vrstice";
         };
         MenuItem
         {
@@ -367,7 +383,7 @@ Menu RID_POPUP_ROWHEADER
             Text [ portuguese_brazilian ] = "E~xcluir Conte�do" ;
             Text [ portuguese ] = "Eli~minar conte�dos..." ;
             Text [ finnish ] = "~Poista sis�lt�..." ;
-            Text [ danish ] = "Slet indhold..." ;
+            Text [ danish ] = "Slet ~indhold..." ;
             Text [ french ] = "S~upprimer du contenu..." ;
             Text [ swedish ] = "Radera inneh�~ll..." ;
             Text [ dutch ] = "~Inhoud wissen..." ;
@@ -390,6 +406,8 @@ Menu RID_POPUP_ROWHEADER
             Text[ hebrew ] = "Inhalte l~öschen...";
             Text[ hindi ] = "विषयों को मि~टाओ...";
             Text[ slovak ] = "Z~mazať obsah...";
+            Text[ hungarian ] = "~Tartalom törlése...";
+            Text[ slovenian ] = "Iz~briši vsebino...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -401,7 +419,7 @@ Menu RID_POPUP_ROWHEADER
             Text = "~Ausblenden" ;
             Text [ ENGLISH ] = "Hide" ;
             Text [ finnish ] = "~Piilota" ;
-            Text [ danish ] = "Skjul" ;
+            Text [ danish ] = "Sk~jul" ;
             Text [ french ] = "M~asquer" ;
             Text [ swedish ] = "~D�lj" ;
             Text [ dutch ] = "~Verbergen" ;
@@ -426,6 +444,8 @@ Menu RID_POPUP_ROWHEADER
             Text[ hebrew ] = "~Ausblenden";
             Text[ hindi ] = "~छिपाओ";
             Text[ slovak ] = "S~kryť";
+            Text[ hungarian ] = "Sor ~elrejtése";
+            Text[ slovenian ] = "~Skrij";
         };
         MenuItem
         {
@@ -434,7 +454,7 @@ Menu RID_POPUP_ROWHEADER
             Text = "Ein~blenden" ;
             Text [ ENGLISH ] = "Show" ;
             Text [ finnish ] = "~N�yt�" ;
-            Text [ danish ] = "Vis" ;
+            Text [ danish ] = "Vi~s" ;
             Text [ french ] = "~Afficher" ;
             Text [ swedish ] = "~Visa" ;
             Text [ dutch ] = "~Weergeven" ;
@@ -459,6 +479,8 @@ Menu RID_POPUP_ROWHEADER
             Text[ hebrew ] = "Ein~blenden";
             Text[ hindi ] = "~दिखाओ";
             Text[ slovak ] = "~Zobraziť";
+            Text[ hungarian ] = "Sor ~megjelenítése";
+            Text[ slovenian ] = "~Pokaži";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -476,7 +498,7 @@ Menu RID_POPUP_ROWHEADER
             Text [ portuguese_brazilian ] = "Colar ~Especial..." ;
             Text [ portuguese ] = "Colar e~special..." ;
             Text [ finnish ] = "Liit� ~m��r�ten..." ;
-            Text [ danish ] = "Inds�t ind~hold..." ;
+            Text [ danish ] = "Inds�t spe~ciel..." ;
             Text [ french ] = "Colla~ge sp�cial..." ;
             Text [ swedish ] = "Klistra in inne~h�ll..." ;
             Text [ dutch ] = "Plakken ~speciaal..." ;
@@ -497,6 +519,8 @@ Menu RID_POPUP_ROWHEADER
             Text[ hebrew ] = "‮הדבקה מיוחדת‬";
             Text[ hindi ] = "विशेष को छि~पकाओ...";
             Text[ slovak ] = "Vložiť in~ak...";
+            Text[ hungarian ] = "~Irányított beillesztés...";
+            Text[ slovenian ] = "P~osebno lepljenje...";
         };
     };
 };
@@ -518,7 +542,7 @@ Menu RID_POPUP_COLHEADER
             Text = "Spalte~nbreite..." ;
             Text [ ENGLISH ] = "Column width..." ;
             Text [ finnish ] = "~Sarakkeen leveys..." ;
-            Text [ danish ] = "Kolonnebredde..." ;
+            Text [ danish ] = "~Kolonnebredde..." ;
             Text [ french ] = "L~argeur de colonne..." ;
             Text [ swedish ] = "Kolum~nbredd..." ;
             Text [ dutch ] = "~Kolombreedte..." ;
@@ -544,6 +568,8 @@ Menu RID_POPUP_COLHEADER
             Text[ hebrew ] = "Spalte~nbreite...";
             Text[ hindi ] = "स्तं~भ चौड़ाई...";
             Text[ slovak ] = "Ší~rka stĺpca...";
+            Text[ hungarian ] = "Osz~lopszélesség...";
+            Text[ slovenian ] = "Širina stol~pca...";
         };
         MenuItem
         {
@@ -552,7 +578,7 @@ Menu RID_POPUP_COLHEADER
             Text = "~Optimale Spaltenbreite..." ;
             Text [ ENGLISH ] = "Optimize column width..." ;
             Text [ finnish ] = "~Optimaalinen sarakkeen leveys..." ;
-            Text [ danish ] = "Optimal kolonnebredde..." ;
+            Text [ danish ] = "~Optimal kolonnebredde..." ;
             Text [ french ] = "Largeur de colonne optimale..." ;
             Text [ swedish ] = "~Optimal kolumnbredd..." ;
             Text [ dutch ] = "~Optimale kolombreedte..." ;
@@ -577,6 +603,8 @@ Menu RID_POPUP_COLHEADER
             Text[ hebrew ] = "~Optimale Spaltenbreite...";
             Text[ hindi ] = "O~ptimal Column Width...";
             Text[ slovak ] = "O~ptimálna šírka stĺpca...";
+            Text[ hungarian ] = "O~ptimális oszlopszélesség...  ";
+            Text[ slovenian ] = "O~ptimalna širina stolpca...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -589,7 +617,7 @@ Menu RID_POPUP_COLHEADER
             Text = "Spalten ~einf�gen" ;
             Text [ ENGLISH ] = "Insert columns" ;
             Text [ finnish ] = "~Lis�� sarakkeet" ;
-            Text [ danish ] = "Inds�t kolonner" ;
+            Text [ danish ] = "Inds�t k~olonner" ;
             Text [ french ] = "I~ns�rer des colonnes" ;
             Text [ swedish ] = "Infoga ~kolumner" ;
             Text [ dutch ] = "~Kolommen invoegen" ;
@@ -615,6 +643,8 @@ Menu RID_POPUP_COLHEADER
             Text[ hebrew ] = "Spalten ~einfügen";
             Text[ hindi ] = "स्तंभ ~जोड़ो";
             Text[ slovak ] = "Vlož~iť stĺpce";
+            Text[ hungarian ] = "~Oszlopok beszúrása";
+            Text[ slovenian ] = "~Vstavi stolpce";
         };
         MenuItem
         {
@@ -630,7 +660,7 @@ Menu RID_POPUP_COLHEADER
             Text [ french ] = "S~upprimer des colonnes" ;
             Text [ dutch ] = "K~olommen wissen" ;
             Text [ swedish ] = "Radera ko~lumner" ;
-            Text [ danish ] = "Slet kolonner" ;
+            Text [ danish ] = "Slet ko~lonner" ;
             Text [ portuguese ] = "Eliminar ~colunas" ;
             Text [ portuguese_brazilian ] = "Exclui~r Colunas" ;
             Text[ chinese_simplified ] = "删除列(~D)";
@@ -650,6 +680,8 @@ Menu RID_POPUP_COLHEADER
             Text[ hebrew ] = "Spalten ~löschen";
             Text[ hindi ] = "स्तंभ ~मिटाओ";
             Text[ slovak ] = "~Zmazať stĺpce";
+            Text[ hungarian ] = "Oszlo~pok törlése";
+            Text[ slovenian ] = "~Izbriši stolpce";
         };
         MenuItem
         {
@@ -663,7 +695,7 @@ Menu RID_POPUP_COLHEADER
             Text [ portuguese_brazilian ] = "Excluir Co~nte�do..." ;
             Text [ portuguese ] = "Eliminar co~nte�dos..." ;
             Text [ finnish ] = "Pois~ta sis�lt�..." ;
-            Text [ danish ] = "Slet indhold..." ;
+            Text [ danish ] = "Slet in~dhold..." ;
             Text [ french ] = "~Supprimer du contenu..." ;
             Text [ swedish ] = "Radera ~inneh�ll..." ;
             Text [ dutch ] = "In~houd wissen..." ;
@@ -686,6 +718,8 @@ Menu RID_POPUP_COLHEADER
             Text[ hebrew ] = "Inhalte l~öschen...";
             Text[ hindi ] = "विषयों को मि~टाओ...";
             Text[ slovak ] = "Zm~azať obsah...";
+            Text[ hungarian ] = "~Tartalom törlése...";
+            Text[ slovenian ] = "I~zbriši vsebino...";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -697,7 +731,7 @@ Menu RID_POPUP_COLHEADER
             Text = "~Ausblenden" ;
             Text [ ENGLISH ] = "Hide" ;
             Text [ finnish ] = "~Piilota" ;
-            Text [ danish ] = "Skjul" ;
+            Text [ danish ] = "Sk~jul" ;
             Text [ french ] = "~Masquer" ;
             Text [ swedish ] = "~D�lj" ;
             Text [ dutch ] = "~Verbergen" ;
@@ -722,6 +756,8 @@ Menu RID_POPUP_COLHEADER
             Text[ hebrew ] = "~Ausblenden";
             Text[ hindi ] = "~छिपाओ";
             Text[ slovak ] = "S~kryť";
+            Text[ hungarian ] = "Oszlop ~elrejtése";
+            Text[ slovenian ] = "~Skrij";
         };
         MenuItem
         {
@@ -730,7 +766,7 @@ Menu RID_POPUP_COLHEADER
             Text = "Ein~blenden" ;
             Text [ ENGLISH ] = "Show" ;
             Text [ finnish ] = "~N�yt�" ;
-            Text [ danish ] = "Vis" ;
+            Text [ danish ] = "Vi~s" ;
             Text [ french ] = "A~fficher" ;
             Text [ swedish ] = "~Visa" ;
             Text [ dutch ] = "~Weergeven" ;
@@ -755,6 +791,8 @@ Menu RID_POPUP_COLHEADER
             Text[ hebrew ] = "Ein~blenden";
             Text[ hindi ] = "~दिखाओ";
             Text[ slovak ] = "~Zobraziť";
+            Text[ hungarian ] = "Oszlop ~megjelenítése";
+            Text[ slovenian ] = "~Pokaži";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -772,7 +810,7 @@ Menu RID_POPUP_COLHEADER
             Text [ portuguese_brazilian ] = "Colar ~Especial..." ;
             Text [ portuguese ] = "Colar e~special..." ;
             Text [ finnish ] = "Liit� ~m��r�ten..." ;
-            Text [ danish ] = "Inds�t ind~hold..." ;
+            Text [ danish ] = "Inds�t spe~ciel..." ;
             Text [ french ] = "Colla~ge sp�cial..." ;
             Text [ swedish ] = "Klistra in inne~h�ll..." ;
             Text [ dutch ] = "Plakken ~speciaal..." ;
@@ -793,9 +831,13 @@ Menu RID_POPUP_COLHEADER
             Text[ hebrew ] = "‮הדבקה מיוחדת...‬";
             Text[ hindi ] = "~विशेष को छिपकाओ...";
             Text[ slovak ] = "Vložiť i~nak...";
+            Text[ hungarian ] = "~Irányított beillesztés...";
+            Text[ slovenian ] = "Po~sebno lepljenje...";
         };
     };
 };
+
+
 
 
 
