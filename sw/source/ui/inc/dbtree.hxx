@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:46:15 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,8 @@ public:
     void    Show();
     void    ShowColumns(BOOL bShowCol);
     void    SetWrtShell(SwWrtShell& rSh);
+
+    void    AddDataSource(const String& rSource);
 };
 
 #endif
