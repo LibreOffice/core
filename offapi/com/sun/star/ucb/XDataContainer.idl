@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDataContainer.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ module com { module sun { module star { module ucb {
 
     @deprecated
 */
-interface XDataContainer: com::sun::star::container::XIndexContainer
+published interface XDataContainer: com::sun::star::container::XIndexContainer
 {
     //-------------------------------------------------------------------------
     /** returns the content type (MIME Type) of the data container.
