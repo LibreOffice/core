@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SfxMacroLoader.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:36 $
+ *  last change:$Date: 2003-05-27 13:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sfx;
 
 import com.sun.star.uno.XInterface;
+import com.sun.star.lang.XMultiServiceFactory;
 import java.io.PrintWriter;
 import lib.Status;
 import lib.StatusException;
@@ -105,8 +106,8 @@ public class SfxMacroLoader extends TestCase {
 
         //now get the OButtonControl
         try {
-            oInterface = Param.getMSF().createInstance
-                ("com.sun.star.comp.sfx2.SfxMacroLoader") ;
+            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
+                                ("com.sun.star.comp.sfx2.SfxMacroLoader");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get service");
             e.printStackTrace(log);
@@ -128,7 +129,7 @@ public class SfxMacroLoader extends TestCase {
         // adding relation for XFrameLoader
         tEnv.addObjRelation("XDispatchProvider.URL",
             "macro:tools.UCB.CreateFolder(\"" +
-            utils.getOfficeTemp(Param.getMSF()) + "/SfxMacroLoader\")") ;
+            utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF()) + "/SfxMacroLoader\")") ;
 
 
         return tEnv;

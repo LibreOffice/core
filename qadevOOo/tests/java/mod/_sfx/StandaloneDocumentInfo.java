@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StandaloneDocumentInfo.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:36 $
+ *  last change:$Date: 2003-05-27 13:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,10 +116,10 @@ public class StandaloneDocumentInfo extends TestCase {
      */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         String srcUrl = utils.getFullTestURL("SfxStandaloneDocInfoObject.sdw") ;
-        destUrl = utils.getOfficeTemp(tParam.getMSF()) +
+        destUrl = utils.getOfficeTemp((XMultiServiceFactory)tParam.getMSF()) +
             "SfxStandaloneDocInfoObject.sdw";
 
-        utils.overwriteFile(tParam.getMSF(), srcUrl, destUrl) ;
+        utils.overwriteFile((XMultiServiceFactory)tParam.getMSF(), srcUrl, destUrl) ;
     }
 
     /**
@@ -135,7 +135,7 @@ public class StandaloneDocumentInfo extends TestCase {
      */
     protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
-        XMultiServiceFactory xMSF = tParam.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
         XInterface oObj = null;
 
         try {
