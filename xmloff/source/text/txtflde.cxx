@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 19:10:44 $
+ *  last change: $Author: dvo $ $Date: 2000-12-12 18:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1094,8 +1094,9 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
         {
             // no value -> current time
             ProcessDateTime(sXML_time_value,
-                            GetDoubleProperty(sPropertyDateTimeValue,xPropSet),
-                            sal_False, sal_False);
+                            GetDateTimeProperty(sPropertyDateTimeValue,
+                                                xPropSet),
+                            sal_False );
         }
         if (xPropSetInfo->hasPropertyByName(sPropertyDateTime))
         {
@@ -1133,10 +1134,12 @@ void XMLTextFieldExport::ExportField(const Reference<XTextField> & rTextField )
         {
             // no value -> current date
             ProcessDateTime(sXML_date_value,
-                            GetDoubleProperty(sPropertyDateTimeValue,xPropSet),
-                            sal_True, sal_False);
+                            GetDateTimeProperty(sPropertyDateTimeValue,
+                                                xPropSet),
+                            sal_True);
         }
-        if (xPropSetInfo->hasPropertyByName(sPropertyDateTime))
+        // TODO: remove double-handling after SRC614
+        else if (xPropSetInfo->hasPropertyByName(sPropertyDateTime))
         {
             ProcessDateTime(sXML_date_value,
                             GetDateTimeProperty(sPropertyDateTime,xPropSet),
@@ -2100,16 +2103,20 @@ void XMLTextFieldExport::ProcessDateTime(const sal_Char* sXMLName,
                                          sal_Bool bIsDate)
 {
     OUStringBuffer aBuffer;
-    if (bIsDate)
+
+    DateTime aDateTime(rTime);
+
+    // truncate dates
+    if(bIsDate)
     {
-        // date/time value
-        rExport.GetMM100UnitConverter().convertDateTime(aBuffer, rTime);
+        aDateTime.HundredthSeconds = 0;
+        aDateTime.Seconds = 0;
+        aDateTime.Minutes = 0;
+        aDateTime.Hours = 0;
     }
-    else
-    {
-        // time only
-        rExport.GetMM100UnitConverter().convertTime( aBuffer, rTime );
-    }
+
+    // date/time value
+    rExport.GetMM100UnitConverter().convertDateTime(aBuffer, aDateTime);
 
     // output attribute
     ProcessString(sXMLName, aBuffer.makeStringAndClear());

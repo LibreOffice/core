@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-11 19:11:16 $
+ *  last change: $Author: dvo $ $Date: 2000-12-12 18:30:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1229,6 +1229,12 @@ void XMLTimeFieldImportContext::ProcessAttribute(
                 fTimeValue = fTmp;
                 bTimeOK = sal_True;
             }
+
+            if (GetImport().GetMM100UnitConverter().
+                convertDateTime(aDateTimeValue, sAttrValue ))
+            {
+                bTimeOK = sal_True;
+            }
             break;
         }
         case XML_TOK_TEXTFIELD_FIXED:
@@ -1291,11 +1297,11 @@ void XMLTimeFieldImportContext::PrepareField(
     if (bFixed && bTimeOK &&
         xPropertySetInfo->hasPropertyByName(sPropertyDateTimeValue))
     {
-        aAny <<= fTimeValue;
+        aAny <<= aDateTimeValue;
         xPropertySet->setPropertyValue(sPropertyDateTimeValue, aAny);
     }
 
-    if (bIsDate && bFixed && bTimeOK &&
+    if (bFixed && bTimeOK &&
         xPropertySetInfo->hasPropertyByName(sPropertyDateTime))
     {
         aAny <<= aDateTimeValue;
