@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: container_XIndexReplace.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:46:08 $ 
+'*  last change:$Date: 2003-10-06 13:21:45 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -75,12 +75,9 @@ option explicit
 ' which must be specified in the object creation:
 
 '      the Test-Object must contain two diffrent named Objects
+'   Global oIdxReplaceInstance as Object
 
 '*************************************************************************
-
-
-
-
 
 
 Sub RunTest()
