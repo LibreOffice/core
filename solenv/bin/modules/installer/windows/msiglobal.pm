@@ -123,7 +123,13 @@ sub generate_cab_file_list
             my $cabinetfile = $onefile->{'cabinet'};
             my $sourcepath =  $onefile->{'sourcepath'};
             my $uniquename =  $onefile->{'uniquename'};
-            if ( $ENV{'USE_SHELL'} eq "tcsh" ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
+
+            my $styles = "";
+            my $doinclude = 1;
+            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
+            if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
+
+            if ( $^O =~ /cygwin/i ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
 
             # all files with the same cabinetfile are directly behind each other in the files collector
 
@@ -132,7 +138,7 @@ sub generate_cab_file_list
             write_ddf_file_header(\@ddffile, $cabinetfile, $installdir);
 
             my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-            push(@ddffile, $ddfline);
+            if ( $doinclude ) { push(@ddffile, $ddfline); }
 
             my $nextfile = ${$filesref}[$i+1];
             my $nextcabinetfile = "";
@@ -142,10 +148,14 @@ sub generate_cab_file_list
             while ( $nextcabinetfile eq $cabinetfile )
             {
                 $sourcepath =  $nextfile->{'sourcepath'};
-                if ( $ENV{'USE_SHELL'} eq "tcsh" ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
+                if ( $^O =~ /cygwin/i ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
                 $uniquename =  $nextfile->{'uniquename'};
+                my $localdoinclude = 1;
+                my $nextfilestyles = "";
+                if ( $nextfile->{'Styles'} ) { $nextfilestyles = $nextfile->{'Styles'}; }
+                if ( $nextfilestyles =~ /\bDONT_PACK\b/ ) { $localdoinclude = 0; }
                 $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-                push(@ddffile, $ddfline);
+                if ( $localdoinclude ) { push(@ddffile, $ddfline); }
                 $i++;                                           # increasing the counter!
                 $nextfile = ${$filesref}[$i+1];
                 if ( $nextfile ) { $nextcabinetfile = $nextfile->{'cabinet'}; }
@@ -181,13 +191,18 @@ sub generate_cab_file_list
             my $onefile = ${$filesref}[$i];
             $cabinetfile = $onefile->{'cabinet'};
             my $sourcepath =  $onefile->{'sourcepath'};
-            if ( $ENV{'USE_SHELL'} eq "tcsh" ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
+            if ( $^O =~ /cygwin/i ) { chomp( $sourcepath = qx{cygpath -w "$sourcepath"} ); }
             my $uniquename =  $onefile->{'uniquename'};
 
             if ( $i == 0 ) { write_ddf_file_header(\@ddffile, $cabinetfile, $installdir); }
 
+            my $styles = "";
+            my $doinclude = 1;
+            if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; };
+            if ( $styles =~ /\bDONT_PACK\b/ ) { $doinclude = 0; }
+
             my $ddfline = "\"" . $sourcepath . "\"" . " " . $uniquename . "\n";
-            push(@ddffile, $ddfline);
+            if ( $doinclude ) { push(@ddffile, $ddfline); }
         }
 
         # creating the DDF file
@@ -266,7 +281,7 @@ sub create_msi_database
 
     $msifilename = installer::converter::make_path_conform($msifilename);
 
-    if ( $ENV{'USE_SHELL'} eq "tcsh" ) {
+    if ( $^O =~ /cygwin/i ) {
         # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
         $idtdirbase =~ s/\//\\\\/g;
         $msifilename =~ s/\//\\\\/g;
@@ -403,7 +418,11 @@ sub get_author_for_sis
 {
     my ( $language, $languagefile, $searchstring ) = @_;
 
-    my $author = get_value_from_sis_lng($language, $languagefile, $searchstring );
+    # my $author = get_value_from_sis_lng($language, $languagefile, $searchstring );
+
+    my $author = $installer::globals::longmanufacturer;
+
+    $author = "\"" . $author . "\"";
 
     return $author;
 }
@@ -414,9 +433,13 @@ sub get_author_for_sis
 
 sub get_subject_for_sis
 {
-    my ( $language, $languagefile, $searchstring ) = @_;
+    my ( $language, $languagefile, $searchstring, $allvariableshashref ) = @_;
 
-    my $subject = get_value_from_sis_lng($language, $languagefile, $searchstring );
+    # my $subject = get_value_from_sis_lng($language, $languagefile, $searchstring );
+
+    my $subject = $allvariableshashref->{'PRODUCTNAME'} . " " . $allvariableshashref->{'PRODUCTVERSION'};
+
+    $subject = "\"" . $subject . "\"";
 
     return $subject;
 }
@@ -477,7 +500,7 @@ sub get_security_for_sis
 
 sub write_summary_into_msi_database
 {
-    my ($msifilename, $language, $languagefile) = @_;
+    my ($msifilename, $language, $languagefile, $allvariableshashref) = @_;
 
     # -g : requrired msi version
     # -c : codepage
@@ -493,7 +516,7 @@ sub write_summary_into_msi_database
     my $guid = get_packagecode_for_sis();
     my $title = get_title_for_sis($language,$languagefile, "OOO_SIS_TITLE");
     my $author = get_author_for_sis($language,$languagefile, "OOO_SIS_AUTHOR");
-    my $subject = get_subject_for_sis($language,$languagefile, "OOO_SIS_SUBJECT");
+    my $subject = get_subject_for_sis($language,$languagefile, "OOO_SIS_SUBJECT", $allvariableshashref);
     my $comment = get_comment_for_sis($language,$languagefile, "OOO_SIS_COMMENT");
     my $keywords = get_keywords_for_sis($language,$languagefile, "OOO_SIS_KEYWORDS");
     my $appname = get_appname_for_sis($language,$languagefile, "OOO_SIS_APPNAME");
@@ -601,6 +624,8 @@ sub rename_msi_database_in_installset
     $newdatabasename = $installdir . $installer::globals::separator . $newdatabasename;
 
     installer::systemactions::rename_one_file($olddatabasename, $newdatabasename);
+
+    $installer::globals::msidatabasename = $newdatabasename;
 }
 
 ##########################################################################
@@ -851,26 +876,19 @@ sub copy_child_projects_into_installset
 {
     my ($installdir) = @_;
 
-    my $sopackpath = "";
-    if ( $ENV{'SO_PACK'} ) { $sopackpath  = $ENV{'SO_PACK'}; }
-    else { installer::exiter::exit_program("ERROR: Environment variable SO_PACK not set!", "copy_child_projects_into_installset"); }
-
     # adding Java
 
-    my $sourcefile = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "jre" . $installer::globals::separator . $installer::globals::javafilename;
-    if ( ! -f $sourcefile ) { installer::exiter::exit_program("ERROR: Java child project file not found: $sourcefile !", "copy_child_projects_into_installset"); }
-    my $destdir = $installdir . $installer::globals::separator . "java";
+    my $sourcefile = $installer::globals::javafile->{'sourcepath'};
+    my $destdir = $installdir . $installer::globals::separator . $installer::globals::javafile->{'Subdir'};
     if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
     installer::systemactions::copy_one_file($sourcefile, $destdir);
 
     # adding Adabas ( complete directory )
 
-    my $sourcedir = $sopackpath . $installer::globals::separator . $installer::globals::compiler . $installer::globals::separator . "adabas" . $installer::globals::separator . $installer::globals::adafilename;
-    if ( ! -d $sourcedir ) { installer::exiter::exit_program("ERROR: Adabas child project file not found: $sourcedir !", "copy_child_projects_into_installset"); }
-    $destdir = $installdir . $installer::globals::separator . "adabas";
+    $sourcefile = $installer::globals::adafile->{'sourcepath'};
+    $destdir = $installdir . $installer::globals::separator . $installer::globals::adafile->{'Subdir'};
     if ( ! -d $destdir) { installer::systemactions::create_directory($destdir); }
-    installer::systemactions::copy_directory($sourcedir, $destdir);
-
+    installer::systemactions::copy_one_file($sourcefile, $destdir);
 }
 
 #################################################################
@@ -890,8 +908,7 @@ sub get_guid_list
 
     # my $systemcall = "$uuidgen -n$number -c |";
     my $systemcall = "$uuidgen -n$number |";
-
-    open (UUIDGEN, "$systemcall");
+    open (UUIDGEN, "$systemcall" ) or die("uuidgen is missing.");
     my @uuidlist = <UUIDGEN>;
     close (UUIDGEN);
 
@@ -944,6 +961,74 @@ sub set_uuid_into_component_table
     installer::files::save_file($componentfilename, $componentfile)
 }
 
+#################################################################
+# Include all cab files into the msi database.
+# This works only on Windows
+#################################################################
+
+sub include_cabs_into_msi
+{
+    my ($installdir) = @_;
+
+    installer::logger::include_header_into_logfile("Including cabs into msi database");
+
+    my $from = cwd();
+    my $to = $installdir;
+
+    chdir($to);
+
+    my $infoline = "Changing into directory: $to";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    my $msidb = "msidb.exe";    # Has to be in the path
+    my $extraslash = "";        # Has to be set for non-ActiveState perl
+
+    my $msifilename = $installer::globals::msidatabasename;
+
+    $msifilename = installer::converter::make_path_conform($msifilename);
+
+    if ( $ENV{'USE_SHELL'} eq "tcsh" ) {
+        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+        $idtdirbase =~ s/\//\\\\/g;
+        $msifilename =~ s/\//\\\\/g;
+        $extraslash = "\\";
+    }
+
+    my $allcabfiles = installer::systemactions::find_file_with_file_extension("cab", $installdir);
+
+    for ( my $i = 0; $i <= $#{$allcabfiles}; $i++ )
+    {
+        my $systemcall = $msidb . " -d " . $msifilename . " -a " . ${$allcabfiles}[$i];
+
+        my $returnvalue = system($systemcall);
+
+        $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        if ($returnvalue)
+        {
+            $infoline = "ERROR: Could not execute $systemcall !\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+        else
+        {
+            $infoline = "Success: Executed $systemcall successfully!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+
+        # deleting the cab file
+
+        unlink(${$allcabfiles}[$i]);
+
+        $infoline = "Deleted cab file: ${$allcabfiles}[$i]\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    $infoline = "Changing back into directory: $from";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    chdir($from);
+}
 
 #################################################################
 # Executing the created batch file to pack all files.
