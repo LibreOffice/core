@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:03:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3312,7 +3312,7 @@ public:
 
     SvxBrushItem_Impl( GraphicObject* p ) : pGraphicObject( p ), nGraphicTransparency(0) {}
 };
-
+/*
 // class SvxBrushItemLink_Impl -------------------------------------------
 
 class SvxBrushItemLink_Impl : public SfxBrushItemLink
@@ -3362,7 +3362,7 @@ void SvxBrushItem::InitSfxLink()
 {
     SfxBrushItemLink::Set( new SvxBrushItemLink_Impl );
 }
-
+*/
 // -----------------------------------------------------------------------
 
 void SvxBrushItem::SetDoneLink( const Link& rLink )
