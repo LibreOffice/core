@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Job.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-02 09:01:03 $
+ *  last change: $Author: kr $ $Date: 2001-02-19 10:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@ package com.sun.star.lib.uno.environments.remote;
 
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 
 import java.lang.reflect.InvocationTargetException;
@@ -79,7 +81,7 @@ import com.sun.star.uno.UnoRuntime;
  * The Job is an abstraction for tasks which have to be done
  * remotely because of a method invocation.
  * <p>
- * @version     $Revision: 1.4 $ $ $Date: 2001-02-02 09:01:03 $
+ * @version     $Revision: 1.5 $ $ $Date: 2001-02-19 10:02:53 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadID
  * @see         com.sun.star.lib.uno.environments.remote.IReceiver
@@ -193,8 +195,12 @@ public class Job {
 
                 if(DEBUG) System.err.println("#### RemoteStub.request - exception:" + theException);
             }
-            else // wrap it as uno exception
-                theException = new com.sun.star.uno.RuntimeException("java exception: " + theException.toString(), null);
+            else {// wrap it as uno exception
+                StringWriter stringWriter = new StringWriter();
+                theException.printStackTrace(new PrintWriter(stringWriter));
+
+                theException = new com.sun.star.uno.RuntimeException("java exception: " + stringWriter.toString(), null);
+            }
 
             if(_iMessage.mustReply())
                 _iReceiver.sendReply(true, _iMessage.getThreadID(), theException);
