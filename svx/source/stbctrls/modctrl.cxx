@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:40:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,11 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxModifyControl, SfxBoolItem);
 
 // class SvxModifyControl ------------------------------------------------
 
-SvxModifyControl::SvxModifyControl( USHORT nId,
-                                    StatusBar& rStb, SfxBindings& rBind ) :
+SvxModifyControl::SvxModifyControl( USHORT nSlotId,
+                                    USHORT nId,
+                                    StatusBar& rStb ) :
 
-    SfxStatusBarControl( nId, rStb, rBind ),
-
+    SfxStatusBarControl( nSlotId, nId, rStb ),
     bState( TRUE )
 {
 }
