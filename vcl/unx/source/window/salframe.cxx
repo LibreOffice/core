@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: pl $ $Date: 2002-04-19 14:12:17 $
+ *  last change: $Author: pl $ $Date: 2002-04-23 13:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2811,7 +2811,7 @@ IMPL_LINK( SalFrameData, HandleAlwaysOnTopRaise, void*, pDummy )
 IMPL_LINK( SalFrameData, HandleResizeTimer, void*, pDummy )
 {
     bool bMoved = false;
-    bool bSized = true;
+    bool bSized = false;
     if( maResizeBuffer.Left() != pFrame_->maGeometry.nX ||
         maResizeBuffer.Top() != pFrame_->maGeometry.nY )
         bMoved = true;
