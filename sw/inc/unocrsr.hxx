@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 16:02:15 $
+ *  last change: $Author: os $ $Date: 2000-10-26 09:23:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,9 @@ public:
     void SetSkipOverProtectSections( BOOL bFlag )
                                     { bSkipOverProtectSections = bFlag; }
 
-    BOOL IskipOverHiddenSections() const
+    BOOL IsSkipOverHiddenSections() const
                                     { return bSkipOverHiddenSections; }
-    void SetkipOverHiddenSections( BOOL bFlag )
+    void SetSkipOverHiddenSections( BOOL bFlag )
                                     { bSkipOverHiddenSections = bFlag; }
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 16:01:32 $
+ *  last change: $Author: os $ $Date: 2000-10-26 09:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
     SwUnoCrsr* pUnoCrsr = *this;
     if( pUnoCrsr )
     {
-        bSkipOverHiddenSections = pUnoCrsr->IskipOverHiddenSections();
+        bSkipOverHiddenSections = pUnoCrsr->IsSkipOverHiddenSections();
         bSkipOverProtectSections = pUnoCrsr->IsSkipOverProtectSections();
     }
     else
