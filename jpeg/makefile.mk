@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sj $ $Date: 2002-08-19 14:59:00 $
+#   last change: $Author: hr $ $Date: 2003-03-26 12:25:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,12 +93,3 @@ OUT2INC=jerror.h   \
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
-
-
-TG_DELIVER : $(INPATH)$/misc$/build$/so_predeliver
-             $(DELIVER)
-
-.IF "$(BUILD_SOSL)"!=""
-ALLTAR : TG_DELIVER
-.ENDIF			# "$(BUILD_SOSL)"!=""
-
