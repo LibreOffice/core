@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-26 09:14:52 $
+ *  last change: $Author: fs $ $Date: 2001-05-18 14:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@ namespace frm
 
 // alle serviceNamen
 DECLARE_CONSTASCII_USTRING(FRM_NUMBER_FORMATTER);
+DECLARE_CONSTASCII_USTRING(FRM_NUMBER_FORMATS_SUPPLIER);
 
 DECLARE_CONSTASCII_USTRING(VCL_CONTROL_EDIT);
 DECLARE_CONSTASCII_USTRING(VCL_CONTROL_LISTBOX);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 07:39:46 $
+ *  last change: $Author: fs $ $Date: 2001-05-18 14:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,7 @@ IMPLEMENT_CONSTASCII_USTRING(FRM_SUN_INTERNATIONAL_INFO, "com.sun.star.deprecate
 
 IMPLEMENT_CONSTASCII_USTRING(FRM_DATA_ENGINE, "com.sun.star.data.DatabaseEngine");
 IMPLEMENT_CONSTASCII_USTRING(FRM_NUMBER_FORMATTER, "com.sun.star.util.NumberFormatter");
+IMPLEMENT_CONSTASCII_USTRING(FRM_NUMBER_FORMATS_SUPPLIER, "com.sun.star.util.NumberFormatsSupplier");
 
 IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_ROWSET, "com.sun.star.sdb.RowSet");
 IMPLEMENT_CONSTASCII_USTRING(SRV_SDB_CONNECTION, "com.sun.star.sdb.Connection");
