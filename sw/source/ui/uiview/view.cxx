@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-06-15 07:56:01 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,6 @@
 #ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
 #endif
-
 #ifndef _VIEW_HRC
 #include <view.hrc>
 #endif
@@ -251,9 +250,6 @@
 #endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
-#endif
-#ifndef _DBMGR_HXX
-#include <dbmgr.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
@@ -1009,8 +1005,7 @@ SwView::SwView( SfxViewFrame *pFrame, SfxViewShell* pOldSh )
     if(xBeamerFrame.is())
     {
         SwDBData aData = pWrtShell->GetDBData();
-        pWrtShell->GetNewDBMgr()->ShowInBeamer(String(aData.sDataSource), String(aData.sCommand),
-                                            aData.nCommandType, aEmptyStr);
+        SW_MOD()->ShowDBObj( *this, aData );
     }
 
 

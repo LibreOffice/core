@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 11:56:39 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,6 +391,9 @@ void SwView::GetState(SfxItemSet &rSet)
                     pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True )||
                     (SID_DOCUMENT_MERGE == nWhich && pWrtShell->GetDoc()->GetRedlinePasswd().getLength()))
                     rSet.DisableItem(nWhich);
+            break;
+            case  SID_VIEW_DATA_SOURCE_BROWSER:
+                rSet.Put( SfxBoolItem( nWhich, GetViewFrame()->HasChildWindow( SID_BROWSER ) ) );
             break;
         }
         nWhich = aIter.NextWhich();

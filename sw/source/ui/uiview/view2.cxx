@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-05-29 13:33:55 $
+ *  last change: $Author: os $ $Date: 2001-06-25 14:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,6 +700,17 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             break;
         case SID_GALLERY :
             GetViewFrame()->ToggleChildWindow(SID_GALLERY);
+        break;
+        case SID_VIEW_DATA_SOURCE_BROWSER:
+        {
+            SfxViewFrame* pVFrame = GetViewFrame();
+            pVFrame->ChildWindowExecute(rReq);
+            if(pVFrame->HasChildWindow(SID_BROWSER))
+            {
+                const SwDBData& rData = GetWrtShell().GetDBDesc();
+                SW_MOD()->ShowDBObj(*this, rData, FALSE);
+            }
+        }
         break;
         default:
             ASSERT(!this, falscher Dispatcher);
