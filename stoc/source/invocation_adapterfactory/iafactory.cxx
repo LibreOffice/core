@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iafactory.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:12:57 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,6 +468,7 @@ void AdapterImpl::invoke(
     uno_Sequence * pInParamsSeq = 0;
     ::uno_sequence_construct( &pInParamsSeq, m_pFactory->m_pAnySeqTD, 0, nParams, 0 );
     uno_Any * pInAnys = (uno_Any *)pInParamsSeq->elements;
+    sal_Int32 nOutParams = 0;
     for ( sal_Int32 nPos = nParams; nPos--; )
     {
         typelib_MethodParameter const & rParam = pFormalParams[nPos];
@@ -475,7 +476,10 @@ void AdapterImpl::invoke(
         {
             ::uno_type_any_assign( &pInAnys[nPos], pArgs[nPos], rParam.pTypeRef, 0, 0 );
         }
-        // pure out is empty any
+        // else: pure out is empty any
+
+        if (rParam.bOut)
+            ++nOutParams;
     }
 
     // out params, out indices
@@ -505,13 +509,15 @@ void AdapterImpl::invoke(
     {
         // write changed out params
         OSL_ENSURE(
-            pOutParams->nElements == pOutIndices->nElements,
+            pOutParams->nElements == nOutParams &&
+            pOutIndices->nElements == nOutParams,
             "### out params lens differ!" );
-        if (pOutParams->nElements == pOutIndices->nElements)
+        if (pOutParams->nElements == nOutParams &&
+            pOutIndices->nElements == nOutParams)
         {
             sal_Int16 * pIndices = (sal_Int16 *)pOutIndices->elements;
             uno_Any * pOut       = (uno_Any *)pOutParams->elements;
-            for ( nPos = 0; nPos < pOutIndices->nElements; ++nPos )
+            for ( nPos = 0; nPos < nOutParams; ++nPos )
             {
                 sal_Int32 nIndex = pIndices[nPos];
                 OSL_ENSURE( nIndex < nParams, "### illegal index!" );
