@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-07 12:03:15 $
+ *  last change: $Author: cl $ $Date: 2000-12-07 19:28:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,7 +667,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
             }
         }
     }
-/*
+
     // set PageProperties?
     if(msStyleName.getLength())
     {
@@ -707,18 +707,25 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
 
                         if(xPropSet2.is())
                         {
-                            pPropStyle->FillPropertySet(xPropSet2);
+                            try
+                            {
+                                pPropStyle->FillPropertySet(xPropSet2);
 
-                            uno::Any aAny;
-                            aAny <<= xPropSet2;
-                            xPropSet1->setPropertyValue( aBackground, aAny );
+                                uno::Any aAny;
+                                aAny <<= xPropSet2;
+                                xPropSet1->setPropertyValue( aBackground, aAny );
+                            }
+                            catch( uno::Exception )
+                            {
+                                DBG_ERROR( "uno::Exception catched!" );
+                            }
                         }
                     }
                 }
             }
         }
     }
-*/
+
     // now delete all up-to-now contained shapes.
     while(rShapes->getCount())
     {
