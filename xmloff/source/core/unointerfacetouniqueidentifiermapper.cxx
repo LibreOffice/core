@@ -26,7 +26,9 @@ const OUString& UnoInterfaceToUniqueIdentifierMapper::registerReference( const R
     }
     else
     {
-        return (*maEntries.insert( IdMap_t::value_type( OUString::valueOf( mnNextId++ ), rInterface ) ).first).first;
+        OUString aId( RTL_CONSTASCII_USTRINGPARAM( "id" ) );
+        aId += OUString::valueOf( mnNextId++ );
+        return (*maEntries.insert( IdMap_t::value_type( aId, rInterface ) ).first).first;
     }
 }
 
@@ -54,7 +56,13 @@ bool UnoInterfaceToUniqueIdentifierMapper::registerReference( const OUString& rI
         const sal_Unicode *p = rIdentifier.getStr();
         sal_Int32 nLength = rIdentifier.getLength();
 
-        // see if the identifier is a pure integer value
+        // see if the identifier is 'id' followed by a pure integer value
+        if( nLength < 2 || p[0] != 'i' || p[1] != 'd' )
+            return true;
+
+        nLength -= 2;
+        p += 2;
+
         while(nLength--)
         {
             if( (*p < '0') || (*p > '9') )
@@ -66,7 +74,7 @@ bool UnoInterfaceToUniqueIdentifierMapper::registerReference( const OUString& rI
         // the identifier is a pure integer value
         // so we make sure we will never generate
         // an integer value like this one
-        sal_Int32 nId = rIdentifier.toInt32();
+        sal_Int32 nId = rIdentifier.copy(2).toInt32();
         if( mnNextId <= nId )
             mnNextId = nId + 1;
 
