@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-06 17:36:50 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
                 Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
-                Text[ korean ] = "Asian typography";
+                Text[ korean ] = "¾Æ½Ã¾Æ Å¸ÀÌÆ÷±×·¡ÇÇ";
                 Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
                 Text[ turkish ] = "Asian typography";
@@ -250,7 +250,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ chinese_traditional ] = "Ãä®Ø";
                 Text[ arabic ] = "ÇáÍÏæÏ";
                 Text[ greek ] = "Ğåñßãñáììá";
-                Text[ korean ] = "°æ°è¼±";
+                Text[ korean ] = "Å×µÎ¸®";
                 Text[ turkish ] = "Kenarlık";
                 Text[ language_user1 ] = " ";
             };
@@ -359,7 +359,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ chinese_traditional ] = "Âê©w(~P)";
         Text[ arabic ] = "ãÍãí";
         Text[ greek ] = "Êëåéäùìİíï";
-        Text[ korean ] = "º¸È£µÈ";
+        Text[ korean ] = "ÀåÆò";
         Text[ turkish ] = "~Koruma altında";
         Text[ language_user1 ] = " ";
     };
@@ -384,11 +384,11 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ chinese_simplified ] = "ÒşÈë¹«Ê½(~F)";
         Text[ russian ] = "Ñêğûòü ôîğìóëó";
         Text[ polish ] = "Ukryj formu³ê";
-        Text[ japanese ] = "”®‚Ì”ñ•\\¦(~F)";
+        Text[ japanese ] = "”®‚ğ•\\¦‚µ‚È‚¢(~F)";
         Text[ chinese_traditional ] = "Áô¤J¤½¦¡(~F)";
         Text[ arabic ] = "ÅÎİÇÁ ÇáÕíÛÉ";
         Text[ greek ] = "Áğüêñõøç ôığïõ";
-        Text[ korean ] = "¼ö½Ä ¼û±â±â(~F)";
+        Text[ korean ] = "¼ö½Ä ¼û±â±â";
         Text[ turkish ] = "~Formulü gizle";
         Text[ language_user1 ] = " ";
     };
@@ -413,11 +413,11 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ chinese_simplified ] = "È«²¿ÒşÈë(~A)";
         Text[ russian ] = "Ñêğûòü âñå";
         Text[ polish ] = "Ukryj wszystko";
-        Text[ japanese ] = "‚·‚×‚Ä”ñ•\\¦(~A)";
+        Text[ japanese ] = "‚·‚×‚Ä•\\¦‚µ‚È‚¢(~A)";
         Text[ chinese_traditional ] = "¥ş³¡Áô¤J(~A)";
         Text[ arabic ] = "ÅÎİÇÁ Çáßá";
         Text[ greek ] = "~Áğüêñõøç üëùí";
-        Text[ korean ] = "ÀüºÎ ¼û±â±â(~A)";
+        Text[ korean ] = "¸ğµÎ ¼û±â±â";
         Text[ turkish ] = "~Tümünü gizle";
         Text[ language_user1 ] = " ";
     };
@@ -510,7 +510,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ chinese_traditional ] = "¥´¦L®ÉÁô¤J(~H)";
         Text[ arabic ] = "ÅÎİÇÁ ÚäÏ ÇáØÈÇÚÉ";
         Text[ greek ] = "Áğüêñõøç êáôÜ ôçí åêôığùóç";
-        Text[ korean ] = "ÀÎ¼â ½Ã ¼û±â±â(~W)";
+        Text[ korean ] = "ÀÎ¼â½Ã¿¡ ¼û±â±â";
         Text[ turkish ] = "~Yazdırırken gizle";
         Text[ language_user1 ] = " ";
     };
