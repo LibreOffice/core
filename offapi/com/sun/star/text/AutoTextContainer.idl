@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AutoTextContainer.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:40 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 // DocMerge from xml: service com::sun::star::text::AutoTextContainer
 /** provides access to groups of text blocks.
  */
-service AutoTextContainer
+published service AutoTextContainer
 {
     // DocMerge: empty anyway
     interface com::sun::star::text::XAutoTextContainer;
