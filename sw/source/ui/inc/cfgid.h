@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgid.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-12 08:25:11 $
+ *  last change: $Author: os $ $Date: 2000-10-19 08:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <sfx2/sfx.hrc>
 #endif
 
+#define CFG_STATUSBAR                         (SFX_ITEMTYPE_SW_BEGIN +13)
 #define CFG_SW_MENU             (SFX_ITEMTYPE_SW_BEGIN +16)
 #define CFG_SW_ACCEL            (SFX_ITEMTYPE_SW_BEGIN +17)
 #define CFG_SWWEB_MENU          (SFX_ITEMTYPE_SW_BEGIN +19)
