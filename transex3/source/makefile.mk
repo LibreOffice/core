@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: nf $ $Date: 2002-08-15 11:13:16 $
+#   last change: $Author: vg $ $Date: 2002-08-26 17:09:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -149,6 +149,8 @@ APP7STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
 # localizer for l10n framework
 APP9TARGET= localize
 APP9STACK=  16000
+EXCEPTIONSFILES=                            \
+                    $(OBJ)$/localize.obj
 APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj
 APP9STDLIBS+=$(BTSTRPLIB) $(STATIC_LIBS)
 
