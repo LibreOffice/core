@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:52:51 $
+ *  last change: $Author: fs $ $Date: 2001-08-21 13:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1592,7 +1592,7 @@ void FmXFormShell::ExecuteSearch()
     LoopGrids(GA_DISABLE_SYNC /*| GA_ENABLE_ROCTRLR*/);
 
     // jetzt bin ich reif fuer den Dialog
-    FmSearchDialog dlg(NULL, strInitialText, strRealContexts, nInitialContext, LINK(this, FmXFormShell, OnSearchContextRequest),
+    FmSearchDialog dlg(&m_pShell->GetViewShell()->GetViewFrame()->GetWindow(), strInitialText, strRealContexts, nInitialContext, LINK(this, FmXFormShell, OnSearchContextRequest),
         FmSearchDialog::SM_ALLOWSCHEDULE);
     // wenn die potentiellen Deadlocks, die durch die Benutzung des Solar-Mutex in MTs VCLX...-Klasen entstehen, irgendwann mal
     // ausgeraeumt sind, sollte hier ein SM_USETHREAD rein, denn die Suche in einem eigenen Thread ist doch etwas fluessiger
