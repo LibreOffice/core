@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2004-12-07 13:18:17 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:40:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,12 +99,12 @@
 //  interface includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
-#include <drafts/com/sun/star/ui/UIElementType.hpp>
+#ifndef _COM_SUN_STAR_UI_UIELEMENTTYPE_HPP_
+#include <com/sun/star/ui/UIElementType.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_CONFIGURATIONEVENT_HPP_
-#include <drafts/com/sun/star/ui/ConfigurationEvent.hpp>
+#ifndef _COM_SUN_STAR_UI_CONFIGURATIONEVENT_HPP_
+#include <com/sun/star/ui/ConfigurationEvent.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
@@ -152,7 +152,7 @@ using namespace com::sun::star::embed;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
-using namespace drafts::com::sun::star::ui;
+using namespace ::com::sun::star::ui;
 
 namespace framework
 {
@@ -165,20 +165,20 @@ DEFINE_XINTERFACE_7                    (    UIConfigurationManager              
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                                      ),
                                             DIRECT_INTERFACE( css::lang::XServiceInfo                                       ),
                                             DIRECT_INTERFACE( css::lang::XComponent                                         ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::ui::XUIConfiguration                  ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::ui::XUIConfigurationManager           ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::ui::XUIConfigurationPersistence       ),
-                                            DIRECT_INTERFACE( drafts::com::sun::star::ui::XUIConfigurationStorage           )
+                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfiguration                  ),
+                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationManager           ),
+                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationPersistence       ),
+                                            DIRECT_INTERFACE( ::com::sun::star::ui::XUIConfigurationStorage           )
                                         )
 
 DEFINE_XTYPEPROVIDER_7                  (   UIConfigurationManager                                  ,
                                             css::lang::XTypeProvider                                ,
                                             css::lang::XServiceInfo                                 ,
                                             css::lang::XComponent                                   ,
-                                            drafts::com::sun::star::ui::XUIConfiguration            ,
-                                            drafts::com::sun::star::ui::XUIConfigurationManager     ,
-                                            drafts::com::sun::star::ui::XUIConfigurationPersistence ,
-                                            drafts::com::sun::star::ui::XUIConfigurationStorage
+                                            ::com::sun::star::ui::XUIConfiguration            ,
+                                            ::com::sun::star::ui::XUIConfigurationManager     ,
+                                            ::com::sun::star::ui::XUIConfigurationPersistence ,
+                                            ::com::sun::star::ui::XUIConfigurationStorage
                                         )
 
 DEFINE_XSERVICEINFO_MULTISERVICE        (   UIConfigurationManager                      ,
@@ -191,7 +191,7 @@ DEFINE_INIT_SERVICE                     (   UIConfigurationManager, {} )
 
 
 // important: The order and position of the elements must match the constant
-// definition of "drafts::com::sun::star::ui::UIElementType"
+// definition of "::com::sun::star::ui::UIElementType"
 static const char* UIELEMENTTYPENAMES[] =
 {
     "",  // Dummy value for unknown!
@@ -335,10 +335,10 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
             {
                 switch ( nElementType )
                 {
-                    case drafts::com::sun::star::ui::UIElementType::UNKNOWN:
+                    case ::com::sun::star::ui::UIElementType::UNKNOWN:
                     break;
 
-                    case drafts::com::sun::star::ui::UIElementType::MENUBAR:
+                    case ::com::sun::star::ui::UIElementType::MENUBAR:
                     {
                         try
                         {
@@ -357,12 +357,12 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                     }
                     break;
 
-                    case drafts::com::sun::star::ui::UIElementType::POPUPMENU:
+                    case ::com::sun::star::ui::UIElementType::POPUPMENU:
                     {
                         break;
                     }
 
-                    case drafts::com::sun::star::ui::UIElementType::TOOLBAR:
+                    case ::com::sun::star::ui::UIElementType::TOOLBAR:
                     {
                         try
                         {
@@ -379,7 +379,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                         break;
                     }
 
-                    case drafts::com::sun::star::ui::UIElementType::STATUSBAR:
+                    case ::com::sun::star::ui::UIElementType::STATUSBAR:
                     {
                         try
                         {
@@ -396,7 +396,7 @@ void UIConfigurationManager::impl_requestUIElementData( sal_Int16 nElementType, 
                         break;
                     }
 
-                    case drafts::com::sun::star::ui::UIElementType::FLOATINGWINDOW:
+                    case ::com::sun::star::ui::UIElementType::FLOATINGWINDOW:
                     {
                         break;
                     }
@@ -468,7 +468,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
                 {
                     switch( rElementType.nElementType )
                     {
-                        case drafts::com::sun::star::ui::UIElementType::MENUBAR:
+                        case ::com::sun::star::ui::UIElementType::MENUBAR:
                         {
                             try
                             {
@@ -481,7 +481,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
                         }
                         break;
 
-                        case drafts::com::sun::star::ui::UIElementType::TOOLBAR:
+                        case ::com::sun::star::ui::UIElementType::TOOLBAR:
                         {
                             try
                             {
@@ -493,7 +493,7 @@ void UIConfigurationManager::impl_storeElementTypeData( Reference< XStorage >& x
                         }
                         break;
 
-                        case drafts::com::sun::star::ui::UIElementType::STATUSBAR:
+                        case ::com::sun::star::ui::UIElementType::STATUSBAR:
                         {
                             try
                             {
@@ -639,7 +639,7 @@ void UIConfigurationManager::impl_Initialize()
         long nModes = m_bReadOnly ? ElementModes::READ : ElementModes::READWRITE;
 
         // Try to access our module sub folder
-        for ( int i = 1; i < drafts::com::sun::star::ui::UIElementType::COUNT; i++ )
+        for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         {
             Reference< XStorage > xElementTypeStorage;
             try
@@ -671,7 +671,7 @@ void UIConfigurationManager::impl_Initialize()
     else
     {
         // We have no storage, just initialize ui element types with empty storage!
-        for ( int i = 1; i < drafts::com::sun::star::ui::UIElementType::COUNT; i++ )
+        for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
             m_aUIElements[i].xStorage = m_xDocConfigStorage;
     }
 }
@@ -692,7 +692,7 @@ UIConfigurationManager::UIConfigurationManager( com::sun::star::uno::Reference< 
 {
     // Make sure we have a default initialized entry for every layer and user interface element type!
     // The following code depends on this!
-    m_aUIElements.resize( ::drafts::com::sun::star::ui::UIElementType::COUNT );
+    m_aUIElements.resize( ::com::sun::star::ui::UIElementType::COUNT );
 }
 
 UIConfigurationManager::~UIConfigurationManager()
@@ -747,7 +747,7 @@ void SAL_CALL UIConfigurationManager::removeEventListener( const Reference< XEve
 }
 
 // XUIConfigurationManager
-void SAL_CALL UIConfigurationManager::addConfigurationListener( const Reference< ::drafts::com::sun::star::ui::XUIConfigurationListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigurationManager::addConfigurationListener( const Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     {
         ResetableGuard aGuard( m_aLock );
@@ -760,7 +760,7 @@ void SAL_CALL UIConfigurationManager::addConfigurationListener( const Reference<
     m_aListenerContainer.addInterface( ::getCppuType( ( const Reference< XUIConfigurationListener >* ) NULL ), xListener );
 }
 
-void SAL_CALL UIConfigurationManager::removeConfigurationListener( const Reference< ::drafts::com::sun::star::ui::XUIConfigurationListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
+void SAL_CALL UIConfigurationManager::removeConfigurationListener( const Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XUIConfigurationListener >* ) NULL ), xListener );
@@ -785,7 +785,7 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
         {
             // Remove all elements from our user-defined storage!
             bool bCommit( false );
-            for ( int i = 1; i < drafts::com::sun::star::ui::UIElementType::COUNT; i++ )
+            for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
             {
                 UIElementType&        rElementType = m_aUIElements[i];
                 Reference< XStorage > xSubStorage( rElementType.xStorage, UNO_QUERY );
@@ -823,7 +823,7 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
             // remove settings from user defined layer and notify listener about removed settings data!
             // Try to access our module sub folder
             ConfigEventNotifyContainer aRemoveEventNotifyContainer;
-            for ( sal_Int16 j = 1; j < drafts::com::sun::star::ui::UIElementType::COUNT; j++ )
+            for ( sal_Int16 j = 1; j < ::com::sun::star::ui::UIElementType::COUNT; j++ )
             {
                 UIElementType& rDocElementType = m_aUIElements[j];
 
@@ -858,7 +858,7 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
 Sequence< Sequence< PropertyValue > > SAL_CALL UIConfigurationManager::getUIElementsInfo( sal_Int16 ElementType )
 throw ( IllegalArgumentException, RuntimeException )
 {
-    if (( ElementType < 0 ) || ( ElementType >= ::drafts::com::sun::star::ui::UIElementType::COUNT ))
+    if (( ElementType < 0 ) || ( ElementType >= ::com::sun::star::ui::UIElementType::COUNT ))
         throw IllegalArgumentException();
 
     ResetableGuard aGuard( m_aLock );
@@ -868,9 +868,9 @@ throw ( IllegalArgumentException, RuntimeException )
     Sequence< Sequence< PropertyValue > > aElementInfoSeq;
     UIElementInfoHashMap aUIElementInfoCollection;
 
-    if ( ElementType == drafts::com::sun::star::ui::UIElementType::UNKNOWN )
+    if ( ElementType == ::com::sun::star::ui::UIElementType::UNKNOWN )
     {
-        for ( sal_Int16 i = 0; i < drafts::com::sun::star::ui::UIElementType::COUNT; i++ )
+        for ( sal_Int16 i = 0; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
             impl_fillSequenceWithElementTypeInfo( aUIElementInfoCollection, sal_Int16( i ) );
     }
     else
@@ -911,8 +911,8 @@ throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
-    if (( nElementType == ::drafts::com::sun::star::ui::UIElementType::UNKNOWN ) ||
-        ( nElementType >= ::drafts::com::sun::star::ui::UIElementType::COUNT   ))
+    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) ||
+        ( nElementType >= ::com::sun::star::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
     else
     {
@@ -929,8 +929,8 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
-    if (( nElementType == ::drafts::com::sun::star::ui::UIElementType::UNKNOWN ) ||
-        ( nElementType >= ::drafts::com::sun::star::ui::UIElementType::COUNT   ))
+    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) ||
+        ( nElementType >= ::com::sun::star::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
     else
     {
@@ -958,8 +958,8 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
-    if (( nElementType == ::drafts::com::sun::star::ui::UIElementType::UNKNOWN ) ||
-        ( nElementType >= ::drafts::com::sun::star::ui::UIElementType::COUNT   ))
+    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) ||
+        ( nElementType >= ::com::sun::star::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
     else if ( m_bReadOnly )
         throw IllegalAccessException();
@@ -1017,8 +1017,8 @@ throw ( NoSuchElementException, IllegalArgumentException, IllegalAccessException
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( ResourceURL );
 
-    if (( nElementType == ::drafts::com::sun::star::ui::UIElementType::UNKNOWN ) ||
-        ( nElementType >= ::drafts::com::sun::star::ui::UIElementType::COUNT   ))
+    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) ||
+        ( nElementType >= ::com::sun::star::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
     else if ( m_bReadOnly )
         throw IllegalAccessException();
@@ -1075,8 +1075,8 @@ throw ( ElementExistException, IllegalArgumentException, IllegalAccessException,
 {
     sal_Int16 nElementType = RetrieveTypeFromResourceURL( NewResourceURL );
 
-    if (( nElementType == ::drafts::com::sun::star::ui::UIElementType::UNKNOWN ) ||
-        ( nElementType >= ::drafts::com::sun::star::ui::UIElementType::COUNT   ))
+    if (( nElementType == ::com::sun::star::ui::UIElementType::UNKNOWN ) ||
+        ( nElementType >= ::com::sun::star::ui::UIElementType::COUNT   ))
         throw IllegalArgumentException();
     else if ( m_bReadOnly )
         throw IllegalAccessException();
@@ -1283,7 +1283,7 @@ void SAL_CALL UIConfigurationManager::reload() throw (::com::sun::star::uno::Exc
         // Try to access our module sub folder
         ConfigEventNotifyContainer aRemoveNotifyContainer;
         ConfigEventNotifyContainer aReplaceNotifyContainer;
-        for ( sal_Int16 i = 1; i < drafts::com::sun::star::ui::UIElementType::COUNT; i++ )
+        for ( sal_Int16 i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         {
             try
             {
@@ -1320,7 +1320,7 @@ void SAL_CALL UIConfigurationManager::store() throw (::com::sun::star::uno::Exce
     if ( m_xDocConfigStorage.is() && m_bModified && !m_bReadOnly )
     {
         // Try to access our module sub folder
-        for ( int i = 1; i < drafts::com::sun::star::ui::UIElementType::COUNT; i++ )
+        for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         {
             try
             {
@@ -1353,7 +1353,7 @@ void SAL_CALL UIConfigurationManager::storeToStorage( const Reference< XStorage 
     if ( m_xDocConfigStorage.is() && m_bModified && !m_bReadOnly )
     {
         // Try to access our module sub folder
-        for ( int i = 1; i < drafts::com::sun::star::ui::UIElementType::COUNT; i++ )
+        for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         {
             try
             {
@@ -1392,7 +1392,7 @@ sal_Bool SAL_CALL UIConfigurationManager::isReadOnly() throw (::com::sun::star::
 
 void UIConfigurationManager::implts_notifyContainerListener( const ConfigurationEvent& aEvent, NotifyOp eOp )
 {
-    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< drafts::com::sun::star::ui::XUIConfigurationListener >*) NULL ) );
+    ::cppu::OInterfaceContainerHelper* pContainer = m_aListenerContainer.getContainer( ::getCppuType( ( const css::uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >*) NULL ) );
     if ( pContainer != NULL )
     {
         ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
@@ -1403,13 +1403,13 @@ void UIConfigurationManager::implts_notifyContainerListener( const Configuration
                 switch ( eOp )
                 {
                     case NotifyOp_Replace:
-                        ((drafts::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementReplaced( aEvent );
+                        ((::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementReplaced( aEvent );
                         break;
                     case NotifyOp_Insert:
-                        ((drafts::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementInserted( aEvent );
+                        ((::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementInserted( aEvent );
                         break;
                     case NotifyOp_Remove:
-                        ((drafts::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementRemoved( aEvent );
+                        ((::com::sun::star::ui::XUIConfigurationListener*)pIterator.next())->elementRemoved( aEvent );
                         break;
                 }
             }
