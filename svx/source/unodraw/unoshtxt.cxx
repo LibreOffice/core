@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-11 16:02:24 $
+ *  last change: $Author: thb $ $Date: 2002-02-11 12:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ namespace css = ::com::sun::star;
 // SvxTextEditSourceImpl
 //------------------------------------------------------------------------
 
-class SvxTextEditSourceImpl : public SfxListener
+class SvxTextEditSourceImpl : public SfxListener, public SfxBroadcaster
 {
 private:
     oslInterlockedCount maRefCount;
@@ -160,6 +160,9 @@ public:
 
     void lock();
     void unlock();
+
+    DECL_LINK( NotifyHdl, EENotify* );
+
 };
 
 //------------------------------------------------------------------------
@@ -287,6 +290,8 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
 
         mpObject = NULL;
+
+        Broadcast( TextHint( SFX_HINT_DYING ) );
     }
 }
 
@@ -348,6 +353,9 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
         }
 
         mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner );
+
+        // register as listener - need to broadcast state change messages
+        mpTextForwarder->SetNotifyHdl( LINK(this, SvxTextEditSourceImpl, NotifyHdl) );
     }
 
     if( mpObject && !mbDataValid )
@@ -466,6 +474,49 @@ void SvxTextEditSourceImpl::unlock()
     }
 }
 
+IMPL_LINK(SvxTextEditSourceImpl, NotifyHdl, EENotify*, aNotify)
+{
+    if( aNotify )
+    {
+        switch( aNotify->eNotificationType )
+        {
+            case EE_NOTIFY_TEXTMODIFIED:
+                Broadcast( SvxEditSourceHint( TEXT_HINT_MODIFIED, aNotify->nParagraph ) );
+                break;
+
+            case EE_NOTIFY_PARAGRAPHINSERTED:
+                Broadcast( SvxEditSourceHint( TEXT_HINT_PARAINSERTED, aNotify->nParagraph ) );
+                break;
+
+            case EE_NOTIFY_PARAGRAPHREMOVED:
+                Broadcast( SvxEditSourceHint( TEXT_HINT_PARAREMOVED, aNotify->nParagraph ) );
+                break;
+
+            case EE_NOTIFY_PARAGRAPHSMOVED:
+                Broadcast( SvxEditSourceHint( EDITSOURCE_HINT_PARASMOVED, aNotify->nParagraph, aNotify->nParam1, aNotify->nParam2 ) );
+                break;
+
+            case EE_NOTIFY_TEXTHEIGHTCHANGED:
+                Broadcast( SvxEditSourceHint( TEXT_HINT_TEXTHEIGHTCHANGED, aNotify->nParagraph ) );
+                break;
+
+            case EE_NOTIFY_TEXTVIEWSCROLLED:
+                Broadcast( SvxEditSourceHint( TEXT_HINT_VIEWSCROLLED ) );
+                break;
+
+            case EE_NOTIFY_TEXTVIEWSELECTIONCHANGED:
+                Broadcast( SvxEditSourceHint( EDITSOURCE_HINT_SELECTIONCHANGED ) );
+                break;
+
+            default:
+                DBG_ERROR( "SvxTextEditSourceImpl::NotifyHdl unknown notification" );
+                break;
+        }
+    }
+
+    return 0;
+}
+
 //------------------------------------------------------------------------
 
 // --------------------------------------------------------------------
@@ -503,37 +554,33 @@ SvxEditSource* SvxTextEditSource::Clone() const
 //------------------------------------------------------------------------
 SvxTextForwarder* SvxTextEditSource::GetTextForwarder()
 {
-    if( mpImpl )
-        return mpImpl->GetTextForwarder();
-    else
-        return NULL;
+    return mpImpl->GetTextForwarder();
 }
 
 //------------------------------------------------------------------------
 void SvxTextEditSource::UpdateData()
 {
-    if( mpImpl )
-        mpImpl->UpdateData();
+    mpImpl->UpdateData();
+}
+
+SfxBroadcaster& SvxTextEditSource::GetBroadcaster() const
+{
+    return *mpImpl;
 }
 
 SdrObject* SvxTextEditSource::GetSdrObject() const
 {
-    if( mpImpl )
-        return mpImpl->GetSdrObject();
-    else
-        return NULL;
+    return mpImpl->GetSdrObject();
 }
 
 void SvxTextEditSource::lock()
 {
-    if( mpImpl )
-        mpImpl->lock();
+    mpImpl->lock();
 }
 
 void SvxTextEditSource::unlock()
 {
-    if( mpImpl )
-        mpImpl->unlock();
+    mpImpl->unlock();
 }
 
 /** this method returns true if the outliner para object of the given shape has
@@ -588,3 +635,4 @@ sal_Bool SvxTextEditSource::hasLevels( const SdrObject* pObject )
 
     return sal_False;
 }
+
