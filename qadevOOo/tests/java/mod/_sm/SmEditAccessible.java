@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SmEditAccessible.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2003-09-08 12:29:19 $
+ *  last change:$Date: 2004-11-02 12:05:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ public class SmEditAccessible extends TestCase {
             (xRoot, AccessibleRole.PANEL, "", "SmEditAccessible");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
-        //at.printAccessibleTree(log,xRoot);
+        at.printAccessibleTree(log, xRoot, Param.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("Destroy", new Boolean(true));
