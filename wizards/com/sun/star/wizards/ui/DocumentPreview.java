@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentPreview.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:06:23 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 14:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,7 +57,6 @@
  *  Contributor(s): _______________________________________
  *
  */
-
 package com.sun.star.wizards.ui;
 
 import com.sun.star.awt.*;
@@ -70,6 +69,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.CloseVetoException;
 import com.sun.star.util.XCloseable;
+import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Properties;
 
 /**
@@ -131,6 +131,7 @@ public class DocumentPreview  {
     protected XComponent setDocument(String url, PropertyValue[] lArgs) throws com.sun.star.lang.IllegalArgumentException, IOException, CloseVetoException {
         loadArgs = lArgs;
         XComponentLoader xCompLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
+        xFrame.activate();
         return xComponent = xCompLoader.loadComponentFromURL(url, "_self", 0, loadArgs);
     }
 
@@ -182,9 +183,10 @@ public class DocumentPreview  {
 
         XWindowPeer xPeer = xToolkit.createWindow(aDescriptor);
         xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xPeer);
-
         Object frame = xmsf.createInstance("com.sun.star.frame.Frame");
         xFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, frame);
+//      XFrame xF = (XFrame) UnoRuntime.queryInterface(XFrame.class, Desktop.getDesktop(xmsf));
+//      xFrame = xF.findFrame("_blank", 0);
         xFrame.initialize(xWindow);
         xWindow.setVisible(true);
     }
