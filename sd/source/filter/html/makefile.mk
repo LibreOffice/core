@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:14:16 $
+#   last change: $Author: hr $ $Date: 2004-05-10 15:41:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..$/..$/..
 PRJNAME=sd
 TARGET=html
-
+LIBTARGET=NO
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
@@ -83,7 +83,14 @@ EXCEPTIONSFILES = $(SLO)$/HtmlOptionsDialog.obj \
 SRS1NAME=$(TARGET)
 SRC1FILES =	pubdlg.src					
     
+LIB1TARGET= $(SLB)$/$(TARGET).lib
 
+LIB1OBJFILES = \
+            $(SLO)$/HtmlOptionsDialog.obj\
+            $(SLO)$/sdhtmlfilter.obj	\
+            $(SLO)$/htmlex.obj			\
+            $(SLO)$/htmlattr.obj
+            
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
