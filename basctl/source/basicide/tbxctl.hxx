@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ private:
     DECL_LINK( SelectHdl, void* );
 
 public:
-    PopupWindowTbx( USHORT nId, ToolBoxAlign eAlign,
+    PopupWindowTbx( USHORT nId, WindowAlign eAlign,
                     ResId aRIdWin, ResId aRIdTbx, SfxBindings& rBind );
     ~PopupWindowTbx();
 
