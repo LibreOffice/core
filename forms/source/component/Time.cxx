@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: fs $ $Date: 2001-05-18 14:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,14 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
+
+//==================================================================
+//=
+//==================================================================
 
 //==================================================================
 //= OTimeControl
@@ -161,13 +166,22 @@ Sequence<Type> OTimeModel::_getTypes()
 
 //------------------------------------------------------------------
 OTimeModel::OTimeModel(const Reference<XMultiServiceFactory>& _rxFactory)
-             :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_CONTROL_TIMEFIELD )
+            :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_TIMEFIELD, FRM_CONTROL_TIMEFIELD )
                                     // use the old control name for compytibility reasons
+            ,OLimitedFormats(_rxFactory, FormComponentType::TIMEFIELD)
 {
     m_nClassId = FormComponentType::TIMEFIELD;
     m_sDataFieldConnectivityProperty = PROPERTY_TIME;
     if (OTimeModel::nTimeHandle == -1)
         OTimeModel::nTimeHandle = getOriginalHandle(PROPERTY_ID_TIME);
+
+    setAggregateSet(m_xAggregateFastSet, getOriginalHandle(PROPERTY_ID_TIMEFORMAT));
+}
+
+//------------------------------------------------------------------------------
+OTimeModel::~OTimeModel()
+{
+    setAggregateSet(Reference< XFastPropertySet >(), -1);
 }
 
 //------------------------------------------------------------------------------
@@ -189,19 +203,18 @@ void OTimeModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(9)
-        // starutil::Time auf transient setzen
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TIME, PropertyAttribute::TRANSIENT, 0);
-
-        DECL_PROP1(NAME,        ::rtl::OUString, BOUND);
-        DECL_PROP2(CLASSID,     sal_Int16, READONLY, TRANSIENT);
-        DECL_PROP3(DEFAULT_TIME,        sal_Int32, BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP1(TAG,     ::rtl::OUString, BOUND);
-        DECL_PROP1(TABINDEX,        sal_Int16, BOUND);
-        DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,    BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,        XPropertySet, READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,   BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
+    FRM_BEGIN_PROP_HELPER(11)
+        DECL_PROP1(NAME,                    ::rtl::OUString,        BOUND);
+        DECL_PROP2(CLASSID,                 sal_Int16,              READONLY, TRANSIENT);
+        DECL_PROP3(DEFAULT_TIME,            sal_Int32,              BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP1(TAG,                     ::rtl::OUString,        BOUND);
+        DECL_PROP1(TABINDEX,                sal_Int16,              BOUND);
+        DECL_PROP1(CONTROLSOURCE,           ::rtl::OUString,        BOUND);
+        DECL_IFACE_PROP2(BOUNDFIELD,        XPropertySet,           READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,           BOUND, MAYBEVOID);
+        DECL_PROP2(CONTROLSOURCEPROPERTY,   ::rtl::OUString,        READONLY, TRANSIENT);
+        DECL_PROP0(FORMATKEY,               sal_Int32);
+        DECL_IFACE_PROP1(FORMATSSUPPLIER,   XNumberFormatsSupplier, READONLY);
     FRM_END_PROP_HELPER();
 }
 
@@ -209,6 +222,42 @@ void OTimeModel::fillProperties(
 ::cppu::IPropertyArrayHelper& OTimeModel::getInfoHelper()
 {
     return *const_cast<OTimeModel*>(this)->getArrayHelper();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OTimeModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle ) const
+{
+    switch (_nHandle)
+    {
+        case PROPERTY_ID_FORMATKEY:
+            getFormatKeyPropertyValue(_rValue);
+            break;
+        case PROPERTY_ID_FORMATSSUPPLIER:
+            _rValue <<= getFormatsSupplier();
+            break;
+        default:
+            OEditBaseModel::getFastPropertyValue(_rValue, _nHandle);
+            break;
+    }
+}
+
+//------------------------------------------------------------------------------
+sal_Bool SAL_CALL OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
+        sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException)
+{
+    if (PROPERTY_ID_FORMATKEY == _nHandle)
+        return convertFormatKeyPropertyValue(_rConvertedValue, _rOldValue, _rValue);
+    else
+        return OEditBaseModel::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OTimeModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
+{
+    if (PROPERTY_ID_FORMATKEY == _nHandle)
+        setFormatKeyPropertyValue(_rValue);
+    else
+        OEditBaseModel::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
 }
 
 // XLoadListener
@@ -301,7 +350,7 @@ void OTimeModel::_reset()
         aValue = m_aDefault;
     else
     {   // aktuelles Datum einstellen
-        Time aCurrentTime;
+        ::Time aCurrentTime;
         aValue <<= (sal_Int32)aCurrentTime.GetTime();
     }
 

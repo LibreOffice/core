@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Time.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-23 08:48:15 $
+ *  last change: $Author: fs $ $Date: 2001-05-18 14:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _FORMS_EDITBASE_HXX_
 #include "EditBase.hxx"
 #endif
+#ifndef _FORMS_LIMITED_FORMATS_HXX_
+#include "limitedformats.hxx"
+#endif
 
 //.........................................................................
 namespace frm
@@ -76,6 +79,7 @@ namespace frm
 //==================================================================
 class OTimeModel
                 :public OEditBaseModel
+                ,public OLimitedFormats
                 ,public ::comphelper::OAggregationArrayUsageHelper< OTimeModel >
 {
     ::com::sun::star::uno::Any      m_aSaveValue;
@@ -88,12 +92,20 @@ protected:
 
 public:
     OTimeModel(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
+    ~OTimeModel();
 
     // starform::XBoundComponent
     virtual sal_Bool _commit();
 
     // stario::XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName();
+
+    // ::com::sun::star::beans::XPropertySet
+    virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
+    virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
+                                          sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
+                                        throw(::com::sun::star::lang::IllegalArgumentException);
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue);
 
     // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OTimeModel);

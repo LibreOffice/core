@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-02 10:28:06 $
+ *  last change: $Author: fs $ $Date: 2001-05-18 14:44:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::awt;
@@ -142,13 +143,16 @@ Sequence<Type> ODateModel::_getTypes()
 
 //------------------------------------------------------------------
 ODateModel::ODateModel(const Reference<XMultiServiceFactory>& _rxFactory)
-             :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_CONTROL_DATEFIELD )
-                                    // use the old control name for compytibility reasons
+            :OEditBaseModel(_rxFactory, VCL_CONTROLMODEL_DATEFIELD, FRM_CONTROL_DATEFIELD )
+                        // use the old control name for compytibility reasons
+            ,OLimitedFormats(_rxFactory, FormComponentType::DATEFIELD)
 {
     m_nClassId = FormComponentType::DATEFIELD;
     m_sDataFieldConnectivityProperty = PROPERTY_DATE;
     if (ODateModel::nDateHandle == -1)
         ODateModel::nDateHandle = getOriginalHandle(PROPERTY_ID_DATE);
+
+    setAggregateSet(m_xAggregateFastSet, getOriginalHandle(PROPERTY_ID_DATEFORMAT));
 }
 
 // XServiceInfo
@@ -183,19 +187,18 @@ void ODateModel::fillProperties(
         Sequence< Property >& _rProps,
         Sequence< Property >& _rAggregateProps ) const
 {
-    FRM_BEGIN_PROP_HELPER(9)
-        // Date auf transient setzen
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_DATE, PropertyAttribute::TRANSIENT, 0);
-
-        DECL_PROP1(NAME,        ::rtl::OUString, BOUND);
-        DECL_PROP2(CLASSID,     sal_Int16, READONLY, TRANSIENT);
-        DECL_PROP3(DEFAULT_DATE,        sal_Int32, BOUND, MAYBEDEFAULT, MAYBEVOID);
-        DECL_PROP1(TAG,     ::rtl::OUString, BOUND);
-        DECL_PROP1(TABINDEX,        sal_Int16, BOUND);
-        DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString, BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,        XPropertySet,   READONLY, TRANSIENT);
-        DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,   BOUND, MAYBEVOID);
-        DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
+    FRM_BEGIN_PROP_HELPER(11)
+        DECL_PROP1(NAME,                    ::rtl::OUString,        BOUND);
+        DECL_PROP2(CLASSID,                 sal_Int16,              READONLY, TRANSIENT);
+        DECL_PROP3(DEFAULT_DATE,            sal_Int32,              BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP1(TAG,                     ::rtl::OUString,        BOUND);
+        DECL_PROP1(TABINDEX,                sal_Int16,              BOUND);
+        DECL_PROP1(CONTROLSOURCE,           ::rtl::OUString,        BOUND);
+        DECL_IFACE_PROP2(BOUNDFIELD,        XPropertySet,           READONLY, TRANSIENT);
+        DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,           BOUND, MAYBEVOID);
+        DECL_PROP2(CONTROLSOURCEPROPERTY,   ::rtl::OUString,        READONLY, TRANSIENT);
+        DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
+        DECL_IFACE_PROP1(FORMATSSUPPLIER,   XNumberFormatsSupplier, READONLY);
     FRM_END_PROP_HELPER();
 }
 
@@ -203,6 +206,42 @@ void ODateModel::fillProperties(
 ::cppu::IPropertyArrayHelper& ODateModel::getInfoHelper()
 {
     return *const_cast<ODateModel*>(this)->getArrayHelper();
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODateModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle ) const
+{
+    switch (_nHandle)
+    {
+        case PROPERTY_ID_FORMATKEY:
+            getFormatKeyPropertyValue(_rValue);
+            break;
+        case PROPERTY_ID_FORMATSSUPPLIER:
+            _rValue <<= getFormatsSupplier();
+            break;
+        default:
+            OEditBaseModel::getFastPropertyValue(_rValue, _nHandle);
+            break;
+    }
+}
+
+//------------------------------------------------------------------------------
+sal_Bool SAL_CALL ODateModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
+        sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException)
+{
+    if (PROPERTY_ID_FORMATKEY == _nHandle)
+        return convertFormatKeyPropertyValue(_rConvertedValue, _rOldValue, _rValue);
+    else
+        return OEditBaseModel::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue );
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL ODateModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
+{
+    if (PROPERTY_ID_FORMATKEY == _nHandle)
+        setFormatKeyPropertyValue(_rValue);
+    else
+        OEditBaseModel::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
 }
 
 // XLoadListener
@@ -294,7 +333,7 @@ void ODateModel::_reset()
         aValue = m_aDefault;
     else
     {   // aktuelles Datum einstellen
-        Date aCurrentDate;
+        ::Date aCurrentDate;
         aValue <<= (sal_Int32)aCurrentDate.GetDate();
     }
 
