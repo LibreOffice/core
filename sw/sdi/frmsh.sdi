@@ -1,14 +1,63 @@
-/*------------------------------------------------------------------------
-
-    $Workfile:   frmsh.sdi  $
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/frmsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
-
-    Beschreibung:   IDL - File FrameShell fuer Sw3
-
-    (c) Copyright 1995 - 2000, Star Division GmbH, Hamburg
-
-------------------------------------------------------------------------*/
+/*************************************************************************
+ *
+ *  $RCSfile: frmsh.sdi,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: os $ $Date: 2001-09-28 07:01:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 
 interface TextFrame : BaseTextFrame
 [
@@ -38,46 +87,4 @@ shell SwFrameShell : SwBaseShell
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 }
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.86  1998/11/12 16:29:08  MA
-    #58677# Disable Flag
-
-
-      Rev 1.85   12 Nov 1998 17:29:08   MA
-   #58677# Disable Flag
-
-      Rev 1.84   05 Nov 1997 11:49:44   MA
-   chain
-
-      Rev 1.83   28 Aug 1997 12:50:20   MBA
-   Neue Interface-Namen
-
-      Rev 1.82   13 Feb 1997 12:45:02   MA
-   unnoetige Texte entfernt
-
-      Rev 1.81   23 Jan 1997 14:30:30   OS
-   Ableitung von _Frame
-
-      Rev 1.80   07 Nov 1996 16:17:06   OS
-   Wrap-Methoden an die Baseshell
-
-      Rev 1.79   21 Sep 1996 17:35:42   OS
-   Sot-Umstellung beendet
-
-      Rev 1.78   18 Sep 1996 10:35:46   OM
-   Umlauf: Nur Anker
-
-      Rev 1.77   10 Sep 1996 16:39:16   OS
-   Slotvereinheitlichung zu, 1.
-
-      Rev 1.76   20 Aug 1996 17:27:28   HJS
-   eu...
-
-      Rev 1.75   17 Jul 1996 07:31:30   OS
-   ReadOnlyDoc - Flag
-
-------------------------------------------------------------------------*/
 

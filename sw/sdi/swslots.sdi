@@ -1,14 +1,63 @@
-/*------------------------------------------------------------------------
-
-    $Workfile:   SWSLOTS.SDI  $
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/swslots.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
-
-    Beschreibung:   Main - IDL - File fuer Sw3
-
-    (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
-
-------------------------------------------------------------------------*/
+/*************************************************************************
+ *
+ *  $RCSfile: swslots.sdi,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: os $ $Date: 2001-09-28 07:01:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 
 import "ofa.ilb"
 
@@ -111,56 +160,4 @@ ModulePrefix( "Sw" )
     include "viewsh.sdi"
     include "wviewsh.sdi"
 }
-/*------------------------------------------------------------------------
 
-    $Log: not supported by cvs2svn $
-    Revision 1.38  2000/02/01 09:45:00  os
-    #72282# SwWebBaseShell removed
-
-    Revision 1.37  1998/06/09 13:37:10  OM
-    VC-Controls entfernt
-
-
-      Rev 1.36   09 Jun 1998 15:37:10   OM
-   VC-Controls entfernt
-
-      Rev 1.35   08 Jun 1998 18:08:30   OM
-   Forms im HTML-Mode
-
-      Rev 1.34   11 Mar 1998 17:14:00   OM
-   DB-FormShell
-
-      Rev 1.33   07 Mar 1998 11:31:22   OS
-   idl->sdi - funktioniert aber nicht!
-
-      Rev 1.32   28 Aug 1997 12:37:00   MBA
-   Text+HTML in eine IDL
-
-      Rev 1.31   13 Feb 1997 12:45:06   MA
-   unnoetige Texte entfernt
-
-      Rev 1.30   31 Jan 1997 13:24:10   OS
-   neu: _/wgrfsh _/wolesh
-
-      Rev 1.29   23 Jan 1997 15:41:42   OS
-   +_textsh.idl
-
-      Rev 1.28   23 Jan 1997 14:39:50   OS
-   Umstellung fuer StarWriter/Web
-
-      Rev 1.27   23 Jan 1997 08:37:16   OS
-   neue files fuer Basis-interfaces
-
-      Rev 1.26   22 Jan 1997 11:18:24   OM
-   Neue Shells: DrawBaseShell und DrawControlShell
-
-      Rev 1.25   08 Jan 1997 12:39:46   OM
-   Neu: Bezier-Shell
-
-      Rev 1.24   27 Sep 1996 09:44:56   OS
-   swnew.idl vor swriter.idl
-
-      Rev 1.23   19 Sep 1996 10:53:52   OS
-   neuese File: swnew.idl fuer neue Slots
-
-------------------------------------------------------------------------*/

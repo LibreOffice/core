@@ -1,15 +1,63 @@
-/*------------------------------------------------------------------------
-
-    $Workfile:   _docsh.sdi  $
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_docsh.sdi,v 1.2 2001-08-01 10:32:50 os Exp $
-
-    Beschreibung:   interface __Document enthaelt gemeinsame Slots fuer
-                    SwDocShell und SwWebDocShell
-
-    (c) Copyright 1997 - 2000, Star Division GmbH, Hamburg
-
-------------------------------------------------------------------------*/
+/*************************************************************************
+ *
+ *  $RCSfile: _docsh.sdi,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: os $ $Date: 2001-09-28 07:01:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 
 interface BaseTextDocument : OfficeDocument
 [
@@ -104,66 +152,4 @@ interface BaseTextDocument : OfficeDocument
     ]
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 17:14:29  hr
-    initial import
-
-    Revision 1.17  2000/05/26 07:06:15  os
-    old SW Basic API Slots removed
-
-    Revision 1.16  1999/09/10 12:16:20  jp
-    AutoCorrectDialog: dont disable by protected cursor
-
-    Revision 1.15  1999/02/02 07:41:38  OS
-    #61027# zweistellige Jahreszahlen
-
-
-      Rev 1.14   02 Feb 1999 08:41:38   OS
-   #61027# zweistellige Jahreszahlen
-
-      Rev 1.13   12 Nov 1998 17:29:28   MA
-   #58677# Disable Flag
-
-      Rev 1.12   28 May 1998 17:39:56   OM
-   Zahlenformat per Basic ermitteln
-
-      Rev 1.11   13 May 1998 14:58:30   OM
-   Autokorrektur/Autoformat umgestaltet und zusammengefasst
-
-      Rev 1.10   24 Apr 1998 15:03:12   OM
-   Seitenvorschau auch im Html-Mode
-
-      Rev 1.9   17 Apr 1998 17:13:10   OM
-   PageCount-Event per Macro setzen: Vorbereitungen
-
-      Rev 1.8   11 Nov 1997 13:17:18   JP
-   neu: NumRule-Vorlagen
-
-      Rev 1.7   04 Sep 1997 13:36:52   MBA
-   Document von OfficeDocument abgeleitet
-
-      Rev 1.6   28 Aug 1997 12:51:22   MBA
-   Neue Interface-Namen
-
-      Rev 1.5   05 Jul 1997 09:42:06   OS
-   Macro und Script an Rahmenvorlagen setzen/lesen
-
-      Rev 1.4   17 Jun 1997 13:24:38   JP
-   neu: Execute vom Slot SID_MAIL_PREPAREEXPORT
-
-      Rev 1.3   06 Mar 1997 08:43:20   OS
-   SID_SPELLCHECKER_CHANGED
-
-      Rev 1.2   13 Feb 1997 09:54:06   MA
-   unnoetige und falsche Texte entfernt
-
-      Rev 1.1   30 Jan 1997 15:28:18   OS
-   SourceView nur noch fuer den Sw/Web
-
-      Rev 1.0   23 Jan 1997 08:14:08   OS
-   Initial revision.
-
-------------------------------------------------------------------------*/
 

@@ -1,14 +1,63 @@
-/*------------------------------------------------------------------------
-
-    $Workfile:   _frmsh.sdi  $
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/_frmsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
-
-    Beschreibung:   Basis-interface fuer Frame
-
-    (c) Copyright 1997 - 2000, Star Division GmbH, Hamburg
-
-------------------------------------------------------------------------*/
+/*************************************************************************
+ *
+ *  $RCSfile: _frmsh.sdi,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: os $ $Date: 2001-09-28 07:01:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 
 interface BaseTextFrame : Selection
 [
@@ -215,78 +264,5 @@ interface BaseTextFrame : Selection
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 }
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.21  2000/08/15 13:50:56  os
-    #77616# re-enable border in SwFrameShell
-
-    Revision 1.20  2000/05/26 07:06:15  os
-    old SW Basic API Slots removed
-
-    Revision 1.19  2000/05/10 12:00:08  os
-    Basic API removed
-
-    Revision 1.18  1999/03/23 11:16:28  MA
-    #63806# ConfigName und HelpText entfernt
-
-
-      Rev 1.17   23 Mar 1999 12:16:28   MA
-   #63806# ConfigName und HelpText entfernt
-
-      Rev 1.16   29 Jan 1999 17:15:22   JP
-   Task #58423#: Reports mit Bildern aus der Datenbank
-
-      Rev 1.15   12 Nov 1998 17:29:08   MA
-   #58677# Disable Flag
-
-      Rev 1.14   11 Jun 1998 13:02:54   OM
-   #49467# Rahmen in Inhalt-protecteten Parents nicht bearbeiten
-
-      Rev 1.13   15 May 1998 16:21:34   OM
-   #49467# GeschÅtzte Rahmen nicht bearbeiten
-
-      Rev 1.12   10 Feb 1998 15:06:06   OM
-   Spiegeln
-
-      Rev 1.11   22 Jan 1998 17:40:30   OS
-   SID_BACKGROUND_PATTERN entsorgt
-
-      Rev 1.10   08 Oct 1997 13:30:52   OS
-   SID_FRAME_LINESTYLE funktioniert nicht ueber die API #44439#
-
-      Rev 1.9   28 Aug 1997 12:38:24   MBA
-   Neue Interface-Namen
-
-      Rev 1.8   28 Jul 1997 16:46:42   OM
-   #42111#Neue Statusmethode fuer Hyperlinkleiste
-
-      Rev 1.7   23 Jul 1997 15:19:12   AMA
-   Opt: ConfigName etc. aufgeraeumt
-
-      Rev 1.6   26 May 1997 14:12:12   OS
-   StateMethod fuer SwFmtSurround
-
-      Rev 1.5   15 May 1997 12:31:22   OS
-   Printable und Opaque am Frame
-
-      Rev 1.4   22 Apr 1997 18:46:52   JP
-    neu: GetSelText/SetText
-
-      Rev 1.3   16 Apr 1997 16:22:28   OS
-   Kontur und erster Absatz per Basic
-
-      Rev 1.2   13 Feb 1997 09:54:08   MA
-   unnoetige und falsche Texte entfernt
-
-      Rev 1.1   23 Jan 1997 16:09:06   OS
-   interface _Frame mit Automation = FALSE
-
-      Rev 1.0   23 Jan 1997 14:46:02   OS
-   Initial revision.
-
-------------------------------------------------------------------------*/
 
 

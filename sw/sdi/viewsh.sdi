@@ -1,14 +1,63 @@
-/*------------------------------------------------------------------------
-
-    $Workfile:   viewsh.sdi  $
-
-    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/sdi/viewsh.sdi,v 1.1.1.1 2000-09-18 17:14:30 hr Exp $
-
-    Beschreibung:   IDL - File ViewShell fuer Sw3
-
-    (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
-
-------------------------------------------------------------------------*/
+/*************************************************************************
+ *
+ *  $RCSfile: viewsh.sdi,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: os $ $Date: 2001-09-28 07:01:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 
 interface TextInTable : Selection
 [ uuid = "63C33940-69D8-101D-9757-C667E8298000" ]
@@ -218,88 +267,4 @@ shell SwPagePreView : SfxViewShell
     import TextPrintPreview[Automation];
 }
 
-
-
-/*
-
-9D84FD80-69D8-101D-9757-C667E8298000
-
-A53B7A40-69D8-101D-9757-C667E8298000
-
-AA3EBDE0-69D8-101D-9757-C667E8298000
-
-
-
-  */
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.245  2000/08/07 11:49:25  jp
-    PagePreView replace the current view
-
-    Revision 1.244  2000/05/26 07:06:19  os
-    old SW Basic API Slots removed
-
-    Revision 1.243  2000/05/10 12:00:10  os
-    Basic API removed
-
-    Revision 1.242  1998/11/12 16:28:58  MA
-    #58677# Disable Flag
-
-
-      Rev 1.241   12 Nov 1998 17:28:58   MA
-   #58677# Disable Flag
-
-      Rev 1.240   29 Sep 1998 14:35:18   OS
-   #57281#, #57264# Zoom der Preview mit Controller, Preview-Close ueber eigenen Slot
-
-      Rev 1.239   21 Aug 1998 15:44:10   OS
-   Seitendruck PagePreview #55252#
-
-      Rev 1.238   10 Mar 1998 14:22:38   OM
-   Konstruktionsmodul fuer Forms
-
-      Rev 1.237   30 Oct 1997 15:16:46   JP
-   neu: LineUp/-Down und CharLeft/CharRight fuer PagePreView
-
-      Rev 1.236   28 Aug 1997 12:37:34   MBA
-   Neue Interface-Namen
-
-      Rev 1.235   14 Apr 1997 16:02:58   OS
-   neu: SearchAttributes und ReplaceAttributes
-
-      Rev 1.234   24 Feb 1997 16:56:32   OM
-   Silbentrennung in Draw-Objekten
-
-      Rev 1.233   13 Feb 1997 12:44:50   MA
-   unnoetige Texte entfernt
-
-      Rev 1.232   04 Feb 1997 13:42:20   HJS
-   merge 04.02.97
-
-      Rev 1.231   30 Jan 1997 12:40:46   HJS
-   quickmerge 30.01.97
-
-      Rev 1.230   28 Jan 1997 16:37:02   OS
-   DrawSelect nicht im WebWriter
-
-      Rev 1.229   27 Jan 1997 16:37:34   OS
-   Web-Slots aus den allg. interfaces raus
-
-      Rev 1.228   23 Jan 1997 08:35:04   OS
-   Ableitung von __View
-
-      Rev 1.227   21 Jan 1997 12:31:42   HJS
-   merge 21.01.97
-
-      Rev 1.226   17 Jan 1997 13:08:24   OS
-   alte Slot-defines entfernt, xxxConfig fuer FN_UPDATE_TOX
-
-      Rev 1.225   14 Jan 1997 12:12:26   HJS
-   merge 14.01.97
-
-
-------------------------------------------------------------------------*/
 
