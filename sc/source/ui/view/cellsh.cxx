@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:58:58 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 11:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,7 +821,12 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 */
             case SID_OUTLINE_MAKE:
                 {
-                    if (pDoc->GetChangeTrack()!=NULL || GetViewData()->IsMultiMarked())
+                    if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
+                                            GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
+                    {
+                        //! test for data pilot operation
+                    }
+                    else if (pDoc->GetChangeTrack()!=NULL || GetViewData()->IsMultiMarked())
                     {
                         rSet.DisableItem( nWhich );
                     }
@@ -849,10 +854,18 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_OUTLINE_REMOVE:
                 {
-                    BOOL bCol, bRow;
-                    pTabViewShell->TestRemoveOutline( bCol, bRow );
-                    if ( !bCol && !bRow )
-                        rSet.DisableItem( nWhich );
+                    if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
+                                            GetViewData()->GetCurY(), GetViewData()->GetTabNo() ) )
+                    {
+                        //! test for data pilot operation
+                    }
+                    else
+                    {
+                        BOOL bCol, bRow;
+                        pTabViewShell->TestRemoveOutline( bCol, bRow );
+                        if ( !bCol && !bRow )
+                            rSet.DisableItem( nWhich );
+                    }
                 }
                 break;
 
