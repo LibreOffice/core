@@ -12,7 +12,7 @@
   <dlg:button dlg:style-id="0" dlg:id="cbGoOn" dlg:tab-index="2" dlg:left="214" dlg:top="190" dlg:width="50" dlg:height="14" dlg:value="cbGoOn">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="WebWizard.HtmlAutoPilotBasic.EndDialog"/>
   </dlg:button>
-  <dlg:img dlg:id="ImagePreview" dlg:tab-index="3" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="31"/>
+  <dlg:img dlg:id="ImagePreview" dlg:tab-index="3" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="26"/>
   <dlg:menulist dlg:style-id="0" dlg:id="lbTemplate" dlg:tab-index="4" dlg:left="6" dlg:top="53" dlg:width="110" dlg:height="94">
    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="WebWizard.HtmlAutoPilotBasic.ReloadCurrentDocument"/>
   </dlg:menulist>

@@ -13,7 +13,7 @@
   <dlg:menulist dlg:style-id="0" dlg:id="lstTables" dlg:tab-index="2" dlg:left="6" dlg:top="78" dlg:width="110" dlg:height="12" dlg:page="1" dlg:spin="true">
    <dlg:event dlg:listener-type="com.sun.star.awt.XItemListener" dlg:event-method="itemStateChanged" dlg:script-type="StarBasic" dlg:script-code="FormWizard.FormWizard.FormGetFields"/>
   </dlg:menulist>
-  <dlg:img dlg:id="imgTheme" dlg:tab-index="3" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="31"/>
+  <dlg:img dlg:id="imgTheme" dlg:tab-index="3" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="26"/>
   <dlg:button dlg:style-id="0" dlg:id="cmdCancel" dlg:tab-index="4" dlg:left="6" dlg:top="190" dlg:width="53" dlg:height="14" dlg:value="cmdCancel">
    <dlg:event dlg:listener-type="com.sun.star.awt.XActionListener" dlg:event-method="actionPerformed" dlg:script-type="StarBasic" dlg:script-code="FormWizard.FormWizard.CancelFormWizard"/>
   </dlg:button>
