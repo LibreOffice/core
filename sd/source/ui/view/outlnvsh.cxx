@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:20:01 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 11:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,37 +519,6 @@ void OutlineViewShell::ArrangeGUIElements ()
             }
         }
     }
-}
-
-/*************************************************************************
-|*
-|* Horizontales Lineal erzeugen
-|*
-\************************************************************************/
-
-SvxRuler* OutlineViewShell::CreateHRuler(::sd::Window* pWin, BOOL bIsFirst)
-{
-    WinBits aWBits = WB_HSCROLL | WB_3DLOOK | WB_BORDER;
-    USHORT  nFlags = SVXRULER_SUPPORT_TABS | SVXRULER_SUPPORT_BORDERS |
-                     SVXRULER_SUPPORT_PARAGRAPH_MARGINS;
-
-    if ( bIsFirst )
-        aWBits |= WB_EXTRAFIELD;
-
-    SvxRuler* pRuler = new SvxRuler(&GetViewFrame()->GetWindow(), pWin,
-                            nFlags, GetViewFrame()->GetBindings(), aWBits);
-    pRuler->SetExtraType(RULER_EXTRA_TAB, RULER_TAB_LEFT);
-    return pRuler;
-}
-
-/*************************************************************************
-|*
-|* Horizontales Lineal aktualisieren
-|*
-\************************************************************************/
-
-void OutlineViewShell::UpdateHRuler()
-{
 }
 
 /*************************************************************************
