@@ -2,5 +2,5 @@
 ..\%__SRC%\class\java_accessibility.jar %_DEST%\bin%_EXT%\java_accessibility.jar
 
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
 
