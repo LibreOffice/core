@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-26 09:39:40 $
+ *  last change: $Author: sj $ $Date: 2001-07-31 11:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,6 @@ BOOL SdDrawDocShell::ConvertFrom( SfxMedium& rMedium )
     }
 
     bRet = pFilter ? pFilter->Import() : FALSE;
-    rMedium.Close();
     FinishedLoading( SFX_LOADED_MAINDOCUMENT | SFX_LOADED_IMAGES );
     delete pFilter;
 
