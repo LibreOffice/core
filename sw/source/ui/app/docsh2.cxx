@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:10:30 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:11:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1705,15 +1705,13 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
                 if( pBasic )
                 {
                     // Die IDE benachrichtigen
-                    String aLibName( '[' );
-                    ((aLibName += GetTitle()).AppendAscii( "]." ))
-                            += pBasic->GetName();
-                    SfxStringItem aStrItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
-
+                    SfxObjectShellItem aShellItem( SID_BASICIDE_ARG_SHELL, (SfxObjectShell*)this );
+                    String aLibName( pBasic->GetName() );
+                    SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
                     pSrcView->GetViewFrame()->GetDispatcher()->Execute(
                                             SID_BASICIDE_LIBREMOVED,
                                             SFX_CALLMODE_SYNCHRON,
-                                            &aStrItem, 0L );
+                                            &aShellItem, &aLibNameItem, 0L );
 
                     // Aus der Standard-Lib werden nur die Module geloescht
                     if( nLibCount )
