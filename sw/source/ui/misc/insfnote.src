@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:49:17 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 21:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ ModalDialog DLG_INS_FOOTNOTE
         Text [ norwegian ] = "~Auto" ;
         Text [ italian ] = "~Automatico" ;
         Text [ portuguese_brazilian ] = "~Auto" ;
-        Text [ portuguese ] = "~Automática" ;
+        Text [ portuguese ] = "~Automático" ;
         Text [ finnish ] = "~Automaattinen" ;
         Text [ danish ] = "Automatisk" ;
         Text [ french ] = "~Automatique" ;
