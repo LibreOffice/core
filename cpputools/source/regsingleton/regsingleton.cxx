@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regsingleton.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-09-11 08:24:34 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include <stdio.h>
 
+#include "sal/main.h"
 #include <osl/diagnose.h>
 #include <osl/file.h>
 
@@ -84,7 +85,7 @@ static void print_options() SAL_THROW( () )
 }
 
 //==================================================================================================
-extern "C" int SAL_CALL main( int argc, char const * argv [] )
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     if (argc < 3)
     {
