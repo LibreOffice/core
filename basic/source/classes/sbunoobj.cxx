@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-27 11:25:31 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 11:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/extract.hxx>
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #include <rtl/ustrbuf.hxx>
@@ -150,7 +150,7 @@ Reference< XIdlReflection > getCoreReflection_Impl( void )
     // Haben wir schon CoreReflection, sonst besorgen
     if( !xCoreReflection.is() )
     {
-        Reference< XMultiServiceFactory > xFactory = utl::getProcessServiceFactory();
+        Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
         if ( xFactory.is() )
         {
             Reference< XInterface > xI = xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.reflection.CoreReflection") );
@@ -1411,7 +1411,7 @@ void SbUnoObject::doIntrospection( void )
     if( !xIntrospection.is() )
     {
         // Introspection-Service holen
-        Reference< XMultiServiceFactory > xFactory( utl::getProcessServiceFactory() );
+        Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
         if ( xFactory.is() )
         {
             Reference< XInterface > xI = xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.beans.Introspection") );
@@ -1864,7 +1864,7 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     String aServiceName = rPar.Get(1)->GetString();
 
     // Service suchen und instanzieren
-    Reference< XMultiServiceFactory > xFactory( utl::getProcessServiceFactory() );
+    Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
     Reference< XInterface > xInterface;
     if ( xFactory.is() )
     {
@@ -1911,7 +1911,7 @@ void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, BOOL 
     SbxVariableRef refVar = rPar.Get(0);
 
     // Globalen Service-Manager holen
-    Reference< XMultiServiceFactory > xFactory( utl::getProcessServiceFactory() );
+    Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
     if( xFactory.is() )
     {
         Any aAny;
@@ -2462,7 +2462,7 @@ void SbRtl_CreateUnoListener( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
         return;
 
     // AllListenerAdapterService holen
-    Reference< XMultiServiceFactory > xFactory( utl::getProcessServiceFactory() );
+    Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
     if( !xFactory.is() )
         return;
 

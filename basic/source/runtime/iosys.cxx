@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iosys.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2000-10-19 08:36:50 $
+ *  last change: $Author: fs $ $Date: 2000-11-02 12:01:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,9 @@
 #endif
 // encoding -->
 
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -120,7 +122,7 @@
 #include <com/sun/star/bridge/XBridge.hpp>
 #include <com/sun/star/bridge/XBridgeFactory.hpp>
 
-using namespace utl;
+using namespace comphelper;
 using namespace osl;
 using namespace rtl;
 using namespace com::sun::star::uno;
