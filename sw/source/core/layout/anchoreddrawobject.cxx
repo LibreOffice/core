@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:46:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,9 @@ SwPosNotify::SwPosNotify( SwAnchoredDrawObject* _pAnchoredDrawObj ) :
     mpAnchoredDrawObj( _pAnchoredDrawObj )
 {
     maOldObjRect = mpAnchoredDrawObj->GetObjRect();
-    mpOldPageFrm = mpAnchoredDrawObj->AnchorFrm()->FindPageFrm();
+    // --> OD 2004-10-20 #i35640# - determine correct page frame
+    mpOldPageFrm = mpAnchoredDrawObj->GetPageFrm();
+    // <--
 }
 
 SwPosNotify::~SwPosNotify()
@@ -146,13 +148,23 @@ SwPosNotify::~SwPosNotify()
         SwRect aNewObjRect( mpAnchoredDrawObj->GetObjRect() );
         if( aNewObjRect.HasArea() )
         {
-            SwPageFrm* pNewPageFrm = mpAnchoredDrawObj->AnchorFrm()->FindPageFrm();
+            // --> OD 2004-10-20 #i35640# - determine correct page frame
+            SwPageFrm* pNewPageFrm = mpAnchoredDrawObj->GetPageFrm();
+            // <--
             if( pNewPageFrm )
                 mpAnchoredDrawObj->NotifyBackground( pNewPageFrm, aNewObjRect,
                                                      PREP_FLY_ARRIVE );
         }
 
         ::ClrContourCache( mpAnchoredDrawObj->GetDrawObj() );
+
+        // --> OD 2004-10-20 #i35640# - additional notify anchor text frame
+        // Needed for negative positioned drawing objects
+        if ( mpAnchoredDrawObj->GetAnchorFrm()->IsTxtFrm() )
+        {
+            mpAnchoredDrawObj->AnchorFrm()->Prepare( PREP_FLY_LEAVE );
+        }
+        // <--
 
         // indicate a restart of the layout process
         mpAnchoredDrawObj->SetRestartLayoutProcess( true );
@@ -277,6 +289,9 @@ SwAnchoredDrawObject::SwAnchoredDrawObject() :
 
 SwAnchoredDrawObject::~SwAnchoredDrawObject()
 {
+    // --> OD 2004-11-03 - follow-up of #i34748#
+    delete mpLastObjRect;
+    // <--
 }
 
 // =============================================================================
@@ -421,18 +436,27 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
         // indicate that position will be valid after positioning is performed
         mbValidPos = true;
 
-        // create instance of <SwPosNotify> for correct notification
-        SwPosNotify aPosNotify( this );
+        // --> OD 2004-10-20 #i35640# - correct scope for <SwPosNotify> instance
+        {
+            // create instance of <SwPosNotify> for correct notification
+            SwPosNotify aPosNotify( this );
 
-        // determine and set position
-        objectpositioning::SwToCntntAnchoredObjectPosition
-                aObjPositioning( *DrawObj() );
-        aObjPositioning.CalcPosition();
+            // determine and set position
+            objectpositioning::SwToCntntAnchoredObjectPosition
+                    aObjPositioning( *DrawObj() );
+            aObjPositioning.CalcPosition();
 
-        // get further needed results of the positioning algorithm
-        SetVertPosOrientFrm ( aObjPositioning.GetVertPosOrientFrm() );
-        _SetDrawObjAnchor();
+            // get further needed results of the positioning algorithm
+            SetVertPosOrientFrm ( aObjPositioning.GetVertPosOrientFrm() );
+            _SetDrawObjAnchor();
 
+            // check for object position oscillation, if position has changed.
+            if ( GetObjRect().Pos() != aPosNotify.LastObjPos() )
+            {
+                bOscillationDetected = aObjPosOscCtrl.OscillationDetected();
+            }
+        }
+        // <--
         // format anchor frame, if requested.
         // Note: the format of the anchor frame can cause the object position
         // to be invalid.
@@ -448,11 +472,6 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtPara()
             bConsiderWrapInfluenceDueToOverlapPrevCol = true;
         }
         // <--
-        // check for object position oscillation, if position has changed.
-        if ( GetObjRect().Pos() != aPosNotify.LastObjPos() )
-        {
-            bOscillationDetected = aObjPosOscCtrl.OscillationDetected();
-        }
     } while ( !mbValidPos && !bOscillationDetected &&
               !bConsiderWrapInfluenceDueToOverlapPrevCol );
 
@@ -488,16 +507,16 @@ void SwAnchoredDrawObject::_MakeObjPosAnchoredAtLayout()
     aObjPositioning.CalcPosition();
 
     // set position
+
     // --> OD 2004-07-29 #i31698#
-//    Point aOffsetToFrmAnchorPos( aObjPositioning.GetOffsetToFrmAnchorPos() );
-//    _SetDrawObjAnchor( aOffsetToFrmAnchorPos );
-//    SetCurrRelPos( aObjPositioning.GetRelPos() );
-//    SetObjLeft( ( DrawObj()->GetAnchorPos().X() -
-//                  aOffsetToFrmAnchorPos.X() ) +
-//                GetCurrRelPos().X() );
-//    SetObjTop( ( DrawObj()->GetAnchorPos().Y() -
-//                 aOffsetToFrmAnchorPos.Y() ) +
-//               GetCurrRelPos().Y() );
+    // --> OD 2004-10-18 #i34995# - setting anchor position needed for filters,
+    // especially for the xml-filter to the OpenOffice.org file format
+    {
+        const Point aNewAnchorPos =
+                    GetAnchorFrm()->GetFrmAnchorPos( ::HasWrap( GetDrawObj() ) );
+        DrawObj()->SetAnchorPos( aNewAnchorPos );
+    }
+    // <--
     SetCurrRelPos( aObjPositioning.GetRelPos() );
     const SwFrm* pAnchorFrm = GetAnchorFrm();
     SWRECTFN( pAnchorFrm );
