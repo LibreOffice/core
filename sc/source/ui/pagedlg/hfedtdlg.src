@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:30:49 $
+ *  last change: $Author: kz $ $Date: 2001-08-15 20:11:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1063,7 +1063,7 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen der aktuellen Seitenzahl : Einf³gen der aktuellen Seitenzahl */
     QuickHelpText[ russian ] = "Ñòğàíèöà";
         QuickHelpText[ polish ] = "Strona";
-        QuickHelpText[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾";
+        QuickHelpText[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ç•ªå·";
         QuickHelpText[ chinese_simplified ] = "é¡µé¢";
         QuickHelpText[ chinese_traditional ] = "é ";
         QuickHelpText[ arabic ] = "ÕİÍÉ";
@@ -1102,7 +1102,7 @@ TabPage RID_HFBASE
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen der letzten Seitenzahl : Einf³gen der letzten Seitenzahl */
     QuickHelpText[ russian ] = "Ñòğàíèöû";
         QuickHelpText[ polish ] = "Strony";
-        QuickHelpText[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾";
+        QuickHelpText[ japanese ] = "ï¾ï¾Ÿï½°ï½¼ï¾ç·æ•°";
         QuickHelpText[ chinese_simplified ] = "é¡µæ•°";
         QuickHelpText[ chinese_traditional ] = "é ";
         QuickHelpText[ arabic ] = "ÕİÍÇÊ";
@@ -1375,6 +1375,7 @@ TabPage RID_SCPAGE_HFED_FR < RID_HFBASE
         TabStop = TRUE ;
     };
 };
+
 
 
 
