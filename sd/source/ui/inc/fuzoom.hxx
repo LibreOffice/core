@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuzoom.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,28 +59,44 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUZOOM_HXX
-#define _SD_FUZOOM_HXX
+#ifndef SD_FU_ZOOM_HXX
+#define SD_FU_ZOOM_HXX
 
 #ifndef _SV_POINTR_HXX //autogen
 #include <vcl/pointr.hxx>
 #endif
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
+namespace sd {
+
 extern USHORT SidArrayZoom[];
 
-/*************************************************************************
-|*
-|* Funktion Zoom
-|*
-\************************************************************************/
-
-class FuZoom : public FuPoor
+class FuZoom
+    : public FuPoor
 {
- protected:
+public:
+    TYPEINFO();
+
+    FuZoom (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuZoom (void);
+
+    // Mouse- & Key-Events
+    virtual BOOL MouseMove(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+
+    virtual void Activate();        // Function aktivieren
+    virtual void Deactivate();      // Function deaktivieren
+
+protected:
     Point       aBeginPosPix;
     Point       aBeginPos;
     Point       aEndPos;
@@ -92,24 +108,9 @@ class FuZoom : public FuPoor
     BOOL        bTextDraft;
     BOOL        bGrafDraft;
     Pointer     aPtr;
-
- public:
-    TYPEINFO();
-
-    FuZoom(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-           SdDrawDocument* pDoc, SfxRequest& rReq);
-
-    virtual ~FuZoom();
-                                       // Mouse- & Key-Events
-    virtual BOOL MouseMove(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
-
-    virtual void Activate();        // Function aktivieren
-    virtual void Deactivate();      // Function deaktivieren
 };
 
+} // end of namespace sd
 
-
-#endif      // _SD_FUZOOM_HXX
+#endif
 
