@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2003-08-22 11:32:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,12 @@ BOOL SwXBookmarkPortion_Impl::operator ==(const SwXBookmarkPortion_Impl &rCmp) c
 
 BOOL SwXBookmarkPortion_Impl::operator < (const SwXBookmarkPortion_Impl &rCmp) const
 {
-    return nIndex < rCmp.nIndex;
+    // #i16896# for bookmark portions at the same position, the start should
+    // always precede the end. Hence compare positions, and use bookmark type
+    // as tie-breaker for same position.
+    return ( nIndex == rCmp.nIndex )
+        ? ( nBkmType < rCmp.nBkmType )
+        : ( nIndex < rCmp.nIndex );
 }
 
 typedef SwXBookmarkPortion_Impl* SwXBookmarkPortion_ImplPtr;
