@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:46:37 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,8 +118,6 @@ HACK( #define protected public )
 #include <svtools/ctrltool.hxx>
 #endif
 
-#include <svtools/pver.hxx>
-
 // Ohne Includeschutz
 #include <svtools/svtdata.hxx>
 #include <svtools/solar.hrc>
@@ -135,6 +133,8 @@ HACK( #define protected public )
 
 #include "app.hxx"
 
+#include "_version.h"
+
 AboutDialog::AboutDialog( Window* pParent, const ResId& id )
 : ModalDialog( pParent, id )
 , a1( this, ResId( 1 ) )
@@ -142,8 +142,8 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& id )
 , aVersionString( this, ResId( RID_VERSIONSTRING ) )
 , aOk  ( this, ResId( RID_OK ) )
 {
-    aVersionString.SetText( ProductVersion::GetMajorVersion().Append( ProductVersion::GetMinorVersion() )
-                            .AppendAscii( " BUILD:" ).Append( ProductVersion::GetBuildNumber() ) );
+    aVersionString.SetText( UniString::CreateFromAscii( _UPD ).Append( UniString::CreateFromAscii( _LAST_MINOR ) )
+                            .AppendAscii( " BUILD:" ).Append( UniString::CreateFromAscii( _BUILD ) ) );
     FreeResource();
 }
 
