@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:58:38 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:52:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1877,7 +1877,7 @@ DefTokenId ExcelToSc::IndexToToken( UINT16 nIndex )
         ocNoName,           // XlfSaveDialog            356
         ocNoName,           //
         ocNoName,           //
-        ocNoName,           //
+        ocHyperLink,                // HYPERLINK #359
         ocNoName,           //                          360
         ocAverageA,         // MITTELWERTA
         ocMaxA,             // MAXA
