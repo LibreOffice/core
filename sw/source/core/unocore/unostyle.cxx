@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-04-25 11:55:37 $
+ *  last change: $Author: os $ $Date: 2001-04-27 12:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1515,7 +1515,6 @@ struct SwStyleBase_Impl
     SwDoc&              rDoc;
 
     const SwPageDesc*   pOldPageDesc;
-    SwPageDesc*         pNewPageDesc;
 
     SwDocStyleSheet*    pNewBase;
     SfxItemSet*         pItemSet;
@@ -1523,19 +1522,15 @@ struct SwStyleBase_Impl
     const String&       rStyleName;
     USHORT              nPDescPos;
 
-    sal_Bool            bChgPDesc;
-
     SwStyleBase_Impl(SwDoc& rSwDoc, const String& rName) :
         rDoc(rSwDoc),
         rStyleName(rName),
         pNewBase(0),
         pItemSet(0),
         pOldPageDesc(0),
-        pNewPageDesc(0),
-        nPDescPos(0xffff),
-        bChgPDesc(sal_False)
+        nPDescPos(0xffff)
         {}
-    ~SwStyleBase_Impl(){delete pNewBase; delete pItemSet; delete pNewPageDesc;}
+    ~SwStyleBase_Impl(){delete pNewBase; delete pItemSet; }
 
     sal_Bool HasItemSet() {return 0 != pNewBase;}
     SfxItemSet& GetItemSet()
@@ -1547,23 +1542,6 @@ struct SwStyleBase_Impl
         }
 
         const SwPageDesc& GetOldPageDesc();
-        SwPageDesc& GetPageDesc()
-                {
-                    if(!pNewPageDesc)
-                    {
-                        if(!pOldPageDesc)
-                            GetOldPageDesc();
-                        pNewPageDesc = new SwPageDesc(*pOldPageDesc);
-                    }
-                    return *pNewPageDesc;
-                }
-
-        void SetChgPageDesc() {bChgPDesc = sal_True;}
-        void ChgPageDesc()
-            {
-                if(bChgPDesc && pNewPageDesc)
-                    rDoc.ChgPageDesc( nPDescPos, *pNewPageDesc );
-            }
 };
 /* -----------------------------25.04.01 12:44--------------------------------
 
@@ -2573,118 +2551,108 @@ void SwXPageStyle::setPropertyValues(
                 case FN_UNO_FOOTER_SHARE_CONTENT:
                 case FN_UNO_FOOTER_HEIGHT:
                 {
-                    SfxStyleSheetBasePool* pBasePool = ((SwXPageStyle*)this)->GetBasePool();
-                    pBasePool->SetSearchMask(GetFamily());
-                    SfxStyleSheetBase* pBase = pBasePool->Find(GetStyleName());
-                    if(pBase)
+                    sal_Bool bSetItem = sal_False;
+                    sal_Bool bFooter = sal_False;
+                    sal_uInt16 nItemType = TYPE_BOOL;
+                    sal_uInt16 nRes = 0;
+                    switch(pMap->nWID)
                     {
-                        SwDocStyleSheet aStyle( *(SwDocStyleSheet*)pBase );
-                        SfxItemSet aSet(aStyle.GetItemSet());
-                        sal_Bool bSetItem = sal_False;
-                        sal_Bool bFooter = sal_False;
-                        sal_uInt16 nItemType = TYPE_BOOL;
-                        sal_uInt16 nRes = 0;
-                        switch(pMap->nWID)
-                        {
-                            case FN_UNO_FOOTER_ON:                  bFooter = sal_True;
-                            //kein break;
-                            case FN_UNO_HEADER_ON:                  nRes = SID_ATTR_PAGE_ON;
-                            break;
-                            case FN_UNO_FOOTER_BACKGROUND:          bFooter = sal_True;
-                            // kein break;
-                            case FN_UNO_HEADER_BACKGROUND:          nRes = RES_BACKGROUND; nItemType = TYPE_BRUSH;
-                            break;
-                            case FN_UNO_FOOTER_BOX:                 bFooter = sal_True;
-                            // kein break;
-                            case FN_UNO_HEADER_BOX:                 nRes = RES_BOX; nItemType = TYPE_BOX;
-                            break;
-                            case FN_UNO_FOOTER_LR_SPACE:            bFooter = sal_True;
-                            // kein break;
-                            case FN_UNO_HEADER_LR_SPACE:            nRes = RES_LR_SPACE;nItemType = TYPE_LRSPACE;
-                            break;
-                            case FN_UNO_FOOTER_SHADOW:              bFooter = sal_True;
-                            // kein break;
-                            case FN_UNO_HEADER_SHADOW:              nRes = RES_SHADOW;nItemType = TYPE_SHADOW;
-                            break;
-                            case FN_UNO_FOOTER_BODY_DISTANCE:       bFooter = sal_True;
-                            // kein break;
-                            case FN_UNO_HEADER_BODY_DISTANCE:       nRes = RES_UL_SPACE;nItemType = TYPE_ULSPACE;
-                            break;
-                            case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE: bFooter = sal_True;
-                            // kein break;
-                            case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE: nRes = SID_ATTR_PAGE_DYNAMIC;
-                            break;
-                            case FN_UNO_FOOTER_SHARE_CONTENT:       bFooter = sal_True;
-                            // kein break;
-                            case FN_UNO_HEADER_SHARE_CONTENT:       nRes = SID_ATTR_PAGE_SHARED;
-                            break;
-                            case FN_UNO_FOOTER_HEIGHT:              bFooter = sal_True;
-                            // kein break;
-                            case FN_UNO_HEADER_HEIGHT:              nRes = SID_ATTR_PAGE_SIZE;nItemType = TYPE_SIZE;
-                            break;
+                        case FN_UNO_FOOTER_ON:                  bFooter = sal_True;
+                        //kein break;
+                        case FN_UNO_HEADER_ON:                  nRes = SID_ATTR_PAGE_ON;
+                        break;
+                        case FN_UNO_FOOTER_BACKGROUND:          bFooter = sal_True;
+                        // kein break;
+                        case FN_UNO_HEADER_BACKGROUND:          nRes = RES_BACKGROUND; nItemType = TYPE_BRUSH;
+                        break;
+                        case FN_UNO_FOOTER_BOX:                 bFooter = sal_True;
+                        // kein break;
+                        case FN_UNO_HEADER_BOX:                 nRes = RES_BOX; nItemType = TYPE_BOX;
+                        break;
+                        case FN_UNO_FOOTER_LR_SPACE:            bFooter = sal_True;
+                        // kein break;
+                        case FN_UNO_HEADER_LR_SPACE:            nRes = RES_LR_SPACE;nItemType = TYPE_LRSPACE;
+                        break;
+                        case FN_UNO_FOOTER_SHADOW:              bFooter = sal_True;
+                        // kein break;
+                        case FN_UNO_HEADER_SHADOW:              nRes = RES_SHADOW;nItemType = TYPE_SHADOW;
+                        break;
+                        case FN_UNO_FOOTER_BODY_DISTANCE:       bFooter = sal_True;
+                        // kein break;
+                        case FN_UNO_HEADER_BODY_DISTANCE:       nRes = RES_UL_SPACE;nItemType = TYPE_ULSPACE;
+                        break;
+                        case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE: bFooter = sal_True;
+                        // kein break;
+                        case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE: nRes = SID_ATTR_PAGE_DYNAMIC;
+                        break;
+                        case FN_UNO_FOOTER_SHARE_CONTENT:       bFooter = sal_True;
+                        // kein break;
+                        case FN_UNO_HEADER_SHARE_CONTENT:       nRes = SID_ATTR_PAGE_SHARED;
+                        break;
+                        case FN_UNO_FOOTER_HEIGHT:              bFooter = sal_True;
+                        // kein break;
+                        case FN_UNO_HEADER_HEIGHT:              nRes = SID_ATTR_PAGE_SIZE;nItemType = TYPE_SIZE;
+                        break;
 
-                        }
-                        const SvxSetItem* pSetItem;
-                        if(SFX_ITEM_SET == aSet.GetItemState(
-                                bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                                sal_False, (const SfxPoolItem**)&pSetItem))
+                    }
+                    const SvxSetItem* pSetItem;
+                    if(SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(
+                            bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
+                            sal_False, (const SfxPoolItem**)&pSetItem))
+                    {
+                        SvxSetItem* pNewSetItem = (SvxSetItem*)pSetItem->Clone();
+                        SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
+                        const SfxPoolItem* pItem = 0;
+                        SfxPoolItem* pNewItem = 0;
+                        SfxItemState eState = rSetSet.GetItemState(nRes, sal_True, &pItem);
+                        if(!pItem && nRes != rSetSet.GetPool()->GetSlotId(nRes))
+                            pItem = &rSetSet.GetPool()->GetDefaultItem(nRes);
+                        if(pItem)
                         {
-                            SvxSetItem* pNewSetItem = (SvxSetItem*)pSetItem->Clone();
-                            SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
-                            const SfxPoolItem* pItem = 0;
-                            SfxPoolItem* pNewItem = 0;
-                            SfxItemState eState = rSetSet.GetItemState(nRes, sal_True, &pItem);
-                            if(!pItem && nRes != rSetSet.GetPool()->GetSlotId(nRes))
-                                pItem = &rSetSet.GetPool()->GetDefaultItem(nRes);
-                            if(pItem)
-                            {
-                                pNewItem = pItem->Clone();
-                            }
-                            else
-                            {
-                                switch(nItemType)
-                                {
-                                    case TYPE_BOOL: pNewItem = new SfxBoolItem(nRes);       break;
-                                    case TYPE_SIZE: pNewItem = new SvxSizeItem(nRes);       break;
-                                    case TYPE_BRUSH: pNewItem = new SvxBrushItem(nRes);     break;
-                                    case TYPE_ULSPACE: pNewItem = new SvxULSpaceItem(nRes); break;
-                                    case TYPE_SHADOW : pNewItem = new SvxShadowItem(nRes);  break;
-                                    case TYPE_LRSPACE: pNewItem = new SvxLRSpaceItem(nRes); break;
-                                    case TYPE_BOX: pNewItem = new SvxBoxItem(nRes);         break;
-                                }
-                            }
-                            bSetItem = pNewItem->PutValue(pValues[nProp], pMap->nMemberId);
-                            rSetSet.Put(*pNewItem);
-                            aSet.Put(*pNewSetItem);
-                            aStyle.SetItemSet(aSet);
-                            delete pNewItem;
-                            delete pNewSetItem;
+                            pNewItem = pItem->Clone();
                         }
-                        else if(SID_ATTR_PAGE_ON == nRes )
+                        else
                         {
-                            sal_Bool bVal = *(sal_Bool*)pValues[nProp].getValue();
-                            if(bVal)
+                            switch(nItemType)
                             {
-                                SfxItemSet aTempSet(*aSet.GetPool(),
-                                    RES_BACKGROUND, RES_SHADOW,
-                                    RES_LR_SPACE, RES_UL_SPACE,
-                                    nRes, nRes,
-                                    SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
-                                    SID_ATTR_PAGE_DYNAMIC, SID_ATTR_PAGE_DYNAMIC,
-                                    SID_ATTR_PAGE_SHARED, SID_ATTR_PAGE_SHARED,
-                                    0 );
-                                aTempSet.Put(SfxBoolItem(nRes, sal_True));
-                                aTempSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(MM50, MM50)));
-                                aTempSet.Put(SvxLRSpaceItem(RES_LR_SPACE));
-                                aTempSet.Put(SvxULSpaceItem(RES_UL_SPACE));
-                                aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED, sal_True));
-                                aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_DYNAMIC, sal_True));
+                                case TYPE_BOOL: pNewItem = new SfxBoolItem(nRes);       break;
+                                case TYPE_SIZE: pNewItem = new SvxSizeItem(nRes);       break;
+                                case TYPE_BRUSH: pNewItem = new SvxBrushItem(nRes);     break;
+                                case TYPE_ULSPACE: pNewItem = new SvxULSpaceItem(nRes); break;
+                                case TYPE_SHADOW : pNewItem = new SvxShadowItem(nRes);  break;
+                                case TYPE_LRSPACE: pNewItem = new SvxLRSpaceItem(nRes); break;
+                                case TYPE_BOX: pNewItem = new SvxBoxItem(nRes);         break;
+                            }
+                        }
+                        bSetItem = pNewItem->PutValue(pValues[nProp], pMap->nMemberId);
+                        rSetSet.Put(*pNewItem);
+                        aBaseImpl.GetItemSet().Put(*pNewSetItem);
+                        delete pNewItem;
+                        delete pNewSetItem;
+                    }
+                    else if(SID_ATTR_PAGE_ON == nRes )
+                    {
+                        sal_Bool bVal = *(sal_Bool*)pValues[nProp].getValue();
+                        if(bVal)
+                        {
+                            SfxItemSet aTempSet(*aBaseImpl.GetItemSet().GetPool(),
+                                RES_BACKGROUND, RES_SHADOW,
+                                RES_LR_SPACE, RES_UL_SPACE,
+                                nRes, nRes,
+                                SID_ATTR_PAGE_SIZE, SID_ATTR_PAGE_SIZE,
+                                SID_ATTR_PAGE_DYNAMIC, SID_ATTR_PAGE_DYNAMIC,
+                                SID_ATTR_PAGE_SHARED, SID_ATTR_PAGE_SHARED,
+                                0 );
+                            aTempSet.Put(SfxBoolItem(nRes, sal_True));
+                            aTempSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(MM50, MM50)));
+                            aTempSet.Put(SvxLRSpaceItem(RES_LR_SPACE));
+                            aTempSet.Put(SvxULSpaceItem(RES_UL_SPACE));
+                            aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_SHARED, sal_True));
+                            aTempSet.Put(SfxBoolItem(SID_ATTR_PAGE_DYNAMIC, sal_True));
 
-                                SvxSetItem aNewSetItem( bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
-                                        aTempSet);
-                                aSet.Put(aNewSetItem);
-                                aStyle.SetItemSet(aSet);
-                            }
+                            SvxSetItem aNewSetItem( bFooter ? SID_ATTR_PAGE_FOOTERSET : SID_ATTR_PAGE_HEADERSET,
+                                    aTempSet);
+                            aBaseImpl.GetItemSet().Put(aNewSetItem);
                         }
                     }
                 }
@@ -2699,65 +2667,13 @@ void SwXPageStyle::setPropertyValues(
                 break;
                 case FN_PARAM_FTN_INFO :
                 {
-                    sal_Bool bRet = sal_True;
-                    SwPageFtnInfo& rInfo = aBaseImpl.GetPageDesc().GetFtnInfo();
-                    sal_Int32 nSet32;
-                    switch(pMap->nMemberId  & ~CONVERT_TWIPS)
-                    {
-                        case MID_LINE_COLOR        :
-                            pValues[nProp] >>= nSet32;
-                            rInfo.SetLineColor(nSet32);
-                        break;
-                        case MID_FTN_HEIGHT:
-                        case MID_LINE_TEXT_DIST    :
-                        case MID_LINE_FOOTNOTE_DIST:
-                                pValues[nProp] >>= nSet32;
-                                if(nSet32 < 0)
-                                    bRet = sal_False;
-                                else
-                                {
-                                    nSet32 = MM100_TO_TWIP(nSet32);
-                                    switch(pMap->nMemberId & ~CONVERT_TWIPS)
-                                    {
-                                        case MID_FTN_HEIGHT:            rInfo.SetHeight(nSet32);    break;
-                                        case MID_LINE_TEXT_DIST:        rInfo.SetTopDist(nSet32);break;
-                                        case MID_LINE_FOOTNOTE_DIST:    rInfo.SetBottomDist(nSet32);break;
-                                    }
-                                }
-                        break;
-                        case MID_LINE_WEIGHT       :
-                        {
-                            sal_Int16 nSet; pValues[nProp] >>= nSet;
-                            if(nSet >= 0)
-                                rInfo.SetLineWidth(MM100_TO_TWIP(nSet));
-                            else
-                                bRet = sal_False;
-                        }
-                        break;
-                        case MID_LINE_RELWIDTH     :
-                        {
-                            sal_Int8 nSet; pValues[nProp] >>= nSet;
-                            if(nSet < 0)
-                                bRet = sal_False;
-                            else
-                                rInfo.SetWidth(Fraction(nSet, 100));
-                        }
-                        break;
-                        case MID_LINE_ADJUST       :
-                        {
-                            sal_Int16 nSet; pValues[nProp] >>= nSet;
-                            if(nSet >= 0 && nSet < 3) //com::sun::star::text::HorizontalAdjust
-                                rInfo.SetAdj((SwFtnAdj)nSet);
-                            else
-                                bRet = sal_False;
-                        }
-                        break;
-                    }
-                    if(bRet)
-                        aBaseImpl.SetChgPageDesc();
-                    else
+                    const SfxPoolItem& rItem = aBaseImpl.GetItemSet().Get(FN_PARAM_FTN_INFO);
+                    SfxPoolItem* pNewFtnItem = rItem.Clone();
+                    sal_Bool bPut = pNewFtnItem->PutValue(pValues[nProp], pMap->nMemberId);
+                    aBaseImpl.GetItemSet().Put(*pNewFtnItem);
+                    delete pNewFtnItem;
+                    if(!bPut)
                         throw IllegalArgumentException();
-                    break;
                 }
                 break;
                 default:
@@ -2773,7 +2689,6 @@ void SwXPageStyle::setPropertyValues(
         else
             throw RuntimeException();
     }
-    aBaseImpl.ChgPageDesc();
     if(aBaseImpl.HasItemSet())
         aBaseImpl.pNewBase->SetItemSet(aBaseImpl.GetItemSet());
 }
@@ -2964,23 +2879,8 @@ MakeObject:
                 break;
                 case FN_PARAM_FTN_INFO :
                 {
-                    const SwPageFtnInfo& rInfo = (SwPageFtnInfo&)aBase.GetOldPageDesc().GetFtnInfo();
-                    switch(pMap->nMemberId & ~CONVERT_TWIPS)
-                    {
-                        case MID_FTN_HEIGHT        :     pRet[nProp] <<= (sal_Int32)TWIP_TO_MM100(rInfo.GetHeight());break;
-                        case MID_LINE_WEIGHT       :     pRet[nProp] <<= (sal_Int16)TWIP_TO_MM100(rInfo.GetLineWidth());break;
-                        case MID_LINE_COLOR        :     pRet[nProp] <<= (sal_Int32)rInfo.GetLineColor().GetColor();break;
-                        case MID_LINE_RELWIDTH     :
-                        {
-                            Fraction aTmp( 100, 1 );
-                            aTmp *= rInfo.GetWidth();
-                            pRet[nProp] <<= (sal_Int8)(long)aTmp;
-                        }
-                        break;
-                        case MID_LINE_ADJUST       :     pRet[nProp] <<= (sal_Int16)rInfo.GetAdj();break;//com::sun::star::text::HorizontalAdjust
-                        case MID_LINE_TEXT_DIST    :     pRet[nProp] <<= (sal_Int32)TWIP_TO_MM100(rInfo.GetTopDist());break;
-                        case MID_LINE_FOOTNOTE_DIST:     pRet[nProp] <<= (sal_Int32)TWIP_TO_MM100(rInfo.GetBottomDist());break;
-                    }
+                    const SfxPoolItem& rItem = aBase.GetItemSet().Get(FN_PARAM_FTN_INFO);
+                    rItem.QueryValue(pRet[nProp], pMap->nMemberId);
                 }
                 break;
                 default:
