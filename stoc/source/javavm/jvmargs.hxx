@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jvmargs.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-06 10:48:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 09:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,6 @@
 #include "jni.h"
 
 
-typedef    jint (JNICALL *JNIvfprintf)(FILE *fp, const char *format, va_list args);
-typedef    void (JNICALL *JNIexit)(jint code);
-typedef    void (JNICALL *JNIabort)(void);
-
 extern "C" {
     typedef jint JNICALL JNI_InitArgs_Type(void *);
     typedef jint JNICALL JNI_CreateVM_Type(JavaVM **, JNIEnv **, void *);
@@ -91,88 +87,59 @@ extern "C" {
 
 namespace stoc_javavm {
 
+/** The path has the form: foo/bar
+    That is, separator is a slash.
+    @exception com::sun::star::uno::Exception
+ */
+
+
+
     class JVM {
         ::std::vector<rtl::OUString> _props;
         ::rtl::OUString _runtimeLib;
-        ::rtl::OUString _systemClasspath;
-        ::rtl::OUString _userClasspath;
+        ::rtl::OUString _classpath;
         sal_Bool _enabled;
-
-        sal_Bool _is_debugPort;
-        jint     _debugPort;
-
-        sal_Bool _is_disableAsyncGC;
-        jint      _disableAsyncGC;
-
-        sal_Bool _is_enableClassGC;
-        jint     _enableClassGC;
-
-        sal_Bool _is_enableVerboseGC;
-        jint     _enableVerboseGC;
-
-        sal_Bool _is_checkSource;
-        jint     _checkSource;
-
-        sal_Bool _is_nativeStackSize;
-        jint     _nativeStackSize;
-
-        sal_Bool _is_javaStackSize;
-        jint     _javaStackSize;
-
-        sal_Bool _is_minHeapSize;
-        jint     _minHeapSize;
-
-        sal_Bool _is_maxHeapSize;
-        jint     _maxHeapSize;
-
-        sal_Bool _is_verifyMode;
-        jint     _verifyMode;
-
-        sal_Bool _is_print;
-        JNIvfprintf _print;
-
-        sal_Bool _is_exit;
-        JNIexit  _exit;
-
-        sal_Bool _is_abort;
-        JNIabort _abort;
-
         ::rtl::OUString _java_home;
-        ::rtl::OUString _vmtype;
+        rtl::OUString _version;
+
+        rtl::OUString buildClassPathFromDirectory(const rtl::OUString & relPath);
 
     public:
         JVM() throw();
 
-        void pushProp(const ::rtl::OUString & uString) throw();
-
-        void setEnabled(sal_Bool sbFlag) throw();
-        void setDisableAsyncGC(jint jiFlag) throw();
-        void setEnableClassGC(jint jiFlag) throw();
-        void setEnableVerboseGC(jint jiFlag) throw();
-        void setCheckSource(jint jiFlag) throw();
-        void setNativeStackSize(jint jiSize) throw();
-        void setJavaStackSize(jint jiSize) throw();
-        void setVerifyMode(const ::rtl::OUString & mode) throw();
-        void setMinHeapSize(jint jiSize) throw();
-        void setMaxHeapSize(jint jiSize) throw();
-        void setDebugPort(jint jiDebugPort) throw();
-        void addSystemClasspath(const ::rtl::OUString & str) throw();
-        ::rtl::OUString getSystemClasspath();
-        void addUserClasspath(const ::rtl::OUString & str) throw();
-        ::rtl::OUString getUserClasspath();
-        void setPrint(JNIvfprintf vfprintf) throw();
-        void setExit(JNIexit exit) throw();
-        void setAbort(JNIabort abort) throw();
-        void setRuntimeLib(const ::rtl::OUString & libName) throw();
-
-        const ::rtl::OUString & getRuntimeLib() const throw();
-        sal_Bool isEnabled() const throw();
+        void pushProp(const ::rtl::OUString & uString);
+        void setEnabled(sal_Bool sbFlag);
+        void addClassPath(const ::rtl::OUString & str);
+        void setRuntimeLib(const ::rtl::OUString & libName);
+        const ::rtl::OUString & getRuntimeLib() const;
+//      sal_Bool isEnabled() const;
         const ::std::vector< ::rtl::OUString> & getProperties() const;
-
         rtl::OUString getClassPath() const;
+        /** @return
+            The system path to the Java installation directory.
+         */
+        const ::rtl::OUString & getJavaHome() const;
+        /** @param sHomeUrl
+            File URL to Java installation directory.
+        */
+        void setJavaHome(const ::rtl::OUString & sHomeUrl);
 
-        const ::rtl::OUString & getJavaHome() const throw();
-        const ::rtl::OUString & getVMType() const throw();
+        void setVersion(const rtl::OUString & sVersion);
+
+        const ::rtl::OUString & getVersion() const;
+
+        /** The method creates based on the specified directory paths
+            to all contained jar files and puts them in the _systemClasspath
+            member which can be retrieved with getSystemClasspath.
+            @param sDir
+            A relative path from the application directory to a directory
+            that contains classes and jar files. The separator must be a '/'.
+            For example “program/classes”
+            @exception com::sun::star::uno::Exception
+         */
+        void setApplicationClassesDir(const rtl::OUString & sDir);
+
+
     };
 }
 
