@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlistimp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-05 17:33:02 $
+ *  last change: $Author: tl $ $Date: 2001-06-18 11:26:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,7 +371,7 @@ void DicList::MyAppExitListener::AtExit()
                 if (!xStor->isReadonly() && xStor->hasLocation())
                     xStor->store();
             }
-            catch(...)
+            catch(Exception &)
             {
             }
         }
@@ -701,7 +701,7 @@ void SAL_CALL
                     if (!xStor->isReadonly() && xStor->hasLocation())
                         xStor->store();
                 }
-                catch(...)
+                catch(Exception &)
                 {
                 }
             }
