@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-28 12:46:19 $
+ *  last change: $Author: jp $ $Date: 2001-12-12 12:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1224,15 +1224,11 @@ void SwTxtNode::TransliterateText( utl::TransliterationWrapper& rTrans,
             Sequence <long> aOffsets;
             String sChgd( rTrans.transliterate( aText, nLang, nStart, nLen,
                                                     &aOffsets ));
-
-            ASSERT( nLen == aOffsets.getLength(),
-                    "transliterate add/remove characters" );
-            if( nLen == aOffsets.getLength() &&
-                !aText.Equals( sChgd, nStart, nLen ) )
+            if( !aText.Equals( sChgd, nStart, nLen ) )
             {
                 if( pUndo )
-                    pUndo->AddChanges( *this, nStart, sChgd.Len(), aOffsets );
-                ReplaceTextOnly( nStart, sChgd, aOffsets );
+                    pUndo->AddChanges( *this, nStart, nLen, aOffsets );
+                ReplaceTextOnly( nStart, nLen, sChgd, aOffsets );
             }
             nStart = nEndPos;
         } while( nEndPos < nEnd && pIter && pIter->Next() );
@@ -1240,45 +1236,46 @@ void SwTxtNode::TransliterateText( utl::TransliterationWrapper& rTrans,
     }
 }
 
-void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, const XubString& rText,
-                                    const Sequence<long>& rOffsets )
+void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
+                                const XubString& rText,
+                                const Sequence<long>& rOffsets )
 {
-    xub_StrLen nLen = (xub_StrLen)rOffsets.getLength();
     aText.Replace( nPos, nLen, rText );
 
+    xub_StrLen nTLen = rText.Len();
     const long* pOffsets = rOffsets.getConstArray();
     // now look for no 1-1 mapping -> move the indizies!
     xub_StrLen nI, nMyOff;
-    for( nI = 0, nMyOff = nPos; nI < nLen; ++nI, ++nMyOff )
+    for( nI = 0, nMyOff = nPos; nI < nTLen; ++nI, ++nMyOff )
     {
         xub_StrLen nOff = (xub_StrLen)pOffsets[ nI ];
         if( nOff < nMyOff )
         {
-            // something is deleted
+            // something is inserted
             xub_StrLen nCnt = 1;
-            while( nI + nCnt < nLen && nOff == pOffsets[ nI + nCnt ] )
+            while( nI + nCnt < nTLen && nOff == pOffsets[ nI + nCnt ] )
                 ++nCnt;
 
-            Update( SwIndex( this, nMyOff ), nCnt, TRUE );
+            Update( SwIndex( this, nMyOff ), nCnt, FALSE );
             nMyOff = nOff;
             //nMyOff -= nCnt;
             nI += nCnt - 1;
         }
         else if( nOff > nMyOff )
         {
-            // something is inserted
-            Update( SwIndex( this, nMyOff ), nOff - nMyOff, FALSE );
+            // something is deleted
+            Update( SwIndex( this, nMyOff+1 ), nOff - nMyOff, TRUE );
             nMyOff = nOff;
         }
     }
-    if( nMyOff < rText.Len() )
-        // something is inserted at the end
-        Update( SwIndex( this, nMyOff ), rText.Len()- nMyOff, FALSE );
+    if( nMyOff < nLen )
+        // something is deleted at the end
+        Update( SwIndex( this, nMyOff ), nLen - nMyOff, TRUE );
 
     // notify the layout!
-    SwDelTxt aDelHint( nPos, nLen );
+    SwDelTxt aDelHint( nPos, nTLen );
     SwModify::Modify( 0, &aDelHint );
 
-    SwInsTxt aHint( nPos, nLen );
+    SwInsTxt aHint( nPos, nTLen );
     SwModify::Modify( 0, &aHint );
 }

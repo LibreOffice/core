@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-23 14:28:01 $
+ *  last change: $Author: jp $ $Date: 2001-12-12 12:33:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ public:
     // ersetze im String an Position nIdx das Zeichen
     void Replace( const SwIndex& rStart, xub_Unicode cCh );
     void Replace( const SwIndex& rStart, xub_StrLen nLen, const XubString& rText );
-    void ReplaceTextOnly( xub_StrLen nPos, const XubString& rText,
+    void ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen, const XubString& rText,
                     const ::com::sun::star::uno::Sequence<long>& rOffsets );
 
     // virtuelle Methoden aus dem CntntNode
