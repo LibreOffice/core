@@ -2,9 +2,9 @@
  *
  *  $RCSfile: borderconn.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:42:48 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@
 #include "framebordertype.hxx"
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SfxItemSet;
 class MetricField;
 class ValueSet;
@@ -82,7 +86,7 @@ class FrameSelector;
 
 /** Creates an item connection object that connects an SvxLineItem with an
     svx::FrameSelector control. */
-sfx::ItemConnectionBase* CreateFrameLineConnection( USHORT nSlot,
+SVX_DLLPUBLIC sfx::ItemConnectionBase* CreateFrameLineConnection( USHORT nSlot,
         FrameSelector& rFrameSel, FrameBorderType eBorder,
         sfx::ItemConnFlags nFlags = sfx::ITEMCONN_DEFAULT );
 
@@ -95,14 +99,14 @@ sfx::ItemConnectionBase* CreateFrameBoxConnection(
 
 /** Creates an item connection object that connects an SvxMarginItem with the
     controls of the SvxBorderTabPage. */
-sfx::ItemConnectionBase* CreateMarginConnection( const SfxItemSet& rItemSet,
+SVX_DLLPUBLIC sfx::ItemConnectionBase* CreateMarginConnection( const SfxItemSet& rItemSet,
         MetricField& rMfLeft, MetricField& rMfRight,
         MetricField& rMfTop, MetricField& rMfBottom,
         sfx::ItemConnFlags nFlags = sfx::ITEMCONN_DEFAULT );
 
 /** Creates an item connection object that connects an SvxShadowItem with the
     controls of the SvxBorderTabPage. */
-sfx::ItemConnectionBase* CreateShadowConnection( const SfxItemSet& rItemSet,
+SVX_DLLPUBLIC sfx::ItemConnectionBase* CreateShadowConnection( const SfxItemSet& rItemSet,
         ValueSet& rVsPos, MetricField& rMfSize, ColorListBox& rLbColor,
         sfx::ItemConnFlags nFlags = sfx::ITEMCONN_DEFAULT );
 
