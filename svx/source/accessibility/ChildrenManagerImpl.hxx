@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: af $ $Date: 2002-06-12 12:55:41 $
+ *  last change: $Author: fs $ $Date: 2002-09-23 09:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,8 +333,10 @@ public:
     */
     virtual sal_Bool ReplaceChild (
         AccessibleShape* pCurrentChild,
-        AccessibleShape* pReplacement)
-        throw (::com::sun::star::uno::RuntimeException);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+        const long _nIndex,
+        const AccessibleShapeTreeInfo& _rShapeTreeInfo
+    )   throw (::com::sun::star::uno::RuntimeException);
 
 
 protected:

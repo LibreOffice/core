@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: af $ $Date: 2002-06-27 12:04:15 $
+ *  last change: $Author: fs $ $Date: 2002-09-23 09:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -691,9 +691,17 @@ void ChildrenManagerImpl::ViewForwarderChanged (ChangeType aChangeType,
 
 sal_Bool ChildrenManagerImpl::ReplaceChild (
     AccessibleShape* pCurrentChild,
-    AccessibleShape* pReplacement)
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
+    const long _nIndex,
+    const AccessibleShapeTreeInfo& _rShapeTreeInfo)
     throw (uno::RuntimeException)
 {
+    // create the new child
+    AccessibleShape* pNewChild = ShapeTypeHandler::Instance().CreateAccessibleObject (
+        AccessibleShapeInfo ( _rxShape, pCurrentChild->getAccessibleParent(), this, _nIndex ),
+        _rShapeTreeInfo
+    );
+
     sal_Bool bResult = sal_False;
 
     // Iterate over the visible children.  If one of them has an already
@@ -715,7 +723,7 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
 
             // Replace with replacement and send an event about existance
             // of the new child.
-            I->mxAccessibleShape = pReplacement;
+            I->mxAccessibleShape = pNewChild;
             mrContext.CommitChange (
                 AccessibleEventId::ACCESSIBLE_CHILD_EVENT,
                 uno::makeAny (I->mxAccessibleShape),
