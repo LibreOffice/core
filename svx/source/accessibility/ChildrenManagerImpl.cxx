@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:33:22 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,15 +195,16 @@ uno::Reference<XAccessible>
         // created while locking the global mutex.
         if ( ! rChildDescriptor.mxAccessibleShape.is())
         {
+            AccessibleShapeInfo aShapeInfo(
+                        rChildDescriptor.mxShape,
+                        mxParent,
+                        this,
+                        mnNewNameIndex++);
             // Create accessible object that corresponds to the descriptor's
             // shape.
             AccessibleShape* pShape =
                 ShapeTypeHandler::Instance().CreateAccessibleObject (
-                    AccessibleShapeInfo (
-                        rChildDescriptor.mxShape,
-                        mxParent,
-                        this,
-                        mnNewNameIndex++),
+                    aShapeInfo,
                     maShapeTreeInfo);
             rChildDescriptor.mxAccessibleShape = uno::Reference<XAccessible> (
                 static_cast<uno::XWeak*>(pShape),
@@ -803,9 +804,10 @@ sal_Bool ChildrenManagerImpl::ReplaceChild (
     const AccessibleShapeTreeInfo& _rShapeTreeInfo)
     throw (uno::RuntimeException)
 {
+    AccessibleShapeInfo aShapeInfo( _rxShape, pCurrentChild->getAccessibleParent(), this, _nIndex );
     // create the new child
     AccessibleShape* pNewChild = ShapeTypeHandler::Instance().CreateAccessibleObject (
-        AccessibleShapeInfo ( _rxShape, pCurrentChild->getAccessibleParent(), this, _nIndex ),
+        aShapeInfo,
         _rShapeTreeInfo
     );
     Reference< XAccessible > xNewChild( pNewChild );    // keep this alive (do this before calling Init!)
