@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:19:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         {
             if ( pDrView->IsPresObjSelected( TRUE, TRUE, TRUE ) )
             {
+                ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
             else
@@ -294,6 +295,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
             if ( pDrView->IsPresObjSelected() )
             {
+                ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
             else
@@ -310,6 +312,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         {
             if ( pDrView->IsPresObjSelected() )
             {
+                ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
             else
@@ -329,6 +332,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
             if ( pDrView->IsPresObjSelected() )
             {
+                ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
             else
@@ -349,6 +353,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
             if ( pDrView->IsPresObjSelected() )
             {
+                ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
             else
@@ -369,6 +374,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
             if ( pDrView->IsPresObjSelected() )
             {
+                ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
             else
@@ -397,6 +403,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         {
             if ( pDrView->IsPresObjSelected() )
             {
+                ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
             else
@@ -460,11 +467,11 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 else
                 {
                     // mit Dialog aufbrechen
-                    //CHINA001 BreakDlg aDlg( pWindow, pDrView, GetDocSh(), nCount, nAnz );
+                    //CHINA001 BreakDlg aDlg( GetActiveWindow(), pDrView, GetDocSh(), nCount, nAnz );
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
                     DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
 
-                    VclAbstractDialog* pDlg = pFact->CreateBreakDlg(ResId( DLG_BREAK ), pWindow, pDrView, GetDocSh(), nCount, nAnz );
+                    VclAbstractDialog* pDlg = pFact->CreateBreakDlg(ResId( DLG_BREAK ), GetActiveWindow(), pDrView, GetDocSh(), nCount, nAnz );
                     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     //CHINA001 aDlg.Execute();
                     pDlg->Execute();
@@ -481,6 +488,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         {
             if ( pDrView->IsPresObjSelected() )
             {
+                ::sd::Window* pWindow = GetActiveWindow();
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
             else
@@ -605,7 +613,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
         case SID_SELECTALL:  // BASIC
         {
             if (pFuOld && pFuOld->ISA(FuSelection) &&
-                !pView->IsFrameDragSingles() && pView->HasMarkablePoints())
+                !GetView()->IsFrameDragSingles() && GetView()->HasMarkablePoints())
             {
                 if ( !pDrView->IsAction() )
                     pDrView->MarkAllPoints();
@@ -633,9 +641,9 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
                 if( pStyleSheet && pStyleSheet->GetFamily() == SD_LT_FAMILY)
                     pStyleSheet = ((SdStyleSheet*)pStyleSheet)->GetPseudoStyleSheet();
 
-                if( (pStyleSheet == NULL) && pView->IsTextEdit() )
+                if( (pStyleSheet == NULL) && GetView()->IsTextEdit() )
                 {
-                    pView->EndTextEdit();
+                    GetView()->EndTextEdit();
 
                     pStyleSheet = pDrView->GetStyleSheet();
                     if(pStyleSheet && pStyleSheet->GetFamily() == SD_LT_FAMILY)
@@ -661,7 +669,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
             if( rReq.GetArgs() )
             {
-                pFuActual = new FuTemplate( this, pWindow, pDrView, GetDoc(), rReq );
+                pFuActual = new FuTemplate( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
                 if( rReq.GetSlot() == SID_STYLE_APPLY )
                     GetViewFrame()->GetBindings().Invalidate( SID_STYLE_APPLY );
                 Cancel();
