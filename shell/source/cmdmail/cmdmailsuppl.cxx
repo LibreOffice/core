@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdmailsuppl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-06-26 16:13:28 $
+ *  last change: $Author: obr $ $Date: 2001-06-27 06:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include <osl/process.h>
 #endif
 
+#ifndef _OSL_FILE_HXX_
+#include <osl/file.hxx>
+#endif
+
 #ifndef _CMDMAILSUPPL_HXX_
 #include "cmdmailsuppl.hxx"
 #endif
@@ -104,6 +108,7 @@ using com::sun::star::container::NoSuchElementException;
 using rtl::OUString;
 using rtl::OUStringToOString;
 using osl::MutexGuard;
+using osl::FileBase;
 
 using namespace cppu;
 using namespace com::sun::star::system::SimpleMailClientFlags;
@@ -228,6 +233,9 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
                 if( aProgram.getLength() )
                 {
+                    // convert to file url
+                    FileBase::getFileURLFromSystemPath( aProgram, aProgram );
+
                     OUString aProgramConfig = OUString::createFromAscii( "base" );
 
                     aConfigRoot += OUString::createFromAscii( "/Profiles/" );
