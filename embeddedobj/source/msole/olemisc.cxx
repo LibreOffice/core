@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olemisc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-15 15:37:43 $
+ *  last change: $Author: mav $ $Date: 2003-12-15 15:59:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,10 +175,15 @@ void OleEmbeddedObject::Dispose()
         m_pInterfaceContainer = NULL;
     }
 
-    m_bDisposed = true;
-
     if ( m_pOleComponent )
-        GetRidOfComponent();
+        try {
+            GetRidOfComponent();
+        } catch( uno::Exception& )
+        {
+            m_bDisposed = true;
+            throw; // TODO: there should be a special listener that will close object when
+                    // component is finally closed
+        }
 
     if ( m_xObjectStream.is() )
     {
@@ -195,6 +200,8 @@ void OleEmbeddedObject::Dispose()
     }
 
     m_xParentStorage = uno::Reference< embed::XStorage >();
+
+    m_bDisposed = true;
 }
 
 //------------------------------------------------------

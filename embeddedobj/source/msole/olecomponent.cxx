@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mav $ $Date: 2003-12-15 15:37:42 $
+ *  last change: $Author: mav $ $Date: 2003-12-15 15:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -518,6 +518,7 @@ OleComponent::~OleComponent()
 
     if ( m_pOleWrapClientSite || m_pImplAdviseSink || m_pInterfaceContainer || m_bOleInitialized )
     {
+        ::osl::MutexGuard aGuard( m_aMutex );
         m_refCount++;
         try {
             Dispose();
@@ -558,6 +559,10 @@ FORMATETC* OleComponentNative_Impl::GetSupportedFormatForAspect( sal_uInt32 nReq
 //----------------------------------------------
 void OleComponent::Dispose()
 {
+    // the mutex must be locked before this method is called
+    if ( m_bDisposed )
+        return;
+
     CloseObject();
 
     if ( m_pOleWrapClientSite )
