@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:18:16 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:40:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,12 +91,15 @@
 #ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #include "RowSetRow.hxx"
 #endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 namespace com{ namespace sun { namespace star{namespace sdbc{ class XParameters; } } } }
 
 namespace dbaccess
 {
-    class OCacheSet
+    class OCacheSet : public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XRow>
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>           m_xDriverSet;
@@ -104,6 +107,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xSetMetaData;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>          m_xConnection;
 
+        ::com::sun::star::uno::Sequence<sal_Bool>   m_aSignedFlags;
         ORowSetRow                                  m_aInsertRow;
         ::rtl::OUString                             m_aComposedTableName;
         sal_Bool                                    m_bInserted;
@@ -116,13 +120,27 @@ namespace dbaccess
             ,m_bDeleted(sal_False)
         {
         }
+        virtual ~OCacheSet();
 
         void setParameter(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > _xParameter,const connectivity::ORowSetValue& _rValue,sal_Int32 _nType = ::com::sun::star::sdbc::DataType::OTHER);
         void fillTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
+        /**
+            fetchValue fetches a single value out of the current row
+            @param _nPos    the current column position
+            @param _nType   the type of the current column
+            @param _xRow    the row where to fetch the data from
+
+            @param _rValue  out - value which was fetched
+        */
+        void fetchValue(sal_Int32 _nPos,
+                        sal_Int32 _nType,
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow,
+                        ::connectivity::ORowSetValue& _rValue);
+
         ::rtl::OUString getIdentifierQuoteString() const;
     public:
-        virtual ~OCacheSet();
+
         // late constructor
         virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
         virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition);
