@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propmultiplex.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:23:21 $
+ *  last change: $Author: fs $ $Date: 2001-01-08 10:31:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,54 +78,62 @@ namespace comphelper
 {
 //.........................................................................
 
-//==================================================================
-//= OPropertyChangeListener
-//==================================================================
-/// simple listener adapter for property sets
-class OPropertyChangeListener
-{
-    friend class OPropertyChangeMultiplexer;
+    //==================================================================
+    //= OPropertyChangeListener
+    //==================================================================
+    /// simple listener adapter for property sets
+    class OPropertyChangeListener
+    {
+        friend class OPropertyChangeMultiplexer;
 
-    OPropertyChangeMultiplexer* m_pAdapter;
-    ::osl::Mutex&               m_rMutex;
+        OPropertyChangeMultiplexer* m_pAdapter;
+        ::osl::Mutex&               m_rMutex;
 
-public:
-    OPropertyChangeListener(::osl::Mutex& _rMutex)
-        :m_rMutex(_rMutex) ,m_pAdapter(NULL) { }
-    virtual ~OPropertyChangeListener();
+    public:
+        OPropertyChangeListener(::osl::Mutex& _rMutex)
+            :m_rMutex(_rMutex) ,m_pAdapter(NULL) { }
+        virtual ~OPropertyChangeListener();
 
-    virtual void _propertyChanged(const  ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException) = 0;
+        virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& _rEvent) throw( ::com::sun::star::uno::RuntimeException) = 0;
+        virtual void _disposing(const ::com::sun::star::lang::EventObject& _rSource) throw( ::com::sun::star::uno::RuntimeException);
 
-protected:
-    void setAdapter(OPropertyChangeMultiplexer* _pAdapter);
-};
+    protected:
+        void setAdapter(OPropertyChangeMultiplexer* _pAdapter);
+    };
 
-//==================================================================
-//= OPropertyChangeMultiplexer
-//==================================================================
-/// multiplexer for property changes
-class OPropertyChangeMultiplexer    :public cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
-{
-    friend class OPropertyChangeListener;
-     ::com::sun::star::uno::Sequence< ::rtl::OUString >     m_aProperties;
-     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>   m_xSet;
-    OPropertyChangeListener*                    m_pListener;
-
-
-    virtual ~OPropertyChangeMultiplexer();
-public:
-    OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxSet);
-
-// XEventListener
-    virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException);
-
-// XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
+    //==================================================================
+    //= OPropertyChangeMultiplexer
+    //==================================================================
+    /// multiplexer for property changes
+    class OPropertyChangeMultiplexer    :public cppu::WeakImplHelper1< ::com::sun::star::beans::XPropertyChangeListener>
+    {
+        friend class OPropertyChangeListener;
+         ::com::sun::star::uno::Sequence< ::rtl::OUString >     m_aProperties;
+         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>   m_xSet;
+        OPropertyChangeListener*                    m_pListener;
+        sal_Int32                                   m_nLockCount;
 
 
-    void addProperty(const ::rtl::OUString& aPropertyName);
-    void dispose();
-};
+        virtual ~OPropertyChangeMultiplexer();
+    public:
+        OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxSet);
+
+    // XEventListener
+        virtual void SAL_CALL disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException);
+
+    // XPropertyChangeListener
+        virtual void SAL_CALL propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw( ::com::sun::star::uno::RuntimeException);
+
+        /// incremental lock
+        void        lock();
+        /// incremental unlock
+        void        unlock();
+        /// get the lock count
+        sal_Int32   locked() const { return m_nLockCount; }
+
+        void addProperty(const ::rtl::OUString& aPropertyName);
+        void dispose();
+    };
 
 //.........................................................................
 }   // namespace comphelper

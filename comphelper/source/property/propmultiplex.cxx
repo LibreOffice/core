@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propmultiplex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:25:29 $
+ *  last change: $Author: fs $ $Date: 2001-01-08 10:33:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,12 @@ OPropertyChangeListener::~OPropertyChangeListener()
 }
 
 //------------------------------------------------------------------
+void OPropertyChangeListener::_disposing(const ::com::sun::star::lang::EventObject& _rSource) throw( ::com::sun::star::uno::RuntimeException)
+{
+    // nothing to do here
+}
+
+//------------------------------------------------------------------
 void OPropertyChangeListener::setAdapter(OPropertyChangeMultiplexer* pAdapter)
 {
     if (m_pAdapter)
@@ -107,6 +113,7 @@ void OPropertyChangeListener::setAdapter(OPropertyChangeMultiplexer* pAdapter)
 OPropertyChangeMultiplexer::OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxSet)
             :m_xSet(_rxSet)
             ,m_pListener(_pListener)
+            ,m_nLockCount(0)
 {
     m_pListener->setAdapter(this);
 }
@@ -114,6 +121,18 @@ OPropertyChangeMultiplexer::OPropertyChangeMultiplexer(OPropertyChangeListener* 
 //------------------------------------------------------------------
 OPropertyChangeMultiplexer::~OPropertyChangeMultiplexer()
 {
+}
+
+//------------------------------------------------------------------
+void OPropertyChangeMultiplexer::lock()
+{
+    ++m_nLockCount;
+}
+
+//------------------------------------------------------------------
+void OPropertyChangeMultiplexer::unlock()
+{
+    --m_nLockCount;
 }
 
 //------------------------------------------------------------------
@@ -136,10 +155,15 @@ void OPropertyChangeMultiplexer::dispose()
 
 // XEventListener
 //------------------------------------------------------------------
-void SAL_CALL OPropertyChangeMultiplexer::disposing( const  ::com::sun::star::lang::EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException)
+void SAL_CALL OPropertyChangeMultiplexer::disposing( const  ::com::sun::star::lang::EventObject& _rSource) throw( ::com::sun::star::uno::RuntimeException)
 {
     if (m_pListener)
+    {
+         // tell the listener
+        m_pListener->_disposing(_rSource);
+        // disconnect the listener
         m_pListener->setAdapter(NULL);
+    }
 
     m_xSet = NULL;
     m_pListener = NULL;
@@ -149,7 +173,7 @@ void SAL_CALL OPropertyChangeMultiplexer::disposing( const  ::com::sun::star::la
 //------------------------------------------------------------------
 void SAL_CALL OPropertyChangeMultiplexer::propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& _rEvent ) throw( ::com::sun::star::uno::RuntimeException)
 {
-    if (m_pListener)
+    if (m_pListener && !locked())
         m_pListener->_propertyChanged(_rEvent);
 }
 
