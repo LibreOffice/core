@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: aw $ $Date: 2001-12-14 11:37:49 $
+ *  last change: $Author: aw $ $Date: 2002-01-04 13:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,8 +427,12 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 
         if ( pSdrObj->ISA(SdrTextObj) )
         {
-            SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
+            // #96243# Tell the object EARLY that it is vertical to have the
+            // defaults for AutoGrowWidth/Height reversed
+            if(bVertical)
+                ((SdrTextObj*)pSdrObj)->SetVerticalWriting(TRUE);
 
+            SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
             if( bVertical )
                 aTempAttr.Put( SdrTextMinFrameWidthItem( rRect.GetSize().Width() ) );
             else
@@ -438,7 +442,13 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             {
                 // Bei Praesentationsobjekten auf der MasterPage soll die
                 // Groesse vom Benutzwer frei waehlbar sein
-                aTempAttr.Put(SdrTextAutoGrowHeightItem(FALSE));
+
+                // #96243# potential problem: This action was still NOT
+                // adapted for vertical text. This sure needs to be done.
+                if(bVertical)
+                    aTempAttr.Put(SdrTextAutoGrowWidthItem(FALSE));
+                else
+                    aTempAttr.Put(SdrTextAutoGrowHeightItem(FALSE));
             }
 
             pSdrObj->SetItemSet(aTempAttr);
