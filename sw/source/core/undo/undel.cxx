@@ -3,9 +3,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:59:07 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,12 +131,14 @@
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 
+
 // DELETE
 
 SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara )
     : SwUndo(UNDO_DELETE), SwUndRng( rPam ),
     pMvStt( 0 ), pSttStr(0), pEndStr(0), nNode( 0 ), nSectDiff( 0 ),
-    pRedlData( 0 ), pRedlSaveData( 0 )
+    pRedlData( 0 ), pRedlSaveData( 0 ),
+    bSpecialSectNd( FALSE )
 {
     bMvAroundSectNd = bSectNdFnd = bGroup = bBackSp = bTblDelLastNd =
         bResetPgDesc = bResetPgBrk = FALSE;
@@ -179,6 +181,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara )
     }
     else
         DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint() );
+
     nSetPos = pHistory ? pHistory->Count() : 0;
 
     // wurde schon was geloescht ??
@@ -319,6 +322,13 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara )
                     pTmpNd->EndOfSectionIndex() < aRg.aEnd.GetIndex())
                 )
                 {
+                    // remember section is adjacent or included in the
+                    // larger section
+                    ASSERT( aRg.aStart.GetIndex() + 1 <= rDocNds.Count(),
+                            "no more nodes?" );
+                    bSpecialSectNd =
+                        rDocNds[ aRg.aStart.GetIndex() + 1 ]->IsSectionNode();
+
                     aRg.aStart = *pTmpNd;
                     bSectNdFnd = TRUE;
                     nSectDiff++;
@@ -618,19 +628,28 @@ SwRewriter SwUndoDelete::GetRewriter() const
     }
     else
     {
-        if (pSttStr != NULL)
-            pStr = pSttStr;
-        else if (pEndStr != NULL)
-            pStr = pEndStr;
-
         String aStr;
-        if (pStr != NULL)
+
+        if (pSttStr != NULL && pEndStr != NULL && pSttStr->Len() == 0 &&
+            pEndStr->Len() == 0)
         {
-            aStr = DenoteSpecialCharacters(*pStr);
+            aStr = SW_RES(STR_PARAGRAPH_UNDO);
         }
         else
         {
-            aStr = UNDO_ARG2;
+            if (pSttStr != NULL)
+                pStr = pSttStr;
+            else if (pEndStr != NULL)
+                pStr = pEndStr;
+
+            if (pStr != NULL)
+            {
+                aStr = DenoteSpecialCharacters(*pStr);
+            }
+            else
+            {
+                aStr = UNDO_ARG2;
+            }
         }
 
         if (pHistory)
@@ -756,8 +775,9 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
         if( bNodeMove )
         {
             SwNodeRange aRg( *pMvStt, 0, *pMvStt, nNode );
-            SwNodeIndex aPrevIdx( aPos.nNode, -1 );
-            pUNds->_Copy( aRg, aPos.nNode );
+            SwNodeIndex aCopyIndex( aPos.nNode, bSpecialSectNd ? -1 : 0 );
+            SwNodeIndex aPrevIdx( aCopyIndex, -1 );
+            pUNds->_Copy( aRg, aCopyIndex );
 
             // SectionNode-Modus und von unten nach oben selektiert:
             //  -> im EndNode steht noch der Rest vom Join => loeschen
@@ -805,7 +825,7 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
                 }
             }
 
-            aPos.nNode = nSttNode - nNdDiff;    // am Anfang manipulieren
+            aPos.nNode = nSttNode - nNdDiff - ( bSpecialSectNd ? 1 : 0 );   // am Anfang manipulieren
         }
         if( pSttStr )
         {
