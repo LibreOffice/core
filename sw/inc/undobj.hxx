@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:43:00 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:37:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,12 @@
 #ifndef _ITABENUM_HXX
 #include <itabenum.hxx>
 #endif
+#ifndef _FORMAT_HXX
+#include <format.hxx>
+#endif
+#ifndef _SW_REWRITER_HXX
+#include <SwRewriter.hxx>
+#endif
 
 class SwUndoIter;
 class SwHistory;
@@ -156,6 +162,10 @@ class SwUndo;
 #endif
 
 
+const String UNDO_ARG1("$1", RTL_TEXTENCODING_ASCII_US);
+const String UNDO_ARG2("$2", RTL_TEXTENCODING_ASCII_US);
+const String UNDO_ARG3("$3", RTL_TEXTENCODING_ASCII_US);
+
 typedef SwRedlineSaveData* SwRedlineSaveDataPtr;
 SV_DECL_PTRARR_DEL( SwRedlineSaveDatas, SwRedlineSaveDataPtr, 8, 8 )
 
@@ -173,6 +183,14 @@ protected:
     static BOOL CanRedlineGroup( SwRedlineSaveDatas& rCurr,
                                 const SwRedlineSaveDatas& rCheck,
                                 BOOL bCurrIsEnd );
+
+    // #111827#
+    /**
+       Returns the rewriter for this object.
+
+       @return the rewriter for this object
+    */
+    virtual SwRewriter GetRewriter() const;
 public:
     SwUndo( USHORT nI ) { nId = nI; nOrigRedlineMode = REDLINE_NONE; }
     virtual ~SwUndo();
@@ -181,6 +199,18 @@ public:
     virtual void Undo( SwUndoIter& ) = 0;
     virtual void Redo( SwUndoIter& ) = 0;
     virtual void Repeat( SwUndoIter& );
+
+    // #111827#
+    /**
+       Returns textual comment for this undo object.
+
+       The textual comment is created from the resource string
+       corresponding to this object's ID. The rewriter of this object
+       is applied to the resource string to get the final comment.
+
+       @return textual comment for this undo object
+    */
+    virtual String GetComment() const;
 
         // das UndoObject merkt sich, welcher Mode eingeschaltet war.
         // In Undo/Redo/Repeat wird dann immer auf diesen zurueck geschaltet
@@ -194,7 +224,6 @@ public:
     static void SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData );
     static BOOL HasHiddenRedlines( const SwRedlineSaveDatas& rSData );
 };
-
 
 // diese Klasse muss in ein Undo-Object vererbt werden, wenn dieses Inhalt
 // fuers Redo/Undo ... speichert
@@ -295,11 +324,21 @@ class SwUndoStart: public SwUndo
     USHORT nUserId;
     // fuer die "Verpointerung" von Start- und End-Undos
     USHORT nEndOffset;
+
+    SwRewriter mRewriter;
+
 public:
     SwUndoStart( USHORT nId );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
+
+    // -> #111827#
+    virtual String GetComment() const;
+    void SetRewriter(const SwRewriter & rRewriter);
+    virtual SwRewriter GetRewriter() const;
+    // <- #111827#
+
     USHORT GetUserId() const { return nUserId; }
     // Setzen vom End-Undo-Offset geschieht im Doc::EndUndo
     USHORT GetEndOffset() const { return nEndOffset; }
@@ -315,11 +354,21 @@ class SwUndoEnd: public SwUndo
     USHORT nUserId;
     // fuer die "Verpointerung" von Start- und End-Undos
     USHORT nSttOffset;
+
+    SwRewriter mRewriter;
+
 public:
     SwUndoEnd( USHORT nId );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
+
+    // -> #111827#
+    virtual String GetComment() const;
+    void SetRewriter(const SwRewriter & rRewriter);
+    virtual SwRewriter GetRewriter() const;
+    // <- #111827#
+
     USHORT GetUserId() const { return nUserId; }
     // Setzen vom Start-Undo-Offset geschieht im Doc::EndUndo
     USHORT GetSttOffset() const { return nSttOffset; }
@@ -330,7 +379,7 @@ public:
 class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 {
     SwPosition *pPos;                   // Inhalt fuers Redo
-    String* pTxt;
+    String *pTxt, *pUndoTxt;
     SwRedlineData* pRedlData;
     ULONG nNode;
     xub_StrLen nCntnt, nLen;
@@ -341,14 +390,34 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     BOOL CanGrouping( sal_Unicode cIns );
     BOOL CanGrouping( const SwPosition& rPos );
 
+    SwDoc * pDoc;
+
+    void Init(const SwNodeIndex & rNode);
+    String * SwUndoInsert::GetTxtFromDoc() const;
+
 public:
     SwUndoInsert( const SwNodeIndex& rNode, xub_StrLen nCntnt, xub_StrLen nLen,
                   BOOL bWDelim = TRUE );
     SwUndoInsert( const SwNodeIndex& rNode );
     virtual ~SwUndoInsert();
+
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
+
+    // #111827#
+    /**
+       Returns rewriter for this undo object.
+
+       The returned rewriter has the following rule:
+
+           $1 -> '<inserted text>'
+
+       <inserted text> is shortened to a length of nUndoStringLength.
+
+       @return rewriter for this undo object
+     */
+    virtual SwRewriter GetRewriter() const;
 
     BOOL CanGrouping( const SwPosition&, sal_Unicode cIns );
     OUT_UNDOBJ( Insert )
@@ -387,6 +456,21 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
+
+    // #111827#
+    /**
+       Returns rewriter for this undo object.
+
+       The rewriter consists of the following rule:
+
+           $1 -> '<deleted text>'
+
+       <deleted text> is shortened to nUndoStringLength characters.
+
+       @return rewriter for this undo object
+    */
+    virtual SwRewriter GetRewriter() const;
+
     BOOL CanGrouping( SwDoc*, const SwPaM& );
 
     void SetTblDelLastNd()      { bTblDelLastNd = TRUE; }
@@ -416,6 +500,21 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
+
+    // #111827#
+    /**
+       Returns the rewriter of this undo object.
+
+       The rewriter contains the following rule:
+
+           $1 -> '<overwritten text>'
+
+       <overwritten text> is shortened to nUndoStringLength characters.
+
+       @return the rewriter of this undo object
+     */
+    virtual SwRewriter GetRewriter() const;
+
     BOOL CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
     OUT_UNDOBJ( Overwrite )
 };
@@ -578,6 +677,23 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
+
+    // #111827#
+    /**
+       Returns the rewriter for this undo object.
+
+       The rewriter contains one rule:
+
+           $1 -> <name of format collection>
+
+       <name of format collection> is the name of the format
+       collection that is applied by the action recorded by this undo
+       object.
+
+       @return the rewriter for this undo object
+    */
+    virtual SwRewriter GetRewriter() const;
+
     SwHistory* GetHistory() { return pHistory; }
     OUT_UNDOBJ( SetFmtColl )
 };
@@ -927,6 +1043,21 @@ protected:
 
 public:
     virtual ~SwUndoBookmark();
+
+    // #111827#
+    /**
+       Returns the rewriter for this undo object.
+
+       The rewriter contains the following rule:
+
+           $1 -> <name of bookmark>
+
+       <name of bookmark> is the name of the bookmark whose
+       insertion/deletion is recorded by this undo object.
+
+       @return the rewriter for this undo object
+     */
+    virtual SwRewriter GetRewriter() const;
 };
 
 
@@ -1033,6 +1164,7 @@ public:
 
     virtual void Undo( SwUndoIter& ) = 0;
     virtual void Redo( SwUndoIter& ) = 0;
+
     OUT_UNDOBJ( FlyBase )
 };
 
@@ -1044,6 +1176,9 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
+
+    String GetComment() const;
+
     OUT_UNDOBJ( InsLayFmt )
 };
 
@@ -1105,6 +1240,28 @@ public:
     virtual ~SwUndoReplace();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
+
+    // #111827#
+    /**
+       Returns the rewriter of this undo object.
+
+       If this undo object represents several replacements the
+       rewriter contains the following rules:
+
+           $1 -> <number of replacements>
+           $2 -> occurrences of
+           $3 -> <replaced text>
+
+       If this undo object represents one replacement the rewriter
+       contains these rules:
+
+           $1 -> <replaced text>
+           $2 -> "->"                   (STR_YIELDS)
+           $3 -> <replacing text>
+
+       @return the rewriter of this undo object
+    */
+    virtual SwRewriter GetRewriter() const;
 
     void AddEntry( const SwPaM& rPam, const String& rInsert, BOOL bRegExp );
     void SetEntryEnd( const SwPaM& rPam );
@@ -1451,6 +1608,21 @@ public:
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
 
+    // #111827#
+    /**
+       Returns the rewriter of this undo object.
+
+       The rewriter contains this rule:
+
+           $1 -> '<text of inserted label>'
+
+       <text of inserted label> is shortened to nUndoStringLength
+       characters.
+
+       @return the rewriter of this undo object
+     */
+    virtual SwRewriter GetRewriter() const;
+
     void SetNodePos( ULONG nNd )
         { if( LTYPE_OBJECT != eType ) NODE.nNode = nNd; }
 
@@ -1658,7 +1830,33 @@ public:
     void ClearSelections()  { pSelFmt = 0; pMarkList = 0; }
 };
 
+// -> #111827#
+const int nUndoStringLength = 20;
 
+/**
+   Shortens a string to a maximum length.
 
+   @param rStr      the string to be shortened
+   @param aLength   the maximum length for rStr
+   @param rFillStr  string to replace cut out characters with
+
+   If rStr has less than aLength characters it will be returned unaltered.
+
+   If rStr has more than aLength characters the following algorithm
+   generates the shortened string:
+
+       frontLength = (aLength - length(rFillStr)) / 2
+       rearLength = aLength - length(rFillStr) - frontLength
+       shortenedString = concat(<first frontLength characters of rStr,
+                                rFillStr,
+                                <last rearLength characters of rStr>)
+
+   Preconditions:
+      - aLength - length(rFillStr) >= 2
+
+   @return the shortened string
+ */
+String ShortenString(const String & rStr, int aLength, const String & rFillStr);
+// <- #111827#
 
 #endif
