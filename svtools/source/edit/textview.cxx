@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:32:41 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -880,6 +880,12 @@ void TextView::MouseButtonDown( const MouseEvent& rMouseEvent )
     mpImpl->mpTextEngine->SetActiveView( this );
 
     mpImpl->mpSelEngine->SelMouseButtonDown( rMouseEvent );
+
+    // mbu 20.01.2005 - SelMouseButtonDown() possibly triggers a 'selection changed'
+    // notification. The appropriate handler could change the current selection,
+    // which is the case in the MailMerge address block control. To enable select'n'drag
+    // we need to reevaluate the selection after the notification has been fired.
+    mpImpl->mbClickedInSelection = IsSelectionAtPoint( rMouseEvent.GetPosPixel() );
 
     // Sonderbehandlungen
     if ( !rMouseEvent.IsShift() && ( rMouseEvent.GetClicks() >= 2 ) )
@@ -2090,7 +2096,8 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
         }
 
         if ( aPrevSel.HasRange() &&
-                ( rDTDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) || !bStarterOfDD )
+                !mpImpl->mbSupportProtectAttribute && // don't remove currently selected element
+                (( rDTDE.DropAction & datatransfer::dnd::DNDConstants::ACTION_MOVE ) || !bStarterOfDD) )
         {
             // ggf. Selection anpasssen:
             if ( ( mpImpl->mpDDInfo->maDropPos.GetPara() < aPrevSel.GetStart().GetPara() ) ||
