@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
+ *  last change: $Author: fs $ $Date: 2000-11-07 15:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ void OTableContainer::construct(const Reference< XNameAccess >& _rxMasterContain
 
     sal_Int32   nTableFilterLen = _rTableFilter.getLength();
 
-    sal_Bool bNoTableFilters = (nTableFilterLen == 0);
+    sal_Bool bNoTableFilters = ((nTableFilterLen == 1) && _rTableFilter[0].equalsAsciiL("%", 1));
     if(!bNoTableFilters)
     {
         Sequence< ::rtl::OUString > aTableFilter        = _rTableFilter;
@@ -225,7 +225,7 @@ void OTableContainer::construct(const Sequence< ::rtl::OUString >& _rTableFilter
     if (nTableFilterLen)
         qsort(aTableFilter.getArray(), nTableFilterLen, sizeof(::rtl::OUString), NameCompare);
 
-    sal_Bool bNoTableFilters = (nTableFilterLen == 0);
+    sal_Bool bNoTableFilters = ((nTableFilterLen == 1) && _rTableFilter[0].equalsAsciiL("%", 1));
         // as we want to modify nTableFilterLen, remember this
 
     // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
