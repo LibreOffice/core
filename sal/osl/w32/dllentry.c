@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2000-12-06 10:51:56 $
+ *  last change: $Author: tra $ $Date: 2000-12-11 17:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@ extern LPWSTR *lpArgvW;
 extern DWORD            g_dwTLSTextEncodingIndex;
 extern void SAL_CALL    _osl_callThreadKeyCallbackOnThreadDetach(void);
 extern CRITICAL_SECTION g_ThreadKeyListCS;
-//extern OSVERSIONINFO    g_OSVerInfo; // defined in systoolinit
 
 //------------------------------------------------------------------------------
 // defines
@@ -100,7 +99,7 @@ extern CRITICAL_SECTION g_ThreadKeyListCS;
 // globales
 //------------------------------------------------------------------------------
 
-DWORD g_dwPlatformId = VER_PLATFORM_WIN32_WINDOWS; // remember plattform
+DWORD         g_dwPlatformId = VER_PLATFORM_WIN32_WINDOWS; // remember plattform
 
 //------------------------------------------------------------------------------
 // showMessage
@@ -161,6 +160,8 @@ static void InitDCOM( )
 
 sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 {
+    OSVERSIONINFO aInfo;
+
     switch (fdwReason)
     {
         case DLL_PROCESS_ATTACH:
@@ -201,15 +202,10 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
                 }
 
                 /* initialize Win9x unicode functions */
-                aInfo.dwOSVersionInfoSize = sizeof( aInfo );
+                aInfo.dwOSVersionInfoSize = sizeof( OSVERSIONINFO );
+
                 if ( GetVersionEx(&aInfo) )
                 {
-                    Kernel9xInit(&aInfo);
-                    Advapi9xInit(&aInfo);
-                    Comdlg9xInit(&aInfo);
-                    Shell9xInit(&aInfo);
-                    User9xInit(&aInfo);
-
                     if ( VER_PLATFORM_WIN32_NT == aInfo.dwPlatformId )
                     {
                         lpfnFindFirstFile             = FindFirstFileW;
@@ -240,12 +236,6 @@ sal_Bool WINAPI DllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved
 
         case DLL_PROCESS_DETACH:
             {
-                Kernel9xDeInit();
-                Advapi9xDeInit();
-                Comdlg9xDeInit();
-                Shell9xDeInit();
-                User9xDeInit();
-
                 WSACleanup( );
                 if ( lpArgvW )
                     GlobalFree( lpArgvW );
