@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontentcaps.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-13 12:51:46 $
+ *  last change: $Author: kso $ $Date: 2001-06-13 13:18:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,12 +406,12 @@ Sequence< CommandInfo > Content::getCommands(
                 CommandInfo(
                     OUString( RTL_CONSTASCII_USTRINGPARAM( "flush" ) ),
                     -1,
-                    getCppuType( static_cast< SplitCommandArgument * >( 0 ) )
+                    getCppuVoidType()
                 ),
                 CommandInfo(
                     OUString( RTL_CONSTASCII_USTRINGPARAM( "split" ) ),
                     -1,
-                    getCppuType( static_cast< TransferInfo * >( 0 ) )
+                    getCppuType( static_cast< SplitCommandArgument * >( 0 ) )
                 )
             };
 
