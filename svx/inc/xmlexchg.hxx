@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexchg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:18:36 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:48:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,27 +66,72 @@
 #include <svtools/transfer.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
+namespace com {
+    namespace sun {
+        namespace star {
+            namespace beans {
+                class SAL_NO_VTABLE XPropertySet;
+            }
+        }
+    }
+}
+
 //........................................................................
 namespace svx
 {
 //........................................................................
 
+
+    //====================================================================
+    //= OXFormsDescriptor
+    //====================================================================
+
+    struct SVX_DLLPUBLIC OXFormsDescriptor {
+
+        String szName;
+        String szServiceName;
+        ::com::sun::star::uno::Reference
+            < ::com::sun::star::beans::XPropertySet >
+                xPropSet;
+
+        inline OXFormsDescriptor( void ) {}
+        inline OXFormsDescriptor( const OXFormsDescriptor &rhs ) { *this=rhs; }
+        inline OXFormsDescriptor &operator = ( const OXFormsDescriptor &rhs ) {
+            szName = rhs.szName;
+            szServiceName = rhs.szServiceName;
+            xPropSet = rhs.xPropSet;
+            return (*this);
+        }
+    };
+
     //====================================================================
     //= OXFormsTransferable
     //====================================================================
-    class OXFormsTransferable : public TransferableHelper
-    {
-    protected:
-        // TransferableHelper overridables
-        virtual void        AddSupportedFormats();
-        virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+    class SVX_DLLPUBLIC OXFormsTransferable : public TransferableHelper {
 
-        static sal_uInt32   getDescriptorFormatId();
+        protected:
 
-    public:
-        /** construct the transferable
-        */
-        OXFormsTransferable();
+            // TransferableHelper overridables
+            virtual void        AddSupportedFormats();
+            virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );
+
+            static sal_uInt32   getDescriptorFormatId();
+
+            OXFormsDescriptor m_aDescriptor;
+
+        public:
+
+            /** construct the transferable
+            */
+            OXFormsTransferable( const OXFormsDescriptor &rhs );
+
+            /** extracts an xform descriptor from the transferable given
+            */
+            static const OXFormsDescriptor &extractDescriptor( const TransferableDataHelper& _rData );
     };
 
 
