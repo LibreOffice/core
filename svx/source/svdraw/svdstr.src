@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 07:38:36 $
+ *  last change: $Author: kz $ $Date: 2001-04-08 19:11:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,7 +752,7 @@ String STR_ObjNameSingulPARALRND
     Text[ arabic ] = "γΚζΗÒν ΓΦαΗΪ γΣΚΟνΡ ΗαÒζΗνΗ";
     Text[ dutch ] = "Afgerond paralellogram";
     Text[ chinese_simplified ] = "Τ²½ΗΖ½ΠΠΛΔ±ίΠΞ";
-    Text[ greek ] = "Στρογγυλεμένο παραλληλόγραμμα";
+    Text[ greek ] = "Στρογγυλεμένο παραλληλόγραμμο";
     Text[ korean ] = "µΥ±ΫΈ° ΖςΗΰ»ηΊ―Ηό";
     Text[ turkish ] = "Yuvarlak kφώeli paralelkenar";
     Text[ language_user1 ] = " ";
@@ -778,7 +778,7 @@ String STR_ObjNamePluralPARALRND
     Text[ arabic ] = "γΚζΗÒνΗΚ ΓΦαΗΪ γΣΚΟνΡΙ ΗαÒζΗνΗ";
     Text[ dutch ] = "Afgeronde parallelogrammen";
     Text[ chinese_simplified ] = "Τ²½ΗΖ½ΠΠΛΔ±ίΠΞ";
-    Text[ greek ] = "Στρογγυλεμένα παραλληλογράμματα";
+    Text[ greek ] = "Στρογγυλεμένα παραλληλόγραμμα";
     Text[ korean ] = "µΥ±ΫΈ° ΖςΗΰ»ηΊ―Ηό";
     Text[ turkish ] = "Yuvarlak kφώeli paralelkenarlar";
     Text[ language_user1 ] = " ";
@@ -16212,7 +16212,7 @@ String SIP_EE_FEATURE_LINEBR
     Text[ swedish ] = "Mjuk radbrytning";
     Text[ polish ] = "Miκkki podzia³ wierszy";
     Text[ portuguese_brazilian ] = "Soft line break";
-    Text[ japanese ] = "”CΣw’θ‚Μ‰όs";
+    Text[ japanese ] = "”CΣ‰όs";
     Text[ chinese_simplified ] = "ΘνΠΤ»»ΠΠ·ϋ";
     Text[ chinese_traditional ] = "³n©Κ΄«¦ζ²Ε";
     Text[ arabic ] = "έΗΥα ΓΣΨΡ ΚαήΗΖν";
