@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_backend.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:14:01 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:58:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,7 +262,7 @@ class PackageRegistryBackend
 protected:
     ::rtl::OUString m_context;
     // currently only for library containers:
-    enum {
+    enum context {
         CONTEXT_UNKNOWN,
         CONTEXT_USER, CONTEXT_SHARED,
         CONTEXT_DOCUMENT

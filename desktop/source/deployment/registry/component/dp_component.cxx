@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:13:33 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:58:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         const OUString m_loader;
         Reference<XComponentContext> m_xRemoteContext;
 
-        enum {
+        enum reg {
             REG_UNINIT, REG_VOID, REG_REGISTERED, REG_NOT_REGISTERED
         } m_registered;
 
