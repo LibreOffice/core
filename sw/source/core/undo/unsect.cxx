@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unsect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:40:10 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,39 +512,3 @@ void SwUndoChgSection::Redo( SwUndoIter& rUndoIter )
 {
     Undo( rUndoIter );
 }
-
-
-
-SwUndoChgSectPsswd::SwUndoChgSectPsswd(
-                    const ::com::sun::star::uno::Sequence <sal_Int8>& rOld,
-                    const SwSectionNode* pSectNd )
-    : SwUndo( UNDO_CHGSECTIONPASSWD ), aPasswd( rOld )
-{
-    nSectNd = pSectNd ? pSectNd->GetIndex() : 0;
-}
-
-
-void SwUndoChgSectPsswd::Undo( SwUndoIter& rIter )
-{
-    SwDoc& rDoc = rIter.GetDoc();
-    ::com::sun::star::uno::Sequence <sal_Int8> aCurr;
-    const SwSection* pSect = 0;
-    if( nSectNd )
-    {
-        SwSectionNode* pNd = rDoc.GetNodes()[ nSectNd ]->GetSectionNode();
-        ASSERT( pNd, "where is the sectionnode?" );
-        pSect = &pNd->GetSection();
-        aCurr = pSect->GetPasswd();
-    }
-    rDoc.ChgSectionPasswd( aPasswd, *pSect );
-    aPasswd = aCurr;
-}
-
-
-void SwUndoChgSectPsswd::Redo( SwUndoIter& rUndoIter )
-{
-    Undo( rUndoIter );
-}
-
-
-
