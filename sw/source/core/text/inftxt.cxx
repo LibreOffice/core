@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-10 06:12:06 $
+ *  last change: $Author: fme $ $Date: 2002-04-10 06:35:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,7 +705,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
 
 #ifdef BIDI
 
-    // The SwScriptInfo object is useless if we are inside a field portion
+    // The SwScriptInfo is useless if we are inside a field portion
     SwScriptInfo* pSI = 0;
     if ( ! rPor.InFldGrp() )
         pSI = &GetParaPortion()->GetScriptInfo();
