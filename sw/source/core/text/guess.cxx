@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-28 10:44:46 $
+ *  last change: $Author: tl $ $Date: 2001-03-29 08:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,7 +269,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
         {
             xHyph = ::GetHyphenator();
             aHyphOpt = LineBreakHyphenationOptions( xHyph,
-                            Sequence< PropertyValue >(), nHyphPos );
+                                rInf.GetHyphValues(), nHyphPos );
         }
 
         LanguageType aLang = rInf.GetFont()->GetLanguage();
@@ -386,7 +386,7 @@ sal_Bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
     //! subtract 1 since the UNO-interface is 0 based
     xHyphWord = xHyph->queryAlternativeSpelling( OUString(aTxt),
                         pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
-                        nPos - nBreakStart, Sequence< PropertyValue >() );
+                        nPos - nBreakStart, rInf.GetHyphValues() );
     return xHyphWord.is() && xHyphWord->isAlternativeSpelling();
 }
 
