@@ -1,10 +1,10 @@
 /*************************************************************************
- *
- *  $RCSfile: xmltoken.cxx,v $
- *
- *  $Revision: 1.75 $
- *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:31:06 $
+*
+*  $RCSfile: xmltoken.cxx,v $
+*
+*  $Revision: 1.76 $
+*
+*  last change: $Author: obo $ $Date: 2004-11-16 14:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,12 @@ namespace xmloff { namespace token {
         TOKEN( "urn:oasis:names:tc:openoffice:xmlns:form:1.0",      XML_N_FORM ),
         TOKEN( "script",                    XML_NP_SCRIPT ),
         TOKEN( "urn:oasis:names:tc:openoffice:xmlns:script:1.0",      XML_N_SCRIPT ),
-
+        TOKEN( "xforms",                                    XML_NP_XFORMS_1_0 ),
+        TOKEN( "http://www.w3.org/2002/xforms",             XML_N_XFORMS_1_0 ),
+        TOKEN( "xsd",                                       XML_NP_XSD ),
+        TOKEN( "http://www.w3.org/2001/XMLSchema",          XML_N_XSD ),
+        TOKEN( "xsi",                                       XML_NP_XSI ),
+        TOKEN( "http://www.w3.org/2001/XMLSchema-instance", XML_N_XSI ),
 
         TOKEN( "block-list",                XML_NP_BLOCK_LIST ),
         TOKEN( "http://openoffice.org/2001/block-list",      XML_N_BLOCK_LIST ),
@@ -2545,6 +2550,51 @@ namespace xmloff { namespace token {
         TOKEN( "z",                            XML_Z ),
         TOKEN( "dimension",                    XML_DIMENSION ),
         TOKEN( "validation-name",               XML_VALIDATION_NAME ),
+
+        // XForms token
+        TOKEN( "model",                            XML_MODEL ),
+        TOKEN( "schema",                           XML_SCHEMA ),
+        TOKEN( "bind",                             XML_BIND ),
+        TOKEN( "instance",                         XML_INSTANCE ),
+        TOKEN( "submission",                       XML_SUBMISSION ),
+        TOKEN( "ref",                              XML_REF ),
+        TOKEN( "src",                              XML_SRC ),
+        TOKEN( "method",                           XML_METHOD ),
+        TOKEN( "nodeset",                          XML_NODESET ),
+        TOKEN( "indent",                           XML_INDENT ),
+        TOKEN( "omit-xml-declaration",             XML_OMIT_XML_DECLARATION ),
+        TOKEN( "standalone",                       XML_STANDALONE ),
+        TOKEN( "cdata-section-elements",           XML_CDATA_SECTION_ELEMENTS ),
+        TOKEN( "readonly",                         XML_READONLY ),
+        TOKEN( "required",                         XML_REQUIRED ),
+        TOKEN( "relevant",                         XML_RELEVANT ),
+        TOKEN( "calculate",                        XML_CALCULATE ),
+        TOKEN( "constraint",                       XML_CONSTRAINT ),
+        TOKEN( "maxOccurs",                        XML_MAXOCCURS /* (maxOccurs) */ ),
+        TOKEN( "minOccurs",                        XML_MINOCCURS /* (minOccurs) */ ),
+        TOKEN( "p3ptype",                          XML_P3PTYPE ),
+        TOKEN( "mediatype",                        XML_MEDIATYPE ),
+        TOKEN( "includenamespaceprefixes",         XML_INCLUDENAMESPACEPREFIXES ),
+
+        // XForms/XSD Schema tokens
+        TOKEN( "base",                             XML_BASE ),
+        TOKEN( "targetNamespace",                  XML_TARGETNAMESPACE ),
+        TOKEN( "simpleType",                       XML_SIMPLETYPE ),
+        TOKEN( "restriction",                      XML_RESTRICTION ),
+        TOKEN( "maxLength",                        XML_MAXLENGTH ),
+        TOKEN( "minLength",                        XML_MINLENGTH ),
+        TOKEN( "minInclusive",                     XML_MININCLUSIVE ),
+        TOKEN( "minExclusive",                     XML_MINEXCLUSIVE ),
+        TOKEN( "maxInclusive",                     XML_MAXINCLUSIVE ),
+        TOKEN( "maxExclusive",                     XML_MAXEXCLUSIVE ),
+        TOKEN( "pattern",                          XML_PATTERN ),
+        TOKEN( "enumeration",                      XML_ENUMERATION ),
+        TOKEN( "whiteSpace",                       XML_WHITESPACE ),
+        TOKEN( "totalDigits",                      XML_TOTALDIGITS ),
+        TOKEN( "fractionDigits",                   XML_FRACTIONDIGITS ),
+        TOKEN( "preserve",                         XML_PRESERVE ),
+        TOKEN( "anyURI",                           XML_ANYURI ),
+        TOKEN( "dateTime",                         XML_DATETIME_XSD ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
