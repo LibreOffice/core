@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: mt $ $Date: 2004-09-08 08:55:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,9 @@
 #include <svtools/asynclink.hxx>
 #include <svtools/saveopt.hxx>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "sfxresid.hxx"
 #include "event.hxx"
@@ -1472,7 +1474,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             String aTemplateName = pNameItem->GetValue();
 
             // Region-Nr besorgen
-            USHORT nRegion;
+            USHORT nRegion = 0;
             if( pRegionItem )
             {
                 // Region-Name finden (eigentlich nicht unbedingt eindeutig)
