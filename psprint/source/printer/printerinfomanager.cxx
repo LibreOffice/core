@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-22 13:42:36 $
+ *  last change: $Author: pl $ $Date: 2001-06-13 12:28:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,8 +156,16 @@ void PrinterInfoManager::initialize()
     m_aGlobalDefaults.m_pParser = PPDParser::getParser( String( RTL_CONSTASCII_USTRINGPARAM( "SGENPRT" ) ) );
     m_aGlobalDefaults.m_aContext.setParser( m_aGlobalDefaults.m_pParser );
 
+    if( ! m_aGlobalDefaults.m_pParser )
+    {
+#ifdef DEBUG
+        fprintf( stderr, "Error: no SGENPRT available, shutting down psprint...\n" );
+        return;
+#endif
+    }
+
     sal_Int32 nIndex = 0;
-    while( nIndex != -1 && m_aGlobalDefaults.m_pParser )
+    while( nIndex != -1 )
     {
         INetURLObject aFile( aPrinterPath.getToken( 0, ':', nIndex ), INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         aFile.Append( String( RTL_CONSTASCII_USTRINGPARAM( PRINT_FILENAME ) ) );
