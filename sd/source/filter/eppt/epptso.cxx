@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-29 15:42:19 $
+ *  last change: $Author: sj $ $Date: 2000-12-02 17:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2986,19 +2986,19 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
     }
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaTabstops" ) ), bGetPropStateValue ) )
         maTabStop = *( ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop>*)mAny.getValue();
-    ::com::sun::star::drawing::TextAdjust eTextAdjust( ::com::sun::star::drawing::TextAdjust_LEFT );
+    ::com::sun::star::style::ParagraphAdjust eTextAdjust( ::com::sun::star::style::ParagraphAdjust_LEFT );
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "ParaAdjust" ) ), bGetPropStateValue ) )
-        eTextAdjust = (::com::sun::star::drawing::TextAdjust)EncodeAnyTosal_Int16( mAny );
+        eTextAdjust = (::com::sun::star::style::ParagraphAdjust)EncodeAnyTosal_Int16( mAny );
     switch ( eTextAdjust )
     {
-        case ::com::sun::star::drawing::TextAdjust_CENTER :
+        case ::com::sun::star::style::ParagraphAdjust_CENTER :
             mnTextAdjust = 1;
         break;
-        case ::com::sun::star::drawing::TextAdjust_RIGHT :
+        case ::com::sun::star::style::ParagraphAdjust_RIGHT :
             mnTextAdjust = 2;
         break;
         default :
-        case ::com::sun::star::drawing::TextAdjust_LEFT :
+        case ::com::sun::star::style::ParagraphAdjust_LEFT :
             mnTextAdjust = 0;
         break;
     }
