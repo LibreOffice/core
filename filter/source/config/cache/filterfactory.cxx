@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filterfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 15:14:34 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 13:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,13 +246,32 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
 }
 
 /*-----------------------------------------------
-    09.07.2003 07:46
+    18.02.2004 14:21
 -----------------------------------------------*/
 css::uno::Sequence< ::rtl::OUString > SAL_CALL FilterFactory::getAvailableServiceNames()
     throw(css::uno::RuntimeException)
 {
-    // must be the same list as ((XNameAccess*)this)->getElementNames() return!
-    return getElementNames();
+    /* Attention: Instead of getElementNames() this method have to return only filter names,
+                  which can be created as UNO Services realy. Thats why we search for filters,
+                  which dont have a valid value for the property "FilterService".
+                  Of course we cant check for corrupted service names here. We can check
+                  for empty strings only ...
+    */
+    CacheItem lIProps;
+    CacheItem lEProps;
+    lEProps[PROPNAME_FILTERSERVICE] <<= ::rtl::OUString();
+
+    OUStringList lUNOFilters;
+    try
+    {
+        lUNOFilters = m_rCache->getMatchingItemsByProps(FilterCache::E_FILTER, lIProps, lEProps);
+    }
+    catch(const css::uno::RuntimeException&)
+        { throw; }
+    catch(const css::uno::Exception&)
+        { lUNOFilters.clear(); }
+
+    return lUNOFilters.getAsConstList();
 }
 
 /*-----------------------------------------------
