@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationbasenode.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:49:53 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,10 +239,10 @@ namespace presentation
 
                     // okay, found a ParagraphTarget with a valid XShape. Does the shape
                     // provide the given paragraph?
-                    const DocTreeNode& rTreeNode( DocTreeNode::createFromShape(
-                                                      mpShape,
-                                                      aTarget.Paragraph,
-                                                      DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ) );
+                    const DocTreeNode& rTreeNode(
+                        mpShape->getTreeNodeSupplier().getTreeNode(
+                            aTarget.Paragraph,
+                            DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ) );
 
                     // CAUTION: the creation of the subset shape
                     // _must_ stay in the node constructor, since
