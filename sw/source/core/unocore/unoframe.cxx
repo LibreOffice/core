@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:27:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:10:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2257,9 +2257,7 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                     //TODO/LATER: from where do I get a ViewAspect? And how do I transport it to the OLENode?
                     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
-                    // TODO/LEAN: VisualArea still needs running state
-                    svt::EmbeddedObjectRef::TryRunningState( xIPObj );
-
+                    // TODO/LEAN: VisualArea may switch object to running state
                     //The Size should be suggested by the OLE server if not manually set
                     MapUnit aRefMap = VCLUnoHelper::UnoEmbed2VCLMapUnit( xIPObj->getMapUnit( nAspect ) );
                     awt::Size aSize = xIPObj->getVisualAreaSize( nAspect );
