@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-24 11:07:56 $
+#   last change: $Author: rt $ $Date: 2004-01-20 13:43:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,13 +63,14 @@
 PRJ=..$/..
 
 PRJNAME=i18npool
-TARGET=search
+TARGET=i18nsearch.uno
 USE_DEFFILE=TRUE
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+DLLPRE =
 
 # --- Files --------------------------------------------------------
 
@@ -80,7 +81,7 @@ SLOFILES=	\
             $(EXCEPTIONSFILES) \
             $(SLO)$/levdis.obj
 
-SHL1TARGET= i18nsearch
+SHL1TARGET= $(TARGET)
 SHL1OBJS=	$(SLOFILES)
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
@@ -96,10 +97,9 @@ SHL1STDLIBS= \
                 $(I18NREGEXPLIB)
 
 SHL1DEPN=		makefile.mk
+SHL1VERSIONMAP= i18nsearch.map
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=		$(SHL1TARGET)
-DEF1EXPORTFILE=	$(SHL1TARGET).dxp
-
 
 # --- Targets ------------------------------------------------------
 
