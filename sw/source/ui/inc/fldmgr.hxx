@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:11:27 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:04:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,6 @@ private:
     USHORT          GetCurrLanguage() const;
 
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> xDBContext;
-    com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> GetDBContext();
     com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> xNumberingInfo;
     com::sun::star::uno::Reference<com::sun::star::text::XNumberingTypeInfo> GetNumberingInfo()const;
 public:
@@ -182,11 +181,6 @@ public:
 
     // Feld einfuegen ueber TypeId (TYP_ ...)
     BOOL            InsertFld(  const SwInsertFld_Data& rData );
-
-    BOOL            InsertURL(  const String& rName,
-                                const String& rVal,
-                                const String& rFrame,
-                                const SvxMacroItem* pItem = 0);
 
     // Direkt das aktuelle Feld aendern
     void            UpdateCurFld(ULONG nFormat,
@@ -201,8 +195,6 @@ public:
     // Ein Feld ermitteln
     SwField*        GetCurFld();
 
-    // Zugriff  auf Feldtypen
-    void            RemoveDBTypes();
     void            InsertFldType(SwFieldType& rType);
 
     BOOL            ChooseMacro(const String &rSelMacro = aEmptyStr);
@@ -215,11 +207,6 @@ public:
     BOOL GoNextPrev( BOOL bNext = TRUE, SwFieldType* pTyp = 0 );
     BOOL GoNext( SwFieldType* pTyp = 0 )    { return GoNextPrev( TRUE, pTyp ); }
     BOOL GoPrev( SwFieldType* pTyp = 0 )    { return GoNextPrev( FALSE, pTyp ); }
-
-    // Setzen von Werten aus Benutzerfeldern (BASIC)
-    //
-    BOOL            SetFieldValue(const String &rFieldName,
-                                  const String &rValue);
 
     // Erfragen von Werten aus Datenbankfeldern (BASIC )
 //  String          GetDataBaseFieldValue(const String &rDBName, const String &rFieldName, SwWrtShell* pSh);
@@ -235,7 +222,6 @@ public:
     SwFieldType*    GetFldType(USHORT nResId, USHORT nId = 0) const;
     SwFieldType*    GetFldType(USHORT nResId, const String& rName) const;
 
-    void            RemoveFldType(USHORT nResId, USHORT nId = 0);
     void            RemoveFldType(USHORT nResId, const String& rName);
 
     // Zugriff ueber TypeId aus dem Dialog
@@ -256,8 +242,6 @@ public:
 
     // Untertypen zu einem Typ
     BOOL            GetSubTypes(USHORT nId, SvStringsDtor& rToFill);
-
-    BOOL            SetUserSubType(const String& rName, USHORT nSubType);
 
     // Formate zu einem Typ
     USHORT          GetFormatCount(USHORT nTypeId, BOOL bIsText, BOOL bHtmlMode = FALSE) const;
