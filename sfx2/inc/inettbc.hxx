@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-18 08:37:15 $
+ *  last change: $Author: fs $ $Date: 2001-01-31 14:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ protected:
 
 public:
                                     SfxURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_NOT_VALID );
+                                    SfxURLBox( Window* pParent, const ResId& _rResId, INetProtocol eSmart = INET_PROT_NOT_VALID );
 
     void                            OpenURL( const String& rName, BOOL nMod ) const;
     void                            SetBaseURL( const String& rURL ) { aBaseURL = rURL; }
