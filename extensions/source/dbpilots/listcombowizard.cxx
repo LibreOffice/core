@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-01 09:34:54 $
+ *  last change: $Author: oj $ $Date: 2002-10-10 10:30:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,9 +232,9 @@ namespace dbp
             if (xMetaData.is())
             {
                 if (isListBox()) // only when we have a listbox this should be not empty
-                    getSettings().sLinkedListField = quoteTableName(xMetaData, getSettings().sLinkedListField);
-                getSettings().sListContentTable = quoteTableName(xMetaData, getSettings().sListContentTable);
-                getSettings().sListContentField = quoteTableName(xMetaData, getSettings().sListContentField);
+                    getSettings().sLinkedListField = quoteTableName(xMetaData, getSettings().sLinkedListField,::dbtools::eInDataManipulation);
+                getSettings().sListContentTable = quoteTableName(xMetaData, getSettings().sListContentTable,::dbtools::eInDataManipulation);
+                getSettings().sListContentField = quoteTableName(xMetaData, getSettings().sListContentField,::dbtools::eInDataManipulation);
             }
 
             // ListSourceType: SQL
@@ -621,6 +621,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2001/08/01 09:34:54  fs
+ *  onFinish: check the result before doing anything
+ *
  *  Revision 1.8  2001/07/04 06:05:02  oj
  *  #89191# sLinkedListField isn't used when combobox
  *
