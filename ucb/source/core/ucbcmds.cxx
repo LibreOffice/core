@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbcmds.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-09-12 10:03:32 $
+ *  last change: $Author: abi $ $Date: 2002-10-17 14:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1500,6 +1500,11 @@ void UniversalContentBroker::globalTransfer(
         {
             // Source URL is not supported by target. Try to transfer
             // the content "manually".
+        }
+        catch( star::ucb::UnsupportedCommandException const & )
+        {
+            // 'transfer'-command is not supported by commandprocessor.
+            // Try to transfer manually.
         }
 /*
         catch ( uno::Exception const & )
