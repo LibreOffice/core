@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exchange.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-27 08:14:40 $
+ *  last change: $Author: ka $ $Date: 2002-07-20 08:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ static const DataFlavorRepresentation aFormatArray_Impl[] =
 /*117 SOT_FORMATSTR_ID_DBACCESS_TABLE*/         { "application/x-openoffice;windows_formatname=\"Data source Table\"", "Data source Table", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*118 SOT_FORMATSTR_ID_DBACCESS_COMMAND*/       { "application/x-openoffice;windows_formatname=\"SQL query\"", "SQL query", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 /*119 SOT_FORMATSTR_ID_DIALOG_60*/              { "application/vnd.sun.xml.dialog", "Dialog 6.0", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
-/*120 SOT_FORMATSTR_ID_DUMMY7*/                 { "application/x-openoffice;windows_formatname=\"SO_DUMMYFORMAT_7\"", "SO_DUMMYFORMAT_7", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) }
+/*120 SOT_FORMATSTR_ID_EMF*/                    { "application/x-openoffice;windows_formatname=\"Image EMF\"", "Windows Enhanced MetaFile", &::getCppuType( (const Sequence< sal_Int8 >*) 0 ) },
 };
 
 //-----------------------------------------------------------------------

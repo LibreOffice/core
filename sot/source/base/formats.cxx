@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-27 13:51:57 $
+ *  last change: $Author: ka $ $Date: 2002-07-20 08:25:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1589,7 +1589,8 @@ USHORT SotExchange::GetExchangeAction(
 
                 aVector.push_back( aFlavorEx );
 
-                if( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) &&
+                if( ( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) ||
+                      ( SOT_FORMATSTR_ID_EMF == aFlavorEx.mnSotId ) ) &&
                     !IsFormatSupported( aVector, SOT_FORMAT_GDIMETAFILE ) )
                 {
                     if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
