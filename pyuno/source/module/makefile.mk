@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 16:52:36 $
+#   last change: $Author: obo $ $Date: 2004-11-15 13:12:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,18 +89,6 @@ PYTHONLIB=$(PYTHON_LIBS)
 CFLAGS+=$(PYTHON_CFLAGS)
 .ELSE # "$(SYSTEM_PYTHON)" == "YES"
 .INCLUDE :  pyversion.mk
-.IF "$(GUI)" == "UNX"
-# python executable brings in the needed python core symbols,
-# so this library cannot be checked
-SHL1NOCHECK=yes
-.IF "$(OS)"=="SOLARIS" || "$(OS)"=="MACOSX"
-PYTHONLIB=-lpython
-.ENDIF # "$(OS)"=="SOLARIS" || "$(OS)"=="MACOSX"
-.ELSE # "$(GUI)" == "UNX"
-# on windows, the python executable also uses the shared library,
-# so we link pyuno directly to it
-PYTHONLIB=python$(PYMAJOR)$(PYMINOR).lib
-.ENDIF # "$(GUI)" == "UNX"
 CFLAGS+=-I$(SOLARINCDIR)$/python
 .ENDIF # "$(SYSTEM_PYTHON)" == "YES"
 
@@ -115,6 +103,13 @@ SLOFILES= \
         $(SLO)$/pyuno_except.obj	\
         $(SLO)$/pyuno_adapter.obj	\
         $(SLO)$/pyuno_gc.obj
+
+# remove this, when issue i35064 is integrated
+.IF "$(COM)"=="GCC"
+NOOPTFILES= \
+    $(SLO)$/pyuno_module.obj
+.ENDIF			# "$(COM)"=="GCC"
+
 
 SHL1STDLIBS= \
         $(CPPULIB)		\
@@ -170,3 +165,4 @@ $(MISC)$/$(PYUNORC) : pyuno
 $(MISC)$/pyuno.flt : pyuno.flt
     -rm -f $@
     cat $? > $@
+
