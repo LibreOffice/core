@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-27 12:03:31 $
+ *  last change: $Author: mib $ $Date: 2001-06-27 12:17:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2376,7 +2376,7 @@ void SwXTextTable::attachToRange(const uno::Reference< XTextRange > & xTextRange
                                         nRows,
                                         nColumns,
                                         HORI_FULL,
-                                        HEADLINE|DEFAULT_BORDER);
+                                        HEADLINE|DEFAULT_BORDER|SPLIT_LAYOUT);
             if(pTable)
             {
                 // hier muessen die Properties des Descriptors ausgewertet werden
