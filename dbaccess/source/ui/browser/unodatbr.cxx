@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:53:15 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -12,7 +12,7 @@
  *         - GNU Lesser General Public License Version 2.1
  *         - Sun Industry Standards Source License Version 1.1
  *
- *  Sun Microsystems Inc., October, 2000
+ *  Sun Microsystems Inc., October, 2000statusChanged
  *
  *  GNU Lesser General Public License Version 2.1
  *  =============================================
@@ -74,7 +74,9 @@
 #ifndef _SVX_DATACCESSDESCRIPTOR_HXX_
 #include <svx/dataaccessdescriptor.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_SDBC_FETCHDIRECTION_HPP_
+#include <com/sun/star/sdbc/FetchDirection.hpp>
+#endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
 #endif
@@ -84,11 +86,18 @@
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_SDB_XPARAMETERSSUPPLIER_HPP_
+#include <com/sun/star/sdb/XParametersSupplier.hpp>
+#endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
-
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#endif
 #ifndef _SV_MULTISEL_HXX //autogen
 #include <tools/multisel.hxx>
 #endif
@@ -250,12 +259,6 @@
 #ifndef _DBA_DBACCESS_HELPID_HRC_
 #include "dbaccess_helpid.hrc"
 #endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
-#endif
-#ifndef _DBAUI_QUERYDESIGNACCESS_HXX_
-#include "querydesignaccess.hxx"
-#endif
 #ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
 #endif
@@ -405,9 +408,12 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
     ,m_pTreeView(NULL)
     ,m_pSplitter(NULL)
     ,m_pCurrentlyDisplayed(NULL)
-    ,m_nAsyncDrop(0)
     ,m_bQueryEscapeProcessing( sal_False )
     ,m_bHiContrast(sal_False)
+    ,m_bShowMenu(sal_False)
+    ,m_bShowToolbox(sal_True)
+    ,m_bPreview(sal_False)
+    ,m_nBorder(1)
 {
     DBG_CTOR(SbaTableQueryBrowser,NULL);
 
@@ -419,6 +425,13 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
 SbaTableQueryBrowser::~SbaTableQueryBrowser()
 {
     DBG_DTOR(SbaTableQueryBrowser,NULL);
+    if ( !rBHelper.bDisposed && !rBHelper.bInDispose )
+    {
+        OSL_ENSURE(0,"Please check who doesn't dispose this component!");
+        // increment ref count to prevent double call of Dtor
+        osl_incrementInterlockedCount( &m_refCount );
+        dispose();
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -479,6 +492,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
             DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
             if(pData)
             {
+                pEntryLoop->SetUserData(NULL);
                 Reference< XContainer > xContainer(pData->xObject, UNO_QUERY);
                 if (xContainer.is())
                     xContainer->removeContainerListener(this);
@@ -494,6 +508,8 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
                     }
                     ::comphelper::disposeComponent(pData->xObject);
                 }
+
+                pData->xObject.clear();
                 delete pData;
             }
             pEntryLoop = m_pTreeModel->Next(pEntryLoop);
@@ -501,8 +517,10 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
     }
     m_pCurrentlyDisplayed = NULL;
     // clear the tree model
-    delete m_pTreeModel;
-    m_pTreeModel = NULL;
+    {
+        ::std::auto_ptr<DBTreeListModel> aTemp(m_pTreeModel);
+        m_pTreeModel = NULL;
+    }
 
     // remove ourself as status listener
     implRemoveStatusListeners();
@@ -552,18 +570,11 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pSplitter = new Splitter(getBrowserView(),WB_HSCROLL);
         m_pSplitter->SetPosSizePixel( Point(0,0), Size(nFrameWidth,0) );
         m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
-        m_pSplitter->Show();
 
-        m_pTreeView = new DBTreeView(getBrowserView(),m_xMultiServiceFacatory, WB_TABSTOP);
-        m_pTreeView->Show();
+        m_pTreeView = new DBTreeView(getBrowserView(),m_xMultiServiceFacatory, WB_TABSTOP | WB_BORDER);
         m_pTreeView->SetPreExpandHandler(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
 
-        m_pTreeView->setCutHandler(LINK(this, SbaTableQueryBrowser, OnCutEntry));
         m_pTreeView->setCopyHandler(LINK(this, SbaTableQueryBrowser, OnCopyEntry));
-        m_pTreeView->setPasteHandler(LINK(this, SbaTableQueryBrowser, OnPasteEntry));
-        m_pTreeView->setDeleteHandler(LINK(this, SbaTableQueryBrowser, OnDeleteEntry));
-        m_pTreeView->setEditingHandler(LINK(this, SbaTableQueryBrowser, OnEditingEntry));
-        m_pTreeView->setEditedHandler(LINK(this, SbaTableQueryBrowser, OnEditedEntry));
 
         m_pTreeView->getListBox()->setControlActionListener(this);
         m_pTreeView->SetHelpId(HID_CTL_TREEVIEW);
@@ -615,20 +626,23 @@ sal_Bool SbaTableQueryBrowser::InitializeForm(const Reference< ::com::sun::star:
         Reference<XPropertySet> xTableProp(pData->xObject,UNO_QUERY);
         OSL_ENSURE(xTableProp.is(),"No table available!");
 
-        // is the filter intially applied ?
-        aProperties.getArray()[0]   = PROPERTY_APPLYFILTER;
-        aValues.getArray()[0]       = xTableProp->getPropertyValue(PROPERTY_APPLYFILTER);
+        if ( xTableProp.is() )
+        {
+            // is the filter intially applied ?
+            aProperties.getArray()[0]   = PROPERTY_APPLYFILTER;
+            aValues.getArray()[0]       = xTableProp->getPropertyValue(PROPERTY_APPLYFILTER);
 
-        // the initial filter
-        aProperties.getArray()[1]   = PROPERTY_FILTER;
-        aValues.getArray()[1]       = xTableProp->getPropertyValue(PROPERTY_FILTER);
+            // the initial filter
+            aProperties.getArray()[1]   = PROPERTY_FILTER;
+            aValues.getArray()[1]       = xTableProp->getPropertyValue(PROPERTY_FILTER);
 
-        // the initial ordering
-        aProperties.getArray()[2]   = PROPERTY_ORDER;
-        aValues.getArray()[2]       = xTableProp->getPropertyValue(PROPERTY_ORDER);
+            // the initial ordering
+            aProperties.getArray()[2]   = PROPERTY_ORDER;
+            aValues.getArray()[2]       = xTableProp->getPropertyValue(PROPERTY_ORDER);
 
-        Reference< XMultiPropertySet >  xFormMultiSet(_rxForm, UNO_QUERY);
-        xFormMultiSet->setPropertyValues(aProperties, aValues);
+            Reference< XMultiPropertySet >  xFormMultiSet(_rxForm, UNO_QUERY);
+            xFormMultiSet->setPropertyValues(aProperties, aValues);
+        }
     }
     catch(Exception&)
     {
@@ -659,25 +673,47 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
             // set the formats from the table
             if(m_pCurrentlyDisplayed)
             {
-                Sequence< ::rtl::OUString> aProperties(6);
-                Sequence< Any> aValues(6);
+                Sequence< ::rtl::OUString> aProperties(6 + ( m_bPreview ? 5 : 0 ));
+                Sequence< Any> aValues(7 + ( m_bPreview ? 5 : 0 ));
 
                 DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
                 Reference<XPropertySet> xTableProp(pData->xObject,UNO_QUERY);
                 OSL_ENSURE(xTableProp.is(),"SbaTableQueryBrowser::InitializeGridModel: No table available!");
 
-                aProperties.getArray()[0]   = PROPERTY_FONT;
-                aValues.getArray()[0]       = xTableProp->getPropertyValue(PROPERTY_FONT);
-                aProperties.getArray()[1]   = PROPERTY_TEXTEMPHASIS;
-                aValues.getArray()[1]       = xTableProp->getPropertyValue(PROPERTY_TEXTEMPHASIS);
-                aProperties.getArray()[2]   = PROPERTY_TEXTRELIEF;
-                aValues.getArray()[2]       = xTableProp->getPropertyValue(PROPERTY_TEXTRELIEF);
-                aProperties.getArray()[3]   = PROPERTY_ROW_HEIGHT;
-                aValues.getArray()[3]       = xTableProp->getPropertyValue(PROPERTY_ROW_HEIGHT);
-                aProperties.getArray()[4]   = PROPERTY_TEXTCOLOR;
-                aValues.getArray()[4]       = xTableProp->getPropertyValue(PROPERTY_TEXTCOLOR);
-                aProperties.getArray()[5]   = PROPERTY_TEXTLINECOLOR;
-                aValues.getArray()[5]       = xTableProp->getPropertyValue(PROPERTY_TEXTLINECOLOR);
+                ::rtl::OUString* pStringIter = aProperties.getArray();
+                Any* pValueIter = aValues.getArray();
+                if ( m_bPreview )
+                {
+                    *pStringIter++  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlwaysShowCursor"));
+                    *pValueIter++   <<= sal_False;
+                    *pStringIter++  = PROPERTY_BORDER;
+                    *pValueIter++   <<= sal_Int16(0);
+                }
+
+                *pStringIter++  = PROPERTY_FONT;
+                *pValueIter++   = xTableProp->getPropertyValue(PROPERTY_FONT);
+                *pStringIter++  = PROPERTY_TEXTEMPHASIS;
+                *pValueIter++   = xTableProp->getPropertyValue(PROPERTY_TEXTEMPHASIS);
+                *pStringIter++  = PROPERTY_TEXTRELIEF;
+                *pValueIter++   = xTableProp->getPropertyValue(PROPERTY_TEXTRELIEF);
+                if ( m_bPreview )
+                {
+                    *pStringIter++  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasNavigationBar"));
+                    *pValueIter++       <<= sal_False;
+                    *pStringIter++  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasRecordMarker"));
+                    *pValueIter++       <<= sal_False;
+                }
+                *pStringIter++  = PROPERTY_ROW_HEIGHT;
+                *pValueIter++   = xTableProp->getPropertyValue(PROPERTY_ROW_HEIGHT);
+                if ( m_bPreview )
+                {
+                    *pStringIter++  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tabstop"));
+                    *pValueIter++       <<= sal_False;
+                }
+                *pStringIter++  = PROPERTY_TEXTCOLOR;
+                *pValueIter++   = xTableProp->getPropertyValue(PROPERTY_TEXTCOLOR);
+                *pStringIter++  = PROPERTY_TEXTLINECOLOR;
+                *pValueIter++   = xTableProp->getPropertyValue(PROPERTY_TEXTLINECOLOR);
 
                 Reference< XMultiPropertySet >  xFormMultiSet(xGrid, UNO_QUERY);
                 xFormMultiSet->setPropertyValues(aProperties, aValues);
@@ -798,6 +834,21 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 xCurrentCol->setPropertyValue(PROPERTY_HELPTEXT, aDescription);
 
                 xColContainer->insertByName(*pBegin, makeAny(xCurrentCol));
+            }
+            if ( m_bPreview )
+            {
+                if ( getBrowserView() && getBrowserView()->getVclControl() )
+                {
+                    getBrowserView()->getVclControl()->AlwaysEnableInput(FALSE);
+                    getBrowserView()->getVclControl()->EnableInput(FALSE);
+                }
+                Reference< XPropertySet >  xDataSourceSet(getRowSet(), UNO_QUERY);
+                if ( xDataSourceSet.is() )
+                {
+                    xDataSourceSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowInserts")),makeAny(sal_False));
+                    xDataSourceSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowUpdates")),makeAny(sal_False));
+                    xDataSourceSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowDeletes")),makeAny(sal_False));
+                }
             }
         }
     }
@@ -957,27 +1008,6 @@ sal_Bool SbaTableQueryBrowser::suspend(sal_Bool bSuspend) throw( RuntimeExceptio
     if (!SbaXDataBrowserController::suspend(bSuspend))
         return sal_False;
 
-    if(m_pCurrentlyDisplayed)
-    {
-        DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
-        if(pData)
-        {
-            try
-            {
-                Reference<XFlushable> xFlush(pData->xObject,UNO_QUERY);
-                if(xFlush.is())
-                    xFlush->flush();
-            }
-            catch(DisposedException&)
-            {
-                OSL_ENSURE(0,"Object already disposed!");
-            }
-            catch(Exception&)
-            {
-            }
-        }
-    }
-
     return sal_True;
 }
 
@@ -1011,7 +1041,7 @@ void SAL_CALL SbaTableQueryBrowser::statusChanged( const FeatureStateEvent& _rEv
                     OSL_ENSURE(bProperFormat, "SbaTableQueryBrowser::statusChanged: need a data access descriptor here!");
                     m_aDocumentDataSource.initializeFrom(aDescriptor);
 
-                    OSL_ENSURE(m_aDocumentDataSource.has(daDataSource) && m_aDocumentDataSource.has(daCommand) && m_aDocumentDataSource.has(daCommandType),
+                    OSL_ENSURE(( m_aDocumentDataSource.has(daDataSource) || m_aDocumentDataSource.has(daDatabaseLocation)) && m_aDocumentDataSource.has(daCommand) && m_aDocumentDataSource.has(daCommandType),
                         "SbaTableQueryBrowser::statusChanged: incomplete descriptor!");
 
                     // check if we know the object which is set as document data source
@@ -1070,9 +1100,11 @@ void SbaTableQueryBrowser::checkDocumentDataSource()
 // -------------------------------------------------------------------------
 void SbaTableQueryBrowser::extractDescriptorProps(const ::svx::ODataAccessDescriptor& _rDescriptor, ::rtl::OUString& _rDataSource, ::rtl::OUString& _rCommand, sal_Int32& _rCommandType, sal_Bool& _rEscapeProcessing)
 {
-    _rDescriptor[daDataSource] >>= _rDataSource;
-    _rDescriptor[daCommand] >>= _rCommand;
-    _rDescriptor[daCommandType] >>= _rCommandType;
+    _rDataSource = _rDescriptor.getDataSource();
+    if ( _rDescriptor.has(daCommand) )
+        _rDescriptor[daCommand] >>= _rCommand;
+    if ( _rDescriptor.has(daCommandType) )
+        _rDescriptor[daCommandType] >>= _rCommandType;
 
     // escape processing is the only one allowed not to be present
     _rEscapeProcessing = sal_True;
@@ -1095,6 +1127,19 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
     {
         // look for the data source entry
         SvLBoxEntry* pDataSource = m_pTreeView->getListBox()->GetEntryPosByName(_rDataSource, NULL);
+        if ( !pDataSource ) // check if the data source name is a file location
+        {
+            INetURLObject aURL(_rDataSource);
+            if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+            {
+                // special case, the data source is file URL
+                // add new entries to the list box model
+                Image a, b, c;  // not interested in  reusing them
+                String e, f;
+                implAddDatasource(_rDataSource, a, e, b, f, c);
+                pDataSource = m_pTreeView->getListBox()->GetEntryPosByName(_rDataSource, NULL);
+            }
+        }
         if (_ppDataSourceEntry)
             // (caller wants to have it ...)
             *_ppDataSourceEntry = pDataSource;
@@ -1321,11 +1366,11 @@ sal_Bool SAL_CALL SbaTableQueryBrowser::select( const Any& _rSelection ) throw (
     }
 
     // check the precense of the props we need
-    if (!aDescriptor.has(daDataSource) || !aDescriptor.has(daCommand) || !aDescriptor.has(daCommandType))
+    if ( !(aDescriptor.has(daDataSource) || aDescriptor.has(daDatabaseLocation)) || !aDescriptor.has(daCommand) || !aDescriptor.has(daCommandType))
         throw IllegalArgumentException(::rtl::OUString(), *this, 1);
         // TODO: error message
 
-    return implSelect(aDescriptor);
+    return implSelect(aDescriptor,sal_True);
 }
 
 // -------------------------------------------------------------------------
@@ -1640,12 +1685,6 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 //  aReturn.bEnabled &= getDefinition() && !getDefinition()->GetDatabase()->IsReadOnly();
                 break;
 
-            case ID_BROWSER_EDITDOC:
-                aReturn = SbaXDataBrowserController::GetState(nId);
-                //  aReturn.bEnabled &= !getDefinition()->IsLocked();
-                    // somebody is modifying the definition -> no edit mode
-                break;
-
             case ID_BROWSER_COPY:
                 if(m_pTreeView->HasChildPathFocus())
                     aReturn.bEnabled = isEntryCopyAllowed(m_pTreeView->getListBox()->GetCurEntry());
@@ -1656,25 +1695,6 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 }
                 else
                     return SbaXDataBrowserController::GetState(nId);
-                break;
-
-            case ID_BROWSER_CUT:
-                if(m_pTreeView->HasChildPathFocus())
-                    aReturn.bEnabled = isEntryCutAllowed(m_pTreeView->getListBox()->GetCurEntry());
-                else
-                    return SbaXDataBrowserController::GetState(nId);
-                break;
-
-            case ID_BROWSER_PASTE:
-                // first look which side is active
-                if(m_pTreeView->HasChildPathFocus())
-                {
-                    SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
-                    aReturn.bEnabled = isEntryPasteAllowed(pEntry);
-                }
-                else
-                    aReturn = SbaXDataBrowserController::GetState(nId);
-
                 break;
 
             default:
@@ -1758,10 +1778,6 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
             toggleExplorer();
             break;
 
-        case ID_BROWSER_EDITDOC:
-            SbaXDataBrowserController::Execute(nId);
-            break;
-
         case ID_BROWSER_DOCUMENT_DATASOURCE:
             implSelect(m_aDocumentDataSource);
             break;
@@ -1822,7 +1838,10 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
                     try
                     {
                         ODataAccessDescriptor aDescriptor;
-                        aDescriptor[daDataSource]   =   xProp->getPropertyValue(PROPERTY_DATASOURCENAME);
+                        ::rtl::OUString sDataSourceName;
+                        xProp->getPropertyValue(PROPERTY_DATASOURCENAME) >>= sDataSourceName;
+
+                        aDescriptor.setDataSource(sDataSourceName);
                         aDescriptor[daCommand]      =   xProp->getPropertyValue(PROPERTY_COMMAND);
                         aDescriptor[daCommandType]  =   xProp->getPropertyValue(PROPERTY_COMMANDTYPE);
                         aDescriptor[daConnection]   =   xProp->getPropertyValue(PROPERTY_ACTIVECONNECTION);
@@ -1851,12 +1870,6 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
             // if it's not 0, such a async close is already pending
             break;
 
-        case ID_BROWSER_PASTE:
-            if(m_pTreeView->HasChildPathFocus())
-            {
-                pasteEntry(m_pTreeView->getListBox()->GetCurEntry());
-                break;
-            }// else run through
         case ID_BROWSER_COPY:
             if(m_pTreeView->HasChildPathFocus())
             {
@@ -1870,8 +1883,6 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
             else
                 SbaXDataBrowserController::Execute(nId);
             break;
-
-        case ID_BROWSER_CUT:// cut isn't allowed for the treeview
         default:
             SbaXDataBrowserController::Execute(nId);
             break;
@@ -1879,8 +1890,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
 }
 // -------------------------------------------------------------------------
 void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDbImage,
-        String& _rQueryName, Image& _rQueryImage, String& _rTableName, Image& _rTableImage,
-        String& _rBookmarkName, Image& _rBookmarkImage)
+        String& _rQueryName, Image& _rQueryImage, String& _rTableName, Image& _rTableImage)
 {
     vos::OGuard aGuard( Application::GetSolarMutex() );
     // initialize the names/images if necessary
@@ -1888,15 +1898,11 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
         _rQueryName = String(ModuleRes(RID_STR_QUERIES_CONTAINER));
     if (!_rTableName.Len())
         _rTableName = String(ModuleRes(RID_STR_TABLES_CONTAINER));
-    if (!_rBookmarkName.Len())
-        _rBookmarkName = String(ModuleRes(RID_STR_BOOKMARKS_CONTAINER));
 
     if (!_rQueryImage)
         _rQueryImage = Image(ModuleRes( DBTreeListModel::getImageResId(etQueryContainer,isHiContrast()) ));
     if (!_rTableImage)
         _rTableImage = Image(ModuleRes( DBTreeListModel::getImageResId(etTableContainer,isHiContrast()) ));
-    if (!_rBookmarkImage)
-        _rBookmarkImage = Image(ModuleRes( DBTreeListModel::getImageResId(etBookmarkContainer,isHiContrast()) ));
 
     if (!_rDbImage)
         _rDbImage = Image(ModuleRes( DBTreeListModel::getImageResId(etDatasource,isHiContrast()) ));
@@ -1923,28 +1929,21 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
         pTables->SetUserData(pTablesData);
     }
 
-    // the child for the boomarks container
-    {
-        SvLBoxEntry* pBookmarks = m_pTreeView->getListBox()->InsertEntry(_rBookmarkName, _rBookmarkImage, _rBookmarkImage, pDatasourceEntry, sal_True);
-        DBTreeListModel::DBTreeListUserData* pBookmarksData = new DBTreeListModel::DBTreeListUserData;
-        pBookmarksData->eType = etBookmarkContainer;
-        pBookmarks->SetUserData(pBookmarksData);
-    }
 }
 // -------------------------------------------------------------------------
 void SbaTableQueryBrowser::initializeTreeModel()
 {
     if (m_xDatabaseContext.is())
     {
-        Image aDBImage, aQueriesImage, aTablesImage, aBookmarksImage;
-        String sQueriesName, sTablesName, aBookmarksName;
+        Image aDBImage, aQueriesImage, aTablesImage;
+        String sQueriesName, sTablesName;
 
         // fill the model with the names of the registered datasources
         Sequence< ::rtl::OUString > aDatasources = m_xDatabaseContext->getElementNames();
         const ::rtl::OUString* pBegin   = aDatasources.getConstArray();
         const ::rtl::OUString* pEnd     = pBegin + aDatasources.getLength();
         for (; pBegin != pEnd; ++pBegin)
-            implAddDatasource(*pBegin, aDBImage, sQueriesName, aQueriesImage, sTablesName, aTablesImage, aBookmarksName, aBookmarksImage);
+            implAddDatasource(*pBegin, aDBImage, sQueriesName, aQueriesImage, sTablesName, aTablesImage);
     }
 }
 // -------------------------------------------------------------------------
@@ -2076,7 +2075,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
         if (ensureEntryObject(_pParent))
         {
             Reference< XNameAccess > xCollection(static_cast< DBTreeListModel::DBTreeListUserData* >(_pParent->GetUserData())->xObject, UNO_QUERY);
-            populateTree(xCollection, _pParent, etQuery == getChildType(_pParent) ? etQuery : etBookmark);
+            populateTree(xCollection, _pParent, etQuery );
         }
     }
     return 1L;
@@ -2128,32 +2127,6 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
         }
         break;
 
-        case etBookmarkContainer:
-        {
-            try
-            {
-                Reference< XBookmarksSupplier > xBookmarksSupp;
-                m_xDatabaseContext->getByName( GetEntryText( pDataSourceEntry ) ) >>= xBookmarksSupp;
-                if (xBookmarksSupp.is())
-                {
-                    Reference< XNameAccess > xBookmarks = xBookmarksSupp->getBookmarks();
-                    Reference< XContainer > xCont(xBookmarks, UNO_QUERY);
-                    if (xCont.is())
-                        // add as listener to get notified if elements are inserted or removed
-                        xCont->addContainerListener(this);
-
-                    pEntryData->xObject = xBookmarks;
-                }
-                else
-                    DBG_ERROR("SbaTableQueryBrowser::ensureEntryObject: no XBookmarksSupplier interface!");
-            }
-            catch(Exception&)
-            {
-                DBG_ERROR("SbaTableQueryBrowser::ensureEntryObject: caught an exception while retrieving the bookmarks container!");
-            }
-        }
-        break;
-
         default:
             DBG_ERROR("SbaTableQueryBrowser::ensureEntryObject: ooops ... missing some implementation here!");
             // TODO ...
@@ -2172,25 +2145,11 @@ IMPL_LINK(SbaTableQueryBrowser, OnEntryDoubleClicked, SvLBoxEntry*, _pEntry)
         return 0L;
     }
 
-    if (etBookmark != getEntryType(pSelected))
-        return 0L;
-
-    // a bookmarks has been double-clicked
-    SvLBoxEntry* pContainer = m_pTreeView->getListBox()->GetParent(pSelected);
-    if (!ensureEntryObject(pContainer))
-        return 0L;
-
-    DBTreeListModel::DBTreeListUserData* pContainerData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
-    Reference< XNameAccess > xBookmarks(pContainerData->xObject, UNO_QUERY);
-
-    OLinkedDocumentsAccess aHelper(getView(), getORB(), xBookmarks);
-    aHelper.open(GetEntryText(pSelected), sal_True);
-
     return 1L;
 };
 
 //------------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor)
+sal_Bool SbaTableQueryBrowser::implSelect(const ::svx::ODataAccessDescriptor& _rDescriptor,sal_Bool _bSelectDirect)
 {
     // extract the props
     ::rtl::OUString sDataSource;
@@ -2200,7 +2159,7 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::svx::ODataAccessDescriptor& _r
     extractDescriptorProps(_rDescriptor, sDataSource, sCommand, nCommandType, bEscapeProcessing);
 
     // select it
-    return implSelect(sDataSource, sCommand, nCommandType, bEscapeProcessing);
+    return implSelect(sDataSource, sCommand, nCommandType, bEscapeProcessing,NULL,_bSelectDirect);
 }
 
 //------------------------------------------------------------------------------
@@ -2222,6 +2181,12 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
             xProp->setPropertyValue(PROPERTY_COMMANDTYPE, makeAny(_nCommandType));
             xProp->setPropertyValue(PROPERTY_COMMAND, makeAny(_rCommand));
             xProp->setPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING, ::cppu::bool2any(_bEscapeProcessing));
+            if ( m_bPreview )
+            {
+                // this be undone by the grid control in DbGridControl::RecalcRows
+                // xProp->setPropertyValue(PROPERTY_FETCHSIZE, makeAny(sal_Int32(20)));
+                xProp->setPropertyValue(PROPERTY_FETCHDIRECTION, makeAny(FetchDirection::FORWARD));
+            }
 
             // the formatter depends on the data source we're working on, so rebuild it here ...
             initFormatter();
@@ -2276,19 +2241,31 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
 //------------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
                                       const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing,
-                                      const Reference<XConnection>& _rxConnection)
+                                      const Reference<XConnection>& _rxConnection
+                                      ,sal_Bool _bSelectDirect)
 {
     if (_rDataSourceName.getLength() && _rCommand.getLength() && (-1 != _nCommandType))
     {
-        setTitle(_rDataSourceName,_rCommand);
+        ::rtl::OUString sName = _rDataSourceName;
+        INetURLObject aURL(sName);
+        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+            sName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
+        setTitle(sName,_rCommand);
         SvLBoxEntry* pDataSource = NULL;
         SvLBoxEntry* pCommandType = NULL;
         SvLBoxEntry* pCommand = getObjectEntry(_rDataSourceName, _rCommand, _nCommandType, &pDataSource, &pCommandType, sal_True);
 
-        if (pDataSource)
+        //  if (pDataSource) // OJ change for the new app
         {
             if (pCommand)
-               m_pTreeView->getListBox()->Select(pCommand);
+            {
+                if ( _bSelectDirect )
+                {
+                    OnSelectEntry(pCommand);
+                }
+                else
+                    m_pTreeView->getListBox()->Select(pCommand);
+            }
             else if (!pCommandType)
             {
                 if ( m_pCurrentlyDisplayed )
@@ -2317,9 +2294,6 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
         case etQuery:
         case etView:
             break;
-        case etBookmark:
-            openHelpAgent(HID_DSBROWSER_BOOKMARKSELECTED);
-            return 0L;
         default:
             // nothing to do
             return 0L;
@@ -2365,24 +2339,6 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
     {
         try
         {
-            // if table was selected before flush it
-            if(m_pCurrentlyDisplayed)
-            {
-                DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
-                if(pData) // can be null because the first load can be failed @see below
-                {
-                    Reference<XFlushable> xFlush(pData->xObject,UNO_QUERY);
-                    if(xFlush.is())
-                        xFlush->flush();
-                }
-            }
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(0,"Object can not be flushed!");
-        }
-        try
-        {
             WaitObject aWaitCursor(getBrowserView());
 
             // tell the old entry it has been deselected
@@ -2418,7 +2374,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
                             pContainerData->xObject = xNameAccess;
                         }
                         else
-                            xNameAccess = Reference<XNameAccess>(pContainerData->xObject,UNO_QUERY);
+                            xNameAccess.set(pContainerData->xObject,UNO_QUERY);
                     }
                     break;
                 case CommandType::QUERY:
@@ -2429,6 +2385,10 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
                     }
                     break;
             }
+            String sStatus(ModuleRes( CommandType::TABLE == nCommandType ? STR_LOADING_TABLE : STR_LOADING_QUERY ));
+            sStatus.SearchAndReplaceAscii("$name$", aName);
+            BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sStatus);
+
             if(xNameAccess.is() && xNameAccess->hasByName(aName))
             {
                 DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(_pEntry->GetUserData());
@@ -2436,13 +2396,46 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
                 {
                     Reference<XInterface> xObject;
                     if(xNameAccess->getByName(aName) >>= xObject) // remember the table or query object
+                    {
                         pData->xObject = xObject;
+                        // if the query contains a parameterized statement and preview is enabled we won't get any data.
+                        if ( m_bPreview && nCommandType == CommandType::QUERY && xObject.is() )
+                        {
+                            ::rtl::OUString sSql;
+                            Reference<XPropertySet> xProp(xObject,UNO_QUERY);
+                            xProp->getPropertyValue(PROPERTY_COMMAND) >>= sSql;
+                            Reference< XMultiServiceFactory >  xFactory(xConnection, UNO_QUERY);
+                            if (xFactory.is())
+                            {
+                                try
+                                {
+                                    Reference<XSingleSelectQueryAnalyzer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
+                                    if ( xAnalyzer.is() )
+                                    {
+                                        xAnalyzer->setQuery(sSql);
+                                        Reference<XParametersSupplier> xParSup(xAnalyzer,UNO_QUERY);
+                                        if ( xParSup->getParameters()->getCount() > 0 )
+                                        {
+                                            String sFilter = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WHERE "));
+                                            sFilter = sFilter + xAnalyzer->getFilter();
+                                            String sReplace(sSql);
+                                            sReplace.SearchAndReplace(sFilter,String());
+                                            xAnalyzer->setQuery(sReplace);
+                                            Reference<XSingleSelectQueryComposer> xComposer(xAnalyzer,UNO_QUERY);
+                                            xComposer->setFilter(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0=1")));
+                                            aName = xAnalyzer->getQuery();
+                                            nCommandType = CommandType::COMMAND;
+                                        }
+                                    }
+                                }
+                                catch (Exception&)
+                                {
+                                }
+                            }
+                        }
+                    }
                 }
             }
-
-            String sStatus(ModuleRes( CommandType::TABLE == nCommandType ? STR_LOADING_TABLE : STR_LOADING_QUERY ));
-            sStatus.SearchAndReplaceAscii("$name$", aName);
-            BrowserViewStatusDisplay aShowStatus(static_cast<UnoDataBrowserView*>(getView()), sStatus);
 
             String sDataSourceName( GetEntryText( pConnection ) );
             if ( implLoadAnything( sDataSourceName, aName, nCommandType, sal_True, xConnection ) )
@@ -2485,27 +2478,25 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
 SvLBoxEntry* SbaTableQueryBrowser::getEntryFromContainer(const Reference<XNameAccess>& _rxNameAccess)
 {
     DBTreeListBox* pListBox = m_pTreeView->getListBox();
-    SvLBoxEntry* pDSLoop = pListBox->FirstChild(NULL);
     SvLBoxEntry* pContainer = NULL;
-    while (pDSLoop)
+    if ( pListBox )
     {
-        pContainer  = pListBox->GetEntry(pDSLoop, CONTAINER_QUERIES);
-        DBTreeListModel::DBTreeListUserData* pQueriesData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
-        if(pQueriesData && pQueriesData->xObject.get() == _rxNameAccess.get())
-            break;
+        SvLBoxEntry* pDSLoop = pListBox->FirstChild(NULL);
+        while (pDSLoop)
+        {
+            pContainer  = pListBox->GetEntry(pDSLoop, CONTAINER_QUERIES);
+            DBTreeListModel::DBTreeListUserData* pQueriesData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
+            if(pQueriesData && pQueriesData->xObject.get() == _rxNameAccess.get())
+                break;
 
-        pContainer  = pListBox->GetEntry(pDSLoop, CONTAINER_TABLES);
-        DBTreeListModel::DBTreeListUserData* pTablesData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
-        if(pTablesData && pTablesData->xObject.get() == _rxNameAccess.get())
-            break;
+            pContainer  = pListBox->GetEntry(pDSLoop, CONTAINER_TABLES);
+            DBTreeListModel::DBTreeListUserData* pTablesData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
+            if(pTablesData && pTablesData->xObject.get() == _rxNameAccess.get())
+                break;
 
-        pContainer  = pListBox->GetEntry(pDSLoop, CONTAINER_BOOKMARKS);
-        DBTreeListModel::DBTreeListUserData* pBookmarksData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
-        if(pBookmarksData && pBookmarksData->xObject.get() == _rxNameAccess.get())
-            break;
-
-        pDSLoop     = pListBox->NextSibling(pDSLoop);
-        pContainer  = NULL;
+            pDSLoop     = pListBox->NextSibling(pDSLoop);
+            pContainer  = NULL;
+        }
     }
     return pContainer;
 }
@@ -2513,6 +2504,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getEntryFromContainer(const Reference<XNameAc
 // -------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aEntryMutex);
 
     Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
@@ -2543,7 +2535,7 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
                 pNewData->eType = etTable;
 
             sal_uInt16 nImageResId = DBTreeListModel::getImageResId(pNewData->eType,isHiContrast());
-            vos::OGuard aGuard( Application::GetSolarMutex() );
+
             Image aImage = Image(ModuleRes(nImageResId));
             m_pTreeView->getListBox()->InsertEntry(::comphelper::getString(_rEvent.Accessor),
                                                                             aImage,
@@ -2559,16 +2551,15 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
             {
                 // the item inserts its children on demand, but it has not been expanded yet. So ensure here and
                 // now that it has all items
-                populateTree(xNames, pEntry, pContainerData->eType == etQueryContainer ? etQuery : etBookmark);
+                populateTree(xNames, pEntry, etQuery );
             }
             else
             {
                 DBTreeListModel::DBTreeListUserData* pNewData = new DBTreeListModel::DBTreeListUserData;
                 //  _rEvent.Element >>= pNewData->xObject;// remember the new element
-                pNewData->eType = pContainerData->eType == etQueryContainer ? etQuery : etBookmark;
+                pNewData->eType = etQuery;
 
                 sal_uInt16 nImageResId = DBTreeListModel::getImageResId(pNewData->eType,isHiContrast());
-                vos::OGuard aGuard( Application::GetSolarMutex() );
                 Image aImage = Image(ModuleRes(nImageResId));
                 m_pTreeView->getListBox()->InsertEntry(::comphelper::getString(_rEvent.Accessor),
                                                                                 aImage,
@@ -2587,9 +2578,9 @@ void SAL_CALL SbaTableQueryBrowser::elementInserted( const ContainerEvent& _rEve
         _rEvent.Accessor >>= sNewDS;
 
         // add new entries to the list box model
-        Image a, b, c, d;   // not interested in  reusing them
-        String e, f, g;
-        implAddDatasource(sNewDS, a, e, b, f, c, g, d);
+        Image a, b, c;  // not interested in  reusing them
+        String e, f;
+        implAddDatasource(sNewDS, a, e, b, f, c);
     }
     else
         SbaXDataBrowserController::elementInserted(_rEvent);
@@ -2605,8 +2596,9 @@ sal_Bool SbaTableQueryBrowser::isCurrentlyDisplayedChanged(const String& _sName,
 // -------------------------------------------------------------------------
 void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard(m_aEntryMutex);
     ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+    ::osl::MutexGuard aGuard(m_aEntryMutex);
+
 
     Reference< XNameAccess > xNames(_rEvent.Source, UNO_QUERY);
     // get the top-level representing the removed data source
@@ -2690,12 +2682,14 @@ void SAL_CALL SbaTableQueryBrowser::elementRemoved( const ContainerEvent& _rEven
                 while (pEntryLoop)
                 {
                     DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntryLoop->GetUserData());
+                    pEntryLoop->SetUserData(NULL);
                     delete pData;
                     pEntryLoop = static_cast<SvLBoxEntry*>(pList->Next());
                 }
             }
             // remove the entry. This should remove all children, too.
             DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pDSLoop->GetUserData());
+            pDSLoop->SetUserData(NULL);
             delete pData;
             m_pTreeModel->Remove(pDSLoop);
         }
@@ -2740,8 +2734,6 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
                     delete pData;
                 }
             }
-            else
-                OSL_ENSURE(etBookmarkContainer == getEntryType(pContainer), "SbaTableQueryBrowser::elementReplaced: a non-bookmark entry without data?");
         }
         else
         {
@@ -2764,8 +2756,6 @@ void SAL_CALL SbaTableQueryBrowser::elementReplaced( const ContainerEvent& _rEve
                             delete pData;
                         }
                     }
-                    else
-                        OSL_ENSURE(etBookmarkContainer == getEntryType(pContainer), "SbaTableQueryBrowser::elementReplaced: a non-bookmark entry without data (2)?");
                     break;
                 }
                 pChild = m_pTreeModel->NextSibling(pChild);
@@ -2826,14 +2816,20 @@ void SbaTableQueryBrowser::closeConnection(SvLBoxEntry* _pDSEntry,sal_Bool _bDis
     // collapse the query/table container
     for (SvLBoxEntry* pContainers = m_pTreeModel->FirstChild(_pDSEntry); pContainers; pContainers= m_pTreeModel->NextSibling(pContainers))
     {
-        m_pTreeView->getListBox()->Collapse(pContainers);
+        SvLBoxEntry* pElements = m_pTreeModel->FirstChild(pContainers);
+        if ( pElements )
+        {
+            m_pTreeView->getListBox()->SetCursor( pElements );
+            m_pTreeView->getListBox()->Collapse(pContainers);
+        }
         m_pTreeView->getListBox()->EnableExpandHandler(pContainers);
         // and delete their children (they are connection-relative)
-        for (SvLBoxEntry* pElements = m_pTreeModel->FirstChild(pContainers); pElements; )
+        for (; pElements; )
         {
             SvLBoxEntry* pRemove = pElements;
             pElements= m_pTreeModel->NextSibling(pElements);
             DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pRemove->GetUserData());
+            pRemove->SetUserData(NULL);
             delete pData;
             m_pTreeModel->Remove(pRemove);
         }
@@ -2858,23 +2854,6 @@ void SbaTableQueryBrowser::unloadAndCleanup(sal_Bool _bDisposeConnection, sal_Bo
     // de-select the path for the currently displayed table/query
     if (m_pCurrentlyDisplayed)
     {
-        if (_bFlushData)
-        {
-            DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
-            try
-            {
-                if(pData)
-                {
-                    Reference<XFlushable> xFlush(pData->xObject, UNO_QUERY);
-                    if(xFlush.is())
-                        xFlush->flush();
-                }
-            }
-            catch (RuntimeException&)
-            {
-                OSL_ENSURE(sal_False, "SbaTableQueryBrowser::unloadAndCleanup: could not flush the data (caught a RuntimeException)!");
-            }
-        }
         selectPath(m_pCurrentlyDisplayed, sal_False);
     }
     m_pCurrentlyDisplayed = NULL;
@@ -2927,13 +2906,13 @@ void SbaTableQueryBrowser::unloadAndCleanup(sal_Bool _bDisposeConnection, sal_Bo
 }
 
 // -------------------------------------------------------------------------
-void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
+void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
         // doin' a lot of VCL stuff here -> lock the SolarMutex
 
     // first initialize the parent
-    SbaXDataBrowserController::initialize( aArguments );
+    SbaXDataBrowserController::impl_initialize( aArguments );
 
     Reference<XConnection> xConnection;
     PropertyValue aValue;
@@ -2943,6 +2922,7 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
     ::rtl::OUString aTableName,aCatalogName,aSchemaName;
 
     sal_Bool bEsacpeProcessing = sal_True;
+    sal_Bool bShow = sal_True;
     sal_Int32 nInitialDisplayCommandType = CommandType::COMMAND;
     ::rtl::OUString sInitialDataSourceName;
     ::rtl::OUString sInitialCommand;
@@ -2968,8 +2948,18 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
             aValue.Value >>= aTableName;
         else if (0 == aValue.Name.compareToAscii(PROPERTY_USE_ESCAPE_PROCESSING))
             bEsacpeProcessing = ::cppu::any2bool(aValue.Value);
+        else if (0 == aValue.Name.compareToAscii("Preview"))
+        {
+            if ( ::cppu::any2bool(aValue.Value) )
+            {
+                bShow = sal_False;
+                m_bPreview = sal_True;
+                getView()->setToolBox(NULL);
+            }
+        }
         else if (0 == aValue.Name.compareToAscii(PROPERTY_SHOWTREEVIEW))
         {
+            bShow = sal_False;
             try
             {
                 if(::cppu::any2bool(aValue.Value))
@@ -2985,7 +2975,7 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
         {
             try
             {
-                if (!::cppu::any2bool(aValue.Value) && getView())
+                if ( !::cppu::any2bool(aValue.Value) && getView() && getView()->getToolBox() )
                 {
                     // hide the explorer and the separator
                     getView()->getToolBox()->HideItem(ID_BROWSER_EXPLORER);
@@ -2997,9 +2987,59 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
             {
             }
         }
+        else if (0 == aValue.Name.compareToAscii(PROPERTY_SHOWMENU))
+        {
+            aValue.Value >>= m_bShowMenu;
+        }
     }
 
-    if (implSelect(sInitialDataSourceName, sInitialCommand, nInitialDisplayCommandType, bEsacpeProcessing,xConnection))
+    if ( bShow )
+    {
+        m_pTreeView->Show();
+        m_pSplitter->Show();
+        getBrowserView()->Resize();
+    }
+
+    if ( m_bPreview )
+    {
+        try
+        {
+            Sequence< ::rtl::OUString> aProperties(5);
+            Sequence< Any> aValues(5);
+
+            ::rtl::OUString* pStringIter = aProperties.getArray();
+            Any* pValueIter = aValues.getArray();
+            *pStringIter++  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlwaysShowCursor"));
+            *pValueIter++   <<= sal_False;
+            *pStringIter++  = PROPERTY_BORDER;
+            *pValueIter++   <<= sal_Int16(0);
+
+
+            *pStringIter++  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasNavigationBar"));
+            *pValueIter++       <<= sal_False;
+            *pStringIter++  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasRecordMarker"));
+            *pValueIter++       <<= sal_False;
+
+            *pStringIter++  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Tabstop"));
+            *pValueIter++       <<= sal_False;
+
+            Reference< XMultiPropertySet >  xFormMultiSet(getFormComponent(), UNO_QUERY);
+            if ( xFormMultiSet.is() )
+                xFormMultiSet->setPropertyValues(aProperties, aValues);
+        }
+        catch(Exception)
+        {
+        }
+    }
+
+    Reference<XChild> xChild(xConnection,UNO_QUERY);
+    if ( !sInitialDataSourceName.getLength() && xChild.is() )
+    {
+        Reference<XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
+        if ( xProp.is() )
+            xProp->getPropertyValue(PROPERTY_NAME) >>= sInitialDataSourceName;
+    }
+    if ( implSelect(sInitialDataSourceName, sInitialCommand, nInitialDisplayCommandType, bEsacpeProcessing,xConnection,sal_True) )
     {
         try
         {
@@ -3019,6 +3059,7 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
         // set a default title
         setDefaultTitle();
     }
+
     InvalidateAll();
 }
 
@@ -3080,7 +3121,7 @@ sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pDSEntry, void* pD
         ::rtl::OUString aDSName = GetEntryText(_pDSEntry);
 
         if (pData)
-            _xConnection = Reference<XConnection>(pData->xObject,UNO_QUERY);
+            _xConnection.set(pData->xObject,UNO_QUERY);
 
         if (!_xConnection.is() && pData)
         {
@@ -3181,13 +3222,11 @@ IMPL_LINK( SbaTableQueryBrowser, OnTreeEntryCompare, const SvSortData*, _pSortDa
 
         const String sLeft = m_pTreeView->getListBox()->GetEntryText(pLHS);
 
-        EntryType eLeft;
+        EntryType eLeft = etTableContainer;
         if (String(ModuleRes(RID_STR_TABLES_CONTAINER)) == sLeft)
             eLeft = etTableContainer;
         else if (String(ModuleRes(RID_STR_QUERIES_CONTAINER)) == sLeft)
             eLeft = etQueryContainer;
-        else
-            eLeft = etBookmarkContainer;
 
         return  eLeft < eRight
             ?   COMPARE_LESS
@@ -3257,254 +3296,43 @@ void SbaTableQueryBrowser::implAdministrate( SvLBoxEntry* _pApplyTo )
 {
     try
     {
-        // the parameters:
-        Sequence< Any > aArgs(2);
+        // get the desktop object
+        sal_Int32 nFrameSearchFlag = FrameSearchFlag::ALL | FrameSearchFlag::GLOBAL ;
+        Reference< XComponentLoader > xFrameLoader(getORB()->createInstance(SERVICE_FRAME_DESKTOP),UNO_QUERY);
+        ::rtl::OUString sTarget = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default"));
 
-        Reference< ::com::sun::star::awt::XWindow> xWindow = getTopMostContainerWindow();
-        if ( !xWindow.is() )
-            xWindow = VCLUnoHelper::GetInterface(m_pTreeView->getListBox()->Window::GetParent());
-        // the parent window
-        aArgs[0] <<= PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),
-                                    0,
-                                    makeAny(xWindow),
-                                    PropertyState_DIRECT_VALUE);
+        if ( xFrameLoader.is() )
+        {
+            // the initial selection
+            SvLBoxEntry* pTopLevelSelected = _pApplyTo;
+            while (pTopLevelSelected && m_pTreeView->getListBox()->GetParent(pTopLevelSelected))
+                pTopLevelSelected = m_pTreeView->getListBox()->GetParent(pTopLevelSelected);
+            ::rtl::OUString sInitialSelection;
+            if (pTopLevelSelected)
+                sInitialSelection = m_pTreeView->getListBox()->GetEntryText(pTopLevelSelected);
 
-        // the initial selection
-        SvLBoxEntry* pTopLevelSelected = _pApplyTo;
-        while (pTopLevelSelected && m_pTreeView->getListBox()->GetParent(pTopLevelSelected))
-            pTopLevelSelected = m_pTreeView->getListBox()->GetParent(pTopLevelSelected);
-        ::rtl::OUString sInitialSelection;
-        if (pTopLevelSelected)
-            sInitialSelection = m_pTreeView->getListBox()->GetEntryText(pTopLevelSelected);
-        aArgs[1] <<= PropertyValue(
-            ::rtl::OUString::createFromAscii("InitialSelection"), 0,
-            makeAny(sInitialSelection), PropertyState_DIRECT_VALUE);
-
-        // create the dialog
-        Reference< XExecutableDialog > xAdminDialog;
-        xAdminDialog = Reference< XExecutableDialog >(
-            m_xMultiServiceFacatory->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.sdb.DatasourceAdministrationDialog"),
-                aArgs), UNO_QUERY);
-
-        // execute it
-        if (xAdminDialog.is())
-            xAdminDialog->execute();
+            Reference<XModel> xDS;
+            if ( m_xDatabaseContext->hasByName(sInitialSelection) )
+            {
+                xDS.set(m_xDatabaseContext->getByName(sInitialSelection),UNO_QUERY);
+                if ( xDS.is() )
+                {
+                    // create a new frame and remove it from the desktop, so we care for it
+                        xFrameLoader->loadComponentFromURL(
+                            xDS->getURL(),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")),
+                            nFrameSearchFlag,
+                            Sequence<PropertyValue >()
+                        );
+                }
+            }
+        }
     }
     catch(::com::sun::star::uno::Exception&)
     {
         DBG_ERROR("SbaTableQueryBrowser::implAdministrate: caught an exception while creating/executing the dialog!");
     }
 }
-
-// -----------------------------------------------------------------------------
-void SbaTableQueryBrowser::implCreateObject( SvLBoxEntry* _pApplyTo, sal_uInt16 _nAction )
-{
-    try
-    {
-        ::osl::MutexGuard aGuard(m_aEntryMutex);
-
-        // get all needed properties for design
-        Reference<XConnection> xConnection;  // supports the service sdb::connection
-        if(!ensureConnection(_pApplyTo, xConnection))
-            return;
-
-        ::rtl::OUString sCurrentObject;
-        if ((ID_EDIT_QUERY_DESIGN == _nAction || ID_EDIT_TABLE == _nAction) && _pApplyTo)
-        {
-            // get the name of the query
-            SvLBoxItem* pQueryTextItem = _pApplyTo->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
-            if (pQueryTextItem)
-                sCurrentObject = static_cast<SvLBoxString*>(pQueryTextItem)->GetText();
-
-            ensureObjectExists(_pApplyTo);
-        }
-
-        ODesignAccess* pDispatcher = NULL;
-        sal_Bool bEdit = sal_False;
-        switch(_nAction)
-        {
-            case ID_TREE_RELATION_DESIGN:
-                pDispatcher = new ORelationDesignAccess(m_xMultiServiceFacatory);
-                break;
-            case ID_EDIT_TABLE:
-                bEdit = sal_True; // run through
-            case ID_NEW_TABLE_DESIGN:
-                pDispatcher = new OTableDesignAccess(m_xMultiServiceFacatory) ;
-                break;
-            case ID_EDIT_QUERY_DESIGN:
-                bEdit = sal_True; // run through
-            case ID_NEW_QUERY_DESIGN:
-            case ID_NEW_QUERY_SQL:
-                pDispatcher = new OQueryDesignAccess(m_xMultiServiceFacatory, sal_False, ID_NEW_QUERY_SQL == _nAction);
-                break;
-            case ID_NEW_VIEW_DESIGN:
-                pDispatcher = new OQueryDesignAccess(m_xMultiServiceFacatory, sal_True) ;
-                break;
-        }
-        ::rtl::OUString aDSName = GetEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
-
-        xConnection = NULL; // #108325# OJ: the designs should use their own connection
-
-        if (bEdit)
-            pDispatcher->edit(aDSName, sCurrentObject, xConnection);
-        else
-            pDispatcher->create(aDSName, xConnection);
-        delete pDispatcher;
-    }
-    catch(SQLException& e)
-    {
-        showError(SQLExceptionInfo(e));
-    }
-    catch(WrappedTargetException& e)
-    {
-        SQLException aSql;
-        if(e.TargetException >>= aSql)
-            showError(SQLExceptionInfo(aSql));
-        else
-            OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implCreateObject: something strange happended!");
-    }
-    catch(Exception&)
-    {
-        DBG_ERROR("SbaTableQueryBrowser::implCreateObject: caught an exception!");
-    }
-}
-
-// -----------------------------------------------------------------------------
-void SbaTableQueryBrowser::implRemoveQuery( SvLBoxEntry* _pApplyTo )
-{
-    String sDsName = GetEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
-    String sName = GetEntryText( _pApplyTo );
-    if (!sDsName.Len() || !sName.Len())
-    {
-        DBG_ERROR("SbaTableQueryBrowser::implRemoveQuery: invalid entries detected!");
-        return;
-    }
-
-    String aMsg(ModuleRes(STR_QUERY_DELETE_QUERY));
-    aMsg.SearchAndReplaceAscii("$name$", sName);
-    OSQLMessageBox aDlg(getBrowserView()->getVclControl(),String(ModuleRes(STR_TITLE_CONFIRM_DELETION )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
-    if(aDlg.Execute() == RET_YES)
-    {
-        Reference<XQueryDefinitionsSupplier> xSet;
-        try
-        {
-            if(m_xDatabaseContext->hasByName(sDsName))
-                m_xDatabaseContext->getByName(sDsName) >>= xSet;
-        }
-        catch(Exception&)
-        {
-        }
-        if(xSet.is())
-        {
-            Reference<XNameContainer> xNames(xSet->getQueryDefinitions(),UNO_QUERY);
-            if(xNames.is())
-            {
-                try
-                {
-                    xNames->removeByName(sName);
-                }
-                catch(SQLException& e)
-                {
-                    showError(SQLExceptionInfo(e));
-                }
-                catch(WrappedTargetException& e)
-                {
-                    SQLException aSql;
-                    if(e.TargetException >>= aSql)
-                        showError(SQLExceptionInfo(aSql));
-                    else
-                        OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implRemoveQuery: something strange happended!");
-                }
-                catch(Exception&)
-                {
-                    DBG_ERROR("SbaTableQueryBrowser::implRemoveQuery: caught a generic exception!");
-                }
-            }
-        }
-    }
-}
-// -----------------------------------------------------------------------------
-void SbaTableQueryBrowser::implRenameEntry( SvLBoxEntry* _pApplyTo )
-{
-    m_pTreeView->getListBox()->EditEntry(_pApplyTo);
-}
-// -----------------------------------------------------------------------------
-void SbaTableQueryBrowser::implDropTable( SvLBoxEntry* _pApplyTo )
-{
-    ::osl::MutexGuard aGuard(m_aEntryMutex);
-    Reference<XConnection> xConnection;  // supports the service sdb::connection
-    if(!ensureConnection(_pApplyTo, xConnection))
-        return;
-
-    // get all needed properties for design
-    Reference<XTablesSupplier> xSup(xConnection,UNO_QUERY);
-    OSL_ENSURE(xSup.is(),"SbaTableQueryBrowser::implDropTable: no XTablesSuppier!");
-    if(!xSup.is())
-        return;
-
-    ::rtl::OUString sTableName = GetEntryText( _pApplyTo );
-
-    Reference<XNameAccess> xTables = xSup->getTables();
-    Reference<XDrop> xDrop(xTables,UNO_QUERY);
-    if(xDrop.is())
-    {
-        vos::OGuard aGuard( Application::GetSolarMutex() );
-        String aMsg(ModuleRes(STR_QUERY_DELETE_TABLE));
-        aMsg.SearchAndReplace(String::CreateFromAscii("%1"),String(sTableName));
-        OSQLMessageBox aDlg(getBrowserView()->getVclControl(),String(ModuleRes(STR_TITLE_CONFIRM_DELETION )),aMsg,WB_YES_NO | WB_DEF_YES,OSQLMessageBox::Query);
-        if(aDlg.Execute() == RET_YES)
-        {
-            SQLExceptionInfo aErrorInfo;
-            try
-            {
-                if(_pApplyTo == m_pCurrentlyDisplayed)  // check if we have to unload otherwise the table will be used by a resultset or is locked
-                    unloadAndCleanup(sal_False, sal_False); // don't dispose the connection, don't flush
-
-                if(xTables->hasByName(sTableName))
-                    xDrop->dropByName(sTableName);
-                else
-                {// could be a view
-                    Reference<XViewsSupplier> xViewsSup(xConnection,UNO_QUERY);
-
-                    Reference<XNameAccess> xViews;
-                    if(xViewsSup.is())
-                        xViews = xViewsSup->getViews();
-                    if(xViews.is() && xViews->hasByName(sTableName))
-                    {
-                        xDrop = Reference<XDrop>(xViews,UNO_QUERY);
-                        if(xDrop.is())
-                            xDrop->dropByName(sTableName);
-                    }
-                }
-            }
-            catch(SQLContext& e) { aErrorInfo = e; }
-            catch(SQLWarning& e) { aErrorInfo = e; }
-            catch(SQLException& e) { aErrorInfo = e; }
-            catch(WrappedTargetException& e)
-            {
-                SQLException aSql;
-                if(e.TargetException >>= aSql)
-                    aErrorInfo = aSql;
-                else
-                    OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implDropTable: something strange happended!");
-            }
-            catch(Exception&)
-            {
-                DBG_ERROR("SbaTableQueryBrowser::implDropTable: suspicious exception caught!");
-            }
-
-            if (aErrorInfo.isValid())
-                showError(aErrorInfo);
-        }
-    }
-    else
-    {
-        String sMessage(ModuleRes(STR_MISSING_TABLES_XDROP));
-        ErrorBox aError(getView(), WB_OK, sMessage);
-        aError.Execute();
-    }
-}
-
 // -----------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
 {
@@ -3552,133 +3380,38 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
 
     EntryType eType = pEntryData ? pEntryData->eType : etUnknown;
 
-    // get the popup menu to use
-    sal_uInt16 nMenuResId = MENU_BROWSER_DEFAULTCONTEXT;
-    if (pEntry && (etDatasource != getEntryType(pEntry)))
-    {
-        switch (eType)
-        {
-            case etTable:
-            case etTableContainer:
-                nMenuResId = MENU_BROWSER_TABLECONTEXT;
-                break;
-            case etView:
-                nMenuResId = MENU_BROWSER_VIEWCONTEXT;
-                break;
-
-            case etQueryContainer:
-            case etQuery:
-                nMenuResId = MENU_BROWSER_QUERYCONTEXT;
-                break;
-
-            case etBookmarkContainer:
-            case etBookmark:
-                nMenuResId = MENU_BROWSER_BOOKMARKCONTEXT;
-                break;
-        }
-    }
-
-    ModuleRes nMenuRes( nMenuResId );
+    ModuleRes nMenuRes( MENU_BROWSER_DEFAULTCONTEXT );
     PopupMenu aContextMenu( nMenuRes );
     PopupMenu* pDynamicSubMenu = NULL;
 
-    sal_Bool bIsConnectionWriteAble = sal_False;
     // enable menu entries
     if (!pDSData || !pDSData->xObject.is())
     {   // no -> disable the connection-related menu entries
         aContextMenu.EnableItem(ID_TREE_CLOSE_CONN, sal_False);
         aContextMenu.EnableItem(ID_TREE_REBUILD_CONN, sal_False);
-        aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN, sal_False);
-    }
-    else
-    {
-        Reference<XConnection> xCon(pDSData->xObject,UNO_QUERY);
-        if(xCon.is())
-        {
-            try
-            {
-                Reference<XDatabaseMetaData> xMeta = xCon->getMetaData();
-                bIsConnectionWriteAble = xMeta.is() && !xMeta->isReadOnly();
-                aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN, xMeta.is() && xMeta->supportsIntegrityEnhancementFacility());
-            }
-            catch(SQLException&)
-            {
-                aContextMenu.EnableItem(ID_TREE_RELATION_DESIGN, sal_False);
-            }
-        }
     }
     // #95715# OJ
     sal_Bool bIsWriterInstalled = SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER);
+    aContextMenu.EnableItem(SID_COPY,   sal_False);
 
-    if(pEntry)
+    if ( pEntry )
     {
+
         switch (eType)
         {
             // 1. for tables
             case etTableContainer:
             case etTable:
             {
-                // 1.2 pasting tables
-                sal_Bool bPasteAble = isTableFormat();
-                aContextMenu.EnableItem(SID_PASTE, bIsConnectionWriteAble && bPasteAble);
-
-                sal_Bool bRenameAllowed = sal_False,
-                         bSelectAllowed = sal_False;
-                if(bIsConnectionWriteAble)
-                {
-                    ensureObjectExists(pEntry);
-                    DBTreeListModel::DBTreeListUserData* pData = static_cast<DBTreeListModel::DBTreeListUserData*>(pEntry->GetUserData());
-                    if(pData && pData->xObject.is())
-                    {
-                        bRenameAllowed  = Reference<XRename>(pData->xObject,UNO_QUERY).is();
-                        try
-                        {
-                            Reference<XPropertySet> xProp(pData->xObject,UNO_QUERY);
-                            sal_Int32 nPrivileges = 0;
-                            if ( xProp.is() )
-                                xProp->getPropertyValue(PROPERTY_PRIVILEGES) >>= nPrivileges;
-                            bSelectAllowed  = (Privilege::SELECT & nPrivileges) == Privilege::SELECT;
-                        }
-                        catch(SQLException&)
-                        {
-                        }
-                    }
-                }
-                // 1.3 actions on existing tables
-                aContextMenu.EnableItem(ID_EDIT_TABLE,      etTable == eType && bIsConnectionWriteAble && bSelectAllowed);
-                aContextMenu.EnableItem(SID_DELETE,         etTable == eType && bIsConnectionWriteAble);
-                aContextMenu.EnableItem(ID_RENAME_ENTRY,    etTable == eType && bIsConnectionWriteAble && bRenameAllowed);
                 aContextMenu.EnableItem(SID_COPY,           etTable == eType);
-                aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  bIsWriterInstalled && etTable == eType);
-                aContextMenu.EnableItem(ID_FORM_NEW_PILOT,  bIsWriterInstalled && etTable == eType);
-                // these have to be disabled if the connection is readonly
-                if(!bIsConnectionWriteAble)
-                {
-                    aContextMenu.EnableItem(ID_NEW_TABLE_DESIGN,sal_False);
-                    aContextMenu.EnableItem(ID_NEW_VIEW_DESIGN,sal_False);
-                }
             }
             break;
             // 2. for views
             case etView:
             {
-                // 2.2 pasting tables
-                sal_Bool bPasteAble = isTableFormat();
-                aContextMenu.EnableItem(SID_PASTE, bIsConnectionWriteAble && bPasteAble);
-
                 // 2.3 actions on existing tables
-                aContextMenu.EnableItem(SID_DELETE,         bIsConnectionWriteAble);
-                aContextMenu.EnableItem(ID_RENAME_ENTRY,    bIsConnectionWriteAble);
                 aContextMenu.EnableItem(SID_COPY,           sal_True);
 
-                // these have to be disabled if the connection is readonly
-                if(!bIsConnectionWriteAble)
-                {
-                    aContextMenu.EnableItem(ID_NEW_TABLE_DESIGN,sal_False);
-                    aContextMenu.EnableItem(ID_NEW_VIEW_DESIGN,sal_False);
-                }
-                aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  bIsWriterInstalled);
-                aContextMenu.EnableItem(ID_FORM_NEW_PILOT,          bIsWriterInstalled);
             }
             break;
 
@@ -3686,40 +3419,8 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             case etQueryContainer:
             case etQuery:
             {
-                TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-                sal_Bool bPasteAble = aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
-                aContextMenu.EnableItem(SID_PASTE, bPasteAble);
                 // 3.2 actions on existing queries
-                aContextMenu.EnableItem(ID_EDIT_QUERY_DESIGN,       etQuery == eType);
-                aContextMenu.EnableItem(SID_DELETE,                 etQuery == eType);
                 aContextMenu.EnableItem(SID_COPY,                   etQuery == eType);
-                aContextMenu.EnableItem(ID_RENAME_ENTRY,            etQuery == eType);
-                aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  etQuery == eType);
-                aContextMenu.EnableItem(ID_FORM_NEW_PILOT,          bIsWriterInstalled && etQuery == eType);
-                aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  bIsWriterInstalled && etQuery == eType);
-                aContextMenu.EnableItem(ID_NEW_QUERY_WIZARD,        bIsWriterInstalled );
-            }
-            break;
-
-            // 4. for bookmarks
-            case etBookmarkContainer:
-            case etBookmark:
-            {
-                aContextMenu.EnableItem(ID_EDIT_LINK,       etBookmark == eType);
-                aContextMenu.EnableItem(SID_DELETE,         etBookmark == eType);
-                aContextMenu.EnableItem(ID_OPEN_DOCUMENT,   etBookmark == eType);
-                aContextMenu.EnableItem(ID_EDIT_DOCUMENT,   etBookmark == eType);
-
-                pDynamicSubMenu = new PopupMenu(ModuleRes(RID_NEW_FORM));
-
-                pDynamicSubMenu->EnableItem(ID_FORM_NEW_TEXT, bIsWriterInstalled);
-                pDynamicSubMenu->EnableItem(ID_FORM_NEW_PILOT, bIsWriterInstalled);
-                pDynamicSubMenu->EnableItem(ID_DOCUMENT_CREATE_REPWIZ, bIsWriterInstalled);
-                SvtModuleOptions aModuleOpt;
-                pDynamicSubMenu->EnableItem(ID_FORM_NEW_CALC, aModuleOpt.IsModuleInstalled(SvtModuleOptions::E_SCALC));
-                pDynamicSubMenu->EnableItem(ID_FORM_NEW_IMPRESS, aModuleOpt.IsModuleInstalled(SvtModuleOptions::E_SIMPRESS));
-
-                aContextMenu.SetPopupMenu(ID_CREATE_NEW_DOC, pDynamicSubMenu);
             }
             break;
         }
@@ -3768,37 +3469,6 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             closeConnection(pDSEntry);
             break;
 
-        case ID_TREE_RELATION_DESIGN:
-        case ID_NEW_TABLE_DESIGN:
-        case ID_NEW_VIEW_DESIGN:
-        case ID_NEW_QUERY_DESIGN:
-        case ID_NEW_QUERY_SQL:
-        case ID_EDIT_QUERY_DESIGN:
-        case ID_EDIT_TABLE:
-            implCreateObject( pEntry, nPos );
-            break;
-
-        case SID_DELETE:
-            switch ( eType )
-            {
-                case etBookmark:
-                    handleLinkContextMenu(ID_DROP_LINK,pEntry,eType,pDSEntry);
-                    break;
-                case etQuery:
-                    implRemoveQuery( pEntry );
-                    break;
-                case etView:
-                case etTable:
-                    implDropTable( pEntry );
-                    break;
-                default:
-                    OSL_ENSURE(0,"Illegal type for delete!");
-            }
-            break;
-        case ID_RENAME_ENTRY:
-            implRenameEntry(pEntry);
-            break;
-
         case SID_COPY:
         {
             TransferableHelper* pTransfer = implCopyObject( pEntry, (etQuery == eType) ? CommandType::QUERY : CommandType::TABLE );
@@ -3808,117 +3478,10 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 pTransfer->CopyToClipboard(getView());
         }
         break;
-
-        case SID_PASTE:
-        {
-            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-            if ( etQuery == eType || etQueryContainer == eType)
-                implPasteQuery( pEntry, ODataAccessObjectTransferable::extractObjectDescriptor(aTransferData) );
-            else
-                implPasteTable( pEntry, aTransferData );
-        }
-        break;
-
-        case ID_NEW_LINK:
-        case ID_OPEN_DOCUMENT:
-        case ID_EDIT_DOCUMENT:
-        case ID_EDIT_LINK:
-        case ID_FORM_NEW_TEXT:
-        case ID_FORM_NEW_CALC:
-        case ID_FORM_NEW_IMPRESS:
-        case ID_FORM_NEW_PILOT:
-        case ID_FORM_NEW_TEMPLATE:
-        case ID_DOCUMENT_CREATE_REPWIZ:
-        case ID_NEW_QUERY_WIZARD:
-            handleLinkContextMenu(nPos,pEntry,eType,pDSEntry);
-        break;
     }
 
     return sal_True;    // handled
 }
-// -----------------------------------------------------------------------------
-void SbaTableQueryBrowser::handleLinkContextMenu(USHORT _nPos,SvLBoxEntry* pEntry,EntryType eType,SvLBoxEntry* pDSEntry)
-{
-    // get the container of the bookmarks
-    SvLBoxEntry* pContainer = isContainer(pEntry) ? pEntry : m_pTreeView->getListBox()->GetParent(pEntry);
-    if (!ensureEntryObject(pContainer))
-        return;
-
-    String sSelectedObject = GetEntryText(pEntry);
-
-    DBTreeListModel::DBTreeListUserData* pContainerData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
-    Reference< XNameAccess > xBookmarks(pContainerData->xObject, UNO_QUERY);
-
-    OLinkedDocumentsAccess aHelper(getView(), getORB(), xBookmarks);
-
-    switch (_nPos)
-    {
-        case ID_NEW_LINK:
-            aHelper.addLinkUI();
-            break;
-
-        case ID_OPEN_DOCUMENT:
-            aHelper.open(sSelectedObject, sal_True);
-            break;
-
-        case ID_EDIT_DOCUMENT:
-            aHelper.open(sSelectedObject, sal_False);
-            break;
-
-        case ID_EDIT_LINK:
-        {
-            ::rtl::OUString sNewName, sNewLocation;
-            aHelper.edit(sSelectedObject, sNewName, sNewLocation);
-        }
-        break;
-
-        case ID_DROP_LINK:
-            aHelper.drop(sSelectedObject);
-            break;
-
-        case ID_FORM_NEW_TEXT:
-        case ID_FORM_NEW_CALC:
-        case ID_FORM_NEW_IMPRESS:
-        case ID_FORM_NEW_TEMPLATE:
-            aHelper.newForm(_nPos);
-            break;
-
-        case ID_FORM_NEW_PILOT:
-        case ID_DOCUMENT_CREATE_REPWIZ:
-        case ID_NEW_QUERY_WIZARD:
-        {
-            // the type of the object to initially select
-            sal_Int32 nObjectType = -1;
-            if ( etTable == eType || etView == eType )
-                nObjectType = CommandType::TABLE;
-            else if (etQuery == eType)
-                nObjectType = CommandType::QUERY;
-
-            // the object name
-            String sObjectName;
-            if (-1 != nObjectType)
-                sObjectName = GetEntryText(pEntry);
-
-            // the connection
-            Reference< XConnection > xConn;
-            if (ensureConnection(pEntry, xConn))
-            {
-                if ( ID_FORM_NEW_PILOT == _nPos )
-                    aHelper.newFormWithPilot(GetEntryText(pDSEntry), nObjectType, sObjectName, xConn);
-                else if ( ID_DOCUMENT_CREATE_REPWIZ == _nPos )
-                    aHelper.newReportWithPilot(GetEntryText(pDSEntry), nObjectType, sObjectName, xConn);
-                else
-                    aHelper.newQueryWithPilot(GetEntryText(pDSEntry), nObjectType, sObjectName, xConn);
-            }
-        }
-            break;
-
-        default:
-            DBG_ERROR("SbaTableQueryBrowser::requestContextMenu: invalid menu id!");
-            break;
-    }
-}
-
 // -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::setDefaultTitle() const
 {
@@ -3954,7 +3517,7 @@ sal_Bool SbaTableQueryBrowser::implGetQuerySignature( ::rtl::OUString& _rCommand
         sal_Int32       nCommandType = CommandType::COMMAND;
         Reference< XPropertySet > xRowsetProps( getRowSet(), UNO_QUERY );
         ODataAccessDescriptor aDesc( xRowsetProps );
-        aDesc[ daDataSource ]   >>= sDataSourceName;
+        sDataSourceName = aDesc.getDataSource();
         aDesc[ daCommand ]      >>= sCommand;
         aDesc[ daCommandType ]  >>= nCommandType;
 
@@ -4018,7 +3581,7 @@ void SbaTableQueryBrowser::ensureObjectExists(SvLBoxEntry* _pApplyTo)
                     // fs@openoffice.org - 24.01.2002
             }
             else
-                xNameAccess = Reference<XNameAccess>(pParentData->xObject,UNO_QUERY);
+                xNameAccess.set(pParentData->xObject,UNO_QUERY);
 
             ::rtl::OUString sCurrentObject;
             SvLBoxItem* pTextItem = _pApplyTo->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
@@ -4071,6 +3634,15 @@ sal_Bool SbaTableQueryBrowser::isHiContrast() const
     if ( m_pTreeView )
         bRet = m_pTreeView->getListBox()->GetBackground().GetColor().IsDark();
     return bRet;
+}
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
+{
+    if ( m_bShowMenu && getView() && getView()->getToolBox() )
+    {
+        getView()->getToolBox()->HideItem(ID_BROWSER_CLOSE);
+        OGenericUnoController::loadMenu(_xFrame);
+    }
 }
 // .........................................................................
 }   // namespace dbaui
