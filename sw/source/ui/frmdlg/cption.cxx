@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 15:56:36 $
+ *  last change: $Author: os $ $Date: 2001-03-28 14:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
         SwFieldType *pType = pMgr->GetFldType( USHRT_MAX, i );
         if( pType->Which() == RES_SETEXPFLD &&
             ((SwSetExpFieldType *) pType)->GetType() & GSE_SEQ )
-            aCategoryBox.InsertEntry(SwBoxEntry(pType->GetName(), i));
+            aCategoryBox.InsertEntry(pType->GetName(), i);
     }
 
     String* pString;
@@ -406,6 +406,19 @@ IMPL_LINK_INLINE_END( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, pEdit )
 {
+    if(&aCategoryBox == pEdit)
+    {
+        String sName = pEdit->GetText();
+        xub_StrLen nLen = sName.Len();
+        SwCalc::IsValidVarName( sName, &sName );
+        if( sName.Len() != nLen )
+        {
+            nLen = sName.Len();
+            Selection aSel(pEdit->GetSelection());
+            pEdit->SetText( sName );
+            pEdit->SetSelection( aSel );   // Cursorpos restaurieren
+        }
+    }
     String sNewName = aObjectNameED.GetText();
     sal_Bool bCorrectName = !aObjectNameED.IsVisible() ||
         (sNewName.Len() &&
@@ -413,7 +426,7 @@ IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, pEdit )
                 !xNameAccess.is() || !xNameAccess->hasByName(sNewName)));
     SwWrtShell &rSh = rView.GetWrtShell();
     String sFldTypeName = aCategoryBox.GetText();
-    sal_Bool bCorrectFldName = SwCalc::IsValidVarName( sFldTypeName );
+    sal_Bool bCorrectFldName = sFldTypeName.Len() > 0;
     SwFieldType* pType = bCorrectFldName
                     ? rSh.GetFldType( RES_SETEXPFLD, sFldTypeName )
                     : 0;
@@ -423,8 +436,7 @@ IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, pEdit )
                                 && 0 != sFldTypeName.Len() );
     aOptionButton.Enable( aOKButton.IsEnabled() );
 
-    if(pEdit != &aObjectNameED)
-        DrawSample();
+    DrawSample();
     return 0;
 }
 
@@ -483,26 +495,6 @@ SwCaptionDialog::~SwCaptionDialog()
 {
     delete pMgr;
 }
-
-/*------------------------------------------------------------------------
- Beschreibung: form ohne Spaces
-------------------------------------------------------------------------*/
-long NoSpaceCombo::PreNotify( NotifyEvent& rNEvt )
-{
-    long nHandled = 0;
-    if ( rNEvt.GetType() == EVENT_KEYINPUT )
-    {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        if(pKEvt->GetKeyCode().GetCode() == KEY_SPACE)
-            nHandled = 1;
-    }
-    if(!nHandled)
-        nHandled = SwComboBox::PreNotify( rNEvt );
-    return nHandled;
-}
-
-
-
 /*  */
 
 SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,

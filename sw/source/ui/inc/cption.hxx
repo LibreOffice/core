@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-02-14 15:56:35 $
+ *  last change: $Author: os $ $Date: 2001-03-28 14:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,22 +119,11 @@ class SwView;
 
 #include "swlbox.hxx"
 
-class NoSpaceCombo : public SwComboBox
-{
-protected:
-    virtual long        PreNotify( NotifyEvent& rNEvt );
-
-public:
-    NoSpaceCombo( Window* pParent, const ResId& rResId)
-        : SwComboBox(pParent, rResId)
-    {}
-};
-
 class SwCaptionDialog : public SvxStandardDialog
 {
     FixedText    aSampleText;
     FixedText    aCategoryText;
-    NoSpaceCombo aCategoryBox;
+    ComboBox     aCategoryBox;
     FixedText    aFormatText;
     ListBox      aFormatBox;
     FixedText    aTextText;
