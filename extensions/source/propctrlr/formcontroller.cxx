@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-07-06 13:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2781,21 +2781,21 @@ namespace pcr
                     m_xPropValueAccess->setPropertyValue( rName, aValue );
             }
 
+            // re-retrieve the value
+            if ( bIsVirtualProperty )
+            {
+                aValue = getVirtualPropertyValue( nPropId );
+            }
+            else
+            {
+                aValue = m_xPropValueAccess->getPropertyValue( rName );
+            }
+
             // care for any inter-property dependencies
             if ( bIsActuatingProperty )
                 updateDependentProperties( nPropId, aValue );
 
-            // re-retrieve the value
-            Any aNewValue;
-            if ( bIsVirtualProperty )
-            {
-                aNewValue = getVirtualPropertyValue( nPropId );
-            }
-            else
-            {
-                aNewValue = m_xPropValueAccess->getPropertyValue( rName );
-            }
-            ::rtl::OUString sNewStrVal = getStringRepFromPropertyValue( aNewValue, nPropId );
+            ::rtl::OUString sNewStrVal = getStringRepFromPropertyValue( aValue, nPropId );
 
             // and display it again. This ensures proper formatting
             getPropertyBox()->SetPropertyValue( rName, sNewStrVal );
@@ -2833,7 +2833,7 @@ namespace pcr
                     m_pPropertyInfo->getPropertyEnumRepresentations(nStateId);
                 sal_Int32 nEntryCount = aEntries.size();
 
-                if (!::comphelper::getBOOL(aNewValue))
+                if (!::comphelper::getBOOL(aValue))
                     // tristate not allowed -> remove the "don't know" state
                     --nEntryCount;
 
@@ -2862,8 +2862,8 @@ namespace pcr
             case PROPERTY_ID_SHOWTHOUSANDSEP:
             {
                 sal_Bool bAccuracy = (PROPERTY_ID_DECIMAL_ACCURACY == nPropId);
-                sal_uInt16  nNewDigits = bAccuracy ? ::comphelper::getINT16(aNewValue) : 0;
-                sal_Bool    bUseSep = bAccuracy ? sal_False : ::comphelper::getBOOL(aNewValue);
+                sal_uInt16  nNewDigits = bAccuracy ? ::comphelper::getINT16(aValue) : 0;
+                sal_Bool    bUseSep = bAccuracy ? sal_False : ::comphelper::getBOOL(aValue);
 
                 getPropertyBox()->DisableUpdate();
 
@@ -3314,7 +3314,7 @@ namespace pcr
 
             getPropertyBox()->EnablePropertyLine( PROPERTY_WORDBREAK,       nTextType == TEXTTYPE_RICHTEXT );
             getPropertyBox()->EnablePropertyLine( PROPERTY_MAXTEXTLEN,      nTextType != TEXTTYPE_RICHTEXT );
-            getPropertyBox()->EnablePropertyLine( PROPERTY_ECHO_CHAR,       nTextType != TEXTTYPE_RICHTEXT );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_ECHO_CHAR,       nTextType == TEXTTYPE_SINGLELINE );
             getPropertyBox()->EnablePropertyLine( PROPERTY_FONT_NAME,       nTextType != TEXTTYPE_RICHTEXT );
             getPropertyBox()->EnablePropertyLine( PROPERTY_ALIGN,           nTextType != TEXTTYPE_RICHTEXT );
             getPropertyBox()->EnablePropertyLine( PROPERTY_DEFAULT_TEXT,    nTextType != TEXTTYPE_RICHTEXT );
@@ -3411,11 +3411,11 @@ namespace pcr
 
         case PROPERTY_ID_BUTTONTYPE:
         {
-            FormButtonType eButtonType( FormButtonType_PUSH );
-            _rNewValue >>= eButtonType;
+            sal_Int32 nButtonType( FormButtonType_PUSH );
+            _rNewValue >>= nButtonType;
 
             // TargetURL depends on the button type *only*
-            getPropertyBox()->EnablePropertyLine( PROPERTY_TARGET_URL, FormButtonType_URL == eButtonType );
+            getPropertyBox()->EnablePropertyLine( PROPERTY_TARGET_URL, FormButtonType_URL == nButtonType );
 
             // TargetFrame depends on the button type *plus* other properties
             aComplexDependentProperties.push_back( PROPERTY_TARGET_FRAME );
