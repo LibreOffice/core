@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:40 $
+ *  last change: $Author: cmc $ $Date: 2002-05-16 11:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6224,7 +6224,8 @@ static SprmInfo aWwSprmTab[] = {
     0xF617, 3, L_FIX, // undocumented
     0xD660, 0, L_VAR, //undocumented, something to do with colour.
     0xD670, 0, L_VAR, //undocumented, something to do with colour.
-    0xCA71, 0, L_VAR  //undocumented, text backcolour
+    0xCA71, 0, L_VAR,  //undocumented, text backcolour
+    0x303C, 1, L_FIX  //undocumented sep
 };
 
 extern "C"
