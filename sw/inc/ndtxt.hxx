@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:04:22 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef _NDTXT_HXX
 #define _NDTXT_HXX
+
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _NODE_HXX
 #include <node.hxx>
 #endif
@@ -106,7 +110,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 // --------------------
 // SwTxtNode
 // --------------------
-class SwTxtNode: public SwCntntNode
+class SW_DLLPUBLIC SwTxtNode: public SwCntntNode
 {
     // fuer das Erzeugen des ersten TextNode
     friend class SwDoc;         // CTOR und AppendTxtNode()
@@ -130,28 +134,28 @@ class SwTxtNode: public SwCntntNode
     // The last two flags have to be recalculated if this flag is set:
     mutable BOOL bRecalcHiddenCharFlags : 1;
 
-    SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
+    SW_DLLPRIVATE SwTxtNode( const SwNodeIndex &rWhere, SwTxtFmtColl *pTxtColl,
                 SwAttrSet* pAutoAttr = 0 );
 
     // Kopiert die Attribute an nStart nach pDest.
-    void CopyAttr( SwTxtNode *pDest, const xub_StrLen nStart, const xub_StrLen nOldPos);
+    SW_DLLPRIVATE void CopyAttr( SwTxtNode *pDest, const xub_StrLen nStart, const xub_StrLen nOldPos);
 
-    SwTxtNode* _MakeNewTxtNode( const SwNodeIndex&, BOOL bNext = TRUE,
+    SW_DLLPRIVATE SwTxtNode* _MakeNewTxtNode( const SwNodeIndex&, BOOL bNext = TRUE,
                                 BOOL bChgFollow = TRUE );
 
-    void    _Cut( SwTxtNode *pDest, const SwIndex &rDestStart,
+    SW_DLLPRIVATE void  _Cut( SwTxtNode *pDest, const SwIndex &rDestStart,
                   const SwIndex &rStart, xub_StrLen nLen, BOOL bUpdate = TRUE );
 
-    SwTxtAttr* MakeTxtAttr( const SfxPoolItem& rNew, xub_StrLen nStt, xub_StrLen nEnd,
+    SW_DLLPRIVATE SwTxtAttr* MakeTxtAttr( const SfxPoolItem& rNew, xub_StrLen nStt, xub_StrLen nEnd,
                             BOOL bPool = TRUE );
 
     // Verlagere alles umfassende harte Attribute in den AttrSet des Absatzes
-    void MoveTxtAttr_To_AttrSet();  // wird von SplitNode gerufen.
+    SW_DLLPRIVATE void MoveTxtAttr_To_AttrSet();  // wird von SplitNode gerufen.
 
     // lege den spz. AttrSet an
-    virtual void NewAttrSet( SwAttrPool& );
+    SW_DLLPRIVATE virtual void NewAttrSet( SwAttrPool& );
 
-    void Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
+    SW_DLLPRIVATE void Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
                         xub_StrLen nEndPos, BOOL bExpandFlds ) const;
 
     // Optimization: Asking for information about hidden characters at SwScriptInfo
@@ -163,7 +167,8 @@ class SwTxtNode: public SwCntntNode
         bContainsHiddenChars = bNewContainsHiddenChars;
         bRecalcHiddenCharFlags = false;
     }
-    void CalcHiddenCharFlags() const;
+
+    SW_DLLPRIVATE void CalcHiddenCharFlags() const;
 
 public:
     const String& GetTxt() const { return aText; }
