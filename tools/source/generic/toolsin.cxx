@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolsin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:07 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,21 +85,6 @@ void ImpDeInitMemMgr();
 #endif
 
 void ImplDeleteCharTabData();
-
-// =======================================================================
-
-// Hier drin, da DOS bisher kein eigenes TOOLS-Verzeichnis hat
-
-#if defined( DOS )
-
-static void* aAppData[SHL_COUNT];
-
-void** GetAppData( USHORT nSharedLib )
-{
-    return &(aAppData[nSharedLib]);
-}
-
-#endif
 
 // =======================================================================
 
