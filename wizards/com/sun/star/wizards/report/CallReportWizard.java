@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CallReportWizard.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tv $ $Date: 2002-05-29 12:18:46 $
+ *  last change: $Author: tv $ $Date: 2002-05-30 09:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,17 +188,28 @@ public class CallReportWizard {
 
             public void trigger(String sEvent)
                 {
-            try
-            {
-               XComponentLoader xcomponentloader = ( XComponentLoader ) UnoRuntime.queryInterface(XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop" ));
-               //ConnectToOfficeDatabase(xcomponentloader);
-
-                  ReportWizard.startReportWizard(xmultiservicefactory);
-            }
-            catch( Exception exception )
-            {
-                System.err.println( exception );
-            }
+                        if ( sEvent.compareTo("start") == 0) {
+                              try
+                            {
+                               XComponentLoader xcomponentloader = ( XComponentLoader ) UnoRuntime.queryInterface(XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop" ));
+                                  ReportWizard.startReportWizard(xmultiservicefactory);
+                            }
+                         catch( Exception exception )
+                            {
+                                System.err.println( exception );
+                            }
+                        }
+                        else if ( sEvent.compareTo("fill") == 0) {
+                                try
+                            {
+                               XComponentLoader xcomponentloader = ( XComponentLoader ) UnoRuntime.queryInterface(XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop" ));
+                                 ReportDocument.createReport(xmultiservicefactory);
+                            }
+                            catch( Exception exception )
+                            {
+                                System.err.println( exception );
+                            }
+                        }
                 }
 
         /** The service name, that must be used to get an instance of this service.
