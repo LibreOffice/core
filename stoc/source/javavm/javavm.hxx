@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-06 10:48:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 09:03:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@ namespace jvmaccess { class VirtualMachine; }
 
 namespace stoc_javavm {
 
+bool configureJava(const com::sun::star::uno::Reference<
+                   com::sun::star::uno::XComponentContext>& xContext);
 // The MS compiler needs a typedef here, so the JavaVirtualMachine ctor can call
 // its base class ctor:
 typedef
