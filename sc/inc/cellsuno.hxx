@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:14:49 $
+ *  last change: $Author: sab $ $Date: 2001-10-24 08:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,7 @@ private:
     ScPatternAttr*          pCurrentFlat;
     ScPatternAttr*          pCurrentDeep;
     SfxItemSet*             pCurrentDataSet;
+    ScMarkData*             pMarkData;
     ScRangeList             aRanges;
     BOOL                    bChartColAsHdr;
     BOOL                    bChartRowAsHdr;
@@ -296,6 +297,7 @@ private:
     const ScPatternAttr*    GetCurrentAttrsFlat();
     const ScPatternAttr*    GetCurrentAttrsDeep();
     SfxItemSet*             GetCurrentDataSet();
+    const ScMarkData*       GetMarkData();
     void                    ForgetCurrentAttrs();
 
     com::sun::star::uno::Reference<com::sun::star::sheet::XSheetCellRanges>
