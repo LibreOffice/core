@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-02 08:51:24 $
+ *  last change: $Author: oj $ $Date: 2002-04-09 07:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,34 @@
 #include "brwhead.hxx"
 #include "datwin.hxx"
 
+#include <functional>
 #include <algorithm>
+
+
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleTableModelChange.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLETABLEMODELCHANGETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#endif
 
 #pragma hdrstop
 
 #ifndef _SV_MULTISEL_HXX
 #include <tools/multisel.hxx>
 #endif
+#ifndef _SVTOOLS_BRWIMPL_HXX
+#include "brwimpl.hxx"
+#endif
+#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXHEADERCELL_HXX
+#include "AccessibleBrowseBoxHeaderCell.hxx"
+#endif
+
+
+
 
 DBG_NAME(BrowseBox);
 
@@ -81,6 +102,11 @@ extern const char* BrowseBoxCheckInvariants( const void* pVoid );
 DECLARE_LIST( BrowserColumns, BrowserColumn* );
 
 #define SCROLL_FLAGS (SCROLL_CLIP | SCROLL_NOCHILDREN)
+
+using namespace drafts::com::sun::star::accessibility::AccessibleEventId;
+using namespace drafts::com::sun::star::accessibility::AccessibleTableModelChangeType;
+using drafts::com::sun::star::accessibility::AccessibleTableModelChange;
+using com::sun::star::lang::XComponent;
 
 //-------------------------------------------------------------------
 
@@ -105,6 +131,19 @@ void DoLog_Impl( const BrowseBox *pThis, const char *pWhat, const char *pWho )
 }
 #endif
 
+namespace
+{
+    void disposeAndClearHeaderCell(::svt::BrowseBoxImpl::THeaderCellMap& _rHeaderCell)
+    {
+        ::std::for_each(
+                        _rHeaderCell.begin(),
+                        _rHeaderCell.end(),
+                        ::svt::BrowseBoxImpl::THeaderCellMapFunctorDispose()
+                            );
+        _rHeaderCell.clear();
+    }
+}
+
 //===================================================================
 
 void BrowseBox::Construct( BrowserMode nMode )
@@ -117,6 +156,7 @@ void BrowseBox::Construct( BrowserMode nMode )
 
     pDataWin = new BrowserDataWin( this );
     pCols = new BrowserColumns;
+    m_pImpl.reset( new ::svt::BrowseBoxImpl() );
 
     aLineColor = Color( COL_LIGHTGRAY );
     InitSettings_Impl( this );
@@ -163,12 +203,8 @@ void BrowseBox::Construct( BrowserMode nMode )
 
 BrowseBox::BrowseBox( Window* pParent, WinBits nBits, BrowserMode nMode )
     :Control( pParent, nBits | WB_3DLOOK )
-#if SUPD>626 || FS_PRIV_DEBUG
     ,DragSourceHelper( this )
-#endif
-#if SUPD>627 || FS_PRIV_DEBUG
     ,DropTargetHelper( this )
-#endif
     ,aHScroll( this, WinBits( WB_HSCROLL ) )
 {
     DBG_CTOR( BrowseBox, NULL );
@@ -179,24 +215,26 @@ BrowseBox::BrowseBox( Window* pParent, WinBits nBits, BrowserMode nMode )
 
 BrowseBox::BrowseBox( Window* pParent, const ResId& rId, BrowserMode nMode )
     :Control( pParent, rId )
-#if SUPD>626 || FS_PRIV_DEBUG
     ,DragSourceHelper( this )
-#endif
-#if SUPD>627 || FS_PRIV_DEBUG
     ,DropTargetHelper( this )
-#endif
     ,aHScroll( this, WinBits(WB_HSCROLL) )
 {
     DBG_CTOR( BrowseBox, NULL );
     Construct(nMode);
 }
-
 //-------------------------------------------------------------------
 
 BrowseBox::~BrowseBox()
 {
     DBG_DTOR(BrowseBox,BrowseBoxCheckInvariants);
     DBG_TRACE1( "BrowseBox: %p~", this );
+
+    if ( m_pImpl->m_pAccessible )
+    {
+        disposeAndClearHeaderCell(m_pImpl->m_aColHeaderCellMap);
+        disposeAndClearHeaderCell(m_pImpl->m_aRowHeaderCellMap);
+        m_pImpl->m_pAccessible->dispose();
+    }
 
     Hide();
     delete ((BrowserDataWin*)pDataWin)->pHeaderBar;
@@ -307,24 +345,6 @@ void BrowseBox::InsertHandleColumn( ULONG nWidth, BOOL bBitmap )
 }
 
 //-------------------------------------------------------------------
-#if SUPD<380
-void BrowseBox::InsertDataColumn( USHORT nItemId, const String &rTitle,
-                    ULONG nWidth, BrowserColumnMode nFlags, USHORT nPos )
-{
-    DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-
-    pCols->Insert( new BrowserColumn( nItemId, Image(), rTitle, nWidth, GetZoom(), nFlags ),
-                           Min( nPos, (USHORT)(pCols->Count()) ) );
-    if ( nCurColId == 0 )
-        nCurColId = nItemId;
-    if ( ((BrowserDataWin*)pDataWin)->pHeaderBar )
-        ((BrowserDataWin*)pDataWin)->pHeaderBar->InsertItem(
-                nItemId, rTitle, nWidth, HIB_STDSTYLE, nPos );
-    ColumnInserted( nPos );
-}
-#else
-//-------------------------------------------------------------------
-
 void BrowseBox::InsertDataColumn( USHORT nItemId, const Image& rImage,
         long nWidth, HeaderBarItemBits nBits, USHORT nPos )
 {
@@ -400,7 +420,6 @@ void BrowseBox::InsertDataColumn( USHORT nItemId,
     }
     ColumnInserted( nPos );
 }
-#endif
 //-------------------------------------------------------------------
 
 void BrowseBox::FreezeColumn( USHORT nItemId, BOOL bFreeze )
@@ -536,6 +555,15 @@ void BrowseBox::SetColumnPos( USHORT nColumnId, USHORT nPos )
         }
         else
             pDataWin->Window::Invalidate( INVALIDATE_NOCHILDREN );
+
+        if ( m_pImpl->m_pAccessible )
+            m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
+                                        com::sun::star::uno::makeAny( AccessibleTableModelChange(   UPDATE,
+                                                                                                    0,
+                                                                                                    0,
+                                                                                                    nColumnId,
+                                                                                                    nColumnId) ),
+                                        com::sun::star::uno::Any());
     }
 
 }
@@ -589,6 +617,9 @@ void BrowseBox::SetColumnTitle( USHORT nItemId, const String& rTitle )
     BrowserColumn *pCol = pCols->GetObject(nItemPos);
     if ( pCol->Title() != rTitle )
     {
+        ::rtl::OUString sNew(rTitle);
+        ::rtl::OUString sOld(pCol->Title());
+
         pCol->Title() = rTitle;
 
         // Headerbar-Column anpassen
@@ -602,6 +633,10 @@ void BrowseBox::SetColumnTitle( USHORT nItemId, const String& rTitle )
                 Invalidate( Rectangle( Point(0,0),
                     Size( GetOutputSizePixel().Width(), GetTitleHeight() ) ) );
         }
+        if ( m_pImpl->m_pAccessible )
+            m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_COLUMN_DESCRIPTION_CHANGED,
+                                    com::sun::star::uno::makeAny( sNew ),
+                                    com::sun::star::uno::makeAny( sOld ));
     }
 }
 
@@ -719,6 +754,15 @@ void BrowseBox::SetColumnWidth( USHORT nItemId, ULONG nWidth )
         // adjust last column
         if ( nItemPos != pCols->Count() - 1 )
             AutoSizeLastColumn();
+
+        if ( m_pImpl->m_pAccessible )
+            m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
+                                        com::sun::star::uno::makeAny( AccessibleTableModelChange(   UPDATE,
+                                                                                                    0,
+                                                                                                    0,
+                                                                                                    nItemId,
+                                                                                                    nItemId) ),
+                                        com::sun::star::uno::Any());
     }
 }
 
@@ -791,6 +835,15 @@ void BrowseBox::RemoveColumn( USHORT nItemId )
         if ( ((BrowserDataWin*)pDataWin)->bAutoSizeLastCol && nPos ==ColCount() )
             SetColumnWidth( GetColumnId( nPos - 1 ), LONG_MAX );
     }
+
+    if ( m_pImpl->m_pAccessible )
+        m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
+                                    com::sun::star::uno::makeAny( AccessibleTableModelChange(   DELETE,
+                                                                                                0,
+                                                                                                0,
+                                                                                                nItemId,
+                                                                                                nItemId) ),
+                                    com::sun::star::uno::Any());
 }
 
 //-------------------------------------------------------------------
@@ -799,6 +852,7 @@ void BrowseBox::RemoveColumns()
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
+    long nOldCount = pCols->Count();
     // alle Spalten entfernen
     while ( pCols->Count() )
         delete ( pCols->Remove( (ULONG) 0 ));
@@ -826,6 +880,14 @@ void BrowseBox::RemoveColumns()
         ((BrowserDataWin*)pDataWin)->Invalidate();
         Control::Invalidate();
     }
+    if ( m_pImpl->m_pAccessible )
+        m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
+                                    com::sun::star::uno::makeAny( AccessibleTableModelChange(   DELETE,
+                                                                                                0,
+                                                                                                0,
+                                                                                                0,
+                                                                                                nOldCount) ),
+                                    com::sun::star::uno::Any());
 }
 
 //-------------------------------------------------------------------
@@ -878,6 +940,14 @@ void BrowseBox::SetDataRowHeight( long nPixel )
     nDataRowHeight = CalcReverseZoom(nPixel);
     Resize();
     ((BrowserDataWin*)pDataWin)->Invalidate();
+    if ( m_pImpl->m_pAccessible )
+        m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
+                                    com::sun::star::uno::makeAny( AccessibleTableModelChange(   UPDATE,
+                                                                                                0,
+                                                                                                nRowCount,
+                                                                                                0,
+                                                                                                0) ),
+                                    com::sun::star::uno::Any());
 }
 
 //-------------------------------------------------------------------
@@ -1144,6 +1214,15 @@ void BrowseBox::RowModified( long nRow, USHORT nColId )
         aRect = GetFieldRectPixel( nRow, nColId, FALSE );
     }
     ((BrowserDataWin*)pDataWin)->Invalidate( aRect );
+
+    if ( m_pImpl->m_pAccessible )
+        m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
+                                    com::sun::star::uno::makeAny( AccessibleTableModelChange(   UPDATE,
+                                                                                                nRow,
+                                                                                                nRow,
+                                                                                                0,
+                                                                                                (nColId == USHRT_MAX) ? pCols->Count() : nColId) ),
+                                    com::sun::star::uno::Any());
 }
 
 //-------------------------------------------------------------------
@@ -1154,6 +1233,7 @@ void BrowseBox::Clear()
 
     // adjust the total number of rows
     DoHideCursor( "Clear" );
+    long nOldRowCount = nRowCount;
     nRowCount = 0;
     nCurRow = BROWSER_ENDOFSELECTION;
     nTopRow = 0;
@@ -1171,20 +1251,16 @@ void BrowseBox::Clear()
     SetNoSelection();
     DoShowCursor( "Clear" );
     CursorMoved();
+    if ( m_pImpl->m_pAccessible )
+        m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
+                                    com::sun::star::uno::makeAny( AccessibleTableModelChange(   DELETE,
+                                                                                                0,
+                                                                                                nOldRowCount,
+                                                                                                0,
+                                                                                                0) ),
+                                    com::sun::star::uno::Any());
 }
-
-//-------------------------------------------------------------------
-#if SUPD > 511
-
-#else
-
-void BrowseBox::RowInserted( long nRow, long nNumRows, BOOL bDoPaint )
-{
-    RowInserted( nRow, nNumRows, bDoPaint, FALSE );
-}
-
-#endif
-
+// -----------------------------------------------------------------------------
 void BrowseBox::RowInserted( long nRow, long nNumRows, BOOL bDoPaint, BOOL bKeepSelection )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
@@ -1264,6 +1340,16 @@ void BrowseBox::RowInserted( long nRow, long nNumRows, BOOL bDoPaint, BOOL bKeep
     }
 
     DoShowCursor( "RowInserted" );
+    //! TODO notify accessible that rows were inserted
+    if ( m_pImpl->m_pAccessible )
+        m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
+                                    com::sun::star::uno::makeAny( AccessibleTableModelChange(   INSERT,
+                                                                                                nRow,
+                                                                                                nRow + nNumRows,
+                                                                                                0,
+                                                                                                0) ),
+                                    com::sun::star::uno::Any());
+
     if ( nCurRow != nOldCurRow )
         CursorMoved();
 
@@ -1379,6 +1465,15 @@ void BrowseBox::RowRemoved( long nRow, long nNumRows, BOOL bDoPaint )
         AutoSizeLastColumn();
     }
 
+    if ( m_pImpl->m_pAccessible )
+        m_pImpl->commitTableEvent(  ACCESSIBLE_TABLE_MODEL_CHANGED,
+                                    com::sun::star::uno::makeAny( AccessibleTableModelChange(   DELETE,
+                                                                                                nRow,
+                                                                                                nRow + nNumRows,
+                                                                                                0,
+                                                                                                0) ),
+                                    com::sun::star::uno::Any());
+
     if ( nOldCurRow != nCurRow )
         CursorMoved();
 
@@ -1402,16 +1497,6 @@ BOOL BrowseBox::GoToRowAndDoNotModifySelection( long nRow )
 }
 
 //-------------------------------------------------------------------
-
-#if SUPD > 511
-
-#else
-BOOL BrowseBox::GoToRow( long nRow, BOOL bRowColMove  )
-{
-    return GoToRow( nRow, bRowColMove, FALSE );
-}
-#endif
-
 BOOL BrowseBox::GoToRow( long nRow, BOOL bRowColMove, BOOL bKeepSelection )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
@@ -1606,6 +1691,12 @@ void BrowseBox::SetNoSelection()
 
     // restore screen
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
+
+    if ( m_pImpl->m_pAccessible )
+        //! TODO check if this event is the rght one when the selection changed
+        m_pImpl->m_pAccessible->commitTableEvent(ACCESSIBLE_SELECTION_EVENT,
+                                            com::sun::star::uno::Any(),
+                                            com::sun::star::uno::Any());
 }
 
 //-------------------------------------------------------------------
@@ -1634,6 +1725,12 @@ void BrowseBox::SetSelection( const MultiSelection &rSel )
     // restore screen
     ToggleSelection();
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
+
+    if ( m_pImpl->m_pAccessible )
+        //! TODO check if this event is the rght one when the selection changed
+        m_pImpl->m_pAccessible->commitTableEvent(ACCESSIBLE_SELECTION_EVENT,
+                                            com::sun::star::uno::Any(),
+                                            com::sun::star::uno::Any());
 }
 
 //-------------------------------------------------------------------
@@ -1679,6 +1776,11 @@ void BrowseBox::SelectAll()
 
     // restore screen
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
+    if ( m_pImpl->m_pAccessible )
+        //! TODO check if this event is the rght one when the selection changed
+        m_pImpl->m_pAccessible->commitTableEvent(ACCESSIBLE_SELECTION_EVENT,
+                                            com::sun::star::uno::Any(),
+                                            com::sun::star::uno::Any());
 }
 
 //-------------------------------------------------------------------
@@ -1732,6 +1834,11 @@ void BrowseBox::SelectRow( long nRow, BOOL _bSelect, BOOL bExpand )
 
     // restore screen
     DBG_TRACE1( "BrowseBox: %p->ShowCursor", this );
+    if ( m_pImpl->m_pAccessible )
+        //! TODO check if this event is the rght one when the selection changed
+        m_pImpl->m_pAccessible->commitTableEvent(ACCESSIBLE_SELECTION_EVENT,
+                                            com::sun::star::uno::Any(),
+                                            com::sun::star::uno::Any());
 }
 
 //-------------------------------------------------------------------
@@ -1792,6 +1899,12 @@ void BrowseBox::SelectColumnPos( USHORT nNewColPos, BOOL _bSelect, BOOL bMakeVis
             Select();
         else
             bSelect = TRUE;
+
+        if ( m_pImpl->m_pAccessible )
+            //! TODO check if this event is the rght one when the selection changed
+            m_pImpl->m_pAccessible->commitTableEvent(ACCESSIBLE_SELECTION_EVENT,
+                                                com::sun::star::uno::Any(),
+                                                com::sun::star::uno::Any());
     }
 
     // restore screen
@@ -2139,15 +2252,6 @@ Rectangle BrowseBox::GetControlArea() const
              aHScroll.GetSizePixel().Height() ) );
 }
 
-#if SUPD<558
-//-------------------------------------------------------------------
-
-BrowserMode BrowseBox::GetMode( ) const
-{
-    return m_nCurrentMode;
-}
-#endif
-
 //-------------------------------------------------------------------
 
 void BrowseBox::SetMode( BrowserMode nMode )
@@ -2343,8 +2447,6 @@ Window& BrowseBox::GetEventWindow() const
 
 //-------------------------------------------------------------------
 
-#if SUPD >= 376
-
 BrowserHeader* BrowseBox::CreateHeaderBar( BrowseBox* pParent )
 {
     BrowserHeader* pNewBar = new BrowserHeader( pParent );
@@ -2358,9 +2460,6 @@ void BrowseBox::SetHeaderBar( BrowserHeader* pHeaderBar )
     ( (BrowserDataWin*)pDataWin )->pHeaderBar = pHeaderBar;
     ( (BrowserDataWin*)pDataWin )->pHeaderBar->SetStartDragHdl( LINK( this, BrowseBox, StartDragHdl ) );
 }
-
-#endif
-
 //-------------------------------------------------------------------
 
 #ifdef DBG_UTIL

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox3.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-02 08:51:24 $
+ *  last change: $Author: oj $ $Date: 2002-04-09 07:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,17 +65,65 @@
 #ifndef _SVTOOLS_ACCESSIBLEBROWSEBOX_HXX
 #include "AccessibleBrowseBox.hxx"
 #endif
+#include "AccessibleBrowseBoxHeaderCell.hxx"
+#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXOBJTYPE_HXX
+#include "AccessibleBrowseBoxObjType.hxx"
+#endif
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _SFXDATWIN_HXX
+#include "datwin.hxx"
+#endif
+#ifndef _SVTOOLS_BRWIMPL_HXX
+#include "brwimpl.hxx"
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
+#ifndef _SVTOOLS_ACCESSIBILEBROWSEBOXTABLECELL_HXX
+#include "AccessibleBrowseBoxTableCell.hxx"
 #endif
 
 // Accessibility ==============================================================
 
 using ::rtl::OUString;
 using ::svt::AccessibleBrowseBox;
-using ::com::sun::star::uno::Reference;
+using namespace ::com::sun::star::uno;
 using ::drafts::com::sun::star::accessibility::XAccessible;
+using namespace ::drafts::com::sun::star::accessibility;
 
+// ============================================================================
+namespace svt
+{
+    using namespace ::com::sun::star::lang;
+    using namespace utl;
+
+    Reference< XAccessible > getHeaderCell( BrowseBoxImpl::THeaderCellMap& _raHederCells,
+                                            sal_Int32 _nId,
+                                            AccessibleBrowseBoxObjType _eType,
+                                            const Reference< XAccessible >& _rParent,
+                                            BrowseBox& _rBrowseBox)
+    {
+        Reference< XAccessible > xRet;
+        BrowseBoxImpl::THeaderCellMap::iterator aFind = _raHederCells.find( _nId );
+        if ( aFind == _raHederCells.end() )
+            aFind = _raHederCells.insert(BrowseBoxImpl::THeaderCellMap::value_type(_nId,
+                                                new svt::AccessibleBrowseBoxHeaderCell(_nId,
+                                                        _rParent,
+                                                        _rBrowseBox,
+                                                        _eType)
+                                                )
+                                        ).first;
+        if ( aFind != _raHederCells.end() )
+            xRet = aFind->second;
+        return xRet;
+    }
+}
 // ============================================================================
 
 Reference< XAccessible > BrowseBox::CreateAccessible()
@@ -83,42 +131,62 @@ Reference< XAccessible > BrowseBox::CreateAccessible()
     Window* pParent = GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "BrowseBox::CreateAccessible - parent not found" );
 
-    Reference< XAccessible > xAccessible;
-    if( pParent && !m_xAccessible.is() )
+    Reference< XAccessible > xAccessible = m_pImpl->m_pAccessible;
+    if( pParent && !m_pImpl->m_pAccessible)
     {
         Reference< XAccessible > xAccParent = pParent->GetAccessible();
         if( xAccParent.is() )
-            m_xAccessible = new AccessibleBrowseBox( xAccParent, *this );
+        {
+            m_pImpl->m_pAccessible = new AccessibleBrowseBox( xAccParent, *this );
+            xAccessible = m_pImpl->m_pAccessible;
+        }
     }
-    return m_xAccessible;
+    return xAccessible;
 }
+// -----------------------------------------------------------------------------
 
 // Children -------------------------------------------------------------------
 
-Reference< XAccessible > BrowseBox::CreateAccessibleCell( sal_Int32 nRow, sal_uInt16 nColumnId )
+Reference< XAccessible > BrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnId )
 {
-    return NULL;
+    // BBINDEX_TABLE must be the table
+    return new svt::AccessibleBrowseBoxTableCell(m_pImpl->m_pAccessible->getAccessibleChild(::svt::BBINDEX_TABLE),*this,_nRow,_nColumnId);
 }
+// -----------------------------------------------------------------------------
 
-Reference< XAccessible > BrowseBox::CreateAccessibleRowHeader( sal_Int32 nRow )
+Reference< XAccessible > BrowseBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
 {
-    return NULL;
+    return svt::getHeaderCell(
+            m_pImpl->m_aRowHeaderCellMap,
+            _nRow,
+            svt::BBTYPE_ROWHEADERCELL,
+            m_pImpl->m_pAccessible->getHeaderBar(svt::BBTYPE_ROWHEADERBAR),
+            *this);
 }
+// -----------------------------------------------------------------------------
 
-Reference< XAccessible > BrowseBox::CreateAccessibleColumnHeader( sal_uInt16 nColumnId )
+Reference< XAccessible > BrowseBox::CreateAccessibleColumnHeader( sal_uInt16 _nColumnId )
 {
-    return NULL;
+    return svt::getHeaderCell(
+            m_pImpl->m_aColHeaderCellMap,
+            _nColumnId,
+            svt::BBTYPE_COLUMNHEADERCELL,
+            m_pImpl->m_pAccessible->getHeaderBar(svt::BBTYPE_COLUMNHEADERBAR),
+            *this);
 }
+// -----------------------------------------------------------------------------
 
 sal_Int32 BrowseBox::GetAccessibleControlCount() const
 {
     return 0;
 }
+// -----------------------------------------------------------------------------
 
 Reference< XAccessible > BrowseBox::CreateAccessibleControl( sal_Int32 nIndex )
 {
     return NULL;
 }
+// -----------------------------------------------------------------------------
 
 // Conversions ----------------------------------------------------------------
 
@@ -126,51 +194,79 @@ sal_Bool BrowseBox::ConvertPointToCellAddress(
         sal_Int32& rnRow, sal_uInt16& rnColumnId, const Point& rPoint )
 {
     //! TODO
-    return sal_False;
+    rnRow = GetRowAtYPosPixel(rPoint.Y());
+    rnColumnId = GetColumnAtXPosPixel(rPoint.X());
+    return rnRow != BROWSER_INVALIDID && rnColumnId != BROWSER_INVALIDID;
 }
+// -----------------------------------------------------------------------------
 
 sal_Bool BrowseBox::ConvertPointToRowHeader( sal_Int32& rnRow, const Point& rPoint )
 {
-    //! TODO
-    return sal_False;
+    rnRow = GetRowAtYPosPixel(rPoint.Y());
+    //  USHORT nColumnId = GetColumnAtXPosPixel(rPoint.X());
+    return rnRow != BROWSER_INVALIDID;// && nColumnId == 0;
 }
+// -----------------------------------------------------------------------------
 
-sal_Bool BrowseBox::ConvertPointToColumnHeader( sal_uInt16& rnColumnId, const Point& rPoint )
+sal_Bool BrowseBox::ConvertPointToColumnHeader( sal_uInt16& _rnColumnId, const Point& _rPoint )
+{
+    _rnColumnId = GetColumnAtXPosPixel(_rPoint.X());
+    return _rnColumnId != BROWSER_INVALIDID;
+}
+// -----------------------------------------------------------------------------
+
+sal_Bool BrowseBox::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )
 {
     //! TODO
-    return sal_False;
-}
+    sal_Int32 nRow = 0;
+    sal_uInt16 nColumn = 0;
+    sal_Bool bRet = ConvertPointToCellAddress(nRow,nColumn,_rPoint);
+    if ( bRet )
+        _rnIndex = nRow * ColCount() + nColumn;
 
-sal_Bool BrowseBox::ConvertPointToControlIndex( sal_Int32& rnIndex, const Point& rPoint )
-{
-    //! TODO
-    return sal_False;
+    return bRet;
 }
+// -----------------------------------------------------------------------------
 
 // Object data and state ------------------------------------------------------
 
 OUString BrowseBox::GetAccessibleName( ::svt::AccessibleBrowseBoxObjType eObjType ) const
 {
     OUString aRetText;
+    //! TODO all texts
     switch( eObjType )
     {
         case ::svt::BBTYPE_BROWSEBOX:
             //! TODO only a test name
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BrowseBox" ) );
-        break;
-#if 0
-        //! TODO all texts
+            break;
         case ::svt::BBTYPE_TABLE:
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "Table" ) );
+            break;
         case ::svt::BBTYPE_ROWHEADERBAR:
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "RowHeaderBar" ) );
+            break;
         case ::svt::BBTYPE_COLUMNHEADERBAR:
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderBar" ) );
+            break;
         case ::svt::BBTYPE_CORNERCONTROL:
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "CornerControl" ) );
+            break;
         case ::svt::BBTYPE_TABLECELL:
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "TableCell" ) );
+            break;
         case ::svt::BBTYPE_ROWHEADERCELL:
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "RowHeaderCell" ) );
+            break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-#endif
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderCell" ) );
+            break;
+        default:
+            OSL_ENSURE(0,"BrowseBox::GetAccessibleName: invalid enum!");
     }
     return aRetText;
 }
+// -----------------------------------------------------------------------------
 
 OUString BrowseBox::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType eObjType ) const
 {
@@ -180,36 +276,109 @@ OUString BrowseBox::GetAccessibleDescription( ::svt::AccessibleBrowseBoxObjType 
         case ::svt::BBTYPE_BROWSEBOX:
             //! TODO only a test name
             aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BrowseBox description" ) );
-        break;
-#if 0
+            break;
         //! TODO all texts
         case ::svt::BBTYPE_TABLE:
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_TABLE description" ) );
+            break;
         case ::svt::BBTYPE_ROWHEADERBAR:
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_ROWHEADERBAR description" ) );
+            break;
         case ::svt::BBTYPE_COLUMNHEADERBAR:
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_COLUMNHEADERBAR description" ) );
+            break;
         case ::svt::BBTYPE_CORNERCONTROL:
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_CORNERCONTROL description" ) );
+            break;
         case ::svt::BBTYPE_TABLECELL:
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_TABLECELL description" ) );
+            break;
         case ::svt::BBTYPE_ROWHEADERCELL:
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_ROWHEADERCELL description" ) );
+            break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
-#endif
+            aRetText = OUString( RTL_CONSTASCII_USTRINGPARAM( "BBTYPE_COLUMNHEADERCELL description" ) );
+            break;
     }
     return aRetText;
 }
+// -----------------------------------------------------------------------------
 
 OUString BrowseBox::GetRowDescription( sal_Int32 nRow ) const
 {
     return OUString();
 }
+// -----------------------------------------------------------------------------
 
 void BrowseBox::FillAccessibleStateSet(
         ::utl::AccessibleStateSetHelper& rStateSet,
         ::svt::AccessibleBrowseBoxObjType eObjType ) const
 {
     //! TODO
+    switch( eObjType )
+    {
+        case ::svt::BBTYPE_BROWSEBOX:
+        case ::svt::BBTYPE_TABLE:
+
+            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+            if ( HasFocus() )
+                rStateSet.AddState( AccessibleStateType::FOCUSED );
+            if ( IsActive() )
+                rStateSet.AddState( AccessibleStateType::ACTIVE );
+            if ( GetUpdateMode() )
+                rStateSet.AddState( AccessibleStateType::EDITABLE );
+            if ( IsEnabled() )
+                rStateSet.AddState( AccessibleStateType::ENABLED );
+            if ( IsReallyVisible() )
+                rStateSet.AddState( AccessibleStateType::VISIBLE );
+            break;
+        case ::svt::BBTYPE_ROWHEADERBAR:
+            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+            rStateSet.AddState( AccessibleStateType::VISIBLE );
+            if ( GetSelectRowCount() )
+                rStateSet.AddState( AccessibleStateType::FOCUSED );
+            break;
+        case ::svt::BBTYPE_COLUMNHEADERBAR:
+            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+            rStateSet.AddState( AccessibleStateType::VISIBLE );
+            if ( GetSelectColumnCount() )
+                rStateSet.AddState( AccessibleStateType::FOCUSED );
+            break;
+        case ::svt::BBTYPE_CORNERCONTROL:
+            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+            rStateSet.AddState( AccessibleStateType::VISIBLE );
+            if ( IsAllSelected() )
+                rStateSet.AddState( AccessibleStateType::FOCUSED );
+            break;
+        case ::svt::BBTYPE_TABLECELL:
+            {
+                sal_Int32 nCurRow = GetCurRow();
+                sal_uInt16 nCurColumn = GetCurColumnId();
+                if ( IsFieldVisible(nCurRow,nCurColumn) )
+                    rStateSet.AddState( AccessibleStateType::VISIBLE );
+                if ( !IsFrozen( nCurColumn ) )
+                    rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+            }
+            break;
+        case ::svt::BBTYPE_ROWHEADERCELL:
+        case ::svt::BBTYPE_COLUMNHEADERCELL:
+            rStateSet.AddState( AccessibleStateType::VISIBLE );
+            rStateSet.AddState( AccessibleStateType::FOCUSABLE );
+            break;
+    }
 }
+// -----------------------------------------------------------------------------
 
 void BrowseBox::GrabTableFocus()
 {
     //! TODO EditBrowseBox has to grab focus of the edit control of the current cell (ActivateCell)
     GrabFocus();
 }
+// -----------------------------------------------------------------------------
+String BrowseBox::GetCellText(long _nRow, USHORT _nColId) const
+{
+    DBG_ASSERT(0,"This method has to be implemented by the derived classes! BUG!!");
+    return String();
+}
+// -----------------------------------------------------------------------------
 

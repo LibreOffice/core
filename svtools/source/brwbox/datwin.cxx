@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 16:23:59 $
+ *  last change: $Author: oj $ $Date: 2002-04-09 07:24:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,9 +428,7 @@ sal_Int8 BrowserDataWin::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     bCallingDropCallback = sal_True;
     sal_Int8 nReturn = DND_ACTION_NONE;
-#if SUPD>627 || FS_PRIV_DEBUG
     nReturn = GetParent()->AcceptDrop( BrowserAcceptDropEvent( this, _rEvt ) );
-#endif
     bCallingDropCallback = sal_False;
     return nReturn;
 }
@@ -440,9 +438,7 @@ sal_Int8 BrowserDataWin::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 {
     bCallingDropCallback = sal_True;
     sal_Int8 nReturn = DND_ACTION_NONE;
-#if SUPD>627 || FS_PRIV_DEBUG
-    return GetParent()->ExecuteDrop( BrowserExecuteDropEvent( this, _rEvt ) );
-#endif
+    nReturn = GetParent()->ExecuteDrop( BrowserExecuteDropEvent( this, _rEvt ) );
     bCallingDropCallback = sal_False;
     return nReturn;
 }
@@ -452,9 +448,7 @@ void BrowserDataWin::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
     Point aEventPos( _rPosPixel );
     aEventPos.Y() += GetParent()->GetTitleHeight();
-#if SUPD>626 || FS_PRIV_DEBUG
     GetParent()->StartDrag( _nAction, aEventPos );
-#endif
 }
 
 //-------------------------------------------------------------------
