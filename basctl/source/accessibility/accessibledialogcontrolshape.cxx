@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibledialogcontrolshape.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 18:19:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ sal_Bool AccessibleDialogControlShape::IsFocused()
     if ( m_pDialogWindow )
     {
         SdrView* pSdrView = m_pDialogWindow->GetView();
-        if ( pSdrView && pSdrView->IsObjMarked( m_pDlgEdObj ) && pSdrView->GetMarkList().GetMarkCount() == 1 )
+        if ( pSdrView && pSdrView->IsObjMarked( m_pDlgEdObj ) && pSdrView->GetMarkedObjectList().GetMarkCount() == 1 )
             bFocused = sal_True;
     }
 
