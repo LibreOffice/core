@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:49:56 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -646,12 +646,11 @@ XclTxo::XclTxo( const String& rString, sal_uInt16 nFontIx ) :
 }
 
 XclTxo::XclTxo( const XclExpRoot& rRoot, const SdrTextObj& rTextObj ) :
+    mpString( XclExpStringHelper::CreateString( rRoot, rTextObj ) ),
     meHorAlign( xlTxoHAlign_Default ),
     meVerAlign( xlTxoVAlign_Default ),
     meRotation( xlTxoRot_Default )
 {
-    mpString.reset( XclExpStringHelper::CreateString( rRoot, rTextObj ) );
-
     // additional alignment and orientation items
     const SfxItemSet& rItemSet = rTextObj.GetItemSet();
 
@@ -715,8 +714,8 @@ void XclTxo::Save( XclExpStream& rStrm )
         // CONTINUE for formatting runs
         rStrm.StartRecord( EXC_ID_CONT, 8 * mpString->GetFormatsCount() );
         const XclFormatRunVec& rFormats = mpString->GetFormats();
-        for( XclFormatRunVec::const_iterator aIter = rFormats.begin(), aEnd = rFormats.end(); aIter != aEnd; ++aIter )
-            rStrm << *aIter << sal_uInt32( 0 );
+        for( XclFormatRunVec::const_iterator aIt = rFormats.begin(), aEnd = rFormats.end(); aIt != aEnd; ++aIt )
+            rStrm << aIt->mnChar << aIt->mnFontIx << sal_uInt32( 0 );
         rStrm.EndRecord();
     }
 }
@@ -795,7 +794,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
             rStrm.EndRecord();
 
             // ftPictFmla subrecord, undocumented as usual
-            XclExpUniString aName( xOleStg->GetUserName() );
+            XclExpString aName( xOleStg->GetUserName() );
             UINT16 nPadLen = (UINT16)(aName.GetSize() & 0x01);
             UINT16 nFmlaLen = static_cast< sal_uInt16 >( 12 + aName.GetSize() + nPadLen );
             UINT16 nSubRecLen = nFmlaLen + 6;
@@ -1415,56 +1414,48 @@ ExcBofC8::ExcBofC8()
     nDocType = 0x0020;
 }
 
-// --- class ExcLabelSst ---------------------------------------------
+// ============================================================================
 
-ExcLabelSst::ExcLabelSst(
+XclExpLabelSst::XclExpLabelSst(
+        const XclExpRoot& rRoot,
         const ScAddress& rPos,
-        const ScPatternAttr* pAttr,
-        RootData& rRoot,
-        const String& rNewText ) :
-    ExcCell( rPos, pAttr, rRoot )
+        const String& rText,
+        const ScPatternAttr* pPattern ) :
+    ExcCell( rPos, pPattern, *rRoot.mpRD )
 {
-    nIsst = rRoot.pER->GetSst().Insert( new XclExpUniString( rNewText ) );
+    XclExpStringPtr pString( new XclExpString( rText ) );
+    mnSstIndex = rRoot.GetSst().Insert( pString );
 }
 
-
-ExcLabelSst::ExcLabelSst(
+XclExpLabelSst::XclExpLabelSst(
+        const XclExpRoot& rRoot,
         const ScAddress& rPos,
-        const ScPatternAttr* pAttr,
-        RootData& rRootData,
-        const ScEditCell& rEdCell ) :
-    ExcCell( rPos, pAttr, rRootData )
+        const ScEditCell& rEditCell,
+        const ScPatternAttr* pPattern ) :
+    ExcCell( rPos, pPattern, *rRoot.mpRD )
 {
-    const XclExpRoot& rRoot = *rRootData.pER;
-    XclExpString* pString = XclExpStringHelper::CreateString( rRoot, rEdCell, pAttr );
-    SetXFId( rRoot.GetXFBuffer().Insert( pAttr, pString->IsWrapped(), pString->RemoveFontOfChar(0)) );
-    nIsst = rRoot.GetSst().Insert( pString );
+    XclExpStringPtr pString( XclExpStringHelper::CreateString( rRoot, rEditCell, pPattern ) );
+    SetXFId( rRoot.GetXFBuffer().Insert( pPattern, pString->IsWrapped(), pString->RemoveFontOfChar( 0 ) ) );
+    mnSstIndex = rRoot.GetSst().Insert( pString );
 }
 
-
-ExcLabelSst::~ExcLabelSst()
+void XclExpLabelSst::SaveDiff( XclExpStream& rStrm )
 {
+    rStrm << mnSstIndex;
 }
 
-
-void ExcLabelSst::SaveDiff( XclExpStream& rStrm )
-{
-    rStrm << nIsst;
-}
-
-
-UINT16 ExcLabelSst::GetNum() const
+UINT16 XclExpLabelSst::GetNum() const
 {
     return 0x00FD;
 }
 
-
-ULONG ExcLabelSst::GetDiffLen() const
+ULONG XclExpLabelSst::GetDiffLen() const
 {
     return 4;
 }
 
 
+// ============================================================================
 
 // --- class ExcBundlesheet8 -----------------------------------------
 
@@ -1678,7 +1669,7 @@ XclDConRef::XclDConRef( const ScRange& rSrcR, const String& rWB ) :
     String  sTemp( ( sal_Unicode ) 0x02 );
 
     sTemp += rWB;
-    pWorkbook = new XclExpUniString( sTemp );
+    pWorkbook = new XclExpString( sTemp );
 }
 
 XclDConRef::~XclDConRef()
@@ -1813,7 +1804,7 @@ void ExcEScenarioCell::WriteText( XclExpStream& rStrm )
 
 
 
-XclExpUniString ExcEScenario::sUsername;
+XclExpString ExcEScenario::sUsername;
 
 ExcEScenario::ExcEScenario( ScDocument& rDoc, UINT16 nTab )
 {
