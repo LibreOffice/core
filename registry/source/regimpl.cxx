@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-10 10:59:09 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 19:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,6 +623,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
             sFullPath.append((sal_Unicode)'/');
         }
     } while( nIndex != -1 );
+
 
     pKey = new ORegKey(sFullKeyName, rStoreDir, this);
     *phNewKey = pKey;
@@ -1927,7 +1928,7 @@ RegError ORegistry::createLink(RegKeyHandle hKey,
             sFullPath += token;
             sFullPath += ROOT;
         }
-    } while( nIndex != -1 );
+    } while( nIndex != -1 && token.getLength() > 0 );
 
     pKey = new ORegKey(sFullLinkName, linkTarget, rStoreDir, this);
     delete pKey;
@@ -2002,51 +2003,47 @@ RegError ORegistry::deleteLink(RegKeyHandle hKey, const OUString& linkName)
 OUString ORegistry::resolveLinks(ORegKey* pKey, const OUString& path, sal_Bool firstLinkOnly)
 {
     OUString    resolvedPath(pKey->getName());
-    sal_Int32   actToken = 0;
     sal_Int32   nIndex = 0;
     OUString    token;
     ORegKey*    pLink = NULL;
 
-    if (resolvedPath.getLength() > 1)
-        resolvedPath += ROOT;
+//     if (resolvedPath.getLength() > 1)
+//         resolvedPath += ROOT;
 
     if ( path.getStr()[0] == '/' )
-        nIndex++, actToken++;
+        nIndex++;
 
     do
     {
         token = path.getToken( 0, '/', nIndex );
-        actToken++;
-        if( token.getLength() > 0 )
+        if( token.getLength() && resolvedPath.getLength() > 1 )
+            resolvedPath += ROOT;
+
+        pLink = resolveLink(pKey, resolvedPath, token);
+
+        if (pLink)
         {
-            pLink = resolveLink(pKey, resolvedPath, token);
+            OUString    tmpName;
+            sal_Int32   lastIndex;
 
-            if (pLink)
+            while(pLink)
             {
-                OUString    tmpName;
-                sal_Int32   lastIndex;
-
-                while(pLink)
+                if (!insertRecursionLink(pLink))
                 {
-                    if (!insertRecursionLink(pLink))
-                    {
-                        resetRecursionLinks();
-                        delete pLink;
-                        return OUString();
-                    }
-
-
-                    lastIndex = resolvedPath.lastIndexOf('/');
-                    tmpName = resolvedPath.copy(lastIndex + 1);
-                    resolvedPath = resolvedPath.copy(0, lastIndex + 1);
-
-                    pLink = resolveLink(pKey, resolvedPath, tmpName);
+                    resetRecursionLinks();
+                    delete pLink;
+                    return OUString();
                 }
 
-                resetRecursionLinks();
+
+                lastIndex = resolvedPath.lastIndexOf('/');
+                tmpName = resolvedPath.copy(lastIndex + 1);
+                resolvedPath = resolvedPath.copy(0, lastIndex + 1);
+
+                pLink = resolveLink(pKey, resolvedPath, tmpName);
             }
-            if( actToken > 1 )
-                resolvedPath += ROOT;
+
+            resetRecursionLinks();
         }
     } while( nIndex != -1 );
 
