@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-06 18:19:37 $
+ *  last change: $Author: cl $ $Date: 2001-03-29 12:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,9 +89,18 @@ SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich, BYTE 
   mpStylePool( ( pModel && pModel->GetStyleSheetPool()) ? &pModel->GetStyleSheetPool()->GetPool() : NULL ),
   mnWhich( nWhich ), mnMemberId( nMemberId )
 {
+    if( pModel )
+        StartListening( *pModel );
 }
 
 SvxUnoNameItemTable::~SvxUnoNameItemTable() throw()
+{
+    if( mpModel )
+        EndListening( *mpModel );
+    dispose();
+}
+
+void SvxUnoNameItemTable::dispose()
 {
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
@@ -101,6 +110,16 @@ SvxUnoNameItemTable::~SvxUnoNameItemTable() throw()
         delete (*aIter).first;
         delete (*aIter++).second;
     }
+
+    maItemSetVector.clear();
+}
+
+void SvxUnoNameItemTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
+{
+    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+
+    if( pSdrHint && HINT_MODELCLEARED == pSdrHint->GetKind() )
+        dispose();
 }
 
 sal_Bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException)

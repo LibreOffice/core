@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNameItemTable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:46:26 $
+ *  last change: $Author: cl $ $Date: 2001-03-29 12:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,10 @@
 #include <vector>
 #endif
 
+#ifndef _SFXLSTNER_HXX
+#include <svtools/lstner.hxx>
+#endif
+
 #ifndef _SVX_XIT_HXX
 #include "xit.hxx"
 #endif
@@ -86,7 +90,8 @@ class SfxItemPool;
 class SfxItemSet;
 
 typedef std::vector< std::pair< SfxItemSet*, SfxItemSet*> > ItemPoolVector;
-class SvxUnoNameItemTable : public cppu::WeakImplHelper2< com::sun::star::container::XNameContainer, com::sun::star::lang::XServiceInfo >
+class SvxUnoNameItemTable : public cppu::WeakImplHelper2< com::sun::star::container::XNameContainer, com::sun::star::lang::XServiceInfo >,
+                            public SfxListener
 {
 private:
     SdrModel*       mpModel;
@@ -102,6 +107,10 @@ public:
     virtual ~SvxUnoNameItemTable() throw();
 
     virtual NameOrIndex* createItem() const throw() = 0;
+    void dispose();
+
+    // SfxListener
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw ();
 
     // XServiceInfo
     virtual sal_Bool SAL_CALL supportsService( const  rtl::OUString& ServiceName ) throw( com::sun::star::uno::RuntimeException);

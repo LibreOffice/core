@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomtabl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-23 21:33:15 $
+ *  last change: $Author: cl $ $Date: 2001-03-29 12:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #include <svtools/itemset.hxx>
 #endif
 
+#ifndef _SFXLSTNER_HXX
+#include <svtools/lstner.hxx>
+#endif
+
 #ifndef _SVX_XLNEDIT_HXX //autogen
 #include <xlnedit.hxx>
 #endif
@@ -105,7 +109,8 @@ using namespace ::cppu;
 
 typedef std::vector< std::pair< SfxItemSet*, SfxItemSet*> > ItemPoolVector;
 
-class SvxUnoMarkerTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
+class SvxUnoMarkerTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >,
+                          public SfxListener
 {
 private:
     SdrModel*       mpModel;
@@ -117,6 +122,11 @@ private:
 public:
     SvxUnoMarkerTable( SdrModel* pModel ) throw();
     virtual ~SvxUnoMarkerTable() throw();
+
+    void dispose();
+
+    // SfxListener
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw ();
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
@@ -145,9 +155,18 @@ SvxUnoMarkerTable::SvxUnoMarkerTable( SdrModel* pModel ) throw()
   mpStylePool( ( pModel && pModel->GetStyleSheetPool() ) ? &pModel->GetStyleSheetPool()->GetPool() : NULL ),
   mpModelPool( pModel ? &pModel->GetItemPool() : (SfxItemPool*)NULL )
 {
+    if( pModel )
+        StartListening( *pModel );
 }
 
 SvxUnoMarkerTable::~SvxUnoMarkerTable() throw()
+{
+    if( mpModel )
+        EndListening( *mpModel );
+    dispose();
+}
+
+void SvxUnoMarkerTable::dispose()
 {
     ItemPoolVector::iterator aIter = maItemSetVector.begin();
     const ItemPoolVector::iterator aEnd = maItemSetVector.end();
@@ -157,6 +176,17 @@ SvxUnoMarkerTable::~SvxUnoMarkerTable() throw()
         delete (*aIter).first;
         delete (*aIter++).second;
     }
+
+    maItemSetVector.clear();
+}
+
+// SfxListener
+void SvxUnoMarkerTable::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
+{
+    const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
+
+    if( pSdrHint && HINT_MODELCLEARED == pSdrHint->GetKind() )
+        dispose();
 }
 
 sal_Bool SAL_CALL SvxUnoMarkerTable::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException)
