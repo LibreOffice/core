@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: pluby $ $Date: 2000-12-03 16:44:49 $
+#   last change: $Author: hjs $ $Date: 2000-12-04 15:18:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1392,6 +1392,10 @@ STDLIB=$(STDLIBCUIST)
 .ENDIF
 
 .ENDIF
+
+.IF "$(NO_DEFAULT_STL)"==""
+STDLIB+=$(LIBSTLPORT)
+.ENDIF			# "$(NO_DEFAULT_STL)"==""
 
 .IF "$(SOLAR_JAVA)"!=""
 CDEFS+=$(JAVADEF)
