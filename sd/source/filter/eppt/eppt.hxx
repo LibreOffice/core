@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-24 13:11:38 $
+ *  last change: $Author: sj $ $Date: 2002-07-05 09:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,7 @@ class GroupTable
     public:
 
         sal_uInt32              GetCurrentGroupIndex() const { return mnIndex; };
-        sal_uInt32              GetCurrentGroupLevel() const { return mnCurrentGroupEntry - 1; };
+        sal_Int32               GetCurrentGroupLevel() const { return mnCurrentGroupEntry - 1; };
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > &
                                 GetCurrentGroupAccess() const { return mpGroupEntry[  mnCurrentGroupEntry - 1 ]->mXIndexAccess; };
         sal_uInt32              GetGroupsClosed();

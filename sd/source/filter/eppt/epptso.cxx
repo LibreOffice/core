@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-29 14:38:20 $
+ *  last change: $Author: sj $ $Date: 2002-07-05 09:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1874,7 +1874,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     // now check if the text is part of a group, and if the previous object has the same color than the fontcolor
                     // ( and if fillcolor is not available the background color ), it is sometimes
                     // not possible to export the 'embossed' flag
-                    if ( GetCurrentGroupLevel() && ( mpGroupEntry[ GetCurrentGroupIndex() ]->mnCurrentPos >= 2 ) )
+                    if ( ( GetCurrentGroupLevel() >= 0 ) && ( mpGroupEntry[ GetCurrentGroupIndex() ]->mnCurrentPos >= 2 ) )
                     {
                         sal_uInt32 nPreviousGroupIndex = mpGroupEntry[ GetCurrentGroupIndex() ]->mnCurrentPos - 2;
 
