@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2001-01-22 13:15:28 $
+ *  last change: $Author: abi $ $Date: 2001-01-22 13:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ BaseContent::queryInterface( const uno::Type& rType )
 {
     uno::Any aRet = cppu::queryInterface( rType,
                                           SAL_STATIC_CAST( lang::XComponent*, this ),
+                                          SAL_STATIC_CAST( lang::XServiceInfo*, this ),
                                           SAL_STATIC_CAST( XCommandProcessor*, this ),
                                           SAL_STATIC_CAST( container::XChild*, this ),
                                           SAL_STATIC_CAST( beans::XPropertiesChangeNotifier*, this ),
@@ -298,6 +299,41 @@ BaseContent::dispose()
         m_pPropertySetInfoChangeListeners->disposeAndClear( aEvt );
 
 }
+
+
+
+
+
+rtl::OUString SAL_CALL
+BaseContent::getImplementationName()
+    throw( uno::RuntimeException)
+{
+    return rtl::OUString::createFromAscii( "FileContent" );
+}
+
+
+
+sal_Bool SAL_CALL
+BaseContent::supportsService( const rtl::OUString& ServiceName )
+    throw( uno::RuntimeException)
+{
+    if( ServiceName.compareToAscii( "com.sun.star.ucb.FileContent" ) == 0 )
+        return true;
+    else
+        return false;
+}
+
+
+
+uno::Sequence< rtl::OUString > SAL_CALL
+BaseContent::getSupportedServiceNames()
+    throw( uno::RuntimeException )
+{
+    uno::Sequence< rtl::OUString > ret( 1 );
+    ret[0] = rtl::OUString::createFromAscii( "com.sun.star.ucb.FileContent" );
+    return ret;
+}
+
 
 
 //////////////////////////////////////////////////////////////////////////////////////////

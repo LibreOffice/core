@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2001-01-22 13:15:28 $
+ *  last change: $Author: abi $ $Date: 2001-01-22 13:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _COM_SUN_STAR_UCB_XRESULTSET_HPP_
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -154,6 +157,7 @@ namespace fileaccess {
     class BaseContent:
         public cppu::OWeakObject,
         public com::sun::star::lang::XComponent,
+        public com::sun::star::lang::XServiceInfo,
         public com::sun::star::ucb::XCommandProcessor,
         public com::sun::star::beans::XPropertiesChangeNotifier,
         public com::sun::star::beans::XPropertyContainer,
@@ -208,6 +212,20 @@ namespace fileaccess {
 
         virtual void SAL_CALL
         removeEventListener( const com::sun::star::uno::Reference< com::sun::star::lang::XEventListener >& aListener )
+            throw( com::sun::star::uno::RuntimeException );
+
+
+        // XServiceInfo
+        virtual rtl::OUString SAL_CALL
+        getImplementationName()
+            throw( com::sun::star::uno::RuntimeException);
+
+        virtual sal_Bool SAL_CALL
+        supportsService( const rtl::OUString& ServiceName )
+            throw( com::sun::star::uno::RuntimeException);
+
+        virtual com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+        getSupportedServiceNames()
             throw( com::sun::star::uno::RuntimeException );
 
 
