@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserIndex.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:21 $
+ *  last change: $Author: os $ $Date: 2002-01-07 16:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@ service UserIndex
     /* determins if embedded objects are included in the index.
      */
     [optional, property] boolean CreateFromEmbeddedObjects;
+    /** contains the name of the user index.
+     */
+    [property] string UserIndexName;
 };
 
 //=============================================================================
