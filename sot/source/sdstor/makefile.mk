@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pluby $ $Date: 2000-12-14 07:34:48 $
+#   last change: $Author: mh $ $Date: 2001-11-06 21:36:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,21 @@ TARGET=sdstor
 .INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
+
+UNOTYPES=   \
+        com.sun.star.sdbc.XRow  \
+        com.sun.star.datatransfer.DataFlavor    \
+        com.sun.star.datatransfer/dnd/DNDConstants   \
+        com.sun.star.packages.manifest.XManifestWriter \
+        com.sun.star.packages.manifest.XManifestReader  \
+        com.sun.star.uno.XWeak  \
+        com.sun.star.uno.XAggregation   \
+        com.sun.star.i18n.KCharacterType    \
+        com.sun.star.i18n.KParseTokens  \
+        com.sun.star.i18n.KParseType    \
+        com.sun.star.i18n.ParseResult   \
+        com.sun.star.i18n.XCharacterClassification
+
 
 SLOFILES =  \
         $(SLO)$/ucbstorage.obj         \
