@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-07 12:59:14 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ WorkWindow TT_INLINE_TRANSLATION {
     Text[ ENGLISH ] = "Inplace Translation";
     Text[ DANISH ] = "Ny oversÊttelse";
     Text[ ENGLISH_US ] = "Translation In Place";
-    Text[ SPANISH ] = "Nueva traducciÛn";
+    Text[ SPANISH ] = "Inplace Translation ";
     Text[ FRENCH ] = "Relogement inline";
     Text[ ITALIAN ] = "Inplace Translation";
     Text[ JAPANESE ] = "ÇÕÇﬂçûÇ›ñ|ñÛ";
@@ -461,7 +461,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ japanese ] = "å≥ÇÃèÛë‘Ç…ñﬂÇ∑(~R)";
         Text[ korean ] = "∫πø¯(~R)";
         Text[ chinese_simplified ] = "–ﬁ∏¥(~R)";
-        Text[ chinese_traditional ] = "´Ï¥_(~R)";
+        Text[ chinese_traditional ] = "¡Ÿ≠Ï(~R)";
         Text[ arabic ] = "«” ⁄«œ…";
         Text[ turkish ] = "~Geri y¸kle";
     };
