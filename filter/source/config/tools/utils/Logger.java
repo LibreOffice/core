@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Logger.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 19:01:29 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 15:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ import java.util.*;
 /** can be used to print out some debug messages
  *  and group it into warnings/errors or info statements.
  *
- *  @author Andreas Schlüns
+ *
  */
 public class Logger
 {
