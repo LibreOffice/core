@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 10:01:44 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 18:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,12 +122,12 @@ class SVX_DLLPRIVATE FmFormPageImpl
     friend class FmFormObj;
     friend class FmXFormShell;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>                xCurrentForm;   // aktuelles Formular
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>  xForms;         // Liste aller Forms
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>              xModel;
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>                xCurrentForm;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>  m_xForms;
     FmFormPage*             pPage;
 
     sal_Bool        m_bFirstActivation  : 1;
+    sal_Bool        m_bAttemptedFormCreation : 2;
 
 protected:
     FmFormPageImpl(FmFormPage* _pPage);
@@ -169,7 +169,7 @@ protected:
     void write(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& OutStream) const;
     void read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& InStream);
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& getForms() {return xForms;}
+    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& getForms( bool _bForceCreate = true );
 
     void fillList(FmObjectList& rList, const SdrObjList& rObjList, sal_Bool bConnected) const;
 
