@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-08 08:06:19 $
+ *  last change: $Author: nn $ $Date: 2001-10-10 13:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,21 +489,12 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
         pStylesArgs[2] <<= xObjectResolver;
         pStylesArgs[3] <<= xInfoSet;
 
-        sal_uInt32 nStylesRetval(0);
-        {
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles import start" );
-
-            nStylesRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLStylesImporter")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("styles.xml")),
-                sEmpty, aStylesArgs, sal_True);
-
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles import end" );
-        }
-
         sal_uInt32 nSettingsRetval(0);
         if (!bStylesOnly)
         {
+            //  Settings must be loaded first because of the printer setting,
+            //  which is needed in the page styles (paper tray).
+
             uno::Sequence<uno::Any> aSettingsArgs(0);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings import start" );
@@ -514,6 +505,18 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly)
                 sEmpty, aSettingsArgs, sal_False);
 
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "settings import end" );
+        }
+
+        sal_uInt32 nStylesRetval(0);
+        {
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles import start" );
+
+            nStylesRetval = ImportFromComponent(xServiceFactory, xModel, xXMLParser, aParserInput,
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Calc.XMLStylesImporter")),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("styles.xml")),
+                sEmpty, aStylesArgs, sal_True);
+
+            RTL_LOGFILE_CONTEXT_TRACE( aLog, "styles import end" );
         }
 
         sal_uInt32 nDocRetval(0);
