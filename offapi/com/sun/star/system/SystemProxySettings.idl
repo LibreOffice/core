@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemProxySettings.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 23:34:23 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@ module com { module sun { module star { module system {
 //=============================================================================
 /** Specifies a service for reading the system proxy settings. Some  systems
     store this information in a central configuration database.
+
+    @deprecated
 */
 
 published service SystemProxySettings

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SOffice52ProxySettings.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 23:33:29 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,8 @@ module com { module sun { module star { module system {
     StarOffice 5.2 installation.
 
     @see com::sun::star::system::ProxySettings
+
+    @deprecated
 */
 
 published service SOffice52ProxySettings
