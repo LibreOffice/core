@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocument.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-05 15:03:45 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 12:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,21 @@ service OfficeDocument
         @optional
      */
     [optional] interface XEventsSupplier;
+
+    /** controls the focus behaviour of the form controls in the document
+        <p>If this flag is set to <TRUE/>, any view belonging to the document should focus the
+        first control in the document.</p>
+        <p>With this, you may control if your document works primarily as form document.</p>
+    */
+    [property, optional] boolean AutomaticControlFocus;
+
+    /** controls the initial (on-load) behaviour of the form controls in the document
+        <p>If set to <TRUE/>, upon loading the document, the form controls will be in design mode.<br/>
+        If set to <FALSE/>, they will be alive (e.g. connected to the data source specified for the form
+        they belong to).</p>
+        <p>With this, you may control if your document works primarily as form document.</p>
+    */
+    [property, optional] boolean ApplyFormDesignMode;
 };
 
 //=============================================================================
@@ -111,6 +126,9 @@ service OfficeDocument
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/02/05 15:03:45  kz
+    XEventSupplier -> XEventsSupplier
+
     Revision 1.4  2001/01/23 10:08:08  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 
