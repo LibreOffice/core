@@ -1,0 +1,10 @@
+OOO_1.1 {
+    global:
+        component_getDescriptionFunc;
+        component_getImplementationEnvironment;
+        component_getFactory;
+        component_writeInfo;
+
+    local:
+        *;
+};
