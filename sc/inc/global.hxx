@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:16:28 $
+ *  last change: $Author: er $ $Date: 2001-08-02 14:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,8 @@ class ScGlobal
 
     static ScUnitConverter* pUnitConverter;
 
+    static  SvNumberFormatter*  pEnglishFormatter;          // for UNO / XML export
+
 public:
     static ::com::sun::star::lang::Locale*      pLocale;
     static SvtSysLocale*        pSysLocale;
@@ -645,6 +647,9 @@ public:
 
     static  CharSet         GetCharsetValue( const String& rCharSet );
     static  String          GetCharsetString( CharSet eVal );
+
+    /// a "ReadOnly" formatter for UNO/XML export
+    static  SvNumberFormatter*  GetEnglishFormatter();
 };
 #endif
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolhelp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-18 07:58:41 $
+ *  last change: $Author: er $ $Date: 2001-08-02 14:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,13 +87,8 @@ ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
     pStylePool = new ScStyleSheetPool( *pDocPool, pSourceDoc );
 
     pFormTable = new SvNumberFormatter( pSourceDoc->GetServiceManager(), ScGlobal::eLnge );
-    aColorLink = LINK( pSourceDoc, ScDocument, GetUserDefinedColor );
-    pFormTable->SetColorLink( &aColorLink );
+    pFormTable->SetColorLink( LINK( pSourceDoc, ScDocument, GetUserDefinedColor ) );
     pFormTable->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
-
-    pEngFormTable = new SvNumberFormatter( pSourceDoc->GetServiceManager(), LANGUAGE_ENGLISH_US );
-    pEngFormTable->SetColorLink( &aColorLink );
-    pEngFormTable->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
 
     pEditPool = EditEngine::CreatePool();
     pEditPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
@@ -110,7 +105,6 @@ ScPoolHelper::~ScPoolHelper()
     delete pEnginePool;
     delete pEditPool;
     delete pFormTable;
-    delete pEngFormTable;
     delete pStylePool;
     delete pDocPool;
 }
@@ -119,7 +113,7 @@ void ScPoolHelper::SourceDocumentGone()
 {
     //  reset all pointers to the source document
     pStylePool->SetDocument( NULL );
-    pFormTable->SetColorLink( NULL );
+    pFormTable->SetColorLink( Link() );
 }
 
 // -----------------------------------------------------------------------

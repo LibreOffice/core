@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:22:13 $
+ *  last change: $Author: er $ $Date: 2001-08-02 14:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,7 @@ ScFunctionList* ScGlobal::pStarCalcFunctionList = NULL;
 ScFunctionMgr*  ScGlobal::pStarCalcFunctionMgr  = NULL;
 
 ScUnitConverter* ScGlobal::pUnitConverter = NULL;
+SvNumberFormatter* ScGlobal::pEnglishFormatter = NULL;
 
 double          ScGlobal::nScreenPPTX           = 96.0;
 double          ScGlobal::nScreenPPTY           = 96.0;
@@ -331,6 +332,20 @@ ULONG ScGlobal::GetStandardFormat( double fNumber, SvNumberFormatter& rFormatter
             pFormat->GetLanguage() );
     return rFormatter.GetStandardFormat( nType, eLnge );
 }
+
+
+// static
+SvNumberFormatter* ScGlobal::GetEnglishFormatter()
+{
+    if ( !pEnglishFormatter )
+    {
+        pEnglishFormatter = new SvNumberFormatter(
+            ::comphelper::getProcessServiceFactory(), LANGUAGE_ENGLISH_US );
+        pEnglishFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_INTL_FORMAT );
+    }
+    return pEnglishFormatter;
+}
+
 
 //------------------------------------------------------------------------
 
@@ -721,6 +736,7 @@ void ScGlobal::Clear()
     DELETEZ(pOutlineBitmaps);
 //  DELETEZ(pAnchorBitmap);
 //  DELETEZ(pGrayAnchorBitmap);
+    DELETEZ(pEnglishFormatter);
     DELETEZ(pCaseTransliteration);
     DELETEZ(pTransliteration);
     DELETEZ(pCaseCollator);

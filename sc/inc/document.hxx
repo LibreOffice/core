@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-31 15:37:53 $
+ *  last change: $Author: er $ $Date: 2001-08-02 14:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,6 @@ private:
     LanguageType        eCtlLanguage;                   // default language for complex text
     CharSet             eSrcSet;                        // Einlesen: Quell-Zeichensatz
 
-    long                nStandardIndexEnglishUS;
     ULONG               nFormulaCodeInTree;             // FormelRPN im Formelbaum
     USHORT              nInterpretLevel;                // >0 wenn im Interpreter
     USHORT              nMacroInterpretLevel;           // >0 wenn Macro im Interpreter
@@ -1257,11 +1256,6 @@ public:
                         const ScMarkData* pMarkData = NULL );
 
     SvNumberFormatter*  GetFormatTable() const;
-    SvNumberFormatter*  GetEnglishFormatTable() const;
-
-    // returns the standard english us
-    // numberformat of the english number formatter
-    ULONG               GetStandardIndexEnglishUS();
 
     void            Sort( USHORT nTab, const ScSortParam& rSortParam, BOOL bKeepQuery );
     USHORT          Query( USHORT nTab, const ScQueryParam& rQueryParam, BOOL bKeepSub );

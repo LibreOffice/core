@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: er $ $Date: 2001-07-19 16:42:49 $
+ *  last change: $Author: er $ $Date: 2001-08-02 14:46:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,8 +371,7 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
         eLinkMode(LM_UNKNOWN),
         pDPCollection( NULL ),
         pScriptTypeData( NULL ),
-        nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
-        nStandardIndexEnglishUS(-1)
+        nAsianCompression(SC_ASIANCOMPRESSION_INVALID)
 {
     eSrcSet = gsl_getSystemTextEncoding();
     nSrcVer = SC_CURRENT_VERSION;
@@ -596,18 +595,6 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 SvNumberFormatter* ScDocument::GetFormatTable() const
 {
     return xPoolHelper->GetFormTable();
-}
-
-SvNumberFormatter* ScDocument::GetEnglishFormatTable() const
-{
-    return xPoolHelper->GetEngFormTable();
-}
-
-ULONG ScDocument::GetStandardIndexEnglishUS()
-{
-    if (nStandardIndexEnglishUS == -1)
-        nStandardIndexEnglishUS = GetEnglishFormatTable()->GetStandardIndex(LANGUAGE_ENGLISH_US);
-    return (ULONG)nStandardIndexEnglishUS;
 }
 
 SfxItemPool* ScDocument::GetEditPool() const
