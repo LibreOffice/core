@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-13 10:55:27 $
+ *  last change: $Author: mt $ $Date: 2001-06-21 12:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,8 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
 
     eDefLanguage        = LANGUAGE_DONTKNOW;
     maBackgroundColor   = COL_AUTO;
+
+    eAsianCompressionMode = EE_ASIANCOMPRESSION_NONE;
 
 
     aStatus.GetControlWord() =  EE_CNTRL_USECHARATTRIBS | EE_CNTRL_DOIDLEFORMAT |
@@ -1225,6 +1227,8 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
     ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
     rTypes.Remove( 0, rTypes.Count() );
 
+//  pParaPortion->aExtraCharInfos.Remove( 0, pParaPortion->aExtraCharInfos.Count() );
+
     ContentNode* pNode = pParaPortion->GetNode();
     if ( pNode->Len() )
     {
@@ -1254,6 +1258,66 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
         while ( ( nPos != (-1) ) && ( nPos < nTextLen ) )
         {
             rTypes[rTypes.Count()-1].nEndPos = (USHORT)nPos;
+
+            // MT 06/2001: Removed, see comment in editdoc.hxx
+
+            /*
+            if ( GetAsianCompressionMode() && ( rTypes[rTypes.Count()-1].nScriptType == i18n::ScriptType::ASIAN ) )
+            {
+                BYTE nPrevState = CHAR_NORMAL;
+                BYTE nState;
+                USHORT nP = rTypes[rTypes.Count()-1].nStartPos;
+                USHORT nPrevChg = nP;
+
+                while ( nP < nPos )
+                {
+                    xub_Unicode cChar = pNode->GetChar( nP );
+
+                    switch ( cChar )
+                    {
+                        // Left punctuation found
+                        case 0x3008: case 0x300A: case 0x300C: case 0x300E:
+                        case 0x3010: case 0x3014: case 0x3016: case 0x3018:
+                        case 0x301A: case 0x301D:
+                            nState = CHAR_PUNCTUATIONLEFT;
+                            break;
+                        // Right punctuation found
+                        case 0x3001: case 0x3002: case 0x3009: case 0x300B:
+                        case 0x300D: case 0x300F: case 0x3011: case 0x3015:
+                        case 0x3017: case 0x3019: case 0x301B: case 0x301E:
+                        case 0x301F:
+                            nState = CHAR_PUNCTUATIONRIGHT;
+                            break;
+                        default:
+                            nState = ( 0x3040 <= cChar && 0x3100 > cChar ) ? CHAR_KANA : CHAR_NORMAL;
+                    }
+
+                    if( nPrevState != nState )
+                    {
+                        if ( nPrevState != CHAR_NORMAL )
+                        {
+                            if ( ( nPrevState != CHAR_KANA ) || ( GetAsianCompressionMode() == EE_ASIANCOMPRESSION_PUNCTIONANDKANA ) )
+                            {
+                                pParaPortion->aExtraCharInfos.Insert( ExtraCharInfo( nPrevChg, nP, nPrevState ), pParaPortion->aExtraCharInfos.Count() );
+                            }
+                        }
+
+                        nPrevState = nState;
+                        nPrevChg = nP;
+                    }
+
+                    nP++;
+                }
+
+                if ( nPrevState != CHAR_NORMAL )
+                {
+                    if ( ( nPrevState != CHAR_KANA ) || ( GetAsianCompressionMode() == EE_ASIANCOMPRESSION_PUNCTIONANDKANA ) )
+                    {
+                        pParaPortion->aExtraCharInfos.Insert( ExtraCharInfo( nPrevChg, nP, nPrevState ), pParaPortion->aExtraCharInfos.Count() );
+                    }
+                }
+            }
+            */
 
             nScriptType = xBI->getScriptType( aOUText, nPos );
             if ( nScriptType == i18n::ScriptType::WEAK )
@@ -1365,6 +1429,69 @@ BOOL ImpEditEngine::IsScriptChange( const EditPaM& rPaM ) const
     return bScriptChange;
 }
 
+// See comment in editdoc.hxx
+/*
+USHORT ImpEditEngine::GetAsianCompressionCharInfo( const EditPaM& rPaM, USHORT* pEndPos ) const
+{
+    USHORT nCharInfo = CHAR_NORMAL;
+
+    if ( pEndPos )
+        *pEndPos = rPaM.GetNode()->Len();
+
+    if ( rPaM.GetNode()->Len() )
+    {
+         USHORT nPara = GetEditDoc().GetPos( rPaM.GetNode() );
+        ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
+        if ( !pParaPortion->aScriptInfos.Count() )
+            ((ImpEditEngine*)this)->InitScriptTypes( nPara );
+
+        ExtraCharInfos& rExtraInfos = pParaPortion->aExtraCharInfos;
+        USHORT nPos = rPaM.GetIndex();
+        for ( USHORT n = 0; n < rExtraInfos.Count(); n++ )
+        {
+            if ( ( rExtraInfos[n].nStartPos <= nPos ) && ( rExtraInfos[n].nEndPos >= nPos ) )
+               {
+                nCharInfo = rExtraInfos[n].nType;
+                if( pEndPos )
+                    *pEndPos = rExtraInfos[n].nEndPos;
+                break;
+            }
+        }
+    }
+    return nCharInfo;
+}
+
+USHORT ImpEditEngine::GetAsianCompressionCharInfo( const EditSelection& rSel ) const
+{
+    EditSelection aSel( rSel );
+    aSel.Adjust( aEditDoc );
+
+    short nCharInfo = CHAR_NORMAL;
+
+     USHORT nStartPara = GetEditDoc().GetPos( aSel.Min().GetNode() );
+     USHORT nEndPara = GetEditDoc().GetPos( aSel.Max().GetNode() );
+
+    for ( USHORT nPara = nStartPara; nPara <= nEndPara; nPara++ )
+    {
+        ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
+        if ( !pParaPortion->aScriptInfos.Count() )
+            ((ImpEditEngine*)this)->InitScriptTypes( nPara );
+
+        ExtraCharInfos& rExtraInfos = pParaPortion->aExtraCharInfos;
+
+        USHORT nS = ( nPara == nStartPara ) ? aSel.Min().GetIndex() : 0;
+        USHORT nE = ( nPara == nEndPara ) ? aSel.Max().GetIndex() : pParaPortion->GetNode()->Len();
+        for ( USHORT n = 0; n < rExtraInfos.Count(); n++ )
+        {
+            if ( ( rExtraInfos[n].nStartPos <= nE ) && ( rExtraInfos[n].nEndPos >= nS ) )
+               {
+                nCharInfo |= rExtraInfos[n].nType;
+            }
+        }
+    }
+    return nCharInfo;
+}
+*/
 
 
 //  ----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-12 13:08:02 $
+ *  last change: $Author: mt $ $Date: 2001-06-21 12:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,30 @@ Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin )
     // Translation...
     aTranslatedPos += rOrigin;
     return aTranslatedPos;
+}
+
+BYTE GetCharTypeForCompression( xub_Unicode cChar )
+{
+    switch ( cChar )
+    {
+        case 0x3008: case 0x300A: case 0x300C: case 0x300E:
+        case 0x3010: case 0x3014: case 0x3016: case 0x3018:
+        case 0x301A: case 0x301D:
+        {
+            return CHAR_PUNCTUATIONRIGHT;
+        }
+        case 0x3001: case 0x3002: case 0x3009: case 0x300B:
+        case 0x300D: case 0x300F: case 0x3011: case 0x3015:
+        case 0x3017: case 0x3019: case 0x301B: case 0x301E:
+        case 0x301F:
+        {
+            return CHAR_PUNCTUATIONLEFT;
+        }
+        default:
+        {
+            return ( ( 0x3040 <= cChar ) && ( 0x3100 > cChar ) ) ? CHAR_KANA : CHAR_NORMAL;
+        }
+    }
 }
 
 void lcl_DrawRedLines( OutputDevice* pOutDev, long nFontHeight, const Point& rPnt, sal_uInt16 nIndex, sal_uInt16 nMaxEnd, const long* pDXArray, WrongList* pWrongs, short nOrientation, const Point& rOrigin )
@@ -689,6 +713,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
     TabInfo aCurrentTab;
 
     BOOL bForceOneRun = bEmptyNodeWithPolygon;
+    BOOL bCompressedChars = FALSE;
 
     while ( ( nIndex < pNode->Len() ) || bForceOneRun )
     {
@@ -903,6 +928,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                             bBrokenLine = sal_True;
                         }
                         pLine->GetCharPosArray().Insert( pPortion->GetSize().Width(), nTmpPos-pLine->GetStart() );
+                        bCompressedChars = FALSE;
                     }
                     break;
                     case EE_FEATURE_LINEBR:
@@ -912,6 +938,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                         bEOL = sal_True;
                         bLineBreak = sal_True;
                         pPortion->GetKind() = PORTIONKIND_LINEBREAK;
+                        bCompressedChars = FALSE;
                     }
                     break;
                     case EE_FEATURE_FIELD:
@@ -940,6 +967,9 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                             bEOL = sal_True;
                             bBrokenLine = sal_True;
                         }
+                        // Compression in Fields????
+                        // I think this could be a little bit difficult and is not very usefull
+                        bCompressedChars = FALSE;
                     }
                     break;
                     default:    DBG_ERROR( "Was fuer ein Feature ?" );
@@ -953,7 +983,7 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 aTmpFont.SetPhysFont( GetRefDevice() );
                 if ( bCalcCharPositions || !pPortion->HasValidSize() )
                     pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(), *pParaPortion->GetNode(), nTmpPos, pPortion->GetLen(), pBuf );
-                nTmpWidth += pPortion->GetSize().Width();
+
                 if ( bCalcCharPositions )
                 {
                     sal_uInt16 nLen = pPortion->GetLen();
@@ -963,28 +993,15 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                     pLine->GetCharPosArray().Insert( pBuf, nLen, nPos );
                 }
 
+                // And now check for Compression:
+                if ( GetAsianCompressionMode() )
+                    bCompressedChars |= ImplCalcAsianCompression( pNode, pPortion, nTmpPos, (long*)pLine->GetCharPosArray().GetData() + (nTmpPos-pLine->GetStart()), 10000, FALSE );
+
+                nTmpWidth += pPortion->GetSize().Width();;
+
+
                 if( bScriptSpace && ( nTmpWidth < nXWidth ) && IsScriptChange( EditPaM( pNode, nTmpPos+pPortion->GetLen() ) ) )
                 {
-                    // MT 05/2001: Don't create extra portion, add space to prev portion...
-                    /*
-                    USHORT nSpacePortion = nTmpPortion+1;
-                    TextPortion* pSpacePortion = NULL;
-
-                    TextPortion* pNextPortion = ( nSpacePortion < pParaPortion->GetTextPortions().Count() ) ? pParaPortion->GetTextPortions().GetObject( nSpacePortion ): NULL;
-                    if ( pNextPortion && ( pNextPortion->GetKind() == PORTIONKIND_EXTRASPACE ) )
-                    {
-                        pSpacePortion = pNextPortion;
-                    }
-                    else
-                    {
-                        pSpacePortion = new TextPortion( 0 );
-                        pSpacePortion->GetKind() = PORTIONKIND_EXTRASPACE;
-                        pParaPortion->GetTextPortions().Insert( pSpacePortion, nSpacePortion );
-                    }
-                    nTmpPortion++;  // Skip this Portion
-                    pSpacePortion->GetSize().Width() = pPortion->GetSize().Height()/5;
-                    nTmpWidth += pSpacePortion->GetSize().Width();
-                    */
                     long nExtraSpace = pPortion->GetSize().Height()/5;
                     pPortion->GetSize().Width() += nExtraSpace;
                     nTmpWidth += nExtraSpace;
@@ -1126,6 +1143,11 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             DBG_ASSERT( (nPortionEnd-nPortionStart) == pPortion->GetLen(), "Doch eine andere Portion?!" );
             long nRemainingWidth = nMaxLineWidth - nTmpWidth;
             sal_Bool bCanHyphenate = ( aTmpFont.GetCharSet() != RTL_TEXTENCODING_SYMBOL );
+            if ( bCompressedChars && ( pPortion->GetLen() > 1 ) && pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
+            {
+                // I need the manipulated DXArray for determining the break postion...
+                ImplCalcAsianCompression( pNode, pPortion, nPortionStart, (long*)pLine->GetCharPosArray().GetData() + (nPortionStart-pLine->GetStart()), 10000, TRUE );
+            }
             ImpBreakLine( pParaPortion, pLine, pPortion, nPortionStart,
                                             nRemainingWidth, bCanHyphenate && bHyphenatePara );
         }
@@ -1233,6 +1255,13 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
                 nMaxLineWidth = nMaxLineWidthFix;
         }
 
+        if ( bCompressedChars )
+        {
+            long nRemainingWidth = nMaxLineWidth - aTextSize.Width();
+            ImplExpandCompressedPortions( pLine, pParaPortion, nRemainingWidth );
+            aTextSize = pLine->CalcTextSize( *pParaPortion );
+        }
+
         if ( pLine->IsHangingPunctuation() )
         {
             // Width from HangingPunctuation was set to 0 in ImpBreakLine,
@@ -1243,7 +1272,6 @@ sal_Bool ImpEditEngine::CreateLines( USHORT nPara, sal_uInt32 nStartPosY )
             long nNewValue = ( nPosInArray ? pLine->GetCharPosArray()[ nPosInArray-1 ] : 0 ) + n;
             pLine->GetCharPosArray()[ nPosInArray ] = nNewValue;
             pTP->GetSize().Width() += n;
-
         }
 
         switch ( eJustification )
@@ -1817,6 +1845,17 @@ sal_uInt16 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_uInt16 nP
         // Kein neues GetTextSize, sondern Werte aus Array verwenden:
         DBG_ASSERT( nPos > pCurLine->GetStart(), "SplitTextPortion am Anfang der Zeile?" );
         pTextPortion->GetSize().Width() = pCurLine->GetCharPosArray()[ nPos-pCurLine->GetStart()-1 ];
+
+        if ( pTextPortion->GetExtraInfos() && pTextPortion->GetExtraInfos()->bCompressed )
+        {
+            // We need the original size from the portion
+            USHORT nTxtPortionStart = pPortion->GetTextPortions().GetStartPos( nSplitPortion );
+               SvxFont aTmpFont( pPortion->GetNode()->GetCharAttribs().GetDefFont() );
+            SeekCursor( pPortion->GetNode(), nTxtPortionStart+1, aTmpFont );
+            aTmpFont.SetPhysFont( GetRefDevice() );
+            Size aSz = aTmpFont.QuickGetTextSize( GetRefDevice(), *pPortion->GetNode(), nTxtPortionStart, pTextPortion->GetLen(), NULL );
+            pTextPortion->GetExtraInfos()->nOrgWidth = aSz.Width();
+        }
     }
     else
         pTextPortion->GetSize().Width() = (-1);
@@ -2530,7 +2569,14 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                                 aTmpFont.SetPhysFont( pOutDev );
                                             }
                                         }
-                                        aTmpFont.QuickDrawText( pOutDev, aOutPos, aText, 0, aText.Len(), pDXArray );
+                                        Point aRealOutPos( aOutPos );
+                                        if ( ( pTextPortion->GetKind() == PORTIONKIND_TEXT )
+                                               && pTextPortion->GetExtraInfos() && pTextPortion->GetExtraInfos()->bCompressed
+                                               && pTextPortion->GetExtraInfos()->bFirstCharIsRightPunktuation )
+                                        {
+                                            aRealOutPos.X() += pTextPortion->GetExtraInfos()->nPortionOffsetX;
+                                        }
+                                        aTmpFont.QuickDrawText( pOutDev, aRealOutPos, aText, 0, aText.Len(), pDXArray );
                                     }
 
 #ifndef SVX_LIGHT
@@ -3307,4 +3353,186 @@ Color ImpEditEngine::GetAutoColor() const
     }
 
     return aColor;
+}
+
+
+BOOL ImpEditEngine::ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, USHORT nStartPos, long* pDXArray, USHORT n100thPercentFromMax, BOOL bManipulateDXArray )
+{
+    DBG_ASSERT( GetAsianCompressionMode(), "ImplCalcAsianCompression - Why?" );
+    DBG_ASSERT( pTextPortion->GetLen(), "ImplCalcAsianCompression - Empty Portion?" );
+
+    // Percent is 1/100 Percent...
+
+    if ( n100thPercentFromMax == 10000 )
+        pTextPortion->SetExtraInfos( NULL );
+
+    BOOL bCompressed = FALSE;
+
+    if ( GetScriptType( EditPaM( pNode, nStartPos+1 ) ) == i18n::ScriptType::ASIAN )
+    {
+        long nNewPortionWidth = pTextPortion->GetSize().Width();
+        USHORT nPortionLen = pTextPortion->GetLen();
+        for ( USHORT n = 0; n < nPortionLen; n++ )
+        {
+            BYTE nType = GetCharTypeForCompression( pNode->GetChar( n+nStartPos ) );
+
+            BOOL bCompressPunctuation = ( nType == CHAR_PUNCTUATIONLEFT ) || ( nType == CHAR_PUNCTUATIONRIGHT );
+            BOOL bCompressKana = ( nType == CHAR_KANA ) && ( GetAsianCompressionMode() == EE_ASIANCOMPRESSION_PUNCTIONANDKANA );
+
+            // create Extra infos only if needed...
+            if ( bCompressPunctuation || bCompressKana )
+            {
+                if ( !pTextPortion->GetExtraInfos() )
+                {
+                    ExtraPortionInfo* pExtraInfos = new ExtraPortionInfo;
+                    pTextPortion->SetExtraInfos( pExtraInfos );
+                    pExtraInfos->nOrgWidth = pTextPortion->GetSize().Width();
+                    pExtraInfos->nAsianCompressionTypes = CHAR_NORMAL;
+                }
+                pTextPortion->GetExtraInfos()->nMaxCompression100thPercent = n100thPercentFromMax;
+                pTextPortion->GetExtraInfos()->nAsianCompressionTypes |= nType;
+//                pTextPortion->GetExtraInfos()->nCompressedChars++;
+
+                long nOldCharWidth;
+                if ( (n+1) < nPortionLen )
+                {
+                    nOldCharWidth = pDXArray[n];
+                }
+                else
+                {
+                    if ( bManipulateDXArray )
+                        nOldCharWidth = nNewPortionWidth - pTextPortion->GetExtraInfos()->nPortionOffsetX;
+                    else
+                        nOldCharWidth = pTextPortion->GetExtraInfos()->nOrgWidth;
+                }
+                nOldCharWidth -= ( n ? pDXArray[n-1] : 0 );
+
+                long nCompress = 0;
+
+                if ( bCompressPunctuation )
+                {
+                    // pTextPortion->GetExtraInfos()->nComressionWeight += 5;
+                    nCompress = nOldCharWidth / 2;
+                }
+                else // Kana
+                {
+                    // pTextPortion->GetExtraInfos()->nComressionWeight += 1;
+                    nCompress = nOldCharWidth / 10;
+                }
+
+                if ( n100thPercentFromMax != 10000 )
+                {
+                    nCompress *= n100thPercentFromMax;
+                    nCompress /= 10000;
+                }
+
+                if ( nCompress )
+                {
+                    bCompressed = TRUE;
+                    nNewPortionWidth -= nCompress;
+                    pTextPortion->GetExtraInfos()->bCompressed = TRUE;
+
+
+                    // Special handling for rightpunctuation: For the 'compression' we must
+                    // start th eoutput before the normal char position....
+                    if ( bManipulateDXArray && ( pTextPortion->GetLen() > 1 ) )
+                    {
+                        if ( !pTextPortion->GetExtraInfos()->pOrgDXArray )
+                            pTextPortion->GetExtraInfos()->SaveOrgDXArray( pDXArray, pTextPortion->GetLen()-1 );
+
+                        if ( nType == CHAR_PUNCTUATIONRIGHT )
+                        {
+                            // If it's the first char, I must handle it in Paint()...
+                            if ( n )
+                            {
+                                // -1: No entry for the last character
+                                for ( USHORT i = n-1; i < (nPortionLen-1); i++ )
+                                    pDXArray[i] -= nCompress;
+                            }
+                            else
+                            {
+                                pTextPortion->GetExtraInfos()->bFirstCharIsRightPunktuation = TRUE;
+                                pTextPortion->GetExtraInfos()->nPortionOffsetX = -nCompress;
+                            }
+                        }
+                        else
+                        {
+                            // -1: No entry for the last character
+                            for ( USHORT i = n; i < (nPortionLen-1); i++ )
+                                pDXArray[i] -= nCompress;
+                        }
+                    }
+                }
+            }
+        }
+
+        if ( bCompressed && ( n100thPercentFromMax == 10000 ) )
+            pTextPortion->GetExtraInfos()->nWidthFullCompression = nNewPortionWidth;
+
+        pTextPortion->GetSize().Width() = nNewPortionWidth;
+
+        if ( pTextPortion->GetExtraInfos() && ( n100thPercentFromMax != 10000 ) )
+        {
+            // Maybe rounding errors in nNewPortionWidth, assure that width not bigger than expected
+            long nShrink = pTextPortion->GetExtraInfos()->nOrgWidth - pTextPortion->GetExtraInfos()->nWidthFullCompression;
+            nShrink *= n100thPercentFromMax;
+            nShrink /= 10000;
+            long nNewWidth = pTextPortion->GetExtraInfos()->nOrgWidth - nShrink;
+            if ( nNewWidth < pTextPortion->GetSize().Width() )
+            pTextPortion->GetSize().Width() = nNewWidth;
+        }
+    }
+    return bCompressed;
+}
+
+
+void ImpEditEngine::ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, long nRemainingWidth )
+{
+    BOOL bFoundCompressedPortion = FALSE;
+    long nCompressed = 0;
+    long nCompressWeight = 0;
+    TextPortionList aCompressedPortions;
+
+    USHORT nPortion = pLine->GetEndPortion();
+    TextPortion* pTP = pParaPortion->GetTextPortions()[ nPortion ];
+    while ( pTP && ( pTP->GetKind() == PORTIONKIND_TEXT ) )
+    {
+        if ( pTP->GetExtraInfos() && pTP->GetExtraInfos()->bCompressed )
+        {
+            bFoundCompressedPortion = TRUE;
+            nCompressed += pTP->GetExtraInfos()->nOrgWidth - pTP->GetSize().Width();
+            aCompressedPortions.Insert( pTP, aCompressedPortions.Count() );
+        }
+        pTP = nPortion ? pParaPortion->GetTextPortions()[ --nPortion ] : NULL;
+    }
+
+    if ( bFoundCompressedPortion )
+    {
+        long nCompressPercent = 0;
+        if ( nCompressed > nRemainingWidth )
+        {
+            nCompressPercent = nCompressed - nRemainingWidth;
+            DBG_ASSERT( nCompressPercent < 200000, "ImplExpandCompressedPortions - Overflow!" );
+            nCompressPercent *= 10000;
+            nCompressPercent /= nCompressed;
+        }
+
+        for ( USHORT n = 0; n < aCompressedPortions.Count(); n++ )
+        {
+            pTP = aCompressedPortions[n];
+            pTP->GetExtraInfos()->bCompressed = FALSE;
+            pTP->GetSize().Width() = pTP->GetExtraInfos()->nOrgWidth;
+            if ( nCompressPercent )
+            {
+                USHORT nTxtPortion = pParaPortion->GetTextPortions().GetPos( pTP );
+                USHORT nTxtPortionStart = pParaPortion->GetTextPortions().GetStartPos( nTxtPortion );
+                long* pDXArray = (long*)pLine->GetCharPosArray().GetData()+( nTxtPortionStart-pLine->GetStart() );
+                if ( pTP->GetExtraInfos()->pOrgDXArray )
+                    memcpy( pDXArray, pTP->GetExtraInfos()->pOrgDXArray, (pTP->GetLen()-1)*sizeof(long) );
+                ImplCalcAsianCompression( pParaPortion->GetNode(), pTP, nTxtPortionStart, pDXArray, (USHORT)nCompressPercent, TRUE );
+            }
+        }
+    }
+
+    aCompressedPortions.Remove( 0, aCompressedPortions.Count() );
 }

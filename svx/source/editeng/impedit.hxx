@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-13 10:55:27 $
+ *  last change: $Author: mt $ $Date: 2001-06-21 12:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,6 +444,8 @@ private:
     sal_uInt16          nStretchX;
     sal_uInt16          nStretchY;
 
+    EEAsianCompression  eAsianCompressionMode;
+
     sal_uInt16          nBigTextObjectStart;
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellChecker1 > xSpeller;
@@ -548,6 +550,8 @@ private:
 
     sal_Bool            ImpCheckRefMapMode();
 
+    BOOL                ImplHasText() const;
+
     void                InsertContent( ContentNode* pNode, sal_uInt16 nPos );
     EditPaM             SplitContent( sal_uInt16 nNode, sal_uInt16 nSepPos );
     EditPaM             ConnectContents( sal_uInt16 nLeftNode, sal_Bool bBackward );
@@ -577,6 +581,12 @@ private:
     USHORT              GetScriptType( const EditPaM& rPaM, USHORT* pEndPos = NULL ) const;
     USHORT              GetScriptType( const EditSelection& rSel ) const;
     BOOL                IsScriptChange( const EditPaM& rPaM ) const;
+
+//    USHORT              GetAsianCompressionCharInfo( const EditPaM& rPaM, USHORT* pEndPos ) const;
+//    USHORT              GetAsianCompressionCharInfo( const EditSelection& rSel ) const;
+
+    BOOL                ImplCalcAsianCompression( ContentNode* pNode, TextPortion* pTextPortion, USHORT nStartPos, long* pDXArray, USHORT n100thPercentFromMax, BOOL bManipulateDXArray );
+    void                ImplExpandCompressedPortions( EditLine* pLine, ParaPortion* pParaPortion, long nRemainingWidth );
 
     EditPaM             ReadText( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadRTF( SvStream& rInput, EditSelection aSel );
@@ -856,6 +866,9 @@ public:
 
     void                TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
 
+    void                SetAsianCompressionMode( EEAsianCompression e );
+    EEAsianCompression  GetAsianCompressionMode() const { return eAsianCompressionMode; }
+
     vos::ORef<SvxForbiddenCharactersTable>  GetForbiddenCharsTable( BOOL bGetInternal = TRUE ) const;
     void                SetForbiddenCharsTable( vos::ORef<SvxForbiddenCharactersTable> xForbiddenChars );
 };
@@ -1042,6 +1055,7 @@ inline Cursor* ImpEditView::GetCursor()
 
 void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit );
 void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const MapUnit* pSourceUnit = NULL, const MapUnit* pDestUnit = NULL );
+BYTE GetCharTypeForCompression( xub_Unicode cChar );
 Point Rotate( const Point& rPoint, short nOrientation, const Point& rOrigin );
 
 #endif // _IMPEDIT_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 08:06:31 $
+ *  last change: $Author: mt $ $Date: 2001-06-21 12:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ public:
 typedef ContentAttribsInfo* ContentAttribsInfoPtr;
 SV_DECL_PTRARR( ContentInfoArray, ContentAttribsInfoPtr, 1, 1 );
 
-// ----------------------------------------------------------------------
+//  ----------------------------------------------------------------------
 //  class SvxFontTable
 //  ----------------------------------------------------------------------
 DECLARE_TABLE( DummyFontTable, SvxFontItem* );
@@ -173,7 +173,7 @@ public:
     ULONG   GetId( const SvxFontItem& rFont );
 };
 
-// ----------------------------------------------------------------------
+//  ----------------------------------------------------------------------
 //  class SvxColorList
 //  ----------------------------------------------------------------------
 typedef ContentNode* ContentNodePtr;
@@ -187,7 +187,7 @@ public:
     ULONG   GetId( const SvxColorItem& rColor );
 };
 
-// ----------------------------------------------------------------------
+//  ----------------------------------------------------------------------
 //  class ItemList
 //  ----------------------------------------------------------------------
 typedef const SfxPoolItem* ConstPoolItemPtr;
@@ -198,7 +198,7 @@ public:
     const SfxPoolItem*  FindAttrib( USHORT nWhich );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class ContentAttribs
 // -------------------------------------------------------------------------
 class ContentAttribs
@@ -221,7 +221,7 @@ public:
     BOOL                HasItem( USHORT nWhich );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class CharAttribList
 // -------------------------------------------------------------------------
 class CharAttribList
@@ -267,7 +267,7 @@ public:
     BOOL            DbgCheckAttribs();
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class ContentNode
 // -------------------------------------------------------------------------
 class ContentNode : public XubString
@@ -324,7 +324,7 @@ inline void ContentNode::CreateWrongList()
 typedef ContentNode* ContentNodePtr;
 SV_DECL_PTRARR( ContentList, ContentNodePtr, 0, 4 );
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditPaM
 // -------------------------------------------------------------------------
 class EditPaM
@@ -365,27 +365,80 @@ public:
 #define DELMODE_RESTOFWORD      1
 #define DELMODE_RESTOFCONTENT   2
 
-// -------------------------------------------------------------------------
+#define CHAR_NORMAL            0x00
+#define CHAR_KANA              0x01
+#define CHAR_PUNCTUATIONLEFT   0x02
+#define CHAR_PUNCTUATIONRIGHT  0x04
+
+// MT 06/2001: For keeping information for CJK compression,
+// I don't thing that this is neccessary....
+// See also GetAsianCompressionCharInfo...
+/*
+struct ExtraCharInfo
+{
+    USHORT  nStartPos;
+    USHORT  nEndPos;
+    BYTE    nType;
+
+    ExtraCharInfo( USHORT nS, USHORT nE, BYTE nT ) { nStartPos = nS; nEndPos = nE; nType = nT;}
+};
+
+SV_DECL_VARARR( ExtraCharInfos, ExtraCharInfo, 0, 1 );
+*/
+
+
+// -------------------------------------------------------------------------
+// struct ExtraPortionInfos
+// -------------------------------------------------------------------------
+struct ExtraPortionInfo
+{
+    long    nOrgWidth;
+    long    nWidthFullCompression;
+
+    long    nPortionOffsetX;
+
+    USHORT  nMaxCompression100thPercent;
+
+    BYTE    nAsianCompressionTypes;
+    BOOL    bFirstCharIsRightPunktuation;
+    BOOL    bCompressed;
+
+    long*    pOrgDXArray;
+
+
+            ExtraPortionInfo();
+            ~ExtraPortionInfo();
+
+    void    SaveOrgDXArray( const long* pDXArray, USHORT nLen );
+    void    DestroyOrgDXArray();
+};
+
+
+// -------------------------------------------------------------------------
 // class TextPortion
 // -------------------------------------------------------------------------
 class TextPortion
 {
 private:
-    USHORT      nLen;
-    Size        aOutSz;
-    BYTE        nKind;
-    sal_Unicode nExtraValue;
+    ExtraPortionInfo*   pExtraInfos;
+    USHORT              nLen;
+    Size                aOutSz;
+    BYTE                nKind;
+    sal_Unicode         nExtraValue;
 
-                TextPortion()               { nLen = 0; nKind = PORTIONKIND_TEXT; nExtraValue = 0;}
+
+                TextPortion()               { DBG_CTOR( EE_TextPortion, 0 );
+                                              pExtraInfos = NULL; nLen = 0; nKind = PORTIONKIND_TEXT; nExtraValue = 0;}
 
 public:
                 TextPortion( USHORT nL ) : aOutSz( -1, -1 )
                                             {   DBG_CTOR( EE_TextPortion, 0 );
-                                                nLen = nL; nKind = PORTIONKIND_TEXT; nExtraValue = 0; }
+                                                pExtraInfos = NULL; nLen = nL; nKind = PORTIONKIND_TEXT; nExtraValue = 0; }
                 TextPortion( const TextPortion& r ) : aOutSz( r.aOutSz )
                                             { DBG_CTOR( EE_TextPortion, 0 );
-                                                nLen = r.nLen; nKind = r.nKind; nExtraValue = r.nExtraValue; }
-                ~TextPortion()              {   DBG_DTOR( EE_TextPortion, 0 ); }
+                                                pExtraInfos = NULL; nLen = r.nLen; nKind = r.nKind; nExtraValue = r.nExtraValue; }
+
+                ~TextPortion()              {   DBG_DTOR( EE_TextPortion, 0 ); delete pExtraInfos; }
 
     USHORT      GetLen() const              { return nLen; }
     USHORT&     GetLen()                    { return nLen; }
@@ -401,10 +454,12 @@ public:
     void        SetExtraValue( sal_Unicode n )  { nExtraValue = n; }
 
     BOOL        HasValidSize() const        { return aOutSz.Width() != (-1); }
+
+    ExtraPortionInfo*   GetExtraInfos() const { return pExtraInfos; }
+    void                SetExtraInfos( ExtraPortionInfo* p ) { delete pExtraInfos; pExtraInfos = p; }
 };
 
-
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class TextPortionList
 // -------------------------------------------------------------------------
 typedef TextPortion* TextPortionPtr;
@@ -418,6 +473,7 @@ public:
 
     void    Reset();
     USHORT  FindPortion( USHORT nCharPos, USHORT& rPortionStart );
+    USHORT  GetStartPos( USHORT nPortion );
     void    DeleteFromPortion( USHORT nDelFrom );
 };
 
@@ -425,7 +481,7 @@ class ParaPortion;
 
 SV_DECL_VARARR( CharPosArray, long, 0, CHARPOSGROW );
 
-// ------------------------------------------------------------------------
+// ------------------------------------------------------------------------
 // class EditLine
 // -------------------------------------------------------------------------
 class EditLine
@@ -510,7 +566,7 @@ public:
 };
 
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class LineList
 // -------------------------------------------------------------------------
 typedef EditLine* EditLinePtr;
@@ -527,7 +583,7 @@ public:
     USHORT  FindLine( USHORT nChar, BOOL bInclEnd );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class ParaPortion
 // -------------------------------------------------------------------------
 class ParaPortion
@@ -540,6 +596,7 @@ private:
     long                nHeight;
 
     ScriptTypePosInfos  aScriptInfos;
+//    ExtraCharInfos      aExtraCharInfos;
 
     USHORT              nInvalidPosStart;
     USHORT              nFirstLineOffset;   // Fuer Writer-LineSpacing-Interpretation
@@ -598,7 +655,7 @@ public:
 typedef ParaPortion* ParaPortionPtr;
 SV_DECL_PTRARR( DummyParaPortionList, ParaPortionPtr, 0, 4 );
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class ParaPortionList
 // -------------------------------------------------------------------------
 class ParaPortionList : public DummyParaPortionList
@@ -618,7 +675,7 @@ public:
     void            DbgCheck( EditDoc& rDoc );
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditSelection
 // -------------------------------------------------------------------------
 class EditSelection
@@ -650,7 +707,7 @@ public:
                             ? TRUE : FALSE; }
 };
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class DeletedNodeInfo
 // -------------------------------------------------------------------------
 class DeletedNodeInfo
@@ -671,7 +728,7 @@ public:
 typedef DeletedNodeInfo* DeletedNodeInfoPtr;
 SV_DECL_PTRARR( DeletedNodesList, DeletedNodeInfoPtr, 0, 4 );
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditDoc
 // -------------------------------------------------------------------------
 class EditDoc : public ContentList
@@ -759,7 +816,7 @@ inline EditCharAttrib* GetAttrib( const CharAttribArray& rAttribs, USHORT nAttr 
 
 BOOL CheckOrderedList( CharAttribArray& rAttribs, BOOL bStart );
 
-// -------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 // class EditEngineItemPool
 // -------------------------------------------------------------------------
 class EditEngineItemPool : public SfxItemPool

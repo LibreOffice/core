@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-17 13:58:40 $
+ *  last change: $Author: mt $ $Date: 2001-06-21 12:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2232,3 +2232,23 @@ void ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int3
         FormatAndUpdate();
     }
 }
+
+void ImpEditEngine::SetAsianCompressionMode( EEAsianCompression e )
+{
+    if ( e != eAsianCompressionMode )
+    {
+        eAsianCompressionMode = e;
+        if ( ImplHasText() )
+        {
+            FormatFullDoc();
+            UpdateViews();
+        }
+    }
+}
+
+
+BOOL ImpEditEngine::ImplHasText() const
+{
+    return ( ( GetEditDoc().Count() > 1 ) || GetEditDoc().GetObject(0)->Len() );
+}
+

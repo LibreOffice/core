@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-30 15:44:48 $
+ *  last change: $Author: mt $ $Date: 2001-06-21 12:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,17 @@ void EditEngine::TransliterateText( const ESelection& rSelection, sal_Int32 nTra
     pImpEditEngine->TransliterateText( pImpEditEngine->CreateSel( rSelection ), nTransliterationMode );
 }
 
+void EditEngine::SetAsianCompressionMode( EEAsianCompression e )
+{
+    DBG_CHKTHIS( EditView, 0 );
+    pImpEditEngine->SetAsianCompressionMode( e );
+}
+
+EEAsianCompression EditEngine::GetAsianCompressionMode() const
+{
+    DBG_CHKTHIS( EditView, 0 );
+    return pImpEditEngine->GetAsianCompressionMode();
+}
 
 void EditEngine::SetPolygon( const XPolyPolygon& rPoly )
 {
@@ -885,6 +896,10 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             break;
             default:
             {
+                #if defined( DBG_UTIL ) || defined( DEBUG )
+                    if ( ( nCode == KEY_C ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
+                        SetAsianCompressionMode( GetAsianCompressionMode() ? EE_ASIANCOMPRESSION_NONE : EE_ASIANCOMPRESSION_PUNCTIONANDKANA );
+                #endif
                 if ( !bReadOnly && IsSimpleCharInput( rKeyEvent ) )
                 {
                     xub_Unicode nCharCode = rKeyEvent.GetCharCode();

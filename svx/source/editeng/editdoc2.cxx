@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-11 08:06:31 $
+ *  last change: $Author: mt $ $Date: 2001-06-21 12:47:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,54 @@ USHORT TextPortionList::FindPortion( USHORT nCharPos, USHORT& nPortionStart )
     return ( Count() - 1 );
 }
 
-// -------------------------------------------------------------------------
+USHORT TextPortionList::GetStartPos( USHORT nPortion )
+{
+    USHORT nPos = 0;
+    for ( USHORT n = 0; n < nPortion; n++ )
+    {
+        TextPortion* pPortion = GetObject( n );
+        nPos += pPortion->GetLen();
+    }
+    return nPos;
+}
+
+
+// -------------------------------------------------------------------------
+// class ExtraPortionInfo
+// -------------------------------------------------------------------------
+
+ExtraPortionInfo::ExtraPortionInfo()
+{
+    nOrgWidth = 0;
+    nWidthFullCompression = 0;
+    nMaxCompression100thPercent = 0;
+    nAsianCompressionTypes = 0;
+    nPortionOffsetX = 0;
+    bFirstCharIsRightPunktuation = FALSE;
+    bCompressed = FALSE;
+    pOrgDXArray = NULL;
+}
+
+ExtraPortionInfo::~ExtraPortionInfo()
+{
+    delete pOrgDXArray;
+}
+
+void ExtraPortionInfo::SaveOrgDXArray( const long* pDXArray, USHORT nLen )
+{
+    delete pOrgDXArray;
+    pOrgDXArray = new long[nLen];
+    memcpy( pOrgDXArray, pDXArray, nLen*sizeof(long) );
+}
+
+void ExtraPortionInfo::DestroyOrgDXArray()
+{
+    delete pOrgDXArray;
+    pOrgDXArray = NULL;
+}
+
+
+// -------------------------------------------------------------------------
 // class ParaPortion
 // -------------------------------------------------------------------------
 ParaPortion::ParaPortion( ContentNode* pN )
@@ -220,6 +267,7 @@ void ParaPortion::MarkInvalid( USHORT nStart, short nDiff )
     }
     bInvalid = TRUE;
     aScriptInfos.Remove( 0, aScriptInfos.Count() );
+//  aExtraCharInfos.Remove( 0, aExtraCharInfos.Count() );
 }
 
 void ParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT nEnd )
@@ -238,6 +286,7 @@ void ParaPortion::MarkSelectionInvalid( USHORT nStart, USHORT nEnd )
     bInvalid = TRUE;
     bSimple = FALSE;
     aScriptInfos.Remove( 0, aScriptInfos.Count() );
+//  aExtraCharInfos.Remove( 0, aExtraCharInfos.Count() );
 }
 
 void ParaPortion::AdjustBlocks( EditLine* pLine, long nRemainingSpace )
@@ -384,7 +433,43 @@ long ParaPortion::GetXPos( EditLine* pLine, USHORT nIndex )
             {
                 // nIndex - 1, weil kein Wert fuer Stelle 0.
                 if ( nIndex != pLine->GetStart() )
+                {
                     nX += pLine->GetCharPosArray().GetObject( nIndex - 1 - pLine->GetStart() );
+                    if ( pPortion->GetExtraInfos() && pPortion->GetExtraInfos()->bCompressed )
+                    {
+                        nX += pPortion->GetExtraInfos()->nPortionOffsetX;
+                        if ( pPortion->GetExtraInfos()->nAsianCompressionTypes & CHAR_PUNCTUATIONRIGHT )
+                        {
+                            BYTE nType = GetCharTypeForCompression( GetNode()->GetChar( nIndex ) );
+                            if ( nType == CHAR_PUNCTUATIONRIGHT )
+                            {
+                                USHORT n = nIndex - nCurIndex;
+                                const long* pDXArray = pLine->GetCharPosArray().GetData()+( nCurIndex-pLine->GetStart() );
+                                long nCharWidth = ( ( (n+1) < pPortion->GetLen() ) ? pDXArray[n] : pPortion->GetSize().Width() )
+                                                                - ( n ? pDXArray[n-1] : 0 );
+                                if ( (n+1) < pPortion->GetLen() )
+                                {
+                                    // smaller, when char behind is CHAR_PUNCTUATIONRIGHT also
+                                    nType = GetCharTypeForCompression( GetNode()->GetChar( nIndex+1 ) );
+                                    if ( nType == CHAR_PUNCTUATIONRIGHT )
+                                    {
+                                        long nNextCharWidth = ( ( (n+2) < pPortion->GetLen() ) ? pDXArray[n+1] : pPortion->GetSize().Width() )
+                                                                        - pDXArray[n];
+                                        long nCompressed = nNextCharWidth/2;
+                                        nCompressed *= pPortion->GetExtraInfos()->nMaxCompression100thPercent;
+                                        nCompressed /= 10000;
+                                        nCharWidth += nCompressed;
+                                    }
+                                }
+                                else
+                                {
+                                    nCharWidth *= 2;    // last char pos to portion end is only compressed size
+                                }
+                                nX += nCharWidth/2; // 50% compression
+                            }
+                        }
+                    }
+                }
             }
             break;  // for
         }
