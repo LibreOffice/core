@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 14:17:11 $
+ *  last change: $Author: jb $ $Date: 2000-12-06 12:15:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1010,10 +1010,11 @@ UnoAny getSimpleValue(Tree const& aTree, NodeRef const& aNode)
 
 ISynchronizedData* getRootLock(Tree const& aTree)
 {
-    OSL_PRECOND( !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
-    if (aTree.isEmpty()) return 0;
+    TreeImpl* pImpl = TreeImplHelper::impl(aTree);
+    OSL_PRECOND( pImpl, "ERROR: Configuration: Tree locking requires a non-NULL Tree");
+    if (pImpl == NULL) return 0;
 
-    return TreeImplHelper::impl(aTree)->getRootLock();
+    return pImpl->getRootLock();
 }
 
 //-----------------------------------------------------------------------------
