@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jbu $ $Date: 2000-11-24 08:59:00 $
+#   last change: $Author: mi $ $Date: 2001-02-02 16:20:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -111,6 +111,7 @@ IDLFILES=\
     TextOutputStream.idl\
     XTextInputStream.idl\
     XTextOutputStream.idl\
+    XTruncate.idl\
     XXMLExtractor.idl	
 
 # ------------------------------------------------------------------
