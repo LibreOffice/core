@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impswfdialog.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-24 16:24:23 $
+ *  last change: $Author: cl $ $Date: 2002-11-21 14:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,4 +65,18 @@
 #define BTN_CANCEL 1
 #define BTN_HELP 1
 #define FI_DESCR 1
+#define FI_EXPORT_ALL_DESCR 2
+#define FI_EXPORT_BACKGROUNDS_DESCR 3
+#define FI_EXPORT_BACKGROUND_OBJECTS_DESCR 4
+#define FI_EXPORT_SLIDE_CONTENTS_DESCR 5
+#define FI_EXPORT_SOUND_DESCR 6
+#define FI_EXPORT_OLE_AS_JPEG_DESCR 7
+#define FI_EXPORT_MULTIPLE_FILES_DESCR 8
 #define NUM_FLD_QUALITY 1
+#define BOOL_EXPORT_ALL 1
+#define BOOL_EXPORT_BACKGROUNDS 2
+#define BOOL_EXPORT_BACKGROUND_OBJECTS 3
+#define BOOL_EXPORT_SLIDE_CONTENTS 4
+#define BOOL_EXPORT_SOUND 5
+#define BOOL_EXPORT_OLE_AS_JPEG 6
+#define BOOL_EXPORT_MULTIPLE_FILES 7

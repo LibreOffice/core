@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impswfdialog.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-24 16:24:24 $
+ *  last change: $Author: cl $ $Date: 2002-11-21 14:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,28 @@ class ImpSWFDialog : public ModalDialog
 private:
     FixedInfo           maFiDescr;
     NumericField        maNumFldQuality;
+    FixedInfo           maFiExportAllDescr;
+    CheckBox            maCheckExportAll;
+    FixedInfo           maFiExportBackgroundsDescr;
+    CheckBox            maCheckExportBackgrounds;
+    FixedInfo           maFiExportBackgroundObjectsDescr;
+    CheckBox            maCheckExportBackgroundObjects;
+    FixedInfo           maFiExportSlideContentsDescr;
+    CheckBox            maCheckExportSlideContents;
+    FixedInfo           maFiExportSoundDescr;
+    CheckBox            maCheckExportSound;
+    FixedInfo           maFiExportOLEAsJPEGDescr;
+    CheckBox            maCheckExportOLEAsJPEG;
+    FixedInfo           maFiExportMultipleFilesDescr;
+    CheckBox            maCheckExportMultipleFiles;
+
     OKButton            maBtnOK;
     CancelButton        maBtnCancel;
     HelpButton          maBtnHelp;
 
     FilterConfigItem    maConfigItem;
+
+    DECL_LINK( OnToggleCheckbox, CheckBox* );
 
 public:
     ImpSWFDialog( Window* pParent, ResMgr& rResMgr,

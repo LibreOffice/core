@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impswfdialog.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-24 16:24:25 $
+ *  last change: $Author: cl $ $Date: 2002-11-21 14:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 ModalDialog DLG_OPTIONS
 {
-    Size = MAP_APPFONT ( 159 , 92 ) ;
+    Size = MAP_APPFONT ( 200 , 200 ) ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Moveable = TRUE ;
@@ -72,25 +72,6 @@ ModalDialog DLG_OPTIONS
     Text [ ENGLISH ] = "Flash Optionen" ;
     Text [ english_us ] = "Flash Options" ;
 
-    OKButton BTN_OK
-    {
-        Pos = MAP_APPFONT ( 103 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_CANCEL
-    {
-        Pos = MAP_APPFONT ( 103 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
-    HelpButton BTN_HELP
-    {
-        Pos = MAP_APPFONT ( 103 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        TabStop = TRUE ;
-    };
     FixedText FI_DESCR
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
@@ -135,4 +116,110 @@ ModalDialog DLG_OPTIONS
         Last = 100 ;
         Repeat = TRUE ;
     };
+    CheckBox BOOL_EXPORT_ALL
+    {
+        Pos = MAP_APPFONT ( 12 , 65 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_ALL_DESCR
+    {
+        Pos = MAP_APPFONT ( 25 , 65 ) ;
+        Size = MAP_APPFONT ( 150 , 16 ) ;
+        Text = "Export All Slides (Uncheck exports current slide)" ;
+    };
+    CheckBox BOOL_EXPORT_MULTIPLE_FILES
+    {
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_MULTIPLE_FILES_DESCR
+    {
+        Pos = MAP_APPFONT ( 25 , 80 ) ;
+        Size = MAP_APPFONT ( 150 , 16 ) ;
+        Text = "Export As Multiple Files" ;
+    };
+    CheckBox BOOL_EXPORT_BACKGROUNDS
+    {
+        Pos = MAP_APPFONT ( 22 , 95 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_BACKGROUNDS_DESCR
+    {
+        Pos = MAP_APPFONT ( 35 , 95 ) ;
+        Size = MAP_APPFONT ( 100 , 16 ) ;
+        Text = "Export Backgrounds" ;
+    };
+    CheckBox BOOL_EXPORT_BACKGROUND_OBJECTS
+    {
+        Pos = MAP_APPFONT ( 22 , 107) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_BACKGROUND_OBJECTS_DESCR
+    {
+        Pos = MAP_APPFONT ( 35 , 107) ;
+        Size = MAP_APPFONT ( 100 , 16 ) ;
+        Text = "Export Background Objects" ;
+    };
+    CheckBox BOOL_EXPORT_SLIDE_CONTENTS
+    {
+        Pos = MAP_APPFONT ( 22 , 119 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_SLIDE_CONTENTS_DESCR
+    {
+        Pos = MAP_APPFONT ( 35 , 119 ) ;
+        Size = MAP_APPFONT ( 100 , 16 ) ;
+        Text = "Export Slide Contents" ;
+    };
+    CheckBox BOOL_EXPORT_SOUND
+    {
+        Pos = MAP_APPFONT ( 12 , 134 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_SOUND_DESCR
+    {
+        Pos = MAP_APPFONT ( 25 , 134 ) ;
+        Size = MAP_APPFONT ( 100 , 16 ) ;
+        Text = "Export Verilogix Slide Annotations" ;
+    };
+    CheckBox BOOL_EXPORT_OLE_AS_JPEG
+    {
+        Pos = MAP_APPFONT ( 12 , 146 ) ;
+        Size = MAP_APPFONT ( 10 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FI_EXPORT_OLE_AS_JPEG_DESCR
+    {
+        Pos = MAP_APPFONT ( 25 , 146 ) ;
+        Size = MAP_APPFONT ( 100 , 16 ) ;
+        Text = "Export OLE Objects as JPEG images" ;
+    };
+
+
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 12 , 180 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 70 , 180 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 140 , 180 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
 };

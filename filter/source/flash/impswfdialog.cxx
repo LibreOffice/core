@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impswfdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-10-30 12:34:34 $
+ *  last change: $Author: cl $ $Date: 2002-11-21 14:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,21 @@ ImpSWFDialog::ImpSWFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
     ModalDialog( pParent, ResId( DLG_OPTIONS, &rResMgr ) ),
     maFiDescr( this, ResId( FI_DESCR ) ),
     maNumFldQuality( this, ResId( NUM_FLD_QUALITY ) ),
+    maFiExportAllDescr( this, ResId( FI_EXPORT_ALL_DESCR ) ),
+    maCheckExportAll( this, ResId( BOOL_EXPORT_ALL ) ),
+    maFiExportBackgroundsDescr( this, ResId( FI_EXPORT_BACKGROUNDS_DESCR ) ),
+    maCheckExportBackgrounds( this, ResId( BOOL_EXPORT_BACKGROUNDS ) ),
+    maFiExportBackgroundObjectsDescr( this, ResId( FI_EXPORT_BACKGROUND_OBJECTS_DESCR ) ),
+    maCheckExportBackgroundObjects( this, ResId( BOOL_EXPORT_BACKGROUND_OBJECTS ) ),
+    maFiExportSlideContentsDescr( this, ResId( FI_EXPORT_SLIDE_CONTENTS_DESCR ) ),
+    maCheckExportSlideContents( this, ResId( BOOL_EXPORT_SLIDE_CONTENTS ) ),
+    maFiExportSoundDescr( this, ResId( FI_EXPORT_SOUND_DESCR ) ),
+    maCheckExportSound( this, ResId( BOOL_EXPORT_SOUND ) ),
+    maFiExportOLEAsJPEGDescr( this, ResId( FI_EXPORT_OLE_AS_JPEG_DESCR ) ),
+    maCheckExportOLEAsJPEG( this, ResId( BOOL_EXPORT_OLE_AS_JPEG ) ),
+    maFiExportMultipleFilesDescr( this, ResId( FI_EXPORT_MULTIPLE_FILES_DESCR ) ),
+    maCheckExportMultipleFiles( this, ResId( BOOL_EXPORT_MULTIPLE_FILES ) ),
+
     maBtnOK( this, ResId( BTN_OK ) ),
     maBtnCancel( this, ResId( BTN_CANCEL ) ),
     maBtnHelp( this, ResId( BTN_HELP ) ),
@@ -81,6 +96,20 @@ ImpSWFDialog::ImpSWFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
 {
     const ULONG nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 75 );
     maNumFldQuality.SetValue( nCompressMode );
+
+    maCheckExportAll.Check();
+    maCheckExportSlideContents.Check();
+    maCheckExportSound.Check();
+
+    maCheckExportAll.SetToggleHdl( LINK( this, ImpSWFDialog, OnToggleCheckbox ) );
+
+    maCheckExportBackgrounds.Disable(); maFiExportBackgroundsDescr.Disable();
+    maCheckExportBackgroundObjects.Disable(); maFiExportBackgroundObjectsDescr.Disable();
+    maCheckExportSlideContents.Disable(); maFiExportSlideContentsDescr.Disable();
+
+#ifdef AUGUSTUS
+    maCheckExportMultipleFiles.Check();
+#endif
 
     FreeResource();
 }
@@ -97,8 +126,31 @@ Sequence< PropertyValue > ImpSWFDialog::GetFilterData()
 {
     sal_Int32 nCompressMode = (sal_Int32)maNumFldQuality.GetValue();
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), nCompressMode );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportAll" ) ), maCheckExportAll.IsChecked() );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBackgrounds" ) ), maCheckExportBackgrounds.IsChecked() );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBackgroundObjects" ) ), maCheckExportBackgroundObjects.IsChecked() );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportSlideContents" ) ), maCheckExportSlideContents.IsChecked() );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportSound" ) ), maCheckExportSound.IsChecked() );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportOLEAsJPEG" ) ), maCheckExportOLEAsJPEG.IsChecked() );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportMultipleFiles" ) ), maCheckExportMultipleFiles.IsChecked() );
+
     Sequence< PropertyValue > aRet( maConfigItem.GetFilterData() );
 
     return aRet;
 }
 
+// AS: This is called whenever the user toggles one of the checkboxes
+IMPL_LINK( ImpSWFDialog, OnToggleCheckbox, CheckBox*, pBox )
+{
+    if (pBox == &maCheckExportAll)
+    {
+        maCheckExportBackgrounds.Enable(!maCheckExportBackgrounds.IsEnabled());
+        maFiExportBackgroundsDescr.Enable(!maFiExportBackgroundsDescr.IsEnabled());
+        maCheckExportBackgroundObjects.Enable(!maCheckExportBackgroundObjects.IsEnabled());
+        maFiExportBackgroundObjectsDescr.Enable(!maFiExportBackgroundObjectsDescr.IsEnabled());
+        maCheckExportSlideContents.Enable(!maCheckExportSlideContents.IsEnabled());
+        maFiExportSlideContentsDescr.Enable(!maFiExportSlideContentsDescr.IsEnabled());
+    }
+
+    return 0;
+}

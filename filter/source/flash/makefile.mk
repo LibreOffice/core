@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: cl $ $Date: 2002-10-24 16:24:26 $
+#   last change: $Author: cl $ $Date: 2002-11-21 14:58:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,12 +98,12 @@ UNOTYPES=\
 
 SRCFILES =	impswfdialog.src				
 
-SLOFILES=	$(SLO)$/filter.obj								\
-            $(SLO)$/writer.obj								\
-            $(SLO)$/writer1.obj								\
-            $(SLO)$/writer2.obj								\
-            $(SLO)$/uno.obj									\
-            $(SLO)$/exporter.obj							\
+SLOFILES=	$(SLO)$/swffilter.obj								\
+            $(SLO)$/swfwriter.obj								\
+            $(SLO)$/swfwriter1.obj								\
+            $(SLO)$/swfwriter2.obj								\
+            $(SLO)$/swfuno.obj									\
+            $(SLO)$/swfexporter.obj							\
             $(SLO)$/swfdialog.obj							\
             $(SLO)$/impswfdialog.obj
 
