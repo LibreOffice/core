@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FontUnderline.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:33 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,127 +68,124 @@
 
 //=============================================================================
 
-// DocMerge from idl: constants com::sun::star::awt::FontUnderline
 /** These values are used to specify the kind of underlining.
 
-        <p>They may be expanded in future versions.
+    <p>They may be expanded in future versions.</p>
  */
 constants FontUnderline
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontUnderline::NONE
     /** specifies no underlining.
      */
     const short NONE = 0;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with a single line.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with a single line.
+     */
     const short SINGLE = 1;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with a double line.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with a double line.
+     */
     const short DOUBLE = 2;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with a dotted line.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with a dotted line.
+     */
     const short DOTTED = 3;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from idl: value com::sun::star::awt::FontUnderline::DONTKNOW
-    /** The kind of underlining ist not know.
+    /** The kind of underlining is not known.
      */
     const short DONTKNOW = 4;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with a dashed line.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with a dashed line.
+     */
     const short DASH = 5;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with long dashes.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with long dashes.
+     */
     const short LONGDASH = 6;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with a dash and dot sequence.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with a dash and dot sequence.
+     */
     const short DASHDOT = 7;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with a dash, dot, dot sequence.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with a dash, dot, dot sequence.
+     */
     const short DASHDOTDOT = 8;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with a small wave.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with a small wave.
+     */
     const short SMALLWAVE = 9;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with a wave.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with a wave.
+     */
     const short WAVE = 10;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with a double wave.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with a double wave.
+     */
     const short DOUBLEWAVE = 11;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with a bold line.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with a bold line.
+     */
     const short BOLD = 12;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with bold dots.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with bold dots.
+     */
     const short BOLDDOTTED = 13;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with bold dashes.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with bold dashes.
+     */
     const short BOLDDASH = 14;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with long bold dashes.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with long bold dashes.
+     */
     const short BOLDLONGDASH = 15;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with a dash and dot sequence in bold.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with a dash and dot sequence in bold.
+     */
     const short BOLDDASHDOT = 16;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with a dash, dot, dot sequence in bold.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with a dash, dot, dot sequence in bold.
+     */
     const short BOLDDASHDOTDOT = 17;
 
     //-------------------------------------------------------------------------
-    // specifies underlining with a bold wave.
 
-    // DocMerge: empty anyway
+    /** specifies underlining with a bold wave.
+     */
     const short BOLDWAVE = 18;
 
 };
