@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:08:09 $
+ *  last change: $Author: cmc $ $Date: 2002-01-11 17:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,20 +379,38 @@ static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt );
 /*
 Sadly word does not have two different sizes for asian font size and western
 font size, it has to different fonts, but not sizes, so we have to use our
-guess as to the script used and disable the export of one type
+guess as to the script used and disable the export of one type. The same
+occurs for font weight and posture (bold and italic)
 */
 BOOL SwWW8Writer::CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich)
 {
     BOOL bRet=TRUE;
-    if ( (nWhich == RES_CHRATR_CJK_FONTSIZE) &&
-          (nScript != com::sun::star::i18n::ScriptType::ASIAN) )
+    if ( nScript != com::sun::star::i18n::ScriptType::ASIAN)
     {
-        bRet = FALSE;
+        switch (nWhich)
+        {
+            case RES_CHRATR_CJK_FONTSIZE:
+            case RES_CHRATR_CJK_POSTURE:
+            case RES_CHRATR_CJK_WEIGHT:
+                bRet = FALSE;
+                break;
+            default:
+                break;
+        }
     }
-    else if ( (nWhich == RES_CHRATR_FONTSIZE) &&
-          (nScript == com::sun::star::i18n::ScriptType::ASIAN) )
+    else
     {
-        bRet = FALSE;
+        switch (nWhich)
+        {
+            case RES_CHRATR_FONTSIZE:
+            case RES_CHRATR_POSTURE:
+            case RES_CHRATR_WEIGHT:
+                bRet = FALSE;
+                break;
+            default:
+                break;
+        }
+
     }
     return bRet;
 }
