@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 10:17:42 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:43:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,7 @@
 
 #include "cell.hxx"
 #include "compiler.hxx"
+#include "errorcodes.hxx"
 #include "document.hxx"
 #include "rangenam.hxx"
 #include "rechead.hxx"
@@ -419,7 +420,7 @@ void ScFormulaCell::GetString( String& rString )
         rString.Erase();
 }
 
-void ScFormulaCell::GetMatrix(ScMatrix** ppMat)
+const ScMatrix* ScFormulaCell::GetMatrix()
 {
     if ( pDocument->GetAutoCalc() )
     {
@@ -430,10 +431,7 @@ void ScFormulaCell::GetMatrix(ScMatrix** ppMat)
         if ( IsDirtyOrInTableOpDirty() )
             Interpret();
     }
-    if (!pCode->GetError())
-        *ppMat = pMatrix;
-    else
-        *ppMat = NULL;
+    return pMatrix;
 }
 
 BOOL ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
