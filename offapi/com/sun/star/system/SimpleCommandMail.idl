@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SimpleCommandMail.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:27 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ module com { module sun { module star { module system {
 
 //=============================================================================
 
-interface XSimpleMailClientSupplier;
+ published interface XSimpleMailClientSupplier;
 
 //=============================================================================
 /** Specifies a SimpleCommandMail service. Implementations of such a service, do
@@ -90,7 +90,7 @@ interface XSimpleMailClientSupplier;
     @see com::sun::star::system::XSimpleMailClient
 */
 
-service SimpleCommandMail
+published service SimpleCommandMail
 {
     //-------------------------------------------------------------------------
     /** Provides access to a <type>XSimpleMailClientSupplier</type> interface.
