@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kr $ $Date: 2001-11-01 16:37:48 $
+ *  last change: $Author: jb $ $Date: 2001-11-06 14:36:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,18 @@ static ::rtl::OUString &getIniFileNameImpl()
     return *pStaticName;
 }
 
+static void getExecutableDirectory(rtl_uString **ppDirURL)
+{
+    OUString fileName;
+    osl_getExecutableFile(&fileName.pData);
+
+    sal_Int32 nDirEnd = fileName.lastIndexOf('/');
+
+    OSL_ENSURE(nDirEnd >= 0, "Cannot locate executable directory");
+
+    rtl_uString_newFromStr_WithLength(ppDirURL,fileName.getStr(),nDirEnd);
+}
+
 static void getFileSize( oslFileHandle handle, sal_uInt64 *pSize )
 {
     sal_uInt64 nOldPos=0;
@@ -246,7 +258,7 @@ static sal_Bool getValue(NameValueList *pNameValueList, rtl_uString * pName, rtl
         osl_freeSecurityHandle(security);
     }
     else if(!rtl_ustr_compare_WithLength(pName->buffer, pName->length, sysBinDir.pData->buffer, sysBinDir.pData->length))
-        osl_getProcessWorkingDir(ppValue);
+        getExecutableDirectory(ppValue);
 
     else
     {
