@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:48:15 $
+ *  last change: $Author: ab $ $Date: 2002-11-15 12:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,14 @@ void BasicTreeListBox::ScanBasic( BasicManager* pBasMgr, const String& rName )
 
     // create tree list box entry
     SvLBoxEntry* pBasicManagerRootEntry = FindEntry( 0, rName, OBJTYPE_BASICMANAGER );
+    if ( pBasicManagerRootEntry )
+    {
+        // #94812 For equally named documents equally named entries are required
+        SbxItem aSbxItem = GetSbxItem( pBasicManagerRootEntry );
+        SfxObjectShell* pEntryShell = aSbxItem.GetShell();
+        if( pEntryShell != pShell )
+            pBasicManagerRootEntry = NULL;
+    }
     if ( !pBasicManagerRootEntry )
         pBasicManagerRootEntry = insertEntry(
             rName,
