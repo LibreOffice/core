@@ -2,9 +2,9 @@
 *
 *  $RCSfile: SQLQueryComposer.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: vg $ $Date: 2005-03-08 15:36:13 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:15:54 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -140,6 +140,7 @@ public class SQLQueryComposer {
         }
         selectclause = selectclause.substring(0, selectclause.length() - 2);
     }
+
 
     public String getAliasFieldNameClause(String _FieldName) {
         String FieldTitle = CurDBMetaData.getFieldTitle(_FieldName);
