@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:11:32 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:34:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include "app.hxx"
 #include "sfxtypes.hxx"
 #include "panelist.hxx"
+#include "imgmgr.hxx"
 
 #include "app.hrc"
 #include "newhelp.hrc"
@@ -2159,7 +2160,7 @@ sal_Bool SfxHelpTextWindow_Impl::HasSelection() const
 
 void SfxHelpTextWindow_Impl::InitToolBoxImages()
 {
-    sal_Bool bLarge = ( SvtMiscOptions().GetSymbolSet() == SFX_SYMBOLS_LARGE );
+    sal_Bool bLarge = ( SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE );
     sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
 
     aIndexOnImage = Image( SfxResId(
