@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:11:15 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,7 @@ ScXMLSourceServiceContext::ScXMLSourceServiceContext( ScXMLImport& rImport,
                 pDataPilotTable->SetServiceSourceObject(sValue);
             }
             break;
-            case XML_TOK_SOURCE_SERVICE_ATTR_USERNAME :
+            case XML_TOK_SOURCE_SERVICE_ATTR_USER_NAME :
             {
                 pDataPilotTable->SetServiceUsername(sValue);
             }
@@ -1083,7 +1083,7 @@ ScXMLDataPilotLevelContext::ScXMLDataPilotLevelContext( ScXMLImport& rImport,
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
-            case XML_TOK_DATA_PILOT_LEVEL_ATTR_DISPLAY_EMPTY :
+            case XML_TOK_DATA_PILOT_LEVEL_ATTR_SHOW_EMPTY :
             {
                 pDataPilotField->SetShowEmpty(IsXMLToken(sValue, XML_TRUE));
             }
@@ -1469,7 +1469,7 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
                 bDisplay = IsXMLToken(sValue, XML_TRUE);
             }
             break;
-            case XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_DETAILS :
+            case XML_TOK_DATA_PILOT_MEMBER_ATTR_SHOW_DETAILS :
             {
                 bDisplayDetails = IsXMLToken(sValue, XML_TRUE);
             }
