@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-24 11:55:14 $
+ *  last change: $Author: cl $ $Date: 2002-07-16 08:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,10 @@
 using namespace rtl;
 using namespace com::sun::star;
 
-//
+extern uno::Reference< uno::XInterface > SAL_CALL SdHtmlOptionsDialog_CreateInstance( const uno::Reference< lang::XMultiServiceFactory > & _rxFactory );
+extern OUString SdHtmlOptionsDialog_getImplementationName() throw( uno::RuntimeException );
+extern uno::Sequence< OUString > SAL_CALL SdHtmlOptionsDialog_getSupportedServiceNames() throw( uno::RuntimeException );
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -102,10 +105,9 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
     {
         try
         {
-/*          registry::XRegistryKey *pKey = reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
+            registry::XRegistryKey *pKey = reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
 
-            writeInfo( pKey, GraphicExporter_getImplementationName(), GraphicExporter_getSupportedServiceNames() );
-*/
+            writeInfo( pKey, SdHtmlOptionsDialog_getImplementationName(), SdHtmlOptionsDialog_getSupportedServiceNames() );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -118,7 +120,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
 void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {
     void * pRet = 0;
-/*
+
     if( pServiceManager )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
@@ -126,12 +128,12 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
         uno::Reference< lang::XSingleServiceFactory > xFactory;
 
         const sal_Int32 nImplNameLen = strlen( pImplName );
-        if( GraphicExporter_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        if( SdHtmlOptionsDialog_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
             xFactory = ::cppu::createSingleFactory( xMSF,
-                GraphicExporter_getImplementationName(),
-                GraphicExporter_createInstance,
-                GraphicExporter_getSupportedServiceNames() );
+                SdHtmlOptionsDialog_getImplementationName(),
+                SdHtmlOptionsDialog_CreateInstance,
+                SdHtmlOptionsDialog_getSupportedServiceNames() );
         }
         if( xFactory.is())
         {
@@ -139,7 +141,7 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
             pRet = xFactory.get();
         }
     }
-*/
+
     return pRet;
 }
 

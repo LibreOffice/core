@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdhtmlfilter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-12 12:51:57 $
+ *  last change: $Author: cl $ $Date: 2002-07-16 08:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,23 +103,20 @@ SdHTMLFilter::~SdHTMLFilter()
 
 sal_Bool SdHTMLFilter::Export()
 {
-    SfxItemSet      aArgs( mrDocument.GetPool(), ATTR_PUBLISH_START, ATTR_PUBLISH_END );
     SdPublishingDlg aDlg( mrDocShell.GetWindow(), mrDocument.GetDocumentType() );
 
     mrMedium.Close();
     mrMedium.Commit();
-    osl::File::remove( mrMedium.GetName() );
 
-    if( aDlg.Execute() )
-    {
-//      String aTmp;
-//      ::utl::LocalFileHelper::ConvertSystemPathToURL( mrMedium.GetName(), aTmp );
-//      const INetURLObject aURL( aTmp );
+    SfxItemSet *pSet = mrMedium.GetItemSet();
 
-        aDlg.FillItemSet( aArgs );
-        aArgs.Put( SfxStringItem( ATTR_PUBLISH_LOCATION, mrMedium.GetName() ) );
-        delete( new HtmlExport( &mrDocument, &mrDocShell, &aArgs ) );
-    }
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aParams;
+
+    const SfxPoolItem* pItem;
+    if ( pSet->GetItemState( SID_FILTER_DATA, sal_False, &pItem ) == SFX_ITEM_SET )
+        ((SfxUnoAnyItem*)pItem)->GetValue() >>= aParams;
+
+    delete( new HtmlExport( mrMedium.GetName(), aParams, &mrDocument, &mrDocShell ) );
 
     return true;
 }

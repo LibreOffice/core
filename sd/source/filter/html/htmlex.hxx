@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-04-18 15:04:35 $
+ *  last change: $Author: cl $ $Date: 2002-07-16 08:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _SD_HTMLEX_HXX
 #define _SD_HTMLEX_HXX
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 
 #ifndef _XPOLY_HXX
 #include <svx/xpoly.hxx>
@@ -143,6 +147,8 @@ public:
 // =====================================================================
 class HtmlExport
 {
+    rtl::OUString m_aPath;
+
     SdDrawDocument* pDoc;
     SdDrawDocShell* pDocSh;
 
@@ -165,6 +171,9 @@ class HtmlExport
 //-/    BOOL m_bCreated;
     ByteString m_aIndex;
     ByteString m_aEMail;
+    ByteString m_aAuthor;
+    ByteString m_aHomePage;
+    ByteString m_aInfo;
     INT16 m_nCompression;
     ByteString m_aDocFileName;
     ByteString m_aFramePage;
@@ -185,9 +194,6 @@ class HtmlExport
     Color m_aFirstPageColor;
     BOOL m_bDocColors;
 
-    SfxItemSet m_aArgs;         // Die Parameter fuer den Export vom Dialog
-                                // oder Basic
-
     ByteString   m_aHTMLExtension;
     ByteString** m_pHTMLFiles;
     ByteString** m_pImageFiles;
@@ -198,6 +204,7 @@ class HtmlExport
     ByteString m_aIndexUrl;
     ByteString m_aURLPath;
     ByteString m_aCGIPath;
+    PublishingScript m_eScript;
 
     SdrTextObj* GetLayoutTextObject(SdrPage* pPage);
 
@@ -257,7 +264,7 @@ class HtmlExport
 
     ByteString WriteMetaCharset() const;
 
-    void InitExportParameters();
+    void InitExportParameters( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams);
     void ExportHtml();
     void ExportKiosk();
     void ExportWebCast();
@@ -267,7 +274,7 @@ class HtmlExport
     void ShowSpecialObjects();
 
  public:
-    HtmlExport( SdDrawDocument* pExpDoc, SdDrawDocShell* pDocShell, const SfxItemSet* pArgs  );
+     HtmlExport( rtl::OUString aPath, const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams, SdDrawDocument* pExpDoc, SdDrawDocShell* pDocShell );
     virtual ~HtmlExport();
 
     static ByteString   ColorToHTMLString( Color aColor );

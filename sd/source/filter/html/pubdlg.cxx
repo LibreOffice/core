@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pubdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-22 13:12:28 $
+ *  last change: $Author: cl $ $Date: 2002-07-16 08:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 #ifndef _UNTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
 #endif
@@ -146,6 +149,11 @@
 #include "htmlattr.hxx"
 #include "htmlex.hxx"
 #include "helpids.h"
+
+using namespace std;
+using namespace rtl;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::beans;
 
 extern void InterpolateFixedBitmap( FixedBitmap * pBitmap );
 
@@ -243,7 +251,8 @@ SdPublishingDesign::SdPublishingDesign()
 
     m_nResolution   = PUB_LOWRES_WIDTH;
     m_aAuthor       = aAdrItem.GetFirstName();
-    m_aAuthor      += sal_Unicode(' ');
+    if( m_aAuthor.Len() && aAdrItem.GetName().Len() )
+        m_aAuthor      += sal_Unicode(' ');
     m_aAuthor      += aAdrItem.GetName();
     m_aEMail        = aAdrItem.GetEmail();
     m_bDownload     = FALSE;
@@ -865,65 +874,158 @@ void SdPublishingDlg::SetDefaults()
 // =====================================================================
 // Das SfxItemSet mit den Einstellungen des Dialogs fuettern
 // =====================================================================
-void SdPublishingDlg::FillItemSet( SfxItemSet& aSet )
+void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 {
+    std::vector< PropertyValue > aProps;
+
+    PropertyValue aValue;
+
+
     // Page 2
-    aSet.Put(SfxAllEnumItem(ATTR_PUBLISH_MODE,  pPage2_Standard->IsChecked()?PUBLISH_HTML:
-                                                pPage2_Frames->IsChecked()?PUBLISH_FRAMES:
-                                                pPage2_Kiosk->IsChecked()?PUBLISH_KIOSK:
-                                                PUBLISH_WEBCAST));
+    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PublishMode" ) );
+    aValue.Value <<= (sal_Int32)(pPage2_Standard->IsChecked()?PUBLISH_HTML:
+                                          pPage2_Frames->IsChecked()?PUBLISH_FRAMES:
+                                          pPage2_Kiosk->IsChecked()?PUBLISH_KIOSK:PUBLISH_WEBCAST);
+    aProps.push_back( aValue );
 
-    aSet.Put(SfxBoolItem(ATTR_PUBLISH_WITHCONTENTSPAGE, pPage2_Content->IsChecked()));
+    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsExportContentsPage" ) );
+    aValue.Value <<= (sal_Bool)pPage2_Content->IsChecked();
+    aProps.push_back( aValue );
+
     if(m_bImpress)
-        aSet.Put(SfxBoolItem(ATTR_PUBLISH_WITHNOTES, pPage2_Notes->IsChecked()));
+    {
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsExportNotes" ) );
+        aValue.Value <<= (sal_Bool)pPage2_Notes->IsChecked();
+        aProps.push_back( aValue );
+    }
 
-    aSet.Put(SfxAllEnumItem(ATTR_PUBLISH_SCRIPT, pPage2_ASP->IsChecked()?SCRIPT_ASP:SCRIPT_PERL));
-    aSet.Put(SfxStringItem(ATTR_PUBLISH_CGIPATH,pPage2_CGI->GetText()));
-    aSet.Put(SfxStringItem(ATTR_PUBLISH_URLPATH,pPage2_URL->GetText()));
-    aSet.Put(SfxStringItem(ATTR_PUBLISH_INDEX,pPage2_Index->GetText()));
+    if( pPage2_WebCast->IsChecked() )
+    {
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "WebCastScriptLanguage" ) );
+        if( pPage2_ASP->IsChecked() )
+            aValue.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "asp" ) );
+        else
+            aValue.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "perl" ) );
+        aProps.push_back( aValue );
 
-    aSet.Put(SfxBoolItem(ATTR_PUBLISH_SLIDECHG, pPage2_ChgAuto->IsChecked() ));
-    aSet.Put(SfxUInt32Item(ATTR_PUBLISH_SLIDEDURATION,
-        (UINT32)pPage2_Duration->GetTime().GetMSFromTime() / 1000));
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "WebCastCGIURL" ) );
+        aValue.Value <<= OUString( pPage2_CGI->GetText() );
+        aProps.push_back( aValue );
 
-    aSet.Put(SfxBoolItem(ATTR_PUBLISH_ENDLESS,pPage2_Endless->IsChecked()));
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "WebCastTargetURL" ) );
+        aValue.Value <<= OUString( pPage2_URL->GetText() );
+        aProps.push_back( aValue );
+    }
+    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IndexURL" ) );
+    aValue.Value <<= OUString( pPage2_Index->GetText() );
+    aProps.push_back( aValue );
+
+
+    if( pPage2_Kiosk->IsChecked() && pPage2_ChgAuto->IsChecked() )
+    {
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "KioskSlideDuration" ) );
+        aValue.Value <<= (sal_uInt32)pPage2_Duration->GetTime().GetMSFromTime() / 1000;
+        aProps.push_back( aValue );
+
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "KioskEndless" ) );
+        aValue.Value <<= (sal_Bool)pPage2_Endless->IsChecked();
+        aProps.push_back( aValue );
+    }
 
     // Page 3
-    aSet.Put(SfxUInt16Item(ATTR_PUBLISH_RESOLUTION,
-        pPage3_Resolution_1->IsChecked()?PUB_LOWRES_WIDTH:
-        pPage3_Resolution_2->IsChecked()?PUB_MEDRES_WIDTH:PUB_HIGHRES_WIDTH));
-    aSet.Put(SfxStringItem(ATTR_PUBLISH_COMPRESSION, pPage3_Quality->GetText()));
-    aSet.Put(SfxAllEnumItem(ATTR_PUBLISH_FORMAT, pPage3_Gif->IsChecked()?FORMAT_GIF:FORMAT_JPG));
+
+    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Width" ) );
+    aValue.Value <<= (sal_Int32)( pPage3_Resolution_1->IsChecked()?PUB_LOWRES_WIDTH:
+                                 pPage3_Resolution_2->IsChecked()?PUB_MEDRES_WIDTH:PUB_HIGHRES_WIDTH);
+    aProps.push_back( aValue );
+
+    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Compression" ) );
+    aValue.Value <<= OUString( pPage3_Quality->GetText() );
+    aProps.push_back( aValue );
+
+    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Format" ) );
+    aValue.Value <<= (sal_Int32)(pPage3_Gif->IsChecked()?FORMAT_GIF:FORMAT_JPG);
+    aProps.push_back( aValue );
 
     // Page 4
-    aSet.Put(SfxStringItem(ATTR_PUBLISH_AUTHOR, pPage4_Author->GetText()));
-    aSet.Put(SfxStringItem(ATTR_PUBLISH_EMAIL, pPage4_Email->GetText()));
+    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Author" ) );
+    aValue.Value <<= OUString( pPage4_Author->GetText() );
+    aProps.push_back( aValue );
+
+    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EMail" ) );
+    aValue.Value <<= OUString( pPage4_Email->GetText() );
+    aProps.push_back( aValue );
 
     // #92433# try to guess protocol for user's homepage
     INetURLObject aHomeURL( pPage4_WWW->GetText(),
                             INET_PROT_HTTP,     // default proto is HTTP
                             INetURLObject::ENCODE_ALL );
-    aSet.Put(SfxStringItem(ATTR_PUBLISH_WWW, aHomeURL.GetMainURL( INetURLObject::NO_DECODE )));
 
-    aSet.Put(SfxStringItem(ATTR_PUBLISH_INFO, pPage4_Misc->GetText()));
-    aSet.Put(SfxBoolItem(ATTR_PUBLISH_WITHDOWNLOAD, m_bImpress?pPage4_Download->IsChecked():FALSE));
-//-/    aSet.Put(SfxBoolItem(ATTR_PUBLISH_WITHSTAROFFICE, pPage4_Created->IsChecked()));
+    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "HomepageURL" ) );
+    aValue.Value <<= OUString( aHomeURL.GetMainURL( INetURLObject::NO_DECODE ) );
+    aProps.push_back( aValue );
+
+    aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UserText" ) );
+    aValue.Value <<= OUString( pPage4_Misc->GetText() );
+    aProps.push_back( aValue );
+
+    if( m_bImpress )
+    {
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableDownload" ) );
+        aValue.Value <<= (sal_Bool)pPage4_Download->IsChecked();
+        aProps.push_back( aValue );
+    }
 
     // Page 5
-    aSet.Put(SfxInt16Item(ATTR_PUBLISH_BUTTONS,
-        pPage5_TextOnly->IsChecked() ? (-1) : (pPage5_Buttons->GetSelectItemId() - 1)));
+    if( !pPage5_TextOnly->IsChecked() )
+    {
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "UseButtonSet" ) );
+        aValue.Value <<= (sal_Int32)(pPage5_Buttons->GetSelectItemId() - 1);
+        aProps.push_back( aValue );
+    }
 
     // Page 6
-    aSet.Put(SfxBoolItem(ATTR_PUBLISH_USERATTR, pPage6_User->IsChecked()));
-    aSet.Put(SvxColorItem(m_aBackColor, ATTR_PUBLISH_BACKCOLOR));
-    aSet.Put(SvxColorItem(m_aTextColor, ATTR_PUBLISH_TEXTCOLOR));
-    aSet.Put(SvxColorItem(m_aLinkColor, ATTR_PUBLISH_LINKCOLOR));
-    aSet.Put(SvxColorItem(m_aVLinkColor, ATTR_PUBLISH_VLINKCOLOR));
-    aSet.Put(SvxColorItem(m_aALinkColor, ATTR_PUBLISH_ALINKCOLOR));
-    aSet.Put(SfxBoolItem(ATTR_PUBLISH_USECOLOR, pPage6_DocColors->IsChecked()));
+    if( pPage6_User->IsChecked() )
+    {
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "BackColor" ) );
+        aValue.Value <<= (sal_Int32)m_aBackColor.GetColor();
+        aProps.push_back( aValue );
+
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "TextColor" ) );
+        aValue.Value <<= (sal_Int32)m_aTextColor.GetColor();
+        aProps.push_back( aValue );
+
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "LinkColor" ) );
+        aValue.Value <<= (sal_Int32)m_aLinkColor.GetColor();
+        aProps.push_back( aValue );
+
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "VLinkColor" ) );
+        aValue.Value <<= (sal_Int32)m_aVLinkColor.GetColor();
+        aProps.push_back( aValue );
+
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ALinkColor" ) );
+        aValue.Value <<= (sal_Int32)m_aALinkColor.GetColor();
+        aProps.push_back( aValue );
+    }
+
+    if( pPage6_DocColors->IsChecked() )
+    {
+        aValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsUseDocumentColors" ) );
+        aValue.Value <<= (sal_Bool)sal_True;
+        aProps.push_back( aValue );
+    }
 
     // Seite 6
 //  aSet.Put(SfxBoolItem(ATTR_PUBLISH_SLIDESOUND,pPage6_Sound->IsChecked()));
+
+
+    rParams.realloc( aProps.size() );
+    PropertyValue* pParams = rParams.getArray();
+
+    for( std::vector< PropertyValue >::iterator i = aProps.begin(); i != aProps.end(); i++ )
+    {
+        *pParams++ = (*i);
+    }
 }
 
 // =====================================================================

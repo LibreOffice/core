@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:43:09 $
+ *  last change: $Author: cl $ $Date: 2002-07-16 08:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,14 +194,14 @@
 #include "sdresid.hxx"
 #include "htmlex.hxx"
 
+using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 
 #define KEY_QUALITY     "JPG-EXPORT-QUALITY"
 
 // Parameter aus Itemset abfragen
-#define GETITEM( type, id, def ) \
-    (m_aArgs.GetItemState(id) == SFX_ITEM_ON)?\
-        (((const type&)m_aArgs.Get(id)).GetValue()):(def)
 
 #define RESTOHTML( res ) StringToHTMLString(String(SdResId(res)))
 #define S2H( str ) StringToHTMLString( str )
@@ -446,9 +446,9 @@ ByteString HtmlState::SetLink( const ByteString& aLink, const ByteString& aTarge
 // =====================================================================
 // Konstruktor fuer die Html Export Hilfsklasse
 // =====================================================================
-HtmlExport::HtmlExport( SdDrawDocument* pExpDoc, SdDrawDocShell* pDocShell, const SfxItemSet* pArgs  )
+HtmlExport::HtmlExport( OUString aPath, const Sequence< PropertyValue >& rParams, SdDrawDocument* pExpDoc, SdDrawDocShell* pDocShell )
 :   pDoc(pExpDoc),
-    m_aArgs(SfxItemSet( pDoc->GetPool(), ATTR_PUBLISH_START, ATTR_PUBLISH_END )),
+    m_aPath( aPath ),
     m_aHTMLExtension(SdResId(STR_HTMLEXP_DEFAULT_EXTENSION),  gsl_getSystemTextEncoding()),
     m_pImageFiles(NULL),
     m_pHTMLFiles(NULL),
@@ -461,15 +461,23 @@ HtmlExport::HtmlExport( SdDrawDocument* pExpDoc, SdDrawDocShell* pDocShell, cons
     m_bNotes(FALSE),
 //-/    m_bCreated(FALSE),
     m_eEC(NULL),
-    pDocSh( pDocShell )
+    pDocSh( pDocShell ),
+    m_eMode( PUBLISH_HTML ),
+    m_eFormat( FORMAT_JPG ),
+    m_nCompression( -1 ),
+    m_nWidthPixel( PUB_LOWRES_WIDTH ),
+    m_bDownload( false ),
+    m_eScript( SCRIPT_ASP )
 {
     FASTBOOL bChange = pDoc->IsChanged();
 
-    m_aArgs.Set( *pArgs );
-
     USHORT nError = 0;
 
-    InitExportParameters();
+    String  aIndex(RTL_CONSTASCII_USTRINGPARAM("index"));
+    aIndex += UniString(m_aHTMLExtension, gsl_getSystemTextEncoding());
+    m_aIndexUrl = ByteString( aIndex, RTL_TEXTENCODING_UTF8 );
+
+    InitExportParameters( rParams );
 
     switch( m_eMode )
     {
@@ -511,32 +519,189 @@ HtmlExport::~HtmlExport()
 }
 
 /** get common export parameters from item set */
-void HtmlExport::InitExportParameters()
+void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams )
 {
     m_bImpress = pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
 
-    m_eMode = (HtmlPublishMode)(GETITEM( SfxAllEnumItem, ATTR_PUBLISH_MODE, PUBLISH_HTML ));
-
-    String aEmpty;
-    String aPath( GETITEM( SfxStringItem, ATTR_PUBLISH_LOCATION, aEmpty ) );
-    ByteString rPath( aPath, RTL_TEXTENCODING_UTF8 );
-
-    String  aIndex(RTL_CONSTASCII_USTRINGPARAM("index"));
-    aIndex += UniString(m_aHTMLExtension, gsl_getSystemTextEncoding());
-    m_aIndexUrl = ByteString( GETITEM( SfxStringItem, ATTR_PUBLISH_INDEX, aIndex), RTL_TEXTENCODING_UTF8 );
-    m_eFormat = (PublishingFormat)(GETITEM( SfxAllEnumItem, ATTR_PUBLISH_FORMAT, FORMAT_GIF ));
-    m_nCompression = -1;
-
-    ByteString aStr( GETITEM( SfxStringItem, ATTR_PUBLISH_COMPRESSION, aEmpty), RTL_TEXTENCODING_UTF8 );
-    if(aStr.Len())
+    sal_Int32 nArgs = rParams.getLength();
+    const PropertyValue* pParams = rParams.getConstArray();
+    while( nArgs-- )
     {
-        USHORT nPos = aStr.Search( '%' );
-        if(nPos != -1)
-            aStr.Erase(nPos,1);
-        m_nCompression = (INT16)aStr.ToInt32();
-    }
+        if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PublishMode" ) ) )
+        {
+            sal_Int32 temp;
+            pParams->Value >>= temp;
+            m_eMode = (HtmlPublishMode)temp;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IndexURL" ) ) )
+        {
+            OUString aStr;
+            pParams->Value >>= aStr;
+            String aStr2( aStr );
+            m_aIndexUrl = ByteString( aStr2, RTL_TEXTENCODING_UTF8 );
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Format" ) ) )
+        {
+            sal_Int32 temp;
+            pParams->Value >>= temp;
+            m_eFormat = (PublishingFormat)temp;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Compression" ) ) )
+        {
+            OUString temp;
+            pParams->Value >>= temp;
+            String temp2( temp );
+            ByteString aStr( temp2, RTL_TEXTENCODING_UTF8 );
+            if(aStr.Len())
+            {
+                USHORT nPos = aStr.Search( '%' );
+                if(nPos != -1)
+                    aStr.Erase(nPos,1);
+                m_nCompression = (INT16)aStr.ToInt32();
+            }
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Width" ) ) )
+        {
+            sal_Int32 temp;
+            pParams->Value >>= temp;
+            m_nWidthPixel = (sal_uInt16)temp;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UseButtonSet" ) ) )
+        {
+            sal_Int32 temp;
+            pParams->Value >>= temp;
+            m_nButtonThema = (sal_Int16)temp;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsExportNotes" ) ) )
+        {
+            if( m_bImpress )
+            {
+                sal_Bool temp;
+                pParams->Value >>= temp;
+                m_bNotes = temp;
+            }
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsExportContentsPage" ) ) )
+        {
+            sal_Bool temp;
+            pParams->Value >>= temp;
+            m_bContentsPage = temp;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Author" ) ) )
+        {
+            OUString aStr;
+            pParams->Value >>= aStr;
+            String aStr2( aStr );
+            m_aAuthor = ByteString( aStr2, RTL_TEXTENCODING_UTF8 );
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EMail" ) ) )
+        {
+            OUString aStr;
+            pParams->Value >>= aStr;
+            String aStr2( aStr );
+            m_aEMail = ByteString( aStr2, RTL_TEXTENCODING_UTF8 );
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "HomepageURL" ) ) )
+        {
+            OUString aStr;
+            pParams->Value >>= aStr;
+            String aStr2( aStr );
+            m_aHomePage = ByteString( aStr2, RTL_TEXTENCODING_UTF8 );
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "UserText" ) ) )
+        {
+            OUString aStr;
+            pParams->Value >>= aStr;
+            String aStr2( aStr );
+            m_aInfo = ByteString( aStr2, RTL_TEXTENCODING_UTF8 );
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "EnableDownload" ) ) )
+        {
+            sal_Bool temp;
+            pParams->Value >>= temp;
+            m_bDownload = temp;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "BackColor" ) ) )
+        {
+            sal_Int32 temp;
+            pParams->Value >>= temp;
+            m_aBackColor = temp;
+            m_bUserAttr = true;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "TextColor" ) ) )
+        {
+            sal_Int32 temp;
+            pParams->Value >>= temp;
+            m_aTextColor = temp;
+            m_bUserAttr = true;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "LinkColor" ) ) )
+        {
+            sal_Int32 temp;
+            pParams->Value >>= temp;
+            m_aLinkColor = temp;
+            m_bUserAttr = true;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VLinkColor" ) ) )
+        {
+            sal_Int32 temp;
+            pParams->Value >>= temp;
+            m_aVLinkColor = temp;
+            m_bUserAttr = true;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ALinkColor" ) ) )
+        {
+            sal_Int32 temp;
+            pParams->Value >>= temp;
+            m_aALinkColor = temp;
+            m_bUserAttr = true;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsUseDocumentColors" ) ) )
+        {
+            sal_Bool temp;
+            pParams->Value >>= temp;
+            m_bDocColors = temp;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "KioskSlideDuration" ) ) )
+        {
+            sal_Int32 temp;
+            pParams->Value >>= temp;
+            m_nSlideDuration = temp;
+            m_bAutoSlide = true;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "KioskEndless" ) ) )
+        {
+            sal_Bool temp;
+            pParams->Value >>= temp;
+            m_bEndless = temp;
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WebCastCGIURL" ) ) )
+        {
+            OUString aStr;
+            pParams->Value >>= aStr;
+            String aStr2( aStr );
+            m_aCGIPath = ByteString( aStr2, RTL_TEXTENCODING_UTF8 );
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WebCastTargetURL" ) ) )
+        {
+            OUString aStr;
+            pParams->Value >>= aStr;
+            String aStr2( aStr );
+            m_aURLPath = ByteString( aStr2, RTL_TEXTENCODING_UTF8 );
+        }
+        else if( pParams->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "WebCastScriptLanguage" ) ) )
+        {
+            sal_Int32 temp;
+            pParams->Value >>= temp;
+            m_eScript = (PublishingScript)temp;
+        }
+        else
+        {
+            DBG_ERROR("Unknown property for html export detected!");
+        }
 
-    m_nWidthPixel = GETITEM( SfxUInt16Item, ATTR_PUBLISH_RESOLUTION, PUB_LOWRES_WIDTH );
+        pParams++;
+    }
 
     // calculate image sizes
     SdPage* pPage = pDoc->GetSdPage(0, PK_STANDARD);
@@ -558,12 +723,10 @@ void HtmlExport::InitExportParameters()
     }
     m_nHeightPixel = (USHORT)(m_nWidthPixel/dRatio);
 
-    m_bSlideSound = GETITEM( SfxBoolItem, ATTR_PUBLISH_SLIDESOUND, TRUE );
-
     //------------------------------------------------------------------
     // Ziel ausklamuestern...
 
-    INetURLObject aINetURLObj( rPath );
+    INetURLObject aINetURLObj( m_aPath );
     DBG_ASSERT( aINetURLObj.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
     m_aExportPath = ByteString( aINetURLObj.GetPartBeforeLastName(), RTL_TEXTENCODING_UTF8 );   // mit '/' am Ende
@@ -580,31 +743,9 @@ void HtmlExport::InitExportParameters()
 ///////////////////////////////////////////////////////////////////////
 void HtmlExport::ExportHtml()
 {
-    // init export html parameters
-    m_nButtonThema = GETITEM( SfxInt16Item, ATTR_PUBLISH_BUTTONS, -1 );
-    m_bNotes = m_bImpress?GETITEM( SfxBoolItem, ATTR_PUBLISH_WITHNOTES, FALSE):FALSE;
-
-    m_bContentsPage = GETITEM( SfxBoolItem, ATTR_PUBLISH_WITHCONTENTSPAGE, TRUE );
-    if( m_bContentsPage )
-    {
-//-/    m_bCreated  = GETITEM( SfxBoolItem, ATTR_PUBLISH_WITHSTAROFFICE, TRUE );
-        String aEmpty;
-        m_aEMail    = ByteString( GETITEM( SfxStringItem, ATTR_PUBLISH_EMAIL, aEmpty ), RTL_TEXTENCODING_UTF8 );
-        m_bDownload = m_bImpress?GETITEM( SfxBoolItem, ATTR_PUBLISH_WITHDOWNLOAD, FALSE ):FALSE;
-    }
-
-    m_bDocColors    = GETITEM( SfxBoolItem, ATTR_PUBLISH_USECOLOR, FALSE );
-    m_bUserAttr     = GETITEM( SfxBoolItem, ATTR_PUBLISH_USERATTR, FALSE );
 
     if(m_bUserAttr)
     {
-        Color aTmpColor;
-        m_aBackColor  = GETITEM( SvxColorItem, ATTR_PUBLISH_BACKCOLOR, aTmpColor );
-        m_aTextColor  = GETITEM( SvxColorItem, ATTR_PUBLISH_TEXTCOLOR, aTmpColor );
-        m_aLinkColor  = GETITEM( SvxColorItem, ATTR_PUBLISH_LINKCOLOR, aTmpColor );
-        m_aVLinkColor = GETITEM( SvxColorItem, ATTR_PUBLISH_VLINKCOLOR, aTmpColor );
-        m_aALinkColor = GETITEM( SvxColorItem, ATTR_PUBLISH_ALINKCOLOR, aTmpColor );
-
         if( m_aTextColor == COL_AUTO )
         {
             if( !m_aBackColor.IsDark() )
@@ -755,10 +896,6 @@ void HtmlExport::ResetProgress()
 
 void HtmlExport::ExportKiosk()
 {
-    m_bAutoSlide = GETITEM( SfxBoolItem, ATTR_PUBLISH_SLIDECHG, FALSE );
-    m_nSlideDuration = GETITEM( SfxUInt32Item, ATTR_PUBLISH_SLIDEDURATION, 15 );
-    m_bEndless = GETITEM( SfxBoolItem, ATTR_PUBLISH_ENDLESS, TRUE );
-
     m_nPagesWritten = 0;
     InitProgress( 2*m_nSdPageCount );
 
@@ -783,22 +920,19 @@ void HtmlExport::ExportWebCast()
     CreateFileNames();
 
     String aEmpty;
-    m_aCGIPath = ByteString( GETITEM( SfxStringItem, ATTR_PUBLISH_CGIPATH, aEmpty ), RTL_TEXTENCODING_UTF8 );
     if(m_aCGIPath.Len() == 0)
         m_aCGIPath = ".";
 
     if( m_aCGIPath.GetChar( m_aCGIPath.Len() - 1 ) != '/' )
         m_aCGIPath += '/';
 
-    PublishingScript eScript = (PublishingScript)(GETITEM( SfxAllEnumItem, ATTR_PUBLISH_SCRIPT, SCRIPT_ASP ));
-    if( eScript == SCRIPT_ASP )
+    if( m_eScript == SCRIPT_ASP )
     {
         m_aURLPath = "./";
     }
     else
     {
            String aEmpty2;
-        m_aURLPath = ByteString( GETITEM( SfxStringItem, ATTR_PUBLISH_URLPATH, aEmpty2 ), RTL_TEXTENCODING_UTF8 );
         if(m_aURLPath.Len() == 0)
             m_aURLPath = ".";
 
@@ -812,7 +946,7 @@ void HtmlExport::ExportWebCast()
         if(!CreateImagesForPresPages())
             break;
 
-        if( eScript == SCRIPT_ASP )
+        if( m_eScript == SCRIPT_ASP )
         {
             if(!CreateASPScripts())
                 break;
@@ -1770,10 +1904,6 @@ BOOL HtmlExport::CreateContentPage()
 
     // Parameter
     String aEmpty;
-//  GETITEM( SfxStringItem, ATTR_PUBLISH_AUTHOR, String() );
-    ByteString aAuthor( S2H(GETITEM( SfxStringItem, ATTR_PUBLISH_AUTHOR, aEmpty )));
-    ByteString aHomePage( S2H(GETITEM( SfxStringItem, ATTR_PUBLISH_WWW, aEmpty )));
-    ByteString aInfo( S2H(GETITEM( SfxStringItem, ATTR_PUBLISH_INFO, aEmpty )));
 
     if( m_bDocColors )
     {
@@ -1835,12 +1965,12 @@ BOOL HtmlExport::CreateContentPage()
     // Dokument Infos
     aStr += "<td valign=top width=50%>\r\n";
 
-    if(aAuthor.Len())
+    if(m_aAuthor.Len())
     {
         aStr += "<p><strong>";
         aStr += RESTOHTML(STR_HTMLEXP_AUTHOR);
         aStr += ":</strong> ";
-        aStr += aAuthor;
+        aStr += m_aAuthor;
         aStr += "</p>\r\n";
     }
 
@@ -1855,23 +1985,23 @@ BOOL HtmlExport::CreateContentPage()
         aStr += "</a></p>\r\n";
     }
 
-    if(aHomePage.Len())
+    if(m_aHomePage.Len())
     {
         aStr += "<p><strong>";
         aStr += RESTOHTML(STR_HTMLEXP_HOMEPAGE);
         aStr += ":</strong> <a href=\"";
-        aStr += aHomePage;
+        aStr += m_aHomePage;
         aStr += "\">";
-        aStr += aHomePage;
+        aStr += m_aHomePage;
         aStr += "</a> </p>\r\n";
     }
 
-    if(aInfo.Len())
+    if(m_aInfo.Len())
     {
         aStr += "<p><strong>";
         aStr += RESTOHTML(STR_HTMLEXP_INFO);
         aStr += ":</strong><br>\r\n";
-        aStr += aInfo;
+        aStr += m_aInfo;
         aStr += "</p>\r\n";
     }
 

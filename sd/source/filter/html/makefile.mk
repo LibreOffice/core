@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: ka $ $Date: 2002-04-18 15:04:35 $
+#   last change: $Author: cl $ $Date: 2002-07-16 08:13:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,8 @@ TARGET=html
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =	$(SLO)$/sdhtmlfilter.obj	\
+SLOFILES =	$(SLO)$/HtmlOptionsDialog.obj\
+            $(SLO)$/sdhtmlfilter.obj	\
             $(SLO)$/htmlex.obj			\
             $(SLO)$/htmlattr.obj		\
             $(SLO)$/pubdlg.obj			
