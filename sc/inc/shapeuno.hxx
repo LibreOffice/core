@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-05 10:28:59 $
+ *  last change: $Author: nn $ $Date: 2002-11-27 18:21:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXTCONTENT_HPP_
 #include <com/sun/star/text/XTextContent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
@@ -100,11 +103,13 @@ class ScShapeObj : public ::cppu::OWeakObject,
                     public ::com::sun::star::beans::XPropertySet,
                     public ::com::sun::star::beans::XPropertyState,
                     public ::com::sun::star::text::XTextContent,
+                    public ::com::sun::star::text::XText,
                     public ::com::sun::star::lang::XTypeProvider
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > mxShapeAgg;
     com::sun::star::uno::Sequence< sal_Int8 >*                              pImplementationId;
+    BOOL                                                                    bIsTextShape;
 
     SdrObject* GetSdrObject() const throw();
 
@@ -199,6 +204,47 @@ public:
     virtual void SAL_CALL   removeEventListener(const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::lang::XEventListener > & aListener)
                                 throw( ::com::sun::star::uno::RuntimeException );
+
+                            // XText
+    virtual void SAL_CALL   insertTextContent( const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::text::XTextRange >& xRange,
+                                const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::text::XTextContent >& xContent,
+                                sal_Bool bAbsorb )
+                                    throw(::com::sun::star::lang::IllegalArgumentException,
+                                    ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removeTextContent( const ::com::sun::star::uno::Reference<
+                                ::com::sun::star::text::XTextContent >& xContent )
+                                    throw(::com::sun::star::container::NoSuchElementException,
+                                            ::com::sun::star::uno::RuntimeException);
+
+                            // XSimpleText
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > SAL_CALL
+                            createTextCursor() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > SAL_CALL
+                            createTextCursorByRange( const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::text::XTextRange >& aTextPosition )
+                                    throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   insertString( const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::text::XTextRange >& xRange,
+                                        const ::rtl::OUString& aString, sal_Bool bAbsorb )
+                                    throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   insertControlCharacter( const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::text::XTextRange >& xRange,
+                                        sal_Int16 nControlCharacter, sal_Bool bAbsorb )
+                                    throw(::com::sun::star::lang::IllegalArgumentException,
+                                        ::com::sun::star::uno::RuntimeException);
+
+                            // XTextRange
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
+                            getText() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
+                            getStart() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
+                            getEnd() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getString() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setString( const ::rtl::OUString& aString )
+                                    throw(::com::sun::star::uno::RuntimeException);
 
                             // XTypeProvider
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-05 10:29:16 $
+ *  last change: $Author: nn $ $Date: 2002-11-27 18:22:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,15 @@
 #include <svtools/unoimap.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/unoshape.hxx>
+#include <svx/unofield.hxx>
 
 #include <com/sun/star/drawing/XShape.hpp>
 
 #include "shapeuno.hxx"
 #include "miscuno.hxx"
 #include "cellsuno.hxx"
+#include "textuno.hxx"
+#include "fielduno.hxx"
 #include "docsh.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
@@ -118,7 +121,8 @@ const SvEventDescription* ScShapeObj::GetSupportedMacroItems()
 //------------------------------------------------------------------------
 
 ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape )
-    : pImplementationId(NULL)
+    : pImplementationId(NULL),
+      bIsTextShape(FALSE)
 {
     comphelper::increment( m_refCount );
 
@@ -134,6 +138,8 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape )
         mxShapeAgg->setDelegator( (cppu::OWeakObject*)this );
 
         xShape = uno::Reference<drawing::XShape>( mxShapeAgg, uno::UNO_QUERY );
+
+        bIsTextShape = ( SvxUnoTextBase::getImplementation( mxShapeAgg ) != NULL );
     }
 
     comphelper::decrement( m_refCount );
@@ -154,6 +160,14 @@ uno::Any SAL_CALL ScShapeObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( beans::XPropertyState )
     SC_QUERYINTERFACE( text::XTextContent )
     SC_QUERYINTERFACE( lang::XComponent )
+    if ( bIsTextShape )
+    {
+        //  #105585# for text shapes, XText (and parent interfaces) must
+        //  be handled here, too (for ScCellFieldObj handling):
+        SC_QUERYINTERFACE( text::XText )
+        SC_QUERYINTERFACE( text::XSimpleText )
+        SC_QUERYINTERFACE( text::XTextRange )
+    }
     SC_QUERYINTERFACE( lang::XTypeProvider )
 
     uno::Any aRet = OWeakObject::queryInterface( rType );
@@ -194,6 +208,30 @@ uno::Reference<lang::XComponent> lcl_GetComponent( const uno::Reference<uno::XAg
     uno::Reference<lang::XComponent> xRet;
     if ( xAgg.is() )
         xAgg->queryAggregation( getCppuType((uno::Reference<lang::XComponent>*) 0) ) >>= xRet;
+    return xRet;
+}
+
+uno::Reference<text::XText> lcl_GetText( const uno::Reference<uno::XAggregation>& xAgg )
+{
+    uno::Reference<text::XText> xRet;
+    if ( xAgg.is() )
+        xAgg->queryAggregation( getCppuType((uno::Reference<text::XText>*) 0) ) >>= xRet;
+    return xRet;
+}
+
+uno::Reference<text::XSimpleText> lcl_GetSimpleText( const uno::Reference<uno::XAggregation>& xAgg )
+{
+    uno::Reference<text::XSimpleText> xRet;
+    if ( xAgg.is() )
+        xAgg->queryAggregation( getCppuType((uno::Reference<text::XSimpleText>*) 0) ) >>= xRet;
+    return xRet;
+}
+
+uno::Reference<text::XTextRange> lcl_GetTextRange( const uno::Reference<uno::XAggregation>& xAgg )
+{
+    uno::Reference<text::XTextRange> xRet;
+    if ( xAgg.is() )
+        xAgg->queryAggregation( getCppuType((uno::Reference<text::XTextRange>*) 0) ) >>= xRet;
     return xRet;
 }
 
@@ -506,6 +544,194 @@ void SAL_CALL ScShapeObj::removeEventListener(
     uno::Reference<lang::XComponent> xAggComp = lcl_GetComponent(mxShapeAgg);
     if ( xAggComp.is() )
         xAggComp->removeEventListener(xListener);
+}
+
+// XText
+// (special handling for ScCellFieldObj)
+
+void lcl_CopyOneProperty( beans::XPropertySet& rDest, beans::XPropertySet& rSource, const sal_Char* pName )
+{
+    rtl::OUString aNameStr = rtl::OUString::createFromAscii(pName);
+    try
+    {
+        uno::Any aValue = rSource.getPropertyValue( aNameStr );
+        rDest.setPropertyValue( aNameStr, aValue );
+    }
+    catch (uno::Exception&)
+    {
+        DBG_ERROR("Exception in text field");
+    }
+}
+
+void SAL_CALL ScShapeObj::insertTextContent( const uno::Reference<text::XTextRange>& xRange,
+                                                const uno::Reference<text::XTextContent>& xContent,
+                                                sal_Bool bAbsorb )
+                                    throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Reference<text::XTextContent> xEffContent;
+
+    ScCellFieldObj* pCellField = ScCellFieldObj::getImplementation( xContent );
+    if ( pCellField )
+    {
+        //  #105585# createInstance("TextField.URL") from the document creates a ScCellFieldObj.
+        //  To insert it into drawing text, a SvxUnoTextField is needed instead.
+        //  The ScCellFieldObj object is left in non-inserted state.
+
+        SvxUnoTextField* pDrawField = new SvxUnoTextField( ID_URLFIELD );
+        xEffContent = pDrawField;
+        lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_URL );
+        lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_REPR );
+        lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_TARGET );
+    }
+    else
+        xEffContent = xContent;
+
+    uno::Reference<text::XText> xAggText = lcl_GetText(mxShapeAgg);
+    if ( xAggText.is() )
+        xAggText->insertTextContent( xRange, xEffContent, bAbsorb );
+}
+
+void SAL_CALL ScShapeObj::removeTextContent( const uno::Reference<text::XTextContent>& xContent )
+                                throw(container::NoSuchElementException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    //  ScCellFieldObj can't be used here.
+
+    uno::Reference<text::XText> xAggText = lcl_GetText(mxShapeAgg);
+    if ( xAggText.is() )
+        xAggText->removeTextContent( xContent );
+}
+
+// XSimpleText (parent of XText)
+// Use own SvxUnoTextCursor subclass - everything is just passed to aggregated object
+
+uno::Reference<text::XTextCursor> SAL_CALL ScShapeObj::createTextCursor()
+                                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    if ( mxShapeAgg.is() )
+    {
+        //  ScDrawTextCursor must be used to ensure the ScShapeObj is returned by getText
+
+        SvxUnoTextBase* pText = SvxUnoTextBase::getImplementation( mxShapeAgg );
+        if (pText)
+            return new ScDrawTextCursor( this, *pText );
+    }
+
+    return uno::Reference<text::XTextCursor>();
+}
+
+uno::Reference<text::XTextCursor> SAL_CALL ScShapeObj::createTextCursorByRange(
+                                    const uno::Reference<text::XTextRange>& aTextPosition )
+                                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    if ( mxShapeAgg.is() && aTextPosition.is() )
+    {
+        //  ScDrawTextCursor must be used to ensure the ScShapeObj is returned by getText
+
+        SvxUnoTextBase* pText = SvxUnoTextBase::getImplementation( mxShapeAgg );
+        SvxUnoTextRangeBase* pRange = SvxUnoTextRangeBase::getImplementation( aTextPosition );
+        if ( pText && pRange )
+        {
+            SvxUnoTextCursor* pCursor = new ScDrawTextCursor( this, *pText );
+            uno::Reference<text::XTextCursor> xCursor( pCursor );
+            pCursor->SetSelection( pRange->GetSelection() );
+            return xCursor;
+        }
+    }
+
+    return uno::Reference<text::XTextCursor>();
+}
+
+void SAL_CALL ScShapeObj::insertString( const uno::Reference<text::XTextRange>& xRange,
+                                        const rtl::OUString& aString, sal_Bool bAbsorb )
+                                    throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Reference<text::XSimpleText> xAggSimpleText = lcl_GetSimpleText(mxShapeAgg);
+    if ( xAggSimpleText.is() )
+        xAggSimpleText->insertString( xRange, aString, bAbsorb );
+    else
+        throw uno::RuntimeException();
+}
+
+void SAL_CALL ScShapeObj::insertControlCharacter( const uno::Reference<text::XTextRange>& xRange,
+                                                sal_Int16 nControlCharacter, sal_Bool bAbsorb )
+                                    throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Reference<text::XSimpleText> xAggSimpleText = lcl_GetSimpleText(mxShapeAgg);
+    if ( xAggSimpleText.is() )
+        xAggSimpleText->insertControlCharacter( xRange, nControlCharacter, bAbsorb );
+    else
+        throw uno::RuntimeException();
+}
+
+// XTextRange
+// (parent of XSimpleText)
+
+uno::Reference<text::XText> SAL_CALL ScShapeObj::getText() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return this;
+}
+
+uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getStart() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Reference<text::XTextRange> xAggTextRange = lcl_GetTextRange(mxShapeAgg);
+    if ( xAggTextRange.is() )
+        return xAggTextRange->getStart();
+    else
+        throw uno::RuntimeException();
+
+    return uno::Reference<text::XTextRange>();
+}
+
+uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getEnd() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Reference<text::XTextRange> xAggTextRange = lcl_GetTextRange(mxShapeAgg);
+    if ( xAggTextRange.is() )
+        return xAggTextRange->getEnd();
+    else
+        throw uno::RuntimeException();
+
+    return uno::Reference<text::XTextRange>();
+}
+
+rtl::OUString SAL_CALL ScShapeObj::getString() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Reference<text::XTextRange> xAggTextRange = lcl_GetTextRange(mxShapeAgg);
+    if ( xAggTextRange.is() )
+        return xAggTextRange->getString();
+    else
+        throw uno::RuntimeException();
+
+    return rtl::OUString();
+}
+
+void SAL_CALL ScShapeObj::setString( const rtl::OUString& aText ) throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    uno::Reference<text::XTextRange> xAggTextRange = lcl_GetTextRange(mxShapeAgg);
+    if ( xAggTextRange.is() )
+        xAggTextRange->setString( aText );
+    else
+        throw uno::RuntimeException();
 }
 
 // XTypeProvider
