@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:56:13 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #include <unotools/streamhelper.hxx>
 
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/XStorageRawAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace com::sun::star;
 
@@ -205,8 +207,7 @@ uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( con
     uno::Reference< io::XInputStream > xInputStream;
     if ( mxStorage.is() )
     {
-        uno::Reference< io::XStream > xStream = OpenInputStream( mxStorage, uri );
-        xInputStream = uno::Reference< io::XInputStream >( xStream, uno::UNO_QUERY );
+        xInputStream = OpenInputStream( mxStorage, uri );
     }
     else
     {
@@ -220,36 +221,55 @@ uno::Reference< io::XInputStream > SAL_CALL UriBindingHelper::getUriBinding( con
     return xInputStream;
 }
 
-uno::Reference < io::XStream > UriBindingHelper::OpenInputStream( uno::Reference < embed::XStorage >& rxStore, const rtl::OUString& rURI )
+uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno::Reference < embed::XStorage >& rxStore, const rtl::OUString& rURI )
 {
-    uno::Reference < io::XStream > xStream;
+    uno::Reference < io::XInputStream > xInStream;
 
     sal_Int32 nSepPos = rURI.indexOf( '/' );
     if ( nSepPos == -1 )
     {
         // Cloning because of I can't keep all storage references open
         // MBA with think about a better API...
-        xStream = rxStore->cloneStreamElement( rURI );
-        // Doesnt work, so better for EA to pass exception and not to sign the doc...
-        /*
+        sal_Bool bEncrypted = sal_False;
+
         try
         {
+            uno::Reference< io::XStream > xStream;
             xStream = rxStore->cloneStreamElement( rURI );
+            if ( !xStream.is() )
+                throw uno::RuntimeException();
+
+            try {
+                uno::Reference< beans::XPropertySet > xProps( xStream, uno::UNO_QUERY_THROW );
+                xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsEncrypted" ) ) ) >>= bEncrypted;
+            } catch( uno::Exception )
+            {}
+
+            if ( !bEncrypted )
+                xInStream = xStream->getInputStream();
         }
-        catch (packages::WrongPasswordException)
+        catch ( packages::WrongPasswordException& )
         {
-            xStream = rxStore->cloneEncryptedStreamElement( rURI, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DUMMY")) );
+            bEncrypted = sal_True;
         }
-        */
+
+        if ( bEncrypted )
+        {
+            // this is an encrypted stream that should be handled accordingly
+            uno::Reference< embed::XStorageRawAccess > xRawStore( rxStore, uno::UNO_QUERY );
+            OSL_ENSURE( xRawStore.is(), "Strange storage implementation is used for signing!\n" );
+            if ( xRawStore.is() )
+                xInStream = xRawStore->getPlainRawStreamElement( rURI );
+        }
     }
     else
     {
         rtl::OUString aStoreName = rURI.copy( 0, nSepPos );
         rtl::OUString aElement = rURI.copy( nSepPos+1 );
         uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( aStoreName, embed::ElementModes::READ );
-        xStream = OpenInputStream( xSubStore, aElement );
+        xInStream = OpenInputStream( xSubStore, aElement );
     }
-    return xStream;
+    return xInStream;
 }
 
 
