@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignControl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:53:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:18:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ void OTableRowView::Init()
     SetFont(aFont);
 
     // HandleColumn, fuer maximal fuenf Ziffern einrichten
-    InsertHandleColumn(GetTextWidth('0') * 4/*, TRUE */);
+    InsertHandleColumn(static_cast<USHORT>(GetTextWidth('0') * 4)/*, TRUE */);
 
     BrowserMode nMode = BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_KEEPSELECTION |
                         BROWSER_HLINESFULL | BROWSER_VLINESFULL | BROWSER_AUTOSIZE_LASTCOL;
