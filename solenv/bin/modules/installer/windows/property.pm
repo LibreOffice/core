@@ -2,9 +2,9 @@
 #
 #   $RCSfile: property.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:57:30 $
+#   last change: $Author: obo $ $Date: 2004-10-18 13:55:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -202,7 +202,7 @@ sub update_property_table
     my $propertyfile = installer::files::read_file($properyfilename);
 
     # Getting the new values
-    # Some values (arpcomments, arpcontacts, ...) are inserted from the Property.ulf
+    # Some values (arpcomments, arpcontacts, ...) are inserted from the Property.mlf
 
     my $arpcomments = get_arpcomments_for_property_table($allvariables);
     #   my $arpcontact = get_arpcontact_for_property_table();
@@ -282,6 +282,14 @@ sub set_languages_in_property_table
 
     my $onepropertyline =  $propertyname . "\t" . $ismultivalue . "\n";
     push(@{$propertyfile}, $onepropertyline);
+
+    # setting the ARPPRODUCTICON
+
+    if ($installer::globals::sofficeiconadded)  # set in shortcut.pm
+    {
+        $onepropertyline =  "ARPPRODUCTICON" . "\t" . "soffice.exe" . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
 
     # Saving the file
 
