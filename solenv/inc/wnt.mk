@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-05 17:46:28 $
+#   last change: $Author: rt $ $Date: 2001-12-11 10:03:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -222,13 +222,8 @@ CAPLIB=$(LIBPRE) cap.lib
 
 # SOLAR JAva Unterstuetzung nur fuer wntmsci
 
-.IF "$(UPD)">="616"
 ASM=ml
 AFLAGS=/c /Cp /coff
-.ELSE			# "$(UPD)">="616"
-ASM=masm386
-AFLAGS=/ml
-.ENDIF			# "$(UPD)">="616"
 OLE2ANSI=TRUE
 
 .IF "$(bndchk)" != ""
