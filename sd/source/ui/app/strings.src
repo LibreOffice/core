@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-31 12:21:41 $
+ *  last change: $Author: ka $ $Date: 2000-11-08 12:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8067,6 +8067,77 @@ String STR_EFFECT_HIDE
     Text[ arabic ] = "ÅÎÝÇÁ";
     Text[ turkish ] = "Kapat";
 };
+String STR_EFFECT_STRTCH
+{
+    Text = "Dehnen";
+    Text[ english ] = "Stretch";
+};
+String STR_EFFECT_STRTCH_FROM_L
+{
+    Text = "Von links dehnen";
+    Text[ english ] = "Stretch from left";
+};
+String STR_EFFECT_STRTCH_FROM_UL
+{
+    Text = "Von links oben dehnen";
+    Text[ english ] = "Stretch from upper left";
+};
+String STR_EFFECT_STRTCH_FROM_T
+{
+    Text = "Von oben dehnen";
+    Text[ english ] = "Stretch from top";
+};
+String STR_EFFECT_STRTCH_FROM_UR
+{
+    Text = "Von rechts oben dehnen";
+    Text[ english ] = "Stretch from upper right";
+};
+String STR_EFFECT_STRTCH_FROM_R
+{
+    Text = "Von rechts dehnen";
+    Text[ english ] = "Stretch from right";
+};
+String STR_EFFECT_STRTCH_FROM_LR
+{
+    Text = "Von rechts unten dehnen";
+    Text[ english ] = "Stretch from lower right";
+};
+String STR_EFFECT_STRTCH_FROM_B
+{
+    Text = "Von unten dehnen";
+    Text[ english ] = "Stretch from bottom";
+};
+String STR_EFFECT_STRTCH_FROM_LL
+{
+    Text = "Von links unten dehnen";
+    Text[ english ] = "Stretch from lower left";
+};
+String STR_EFFECT_STRTCH_ROTATE
+{
+    Text = "Dehnen und Drehen";
+    Text[ english ] = "Stretch and rotate";
+};
+String STR_EFFECT_STRTCH_HORIZONTAL
+{
+    Text = "Horizontal dehnen";
+    Text[ english ] = "Stretch horizontal";
+};
+String STR_EFFECT_STRTCH_VERTICAL
+{
+    Text = "Vertikal dehnen";
+    Text[ english ] = "Stretch vertical";
+};
+String STR_EFFECT_ROTATE_HORIZONTAL
+{
+    Text = "Horizontal drehen";
+    Text[ english ] = "Rotate horizontally";
+};
+String STR_EFFECT_ROTATE_VERTICAL
+{
+    Text = "Vertikal drehen";
+    Text[ english ] = "Rotate vertically";
+};
+
 String STR_GENERAL_PUBLISHING_ERROR
 {
     /* ### ACHTUNG: Neuer Text in Resource? Beim Speichern der Veröffentlichung ist ein Fehler aufgetreten. : Beim Speichern der Ver÷ffentlichung ist ein Fehler aufgetreten. */

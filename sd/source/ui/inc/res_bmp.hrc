@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-30 12:59:37 $
+ *  last change: $Author: ka $ $Date: 2000-11-08 12:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,19 @@
 #define BMP_EFFECT_DISCARD_S_FROM_LL        RID_APP_START+141
 #define BMP_EFFECT_VERTICAL_CHECKERBOARD    RID_APP_START+142
 #define BMP_EFFECT_HORIZONTAL_CHECKERBOARD  RID_APP_START+143
+#define BMP_EFFECT_STRTCH_FROM_L            RID_APP_START+144
+#define BMP_EFFECT_STRTCH_FROM_UL           RID_APP_START+145
+#define BMP_EFFECT_STRTCH_FROM_T            RID_APP_START+146
+#define BMP_EFFECT_STRTCH_FROM_UR           RID_APP_START+147
+#define BMP_EFFECT_STRTCH_FROM_R            RID_APP_START+148
+#define BMP_EFFECT_STRTCH_FROM_LR           RID_APP_START+149
+#define BMP_EFFECT_STRTCH_FROM_B            RID_APP_START+150
+#define BMP_EFFECT_STRTCH_FROM_LL           RID_APP_START+151
+
+#define BMP_EFFECT_STRTCH_HORIZONTAL        (RID_APP_START+152)
+#define BMP_EFFECT_STRTCH_VERTICAL          (RID_APP_START+153)
+#define BMP_EFFECT_ROTATE_HORIZONTAL        (RID_APP_START+154)
+#define BMP_EFFECT_ROTATE_VERTICAL          (RID_APP_START+155)
 
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-30 12:47:25 $
+ *  last change: $Author: ka $ $Date: 2000-11-08 12:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,6 +582,55 @@ Bitmap BMP_EFFECT_APPEAR
 {
     File = "effapear.bmp" ;
 };
+Bitmap BMP_EFFECT_STRTCH_FROM_L
+{
+    File = "strtleft.bmp";
+};
+Bitmap BMP_EFFECT_STRTCH_FROM_UL
+{
+    File = "strtulft.bmp";
+};
+Bitmap BMP_EFFECT_STRTCH_FROM_T
+{
+    File = "strttop.bmp";
+};
+Bitmap BMP_EFFECT_STRTCH_FROM_UR
+{
+    File = "strturgt.bmp";
+};
+Bitmap BMP_EFFECT_STRTCH_FROM_R
+{
+    File = "strtrght.bmp";
+};
+Bitmap BMP_EFFECT_STRTCH_FROM_LR
+{
+    File = "strtlrgt.bmp";
+};
+Bitmap BMP_EFFECT_STRTCH_FROM_B
+{
+    File = "strtbotm.bmp";
+};
+Bitmap BMP_EFFECT_STRTCH_FROM_LL
+{
+    File = "strtllft.bmp";
+};
+Bitmap BMP_EFFECT_STRTCH_HORIZONTAL
+{
+    File = "strthorz.bmp";
+};
+Bitmap BMP_EFFECT_STRTCH_VERTICAL
+{
+    File = "strtvert.bmp";
+};
+Bitmap BMP_EFFECT_ROTATE_HORIZONTAL
+{
+    File = "rothorz.bmp";
+};
+Bitmap BMP_EFFECT_ROTATE_VERTICAL
+{
+    File = "rotvert.bmp";
+};
+
 
 Image IMG_EMBEDDED
 {

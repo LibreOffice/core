@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-31 11:49:27 $
+ *  last change: $Author: ka $ $Date: 2000-11-08 12:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,6 +723,22 @@
 #define STR_EFFECT_MOVE_S_TO_LR             (RID_APP_START+630)
 #define STR_EFFECT_MOVE_S_TO_B              (RID_APP_START+631)
 #define STR_EFFECT_MOVE_S_TO_LL             (RID_APP_START+632)
+
+#define STR_EFFECT_STRTCH                   (RID_APP_START+634)
+#define STR_EFFECT_STRTCH_FROM_L            (RID_APP_START+635)
+#define STR_EFFECT_STRTCH_FROM_UL           (RID_APP_START+636)
+#define STR_EFFECT_STRTCH_FROM_T            (RID_APP_START+637)
+#define STR_EFFECT_STRTCH_FROM_UR           (RID_APP_START+638)
+#define STR_EFFECT_STRTCH_FROM_R            (RID_APP_START+639)
+#define STR_EFFECT_STRTCH_FROM_LR           (RID_APP_START+640)
+#define STR_EFFECT_STRTCH_FROM_B            (RID_APP_START+641)
+#define STR_EFFECT_STRTCH_FROM_LL           (RID_APP_START+642)
+
+#define STR_EFFECT_STRTCH_ROTATE            (RID_APP_START+643)
+#define STR_EFFECT_STRTCH_HORIZONTAL        (RID_APP_START+644)
+#define STR_EFFECT_STRTCH_VERTICAL          (RID_APP_START+645)
+#define STR_EFFECT_ROTATE_HORIZONTAL        (RID_APP_START+646)
+#define STR_EFFECT_ROTATE_VERTICAL          (RID_APP_START+647)
 
 /******************************************************************************
 * Ab (RID_APP_START+700 beginnen die Ids in glob.hrc!
