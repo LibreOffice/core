@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleAction.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-03-25 14:31:40 $
+ *  last change:$Date: 2003-03-26 11:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ public class _XAccessibleAction extends lib.MultiMethodTest {
      */
 
     public void _doAccessibleAction() {
-        requiredMethod("getAccessibleActionCount()");
+        requiredMethod("getAccessibleKeyBinding()");
         boolean res = true;
 
         log.println("Calling method with wrong argument");
