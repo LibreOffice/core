@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-07 11:46:07 $
+ *  last change: $Author: sj $ $Date: 2001-06-12 13:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,26 +609,27 @@ void __EXPORT SdOutlineViewShell::GetCtrlState(SfxItemSet &rSet)
         SvxHyperlinkItem aHLinkItem;
 
         OutlinerView* pOLV = pOlView->GetViewByWindow(pWindow);
-
         if (pOLV)
         {
             const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
-
             if (pFieldItem)
             {
-                const SvxFieldData* pField = pFieldItem->GetField();
-
-                if (pField->ISA(SvxURLField))
+                ESelection aSel = pOLV->GetSelection();
+                if ( abs( aSel.nEndPos - aSel.nStartPos ) == 1 )
                 {
-                    aHLinkItem.SetName(((const SvxURLField*) pField)->GetRepresentation());
-                    aHLinkItem.SetURL(((const SvxURLField*) pField)->GetURL());
-                    aHLinkItem.SetTargetFrame(((const SvxURLField*) pField)->GetTargetFrame());
+                    const SvxFieldData* pField = pFieldItem->GetField();
+                    if ( pField->ISA(SvxURLField) )
+                    {
+                        aHLinkItem.SetName(((const SvxURLField*) pField)->GetRepresentation());
+                        aHLinkItem.SetURL(((const SvxURLField*) pField)->GetURL());
+                        aHLinkItem.SetTargetFrame(((const SvxURLField*) pField)->GetTargetFrame());
+                    }
                 }
             }
         }
-
         rSet.Put(aHLinkItem);
     }
+    rSet.Put( SfxBoolItem( SID_READONLY_MODE, GetDocSh()->IsReadOnly() ) );
 
     // #49150#: Qualitaet des Previewfensters aendern, falls vorhanden
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_COLOR ) ||

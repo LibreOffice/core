@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsf.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2001-05-08 14:00:29 $
+ *  last change: $Author: sj $ $Date: 2001-06-12 13:54:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,16 +182,18 @@ void __EXPORT SdDrawViewShell::GetCtrlState(SfxItemSet &rSet)
         if (pOLV)
         {
             const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
-
             if (pFieldItem)
             {
-                const SvxFieldData* pField = pFieldItem->GetField();
-
-                if (pField->ISA(SvxURLField))
+                ESelection aSel = pOLV->GetSelection();
+                if ( abs( aSel.nEndPos - aSel.nStartPos ) == 1 )
                 {
-                    aHLinkItem.SetName(((const SvxURLField*) pField)->GetRepresentation());
-                    aHLinkItem.SetURL(((const SvxURLField*) pField)->GetURL());
-                    aHLinkItem.SetTargetFrame(((const SvxURLField*) pField)->GetTargetFrame());
+                    const SvxFieldData* pField = pFieldItem->GetField();
+                    if (pField->ISA(SvxURLField))
+                    {
+                        aHLinkItem.SetName(((const SvxURLField*) pField)->GetRepresentation());
+                        aHLinkItem.SetURL(((const SvxURLField*) pField)->GetURL());
+                        aHLinkItem.SetTargetFrame(((const SvxURLField*) pField)->GetTargetFrame());
+                    }
                 }
             }
         }
@@ -255,6 +257,7 @@ void __EXPORT SdDrawViewShell::GetCtrlState(SfxItemSet &rSet)
 
         rSet.Put(aHLinkItem);
     }
+    rSet.Put( SfxBoolItem( SID_READONLY_MODE, bReadOnly ) );
 
     // Ausgabequalitaet
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_COLOR ) ||
