@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2000-12-22 10:43:54 $
+ *  last change: $Author: kr $ $Date: 2001-02-08 09:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.1 $ $ $Date: 2000-12-22 10:43:54 $
+ * @version     $Revision: 1.2 $ $ $Date: 2001-02-08 09:14:28 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
@@ -650,8 +650,20 @@ public class TypeDescription {
         return _typeClass;
     }
 
+    /**
+     * Gets the component <code>TypeDescription</code> if
+     * this is an array type.
+     * <p>
+     * @return the <code>TypeDescription</code>
+     */
     public TypeDescription getComponentType() throws com.sun.star.uno.Exception {
-        return getTypeDescription(getZClass().getComponentType());
+        TypeDescription componentTypeDescription = null;
+
+        Class componentClass = getZClass().getComponentType();
+        if(componentClass != null)
+            componentTypeDescription = getTypeDescription(componentClass);
+
+        return componentTypeDescription;
     }
 
     /**
