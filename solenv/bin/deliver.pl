@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: rt $ $Date: 2002-11-08 10:59:58 $
+#   last change: $Author: rt $ $Date: 2002-11-08 11:02:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.33 $ ';
+$id_str = ' $Revision: 1.34 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -920,10 +920,6 @@ sub zip_files
     # zip content has to be relative to $dest
     chdir($common_dest);
     open(ZIP, "| $zipexe -q -o -u -@ $common_zip_file");
-# rt 100519
-# so wird ein separates zipfile in common/zip angelegt. Andere Moeglichkeit:
-# open(ZIP, "| $zipexe -q -o -u -@ $zip_file");
-# das wuerde die common-Sachen an die Platform-zips angehängen.
     foreach $file (@common_zip_list) {
         print "ZIP: adding $file to $common_zip_file\n";# if $is_debug;
         print ZIP "$file\n";
