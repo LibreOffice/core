@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dbo $ $Date: 2003-05-08 12:41:05 $
+#   last change: $Author: dbo $ $Date: 2003-06-05 13:18:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,24 +63,24 @@
 PRJ = ..
 PRJNAME = cli_ure
 
+# for dummy
+TARGET = unotypes
+
+.INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
+
+.INCLUDE : $(PRJ)$/util$/target.pmk
+.INCLUDE : target.mk
+
 .IF "$(BUILD_FOR_CLI)" != ""
 
-# for dummy
-TARGET = cli_ure
+ALLTAR : \
+    $(OUT)$/bin$/cli_types.dll
 
 CLIMAKERFLAGS =
 .IF "$(debug)" != ""
 CLIMAKERFLAGS += --verbose
 .ENDIF
-
-.INCLUDE : settings.mk
-
-.INCLUDE : $(PRJ)$/util$/target.pmk
-.INCLUDE : target.mk
-
-ALLTAR : \
-    $(OUT)$/bin$/cli_types.dll
 
 $(OUT)$/bin$/cli_types.dll : $(OUT)$/bin$/climaker.exe $(SOLARBINDIR)$/types.rdb
     +$(OUT)$/bin$/climaker.exe $(CLIMAKERFLAGS) \

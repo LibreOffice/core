@@ -2,9 +2,9 @@
  *
  *  $RCSfile: climaker_app.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2003-05-08 12:40:58 $
+ *  last change: $Author: dbo $ $Date: 2003-06-05 13:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,8 +358,7 @@ extern "C" int SAL_CALL main( int argc, char const * argv [] )
         // get rdb tdprovider factory
         Reference< lang::XSingleComponentFactory > xTDprov_factory(
             ::cppu::loadSharedLibComponentFactory(
-//                 OUSTR("regtypeprov.uno" SAL_DLLEXTENSION), OUString(),
-                OUSTR("rdbtdp"), OUString(),
+                OUSTR("regtypeprov.uno" SAL_DLLEXTENSION), OUString(),
                 OUSTR("com.sun.star.comp.stoc.RegistryTypeDescriptionProvider"),
                 Reference< lang::XMultiServiceFactory >(
                     xContext->getServiceManager(), UNO_QUERY ),

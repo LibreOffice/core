@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dbo $ $Date: 2003-04-22 16:33:56 $
+#   last change: $Author: dbo $ $Date: 2003-06-05 13:17:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,9 +63,6 @@
 PRJ = ..$/..
 PRJNAME = cli_ure
 
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-.IF "$(BUILD_FOR_CLI)" != ""
-
 TARGET = cli_cppuhelper
 NO_BSYMBOLIC = TRUE
 ENABLE_EXCEPTIONS = TRUE
@@ -73,6 +70,9 @@ LIBTARGET = NO
 USE_DEFFILE = TRUE
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
+
+.IF "$(BUILD_FOR_CLI)" != ""
 
 UNOUCRRDB = $(SOLARBINDIR)$/udkapi.rdb
 UNOUCRDEP = $(UNOUCRRDB)
@@ -107,6 +107,7 @@ SHL1VERSIONMAP = msvc.map
 SHL1DEF = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME = $(SHL1TARGET)
 
-.INCLUDE : target.mk
-
 .ENDIF
+
+.INCLUDE : $(PRJ)$/util$/target.pmk
+.INCLUDE : target.mk

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dbo $ $Date: 2003-05-08 12:41:02 $
+#   last change: $Author: dbo $ $Date: 2003-06-05 13:18:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,16 +63,16 @@
 PRJ = ..$/..
 PRJNAME = cli_ure
 
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-.IF "$(BUILD_FOR_CLI)" != ""
-
 # for dummy
-TARGET = cli_ure
+TARGET = ure
 
 .INCLUDE : settings.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
+
+.IF "$(BUILD_FOR_CLI)" != ""
 
 ALLTAR : \
     $(OUT)$/bin$/cli_ure.dll

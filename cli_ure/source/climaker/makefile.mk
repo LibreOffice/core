@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dbo $ $Date: 2003-03-28 10:17:38 $
+#   last change: $Author: dbo $ $Date: 2003-06-05 13:17:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,15 +63,15 @@
 PRJ = ..$/..
 PRJNAME = cli_ure
 
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-.IF "$(BUILD_FOR_CLI)" != ""
-
 TARGET = climaker
 TARGETTYPE = CUI
 LIBTARGET = NO
 ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE :  settings.mk
+.INCLUDE : $(PRJ)$/util$/makefile.pmk
+
+.IF "$(BUILD_FOR_CLI)" != ""
 
 UNOUCRDEP = $(SOLARBINDIR)$/udkapi.rdb
 UNOUCRRDB = $(SOLARBINDIR)$/udkapi.rdb
@@ -117,6 +117,7 @@ APP1STDLIBS = \
     $(SALLIB)			\
     mscoree.lib
 
-.INCLUDE :  target.mk
-
 .ENDIF
+
+.INCLUDE : $(PRJ)$/util$/target.pmk
+.INCLUDE :  target.mk
