@@ -1,5 +1,4 @@
 #include "WPXSvStream.h"
-#include "libwpd_internal.h"
 
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>

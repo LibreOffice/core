@@ -1,4 +1,4 @@
-wpft	writerperfect : xmloff libwpd sot sfx2 NULL
+wpft	writerperfect : sfx2 libwpd sot svx comphelper NULL
 
 wpft	writerperfect\source\stream	nmake	-	all	wpft_stream NULL
 wpft	writerperfect\source\filter	nmake	-	all	wpft_filter NULL
