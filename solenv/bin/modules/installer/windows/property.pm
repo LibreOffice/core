@@ -2,9 +2,9 @@
 #
 #   $RCSfile: property.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 09:10:54 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:57:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,16 +73,27 @@ use installer::windows::language;
 # for the table Property.idt
 #############################################
 
-#   sub get_arpcomments_for_property_table
-#   {
-#       my ( $allvariables ) = @_;
-#
-#       my $name = $allvariables->{'PRODUCTNAME'};
-#       my $version = $allvariables->{'PRODUCTVERSION'};
-#       my $comment = $name . " " . $version;
-#
-#       return $comment;
-#   }
+sub get_arpcomments_for_property_table
+{
+    my ( $allvariables ) = @_;
+
+    my $name = $allvariables->{'PRODUCTNAME'};
+    my $version = $allvariables->{'PRODUCTVERSION'};
+    my $comment = $name . " " . $version;
+
+    my $localminor = "";
+    if ( $installer::globals::updatepack ) { $localminor = $installer::globals::lastminor; }
+    else { $localminor = $installer::globals::minor; }
+
+    my $buildidstring = "(" . $installer::globals::build . $localminor . "(Build:" . $installer::globals::buildid . "))";
+
+    # the environment variable CWS_WORK_STAMP is set only in CWS
+    if ( $ENV{'CWS_WORK_STAMP'} ) { $buildidstring = $buildidstring . "\[CWS\:" . $ENV{'CWS_WORK_STAMP'} . "\]"; }
+
+    $comment = $comment . " " . $buildidstring;
+
+    return $comment;
+}
 
 #   sub get_arpcontact_for_property_table
 #   {
@@ -193,7 +204,7 @@ sub update_property_table
     # Getting the new values
     # Some values (arpcomments, arpcontacts, ...) are inserted from the Property.ulf
 
-    #   my $arpcomments = get_arpcomments_for_property_table($allvariables);
+    my $arpcomments = get_arpcomments_for_property_table($allvariables);
     #   my $arpcontact = get_arpcontact_for_property_table();
     #   my $arphelplink = get_arphelplink_for_property_table();
     #   my $arphelptelephone = get_arphelptelephone_for_property_table();
@@ -212,7 +223,7 @@ sub update_property_table
 
     for ( my $i = 0; $i <= $#{$propertyfile}; $i++ )
     {
-        #   ${$propertyfile}[$i] =~ s/\bARPCOMMENTSTEMPLATE\b/$arpcomments/;
+        ${$propertyfile}[$i] =~ s/\bARPCOMMENTSTEMPLATE\b/$arpcomments/;
         #   ${$propertyfile}[$i] =~ s/\bARPCONTACTTEMPLATE\b/$arpcontact/;
         #   ${$propertyfile}[$i] =~ s/\bARPHELPLINKTEMPLATE\b/$arphelplink/;
         #   ${$propertyfile}[$i] =~ s/\bARPHELPTELEPHONETEMPLATE\b/$arphelptelephone/;
