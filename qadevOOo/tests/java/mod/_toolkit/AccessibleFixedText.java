@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleFixedText.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Date: 2003-09-08 12:59:43 $
+ *  last change: $Date: 2004-01-05 20:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.utils;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
@@ -85,6 +75,17 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.utils;
+
 
 /**
  * Test for object which is represented by accesible component
@@ -111,85 +112,87 @@ import com.sun.star.uno.XInterface;
  * @see ifc.accessibility._XAccessibleText
  */
 public class AccessibleFixedText extends TestCase {
-
     XTextDocument xTextDoc = null;
     XAccessibleAction action = null;
-    private XWindow xWinDlg = null ;
+    private XWindow xWinDlg = null;
 
     /**
      * Creates a new dialog adds fixed text control to it and
      * displays it. Then the text's accessible component is
      * obtained.
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
-
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XInterface oObj = null;
-        XMultiServiceFactory xMSF =  (XMultiServiceFactory) Param.getMSF() ;
-        XControlModel dlgModel = null ;
+        XMultiServiceFactory xMSF = (XMultiServiceFactory) Param.getMSF();
+        XControlModel dlgModel = null;
 
-        XControl txtControl = null ;
-        XControlModel txtModel = null ;
+        XControl txtControl = null;
+        XControlModel txtModel = null;
 
         try {
-            dlgModel = (XControlModel) UnoRuntime.queryInterface
-                (XControlModel.class, xMSF.createInstance
-                ("com.sun.star.awt.UnoControlDialogModel")) ;
+            dlgModel = (XControlModel) UnoRuntime.queryInterface(
+                               XControlModel.class,
+                               xMSF.createInstance(
+                                       "com.sun.star.awt.UnoControlDialogModel"));
 
-            XControl dlgControl = (XControl) UnoRuntime.queryInterface
-                (XControl.class, xMSF.createInstance
-                ("com.sun.star.awt.UnoControlDialog")) ;
+            XControl dlgControl = (XControl) UnoRuntime.queryInterface(
+                                          XControl.class,
+                                          xMSF.createInstance(
+                                                  "com.sun.star.awt.UnoControlDialog"));
 
-            dlgControl.setModel(dlgModel) ;
+            dlgControl.setModel(dlgModel);
 
-            txtModel = (XControlModel) UnoRuntime.queryInterface
-                (XControlModel.class, xMSF.createInstance
-                ("com.sun.star.awt.UnoControlFixedTextModel")) ;
+            txtModel = (XControlModel) UnoRuntime.queryInterface(
+                               XControlModel.class,
+                               xMSF.createInstance(
+                                       "com.sun.star.awt.UnoControlFixedTextModel"));
 
-            txtControl = (XControl) UnoRuntime.queryInterface
-                (XControl.class, xMSF.createInstance
-                ("com.sun.star.awt.UnoControlFixedText")) ;
+            txtControl = (XControl) UnoRuntime.queryInterface(XControl.class,
+                                                              xMSF.createInstance(
+                                                                      "com.sun.star.awt.UnoControlFixedText"));
 
-            txtControl.setModel(txtModel) ;
+            txtControl.setModel(txtModel);
 
-            XFixedText xFT = (XFixedText) UnoRuntime.queryInterface
-                (XFixedText.class, txtControl);
+            XFixedText xFT = (XFixedText) UnoRuntime.queryInterface(
+                                     XFixedText.class, txtControl);
             xFT.setText("FxedText");
 
-            XControlContainer ctrlCont = (XControlContainer)
-                UnoRuntime.queryInterface(XControlContainer.class, dlgControl) ;
+            XControlContainer ctrlCont = (XControlContainer) UnoRuntime.queryInterface(
+                                                 XControlContainer.class,
+                                                 dlgControl);
 
-            ctrlCont.addControl("Text", txtControl) ;
+            ctrlCont.addControl("Text", txtControl);
 
-            xWinDlg = (XWindow) UnoRuntime.queryInterface
-                (XWindow.class, dlgControl) ;
+            xWinDlg = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                          dlgControl);
 
-            xWinDlg.setVisible(true) ;
+            xWinDlg.setVisible(true);
 
-            xWinDlg.setPosSize(0, 0, 200, 100, PosSize.SIZE) ;
+            xWinDlg.setPosSize(0, 0, 200, 100, PosSize.SIZE);
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Error creating dialog :") ;
-            e.printStackTrace(log) ;
+            log.println("Error creating dialog :");
+            e.printStackTrace(log);
         }
 
         try {
-            oObj = (XInterface) ( (XMultiServiceFactory) Param.getMSF()).createInstance
-                ("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+                           "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit)
-                        UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                      XExtendedToolkit.class, oObj);
 
         shortWait();
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = (XWindow)
-            UnoRuntime.queryInterface(XWindow.class,tk.getActiveTopWindow());
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                              tk.getActiveTopWindow());
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
@@ -201,36 +204,35 @@ public class AccessibleFixedText extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XWindow xWin = (XWindow) UnoRuntime.queryInterface
-            (XWindow.class, txtControl);
+        final XWindow xWin = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                                 txtControl);
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    xWin.setEnable(false);
-                    xWin.setEnable(true);
-                }
-            });
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                xWin.setEnable(false);
+                xWin.setEnable(true);
+            }
+        });
 
-        XAccessibleText text = (XAccessibleText)
-                    UnoRuntime.queryInterface(XAccessibleText.class,oObj) ;
+        XAccessibleText text = (XAccessibleText) UnoRuntime.queryInterface(
+                                       XAccessibleText.class, oObj);
 
         tEnv.addObjRelation("XAccessibleText.Text", text.getText());
 
         tEnv.addObjRelation("EditOnly",
-                    "This method isn't supported in this component");
+                            "This method isn't supported in this component");
 
         tEnv.addObjRelation("LimitedBounds", "yes");
 
         return tEnv;
-
     }
 
     /**
      * Closes dialog using action of button 'Close'
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-        log.println( "    Closing dialog ... " );
+    protected void cleanup(TestParameters Param, PrintWriter log) {
+        log.println("    Closing dialog ... ");
         xWinDlg.dispose();
     }
 
@@ -240,9 +242,9 @@ public class AccessibleFixedText extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.sleep(500) ;
+            Thread.sleep(500);
         } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
+            log.println("While waiting :" + e);
         }
     }
 }
