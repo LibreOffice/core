@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VPolarAxis.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-23 09:38:08 $
+ *  last change: $Author: iha $ $Date: 2004-01-23 10:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,10 +225,11 @@ void VPolarAxis::create2DAngleAxis( const uno::Reference< drawing::XShapes >& xT
 
     //-----------------------------------------
     //create labels
-    AxisLabelProperties aAxisLabelProperties;
-    aAxisLabelProperties.init(m_aAxisProperties.m_xAxisModel);
-    if( aAxisLabelProperties.bDisplayLabels )
+    if( m_aAxisProperties.m_bDisplayLabels )
     {
+        AxisLabelProperties aAxisLabelProperties;
+        aAxisLabelProperties.init(m_aAxisProperties.m_xAxisModel);
+
         FixedNumberFormatter aFixedNumberFormatter(
                 m_pNumberFormatterWrapper, aAxisLabelProperties.aNumberFormat );
 
@@ -271,6 +272,9 @@ void VPolarAxis::create2DRadiusAxis( const uno::Reference< drawing::XShapes >& x
     {
         pTickInfo->updateUnscaledValue( xInverseScaling );
         aAxisProperties.m_pfMainLinePositionAtOtherAxis = new double( pTickInfo->fUnscaledTickValue );
+        if(nTick)
+            aAxisProperties.m_bDisplayLabels=false;
+
         //-------------------
         VCartesianAxis aAxis(aAxisProperties,m_pNumberFormatterWrapper
             ,2,new PolarPlottingPositionHelper(false));

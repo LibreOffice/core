@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VAxisProperties.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:20:33 $
+ *  last change: $Author: iha $ $Date: 2004-01-23 10:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,7 @@ AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
     , m_fInnerDirectionSign(1.0)
     , m_bLabelsOutside(true)
     , m_aLabelAlignment(LABEL_ALIGN_RIGHT_TOP)
+    , m_bDisplayLabels( true )
 //    , m_eRelativeLabelPosition(LEFTORBOTTOM_OF_AXIS)
     , m_nMajorTickmarks(1)
     , m_nMinorTickmarks(1)
@@ -213,6 +214,7 @@ AxisProperties::AxisProperties( const AxisProperties& rAxisProperties )
     , m_fInnerDirectionSign( rAxisProperties.m_fInnerDirectionSign )
     , m_bLabelsOutside( rAxisProperties.m_bLabelsOutside )
     , m_aLabelAlignment( rAxisProperties.m_aLabelAlignment )
+    , m_bDisplayLabels( rAxisProperties.m_bDisplayLabels )
 //    , m_eRelativeLabelPosition( rAxisProperties.m_eRelativeLabelPosition )
     , m_nMajorTickmarks( rAxisProperties.m_nMajorTickmarks )
     , m_nMinorTickmarks( rAxisProperties.m_nMinorTickmarks )
@@ -287,12 +289,15 @@ void AxisProperties::init( bool bCartesian )
     if( !xProp.is() )
         return;
 
-    //init LineProperties
-    m_aLineProperties.initFromPropertySet( xProp );
-
-    //init TickmarkProperties
     try
     {
+        //init LineProperties
+        m_aLineProperties.initFromPropertySet( xProp );
+
+        //init display labels
+        xProp->getPropertyValue( C2U( "DisplayLabels" ) ) >>= m_bDisplayLabels;
+
+        //init TickmarkProperties
         xProp->getPropertyValue( C2U( "MajorTickmarks" ) ) >>= m_nMajorTickmarks;
         xProp->getPropertyValue( C2U( "MinorTickmarks" ) ) >>= m_nMinorTickmarks;
 
@@ -319,7 +324,6 @@ void AxisProperties::init( bool bCartesian )
 
 AxisLabelProperties::AxisLabelProperties()
                         : aNumberFormat()
-                        , bDisplayLabels( true )
                         , eStaggering( SIDE_BY_SIDE )
                         , bLineBreakAllowed( true )
                         , bOverlapAllowed( false )
@@ -353,7 +357,6 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
                 //@todo get number format from calc
             }
 
-            xProp->getPropertyValue( C2U( "DisplayLabels" ) ) >>= this->bDisplayLabels;
             xProp->getPropertyValue( C2U( "TextBreak" ) ) >>= this->bLineBreakAllowed;
             xProp->getPropertyValue( C2U( "TextOverlap" ) ) >>= this->bOverlapAllowed;
             xProp->getPropertyValue( C2U( "StackCharacters" ) ) >>= this->bStackCharacters;

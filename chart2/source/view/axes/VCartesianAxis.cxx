@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCartesianAxis.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:20:34 $
+ *  last change: $Author: iha $ $Date: 2004-01-23 10:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,10 +804,11 @@ void SAL_CALL VCartesianAxis::createShapes()
     }
     //-----------------------------------------
     //create labels
-    AxisLabelProperties aAxisLabelProperties;
-    aAxisLabelProperties.init(m_aAxisProperties.m_xAxisModel);
-    if( aAxisLabelProperties.bDisplayLabels )
+    if( m_aAxisProperties.m_bDisplayLabels )
     {
+        AxisLabelProperties aAxisLabelProperties;
+        aAxisLabelProperties.init(m_aAxisProperties.m_xAxisModel);
+
         //create tick mark text shapes
         while( !createTextShapes( xGroupShape_Shapes, aAllTickInfos
                         , aAxisLabelProperties, apTickmarkHelper.get()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VAxisProperties.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2004-01-22 19:20:33 $
+ *  last change: $Author: iha $ $Date: 2004-01-23 10:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,6 @@ struct AxisLabelProperties
 
     drafts::com::sun::star::chart2::NumberFormat        aNumberFormat;
 
-    sal_Bool             bDisplayLabels;
-
     AxisLabelStaggering  eStaggering;
 
     sal_Bool             bLineBreakAllowed;
@@ -142,11 +140,12 @@ struct AxisProperties
     bool        m_bIsMainAxis;//not secondary axis
     double*     m_pfMainLinePositionAtOtherAxis;
     double*     m_pfExrtaLinePositionAtOtherAxis;
-    //this direction is used to indicate in which direction inner tickmarks are to be drawn
-    double      m_fInnerDirectionSign;
-    bool        m_bLabelsOutside;
 
+    //this direction is used to indicate in which direction inner tickmarks are to be drawn
+    double          m_fInnerDirectionSign;
+    bool            m_bLabelsOutside;
     LabelAlignment  m_aLabelAlignment;
+    sal_Bool        m_bDisplayLabels;
 
 
 //    enum RelativeLabelPosition { NONE, LEFTORBOTTOM_OF_DIAGRAM, RIGHTORTOP_OF_DIAGRAM,
