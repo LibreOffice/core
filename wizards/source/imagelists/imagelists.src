@@ -1,0 +1,195 @@
+/*************************************************************************
+ *
+ *  $RCSfile: imagelists.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:30:45 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#define REPORTWIZARD_BASE   1000
+#define FORMWIZARD_BASE     1100
+#define WEBWIZARD_BASE      1200
+
+#define IMG_REPORT_ORIENTATION_PORTRAIT         REPORTWIZARD_BASE + 0
+Image IMG_REPORT_ORIENTATION_PORTRAIT
+{
+    ImageBitmap = Bitmap { File = "portrait_32.png"; };
+};
+
+#define IMG_REPORT_ORIENTATION_PORTRAIT_HC      REPORTWIZARD_BASE + 1
+Image IMG_REPORT_ORIENTATION_PORTRAIT_HC
+{
+    ImageBitmap = Bitmap { File = "portrait_32_h.png"; };
+};
+
+#define IMG_REPORT_ORIENTATION_LANDSCAPE        REPORTWIZARD_BASE + 2
+Image IMG_REPORT_ORIENTATION_LANDSCAPE
+{
+    ImageBitmap = Bitmap { File = "landscape_32.png"; };
+};
+
+#define IMG_REPORT_ORIENTATION_LANDSCAPE_HC     REPORTWIZARD_BASE + 3
+Image IMG_REPORT_ORIENTATION_LANDSCAPE_HC
+{
+    ImageBitmap = Bitmap { File = "landscape_32_h.png"; };
+};
+
+#define IMG_FORM_ARRANGELISTSIDE                FORMWIZARD_BASE + 0
+Image IMG_FORM_ARRANGELISTSIDE
+{
+    ImageBitmap = Bitmap { File = "formarrangelistside_42.png"; };
+};
+
+#define IMG_FORM_ARRANGELISTSIDE_HC             FORMWIZARD_BASE + 1
+Image IMG_FORM_ARRANGELISTSIDE_HC
+{
+    ImageBitmap = Bitmap { File = "formarrangelistside_42_h.png"; };
+};
+
+#define IMG_FORM_ARRANGELISTTOP                 FORMWIZARD_BASE + 2
+Image IMG_FORM_ARRANGELISTTOP
+{
+    ImageBitmap = Bitmap { File = "formarrangelisttop_42.png"; };
+};
+
+#define IMG_FORM_ARRANGELISTTOP_HC              FORMWIZARD_BASE + 3
+Image IMG_FORM_ARRANGELISTTOP_HC
+{
+    ImageBitmap = Bitmap { File = "formarrangelisttop_42_h.png"; };
+};
+
+#define IMG_FORM_ARRANGETABLE                   FORMWIZARD_BASE + 4
+Image IMG_FORM_ARRANGETABLE
+{
+    ImageBitmap = Bitmap { File = "formarrangetable_42.png"; };
+};
+
+#define IMG_FORM_ARRANGETABLE_HC                    FORMWIZARD_BASE + 5
+Image IMG_FORM_ARRANGETABLE_HC
+{
+    ImageBitmap = Bitmap { File = "formarrangetable_42_h.png"; };
+};
+
+
+#define IMG_FORM_ARRANGEFREE                    FORMWIZARD_BASE + 6
+Image IMG_FORM_ARRANGEFREE
+{
+    ImageBitmap = Bitmap { File = "formarrangefree_42.png"; };
+};
+
+#define IMG_FORM_ARRANGEFREE_HC                 FORMWIZARD_BASE + 7
+Image IMG_FORM_ARRANGEFREE_HC
+{
+    ImageBitmap = Bitmap { File = "formarrangefree_42_h.png"; };
+};
+
+
+#define IMG_WEB_LAYOUT_TABLE3                       WEBWIZARD_BASE + 0
+Image IMG_WEB_LAYOUT_TABLE3
+{
+    ImageBitmap = Bitmap { File = "table_3.png"; };
+};
+
+
+#define IMG_WEB_LAYOUT_TABLE2                       WEBWIZARD_BASE + 2
+Image IMG_WEB_LAYOUT_TABLE2
+{
+    ImageBitmap = Bitmap { File = "table_2.png"; };
+};
+
+
+#define IMG_WEB_LAYOUT_SIMPLE                       WEBWIZARD_BASE + 4
+Image IMG_WEB_LAYOUT_SIMPLE
+{
+    ImageBitmap = Bitmap { File = "simple.png"; };
+};
+
+#define IMG_WEB_LAYOUT_DIAGONAL                     WEBWIZARD_BASE + 6
+Image IMG_WEB_LAYOUT_DIAGONAL
+{
+    ImageBitmap = Bitmap { File = "diagonal.png"; };
+};
+
+#define IMG_WEB_LAYOUT_ZIGZAG                       WEBWIZARD_BASE + 8
+Image IMG_WEB_LAYOUT_ZIGZAG
+{
+    ImageBitmap = Bitmap { File = "zigzag.png"; };
+};
+
+#define IMG_WEB_LAYOUT_FRAMELEFT                        WEBWIZARD_BASE + 10
+Image IMG_WEB_LAYOUT_FRAMELEFT
+{
+    ImageBitmap = Bitmap { File = "frame_left.png"; };
+};
+
+#define IMG_WEB_LAYOUT_FRAMERIGHT                       WEBWIZARD_BASE + 12
+Image IMG_WEB_LAYOUT_FRAMERIGHT
+{
+    ImageBitmap = Bitmap { File = "frame_right.png"; };
+};
+
+#define IMG_WEB_LAYOUT_FRAMETOP                         WEBWIZARD_BASE + 14
+Image IMG_WEB_LAYOUT_FRAMETOP
+{
+    ImageBitmap = Bitmap { File = "frame_top.png"; };
+};
+
+#define IMG_WEB_LAYOUT_FRAMEBOTTOM                          WEBWIZARD_BASE + 16
+Image IMG_WEB_LAYOUT_FRAMEBOTTOM
+{
+    ImageBitmap = Bitmap { File = "frame_bottom.png"; };
+};
+
