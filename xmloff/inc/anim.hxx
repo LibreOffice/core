@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anim.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-19 14:03:25 $
+ *  last change: $Author: vg $ $Date: 2000-12-21 18:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ enum XMLEffectDirection
     ED_to_center,
 
     ED_clockwise,
-    ED_cclockwise,
+    ED_cclockwise
 };
 
 extern SvXMLEnumMapEntry aXML_AnimationDirection_EnumMap[];
