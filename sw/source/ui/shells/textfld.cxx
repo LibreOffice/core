@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:49:32 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,24 +821,23 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
 
     if( rSh.GetSelectionType() & SwWrtShell::SEL_TXT )
     {
+        rSh.StartAction();
+        SfxItemSet aSet(GetPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
+        rSh.GetAttr( aSet );
+
+        const SfxPoolItem* pItem;
+        if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, FALSE, &pItem))
+        {
+            const SwFmtINetFmt* pINetFmt = (const SwFmtINetFmt*)pItem;
+
+            // Links selektieren
+            rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT);
+        }
         switch (nType)
         {
         case HLINK_DEFAULT:
         case HLINK_FIELD:
             {
-                rSh.StartAction();
-                BOOL bSel = rSh.HasSelection();
-                SfxItemSet aSet(GetPool(), RES_TXTATR_INETFMT, RES_TXTATR_INETFMT);
-                rSh.GetAttr( aSet );
-
-                const SfxPoolItem* pItem;
-                if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, FALSE, &pItem))
-                {
-                    const SwFmtINetFmt* pINetFmt = (const SwFmtINetFmt*)pItem;
-
-                    // Links selektieren
-                    rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT);
-                }
                 SwFmtINetFmt aINetFmt( rURL, rTarget );
                 aINetFmt.SetName(rHlnkItem.GetIntName());
                 if(pMacroTbl)
@@ -856,15 +855,18 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
                 rSh.SttSelect();
                 rSh.InsertURL( aINetFmt, rName, TRUE );
                 rSh.EndSelect();
-                rSh.EndAction();
             }
             break;
 
         case HLINK_BUTTON:
+            BOOL bSel = rSh.HasSelection();
+            if(bSel)
+                rSh.DelRight();
             InsertURLButton( rURL, rTarget, rName );
             rSh.EnterStdMode();
             break;
         }
+        rSh.EndAction();
     }
 }
 
