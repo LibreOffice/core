@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-17 20:10:46 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_traditional ] = "ζ°΄εΉ³ζ¨™ε°Ί(~Z)";
         Text[ arabic ] = "ΗαγΣΨΡΙ ΗαΓέήνΙ";
         Text[ greek ] = "Οριζόντιος χάρακας";
-        Text[ korean ] = "μν‰ λκΈμ(~Z)";
+        Text[ korean ] = "κ°€λ΅ λκΈμ(~Z)";
         Text[ turkish ] = "Yatay cetvel";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Regle hori~tzontal";
@@ -1678,16 +1678,16 @@ TabPage TP_STD_FONT
         Text[ russian ] = "CTL";
         Text[ greek ] = "CTL";
         Text[ dutch ] = "CTL";
-        Text[ french ] = "CTL";
+        Text[ french ] = "Scripts complexes";
         Text[ spanish ] = "CTL";
         Text[ finnish ] = "CTL";
-        Text[ italian ] = "CTL";
+        Text[ italian ] = "Script complessi";
         Text[ danish ] = "CTL";
         Text[ swedish ] = "CTL";
         Text[ polish ] = "CTL";
-        Text[ japanese ] = "CTL";
+        Text[ japanese ] = "θ¤‡εζ–‡ε­—θ¨€θª";
         Text[ korean ] = "CTL";
-        Text[ chinese_simplified ] = "CTL";
+        Text[ chinese_simplified ] = "ε¤ζ‚η„ζ–‡ε­—";
         Text[ chinese_traditional ] = "θ¤‡ι›η„ζ–‡ε­—";
         Text[ turkish ] = "CTL";
         Text[ arabic ] = "CTL";
