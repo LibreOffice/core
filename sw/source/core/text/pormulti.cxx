@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-16 13:22:22 $
+ *  last change: $Author: ama $ $Date: 2000-10-17 10:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,8 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     KSHORT nOldX = GetInfo().X();
     KSHORT nOldY = GetInfo().Y();
     xub_StrLen nOldIdx = GetInfo().GetIdx();
+    SvShorts *pOldSpaceAdd = GetInfo().GetpSpaceAdd();
+    GetInfo().SetSpaceAdd( NULL );
 
     SwLineLayout* pLay = &rMulti.GetRoot();// the first line of the multiportion
     SwLinePortion* pPor = pLay->GetFirstPortion();//first portion of these line
@@ -242,6 +244,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     GetInfo().SetIdx( nOldIdx );
     GetInfo().X( nOldX );
     GetInfo().Y( nOldY );
+    GetInfo().SetSpaceAdd( pOldSpaceAdd );
 }
 
 /*-----------------13.10.00 16:46-------------------
@@ -276,6 +279,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         {
             SwFldPortion *pFld =
                 rMulti.GetFldRest()->Clone( rMulti.GetFldRest()->GetExp() );
+            pFld->SetFollow( sal_True );
             aInf.SetRest( pFld );
         }
         BuildPortions( aInf );
