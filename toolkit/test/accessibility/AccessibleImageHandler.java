@@ -40,7 +40,10 @@ class AccessibleImageHandler extends NodeHandler
             XAccessibleImage xImage = getImage ((AccTreeNode)aParent);
             if (xImage != null)
                 return new StringNode (
-                    "Image description: " + xImage.getAccessibleImageDescription(),
+                    "Image: " +
+                    xImage.getAccessibleImageDescription() + " (" +
+                    xImage.getAccessibleImageWidth() + "x" +
+                    xImage.getAccessibleImageHeight() + ")",
                     aParent);
         }
         return null;
