@@ -37,7 +37,8 @@ import com.sun.star.lang.XMultiComponentFactory;
 public class ConverterServlet extends HttpServlet {
   /** Specifies the temporary directory on the web server.
    */
-  private String stringWorkingDirectory = System.getProperty( "java.io.tmpdir" );
+  private String stringWorkingDirectory =
+  System.getProperty( "java.io.tmpdir" ).replace( '\\', '/' ) + "/";
 
   /** Specifies the host for the office server.
    */
