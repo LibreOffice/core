@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentidentifier.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 16:55:37 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 09:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,16 +167,14 @@ ContentIdentifier::~ContentIdentifier()
 
 //=========================================================================
 // virtual
-void SAL_CALL ContentIdentifier::acquire()
-    throw( RuntimeException )
+void SAL_CALL ContentIdentifier::acquire() throw()
 {
     OWeakObject::acquire();
 }
 
 //=========================================================================
 // virtual
-void SAL_CALL ContentIdentifier::release()
-    throw( RuntimeException )
+void SAL_CALL ContentIdentifier::release() throw()
 {
     OWeakObject::release();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 09:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,10 +98,10 @@
         throw( com::sun::star::uno::RuntimeException );                     \
     virtual void SAL_CALL                                                   \
     acquire()                                                               \
-        throw( com::sun::star::uno::RuntimeException );                     \
+        throw();                                                            \
     virtual void SAL_CALL                                                   \
     release()                                                               \
-        throw( com::sun::star::uno::RuntimeException );
+        throw();
 
 //=========================================================================
 //
@@ -111,13 +111,13 @@
 
 #define XINTERFACE_COMMON_IMPL( Class )                                     \
 void SAL_CALL Class::acquire()                                              \
-    throw( com::sun::star::uno::RuntimeException )                          \
+    throw()                                                                 \
 {                                                                           \
     OWeakObject::acquire();                                                 \
 }                                                                           \
                                                                             \
 void SAL_CALL Class::release()                                              \
-    throw( com::sun::star::uno::RuntimeException )                          \
+    throw()                                                                 \
 {                                                                           \
     OWeakObject::release();                                                 \
 }

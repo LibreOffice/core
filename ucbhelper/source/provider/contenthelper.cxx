@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contenthelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-18 08:24:47 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 09:51:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,13 +280,13 @@ ContentImplHelper::~ContentImplHelper()
 //=========================================================================
 
 void SAL_CALL ContentImplHelper::acquire()
-    throw( com::sun::star::uno::RuntimeException )
+    throw()
 {
     OWeakObject::acquire();
 }
 
 void SAL_CALL ContentImplHelper::release()
-    throw( com::sun::star::uno::RuntimeException )
+    throw()
 {
     vos::OGuard aGuard(m_xProvider->m_aMutex);
     OWeakObject::release();
