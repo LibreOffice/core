@@ -21,7 +21,6 @@ import com.sun.star.style.XStyle;
 public class FaxDocument extends TextDocument {
 
     XDesktop xDesktop;
-    Size DocSize = null;
     boolean keepLogoFrame = true;
     boolean keepTypeFrame = true;
 
