@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleRegistry.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:18:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ module com { module sun { module star { module registry {
 
     @see XRegistryKey
 */
-interface XSimpleRegistry: com::sun::star::uno::XInterface
+published interface XSimpleRegistry: com::sun::star::uno::XInterface
 {
     //---------------------------------------------------------------------
     /** returns the URL of the current data source of the registry.
