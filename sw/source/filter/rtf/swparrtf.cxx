@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:37:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:43:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1534,6 +1534,19 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
                     // Update vom LR-Space abschalten
                     pTxtNd->SetNumLSpace( FALSE );
                 }
+            }
+        }
+    }
+    else
+    {
+        for( ULONG n = nSNd; n <= nENd; ++n )
+        {
+            SwTxtNode* pTxtNd = pDoc->GetNodes()[ n ]->GetTxtNode();
+            if( pTxtNd )
+            {
+                pTxtNd->SwCntntNode::SetAttr(
+                    *GetDfltAttr(RES_PARATR_NUMRULE));
+                pTxtNd->UpdateNum(SwNodeNum(NO_NUMBERING));
             }
         }
     }
