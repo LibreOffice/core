@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 07:52:15 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 10:51:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,6 +606,7 @@ void SAL_CALL FmXUndoEnvironment::elementInserted(const ::com::sun::star::contai
     // neues Object zum lauschen
     Reference< XInterface >  xIface;
     evt.Element >>= xIface;
+    OSL_ENSURE(xIface.is(), "FmXUndoEnvironment::elementInserted: invalid container notification!");
     AddElement(xIface);
 
     if (!IsLocked() && rModel.GetObjectShell())
@@ -619,6 +620,7 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ::com::sun::star::contai
 {
     Reference< XInterface >  xIface;
     evt.ReplacedElement >>= xIface;
+    OSL_ENSURE(xIface.is(), "FmXUndoEnvironment::elementReplaced: invalid container notification!");
     RemoveElement(xIface);
 
     evt.Element >>= xIface;
@@ -634,7 +636,8 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ::com::sun::star::contai
 void SAL_CALL FmXUndoEnvironment::elementRemoved(const ::com::sun::star::container::ContainerEvent& evt)
 {
     Reference< XInterface >  xIface;
-    evt.ReplacedElement >>= xIface;
+    evt.Element >>= xIface;
+    OSL_ENSURE(xIface.is(), "FmXUndoEnvironment::elementRemoved: invalid container notification!");
     RemoveElement(xIface);
 
     if (!IsLocked() && rModel.GetObjectShell())
