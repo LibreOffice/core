@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $
+ *  last change: $Author: ka $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,8 +188,8 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                                                const ::rtl::OUString& rPictureStreamName,
                                                const ::rtl::OUString& rGraphicId )
 {
-    String arGraphicId( rGraphicId );
-    GraphicObject   aGrfObject( ByteString( arGraphicId, RTL_TEXTENCODING_ASCII_US ) );
+    String          aGraphicId( rGraphicId );
+    GraphicObject   aGrfObject( ByteString( aGraphicId, RTL_TEXTENCODING_ASCII_US ) );
     sal_Bool        bRet = sal_False;
 
     if( aGrfObject.GetType() != GRAPHIC_NONE )
