@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliteration_body.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2002-03-26 17:13:19 $
+ *  last change: $Author: er $ $Date: 2002-11-19 22:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,39 @@ OUString SAL_CALL
 Transliteration_body::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& offset) throw(RuntimeException)
 {
+#if 0
+/* Performace optimization:
+ * The two realloc() consume 48% (32% grow, 16% shrink) runtime of this method!
+ * getValue() needs about 15%, so there is equal balance if we trade the second
+ * (shrinking) realloc() for a getValue(). But if the caller initializes the
+ * sequence to nCount elements there isn't any change in size necessary in most
+ * cases (one-to-one mapping) and we gain 33%.
+ *
+ * Of that constellation the getValue() method takes 20% upon each call, so 40%
+ * for both. By remembering the first calls' results we could gain some extra
+ * percentage again, but unfortunately getValue() may return a reference to a
+ * static buffer, so we can't store the pointer directly but would have to
+ * copy-construct an array, which doesn't give us any advantage.
+ *
+ * Much more is accomplished by working directly on the sequence buffer
+ * returned by getArray() instead of using operator[] for each and every
+ * access.
+ *
+ * And while we're at it: now that we know the size in advance we don't need to
+ * copy the buffer anymore, just create the real string buffer and let the
+ * return value take ownership.
+ *
+ * All together these changes result in the new implementation needing only 62%
+ * of the time of the old implementation (in other words: that one was 1.61
+ * times slower ...)
+ */
+
     // Allocate the max possible buffer. Try to use stack instead of heap which
     // would have to be reallocated most times anyway.
     const sal_Int32 nLocalBuf = 512 * NMAPPINGMAX;
     sal_Unicode aLocalBuf[nLocalBuf], *out = aLocalBuf, *aHeapBuf = NULL;
-    sal_Unicode *in = (sal_Unicode*) inStr.getStr() + startPos;
+
+    const sal_Unicode *in = inStr.getStr() + startPos;
 
     if (nCount > 512)
         out = aHeapBuf =  (sal_Unicode*) malloc((nCount * NMAPPINGMAX) * sizeof(sal_Unicode));
@@ -129,6 +157,36 @@ Transliteration_body::transliterate( const OUString& inStr, sal_Int32 startPos, 
         free(aHeapBuf);
 
     return r;
+#else
+    const sal_Unicode *in = inStr.getStr() + startPos;
+
+    sal_Int32 nOffCount = 0, i;
+    for (i = 0; i < nCount; i++)
+    {
+        const Mapping &map = getValue(in, i, nCount);
+        nOffCount += map.nmap;
+    }
+
+    if ( nOffCount != offset.getLength() )
+        offset.realloc( nOffCount );
+    rtl_uString* pStr = x_rtl_uString_new_WithLength( nOffCount, 1 );  // our x_rtl_ustring.h
+    sal_Unicode* out = pStr->buffer;
+
+    sal_Int32 j = 0;
+    sal_Int32 * const pArr = offset.getArray();
+    for (i = 0; i < nCount; i++)
+    {
+        const Mapping &map = getValue(in, i, nCount);
+        for (sal_Int32 k = 0; k < map.nmap; k++)
+        {
+            out[j] = map.map[k];
+            pArr[j++] = i + startPos;
+        }
+    }
+    out[j] = 0;
+
+    return OUString( pStr, SAL_NO_ACQUIRE );
+#endif
 }
 
 OUString SAL_CALL
