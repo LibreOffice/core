@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
+ *  last change: $Author: oj $ $Date: 2002-05-22 10:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -880,15 +880,15 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
     SfxUndoManager* pUndoMgr = m_pView->getController()->getUndoMgr();
     pUndoMgr->EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
 
-    // Undo Actions und Loeschen der Felder in SelectionBrowseBox
-    pParent->TableDeleted( static_cast< OQueryTableWindowData*>(pTabWin->GetData())->GetAliasName() );
-
     // Undo-Action anlegen
     OQueryTabWinDelUndoAct* pUndoAction = new OQueryTabWinDelUndoAct(this);
     pUndoAction->SetTabWin(static_cast< OQueryTableWindow*>(pTabWin));
 
     // und Fenster verstecken
     HideTabWin(static_cast< OQueryTableWindow*>(pTabWin), pUndoAction);
+
+    // Undo Actions und Loeschen der Felder in SelectionBrowseBox
+    pParent->TableDeleted( static_cast< OQueryTableWindowData*>(pTabWin->GetData())->GetAliasName() );
 
     m_pView->getController()->addUndoActionAndInvalidate( pUndoAction );
     pUndoMgr->LeaveListAction();
@@ -904,9 +904,9 @@ void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
 void OQueryTableView::EnsureVisible(const OTableWindow* pWin)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    OJoinTableView::EnsureVisible(pWin);
+
     Invalidate(INVALIDATE_NOCHILDREN);
-    return;
+    OJoinTableView::EnsureVisible(pWin);
 }
 
 //------------------------------------------------------------------------
