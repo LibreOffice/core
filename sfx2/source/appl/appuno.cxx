@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-02 11:57:21 $
+ *  last change: $Author: mba $ $Date: 2001-07-10 11:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,8 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             static const String sSilent         = String::CreateFromAscii( "Silent"         );
             static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
             static const String sURL            = String::CreateFromAscii( "URL"            );
+            static const String sOrigURL        = String::CreateFromAscii( "OriginalURL"    );
+            static const String sSalvageURL     = String::CreateFromAscii( "SalvagedFile"   );
 
             if ( aName == sInputStream && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
                 rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
@@ -294,7 +296,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             else if ( aName == sHidden && rProp.Value.getValueType() == ::getBooleanCppuType() )
                 rSet.Put( SfxBoolItem( SID_HIDDEN, *((sal_Bool*)rProp.Value.getValue()) ) );
 
-             else if ( aName == sSilent && rProp.Value.getValueType() == ::getBooleanCppuType() )
+            else if ( aName == sSilent && rProp.Value.getValueType() == ::getBooleanCppuType() )
                 rSet.Put( SfxBoolItem( SID_SILENT, *((sal_Bool*)rProp.Value.getValue()) ) );
 
             else if ( aName == sPreview && rProp.Value.getValueType() == ::getBooleanCppuType() )
@@ -302,6 +304,12 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 
             else if ( aName == sURL && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                 rSet.Put( SfxStringItem( SID_OPENURL, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+
+            else if ( aName == sOrigURL && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                rSet.Put( SfxStringItem( SID_ORIGURL, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+
+            else if ( aName == sSalvageURL && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                rSet.Put( SfxStringItem( SID_DOC_SALVAGE, *((::rtl::OUString*)rProp.Value.getValue()) ) );
 
             else if ( aName == sFrameName && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                 rSet.Put( SfxStringItem( SID_TARGETNAME, *((::rtl::OUString*)rProp.Value.getValue()) ) );
@@ -354,6 +362,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     if ( nSlotId == SID_OPENDOC )
     {
         if ( rSet.GetItemState( SID_OPENURL ) == SFX_ITEM_SET )
+            nItems++;
+        if ( rSet.GetItemState( SID_ORIGURL ) == SFX_ITEM_SET )
+            nItems++;
+        if ( rSet.GetItemState( SID_DOC_SALVAGE ) == SFX_ITEM_SET )
             nItems++;
         if ( rSet.GetItemState( SID_INPUTSTREAM ) == SFX_ITEM_SET )
             nItems++;
@@ -424,6 +436,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         static const String sSilent         = String::CreateFromAscii( "Silent"         );
         static const String sJumpMark       = String::CreateFromAscii( "JumpMark"       );
         static const String sURL            = String::CreateFromAscii( "URL"            );
+        static const String sOrigURL        = String::CreateFromAscii( "OriginalURL"    );
+        static const String sSalvageURL     = String::CreateFromAscii( "SalvagedFile"   );
 
         const SfxPoolItem *pItem=0;
         if ( rSet.GetItemState( SID_INPUTSTREAM, sal_False, &pItem ) == SFX_ITEM_SET )
@@ -479,6 +493,16 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         if ( rSet.GetItemState( SID_TARGETNAME, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             pValue[nItems].Name = sFrameName;
+            pValue[nItems++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+        }
+        if ( rSet.GetItemState( SID_ORIGURL, sal_False, &pItem ) == SFX_ITEM_SET )
+        {
+            pValue[nItems].Name = sOrigURL;
+            pValue[nItems++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+        }
+        if ( rSet.GetItemState( SID_DOC_SALVAGE, sal_False, &pItem ) == SFX_ITEM_SET )
+        {
+            pValue[nItems].Name = sSalvagedURL;
             pValue[nItems++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
         }
         if ( rSet.GetItemState( SID_CONTENTTYPE, sal_False, &pItem ) == SFX_ITEM_SET )

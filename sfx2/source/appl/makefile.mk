@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: ab $ $Date: 2001-06-25 11:13:38 $
+#   last change: $Author: mba $ $Date: 2001-07-10 11:39:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,6 +132,7 @@ SLOFILES =  \
         $(SLO)$/officeacceptthread.obj \
         $(SLO)$/newhelp.obj \
         $(SLO)$/helpinterceptor.obj \
+                $(SLO)$/cmdlineargs.obj \
         $(SLO)$/shutdownicon.obj \
         $(SLO)$/shutdowniconw32.obj
 

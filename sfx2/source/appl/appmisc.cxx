@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 07:12:52 $
+ *  last change: $Author: mba $ $Date: 2001-07-10 11:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(0))
 
 //--------------------------------------------------------------------
 
-
+#if SUPD<638
 void SfxApplicationClass::ActivateExtHelp()
 {
     SFX_APP()->Invalidate( SID_EXTENDEDHELP );
@@ -255,6 +255,7 @@ void SfxApplicationClass::DeactivateExtHelp()
     SFX_APP()->Invalidate( SID_EXTENDEDHELP );
     HideStatusText();
 }
+#endif
 
 //-------------------------------------------------------------------------
 
@@ -314,14 +315,6 @@ void SfxApplication::InitializeDisplayName_Impl()
 }
 
 //--------------------------------------------------------------------
-
-//IMPL_LINK( SfxApplication, OpenClients_Impl, void*, pvoid )
-//{
-//    OpenClients();
-//  DELETEZ(pImp->pIntro);
-//
-//    return 0;
-//}
 
 void SfxApplication::OpenClients()
 
@@ -783,7 +776,7 @@ void SfxApplication::ToolboxState_Impl( SfxItemSet &rSet )
 
 //------------------------------------------------------------------------
 
-
+#if SUPD<638
 VclFileDialog* SfxApplicationClass::CreateFileDialog( Window* pParent, sal_uInt32 nWinBits )
 {
     DBG_ERRORFILE( "SfxApplicationClass::CreateFileDialog() isn't supported any longer" );
@@ -791,6 +784,7 @@ VclFileDialog* SfxApplicationClass::CreateFileDialog( Window* pParent, sal_uInt3
 //    return new SfxFileDialog( pParent, nWinBits );
     return NULL;
 }
+#endif
 
 SvUShorts* SfxApplication::GetDisabledSlotList_Impl()
 {

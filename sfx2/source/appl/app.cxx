@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 07:12:52 $
+ *  last change: $Author: mba $ $Date: 2001-07-10 11:39:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,6 +521,7 @@ sal_Bool IsTemplate_Impl( const String& aPath )
 
 extern void FATToVFat_Impl( String& );
 
+#if 0
 String GetURL_Impl( const String& rName )
 {
     // if the filename is a physical name, it is the client file system, not the file system
@@ -641,6 +642,7 @@ void SfxApplication::HandleAppEvent( const ApplicationEvent& rAppEvent )
         }
     }
 }
+#endif
 
 //--------------------------------------------------------------------
 
@@ -1364,6 +1366,65 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
         }
     }
 
+#if SUPD<613//MUSTINI
+/*TODO: We need a new key to save informations for SenCrashMail feature.*/
+    sal_Bool bSendMail = pInternalOptions->CrashMailEnabled();
+    if ( !pAppData_Impl->bBean && bSendMail )
+    {
+        String aInfo = System::GetSummarySystemInfos();
+        if ( aInfo.Len() )
+        {
+            TempFile aTempFile( aSaveObj.GetMainURL() );
+            String aFileName = aTempFile.GetName();
+            SvFileStream aStr( aFileName, STREAM_STD_READWRITE );
+            aStr.WriteByteString(aInfo);
+            aStr << "\n<Build>\n";
+            aStr << BUILD;
+            aStr << '\n';
+            aStr << "</Build>\n";
+            aStr << "\n<Plattform>\n";
+#ifdef WNT
+            ByteString aPlattform( "wntmsci3" );
+#elif defined ( C50 )
+#   if defined ( SPARC )
+            ByteString aPlattform( "unxsols2" );
+#   elif defined ( INTEL )
+            ByteString aPlattform( "unxsoli2" );
+#   endif
+#elif defined ( C52 )
+#   if defined ( SPARC )
+            ByteString aPlattform( "unxsols3" );
+#   elif defined ( INTEL )
+            ByteString aPlattform( "unxsoli3" );
+#   endif
+#elif GLIBC == 2
+            ByteString aPlattform( "unxlngi2" );
+#elif defined ( SPARC ) && defined ( GCC )
+            ByteString aPlattform( "unxsogs" );
+#endif
+#ifndef DBG_UTIL
+            aPlattform += ".pro";
+#endif
+            aStr << aPlattform.GetBuffer();
+            aStr << '\n';
+            aStr << "</Plattform>\n";
+            aStr << "\n<OfficeLanguage>\n";
+            aStr.WriteByteString( ByteString( osl_getThreadTextencoding() ) );
+            aStr << '\n';
+            aStr << "</OfficeLanguage>\n";
+            aStr << "\n<ExceptionType>\n";
+            aStr << nError;
+            aStr << '\n';
+            aStr << "</ExceptionType>\n";
+            aStr.Close();
+
+            pAppIniMgr->WriteKey( pAppIniMgr->GetGroupName( SFX_GROUP_WORKINGSET_IMPL ),
+                                  DEFINE_CONST_UNICODE("Info"), aFileName );
+            pAppIniMgr->Flush();
+        }
+    }
+#endif//MUSTINI
+
     ::utl::ConfigManager::GetConfigManager()->StoreConfigItems();
 
     switch( nError & EXC_MAJORTYPE )
@@ -1403,9 +1464,7 @@ SimpleResMgr* SfxApplication::CreateSimpleResManager()
     ::rtl::OUString sAppName;
 
     if ( ::vos::OStartupInfo().getExecutableFile(sAppName) != ::vos::OStartupInfo::E_None )
-    {
         sAppName = ::rtl::OUString();
-    }
 
     const AllSettings& rAllSettings = Application::GetSettings();
     LanguageType nType = rAllSettings.GetUILanguage();
