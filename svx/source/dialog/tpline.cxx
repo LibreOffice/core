@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:20:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1034,6 +1034,7 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
 #endif
         VirtualDevice aVDev;
         aVDev.SetMapMode(MapMode(MAP_100TH_MM));
+
         SdrModel* pModel = new SdrModel(NULL, NULL, LOADREFCOUNTS);
         pModel->GetItemPool().FreezeIdRanges();
         SdrPage* pPage = new SdrPage( *pModel, FALSE );
@@ -1705,7 +1706,6 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
     {
         VirtualDevice aVDev;
         aVDev.SetMapMode(MapMode(MAP_100TH_MM));
-
         SdrModel* pModel = new SdrModel(NULL, NULL, LOADREFCOUNTS);
         pModel->GetItemPool().FreezeIdRanges();
         // Page
