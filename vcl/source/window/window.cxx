@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: tbe $ $Date: 2002-11-28 13:20:59 $
+ *  last change: $Author: oj $ $Date: 2002-12-02 08:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8167,6 +8167,8 @@ USHORT Window::GetAccessibleRole() const
             case WINDOW_LISTBOX:
             case WINDOW_MULTILISTBOX: nRole = accessibility::AccessibleRole::LIST; break;
 
+            case WINDOW_TREELISTBOX: nRole = accessibility::AccessibleRole::TREE; break;
+
             case WINDOW_FIXEDTEXT: nRole = accessibility::AccessibleRole::LABEL; break;
             case WINDOW_FIXEDBORDER:
             case WINDOW_FIXEDLINE: nRole = accessibility::AccessibleRole::SEPARATOR; break;
@@ -8266,6 +8268,7 @@ String Window::GetAccessibleName() const
             case WINDOW_COMBOBOX:
             case WINDOW_LISTBOX:
             case WINDOW_MULTILISTBOX:
+            case WINDOW_TREELISTBOX:
 
             {
                 Window *pLabel = GetLabeledBy();
