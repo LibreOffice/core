@@ -2,9 +2,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tra $ $Date: 2002-11-25 11:34:30 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:10:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ void SAL_CALL DragSource::startDrag(
 //----------------------------------------------------
 /**
 */
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 void SAL_CALL DragSource::release()
 {
     if( m_refCount == 1)
