@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-25 07:17:43 $
+ *  last change: $Author: oj $ $Date: 2001-01-25 08:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,6 +357,7 @@ sal_uInt16 DlgFilterCrit::GetSelectionPos(OSQLPredicateType eType,const ListBox&
 {
     ::rtl::OUString aFilter(_rField.GetSelectEntry());
     aFilter += ::rtl::OUString::createFromAscii(" ");
+    sal_Bool bNeedText = sal_True;
     switch(GetOSQLPredicateType(_rComp.GetSelectEntryPos(),_rComp.GetEntryCount()))
     {
         case SQL_PRED_EQUAL:
@@ -385,15 +386,20 @@ sal_uInt16 DlgFilterCrit::GetSelectionPos(OSQLPredicateType eType,const ListBox&
             break;
         case SQL_PRED_ISNULL:
             aFilter += ::rtl::OUString::createFromAscii("IS NULL");
+            bNeedText = sal_False;
             break;
         case SQL_PRED_ISNOTNULL:
             aFilter += ::rtl::OUString::createFromAscii("IS NOT NULL");
+            bNeedText = sal_False;
             break;
     }
-    aFilter += ::rtl::OUString::createFromAscii(" ");
-    String aTemp = _rValue.GetText();
-    ::Replace_OS_PlaceHolder(aTemp);
-    aFilter += aTemp.GetBuffer();
+    if(bNeedText)
+    {
+        aFilter += ::rtl::OUString::createFromAscii(" ");
+        String aTemp = _rValue.GetText();
+        ::Replace_OS_PlaceHolder(aTemp);
+        aFilter += aTemp.GetBuffer();
+    }
     return aFilter;
 }
 //------------------------------------------------------------------------------
