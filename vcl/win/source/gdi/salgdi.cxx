@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: thb $ $Date: 2002-07-26 13:52:09 $
+ *  last change: $Author: thb $ $Date: 2002-08-05 16:36:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,6 +670,7 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
         const POINT* pCurrPoint = reinterpret_cast<const POINT*>( *pPtAry++ );
         const BYTE* pCurrFlag = *pFlgAry++;
         const ULONG nCurrPoints = *pPoints++;
+        const bool bHaveFlagArray( pCurrFlag );
         ULONG nCurrPoint;
 
         if( nCurrPoints )
@@ -681,7 +682,9 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
 
             for( nCurrPoint=1; nCurrPoint<nCurrPoints; )
             {
-                if( ( nCurrPoint + 2 ) < nCurrPoints )
+                // #102067# Check existence of flag array
+                if( bHaveFlagArray &&
+                    ( nCurrPoint + 2 ) < nCurrPoints )
                 {
                     BYTE P4( pCurrFlag[ 2 ] );
 
