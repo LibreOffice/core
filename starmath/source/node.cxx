@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:22:16 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,14 +446,6 @@ void  SmNode::ToggleDebug() const
             pNode->ToggleDebug();
 #endif
 }
-
-
-#ifdef MAC
-#pragma segment FrmNode_02
-
-#else
-
-#endif
 
 
 void SmNode::Move(const Point& rPosition)
@@ -1870,10 +1862,6 @@ void SmVerticalBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFor
 
 
 /**************************************************************************/
-
-#ifdef MAC
-#pragma segment FrmNode_03
-#endif
 
 
 SmNode * SmOperNode::GetSymbol()
