@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:08:24 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 20:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,20 +69,20 @@ String S_INVALID_KEYCODE
     Text = "Ist kein gültiger KeyCode!";
     Text[ english_us ] = "Is an invalid KeyCode!";
     Text[ portuguese ] = "Não é um KeyCode válido!";
-    Text[ russian ] = "Is an invalid KeyCode!";
+    Text[ russian ] = "Íåïğàâèëüíûé KeyCode!";
     Text[ greek ] = "Is an invalid KeyCode!";
     Text[ dutch ] = "Is geen geldige KeyCode!";
     Text[ french ] = "KeyCode incorrect !";
     Text[ spanish ] = "¡No es un KeyCode correcto!";
-    Text[ italian ] = "Is an invalid KeyCode!";
+    Text[ italian ] = "KeyCode non valido";
     Text[ danish ] = "Is an invalid KeyCode!";
     Text[ swedish ] = "Is an invalid KeyCode!";
     Text[ polish ] = "Nieprawid³owy KeyCode!";
     Text[ portuguese_brazilian ] = "Ist kein gültiger KeyCode!";
-    Text[ japanese ] = "Is an invalid KeyCode!";
+    Text[ japanese ] = "·°º°ÄŞ‚Í–³Œø‚Å‚·B";
     Text[ korean ] = "Å° ÄÚµå°¡ ¸ÂÁö¾Ê½À´Ï´Ù!";
     Text[ chinese_simplified ] = "ÊÇÒ»¸öÎŞĞ§µÄ¼üÂë£¡";
-    Text[ chinese_traditional ] = "Ist kein gültiger KeyCode!";
+    Text[ chinese_traditional ] = "µL®ÄªºÁä½X¡I";
     Text[ arabic ] = "Is an invalid KeyCode!";
     Text[ turkish ] = "Geçerli bir KeyCode değil!";
 };
@@ -91,20 +91,20 @@ String S_MANDATORY_FILE
     Text = "\nwurde nicht gefunden.\nDiese Datei ist unentbehrlich.";
     Text[ english_us ] = "\ncould not be found.\nThis file is indispensable.";
     Text[ portuguese ] = "\nnão foi encontrado.\nEste ficheiro é indispensável.";
-    Text[ russian ] = "\ncould not be found.\nThis file is indispensable.";
+    Text[ russian ] = "\níå íàéäåí.\nİòîò ôàéë ÿâëÿåòñÿ íåîáõîäèìûì.";
     Text[ greek ] = "\ncould not be found.\nThis file is indispensable.";
     Text[ dutch ] = "\nniet gevonden.\nDit bestand is onontbeerlijk.";
     Text[ french ] = "\nn'a pas pu être détecté.\nCe fichier est indispensable.";
     Text[ spanish ] = "\nno se encontró.\nEste archivo es imprescindible.";
-    Text[ italian ] = "\ncould not be found.\nThis file is indispensable.";
+    Text[ italian ] = "\nnon trovato.\nIl file è indispensabile";
     Text[ danish ] = "\ncould not be found.\nThis file is indispensable.";
     Text[ swedish ] = "\ncould not be found.\nThis file is indispensable.";
     Text[ polish ] = "\nnie znaleziono.\n.Plik ten jest niezbêdny.";
     Text[ portuguese_brazilian ] = "\nwurde nicht gefunden.\nDiese Datei ist unentbehrlich.";
-    Text[ japanese ] = "\ncould not be found.\nThis file is indispensable.";
+    Text[ japanese ] = "\nŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B\n‚±‚ÌÌ§²Ù‚Íâ‘Î‚É•K—v‚Å‚·B";
     Text[ korean ] = "\n¹ß°ßµÇÁö ¾Ê½À´Ï´Ù.\nÀÌ ÆÄÀÏÀº ¹İµå½Ã ÀÖ¾î¾ßÇÕ´Ï´Ù.";
     Text[ chinese_simplified ] = "\nÎŞ·¨ÕÒµ½¡£\nÒ»¶¨ĞèÒªÕâ¸öÎÄ¼ş¡£";
-    Text[ chinese_traditional ] = "\nwurde nicht gefunden.\nDiese Datei ist unentbehrlich.";
+    Text[ chinese_traditional ] = "\n¨S¦³³Q§ä¨ì¡C\n³o­ÓÀÉ®×¬O¥²¤£¥i¤Öªº¡C";
     Text[ arabic ] = "\ncould not be found.\nThis file is indispensable.";
     Text[ turkish ] = "\nbulunamadı.\nBu dosya mutlaka gerekli.";
 };
@@ -113,20 +113,20 @@ String S_READING_LONGNAMES
     Text = "Einlesen der Langnamen";
     Text[ english_us ] = "Reading long names";
     Text[ portuguese ] = "Leitura dos nomes extensos";
-    Text[ russian ] = "Reading long names";
+    Text[ russian ] = "×òåíèå äëèííûõ èìåí";
     Text[ greek ] = "Reading long names";
     Text[ dutch ] = "Lezen van volledige namen";
     Text[ french ] = "Lecture des noms de fichiers longs (long names)";
     Text[ spanish ] = "Leyendo nombres largos";
-    Text[ italian ] = "Reading long names";
+    Text[ italian ] = "Carica nomi estesi";
     Text[ danish ] = "Reading long names";
     Text[ swedish ] = "Reading long names";
     Text[ polish ] = "Czytanie pe³nych nazw";
     Text[ portuguese_brazilian ] = "Einlesen der Langnamen";
-    Text[ japanese ] = "Reading long names";
+    Text[ japanese ] = "Ûİ¸ŞÌ§²ÙÈ°Ñ‚Ì“Ç‚İæ‚è";
     Text[ korean ] = "±ä ÀÌ¸§ ÀĞ±â";
     Text[ chinese_simplified ] = "¶ÁÈ¡³¤Ãû³Æ";
-    Text[ chinese_traditional ] = "Einlesen der Langnamen";
+    Text[ chinese_traditional ] = "Åª¨úªø¦WºÙ¡C";
     Text[ arabic ] = "Reading long names";
     Text[ turkish ] = "Uzun adlar okunuyor";
 };
@@ -135,20 +135,20 @@ String S_READING_SLOT_IDS
     Text = "Einlesen der Slot IDs";
     Text[ english_us ] = "Reading Slot IDs";
     Text[ portuguese ] = "Leitura dos Slot IDs";
-    Text[ russian ] = "Reading Slot IDs";
+    Text[ russian ] = "×òåíèå Slot IDs";
     Text[ greek ] = "Reading Slot IDs";
     Text[ dutch ] = "Lezen van de Slot IDs";
     Text[ french ] = "Lecture des Slot IDs";
     Text[ spanish ] = "Leyendo Slot IDs";
-    Text[ italian ] = "Reading Slot IDs";
+    Text[ italian ] = "Carica Slot IDs";
     Text[ danish ] = "Reading Slot IDs";
     Text[ swedish ] = "Reading Slot IDs";
     Text[ polish ] = "Czytanie Slot ID";
     Text[ portuguese_brazilian ] = "Einlesen der Slot IDs";
-    Text[ japanese ] = "Reading Slot IDs";
+    Text[ japanese ] = "½Û¯Ä ID ‚Ì“Ç‚İæ‚è";
     Text[ korean ] = "½½·Ô ¾ÆÀÌµğ ÀĞ±â";
     Text[ chinese_simplified ] = "¶ÁÈ¡ Slot IDs";
-    Text[ chinese_traditional ] = "Einlesen der Slot IDs";
+    Text[ chinese_traditional ] = "Åª¨ú Slot IDs";
     Text[ arabic ] = "Reading Slot IDs";
     Text[ turkish ] = "Slot ID'ler okunuyor";
 };
@@ -159,18 +159,18 @@ String S_READING_CONTROLS
     Text[ portuguese ] = "Leitura dos Controls";
     Text[ russian ] = "Reading Controls";
     Text[ greek ] = "Reading Controls";
-    Text[ dutch ] = "Leuen van de Controls";
+    Text[ dutch ] = "Lezen van de Controls";
     Text[ french ] = "Lecture des contrôles";
     Text[ spanish ] = "Leyendo Controls";
-    Text[ italian ] = "Reading Controls";
+    Text[ italian ] = "Carica Controls";
     Text[ danish ] = "Reading Controls";
     Text[ swedish ] = "Reading Controls";
-    Text[ polish ] = "Odczyt pól kontrolnych";
+    Text[ polish ] = "Reading Controls";
     Text[ portuguese_brazilian ] = "Einlesen der Controls";
-    Text[ japanese ] = "Reading Controls";
+    Text[ japanese ] = "ºİÄÛ°Ù‚Ì“Ç‚İæ‚è";
     Text[ korean ] = "ÄÁÆ®·Ñ ÀĞ±â";
     Text[ chinese_simplified ] = "¶ÁÈ¡¿ØÖÆ";
-    Text[ chinese_traditional ] = "Einlesen der Controls";
+    Text[ chinese_traditional ] = "Åª¨ú±±¨î¶µ";
     Text[ arabic ] = "Reading Controls";
     Text[ turkish ] = "Control'ler okunuyor";
 };
@@ -179,20 +179,20 @@ String S_READING_BASIC_MODULE
     Text = "Einlesen BASIC Modul";
     Text[ english_us ] = "Reading BASIC module";
     Text[ portuguese ] = "Leitura do módulo BASIC";
-    Text[ russian ] = "Reading BASIC module";
+    Text[ russian ] = "×òåíèå ìîäóëÿ BASIC";
     Text[ greek ] = "Reading BASIC module";
     Text[ dutch ] = "Lezen van BASIC module";
     Text[ french ] = "Lecture du module BASIC";
     Text[ spanish ] = "Leyendo módulo BASIC";
-    Text[ italian ] = "Reading BASIC module";
+    Text[ italian ] = "Carica i moduli BASIC";
     Text[ danish ] = "Reading BASIC module";
     Text[ swedish ] = "Reading BASIC module";
     Text[ polish ] = "Czytanie modu³u BASIC";
     Text[ portuguese_brazilian ] = "Einlesen BASIC Modul";
-    Text[ japanese ] = "Reading BASIC module";
+    Text[ japanese ] = "BASIC Ó¼Ş­°Ù‚Ì“Ç‚İæ‚è";
     Text[ korean ] = "BASIC ¸ğµâ ÀĞ±â";
     Text[ chinese_simplified ] = "¶ÁÈ¡ BASIC Ä£¿é";
-    Text[ chinese_traditional ] = "Einlesen BASIC Modul";
+    Text[ chinese_traditional ] = "Åª¨ú BASIC ¼Ò¶ô";
     Text[ arabic ] = "Reading BASIC module";
     Text[ turkish ] = "BASIC modülü okunuyor";
 };
@@ -201,20 +201,20 @@ String S_STARTING_APPLICATION
     Text = "Starten der Applikation";
     Text[ english_us ] = "Starting application";
     Text[ portuguese ] = "A iniciar aplicação";
-    Text[ russian ] = "Starting application";
+    Text[ russian ] = "Çàïóñê ïğèëîæåíèÿ";
     Text[ greek ] = "Starting application";
-    Text[ dutch ] = "Starten van applicatie";
+    Text[ dutch ] = "Starten van toepassing";
     Text[ french ] = "Démarrage de l'application";
     Text[ spanish ] = "Iniciando la aplicación";
-    Text[ italian ] = "Starting application";
+    Text[ italian ] = "Avvio dell'applicazione";
     Text[ danish ] = "Starting application";
     Text[ swedish ] = "Starting application";
     Text[ polish ] = "Uruchamianie aplikacji";
     Text[ portuguese_brazilian ] = "Starten der Applikation";
-    Text[ japanese ] = "Starting application";
+    Text[ japanese ] = "±ÌßØ¹°¼®İ‚Ì‹N“®";
     Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥ ½ÃÀÛ";
     Text[ chinese_simplified ] = "Æô¶¯Ó¦ÓÃ³ÌĞò";
-    Text[ chinese_traditional ] = "Starten der Applikation";
+    Text[ chinese_traditional ] = "±Ò°ÊÀ³¥Îµ{¦¡";
     Text[ arabic ] = "Starting application";
     Text[ turkish ] = "Uygulama başlatılıyor";
 };
