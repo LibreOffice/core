@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:49:17 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,7 +387,6 @@ public:
 
     // TYP_ID
             USHORT      GetTypeId() const;
-    static  USHORT      GetResId(USHORT nTypeId, BOOL& bAmbigous);
     virtual USHORT      GetSubType() const;
     virtual void        SetSubType(USHORT);
 
@@ -495,29 +494,6 @@ public:
     void                    SetExpandedFormula(const String& rStr);
     String                  GetExpandedFormula() const;
 
-};
-
-
-/*--------------------------------------------------------------------
-    Beschreibung:   Sortierung von Felder nach der Position
- --------------------------------------------------------------------*/
-class SwFieldList
-{
-public:
-    SwFieldList(SwEditShell* pShell);
-    ~SwFieldList();
-
-    // Felder eines bestimmten Typen aufnehmen
-    void        InsertFields(USHORT nTypeId, const String* pName=0);
-
-    USHORT      Count() const;
-
-    SwField*    GetLastField() const;
-    SwField*    GetNextField() const;
-
-private:
-    SwEditShell*    pSh;
-    _SetGetExpFlds* pSrtLst;
 };
 
 inline SvStringsDtor* SwFieldType::GetFldNames()
