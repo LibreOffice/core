@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:40:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:24:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1232,7 +1232,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 eTextKind = OBJ_TEXT;
             }
 
-            sal_uInt32 nInstanceInSheet = aTextObj.GetInstance();
+            sal_uInt32 nDestinationInstance = aTextObj.GetInstance();
             if ( ( rPersistEntry.ePageKind == PPT_MASTERPAGE ) )
             {
                 if ( !rPersistEntry.pPresentationObjects )
@@ -1240,28 +1240,28 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     rPersistEntry.pPresentationObjects = new UINT32[ PPT_STYLESHEETENTRYS ];
                     memset( rPersistEntry.pPresentationObjects, 0, PPT_STYLESHEETENTRYS * 4 );
                 }
-                if ( !rPersistEntry.pPresentationObjects[ nInstanceInSheet ] )
-                    rPersistEntry.pPresentationObjects[ nInstanceInSheet ] = rObjData.rSpHd.GetRecBegFilePos();
+                if ( !rPersistEntry.pPresentationObjects[ nDestinationInstance ] )
+                    rPersistEntry.pPresentationObjects[ nDestinationInstance ] = rObjData.rSpHd.GetRecBegFilePos();
             }
-            switch ( nInstanceInSheet )
+            switch ( nDestinationInstance )
             {
                 case TSS_TYPE_PAGETITLE :
                 case TSS_TYPE_TITLE :
                 {
                     if ( GetSlideLayoutAtom()->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE )
-                        nInstanceInSheet = TSS_TYPE_TITLE;
+                        nDestinationInstance = TSS_TYPE_TITLE;
                     else
-                        nInstanceInSheet = TSS_TYPE_PAGETITLE;
+                        nDestinationInstance = TSS_TYPE_PAGETITLE;
                 }
                 break;
                 case TSS_TYPE_BODY :
 //              case TSS_TYPE_SUBTITLE :
                 case TSS_TYPE_HALFBODY :
                 case TSS_TYPE_QUARTERBODY :
-                    nInstanceInSheet = TSS_TYPE_BODY;
+                    nDestinationInstance = TSS_TYPE_BODY;
                 break;
             }
-            aTextObj.SetMappedInstance( (sal_uInt16)nInstanceInSheet );
+            aTextObj.SetDestinationInstance( (sal_uInt16)nDestinationInstance );
 
             switch ( aTextObj.GetInstance() )
             {
@@ -1272,11 +1272,19 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 case TSS_TYPE_HALFBODY :
                 case TSS_TYPE_QUARTERBODY : eTextKind = OBJ_OUTLINETEXT; break;
             }
+            if ( aTextObj.GetDestinationInstance() != TSS_TYPE_TEXT_IN_SHAPE )
+            {
+                if ( !aTextObj.GetOEPlaceHolderAtom() || !aTextObj.GetOEPlaceHolderAtom()->nPlaceholderId )
+                {
+                    aTextObj.SetDestinationInstance( TSS_TYPE_TEXT_IN_SHAPE );
+                    eTextKind = OBJ_RECT;
+                }
+            }
             SdrObject* pTObj = NULL;
             sal_Bool bWordWrap = (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) != mso_wrapNone;
             sal_Bool bFitShapeToText = ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 ) != 0;
 
-            if ( pRet && pRet->ISA( SdrObjCustomShape ) )
+            if ( pRet && pRet->ISA( SdrObjCustomShape ) && ( eTextKind == OBJ_RECT ) )
             {
                 bAutoGrowHeight = bFitShapeToText;
                 if ( bWordWrap )
@@ -1288,6 +1296,11 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
             }
             else
             {
+                if ( pRet && pRet->ISA( SdrObjCustomShape ) )
+                {
+                    delete pRet;
+                    pRet = NULL;
+                }
                 pTObj = new SdrRectObj( eTextKind != OBJ_RECT ? eTextKind : OBJ_TEXT );
                 pTObj->SetModel( pSdrModel );
                 SfxItemSet aSet( pSdrModel->GetItemPool() );
@@ -2478,7 +2491,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
     SdrTextObj* pText = pSdrText;
     if ( pTextObj->Count() )
     {
-        UINT32 nInstanceInSheet = pTextObj->GetMappedInstance() ;
+        UINT32 nDestinationInstance = pTextObj->GetDestinationInstance() ;
         SdrOutliner& rOutliner = pText->ImpGetDrawOutliner();
         rOutliner.SetMinDepth( 0 );
         if ( ( pText->GetObjInventor() == SdrInventor ) && ( pText->GetObjIdentifier() == OBJ_TITLETEXT ) ) // Outliner-Style fuer Titel-Textobjekt?!? (->von DL)
@@ -2535,7 +2548,7 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 SfxStyleSheet* pS = ( ppStyleSheetAry ) ? ppStyleSheetAry[ pPara->pParaSet->mnDepth ] : pSheet;
 
                 ESelection aSelection( nParaIndex, 0, nParaIndex, 0 );
-                rOutliner.Insert( String(), nParaIndex, pPara->GetLevel() );
+                rOutliner.Insert( String(), nParaIndex, pPara->GetLevel( pTextObj->GetDestinationInstance() ) );
                 rOutliner.QuickInsertText( String( pParaText, (UINT16)nCurrentIndex ), aSelection );
                 rOutliner.SetParaAttribs( nParaIndex, rOutliner.GetEmptyItemSet() );
                 if ( pS )
@@ -2572,12 +2585,12 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                         if ( nLen )
                             aSelection.nEndPos += (sal_uInt16)nLen;
                     }
-                    pPortion->ApplyTo( aPortionAttribs, (SdrPowerPointImport&)*this, nInstanceInSheet, pTextObj );
+                    pPortion->ApplyTo( aPortionAttribs, (SdrPowerPointImport&)*this, nDestinationInstance, pTextObj );
                     rOutliner.QuickSetAttribs( aPortionAttribs, aSelection );
                     aSelection.nStartPos = aSelection.nEndPos;
                 }
                 SfxItemSet aParagraphAttribs( rOutliner.GetEmptyItemSet() );
-                pPara->ApplyTo( aParagraphAttribs, (SdrPowerPointImport&)*this, nInstanceInSheet, pPreviousParagraph );
+                pPara->ApplyTo( aParagraphAttribs, (SdrPowerPointImport&)*this, nDestinationInstance, pPreviousParagraph );
                 pPreviousParagraph = pPara;
                 if ( !aSelection.nStartPos )    // in PPT empty paragraphs never gets a bullet
                     aParagraphAttribs.Put( SfxUInt16Item( EE_PARA_BULLETSTATE, FALSE ) );
@@ -3651,10 +3664,10 @@ PPTNumberFormatCreator::~PPTNumberFormatCreator()
 }
 
 BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManager,
-    SvxNumberFormat& rNumberFormat, UINT32 nLevel, UINT32 nInstance, UINT32 nInstanceInSheet,
+    SvxNumberFormat& rNumberFormat, UINT32 nLevel, UINT32 nInstance, UINT32 nDestinationInstance,
         UINT32 nFontHeight, PPTParagraphObj* pPara )
 {
-    BOOL bHardAttribute = ( nInstanceInSheet == 0xffffffff );
+    BOOL bHardAttribute = ( nDestinationInstance == 0xffffffff );
 
     UINT32  nBuFlags = 0;
     UINT16  nBuStart = 0;
@@ -3879,23 +3892,23 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
     }
 }
 
-BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, PPTParagraphObj* pParaObj, UINT32 nInstanceInSheet )
+BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, PPTParagraphObj* pParaObj, UINT32 nDestinationInstance )
 {
     UINT32 nHardCount = 0;
-    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet, nInstanceInSheet );
-    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletChar, nBulletChar, nInstanceInSheet );
-    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletFont, nBulletFont, nInstanceInSheet );
-    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletHeight, nBulletHeight, nInstanceInSheet );
-    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletColor, nBulletColor, nInstanceInSheet );
-    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_TextOfs, nTextOfs, nInstanceInSheet );
-    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletOfs, nBulletOfs, nInstanceInSheet );
+    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet, nDestinationInstance );
+    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletChar, nBulletChar, nDestinationInstance );
+    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletFont, nBulletFont, nDestinationInstance );
+    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletHeight, nBulletHeight, nDestinationInstance );
+    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletColor, nBulletColor, nDestinationInstance );
+    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_TextOfs, nTextOfs, nDestinationInstance );
+    nHardCount += pParaObj->GetAttrib( PPT_ParaAttr_BulletOfs, nBulletOfs, nDestinationInstance );
 
     UINT32 nFontHeight = 24;
     PPTPortionObj* pPtr = pParaObj->First();
     if ( pPtr )
-        pPtr->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nInstanceInSheet );
+        pPtr->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
     nHardCount += ImplGetExtNumberFormat( rManager, rNumberFormat, pParaObj->pParaSet->mnDepth,
-                                                pParaObj->mnInstance, nInstanceInSheet, nFontHeight, pParaObj );
+                                                pParaObj->mnInstance, nDestinationInstance, nFontHeight, pParaObj );
 
     if ( rNumberFormat.GetNumberingType() != SVX_NUM_BITMAP )
         pParaObj->UpdateBulletRelSize( nBulletHeight );
@@ -3917,7 +3930,7 @@ BOOL PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
                 if ( pPtr )
                 {
                     sal_uInt32 nFont;
-                    pPtr->GetAttrib( PPT_CharAttr_Font, nFont, nInstanceInSheet );
+                    pPtr->GetAttrib( PPT_CharAttr_Font, nFont, nDestinationInstance );
                     PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nFont );
                     if ( pFontEnityAtom )
                     {
@@ -5546,7 +5559,7 @@ BOOL PPTPortionObj::HasTabulator()
     return bRetValue;
 }
 
-BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstanceInSheet )
+BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nDestinationInstance )
 {
     UINT32  nMask = 1 << nAttr;
     nRetValue = 0;
@@ -5588,11 +5601,11 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstance
     {
         const PPTCharLevel& rCharLevel = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ];
         PPTCharLevel* pCharLevel = NULL;
-        if ( ( nInstanceInSheet == 0xffffffff )
+        if ( ( nDestinationInstance == 0xffffffff )
                 || ( mnDepth && ( ( mnInstance == TSS_TYPE_SUBTITLE ) || ( mnInstance == TSS_TYPE_TEXT_IN_SHAPE ) ) ) )
             bIsHardAttribute = 1;
-        else if ( nInstanceInSheet != mnInstance )
-            pCharLevel = &mrStyleSheet.mpCharSheet[ nInstanceInSheet ]->maCharLevel[ mnDepth ];
+        else if ( nDestinationInstance != mnInstance )
+            pCharLevel = &mrStyleSheet.mpCharSheet[ nDestinationInstance ]->maCharLevel[ mnDepth ];
         switch( nAttr )
         {
             case PPT_CharAttr_Bold :
@@ -5609,7 +5622,7 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstance
                     if ( nRetValue != nTmp )
                         bIsHardAttribute = 1;
                 }
-                if ( nRetValue && ( nInstanceInSheet == TSS_TYPE_TEXT_IN_SHAPE ) )
+                if ( nRetValue && ( nDestinationInstance == TSS_TYPE_TEXT_IN_SHAPE ) )
                 {
                     nRetValue = 0;          // no inheritance for standard textobjects
                     bIsHardAttribute = 1;   // this attribute must be hard formatted
@@ -5658,31 +5671,31 @@ BOOL PPTPortionObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstance
     return (BOOL)bIsHardAttribute;
 }
 
-void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, UINT32 nInstanceInSheet )
+void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, UINT32 nDestinationInstance )
 {
-    ApplyTo( rSet, rManager, nInstanceInSheet, NULL );
+    ApplyTo( rSet, rManager, nDestinationInstance, NULL );
 }
 
-void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, UINT32 nInstanceInSheet, const PPTTextObj* pTextObj )
+void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, UINT32 nDestinationInstance, const PPTTextObj* pTextObj )
 {
     UINT32  nVal;
-    if ( GetAttrib( PPT_CharAttr_Bold, nVal, nInstanceInSheet ) )
+    if ( GetAttrib( PPT_CharAttr_Bold, nVal, nDestinationInstance ) )
         rSet.Put( SvxWeightItem( nVal != 0 ? WEIGHT_BOLD : WEIGHT_NORMAL ) );
 
-    if ( GetAttrib( PPT_CharAttr_Italic, nVal, nInstanceInSheet ) )
+    if ( GetAttrib( PPT_CharAttr_Italic, nVal, nDestinationInstance ) )
         rSet.Put( SvxPostureItem( nVal != 0 ? ITALIC_NORMAL : ITALIC_NONE ) );
 
-    if ( GetAttrib( PPT_CharAttr_Underline, nVal, nInstanceInSheet ) )
+    if ( GetAttrib( PPT_CharAttr_Underline, nVal, nDestinationInstance ) )
         rSet.Put( SvxUnderlineItem( nVal != 0 ? UNDERLINE_SINGLE : UNDERLINE_NONE ) );
 
-    if ( GetAttrib( PPT_CharAttr_Shadow, nVal, nInstanceInSheet ) )
+    if ( GetAttrib( PPT_CharAttr_Shadow, nVal, nDestinationInstance ) )
         rSet.Put( SvxShadowedItem( nVal != 0 ) );
 
-    if ( GetAttrib( PPT_CharAttr_Strikeout, nVal, nInstanceInSheet ) )
+    if ( GetAttrib( PPT_CharAttr_Strikeout, nVal, nDestinationInstance ) )
         rSet.Put( SvxCrossedOutItem( nVal != 0 ? STRIKEOUT_SINGLE : STRIKEOUT_NONE ) );
 
     sal_uInt32  nAsianFontId = 0xffff;
-    if ( GetAttrib( PPT_CharAttr_AsianOrComplexFont, nAsianFontId, nInstanceInSheet ) )
+    if ( GetAttrib( PPT_CharAttr_AsianOrComplexFont, nAsianFontId, nDestinationInstance ) )
     {
         if ( nAsianFontId != 0xffff )
         {
@@ -5696,13 +5709,13 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
             }
         }
     }
-    if ( GetAttrib( PPT_CharAttr_Font, nVal, nInstanceInSheet ) )
+    if ( GetAttrib( PPT_CharAttr_Font, nVal, nDestinationInstance ) )
     {
         PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nVal );
         if ( pFontEnityAtom )
             rSet.Put( SvxFontItem( pFontEnityAtom->eFamily, pFontEnityAtom->aName, String(), pFontEnityAtom->ePitch, pFontEnityAtom->eCharSet ) );
     }
-    if ( GetAttrib( PPT_CharAttr_FontHeight, nVal, nInstanceInSheet ) ) // Schriftgrad in Point
+    if ( GetAttrib( PPT_CharAttr_FontHeight, nVal, nDestinationInstance ) ) // Schriftgrad in Point
     {
         sal_uInt32 nHeight = rManager.ScalePoint( nVal );
         rSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
@@ -5710,7 +5723,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
         rSet.Put( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
     }
 
-    if ( GetAttrib( PPT_CharAttr_Embossed, nVal, nInstanceInSheet ) )
+    if ( GetAttrib( PPT_CharAttr_Embossed, nVal, nDestinationInstance ) )
         rSet.Put( SvxCharReliefItem( nVal != 0 ? RELIEF_EMBOSSED : RELIEF_NONE ) );
     if ( nVal ) /* if Embossed is set, the font color depends to the fillstyle/color of the object,
                    if the object has no fillstyle, the font color depends to fillstyle of the background */
@@ -5834,11 +5847,11 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
     }
     else
     {
-        if ( GetAttrib( PPT_CharAttr_FontColor, nVal, nInstanceInSheet ) )  // Textfarbe (4Byte-Arg)
+        if ( GetAttrib( PPT_CharAttr_FontColor, nVal, nDestinationInstance ) )  // Textfarbe (4Byte-Arg)
         {
             Color aCol( rManager.MSO_CLR_ToColor( nVal ) );
             rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
-            if ( nInstanceInSheet == 0xffffffff )
+            if ( nDestinationInstance == 0xffffffff )
                 mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet = aCol;
         }
         else if ( nVal & 0x0f000000 )   // this is not a hard attribute, but maybe the page has a different colerscheme,
@@ -5850,7 +5863,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
         }
     }
 
-    if ( GetAttrib( PPT_CharAttr_Escapement, nVal, nInstanceInSheet ) ) // Hoch/Tiefstellung in %
+    if ( GetAttrib( PPT_CharAttr_Escapement, nVal, nDestinationInstance ) ) // Hoch/Tiefstellung in %
     {
         sal_uInt16  nEsc = 0;
         sal_uInt8   nProp = 100;
@@ -5970,7 +5983,7 @@ void PPTParagraphObj::UpdateBulletRelSize( sal_uInt32& nBulletRelSize ) const
     }
 }
 
-BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstanceInSheet )
+BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nDestinationInstance )
 {
     UINT32  nMask = 1 << nAttr;
     nRetValue = 0;
@@ -5998,7 +6011,7 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
             else
             {
                 nRetValue = PPT_COLSCHEME_TEXT_UND_ZEILEN;
-                if ( ( nInstanceInSheet != 0xffffffff ) && mnPortionCount )
+                if ( ( nDestinationInstance != 0xffffffff ) && mnPortionCount )
                 {
                     PPTPortionObj* pPortion = mpPortionList[ 0 ];
                     if ( pPortion )
@@ -6006,7 +6019,7 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
                         if ( pPortion->pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_FontColor ) )
                             nRetValue = pPortion->pCharSet->mnColor;
                         else
-                            nRetValue = mrStyleSheet.mpCharSheet[ nInstanceInSheet ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
+                            nRetValue = mrStyleSheet.mpCharSheet[ nDestinationInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
                     }
                 }
             }
@@ -6025,7 +6038,7 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
             {
                 // it is the font used which assigned to the first character of the following text
                 nRetValue = 0;
-                if ( ( nInstanceInSheet != 0xffffffff ) && mnPortionCount )
+                if ( ( nDestinationInstance != 0xffffffff ) && mnPortionCount )
                 {
                     PPTPortionObj* pPortion = mpPortionList[ 0 ];
                     if ( pPortion )
@@ -6033,7 +6046,7 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
                         if ( pPortion->pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_Font ) )
                             nRetValue = pPortion->pCharSet->mnFont;
                         else
-                            nRetValue = mrStyleSheet.mpCharSheet[ nInstanceInSheet ]->maCharLevel[ pParaSet->mnDepth ].mnFont;
+                            nRetValue = mrStyleSheet.mpCharSheet[ nDestinationInstance ]->maCharLevel[ pParaSet->mnDepth ].mnFont;
                     }
                 }
             }
@@ -6046,11 +6059,11 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
         const PPTParaLevel& rParaLevel = mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[ pParaSet->mnDepth ];
 
         PPTParaLevel* pParaLevel = NULL;
-        if ( ( nInstanceInSheet == 0xffffffff )
+        if ( ( nDestinationInstance == 0xffffffff )
             || ( pParaSet->mnDepth && ( ( mnInstance == TSS_TYPE_SUBTITLE ) || ( mnInstance == TSS_TYPE_TEXT_IN_SHAPE ) ) ) )
             bIsHardAttribute = 1;
-        else if ( nInstanceInSheet != mnInstance )
-            pParaLevel = &mrStyleSheet.mpParaSheet[ nInstanceInSheet ]->maParaLevel[ pParaSet->mnDepth ];
+        else if ( nDestinationInstance != mnInstance )
+            pParaLevel = &mrStyleSheet.mpParaSheet[ nDestinationInstance ]->maParaLevel[ pParaSet->mnDepth ];
         switch ( nAttr )
         {
             case PPT_ParaAttr_BulletOn :
@@ -6094,7 +6107,7 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
                     {
                         PPTPortionObj* pPortion = mpPortionList[ 0 ];
                         if ( pPortion )
-                            bIsHardAttribute = pPortion->GetAttrib( PPT_CharAttr_Font, nRetValue, nInstanceInSheet );
+                            bIsHardAttribute = pPortion->GetAttrib( PPT_CharAttr_Font, nRetValue, nDestinationInstance );
                     }
                     else
                     {
@@ -6130,7 +6143,7 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
                     {
                         PPTPortionObj* pPortion = mpPortionList[ 0 ];
                         if ( pPortion )
-                            bIsHardAttribute = pPortion->GetAttrib( PPT_CharAttr_FontColor, nRetValue, nInstanceInSheet );
+                            bIsHardAttribute = pPortion->GetAttrib( PPT_CharAttr_FontColor, nRetValue, nDestinationInstance );
                     }
                     else
                     {
@@ -6222,27 +6235,27 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
     return (BOOL)bIsHardAttribute;
 }
 
-void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, UINT32 nInstanceInSheet, const PPTParagraphObj* pPrev )
+void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, sal_uInt32 nDestinationInstance, const PPTParagraphObj* pPrev )
 {
     INT16   nVal2;
     UINT32  nVal, nUpperDist, nLowerDist;
-    UINT32  nInstance = mnInstance;
+    UINT32  nInstance = nDestinationInstance != 0xffffffff ? nDestinationInstance : mnInstance;
 
-    if ( ( nInstanceInSheet != 0xffffffff ) || ( GetLevel() <= 1 ) )
+    if ( ( nDestinationInstance != 0xffffffff ) || ( GetLevel( nInstance ) <= 1 ) )
     {
         SvxNumBulletItem* pNumBulletItem = mrStyleSheet.mpNumBulletItem[ nInstance ];
         if ( pNumBulletItem )
         {
             SvxNumberFormat aNumberFormat( SVX_NUM_CHAR_SPECIAL );
             aNumberFormat.SetBulletChar( ' ' );
-            if ( GetNumberFormat( rManager, aNumberFormat, this, nInstanceInSheet ) )
+            if ( GetNumberFormat( rManager, aNumberFormat, this, nDestinationInstance ) )
             {
                 SvxNumBulletItem aNewNumBulletItem( *pNumBulletItem );
                 SvxNumRule* pRule = aNewNumBulletItem.GetNumRule();
                 if ( pRule )
                 {
-                    pRule->SetLevel( GetLevel(), aNumberFormat );
-                    if ( nInstanceInSheet == 0xffffffff )
+                    pRule->SetLevel( GetLevel( nInstance ), aNumberFormat );
+                    if ( nDestinationInstance == 0xffffffff )
                     {
                         sal_uInt16 i, n;
                         for ( i = 1; i < pRule->GetLevelCount(); i++ )
@@ -6281,17 +6294,17 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         }
     }
     UINT32 nIsBullet;
-    GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet, nInstanceInSheet );
+    GetAttrib( PPT_ParaAttr_BulletOn, nIsBullet, nDestinationInstance );
     rSet.Put( SfxUInt16Item( EE_PARA_BULLETSTATE, nIsBullet == 0 ? 0 : 1 ) );
 
-    if ( GetAttrib( PPT_ParaAttr_TextOfs, nVal, nInstanceInSheet ) )
+    if ( GetAttrib( PPT_ParaAttr_TextOfs, nVal, nDestinationInstance ) )
     {
         SvxLRSpaceItem aLRSpaceItem( ITEMID_LRSPACE );
         aLRSpaceItem.SetLeft( (UINT16)(((UINT32) nVal * 2540 ) / ( 72 * 8 ) ) );
         rSet.Put( aLRSpaceItem );
     }
 
-    if ( GetAttrib( PPT_ParaAttr_Adjust, nVal, nInstanceInSheet ) )
+    if ( GetAttrib( PPT_ParaAttr_Adjust, nVal, nDestinationInstance ) )
     {
         if ( nVal <= 3 )
         {   // Absatzausrichtung
@@ -6300,27 +6313,27 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         }
     }
 
-    if ( GetAttrib( PPT_ParaAttr_AsianLB_1, nVal, nInstanceInSheet ) )
+    if ( GetAttrib( PPT_ParaAttr_AsianLB_1, nVal, nDestinationInstance ) )
         rSet.Put( SfxBoolItem( EE_PARA_FORBIDDENRULES, nVal != 0 ) );
-    if ( GetAttrib( PPT_ParaAttr_AsianLB_3, nVal, nInstanceInSheet ) )
+    if ( GetAttrib( PPT_ParaAttr_AsianLB_3, nVal, nDestinationInstance ) )
         rSet.Put( SfxBoolItem( EE_PARA_HANGINGPUNCTUATION, nVal != 0 ) );
 
-    if ( GetAttrib( PPT_ParaAttr_BiDi, nVal, nInstanceInSheet ) )
+    if ( GetAttrib( PPT_ParaAttr_BiDi, nVal, nDestinationInstance ) )
         rSet.Put( SvxFrameDirectionItem( nVal == 1 ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP, EE_PARA_WRITINGDIR ) );
 
     // LineSpacing
     PPTPortionObj* pPortion = First();
-    BOOL bIsHardAttribute = GetAttrib( PPT_ParaAttr_LineFeed, nVal, nInstanceInSheet );
+    BOOL bIsHardAttribute = GetAttrib( PPT_ParaAttr_LineFeed, nVal, nDestinationInstance );
     nVal2 = (INT16)nVal;
     if ( ( pPrev == NULL ) && bIsHardAttribute && pPortion && ( nVal2 > 100 ) )
     {   // first paragraph: each linespacing will be converted to 'at least' to take the spacing above the line
         UINT32 nFontHeight;
-        pPortion->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nInstanceInSheet );
+        pPortion->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
         nVal2 = -(INT16)( ( nFontHeight * nVal * 8 ) / 100 );
         bIsHardAttribute = TRUE;
     }
     sal_uInt32 nFont;
-    if ( pPortion && pPortion->GetAttrib( PPT_CharAttr_Font, nFont, nInstanceInSheet ) )
+    if ( pPortion && pPortion->GetAttrib( PPT_CharAttr_Font, nFont, nDestinationInstance ) )
         bIsHardAttribute = TRUE;
 
     if ( bIsHardAttribute )
@@ -6328,7 +6341,7 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
         if ( pPortion && ( nVal2 > 200 ) )
         {
             UINT32 nFontHeight;
-            pPortion->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nInstanceInSheet );
+            pPortion->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
             nVal2 = -(sal_Int16)( ( nFontHeight * nVal * 8 ) / 100 );
         }
         SvxLineSpacingItem aItem( 200, EE_PARA_SBL );
@@ -6351,13 +6364,13 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
 
     // Paragraph Spacing
     UINT32 nFontHeight = 0;
-    bIsHardAttribute = ( (UINT32)GetAttrib( PPT_ParaAttr_UpperDist, nUpperDist, nInstanceInSheet ) +
-        (UINT32)GetAttrib( PPT_ParaAttr_LowerDist, nLowerDist, nInstanceInSheet ) ) != 0;
+    bIsHardAttribute = ( (UINT32)GetAttrib( PPT_ParaAttr_UpperDist, nUpperDist, nDestinationInstance ) +
+        (UINT32)GetAttrib( PPT_ParaAttr_LowerDist, nLowerDist, nDestinationInstance ) ) != 0;
     if ( ( nUpperDist > 0 ) || ( nLowerDist > 0 ) )
     {
         if ( mnPortionCount )
         {
-            mpPortionList[ mnPortionCount - 1 ]->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nInstanceInSheet );
+            mpPortionList[ mnPortionCount - 1 ]->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
             if ( ((INT16)nUpperDist) > 0 )
                 nUpperDist = - (sal_Int16)( ( nFontHeight * nUpperDist * 100 ) / 1000 );
             if ( ((INT16)nLowerDist) > 0 )
@@ -6391,10 +6404,10 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
     {
         UINT32 i, nDefaultTab, nTab, nTextOfs = 0;
         UINT32 nLatestManTab = 0;
-        GetAttrib( PPT_ParaAttr_TextOfs, nTextOfs, nInstanceInSheet );
-        GetAttrib( PPT_ParaAttr_BulletOfs, nTab, nInstanceInSheet );
-        GetAttrib( PPT_ParaAttr_BulletOn, i, nInstanceInSheet );
-        GetAttrib( PPT_ParaAttr_DefaultTab, nDefaultTab, nInstanceInSheet );
+        GetAttrib( PPT_ParaAttr_TextOfs, nTextOfs, nDestinationInstance );
+        GetAttrib( PPT_ParaAttr_BulletOfs, nTab, nDestinationInstance );
+        GetAttrib( PPT_ParaAttr_BulletOn, i, nDestinationInstance );
+        GetAttrib( PPT_ParaAttr_DefaultTab, nDefaultTab, nDestinationInstance );
         SvxTabStopItem aTabItem( 0, 0 );
         if ( GetTabCount() )
         {
@@ -6431,10 +6444,10 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
     }
 }
 
-UINT16 PPTParagraphObj::GetLevel()
+sal_uInt16 PPTParagraphObj::GetLevel( sal_uInt32 nMappedInstance )
 {
-    UINT16 nRetValue = pParaSet->mnDepth;
-    switch ( mnInstance )
+    sal_uInt16 nRetValue = pParaSet->mnDepth;
+    switch ( nMappedInstance )
     {
         case TSS_TYPE_BODY :
         case TSS_TYPE_HALFBODY :
@@ -6576,7 +6589,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
     mpImplTextObj->mnShapeId = 0;
     mpImplTextObj->mnShapeMaster = 0;
     mpImplTextObj->mpPlaceHolderAtom = NULL;
-    mpImplTextObj->mnMappedInstance = mpImplTextObj->mnInstance = 4;
+    mpImplTextObj->mnDestinationInstance = mpImplTextObj->mnInstance = 4;
     mpImplTextObj->mnCurrentObject = 0;
     mpImplTextObj->mnParagraphCount = 0;
     mpImplTextObj->mpParagraphList = NULL;
