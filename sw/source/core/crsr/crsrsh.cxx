@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:13:02 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:52:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,7 +664,13 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText )
     SwCrsrMoveState aTmpState( IsTableMode() ? MV_TBLSEL :
                                     bOnlyText ?  MV_SETONLYTEXT : MV_NONE );
     aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
-    aTmpState.bInFrontOfLabel = TRUE; // #i27615#
+
+    SwTxtNode * pTxtNd = pCrsr->GetPoint()->nNode.GetNode().GetTxtNode();
+
+    if (pTxtNd && pTxtNd->GetNum())
+        aTmpState.bInFrontOfLabel = TRUE; // #i27615#
+    else
+        aTmpState.bInFrontOfLabel = FALSE;
 
     int bRet = CRSR_POSOLD |
                 ( GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState )
