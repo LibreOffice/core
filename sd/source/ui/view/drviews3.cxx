@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-13 16:33:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,9 +473,9 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     (SfxRectangleItem&)rReq.GetArgs()->Get(SID_OBJECTRESIZE);
                 Rectangle aRect( pWindow->PixelToLogic( rRect.GetValue() ) );
 
-                if ( pDrView->HasMarkedObj() )
+                if ( pDrView->AreObjectsMarked() )
                 {
-                    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+                    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
                     if (rMarkList.GetMarkCount() == 1)
                     {
@@ -875,11 +875,11 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     const sal_Bool bRTL = GetDoc() && GetDoc()->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB;
     rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, bRTL));
 
-    if( pDrView->HasMarkedObj() )
+    if( pDrView->AreObjectsMarked() )
     {
         if( pDrView->IsTextEdit() )
         {
-            SdrObject* pObj = pDrView->GetMarkList().GetMark( 0 )->GetObj();
+            SdrObject* pObj = pDrView->GetMarkedObjectList().GetMark( 0 )->GetObj();
             if( pObj->GetObjInventor() == SdrInventor)
             {
                 SfxItemSet aEditAttr( GetDoc()->GetPool() );
