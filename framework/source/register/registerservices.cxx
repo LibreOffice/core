@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:53:57 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,10 @@
 #include "uifactory/toolbarcontrollerfactory.hxx"
 #endif
 
+#ifndef __FRAMEWORK_UIFACTORY_STATUSBARCONTROLLERFACTORY_HXX_
+#include "uifactory/statusbarcontrollerfactory.hxx"
+#endif
+
 #ifndef __FRAMEWORK_UIELEMENT_TOOLBARSMENUCONTROLLER_HXX_
 #include <uielement/toolbarsmenucontroller.hxx>
 #endif
@@ -302,6 +306,7 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::RecentFilesMenuController               )
                         COMPONENTINFO( ::framework::StatusBarFactory                        )
                         COMPONENTINFO( ::framework::UICategoryDescription                   )
+                        COMPONENTINFO( ::framework::StatusbarControllerFactory              )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
@@ -344,6 +349,7 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::ToolbarsMenuController                  )   else
                         IFFACTORY( ::framework::RecentFilesMenuController               )   else
                         IFFACTORY( ::framework::StatusBarFactory                        )   else
-                        IFFACTORY( ::framework::UICategoryDescription                   )
+                        IFFACTORY( ::framework::UICategoryDescription                   )   else
+                        IFFACTORY( ::framework::StatusbarControllerFactory              )
             )
 
