@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Index.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 
  module com {  module sun {  module star {  module sdbcx {
 
-interface XColumnsSupplier;
-interface XDataDescriptorFactory;
+ published interface XColumnsSupplier;
+ published interface XDataDescriptorFactory;
 
 
 // DocMerge from xml: service com::sun::star::sdbcx::Index
@@ -82,7 +82,7 @@ interface XDataDescriptorFactory;
     to a table. In that case the service is a data descriptor.
     </p>
  */
-service Index
+published service Index
 {
 
     // DocMerge from xml: service com::sun::star::sdbcx::Index: interface com::sun::star::sdbcx::XDataDescriptorFactory
