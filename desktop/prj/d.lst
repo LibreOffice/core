@@ -1,7 +1,6 @@
 mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\bin%_EXT%\local
 mkdir: %_DEST%\bin%_EXT%\remote2
-
 mkdir: %_DEST%\bin%_EXT%\01
 mkdir: %_DEST%\bin%_EXT%\03
 mkdir: %_DEST%\bin%_EXT%\07
@@ -53,7 +52,6 @@ mkdir: %_DEST%\bin%_EXT%\96
 ..\%__SRC%\lib\liboffacc*.dylib %_DEST%\lib%_EXT%\liboffacc*.dylib
 
 ..\%__SRC%\bin\sweb %_DEST%\bin%_EXT%\sweb.bin
-..\%__SRC%\bin\javaldx %_DEST%\bin%_EXT%\javaldx
 
 ..\%__SRC%\bin\01\loader2.ex? %_DEST%\bin%_EXT%\01\loader2.ex?
 ..\%__SRC%\bin\03\loader2.ex? %_DEST%\bin%_EXT%\03\loader2.ex?
