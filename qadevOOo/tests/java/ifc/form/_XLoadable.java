@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XLoadable.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:59 $
+ *  last change:$Date: 2003-09-08 10:35:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,9 @@
 package ifc.form;
 
 
-import com.sun.star.form.XLoadable;
 import lib.MultiMethodTest;
+
+import com.sun.star.form.XLoadable;
 
 /**
 * Testing <code>com.sun.star.form.XLoadable</code>
@@ -230,7 +231,7 @@ public class _XLoadable extends MultiMethodTest {
     * returns <code>false</code>.
     */
     public void _isLoaded() {
-        boolean result = true ;
+
         boolean isLoaded = oObj.isLoaded() ;
         if (isLoaded) oObj.unload();
         isLoaded = oObj.isLoaded() ;

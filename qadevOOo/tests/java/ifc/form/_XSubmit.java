@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSubmit.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:58 $
+ *  last change:$Date: 2003-09-08 10:35:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 package ifc.form;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.awt.MouseEvent;
 import com.sun.star.awt.XControl;
 import com.sun.star.beans.XPropertySet;
@@ -68,7 +70,6 @@ import com.sun.star.form.XSubmit;
 import com.sun.star.form.XSubmitListener;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.form.XSubmit</code>
@@ -184,6 +185,7 @@ public class _XSubmit extends MultiMethodTest {
         tRes.tested("addSubmitListener()", listener2.called == 1);
         tRes.tested("removeSubmitListener()", listener1.called == 0);
         tRes.tested("submit()", listener2.called > 0);
+        oObj.removeSubmitListener(listener2);
     }
 
     /**
@@ -211,5 +213,13 @@ public class _XSubmit extends MultiMethodTest {
             log.println("While waiting :" + e) ;
         }
     }
+
+    /**
+    * Forces environment recreation.
+    */
+    protected void after() {
+        disposeEnvironment();
+    }
+
 }
 

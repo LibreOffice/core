@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XReset.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:09:58 $
+ *  last change:$Date: 2003-09-08 10:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 package ifc.form;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.form.XReset;
 import com.sun.star.form.XResetListener;
 import com.sun.star.lang.EventObject;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.form.XReset</code>
