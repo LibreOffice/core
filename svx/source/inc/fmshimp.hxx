@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:59:33 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ DECLARE_STL_VECTOR( ::com::sun::star::uno::Reference< ::com::sun::star::form::XF
 //==============================================================================
 // a class iterating through all fields of a form which are bound to a field
 // sub forms are ignored, grid columns (where the grid is a direct child of the form) are included
-class FmXBoundFormFieldIterator : public ::comphelper::IndexAccessIterator
+class SAL_DLLPRIVATE FmXBoundFormFieldIterator : public ::comphelper::IndexAccessIterator
 {
 public:
     FmXBoundFormFieldIterator(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _rStartingPoint) : ::comphelper::IndexAccessIterator(_rStartingPoint) { }
@@ -244,7 +244,7 @@ protected:
 // I would prefer this to be a struct local to FmXFormShell but unfortunately local structs/classes
 // are somewhat difficult with some of our compilers
 class FmCursorActionThread;
-struct CursorActionDescription
+struct SAL_DLLPRIVATE CursorActionDescription
 {
     FmCursorActionThread*   pThread;
     sal_uInt32                  nFinishedEvent;
@@ -257,7 +257,7 @@ struct CursorActionDescription
 
 class FmFormPage;
 //========================================================================
-struct FmLoadAction
+struct SAL_DLLPRIVATE FmLoadAction
 {
     FmFormPage* pPage;
     sal_uInt32  nEventId;
@@ -279,7 +279,7 @@ typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::beans::XPropertyCh
                                         >   FmXFormShell_BD_BASE;
 
 //========================================================================
-class FmXFormShell_Base_Disambiguation : public FmXFormShell_BD_BASE
+class SAL_DLLPRIVATE FmXFormShell_Base_Disambiguation : public FmXFormShell_BD_BASE
 {
 protected:
     FmXFormShell_Base_Disambiguation( ::osl::Mutex& _rMutex );
@@ -298,10 +298,10 @@ typedef ::utl::ConfigItem                   FmXFormShell_CFGBASE;
 
 struct SdrViewEvent;
 class FmFormShell;
-class FmXFormShell  :public FmXFormShell_BASE
-                    ,public FmXFormShell_CFGBASE
-                    ,public ::svxform::OStaticDataAccessTools
-                    ,public ::svx::IControllerFeatureInvalidation
+class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
+                                    ,public FmXFormShell_CFGBASE
+                                    ,public ::svxform::OStaticDataAccessTools
+                                    ,public ::svx::IControllerFeatureInvalidation
 {
     friend class FmFormView;
     friend class FmXFormView;
@@ -690,7 +690,7 @@ inline sal_Bool FmXFormShell::IsSelectionUpdatePending()
 // = der Teil mit dem Container-Test fuer dieses Objekt.
 // =
 
-class SearchableControlIterator : public ::comphelper::IndexAccessIterator
+class SAL_DLLPRIVATE SearchableControlIterator : public ::comphelper::IndexAccessIterator
 {
     ::rtl::OUString         m_sCurrentValue;
         // der aktuelle Wert der ControlSource-::com::sun::star::beans::Property
@@ -708,7 +708,7 @@ public:
 
 // ========================================================================
 SV_DECL_PTRARR_DEL(StatusForwarderArray, SfxStatusForwarder*, 16, 0)
-class ControlConversionMenuController : public SfxMenuControl
+class SAL_DLLPRIVATE ControlConversionMenuController : public SfxMenuControl
 {
 protected:
     StatusForwarderArray    m_aStatusForwarders;
@@ -727,7 +727,7 @@ public:
 // FmCursorActionThread
 //==================================================================
 
-class FmCursorActionThread : public ::vos::OThread
+class SAL_DLLPRIVATE FmCursorActionThread : public ::vos::OThread
 {
     Link                    m_aTerminationHandler;      // the handler to be called upon termination
     ::com::sun::star::sdbc::SQLException            m_aRunException;            // the database exception thrown by RunImpl
@@ -821,7 +821,7 @@ protected:
 
 #define DECL_CURSOR_ACTION_THREAD(classname)            \
                                                         \
-class classname : public FmCursorActionThread           \
+class SAL_DLLPRIVATE classname : public FmCursorActionThread    \
 {                                                       \
 public:                                                 \
     classname(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDataSource); \
