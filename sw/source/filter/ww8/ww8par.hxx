@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-24 16:48:25 $
+ *  last change: $Author: hr $ $Date: 2002-05-28 18:03:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,7 +558,7 @@ private:
     wwFrameNamer& operator=(const wwFrameNamer&);
 public:
     void SetUniqueGraphName(SwFrmFmt *pFrmFmt,const String &rFixedPart);
-    wwFrameNamer(bool bIsDisabled, String &rSeed)
+    wwFrameNamer(bool bIsDisabled, const String &rSeed)
         : msSeed(rSeed), mnImportedGraphicsCount(0), mbIsDisabled(bIsDisabled)
         { }
 };
