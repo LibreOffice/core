@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-08 13:13:07 $
+ *  last change: $Author: oj $ $Date: 2002-11-12 13:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,7 +918,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
         {
             OSL_ENSURE(*aIter,"OTableRow is null!");
             OFieldDescription* pField = (*aIter)->GetActFieldDescr();
-            if ( !pField || (!_bNew && (*aIter)->IsReadOnly()) )
+            if ( !pField || (!_bNew && (*aIter)->IsReadOnly() && !_bKeyColumns) )
                 continue;
 
             Reference<XPropertySet> xColumn;
