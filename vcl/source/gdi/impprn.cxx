@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impprn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-07 10:35:51 $
+ *  last change: $Author: ka $ $Date: 2001-07-04 11:28:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,7 @@ void ImplQPrinter::ImplPrintMtf( GDIMetaFile& rMtf, long nMaxBmpDPIX, long nMaxB
         {
             MetaGradientAction* pGradientAction = (MetaGradientAction*) pAct;
             DrawGradientEx( this, pGradientAction->GetRect(), pGradientAction->GetGradient() );
+            bExecuted = sal_True;
         }
         else if( nType == META_BMPSCALE_ACTION )
         {
