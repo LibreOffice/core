@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-29 13:48:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ public:
     virtual void    MouseMove( const MouseEvent& rMEvt );
     virtual void    Tracking( const TrackingEvent& rTEvt );
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     void            FakeButtonUp();
 
