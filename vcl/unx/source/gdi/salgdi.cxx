@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-31 15:01:50 $
+ *  last change: $Author: hdu $ $Date: 2001-02-15 15:31:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,21 +144,22 @@ final SalGraphicsData::SalGraphicsData()
 #endif
     hDrawable_          = None;
 
-    pClipRegion_        = NULL;
+    pClipRegion_            = NULL;
     pPaintRegion_       = NULL;
 
-    pPenGC_             = NULL;
+    pPenGC_         = NULL;
     nPenPixel_          = 0;
     nPenColor_          = MAKE_SALCOLOR( 0x00, 0x00, 0x00 ); // Black
 
     pFontGC_            = NULL;
 //  xFont_              = NULL;
+    mpServerSideFont    = NULL;
     aScale_             = Fraction( 1, 1 );
     nTextPixel_         = 0;
     nTextColor_         = MAKE_SALCOLOR( 0x00, 0x00, 0x00 ); // Black
 
     pBrushGC_           = NULL;
-    nBrushPixel_        = 0;
+    nBrushPixel_            = 0;
     nBrushColor_        = MAKE_SALCOLOR( 0xFF, 0xFF, 0xFF ); // White
     hBrush_             = None;
 
@@ -173,7 +174,7 @@ final SalGraphicsData::SalGraphicsData()
     bWindow_            = FALSE;
     bPrinter_           = FALSE;
     bVirDev_            = FALSE;
-    bPenGC_             = FALSE;
+    bPenGC_         = FALSE;
     bFontGC_            = FALSE;
     bBrushGC_           = FALSE;
     bMonoGC_            = FALSE;
@@ -229,6 +230,7 @@ void SalGraphicsData::SetClipRegion( GC pGC, XLIB_Region pXReg ) const
         Regions[n++] = pClipRegion_;
 //  if( pPaintRegion_ /* && !XEmptyRegion( pPaintRegion_ ) */ )
 //      Regions[n++] = pPaintRegion_;
+
     if( pXReg && !XEmptyRegion( pXReg ) )
         Regions[n++] = pXReg;
 
@@ -322,6 +324,7 @@ final GC SalGraphicsData::SelectBrush()
         }
         XSetFunction  ( pDisplay, pBrushGC_, bXORMode_ ? GXxor : GXcopy );
         SetClipRegion( pBrushGC_ );
+
         bBrushGC_ = TRUE;
     }
 
@@ -966,6 +969,7 @@ void SalGraphics::DrawRect( long nX, long nY, long nDX, long nDY )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
+
         maGraphicsData.m_pPrinterGfx->DrawRect (Rectangle(Point(nX, nY), Size(nDX, nDY)));
     else
     {
@@ -1070,6 +1074,7 @@ void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
         maGraphicsData.m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, (const Point**)pPtAry);
     else
     {
+
     #endif
 
     if( _GetBrushColor() != 0xFFFFFFFF )
