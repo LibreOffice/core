@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: kz $ $Date: 2003-10-15 10:08:00 $
+#   last change: $Author: kz $ $Date: 2004-01-28 19:06:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,13 +74,13 @@ TARGET1=heavyconfig
 SLOFILES = \
     $(SLO)$/accelcfg.obj				\
     $(SLO)$/xmlaccelcfg.obj				\
+    $(SLO)$/moduleoptions.obj           \
     $(SLO)$/pathoptions.obj             \
     $(SLO)$/saveopt.obj					\
     $(SLO)$/undoopt.obj             	\
     $(SLO)$/helpopt.obj             	\
     $(SLO)$/javaoptions.obj             \
     $(SLO)$/useroptions.obj             \
-    $(SLO)$/moduleoptions.obj			\
     $(SLO)$/securityoptions.obj			\
     $(SLO)$/localisationoptions.obj		\
     $(SLO)$/workingsetoptions.obj		\
@@ -111,7 +111,8 @@ SLOFILES = \
 EXCEPTIONSFILES = \
     $(SLO)$/accelcfg.obj				\
     $(SLO)$/inetoptions.obj				\
-    $(SLO)$/xmlaccelcfg.obj				\
+    $(SLO)$/xmlaccelcfg.obj             \
+    $(SLO)$/moduleoptions.obj           \
     $(SLO)$/pathoptions.obj
 
 # --- heavyconfig.lib Files --------------------------------------------------------
