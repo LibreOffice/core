@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.22 $
+  *  $Revision: 1.23 $
   *
-  *  last change: $Author: vg $ $Date: 2003-12-17 20:23:08 $
+  *  last change: $Author: obo $ $Date: 2004-03-17 10:52:41 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -279,7 +279,6 @@ void PrinterGfx::DrawGlyphs(
         sal_Unicode* pTempUnicodes = (sal_Unicode*)alloca(sizeof(sal_Unicode)*nLen);
         sal_Int16 nTempLen = 0;
         sal_Int32 nTempFirstDelta = 0;
-        sal_Int32 nRot = 0;
         Point aRotPoint;
         sal_Int32 nTextHeight = maVirtualStatus.mnTextHeight;
         sal_Int32 nTextWidth  = maVirtualStatus.mnTextWidth ? maVirtualStatus.mnTextWidth : maVirtualStatus.mnTextHeight;
@@ -455,7 +454,7 @@ PrinterGfx::DrawText (
 
         while ((nTo < nLen) && (nFont == pFontMap[nTo]))
         {
-            pNewDeltaArray[ nTo ] = ((0.5 + pNewDeltaArray[ nTo ]) / 1000.0) - nDelta;
+            pNewDeltaArray[ nTo ] = (sal_Int32)(((0.5 + pNewDeltaArray[ nTo ]) / 1000.0) - nDelta);
             nTo++ ;
         }
 
@@ -530,7 +529,6 @@ void PrinterGfx::drawVerticalizedText(
             i++;
         if( i <= nLen && i > nLastPos )
         {
-            int nWidth = 0;
             for( int n = nLastPos; n < i; n++ )
                 pDelta[n] = pDeltaArray[n] - (aPoint.X() - rPoint.X() );
 
@@ -541,8 +539,8 @@ void PrinterGfx::drawVerticalizedText(
                      maVirtualStatus.mbArtBold );
             drawText( aPoint, pStr + nLastPos, i - nLastPos, pDelta + nLastPos );
 
-            aPoint.X() = rPoint.X() + ((double)pDeltaArray[i-1] * fCos);
-            aPoint.Y() = rPoint.Y() + ((double)pDeltaArray[i-1] * fSin);
+            aPoint.X() = (sal_Int32)(rPoint.X() + ((double)pDeltaArray[i-1] * fCos));
+            aPoint.Y() = (sal_Int32)(rPoint.Y() + ((double)pDeltaArray[i-1] * fSin));
         }
         if( i < nLen )
         {
@@ -566,19 +564,19 @@ void PrinterGfx::drawVerticalizedText(
             switch( nDeltaAngle )
             {
                 case +900:
-                    aPos.X() += +nA * fCos + nD * fSin;
-                    aPos.Y() += -nA * fSin + nD * fCos;
+                    aPos.X() += (sal_Int32)(+nA * fCos + nD * fSin);
+                    aPos.Y() += (sal_Int32)(-nA * fSin + nD * fCos);
                     break;
                 case -900:
-                    aPos.X() += +nA * fSin + nD * fCos;
-                    aPos.Y() += -(nTextScale*fStretch - nD) * fCos;
+                    aPos.X() += (sal_Int32)(+nA * fSin + nD * fCos);
+                    aPos.Y() += (sal_Int32)(-(nTextScale*fStretch - nD) * fCos);
                     break;
             }
             drawText( aPos, pStr+i, 1, NULL );
             if( i < nLen-1 && pDeltaArray )
             {
-                aPoint.X() = rPoint.X() + ((double)pDeltaArray[i] * fCos);
-                aPoint.Y() = rPoint.Y() + ((double)pDeltaArray[i] * fSin);
+                aPoint.X() = (sal_Int32)(rPoint.X() + ((double)pDeltaArray[i] * fCos));
+                aPoint.Y() = (sal_Int32)(rPoint.Y() + ((double)pDeltaArray[i] * fSin));
             }
 
             // swap text width/height again
@@ -640,8 +638,6 @@ PrinterGfx::drawText(
         return;
 
     fonttype::type   eType          = mrFontMgr.getFontType (mnFontID);
-    fonttype::type   eEffectiveType = fonttype::Unknown;
-    rtl_TextEncoding nEncoding      = mrFontMgr.getFontEncoding (mnFontID);
 
     if (eType == fonttype::Type1)
         PSUploadPS1Font (mnFontID);
