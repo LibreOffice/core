@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:53:04 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,6 +491,7 @@ void OPrimKeyUndoAct::Undo()
     // Die eingefuegten Keys loeschen
     for( long nIndex = m_aInsKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aInsKeys.NextSelected() )
     {
+        OSL_ENSURE(nIndex <= pRowList->size(),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
         pRow->SetPrimaryKey( FALSE );
     }
@@ -499,6 +500,7 @@ void OPrimKeyUndoAct::Undo()
     // Die geloeschten Keys herstellen
     for( nIndex = m_aDelKeys.FirstSelected(); nIndex != SFX_ENDOFSELECTION; nIndex=m_aDelKeys.NextSelected() )
     {
+        OSL_ENSURE(nIndex <= pRowList->size(),"Index for undo isn't valid!");
         pRow = (*pRowList)[nIndex];
         pRow->SetPrimaryKey( TRUE );
     }
