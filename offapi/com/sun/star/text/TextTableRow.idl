@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextTableRow.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:58 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,72 +80,58 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::text::TextTableRow
 /** specifies the properties of a text table row.
+
+    @see com::sun::star::TextTable
  */
 service TextTableRow
 {
-    // DocMerge: empty anyway
     interface com::sun::star::beans::XPropertySet;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTableRow::BackColor
     /** specifies the color of the background.
-
-
-        <p> </p>
      */
     [property] long BackColor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTableRow::BackTransparent
     /** If <TRUE/>, the background color value in "BackColor" is not visible.
-
-        <p>
-        </p>
      */
     [property] boolean BackTransparent;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTableRow::BackGraphicURL
     /** contains the URL of a background graphic.
      */
     [property] string BackGraphicURL;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTableRow::BackGraphicFilter
     /** contains the name of the file filter of a background graphic.
      */
     [property] string BackGraphicFilter;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTableRow::BackGraphicLocation
     /** determines the position of the background graphic.@see GraphicLocation
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTableRow::TableColumnSeparators
     /** contains the description of the columns in the table row.
      */
     [property] com::sun::star::text::TableColumnSeparator TableColumnSeparators;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTableRow::Height
     /** contains the height of the table row.
      */
     [property] long Height;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: property com::sun::star::text::TextTableRow::IsAutoHeight
     /** If the value of this property is <TRUE/>, the height of the table row
         depends on the content of the table cells.
      */
