@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-09 23:14:11 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,6 +186,7 @@ Menu RID_MAIN_MENU
                         Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ...";
                         Text[ turkish ] = "~Sütun düzeni...";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "~Asignación de columnas...";
                     };
             MenuItem
             {
@@ -214,6 +215,7 @@ Menu RID_MAIN_MENU
                         Text[ arabic ] = "ãÕÏÑ ÇáÈíÇäÇÊ...";
                         Text[ turkish ] = "~Veri kaynaðý...";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "~Fuente de datos...";
                     };
         };
         };
@@ -227,6 +229,7 @@ Menu RID_MAIN_MENU
             Text[ korean ] = "ÆíÁý(~E)";
             Text[ turkish ] = "~Düzenle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Editar";
         };
         MenuItem
         {
@@ -262,6 +265,7 @@ Menu RID_MAIN_MENU
             Text[ arabic ] = "~ÚÑÖ";
             Text[ turkish ] = "Görünüm";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Ver";
         };
     MenuItem
     {
@@ -309,6 +313,7 @@ Menu RID_MAIN_MENU
                         Text[ arabic ] = "ÊÕÝíÉ...";
                         Text[ turkish ] = "~Filtrele...";
                         Text[ language_user1 ] = " ";
+                        Text[ catalan ] = "~Filter...";
                     };
              MenuItem
             {
@@ -331,6 +336,7 @@ Menu RID_MAIN_MENU
             Text[ arabic ] = "Ã~ÏæÇÊ";
             Text[ turkish ] = "~Araçlar";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Herramientas";
         };
     ITEM_WINDOW_MENU
     ITEM_HELP_MENU
