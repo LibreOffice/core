@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Labels.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:50:08 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 18:27:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,23 +70,115 @@
 		<group oor:name="LabelType">
 			<info>
 				<desc xml:lang="en-US">Contains the properties used for a label.</desc>
+				<desc xml:lang="el">Contains the properties used for a label.</desc>
+				<desc xml:lang="nl">Contains the properties used for a label.</desc>
+				<desc xml:lang="fr">Contains the properties used for a label.</desc>
+				<desc xml:lang="fi">Contains the properties used for a label.</desc>
+				<desc xml:lang="cs">Contains the properties used for a label.</desc>
+				<desc xml:lang="da">Contains the properties used for a label.</desc>
+				<desc xml:lang="zh-CN">含有数据标志的属性。</desc>
+				<desc xml:lang="zh-TW">Contains the properties used for a label.</desc>
+				<desc xml:lang="ar">Contains the properties used for a label.</desc>
+				<desc xml:lang="he">Contains the properties used for a label.</desc>
+				<desc xml:lang="ca">Contains the properties used for a label.</desc>
+				<desc xml:lang="pt">Contains the properties used for a label.</desc>
+				<desc xml:lang="ru">Contains the properties used for a label.</desc>
+				<desc xml:lang="es">Contains the properties used for a label.</desc>
+				<desc xml:lang="it">Contains the properties used for a label.</desc>
+				<desc xml:lang="sv">Contains the properties used for a label.</desc>
+				<desc xml:lang="pl">Contains the properties used for a label.</desc>
+				<desc xml:lang="pt-BR">Contains the properties used for a label.</desc>
+				<desc xml:lang="ja">Contains the properties used for a label.</desc>
+				<desc xml:lang="ko">Contains the properties used for a label.</desc>
+				<desc xml:lang="tr">Contains the properties used for a label.</desc>
+				<desc xml:lang="th">Contains the properties used for a label.</desc>
+				<desc xml:lang="hi-IN">Contains the properties used for a label.</desc>
 			</info>
 			<prop oor:name="Name" oor:type="xs:string">
 				<!--Label: Type Description: Name of the format-->
 				<info>
 					<desc xml:lang="en-US">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="el">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="nl">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="fr">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="fi">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="cs">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="da">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="zh-CN">含有数据标志格式的描述性名称。</desc>
+					<desc xml:lang="zh-TW">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="ar">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="he">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="ca">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="pt">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="ru">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="es">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="it">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="sv">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="pl">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="pt-BR">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="ja">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="ko">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="tr">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="th">Contains the descriptive name for the label format.</desc>
+					<desc xml:lang="hi-IN">Contains the descriptive name for the label format.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Measure" oor:type="xs:string">
 				<!--Label: Contains the measurement data of the label contatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a '1' is append if the label type is continuous otherwise a '0'-->
 				<info>
-					<desc xml:lang="en-US">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a '1' is append if the label type is continuous otherwise a '0'.</desc>
+					<desc xml:lang="en-US">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="el">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="nl">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="fr">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="fi">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="cs">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="da">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="zh-CN">含有按以下顺序连结并以分号 (;) 隔开的数据标志的定量数据：行数; 列数; 宽度; 高度; 水平间隔; 垂直间隔; 左边距; 上边距; 如果数据标志类型是连续的，则在末尾附加“1”，否则附加“0”。</desc>
+					<desc xml:lang="zh-TW">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="ar">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="he">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="ca">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="pt">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="ru">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="es">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="it">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="sv">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="pl">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="pt-BR">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="ja">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="ko">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="tr">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="th">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
+					<desc xml:lang="hi-IN">Contains the measurement data of the label concatenated by a colon (;) in the following order: No of Rows;No. Of Columns; Width; Height; Hor. Distance; Vert. Distance;Left margin;Upper margin; At the end a &apos;1&apos; is append if the label type is continuous otherwise a &apos;0&apos;.</desc>
 				</info>
 			</prop>
 		</group>
 		<set oor:name="Labels" oor:node-type="LabelType">
 			<info>
 				<desc xml:lang="en-US">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="el">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="nl">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="fr">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="fi">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="cs">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="da">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="zh-CN">指定制造商的数据标志集。</desc>
+				<desc xml:lang="zh-TW">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="ar">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="he">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="ca">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="pt">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="ru">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="es">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="it">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="sv">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="pl">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="pt-BR">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="ja">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="ko">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="tr">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="th">Specifies a set of labels of a manufacturer.</desc>
+				<desc xml:lang="hi-IN">Specifies a set of labels of a manufacturer.</desc>
 			</info>
 		</set>
 	</templates>
@@ -94,8 +186,58 @@
 		<set oor:name="Manufacturer" oor:node-type="Labels">
 			<info>
 				<desc xml:lang="en-US">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="el">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="nl">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="fr">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="fi">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="cs">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="da">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="zh-CN">含有数据标志制造商列单。</desc>
+					<desc xml:lang="zh-TW">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="ar">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="he">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="ca">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="pt">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="ru">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="es">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="it">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="sv">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="pl">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="pt-BR">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="ja">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="ko">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="tr">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="th">Contains the list of label manufacturers.</desc>
+					<desc xml:lang="hi-IN">Contains the list of label manufacturers.</desc>
 				<label xml:lang="en-US">Available Manufacturers</label>
+				<label xml:lang="el">Available Manufacturers</label>
+				<label xml:lang="nl">Available Manufacturers</label>
+				<label xml:lang="fr">Available Manufacturers</label>
+				<label xml:lang="fi">Available Manufacturers</label>
+				<label xml:lang="cs">Available Manufacturers</label>
+				<label xml:lang="da">Available Manufacturers</label>
+				<label xml:lang="zh-CN">可用的制造商</label>
+				<label xml:lang="zh-TW">Available Manufacturers</label>
+				<label xml:lang="ar">Available Manufacturers</label>
+				<label xml:lang="he">Available Manufacturers</label>
+				<label xml:lang="ca">Available Manufacturers</label>
+				<label xml:lang="pt">Available Manufacturers</label>
+				<label xml:lang="ru">Available Manufacturers</label>
+				<label xml:lang="es">Available Manufacturers</label>
+				<label xml:lang="it">Available Manufacturers</label>
+				<label xml:lang="sv">Available Manufacturers</label>
+				<label xml:lang="pl">Available Manufacturers</label>
+				<label xml:lang="pt-BR">Available Manufacturers</label>
+				<label xml:lang="ja">Available Manufacturers</label>
+				<label xml:lang="ko">Available Manufacturers</label>
+				<label xml:lang="tr">Available Manufacturers</label>
+				<label xml:lang="th">Available Manufacturers</label>
+				<label xml:lang="hi-IN">Available Manufacturers</label>
 			</info>
 		</set>
 	</component>
 </oor:component-schema>
+
+
+
+
