@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2000-10-23 12:14:31 $
+ *  last change: $Author: dl $ $Date: 2000-11-29 16:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,7 +452,7 @@ void SdrOle2Obj::ImpAnmeldung()
 void SdrOle2Obj::ImpAbmeldung()
 {
 #ifndef SVX_LIGHT
-    if( !IsEmpty() )
+    if( !IsEmpty() && aName.Len() )
     {
         uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
         if( xBC.is() && pModifyListener )
@@ -462,7 +462,7 @@ void SdrOle2Obj::ImpAbmeldung()
         }
     }
 
-    if (pModel!=NULL)
+    if (pModel && aName.Len() )
     {
         // Aus Cache entfernen
         GetSdrGlobalData().GetOLEObjCache().RemoveObj(this);
