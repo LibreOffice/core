@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 14:39:18 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 13:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1402,9 +1402,15 @@ static void GetLineArrow( const sal_Int32 nLineWidth, const MSO_LineEnd eLineEnd
     rnArrowWidth = (sal_Int32)( fLineWidth * fWidthMul );
 }
 
-void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet ) const
+void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet, const MSO_SPT eShapeType ) const // #i28269#
 {
-    UINT32 nLineFlags = GetPropertyValue( DFF_Prop_fNoLineDrawDash );
+    UINT32 nLineFlags(GetPropertyValue( DFF_Prop_fNoLineDrawDash ));
+
+    if(!IsHardAttribute( DFF_Prop_fLine ) && !IsCustomShapeStrokedByDefault( eShapeType ))
+    {
+        nLineFlags &= ~0x08;
+    }
+
     if ( nLineFlags & 8 )
     {
         // Linienattribute
@@ -1555,10 +1561,14 @@ void DffPropertyReader::ApplyLineAttributes( SfxItemSet& rSet ) const
 
 void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, const MSO_SPT eShapeType ) const
 {
-    sal_Bool bFilled = IsHardAttribute( DFF_Prop_fFilled )
-                        ? ( GetPropertyValue( DFF_Prop_fNoFillHitTest ) & 0x10 ) != 0
-                        : IsCustomShapeFilledByDefault( eShapeType );
-    if ( bFilled )
+    UINT32 nFillFlags(GetPropertyValue( DFF_Prop_fNoFillHitTest ));
+
+    if(!IsHardAttribute( DFF_Prop_fFilled ) && !IsCustomShapeFilledByDefault( eShapeType ))
+    {
+        nFillFlags &= ~0x10;
+    }
+
+    if ( nFillFlags & 0x10 )
     {
         MSO_FillType eMSO_FillType = (MSO_FillType)GetPropertyValue( DFF_Prop_fillType, mso_fillSolid );
         XFillStyle eXFill = XFILL_NONE;
@@ -3135,7 +3145,7 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const 
         }
     }
 
-    ApplyLineAttributes( rSet );
+    ApplyLineAttributes( rSet, eShapeType ); // #i28269#
     ApplyFillAttributes( rIn, rSet, eShapeType );
     if (  rManager.GetSvxMSDffSettings() & SVXMSDFF_SETTINGS_IMPORT_IAS )
     {
