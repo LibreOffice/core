@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-21 15:44:24 $
+ *  last change: $Author: mba $ $Date: 2001-06-25 09:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1844,6 +1844,9 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         SetError( ERRCODE_IO_INVALIDPARAMETER );
         return sal_False;
     }
+
+    if ( SvtSaveOptions().IsSaveUnpacked() )
+        pParams->Put( SfxBoolItem( SID_PACK, FALSE ) );
 
     if ( PreDoSaveAs_Impl(aURL.GetMainURL(),aFilterName,pParams))
     {

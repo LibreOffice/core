@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-22 12:32:03 $
+ *  last change: $Author: mba $ $Date: 2001-06-25 09:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@
 #ifndef  _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
 #include <com/sun/star/ucb/TransferInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 #ifndef _ZCODEC_HXX
 #include <tools/zcodec.hxx>
 #endif
@@ -155,6 +158,8 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::io;
 
 #pragma hdrstop
 
@@ -164,8 +169,10 @@ using namespace ::com::sun::star::ucb;
 #include <svtools/pathoptions.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/localfilehelper.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <ucbhelper/content.hxx>
+#include <sot/stg.hxx>
 
 #include "ucbhelp.hxx"
 #include "helper.hxx"
@@ -1124,7 +1131,8 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
     else
     {
         aStorage = new SvStorage( pStream, FALSE );
-        aStorage->SetName( aStorageName );
+        if ( !aStorage->GetName().Len() )
+            aStorage->SetName( aStorageName );
     }
 
     if ( aStorage->GetError() == SVSTREAM_OK )
@@ -1260,7 +1268,7 @@ void SfxMedium::Transfer_Impl()
     if( pImp->pTempFile && ( !eError || eError & ERRCODE_WARNING_MASK ) )
     {
         Reference < XContent > xContent = GetContent();
-        if ( ! xContent.is() )
+        if ( !xContent.is() )
         {
             eError = ERRCODE_IO_NOTEXISTS;
             return;
@@ -1273,14 +1281,19 @@ void SfxMedium::Transfer_Impl()
             SotStorageRef xStor = new SotStorage( TRUE, GetName(), STREAM_STD_READWRITE | STREAM_TRUNC, STORAGE_TRANSACTED );
             if ( xStor->GetError() == ERRCODE_NONE )
             {
+                // set segment size property; package will automatically be divided in pieces fitting
+                // into this size
                 ::com::sun::star::uno::Any aAny;
                 aAny <<= pSegmentSize->GetValue();
                 xStor->SetProperty( String::CreateFromAscii("SegmentSize"), aAny );
+
+                // copy the temporary storage into the disk spanned package
                 GetStorage()->CopyTo( xStor );
                 xStor->Commit();
             }
-            else
-                eError = ERRCODE_IO_GENERAL;
+
+            if ( !GetError() )
+                SetError( xStor->GetError() );
             return;
         }
 
@@ -1290,10 +1303,38 @@ void SfxMedium::Transfer_Impl()
             SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_PACK, sal_False);
             if ( pItem && !pItem->GetValue() )
             {
-                ::utl::UCBContentHelper::MakeFolder( GetName() );
-                ::ucb::Content aContent( GetName(), Reference < XCommandEnvironment >() );
-                SotStorageRef xStor = new SotStorage( aContent, GetName() );
-                GetStorage()->CopyTo( xStor );
+                // this file must be stored without packing into a JAR file
+                // check for an existing unpacked storage
+                SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( GetName(), STREAM_STD_READ );
+                if ( !pStream->GetError() )
+                {
+                    String aURL = UCBStorage::GetLinkedFile( *pStream );
+                    if ( aURL.Len() )
+                        // remove a possibly existing old folder
+                        SfxContentHelper::Kill( aURL );
+                }
+
+                DELETEZ( pStream );
+
+                // create a link file for unpacked storages
+                String aURL = UCBStorage::CreateLinkFile( GetName() );
+
+                // create a new folder based storage
+                SvStorageRef xStor = new SvStorage( TRUE, GetName() );
+
+                // copy package into unpacked storage
+                if ( GetStorage()->CopyTo( xStor ) )
+                {
+                    // commit changes, writing will happen now
+                    xStor->Commit();
+
+                    // take new unpacked storage as own storage
+                    Close();
+                    DELETEZ( pImp->pTempFile );
+                    SetStorage_Impl( xStor );
+                }
+                else if ( !GetError() )
+                    SetError( GetStorage()->GetError() );
                 return;
             }
         }
@@ -1508,9 +1549,54 @@ void SfxMedium::GetMedium_Impl()
             BOOL bAllowReadOnlyMode = pItem ? pItem->GetValue() : TRUE;
             BOOL bIsWritable = ( nStorOpenMode & STREAM_WRITE );
 
-            // no callbacks for opening read/write because we might try readonly later
-            pImp->bDontCallDoneLinkOnSharingError = ( bIsWritable && bAllowReadOnlyMode );
-            xLockBytes = ::utl::UcbLockBytes:: CreateLockBytes( GetContent(), nStorOpenMode, bIsWritable ? NULL : pHandler );
+            SFX_ITEMSET_ARG( GetItemSet(), pPostStringItem, SfxStringItem, SID_POSTSTRING, sal_False);
+            SFX_ITEMSET_ARG( GetItemSet(), pPostDataItem, SfxLockBytesItem, SID_POSTLOCKBYTES, sal_False);
+            SFX_ITEMSET_ARG( GetItemSet(), pContentTypeItem, SfxStringItem, SID_CONTENT_TYPE, sal_False);
+            SFX_ITEMSET_ARG( GetItemSet(), pRefererItem, SfxStringItem, SID_REFERER, sal_False);
+
+            Sequence < PropertyValue > aProps(1);
+            ::rtl::OUString aReferer;
+            if ( pRefererItem )
+                aReferer = pRefererItem->GetValue();
+
+            aProps[0].Name = ::rtl::OUString::createFromAscii("Referer");
+            aProps[0].Value <<= aReferer;
+
+            if ( pPostDataItem || pPostStringItem )
+            {
+                DBG_ASSERT( !bIsWritable && bAllowReadOnlyMode, "Strange open mode!" );
+                bIsWritable = FALSE;
+
+                ::rtl::OUString aMimeType;
+                if ( pContentTypeItem )
+                    aMimeType = pContentTypeItem->GetValue();
+                else
+                    aMimeType = ::rtl::OUString::createFromAscii( "application/x-www-form-urlencoded" );
+
+                aProps.realloc(2);
+                aProps[1].Name = ::rtl::OUString::createFromAscii("ContentType");
+                aProps[1].Value <<= aMimeType;
+
+                Reference < XInputStream > xPostData;
+                if ( pPostDataItem )
+                {
+                    SvLockBytesRef xRef( pPostDataItem->GetValue() );
+                    SvLockBytesStat aStat;
+                    sal_uInt32 nLen = 0;
+                    if ( xRef->Stat( &aStat, SVSTATFLAG_DEFAULT ) == ERRCODE_NONE )
+                        nLen = aStat.nSize;
+                    xPostData = new ::utl::OInputStreamHelper( xRef, nLen );
+                }
+
+                xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), aProps, xPostData, pHandler );
+            }
+            else
+            {
+                // no callbacks for opening read/write because we might try readonly later
+                pImp->bDontCallDoneLinkOnSharingError = ( bIsWritable && bAllowReadOnlyMode );
+                xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), aProps, nStorOpenMode, bIsWritable ? NULL : pHandler );
+            }
+
             if ( !xLockBytes.Is() )
             {
                 pImp->bDontCallDoneLinkOnSharingError = sal_False;
@@ -1523,7 +1609,7 @@ void SfxMedium::GetMedium_Impl()
                 ResetError();
                 pImp->bDownloadDone = sal_False;
                 pImp->bDontCallDoneLinkOnSharingError = sal_False;
-                xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), nStorOpenMode, pHandler );
+                xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), aProps, nStorOpenMode, pHandler );
                 if ( !pHandler && !pImp->bDownloadDone )
                     Done_Impl( xLockBytes->GetError() );
             }
@@ -1818,12 +1904,12 @@ void SfxMedium::Close()
         // storage
 
         const SvStream *pStream = aStorage->GetSvStream();
-        if ( pStream == pInStream )
+        if ( pStream && pStream == pInStream )
         {
             pInStream = NULL;
             aStorage->SetDeleteStream( TRUE );
         }
-        if ( pStream == pOutStream )
+        else if ( pStream && pStream == pOutStream )
         {
             pOutStream = NULL;
             aStorage->SetDeleteStream( TRUE );
@@ -1837,6 +1923,8 @@ void SfxMedium::Close()
 
     if ( pOutStream )
         CloseOutStream_Impl();
+
+    pImp->xContent = Reference < XContent >();
 }
 
 //------------------------------------------------------------------
@@ -2491,7 +2579,8 @@ void SfxMedium::CreateTempFile()
     ResetError();
 
     SFX_ITEMSET_ARG( GetItemSet(), pSegmentSize, SfxInt32Item, SID_SEGMENTSIZE, sal_False);
-    if ( pSegmentSize )
+    SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_PACK, sal_False);
+    if ( pSegmentSize || pItem && !pItem->GetValue() )
     {
         pImp->pTempFile = new ::utl::TempFile();
     }
@@ -2543,7 +2632,8 @@ void SfxMedium::CreateTempFileNoCopy()
         delete pImp->pTempFile;
 
     SFX_ITEMSET_ARG( GetItemSet(), pSegmentSize, SfxInt32Item, SID_SEGMENTSIZE, sal_False);
-    if ( pSegmentSize )
+    SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_PACK, sal_False);
+    if ( pSegmentSize || pItem && !pItem->GetValue() )
     {
         pImp->pTempFile = new ::utl::TempFile();
     }
