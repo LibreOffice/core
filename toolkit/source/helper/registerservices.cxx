@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 14:54:18 $
+ *  last change: $Author: mt $ $Date: 2001-01-26 12:32:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
 
+#include <toolkit/controls/geometrycontrolmodel.hxx>
+
 #include <cppuhelper/factory.hxx>
 
 #ifndef _CPPUHELPER_WEAK_HXX_
@@ -92,7 +94,6 @@
 #include <toolkit/controls/stdtabcontroller.hxx>
 #include <toolkit/controls/stdtabcontrollermodel.hxx>
 
-
 #define REGISTER_SERVICES( ImplName, ServiceName1, ServiceName2 ) \
     xNewKey = pRegistryKey->createKey( ::rtl::OUString::createFromAscii( "/stardiv.Toolkit." #ImplName "/UNO/SERVICES" ) ); \
     xNewKey->createKey( ServiceName1 ); \
@@ -102,6 +103,11 @@
 #define IMPL_CREATEINSTANCE( ImplName ) \
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL ImplName##_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& ) \
     { return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new ImplName ); }
+
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL UnoControlDialogModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
+{
+    return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new OGeometryControlModel<UnoControlDialogModel> );
+}
 
 #define CHECKANDCREATEFACTORY( ImplName, ServiceName1, ServiceName2 ) \
     if ( rtl_str_compare( sImplementationName, "stardiv.Toolkit." #ImplName ) == 0 ) \
@@ -132,7 +138,6 @@ IMPL_CREATEINSTANCE( UnoControlContainer )
 IMPL_CREATEINSTANCE( UnoControlContainerModel )
 IMPL_CREATEINSTANCE( UnoControlCurrencyFieldModel )
 IMPL_CREATEINSTANCE( UnoControlDateFieldModel )
-IMPL_CREATEINSTANCE( UnoControlDialogModel )
 IMPL_CREATEINSTANCE( UnoControlEditModel )
 IMPL_CREATEINSTANCE( UnoControlFileControlModel )
 IMPL_CREATEINSTANCE( UnoControlFixedTextModel )
