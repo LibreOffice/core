@@ -2,9 +2,9 @@
  *
  *  $RCSfile: merge.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-18 08:17:30 $
+ *  last change: $Author: ihi $ $Date: 2004-11-26 20:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
 
                 //if (( nLANG != 49 ) && ( LANGUAGE_ALLOWED( GetLangIndex( nLANG ))))
                 nLANG.EraseLeadingAndTrailingChars();
-                if ( !nLANG.EqualsIgnoreCaseAscii( "de" ) && !nLANG.EqualsIgnoreCaseAscii("en-US")  ){
+                if (  !nLANG.EqualsIgnoreCaseAscii("en-US")  ){
                     InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE );
                     if( nLANG.Len() > 0 ){
                         bool bFound = false;
@@ -348,7 +348,7 @@ MergeDataFile::MergeDataFile( const ByteString &rFileName, const ByteString& sFi
 
             //if (( nLANG != 49 ) && ( LANGUAGE_ALLOWED( GetLangIndex( nLANG ))))
             nLANG.EraseLeadingAndTrailingChars();
-            if ( !nLANG.EqualsIgnoreCaseAscii("de") && !nLANG.EqualsIgnoreCaseAscii("en-US") ){
+            if ( !nLANG.EqualsIgnoreCaseAscii("en-US") ){
                 InsertEntry( sTYP, sGID, sLID, sPFO, nLANG, sTEXT, sQHTEXT, sTITLE );
                 if( nLANG.Len() > 0 ){
                     bool bFound = false;
