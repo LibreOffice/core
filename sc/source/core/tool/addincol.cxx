@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:46:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,15 +1157,21 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     }
                     if ( nMaxColCount && nRowCount )
                     {
-                        pMatrix = new ScMatrix( (USHORT)nMaxColCount, (USHORT)nRowCount );
+                        pMatrix = new ScMatrix(
+                                static_cast<SCSIZE>(nMaxColCount),
+                                static_cast<SCSIZE>(nRowCount) );
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const INT32* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
-                                pMatrix->PutDouble( pColArr[nCol], (USHORT)nCol, (USHORT)nRow );
+                                pMatrix->PutDouble( pColArr[nCol],
+                                        static_cast<SCSIZE>(nCol),
+                                        static_cast<SCSIZE>(nRow) );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutDouble( 0.0, (USHORT)nCol, (USHORT)nRow );
+                                pMatrix->PutDouble( 0.0,
+                                        static_cast<SCSIZE>(nCol),
+                                        static_cast<SCSIZE>(nRow) );
                         }
                     }
                 }
@@ -1193,15 +1199,21 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     }
                     if ( nMaxColCount && nRowCount )
                     {
-                        pMatrix = new ScMatrix( (USHORT)nMaxColCount, (USHORT)nRowCount );
+                        pMatrix = new ScMatrix(
+                                static_cast<SCSIZE>(nMaxColCount),
+                                static_cast<SCSIZE>(nRowCount) );
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const double* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
-                                pMatrix->PutDouble( pColArr[nCol], (USHORT)nCol, (USHORT)nRow );
+                                pMatrix->PutDouble( pColArr[nCol],
+                                        static_cast<SCSIZE>(nCol),
+                                        static_cast<SCSIZE>(nRow) );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutDouble( 0.0, (USHORT)nCol, (USHORT)nRow );
+                                pMatrix->PutDouble( 0.0,
+                                        static_cast<SCSIZE>(nCol),
+                                        static_cast<SCSIZE>(nRow) );
                         }
                     }
                 }
@@ -1229,16 +1241,21 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     }
                     if ( nMaxColCount && nRowCount )
                     {
-                        pMatrix = new ScMatrix( (USHORT)nMaxColCount, (USHORT)nRowCount );
+                        pMatrix = new ScMatrix(
+                                static_cast<SCSIZE>(nMaxColCount),
+                                static_cast<SCSIZE>(nRowCount) );
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const rtl::OUString* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
                                 pMatrix->PutString( String( pColArr[nCol] ),
-                                    (USHORT)nCol, (USHORT)nRow );
+                                    static_cast<SCSIZE>(nCol),
+                                    static_cast<SCSIZE>(nRow) );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutString( EMPTY_STRING, (USHORT)nCol, (USHORT)nRow );
+                                pMatrix->PutString( EMPTY_STRING,
+                                        static_cast<SCSIZE>(nCol),
+                                        static_cast<SCSIZE>(nRow) );
                         }
                     }
                 }
@@ -1267,7 +1284,9 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     if ( nMaxColCount && nRowCount )
                     {
                         rtl::OUString aUStr;
-                        pMatrix = new ScMatrix( (USHORT)nMaxColCount, (USHORT)nRowCount );
+                        pMatrix = new ScMatrix(
+                                static_cast<SCSIZE>(nMaxColCount),
+                                static_cast<SCSIZE>(nRowCount) );
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
@@ -1278,20 +1297,27 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                                 //if ( pRefl->equals( *OUString_getReflection() ) )
                                 if ( pColArr[nCol] >>= aUStr )
                                     pMatrix->PutString( String( aUStr ),
-                                        (USHORT)nCol, (USHORT)nRow );
+                                        static_cast<SCSIZE>(nCol),
+                                        static_cast<SCSIZE>(nRow) );
                                 else
                                 {
                                     // try to convert to double, empty if not possible
 
                                     double fCellVal;
                                     if ( lcl_ConvertToDouble( pColArr[nCol], fCellVal ) )
-                                        pMatrix->PutDouble( fCellVal, (USHORT)nCol, (USHORT)nRow );
+                                        pMatrix->PutDouble( fCellVal,
+                                                static_cast<SCSIZE>(nCol),
+                                                static_cast<SCSIZE>(nRow) );
                                     else
-                                        pMatrix->PutEmpty( (USHORT)nCol, (USHORT)nRow );
+                                        pMatrix->PutEmpty(
+                                                static_cast<SCSIZE>(nCol),
+                                                static_cast<SCSIZE>(nRow) );
                                 }
                             }
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutString( EMPTY_STRING, (USHORT)nCol, (USHORT)nRow );
+                                pMatrix->PutString( EMPTY_STRING,
+                                        static_cast<SCSIZE>(nCol),
+                                        static_cast<SCSIZE>(nRow) );
                         }
                     }
                 }
