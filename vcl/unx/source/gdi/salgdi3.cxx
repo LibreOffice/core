@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-15 11:14:53 $
+ *  last change: $Author: hdu $ $Date: 2002-08-19 15:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1476,7 +1476,7 @@ void SalGraphics::DrawSalLayout( const SalLayout& rSalLayout )
         sal_Unicode aUnicodes[MAX_GLYPHS];
         memset( aUnicodes, 0, sizeof(aUnicodes));
         Point aPos;
-        bool bIsTruetype = (psp::PrintFontManager::get().getFontType( maGraphicsData.m_pPrinterGfx->GetFontID() ) == psp::fonttype::TrueType);
+        bool bHasGlyphs = rSalLayout.HasGlyphs();
         const GenericSalLayout& rLayout = reinterpret_cast<const GenericSalLayout&>( rSalLayout );
         int nUnitsPerPixel = rLayout.GetUnitsPerPixel();
         for( int nStart = 0;; )
@@ -1490,7 +1490,7 @@ void SalGraphics::DrawSalLayout( const SalLayout& rSalLayout )
             {
                 nXOffset += aWidthAry[ j ];
                 aIdxAry[ j ] = nXOffset / nUnitsPerPixel;
-                aUnicodes[j] = bIsTruetype ? 0 : aGlyphAry[j];
+                aUnicodes[j] = bHasGlyphs ? 0 : aGlyphAry[j];
             }
 
             maGraphicsData.m_pPrinterGfx->DrawGlyphs( aPos, (unsigned long*)aGlyphAry, aUnicodes, nGlyphs, aIdxAry );
@@ -2334,11 +2334,23 @@ SalGraphics::GetGlyphOutline( xub_Unicode cChar,
 #ifdef ENABLE_CTL
 SalLayout* SalGraphicsData::LayoutText( const ImplLayoutArgs& rArgs )
 {
+    bool bEnableGlyphs = true;
+
+#if !defined(_USE_PRINT_EXTENSION_)
+    // workaround for printers not handling glyph indexing for non-TT fonts
+    // TODO: make bEnableGlyphs part of SalLayout
+    if( m_pPrinterGfx != NULL )
+    {
+        int nFontId = m_pPrinterGfx->GetFontID();
+        bEnableGlyphs = ( psp::fonttype::TrueType == psp::PrintFontManager::get().getFontType( nFontId ) );
+    }
+#endif // !defined(_USE_PRINT_EXTENSION_)
+
     GenericSalLayout* pSalLayout = NULL;
 
-    if( mpServerSideFont != NULL )
+    if( mpServerSideFont && bEnableGlyphs )
     {
-        // try to render in selected font
+        // layout in selected font
         pSalLayout = mpServerSideFont->LayoutText( rArgs );
 #if 0 // TODO: enable fallback layout
         // if needed use fallback fonts
@@ -2370,7 +2382,7 @@ SalLayout* SalGraphicsData::LayoutText( const ImplLayoutArgs& rArgs )
         {
             int nLogicalIndex = bRightToLeft ? (rArgs.mnEndCharIndex-1-i) : (rArgs.mnFirstCharIndex+i);
             sal_Unicode cChar = rArgs.mpStr[ nLogicalIndex ];
-            int nGlyphIndex = cChar;    // TODO: translate to printer glyph index
+            int nGlyphIndex = cChar;  // printer glyphs = unicode
 
             Point aNewPos( nWidth, 0 );
 
