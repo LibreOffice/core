@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-22 08:23:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -860,7 +860,7 @@ protected:
         const Reference< xml::sax::XAttributeList > & xAttrList );
     // HACK
     virtual UniReference < SvXMLImportPropertyMapper > GetImportPropertyMapper(
-                        sal_uInt16 nFamily ) const;
+        sal_uInt16 nFamily ) const;
 
     virtual ::com::sun::star::uno::Reference <
                     ::com::sun::star::container::XNameContainer >
@@ -937,6 +937,8 @@ SvXMLStyleContext *SwXMLStylesContext_Impl::CreateDefaultStyleStyleChildContext(
     switch( nFamily )
     {
     case XML_STYLE_FAMILY_TEXT_PARAGRAPH:
+    case XML_STYLE_FAMILY_TABLE_TABLE:
+    case XML_STYLE_FAMILY_TABLE_ROW:
         pStyle = new XMLTextStyleContext( GetImport(), nPrefix, rLocalName,
                                           xAttrList, *this, nFamily,
                                           sal_True );
@@ -1008,15 +1010,17 @@ sal_Bool SwXMLStylesContext_Impl::InsertStyleFamily( sal_uInt16 nFamily ) const
 }
 
 UniReference < SvXMLImportPropertyMapper > SwXMLStylesContext_Impl::GetImportPropertyMapper(
-                        sal_uInt16 nFamily ) const
+        sal_uInt16 nFamily ) const
 {
     UniReference < SvXMLImportPropertyMapper > xMapper;
-//  if( XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily )
-//      xMapper = ((SvXMLImport *)&GetImport())->GetTextImport()
-//                   ->GetFrameImportPropertySetMapper();
-//  else
+    if( nFamily == XML_STYLE_FAMILY_TABLE_TABLE )
+        xMapper = XMLTextImportHelper::CreateTableDefaultExtPropMapper(
+            const_cast<SwXMLStylesContext_Impl*>( this )->GetImport() );
+    else if( nFamily == XML_STYLE_FAMILY_TABLE_ROW )
+        xMapper = XMLTextImportHelper::CreateTableRowDefaultExtPropMapper(
+            const_cast<SwXMLStylesContext_Impl*>( this )->GetImport() );
+    else
         xMapper = SvXMLStylesContext::GetImportPropertyMapper( nFamily );
-
     return xMapper;
 }
 
