@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compbase.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:47:47 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 23:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,7 @@
 #include <cppuhelper/implbase.hxx>
 #endif
 
-/* This header should not be used anymore.  compbase1-N.hxx use implbase_ex.hxx except
-   for MACOSX.
+/* This header should not be used anymore.
    @deprecated
 */
 
@@ -145,20 +144,10 @@ ClassData##N WeakAggComponentImplHelper##N< __IFC##N >::s_aCD = ClassData##N( 3 
 #define __DEF_COMPIMPLHELPER_C( N ) \
 }
 //==================================================================================================
-// The Mac OS X gcc compiler cannot handle assignments to static data members
-// of the generic template class. It can only handle assignments to specific
-// instantiations of a template class.
-#if defined(MACOSX) && ( __GNUC__ < 3 )
-/** @internal */
-#define __DEF_COMPIMPLHELPER( N ) \
-__DEF_COMPIMPLHELPER_A( N ) \
-__DEF_COMPIMPLHELPER_C( N )
-#else
 /** @internal */
 #define __DEF_COMPIMPLHELPER( N ) \
 __DEF_COMPIMPLHELPER_A( N ) \
 __DEF_COMPIMPLHELPER_B( N ) \
 __DEF_COMPIMPLHELPER_C( N )
-#endif
 
 #endif
