@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:36 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:32:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,14 +753,17 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
             bRet = true;
             if( bExecuteTimers )
             {
-                // timed out, notify.
+                // timed out, update timeout
                 Timeout_ = aTimeOfDay;
+                /*
+               *  #107827# autorestart immediately, will be stopped (or set
+               *  to different value in notify hdl if necessary;
+               *  CheckTimeout should return false while
+               *  timers are being dispatched.
+               */
+                Timeout_ += nTimeoutMS_;
+                // notify
                 GetSalData()->Timeout();
-                if (aTimeOfDay == Timeout_)
-                {
-                    // still timed out, auto restart.
-                    Timeout_ += nTimeoutMS_;
-                }
             }
         }
     }
