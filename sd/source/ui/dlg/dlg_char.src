@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlg_char.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-25 20:30:46 $
+ *  last change: $Author: kz $ $Date: 2001-10-11 20:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ TabDialog TAB_CHAR
                 Text[ dutch ] = "Positie";
                 Text[ french ] = "Position";
                 Text[ spanish ] = "Posición";
-                Text[ italian ] = "Position";
+                Text[ italian ] = "Posizione";
                 Text[ danish ] = "Start_ved";
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
@@ -236,6 +236,7 @@ TabDialog TAB_CHAR
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Caracteres";
 };
+
 
 
 
