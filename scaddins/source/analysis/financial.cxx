@@ -2,9 +2,9 @@
  *
  *  $RCSfile: financial.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-17 10:00:19 $
+ *  last change: $Author: gt $ $Date: 2001-08-23 16:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ double SAL_CALL AnalysisAddIn::getPricemat( constREFXPS& xOpt,
 
     double      fRet = 1.0 + fIssMat * fRate;
     fRet /= 1.0 + fSetMat * fYield;
-    fRet -= fIssMat * fRate;
+    fRet -= fIssSet * fRate;
     fRet *= 100.0;
 
     return fRet;
@@ -433,29 +433,7 @@ double SAL_CALL AnalysisAddIn::getOddfprice( constREFXPS& xOpt,
     if( fRate < 0 || fYield < 0 || CHK_Freq || nMat <= nFirstCoup || nFirstCoup <= nSettle || nSettle <= nIssue )
         THROW_IAE;
 
-    sal_Int32   nBase = GetOptBase( rOB );
-    sal_Int32   nNullDate = GetNullDate( xOpt );
-
-    double      fN = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase ) - 1.0;
-    double      fA = nSettle - GetCouppcd( nNullDate, nSettle, nFirstCoup, nFreq, nBase );
-    double      fE = GetCoupdays( nNullDate, nSettle, nMat, nFreq, nBase );
-    double      fDSC = GetCoupdaysnc( nNullDate, nSettle, nMat, nFreq, nBase );
-    double      fDSC_E = fDSC / fE;
-    double      fDFC = GetCoupdaysnc( nNullDate, nIssue, nFirstCoup, nFreq, nBase );
-
-    double      fT1 = 1.0 + fYield / double( nFreq );
-    double      fT2 = 100.0 * fRate / double( nFreq );
-
-    double      fRet = fRedemp / pow( fT1, fN + fDSC_E );
-    fRet += fT2 * fDFC / ( pow( fT1, fDSC_E ) * fE );
-    fRet -= fT2 * fA / fE;
-
-    double      fC = 1.0 + fDSC / fE;
-    sal_Int32   nN = sal_Int32( fN );
-    for( sal_Int32 k = 1 ; k < nN ; k++, fC++ )
-        fRet += fT2 / pow( fT1, fC );
-
-    return fRet;
+    return GetOddfprice( GetNullDate( xOpt ), nSettle, nMat, nIssue, nFirstCoup, fRate, fYield, fRedemp, nFreq, GetOptBase( rOB ) );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-17 10:00:19 $
+ *  last change: $Author: gt $ $Date: 2001-08-23 16:13:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1538,7 +1538,16 @@ double GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, doub
 double GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
     double fRate, double fPrice, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    return f_Ret;
+    double      fIssMat = GetYearFrac( nNullDate, nIssue, nMat, nBase );
+    double      fIssSet = GetYearFrac( nNullDate, nIssue, nSettle, nBase );
+    double      fSetMat = GetYearFrac( nNullDate, nSettle, nMat, nBase );
+
+    double      y = 1.0 + fIssMat * fRate;
+    y /= fPrice / 100.0 + fIssSet * fRate;
+    y--;
+    y /= fSetMat;
+
+    return y;
 }
 
 
@@ -1675,55 +1684,36 @@ double GetOddfyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
 }
 
 
-double GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
+double GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastCoup,
     double fRate, double fYield, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    THROW_IAE;
-    return 0.0;
+    double      fFreq = double( nFreq );
+    double      fDCi = GetYearFrac( nNullDate, nLastCoup, nMat, nBase ) * fFreq;
+    double      fDSCi = GetYearFrac( nNullDate, nSettle, nMat, nBase ) * fFreq;
+    double      fAi = GetYearFrac( nNullDate, nLastCoup, nSettle, nBase ) * fFreq;
+
+    double      p = fRedemp + fDCi * 100.0 * fRate / fFreq;
+    p /= 100.0 + fDSCi * 100.0 * fYield / fFreq - ( fAi * 100.0 * fRate / fFreq );
+    p *= 100.0;
+
+    return p;
 }
 
 
-double GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest,
+double GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastCoup,
     double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE
 {
-    THROW_IAE;
-    return 0.0;
-/*  double      f100ZH = 100.0 * fRate / double( nFreq );
-    double      s;
-    sal_uInt32  i;
-    sal_uInt32  nc = 42;
+    double      fFreq = double( nFreq );
+    double      fDCi = GetYearFrac( nNullDate, nLastCoup, nMat, nBase ) * fFreq;
+    double      fDSCi = GetYearFrac( nNullDate, nSettle, nMat, nBase ) * fFreq;
+    double      fAi = GetYearFrac( nNullDate, nLastCoup, nSettle, nBase ) * fFreq;
 
-#define _DC( i )        1
-#define _NL( i )        1
-#define _A( i )         1
-#define _DSC( i )       1
+    double      y = fRedemp + fDCi * 100.0 * fRate / fFreq;
+    y /= fPrice + fAi * 100.0 * fRate / fFreq;
+    y--;
+    y *= fFreq / fDSCi;
 
-    double      fZ1 = fRedemp;
-    s = 0.0;
-    for( i = 1 ; i <= nc ; i++ )
-        s += _DC( i ) / _NL( i );
-    s*= f100ZH;
-    fZ1 += s;
-
-    double      fN1 = fPrice;
-    s = 0.0;
-    for( i = 1 ; i <= nc ; i++ )
-        s += _A( i ) / _NL( i );
-    s*= f100ZH;
-    fN1 += s;
-
-    s = 0.0;
-    for( i = 1 ; i <= nc ; i++ )
-        s += _DSC( i ) / _NL( i );
-    double      fN2 = s;
-
-    return ( fZ1 / fN1 - 1.0 ) * double( nFreq ) / fN2;
-
-#undef _DC
-#undef _NL
-#undef _A
-#undef _DSC
-*/
+    return y;
 }
 
 
