@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: tbe $ $Date: 2001-05-04 10:57:32 $
+#   last change: $Author: mt $ $Date: 2001-05-28 09:03:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -125,48 +125,50 @@ IDLFILES=\
     TextAlign.idl\
     TextEvent.idl\
     Toolkit.idl\
-    UnoControlButton.idl\
-    UnoControlCheckBox.idl\
-    UnoControlComboBox.idl\
     UnoControl.idl\
+    UnoControlButton.idl\
     UnoControlButtonModel.idl\
+    UnoControlCheckBox.idl\
     UnoControlCheckBoxModel.idl\
+    UnoControlComboBox.idl\
     UnoControlComboBoxModel.idl\
     UnoControlContainer.idl\
     UnoControlContainerModel.idl\
+    UnoControlCurrencyField.idl\
     UnoControlCurrencyFieldModel.idl\
+    UnoControlDateField.idl\
     UnoControlDateFieldModel.idl\
+    UnoControlDialog.idl\
+    UnoControlDialogModel.idl\
+    UnoControlEdit.idl\
     UnoControlEditModel.idl\
+    UnoControlFileControl.idl\
     UnoControlFileControlModel.idl\
+    UnoControlFixedLine.idl\
     UnoControlFixedLineModel.idl\
+    UnoControlFixedText.idl\
     UnoControlFixedTextModel.idl\
+    UnoControlFormattedField.idl\
     UnoControlFormattedFieldModel.idl\
+    UnoControlGroupBox.idl\
     UnoControlGroupBoxModel.idl\
+    UnoControlImageControl.idl\
     UnoControlImageControlModel.idl\
+    UnoControlListBox.idl\
     UnoControlListBoxModel.idl\
     UnoControlModel.idl\
-    UnoControlNumericFieldModel.idl\
-    UnoControlPatternFieldModel.idl\
-    UnoControlProgressBarModel.idl\
-    UnoControlRadioButtonModel.idl\
-    UnoControlScrollBarModel.idl\
-    UnoControlTimeFieldModel.idl\
-    UnoControlCurrencyField.idl\
-    UnoControlDateField.idl\
-    UnoControlEdit.idl\
-    UnoControlFileControl.idl\
-    UnoControlFixedLine.idl\
-    UnoControlFixedText.idl\
-    UnoControlFormattedField.idl\
-    UnoControlGroupBox.idl\
-    UnoControlImageControl.idl\
-    UnoControlListBox.idl\
     UnoControlNumericField.idl\
+    UnoControlNumericFieldModel.idl\
     UnoControlPatternField.idl\
+    UnoControlPatternFieldModel.idl\
     UnoControlProgressBar.idl\
+    UnoControlProgressBarModel.idl\
     UnoControlRadioButton.idl\
+    UnoControlRadioButtonModel.idl\
     UnoControlScrollBar.idl\
+    UnoControlScrollBarModel.idl\
     UnoControlTimeField.idl\
+    UnoControlTimeFieldModel.idl\
     VclContainerEvent.idl\
     VclWindowPeerAttribute.idl\
     WindowAttribute.idl\
