@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:39:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:28:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,23 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_PRESENTATION_PARAGRAPHTARGET_HPP_
+#include <com/sun/star/presentation/ParagraphTarget.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_EFFECTNODETYPE_HPP_
+#include <com/sun/star/presentation/EffectNodeType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_SHAPEANIMATIONSUBTYPE_HPP_
+#include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
+#endif
 #ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONEFFECT_HPP_
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #endif
 #ifndef _COM_SUN_STAR_PRESENTATION_CLICKACTION_HPP_
 #include <com/sun/star/presentation/ClickAction.hpp>
+#endif
+#ifndef _COM_SUN_STAR_PRESENTATION_TEXTANIMATIONTYPE_HPP_
+#include <com/sun/star/presentation/TextAnimationType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_PRESENTATION_ANIMATIONSPEED_HPP_
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
@@ -136,6 +148,10 @@
 #include <svx/outlobj.hxx>
 #endif
 
+#ifndef _SD_CUSTOMANIMATIONPRESET_HXX
+#include "CustomAnimationPreset.hxx"
+#endif
+
 #ifndef SD_OUTLINER_HXX
 #include "Outliner.hxx"
 #endif
@@ -181,7 +197,15 @@
 
 using namespace ::vos;
 using namespace ::rtl;
+using namespace ::sd;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::presentation;
+using namespace ::com::sun::star::animations;
+
+using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::drawing::XShape;
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -502,16 +526,17 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             switch(pMap->nWID)
             {
                 case WID_EFFECT:
-                    ::cppu::any2enum< presentation::AnimationEffect >( pInfo->eEffect, aValue );
+                    setOldEffect( aValue );
                     break;
                 case WID_TEXTEFFECT:
-                    ::cppu::any2enum< presentation::AnimationEffect >( pInfo->eTextEffect, aValue);
+                    setOldTextEffect( aValue );
                     break;
                 case WID_SPEED:
-                    ::cppu::any2enum< presentation::AnimationSpeed >( pInfo->eSpeed, aValue);
+                    setOldSpeed( aValue );
                     break;
-                case WID_ISANIMATION:
+/* TODO??       case WID_ISANIMATION:
                 {
+
                     sal_Bool bIsAnimation;
                     if(!(aValue >>= bIsAnimation))
                         throw lang::IllegalArgumentException();
@@ -519,6 +544,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     pInfo->bIsMovie = bIsAnimation;
                     break;
                 }
+*/
                 case WID_BOOKMARK:
                 {
                     OUString aString;
@@ -531,6 +557,8 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 case WID_CLICKACTION:
                     ::cppu::any2enum< presentation::ClickAction >( pInfo->eClickAction, aValue);
                     break;
+
+/* todo?
                 case WID_PLAYFULL:
                     pInfo->bPlayFull = ::cppu::any2bool(aValue);
                     break;
@@ -554,6 +582,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     pInfo->aBlueScreen.SetColor( nColor );
                     break;
                 }
+*/
                 case WID_VERB:
                 {
                     sal_Int32 nVerb;
@@ -565,21 +594,29 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 }
                 case WID_DIMCOLOR:
                 {
+                    setOldDimColor( aValue );
+/*
                     sal_Int32 nColor;
                     if(!(aValue >>= nColor))
                         throw lang::IllegalArgumentException();
 
                     pInfo->aDimColor.SetColor( (ColorData) nColor );
+*/
                     break;
                 }
                 case WID_DIMHIDE:
-                    pInfo->bDimHide = ::cppu::any2bool(aValue);
+                    setOldDimHide( aValue );
+//                  pInfo->bDimHide = ::cppu::any2bool(aValue);
                     break;
                 case WID_DIMPREV:
-                    pInfo->bDimPrevious = ::cppu::any2bool(aValue);
+                    setOldDimPrevious( aValue );
+//                  pInfo->bDimPrevious = ::cppu::any2bool(aValue);
                     break;
                 case WID_PRESORDER:
-                {
+                    setOldPresOrder( aValue );
+                    break;
+/*
+                    {
                     sal_Int32 nPos;
                     if(!(aValue >>= nPos))
                         throw lang::IllegalArgumentException();
@@ -587,6 +624,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                     SetPresentationOrderPos( nPos );
                     break;
                 }
+*/
                 case WID_STYLE:
                     SetStyleSheet( aValue );
                     break;
@@ -596,6 +634,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 case WID_MASTERDEPEND:
                     SetMasterDepend( ::cppu::any2bool(aValue) );
                     break;
+/* todo
                 case WID_ANIMPATH:
                 {
                     uno::Reference< drawing::XShape > xShape;
@@ -624,6 +663,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
 
                     break;
                 }
+*/
                 case WID_IMAGEMAP:
                 {
                     SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
@@ -1096,6 +1136,7 @@ sal_Int32 SdXShape::GetPresentationOrderPos() const throw()
  */
 void SdXShape::SetPresentationOrderPos( sal_Int32 nPos ) throw()
 {
+/*
     SdrObject* pObj = mpShape->GetSdrObject();
     SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
     if(pDoc == 0 || pObj == NULL)
@@ -1151,6 +1192,7 @@ void SdXShape::SetPresentationOrderPos( sal_Int32 nPos ) throw()
         SdAnimationInfo* pInfo = pDoc->GetAnimationInfo( pIterObj );
         pInfo->nPresOrder = nIdx++;
     }
+*/
 }
 
 void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumentException )
@@ -1880,4 +1922,516 @@ uno::Sequence< OUString > SAL_CALL SdUnoEventsAccess::getSupportedServiceNames( 
 {
     uno::Sequence< OUString > aStr( &maStrServiceName, 1 );
     return aStr;
+}
+
+
+struct deprecated_AnimationEffect_conversion_table_entry
+{
+    AnimationEffect meEffect;
+    const sal_Char* mpPresetId;
+    const sal_Char* mpPresetSubType;
+}
+deprecated_AnimationEffect_conversion_table[] =
+{
+    { AnimationEffect_FADE_FROM_LEFT, "ooo-entrance-wipe","from-left" },
+    { AnimationEffect_FADE_FROM_TOP, "ooo-entrance-wipe","from-top" },
+    { AnimationEffect_FADE_FROM_RIGHT, "ooo-entrance-wipe","from-right" },
+    { AnimationEffect_FADE_FROM_BOTTOM, "ooo-entrance-wipe","from-bottom" },
+    { AnimationEffect_FADE_TO_CENTER, "ooo-entrance-box","in" },
+    { AnimationEffect_FADE_FROM_CENTER, "ooo-entrance-box","out" },
+    { AnimationEffect_MOVE_FROM_LEFT, "ooo-entrance-fly-in","from-left" },
+    { AnimationEffect_MOVE_FROM_TOP, "ooo-entrance-fly-in","from-top" },
+    { AnimationEffect_MOVE_FROM_RIGHT, "ooo-entrance-fly-in","from-right" },
+    { AnimationEffect_MOVE_FROM_BOTTOM, "ooo-entrance-fly-in","from-bottom" },
+    { AnimationEffect_VERTICAL_STRIPES, "ooo-entrance-venetian-blinds","horizontal" },
+    { AnimationEffect_HORIZONTAL_STRIPES, "ooo-entrance-venetian-blinds","vertical" },
+    { AnimationEffect_CLOCKWISE, "ooo-entrance-checkerboard","downward" },
+    { AnimationEffect_COUNTERCLOCKWISE, "ooo-entrance-checkerboard","across" },
+    { AnimationEffect_FADE_FROM_UPPERLEFT, "ooo-entrance-diagonal-squares","right-to-bottom" },
+    { AnimationEffect_FADE_FROM_UPPERRIGHT, "ooo-entrance-diagonal-squares","left-to-bottom" },
+    { AnimationEffect_FADE_FROM_LOWERLEFT, "ooo-entrance-diagonal-squares","right-to-top" },
+    { AnimationEffect_FADE_FROM_LOWERRIGHT, "ooo-entrance-diagonal-squares","left-to-top" },
+    { AnimationEffect_CLOSE_VERTICAL, "ooo-entrance-split","horizontal-in" },
+    { AnimationEffect_CLOSE_HORIZONTAL, "ooo-entrance-split","vertical-in" },
+    { AnimationEffect_OPEN_VERTICAL, "ooo-entrance-split","horizontal-out" },
+    { AnimationEffect_OPEN_HORIZONTAL, "ooo-entrance-split","vertical-out" },
+    { AnimationEffect_PATH, "ooo-entrance-spiral-in",0 },
+    { AnimationEffect_MOVE_TO_LEFT, "ooo-entrance-random",0 },
+    { AnimationEffect_MOVE_TO_TOP, "ooo-entrance-random",0 },
+    { AnimationEffect_MOVE_TO_RIGHT, "ooo-entrance-random",0 },
+    { AnimationEffect_MOVE_TO_BOTTOM, "ooo-entrance-random",0 },
+    { AnimationEffect_SPIRALIN_LEFT, "ooo-entrance-spiral-in",0 },
+    { AnimationEffect_SPIRALIN_RIGHT, "ooo-entrance-spiral-in",0 },
+    { AnimationEffect_SPIRALOUT_LEFT, "ooo-entrance-spiral-in",0 },
+    { AnimationEffect_SPIRALOUT_RIGHT, "ooo-entrance-spiral-in",0 },
+    { AnimationEffect_DISSOLVE, "ooo-entrance-dissolve-in",0 },
+    { AnimationEffect_WAVYLINE_FROM_LEFT, "ooo-entrance-wipe","from-left" },
+    { AnimationEffect_WAVYLINE_FROM_TOP, "ooo-entrance-wipe","from-top" },
+    { AnimationEffect_WAVYLINE_FROM_RIGHT, "ooo-entrance-wipe","from-right" },
+    { AnimationEffect_WAVYLINE_FROM_BOTTOM, "ooo-entrance-wipe","from-bottom" },
+    { AnimationEffect_RANDOM, "ooo-entrance-random",0 },
+    { AnimationEffect_VERTICAL_LINES, "ooo-entrance-random-bars","horizontal" },
+    { AnimationEffect_HORIZONTAL_LINES, "ooo-entrance-random-bars","vertical" },
+    { AnimationEffect_LASER_FROM_LEFT, "ooo-entrance-fly-in","from-left" },
+    { AnimationEffect_LASER_FROM_TOP, "ooo-entrance-fly-in","from-top" },
+    { AnimationEffect_LASER_FROM_RIGHT, "ooo-entrance-fly-in","from-right" },
+    { AnimationEffect_LASER_FROM_BOTTOM, "ooo-entrance-fly-in","from-bottom" },
+    { AnimationEffect_LASER_FROM_UPPERLEFT, "ooo-entrance-fly-in","from-top-left" },
+    { AnimationEffect_LASER_FROM_UPPERRIGHT, "ooo-entrance-fly-in","from-top-right" },
+    { AnimationEffect_LASER_FROM_LOWERLEFT, "ooo-entrance-fly-in","from-bottom-left" },
+    { AnimationEffect_LASER_FROM_LOWERRIGHT, "ooo-entrance-fly-in","from-bottom-right" },
+    { AnimationEffect_APPEAR, "ooo-entrance-appear",0 },
+    { AnimationEffect_HIDE, "ooo-entrance-random",0 },
+    { AnimationEffect_MOVE_FROM_UPPERLEFT, "ooo-entrance-fly-in","from-top-left" },
+    { AnimationEffect_MOVE_FROM_UPPERRIGHT, "ooo-entrance-fly-in","from-top-right" },
+    { AnimationEffect_MOVE_FROM_LOWERRIGHT, "ooo-entrance-fly-in","from-bottom-right" },
+    { AnimationEffect_MOVE_FROM_LOWERLEFT, "ooo-entrance-fly-in","from-bottom-left" },
+    { AnimationEffect_MOVE_TO_UPPERLEFT, "ooo-entrance-appear",0 },
+    { AnimationEffect_MOVE_TO_UPPERRIGHT, "ooo-entrance-appear",0 },
+    { AnimationEffect_MOVE_TO_LOWERRIGHT, "ooo-entrance-appear",0 },
+    { AnimationEffect_MOVE_TO_LOWERLEFT, "ooo-entrance-appear",0 },
+    { AnimationEffect_MOVE_SHORT_FROM_LEFT, "ooo-entrance-peek-in","from-left" },
+    { AnimationEffect_MOVE_SHORT_FROM_UPPERLEFT, "ooo-entrance-peek-in","from-left" },
+    { AnimationEffect_MOVE_SHORT_FROM_TOP, "ooo-entrance-peek-in","from-top" },
+    { AnimationEffect_MOVE_SHORT_FROM_UPPERRIGHT, "ooo-entrance-peek-in","from-top" },
+    { AnimationEffect_MOVE_SHORT_FROM_RIGHT, "ooo-entrance-peek-in","from-right" },
+    { AnimationEffect_MOVE_SHORT_FROM_LOWERRIGHT, "ooo-entrance-peek-in","from-right" },
+    { AnimationEffect_MOVE_SHORT_FROM_BOTTOM, "ooo-entrance-peek-in","from-bottom" },
+    { AnimationEffect_MOVE_SHORT_FROM_LOWERLEFT, "ooo-entrance-peek-in","from-bottom" },
+    { AnimationEffect_MOVE_SHORT_TO_LEFT, "ooo-entrance-appear",0 },
+    { AnimationEffect_MOVE_SHORT_TO_UPPERLEFT, "ooo-entrance-appear",0 },
+    { AnimationEffect_MOVE_SHORT_TO_TOP, "ooo-entrance-appear",0 },
+    { AnimationEffect_MOVE_SHORT_TO_UPPERRIGHT, "ooo-entrance-appear",0 },
+    { AnimationEffect_MOVE_SHORT_TO_RIGHT, "ooo-entrance-appear",0 },
+    { AnimationEffect_MOVE_SHORT_TO_LOWERRIGHT, "ooo-entrance-appear",0 },
+    { AnimationEffect_MOVE_SHORT_TO_BOTTOM, "ooo-entrance-appear",0 },
+    { AnimationEffect_MOVE_SHORT_TO_LOWERLEFT, "ooo-entrance-appear",0 },
+    { AnimationEffect_VERTICAL_CHECKERBOARD, "ooo-entrance-checkerboard","downward" },
+    { AnimationEffect_HORIZONTAL_CHECKERBOARD, "ooo-entrance-checkerboard","across" },
+    { AnimationEffect_HORIZONTAL_ROTATE, "ooo-entrance-swivel","vertical" },
+    { AnimationEffect_VERTICAL_ROTATE, "ooo-entrance-swivel","vertical" },
+    { AnimationEffect_HORIZONTAL_STRETCH, "ooo-entrance-stretchy","across" },
+    { AnimationEffect_VERTICAL_STRETCH, "ooo-entrance-stretchy","across" },
+    { AnimationEffect_STRETCH_FROM_LEFT, "ooo-entrance-stretchy","from-left" },
+    { AnimationEffect_STRETCH_FROM_UPPERLEFT, "ooo-entrance-stretchy","from-left" },
+    { AnimationEffect_STRETCH_FROM_TOP, "ooo-entrance-stretchy","from-top" },
+    { AnimationEffect_STRETCH_FROM_UPPERRIGHT, "ooo-entrance-stretchy","from-top" },
+    { AnimationEffect_STRETCH_FROM_RIGHT, "ooo-entrance-stretchy","from-right" },
+    { AnimationEffect_STRETCH_FROM_LOWERRIGHT, "ooo-entrance-stretchy","from-right" },
+    { AnimationEffect_STRETCH_FROM_BOTTOM, "ooo-entrance-stretchy","from-bottom" },
+    { AnimationEffect_STRETCH_FROM_LOWERLEFT, "ooo-entrance-stretchy","from-bottom" },
+    { AnimationEffect_ZOOM_IN, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_SMALL, "ooo-entrance-zoom","in-slightly" },
+    { AnimationEffect_ZOOM_IN_SPIRAL, "ooo-entrance-zoom","in-slightly" },
+    { AnimationEffect_ZOOM_OUT, "ooo-entrance-zoom","out" },
+    { AnimationEffect_ZOOM_OUT_SMALL, "ooo-entrance-zoom","out-slightly" },
+    { AnimationEffect_ZOOM_OUT_SPIRAL, "ooo-entrance-zoom","out-slightly" },
+    { AnimationEffect_ZOOM_IN_FROM_LEFT, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_UPPERLEFT, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_TOP, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_UPPERRIGHT, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_RIGHT, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_LOWERRIGHT, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_BOTTOM, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_LOWERLEFT, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_IN_FROM_CENTER, "ooo-entrance-zoom","in" },
+    { AnimationEffect_ZOOM_OUT_FROM_LEFT, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_UPPERLEFT, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_TOP, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_UPPERRIGHT, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_RIGHT, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_LOWERRIGHT, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_BOTTOM, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_LOWERLEFT, "ooo-entrance-appear",0 },
+    { AnimationEffect_ZOOM_OUT_FROM_CENTER, "ooo-entrance-appear",0 },
+    { AnimationEffect_NONE, 0, 0 }
+};
+
+EffectSequence::iterator ImplFindEffect( MainSequencePtr& pMainSequence, const Reference< XShape >& rShape, sal_Int16 nSubItem )
+{
+    EffectSequence::iterator aIter;
+
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+    {
+        CustomAnimationEffectPtr pEffect( (*aIter) );
+        if( (pEffect->getTargetShape() == rShape) && (pEffect->getTargetSubItem() == nSubItem) )
+            break;
+    }
+
+    return aIter;
+}
+
+void SdXShape::setOldEffect( const com::sun::star::uno::Any& aValue )
+{
+    AnimationEffect eEffect;
+    if(!(aValue >>= eEffect))
+        throw lang::IllegalArgumentException();
+
+    deprecated_AnimationEffect_conversion_table_entry* p = deprecated_AnimationEffect_conversion_table;
+    while( p->mpPresetId )
+    {
+        if( p->meEffect == eEffect )
+            break;
+        p++;
+    }
+
+    if( !p->mpPresetId )
+        throw lang::IllegalArgumentException();
+
+    const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
+
+    const OUString aPresetId( OUString::createFromAscii( p->mpPresetId ) );
+    const OUString aPresetSubType( OUString::createFromAscii( p->mpPresetSubType ) );
+
+    CustomAnimationPresetPtr pPreset( rPresets.getEffectDescriptor( aPresetId ) );
+    SdrObject* pObj = mpShape->GetSdrObject();
+    sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
+
+    if( pPreset.get() && pMainSequence.get() )
+    {
+        const Reference< XShape > xShape( mpShape );
+
+        EffectSequence::iterator aIterOnlyBackground( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::ONLY_BACKGROUND ) );
+        EffectSequence::iterator aIterAsWhole( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::AS_WHOLE ) );
+        const EffectSequence::iterator aEnd( pMainSequence->getEnd() );
+
+        bool bEffectCreated = false;
+
+        if( (aIterOnlyBackground == aEnd) && (aIterAsWhole == aEnd) )
+        {
+            // check if there is already an text effect for this shape
+            EffectSequence::iterator aIterOnlyText( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::ONLY_TEXT ) );
+            if( aIterOnlyText != aEnd )
+            {
+                // check if this is an animation text group
+                sal_Int32 nGroupId = (*aIterOnlyText)->getGroupId();
+                if( nGroupId >= 0 )
+                {
+                    CustomAnimationTextGroupPtr pGroup = pMainSequence->findGroup( nGroupId );
+                    if( pGroup.get() )
+                    {
+                        // add an effect to animate the shape
+                        pMainSequence->setAnimateForm( pGroup, true );
+
+                        // find this effect
+                        EffectSequence::iterator aIter( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::ONLY_BACKGROUND ) );
+
+                        if( aIter != aEnd )
+                        {
+                            if( ((*aIter)->getPresetId() != aPresetId) ||
+                                ((*aIter)->getPresetSubType() != aPresetSubType) )
+                            {
+                                (*aIter)->replaceNode( pPreset->create( aPresetSubType ) );
+                                pMainSequence->rebuild();
+                                bEffectCreated = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if( !bEffectCreated )
+            {
+                // if there is not yet an effect that target this shape, we generate one
+                // we insert the shape effect before it
+                CustomAnimationEffectPtr pEffect( new CustomAnimationEffect( pPreset->create( aPresetSubType ) ) );
+                pEffect->setTarget( makeAny( xShape ) );
+                SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
+                if( pPage && pPage->GetPresChange() != PRESCHANGE_MANUAL )
+                    pEffect->setNodeType( EffectNodeType::AFTER_PREVIOUS );
+
+                pMainSequence->append( pEffect );
+            }
+        }
+        else
+        {
+            // if there is already an effect targeting this shape
+            // just replace it
+            CustomAnimationEffectPtr pEffect;
+            if( aIterAsWhole != aEnd )
+            {
+                pEffect = (*aIterAsWhole);
+            }
+            else
+            {
+                pEffect = (*aIterOnlyBackground);
+            }
+
+            if( pEffect.get() )
+            {
+                if( (pEffect->getPresetId() != aPresetId) ||
+                    (pEffect->getPresetSubType() != aPresetSubType) )
+                {
+                    pMainSequence->replace( pEffect, pPreset, aPresetSubType );
+                }
+            }
+        }
+    }
+}
+
+void SdXShape::setOldTextEffect( const com::sun::star::uno::Any& aValue )
+{
+    AnimationEffect eEffect;
+    if(!(aValue >>= eEffect))
+        throw lang::IllegalArgumentException();
+
+    // first map the deprecated AnimationEffect to a preset and subtype
+    deprecated_AnimationEffect_conversion_table_entry* p = deprecated_AnimationEffect_conversion_table;
+    while( p->mpPresetId )
+    {
+        if( p->meEffect == eEffect )
+            break;
+        p++;
+    }
+
+    if( !p->mpPresetId )
+        throw lang::IllegalArgumentException();
+
+    const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
+
+    // create an effect from this preset
+    const OUString aPresetId( OUString::createFromAscii( p->mpPresetId ) );
+    const OUString aPresetSubType( OUString::createFromAscii( p->mpPresetSubType ) );
+    CustomAnimationPresetPtr pPreset( rPresets.getEffectDescriptor( aPresetId ) );
+
+    SdrObject* pObj = mpShape->GetSdrObject();
+    sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
+
+    if( pPreset.get() && pMainSequence.get() )
+    {
+        const Reference< XShape > xShape( mpShape );
+
+        EffectSequence::iterator aIterOnlyText( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::ONLY_TEXT ) );
+        const EffectSequence::iterator aEnd( pMainSequence->getEnd() );
+
+        CustomAnimationEffectPtr pEffect;
+
+        CustomAnimationTextGroupPtr pGroup;
+
+        // is there already an animation text group for this shape?
+        if( aIterOnlyText != aEnd )
+        {
+            const sal_Int32 nGroupId = (*aIterOnlyText)->getGroupId();
+            if( nGroupId >= 0 )
+                pGroup = pMainSequence->findGroup( nGroupId );
+        }
+
+        // if there is not yet a group, create it
+        if( pGroup.get() == 0 )
+        {
+            CustomAnimationEffectPtr pShapeEffect;
+
+            EffectSequence::iterator aIterOnlyBackground( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::ONLY_BACKGROUND ) );
+            if( aIterOnlyBackground != aEnd )
+            {
+                pShapeEffect = (*aIterOnlyBackground);
+            }
+            else
+            {
+                EffectSequence::iterator aIterAsWhole( ImplFindEffect( pMainSequence, xShape, ShapeAnimationSubType::AS_WHOLE ) );
+                if( aIterAsWhole != aEnd )
+                {
+                    pShapeEffect = (*aIterAsWhole);
+                }
+                else
+                {
+                    OUString aEmpty;
+                    CustomAnimationPresetPtr pShapePreset( rPresets.getEffectDescriptor( OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo-entrance-appear" ) ) ) );
+                    pShapeEffect.reset( new CustomAnimationEffect( pShapePreset->create( aEmpty ) ) );
+                    pShapeEffect->setTarget( makeAny( xShape ) );
+                    pMainSequence->append( pShapeEffect );
+
+                    SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
+                    if( pPage && pPage->GetPresChange() != PRESCHANGE_MANUAL )
+                        pEffect->setNodeType( EffectNodeType::AFTER_PREVIOUS );
+                }
+            }
+
+            SdPage* pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
+            const bool bManual = (pPage == 0) || (pPage->GetPresChange() == PRESCHANGE_MANUAL);
+
+            // now create effects for each paragraph
+            pGroup =
+                pMainSequence->
+                    createTextGroup( pShapeEffect, 10, pShapeEffect->getDuration(), sal_True, sal_False );
+        }
+
+        if( pGroup.get() != 0 )
+        {
+            const bool bLaserEffect = (eEffect >= AnimationEffect_LASER_FROM_LEFT) && (eEffect <= AnimationEffect_LASER_FROM_LOWERRIGHT);
+
+            // now we have a group, so check if all effects are same as we like to have them
+            const EffectSequence& rEffects = pGroup->getEffects();
+
+            EffectSequence::const_iterator aIter;
+            for( aIter = rEffects.begin(); aIter != rEffects.end(); aIter++ )
+            {
+                // only work on paragraph targets
+                if( (*aIter)->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
+                {
+                    if( ((*aIter)->getPresetId() != aPresetId) ||
+                        ((*aIter)->getPresetSubType() != aPresetSubType) )
+                    {
+                        (*aIter)->replaceNode( pPreset->create( aPresetSubType ) );
+                    }
+
+                    if( bLaserEffect )
+                    {
+                        (*aIter)->setIterateType( TextAnimationType::BY_LETTER );
+                        (*aIter)->setIterateInterval( 20.0 );// TODO:
+                                                             // Determine
+                                                             // interval
+                                                             // according
+                                                             // to
+                                                             // total
+                                                             // effect
+                                                             // duration
+                    }
+                }
+            }
+        }
+        pMainSequence->rebuild();
+    }
+}
+
+void SdXShape::setOldSpeed( const com::sun::star::uno::Any& aValue )
+{
+    AnimationSpeed eSpeed;
+    if(!(aValue>>=eSpeed))
+        throw lang::IllegalArgumentException();
+
+    double fDuration;
+    switch( eSpeed )
+    {
+    case AnimationSpeed_SLOW: fDuration = 5.0; break;
+    case AnimationSpeed_FAST: fDuration = 0.5; break;
+    //case AnimationSpeed_MEDIUM:
+    default:
+        fDuration = 2.0; break;
+    }
+
+    SdrObject* pObj = mpShape->GetSdrObject();
+    sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
+
+    const Reference< XShape > xShape( mpShape );
+
+    EffectSequence::iterator aIter;
+    bool bNeedRebuild = false;
+
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+    {
+        CustomAnimationEffectPtr pEffect( (*aIter) );
+        if( pEffect->getTargetShape() == xShape )
+        {
+            pEffect->setDuration( fDuration );
+            bNeedRebuild = true;
+        }
+    }
+
+    if( bNeedRebuild )
+        pMainSequence->rebuild();
+}
+
+void SdXShape::setOldDimColor( const com::sun::star::uno::Any& aValue )
+{
+    sal_Int32 nColor;
+
+    if( !(aValue >>= nColor) )
+        throw lang::IllegalArgumentException();
+
+    SdrObject* pObj = mpShape->GetSdrObject();
+    sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
+
+    const Reference< XShape > xShape( mpShape );
+
+    EffectSequence::iterator aIter;
+    bool bNeedRebuild = false;
+
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+    {
+        CustomAnimationEffectPtr pEffect( (*aIter) );
+        if( pEffect->getTargetShape() == xShape )
+        {
+            pEffect->setHasAfterEffect( true );
+            pEffect->setDimColor( aValue );
+            pEffect->setMasterRel( 0 );
+            bNeedRebuild = true;
+        }
+    }
+
+    if( bNeedRebuild )
+        pMainSequence->rebuild();
+}
+
+void SdXShape::setOldDimHide( const com::sun::star::uno::Any& aValue )
+{
+    Any aEmpty;
+
+    sal_Bool bDimHide;
+    if( !(aValue >>= bDimHide) )
+        lang::IllegalArgumentException();
+
+    SdrObject* pObj = mpShape->GetSdrObject();
+    sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
+
+    const Reference< XShape > xShape( mpShape );
+
+    EffectSequence::iterator aIter;
+    bool bNeedRebuild = false;
+
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+    {
+        CustomAnimationEffectPtr pEffect( (*aIter) );
+        if( pEffect->getTargetShape() == xShape )
+        {
+            pEffect->setHasAfterEffect( bDimHide ? true : false );
+            if( bDimHide )
+                pEffect->setDimColor( aEmpty );
+            pEffect->setMasterRel( bDimHide ? 2 : 0 );
+            bNeedRebuild = true;
+        }
+    }
+
+    if( bNeedRebuild )
+        pMainSequence->rebuild();
+}
+
+void SdXShape::setOldDimPrevious( const com::sun::star::uno::Any& aValue )
+{
+    sal_Bool bDimPrevious;
+    if( !(aValue >>= bDimPrevious) )
+        lang::IllegalArgumentException();
+
+    Any aColor;
+
+    if( bDimPrevious )
+        aColor = makeAny( (sal_Int32)COL_LIGHTGRAY );
+
+    SdrObject* pObj = mpShape->GetSdrObject();
+    sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
+
+    const Reference< XShape > xShape( mpShape );
+
+    EffectSequence::iterator aIter;
+    bool bNeedRebuild = false;
+
+    for( aIter = pMainSequence->getBegin(); aIter != pMainSequence->getEnd(); aIter++ )
+    {
+        CustomAnimationEffectPtr pEffect( (*aIter) );
+        if( pEffect->getTargetShape() == xShape )
+        {
+            pEffect->setHasAfterEffect( bDimPrevious );
+            if( !bDimPrevious || !pEffect->getDimColor().hasValue() )
+                pEffect->setDimColor( aColor );
+            pEffect->setMasterRel( 0 );
+            bNeedRebuild = true;
+        }
+    }
+
+    if( bNeedRebuild )
+        pMainSequence->rebuild();
+}
+
+void SdXShape::setOldPresOrder( const com::sun::star::uno::Any& aValue )
+{
 }
