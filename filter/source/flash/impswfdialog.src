@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impswfdialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2002-12-05 14:06:15 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 11:40:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ ModalDialog DLG_OPTIONS
     Closeable = TRUE ;
     Text = "Macromedia Flash (SWF) Optionen" ;
     Text [ ENGLISH ] = "Flash Optionen" ;
-    Text [ english_us ] = "Flash Options" ;
+    Text [ english_us ] = "Macromedia Flash (SWF) Options" ;
 
     FixedText FI_DESCR
     {
@@ -234,4 +234,13 @@ ModalDialog DLG_OPTIONS
     Text[ korean ] = "Flash Options";
     Text[ turkish ] = "Flash Options";
     Text[ thai ] = "Flash Options";
+    Text[ greek ] = "Flash Options";
+    Text[ dutch ] = "Flash Options";
+    Text[ french ] = "Flash Options";
+    Text[ finnish ] = "Flash Options";
+    Text[ danish ] = "Flash Options";
+    Text[ chinese_simplified ] = "Flash Options";
+    Text[ chinese_traditional ] = "Flash Options";
+    Text[ arabic ] = "Flash Options";
+    Text[ catalan ] = "Flash Options";
 };
