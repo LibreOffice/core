@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentIndexLevelFormat.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:43 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,10 @@
     <li>
     <p>TabStopFillCharacter</p>
     <p>Fill character in tab stops.</p>
+    </li>
+    <li>
+    <p>WithTab</p>
+    <p>If true insert tab character.</p>
     </li>
     <li>
     <p>Text</p>
