@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CurrencyField.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2002-12-10 15:14:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 /** This service specifies the ControlModel for an edit field which
     contains a currency value.
  */
-service CurrencyField
+published service CurrencyField
 {
     service com::sun::star::awt::UnoControlCurrencyFieldModel;
 
