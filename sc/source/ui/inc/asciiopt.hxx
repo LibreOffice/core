@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-12-22 01:23:13 $
+ *  last change: $Author: dr $ $Date: 2001-05-30 13:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,6 @@
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
 #ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
 #endif
@@ -119,7 +116,7 @@
 #define SC_COL_SKIP         9
 #define SC_COL_ENGLISH      10
 
-#define SC_ASCIIOPT_PREVIEW_LINES 5     // Anzahl Preview Lines
+#define SC_ASCIIOPT_PREVIEW_LINES 6     // Anzahl Preview Lines
 
 //  Import-Optionen
 
@@ -188,6 +185,7 @@ class ScImportAsciiDlg : public ModalDialog
 
     BOOL            bVFlag;
 
+    FixedLine       aFlFieldOpt;
     FixedText       aFtCharSet;
     SvxTextEncodingBox aLbCharSet;
     BOOL            bCharSetSystem;
@@ -195,6 +193,7 @@ class ScImportAsciiDlg : public ModalDialog
     FixedText       aFtRow;
     NumericField    aNfRow;
 
+    FixedLine       aFlSepOpt;
     RadioButton     aRbFixed;
     RadioButton     aRbSeparated;
 
@@ -208,15 +207,12 @@ class ScImportAsciiDlg : public ModalDialog
     FixedText       aFtTextSep;
     ComboBox        aCbTextSep;
 
-    ScTableWithRuler aTableBox;
+    FixedLine       aFlWidth;
     FixedText       aFtType;
     ListBox         aLbType;
+    ScTableWithRuler aTableBox;
     ScrollBar       aScrollbar;
     ScrollBar       aVScroll;
-
-    GroupBox        aGbSepOpt;
-    GroupBox        aGbFieldOpt;
-    GroupBox        aGbWidth;
 
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;

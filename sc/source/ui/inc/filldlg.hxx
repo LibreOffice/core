@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filldlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: dr $ $Date: 2001-05-30 13:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
 #endif
@@ -118,23 +115,25 @@ public:
     void        SetEdStartValEnabled(BOOL bFlag=FALSE);
 
 private:
+    FixedLine       aFlDirection;
     RadioButton     aBtnDown;
     RadioButton     aBtnRight;
     RadioButton     aBtnUp;
     RadioButton     aBtnLeft;
-    GroupBox        aGbDirection;
 
+    FixedLine       aFlSep1;
+    FixedLine       aFlType;
     RadioButton     aBtnArithmetic;
     RadioButton     aBtnGeometric;
     RadioButton     aBtnDate;
     RadioButton     aBtnAutoFill;
-    GroupBox        aGbType;
 
+    FixedLine       aFlSep2;
+    FixedLine       aFlTimeUnit;
     RadioButton     aBtnDay;
     RadioButton     aBtnDayOfWeek;
     RadioButton     aBtnMonth;
     RadioButton     aBtnYear;
-    GroupBox        aGbTimeUnit;
 
     BOOL            bStartValFlag;
     FixedText       aFtStartVal;

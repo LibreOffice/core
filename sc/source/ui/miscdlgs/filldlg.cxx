@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filldlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: dr $ $Date: 2001-05-30 13:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,21 +97,23 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
 
     :   ModalDialog     ( pParent, ScResId( RID_SCDLG_FILLSERIES ) ),
 
+        aFlDirection    ( this, ScResId( FL_DIRECTION ) ),
         aBtnLeft        ( this, ScResId( BTN_LEFT ) ),
         aBtnRight       ( this, ScResId( BTN_RIGHT ) ),
         aBtnUp          ( this, ScResId( BTN_TOP ) ),
         aBtnDown        ( this, ScResId( BTN_BOTTOM ) ),
-        aGbDirection    ( this, ScResId( GB_DIRECTION ) ),
+        aFlSep1         ( this, ScResId( FL_SEP1 ) ),
+        aFlType         ( this, ScResId( FL_TYPE ) ),
         aBtnArithmetic  ( this, ScResId( BTN_ARITHMETIC ) ),
         aBtnGeometric   ( this, ScResId( BTN_GEOMETRIC ) ),
         aBtnDate        ( this, ScResId( BTN_DATE ) ),
         aBtnAutoFill    ( this, ScResId( BTN_AUTOFILL ) ),
-        aGbType         ( this, ScResId( GB_TYPE ) ),
+        aFlSep2         ( this, ScResId( FL_SEP2 ) ),
+        aFlTimeUnit     ( this, ScResId( FL_TIME_UNIT ) ),
         aBtnDay         ( this, ScResId( BTN_DAY ) ),
         aBtnDayOfWeek   ( this, ScResId( BTN_DAY_OF_WEEK ) ),
         aBtnMonth       ( this, ScResId( BTN_MONTH ) ),
         aBtnYear        ( this, ScResId( BTN_YEAR ) ),
-        aGbTimeUnit     ( this, ScResId( GB_TIME_UNIT ) ),
 
         aFtStartVal     ( this, ScResId( FT_START_VALUE ) ),
         aEdStartVal     ( this, ScResId( ED_START_VALUES ) ),
@@ -252,6 +254,9 @@ void ScFillSeriesDlg::Init( USHORT nPossDir )
     aEdEndVal.SetText( aEndTxt );
 
     bStartValFlag=FALSE;
+
+    aFlSep1.SetStyle( aFlSep1.GetStyle() | WB_VERT );
+    aFlSep2.SetStyle( aFlSep2.GetStyle() | WB_VERT );
 }
 
 
@@ -318,7 +323,7 @@ IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
         aBtnDayOfWeek.Enable();
         aBtnMonth.Enable();
         aBtnYear.Enable();
-        aGbTimeUnit.Enable();
+        aFlTimeUnit.Enable();
     }
     else
     {
@@ -326,7 +331,7 @@ IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
         aBtnDayOfWeek.Disable();
         aBtnMonth.Disable();
         aBtnYear.Disable();
-        aGbTimeUnit.Disable();
+        aFlTimeUnit.Disable();
     }
 
     if ( pBtn != &aBtnAutoFill )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpstat.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: dr $ $Date: 2001-05-30 13:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,6 @@
 #include <vcl/fixed.hxx>
 #endif
 
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
-#endif
-
 #ifndef _STDCTRL_HXX //autogen
 #include <svtools/stdctrl.hxx>
 #endif
@@ -97,14 +93,13 @@ protected:
     virtual void    Reset      ( const SfxItemSet& rSet );
 
 private:
+    FixedLine       aFlInfo;
     FixedText       aFtTablesLbl;
     FixedInfo       aFtTables;
     FixedText       aFtCellsLbl;
     FixedInfo       aFtCells;
     FixedText       aFtPagesLbl;
     FixedInfo       aFtPages;
-
-    GroupBox        aGbInfo;
 };
 
 

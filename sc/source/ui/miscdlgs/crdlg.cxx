@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:02 $
+ *  last change: $Author: dr $ $Date: 2001-05-30 13:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,13 +83,13 @@ ScColOrRowDlg::ScColOrRowDlg( Window*       pParent,
         //
         aBtnRows        ( this, ScResId( BTN_GROUP_ROWS ) ),
         aBtnCols        ( this, ScResId( BTN_GROUP_COLS ) ),
-        aGbFrame        ( this, ScResId( GB_FRAME ) ),
+        aFlFrame        ( this, ScResId( FL_FRAME ) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
     SetText( rStrTitle );
-    aGbFrame.SetText( rStrLabel );
+    aFlFrame.SetText( rStrLabel );
 
     if ( bColDefault )
         aBtnCols.Check();

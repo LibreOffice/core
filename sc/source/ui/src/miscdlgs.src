@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-25 10:43:59 $
+ *  last change: $Author: dr $ $Date: 2001-05-30 13:31:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2452,7 +2452,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     OutputSize = TRUE ;
     HelpId = FID_FILL_SERIES ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 290 , 107 ) ;
+    Size = MAP_APPFONT ( 290 , 122 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Reihe füllen : Reihe f³llen */
     Text = "Reihe füllen" ;
     Text [ ENGLISH ] = "Fill Series" ;
@@ -2472,7 +2472,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     RadioButton BTN_DAY
     {
         Pos = MAP_APPFONT ( 159 , 14 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Size = MAP_APPFONT ( 66 , 10 ) ;
         Text = "~Tag" ;
         Text [ ENGLISH ] = "~Day" ;
         Text [ norwegian ] = "~Day" ;
@@ -2501,8 +2501,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_DAY_OF_WEEK
     {
-        Pos = MAP_APPFONT ( 159 , 27 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 159 , 28 ) ;
+        Size = MAP_APPFONT ( 66 , 10 ) ;
         Text = "~Wochentag" ;
         Text [ ENGLISH ] = "Day of ~Week" ;
         Text [ norwegian ] = "Day of ~Week" ;
@@ -2531,8 +2531,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_MONTH
     {
-        Pos = MAP_APPFONT ( 159 , 40 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 159 , 42 ) ;
+        Size = MAP_APPFONT ( 66 , 10 ) ;
         Text = "~Monat" ;
         Text [ ENGLISH ] = "~Month" ;
         Text [ norwegian ] = "~Month" ;
@@ -2561,8 +2561,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_YEAR
     {
-        Pos = MAP_APPFONT ( 159 , 53 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 159 , 56 ) ;
+        Size = MAP_APPFONT ( 66 , 10 ) ;
         Text = "~Jahr" ;
         Text [ ENGLISH ] = "~Year" ;
         Text [ norwegian ] = "~Year" ;
@@ -2589,10 +2589,10 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Año";
     };
-    GroupBox GB_TIME_UNIT
+    FixedLine FL_TIME_UNIT
     {
         Pos = MAP_APPFONT ( 153 , 3 ) ;
-        Size = MAP_APPFONT ( 75 , 65 ) ;
+        Size = MAP_APPFONT ( 75 , 8 ) ;
         Text = "Zeiteinheit" ;
         Text [ ENGLISH ] = "Date Unit" ;
         Text [ norwegian ] = "Date Unit" ;
@@ -2620,8 +2620,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_RIGHT
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "~Rechts" ;
         Text [ ENGLISH ] = "~Right" ;
         Text [ norwegian ] = "~Right" ;
@@ -2650,8 +2650,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_LEFT
     {
-        Pos = MAP_APPFONT ( 12 , 53 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "~Links" ;
         Text [ ENGLISH ] = "~Left" ;
         Text [ norwegian ] = "~Left" ;
@@ -2680,8 +2680,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_TOP
     {
-        Pos = MAP_APPFONT ( 12 , 40 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 42 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "~Oben" ;
         Text [ ENGLISH ] = "~Up" ;
         Text [ norwegian ] = "~Up" ;
@@ -2711,7 +2711,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     RadioButton BTN_BOTTOM
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
         Text = "~Unten" ;
         Text [ ENGLISH ] = "D~own" ;
         Text [ norwegian ] = "D~own" ;
@@ -2738,10 +2738,10 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "A~bajo";
     };
-    GroupBox GB_DIRECTION
+    FixedLine FL_DIRECTION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 60 , 65 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
         Text = "Richtung" ;
         Text [ ENGLISH ] = "Fill Direction" ;
         Text [ norwegian ] = "Fill Direction" ;
@@ -2770,7 +2770,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     RadioButton BTN_ARITHMETIC
     {
         Pos = MAP_APPFONT ( 78 , 14 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Size = MAP_APPFONT ( 66 , 10 ) ;
         Text = "~Arithmetisch" ;
         Text [ ENGLISH ] = "~Linear" ;
         Text [ norwegian ] = "~Linear" ;
@@ -2799,8 +2799,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_GEOMETRIC
     {
-        Pos = MAP_APPFONT ( 78 , 27 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 78 , 28 ) ;
+        Size = MAP_APPFONT ( 66 , 10 ) ;
         Text = "~Geometrisch" ;
         Text [ ENGLISH ] = "~Growth" ;
         Text [ norwegian ] = "~Growth" ;
@@ -2829,8 +2829,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_DATE
     {
-        Pos = MAP_APPFONT ( 78 , 40 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 78 , 42 ) ;
+        Size = MAP_APPFONT ( 66 , 10 ) ;
         Text = "~Datum" ;
         Text [ ENGLISH ] = "Da~te" ;
         Text [ norwegian ] = "Da~te" ;
@@ -2859,8 +2859,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     };
     RadioButton BTN_AUTOFILL
     {
-        Pos = MAP_APPFONT ( 78 , 53 ) ;
-        Size = MAP_APPFONT ( 65 , 10 ) ;
+        Pos = MAP_APPFONT ( 78 , 56 ) ;
+        Size = MAP_APPFONT ( 66 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Auto-Aus~füllen : Auto-Aus~f³llen */
         Text = "Auto-Aus~füllen" ;
         Text [ ENGLISH ] = "~Autofill" ;
@@ -2888,10 +2888,10 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Relleno automático";
     };
-    GroupBox GB_TYPE
+    FixedLine FL_TYPE
     {
         Pos = MAP_APPFONT ( 72 , 3 ) ;
-        Size = MAP_APPFONT ( 75 , 65 ) ;
+        Size = MAP_APPFONT ( 75 , 8 ) ;
         Text = "Reihentyp" ;
         Text [ ENGLISH ] = "Type" ;
         Text [ norwegian ] = "Type" ;
@@ -2917,10 +2917,20 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo";
     };
+    FixedLine FL_SEP1
+    {
+        Pos = MAP_APPFONT( 69 , 14 ) ;
+        Size = MAP_APPFONT ( 1 , 52 ) ;
+    };
+    FixedLine FL_SEP2
+    {
+        Pos = MAP_APPFONT( 150 , 14 ) ;
+        Size = MAP_APPFONT ( 1 , 52 ) ;
+    };
     FixedText FT_START_VALUE
     {
-        Pos = MAP_APPFONT ( 6 , 75 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 74 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
         Text = "~Startwert" ;
         Text [ english ] = "~Min. value" ;
         Text [ english_us ] = "~Start value" ;
@@ -2948,14 +2958,14 @@ ModalDialog RID_SCDLG_FILLSERIES
     Edit ED_START_VALUES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 74 ) ;
+        Pos = MAP_APPFONT ( 55 , 72 ) ;
         Size = MAP_APPFONT ( 58 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_END_VALUE
     {
-        Pos = MAP_APPFONT ( 121 , 75 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 90 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
         Text = "~Endwert" ;
         Text [ ENGLISH ] = "Max. Value" ;
         Text [ NORWEGIAN ] = "Max. Value" ;
@@ -2984,14 +2994,14 @@ ModalDialog RID_SCDLG_FILLSERIES
     Edit ED_END_VALUES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 170 , 74 ) ;
+        Pos = MAP_APPFONT ( 55 , 88 ) ;
         Size = MAP_APPFONT ( 58 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_INCREMENT
     {
-        Pos = MAP_APPFONT ( 6 , 90 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 106 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
         Text = "~Inkrement" ;
         Text [ ENGLISH ] = "In~crement" ;
         Text [ NORWEGIAN ] = "In~crement" ;
@@ -3020,8 +3030,8 @@ ModalDialog RID_SCDLG_FILLSERIES
     Edit ED_INCREMENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 55 , 89 ) ;
-        Size = MAP_APPFONT ( 31 , 12 ) ;
+        Pos = MAP_APPFONT ( 55 , 104 ) ;
+        Size = MAP_APPFONT ( 58 , 12 ) ;
         TabStop = TRUE ;
     };
     String STR_VALERR
@@ -3305,21 +3315,21 @@ ModalDialog RID_SCDLG_COLORROW
     RadioButton BTN_GROUP_ROWS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Size = MAP_APPFONT ( 71 , 10 ) ;
         TXT_ROWS
         TabStop = TRUE ;
     };
     RadioButton BTN_GROUP_COLS
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 71 , 10 ) ;
         TXT_COLS
         TabStop = TRUE ;
     };
-    GroupBox GB_FRAME
+    FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 80 , 40 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
     };
 };
 
@@ -3680,8 +3690,8 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Moveable = TRUE ;
     CheckBox 1
     {
-        Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
         Text = "Erste ~Spalte als Beschriftung" ;
         Text [ ENGLISH ] = "First ~column as label" ;
         Text [ ENGLISH_US ] = "First ~column as label" ;
@@ -3709,7 +3719,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     CheckBox 2
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 110 , 10 ) ;
+        Size = MAP_APPFONT ( 114 , 10 ) ;
         Text = "Erste ~Zeile als Beschriftung" ;
         Text [ ENGLISH ] = "First ~row as label" ;
         Text [ ENGLISH_US ] = "First ~row as label" ;
@@ -3734,10 +3744,10 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ catalan ] = "Primera ~fila como etiqueta";
         Text[ finnish ] = "Ensimmäinen ~rivi nimiönä";
     };
-    GroupBox 6
+    FixedLine 6
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 123 , 54 ) ;
+        Size = MAP_APPFONT ( 123 , 8 ) ;
         Text = "Beschriftung" ;
         Text [ ENGLISH ] = "Labels" ;
         Text [ ENGLISH_US ] = "Labels" ;

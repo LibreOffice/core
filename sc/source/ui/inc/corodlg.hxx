@@ -2,9 +2,9 @@
  *
  *  $RCSfile: corodlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:58 $
+ *  last change: $Author: dr $ $Date: 2001-05-30 13:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _BUTTON_HXX //autogen
 #include <vcl/button.hxx>
 #endif
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _FIXED_HXX //autogen
+#include <vcl/fixed.hxx>
 #endif
 
 #include "sc.hrc"
@@ -84,12 +84,12 @@ public:
                               BOOL bCol = FALSE,
                               BOOL bRow = FALSE )
                 : ModalDialog( pParent, ScResId( RID_SCDLG_CHARTCOLROW ) ),
+                  aFlColRow  ( this, ScResId(6) ),
                   aBtnRow    ( this, ScResId(2) ),
                   aBtnCol    ( this, ScResId(1) ),
                   aBtnOk     ( this, ScResId(3) ),
                   aBtnCancel ( this, ScResId(4) ),
-                  aBtnHelp   ( this, ScResId(5) ),
-                  aGbColRow  ( this, ScResId(6) )
+                  aBtnHelp   ( this, ScResId(5) )
                 {
                     FreeResource();
                     aBtnCol.Check( bCol );
@@ -100,12 +100,12 @@ public:
     BOOL IsRow() { return aBtnRow.IsChecked(); }
 
 private:
+    FixedLine       aFlColRow;
     CheckBox        aBtnRow;
     CheckBox        aBtnCol;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
-    GroupBox        aGbColRow;
 };
 
 

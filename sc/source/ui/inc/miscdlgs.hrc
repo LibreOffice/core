@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-25 16:16:47 $
+ *  last change: $Author: dr $ $Date: 2001-05-30 13:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@
 #define BTN_ADD         105
 #define BTN_REMOVE      106
 #define FT_LABEL        110
-#define GB_FRAME        111
 #define FL_FRAME        112
 #define STR_BTN_CLOSE   200
 
@@ -159,21 +158,23 @@
 #define LB_ENTRYLIST    11
 
 // Reihen fuellen
-#define BTN_LEFT        1
-#define BTN_RIGHT       2
-#define BTN_TOP         3
-#define BTN_BOTTOM      4
-#define GB_DIRECTION    9
-#define BTN_ARITHMETIC  10
-#define BTN_GEOMETRIC   11
-#define BTN_DATE        12
-#define BTN_AUTOFILL    13
-#define GB_TYPE         19
-#define BTN_DAY         20
-#define BTN_DAY_OF_WEEK 21
-#define BTN_MONTH       22
-#define BTN_YEAR        23
-#define GB_TIME_UNIT    29
+#define FL_DIRECTION    1
+#define BTN_LEFT        2
+#define BTN_RIGHT       3
+#define BTN_TOP         4
+#define BTN_BOTTOM      5
+#define FL_SEP1         10
+#define FL_TYPE         11
+#define BTN_ARITHMETIC  12
+#define BTN_GEOMETRIC   13
+#define BTN_DATE        14
+#define BTN_AUTOFILL    15
+#define FL_SEP2         20
+#define FL_TIME_UNIT    21
+#define BTN_DAY         22
+#define BTN_DAY_OF_WEEK 23
+#define BTN_MONTH       24
+#define BTN_YEAR        25
 #define FT_INCREMENT    30
 #define ED_INCREMENT    39
 #define FT_END_VALUE    40
