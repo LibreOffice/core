@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:45:55 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -134,8 +133,11 @@
 SwFlyFreeFrm::SwFlyFreeFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     SwFlyFrm( pFmt, pAnch ),
     pPage( 0 ),
-    // --> OD 2004-10-29 #i36347#
-    mbNoCheckClip( false )
+    // --> OD 2004-11-15 #i34753#
+    mbNoMakePos( false ),
+    // <--
+    // --> OD 2004-11-12 #i37068#
+    mbNoMoveOnCheckClip( false )
     // <--
 {
 }
@@ -232,9 +234,14 @@ void SwFlyFreeFrm::MakeAll()
         // if anchored object is anchored inside a Writer fly frame,
         // its position is already locked, and it follows the text flow.
         bValidSize = bHeightClipped = bWidthClipped = FALSE;
-        if ( !( PositionLocked() &&
+        // --> OD 2004-11-15 #i34753# - add condition:
+        // no invalidation of position, if no direct move is requested in <CheckClip(..)>
+        bValidSize = bHeightClipped = bWidthClipped = FALSE;
+        if ( !IsNoMoveOnCheckClip() &&
+             !( PositionLocked() &&
                 GetAnchorFrm()->IsInFly() &&
                 GetFrmFmt().GetFollowTextFlow().GetValue() ) )
+        // <--
         {
             bValidPos = FALSE;
         }
@@ -286,7 +293,13 @@ void SwFlyFreeFrm::MakeAll()
             {
                 const Point aOldPos( (Frm().*fnRect->fnGetPos)() );
                 // OD 2004-03-23 #i26791# - use new method <MakeObjPos()>
-                MakeObjPos();
+                // --> OD 2004-11-15 #i34753# - no positioning, if requested.
+                if ( IsNoMakePos() )
+                    bValidPos = TRUE;
+                else
+                    // OD 2004-03-23 #i26791# - use new method <MakeObjPos()>
+                    MakeObjPos();
+                // <--
                 if( aOldPos == (Frm().*fnRect->fnGetPos)() )
                 {
                     if( !bValidPos && GetAnchorFrm()->IsInSct() &&
@@ -297,10 +310,7 @@ void SwFlyFreeFrm::MakeAll()
                     bValidSize = FALSE;
             }
         }
-        // --> OD 2004-10-29 #i36347# - calling of method <CheckClip(..)> now
-        // depends on flag <mbNoCheckClip>.
-        if ( !IsNoCheckClip() && bValidPos && bValidSize )
-        // <--
+        if ( bValidPos && bValidSize )
         {
             CheckClip( *pSz );
         }
@@ -388,7 +398,10 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
     if ( bBot || bRig )
     {
         FASTBOOL bAgain = FALSE;
-        if ( bBot && !GetDrawObjs() && !GetAnchorFrm()->IsInTab() )
+        // --> OD 2004-11-12 #i37068# - no move, if it's requested
+        if ( bBot && !IsNoMoveOnCheckClip() &&
+             !GetDrawObjs() && !GetAnchorFrm()->IsInTab() )
+        // <--
         {
             SwFrm* pHeader = FindFooterOrHeader();
             // In a header, correction of the position is no good idea.
