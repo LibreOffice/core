@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:02:45 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1546,6 +1546,8 @@ Image IMG_SORTDOWN_H
         Blue = 0xFFFF ;
     };
 };
+
+
 
 
 
