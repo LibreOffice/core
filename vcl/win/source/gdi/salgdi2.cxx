@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 14:51:39 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:55:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,6 @@
 #include <tools/debug.hxx>
 #endif
 
-#define _SV_SALGDI2_CXX
-
 #ifndef _SV_WINCOMP_HXX
 #include <wincomp.hxx>
 #endif
@@ -87,10 +85,6 @@
 #ifndef _SV_SALGDI_H
 #include <salgdi.h>
 #endif
-
-// =======================================================================
-
-BOOL bFastTransparent = FALSE;
 
 // =======================================================================
 
@@ -492,99 +486,70 @@ void WinSalGraphics::drawBitmap( const SalTwoRect* pPosAry,
     const WinSalBitmap& rSalBitmap = static_cast<const WinSalBitmap&>(rSSalBitmap);
     const WinSalBitmap& rTransparentBitmap = static_cast<const WinSalBitmap&>(rSTransparentBitmap);
 
-    if( bFastTransparent )
-    {
-        // bei Paletten-Displays hat WIN/WNT offenbar ein kleines Problem,
-        // die Farben der Maske richtig auf die Palette abzubilden,
-        // wenn wir die DIB direkt ausgeben => DDB-Ausgabe
-        if( ( GetBitCount() <= 8 ) && rTransparentBitmap.ImplGethDIB() && rTransparentBitmap.GetBitCount() == 1 )
-        {
-            WinSalBitmap aTmp;
-            if( aTmp.Create( rTransparentBitmap, this ) )
-                ImplDrawBitmap( mhDC, pPosAry, aTmp, FALSE, SRCAND );
-        }
-        else
-            ImplDrawBitmap( mhDC, pPosAry, rTransparentBitmap, FALSE, SRCAND );
+    SalTwoRect  aPosAry = *pPosAry;
+    int         nDstX = (int)aPosAry.mnDestX;
+    int         nDstY = (int)aPosAry.mnDestY;
+    int         nDstWidth = (int)aPosAry.mnDestWidth;
+    int         nDstHeight = (int)aPosAry.mnDestHeight;
+    HDC         hDC = mhDC;
+    HBITMAP     hMemBitmap = 0;
+    HBITMAP     hMaskBitmap = 0;
 
-        // bei Paletten-Displays hat WIN/WNT offenbar ein kleines Problem,
-        // die Farben der Maske richtig auf die Palette abzubilden,
-        // wenn wir die DIB direkt ausgeben => DDB-Ausgabe
-        if( ( GetBitCount() <= 8 ) && rSalBitmap.ImplGethDIB() && rSalBitmap.GetBitCount() == 1 )
-        {
-            WinSalBitmap aTmp;
-            if( aTmp.Create( rSalBitmap, this ) )
-                ImplDrawBitmap( mhDC, pPosAry, aTmp, FALSE, SRCPAINT );
-        }
-        else
-            ImplDrawBitmap( mhDC, pPosAry, rSalBitmap, FALSE, SRCPAINT );
+    if( ( nDstWidth > CACHED_HDC_DEFEXT ) || ( nDstHeight > CACHED_HDC_DEFEXT ) )
+    {
+        hMemBitmap = CreateCompatibleBitmap( hDC, nDstWidth, nDstHeight );
+        hMaskBitmap = CreateCompatibleBitmap( hDC, nDstWidth, nDstHeight );
+    }
+
+    HDC hMemDC = ImplGetCachedDC( CACHED_HDC_1, hMemBitmap );
+    HDC hMaskDC = ImplGetCachedDC( CACHED_HDC_2, hMaskBitmap );
+
+    aPosAry.mnDestX = aPosAry.mnDestY = 0;
+    BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hDC, nDstX, nDstY, SRCCOPY );
+
+    // bei Paletten-Displays hat WIN/WNT offenbar ein kleines Problem,
+    // die Farben der Maske richtig auf die Palette abzubilden,
+    // wenn wir die DIB direkt ausgeben => DDB-Ausgabe
+    if( ( GetBitCount() <= 8 ) && rTransparentBitmap.ImplGethDIB() && rTransparentBitmap.GetBitCount() == 1 )
+    {
+        WinSalBitmap aTmp;
+
+        if( aTmp.Create( rTransparentBitmap, this ) )
+            ImplDrawBitmap( hMaskDC, &aPosAry, aTmp, FALSE, SRCCOPY );
+    }
+    else
+        ImplDrawBitmap( hMaskDC, &aPosAry, rTransparentBitmap, FALSE, SRCCOPY );
+
+    // now MemDC contains background, MaskDC the transparency mask
+
+    // #105055# Respect XOR mode
+    if( mbXORMode )
+    {
+        ImplDrawBitmap( hMaskDC, &aPosAry, rSalBitmap, FALSE, SRCERASE );
+        // now MaskDC contains the bitmap area with black background
+        BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCINVERT );
+        // now MemDC contains background XORed bitmap area ontop
     }
     else
     {
-        SalTwoRect  aPosAry = *pPosAry;
-        int         nDstX = (int)aPosAry.mnDestX;
-        int         nDstY = (int)aPosAry.mnDestY;
-        int         nDstWidth = (int)aPosAry.mnDestWidth;
-        int         nDstHeight = (int)aPosAry.mnDestHeight;
-        HDC         hDC = mhDC;
-        HBITMAP     hMemBitmap = 0;
-        HBITMAP     hMaskBitmap = 0;
+        BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCAND );
+        // now MemDC contains background with masked-out bitmap area
+        ImplDrawBitmap( hMaskDC, &aPosAry, rSalBitmap, FALSE, SRCERASE );
+        // now MaskDC contains the bitmap area with black background
+        BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCPAINT );
+        // now MemDC contains background and bitmap merged together
+    }
+    // copy to output DC
+    BitBlt( hDC, nDstX, nDstY, nDstWidth, nDstHeight, hMemDC, 0, 0, SRCCOPY );
 
-        if( ( nDstWidth > CACHED_HDC_DEFEXT ) || ( nDstHeight > CACHED_HDC_DEFEXT ) )
-        {
-            hMemBitmap = CreateCompatibleBitmap( hDC, nDstWidth, nDstHeight );
-            hMaskBitmap = CreateCompatibleBitmap( hDC, nDstWidth, nDstHeight );
-        }
+    ImplReleaseCachedDC( CACHED_HDC_1 );
+    ImplReleaseCachedDC( CACHED_HDC_2 );
 
-        HDC hMemDC = ImplGetCachedDC( CACHED_HDC_1, hMemBitmap );
-        HDC hMaskDC = ImplGetCachedDC( CACHED_HDC_2, hMaskBitmap );
-
-        aPosAry.mnDestX = aPosAry.mnDestY = 0;
-        BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hDC, nDstX, nDstY, SRCCOPY );
-
-        // bei Paletten-Displays hat WIN/WNT offenbar ein kleines Problem,
-        // die Farben der Maske richtig auf die Palette abzubilden,
-        // wenn wir die DIB direkt ausgeben => DDB-Ausgabe
-        if( ( GetBitCount() <= 8 ) && rTransparentBitmap.ImplGethDIB() && rTransparentBitmap.GetBitCount() == 1 )
-        {
-            WinSalBitmap aTmp;
-
-            if( aTmp.Create( rTransparentBitmap, this ) )
-                ImplDrawBitmap( hMaskDC, &aPosAry, aTmp, FALSE, SRCCOPY );
-        }
-        else
-            ImplDrawBitmap( hMaskDC, &aPosAry, rTransparentBitmap, FALSE, SRCCOPY );
-
-        // now MemDC contains background, MaskDC the transparency mask
-
-        // #105055# Respect XOR mode
-        if( mbXORMode )
-        {
-            ImplDrawBitmap( hMaskDC, &aPosAry, rSalBitmap, FALSE, SRCERASE );
-            // now MaskDC contains the bitmap area with black background
-            BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCINVERT );
-            // now MemDC contains background XORed bitmap area ontop
-        }
-        else
-        {
-            BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCAND );
-            // now MemDC contains background with masked-out bitmap area
-            ImplDrawBitmap( hMaskDC, &aPosAry, rSalBitmap, FALSE, SRCERASE );
-            // now MaskDC contains the bitmap area with black background
-            BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCPAINT );
-            // now MemDC contains background and bitmap merged together
-        }
-        // copy to output DC
-        BitBlt( hDC, nDstX, nDstY, nDstWidth, nDstHeight, hMemDC, 0, 0, SRCCOPY );
-
-        ImplReleaseCachedDC( CACHED_HDC_1 );
-        ImplReleaseCachedDC( CACHED_HDC_2 );
-
-        // hMemBitmap != 0 ==> hMaskBitmap != 0
-        if( hMemBitmap )
-        {
-            DeleteObject( hMemBitmap );
-            DeleteObject( hMaskBitmap );
-        }
+    // hMemBitmap != 0 ==> hMaskBitmap != 0
+    if( hMemBitmap )
+    {
+        DeleteObject( hMemBitmap );
+        DeleteObject( hMaskBitmap );
     }
 }
 
@@ -662,11 +627,7 @@ SalColor WinSalGraphics::getPixel( long nX, long nY )
 {
     COLORREF aWinCol = ::GetPixel( mhDC, (int) nX, (int) nY );
 
-#ifdef WIN
-    if ( -1 == aWinCol )
-#else
     if ( CLR_INVALID == aWinCol )
-#endif
         return MAKE_SALCOLOR( 0, 0, 0 );
     else
         return MAKE_SALCOLOR( GetRValue( aWinCol ),
@@ -757,23 +718,6 @@ void WinSalGraphics::invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nS
     hOldPen = SelectPen( mhDC, hPen );
 
     POINT* pWinPtAry;
-#ifdef WIN
-    if ( nPoints > MAX_64KSALPOINTS )
-        nPoints = MAX_64KSALPOINTS;
-
-    pWinPtAry = new POINT[(USHORT)nPoints];
-    const SalPoint huge* pHugePtAry = (const SalPoint huge*)pPtAry;
-    for( USHORT i=0; i < (USHORT)nPoints ; i++ )
-    {
-        pWinPtAry[i].x = (int)pHugePtAry[i].mnX;
-        pWinPtAry[i].y = (int)pHugePtAry[i].mnY;
-    }
-    if ( nSalFlags & SAL_INVERT_TRACKFRAME )
-        Polyline( mhDC, pWinPtAry, (int)nPoints );
-    else
-        WIN_Polygon( mhDC, pWinPtAry, (int)nPoints );
-    delete pWinPtAry;
-#else
     // Unter NT koennen wir das Array direkt weiterreichen
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphics::DrawPolyLine(): POINT != SalPoint" );
@@ -791,7 +735,6 @@ void WinSalGraphics::invert( ULONG nPoints, const SalPoint* pPtAry, SalInvert nS
         if ( !WIN_Polygon( mhDC, pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )
             WIN_Polygon( mhDC, pWinPtAry, MAX_64KSALPOINTS );
     }
-#endif
 
     SetROP2( mhDC, nOldROP );
     SelectPen( mhDC, hOldPen );
