@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-06 10:38:35 $
+ *  last change: $Author: mtg $ $Date: 2001-09-28 16:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,8 @@ sal_Int64 SAL_CALL ByteChucker::seek( sal_Int64 location )
     throw(IllegalArgumentException, IOException, RuntimeException)
 {
     sal_Int64 nLen = xSeek->getLength();
+    if ( location < 0 || location > nLen )
+        throw IllegalArgumentException();
     if (location > nLen )
         location = nLen;
     xSeek->seek( location );

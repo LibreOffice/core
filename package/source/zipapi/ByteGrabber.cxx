@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteGrabber.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-08 18:22:03 $
+ *  last change: $Author: mtg $ $Date: 2001-09-28 16:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,8 @@ sal_Int64 SAL_CALL ByteGrabber::seek( sal_Int64 location )
     if (xSeek.is() )
     {
         sal_Int64 nLen = xSeek->getLength();
+        if ( location < 0 || location > nLen )
+            throw lang::IllegalArgumentException();
         if (location > nLen )
             location = nLen;
         xSeek->seek( location );
