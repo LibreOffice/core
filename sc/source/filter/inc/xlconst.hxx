@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:09:14 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XLCONST_HXX
 #define SC_XLCONST_HXX
 
@@ -73,13 +72,12 @@
 /** An enumeration for all Excel file format types (BIFF types). */
 enum XclBiff
 {
-    xlBiff2 = 0,                /// MS Excel 2.1
-    xlBiff3,                    /// MS Excel 3.0
-    xlBiff4,                    /// MS Excel 4.0
-    xlBiff5,                    /// MS Excel 5.0
-    xlBiff7,                    /// MS Excel 7.0 (95)
-    xlBiff8,                    /// MS Excel 8.0 (97), 9.0 (2000), 10.0 (XP), 11.0 (2003)
-    xlBiffUnknown               /// Unknown BIFF version.
+    EXC_BIFF2 = 0,              /// MS Excel 2.1
+    EXC_BIFF3,                  /// MS Excel 3.0
+    EXC_BIFF4,                  /// MS Excel 4.0
+    EXC_BIFF5,                  /// MS Excel 5.0, MS Excel 7.0 (95)
+    EXC_BIFF8,                  /// MS Excel 8.0 (97), 9.0 (2000), 10.0 (XP), 11.0 (2003)
+    EXC_BIFF_UNKNOWN            /// Unknown BIFF version.
 };
 
 // Excel sheet dimensions -----------------------------------------------------
@@ -116,30 +114,6 @@ const SCTAB SCTAB_GLOBAL                    = SCTAB_MAX;        /// A Calc sheet
 #define EXC_STREAM_BOOK                     CREATE_STRING( "Book" )
 #define EXC_STREAM_WORKBOOK                 CREATE_STRING( "Workbook" )
 #define EXC_STREAM_CTLS                     CREATE_STRING( "Ctls" )
-
-// String import/export -------------------------------------------------------
-
-/** Flags used to specify import/export mode of strings. */
-typedef sal_uInt16 XclStrFlags;
-
-const XclStrFlags EXC_STR_DEFAULT           = 0x0000;   /// Default string settings.
-const XclStrFlags EXC_STR_FORCEUNICODE      = 0x0001;   /// Always use UCS-2 characters (default: try to compress). BIFF8 only.
-const XclStrFlags EXC_STR_8BITLENGTH        = 0x0002;   /// 8-bit string length field (default: 16-bit).
-const XclStrFlags EXC_STR_SMARTFLAGS        = 0x0004;   /// Omit flags on empty string (default: read/write always). BIFF8 only.
-
-const sal_uInt16 EXC_STR_MAXLEN_BIFF2       = 0x00FF;
-const sal_uInt16 EXC_STR_MAXLEN             = 0xFFFF;
-
-const sal_uInt8 EXC_STRF_16BIT              = 0x01;
-const sal_uInt8 EXC_STRF_FAREAST            = 0x04;
-const sal_uInt8 EXC_STRF_RICH               = 0x08;
-const sal_uInt8 EXC_STRF_UNKNOWN            = 0xF2;
-
-// Fixed-size characters
-const sal_uInt8 EXC_LF_C                    = '\x0A';       /// LF character (used for line break).
-const sal_uInt16 EXC_LF                     = EXC_LF_C;     /// LF character (unicode).
-const sal_uInt8 EXC_NUL_C                   = '\x00';       /// NUL chararcter.
-const sal_uInt16 EXC_NUL                    = EXC_NUL_C;    /// NUL chararcter (unicode).
 
 // Encoded URLs ---------------------------------------------------------------
 
@@ -225,15 +199,13 @@ const sal_uInt16 EXC_ID_EOF                 = 0x000A;
 
 const sal_uInt16 EXC_ID_PROTECT             = 0x0012;
 
+// (0x0013) PASSWORD ----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_PASSWORD            = 0x0013;
+
 // (0x0019) WINDOWPROTECT -----------------------------------------------------
 
 const sal_uInt16 EXC_ID_WINDOWPROTECT       = 0x0019;
-
-// (0x003D) WINDOW1 -----------------------------------------------------------
-
-const sal_uInt16 EXC_ID_WINDOW1             = 0x003D;
-const sal_uInt16 EXC_WIN1_DEFAULTFLAGS      = 0x0038;   /// Default flags for export.
-const sal_uInt16 EXC_WIN1_TABBARRATIO       = 600;      /// Sheet tab bar takes 60% of window width.
 
 // (0x0081) WSBOOL ------------------------------------------------------------
 
