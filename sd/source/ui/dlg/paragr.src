@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-11-30 15:29:48 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,24 @@ TabDialog TAB_PARAGRAPH
                 PageResID = RID_SVXPAGE_PARA_ASIAN ;
                 Text = "Asiatische Typography" ;
                 Text [ ENGLISH ] = "Asian typography" ;
+                Text[ english_us ] = "Asian typography";
+                Text[ portuguese ] = "Asian typography";
+                Text[ russian ] = "Asian typography";
+                Text[ greek ] = "Asian typography";
+                Text[ dutch ] = "Asian typography";
+                Text[ french ] = "Typographie asiatique";
+                Text[ spanish ] = "Asian typography";
+                Text[ italian ] = "Asian typography";
+                Text[ danish ] = "Asian typography";
+                Text[ swedish ] = "Asian typography";
+                Text[ polish ] = "Typografia azjatycka";
+                Text[ portuguese_brazilian ] = "Asian typography";
+                Text[ japanese ] = "òaï∂àÛç¸ÇÃëÃçŸ";
+                Text[ korean ] = "æ∆Ω√æ∆ ¿Œº‚√º";
+                Text[ chinese_simplified ] = "÷–»’∫´Œƒ◊÷";
+                Text[ chinese_traditional ] = "§§§È¡˙§Â¶r";
+                Text[ turkish ] = "Asian typography";
+                Text[ arabic ] = "√”·Ê» «·ÿ»«⁄… «·¬”ÌÊÌ…";
             };
             PageItem
             {
