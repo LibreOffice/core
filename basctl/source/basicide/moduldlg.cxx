@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:39:42 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 08:02:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,13 +521,26 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
 }
 
 
-OrganizeDialog::OrganizeDialog( Window* pParent )
+OrganizeDialog::OrganizeDialog( Window* pParent, INT16 tabId )
     :   TabDialog( pParent, IDEResId( RID_TD_ORGANIZE ) ),
         aTabCtrl( this, IDEResId( RID_TC_ORGANIZE ) )
 {
     FreeResource();
     aTabCtrl.SetActivatePageHdl( LINK( this, OrganizeDialog, ActivatePageHdl ) );
-    aTabCtrl.SetCurPageId( RID_TP_MOD );
+    if( tabId == 0 )
+    {
+        aTabCtrl.SetCurPageId( RID_TP_MOD );
+    }
+    else if ( tabId == 1 )
+    {
+        aTabCtrl.SetCurPageId( RID_TP_DLG );
+    }
+    else
+    {
+        aTabCtrl.SetCurPageId( RID_TP_LIB );
+    }
+
+
     ActivatePageHdl( &aTabCtrl );
 
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
@@ -573,7 +586,13 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
         {
             case RID_TP_MOD:
             {
-                pNewTabPage = new ObjectPage( pTabCtrl );
+                pNewTabPage = new ObjectPage( pTabCtrl, BROWSEMODE_MODULES );
+                ((ObjectPage*)pNewTabPage)->SetTabDlg( this );
+            }
+            break;
+            case RID_TP_DLG:
+            {
+                pNewTabPage = new ObjectPage( pTabCtrl, BROWSEMODE_OBJS );
                 ((ObjectPage*)pNewTabPage)->SetTabDlg( this );
             }
             break;
@@ -594,7 +613,7 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 
 
-ObjectPage::ObjectPage( Window * pParent ) :
+ObjectPage::ObjectPage( Window * pParent, USHORT nMode ) :
         TabPage(        pParent,IDEResId( RID_TP_MODULS ) ),
         aLibText(       this,   IDEResId( RID_STR_LIB ) ),
         aBasicBox(      this,   IDEResId( RID_TRLBOX ) ),
@@ -609,18 +628,27 @@ ObjectPage::ObjectPage( Window * pParent ) :
     pTabDlg = 0;
 
     aEditButton.SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
-    aNewModButton.SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
-    aNewDlgButton.SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
     aDelButton.SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
     aCloseButton.SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
     aBasicBox.SetSelectHdl( LINK( this, ObjectPage, BasicBoxHighlightHdl ) );
 
 //  aEdit.SetModifyHdl( LINK( this, ObjectPage, EditModifyHdl ) );
 
+    if( nMode == BROWSEMODE_MODULES )
+    {
+        aNewModButton.SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
+        aNewDlgButton.Hide();
+    }
+    else if ( nMode == BROWSEMODE_OBJS )
+    {
+        aNewDlgButton.SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
+        aNewModButton.Hide();
+    }
+
     aBasicBox.SetDragDropMode( SV_DRAGDROP_CTRL_MOVE | SV_DRAGDROP_CTRL_COPY );
     aBasicBox.EnableInplaceEditing( TRUE );
 
-    aBasicBox.SetMode( BROWSEMODE_MODULES | BROWSEMODE_OBJS );
+    aBasicBox.SetMode( nMode );
     aBasicBox.SetWindowBits( WB_HASLINES );
 
     aEditButton.GrabFocus();
