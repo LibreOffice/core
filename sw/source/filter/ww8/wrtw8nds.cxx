@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:29:12 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1770,10 +1770,18 @@ Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
             {
                 pTmpSet = new SfxItemSet( pNd->GetSwAttrSet() );
                 SvxULSpaceItem aUL( *(SvxULSpaceItem*)pItem );
-                if( !(ND_HAS_PREV_LAYNODE & nPrvNxtNd ))
-                    aUL.SetUpper( 0 );
-                if( !(ND_HAS_NEXT_LAYNODE & nPrvNxtNd ))
-                    aUL.SetLower( 0 );
+                // OD, MMAHER 2004-03-01 #i25901#- consider compatibility option
+                if (!rWrt.pDoc->IsParaSpaceMaxAtPages())
+                {
+                    if( !(ND_HAS_PREV_LAYNODE & nPrvNxtNd ))
+                        aUL.SetUpper( 0 );
+                }
+                // OD, MMAHER 2004-03-01 #i25901# - consider compatibility option
+                if (!rWrt.pDoc->IsAddParaSpacingToTableCells())
+                {
+                    if( !(ND_HAS_NEXT_LAYNODE & nPrvNxtNd ))
+                        aUL.SetLower( 0 );
+                }
                 pTmpSet->Put( aUL );
             }
         }
