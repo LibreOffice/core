@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cd $ $Date: 2000-10-23 07:11:04 $
+ *  last change: $Author: hr $ $Date: 2000-10-31 14:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@
 #include <vos/mutex.hxx>
 #include <vos/timer.hxx>
 #include "rvp.hxx"
-#include <atom.hxx>
+#include <unotools/atom.hxx>
 
 
 #include <com/sun/star/portal/client/XRmStatus.hpp>
@@ -301,8 +301,8 @@ BOOL SVMain()
 
     if( pSVData->mxClientFactory.is() )
     {
-        pSVData->mpAtoms = new ::vcl::AtomClient(
-            Reference< ::com::sun::star::portal::client::XAtomServer >(
+        pSVData->mpAtoms = new ::utl::AtomClient(
+            Reference< ::com::sun::star::util::XAtomServer >(
                 pSVData->mxClientFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "ClientAtomServer.stardiv.de" ) ) ), UNO_QUERY ) );
 
         Reference< XInterface > rX = pSVData->mxClientFactory->createInstance(
