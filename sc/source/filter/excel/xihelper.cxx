@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:51 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,8 +559,8 @@ void XclImpUrlHelper::DecodeUrl(
     if( (aDosBase.Len() > 2) && aDosBase.EqualsAscii( ":\\", 1, 2 ) )
         cCurrDrive = aDosBase.GetChar( 0 );
 
-    const sal_Unicode* pCurr = rEncodedUrl.GetBuffer();
-    while( *pCurr )
+    const sal_Unicode* pChar = rEncodedUrl.GetBuffer();
+    while( *pChar )
     {
         switch( eState )
         {
@@ -569,19 +569,19 @@ void XclImpUrlHelper::DecodeUrl(
 
             case xlUrlInit:
             {
-                switch( *pCurr )
+                switch( *pChar )
                 {
-                    case '\0x1':        // encoded
+                    case EXC_URLSTART_ENCODED:
                         eState = xlUrlPath;
                     break;
-                    case '\0x2':        // self
-                    case '\0x3':        // encoded & self
+                    case EXC_URLSTART_SELF:
+                    case EXC_URLSTART_SELFENCODED:
                         rbSameWb = true;
                         eState = xlUrlSheetName;
                     break;
                     default:
                         bEncoded = false;
-                        rUrl.Append( *pCurr );
+                        rUrl.Append( *pChar );
                         eState = xlUrlPath;
                 }
             }
@@ -591,41 +591,45 @@ void XclImpUrlHelper::DecodeUrl(
 
             case xlUrlPath:
             {
-                switch( *pCurr )
+                switch( *pChar )
                 {
-                    case '\0x1':
+                    case EXC_URL_DOSDRIVE:
                     {
-                        if( *(pCurr + 1) )
+                        if( *(pChar + 1) )
                         {
-                            ++pCurr;
-                            if( *pCurr == '@' )
+                            ++pChar;
+                            if( *pChar == '@' )
                                 rUrl.AppendAscii( "\\\\" );
                             else
-                                rUrl.Append( *pCurr ).AppendAscii( ":\\" );
+                                rUrl.Append( *pChar ).AppendAscii( ":\\" );
                         }
                         else
                             rUrl.AppendAscii( "<NULL-DRIVE!>" );
                     }
                     break;
-                    case '\0x2':
+                    case EXC_URL_DRIVEROOT:
                         if( cCurrDrive )
                             rUrl.Append( cCurrDrive ).Append( ':' );
                         // run through
-                    case '\0x3':
-                        rUrl.Append( '\\' );
-                        if( !bEncoded )
-                            eState = xlUrlRaw;             // was DDE delimiter
+                    case EXC_URL_SUBDIR:
+                        if( bEncoded )
+                            rUrl.Append( '\\' );
+                        else    // control character in raw name -> DDE link
+                        {
+                            rUrl.Append( '|' );
+                            eState = xlUrlRaw;
+                        }
                     break;
-                    case '\0x4':
+                    case EXC_URL_PARENTDIR:
                         rUrl.AppendAscii( "..\\" );
                     break;
-                    case '\0x5':
+                    case EXC_URL_MACVOLUME:
                     {
-                        if( *(pCurr + 1) )
+                        if( *(pChar + 1) )
                         {
-                            xub_StrLen nVolLen = *++pCurr;
-                            for( xub_StrLen nChar = 0; (nChar < nVolLen) && *(pCurr + 1); ++nChar )
-                                rUrl.Append( *++pCurr );
+                            xub_StrLen nVolLen = *++pChar;
+                            for( xub_StrLen nChar = 0; (nChar < nVolLen) && *(pChar + 1); ++nChar )
+                                rUrl.Append( *++pChar );
                             rUrl.Append( ':' );
                         }
                         else
@@ -636,7 +640,7 @@ void XclImpUrlHelper::DecodeUrl(
                         eState = xlUrlFileName;
                     break;
                     default:
-                        rUrl.Append( *pCurr );
+                        rUrl.Append( *pChar );
                 }
             }
             break;
@@ -645,10 +649,10 @@ void XclImpUrlHelper::DecodeUrl(
 
             case xlUrlFileName:
             {
-                switch( *pCurr )
+                switch( *pChar )
                 {
                     case ']':   eState = xlUrlSheetName;    break;
-                    default:    rUrl.Append( *pCurr );
+                    default:    rUrl.Append( *pChar );
                 }
             }
             break;
@@ -656,15 +660,17 @@ void XclImpUrlHelper::DecodeUrl(
 // --- sheet name ---
 
             case xlUrlSheetName:
-                rTable.Append( *pCurr );
+                rTable.Append( *pChar );
             break;
 
 // --- raw read mode ---
 
             case xlUrlRaw:
-                rUrl.Append( *pCurr );
+                rUrl.Append( *pChar );
             break;
         }
+
+        ++pChar;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:53 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,12 +187,12 @@ const XclGuid XclTools::maGuidFileMoniker(
 
 // numeric conversion ---------------------------------------------------------
 
-double XclTools::GetDoubleFromRK( sal_uInt32 nRKValue )
+double XclTools::GetDoubleFromRK( sal_Int32 nRKValue )
 {
     double fVal;
 
     if( ::get_flag( nRKValue, EXC_RK_INTFLAG ) )
-        ::extract_value( fVal, nRKValue, 2, 30 );
+        fVal = nRKValue >> 2;
     else
     {
         // create a Little-Endian buffer

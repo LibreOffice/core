@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:12 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 class XclExpSst;
 class XclExpPalette;
 class XclExpFontBuffer;
+class XclExpNumFmtBuffer;
 class XclExpTabIdBuffer;
 class XclExpLinkManager;
 
@@ -83,6 +84,7 @@ struct XclExpRootData : public XclRootData
     typedef ::std::auto_ptr< XclExpSst >            XclExpSstPtr;
     typedef ::std::auto_ptr< XclExpPalette >        XclExpPalettePtr;
     typedef ::std::auto_ptr< XclExpFontBuffer >     XclExpFontBufferPtr;
+    typedef ::std::auto_ptr< XclExpNumFmtBuffer >   XclExpNumFmtBufferPtr;
     typedef ::std::auto_ptr< XclExpTabIdBuffer >    XclExpTabIdBufferPtr;
     typedef ::std::auto_ptr< XclExpLinkManager >    XclExpLinkManagerPtr;
 
@@ -90,6 +92,7 @@ struct XclExpRootData : public XclRootData
 
     XclExpPalettePtr            mpPalette;          /// The color buffer.
     XclExpFontBufferPtr         mpFontBuffer;       /// All fonts in the file.
+    XclExpNumFmtBufferPtr       mpNumFmtBuffer;     /// All number formats in the file.
 
     XclExpTabIdBufferPtr        mpTabIdBuffer;      /// Calc->Excel sheet index conversion.
     XclExpLinkManagerPtr        mpLinkManager;      /// Manager for internal/external links.
@@ -128,6 +131,8 @@ public:
     XclExpPalette&              GetPalette() const;
     /** Returns the font buffer. */
     XclExpFontBuffer&           GetFontBuffer() const;
+    /** Returns the number format buffer. */
+    XclExpNumFmtBuffer&         GetNumFmtBuffer() const;
 
     /** Returns the buffer for Calc->Excel sheet index conversion. */
     XclExpTabIdBuffer&          GetTabIdBuffer() const;

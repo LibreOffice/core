@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlconst.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:03:00 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,6 @@ const sal_uInt16 EXC_MAXROW_BIFF8           = 65535;
 const sal_uInt16 EXC_MAXTAB_BIFF8           = EXC_MAXTAB_BIFF4;
 
 
-
 // In/out stream --------------------------------------------------------------
 
 const sal_uInt32 RECORD_SEEK_TO_BEGIN       = 0UL;
@@ -104,16 +103,31 @@ const sal_uInt16 EXC_ID_CONT                = 0x003C;
 /** Flags used to specify import/export mode of strings. */
 typedef sal_uInt16                          XclStrFlags;
 const XclStrFlags EXC_STR_DEFAULT           = 0x0000;   /// Default string settings.
-const XclStrFlags EXC_STR_BYTESTRING        = 0x0001;   /// BIFF2-BIFF7 bytestring.
-const XclStrFlags EXC_STR_FORCEUNICODE      = 0x0002;   /// Always use 16-bit (Unicode) characters (default: automatic).
-const XclStrFlags EXC_STR_8BITLENGTH        = 0x0004;   /// 8-bit string length (default: 16-bit).
-const XclStrFlags EXC_STR_SMARTFLAGS        = 0x0008;   /// Omit flags on empty string (default: read/write always).
-const XclStrFlags EXC_STR_KEEPZEROCHARS     = 0x0010;   /// Keep zero characters unchanged (default: replace with '?').
+const XclStrFlags EXC_STR_FORCEUNICODE      = 0x0001;   /// Always use 16-bit (Unicode) characters (default: automatic).
+const XclStrFlags EXC_STR_8BITLENGTH        = 0x0002;   /// 8-bit string length (default: 16-bit).
+const XclStrFlags EXC_STR_SMARTFLAGS        = 0x0004;   /// Omit flags on empty string (default: read/write always).
+const XclStrFlags EXC_STR_KEEPZEROCHARS     = 0x0008;   /// Keep zero characters unchanged (default: replace with '?').
 
 const sal_uInt8 EXC_STRF_16BIT              = 0x01;
 const sal_uInt8 EXC_STRF_FAREAST            = 0x04;
 const sal_uInt8 EXC_STRF_RICH               = 0x08;
 const sal_uInt8 EXC_STRF_UNKNOWN            = 0xF2;
+
+
+// Encoded URLs ---------------------------------------------------------------
+
+const sal_Unicode EXC_URLSTART_ENCODED      = '\x01';   /// Encoded URL.
+const sal_Unicode EXC_URLSTART_SELF         = '\x02';   /// Reference to own workbook.
+const sal_Unicode EXC_URLSTART_SELFENCODED  = '\x03';   /// Encoded self reference.
+
+const sal_Unicode EXC_URL_DOSDRIVE          = '\x01';   /// DOS drive letter or UNC server name.
+const sal_Unicode EXC_URL_DRIVEROOT         = '\x02';   /// Root directory of current drive.
+const sal_Unicode EXC_URL_SUBDIR            = '\x03';   /// Directory name delimiter.
+const sal_Unicode EXC_URL_PARENTDIR         = '\x04';   /// Parent directory.
+const sal_Unicode EXC_URL_MACVOLUME         = '\x05';   /// MAC volume name.
+const sal_Unicode EXC_URL_SHEETNAME         = '\x09';   /// Sheet name starts here (BIFF4).
+
+const sal_Unicode EXC_DDE_DELIM             = '\x03';   /// DDE application-topic delimiter
 
 
 // Cached values list (EXTERNNAME, ptgArray, ...) -----------------------------
@@ -144,7 +158,8 @@ const sal_uInt16 EXC_PATT_6_25_PERC         = 0x0012;
 
 // Miscellaneous ---------------------------------------------------------------
 
-const sal_Unicode EXC_NEWLINE               = 0x0A;
+const sal_Char      EXC_NEWLINE_CHAR        = 0x0A;
+const sal_Unicode   EXC_NEWLINE             = EXC_NEWLINE_CHAR;
 
 
 // Records (ordered by lowest record ID) ======================================
@@ -196,6 +211,14 @@ const sal_uInt16 EXC_ID_VERTPAGEBREAKS      = 0x001A;
 const sal_uInt16 EXC_ID_HORPAGEBREAKS       = 0x001B;
 
 
+// (0x001E, 0x041E) FORMAT ----------------------------------------------------
+
+const sal_uInt16 EXC_ID_FORMAT              = 0x041E;
+
+const sal_uInt16 EXC_FORMAT_OFFSET5         = 164;
+const sal_uInt16 EXC_FORMAT_OFFSET8         = 164;
+
+
 // (0x0023) EXTERNNAME --------------------------------------------------------
 
 const sal_uInt16 EXC_ID_EXTERNNAME          = 0x0023;
@@ -224,6 +247,10 @@ const sal_uInt16 EXC_ID_WINDOWPROTECT       = 0x0019;
 // (0x0031) FONT --------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_FONT                = 0x0031;
+
+const sal_uInt32 EXC_FONT_MAXCOUNT4         = 0x00FF;
+const sal_uInt32 EXC_FONT_MAXCOUNT5         = 0x00FF;
+const sal_uInt32 EXC_FONT_MAXCOUNT8         = 0xFFFF;
 
 // attributes
 const sal_uInt16 EXC_FONTATTR_NONE          = 0x0000;
@@ -303,14 +330,14 @@ const sal_uInt16 EXC_ID_CRN                 = 0x005A;
 
 // (0x007E) RK ----------------------------------------------------------------
 
-const sal_uInt32 EXC_RK_100FLAG             = 0x00000001;
-const sal_uInt32 EXC_RK_INTFLAG             = 0x00000002;
-const sal_uInt32 EXC_RK_VALUEMASK           = 0xFFFFFFFC;
+const sal_Int32 EXC_RK_100FLAG              = 0x00000001;
+const sal_Int32 EXC_RK_INTFLAG              = 0x00000002;
+const sal_Int32 EXC_RK_VALUEMASK            = 0xFFFFFFFC;
 
-const sal_uInt32 EXC_RK_DBL                 = 0x00000000;
-const sal_uInt32 EXC_RK_DBL100              = EXC_RK_100FLAG;
-const sal_uInt32 EXC_RK_INT                 = EXC_RK_INTFLAG;
-const sal_uInt32 EXC_RK_INT100              = EXC_RK_100FLAG | EXC_RK_INTFLAG;
+const sal_Int32 EXC_RK_DBL                  = 0x00000000;
+const sal_Int32 EXC_RK_DBL100               = EXC_RK_100FLAG;
+const sal_Int32 EXC_RK_INT                  = EXC_RK_INTFLAG;
+const sal_Int32 EXC_RK_INT100               = EXC_RK_100FLAG | EXC_RK_INTFLAG;
 
 
 // (0x0081) WSBOOL ------------------------------------------------------------

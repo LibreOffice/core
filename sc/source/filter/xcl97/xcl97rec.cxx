@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:22:29 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,14 +149,14 @@
 
 // --- class XclMsodrawing_Base --------------------------------------
 
-XclMsodrawing_Base::XclMsodrawing_Base( XclEscher& rEscher )
+XclMsodrawing_Base::XclMsodrawing_Base( XclEscher& rEscher, ULONG nInitialSize )
         :
         pEscher( &rEscher ),
         nStartPos( rEscher.GetEx()->GetLastOffsetMapPos() )
 {
     // for safety's sake add this now
     nStopPos = GetEscherEx()->AddCurrentOffsetToMap();
-    DBG_ASSERT( GetDataLen() == 0, "XclMsodrawing_Base ctor: do I really own that data?" );
+    DBG_ASSERT( GetDataLen() == nInitialSize, "XclMsodrawing_Base ctor: do I really own that data?" );
 }
 
 
@@ -259,9 +259,9 @@ ULONG XclMsodrawinggroup::GetLen() const
 
 // --- class XclMsodrawing --------------------------------------
 
-XclMsodrawing::XclMsodrawing( RootData& rRoot, UINT16 nEscherType )
+XclMsodrawing::XclMsodrawing( RootData& rRoot, UINT16 nEscherType, UINT32 nInitialSize )
         :
-        XclMsodrawing_Base( *rRoot.pEscher )
+        XclMsodrawing_Base( *rRoot.pEscher, nInitialSize )
 {
     if ( nEscherType )
     {
@@ -307,12 +307,13 @@ ULONG XclMsodrawing::GetLen() const
 }
 
 
-
 // --- class XclObjList ----------------------------------------------
 
 XclObjList::XclObjList( RootData& rRoot )
         :
-        pMsodrawingPerSheet( new XclMsodrawing( rRoot, ESCHER_DgContainer ) )
+        ExcRoot( &rRoot ),
+        pMsodrawingPerSheet( new XclMsodrawing( rRoot, ESCHER_DgContainer ) ),
+        pSolverContainer( NULL )
 {
 }
 
@@ -324,6 +325,7 @@ XclObjList::~XclObjList()
         delete p;
     }
     delete pMsodrawingPerSheet;
+    delete pSolverContainer;
 }
 
 
@@ -348,11 +350,12 @@ UINT16 XclObjList::Add( XclObj* pObj )
 void XclObjList::EndSheet()
 {
     XclEscherEx* pEx = pMsodrawingPerSheet->GetEscherEx();
-    //! close all Escher group shapes created since XclObjList ctor MSODRAWING
-    while ( pEx->GetGroupLevel() )
-    {
-        pEx->LeaveGroup();
-    }
+
+    // Is there still something in the stream? -> The solver container
+    UINT32 nSolverSize = pEx->GetStreamPos() - pEx->GetOffsetFromMap( pEx->GetLastOffsetMapPos() );
+    if( nSolverSize )
+        pSolverContainer = new XclMsodrawing( *pExcRoot, ESCHER_SolverContainer, nSolverSize );
+
     //! close ESCHER_DgContainer created by XclObjList ctor MSODRAWING
     pEx->CloseContainer();
 }
@@ -365,6 +368,9 @@ void XclObjList::Save( XclExpStream& rStrm )
 
     for ( XclObj* p = First(); p; p = Next() )
         p->Save( rStrm );
+
+    if( pSolverContainer )
+        pSolverContainer->Save( rStrm );
 }
 
 
@@ -706,7 +712,7 @@ XclTxo::~XclTxo()
 
 void XclTxo::SaveCont( XclExpStream& rStrm )
 {
-    UINT16 nTextLen = aText.GetLen();
+    UINT16 nTextLen = aText.Len();
     UINT16 nFormatLen = 0;
     if ( nTextLen && !nFormatLen )
         nFormatLen = 8 * 2; // length of CONTINUE record, not count of formats
@@ -719,7 +725,7 @@ void XclTxo::Save( XclExpStream& rStrm )
 {
     ExcRecord::Save( rStrm );
 
-    UINT16 nTextLen = aText.GetLen();
+    UINT16 nTextLen = aText.Len();
     UINT16 nFormatLen = 0;
     if ( nTextLen && !nFormatLen )
         nFormatLen = 8 * 2; // length of CONTINUE record, not count of formats
@@ -728,7 +734,7 @@ void XclTxo::Save( XclExpStream& rStrm )
     if ( nTextLen )
     {
         // CONTINUE text
-        rStrm.StartRecord( EXC_ID_CONT, aText.GetBufferByteCount() + 1 );
+        rStrm.StartRecord( EXC_ID_CONT, aText.GetBufferSize() + 1 );
         aText.WriteFlagField( rStrm );
         aText.WriteBuffer( rStrm );
         rStrm.EndRecord();
@@ -833,8 +839,8 @@ void XclObjOle::SaveCont( XclExpStream& rStrm )
                 0x03
             };
             XclExpUniString aName( xOleStg->GetUserName() );
-            UINT16 nPadLen = (UINT16)(aName.GetByteCount() & 0x01);
-            UINT16 nFmlaLen = sizeof(pData) + aName.GetByteCount() + nPadLen;
+            UINT16 nPadLen = (UINT16)(aName.GetSize() & 0x01);
+            UINT16 nFmlaLen = sizeof(pData) + aName.GetSize() + nPadLen;
             UINT16 nSubRecLen = nFmlaLen + 6;
 
             // ftPictFmla subrecord, undocumented as usual
@@ -993,7 +999,7 @@ UINT16 XclNote::GetNum() const
 
 ULONG XclNote::GetLen() const
 {
-    return nObjId ? 9 + aAuthor.GetByteCount() : 0;
+    return nObjId ? 9 + aAuthor.GetSize() : 0;
 }
 
 
@@ -1237,7 +1243,7 @@ void ExcBundlesheet8::SaveCont( XclExpStream& rStrm )
 
 ULONG ExcBundlesheet8::GetLen() const
 {   // Text max 255 chars
-    return 8 + aUnicodeName.GetBufferByteCount();
+    return 8 + aUnicodeName.GetBufferSize();
 }
 
 
@@ -1776,7 +1782,7 @@ UINT16 XclDConRef::GetNum() const
 
 ULONG XclDConRef::GetLen() const
 {
-    return 7 + pWorkbook->GetByteCount();
+    return 7 + pWorkbook->GetSize();
 }
 
 
@@ -1859,7 +1865,7 @@ UINT16 XclCodename::GetNum() const
 
 ULONG XclCodename::GetLen() const
 {
-    return aName.GetByteCount();
+    return aName.GetSize();
 }
 
 
@@ -1897,21 +1903,21 @@ ExcEScenario::ExcEScenario( ScDocument& rDoc, UINT16 nTab )
 
     rDoc.GetName( nTab, sTmpName );
     sName.Assign( sTmpName, EXC_STR_8BITLENGTH );
-    nRecLen = 8 + sName.GetBufferByteCount();
+    nRecLen = 8 + sName.GetBufferSize();
 
     rDoc.GetScenarioData( nTab, sTmpComm, aDummyCol, nDummyFlags );
     sComment.Assign( sTmpComm, EXC_STR_DEFAULT, 255 );
-    if( sComment.GetLen() )
-        nRecLen += sComment.GetByteCount();
+    if( sComment.Len() )
+        nRecLen += sComment.GetSize();
 
-    if( !sUsername.GetLen() )
+    if( !sUsername.Len() )
     {
         SvtUserOptions aUserOpt;
         sUsername.Assign( aUserOpt.GetLastName(), EXC_STR_DEFAULT, 255 );
     }
-    if( !sUsername.GetLen() )
+    if( !sUsername.Len() )
         sUsername.Assign( String::CreateFromAscii( "SC" ) );
-    nRecLen += sUsername.GetByteCount();
+    nRecLen += sUsername.GetSize();
 
     const ScRangeList* pRList = rDoc.GetScenarioRanges( nTab );
     if( !pRList )
@@ -1964,15 +1970,15 @@ void ExcEScenario::SaveCont( XclExpStream& rStrm )
     rStrm   << (UINT16) List::Count()       // number of cells
             << (UINT8) 1                    // fLocked
             << (UINT8) 0                    // fHidden
-            << (UINT8) sName.GetLen()       // length of scen name
-            << (UINT8) sComment.GetLen()    // length of comment
-            << (UINT8) sUsername.GetLen();  // length of user name
+            << (UINT8) sName.Len()          // length of scen name
+            << (UINT8) sComment.Len()       // length of comment
+            << (UINT8) sUsername.Len();     // length of user name
     sName.WriteFlagField( rStrm );
     sName.WriteBuffer( rStrm );
 
     rStrm << sUsername;
 
-    if( sComment.GetLen() )
+    if( sComment.Len() )
         rStrm << sComment;
 
     ExcEScenarioCell* pCell;

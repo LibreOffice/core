@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestream.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:49 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,6 +346,12 @@ void XclExpStream::WriteByteString( const ByteString& rString, sal_uInt16 nMaxLe
     else
         operator<<( static_cast< sal_uInt8 >( nLen ) );
     Write( rString.GetBuffer(), nLen );
+}
+
+void XclExpStream::WriteCharBuffer( const ScfUInt8Vec& rBuffer )
+{
+    SetSliceSize( 0 );
+    Write( &rBuffer[ 0 ], rBuffer.size() );
 }
 
 sal_uInt32 XclExpStream::SetStreamPos( sal_uInt32 nPos )

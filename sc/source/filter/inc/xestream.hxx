@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestream.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:13 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,9 @@ public:
                                     sal_uInt16 nMaxLen = 0x00FF,
                                     bool b16BitCount = false );
 
+    /** Writes 8-bit character buffer. */
+    void                        WriteCharBuffer( const ScfUInt8Vec& rBuffer );
+
     // *** SvStream access ***
 
     /** Sets position of system stream (only allowed outside of records). */
@@ -276,6 +279,17 @@ inline XclExpStream& XclExpStream::operator<<( double fValue )
     mrStrm << fValue;
     return *this;
 }
+
+
+// ============================================================================
+
+/** Function object to stream out an object, useful i.e. for ::std::for_each(). */
+template< typename Type > struct XclWriteFunc
+{
+    XclExpStream&               mrStrm;
+    inline explicit             XclWriteFunc( XclExpStream& rStrm ) : mrStrm( rStrm ) {}
+    inline void                 operator()( const Type& rObj ) { mrStrm << rObj; }
+};
 
 
 // ============================================================================

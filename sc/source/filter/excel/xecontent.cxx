@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:47 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     if( bWithRepr )
     {
         XclExpString aDescr( rRepr, EXC_STR_FORCEUNICODE, 255 );
-        aXclStrm << sal_uInt32( aDescr.GetLen() + 1 );  // string length + 1 trailing zero word
+        aXclStrm << sal_uInt32( aDescr.Len() + 1 );     // string length + 1 trailing zero word
         aDescr.WriteBuffer( aXclStrm );                 // NO flags
         aXclStrm << sal_uInt16( 0 );
 
@@ -326,8 +326,8 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
         aXclStrm    << sal_uInt8( 0 )
                     << sal_uInt32( 0xDEADFFFF );
         aXclStrm.WriteZeroBytes( 20 );
-        aXclStrm    << sal_uInt32( aLink.GetBufferByteCount() + 6 )
-                    << sal_uInt32( aLink.GetBufferByteCount() ) // byte count, not string length
+        aXclStrm    << sal_uInt32( aLink.GetBufferSize() + 6 )
+                    << sal_uInt32( aLink.GetBufferSize() )      // byte count, not string length
                     << sal_uInt16( 0x0003 );
         aLink.WriteBuffer( aXclStrm );                          // NO flags
 
@@ -338,8 +338,8 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     {
         XclExpString aUrl( aUrlObj.GetURLNoMark(), EXC_STR_FORCEUNICODE, 255 );
         aXclStrm    << XclTools::maGuidUrlMoniker
-                    << sal_uInt32( aUrl.GetBufferByteCount() + 2 ); // byte count + 1 trailing zero word
-        aUrl.WriteBuffer( aXclStrm );                               // NO flags
+                    << sal_uInt32( aUrl.GetBufferSize() + 2 );  // byte count + 1 trailing zero word
+        aUrl.WriteBuffer( aXclStrm );                           // NO flags
         aXclStrm    << sal_uInt16( 0 );
 
         mnFlags |= EXC_HLINK_BODY | EXC_HLINK_ABS;
@@ -359,8 +359,8 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
 
     if( pTextMark.get() )
     {
-        aXclStrm    << sal_uInt32( pTextMark->GetLen() + 1 );   // string length + 1 trailing zero word
-        pTextMark->WriteBuffer( aXclStrm );                     // NO flags
+        aXclStrm    << sal_uInt32( pTextMark->Len() + 1 );  // string length + 1 trailing zero word
+        pTextMark->WriteBuffer( aXclStrm );                 // NO flags
         aXclStrm    << sal_uInt16( 0 );
 
         mnFlags |= EXC_HLINK_MARK;
@@ -710,7 +710,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     sal_uInt16 nFlags;
 
     // QSI record
-    rStrm.StartRecord( EXC_ID_QSI, 10 + maDestRange.GetByteCount() );
+    rStrm.StartRecord( EXC_ID_QSI, 10 + maDestRange.GetSize() );
     rStrm   << EXC_QSI_DEFAULTFLAGS
             << sal_uInt16( 0x0010 )
             << sal_uInt16( 0x0012 )
@@ -728,12 +728,12 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 
     // SXSTRING record
-    rStrm.StartRecord( EXC_ID_SXSTRING, maUrl.GetByteCount() );
+    rStrm.StartRecord( EXC_ID_SXSTRING, maUrl.GetSize() );
     rStrm << maUrl;
     rStrm.EndRecord();
 
     // unknown record 0x0802
-    rStrm.StartRecord( EXC_ID_0802, 16 + maDestRange.GetByteCount() );
+    rStrm.StartRecord( EXC_ID_0802, 16 + maDestRange.GetSize() );
     rStrm   << EXC_ID_0802;             // repeated record id ?!?
     rStrm.WriteZeroBytes( 6 );
     rStrm   << sal_uInt16( 0x0003 )
@@ -760,7 +760,7 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     // WEBQRYTABLES record
     if( mpQryTables )
     {
-        rStrm.StartRecord( EXC_ID_WQTABLES, 4 + mpQryTables->GetByteCount() );
+        rStrm.StartRecord( EXC_ID_WQTABLES, 4 + mpQryTables->GetSize() );
         rStrm   << EXC_ID_WQTABLES          // repeated record id ?!?
                 << sal_uInt16( 0x0000 )
                 << *mpQryTables;            // comma separated list of source tables

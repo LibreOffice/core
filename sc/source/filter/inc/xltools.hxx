@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:19 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ public:
 // numeric conversion ---------------------------------------------------------
 
     /** Calculates the double value from an RK value (encoded integer or double). */
-    static double               GetDoubleFromRK( sal_uInt32 nRKValue );
+    static double               GetDoubleFromRK( sal_Int32 nRKValue );
     /** Calculates an RK value (encoded integer or double) from a double value.
         @param rnRKValue  Returns the calculated RK value.
         @param fValue  The double value.

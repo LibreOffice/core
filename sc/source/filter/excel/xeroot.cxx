@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeroot.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:49 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:39:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ XclExpRoot::XclExpRoot( XclExpRootData& rExpRootData ) :
 {
     mrExpData.mpPalette.reset( new XclExpPalette( *this ) );
     mrExpData.mpFontBuffer.reset( new XclExpFontBuffer( *this ) );
+    mrExpData.mpNumFmtBuffer.reset( new XclExpNumFmtBuffer( *this ) );
     mrExpData.mpTabIdBuffer.reset( new XclExpTabIdBuffer( GetDoc() ) );
     mrExpData.mpLinkManager.reset( new XclExpLinkManager( *this ) );
 }
@@ -124,6 +125,7 @@ void XclExpRoot::SetBiff( XclBiff eBiff )
     XclRoot::SetBiff( eBiff );
     GetPalette().SetBiff( eBiff );
     GetFontBuffer().SetBiff( eBiff );
+    GetNumFmtBuffer().SetBiff( eBiff );
 }
 
 XclExpSst& XclExpRoot::GetSst() const
@@ -141,6 +143,11 @@ XclExpPalette& XclExpRoot::GetPalette() const
 XclExpFontBuffer& XclExpRoot::GetFontBuffer() const
 {
     return *mrExpData.mpFontBuffer;
+}
+
+XclExpNumFmtBuffer& XclExpRoot::GetNumFmtBuffer() const
+{
+    return *mrExpData.mpNumFmtBuffer;
 }
 
 XclExpTabIdBuffer& XclExpRoot::GetTabIdBuffer() const

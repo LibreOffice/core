@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xerecord.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:12 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ public:
     /** Sets a new record size prediction. */
     inline void                 SetRecSize( sal_uInt32 nRecSize ) { mnRecSize = nRecSize; }
 
-    /** Writes the record header and calls WriteContent(). */
+    /** Writes the record header and calls WriteBody(). */
     virtual void                Save( XclExpStream& rStrm );
 
 private:
@@ -163,7 +163,7 @@ private:
 
 public:
     /** @param nRecId  The record ID of this record.
-        @param nValue  The value for the record body.
+        @param rValue  The value for the record body.
         @param nSize  Record size. Uses sizeof( Type ), if this parameter is omitted. */
     inline                      XclExpValueRecord(
                                     sal_uInt16 nRecId,
@@ -253,9 +253,10 @@ public:
 
 // List of records ============================================================
 
-/** A list of Excel record objects. Provides saving the compete list. This
-    class is derived from XclExpRecordBase, so it can be used as record in
-    another record list. Requires RecType::Save( XclExpStream& ). */
+/** A list of Excel record objects.
+    @descr  Provides saving the compete list. This class is derived from
+    XclExpRecordBase, so it can be used as record in another record list.
+    Requires RecType::Save( XclExpStream& ). */
 template< typename RecType = XclExpRecordBase >
 class XclExpRecordList : public XclExpRecordBase, public ScfDelList< RecType >
 {

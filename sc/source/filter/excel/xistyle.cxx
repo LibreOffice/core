@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:52 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,14 +676,14 @@ void XclImpNumFmtBuffer::ReadFormat( XclImpStream& rStrm )
 
 void XclImpNumFmtBuffer::InsertBuiltinFormats()
 {
-    const XclImpBuiltInFormat* pLimit = pBuiltInFormats + STATIC_TABLE_SIZE( pBuiltInFormats );
+    const XclImpBuiltInFormat* pEnd = pBuiltInFormats + STATIC_TABLE_SIZE( pBuiltInFormats );
 
     String aFormat;
     xub_StrLen nCheckPos;
     sal_Int16 nType = NUMBERFORMAT_DEFINED;
     sal_uInt32 nKey;
 
-    for( const XclImpBuiltInFormat* pCurr = pBuiltInFormats; pCurr < pLimit; ++pCurr )
+    for( const XclImpBuiltInFormat* pCurr = pBuiltInFormats; pCurr != pEnd; ++pCurr )
     {
         if( pCurr->mpFormat )
         {

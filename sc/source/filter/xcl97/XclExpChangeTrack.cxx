@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:22:28 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,9 +108,9 @@ void lcl_WriteDateTime( XclExpStream& rStrm, const DateTime& rDateTime )
 // <nLength> is without string header
 void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpUniString& rString, ULONG nLength )
 {
-    ULONG nStrBytes = rString.GetBufferByteCount();
+    ULONG nStrBytes = rString.GetBufferSize();
     DBG_ASSERT( nLength >= nStrBytes, "lcl_WriteFixedString - String too long" );
-    if( rString.GetLen() )
+    if( rString.Len() )
         rStrm << rString;
     if( nLength > nStrBytes )
         rStrm.WriteZeroBytes( nLength - nStrBytes );
@@ -151,7 +151,7 @@ void XclExpUserBView::SaveCont( XclExpStream& rStrm )
             << (sal_uInt16) 0x0000
             << (sal_uInt16) 0x0001
             << (sal_uInt16) 0x0000;
-    if( sUsername.GetLen() )
+    if( sUsername.Len() )
         rStrm << sUsername;
 }
 
@@ -162,7 +162,7 @@ UINT16 XclExpUserBView::GetNum() const
 
 ULONG XclExpUserBView::GetLen() const
 {
-    return 50 + (sUsername.GetLen() ? sUsername.GetByteCount() : 0);
+    return 50 + (sUsername.Len() ? sUsername.GetSize() : 0);
 }
 
 //___________________________________________________________________
@@ -809,7 +809,7 @@ void XclExpChTrCellContent::GetCellData(
                 ((const ScEditCell*) pScCell)->GetString( sCellStr );
             rpData->pString = new XclExpUniString( sCellStr, EXC_STR_DEFAULT, 32766 );
             rpData->nType = EXC_CHTR_TYPE_STRING;
-            rpData->nSize = 3 + (sal_uInt16) rpData->pString->GetByteCount();
+            rpData->nSize = 3 + (sal_uInt16) rpData->pString->GetSize();
             rXclLength1 = 64 + (sCellStr.Len() << 1);
             rXclLength2 = 6 + (sal_uInt16)(sCellStr.Len() << 1);
         }
@@ -838,7 +838,7 @@ void XclExpChTrCellContent::GetCellData(
                     const XclExpUniString* pUrl = pExcRoot->pER->GetLinkManager().GetUrl( nXclFirst );
                     const XclExpUniString* pTabName = pExcRoot->pER->GetLinkManager().GetTableName( nXclFirst );
                     if( pUrl && pTabName )
-                        nSize += pUrl->GetByteCount() + pTabName->GetByteCount() + 2;
+                        nSize += pUrl->GetSize() + pTabName->GetSize() + 2;
                     else
                         nSize += (nXclFirst == nXclLast) ? 6 : 8;
                 }

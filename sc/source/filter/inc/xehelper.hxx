@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:10 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,12 +88,15 @@ class EditTextObject;
 class XclExpString
 {
 private:
-    ScfUInt16Vec                maBuffer;       /// The character buffer.
+    ScfUInt16Vec                maUniBuffer;    /// The Unicode character buffer.
+    ScfUInt8Vec                 maCharBuffer;   /// The byte character buffer.
     XclFormatRunVec             maFormats;      /// All formatting runs.
     sal_uInt16                  mnLen;          /// Character count to export.
+    bool                        mbIsBiff8;      /// true = BIFF8 Unicode string, false = BIFF2-7 bytestring.
     bool                        mbIsUnicode;    /// true, if at least one character is >0xFF.
-    bool                        mb8BitLen;      /// true = write 8-bit string length, false = 16-bit.
-    bool                        mbSmartFlags;   /// true = omit flags on empty string, false = always write flags.
+    bool                        mb8BitLen;      /// true = write 8-bit string length; false = 16-bit.
+    bool                        mbSmartFlags;   /// true = omit flags on empty string; false = always write flags.
+    bool                        mbKeepZero;     /// true = keeps zero characters; false = replaces with '?'.
     bool                        mbWrapped;      /// true = text contains several paragraphs.
 
 public:
@@ -134,14 +137,14 @@ public:
 
                                 ~XclExpString();
 
-    /** Assigns a new unformatted string.
+    /** Assigns an unformatted string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
     void                        Assign(
                                     const String& rString,
                                     XclStrFlags nFlags = EXC_STR_DEFAULT,
                                     sal_uInt16 nMaxLen = 0xFFFF );
-    /** Assigns a new formatted string.
+    /** Assigns a formatted string.
         @param rFormats  The formatting runs.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
@@ -150,14 +153,14 @@ public:
                                     const XclFormatRunVec& rFormats,
                                     XclStrFlags nFlags = EXC_STR_DEFAULT,
                                     sal_uInt16 nMaxLen = 0xFFFF );
-    /** Assigns a new string.
+    /** Assigns an unformatted string.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
     void                        Assign(
                                     const ::rtl::OUString& rString,
                                     XclStrFlags nFlags = EXC_STR_DEFAULT,
                                     sal_uInt16 nMaxLen = 0xFFFF );
-    /** Assigns a new formatted string.
+    /** Assigns a formatted string.
         @param rFormats  The formatting runs.
         @param nFlags  Modifiers for string export.
         @param nMaxLen  The maximum number of characters to store in this string. */
@@ -170,22 +173,34 @@ public:
         @param nFlags  Modifiers for string export. */
     void                        Assign( sal_Unicode cChar, XclStrFlags nFlags = EXC_STR_DEFAULT );
 
+    /** Assigns an unformatted BIFF2-BIFF7 byte string.
+        @param nFlags  Modifiers for string export.
+        @param nMaxLen  The maximum number of characters to store in this string. */
+    void                        AssignByte(
+                                    const String& rString,
+                                    CharSet eCharSet,
+                                    XclStrFlags nFlags = EXC_STR_DEFAULT,
+                                    sal_uInt16 nMaxLen = 0xFFFF );
+
+
     /** Sets new formatting runs for the current text. */
     void                        SetFormats( const XclFormatRunVec& rFormats );
 
     /** Returns the character count of the string. */
-    inline sal_uInt16           GetLen() const { return mnLen; }
+    inline sal_uInt16           Len() const { return mnLen; }
+    /** Returns true, if the string is empty. */
+    inline bool                 IsEmpty() const { return mnLen == 0; }
     /** Returns true, if the string contains formatting information. */
-    inline bool                 IsRich() const { return !maFormats.empty(); }
+    inline bool                 IsRich() const { return mbIsBiff8 && !maFormats.empty(); }
     /** Returns true, if the string contains line breaks. */
     inline bool                 IsWrapped() const { return mbWrapped; }
 
     /** Returns the current string flags field to export. */
     sal_uInt8                   GetFlagField() const;
     /** Returns the byte count the character buffer will take on export. */
-    sal_uInt32                  GetBufferByteCount() const;
+    sal_uInt32                  GetBufferSize() const;
     /** Returns the byte count the whole string will take on export. */
-    sal_uInt32                  GetByteCount() const;
+    sal_uInt32                  GetSize() const;
 
     /** Writes the string flags field (1 byte). */
     void                        WriteFlagField( XclExpStream& rStrm ) const;
@@ -200,22 +215,35 @@ public:
     void                        WriteBuffer( void* pDest ) const;
 
 private:
-    /** Initializes all members. */
-    void                        Init( XclStrFlags nFlags );
+    /** Returns true, if the flag field should be written. */
+    bool                        IsWriteFlags() const;
 
     /** Calculates the string length to be used from real length and given limit. */
-    sal_uInt16                  CalcStrLen( const String& rString, sal_uInt16 nMaxLen );
-    /** Calculates the string length to be used from real length and given limit. */
-    sal_uInt16                  CalcStrLen( const ::rtl::OUString& rString, sal_uInt16 nMaxLen );
-    /** Returns a valid maximum length value, according to current string state. */
-    inline sal_uInt16           GetMaxLen( sal_uInt16 nMaxLen )
-                                    { return (mb8BitLen && (nMaxLen > 255)) ? 255 : nMaxLen; }
+    sal_uInt16                  CalcStrLen( sal_Int32 nCurrLen, sal_uInt16 nMaxLen );
+
+    /** Initializes flags, string length and character buffers.
+        @param nFlags  Modifiers for string export.
+        @param nCurrLen  The real count of characters contained in the passed buffer.
+        @param nMaxLen  The maximum length allowed of the resulting string.
+        @param bBiff8  true = BIFF8 Unicode string; false = BIFF2-BIFF7 byte string. */
+    void                        Init( XclStrFlags nFlags, sal_Int32 nCurrLen, sal_uInt16 nMaxLen, bool bBiff8 );
 
     /** Creates the character buffer from the given Unicode array.
         @param pSource  The source character buffer. Trailing NULL character is not necessary.
         @param nFlags  Modifiers for string export.
-        @param nCount  The count of characters contained in the buffer. */
-    void                        Build( const sal_Unicode* pSource, XclStrFlags nFlags, sal_uInt16 nCount );
+        @param nCurrLen  The real count of characters contained in the passed buffer.
+        @param nMaxLen  The maximum length allowed of the resulting string. */
+    void                        Build(
+                                    const sal_Unicode* pSource,
+                                    XclStrFlags nFlags, sal_Int32 nCurrLen, sal_uInt16 nMaxLen );
+    /** Creates the character buffer from the given character array.
+        @param pSource  The source character buffer. Trailing NULL character is not necessary.
+        @param nFlags  Modifiers for string export.
+        @param nCurrLen  The real count of characters contained in the passed buffer.
+        @param nMaxLen  The maximum length allowed of the resulting string. */
+    void                        Build(
+                                    const sal_Char* pSource,
+                                    XclStrFlags nFlags, sal_Int32 nCurrLen, sal_uInt16 nMaxLen );
 
     /** Initializes write process on stream. */
     void                        PrepareWrite( XclExpStream& rStrm, sal_uInt32 nBytes ) const;
@@ -238,8 +266,8 @@ class ScPatternAttr;
 class EditTextObject;
 
 /** This class provides methods to create an XclExpString.
-    @The string can be created from an edit engine text object or directly
-    from a Calc edit cell. */
+    @descr  The string can be created from an edit engine text object or
+    directly from a Calc edit cell. */
 class XclExpStringHelper : ScfNoInstance
 {
 public:
@@ -333,10 +361,11 @@ private:
 class XclExpUrlHelper : ScfNoInstance
 {
 public:
-    /** Encodes and returns the URL passed in rAbsUrl to an Excel like URL. */
-    static String               EncodeUrl(
-                                    const XclExpRoot& rRoot,
-                                    const String& rAbsUrl );
+    /** Encodes and returns the URL passed in rAbsUrl to an Excel like URL.
+        @param pTableName  Optional pointer to a table name to be encoded in this URL. */
+    static String               EncodeUrl( const XclExpRoot& rRoot, const String& rAbsUrl, const String* pTableName = NULL );
+    /** Encodes and returns the passed DDE link to an Excel like DDE link. */
+    static String               EncodeDde( const String& rApplic, const String rTopic );
 
 private:
     /** Converts the URL passed in rUrl to a URL in MS-DOS mode.
@@ -344,8 +373,8 @@ private:
         @return  True = rUrl is a file URL (local or UNC). */
     static bool                 ConvertToDos( String& rUrl, const XclExpRoot& rRoot );
     /** Encodes special parts of the URL, i.e. directory separators and volume names.
-        @param bBrackets  True = Adds brackets around the file name. */
-    static void                 EncodeUrl_Impl( String& rUrl, bool bBrackets );
+        @param pTableName  Pointer to a table name to be encoded in this URL, or NULL. */
+    static void                 EncodeUrl_Impl( String& rUrl, const String* pTableName );
 };
 
 
@@ -424,9 +453,11 @@ public:
 class XclExpCachedMatrix
 {
 private:
-    ScfDelList< XclExpCachedValue > maValueList;    /// The list containing the cached values.
-    sal_uInt16                  mnCols;             /// Column count of the value matrix.
-    sal_uInt16                  mnRows;             /// Row count of the value matrix.
+    typedef ScfDelList< XclExpCachedValue > XclExpCachedValueList;
+
+    XclExpCachedValueList       maValueList;    /// The list containing the cached values.
+    sal_uInt16                  mnCols;         /// Column count of the value matrix.
+    sal_uInt16                  mnRows;         /// Row count of the value matrix.
 
 public:
     /** Constructs and fills a new matrix.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:20:43 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ protected:
         ULONG                   nStopPos;       // position in OffsetMap
 
 public:
-                                XclMsodrawing_Base( XclEscher& rEscher );
+                                XclMsodrawing_Base( XclEscher& rEscher, ULONG nInitialSize = 0 );
     virtual                     ~XclMsodrawing_Base();
 
     inline  XclEscher*          GetEscher() const   { return pEscher; }
@@ -118,7 +118,8 @@ private:
 
 public:
                                 XclMsodrawing( RootData& rRoot,
-                                    UINT16 nEscherType = 0 );
+                                    UINT16 nEscherType = 0,
+                                    ULONG nInitialSize = 0 );
     virtual                     ~XclMsodrawing();
 
     virtual UINT16              GetNum() const;
@@ -131,10 +132,11 @@ public:
 class XclObj;
 class XclMsodrawing;
 
-class XclObjList : public List, public ExcEmptyRec
+class XclObjList : public List, public ExcEmptyRec, public ExcRoot
 {
 private:
         XclMsodrawing*          pMsodrawingPerSheet;
+        XclMsodrawing*          pSolverContainer;
 
 public:
                                 XclObjList( RootData& rRoot );
@@ -793,7 +795,7 @@ public:
                                 ExcEScenarioCell( UINT16 nC, UINT16 nR, const String& rTxt );
 
     inline ULONG                GetStringBytes()
-                                    { return sText.GetByteCount(); }
+                                    { return sText.GetSize(); }
 
     void                        WriteAddress( XclExpStream& rStrm );
     void                        WriteText( XclExpStream& rStrm );

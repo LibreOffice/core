@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:15:58 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:39:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ static void __AddDouble( ByteString& r, const double f )
 }
 
 
-static inline void __AddRK( ByteString& rString, sal_uInt32 nRKValue )
+static inline void __AddRK( ByteString& rString, sal_Int32 nRKValue )
 {
     __AddDouble( rString, XclTools::GetDoubleFromRK( nRKValue ) );
 }
@@ -1275,7 +1275,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
 //              LINESTART();
                 ADDCELLHEAD();
                 ADDTEXT( "   val = " );
-                __AddRK( t, Read4( rIn ) );
+                __AddRK( t, rIn.ReadInt32() );
                 PRINT();
             }
             break;
@@ -1429,7 +1429,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     switch( nType )
                     {
                         case 0x02:
-                            __AddRK( sTemp[ nF ], Read4( rIn ) );
+                            __AddRK( sTemp[ nF ], rIn.ReadInt32() );
                             IGNORE( 4 );
                             break;
                         case 0x04:
@@ -1847,7 +1847,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             case 0xBD:
             {
                 UINT16  nC, nR, nXF;
-                UINT32 nRK;
+                INT32 nRK;
                 UINT16  n = (UINT16)((nL - 4) / 6);
 
                 rIn >> nR >> nC;
@@ -2392,7 +2392,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     switch( nOldType )
                     {
                         case 0x0001:
-                            __AddRK( t, Read4( rIn ) );
+                            __AddRK( t, rIn.ReadInt32() );
                             PRINT();
                         break;
                         case 0x0002:
@@ -2428,7 +2428,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     switch( nNewType )
                     {
                         case 0x0001:
-                            __AddRK( t, Read4( rIn ) );
+                            __AddRK( t, rIn.ReadInt32() );
                             PRINT();
                         break;
                         case 0x0002:
@@ -3244,7 +3244,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                             rIn >> n2;
                             ADDTEXT( "   [l=" );        __AddDec( t, n2 );
                             ADDTEXT( ", 8-Bit]: '" );
-                            aData = rIn.ReadRawByteString( (USHORT)(n1 - 1) );
+                            aData = rIn.ReadRawByteString( (USHORT)(n2 - 1) );
                             t += GETSTR( aData );
                             ADDTEXT( "<" ); ADDHEX( 1 ); ADDTEXT( ">'" ); // trailing zero
                             PRINT();
@@ -3413,7 +3413,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             {
                 ADDCELLHEAD();
                 ADDTEXT( "   val = " );
-                __AddRK( t, Read4( rIn ) );
+                __AddRK( t, rIn.ReadInt32() );
                 PRINT();
             }
             break;
@@ -4787,6 +4787,18 @@ void Biff8RecDumper::EscherDump( const ULONG nMaxLen )
                 nL -= nDumpSize;
                 n -= nDumpSize;
             }
+        }
+        else if ( nR == 0xF012 )
+        {
+            aT = "    Connector rule: ";    __AddDec( aT, pIn->ReaduInt32() );
+            aT += "   ShapeID A: ";         __AddHex( aT, pIn->ReaduInt32() );
+            aT += "   ShapeID B: ";         __AddHex( aT, pIn->ReaduInt32() );
+            Print( aT );
+            aT = "    ShapeID connector: "; __AddHex( aT, pIn->ReaduInt32() );
+            aT += "   Connect pt A: ";      __AddHex( aT, pIn->ReaduInt32() );
+            aT += "   Connect pt B: ";      __AddHex( aT, pIn->ReaduInt32() );
+            Print( aT );
+            nL -= 24; n -= 24;
         }
 
         if( ( nPre & 0x000F ) == 0x000F && n >= 0 )

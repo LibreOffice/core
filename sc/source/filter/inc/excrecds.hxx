@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:03:26 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
-#ifndef INCLUDED_SVTOOLS_NFKEYTAB_HXX
-#include <svtools/nfkeytab.hxx>
-#endif
 
 
 #include <vector>
@@ -94,17 +91,11 @@
 #include "rangelst.hxx"
 #endif
 
-#ifndef SC_XLSTYLE_HXX
-#include "xlstyle.hxx"
-#endif
-#ifndef SC_XEROOT_HXX
-#include "xeroot.hxx"
-#endif
-#ifndef SC_XERECORD_HXX
-#include "xerecord.hxx"
-#endif
 #ifndef SC_XEHELPER_HXX
 #include "xehelper.hxx"
+#endif
+#ifndef SC_XESTYLE_HXX
+#include "xestyle.hxx"
 #endif
 
 #ifndef _ROOT_HXX
@@ -360,34 +351,6 @@ class Exc1904 : public ExcBoolRecord
 public:
                             Exc1904( ScDocument& rDoc );
     virtual UINT16          GetNum( void ) const;
-};
-
-
-//--------------------------------------------------------- class ExcDummy_01 -
-// Ersatz fuer Default Font Records
-
-class ExcDummy_01: public ExcDummyRec
-{
-private:
-    static const BYTE       pMyData[];
-    static const ULONG      nMyLen;
-public:
-    virtual ULONG           GetLen( void ) const;
-    virtual const BYTE*     GetData( void ) const;
-};
-
-
-//--------------------------------------------------------- class ExcDummy_Fm -
-// Ersatz fuer Default Format Records
-
-class ExcDummy_Fm : public ExcDummyRec
-{
-private:
-    static const BYTE       pMyData[];
-    static const ULONG      nMyLen;
-public:
-    virtual ULONG           GetLen( void ) const;
-    virtual const BYTE*     GetData( void ) const;
 };
 
 
@@ -1185,36 +1148,6 @@ public:
 };
 
 
-//----------------------------------------------------------- class ExcFormat -
-
-class UsedFormList;
-class SvNumberFormatter;
-
-class ExcFormat : public ExcRecord, ExcRoot
-{
-private:
-    friend                      UsedFormList;
-
-    UINT16                      nIndex;     // Excel-Index
-    UINT32                      nScIndex;   // ...
-    String                      aFormStr;
-    BiffTyp                     eBiff;
-    static SvNumberFormatter*   pFormatter;
-    static UINT32               nObjCnt;
-    static NfKeywordTable*      pKeywordTable;
-
-    virtual void                SaveCont( XclExpStream& rStrm );
-
-public:
-                                ExcFormat( RootData*, UINT32 nScIndex );
-    virtual                     ~ExcFormat();
-
-    virtual UINT16              GetNum( void ) const;
-    virtual ULONG               GetLen( void ) const;
-};
-
-
-
 //------------------------------------------------------ class ExcExterncount -
 
 class ExcExterncount : public ExcRecord, ExcRoot
@@ -1334,22 +1267,6 @@ public:
 };
 
 
-//-------------------------------------------------------- class UsedFormList -
-// a list of FORMAT records
-
-class UsedFormList : public UsedList, public ExcRoot
-{
-private:
-    inline ExcFormat*       _First()    { return (ExcFormat*) List::First(); }
-    inline ExcFormat*       _Next()     { return (ExcFormat*) List::Next(); }
-
-public:
-    inline                  UsedFormList( RootData& rRootData ) : ExcRoot( &rRootData ) {}
-    virtual                 ~UsedFormList();
-    UINT16                  Add( UINT32 nNewScIx );
-};
-
-
 //-------------------------------------------------------- class UsedAttrList -
 // a list of ENTRY structs
 
@@ -1376,7 +1293,7 @@ private:
     inline ENTRY*           _Next()     { return (ENTRY*) List::Next(); }
 
     XclExpFontBuffer&       rFntLst;
-    UsedFormList&           rFrmLst;
+    XclExpNumFmtBuffer&     rFrmLst;
 
     void                    AddNewXF( const ScPatternAttr* pAttr,
                                 const BOOL bStyle, const BOOL bExplLineBreak,
@@ -1384,7 +1301,7 @@ private:
                                 BOOL bForceAltNumForm = FALSE );
 
 public:
-                            UsedAttrList( RootData* pRD, UsedFormList& );
+                            UsedAttrList( RootData* pRD );
     virtual                 ~UsedAttrList();
     UINT16                  Find( const ScPatternAttr* pSearch, const BOOL bStyle = FALSE,
                                     const ULONG nAltNumForm = NUMBERFORMAT_ENTRY_NOT_FOUND,
@@ -1848,3 +1765,4 @@ public:
 };
 
 #endif
+

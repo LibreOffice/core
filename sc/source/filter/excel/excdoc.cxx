@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:06:42 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,13 +271,11 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
     UINT16  nCodenames      = rTabBuffer.GetCodenameCount();
 
     ExcNameList*    pNameList   = rR.pNameList  = new ExcNameList( rR );
-    UsedFormList*   pFormRecs   = rR.pFormRecs  = new UsedFormList( rR );
-    UsedAttrList*   pXFRecs     = rR.pXFRecs    = new UsedAttrList( &rR, *pFormRecs );
+    UsedAttrList*   pXFRecs     = rR.pXFRecs    = new UsedAttrList( &rR );
 
     rR.pObjRecs = NULL;             // per sheet
     rR.pNoteRecs = NULL;            // per sheet
 
-    pFormRecs->SetBaseIndex( 164 ); // siehe auch ValueFormBuffer::nNewFormats
     pXFRecs->SetBaseIndex( 21 );
 
     if( rR.eDateiTyp < Biff8 )
@@ -354,8 +352,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         // Font
         Add( new XclExpRefRecord( rR.pER->GetFontBuffer() ) );
         // Format
-        Add( new ExcDummy_Fm );
-        Add( pFormRecs );
+        Add( new XclExpRefRecord( rR.pER->GetNumFmtBuffer() ) );
         // XF + Style
         Add( new ExcDummy_XF );
         Add( pXFRecs );
@@ -385,8 +382,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
         // Font
         Add( new XclExpRefRecord( rR.pER->GetFontBuffer() ) );
         // Format
-        Add( new ExcDummy8_Fm );
-        Add( pFormRecs );
+        Add( new XclExpRefRecord( rR.pER->GetNumFmtBuffer() ) );
         // XF + Style
         Add( new ExcDummy8_XF );
         Add( pXFRecs );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:48 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,10 @@ using ::rtl::OUString;
 
 // Byte/Unicode Strings =======================================================
 
+/** All allowed flags for exporting a BIFF2-BIFF7 byte string. */
+const XclStrFlags nAllowedFlags27 = EXC_STR_8BITLENGTH | EXC_STR_KEEPZEROCHARS;
 /** All allowed flags for export. */
-const XclStrFlags nAllowedFlags =
-    EXC_STR_FORCEUNICODE | EXC_STR_8BITLENGTH | EXC_STR_SMARTFLAGS | EXC_STR_KEEPZEROCHARS;
+const XclStrFlags nAllowedFlags = nAllowedFlags27 | EXC_STR_FORCEUNICODE | EXC_STR_SMARTFLAGS;
 
 
 inline XclExpStream& operator<<( XclExpStream& rStrm, const XclFormatRun& rRun )
@@ -153,7 +154,7 @@ inline XclExpStream& operator<<( XclExpStream& rStrm, const XclFormatRun& rRun )
 
 XclExpString::XclExpString( XclStrFlags nFlags )
 {
-    Init( nFlags );
+    Init( nFlags, 0, 0, true );
 }
 
 XclExpString::XclExpString( const String& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
@@ -186,8 +187,7 @@ XclExpString::~XclExpString()
 
 void XclExpString::Assign( const String& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    Init( nFlags );
-    Build( rString.GetBuffer(), nFlags, CalcStrLen( rString, nMaxLen ) );
+    Build( rString.GetBuffer(), nFlags, rString.Len(), nMaxLen );
 }
 
 void XclExpString::Assign(
@@ -200,8 +200,7 @@ void XclExpString::Assign(
 
 void XclExpString::Assign( const OUString& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    Init( nFlags );
-    Build( rString.getStr(), nFlags, CalcStrLen( rString, nMaxLen ) );
+    Build( rString.getStr(), nFlags, rString.getLength(), nMaxLen );
 }
 
 void XclExpString::Assign(
@@ -214,15 +213,21 @@ void XclExpString::Assign(
 
 void XclExpString::Assign( sal_Unicode cChar, XclStrFlags nFlags )
 {
-    Init( nFlags );
-    Build( &cChar, nFlags, 1 );
+    Build( &cChar, nFlags, 1, 1 );
+}
+
+void XclExpString::AssignByte(
+        const String& rString, CharSet eCharSet, XclStrFlags nFlags, sal_uInt16 nMaxLen )
+{
+    Build( ByteString( rString, eCharSet ).GetBuffer(), nFlags, rString.Len(), nMaxLen );
 }
 
 void XclExpString::SetFormats( const XclFormatRunVec& rFormats )
 {
+    DBG_ASSERT( mbIsBiff8, "XclExpString::SetFormats - not allowed for old byte strings" );
     maFormats = rFormats;
 #ifdef DBG_UTIL
-    if( !maFormats.empty() )
+    if( IsRich() )
     {
         XclFormatRunVec::const_iterator aCurr = maFormats.begin();
         XclFormatRunVec::const_iterator aPrev = aCurr;
@@ -239,36 +244,42 @@ sal_uInt8 XclExpString::GetFlagField() const
     return (mbIsUnicode ? EXC_STRF_16BIT : 0) | (IsRich() ? EXC_STRF_RICH : 0);
 }
 
-sal_uInt32 XclExpString::GetBufferByteCount() const
+sal_uInt32 XclExpString::GetBufferSize() const
 {
-    return GetLen() * (mbIsUnicode ? 2 : 1);
+    return mnLen * (mbIsUnicode ? 2 : 1);
 }
 
-sal_uInt32 XclExpString::GetByteCount() const
+sal_uInt32 XclExpString::GetSize() const
 {
-    // length + flags + buffer + formattting
-    return (mb8BitLen ? 1 : 2) + 1 + GetBufferByteCount() + (IsRich() ? (4 * maFormats.size() + 2) : 0);
+    return
+        (mb8BitLen ? 1 : 2) +                           // length field
+        (IsWriteFlags() ? 1 : 0) +                      // flag field
+        GetBufferSize() +                               // character buffer
+        (IsRich() ? (4 * maFormats.size() + 2) : 0);    // richtext formattting
 }
 
 void XclExpString::WriteFlagField( XclExpStream& rStrm ) const
 {
-    PrepareWrite( rStrm, 1 );
-    rStrm << GetFlagField();
-    rStrm.SetSliceSize( 0 );
+    if( mbIsBiff8 )
+    {
+        PrepareWrite( rStrm, 1 );
+        rStrm << GetFlagField();
+        rStrm.SetSliceSize( 0 );
+    }
 }
 
 void XclExpString::WriteHeader( XclExpStream& rStrm ) const
 {
     DBG_ASSERT( !mb8BitLen || (mnLen < 256), "XclExpString::WriteHeader - string too long" );
 
-    bool bWriteFlags = GetLen() || !mbSmartFlags;
+    bool bWriteFlags = IsWriteFlags();
     PrepareWrite( rStrm, (mb8BitLen ? 1 : 2) + (bWriteFlags ? 1 : 0) + (IsRich() ? 2 : 0) );
 
     // length
     if( mb8BitLen )
-        rStrm << static_cast< sal_uInt8 >( GetLen() );
+        rStrm << static_cast< sal_uInt8 >( mnLen );
     else
-        rStrm << GetLen();
+        rStrm << mnLen;
     // flag field
     if( bWriteFlags )
         rStrm << GetFlagField();
@@ -281,7 +292,10 @@ void XclExpString::WriteHeader( XclExpStream& rStrm ) const
 
 void XclExpString::WriteBuffer( XclExpStream& rStrm ) const
 {
-    rStrm.WriteUnicodeBuffer( maBuffer, GetFlagField() );
+    if( mbIsBiff8 )
+        rStrm.WriteUnicodeBuffer( maUniBuffer, GetFlagField() );
+    else
+        rStrm.WriteCharBuffer( maCharBuffer );
 }
 
 void XclExpString::Write( XclExpStream& rStrm ) const
@@ -291,70 +305,95 @@ void XclExpString::Write( XclExpStream& rStrm ) const
     if( IsRich() )
     {
         rStrm.SetSliceSize( 4 );
-        XclFormatRunVec::const_iterator aEndIter = maFormats.end();
-        for( XclFormatRunVec::const_iterator aIter = maFormats.begin(); aIter != aEndIter; ++aIter )
-            rStrm << *aIter;
+        ::std::for_each( maFormats.begin(), maFormats.end(), XclWriteFunc< XclFormatRun >( rStrm ) );
         rStrm.SetSliceSize( 0 );
     }
 }
 
 void XclExpString::WriteBuffer( void* pDest ) const
 {
-    if( mnLen )
+    if( pDest && !IsEmpty() )
     {
-        sal_uInt8* pDest8 = reinterpret_cast< sal_uInt8* >( pDest );
-        ScfUInt16Vec::const_iterator aEnd = maBuffer.end();
-        for( ScfUInt16Vec::const_iterator aIter = maBuffer.begin(); aIter != aEnd; ++aIter )
+        if( mbIsBiff8 )
         {
-            sal_uInt16 nChar = *aIter;
-            *pDest8 = static_cast< sal_uInt8 >( nChar );
-            ++pDest8;
-            if( mbIsUnicode )
+            sal_uInt8* pDest8 = reinterpret_cast< sal_uInt8* >( pDest );
+            for( ScfUInt16Vec::const_iterator aIter = maUniBuffer.begin(), aEnd = maUniBuffer.end(); aIter != aEnd; ++aIter )
             {
-                *pDest8 = static_cast< sal_uInt8 >( nChar >> 8 );
+                sal_uInt16 nChar = *aIter;
+                *pDest8 = static_cast< sal_uInt8 >( nChar );
                 ++pDest8;
+                if( mbIsUnicode )
+                {
+                    *pDest8 = static_cast< sal_uInt8 >( nChar >> 8 );
+                    ++pDest8;
+                }
             }
         }
+        else
+            memcpy( pDest, &maCharBuffer[ 0 ], mnLen );
     }
 }
 
-void XclExpString::Init( XclStrFlags nFlags )
+bool XclExpString::IsWriteFlags() const
 {
-    DBG_ASSERT( (nFlags & ~nAllowedFlags) == 0, "XclExpString::Init - unknown flag" );
-    maFormats.clear();
-    mnLen = 0;
-    mbIsUnicode = ::get_flag( nFlags, EXC_STR_FORCEUNICODE );
+    return mbIsBiff8 && (!IsEmpty() || !mbSmartFlags);
+}
+
+sal_uInt16 XclExpString::CalcStrLen( sal_Int32 nCurrLen, sal_uInt16 nMaxLen )
+{
+    sal_Int32 nAllowedLen = (mb8BitLen && (nMaxLen > 255)) ? 255 : nMaxLen;
+    return static_cast< sal_uInt16 >( ::std::min( ::std::max( nCurrLen, 0L ), nAllowedLen ) );
+}
+
+void XclExpString::Init( XclStrFlags nFlags, sal_Int32 nCurrLen, sal_uInt16 nMaxLen, bool bBiff8 )
+{
+    DBG_ASSERT( (nFlags & ~(bBiff8 ? nAllowedFlags : nAllowedFlags27)) == 0, "XclExpString::Init - unknown flag" );
+    mnLen = CalcStrLen( nCurrLen, nMaxLen );
+    mbIsBiff8 = bBiff8;
+    mbIsUnicode = bBiff8 && ::get_flag( nFlags, EXC_STR_FORCEUNICODE );
     mb8BitLen = ::get_flag( nFlags, EXC_STR_8BITLENGTH );
-    mbSmartFlags = ::get_flag( nFlags, EXC_STR_SMARTFLAGS );
+    mbSmartFlags = bBiff8 && ::get_flag( nFlags, EXC_STR_SMARTFLAGS );
+    mbKeepZero = ::get_flag( nFlags, EXC_STR_KEEPZEROCHARS );
     mbWrapped = false;
-}
 
-sal_uInt16 XclExpString::CalcStrLen( const String& rString, sal_uInt16 nMaxLen )
-{
-    return static_cast< sal_uInt16 >( ::std::min< xub_StrLen >( rString.Len(), GetMaxLen( nMaxLen ) ) );
-}
-
-sal_uInt16 XclExpString::CalcStrLen( const ::rtl::OUString& rString, sal_uInt16 nMaxLen )
-{
-    return static_cast< sal_uInt16 >( ::std::min< sal_Int32 >( ::std::max( rString.getLength(), 0L ), GetMaxLen( nMaxLen ) ) );
-}
-
-void XclExpString::Build( const sal_Unicode* pSrc, XclStrFlags nFlags, sal_uInt16 nCount )
-{
-    maBuffer.resize( nCount );
-    mnLen = nCount;
-
-    bool bKeepZero = ::get_flag( nFlags, EXC_STR_KEEPZEROCHARS );
-    const sal_Unicode* pSrcChar = pSrc;
-    ScfUInt16Vec::const_iterator aEnd = maBuffer.end();
-    for( ScfUInt16Vec::iterator aIter = maBuffer.begin(); aIter != aEnd; ++aIter, ++pSrcChar )
+    maFormats.clear();
+    if( mbIsBiff8 )
     {
-        *aIter = static_cast< sal_uInt16 >( (*pSrcChar || bKeepZero) ? *pSrcChar : '?' );
+        maCharBuffer.clear();
+        maUniBuffer.resize( mnLen );
+    }
+    else
+    {
+        maUniBuffer.clear();
+        maCharBuffer.resize( mnLen );
+    }
+}
+
+void XclExpString::Build( const sal_Unicode* pSource, XclStrFlags nFlags, sal_Int32 nCurrLen, sal_uInt16 nMaxLen )
+{
+    Init( nFlags, nCurrLen, nMaxLen, true );
+
+    const sal_Unicode* pSrcChar = pSource;
+    for( ScfUInt16Vec::iterator aIter = maUniBuffer.begin(), aEnd = maUniBuffer.end(); aIter != aEnd; ++aIter, ++pSrcChar )
+    {
+        *aIter = static_cast< sal_uInt16 >( (*pSrcChar || mbKeepZero) ? *pSrcChar : '?' );
         if( *aIter & 0xFF00 )
             mbIsUnicode = true;
     }
 
-    mbWrapped = ::std::find( maBuffer.begin(), maBuffer.end(), EXC_NEWLINE ) != maBuffer.end();
+    mbWrapped = ::std::find( maUniBuffer.begin(), maUniBuffer.end(), EXC_NEWLINE ) != maUniBuffer.end();
+}
+
+void XclExpString::Build( const sal_Char* pSource, XclStrFlags nFlags, sal_Int32 nCurrLen, sal_uInt16 nMaxLen )
+{
+    Init( nFlags, nCurrLen, nMaxLen, false );
+
+    const sal_Char* pSrcChar = pSource;
+    for( ScfUInt8Vec::iterator aIter = maCharBuffer.begin(), aEnd = maCharBuffer.end(); aIter != aEnd; ++aIter, ++pSrcChar )
+        *aIter = static_cast< sal_uInt8 >( (*pSrcChar || mbKeepZero) ? *pSrcChar : '?' );
+
+    mbIsUnicode = false;
+    mbWrapped = ::std::find( maCharBuffer.begin(), maCharBuffer.end(), EXC_NEWLINE_CHAR ) != maCharBuffer.end();
 }
 
 void XclExpString::PrepareWrite( XclExpStream& rStrm, sal_uInt32 nBytes ) const
@@ -684,12 +723,19 @@ void XclExpHFConverter::AppendPortion( String& rHFString, const EditTextObject* 
 
 // URL conversion =============================================================
 
-String XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const String& rAbsUrl )
+String XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const String& rAbsUrl, const String* pTableName )
 {
     String aUrl( rAbsUrl );
     if( ConvertToDos( aUrl, rRoot ) )
-        EncodeUrl_Impl( aUrl, false );
+        EncodeUrl_Impl( aUrl, pTableName );
     return aUrl;
+}
+
+String XclExpUrlHelper::EncodeDde( const String& rApplic, const String rTopic )
+{
+    String aDde( rApplic );
+    aDde.Append( EXC_DDE_DELIM ).Append( rTopic );
+    return aDde;
 }
 
 bool XclExpUrlHelper::ConvertToDos( String& rUrl, const XclExpRoot& rRoot )
@@ -709,11 +755,11 @@ bool XclExpUrlHelper::ConvertToDos( String& rUrl, const XclExpRoot& rRoot )
             // special handling for UNC
             xub_StrLen nStartSearch = aDosBase.EqualsAscii( "\\\\", 0, 2 ) ? 2 : 0;
             bool bEqualBase = false;
-            bool bExit = false;
-            while( !bExit && ((nPos = aDosBase.Search( '\\', nStartSearch )) != STRING_NOTFOUND) )
+            bool bLoop = true;
+            while( bLoop && ((nPos = aDosBase.Search( '\\', nStartSearch )) != STRING_NOTFOUND) )
             {
-                bExit = !aDosBase.Equals( aDosUrl, 0, nPos + 1 );
-                if( !bExit )
+                bLoop = (TRUE == aDosBase.Equals( aDosUrl, 0, nPos + 1 ));
+                if( bLoop )
                 {
                     aDosBase.Erase( 0, nPos + 1 );
                     aDosUrl.Erase( 0, nPos + 1 );
@@ -738,40 +784,49 @@ bool XclExpUrlHelper::ConvertToDos( String& rUrl, const XclExpRoot& rRoot )
     return bRet;
 }
 
-void XclExpUrlHelper::EncodeUrl_Impl( String& rUrl, bool bBrackets )
+void XclExpUrlHelper::EncodeUrl_Impl( String& rUrl, const String* pTableName = NULL )
 {
-    String aOldUrl( rUrl );
-    rUrl = '\x01';
+    if( rUrl.Len() )
+    {
+        String aOldUrl( rUrl );
+        rUrl = EXC_URLSTART_ENCODED;
 
-    if( (aOldUrl.Len() > 2) && aOldUrl.EqualsAscii( "\\\\", 0, 2 ) )
-    {
-        // UNC
-        rUrl.AppendAscii( "\x01@" );
-        aOldUrl.Erase( 0, 2 );
-    }
-    else if( (aOldUrl.Len() > 2) && aOldUrl.EqualsAscii( ":\\", 1, 2 ) )
-    {
-        // drive letter
-        rUrl.Append( '\x01' ).Append( aOldUrl.GetChar( 0 ) );
-        aOldUrl.Erase( 0, 3 );
-    }
+        if( (aOldUrl.Len() > 2) && aOldUrl.EqualsAscii( "\\\\", 0, 2 ) )
+        {
+            // UNC
+            rUrl.Append( EXC_URL_DOSDRIVE ).Append( '@' );
+            aOldUrl.Erase( 0, 2 );
+        }
+        else if( (aOldUrl.Len() > 2) && aOldUrl.EqualsAscii( ":\\", 1, 2 ) )
+        {
+            // drive letter
+            rUrl.Append( EXC_URL_DOSDRIVE ).Append( aOldUrl.GetChar( 0 ) );
+            aOldUrl.Erase( 0, 3 );
+        }
 
-    // directories
-    xub_StrLen nPos;
-    while( (nPos = aOldUrl.Search( '\\' )) != STRING_NOTFOUND )
-    {
-        if( aOldUrl.EqualsAscii( "..", 0, 2 ) )
-            rUrl.Append( '\x04' ); // parent dir
+        // directories
+        xub_StrLen nPos;
+        while( (nPos = aOldUrl.Search( '\\' )) != STRING_NOTFOUND )
+        {
+            if( aOldUrl.EqualsAscii( "..", 0, 2 ) )
+                rUrl.Append( EXC_URL_PARENTDIR );   // parent dir
+            else
+                rUrl.Append( aOldUrl.GetBuffer(), nPos ).Append( EXC_URL_SUBDIR );
+            aOldUrl.Erase( 0, nPos + 1 );
+        }
+
+        // file name
+        if( pTableName )    // enclose file name in brackets if table name follows
+            rUrl.Append( '[' ).Append( aOldUrl ).Append( ']' );
         else
-            rUrl.Append( aOldUrl.GetBuffer(), nPos ).Append( '\x03' );
-        aOldUrl.Erase( 0, nPos + 1 );
+            rUrl.Append( aOldUrl );
     }
+    else    // empty URL -> self reference
+        rUrl = pTableName ? EXC_URLSTART_SELFENCODED : EXC_URLSTART_SELF;
 
-    // file name
-    if( bBrackets )
-        rUrl.Append( '[' ).Append( aOldUrl ).Append( ']' );
-    else
-        rUrl.Append( aOldUrl );
+    // table name
+    if( pTableName )
+        rUrl.Append( *pTableName );
 }
 
 
@@ -805,7 +860,7 @@ XclExpCachedString::XclExpCachedString( const String& rStr, XclStrFlags nFlags )
 
 sal_uInt32 XclExpCachedString::GetSize() const
 {
-    return 1 + maStr.GetByteCount();
+    return 1 + maStr.GetSize();
 }
 
 void XclExpCachedString::Save( XclExpStream& rStrm ) const
@@ -857,7 +912,7 @@ sal_uInt32 XclExpCachedMatrix::GetSize() const
 void XclExpCachedMatrix::Save( XclExpStream& rStrm ) const
 {
     if( rStrm.GetRoot().GetBiff() < xlBiff8 )
-        // 256 columns are saves as 0 columns
+        // 256 columns are saved as 0 columns
         rStrm << static_cast< sal_uInt8 >( mnCols ) << mnRows;
     else
         rStrm << static_cast< sal_uInt8 >( mnCols - 1 ) << static_cast< sal_uInt16 >( mnRows - 1 );

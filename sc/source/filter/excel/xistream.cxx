@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:12:52 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,10 +104,6 @@ sal_uInt16 XclImpDecrypter::GetHash( const ByteString& rPass )
     return nHash;
 }
 
-void lcl_GetNextKeyBase( sal_uInt16& rnKey )
-{
-}
-
 sal_uInt16 XclImpDecrypter::GetKey( const ByteString& rPass )
 {
     xub_StrLen nLen = rPass.Len();
@@ -159,11 +155,11 @@ XclImpBiff5Decrypter::XclImpBiff5Decrypter( const String& rPass, sal_uInt16 nKey
 
         SVBT16 nOrigKey;
         ShortToSVBT16( nKey, nOrigKey );
-        for( nIndex = 0; nIndex < 16; ++nIndex )
+        sal_uInt8* pKeyChar = mpKey;
+        for( nIndex = 0; nIndex < 16; ++nIndex, ++pKeyChar )
         {
-            sal_uInt8& rnVal = mpKey[ nIndex ];
-            rnVal ^= nOrigKey[ nIndex & 0x01 ];
-            ::rotate_left( rnVal, 2 );
+            *pKeyChar ^= nOrigKey[ nIndex & 0x01 ];
+            ::rotate_left( *pKeyChar, 2 );
         }
 
         mbIsValid = true;

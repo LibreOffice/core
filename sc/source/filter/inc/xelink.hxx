@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xelink.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:11:11 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ private:
 // ----------------------------------------------------------------------------
 
 /** Represents an EXTERNNAME record for a DDE link. */
-class XclExpExtNameDDE : public XclExpExtNameBase
+class XclExpExtNameDde : public XclExpExtNameBase
 {
 private:
     typedef ::std::auto_ptr< XclExpCachedMatrix > XclExpCachedMatrixPtr;
@@ -212,10 +212,10 @@ private:
     sal_uInt32                  mnBaseSize;     /// Cached size of base record.
 
 public:
-    explicit                    XclExpExtNameDDE( const String& rName, sal_uInt16 nFlags );
+    explicit                    XclExpExtNameDde( const String& rName, sal_uInt16 nFlags );
 
     /** Inserts result list of a DDE link. */
-    bool                        InsertDDE(
+    bool                        InsertDde(
                                     const XclExpRoot& rRoot,
                                     const String& rApplic,
                                     const String& rTopic,
@@ -234,17 +234,17 @@ class XclExpExtNameList : XclExpRecordBase
 {
 private:
     XclExpRecordList< XclExpExtNameBase > maNameList;   /// The list with all EXTERNNAME records.
-    bool                        mbHasDDE;               /// true = contains DDE links.
+    bool                        mbHasDde;               /// true = contains DDE links.
 
 public:
-    explicit                    XclExpExtNameList() : mbHasDDE( false ) {}
+    explicit                    XclExpExtNameList() : mbHasDde( false ) {}
 
     /** Inserts an add-in function name
         @return  The 1-based (Excel-like) list index of the name. */
     sal_uInt16                  InsertAddIn( const String& rName );
     /** Inserts a DDE link.
         @return  The 1-based (Excel-like) list index of the DDE link. */
-    sal_uInt16                  InsertDDE(
+    sal_uInt16                  InsertDde(
                                     const XclExpRoot& rRoot,
                                     const String& rApplic,
                                     const String& rTopic,
@@ -359,7 +359,7 @@ public:
 
     /** Returns the size the sheet name will take in stream. */
     inline sal_uInt16           GetTableBytes() const
-                                    { return static_cast< sal_uInt16 >( maTable.GetByteCount() ); }
+                                    { return static_cast< sal_uInt16 >( maTable.GetSize() ); }
     /** Returns the external sheet name. */
     inline const XclExpString&  GetTableName() const { return maTable; }
 
@@ -392,12 +392,14 @@ private:
     enum XclExpSBType
     {
         xlSBSelf,               /// SUPBOOK is used for internal references.
-        xlSBExt,                /// SUPBOOK is used for external references.
+        xlSBUrl,                /// SUPBOOK is used for external references.
+        xlSBDde,                /// SUPBOOK is used for DDE links.
         xlSBAddIn               /// SUPBOOK contains add-in functions.
     };
 
     XclExpRecordList< XclExpXct > maXctList;    /// List of XCT records (which contain CRN records).
-    String                      maUrl;          /// URL of the external document.
+    String                      maUrl;          /// URL of the external document or application name for DDE.
+    String                      maDdeTopic;     /// Topic of an DDE link.
     XclExpString                maUrlEncoded;   /// Document name encoded for Excel.
     XclExpExtNameListPtr        mpExtNameList;  /// List of EXTERNNAME records.
     XclExpSBType                meType;         /// Type of this SUPBOOK record.
@@ -408,23 +410,20 @@ public:
     explicit                    XclExpSupbook( sal_uInt16 nTabs );
     /** Creates a SUPBOOK record for add-in functions. */
     explicit                    XclExpSupbook();
-    /** Creates a SUPBOOK record for external references or DDE links.
-        @param bDDE  false = external reference, true = DDE link. */
-    explicit                    XclExpSupbook( const XclExpRoot& rRoot, const String& rUrl, bool bDDE );
+    /** Creates a SUPBOOK record for an external document. */
+    explicit                    XclExpSupbook( const XclExpRoot& rRoot, const String& rUrl );
+    /** Creates a SUPBOOK record for a DDE link. */
+    explicit                    XclExpSupbook( const XclExpRoot& rRoot, const String& rApplic, const String& rTopic );
 
-    /** Returns the original document URL. */
-    inline const String&        GetUrl() const { return maUrl; }
     /** Returns document URL encoded for Excel. */
     inline const XclExpString&  GetUrlEncoded() const { return maUrlEncoded; }
     /** Returns the sheet name inside of this SUPBOOK. */
     const XclExpString*         GetTableName( sal_uInt16 nXct ) const;
 
-    /** Returns true, if this SUPBOOK is for internal references. */
-    inline bool                 IsSelf() const { return meType == xlSBSelf; }
-    /** Returns true, if this SUPBOOK is for external references or DDE links. */
-    inline bool                 IsExtern() const { return meType == xlSBExt; }
-    /** Returns true, if this SUPBOOK is for add-in functions. */
-    inline bool                 IsAddin() const { return meType == xlSBAddIn; }
+    /** Returns true, if this SUPBOOK contains the passed URL of an external document. */
+    bool                        IsUrlLink( const String& rUrl ) const;
+    /** Returns true, if this SUPBOOK contains the passed DDE link. */
+    bool                        IsDdeLink( const String& rApplic, const String& rTopic ) const;
 
     /** Stores all cells in the given range in the CRN list of the XCT with index nXct. */
     void                        StoreCellRange( const XclExpRoot& rRoot, const ScRange& rRange, sal_uInt16 nXct );
@@ -437,11 +436,7 @@ public:
     sal_uInt16                  InsertAddIn( const String& rName );
     /** Finds or inserts an EXTERNNAME record for DDE links.
         @return  The 1-based EXTERNNAME record index. */
-    sal_uInt16                  InsertDDE(
-                                    const XclExpRoot& rRoot,
-                                    const String& rApplic,
-                                    const String& rTopic,
-                                    const String& rItem );
+    sal_uInt16                  InsertDde( const XclExpRoot& rRoot, const String& rItem );
 
     /** Writes the SUPBOOK and all EXTERNNAME, XCT and CRN records. */
     virtual void                Save( XclExpStream& rStrm );
@@ -494,7 +489,7 @@ public:
     /** Finds or inserts an EXTERNNAME record for DDE links.
         @param rnSupbook  Returns the index of the SUPBOOK record which contains the DDE link.
         @param rnExtName  Returns the 1-based EXTERNNAME record index. */
-    void                        InsertDDE(
+    void                        InsertDde(
                                     sal_uInt16& rnSupbook, sal_uInt16& rnExtName,
                                     const String& rApplic, const String& rTopic, const String& rItem );
 
@@ -504,10 +499,14 @@ public:
 private:
     /** Returns the SUPBOOK record of an Excel sheet. */
     XclExpSupbook*              GetSupbook( sal_uInt16 nXclTab ) const;
-    /** Searches for the SUPBOOK record with the passed document URL.
+    /** Searches for the SUPBOOK record containing the passed document URL.
         @param rnIndex  Returns the list index, if the SUPBOOK exists.
         @return  The SUPBOOK record or NULL, if not found. */
-    XclExpSupbook*              GetSupbook( sal_uInt16& rnIndex, const String& rUrl ) const;
+    XclExpSupbook*              GetSupbookUrl( sal_uInt16& rnIndex, const String& rUrl ) const;
+    /** Searches for the SUPBOOK record containing the passed DDE link.
+        @param rnIndex  Returns the list index, if the SUPBOOK exists.
+        @return  The SUPBOOK record or NULL, if not found. */
+    XclExpSupbook*              GetSupbookDde( sal_uInt16& rnIndex, const String& rApplic, const String& rTopic ) const;
 
     /** Appends a new SUPBOOK to the list.
         @return  The list index of the SUPBOOK record. */
@@ -591,7 +590,7 @@ public:
     /** Finds or inserts an EXTERNNAME record for DDE links.
         @param rnXti  Returns the index of the XTI structure which contains the DDE link.
         @param rnExtName  Returns the 1-based EXTERNNAME record index. */
-    bool                        InsertDDE(
+    bool                        InsertDde(
                                     sal_uInt16& rnXti, sal_uInt16& rnExtName,
                                     const String& rApplic, const String& rTopic, const String& rItem );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2002-11-21 12:20:43 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@ class XclExpUserBViewList;
 class XclExpCellMerging;
 
 class ExcNameList;
-class UsedFormList;
 class UsedAttrList;
 class XclObjList;
 class XclNoteList;
@@ -159,7 +158,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
 
     ExcNameList*        pNameList;
     ScRangeName*        pScNameList;        // stores range names and DB ranges
-    UsedFormList*       pFormRecs;
     UsedAttrList*       pXFRecs;
     ExcExternDup*       pExtSheetCntAndRecs;
     UINT16              nColMax;
@@ -248,3 +246,4 @@ struct LOTUS_ROOT
 extern LOTUS_ROOT*      pLotusRoot; // -> Inkarn. in filter.cxx
 
 #endif
+

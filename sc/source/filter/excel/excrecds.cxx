@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:06:42 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:39:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,73 +176,6 @@ const BYTE      ExcDummy_041::pMyData[] = {
 };
 const ULONG ExcDummy_041::nMyLen = sizeof( ExcDummy_041::pMyData );
 
-//--------------------------------------------------------- class ExcDummy_01-
-// Default Font Records
-const BYTE      ExcDummy_01::pMyData[] = {   //////////
-    0x31, 0x00, 0x14, 0x00, 0xc8, 0x00, 0x00, 0x00, 0xff, 0x7f, 0x90, 0x01,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0xa5, 0x05, 0x41, 0x72, 0x69, 0x61, 0x6c,
-    //                              'alter Wert 0xa5, hier Reserved
-    0x31, 0x00, 0x14, 0x00, 0xc8, 0x00, 0x01, 0x00, 0xff, 0x7f, 0xbc, 0x02,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0xa5, 0x05, 0x41, 0x72, 0x69, 0x61, 0x6c,
-
-    0x31, 0x00, 0x14, 0x00, 0xc8, 0x00, 0x02, 0x00, 0xff, 0x7f, 0x90, 0x01,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0xa5, 0x05, 0x41, 0x72, 0x69, 0x61, 0x6c,
-
-    0x31, 0x00, 0x14, 0x00, 0xc8, 0x00, 0x03, 0x00, 0xff, 0x7f, 0xbc, 0x02,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0xa5, 0x05, 0x41, 0x72, 0x69, 0x61, 0x6c,
-
-    0x31, 0x00, 0x14, 0x00, 0xc8, 0x00, 0x00, 0x00, 0xff, 0x7f, 0x90, 0x01,
-    0x00, 0x00, 0x00, 0x00, 0x00, 0xa5, 0x05, 0x41, 0x72, 0x69, 0x61, 0x6c
-};
-const ULONG ExcDummy_01::nMyLen = sizeof( ExcDummy_01::pMyData );   //( ( UINT16 ) 0x14 + 4 ) * 5;
-
-
-//--------------------------------------------------------- class ExcDummy_Fm -
-const BYTE      ExcDummy_Fm::pMyData[] = {
-    0x1e, 0x04, 0x1c, 0x00, 0x05, 0x00, 0x19, 0x23, 0x2c, 0x23, 0x23, 0x30,
-    0x5c, 0x20, 0x22, 0x44, 0x4d, 0x22, 0x3b, 0x5c, 0x2d, 0x23, 0x2c, 0x23,
-    0x23, 0x30, 0x5c, 0x20, 0x22, 0x44, 0x4d, 0x22,
-    0x1e, 0x04, 0x21, 0x00, 0x06, 0x00, 0x1e, 0x23, 0x2c, 0x23, 0x23, 0x30,
-    0x5c, 0x20, 0x22, 0x44, 0x4d, 0x22, 0x3b, 0x5b, 0x52, 0x65, 0x64, 0x5d,
-    0x5c, 0x2d, 0x23, 0x2c, 0x23, 0x23, 0x30, 0x5c, 0x20, 0x22, 0x44, 0x4d,
-    0x22,
-    0x1e, 0x04, 0x22, 0x00, 0x07, 0x00, 0x1f, 0x23, 0x2c, 0x23, 0x23, 0x30,
-    0x2e, 0x30, 0x30, 0x5c, 0x20, 0x22, 0x44, 0x4d, 0x22, 0x3b, 0x5c, 0x2d,
-    0x23, 0x2c, 0x23, 0x23, 0x30, 0x2e, 0x30, 0x30, 0x5c, 0x20, 0x22, 0x44,
-    0x4d, 0x22,
-    0x1e, 0x04, 0x27, 0x00, 0x08, 0x00, 0x24, 0x23, 0x2c, 0x23, 0x23, 0x30,
-    0x2e, 0x30, 0x30, 0x5c, 0x20, 0x22, 0x44, 0x4d, 0x22, 0x3b, 0x5b, 0x52,
-    0x65, 0x64, 0x5d, 0x5c, 0x2d, 0x23, 0x2c, 0x23, 0x23, 0x30, 0x2e, 0x30,
-    0x30, 0x5c, 0x20, 0x22, 0x44, 0x4d, 0x22,
-    0x1e, 0x04, 0x3c, 0x00, 0x2a, 0x00, 0x39, 0x5f, 0x2d, 0x2a, 0x20, 0x23,
-    0x2c, 0x23, 0x23, 0x30, 0x5c, 0x20, 0x22, 0x44, 0x4d, 0x22, 0x5f, 0x2d,
-    0x3b, 0x5c, 0x2d, 0x2a, 0x20, 0x23, 0x2c, 0x23, 0x23, 0x30, 0x5c, 0x20,
-    0x22, 0x44, 0x4d, 0x22, 0x5f, 0x2d, 0x3b, 0x5f, 0x2d, 0x2a, 0x20, 0x22,
-    0x2d, 0x22, 0x5c, 0x20, 0x22, 0x44, 0x4d, 0x22, 0x5f, 0x2d, 0x3b, 0x5f,
-    0x2d, 0x40, 0x5f, 0x2d,
-    0x1e, 0x04, 0x3c, 0x00, 0x29, 0x00, 0x39, 0x5f, 0x2d, 0x2a, 0x20, 0x23,
-    0x2c, 0x23, 0x23, 0x30, 0x5c, 0x20, 0x5f, 0x44, 0x5f, 0x4d, 0x5f, 0x2d,
-    0x3b, 0x5c, 0x2d, 0x2a, 0x20, 0x23, 0x2c, 0x23, 0x23, 0x30, 0x5c, 0x20,
-    0x5f, 0x44, 0x5f, 0x4d, 0x5f, 0x2d, 0x3b, 0x5f, 0x2d, 0x2a, 0x20, 0x22,
-    0x2d, 0x22, 0x5c, 0x20, 0x5f, 0x44, 0x5f, 0x4d, 0x5f, 0x2d, 0x3b, 0x5f,
-    0x2d, 0x40, 0x5f, 0x2d,
-    0x1e, 0x04, 0x44, 0x00, 0x2c, 0x00, 0x41, 0x5f, 0x2d, 0x2a, 0x20, 0x23,
-    0x2c, 0x23, 0x23, 0x30, 0x2e, 0x30, 0x30, 0x5c, 0x20, 0x22, 0x44, 0x4d,
-    0x22, 0x5f, 0x2d, 0x3b, 0x5c, 0x2d, 0x2a, 0x20, 0x23, 0x2c, 0x23, 0x23,
-    0x30, 0x2e, 0x30, 0x30, 0x5c, 0x20, 0x22, 0x44, 0x4d, 0x22, 0x5f, 0x2d,
-    0x3b, 0x5f, 0x2d, 0x2a, 0x20, 0x22, 0x2d, 0x22, 0x3f, 0x3f, 0x5c, 0x20,
-    0x22, 0x44, 0x4d, 0x22, 0x5f, 0x2d, 0x3b, 0x5f, 0x2d, 0x40, 0x5f, 0x2d,
-
-    0x1e, 0x04, 0x44, 0x00, 0x2b, 0x00, 0x41, 0x5f, 0x2d, 0x2a, 0x20, 0x23,
-    0x2c, 0x23, 0x23, 0x30, 0x2e, 0x30, 0x30, 0x5c, 0x20, 0x5f, 0x44, 0x5f,
-    0x4d, 0x5f, 0x2d, 0x3b, 0x5c, 0x2d, 0x2a, 0x20, 0x23, 0x2c, 0x23, 0x23,
-    0x30, 0x2e, 0x30, 0x30, 0x5c, 0x20, 0x5f, 0x44, 0x5f, 0x4d, 0x5f, 0x2d,
-    0x3b, 0x5f, 0x2d, 0x2a, 0x20, 0x22, 0x2d, 0x22, 0x3f, 0x3f, 0x5c, 0x20,
-    0x5f, 0x44, 0x5f, 0x4d, 0x5f, 0x2d, 0x3b, 0x5f, 0x2d, 0x40, 0x5f, 0x2d
-};
-const ULONG ExcDummy_Fm::nMyLen = sizeof( ExcDummy_Fm::pMyData );
-
-
 //--------------------------------------------------------- class ExcDummy_XF -
 const BYTE      ExcDummy_XF::pMyData[] = {
     0xe0, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0xf5, 0xff, 0x20, 0x00,
@@ -333,12 +266,6 @@ const ULONG ExcDummy_02c::nMyLen = sizeof( ExcDummy_02c::pMyData );
 #ifdef DBG_UTIL
 UINT16          ExcXf::nObjCnt = 0;
 #endif
-
-SvNumberFormatter*  ExcFormat::pFormatter    = NULL;
-UINT32              ExcFormat::nObjCnt       = 0;
-NfKeywordTable*     ExcFormat::pKeywordTable = 0;
-
-
 
 
 //----------------------------------------------------------- class ExcRecord -
@@ -594,36 +521,6 @@ Exc1904::Exc1904( ScDocument& rDoc )
 UINT16 Exc1904::GetNum( void ) const
 {
     return 0x0022;
-}
-
-
-
-//--------------------------------------------------------- class ExcDummy_01 -
-
-ULONG ExcDummy_01::GetLen( void ) const
-{
-    return nMyLen;
-}
-
-
-const BYTE* ExcDummy_01::GetData( void ) const
-{
-    return pMyData;
-}
-
-
-
-//--------------------------------------------------------- class ExcDummy_Fm -
-
-ULONG ExcDummy_Fm::GetLen( void ) const
-{
-    return nMyLen;
-}
-
-
-const BYTE* ExcDummy_Fm::GetData( void ) const
-{
-    return pMyData;
 }
 
 
@@ -2663,131 +2560,6 @@ ULONG ExcXf::GetLen( void ) const
 
 
 
-//----------------------------------------------------------- class ExcFormat -
-
-ExcFormat::ExcFormat( RootData* pExcRoot, UINT32 nNewScIndex ) : ExcRoot( pExcRoot )
-{
-    // ACHTUNG: nIndex wird hier NICHT gesetzt -> bei Freunden machen!
-    if( !nObjCnt )
-    {
-        pFormatter = new SvNumberFormatter(
-                pExcRoot->pDoc->GetServiceManager(), LANGUAGE_ENGLISH_US );
-        // Compiler needs a hint, this doesn't work: pKeywordTable = new NfKeywordTable;
-        // cannot convert from 'class String *' to 'class String (*)[54]'
-        // The effective result here is class String (*)[54*1]
-        pKeywordTable = new NfKeywordTable[1];
-        pFormatter->FillKeywordTable( *pKeywordTable, LANGUAGE_ENGLISH_US );
-        // remap codes unknown to Excel
-        (*pKeywordTable)[NF_KEY_NN] = String( RTL_CONSTASCII_USTRINGPARAM( "DDD" ) );
-        (*pKeywordTable)[NF_KEY_NNN] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
-        // NNNN gets a separator appended in SvNumberformat::GetMappedFormatString()
-        (*pKeywordTable)[NF_KEY_NNNN] = String( RTL_CONSTASCII_USTRINGPARAM( "DDDD" ) );
-    }
-
-    nObjCnt++;  // Objektzaehler einen hoch
-
-    eBiff = pExcRoot->eDateiTyp;
-
-    nScIndex = nNewScIndex;
-
-    DBG_ASSERT( pExcRoot->pDoc->GetFormatTable(), "-ExcFormat::ExcFormat(): Keine Format-Tabelle!" );
-
-    const SvNumberformat*   pEntry = pExcRoot->pDoc->GetFormatTable()->GetEntry( nNewScIndex );
-
-    if( pEntry )
-    {
-        if( pEntry->GetType() == NUMBERFORMAT_LOGICAL )
-        {
-            String  aTmpStr;
-            Color   aDummyCol;
-            Color*  pDummyCol = &aDummyCol;
-
-            aFormStr = sal_Unicode( '\"' );
-            ( ( SvNumberformat * ) pEntry )->GetOutputString( 1.0, aTmpStr, &pDummyCol );
-            aFormStr += aTmpStr;
-            aFormStr.AppendAscii( "\";\"" );
-            aFormStr += aTmpStr;
-            aFormStr.AppendAscii( "\";\"" );
-            ( ( SvNumberformat * ) pEntry )->GetOutputString( 0.0, aTmpStr, &pDummyCol );
-            aFormStr += aTmpStr;
-            aFormStr += sal_Unicode( '\"' );
-        }
-        else
-        {
-            LanguageType    eLang = pEntry->GetLanguage();
-            if ( eLang == LANGUAGE_ENGLISH_US )
-                aFormStr = pEntry->GetMappedFormatstring( *pKeywordTable,
-                        *pFormatter->GetLocaleData() );
-            else
-            {
-                xub_StrLen  nCheckPos;
-                UINT32      nConvertIndex;
-                INT16       nTyp = NUMBERFORMAT_DEFINED;
-                String      aTmpString( pEntry->GetFormatstring() );
-                pFormatter->PutandConvertEntry( aTmpString, nCheckPos, nTyp,
-                        nConvertIndex, eLang, LANGUAGE_ENGLISH_US );
-#ifndef PRODUCT
-                if ( nCheckPos )
-                {
-                    ByteString aMsg( "Format code string not convertible to English code:\n" );
-                    aMsg += ByteString( aTmpString, RTL_TEXTENCODING_UTF8 );
-                    DBG_ERRORFILE( aMsg.GetBuffer() );
-                }
-#endif
-                aFormStr = pFormatter->GetEntry( nConvertIndex
-                        )->GetMappedFormatstring( *pKeywordTable,
-                            *pFormatter->GetLocaleData() );
-            }
-            if( aFormStr.EqualsAscii( "Standard" ) )
-                aFormStr.AssignAscii( "General" );
-        }
-    }
-    else
-        aFormStr.AssignAscii( "\"Internal Error: Unknown Numberformat!\"" );
-}
-
-
-ExcFormat::~ExcFormat()
-{
-    DBG_ASSERT( nObjCnt, "*ExcFormat::~ExcFormat(): zuviel des Guten" );
-    nObjCnt--;
-    if( !nObjCnt )
-    {
-        DBG_ASSERT( pFormatter, "*ExcFormat::~ExcFormat(): multiple delete!" );
-        delete pFormatter;
-        pFormatter = NULL;
-        delete [] pKeywordTable;
-        pKeywordTable = NULL;
-    }
-}
-
-
-void ExcFormat::SaveCont( XclExpStream& rStrm )
-{
-    if ( eBiff < Biff8 )
-    {
-        rStrm << nIndex;
-        rStrm.WriteByteString(
-            ByteString( aFormStr, *pExcRoot->pCharset ), (BYTE)aFormStr.Len() );    // 8 bit length
-    }
-    else
-        rStrm << nIndex << XclExpUniString( aFormStr );
-}
-
-
-UINT16 ExcFormat::GetNum( void ) const
-{
-    return 0x041E;
-}
-
-
-ULONG ExcFormat::GetLen( void ) const
-{   //! for Biff8 only a prediction, assumes 8-bit string
-    return ( eBiff < Biff8 ? 2 + 1 + (BYTE)aFormStr.Len() : 2 + 3 + aFormStr.Len() );
-}
-
-
-
 //------------------------------------------------------ class ExcExterncount -
 
 ExcExterncount::ExcExterncount( RootData* pRD, const BOOL bTableNew ) :
@@ -2959,38 +2731,12 @@ void UsedList::Save( XclExpStream& rStrm )
 
 
 
-//-------------------------------------------------------- class UsedFormList -
-
-UsedFormList::~UsedFormList()
-{
-    for( ExcFormat* pFormat = _First(); pFormat; pFormat = _Next() )
-        delete pFormat;
-}
-
-
-//UINT16 UsedFormList::Add( ExcFormat* pFormat )
-UINT16 UsedFormList::Add( UINT32 nNewScIx )
-{
-    // Doubletten suchen
-    UINT16      nC = nBaseIndex;
-    for( ExcFormat* pCurr = _First(); pCurr; pCurr = _Next(), nC++ )
-        if( pCurr->nScIndex == nNewScIx )
-            return nC;
-
-    ExcFormat* pFormat = new ExcFormat( pExcRoot, nNewScIx );
-    pFormat->nIndex = nC;
-    Insert( pFormat, LIST_APPEND );
-    return nC;
-}
-
-
-
 //-------------------------------------------------------- class UsedAttrList -
 
-UsedAttrList::UsedAttrList( RootData* pRD, UsedFormList& rUFrmLst ) :
+UsedAttrList::UsedAttrList( RootData* pRD ) :
     ExcRoot( pRD ),
     rFntLst( pRD->pER->GetFontBuffer() ),
-    rFrmLst( rUFrmLst )
+    rFrmLst( pRD->pER->GetNumFmtBuffer() )
 {
 }
 
@@ -3039,7 +2785,7 @@ void UsedAttrList::AddNewXF( const ScPatternAttr* pAttr, const BOOL bStyle, cons
         nFontIndex = 0;
     }
 
-    UINT16          nFormatIndex = rFrmLst.Add( nScForm );
+    UINT16          nFormatIndex = rFrmLst.Insert( nScForm );
 
     if ( pExcRoot->eDateiTyp < Biff8 )
         pData->pXfRec = new ExcXf( *pExcRoot->pER, nFontIndex, nFormatIndex, pAttr, pData->bLineBreak, bStyle );
@@ -3464,7 +3210,7 @@ ExcFilterCondition::~ExcFilterCondition()
 
 ULONG ExcFilterCondition::GetTextBytes() const
 {
-    return pText ? 1 + pText->GetBufferByteCount() : 0;
+    return pText ? 1 + pText->GetBufferSize() : 0;
 }
 
 void ExcFilterCondition::SetCondition( UINT8 nTp, UINT8 nOp, double fV, String* pT )
@@ -3487,7 +3233,7 @@ void ExcFilterCondition::Save( XclExpStream& rStrm )
         break;
         case EXC_AFTYPE_STRING:
             DBG_ASSERT( pText, "ExcFilterCondition::Save() -- pText is NULL!" );
-            rStrm << (UINT32)0 << (UINT8) pText->GetLen() << (UINT16)0 << (UINT8)0;
+            rStrm << (UINT32)0 << (UINT8) pText->Len() << (UINT16)0 << (UINT8)0;
         break;
         case EXC_AFTYPE_BOOLERR:
             rStrm << (UINT8)0 << (UINT8)((fVal != 0) ? 1 : 0) << (UINT32)0 << (UINT16)0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:06:41 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:39:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1455,7 +1455,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
     else
     {
         UINT8   nE, nType, nOper, nBoolErr, nVal;
-        UINT32  nRK;
+        INT32   nRK;
         double  fVal;
         BOOL    bIgnore;
 

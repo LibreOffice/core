@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-12-06 16:06:42 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,7 +1042,7 @@ void ImportExcel::Colinfo( void )
 void ImportExcel::Rk( void )
 {// Cell Value, RK Number
     UINT16              nRow, nCol, nXF;
-    UINT32              nRkNum;
+    INT32               nRkNum;
 
     aIn >> nRow >> nCol >> nXF >> nRkNum;
 
@@ -1420,7 +1420,7 @@ void ImportExcel::Shrfmla( void )
 void ImportExcel::Mulrk( void )
 {
     UINT16  nRow, nColFirst, nXF;
-    UINT32  nRkNum;
+    INT32   nRkNum;
 
     aIn >> nRow >> nColFirst;
 

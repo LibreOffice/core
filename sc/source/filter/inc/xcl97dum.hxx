@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97dum.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-28 13:46:46 $
+ *  last change: $Author: dr $ $Date: 2002-12-06 16:41:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,28 +102,6 @@ public:
 
 
 class ExcDummy8_041 : public ExcDummyRec
-{
-private:
-        static const BYTE   pMyData[];
-        static const ULONG  nMyLen;
-public:
-    virtual ULONG               GetLen() const;
-    virtual const BYTE*         GetData() const;
-};
-
-
-class ExcDummy8_01 : public ExcDummyRec
-{
-private:
-        static const BYTE   pMyData[];
-        static const ULONG  nMyLen;
-public:
-    virtual ULONG               GetLen() const;
-    virtual const BYTE*         GetData() const;
-};
-
-
-class ExcDummy8_Fm : public ExcDummyRec
 {
 private:
         static const BYTE   pMyData[];
