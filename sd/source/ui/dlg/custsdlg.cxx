@@ -2,9 +2,9 @@
  *
  *  $RCSfile: custsdlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:14:37 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
         pCustomShowList->Seek( nPosToSelect );
     }
 
-    aCbxUseCustomShow.Check( pCustomShowList && rDoc.IsCustomShow() );
+    aCbxUseCustomShow.Check( pCustomShowList && rDoc.getPresentationSettings().mbCustomShow );
 
     CheckState();
 }
