@@ -2,9 +2,9 @@
  *
  *  $RCSfile: substitutepathvars.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-17 08:16:09 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:14:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,6 @@ class SubstitutePathVariables :     public com::sun::star::lang::XTypeProvider  
          rtl::OUString  GetPathVariableValue() const;
 
         rtl::OUString   GetHomeVariableValue() const;
-        rtl::OUString   GetLanguageString( LanguageType eLanguageType ) const;
 
         // XStringSubstitution implementation methods
         rtl::OUString impl_substituteVariable( const ::rtl::OUString& aText, sal_Bool bSustRequired )
