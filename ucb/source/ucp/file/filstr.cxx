@@ -31,7 +31,8 @@ public:
 
     ~XInputStreamForStream()
     {
-        closeInput();
+        if ( m_xPtr )
+            m_xPtr->release();
     }
 
     uno::Any SAL_CALL
@@ -199,7 +200,8 @@ public:
 
     ~XOutputStreamForStream()
     {
-        closeOutput();
+        if ( m_xPtr )
+            m_xPtr->release();
     }
 
     // XInterface
