@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: is $ $Date: 2004-05-26 17:08:12 $
+#   last change: $Author: hjs $ $Date: 2004-06-28 13:39:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,30 +75,31 @@ INSTALLDIR=$(OUT)
 
 ALLTAR : openoffice
 
-.IF "$(alllangext)"!=""
+.IF "$(alllangiso)"!=""
 
 .IF "$(BUILD_SPECIAL)"!=""  
 .IF "$(OOO_RELEASE_BUILD)"==""
-openoffice: openoffice_01
+openoffice: openoffice_en-US
 .ELSE
-openoffice: $(foreach,i,$(alllangext) openoffice_$i)
+openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 .ENDIF
 .ELSE
-openoffice: $(foreach,i,$(alllangext) openoffice_$i)
+openoffice: $(foreach,i,$(alllangiso) openoffice_$i)
 .ENDIF
 
-ooolanguagepack : $(foreach,i,$(alllangext) ooolanguagepack_$i)
+ooolanguagepack : $(foreach,i,$(alllangiso) ooolanguagepack_$i)
 
 openoffice_%:
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f openoffice.lst -l $(@:s/openoffice_//) -p OpenOffice -packagelist ..$/inc_openoffice$/unix$/packagelist.txt -u $(OUT) -buildid $(BUILD) -msitemplate ..$/inc_openoffice$/windows$/msi_templates -msilanguage ..$/inc_openoffice$/windows$/msi_languages -msifiles ..$/inc_openoffice$/windows$/msi_files
 
-.ELSE			# "$(alllangext)"!=""
+.ELSE			# "$(alllangiso)"!=""
 openoffice:
     @+echo cannot pack nothing...
 
-.ENDIF			# "$(alllangext)"!=""
+.ENDIF			# "$(alllangiso)"!=""
 
 .ENDIF          # "$(BSCLIENT)"==""
 
 ooolanguagepack_%:
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f openoffice.lst -l $(@:s/ooolanguagepack_//) -p OpenOffice -packagelist ..$/inc_openoffice$/unix$/packagelist_languagepack.txt -u $(OUT) -buildid $(BUILD) -msitemplate ..$/inc_openoffice$/windows$/msi_templates -msilanguage ..$/inc_openoffice$/windows$/msi_languages -msifiles ..$/inc_openoffice$/windows$/msi_files -languagepack
+
