@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-29 14:32:19 $
+ *  last change: $Author: cl $ $Date: 2002-05-08 09:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1971,14 +1971,23 @@ void SdrTextObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
         }
     }
 
-    if( pOutlinerParaObject && pOutlinerParaObject->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
+    if( pOutlinerParaObject )
     {
-        if( eTextKind == OBJ_TITLETEXT )
-            pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
-        else if( eTextKind == OBJ_OUTLINETEXT )
-            pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
-        else
-            pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+        if( pOutlinerParaObject->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
+        {
+            if( eTextKind == OBJ_TITLETEXT )
+                pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
+            else if( eTextKind == OBJ_OUTLINETEXT )
+                pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
+            else
+                pOutlinerParaObject->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
+        }
+
+        if( pOutlinerParaObject->IsVertical() )
+        {
+            ImpForceItemSet();
+            mpObjectItemSet->Put( SvxWritingModeItem( com::sun::star::text::WritingMode_TB_RL ) );
+        }
     }
 
     if (rHead.GetVersion()>=10) {
