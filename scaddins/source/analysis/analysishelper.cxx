@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 17:46:44 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,11 @@ sal_Int32 DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
  */
 
 void DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear )
+    throw( lang::IllegalArgumentException )
 {
+    if( nDays < 0 )
+        throw lang::IllegalArgumentException();
+
     sal_Int32   nTempDays;
     sal_Int32   i = 0;
     sal_Bool    bCalc;
@@ -959,6 +963,8 @@ double Bessely1( double fNum )
     }
     else
     {
+#if 0
+        // #i12430# don't know the intention of this piece of code...
         double  z = 8.0 / fNum;
         double  y = z * z;
         double  xx = fNum - 2.356194491;
@@ -971,6 +977,9 @@ double Bessely1( double fNum )
                         y * 0.105787412e-6 ) ) );
 
         fRet = sqrt( 0.636619772 / fNum ) * ( sin( xx ) * f1 + z * cos( xx ) * f2 );
+#endif
+        // #i12430# ...but this seems to work much better.
+        fRet = sqrt( 0.636619772 / fNum ) * sin( fNum - 2.356194491 );
     }
 
     return fRet;
