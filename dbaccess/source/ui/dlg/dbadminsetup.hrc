@@ -1,0 +1,175 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dbadminsetup.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:02:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _DBAUI_DBADMINSETUP_HRC_
+#define _DBAUI_DBADMINSETUP_HRC_
+
+
+#ifndef _DBA_DBACCESS_HELPID_HRC_
+#include "dbaccess_helpid.hrc"
+#endif
+#ifndef _DBU_DLG_HRC_
+#include "dbu_dlg.hrc"
+#endif
+#ifndef DBACCESS_UI_BROWSER_ID_HXX
+#include "browserids.hxx"
+#endif
+#ifndef DBAUI_ADABASPAGE_HRC
+#include "AdabasPage.hrc"
+#endif
+
+
+#define STR_DBASE_HELPTEXT                  28
+#define STR_MSACCESS_HELPTEXT               29
+#define STR_TEXT_HELPTEXT                   30
+//#define STR_LDAP_HELPTEXT                 31
+#define STR_ADO_HELPTEXT                    32
+#define STR_JDBC_HELPTEXT                   33
+#define STR_ODBC_HELPTEXT                   34
+#define STR_MYSQLJDBC_HELPTEXT              35
+#define STR_SPREADSHEET_HELPTEXT            36
+//#define STR_AUTHENTIFICATION_HELPTEXT     37
+#define STR_FINAL_HELPTEXT                  38
+#define STR_ADABAS_HELPTEXT                 39
+#define STR_ORACLE_HELPTEXT                 40
+
+#define STR_DBASE_HEADERTEXT                41
+#define STR_MSACCESS_HEADERTEXT             42
+#define STR_TEXT_HEADERTEXT                 43
+//#define STR_LDAP_HEADERTEXT               44
+#define STR_ADO_HEADERTEXT                  45
+#define STR_JDBC_HEADERTEXT                 46
+#define STR_ODBC_HEADERTEXT                 47
+#define STR_MYSQLJDBC_HEADERTEXT            49
+#define STR_SPREADSHEET_HEADERTEXT          50
+#define STR_FINAL_HEADERTEXT                52
+#define STR_ADABAS_HEADERTEXT               53
+#define STR_ORACLE_HEADERTEXT               54
+#define STR_GENERAL_HEADERTEXT              55
+#define STR_DBWIZARDTITLE                   56
+#define STR_ROADMAPHEADER                   57
+
+#define STR_DEFAULTLDAPPORTNUMBER           60
+
+#define STR_ADABASNAME                  61
+//#define STR_ADOURL                    62
+#define STR_ODBCDATASOURCENAME          63
+#define STR_SPREADSHEETPATH             64
+#define STR_DBLOCATIONLABEL             65
+#define STR_ADMIN_HELPTEXT              66
+
+#define STR_ORACLE_DEFAULT              67
+#define STR_PAGETITLE_INTROPAGE         69
+#define STR_PAGETITLE_DBASE             70
+#define STR_PAGETITLE_TEXT              71
+#define STR_PAGETITLE_MSACCESS          72
+#define STR_PAGETITLE_LDAP              73
+#define STR_PAGETITLE_ADABAS            74
+#define STR_PAGETITLE_ADO               75
+#define STR_PAGETITLE_JDBC              76
+#define STR_PAGETITLE_ORACLE            77
+#define STR_PAGETITLE_MYSQL             78
+#define STR_PAGETITLE_ODBC              79
+#define STR_PAGETITLE_SPREADSHEET       80
+#define STR_PAGETITLE_AUTHENTIFICATION  81
+#define STR_PAGETITLE_FINAL             82
+#define STR_MYSQL_DEFAULT               83
+#define STR_ORACLE_DRIVERCLASSTEXT      84
+#define STR_MYSQL_DRIVERCLASSTEXT       85
+#define STR_LDAP_DEFAULT                86
+
+
+#define FT_PORTNUMBERDEFAULT    29
+#define FT_LDAP_HELPTEXT        30
+#define FT_MYSQL_HELPTEXT       31
+#define FT_MYSQL_HEADERTEXT     32
+#define FT_MYSQLCONNECTIONMODE  33
+//#define FT_WIZARDHELPTEXT     34
+#define FT_BROWSEURL            35
+#define FT_AUTHENTIFICATIONHELPTEXT     36
+#define FT_AUTHENTIFICATIONHEADERTEXT   37
+#define FT_LDAP_HEADERTEXT      38
+#define FT_GENERALUSERNAME      39
+//#define FT_WIZARDHEADER         40
+
+
+
+#define FT_FINALHEADER          45
+#define FT_FINALTEXT            46
+#define FT_FINALHELPTEXT        47
+#define FT_ADDITIONALSETTINGS   48
+
+#define ET_GENERALUSERNAME      17
+
+#define PB_TESTCONNECTION       13
+
+#define RB_CONNECTVIAODBC       5
+#define RB_CONNECTVIAJDBC       6
+#define RB_REGISTERDATASOURCE   7
+#define RB_DONTREGISTERDATASOURCE   8
+
+#define CB_USESSL               16
+#define CB_STARTTABLEWIZARD                 19
+#define CB_OPENAFTERWARDS                   20
+#define CB_SPREADSHEETPASSWORDREQUIRED      21
+#define CB_GENERALPASSWORDREQUIRED          22
+
+#endif
