@@ -2233,3 +2233,8 @@ __CTA2?AVIllegalArgumentException@lang@star@sun@com@@
 ?getCppuType@@YAABVType@uno@star@sun@com@@PBUNumberedSortingInfo@ucb@345@@Z
 ??1?$Reference@VXParameters@sdbc@star@sun@com@@@uno@star@sun@com@@QAE@XZ
 ?getWarning@OSQLParseTreeIterator@connectivity@@QBE?AVSQLWarning@sdbc@star@sun@com@@XZ
+??1OSQLAnalyzer@file@connectivity@@UAE@XZ
+??_GOSQLAnalyzer@file@connectivity@@UAEPAXI@Z
+?hasRestriction@OSQLAnalyzer@file@connectivity@@UBEEXZ
+?__linear_insert@_STL@@YAXPAJ0J@Z
+?doTableSpecials@OResultSet@file@connectivity@@UAEXABV?$Reference@VXColumnsSupplier@sdbcx@star@sun@com@@@uno@star@sun@com@@@Z
