@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonInputStream.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2001-03-08 12:52:12 $
+ *  last change: $Author: kso $ $Date: 2001-09-12 10:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ void SAL_CALL NeonInputStream::skipBytes( sal_Int32 nBytesToSkip )
 // -------------------------------------------------------------------
 sal_Int32 SAL_CALL NeonInputStream::available(  )
         throw( ::com::sun::star::io::NotConnectedException,
-               ::com::sun::star::io::BufferSizeExceededException,
+               ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException )
 {
     return mLen - mPos;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgcontent.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-29 13:38:57 $
+ *  last change: $Author: kso $ $Date: 2001-09-12 10:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,18 +650,18 @@ uno::Any SAL_CALL Content::execute(
         // Remove own and all children's persistent data.
         if ( !removeData() )
         {
-            ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_CANT_WRITE,
-                uno::Sequence< uno::Any >(
-                    &uno::makeAny(
+            uno::Any aProps
+                = uno::makeAny(
                          beans::PropertyValue(
                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                "Uri")),
                              -1,
                              uno::makeAny(m_xIdentifier->
                                               getContentIdentifier()),
-                             beans::PropertyState_DIRECT_VALUE)),
-                    1),
+                             beans::PropertyState_DIRECT_VALUE));
+            ucbhelper::cancelCommandExecution(
+                star::ucb::IOErrorCode_CANT_WRITE,
+                uno::Sequence< uno::Any >(&aProps, 1),
                 Environment,
                 rtl::OUString::createFromAscii(
                     "Cannot remove persistent data!" ),
@@ -1548,18 +1548,18 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             if ( !storeData( uno::Reference< io::XInputStream >() ) )
             {
-                ucbhelper::cancelCommandExecution(
-                    star::ucb::IOErrorCode_CANT_WRITE,
-                    uno::Sequence< uno::Any >(
-                        &uno::makeAny(
+                uno::Any aProps
+                    = uno::makeAny(
                              beans::PropertyValue(
                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                    "Uri")),
                                  -1,
                                  uno::makeAny(m_xIdentifier->
                                                   getContentIdentifier()),
-                                 beans::PropertyState_DIRECT_VALUE)),
-                        1),
+                                 beans::PropertyState_DIRECT_VALUE));
+                ucbhelper::cancelCommandExecution(
+                    star::ucb::IOErrorCode_CANT_WRITE,
+                    uno::Sequence< uno::Any >(&aProps, 1),
                     xEnv,
                     rtl::OUString::createFromAscii(
                         "Cannot store persistent data!" ),
@@ -1621,18 +1621,18 @@ uno::Any Content::open(
             if ( !xIn.is() )
             {
                 // No interaction if we are not persistent!
-                ucbhelper::cancelCommandExecution(
-                    star::ucb::IOErrorCode_CANT_READ,
-                    uno::Sequence< uno::Any >(
-                        &uno::makeAny(
+                uno::Any aProps
+                    = uno::makeAny(
                              beans::PropertyValue(
                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                    "Uri")),
                                  -1,
                                  uno::makeAny(m_xIdentifier->
                                                   getContentIdentifier()),
-                                 beans::PropertyState_DIRECT_VALUE)),
-                        1),
+                                 beans::PropertyState_DIRECT_VALUE));
+                ucbhelper::cancelCommandExecution(
+                    star::ucb::IOErrorCode_CANT_READ,
+                    uno::Sequence< uno::Any >(&aProps, 1),
                     m_eState == PERSISTENT
                         ? xEnv
                         : uno::Reference< star::ucb::XCommandEnvironment >(),
@@ -1681,18 +1681,18 @@ uno::Any Content::open(
                 if ( !xIn.is() )
                 {
                     // No interaction if we are not persistent!
-                    ucbhelper::cancelCommandExecution(
-                        star::ucb::IOErrorCode_CANT_READ,
-                        uno::Sequence< uno::Any >(
-                            &uno::makeAny(
+                    uno::Any aProps
+                        = uno::makeAny(
                                  beans::PropertyValue(
                                      rtl::OUString(
                                          RTL_CONSTASCII_USTRINGPARAM("Uri")),
                                      -1,
                                      uno::makeAny(m_xIdentifier->
                                                       getContentIdentifier()),
-                                     beans::PropertyState_DIRECT_VALUE)),
-                            1),
+                                     beans::PropertyState_DIRECT_VALUE));
+                    ucbhelper::cancelCommandExecution(
+                        star::ucb::IOErrorCode_CANT_READ,
+                        uno::Sequence< uno::Any >(&aProps, 1),
                         m_eState == PERSISTENT
                             ? xEnv
                             : uno::Reference<
@@ -1853,17 +1853,17 @@ void Content::insert(
 
     if ( !storeData( xStream ) )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_WRITE,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Uri")),
                                   -1,
                                   uno::makeAny(m_xIdentifier->
                                                    getContentIdentifier()),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_WRITE,
+            uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii( "Cannot store persistent data!" ),
             this );
@@ -1974,16 +1974,16 @@ void Content::transfer(
         if ( aId.compareTo(
                 rInfo.SourceURL, rInfo.SourceURL.getLength() ) == 0 )
         {
-            ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_RECURSIVE,
-                uno::Sequence< uno::Any >(
-                    &uno::makeAny(beans::PropertyValue(
+            uno::Any aProps
+                = uno::makeAny(beans::PropertyValue(
                                       rtl::OUString(
                                           RTL_CONSTASCII_USTRINGPARAM("Uri")),
                                       -1,
                                       uno::makeAny(rInfo.SourceURL),
-                                      beans::PropertyState_DIRECT_VALUE)),
-                    1),
+                                      beans::PropertyState_DIRECT_VALUE));
+            ucbhelper::cancelCommandExecution(
+                star::ucb::IOErrorCode_RECURSIVE,
+                uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
                 rtl::OUString::createFromAscii(
                     "Target is equal to or is a child of source!" ),
@@ -2015,16 +2015,16 @@ void Content::transfer(
 
     if ( !xSource.is() )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_READ,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Uri")),
                                   -1,
                                   uno::makeAny(xId->getContentIdentifier()),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_READ,
+            uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii(
                 "Cannot instanciate source object!" ),
@@ -2049,16 +2049,16 @@ void Content::transfer(
         = static_cast< Content * >( createNewContent( aInfo ).get() );
     if ( !xTarget.is() )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_CREATE,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Folder")),
                                   -1,
                                   uno::makeAny(aId),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_CREATE,
+            uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii(
                 "XContentCreator::createNewContent failed!" ),
@@ -2210,10 +2210,8 @@ void Content::transfer(
         // Remove all persistent data of source and its children.
         if ( !xSource->removeData() )
         {
-            ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_CANT_WRITE,
-                uno::Sequence< uno::Any >(
-                    &uno::makeAny(
+            uno::Any aProps
+                = uno::makeAny(
                          beans::PropertyValue(
                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                "Uri")),
@@ -2221,8 +2219,10 @@ void Content::transfer(
                              uno::makeAny(
                                  xSource->m_xIdentifier->
                                               getContentIdentifier()),
-                             beans::PropertyState_DIRECT_VALUE)),
-                    1),
+                             beans::PropertyState_DIRECT_VALUE));
+            ucbhelper::cancelCommandExecution(
+                star::ucb::IOErrorCode_CANT_WRITE,
+                uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
                 rtl::OUString::createFromAscii(
                     "Cannot remove persistent data of source object!" ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbcmds.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-30 13:01:20 $
+ *  last change: $Author: kso $ $Date: 2001-09-12 10:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,8 +202,10 @@ public:
     // XInterface methods
     virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType )
         throw( uno::RuntimeException );
-    virtual void SAL_CALL acquire();
-    virtual void SAL_CALL release();
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
 
     // XActiveDataSink methods.
     virtual void SAL_CALL setInputStream(
@@ -227,6 +229,7 @@ uno::Any SAL_CALL ActiveDataSink::queryInterface( const uno::Type & rType )
 //=========================================================================
 // virtual
 void SAL_CALL ActiveDataSink::acquire()
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -234,6 +237,7 @@ void SAL_CALL ActiveDataSink::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL ActiveDataSink::release()
+    throw()
 {
     OWeakObject::release();
 }
@@ -273,8 +277,10 @@ public:
     // XInterface methods
     virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType )
         throw( uno::RuntimeException );
-    virtual void SAL_CALL acquire();
-    virtual void SAL_CALL release();
+    virtual void SAL_CALL acquire()
+        throw();
+    virtual void SAL_CALL release()
+        throw();
 
     // XCommandInfo methods
     virtual uno::Sequence< star::ucb::CommandInfo > SAL_CALL getCommands()
@@ -332,6 +338,7 @@ uno::Any SAL_CALL CommandProcessorInfo::queryInterface(
 //=========================================================================
 // virtual
 void SAL_CALL CommandProcessorInfo::acquire()
+    throw()
 {
     OWeakObject::acquire();
 }
@@ -339,6 +346,7 @@ void SAL_CALL CommandProcessorInfo::acquire()
 //=========================================================================
 // virtual
 void SAL_CALL CommandProcessorInfo::release()
+    throw()
 {
     OWeakObject::release();
 }
@@ -434,16 +442,16 @@ static uno::Reference< star::ucb::XContent > createNew(
 
     if ( !xCreator.is() )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_CREATE,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Folder")),
                                   -1,
                                   uno::makeAny(rContext.aArg.TargetURL),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_CREATE,
+            uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xEnv,
             rtl::OUString::createFromAscii( "Target is no XContentCreator!" ),
             rContext.xProcessor );
@@ -456,16 +464,16 @@ static uno::Reference< star::ucb::XContent > createNew(
     sal_Int32 nCount = aTypesInfo.getLength();
     if ( !nCount )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_CREATE,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Folder")),
                                   -1,
                                   uno::makeAny(rContext.aArg.TargetURL),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_CREATE,
+            uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xEnv,
             rtl::OUString::createFromAscii( "No types creatable!" ),
             rContext.xProcessor );
@@ -551,17 +559,17 @@ static uno::Reference< star::ucb::XContent > createNew(
 
             if ( !xNew.is() )
             {
-                ucbhelper::cancelCommandExecution(
-                    star::ucb::IOErrorCode_CANT_CREATE,
-                    uno::Sequence< uno::Any >(
-                        &uno::makeAny(
+                uno::Any aProps
+                    = uno::makeAny(
                              beans::PropertyValue(
                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                    "Folder")),
                                  -1,
                                  uno::makeAny(rContext.aArg.TargetURL),
-                                 beans::PropertyState_DIRECT_VALUE)),
-                        1),
+                                 beans::PropertyState_DIRECT_VALUE));
+                ucbhelper::cancelCommandExecution(
+                    star::ucb::IOErrorCode_CANT_CREATE,
+                    uno::Sequence< uno::Any >(&aProps, 1),
                     rContext.xEnv,
                     rtl::OUString::createFromAscii(
                         "createNewContent failed!" ),
@@ -593,16 +601,16 @@ static void transferProperties(
 
     if ( !xInfo.is() )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_READ,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Uri")),
                                   -1,
                                   uno::makeAny(rContext.aArg.SourceURL),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_READ,
+            uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xEnv,
             rtl::OUString::createFromAscii(
                 "Unable to get propertyset info from source object!" ),
@@ -623,16 +631,16 @@ static void transferProperties(
 
     if ( !xRow1.is() )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_READ,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Uri")),
                                   -1,
                                   uno::makeAny(rContext.aArg.SourceURL),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_READ,
+            uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xEnv,
             rtl::OUString::createFromAscii(
                 "Unable to get properties from source object!" ),
@@ -912,16 +920,16 @@ static void globalTransfer(
                                                             bSourceIsLink );
     if ( !xNew.is() )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_CREATE,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                       "Folder")),
                                   -1,
                                   uno::makeAny(rContext.aArg.TargetURL),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_CREATE,
+            uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xEnv,
             rtl::OUString::createFromAscii(
                 "No matching content type at target!" ),
@@ -939,18 +947,18 @@ static void globalTransfer(
                                                     xNew, uno::UNO_QUERY );
     if ( !xCommandProcessorN.is() )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_WRITE,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Uri")),
                                   -1,
                                   uno::makeAny(
                                       xNew->getIdentifier()->
                                                 getContentIdentifier()),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_WRITE,
+            uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xEnv,
             rtl::OUString::createFromAscii(
                 "New content is not a XCommandProcessor!" ),
@@ -964,16 +972,16 @@ static void globalTransfer(
                                                     xSource, uno::UNO_QUERY );
     if ( !xCommandProcessorS.is() )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_READ,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Uri")),
                                   -1,
                                   uno::makeAny(rContext.aArg.SourceURL),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_READ,
+            uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xEnv,
             rtl::OUString::createFromAscii(
                 "Source content is not a XCommandProcessor!" ),
@@ -1100,10 +1108,8 @@ static void globalTransfer(
 
                 if ( !xRow.is() )
                 {
-                    ucbhelper::cancelCommandExecution(
-                        star::ucb::IOErrorCode_CANT_READ,
-                        uno::Sequence< uno::Any >(
-                            &uno::makeAny(
+                    uno::Any aProps
+                        = uno::makeAny(
                                  beans::PropertyValue(
                                      rtl::OUString(
                                          RTL_CONSTASCII_USTRINGPARAM("Uri")),
@@ -1111,8 +1117,10 @@ static void globalTransfer(
                                      uno::makeAny(
                                          xNew->getIdentifier()->
                                                    getContentIdentifier()),
-                                     beans::PropertyState_DIRECT_VALUE)),
-                            1),
+                                     beans::PropertyState_DIRECT_VALUE));
+                    ucbhelper::cancelCommandExecution(
+                        star::ucb::IOErrorCode_CANT_READ,
+                        uno::Sequence< uno::Any >(&aProps, 1),
                         rContext.xEnv,
                         rtl::OUString::createFromAscii(
                             "Unable to get properties from new object!" ),
@@ -1206,10 +1214,8 @@ static void globalTransfer(
                                                 rContext, xCommandProcessorS );
                                 if ( !xInputStream.is() )
                                 {
-                                    ucbhelper::cancelCommandExecution(
-                                        star::ucb::IOErrorCode_CANT_READ,
-                                        uno::Sequence< uno::Any >(
-                                            &uno::makeAny(
+                                    uno::Any aProps
+                                        = uno::makeAny(
                                                  beans::PropertyValue(
                                                      rtl::OUString(
                                                   RTL_CONSTASCII_USTRINGPARAM(
@@ -1219,8 +1225,10 @@ static void globalTransfer(
                                                          xNew->
                                                              getIdentifier()->
                                                       getContentIdentifier()),
-                                          beans::PropertyState_DIRECT_VALUE)),
-                                            1),
+                                          beans::PropertyState_DIRECT_VALUE));
+                                    ucbhelper::cancelCommandExecution(
+                                        star::ucb::IOErrorCode_CANT_READ,
+                                        uno::Sequence< uno::Any >(&aProps, 1),
                                         rContext.xEnv,
                                         rtl::OUString::createFromAscii(
                                             "Got no data stream from source!" ),
@@ -1305,17 +1313,17 @@ static void globalTransfer(
 
             if ( !xChildRow.is() )
             {
-                ucbhelper::cancelCommandExecution(
-                    star::ucb::IOErrorCode_CANT_READ,
-                    uno::Sequence< uno::Any >(
-                        &uno::makeAny(
+                uno::Any aProps
+                    = uno::makeAny(
                              beans::PropertyValue(
                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                    "Uri")),
                                  -1,
                                  uno::makeAny(rContext.aArg.SourceURL),
-                                 beans::PropertyState_DIRECT_VALUE)),
-                        1),
+                                 beans::PropertyState_DIRECT_VALUE));
+                ucbhelper::cancelCommandExecution(
+                    star::ucb::IOErrorCode_CANT_READ,
+                    uno::Sequence< uno::Any >(&aProps, 1),
                     rContext.xEnv,
                     rtl::OUString::createFromAscii(
                         "Unable to get properties from children of source!" ),
@@ -1328,17 +1336,17 @@ static void globalTransfer(
 
             if ( !xChildAccess.is() )
             {
-                ucbhelper::cancelCommandExecution(
-                    star::ucb::IOErrorCode_CANT_READ,
-                    uno::Sequence< uno::Any >(
-                        &uno::makeAny(
+                uno::Any aProps
+                    = uno::makeAny(
                              beans::PropertyValue(
                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                      "Uri")),
                                  -1,
                                  uno::makeAny(rContext.aArg.SourceURL),
-                                 beans::PropertyState_DIRECT_VALUE)),
-                        1),
+                                 beans::PropertyState_DIRECT_VALUE));
+                ucbhelper::cancelCommandExecution(
+                    star::ucb::IOErrorCode_CANT_READ,
+                    uno::Sequence< uno::Any >(&aProps, 1),
                     rContext.xEnv,
                     rtl::OUString::createFromAscii(
                         "Unable to get children of source!" ),
@@ -1427,16 +1435,16 @@ void UniversalContentBroker::globalTransfer(
 
     if ( !xTarget.is() )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_READ,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                       "Uri")),
                                   -1,
                                   uno::makeAny(rArg.TargetURL),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_READ,
+            uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii(
                 "Can't instanciate target object!" ),
@@ -1451,17 +1459,17 @@ void UniversalContentBroker::globalTransfer(
                                                     xTarget, uno::UNO_QUERY );
         if ( !xCommandProcessor.is() )
         {
-            ucbhelper::cancelCommandExecution(
-                star::ucb::IOErrorCode_CANT_READ,
-                uno::Sequence< uno::Any >(
-                    &uno::makeAny(
+            uno::Any aProps
+                = uno::makeAny(
                          beans::PropertyValue(
                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                "Uri")),
                              -1,
                              uno::makeAny(rArg.TargetURL),
-                             beans::PropertyState_DIRECT_VALUE)),
-                    1),
+                             beans::PropertyState_DIRECT_VALUE));
+            ucbhelper::cancelCommandExecution(
+                star::ucb::IOErrorCode_CANT_READ,
+                uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
                 rtl::OUString::createFromAscii(
                     "Target content is not a XCommandProcessor!" ),
@@ -1520,16 +1528,16 @@ void UniversalContentBroker::globalTransfer(
 
     if ( !xSource.is() )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_READ,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Uri")),
                                   -1,
                                   uno::makeAny(rArg.SourceURL),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_READ,
+            uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii(
                 "Can't instanciate source object!" ),
@@ -1541,16 +1549,16 @@ void UniversalContentBroker::globalTransfer(
                                                 xSource, uno::UNO_QUERY );
     if ( !xCommandProcessor.is() )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_READ,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Uri")),
                                   -1,
                                   uno::makeAny(rArg.SourceURL),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_READ,
+            uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii(
                 "Source content is not a XCommandProcessor!" ),
@@ -1579,16 +1587,16 @@ void UniversalContentBroker::globalTransfer(
 
     if ( !xRow.is() )
     {
-        ucbhelper::cancelCommandExecution(
-            star::ucb::IOErrorCode_CANT_READ,
-            uno::Sequence< uno::Any >(
-                &uno::makeAny(beans::PropertyValue(
+        uno::Any aProps
+            = uno::makeAny(beans::PropertyValue(
                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                     "Uri")),
                                   -1,
                                   uno::makeAny(rArg.SourceURL),
-                                  beans::PropertyState_DIRECT_VALUE)),
-                1),
+                                  beans::PropertyState_DIRECT_VALUE));
+        ucbhelper::cancelCommandExecution(
+            star::ucb::IOErrorCode_CANT_READ,
+            uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
             rtl::OUString::createFromAscii(
                 "Unable to get properties from source object!" ),
