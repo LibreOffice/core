@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ FltError ScImportExcel( SfxMedium&, ScDocument* );
 FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT );
         // eFormat == EIF_AUTO  -> passender Filter wird automatisch verwendet
         // eFormat == EIF_BIFF5 -> nur Biff5-Stream fuehrt zum Erfolg (auch wenn in einem Excel97-Doc)
-        // eFormat == EIF_BIFF5 -> nur Biff8-Stream fuehrt zum Erfolg (nur in Excel97-Docs)
+        // eFormat == EIF_BIFF8 -> nur Biff8-Stream fuehrt zum Erfolg (nur in Excel97-Docs)
         // eFormat == EIF_BIFF_LE4 -> nur Nicht-Storage-Dateien _koennen_ zum Erfolg fuehren
 
 FltError ScImportStarCalc10( SvStream&, ScDocument* );
@@ -139,7 +139,7 @@ FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
 
 FltError ScImportRTF( SvStream&, ScDocument*, ScRange& rRange );
 
-FltError ScImportHTML( SvStream&, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0 );
+FltError ScImportHTML( SvStream&, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE );
 
 // ***********************************************************************
 // Diverse Exportfilter

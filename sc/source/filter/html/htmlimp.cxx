@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,23 +82,25 @@
 #include "editutil.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
+#include "compiler.hxx"
+#include "rangenam.hxx"
 
 
 //------------------------------------------------------------------------
 
 FltError ScImportHTML( SvStream &rStream, ScDocument *pDoc,
-        ScRange& rRange, double nOutputFactor )
+        ScRange& rRange, double nOutputFactor, BOOL bCalcWidthHeight )
 {
-    ScHTMLImport aImp( pDoc, rRange );
+    ScHTMLImport aImp( pDoc, rRange, bCalcWidthHeight );
     FltError nErr = (FltError) aImp.Read( rStream );
     ScRange aR = aImp.GetRange();
     rRange.aEnd = aR.aEnd;
-    aImp.WriteToDocument( TRUE, nOutputFactor );        // mit SizeColRow
+    aImp.WriteToDocument( TRUE, nOutputFactor );
     return nErr;
 }
 
 
-ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const ScRange& rRange ) :
+ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const ScRange& rRange, BOOL bCalcWidthHeight ) :
     ScEEImport( pDocP, rRange )
 {
     Size aPageSize;
@@ -131,7 +133,7 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const ScRange& rRange ) :
         aPageSize = pDefaultDev->LogicToPixel(
             SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 ), MapMode( MAP_TWIP ) );
     }
-    pParser = new ScHTMLParser( pEngine, aPageSize, pDocP );
+    pParser = new ScHTMLParser( pEngine, aPageSize, pDocP, bCalcWidthHeight );
 }
 
 
@@ -143,5 +145,54 @@ ScHTMLImport::~ScHTMLImport()
 }
 
 
+void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
+{
+    ScEEImport::WriteToDocument( bSizeColsRows, nOutputFactor );
+
+    // create ranges for HTML tables
+    const ScHTMLParser* pParser = GetParser();
+    ScHTMLTableDataTable* pHTMLTables = pParser->GetHTMLTables();
+    if( !pHTMLTables )
+        return;
+
+    ScRange aRange;
+    ComplRefData aRefData;
+    ScTokenArray aTokArray;
+    ScRangeData* pRangeData;
+    ScRangeName* pRangeName = pDoc->GetRangeName();
+
+    String aHeading( RTL_CONSTASCII_STRINGPARAM( "HTML_" ) );
+    ScHTMLTableData* pTable = NULL;
+    ULONG nTab = 0;
+    while( pTable = pHTMLTables->GetTable( ++nTab ) )
+    {
+        pTable->GetRange( aRange );
+        aRefData.InitRange( aRange );
+        aTokArray.Clear();
+        aTokArray.AddDoubleReference( aRefData );
+
+        // insert table number as name
+        String aName( aHeading );
+        aName += String::CreateFromInt32( (sal_Int32) nTab );
+
+        USHORT nPos;
+        if( pRangeName->SearchName( aName, nPos ) )
+            pRangeName->AtFree( nPos );
+
+        pRangeData = new ScRangeData( pDoc, aName, aTokArray );
+        if( !pRangeName->Insert( pRangeData ) )
+            delete pRangeData;
+
+        // insert table id as name
+        if( pTable->GetTableName().Len() )
+        {
+            aName = aHeading;
+            aName += pTable->GetTableName();
+            pRangeData = new ScRangeData( pDoc, aName, aTokArray );
+            if( !pRangeName->Insert( pRangeData ) )
+                delete pRangeData;
+        }
+    }
+}
 
 

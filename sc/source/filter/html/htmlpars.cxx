@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:12 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:54:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,15 +119,279 @@ SV_IMPL_VARARR_SORT( ScHTMLColOffset, ULONG );
 
 //------------------------------------------------------------------------
 
+ScHTMLTableData::ScHTMLTableData(
+        const String& rTabName,
+        USHORT _nFirstCol, USHORT _nFirstRow,
+        USHORT _nColSpan, USHORT _nRowSpan ) :
+    aTableName( rTabName ),
+    nFirstCol( _nFirstCol ),
+    nFirstRow( _nFirstRow ),
+    nLastCol( _nFirstCol ),
+    nLastRow( _nFirstRow ),
+    nColSpan( _nColSpan ),
+    nRowSpan( _nRowSpan ),
+    nDocCol( _nFirstCol ),
+    nDocRow( _nFirstRow ),
+    pNestedTables( NULL )
+{
+}
+
+ScHTMLTableData::~ScHTMLTableData()
+{
+    if( pNestedTables )
+        delete pNestedTables;
+}
+
+USHORT ScHTMLTableData::GetCount( const Table& rTab, ULONG nIndex )
+{
+    USHORT nCount = (USHORT)(ULONG) rTab.Get( nIndex );
+    return Max( nCount, (USHORT)1 );        // width/height is at least 1 cell
+}
+
+USHORT ScHTMLTableData::GetSize( const Table& rDataTab, ULONG nStart, ULONG nEnd )
+{
+    USHORT nSize = 0;
+    for( ULONG nIndex = nStart; nIndex <= nEnd; nIndex++ )
+        nSize += GetCount( rDataTab, nIndex );
+    return nSize;
+}
+
+USHORT ScHTMLTableData::CalcDocPos( ScHTMLTableDataKey eCRKey, ULONG nIndex ) const
+{
+    USHORT nFirst = GetFirst( eCRKey );
+    return GetDocPos( eCRKey ) + ((nFirst < nIndex) ? GetSize( GetDataTable( eCRKey ), nFirst, nIndex - 1 ) : 0);
+}
+
+USHORT ScHTMLTableData::CalcSpan( ScHTMLTableDataKey eCRKey, ULONG nIndex, USHORT nSpan ) const
+{
+    return GetSize( GetDataTable( eCRKey ), nIndex, nIndex + nSpan - 1 );
+}
+
+void ScHTMLTableData::GetRange( ScRange& rRange ) const
+{
+    USHORT nCol = CalcDocCol( nFirstCol );
+    USHORT nRow = CalcDocRow( nFirstRow );
+    rRange.aStart.Set( nCol, nRow, 0 );
+    rRange.aEnd.Set( nCol + GetSize( tdCol ) - 1, nRow + GetSize( tdRow ) - 1, 0 );
+}
+
+ScHTMLTableData* ScHTMLTableData::GetNestedTable( ULONG nTab ) const
+{
+    return pNestedTables ? pNestedTables->GetTable( nTab ) : NULL;
+}
+
+void ScHTMLTableData::SetMaxCount( Table& rDataTab, ULONG nIndex, USHORT nCount )
+{
+    if( GetCount( rDataTab, nIndex ) < nCount )
+    {
+        if( rDataTab.IsKeyValid( nIndex ) )
+            rDataTab.Replace( nIndex, (void*) nCount );
+        else
+            rDataTab.Insert( nIndex, (void*) nCount );
+    }
+}
+
+ScHTMLTableData* ScHTMLTableData::InsertNestedTable(
+        ULONG nTab, const String& rTabName,
+        USHORT _nFirstCol, USHORT _nFirstRow, USHORT _nColSpan, USHORT _nRowSpan )
+{
+    if( !pNestedTables )
+        pNestedTables = new ScHTMLTableDataTable;
+    return pNestedTables->InsertTable( nTab, rTabName, _nFirstCol, _nFirstRow, _nColSpan, _nRowSpan );
+}
+
+void ScHTMLTableData::SetDocCoord( USHORT nCol, USHORT nRow )
+{
+    short nColDiff = nCol - nFirstCol;
+    short nRowDiff = nRow - nFirstRow;
+    ChangeDocCoord( nColDiff, nRowDiff );
+    if( pNestedTables )
+        for( ScHTMLTableData* pTable = pNestedTables->GetFirst(); pTable; pTable = pNestedTables->GetNext() )
+            pTable->ChangeDocCoord( nColDiff, nRowDiff );
+}
+
+void ScHTMLTableData::RecalcSizeDim( ScHTMLTableDataKey eCRKey )
+{
+    if( !pNestedTables ) return;
+    for( ScHTMLTableData* pTable = pNestedTables->GetFirstInOrder( eCRKey );
+            pTable; pTable = pNestedTables->GetNextInOrder() )
+    {
+        USHORT nIndex = pTable->GetFirst( eCRKey );
+        USHORT nSpan = pTable->GetSpan( eCRKey );
+        USHORT nSize = pTable->GetSize( eCRKey );
+        Table& rDataTab = GetDataTable( eCRKey );
+        while( nSpan > 1 )
+        {
+            nSize -= Min( nSize, GetCount( rDataTab, nIndex ) );
+            nIndex++;
+            nSpan--;
+        }
+        SetMaxCount( rDataTab, nIndex, nSize );
+    }
+}
+
+void ScHTMLTableData::RecalcSize()
+{
+    if( !pNestedTables ) return;
+    pNestedTables->RecalcSizes();
+    // all nested tables have the right size now -> calculate it for this table
+    RecalcSizeDim( tdCol );
+    RecalcSizeDim( tdRow );
+    // set correct position of nested tables inside of THIS table
+    for( ScHTMLTableData* pTable = pNestedTables->GetFirst(); pTable; pTable = pNestedTables->GetNext() )
+        pTable->SetDocCoord( CalcDocCol( pTable->GetFirstCol() ), CalcDocRow( pTable->GetFirstRow() ) );
+}
+
+
+
+ScHTMLTableDataTable::ScHTMLTableDataTable() :
+    pCurrTab( NULL ),
+    nCurrTab( 0 )
+{
+}
+
+ScHTMLTableDataTable::~ScHTMLTableDataTable()
+{
+    for( ScHTMLTableData* pData = GetFirst(); pData; pData = GetNext() )
+        delete pData;
+}
+
+ScHTMLTableData* ScHTMLTableDataTable::GetTable( ULONG nTab )
+{
+    if( nTab == nCurrTab )
+        return pCurrTab;
+    if( !nTab )
+        return NULL;
+
+    ScHTMLTableData* pTable = _Get( nTab );
+    if( pTable )
+    {
+        SetCurrTable( nTab, pTable );
+        return pTable;
+    }
+
+    ScHTMLTableData* pNested = NULL;
+    for( pTable = GetFirst(); pTable; pTable = GetNext() )
+    {
+        pNested = pTable->GetNestedTable( nTab );
+        if( pNested )
+        {
+            SetCurrTable( nTab, pNested );
+            return pNested;
+        }
+    }
+    return NULL;
+}
+
+ScHTMLTableData* ScHTMLTableDataTable::GetFirstInOrder( ScHTMLTableDataKey eKey )
+{
+    nSearchMin1 = nSearchMin2 = 0;
+    eSearchKey = eKey;
+    return GetNextInOrder();
+}
+
+ScHTMLTableData* ScHTMLTableDataTable::GetNextInOrder()
+{
+    ScHTMLTableDataKey eOppKey = (eSearchKey == tdCol) ? tdRow : tdCol;
+    ScHTMLTableData* pTableFound = NULL;
+    USHORT nFoundPos1 = (USHORT)~0;
+    USHORT nFoundPos2 = (USHORT)~0;
+
+    for( ScHTMLTableData* pTable = GetFirst(); pTable; pTable = GetNext() )
+    {
+        USHORT nTablePos1 = pTable->GetFirst( eSearchKey ) + pTable->GetSpan( eSearchKey ) - 1;
+        USHORT nTablePos2 = pTable->GetFirst( eOppKey );
+        if( ((nTablePos1 > nSearchMin1) || ((nTablePos1 == nSearchMin1) && (nTablePos2 > nSearchMin2))) &&
+            ((nTablePos1 < nFoundPos1) || ((nTablePos1 == nFoundPos1) && (nTablePos2 < nFoundPos2))) )
+        {   // position of this table is between min position and last found position
+            pTableFound = pTable;
+            nFoundPos1 = nTablePos1;
+            nFoundPos2 = nTablePos2;
+        }
+    }
+    nSearchMin1 = nFoundPos1;
+    nSearchMin2 = nFoundPos2;
+    return pTableFound;
+}
+
+USHORT ScHTMLTableDataTable::GetNextFreeRow( ULONG nTab )
+{
+    ScHTMLTableData* pTable = _Get( nTab );
+    if( pTable )
+        return pTable->GetFirstRow() + pTable->GetSize( tdRow );
+
+    for( pTable = GetFirst(); pTable; pTable = GetNext() )
+        if( pTable->GetNestedTable( nTab ) )
+            return pTable->GetFirstRow() + pTable->GetSize( tdRow );
+
+    return 0;
+}
+
+ScHTMLTableData* ScHTMLTableDataTable::InsertTable(
+        ULONG nTab, const String& rTabName, USHORT nFirstCol, USHORT nFirstRow,
+        USHORT nColSpan, USHORT nRowSpan, ULONG nNestedIn )
+{
+    ScHTMLTableData* pTable = GetTable( nTab );
+    // table already exists
+    if( pTable )
+        return pTable;
+    // insert in nested table
+    if( nNestedIn )
+    {
+        pTable = GetTable( nNestedIn );
+        if( pTable )
+        {
+            ScHTMLTableData* pNewTab = pTable->InsertNestedTable( nTab, rTabName, nFirstCol, nFirstRow, nColSpan, nRowSpan );
+            SetCurrTable( nTab, pNewTab );
+            return pNewTab;
+        }
+    }
+    // insert in this table
+    _Insert( nTab, pTable = new ScHTMLTableData( rTabName, nFirstCol, nFirstRow, nColSpan, nRowSpan ) );
+    SetCurrTable( nTab, pTable );
+    return pTable;
+}
+
+void ScHTMLTableDataTable::SetCellCoord( ULONG nTab, USHORT nCol, USHORT nRow )
+{
+    ScHTMLTableData* pTable = GetTable( nTab );
+    if( pTable )
+        pTable->SetCellCoord( nCol, nRow );
+}
+
+void ScHTMLTableDataTable::RecalcSizes()
+{
+    for( ScHTMLTableData* pTable = GetFirst(); pTable; pTable = GetNext() )
+        pTable->RecalcSize();
+}
+
+void ScHTMLTableDataTable::Recalc()
+{
+    // table sizes
+    RecalcSizes();
+    // table positions (move tables down)
+    USHORT nDocRow;
+    USHORT nRowDiff = 0;
+    for( ScHTMLTableData* pTable = GetFirst(); pTable; pTable = GetNext() )
+    {
+        nDocRow = pTable->GetFirstRow() + nRowDiff;
+        pTable->SetDocCoord( pTable->GetFirstCol(), nDocRow );
+        nRowDiff += (pTable->GetSize( tdRow ) + pTable->GetFirstRow() - pTable->GetLastRow() - 1);
+    }
+}
+
+//------------------------------------------------------------------------
+
 ScHTMLParser::ScHTMLParser( EditEngine* pEditP, const Size& aPageSizeP,
-            ScDocument* pDocP ) :
+            ScDocument* pDocP, BOOL _bCalcWidthHeight ) :
         ScEEParser( pEditP ),
         aPageSize( aPageSizeP ),
         xLockedList( new ScRangeList ),
         pDoc( pDocP ),
         pTables( NULL ),
-        pColOffset( new ScHTMLColOffset ),
-        pLocalColOffset( new ScHTMLColOffset ),
+        pTableData( _bCalcWidthHeight ? NULL : new ScHTMLTableDataTable ),
+        pColOffset( _bCalcWidthHeight ? new ScHTMLColOffset : NULL ),
+        pLocalColOffset( _bCalcWidthHeight ? new ScHTMLColOffset : NULL ),
         nFirstTableCell(0),
         nTableLevel(0),
         nTable(0),
@@ -138,6 +402,7 @@ ScHTMLParser::ScHTMLParser( EditEngine* pEditP, const Size& aPageSizeP,
         nColOffset(0),
         nColOffsetStart(0),
         nMetaCnt(0),
+        bCalcWidthHeight( _bCalcWidthHeight ),
         bTabInTabCell( FALSE ),
         bFirstRow( TRUE ),
         bInCell( FALSE ),
@@ -151,8 +416,11 @@ ScHTMLParser::ScHTMLParser( EditEngine* pEditP, const Size& aPageSizeP,
         aFontHeights[j] = pHtmlOptions->GetFontSize( j ) * 20;
     }
 
-    MakeColNoRef( pLocalColOffset, 0, 0, 0, 0 );
-    MakeColNoRef( pColOffset, 0, 0, 0, 0 );
+    if( bCalcWidthHeight )
+    {
+        MakeColNoRef( pLocalColOffset, 0, 0, 0, 0 );
+        MakeColNoRef( pColOffset, 0, 0, 0, 0 );
+    }
 }
 
 
@@ -167,14 +435,18 @@ ScHTMLParser::~ScHTMLParser()
             delete pS->pLocalColOffset;
         delete pS;
     }
-    delete pLocalColOffset;
-    delete pColOffset;
+    if ( pLocalColOffset )
+        delete pLocalColOffset;
+    if ( pColOffset )
+        delete pColOffset;
     if ( pTables )
     {
         for ( Table* pT = (Table*) pTables->First(); pT; pT = (Table*) pTables->Next() )
             delete pT;
         delete pTables;
     }
+    if ( pTableData )
+        delete pTableData;
 }
 
 
@@ -185,20 +457,25 @@ ULONG ScHTMLParser::Read( SvStream& rStream )
     ULONG nErr = pEdit->Read( rStream, EE_FORMAT_HTML,
         pDoc->GetDocumentShell()->GetHeaderAttributes() );
     pEdit->SetImportHdl( aOldLink );
-    Adjust();
     // Spaltenbreiten erzeugen
-    OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-    USHORT nCount = pColOffset->Count();
-    const ULONG* pOff = (const ULONG*) pColOffset->GetData();
-    ULONG nOff = *pOff++;
-    Size aSize;
-    for ( USHORT j = 1; j < nCount; j++, pOff++ )
+    if( bCalcWidthHeight )
     {
-        aSize.Width() = *pOff - nOff;
-        aSize = pDefaultDev->PixelToLogic( aSize, MapMode( MAP_TWIP ) );
-        pColWidths->Insert( j-1, (void*)aSize.Width() );
-        nOff = *pOff;
+        Adjust();
+        OutputDevice* pDefaultDev = Application::GetDefaultDevice();
+        USHORT nCount = pColOffset->Count();
+        const ULONG* pOff = (const ULONG*) pColOffset->GetData();
+        ULONG nOff = *pOff++;
+        Size aSize;
+        for ( USHORT j = 1; j < nCount; j++, pOff++ )
+        {
+            aSize.Width() = *pOff - nOff;
+            aSize = pDefaultDev->PixelToLogic( aSize, MapMode( MAP_TWIP ) );
+            pColWidths->Insert( j-1, (void*)aSize.Width() );
+            nOff = *pOff;
+        }
     }
+    else
+        AdjustNoWidthHeight();
     return nErr;
 }
 
@@ -251,6 +528,7 @@ void ScHTMLParser::NextRow( ImportInfo* pInfo )
 BOOL ScHTMLParser::SeekOffset( ScHTMLColOffset* pOffset, USHORT nOffset,
         USHORT* pCol, USHORT nOffsetTol )
 {
+    DBG_ASSERT( pOffset, "ScHTMLParser::SeekOffset - illegal call" );
     if ( pOffset->Seek_Entry( nOffset, pCol ) )
         return TRUE;
     USHORT nCount = pOffset->Count();
@@ -273,6 +551,7 @@ BOOL ScHTMLParser::SeekOffset( ScHTMLColOffset* pOffset, USHORT nOffset,
 void ScHTMLParser::MakeCol( ScHTMLColOffset* pOffset, USHORT& nOffset,
         USHORT& nWidth, USHORT nOffsetTol, USHORT nWidthTol )
 {
+    DBG_ASSERT( pOffset, "ScHTMLParser::MakeCol - illegal call" );
     USHORT nPos;
     if ( SeekOffset( pOffset, nOffset, &nPos, nOffsetTol ) )
         nOffset = (USHORT)(*pOffset)[nPos];
@@ -291,6 +570,7 @@ void ScHTMLParser::MakeCol( ScHTMLColOffset* pOffset, USHORT& nOffset,
 void ScHTMLParser::MakeColNoRef( ScHTMLColOffset* pOffset, USHORT nOffset,
         USHORT nWidth, USHORT nOffsetTol, USHORT nWidthTol )
 {
+    DBG_ASSERT( pOffset, "ScHTMLParser::MakeColNoRef - illegal call" );
     USHORT nPos;
     if ( SeekOffset( pOffset, nOffset, &nPos, nOffsetTol ) )
         nOffset = (USHORT)(*pOffset)[nPos];
@@ -307,6 +587,7 @@ void ScHTMLParser::MakeColNoRef( ScHTMLColOffset* pOffset, USHORT nOffset,
 void ScHTMLParser::ModifyOffset( ScHTMLColOffset* pOffset, USHORT& nOldOffset,
             USHORT& nNewOffset, USHORT nOffsetTol )
 {
+    DBG_ASSERT( pOffset, "ScHTMLParser::ModifyOffset - illegal call" );
     USHORT nPos;
     if ( !SeekOffset( pOffset, nOldOffset, &nPos, nOffsetTol ) )
     {
@@ -499,8 +780,57 @@ void ScHTMLParser::Adjust()
 }
 
 
+void ScHTMLParser::AdjustNoWidthHeight()
+{
+    DBG_ASSERT( pTableData, "ScHTMLParser::AdjustNoWidthHeight - no table data" );
+    pTableData->Recalc();
+
+    USHORT nLastCol = 0;
+    USHORT nLastRow = 0;
+    USHORT nLastTab = 0;
+    USHORT nDocCol = 0;
+    USHORT nDocRow = 0;
+
+    for ( ScEEParseEntry* pEntry = pList->First(); pEntry; pEntry = pList->Next() )
+    {
+        ScHTMLTableData* pTable = pTableData->GetTable( pEntry->nTab );
+
+        if( pTable )
+        {
+            nDocCol = pTable->CalcDocCol( pEntry->nCol );
+            nDocRow = pTable->CalcDocRow( pEntry->nRow );
+            pEntry->nColOverlap = pTable->CalcColSpan( pEntry->nCol, pEntry->nColOverlap );
+            pEntry->nRowOverlap = pTable->CalcRowSpan( pEntry->nRow, pEntry->nRowOverlap );
+        }
+        else if( nLastTab )
+        {
+            nDocCol = pEntry->nCol;
+            nDocRow = pTableData->GetNextFreeRow( nLastTab );
+        }
+        else
+        {
+            nDocCol += pEntry->nCol - nLastCol;
+            nDocRow += pEntry->nRow - nLastRow;
+        }
+
+        nLastCol = pEntry->nCol;
+        nLastRow = pEntry->nRow;
+        nLastTab = pEntry->nTab;
+
+        pEntry->nCol = nDocCol;
+        pEntry->nRow = nDocRow;
+
+        nColMax = Max( nColMax, (USHORT)(pEntry->nCol + pEntry->nColOverlap) );
+        nRowMax = Max( nRowMax, (USHORT)(pEntry->nRow + pEntry->nRowOverlap) );
+    }
+}
+
+
 USHORT ScHTMLParser::GetWidth( ScEEParseEntry* pE )
 {
+    if( !bCalcWidthHeight )
+        return 0;
+
     if ( pE->nWidth )
         return pE->nWidth;
     USHORT nPos = Min( pE->nCol - nColCntStart + pE->nColOverlap,
@@ -514,6 +844,8 @@ USHORT ScHTMLParser::GetWidth( ScEEParseEntry* pE )
 
 void ScHTMLParser::SetWidths()
 {
+    if( !bCalcWidthHeight ) return;
+
     ScEEParseEntry* pE;
     USHORT nCol;
     if ( !nTableWidth )
@@ -530,7 +862,7 @@ void ScHTMLParser::SetWidths()
         {
             MakeColNoRef( pLocalColOffset, nOff, 0, 0, 0 );
         }
-        nTableWidth = (*pLocalColOffset)[pLocalColOffset->Count() -1 ] - (*pLocalColOffset)[0];
+        nTableWidth = (USHORT)((*pLocalColOffset)[pLocalColOffset->Count() -1 ] - (*pLocalColOffset)[0]);
         pE = pList->Seek( nFirstTableCell );
         while ( pE )
         {
@@ -674,23 +1006,27 @@ void ScHTMLParser::Colonize( ScEEParseEntry* pE )
 {
     USHORT nCol = pE->nCol;
     SkipLocked( pE );       // Spaltenverdraengung nach rechts
-    if ( nCol < pE->nCol )
-    {   // verdraengt
-        nCol = pE->nCol - nColCntStart;
-        USHORT nCount = pLocalColOffset->Count();
-        if ( nCol < nCount )
-            nColOffset = (USHORT) (*pLocalColOffset)[nCol];
-        else
-            nColOffset = (USHORT) (*pLocalColOffset)[nCount - 1];
+
+    if( bCalcWidthHeight )
+    {
+        if ( nCol < pE->nCol )
+        {   // verdraengt
+            nCol = pE->nCol - nColCntStart;
+            USHORT nCount = pLocalColOffset->Count();
+            if ( nCol < nCount )
+                nColOffset = (USHORT) (*pLocalColOffset)[nCol];
+            else
+                nColOffset = (USHORT) (*pLocalColOffset)[nCount - 1];
+        }
+        pE->nOffset = nColOffset;
+        USHORT nWidth = GetWidth( pE );
+        MakeCol( pLocalColOffset, pE->nOffset, nWidth );
+        if ( pE->nWidth )
+            pE->nWidth = nWidth;
+        nColOffset = pE->nOffset + nWidth;
+        if ( nTableWidth < nColOffset - nColOffsetStart )
+            nTableWidth = nColOffset - nColOffsetStart;
     }
-    pE->nOffset = nColOffset;
-    USHORT nWidth = GetWidth( pE );
-    MakeCol( pLocalColOffset, pE->nOffset, nWidth );
-    if ( pE->nWidth )
-        pE->nWidth = nWidth;
-    nColOffset = pE->nOffset + nWidth;
-    if ( nTableWidth < nColOffset - nColOffsetStart )
-        nTableWidth = nColOffset - nColOffsetStart;
 }
 
 
@@ -999,6 +1335,15 @@ void ScHTMLParser::TableDataOn( ImportInfo* pInfo )
     pActEntry->nCol = nColCnt;
     pActEntry->nRow = nRowCnt;
     pActEntry->nTab = nTable;
+
+    if( pTableData )
+    {
+        SkipLocked( pActEntry, FALSE );
+        nColCnt = pActEntry->nCol;
+        nRowCnt = pActEntry->nRow;
+        pTableData->SetCellCoord( nTable, pActEntry->nCol, pActEntry->nRow );
+    }
+
     if ( bHorJustifyCenterTH )
         pActEntry->aItemSet.Put(
             SvxHorJustifyItem( SVX_HOR_JUSTIFY_CENTER, ATTR_HOR_JUSTIFY) );
@@ -1007,6 +1352,7 @@ void ScHTMLParser::TableDataOn( ImportInfo* pInfo )
 
 void ScHTMLParser::TableOn( ImportInfo* pInfo )
 {
+    String aTabName;
     if ( ++nTableLevel > 1 )
     {   // Table in Table
         USHORT nTmpColOffset = nColOffset;  // wird in Colonize noch angepasst
@@ -1037,6 +1383,11 @@ void ScHTMLParser::TableOn( ImportInfo* pInfo )
                         nTableWidth = GetWidthPixel( pOption );
                     }
                     break;
+                    case HTML_O_ID:
+                    {
+                        aTabName.Assign( pOption->GetString() );
+                    }
+                    break;
                 }
             }
         }
@@ -1053,6 +1404,11 @@ void ScHTMLParser::TableOn( ImportInfo* pInfo )
             nColOffset = nTmpColOffset;
             nColOffsetStart = nColOffset;
         }
+
+        if( pTableData )
+            pTableData->InsertTable( nMaxTable + 1, aTabName, pActEntry->nCol, pActEntry->nRow,
+                pActEntry->nColOverlap, pActEntry->nRowOverlap, nTable );
+
         ScEEParseEntry* pE = pList->Last();
         NewActEntry( pE );      // neuer freifliegender pActEntry
         xLockedList = new ScRangeList;
@@ -1085,16 +1441,27 @@ void ScHTMLParser::TableOn( ImportInfo* pInfo )
                         nTableWidth = GetWidthPixel( pOption );
                     }
                     break;
+                    case HTML_O_ID:
+                    {
+                        aTabName.Assign( pOption->GetString() );
+                    }
+                    break;
                 }
             }
         }
+
+        if( pTableData )
+            pTableData->InsertTable( nMaxTable + 1, aTabName, nColCnt, nRowCnt, 1, 1 );
     }
-    pLocalColOffset = new ScHTMLColOffset;
     nTable = ++nMaxTable;
     bFirstRow = TRUE;
     nFirstTableCell = pList->Count();
 
-    MakeColNoRef( pLocalColOffset, nColOffsetStart, 0, 0, 0 );
+    if( bCalcWidthHeight )
+    {
+        pLocalColOffset = new ScHTMLColOffset;
+        MakeColNoRef( pLocalColOffset, nColOffsetStart, 0, 0, 0 );
+    }
 }
 
 
@@ -1116,7 +1483,7 @@ void ScHTMLParser::TableOff( ImportInfo* pInfo )
         {
             ScEEParseEntry* pE = pS->pCellEntry;
             USHORT nRows = nRowCnt - pS->nRowCnt;
-            if ( nRows > 1 )
+            if ( nRows > 1 && bCalcWidthHeight )
             {   // Groesse der Tabelle an dieser Position eintragen
                 USHORT j;
                 USHORT nCol = nColCntStart;
@@ -1206,20 +1573,23 @@ void ScHTMLParser::TableOff( ImportInfo* pInfo )
                 }
             }
 
-            SetWidths();
-
-            if ( !pE->nWidth )
-                pE->nWidth = nTableWidth;
-            else if ( pE->nWidth < nTableWidth )
+            if( bCalcWidthHeight )
             {
-                USHORT nOldOffset = pE->nOffset + pE->nWidth;
-                USHORT nNewOffset = pE->nOffset + nTableWidth;
-                ModifyOffset( pS->pLocalColOffset, nOldOffset, nNewOffset );
-                USHORT nTmp = nNewOffset - pE->nOffset - pE->nWidth;
-                pE->nWidth = nNewOffset - pE->nOffset;
-                pS->nTableWidth += nTmp;
-                if ( pS->nColOffset >= nOldOffset )
-                    pS->nColOffset += nTmp;
+                SetWidths();
+
+                if ( !pE->nWidth )
+                    pE->nWidth = nTableWidth;
+                else if ( pE->nWidth < nTableWidth )
+                {
+                    USHORT nOldOffset = pE->nOffset + pE->nWidth;
+                    USHORT nNewOffset = pE->nOffset + nTableWidth;
+                    ModifyOffset( pS->pLocalColOffset, nOldOffset, nNewOffset );
+                    USHORT nTmp = nNewOffset - pE->nOffset - pE->nWidth;
+                    pE->nWidth = nNewOffset - pE->nOffset;
+                    pS->nTableWidth += nTmp;
+                    if ( pS->nColOffset >= nOldOffset )
+                        pS->nColOffset += nTmp;
+                }
             }
 
             nColCnt = pE->nCol + pE->nColOverlap;
@@ -1233,7 +1603,8 @@ void ScHTMLParser::TableOff( ImportInfo* pInfo )
             nColOffsetStart = pS->nColOffsetStart;
             bFirstRow = pS->bFirstRow;
             xLockedList = pS->xLockedList;
-            delete pLocalColOffset;
+            if ( pLocalColOffset )
+                delete pLocalColOffset;
             pLocalColOffset = pS->pLocalColOffset;
             delete pActEntry;
             // pActEntry bleibt erstmal erhalten falls da noch 'ne Table in
@@ -1250,9 +1621,11 @@ void ScHTMLParser::TableOff( ImportInfo* pInfo )
         SetWidths();
         ScHTMLTableStackEntry* pS = aTableStack.Pop();
         nMaxCol = 0;
+        nTable = 0;
         if ( pS )
         {
-            delete pLocalColOffset;
+            if ( pLocalColOffset )
+                delete pLocalColOffset;
             pLocalColOffset = pS->pLocalColOffset;
             delete pS;
         }
@@ -1262,6 +1635,8 @@ void ScHTMLParser::TableOff( ImportInfo* pInfo )
 
 void ScHTMLParser::Image( ImportInfo* pInfo )
 {
+    if( !bCalcWidthHeight ) return;
+
     if ( !pActEntry->pImageList )
         pActEntry->pImageList = new ScHTMLImageList;
     ScHTMLImageList* pIL = pActEntry->pImageList;
@@ -1359,6 +1734,8 @@ void ScHTMLParser::Image( ImportInfo* pInfo )
 
 void ScHTMLParser::ColOn( ImportInfo* pInfo )
 {
+    if( !bCalcWidthHeight ) return;
+
     const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
     USHORT nArrLen = pOptions->Count();
     for ( USHORT i = 0; i < nArrLen; i++ )
@@ -1380,6 +1757,9 @@ void ScHTMLParser::ColOn( ImportInfo* pInfo )
 
 USHORT ScHTMLParser::GetWidthPixel( const HTMLOption* pOption )
 {
+    if( !bCalcWidthHeight )
+        return 0;
+
     const String& rOptVal = pOption->GetString();
     if ( rOptVal.Search('%') != STRING_NOTFOUND )
     {   // Prozent

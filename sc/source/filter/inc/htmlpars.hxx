@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlpars.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,148 @@ struct ScHTMLAdjustStackEntry
 };
 DECLARE_STACK( ScHTMLAdjustStack, ScHTMLAdjustStackEntry* );
 
+
+//------------------------------------------------------------------------
+
+enum ScHTMLTableDataKey         { tdCol, tdRow };
+
+class ScHTMLTableDataTable;
+
+class ScHTMLTableData           // data for one HTML table
+{
+private:
+    String                      aTableName;     // <TABLE ID="name">
+    Table                       aColCount;      // count of cells per HTML column
+    Table                       aRowCount;      // count of cells per HTML row
+    USHORT                      nFirstCol;      // first column index
+    USHORT                      nFirstRow;      // first row index
+    USHORT                      nLastCol;       // last column index
+    USHORT                      nLastRow;       // last row index
+    USHORT                      nColSpan;       // column spanning of the parent cell
+    USHORT                      nRowSpan;       // row spanning of the parent cell
+    USHORT                      nDocCol;        // resulting position in ScDoc
+    USHORT                      nDocRow;        // resulting position in ScDoc
+
+    ScHTMLTableDataTable*       pNestedTables;  // table of nested HTML tables
+
+    inline Table&               GetDataTable( ScHTMLTableDataKey eCRKey )
+                                    { return (eCRKey == tdCol) ? aColCount : aRowCount; }
+    inline const Table&         GetDataTable( ScHTMLTableDataKey eCRKey ) const
+                                    { return (eCRKey == tdCol) ? aColCount : aRowCount; }
+
+    static USHORT               GetCount( const Table& rDataTab, ULONG nIndex );
+    static USHORT               GetSize( const Table& rDataTab, ULONG nStart, ULONG nEnd );
+
+    USHORT                      CalcDocPos( ScHTMLTableDataKey eCRKey, ULONG nIndex ) const;
+    USHORT                      CalcSpan( ScHTMLTableDataKey eCRKey, ULONG nIndex, USHORT nSpan ) const;
+
+    void                        SetMaxCount( Table& rDataTab, ULONG nIndex, USHORT nCount );
+    inline void                 ChangeDocCoord( short nColDiff, short nRowDiff );
+
+    void                        RecalcSizeDim( ScHTMLTableDataKey eCRKey );
+
+public:
+                                ScHTMLTableData(
+                                    const String& rTabName,
+                                    USHORT _nFirstCol, USHORT _nFirstRow,
+                                    USHORT _nColSpan, USHORT _nRowSpan );
+                                ~ScHTMLTableData();
+
+    inline USHORT               GetFirstCol() const     { return nFirstCol; }
+    inline USHORT               GetFirstRow() const     { return nFirstRow; }
+    inline USHORT               GetLastCol() const      { return nLastCol; }
+    inline USHORT               GetLastRow() const      { return nLastRow; }
+    inline const String&        GetTableName() const    { return aTableName; }
+    void                        GetRange( ScRange& rRange ) const;
+
+    inline USHORT               GetFirst( ScHTMLTableDataKey eCRKey ) const
+                                    { return (eCRKey == tdCol) ? nFirstCol : nFirstRow; }
+    inline USHORT               GetLast( ScHTMLTableDataKey eCRKey ) const
+                                    { return (eCRKey == tdCol) ? nLastCol : nLastRow; }
+    inline USHORT               GetDocPos( ScHTMLTableDataKey eCRKey ) const
+                                    { return (eCRKey == tdCol) ? nDocCol : nDocRow; }
+    inline USHORT               GetSpan( ScHTMLTableDataKey eCRKey ) const
+                                    { return (eCRKey == tdCol) ? nColSpan : nRowSpan; }
+    inline USHORT               GetCount( ScHTMLTableDataKey eCRKey, ULONG nIndex ) const
+                                    { return GetCount( GetDataTable( eCRKey ), nIndex ); }
+    inline USHORT               GetSize( ScHTMLTableDataKey eCRKey ) const
+                                    { return GetSize( GetDataTable( eCRKey ), GetFirst( eCRKey ), GetLast( eCRKey ) ); }
+
+    inline USHORT               CalcDocCol( ULONG nIndex ) const    { return CalcDocPos( tdCol, nIndex ); }
+    inline USHORT               CalcDocRow( ULONG nIndex ) const    { return CalcDocPos( tdRow, nIndex ); }
+    inline USHORT               CalcColSpan( ULONG nIndex, USHORT nSpan ) const { return CalcSpan( tdCol, nIndex, nSpan ); }
+    inline USHORT               CalcRowSpan( ULONG nIndex, USHORT nSpan ) const { return CalcSpan( tdRow, nIndex, nSpan ); }
+
+    ScHTMLTableData*            GetNestedTable( ULONG nTab ) const;
+
+    ScHTMLTableData*            InsertNestedTable(
+                                    ULONG nTab, const String& rTabName,
+                                    USHORT _nFirstCol, USHORT _nFirstRow,
+                                    USHORT _nColSpan, USHORT _nRowSpan );
+    inline void                 SetCellCoord( USHORT nCol, USHORT nRow );
+    void                        SetDocCoord( USHORT nCol, USHORT nRow );
+
+    void                        RecalcSize();
+};
+
+inline void ScHTMLTableData::SetCellCoord( USHORT nCol, USHORT nRow )
+{
+    nLastCol = Max( nLastCol, nCol );
+    nLastRow = Max( nLastRow, nRow );
+}
+
+inline void ScHTMLTableData::ChangeDocCoord( short nColDiff, short nRowDiff )
+{
+    nDocCol += nColDiff;
+    nDocRow += nRowDiff;
+}
+
+
+
+class ScHTMLTableDataTable : private Table
+{
+private:
+    ScHTMLTableData*            pCurrTab;
+    ULONG                       nCurrTab;
+
+    USHORT                      nSearchMin1;
+    USHORT                      nSearchMin2;
+    ScHTMLTableDataKey          eSearchKey;
+
+    inline void                 _Insert( ULONG nTab, ScHTMLTableData* pTable )
+                                            { Table::Insert( nTab, pTable ); }
+
+    inline ScHTMLTableData*     _Get( ULONG nTab ) const
+                                            { return (ScHTMLTableData*) Table::Get( nTab ); }
+
+    inline void                 SetCurrTable( ULONG nTab, ScHTMLTableData* pTab )
+                                            { nCurrTab = nTab; pCurrTab = pTab; }
+public:
+                                ScHTMLTableDataTable();
+    virtual                     ~ScHTMLTableDataTable();
+
+    ScHTMLTableData*            GetTable( ULONG nTab );
+    inline ScHTMLTableData*     GetFirst()  { return (ScHTMLTableData*) Table::First(); }
+    inline ScHTMLTableData*     GetNext()   { return (ScHTMLTableData*) Table::Next(); }
+    ScHTMLTableData*            GetFirstInOrder( ScHTMLTableDataKey eKey );
+    ScHTMLTableData*            GetNextInOrder();
+
+    USHORT                      GetNextFreeRow( ULONG nTab );
+
+    ScHTMLTableData*            InsertTable(
+                                    ULONG nTab, const String& rTabName,
+                                    USHORT nFirstCol, USHORT nFirstRow,
+                                    USHORT nColSpan, USHORT nRowSpan,
+                                    ULONG nNestedIn = 0 );
+    void                        SetCellCoord( ULONG nTab, USHORT nCol, USHORT nRow );
+    void                        RecalcSizes();
+
+    void                        Recalc();
+};
+
+//------------------------------------------------------------------------
+
+
 class EditEngine;
 class ScDocument;
 class HTMLOption;
@@ -136,6 +278,7 @@ private:
     ScRangeListRef      xLockedList;        // je Table
     ScDocument*         pDoc;
     Table*              pTables;
+    ScHTMLTableDataTable* pTableData;       // data for each HTML table
     ScHTMLColOffset*    pColOffset;
     ScHTMLColOffset*    pLocalColOffset;    // je Table
     ULONG               nFirstTableCell;    // je Table
@@ -148,6 +291,8 @@ private:
     USHORT              nColOffset;         // aktuell, Pixel
     USHORT              nColOffsetStart;    // Startwert je Table, in Pixel
     USHORT              nMetaCnt;           // fuer ParseMetaOptions
+    BOOL                bCalcWidthHeight;   // TRUE: calculate real column width
+                                            // FALSE: 1 html-col = 1 sc-col
     BOOL                bTabInTabCell;
     BOOL                bFirstRow;          // je Table, ob in erster Zeile
     BOOL                bInCell;
@@ -178,6 +323,7 @@ private:
     USHORT              GetWidth( ScEEParseEntry* );
     void                SetWidths();
     void                Adjust();
+    void                AdjustNoWidthHeight();
 
     USHORT              GetWidthPixel( const HTMLOption* );
     BOOL                IsAtBeginningOfText( ImportInfo* );
@@ -192,9 +338,11 @@ private:
 
 public:
                         ScHTMLParser( EditEngine*, const Size& aPageSize,
-                            ScDocument* );
+                            ScDocument*, BOOL _bCalcWidthHeight );
     virtual             ~ScHTMLParser();
     virtual ULONG       Read( SvStream& );
+
+    ScHTMLTableDataTable* GetHTMLTables() const { return pTableData; }
 };
 
 

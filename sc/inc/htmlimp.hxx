@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlimp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:49 $
+ *  last change: $Author: dr $ $Date: 2001-04-05 10:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,9 +69,11 @@ class ScHTMLParser;
 class ScHTMLImport : public ScEEImport
 {
 public:
-                        ScHTMLImport( ScDocument* pDoc, const ScRange& rRange );
+                        ScHTMLImport( ScDocument* pDoc, const ScRange& rRange, BOOL bCalcWidthHeight = TRUE );
                         ~ScHTMLImport();
     const ScHTMLParser* GetParser() const { return (ScHTMLParser*)pParser; }
+
+    virtual void        WriteToDocument( BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0 );
 };
 
 
