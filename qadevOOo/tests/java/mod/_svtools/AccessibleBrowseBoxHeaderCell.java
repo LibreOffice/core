@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleBrowseBoxHeaderCell.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:33:08 $
+ *  last change:$Date: 2004-02-04 11:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,8 +245,10 @@ public class AccessibleBrowseBoxHeaderCell extends TestCase {
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
+        //at.printAccessibleTree(log,xRoot);
+
         oObj = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.COLUMN_HEADER, "Identifier");
+            AccessibleRole.ROW_HEADER);
 
         log.println("ImplementationName: "+ util.utils.getImplName(oObj));
 
