@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-16 11:35:10 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef UNOTOOLS_CONFIGPATHES_HXX_INCLUDED
+#include <unotools/configpathes.hxx>
 #endif
 
 #ifndef _ISOLANG_HXX
@@ -926,12 +929,6 @@ struct StrictStringSort : public ::std::binary_function< const FontSubstConfigIt
     { return rLeft.Name.CompareTo( rRight.Name ) == COMPARE_LESS ; }
 };
 
-struct WeakStringSort : public ::std::binary_function< const FontSubstConfigItem::FontNameAttr&, const FontSubstConfigItem::FontNameAttr&, bool >
-{
-    bool operator()( const FontSubstConfigItem::FontNameAttr& rLeft, const FontSubstConfigItem::FontNameAttr& rRight )
-    { return rLeft.Name.CompareTo( rRight.Name, rLeft.Name.Len() ) == COMPARE_LESS ; }
-};
-
 static const char* const pAttribNames[] =
 {
     "default",
@@ -1041,7 +1038,9 @@ void FontSubstConfigItem::getValues()
 
             String aFontKey( aKeyName );
             aFontKey.Append( '/' );
-            aFontKey.Append( aAttributes.Name );
+            // must use the wrapped name in config paths due to non-ASCII chars (eg korean font names) !!!
+            String wrappedName = wrapConfigurationElementName( aAttributes.Name );
+            aFontKey.Append( wrappedName );
             Sequence< OUString > aKeys( 7 );
             OUString* pKeys = aKeys.getArray();
             aFontKey.Append( '/' );
@@ -1176,6 +1175,9 @@ void FontSubstConfigItem::getValues()
 
 const FontSubstConfigItem::FontNameAttr* FontSubstConfigItem::getSubstInfo( const String& rFontName, int nLanguage ) const
 {
+    if( !rFontName.Len() )
+        return NULL;
+
     // search if a  (language dep.) replacement table for the given font exists
     // fallback is english
     String aSearchFont( rFontName );
@@ -1187,13 +1189,10 @@ const FontSubstConfigItem::FontNameAttr* FontSubstConfigItem::getSubstInfo( cons
         ::std::map< int, ::std::vector< FontNameAttr > >::const_iterator lang = m_aSubstitutions.find( nLanguage );
         if( lang != m_aSubstitutions.end() )
         {
-            // try to find an exact match first
+            // try to find an exact match
+            // because the list is sorted this will also find fontnames of the form searchfontname*
             ::std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( lang->second.begin(), lang->second.end(), aSearchAttr, StrictStringSort() );
             if( it != lang->second.end() && aSearchFont.CompareTo( it->Name, aSearchFont.Len() ) == COMPARE_EQUAL )
-                return &(*it);
-            // search for the replacement table of a similarly named font
-            it = ::std::lower_bound( lang->second.begin(), lang->second.end(), aSearchAttr, WeakStringSort() );
-            if( it != lang->second.end()  )
                 return &(*it);
         }
         switch( i )
