@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:08:20 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet)
     if(_xDriverSet.is())
     {
         m_xDriverSet = _xDriverSet;
-        m_xDriverRow = Reference<XRow>(_xDriverSet,UNO_QUERY);
+        m_xDriverRow.set(_xDriverSet,UNO_QUERY);
         m_xSetMetaData = Reference<XResultSetMetaDataSupplier>(_xDriverSet,UNO_QUERY)->getMetaData();
         if ( m_xSetMetaData.is() )
         {
@@ -218,11 +218,9 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
     ::rtl::OUString aQuote = getIdentifierQuoteString();
     static ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
     sal_Int32 i = 1;
-    ::std::vector<sal_Bool> aSignedValues;
     ORowVector< ORowSetValue >::const_iterator aIter = _rInsertRow->begin()+1;
     for(; aIter != _rInsertRow->end();++aIter)
     {
-        aSignedValues.push_back(m_xSetMetaData->isSigned(i));
         aSql += ::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++));
         aSql += aComma;
         aValues += aPara;
@@ -242,7 +240,7 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
             if(aIter->isNull())
                 xParameter->setNull(i,aIter->getTypeKind());
             else
-                setParameter(i,xParameter,*aIter,aSignedValues[i-1]);
+                setParameter(i,xParameter,*aIter);
         }
 
         m_bInserted = xPrep->executeUpdate() > 0;
@@ -270,7 +268,6 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
                                         ,const connectivity::OSQLTable& _xTable
                                         ,::rtl::OUString& _sCondition
                                         ,::rtl::OUString& _sParameter
-                                        ,::std::vector<sal_Bool>& _rSignedValues
                                         ,::std::list< sal_Int32>& _rOrgValues)
 {
     // use keys and indexes for excat postioning
@@ -294,7 +291,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
             if(KeyType::PRIMARY == nKeyType)
             {
-                xKeyColsSup = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                xKeyColsSup.set(xProp,UNO_QUERY);
                 break;
             }
         }
@@ -305,7 +302,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
     Reference<XIndexAccess> xIndexes;
     if(xIndexSup.is())
-        xIndexes = Reference<XIndexAccess>(xIndexSup->getIndexes(),UNO_QUERY);
+        xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
 
     //  Reference<XColumnsSupplier>
     Reference<XPropertySet> xIndexColsSup;
@@ -338,7 +335,6 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     for(; aIter != aEnd;++aIter,++nCheckCount,++i)
     {
         aColumnName = m_xSetMetaData->getColumnName(i);
-        _rSignedValues.push_back(m_xSetMetaData->isSigned(i));
         if(xKeyColumns.is() && xKeyColumns->hasByName(aColumnName))
         {
             _sCondition += ::dbtools::quoteName( aQuote,aColumnName);
@@ -348,7 +344,6 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
                 _sCondition += ::rtl::OUString::createFromAscii(" = ?");
             _sCondition += aAnd;
             _rOrgValues.push_back(nCheckCount);
-            _rSignedValues.push_back(_rSignedValues.back());
 
         }
         for( ::std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
@@ -363,7 +358,6 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
                     _sCondition += ::rtl::OUString::createFromAscii(" = ?");
                 _sCondition += aAnd;
                 _rOrgValues.push_back(nCheckCount);
-                _rSignedValues.push_back(_rSignedValues.back());
                 break;
             }
         }
@@ -372,8 +366,6 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
             _sParameter += ::dbtools::quoteName( aQuote,aColumnName);
             _sParameter += aPara;
         }
-        else
-            _rSignedValues.pop_back();
     }
 }
 // -------------------------------------------------------------------------
@@ -389,8 +381,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
 
     ::rtl::OUString aCondition;
     ::std::list< sal_Int32> aOrgValues;
-    ::std::vector<sal_Bool> aSignedValues;
-    fillParameters(_rInsertRow,_xTable,aCondition,aSql,aSignedValues,aOrgValues);
+    fillParameters(_rInsertRow,_xTable,aCondition,aSql,aOrgValues);
     aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(" "));
     if ( aCondition.getLength() )
     {
@@ -409,11 +400,11 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     for(ORowVector< ORowSetValue >::const_iterator aIter = _rInsertRow->begin()+1; aIter != _rInsertRow->end();++aIter)
     {
         if(aIter->isModified())
-            setParameter(i++,xParameter,*aIter,aSignedValues[i-1]);
+            setParameter(i++,xParameter,*aIter);
     }
     for(::std::list< sal_Int32>::const_iterator aOrgValue = aOrgValues.begin(); aOrgValue != aOrgValues.end();++aOrgValue,++i)
     {
-        setParameter(i,xParameter,(*_rOrginalRow)[*aOrgValue],aSignedValues[i-1]);
+        setParameter(i,xParameter,(*_rOrginalRow)[*aOrgValue]);
     }
 
      m_bUpdated = xPrep->executeUpdate() > 0;
@@ -428,20 +419,77 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     aSql += m_aComposedTableName;
     aSql += ::rtl::OUString::createFromAscii(" WHERE ");
 
-    ::rtl::OUString aTemp;
+    // list all cloumns that should be set
+    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
+
+    sal_Int32 i = 1;
+    ORowVector< ORowSetValue >::const_iterator aIter = _rDeleteRow->begin()+1;
+
+    // use keys and indexes for excat postioning
+    // first the keys
+    Reference<XKeysSupplier> xKeySup(_xTable,UNO_QUERY);
+    Reference<XIndexAccess> xKeys;
+    if(xKeySup.is())
+        xKeys = xKeySup->getKeys();
+
+    Reference<XColumnsSupplier> xKeyColsSup;
+    Reference<XNameAccess> xKeyColumns;
+    if(xKeys.is() && xKeys->getCount())
+    {
+        Reference<XPropertySet> xProp;
+        Reference<XColumnsSupplier> xColumnsSupplier;
+        // search the one and only primary key
+        for(sal_Int32 i=0;i< xKeys->getCount();++i)
+        {
+            ::cppu::extractInterface(xProp,xKeys->getByIndex(i));
+            sal_Int32 nKeyType = 0;
+            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+            if(KeyType::PRIMARY == nKeyType)
+            {
+                xKeyColsSup.set(xProp,UNO_QUERY);
+                break;
+            }
+        }
+        if(xKeyColsSup.is())
+            xKeyColumns = xKeyColsSup->getColumns();
+    }
+    // second the indexes
+    Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
+    Reference<XIndexAccess> xIndexes;
+    if(xIndexSup.is())
+        xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
+
+    //  Reference<XColumnsSupplier>
+    Reference<XPropertySet> xIndexColsSup;
+    Reference<XNameAccess> xIndexColumns;
+    ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
+    if(xIndexes.is())
+    {
+        for(sal_Int32 j=0;j<xIndexes->getCount();++j)
+        {
+            ::cppu::extractInterface(xIndexColsSup,xIndexes->getByIndex(j));
+            if( xIndexColsSup.is()
+                && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
+                && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
+              )
+                aAllIndexColumns.push_back(Reference<XColumnsSupplier>(xIndexColsSup,UNO_QUERY)->getColumns());
+        }
+    }
+
+    ::rtl::OUString aColumnName;
     ::std::list< sal_Int32> aOrgValues;
-    ::std::vector<sal_Bool> aSignedValues;
-    fillParameters(_rDeleteRow,_xTable,aSql,aTemp,aSignedValues,aOrgValues);
+    fillParameters(_rDeleteRow,_xTable,aSql,aColumnName,aOrgValues);
 
     aSql = aSql.replaceAt(aSql.getLength()-5,5,::rtl::OUString::createFromAscii(" "));
 
     // now create end execute the prepared statement
     Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
-    sal_Int32 i = 1;
+    i = 1;
     for(::std::list< sal_Int32>::const_iterator j = aOrgValues.begin(); j != aOrgValues.end();++j,++i)
     {
-        setParameter(i,xParameter,(*_rDeleteRow)[*j],aSignedValues[i-1]);
+        setParameter(i,xParameter,(*_rDeleteRow)[*j]);
     }
 
     m_bDeleted = xPrep->executeUpdate() > 0;
@@ -516,17 +564,18 @@ void OCacheSet::setParameter(sal_Int32 nPos
                 break;
             case DataType::CLOB:
                 {
-                    Reference<XInputStream> xStream;
-                    _rValue.getAny() >>= xStream;
+                    Reference<XInputStream> xStream(_rValue.getAny(),UNO_QUERY);
                     _xParameter->setCharacterStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
                 }
                 break;
             case DataType::BLOB:
                 {
-                    Reference<XInputStream> xStream;
-                    _rValue.getAny() >>= xStream;
+                    Reference<XInputStream> xStream(_rValue.getAny(),UNO_QUERY);
                     _xParameter->setBinaryStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
                 }
+                break;
+            case DataType::SQLNULL:
+                _xParameter->setNull(nPos,nType);
                 break;
         }
     }
