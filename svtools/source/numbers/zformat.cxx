@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2001-03-07 16:19:23 $
+ *  last change: $Author: er $ $Date: 2001-03-19 18:14:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,6 +418,20 @@ SvNumberformat::SvNumberformat( SvNumberformat& rFormat, ImpSvNumberformatScan& 
     CopyNumberformat( rFormat );
 }
 
+
+BOOL lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
+{
+    if ( nSymbolType > 0  )
+        return TRUE;        // conditions
+    switch ( nSymbolType )
+    {
+        case SYMBOLTYPE_COLOR :
+            return TRUE;
+    }
+    return FALSE;
+}
+
+
 SvNumberformat::SvNumberformat(String& rString,
                                ImpSvNumberformatScan* pSc,
                                ImpSvNumberInputScan* pISc,
@@ -460,144 +474,161 @@ SvNumberformat::SvNumberformat(String& rString,
     BOOL bCancel = FALSE;
     BOOL bCondition = FALSE;
     short eSymbolType;
-    xub_StrLen nStrPos;
     xub_StrLen nPos = 0;
     xub_StrLen nPosOld;
     nCheckPos = 0;
     String aComment;
-                                            // Zerlegung in 4 Teilstrings:
-    for (USHORT nIndex = 0; nIndex < 4 && !bCancel; nIndex++)
+
+    // Split into 4 sub formats
+    USHORT nIndex;
+    for ( nIndex = 0; nIndex < 4 && !bCancel; nIndex++ )
     {
+        // Original language/country may have to be reestablished
         if (rScan.GetConvertMode())
             (rScan.GetNumberformatter())->ChangeIntl(rScan.GetTmpLnge());
-                                            // in hinteren Formaten muss
-                                            // hier ggfs. wieder die
-                                            // Ausgangssprache eingestellt
-                                            // werden
+
         String sStr;
-        nPosOld = nPos;                         // Position vor Teilstring
-        eSymbolType = ImpNextSymbol(rString, nPos, sStr);
-        if (eSymbolType > 0)                    // Bedingung
+        nPosOld = nPos;                         // Start position of substring
+        // first get bracketed prefixes; e.g. conditions, color
+        do
         {
-            if (nIndex == 0)
+            eSymbolType = ImpNextSymbol(rString, nPos, sStr);
+            if (eSymbolType > 0)                    // condition
             {
-                bCondition = TRUE;
-                eOp1 = (SvNumberformatLimitOps) eSymbolType;
-            }
-            else if (nIndex == 1 && bCondition)
-                eOp2 = (SvNumberformatLimitOps) eSymbolType;
-            else                                // Fehler
-            {
-                bCancel = TRUE;                 // Abbruch for
-                nCheckPos = nPos;
-            }
-            if (!bCancel)
-            {
-                double fNumber;
-                xub_StrLen nAnzChars = ImpGetNumber(rString, nPos, sStr);
-                if (nAnzChars > 0)
+                if ( nIndex == 0 && !bCondition )
                 {
-                    short F_Type;
-                    if (!pISc->IsNumberFormat(sStr,F_Type,fNumber) ||
-                        ( F_Type != NUMBERFORMAT_NUMBER &&
-                          F_Type != NUMBERFORMAT_SCIENTIFIC) )
+                    bCondition = TRUE;
+                    eOp1 = (SvNumberformatLimitOps) eSymbolType;
+                }
+                else if ( nIndex == 1 && bCondition )
+                    eOp2 = (SvNumberformatLimitOps) eSymbolType;
+                else                                // error
+                {
+                    bCancel = TRUE;                 // break for
+                    nCheckPos = nPosOld;
+                }
+                if (!bCancel)
+                {
+                    double fNumber;
+                    xub_StrLen nAnzChars = ImpGetNumber(rString, nPos, sStr);
+                    if (nAnzChars > 0)
+                    {
+                        short F_Type;
+                        if (!pISc->IsNumberFormat(sStr,F_Type,fNumber) ||
+                            ( F_Type != NUMBERFORMAT_NUMBER &&
+                              F_Type != NUMBERFORMAT_SCIENTIFIC) )
+                        {
+                            fNumber = 0.0;
+                            nPos -= nAnzChars;
+                            rString.Erase(nPos, nAnzChars);
+                            rString.Insert('0',nPos);
+                            nPos++;
+                        }
+                        if ( rString.GetChar(nPos) == ']' )
+                            nPos++;
+                    }
+                    else
                     {
                         fNumber = 0.0;
-                        nPos -= nAnzChars;
-                        rString.Erase(nPos, nAnzChars);
-                        rString.Insert('0',nPos);
-                        nPos++;
+                        rString.Insert('0',nPos++);
                     }
-                    nPos++;                         // Skip ']'
+                    if (nIndex == 0)
+                        fLimit1 = fNumber;
+                    else
+                        fLimit2 = fNumber;
+                }
+                nPosOld = nPos;                     // position before string
+            }
+            else if (eSymbolType == SYMBOLTYPE_COLOR)
+            {
+                if ( NumFor[nIndex].GetColor() != NULL )
+                {                                   // error, more than one color
+                    bCancel = TRUE;                 // break for
+                    nCheckPos = nPosOld;
                 }
                 else
                 {
-                    fNumber = 0.0;
-                    rString.Insert('0',nPos);
-                }
-                if (nIndex == 0)
-                    fLimit1 = fNumber;
-                else
-                    fLimit2 = fNumber;
-            }
-            nPosOld = nPos;                         // Position vor String
-            eSymbolType = ImpNextSymbol(rString, nPos, sStr);
-        }
-        if (eSymbolType == SYMBOLTYPE_COLOR)
-        {
-            NumFor[nIndex].SetColor(pSc->GetColor(sStr), sStr);
-            if (NumFor[nIndex].GetColor() == NULL)  // Fehler
-            {
-                bCancel = TRUE;                     // Abbruch for
-                nCheckPos = nPos;
-            }
-            else
-            {
-                rString.Erase(nPosOld,nPos-nPosOld);
-                rString.Insert(sStr,nPosOld);
-                nPos = nPosOld + sStr.Len();
-                rString.Insert(']', nPos);
-                rString.Insert('[', nPosOld);
-                nPos += 2;
-                nPosOld = nPos;                     // Position vor String
-                eSymbolType = ImpNextSymbol(rString, nPos, sStr);
-            }
-        }
-        if (eSymbolType == SYMBOLTYPE_FORMAT)
-        {
-            if (nIndex == 1 && eOp1 == NUMBERFORMAT_OP_NO)// Bdg. undefiniert
-                eOp1 = NUMBERFORMAT_OP_GT;              // default: > 0
-            else if (nIndex == 2 && eOp2 == NUMBERFORMAT_OP_NO)
-                eOp2 = NUMBERFORMAT_OP_LT;              // default: < 0
-            if (sStr.Len() == 0)                        // empty sub format
-            {
-            }
-            else
-            {
-                nStrPos = pSc->ScanFormat( sStr, aComment );
-                USHORT nAnz = pSc->GetAnzResStrings();
-                if (nAnz == 0)              // Fehler
-                    nStrPos = 1;
-                if (nStrPos == 0)               // ok
-                {
-                    rString.Erase(nPosOld,nPos-nPosOld);
-                    rString.Insert(sStr,nPosOld);
-                    nPos = nPosOld + sStr.Len();
-                    if (nPos < rString.Len())
+                    NumFor[nIndex].SetColor(pSc->GetColor(sStr), sStr);
+                    if (NumFor[nIndex].GetColor() == NULL)
+                    {                                   // error
+                        bCancel = TRUE;                 // break for
+                        nCheckPos = nPosOld;
+                    }
+                    else
                     {
-                        rString.Insert(';',nPos);
-                        nPos++;
+                        rString.Erase(nPosOld,nPos-nPosOld);
+                        rString.Insert(sStr,nPosOld);
+                        nPos = nPosOld + sStr.Len();
+                        rString.Insert(']', nPos);
+                        rString.Insert('[', nPosOld);
+                        nPos += 2;
+                        nPosOld = nPos;                 // position before string
                     }
-                    NumFor[nIndex].Enlarge(nAnz);
-                    pSc->CopyInfo(&(NumFor[nIndex].Info()), nAnz);
-                    if (nIndex == 0)                        // Typcheck:
-                        eType = (short) NumFor[nIndex].Info().eScannedType;
-                    else if (nIndex == 3)
-                    {   // #77026# Everything recognized IS text
-                        NumFor[nIndex].Info().eScannedType = NUMBERFORMAT_TEXT;
-                    }
-                    else if ( (short) NumFor[nIndex].Info().eScannedType !=
-                          eType)
-                        eType = NUMBERFORMAT_DEFINED;
                 }
-                else                                // Fehler im String
+            }
+        } while ( !bCancel && lcl_SvNumberformat_IsBracketedPrefix( eSymbolType ) );
+
+        // The remaining format code string
+        if ( !bCancel )
+        {
+            if (eSymbolType == SYMBOLTYPE_FORMAT)
+            {
+                if (nIndex == 1 && eOp1 == NUMBERFORMAT_OP_NO)
+                    eOp1 = NUMBERFORMAT_OP_GT;  // undefined condition, default: > 0
+                else if (nIndex == 2 && eOp2 == NUMBERFORMAT_OP_NO)
+                    eOp2 = NUMBERFORMAT_OP_LT;  // undefined condition, default: < 0
+                if (sStr.Len() == 0)
+                {   // empty sub format
+                }
+                else
                 {
-                    nCheckPos = nPosOld + nStrPos;
-                    bCancel = TRUE;                 // Abbruch for
+                    xub_StrLen nStrPos = pSc->ScanFormat( sStr, aComment );
+                    USHORT nAnz = pSc->GetAnzResStrings();
+                    if (nAnz == 0)              // error
+                        nStrPos = 1;
+                    if (nStrPos == 0)               // ok
+                    {
+                        rString.Erase(nPosOld,nPos-nPosOld);
+                        rString.Insert(sStr,nPosOld);
+                        nPos = nPosOld + sStr.Len();
+                        if (nPos < rString.Len())
+                        {
+                            rString.Insert(';',nPos);
+                            nPos++;
+                        }
+                        NumFor[nIndex].Enlarge(nAnz);
+                        pSc->CopyInfo(&(NumFor[nIndex].Info()), nAnz);
+                        // type check
+                        if (nIndex == 0)
+                            eType = (short) NumFor[nIndex].Info().eScannedType;
+                        else if (nIndex == 3)
+                        {   // #77026# Everything recognized IS text
+                            NumFor[nIndex].Info().eScannedType = NUMBERFORMAT_TEXT;
+                        }
+                        else if ( (short) NumFor[nIndex].Info().eScannedType !=
+                              eType)
+                            eType = NUMBERFORMAT_DEFINED;
+                    }
+                    else
+                    {
+                        nCheckPos = nPosOld + nStrPos;  // error in string
+                        bCancel = TRUE;                 // break for
+                    }
                 }
-            }                                       // of != Standard
+            }
+            else if (eSymbolType == SYMBOLTYPE_ERROR)   // error
+            {
+                nCheckPos = nPosOld;
+                bCancel = TRUE;
+            }
+            else if ( lcl_SvNumberformat_IsBracketedPrefix( eSymbolType ) )
+            {
+                nCheckPos = nPosOld+1;                  // error, prefix in string
+                bCancel = TRUE;                         // break for
+            }
         }
-        else if (eSymbolType == SYMBOLTYPE_ERROR)   // Fehler
-        {
-            nCheckPos = nPos;
-            bCancel = TRUE;
-        }
-        else if (eSymbolType > 0 ||                 // doppelt
-                 eSymbolType == SYMBOLTYPE_COLOR    )
-        {
-            nCheckPos = nPosOld+1;
-            bCancel = TRUE;
-        }
+        if ( bCancel && !nCheckPos )
+            nCheckPos = 1;      // nCheckPos is used as an error condition
         if (rString.Len() == nPos)
         {
             if ( nIndex == 2 && eSymbolType == SYMBOLTYPE_FORMAT &&
@@ -608,23 +639,62 @@ SvNumberformat::SvNumberformat(String& rString,
             }
             bCancel = TRUE;
         }
-    }                                               // of for
-    if (bCondition)
+    }
+
+    if ( bCondition && !nCheckPos )
     {
-        if (NumFor[1].GetnAnz() == 0)               // kein 2. Teilstring
-        {
-            if (NumFor[1].Info().eScannedType != NUMBERFORMAT_NUMBER)
+        if ( nIndex == 1 && NumFor[0].GetnAnz() == 0 &&
+                rString.GetChar(rString.Len()-1) != ';' )
+        {   // No format code => GENERAL   but not if specified empty
+            String aAdd( pSc->GetStandardName() );
+            String aTmp;
+            if ( !pSc->ScanFormat( aAdd, aTmp ) )
             {
-                rString += ';';
-                rString += pSc->GetStandardName();
+                USHORT nAnz = pSc->GetAnzResStrings();
+                if ( nAnz )
+                {
+                    NumFor[0].Enlarge(nAnz);
+                    pSc->CopyInfo( &(NumFor[0].Info()), nAnz );
+                    rString += aAdd;
+                }
             }
         }
-        else if (NumFor[2].GetnAnz() == 0 && eOp2 != NUMBERFORMAT_OP_NO)
-        {
-            if (NumFor[2].Info().eScannedType != NUMBERFORMAT_NUMBER)
+        else if ( nIndex == 1 && NumFor[nIndex].GetnAnz() == 0 &&
+                rString.GetChar(rString.Len()-1) != ';' &&
+                (NumFor[0].GetnAnz() > 1 || (NumFor[0].GetnAnz() == 1 &&
+                NumFor[0].Info().nTypeArray[0] != NF_KEY_GENERAL)) )
+        {   // No trailing second subformat => GENERAL   but not if specified empty
+            // and not if first subformat is GENERAL
+            String aAdd( pSc->GetStandardName() );
+            String aTmp;
+            if ( !pSc->ScanFormat( aAdd, aTmp ) )
             {
-                rString += ';';
-                rString += pSc->GetStandardName();
+                USHORT nAnz = pSc->GetAnzResStrings();
+                if ( nAnz )
+                {
+                    NumFor[nIndex].Enlarge(nAnz);
+                    pSc->CopyInfo( &(NumFor[nIndex].Info()), nAnz );
+                    rString += ';';
+                    rString += aAdd;
+                }
+            }
+        }
+        else if ( nIndex == 2 && NumFor[nIndex].GetnAnz() == 0 &&
+                rString.GetChar(rString.Len()-1) != ';' &&
+                eOp2 != NUMBERFORMAT_OP_NO )
+        {   // No trailing third subformat => GENERAL   but not if specified empty
+            String aAdd( pSc->GetStandardName() );
+            String aTmp;
+            if ( !pSc->ScanFormat( aAdd, aTmp ) )
+            {
+                USHORT nAnz = pSc->GetAnzResStrings();
+                if ( nAnz )
+                {
+                    NumFor[nIndex].Enlarge(nAnz);
+                    pSc->CopyInfo( &(NumFor[nIndex].Info()), nAnz );
+                    rString += ';';
+                    rString += aAdd;
+                }
             }
         }
     }
@@ -695,6 +765,8 @@ enum ScanState
     SsGetColCon = 6                         // noch unentschieden
 };
 
+
+// read a string until ']' and delete spaces in input
 xub_StrLen SvNumberformat::ImpGetNumber(String& rString,
                                  xub_StrLen& nPos,
                                  String& sSymbol)
@@ -702,13 +774,11 @@ xub_StrLen SvNumberformat::ImpGetNumber(String& rString,
     xub_StrLen nStartPos = nPos;
     sal_Unicode cToken;
     xub_StrLen nLen = rString.Len();
-    if (nPos < nLen)
-        cToken = rString.GetChar(nPos);
     sSymbol.Erase();
-    while (nPos < nLen-1 && cToken != ']')              // bis ']'
+    while ( nPos < nLen && ((cToken = rString.GetChar(nPos)) != ']') )
     {
-        if (cToken == ' ')                              // Blanks loeschen
-        {
+        if (cToken == ' ')
+        {                                               // delete spaces
             rString.Erase(nPos,1);
             nLen--;
         }
@@ -717,7 +787,6 @@ xub_StrLen SvNumberformat::ImpGetNumber(String& rString,
             nPos++;
             sSymbol += cToken;
         }
-        cToken = rString.GetChar(nPos);
     }
     return nPos - nStartPos;
 }
