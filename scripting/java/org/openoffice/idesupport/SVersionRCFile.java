@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SVersionRCFile.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:30 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ public class SVersionRCFile {
     private static final HashMap files = new HashMap(3);
 
     private File sverionrc = null;
+    private String defaultversion = null;
     private long lastModified = 0;
 
     public SVersionRCFile() {
@@ -150,6 +151,14 @@ public class SVersionRCFile {
         return buf.toString();
     }
 
+    public String getDefaultVersion() throws IOException {
+        if (defaultversion == null) {
+            getVersions();
+        }
+
+        return defaultversion;
+    }
+
     public Hashtable getVersions() throws IOException {
         BufferedReader br;
 
@@ -183,8 +192,11 @@ public class SVersionRCFile {
             String name = tokens.nextToken();
             String path = tokens.nextToken();
             OfficeInstallation oi = new OfficeInstallation(name, path);
-            if (oi.supportsFramework())
+            if (oi.supportsFramework()) {
                 versions.put(name, oi.getPath());
+                if (defaultversion == null)
+                    defaultversion = oi.getPath();
+            }
         }
         return versions;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelZipper.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:32 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,8 +327,11 @@ public class ParcelZipper
         ZipOutputStream outStream;
         Manifest manifest;
 
+        String language = getParcelLanguage(parcel);
+
         if (isDocumentOverwriteNeeded(parcel, targetDocument)) {
-            String parcelName = getParcelDirFromParcelZip(parcel.getName());
+            String parcelName = language + "/" +
+                getParcelDirFromParcelZip(parcel.getName());
             removeParcel(targetDocument, parcelName);
         }
 
@@ -336,7 +339,6 @@ public class ParcelZipper
         File tmpfile = new File(targetDocument.getAbsolutePath() + ".tmp");
 
         manifest = addParcelToManifest(targetDocument, parcel);
-        String language = getParcelLanguage(parcel);
 
         documentStream =
             new ZipInputStream(new FileInputStream(targetDocument));
@@ -425,7 +427,8 @@ public class ParcelZipper
         ZipOutputStream outStream;
         Manifest manifest = null;
 
-        parcelName =  PARCEL_PREFIX_DIR + parcelName;
+        if (!parcelName.startsWith(PARCEL_PREFIX_DIR))
+            parcelName = PARCEL_PREFIX_DIR + parcelName;
         manifest = removeParcelFromManifest(document, parcelName);
 
         // first write contents of document to tmpfile

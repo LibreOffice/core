@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-01-21 15:45:59 $
+#   last change: $Author: toconnor $ $Date: 2003-01-30 16:22:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,12 @@
     <pathelement path="${install.dir}/bsh-1.2b7.jar"/>
   </path>
 
+  <path id="idesupport.class.path">
+    <!-- <pathelement path="${solar.jar}/jaxp.jar"/>
+    <pathelement path="${solar.jar}/parser.jar"/> -->
+    <pathelement path="${install.dir}/xerces.jar"/>
+  </path>
+
   <path id="openide.class.path">
     <pathelement path="${netbeans.home}/lib/openide.jar"/>
     <pathelement path="${install.dir}/xerces.jar"/>
@@ -125,11 +131,12 @@
   <target name="idesupport.compile" depends="prepare">
     <javac srcdir="." destdir="${jardir}"
            debug="${debug}" deprecation="on">
-      <classpath refid="openide.class.path"/>
+      <classpath refid="idesupport.class.path"/>
       <exclude name="${idesupport.dir}/**/.*/*"/>
       <exclude name="${idesupport.dir}/localoffice/**/*"/>
       <include name="${idesupport.dir}/*.java"/>
       <include name="${idesupport.dir}/*/*.java"/>
+      <include name="${netbeans.dir}/utils/CommandLineTools.java"/>
     </javac>
   </target>
 
@@ -194,6 +201,7 @@
     <jar jarfile="${jardir}/idesupport.jar">
       <fileset dir="${jardir}">
           <include name="${idesupport.dir}/**/*.class"/>
+          <include name="CommandLineTools.class"/>
           <exclude name="${idesupport.dir}/localoffice/*.class"/>
       </fileset>
       <fileset dir=".">

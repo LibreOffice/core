@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelFolderSupport.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:33 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,8 +169,8 @@ public class ParcelFolderSupport implements ParcelFolderCookie
             else
                 configuror.reload(contents.getAbsolutePath(), classpath);
         }
-        catch (FileNotFoundException fnfe) {
-            ErrorManager.getDefault().notify(fnfe);
+        catch (IOException ioe) {
+            ErrorManager.getDefault().notify(ioe);
         }
 
         DialogDescriptor descriptor = new DialogDescriptor(configuror,

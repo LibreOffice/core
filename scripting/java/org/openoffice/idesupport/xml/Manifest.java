@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Manifest.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:31 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ public class Manifest {
     private Document document = null;
     private boolean baseElementsExist = false;
 
-    public Manifest(InputStream inputStream) {
+    public Manifest(InputStream inputStream) throws IOException {
         document = XMLParserFactory.getParser().parse(inputStream);
     }
 

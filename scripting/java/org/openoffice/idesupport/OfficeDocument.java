@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocument.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:30 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,8 @@ public class OfficeDocument
         ParcelZipper.PARCEL_PREFIX_DIR;
 
     public static final String[] OFFICE_EXTENSIONS = {".sxc" , ".sxw"};
-    public static final String ARCHIVE_TAG = "[PARCEL_FILE]";
     public static final String OFFICE_PRODUCT_NAME = "OpenOffice.org";
 
-    private static ParcelZipper zipper = ParcelZipper.getParcelZipper();
     private File file = null;
 
     public OfficeDocument(File file) throws IllegalArgumentException
@@ -116,10 +114,8 @@ public class OfficeDocument
                     String tmp = ze.getName();
                     int end = tmp.lastIndexOf("/");
                     tmp = tmp.substring(0, end);
-                    int start = tmp.lastIndexOf("/") + 1;
 
-                    String parcelName = ARCHIVE_TAG +
-                        ze.getName().substring(start, end);
+                    String parcelName = ze.getName().substring(0, end);
                     parcels.add(parcelName);
                 }
             }
@@ -143,15 +139,10 @@ public class OfficeDocument
         return parcels.elements();
     }
 
-    public String getParcelEntryFromName(String parcelName) {
-        return parcelName.substring(ARCHIVE_TAG.length()) + "/";
-    }
-
     public boolean removeParcel(String parcelName) {
 
         try {
-            ParcelZipper.getParcelZipper().removeParcel(
-                file, getParcelEntryFromName(parcelName));
+            ParcelZipper.getParcelZipper().removeParcel(file, parcelName);
         }
         catch (IOException ioe) {
             ioe.printStackTrace();

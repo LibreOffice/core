@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConfigurePanel.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-01-28 20:52:31 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 package org.openoffice.idesupport.ui;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import java.util.Vector;
 import java.util.Enumeration;
@@ -107,7 +107,7 @@ public class ConfigurePanel extends JPanel {
     }
 
     public ConfigurePanel(String basedir, Vector classpath)
-        throws FileNotFoundException {
+        throws IOException {
 
         this.basedir = new File(basedir);
         this.classpath = classpath;
@@ -134,7 +134,7 @@ public class ConfigurePanel extends JPanel {
     }
 
     public void reload(String basedir, Vector classpath)
-        throws FileNotFoundException {
+        throws IOException {
 
         if (basedir != null)
             this.basedir = new File(basedir);

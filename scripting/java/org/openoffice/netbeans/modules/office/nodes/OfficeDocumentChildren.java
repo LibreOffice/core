@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeDocumentChildren.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: toconnor $ $Date: 2002-11-13 17:44:37 $
+ *  last change: $Author: toconnor $ $Date: 2003-01-30 16:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,8 @@ import org.openide.util.HelpCtx;
 
 import org.openoffice.netbeans.modules.office.actions.OfficeDocumentCookie;
 
-public class OfficeDocumentChildren extends Children.Keys implements ChangeListener {
+public class OfficeDocumentChildren extends Children.Keys
+    implements ChangeListener {
 
     private OfficeDocumentCookie document = null;
 
@@ -135,7 +136,7 @@ public class OfficeDocumentChildren extends Children.Keys implements ChangeListe
             setIconBase("/org/openoffice/netbeans/modules/office/resources/OfficeIcon");
 
             setName(name);
-            setDisplayName(name.substring(name.lastIndexOf(".") + 1));
+            setDisplayName(name.substring(name.lastIndexOf("/") + 1));
             setShortDescription(name);
         }
 
