@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-03 11:45:59 $
+ *  last change: $Author: jb $ $Date: 2000-12-04 09:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,6 @@ namespace configmgr
                   :m_xDefaultOptions(new OOptions(_rModule.getConverter()))
                   ,m_pTreeMgr(new TreeManager(_pSession, m_xDefaultOptions))
                   ,m_pNewProviders(0)
-                  ,m_aNotifier(m_pTreeMgr)
                   ,m_pProvider(_pProvider)
     {
         m_pTreeMgr->acquire();
@@ -201,7 +200,6 @@ namespace configmgr
     OProviderImpl::~OProviderImpl()
     {
         delete m_pNewProviders;
-        m_aNotifier.dispose();
         m_pTreeMgr->release();
         m_pTreeMgr = NULL;
     }
@@ -209,6 +207,10 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     // access to the factory for writable elements
     configapi::Factory& OProviderImpl::getWriterFactory() {return m_pNewProviders->getWriterFactory();}
+
+    //-----------------------------------------------------------------------------
+    // access to the raw notifications
+    IConfigBroadcaster* OProviderImpl::getNotifier() { OSL_ASSERT(m_pTreeMgr); return m_pTreeMgr->getBroadcaster(); }
 
     // TemplateProvider access
     //-----------------------------------------------------------------------------
@@ -218,7 +220,7 @@ namespace configmgr
         return m_pNewProviders->getTemplateProvider();
     }
 
-    // ITreeProvider
+    // ITreeProvider /ITreeManager
     //-----------------------------------------------------------------------------
     ISubtree* OProviderImpl::requestSubtree( OUString const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
                                              sal_Int16 nMinLevels) throw (container::NoSuchElementException)
@@ -227,18 +229,24 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::updateTree(TreeChangeList& aChanges, const vos::ORef < OOptions >& _xOptions) throw (lang::WrappedTargetException, uno::RuntimeException)
+    void OProviderImpl::updateTree(TreeChangeList& aChanges) throw (lang::WrappedTargetException, uno::RuntimeException)
     {
-        m_pTreeMgr->updateTree(aChanges, _xOptions);
+        m_pTreeMgr->updateTree(aChanges);
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::notifyUpdate(TreeChangeList const& aChanges) const throw (uno::RuntimeException)
+    void OProviderImpl::releaseSubtree( OUString const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) throw ()
+    {
+        m_pTreeMgr->releaseSubtree(aSubtreePath, _xOptions);
+    }
+
+    //-----------------------------------------------------------------------------
+    void OProviderImpl::notifyUpdate(TreeChangeList const& aChanges) throw (uno::RuntimeException)
     {
         m_pTreeMgr->notifyUpdate(aChanges);
     }
 
-    // IRefCountedTreeProvider
+    // IInterface
     //-----------------------------------------------------------------------------
     void SAL_CALL OProviderImpl::acquire(  ) throw ()
     {
