@@ -2,9 +2,9 @@
 *
 *  $RCSfile: FileAccess.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:36:14 $
+*  last change: $Author: hr $ $Date: 2004-08-02 17:18:56 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -308,12 +308,20 @@ public class FileAccess {
         }
     }
 
+    /**
+     * searches a directory for files which start with a certain
+     * prefix, and returns their URLs and document-titles.
+     * @param xMSF
+     * @param FilterName the prefix of the filename. a "-" is added to the prefix !
+     * @param FolderName the folder (URL) to look for files...
+     * @return an array with two array members. The first one, with document titles,
+     * the second with the corresponding URLs.
+     */
     public static String[][] getFolderTitles(com.sun.star.lang.XMultiServiceFactory xMSF, String FilterName, String FolderName) {
         String[][] LocLayoutFiles = new String[2][]; //{"",""}{""};
         try {
             java.util.Vector TitleVector = null;
             java.util.Vector NameVector = null;
-            String[] NameList;
 
             XInterface xDocInterface = (XInterface) xMSF.createInstance("com.sun.star.document.StandaloneDocumentInfo");
             com.sun.star.document.XStandaloneDocumentInfo xDocInfo = (com.sun.star.document.XStandaloneDocumentInfo) UnoRuntime.queryInterface(com.sun.star.document.XStandaloneDocumentInfo.class, xDocInterface);
@@ -321,19 +329,23 @@ public class FileAccess {
             XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = (com.sun.star.ucb.XSimpleFileAccess) UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
 
-            NameList = xSimpleFileAccess.getFolderContents(FolderName, false);
-            TitleVector = new java.util.Vector(NameList.length);
-            NameVector = new java.util.Vector(NameList.length);
-            int FileCount = NameList.length;
-            int FilterLen = FilterName.length();
-            String CurFileName = "";
-            for (int i = 0; i < FileCount; i++) {
-                CurFileName = NameList[i];
-                int s = CurFileName.indexOf(FilterName + "-");
-                if (CurFileName.indexOf(FilterName + "-") != -1) {
-                    xDocInfo.loadFromURL(CurFileName);
-                    NameVector.addElement(CurFileName);
+            String[] nameList = xSimpleFileAccess.getFolderContents(FolderName, false);
+
+            TitleVector = new java.util.Vector(nameList.length);
+            NameVector = new java.util.Vector(nameList.length);
+
+            FilterName = FilterName == null || FilterName.equals("") ? null : FilterName + "-";
+
+            String fileName = "";
+            for (int i = 0; i < nameList.length; i++) {
+                fileName = getFilename( nameList[i] );
+
+                if (FilterName == null || fileName.startsWith(FilterName)) {
+
+                    xDocInfo.loadFromURL(nameList[i]);
+                    NameVector.addElement(nameList[i]);
                     TitleVector.addElement(com.sun.star.uno.AnyConverter.toString(Helper.getUnoPropertyValue(xDocInterface, "Title")));
+
                 }
             }
             String[] LocNameList = new String[NameVector.size()];
@@ -343,6 +355,7 @@ public class FileAccess {
             TitleVector.copyInto(LocTitleList);
             LocLayoutFiles[1] = LocNameList;
             LocLayoutFiles[0] = LocTitleList;
+
             JavaTools.bubblesortList(LocLayoutFiles);
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
@@ -482,7 +495,7 @@ public class FileAccess {
          * @param path
          * @return
          */
-    public String getFilename(String path) {
+    public static String getFilename(String path) {
         return getFilename(path, "/");
     }
 
@@ -491,7 +504,7 @@ public class FileAccess {
      * @param path
      * @return
      */
-    public String getFilename(String path, String pathSeparator) {
+    public static String getFilename(String path, String pathSeparator) {
         //TODO 1.4 -> 1.3 ! String.split
         String[] s = JavaTools.ArrayoutofString(path, pathSeparator);
         return s[s.length - 1];
@@ -605,7 +618,30 @@ public class FileAccess {
         return sFileData;
     }
 
+    /**
+     * shortens a filename to a user displayable representation.
+     * @param path
+     * @param maxLength
+     * @return
+     */
+    public static String getShortFilename(String path, int maxLength) {
+        int firstPart = 0;
 
+        if (path.length() > maxLength) {
+            if (path.startsWith("/"))  { // unix
+                int nextSlash = path.indexOf("/",1) + 1;
+                firstPart = Math.min(nextSlash, ( maxLength - 3 ) / 2  );
+            }
+            else { //windows
+                firstPart = Math.min( 10, (maxLength - 3) / 2);
+            }
 
+            String s1 = path.substring(0,firstPart);
+            String s2 = path.substring(path.length() - (maxLength - ( 3 + firstPart)));
 
+            return s1 + "..." + s2;
+        }
+        else
+            return path;
+    }
 }
