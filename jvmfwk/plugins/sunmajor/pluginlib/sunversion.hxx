@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunversion.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 11:45:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@ namespace jfw_plugin {
    Pre releases relate this way
    1.4.1-ea < 1.4.1-beta < 1.4.1-rc1
 
+   This class supports also a FreeBSD Java. This is currently necessary because
+   it also has the vendor string "Sun Microsystems Inc.".
+
    An object acts as holder for the version string. That string may be present
    even if the version could not be parsed. Then the version may not be compatible
    to a SUN Java version.
@@ -107,6 +110,10 @@ protected:
         Rel_RC1,
         Rel_RC2,
         Rel_RC3
+#if defined(FREEBSD)
+    ,
+        Rel_FreeBSD
+#endif
     };
 
     //contains major,minor,micro,update
