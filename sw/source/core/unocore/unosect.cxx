@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 12:54:49 $
+ *  last change: $Author: os $ $Date: 2001-02-12 13:26:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1012,6 +1012,9 @@ Sequence< PropertyState > SwXTextSection::getPropertyStates(
                 case WID_SECT_VISIBLE   :
                 case WID_SECT_PROTECTED:
                 case  FN_PARAM_LINK_DISPLAY_NAME:
+                case  FN_UNO_ANCHOR_TYPES:
+                case  FN_UNO_TEXT_WRAP:
+                case  FN_UNO_ANCHOR_TYPE:
                     pStates[i] = PropertyState_DIRECT_VALUE;
                 break;
                 default:
@@ -1097,6 +1100,10 @@ void SwXTextSection::setPropertyToDefault( const OUString& rPropertyName )
                     aSection.SetProtect(FALSE);
             }
             break;
+            case  FN_UNO_ANCHOR_TYPES:
+            case  FN_UNO_TEXT_WRAP:
+            case  FN_UNO_ANCHOR_TYPE:
+            break;
             default:
                 if(pFmt)
                 {
@@ -1169,6 +1176,11 @@ Any SwXTextSection::getPropertyDefault( const OUString& rPropertyName )
             sal_Bool bTemp = FALSE;
             aRet.setValue( &bTemp, ::getCppuBooleanType());
         }
+        break;
+        case  FN_UNO_ANCHOR_TYPES:
+        case  FN_UNO_TEXT_WRAP:
+        case  FN_UNO_ANCHOR_TYPE:
+            SwXParagraph::getDefaultTextContentValue(aRet, OUString(), pMap->nWID);
         break;
         default:
         if(pFmt)
