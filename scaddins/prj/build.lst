@@ -1,0 +1,3 @@
+ca	scaddins	:	cppuhelper offapi NULL
+ca	scaddins								usr1	-	all	sc_mkout NULL
+ca	scaddins\source\datefunc				nmake	-	all	sc_dfunc NULL

@@ -1,0 +1,49 @@
+sc	sc	:	offmgr NULL
+sc	sc										usr1	-	all	sc_mkout NULL
+sc	sc\inc									get		-	all	sc_inc NULL
+sc	sc\prj									get		-	all	sc_prj NULL
+sc	sc\jobs									get		-	all	sc_jobs NULL
+sc	sc\res									get		-	all	sc_res NULL
+sc	sc\res\imglst\inputwin					get		-	all	sc_resiw NULL
+sc	sc\res\imglst\navipi					get		-	all	sc_resna NULL
+sc	sc\res\imglst\apptbx					get		-	all	sc_resap NULL
+sc	sc\source\core\inc						get		-	all	sc_coinc NULL
+sc	sc\source\ui\inc						get		-	all	sc_uiinc NULL
+sc	sc\source\filter\inc					get		-	all	sc_fiinc NULL
+sc	sc\addin\inc							get		-	all	sc_adinc NULL
+sc	sc\sdi									nmake	-	all	sc_sdi NULL
+sc	sc\source\ui\pch						get		-	all	sc_upch sc_sdi NULL
+sc	sc\source\ui\view						nmake	-	all	sc_view sc_sdi NULL
+sc	sc\source\ui\app						nmake	-	all	sc_app sc_sdi NULL
+sc	sc\source\ui\cctrl						nmake	-	all	sc_cctrl sc_sdi NULL
+sc	sc\source\ui\dbgui						nmake	-	all	sc_dbgui sc_sdi NULL
+sc	sc\source\ui\docshell					nmake	-	all	sc_docsh sc_sdi NULL
+sc	sc\source\ui\drawfunc					nmake	-	all	sc_drfnc sc_sdi NULL
+sc	sc\source\ui\formdlg					nmake	-	all	sc_form sc_sdi NULL
+sc	sc\source\ui\miscdlgs					nmake	-	all	sc_misc sc_sdi NULL
+sc	sc\source\ui\namedlg					nmake	-	all	sc_name sc_sdi NULL
+sc	sc\source\ui\navipi						nmake	-	all	sc_nvipi sc_sdi NULL
+sc	sc\source\ui\optdlg						nmake	-	all	sc_opt sc_sdi NULL
+sc	sc\source\ui\attrdlg					nmake	-	all	sc_attr sc_sdi NULL
+sc	sc\source\ui\pagedlg					nmake	-	all	sc_page sc_sdi NULL
+sc	sc\source\ui\src						nmake	-	all	sc_uisrc sc_sdi NULL
+sc	sc\source\ui\styleui					nmake	-	all	sc_style sc_sdi NULL
+sc	sc\source\ui\undo						nmake	-	all	sc_undo sc_sdi NULL
+sc	sc\source\ui\unoobj						nmake	-	all	sc_unobj sc_sdi NULL
+sc	sc\source\core\pch						get		-	all	sc_cpch sc_sdi NULL
+sc	sc\source\core\data						nmake	-	all	sc_data sc_sdi NULL
+sc	sc\source\core\src						nmake	-	all	sc_cosrc sc_sdi NULL
+sc	sc\source\core\tool						nmake	-	all	sc_tool sc_sdi NULL
+sc	sc\source\filter\pch					get		-	all	sc_fpch sc_sdi NULL
+sc	sc\source\filter\excel					nmake	-	all	sc_excel sc_sdi NULL
+sc	sc\source\filter\lotus					nmake	-	all	sc_lotus sc_sdi NULL
+sc	sc\source\filter\starcalc				nmake	-	all	sc_scalc sc_sdi NULL
+sc	sc\source\filter\dif					nmake	-	all	sc_dif sc_sdi NULL
+sc	sc\source\filter\rtf					nmake	-	all	sc_rtf sc_sdi NULL
+sc	sc\source\filter\html					nmake	-	all	sc_html sc_sdi NULL
+sc	sc\source\filter\xml					nmake	-	all	sc_xml sc_sdi NULL
+sc	sc\source\filter\xcl97					nmake	-	all	sc_xcl97 sc_sdi NULL
+sc	sc\addin\datefunc						nmake	-	all	sc_addfu sc_sdi NULL
+sc	sc\addin\rot13							nmake	-	all	sc_adrot sc_sdi NULL
+sc	sc\addin\util							nmake	-	all	sc_adutil sc_addfu sc_adrot sc_sdi NULL
+sc	sc\util									nmake	-	all	sc_util sc_addfu sc_adrot sc_adutil sc_app sc_attr sc_cctrl sc_cosrc sc_data sc_dbgui sc_dif sc_docsh sc_drfnc sc_excel sc_form sc_html sc_lotus sc_misc sc_name sc_nvipi sc_opt sc_page sc_rtf sc_scalc sc_style sc_tool sc_uisrc sc_undo sc_unobj sc_view sc_xcl97 sc_xml NULL
