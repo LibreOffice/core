@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pl $ $Date: 2002-05-08 13:46:43 $
+ *  last change: $Author: cp $ $Date: 2002-06-10 16:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -914,7 +914,7 @@ void WMAdaptor::setWMName( SalFrame* pFrame, const String& rWMName ) const
     }
 
     char* pT = const_cast<char*>(aTitle.GetBuffer());
-    XTextProperty aProp;
+    XTextProperty aProp = { NULL, None, 0, 0 };
     XmbTextListToTextProperty( m_pDisplay,
                                &pT,
                                1,
@@ -949,7 +949,8 @@ void WMAdaptor::setWMName( SalFrame* pFrame, const String& rWMName ) const
                      PropModeReplace,
                      (unsigned char*)aWMLocale.getStr(),
                      aWMLocale.getLength() );
-    XFree( aProp.value );
+    if (aProp.value != NULL)
+        XFree( aProp.value );
 }
 
 /*
