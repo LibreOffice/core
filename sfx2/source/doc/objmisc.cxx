@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-11 12:29:32 $
+ *  last change: $Author: mba $ $Date: 2001-11-22 10:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,15 +433,17 @@ sal_Bool SfxObjectShell::IsReadOnly() const
 //-------------------------------------------------------------------------
 
 sal_Bool SfxObjectShell::IsInModalMode() const
-
-/*  [Beschreibung]
-
-    Diese Methode liefert sal_True, falls in einer ::com::sun::star::sdbcx::View auf dieses Dokument
-    ein modaler Dialog exitiert, sonst sal_False.
-*/
-
 {
-    return pImp->bModalMode;
+    return pImp->bModalMode || pImp->bRunningMacro;
+}
+
+void SfxObjectShell::SetMacroMode_Impl( sal_Bool bModal )
+{
+    if ( !pImp->bRunningMacro != !bModal )
+    {
+        pImp->bRunningMacro = bModal;
+        Broadcast( SfxSimpleHint( SFX_HINT_MODECHANGED ) );
+    }
 }
 
 //-------------------------------------------------------------------------

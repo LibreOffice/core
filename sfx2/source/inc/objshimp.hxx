@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-01 17:53:59 $
+ *  last change: $Author: mba $ $Date: 2001-11-22 10:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ struct SfxObjectShell_Impl
     Size                aViewSize;          // wird leider vom Writer beim
     sal_Bool                bInFrame;           // HTML-Import gebraucht
     sal_Bool                bModalMode;
+    sal_Bool                bRunningMacro;
     sal_Bool                bReloadAvailable;
     sal_uInt16              nAutoLoadLocks;
     SfxModule*              pModule;
@@ -196,12 +197,13 @@ struct SfxObjectShell_Impl
         pMarkData( 0 ),
         bInFrame( sal_False ),
         bModalMode( sal_False ),
+        bRunningMacro( sal_False ),
         bReloadAvailable( sal_False ),
         nAutoLoadLocks( 0 ),
         bInPrepareClose( sal_False ),
         bPreparedForClose( sal_False ),
         bWaitingForPicklist( sal_False ),
-        pModule(  0 ),
+        pModule( 0 ),
         bModuleSearched( sal_False ),
         pFrame( 0 ),
         pImageManager( 0 ),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-21 12:34:07 $
+ *  last change: $Author: mba $ $Date: 2001-11-22 10:53:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,24 +827,28 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
 
                 SbxBaseRef xOldVar;
                 SbxVariable *pCompVar = NULL;
-                if ( pSh && pBasMgr == pAppMgr )
+                if ( pSh )
                 {
-                    pCompVar = pAppMgr->GetLib(0)->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                            xInterface ( pSh->GetModel() , ::com::sun::star::uno::UNO_QUERY );
-                    ::com::sun::star::uno::Any aAny;
-                    aAny <<= xInterface;
-                    if ( pCompVar )
+                    pSh->SetMacroMode_Impl( TRUE );
+                    if ( pBasMgr == pAppMgr )
                     {
-                        xOldVar = pCompVar->GetObject();
-                        pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny ) );
-                    }
-                    else
-                    {
-                        SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny );
-                        xUnoObj->SetFlag( SBX_DONTSTORE );
-                        pAppMgr->GetLib(0)->Insert( xUnoObj );
                         pCompVar = pAppMgr->GetLib(0)->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
+                        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                                xInterface ( pSh->GetModel() , ::com::sun::star::uno::UNO_QUERY );
+                        ::com::sun::star::uno::Any aAny;
+                        aAny <<= xInterface;
+                        if ( pCompVar )
+                        {
+                            xOldVar = pCompVar->GetObject();
+                            pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny ) );
+                        }
+                        else
+                        {
+                            SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny );
+                            xUnoObj->SetFlag( SBX_DONTSTORE );
+                            pAppMgr->GetLib(0)->Insert( xUnoObj );
+                            pCompVar = pAppMgr->GetLib(0)->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
+                        }
                     }
                 }
 
@@ -856,6 +860,8 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, SfxObjectShell* 
                 nErr = SbxBase::GetError();
                 if ( pCompVar )
                     pCompVar->PutObject( xOldVar );
+                if ( pSh )
+                    pSh->SetMacroMode_Impl( FALSE );
             }
             else
                 nErr = ERRCODE_BASIC_PROC_UNDEFINED;
