@@ -37,7 +37,7 @@ Sub Main()
 	FillStep_Welcome()
 	RepaintHeaderPreview()
 	SetStates()
-	ImportDialogArea.Visible = True &apos;Execute()
+	ImportDialogArea.Execute() &apos;Visible = True 
 	ImportDialog.cbGoOn.DefaultButton = True
 	Exit Sub
 RTError:
@@ -133,7 +133,7 @@ Sub CancelButton()
 		ImportDialog.cbCancel.Enabled = False
 		bCancelTask = True
 	Else
-		ImportDialogArea.Visible = False &apos;EndExecute
+		ImportDialogArea.EndExecute()
 		ImportDialogArea.Dispose()
 		End
 	End If
@@ -142,7 +142,7 @@ End Sub
 
 Sub CancelTask()
 	If Msgbox(sConvertError1, 36, sConvertError2) = 6 Then
-		ImportDialogArea.Visible = False &apos;EndExecute
+		ImportDialogArea.EndExecute		&apos;Visible = False 
 		ImportDialogArea.Dispose
 		End
 	Else
