@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:26:54 $
+ *  last change: $Author: kz $ $Date: 2001-05-30 19:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,7 @@ TabPage TAB_WIZ_TYPE_SELECT
         Text[ polish ] = "Wiersze (maks.):";
         Text[ portuguese_brazilian ] = "Tablename:";
         Text[ japanese ] = "Å‘ås”(~X):";
-        Text[ korean ] = "ÁÙ[ÃÖ´ë(~X)";
+        Text[ korean ] = "(ÃÖ´ë)~ÁÙ:";
         Text[ chinese_simplified ] = "(×î¶à)ĞĞ(~X)£º";
         Text[ chinese_traditional ] = "(³Ì¦h)¦C(~X)¡G";
         Text[ arabic ] = "(ÇáÍÏ ÇáÃŞÕì) ááÕİæİ:";
@@ -758,7 +758,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text[ italian ] = "Tabella sorgente: \n";
         Text[ danish ] = "Kildetabel: \n";
         Text[ swedish ] = "Källtabell: \n";
-        Text[ polish ] = "Tabela ?ród³owa: \n";
+        Text[ polish ] = "Tabela Ÿród³owa: \n";
         Text[ portuguese_brazilian ] = "Source table: \n";
         Text[ japanese ] = "¿°½Ã°ÌŞÙ: \n";
         Text[ korean ] = "¼Ò½º Å×ÀÌºí: \n";
@@ -1323,7 +1323,7 @@ String STR_COPYTABLE_TITLE_MOVE
     Text [ dutch ] = "Tabel verplaatsen" ;
     Text[ chinese_simplified ] = "ÒÆ¶¯±íµ¥";
     Text[ russian ] = "Ïåğåìåñòèòü òàáëèöó";
-    Text[ polish ] = "Przenie? tabelê";
+    Text[ polish ] = "Przenieœ tabelê";
     Text[ japanese ] = "Ã°ÌŞÙ‚ÌˆÚ“®";
     Text[ chinese_traditional ] = "²¾°Êªí³æ";
     Text[ arabic ] = "ÊÍÑíß ÇáÌÏæá";
