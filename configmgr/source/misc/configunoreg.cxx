@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configunoreg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:59:39 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 13:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,10 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
         RegisterService(configmgr::localbe::getLocalDataImportServiceInfo(), xKey) ;
         RegisterService(configmgr::localbe::getLocalHierarchyBrowserServiceInfo(), xKey) ;
         RegisterService(configmgr::localbe::getLocalSchemaSupplierServiceInfo(), xKey) ;
-        RegisterService(configmgr::localbe::getLocalSingleStratumServiceInfo(), xKey) ;
+        RegisterService(configmgr::localbe::getLocalLegacyStratumServiceInfo(), xKey) ;
+        RegisterService(configmgr::localbe::getLocalDataStratumServiceInfo(), xKey) ;
+        RegisterService(configmgr::localbe::getLocalReadonlyStratumServiceInfo(), xKey) ;
+        RegisterService(configmgr::localbe::getLocalResourceStratumServiceInfo(), xKey) ;
 
         // im/export
         RegisterService(configmgr::backend::getMergeImportServiceInfo(), xKey);
@@ -396,8 +399,20 @@ extern "C" void* SAL_CALL component_getFactory(
                 configmgr::localbe::instantiateLocalSchemaSupplier)
         ||
          aReq.CreateServiceFactory(
-                configmgr::localbe::getLocalSingleStratumServiceInfo(),
-                configmgr::localbe::instantiateLocalSingleStratum)
+                configmgr::localbe::getLocalLegacyStratumServiceInfo(),
+                configmgr::localbe::instantiateLocalLegacyStratum)
+        ||
+         aReq.CreateServiceFactory(
+                configmgr::localbe::getLocalDataStratumServiceInfo(),
+                configmgr::localbe::instantiateLocalDataStratum)
+        ||
+         aReq.CreateServiceFactory(
+                configmgr::localbe::getLocalReadonlyStratumServiceInfo(),
+                configmgr::localbe::instantiateLocalReadonlyStratum)
+        ||
+         aReq.CreateServiceFactory(
+                configmgr::localbe::getLocalResourceStratumServiceInfo(),
+                configmgr::localbe::instantiateLocalResourceStratum)
         ||
         // im/export
         aReq.CreateServiceFactory(
