@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
+ *  last change: $Author: jp $ $Date: 2001-03-23 15:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,20 +266,18 @@ public:
     virtual long DdeSetData( const String& rItem, const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
     virtual ::so3::SvLinkSource* DdeCreateLinkSource( const String& rItem );
-    virtual void        FillClass( SvGlobalName * pClassName,
+    virtual void FillClass( SvGlobalName * pClassName,
                                    ULONG * pClipFormat,
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
                                    long nVersion = SOFFICE_FILEFORMAT_CURRENT ) const;
-    virtual void    FillRegInfo( SvEmbeddedRegistryInfo * );
-
-    virtual SvDataMemberObjectRef CreateSnapshot();
+    virtual void FillRegInfo( SvEmbeddedRegistryInfo * );
 
     virtual void LoadStyles( SfxObjectShell& rSource );
 
     // Seitenvorlagedialog anzeigen, ggf. auf Spaltenpage
-    void    FormatPage( const String& rPage,
+    void FormatPage( const String& rPage,
                         BOOL bColumn = FALSE,
                         SwWrtShell*     pActShell = 0 );
 
