@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcache.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:42:44 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,11 +149,11 @@ SwCache::SwCache( const USHORT nInitSize, const USHORT nGrowSize
     ) :
     SwCacheObjArr( (BYTE)nInitSize, (BYTE)nGrowSize ),
     aFreePositions( 5, 5 ),
-    nMax( nInitSize ),
-    nCurMax( nInitSize ),
     pRealFirst( 0 ),
     pFirst( 0 ),
-    pLast( 0 )
+    pLast( 0 ),
+    nMax( nInitSize ),
+    nCurMax( nInitSize )
 #ifndef PRODUCT
     , aName( rNm ),
     nAppend( 0 ),
@@ -605,10 +605,10 @@ void SwCache::SetLRUOfst( const USHORT nOfst )
 
 
 SwCacheObj::SwCacheObj( const void *pOwn ) :
-    nLock( 0 ),
-    nCachePos( USHRT_MAX ),
     pNext( 0 ),
     pPrev( 0 ),
+    nCachePos( USHRT_MAX ),
+    nLock( 0 ),
     pOwner( pOwn )
 {
 }
@@ -646,6 +646,13 @@ void SwCacheObj::Unlock()
     --nLock;
 }
 #endif
+
+
+SwCacheAccess::~SwCacheAccess()
+{
+    if ( pObj )
+        pObj->Unlock();
+}
 
 /*************************************************************************
 |*
