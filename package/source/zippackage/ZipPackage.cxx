@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-27 16:10:30 $
+ *  last change: $Author: mtg $ $Date: 2000-11-27 16:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,8 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                 pPkgStream->setParent( Reference < XInterface > (xCurrent, UNO_QUERY));
                 pPkgStream->setZipEntry( aEntry );
                 pPkgStream->setName( sStreamName );
+                aAny <<= OUString::createFromAscii("text/plain");
+                pPkgStream->setPropertyValue(OUString::createFromAscii("MediaType"), aAny);
                 aAny <<= Reference < XUnoTunnel > (pPkgStream);
                 xCurrent->insertByName(sStreamName, aAny);
             }
@@ -368,7 +370,15 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
     sal_Int32 nOldIndex =0,nIndex = 0;
     Any aAny;
     Reference < XNameContainer > xCurrent  = Reference < XNameContainer > (pRootFolder);
-    if (aName.lastIndexOf('/') == aName.getLength()-1)
+
+    if (aName[nOldIndex] == '/')
+        nOldIndex++;
+
+    if (aName == OUString::createFromAscii("/"))
+    {
+        return sal_True;
+    }
+    else if (aName.lastIndexOf('/') == aName.getLength()-1)
     {
         while ((nIndex = aName.indexOf('/', nOldIndex)) != -1)
         {
@@ -433,12 +443,31 @@ void SAL_CALL ZipPackage::commitChanges(  )
 {
 #ifdef _DEBUG_RECURSION_
     TestZip *pFoo = new TestZip(L"e:/clean/foo.txt", sal_False);
+
     pRootFolder->saveContents(OUString::createFromAscii(""), *pFoo);
     pFoo->closeInput();
 #else
-    pRootFolder->saveContents(OUString::createFromAscii(""));
+    std::vector < ManifestEntry * > aManList;
+    pRootFolder->saveContents(OUString::createFromAscii(""), aManList);
 #endif
-
+    ZipEntry aEntry;
+    ZipPackageBuffer *pBuffer = new ZipPackageBuffer(65535);
+    Reference < XOutputStream > xOutStream = pBuffer;
+    aEntry.nVersion = -1;
+    aEntry.nFlag = -1;
+    aEntry.nMethod = STORED;
+    aEntry.nTime = -1;
+    aEntry.nCrc = -1;
+    aEntry.nCompressedSize = -1;
+    aEntry.nSize = -1;
+    aEntry.nOffset = -1;
+    aEntry.sName = OUString::createFromAscii("META-INF/manifest.xml");
+    pZipOut->putNextEntry(aEntry);
+    ManifestWriter aWriter ( xOutStream, aManList);
+    aWriter.Write();
+    pBuffer->aBuffer.realloc(pBuffer->getPosition());
+    pZipOut->write(pBuffer->aBuffer, 0, pBuffer->getPosition());
+    pZipOut->closeEntry();
     pZipOut->finish();
 }
 sal_Bool SAL_CALL ZipPackage::hasPendingChanges(  )

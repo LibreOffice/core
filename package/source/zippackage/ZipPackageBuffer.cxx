@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageBuffer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-23 14:15:52 $
+ *  last change: $Author: mtg $ $Date: 2000-11-27 16:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,9 +166,6 @@ void SAL_CALL ZipPackageBuffer::seek( sal_Int64 location )
 sal_Int64 SAL_CALL ZipPackageBuffer::getPosition(  )
         throw(IOException, RuntimeException)
 {
-    sal_Int8 nP = aBuffer[nCurrent];
-    sal_Int8 nR = aBuffer[nEnd];
-    int i =0;
     return nCurrent;
 }
 sal_Int64 SAL_CALL ZipPackageBuffer::getLength(  )
