@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlotterBase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-12 17:02:51 $
+ *  last change: $Author: bm $ $Date: 2003-12-12 17:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,7 @@ void lcl_getErrorBarPosAndSize(
     double fErrorBarLength,
     ShapeFactory::tErrorBarDirection eDirection,
     const uno::Reference< XTransformation > & xTrans,
+    const PlottingPositionHelper & rPositionHelper,
     drawing::Position3D & rInOutNewPos,
     drawing::Direction3D & rOutNewSize )
 {
@@ -268,11 +269,18 @@ void lcl_getErrorBarPosAndSize(
                 break;
         }
 
+        rPositionHelper.doLogicScaling(
+            & rInOutNewPos.PositionX, & rInOutNewPos.PositionY, & rInOutNewPos.PositionZ );
         rInOutNewPos = drawing::Position3D(
             SequenceToPosition3D( xTrans->transform( Position3DToSequence( rInOutNewPos ))));
 
+        rPositionHelper.doLogicScaling(
+            & aUpperLeft.PositionX, & aUpperLeft.PositionY, & aUpperLeft.PositionZ );
         drawing::Position3D aNewUpperLeft(
             SequenceToPosition3D( xTrans->transform( Position3DToSequence( aUpperLeft ))));
+
+        rPositionHelper.doLogicScaling(
+            & aLowerRight.PositionX, & aLowerRight.PositionY, & aLowerRight.PositionZ );
         drawing::Position3D aNewLowerRight(
             SequenceToPosition3D( xTrans->transform( Position3DToSequence( aLowerRight ))));
 
@@ -300,6 +308,7 @@ void lcl_getErrorBarPosAndSize(
 void PlotterBase::createErrorBar(
       const uno::Reference< drawing::XShapes >& xTarget
     , const drawing::Position3D& rPos
+    , const PlottingPositionHelper & rPositionHelper
     , const uno::Reference< beans::XPropertySet > & xErrorBarProperties
     , const uno::Sequence< double > & rData
     , sal_Int32 nIndex
@@ -334,7 +343,7 @@ void PlotterBase::createErrorBar(
 
             drawing::Position3D  aPos( rPos );
             drawing::Direction3D aSize;
-            lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, aPos, aSize );
+            lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, rPositionHelper, aPos, aSize );
 
             m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir );
         }
@@ -350,7 +359,7 @@ void PlotterBase::createErrorBar(
 
             drawing::Position3D  aPos( rPos );
             drawing::Direction3D aSize;
-            lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, aPos, aSize );
+            lcl_getErrorBarPosAndSize( fErrorBarLength, eErrorBarDir, xTrans, rPositionHelper, aPos, aSize );
 
             m_pShapeFactory->createErrorBar2D( xTarget, aPos, aSize, eErrorBarDir );
         }

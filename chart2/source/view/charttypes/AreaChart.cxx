@@ -622,6 +622,7 @@ void AreaChart::createShapes()
                         rfMaxX=fLogicX;
                 }
 
+                drawing::Position3D aUnScaledPoint( fLogicX, fLogicY, fLogicZ );
                 //apply scaling
                 //(for more accurat clipping it would be better to first clip and than scale and transform,
                 //but as long as we only have integer Polygon clipping we need to apply scaling and transformation first ) see QQQ
@@ -705,10 +706,11 @@ void AreaChart::createShapes()
                                     && !::rtl::math::isNan(fLogicY) && !::rtl::math::isInf(fLogicY)
                                     && !::rtl::math::isNan(fLogicZ) && !::rtl::math::isInf(fLogicZ) )
                                 {
-                                    drawing::Position3D aScaledLogicPosition( fLogicX, fLogicY,fLogicZ);
+//                                     drawing::Position3D aUnScaledPoint( fLogicX, fLogicY,fLogicZ);
 
                                     createErrorBar(   xPointGroupShape_Shapes
-                                                    , aScaledLogicPosition
+                                                    , aUnScaledPoint
+                                                    , *m_pPosHelper
                                                     , xErrorBarProp
                                                     , (*aSeriesIter)->getAllY()
                                                     , nIndex
