@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-03 14:46:23 $
+ *  last change: $Author: sab $ $Date: 2001-08-29 08:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,11 +234,6 @@ public:
     ScXMLExport(const sal_uInt16 nExportFlag);
     virtual ~ScXMLExport();
 
-    // XExporter
-    virtual void SAL_CALL setSourceDocument(
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
-                throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
-
     com::sun::star::uno::Reference <com::sun::star::frame::XModel>& GetXModel() { return xModel; }
     const com::sun::star::uno::Reference <com::sun::star::frame::XModel>& GetXModel() const { return xModel; }
 
@@ -265,6 +260,24 @@ public:
     void SetSharedData(ScMySharedData* pTemp) { pSharedData = pTemp; }
     ScMySharedData* GetSharedData() { return pSharedData; }
     XMLNumberFormatAttributesExportHelper* GetNumberFormatAttributesExportHelper();
+
+    // XExporter
+    virtual void SAL_CALL setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    // XFilter
+    virtual sal_Bool SAL_CALL filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL cancel() throw(::com::sun::star::uno::RuntimeException);
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 #endif

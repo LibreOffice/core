@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-03 14:46:23 $
+ *  last change: $Author: sab $ $Date: 2001-08-29 08:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@
 #endif
 #ifndef SC_CHARTLIS_HXX
 #include "chartlis.hxx"
+#endif
+#ifndef SC_UNOGUARD_HXX
+#include "unoguard.hxx"
 #endif
 
 #ifndef _XMLOFF_XMLTOKEN_HXX
@@ -491,21 +494,6 @@ ScXMLExport::~ScXMLExport()
         delete pChangeTrackingExportHelper;
     if (pChartListener)
         delete pChartListener;
-}
-
-void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XComponent>& xComponent )
-                            throw(lang::IllegalArgumentException, uno::RuntimeException)
-{
-    SvXMLExport::setSourceDocument( xComponent );
-
-    xModel = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY);
-    pDoc = ScXMLConverter::GetScDocument( xModel );
-    DBG_ASSERT( pDoc, "ScXMLExport::setSourceDocument - no ScDocument!" );
-    if (!pDoc)
-        throw lang::IllegalArgumentException();
-
-    // create ScChangeTrackingExportHelper after document is known
-    pChangeTrackingExportHelper = new ScChangeTrackingExportHelper(*this);
 }
 
 sal_Bool ScXMLExport::HasDrawPages(uno::Reference <sheet::XSpreadsheetDocument>& xDoc)
@@ -3210,5 +3198,75 @@ XMLNumberFormatAttributesExportHelper* ScXMLExport::GetNumberFormatAttributesExp
         pNumberFormatAttributesExportHelper->SetExport(this);
     }
     return pNumberFormatAttributesExportHelper;
+}
+
+// XExporter
+void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XComponent>& xComponent )
+                            throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    SvXMLExport::setSourceDocument( xComponent );
+
+    xModel = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY);
+    pDoc = ScXMLConverter::GetScDocument( xModel );
+    DBG_ASSERT( pDoc, "ScXMLExport::setSourceDocument - no ScDocument!" );
+    if (!pDoc)
+        throw lang::IllegalArgumentException();
+
+    // create ScChangeTrackingExportHelper after document is known
+    pChangeTrackingExportHelper = new ScChangeTrackingExportHelper(*this);
+}
+
+// XFilter
+sal_Bool SAL_CALL ScXMLExport::filter( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return SvXMLExport::filter(aDescriptor);
+}
+
+void SAL_CALL ScXMLExport::cancel()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    SvXMLExport::cancel();
+}
+
+// XInitialization
+void SAL_CALL ScXMLExport::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    SvXMLExport::initialize(aArguments);
+}
+
+// XServiceInfo
+::rtl::OUString SAL_CALL ScXMLExport::getImplementationName(  )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return SvXMLExport::getImplementationName();
+}
+
+sal_Bool SAL_CALL ScXMLExport::supportsService( const ::rtl::OUString& ServiceName )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return SvXMLExport::supportsService( ServiceName );
+}
+
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ScXMLExport::getSupportedServiceNames(  )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return SvXMLExport::getSupportedServiceNames();
+}
+
+// XUnoTunnel
+sal_Int64 SAL_CALL ScXMLExport::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return SvXMLExport::getSomething(aIdentifier);
 }
 

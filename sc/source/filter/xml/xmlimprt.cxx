@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 14:09:26 $
+ *  last change: $Author: sab $ $Date: 2001-08-29 08:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #include "docuno.hxx"
 #include "xmlbodyi.hxx"
 #include "xmlstyli.hxx"
+#ifndef SC_UNOGUARD_HXX
+#include "unoguard.hxx"
+#endif
 
 #ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
@@ -1579,22 +1582,6 @@ ScXMLImport::~ScXMLImport()
         xActionLockable->removeActionLock();
 }
 
-void SAL_CALL ScXMLImport::setTargetDocument( const uno::Reference<lang::XComponent>& xComponent )
-                            throw(lang::IllegalArgumentException, uno::RuntimeException)
-{
-    SvXMLImport::setTargetDocument( xComponent );
-
-    uno::Reference<frame::XModel> xModel(xComponent, uno::UNO_QUERY);
-    pDoc = ScXMLConverter::GetScDocument( xModel );
-    DBG_ASSERT( pDoc, "ScXMLImport::setTargetDocument - no ScDocument!" );
-    if (!pDoc)
-        throw lang::IllegalArgumentException();
-
-    uno::Reference<document::XActionLockable> xActionLockable(xComponent, uno::UNO_QUERY);
-    if (xActionLockable.is())
-        xActionLockable->addActionLock();
-}
-
 // ---------------------------------------------------------------------
 
 SvXMLImportContext *ScXMLImport::CreateFontDeclsContext(const USHORT nPrefix, const ::rtl::OUString& rLocalName,
@@ -2121,4 +2108,157 @@ void ScXMLImport::SetStylesToRangesFinished()
     SetStyleToRanges();
     sPrevStyleName = sEmpty;
 }
+
+// ::com::sun::star::xml::sax::XDocumentHandler
+void SAL_CALL ScXMLImport::startDocument(void)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::startDocument();
+}
+
+void SAL_CALL ScXMLImport::endDocument(void)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::endDocument();
+}
+
+void SAL_CALL ScXMLImport::startElement(const ::rtl::OUString& aName,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::startElement(aName, xAttribs);
+}
+
+void SAL_CALL ScXMLImport::endElement(const ::rtl::OUString& aName)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::endElement(aName);
+}
+
+void SAL_CALL ScXMLImport::characters(const ::rtl::OUString& aChars)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::characters(aChars);
+}
+
+void SAL_CALL ScXMLImport::ignorableWhitespace(const ::rtl::OUString& aWhitespaces)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::ignorableWhitespace(aWhitespaces);
+}
+
+void SAL_CALL ScXMLImport::processingInstruction(const ::rtl::OUString& aTarget,
+                                    const ::rtl::OUString& aData)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::processingInstruction(aTarget, aData);
+}
+
+void SAL_CALL ScXMLImport::setDocumentLocator(const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator > & xLocator)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::setDocumentLocator(xLocator);
+}
+
+// ::com::sun::star::xml::sax::XExtendedDocumentHandler
+void SAL_CALL ScXMLImport::startCDATA(void)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::startCDATA();
+}
+
+void SAL_CALL ScXMLImport::endCDATA(void)
+    throw( ::com::sun::star::uno::RuntimeException )
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::endCDATA();
+}
+
+void SAL_CALL ScXMLImport::comment(const ::rtl::OUString& sComment)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::comment(sComment);
+}
+
+void SAL_CALL ScXMLImport::allowLineBreak(void)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::allowLineBreak();
+}
+
+void SAL_CALL ScXMLImport::unknown(const ::rtl::OUString& sString)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::unknown(sString);
+}
+
+
+// XImporter
+void SAL_CALL ScXMLImport::setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
+    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::setTargetDocument( xDoc );
+
+    uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY);
+    pDoc = ScXMLConverter::GetScDocument( xModel );
+    DBG_ASSERT( pDoc, "ScXMLImport::setTargetDocument - no ScDocument!" );
+    if (!pDoc)
+        throw lang::IllegalArgumentException();
+
+    uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
+    if (xActionLockable.is())
+        xActionLockable->addActionLock();
+}
+
+// XInitialization
+void SAL_CALL ScXMLImport::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+    throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aUnoGuard;
+    SvXMLImport::initialize(aArguments);
+}
+
+// XUnoTunnel
+sal_Int64 SAL_CALL ScXMLImport::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aUnoGuard;
+    return SvXMLImport::getSomething(aIdentifier);
+}
+
+// XServiceInfo
+::rtl::OUString SAL_CALL ScXMLImport::getImplementationName(  )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aUnoGuard;
+    return SvXMLImport::getImplementationName();
+}
+
+sal_Bool SAL_CALL ScXMLImport::supportsService( const ::rtl::OUString& ServiceName )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aUnoGuard;
+    return SvXMLImport::supportsService(ServiceName);
+}
+
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ScXMLImport::getSupportedServiceNames(  )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    ScUnoGuard aUnoGuard;
+    return SvXMLImport::getSupportedServiceNames();
+}
+
 
