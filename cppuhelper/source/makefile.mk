@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: vg $ $Date: 2003-07-02 15:17:30 $
+#   last change: $Author: vg $ $Date: 2003-10-06 12:56:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@ UNIXVERSIONNAMES=UDK
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRDEP=$(UNOUCRRDB)
 UNOUCROUT=$(OUT)$/inc
-INCPRE+=$(OUT)$/inc
+INCPRE+=$(OUT)$/inc $(OUT)$/inc$/private
 
 CPPUMAKERFLAGS=
 
@@ -96,6 +96,7 @@ UNOTYPES= \
         com.sun.star.uno.XComponentContext		\
         com.sun.star.uno.XUnloadingPreference    	\
         com.sun.star.uno.DeploymentException    	\
+        com.sun.star.lang.DisposedException 		\
         com.sun.star.lang.XMultiServiceFactory 		\
         com.sun.star.lang.XSingleServiceFactory 	\
         com.sun.star.lang.XMultiComponentFactory 	\
@@ -176,10 +177,6 @@ SHL1DEPN=
 SHL1IMPLIB=i$(TARGET)
 SHL1OBJS = $(SLOFILES)
 
-# xxx todo: in progress when moving down cfgmgr+interfaces to udk
-# \
-# 		$(SLB)$/cfg_registry_wrapper.lib
-
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
@@ -189,11 +186,15 @@ SHL1VERSIONMAP=msvc_win32_intel.map
 .ELIF "$(COMNAME)"=="sunpro5"
 SHL1VERSIONMAP=cc5_solaris_sparc.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc2"
-#"ERROR: gcc2_linux_intel.map lacks symbols from cppuhelper/unourl.hxx"
+#"ERROR: gcc2_linux_intel.map lacks symbols"
+#-- cppuhelper/unourl.hxx"
+#-- cppuhelper/exc_hlp.hxx getCaughtException()
+#-- cppuhelper/propshlp.hxx
 SHL1VERSIONMAP=gcc2_linux_intel.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc3"
 SHL1VERSIONMAP=gcc3_linux_intel.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="FREEBSDIgcc2"
+#"ERROR: gcc2_linux_intel.map lacks symbols"
 SHL1VERSIONMAP=gcc2_linux_intel.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="FREEBSDIgcc3"
 SHL1VERSIONMAP=gcc3_linux_intel.map
