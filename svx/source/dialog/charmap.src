@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:22:43 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:10:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,21 +862,21 @@ String RID_SUBSETSTR_MALAYALAM
     Text = "Malayisch" ;
     Text [ ENGLISH ] = "Malayalam" ;
     Text[ english_us ] = "Malayalam";
-        Text[ portuguese ] = "Malayalam";
+        Text[ portuguese ] = "Malaio";
         Text[ russian ] = "Ìàëàéñêèé";
         Text[ greek ] = "ÌáëáéóéáêÜ";
         Text[ dutch ] = "Malayalam";
         Text[ french ] = "Malayalam";
-        Text[ spanish ] = "Malayalam";
+        Text[ spanish ] = "Malasio";
         Text[ italian ] = "Malayalam";
         Text[ danish ] = "Malayalam";
         Text[ swedish ] = "Malajiska";
-        Text[ polish ] = "Malayalam";
+        Text[ polish ] = "Malajski";
         Text[ portuguese_brazilian ] = "Malayalam";
         Text[ japanese ] = "Ï×Ô°×Ñ";
         Text[ korean ] = "¸»·¹ÀÌ½Ã¾Æ¾î";
-        Text[ chinese_simplified ] = "ÂíÀ´Óï";
-        Text[ chinese_traditional ] = "¦L«×¦è«n³¡ªºDravidian_»yªº¤@¤è¨¥";
+        Text[ chinese_simplified ] = "Ó¡¶ÈÎ÷ÄÏ²¿µÄDravidianÓïµÄ·½ÑÔ";
+        Text[ chinese_traditional ] = "¦L«×¦è«n³¡ªºDravidian»yªº¤è¨¥";
         Text[ turkish ] = "Malayalam";
         Text[ arabic ] = "ãÇáÇíÇáÇã";
         Text[ catalan ] = "Malayalam";
@@ -1623,7 +1623,7 @@ String RID_SUBSETSTR_CJK_MISC
         Text[ swedish ] = "Diverse CJK-tecken";
         Text[ polish ] = "Ró¿ne znaki CJK";
         Text[ portuguese_brazilian ] = "CJK Miscellaneous";
-        Text[ japanese ] = "‚»‚Ì‘¼‚ÌCJK‹L†";
+        Text[ japanese ] = "‚»‚Ì‘¼CJK•¶š‹L†";
         Text[ korean ] = "±âÅ¸ CJK ¹®ÀÚ";
         Text[ chinese_simplified ] = "¸÷ÖÖÖĞÈÕº«×Ö·û";
         Text[ chinese_traditional ] = "¤¤¤éÁú²V¦X¦r¤¸";
@@ -1873,7 +1873,7 @@ String RID_SUBSETSTR_COMBINING_HALF_MARKS
         Text[ swedish ] = "Kombinerar halva markeringar";
         Text[ polish ] = "£¹cz¹ce pó³znaczniki";
         Text[ portuguese_brazilian ] = "Combining Half Marks";
-        Text[ japanese ] = "§Œä—p‹L†";
+        Text[ japanese ] = "Œ‹‡”¼Šp‹L†";
         Text[ korean ] = "¹İ ¸¶Å© Á¶ÇÕ";
         Text[ chinese_simplified ] = "¶ÔÓ¦µÄ·ûºÅ";
         Text[ chinese_traditional ] = "¹ïÀ³ªº²Å¸¹";
@@ -2685,5 +2685,6 @@ String RID_SUBSETSTR_MONGOLIAN
 };
 
 // ********************************************************************** EOF
+
 
 
