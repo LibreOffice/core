@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 10:40:16 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 15:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,2044 +75,421 @@
 // --------------------------------------------------------------------
 String SAMPLES
 {
-    Text = "Damit die volle Funktionalität dieses Beispiels zur Verfügung steht, muss ein neues Dokument auf Basis dieser Vorlage erstellt werden.";
-    Text[English] = "In order to use the full functionality of this sample a new document, using this one as a template, will be created";
-    Text[ english_us ] = "In order to use the full functionality of this sample, create a document that is based on this template.";
-    Text[ portuguese ] = "Para poder usufruir de toda a funcionalidade deste exemplo, terá que criar um novo documento com base neste modelo.";
-    Text[ greek ] = "Ãéá íá ìğïñİóåôå íá ÷ñçóéìïğïéŞóåôå üëåò ôéò ëåéôïõñãßåò áõôïı ôïõ ğáñáäåßãìáôïò èá ğñİğåé íá äçìéïõñãŞóåôå İíá íİï İããñáöï âáóéóìİíï óå áõôü ôï ğñüôõğï.";
-    Text[ dutch ] = "Om alle mogelijkheden van dit voorbeeld te kunnen gebruiken, maakt u een nieuw document op basis van dit sjabloon.";
-    Text[ french ] = "Afin de pouvoir profiter de l'entière fonctionnalité de cet exemple, il vous faut créer un nouveau document basé sur ce modèle.";
-    Text[ spanish ] = "Para aprovechar al máximo la funcionalidad de este ejemplo deberá crear un documento nuevo basado en esta plantilla.";
-    Text[ swedish ] = "Ett nytt dokument måste skapas med den här mallen som grund för att alla funktioner i detta exempel skall vara tillgängliga.";
-    Text[ russian ] = "Íåîáõîäèìî ñîçäàòü äîêóìåíò íà îñíîâå ıòîãî øàáëîíà, ÷òîáû ñòàëè äîñòóïíû âñå ôóíêöèè ıòîãî ïğèìåğà.";
-    Text[ italian ] = "Per poter sfruttare al meglio la funzionalità di questo esempio è necessario creare un documento in base a questo modello.";
-    Text[ danish ] = "For at kunne udnytte dette eksempels fulde funktionsmuligheder skal der oprettes et nyt dokument på grundlag af denne skabelon.";
-    Text[ polish ] = "Aby w pe³ni wykorzystaæ ten przyk³ad, utwórz nowy dokument na podstawie tego szablonu.";
-    Text[ portuguese_brazilian ] = "Para poder usufruir de toda a funcionalidade deste exemplo, crie um documento com base neste modelo. ";
-    Text[ japanese ] = "ã“ã®ã‚µãƒ³ãƒ—ãƒ«ã®æ©Ÿèƒ½ã‚’ã†ã¾ãå¿œç”¨ã™ã‚‹ã«ã¯ã€ã“ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚’ãƒ™ãƒ¼ã‚¹ã¨ã—ãŸæ–°ã—ã„ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’ä½œæˆã™ã‚‹å¿…è¦ãŒã‚ã‚Šã¾ã™ã€‚";
-    Text[ korean ] = "ì´ ìƒ˜í”Œ ë¬¸ì„œì˜ ëª¨ë“  ê¸°ëŠ¥ì„ ì‚¬ìš©í•˜ë ¤ë©´ ì´ ì„œì‹ íŒŒì¼ì„ ê¸°ì¤€ìœ¼ë¡œ ìƒˆ ë¬¸ì„œë¥¼ ë§Œë“œì‹­ì‹œì˜¤.";
-    Text[ chinese_simplified ] = "åªæœ‰é¦–å…ˆå€ŸåŠ©è¿™ä¸ªæ ·å¼æ–°å»ºä¸€ä¸ªæ–‡æ¡£ï¼Œæ‰èƒ½å……åˆ†ä½¿ç”¨ç¤ºä¾‹åŠŸèƒ½ã€‚";
-    Text[ chinese_traditional ] = "è¦æƒ³å……åˆ†åˆ©ç”¨é€™å€‹æ¨£å¼çš„å„ç¨®å„ªç§€åŠŸèƒ½ï¼Œæ‚¨å¿…é ˆæ¡ç”¨é€™å€‹æ¨£å¼ä¾†æ–°å»ºä¸€å€‹æ–‡ä»¶ã€‚";
-    Text[ arabic ] = "áßí ÊÓÊØíÚ ÇÓÊÎÏÇã åĞÇ ÇáãËÇá Úáì ÇáäÍæ ÇáÃãËá¡ Úáíß ÅäÔÇÁ ãÓÊäÏ ÌÏíÏ ÈÇÓÊÎÏÇã åĞÇ ÇáŞÇáÈ.";
-    Text[ turkish ] = "Bu örneğin tüm işlevlerini kullanabilmek için, bu şablon ile yeni bir belge oluşturun.";
-    Text[ catalan ] = "Per tal d'utilitzar les funcions d'aquesta mostra al cent per cent, creeu un document a partir d'aquesta plantilla.";
-    Text[ finnish ] = "Jotta voisit käyttää esimerkin toimintoja täysipainoisesti, luo asiakirja tämän mallin avulla.";
-    Text[ thai ] = "à¹€à¸à¸·à¹ˆà¸­à¸—à¸µà¹ˆà¸ˆà¸°à¹ƒà¸Šà¹‰à¸•à¸±à¸§à¸­à¸¢à¹ˆà¸²à¸‡à¸™à¸µà¹‰à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸•à¹‡à¸¡à¸ªà¸¡à¸£à¸£à¸–à¸™à¸°, à¹ƒà¸«à¹‰à¸ªà¸£à¹‰à¸²à¸‡à¹€à¸­à¸à¸ªà¸²à¸£à¸—à¸µà¹ˆà¸¡à¸µà¸à¸·à¹‰à¸™à¸à¸²à¸™à¸šà¸™à¹à¸¡à¹ˆà¹à¸šà¸šà¸™à¸µà¹‰";
-    Text[ czech ] = "Abyste si mohli vyzkouÅ¡et plnou funkcionalitu tÃ©to ukÃ¡zky, musÃ­te vytvoÅ™it dokument zaloÅ¾enÃ½ na tÃ©to Å¡ablonÄ›:";
-    Text[ hebrew ] = "â€®×›×“×™ ×œ× ×¦×œ ××ª ××œ× ×”×™×›×•×œ×ª ×©×œ ×“×•×’××” ×–×• ×™×© ×œ×™×¦×•×¨ ××¡××š ××‘×•×¡×¡ ×¢×œ ×ª×‘× ×™×ª ×–×•.â€¬";
-    Text[ hindi ] = "à¤‡à¤¸ à¤¨à¤®à¥‚à¤¨à¥‡ à¤•à¤¾ à¤¸à¤®à¥à¤ªà¥‚à¤°à¥à¤£ à¤•à¤¾à¤°à¥à¤¯ à¤•à¤¾ à¤‰à¤ªà¤¯à¥‹à¤— à¤•à¤°à¤¨à¥‡ à¤•à¥‡à¤²à¤¿à¤, à¤‡à¤¸ à¤¨à¤®à¥‚à¤¨à¥‡ à¤•à¥‡ à¤†à¤§à¤¾à¤° à¤ªà¤° à¤à¤• à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¥‹ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¥€à¤œà¤¿à¤ à¥¤";
-    Text[ slovak ] = "Ak chcete vyuÅ¾iÅ¥ plnÃº funkÄnosÅ¥ tohoto vzorku, vytvorte dokument zaloÅ¾enÃ½ na tejto Å¡ablÃ³ne.";
-    Text[ hungarian ] = "Ahhoz, hogy a minta Ã¶sszes funkciÃ³jÃ¡t hasznÃ¡lhassa, hozzon lÃ©tre egy erre a sablonra Ã©pÃ¼lÅ‘ dokumentumot.";
-    Text[ slovenian ] = "Da bi izkoristili vse prednosti vzorca, ustvarite dokument, ki temelji na tej predlogi.";
+    Text [ de ] = "Damit die volle Funktionalität dieses Beispiels zur Verfügung steht, muss ein neues Dokument auf Basis dieser Vorlage erstellt werden.";
+    Text [ en-US ] = "In order to use the full functionality of this sample, create a document that is based on this template.";
 };
 
 String SAMPLES + 1
 {
-    Text = "Hinweis";
-    Text[English] = "Hint";
-    Text[ english_us ] = "Remarks";
-    Text[ portuguese ] = "Observação";
-    Text[ greek ] = "ÓõìâïõëŞ";
-    Text[ dutch ] = "Tip";
-    Text[ french ] = "Remarque";
-    Text[ spanish ] = "Nota";
-    Text[ swedish ] = "Hänvisning";
-    Text[ russian ] = "Çàìå÷àíèÿ";
-    Text[ italian ] = "Nota";
-    Text[ danish ] = "Bemærkninger";
-    Text[ polish ] = "Wskazówka";
-    Text[ portuguese_brazilian ] = "Observações";
-    Text[ japanese ] = "æŒ‡ç¤º";
-    Text[ korean ] = "ì°¸ê³ ";
-    Text[ chinese_simplified ] = "æç¤º";
-    Text[ chinese_traditional ] = "æç¤º";
-    Text[ arabic ] = "ãáÇÍÙÉ";
-    Text[ turkish ] = "Öneriler";
-    Text[ catalan ] = "Comentaris";
-    Text[ finnish ] = "Huomautukset";
-    Text[ thai ] = "à¸«à¸¡à¸²à¸¢à¹€à¸«à¸•à¸¸";
-    Text[ czech ] = "Rady";
-    Text[ hebrew ] = "â€®×”×¢×¨×•×ªâ€¬";
-    Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤· à¤•à¤¥à¤¨";
-    Text[ slovak ] = "PoznÃ¡mky";
-    Text[ hungarian ] = "MegjegyzÃ©sek";
-    Text[ slovenian ] = "Pripombe";
+    Text [ de ] = "Hinweis";
+    Text [ en-US ] = "Remarks";
 };
 
 // --------------------------------------------------------------------
 String STYLES
 {
-    Text = "Themen-Auswahl";
-    Text[English] = "Design Selection";
-    Text[ english_us ] = "Theme Selection";
-    Text[ portuguese ] = "Seleccionar temas";
-    Text[ russian ] = "Âûáîğ òåì";
-    Text[ greek ] = "ÅğéëïãŞ èåìÜôùí";
-    Text[ dutch ] = "Onderwerpen kiezen";
-    Text[ french ] = "Sélection de thème";
-    Text[ spanish ] = "Selección de temas";
-    Text[ italian ] = "Scelta argomento";
-    Text[ danish ] = "Temaudvalg";
-    Text[ swedish ] = "Temaurval";
-    Text[ polish ] = "Wybór tematów";
-    Text[ portuguese_brazilian ] = "Seleção de Tema";
-    Text[ japanese ] = "ãƒ†ãƒ¼ãƒã®é¸æŠ";
-    Text[ korean ] = "ì£¼ì œ ì„ íƒ";
-    Text[ chinese_simplified ] = "é€‰æ‹©ä¸»é¢˜";
-    Text[ chinese_traditional ] = "é¸æ“‡è¨­è¨ˆé¢¨æ ¼";
-    Text[ arabic ] = "ÇÎÊíÇÑ ÇáãæÇÖíÚ";
-    Text[ turkish ] = "Konu seçimi";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Selecció de temes";
-    Text[ finnish ] = "Teeman valinta";
-    Text[ thai ] = "à¸à¸²à¸£à¹€à¸¥à¸·à¸­à¸à¸£à¸¹à¸›à¹à¸šà¸š";
-    Text[ czech ] = "VÃ½bÄ›r tÃ©matu";
-    Text[ hebrew ] = "â€®×‘×—×™×¨×ª × ×•×©× ×¨×§×¢â€¬";
-    Text[ hindi ] = "à¤ªà¥à¤°à¤•à¤°à¤£ à¤šà¥à¤¨à¤¾à¤µ";
-    Text[ slovak ] = "VÃ½ber tÃ©my";
-    Text[ hungarian ] = "TÃ©mavÃ¡lasztÃ¡s";
-    Text[ slovenian ] = "Izbor teme";
+    Text [ de ] = "Themen-Auswahl";
+    Text [ en-US ] = "Theme Selection";
+    Text [ x-comment ] = " ";
 };
 
 String STYLES + 1
 {
-    Text = "Fehler beim Zwischenspeichern des aktuellen Dokumentes! Die folgende Aktion kann nicht rückgängig gemacht werden.";
-    Text[English] = "Error while temporarily saving the document! The following action cannot be undone.";
-    Text[ english_us ] = "Error while saving the document to the clipboard! The following action cannot be undone.";
-    Text[ portuguese ] = "Erro ao guardar o documento activo no porta-documentos! É impossível restaurar a seguinte acção.";
-    Text[ russian ] = "Îøèáêà ñîõğàíåíèÿ â áóôåğå îáìåíà! Íåâîçìîæíî îòìåíèòü ñëåäóşùåå äåéñòâèå.";
-    Text[ greek ] = "ÓöÜëìá êáôÜ ôçí ğñïóùñéíŞ áğïèŞêåõóç ôïõ ôñİ÷ïíôïò åããñÜöïõ! Äåí åßíáé äõíáôŞ ç áíáßñåóç ôçò áêüëïõèçò åíİñãåéáò.";
-    Text[ dutch ] = "Fout bij opslaan van huidig document in cachegeheugen. De volgende handeling kan niet ongedaan worden gemaakt.";
-    Text[ french ] = "Une erreur est survenue lors de l'enregistrement du document actif dans le presse-papiers ! Impossible d'annuler l'action suivante.";
-    Text[ spanish ] = "¡Ha ocurrido un error al guardar el documento actual en el portapapeles! La acción siguiente no se puede deshacer.";
-    Text[ italian ] = "Errore mentre si cercava di salvare il documento negli appunti. L'azione seguente non può essere annullata.";
-    Text[ danish ] = "Fejl under forsøg på at gemme dokumentet i udklipsholderen! Den følgende handling kan ikke fortrydes.";
-    Text[ swedish ] = "Fel uppstod när det aktuella dokumentet skulle sparas i urklippet! Följande åtgärd går inte att ångra.";
-    Text[ polish ] = "B³¹d podczas zapisywania dokumentu do schowka! Nastêpuj¹cej akcji nie mo¿na cofn¹æ.";
-    Text[ portuguese_brazilian ] = "Ocorreu um erro ao salvar o documento para a área de transferência! A ação que segue não poderá ser desfeita.";
-    Text[ japanese ] = "ç¾åœ¨ã®ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’ã‚¯ãƒªãƒƒãƒ—ãƒœãƒ¼ãƒ‰ã«ä¿å­˜ã™ã‚‹ã¨ãã«ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚æ¬¡ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã¯å…ƒã«æˆ»ã›ã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ë¬¸ì„œë¥¼ í´ë¦½ë³´ë“œë¡œ ì €ì¥í•˜ë˜ ì¤‘ ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤. ê³„ì†ë˜ëŠ” ì‘ë™ì„ ì‹¤í–‰ ì·¨ì†Œí•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "åœ¨å­˜ç›˜å½“å‰æ–‡æ¡£æ—¶å‘ç”Ÿé”™è¯¯ï¼æ— æ³•å–æ¶ˆä¸‹åˆ—æ“ä½œã€‚";
-    Text[ chinese_traditional ] = "æš«å­˜æ–‡ä»¶ç™¼ç”ŸéŒ¯èª¤ï¼ç„¡æ³•æ¢å¾©ä»¥ä¸‹çš„å‹•ä½œã€‚";
-    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÍİÙ ÇáãÓÊäÏ ÇáÍÇáí İí ÇáÍÇİÙÉ! áä íãßä ÇáÊÑÇÌÚ Úä ÇáÅÌÑÇÁ ÇáŞÇÏã.";
-    Text[ turkish ] = "Belgeyi panoya kaydederken hata oluştu! Bir sonraki işlem geri alınamaz.";
-    Text[ catalan ] = "S'ha produït un error en desar el document actual al porta-retalls! La següent acció no es pot desfer.";
-    Text[ finnish ] = "On ilmennyt virhe tallennettaessa asiakirjaa leikepöydälle. Seuraavaa toimintoa ei voi kumota.";
-    Text[ thai ] = "à¸œà¸´à¸”à¸à¸¥à¸²à¸”à¸‚à¸“à¸°à¸à¸³à¸¥à¸±à¸‡à¸šà¸±à¸™à¸—à¸¶à¸à¹€à¸­à¸à¸ªà¸²à¸£à¹„à¸›à¸¢à¸±à¸‡à¸„à¸¥à¸´à¸›à¸šà¸­à¸£à¹Œà¸”! à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹„à¸¡à¹ˆà¸—à¸³à¸à¸²à¸£à¸à¸£à¸°à¸—à¸³à¸•à¹ˆà¸­à¹„à¸›à¸™à¸µà¹‰à¹„à¸”à¹‰";
-    Text[ czech ] = "PÅ™i uklÃ¡dÃ¡nÃ­ dokumentu do schrÃ¡nky doÅ¡lo k chybÄ›. NÃ¡sledujÃ­cÃ­ akce nemÅ¯Å¾e bÃ½t vrÃ¡cena.";
-    Text[ hebrew ] = "â€®×©×’×™××” ×‘×¢×ª ×©××™×¨×ª ×”××¡××š ×œ×œ×•×— ×”×˜×™×•×˜×”! ×”×¤×¢×•×œ×” ×”×‘××” ×‘×œ×ª×™ ×”×¤×™×›×”.â€¬";
-    Text[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤•à¥‹ à¤•à¥à¤²à¤¿à¤ªà¤¬à¥‹à¤°à¥à¤¡ à¤®à¥‡à¤‚ à¤¸à¤‚à¤šà¤¿à¤¤ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤¸à¤®à¤¯ à¤—à¤²à¤¤à¥€ ! à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤•à¤¾à¤°à¥à¤¯ à¤•à¤¾ à¤…à¤¨à¤¾à¤µà¥ƒà¤¤à¥à¤¤à¤¿ à¤¨à¤¹à¥€à¤‚ à¤¹à¥‹ à¤¸à¤•à¤¤à¤¾ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "Chyba pri ukladanÃ­ dokumentu do schrÃ¡nky! NasledujÃºca akcia nemÃ´Å¾e byÅ¥ odvolanÃ¡.";
-    Text[ hungarian ] = "Hiba tÃ¶rtÃ©nt a dokumentum vÃ¡gÃ³lapra helyezÃ©se kÃ¶zben. A kÃ¶vetkezÅ‘ mÅ±velet nem vonhatÃ³ vissza.";
-    Text[ slovenian ] = "Pri shranjevanju dokumenta v odloÅ¾iÅ¡Äe je priÅ¡lo do napake! Naslednjega dejanja ni mogoÄe razveljaviti.";
+    Text [ de ] = "Fehler beim Zwischenspeichern des aktuellen Dokumentes! Die folgende Aktion kann nicht rückgängig gemacht werden.";
+    Text [ en-US ] = "Error while saving the document to the clipboard! The following action cannot be undone.";
 };
 
 String STYLES + 2
 {
-    Text = "~Abbrechen";
-    Text[English] = "Cancel";
-    Text[ english_us ] = "~Cancel";
-    Text[ portuguese ] = "~Cancelar";
-    Text[ russian ] = "Îòìåíèòü";
-    Text[ greek ] = "~¢êõñï";
-    Text[ dutch ] = "~Annuleren";
-    Text[ french ] = "Annuler";
-    Text[ spanish ] = "~Cancelar";
-    Text[ italian ] = "Annulla";
-    Text[ danish ] = "~Annuller";
-    Text[ swedish ] = "~Avbryt";
-    Text[ polish ] = "~Anuluj";
-    Text[ portuguese_brazilian ] = "~Cancelar";
-    Text[ japanese ] = "ã‚­ãƒ£ãƒ³ã‚»ãƒ«(~C)";
-    Text[ korean ] = "ì·¨ì†Œ(~C)";
-    Text[ chinese_simplified ] = "å–æ¶ˆ(~C)";
-    Text[ chinese_traditional ] = "å–æ¶ˆ(~C)";
-    Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
-    Text[ turkish ] = "~İptal";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~Cancel.la";
-    Text[ finnish ] = "~Peruuta";
-    Text[ thai ] = "~à¸¢à¸à¹€à¸¥à¸´à¸";
-    Text[ czech ] = "ZruÅ¡it";
-    Text[ hebrew ] = "â€®×‘×™×˜×•×œâ€¬";
-    Text[ hindi ] = "~à¤°à¤¦à¥à¤¦ à¤•à¤°à¥‹";
-    Text[ slovak ] = "~ZruÅ¡iÅ¥";
-    Text[ hungarian ] = "~MÃ©gsem";
-    Text[ slovenian ] = "Pre~kliÄi";
+    Text [ de ] = "~Abbrechen";
+    Text [ en-US ] = "~Cancel";
+    Text [ x-comment ] = " ";
 };
 
 String STYLES + 3
 {
-    Text = "~OK";
-    Text[English] = "OK";
-    Text[ english_us ] = "~OK";
-    Text[ portuguese ] = "~OK";
-    Text[ russian ] = "Äà";
-    Text[ greek ] = "~OK";
-    Text[ dutch ] = "~OK";
-    Text[ french ] = "~OK";
-    Text[ spanish ] = "~Aceptar";
-    Text[ italian ] = "O~K";
-    Text[ danish ] = "~OK";
-    Text[ swedish ] = "~OK";
-    Text[ polish ] = "~OK";
-    Text[ portuguese_brazilian ] = "~OK";
-    Text[ japanese ] = "~OK";
-    Text[ korean ] = "í™•ì¸(~O)";
-    Text[ chinese_simplified ] = "ç¡®å®š(~O)";
-    Text[ chinese_traditional ] = "ç¢ºå®š(~O)";
-    Text[ arabic ] = "ÍÓäÇğ";
-    Text[ turkish ] = "~Tamam";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "~D'acord";
-    Text[ finnish ] = "~OK";
-    Text[ thai ] = "~à¸•à¸à¸¥à¸‡";
-    Text[ czech ] = "OK";
-    Text[ hebrew ] = "â€®××™×©×•×¨â€¬";
-    Text[ hindi ] = "~à¤ à¥€à¤•";
-    Text[ slovak ] = "~OK";
-    Text[ hungarian ] = "~OK";
-    Text[ slovenian ] = "~V redu";
+    Text [ de ] = "~OK";
+    Text [ en-US ] = "~OK";
+    Text [ x-comment ] = " ";
 };
 
 // --------------------------------------------------------------------
 String AgendaDlgName
 {
-    Text = "Protokollvorlage";
-    Text[English] = "Minutes Template";
-    Text[ english_us ] = "Minutes Template";
-    Text[ portuguese ] = "Modelo de acta";
-    Text[ dutch ] = "Sjabloon voor verslagen";
-    Text[ french ] = "Modèle de compte rendu";
-    Text[ spanish ] = "Plantilla de protocolo";
-    Text[ italian ] = "Modello di protocollo";
-    Text[ swedish ] = "Protokollmall";
-    Text[ russian ] = "Øàáëîí ïğîòîêîëà";
-    Text[ greek ] = "Ğñüôõğï ğñùôüêïëëïõ";
-    Text[ danish ] = "Referatskabelon";
-    Text[ polish ] = "Szablon protoko³u";
-    Text[ portuguese_brazilian ] = "Modelo de Ata";
-    Text[ japanese ] = "è­°äº‹éŒ²ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
-    Text[ korean ] = "í”„ë¡œí† ì½œ ì„œì‹ íŒŒì¼";
-    Text[ chinese_simplified ] = "è®°å½•æ ·å¼";
-    Text[ chinese_traditional ] = "å”å®šæ¨£å¼";
-    Text[ arabic ] = "ŞÇáÈ ÈÑæÊæßæá";
-    Text[ turkish ] = "Tutanak şablonu";
-    Text[ catalan ] = "Plantilla d'actes";
-    Text[ finnish ] = "Pöytäkirjamalli";
-    Text[ thai ] = "à¹à¸¡à¹ˆà¹à¸šà¸šà¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¸›à¸£à¸°à¸Šà¸¸à¸¡";
-    Text[ czech ] = "MinutovÃ¡ Å¡ablona";
-    Text[ hebrew ] = "â€®×ª×‘× ×™×ª ×™×•××Ÿâ€¬";
-    Text[ hindi ] = "à¤®à¤¿à¤¨à¤Ÿ à¤•à¤¾ à¤¨à¤®à¥‚à¤¨à¤¾";
-    Text[ slovak ] = "Å ablÃ³na protokolu";
-    Text[ hungarian ] = "JegyzÅ‘kÃ¶nyvsablon";
-    Text[ slovenian ] = "Predloga zapisnika";
+    Text [ de ] = "Protokollvorlage";
+    Text [ en-US ] = "Minutes Template";
 };
 
 String AgendaDlgNoCancel
 {
-    Text = "Es muss eine Option bestätigt werden.";
-    Text[English] = "An option must be selected.";
-    Text[ english_us ] = "An option must be confirmed.";
-    Text[ portuguese ] = "É necessário confirmar uma opção.";
-    Text[ dutch ] = "Er moet een optie worden bevestigd.";
-    Text[ french ] = "Confirmation d'une option requise.";
-    Text[ spanish ] = "Debe confirmar una opción.";
-    Text[ italian ] = "È necessario confermare una opzione.";
-    Text[ swedish ] = "Ett alternativ måste bekräftas.";
-    Text[ russian ] = "Íåîáõîäèìî ïîäòâåğäèòü ïàğàìåòğ.";
-    Text[ greek ] = "Ğñİğåé íá ãßíåé åğéâåâáßùóç ìéáò åğéëïãŞò.";
-    Text[ finnish ] = "Valinta on vahvistettava.";
-    Text[ danish ] = "Du skal bekræfte en indstilling.";
-    Text[ polish ] = "Nale¿y potwierdziæ opcjê.";
-    Text[ portuguese_brazilian ] = "É necessário confirmar uma opção.";
-    Text[ japanese ] = "ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®ï¼‘ã¤ã¯é¸æŠã—ã¦ãã ã•ã„ã€‚";
-    Text[ korean ] = "ì˜µì…˜ì„ í™•ì¸í•´ì•¼ í•©ë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "å¿…é¡»é€‰æ‹©ä¸€ä¸ªé€‰é¡¹ã€‚";
-    Text[ chinese_traditional ] = "å¿…é ˆç¢ºå®šä¸€å€‹é¸é …ã€‚";
-    Text[ turkish ] = "Bir seçenek onaylanmalıdır";
-    Text[ arabic ] = "íÌÈ ÊÃßíÏ ÃÍÏ ÇáÎíÇÑÇÊ.";
-    Text[ catalan ] = "Heu de confirmar una opció.";
-    Text[ thai ] = "à¸•à¹‰à¸­à¸‡à¸¢à¸·à¸™à¸¢à¸±à¸™à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸";
-    Text[ czech ] = "Volba musÃ­ bÃ½t potvrzena";
-    Text[ hebrew ] = "â€®×™×© ×œ××©×¨ ××¤×©×¨×•×ª.â€¬";
-    Text[ hindi ] = "à¤µà¤¿à¤•à¤²à¥à¤ª à¤•à¥‹ à¤¦à¥ƒà¤¢à¤¼ à¤•à¤°à¤¨à¤¾ à¤œà¤¼à¤°à¥‚à¤°à¥€ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "VoÄ¾ba musÃ­ byÅ¥ potvrdenÃ¡";
-    Text[ hungarian ] = "Az egyik beÃ¡llÃ­tÃ¡st jÃ³vÃ¡ kell hagynia.";
-    Text[ slovenian ] = "MoÅ¾nost morate potrditi.";
+    Text [ de ] = "Es muss eine Option bestätigt werden.";
+    Text [ en-US ] = "An option must be confirmed.";
 };
 
 String AgendaDlgFrame
 {
-    Text = "Protokolltyp";
-    Text[English] = "Minutes Type";
-    Text[ english_us ] = "Minutes Type";
-    Text[ portuguese ] = "Tipo de acta";
-    Text[ dutch ] = "Type verslag";
-    Text[ french ] = "Type de compte rendu";
-    Text[ spanish ] = "Tipo de protocolo";
-    Text[ italian ] = "Tipo di protocollo";
-    Text[ swedish ] = "Protokolltyp";
-    Text[ russian ] = "Òèï ïğîòîêîëà";
-    Text[ greek ] = "Ôığïò ğñùôüêïëëïõ";
-    Text[ danish ] = "Referattype";
-    Text[ polish ] = "Typ protoko³u";
-    Text[ portuguese_brazilian ] = "Tipo de ata";
-    Text[ japanese ] = "è­°äº‹éŒ²ã®ã‚¿ã‚¤ãƒ—";
-    Text[ korean ] = "í”„ë¡œí† ì½œ í˜•ì‹";
-    Text[ chinese_simplified ] = "è®°å½•ç±»å‹";
-    Text[ chinese_traditional ] = "è¨˜éŒ„é¡å‹";
-    Text[ arabic ] = "äæÚ ÇáÈÑæÊæßæá";
-    Text[ turkish ] = "Tutanak tipi";
-    Text[ catalan ] = "Tipus d'acta";
-    Text[ finnish ] = "Pöytäkirjatyyppi";
-    Text[ thai ] = "à¸Šà¸™à¸´à¸”à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¸›à¸£à¸°à¸Šà¸¸à¸¡";
-    Text[ czech ] = "Typ zÃ¡znamÅ¯";
-    Text[ hebrew ] = "â€®×¡×•×’ ×¨×™×©×•×â€¬";
-    Text[ hindi ] = "à¤®à¤¿à¤¨à¤Ÿ à¤•à¤¾ à¤µà¤°à¥à¤—";
-    Text[ slovak ] = "Typ protokolu";
-    Text[ hungarian ] = "JegyzÅ‘kÃ¶nyv tÃ­pusa";
-    Text[ slovenian ] = "Vrsta zapisnika";
+    Text [ de ] = "Protokolltyp";
+    Text [ en-US ] = "Minutes Type";
 };
 
 String AgendaDlgButton1
 {
-    Text = "Ergebnisprotokoll";
-    Text[English] = "Agenda Results Minutes";
-    Text[ english_us ] = "Results Minutes";
-    Text[ portuguese ] = "Acta sobre resultados";
-    Text[ dutch ] = "Verslag van de resultaten";
-    Text[ french ] = "Compte rendu des résultats";
-    Text[ spanish ] = "Protocolo de resultado";
-    Text[ italian ] = "Protocollo dei risultati";
-    Text[ swedish ] = "Beslutsprotokoll";
-    Text[ russian ] = "Ïğîòîêîë èòîãîâ";
-    Text[ greek ] = "Ğñùôüêïëëï áğïôåëåóìÜôùí";
-    Text[ danish ] = "Beslutningsreferat";
-    Text[ polish ] = "Protokó³ podsumowujacy";
-    Text[ portuguese_brazilian ] = "Ata dos Resultados";
-    Text[ japanese ] = "çµæœè­°äº‹éŒ²";
-    Text[ korean ] = "ê²°ê³¼ í”„ë¡œí† ì½œ";
-    Text[ chinese_simplified ] = "è®®ç¨‹ç»“æœè®°å½•";
-    Text[ chinese_traditional ] = "æœƒè«‡çµæœè¨˜éŒ„";
-    Text[ arabic ] = "ÈÑæÊæßæá ÇáäÊíÌÉ";
-    Text[ turkish ] = "Sonuç tutanağı";
-    Text[ catalan ] = "Actes de resultats";
-    Text[ finnish ] = "Tulospöytäkirja";
-    Text[ thai ] = "à¸œà¸¥à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¸›à¸£à¸°à¸Šà¸¸à¸¡";
-    Text[ czech ] = "PÅ™ijatÃ¡ usnesenÃ­";
-    Text[ hebrew ] = "â€®×™×•××Ÿ ×ª×•×¦××•×ªâ€¬";
-    Text[ hindi ] = "à¤¨à¤¤à¥€à¤œà¤¾ à¤®à¤¿à¤¨à¤Ÿà¥‹à¤‚ à¤®à¥‡à¤‚";
-    Text[ slovak ] = "PrijatÃ© uznesenie";
-    Text[ hungarian ] = "JegyzÅ‘kÃ¶nyv az eredmÃ©nyekrÅ‘l";
-    Text[ slovenian ] = "Zapisnik o rezultatih";
+    Text [ de ] = "Ergebnisprotokoll";
+    Text [ en-US ] = "Results Minutes";
 };
 
 String AgendaDlgButton2
 {
-    Text = "Verlaufsprotokoll";
-    Text[English] = "Agenda Evaluation Minutes";
-    Text[ english_us ] = "Evaluation Minutes";
-    Text[ portuguese ] = "Acta sobre decurso";
-    Text[ dutch ] = "Verslag van het verloop";
-    Text[ french ] = "Procès verbal";
-    Text[ spanish ] = "Protocolo del transcurso";
-    Text[ italian ] = "Protocollo dello svolgimento";
-    Text[ swedish ] = "Redogörande protokoll";
-    Text[ russian ] = "Îöåíî÷íûé ïğîòîêîë";
-    Text[ greek ] = "Ğñùôüêïëëï åîİëéîçò";
-    Text[ danish ] = "Evalueringsreferat";
-    Text[ polish ] = "Protokó³ oceny";
-    Text[ portuguese_brazilian ] = "Atas de Avaliação";
-    Text[ japanese ] = "ä¸­é–“å ±å‘Šã®è­°äº‹éŒ²";
-    Text[ korean ] = "ê²½ê³¼ í”„ë¡œí† ì½œ";
-    Text[ chinese_simplified ] = "è®®ç¨‹è¿‡ç¨‹è®°å½•";
-    Text[ chinese_traditional ] = "æœƒè«‡éç¨‹è¨˜éŒ„";
-    Text[ arabic ] = "ÈÑæÊæßæá ÎØ ÇáÓíÑ";
-    Text[ turkish ] = "Değerlendirme tutanağı";
-    Text[ catalan ] = "Protocol del transcurs";
-    Text[ finnish ] = "Arviointipöytäkirja";
-    Text[ thai ] = "à¸›à¸£à¸°à¹€à¸¡à¸´à¸™à¸œà¸¥à¸šà¸±à¸™à¸—à¸¶à¸à¸à¸²à¸£à¸›à¸£à¸°à¸Šà¸¸à¸¡";
-    Text[ czech ] = "PrÅ¯bÄ›h zasedÃ¡nÃ­";
-    Text[ hebrew ] = "â€®×™×•××Ÿ ×”×¢×¨×›×”â€¬";
-    Text[ hindi ] = "à¤ªà¤°à¥€à¤•à¥à¤·à¤¾ à¤•à¤°à¤¨à¥‡ à¤•à¤¾ à¤®à¤¿à¤¨à¤Ÿà¥‡à¤‚ ";
-    Text[ slovak ] = "Priebeh zasadania";
-    Text[ hungarian ] = "KiÃ©rtÃ©kelÅ‘ jegyzÅ‘kÃ¶nyv";
-    Text[ slovenian ] = "Zapisnik o ocenah";
+    Text [ de ] = "Verlaufsprotokoll";
+    Text [ en-US ] = "Evaluation Minutes";
 };
 
 // --------------------------------------------------------------------
 String CorrespondenceNoTextmark
 {
-    Text = "Die Textmarke 'Recipient' fehlt.";
-    Text[English] = "The Bookmark 'Recipient' is lacking.";
-    Text[ english_us ] = "The bookmark 'Recipient' is missing.";
-    Text[ portuguese ] = "Falta o marcador de texto 'Recipient'.";
-    Text[ dutch ] = "De tekstmarkering 'Recipient' ontbreekt.";
-    Text[ french ] = "Le repère de texte 'Recipient' n'existe pas.";
-    Text[ spanish ] = "Falta el marcador 'Recipient'.";
-    Text[ italian ] = "Manca il segnalibro 'Recipient'.";
-    Text[ swedish ] = "Bokmärket 'Recipient' saknas.";
-    Text[ russian ] = "Îòñóòñòâóåò çàêëàäêà 'Ïîëó÷àòåëü'.";
-    Text[ greek ] = "Ëåßğåé ôï óçìÜäé ôïõ êåéìİíïõ 'Recipient' (ĞáñáëŞğôçò).";
-    Text[ danish ] = "Bogmærket 'Modtager' mangler.";
-    Text[ polish ] = "Brak zak³adki Adresat.";
-    Text[ portuguese_brazilian ] = "Falta o marcador 'Destinatário'";
-    Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆãƒãƒ¼ã‚¯ 'Recipient' ãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ì±…ê°ˆí”¼ 'Recipient'ê°€ ì—†ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "ä¹¦ç­¾ 'Recipient' ä¸å­˜åœ¨ã€‚";
-    Text[ chinese_traditional ] = "æ¨™è¨˜<Recipient>ä¸å­˜åœ¨ã€‚";
-    Text[ arabic ] = "ÇáÅÔÇÑÉ ÇáãÑÌÚíÉ 'Recipient' äÇŞÕÉ.";
-    Text[ turkish ] = "'Alıcı' Belirteci mevcut değil.";
-    Text[ catalan ] = "Falta la marca de text 'Recipient'.";
-    Text[ finnish ] = "Kirjanmerkki Vastaanottaja puuttuu.";
-    Text[ thai ] = "à¸•à¸±à¸§à¸„à¸±à¹ˆà¸™ 'à¸œà¸¹à¹‰à¸£à¸±à¸š' à¸•à¸à¸«à¸¥à¹ˆà¸™";
-    Text[ czech ] = "ChybÃ­ zÃ¡loÅ¾ka 'PÅ™Ã­jemci'.";
-    Text[ hebrew ] = "â€®×¡××Ÿ ×”× ××¢×Ÿ ×—×¡×¨â€¬";
-    Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤ à¤¸à¤‚à¤•à¥‡à¤¤ 'à¤ªà¥à¤°à¤¤à¤¿à¤—à¥à¤°à¤¾à¤¹à¤•' à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤ à¤²à¥à¤ªà¥à¤¤ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "ChÃ½ba zÃ¡loÅ¾ka 'PrÃ­jemca'.";
-    Text[ hungarian ] = "A 'CÃ­mzett' kÃ¶nyvjelzÅ‘ hiÃ¡nyzik.";
-    Text[ slovenian ] = "Manjka zaznamek 'Prejemnik'.";
+    Text [ de ] = "Die Textmarke 'Recipient' fehlt.";
+    Text [ en-US ] = "The bookmark 'Recipient' is missing.";
 };
 
 String CorrespondenceNoTextmark+1
 {
-    Text = "Serienbrieffelder können nicht eingefügt werden.";
-    Text[English] = "Mail Merge fields can not be included.";
-    Text[ english_us ] = "Form letter fields can not be included.";
-    Text[ portuguese ] = "Impossível inserir campos para cartas em série.";
-    Text[ dutch ] = "Er kunnen geen standaardbriefvelden worden ingevoegd.";
-    Text[ french ] = "Impossible d'insérer des champs de lettre type !";
-    Text[ spanish ] = "No se pueden insertar campos de cartas en serie.";
-    Text[ italian ] = "Impossibile inserire i campi della stampa in serie.";
-    Text[ swedish ] = "Omöjligt att infoga fält för standardbrev.";
-    Text[ russian ] = "Íåâîçìîæíî âêëş÷èòü ïîëÿ ñòàíäàğòíîãî ïèñüìà.";
-    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé åéóáãùãŞ ôùí ğåäßùí ôùí åãêõêëßùí åğéóôïëşí.";
-    Text[ danish ] = "Det er ikke muligt at inkludere formularbrevsfelter.";
-    Text[ polish ] = "Nie mo¿na do³¹czyæ pól listu seryjnego.";
-    Text[ portuguese_brazilian ] = "Não é possível inserir campos para a mala direta.";
-    Text[ japanese ] = "å·®ã—è¾¼ã¿å°åˆ·ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’æŒ¿å…¥ã§ãã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "í¸ì§€ ì–‘ì‹ í•„ë“œë¥¼ ì‚½ì…í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "æ— æ³•æ’å…¥é‚®ä»¶åˆå¹¶å­—æ®µã€‚";
-    Text[ chinese_traditional ] = "ç„¡æ³•æ’å…¥éƒµä»¶åˆä½µçš„æ¬„ä½ã€‚";
-    Text[ arabic ] = "áÇ íãßä ÅÖÇİÉ ÍŞæá ÎØÇÈ ãÓáÓá.";
-    Text[ turkish ] = "Standart mektup alanları eklenemiyor.";
-    Text[ catalan ] = "No es poden incloure camps de carta de formulari";
-    Text[ finnish ] = "Joukkokirjekenttien liittäminen ei onnistu.";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸£à¸§à¸¡à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡à¸ˆà¸”à¸«à¸¡à¸²à¸¢";
-    Text[ czech ] = "Pole formulÃ¡Å™ovÃ©ho dopisu nemohou bÃ½t zahrnuta.";
-    Text[ hebrew ] = "â€®××™×Ÿ ××¤×©×¨×•×ª ×œ×›×œ×•×œ ×©×“×•×ª ×××›×ª×‘×™ ×ª×‘× ×™×ªâ€¬";
-    Text[ hindi ] = "à¤«à¥‰à¤°à¥à¤® à¤ªà¤¤à¥à¤° à¤•à¤¾ à¤•à¥à¤·à¥‡à¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤•à¤° à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ à¥¤";
-    Text[ slovak ] = "FormulÃ¡rovÃ© polia nemÃ´Å¾u byÅ¥ zahrnutÃ©.";
-    Text[ hungarian ] = "A kÃ¶rlevÃ©lmezÅ‘ket nem lehet befoglalni.";
-    Text[ slovenian ] = "Ni mogoÄe vkljuÄiti polj tipskih pisem.";
+    Text [ de ] = "Serienbrieffelder können nicht eingefügt werden.";
+    Text [ en-US ] = "Form letter fields can not be included.";
 };
 
 String CorrespondenceMsgError
 {
-    Text = "Es ist ein Fehler aufgetreten!";
-    Text[English] = "Error";
-    Text[ english_us ] = "An error has occurred.";
-    Text[ portuguese ] = "Erro";
-    Text[ dutch ] = "Fout";
-    Text[ french ] = "Une erreur est survenue !";
-    Text[ spanish ] = "Ha ocurrido un error.";
-    Text[ italian ] = "Si è verificato un'errore.";
-    Text[ swedish ] = "Det har uppstått ett fel!";
-    Text[ russian ] = "Îøèáêà";
-    Text[ greek ] = "ÓöÜëìá";
-    Text[ danish ] = "Der opstod en fejl";
-    Text[ polish ] = "B³¹d";
-    Text[ portuguese_brazilian ] = "Erro";
-    Text[ japanese ] = "ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚";
-    Text[ korean ] = "ì˜¤ë¥˜ê°€ ë°œìƒí–ˆìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "å‘ç”Ÿé”™è¯¯";
-    Text[ chinese_traditional ] = "å·²ç¶“ç™¼ç”Ÿä¸€å€‹éŒ¯èª¤ï¼";
-    Text[ arabic ] = "ÎØÃ";
-    Text[ turkish ] = "Hata oluştu.";
-    Text[ catalan ] = "Error";
-    Text[ finnish ] = "Virhe";
-    Text[ thai ] = "à¸‚à¹‰à¸­à¸œà¸´à¸”à¸à¸¥à¸²à¸”";
-    Text[ czech ] = "Chyba";
-    Text[ hebrew ] = "â€®××¨×¢×” ×©×’×™××”!â€¬";
-    Text[ hindi ] = "à¤—à¤²à¤¤à¥€";
-    Text[ slovak ] = "Chyba";
-    Text[ hungarian ] = "Hiba tÃ¶rtÃ©nt.";
-    Text[ slovenian ] = "PriÅ¡lo je do napake.";
+    Text [ de ] = "Es ist ein Fehler aufgetreten!";
+    Text [ en-US ] = "An error has occurred.";
 };
 
 String CorrespondenceDialog
 {
-    Text = "Empfänger";
-    Text[English] = "Who will get this document?";
-    Text[ english_us ] = "Addressee";
-    Text[ portuguese ] = "Destinatário";
-    Text[ dutch ] = "Geadresseerde";
-    Text[ french ] = "Destinataire";
-    Text[ spanish ] = "Destinatario";
-    Text[ italian ] = "Destinatario";
-    Text[ swedish ] = "Mottagare";
-    Text[ russian ] = "Ïîëó÷àòåëü";
-    Text[ greek ] = "ĞáñáëŞğôçò";
-    Text[ danish ] = "Modtager";
-    Text[ polish ] = "Odbiorca";
-    Text[ portuguese_brazilian ] = "Destinatário";
-    Text[ japanese ] = "å®›å…ˆ";
-    Text[ korean ] = "ìˆ˜ì‹ ì¸";
-    Text[ chinese_simplified ] = "æ”¶ä»¶äºº";
-    Text[ chinese_traditional ] = "æ”¶ä»¶è€…";
-    Text[ arabic ] = "ãÇĞÇ ÊÑíÏ Ãä ÊßÊÈ¿";
-    Text[ turkish ] = "Alıcı";
-    Text[ catalan ] = "Destinatari";
-    Text[ finnish ] = "Saaja";
-    Text[ thai ] = "à¸œà¸¹à¹‰à¸£à¸±à¸š";
-    Text[ czech ] = "Adresa";
-    Text[ hebrew ] = "â€®× ××¢×Ÿâ€¬";
-    Text[ hindi ] = "à¤²à¥‡à¤¨à¥‡à¤µà¤¾à¤²à¤¾";
-    Text[ slovak ] = "PrÃ­jemca";
-    Text[ hungarian ] = "CÃ­mzett";
-    Text[ slovenian ] = "Naslovnik";
+    Text [ de ] = "Empfänger";
+    Text [ en-US ] = "Addressee";
 };
 
 String CorrespondenceDialog+1
 {
-    Text = "Ein Empfänger";
-    Text[English] = "One Recipient";
-    Text[ english_us ] = "One recipient";
-    Text[ portuguese ] = "Um destinatário";
-    Text[ dutch ] = "Een geadresseerde";
-    Text[ french ] = "Un destinataire";
-    Text[ spanish ] = "Un destinatario";
-    Text[ italian ] = "Un destinatario";
-    Text[ swedish ] = "En mottagare";
-    Text[ russian ] = "Îäèí ïîëó÷àòåëü";
-    Text[ greek ] = "¸íáò ğáñáëŞğôçò";
-    Text[ danish ] = "Én modtager";
-    Text[ polish ] = "Jeden adresat";
-    Text[ portuguese_brazilian ] = "Destinatário único";
-    Text[ japanese ] = "ï¼‘é€š";
-    Text[ korean ] = "ë‹¨ì¼ ìˆ˜ì‹ ì¸";
-    Text[ chinese_simplified ] = "å•ä¸€æ”¶ä»¶äºº";
-    Text[ chinese_traditional ] = "å–®ä¸€æ”¶ä»¶è€…";
-    Text[ arabic ] = "ÎØÇÈ ãİÑÏ";
-    Text[ turkish ] = "Tek alıcı";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Carta individual";
-    Text[ finnish ] = "Yksi vastaanottaja";
-    Text[ thai ] = "à¸œà¸¹à¹‰à¸£à¸±à¸šà¸„à¸™à¹€à¸”à¸µà¸¢à¸§";
-    Text[ czech ] = "Jeden pÅ™Ã­jemce";
-    Text[ hebrew ] = "â€®× ××¢×Ÿ ××—×“â€¬";
-    Text[ hindi ] = "à¤à¤• à¤ªà¥à¤°à¤¤à¤¿à¤—à¥à¤°à¤¾à¤¹à¤•";
-    Text[ slovak ] = "Jeden prÃ­jemca";
-    Text[ hungarian ] = "Egy cÃ­mzett";
-    Text[ slovenian ] = "En prejemnik";
+    Text [ de ] = "Ein Empfänger";
+    Text [ en-US ] = "One recipient";
+    Text [ x-comment ] = " ";
 };
 
 String CorrespondenceDialog+2
 {
-    Text = "Mehrere Empfänger (Adressdatenbank)";
-    Text[English] = "Multiple Recipients (Address Database)";
-    Text[ english_us ] = "Several recipients (address database)";
-    Text[ portuguese ] = "Vários destinatários (base de dados de endereços)";
-    Text[ dutch ] = "Meer geadresseerden (adresdatabase)";
-    Text[ french ] = "Plusieurs destinataires (BD d'adresses)";
-    Text[ spanish ] = "Varios destinatarios (base de datos de direcciones)";
-    Text[ italian ] = "Più destinatari (database Rubrica)";
-    Text[ swedish ] = "Flera mottagare (adressdatabas)";
-    Text[ russian ] = "Íåñêîëüêî ïîëó÷àòåëåé (áàçà äàííûõ àäğåñîâ)";
-    Text[ greek ] = "Ğïëëïß ğáñáëŞğôåò (âÜóç äåäïìİíùí äéåõèıíóåùí)";
-    Text[ danish ] = "Flere modtagere (adressedatabase)";
-    Text[ polish ] = "Kilku adresatów (adresowa baza danych)";
-    Text[ portuguese_brazilian ] = "Vários destinatários (banco de dados de endereços)";
-    Text[ japanese ] = "è¤‡æ•°(ã‚¢ãƒ‰ãƒ¬ã‚¹å¸³ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹)";
-    Text[ korean ] = "ì—¬ëŸ¬ ìˆ˜ì‹ ì¸ (ì£¼ì†Œ ë°ì´í„°ë² ì´ìŠ¤)";
-    Text[ chinese_simplified ] = "å¤šä¸ªæ”¶ä»¶äºº(é€šè®¯ç°¿æ•°æ®åº“)";
-    Text[ chinese_traditional ] = "å¤šå€‹æ”¶ä»¶è€…(åœ°å€è³‡æ–™åº«)";
-    Text[ arabic ] = "ÎØÇÈ ãÓáÓá";
-    Text[ turkish ] = "Birçok alıcı (adres veritabanı)";
-    Text[ catalan ] = "Carta formulari";
-    Text[ finnish ] = "Useita vastaanottajia (osoitetietokanta)";
-    Text[ thai ] = "à¸œà¸¹à¹‰à¸£à¸±à¸šà¸«à¸¥à¸²à¸¢à¸„à¸™ (à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ)";
-    Text[ czech ] = "NÄ›kolik pÅ™Ã­jemcÅ¯ (databÃ¡ze adres)";
-    Text[ hebrew ] = "â€®× ××¢× ×™× ××—×“×™× (×××¡×“ ×”× ×ª×•× ×™×)â€¬";
-    Text[ hindi ] = "à¤…à¤¨à¥‡à¤• à¤ªà¥à¤°à¤¤à¤¿à¤—à¥à¤°à¤¾à¤¹à¤• (à¤ªà¤¤à¤¾ à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯)";
-    Text[ slovak ] = "NiekoÄ¾ko prÃ­jemcov (databÃ¡za adries)";
-    Text[ hungarian ] = "TÃ¶bb cÃ­mzett (cÃ­mlista-adatbÃ¡zis)";
-    Text[ slovenian ] = "VeÄ prejemnikov (adresar)";
+    Text [ de ] = "Mehrere Empfänger (Adressdatenbank)";
+    Text [ en-US ] = "Several recipients (address database)";
 };
 
 String CorrespondenceDialog+3
 {
-    Text = "Verwendung der Vorlage";
-    Text[English] = "Use of this template";
-    Text[ english_us ] = "Use of This Template";
-    Text[ portuguese ] = "Utilizar modelo";
-    Text[ russian ] = "Èñïîëüçîâàíèå ıòîãî øàáëîíà";
-    Text[ greek ] = "×ñŞóç áõôïı ôïõ ğñïôığïõ";
-    Text[ dutch ] = "Gebruikmaking van sjabloon";
-    Text[ french ] = "Utilisation du modèle";
-    Text[ spanish ] = "Uso de la plantilla";
-    Text[ finnish ] = "Mallin käyttö";
-    Text[ italian ] = "Uso del modello";
-    Text[ danish ] = "Anvendelse af skabelonen";
-    Text[ swedish ] = "Användning av den här mallen";
-    Text[ polish ] = "Przeznaczenie szablonu";
-    Text[ portuguese_brazilian ] = "Uso deste Modelo";
-    Text[ japanese ] = "ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚’ä½¿ç”¨";
-    Text[ korean ] = "ì„œì‹ íŒŒì¼ ì‚¬ìš©";
-    Text[ chinese_simplified ] = "ä½¿ç”¨æ ·å¼";
-    Text[ chinese_traditional ] = "ä½¿ç”¨æ¨£å¼";
-    Text[ turkish ] = "Bu şablonu kullan";
-    Text[ arabic ] = "Use of This Template";
-    Text[ catalan ] = "Ús d'aquesta plantilla";
-    Text[ thai ] = "à¹ƒà¸Šà¹‰à¹à¸¡à¹ˆà¹à¸šà¸šà¸™à¸µà¹‰";
-    Text[ czech ] = "PouÅ¾Ã­t tuto Å¡ablonu";
-    Text[ hebrew ] = "â€®×©×™××•×© ×‘×ª×‘× ×™×ª ×–×•â€¬";
-    Text[ hindi ] = "à¤‡à¤¸ à¤¨à¤®à¥‚à¤¨à¥‡ à¤•à¤¾ à¤‰à¤ªà¤¯à¥‹à¤—";
-    Text[ slovak ] = "PouÅ¾itie tejto Å¡ablÃ³ny";
-    Text[ hungarian ] = "Sablon hasznÃ¡lata";
-    Text[ slovenian ] = "Uporaba te predloge";
+    Text [ de ] = "Verwendung der Vorlage";
+    Text [ en-US ] = "Use of This Template";
 };
 
 
 String CorrespondenceFields
 {
-    Text = "Platzhalter anklicken und überschreiben";
-    Text[English] = "Click place holder and overwrite";
-    Text[ english_us ] = "Click placeholder and overwrite";
-    Text[ language_user1 ] = "; Platzhalter-Hinweistext";
-    Text[ portuguese ] = "Clique no marcador de posição e escreva o seu texto";
-    Text[ russian ] = "Ùåëêíèòå íà ïîëå ïîäñòàíîâêè è ââåäèòå íîâûé òåêñò";
-    Text[ greek ] = "ÊÜíôå êëéê óôï ğëáßóéï äåßêôç ôïğïèİôçóçò êáé áíôéêáôáóôŞóôå ôïí";
-    Text[ dutch ] = "Op plaatsvervanger klikken en overschrijven";
-    Text[ french ] = "Clic sur le substituant pour remplacement";
-    Text[ spanish ] = "Pulse sobre el comodín y sobrescriba";
-    Text[ finnish ] = "Napsauta paikanninta ja kirjoita sen päälle";
-    Text[ italian ] = "Cliccate lo spazio e scrivete";
-    Text[ danish ] = "Klik på pladsholder, og overskriv";
-    Text[ swedish ] = "Klicka på platshållaren och skriv över";
-    Text[ polish ] = "Kliknij i zast¹p znak-wype³niacz";
-    Text[ portuguese_brazilian ] = "Clique no espaço reservado e sobrescreva seu texto";
-    Text[ japanese ] = "ãƒ—ãƒ¬ãƒ¼ã‚¹ãƒ•ã‚©ãƒ«ãƒ€ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦ä¸Šæ›¸ãã™ã‚‹";
-    Text[ korean ] = "í”Œë ˆì´ìŠ¤í™€ë”ë¥¼ í´ë¦­í•œ í›„ ë®ì–´ì“°ê¸°";
-    Text[ chinese_simplified ] = "ç‚¹å‡»è¿™é‡Œï¼Œå¼€å§‹è¾“å…¥æ–‡å­—ã€‚";
-    Text[ chinese_traditional ] = "æŒ‰ä¸€ä¸‹ï¼Œé–‹å§‹è¼¸å…¥æ–‡å­—ã€‚";
-    Text[ turkish ] = "Yerine geçecek olanı tıkla ve üzerine yaz";
-    Text[ arabic ] = "Click place holder and overwrite";
-    Text[ catalan ] = "Fes clic al comodí i sobreescriu";
-    Text[ thai ] = "à¸„à¸¥à¸´à¹Šà¸à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¸§à¸²à¸‡à¸§à¸±à¸•à¸–à¸¸à¹à¸¥à¸°à¹€à¸‚à¸µà¸¢à¸™à¸—à¸±à¸š";
-    Text[ czech ] = "KliknÄ›te na naznaÄenÃ© mÃ­sto a vepiÅ¡te vlastnÃ­ text";
-    Text[ hebrew ] = "â€®×œ×—×™×¦×” ×¢×œ ×¡××Ÿ ×”××§×•× ×›×•×ª×‘×ª ×¢×œâ€¬";
-    Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨à¤§à¤¾à¤°à¤• à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¥‹ à¤”à¤° à¤“à¤µà¤°à¤°à¤‡à¤Ÿà¥ à¤•à¤°à¥‹";
-    Text[ slovak ] = "Klikni na vlastnÃ­ka a prepÃ­Å¡";
-    Text[ hungarian ] = "Kattintson a helykitÃ¶ltÅ‘re, Ã©s Ã­rja felÃ¼l";
-    Text[ slovenian ] = "Klikni ogrado in prepiÅ¡i";
+    Text [ de ] = "Platzhalter anklicken und überschreiben";
+    Text [ en-US ] = "Click placeholder and overwrite";
+    Text [ x-comment ] = "; Platzhalter-Hinweistext";
 };
 
 String CorrespondenceFields+1
 {
-    Text = "Firma";
-    Text[English] = "Company";
-    Text[ english_us ] = "Company";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Empresa";
-    Text[ russian ] = "Îğãàíèçàöèÿ";
-    Text[ greek ] = "Åôáéñåßá";
-    Text[ dutch ] = "Bedrijf";
-    Text[ french ] = "Société";
-    Text[ spanish ] = "Empresa";
-    Text[ finnish ] = "Yritys";
-    Text[ italian ] = "Azienda";
-    Text[ danish ] = "Firma";
-    Text[ swedish ] = "Företag";
-    Text[ polish ] = "Firma";
-    Text[ portuguese_brazilian ] = "Empresa";
-    Text[ japanese ] = "ä¼šç¤¾å";
-    Text[ korean ] = "íšŒì‚¬";
-    Text[ chinese_simplified ] = "å…¬å¸";
-    Text[ chinese_traditional ] = "å…¬å¸";
-    Text[ turkish ] = "Şirket adı";
-    Text[ arabic ] = "ÇáÔÑßÉ";
-    Text[ catalan ] = "Empresa";
-    Text[ thai ] = "à¸šà¸£à¸´à¸©à¸±à¸—";
-    Text[ czech ] = "SpoleÄnost";
-    Text[ hebrew ] = "â€®×—×‘×¨×”â€¬";
-    Text[ hindi ] = "à¤¸à¤‚à¤¸à¥à¤¥à¤¾";
-    Text[ slovak ] = "SpoloÄnosÅ¥";
-    Text[ hungarian ] = "CÃ©g";
-    Text[ slovenian ] = "Podjetje";
+    Text [ de ] = "Firma";
+    Text [ en-US ] = "Company";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+2
 {
-    Text = "Abteilung";
-    Text[English] = "Department";
-    Text[ english_us ] = "Department";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Departamento";
-    Text[ russian ] = "Îòäåë";
-    Text[ greek ] = "ÔìŞìá";
-    Text[ dutch ] = "Afdeling";
-    Text[ french ] = "Service";
-    Text[ spanish ] = "Departamento";
-    Text[ finnish ] = "Osasto";
-    Text[ italian ] = "Reparto";
-    Text[ danish ] = "Afdeling";
-    Text[ swedish ] = "Avdelning";
-    Text[ polish ] = "Dzia³";
-    Text[ portuguese_brazilian ] = "Departamento";
-    Text[ japanese ] = "éƒ¨ç½²";
-    Text[ korean ] = "ë¶€ì„œ";
-    Text[ chinese_simplified ] = "éƒ¨é—¨";
-    Text[ chinese_traditional ] = "éƒ¨é–€";
-    Text[ turkish ] = "Bölüm";
-    Text[ arabic ] = "ÇáŞÓã";
-    Text[ catalan ] = "Departament";
-    Text[ thai ] = "à¹à¸œà¸™à¸";
-    Text[ czech ] = "OddÄ›lenÃ­";
-    Text[ hebrew ] = "â€®××—×œ×§×”â€¬";
-    Text[ hindi ] = "à¤µà¤¿à¤­à¤¾à¤—";
-    Text[ slovak ] = "Oddelenie";
-    Text[ hungarian ] = "RÃ©szleg";
-    Text[ slovenian ] = "Oddelek";
+    Text [ de ] = "Abteilung";
+    Text [ en-US ] = "Department";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+3
 {
-    Text = "Vorname";
-    Text[English] = "First Name";
-    Text[ english_us ] = "First Name";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Nome próprio";
-    Text[ russian ] = "Èìÿ";
-    Text[ greek ] = "¼íïìá";
-    Text[ dutch ] = "Voornaam";
-    Text[ french ] = "Prénom";
-    Text[ spanish ] = "Nombre";
-    Text[ finnish ] = "Etunimi";
-    Text[ italian ] = "Nome";
-    Text[ danish ] = "Fornavn";
-    Text[ swedish ] = "Förnamn";
-    Text[ polish ] = "Imiê";
-    Text[ portuguese_brazilian ] = "Nome";
-    Text[ japanese ] = "å";
-    Text[ korean ] = "ì´ë¦„";
-    Text[ chinese_simplified ] = "åå­—";
-    Text[ chinese_traditional ] = "åå­—";
-    Text[ turkish ] = "Adı";
-    Text[ arabic ] = "ÇáÇÓã";
-    Text[ catalan ] = "Nom";
-    Text[ thai ] = "à¸Šà¸·à¹ˆà¸­";
-    Text[ czech ] = "JmÃ©no";
-    Text[ hebrew ] = "â€®×©× ×¤×¨×˜×™â€¬";
-    Text[ hindi ] = "à¤ªà¤¹à¤¿à¤²à¤¾ à¤¨à¤¾à¤®";
-    Text[ slovak ] = "Meno";
-    Text[ hungarian ] = "UtÃ³nÃ©v";
-    Text[ slovenian ] = "Ime";
+    Text [ de ] = "Vorname";
+    Text [ en-US ] = "First Name";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+4
 {
-    Text = "Nachname";
-    Text[English] = "Last Name";
-    Text[ english_us ] = "Last Name";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Apelido";
-    Text[ russian ] = "Ôàìèëèÿ";
-    Text[ greek ] = "Åğşíõìï";
-    Text[ dutch ] = "Achternaam";
-    Text[ french ] = "Nom";
-    Text[ spanish ] = "Apellidos";
-    Text[ finnish ] = "Sukunimi";
-    Text[ italian ] = "Cognome";
-    Text[ danish ] = "Efternavn";
-    Text[ swedish ] = "Efternamn";
-    Text[ polish ] = "Nazwisko";
-    Text[ portuguese_brazilian ] = "Sobrenome";
-    Text[ japanese ] = "å§“";
-    Text[ korean ] = "ì„±";
-    Text[ chinese_simplified ] = "å§“æ°";
-    Text[ chinese_traditional ] = "å§“æ°";
-    Text[ turkish ] = "Soyad ";
-    Text[ arabic ] = "ÇÓã ÇáÚÇÆáÉ";
-    Text[ catalan ] = "Cognom";
-    Text[ thai ] = "à¸™à¸²à¸¡à¸ªà¸à¸¸à¸¥";
-    Text[ czech ] = "PÅ™Ã­jmenÃ­";
-    Text[ hebrew ] = "â€®×©× ××©×¤×—×”â€¬";
-    Text[ hindi ] = "à¤…à¤‚à¤¤à¤¿à¤® à¤¨à¤¾à¤®";
-    Text[ slovak ] = "Priezvisko";
-    Text[ hungarian ] = "VezetÃ©knÃ©v";
-    Text[ slovenian ] = "Priimek";
+    Text [ de ] = "Nachname";
+    Text [ en-US ] = "Last Name";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+5
 {
-    Text = "Straße";
-    Text[English] = "Address";
-    Text[ english_us ] = "Street";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Rua";
-    Text[ russian ] = "Óëèöà";
-    Text[ greek ] = "Ïäüò";
-    Text[ dutch ] = "Straat";
-    Text[ french ] = "Rue";
-    Text[ spanish ] = "Calle";
-    Text[ finnish ] = "Katuosoite";
-    Text[ italian ] = "Via";
-    Text[ danish ] = "Gade";
-    Text[ swedish ] = "Gatuadress";
-    Text[ polish ] = "Ulica";
-    Text[ portuguese_brazilian ] = "Rua";
-    Text[ japanese ] = "å¸‚ç”ºæ‘åç•ªåœ°";
-    Text[ korean ] = "ì£¼ì†Œ";
-    Text[ chinese_simplified ] = "è¡—é“";
-    Text[ chinese_traditional ] = "è¡—é“";
-    Text[ turkish ] = "Cadde";
-    Text[ arabic ] = "Address";
-    Text[ catalan ] = "Adreça";
-    Text[ thai ] = "à¸–à¸™à¸™";
-    Text[ czech ] = "Ulice";
-    Text[ hebrew ] = "â€®×¨×—×•×‘â€¬";
-    Text[ hindi ] = "à¤¸à¤¡à¤¼à¤•";
-    Text[ slovak ] = "Ulica";
-    Text[ hungarian ] = "Utca";
-    Text[ slovenian ] = "Ulica";
+    Text [ de ] = "Straße";
+    Text [ en-US ] = "Street";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+6
 {
-    Text = "Land";
-    Text[English] = "Country";
-    Text[ english_us ] = "Country";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "País";
-    Text[ russian ] = "Ñòğàíà";
-    Text[ greek ] = "×şñá";
-    Text[ dutch ] = "Land";
-    Text[ french ] = "Pays";
-    Text[ spanish ] = "País";
-    Text[ finnish ] = "Maa";
-    Text[ italian ] = "Paese";
-    Text[ danish ] = "Land";
-    Text[ swedish ] = "Land";
-    Text[ polish ] = "Kraj";
-    Text[ portuguese_brazilian ] = "País";
-    Text[ japanese ] = "å›½å";
-    Text[ korean ] = "êµ­ê°€";
-    Text[ chinese_simplified ] = "å›½å®¶";
-    Text[ chinese_traditional ] = "åœ‹å®¶";
-    Text[ turkish ] = "Ülke";
-    Text[ arabic ] = "ÇáÈáÏ";
-    Text[ catalan ] = "País";
-    Text[ thai ] = "à¸›à¸£à¸°à¹€à¸—à¸¨";
-    Text[ czech ] = "ZemÄ›";
-    Text[ hebrew ] = "â€®××“×™× ×”â€¬";
-    Text[ hindi ] = "à¤¦à¥‡à¤¶";
-    Text[ slovak ] = "Krajina";
-    Text[ hungarian ] = "OrszÃ¡g";
-    Text[ slovenian ] = "DrÅ¾ava";
+    Text [ de ] = "Land";
+    Text [ en-US ] = "Country";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+7
 {
-    Text = "PLZ";
-    Text[English] = "Postal Code";
-    Text[ english_us ] = "ZIP/Postal Code";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "CP";
-    Text[ russian ] = "Ïî÷òîâûé èíäåêñ";
-    Text[ greek ] = "Ôá÷õäñïìéêüò êşäéêáò";
-    Text[ dutch ] = "Postcode";
-    Text[ french ] = "C.P.";
-    Text[ spanish ] = "Código postal";
-    Text[ finnish ] = "Postinumero";
-    Text[ italian ] = "C.A.P.";
-    Text[ danish ] = "Postnr.";
-    Text[ swedish ] = "Postnr";
-    Text[ polish ] = "Kod pocztowy";
-    Text[ portuguese_brazilian ] = "CEP/Código postal";
-    Text[ japanese ] = "éƒµä¾¿ç•ªå·";
-    Text[ korean ] = "ìš°í¸ë²ˆí˜¸";
-    Text[ chinese_simplified ] = "é‚®æ”¿ç¼–ç ";
-    Text[ chinese_traditional ] = "éƒµéå€è™Ÿ";
-    Text[ turkish ] = "Posta Kodu";
-    Text[ arabic ] = "Postal Code";
-    Text[ catalan ] = "Codi Postal";
-    Text[ thai ] = "à¸£à¸«à¸±à¸ªà¹„à¸›à¸£à¸©à¸“à¸µà¸¢à¹Œ";
-    Text[ czech ] = "PSÄŒ";
-    Text[ hebrew ] = "â€®××™×§×•×“â€¬";
-    Text[ hindi ] = "ZIP/à¤¡à¤¾à¤• à¤•à¥‹à¤¡";
-    Text[ slovak ] = "PSÄŒ";
-    Text[ hungarian ] = "IrÃ¡nyÃ­tÃ³szÃ¡m";
-    Text[ slovenian ] = "PoÅ¡tna Å¡tevilka";
+    Text [ de ] = "PLZ";
+    Text [ en-US ] = "ZIP/Postal Code";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+8
 {
-    Text = "Ort";
-    Text[English] = "City";
-    Text[ english_us ] = "City";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Localidade";
-    Text[ russian ] = "Ãîğîä";
-    Text[ greek ] = "Ğüëç";
-    Text[ dutch ] = "Plaats";
-    Text[ french ] = "Ville";
-    Text[ spanish ] = "Ciudad";
-    Text[ finnish ] = "Postitoimipaikka";
-    Text[ italian ] = "Località";
-    Text[ danish ] = "By";
-    Text[ swedish ] = "Ort";
-    Text[ polish ] = "Miejscowoœæ";
-    Text[ portuguese_brazilian ] = "Cidade";
-    Text[ japanese ] = "éƒ½é“åºœçœŒå";
-    Text[ korean ] = "êµ¬/êµ°/ì‹œ";
-    Text[ chinese_simplified ] = "åŸå¸‚";
-    Text[ chinese_traditional ] = "åŸå¸‚";
-    Text[ turkish ] = "Şehir";
-    Text[ arabic ] = "ÇáãÏíäÉ";
-    Text[ catalan ] = "Ciutat";
-    Text[ thai ] = "à¹€à¸¡à¸·à¸­à¸‡";
-    Text[ czech ] = "Obec/mÄ›sto";
-    Text[ hebrew ] = "â€®×¢×™×¨â€¬";
-    Text[ hindi ] = "à¤¨à¤—à¤°";
-    Text[ slovak ] = "Obec";
-    Text[ hungarian ] = "TelepÃ¼lÃ©s";
-    Text[ slovenian ] = "Kraj";
+    Text [ de ] = "Ort";
+    Text [ en-US ] = "City";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+9
 {
-    Text = "Titel";
-    Text[English] = "Title";
-    Text[ english_us ] = "Title";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Título";
-    Text[ russian ] = "Çàãîëîâîê";
-    Text[ greek ] = "Ôßôëïò";
-    Text[ dutch ] = "Titel";
-    Text[ french ] = "Titre";
-    Text[ spanish ] = "Título";
-    Text[ finnish ] = "Tehtävä";
-    Text[ italian ] = "Titolo";
-    Text[ danish ] = "Titel";
-    Text[ swedish ] = "Titel";
-    Text[ polish ] = "Tytu³";
-    Text[ portuguese_brazilian ] = "Título";
-    Text[ japanese ] = "è‚©æ›¸ã";
-    Text[ korean ] = "ì§í•¨";
-    Text[ chinese_simplified ] = "ç§°å‘¼";
-    Text[ chinese_traditional ] = "ç¨±å‘¼";
-    Text[ turkish ] = "Başlık";
-    Text[ arabic ] = "ÇáÚäæÇä";
-    Text[ catalan ] = "Títol";
-    Text[ thai ] = "à¸¢à¸¨";
-    Text[ czech ] = "Titul";
-    Text[ hebrew ] = "â€®×›×•×ª×¨×ªâ€¬";
-    Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•";
-    Text[ slovak ] = "Nadpis";
-    Text[ hungarian ] = "CÃ­m";
-    Text[ slovenian ] = "Naslov";
+    Text [ de ] = "Titel";
+    Text [ en-US ] = "Title";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+10
 {
-    Text = "Position";
-    Text[English] = "Position";
-    Text[ english_us ] = "Position";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Posição";
-    Text[ russian ] = "Äîëæíîñòü";
-    Text[ greek ] = "Èİóç";
-    Text[ dutch ] = "Functie";
-    Text[ french ] = "Fonction";
-    Text[ spanish ] = "Posición";
-    Text[ finnish ] = "Sijainti";
-    Text[ italian ] = "Posizione";
-    Text[ danish ] = "Stilling";
-    Text[ swedish ] = "Befattning";
-    Text[ polish ] = "Pozycja";
-    Text[ portuguese_brazilian ] = "Cargo";
-    Text[ japanese ] = "è·å‹™";
-    Text[ korean ] = "ì§ìœ„";
-    Text[ chinese_simplified ] = "èŒä½";
-    Text[ chinese_traditional ] = "è·ä½";
-    Text[ turkish ] = "Konum";
-    Text[ arabic ] = "ãæÖÚ";
-    Text[ catalan ] = "Posició";
-    Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
-    Text[ czech ] = "UmÃ­stÄ›nÃ­";
-    Text[ hebrew ] = "â€®××™×§×•×â€¬";
-    Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
-    Text[ slovak ] = "Umiestnenie";
-    Text[ hungarian ] = "BeosztÃ¡s";
-    Text[ slovenian ] = "PoloÅ¾aj";
+    Text [ de ] = "Position";
+    Text [ en-US ] = "Position";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+11
 {
-    Text = "Anrede";
-    Text[English] = "Form of Address";
-    Text[ english_us ] = "Form of Address";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Vocativo";
-    Text[ russian ] = "Ôîğìà àäğåñà";
-    Text[ greek ] = "Ğñïóöşíçóç";
-    Text[ dutch ] = "Aanhef";
-    Text[ french ] = "Appellation";
-    Text[ spanish ] = "Tratamiento";
-    Text[ finnish ] = "Osoitemuoto";
-    Text[ italian ] = "Formula di apertura";
-    Text[ danish ] = "Tiltale";
-    Text[ swedish ] = "Tilltal";
-    Text[ polish ] = "Zwrot grzecznoœciowy";
-    Text[ portuguese_brazilian ] = "Tratamento";
-    Text[ japanese ] = "æ•¬ç§°";
-    Text[ korean ] = "ê²½ì¹­";
-    Text[ chinese_simplified ] = "æ”¶ä»¶äººç§°å‘¼";
-    Text[ chinese_traditional ] = "æ”¶ä»¶è€…çš„ç¨±å‘¼";
-    Text[ turkish ] = "Adres formu";
-    Text[ arabic ] = "áŞÈ ÇáãÎÇØÈÉ";
-    Text[ catalan ] = "Tractament";
-    Text[ thai ] = "à¹à¸šà¸šà¸Ÿà¸­à¸£à¹Œà¸¡à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆ";
-    Text[ czech ] = "Forma adresy";
-    Text[ hebrew ] = "â€®×¦×•×¨×ª ×¤× ×™×”â€¬";
-    Text[ hindi ] = "à¤ªà¤¤à¥‡ à¤•à¤¾ à¤«à¥‰à¤°à¥à¤®";
-    Text[ slovak ] = "FormulÃ¡r z adries";
-    Text[ hungarian ] = "CÃ­m formÃ¡tuma";
-    Text[ slovenian ] = "Naziv";
+    Text [ de ] = "Anrede";
+    Text [ en-US ] = "Form of Address";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+12
 {
-    Text = "Kürzel";
-    Text[English] = "Initials";
-    Text[ english_us ] = "Initials";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Iniciais";
-    Text[ russian ] = "Èíèöèàëû";
-    Text[ greek ] = "Áñ÷éêÜ";
-    Text[ dutch ] = "Initialen";
-    Text[ french ] = "Initiales";
-    Text[ spanish ] = "Iniciales";
-    Text[ finnish ] = "Nimikirjaimet";
-    Text[ italian ] = "Iniziali";
-    Text[ danish ] = "Initialer";
-    Text[ swedish ] = "Initialer";
-    Text[ polish ] = "Inicja³y";
-    Text[ portuguese_brazilian ] = "Iniciais";
-    Text[ japanese ] = "ã‚¤ãƒ‹ã‚·ãƒ£ãƒ«";
-    Text[ korean ] = "ì´ë‹ˆì…œ";
-    Text[ chinese_simplified ] = "ç¼©å†™";
-    Text[ chinese_traditional ] = "ç¸®å¯«";
-    Text[ turkish ] = "Başlangıçlar";
-    Text[ arabic ] = "ÇáÇÎÊÕÇÑ";
-    Text[ catalan ] = "Inicials";
-    Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸¢à¹ˆà¸­";
-    Text[ czech ] = "IniciÃ¡ly";
-    Text[ hebrew ] = "â€®×¨××©×™ ×ª×™×‘×•×ªâ€¬";
-    Text[ hindi ] = "à¤‡à¤¨à¤¿à¤¶à¥à¤¯à¤²";
-    Text[ slovak ] = "IniciÃ¡ly";
-    Text[ hungarian ] = "Monogram";
-    Text[ slovenian ] = "ZaÄetnice";
+    Text [ de ] = "Kürzel";
+    Text [ en-US ] = "Initials";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+13
 {
-    Text = "Briefanrede";
-    Text[English] = "Salutation";
-    Text[ english_us ] = "Salutation";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Início de carta";
-    Text[ russian ] = "Ïğèâåòñòâèå";
-    Text[ greek ] = "×áéñåôéóìüò";
-    Text[ dutch ] = "Aanhef";
-    Text[ french ] = "Formule d'ouverture";
-    Text[ spanish ] = "Tratamiento";
-    Text[ finnish ] = "Tervehdys";
-    Text[ italian ] = "Inizio lettera";
-    Text[ danish ] = "Starthilsen";
-    Text[ swedish ] = "Hälsningsfras";
-    Text[ polish ] = "Zwrot grzecznoœciowy";
-    Text[ portuguese_brazilian ] = "Saudação";
-    Text[ japanese ] = "æŒ¨æ‹¶æ–‡";
-    Text[ korean ] = "ì¸ì‚¬ë§";
-    Text[ chinese_simplified ] = "ä¿¡ä»¶å¼€å¤´ç§°å‘¼";
-    Text[ chinese_traditional ] = "ä¿¡å‡½é–‹é ­ç¨±å‘¼";
-    Text[ turkish ] = "Selamlama";
-    Text[ arabic ] = "ÇáÊÍíÉ";
-    Text[ catalan ] = "Salutació";
-    Text[ thai ] = "à¸„à¸³à¸‚à¸¶à¹‰à¸™à¸•à¹‰à¸™à¸ˆà¸”à¸«à¸¡à¸²à¸¢";
-    Text[ czech ] = "OslovenÃ­";
-    Text[ hebrew ] = "â€®×¤×ª×™×—â€¬";
-    Text[ hindi ] = "à¤¨à¤®à¤¸à¥à¤•à¤¾à¤°";
-    Text[ slovak ] = "Oslovenie";
-    Text[ hungarian ] = "MegszÃ³lÃ­tÃ¡s";
-    Text[ slovenian ] = "Uvodni pozdrav";
+    Text [ de ] = "Briefanrede";
+    Text [ en-US ] = "Salutation";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+14
 {
-    Text = "Tel. privat";
-    Text[English] = "Home Phone";
-    Text[ english_us ] = "Home Phone";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Tel. particular";
-    Text[ russian ] = "Äîì. òåëåôîí";
-    Text[ greek ] = "Ôçëİöùíï ïéêßáò";
-    Text[ dutch ] = "Tel. privé";
-    Text[ french ] = "Tél. domicile";
-    Text[ spanish ] = "Tfno. particular";
-    Text[ finnish ] = "Kotipuhelin";
-    Text[ italian ] = "Tel. privato";
-    Text[ danish ] = "Tlf. privat";
-    Text[ swedish ] = "Tfn privat";
-    Text[ polish ] = "Telefon domowy";
-    Text[ portuguese_brazilian ] = "Tel. residencial";
-    Text[ japanese ] = "è‡ªå®…é›»è©±";
-    Text[ korean ] = "ì§‘ ì „í™”";
-    Text[ chinese_simplified ] = "ç§äººç”µè¯";
-    Text[ chinese_traditional ] = "ç§äººé›»è©±";
-    Text[ turkish ] = "Ev Telefonu";
-    Text[ arabic ] = "Home Phone";
-    Text[ catalan ] = "Telèfon (particular)";
-    Text[ thai ] = "à¹‚à¸—à¸£à¸¨à¸±à¸à¸—à¹Œà¸šà¹‰à¸²à¸™";
-    Text[ czech ] = "Telefon domÅ¯";
-    Text[ hebrew ] = "â€®×˜×œ×¤×•×Ÿ ×‘×‘×™×ªâ€¬";
-    Text[ hindi ] = "à¤˜à¤° à¤•à¤¾ à¤¦à¥‚à¤°à¤­à¤¾à¤·";
-    Text[ slovak ] = "TelefÃ³n domov";
-    Text[ hungarian ] = "Otthoni telefonszÃ¡m";
-    Text[ slovenian ] = "DomaÄi telefon";
+    Text [ de ] = "Tel. privat";
+    Text [ en-US ] = "Home Phone";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+15
 {
-    Text = "Tel. gesch.";
-    Text[English] = "Work Phone";
-    Text[ english_us ] = "Work Phone";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Tel. emprego";
-    Text[ russian ] = "Ğàá. òåëåôîí";
-    Text[ greek ] = "Ôçëİöùíï åñãáóßáò";
-    Text[ dutch ] = "Tel. werk";
-    Text[ french ] = "Tél. bureau 2";
-    Text[ spanish ] = "Tfno. trabajo";
-    Text[ finnish ] = "Työpuhelin";
-    Text[ italian ] = "Tel. lavoro";
-    Text[ danish ] = "Tlf. arbejde";
-    Text[ swedish ] = "Tfn arbete";
-    Text[ polish ] = "Telefon (praca)";
-    Text[ portuguese_brazilian ] = "Tel. comercial";
-    Text[ japanese ] = "ä¼šç¤¾é›»è©±";
-    Text[ korean ] = "ì§ì¥ ì „í™”";
-    Text[ chinese_simplified ] = "å…¬åŠ¡ç”µè¯";
-    Text[ chinese_traditional ] = "å…¬å‹™é›»è©±";
-    Text[ turkish ] = "İş Telefonu";
-    Text[ arabic ] = "Work Phone";
-    Text[ catalan ] = "Telèfon (feina)";
-    Text[ thai ] = "à¹‚à¸—à¸£à¸¨à¸±à¸à¸—à¹Œà¸—à¸µà¹ˆà¸—à¸³à¸‡à¸²à¸™";
-    Text[ czech ] = "Telefon do zamÄ›stnÃ¡nÃ­";
-    Text[ hebrew ] = "â€®×˜×œ×¤×•×Ÿ ×‘×¢×‘×•×“×”â€¬";
-    Text[ hindi ] = "à¤•à¤¾à¤® à¤•à¤¾ à¤¦à¥‚à¤°à¤­à¤¾à¤·";
-    Text[ slovak ] = "TelefÃ³n do zamestnania";
-    Text[ hungarian ] = "Munkahelyi telefonszÃ¡m";
-    Text[ slovenian ] = "SluÅ¾beni telefon";
+    Text [ de ] = "Tel. gesch.";
+    Text [ en-US ] = "Work Phone";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+16
 {
-    Text = "Fax";
-    Text[English] = "Fax";
-    Text[ english_us ] = "Fax";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Fax";
-    Text[ russian ] = "Ôàêñ";
-    Text[ greek ] = "Öáî";
-    Text[ dutch ] = "Fax";
-    Text[ french ] = "Fax";
-    Text[ spanish ] = "Fax";
-    Text[ finnish ] = "Faksi";
-    Text[ italian ] = "Fax";
-    Text[ danish ] = "Fax";
-    Text[ swedish ] = "Fax";
-    Text[ polish ] = "Faks";
-    Text[ portuguese_brazilian ] = "Fax";
-    Text[ japanese ] = "Fax";
-    Text[ korean ] = "íŒ©ìŠ¤";
-    Text[ chinese_simplified ] = "ä¼ çœŸ";
-    Text[ chinese_traditional ] = "å‚³çœŸ";
-    Text[ turkish ] = "Faks";
-    Text[ arabic ] = "ÇáİÇßÓ";
-    Text[ catalan ] = "Fax";
-    Text[ thai ] = "à¹‚à¸—à¸£à¸ªà¸²à¸£";
-    Text[ czech ] = "Fax";
-    Text[ hebrew ] = "â€®×¤×§×¡â€¬";
-    Text[ hindi ] = "à¤«à¥‰à¤•à¥à¤¸";
-    Text[ slovak ] = "Fax";
-    Text[ hungarian ] = "Fax";
-    Text[ slovenian ] = "Faks";
+    Text [ de ] = "Fax";
+    Text [ en-US ] = "Fax";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+17
 {
-    Text = "E-Mail";
-    Text[English] = "E-Mail";
-    Text[ english_us ] = "E-Mail";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "E-mail";
-    Text[ russian ] = "İë. ïî÷òà";
-    Text[ greek ] = "Äéåıèõíóç çëåêôñïíéêïı ôá÷õäñïìåßïõ";
-    Text[ dutch ] = "E-mail";
-    Text[ french ] = "E-mail";
-    Text[ spanish ] = "Correo-e";
-    Text[ finnish ] = "Sähköposti";
-    Text[ italian ] = "E-Mail";
-    Text[ danish ] = "E-mail";
-    Text[ swedish ] = "E-post";
-    Text[ polish ] = "e-mail";
-    Text[ portuguese_brazilian ] = "E-Mail";
-    Text[ japanese ] = "E-mail";
-    Text[ korean ] = "ì „ì ë©”ì¼";
-    Text[ chinese_simplified ] = "ç”µå­é‚®ä»¶";
-    Text[ chinese_traditional ] = "é›»å­éƒµä»¶";
-    Text[ turkish ] = "E-posta";
-    Text[ arabic ] = "ÇáÈÑíÏ ÇáÅáßÊÑæäí";
-    Text[ catalan ] = "Correu electrònic";
-    Text[ thai ] = "à¸­à¸µà¹€à¸¡à¸¥à¹Œ";
-    Text[ czech ] = "E-Mail";
-    Text[ hebrew ] = "â€®×“×•××¨ ×'â€¬";
-    Text[ hindi ] = "à¤‡-à¤®à¥‡à¤‡à¤²";
-    Text[ slovak ] = "Email";
-    Text[ hungarian ] = "E-mail";
-    Text[ slovenian ] = "E-poÅ¡ta";
+    Text [ de ] = "E-Mail";
+    Text [ en-US ] = "E-Mail";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+18
 {
-    Text = "URL";
-    Text[English] = "URL";
-    Text[ english_us ] = "URL";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "URL";
-    Text[ russian ] = "URL";
-    Text[ greek ] = "URL";
-    Text[ dutch ] = "URL";
-    Text[ french ] = "URL";
-    Text[ spanish ] = "URL";
-    Text[ finnish ] = "URL-osoite";
-    Text[ italian ] = "URL";
-    Text[ danish ] = "URL";
-    Text[ swedish ] = "URL";
-    Text[ polish ] = "URL";
-    Text[ portuguese_brazilian ] = "URL";
-    Text[ japanese ] = "URL";
-    Text[ korean ] = "URL";
-    Text[ chinese_simplified ] = "URL";
-    Text[ chinese_traditional ] = "URL";
-    Text[ turkish ] = "URL";
-    Text[ arabic ] = "URL";
-    Text[ catalan ] = "URL";
-    Text[ czech ] = "URL";
-    Text[ hebrew ] = "URL";
-    Text[ thai ] = "URL";
-    Text[ hindi ] = "URL";
-    Text[ slovak ] = "URL";
-    Text[ hungarian ] = "URL";
-    Text[ slovenian ] = "URL";
+    Text [ de ] = "URL";
+    Text [ en-US ] = "URL";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+19
 {
-    Text = "Notiz";
-    Text[English] = "Notes";
-    Text[ english_us ] = "Notes";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Anotações";
-    Text[ russian ] = "Ïğèìå÷àíèÿ";
-    Text[ greek ] = "Óçìåéşóåéò";
-    Text[ dutch ] = "Aantekening";
-    Text[ french ] = "Notes";
-    Text[ spanish ] = "Notas";
-    Text[ finnish ] = "Huomautukset";
-    Text[ italian ] = "Note";
-    Text[ danish ] = "Noter";
-    Text[ swedish ] = "Anteckning";
-    Text[ polish ] = "Notatki";
-    Text[ portuguese_brazilian ] = "Anotações";
-    Text[ japanese ] = "ãƒ¡ãƒ¢";
-    Text[ korean ] = "ë©”ëª¨";
-    Text[ chinese_simplified ] = "å¤‡æ³¨";
-    Text[ chinese_traditional ] = "å‚™è¨»";
-    Text[ turkish ] = "Notes";
-    Text[ arabic ] = "ãáÇÍÙÉ";
-    Text[ catalan ] = "Notes";
-    Text[ thai ] = "à¸šà¸±à¸™à¸—à¸¶à¸à¸¢à¹ˆà¸­";
-    Text[ czech ] = "PoznÃ¡mky";
-    Text[ hebrew ] = "â€®×”×¢×¨×•×ªâ€¬";
-    Text[ hindi ] = "à¤Ÿà¤¿à¤ªà¥à¤ªà¤£à¥€";
-    Text[ slovak ] = "PoznÃ¡mky";
-    Text[ hungarian ] = "Jegyzetek";
-    Text[ slovenian ] = "Opombe";
+    Text [ de ] = "Notiz";
+    Text [ en-US ] = "Notes";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+20
 {
-    Text = "Alt. Feld 1";
-    Text[English] = "Alt. Field 1";
-    Text[ english_us ] = "Alt. Field 1";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Campo facultativo 1";
-    Text[ russian ] = "Àëüòåğí. ïîëå 1";
-    Text[ greek ] = "Åíáëëáêôéêü ğåäßï 1";
-    Text[ dutch ] = "Alt. veld 1";
-    Text[ french ] = "Champ facultatif 1";
-    Text[ spanish ] = "Campo alt. 1";
-    Text[ finnish ] = "Vaihtoeht. kenttä 1";
-    Text[ italian ] = "Campo 1";
-    Text[ danish ] = "Alt. felt 1";
-    Text[ swedish ] = "Alt.fält 1";
-    Text[ polish ] = "Pole 1";
-    Text[ portuguese_brazilian ] = "Campo facultativo 1";
-    Text[ japanese ] = "äºˆå‚™ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ 1";
-    Text[ korean ] = "Alt. í•„ë“œ 1";
-    Text[ chinese_simplified ] = "é¢„å¤‡æ  1";
-    Text[ chinese_traditional ] = "é å‚™æ¬„ 1";
-    Text[ turkish ] = "Alt. Alan 1";
-    Text[ arabic ] = "Alt. Field 1";
-    Text[ catalan ] = "Camp alt. 1";
-    Text[ thai ] = "Alt. à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ 1";
-    Text[ czech ] = "VlastnÃ­ pole 1";
-    Text[ hebrew ] = "â€®×©×“×” × ×•×¡×£ 1â€¬";
-    Text[ hindi ] = "à¤µà¥ˆà¤•à¤²à¥à¤ªà¤¿à¤• à¤•à¥à¤·à¥‡à¤¤à¥à¤° 1";
-    Text[ slovak ] = "Vol. pole 1";
-    Text[ hungarian ] = "1. alt. mezÅ‘";
-    Text[ slovenian ] = "Izb. polje 1";
+    Text [ de ] = "Alt. Feld 1";
+    Text [ en-US ] = "Alt. Field 1";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+21
 {
-    Text = "Alt. Feld 2";
-    Text[English] = "Alt. Field 2";
-    Text[ english_us ] = "Alt. Field 2";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Campo facultativo 2";
-    Text[ russian ] = "Àëüòåğí. ïîëå 2";
-    Text[ greek ] = "Åíáëëáêôéêü ğåäßï 2";
-    Text[ dutch ] = "Alt. veld 2";
-    Text[ french ] = "Champ facultatif 2";
-    Text[ spanish ] = "Campo alt. 2";
-    Text[ finnish ] = "Vaihtoeht. kenttä 2";
-    Text[ italian ] = "Campo 2";
-    Text[ danish ] = "Alt. felt 2";
-    Text[ swedish ] = "Alt.fält 2";
-    Text[ polish ] = "Pole 2";
-    Text[ portuguese_brazilian ] = "Campo facultativo 2";
-    Text[ japanese ] = "äºˆå‚™ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ 2";
-    Text[ korean ] = "Alt. í•„ë“œ 2";
-    Text[ chinese_simplified ] = "é¢„å¤‡æ  2";
-    Text[ chinese_traditional ] = "é å‚™æ¬„ 2";
-    Text[ turkish ] = "Alt. Alan 2";
-    Text[ arabic ] = "Alt. Field 2";
-    Text[ catalan ] = "Camp alt. 2";
-    Text[ thai ] = "Alt. à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ 2";
-    Text[ czech ] = "VlastnÃ­ pole 2";
-    Text[ hebrew ] = "â€®×©×“×” × ×•×¡×£ 2â€¬";
-    Text[ hindi ] = "à¤µà¥ˆà¤•à¤²à¥à¤ªà¤¿à¤• à¤•à¥à¤·à¥‡à¤¤à¥à¤° 2";
-    Text[ slovak ] = "Vol. pole 2";
-    Text[ hungarian ] = "2. alt. mezÅ‘";
-    Text[ slovenian ] = "Izb. polje 2";
+    Text [ de ] = "Alt. Feld 2";
+    Text [ en-US ] = "Alt. Field 2";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+22
 {
-    Text = "Alt. Feld 3";
-    Text[English] = "Alt. Field 3";
-    Text[ english_us ] = "Alt. Field 3";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Campo facultativo 3";
-    Text[ russian ] = "Àëüòåğí. ïîëå 3";
-    Text[ greek ] = "Åíáëëáêôéêü ğåäßï 3";
-    Text[ dutch ] = "Alt. veld 3";
-    Text[ french ] = "Champ facultatif 3";
-    Text[ spanish ] = "Campo alt. 3";
-    Text[ finnish ] = "Vaihtoeht. kenttä 3";
-    Text[ italian ] = "Campo 3";
-    Text[ danish ] = "Alt. felt 3";
-    Text[ swedish ] = "Alt.fält 3";
-    Text[ polish ] = "Pole 3";
-    Text[ portuguese_brazilian ] = "Campo facultativo 3";
-    Text[ japanese ] = "äºˆå‚™ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ 3";
-    Text[ korean ] = "Alt. í•„ë“œ 3";
-    Text[ chinese_simplified ] = "é¢„å¤‡æ  3";
-    Text[ chinese_traditional ] = "é å‚™æ¬„ 3";
-    Text[ turkish ] = "Alt. Alan 3";
-    Text[ arabic ] = "Alt. Field 3";
-    Text[ catalan ] = "Camp alt. 3";
-    Text[ thai ] = "Alt. à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ 3";
-    Text[ czech ] = "VlastnÃ­ pole 3";
-    Text[ hebrew ] = "â€®×©×“×” × ×•×¡×£ 3â€¬";
-    Text[ hindi ] = "à¤µà¥ˆà¤•à¤²à¥à¤ªà¤¿à¤• à¤•à¥à¤·à¥‡à¤¤à¥à¤° 3";
-    Text[ slovak ] = "Vol. pole 3";
-    Text[ hungarian ] = "3. alt. mezÅ‘";
-    Text[ slovenian ] = "Izb. polje 3";
+    Text [ de ] = "Alt. Feld 3";
+    Text [ en-US ] = "Alt. Field 3";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+23
 {
-    Text = "Alt. Feld 4";
-    Text[English] = "Alt. Field 4";
-    Text[ english_us ] = "Alt. Field 4";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Campo facultativo 4";
-    Text[ russian ] = "Àëüòåğí. ïîëå 4";
-    Text[ greek ] = "Åíáëëáêôéêü ğåäßï 4";
-    Text[ dutch ] = "Alt. veld 4";
-    Text[ french ] = "Champ facultatif 4";
-    Text[ spanish ] = "Campo alt. 4";
-    Text[ finnish ] = "Vaihtoeht. kenttä 4";
-    Text[ italian ] = "Campo 4";
-    Text[ danish ] = "Alt. felt 4";
-    Text[ swedish ] = "Alt.fält 4";
-    Text[ polish ] = "Pole 4";
-    Text[ portuguese_brazilian ] = "Campo facultativo 4";
-    Text[ japanese ] = "äºˆå‚™ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ 4";
-    Text[ korean ] = "Alt. í•„ë“œ 4";
-    Text[ chinese_simplified ] = "é¢„å¤‡æ  4";
-    Text[ chinese_traditional ] = "é å‚™æ¬„ 4";
-    Text[ turkish ] = "Alt. Alan 4";
-    Text[ arabic ] = "Alt. Field 4";
-    Text[ catalan ] = "Camp alt. 4";
-    Text[ thai ] = "Alt. à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥ 4";
-    Text[ czech ] = "VlastnÃ­ pole 4";
-    Text[ hebrew ] = "â€®×©×“×” × ×•×¡×£ 4â€¬";
-    Text[ hindi ] = "à¤µà¥ˆà¤•à¤²à¥à¤ªà¤¿à¤• à¤•à¥à¤·à¥‡à¤¤à¥à¤° 4";
-    Text[ slovak ] = "Vol. pole 4";
-    Text[ hungarian ] = "4. alt. mezÅ‘";
-    Text[ slovenian ] = "Izb. polje 4";
+    Text [ de ] = "Alt. Feld 4";
+    Text [ en-US ] = "Alt. Field 4";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+24
 {
-    Text = "ID";
-    Text[English] = "ID";
-    Text[ english_us ] = "ID";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "ID";
-    Text[ russian ] = "ID";
-    Text[ greek ] = "Áíáãíùñéóôéêü";
-    Text[ dutch ] = "ID";
-    Text[ french ] = "ID";
-    Text[ spanish ] = "ID (identificación)";
-    Text[ finnish ] = "Tunnus";
-    Text[ italian ] = "ID";
-    Text[ danish ] = "ID";
-    Text[ swedish ] = "ID";
-    Text[ polish ] = "Identyfikator";
-    Text[ portuguese_brazilian ] = "ID";
-    Text[ japanese ] = "ID";
-    Text[ korean ] = "ID";
-    Text[ chinese_simplified ] = "ID";
-    Text[ chinese_traditional ] = "ID";
-    Text[ turkish ] = "ID";
-    Text[ arabic ] = "ÊÚÑíİ";
-    Text[ catalan ] = "Identificació";
-    Text[ czech ] = "ID";
-    Text[ hebrew ] = "ID";
-    Text[ thai ] = "ID";
-    Text[ hindi ] = "ID";
-    Text[ slovak ] = "ID";
-    Text[ hungarian ] = "AzonosÃ­tÃ³";
-    Text[ slovenian ] = "ID";
+    Text [ de ] = "ID";
+    Text [ en-US ] = "ID";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+25
 {
-    Text = "Bundesland";
-    Text[English] = "State";
-    Text[ english_us ] = "State";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Estado";
-    Text[ russian ] = "Îáëàñòü";
-    Text[ greek ] = "Íïìüò";
-    Text[ dutch ] = "Regio";
-    Text[ french ] = "État";
-    Text[ spanish ] = "Provincia";
-    Text[ finnish ] = "Osavaltio";
-    Text[ italian ] = "Regione";
-    Text[ danish ] = "Delstat";
-    Text[ swedish ] = "Delstat";
-    Text[ polish ] = "Województwo";
-    Text[ portuguese_brazilian ] = "Estado";
-    Text[ japanese ] = "å·å";
-    Text[ korean ] = "ë„/ì£¼";
-    Text[ chinese_simplified ] = "çœæˆ–ç›´è¾–å¸‚";
-    Text[ chinese_traditional ] = "çœ";
-    Text[ turkish ] = "Eyalet";
-    Text[ arabic ] = "ÇáæáÇíÉ";
-    Text[ catalan ] = "Provincia";
-    Text[ thai ] = "à¸£à¸±à¸";
-    Text[ czech ] = "StÃ¡t";
-    Text[ hebrew ] = "â€®××—×•×–â€¬";
-    Text[ hindi ] = "à¤°à¤¾à¤œà¥à¤¯";
-    Text[ slovak ] = "Å tÃ¡t";
-    Text[ hungarian ] = "Ãllam";
-    Text[ slovenian ] = "Zvezna drÅ¾ava";
+    Text [ de ] = "Bundesland";
+    Text [ en-US ] = "State";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+26
 {
-    Text = "Tel. Büro";
-    Text[English] = "Office Phone";
-    Text[ english_us ] = "Office Phone";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Tel. emprego";
-    Text[ russian ] = "Ğàáî÷èé òåëåôîí";
-    Text[ greek ] = "Ôçëİöùíï ãñáöåßïõ";
-    Text[ dutch ] = "Tel. kantoor";
-    Text[ french ] = "Tél. bureau 2";
-    Text[ spanish ] = "Tfno. oficina";
-    Text[ finnish ] = "Toimistopuhelin";
-    Text[ italian ] = "Tel. ufficio";
-    Text[ danish ] = "Tlf. kontor";
-    Text[ swedish ] = "Tfn kontor";
-    Text[ polish ] = "Telefon (praca)";
-    Text[ portuguese_brazilian ] = "Tel. comercial";
-    Text[ japanese ] = "ã‚ªãƒ•ã‚£ã‚¹é›»è©±";
-    Text[ korean ] = "ì‚¬ë¬´ì‹¤ ì „í™”";
-    Text[ chinese_simplified ] = "åŠå…¬å®¤ç”µè¯";
-    Text[ chinese_traditional ] = "è¾¦å…¬å®¤é›»è©±";
-    Text[ turkish ] = "Ofis telefonu";
-    Text[ arabic ] = "Office Phone";
-    Text[ catalan ] = "Telf. oficina";
-    Text[ thai ] = "à¹‚à¸—à¸£à¸¨à¸±à¸à¸—à¹Œà¸—à¸µà¹ˆà¸—à¸³à¸‡à¸²à¸™";
-    Text[ czech ] = "Telefon do kancelÃ¡Å™e";
-    Text[ hebrew ] = "â€®×˜×œ×¤×•×Ÿ ×‘××©×¨×“â€¬";
-    Text[ hindi ] = "à¤¦à¤«à¥à¤¤à¤° à¤¦à¥‚à¤°à¤­à¤¾à¤·";
-    Text[ slovak ] = "TelefÃ³n do kancelÃ¡rie";
-    Text[ hungarian ] = "Munkahelyi telefon";
-    Text[ slovenian ] = "SluÅ¾beni telefon";
+    Text [ de ] = "Tel. Büro";
+    Text [ en-US ] = "Office Phone";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+27
 {
-    Text = "Pager";
-    Text[English] = "Pager";
-    Text[ english_us ] = "Pager";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Pager";
-    Text[ russian ] = "Ïåéäæåğ";
-    Text[ greek ] = "Ôçëååéäïğïßçóç";
-    Text[ dutch ] = "Pager";
-    Text[ french ] = "Pager";
-    Text[ spanish ] = "Busca";
-    Text[ finnish ] = "Hakulaite";
-    Text[ italian ] = "Teledrin";
-    Text[ danish ] = "Personsøger";
-    Text[ swedish ] = "Personsökare";
-    Text[ polish ] = "Pager";
-    Text[ portuguese_brazilian ] = "Pager";
-    Text[ japanese ] = "ãƒã‚±ãƒƒãƒˆãƒ™ãƒ«";
-    Text[ korean ] = "í˜¸ì¶œê¸°";
-    Text[ chinese_simplified ] = "BP æœº";
-    Text[ chinese_traditional ] = "BP æ©Ÿ";
-    Text[ turkish ] = "Çağrı";
-    Text[ arabic ] = "ÈíÌÑ";
-    Text[ catalan ] = "Pager";
-    Text[ thai ] = "à¹€à¸à¸ˆà¹€à¸ˆà¸­à¸£à¹Œ";
-    Text[ czech ] = "Pager";
-    Text[ hebrew ] = "â€®××™×ª×•×¨×™×ªâ€¬";
-    Text[ hindi ] = "à¤ªà¥‡à¤œà¤°";
-    Text[ slovak ] = "Pager";
-    Text[ hungarian ] = "SzemÃ©lyhÃ­vÃ³";
-    Text[ slovenian ] = "Pozivnik";
+    Text [ de ] = "Pager";
+    Text [ en-US ] = "Pager";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+28
 {
-    Text = "Tel. Mobil";
-    Text[English] = "Mobile Phone";
-    Text[ english_us ] = "Mobile Phone";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Telemóvel";
-    Text[ russian ] = "Òåëåôîí, ìîáèëüíûé";
-    Text[ greek ] = "Êéíçôü ôçëİöùíï";
-    Text[ dutch ] = "Tel. mobiel";
-    Text[ french ] = "Tél. portable";
-    Text[ spanish ] = "Tfno. móvil";
-    Text[ finnish ] = "Matkapuhelin";
-    Text[ italian ] = "Cellulare";
-    Text[ danish ] = "Tlf. mobil";
-    Text[ swedish ] = "Mobiltfn";
-    Text[ polish ] = "Telefon komórkowy";
-    Text[ portuguese_brazilian ] = "Tel. celular";
-    Text[ japanese ] = "æºå¸¯é›»è©±";
-    Text[ korean ] = "íœ´ëŒ€í°";
-    Text[ chinese_simplified ] = "æ‰‹æœº";
-    Text[ chinese_traditional ] = "æ‰‹æ©Ÿ";
-    Text[ turkish ] = "Cep telefonu";
-    Text[ arabic ] = "Mobile Phone";
-    Text[ catalan ] = "Telf. mòbil";
-    Text[ thai ] = "à¸¡à¸·à¸­à¸–à¸·à¸­";
-    Text[ czech ] = "MobilnÃ­ telefon";
-    Text[ hebrew ] = "â€®×˜×œ×¤×•×Ÿ × ×™×™×“â€¬";
-    Text[ hindi ] = "à¤®à¥‹à¤¬à¥ˆà¤² à¤¦à¥‚à¤°à¤­à¤¾à¤·";
-    Text[ slovak ] = "Mobil";
-    Text[ hungarian ] = "Mobiltelefon";
-    Text[ slovenian ] = "Mobilni telefon";
+    Text [ de ] = "Tel. Mobil";
+    Text [ en-US ] = "Mobile Phone";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+29
 {
-    Text = "Tel. Andere";
-    Text[English] = "Other Phone";
-    Text[ english_us ] = "Other Phone";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Outros telefones";
-    Text[ russian ] = "Òåëåôîí äîïîëí.";
-    Text[ greek ] = "¢ëëï ôçëİöùíï";
-    Text[ dutch ] = "Tel. andere";
-    Text[ french ] = "Tél. autre";
-    Text[ spanish ] = "Otros teléfonos";
-    Text[ finnish ] = "Muu puhelin";
-    Text[ italian ] = "Altro telefono";
-    Text[ danish ] = "Tlf. øvrige";
-    Text[ swedish ] = "Tfn annan";
-    Text[ polish ] = "Inne telefony";
-    Text[ portuguese_brazilian ] = "Outros telefones";
-    Text[ japanese ] = "ãã®ä»–ã®é›»è©±";
-    Text[ korean ] = "ê¸°íƒ€ ì „í™”";
-    Text[ chinese_simplified ] = "å…¶ä»–ç”µè¯";
-    Text[ chinese_traditional ] = "å…¶ä»–é›»è©±";
-    Text[ turkish ] = "Diğer telefonlar";
-    Text[ arabic ] = "Other Phone";
-    Text[ catalan ] = "Altre telf.";
-    Text[ thai ] = "à¹‚à¸—à¸£à¸¨à¸±à¸à¸—à¹Œà¸­à¸·à¹ˆà¸™ à¹†";
-    Text[ czech ] = "DalÅ¡Ã­ telefon";
-    Text[ hebrew ] = "â€®×˜×œ×¤×•×Ÿ ××—×¨â€¬";
-    Text[ hindi ] = "à¤…à¤¨à¥à¤¯ à¤¦à¥‚à¤°à¤­à¤¾à¤·";
-    Text[ slovak ] = "OstatnÃ© telefÃ³ny";
-    Text[ hungarian ] = "EgyÃ©b telefonszÃ¡m";
-    Text[ slovenian ] = "Drug telefon";
+    Text [ de ] = "Tel. Andere";
+    Text [ en-US ] = "Other Phone";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+30
 {
-    Text = "Kalender URL";
-    Text[English] = "Calendar URL";
-    Text[ english_us ] = "Calendar URL";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "URL do calendário";
-    Text[ russian ] = "URL êàëåíäàğÿ";
-    Text[ greek ] = "URL çìåñïëïãßïõ";
-    Text[ dutch ] = "Kalender URL";
-    Text[ french ] = "URL du calendrier";
-    Text[ spanish ] = "Calendario URL";
-    Text[ finnish ] = "Kalenterin URL";
-    Text[ italian ] = "Calendario URL";
-    Text[ danish ] = "Kalender-URL";
-    Text[ swedish ] = "Kalender-URL";
-    Text[ polish ] = "Adres URL kalendarza";
-    Text[ portuguese_brazilian ] = "URL do calendário";
-    Text[ japanese ] = "äºˆå®šè¡¨ URL";
-    Text[ korean ] = "ì¹¼ë Œë” URL";
-    Text[ chinese_simplified ] = "æ—¥å† URL";
-    Text[ chinese_traditional ] = "è¡Œäº‹æ›† URL";
-    Text[ turkish ] = "Takvim URL";
-    Text[ arabic ] = "Calendar URL";
-    Text[ catalan ] = "Calendari URL";
-    Text[ thai ] = "à¸›à¸à¸´à¸—à¸´à¸™ URL";
-    Text[ czech ] = "URL kalendÃ¡Å™e";
-    Text[ hebrew ] = "â€®URL ×©×œ ×œ×•×— ×©× ×”â€¬";
-    Text[ hindi ] = "à¤•à¥‡à¤²à¤¨à¥à¤¡à¤° URL";
-    Text[ slovak ] = "KalendÃ¡r URL";
-    Text[ hungarian ] = "NaptÃ¡r URL";
-    Text[ slovenian ] = "URL koledarja";
+    Text [ de ] = "Kalender URL";
+    Text [ en-US ] = "Calendar URL";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+31
 {
-    Text = "Einladen";
-    Text[English] = "Invite";
-    Text[ english_us ] = "Invite";
-    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
-    Text[ portuguese ] = "Convocar";
-    Text[ russian ] = "Ïğèãëàñèòü";
-    Text[ greek ] = "Ğñüóêëçóç";
-    Text[ dutch ] = "Uitnodigen";
-    Text[ french ] = "Invitation";
-    Text[ spanish ] = "Invitar";
-    Text[ finnish ] = "Kutsu";
-    Text[ italian ] = "Invito";
-    Text[ danish ] = "Inviter";
-    Text[ swedish ] = "Bjud in";
-    Text[ polish ] = "Zaproszenie";
-    Text[ portuguese_brazilian ] = "Convidar";
-    Text[ japanese ] = "å‡ºå¸­ä¾é ¼";
-    Text[ korean ] = "ì´ˆëŒ€";
-    Text[ chinese_simplified ] = "é‚€è¯·";
-    Text[ chinese_traditional ] = "é‚€è«‹";
-    Text[ turkish ] = "Davet et";
-    Text[ arabic ] = "ÏÚæÉ";
-    Text[ catalan ] = "Invitació";
-    Text[ thai ] = "à¹€à¸Šà¸´à¸";
-    Text[ czech ] = "Pozvat";
-    Text[ hebrew ] = "â€®×œ×”×–××™×Ÿâ€¬";
-    Text[ hindi ] = "à¤†à¤®à¤¨à¥à¤¤à¥à¤°à¤£";
-    Text[ slovak ] = "PozvaÅ¥";
-    Text[ hungarian ] = "MeghÃ­vÃ¡s";
-    Text[ slovenian ] = "Povabi";
+    Text [ de ] = "Einladen";
+    Text [ en-US ] = "Invite";
+    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String TextField
 {
-    Text = "Benutzerdatenfeld ist nicht definiert!";
-    Text[English] = "Textfield is not defined!";
-    Text[ english_us ] = "User data field is not defined!";
-    Text[ language_user1 ] = "; Mitteilung in einer Messagebox";
+    Text [ de ] = "Benutzerdatenfeld ist nicht definiert!";
+    Text [ en-US ] = "User data field is not defined!";
+    Text [ x-comment ] = "; Mitteilung in einer Messagebox";
 
-    Text[ portuguese ] = "Campo de dados do utilizador não definido.";
-    Text[ russian ] = "Íå çàäàíî ïîëå ïîëüçîâàòåëÿ.";
-    Text[ greek ] = "Äåí ïñßóôçêå ôï ğåäßï ôùí äåäïìİíùí ôïõ ÷ñŞóôç!";
-    Text[ dutch ] = "Geen veld voor gebruikersgegevens gedefinieerd!";
-    Text[ french ] = "Ce champ de données d'utilisateur n'est pas défini !";
-    Text[ spanish ] = "¡El campo de datos de usuario no está definido!";
-    Text[ italian ] = "Il campo dati utente non è stato definito!";
-    Text[ danish ] = "Brugerdatafeltet er ikke defineret!";
-    Text[ swedish ] = "Användardatafält är inte definierat!";
-    Text[ polish ] = "Nie zdefiniowano pola danych u¿ytkownika!";
-    Text[ portuguese_brazilian ] = "O campo de dados do usuário não está definido!";
-    Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ‡ãƒ¼ã‚¿ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãŒå®šç¾©ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
-    Text[ korean ] = "ì‚¬ìš©ì ë°ì´í„°í•„ë“œê°€ ì •ì˜ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.";
-    Text[ chinese_simplified ] = "è¿˜æ²¡æœ‰å®šä¹‰ä½¿ç”¨è€…å­—æ®µï¼";
-    Text[ chinese_traditional ] = "é‚„æ²’æœ‰å®šç¾©ä½¿ç”¨è€…è³‡æ–™æ¬„ä½!";
-    Text[ turkish ] = "Kullanıcı veri alanları tanımlı değil!";
-    Text[ arabic ] = "áã íÊã ÊÚííä ÍŞá ÈíÇäÇÊ ÇáãÓÊÎÏã!";
-    Text[ catalan ] = "No s'ha definit el camp dades de l'usuari!";
-    Text[ finnish ] = "Käyttäjän tietokenttää ei ole määritetty.";
-    Text[ thai ] = "à¹„à¸¡à¹ˆà¹„à¸”à¹‰à¸£à¸°à¸šà¸¸à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰!";
-    Text[ czech ] = "Pole s daty uÅ¾ivatele nenÃ­ definovÃ¡no!";
-    Text[ hebrew ] = "â€®×©×“×” ×¤×¨×˜×™ ×”××©×ª××© ×œ× ××•×’×“×¨!â€¬";
-    Text[ hindi ] = "à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤•à¤¾ à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¿à¤¤ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆ!";
-    Text[ slovak ] = "UÅ¾Ã­vateÄ¾skÃ© dÃ¡tovÃ© pole nie je definovanÃ©!";
-    Text[ hungarian ] = "A felhasznÃ¡lÃ³i adatmezÅ‘ nincs definiÃ¡lva!";
-    Text[ slovenian ] = "UporabniÅ¡ko podatkovno polje ni doloÄeno!";
 };
 
 String Newsletter
 {
-    Text = "Allgemeines Layout";
-    Text[English] = "General Layout";
-    Text[ english_us ] = "General layout";
-    Text[ language_user1 ] = "; Überschrift für Optionsgruppe im Initialdialog für die Zeitungsvorlage";
-    Text[ portuguese ] = "Configuração geral";
-    Text[ russian ] = "Îáùàÿ ğàçìåòêà";
-    Text[ greek ] = "ÃåíéêŞ äéÜôáîç";
-    Text[ dutch ] = "Algemene lay-out";
-    Text[ french ] = "Mise en page universelle";
-    Text[ spanish ] = "Diseño general";
-    Text[ finnish ] = "Yleinen asettelu";
-    Text[ italian ] = "Layout generale";
-    Text[ danish ] = "Generelt layout";
-    Text[ swedish ] = "Allmän layout";
-    Text[ polish ] = "Uk³ad ogólny";
-    Text[ portuguese_brazilian ] = "Layout geral";
-    Text[ japanese ] = "å…¨èˆ¬ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ";
-    Text[ korean ] = "ì¼ë°˜ ë ˆì´ì•„ì›ƒ";
-    Text[ chinese_simplified ] = "ä¸€èˆ¬çš„ç‰ˆå¼";
-    Text[ chinese_traditional ] = "ä¸€èˆ¬çš„ç‰ˆå¼";
-    Text[ turkish ] = "Genel düzen";
-    Text[ arabic ] = "General layout";
-    Text[ catalan ] = "Disseny general";
-    Text[ thai ] = "à¹€à¸„à¹‰à¸²à¹‚à¸„à¸£à¸‡à¸—à¸±à¹ˆà¸§à¹„à¸›";
-    Text[ czech ] = "VÅ¡eobecnÃ½ vzhled";
-    Text[ hebrew ] = "â€®×¢×™×¦×•×‘ ×¤×¨×™×¡×” ×›×œ×œ×™×ªâ€¬";
-    Text[ hindi ] = "à¤¸à¤¾à¤®à¤¾à¤¨à¥à¤¯ à¤…à¤­à¤¿à¤¨à¥à¤¯à¤¾à¤¸";
-    Text[ slovak ] = "VÅ¡eobecnÃ© rozloÅ¾enie";
-    Text[ hungarian ] = "ÃltalÃ¡nos elrendezÃ©s";
-    Text[ slovenian ] = "SploÅ¡na postavitev";
+    Text [ de ] = "Allgemeines Layout";
+    Text [ en-US ] = "General layout";
+    Text [ x-comment ] = "; Überschrift für Optionsgruppe im Initialdialog für die Zeitungsvorlage";
 };
 
 
 String Newsletter + 1
 {
-    Text = "Standard Layout";
-    Text[English] = "Standard Layout";
-    Text[ english_us ] = "Default layout";
-    Text[ language_user1 ] = "; Layout Option im Initialdialog für die Zeitungsvorlage";
-    Text[ portuguese ] = "Configuração padrão";
-    Text[ russian ] = "Ñòàíäàğòíàÿ ğàçìåòêà";
-    Text[ greek ] = "Ğñïåğéëåãìİíç äéÜôáîç";
-    Text[ dutch ] = "Standaardlay-out";
-    Text[ french ] = "Mise en page standard";
-    Text[ spanish ] = "Diseño predeterminado";
-    Text[ finnish ] = "Oletusasettelu";
-    Text[ italian ] = "Layout standard";
-    Text[ danish ] = "Standardlayout";
-    Text[ swedish ] = "Standardlayout";
-    Text[ polish ] = "Uk³ad domyœlny";
-    Text[ portuguese_brazilian ] = "Layout padrão";
-    Text[ japanese ] = "æ¨™æº–ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ";
-    Text[ korean ] = "ê¸°ë³¸ ë ˆì´ì•„ì›ƒ";
-    Text[ chinese_simplified ] = "æ ‡å‡†çš„ç‰ˆå¼";
-    Text[ chinese_traditional ] = "æ¨™æº–çš„ç‰ˆå¼";
-    Text[ turkish ] = "Öndeğer düzen";
-    Text[ arabic ] = "Default layout";
-    Text[ catalan ] = "Disseny estàndard";
-    Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™à¹€à¸„à¹‰à¸²à¹‚à¸„à¸£à¸‡";
-    Text[ czech ] = "VÃ½chozÃ­ vzhled";
-    Text[ hebrew ] = "â€®×¢×™×¦×•×‘ ×¤×¨×™×¡×” ×‘×¨×™×¨×ª ××—×“×œâ€¬";
-    Text[ hindi ] = "à¤…à¤¨à¥à¤ªà¤¸à¥à¤¥à¤¿à¤¤à¤¿ à¤…à¤­à¤¿à¤¨à¥à¤¯à¤¾à¤¸";
-    Text[ slovak ] = "VÃ½chodzie rozloÅ¾enie";
-    Text[ hungarian ] = "AlapÃ©rtelmezett kiosztÃ¡s";
-    Text[ slovenian ] = "Privzeta postavitev";
+    Text [ de ] = "Standard Layout";
+    Text [ en-US ] = "Default layout";
+    Text [ x-comment ] = "; Layout Option im Initialdialog für die Zeitungsvorlage";
 };
 
 String Newsletter + 2
 {
-    Text = "Festschrift";
-    Text[English] = "Party Layout";
-    Text[ english_us ] = "Commemorative publication layout";
-    Text[ language_user1 ] = "; Layout Option im Initialdialog für die Zeitungsvorlage";
-    Text[ portuguese ] = "Publicação festiva";
-    Text[ russian ] = "Ğàçìåòêà şáèëåéíîé ïóáëèêàöèè";
-    Text[ greek ] = "ÄéÜôáîç äçìïóßåõóçò õğåíèıìéóçò";
-    Text[ dutch ] = "Feestelijke lay-out";
-    Text[ french ] = "Mise en page Fête";
-    Text[ spanish ] = "Diseño festivo";
-    Text[ finnish ] = "Juhlajulkaisun asettelu";
-    Text[ italian ] = "Layout per una festa";
-    Text[ danish ] = "Festskrift";
-    Text[ swedish ] = "Festhäfte";
-    Text[ polish ] = "Uk³ad wydania jubileuszowego";
-    Text[ portuguese_brazilian ] = "Layout de publicação comemorativa";
-    Text[ japanese ] = "è¨˜å¿µåˆŠè¡Œç‰©ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ";
-    Text[ korean ] = "ê¸°ë… ë°œí–‰ë¬¼";
-    Text[ chinese_simplified ] = "çºªå¿µæ–‡";
-    Text[ chinese_traditional ] = "ç´€å¿µæ–‡";
-    Text[ turkish ] = "Anı yayın düzeni";
-    Text[ arabic ] = "Party Layout";
-    Text[ catalan ] = "Disseny festiu";
-    Text[ thai ] = "à¹€à¸„à¹‰à¸²à¹‚à¸„à¸£à¸‡à¸à¸²à¸£à¸ˆà¸±à¸”à¸à¸´à¸¡à¸à¹Œà¹€à¸à¸·à¹ˆà¸­à¹€à¸›à¹‡à¸™à¸­à¸™à¸¸à¸ªà¸£à¸“à¹Œ";
-    Text[ czech ] = "Vzhled upomÃ­nkovÃ© publikace";
-    Text[ hebrew ] = "â€®×¢×™×¦×•×‘ ×¤×¨×™×¡×” ×œ×—×•×‘×¨×ª ×”× ×¦×—×”â€¬";
-    Text[ hindi ] = "à¤•à¤®à¥‡à¤®à¤°à¥‡à¤Ÿà¤¿à¤µ à¤ªà¥à¤°à¤•à¤¾à¤¶à¤¨ à¤…à¤­à¤¿à¤¨à¥à¤¯à¤¾à¤¸ ";
-    Text[ slovak ] = "VzhÄ¾ad spomienkovej publikÃ¡cie";
-    Text[ hungarian ] = "MegemlÃ©kezÅ‘kiadvÃ¡ny-elrendezÃ©s";
-    Text[ slovenian ] = "Postavitev spominske izdaje";
+    Text [ de ] = "Festschrift";
+    Text [ en-US ] = "Commemorative publication layout";
+    Text [ x-comment ] = "; Layout Option im Initialdialog für die Zeitungsvorlage";
 };
 
 String Newsletter + 3
 {
-    Text = "Prospekt Layout";
-    Text[English] = "Brochure Layout";
-    Text[ english_us ] = "Brochure layout";
-    Text[ language_user1 ] = "; Layout Option im Initialdialog für die Zeitungsvorlage";
-    Text[ portuguese ] = "Configuração de brochura";
-    Text[ russian ] = "Ğàçìåòêà áğîøşğû";
-    Text[ greek ] = "ÄéÜôáîç öõëëáäßïõ";
-    Text[ dutch ] = "Brochure lay-out";
-    Text[ french ] = "Mise en page Prospectus";
-    Text[ spanish ] = "Diseño prospecto";
-    Text[ finnish ] = "Esitteen asettelu";
-    Text[ italian ] = "Layout depliant";
-    Text[ danish ] = "Brochurelayout";
-    Text[ swedish ] = "Broschyrlayout";
-    Text[ polish ] = "Uk³ad broszury";
-    Text[ portuguese_brazilian ] = "Layout de brochura";
-    Text[ japanese ] = "ãƒãƒ©ã‚·åºƒå‘Šãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ";
-    Text[ korean ] = "ë¸Œë¡œìŠˆì–´ ë ˆì´ì•„ì›ƒ";
-    Text[ chinese_simplified ] = "å°æ‰‹å†Œçš„ç‰ˆå¼";
-    Text[ chinese_traditional ] = "å°æ‰‹å†Šçš„ç‰ˆå¼";
-    Text[ turkish ] = "Broşür düzeni";
-    Text[ arabic ] = "Brochure layout";
-    Text[ catalan ] = "Disseny tríptic";
-    Text[ thai ] = "à¹€à¸„à¹‰à¸²à¹‚à¸„à¸£à¸‡à¹‚à¸šà¸£à¸Šà¸±à¸§à¸£à¹Œ";
-    Text[ czech ] = "Vzhled broÅ¾ury";
-    Text[ hebrew ] = "â€®×¢×™×¦×•×‘ ×¤×¨×™×¡×” ×œ×—×•×‘×¨×ª ××¡×—×¨×™×ªâ€¬";
-    Text[ hindi ] = "à¤¬à¥à¤°à¥‹à¤¶à¤° à¤…à¤­à¤¿à¤¨à¥à¤¯à¤¾à¤¸";
-    Text[ slovak ] = "VzhÄ¾ad broÅ¾Ãºry";
-    Text[ hungarian ] = "BrosÃºraelrendezÃ©s";
-    Text[ slovenian ] = "Postavitev broÅ¡ure";
+    Text [ de ] = "Prospekt Layout";
+    Text [ en-US ] = "Brochure layout";
+    Text [ x-comment ] = "; Layout Option im Initialdialog für die Zeitungsvorlage";
 };
 
 String Newsletter + 10
 {
-    Text = "Format";
-    Text[English] = "Format";
-    Text[ english_us ] = "Format";
-    Text[ language_user1 ] = "; Überschrift für Optionsgruppe im Initialdialog für die Zeitungsvorlage";
-    Text[ portuguese ] = "Formato";
-    Text[ russian ] = "Ôîğìàò";
-    Text[ greek ] = "ÌïñöŞ";
-    Text[ dutch ] = "Formaat";
-    Text[ french ] = "Format";
-    Text[ spanish ] = "Formato";
-    Text[ finnish ] = "Muoto";
-    Text[ italian ] = "Formato";
-    Text[ danish ] = "Format";
-    Text[ swedish ] = "Format";
-    Text[ polish ] = "Format";
-    Text[ portuguese_brazilian ] = "Formato";
-    Text[ japanese ] = "æ›¸å¼";
-    Text[ korean ] = "ì„œì‹";
-    Text[ chinese_simplified ] = "æ ¼å¼";
-    Text[ chinese_traditional ] = "æ ¼å¼";
-    Text[ turkish ] = "Format";
-    Text[ arabic ] = "ÊäÓíŞ";
-    Text[ catalan ] = "Format";
-    Text[ thai ] = "à¸£à¸¹à¸›à¹à¸šà¸š";
-    Text[ czech ] = "FormÃ¡t";
-    Text[ hebrew ] = "â€®×¢×™×¦×•×‘â€¬";
-    Text[ hindi ] = "à¤°à¤šà¤¨à¤¾";
-    Text[ slovak ] = "FormÃ¡t";
-    Text[ hungarian ] = "FormÃ¡tum";
-    Text[ slovenian ] = "Oblika";
+    Text [ de ] = "Format";
+    Text [ en-US ] = "Format";
+    Text [ x-comment ] = "; Überschrift für Optionsgruppe im Initialdialog für die Zeitungsvorlage";
 };
 
 String Newsletter + 11
 {
-    Text = "Einseitig";
-    Text[English] = "Single sided";
-    Text[ english_us ] = "Single-sided";
-    Text[ language_user1 ] = "; 'Format' Option im Initialdialog für die Zeitungsvorlage";
-    Text[ portuguese ] = "Uma página";
-    Text[ russian ] = "Ñ îäíîé ñòîğîíû";
-    Text[ greek ] = "ÌïíŞò üøçò";
-    Text[ dutch ] = "Enkelzijdig";
-    Text[ french ] = "Une page";
-    Text[ spanish ] = "Por un lado";
-    Text[ finnish ] = "Yksipuolinen";
-    Text[ italian ] = "Una pagina";
-    Text[ danish ] = "Enkeltsidet";
-    Text[ swedish ] = "Enkelsidig";
-    Text[ polish ] = "Z jednej strony";
-    Text[ portuguese_brazilian ] = "Frente somente";
-    Text[ japanese ] = "1é¢";
-    Text[ korean ] = "ë‹¨ë©´";
-    Text[ chinese_simplified ] = "å•é¡µ";
-    Text[ chinese_traditional ] = "å–®é ";
-    Text[ turkish ] = "Tek taraflı";
-    Text[ arabic ] = "Single sided";
-    Text[ catalan ] = "Una cara";
-    Text[ thai ] = "à¸‚à¹‰à¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";
-    Text[ czech ] = "JednostrannÃ½";
-    Text[ hebrew ] = "â€®×—×“ ×¦×“×“×™â€¬";
-    Text[ hindi ] = "à¤…à¤•à¥‡à¤²à¤¾-à¤­à¤¾à¤—";
-    Text[ slovak ] = "JednoduchÃ©";
-    Text[ hungarian ] = "Egyoldalas";
-    Text[ slovenian ] = "Enostransko";
+    Text [ de ] = "Einseitig";
+    Text [ en-US ] = "Single-sided";
+    Text [ x-comment ] = "; 'Format' Option im Initialdialog für die Zeitungsvorlage";
 };
 
 String Newsletter + 12
 {
-    Text = "Doppelseitig";
-    Text[English] = "double sided";
-    Text[ english_us ] = "Double-sided";
-    Text[ language_user1 ] = "; 'Format' Option im Initialdialog für die Zeitungsvorlage";
-    Text[ portuguese ] = "Página dupla";
-    Text[ russian ] = "Ñ äâóõ ñòîğîí";
-    Text[ greek ] = "ÄéğëŞò üøçò";
-    Text[ dutch ] = "Dubbelzijdig";
-    Text[ french ] = "Pages vis-à-vis";
-    Text[ spanish ] = "Ambas caras";
-    Text[ finnish ] = "Kaksipuolinen";
-    Text[ italian ] = "Due pagine";
-    Text[ danish ] = "Dobbeltsidet";
-    Text[ swedish ] = "Dubbelsidig";
-    Text[ polish ] = "Obustronnie";
-    Text[ portuguese_brazilian ] = "Frente e verso";
-    Text[ japanese ] = "2é¢";
-    Text[ korean ] = "ì–‘ë©´";
-    Text[ chinese_simplified ] = "åŒé¡µ";
-    Text[ chinese_traditional ] = "é›™é ";
-    Text[ turkish ] = "Çift taraflı";
-    Text[ arabic ] = "double sided";
-    Text[ catalan ] = "Dues cares";
-    Text[ thai ] = "à¸ªà¸­à¸‡à¸‚à¹‰à¸²à¸‡";
-    Text[ czech ] = "OboustrannÃ½";
-    Text[ hebrew ] = "â€®×“×• ×¦×“×“×™â€¬";
-    Text[ hindi ] = "à¤¦à¥à¤µà¤¿à¤—à¥à¤£à¤¿à¤¤-à¤­à¤¾à¤—";
-    Text[ slovak ] = "DvojitÃ© riadkovanie";
-    Text[ hungarian ] = "KÃ©toldalas";
-    Text[ slovenian ] = "Dvostransko";
+    Text [ de ] = "Doppelseitig";
+    Text [ en-US ] = "Double-sided";
+    Text [ x-comment ] = "; 'Format' Option im Initialdialog für die Zeitungsvorlage";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
