@@ -187,15 +187,19 @@ public class TokenDecoder {
      * @return The decoded String <code>Token</code>
      */
     private Token readStringToken(ByteArrayInputStream bis) {
-        int len = (int)bis.read();
+        int len = ((int)bis.read())*2;
+        int options = (int)bis.read();
+        Debug.log(Debug.TRACE,"String length is " + len + " and Options Flag is " + options);
         byte [] stringBytes = new byte[len];
         int numRead =0;
         if ((numRead = bis.read(stringBytes, 0, len)) != len) {
+            Debug.log(Debug.TRACE,"Expected " + len + " bytes. Could only read " + numRead + " bytes.");
             //throw new IOException("Expected " + len + " bytes. Could only read " + numRead + " bytes.");
         }
         StringBuffer outputString = new StringBuffer();
         outputString.append('"');
         try {
+            Debug.log(Debug.TRACE,"Using LE encoding");
             outputString.append(new String(stringBytes, "UTF-16LE"));
         } catch (IOException eIO) {
             outputString.append(new String(stringBytes)); //fall back to default encoding
