@@ -1,0 +1,12 @@
+    <node oor:name="calc8" oor:op="replace">
+        <prop oor:name="DetectService"><value>com.sun.star.comp.calc.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"><value>private:factory/scalc*</value></prop>
+        <prop oor:name="Extensions"><value>oxs</value></prop>
+        <prop oor:name="MediaType"><value>application/x-vnd.oasis.openoffice.spreadsheet</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>calc8</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Calc 8</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Calc 8</value></prop>
+    </node>
