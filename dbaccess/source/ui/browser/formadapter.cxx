@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formadapter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:25:56 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 08:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1599,7 +1599,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_uInt16 nIndex, const :
 
         xElementSet->getPropertyValue(PROPERTY_NAME) >>= sName;
     }
-    catch(...)
+    catch(Exception&)
     {
         // the set didn't support the name prop
         throw ::com::sun::star::lang::IllegalArgumentException();
@@ -1794,7 +1794,7 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
     {
         xElementSet->getPropertyValue(PROPERTY_NAME) >>= sName;
     }
-    catch(...)
+    catch(Exception&)
     {
         // the set didn't support the name prop
         throw ::com::sun::star::lang::IllegalArgumentException();
