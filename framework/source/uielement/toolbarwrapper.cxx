@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarwrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:07:15 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@
 #include <rtl/logfile.hxx>
 
 using namespace rtl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::frame;
@@ -163,6 +164,30 @@ ToolBarWrapper::ToolBarWrapper( const Reference< XMultiServiceFactory >& xServic
 
 ToolBarWrapper::~ToolBarWrapper()
 {
+}
+
+// XInterface
+void SAL_CALL ToolBarWrapper::acquire() throw()
+{
+    UIConfigElementWrapperBase::acquire();
+}
+
+void SAL_CALL ToolBarWrapper::release() throw()
+{
+    UIConfigElementWrapperBase::release();
+}
+
+uno::Any SAL_CALL ToolBarWrapper::queryInterface( const uno::Type & rType )
+throw( ::com::sun::star::uno::RuntimeException )
+{
+    Any a = ::cppu::queryInterface(
+                rType ,
+                SAL_STATIC_CAST( ::com::sun::star::ui::XUIFunctionListener*, this ) );
+
+    if( a.hasValue() )
+        return a;
+
+    return UIConfigElementWrapperBase::queryInterface( rType );
 }
 
 // XComponent
@@ -244,6 +269,12 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             }
         }
     }
+}
+
+// XEventListener
+void SAL_CALL ToolBarWrapper::disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
+{
+    // nothing todo
 }
 
 // XUpdatable
@@ -361,6 +392,22 @@ Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  ) throw (::c
     }
 
     return Reference< XInterface >();
+}
+
+//XUIFunctionExecute
+void SAL_CALL ToolBarWrapper::functionExecute(
+    const ::rtl::OUString& aUIElementName,
+    const ::rtl::OUString& aCommand )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ResetableGuard aLock( m_aLock );
+
+    if ( m_xToolBarManager.is() )
+    {
+        ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
+        if ( pToolBarManager )
+            pToolBarManager->notifyRegisteredControllers( aUIElementName, aCommand );
+    }
 }
 
 } // namespace framework
