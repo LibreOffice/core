@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlinkdialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 14:05:11 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,13 +513,10 @@ namespace pcr
             return;
 
         _rxConnection.clear();
-        _rxFormProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= _rxConnection;
+        if ( !::dbtools::isEmbeddedInDatabase( _rxFormProps, _rxConnection ) )
+            _rxFormProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= _rxConnection;
         if ( !_rxConnection.is() )
-        {
             _rxConnection = ::dbtools::connectRowset( Reference< XRowSet >( _rxFormProps, UNO_QUERY ), m_xORB, sal_True );
-            // TODO: this now is a resource leak: we just created this connection ourself,
-            // and nobody will ever dispose it
-        }
     }
 
     //------------------------------------------------------------------------
@@ -528,7 +525,8 @@ namespace pcr
         if ( _rxFormProps.is() )
         {
             Reference< XConnection > xConnection;
-            _rxFormProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
+            if ( !::dbtools::isEmbeddedInDatabase( _rxFormProps, xConnection ) )
+                _rxFormProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
             if ( xConnection.is() )
                 _rxMeta = xConnection->getMetaData();
         }
