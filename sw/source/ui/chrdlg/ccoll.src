@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:41 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,16 +88,19 @@ TabPage TP_CONDCOLL
         Text[ danish ] = "Indstillinger";
         Text[ swedish ] = "Alternativ";
         Text[ polish ] = "Opcje";
-        Text[ portuguese_brazilian ] = "Settings";
+        Text[ portuguese_brazilian ] = "Op��es";
         Text[ japanese ] = "オプション";
         Text[ korean ] = "옵션";
         Text[ chinese_simplified ] = "选项";
         Text[ chinese_traditional ] = "選項";
-        Text[ turkish ] = "Settings";
+        Text[ turkish ] = "Ayarlar";
         Text[ arabic ] = "������";
         Text[ catalan ] = "Opcions";
         Text[ finnish ] = "Asetukset";
         Text[ thai ] = "ตัวเลือก";
+        Text[ czech ] = "Volby";
+        Text[ hebrew ] = "‮אפשרויות‬";
+        Text[ hindi ] = "विकल्प";
     };
     CheckBox CB_CONDITION
     {
@@ -114,11 +117,11 @@ TabPage TP_CONDCOLL
         Text [ dutch ] = "~Als conditioneel opmaakprofiel" ;
         Text [ swedish ] = "som villkorlig m~all" ;
         Text [ danish ] = "Som betinget typografi" ;
-        Text [ portuguese_brazilian ] = "~Als bedingte Vorlage" ;
+        Text [ portuguese_brazilian ] = "~Estilo Condicional" ;
         Text [ portuguese ] = "~Estilo condicional" ;
         Text[ chinese_simplified ] = "当作有条件的样式(~C)";
         Text[ russian ] = "�������� �����";
-        Text[ polish ] = "Jako warunkowy szablon";
+        Text[ polish ] = "S~tyl warunkowy";
         Text[ japanese ] = "条件付きスタイルとして(~C)";
         Text[ chinese_traditional ] = "當作有條件的樣式(~C)";
         Text[ arabic ] = "���� �����";
@@ -129,6 +132,9 @@ TabPage TP_CONDCOLL
         Text[ catalan ] = "~Estil condicional";
         Text[ finnish ] = "~Ehdollinen Tyyli";
         Text[ thai ] = "ลักษณะเ~งื่อนไข";
+        Text[ czech ] = "Podmíněný styl";
+        Text[ hebrew ] = "~Als bedingte Vorlage";
+        Text[ hindi ] = "~शर्त के अन्तर्गत शैली";
     };
     FixedText FT_CONTEXT
     {
@@ -145,10 +151,10 @@ TabPage TP_CONDCOLL
         Text [ swedish ] = "~Sammanhang" ;
         Text [ danish ] = "Kontekst" ;
         Text [ portuguese ] = "~Contexto" ;
-        Text [ portuguese_brazilian ] = "~Kontext" ;
+        Text [ portuguese_brazilian ] = "~Contexto" ;
         Text[ chinese_simplified ] = "上下文(~X)";
         Text[ russian ] = "~��������";
-        Text[ polish ] = "Kontekst";
+        Text[ polish ] = "~Kontekst";
         Text[ japanese ] = "コンテキスト(~X)";
         Text[ chinese_traditional ] = "上下文(~X)";
         Text[ arabic ] = "������";
@@ -159,6 +165,9 @@ TabPage TP_CONDCOLL
         Text[ catalan ] = "Conte~xt";
         Text[ finnish ] = "~Konteksti";
         Text[ thai ] = "บริบ~ท";
+        Text[ czech ] = "Kontext";
+        Text[ hebrew ] = "~Kontext";
+        Text[ hindi ] = "~सन्दर्भ";
     };
     FixedText FT_USED
     {
@@ -175,10 +184,10 @@ TabPage TP_CONDCOLL
         Text [ swedish ] = "Anv�nda formatmallar" ;
         Text [ danish ] = "Anvendt typografi" ;
         Text [ portuguese ] = "Estilos em uso" ;
-        Text [ portuguese_brazilian ] = "Verwendete Vorlage" ;
+        Text [ portuguese_brazilian ] = "Estilos Aplicados" ;
         Text[ chinese_simplified ] = "使用的样式";
         Text[ russian ] = "������������ �����";
-        Text[ polish ] = "U�yte style";
+        Text[ polish ] = "Zastosowane style";
         Text[ japanese ] = "使用するスタイル";
         Text[ chinese_traditional ] = "使用的樣式";
         Text[ arabic ] = "����� ��� ���������";
@@ -189,6 +198,9 @@ TabPage TP_CONDCOLL
         Text[ catalan ] = "Estils aplicats";
         Text[ finnish ] = "K�ytetyt tyylit";
         Text[ thai ] = "ลักษณะประยุกต์";
+        Text[ czech ] = "Použité styly";
+        Text[ hebrew ] = "Verwendete Vorlage";
+        Text[ hindi ] = "लागू की हुयी शैलियाँ";
     };
     Control TB_CONDCOLLS
     {
@@ -215,20 +227,23 @@ TabPage TP_CONDCOLL
         Text [ swedish ] = "St~yckeformatmallar" ;
         Text [ danish ] = "A~fsnitstypografier" ;
         Text [ portuguese ] = "E~stilos de par�grafo" ;
-        Text [ portuguese_brazilian ] = "Absatzvorlagen" ;
+        Text [ portuguese_brazilian ] = "Estilos de ~Par�grafos" ;
         Text[ chinese_simplified ] = "段落样式(~P)";
         Text[ russian ] = "����� ������";
-        Text[ polish ] = "Style akapitu";
+        Text[ polish ] = "Style ~akapitu";
         Text[ japanese ] = "段落スタイル(~P)";
         Text[ chinese_traditional ] = "段落樣式(~P)";
         Text[ arabic ] = "����� ����";
         Text[ greek ] = "������� ����������";
         Text[ korean ] = "단락 스타일(~P)";
-        Text[ turkish ] = "Paragraf bi�imi";
+        Text[ turkish ] = "~Paragraf Bi�emleri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Es~tils de par�graf";
         Text[ finnish ] = "Kappale~tyylit";
         Text[ thai ] = "ลักษณะ~ย่อหน้า";
+        Text[ czech ] = "Styly odstavce";
+        Text[ hebrew ] = "A~bsatzvorlagen";
+        Text[ hindi ] = "~परिच्छेद शैलियाँ";
     };
     ListBox LB_STYLE
     {
@@ -266,7 +281,7 @@ TabPage TP_CONDCOLL
         Text [ swedish ] = "Ta ~bort" ;
         Text [ danish ] = "Fjern" ;
         Text [ portuguese ] = "~Remover" ;
-        Text [ portuguese_brazilian ] = "~Entfernen" ;
+        Text [ portuguese_brazilian ] = "~Remover" ;
         Text[ chinese_simplified ] = "删除(~M)";
         Text[ russian ] = "~�������";
         Text[ polish ] = "~Usu�";
@@ -275,11 +290,14 @@ TabPage TP_CONDCOLL
         Text[ arabic ] = "�����";
         Text[ greek ] = "��������";
         Text[ korean ] = "제거(~M)";
-        Text[ turkish ] = "~Kald�r";
+        Text[ turkish ] = "Kald�r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ex~treu";
         Text[ finnish ] = "~Poista";
         Text[ thai ] = "เอาออ~ก";
+        Text[ czech ] = "Odstranit";
+        Text[ hebrew ] = "~Entfernen";
+        Text[ hindi ] = "हटा~ओ";
     };
     PushButton PB_ASSIGN
     {
@@ -297,10 +315,10 @@ TabPage TP_CONDCOLL
         Text [ swedish ] = "Till~dela" ;
         Text [ danish ] = "Tildel" ;
         Text [ portuguese ] = "~Atribuir" ;
-        Text [ portuguese_brazilian ] = "~Zuweisen" ;
+        Text [ portuguese_brazilian ] = "~Aplicar" ;
         Text[ chinese_simplified ] = "指定(~A)";
         Text[ russian ] = "~���������";
-        Text[ polish ] = "P~rzypisz";
+        Text[ polish ] = "~Zastosuj";
         Text[ japanese ] = "割り当て(~A)";
         Text[ chinese_traditional ] = "指定(~A)";
         Text[ arabic ] = "�����";
@@ -311,6 +329,9 @@ TabPage TP_CONDCOLL
         Text[ catalan ] = "~Aplica";
         Text[ finnish ] = "K�~yt�";
         Text[ thai ] = "ใ~ช้";
+        Text[ czech ] = "Použít";
+        Text[ hebrew ] = "‮יישום‬";
+        Text[ hindi ] = "~लागू करो";
     };
     StringArray STR_REGIONS
     {
@@ -441,34 +462,34 @@ TabPage TP_CONDCOLL
         };
         itemlist [ portuguese_brazilian ] =
         {
-            < "Tabellen Kopfzeile" ; > ;
-            < "Tabelle" ; > ;
-            < "Rahmen" ; > ;
-            < "Bereich" ; > ;
-            < "Fu?note" ; > ;
-            < "Kopfzeile" ; > ;
-            < "Fusszeile" ; > ;
-            < "1. Ebene Gliederung" ; > ;
-            < "2. Ebene Gliederung" ; > ;
-            < "3. Ebene Gliederung" ; > ;
-            < "4. Ebene Gliederung" ; > ;
-            < "5. Ebene Gliederung" ; > ;
-            < "1. Ebene Numerierung" ; > ;
-            < "2. Ebene Numerierung" ; > ;
-            < "3. Ebene Numerierung" ; > ;
-            < "4. Ebene Numerierung" ; > ;
-            < "5. Ebene Numerierung" ; > ;
-            < "10. Ebene Gliederung" ; > ;
-            < "1. Ebene Numerierung" ; > ;
-            < "2. Ebene Numerierung" ; > ;
-            < "3. Ebene Numerierung" ; > ;
-            < "4. Ebene Numerierung" ; > ;
-            < "5. Ebene Numerierung" ; > ;
-            < "6. Ebene Numerierung" ; > ;
-            < "7. Ebene Numerierung" ; > ;
-            < "8. Ebene Numerierung" ; > ;
-            < "9. Ebene Numerierung" ; > ;
-            < "10. Ebene Numerierung" ; > ;
+            < "Cabe�alho da Tabela" ; > ;
+            < "Tabela" ; > ;
+            < "Moldura" ; > ;
+            < "Se��o" ; > ;
+            < "Nota de Rodap�" ; > ;
+            < "Nota de Fim" ; > ;
+            < "Cabe�alho" ; > ;
+            < "Rodap�" ; > ;
+            < "T�pico de 1� N�vel" ; > ;
+            < "T�pico de 2� N�vel" ; > ;
+            < "T�pico de 3� N�vel" ; > ;
+            < "T�pico de 4� N�vel" ; > ;
+            < "T�pico de 5� N�vel" ; > ;
+            < "T�pico de 6� N�vel" ; > ;
+            < "T�pico de 7� N�vel" ; > ;
+            < "T�pico de 8� N�vel" ; > ;
+            < "T�pico de 9� N�vel" ; > ;
+            < "T�pico de 10� N�vel" ; > ;
+            < "Numera��o de 1� N�vel" ; > ;
+            < "Numera��o de 2� N�vel" ; > ;
+            < "Numera��o de 3� N�vel" ; > ;
+            < "Numera��o de 4� N�vel" ; > ;
+            < "Numera��o de 5� N�vel" ; > ;
+            < "Numera��o de 6� N�vel" ; > ;
+            < "Numera��o de 7� N�vel" ; > ;
+            < "Numera��o de 8� N�vel" ; > ;
+            < "Numera��o de 9� N�vel" ; > ;
+            < "Numera��o de 10� N�vel" ; > ;
         };
         itemlist [ swedish ] =
         {
@@ -720,12 +741,12 @@ TabPage TP_CONDCOLL
     };
     ItemList [ polish ] =
     {
-            < "Tabele Nag��wek" ; > ;
+            < "Nag��wek tabeli" ; > ;
         < "Tabela" ; > ;
         < "Ramka" ; > ;
         < "Sekcja" ; > ;
         < "Przypis dolny" ; > ;
-        < "Przypis ko�c." ; > ;
+        < "Przypis ko�cowy" ; > ;
         < "Nag��wek" ; > ;
         < "Stopka" ; > ;
         < "1. Poziom kontekstu" ; > ;
@@ -738,7 +759,7 @@ TabPage TP_CONDCOLL
         < "8. Poziom konspektu" ; > ;
         < "9. Poziom konspektu" ; > ;
         < "10. Poziom konspektu" ; > ;
-        < "1 Poziom numeracji" ; > ;
+        < "1. poziom numeracji" ; > ;
         < "2. Poziom numeracji" ; > ;
         < "3. Poziom numeracji" ; > ;
         < "4. Poziom numeracji" ; > ;
@@ -910,29 +931,29 @@ TabPage TP_CONDCOLL
         < "Tablo" ; > ;
         < "�er�eve" ; > ;
         < "B�l�m" ; > ;
-        < "Dipnot" ; > ;
+        < "Alt ba�l�k" ; > ;
         < "Sonnot" ; > ;
         < "�st bilgi" ; > ;
         < "Alt bilgi" ; > ;
-        < "1. Anahat d�zeyi" ; > ;
-        < "2. Anahat d�zeyi" ; > ;
-        < "3. Anahat d�zeyi" ; > ;
-        < "4. Anahat d�zeyi" ; > ;
-        < "5. Anahat d�zeyi" ; > ;
-        < "6. Anahat d�zeyi" ; > ;
-        < "7. Anahat d�zeyi" ; > ;
-        < "8. Anahat d�zeyi" ; > ;
-        < "9. Anahat d�zeyi" ; > ;
-        < "10. Anahat d�zeyi" ; > ;
-        < "1. Numaralama d�zeyi" ; > ;
-        < "2. Numaralama d�zeyi" ; > ;
-        < "3. Numaralama d�zeyi" ; > ;
-        < "4. Numaralama d�zeyi" ; > ;
-        < "5. Numaralama d�zeyi" ; > ;
-        < "6. Numaralama d�zeyi" ; > ;
-        < "7. Numaralama d�zeyi" ; > ;
-        < "8. Numaralama d�zeyi" ; > ;
-        < "9. Numaralama d�zeyi" ; > ;
+        < " 1. Anahat d�zeyi" ; > ;
+        < " 2. Anahat d�zeyi" ; > ;
+        < " 3. Anahat d�zeyi" ; > ;
+        < " 4. Anahat d�zeyi" ; > ;
+        < " 5. Anahat d�zeyi" ; > ;
+        < " 6. Anahat d�zeyi" ; > ;
+        < " 7. Anahat d�zeyi" ; > ;
+        < " 8. Anahat d�zeyi" ; > ;
+        < " 9. Anahat d�zeyi" ; > ;
+        < " 10. Anahat d�zeyi" ; > ;
+        < " 1. Numaralama d�zeyi" ; > ;
+        < " 2. Numaralama d�zeyi" ; > ;
+        < " 3. Numaralama d�zeyi" ; > ;
+        < " 4. Numaralama d�zeyi" ; > ;
+        < " 5. Numaralama d�zeyi" ; > ;
+        < " 6. Numaralama d�zeyi" ; > ;
+        < " 7. Numaralama d�zeyi" ; > ;
+        < " 8. Numaralama d�zeyi" ; > ;
+        < " 9. Numaralama d�zeyi" ; > ;
         < "10. Numaralama d�zeyi" ; > ;
     };
     ItemList [ language_user1 ] =
@@ -1059,6 +1080,99 @@ TabPage TP_CONDCOLL
         < "ระดับลำดับตัวเลขที่ 9" ; > ;
         < "ระดับลำดับตัวเลขที่ 10" ; > ;
     };
+    ItemList [ czech ] =
+    {
+         < "Nadpis tabulky" ; > ;
+        < "Tabulka" ; > ;
+        < "Rámec" ; > ;
+        < "Sekce" ; > ;
+        < "Poznámka pod čarou" ; > ;
+        < "Vysvětlivka" ; > ;
+        < "Záhlaví" ; > ;
+        < "Zápatí" ; > ;
+        < " 1. úroveň osnovy" ; > ;
+        < " 2. úroveň osnovy" ; > ;
+        < " 3. úroveň osnovy" ; > ;
+        < " 4. úroveň osnovy" ; > ;
+        < " 5. úroveň osnovy" ; > ;
+        < " 6. úroveň osnovy" ; > ;
+        < " 7. úroveň osnovy " ; > ;
+        < " 8. úroveň osnovy" ; > ;
+        < " 9. úroveň osnovy" ; > ;
+            < "10. úroveň osnovy" ; > ;
+            < " 1. úroveň číslování" ; > ;
+            < " 2. úroveň číslování" ; > ;
+            < " 3. úroveň číslování" ; > ;
+            < " 4. úroveň číslování" ; > ;
+            < " 5. úroveň číslování" ; > ;
+            < " 6. úroveň číslování" ; > ;
+            < " 7. úroveň číslování" ; > ;
+            < " 8. úroveň číslování" ; > ;
+            < " 9. úroveň číslování" ; > ;
+            < "10. úroveň číslování" ; > ;
+        };
+    ItemList [ hebrew ] =
+    {
+         < "Tabellen Kopfzeile" ; > ;
+        < "‮טבלה‬" ; > ;
+        < "‮מסגרת‬" ; > ;
+        < "‮מיקטע‬" ; > ;
+        < "‮הערת שוליים‬" ; > ;
+        < "Endnote" ; > ;
+        < "‮כותרת עליונה‬" ; > ;
+        < "‮כותרת תחתונה‬" ; > ;
+        < " 1. Ebene Gliederung" ; > ;
+        < " 2. Ebene Gliederung" ; > ;
+        < " 3. Ebene Gliederung" ; > ;
+        < " 4. Ebene Gliederung" ; > ;
+        < " 5. Ebene Gliederung" ; > ;
+        < " 6. Ebene Gliederung" ; > ;
+        < " 7. Ebene Gliederung" ; > ;
+        < " 8. Ebene Gliederung" ; > ;
+        < " 9. Ebene Gliederung" ; > ;
+            < "10. Ebene Gliederung" ; > ;
+            < " 1. Ebene Nummerierung" ; > ;
+            < " 2. Ebene Nummerierung" ; > ;
+            < " 3. Ebene Nummerierung" ; > ;
+            < " 4. Ebene Nummerierung" ; > ;
+            < " 5. Ebene Nummerierung" ; > ;
+            < " 6. Ebene Nummerierung" ; > ;
+            < " 7. Ebene Nummerierung" ; > ;
+            < " 8. Ebene Nummerierung" ; > ;
+            < " 9. Ebene Nummerierung" ; > ;
+            < "10. Ebene Nummerierung" ; > ;
+        };
+    ItemList [ hindi ] =
+    {
+         < "सारणी शीर्षक" ; > ;
+        < "सारणी" ; > ;
+        < "फ्रेम " ; > ;
+        < "विभाग" ; > ;
+        < "पृष्ठ के नीचे की टीका " ; > ;
+        < "अंत की टीका" ; > ;
+        < "पृष्ठ के ऊपर की टीका" ; > ;
+        < "पृष्ठ के अधोभाग की टीका" ; > ;
+        < " 1. बाहरी रूपरेखा स्तर" ; > ;
+        < " 2. बाहरी रूपरेखा स्तर" ; > ;
+        < " 3. बाहरी रूपरेखा स्तर" ; > ;
+        < " 4. बाहरी रूपरेखा स्तर" ; > ;
+        < " 5. बाहरी रूपरेखा स्तर" ; > ;
+        < " 6. बाहरी रूपरेखा स्तर" ; > ;
+        < " 7. बाहरी रूपरेखा स्तर" ; > ;
+        < " 8. बाहरी रूपरेखा स्तर" ; > ;
+        < " 9. बाहरी रूपरेखा स्तर" ; > ;
+            < "10. बाहरी रूपरेखा स्तर" ; > ;
+            < " 1.  संख्या स्तर" ; > ;
+            < " 2.  संख्या स्तर" ; > ;
+            < " 3.  संख्या स्तर" ; > ;
+            < " 4.  संख्या स्तर" ; > ;
+            < " 5. संख्या स्तर" ; > ;
+            < " 6. संख्या स्तर" ; > ;
+            < " 7. संख्या स्तर" ; > ;
+            < " 8. संख्या स्तर" ; > ;
+            < " 9. संख्या स्तर" ; > ;
+            < "10. संख्या स्तर" ; > ;
+        };
     };
     String STR_NOTEMPL
     {
@@ -1072,7 +1186,7 @@ TabPage TP_CONDCOLL
         Text [ swedish ] = "<ingen>" ;
         Text [ danish ] = "<ingen>" ;
         Text [ portuguese ] = "<nenhum>" ;
-        Text [ portuguese_brazilian ] = "<keine>" ;
+        Text [ portuguese_brazilian ] = "<nenhum>" ;
         Text[ chinese_simplified ] = "<无>";
         Text[ russian ] = "<���>";
         Text[ polish ] = "<brak>";
@@ -1086,9 +1200,45 @@ TabPage TP_CONDCOLL
         Text[ catalan ] = "<cap>";
         Text[ finnish ] = "<ei mit��n>";
         Text[ thai ] = "<ไม่มี>";
+        Text[ czech ] = "<nic>";
+        Text[ hebrew ] = "<keine>";
+        Text[ hindi ] = "<कोई नहीं>";
     };
 };
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
