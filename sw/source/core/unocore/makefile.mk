@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: os $ $Date: 2000-12-06 13:57:51 $
+#   last change: $Author: os $ $Date: 2000-12-15 12:30:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,7 @@ PDBTARGET=core_pch
 PROJECTPCHSOURCE=..$/core_1st$/core_pch
 
 # --- Settings -----------------------------------------------------
+ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :	$(PRJ)$/inc$/swpre.mk
 .INCLUDE :	settings.mk
@@ -88,6 +89,7 @@ LIBFLAGS=/NOI /NOE /PAGE:512
 CXXFILES = \
         unobkm.cxx \
         unoclbck.cxx \
+        unocrsrhelper.cxx\
         unocoll.cxx \
         unodraw.cxx \
         unofield.cxx \
@@ -96,6 +98,7 @@ CXXFILES = \
         unomap.cxx \
         unoobj.cxx \
         unoobj2.cxx \
+        unoparagraph.cxx \
         unoport.cxx \
         unoportenum.cxx \
         unoprnms.cxx \
@@ -110,6 +113,7 @@ CXXFILES = \
 SLOFILES =	\
         $(SLO)$/unobkm.obj\
         $(SLO)$/unoclbck.obj\
+        $(SLO)$/unocrsrhelper.obj\
         $(SLO)$/unoftn.obj\
         $(SLO)$/unorefmk.obj\
         $(SLO)$/unosect.obj\
@@ -122,6 +126,7 @@ SLOFILES =	\
         $(SLO)$/unomap.obj\
         $(SLO)$/unoobj.obj\
         $(SLO)$/unoobj2.obj\
+        $(SLO)$/unoparagraph.obj\
         $(SLO)$/unoport.obj\
         $(SLO)$/unoportenum.obj\
         $(SLO)$/unoprnms.obj\
@@ -130,27 +135,6 @@ SLOFILES =	\
         $(SLO)$/unotbl.obj \
         $(SLO)$/unotext.obj
 
-EXCEPTIONSFILES= \
-        $(SLO)$/unobkm.obj\
-        $(SLO)$/unoclbck.obj\
-        $(SLO)$/unoftn.obj\
-        $(SLO)$/unorefmk.obj\
-        $(SLO)$/unosect.obj\
-        $(SLO)$/unosett.obj\
-        $(SLO)$/unodraw.obj\
-        $(SLO)$/unofield.obj\
-        $(SLO)$/unoframe.obj\
-        $(SLO)$/unoidx.obj\
-        $(SLO)$/unomap.obj\
-        $(SLO)$/unoobj.obj\
-        $(SLO)$/unoobj2.obj\
-        $(SLO)$/unoport.obj\
-        $(SLO)$/unoportenum.obj\
-        $(SLO)$/unosrch.obj\
-        $(SLO)$/unostyle.obj\
-        $(SLO)$/unocoll.obj\
-        $(SLO)$/unotbl.obj \
-        $(SLO)$/unotext.obj
 
 # --- Targets -------------------------------------------------------
 
