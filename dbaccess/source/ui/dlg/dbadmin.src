@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:53:24 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:21:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,21 +297,21 @@ TabDialog DLG_DATABASE_ADMINISTRATION
         Text[ENGLISH] = "Adabas D statistic" ;
         Text[ english_us ] = "Adabas D Statistics";
         Text[ portuguese ] = "Adabas D";
-        Text[ russian ] = "Adabas D";
+        Text[ russian ] = "—Ú‡ÚËÒÚËÍË Adabas D";
         Text[ greek ] = "Adabas D";
         Text[ dutch ] = "Adabas D";
-        Text[ french ] = "Adabas D";
+        Text[ french ] = "Adabas D - Statistique";
         Text[ spanish ] = "Adabas D";
         Text[ italian ] = "Statistica Adabas D";
         Text[ danish ] = "Adabas D";
-        Text[ swedish ] = "Adabas D-statistik";
-        Text[ polish ] = "Adabas D";
+        Text[ swedish ] = "Statistik Adabas D";
+        Text[ polish ] = "Adabas D - Statystyka";
         Text[ portuguese_brazilian ] = "Adabas D";
         Text[ japanese ] = "Adabas D Statistic";
         Text[ korean ] = "Adabas D";
-        Text[ chinese_simplified ] = "Adabas D";
+        Text[ chinese_simplified ] = "Adabas D Statistic";
         Text[ chinese_traditional ] = "Adabas D Statistic";
-        Text[ arabic ] = "Adabas D";
+        Text[ arabic ] = "≈Õ’«∆Ì«  Adabas D";
         Text[ turkish ] = "Adabas D";
     };
     String STR_PAGETITLE_TEXT
@@ -650,22 +650,22 @@ TabPage PAGE_GENERAL
         Text [ english ] = "~new database" ;
         Text [ english_us ] = "~New Database..." ;
         Text[ portuguese ] = "~new database";
-        Text[ russian ] = "~new database";
+        Text[ russian ] = "~ÕÓ‚‡ˇ ·‡Á‡ ‰‡ÌÌ˚ı...";
         Text[ greek ] = "~new database";
         Text[ dutch ] = "~new database";
-        Text[ french ] = "~new database";
+        Text[ french ] = "~Nouvelle base de donnÈes...";
         Text[ spanish ] = "~new database";
         Text[ italian ] = "~Nuovo database...";
         Text[ danish ] = "~new database";
         Text[ swedish ] = "~Ny databas";
-        Text[ polish ] = "~new database";
+        Text[ polish ] = "Nowa baza danych...";
         Text[ portuguese_brazilian ] = "~new database";
         Text[ japanese ] = "êVÇµÇ¢√ﬁ∞¿Õﬁ∞Ω...";
         Text[ korean ] = "~new database";
-        Text[ chinese_simplified ] = "~new database";
+        Text[ chinese_simplified ] = "–¬‘ˆ ˝æ›ø‚...";
         Text[ chinese_traditional ] = "∑sºW∏ÍÆ∆Æw...";
         Text[ turkish ] = "~new database";
-        Text[ arabic ] = "~new database";
+        Text[ arabic ] = "ﬁ«⁄œ… »Ì«‰«  ÃœÌœ…...";
     };
     String STR_NAMEINVALID
     {
@@ -2226,6 +2226,9 @@ ErrorBox ERR_CANTADMINQUERIES
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.34  2001/03/31 05:53:24  kz
+ *  Merge SRC627: 31.03.01 - 07:52:53 (NoBranch)
+ *
  *  Revision 1.33  2001/03/27 08:05:56  oj
  *  impl new page for adabas
  *
