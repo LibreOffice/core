@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-12 10:02:57 $
+ *  last change: $Author: dv $ $Date: 2001-03-23 14:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,7 +949,6 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
     if ( !bDirect )
     {
         SfxDocumentTemplates aTmpFac;
-        aTmpFac.Construct();
         if( !aTemplateFileName.Len() )
             aTmpFac.GetFull( aTemplateRegion, aTemplateName, aTemplateFileName );
 

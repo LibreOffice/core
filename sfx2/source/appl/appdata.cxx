@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-01-17 16:14:14 $
+ *  last change: $Author: dv $ $Date: 2001-03-23 14:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,7 +207,6 @@ SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
     if ( !pTemplates )
     {
         pTemplates = new SfxDocumentTemplates;
-        pTemplates->Construct();
     }
 
     return pTemplates;
