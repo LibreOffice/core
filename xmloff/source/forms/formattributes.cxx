@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:39:03 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 12:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,6 +362,13 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11.22.2  2003/11/24 15:05:30  obo
+ *  undo last change
+ *
+ *  Revision 1.11  2003/10/21 08:39:03  obo
+ *  INTEGRATION: CWS formcelllinkage (1.10.160); FILE MERGED
+ *  2003/10/01 09:55:19 fs 1.10.160.1: #i18994# merging the changes from the CWS fs002
+ *
  *  Revision 1.10.160.1  2003/10/01 09:55:19  fs
  *  #i18994# merging the changes from the CWS fs002
  *
