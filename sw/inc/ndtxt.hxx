@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:22:42 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,27 @@ public:
     SwNumRule *GetNumRule() const;
     const SwNodeNum* GetNum() const; // #i29363#
     const SwNodeNum* GetOutlineNum() const;
+
+    // ->#i36903#
+    /**
+       Return non-outline number of this text node.
+
+       If this text node is an outline the result is NULL
+
+       @return the non-outline number of this text node or NULL if
+       outline of not present
+     */
+    const SwNodeNum* GetNumNoOutline() const;
+
+    /**
+       Returns if this text node is an outline.
+
+       @retval TRUE      this text node is an outline
+       @retval FALSE     else
+     */
+    BOOL IsOutline() const;
+    // <- #i36903#
+
     BOOL MayBeNumbered() const; // #i23730#
     void NumRuleChgd();                 // Frames benachrichtigen
     XubString GetNumString() const;     // returnt Outline oder Num - String
