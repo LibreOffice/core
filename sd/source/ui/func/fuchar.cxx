@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuchar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:55 $
+ *  last change: $Author: dl $ $Date: 2001-11-16 10:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,18 @@ FuChar::FuChar(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
                     0 };
 
     pViewShell->GetViewFrame()->GetBindings().Invalidate( SidArray );
+
+    if( pDoc->GetOnlineSpell() )
+    {
+        const SfxPoolItem* pItem;
+        if( SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE, FALSE, &pItem ) ||
+            SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CJK, FALSE, &pItem ) ||
+            SFX_ITEM_SET == pArgs->GetItemState(EE_CHAR_LANGUAGE_CTL, FALSE, &pItem ) )
+        {
+            pDoc->StopOnlineSpelling();
+            pDoc->StartOnlineSpelling();
+        }
+    }
 }
 
 
