@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-24 17:23:38 $
+ *  last change: $Author: nn $ $Date: 2001-05-11 14:31:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -403,7 +403,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     SvxFontItem     aCtlFontItem(EE_CHAR_FONTINFO_CTL);
     long            nTHeight, nCjkTHeight, nCtlTHeight;     // Twips
     FontWeight      eWeight, eCjkWeight, eCtlWeight;
-    FontUnderline   eUnder;
+    SvxUnderlineItem aUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE);
     FontStrikeout   eStrike;
     FontItalic      eItalic, eCjkItalic, eCtlItalic;
     BOOL            bOutline;
@@ -464,7 +464,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
 
         if ( pCondSet->GetItemState( ATTR_FONT_UNDERLINE, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_UNDERLINE );
-        eUnder = (FontUnderline)((const SvxUnderlineItem*)pItem)->GetValue();
+        aUnderlineItem = *(const SvxUnderlineItem*)pItem;
 
         if ( pCondSet->GetItemState( ATTR_FONT_CROSSEDOUT, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_FONT_CROSSEDOUT );
@@ -520,8 +520,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
                         rMySet.Get( ATTR_CJK_FONT_POSTURE )).GetValue();
         eCtlItalic = (FontItalic)((const SvxPostureItem&)
                         rMySet.Get( ATTR_CTL_FONT_POSTURE )).GetValue();
-        eUnder = (FontUnderline)((const SvxUnderlineItem&)
-                        rMySet.Get( ATTR_FONT_UNDERLINE )).GetValue();
+        aUnderlineItem = (const SvxUnderlineItem&) rMySet.Get( ATTR_FONT_UNDERLINE );
         eStrike = (FontStrikeout)((const SvxCrossedOutItem&)
                         rMySet.Get( ATTR_FONT_CROSSEDOUT )).GetValue();
         bOutline = ((const SvxContourItem&)
@@ -558,7 +557,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     pEditSet->Put( SvxWeightItem    ( eWeight,      EE_CHAR_WEIGHT ) );
     pEditSet->Put( SvxWeightItem    ( eCjkWeight,   EE_CHAR_WEIGHT_CJK ) );
     pEditSet->Put( SvxWeightItem    ( eCtlWeight,   EE_CHAR_WEIGHT_CTL ) );
-    pEditSet->Put( SvxUnderlineItem ( eUnder,       EE_CHAR_UNDERLINE ) );
+    pEditSet->Put( aUnderlineItem );
     pEditSet->Put( SvxCrossedOutItem( eStrike,      EE_CHAR_STRIKEOUT ) );
     pEditSet->Put( SvxPostureItem   ( eItalic,      EE_CHAR_ITALIC ) );
     pEditSet->Put( SvxPostureItem   ( eCjkItalic,   EE_CHAR_ITALIC_CJK ) );
@@ -607,9 +606,10 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
         rMySet.Put( SvxWeightItem( (FontWeight)((const SvxWeightItem*)pItem)->GetValue(),
                         ATTR_CTL_FONT_WEIGHT) );
 
+    // SvxUnderlineItem contains enum and color
     if (pEditSet->GetItemState(EE_CHAR_UNDERLINE,TRUE,&pItem) == SFX_ITEM_SET)
-        rMySet.Put( SvxUnderlineItem( (FontUnderline)((const SvxUnderlineItem*)pItem)->GetValue(),
-                        ATTR_FONT_UNDERLINE) );
+        rMySet.Put( SvxUnderlineItem(UNDERLINE_NONE,ATTR_FONT_UNDERLINE) = *(const SvxUnderlineItem*)pItem );
+
     if (pEditSet->GetItemState(EE_CHAR_STRIKEOUT,TRUE,&pItem) == SFX_ITEM_SET)
         rMySet.Put( SvxCrossedOutItem( (FontStrikeout)((const SvxCrossedOutItem*)pItem)->GetValue(),
                         ATTR_FONT_CROSSEDOUT) );
