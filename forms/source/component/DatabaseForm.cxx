@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 13:00:31 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,7 +446,6 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         ,m_bForwardingConnection(sal_False)
         ,m_pAggregatePropertyMultiplexer(NULL)
         ,m_bSharingConnection( sal_False )
-        ,m_bInContext(sal_False)
         ,m_bInsertOnly( sal_False )
 {
     DBG_CTOR(ODatabaseForm,NULL);
@@ -1452,7 +1451,7 @@ void ODatabaseForm::fillProperties(
         RemoveProperty( _rAggregateProps, PROPERTY_FILTER );
         RemoveProperty( _rAggregateProps, PROPERTY_APPLYFILTER );
 
-        DECL_IFACE_PROP4(ACTIVE_CONNECTION,         XConnection,    BOUND, TRANSIENT, MAYBEVOID, CONSTRAINED);
+        DECL_IFACE_PROP4(ACTIVE_CONNECTION, XConnection,                    BOUND, TRANSIENT, MAYBEVOID, CONSTRAINED);
         DECL_BOOL_PROP2 ( APPLYFILTER,                                      BOUND, MAYBEDEFAULT            );
         DECL_PROP1      ( NAME,             ::rtl::OUString,                BOUND                          );
         DECL_PROP1      ( MASTERFIELDS,     Sequence< ::rtl::OUString >,    BOUND                          );
@@ -1643,11 +1642,6 @@ sal_Bool ODatabaseForm::convertFastPropertyValue( Any& rConvertedValue, Any& rOl
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, aAggregateProperty, ::getCppuType(static_cast<const ::rtl::OUString*>(NULL)));
         }
         break;
-        case PROPERTY_ID_ACTIVE_CONNECTION:
-            if ( m_bInContext )
-                throw PropertyVetoException();
-            bModified = OPropertySetAggregationHelper::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
-            break;
         case PROPERTY_ID_TARGET_URL:
             bModified = tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aTargetURL);
             break;
@@ -1733,14 +1727,18 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
         break;
 
         case PROPERTY_ID_DATASOURCE:
-            if ( m_bInContext )
+        {
+            Reference< XConnection > xSomeConnection;
+            if ( ::dbtools::isEmbeddedInDatabase( getParent(), xSomeConnection ) )
                 throw PropertyVetoException();
+
             try
             {
                 m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, rValue);
             }
             catch(Exception&) { }
-            break;
+        }
+        break;
         case PROPERTY_ID_TARGET_URL:
             rValue >>= m_aTargetURL;
             break;
@@ -1791,6 +1789,15 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
         case PROPERTY_ID_CONTROL_BORDER_COLOR_INVALID:
             m_aControlBorderColorInvalid = rValue;
             break;
+
+        case PROPERTY_ID_ACTIVE_CONNECTION:
+        {
+            Reference< XConnection > xSomeConnection;
+            if ( ::dbtools::isEmbeddedInDatabase( getParent(), xSomeConnection ) )
+                throw PropertyVetoException();
+        }
+        // NO break!
+
         default:
             OPropertySetAggregationHelper::setFastPropertyValue_NoBroadcast( nHandle, rValue );
             break;
@@ -2415,47 +2422,22 @@ void SAL_CALL ODatabaseForm::setParent(const InterfaceRef& Parent) throw ( ::com
     xParentForm.set(getParent(), UNO_QUERY);
     if ( xParentForm.is() )
     {
-        {
-            Reference<XRowSetApproveBroadcaster>  xParentApprBroadcast(xParentForm, UNO_QUERY);
-            if (xParentApprBroadcast.is())
-                xParentApprBroadcast->addRowSetApproveListener(this);
-            Reference<XLoadable>  xParentLoadable(xParentForm, UNO_QUERY);
-            if (xParentLoadable.is())
-                xParentLoadable->addLoadListener(this);
-        }
+        Reference<XRowSetApproveBroadcaster>  xParentApprBroadcast(xParentForm, UNO_QUERY);
+        if (xParentApprBroadcast.is())
+            xParentApprBroadcast->addRowSetApproveListener(this);
+        Reference<XLoadable>  xParentLoadable(xParentForm, UNO_QUERY);
+        if (xParentLoadable.is())
+            xParentLoadable->addLoadListener(this);
     }
 
-    Any aNewValue;
-    if ( Parent.is() )
-    {
-        // do we have a connection in the hierarchy than take that connection
-        // this overwrites all the other connnections
-        Reference< XConnection> xConnection;
-        m_bInContext = ::dbtools::isEmbeddedInDatabase( Parent, xConnection );
-        if ( m_bInContext )
-        {
-            Reference<XChild> xChild(xConnection,UNO_QUERY);
-            if ( xChild.is() )
-            {
-                Reference<XPropertySet> xProp(xChild->getParent(),UNO_QUERY);
-                if ( xProp.is() )
-                    m_xAggregateSet->setPropertyValue( PROPERTY_DATASOURCE ,xProp->getPropertyValue(PROPERTY_NAME));
-            }
-            aNewValue <<= xConnection;
-            m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION ,aNewValue);
-        }
-    }
-    else
-    {
-        m_bInContext = sal_False;
-        m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION ,Any());
-        m_xAggregateSet->setPropertyValue( PROPERTY_DATASOURCE, makeAny( ::rtl::OUString() ) );
-    }
-    // clear the guard before notify
+    Reference< XConnection > xOuterConnection;
+    sal_Bool bIsEmbedded = ::dbtools::isEmbeddedInDatabase( Parent, xOuterConnection );
+
+    // clear the guard before setting property values, because of the notifications
+    // which are triggered there
     aGuard.clear();
-    sal_Int32 nHandle = PROPERTY_ID_ACTIVE_CONNECTION;
-    Any aEmpty;
-    fire(&nHandle, &aNewValue, &aEmpty, 1, sal_False);
+    if ( bIsEmbedded )
+        m_xAggregateSet->setPropertyValue( PROPERTY_DATASOURCE, makeAny( ::rtl::OUString() ) );
 }
 
 //==============================================================================
@@ -2822,6 +2804,14 @@ sal_Bool ODatabaseForm::implEnsureConnection()
         if ( getConnection( ).is() )
             // if our aggregate already has a connection, nothing needs to be done about it
             return sal_True;
+
+        // see whether we're an embedded form
+        Reference< XConnection > xOuterConnection;
+        if ( ::dbtools::isEmbeddedInDatabase( getParent(), xOuterConnection ) )
+        {
+            m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xOuterConnection ) );
+            return xOuterConnection.is();
+        }
 
         m_bSharingConnection = sal_False;
 
