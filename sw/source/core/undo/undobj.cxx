@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:07:53 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,9 @@
 #endif
 #ifndef _UNDO_HRC
 #include <undo.hrc>
+#endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
 #endif
 #ifndef _SW_REWRITER_HXX
 #include <SwRewriter.hxx>
@@ -262,8 +265,15 @@ void SwUndo::RemoveIdxRel( ULONG nIdx, const SwPosition& rPos )
     ::PaMCorrRel( aIdx, rPos );
 }
 
+SwUndo::SwUndo( USHORT nI )
+    : nId(nI), nOrigRedlineMode(REDLINE_NONE), pComment(NULL),
+      bCacheComment(true)
+{
+}
+
 SwUndo::~SwUndo()
 {
+    delete pComment;
 }
 
 void SwUndo::Repeat( SwUndoIter& rIter )
@@ -273,12 +283,31 @@ void SwUndo::Repeat( SwUndoIter& rIter )
 
 String SwUndo::GetComment() const
 {
-    String sResult(SW_RES(UNDO_BASE + nId));
+    String aResult;
 
-    SwRewriter aRewriter = GetRewriter();
-    sResult = aRewriter.Apply(sResult);
+    if (bCacheComment)
+    {
+        if (! pComment)
+        {
+            pComment = new String(SW_RES(UNDO_BASE + nId));
 
-    return sResult;
+            SwRewriter aRewriter = GetRewriter();
+
+            *pComment = aRewriter.Apply(*pComment);
+        }
+
+        aResult = *pComment;
+    }
+    else
+    {
+        aResult = String(SW_RES(UNDO_BASE + nId));
+
+        SwRewriter aRewriter = GetRewriter();
+
+        aResult = aRewriter.Apply(aResult);
+    }
+
+    return aResult;
 }
 
 SwRewriter SwUndo::GetRewriter() const
@@ -1184,6 +1213,110 @@ String ShortenString(const String & rStr, int aLength, const String & rFillStr)
         aResult += rFillStr;
         aResult += rStr.Copy(rStr.Len() - aBackLen, aBackLen);
     }
+
+    return aResult;
+}
+
+static bool lcl_IsSpecialCharacter(sal_Unicode nChar)
+{
+    switch (nChar)
+    {
+    case CH_TXTATR_BREAKWORD:
+    case CH_TXTATR_INWORD:
+    case CH_TXTATR_TAB:
+    case CH_TXTATR_NEWLINE:
+        return true;
+
+    default:
+        break;
+    }
+
+    return false;
+}
+
+static String lcl_DenotedPortion(String rStr, xub_StrLen nStart,
+                                 xub_StrLen nEnd)
+{
+    String aResult;
+
+    if (nEnd - nStart > 0)
+    {
+        sal_Unicode cLast = rStr.GetChar(nEnd - 1);
+        if (lcl_IsSpecialCharacter(cLast))
+        {
+            switch(cLast)
+            {
+            case CH_TXTATR_TAB:
+                aResult += String(SW_RES(STR_UNDO_TABS));
+
+                break;
+            case CH_TXTATR_NEWLINE:
+                aResult += String(SW_RES(STR_UNDO_NLS));
+
+                break;
+
+            case CH_TXTATR_INWORD:
+            case CH_TXTATR_BREAKWORD:
+                aResult += UNDO_ARG2;
+
+                break;
+
+            }
+            SwRewriter aRewriter;
+            aRewriter.AddRule(UNDO_ARG1,
+                              String::CreateFromInt32(nEnd - nStart));
+            aResult = aRewriter.Apply(aResult);
+        }
+        else
+        {
+            aResult = String(SW_RES(STR_START_QUOTE));
+            aResult += rStr.Copy(nStart, nEnd - nStart);
+            aResult += String(SW_RES(STR_END_QUOTE));
+        }
+    }
+
+    return aResult;
+}
+
+String DenoteSpecialCharacters(const String & rStr)
+{
+    String aResult;
+
+    if (rStr.Len() > 0)
+    {
+        bool bStart = false;
+        xub_StrLen nStart = 0;
+        sal_Unicode cLast = 0;
+
+        for (xub_StrLen i = 0; i < rStr.Len(); i++)
+        {
+            if (lcl_IsSpecialCharacter(rStr.GetChar(i)))
+            {
+                if (cLast != rStr.GetChar(i))
+                    bStart = true;
+
+            }
+            else
+            {
+                if (lcl_IsSpecialCharacter(cLast))
+                    bStart = true;
+            }
+
+            if (bStart)
+            {
+                aResult += lcl_DenotedPortion(rStr, nStart, i);
+
+                nStart = i;
+                bStart = false;
+            }
+
+            cLast = rStr.GetChar(i);
+        }
+
+        aResult += lcl_DenotedPortion(rStr, nStart, rStr.Len());
+    }
+    else
+        aResult = UNDO_ARG2;
 
     return aResult;
 }
