@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilePicker.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:58:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,14 +94,14 @@ module com { module sun { module star { module ui { module dialogs {
     @see XFilePicker
 */
 
-interface XFilePicker;
-interface XFilePickerNotifier;
-interface XFilePickerControlAccess;
-interface XFilterManager;
-interface XFilePreview;
-interface XFilterGroupManager;
+ published interface XFilePicker;
+ published interface XFilePickerNotifier;
+ published interface XFilePickerControlAccess;
+ published interface XFilterManager;
+ published interface XFilePreview;
+ published interface XFilterGroupManager;
 
-service FilePicker
+published service FilePicker
 {
     //-------------------------------------------------------------------------
     /** Allows to associate a help URL with the file picker instance.
