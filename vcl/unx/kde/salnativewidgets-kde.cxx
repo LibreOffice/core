@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:25:28 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 13:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1286,6 +1286,32 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
         }
         break;
 
+        // Metrics of the radio button
+        case CTRL_RADIOBUTTON:
+            pWidget = pWidgetPainter->radioButton( rControlRegion );
+
+            if ( nPart == PART_ENTIRE_CONTROL )
+            {
+                qRect.setWidth( kapp->style().pixelMetric( QStyle::PM_ExclusiveIndicatorWidth, pWidget ) );
+                qRect.setHeight( kapp->style().pixelMetric( QStyle::PM_ExclusiveIndicatorHeight, pWidget ) );
+
+                bReturn = TRUE;
+            }
+            break;
+
+        // Metrics of the check box
+        case CTRL_CHECKBOX:
+            pWidget = pWidgetPainter->checkBox( rControlRegion );
+
+            if ( nPart == PART_ENTIRE_CONTROL )
+            {
+                qRect.setWidth( kapp->style().pixelMetric( QStyle::PM_IndicatorWidth, pWidget ) );
+                qRect.setHeight( kapp->style().pixelMetric( QStyle::PM_IndicatorHeight, pWidget ) );
+
+                bReturn = TRUE;
+            }
+            break;
+
     // Metrics of the combo box
     case CTRL_COMBOBOX:
     case CTRL_LISTBOX:
@@ -1385,6 +1411,7 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPar
             bReturn = TRUE;
             break;
         }
+            break;
     }
 
     // Fill rNativeBoundingRegion and rNativeContentRegion
