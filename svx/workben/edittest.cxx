@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edittest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-02 11:12:04 $
+ *  last change: $Author: mt $ $Date: 2000-11-02 14:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <svtools/style.hxx>
 #include <svx/dialdll.hxx>
 
 
@@ -180,13 +179,7 @@
 #define TB_MOVE         34
 #define TB_PARATTR1     35
 #define TB_ROTATE       38
-#define TB_STYLEA       39
-#define TB_STYLEB       40
-#define TB_STYLEBFROMA  41
-#define TB_STYLEBAFTERA 42
 #define TB_RED          43
-#define TB_STYLEAISU    44
-#define TB_STYLEC       45
 #define TB_FLAT         46
 #define TB_BINOBJ1      47
 #define TB_BINOBJ3      49
@@ -313,112 +306,11 @@ public:
 class MyEditEngine : public EditEngine
 {
 public:
+    MyEditEngine( SfxItemPool* pPool ) : EditEngine( pPool ) { ; }
     virtual String  CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rTxtColor, Color*& rFldColor );
     virtual void    FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
     virtual void    FieldSelected( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
 };
-
-class MyEditStyleSheet : public SfxStyleSheet
-{
-public:
-                        TYPEINFO();
-                        MyEditStyleSheet(const XubString& rName,
-                                     SfxStyleSheetBasePool& rPool,
-                                     SfxStyleFamily eFamily,
-                                     USHORT nMask);
-    virtual             ~MyEditStyleSheet();
-
-    virtual BOOL        SetParent ( const XubString& rParentName );
-    virtual BOOL        SetFollow( const XubString& rFollowName );
-    virtual SfxItemSet& GetItemSet();
-    virtual BOOL        IsUsed() const              { return HasListeners(); }
-    virtual BOOL        HasFollowSupport() const    { return TRUE; }
-    virtual BOOL        HasParentSupport() const    { return TRUE; }
-};
-
-TYPEINIT1( MyEditStyleSheet, SfxStyleSheet );
-
-MyEditStyleSheet::MyEditStyleSheet(const XubString& rName, SfxStyleSheetBasePool& rPool,
-                           SfxStyleFamily eFamily, USHORT nMask) :
-    SfxStyleSheet(rName, rPool, eFamily, nMask)
-{
-}
-
-MyEditStyleSheet::~MyEditStyleSheet()
-{
-    delete pSet;
-}
-
-BOOL MyEditStyleSheet::SetParent(const XubString& rParentName)
-{
-    SfxStyleSheet::SetParent( rParentName );
-
-    BOOL bResult = FALSE;
-    SfxStyleSheetBase* pStyle = rPool.Find( rParentName, nFamily );
-    if (pStyle)
-    {
-        bResult = TRUE;
-        SfxItemSet& rParentSet = pStyle->GetItemSet();
-        GetItemSet().SetParent(&rParentSet);
-        // Macht SetParent, ausserdem STYLESHHET_MODIFIED
-//      Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
-    }
-    return bResult;
-}
-
-BOOL MyEditStyleSheet::SetFollow(const XubString& rFollowName)
-{
-    BOOL bDone = SfxStyleSheet::SetFollow( rFollowName );
-//  Broadcast( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
-    return bDone;
-}
-
-SfxItemSet& MyEditStyleSheet::GetItemSet()
-{
-    if (!pSet)
-    {
-        pSet = new SfxItemSet( GetPool().GetPool(), EE_ITEMS_START, EE_CHAR_END );
-        for ( USHORT nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
-            pSet->ClearItem( nWhich );
-    }
-
-    return *pSet;
-}
-
-class MyEditStyleSheetPool : public SfxStyleSheetPool
-{
-protected:
-    virtual SfxStyleSheetBase* Create(const XubString& rName,
-                                      SfxStyleFamily eFamily,
-                                      USHORT nMask);
-
-public:
-                        MyEditStyleSheetPool(SfxItemPool& rPool);
-    virtual             ~MyEditStyleSheetPool();
-
-    SfxStyleSheet*      MakeStyleSheet( const XubString& rName, SfxStyleFamily eFamily, USHORT nMask );
-};
-
-MyEditStyleSheetPool::MyEditStyleSheetPool(SfxItemPool& rPool) :
-    SfxStyleSheetPool(rPool)
-{
-}
-
-MyEditStyleSheetPool::~MyEditStyleSheetPool()
-{
-}
-
-SfxStyleSheetBase* MyEditStyleSheetPool::Create(const XubString& rName, SfxStyleFamily eFamily, USHORT nMask )
-{
-    return new MyEditStyleSheet( rName, *this, eFamily, nMask );
-}
-
-SfxStyleSheet* MyEditStyleSheetPool::MakeStyleSheet(const XubString& rName, SfxStyleFamily eFamily, USHORT nMask )
-{
-    SfxStyleSheet* pStyle = (SfxStyleSheet*)Create( rName, eFamily, nMask );
-    aStyles.Insert( pStyle, LIST_APPEND );
-    return pStyle;
-}
 
 XubString __EXPORT MyEditEngine::CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
@@ -620,8 +512,6 @@ private:
     EditViewWindow          aViewWin;
     Printer*                pPrinter;
 
-    MyEditStyleSheetPool*   pStyleSheets;
-
     WorkWindow*             pTmpWindow;
 
     EditTextObject*         pRTFObj;
@@ -662,7 +552,6 @@ EditMainWindow::~EditMainWindow()
     delete pFileDialogBox2;
     delete pTmpWindow;
     delete pPrinter;
-    delete pStyleSheets;
 }
 
 EditMainWindow::EditMainWindow() :
@@ -694,15 +583,7 @@ EditMainWindow::EditMainWindow() :
     aViewWin.SetMapMode( pPrinter->GetMapMode() );
     aViewWin.GetEditView()->GetEditEngine()->SetRefDevice( pPrinter );
 
-    MapMode aPntMode( MAP_POINT );
-    MapMode aCurrent( aViewWin.GetMapMode() );
-    Size aSz( LogicToLogic( Size( 12, 0 ), &aPntMode, &aCurrent ) );
 
-    SfxItemSet aSet( aViewWin.GetEditView()->GetEditEngine()->GetEmptyItemSet() );
-    Font aFont = GetSettings().GetStyleSettings().GetAppFont();
-    aSet.Put( SvxFontItem( aFont.GetFamily(), aFont.GetName(), String(),aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO ) );
-    aSet.Put( SvxFontHeightItem( aSz.Width(), 100, EE_CHAR_FONTHEIGHT) );
-    aViewWin.GetEditView()->GetEditEngine()->SetDefaults( aSet );
 
     pTmpWindow = new WorkWindow( this, WB_STDWORK );
 
@@ -724,12 +605,6 @@ EditMainWindow::EditMainWindow() :
     aToolBox.InsertSeparator();
     aToolBox.InsertItem( TB_FONT1, String( RTL_CONSTASCII_USTRINGPARAM( "Font1" ) ) );
     aToolBox.InsertItem( TB_FONT2, String( RTL_CONSTASCII_USTRINGPARAM( "Font2" ) ) );
-    aToolBox.InsertItem( TB_STYLEA, String( RTL_CONSTASCII_USTRINGPARAM( "StyleA" ) ) );
-    aToolBox.InsertItem( TB_STYLEB, String( RTL_CONSTASCII_USTRINGPARAM( "StyleB" ) ) );
-    aToolBox.InsertItem( TB_STYLEC, String( RTL_CONSTASCII_USTRINGPARAM( "*StyleC" ) ) );
-    aToolBox.InsertItem( TB_STYLEBFROMA, String( RTL_CONSTASCII_USTRINGPARAM( "B=f(A)" ) ) );
-    aToolBox.InsertItem( TB_STYLEBAFTERA, String( RTL_CONSTASCII_USTRINGPARAM( "A->B" ) ) );
-    aToolBox.InsertItem( TB_STYLEAISU, String( RTL_CONSTASCII_USTRINGPARAM( "A:U" ) ) );
     aToolBox.InsertItem( TB_DEFTAB, String( RTL_CONSTASCII_USTRINGPARAM( "DefTab" ) ) );
     aToolBox.InsertBreak();
     aToolBox.InsertItem( TB_OPEN2, String( RTL_CONSTASCII_USTRINGPARAM( "Read" ) ) );
@@ -802,22 +677,6 @@ EditMainWindow::EditMainWindow() :
     aHScrollBar.Enable();
     aVScrollBar.Enable();
 
-    pStyleSheets = new MyEditStyleSheetPool( *aViewWin.GetEditView()->GetEditEngine()->GetEmptyItemSet().GetPool() ),
-    pStyleSheets->MakeStyleSheet( String( RTL_CONSTASCII_USTRINGPARAM( "StyleA")), SFX_STYLE_FAMILY_PARA, 0xffff );
-    pStyleSheets->MakeStyleSheet( String( RTL_CONSTASCII_USTRINGPARAM( "StyleB")), SFX_STYLE_FAMILY_PARA, 0xffff );
-
-    SfxStyleSheet* pA = (SfxStyleSheet*)pStyleSheets->Find( String( RTL_CONSTASCII_USTRINGPARAM( "StyleA" )), SFX_STYLE_FAMILY_ALL );
-    DBG_ASSERT( pA, "Erzeugt und doch nicht da: StyleA" );
-    DBG_ASSERT( pA->IsA( TYPE(SfxStyleSheet) ), "Keine gueltige Vorlage" );
-    pA->GetItemSet().Put( SvxWeightItem( WEIGHT_BOLD, EE_CHAR_WEIGHT) );
-    pA->GetItemSet().Put( SvxAdjustItem( SVX_ADJUST_CENTER, EE_PARA_JUST ) );
-
-    SfxStyleSheet* pB = (SfxStyleSheet*)pStyleSheets->Find( String( RTL_CONSTASCII_USTRINGPARAM( "StyleB" )), SFX_STYLE_FAMILY_ALL );
-    DBG_ASSERT( pB, "Erzeugt und doch nicht da: StyleB" );
-    DBG_ASSERT( pB->IsA( TYPE(SfxStyleSheet) ), "Keine gueltige Vorlage" );
-    pB->GetItemSet().Put( SvxPostureItem( ITALIC_NORMAL, EE_CHAR_ITALIC ) );
-
-    aViewWin.GetEditView()->GetEditEngine()->SetStyleSheetPool( pStyleSheets );
     aViewWin.GetEditView()->GetEditEngine()->SetStatusEventHdl( LINK( this, EditMainWindow, ShowStatus ) );
 
     SetTitle();
@@ -1239,53 +1098,6 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
             pEditView->ShowCursor();
         }
         break;
-        case TB_STYLEA:
-        {
-            pEditView->SetStyleSheet( String( RTL_CONSTASCII_USTRINGPARAM( "StyleA" ) ), SFX_STYLE_FAMILY_PARA );
-        }
-        break;
-        case TB_STYLEB:
-        {
-            pEditView->SetStyleSheet( String( RTL_CONSTASCII_USTRINGPARAM( "StyleB" ) ), SFX_STYLE_FAMILY_PARA );
-        }
-        break;
-        case TB_STYLEC:
-        {
-            SfxStyleSheetBase* pC = (SfxStyleSheet*)pStyleSheets->Find( String( RTL_CONSTASCII_USTRINGPARAM( "StyleC" ) ), SFX_STYLE_FAMILY_ALL );
-            if ( !pC )
-            {
-                pStyleSheets->MakeStyleSheet( String( RTL_CONSTASCII_USTRINGPARAM( "StyleC" ) ), SFX_STYLE_FAMILY_PARA, 0xffff );
-                pC = (SfxStyleSheet*)pStyleSheets->Find( String( RTL_CONSTASCII_USTRINGPARAM( "StyleC" ) ), SFX_STYLE_FAMILY_ALL );
-                DBG_ASSERT( pC, "Gerade erzeugt, aber nicht auffindbar!" );
-                pC->GetItemSet().Put( SvxAdjustItem( SVX_ADJUST_RIGHT, EE_PARA_JUST ) );
-                pC->GetItemSet().Put( SvxUnderlineItem( UNDERLINE_DOUBLE, EE_CHAR_UNDERLINE ) );
-                aToolBox.SetItemText( TB_STYLEC, String( RTL_CONSTASCII_USTRINGPARAM( "StyleC" ) ) );
-            }
-            pEditView->SetStyleSheet( String( RTL_CONSTASCII_USTRINGPARAM( "StyleC" ) ), SFX_STYLE_FAMILY_PARA );
-        }
-        break;
-        case TB_STYLEBAFTERA:
-        {
-            SfxStyleSheet* pA = (SfxStyleSheet*)pStyleSheets->Find( String( RTL_CONSTASCII_USTRINGPARAM( "StyleA" )) , SFX_STYLE_FAMILY_ALL );
-            DBG_ASSERT( pA, "Erzeugt und doch nicht da: StyleA" );
-            pA->SetFollow( String( RTL_CONSTASCII_USTRINGPARAM( "StyleB" ) ) );
-        }
-        break;
-        case TB_STYLEAISU:
-        {
-            SfxStyleSheet* pA = (SfxStyleSheet*)pStyleSheets->Find( String( RTL_CONSTASCII_USTRINGPARAM( "StyleA" ) ), SFX_STYLE_FAMILY_ALL );
-            DBG_ASSERT( pA, "Erzeugt und doch nicht da: StyleA" );
-            pA->GetItemSet().Put( SvxUnderlineItem( UNDERLINE_SINGLE, EE_CHAR_UNDERLINE  ) );
-            pA->GetPool().Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_MODIFIED, *pA ) );
-        }
-        break;
-        case TB_STYLEBFROMA:
-        {
-            SfxStyleSheet* pB = (SfxStyleSheet*)pStyleSheets->Find( String( RTL_CONSTASCII_USTRINGPARAM( "StyleB" ) ), SFX_STYLE_FAMILY_ALL );
-            DBG_ASSERT( pB, "Erzeugt und doch nicht da: StyleB" );
-            pB->SetParent( String( RTL_CONSTASCII_USTRINGPARAM( "StyleA" ) ) );
-        }
-        break;
         case TB_BINOBJ1:
         {
             delete pBinObj;
@@ -1360,8 +1172,6 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
                     pEditEngine->Read( aStrm, EE_FORMAT_RTF );
                 if ( aDirEntry.GetExtension().EqualsIgnoreCaseAscii( "htm" ) == COMPARE_EQUAL )
                 {
-                    String aAbs = INetURLObject::SmartRelToAbs( aDirEntry.GetFull() );
-                    INetURLObject::SetBaseURL( aAbs );
                     pEditEngine->Read( aStrm, EE_FORMAT_HTML );
                 }
                 else if ( aDirEntry.GetExtension().EqualsIgnoreCaseAscii( "bin" ) == COMPARE_EQUAL )
@@ -1444,8 +1254,8 @@ IMPL_LINK( EditMainWindow, TBSelect, ToolBox *, p )
             SfxItemSet aCurSet = pEditView->GetAttribs();
             XubString aDebStr( String( RTL_CONSTASCII_USTRINGPARAM( "Attribute in Selektion:" ) ) );
             aDebStr += String( RTL_CONSTASCII_USTRINGPARAM( "\nVorlage:" ) );
-            XubString aStyle; SfxStyleFamily eFam;
-            pEditView->GetStyleSheet( aStyle, eFam );
+            XubString aStyle;
+//          pEditView->GetStyleSheet( aStyle, eFam );
             aDebStr += aStyle;
             for ( USHORT nWhich = EE_ITEMS_START; nWhich <= EE_ITEMS_END; nWhich++)
             {
@@ -1713,9 +1523,22 @@ EditViewWindow::EditViewWindow( Window* pParent ) :
                 Window( pParent ), aURLPtr( POINTER_HAND )
 {
     SetBackgroundBrush( Brush( Color( COL_WHITE ) ) );
+    SetMapMode( MAP_100TH_MM );
     EnableDrop();
 
-    pEditEngine = new MyEditEngine;
+    SfxItemPool* pPool = EditEngine::CreatePool();
+    Font aFont = GetSettings().GetStyleSettings().GetAppFont();
+    MapMode aPntMode( MAP_POINT );
+    MapMode aCurrent( GetMapMode() );
+    Size aSz( LogicToLogic( Size( 12, 0 ), &aPntMode, &aCurrent ) );
+    aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ) );
+    pPool->SetPoolDefaultItem( SvxFontItem( aFont.GetFamily(), aFont.GetName(), String(),aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO ) );
+    aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma" ) ) );
+    pPool->SetPoolDefaultItem( SvxFontItem( aFont.GetFamily(), aFont.GetName(), String(),aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CJK ) );
+    pPool->SetPoolDefaultItem( SvxFontItem( aFont.GetFamily(), aFont.GetName(), String(),aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CTL ) );
+    pPool->SetPoolDefaultItem( SvxFontHeightItem( aSz.Width(), 100, EE_CHAR_FONTHEIGHT ) );
+    pEditEngine = new MyEditEngine( pPool );
+
     Size aPaperSz( 10000,8000 );
     pEditEngine->SetPaperSize( aPaperSz );
 
@@ -1823,8 +1646,8 @@ void __EXPORT EditViewWindow::KeyInput( const KeyEvent& rKEvt )
     if ( ( nCode == KEY_S ) && rKEvt.GetKeyCode().IsMod2() )
     {
         if ( !pEditEngine->GetSpeller().is() )
-            pEditEngine->CreateSpeller( DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "n:\\offenv\\wini" ) ) ),
-                                        DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "n:\\offenv\\wini" ) ) ) );
+//          pEditEngine->CreateSpeller( DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "n:\\offenv\\wini" ) ) ),
+//                                      DirEntry( String( RTL_CONSTASCII_USTRINGPARAM( "n:\\offenv\\wini" ) ) ) );
         if ( pEditEngine->HasSpellErrors( LANGUAGE_GERMAN ) == EE_SPELL_OK )
             InfoBox( 0, String( RTL_CONSTASCII_USTRINGPARAM( "Spell lohnt nicht!" ) ) ).Execute();
         else
@@ -1832,22 +1655,6 @@ void __EXPORT EditViewWindow::KeyInput( const KeyEvent& rKEvt )
     }
     if ( ( nCode == KEY_A) && rKEvt.GetKeyCode().IsMod1() )
         pEditView->SetSelection( ESelection( 0, 0, 0xFFFF, 0xFFFF ) );
-    else if ( ( nCode == KEY_D ) && rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
-    {
-        SfxItemSet aSet( pEditEngine->GetEmptyItemSet() );
-        aSet.Put( SvxFontItem( FAMILY_SWISS, String( RTL_CONSTASCII_USTRINGPARAM( "Arial" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "" ) ), PITCH_VARIABLE, RTL_TEXTENCODING_MS_1252, EE_CHAR_FONTINFO ) );
-        aSet.Put( SvxFontHeightItem(281, 100, EE_CHAR_FONTHEIGHT) );
-        pEditEngine->SetDefaults( aSet );
-        Invalidate();
-        Update();
-        XubString aText( pEditEngine->GetText() );
-        Font aFont = pEditEngine->CreateFontFromItemSet( aSet );
-        aFont.SetAlign( ALIGN_TOP );
-        Point aPos( pEditView->GetOutputArea().TopLeft() );
-        aPos.Y() += pEditEngine->GetTextHeight();
-        SetFont( aFont );
-        DrawText( aPos, aText );
-    }
     else if ( ( nCode == KEY_R ) && rKEvt.GetKeyCode().IsMod2() )
         Invalidate();
     else if ( ( nCode == KEY_L ) && rKEvt.GetKeyCode().IsMod2() )
@@ -1857,53 +1664,9 @@ void __EXPORT EditViewWindow::KeyInput( const KeyEvent& rKEvt )
         pEditEngine->SetControlWord( n );
         pEditEngine->QuickFormatDoc();
     }
-    else if ( ( nCode == KEY_K ) && rKEvt.GetKeyCode().IsMod2() )
-    {
-        SfxItemSet aSet( pEditEngine->GetEmptyItemSet() );
-        aSet.Put( SvxPostureItem( ITALIC_NORMAL, EE_CHAR_ITALIC ) );
-        pEditEngine->SetDefaults( aSet );
-    }
     else if ( ( nCode == KEY_Z ) && rKEvt.GetKeyCode().IsMod2() )
     {
         pEditView->RemoveAttribs();
-    }
-    else if ( ( nCode == KEY_X ) && rKEvt.GetKeyCode().IsMod2() )
-    {
-        SetMapMode( MAP_PIXEL );
-        pEditEngine->SetUpdateMode( FALSE );
-        Size aPaperSz( 400, 200 );
-        pEditEngine->SetPaperSize( aPaperSz );
-        pEditEngine->SetDefTab( 30 );
-        pEditView->SetOutputArea( Rectangle( Point( 30, 30 ), aPaperSz ) );
-        SfxItemSet aSet( pEditEngine->GetEmptyItemSet() );
-        aSet.Put( SvxFontHeightItem( 12, 100, EE_CHAR_FONTHEIGHT ) );
-        pEditEngine->SetDefaults( aSet );
-        pEditEngine->SetRefMapMode( GetMapMode() );
-        pEditEngine->SetUpdateMode( TRUE );
-        Invalidate();
-    }
-    else if ( ( nCode == KEY_V ) && rKEvt.GetKeyCode().IsMod2() )
-    {
-        Sound::Beep();
-        static nViews = 0;
-        MyView* pView = new MyView( this, pEditEngine );
-        pView->SetMapMode( MapMode( MAP_100TH_MM, Point(0,0), Fraction(100+nViews*100,100), Fraction(100+nViews*100,100) ) );
-        if ( rKEvt.GetKeyCode().IsMod1() )
-        {
-            pEditEngine->SetUpdateMode( FALSE );
-            SfxItemSet aSet( pEditEngine->GetEmptyItemSet() );
-            aSet.Put( SvxFontHeightItem( 2400, 100, EE_CHAR_FONTHEIGHT ) );
-            pEditEngine->SetDefaults( aSet );
-            pEditEngine->SetRefMapMode( pView->GetMapMode() );
-            pEditEngine->SetUpdateMode( TRUE );
-            pView->Invalidate();
-            pEditEngine->SetPaperSize( Size( 0x7FFFFFFF, 0 ) );
-            pView->SetMapMode( MapMode( MAP_100TH_MM, Point(0,0), Fraction(5,1), Fraction(5,1) ) );
-        }
-        pView->Resize();
-        nViews++;
-        // nur damit sie zerstoert werden koennen:
-        aViewList.Insert( pView, LIST_APPEND );
     }
     else if ( ( ( nCode == KEY_ADD ) || ( nCode == KEY_SUBTRACT ) )&& rKEvt.GetKeyCode().IsMod2() )
     {
@@ -2017,41 +1780,6 @@ void __EXPORT EditViewWindow::KeyInput( const KeyEvent& rKEvt )
         // MinSize/MaxSize nur, wenn AUTOPAGESIZE ( KEY_1 - KEY_9 )
         pEditEngine->SetMaxAutoPaperSize( Size( aOutSz.Width() / 2, aOutSz.Height() / 2 ) );
         pEditEngine->SetMinAutoPaperSize( Size( aOutSz.Width() / 8, aOutSz.Height() / 8 ) );
-    }
-    else if (  nCode == KEY_F7 )
-    {
-        // Aendern der Deafaults
-        SfxItemSet aSet( pEditEngine->GetEmptyItemSet() );
-        aSet.Put( SvxFontItem( FAMILY_ROMAN, String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "" ) ), PITCH_DONTKNOW, RTL_TEXTENCODING_MS_1252, EE_CHAR_FONTINFO ) );
-        aSet.Put( SvxColorItem( Color(COL_BLUE), EE_CHAR_COLOR ) );
-        aSet.Put( SvxFontHeightItem( 500, 100, EE_CHAR_FONTHEIGHT ) );
-        pEditEngine->SetDefaults( aSet );
-    }
-    else if (  nCode == KEY_F8 )
-    {
-        // Aendern der Deafaults
-        SfxItemSet aSet( pEditEngine->GetEmptyItemSet() );
-        aSet.Put( SvxFontItem( FAMILY_ROMAN, String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "" ) ), PITCH_DONTKNOW, RTL_TEXTENCODING_MS_1252, EE_CHAR_FONTINFO ) );
-        aSet.Put( SvxColorItem( Color(COL_BLUE), EE_CHAR_COLOR ) );
-        aSet.Put( SvxFontHeightItem( 200, 100, EE_CHAR_FONTHEIGHT ) );
-        pEditEngine->SetDefaults( aSet );
-    }
-    else if (  nCode == KEY_F9 )
-        pEditView->InsertText( String( RTL_CONSTASCII_USTRINGPARAM( "Ein kleiner Test-String.... " ) ), TRUE );
-    else if (  nCode == KEY_F6 )
-        pEditView->SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "kleiner" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "grosser" ) ) );
-    else if ( ( nCode == KEY_I ) && rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
-    {
-        XubString aStr( String( RTL_CONSTASCII_USTRINGPARAM( "Vorlage: " ) ) );
-        XubString aName;
-        SfxStyleFamily aFam;
-        if ( pEditView->GetStyleSheet( aName, aFam ) )
-            aStr += aName;
-        InfoBox( 0, aStr ).Execute();
-    }
-    else if ( ( nCode == KEY_I ) && rKEvt.GetKeyCode().IsMod2() )
-    {
-        pEditView->SpellIgnoreWord();
     }
     else if ( ( nCode == KEY_J ) && rKEvt.GetKeyCode().IsMod2() )
     {
