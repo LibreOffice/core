@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:55:21 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,7 +704,16 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                     {
                                         aPos = GetActiveWindow()->LogicToPixel( pOLV->GetEditView().GetCursor()->GetPos() );
                                     }
+                                    // While showing the spell context menu
+                                    // we lock the input so that another
+                                    // context menu can not be opened during
+                                    // that time (crash #i43235#).  In order
+                                    // to not lock the UI completely we
+                                    // first release the mouse.
+                                    GetActiveWindow()->ReleaseMouse();
+                                    LockInput();
                                     pOLV->ExecuteSpellPopup(aPos, &aLink);
+                                    UnlockInput();
                                 }
                                 else
                                     nSdResId = RID_DRAW_TEXTOBJ_INSIDE_POPUP;
