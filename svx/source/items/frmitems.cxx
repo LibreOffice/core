@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmitems.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:25:09 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_WRITINGMODE2_HPP_
 #include <com/sun/star/text/WritingMode2.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_STATUS_UPPERLOWERMARGINSCALE_HPP_
+#include <drafts/com/sun/star/frame/status/UpperLowerMarginScale.hpp>
 #endif
 
 #include <comphelper/types.hxx>
@@ -948,8 +951,18 @@ sal_Bool    SvxULSpaceItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     switch( nMemberId )
     {
         //  jetzt alles signed
-        case  MID_UP_MARGIN:    rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nUpper) : nUpper); break;
-        case  MID_LO_MARGIN:    rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nLower) : nLower); break;
+        case 0:
+        {
+            drafts::com::sun::star::frame::status::UpperLowerMarginScale aUpperLowerMarginScale;
+            aUpperLowerMarginScale.Upper = (sal_Int32)(bConvert ? TWIP_TO_MM100(nUpper) : nUpper);
+            aUpperLowerMarginScale.Lower = (sal_Int32)(bConvert ? TWIP_TO_MM100(nLower) : nPropUpper);
+            aUpperLowerMarginScale.ScaleUpper = (sal_Int16)nPropUpper;
+            aUpperLowerMarginScale.ScaleLower = (sal_Int16)nPropLower;
+            rVal <<= aUpperLowerMarginScale;
+            break;
+        }
+        case MID_UP_MARGIN: rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nUpper) : nUpper); break;
+        case MID_LO_MARGIN: rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100(nLower) : nLower); break;
         case MID_UP_REL_MARGIN: rVal <<= (sal_Int16) nPropUpper; break;
         case MID_LO_REL_MARGIN: rVal <<= (sal_Int16) nPropLower; break;
     }
@@ -964,6 +977,21 @@ sal_Bool SvxULSpaceItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     sal_Int32 nVal;
     switch( nMemberId )
     {
+        case 0:
+        {
+            drafts::com::sun::star::frame::status::UpperLowerMarginScale aUpperLowerMarginScale;
+            if ( !(rVal >>= aUpperLowerMarginScale ))
+                return sal_False;
+            {
+                SetUpper((sal_uInt16)(bConvert ? MM100_TO_TWIP( aUpperLowerMarginScale.Upper ) : aUpperLowerMarginScale.Upper));
+                SetLower((sal_uInt16)(bConvert ? MM100_TO_TWIP( aUpperLowerMarginScale.Lower ) : aUpperLowerMarginScale.Lower));
+                if( aUpperLowerMarginScale.ScaleUpper > 1 )
+                    nPropUpper = aUpperLowerMarginScale.ScaleUpper;
+                if( aUpperLowerMarginScale.ScaleLower > 1 )
+                    nPropUpper = aUpperLowerMarginScale.ScaleLower;
+            }
+        }
+
         case MID_UP_MARGIN :
             if(!(rVal >>= nVal) || nVal < 0)
                 return sal_False;
