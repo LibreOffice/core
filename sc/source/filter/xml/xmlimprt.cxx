@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-14 12:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,16 +173,16 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
-uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw()
-{
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLImporter" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
 OUString SAL_CALL ScXMLImport_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLImport" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLImporter" ) );
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( ScXMLImport_getImplementationName() );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
@@ -191,16 +191,16 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
     return (cppu::OWeakObject*)new ScXMLImport(IMPORT_ALL);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Meta_getSupportedServiceNames() throw()
-{
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLMetaImporter" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
 OUString SAL_CALL ScXMLImport_Meta_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLImport_Meta" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLMetaImporter" ) );
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Meta_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( ScXMLImport_Meta_getImplementationName() );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
@@ -209,16 +209,16 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
     return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Styles_getSupportedServiceNames() throw()
-{
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLStylesImporter" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
 OUString SAL_CALL ScXMLImport_Styles_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLImport_Styles" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLStylesImporter" ) );
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Styles_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( ScXMLImport_Styles_getImplementationName() );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
@@ -227,16 +227,16 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
     return (cppu::OWeakObject*)new ScXMLImport(IMPORT_STYLES|IMPORT_AUTOSTYLES|IMPORT_MASTERSTYLES|IMPORT_FONTDECLS);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Content_getSupportedServiceNames() throw()
-{
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLContentImporter" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
 OUString SAL_CALL ScXMLImport_Content_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLImport_Content" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLContentImporter" ) );
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Content_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( ScXMLImport_Content_getImplementationName() );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
@@ -245,16 +245,16 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
     return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META|IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_SETTINGS|IMPORT_FONTDECLS);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Settings_getSupportedServiceNames() throw()
-{
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLSettingsImporter" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
 OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLImport_Settings" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLSettingsImporter" ) );
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_Settings_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( ScXMLImport_Settings_getImplementationName() );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
@@ -2263,6 +2263,28 @@ sal_Int64 SAL_CALL ScXMLImport::getSomething( const ::com::sun::star::uno::Seque
     throw(::com::sun::star::uno::RuntimeException)
 {
     ScUnoGuard aUnoGuard;
+    switch( getImportFlags() )
+    {
+        case IMPORT_ALL:
+            return ScXMLImport_getImplementationName();
+            break;
+        case (IMPORT_STYLES|IMPORT_MASTERSTYLES|IMPORT_AUTOSTYLES|IMPORT_FONTDECLS):
+            return ScXMLImport_Styles_getImplementationName();
+            break;
+        case (IMPORT_AUTOSTYLES|IMPORT_CONTENT|IMPORT_SCRIPTS|IMPORT_FONTDECLS):
+            return ScXMLImport_Content_getImplementationName();
+            break;
+        case IMPORT_META:
+            return ScXMLImport_Meta_getImplementationName();
+            break;
+        case IMPORT_SETTINGS:
+            return ScXMLImport_Settings_getImplementationName();
+            break;
+        default:
+            // generic name for 'unknown' cases
+            return ScXMLImport_getImplementationName();
+            break;
+    }
     return SvXMLImport::getImplementationName();
 }
 

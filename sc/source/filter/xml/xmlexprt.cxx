@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:15:15 $
+ *  last change: $Author: sab $ $Date: 2001-09-14 12:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,16 +299,16 @@ using namespace xmloff::token;
 
 //----------------------------------------------------------------------------
 
-uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_getSupportedServiceNames() throw()
-{
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLExporter" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
 OUString SAL_CALL ScXMLExport_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLExport" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLExporter" ) );
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( ScXMLExport_getImplementationName() );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_createInstance(
@@ -317,16 +317,16 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_createInstance(
     return (cppu::OWeakObject*)new ScXMLExport(EXPORT_ALL);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Meta_getSupportedServiceNames() throw()
-{
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLMetaExporter" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
 OUString SAL_CALL ScXMLExport_Meta_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLExport_Meta" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLMetaExporter" ) );
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Meta_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( ScXMLExport_Meta_getImplementationName() );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Meta_createInstance(
@@ -335,16 +335,16 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Meta_createInstance(
     return (cppu::OWeakObject*)new ScXMLExport(EXPORT_META);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Styles_getSupportedServiceNames() throw()
-{
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLStylesExporter" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
 OUString SAL_CALL ScXMLExport_Styles_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLExport_Styles" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLStylesExporter" ) );
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Styles_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( ScXMLExport_Styles_getImplementationName() );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Styles_createInstance(
@@ -353,16 +353,16 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Styles_createInstance(
     return (cppu::OWeakObject*)new ScXMLExport(EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Content_getSupportedServiceNames() throw()
-{
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLContentExporter" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
 OUString SAL_CALL ScXMLExport_Content_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLExport_Content" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLContentExporter" ) );
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Content_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( ScXMLExport_Content_getImplementationName() );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Content_createInstance(
@@ -371,16 +371,16 @@ uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Content_createInstance(
     return (cppu::OWeakObject*)new ScXMLExport(EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Settings_getSupportedServiceNames() throw()
-{
-    const rtl::OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLSettingsExporter" ) );
-    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
 OUString SAL_CALL ScXMLExport_Settings_getImplementationName() throw()
 {
-    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScXMLExport_Settings" ) );
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Calc.XMLSettingsExporter" ) );
+}
+
+uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Settings_getSupportedServiceNames() throw()
+{
+    const rtl::OUString aServiceName( ScXMLExport_Settings_getImplementationName() );
+    const uno::Sequence< rtl::OUString > aSeq( &aServiceName, 1 );
+    return aSeq;
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Settings_createInstance(
@@ -3289,6 +3289,28 @@ void SAL_CALL ScXMLExport::initialize( const ::com::sun::star::uno::Sequence< ::
     throw(::com::sun::star::uno::RuntimeException)
 {
     ScUnoGuard aGuard;
+    switch( getExportFlags() )
+    {
+        case EXPORT_ALL:
+            return ScXMLExport_getImplementationName();
+            break;
+        case (EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS):
+            return ScXMLExport_Styles_getImplementationName();
+            break;
+        case (EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS):
+            return ScXMLExport_Content_getImplementationName();
+            break;
+        case EXPORT_META:
+            return ScXMLExport_Meta_getImplementationName();
+            break;
+        case EXPORT_SETTINGS:
+            return ScXMLExport_Settings_getImplementationName();
+            break;
+        default:
+            // generic name for 'unknown' cases
+            return ScXMLExport_getImplementationName();
+            break;
+    }
     return SvXMLExport::getImplementationName();
 }
 
