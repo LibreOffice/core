@@ -2,9 +2,9 @@
  *
  *  $RCSfile: e3dcompoundproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:48:58 $
+ *  last change: $Author: vg $ $Date: 2003-12-16 13:09:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,10 @@ namespace sdr
 
             if(pScene)
             {
-                // add filtered scene properties (SDRATTR_3DSCENE_) to local itemset
+                // force ItemSet
                 GetObjectItemSet();
+
+                // add filtered scene properties (SDRATTR_3DSCENE_) to local itemset
                 SfxItemSet aSet(*mpItemSet->GetPool(), SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST);
                 aSet.Put(pScene->GetProperties().GetObjectItemSet());
                 mpItemSet->Put(aSet);
@@ -129,8 +131,10 @@ namespace sdr
 
             if(pScene)
             {
-                // Generate filtered scene properties (SDRATTR_3DSCENE_) itemset
+                // force ItemSet
                 GetObjectItemSet();
+
+                // Generate filtered scene properties (SDRATTR_3DSCENE_) itemset
                 SfxItemSet aSet(*mpItemSet->GetPool(), SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST);
                 aSet.Put(rSet);
 
