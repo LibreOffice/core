@@ -1,9 +1,0 @@
-mkdir: %_DEST%\inc%_EXT%\openssl
-
-..\%__SRC%\inc\openssl\*.h %_DEST%\inc%_EXT%\openssl\*.h
-
-..\%__SRC%\lib\libcrypto.a %_DEST%\lib%_EXT%\libcrypto.a
-..\%__SRC%\lib\libssl.a %_DEST%\lib%_EXT%\libssl.a
-
-..\%__SRC%\lib\libeay32.lib %_DEST%\lib%_EXT%\libeay32.lib
-..\%__SRC%\lib\ssleay32.lib %_DEST%\lib%_EXT%\ssleay32.lib
