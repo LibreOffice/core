@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiserviceinfo.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 13:22:09 $
+ *  last change: $Author: jb $ $Date: 2001-02-05 09:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,12 +70,14 @@ namespace configmgr
     namespace configapi
     {
 //-----------------------------------------------------------------------------
-extern ServiceInfo const aRootElementUpdateAccessSI;
-extern ServiceInfo const aRootElementAdminAccessSI;
-extern ServiceInfo const aRootElementReadAccessSI;
-extern ServiceInfo const aInnerGroupInfoSI;
-extern ServiceInfo const aInnerGroupUpdateSI;
-extern ServiceInfo const aInnerSetInfoSI;
+
+ extern const AsciiServiceName c_aUserAdministrationServices[];
+ extern const AsciiServiceName c_aGroupAdministrationServices[];
+
+//-----------------------------------------------------------------------------
+ extern ServiceInfo const aInnerGroupInfoSI;
+ extern ServiceInfo const aInnerGroupUpdateSI;
+ extern ServiceInfo const aInnerSetInfoSI;
  extern ServiceInfo const aInnerTreeSetSI;
  extern ServiceInfo const aInnerValueSetSI;
  extern ServiceInfo const aSetElementGroupInfoSI;
@@ -88,9 +90,11 @@ extern ServiceInfo const aInnerSetInfoSI;
  extern ServiceInfo const aRootElementSetInfoSI;
  extern ServiceInfo const aRootElementTreeSetUpdateSI;
  extern ServiceInfo const aRootElementValueSetUpdateSI;
- extern ServiceInfo const aRootElementReadAccessSI;
- extern ServiceInfo const aRootElementUpdateAccessSI;
- extern ServiceInfo const aRootElementAdminAccessSI;
+
+//-----------------------------------------------------------------------------
+ extern ServiceInfo const aCreateReadAccessSI;
+ extern ServiceInfo const aCreateUpdateAccessSI;
+// extern ServiceInfo const aRootElementAdminAccessSI;
 
 //-----------------------------------------------------------------------------
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiserviceinfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 13:22:09 $
+ *  last change: $Author: jb $ $Date: 2001-02-05 09:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,138 +66,288 @@ namespace configmgr
     namespace configapi
     {
 //========================================================================
+//= service names
+//========================================================================
+
+//========================================================================
 //= service infos
 //========================================================================
-const AsciiServiceName c_aUserContainerServices[] =
-{
-    "com.sun.star.configuration.UserAdministration",
-    "com.sun.star.configuration.ConfigurationContainer",
-    "com.sun.star.configuration.ConfigurationUpdateAccess",
-    "com.sun.star.configuration.ConfigurationAccess",
-    NULL
-};
-const AsciiServiceName c_aContainerServices[] =
-{
-    "com.sun.star.configuration.ConfigurationContainer",
-    "com.sun.star.configuration.ConfigurationUpdateAccess",
-    "com.sun.star.configuration.ConfigurationAccess",
-    NULL
-};
-const AsciiServiceName c_aUpdateServices[] =
-{
-    "com.sun.star.configuration.ConfigurationUpdateAccess",
-    "com.sun.star.configuration.ConfigurationAccess",
-    NULL
-};
 
-const AsciiServiceName c_aAccessServices[] =
-{
-    "com.sun.star.configuration.ConfigurationAccess",
-    NULL
-};
+//-- ACCESS (CONTAINER) ROLES -----------------------------
+
+#define CFG_SVCLIST_SETACCESS \
+    "com.sun.star.configuration.ConfigurationAccess",   \
+    "com.sun.star.configuration.SetAccess",             \
+    "com.sun.star.configuration.HierarchyAccess",       \
+    "com.sun.star.configuration.SimpleSetAccess"
+
+#define CFG_SVCLIST_GROUPACCESS \
+    "com.sun.star.configuration.ConfigurationAccess",   \
+    "com.sun.star.configuration.GroupAccess",           \
+    "com.sun.star.configuration.HierarchyAccess",       \
+    "com.sun.star.configuration.PropertyHierarchy"
+
+#define CFG_SVCLIST_SETUPDATE \
+    "com.sun.star.configuration.ConfigurationUpdateAccess", \
+    "com.sun.star.configuration.SetUpdate",                 \
+    "com.sun.star.configuration.SimpleSetUpdate",           \
+    "com.sun.star.configuration.ConfigurationContainer", /* Obsolete */ \
+    CFG_SVCLIST_SETACCESS
+
+#define CFG_SVCLIST_GROUPUPDATE \
+    "com.sun.star.configuration.ConfigurationUpdateAccess", \
+    "com.sun.star.configuration.GroupUpdate",               \
+    CFG_SVCLIST_GROUPACCESS
+
+//-- ELEMENT ROLES ----------------------------------------
+
+#define CFG_SVCLIST_SETELEMENT \
+    "com.sun.star.configuration.SetElement",        \
+    "com.sun.star.configuration.HierarchyElement"
+
+#define CFG_SVCLIST_GROUPELEMENT \
+    "com.sun.star.configuration.GroupElement",      \
+    "com.sun.star.configuration.HierarchyElement"
+
+#define CFG_SVCLIST_ACCESSROOTELEMENT \
+    "com.sun.star.configuration.AccessRootElement", \
+    "com.sun.star.configuration.HierarchyElement"
+
+#define CFG_SVCLIST_UPDATEROOTELEMENT \
+    "com.sun.star.configuration.UpdateRootElement", \
+    CFG_SVCLIST_ACCESSROOTELEMENT
+
+//-----------------------------------------------------------------------------
 
 const AsciiServiceName c_aNoServices[] =
 {
+    NULL
+};
+
+//-----------------------------------------------------------------------------
+
+const AsciiServiceName c_aCreateAccessServiceNames[] =
+{
+    "com.sun.star.configuration.ConfigurationAccess",
+    "com.sun.star.configuration.HierarchyAccess",
+    "com.sun.star.configuration.HierarchyElement",
+    NULL
+};
+
+const AsciiServiceName c_aCreateUpdateServiceNames[] =
+{
+    "com.sun.star.configuration.ConfigurationUpdateAccess",
+    "com.sun.star.configuration.ConfigurationAccess",
+    "com.sun.star.configuration.HierarchyAccess",
+    "com.sun.star.configuration.HierarchyElement",
+    NULL
+};
+
+//-----------------------------------------------------------------------------
+
+const AsciiServiceName c_aUserAdministrationServices[] =
+{
+    "com.sun.star.configuration.UserAdministration",
+    "com.sun.star.configuration.SimpleSetUpdate",
+    "com.sun.star.configuration.SimpleSetAccess",
+    "com.sun.star.configuration.ConfigurationContainer", // Obsolete
+    NULL
+};
+
+const AsciiServiceName c_aGroupAdministrationServices[] =
+{
+    "com.sun.star.configuration.GroupAdministration",
+    "com.sun.star.configuration.SimpleSetUpdate",
+    "com.sun.star.configuration.SimpleSetAccess",
+    "com.sun.star.configuration.ConfigurationContainer", // Obsolete
+    NULL
+};
+
+//-- ROLE COMBINATIONS ------------------
+
+//-- GroupElements
+
+const AsciiServiceName c_aInnerGroupAccessServices[] =
+{
+    CFG_SVCLIST_GROUPACCESS,
+    CFG_SVCLIST_GROUPELEMENT,
+    NULL
+};
+
+const AsciiServiceName c_aInnerGroupUpdateServices[] =
+{
+    CFG_SVCLIST_GROUPUPDATE,
+    CFG_SVCLIST_GROUPELEMENT,
+    NULL
+};
+
+const AsciiServiceName c_aInnerSetAccessServices[] =
+{
+    CFG_SVCLIST_SETACCESS,
+    CFG_SVCLIST_GROUPELEMENT,
+    NULL
+};
+
+const AsciiServiceName c_aInnerSetUpdateServices[] =
+{
+    CFG_SVCLIST_SETUPDATE,
+    CFG_SVCLIST_GROUPELEMENT,
+    NULL
+};
+
+//-- SetElements
+
+const AsciiServiceName c_aSetElementGroupAccessServices[] =
+{
+    CFG_SVCLIST_GROUPACCESS,
+    CFG_SVCLIST_SETELEMENT,
+    NULL
+};
+
+const AsciiServiceName c_aSetElementGroupUpdateServices[] =
+{
+    CFG_SVCLIST_GROUPUPDATE,
+    CFG_SVCLIST_SETELEMENT,
+    NULL
+};
+
+const AsciiServiceName c_aSetElementSetAccessServices[] =
+{
+    CFG_SVCLIST_SETACCESS,
+    CFG_SVCLIST_SETELEMENT,
+    NULL
+};
+
+const AsciiServiceName c_aSetElementSetUpdateServices[] =
+{
+    CFG_SVCLIST_SETUPDATE,
+    CFG_SVCLIST_SETELEMENT,
+    NULL
+};
+
+//-- RootElements
+
+const AsciiServiceName c_aRootGroupAccessServices[] =
+{
+    CFG_SVCLIST_GROUPACCESS,
+    CFG_SVCLIST_ACCESSROOTELEMENT,
+    NULL
+};
+
+const AsciiServiceName c_aRootGroupUpdateServices[] =
+{
+    CFG_SVCLIST_GROUPUPDATE,
+    CFG_SVCLIST_UPDATEROOTELEMENT,
+    NULL
+};
+
+const AsciiServiceName c_aRootSetAccessServices[] =
+{
+    CFG_SVCLIST_SETACCESS,
+    CFG_SVCLIST_ACCESSROOTELEMENT,
+    NULL
+};
+
+const AsciiServiceName c_aRootSetUpdateServices[] =
+{
+    CFG_SVCLIST_SETUPDATE,
+    CFG_SVCLIST_UPDATEROOTELEMENT,
     NULL
 };
 //-----------------------------------------------------------------------------
 
 ServiceInfo const aInnerGroupInfoSI =
 {
-    "com.sun.star.configuration.configmgr.OInnerGroupInfoAccess",
-    c_aNoServices
+    "com.sun.star.comp.configuration.OInnerGroupInfoAccess",
+    c_aInnerGroupAccessServices
 };
 ServiceInfo const aInnerGroupUpdateSI =
 {
-    "com.sun.star.configuration.configmgr.OInnerGroupUpdateAccess",
-    c_aNoServices
+    "com.sun.star.comp.configuration.OInnerGroupUpdateAccess",
+    c_aInnerGroupUpdateServices
 };
 ServiceInfo const aInnerSetInfoSI =
 {
-    "com.sun.star.configuration.configmgr.OInnerSetInfoAccess",
-    c_aNoServices
+    "com.sun.star.comp.configuration.OInnerSetInfoAccess",
+    c_aInnerSetAccessServices
 };
 ServiceInfo const aInnerTreeSetSI =
 {
-    "com.sun.star.configuration.configmgr.OInnerTreeSetUpdateAccess",
-    c_aNoServices
+    "com.sun.star.comp.configuration.OInnerTreeSetUpdateAccess",
+    c_aInnerSetUpdateServices
 };
 ServiceInfo const aInnerValueSetSI =
 {
-    "com.sun.star.configuration.configmgr.OInnerValueSetUpdateAccess",
-    c_aNoServices
+    "com.sun.star.comp.configuration.OInnerValueSetUpdateAccess",
+    c_aInnerSetUpdateServices
 };
 //-----------------------------------------------------------------------------
 
 ServiceInfo const aSetElementGroupInfoSI =
 {
-    "com.sun.star.configuration.configmgr.OSetElementGroupInfoAccess",
-    c_aAccessServices
+    "com.sun.star.comp.configuration.OSetElementGroupInfoAccess",
+    c_aSetElementGroupUpdateServices
 };
 ServiceInfo const aSetElementGroupUpdateSI =
 {
-    "com.sun.star.configuration.configmgr.OSetElementGroupUpdateAccess",
-    c_aUpdateServices
+    "com.sun.star.comp.configuration.OSetElementGroupUpdateAccess",
+    c_aSetElementGroupUpdateServices
 };
 ServiceInfo const aSetElementSetInfoSI =
 {
-    "com.sun.star.configuration.configmgr.OSetElementSetInfoAccess",
-    c_aAccessServices
+    "com.sun.star.comp.configuration.OSetElementSetInfoAccess",
+    c_aSetElementSetAccessServices
 };
 ServiceInfo const aSetElementTreeSetSI =
 {
-    "com.sun.star.configuration.configmgr.OSetElementTreeSetUpdateAccess",
-    c_aContainerServices
+    "com.sun.star.comp.configuration.OSetElementTreeSetUpdateAccess",
+    c_aSetElementSetUpdateServices
 };
 ServiceInfo const aSetElementValueSetSI =
 {
-    "com.sun.star.configuration.configmgr.OSetElementValueSetUpdateAccess",
-    c_aContainerServices
+    "com.sun.star.comp.configuration.OSetElementValueSetUpdateAccess",
+    c_aSetElementSetUpdateServices
 };
 //-----------------------------------------------------------------------------
 
 ServiceInfo const aRootElementGroupInfoSI =
 {
-    "com.sun.star.configuration.configmgr.ORootElementGroupInfoAccess",
-    c_aAccessServices
+    "com.sun.star.comp.configuration.ORootElementGroupInfoAccess",
+    c_aRootGroupAccessServices
 };
 ServiceInfo const aRootElementGroupUpdateSI =
 {
-    "com.sun.star.configuration.configmgr.ORootElementGroupUpdateAccess",
-    c_aUpdateServices
+    "com.sun.star.comp.configuration.ORootElementGroupUpdateAccess",
+    c_aRootGroupUpdateServices
 };
 ServiceInfo const aRootElementSetInfoSI =
 {
-    "com.sun.star.configuration.configmgr.ORootElementSetInfoAccess",
-    c_aAccessServices
+    "com.sun.star.comp.configuration.ORootElementSetInfoAccess",
+    c_aRootSetAccessServices
 };
 ServiceInfo const aRootElementTreeSetUpdateSI =
 {
-    "com.sun.star.configuration.configmgr.ORootElementTreeSetUpdateAccess",
-    c_aContainerServices
+    "com.sun.star.comp.configuration.ORootElementTreeSetUpdateAccess",
+    c_aRootSetUpdateServices
 };
 ServiceInfo const aRootElementValueSetUpdateSI =
 {
-    "com.sun.star.configuration.configmgr.ORootElementValueSetUpdateAccess",
-    c_aContainerServices
+    "com.sun.star.comp.configuration.ORootElementValueSetUpdateAccess",
+    c_aRootSetUpdateServices
 };
 //-----------------------------------------------------------------------------
 
-ServiceInfo const aRootElementReadAccessSI =
+ServiceInfo const aCreateReadAccessSI =
 {
-    "com.sun.star.configuration.configmgr.ORootElementReadAccess",
-    c_aAccessServices
+    NULL, //"com.sun.star.comp.configuration.ORootElementReadAccess",
+    c_aCreateAccessServiceNames
 };
-ServiceInfo const aRootElementUpdateAccessSI =
+ServiceInfo const aCreateUpdateAccessSI =
 {
-    "com.sun.star.configuration.configmgr.ORootElementUpdateAccess",
-    c_aUpdateServices
+    NULL, //"com.sun.star.comp.configuration.ORootElementUpdateAccess",
+    c_aCreateUpdateServiceNames
 };
-ServiceInfo const aRootElementAdminAccessSI =
-{
-    "com.sun.star.configuration.configmgr.ORootElementUserAdminAccess",
-    c_aUserContainerServices
-};
+//-----------------------------------------------------------------------------
 
     }
 }

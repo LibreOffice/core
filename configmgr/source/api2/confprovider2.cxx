@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-08 19:36:49 $
+ *  last change: $Author: jb $ $Date: 2001-02-05 09:57:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,8 @@ namespace configmgr
         {
             static ServiceCreationInfo const createServiceData[] =
             {
-                { &configapi::aRootElementReadAccessSI, &OConfigurationProviderImpl::createReadAccess },
-                { &configapi::aRootElementUpdateAccessSI, &OConfigurationProviderImpl::createUpdateAccess },
+                { &configapi::aCreateReadAccessSI, &OConfigurationProviderImpl::createReadAccess },
+                { &configapi::aCreateUpdateAccessSI, &OConfigurationProviderImpl::createUpdateAccess },
             };
             OSL_ENSHURE(sizeof(createServiceData)/sizeof(createServiceData[0]) == getCreateServiceDataCount(),
                 "getCreateServiceData : inconsistent data !");
