@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:09 $
+ *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,6 +209,10 @@
 #ifndef _XMLOFF_TXTPARAE_HXX
 #include "txtparae.hxx"
 #endif
+#ifndef _XMLOFF_XMLSECTIONEXPORT_HXX_
+#include "XMLSectionExport.hxx"
+#endif
+
 
 using namespace ::rtl;
 using namespace ::std;
@@ -549,6 +553,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     pPageShapeIdxs( 0 ),
     pFrameTextFrameIdxs( 0 ),
     pFrameGraphicIdxs( 0 ),
+    pSectionExport( NULL ),
     pFrameShapeIdxs( 0 ),
     sParagraphService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Paragraph")),
     sTableService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextTable")),
@@ -612,30 +617,9 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sUnvisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("UnvisitedCharStyleName")),
     sVisitedCharStyleName(RTL_CONSTASCII_USTRINGPARAM("VisitedCharStyleName")),
     sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection")),
-    sSection(RTL_CONSTASCII_USTRINGPARAM(sXML_section)),
-    sIsProtected(RTL_CONSTASCII_USTRINGPARAM("IsProtected")),
-    sIsVisible(RTL_CONSTASCII_USTRINGPARAM("IsVisible")),
-    sCondition(RTL_CONSTASCII_USTRINGPARAM("Condition")),
-    sFileLink(RTL_CONSTASCII_USTRINGPARAM("FileLink")),
-    sLinkRegion(RTL_CONSTASCII_USTRINGPARAM("LinkRegion")),
-    sDdeCommandFile(RTL_CONSTASCII_USTRINGPARAM("DDECommandFile")),
-    sDdeCommandType(RTL_CONSTASCII_USTRINGPARAM("DDECommandType")),
-    sDdeCommandElement(RTL_CONSTASCII_USTRINGPARAM("DDECommandElement")),
     sDocumentIndex(RTL_CONSTASCII_USTRINGPARAM("DocumentIndex")),
-    sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM("CreateFromOutline")),
-    sLevel(RTL_CONSTASCII_USTRINGPARAM("Level")),
-    sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM("CreateFromMarks")),
-    sCreateFromChapter(RTL_CONSTASCII_USTRINGPARAM("CreateFromChapter")),
-    sLevelFormat(RTL_CONSTASCII_USTRINGPARAM("LevelFormat")),
-    sTitle(RTL_CONSTASCII_USTRINGPARAM("Title")),
-    sParaStyleHeading(RTL_CONSTASCII_USTRINGPARAM("ParaStyleHeading")),
-    sParaStyleLevel(RTL_CONSTASCII_USTRINGPARAM("ParaStyleLevel")),
-    sLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM("LevelParagraphStyles")),
-    sEmpty()
+    sDocumentIndexMark(RTL_CONSTASCII_USTRINGPARAM("DocumentIndexMark"))
 {
-    sText_Section = GetExport().GetNamespaceMap().GetQNameByKey(
-        XML_NAMESPACE_TEXT, sSection);
-
     UniReference < XMLPropertySetMapper > xPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
     xParaPropMapper = new XMLTextExportPropertySetMapper( xPropMapper,
@@ -675,10 +659,12 @@ XMLTextParagraphExport::XMLTextParagraphExport(
                                                               GetExport() );
 
     pFieldExport = new XMLTextFieldExport( rExp );
+    pSectionExport = new XMLSectionExport( rExp, *this );
 }
 
 XMLTextParagraphExport::~XMLTextParagraphExport()
 {
+    delete pSectionExport;
     delete pFieldExport;
     delete pListElements;
     delete pExportedLists;
@@ -1095,6 +1081,12 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                                bAutoStyles);
                 bPrevCharIsSpace = sal_False;
             }
+            else if (sType.equals(sDocumentIndexMark))
+            {
+                exportIndexMark(xPropSet,
+                                bAutoStyles);
+                bPrevCharIsSpace = sal_False;
+            }
             else
                 DBG_ERROR("unknown text portion type");
         }
@@ -1211,6 +1203,13 @@ void XMLTextParagraphExport::exportTextMark(
                                  sal_False, sal_False);
     }
     // else: no styles. (see above)
+}
+
+void XMLTextParagraphExport::exportIndexMark(
+    const Reference < XPropertySet > & rPropSet,
+    sal_Bool bAutoStyles)
+{
+    // TODO: export index mark
 }
 
 sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(

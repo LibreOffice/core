@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,27 +344,25 @@ SvXMLImportContext* XMLSectionImportContext::CreateChildContext(
     SvXMLImportContext* pContext = NULL;
 
     // section-source (-dde) elements
-    if (XML_NAMESPACE_TEXT == nPrefix)
+    if ((XML_NAMESPACE_TEXT == nPrefix) &&
+        rLocalName.equalsAsciiL(sXML_section_source,
+                                sizeof(sXML_section_source)-1))
     {
-        if (rLocalName.equalsAsciiL(sXML_section_source,
-                                    sizeof(sXML_section_source)-1))
-        {
-            pContext = new XMLSectionSourceImportContext(GetImport(),
-                                                         nPrefix, rLocalName,
-                                                         xSectionPropertySet);
-        }
-        else if (rLocalName.equalsAsciiL(sXML_section_source_dde,
-                                         sizeof(sXML_section_source_dde)-1))
-        {
-            pContext = new XMLSectionSourceDDEImportContext(GetImport(),
-                                                          nPrefix, rLocalName,
-                                                          xSectionPropertySet);
-        }
+        pContext = new XMLSectionSourceImportContext(GetImport(),
+                                                     nPrefix, rLocalName,
+                                                     xSectionPropertySet);
     }
-
-    // otherwise: text context
-    if (NULL == pContext)
+    else if ((XML_NAMESPACE_OFFICE == nPrefix) &&
+             rLocalName.equalsAsciiL(sXML_dde_source,
+                                     sizeof(sXML_dde_source)-1))
     {
+        pContext = new XMLSectionSourceDDEImportContext(GetImport(),
+                                                        nPrefix, rLocalName,
+                                                        xSectionPropertySet);
+    }
+    else
+    {
+        // otherwise: text context
         pContext = GetImport().GetTextImport()->CreateTextChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCSourceContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _XMLOFF_XMLINDEXTOCSOURCECONTEXT_HXX_
 #define _XMLOFF_XMLINDEXTOCSOURCECONTEXT_HXX_
 
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#ifndef _XMLOFF_XMLINDEXSOURCEBASECONTEXT_HXX_
+#include "XMLIndexSourceBaseContext.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -81,21 +81,16 @@ namespace rtl { class OUString; }
 /**
  * Import table of context source element
  */
-class XMLIndexTOCSourceContext : public SvXMLImportContext
+class XMLIndexTOCSourceContext : public XMLIndexSourceBaseContext
 {
     const ::rtl::OUString sCreateFromMarks;
     const ::rtl::OUString sLevel;
     const ::rtl::OUString sCreateFromChapter;
     const ::rtl::OUString sCreateFromOutline;
 
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> & rTOCPropertySet;
-
     sal_Int32 nOutlineLevel;
     sal_Bool bUseOutline;
     sal_Bool bUseMarks;
-    sal_Bool bChapterIndex;
-    sal_Bool bRelativeTabs;
 
 public:
 
@@ -112,9 +107,9 @@ public:
 
 protected:
 
-    virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+    virtual void ProcessAttribute(
+        enum IndexSourceParamEnum eParam,
+        const ::rtl::OUString& rValue);
 
     virtual void EndElement();
 

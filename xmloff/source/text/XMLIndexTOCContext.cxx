@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTOCContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,30 @@
 #include "XMLIndexTOCSourceContext.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLINDEXOBJECTSOURCECONTEXT_HXX_
+#include "XMLIndexObjectSourceContext.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLINDEXALPHABETICALSOURCECONTEXT_HXX_
+#include "XMLIndexAlphabeticalSourceContext.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLINDEXUSERSOURCECONTEXT_HXX_
+#include "XMLIndexUserSourceContext.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLINDEXBIBLIOGRAPHYSOURCECONTEXT_HXX_
+#include "XMLIndexBibliographySourceContext.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLINDEXTABLESOURCECONTEXT_HXX_
+#include "XMLIndexTableSourceContext.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLINDEXILLUSTRATIONSOURCECONTEXT_HXX_
+#include "XMLIndexIllustrationSourceContext.hxx"
+#endif
+
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include "xmlictxt.hxx"
 #endif
@@ -112,6 +136,10 @@
 #include "prstylei.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include "xmluconv.hxx"
+#endif
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -119,6 +147,11 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
@@ -132,12 +165,67 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 
 TYPEINIT1(XMLIndexTOCContext, SvXMLImportContext);
 
+static const sal_Char* aIndexServiceMap[] =
+{
+    "com.sun.star.text.ContentIndex",
+    "com.sun.star.text.DocumentIndex",
+    "com.sun.star.text.TableIndex",
+    "com.sun.star.text.ObjectIndex",
+    "com.sun.star.text.Bibliography",
+    "com.sun.star.text.UserIndex",
+    "com.sun.star.text.IllustrationsIndex"
+};
+
+static const sal_Char* aIndexSourceElementMap[] =
+{
+    sXML_table_of_content_source,
+    sXML_alphabetical_index_source,
+    sXML_table_index_source,
+    sXML_object_index_source,
+    sXML_bibliography_source,
+    sXML_user_index_source,
+    sXML_illustration_index_source
+};
+
+SvXMLEnumMapEntry __READONLY_DATA aIndexTypeMap[] =
+{
+    { sXML_table_of_content,    TEXT_INDEX_TOC },
+    { sXML_alphabetical_index,  TEXT_INDEX_ALPHABETICAL },
+    { sXML_table_index,         TEXT_INDEX_TABLE },
+    { sXML_object_index,        TEXT_INDEX_OBJECT },
+    { sXML_bibliography,        TEXT_INDEX_BIBLIOGRAPHY },
+    { sXML_user_index,          TEXT_INDEX_USER },
+    { sXML_illustration_index,  TEXT_INDEX_ILLUSTRATION },
+    { NULL, NULL }
+};
+
+
 XMLIndexTOCContext::XMLIndexTOCContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName ) :
-        SvXMLImportContext(rImport, nPrfx, rLocalName)
+        SvXMLImportContext(rImport, nPrfx, rLocalName),
+        pSourceElementName(NULL),
+        bValid(sal_False)
 {
+    if (XML_NAMESPACE_TEXT == nPrfx)
+    {
+        sal_uInt16 nTmp;
+        if (SvXMLUnitConverter::convertEnum(nTmp, rLocalName, aIndexTypeMap))
+        {
+            // check for array index:
+            DBG_ASSERT(nTmp >= 0, "index too low");
+            DBG_ASSERT(nTmp < (sizeof(aIndexServiceMap)/sizeof(sal_Char*)),
+                       "index too high");
+            DBG_ASSERT(sizeof(aIndexServiceMap) ==
+                       sizeof(aIndexSourceElementMap),
+                       "service and source element maps must be same size");
+
+            eIndexType = (enum IndexTypeEnum)nTmp;
+            pSourceElementName = aIndexSourceElementMap[eIndexType];
+            bValid = sal_True;
+        }
+    }
 }
 
 XMLIndexTOCContext::~XMLIndexTOCContext()
@@ -147,43 +235,45 @@ XMLIndexTOCContext::~XMLIndexTOCContext()
 void XMLIndexTOCContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    // TODO: solve properly when API is up to task
-    const sal_Char sAPI_toc[] = "com.sun.star.text.ContentIndex";
-    const OUString sContentIndex(RTL_CONSTASCII_USTRINGPARAM(sAPI_toc));
-
-    // create table of content (via MultiServiceFactory)
-    Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),UNO_QUERY);
-    if( xFactory.is() )
+    if (bValid)
     {
-        Reference<XInterface> xIfc = xFactory->createInstance(sContentIndex);
-        if( xIfc.is() )
+        // create table of content (via MultiServiceFactory)
+        Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
+                                                 UNO_QUERY);
+        if( xFactory.is() )
         {
-            Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
-            GetImport().GetTextImport()->InsertTextContent(xTextContent);
-
-            Reference<XPropertySet> xPropSet(xIfc, UNO_QUERY);
-            xTOCPropertySet = xPropSet;
-        }
-    }
-
-    // find text:style-name attribute and set section style
-    sal_Int32 nCount = xAttrList->getLength();
-    for(sal_Int32 nAttr = 0; nAttr < nCount; nAttr++)
-    {
-        OUString sLocalName;
-        sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
-            GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
-                              &sLocalName );
-        if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-             (sLocalName.equalsAsciiL(sXML_style_name,
-                                      sizeof(sXML_style_name)-1)) )
-        {
-            XMLPropStyleContext* pStyle =
-                GetImport().GetTextImport()->FindSectionStyle(
-                    xAttrList->getValueByIndex(nAttr));
-            if (pStyle != NULL)
+            Reference<XInterface> xIfc =
+                xFactory->createInstance(
+                    OUString::createFromAscii(aIndexServiceMap[eIndexType]));
+            if( xIfc.is() )
             {
-                pStyle->FillPropertySet( xTOCPropertySet );
+                Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
+                GetImport().GetTextImport()->InsertTextContent(xTextContent);
+
+                Reference<XPropertySet> xPropSet(xIfc, UNO_QUERY);
+                xTOCPropertySet = xPropSet;
+            }
+        }
+
+        // find text:style-name attribute and set section style
+        sal_Int32 nCount = xAttrList->getLength();
+        for(sal_Int32 nAttr = 0; nAttr < nCount; nAttr++)
+        {
+            OUString sLocalName;
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                GetKeyByAttrName( xAttrList->getNameByIndex(nAttr),
+                                  &sLocalName );
+            if ( (XML_NAMESPACE_TEXT == nPrefix) &&
+                 (sLocalName.equalsAsciiL(sXML_style_name,
+                                          sizeof(sXML_style_name)-1)) )
+            {
+                XMLPropStyleContext* pStyle =
+                    GetImport().GetTextImport()->FindSectionStyle(
+                        xAttrList->getValueByIndex(nAttr));
+                if (pStyle != NULL)
+                {
+                    pStyle->FillPropertySet( xTOCPropertySet );
+                }
             }
         }
     }
@@ -201,18 +291,65 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = NULL;
 
-    if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         (rLocalName.equalsAsciiL(sXML_table_of_content_source,
-                                  sizeof(sXML_table_of_content_source)-1)) )
+    if (bValid)
     {
-        pContext = new XMLIndexTOCSourceContext(GetImport(),
-                                                nPrefix, rLocalName,
-                                                xTOCPropertySet);
+        if (XML_NAMESPACE_TEXT == nPrefix)
+        {
+            if (rLocalName.equalsAsciiL(sXML_index_body,
+                                        sizeof(sXML_index_body)-1))
+            {
+                // TODO: text content
+            }
+            else if (0 == rLocalName.compareToAscii(pSourceElementName))
+            {
+                // instantiate source context for this index type
+                switch (eIndexType)
+                {
+                    case TEXT_INDEX_TOC:
+                        pContext = new XMLIndexTOCSourceContext(
+                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                        break;
+
+                    case TEXT_INDEX_OBJECT:
+                        pContext = new XMLIndexObjectSourceContext(
+                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                        break;
+
+                    case TEXT_INDEX_ALPHABETICAL:
+                        pContext = new XMLIndexAlphabeticalSourceContext(
+                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                        break;
+
+                    case TEXT_INDEX_USER:
+                        pContext = new XMLIndexUserSourceContext(
+                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                        break;
+
+                    case TEXT_INDEX_BIBLIOGRAPHY:
+                        pContext = new XMLIndexBibliographySourceContext(
+                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                        break;
+
+                    case TEXT_INDEX_TABLE:
+                        pContext = new XMLIndexTableSourceContext(
+                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                        break;
+
+                    case TEXT_INDEX_ILLUSTRATION:
+                        pContext = new XMLIndexIllustrationSourceContext(
+                            GetImport(), nPrefix, rLocalName, xTOCPropertySet);
+                        break;
+
+                    default:
+                        DBG_ERROR("index type not implemented");
+                        break;
+                }
+            }
+            // else: ignore
+        }
+        // else: no text: namespace -> ignore
     }
-    else
-    {
-        // TODO: text content
-    }
+    // else: not valid -> ignore
 
     // default: ignore
     if (pContext == NULL)

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLIndexTOCContext.hxx,v $
+ *  $RCSfile: XMLIndexBibliographyEntryContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
@@ -59,85 +59,68 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
-#define _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
+#ifndef _XMLOFF_XMLINDEXBIBLIOGRAPHYENTRYCONTEXT_HXX_
+#define _XMLOFF_XMLINDEXBIBLIOGRAPHYENTRYCONTEXT_HXX_
 
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#ifndef _XMLOFF_XMLINDEXSIMPLEENTRYCONTEXT_HXX_
+#include "XMLIndexSimpleEntryContext.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
-    namespace beans { class XPropertySet; }
 } } }
 namespace rtl { class OUString; }
-
-
-enum IndexTypeEnum
-{
-    TEXT_INDEX_TOC,
-    TEXT_INDEX_ALPHABETICAL,
-    TEXT_INDEX_TABLE,
-    TEXT_INDEX_OBJECT,
-    TEXT_INDEX_BIBLIOGRAPHY,
-    TEXT_INDEX_USER,
-    TEXT_INDEX_ILLUSTRATION,
-
-    TEXT_INDEX_UNKNOWN
-};
-
+class XMLIndexTemplateContext;
 
 /**
- * Import all indices.
- *
- * Originally, this class would import only the TOC (table of
- * content), but now it's role has been expanded to handle all
- * indices, and hence is named inappropriately. Depending on the
- * element name it decides which index source element context to create.
+ * Import bibliography index entry templates
  */
-class XMLIndexTOCContext : public SvXMLImportContext
+class XMLIndexBibliographyEntryContext : public XMLIndexSimpleEntryContext
 {
-
-    /** XPropertySet of the index */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xTOCPropertySet;
-
-    enum IndexTypeEnum eIndexType;
-
-    /** source element name (for CreateChildContext) */
-    const sal_Char* pSourceElementName;
-
-    sal_Bool bValid;
+    // bibliography info
+    sal_Int16 nBibliographyInfo;
+    sal_Bool bBibliographyInfoOK;
 
 public:
 
     TYPEINFO();
 
-    XMLIndexTOCContext(
+    XMLIndexBibliographyEntryContext(
         SvXMLImport& rImport,
+        XMLIndexTemplateContext& rTemplate,
         sal_uInt16 nPrfx,
         const ::rtl::OUString& rLocalName );
 
-    ~XMLIndexTOCContext();
+    ~XMLIndexBibliographyEntryContext();
 
 protected:
 
+    /** process parameters */
     virtual void StartElement(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
+    /** call FillPropertyValues and insert into template */
     virtual void EndElement();
 
-    virtual SvXMLImportContext *CreateChildContext(
-        sal_uInt16 nPrefix,
-        const ::rtl::OUString& rLocalName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
+    /** fill property values for this template entry */
+    virtual void FillPropertyValues(
+        ::com::sun::star::uno::Sequence<
+            ::com::sun::star::beans::PropertyValue> & rValues);
+
 };
 
 #endif

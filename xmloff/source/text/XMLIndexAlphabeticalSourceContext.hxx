@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLIndexTOCContext.hxx,v $
+ *  $RCSfile: XMLIndexAlphabeticalSourceContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
@@ -59,11 +59,11 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
-#define _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
+#ifndef _XMLOFF_XMLINDEXALPHABETICALSOURCECONTEXT_HXX_
+#define _XMLOFF_XMLINDEXALPHABETICALSOURCECONTEXT_HXX_
 
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#ifndef _XMLOFF_XMLINDEXSOURCEBASECONTEXT_HXX_
+#include "XMLIndexSourceBaseContext.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -78,62 +78,53 @@ namespace com { namespace sun { namespace star {
 namespace rtl { class OUString; }
 
 
-enum IndexTypeEnum
-{
-    TEXT_INDEX_TOC,
-    TEXT_INDEX_ALPHABETICAL,
-    TEXT_INDEX_TABLE,
-    TEXT_INDEX_OBJECT,
-    TEXT_INDEX_BIBLIOGRAPHY,
-    TEXT_INDEX_USER,
-    TEXT_INDEX_ILLUSTRATION,
-
-    TEXT_INDEX_UNKNOWN
-};
-
-
 /**
- * Import all indices.
- *
- * Originally, this class would import only the TOC (table of
- * content), but now it's role has been expanded to handle all
- * indices, and hence is named inappropriately. Depending on the
- * element name it decides which index source element context to create.
+ * Import alphabetical (keyword) index source element
  */
-class XMLIndexTOCContext : public SvXMLImportContext
+class XMLIndexAlphabeticalSourceContext : public XMLIndexSourceBaseContext
 {
+    const ::rtl::OUString sMainEntryCharacterStyleName;
+    const ::rtl::OUString sUseAlphabeticalSeparators;
+    const ::rtl::OUString sUseCombinedEntries;
+    const ::rtl::OUString sIsCaseSensitive;
+    const ::rtl::OUString sUseKeyAsEntry;
+    const ::rtl::OUString sUseUpperCase;
+    const ::rtl::OUString sUseDash;
+    const ::rtl::OUString sUsePP;
 
-    /** XPropertySet of the index */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xTOCPropertySet;
+    ::rtl::OUString sMainEntryStyleName;
+    sal_Bool bMainEntryStyleNameOK;
 
-    enum IndexTypeEnum eIndexType;
-
-    /** source element name (for CreateChildContext) */
-    const sal_Char* pSourceElementName;
-
-    sal_Bool bValid;
+    sal_Bool bSeparators;
+    sal_Bool bCombineEntries;
+    sal_Bool bCaseSensitive;
+    sal_Bool bEntry;
+    sal_Bool bUpperCase;
+    sal_Bool bCombineDash;
+    sal_Bool bCombinePP;
 
 public:
 
     TYPEINFO();
 
-    XMLIndexTOCContext(
+    XMLIndexAlphabeticalSourceContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const ::rtl::OUString& rLocalName,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet> & rPropSet);
 
-    ~XMLIndexTOCContext();
+    ~XMLIndexAlphabeticalSourceContext();
 
 protected:
 
-    virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+    virtual void ProcessAttribute(
+        enum IndexSourceParamEnum eParam,
+        const ::rtl::OUString& rValue);
 
     virtual void EndElement();
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<

@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLIndexTOCContext.hxx,v $
+ *  $RCSfile: XMLIndexTableSourceContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
@@ -59,11 +59,11 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
-#define _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
+#ifndef _XMLOFF_XMLINDEXTABLESOURCECONTEXT_HXX_
+#define _XMLOFF_XMLINDEXTABLESOURCECONTEXT_HXX_
 
-#ifndef _XMLOFF_XMLICTXT_HXX
-#include "xmlictxt.hxx"
+#ifndef _XMLOFF_XMLINDEXSOURCEBASECONTEXT_HXX_
+#include "XMLIndexSourceBaseContext.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -78,62 +78,44 @@ namespace com { namespace sun { namespace star {
 namespace rtl { class OUString; }
 
 
-enum IndexTypeEnum
-{
-    TEXT_INDEX_TOC,
-    TEXT_INDEX_ALPHABETICAL,
-    TEXT_INDEX_TABLE,
-    TEXT_INDEX_OBJECT,
-    TEXT_INDEX_BIBLIOGRAPHY,
-    TEXT_INDEX_USER,
-    TEXT_INDEX_ILLUSTRATION,
-
-    TEXT_INDEX_UNKNOWN
-};
-
-
 /**
- * Import all indices.
- *
- * Originally, this class would import only the TOC (table of
- * content), but now it's role has been expanded to handle all
- * indices, and hence is named inappropriately. Depending on the
- * element name it decides which index source element context to create.
+ * Import table index source element
  */
-class XMLIndexTOCContext : public SvXMLImportContext
+class XMLIndexTableSourceContext : public XMLIndexSourceBaseContext
 {
+    const ::rtl::OUString sCreateFromLabels;
+    const ::rtl::OUString sLabelCategory;
+    const ::rtl::OUString sLabelDisplayType;
 
-    /** XPropertySet of the index */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xTOCPropertySet;
+    ::rtl::OUString sSequence;
+    sal_Int16 nDisplayFormat;
 
-    enum IndexTypeEnum eIndexType;
-
-    /** source element name (for CreateChildContext) */
-    const sal_Char* pSourceElementName;
-
-    sal_Bool bValid;
+    sal_Bool bSequenceOK;
+    sal_Bool bDisplayFormatOK;
+    sal_Bool bUseCaption;
 
 public:
 
     TYPEINFO();
 
-    XMLIndexTOCContext(
+    XMLIndexTableSourceContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const ::rtl::OUString& rLocalName,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet> & rPropSet);
 
-    ~XMLIndexTOCContext();
+    ~XMLIndexTableSourceContext();
 
 protected:
 
-    virtual void StartElement(
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
+    virtual void ProcessAttribute(
+        enum IndexSourceParamEnum eParam,
+        const ::rtl::OUString& rValue);
 
     virtual void EndElement();
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<

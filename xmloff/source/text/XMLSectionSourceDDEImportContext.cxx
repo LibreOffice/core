@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionSourceDDEImportContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-10-16 13:01:58 $
+ *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,10 @@ enum XMLSectionSourceDDEToken
 
 static __FAR_DATA SvXMLTokenMapEntry aSectionSourceDDETokenMap[] =
 {
-    { XML_NAMESPACE_TEXT, sXML_dde_application,
+    { XML_NAMESPACE_OFFICE, sXML_dde_application,
         XML_TOK_SECTION_DDE_APPLICATION },
-    { XML_NAMESPACE_TEXT, sXML_dde_topic, XML_TOK_SECTION_DDE_TOPIC },
-    { XML_NAMESPACE_TEXT, sXML_dde_item, XML_TOK_SECTION_DDE_ITEM },
+    { XML_NAMESPACE_OFFICE, sXML_dde_topic, XML_TOK_SECTION_DDE_TOPIC },
+    { XML_NAMESPACE_OFFICE, sXML_dde_item, XML_TOK_SECTION_DDE_ITEM },
     XML_TOKEN_MAP_END
 };
 

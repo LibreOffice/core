@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.6 2000-11-02 15:51:17 dvo Exp $
+	$Id: text.mod,v 1.7 2000-11-14 14:42:49 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -633,7 +633,7 @@
 <!ELEMENT text:endnote-body (text:h|text:p|
 							 text:ordered-list|text:unordered-list)*>
 
-<!ENTITY % sectionText "((text:section-source|text:section-source-dde)?,
+<!ENTITY % sectionText "((text:section-source|office:dde-source)?,
 						(text:h|text:p|text:ordered-list|
 						text:unordered-list|table:table|chart:chart|draw:page|
 						draw:a|draw:text-box|draw:image|text:section|
@@ -653,11 +653,6 @@
 <!ATTLIST text:section-source xlink:show (embed) #FIXED "embed">
 <!ATTLIST text:section-source text:section-name %string; #IMPLIED>
 <!ATTLIST text:section-source text:filter-name %string; #IMPLIED>
-
-<!ELEMENT text:section-source-dde EMPTY>
-<!ATTLIST text:section-source-dde text:dde-application CDATA #IMPLIED>
-<!ATTLIST text:section-source-dde text:dde-topic CDATA #IMPLIED>
-<!ATTLIST text:section-source-dde text:dde-item CDATA #IMPLIED>
 
 <!ELEMENT text:table-of-content (text:table-of-content-source, 
 								 text:table-of-content-body)   >

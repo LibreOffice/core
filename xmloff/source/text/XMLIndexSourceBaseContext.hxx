@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLIndexTOCContext.hxx,v $
+ *  $RCSfile: XMLIndexSourceBaseContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
-#define _XMLOFF_XMLINDEXTOCCONTEXT_HXX_
+#ifndef _XMLOFF_XMLINDEXSOURCEBASECONTEXT_HXX_
+#define _XMLOFF_XMLINDEXSOURCEBASECONTEXT_HXX_
 
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include "xmlictxt.hxx"
@@ -70,60 +70,78 @@
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }
     namespace beans { class XPropertySet; }
 } } }
-namespace rtl { class OUString; }
 
-
-enum IndexTypeEnum
+enum IndexSourceParamEnum
 {
-    TEXT_INDEX_TOC,
-    TEXT_INDEX_ALPHABETICAL,
-    TEXT_INDEX_TABLE,
-    TEXT_INDEX_OBJECT,
-    TEXT_INDEX_BIBLIOGRAPHY,
-    TEXT_INDEX_USER,
-    TEXT_INDEX_ILLUSTRATION,
-
-    TEXT_INDEX_UNKNOWN
+    XML_TOK_INDEXSOURCE_OUTLINE_LEVEL,
+    XML_TOK_INDEXSOURCE_USE_INDEX_MARKS,
+    XML_TOK_INDEXSOURCE_INDEX_SCOPE,
+    XML_TOK_INDEXSOURCE_RELATIVE_TABS,
+    XML_TOK_INDEXSOURCE_USE_OTHER_OBJECTS,
+    XML_TOK_INDEXSOURCE_USE_SHEET,
+    XML_TOK_INDEXSOURCE_USE_CHART,
+    XML_TOK_INDEXSOURCE_USE_DRAW,
+    XML_TOK_INDEXSOURCE_USE_IMAGE,
+    XML_TOK_INDEXSOURCE_USE_MATH,
+    XML_TOK_INDEXSOURCE_MAIN_ENTRY_STYLE,
+    XML_TOK_INDEXSOURCE_IGNORE_CASE,
+    XML_TOK_INDEXSOURCE_SEPARATORS,
+    XML_TOK_INDEXSOURCE_COMBINE_ENTRIES,
+    XML_TOK_INDEXSOURCE_COMBINE_WITH_DASH,
+    XML_TOK_INDEXSOURCE_KEYS_AS_ENTRIES,
+    XML_TOK_INDEXSOURCE_COMBINE_WITH_PP,
+    XML_TOK_INDEXSOURCE_CAPITALIZE,
+    XML_TOK_INDEXSOURCE_USE_OBJECTS,
+    XML_TOK_INDEXSOURCE_USE_GRAPHICS,
+    XML_TOK_INDEXSOURCE_USE_TABLES,
+    XML_TOK_INDEXSOURCE_USE_FRAMES,
+    XML_TOK_INDEXSOURCE_COPY_OUTLINE_LEVELS,
+    XML_TOK_INDEXSOURCE_USE_CAPTION,
+    XML_TOK_INDEXSOURCE_SEQUENCE_NAME,
+    XML_TOK_INDEXSOURCE_SEQUENCE_FORMAT
 };
 
 
 /**
- * Import all indices.
- *
- * Originally, this class would import only the TOC (table of
- * content), but now it's role has been expanded to handle all
- * indices, and hence is named inappropriately. Depending on the
- * element name it decides which index source element context to create.
+ * Superclass for index source elements
  */
-class XMLIndexTOCContext : public SvXMLImportContext
+class XMLIndexSourceBaseContext : public SvXMLImportContext
 {
+    const ::rtl::OUString sCreateFromChapter;
 
-    /** XPropertySet of the index */
+    sal_Bool bUseLevelFormats;
+
+    sal_Bool bChapterIndex;     /// chapter-wise or document index?
+    sal_Bool bRelativeTabs;     /// tab stops relative to margin or indent?
+
+protected:
+
+    /// property set of index; must be accessible to subclasses
     ::com::sun::star::uno::Reference<
-        ::com::sun::star::beans::XPropertySet> xTOCPropertySet;
-
-    enum IndexTypeEnum eIndexType;
-
-    /** source element name (for CreateChildContext) */
-    const sal_Char* pSourceElementName;
-
-    sal_Bool bValid;
+        ::com::sun::star::beans::XPropertySet> & rIndexPropertySet;
 
 public:
 
     TYPEINFO();
 
-    XMLIndexTOCContext(
+    XMLIndexSourceBaseContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const ::rtl::OUString& rLocalName,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet> & rPropSet,
+        sal_Bool bLevelFormats);
 
-    ~XMLIndexTOCContext();
+    ~XMLIndexSourceBaseContext();
 
 protected:
 
@@ -131,9 +149,13 @@ protected:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList);
 
+    virtual void ProcessAttribute(
+        enum IndexSourceParamEnum eParam,
+        const ::rtl::OUString& rValue);
+
     virtual void EndElement();
 
-    virtual SvXMLImportContext *CreateChildContext(
+    virtual SvXMLImportContext* CreateChildContext(
         sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<

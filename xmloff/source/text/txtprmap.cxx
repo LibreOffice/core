@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-13 08:42:14 $
+ *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -553,7 +553,16 @@ XMLPropertyMapEntry aXMLShapePropMap[] =
 
 XMLPropertyMapEntry aXMLSectionPropMap[] =
 {
+    // RES_COL
     M_E( "TextColumns",         STYLE,  columns,    MID_FLAG_ELEMENT_ITEM|XML_TYPE_TEXT_COLUMNS, CTF_TEXTCOLUMNS ),
+
+    // RES_BACKGROUND
+    M_E( "BackColor",   FO, background_color,       XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    M_E( "BackTransparent", FO, background_color,       XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    M_E( "BackGraphicLocation", STYLE,  position,   MID_FLAG_SPECIAL_ITEM|XML_TYPE_BUILDIN_CMP_ONLY, CTF_BACKGROUND_POS  ),
+    M_E( "BackGraphicFilter",STYLE, filter_name,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_FILTER ),
+    M_E( "BackGraphicURL",  STYLE,  background_image,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_URL ),
+
     M_E( "IsProtected",         STYLE,  protect,    XML_TYPE_BOOL, 0 ),
     { 0, 0, 0, 0 }
 };

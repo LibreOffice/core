@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLIndexTOCSourceContext.cxx,v $
+ *  $RCSfile: XMLIndexBibliographySourceContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
@@ -60,8 +60,8 @@
  ************************************************************************/
 
 
-#ifndef _XMLOFF_XMLINDEXTOCSOURCECONTEXT_HXX_
-#include "XMLIndexTOCSourceContext.hxx"
+#ifndef _XMLOFF_XMLINDEXBIBLIOGRAPHYSOURCECONTEXT_HXX_
+#include "XMLIndexBibliographySourceContext.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -120,115 +120,59 @@
 #include <rtl/ustring.hxx>
 #endif
 
-
-
-
 using ::rtl::OUString;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 
-const sal_Char sAPI_CreateFromChapter[] = "CreateFromChapter";
-const sal_Char sAPI_CreateFromOutline[] = "CreateFromOutline";
-const sal_Char sAPI_CreateFromMarks[] = "CreateFromMarks";
-const sal_Char sAPI_Level[] = "Level";
 
-TYPEINIT1( XMLIndexTOCSourceContext, XMLIndexSourceBaseContext );
+TYPEINIT1(XMLIndexBibliographySourceContext, XMLIndexSourceBaseContext);
 
-XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
+
+XMLIndexBibliographySourceContext::XMLIndexBibliographySourceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet) :
         XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
-                                  rPropSet, sal_True),
-        // use all chapters by default
-        nOutlineLevel(rImport.GetTextImport()->GetChapterNumbering()->
-                                                                  getCount()),
-        bUseOutline(sal_True),
-        bUseMarks(sal_True),
-        sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromMarks)),
-        sLevel(RTL_CONSTASCII_USTRINGPARAM(sAPI_Level)),
-        sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromOutline))
+                                  rPropSet, sal_False)
 {
 }
 
-XMLIndexTOCSourceContext::~XMLIndexTOCSourceContext()
+XMLIndexBibliographySourceContext::~XMLIndexBibliographySourceContext()
 {
 }
 
-void XMLIndexTOCSourceContext::ProcessAttribute(
+void XMLIndexBibliographySourceContext::ProcessAttribute(
     enum IndexSourceParamEnum eParam,
     const OUString& rValue)
 {
-    switch (eParam)
-    {
-        case XML_TOK_INDEXSOURCE_OUTLINE_LEVEL:
-            if (rValue.equalsAsciiL(sXML_none, sizeof(sXML_none)-1))
-            {
-                bUseOutline = sal_False;
-            }
-            else
-            {
-                sal_Int32 nTmp;
-                if (SvXMLUnitConverter::convertNumber(
-                    nTmp, rValue, 1, GetImport().GetTextImport()->
-                    GetChapterNumbering()->getCount()))
-                {
-                    bUseOutline = sal_True;
-                    nOutlineLevel = nTmp;
-                }
-            }
-            break;
-
-        case XML_TOK_INDEXSOURCE_USE_INDEX_MARKS:
-        {
-            sal_Bool bTmp;
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
-            {
-                bUseMarks = bTmp;
-            }
-            break;
-        }
-
-        default:
-            // default: ask superclass
-            XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
-            break;
-    }
+    // We have no attributes. Who wants attributes, anyway?
 }
 
-void XMLIndexTOCSourceContext::EndElement()
+
+void XMLIndexBibliographySourceContext::EndElement()
 {
-    Any aAny;
-
-    aAny.setValue(&bUseMarks, ::getBooleanCppuType());
-    rIndexPropertySet->setPropertyValue(sCreateFromMarks, aAny);
-
-    aAny.setValue(&bUseOutline, ::getBooleanCppuType());
-    rIndexPropertySet->setPropertyValue(sCreateFromOutline, aAny);
-
-    aAny <<= (sal_Int16)nOutlineLevel;
-    rIndexPropertySet->setPropertyValue(sLevel, aAny);
+    // No attributes, no properties.
 }
 
 
-SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
+SvXMLImportContext* XMLIndexBibliographySourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         (rLocalName.equalsAsciiL(sXML_table_of_content_entry_template,
-                            sizeof(sXML_table_of_content_entry_template)-1)))
+         (rLocalName.equalsAsciiL(sXML_bibliography_entry_template,
+                    sizeof(sXML_bibliography_entry_template)-1)))
     {
         return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
                                            nPrefix, rLocalName,
-                                           aLevelNameTOCMap,
-                                           sXML_outline_level,
-                                           aLevelStylePropNameTOCMap,
-                                           aAllowedTokenTypesTOC);
+                                           aLevelNameBibliographyMap,
+                                           sXML_bibliography_type,
+                                           aLevelStylePropNameBibliographyMap,
+                                           aAllowedTokenTypesBibliography);
     }
     else
     {
@@ -236,4 +180,5 @@ SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
                                                              rLocalName,
                                                              xAttrList);
     }
+
 }

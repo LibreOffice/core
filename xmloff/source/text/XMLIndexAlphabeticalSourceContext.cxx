@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLIndexTOCSourceContext.cxx,v $
+ *  $RCSfile: XMLIndexAlphabeticalSourceContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
@@ -60,8 +60,8 @@
  ************************************************************************/
 
 
-#ifndef _XMLOFF_XMLINDEXTOCSOURCECONTEXT_HXX_
-#include "XMLIndexTOCSourceContext.hxx"
+#ifndef _XMLOFF_XMLINDEXALPHABETICALSOURCECONTEXT_HXX_
+#include "XMLIndexAlphabeticalSourceContext.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -129,106 +129,169 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 
-const sal_Char sAPI_CreateFromChapter[] = "CreateFromChapter";
-const sal_Char sAPI_CreateFromOutline[] = "CreateFromOutline";
-const sal_Char sAPI_CreateFromMarks[] = "CreateFromMarks";
-const sal_Char sAPI_Level[] = "Level";
+const sal_Char sAPI_MainEntryCharacterStyleName[] = "MainEntryCharacterStyleName";
+const sal_Char sAPI_UseAlphabeticalSeparators[] = "UseAlphabeticalSeparators";
+const sal_Char sAPI_UseCombinedEntries[] = "UseCombinedEntries";
+const sal_Char sAPI_IsCaseSensitive[] = "IsCaseSensitive";
+const sal_Char sAPI_UseKeyAsEntry[] = "UseKeyAsEntry";
+const sal_Char sAPI_UseUpperCase[] = "UseUpperCase";
+const sal_Char sAPI_UseDash[] = "UseDash";
+const sal_Char sAPI_UsePP[] = "UsePP";
 
-TYPEINIT1( XMLIndexTOCSourceContext, XMLIndexSourceBaseContext );
 
-XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
+TYPEINIT1( XMLIndexAlphabeticalSourceContext, XMLIndexSourceBaseContext );
+
+XMLIndexAlphabeticalSourceContext::XMLIndexAlphabeticalSourceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet) :
         XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
-                                  rPropSet, sal_True),
-        // use all chapters by default
-        nOutlineLevel(rImport.GetTextImport()->GetChapterNumbering()->
-                                                                  getCount()),
-        bUseOutline(sal_True),
-        bUseMarks(sal_True),
-        sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromMarks)),
-        sLevel(RTL_CONSTASCII_USTRINGPARAM(sAPI_Level)),
-        sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromOutline))
+                                  rPropSet, sal_False),
+        sMainEntryStyleName(),
+        bMainEntryStyleNameOK(sal_False),
+        bSeparators(sal_False),
+        bCombineEntries(sal_True),
+        bCaseSensitive(sal_True),
+        bEntry(sal_False),
+        bUpperCase(sal_False),
+        bCombineDash(sal_False),
+        bCombinePP(sal_True),
+        sMainEntryCharacterStyleName(RTL_CONSTASCII_USTRINGPARAM(
+            sAPI_MainEntryCharacterStyleName)),
+        sUseAlphabeticalSeparators(RTL_CONSTASCII_USTRINGPARAM(
+            sAPI_UseAlphabeticalSeparators)),
+        sUseCombinedEntries(RTL_CONSTASCII_USTRINGPARAM(
+            sAPI_UseCombinedEntries)),
+        sIsCaseSensitive(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsCaseSensitive)),
+        sUseKeyAsEntry(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseKeyAsEntry)),
+        sUseUpperCase(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseUpperCase)),
+        sUseDash(RTL_CONSTASCII_USTRINGPARAM(sAPI_UseDash)),
+        sUsePP(RTL_CONSTASCII_USTRINGPARAM(sAPI_UsePP))
 {
 }
 
-XMLIndexTOCSourceContext::~XMLIndexTOCSourceContext()
+XMLIndexAlphabeticalSourceContext::~XMLIndexAlphabeticalSourceContext()
 {
 }
 
-void XMLIndexTOCSourceContext::ProcessAttribute(
+void XMLIndexAlphabeticalSourceContext::ProcessAttribute(
     enum IndexSourceParamEnum eParam,
     const OUString& rValue)
 {
+    sal_Bool bTmp;
+
     switch (eParam)
     {
-        case XML_TOK_INDEXSOURCE_OUTLINE_LEVEL:
-            if (rValue.equalsAsciiL(sXML_none, sizeof(sXML_none)-1))
-            {
-                bUseOutline = sal_False;
-            }
-            else
-            {
-                sal_Int32 nTmp;
-                if (SvXMLUnitConverter::convertNumber(
-                    nTmp, rValue, 1, GetImport().GetTextImport()->
-                    GetChapterNumbering()->getCount()))
-                {
-                    bUseOutline = sal_True;
-                    nOutlineLevel = nTmp;
-                }
-            }
+        case XML_TOK_INDEXSOURCE_MAIN_ENTRY_STYLE:
+            sMainEntryStyleName = rValue;
+            bMainEntryStyleNameOK = sal_True;
             break;
 
-        case XML_TOK_INDEXSOURCE_USE_INDEX_MARKS:
-        {
-            sal_Bool bTmp;
+        case XML_TOK_INDEXSOURCE_IGNORE_CASE:
             if (SvXMLUnitConverter::convertBool(bTmp, rValue))
             {
-                bUseMarks = bTmp;
+                bCaseSensitive = !bTmp;
             }
             break;
-        }
+
+        case XML_TOK_INDEXSOURCE_SEPARATORS:
+            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            {
+                bSeparators = bTmp;
+            }
+            break;
+
+        case XML_TOK_INDEXSOURCE_COMBINE_ENTRIES:
+            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            {
+                bCombineEntries = bTmp;
+            }
+            break;
+
+        case XML_TOK_INDEXSOURCE_COMBINE_WITH_DASH:
+            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            {
+                bCombineDash = bTmp;
+            }
+            break;
+        case XML_TOK_INDEXSOURCE_KEYS_AS_ENTRIES:
+            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            {
+                bEntry = bTmp;
+            }
+            break;
+
+        case XML_TOK_INDEXSOURCE_COMBINE_WITH_PP:
+            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            {
+                bCombinePP = bTmp;
+            }
+            break;
+
+        case XML_TOK_INDEXSOURCE_CAPITALIZE:
+            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
+            {
+                bUpperCase = bTmp;
+            }
+            break;
 
         default:
-            // default: ask superclass
             XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
             break;
     }
 }
 
-void XMLIndexTOCSourceContext::EndElement()
+void XMLIndexAlphabeticalSourceContext::EndElement()
 {
+
     Any aAny;
 
-    aAny.setValue(&bUseMarks, ::getBooleanCppuType());
-    rIndexPropertySet->setPropertyValue(sCreateFromMarks, aAny);
+    if (bMainEntryStyleNameOK)
+    {
+        aAny <<= sMainEntryStyleName;
+        rIndexPropertySet->setPropertyValue(sMainEntryCharacterStyleName,aAny);
+    }
 
-    aAny.setValue(&bUseOutline, ::getBooleanCppuType());
-    rIndexPropertySet->setPropertyValue(sCreateFromOutline, aAny);
+    aAny.setValue(&bSeparators, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sUseAlphabeticalSeparators, aAny);
 
-    aAny <<= (sal_Int16)nOutlineLevel;
-    rIndexPropertySet->setPropertyValue(sLevel, aAny);
+    aAny.setValue(&bCombineEntries, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sUseCombinedEntries, aAny);
+
+    aAny.setValue(&bCaseSensitive, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sIsCaseSensitive, aAny);
+
+    aAny.setValue(&bEntry, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sUseKeyAsEntry, aAny);
+
+    aAny.setValue(&bUpperCase, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sUseUpperCase, aAny);
+
+    aAny.setValue(&bCombineDash, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sUseDash, aAny);
+
+    aAny.setValue(&bCombinePP, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sUsePP, aAny);
+
+    XMLIndexSourceBaseContext::EndElement();
 }
 
-
-SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
+SvXMLImportContext* XMLIndexAlphabeticalSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         (rLocalName.equalsAsciiL(sXML_table_of_content_entry_template,
-                            sizeof(sXML_table_of_content_entry_template)-1)))
+         (rLocalName.equalsAsciiL(sXML_alphabetical_index_entry_template,
+                    sizeof(sXML_alphabetical_index_entry_template)-1)))
     {
         return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
                                            nPrefix, rLocalName,
-                                           aLevelNameTOCMap,
+                                           aLevelNameAlphaMap,
                                            sXML_outline_level,
-                                           aLevelStylePropNameTOCMap,
-                                           aAllowedTokenTypesTOC);
+                                           aLevelStylePropNameAlphaMap,
+                                           aAllowedTokenTypesAlpha);
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-13 08:42:14 $
+ *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,12 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_dde_connection_decls, XML_TOK_TEXT_DDE_DECLS },
     { XML_NAMESPACE_TEXT, sXML_section,         XML_TOK_TEXT_SECTION },
     { XML_NAMESPACE_TEXT, sXML_table_of_content, XML_TOK_TEXT_TOC },
+    { XML_NAMESPACE_TEXT, sXML_object_index,    XML_TOK_TEXT_OBJECT_INDEX },
+    { XML_NAMESPACE_TEXT, sXML_table_index,     XML_TOK_TEXT_TABLE_INDEX },
+    { XML_NAMESPACE_TEXT, sXML_illustration_index, XML_TOK_TEXT_ILLUSTRATION_INDEX },
+    { XML_NAMESPACE_TEXT, sXML_user_index,      XML_TOK_TEXT_USER_INDEX },
+    { XML_NAMESPACE_TEXT, sXML_alphabetical_index, XML_TOK_TEXT_ALPHABETICAL_INDEX },
+    { XML_NAMESPACE_TEXT, sXML_bibliography,    XML_TOK_TEXT_BIBLIOGRAPHY_INDEX },
 
     XML_TOKEN_MAP_END
 };
@@ -996,6 +1002,12 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         break;
 
     case XML_TOK_TEXT_TOC:
+    case XML_TOK_TEXT_OBJECT_INDEX:
+    case XML_TOK_TEXT_TABLE_INDEX:
+    case XML_TOK_TEXT_ILLUSTRATION_INDEX:
+    case XML_TOK_TEXT_USER_INDEX:
+    case XML_TOK_TEXT_ALPHABETICAL_INDEX:
+    case XML_TOK_TEXT_BIBLIOGRAPHY_INDEX:
         pContext = new XMLIndexTOCContext( rImport, nPrefix, rLocalName );
         break;
 

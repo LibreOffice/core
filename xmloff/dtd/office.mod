@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.8 2000-11-13 08:42:12 mib Exp $
+	$Id: office.mod,v 1.9 2000-11-14 14:42:49 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -133,3 +133,11 @@
 		table:database-ranges?,table:data-pilot-tables?,
 		table:consolidation?)">
 <!ELEMENT office:body %body;>
+
+<!-- DDE source: for text sections and tables -->
+<!ELEMENT office:dde-source EMPTY>
+<!ATTLIST office:dde-source text:dde-application CDATA #IMPLIED>
+<!ATTLIST office:dde-source text:dde-topic CDATA #IMPLIED>
+<!ATTLIST office:dde-source text:dde-item CDATA #IMPLIED>
+<!ATTLIST office:dde-source text:automatic-update %boolean; "false">
+

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: mib $ $Date: 2000-11-07 13:33:08 $
+#   last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,15 +96,25 @@ CXXFILES = \
         XMLFootnoteBodyImportContext.cxx \
         XMLFootnoteConfigurationImportContext.cxx \
         XMLFootnoteImportContext.cxx \
+        XMLIndexAlphabeticalSourceContext.cxx \
+        XMLIndexBibliographyEntryContext.cxx \
+        XMLIndexBibliographySourceContext.cxx \
+        XMLIndexChapterInfoEntryContext.cxx \
+        XMLIndexIllustrationSourceContext.cxx \
+        XMLIndexObjectSourceContext.cxx \
         XMLIndexSimpleEntryContext.cxx \
         XMLIndexSpanEntryContext.cxx \
         XMLIndexTabStopEntryContext.cxx \
+        XMLIndexSourceBaseContext.cxx \
+        XMLIndexTableSourceContext.cxx \
         XMLIndexTOCContext.cxx \
         XMLIndexTOCSourceContext.cxx \
         XMLIndexTOCStylesContext.cxx \
         XMLIndexTemplateContext.cxx \
         XMLIndexTitleTemplateContext.cxx \
+        XMLIndexUserSourceContext.cxx \
         XMLPropertyBackpatcher.cxx \
+        XMLSectionExport.cxx \
         XMLSectionImportContext.cxx \
         XMLSectionSourceDDEImportContext.cxx \
         XMLSectionSourceImportContext.cxx \
@@ -145,15 +155,25 @@ SLOFILES =	\
         $(SLO)$/XMLFootnoteBodyImportContext.obj \
         $(SLO)$/XMLFootnoteConfigurationImportContext.obj \
         $(SLO)$/XMLFootnoteImportContext.obj \
+        $(SLO)$/XMLIndexAlphabeticalSourceContext.obj \
+        $(SLO)$/XMLIndexBibliographyEntryContext.obj \
+        $(SLO)$/XMLIndexBibliographySourceContext.obj \
+        $(SLO)$/XMLIndexChapterInfoEntryContext.obj \
+        $(SLO)$/XMLIndexIllustrationSourceContext.obj \
+        $(SLO)$/XMLIndexObjectSourceContext.obj \
         $(SLO)$/XMLIndexSimpleEntryContext.obj \
         $(SLO)$/XMLIndexSpanEntryContext.obj \
+        $(SLO)$/XMLIndexSourceBaseContext.obj \
         $(SLO)$/XMLIndexTOCContext.obj \
         $(SLO)$/XMLIndexTOCSourceContext.obj \
         $(SLO)$/XMLIndexTOCStylesContext.obj \
+        $(SLO)$/XMLIndexTableSourceContext.obj \
         $(SLO)$/XMLIndexTabStopEntryContext.obj \
         $(SLO)$/XMLIndexTemplateContext.obj \
         $(SLO)$/XMLIndexTitleTemplateContext.obj \
+        $(SLO)$/XMLIndexUserSourceContext.obj \
         $(SLO)$/XMLPropertyBackpatcher.obj \
+        $(SLO)$/XMLSectionExport.obj \
         $(SLO)$/XMLSectionImportContext.obj \
         $(SLO)$/XMLSectionSourceDDEImportContext.obj \
         $(SLO)$/XMLSectionSourceImportContext.obj \

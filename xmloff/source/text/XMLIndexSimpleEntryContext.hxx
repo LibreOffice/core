@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexSimpleEntryContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,11 @@ class XMLIndexSimpleEntryContext : public SvXMLImportContext
     // entry type
     const ::rtl::OUString& rEntryType;
 
+protected:
     // character style
     ::rtl::OUString sCharStyleName;
     sal_Bool bCharStyleNameOK;
 
-protected:
     // surrounding template
     XMLIndexTemplateContext& rTemplateContext;
 

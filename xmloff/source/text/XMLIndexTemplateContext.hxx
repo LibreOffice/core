@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTemplateContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:18 $
+ *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,31 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
 } } }
 namespace rtl { class OUString; }
+struct SvXMLEnumMapEntry;
+
+
+// constants for the XMLIndexTemplateContext constructor
+
+// TOC and user defined index:
+extern const SvXMLEnumMapEntry aLevelNameTOCMap[];
+extern const sal_Char* aLevelStylePropNameTOCMap[];
+extern const sal_Bool aAllowedTokenTypesTOC[];
+extern const sal_Bool aAllowedTokenTypesUser[];
+
+// alphabetical index:
+extern const SvXMLEnumMapEntry aLevelNameAlphaMap[];
+extern const sal_Char* aLevelStylePropNameAlphaMap[];
+extern const sal_Bool aAllowedTokenTypesAlpha[];
+
+// bibliography:
+extern const SvXMLEnumMapEntry aLevelNameBibliographyMap[];
+extern const sal_Char* aLevelStylePropNameBibliographyMap[];
+extern const sal_Bool aAllowedTokenTypesBibliography[];
+
+// table, illustration and object tables:
+extern const SvXMLEnumMapEntry* aLevelNameTableMap; // NULL: no outline-level
+extern const sal_Char* aLevelStylePropNameTableMap[];
+extern const sal_Bool aAllowedTokenTypesTable[];
 
 
 /**
@@ -99,6 +124,12 @@ class XMLIndexTemplateContext : public SvXMLImportContext
     ::std::vector< ::com::sun::star::beans::PropertyValues > aValueVector;
 
     ::rtl::OUString sStyleName;
+
+    const SvXMLEnumMapEntry* pOutlineLevelNameMap;
+    const sal_Char* pOutlineLevelAttrName;
+    const sal_Char** pOutlineLevelStylePropMap;
+    const sal_Bool* pAllowedTokenTypesMap;
+
     sal_Int32 nOutlineLevel;
     sal_Bool bStyleNameOK;
     sal_Bool bOutlineLevelOK;
@@ -127,6 +158,8 @@ public:
     const ::rtl::OUString sTabStopRightAligned;
     const ::rtl::OUString sTabStopPosition;
     const ::rtl::OUString sTabStopFillCharacter;
+    const ::rtl::OUString sBibliographyDataField;
+    const ::rtl::OUString sChapterFormat;
 
     const ::rtl::OUString sLevelFormat;
     const ::rtl::OUString sParaStyleLevel;
@@ -139,7 +172,11 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & rPropSet,
         sal_uInt16 nPrfx,
-        const ::rtl::OUString& rLocalName );
+        const ::rtl::OUString& rLocalName,
+        const SvXMLEnumMapEntry* aLevelNameMap,
+        const sal_Char* pLevelAttrName,
+        const sal_Char** aLevelStylePropNameMap,
+        const sal_Bool* aAllowedTokenTypes);
 
     ~XMLIndexTemplateContext();
 

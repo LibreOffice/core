@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XMLIndexTOCSourceContext.cxx,v $
+ *  $RCSfile: XMLIndexTableSourceContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dvo $ $Date: 2000-11-14 14:42:50 $
  *
@@ -60,8 +60,8 @@
  ************************************************************************/
 
 
-#ifndef _XMLOFF_XMLINDEXTOCSOURCECONTEXT_HXX_
-#include "XMLIndexTOCSourceContext.hxx"
+#ifndef _XMLOFF_XMLINDEXTABLESOURCECONTEXT_HXX_
+#include "XMLIndexTableSourceContext.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -70,6 +70,10 @@
 
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
 #include <com/sun/star/container/XIndexReplace.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_REFERENCEFIELD_PART_HPP
+#include <com/sun/star/text/ReferenceFieldpart.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLINDEXTEMPLATECONTEXT_HXX_
@@ -120,8 +124,7 @@
 #include <rtl/ustring.hxx>
 #endif
 
-
-
+using namespace ::com::sun::star::text;
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::XPropertySet;
@@ -129,106 +132,121 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::xml::sax::XAttributeList;
 
-const sal_Char sAPI_CreateFromChapter[] = "CreateFromChapter";
-const sal_Char sAPI_CreateFromOutline[] = "CreateFromOutline";
-const sal_Char sAPI_CreateFromMarks[] = "CreateFromMarks";
-const sal_Char sAPI_Level[] = "Level";
+const sal_Char sAPI_CreateFromLabels[] = "CreateFromLabels";
+const sal_Char sAPI_LabelCategory[] = "LabelCategory";
+const sal_Char sAPI_LabelDisplayType[] = "LabelDisplayType";
 
-TYPEINIT1( XMLIndexTOCSourceContext, XMLIndexSourceBaseContext );
 
-XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
+TYPEINIT1(XMLIndexTableSourceContext, XMLIndexSourceBaseContext);
+
+
+XMLIndexTableSourceContext::XMLIndexTableSourceContext(
     SvXMLImport& rImport,
     sal_uInt16 nPrfx,
     const OUString& rLocalName,
     Reference<XPropertySet> & rPropSet) :
         XMLIndexSourceBaseContext(rImport, nPrfx, rLocalName,
-                                  rPropSet, sal_True),
-        // use all chapters by default
-        nOutlineLevel(rImport.GetTextImport()->GetChapterNumbering()->
-                                                                  getCount()),
-        bUseOutline(sal_True),
-        bUseMarks(sal_True),
-        sCreateFromMarks(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromMarks)),
-        sLevel(RTL_CONSTASCII_USTRINGPARAM(sAPI_Level)),
-        sCreateFromOutline(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromOutline))
+                                  rPropSet, sal_False),
+        sCreateFromLabels(RTL_CONSTASCII_USTRINGPARAM(sAPI_CreateFromLabels)),
+        sLabelCategory(RTL_CONSTASCII_USTRINGPARAM(sAPI_LabelCategory)),
+        sLabelDisplayType(RTL_CONSTASCII_USTRINGPARAM(sAPI_LabelDisplayType)),
+        bSequenceOK(sal_False),
+        bDisplayFormatOK(sal_False),
+        bUseCaption(sal_False)
 {
 }
 
-XMLIndexTOCSourceContext::~XMLIndexTOCSourceContext()
+XMLIndexTableSourceContext::~XMLIndexTableSourceContext()
 {
 }
 
-void XMLIndexTOCSourceContext::ProcessAttribute(
+static SvXMLEnumMapEntry __READONLY_DATA lcl_aReferenceTypeTokenMap[] =
+{
+    { sXML_text,        ReferenceFieldPart::TEXT },
+    { sXML_category_and_value, ReferenceFieldPart::CATEGORY_AND_NUMBER },
+    { sXML_caption,     ReferenceFieldPart::ONLY_CAPTION },
+    { 0,                0 }
+};
+
+void XMLIndexTableSourceContext::ProcessAttribute(
     enum IndexSourceParamEnum eParam,
     const OUString& rValue)
 {
+    sal_Bool bTmp;
+
     switch (eParam)
     {
-        case XML_TOK_INDEXSOURCE_OUTLINE_LEVEL:
-            if (rValue.equalsAsciiL(sXML_none, sizeof(sXML_none)-1))
+        case XML_TOK_INDEXSOURCE_USE_CAPTION:
+            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
             {
-                bUseOutline = sal_False;
-            }
-            else
-            {
-                sal_Int32 nTmp;
-                if (SvXMLUnitConverter::convertNumber(
-                    nTmp, rValue, 1, GetImport().GetTextImport()->
-                    GetChapterNumbering()->getCount()))
-                {
-                    bUseOutline = sal_True;
-                    nOutlineLevel = nTmp;
-                }
+                bUseCaption = bTmp;
             }
             break;
 
-        case XML_TOK_INDEXSOURCE_USE_INDEX_MARKS:
+        case XML_TOK_INDEXSOURCE_SEQUENCE_NAME:
+            sSequence = rValue;
+            bSequenceOK = sal_True;
+            break;
+
+        case XML_TOK_INDEXSOURCE_SEQUENCE_FORMAT:
         {
-            sal_Bool bTmp;
-            if (SvXMLUnitConverter::convertBool(bTmp, rValue))
-            {
-                bUseMarks = bTmp;
-            }
+            // TODO: API problem
+
+//          sal_uInt16 nTmp;
+//          if (SvXMLUnitConverter::convertEnum(nTmp, rValue,
+//                                              lcl_aReferenceTypeTokenMap))
+//          {
+//              nDisplayFormat = nTmp;
+//              bDisplayFormatOK = sal_True;
+//          }
             break;
         }
 
         default:
-            // default: ask superclass
             XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
             break;
     }
 }
 
-void XMLIndexTOCSourceContext::EndElement()
+
+void XMLIndexTableSourceContext::EndElement()
 {
     Any aAny;
 
-    aAny.setValue(&bUseMarks, ::getBooleanCppuType());
-    rIndexPropertySet->setPropertyValue(sCreateFromMarks, aAny);
+    aAny.setValue(&bUseCaption, ::getBooleanCppuType());
+    rIndexPropertySet->setPropertyValue(sCreateFromLabels, aAny);
 
-    aAny.setValue(&bUseOutline, ::getBooleanCppuType());
-    rIndexPropertySet->setPropertyValue(sCreateFromOutline, aAny);
+    if (bSequenceOK)
+    {
+        aAny <<= sSequence;
+        rIndexPropertySet->setPropertyValue(sLabelCategory, aAny);
+    }
 
-    aAny <<= (sal_Int16)nOutlineLevel;
-    rIndexPropertySet->setPropertyValue(sLevel, aAny);
+    if (bDisplayFormatOK)
+    {
+        aAny <<= nDisplayFormat;
+        rIndexPropertySet->setPropertyValue(sLabelDisplayType, aAny);
+    }
+
+    XMLIndexSourceBaseContext::EndElement();
 }
 
 
-SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
+SvXMLImportContext* XMLIndexTableSourceContext::CreateChildContext(
     sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
     if ( (XML_NAMESPACE_TEXT == nPrefix) &&
-         (rLocalName.equalsAsciiL(sXML_table_of_content_entry_template,
-                            sizeof(sXML_table_of_content_entry_template)-1)))
+         (rLocalName.equalsAsciiL(sXML_table_index_entry_template,
+                    sizeof(sXML_table_index_entry_template)-1)))
     {
         return new XMLIndexTemplateContext(GetImport(), rIndexPropertySet,
                                            nPrefix, rLocalName,
-                                           aLevelNameTOCMap,
-                                           sXML_outline_level,
-                                           aLevelStylePropNameTOCMap,
-                                           aAllowedTokenTypesTOC);
+                                           aLevelNameTableMap,
+                                           NULL, // no outline-level attr
+                                           aLevelStylePropNameTableMap,
+                                           aAllowedTokenTypesTable);
     }
     else
     {
@@ -236,4 +254,5 @@ SvXMLImportContext* XMLIndexTOCSourceContext::CreateChildContext(
                                                              rLocalName,
                                                              xAttrList);
     }
+
 }
