@@ -3,7 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.util.Vector;
-import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+import com.sun.star.script.framework.runtime.XScriptContext;
 
 
 public class PostNewsgroup extends JFrame
