@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 10:35:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1071,7 +1071,12 @@ void SwLayAction::InternalAction()
         // OD 14.04.2003 #106346# - set flag for interrupt content formatting
         mbFormatCntntOnInterrupt = IsInput() && !IsStopPrt();
         long nBottom = rVis.Bottom();
-        while ( pPg && pPg->Frm().Top() < nBottom )
+        // --> OD 2005-02-15 #i42586# - format current page, if idle action is active
+        // This is an optimization for the case that the interrupt is created by
+        // the move of a form control object, which is represented by a window.
+        while ( pPg && ( pPg->Frm().Top() < nBottom ||
+                         ( IsIdle() && pPg == pPage ) ) )
+        // <--
         {
             // --> OD 2004-10-11 #i26945# - follow-up of #i28701#
             NotifyLayoutOfPageInProgress aLayoutOfPageInProgress( *pPg );
