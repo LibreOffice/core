@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:27:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,7 @@ String RID_SVXSTR_PAGES
     Text[ thai ] = "หน้า";
     Text[ czech ] = "Stránky";
     Text[ hebrew ] = "‮עמודים‬";
-    Text[ portuguese_brazilian ] = "~P�ginas";
+    Text[ portuguese_brazilian ] = "Pages";
     Text[ hindi ] = "पृष्ठ";
     Text[ slovak ] = "Stránky";
 };
@@ -455,6 +455,7 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE_H
 };
 
 // ********************************************************************** EOF
+
 
 
 
