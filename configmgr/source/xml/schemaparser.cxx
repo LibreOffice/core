@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemaparser.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-22 14:51:57 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 15:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@ namespace configmgr
         namespace sax       = ::com::sun::star::xml::sax;
 // -----------------------------------------------------------------------------
 
-SchemaParser::SchemaParser(ServiceFactory const & _xSvcFactory, uno::Reference< backenduno::XSchemaHandler > const & _xHandler, Select _selector)
-: BasicParser(_xSvcFactory)
+SchemaParser::SchemaParser(Context const & _xContext, uno::Reference< backenduno::XSchemaHandler > const & _xHandler, Select _selector)
+: BasicParser(_xContext)
 , m_xHandler(_xHandler)
 , m_sComponent()
 , m_selector(_selector)
@@ -404,22 +404,28 @@ void SchemaParser::startValueData(const uno::Reference< sax::XAttributeList >& x
 
     BasicParser::startValueData(xAttribs);
 
-    OSL_ENSURE(!this->isValueDataLocalized(),"Schema XML parser - language attributes on values are ignored in the schema.\n");
+    if (this->isValueDataLocalized())
+        getLogger().warning("Language attributes on values are ignored in the schema.",
+                            "endValueData()","configuration::xml::SchemaParser");
 }
 // -----------------------------------------------------------------------------
 
 void SchemaParser::endValueData()
 {
     uno::Any aValue = this->getCurrentValue();
-    OSL_ENSURE(aValue.hasValue(),"configmgr::SchemaParser Warning: Found deprecated explicit NIL value in schema data.");
 
     ElementInfo const & aInfo = this->getActiveNodeInfo();
 
     if (aValue.hasValue())
+    {
         m_xHandler->addPropertyWithDefault(aInfo.name,aInfo.flags,aValue);
-
+    }
     else
+    {
+        getLogger().warning("Found deprecated explicit NIL value in schema data.",
+                            "endValueData()","configuration::xml::SchemaParser");
         m_xHandler->addProperty(aInfo.name,aInfo.flags,getActivePropertyType());
+    }
 
     BasicParser::endValueData();
 
