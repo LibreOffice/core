@@ -2,9 +2,9 @@
 # 
 #   $RCSfile: makefile.mk,v $ 
 # 
-#   $Revision: 1.3 $ 
+#   $Revision: 1.4 $ 
 #
-#   last change: $Author: vg $ $Date: 2003-05-22 14:04:07 $ 
+#   last change: $Author: vg $ $Date: 2003-06-12 11:13:35 $ 
 # 
 #   The Contents of this file are made available subject to the terms of 
 #   either of the following licenses 
@@ -64,8 +64,11 @@ PRJNAME = filter
 #PACKAGE = com$/sun$/star$/documentconversion$/XSLTFilter
 TARGET  =XSLTFilter  
 # --- Settings ----------------------------------------------------- 
-.INCLUDE: settings.mk
 CLASSDIR!:=$(CLASSDIR)$/$(TARGET)  
+.IF "$(XML_CLASSPATH)" != ""
+XCLASSPATH+=":$(XML_CLASSPATH)"
+.ENDIF
+.INCLUDE: settings.mk  
 #USE_UDK_EXTENDED_MANIFESTFILE=TRUE
 #USE_EXTENDED_MANIFESTFILE=TRUE
 JARFILES 		= sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar 
