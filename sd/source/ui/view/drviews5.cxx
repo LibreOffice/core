@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-24 15:06:27 $
+ *  last change: $Author: cl $ $Date: 2002-04-15 09:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,6 +575,13 @@ void SdDrawViewShell::Paint(const Rectangle& rRect, SdWindow* pWin)
             pWin->SetDrawMode( nOldDrawMode );
         }
     }
+
+    /* #97517#  This is done before each text edit, so why not do it before every paint.
+                The default language is only used if the outliner only contains one
+                character in a symbol font
+    */
+    SdrOutliner& rOutl=pDoc->GetDrawOutliner(NULL);
+    rOutl.SetDefaultLanguage( pDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
 
     /**************************************************************************
     * Seite zeichnen
