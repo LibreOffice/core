@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-13 10:12:40 $
+ *  last change: $Author: abi $ $Date: 2001-06-13 13:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,9 +657,15 @@ void Databases::errorDocument( const rtl::OUString& Language,
         else
         {
             // the error file does not exist
-            m_nErrorDocLength = strlen( m_pErrorDoc = "<html><body>"
-                                        "The requested document does not exist in the database !!"
-                                        "</body></html>" );
+          const char* errorText =
+            "<html><body>"
+            "The requested document does not exist in the database !!"
+            "</body></html>";
+
+          m_nErrorDocLength = strlen( errorText );
+          m_pErrorDoc = new char[ 1 + m_nErrorDocLength ];
+          m_pErrorDoc[ m_nErrorDocLength ] = 0;
+          rtl_copyMemory( m_pErrorDoc,errorText,m_nErrorDocLength );
         }
 
     }
