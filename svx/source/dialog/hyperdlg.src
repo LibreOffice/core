@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 22:17:41 $
+ *  last change: $Author: kz $ $Date: 2002-02-21 21:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,7 +635,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
-        Text[ japanese ] = "文字列(~X)";
+        Text[ japanese ] = "テキスト(~X)";
         Text[ korean ] = "텍스트(~X)";
         Text[ chinese_simplified ] = "提示文字(~X)";
         Text[ chinese_traditional ] = "文字(~X)";
@@ -1166,7 +1166,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
-        Text[ japanese ] = "文字列(~X)";
+        Text[ japanese ] = "テキスト(~X)";
         Text[ korean ] = "텍스트(~X)";
         Text[ chinese_simplified ] = "提示文字(~X)";
         Text[ chinese_traditional ] = "文字(~X)";
@@ -1758,7 +1758,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
-        Text[ japanese ] = "文字列(~X)";
+        Text[ japanese ] = "テキスト(~X)";
         Text[ korean ] = "텍스트(~X)";
         Text[ chinese_simplified ] = "提示文字(~X)";
         Text[ chinese_traditional ] = "文字(~X)";
@@ -2295,7 +2295,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ swedish ] = "Te~xt";
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
-        Text[ japanese ] = "文字列(~X)";
+        Text[ japanese ] = "テキスト(~X)";
         Text[ korean ] = "텍스트(~X)";
         Text[ chinese_simplified ] = "提示文字(~X)";
         Text[ chinese_traditional ] = "文字(~X)";
@@ -2724,7 +2724,7 @@ String RID_SVXSTR_HYPERDLG_FROM_TEXT
     Text [ swedish ] = "Text" ;
     Text [ polish ] = "Tekst" ;
     Text [ portuguese_brazilian ] = "Text" ;
-    Text [ japanese ] = "文字列" ;
+    Text [ japanese ] = "テキスト" ;
     Text [ korean ] = "텍스트" ;
     Text [ chinese_simplified ] = "文字" ;
     Text [ chinese_traditional ] = "文字" ;
