@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-11-20 23:32:57 $
+ *  last change: $Author: bmahbod $ $Date: 2000-11-29 23:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,24 +156,56 @@ void SalGraphics::EndSetClipRegion()
 
 void SalGraphics::SetLineColor()
 {
+    maGraphicsData.mbTransparentPen = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::SetLineColor( SalColor nSalColor )
 {
+    RGBColor aRGBColor;
+
+    aRGBColor.red   = SALCOLOR_RED   ( nSalColor );
+    aRGBColor.green = SALCOLOR_GREEN ( nSalColor );
+    aRGBColor.blue  = SALCOLOR_BLUE  ( nSalColor );
+
+    maGraphicsData.mbTransparentPen = FALSE;
+    maGraphicsData.maPenColor       = aRGBColor;
 }
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::SetFillColor()
 {
+    maGraphicsData.mbTransparentBrush = TRUE;
 }
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::SetFillColor( SalColor nSalColor )
 {
+    RGBColor  aRGBColor;
+
+    aRGBColor.red   = SALCOLOR_RED   ( nSalColor );
+    aRGBColor.green = SALCOLOR_GREEN ( nSalColor );
+    aRGBColor.blue  = SALCOLOR_BLUE  ( nSalColor );
+
+    maGraphicsData.maBrushColor       = aRGBColor;
+    maGraphicsData.mbTransparentBrush = FALSE;
+
+    if ( ( maGraphicsData.mhDefBrush != NULL ) && (  *(maGraphicsData.mhDefBrush) != NULL ) )
+    {
+        DisposePixPat( maGraphicsData.mhDefBrush );
+
+        maGraphicsData.mhDefBrush = NULL;
+    }
+
+    maGraphicsData.mhDefBrush = NewPixPat();
+
+    if ( ( maGraphicsData.mhDefBrush != NULL ) && (  *(maGraphicsData.mhDefBrush) != NULL ) )
+    {
+        MakeRGBPat( maGraphicsData.mhDefBrush, &aRGBColor );
+    } // if
 }
 
 // -----------------------------------------------------------------------
@@ -214,13 +246,13 @@ void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 
     if ( hView )
     {
-        RGBColor pixelRGBColor;
+        RGBColor aPixelRGBColor;
 
-        pixelRGBColor.red   = SALCOLOR_RED   ( nSalColor );
-        pixelRGBColor.green = SALCOLOR_GREEN ( nSalColor );
-        pixelRGBColor.blue  = SALCOLOR_BLUE  ( nSalColor );
+        aPixelRGBColor.red   = SALCOLOR_RED   ( nSalColor );
+        aPixelRGBColor.green = SALCOLOR_GREEN ( nSalColor );
+        aPixelRGBColor.blue  = SALCOLOR_BLUE  ( nSalColor );
 
-        VCLGraphics_DrawColorPixel ( hView, nX, nY, &pixelRGBColor );
+        VCLGraphics_DrawColorPixel ( hView, nX, nY, &aPixelRGBColor );
     } // if
 }
 
@@ -228,16 +260,31 @@ void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 
 void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    VCLVIEW hView = maGraphicsData.mhDC;
+    VCLVIEW  hView = maGraphicsData.mhDC;
 
     if ( hView )
     {
-        VCLGraphics_DrawLine ( hView,
-                       nX1,
-                       nY1,
-                       nX2,
-                       nY2
-                     );
+        if ( maGraphicsData.mbTransparentPen == TRUE )
+        {
+            VCLGraphics_DrawLine ( hView,
+                                   nX1,
+                                   nY1,
+                                   nX2,
+                                   nY2
+                                 );
+        } // if
+        else
+        {
+            RGBColor  aLineColor = maGraphicsData.maPenColor;
+
+            VCLGraphics_DrawColorLine (  hView,
+                                         nX1,
+                                         nY1,
+                                         nX2,
+                                         nY2,
+                                        &aLineColor
+                                      );
+        } // else
     } // if
 } // SalGraphics::DrawLine
 
@@ -264,10 +311,10 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 {
     if  ( ( nPoints > 1 ) && ( pPtAry != NULL ) )
     {
-        long     i;
-        long     pXPtsArray[nPoints];
-        long     pYPtsArray[nPoints];
-        VCLVIEW  hView = maGraphicsData.mhDC;
+        long      i;
+        long      pXPtsArray[nPoints];
+        long      pYPtsArray[nPoints];
+        VCLVIEW   hView = maGraphicsData.mhDC;
 
         for ( i = 0; i < nPoints; i++ )
         {
@@ -292,10 +339,12 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 {
     if  ( ( nPoints > 1 ) && ( pPtAry != NULL ) )
     {
-        long     i;
-        long     pXPtsArray[nPoints];
-        long     pYPtsArray[nPoints];
-        VCLVIEW  hView = maGraphicsData.mhDC;
+        long      i;
+        long      pXPtsArray[nPoints];
+        long      pYPtsArray[nPoints];
+
+        VCLVIEW   hView          = maGraphicsData.mhDC;
+        RGBColor  aPolyFillColor = maGraphicsData.maBrushColor;
 
         for ( i = 0; i < nPoints; i++ )
         {
@@ -305,14 +354,11 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 
         if ( hView )
         {
-            // Will be changed once set color apis are implemented
-            // passing null  color for now
-
-            VCLGraphics_DrawColorPolygon ( hView,
-                                           nPoints,
-                                           pXPtsArray,
-                                           pYPtsArray,
-                                           NULL
+            VCLGraphics_DrawColorPolygon (  hView,
+                                            nPoints,
+                                            pXPtsArray,
+                                            pYPtsArray,
+                                           &aPolyFillColor
                                          );
         } // if
     } // if
