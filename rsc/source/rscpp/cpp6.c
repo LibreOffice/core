@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp6.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:26:39 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -878,7 +878,8 @@ newline:
                     goto newline;               /* process the line     */
                 }
                 else {
-                    fclose(file->fp);           /* Close finished file  */
+            if( file->fp != stdin )
+                        fclose(file->fp);           /* Close finished file  */
                     if ((infile = file->parent) != NULL) {
                         /*
                          * There is an "ungotten" newline in the current
