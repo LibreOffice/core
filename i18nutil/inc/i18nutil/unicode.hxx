@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unicode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 12:25:59 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 17:12:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 typedef struct _ScriptTypeList {
     sal_Int16 from;
     sal_Int16 to;
+    sal_Int16 value;
 } ScriptTypeList;
 
 class unicode
