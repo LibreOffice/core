@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-03 16:52:03 $
+ *  last change: $Author: hr $ $Date: 2002-04-30 17:01:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2332,7 +2332,7 @@ String DbListBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn 
         String aText;
         if (m_bBound)
         {
-            Sequence<sal_Int16> aPosSeq = findValue(m_aValueList, _xVariant->getString(), sal_True);
+            Sequence<sal_Int16> aPosSeq = ::findValue(m_aValueList, _xVariant->getString(), sal_True);
             if (aPosSeq.getLength())
                 aText = static_cast<ListBox*>(m_pWindow)->GetEntry(aPosSeq.getConstArray()[0]);
         }
@@ -2675,7 +2675,7 @@ void DbFilterField::SetText(const String& rText)
         case ::com::sun::star::form::FormComponentType::LISTBOX:
         {
             String aText;
-            Sequence<sal_Int16> aPosSeq = findValue(m_aValueList, m_aText, sal_True);
+            Sequence<sal_Int16> aPosSeq = ::findValue(m_aValueList, m_aText, sal_True);
             if (aPosSeq.getLength())
                 static_cast<ListBox*>(m_pWindow)->SelectEntryPos(aPosSeq.getConstArray()[0], sal_True);
             else
