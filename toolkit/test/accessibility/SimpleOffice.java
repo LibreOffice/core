@@ -1,0 +1,352 @@
+import OfficeConnection;
+import FrameActionListener;
+import Print;
+
+import java.lang.Thread;
+
+import com.sun.star.awt.Rectangle;
+import com.sun.star.awt.XWindow;
+
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
+
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XChild;
+import com.sun.star.container.XEnumerationAccess;
+import com.sun.star.container.XEnumeration;
+
+import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.XController;
+import com.sun.star.frame.XDesktop;
+import com.sun.star.frame.XFrame;
+import com.sun.star.frame.XModel;
+import com.sun.star.frame.XTasksSupplier;
+import com.sun.star.frame.XTask;
+
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lang.XServiceName;
+import com.sun.star.lang.XTypeProvider;
+
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.uno.Type;
+
+import com.sun.star.drawing.XDrawView;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.drawing.XShapes;
+import com.sun.star.drawing.XShape;
+import com.sun.star.drawing.XShapeDescriptor;
+
+import drafts.com.sun.star.accessibility.XAccessible;
+import drafts.com.sun.star.accessibility.XAccessibleContext;
+import drafts.com.sun.star.accessibility.XAccessibleComponent;
+import drafts.com.sun.star.accessibility.XAccessibleRelationSet;
+import drafts.com.sun.star.accessibility.XAccessibleStateSet;
+
+
+/** This class tries to simplify some tasks like loading a document or
+    getting various objects.
+*/
+public class SimpleOffice
+    implements Print
+{
+    XDesktop mxDesktop = null;
+    Print maPrinter;
+    OfficeConnection aConnection;
+    int mnPortNumber;
+
+    public SimpleOffice (Print aPrinter, int nPortNumber)
+    {
+        mnPortNumber = nPortNumber;
+        maPrinter = aPrinter;
+        connect ();
+        getDesktop ();
+    }
+
+    public void connect ()
+    {
+        aConnection = new OfficeConnection (maPrinter, mnPortNumber);
+        mxDesktop = null;
+        getDesktop ();
+    }
+
+    public XModel loadDocument (String URL)
+    {
+        XModel xModel = null;
+        try
+        {
+            //  Load the document from the specified URL.
+            XComponentLoader xLoader =
+                (XComponentLoader)UnoRuntime.queryInterface(
+                    XComponentLoader.class, mxDesktop);
+
+            XComponent xComponent = xLoader.loadComponentFromURL (
+                URL,
+                "_blank",
+                0,
+                new PropertyValue[0]
+                );
+
+            xModel = (XModel) UnoRuntime.queryInterface(
+                XModel.class, xComponent);
+        }
+        catch (java.lang.NullPointerException e)
+        {
+            println ("caught exception while loading "
+                + URL + " : " + e);
+        }
+        catch (Exception e)
+        {
+            println ("caught exception while loading "
+                + URL + " : " + e);
+        }
+        return xModel;
+    }
+
+
+
+
+    public XModel getModel (String name)
+    {
+        XModel xModel = null;
+        try
+        {
+            XTasksSupplier xTasksSupplier =
+                (XTasksSupplier) UnoRuntime.queryInterface(
+                    XTasksSupplier.class, mxDesktop);
+            XEnumerationAccess xEA = xTasksSupplier.getTasks();
+            XEnumeration xE = xEA.createEnumeration();
+            while (xE.hasMoreElements())
+            {
+                XTask xTask = (XTask) UnoRuntime.queryInterface(
+                    XTask.class, xE.nextElement());
+                print (xTask.getName());
+            }
+        }
+        catch (Exception e)
+        {
+            println ("caught exception while getting Model " + name
+                + ": " + e);
+        }
+        return xModel;
+    }
+
+
+    public XModel getModel (XDrawView xView)
+    {
+        XController xController = (XController) UnoRuntime.queryInterface(
+            XController.class, xView);
+        if (xController != null)
+            return xController.getModel();
+        else
+        {
+            println ("can't cast view to controller");
+            return null;
+        }
+    }
+
+    public  XDesktop getDesktop ()
+    {
+        if (mxDesktop != null)
+            return mxDesktop;
+        try
+        {
+            //  Get the factory of the connected office.
+            XMultiServiceFactory xMSF = aConnection.getServiceManager ();
+            if (xMSF == null)
+            {
+                println ("can't connect to office");
+                return null;
+            }
+            else
+                println ("Connected successfully.");
+
+            //  Create a new desktop.
+            mxDesktop = (XDesktop) UnoRuntime.queryInterface(
+                XDesktop.class,
+                xMSF.createInstance ("com.sun.star.frame.Desktop")
+                );
+        }
+        catch (Exception e)
+        {
+            println ("caught exception while creating desktop: "
+                + e);
+        }
+
+        return mxDesktop;
+    }
+
+
+
+
+    public XAccessible getAccessibleRoot (XInterface xObject)
+    {
+        XAccessible xAccessible = null;
+        try
+        {
+            xAccessible = (XAccessible) UnoRuntime.queryInterface(
+                XAccessible.class, xObject);
+        }
+        catch (Exception e)
+        {
+            println (
+                "caught exception while getting accessible root" + e);
+        }
+        return xAccessible;
+    }
+
+
+
+
+    /** @descr Return the current window associated with the given
+                model.
+    */
+    public XWindow getCurrentWindow ()
+    {
+        return getCurrentWindow ((XModel) UnoRuntime.queryInterface(
+                XModel.class, getDesktop()));
+    }
+
+
+
+
+
+    public XWindow getCurrentWindow (XModel xModel)
+    {
+        XWindow xWindow = null;
+        try
+        {
+            if (xModel == null)
+                println ("invalid model (==null)");
+            XController xController = xModel.getCurrentController();
+            if (xController == null)
+                println ("can't get controller from model");
+            XFrame xFrame = xController.getFrame();
+            if (xFrame == null)
+                println ("can't get frame from controller");
+            xWindow = xFrame.getComponentWindow ();
+            if (xWindow == null)
+                println ("can't get window from frame");
+        }
+        catch (Exception e)
+        {
+            println ("caught exception while getting current window" + e);
+        }
+
+        return xWindow;
+    }
+
+
+
+
+    /** @descr Return the current draw page of the given desktop.
+    */
+    public XDrawPage getCurrentDrawPage ()
+    {
+        return getCurrentDrawPage ((XDrawView) UnoRuntime.queryInterface(
+                XDrawView.class, getDesktop()));
+    }
+
+
+
+
+    public XDrawPage getCurrentDrawPage (XDrawView xView)
+    {
+        try
+        {
+            XDrawPage xPage = xView.getCurrentPage();
+            return xPage;
+        }
+        catch (Exception e)
+        {
+            println ("caught exception while getting current draw page : " + e);
+        }
+
+        return null;
+    }
+
+
+
+
+    /** @descr Return the current view of the given desktop.
+    */
+    public XDrawView getCurrentView ()
+    {
+        return getCurrentView (null);
+    }
+
+    public XDrawView getCurrentView (XDesktop xDesktop)
+    {
+        getDesktop();
+        if (mxDesktop == null)
+            println ("can't get desktop to retrieve current view");
+
+        XDrawView xView = null;
+        try
+        {
+            XComponent xComponent = mxDesktop.getCurrentComponent();
+            if (xComponent == null)
+                println ("can't get component to retrieve current view");
+
+            XFrame xFrame = mxDesktop.getCurrentFrame();
+            if (xFrame == null)
+                println ("can't get frame to retrieve current view");
+
+            XController xController = xFrame.getController();
+            if (xController == null)
+                println ("can't get controller to retrieve current view");
+
+            xView = (XDrawView) UnoRuntime.queryInterface(
+                XDrawView.class, xController);
+        }
+        catch (Exception e)
+        {
+            println ("caught exception while getting current view : " + e);
+        }
+
+        return xView;
+    }
+
+
+
+
+    //  Return the accessible object of the document window.
+    public static XAccessible getAccessibleDocumentWindow (XDrawPage xPage)
+    {
+        XIndexAccess xShapeList = (XIndexAccess) UnoRuntime.queryInterface(
+            XIndexAccess.class, xPage);
+        if (xShapeList.getCount() > 0)
+        {
+            // All shapes return as accessible object the document window's
+            // accessible object.  This is, of course, a hack and will be
+            // removed as soon as the missing infrastructure for obtaining
+            // the object directly is implemented.
+            XShape xShape = null;
+            try{
+                xShape = (XShape) UnoRuntime.queryInterface(
+                    XShape.class, xShapeList.getByIndex (0));
+            } catch (Exception e)
+            {}
+            XAccessible xAccessible = (XAccessible) UnoRuntime.queryInterface (
+                XAccessible.class, xShape);
+            return xAccessible;
+        }
+        else
+            return null;
+    }
+
+
+
+
+    public  void    print (String text)
+    {
+        maPrinter.print (text);
+    }
+
+    public  void    println (String text)
+    {
+        maPrinter.println (text);
+    }
+}
