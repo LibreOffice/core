@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-05-02 12:38:13 $
+ *  last change: $Author: mba $ $Date: 2001-06-14 11:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,8 @@
 #include <svx/rubydialog.hxx>
 #endif
 
+#include <svtools/moduleoptions.hxx>
+
 #include <app.hrc>
 
 ResMgr *pSwResMgr = 0;
@@ -460,10 +462,16 @@ void SwDLL::RegisterFactories()
 {
     //Diese Id's duerfen nicht geaendert werden. Mittels der Id's wird vom
     //Sfx die sdbcx::View (Dokumentansicht wiederherstellen) erzeugt.
-    SwView::RegisterFactory         ( 2 );
+    if ( SvtModuleOptions().IsWriter() )
+        SwView::RegisterFactory         ( 2 );
+
     SwWebView::RegisterFactory      ( 5 );
-    SwSrcView::RegisterFactory      ( 6 );
-    SwPagePreView::RegisterFactory  ( 7 );
+
+    if ( SvtModuleOptions().IsWriter() )
+    {
+        SwSrcView::RegisterFactory      ( 6 );
+        SwPagePreView::RegisterFactory  ( 7 );
+    }
 }
 
 //************************************************************************

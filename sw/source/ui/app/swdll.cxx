@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdll.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-12-18 15:07:20 $
+ *  last change: $Author: mba $ $Date: 2001-06-14 11:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,21 +114,24 @@ void SwDLL::Init()
     SvFactory* pWDocFact    = (SvFactory*)(*ppShlPtr)->pSwWebDocShellFactory;
     SvFactory* pGlobDocFact = (SvFactory*)(*ppShlPtr)->pSwGlobalDocShellFactory;
     delete (*ppShlPtr);
-    SwModule* pModule = new SwModule(pDocFact, pWDocFact, pGlobDocFact);;
+    SwModule* pModule = new SwModule( pWDocFact, pDocFact, pGlobDocFact );
     (*ppShlPtr) = pModule;
     (*ppShlPtr)->pSwDocShellFactory         = pDocFact    ;
     (*ppShlPtr)->pSwWebDocShellFactory      = pWDocFact   ;
     (*ppShlPtr)->pSwGlobalDocShellFactory   = pGlobDocFact;
 
-    SwDocShell::Factory().RegisterPluginMenuBar( SW_RES(CFG_SW_MENU_PORTAL));
-    SwDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SW_MENU));
-    SwDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
+    if ( pDocFact )
+    {
+        SwDocShell::Factory().RegisterPluginMenuBar( SW_RES(CFG_SW_MENU_PORTAL));
+        SwDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SW_MENU));
+        SwDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
+        SwGlobalDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SW_MENU));
+        SwGlobalDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
+    }
+
     SwWebDocShell::Factory().RegisterPluginMenuBar( SW_RES(CFG_SWWEB_MENU_PORTAL));
     SwWebDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SWWEB_MENU));
     SwWebDocShell::Factory().RegisterAccel(SW_RES(CFG_SWWEB_ACCEL));
-    SwGlobalDocShell::Factory().RegisterMenuBar(SW_RES(CFG_SW_MENU));
-    SwGlobalDocShell::Factory().RegisterAccel(SW_RES(CFG_SW_ACCEL));
-
 
     SdrObjFactory::InsertMakeObjectHdl( LINK( &aSwObjectFactory, SwObjectFactory, MakeObject ) );
     //Initialisierung der Statics
@@ -147,7 +150,6 @@ void SwDLL::Init()
 
     // register your controllers here
     RegisterControls();
-
 }
 
 

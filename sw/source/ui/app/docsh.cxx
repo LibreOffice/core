@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-18 15:28:23 $
+ *  last change: $Author: mba $ $Date: 2001-06-14 11:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,8 @@
 #include <app.hrc>
 #endif
 
+#include <svtools/moduleoptions.hxx>
+
 using namespace rtl;
 using namespace ::com::sun::star::uno;
 
@@ -298,8 +300,11 @@ public:
 
 SFX_IMPL_INTERFACE( SwDocShell, SfxObjectShell, SW_RES(0) )
 {
-    SwGlobalDocShell::Factory().RegisterHelpFile(String::CreateFromAscii("swriter.svh"));
-    SwGlobalDocShell::Factory().RegisterHelpPIFile(String::CreateFromAscii("swriter.svh"));
+    if ( SvtModuleOptions().IsWriter() )
+    {
+        SwGlobalDocShell::Factory().RegisterHelpFile(String::CreateFromAscii("swriter.svh"));
+        SwGlobalDocShell::Factory().RegisterHelpPIFile(String::CreateFromAscii("swriter.svh"));
+    }
 }
 
 /*--------------------------------------------------------------------

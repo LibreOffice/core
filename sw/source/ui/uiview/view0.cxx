@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-01-10 16:10:12 $
+ *  last change: $Author: mba $ $Date: 2001-06-14 11:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,12 +133,17 @@
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
+#include <svtools/moduleoptions.hxx>
+
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 
 SFX_IMPL_VIEWFACTORY(SwView, SW_RES(STR_NONAME))
 {
-    SFX_VIEW_REGISTRATION(SwDocShell);
-    SFX_VIEW_REGISTRATION(SwGlobalDocShell);
+    if ( SvtModuleOptions().IsWriter() )
+    {
+        SFX_VIEW_REGISTRATION(SwDocShell);
+        SFX_VIEW_REGISTRATION(SwGlobalDocShell);
+    }
 }
 
 SFX_IMPL_INTERFACE( SwView, SfxViewShell, SW_RES(RID_TOOLS_TOOLBOX) )
@@ -179,6 +184,9 @@ view::XSelectionSupplier* SwView::GetUNOObject()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/01/10 16:10:12  os
+    Ruby dialog
+
     Revision 1.5  2000/11/10 15:49:54  tbe
     removed outcommented basctl include file idetemp.hxx
 
