@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlatr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:32:25 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3505,7 +3505,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_DUMMY3 */             0,
 /* RES_CHRATR_DUMMY4 */             0,
 /* RES_CHRATR_DUMMY5 */             0,
-/* RES_CHRATR_DUMMY1 */             0, // Dummy:
+/* RES_CHRATR_HIDDEN */             0, // Dummy:
 
 /* RES_TXTATR_INETFMT   */          OutHTML_SwFmtINetFmt,
 /* RES_TXTATR_DUMMY4    */          0,
