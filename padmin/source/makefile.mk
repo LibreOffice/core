@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 16:30:53 $
+#   last change: $Author: rt $ $Date: 2004-06-17 11:48:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,8 @@ RESLIB1DEPN=\
     rtsetup.src		\
     rtsetup.hrc
 
+.IF "$(GUI)" == "UNX"
+
 SLOFILES=\
     $(SLO)$/padialog.obj		\
     $(SLO)$/cmddlg.obj			\
@@ -146,6 +148,8 @@ APP2STDLIBS=	\
     $(CPPULIB)			\
     $(SALLIB)			\
     -lXext -lX11
+
+.ENDIF
 
 all: $(BIN)$/so ALLTAR
 
