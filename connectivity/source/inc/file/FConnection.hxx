@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 17:11:11 $
+ *  last change: $Author: fs $ $Date: 2001-10-26 10:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ namespace connectivity
             sal_Bool                    m_bAutoCommit;
             sal_Bool                    m_bReadOnly;
             sal_Bool                    m_bShowDeleted;
+            sal_Bool                    m_bCaseSensitiveExtension;
 
 
             void throwUrlNotValid(const ::rtl::OUString & _rsUrl,const ::rtl::OUString & _rsMessage);
@@ -195,11 +196,22 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > createCatalog();
 
 
-            String          getExtension()  const { return m_aFilenameExtension;}
-            String          getURL()        const { return m_aURL; }
-            OFileDriver*    getDriver()     const { return m_pDriver; }
-            sal_Bool        showDeleted()   const { return m_bShowDeleted; }
+            const String&   getExtension()              const { return m_aFilenameExtension; }
+            sal_Bool        isCaseSensitveExtension()   const { return m_bCaseSensitiveExtension; }
+            sal_Bool        matchesExtension( const String& _rExt ) const;
+            String          getURL()                    const { return m_aURL; }
+            OFileDriver*    getDriver()                 const { return m_pDriver; }
+            sal_Bool        showDeleted()               const { return m_bShowDeleted; }
 
+        public:
+            struct GrantAccess
+            {
+                friend class ODatabaseMetaData;
+            private:
+                GrantAccess() { }
+            };
+
+            void    setCaseSensitiveExtension( sal_Bool _bIsCS, GrantAccess ) { m_bCaseSensitiveExtension = _bIsCS; }
         };
     }
 }
