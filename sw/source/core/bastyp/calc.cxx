@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-21 14:24:56 $
+ *  last change: $Author: jp $ $Date: 2001-01-25 17:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,6 @@ const sal_Char __FAR_DATA sCalc_Tan[]   =   "tan";
 const sal_Char __FAR_DATA sCalc_Asin[]  =   "asin";
 const sal_Char __FAR_DATA sCalc_Acos[]  =   "acos";
 const sal_Char __FAR_DATA sCalc_Atan[]  =   "atan";
-const sal_Char __FAR_DATA sCalc_Tdif[]  =   "timediff";
 const sal_Char __FAR_DATA sCalc_Round[] =   "round";
 
 
@@ -212,7 +211,6 @@ _CalcOp __READONLY_DATA aOpTable[] = {
 /* SUB */     sCalc_Sub,        CALC_MINUS, // Subtraktion
 /* SUM */     sCalc_Sum,        CALC_SUM,   // Summe
 /* TAN */     sCalc_Tan,        CALC_TAN,   // Tangens
-/* TIMEDIFF */sCalc_Tdif,       CALC_TDIF,  // Zeitspanne
 /* XOR */     sCalc_Xor,        CALC_XOR    // log. xoder
 };
 
@@ -274,18 +272,6 @@ _CalcOp* FindOperator( const String& rSrch )
                                 OperatorCompare );
 }
 
-inline void EatWhite( const String& rStr, xub_StrLen& rPos )
-{
-    sal_Unicode c;
-    while( rPos < rStr.Len() && ( ( c = rStr.GetChar( rPos ) ) == ' ' ||
-        c == '\t' || c == '\x0a' || c == '\x0d' ))
-        ++rPos;
-}
-
-inline sal_Unicode NextCh( const String& rStr, xub_StrLen& rPos )
-{
-    return rPos < rStr.Len() ? rStr.GetChar( rPos++ ) : 0;
-}
 
 //-----------------------------------------------------------------------------
 
@@ -556,138 +542,6 @@ String SwCalc::GetStrResult( double nValue, BOOL bRound )
 }
 
 /******************************************************************************
- *  Methode     :   BOOL SwCalc::ParseTime( USHORT *pHour, USHORT *pMin, USHORT *pSec )
- *  Beschreibung:
- *  Erstellt    :   OK 09.06.94 11:15
- *  Aenderung   :   JP 03.11.95
- ******************************************************************************/
-
-enum TMStatus { TM_START, TM_THSEP, TM_MIN, TM_TMSEP, TM_SEC,
-                TM_AMPM, TM_END, TM_ERROR };
-
-BOOL SwCalc::ParseTime( USHORT *pHour, USHORT *pMin, USHORT *pSec )
-{
-//??    TimeFormat aTMFmt = pInter->GetTimeFormat();
-    sal_Unicode ch, cTMSep = pLclData->getTimeSep().GetChar(0);
-
-    EatWhite( sCommand, nCommandPos );
-    ch = NextCh( sCommand, nCommandPos );
-
-    TMStatus eState = TM_START;
-    while( eState != TM_END && eState != TM_ERROR )
-    {
-        sal_Unicode cNext = 0;
-        USHORT *pActVal = 0;
-        switch( eState )
-        {
-            case TM_AMPM  :
-                {
-                    xub_StrLen nStt = --nCommandPos;
-                    BOOL bFnd = FALSE;
-                    String aStr;
-                    const String& rPMStr = pLclData->getTimePM();
-                    const String& rAMStr = pLclData->getTimeAM();
-                    while( nCommandPos < sCommand.Len() )
-                    {
-                        EatWhite( sCommand, nCommandPos );
-                        aStr += NextCh( sCommand, nCommandPos );
-                        if( aStr == rPMStr )
-                        {
-                            if( *pHour <= 12 )
-                                *pHour += 12;
-                            bFnd =TRUE;
-                            break;
-                        }
-                        if( aStr == rAMStr )
-                        {
-                            bFnd = TRUE;
-                            break;
-                        }
-                    }
-                    if( !bFnd )
-                        nCommandPos = nStt;
-
-                    // Klammer oder Trenner weglesen !
-                    EatWhite( sCommand, nCommandPos );
-                    ch = NextCh( sCommand, nCommandPos );
-                    if( ch != ')' && ch != cListDelim )
-                        eState = TM_ERROR;
-                    else
-                        eState = TM_END;
-                }
-                break;
-
-            case TM_TMSEP :
-                if( ch == cTMSep )
-                    ++((int&)eState);
-                else
-                {
-                    if( nCommandPos < sCommand.Len() )
-                        --nCommandPos;
-                    eState = TM_AMPM;
-                }
-                break;
-            case TM_THSEP :
-                if( ch == cTMSep )
-                    ++((int&)eState);
-                else
-                {
-                    if( nCommandPos < sCommand.Len() )
-                        --nCommandPos;
-                    eState = TM_AMPM;
-                }
-                break;
-
-            case TM_SEC   : if( !pActVal ) pActVal = pSec;
-            case TM_MIN   : if( !pActVal ) pActVal = pMin;
-            case TM_START :
-                {
-                    if( ch == '(' || ch == cListDelim )
-                        break;
-                    if( !pActVal )
-                        pActVal = pHour;
-
-                    USHORT nVal = ( ch - '0' );
-                    EatWhite( sCommand, nCommandPos );
-                    cNext = NextCh( sCommand, nCommandPos );
-                    if( cNext &&
-                        pCharClass->isDigit( sCommand, nCommandPos - 1 ) )
-                    {
-                        if( eState != TM_START ||
-                            /*aTMFmt == HOUR_12 && nVal <= 1 ||
-                            aTMFmt == HOUR_24 &&*/ nVal <= 2 )
-                        {
-                            *pActVal = nVal * 10 + ( cNext - '0');
-                            cNext = 0;
-                        }
-                        else
-                        {
-                            eState = TM_ERROR;
-                            break;
-                        }
-                    }
-                    else
-                        *pActVal += nVal;
-                    ++((int&)eState);
-                }
-                break;
-        }
-
-        if( eState != TM_END )
-        {
-            if( cNext )
-                ch = cNext;
-            else
-            {
-                EatWhite( sCommand, nCommandPos );
-                ch = NextCh( sCommand, nCommandPos );
-            }
-        }
-    }
-    return eState==TM_ERROR? FALSE : TRUE;
-}
-
-/******************************************************************************
 |*
 |*  SwCalcExp* SwCalc::VarLook( const String& )
 |*
@@ -931,6 +785,205 @@ void SwCalc::Pop( const VoidPtr pPtr )
 
 SwCalcOper SwCalc::GetToken()
 {
+#ifdef DEBUG
+//JP 25.01.2001: static for switch back to the "old" implementation of the
+//              calculator, which don't use the I18N routines.
+static int nUseOld = 0;
+if( !nUseOld )
+{
+#endif
+
+    if( nCommandPos >= sCommand.Len() )
+        return eCurrOper = CALC_ENDCALC;
+
+    using namespace ::com::sun::star::i18n;
+    {
+        // First character may be any alphabetic or underscore.
+        sal_Int32 nStartFlags = KParseTokens::ANY_LETTER_OR_NUMBER |
+                                KParseTokens::ASC_UNDERSCORE |
+                                KParseTokens::IGNORE_LEADING_WS;
+        // Continuing characters may be any alphanumeric or underscore or dot.
+        sal_Int32 nContFlags = ( nStartFlags | KParseTokens::ASC_DOT )
+                                & ~KParseTokens::IGNORE_LEADING_WS;
+
+        // Parse any token.
+        ParseResult rRes = pCharClass->parseAnyToken( sCommand, nCommandPos,
+                                                    nStartFlags, aEmptyStr,
+                                                    nContFlags, aEmptyStr );
+
+        BOOL bSetError = TRUE;
+        xub_StrLen nRealStt = nCommandPos + (xub_StrLen)rRes.LeadingWhiteSpace;
+        if( rRes.TokenType & (KParseType::ASC_NUMBER | KParseType::UNI_NUMBER) )
+        {
+            nNumberValue.PutDouble( rRes.Value );
+            eCurrOper = CALC_NUMBER;
+            bSetError = FALSE;
+        }
+        else if( rRes.TokenType & KParseType::IDENTNAME )
+        {
+            String aName( sCommand.Copy( nRealStt, rRes.EndPos - nRealStt ));
+            pCharClass->toLower( aName );
+
+            // Currency-Symbol abfangen
+            if( aName == sCurrSym )
+            {
+                nCommandPos = (xub_StrLen)rRes.EndPos;
+                return GetToken();  // also nochmal aufrufen
+            }
+
+            // Operations abfangen
+            _CalcOp* pFnd = ::FindOperator( aName );
+            if( pFnd )
+            {
+                switch( ( eCurrOper = ((_CalcOp*)pFnd)->eOp ) )
+                {
+                    case CALC_SUM  :
+                    case CALC_MEAN : eCurrListOper = CALC_PLUS;     break;
+                    case CALC_MIN  : eCurrListOper = CALC_MIN_IN;   break;
+                    case CALC_MAX  : eCurrListOper = CALC_MAX_IN;   break;
+                }
+                nCommandPos = (xub_StrLen)rRes.EndPos;
+                return eCurrOper;
+            }
+            aVarName = aName;
+            eCurrOper = CALC_NAME;
+            bSetError = FALSE;
+        }
+        else if ( rRes.TokenType & KParseType::DOUBLE_QUOTE_STRING )
+        {
+            nNumberValue.PutString( String( rRes.DequotedNameOrString ));
+            eCurrOper = CALC_NUMBER;
+            bSetError = FALSE;
+        }
+        else if( rRes.TokenType & KParseType::ONE_SINGLE_CHAR )
+        {
+            String aName( sCommand.Copy( nRealStt, rRes.EndPos - nRealStt ));
+            if( 1 == aName.Len() )
+            {
+                bSetError = FALSE;
+                sal_Unicode ch = aName.GetChar( 0 );
+                switch( ch )
+                {
+                case ';':
+                case '\n':
+                            eCurrOper = CALC_PRINT;
+                            break;
+                case '%':
+                case '^':
+                case '*':
+                case '/':
+                case '+':
+                case '-':
+                case '(':
+                case ')':   eCurrOper = SwCalcOper(ch);
+                            break;
+
+                case '=':
+                case '!':
+                        {
+                            SwCalcOper eTmp2;
+                            if( '=' == ch )
+                                eCurrOper = SwCalcOper('='), eTmp2 = CALC_EQ;
+                            else
+                                eCurrOper = CALC_NOT, eTmp2 = CALC_NEQ;
+
+                            if( rRes.EndPos < sCommand.Len() &&
+                                '=' == sCommand.GetChar( (xub_StrLen)rRes.EndPos ) )
+                            {
+                                eCurrOper = eTmp2;
+                                ++rRes.EndPos;
+                            }
+                        }
+                        break;
+
+                case cListDelim :
+                        eCurrOper = eCurrListOper;
+                        break;
+
+                case '[':
+                        if( rRes.EndPos < sCommand.Len() )
+                        {
+                            aVarName.Erase();
+                            xub_StrLen nFndPos = (xub_StrLen)rRes.EndPos,
+                                        nSttPos = nFndPos;
+
+                            do{
+                                if( STRING_NOTFOUND != ( nFndPos =
+                                    sCommand.Search( ']', nFndPos )) )
+                                {
+                                    // ignore the ]
+                                    if( '\\' == sCommand.GetChar(nFndPos-1))
+                                    {
+                                        aVarName += sCommand.Copy( nSttPos,
+                                                    nFndPos - nSttPos - 1 );
+                                        nSttPos = ++nFndPos;
+                                    }
+                                    else
+                                        break;
+                                }
+                            } while( STRING_NOTFOUND != nFndPos );
+
+                            if( STRING_NOTFOUND != nFndPos )
+                            {
+                                if( nSttPos != nFndPos )
+                                    aVarName += sCommand.Copy( nSttPos,
+                                                    nFndPos - nSttPos );
+                                rRes.EndPos = nFndPos + 1;
+                                eCurrOper = CALC_NAME;
+                            }
+                            else
+                                bSetError = TRUE;
+                        }
+                        else
+                            bSetError = TRUE;
+                        break;
+
+                default:
+                    bSetError = TRUE;
+                    break;
+                }
+            }
+        }
+        else if( rRes.TokenType & KParseType::BOOLEAN )
+        {
+            String aName( sCommand.Copy( nRealStt, rRes.EndPos - nRealStt ));
+            if( aName.Len() )
+            {
+                bSetError = FALSE;
+                sal_Unicode ch = aName.GetChar(0);
+                SwCalcOper eTmp2;
+                if( '<' == ch )
+                    eCurrOper = CALC_LES, eTmp2 = CALC_LEQ;
+                else if( '>' == ch )
+                    eCurrOper = CALC_GRE, eTmp2 = CALC_GEQ;
+                else
+                    bSetError = TRUE;
+
+                if( !bSetError )
+                {
+                    if( 2 == aName.Len() && '=' == aName.GetChar(1) )
+                        eCurrOper = eTmp2;
+                    else if( 1 != aName.Len() )
+                        bSetError = TRUE;
+                }
+            }
+        }
+
+        if( bSetError )
+        {
+            eError = CALC_SYNTAX;
+            eCurrOper = CALC_PRINT;
+        }
+        nCommandPos = (xub_StrLen)rRes.EndPos;
+    };
+
+#ifdef DEBUG
+
+#define NextCh( s, n )  (nCommandPos < sCommand.Len() ? sCommand.GetChar( nCommandPos++ ) : 0)
+
+}
+else
+{
     sal_Unicode ch;
     sal_Unicode cTSep = pLclData->getNumThousandSep().GetChar(0),
                 cDSep = pLclData->getNumDecimalSep().GetChar(0);
@@ -946,8 +999,15 @@ SwCalcOper SwCalc::GetToken()
     switch( ch )
     {
         case ';':
-        case '\n':  EatWhite( sCommand, nCommandPos );
-                    eCurrOper = CALC_PRINT;
+        case '\n':
+                    {
+                        sal_Unicode c;
+                        while( nCommandPos < sCommand.Len() && ( ( c =
+                                sCommand.GetChar( nCommandPos ) ) == ' ' ||
+                                c == '\t' || c == '\x0a' || c == '\x0d' ))
+                            ++nCommandPos;
+                        eCurrOper = CALC_PRINT;
+                    }
                     break;
         case '%':
         case '^':
@@ -1101,6 +1161,9 @@ SwCalcOper SwCalc::GetToken()
                     }
                     break;
     }
+
+}
+#endif
     return eCurrOper;
 }
 
@@ -1369,19 +1432,6 @@ SwSbxValue SwCalc::Prim()
                                     eError = CALC_BRACK;
                                 else
                                     GetToken();
-                            }
-                            break;
-
-        case CALC_TDIF:     {
-                                USHORT nH1 = 0, nM1 = 0, nS1 = 0,
-                                       nH2 = 0, nM2 = 0, nS2 = 0;
-                                if( !ParseTime( &nH1, &nM1, &nS1 ) ||
-                                    !ParseTime( &nH2, &nM2, &nS2 ) )
-                                    eError = CALC_WRONGTIME;
-                                GetToken();
-                                nErg.PutDouble( double(
-                                        3600L * nH2 + 60 * nM2 + nS2 -
-                                        3600L * nH1 - 60 * nM1 - nS1 ));
                             }
                             break;
 
