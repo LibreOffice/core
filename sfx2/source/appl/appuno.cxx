@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-21 07:44:38 $
+ *  last change: $Author: mba $ $Date: 2002-05-22 11:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
         }
 
         USHORT nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        BOOL bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
         pItem->SetWhich( nWhich );
         USHORT nSubCount = pType->nAttribs;
         if ( nSubCount == 0 )
@@ -321,7 +322,10 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     const char* pName = aStr.GetBuffer();
                     if ( rProp.Name.compareToAscii( pName ) == COMPARE_EQUAL )
                     {
-                        pItem->PutValue( rProp.Value, (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID );
+                        BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID;
+                        if ( bConvertTwips )
+                            nSubId |= CONVERT_TWIPS;
+                        pItem->PutValue( rProp.Value, nSubId );
                         break;
                     }
                 }
@@ -340,6 +344,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArgs );
             SfxPoolItem* pItem = rArg.CreateItem();
             USHORT nWhich = rSet.GetPool()->GetWhich(rArg.nSlotId);
+            BOOL bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
             pItem->SetWhich( nWhich );
             const SfxType* pType = rArg.pType;
             USHORT nSubCount = pType->nAttribs;
@@ -375,7 +380,10 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         const char* pName = aStr.GetBuffer();
                         if ( rProp.Name.compareToAscii( pName ) == COMPARE_EQUAL )
                         {
-                            BOOL bSuccess = pItem->PutValue( rProp.Value, (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID );
+                            BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[nSub].nAID;
+                            if ( bConvertTwips )
+                                nSubId |= CONVERT_TWIPS;
+                            BOOL bSuccess = pItem->PutValue( rProp.Value, nSubId );
                             DBG_ASSERT(bSuccess, "Property not convertable!");
                             if ( bSuccess )
                                 bDone = TRUE;
@@ -694,6 +702,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
     {
         // slot is a property
         USHORT nWhich = rSet.GetPool()->GetWhich(nSlotId);
+        BOOL bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
         SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, sal_False );
         if ( pItem ) //???
         {
@@ -711,12 +720,16 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 for ( USHORT n=1; n<=nSubCount; ++n )
                 {
                     //rPool.FillVariable( *pItem, *pVar, eUserMetric );
-                    DBG_ASSERT( pType->aAttrib[n-1].nAID <= 255, "Member ID out of range" );
+                    BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[n-1].nAID;
+                    if ( bConvertTwips )
+                        nSubId |= CONVERT_TWIPS;
+
+                    DBG_ASSERT( nSubId <= 255, "Member ID out of range" );
                     String aName( String::CreateFromAscii( pSlot->pUnoName ) ) ;
                     aName += '.';
                     aName += String( String::CreateFromAscii( pType->aAttrib[n-1].pName ) ) ;
                     pValue[nProps].Name = aName;
-                    if ( pItem && !pItem->QueryValue( pValue[nProps++].Value, (BYTE) (sal_Int8) pType->aAttrib[n-1].nAID ) )
+                    if ( pItem && !pItem->QueryValue( pValue[nProps++].Value, nSubId ) )
                         DBG_ERROR("Item not convertable!");
                 }
             }
@@ -730,6 +743,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         {
             const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
             USHORT nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
+            BOOL bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
             SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, sal_False );
             if ( pItem ) //???
             {
@@ -747,12 +761,16 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     for ( USHORT n = 1; n <= nSubCount; ++n )
                     {
                         //rPool.FillVariable( rItem, *pVar, eUserMetric );
-                        DBG_ASSERT( rArg.pType->aAttrib[n-1].nAID <= 255, "Member ID out of range" );
+                        BYTE nSubId = (BYTE) (sal_Int8) pType->aAttrib[n-1].nAID;
+                        if ( bConvertTwips )
+                            nSubId |= CONVERT_TWIPS;
+
+                        DBG_ASSERT( nSubId <= 255, "Member ID out of range" );
                         String aName( String::CreateFromAscii( pSlot->pUnoName ) ) ;
                         aName += '.';
                         aName += String( String::CreateFromAscii( rArg.pType->aAttrib[n-1].pName ) ) ;
                         pValue[nProps].Name = aName;
-                        if ( pItem && !pItem->QueryValue( pValue[nProps++].Value, (BYTE) (sal_Int8) rArg.pType->aAttrib[n-1].nAID ) )
+                        if ( pItem && !pItem->QueryValue( pValue[nProps++].Value, nSubId ) )
                             DBG_ERROR("Item not convertable!");
                     }
                 }
