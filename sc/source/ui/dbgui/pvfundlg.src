@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:48:51 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:21:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ chinese_traditional ] = "µL(~N)";
         Text[ arabic ] = "ΘΟζδ";
         Text[ greek ] = "Κανένα";
-        Text[ korean ] = "Ύψΐ½";
+        Text[ korean ] = "Ύψΐ½(~N)";
         Text[ turkish ] = "~Yok";
         Text[ language_user1 ] = " ";
     };
@@ -130,7 +130,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ chinese_traditional ] = "¦Ϋ°Κ(~A)";
         Text[ arabic ] = "ΚαήΗΖν";
         Text[ greek ] = "Αυτόματα";
-        Text[ korean ] = "ΐΪµΏ";
+        Text[ korean ] = "ΐΪµΏ(~A)";
         Text[ turkish ] = "~Otomatik";
         Text[ language_user1 ] = " ";
     };
@@ -159,7 +159,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ chinese_traditional ] = "¨Ο¥ΞªΜ¦Ϋ­q(~U)";
         Text[ arabic ] = "γΪΡέ γδ ήΘα ΗαγΣΚΞΟγ";
         Text[ greek ] = "Οριζόμενο από τον χρήστη";
-        Text[ korean ] = "»ηΏλΐΪ Α¤ΐΗ";
+        Text[ korean ] = "»ηΏλΐΪ Α¤ΐΗ(~U)";
         Text[ turkish ] = "~Kullanύcύ tanύmlύ";
         Text[ language_user1 ] = " ";
     };
