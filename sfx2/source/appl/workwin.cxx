@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:32:50 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:03:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,18 +120,18 @@ static const ResIdToResName pToolBarResToName[] =
     { 25001,    "formatobjectbar"      },
     { 25006,    "previewbar"           },
     { 25035,    "toolbar"              },      //calc
-    { 23015,    "bezierobjectbar"      },      //draw
+    { 23015,    "bezierobjectbar"      },      //draw/impress
     { 23019,    "gluepointsobjectbar"  },
-    { 23030,    "graphicobjectbar"     },      //impress
-    { 23013,    "drawingobjectbar"     },
+    { 23030,    "graphicobjectbar"     },
+    { 23013,    "drawingobjectbar"     },      //impress
     { 23016,    "textobjectbar"        },      //impress
     { 23028,    "textobjectbar"        },      //draw
-    { 23011,    "toolbar"              },      //impres
+    { 23011,    "toolbar"              },      //impress
     { 23020,    "optionsbar"           },
     { 23021,    "commontaskbar"        },
     { 23025,    "toolbar"              },      //draw
     { 23026,    "optionsbar"           },
-    { 23027,    "graphicobjectbar"     },      //draw
+    { 23027,    "drawingobjectbar"     },      //draw
     { 23017,    "outlinetoolbar"       },      //impress
     { 23012,    "slideviewtoolbar"     },
     { 23014,    "slideviewobjectbar"   },
@@ -159,6 +159,7 @@ static const ResIdToResName pToolBarResToName[] =
     { 23024,    "drawviewerbar"        },
     { 10987,    "fontworkobjectbar"    },      //global
     { 10986,    "extrusionobjectbar"   },
+    { 23022,    "formsobjectbar"       },
     { 0,        ""                     }
 };
 
