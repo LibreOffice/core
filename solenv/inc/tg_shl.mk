@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-18 14:13:47 $
+#   last change: $Author: hjs $ $Date: 2001-06-19 10:40:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -482,8 +482,8 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(UNIXVERSIONNAMES)"!=""
     +$(RM) $(LB)$/$(SHL$(TNR)TARGETN:b:b:b)
     +$(RM) $(LB)$/$(SHL$(TNR)TARGETN:b:b)
-    +ln -s $(SHL$(TNR)TARGETN) $(LB)$/$(SHL$(TNR)TARGETN:b:b)
-    +ln -s $(LB)$/$(SHL$(TNR)TARGETN:f:b:b) $(LB)$/$(SHL$(TNR)TARGETN:b:b:b)
+    +cd $(LB) && ln -s $(SHL$(TNR)TARGETN:f) $(SHL$(TNR)TARGETN:b:b)
+    +cd $(LB) && ln -s $(SHL$(TNR)TARGETN:f:b:b) $(SHL$(TNR)TARGETN:b:b:b)
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
 .ENDIF			# "$(OS)"=="MACOSX"
     @ls -l $@
