@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2001-03-20 18:22:01 $
+ *  last change: $Author: er $ $Date: 2001-03-22 19:03:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,6 @@ ImpSvNumFor::ImpSvNumFor()
     aI.nCntPost = 0;
     aI.nCntExp = 0;
     pColor = NULL;
-    nDBNum = 0;
 }
 
 ImpSvNumFor::~ImpSvNumFor()
@@ -274,7 +273,7 @@ void ImpSvNumFor::Copy( const ImpSvNumFor& rNumFor )
     aI.Copy( rNumFor.aI, nAnzStrings );
     pColor = rNumFor.pColor;
     sColorName = rNumFor.sColorName;
-    nDBNum = rNumFor.nDBNum;
+    aDBNum = rNumFor.aDBNum;
 }
 
 void ImpSvNumFor::Save(SvStream& rStream) const
@@ -388,7 +387,8 @@ enum Sc_FormatSymbolType
     SYMBOLTYPE_DBNUM6   = -9,
     SYMBOLTYPE_DBNUM7   = -10,
     SYMBOLTYPE_DBNUM8   = -11,
-    SYMBOLTYPE_DBNUM9   = -12
+    SYMBOLTYPE_DBNUM9   = -12,
+    SYMBOLTYPE_LOCALE   = -13
 };
 
 SvNumberformat::SvNumberformat( ImpSvNumberformatScan& rSc, LanguageType eLge )
@@ -446,6 +446,7 @@ BOOL lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
         case SYMBOLTYPE_DBNUM7 :
         case SYMBOLTYPE_DBNUM8 :
         case SYMBOLTYPE_DBNUM9 :
+        case SYMBOLTYPE_LOCALE :
             return TRUE;
     }
     return FALSE;
@@ -596,11 +597,44 @@ SvNumberformat::SvNumberformat(String& rString,
                     case SYMBOLTYPE_DBNUM8 :
                     case SYMBOLTYPE_DBNUM9 :
                     {
-                        sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DBNum" ) );
-                        //! eSymbolType is negative
-                        BYTE nNum = 1 - (eSymbolType - SYMBOLTYPE_DBNUM1);
-                        sStr += '0' + nNum;
-                        NumFor[nIndex].SetDBNum( nNum );
+                        if ( NumFor[nIndex].GetDBNum().nNum != 0 )
+                        {
+                            bCancel = TRUE;         // break for
+                            nCheckPos = nPosOld;
+                        }
+                        else
+                        {
+                            sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DBNum" ) );
+                            //! eSymbolType is negative
+                            BYTE nNum = 1 - (eSymbolType - SYMBOLTYPE_DBNUM1);
+                            sStr += '0' + nNum;
+                            NumFor[nIndex].SetDBNumNum( nNum );
+                        }
+                    }
+                    break;
+                    case SYMBOLTYPE_LOCALE :
+                    {
+                        if ( NumFor[nIndex].GetDBNum().eLang != LANGUAGE_DONTKNOW )
+                        {
+                            bCancel = TRUE;         // break for
+                            nCheckPos = nPosOld;
+                        }
+                        else
+                        {
+                            xub_StrLen nTmp = 2;
+                            LanguageType eLang = ImpGetLanguageType( sStr, nTmp );
+                            if ( eLang == LANGUAGE_DONTKNOW )
+                            {
+                                bCancel = TRUE;         // break for
+                                nCheckPos = nPosOld;
+                            }
+                            else
+                            {
+                                sStr.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "$-" ) );
+                                sStr += String::CreateFromInt32( sal_Int32( eLang ), 16 ).ToUpperAscii();
+                                NumFor[nIndex].SetDBNumLang( eLang );
+                            }
+                        }
                     }
                     break;
                 }
@@ -816,6 +850,7 @@ enum ScanState
 
 
 // read a string until ']' and delete spaces in input
+// static
 xub_StrLen SvNumberformat::ImpGetNumber(String& rString,
                                  xub_StrLen& nPos,
                                  String& sSymbol)
@@ -838,6 +873,39 @@ xub_StrLen SvNumberformat::ImpGetNumber(String& rString,
         }
     }
     return nPos - nStartPos;
+}
+
+
+// static
+LanguageType SvNumberformat::ImpGetLanguageType( const String& rString,
+         xub_StrLen& nPos )
+{
+    sal_Int32 nNum = 0;
+    sal_Unicode cToken = 0;
+    xub_StrLen nLen = rString.Len();
+    while ( nPos < nLen && ((cToken = rString.GetChar(nPos)) != ']') )
+    {
+        if ( '0' <= cToken && cToken <= '9' )
+        {
+            nNum *= 16;
+            nNum += cToken - '0';
+        }
+        else if ( 'a' <= cToken && cToken <= 'f' )
+        {
+            nNum *= 16;
+            nNum += cToken - 'a' + 10;
+        }
+        else if ( 'A' <= cToken && cToken <= 'F' )
+        {
+            nNum *= 16;
+            nNum += cToken - 'A' + 10;
+        }
+        else
+            return LANGUAGE_DONTKNOW;
+        ++nPos;
+    }
+    return (nNum && (cToken == ']' || nPos == nLen)) ? (LanguageType)nNum :
+        LANGUAGE_DONTKNOW;
 }
 
 
@@ -919,10 +987,19 @@ short SvNumberformat::ImpNextSymbol(String& rString,
                     }
                     break;
                     case '$' :
-                    {   // currency as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
-                        eType = SYMBOLTYPE_FORMAT;
+                    {
+                        if ( rString.GetChar(nPos) == '-' )
+                        {   // [$-xxx] locale
+                            sSymbol.EraseAllChars('[');
+                            eType = SYMBOLTYPE_LOCALE;
+                            eState = SsGetPrefix;
+                        }
+                        else
+                        {   // currency as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
+                            eType = SYMBOLTYPE_FORMAT;
+                            eState = SsGetString;
+                        }
                         sSymbol += cToken;
-                        eState = SsGetString;
                     }
                     break;
                     case '~' :
@@ -3743,12 +3820,14 @@ String SvNumberformat::GetMappedFormatstring(
 }
 
 
-String SvNumberformat::GetDBNumString( BYTE nNum, sal_Int32 nVal, USHORT nMinDigits ) const
+String SvNumberformat::GetDBNumString( const SvNumberDBNum& rNum,
+        sal_Int32 nVal, USHORT nMinDigits ) const
 {
-    if ( nNum )
+    if ( rNum.IsComplete() )
     {
 //! TODO: DoubleByte Chinese and other digits
-        return GetDBNumString( 0, nVal, nMinDigits );   // yes, one recursion for now
+        SvNumberDBNum aNum;
+        return GetDBNumString( aNum, nVal, nMinDigits );    // yes, one recursion for now
     }
     if ( nMinDigits )
     {
