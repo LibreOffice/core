@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-28 13:02:13 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ namespace dbaccess
             @param          _rxConn         the connection the table belongs to
             @param          _rxTable        the table from the driver can be null
         */
-        ODBTableDecorator(const OConfigurationNode& _rTableConfig,
+        ODBTableDecorator(const ::utl::OConfigurationNode& _rTableConfig,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier >& _rxTable)
             throw(::com::sun::star::sdbc::SQLException);

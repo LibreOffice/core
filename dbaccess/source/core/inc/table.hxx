@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-04 10:02:31 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ namespace dbaccess
             @param          _rType          the type of the table, as supplied by the driver
             @param          _rDesc          the description of the table, as supplied by the driver
         */
-        ODBTable(const OConfigurationNode& _rTableConfig,
+        ODBTable(const ::utl::OConfigurationNode& _rTableConfig,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConn,
                 const ::rtl::OUString& _rCatalog, const ::rtl::OUString& _rSchema, const ::rtl::OUString& _rName,
                 const ::rtl::OUString& _rType, const ::rtl::OUString& _rDesc)

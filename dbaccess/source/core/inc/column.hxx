@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:47:51 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,8 @@
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include <connectivity/sdbcx/VCollection.hxx>
 #endif
-#ifndef _DBA_CONFIGNODE_HXX_
-#include "confignode.hxx"
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
 #endif
 #ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
 #include <connectivity/sdbcx/IRefreshable.hxx>
@@ -255,11 +255,11 @@ namespace dbaccess
             @return                         sal_True, if anything has been written (i.e. there is at least one non-default property)
                                             sal_False else
         */
-        sal_Bool    writeUITo(const OConfigurationNode& _rConfigNode);
+        sal_Bool    writeUITo(const ::utl::OConfigurationNode& _rConfigNode);
         /** read the connection independent information (i.e. te hidden flag or the column width) from the given configuration node.
             @param      _rxConfigNode       the configuratoin node to read from
         */
-        void        readUIFrom(const OConfigurationNode& _rConfigNode);
+        void        readUIFrom(const ::utl::OConfigurationNode& _rConfigNode);
     };
 
     //============================================================
@@ -301,7 +301,7 @@ namespace dbaccess
         ODBTable*                   m_pTable;       // in some cases this is the parent
 
         // configuration
-        OConfigurationNode          m_aConfigurationNode;
+        ::utl::OConfigurationNode   m_aConfigurationNode;
         // comes from the driver can be null
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xDrvColumns;
         IColumnFactory*                             m_pColFactoryImpl;
@@ -378,7 +378,7 @@ namespace dbaccess
             @see    OColumn::readUIFrom
             @see    storeSettings
         */
-        virtual void    loadSettings(const OConfigurationNode& _rLocation);
+        virtual void    loadSettings(const ::utl::OConfigurationNode& _rLocation);
 
         /** store the columns configuration information under the current configuration node.
             @param  _rCommitLocation        Since the current configuration does not support different types of
@@ -390,7 +390,7 @@ namespace dbaccess
             @see    OColumn::writeUITo
             @see    loadSettings
         */
-        virtual void    storeSettings(const OConfigurationNode& _rLocation);
+        virtual void    storeSettings(const ::utl::OConfigurationNode& _rLocation);
 
         // XAppend
         virtual void SAL_CALL appendByDescriptor( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);

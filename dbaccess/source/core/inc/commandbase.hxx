@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandbase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:03:27 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,16 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #endif
 
+namespace utl
+{
+    class OConfigurationNode;
+}
+
 //........................................................................
 namespace dbaccess
 {
 //........................................................................
 
-class OConfigurationNode;
 //==========================================================================
 //= OCommandBase - a base class (in fact just a container for some members)
 //=                 for classes implementing the sdb.CommandDefinition service
@@ -95,12 +99,12 @@ protected:
     /** store all configuration relevant informations under the given configuration node
         @param      _rConfigLocation        the configuration node. must not be readonly
     */
-    virtual void    storeTo(const OConfigurationNode& _rConfigLocation);
+    virtual void    storeTo(const ::utl::OConfigurationNode& _rConfigLocation);
 
     /** initialize with the informations stored under the given configuration node
         @param      _rConfigLocation        the configuration node.
     */
-    virtual void    initializeFrom(const OConfigurationNode& _rConfigLocation);
+    virtual void    initializeFrom(const ::utl::OConfigurationNode& _rConfigLocation);
 };
 
 //........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-01 09:49:04 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,8 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
 #endif
-#ifndef _DBA_CONFIGNODE_HXX_
-#include "confignode.hxx"
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
 #endif
 #ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
 #include <connectivity/sdbcx/VCollection.hxx>
@@ -143,9 +143,9 @@ namespace dbaccess
     {
     protected:
 
-        OConfigurationTreeRoot  m_aCommitLocation; // need to commit new table nodes
-        OConfigurationNode      m_aTablesConfig;
-        IWarningsContainer*     m_pWarningsContainer;
+        ::utl::OConfigurationTreeRoot   m_aCommitLocation; // need to commit new table nodes
+        ::utl::OConfigurationNode       m_aTablesConfig;
+        IWarningsContainer*             m_pWarningsContainer;
 
         // holds the original tables which where set in construct but they can be null
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterTables;
@@ -173,7 +173,7 @@ namespace dbaccess
             @param          _rTableTypeFilter   restricts the visible tables by type
             @see            construct
         */
-        OTableContainer( const OConfigurationNode& _rTablesConfig,const OConfigurationTreeRoot& _rCommitLocation,
+        OTableContainer( const ::utl::OConfigurationNode& _rTablesConfig,const ::utl::OConfigurationTreeRoot& _rCommitLocation,
             ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,

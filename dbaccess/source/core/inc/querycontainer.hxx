@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:19:42 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,8 @@
 #ifndef _DBA_CORE_CONFIGURATIONFLUSHABLE_HXX_
 #include "configurationflushable.hxx"
 #endif
-#ifndef _DBA_CONFIGNODE_HXX_
-#include "confignode.hxx"
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
 #endif
 
 //........................................................................
@@ -198,7 +198,7 @@ namespace dbaccess
         OQueryContainer(::cppu::OWeakObject& _rConnection,
             ::osl::Mutex& _rMutex,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
-            const OConfigurationTreeRoot& _rRootConfigNode,
+            const ::utl::OConfigurationTreeRoot& _rRootConfigNode,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
             );
         ~OQueryContainer();
@@ -275,7 +275,7 @@ namespace dbaccess
         sal_Int32 implGetIndex(const ::rtl::OUString& _rName);
 
         /// search the object key for the given name
-        OConfigurationNode implGetObjectKey(const ::rtl::OUString& _rName, sal_Bool bCreate = sal_False);
+        ::utl::OConfigurationNode implGetObjectKey(const ::rtl::OUString& _rName, sal_Bool bCreate = sal_False);
     };
 
     //==========================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasettings.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 08:37:53 $
+ *  last change: $Author: fs $ $Date: 2001-06-18 11:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,12 +86,16 @@
 #include <comphelper/propertycontainer.hxx>
 #endif
 
+namespace utl
+{
+    class OConfigurationNode;
+}
+
 //........................................................................
 namespace dbaccess
 {
 //........................................................................
 
-class OConfigurationNode;
 //==========================================================================
 //= ODataSettings_Base - a base class which implements the property member
 //=                 for an object implementing the sdb::DataSettings
@@ -122,12 +126,12 @@ protected:
         scheme for "DefinitionSettings" - which has yet to be defined :)
         @param      _rxConfigLocation       the configuration node. must not be readonly
     */
-    virtual void    storeTo(const OConfigurationNode& _rConfigLocation) const;
+    virtual void    storeTo(const ::utl::OConfigurationNode& _rConfigLocation) const;
 
     /** load all configuration relevant informations from the given configuration node.
         @param      _rxConfigLocation       the configuration node. must not be readonly
     */
-    virtual void    loadFrom(const OConfigurationNode& _rConfigLocation);
+    virtual void    loadFrom(const ::utl::OConfigurationNode& _rConfigLocation);
 
 };
 //==========================================================================
