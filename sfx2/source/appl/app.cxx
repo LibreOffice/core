@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:47:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:41:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,9 +94,6 @@
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
-#ifndef _FILELIST_HXX //autogen
-#include <so3/filelist.hxx>
-#endif
 #ifndef _URLBMK_HXX //autogen
 #include <svtools/urlbmk.hxx>
 #endif
@@ -182,7 +179,7 @@
 #include <rtl/logfile.hxx>
 #endif
 
-#include <appuno.hxx>
+#include "appuno.hxx"
 #include "sfxhelp.hxx"
 #include "request.hxx"
 #include "sfxtypes.hxx"
@@ -209,8 +206,6 @@
 #include "appdata.hxx"
 #include "openflag.hxx"
 #include "app.hrc"
-#include "interno.hxx"
-#include "ipenv.hxx"
 #include "intfrm.hxx"
 #include "virtmenu.hxx"
 #include "module.hxx"
@@ -218,6 +213,7 @@
 #include "event.hxx"
 #include "appimp.hxx"
 #include "imestatuswindow.hxx"
+#include "workwin.hxx"
 #include "module.hxx"
 #include "tbxctrl.hxx"
 #include "sfxdlg.hxx"
@@ -613,12 +609,6 @@ SfxApplication::~SfxApplication()
     if ( !bDowning )
         Deinitialize();
 
-    // better call SvFactory::DeInit, because this will remove ALL factories,
-    // but it will fail because the ConfigManager has a storage that is a SvObject
-    SfxObjectFactory::RemoveAll_Impl();
-
-//    UCB_Helper::Deinitialize();
-
     delete pCfgMgr;
     delete pImp;
     delete pAppData_Impl;
@@ -836,10 +826,6 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
             }
         }
 
-        // check if activated or deactivated frame is a InPlaceFrame
-        SfxInPlaceFrame *pOld = PTR_CAST( SfxInPlaceFrame, pViewFrame );
-        SfxInPlaceFrame *pNew = PTR_CAST( SfxInPlaceFrame, pFrame );
-
         // get the containerframes ( if one of the frames is an InPlaceFrame )
         SfxViewFrame *pOldContainerFrame = pViewFrame;
         while ( pOldContainerFrame && pOldContainerFrame->GetParentViewFrame_Impl() )
@@ -856,29 +842,8 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
         if ( pViewFrame )
         {
             if ( bTaskActivate )
-            {
                 // prepare UI for deacivation
                 pViewFrame->GetFrame()->Deactivate_Impl();
-
-                if ( pOld )
-                {
-                    // broadcast deactivation event
-                    NotifyEvent( SfxEventHint( SFX_EVENT_DEACTIVATEDOC, pViewFrame->GetObjectShell() ) );
-
-                    // inplace deactivation needed
-                    SvInPlaceClient *pCli = pOldContainerFrame->GetViewShell() ? pOldContainerFrame->GetViewShell()->GetIPClient() : NULL;
-                    if ( pCli && pCli->GetProtocol().IsUIActive() )
-                    {
-                        if ( bDocWinActivate )
-                        {
-                            pCli->GetIPObj()->GetIPEnv()->DoShowUITools( sal_False );
-                            pCli->GetProtocol().DocWinActivate( sal_False );
-                        }
-                        else
-                            pCli->GetProtocol().TopWinActivate( sal_False );
-                    }
-                }
-            }
         }
 
         if ( pOldContainerFrame )
@@ -917,33 +882,11 @@ void SfxApplication::SetViewFrame( SfxViewFrame *pFrame )
                     pProgress->SetState( pProgress->GetState() );
             }
 
-            if ( !pNew && pViewFrame->GetViewShell() )
+            if ( pViewFrame->GetViewShell() )
             {
                 SfxDispatcher* pDisp = pViewFrame->GetDispatcher();
                 pDisp->Flush();
                 pDisp->Update_Impl(sal_True);
-            }
-        }
-
-        if ( pViewFrame && pViewFrame->GetViewShell() )
-        {
-            if ( bTaskActivate )
-            {
-                if ( pNew )
-                {
-                    // Activate IPClient if present
-                    SvInPlaceClient *pCli = pNewContainerFrame->GetViewShell()->GetIPClient();
-                    if ( pCli && pCli->GetProtocol().IsUIActive() )
-                    {
-                        if ( bDocWinActivate )
-                        {
-                            pCli->GetIPObj()->GetIPEnv()->DoShowUITools( sal_True );
-                            pCli->GetProtocol().DocWinActivate( sal_True );
-                        }
-                        else
-                            pCli->GetProtocol().TopWinActivate( sal_True );
-                    }
-                }
             }
         }
     }
