@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: awt_UnoControlDialogModel.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:43:46 $ 
+'*  last change:$Date: 2003-10-06 12:45:42 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -83,12 +83,6 @@ On Error Goto ErrHndl
 
     PropertyTester.TestProperty("BackgroundColor")
 
-    Dim params As Variant
-    params = Array(0, 1, 2)
-    PropertyTester.TestProperty("Border", params())
-
-    PropertyTester.TestProperty("DefaultControl")
-
     PropertyTester.TestProperty("Enabled")
 
     PropertyTester.TestProperty("FontDescriptor")
@@ -98,6 +92,20 @@ On Error Goto ErrHndl
     PropertyTester.TestProperty("TextColor")
 
     PropertyTester.TestProperty("Sizeable")
+
+    PropertyTester.TestProperty("Closeable")
+
+    PropertyTester.TestProperty("FontEmphasisMark")
+
+    PropertyTester.TestProperty("FontRelief")
+
+    PropertyTester.TestProperty("HelpText")
+
+    PropertyTester.TestProperty("HelpURL")
+
+    PropertyTester.TestProperty("Moveable")
+
+    PropertyTester.TestProperty("TextLineColor")
 
 Exit Sub
 ErrHndl:
