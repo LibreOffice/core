@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-24 20:27:30 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 21:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,7 +254,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ polish ] = "Krzywa";
                 Text[ portuguese_brazilian ] = "Bezier";
                 Text[ japanese ] = "曲線";
-                Text[ korean ] = "베지에";
+                Text[ korean ] = "곡선";
                 Text[ chinese_simplified ] = "曲线";
                 Text[ chinese_traditional ] = "曲線";
                 Text[ turkish ] = "Bezier";
@@ -282,7 +282,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ polish ] = "Linia narysowana odr�cznie";
                 Text[ portuguese_brazilian ] = "Freihand";
                 Text[ japanese ] = "ﾌﾘｰﾊﾝﾄﾞの曲線";
-                Text[ korean ] = "자유서식";
+                Text[ korean ] = "자유형 곡선";
                 Text[ chinese_simplified ] = "自由形线条";
                 Text[ chinese_traditional ] = "自由形線條";
                 Text[ turkish ] = "Serbest bi�im";
@@ -762,6 +762,7 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
     Text[ catalan ] = "Alineaci�n";
 };
  // ********************************************************************** EOF
+
 
 
 
