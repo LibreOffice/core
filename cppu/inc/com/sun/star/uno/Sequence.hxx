@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:06:32 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,20 +300,16 @@ SAL_CALL getCppuSequenceType( const ::com::sun::star::uno::Type & rElementType )
         & ::com::sun::star::uno::Sequence< E >::s_pType );
 }
 
-#if ((defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || \
-     (defined(__GNUC__) && defined(__APPLE__)))
-static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char
-= 0;
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
+static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = 0;
 #endif
 
 // char sequence
 inline const ::com::sun::star::uno::Type &
 SAL_CALL getCharSequenceCppuType() SAL_THROW( () )
 {
-#if !( (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || \
-       (defined(__GNUC__) && defined(__APPLE__)) )
-    static typelib_TypeDescriptionReference *
-        s_pType_com_sun_star_uno_Sequence_Char = 0;
+#if !( defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500))
+    static typelib_TypeDescriptionReference * s_pType_com_sun_star_uno_Sequence_Char = 0;
 #endif
     if (! s_pType_com_sun_star_uno_Sequence_Char)
     {
