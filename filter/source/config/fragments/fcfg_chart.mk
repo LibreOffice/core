@@ -4,7 +4,8 @@ T4_CHART = \
     chart_StarChart_30 \
     chart_StarChart_40 \
     chart_StarChart_50 \
-    chart_StarOffice_XML_Chart
+    chart_StarOffice_XML_Chart \
+    chart2_StarOffice_XML_Chart
 
 # -----------------------------------------------
 # count = 4
@@ -16,7 +17,8 @@ F4_CHART = \
 
 # -----------------------------------------------
 # count = 0
-L4_CHART =
+L4_CHART = \
+    com_sun_star_comp_chart2_ChartFrameLoader
 
 # -----------------------------------------------
 # count = 0
