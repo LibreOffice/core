@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssmith $ $Date: 2002-12-16 12:49:25 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-18 15:29:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,8 +618,10 @@ TemplateResult CacheController::getTemplateData(TemplateRequest const & _aReques
                                         "*" : RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) );
 
 
-    //Remember to remove
-    AbsolutePath aTemplateLocation = AbsolutePath::makeModulePath(_aRequest.getComponentName(), AbsolutePath::NoValidate());
+
+    AbsolutePath aTemplateLocation = encodeTemplateLocation(_aRequest.getTemplateName(), _aRequest.getComponentName());
+
+    loadTemplate(_aRequest);
     //AbsolutePath aTemplateLocation = ensureTemplate(_aRequest.getTemplateName(), _aRequest.getComponentName());
 
     memory::Segment * pTemplatesSegment = m_aTemplates.getDataSegment(aTemplateLocation.getModuleName());
