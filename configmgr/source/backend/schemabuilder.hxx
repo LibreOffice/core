@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schemabuilder.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:18:07 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ namespace configmgr
         :   public SchemaBuilder_Base
         {
         public:
-            SchemaBuilder( const OUString& aExpectedComponentName, ITemplateDataProvider* aTemplateProvider = NULL );
+            SchemaBuilder( const OUString& aExpectedComponentName, MergedComponentData & rData, ITemplateDataProvider* aTemplateProvider = NULL );
             virtual ~SchemaBuilder();
 
         // checking the result
@@ -182,7 +182,7 @@ namespace configmgr
 
             void substituteInstances();
         private:
-            MergedComponentData     m_aData;
+            MergedComponentData &   m_aData;
             DataBuilderContext      m_aContext;
             ComponentDataFactory    m_aFactory;
             ITemplateDataProvider *  m_aTemplateProvider;
