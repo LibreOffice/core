@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XVclWindowPeer.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:54 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,52 +76,54 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XVclWindowPeer
-/** @deprecated
+/** gives access to the VCL window implementation.
+
+    @deprecated
  */
 interface XVclWindowPeer: com::sun::star::awt::XWindowPeer
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XVclWindowPeer::isChild
 
-    // DocMerge: empty anyway
+    /** returns <true/> if the window peer is a child, <false/> otherwise.
+     */
     boolean isChild( [in] com::sun::star::awt::XWindowPeer Peer );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XVclWindowPeer::setDesignMode
     /** sets the design mode for use in a design editor.
      */
     [oneway] void setDesignMode( [in] boolean bOn );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XVclWindowPeer::isDesignMode
 
-    // DocMerge: empty anyway
+    /** returns <true/> if the window peer is in design mode,
+        <false/> otherwise.
+     */
     boolean isDesignMode();
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XVclWindowPeer::enableClipSiblings
 
-    // DocMerge: empty anyway
+    /** enables clipping of sibling windows.
+     */
     [oneway] void enableClipSiblings( [in] boolean bClip );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XVclWindowPeer::setForeground
 
-    // DocMerge: empty anyway
+    /** sets the foreground color.
+     */
     [oneway] void setForeground( [in] long Color );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XVclWindowPeer::setControlFont
 
-    // DocMerge: empty anyway
+    /** sets the control font.
+     */
     [oneway] void setControlFont( [in] com::sun::star::awt::FontDescriptor aFont );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XVclWindowPeer::getStyles
 
-    // DocMerge: empty anyway
+    /** returns the font, foreground and background color for the specified
+        type.
+     */
     void getStyles( [in] short nType,
              [out] com::sun::star::awt::FontDescriptor Font,
              [out] long ForegroundColor,
@@ -129,16 +131,15 @@ interface XVclWindowPeer: com::sun::star::awt::XWindowPeer
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XVclWindowPeer::setProperty
-    /** sets properties like colors, fonts, ....
+    /** sets the value of the property with the specified name.
      */
     void setProperty( [in] string PropertyName,
              [in] any Value );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XVclWindowPeer::getProperty
 
-    // DocMerge: empty anyway
+    /** returns the value of the property with the specified name.
+     */
     any getProperty( [in] string PropertyName );
 
 };

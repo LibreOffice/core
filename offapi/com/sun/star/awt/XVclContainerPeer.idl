@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XVclContainerPeer.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:54 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,29 +76,30 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XVclContainerPeer
-/** @deprecated
+/** gives access to the VCL container window implementation.
+
+    @deprecated
  */
 interface XVclContainerPeer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XVclContainerPeer::enableDialogControl
 
-    // DocMerge: empty anyway
+    /** enable as dialog control.
+     */
     [oneway] void enableDialogControl( [in] boolean bEnable );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XVclContainerPeer::setTabOrder
 
-    // DocMerge: empty anyway
+    /** sets the tab order.
+     */
     [oneway] void setTabOrder( [in] sequence<com::sun::star::awt::XWindow> WindowOrder,
              [in] sequence<any> Tabs,
              [in] boolean GroupControl );
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION OMITTED FOR XVclContainerPeer::setGroup
 
-    // DocMerge: empty anyway
+    /** sets a group.
+     */
     [oneway] void setGroup( [in] sequence<com::sun::star::awt::XWindow> Windows );
 
 };
