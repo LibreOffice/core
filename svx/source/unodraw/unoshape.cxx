@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:33:48 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:17:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -804,6 +804,35 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShapes>*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShapeGroup>*)0);
+                }
+            }
+            return aTypeSequence;
+        }
+    case OBJ_CUSTOMSHAPE:
+        {
+            static ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > aTypeSequence;
+
+            if( aTypeSequence.getLength() == 0 )
+            {
+                // Ready for multithreading; get global mutex for first call of this method only! see before
+                MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
+
+                // Control these pointer again ... it can be, that another instance will be faster then these!
+                if( aTypeSequence.getLength() == 0 )
+                {
+                    aTypeSequence.realloc( 11 );
+                    uno::Type* pTypes = aTypeSequence.getArray();
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XShape >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XChild >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< lang::XUnoTunnel >*)0);
+                    *pTypes++ = ::getCppuType((const uno::Reference< container::XNamed >*)0);
                 }
             }
             return aTypeSequence;
@@ -3042,6 +3071,9 @@ const char* sUNO_service_drawing_RotationDescriptor         = STAR_NAMESPACE "dr
 const char* sUNO_service_drawing_Text                       = STAR_NAMESPACE "drawing.Text";
 const char* sUNO_service_drawing_GroupShape                 = STAR_NAMESPACE "drawing.GroupShape";
 
+const char* sUNO_service_drawing_CustomShapeProperties      = STAR_NAMESPACE "drawing.CustomShapeProperties";
+const char* sUNO_service_drawing_CustomShape                    = STAR_NAMESPACE "drawing.CustomShape";
+
 const char* sUNO_service_drawing_PolyPolygonDescriptor      = STAR_NAMESPACE "drawing.PolyPolygonDescriptor";
 const char* sUNO_service_drawing_PolyPolygonBezierDescriptor= STAR_NAMESPACE "drawing.PolyPolygonBezierDescriptor";
 
@@ -3106,6 +3138,37 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
 
                 return *pSeq;
             }
+        case OBJ_CUSTOMSHAPE:
+            {
+                static uno::Sequence< OUString > *pSeq = 0;
+                if( 0 == pSeq )
+                {
+                    OGuard aGuard( Application::GetSolarMutex() );
+                    if( 0 == pSeq )
+                    {
+                        static uno::Sequence< OUString > SvxShape_CustomShapeServices;
+
+                        SvxServiceInfoHelper::addToSequence( SvxShape_CustomShapeServices, 13,
+                            sUNO_service_drawing_CustomShape,
+                              sUNO_service_drawing_Shape,
+                            sUNO_service_drawing_CustomShapeProperties,
+                            sUNO_service_drawing_FillProperties,
+                            sUNO_service_drawing_LineProperties,
+                            sUNO_service_drawing_Text,
+                            sUNO_service_drawing_TextProperties,
+                            sUNO_service_style_ParagraphProperties,
+                            sUNO_service_style_ParagraphPropertiesComplex,
+                            sUNO_service_style_ParagraphPropertiesAsian,
+                            sUNO_service_style_CharacterProperties,
+                            sUNO_service_style_CharacterPropertiesComplex,
+                            sUNO_service_style_CharacterPropertiesAsian,
+                            sUNO_service_drawing_ShadowProperties,
+                            sUNO_service_drawing_RotationDescriptor);
+                        pSeq = &SvxShape_CustomShapeServices;
+                    }
+                }
+                return *pSeq;
+            }
         case OBJ_LINE:
             {
                 static uno::Sequence< OUString > *pSeq = 0;
@@ -3157,8 +3220,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Shape,
                             sUNO_service_drawing_FillProperties,
                             sUNO_service_drawing_LineProperties,
-
-                            sUNO_service_drawing_Text,
                             sUNO_service_drawing_TextProperties,
                             sUNO_service_style_ParagraphProperties,
                             sUNO_service_style_ParagraphPropertiesComplex,
