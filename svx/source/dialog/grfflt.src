@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 09:54:55 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 11:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text[ swedish ] = "~Höjd" ;
         Text[ dutch ] = "~Hoogte" ;
         Text[ spanish ] = "A~ltura" ;
-        Text[ english_us ] = "~Height" ;
+        Text[ english_us ] = "H~eight" ;
         Text[ chinese_simplified ] = "¸ß(~H)";
         Text[ russian ] = "~Âûñîòà";
         Text[ polish ] = "Wys.";
@@ -255,7 +255,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         TabStop = TRUE ;
         Text = "~Kanten hervorheben" ;
         Text[ ENGLISH ] = "~Enhance edges" ;
-        Text[ english_us ] = "~Enhance edges" ;
+        Text[ english_us ] = "E~nhance edges" ;
         Text[ portuguese ] = "~Enhance edges";
         Text[ russian ] = "~Âûäåëèòü êîíòóðû";
         Text[ greek ] = "ÅðéóÞìáíóç Ü~êñùí";
@@ -723,7 +723,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
         Text[ italian ] = "Parameter";
         Text[ danish ] = "Parametre";
         Text[ swedish ] = "Parameter";
-        Text[ polish ] = "Parametr";
+        Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Parameter";
         Text[ japanese ] = "Êß×Ò°À";
         Text[ korean ] = "ÆÄ¶ó¹ÌÅÍ";
@@ -833,7 +833,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     Text[ chinese_traditional ] = "¯BÀJ";
     Text[ arabic ] = "äÞÔ";
     Text[ greek ] = "AíÜãëõöï";
-    Text[ korean ] = "¼±¸í`µµ";
+    Text[ korean ] = "¾ç°¢";
     Text[ turkish ] = "Rölyef";
     Text[ language_user1 ] = " ";
 
@@ -884,7 +884,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ italian ] = "Parameter";
         Text[ danish ] = "Parametre";
         Text[ swedish ] = "Parametrar";
-        Text[ polish ] = "Parametr";
+        Text[ polish ] = "Parametry";
         Text[ portuguese_brazilian ] = "Parameter";
         Text[ japanese ] = "Êß×Ò°À";
         Text[ korean ] = "ÆÄ¶ó¹ÌÅÍ";
