@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XNamed.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:23:58 $
+ *  last change:$Date: 2004-03-19 14:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,14 @@
  *
  *
  ************************************************************************/
-
 package ifc.container;
 
+import com.sun.star.container.XNamed;
+
 import lib.MultiMethodTest;
+
 import util.utils;
 
-import com.sun.star.container.XNamed;
 
 /**
 * Testing <code>com.sun.star.container.XNamed</code>
@@ -84,8 +85,7 @@ import com.sun.star.container.XNamed;
 * @see com.sun.star.container.XNamed
 */
 public class _XNamed extends MultiMethodTest {
-
-    public XNamed oObj = null;    // oObj filled by MultiMethodTest
+    public XNamed oObj = null; // oObj filled by MultiMethodTest
 
     /**
     * Test calls the method and checks return value and that
@@ -94,9 +94,8 @@ public class _XNamed extends MultiMethodTest {
     * and no exceptions were thrown. <p>
     */
     public void _getName() {
-
         // write to log what we try next
-        log.println( "test for getName()" );
+        log.println("test for getName()");
 
         boolean result = true;
         boolean loc_result = true;
@@ -105,8 +104,12 @@ public class _XNamed extends MultiMethodTest {
         loc_result = ((name = oObj.getName()) != null);
         log.println("getting the name \"" + name + "\"");
 
-        if (loc_result) log.println("... getName() - OK");
-        else log.println("... getName() - FAILED");
+        if (loc_result) {
+            log.println("... getName() - OK");
+        } else {
+            log.println("... getName() - FAILED");
+        }
+
         result &= loc_result;
         tRes.tested("getName()", result);
     }
@@ -127,25 +130,30 @@ public class _XNamed extends MultiMethodTest {
     *  <li> <code> getName() </code> : to be sure the method works</li>
     * </ul>
     */
-    public void _setName(){
+    public void _setName() {
         String Oname = tEnv.getTestCase().getObjectName();
         String nsn = (String) tEnv.getObjRelation("NoSetName");
+
         if (nsn != null) {
             Oname = nsn;
         }
-        if (Oname.indexOf("Exporter")>0 || nsn != null) {
-            log.println("With "+Oname+" setName() doesn't work");
+
+        if ((Oname.indexOf("Exporter") > 0) || (nsn != null)) {
+            log.println("With " + Oname + " setName() doesn't work");
             log.println("see idl-file for further information");
-            tRes.tested("setName()",true);
+            tRes.tested("setName()", true);
+
             return;
         }
+
         requiredMethod("getName()");
         log.println("testing setName() ... ");
 
         String oldName = oObj.getName();
-        String NewName = oldName == null ? "XNamed" : oldName + "X" ;
+        String NewName = (oldName == null) ? "XNamed" : oldName + "X";
 
         String testobjname = tEnv.getTestCase().getObjectName();
+
         if (testobjname.equals("ScSheetLinkObj")) {
             // special case, here name is equals to links URL.
             NewName = "file:///c:/somename/from/XNamed";
@@ -160,6 +168,7 @@ public class _XNamed extends MultiMethodTest {
         boolean result = true;
         boolean loc_result = true;
         Boolean sName = (Boolean) tEnv.getObjRelation("setName");
+
         if (sName == null) {
             log.println("set the name of object to \"" + NewName + "\"");
             oObj.setName(NewName);
@@ -169,29 +178,22 @@ public class _XNamed extends MultiMethodTest {
             log.println("getting the name \"" + name + "\"");
             loc_result = name.equals(NewName);
 
-            if (loc_result) log.println("... setName() - OK");
-                            else log.println("... setName() - FAILED");
+            if (loc_result) {
+                log.println("... setName() - OK");
+            } else {
+                log.println("... setName() - FAILED");
+            }
+
             result &= loc_result;
-        }
-        else {
-            log.println("The names for the object '"+testobjname+
-                "' are fixed.");
+            oObj.setName(oldName);
+        } else {
+            log.println("The names for the object '" + testobjname +
+                        "' are fixed.");
             log.println("It is not possible to rename.");
             log.println("So 'setName()' is always OK");
             result = sName.booleanValue();
         }
+
         tRes.tested("setName()", result);
-        oObj.setName(oldName);
-        return;
     }
-
-    /**
-    * Does nothing.
-    */
-    protected void after() {
-        //disposeEnvironment();
-    }
-
 }
-
-
