@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bbdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:10:31 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:31:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,7 @@ TabDialog RID_SVXDLG_BBDLG
     Text[ slovak ] = "Okraje / Pozadie";
 };
  // ********************************************************************** EOF
+
 
 
 
