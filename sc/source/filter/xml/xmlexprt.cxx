@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-23 15:24:06 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,6 @@
 #include "chartlis.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
 #endif
@@ -519,10 +516,22 @@ void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XCompon
     pChangeTrackingExportHelper = new ScChangeTrackingExportHelper(*this);
 }
 
+sal_Bool ScXMLExport::HasDrawPages(uno::Reference <sheet::XSpreadsheetDocument>& xDoc)
+{
+    sal_Bool bRet(sal_False);
+    uno::Reference <beans::XPropertySet> xDocProps( xDoc, uno::UNO_QUERY );
+    if (xDocProps.is())
+    {
+        uno::Any aAny(xDocProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_HASDRAWPAGES))));
+        bRet = ::cppu::any2bool( aAny );
+    }
+    return bRet;
+}
+
 void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount, const sal_Int32 nCellCount)
 {
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xModel, uno::UNO_QUERY );
-    if ( xSpreadDoc.is() )
+    if ( xSpreadDoc.is())
     {
         uno::Reference<sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
         uno::Reference<container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
@@ -530,33 +539,36 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
         {
             nTableCount = xIndex->getCount();
             pCellStyles->AddNewTable(nTableCount - 1);
-            for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
+            if (HasDrawPages(xSpreadDoc))
             {
-                uno::Any aTable = xIndex->getByIndex(nTable);
-                uno::Reference<sheet::XSpreadsheet> xTable;
-                if (aTable>>=xTable)
+                for (sal_Int32 nTable = 0; nTable < nTableCount; nTable++)
                 {
-                    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTable, uno::UNO_QUERY);
-                    if (xDrawPageSupplier.is())
+                    uno::Any aTable = xIndex->getByIndex(nTable);
+                    uno::Reference<sheet::XSpreadsheet> xTable;
+                    if (aTable>>=xTable)
                     {
-                        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-                        uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
-                        if (xShapesIndex.is())
+                        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xTable, uno::UNO_QUERY);
+                        if (xDrawPageSupplier.is())
                         {
-                            sal_Int32 nShapes = xShapesIndex->getCount();
-                            for (sal_Int32 nShape = 0; nShape < nShapes; nShape++)
+                            uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+                            uno::Reference<container::XIndexAccess> xShapesIndex (xDrawPage, uno::UNO_QUERY);
+                            if (xShapesIndex.is())
                             {
-                                uno::Any aShape = xShapesIndex->getByIndex(nShape);
-                                uno::Reference<drawing::XShape> xShape;
-                                if (aShape >>= xShape)
+                                sal_Int32 nShapes = xShapesIndex->getCount();
+                                for (sal_Int32 nShape = 0; nShape < nShapes; nShape++)
                                 {
-                                    uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
-                                    if( xShapeProp.is() )
+                                    uno::Any aShape = xShapesIndex->getByIndex(nShape);
+                                    uno::Reference<drawing::XShape> xShape;
+                                    if (aShape >>= xShape)
                                     {
-                                        uno::Any aPropAny = xShapeProp->getPropertyValue(sLayerID);
-                                        sal_Int16 nLayerID;
-                                        if( (aPropAny >>= nLayerID) && (nLayerID != SC_LAYER_INTERN) )
-                                            nShapesCount++;
+                                        uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
+                                        if( xShapeProp.is() )
+                                        {
+                                            uno::Any aPropAny = xShapeProp->getPropertyValue(sLayerID);
+                                            sal_Int16 nLayerID;
+                                            if( (aPropAny >>= nLayerID) && (nLayerID != SC_LAYER_INTERN) )
+                                                nShapesCount++;
+                                        }
                                     }
                                 }
                             }
