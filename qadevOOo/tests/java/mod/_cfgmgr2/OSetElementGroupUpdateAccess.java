@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSetElementGroupUpdateAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:38:58 $
+ *  last change:$Date: 2003-12-11 11:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@ import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameReplace;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.UnoRuntime;
@@ -154,6 +155,12 @@ public class OSetElementGroupUpdateAccess extends TestCase {
         tEnv.addObjRelation("HierachicalName", "//Job");
         tEnv.addObjRelation("NoSetName", "OSetElementGroupUpdateAccess");
 
+        tEnv.addObjRelation("XContainer.NewValue", "aValue");
+        tEnv.addObjRelation("XContainer.ElementName", pNames[0]);
+        tEnv.addObjRelation("XContainer.Container", (XNameReplace)
+                        UnoRuntime.queryInterface(XNameReplace.class, oObj));
+
+        tEnv.addObjRelation("TemplateInstance", (String)nodepath.Value + "/Job");
         return tEnv;
     }
 }
