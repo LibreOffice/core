@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:39:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,7 +755,7 @@ PDFWriterImpl::PDFWriterImpl( const OUString& rFilename, PDFWriter::PDFVersion e
         case PDFWriter::PDF_1_4: aBuffer.append( "1.4" );break;
     }
     // append something binary as comment (suggested in PDF Reference)
-    aBuffer.append( "\r\n%äöÜß\r\n" );
+    aBuffer.append( "\r\n%ï¿½ï¿½\r\n" );
     if( !writeBuffer( aBuffer.getStr(), aBuffer.getLength() ) )
     {
         osl_closeFile( m_aFile );
@@ -868,51 +868,68 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
     return m_pReferenceDevice;
 }
 
+class ImplPdfBuiltinFontData : public ImplFontData
+{
+private:
+    const PDFWriterImpl::BuiltinFont& mrBuiltin;
+
+public:
+    enum {PDF_FONT_MAGIC = 0xBDFF0A1C };
+                                        ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont& );
+    const PDFWriterImpl::BuiltinFont*   GetBuiltinFont() const  { return &mrBuiltin; }
+
+    virtual ImplFontData*               Clone() const { return new ImplPdfBuiltinFontData(*this); }
+    virtual ImplFontEntry*              CreateFontInstance( ImplFontSelectData& ) const;
+};
+
+inline const ImplPdfBuiltinFontData* GetPdfFontData( const ImplFontData* pFontData )
+{
+    const ImplPdfBuiltinFontData* pFD = NULL;
+    if( pFontData && pFontData->CheckMagic( ImplPdfBuiltinFontData::PDF_FONT_MAGIC ) )
+        pFD = reinterpret_cast<const ImplPdfBuiltinFontData*>( pFontData );
+    return pFD;
+}
+
+static ImplDevFontAttributes GetDevFontAttributes( const PDFWriterImpl::BuiltinFont& rBuiltin )
+{
+    ImplDevFontAttributes aDFA;
+    aDFA.maName         = String::CreateFromAscii( rBuiltin.m_pName );
+    aDFA.maStyleName    = String::CreateFromAscii( rBuiltin.m_pStyleName );
+    aDFA.meFamily       = rBuiltin.m_eFamily;
+    aDFA.mbSymbolFlag   = (rBuiltin.m_eCharSet == RTL_TEXTENCODING_SYMBOL);
+    aDFA.mePitch        = rBuiltin.m_ePitch;
+    aDFA.meWeight       = rBuiltin.m_eWeight;
+    aDFA.meItalic       = rBuiltin.m_eItalic;
+    aDFA.meWidthType    = rBuiltin.m_eWidthType;
+
+    aDFA.mbOrientation  = true;
+    aDFA.mbDevice       = true;
+    aDFA.mnQuality      = 50000;
+    aDFA.mbSubsettable  = false;
+    aDFA.mbEmbeddable   = false;
+    return aDFA;
+}
+
+ImplPdfBuiltinFontData::ImplPdfBuiltinFontData( const PDFWriterImpl::BuiltinFont& rBuiltin )
+:   ImplFontData( GetDevFontAttributes(rBuiltin), PDF_FONT_MAGIC ),
+    mrBuiltin( rBuiltin )
+{}
+
+ImplFontEntry* ImplPdfBuiltinFontData::CreateFontInstance( ImplFontSelectData& rFSD ) const
+{
+    ImplFontEntry* pEntry = new ImplFontEntry( rFSD );
+    return pEntry;
+}
+
 ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
 {
     DBG_ASSERT( m_aSubsets.size() == 0, "Fonts changing during PDF generation, document will be invalid" );
-    ImplDevFontList* pFiltered = new ImplDevFontList();
+    ImplDevFontList* pFiltered = pFontList->Clone( true, true );
 
-    ImplDevFontListData* pData = pFontList->First();
-    while( pData )
-    {
-        ImplFontData* pEntry = pData->mpFirst;
-        while( pEntry )
-        {
-            if( pEntry->mbSubsettable || pEntry->mbEmbeddable )
-            {
-                ImplFontData* pNewData = new ImplFontData();
-                *pNewData = *pEntry;
-                pNewData->mbDevice = FALSE; // obviously
-                pFiltered->Add( pNewData );
-            }
-            pEntry = pEntry->mpNext;
-        }
-        pData = pFontList->Next();
-    }
-    // append the 14 PDF builtin fonts
+    // append the PDF builtin fonts
     for( unsigned int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
     {
-        ImplFontData* pNewData = new ImplFontData();
-        pNewData->mpSysData     = (void*)&m_aBuiltinFonts[i];
-        pNewData->maName        = String::CreateFromAscii( m_aBuiltinFonts[i].m_pName );
-        pNewData->maStyleName   = String::CreateFromAscii( m_aBuiltinFonts[i].m_pStyleName );
-        pNewData->mnWidth       = 0;
-        pNewData->mnHeight      = 0;
-        pNewData->meFamily      = m_aBuiltinFonts[i].m_eFamily;
-        pNewData->meCharSet     = m_aBuiltinFonts[i].m_eCharSet;
-        pNewData->mePitch       = m_aBuiltinFonts[i].m_ePitch;
-        pNewData->meWeight      = m_aBuiltinFonts[i].m_eWeight;
-        pNewData->meItalic      = m_aBuiltinFonts[i].m_eItalic;
-        pNewData->meWidthType   = m_aBuiltinFonts[i].m_eWidthType;
-        pNewData->meType        = TYPE_SCALABLE;
-        pNewData->mnVerticalOrientation = 0;
-        pNewData->mbOrientation = TRUE;
-        pNewData->mbDevice      = TRUE;
-        pNewData->mnQuality     = 50000;
-        pNewData->mbSubsettable = FALSE;
-        pNewData->mbEmbeddable  = FALSE;
-
+        ImplFontData* pNewData = new ImplPdfBuiltinFontData( m_aBuiltinFonts[i] );
         pFiltered->Add( pNewData );
     }
     return pFiltered;
@@ -920,38 +937,30 @@ ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
 
 bool PDFWriterImpl::isBuiltinFont( ImplFontData* pFont ) const
 {
-    for( unsigned int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
-    {
-        if( pFont->mpSysData == (void*)&m_aBuiltinFonts[i] )
-            return true;
-    }
-    return false;
+    const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pFont );
+    return (pFD != NULL);
 }
 
 void PDFWriterImpl::getFontMetric( ImplFontSelectData* pSelect, ImplFontMetricData* pMetric ) const
 {
-    for( unsigned int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
-    {
-        if( pSelect->mpFontData->mpSysData == (void*)&m_aBuiltinFonts[i] )
-        {
-            pMetric->mnWidth        = pSelect->mnHeight;
-            pMetric->mnAscent       = ( pSelect->mnHeight * m_aBuiltinFonts[i].m_nAscent + 500 ) / 1000;
-            pMetric->mnDescent      = ( pSelect->mnHeight * (-m_aBuiltinFonts[i].m_nDescent) + 500 ) / 1000;
-            pMetric->mnIntLeading   = 0;
-            pMetric->mnExtLeading   = 0;
-            pMetric->mnSlant        = 0;
-            pMetric->mnFirstChar    = 32;
-            pMetric->mnLastChar     = 255;
-            pMetric->meFamily       = m_aBuiltinFonts[i].m_eFamily;
-            pMetric->meCharSet      = m_aBuiltinFonts[i].m_eCharSet;
-            pMetric->mePitch        = m_aBuiltinFonts[i].m_ePitch;
-            pMetric->meWeight       = m_aBuiltinFonts[i].m_eWeight;
-            pMetric->meItalic       = m_aBuiltinFonts[i].m_eItalic;
-            pMetric->meType         = TYPE_SCALABLE;
-            pMetric->mbDevice       = TRUE;
-            break;
-        }
-    }
+    const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pSelect->mpFontData );
+    if( !pFD )
+        return;
+    const BuiltinFont* pBuiltinFont = pFD->GetBuiltinFont();
+
+    pMetric->mnWidth        = pSelect->mnHeight;
+    pMetric->mnAscent       = ( pSelect->mnHeight * +pBuiltinFont->m_nAscent + 500 ) / 1000;
+    pMetric->mnDescent      = ( pSelect->mnHeight * -pBuiltinFont->m_nDescent + 500 ) / 1000;
+    pMetric->mnIntLeading   = 0;
+    pMetric->mnExtLeading   = 0;
+    pMetric->mnSlant        = 0;
+    pMetric->meFamily       = pBuiltinFont->m_eFamily;
+    pMetric->mePitch        = pBuiltinFont->m_ePitch;
+    pMetric->meWeight       = pBuiltinFont->m_eWeight;
+    pMetric->meItalic       = pBuiltinFont->m_eItalic;
+    pMetric->mbSymbolFlag   = pFD->IsSymbolFont();
+    pMetric->mbScalableFont = true;
+    pMetric->mbDevice       = true;
 }
 
 // -----------------------------------------------------------------------
@@ -1073,20 +1082,16 @@ SalLayout* PDFWriterImpl::GetTextLayout( ImplLayoutArgs& rArgs, ImplFontSelectDa
     DBG_ASSERT( (pSelect->mpFontData != NULL),
         "PDFWriterImpl::GetTextLayout mpFontData is NULL" );
 
-    for( unsigned int n = 0; n < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); n++ )
-    {
-        if( pSelect->mpFontData->mpSysData != (void*)&m_aBuiltinFonts[n] )
-            continue;
+    const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pSelect->mpFontData );
+    if( !pFD )
+        return NULL;
+    const BuiltinFont* pBuiltinFont = pFD->GetBuiltinFont();
 
-        long nPixelPerEM = pSelect->mnWidth ? pSelect->mnWidth : pSelect->mnHeight;
-        int nOrientation = pSelect->mnOrientation;
-        PDFSalLayout* pLayout = new PDFSalLayout( *this, m_aBuiltinFonts[n],
-            nPixelPerEM, nOrientation );
-        pLayout->SetText( rArgs.mpStr );
-        return pLayout;
-    }
-
-    return NULL;
+    long nPixelPerEM = pSelect->mnWidth ? pSelect->mnWidth : pSelect->mnHeight;
+    int nOrientation = pSelect->mnOrientation;
+    PDFSalLayout* pLayout = new PDFSalLayout( *this, *pBuiltinFont, nPixelPerEM, nOrientation );
+    pLayout->SetText( rArgs.mpStr );
+    return pLayout;
 }
 
 sal_Int32 PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation )
@@ -1261,30 +1266,26 @@ bool PDFWriterImpl::emitTilings()
 
 sal_Int32 PDFWriterImpl::emitBuiltinFont( ImplFontData* pFont )
 {
-    sal_Int32 nFontObject = 0;
-    for( unsigned int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
-    {
-        if( pFont->mpSysData == (void*)&m_aBuiltinFonts[i] )
-        {
-            OStringBuffer aLine( 1024 );
+    const ImplPdfBuiltinFontData* pFD = GetPdfFontData( pFont );
+    if( !pFD )
+        return 0;
+    const BuiltinFont* pBuiltinFont = pFD->GetBuiltinFont();
 
-            nFontObject = createObject();
-            CHECK_RETURN( updateObject( nFontObject ) );
-            aLine.append( nFontObject );
-            aLine.append( " 0 obj\r\n"
-                          "<< /Type /Font\r\n"
-                          "   /Subtype /Type1\r\n"
-                          "   /BaseFont /" );
-            appendName( m_aBuiltinFonts[i].m_pPSName, aLine );
-            aLine.append( "\r\n" );
-            if( m_aBuiltinFonts[i].m_eCharSet != RTL_TEXTENCODING_SYMBOL )
-                aLine.append( "   /Encoding /WinAnsiEncoding\r\n" );
-            aLine.append( ">>\r\nendobj\r\n\r\n" );
-            CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    OStringBuffer aLine( 1024 );
 
-            break;
-        }
-    }
+    sal_Int32 nFontObject = createObject();
+    CHECK_RETURN( updateObject( nFontObject ) );
+    aLine.append( nFontObject );
+    aLine.append( " 0 obj\r\n"
+                  "<< /Type /Font\r\n"
+                  "   /Subtype /Type1\r\n"
+                  "   /BaseFont /" );
+    appendName( pBuiltinFont->m_pPSName, aLine );
+    aLine.append( "\r\n" );
+    if( pBuiltinFont->m_eCharSet != RTL_TEXTENCODING_SYMBOL )
+         aLine.append( "   /Encoding /WinAnsiEncoding\r\n" );
+    aLine.append( ">>\r\nendobj\r\n\r\n" );
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     return nFontObject;
 }
 
@@ -1659,7 +1660,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
                       "   /BaseFont /" );
         appendName( aInfo.m_aPSName, aLine );
         aLine.append( "\r\n" );
-        if( pFont->meCharSet != RTL_TEXTENCODING_SYMBOL &&  pEncoding == 0 )
+        if( !pFont->mbSymbolFlag &&  pEncoding == 0 )
             aLine.append( "   /Encoding /WinAnsiEncoding\r\n" );
         if( nToUnicodeStream )
         {
@@ -2905,6 +2906,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
         }
     }
 
+    FontMetric aRefDevFontMetric = m_pReferenceDevice->GetFontMetric();
+
     sal_Int32 nLastMappedFont = -1;
     while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, pAdvanceWidths, pCharPosAry )) )
     {
@@ -2915,9 +2918,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
 
         Point aDiff;
         if ( eAlign == ALIGN_BOTTOM )
-            aDiff.Y() -= m_pReferenceDevice->GetFontMetric().GetDescent();
+            aDiff.Y() -= aRefDevFontMetric.GetDescent();
         else if ( eAlign == ALIGN_TOP )
-            aDiff.Y() += m_pReferenceDevice->GetFontMetric().GetAscent();
+            aDiff.Y() += aRefDevFontMetric.GetAscent();
 
         if( aDiff.X() || aDiff.Y() )
         {
@@ -2969,7 +2972,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 if( ( nGlyphFlags[n] & GF_ROTMASK ) == GF_ROTL )
                 {
                     fDeltaAngle = M_PI/2.0;
-                    aDeltaPos.X() = m_pReferenceDevice->GetFontMetric().GetAscent();
+                    aDeltaPos.X() = aRefDevFontMetric.GetAscent();
                     aDeltaPos.Y() = (int)((double)m_pReferenceDevice->GetFontMetric().GetDescent() * fXScale);
                     fYScale = fXScale;
                     fTempXScale = 1.0;
@@ -2979,8 +2982,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 else if( ( nGlyphFlags[n] & GF_ROTMASK ) == GF_ROTR )
                 {
                     fDeltaAngle = -M_PI/2.0;
-                    aDeltaPos.X() = (int)((double)m_pReferenceDevice->GetFontMetric().GetDescent()*fXScale);
-                    aDeltaPos.Y() = -m_pReferenceDevice->GetFontMetric().GetAscent();
+                    aDeltaPos.X() = (int)((double)aRefDevFontMetric.GetDescent()*fXScale);
+                    aDeltaPos.Y() = -aRefDevFontMetric.GetAscent();
                     fYScale = fXScale;
                     fTempXScale = 1.0;
                     fSkewA = fSkewB;
