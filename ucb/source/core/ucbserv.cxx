@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbserv.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:52:48 $
+ *  last change: $Author: sb $ $Date: 2000-12-04 17:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,6 @@
 #endif
 #ifndef _PROVPROX_HXX
 #include "provprox.hxx"
-#endif
-#ifndef _UCB_UCBDISTRIBUTOR_HXX_
-#include "ucbdistributor.hxx"
 #endif
 
 using namespace rtl;
@@ -183,15 +180,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 
     writeInfo( pRegistryKey,
        UcbContentProviderProxyFactory::getImplementationName_Static(),
-       UcbContentProviderProxyFactory::getSupportedServiceNames_Static() ) &&
-
-    //////////////////////////////////////////////////////////////////////
-    // UCB Distributor.
-    //////////////////////////////////////////////////////////////////////
-
-    writeInfo( pRegistryKey,
-               chaos_ucb::UcbDistributor::getImplementationName_Static(),
-               chaos_ucb::UcbDistributor::getSupportedServiceNames_Static() );
+       UcbContentProviderProxyFactory::getSupportedServiceNames_Static() );
 }
 
 //=========================================================================
@@ -253,17 +242,6 @@ extern "C" void * SAL_CALL component_getFactory(
     {
         xFactory
             = UcbContentProviderProxyFactory::createServiceFactory( xSMgr );
-    }
-
-    //////////////////////////////////////////////////////////////////////
-    // UCB Distributor.
-    //////////////////////////////////////////////////////////////////////
-
-    else if ( chaos_ucb::UcbDistributor::getImplementationName_Static().
-                compareToAscii( pImplName ) == 0 )
-    {
-        xFactory
-            = chaos_ucb::UcbDistributor::createServiceFactory( xSMgr );
     }
 
     //////////////////////////////////////////////////////////////////////
