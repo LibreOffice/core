@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:46:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 14:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,27 @@ static sal_Bool DeInitSignal()
 static int ReportCrash( int Signal )
 {
     static sal_Bool bCrashReporterExecuted = sal_False;
+
+    sal_uInt32  argi;
+    sal_uInt32  argc;
+    rtl_uString *ustrCommandArg = NULL;
+
+    argc = osl_getCommandArgCount();
+
+    for ( argi = 0; argi < argc; argi++ )
+    {
+        if ( osl_Process_E_None == osl_getCommandArg( argi, &ustrCommandArg ) )
+        {
+            if ( 0 == rtl_ustr_ascii_compare( rtl_uString_getStr( ustrCommandArg ), "-nocrashreport" ) )
+            {
+                rtl_uString_release( ustrCommandArg );
+                return -1;
+            }
+        }
+    }
+
+    if ( ustrCommandArg )
+        rtl_uString_release( ustrCommandArg );
 
     if ( !bCrashReporterExecuted )
     {
