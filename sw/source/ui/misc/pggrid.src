@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pggrid.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2002-04-19 20:11:19 $
+ *  last change: $Author: os $ $Date: 2002-04-22 14:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ TabPage TP_TEXTGRID_PAGE
         Minimum = 1 ;
         Maximum = 5600 ;
         DecimalDigits = 1 ;
-        Unit = FUNIT_CM ;
+        Unit = FUNIT_POINT ;
         First = 10 ;
         Last = 5600 ;
         SpinSize = 5 ;
@@ -367,7 +367,7 @@ TabPage TP_TEXTGRID_PAGE
         Minimum = 1 ;
         Maximum = 5600 ;
         DecimalDigits = 1 ;
-        Unit = FUNIT_CM ;
+        Unit = FUNIT_POINT;
         First = 10 ;
         Last = 5600 ;
         SpinSize = 5 ;
