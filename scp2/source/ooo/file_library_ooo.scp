@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.23 $
+*  $Revision: 1.24 $
 *
-*  last change: $Author: rt $ $Date: 2004-06-17 15:45:41 $
+*  last change: $Author: hjs $ $Date: 2004-06-28 17:03:23 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -412,16 +412,7 @@ File gid_File_Lib_Dbpool
   #endif
 End
 
-File gid_File_Lib_Dbt
-    TXT_FILE_BODY;
-  #ifdef UNX
-    Name = STRING(CONCAT2(libdbtools2,UNXSUFFIX));
-  #else
-    Name = "dbtools2.dll";
-  #endif
-    Dir = gid_Dir_Program;
-    Styles = (PACKED);
-End
+STD_LIB_FILE( gid_File_Lib_Dbt, dbtools )
 
 STD_UNO_LIB_FILE( gid_File_Lib_Dbu, dbu )
 
