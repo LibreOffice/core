@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-04 13:07:46 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "¦WºÙ(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
-        Text[ korean ] = "ÀÌ¸§";
+        Text[ korean ] = "ÀÌ¸§(~N)";
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
@@ -168,7 +168,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "Äİ©Ê(~I)...";
         Text[ arabic ] = "ÎÕÇÆÕ...";
         Text[ greek ] = "Éäéüôçôåò...";
-        Text[ korean ] = "µî·ÏÁ¤º¸...";
+        Text[ korean ] = "µî·ÏÁ¤º¸(~I)...";
         Text[ turkish ] = "~Özellikler...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Propiedades...";
@@ -397,7 +397,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ russian ] = "Îáëàñòü ïå÷àòè";
         Text[ polish ] = "Zakres wydruku";
         Text[ japanese ] = "ˆóü”ÍˆÍ";
-        Text[ chinese_traditional ] = "¦C¦L­S³ò";
+        Text[ chinese_traditional ] = "¦C¦L½d³ò";
         Text[ arabic ] = "äØÇŞ ÇáØÈÇÚÉ";
         Text[ greek ] = "Ğåñéï÷Ş åêôığùóçò";
         Text[ korean ] = "ÀÎ¼â ¹üÀ§";
@@ -604,7 +604,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "±Æ§Ç(~L)";
         Text[ arabic ] = "ÊÑÊíÈ ÇáäÓÎ";
         Text[ greek ] = "Ôáîéíüìçóç";
-        Text[ korean ] = "ºĞ·ù";
+        Text[ korean ] = "ºĞ·ù(~L)";
         Text[ turkish ] = "S~ırala";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Ordenar";
@@ -657,7 +657,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Text[ chinese_traditional ] = "¨ä¥L(~O)...";
         Text[ arabic ] = "ÎíÇÑÇÊ...";
         Text[ greek ] = "Ğñüóèåôá...";
-        Text[ korean ] = "¿É¼Ç...";
+        Text[ korean ] = "¿É¼Ç(~O)...";
         Text[ turkish ] = "~Seçenekler...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Opciones...";
@@ -683,6 +683,26 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Text = "<Alle>";
         Text [ english ] = "<All>";
+        Text[ english_us ] = "<All>";
+        Text[ portuguese ] = "<All>";
+        Text[ russian ] = "<All>";
+        Text[ greek ] = "<All>";
+        Text[ dutch ] = "<All>";
+        Text[ french ] = "<All>";
+        Text[ spanish ] = "<All>";
+        Text[ finnish ] = "<All>";
+        Text[ italian ] = "<All>";
+        Text[ danish ] = "<All>";
+        Text[ swedish ] = "<Alla>";
+        Text[ polish ] = "<Wszystko>";
+        Text[ portuguese_brazilian ] = "<All>";
+        Text[ japanese ] = "<All>";
+        Text[ korean ] = "<All>";
+        Text[ chinese_simplified ] = "<All>";
+        Text[ chinese_traditional ] = "<All>";
+        Text[ turkish ] = "<All>";
+        Text[ arabic ] = "<All>";
+        Text[ catalan ] = "<All>";
     };
     Text[ chinese_simplified ] = "´òÓ¡";
     Text[ russian ] = "Ïå÷àòü";
@@ -697,6 +717,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     Text[ catalan ] = "Imprimir";
     Text[ finnish ] = "Tulosta";
 };
+
 
 
 
