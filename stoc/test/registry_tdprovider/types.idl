@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:35:10 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 15:05:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,21 +66,31 @@
 
 module test { module registrytdprovider {
 
-struct Struct1 { long s1; };
+published enum Enum1 { E1 };
+
+enum Enum2 { E1 };
+
+published struct Struct1 { long s1; };
 
 struct Struct2 { Struct1 s1; };
 
-struct Struct3<T, U>: Struct2 { U s2; };
+published struct Struct3<T, U> { U s2; };
 
-struct Struct4 { Struct3< Struct2, Struct3< boolean, any > > s1; };
+struct Struct3a<T, U> { U s2; };
 
-interface XBase {};
+struct Struct4: Struct2 { Struct3< Struct2, Struct3< boolean, any > > s2; };
 
-typedef XBase Typedef1;
+published exception Exception1: com::sun::star::uno::Exception {};
+
+exception Exception2: com::sun::star::uno::Exception {};
+
+published interface XBase {};
+
+published typedef XBase Typedef1;
 
 typedef Typedef1 Typedef2;
 
-interface XTest1 {
+published interface XTest1 {
     [optional] interface XBase;
 
     void f1([out] any p) raises (com::sun::star::uno::RuntimeException);
@@ -105,7 +115,7 @@ interface XTest1 {
 
 interface XTest2: Typedef2 {};
 
-service Service1: XTest1 {
+published service Service1: XTest1 {
     c1();
 
     c2([in] any... p) raises (com::sun::star::uno::RuntimeException);
@@ -121,8 +131,16 @@ service Service3: Typedef2 {};
 
 singleton Singleton1: XTest1;
 
-singleton Singleton2 { service Service1; };
+published singleton Singleton2 { service Service1; };
 
 singleton Singleton3: Typedef2;
+
+published const long Const1 = 0;
+
+const long Const2 = 0;
+
+published constants Consts1 { const long C = 0; };
+
+constants Consts2 { const long C = 0; };
 
 }; };
