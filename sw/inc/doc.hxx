@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:01:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:19:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1602,8 +1602,10 @@ public:
 
         // setzt, wenn noch keine Numerierung, sonst wird geaendert
         // arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
+    // --> OD 2005-02-18 #i42921# - re-use unused 3rd parameter
     void SetNumRule( const SwPaM&, const SwNumRule&,
-                     sal_Bool bSetAbsLSpace = sal_True );
+                     sal_Bool bSetItem = sal_True );
+    // <--
         // ab hier neu starten lassen oder den Start wieder aufheben
 
     /**
