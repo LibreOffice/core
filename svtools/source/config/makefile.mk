@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: os $ $Date: 2001-04-10 11:43:05 $
+#   last change: $Author: ka $ $Date: 2001-04-12 14:59:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,8 @@ SLOFILES = \
     $(SLO)$/addxmltostorageoptions.obj	\
     $(SLO)$/miscopt.obj					\
     $(SLO)$/defaultoptions.obj			\
-    $(SLO)$/searchopt.obj
+    $(SLO)$/searchopt.obj				\
+    $(SLO)$/cacheoptions.obj			
 
 # --- Targets ------------------------------------------------------
 
