@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:36 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,8 @@ EraseLeadingSpace( udmstri & io_rStr )
 {
     if ( *io_rStr.c_str() < 33 AND io_rStr.length() > 0 )
     {
-        for ( const unsigned char * pNew = (const unsigned char * ) io_rStr.c_str();
+        const unsigned char * pNew;
+        for ( pNew = (const unsigned char * ) io_rStr.c_str();
               *pNew < 33 AND *pNew != 0;
               ++pNew ) {}
         udmstri sNew( (const char*)pNew );
