@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hro $ $Date: 2000-09-29 14:50:55 $
+ *  last change: $Author: hro $ $Date: 2000-11-21 14:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ __declspec( dllexport ) sal_Bool WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwRea
                 WORD wVersionRequested;
                 WSADATA wsaData;
                 int error;
+
 #ifdef _M_IX86
                 SYSTEM_INFO SystemInfo;
 
@@ -150,6 +151,9 @@ __declspec( dllexport ) sal_Bool WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwRea
                     (SystemInfo.dwProcessorType != PROCESSOR_INTEL_PENTIUM))
                     showMessage(ERR_GENERAL_WRONG_CPU);
 #endif
+                // Suppress file error messages from system like "Floppy A: not inserted"
+                SetErrorMode( SEM_NOOPENFILEERRORBOX | SEM_FAILCRITICALERRORS );
+
                 wVersionRequested = MAKEWORD(2, 2);
 
                 error = WSAStartup(wVersionRequested, &wsaData);
