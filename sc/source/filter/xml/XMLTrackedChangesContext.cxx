@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 12:25:02 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1383,7 +1383,7 @@ void ScXMLChangeCellContext::EndElement()
                 else if (bIsMatrix && nMatrixRows && nMatrixCols)
                 {
                     static_cast<ScFormulaCell*>(rOldCell)->SetMatrixFlag(MM_FORMULA);
-                    static_cast<ScFormulaCell*>(rOldCell)->SetMatColsRows(static_cast<sal_uInt16>(nMatrixCols), static_cast<sal_uInt16>(nMatrixRows));
+                    static_cast<ScFormulaCell*>(rOldCell)->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
                 }*/
             }
         }
