@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:21:00 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
+#ifndef _TABFRM_HXX
+#include <tabfrm.hxx>
+#endif
+
 
 #include "txtcfg.hxx"
 #include "swfont.hxx"   // new SwFont
@@ -241,6 +245,112 @@ sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
     return sal_True;
 }
 
+
+/*************************************************************************
+ *                      lcl_GetFtnLower()
+ *
+ * Local helper function. Checks if nLower should be taken as the boundary
+ * for the footnote.
+ *************************************************************************/
+
+SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
+{
+    // nLower is an absolute value. It denotes the bottom of the line
+    // containing the footnote.
+    SWRECTFN( pFrm )
+
+    ASSERT( !pFrm->IsVertical() || !pFrm->IsSwapped(),
+            "lcl_GetFtnLower with swapped frame" );
+
+    SwTwips nAdd;
+    SwTwips nRet = nLower;
+
+    //
+    // Check if text is inside a table.
+    //
+    if ( pFrm->IsInTab() )
+    {
+        //
+        // If pFrm is inside a table, we have to check if
+        // a) The table is not allowed to split or
+        // b) The table row is not allowed to split
+        //
+        // Inside a table, there are no footnotes,
+        // see SwFrm::FindFtnBossFrm. So we don't have to check
+        // the case that pFrm is inside a (footnote collecting) section
+        // within the table.
+        //
+        const SwFrm* pRow = pFrm;
+        while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() )
+            pRow = pRow->GetUpper();
+        const SwTabFrm* pTabFrm = (SwTabFrm*)pRow->GetUpper();
+
+        ASSERT( pTabFrm && pRow &&
+                pRow->GetUpper()->IsTabFrm(), "Upper of row should be tab" )
+
+        const BOOL bDontSplit = !pTabFrm->IsFollow() &&
+                                !pTabFrm->IsLayoutSplitAllowed();
+
+        SwTwips nMin = 0;
+        if ( bDontSplit )
+            nMin = (pTabFrm->Frm().*fnRect->fnGetBottom)();
+        else if ( !((SwRowFrm*)pRow)->IsRowSplitAllowed() )
+            nMin = (pRow->Frm().*fnRect->fnGetBottom)();
+
+        if ( nMin && (*fnRect->fnYDiff)( nMin, nLower ) > 0 )
+            nRet = nMin;
+
+        nAdd = (pRow->GetUpper()->*fnRect->fnGetBottomMargin)();
+    }
+    else
+        nAdd = (pFrm->*fnRect->fnGetBottomMargin)();
+
+    if( nAdd > 0 )
+    {
+        if ( bVert )
+            nRet -= nAdd;
+        else
+            nRet += nAdd;
+    }
+
+    // #i10770#: If there are fly frames anchored at previous paragraphs,
+    // the deadline should consider their lower borders.
+    const SwFrm* pStartFrm = pFrm->GetUpper()->GetLower();
+    ASSERT( pStartFrm, "Upper has no lower" )
+    SwTwips nFlyLower = bVert ? LONG_MAX : 0;
+    while ( pStartFrm != pFrm )
+    {
+        ASSERT( pStartFrm, "Frame chain is broken" )
+        if ( pStartFrm->GetDrawObjs() )
+        {
+            const SwDrawObjs &rObjs = *pStartFrm->GetDrawObjs();
+            for ( USHORT i = 0; i < rObjs.Count(); ++i )
+            {
+                SdrObject *pO = rObjs[i];
+                SwRect aRect( pO->GetCurrentBoundRect() );
+
+                if ( ! pO->ISA(SwVirtFlyDrawObj) ||
+                     ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->IsValid() )
+                {
+                    const SwTwips nBottom = (aRect.*fnRect->fnGetBottom)();
+                    if ( (*fnRect->fnYDiff)( nBottom, nFlyLower ) > 0 )
+                        nFlyLower = nBottom;
+                }
+            }
+        }
+
+        pStartFrm = pStartFrm->GetNext();
+    }
+
+    if ( bVert )
+        nRet = Min( nRet, nFlyLower );
+    else
+        nRet = Max( nRet, nFlyLower );
+
+    return nRet;
+}
+
+
 /*************************************************************************
  *                      SwTxtFrm::GetFtnLine()
  *************************************************************************/
@@ -273,6 +383,8 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn, sal_Bool bLocked ) const
         nRet = SwitchHorizontalToVertical( nRet );
 
     UNDO_SWAP( this )
+
+    nRet = lcl_GetFtnLower( pThis, nRet );
 
     pThis->mnFtnLine = nRet;
     return nRet;
@@ -821,6 +933,8 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
     return;
 }
 
+
+
 /*************************************************************************
  *                      SwTxtFormatter::NewFtnPortion()
  *************************************************************************/
@@ -865,69 +979,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     if( bVert )
         nLower = pFrm->SwitchHorizontalToVertical( nLower );
 
-    SwTwips nAdd;
-
-    if( pFrm->IsInTab() && (!pFrm->IsInSct() || pFrm->FindSctFrm()->IsInTab()) )
-    {
-        SwFrm *pRow = pFrm;
-        while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() )
-            pRow = pRow->GetUpper();
-
-        if ( !((SwRowFrm*)pRow)->IsRowSplitAllowed() )
-        {
-            const SwTwips nMin = (pRow->Frm().*fnRect->fnGetBottom)();
-
-            if( ( ! bVert && nMin > nLower ) || ( bVert && nMin < nLower ) )
-                nLower = nMin;
-        }
-
-        nAdd = (pRow->GetUpper()->*fnRect->fnGetBottomMargin)();
-
-    }
-    else
-        nAdd = (pFrm->*fnRect->fnGetBottomMargin)();
-
-    if( nAdd > 0 )
-    {
-        if ( bVert )
-            nLower -= nAdd;
-        else
-            nLower += nAdd;
-    }
-
-    // #i10770#: If there are fly frames anchored at previous paragraphs,
-    // the deadline should consider their lower borders.
-    SwFrm* pStartFrm = pFrm->GetUpper()->GetLower();
-    ASSERT( pStartFrm, "Upper has no lower" )
-    SwTwips nFlyLower = bVert ? LONG_MAX : 0;
-    while ( pStartFrm != pFrm )
-    {
-        ASSERT( pStartFrm, "Frame chain is broken" )
-        if ( pStartFrm->GetDrawObjs() )
-        {
-            const SwDrawObjs &rObjs = *pStartFrm->GetDrawObjs();
-            for ( USHORT i = 0; i < rObjs.Count(); ++i )
-            {
-                SdrObject *pO = rObjs[i];
-                SwRect aRect( pO->GetCurrentBoundRect() );
-
-                if ( ! pO->ISA(SwVirtFlyDrawObj) ||
-                     ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()->IsValid() )
-                {
-                    const SwTwips nBottom = (aRect.*fnRect->fnGetBottom)();
-                    if ( (*fnRect->fnYDiff)( nBottom, nFlyLower ) > 0 )
-                        nFlyLower = nBottom;
-                }
-            }
-        }
-
-        pStartFrm = pStartFrm->GetNext();
-    }
-
-    if ( bVert )
-        nLower = Min( nLower, nFlyLower );
-    else
-        nLower = Max( nLower, nFlyLower );
+    nLower = lcl_GetFtnLower( pFrm, nLower );
 
     //6995: Wir frischen nur auf. Das Connect tut fuer diesen Fall nix
     //Brauchbares, sondern wuerde stattdessen fuer diesen Fall meist die
