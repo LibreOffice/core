@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: hr $ $Date: 2004-05-10 14:34:32 $
+#   last change: $Author: rt $ $Date: 2004-05-21 09:48:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -291,6 +291,7 @@ SRSFILELIST+=   $(SOLARVERSION)$/$(INPATH)$/res$/sfx.srs
 .ENDIF
 
 RESLIB1NAME=svx
+RESLIB1IMAGES=$(PRJ)$/res $(PRJ)$/source/svdraw
 RESLIB1SRSFILES= $(SRSFILELIST)
 
 .IF "$(depend)" != ""
