@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-10 17:48:13 $
+#   last change: $Author: rt $ $Date: 2005-03-29 11:44:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,7 +115,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 OUTDIR2INC=include$/xmlsec 
 
 .IF "$(OS)"=="MACOSX"
-OUT2LIB+=src$/.libs$/libxmlsec1.*.dylib src$/nss$/.libs$/libxmlsec1-nss.*.dylib 
+OUT2LIB+=src$/.libs$/libxmlsec1.*dylib src$/nss$/.libs$/libxmlsec1-nss.*dylib 
 .ELIF "$(OS)"=="WNT"
 OUT2LIB+=win32$/binaries$/*.lib
 OUT2BIN+=win32$/binaries$/*.dll
