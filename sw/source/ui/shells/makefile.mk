@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cmc $ $Date: 2001-02-08 13:13:59 $
+#   last change: $Author: os $ $Date: 2001-07-17 08:44:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ SLOFILES =  \
         $(SLO)$/drwtxtsh.obj \
         $(SLO)$/frmsh.obj \
         $(SLO)$/grfsh.obj \
+        $(SLO)$/grfshex.obj \
         $(SLO)$/listsh.obj \
         $(SLO)$/olesh.obj \
         $(SLO)$/slotadd.obj \
@@ -110,7 +111,8 @@ SLOFILES =  \
         $(SLO)$/txtnum.obj
 
 EXCEPTIONSFILES =  \
-        $(SLO)$/textsh2.obj
+        $(SLO)$/textsh2.obj \
+        $(SLO)$/grfshex.obj
 
 # --- Tagets -------------------------------------------------------
 
