@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tres.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-06-21 00:40:43 $
+ *  last change: $Author: bmahbod $ $Date: 2001-06-21 01:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,46 +186,16 @@ class TestResult {
 
             if ( pTestCaseName != NULL )
             {
-                if ( bTestCaseState )
-                {
-                    const sal_Char *pTestCaseState
-                                      = getLogTCSResultStr( bTestCaseState );
+                const sal_Char *pTestCaseState
+                                  = getLogTCSResultStr( bTestCaseState );
 
-                    sprintf ( pBuffer,
-                              ">> [%s]..[%s] ",
-                              pTestCaseName,
-                              pTestCaseState
-                            );
-                } // if
-                else
-                {
-                    sprintf ( pBuffer,
-                              ">> [%s] ",
-                              pTestCaseName
-                            );
-                } // else
+                sprintf ( pBuffer,
+                          ">> [%s]..[%s] ",
+                          pTestCaseName,
+                          pTestCaseState
+                        );
             } // if
             else
-            {
-                if ( bTestCaseState )
-                {
-                    const sal_Char *pTestCaseState
-                                      = getLogTCSResultStr( bTestCaseState );
-
-                    sprintf ( pBuffer,
-                              ">> [%s] ",
-                              pTestCaseState
-                            );
-                } // if
-                else
-                {
-                    strcpy( pBuffer, ">> " );
-                } // else
-            } // else
-        } // if
-        else
-        {
-            if ( bTestCaseState )
             {
                 const sal_Char *pTestCaseState
                                   = getLogTCSResultStr( bTestCaseState );
@@ -234,11 +204,17 @@ class TestResult {
                           ">> [%s] ",
                           pTestCaseState
                         );
-            } // if
-            else
-            {
-                strcpy( pBuffer, ">> " );
             } // else
+        } // if
+        else
+        {
+            const sal_Char *pTestCaseState
+                              = getLogTCSResultStr( bTestCaseState );
+
+            sprintf ( pBuffer,
+                      ">> [%s] ",
+                      pTestCaseState
+                    );
         } // else
 
         return  pBuffer;
