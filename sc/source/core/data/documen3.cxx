@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:41:18 $
+ *  last change: $Author: nn $ $Date: 2000-12-14 14:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,8 +200,53 @@ ScDBCollection* ScDocument::GetDBCollection() const
     return pDBCollection;
 }
 
-void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection )
+void ScDocument::SetDBCollection( ScDBCollection* pNewDBCollection, BOOL bRemoveAutoFilter )
 {
+    if ( bRemoveAutoFilter )
+    {
+        //  remove auto filter attribute if new db data don't contain auto filter flag
+        //  start position is also compared, so bRemoveAutoFilter must not be set from ref-undo!
+
+        if ( pDBCollection )
+        {
+            USHORT nOldCount = pDBCollection->GetCount();
+            for (USHORT nOld=0; nOld<nOldCount; nOld++)
+            {
+                ScDBData* pOldData = (*pDBCollection)[nOld];
+                if ( pOldData->HasAutoFilter() )
+                {
+                    ScRange aOldRange;
+                    pOldData->GetArea( aOldRange );
+
+                    BOOL bFound = FALSE;
+                    USHORT nNewIndex = 0;
+                    if ( pNewDBCollection &&
+                        pNewDBCollection->SearchName( pOldData->GetName(), nNewIndex ) )
+                    {
+                        ScDBData* pNewData = (*pNewDBCollection)[nNewIndex];
+                        if ( pNewData->HasAutoFilter() )
+                        {
+                            ScRange aNewRange;
+                            pNewData->GetArea( aNewRange );
+                            if ( aOldRange.aStart == aNewRange.aStart )
+                                bFound = TRUE;
+                        }
+                    }
+
+                    if ( !bFound )
+                    {
+                        aOldRange.aEnd.SetRow( aOldRange.aStart.Row() );
+                        RemoveFlagsTab( aOldRange.aStart.Col(), aOldRange.aStart.Row(),
+                                        aOldRange.aEnd.Col(),   aOldRange.aEnd.Row(),
+                                        aOldRange.aStart.Tab(), SC_MF_AUTO );
+                        if (pShell)
+                            pShell->Broadcast( ScPaintHint( aOldRange, PAINT_GRID ) );
+                    }
+                }
+            }
+        }
+    }
+
     if (pDBCollection)
         delete pDBCollection;
     pDBCollection = pNewDBCollection;

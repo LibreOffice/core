@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-28 16:00:20 $
+ *  last change: $Author: nn $ $Date: 2000-12-14 14:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -492,7 +492,8 @@ public:
     ScRangePairListRef& GetRowNameRangesRef() { return xRowNameRanges; }
 
     ScDBCollection* GetDBCollection() const;
-    void            SetDBCollection( ScDBCollection* pNewDBCollection );
+    void            SetDBCollection( ScDBCollection* pNewDBCollection,
+                                        BOOL bRemoveAutoFilter = FALSE );
     ScDBData*       GetDBAtCursor(USHORT nCol, USHORT nRow, USHORT nTab,
                                         BOOL bStartOnly = FALSE) const;
     ScDBData*       GetDBAtArea(USHORT nTab, USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2) const;
