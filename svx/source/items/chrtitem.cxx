@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrtitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:20 $
+ *  last change: $Author: bm $ $Date: 2001-01-22 13:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,7 @@ SfxFieldUnit SvxDoubleItem::GetUnit() const
 // -----------------------------------------------------------------------
 sal_Bool SvxDoubleItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
-    rVal <<= (float)fVal;
+    rVal <<= fVal;
     return sal_True;
 }
 
