@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:09:58 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 10:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 #ifndef _VIEWSH_HXX
 #define _VIEWSH_HXX
+
 #ifndef _RTTI_HXX //autogen
 #include <tools/rtti.hxx>
 #endif
@@ -67,6 +68,9 @@
 #include <svtools/svarray.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -120,7 +124,7 @@ struct SwAccessibilityOptions;
 // Zur Zeit wird fuer die DrawPage das PreView Flag benoetigt
 #define VSHELLFLAG_ISPREVIEW            ((long)0x1)
 
-class ViewShell : public Ring
+class SW_DLLPUBLIC ViewShell : public Ring
 {
     friend void SetOutDev( ViewShell *pSh, OutputDevice *pOut );
     friend void SetOutDevAndWin( ViewShell *pSh, OutputDevice *pOut,
@@ -182,26 +186,26 @@ class ViewShell : public Ring
     bool mbInConstructor:1;
 
     //Initialisierung, wird von den verschiedenen Konstruktoren gerufen.
-    void Init( const SwViewOption *pNewOpt );
+    SW_DLLPRIVATE void Init( const SwViewOption *pNewOpt );
 
     inline void ResetInvalidRect();
 
-    void Reformat();            //Invalidert das ges. Layout (ApplyViewOption)
+    SW_DLLPRIVATE void Reformat();          //Invalidert das ges. Layout (ApplyViewOption)
 
-    void PaintDesktop( const SwRect & );        // sammeln der Werte fuers
+    SW_DLLPRIVATE void PaintDesktop( const SwRect & );      // sammeln der Werte fuers
                                                 // Malen der Wiese und rufen
     // PaintDesktop gesplittet, dieser Teil wird auch von PreViewPage benutzt
-    void _PaintDesktop( const SwRegionRects &rRegion );
+    SW_DLLPRIVATE void _PaintDesktop( const SwRegionRects &rRegion );
 
-    sal_Bool CheckInvalidForPaint( const SwRect & );//Direkt Paint oder lieber
+    SW_DLLPRIVATE sal_Bool CheckInvalidForPaint( const SwRect & );//Direkt Paint oder lieber
                                                 //eine Aktion ausloesen.
 
-    void Scroll();  //Scrollen wenn sich aus der LayAction Scrollmoeglichkeiten
+    SW_DLLPRIVATE void Scroll();    //Scrollen wenn sich aus der LayAction Scrollmoeglichkeiten
                     //ergaben.
 
-    void PrepareForPrint( const SwPrtOptions &rOptions );
+    SW_DLLPRIVATE void PrepareForPrint( const SwPrtOptions &rOptions );
 
-    void ImplApplyViewOptions( const SwViewOption &rOpt );
+    SW_DLLPRIVATE void ImplApplyViewOptions( const SwViewOption &rOpt );
 
 protected:
     static ShellResource*   pShellRes;      // Resourcen fuer die Shell
