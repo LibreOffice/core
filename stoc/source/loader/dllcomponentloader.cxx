@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllcomponentloader.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:34 $
+ *  last change: $Author: dbo $ $Date: 2000-11-07 14:50:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+
+#include <stdlib.h>
+#include <osl/file.h>
+#include <vector>
+#include <osl/mutex.hxx>
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -209,6 +214,121 @@ void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::co
     m_xSMgr = rServiceManager;
 }
 
+#ifdef TRACE_CPLD
+static inline void out( const char * p )
+{
+    OSL_TRACE( p );
+}
+static inline void out( const OUString & r )
+{
+    OString s( OUStringToOString( r, RTL_TEXTENCODING_ASCII_US ) );
+    out( s.getStr() );
+}
+#endif
+
+//==================================================================================================
+static const ::std::vector< OUString > * getAccessDPath()
+{
+    static ::std::vector< OUString > * s_p = 0;
+    static sal_Bool s_bInit = sal_False;
+
+    if (! s_bInit)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! s_bInit)
+        {
+            const char * pEnv = ::getenv( "CPLD_ACCESSPATH" );
+            if (pEnv)
+            {
+                static ::std::vector< OUString > s_v;
+
+                OString aEnv( pEnv );
+                sal_Int32 nToken = aEnv.getTokenCount( ';' );
+
+                for ( sal_Int32 i = 0; i < nToken; ++i )
+                {
+                    OUString aStr( OStringToOUString(
+                        aEnv.getToken( i, ';' ), RTL_TEXTENCODING_ASCII_US ) );
+                    OUString aUNC;
+                    if (osl_File_E_None == ::osl_normalizePath( aStr.pData, &aUNC.pData ))
+                    {
+                        s_v.push_back( aUNC );
+                    }
+                }
+#ifdef TRACE_CPLD
+                out( "> cpld: acknowledged following cpld path(s): \"" );
+                ::std::vector< OUString >::const_iterator iPos( s_v.begin() );
+                while (iPos != s_v.end())
+                {
+                    out( *iPos );
+                    ++iPos;
+                    if (iPos != s_v.end())
+                        out( ";" );
+                }
+                out( "\"\n" );
+#endif
+                s_p = & s_v;
+            }
+            s_bInit = sal_True;
+        }
+    }
+
+    return s_p;
+}
+
+//==================================================================================================
+static oslModule loadModule( const OUString & rLibName, sal_Int32 nMode )
+{
+#ifdef TRACE_CPLD
+    out( "> cpld trying to load module: \"" );
+    out( rLibName );
+    out( "\"\n" );
+#endif
+
+    const ::std::vector< OUString > * pPath = getAccessDPath();
+
+    if (pPath)
+    {
+        for ( ::std::vector< OUString >::const_iterator iPos( pPath->begin() );
+              iPos != pPath->end(); ++iPos )
+        {
+            OUString aBaseDir( *iPos );
+            OUString aAbs;
+            if (osl_File_E_None == ::osl_getAbsolutePath(
+                aBaseDir.pData, rLibName.pData, &aAbs.pData )) // file exists
+            {
+#ifdef TRACE_CPLD
+                out( "> cpld found path: \"" );
+                out( aBaseDir );
+                out( "\" + \"" );
+                out( rLibName );
+                out( "\" => \"" );
+                out( aAbs );
+#endif
+                if (0 == aAbs.indexOf( aBaseDir )) // still part of it?
+                {
+                    // load from absolute path
+                    oslModule lib = ::osl_loadModule( aAbs.pData, nMode );
+#ifdef TRACE_CPLD
+                    out( lib ? "\" ...loaded!\n" : "\" ...loading failed!\n" );
+#endif
+                    return lib;
+                }
+#ifdef TRACE_CPLD
+                else
+                {
+                    out( "\" ...does not match given path.\n" );
+                }
+#endif
+            }
+        }
+        return 0;
+    }
+
+    // no path set
+    return ::osl_loadModule( rLibName.pData, nMode );
+}
+
 //*************************************************************************
 Reference<XInterface> SAL_CALL DllComponentLoader::activate(
     const OUString & rImplName, const OUString &, const OUString & rLibName,
@@ -219,7 +339,7 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
     Reference< XSingleServiceFactory > xRet;
     OUString sMessage;
 
-    oslModule lib = osl_loadModule( rLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
+    oslModule lib = loadModule( rLibName, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
 
     if (lib)
     {
@@ -364,7 +484,7 @@ sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
     sal_Bool bRet = sal_False;
     OUString sMessage;
 
-    oslModule lib = osl_loadModule( rLibName.pData, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
+    oslModule lib = loadModule( rLibName, SAL_LOADMODULE_LAZY | SAL_LOADMODULE_GLOBAL );
 
     if (lib)
     {
