@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DeployParcelAction.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-12 12:41:51 $
+ *  last change: $Author: toconnor $ $Date: 2003-02-20 12:01:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ import org.openide.util.actions.*;
 import org.openide.awt.JMenuPlus;
 
 import org.openoffice.idesupport.SVersionRCFile;
+import org.openoffice.idesupport.OfficeInstallation;
 import org.openoffice.idesupport.zip.ParcelZipper;
 import org.openoffice.idesupport.LocalOffice;
 
@@ -97,8 +98,6 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
 
     private static final String BROWSE_LABEL = "Office Document...";
     private static final String DEPLOY_LABEL = "Deploy To";
-    private Hashtable offices;
-    private Hashtable mappings;
 
     public String getName () {
         return DEPLOY_LABEL;
@@ -111,26 +110,19 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
     public JMenuItem getPopupPresenter() {
         JMenuPlus menu = new JMenuPlus(DEPLOY_LABEL);
         JMenuItem item, user, share;
-
-        try {
-            offices = SVersionRCFile.createInstance().getVersions();
-            mappings = new Hashtable(offices.size());
-        }
-        catch (IOException ioe) {
-            return menu;
-        }
+        final OfficeInstallation oi = OfficeSettings.getDefault().getOfficeDirectory();
 
         ActionListener listener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JMenuItem item = (JMenuItem)e.getSource();
-                String label = item.getText();
+                JMenuItem choice = (JMenuItem)e.getSource();
+                String label = choice.getText();
 
                 Node[] nodes = getActivatedNodes();
                 final ParcelCookie parcelCookie =
                     (ParcelCookie)nodes[0].getCookie(ParcelCookie.class);
 
-                File target = new File((String)mappings.get(item) +
-                    File.separator + label + File.separator + "Scripts");
+                File target = new File(oi.getPath(File.separator + label +
+                    File.separator + "Scripts"));
 
                 File langdir = new File(target, parcelCookie.getLanguage());
 
@@ -145,23 +137,16 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
             }
         };
 
-        Enumeration enum = offices.keys();
-        while (enum.hasMoreElements()) {
-            String s = (String)enum.nextElement();
+        user = new JMenuItem("user");
+        user.addActionListener(listener);
 
-            user = new JMenuItem("user");
-            user.addActionListener(listener);
-            mappings.put(user, offices.get(s));
+        share = new JMenuItem("share");
+        share.addActionListener(listener);
 
-            share = new JMenuItem("share");
-            share.addActionListener(listener);
-            mappings.put(share, offices.get(s));
-
-            item = new JMenuPlus(s);
-            item.add(user);
-            item.add(share);
-            menu.add(item);
-        }
+        item = new JMenuPlus(oi.getName());
+        item.add(user);
+        item.add(share);
+        menu.add(item);
 
         menu.addSeparator();
         item = new JMenuItem(BROWSE_LABEL);
@@ -176,8 +161,6 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
         menu.add(item);
 
         return menu;
-
-        // return new LocationsMenu (this, new LocationsModel (this), true);
     }
 
     protected int mode () {
@@ -246,9 +229,8 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
 
     private void showNagDialog() {
         String message = "If you currently have Office running you will " +
-            "need to click on the Tools/Refresh Scripts menu item " +
-            "in Office so that the scripts in this parcel can be " +
-            "detected.";
+            "need to click on the Tools/Scripting Add-on's/Refresh All Scripts " +
+            " menu item in Office so that the scripts in this parcel can be detected.";
 
         OfficeSettings settings = OfficeSettings.getDefault();
 
@@ -292,122 +274,4 @@ public class DeployParcelAction extends CookieAction implements Presenter.Popup 
         }
         return target;
     }
-
-    /** Special submenu which notifies model when it is added as a component.
-    */
-    /*
-    private static final class LocationsMenu extends Actions.SubMenu {
-
-        private final LocationsModel model;
-
-        LocationsMenu (SystemAction action, LocationsModel model, boolean popup) {
-            super (action, model, popup);
-            this.model = model;
-        }
-
-        public void addNotify () {
-            model.addNotify ();
-            super.addNotify ();
-        }
-    }
-    */
-
-    /** Model to use for the submenu.
-    */
-    /*
-    private static final class LocationsModel implements Actions.SubMenuModel {
-        private List labels = null;
-        private Hashtable versions = null;
-        private final NodeAction action;
-
-        LocationsModel (NodeAction action) {
-            this.action = action;
-        }
-
-        public int getCount () {
-            if (labels == null)
-                return 0;
-            return labels.size();
-        }
-
-        public String getLabel (int index) {
-            return (String)labels.get(index);
-        }
-
-        public HelpCtx getHelpCtx (int index) {
-            return HelpCtx.DEFAULT_HELP; // NOI18N
-        }
-
-        public void performActionAt (final int index) {
-            final String label = getLabel(index);
-            final File source;
-            final File target;
-
-            if (label.equals(BROWSE_LABEL)) {
-                target = getTargetFile();
-                if (target == null)
-                    return;
-            }
-            else {
-                target = new File((String)versions.get(label) +
-                    File.separator + "user" + File.separator + "Scripts");
-                if (!target.exists()) {
-                    boolean response = askIfCreateDirectory(target);
-                    if (response == false) {
-                        return;
-                    }
-                }
-            }
-
-            Node[] nodes = action.getActivatedNodes();
-            final ParcelCookie parcelCookie =
-                (ParcelCookie)nodes[0].getCookie(ParcelCookie.class);
-
-            RequestProcessor.getDefault().post(new Runnable() {
-                public void run() {
-                    boolean result = parcelCookie.deploy(target);
-
-                    if (result == true && target.isDirectory()) {
-                        showNagDialog();
-                        // refreshOffice((String)versions.get(label));
-                    }
-                }
-            });
-        }
-
-        void addNotify () {
-            SVersionRCFile rcfile = SVersionRCFile.createInstance();
-
-            try {
-                versions = rcfile.getVersions();
-            }
-            catch (IOException ioe) {
-                return;
-            }
-
-            Enumeration enum = versions.keys();
-            labels = new ArrayList();
-
-            while (enum.hasMoreElements()) {
-                String s = (String)enum.nextElement();
-                // System.out.println("Adding: " + s);
-                labels.add(s);
-            }
-
-            labels.add(null);
-            labels.add(BROWSE_LABEL);
-
-            // IDE will not show the submenu if there is only one item
-            // so add a blank item which will not be shown
-            if (labels.size() == 1)
-                labels.add(null);
-        }
-
-        public synchronized void addChangeListener (ChangeListener l) {
-        }
-
-        public synchronized void removeChangeListener (ChangeListener l) {
-        }
-    }
-    */
 }
