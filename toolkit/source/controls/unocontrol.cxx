@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-15 12:49:57 $
+ *  last change: $Author: vg $ $Date: 2001-05-18 14:05:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,9 @@ void UnoControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDescripto
     if( mxContext.is() )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl > xContComp( mxContext, ::com::sun::star::uno::UNO_QUERY );
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xP = xContComp.is() ? xContComp->getPeer() : NULL;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer > xP;
+        if ( xContComp.is() )
+            xP = xContComp->getPeer();
         if ( xP.is() )
             xP->queryInterface( ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >*)0) ) >>= xPeer;
     }
