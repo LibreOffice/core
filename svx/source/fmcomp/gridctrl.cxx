@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 16:10:32 $
+ *  last change: $Author: oj $ $Date: 2001-10-16 09:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,7 +542,7 @@ sal_uInt16 DbGridControl::NavigationBar::ArrangeControls()
     m_aRecordOf.SetSizePixel(Size(nTextWidth,nH));
     nX += (sal_uInt16)(nTextWidth + aBorder.Width());
 
-    nTextWidth = m_aRecordCount.GetTextWidth( String::CreateFromAscii("0000000 (00000)") );
+    nTextWidth = m_aRecordCount.GetTextWidth( String::CreateFromAscii("0000000 (00000) *") );
     m_aRecordCount.SetPosPixel(Point(nX,nY) );
     m_aRecordCount.SetSizePixel(Size(nTextWidth,nH));
     nX += (sal_uInt16)(nTextWidth + aBorder.Width());
@@ -769,6 +769,8 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
                 }
                 else
                     aText = String::CreateFromInt32(pParent->GetRowCount());
+                if(!pParent->m_bRecordCountFinal)
+                    aText += String::CreateFromAscii(" *");
             }
             else
                 aText = String();
@@ -1600,7 +1602,7 @@ void DbGridControl::setDataSource(const ::com::sun::star::uno::Reference< ::com:
         {
             // insert the empty row for insertion
             m_xEmptyRow = new DbGridRow();
-            nRecordCount++;
+            ++nRecordCount;
         }
         if (nRecordCount)
         {
@@ -1956,13 +1958,13 @@ void DbGridControl::AdjustRows()
 
     // zusaetzliche AppendRow fuers einfuegen
     if (m_nOptions & OPT_INSERT)
-        nRecordCount++;
+        ++nRecordCount;
 
     // wird gerade eingefuegt, dann gehoert die gerade hinzuzufuegende
     // Zeile nicht zum RecordCount und die Appendrow ebenfalls nicht
     if (!IsUpdating() && m_bRecordCountFinal && IsModified() && m_xCurrentRow != m_xEmptyRow &&
         m_xCurrentRow->IsNew())
-        nRecordCount++;
+        ++nRecordCount;
     // das ist mit !m_bUpdating abgesichert : innerhalb von SaveRow (m_bUpdating == sal_True) wuerde sonst der Datensatz, den ich editiere
     // (und den SaveRow gerade angefuegt hat, wodurch diese Methode hier getriggert wurde), doppelt zaehlen : einmal ist er schon
     // in dem normalen RecordCount drin, zum zweiten wuerde er hier gezaehlt werden (60787 - FS)
@@ -2159,12 +2161,12 @@ void DbGridControl::CursorMoved()
 //------------------------------------------------------------------------------
 void DbGridControl::setDisplaySynchron(sal_Bool bSync)
 {
-    if (bSync == m_bSynchDisplay)
-        return;
-
-    m_bSynchDisplay = bSync;
-    if (m_bSynchDisplay)
-        AdjustDataSource(sal_False);
+    if (bSync != m_bSynchDisplay)
+    {
+        m_bSynchDisplay = bSync;
+        if (m_bSynchDisplay)
+            AdjustDataSource(sal_False);
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -2414,10 +2416,7 @@ sal_Bool DbGridControl::SeekCursor(long nRow, sal_Bool bAbsolute)
 //------------------------------------------------------------------------------
 void DbGridControl::MoveToFirst()
 {
-    if (!m_pSeekCursor)
-        return;
-
-    if (GetCurRow() != 0)
+    if (m_pSeekCursor && (GetCurRow() != 0))
         MoveToPosition(0);
 }
 
