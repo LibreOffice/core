@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: tbe $ $Date: 2002-03-11 17:23:39 $
+#   last change: $Author: tbe $ $Date: 2002-03-18 18:01:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,6 +97,8 @@ SLOFILES=   \
             $(SLO)$/vclxtopwindow.obj 					\
             $(SLO)$/vclxwindow.obj 						\
             $(SLO)$/vclxwindows.obj
+
+SRCFILES=	accessiblestrings.src
 
 # --- Targets ------------------------------------------------------
 
