@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:13:18 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,6 +666,10 @@ String STR_LB_VERSION
 };
 
 //******************************************************************** EOF
+
+
+
+
 
 
 
