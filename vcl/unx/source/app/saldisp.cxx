@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-18 14:24:05 $
+ *  last change: $Author: pl $ $Date: 2002-10-08 13:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,8 @@ extern "C" { int gethostname(char*,int); }
 #include "pivotfld_mask.h"
 #include "pivotrow_curs.h"
 #include "pivotrow_mask.h"
+#include "pivotdel_curs.h"
+#include "pivotdel_mask.h"
 
 #include "chain_curs.h"
 #include "chain_mask.h"
@@ -2239,6 +2241,9 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
             break;
         case POINTER_PIVOT_FIELD:
             MAKE_CURSOR( pivotfld_ );
+            break;
+        case POINTER_PIVOT_DELETE:
+            MAKE_CURSOR( pivotdel_ );
             break;
         case POINTER_CHAIN:
             MAKE_CURSOR( chain_ );
