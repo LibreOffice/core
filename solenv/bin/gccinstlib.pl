@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: gccinstlib.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:41:16 $
+#   last change: $Author: hr $ $Date: 2004-04-07 10:31:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,6 +62,8 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #
 #*************************************************************************
+
+$ENV{'LC_MESSAGES'} = 'C';
 
 %SearchDirs = GetGccSearchDirs ();
 
