@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 13:42:51 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2312,6 +2312,7 @@ BOOL SwTxtNode::MayBeNumbered() const
     return ! pNdNum || pNdNum->IsNum();
 }
 
+
 SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
                                         BOOL bChgFollow )
 {
@@ -2502,7 +2503,17 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
         if( ! pNum->IsNum() )
             rFLOffset = 0;
         else
-            rFLOffset = pRule->Get( pNum->GetLevel() ).GetFirstLineOffset();
+        {
+            rFLOffset = pRule->Get( pNum->GetRealLevel() ).GetFirstLineOffset();
+
+            if (! GetDoc()->IsOldNumbering())
+            {
+                SvxLRSpaceItem aItem = GetSwAttrSet().GetLRSpace();
+
+                rFLOffset += aItem.GetTxtFirstLineOfst();
+            }
+        }
+
         return TRUE;
     }
     rFLOffset = GetSwAttrSet().GetLRSpace().GetTxtFirstLineOfst();
