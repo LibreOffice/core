@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:54:26 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: kz $ $Date: 2001-05-10 05:54:26 $ $Revision: 1.6 $
+ // $Author: kz $ $Date: 2001-05-12 06:40:45 $ $Revision: 1.7 $
  //
  //---------------------------------------------------------------------------
 
@@ -115,7 +115,7 @@ ModalDialog DLG_ROWHEIGHT
         Text[ korean ] = "³ôÀÌ(~H)";
         Text[ turkish ] = "Yükseklik";
         Text[ catalan ] = "~Altura";
-        Text[ finnish ] = "H~öhe";
+        Text[ finnish ] = "~Korkeus";
     };
     MetricField MF_VALUE
     {
@@ -156,7 +156,7 @@ ModalDialog DLG_ROWHEIGHT
         Text[ arabic ] = "ÊáÞÇÆí";
         Text[ turkish ] = "Otomatik";
         Text[ catalan ] = "~Automático";
-        Text[ finnish ] = "~Automatisch";
+        Text[ finnish ] = "A~utomaattinen";
     };
     OKButton PB_OK
     {
@@ -196,7 +196,7 @@ ModalDialog DLG_ROWHEIGHT
     Text[ korean ] = "Çà ³ôÀÌ";
     Text[ turkish ] = "Satýr yüksekliði";
     Text[ catalan ] = "Altura de fila";
-    Text[ finnish ] = "Zeilenhöhe";
+    Text[ finnish ] = "Rivin korkeus";
 };
 ModalDialog DLG_COLWIDTH
 {
@@ -233,7 +233,7 @@ ModalDialog DLG_COLWIDTH
         Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "Geniþlik";
         Text[ catalan ] = "An~cho";
-        Text[ finnish ] = "~Breite";
+        Text[ finnish ] = "Le~veys";
     };
     MetricField MF_VALUE
     {
@@ -274,7 +274,7 @@ ModalDialog DLG_COLWIDTH
         Text[ arabic ] = "ÊáÞÇÆí";
         Text[ turkish ] = "Otomatik";
         Text[ catalan ] = "~Automático";
-        Text[ finnish ] = "~Automatisch";
+        Text[ finnish ] = "A~utomaattinen";
     };
     OKButton PB_OK
     {
@@ -314,5 +314,5 @@ ModalDialog DLG_COLWIDTH
     Text[ korean ] = "¿­ ³Êºñ";
     Text[ turkish ] = "Sütun geniþliði";
     Text[ catalan ] = "Ancho de columna";
-    Text[ finnish ] = "Spaltenbreite";
+    Text[ finnish ] = "Sarakkeen leveys";
 };
