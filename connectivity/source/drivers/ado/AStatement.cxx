@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: fs $ $Date: 2000-10-06 12:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ using namespace com::sun::star::sdbc;
 //------------------------------------------------------------------------------
 OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(m_aMutex)
                                                         ,OPropertySetHelper(OStatement_BASE::rBHelper)
-                                                        ,OSubComponent< OStatement_Base>((::cppu::OWeakObject*)_pConnection)
+                                                        ,OSubComponent< OStatement_Base>((::cppu::OWeakObject*)_pConnection, this)
                                                         ,m_pConnection(_pConnection)
                                                         ,m_nFetchSize(1)
                                                         ,m_nMaxRows(0)
@@ -166,7 +166,6 @@ void OStatement_Base::disposing()
 void SAL_CALL OStatement_Base::release() throw(RuntimeException)
 {
     relase_ChildImpl();
-    OStatement_BASE::release();
 }
 //-----------------------------------------------------------------------------
 Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException)
