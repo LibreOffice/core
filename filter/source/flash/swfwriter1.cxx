@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfwriter1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-12-05 17:09:51 $
+ *  last change: $Author: cl $ $Date: 2002-12-05 18:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,12 +894,23 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
     SvMemoryStream aDstStm( 65535, 65535 );
 
     GraphicFilter aFilter;
+
     Sequence< PropertyValue > aFilterData(nJPEGQualityLevel != -1);
     if( nJPEGQualityLevel != -1 )
     {
         aFilterData[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM("Quality"));
         aFilterData[0].Value <<= nJPEGQualityLevel;
     }
+
+#if 0
+    // Debug code to see what we export to swf
+    {
+        SvFileStream aDstStm( String( RTL_CONSTASCII_USTRINGPARAM("e:\\test.png") ), STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
+        aFilter.ExportGraphic( aGraphic, String(), aDstStm,
+                                    aFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( PNG_SHORTNAME ) ) ),
+                                    false, &aFilterData );
+    }
+#endif
 
     if( aFilter.ExportGraphic( aGraphic, String(), aDstStm,
                                 aFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( JPG_SHORTNAME ) ) ),
@@ -970,6 +981,17 @@ void Writer::Impl_writeImage( const BitmapEx& rBmpEx, const Point& rPt, const Si
 
         if( !!bmpSource )
         {
+            // #105949# fix images that are under 16 pixels width or height by
+            //          expanding them. Some swf players can't display such small
+            //          bitmaps
+            const Size& rSizePixel = bmpSource.GetSizePixel();
+            if( (rSizePixel.Width() < 16) || (rSizePixel.Height() < 16) )
+            {
+                const sal_uInt32 nDX = rSizePixel.Width() < 16 ? 16 - rSizePixel.Width() : 0;
+                const sal_uInt32 nDY = rSizePixel.Height() < 16 ? 16 - rSizePixel.Height() : 0;
+                bmpSource.Expand( nDX, nDY );
+            }
+
             sal_Int32 nJPEGQuality = mnJPEGCompressMode;
 
             Size szDestPixel = mpVDev->LogicToPixel(srcSize, aTWIPSMode);
