@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:25:36 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-
-// Supbooks, ExcETabNumBuffer =================================================
-
-#define EXC_TABBUF_INVALID          0xFFFF
 
 // (0x001C) NOTE ==============================================================
 
