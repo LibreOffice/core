@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editattr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *  last change: $Author: mt $ $Date: 2000-10-13 10:08:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@ class SvxFieldItem;
 
 class SfxVoidItem;
 
-#define CH_FEATURE_OLD  (sal_Unicode) 0xFF
-#define CH_FEATURE      (sal_Unicode) 0x01
+#define CH_FEATURE_OLD  (BYTE)          0xFF
+#define CH_FEATURE      (sal_Unicode)   0x01
 
 // DEF_METRIC: Bei meinem Pool sollte immer die DefMetric bei
 // GetMetric( nWhich ) ankommen!
