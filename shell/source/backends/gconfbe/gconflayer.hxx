@@ -5,6 +5,9 @@
 #include "gconfbackend.hxx"
 #endif // GCONFBACKEND_HXX_
 
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYER_HPP_
 #include <com/sun/star/configuration/backend/XLayer.hpp>
@@ -13,6 +16,10 @@
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDACCESSEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/BackendAccessException.hpp>
 #endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDACCESSEXCEPTION_HPP_
+
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERCONTENTDESCIBER_HPP_
+#include <com/sun/star/configuration/backend/XLayerContentDescriber.hpp>
+#endif // _COM_SUN_STAR_CONFIGURATION_BACKEND_XLAYERCONTENTDESCIBER_HPP_
 
 #ifndef _COM_SUN_STAR_UTIL_XTIMESTAMPED_HPP_
 #include <com/sun/star/util/XTimeStamped.hpp>
@@ -39,26 +46,21 @@ namespace util = css::util ;
   BasicPlatformLayer
   The timestamp indicates the last modification time
   */
- class GconfLayer : public cppu::WeakImplHelper2<backend::XLayer,
-                                                 util::XTimeStamped>
+class GconfLayer : public cppu::WeakImplHelper2<backend::XLayer, util::XTimeStamped>
 {
     public :
         /**
           Constructor given the configuration keys map and requested
-          component name
-          @param aKeyMap        Gconf->OO key map
-          @param aCompoentName  Requested Component Name
-          @param sTimestamp     timestamp indicating last modifictaion
-         */
-        GconfLayer(
-            const rtl::OUString& sComponent,
-            const KeyMappingTable& aKeyMap,
-            const rtl::OUString& sTimestamp,
-            const TSMappingTable& aTSMap,
-            const uno::Reference<lang::XMultiServiceFactory>& xFactory);
+          component name.
 
-        /** Destructor */
-        ~GconfLayer(void) {}
+          @param aTimestamp     timestamp indicating last modifictaion
+          @param aComponentName Requested Component Name
+          @param aKeyMap        Gconf->OO key map
+         */
+
+        GconfLayer( const rtl::OUString& aComponent,
+                    const rtl::OUString& aTimestamp,
+                    const uno::Reference<uno::XComponentContext>& xContext);
 
         // XLayer
         virtual void SAL_CALL readData(
@@ -71,22 +73,24 @@ namespace util = css::util ;
         // XTimeStamped
         virtual rtl::OUString SAL_CALL getTimestamp(void)
             throw (uno::RuntimeException);
+
+    protected:
+
+    /** Destructor */
+        ~GconfLayer(void) {}
+
     private :
         /** Convert Gconf Value to OO value */
-        void convertGconfValue(
+/*        void convertGconfValue(
             const GConfValue* aValue,
             uno::Any* aOOValue,
             const rtl::OUString& OOType );
-
+*/
         /** Timestamp of Gconf layer */
-        rtl::OUString mTimestamp ;
-        rtl::OUString mComponent;
-        const KeyMappingTable& mKeyMap;
+        rtl::OUString m_aTimestamp ;
+        rtl::OUString m_aComponent ;
 
-        /** List of updated component TimeStamps */
-        const TSMappingTable& mTSMap;
-
-        uno::Reference<lang::XMultiServiceFactory> mFactory;
+        uno::Reference<backend::XLayerContentDescriber> m_xLayerContentDescriber ;
   } ;
 
 #endif // GCONFLAYER
