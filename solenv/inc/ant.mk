@@ -82,7 +82,6 @@ $(CLASSDIR)$/solar.properties : $(SOLARENV)$/inc/minor.mk $(SOLARENV)$/inc/ant.p
     @+cat $(DMAKEROOT)$/../ant.properties >> $@
 
 ANTBUILD .PHONY:
-    @echo $(CLASSPATH)
     $(ANT) $(ANT_FLAGS)
 
 clean  .PHONY:
