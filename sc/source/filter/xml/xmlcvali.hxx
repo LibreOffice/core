@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2001-08-03 14:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,139 +96,6 @@ public:
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
 
     virtual ~ScXMLContentValidationsContext();
-
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const ::rtl::OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-
-    virtual void EndElement();
-};
-
-class ScXMLContentValidationContext : public SvXMLImportContext
-{
-    rtl::OUString   sName;
-    rtl::OUString   sHelpTitle;
-    rtl::OUString   sHelpMessage;
-    rtl::OUString   sErrorTitle;
-    rtl::OUString   sErrorMessage;
-    rtl::OUString   sErrorMessageType;
-    rtl::OUString   sBaseCellAddress;
-    rtl::OUString   sCondition;
-    sal_Bool        bAllowEmptyCell : 1;
-    sal_Bool        bDisplayHelp : 1;
-    sal_Bool        bDisplayError : 1;
-
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
-
-    void GetAlertStyle(const rtl::OUString& sMessageType, com::sun::star::sheet::ValidationAlertStyle& aAlertStyle);
-    void SetFormulas(const rtl::OUString& sFormulas, rtl::OUString& sFormula1, rtl::OUString& sFormula2) const;
-    void GetCondition(const rtl::OUString& sCondition, rtl::OUString& sFormula1, rtl::OUString& sFormula2,
-        com::sun::star::sheet::ValidationType& aValidationType,
-        com::sun::star::sheet::ConditionOperator& aOperator);
-
-public:
-
-    ScXMLContentValidationContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const ::rtl::OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList);
-
-    virtual ~ScXMLContentValidationContext();
-
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const ::rtl::OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-
-    virtual void EndElement();
-
-    void SetHelpMessage(const rtl::OUString& sTitle, const rtl::OUString& sMessage, const sal_Bool bDisplay);
-    void SetErrorMessage(const rtl::OUString& sTitle, const rtl::OUString& sMessage, const rtl::OUString& sMessageType, const sal_Bool bDisplay);
-    void SetErrorMacro(const rtl::OUString& sName, const sal_Bool bExecute);
-};
-
-class ScXMLHelpMessageContext : public SvXMLImportContext
-{
-    rtl::OUString   sTitle;
-    rtl::OUStringBuffer sMessage;
-    sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay : 1;
-
-    ScXMLContentValidationContext* pValidationContext;
-
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
-
-public:
-
-    ScXMLHelpMessageContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const ::rtl::OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        ScXMLContentValidationContext* pValidationContext);
-
-    virtual ~ScXMLHelpMessageContext();
-
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const ::rtl::OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-
-    virtual void EndElement();
-};
-
-class ScXMLErrorMessageContext : public SvXMLImportContext
-{
-    rtl::OUString   sTitle;
-    rtl::OUStringBuffer sMessage;
-    rtl::OUString   sMessageType;
-    sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay : 1;
-
-    ScXMLContentValidationContext* pValidationContext;
-
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
-
-public:
-
-    ScXMLErrorMessageContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const ::rtl::OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        ScXMLContentValidationContext* pValidationContext);
-
-    virtual ~ScXMLErrorMessageContext();
-
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
-                                     const ::rtl::OUString& rLocalName,
-                                     const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
-
-    virtual void EndElement();
-};
-
-class ScXMLErrorMacroContext : public SvXMLImportContext
-{
-    rtl::OUString   sName;
-    sal_Bool        bExecute : 1;
-
-    ScXMLContentValidationContext* pValidationContext;
-
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
-
-public:
-
-    ScXMLErrorMacroContext( ScXMLImport& rImport, USHORT nPrfx,
-                        const ::rtl::OUString& rLName,
-                        const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        ScXMLContentValidationContext* pValidationContext);
-
-    virtual ~ScXMLErrorMacroContext();
 
     virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
                                      const ::rtl::OUString& rLocalName,

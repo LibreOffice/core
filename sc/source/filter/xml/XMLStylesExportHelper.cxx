@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-08-03 14:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
+#ifndef _XMLOFF_XMLEVENTEXPORT_HXX
+#include <xmloff/XMLEventExport.hxx>
+#endif
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -163,7 +166,12 @@ ScMyValidationsContainer::ScMyValidationsContainer()
     sINPTITLE(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)),
     sINPMESS(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPMESS)),
     sERRTITLE(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRTITLE)),
-    sERRMESS(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRMESS))
+    sERRMESS(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRMESS)),
+    sOnError(RTL_CONSTASCII_USTRINGPARAM("OnError")),
+    sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
+    sStarBasic(RTL_CONSTASCII_USTRINGPARAM("StarBasic")),
+    sLibrary(RTL_CONSTASCII_USTRINGPARAM("Library")),
+    sMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName"))
 {
 }
 
@@ -447,6 +455,19 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                         else
                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_FALSE);
                         SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MACRO, sal_True, sal_True);
+                        {
+                            uno::Sequence<beans::PropertyValue> aSeq(3);
+                            beans::PropertyValue* pArr = aSeq.getArray();
+                            pArr[0].Name = sEventType;
+                            pArr[0].Value <<= sStarBasic;
+                            pArr[1].Name = sLibrary;
+                            pArr[1].Value <<= sEmptyString;
+                            pArr[2].Name = sMacroName;
+                            pArr[2].Value <<= aItr->sErrorTitle;
+
+                            // 2) export the sequence
+                            rExport.GetEventExport().ExportSingleEvent( aSeq, sOnError);
+                        }
                     }
                     break;
                 }
@@ -1027,13 +1048,12 @@ void ScFormatRangeStyles::Sort()
 
 //===========================================================================
 
-ScColumnRowStyles::ScColumnRowStyles()
-    : aTables(),
-    aStyleNames()
+ScColumnRowStylesBase::ScColumnRowStylesBase()
+    : aStyleNames()
 {
 }
 
-ScColumnRowStyles::~ScColumnRowStyles()
+ScColumnRowStylesBase::~ScColumnRowStylesBase()
 {
     ScMyOUStringVec::iterator i = aStyleNames.begin();
     while (i != aStyleNames.end())
@@ -1043,24 +1063,13 @@ ScColumnRowStyles::~ScColumnRowStyles()
     }
 }
 
-void ScColumnRowStyles::AddNewTable(const sal_Int16 nTable, const sal_Int32 nFields)
-{
-    sal_Int16 nSize = aTables.size() - 1;
-    if (nTable > nSize)
-        for (sal_Int32 i = nSize; i < nTable; i++)
-        {
-            ScMysalInt32Vec aFieldsVec(nFields + 1, -1);
-            aTables.push_back(aFieldsVec);
-        }
-}
-
-sal_Int32 ScColumnRowStyles::AddStyleName(rtl::OUString* pString)
+sal_Int32 ScColumnRowStylesBase::AddStyleName(rtl::OUString* pString)
 {
     aStyleNames.push_back(pString);
     return aStyleNames.size() - 1;
 }
 
-sal_Int32 ScColumnRowStyles::GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix)
+sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix)
 {
     sal_Int32 nPrefixLength = rPrefix.getLength();
     rtl::OUString sTemp = rString.copy(nPrefixLength);
@@ -1085,7 +1094,93 @@ sal_Int32 ScColumnRowStyles::GetIndexOfStyleName(const rtl::OUString& rString, c
     }
 }
 
-sal_Int32 ScColumnRowStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nField)
+rtl::OUString* ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex)
+{
+    return aStyleNames[nIndex];
+}
+
+//===========================================================================
+
+ScColumnStyles::ScColumnStyles()
+    : ScColumnRowStylesBase(),
+    aTables()
+{
+}
+
+ScColumnStyles::~ScColumnStyles()
+{
+}
+
+void ScColumnStyles::AddNewTable(const sal_Int16 nTable, const sal_Int32 nFields)
+{
+    sal_Int16 nSize = aTables.size() - 1;
+    if (nTable > nSize)
+        for (sal_Int32 i = nSize; i < nTable; i++)
+        {
+            ScMyColumnStyleVec aFieldsVec(nFields + 1, ScColumnStyle());
+            aTables.push_back(aFieldsVec);
+        }
+}
+
+sal_Int32 ScColumnStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nField,
+    sal_Bool& bIsVisible)
+{
+    DBG_ASSERT(static_cast<sal_uInt32>(nTable) < aTables.size(), "wrong table");
+    if (static_cast<sal_uInt32>(nField) < aTables[nTable].size())
+    {
+        bIsVisible = aTables[nTable][nField].bIsVisible;
+        return aTables[nTable][nField].nIndex;
+    }
+    else
+    {
+        bIsVisible = aTables[nTable][aTables[nTable].size() - 1].bIsVisible;
+        return aTables[nTable][aTables[nTable].size() - 1].nIndex;
+    }
+}
+
+void ScColumnStyles::AddFieldStyleName(const sal_Int16 nTable, const sal_Int32 nField,
+    const sal_Int32 nStringIndex, const sal_Bool bIsVisible)
+{
+    DBG_ASSERT(static_cast<sal_uInt32>(nTable) < aTables.size(), "wrong table");
+    DBG_ASSERT(aTables[nTable].size() >= static_cast<sal_uInt32>(nField), "wrong field");
+    ScColumnStyle aStyle;
+    aStyle.nIndex = nStringIndex;
+    aStyle.bIsVisible = bIsVisible;
+    if (aTables[nTable].size() == static_cast<sal_uInt32>(nField))
+        aTables[nTable].push_back(aStyle);
+    aTables[nTable][nField] = aStyle;
+}
+
+rtl::OUString* ScColumnStyles::GetStyleName(const sal_Int16 nTable, const sal_Int32 nField)
+{
+    sal_Bool bTemp;
+    return GetStyleNameByIndex(GetStyleNameIndex(nTable, nField, bTemp));
+}
+
+//===========================================================================
+
+ScRowStyles::ScRowStyles()
+    : ScColumnRowStylesBase(),
+    aTables()
+{
+}
+
+ScRowStyles::~ScRowStyles()
+{
+}
+
+void ScRowStyles::AddNewTable(const sal_Int16 nTable, const sal_Int32 nFields)
+{
+    sal_Int16 nSize = aTables.size() - 1;
+    if (nTable > nSize)
+        for (sal_Int32 i = nSize; i < nTable; i++)
+        {
+            ScMysalInt32Vec aFieldsVec(nFields + 1, -1);
+            aTables.push_back(aFieldsVec);
+        }
+}
+
+sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nField)
 {
     DBG_ASSERT(static_cast<sal_uInt32>(nTable) < aTables.size(), "wrong table");
     if (static_cast<sal_uInt32>(nField) < aTables[nTable].size())
@@ -1094,7 +1189,8 @@ sal_Int32 ScColumnRowStyles::GetStyleNameIndex(const sal_Int16 nTable, const sal
         return aTables[nTable][aTables[nTable].size() - 1];
 }
 
-void ScColumnRowStyles::AddFieldStyleName(const sal_Int16 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex)
+void ScRowStyles::AddFieldStyleName(const sal_Int16 nTable, const sal_Int32 nField,
+    const sal_Int32 nStringIndex)
 {
     DBG_ASSERT(static_cast<sal_uInt32>(nTable) < aTables.size(), "wrong table");
     DBG_ASSERT(aTables[nTable].size() >= static_cast<sal_uInt32>(nField), "wrong field");
@@ -1103,13 +1199,7 @@ void ScColumnRowStyles::AddFieldStyleName(const sal_Int16 nTable, const sal_Int3
     aTables[nTable][nField] = nStringIndex;
 }
 
-rtl::OUString* ScColumnRowStyles::GetStyleName(const sal_Int16 nTable, const sal_Int32 nField)
+rtl::OUString* ScRowStyles::GetStyleName(const sal_Int16 nTable, const sal_Int32 nField)
 {
-    return aStyleNames[GetStyleNameIndex(nTable, nField)];
+    return GetStyleNameByIndex(GetStyleNameIndex(nTable, nField));
 }
-
-rtl::OUString* ScColumnRowStyles::GetStyleNameByIndex(const sal_Int32 nIndex)
-{
-    return aStyleNames[nIndex];
-}
-

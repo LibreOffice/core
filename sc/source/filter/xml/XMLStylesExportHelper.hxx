@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-06 11:35:07 $
+ *  last change: $Author: sab $ $Date: 2001-08-03 14:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,12 @@ private:
     const rtl::OUString         sINPMESS;
     const rtl::OUString         sERRTITLE;
     const rtl::OUString         sERRMESS;
+    const rtl::OUString         sOnError;
+    const rtl::OUString         sEventType;
+    const rtl::OUString         sStarBasic;
+    const rtl::OUString         sLibrary;
+    const rtl::OUString         sMacroName;
+
 public:
                                 ScMyValidationsContainer();
                                 ~ScMyValidationsContainer();
@@ -272,25 +278,63 @@ public:
     void Sort();
 };
 
-typedef std::vector<sal_Int32>          ScMysalInt32Vec;
-typedef std::vector<ScMysalInt32Vec>    ScMyVectorVec;
-
-class ScColumnRowStyles
+class ScColumnRowStylesBase
 {
-    ScMyVectorVec               aTables;
     ScMyOUStringVec             aStyleNames;
 
 public:
-    ScColumnRowStyles();
-    ~ScColumnRowStyles();
+    ScColumnRowStylesBase();
+    ~ScColumnRowStylesBase();
 
-    void AddNewTable(const sal_Int16 nTable, const sal_Int32 nFields);
+    virtual void AddNewTable(const sal_Int16 nTable, const sal_Int32 nFields) = 0;
     sal_Int32 AddStyleName(rtl::OUString* pString);
     sal_Int32 GetIndexOfStyleName(const rtl::OUString& rString, const rtl::OUString& rPrefix);
+    virtual rtl::OUString* GetStyleName(const sal_Int16 nTable, const sal_Int32 nField) = 0;
+    rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex);
+};
+
+struct ScColumnStyle
+{
+    sal_Int32   nIndex;
+    sal_Bool    bIsVisible : 1;
+
+    ScColumnStyle() : nIndex(-1), bIsVisible(sal_True) {}
+};
+
+
+typedef std::vector<ScColumnStyle>  ScMyColumnStyleVec;
+typedef std::vector<ScMyColumnStyleVec> ScMyColumnVectorVec;
+
+class ScColumnStyles : public ScColumnRowStylesBase
+{
+    ScMyColumnVectorVec             aTables;
+
+public:
+    ScColumnStyles();
+    ~ScColumnStyles();
+
+    virtual void AddNewTable(const sal_Int16 nTable, const sal_Int32 nFields);
+    sal_Int32 GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nField,
+        sal_Bool& bIsVisible);
+    void AddFieldStyleName(const sal_Int16 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex, const sal_Bool bIsVisible);
+    virtual rtl::OUString* GetStyleName(const sal_Int16 nTable, const sal_Int32 nField);
+};
+
+typedef std::vector<sal_Int32>  ScMysalInt32Vec;
+typedef std::vector<ScMysalInt32Vec>    ScMyRowVectorVec;
+
+class ScRowStyles : public ScColumnRowStylesBase
+{
+    ScMyRowVectorVec                aTables;
+
+public:
+    ScRowStyles();
+    ~ScRowStyles();
+
+    virtual void AddNewTable(const sal_Int16 nTable, const sal_Int32 nFields);
     sal_Int32 GetStyleNameIndex(const sal_Int16 nTable, const sal_Int32 nField);
     void AddFieldStyleName(const sal_Int16 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex);
-    rtl::OUString* GetStyleName(const sal_Int16 nTable, const sal_Int32 nField);
-    rtl::OUString* GetStyleNameByIndex(const sal_Int32 nIndex);
+    virtual rtl::OUString* GetStyleName(const sal_Int16 nTable, const sal_Int32 nField);
 };
 
 #endif
