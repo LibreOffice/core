@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:08:57 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,7 +544,8 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
         if ( !m_pExtStream ) hr = E_FAIL;
     }
 
-    RECTL aRectToSet;
+    // RECTL aRectToSet;
+    SIZEL aSizeToSet;
     if ( SUCCEEDED( hr ) )
     {
         ULARGE_INTEGER nNewPos;
@@ -559,10 +560,12 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
 
             if ( SUCCEEDED( hr ) )
             {
-                aRectToSet.left = *((sal_Int32*)aInf);
-                aRectToSet.top = *((sal_Int32*)&aInf[4]);
-                aRectToSet.right = *((sal_Int32*)&aInf[8]);
-                aRectToSet.bottom = *((sal_Int32*)&aInf[12]);
+                // aRectToSet.left = *((sal_Int32*)aInf);
+                // aRectToSet.top = *((sal_Int32*)&aInf[4]);
+                // aRectToSet.right = *((sal_Int32*)&aInf[8]);
+                // aRectToSet.bottom = *((sal_Int32*)&aInf[12]);
+                aSizeToSet.cx = *((sal_Int32*)&aInf[8]) - *((sal_Int32*)aInf);
+                aSizeToSet.cy = *((sal_Int32*)&aInf[12]) - *((sal_Int32*)&aInf[4]);
             }
         }
     }
@@ -588,7 +591,8 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
                     {
                         xLoadable->load( fillArgsForLoading_Impl( xTempIn, nStreamMode ) );
                         m_pMasterStorage = pStg;
-                        hr = m_pDocHolder->SetVisArea( &aRectToSet );
+                        hr = m_pDocHolder->SetExtent( &aSizeToSet );
+                        // hr = m_pDocHolder->SetVisArea( &aRectToSet );
                     }
                     catch( uno::Exception& )
                     {
@@ -679,17 +683,17 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
                     hr = pNewExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
                     if ( SUCCEEDED( hr ) )
                     {
-                        RECTL aRect;
-                        hr = m_pDocHolder->GetVisArea( &aRect );
+                        SIZEL aSize;
+                        hr = m_pDocHolder->GetExtent( &aSize );
 
                         if ( SUCCEEDED( hr ) )
                         {
                             sal_uInt32 nWritten;
                             sal_Int8 aInf[EXT_STREAM_LENGTH];
-                            *((sal_Int32*)aInf) = aRect.left;
-                            *((sal_Int32*)&aInf[4]) = aRect.top;
-                            *((sal_Int32*)&aInf[8]) = aRect.right;
-                            *((sal_Int32*)&aInf[12]) = aRect.bottom;
+                            *((sal_Int32*)aInf) = 0;
+                            *((sal_Int32*)&aInf[4]) = 0;
+                            *((sal_Int32*)&aInf[8]) = aSize.cx;
+                            *((sal_Int32*)&aInf[12]) = aSize.cy;
 
                             hr = pNewExtStream->Write( (void*)aInf, EXT_STREAM_LENGTH, &nWritten );
                             if ( nWritten != EXT_STREAM_LENGTH ) hr = E_FAIL;
@@ -850,17 +854,17 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )
                 hr = m_pExtStream->Seek( aZero, STREAM_SEEK_SET, &nNewPos );
                 if ( SUCCEEDED( hr ) )
                 {
-                    RECTL aRect;
-                    hr = m_pDocHolder->GetVisArea( &aRect );
+                    SIZEL aSize;
+                    hr = m_pDocHolder->GetExtent( &aSize );
 
                     if ( SUCCEEDED( hr ) )
                     {
                         sal_uInt32 nWritten;
                         sal_Int8 aInf[EXT_STREAM_LENGTH];
-                        *((sal_Int32*)aInf) = aRect.left;
-                        *((sal_Int32*)&aInf[4]) = aRect.top;
-                        *((sal_Int32*)&aInf[8]) = aRect.right;
-                        *((sal_Int32*)&aInf[12]) = aRect.bottom;
+                        *((sal_Int32*)aInf) = 0;
+                        *((sal_Int32*)&aInf[4]) = 0;
+                        *((sal_Int32*)&aInf[8]) = aSize.cx;
+                        *((sal_Int32*)&aInf[12]) = aSize.cy;
 
                         hr = m_pExtStream->Write( (void*)aInf, EXT_STREAM_LENGTH, &nWritten );
                         if ( nWritten != EXT_STREAM_LENGTH ) hr = E_FAIL;
