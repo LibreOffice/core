@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:53:49 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:48:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,6 +259,7 @@ void FontCache::flush()
                         aLine.Append( ';' );
                         aLine.Append( ByteString::CreateFromInt32( static_cast<const PrintFontManager::TrueTypeFontFile*>(*it)->m_nTypeFlags ) );
                         break;
+                    default: break;
                 }
                 aStream.WriteLine( aLine );
             }
@@ -375,6 +376,7 @@ void FontCache::read()
                     case fonttype::Builtin:
                         pFont = new PrintFontManager::BuiltinFont();
                         break;
+                    default: break;
                 }
                 nIndex = 0;
 
@@ -444,6 +446,7 @@ void FontCache::read()
                         static_cast<PrintFontManager::BuiltinFont*>(pFont)->m_nDirectory = nDir;
                         static_cast<PrintFontManager::BuiltinFont*>(pFont)->m_aMetricFile = aFile;
                         break;
+                    default: break;
                 }
 
                 /*
@@ -523,6 +526,7 @@ void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFo
             static_cast<PrintFontManager::BuiltinFont*>(pTo)->m_nDirectory = static_cast<const PrintFontManager::BuiltinFont*>(pFrom)->m_nDirectory;
             static_cast<PrintFontManager::BuiltinFont*>(pTo)->m_aMetricFile = static_cast<const PrintFontManager::BuiltinFont*>(pFrom)->m_aMetricFile;
             break;
+        default: break;
     }
     pTo->m_nFamilyName      = pFrom->m_nFamilyName;
     pTo->m_aAliases         = pFrom->m_aAliases;
@@ -561,6 +565,7 @@ PrintFontManager::PrintFont* FontCache::clonePrintFont( const PrintFontManager::
         case fonttype::Builtin:
             pFont = new PrintFontManager::BuiltinFont();
             break;
+        default: break;
     }
     if( pFont )
     {
