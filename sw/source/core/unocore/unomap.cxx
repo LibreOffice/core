@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-24 15:05:27 $
+ *  last change: $Author: os $ $Date: 2002-11-05 08:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -964,9 +964,6 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_BACK_TRANSPARENT), FN_UNO_TABLE_CELL_BACKGROUND,    CPPU_E2T(CPPUTYPE_BOOLEAN), PropertyAttribute::MAYBEVOID|PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_TRANSPARENT      },
 
                     // most of the properties from paragraph style...
-                    { SW_PROP_NMID(UNO_NAME_BREAK_TYPE), RES_BREAK,                 CPPU_E2T(CPPUTYPE_BREAK),       PropertyAttribute::MAYBEVOID, 0},
-                    { SW_PROP_NMID(UNO_NAME_PAGE_DESC_NAME), RES_PAGEDESC,          CPPU_E2T(CPPUTYPE_OUSTRING),            PropertyAttribute::MAYBEVOID, MID_PAGEDESC_PAGEDESCNAME },
-                    { SW_PROP_NMID(UNO_NAME_PAGE_NUMBER_OFFSET), RES_PAGEDESC,              CPPU_E2T(CPPUTYPE_INT16),       PropertyAttribute::MAYBEVOID, MID_PAGEDESC_PAGENUMOFFSET},
                     { SW_PROP_NMID(UNO_NAME_CHAR_AUTO_KERNING), RES_CHRATR_AUTOKERN  ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID,     0},
                     { SW_PROP_NMID(UNO_NAME_CHAR_BACK_TRANSPARENT), RES_CHRATR_BACKGROUND, CPPU_E2T(CPPUTYPE_BOOLEAN),          PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_TRANSPARENT       },
                     { SW_PROP_NMID(UNO_NAME_CHAR_BACK_COLOR), RES_CHRATR_BACKGROUND,    CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID ,MID_BACK_COLOR        },
@@ -1027,6 +1024,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS), RES_PARATR_HYPHENZONE,         CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_LEAD   },
                     { SW_PROP_NMID(UNO_NAME_PARA_HYPHENATION_MAX_TRAILING_CHARS), RES_PARATR_HYPHENZONE,        CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_TRAIL  },
                     { SW_PROP_NMID(UNO_NAME_PARA_HYPHENATION_MAX_HYPHENS), RES_PARATR_HYPHENZONE,       CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MAX_HYPHENS},
+                    { SW_PROP_NMID(UNO_NAME_NUMBERING_RULES), FN_UNO_NUM_RULES,     CPPU_E2T(CPPUTYPE_REFIDXREPL),  PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},                        \
                     { SW_PROP_NMID(UNO_NAME_NUMBERING_STYLE_NAME), RES_PARATR_NUMRULE,  CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,   0},
                     { SW_PROP_NMID(UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES), RES_UNKNOWNATR_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_PARA_SHADOW_FORMAT), RES_SHADOW,    CPPU_E2T(CPPUTYPE_SHADOWFMT),   PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
