@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-07 13:57:40 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 12:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     StringList [ english_us ] =
     {
              < "None" ; > ;
-        < "Automatic" ; > ;
+        < "Manual" ; > ;
         < "Manual" ; > ;
     };
     StringList [ portuguese ] =
@@ -195,7 +195,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     StringList [ russian ] =
     {
              < "Áåç" ; > ;
-        < "Àâòîìàòè÷åñêè" ; > ;
+        < "Âðó÷íóþ" ; > ;
         < "Âðó÷íóþ" ; > ;
     };
     StringList [ greek ] =
@@ -213,7 +213,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     StringList [ french ] =
     {
              < "Aucun(e)" ; > ;
-        < "Automatique" ; > ;
+        < "Manuel" ; > ;
         < "Manuel" ; > ;
     };
     StringList [ spanish ] =
@@ -261,7 +261,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     StringList [ japanese ] =
     {
              < "‚È‚µ" ; > ;
-        < "Ž©“®" ; > ;
+        < "Žè“®" ; > ;
         < "Žè“®" ; > ;
     };
     StringList [ korean ] =
@@ -273,7 +273,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     StringList [ chinese_simplified ] =
     {
              < "ÎÞ" ; > ;
-        < "×Ô¶¯" ; > ;
+        < "ÊÖ¶¯" ; > ;
         < "ÊÖ¹¤" ; > ;
     };
     StringList [ chinese_traditional ] =
@@ -1805,7 +1805,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ english_us ] = "~Enable" ;
         Text [ italian ] = "A~bilita" ;
         Text [ spanish ] = "Vali~dar" ;
-        Text [ french ] = "~Valider" ;
+        Text [ french ] = "Valider" ;
         Text [ dutch ] = "~Vrijgeven" ;
         Text [ swedish ] = "~frige" ;
         Text [ danish ] = "aktiver" ;
@@ -1835,14 +1835,14 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ portuguese_brazilian ] = "S~icherheitsüberprüfungen";
         Text[ portuguese ] = "~Controlos de segurança";
         Text[ danish ] = "Sikkerhedskontroller";
-        Text[ french ] = "C~ontrôles de sécurité";
+        Text[ french ] = "Contrôles de sécurité";
         Text[ swedish ] = "S~äkerhetskontroller";
         Text[ dutch ] = "V~eiligheidscontroles";
         Text[ spanish ] = "Co~ntroles de seguridad";
         Text[ chinese_simplified ] = "°²È«¼ì²é(~S)";
         Text[ russian ] = "Ïðîâåðêà áåçîïàñíîñòè";
         Text[ polish ] = "Kontrola zabezpieczeñ";
-        Text[ japanese ] = "¾·­ØÃ¨ Áª¯¸(~S)";
+        Text[ japanese ] = "¾·­ØÃ¨Áª¯¸(~S)";
         Text[ chinese_traditional ] = "¦w¥þÀË¬d(~S)";
         Text[ arabic ] = "ÝÍæÕ ÃãäíÉ";
         Text[ greek ] = "¸ëåã÷ï~é áóöáëåßáò";
@@ -1861,7 +1861,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ english_us ] = "Net ~access" ;
         Text [ italian ] = "Accesso rete" ;
         Text [ spanish ] = "Acce~so a la red" ;
-        Text [ french ] = "Accès ~réseau" ;
+        Text [ french ] = "Accès réseau" ;
         Text [ dutch ] = "~Nettoegang" ;
         Text [ swedish ] = "~Nätåtkomst" ;
         Text [ danish ] = "Netadgang" ;
@@ -1937,7 +1937,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         stringlist [ french ] =
         {
             < "Illimité" ; > ;
-            < "Aucun(e)" ; > ;
+            < "Aucun" ; > ;
             < "Ordinateur" ; > ;
         };
         stringlist [ dutch ] =
@@ -1962,7 +1962,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         {
             < "Íåîãðàíè÷åííûé" ; > ;
             < "Áåç" ; > ;
-            < "Êîìïüþòåð" ; > ;
+            < "Óçåë" ; > ;
         };
         StringList [ polish ] =
         {
@@ -1974,7 +1974,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         {
             < "§ŒÀ‚È‚µ" ; > ;
             < "‚È‚µ" ; > ;
-            < "Î½Ä" ; > ;
+            < "Î½ÄºÝËß­°À" ; > ;
         };
         StringList [ chinese_traditional ] =
         {
@@ -2034,14 +2034,14 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ english_us ] = "~Class path" ;
         Text [ italian ] = "~ClassPath" ;
         Text [ spanish ] = "~ClassPath" ;
-        Text [ french ] = "~ClassPath" ;
+        Text [ french ] = "ClassPath" ;
         Text [ dutch ] = "~ClassPath" ;
         Text [ swedish ] = "~ClassPath" ;
         Text [ danish ] = "ClassPath" ;
         Text [ portuguese_brazilian ] = "~ClassPath" ;
         Text [ portuguese ] = "~ClassPath" ;
         Text[ chinese_simplified ] = "~ClassPath";
-        Text[ russian ] = "~Class Path";
+        Text[ russian ] = "~ClassPath";
         Text[ polish ] = "ClassPath";
         Text[ japanese ] = "~ClassPath";
         Text[ chinese_traditional ] = "~ClassPath";
@@ -2077,19 +2077,19 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 74 , 8 ) ;
         Text = "F~reischalten" ;
         Text [ English ] = "~enable" ;
-        Text [ english_us ] = "Plug-ins" ;
+        Text [ english_us ] = "E~nable" ;
         Text [ portuguese_brazilian ] = "Ausf?ren" ;
         Text [ swedish ] = "F~rige" ;
         Text [ danish ] = "PlugIns" ;
         Text [ italian ] = "PlugIns" ;
         Text [ spanish ] = "Validar" ;
-        Text [ french ] = "Plug-ins" ;
+        Text [ french ] = "Valider" ;
         Text [ dutch ] = "PlugIns" ;
         Text [ portuguese ] = "PlugIns" ;
         Text[ chinese_simplified ] = "¿ª·Å";
-        Text[ russian ] = "Plug-Ins";
+        Text[ russian ] = "Ðàçáëîêèðîâàòü";
         Text[ polish ] = "Aktywacja";
-        Text[ japanese ] = "Ìß×¸Þ²Ý";
+        Text[ japanese ] = "Žg—p‚·‚é";
         Text[ chinese_traditional ] = "±Ò¥Î";
         Text[ arabic ] = "Plug-Ins";
         Text[ greek ] = "Óõíäåüìåíåò õðïìïíÜäåò";
@@ -2105,19 +2105,19 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Size = MAP_APPFONT ( 65 , 10 ) ;
         Text = "~PlugIns" ;
         Text [ English ] = "PlugIns" ;
-        Text [ english_us ] = "E~nable" ;
+        Text [ english_us ] = "Plug-ins" ;
         Text [ portuguese_brazilian ] = "~Plugins" ;
         Text [ swedish ] = "Plug-ins" ;
         Text [ danish ] = "aktiver" ;
         Text [ italian ] = "Abilita" ;
         Text [ spanish ] = "Plug-ins" ;
-        Text [ french ] = "~Valider" ;
+        Text [ french ] = "Plug-ins" ;
         Text [ dutch ] = "V~rijgeven" ;
         Text [ portuguese ] = "~Activar" ;
         Text[ chinese_simplified ] = "Plug-Ins";
-        Text[ russian ] = "Ðàçáëîêèðîâàòü";
+        Text[ russian ] = "Plug-In";
         Text[ polish ] = "Wtyczki plug-in";
-        Text[ japanese ] = "Žg—p‚·‚é(~N)";
+        Text[ japanese ] = "Ìß×¸Þ²Ý";
         Text[ chinese_traditional ] = "Plug-Ins";
         Text[ arabic ] = "ÇáÊÔÛíá";
         Text[ greek ] = "Óõíäåüìåíåò õðïìïíÜäåò";
@@ -2146,7 +2146,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text[ swedish ] = "Applets";
         Text[ polish ] = "Aplety";
         Text[ portuguese_brazilian ] = "Applets";
-        Text[ japanese ] = "?????";
+        Text[ japanese ] = "±ÌßÚ¯Ä";
         Text[ korean ] = "Applet";
         Text[ chinese_simplified ] = "Applets";
         Text[ chinese_traditional ] = "Applets";
@@ -2281,4 +2281,5 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
 
