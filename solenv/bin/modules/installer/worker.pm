@@ -2,9 +2,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 15:00:27 $
+#   last change: $Author: rt $ $Date: 2004-08-12 08:30:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -276,7 +276,7 @@ sub remove_old_installation_sets
 
     # looking for non successful old installation sets
 
-    $removedir = $basedir . "_with_error";
+    $removedir = $basedir . "_witherror";
     if ( -d $removedir ) { installer::systemactions::remove_complete_directory($removedir, 1); }
 
     $removedir = $basedir . "_inprogress";
@@ -308,8 +308,8 @@ sub remove_old_ship_installation_sets
         my $pre_inprogress = $1;        # $pre still contains "inprogress"
         my $number = $2;
         my $post = $3;
-        my $pre_with_error = $pre_inprogress;
-        $pre_with_error =~ s/inprogress/with_error/;
+        my $pre_witherror = $pre_inprogress;
+        $pre_witherror =~ s/inprogress/witherror/;
 
         for ( my $i = 0; $i <= $#{$alldirs}; $i++ )
         {
@@ -320,7 +320,7 @@ sub remove_old_ship_installation_sets
                 installer::systemactions::remove_complete_directory(${$alldirs}[$i], 1);
             }
 
-            if ( ${$alldirs}[$i] =~ /^\s*\Q$pre_with_error\E\d+\Q$post\E\s*$/ ) # removing old "with_error" directories
+            if ( ${$alldirs}[$i] =~ /^\s*\Q$pre_witherror\E\d+\Q$post\E\s*$/ )  # removing old "witherror" directories
             {
                 installer::systemactions::remove_complete_directory(${$alldirs}[$i], 1);
             }
@@ -356,6 +356,8 @@ sub create_installation_directory
         $installdir = $inprogressinstalldir;
     }
 
+    $installer::globals::saveinstalldir = $installdir;  # saving directory globally, in case of exiting
+
     return $installdir;
 }
 
@@ -375,7 +377,7 @@ sub analyze_and_save_logfile
 
     if ( $contains_error )
     {
-        my $errordir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_with_error");
+        my $errordir = installer::systemactions::rename_string_in_directory($installdir, "_inprogress", "_witherror");
         if ( $installer::globals::updatepack ) { installer::mail::send_fail_mail($allsettingsarrayref, $languagestringref, $errordir); }
     }
     else
@@ -396,7 +398,7 @@ sub analyze_and_save_logfile
     # Saving the logfile in the log file directory and additionally in a log directory in the install directory
 
     my $numberedlogfilename = $installer::globals::logfilename;
-    if ( $installer::globals::updatepack ) { $numberedlogfilename =~ s /logfile/log_$current_install_number/; }
+    if ( $installer::globals::updatepack ) { $numberedlogfilename =~ s /log_/log_$current_install_number\_/; }
     print "... creating log file $numberedlogfilename \n";
     installer::files::save_file($loggingdir . $numberedlogfilename, \@installer::globals::logfileinfo);
     installer::files::save_file($installlogdir . $installer::globals::separator . $numberedlogfilename, \@installer::globals::logfileinfo);
