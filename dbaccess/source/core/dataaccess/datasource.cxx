@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:24:28 $
+ *  last change: $Author: fs $ $Date: 2001-03-06 10:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,7 +566,7 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (Runt
         DECL_PROP0(INFO,                        Sequence< PropertyValue >);
         DECL_PROP1_BOOL(ISPASSWORDREQUIRED,                                 BOUND);
         DECL_PROP1_BOOL(ISREADONLY,                                         READONLY);
-        DECL_PROP1(LAYOUTINFORMATION,           Sequence< sal_Int8 >,       TRANSIENT);
+        DECL_PROP0(LAYOUTINFORMATION,           Sequence< sal_Int8 >);
         DECL_PROP1(NAME,                        ::rtl::OUString,            READONLY);
         DECL_PROP1_IFACE(NUMBERFORMATSSUPPLIER, XNumberFormatsSupplier,     READONLY);
         DECL_PROP1(PASSWORD,                    ::rtl::OUString,            TRANSIENT);
