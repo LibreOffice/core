@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-15 10:53:58 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:29:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1619,16 +1619,7 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
         else
             aArgs.realloc ( i-1 );
 
-        try
-        {
-            xLoader->filter( aArgs );
-        }
-        catch (com::sun::star::uno::Exception&)
-        {
-            return sal_False;
-        }
-
-        return sal_True;
+        return xLoader->filter( aArgs );
     }
 
     return sal_False;
@@ -1703,8 +1694,7 @@ sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         else
             aArgs.realloc ( i-1 );
 
-        xFilter->filter( aArgs );
-        return sal_True;
+        return xFilter->filter( aArgs );
     }
 
     return sal_False;
