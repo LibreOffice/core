@@ -2,8 +2,8 @@
 *
 *  $RCSfile: ScriptStorage.cxx,v $
 *
-*  $Revision: 1.23 $
-*  last change: $Author: dfoster $ $Date: 2003-05-29 14:17:55 $
+*  $Revision: 1.24 $
+*  last change: $Author: npower $ $Date: 2003-07-07 14:27:28 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -106,7 +106,7 @@ static Sequence< OUString > ss_serviceNames =
 
 const sal_uInt16 NUMBER_STORAGE_INITIALIZE_ARGS = 3;
 
-extern ::rtl_StandardModuleCount s_moduleCount;
+//extern ::rtl_StandardModuleCount s_moduleCount;
 
 
 
@@ -192,14 +192,14 @@ throw ( RuntimeException )
             }
         }
     }
-    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
+//    s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 }
 
 //*************************************************************************
 ScriptStorage::~ScriptStorage() SAL_THROW( () )
 {
     OSL_TRACE( "< ScriptStorage dtor called >\n" );
-    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
+//    s_moduleCount.modCnt.release( &s_moduleCount.modCnt );
 }
 
 //*************************************************************************
@@ -945,24 +945,31 @@ throw( RuntimeException )
 {
     return ss_serviceNames;
 }
+
+} // namespace scripting_impl
+
+
+namespace scripting_runtimemgr
+{
+
 //*************************************************************************
 Reference<XInterface> SAL_CALL ss_create(
     const Reference< XComponentContext > & xCompC )
 {
-    return ( cppu::OWeakObject * ) new ScriptStorage( xCompC );
+    return ( cppu::OWeakObject * ) new ::scripting_impl::ScriptStorage( xCompC );
 }
 
 //*************************************************************************
 Sequence<OUString> ss_getSupportedServiceNames( )
 SAL_THROW( () )
 {
-    return ss_serviceNames;
+    return ::scripting_impl::ss_serviceNames;
 }
 
 //*************************************************************************
 OUString ss_getImplementationName( )
 SAL_THROW( () )
 {
-    return ss_implName;
+    return ::scripting_impl::ss_implName;
 }
-} // namespace scripting_impl
+}//end namespace
