@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: fme $ $Date: 2002-04-25 08:43:11 $
+ *  last change: $Author: fme $ $Date: 2002-05-03 11:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1690,9 +1690,19 @@ void SwTxtFormatter::CalcRealHeight( sal_Bool bNewLine )
         pCurr->SetAscent( nAsc );
         pInf->GetParaPortion()->SetFixLineHeight();
 
-        // Zwischenraum
-//        if( !IsParaLine() )
-//            nLineHeight += nInterLineHeight;
+        // we ignore any line spacing options except from ...
+        const SvxLineSpacingItem* pSpace = aLineInf.GetLineSpacing();
+        if ( ! IsParaLine() && pSpace &&
+             SVX_INTER_LINE_SPACE_PROP == pSpace->GetInterLineSpaceRule() )
+        {
+            ULONG nTmp = pSpace->GetPropLineSpace();
+
+            if( nTmp < 100 )
+                nTmp = 100;
+
+            nTmp *= nLineHeight;
+            nLineHeight = (USHORT)(nTmp / 100);
+        }
 
         pCurr->SetRealHeight( nLineHeight );
         return;
