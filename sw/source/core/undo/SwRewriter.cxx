@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwRewriter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:05:24 $
+ *  last change: $Author: rt $ $Date: 2004-05-26 10:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@
 
 #include <algorithm>
 #include <SwRewriter.hxx>
+
+using namespace std;
 
 bool operator == (const SwRewriteRule & a, const SwRewriteRule & b)
 {
