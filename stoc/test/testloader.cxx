@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testloader.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:14:35 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,15 +124,8 @@ int _cdecl main( int argc, char * argv[] )
 
     Module module;
 
-#ifdef SAL_W32
-    OUString dllName( OUString::createFromAscii("cpld.dll") );
-#else
-#ifdef MACOSX
-    OUString dllName( OUString::createFromAscii("libcpld.dylib") );
-#else
-    OUString dllName( OUString::createFromAscii("libcpld.so") );
-#endif
-#endif
+    OUString dllName(
+        RTL_CONSTASCII_USTRINGPARAM("shlibloader.uno" SAL_DLLEXTENSION) );
 
     if (module.load(dllName))
     {
