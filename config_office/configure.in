@@ -87,7 +87,8 @@ AC_ARG_ENABLE(xprint,
 AC_ARG_WITH(lang,
 [  --with-lang             Use this option to build OpenOffice with additional language
                           support. US English is always included by default. Separate 
-                          multiple languages with commas.                          
+                          multiple languages with commas. For all languages, use
+			  --with-lang=ALL.                          
 
                           Usage: --with-lang=SPAN,SWED,TURK
 ],,)
