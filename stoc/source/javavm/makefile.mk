@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: jsc $ $Date: 2000-11-13 16:43:56 $
+#   last change: $Author: hr $ $Date: 2000-11-13 16:51:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,20 +112,5 @@ DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(depend)" == ""
-ALL : 	$(BIN)$/jen.rdb	\
-        $(MISC)$/jen_desc.cxx	\
-        ALLTAR 
-.ELSE
-ALL: 		ALLDEP
-.ENDIF
-
 .INCLUDE :	target.mk
-
-$(BIN)$/jen.rdb: $(SOLARBINDIR)$/applicat.rdb
-    +rdbmaker -BUCR -O$(BIN)$/jen.rdb $(foreach,i,$(UNOTYPES) -T$i ) $(SOLARBINDIR)$/applicat.rdb
-
-$(MISC)$/jen_desc.cxx: jen.xml
-    +xml2cmp -func $(MISC)$/jen_desc.cxx jen.xml
-
 
