@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-13 17:43:53 $
+ *  last change: $Author: sab $ $Date: 2002-08-15 10:04:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,8 @@ void ScAccessibleSpreadsheet::CompleteSelectionChanged(sal_Bool bNewState)
 
 void ScAccessibleSpreadsheet::LostFocus()
 {
+    CommitFocusGained();
+
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
     aEvent.Source = uno::Reference< XAccessible >(this);
@@ -207,6 +209,8 @@ void ScAccessibleSpreadsheet::LostFocus()
 
 void ScAccessibleSpreadsheet::GotFocus()
 {
+    CommitFocusLost();
+
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
     aEvent.Source = uno::Reference< XAccessible >(this);
@@ -277,11 +281,16 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             else
                 mbDelIns = sal_False;
         }
+        else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
+        {
+            AccessibleEventObject aEvent;
+            aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+            aEvent.Source = uno::Reference< XAccessible >(this);
+
+            CommitChange(aEvent);
         // commented out, because to use a ModelChangeEvent is not the right way
         // at the moment there is no way, but the Java/Gnome Api should be extended sometime
-/*      else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
-        {
-            if (mpViewShell)
+/*          if (mpViewShell)
             {
                 Rectangle aNewVisCells(GetVisCells(GetVisArea(mpViewShell, meSplitPos)));
 
@@ -295,8 +304,8 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 maVisCells = aNewVisCells;
 
                 CommitTableModelChange(aNewPos.Top(), aNewPos.Left(), aNewPos.Bottom(), aNewPos.Right(), AccessibleTableModelChangeType::UPDATE);
-            }
-        }*/
+            }*/
+        }
     }
     else if (rHint.ISA( ScUpdateRefHint ))
     {
@@ -312,14 +321,48 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 mbDelIns = sal_True;
 
                 sal_Int16 nId(0);
-                if ((rRef.GetDx() < 0) || (rRef.GetDy() < 0))
+                sal_Int16 nX(rRef.GetDx());
+                sal_Int16 nY(rRef.GetDy());
+                ScRange aRange(rRef.GetRange());
+                if ((nX < 0) || (nY < 0))
+                {
+                    DBG_ASSERT(!((nX < 0) && (nY < 0)), "should not be possible to remove row and column at the same time");
                     nId = AccessibleTableModelChangeType::DELETE;
-                else if ((rRef.GetDx() > 0) || (rRef.GetDy() > 0))
+                    if (nX < 0)
+                    {
+                        nX = -nX;
+                        nY = aRange.aEnd.Row() - aRange.aStart.Row();
+                    }
+                    else
+                    {
+                        nY = -nY;
+                        nX = aRange.aEnd.Col() - aRange.aStart.Col();
+                    }
+                }
+                else if ((nX > 0) || (nY > 0))
+                {
+                    DBG_ASSERT(!((nX > 0) && (nY > 0)), "should not be possible to add row and column at the same time");
                     nId = AccessibleTableModelChangeType::INSERT;
+                    if (nX < 0)
+                        nY = aRange.aEnd.Row() - aRange.aStart.Row();
+                    else
+                        nX = aRange.aEnd.Col() - aRange.aStart.Col();
+                }
                 else
                     DBG_ERROR("is it a deletion or a insertion?");
 
-                CommitTableModelChange(rRef.GetRange().aStart.Row(), rRef.GetRange().aStart.Col(), rRef.GetRange().aEnd.Row(), rRef.GetRange().aEnd.Col(), nId);
+                CommitTableModelChange(rRef.GetRange().aStart.Row(),
+                    rRef.GetRange().aStart.Col(),
+                    rRef.GetRange().aStart.Row() + nY,
+                    rRef.GetRange().aStart.Col() + nX, nId);
+
+                AccessibleEventObject aEvent;
+                aEvent.EventId = AccessibleEventId::ACCESSIBLE_ACTIVE_DESCENDANT_EVENT;
+                aEvent.Source = uno::Reference< XAccessible >(this);
+                uno::Reference< XAccessible > xNew = mpAccCell;
+                aEvent.NewValue <<= xNew;
+
+                CommitChange(aEvent);
             }
         }
     }
@@ -388,6 +431,10 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleRowSelected( sal_Int32 nR
 {
     ScUnoGuard aGuard;
     IsObjectValid();
+
+    if ((nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
+        throw lang::IndexOutOfBoundsException();
+
     sal_Bool bResult(sal_False);
     if (mpViewShell && mpViewShell->GetViewData())
     {
@@ -402,6 +449,10 @@ sal_Bool SAL_CALL ScAccessibleSpreadsheet::isAccessibleColumnSelected( sal_Int32
 {
     ScUnoGuard aGuard;
     IsObjectValid();
+
+    if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0))
+        throw lang::IndexOutOfBoundsException();
+
     sal_Bool bResult(sal_False);
     if (mpViewShell && mpViewShell->GetViewData())
     {
@@ -525,6 +576,9 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         if (IsEditable(xParentStates))
             pStateSet->AddState(AccessibleStateType::EDITABLE);
         pStateSet->AddState(AccessibleStateType::ENABLED);
+        pStateSet->AddState(AccessibleStateType::FOCUSABLE);
+        if (IsFocused())
+            pStateSet->AddState(AccessibleStateType::FOCUSED);
         pStateSet->AddState(AccessibleStateType::MULTISELECTABLE);
         pStateSet->AddState(AccessibleStateType::OPAQUE);
         pStateSet->AddState(AccessibleStateType::SELECTABLE);
@@ -814,6 +868,17 @@ sal_Bool ScAccessibleSpreadsheet::IsEditable(
     if (mpDoc && mpDoc->IsTabProtected(maRange.aStart.Tab()))
         bProtected = sal_True;
     return !bProtected;
+}
+
+sal_Bool ScAccessibleSpreadsheet::IsFocused()
+{
+    sal_Bool bFocused(sal_False);
+    if (mpViewShell)
+    {
+        if (mpViewShell->GetViewData()->GetActivePart() == meSplitPos)
+            bFocused = mpViewShell->GetActiveWin()->HasFocus();
+    }
+    return bFocused;
 }
 
 sal_Bool ScAccessibleSpreadsheet::IsCompleteSheetSelected()
