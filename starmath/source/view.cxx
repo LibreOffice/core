@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:05:04 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1355,7 +1355,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                 GetDoc()->SetText( pWin->GetText() );
                 SetStatusText(String());
                 ShowError( 0 );
-                GetDoc()->Resize();
+                GetDoc()->Repaint();
             }
             break;
 
