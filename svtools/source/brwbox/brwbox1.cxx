@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 16:57:26 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 11:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1758,8 +1758,14 @@ void BrowseBox::SelectColumnPos( USHORT nNewColPos, BOOL bSelect, BOOL bMakeVisi
             GoToColumnId( pCols->GetObject(nNewColPos)->GetId(), bMakeVisible );
         return;
     }
-    else if (!GoToColumnId( pCols->GetObject(nNewColPos)->GetId(), bMakeVisible ))
-        return;
+    else
+    {
+#ifdef DBG_UTIL
+        BrowserColumn* pNewSelectedCol = pCols->GetObject( nNewColPos );
+#endif
+        if ( !GoToColumnId( pCols->GetObject( nNewColPos )->GetId(), bMakeVisible ) )
+            return;
+    }
 
     DBG_TRACE1( "BrowseBox: %p->HideCursor", this );
     ToggleSelection();

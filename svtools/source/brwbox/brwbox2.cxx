@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 16:57:26 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 11:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1656,8 +1656,14 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
             GoToRow( rEvt.GetRow() );
             SelectRow( rEvt.GetRow(), TRUE, FALSE );
         }
-        else if ( bColumnCursor && rEvt.GetColumn() != 0 )
-            SelectColumnPos( rEvt.GetColumn(), TRUE, FALSE);
+        else
+        {
+            if ( bColumnCursor && rEvt.GetColumn() != 0 )
+            {
+                if ( rEvt.GetColumn() < pCols->Count() )
+                    SelectColumnPos( rEvt.GetColumn(), TRUE, FALSE);
+            }
+        }
         DoubleClick( rEvt );
     }
     // selections
