@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-08 14:02:47 $
+ *  last change: $Author: oj $ $Date: 2001-05-10 08:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1404,7 +1404,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
                     static_cast<OTableDesignView*>(getView())->GetEditorCtrl()->DisplayData(0);
                 }
             }
-            else
+            else if (nReturn == RET_CANCEL)
                 bOk = sal_False;
         }
     }
