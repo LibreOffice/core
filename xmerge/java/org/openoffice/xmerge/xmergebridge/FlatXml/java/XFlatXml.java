@@ -24,7 +24,7 @@ import com.sun.star.xml.XExportFilter;
 import java.io.*;
 
 
-
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XTypeProvider;
@@ -101,7 +101,7 @@ public class XFlatXml {
 
         public boolean importer(com.sun.star.beans.PropertyValue[] aSourceData,
                 com.sun.star.xml.sax.XDocumentHandler xDocHandler,
-                java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException {
+                java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException,com.sun.star.lang.IllegalArgumentException {
                     /*
         System.out.println("\nFound the  Java Importer!\n");
 
@@ -123,20 +123,22 @@ public class XFlatXml {
 
         for  (int  i = 0 ; i < pValue.length; i++)
         {
-        //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
-        if (pValue[i].Name.compareTo("InputStream")==0){
-            xis =(com.sun.star.io.XInputStream) pValue[i].Value;
+         try{
+             //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
+             if (pValue[i].Name.compareTo("InputStream")==0){
+            xis=(com.sun.star.io.XInputStream)AnyConverter.toObject(new Type(com.sun.star.io.XInputStream.class), pValue[i].Value);
+             }
+             if (pValue[i].Name.compareTo("FileName")==0){
+             sFileName=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
+             }
+             if (pValue[i].Name.compareTo("URL")==0){
+             sURL=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
+             }
+         }
+         catch(com.sun.star.lang.IllegalArgumentException AnyExec){
+             System.out.println("\nIllegalArgumentException "+AnyExec);
+         }
 
-            //System.out.println(pValue[i].Name+" "+xis);
-        }
-        if (pValue[i].Name.compareTo("FileName")==0){
-            sFileName=(String) pValue[i].Value;
-            //System.out.println(pValue[i].Name+" "+sFileName);
-        }
-        if (pValue[i].Name.compareTo("URL")==0){
-            sURL = (String)pValue[i].Value;
-            //System.out.println(pValue[i].Name+" "+sURL);
-        }
         }
 
         try{
@@ -173,7 +175,7 @@ public class XFlatXml {
 
 
  public boolean exporter(com.sun.star.beans.PropertyValue[] aSourceData,
-                   java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException{
+                    java.lang.String[] msUserData) throws com.sun.star.uno.RuntimeException,com.sun.star.lang.IllegalArgumentException{
                    /*
         System.out.println("\nFound the Exporter!\n");
 
@@ -192,23 +194,30 @@ public class XFlatXml {
 
 
         com.sun.star.beans.PropertyValue[] pValue = aSourceData;
+
         for  (int  i = 0 ; i < pValue.length; i++)
         {
-        //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
-        if (pValue[i].Name.compareTo("OutputStream")==0){
-            xos =(com.sun.star.io.XOutputStream)pValue[i].Value;
-
+        try{
+            //System.out.println("\n"+pValue[i].Name+" "+pValue[i].Value);
+            if (pValue[i].Name.compareTo("OutputStream")==0){
+            xos=(com.sun.star.io.XOutputStream)AnyConverter.toObject(new Type(com.sun.star.io.XOutputStream.class), pValue[i].Value);
             //  System.out.println(pValue[i].Name+" "+xos);
-        }
-        if (pValue[i].Name.compareTo("FileName")==0){
-            sFileName=(String) pValue[i].Value;
+            }
+            if (pValue[i].Name.compareTo("FileName")==0){
+            sFileName=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
             //System.out.println(pValue[i].Name+" "+sFileName);
+            }
+            if (pValue[i].Name.compareTo("URL")==0){
+            sURL=(String)AnyConverter.toObject(new Type(java.lang.String.class), pValue[i].Value);
+            // System.out.println("\nMediaDescriptor url "+pValue[i].Name+" "+sURL);
+
+            }
         }
-        if (pValue[i].Name.compareTo("URL")==0){
-            sURL = (String)pValue[i].Value;
-            //System.out.println(pValue[i].Name+" "+sURL);
+        catch(com.sun.star.lang.IllegalArgumentException AnyExec){
+             System.out.println("\nIllegalArgumentException "+AnyExec);
         }
         }
+
 
          try{
          Object xCfgMgrObj=xMSF.createInstance("com.sun.star.config.SpecialConfigManager");
@@ -312,7 +321,7 @@ public class XFlatXml {
     public void endElement(String str){
         str="</".concat(str);
         str=str.concat(">");
-          str=str.concat("\n");
+        //str=str.concat("\n");
         try{
         // xOutStream.writeBytes(str.getBytes());
         xOutStream.writeBytes(str.getBytes("UTF-8"));
