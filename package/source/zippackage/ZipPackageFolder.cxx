@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-30 13:58:00 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:34:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,15 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
+#ifndef _ENCRYPTED_DATA_HEADER_HXX_
+#include <EncryptedDataHeader.hxx>
+#endif
+#ifndef _RTL_RANDOM_H_
+#include <rtl/random.h>
+#endif
 
 using namespace com::sun::star::packages::zip::ZipConstants;
 using namespace com::sun::star::packages::zip;
@@ -108,24 +117,11 @@ using namespace rtl;
 using namespace std;
 using vos::ORef;
 
-::cppu::class_data6 ZipPackageFolder::s_cd =
-{
-    6 +1, sal_False, sal_False,
-    { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-    {
-        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumerationAccess > const * ))   &getCppuType, ((sal_Int32)(::com::sun::star::container::XEnumerationAccess *) (ZipPackageFolder * ) 16) - 16 },
-        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > const * )) &getCppuType, ((sal_Int32)(::com::sun::star::beans::XPropertySet *) (ZipPackageFolder * ) 16) - 16 },
-        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > const * ))   &getCppuType, ((sal_Int32)(::com::sun::star::container::XNamed *)   (ZipPackageFolder * ) 16) - 16 },
-        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::container::XChild > const * ))   &getCppuType, ((sal_Int32)(::com::sun::star::container::XChild *)   (ZipPackageFolder * ) 16) - 16 },
-        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > const * ))   &getCppuType, ((sal_Int32)(::com::sun::star::container::XNameContainer *)   (ZipPackageFolder * ) 16) - 16 },
-        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XUnoTunnel > const * ))    &getCppuType, ((sal_Int32)(::com::sun::star::lang::XUnoTunnel *)    (ZipPackageFolder * ) 16) - 16 },
-        { (::cppu::fptr_getCppuType)(::com::sun::star::uno::Type const & (SAL_CALL *)( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XTypeProvider > const * )) &getCppuType, ((sal_Int32)(::com::sun::star::lang::XTypeProvider *) (ZipPackageFolder * ) 16) - 16 }
-    }
-};
+Sequence < sal_Int8 > ZipPackageFolder::aImplementationId = Sequence < sal_Int8 > ();
 
-ZipPackageFolder::ZipPackageFolder (void)
-: ZipPackageEntry ( true )
+ZipPackageFolder::ZipPackageFolder ()
 {
+    SetFolder ( sal_True );
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
     aEntry.nMethod      = STORED;
@@ -134,10 +130,12 @@ ZipPackageFolder::ZipPackageFolder (void)
     aEntry.nCompressedSize  = 0;
     aEntry.nSize        = 0;
     aEntry.nOffset      = -1;
+    if ( !aImplementationId.getLength() )
+        aImplementationId = getImplementationId();
 }
 
 
-ZipPackageFolder::~ZipPackageFolder( void )
+ZipPackageFolder::~ZipPackageFolder()
 {
 }
 void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
@@ -167,12 +165,12 @@ void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const Any& 
         {
             sal_Int64 nTest;
             ZipPackageEntry *pEntry;
-            if ( ( nTest = xRef->getSomething ( ZipPackageFolder::getUnoTunnelImplementationId() ) ) != 0 )
+            if ( ( nTest = xRef->getSomething ( ZipPackageFolder::static_getImplementationId() ) ) != 0 )
             {
                 ZipPackageFolder *pFolder = reinterpret_cast < ZipPackageFolder * > ( nTest );
                 pEntry = static_cast < ZipPackageEntry * > ( pFolder );
             }
-            else if ( ( nTest = xRef->getSomething ( ZipPackageStream::getUnoTunnelImplementationId() ) ) != 0 )
+            else if ( ( nTest = xRef->getSomething ( ZipPackageStream::static_getImplementationId() ) ) != 0 )
             {
                 ZipPackageStream *pStream = reinterpret_cast < ZipPackageStream * > ( nTest );
                 pEntry = static_cast < ZipPackageEntry * > ( pStream );
@@ -231,12 +229,13 @@ Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
         throw(RuntimeException)
 {
     sal_uInt32 i=0, nSize = maContents.size();
-    OUString *pNames = new OUString[nSize];
+    Sequence < OUString > aSequence ( nSize );
+    OUString *pNames = aSequence.getArray();
     for ( ContentHash::const_iterator aIterator = maContents.begin(), aEnd = maContents.end();
           aIterator != aEnd;
-          i++,aIterator++)
+          ++i, ++aIterator)
         pNames[i] = (*aIterator).first;
-    return Sequence < OUString > (pNames, nSize);
+    return aSequence;
 }
 sal_Bool SAL_CALL ZipPackageFolder::hasByName( const OUString& aName )
     throw(RuntimeException)
@@ -253,6 +252,20 @@ void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const Any&
         throw NoSuchElementException();
     insertByName(aName, aElement);
 }
+
+static void ImplSetStoredData( ZipEntry * pEntry, sal_Int32 nLength, Reference < XInputStream> & rStream )
+{
+    // It's very annoying that we have to do this, but lots of zip packages
+    // don't allow data descriptors for STORED streams, meaning we have to
+    // know the size and CRC32 of uncompressed streams before we actually
+    // write them !
+    CRC32 aCRC32;
+    pEntry->nMethod = STORED;
+    pEntry->nCompressedSize = pEntry->nSize = nLength;
+    aCRC32.updateStream ( rStream );
+    pEntry->nCrc = aCRC32.getValue();
+}
+
 void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < PropertyValue > > &rManList, ZipOutputStream & rZipOut, Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool &rRandomPool)
     throw(RuntimeException)
 {
@@ -314,56 +327,114 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             pValue[1].Name = sFullPathProperty;
             pValue[1].Value <<= pTempEntry->sName;
 
-            if ( bToBeEncrypted )
+            Reference < XInputStream > xStream;
+            Reference < XSeekable > xSeek;
+
+            sal_Int32 nMagicalHackPos = 0, nMagicalHackSize = 0;
             {
-                Sequence < sal_uInt8 > aSalt ( 16 ), aVector ( 8 );
-                Sequence < sal_Int8 > aKey ( 16 );
-                rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
-                rtl_random_getBytes ( rRandomPool, aVector.getArray(), 8 );
-                sal_Int32 nIterationCount = 1024;
+                xStream = pStream->getRawStream();
+                xSeek = Reference < XSeekable > ( xStream, UNO_QUERY );
+                // should probably do more than assert if we don't have an XSeekable interface...
+                VOS_ENSURE ( xSeek.is(), "Bad juju! We can only package streams which support XSeekable!");
 
-                if ( pStream->HasOwnKey() )
-                    rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
-                                        reinterpret_cast < const sal_uInt8 * > (pStream->getKey().getConstArray()), pStream->getKey().getLength(),
-                                        aSalt.getConstArray(), 16,
-                                        nIterationCount );
-                else
-                    rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
-                                        reinterpret_cast < const sal_uInt8 * > (rEncryptionKey.getConstArray()), rEncryptionKey.getLength(),
-                                        aSalt.getConstArray(), 16,
-                                        nIterationCount );
-                pStream->setInitialisationVector ( aVector );
-                pStream->setSalt ( aSalt );
-                pStream->setIterationCount ( nIterationCount );
-                pStream->setKey ( aKey );
+                xSeek->seek ( 0 );
 
-                aPropSet.realloc(7); // 6th property is size, below, 7th is Digest
+                Sequence < sal_Int8 > aHeader ( 4 );
+                if ( xStream->readBytes ( aHeader, 4 ) == 4 )
+                {
+                    const sal_Int8 *pHeader = aHeader.getConstArray();
+                    sal_uInt32 nHeader = ( pHeader [0] & 0xFF )       |
+                                         ( pHeader [1] & 0xFF ) << 8  |
+                                         ( pHeader [2] & 0xFF ) << 16 |
+                                         ( pHeader [3] & 0xFF ) << 24;
+                    if ( nHeader == n_ConstHeader )
+                    {
+                        // this is one of our god-awful, but extremely devious hacks, everyone cheer
+                        pStream->SetToBeEncrypted ( sal_True );
+                        pStream->SetIsEncrypted ( sal_True );
+                        ZipFile::StaticFillData ( pStream->getEncryptionData(), nMagicalHackSize, xStream );
+                        // the stream will currently be positioned after the header, so
+                        // remember this position for copying
+                        nMagicalHackPos = static_cast < sal_Int32 > ( xSeek->getPosition() );
+                        // it's already compressed and encrypted
+                        bToBeEncrypted = bToBeCompressed = sal_False;
+                    }
+                }
+                if ( !nMagicalHackPos )
+                    xSeek->seek ( 0 );
+            }
+
+            sal_Int32 nStreamLength = static_cast < sal_Int32 > ( xSeek->getLength() ) - nMagicalHackPos;
+
+            if ( bToBeEncrypted  || nMagicalHackPos )
+            {
+                if ( bToBeEncrypted )
+                {
+                    Sequence < sal_uInt8 > aSalt ( 16 ), aVector ( 8 );
+                    Sequence < sal_Int8 > aKey ( 16 );
+                    rtl_random_getBytes ( rRandomPool, aSalt.getArray(), 16 );
+                    rtl_random_getBytes ( rRandomPool, aVector.getArray(), 8 );
+                    sal_Int32 nIterationCount = 1024;
+
+                    if ( pStream->HasOwnKey() )
+                        rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
+                                            reinterpret_cast < const sal_uInt8 * > (pStream->getKey().getConstArray()), pStream->getKey().getLength(),
+                                            reinterpret_cast < const sal_uInt8 * > ( aSalt.getConstArray() ), 16,
+                                            nIterationCount );
+                    else
+                        rtl_digest_PBKDF2 ( reinterpret_cast < sal_uInt8 * > (aKey.getArray()), 16,
+                                            reinterpret_cast < const sal_uInt8 * > (rEncryptionKey.getConstArray()), rEncryptionKey.getLength(),
+                                            reinterpret_cast < const sal_uInt8 * > ( aSalt.getConstArray() ), 16,
+                                            nIterationCount );
+                    pStream->setInitialisationVector ( aVector );
+                    pStream->setSalt ( aSalt );
+                    pStream->setIterationCount ( nIterationCount );
+                    pStream->setKey ( aKey );
+                }
+
+                aPropSet.realloc(7); // 7th property is digest, which is inserted later if we didn't have
+                                     // a magic header
                 pValue = aPropSet.getArray();
                 pValue[2].Name = sInitialisationVectorProperty;
-                pValue[2].Value <<= aVector;
+                pValue[2].Value <<= pStream->getInitialisationVector();
                 pValue[3].Name = sSaltProperty;
-                pValue[3].Value <<= aSalt;
+                pValue[3].Value <<= pStream->getSalt();
                 pValue[4].Name = sIterationCountProperty;
-                pValue[4].Value <<= nIterationCount;
+                pValue[4].Value <<= pStream->getIterationCount ();
+                pValue[5].Name = sSizeProperty;
+                pValue[5].Value <<= nMagicalHackSize ? nMagicalHackSize : nStreamLength;
+
+                if ( nMagicalHackPos )
+                {
+                    pValue[6].Name = sDigestProperty;
+                    pValue[6].Value <<= pStream->getDigest();
+                }
             }
 
             // If the entry is already stored in the zip file in the format we
             // want for this write...copy it raw
-            if (pStream->IsPackageMember() && !bToBeEncrypted &&
-                ( (pStream->aEntry.nMethod == DEFLATED && bToBeCompressed) ||
-                  (pStream->aEntry.nMethod == STORED && !bToBeCompressed) ) )
+            if ( nMagicalHackPos ||
+                ( pStream->IsPackageMember()          && !bToBeEncrypted &&
+                ( pStream->aEntry.nMethod == DEFLATED &&  bToBeCompressed ) ||
+                ( pStream->aEntry.nMethod == STORED   && !bToBeCompressed ) ) )
             {
+
                 try
                 {
-                    Reference < XInputStream > xStream = pStream->getRawStream();
-                    rZipOut.putNextEntry ( *pTempEntry, pStream->getEncryptionData(), bToBeEncrypted);
-                    Sequence < sal_Int8 > aSeq (n_ConstBufferSize);
-                    sal_Int32 nLength = n_ConstBufferSize;
-                    while ( nLength >= n_ConstBufferSize )
+                    if ( nMagicalHackPos )
                     {
-                        nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
+                        xSeek->seek ( nMagicalHackPos );
+                        ImplSetStoredData ( pTempEntry, nStreamLength, xStream );
+                    }
+                    rZipOut.putNextEntry ( *pTempEntry, pStream->getEncryptionData(), sal_False );
+                    Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
+                    sal_Int32 nLength;
+                    do
+                    {
+                        nLength = xStream->readBytes( aSeq, n_ConstBufferSize );
                         rZipOut.rawWrite(aSeq, 0, nLength);
                     }
+                    while ( nLength >= n_ConstBufferSize );
                     rZipOut.rawCloseEntry();
                 }
                 catch (ZipException&)
@@ -377,11 +448,18 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             }
             else
             {
-                Reference < XInputStream > xStream = pStream->getInputStream();
-                Reference < XSeekable > xSeek (xStream, UNO_QUERY);
-                if (!xSeek.is())
-                    VOS_ENSURE ( 0, "Bad juju! We can only package streams which support XSeekable!");
-                sal_Int32 nStreamLength = static_cast < sal_Int32 > ( xSeek->getLength() );
+
+                // clear previous reference and replace it with the real stream
+                xStream = pStream->getInputStream();
+                xSeek = Reference < XSeekable > ( xStream, UNO_QUERY );
+
+                // should probably do more than assert if we don't have an XSeekable interface...
+                VOS_ENSURE ( xSeek.is(), "Bad juju! We can only package streams which support XSeekable!");
+
+
+                // skip the magic header when generating the CRC and writing the stream
+                if ( nMagicalHackPos )
+                    xSeek->seek ( nMagicalHackPos );
 
                 if ( bToBeCompressed )
                 {
@@ -389,31 +467,20 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                     pTempEntry->nCrc = pTempEntry->nCompressedSize = pTempEntry->nSize = -1;
                 }
                 else
-                {
-                    CRC32 aCRC32;
-                    pTempEntry->nMethod = STORED;
-                    pTempEntry->nCompressedSize = pTempEntry->nSize = nStreamLength;
-                    aCRC32.updateStream ( xStream );
-                    pTempEntry->nCrc = aCRC32.getValue();
-                }
+                    ImplSetStoredData ( pTempEntry, nStreamLength, xStream );
 
-                if (bToBeEncrypted)
-                {
-                    // Need to store the uncompressed size in the manifest
-                    pValue[5].Name = sSizeProperty;
-                    pValue[5].Value <<= nStreamLength;
-                }
 
                 try
                 {
                     rZipOut.putNextEntry ( *pTempEntry, pStream->getEncryptionData(), bToBeEncrypted);
-                    sal_Int32 nLength = n_ConstBufferSize;
+                    sal_Int32 nLength;
                     Sequence < sal_Int8 > aSeq (n_ConstBufferSize);
-                    while ( nLength >= n_ConstBufferSize )
+                    do
                     {
                         nLength = xStream->readBytes(aSeq, n_ConstBufferSize);
                         rZipOut.write(aSeq, 0, nLength);
                     }
+                    while ( nLength >= n_ConstBufferSize );
                     pStream->SetPackageMember ( sal_True );
                     rZipOut.closeEntry();
                 }
@@ -425,11 +492,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 {
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
                 }
-                if (bToBeEncrypted)
+                if ( bToBeEncrypted && !nMagicalHackPos )
                 {
                     // Need to store the uncompressed size in the manifest
                     pValue[6].Name = sDigestProperty;
                     pValue[6].Value <<= pStream->getDigest();
+                    pStream->SetIsEncrypted ( sal_True );
                 }
             }
 
@@ -463,7 +531,7 @@ sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const Sequence< sal_Int8 >& a
 {
     sal_Int64 nMe = 0;
     if ( aIdentifier.getLength() == 16 &&
-         0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
+         0 == rtl_compareMemory(static_getImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
         nMe = reinterpret_cast < sal_Int64 > ( this );
     return nMe;
 }
@@ -498,4 +566,22 @@ void ZipPackageFolder::doInsertByName ( ZipPackageEntry *pEntry, sal_Bool bSetPa
 
     if ( bSetParent )
         pEntry->setParent ( *this );
+}
+OUString ZipPackageFolder::getImplementationName()
+    throw (RuntimeException)
+{
+    return OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ZipPackageFolder" ) );
+}
+
+Sequence< OUString > ZipPackageFolder::getSupportedServiceNames()
+    throw (RuntimeException)
+{
+    Sequence< OUString > aNames(1);
+    aNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.PackageFolder" ) );
+    return aNames;
+}
+sal_Bool SAL_CALL ZipPackageFolder::supportsService( OUString const & rServiceName )
+    throw (RuntimeException)
+{
+    return rServiceName == getSupportedServiceNames()[0];
 }
