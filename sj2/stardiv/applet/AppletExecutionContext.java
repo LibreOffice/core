@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppletExecutionContext.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-10 13:56:23 $
+ *  last change: $Author: kr $ $Date: 2001-05-21 15:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,8 @@ public final class AppletExecutionContext extends ExecutionContext
 
         if(_baseURL == null)
             _baseURL = _documentURL;
+
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".init - baseUrl:" + _baseURL);
 
         _className = getParameter("code");
         String defaultExtension = ".class";
@@ -361,6 +363,8 @@ public final class AppletExecutionContext extends ExecutionContext
      * Methods for AppletStub interface
      */
     public void appletResize(int width, int height) {
+        if(DEBUG) System.err.println("##### " + getClass().getName() + ".appletResize: " + width + " " + height);
+
         _container.setSize(width, height);
         if(_applet != null)
             _applet.setSize(width, height);

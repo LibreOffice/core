@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-10 13:54:47 $
+ *  last change: $Author: kr $ $Date: 2001-05-21 15:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,17 +114,19 @@ void SjApplet2_Impl::init(Window * pParentWin,
     _pParentWin = pParentWin;
 
     // Java URL erzeugen
-    OUString url = rDocBase.GetMainURL();
-    if (url.getLength()) {
-        //WorkAround, weil Java mit dem | nicht zurecht kommt
-        if(rDocBase.GetProtocol() == INET_PROT_FILE && url.pData->buffer[9] == INET_ENC_DELIM_TOKEN) {
-            OUString tmp = url.copy(0, 9);
-            tmp += OUString(INET_DELIM_TOKEN);
-            tmp += url.copy(10);
+    OUString url = OUString::createFromAscii("file:///");
+//      OUString url = rDocBase.GetMainURL();
 
-            url = tmp;
-        }
-    }
+//      if (url.getLength()) {
+//          //WorkAround, weil Java mit dem | nicht zurecht kommt
+//          if(rDocBase.GetProtocol() == INET_PROT_FILE && url.pData->buffer[9] == INET_ENC_DELIM_TOKEN) {
+//              OUString tmp = url.copy(0, 9);
+//              tmp += OUString(INET_DELIM_TOKEN);
+//              tmp += url.copy(10);
+
+//              url = tmp;
+//          }
+//      }
     _xJavaVM = Reference<XJavaVM>(smgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"))), UNO_QUERY);
     _xJavaThreadRegister_11 = Reference<XJavaThreadRegister_11>(_xJavaVM, UNO_QUERY);
 
@@ -145,10 +147,6 @@ void SjApplet2_Impl::init(Window * pParentWin,
         aVMPtr >>= nP;
         _pJVM = (JavaVM*)nP;
     }
-
-
-    OString tmp = OUStringToOString(url, RTL_TEXTENCODING_ASCII_US);
-    OSL_TRACE("applet url: %s\n", tmp.getStr());
 
       TKTThreadAttach jenv(_pJVM, _xJavaThreadRegister_11.get());
 
