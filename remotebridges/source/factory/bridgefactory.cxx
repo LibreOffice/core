@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgefactory.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sb $ $Date: 2002-10-04 09:40:28 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,30 +222,31 @@ namespace remotebridges_factory
                     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.bridge.Bridge" ) );
                 Reference < XEnumeration > rEnum =
                     rContent->createContentEnumeration( sMetaService );
-                while( rEnum->hasMoreElements() )
-                {
-                    Any a = rEnum->nextElement();
-                    Reference <XServiceInfo> rInfo;
-                    if( a >>= rInfo )
+                if ( rEnum.is() )
+                    while( rEnum->hasMoreElements() )
                     {
-                        Sequence< OUString > seq = rInfo->getSupportedServiceNames();
-                        sal_Int32 i;
-                        for( i = 0 ; i < seq.getLength() ; i ++ )
+                        Any a = rEnum->nextElement();
+                        Reference <XServiceInfo> rInfo;
+                        if( a >>= rInfo )
                         {
-                            if( seq.getConstArray()[i] != sMetaService )
+                            Sequence< OUString > seq = rInfo->getSupportedServiceNames();
+                            sal_Int32 i;
+                            for( i = 0 ; i < seq.getLength() ; i ++ )
                             {
-                                sal_Int32 nIndex = seq.getConstArray()[i].lastIndexOf( '.' );
-                                OUString sSuffix = seq.getConstArray()[i].copy(nIndex+1);
-                                if( sSuffix.getLength() > 6  &&
-                                    0 == sSuffix.copy( sSuffix.getLength() - 6 ).compareToAscii( "Bridge" ) )
+                                if( seq.getConstArray()[i] != sMetaService )
                                 {
-                                    OUString sProtocol = sSuffix.copy(0 , sSuffix.getLength()-6 ).toAsciiLowerCase();
-                                    m_mapProtocolToService[ sProtocol ] = seq.getConstArray()[i];
+                                    sal_Int32 nIndex = seq.getConstArray()[i].lastIndexOf( '.' );
+                                    OUString sSuffix = seq.getConstArray()[i].copy(nIndex+1);
+                                    if( sSuffix.getLength() > 6  &&
+                                        0 == sSuffix.copy( sSuffix.getLength() - 6 ).compareToAscii( "Bridge" ) )
+                                    {
+                                        OUString sProtocol = sSuffix.copy(0 , sSuffix.getLength()-6 ).toAsciiLowerCase();
+                                        m_mapProtocolToService[ sProtocol ] = seq.getConstArray()[i];
+                                    }
                                 }
                             }
                         }
                     }
-                }
             }
             m_bInitialized = sal_True;
         }
@@ -272,7 +273,7 @@ namespace remotebridges_factory
         else
         {
             // fallback to the old solution, deprecated, should be removed !
-            OUString sService = OUString::createFromAscii( "com.sun.star.bridge.Bridge." );
+            sService = OUString::createFromAscii( "com.sun.star.bridge.Bridge." );
             sService += sProtocolName;
         }
         return sService;
