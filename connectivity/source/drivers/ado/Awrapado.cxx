@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 13:18:02 $
+ *  last change: $Author: fs $ $Date: 2002-01-16 08:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,15 +68,15 @@
 #include <comphelper/types.hxx>
 #endif
 
+namespace connectivity
+{
+    namespace ado
+    {
+        sal_Int32 nAdoObjectCounter = 0;
+    }
+}
+
 using namespace connectivity::ado;
-//#include <tools/prewin.h>
-//namespace test__rr__
-//{
-//
-//#import "c:\Program Files\Common Files\system\ado\msadox.dll"
-//
-//}
-//#include <tools/postwin.h>
 
 void WpADOCatalog::Create()
 {
