@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: fs $ $Date: 2001-03-23 10:59:30 $
+#   last change: $Author: fs $ $Date: 2001-04-26 11:36:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ IMGLST_SRS=$(SRS)$/$(TARGET).srs
 # --- Files --------------------------------------------------------
 
 SLOFILES =\
+            $(SLO)$/dbtreemodel.obj				\
             $(SLO)$/dsbrowserDnD.obj			\
             $(SLO)$/AsyncronousLink.obj			\
             $(SLO)$/dataview.obj				\

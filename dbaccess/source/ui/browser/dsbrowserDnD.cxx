@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-11 12:58:38 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ namespace dbaui
 
                 if(aSeq.getLength())
                 {
-                    ::rtl::OUString aDSName = getEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
+                    ::rtl::OUString aDSName = GetEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
 
                     const PropertyValue* pBegin = aSeq.getConstArray();
                     const PropertyValue* pEnd   = pBegin + aSeq.getLength();
@@ -627,8 +627,8 @@ namespace dbaui
             if (_bAllowConnection && !ensureConnection(_pApplyTo, xConnection))
                 return NULL;
 
-            ::rtl::OUString aName = getEntryText( _pApplyTo );
-            ::rtl::OUString aDSName = getEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
+            ::rtl::OUString aName = GetEntryText( _pApplyTo );
+            ::rtl::OUString aDSName = GetEntryText( m_pTreeView->getListBox()->GetRootLevelParent( _pApplyTo ) );
 
             // the owner ship goes to ODataClipboard
             ODataClipboard* pData = new ODataClipboard(aDSName, _nCommandType, aName, xConnection, getNumberFormatter(), getORB());
@@ -807,6 +807,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/04/11 12:58:38  fs
+ *  use the ODataAccessDescriptor instead of the dbatools functions
+ *
  *  Revision 1.7  2001/04/06 13:48:34  oj
  *  #85664# match copy/cut/paste with the right window
  *

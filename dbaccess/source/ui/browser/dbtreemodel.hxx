@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreemodel.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-30 08:37:34 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,8 @@
 //          query                       holds the query
 //      tables                          holds the nameaccess for the tables
 //          table                       holds the table
+//      bookmarks                       holds the nameaccess for the document links
+//          table                       holds the document links
 
 
 namespace com { namespace sun { namespace star { namespace lang { class XMultiServiceFactory; } } } }
@@ -93,16 +95,22 @@ namespace dbaui
     class DBTreeListModel : public SvLBoxTreeList
     {
     public:
+        enum EntryType
+        {
+            etQuery,
+            etTable,
+            etBookmark
+        };
         struct DBTreeListUserData
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                         xObject;
-            sal_Bool    bTable;
+            EntryType   eType;
+
+            DBTreeListUserData();
         };
 
-        DBTreeListModel()
-        {
-        }
+        static sal_uInt16 getImageResId(EntryType _eType);
     };
 }
 

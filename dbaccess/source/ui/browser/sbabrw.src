@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:39:06 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -574,6 +574,18 @@ Image QUERY_TREE_ICON
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
+Image BOOKMARKFOLDER_TREE_ICON
+{
+    ImageBitmap = Bitmap { File = "bookmarkcontainer_sx.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
+Image BOOKMARK_TREE_ICON
+{
+    ImageBitmap = Bitmap { File = "bookmark_sx.bmp"; };
+    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
+};
+
 String RID_STR_QUERIES_CONTAINER
 {
     Text = "Abfragen";
@@ -622,89 +634,158 @@ String RID_STR_TABLES_CONTAINER
     Text[ arabic ] = "Tables";
 };
 
-Menu MENU_BROWSERTREE_CONTEXT
+String RID_STR_BOOKMARKS_CONTAINER
+{
+    Text = "Verknüpfungen";
+    Text [ english ] = "Bookmarks";
+    Text [ english_us ] = "Bookmarks";
+};
+
+#define MID_ADMINISTRATE    \
+    Identifier = ID_TREE_ADMINISTRATE ; \
+    HelpId = HID_BROWSER_DSADMINISTRATE ;   \
+    Text = "~Datenquellen verwalten ..." ;  \
+    Text [ english ] = "administrate ~data sources ..." ;   \
+    Text [ english_us ] = "Administrate ~Data Sources..." ; \
+    Text[ portuguese ] = "A~dministrar fontes de dados..."; \
+    Text[ russian ] = "~Óïğàâëåíèå èñõîäíûìè äàííûìè...";   \
+    Text[ greek ] = "Äéá÷åßñéóç ğñïåëåıóåùí ôùí ~äåäïìİíùí..."; \
+    Text[ dutch ] = "~gegevensbronnen beheren...";  \
+    Text[ french ] = "Gérer les sources de ~données...";    \
+    Text[ spanish ] = "Administrar fuente de datos..."; \
+    Text[ italian ] = "Amministra ~sorgente dati...";   \
+    Text[ danish ] = "administrate ~data sources ...";  \
+    Text[ swedish ] = "Administrera ~datakällor...";    \
+    Text[ polish ] = "Administruj Ÿród³a danych...";    \
+    Text[ portuguese_brazilian ] = "administrate ~data sources ...";    \
+    Text[ japanese ] = "ÃŞ°À¿°½‚ÌŠÇ—(~D)...";  \
+    Text[ korean ] = "a~dministrate data sources ...";  \
+    Text[ chinese_simplified ] = "¹ÜÀíÊı¾İÔ´(~D)...";   \
+    Text[ chinese_traditional ] = "ºŞ²z¸ê®Æ·½(~D)...";  \
+    Text[ turkish ] = "administrate ~data sources ..."; \
+    Text[ arabic ] = "ÅÏÇÑÉ ãÕÇÏÑ ÇáÈíÇäÇÊ..."; \
+
+#define MID_CLOSECONN   \
+    Identifier = ID_TREE_CLOSE_CONN ;   \
+    HelpId = HID_BROWSER_CLOSECONN ;    \
+    Text = "Verbindung s~chließen" ;    \
+    Text [ english ] = "~close connection" ;    \
+    Text [ english_us ] = "Disco~nnect" ;   \
+    Text[ portuguese ] = "~Desligar";   \
+    Text[ russian ] = "Îòñîåäèíèòüñÿ";  \
+    Text[ greek ] = "Êëåßóéìï óıíäåóç~ò";   \
+    Text[ dutch ] = "~Verbinding verbreken";    \
+    Text[ french ] = "Dé~connecter";    \
+    Text[ spanish ] = "Cerrar conexión";    \
+    Text[ italian ] = "C~hiudi collegamento";   \
+    Text[ danish ] = "~close connection";   \
+    Text[ swedish ] = "Stän~g förbindelse"; \
+    Text[ polish ] = "Roz³¹cz"; \
+    Text[ portuguese_brazilian ] = "~close connection"; \
+    Text[ japanese ] = "Ú‘±‚ğ•Â‚¶‚é(~N)";  \
+    Text[ korean ] = "close co~nnection";   \
+    Text[ chinese_simplified ] = "½áÊøÁ¬½Ó(~N)";    \
+    Text[ chinese_traditional ] = "µ²§ô³s½u(~N)";   \
+    Text[ turkish ] = "~close connection";  \
+    Text[ arabic ] = "ŞØÚ ÇáÇÊÕÇá"; \
+
+#define MID_REFRESHCONN \
+    Identifier = ID_TREE_REBUILD_CONN ; \
+    HelpId = HID_BROWSER_REFRESHCONN ;  \
+    Text = "Verbindung e~rneuern" ; \
+    Text [ english ] = "~refresh connection" ;  \
+    Text [ english_us ] = "~Refresh Connection" ;   \
+    Text[ portuguese ] = "~Actualizar ligação"; \
+    Text[ russian ] = "~Âîçîáíîâèòü ïîäêëş÷åíèå";   \
+    Text[ greek ] = "Áíáíİùóç óıíäåóçò";    \
+    Text[ dutch ] = "~opnieuw verbinden";   \
+    Text[ french ] = "~Rétablir la connexion";  \
+    Text[ spanish ] = "Actualizar conexión";    \
+    Text[ italian ] = "Ag~giorna collegamento"; \
+    Text[ danish ] = "~refresh connection"; \
+    Text[ swedish ] = "Fö~rnya förbindelse";    \
+    Text[ polish ] = "Odtwórz po³¹czenie";  \
+    Text[ portuguese_brazilian ] = "~refresh connection";   \
+    Text[ japanese ] = "Ú‘±‚ğXV(~R)";    \
+    Text[ korean ] = "~refresh connection"; \
+    Text[ chinese_simplified ] = "ÖØĞÂÁ¬½Ó(~R)";    \
+    Text[ chinese_traditional ] = "­«·s³s½u(~R)";   \
+    Text[ turkish ] = "~refresh connection";    \
+    Text[ arabic ] = "ÊÍÏíË ÇáÇÊÕÇá";   \
+
+#define MITEMS_DEFAULT  \
+    MenuItem    \
+    {   \
+        MID_ADMINISTRATE    \
+    };  \
+    MenuItem    \
+    {   \
+        MID_CLOSECONN   \
+    };  \
+    MenuItem    \
+    {   \
+        MID_REFRESHCONN \
+    };  \
+    MenuItem    \
+    {   \
+        Separator = TRUE;   \
+    };
+
+Menu MENU_BROWSER_DEFAULTCONTEXT
 {
     ItemList =
     {
+        MITEMS_DEFAULT
+    };
+};
+
+Menu MENU_BROWSER_BOOKMARKCONTEXT
+{
+    ItemList =
+    {
+        MITEMS_DEFAULT
+
         MenuItem
         {
-            Identifier = ID_TREE_ADMINISTRATE ;
-            HelpId = HID_BROWSER_DSADMINISTRATE ;
-            Text = "~Datenquellen verwalten ..." ;
-            Text [ english ] = "administrate ~data sources ..." ;
-            Text [ english_us ] = "Administrate ~Data Sources..." ;
-            Text[ portuguese ] = "A~dministrar fontes de dados...";
-            Text[ russian ] = "~Óïğàâëåíèå èñõîäíûìè äàííûìè...";
-            Text[ greek ] = "Äéá÷åßñéóç ğñïåëåıóåùí ôùí ~äåäïìİíùí...";
-            Text[ dutch ] = "~gegevensbronnen beheren...";
-            Text[ french ] = "Gérer les sources de ~données...";
-            Text[ spanish ] = "Administrar fuente de datos...";
-            Text[ italian ] = "Amministra ~sorgente dati...";
-            Text[ danish ] = "administrate ~data sources ...";
-            Text[ swedish ] = "Administrera ~datakällor...";
-            Text[ polish ] = "Administruj Ÿród³a danych...";
-            Text[ portuguese_brazilian ] = "administrate ~data sources ...";
-            Text[ japanese ] = "ÃŞ°À¿°½‚ÌŠÇ—(~D)...";
-            Text[ korean ] = "a~dministrate data sources ...";
-            Text[ chinese_simplified ] = "¹ÜÀíÊı¾İÔ´(~D)...";
-            Text[ chinese_traditional ] = "ºŞ²z¸ê®Æ·½(~D)...";
-            Text[ turkish ] = "administrate ~data sources ...";
-            Text[ arabic ] = "ÅÏÇÑÉ ãÕÇÏÑ ÇáÈíÇäÇÊ...";
+            MID_LINK_NEW
         };
         MenuItem
         {
-            Identifier = ID_TREE_CLOSE_CONN ;
-            HelpId = HID_BROWSER_CLOSECONN ;
-            Text = "Verbindung s~chließen" ;
-            Text [ english ] = "~close connection" ;
-            Text [ english_us ] = "Disco~nnect" ;
-            Text[ portuguese ] = "~Desligar";
-            Text[ russian ] = "Îòñîåäèíèòüñÿ";
-            Text[ greek ] = "Êëåßóéìï óıíäåóç~ò";
-            Text[ dutch ] = "~Verbinding verbreken";
-            Text[ french ] = "Dé~connecter";
-            Text[ spanish ] = "Cerrar conexión";
-            Text[ italian ] = "C~hiudi collegamento";
-            Text[ danish ] = "~close connection";
-            Text[ swedish ] = "Stän~g förbindelse";
-            Text[ polish ] = "Roz³¹cz";
-            Text[ portuguese_brazilian ] = "~close connection";
-            Text[ japanese ] = "Ú‘±‚ğ•Â‚¶‚é(~N)";
-            Text[ korean ] = "close co~nnection";
-            Text[ chinese_simplified ] = "½áÊøÁ¬½Ó(~N)";
-            Text[ chinese_traditional ] = "µ²§ô³s½u(~N)";
-            Text[ turkish ] = "~close connection";
-            Text[ arabic ] = "ŞØÚ ÇáÇÊÕÇá";
+            MID_LINK_EDIT
         };
         MenuItem
         {
-            Identifier = ID_TREE_REBUILD_CONN ;
-            HelpId = HID_BROWSER_REFRESHCONN ;
-            Text = "Verbindung e~rneuern" ;
-            Text [ english ] = "~refresh connection" ;
-            Text [ english_us ] = "~Refresh Connection" ;
-            Text[ portuguese ] = "~Actualizar ligação";
-            Text[ russian ] = "~Âîçîáíîâèòü ïîäêëş÷åíèå";
-            Text[ greek ] = "Áíáíİùóç óıíäåóçò";
-            Text[ dutch ] = "~opnieuw verbinden";
-            Text[ french ] = "~Rétablir la connexion";
-            Text[ spanish ] = "Actualizar conexión";
-            Text[ italian ] = "Ag~giorna collegamento";
-            Text[ danish ] = "~refresh connection";
-            Text[ swedish ] = "Fö~rnya förbindelse";
-            Text[ polish ] = "Odtwórz po³¹czenie";
-            Text[ portuguese_brazilian ] = "~refresh connection";
-            Text[ japanese ] = "Ú‘±‚ğXV(~R)";
-            Text[ korean ] = "~refresh connection";
-            Text[ chinese_simplified ] = "ÖØĞÂÁ¬½Ó(~R)";
-            Text[ chinese_traditional ] = "­«·s³s½u(~R)";
-            Text[ turkish ] = "~refresh connection";
-            Text[ arabic ] = "ÊÍÏíË ÇáÇÊÕÇá";
+            MID_LINK_DROP
         };
         MenuItem
         {
             Separator = TRUE;
         };
+        MenuItem
+        {
+            MID_DOCUMENT_OPEN
+        };
+        MenuItem
+        {
+            MID_DOCUMENT_EDIT
+        };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
+        MenuItem
+        {
+            MID_DOCUMENT_CREATE_NEW
+        };
+    };
+};
+
+Menu MENU_BROWSER_QUERYCONTEXT
+{
+    ItemList =
+    {
+        MITEMS_DEFAULT
+
         MenuItem
         {
             Identifier = ID_TREE_QUERY_CREATE_DESIGN ;
@@ -834,10 +915,15 @@ Menu MENU_BROWSERTREE_CONTEXT
             Text[ turkish ] = "c~opy query";
             Text[ arabic ] = "äÓÎ ÇáÇÓÊİÓÇÑ";
         };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
+    };
+};
+
+Menu MENU_BROWSER_TABLECONTEXT
+{
+    ItemList =
+    {
+        MITEMS_DEFAULT
+
         MenuItem
         {
             Identifier = ID_TREE_TABLE_CREATE_DESIGN ;
@@ -1006,6 +1092,7 @@ Menu MENU_BROWSERTREE_CONTEXT
         };
     };
 };
+
 String STR_TITLE_CONFIRM_DELETION
 {
     Text = "Löschen bestätigen" ;
@@ -1032,26 +1119,26 @@ String STR_TITLE_CONFIRM_DELETION
 
 String STR_QUERY_DELETE_QUERY
 {
-    Text = "Soll die Abfrage '%1' gelöscht werden?" ;
-    Text [ English ] = "Delete query '%1'?" ;
-    Text [ english_us ] = "Do you want to delete the query '%1'?" ;
-    Text[ portuguese ] = "Eliminar consulta '%1'?";
-    Text[ russian ] = "Óäàëèòü çàïğîñ '%1'?";
-    Text[ greek ] = "Èİëåôå íá äéáãñáöåß ôï åñşôçìá '%1';";
-    Text[ dutch ] = "Wilt u query '%1' wissen?";
-    Text[ french ] = "Voulez-vous supprimer la requête '%1' ?";
-    Text[ spanish ] = "¿Desea eliminar la consulta '%1'?";
-    Text[ italian ] = "Volete eliminare la ricerca '%1'?";
-    Text[ danish ] = "Do you want to delete the query '%1'?";
-    Text[ swedish ] = "Ska sökningen '%1' raderas?";
-    Text[ polish ] = "Usun¹æ kwerendê'%1'?";
-    Text[ portuguese_brazilian ] = "Do you want to delete the query '%1'?";
-    Text[ japanese ] = "¸´Ø° '%1' ‚ğíœ‚µ‚Ü‚·‚©B";
-    Text[ korean ] = "Do you want to delete the query '%1'?";
-    Text[ chinese_simplified ] = "ÒªÉ¾³ıÕâ¸ö²éÑ¯ '%1'?";
-    Text[ chinese_traditional ] = "­n§R°£¬d¸ß'%1'?";
-    Text[ turkish ] = "Do you want to delete the query '%1'?";
-    Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÇÓÊİÓÇÑ '%1'¿";
+    Text = "Soll die Abfrage '$name$' gelöscht werden?" ;
+    Text [ English ] = "Delete query '$name$'?" ;
+    Text [ english_us ] = "Do you want to delete the query '$name$'?" ;
+    Text[ portuguese ] = "Eliminar consulta '$name$'?";
+    Text[ russian ] = "Óäàëèòü çàïğîñ '$name$'?";
+    Text[ greek ] = "Èİëåôå íá äéáãñáöåß ôï åñşôçìá '$name$';";
+    Text[ dutch ] = "Wilt u query '$name$' wissen?";
+    Text[ french ] = "Voulez-vous supprimer la requête '$name$' ?";
+    Text[ spanish ] = "¿Desea eliminar la consulta '$name$'?";
+    Text[ italian ] = "Volete eliminare la ricerca '$name$'?";
+    Text[ danish ] = "Do you want to delete the query '$name$'?";
+    Text[ swedish ] = "Ska sökningen '$name$' raderas?";
+    Text[ polish ] = "Usun¹æ kwerendê'$name$'?";
+    Text[ portuguese_brazilian ] = "Do you want to delete the query '$name$'?";
+    Text[ japanese ] = "¸´Ø° '$name$' ‚ğíœ‚µ‚Ü‚·‚©B";
+    Text[ korean ] = "Do you want to delete the query '$name$'?";
+    Text[ chinese_simplified ] = "ÒªÉ¾³ıÕâ¸ö²éÑ¯ '$name$'?";
+    Text[ chinese_traditional ] = "­n§R°£¬d¸ß'$name$'?";
+    Text[ turkish ] = "Do you want to delete the query '$name$'?";
+    Text[ arabic ] = "åá ÊÑíÏ ÍĞİ ÇáÇÓÊİÓÇÑ '$name$'¿";
 };
 
 String STR_QUERY_DELETE_TABLE
