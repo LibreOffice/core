@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattrbmp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 12:05:15 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 11:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <tools/stream.hxx>
 #include <vcl/window.hxx>
@@ -84,7 +83,13 @@
 #include "svdmodel.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
 #define GLOBALOVERFLOW
+
+using namespace ::com::sun::star;
 
 // ---------------
 // class XOBitmap
@@ -750,29 +755,61 @@ sal_Bool XFillBitmapItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE nMe
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
+
+    // needed for MID_NAME
+    ::rtl::OUString aApiName;
+    // needed for complete item (MID 0)
+    ::rtl::OUString aInternalName;
+
+    ::rtl::OUString aURL;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBmp;
+
     if( nMemberId == MID_NAME )
     {
-        rtl::OUString aApiName;
-        SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
-        rVal <<= aApiName;
+         SvxUnogetApiNameForItem( Which(), GetName(), aApiName );
     }
-    else if( nMemberId == MID_GRAFURL )
+    else if( nMemberId == 0  )
     {
-        XOBitmap aXOBitmap( GetValue() );
-        ::rtl::OUString aURL( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
-        aURL += ::rtl::OUString::createFromAscii( aXOBitmap.GetGraphicObject().GetUniqueID().GetBuffer() );
-        rVal <<= aURL;
+        aInternalName = GetName();
     }
-    else
+
+    if( nMemberId == MID_GRAFURL ||
+        nMemberId == 0 )
     {
-        XOBitmap aXOBitmap( GetValue() );
-        Bitmap aBmp( aXOBitmap.GetBitmap() );
+        XOBitmap aLocalXOBitmap( GetValue() );
+        aURL = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX));
+        aURL += ::rtl::OUString::createFromAscii( aLocalXOBitmap.GetGraphicObject().GetUniqueID().GetBuffer() );
+    }
+    if( nMemberId == MID_BITMAP ||
+        nMemberId == 0  )
+    {
+        XOBitmap aLocalXOBitmap( GetValue() );
+        Bitmap aBmp( aLocalXOBitmap.GetBitmap() );
         BitmapEx aBmpEx( aBmp );
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBmp(
-            VCLUnoHelper::CreateBitmap( aBmpEx ) );
+        xBmp.set( VCLUnoHelper::CreateBitmap( aBmpEx ) );
+    }
 
+    if( nMemberId == MID_NAME )
+        rVal <<= aApiName;
+    else if( nMemberId == MID_GRAFURL )
+        rVal <<= aURL;
+    else if( nMemberId == MID_BITMAP )
         rVal <<= xBmp;
+    else
+    {
+        // member-id 0 => complete item (e.g. for toolbars)
+        DBG_ASSERT( nMemberId == 0, "invalid member-id" );
+        uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
+
+        aPropSeq[0].Name  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ));
+        aPropSeq[0].Value = uno::makeAny( aInternalName );
+        aPropSeq[1].Name  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillBitmapURL" ));
+        aPropSeq[1].Value = uno::makeAny( aURL );
+        aPropSeq[2].Name  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Bitmap" ));
+        aPropSeq[2].Value = uno::makeAny( xBmp );
+
+        rVal <<= aPropSeq;
     }
 
     return sal_True;
@@ -784,50 +821,69 @@ sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
+
+    ::rtl::OUString aName;
+    ::rtl::OUString aURL;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBmp;
+
+    bool bSetName   = false;
+    bool bSetURL    = false;
+    bool bSetBitmap = false;
+
     if( nMemberId == MID_NAME )
-    {
-        ::rtl::OUString aName;
-        if(rVal >>= aName)
-        {
-            SetName( aName );
-            return sal_True;
-        }
-    }
+        bSetName = (rVal >>= aName);
     else if( nMemberId == MID_GRAFURL )
-    {
-        ::rtl::OUString aURL;
-        if(rVal >>= aURL)
-        {
-            GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
-            XOBitmap aBMP( aGrafObj );
-            SetValue( aBMP );
-            return sal_True;
-        }
-    }
+        bSetURL = (rVal >>= aURL);
+    else if( nMemberId == MID_BITMAP )
+        bSetBitmap = (rVal >>= xBmp);
     else
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBmp;
-        if( rVal >>= xBmp)
+        DBG_ASSERT( nMemberId == 0, "invalid member-id" );
+        uno::Sequence< beans::PropertyValue >   aPropSeq;
+        if( rVal >>= aPropSeq )
         {
-            BitmapEx aInputEx( VCLUnoHelper::GetBitmap( xBmp ) );
-            Bitmap aInput( aInputEx.GetBitmap() );
-
-            // Bitmap einsetzen
-            aXOBitmap.SetBitmap( aInput );
-            aXOBitmap.SetBitmapType(XBITMAP_IMPORT);
-
-            if(aInput.GetSizePixel().Width() == 8
-                && aInput.GetSizePixel().Height() == 8
-                && aInput.GetColorCount() == 2)
+            for ( sal_Int32 n = 0; n < aPropSeq.getLength(); n++ )
             {
-                aXOBitmap.Bitmap2Array();
-                aXOBitmap.SetBitmapType(XBITMAP_8X8);
-                aXOBitmap.SetPixelSize(aInput.GetSizePixel());
+                if( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Name" )))
+                    bSetName = (aPropSeq[n].Value >>= aName);
+                else if( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "FillBitmapURL" )))
+                    bSetURL = (aPropSeq[n].Value >>= aURL);
+                else if( aPropSeq[n].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Bitmap" )))
+                    bSetBitmap = (aPropSeq[n].Value >>= xBmp);
             }
-            return sal_True;
         }
     }
-    return sal_False;
+
+    if( bSetName )
+    {
+        SetName( aName );
+    }
+    if( bSetURL )
+    {
+        GraphicObject aGrafObj( CreateGraphicObjectFromURL( aURL ) );
+        XOBitmap aBMP( aGrafObj );
+        SetValue( aBMP );
+    }
+    if( bSetBitmap )
+    {
+        BitmapEx aInputEx( VCLUnoHelper::GetBitmap( xBmp ) );
+        Bitmap aInput( aInputEx.GetBitmap() );
+
+        // note: aXOBitmap is the member bitmap
+        aXOBitmap.SetBitmap( aInput );
+        aXOBitmap.SetBitmapType(XBITMAP_IMPORT);
+
+        if(aInput.GetSizePixel().Width() == 8
+           && aInput.GetSizePixel().Height() == 8
+           && aInput.GetColorCount() == 2)
+        {
+            aXOBitmap.Bitmap2Array();
+            aXOBitmap.SetBitmapType(XBITMAP_8X8);
+            aXOBitmap.SetPixelSize(aInput.GetSizePixel());
+        }
+    }
+
+    return (bSetName || bSetURL || bSetBitmap);
 }
 
 BOOL XFillBitmapItem::CompareValueFunc( const NameOrIndex* p1, const NameOrIndex* p2 )
