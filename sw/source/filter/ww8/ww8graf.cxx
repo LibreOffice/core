@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2001-10-17 09:35:21 $
+ *  last change: $Author: cmc $ $Date: 2001-10-17 10:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2576,12 +2576,15 @@ void SwWW8ImplReader::MungeTextIntoDrawBox(SdrObject* pTrueObject,
 
                 SdrObject* pNewObj = pGroupObject ?
                     pGroupObject->GetSubList()->GetObj(nOrdNum) : pTrueObject;
-                // Objekt in der Z-Order-Liste ersetzen
-                pMSDffManager->ExchangeInShapeOrder(pSdrTextObj, 0,0, pNewObj);
-                // Objekt jetzt noch loeschen
-                delete pRecord->pObj;
-                // und das neue Objekt merken.
-                pRecord->pObj = pNewObj;
+                if (pSdrTextObj != pNewObj)
+                {
+                    // Objekt in der Z-Order-Liste ersetzen
+                    pMSDffManager->ExchangeInShapeOrder(pSdrTextObj, 0,0, pNewObj);
+                    // Objekt jetzt noch loeschen
+                    delete pRecord->pObj;
+                    // und das neue Objekt merken.
+                    pRecord->pObj = pNewObj;
+                }
             }
             else
             {
