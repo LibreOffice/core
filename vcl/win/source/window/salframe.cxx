@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:43:06 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,6 @@
 #ifndef _SVWIN_HXX
 #include <tools/svwin.h>
 #endif
-
-#define _SV_SALFRAME_CXX
 
 #ifndef _RTL_STRING_H_
 #include <rtl/string.h>
@@ -154,46 +152,20 @@ extern "C" {
     static SetLayeredWindowAttributes_Proc_T lpfnSetLayeredWindowAttributes;
 };
 
-#define LWA_COLORKEY            0x00000001
-#define LWA_ALPHA               0x00000002
-#define ULW_COLORKEY            0x00000001
-#define ULW_ALPHA               0x00000002
-#define ULW_OPAQUE              0x00000004
-#define WS_EX_LAYERED           0x00080000
-
-
 // =======================================================================
 
 const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageA("SYSTEM_WINDOW_ACTIVATED");
 
-// =======================================================================
+BOOL WinSalFrame::mbInReparent = FALSE;
 
-// Wegen Fehler in Windows-Headerfiles
-#ifndef IMN_OPENCANDIDATE
-#define IMN_OPENCANDIDATE               0x0005
-#endif
-#ifndef IMN_CLOSECANDIDATE
-#define IMN_CLOSECANDIDATE              0x0004
-#endif
+// =======================================================================
 
 // Macros for support of WM_UNICHAR & Keyman 6.0
 #define Uni_UTF32ToSurrogate1(ch)   (((unsigned long) (ch) - 0x10000) / 0x400 + 0xD800)
 #define Uni_UTF32ToSurrogate2(ch)   (((unsigned long) (ch) - 0x10000) % 0x400 + 0xDC00)
 #define Uni_SupplementaryPlanesStart    0x10000
-#ifndef WM_UNICHAR
-#define WM_UNICHAR          0x0109
-#define UNICODE_NOCHAR      0xFFFF
-#endif
-
-#if OSL_DEBUG_LEVEL > 1
-void MyOutputDebugString(const char *buffer)
-{
-    OutputDebugString( buffer );
-}
-#endif
 
 // =======================================================================
-BOOL WinSalFrame::mbInReparent = FALSE;
 
 static void UpdateFrameGeometry( HWND hWnd, SalFrame* pFrame );
 
@@ -536,7 +508,7 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
 #if OSL_DEBUG_LEVEL > 1
         // set transparency value
         if( bLayeredAPI == 1 && GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
-            lpfnSetLayeredWindowAttributes( hWnd, 0, 230, LWA_ALPHA );
+            lpfnSetLayeredWindowAttributes( hWnd, 0, 230, 0x00000002 /*LWA_ALPHA*/ );
 #endif
     }
     else
@@ -1861,7 +1833,6 @@ void WinSalFrame::ShowFullScreen( BOOL bFullScreen )
     mbFullScreen = bFullScreen;
     if ( bFullScreen )
     {
-#if ( WINVER >= 0x0400 )
         // Damit Taskleiste von Windows ausgeblendet wird
         DWORD nExStyle = GetWindowExStyle( mhWnd );
         if ( nExStyle & WS_EX_TOOLWINDOW )
@@ -1870,8 +1841,6 @@ void WinSalFrame::ShowFullScreen( BOOL bFullScreen )
             nExStyle &= ~WS_EX_TOOLWINDOW;
             SetWindowExStyle( mhWnd, nExStyle );
         }
-#endif
-
         // save old position
         GetWindowRect( mhWnd, &maFullScreenRect );
 
@@ -1891,11 +1860,9 @@ void WinSalFrame::ShowFullScreen( BOOL bFullScreen )
         if ( bVisible && (mnShowState != mnFullScreenShowState) )
             ShowWindow( mhWnd, SW_HIDE );
 
-#if ( WINVER >= 0x0400 )
         if ( mbFullScreenToolWin )
             SetWindowExStyle( mhWnd, GetWindowExStyle( mhWnd ) | WS_EX_TOOLWINDOW );
         mbFullScreenToolWin = FALSE;
-#endif
 
         SetWindowPos( mhWnd, 0,
                       maFullScreenRect.left,
@@ -1931,7 +1898,6 @@ void WinSalFrame::StartPresentation( BOOL bStart )
     SalData* pSalData = GetSalData();
     if ( bStart )
     {
-#if ( WINVER >= 0x0400 )
         if ( !pSalData->mpSageEnableProc )
         {
             if ( pSalData->mnSageStatus != DISABLE_AGENT )
@@ -1955,7 +1921,6 @@ void WinSalFrame::StartPresentation( BOOL bStart )
             if ( pSalData->mnSageStatus == ENABLE_AGENT )
                 pSalData->mpSageEnableProc( DISABLE_AGENT );
         }
-#endif
 
         // Bildschirmschoner ausschalten, wenn Praesentation laueft
         SystemParametersInfo( SPI_GETSCREENSAVEACTIVE, 0,
@@ -1969,11 +1934,9 @@ void WinSalFrame::StartPresentation( BOOL bStart )
         if ( pSalData->mbScrSvrEnabled )
             SystemParametersInfo( SPI_SETSCREENSAVEACTIVE, pSalData->mbScrSvrEnabled, 0, 0 );
 
-#if ( WINVER >= 0x0400 )
         // Systemagenten wieder aktivieren
         if ( pSalData->mnSageStatus == ENABLE_AGENT )
             pSalData->mpSageEnableProc( pSalData->mnSageStatus );
-#endif
     }
 }
 
@@ -2062,11 +2025,7 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { 0, 0, SAL_RESID_POINTER_NULL },               // POINTER_NULL
     { 0, IDC_WAIT, 0 },                             // POINTER_WAIT
     { 0, IDC_IBEAM, 0 },                            // POINTER_TEXT
-#if ( WINVER >= 0x0400 )
     { 0, IDC_HELP, 0 },                             // POINTER_HELP
-#else
-    { 0, 0, SAL_RESID_POINTER_HELP },               // POINTER_HELP
-#endif
     { 0, 0, SAL_RESID_POINTER_CROSS },              // POINTER_CROSS
     { 0, 0, SAL_RESID_POINTER_MOVE },               // POINTER_MOVE
     { 0, IDC_SIZENS, 0 },                           // POINTER_NSIZE
@@ -2716,13 +2675,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 
     StyleSettings aStyleSettings = rSettings.GetStyleSettings();
     BOOL bCompBorder = (aStyleSettings.GetOptions() & (STYLE_OPTION_MACSTYLE | STYLE_OPTION_UNIXSTYLE)) == 0;
-#if (_MSC_VER < 1300)
-    aStyleSettings.SetScrollBarSize( std::min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) ); // #99956# do not allow huge scrollbars, most of the UI is not scaled anymore
-    aStyleSettings.SetSpinSize( std::min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) );
-#else
-    aStyleSettings.SetScrollBarSize( min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) ); // #99956# do not allow huge scrollbars, most of the UI is not scaled anymore
-    aStyleSettings.SetSpinSize( min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) );
-#endif
+    aStyleSettings.SetScrollBarSize( Min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) ); // #99956# do not allow huge scrollbars, most of the UI is not scaled anymore
+    aStyleSettings.SetSpinSize( Min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) );
     aStyleSettings.SetCursorBlinkTime( GetCaretBlinkTime() );
     if ( bCompBorder )
     {
@@ -2985,10 +2939,6 @@ void WinSalFrame::Beep( SoundType eSoundType )
         MB_ICONHAND,                    // SOUND_ERROR
         MB_ICONQUESTION                 // SOUND_QUERY
     };
-
-#if SOUND_COUNT != 5
-#error New Sound must be defined!
-#endif
 
     MessageBeep( aImplSoundTab[eSoundType] );
 }
@@ -4085,10 +4035,8 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
 
     if ( nMsg == WM_DEVMODECHANGE )
         nSalEvent = SALEVENT_PRINTERCHANGED;
-#ifdef WM_DISPLAYCHANGE
     else if ( nMsg == WM_DISPLAYCHANGE )
         nSalEvent = SALEVENT_DISPLAYCHANGED;
-#endif
     else if ( nMsg == WM_FONTCHANGE )
         nSalEvent = SALEVENT_FONTCHANGED;
     else if ( nMsg == WM_TIMECHANGE )
@@ -4110,13 +4058,11 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
         }
     }
 
-#ifdef WM_SETTINGCHANGE
     if ( nMsg == WM_SETTINGCHANGE )
     {
         if ( wParam == SPI_SETWHEELSCROLLLINES )
             aSalShlData.mnWheelScrollLines = ImplSalGetWheelScrollLines();
     }
-#endif
 
     if ( WM_SYSCOLORCHANGE == nMsg && GetSalData()->mhDitherPal )
         ImplUpdateSysColorEntries();
@@ -5601,14 +5547,8 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             rDef = FALSE;
             break;
 
-#ifdef WM_DISPLAYCHANGE
         case WM_DISPLAYCHANGE:
-#endif
-#ifdef WM_SETTINGCHANGE
         case WM_SETTINGCHANGE:
-#else
-        case WM_WININICHANGE:
-#endif
         case WM_DEVMODECHANGE:
         case WM_FONTCHANGE:
         case WM_SYSCOLORCHANGE:
