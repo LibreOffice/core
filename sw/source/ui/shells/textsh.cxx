@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:54:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:36:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,9 +215,9 @@
 #ifndef _TEXTSH_HXX
 #include <textsh.hxx>
 #endif
-#ifndef _INSTABLE_HXX
-#include <instable.hxx>
-#endif
+//CHINA001 #ifndef _INSTABLE_HXX
+//CHINA001 #include <instable.hxx>
+//CHINA001 #endif
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
@@ -242,9 +242,9 @@
 #ifndef _TBLAFMT_HXX
 #include <tblafmt.hxx>
 #endif
-#ifndef _INSRULE_HXX
-#include <insrule.hxx>
-#endif
+//CHINA001 #ifndef _INSRULE_HXX
+//CHINA001 #include <insrule.hxx>
+//CHINA001 #endif
 #ifndef _CAPTION_HXX
 #include <caption.hxx>
 #endif
@@ -296,7 +296,10 @@
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
-
+#include "swabstdlg.hxx" //CHINA001
+#include <misc.hrc> //CHINA001
+#include <table.hrc> //CHINA001
+#include <frmui.hrc> //CHINA001
 #define C2S(cChar) UniString::CreateFromAscii(cChar)
 
 /*--------------------------------------------------------------------
@@ -646,7 +649,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
                 if( !nCols || !nRows )
                 {
-                    SwInsTableDlg *pDlg = new SwInsTableDlg(rView);
+                    //CHINA001 SwInsTableDlg *pDlg = new SwInsTableDlg(rView);
+                    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+                    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+                    AbstractInsTableDlg* pDlg = pFact->CreateInsTableDlg( ResId(DLG_INSERT_TABLE), rView );
+                    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     if( RET_OK == pDlg->Execute() )
                     {
                         pDlg->GetValues( aTableName, nRows, nCols, aInsTblOpts, aAutoName, pTAFmt );
@@ -817,8 +824,12 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
             FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebDocShell, GetView().GetDocShell()));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
-            SwFrmDlg* pDlg = new SwFrmDlg(GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, TRUE);
-
+            //CHINA001 SwFrmDlg* pDlg = new SwFrmDlg(GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, TRUE);
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( ResId(DLG_FRM_STD),
+                                                    GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, TRUE);
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             if(pDlg->Execute() && pDlg->GetOutputItemSet())
             {
                 GetShell().StartAllAction();
@@ -869,7 +880,12 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else
         {
-            SwInsertGrfRulerDlg* pDlg = new SwInsertGrfRulerDlg(pParent);
+            //CHINA001 SwInsertGrfRulerDlg* pDlg = new SwInsertGrfRulerDlg(pParent);
+            SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+            DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+            AbstractInsertGrfRulerDlg* pDlg = pFact->CreateInsertGrfRulerDlg( ResId(DLG_INSERT_RULER),
+                                                        pParent );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             // MessageBox fuer fehlende Grafiken
             if(!pDlg->HasImages())
                 InfoBox( pParent, SW_RES(MSG_NO_RULER)).Execute();
@@ -922,7 +938,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
     break;
     case FN_FORMAT_COLUMN :
     {
-        SwColumnDlg* pColDlg = new SwColumnDlg(GetView().GetWindow(), rSh);
+        //CHINA001 SwColumnDlg* pColDlg = new SwColumnDlg(GetView().GetWindow(), rSh);
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
+        VclAbstractDialog* pColDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, ResId(DLG_COLUMN));
+        DBG_ASSERT(pColDlg, "Dialogdiet fail!");//CHINA001
         pColDlg->Execute();
         delete pColDlg;
     }
