@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cmc $ $Date: 2001-02-08 13:12:00 $
+#   last change: $Author: os $ $Date: 2001-08-30 13:56:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,8 @@ SLOFILES =  \
         $(SLO)$/dbinsdlg.obj \
         $(SLO)$/dbmgr.obj \
         $(SLO)$/dbtree.obj \
-        $(SLO)$/dbui.obj
+        $(SLO)$/dbui.obj \
+        $(SLO)$/swdbtoolsclient.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/dbinsdlg.obj \

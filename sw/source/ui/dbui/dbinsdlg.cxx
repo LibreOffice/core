@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-24 12:36:13 $
+ *  last change: $Author: os $ $Date: 2001-08-30 13:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,6 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
 #endif
@@ -137,6 +134,9 @@
 #endif
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
+#endif
+#ifndef _SWDBTOOLSCLIENT_HXX
+#include <swdbtoolsclient.hxx>
 #endif
 
 #include <float.h>
@@ -524,9 +524,11 @@ SwInsertDBColAutoPilot::SwInsertDBColAutoPilot( SwView& rView,
                         }
                     }
                     else
-                        pNew->nDBNumFmt = dbtools::getDefaultNumberFormat(xCol,
-                                     xDocNumberFormatTypes,
-                                     aDocLocale);
+                    {
+                        pNew->nDBNumFmt = rView.GetWrtShell().GetNewDBMgr()->
+                                            GetDbtoolsClient().getDefaultNumberFormat(xCol,
+                                                    xDocNumberFormatTypes, aDocLocale);
+                    }
 
                 }
                 break;

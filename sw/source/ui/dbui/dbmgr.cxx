@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
+ *  last change: $Author: os $ $Date: 2001-08-30 13:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@
 #endif
 #ifndef _DBCONFIG_HXX
 #include <dbconfig.hxx>
+#endif
+#ifndef _SWDBTOOLSCLIENT_HXX
+#include <swdbtoolsclient.hxx>
 #endif
 #ifndef _LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
@@ -227,9 +230,6 @@
 #include <hintids.hxx>
 #endif
 #include <connectivity/dbconversion.hxx>
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -271,9 +271,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef _UTL_UNO3_DB_TOOLS_HXX_
-#include <connectivity/dbtools.hxx>
 #endif
 #ifndef _SVX_LANGITEM_HXX
 #include <svx/langitem.hxx>
@@ -382,7 +379,7 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
                         const String *pPrinter)
 {
 
-    DBG_ASSERT(!bInMerge && !pMergeData, "merge already activated!")
+    DBG_ASSERT(!bInMerge && !pImpl->pMergeData, "merge already activated!")
 
     SwDBData aData;
     aData.nCommandType = CommandType::TABLE;
@@ -422,44 +419,44 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
         for(sal_Int32 nSel = 0; nSel < aSelection.getLength(); nSel++)
             pGridSelection[nSel] >>= pDlgSelection[nSel];
     }
-    pMergeData = new SwDSParam(aData, xResSet, aDlgSelection);
+    pImpl->pMergeData = new SwDSParam(aData, xResSet, aDlgSelection);
     SwDSParam*  pTemp = FindDSData(aData, FALSE);
     if(pTemp)
-        *pTemp = *pMergeData;
+        *pTemp = *pImpl->pMergeData;
     else
-        aDataSourceParams.Insert(new SwDSParam(*pMergeData), aDataSourceParams.Count());
-    if(!pMergeData->xConnection.is())
-        pMergeData->xConnection = xConnection;
+        aDataSourceParams.Insert(new SwDSParam(*pImpl->pMergeData), aDataSourceParams.Count());
+    if(!pImpl->pMergeData->xConnection.is())
+        pImpl->pMergeData->xConnection = xConnection;
 
     try{
         //set to start position
-        if(pMergeData->aSelection.getLength())
+        if(pImpl->pMergeData->aSelection.getLength())
         {
-            pMergeData->bEndOfDB = !pMergeData->xResultSet->absolute(
-                    (ULONG)pMergeData->aSelection.getConstArray()[ pMergeData->nSelectionIndex++ ] );
-            pMergeData->CheckEndOfDB();
-            if(pMergeData->nSelectionIndex >= pMergeData->aSelection.getLength())
-                pMergeData->bEndOfDB = TRUE;
+            pImpl->pMergeData->bEndOfDB = !pImpl->pMergeData->xResultSet->absolute(
+                    (ULONG)pImpl->pMergeData->aSelection.getConstArray()[ pImpl->pMergeData->nSelectionIndex++ ] );
+            pImpl->pMergeData->CheckEndOfDB();
+            if(pImpl->pMergeData->nSelectionIndex >= pImpl->pMergeData->aSelection.getLength())
+                pImpl->pMergeData->bEndOfDB = TRUE;
         }
         else
         {
-            pMergeData->bEndOfDB = !pMergeData->xResultSet->first();
-            pMergeData->CheckEndOfDB();
+            pImpl->pMergeData->bEndOfDB = !pImpl->pMergeData->xResultSet->first();
+            pImpl->pMergeData->CheckEndOfDB();
         }
     }
     catch(Exception&)
     {
-        pMergeData->bEndOfDB = TRUE;
-        pMergeData->CheckEndOfDB();
+        pImpl->pMergeData->bEndOfDB = TRUE;
+        pImpl->pMergeData->CheckEndOfDB();
         DBG_ERROR("exception in MergeNew()")
     }
 
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-    Reference<XDataSource> xSource = dbtools::getDataSource(aData.sDataSource, xMgr);
+    Reference<XDataSource> xSource = GetDbtoolsClient().getDataSource(aData.sDataSource, xMgr);
     if( xMgr.is() )
     {
         Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.util.NumberFormatter" ));
-        pMergeData->xFormatter = Reference<util::XNumberFormatter>(xInstance, UNO_QUERY) ;
+        pImpl->pMergeData->xFormatter = Reference<util::XNumberFormatter>(xInstance, UNO_QUERY) ;
     }
 
     Reference<XPropertySet> xSourceProps(xSource, UNO_QUERY);
@@ -475,7 +472,7 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
                 Reference< XPropertySet > xSettings = xSuppl->getNumberFormatSettings();
                 Any aNull = xSettings->getPropertyValue(C2U("NullDate"));
                 if(aNull.hasValue())
-                    pMergeData->aNullDate = *(util::Date*)aNull.getValue();
+                    pImpl->pMergeData->aNullDate = *(util::Date*)aNull.getValue();
             }
         }
     }
@@ -568,7 +565,7 @@ BOOL SwNewDBMgr::Merge(SwWrtShell* pSh)
  --------------------------------------------------------------------*/
 void SwNewDBMgr::ImportFromConnection(  SwWrtShell* pSh )
 {
-    if(pMergeData && !pMergeData->bEndOfDB)
+    if(pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB)
     {
         {
             pSh->StartAllAction();
@@ -652,11 +649,11 @@ inline String lcl_GetDBInsertMode( const SwDBData& rData )
 
 void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
 {
-    if(pMergeData && !pMergeData->bEndOfDB)
+    if(pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB)
     {
-          Reference< XColumnsSupplier > xColsSupp( pMergeData->xResultSet, UNO_QUERY );
+        Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
           Reference <XNameAccess> xCols = xColsSupp->getColumns();
-        String sFormatStr( lcl_GetDBInsertMode( *pMergeData ));
+        String sFormatStr( lcl_GetDBInsertMode( *pImpl->pMergeData ));
         USHORT nFmtLen = sFormatStr.Len();
         if( nFmtLen )
         {
@@ -821,8 +818,7 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
  --------------------------------------------------------------------*/
 
 SwNewDBMgr::SwNewDBMgr() :
-            pMergeData(0),
-            pMergeDialog(0),
+            pImpl(new SwNewDBMgr_Impl),
             bInMerge(FALSE),
             nMergeType(DBMGR_INSERT),
             bInitDBFields(FALSE)
@@ -850,6 +846,8 @@ SwNewDBMgr::~SwNewDBMgr()
             }
         }
     }
+    delete pImpl->pDbtoolsClient;
+    delete pImpl;
 }
 /*--------------------------------------------------------------------
     Beschreibung:   Serienbrief drucken
@@ -863,7 +861,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     //check if the doc is synchronized and contains at least one linked section
     BOOL bSynchronizedDoc = pSh->IsLabelDoc() && pSh->GetSectionFmtCount() > 1;
     //merge source is already open
-    rOpt.nMergeCnt = pMergeData && pMergeData->aSelection.getLength();
+    rOpt.nMergeCnt = pImpl->pMergeData && pImpl->pMergeData->aSelection.getLength();
 
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
     rOpt.bSinglePrtJobs = pModOpt->IsSinglePrintJob();
@@ -944,7 +942,7 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
     BOOL bLoop = TRUE;
 
     {
-        Reference< XColumnsSupplier > xColsSupp( pMergeData->xResultSet, UNO_QUERY );
+        Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
         Reference <XNameAccess> xCols = xColsSupp->getColumns();
         if(!xCols->hasByName(sEMailAddrFld))
             return FALSE;
@@ -1120,7 +1118,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
 
         if (bColumnName)
         {
-            Reference< XColumnsSupplier > xColsSupp( pMergeData->xResultSet, UNO_QUERY );
+            Reference< XColumnsSupplier > xColsSupp( pImpl->pMergeData->xResultSet, UNO_QUERY );
             Reference <XNameAccess> xCols = xColsSupp->getColumns();
             if(!xCols->hasByName(sEMailAddrFld))
                 return FALSE;
@@ -1282,10 +1280,10 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
         Reference< XDataSource> xSource;
         Reference< XConnection> xConnection;
         sal_Bool bUseMergeData = sal_False;
-        if(pMergeData &&
-            pMergeData->sDataSource.equals(rDBName) && pMergeData->sCommand.equals(rTableName))
+        if(pImpl->pMergeData &&
+            pImpl->pMergeData->sDataSource.equals(rDBName) && pImpl->pMergeData->sCommand.equals(rTableName))
         {
-            xConnection = pMergeData->xConnection;
+            xConnection = pImpl->pMergeData->xConnection;
             Reference<XChild> xChild(xConnection, UNO_QUERY);
             if(xChild.is())
                 xSource = Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
@@ -1299,7 +1297,7 @@ ULONG SwNewDBMgr::GetColumnFmt( const String& rDBName,
             else
                 xConnection = SwNewDBMgr::GetConnection(rDBName, xSource);
             if(bUseMergeData)
-                pMergeData->xConnection = xConnection;
+                pImpl->pMergeData->xConnection = xConnection;
         }
         Reference< XColumnsSupplier> xColsSupp = SwNewDBMgr::GetColumnSupplier(xConnection, rTableName);
         if(xColsSupp.is())
@@ -1398,7 +1396,7 @@ ULONG SwNewDBMgr::GetColumnFmt( Reference< XDataSource> xSource,
             }
         }
         else
-            nRet = dbtools::getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
+            nRet = GetDbtoolsClient().getDefaultNumberFormat(xColumn, xDocNumberFormatTypes,  aLocale);
     }
     return nRet;
 }
@@ -1551,7 +1549,8 @@ String SwNewDBMgr::GetDBField(Reference<XPropertySet> xColumnProps,
 
             try
             {
-                sRet = dbtools::DBTypeConversion::getValue(
+                SwDbtoolsClient aClient;
+                sRet = aClient.getValue(
                     xColumnProps,
                     rDBFormatData.xFormatter,
                     rDBFormatData.aLocale,
@@ -1597,8 +1596,8 @@ void    SwNewDBMgr::EndMerge()
 {
     DBG_ASSERT(bInMerge, "merge is not active")
     bInMerge = FALSE;
-    delete pMergeData;
-    pMergeData = 0;
+    delete pImpl->pMergeData;
+    pImpl->pMergeData = 0;
 }
 /* -----------------------------06.07.00 14:28--------------------------------
     checks if a desired data source table or query is open
@@ -1606,11 +1605,11 @@ void    SwNewDBMgr::EndMerge()
 BOOL    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource,
             const String& rTableOrQuery, sal_Bool bMergeOnly)
 {
-     if(pMergeData)
+    if(pImpl->pMergeData)
     {
-        return rDataSource == (String)pMergeData->sDataSource &&
-                    rTableOrQuery == (String)pMergeData->sCommand &&
-                    pMergeData->xResultSet.is();
+        return rDataSource == (String)pImpl->pMergeData->sDataSource &&
+                    rTableOrQuery == (String)pImpl->pMergeData->sCommand &&
+                    pImpl->pMergeData->xResultSet.is();
     }
     else if(!bMergeOnly)
     {
@@ -1634,11 +1633,11 @@ BOOL SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTableNam
     BOOL bRet = FALSE;
     SwDSParam* pFound = 0;
     //check if it's the merge data source
-    if(pMergeData &&
-        rSourceName == (String)pMergeData->sDataSource &&
-        rTableName == (String)pMergeData->sCommand)
+    if(pImpl->pMergeData &&
+        rSourceName == (String)pImpl->pMergeData->sDataSource &&
+        rTableName == (String)pImpl->pMergeData->sCommand)
     {
-        pFound = pMergeData;
+        pFound = pImpl->pMergeData;
     }
     else
     {
@@ -1670,13 +1669,13 @@ BOOL SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTableNam
 BOOL    SwNewDBMgr::GetMergeColumnCnt(const String& rColumnName, USHORT nLanguage,
                                 String &rResult, double *pNumber, sal_uInt32 *pFormat)
 {
-    if(!pMergeData || !pMergeData->xResultSet.is() || pMergeData->bAfterSelection )
+    if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is() || pImpl->pMergeData->bAfterSelection )
     {
         rResult.Erase();
         return FALSE;
     }
 
-    BOOL bRet = lcl_GetColumnCnt(pMergeData, rColumnName, nLanguage, rResult, pNumber);
+    BOOL bRet = lcl_GetColumnCnt(pImpl->pMergeData, rColumnName, nLanguage, rResult, pNumber);
     return bRet;
 }
 /* -----------------------------07.07.00 14:28--------------------------------
@@ -1684,8 +1683,8 @@ BOOL    SwNewDBMgr::GetMergeColumnCnt(const String& rColumnName, USHORT nLanguag
  ---------------------------------------------------------------------------*/
 BOOL SwNewDBMgr::ToNextMergeRecord()
 {
-    DBG_ASSERT(pMergeData && pMergeData->xResultSet.is(), "no data source in merge")
-    return ToNextRecord(pMergeData);
+    DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge")
+    return ToNextRecord(pImpl->pMergeData);
 }
 /* -----------------------------10.07.01 14:28--------------------------------
 
@@ -1695,10 +1694,10 @@ BOOL SwNewDBMgr::ToNextRecord(
 {
     SwDSParam* pFound = 0;
     BOOL bRet = TRUE;
-    if(pMergeData &&
-        rDataSource == (String)pMergeData->sDataSource &&
-        rCommand == (String)pMergeData->sCommand)
-        pFound = pMergeData;
+    if(pImpl->pMergeData &&
+        rDataSource == (String)pImpl->pMergeData->sDataSource &&
+        rCommand == (String)pImpl->pMergeData->sCommand)
+        pFound = pImpl->pMergeData;
     else
     {
         SwDBData aData;
@@ -1754,7 +1753,7 @@ BOOL SwNewDBMgr::ToNextRecord(SwDSParam* pParam)
  ---------------------------------------------------------------------------*/
 BOOL SwNewDBMgr::ExistsNextRecord() const
 {
-    return pMergeData && !pMergeData->bEndOfDB;
+    return pImpl->pMergeData && !pImpl->pMergeData->bEndOfDB;
 }
 /* -----------------------------13.07.00 10:41--------------------------------
 
@@ -1762,12 +1761,12 @@ BOOL SwNewDBMgr::ExistsNextRecord() const
 sal_uInt32  SwNewDBMgr::GetSelectedRecordId()
 {
     sal_uInt32  nRet = 0;
-    DBG_ASSERT(pMergeData && pMergeData->xResultSet.is(), "no data source in merge")
-    if(!pMergeData || !pMergeData->xResultSet.is())
+    DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge")
+    if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is())
         return FALSE;
     try
     {
-        nRet = pMergeData->xResultSet->getRow();
+        nRet = pImpl->pMergeData->xResultSet->getRow();
     }
     catch(Exception& )
     {
@@ -1780,17 +1779,17 @@ sal_uInt32  SwNewDBMgr::GetSelectedRecordId()
  ---------------------------------------------------------------------------*/
 sal_Bool SwNewDBMgr::ToRecordId(sal_Int32 nSet)
 {
-    DBG_ASSERT(pMergeData && pMergeData->xResultSet.is(), "no data source in merge")
-    if(!pMergeData || !pMergeData->xResultSet.is()|| nSet < 0)
+    DBG_ASSERT(pImpl->pMergeData && pImpl->pMergeData->xResultSet.is(), "no data source in merge")
+    if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is()|| nSet < 0)
         return FALSE;
     sal_Bool bRet = FALSE;
     sal_Int32 nAbsPos = nSet;
 
     if(nAbsPos >= 0)
     {
-        bRet = lcl_MoveAbsolute(pMergeData, nAbsPos);
-        pMergeData->bEndOfDB = !bRet;
-        pMergeData->CheckEndOfDB();
+        bRet = lcl_MoveAbsolute(pImpl->pMergeData, nAbsPos);
+        pImpl->pMergeData->bEndOfDB = !bRet;
+        pImpl->pMergeData->CheckEndOfDB();
     }
     return bRet;
 }
@@ -1875,10 +1874,10 @@ sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
 {
     sal_uInt32 nRet = -1;
     //check for merge data source first
-    if(pMergeData && rDataSource == (String)pMergeData->sDataSource &&
-                    rTableOrQuery == (String)pMergeData->sCommand &&
-                    (nCommandType == -1 || nCommandType == pMergeData->nCommandType) &&
-                    pMergeData->xResultSet.is())
+    if(pImpl->pMergeData && rDataSource == (String)pImpl->pMergeData->sDataSource &&
+                    rTableOrQuery == (String)pImpl->pMergeData->sCommand &&
+                    (nCommandType == -1 || nCommandType == pImpl->pMergeData->nCommandType) &&
+                    pImpl->pMergeData->xResultSet.is())
         nRet = GetSelectedRecordId();
     else
     {
@@ -1908,7 +1907,7 @@ void    SwNewDBMgr::CloseAll(BOOL bIncludingMerge)
 //    for(USHORT nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
 //    {
 //        SwDSParam* pParam = aDataSourceParams[nPos];
-//        if(bIncludingMerge || pParam != pMergeData)
+//        if(bIncludingMerge || pParam != pImpl->pMergeData)
 //        {
 //            pParam->xResultSet = 0;
 //            pParam->xStatement = 0;
@@ -2038,7 +2037,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                         const Sequence<PropertyValue>& rProperties)
 {
     //prevent second call
-    if(pMergeDialog)
+    if(pImpl->pMergeDialog)
         return ;
     OUString sDataSource, sDataTableOrQuery;
     Sequence<Any> aSelection;
@@ -2081,7 +2080,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
             pGridSelection[nSel] >>= pDlgSelection[nSel];
 
     }
-    pMergeDialog = new SwMailMergeDlg(
+    pImpl->pMergeDialog = new SwMailMergeDlg(
                     &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
                     sDataSource,
                     sDataTableOrQuery,
@@ -2089,9 +2088,9 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                     xConnection,
                     bHasSelectionProperty ? &aDlgSelection : 0 );
 
-    if(pMergeDialog->Execute() == RET_OK)
+    if(pImpl->pMergeDialog->Execute() == RET_OK)
     {
-        SetMergeType(  pMergeDialog->GetMergeType() );
+        SetMergeType(  pImpl->pMergeDialog->GetMergeType() );
 
         Sequence<PropertyValue> aNewProperties = rProperties;
         if(!bHasSelectionProperty)
@@ -2100,9 +2099,9 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
             aNewProperties.realloc(rProperties.getLength() + 1);
             aNewProperties[nSelectionPos].Name = C2U("Selection");
         }
-        aNewProperties[nSelectionPos].Value <<= pMergeDialog->GetSelection();
+        aNewProperties[nSelectionPos].Value <<= pImpl->pMergeDialog->GetSelection();
 
-        Reference<XResultSet> xResSet = pMergeDialog->GetResultSet();
+        Reference<XResultSet> xResSet = pImpl->pMergeDialog->GetResultSet();
         if(xResSet.is())
         {
             if(nResultSetIdx < 0)
@@ -2118,7 +2117,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
                             rSh,
                             aNewProperties);
     }
-    DELETEZ(pMergeDialog);
+    DELETEZ(pImpl->pMergeDialog);
 }
 /* -----------------------------13.11.00 08:20--------------------------------
 
@@ -2164,7 +2163,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     if(xChild.is())
         xSource = Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
     if(!xSource.is())
-        xSource = dbtools::getDataSource(sDataSource, xMgr);
+        xSource = GetDbtoolsClient().getDataSource(sDataSource, xMgr);
     Reference< XColumnsSupplier > xColSupp( xResSet, UNO_QUERY );
     SwDBData aDBData;
     aDBData.sDataSource = sDataSource;
@@ -2193,4 +2192,12 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     delete pDlg;
 
 }
+/* -----------------------------30.08.2001 12:00------------------------------
 
+ ---------------------------------------------------------------------------*/
+SwDbtoolsClient& SwNewDBMgr::GetDbtoolsClient()
+{
+    if(!pImpl->pDbtoolsClient)
+        pImpl->pDbtoolsClient = new SwDbtoolsClient;
+    return *pImpl->pDbtoolsClient;
+}

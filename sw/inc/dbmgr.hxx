@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-08-15 08:20:44 $
+ *  last change: $Author: os $ $Date: 2001-08-30 13:54:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ class ListBox;
 class Button;
 class SvNumberFormatter;
 class SwMailMergeDlg;
+class SwDbtoolsClient;
 
 // -----------------------------------------------------------------------
 
@@ -188,7 +189,17 @@ struct SwDSParam : public SwDBData
 typedef SwDSParam* SwDSParamPtr;
 SV_DECL_PTRARR_DEL(SwDSParamArr, SwDSParamPtr, 0, 5)
 
+struct SwNewDBMgr_Impl
+{
+    SwDSParam*          pMergeData;
+    SwMailMergeDlg*     pMergeDialog;
+    SwDbtoolsClient*    pDbtoolsClient;
 
+    SwNewDBMgr_Impl() :
+        pMergeData(0),
+        pMergeDialog(0),
+        pDbtoolsClient(0){}
+};
 class SwNewDBMgr
 {
     String              sEMailAddrFld;  // Mailing: Spaltenname der E-Mail Adresse
@@ -201,9 +212,12 @@ class SwNewDBMgr
 
     BOOL                bInMerge    : 1;    //merge process active
     SwDSParamArr        aDataSourceParams;
+    SwNewDBMgr_Impl*    pImpl;
 
     SwDSParam*          pMergeData;
     SwMailMergeDlg*     pMergeDialog;
+
+    SwDbtoolsClient*    pDbtoolsClient;
 
     SwDSParam*          FindDSData(const SwDBData& rData, BOOL bCreate);
     SwDSParam*          FindDSConnection(const ::rtl::OUString& rSource, BOOL bCreate);
@@ -342,6 +356,7 @@ public:
 
     static ::com::sun::star::uno::Sequence<rtl::OUString> GetExistingDatabaseNames();
 
+    SwDbtoolsClient&    GetDbtoolsClient();
 };
 
 #endif

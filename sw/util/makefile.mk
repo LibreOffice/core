@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: tbe $ $Date: 2001-07-25 07:43:48 $
+#   last change: $Author: os $ $Date: 2001-08-30 13:56:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -192,7 +192,6 @@ SHL2STDLIBS= \
     $(CPPULIB) \
     $(CPPUHELPERLIB) \
     $(UNOTOOLSLIB) \
-    $(DBTOOLSLIB) \
     $(VOSLIB) \
     $(TKLIB) \
     $(SDLIB) \
@@ -234,11 +233,11 @@ SHL2DEPN=   \
 
 SHL2OBJS= \
     $(OUT)$/slo$/swmodule.obj \
-    $(OUT)$/slo$/swdll.obj 
+    $(OUT)$/slo$/swdll.obj
 #	$(SLO)$/.obj		  ^ \ nicht vergessen!
 
-.IF "$(OS)"!="LINUX" 
-.IF "$(OS)"!="FREEBSD" 
+.IF "$(OS)"!="LINUX"
+.IF "$(OS)"!="FREEBSD"
 .IF "$(OS)"!="NETBSD"
 SHL2OBJS+= \
             $(SLO)$/atrfrm.obj      \
