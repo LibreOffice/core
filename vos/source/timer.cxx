@@ -2,9 +2,9 @@
  *
  *  $RCSfile: timer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:17 $
+ *  last change: $Author: mfe $ $Date: 2001-02-01 12:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,6 @@
 #include <vos/ref.hxx>
 #include <vos/thread.hxx>
 #include <vos/conditn.hxx>
-
-#ifdef SOLARIS
-extern "C" void ChangeGlobalInit();
-#endif
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -343,10 +339,6 @@ void OTimerManager::onTerminated()
 
 OTimerManager* OTimerManager::getTimerManager()
 {
-#ifdef SOLARIS
-    ChangeGlobalInit();
-#endif
-
     OGuard Guard(&m_Access);
 
     if (! m_pManager)
