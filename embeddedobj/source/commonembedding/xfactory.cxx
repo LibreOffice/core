@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfactory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:44:30 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,36 +84,12 @@
 
 #include "xfactory.hxx"
 #include "commonembobj.hxx"
+#include "specialobject.hxx"
 #include "oleembobj.hxx"
-#include "convert.hxx"
+// #include "convert.hxx"
 
 
 using namespace ::com::sun::star;
-
-//-------------------------------------------------------------------------
-::rtl::OUString GetDocServiceNameFromFilter( const ::rtl::OUString& aFilterName,
-                                            const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-{
-    ::rtl::OUString aDocServiceName;
-
-    uno::Reference< container::XNameAccess > xFilterFactory(
-            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
-            uno::UNO_QUERY );
-
-    if ( !xFilterFactory.is() )
-        throw uno::RuntimeException(); // TODO
-
-    uno::Any aFilterAnyData = xFilterFactory->getByName( aFilterName );
-    uno::Sequence< beans::PropertyValue > aFilterData;
-    if ( aFilterAnyData >>= aFilterData )
-    {
-        for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
-            if ( aFilterData[nInd].Name.equalsAscii( "DocumentService" ) )
-                aFilterData[nInd].Value >>= aDocServiceName;
-    }
-
-    return ConvertServiceToImplementationName( aDocServiceName );
-}
 
 //-------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > SAL_CALL OOoEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
@@ -197,7 +173,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         }
         xSubStorage = uno::Reference< embed::XStorage >();
 
-        ::rtl::OUString aDocServiceName = GetDocumentServiceFromMediaType( aMediaType );
+#if 0
+        ::rtl::OUString aDocServiceName = m_aConfigHelper.GetDocumentServiceFromMediaType( aMediaType );
         if ( !aDocServiceName.getLength() )
         {
             // only own document can be based on storage
@@ -206,13 +183,21 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
 
             throw io::IOException(); // unexpected mimetype of the storage
         }
+#endif
+
+        uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByMediaType( aMediaType );
+        if ( !aObject.getLength() )
+            throw io::IOException(); // unexpected mimetype of the storage
 
         xResult = uno::Reference< uno::XInterface >(
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                                 m_xFactory,
+                                                aObject ) ),
+#if 0
                                                 GetClassIDFromServName( aDocServiceName ),
                                                 GetClassNameFromServName( aDocServiceName ),
                                                 aDocServiceName ) ),
+#endif
                     uno::UNO_QUERY );
     }
     else
@@ -259,66 +244,22 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
 
     // check if there is FilterName
-    ::rtl::OUString aFilterName;
-    for ( sal_Int32 nInd = 0; nInd < aTempMedDescr.getLength(); nInd++ )
-        if ( aTempMedDescr[nInd].Name.equalsAscii( "FilterName" ) )
-            aTempMedDescr[nInd].Value >>= aFilterName;
-
-    if ( !aFilterName.getLength() )
-    {
-        // filter name is not specified, so type detection should be done
-
-        uno::Reference< document::XTypeDetection > xTypeDetection(
-                m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
-                uno::UNO_QUERY );
-
-        if ( !xTypeDetection.is() )
-            throw uno::RuntimeException(); // TODO
-
-        // get TypeName
-        ::rtl::OUString aTypeName = xTypeDetection->queryTypeByDescriptor( aTempMedDescr, sal_True );
-
-        // get FilterName
-        for ( sal_Int32 nInd = 0; nInd < aTempMedDescr.getLength(); nInd++ )
-            if ( aTempMedDescr[nInd].Name.equalsAscii( "FilterName" ) )
-                aTempMedDescr[nInd].Value >>= aFilterName;
-
-        if ( !aFilterName.getLength() && aTypeName.getLength() )
-        {
-            uno::Reference<container::XNameAccess> xNameAccess( xTypeDetection, uno::UNO_QUERY );
-            if ( xNameAccess.is() && xNameAccess->hasByName( aTypeName ) )
-            {
-                uno::Sequence<beans::PropertyValue> aTypes;
-                xNameAccess->getByName(aTypeName) >>= aTypes;
-                for( sal_Int32 nInd = 0; nInd < aTypes.getLength(); nInd++ )
-                    if ( aTypes[nInd].Name.equalsAscii("PreferredFilter") )
-                    {
-                        aTypes[nInd].Value >>= aFilterName;
-                        sal_Int32 nLen = aTempMedDescr.getLength();
-                        aTempMedDescr.realloc(nLen+1);
-                        aTempMedDescr[nLen].Value = aTypes[nInd].Value;
-                        aTempMedDescr[nLen].Name = ::rtl::OUString::createFromAscii( "FilterName" );
-                        break;
-                    }
-            }
-        }
-    }
+    ::rtl::OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, sal_False );
 
     uno::Reference< uno::XInterface > xResult;
 
     // find document service name
     if ( aFilterName.getLength() )
     {
-        ::rtl::OUString aDocServiceName = GetDocServiceNameFromFilter( aFilterName, m_xFactory );
-        if ( !aDocServiceName.getLength() )
-            throw io::IOException(); // TODO: filter detection failed
+        uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByFilter( aFilterName );
+        if ( !aObject.getLength() )
+            throw io::IOException(); // unexpected mimetype of the storage
+
 
         xResult = uno::Reference< uno::XInterface >(
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                             m_xFactory,
-                                            GetClassIDFromServName( aDocServiceName ),
-                                            GetClassNameFromServName( aDocServiceName ),
-                                            aDocServiceName ) ),
+                                            aObject ) ),
                     uno::UNO_QUERY );
     }
     else
@@ -365,23 +306,16 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
                                             4 );
 
-    ::rtl::OUString aDocServiceName = GetDocumentServiceNameFromClassID( aClassID );
+    uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
+    if ( !aObject.getLength() )
+        throw io::IOException(); // unexpected mimetype of the storage
 
-    if ( aDocServiceName.getLength() )
-    {
-        xResult = uno::Reference< uno::XInterface >(
+    xResult = uno::Reference< uno::XInterface >(
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                                 m_xFactory,
-                                                aClassID,
-                                                aClassName,
-                                                aDocServiceName ) ),
+                                                aObject ) ),
                     uno::UNO_QUERY );
-    }
-    else
-    {
-        // the object must be OOo embedded object, if it is not an exception must be thrown
-        throw io::IOException(); // TODO:
-    }
+
 
     uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
 
@@ -422,18 +356,22 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
                                             2 );
 
+    uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
+    if ( !aObject.getLength() )
+        throw io::IOException(); // unexpected mimetype of the storage
 
-    ::rtl::OUString aDocServiceName = GetDocumentServiceNameFromClassID( aClassID );
+    uno::Sequence< beans::PropertyValue > aTempMedDescr( lArguments );
+    ::rtl::OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, aObject );
 
     uno::Reference< uno::XInterface > xResult;
-    if ( aDocServiceName.getLength() )
+
+    if ( aFilterName.getLength() )
     {
-        xResult = uno::Reference< uno::XInterface >(
+
+        xResult = uno::Reference< uno::XInterface > (
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                                 m_xFactory,
-                                                aClassID,
-                                                aClassName,
-                                                aDocServiceName ) ),
+                                                aObject ) ),
                     uno::UNO_QUERY );
     }
     else
@@ -448,7 +386,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         xPersist->setPersistentEntry( xStorage,
                                     sEntName,
                                     nEntryConnectionMode,
-                                    lArguments,
+                                    aTempMedDescr,
                                     lObjArgs );
 
     }
@@ -470,15 +408,14 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                 uno::Exception,
                 uno::RuntimeException )
 {
+    uno::Reference< uno::XInterface > xResult;
+
     uno::Sequence< beans::PropertyValue > aTempMedDescr( aMediaDescr );
 
-    // check if there is FilterName and URL, URL must exist
-    ::rtl::OUString aFilterName;
+    // check if there is URL, URL must exist
     ::rtl::OUString aURL;
     for ( sal_Int32 nInd = 0; nInd < aTempMedDescr.getLength(); nInd++ )
-        if ( aTempMedDescr[nInd].Name.equalsAscii( "FilterName" ) )
-            aTempMedDescr[nInd].Value >>= aFilterName;
-        else if ( aTempMedDescr[nInd].Name.equalsAscii( "URL" ) )
+        if ( aTempMedDescr[nInd].Name.equalsAscii( "URL" ) )
             aTempMedDescr[nInd].Value >>= aURL;
 
     if ( !aURL.getLength() )
@@ -486,47 +423,21 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
 
-    if ( !aFilterName.getLength() )
-    {
-        uno::Reference< document::XTypeDetection > xTypeDetection(
-                m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
-                uno::UNO_QUERY );
-
-        if ( !xTypeDetection.is() )
-            throw uno::RuntimeException(); // TODO
-
-        ::rtl::OUString aTypeName = xTypeDetection->queryTypeByDescriptor( aTempMedDescr, sal_True );
-
-        // TODO: in case of unexpected format we can try to create an OLE link;
-        //       when we have different objects for unknown non-OLE formats
-        //       we will need kind of typedetection to detect which type of the link we need;
-        //       another way could be to provide ClassID to the call, but how
-        //       can caller detect object type if factory can not?
-
-        for ( sal_Int32 nInd = 0; nInd < aTempMedDescr.getLength(); nInd++ )
-            if ( aTempMedDescr[nInd].Name.equalsAscii( "FilterName" ) )
-                aTempMedDescr[nInd].Value >>= aFilterName;
-    }
-
-    uno::Reference< uno::XInterface > xResult;
+    ::rtl::OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, sal_False );
 
     if ( aFilterName.getLength() )
     {
-        // find document service name
-        //TODO: will use storages in future
+        uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByFilter( aFilterName );
+        if ( !aObject.getLength() )
+            throw io::IOException(); // unexpected mimetype of the storage
 
-        ::rtl::OUString aDocServiceName = GetDocServiceNameFromFilter( aFilterName, m_xFactory );
-        if ( !aDocServiceName.getLength() )
-            throw io::IOException(); // TODO: unexpected format
 
         xResult = uno::Reference< uno::XInterface >(
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                             m_xFactory,
-                                            GetClassIDFromServName( aDocServiceName ),
-                                            GetClassNameFromServName( aDocServiceName ),
-                                            aDocServiceName,
-                                            aFilterName,
-                                            aURL ) ),
+                                            aObject,
+                                            aTempMedDescr,
+                                            lObjArgs ) ),
                     uno::UNO_QUERY );
     }
     else
@@ -534,8 +445,6 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         // the object must be OOo embedded object, if it is not an exception must be thrown
         throw io::IOException(); // TODO:
     }
-
-    // TODO: set persistence and use lObjArgs
 
     return xResult;
 }
@@ -553,6 +462,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                 uno::Exception,
                 uno::RuntimeException )
 {
+    uno::Reference< uno::XInterface > xResult;
+
     // the initialization is completelly controlled by user
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( ::rtl::OUString::createFromAscii( "No parent storage is provided!\n" ),
@@ -567,11 +478,8 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
     uno::Sequence< beans::PropertyValue > aTempMedDescr( lArguments );
 
     ::rtl::OUString aURL;
-    ::rtl::OUString aFilterName;
     for ( sal_Int32 nInd = 0; nInd < aTempMedDescr.getLength(); nInd++ )
-        if ( aTempMedDescr[nInd].Name.equalsAscii( "FilterName" ) )
-            aTempMedDescr[nInd].Value >>= aFilterName;
-        else if ( aTempMedDescr[nInd].Name.equalsAscii( "URL" ) )
+        if ( aTempMedDescr[nInd].Name.equalsAscii( "URL" ) )
             aTempMedDescr[nInd].Value >>= aURL;
 
     if ( !aURL.getLength() )
@@ -579,37 +487,21 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ),
                                         3 );
 
-    ::rtl::OUString aDocServiceName = GetDocumentServiceNameFromClassID( aClassID );
-    if ( !aFilterName.getLength() )
+    uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
+    if ( !aObject.getLength() )
+        throw io::IOException(); // unexpected mimetype of the storage
+
+    ::rtl::OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, aObject );
+
+    if ( aFilterName.getLength() )
     {
-        // filter name is not specified, so type detection should be done
-        uno::Reference< document::XTypeDetection > xTypeDetection(
-                m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
-                uno::UNO_QUERY );
 
-        if ( !xTypeDetection.is() )
-            throw uno::RuntimeException(); // TODO
-
-        // get TypeName
-        ::rtl::OUString aTypeName = xTypeDetection->queryTypeByDescriptor( aTempMedDescr, sal_True );
-
-        // get FilterName
-        for ( sal_Int32 nInd = 0; nInd < aTempMedDescr.getLength(); nInd++ )
-            if ( aTempMedDescr[nInd].Name.equalsAscii( "FilterName" ) )
-                aTempMedDescr[nInd].Value >>= aFilterName;
-    }
-
-    uno::Reference< uno::XInterface > xResult;
-    if ( aDocServiceName.getLength() && aFilterName.getLength() )
-    {
         xResult = uno::Reference< uno::XInterface >(
                     static_cast< ::cppu::OWeakObject* > ( new OCommonEmbeddedObject(
                                             m_xFactory,
-                                            aClassID,
-                                            aClassName,
-                                            aDocServiceName,
-                                            aFilterName,
-                                            aURL ) ),
+                                            aObject,
+                                            aTempMedDescr,
+                                            lObjArgs ) ),
                     uno::UNO_QUERY );
     }
     else
@@ -618,21 +510,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         throw io::IOException(); // TODO:
     }
 
-    uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
-    if ( xPersist.is() )
-    {
-        xPersist->setPersistentEntry( xStorage,
-                                    sEntName,
-                                    embed::EntryInitModes::MEDIA_DESCRIPTOR_INIT,
-                                    uno::Sequence< beans::PropertyValue >(),
-                                    lObjArgs );
-
-    }
-    else
-        throw uno::RuntimeException(); // TODO:
-
     return xResult;
-
 }
 
 //-------------------------------------------------------------------------
@@ -661,4 +539,80 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OOoEmbeddedObjectFactory::getSupported
 {
     return impl_staticGetSupportedServiceNames();
 }
+
+//-------------------------------------------------------------------------
+uno::Sequence< ::rtl::OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
+{
+    uno::Sequence< ::rtl::OUString > aRet(2);
+    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.OOoSpecialEmbeddedObjectFactory");
+    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory");
+    return aRet;
+}
+
+//-------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OOoSpecialEmbeddedObjectFactory::impl_staticGetImplementationName()
+{
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.OOoSpecialEmbeddedObjectFactory");
+}
+
+//-------------------------------------------------------------------------
+uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::impl_staticCreateSelfInstance(
+            const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
+{
+    return uno::Reference< uno::XInterface >( *new OOoSpecialEmbeddedObjectFactory( xServiceManager ) );
+}
+
+//-------------------------------------------------------------------------
+uno::Reference< uno::XInterface > SAL_CALL OOoSpecialEmbeddedObjectFactory::createInstanceUserInit(
+            const uno::Sequence< sal_Int8 >& aClassID,
+            const ::rtl::OUString& aClassName,
+            const uno::Reference< embed::XStorage >& xStorage,
+            const ::rtl::OUString& sEntName,
+            sal_Int32 nEntryConnectionMode,
+            const uno::Sequence< beans::PropertyValue >& lArguments,
+            const uno::Sequence< beans::PropertyValue >& lObjArgs )
+    throw ( lang::IllegalArgumentException,
+            io::IOException,
+            uno::Exception,
+            uno::RuntimeException )
+{
+    uno::Sequence< beans::NamedValue > aObject = m_aConfigHelper.GetObjectPropsByClassID( aClassID );
+    if ( !aObject.getLength() )
+        throw io::IOException(); // unexpected mimetype of the storage
+
+    uno::Reference< uno::XInterface > xResult(
+                    static_cast< ::cppu::OWeakObject* > ( new OSpecialEmbeddedObject(
+                                                m_xFactory,
+                                                aObject ) ),
+                    uno::UNO_QUERY );
+    return xResult;
+}
+
+//-------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OOoSpecialEmbeddedObjectFactory::getImplementationName()
+    throw ( uno::RuntimeException )
+{
+    return impl_staticGetImplementationName();
+}
+
+//-------------------------------------------------------------------------
+sal_Bool SAL_CALL OOoSpecialEmbeddedObjectFactory::supportsService( const ::rtl::OUString& ServiceName )
+    throw ( uno::RuntimeException )
+{
+    uno::Sequence< ::rtl::OUString > aSeq = impl_staticGetSupportedServiceNames();
+
+    for ( sal_Int32 nInd = 0; nInd < aSeq.getLength(); nInd++ )
+        if ( ServiceName.compareTo( aSeq[nInd] ) == 0 )
+            return sal_True;
+
+    return sal_False;
+}
+
+//-------------------------------------------------------------------------
+uno::Sequence< ::rtl::OUString > SAL_CALL OOoSpecialEmbeddedObjectFactory::getSupportedServiceNames()
+    throw ( uno::RuntimeException )
+{
+    return impl_staticGetSupportedServiceNames();
+}
+
 
