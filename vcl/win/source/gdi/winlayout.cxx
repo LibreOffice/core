@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-18 12:02:32 $
+ *  last change: $Author: hdu $ $Date: 2002-04-22 13:15:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -644,6 +644,7 @@ bool UniscribeLayout::GetItemSubrange( int nItem, int& nMinIndex, int& nEndIndex
         nMinIndex = mnGlyphCapacity;
         int nMaxIndex = 0;
 
+        // TODO: optimize for case that LTR/RTL correspond to monotonous glyph indexes
         int i = mnFirstCharIndex;
         if( i < rScriptItem.iCharPos )
             i = rScriptItem.iCharPos;
@@ -660,15 +661,17 @@ bool UniscribeLayout::GetItemSubrange( int nItem, int& nMinIndex, int& nEndIndex
 
         // account for multiple glyphs at rightmost character
         // test only needed when rightmost glyph isn't referenced
-        if( nMaxIndex + 1 < mpGlyphCounts[ nItem ] )
+        if( nEndIndex > nMaxIndex + 1 )
         {
-            for( int i = rScriptItem.iCharPos; i < nCharIndexLimit; ++i )
+            // glyph index above currently selected range is new end index
+            // TODO: optimize for case that LTR/RTL correspond to monotonous glyph indexes
+            int i2 = mpScriptItems[ nItem+1 ].iCharPos;
+            for( int i = rScriptItem.iCharPos; i < i2; ++i )
             {
                 int n = mpLogClusters[ i ];
                 if( (n < nEndIndex) && (n > nMaxIndex) )
-                    nMaxIndex = n;
+                    nEndIndex = n;
             }
-            nEndIndex = nMaxIndex + 1;
         }
     }
 
