@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 16:39:54 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 14:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,7 +562,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) {
             str = currNode -> getAttr() -> getValueByName("default");
             of.writeDefaultParameter("Index", str, nbOfIndexs);
             str = currNode -> getAttr() -> getValueByName("phonetic");
-            of.writeParameter("Phonetic", str, nbOfIndexs);
+            of.writeDefaultParameter("Phonetic", str, nbOfIndexs);
             of.writeAsciiString("\n");
 
             nbOfIndexs++;
@@ -597,7 +597,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) {
         of.writeInt(i);
         of.writeAsciiString(",\n");
 
-        of.writeAsciiString("\tPhonetic");
+        of.writeAsciiString("\tdefaultPhonetic");
         of.writeInt(i);
         of.writeAsciiString(",\n");
     }
