@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:44:38 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 13:46:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 
 using namespace osl;
@@ -162,14 +165,15 @@ ResId padmin::PaResId( ULONG nId )
  *  FindFiles
  */
 
-void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult, const String& rSuffixes )
+void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult, const String& rSuffixes, bool bRecursive )
 {
     rResult.clear();
 
     OUString aDirPath;
     ::osl::FileBase::getFileURLFromSystemPath( rDirectory, aDirPath );
     Directory aDir( aDirPath );
-    aDir.open();
+    if( aDir.open() != FileBase::E_None )
+        return;
     DirectoryItem aItem;
     while( aDir.getNextItem( aItem ) == FileBase::E_None )
     {
@@ -195,6 +199,23 @@ void padmin::FindFiles( const String& rDirectory, ::std::list< String >& rResult
                         break;
                     }
                 }
+            }
+        }
+        else if( bRecursive &&
+                 ( aStatus.getFileType() == FileStatus::Directory ||
+                   aStatus.getFileType() == FileStatus::Link ) )
+        {
+            OUStringBuffer aSubDir( rDirectory );
+            aSubDir.appendAscii( "/", 1 );
+            aSubDir.append( aStatus.getFileName() );
+            std::list< String > subfiles;
+            FindFiles( aSubDir.makeStringAndClear(), subfiles, rSuffixes, bRecursive );
+            for( std::list< String >::const_iterator it = subfiles.begin(); it != subfiles.end(); ++it )
+            {
+                OUStringBuffer aSubFile( aStatus.getFileName() );
+                aSubFile.appendAscii( "/", 1 );
+                aSubFile.append( *it );
+                rResult.push_back( aSubFile.makeStringAndClear() );
             }
         }
     }
