@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-23 14:11:36 $
+ *  last change: $Author: dl $ $Date: 2001-12-07 09:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1395,6 +1395,10 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         for (USHORT nPage = 0; nPage < GetPageCount(); nPage++)
         {
             SdPage* pPage = (SdPage*)GetPage(nPage);
+
+            if( nFileFormatVersion <= 4 )
+                pPage->CreateTitleAndLayout();
+
             SdrObjListIter aIter( *pPage );
             while( aIter.IsMore() )
             {
