@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-08 21:17:13 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text[ chinese_traditional ] = "Äæ®æ¦¡(~F)...";
             Text[ arabic ] = "ÊäÓíŞ ÇáÃÚãÏÉ...";
             Text[ greek ] = "Ìïñ~öïğïßçóç óôŞëçò...";
-            Text[ korean ] = "¿­ ¼­½Ä...";
+            Text[ korean ] = "¿­ Æ÷¸ËÆÃ...";
             Text[ turkish ] = "Sütun formatı...";
         };
         MenuItem
@@ -147,7 +147,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text [ swedish ] = "Tabellformatering..." ;
             Text [ danish ] = "Tabelformatering..." ;
             Text [ portuguese_brazilian ] = "Tabellenformatierung..." ;
-            Text [ portuguese ] = "Formatar tabelas..." ;
+            Text [ portuguese ] = "Formatar tabela..." ;
             Text[ chinese_simplified ] = "±í¸ñ¸ñÊ½...";
             Text[ russian ] = "Ôîğìàò òàáëèöû...";
             Text[ polish ] = "Formatowanie tabeli...";
@@ -155,7 +155,7 @@ Menu RID_SBA_GRID_ROWCTXMENU
             Text[ chinese_traditional ] = "¤u§@ªí®æ¦¡...";
             Text[ arabic ] = "ÊäÓíŞ ÇáÌÏæá...";
             Text[ greek ] = "Ìïñöïğïßçóç ğßíáêá...";
-            Text[ korean ] = "Ç¥ ¼­½Ä...";
+            Text[ korean ] = "Ç¥ Æ÷¸ËÆÃ...";
             Text[ turkish ] = "Tablo formatı...";
         };
         MenuItem
