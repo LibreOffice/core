@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:14:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:30:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,10 @@ static osl::Mutex& getResMgrMutex()
     return *pResMgrMutex;
 }
 
+static OUString* pGlobalPrefix = NULL;
+static com::sun::star::lang::Locale* pGlobalLocale = NULL;
+static std::list<ResMgr*>* pGlobalThreadList = NULL;
+
 struct ImplSVResourceData
 {
     oslThreadKey        pThreadKey;
@@ -170,19 +174,14 @@ struct ImplSVResourceData
         pThreadKey = osl_createThreadKey( NULL );
     }
 
-    ResMgr* getThreadResMgr()
-    {
-        return (ResMgr*)osl_getThreadKeyData( pThreadKey );
-    }
-    void setThreadResMgr( ResMgr* pResMgr )
-    {
-        osl_setThreadKeyData( pThreadKey, pResMgr );
-    }
+    ResMgr* getThreadResMgr();
+    void setThreadResMgr( ResMgr* pResMgr );
 };
 
 struct ImpContent;
 class InternalResMgr
 {
+    friend void ImplSVResourceData::setThreadResMgr(ResMgr*);
     friend class ResMgr;
     friend class SimpleResMgr;
     friend class ResMgrContainer;
@@ -545,6 +544,41 @@ void ResMgrContainer::freeResMgr( InternalResMgr* pResMgr )
 // =======================================================================
 
 struct ResData : public rtl::Static< ImplSVResourceData, ResData > {};
+
+ResMgr* ImplSVResourceData::getThreadResMgr()
+{
+    ResMgr* pRet = (ResMgr*)osl_getThreadKeyData( pThreadKey );
+    if( ! pRet )
+    {
+        osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
+        if( pGlobalLocale && pGlobalPrefix )
+        {
+            InternalResMgr* pImpl = ResMgrContainer::get().getResMgr( *pGlobalPrefix, *pGlobalLocale, true );
+            if( pImpl )
+            {
+                pRet = ResMgr::ImplCreateResMgr( pImpl );
+                setThreadResMgr( pRet );
+                if( ! pGlobalThreadList )
+                    pGlobalThreadList = new std::list<ResMgr*>();
+                pGlobalThreadList->push_back( pRet );
+            }
+        }
+    }
+    return pRet;
+}
+void ImplSVResourceData::setThreadResMgr( ResMgr* pResMgr )
+{
+    if( ! (pGlobalLocale && pGlobalPrefix) && pResMgr )
+    {
+        osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
+        if( ! (pGlobalLocale && pGlobalPrefix) )
+        {
+            pGlobalLocale = new com::sun::star::lang::Locale( pResMgr->ImplGetLocale() );
+            pGlobalPrefix = new OUString( pResMgr->ImplGetPrefix() );
+        }
+    }
+    osl_setThreadKeyData( pThreadKey, pResMgr );
+}
 
 void Resource::TestRes()
 {
@@ -1010,6 +1044,18 @@ void ResMgr::DestroyAllResMgr()
     {
         osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
+        if( pGlobalThreadList )
+        {
+            while( ! pGlobalThreadList->empty() )
+            {
+                delete pGlobalThreadList->front();
+                pGlobalThreadList->pop_front();
+            }
+            delete pGlobalThreadList;
+        }
+        delete pGlobalLocale, pGlobalLocale = NULL;
+        delete pGlobalPrefix, pGlobalPrefix = NULL;
+
         if( pEmptyBuffer )
         {
             rtl_freeMemory( pEmptyBuffer );
@@ -1154,6 +1200,17 @@ void ResMgr::TestStack( const Resource* )
 }
 
 #endif
+
+// -----------------------------------------------------------------------
+OUString ResMgr::ImplGetPrefix()
+{
+    return pImpRes ? pImpRes->aPrefix : OUString();
+}
+
+com::sun::star::lang::Locale ResMgr::ImplGetLocale()
+{
+    return pImpRes ? pImpRes->aLocale : com::sun::star::lang::Locale();
+}
 
 // -----------------------------------------------------------------------
 
