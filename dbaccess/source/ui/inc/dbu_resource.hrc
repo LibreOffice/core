@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-04 11:19:55 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 16:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #define DLG_ROWHEIGHT                   RID_DIALOG_START +  8
 #define DLG_COLWIDTH                    RID_DIALOG_START +  9
 #define DLG_ATTR                        RID_DIALOG_START + 10
+#define DLG_SAVE_AS                     RID_DIALOG_START + 11
+#define DLG_ERROR                       RID_DIALOG_START + 12
+#define DLG_TEXT                        RID_DIALOG_START + 13
 
 //========================================================================
 // tab pages
@@ -115,6 +118,9 @@
 
 #define QUERY_BRW_DELETE_ROWS           RID_QUERYBOX_START +  0
 #define QUERY_BRW_SAVEMODIFIED          RID_QUERYBOX_START +  1
+#define QUERY_BRW_DELETE_QUERY          RID_QUERYBOX_START +  2
+#define QUERY_CONNECTION_LOST           RID_QUERYBOX_START +  3
+#define QUERY_BRW_DELETE_QUERY_CONFIRM  RID_QUERYBOX_START +  4
 
 //========================================================================
 // toolboxes
@@ -122,6 +128,7 @@
 #define RID_BRW_TAB_TOOLBOX             RID_TOOLBOX_START +  0
 #define RID_BRW_QRY_TOOLBOX             RID_TOOLBOX_START +  1
 #define RID_QRY_TOOLBOX_SQL             RID_TOOLBOX_START +  2
+#define RID_BRW_QUERYDESIGN_TOOLBOX     RID_TOOLBOX_START +  3
 
 //========================================================================
 // bitmaps
@@ -216,6 +223,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/01/04 11:19:55  fs
+ *  #81485# +PAGE_ADO
+ *
  *  Revision 1.15  2000/12/12 12:30:16  oj
  *  #80933# new dialog ids
  *

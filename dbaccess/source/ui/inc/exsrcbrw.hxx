@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exsrcbrw.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:45:18 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 16:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ namespace dbaui
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
         // UNO
-        DECLARE_UNO3_DEFAULTS(SbaExternalSourceBrowser, SbaXDataBrowserController_Base);
+        DECLARE_UNO3_DEFAULTS(SbaExternalSourceBrowser, OGenericUnoController);
         virtual ::com::sun::star::uno::Any  SAL_CALL queryInterface(const ::com::sun::star::uno::Type& _rType) throw (::com::sun::star::uno::RuntimeException);
         //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > >  getIdlClasses(void);
 

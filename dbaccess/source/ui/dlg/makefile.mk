@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.7 $
+ #  $Revision: 1.8 $
  #
- #  last change: $Author: oj $ $Date: 2000-12-12 12:47:56 $
+ #  last change: $Author: oj $ $Date: 2001-01-09 16:06:51 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -77,6 +77,9 @@ ENABLE_EXCEPTIONS=TRUE
 BMP_IN=$(PRJ)$/res
 
 SRCFILES =	\
+        dlgtext.src		\
+        dlgerr.src		\
+        dlgsave.src		\
         queryorder.src	\
         queryfilter.src	\
         paramdialog.src	\
@@ -90,6 +93,9 @@ SRCFILES =	\
 # ... object files ............................
 
 SLOFILES=	\
+        $(SLO)$/dlgtext.obj		\
+        $(SLO)$/dlgerr.obj		\
+        $(SLO)$/dlgsave.obj		\
         $(SLO)$/dlgsize.obj		\
         $(SLO)$/dlgattr.obj		\
         $(SLO)$/queryorder.obj	\
@@ -110,6 +116,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.7  2000/12/12 12:47:56  oj
+ #	#80933# some new files
+ #	
  #	Revision 1.6  2000/11/10 16:12:36  oj
  #	new files
  #	

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 16:12:18 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 16:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #ifndef _COM_SUN_STAR_FRAME_XSTATUSLISTENER_HPP_
 #include <com/sun/star/frame/XStatusListener.hpp>
 #endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
-#endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
@@ -101,10 +98,11 @@ namespace dbaui
                 ,public SbaTableQueryBrowser_Base
     {
     protected:
+        ::osl::Mutex            m_aEntryMutex;
         DBTreeView*             m_pTreeView;
         Splitter*               m_pSplitter;
         DBTreeListModel*        m_pTreeModel;           // contains the datasources of the registry
-        SvLBoxEntry*            m_pCurrentlyLoaded;
+        SvLBoxEntry*            m_pCurrentlyDisplayed;
 
         DECLARE_STL_STDKEY_MAP( sal_Int32, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >, SpecialSlotDispatchers);
         DECLARE_STL_STDKEY_MAP( sal_Int32, sal_Bool, SpecialSlotStates);
@@ -114,26 +112,20 @@ namespace dbaui
         ::rtl::OUString         m_sDefaultDataSourceName;
         ::rtl::OUString         m_sDefaultCommand;
         sal_Int32               m_nDefaultCommandType;
-
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xDatabaseContext;
+        sal_Bool                m_bHideTreeView;
 
     // attribute access
     public:
         SbaTableQueryBrowser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
         ~SbaTableQueryBrowser();
 
-//      static void * SAL_CALL operator new( size_t nSize ) throw()
-//          { return ::rtl_allocateMemory( nSize ); }
-//      static void SAL_CALL operator delete( void * pMem ) throw()
-//          { ::rtl_freeMemory( pMem ); }
-//
         // need by registration
         static ::rtl::OUString getImplementationName_Static() throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                 SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-        DECLARE_UNO3_DEFAULTS(SbaTableQueryBrowser,SbaXDataBrowserController_Base);
+        DECLARE_UNO3_DEFAULTS(SbaTableQueryBrowser,OGenericUnoController);
         // late construction
         virtual sal_Bool Construct(Window* pParent);
 
@@ -214,14 +206,19 @@ namespace dbaui
 
         /** unloads the form, empties the grid model
         */
-        void unloadForm();
+        void unloadForm(sal_Bool _bDisposeConnection = sal_True);
 
         /** close the connection (and collapse the list entries) of the given list entries
         */
-        void closeConnection(SvLBoxEntry* _pEntry);
+        void closeConnection(SvLBoxEntry* _pEntry,sal_Bool _bDisposeConnection = sal_True);
 
         sal_Bool    populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, const Image& _rImage);
         void        initializeTreeModel();
+
+        /** search in the tree for query- or tablecontainer equal to this interface and return
+            this container entry
+        */
+        SvLBoxEntry* getNameAccessFromEntry(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxNameAccess);
 
         // is called when a table or a query was selected
         DECL_LINK( OnSelectEntry, SvLBoxEntry* );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 16:46:23 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 16:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 /********************************************************************************************/
 
 using namespace ::rtl;
+using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
@@ -87,6 +88,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBContentLoader();
 extern "C" void SAL_CALL writeDBLoaderInfo(void* pRegistryKey);
 extern "C" void SAL_CALL createRegistryInfo_OInteractionHandler();
 extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl();
+extern "C" void SAL_CALL createRegistryInfo_OQueryControl();
 
 //***************************************************************************************
 extern "C" void SAL_CALL createRegistryInfo_DBU()
@@ -101,6 +103,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_DBContentLoader();
         createRegistryInfo_OInteractionHandler();
         createRegistryInfo_SbaXGridControl();
+        createRegistryInfo_OQueryControl();
         bInit = sal_True;
     }
 }

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: brwview.hxx,v $
+ *  $RCSfile: QueryTextView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:03:40 $
+ *  last change: $Author: oj $ $Date: 2001-01-09 16:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -37,11 +37,11 @@
  *  Sun Industry Standards Source License Version 1.1
  *  =================================================
  *  The contents of this file are subject to the Sun Industry Standards
- *  Source License Version 1.1 (the "License"); You may not use this file
+ *  Source License Version 1.1 (the License); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
  *  License at http://www.openoffice.org/license.html.
  *
- *  Software provided under this License is provided on an "AS IS" basis,
+ *  Software provided under this License is provided on an AS IS basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
@@ -58,75 +58,75 @@
  *
  *
  ************************************************************************/
+#ifndef DBAUI_QUERYVIEW_TEXT_HXX
+#define DBAUI_QUERYVIEW_TEXT_HXX
 
-#ifndef _SBX_BRWVIEW_HXX
-#define _SBX_BRWVIEW_HXX
-
-#ifndef _SV_WINDOW_HXX //autogen
-#include <vcl/window.hxx>
+#ifndef DBAUI_QUERYVIEW_HXX
+#include "queryview.hxx"
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
 #endif
 
-#ifndef _TOOLBOX_HXX //autogen
-#include <vcl/toolbox.hxx>
-#endif
-
-#ifndef _TOOLS_RESID_HXX //autogen wg. ResId
-#include <tools/resid.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
-#include <com/sun/star/awt/PosSize.hpp>
-#endif
-#ifndef DBAUI_DATAVIEW_HXX
-#include "dataview.hxx"
-#endif
-
-// =========================================================================
-class ResMgr;
 class Splitter;
 
 namespace dbaui
 {
-    class DBTreeListModel;
-    class DBTreeView;
-    class SbaGridControl;
-
-    class UnoDataBrowserView : public ODataView
+    // tempoaray class until the beamer is implemented
+    class OBeamer : public Window
     {
-    protected:
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >                 m_xGrid;            // our grid's UNO representation
-        DBTreeView*             m_pTreeView;
-        Splitter*               m_pSplitter;
-        SbaGridControl*         m_pVclControl;  // our grid's VCL representation
+    public:
+        OBeamer(Window* _pParent) : Window(_pParent){}
+    };
+
+    class OQueryTextView;
+    class OQueryContainerWindow : public Window
+    {
+        OQueryTextView* m_pView;
+        OBeamer*        m_pBeamer;
+        Splitter*       m_pSplitter;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xBeamer;
+        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer >        m_xMe;              // our own UNO representation
 
         DECL_LINK( SplitHdl, void* );
-    // attribute access
     public:
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >             getGridControl() const  { return m_xGrid; }
-        SbaGridControl*         getVclControl() const   { return m_pVclControl; }
+        OQueryContainerWindow(Window* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        ~OQueryContainerWindow();
 
+        virtual void        Resize();
+        void showBeamer(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
+        void hideBeamer();
+        void initialize(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _xFrame);
+        OQueryTextView * getView() { return m_pView; }
+    };
+    // end of temp classes
+
+    class OSqlEdit;
+    class OQueryTextView : public OQueryView
+    {
+        OSqlEdit*   m_pEdit;
     public:
-        UnoDataBrowserView(Window* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
-        virtual ~UnoDataBrowserView();
+        OQueryTextView(Window* pParent, OQueryController* _pController,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+        virtual ~OQueryTextView();
 
+        virtual sal_Bool isCutAllowed();
+        virtual void copy();
+        virtual void cut();
+        virtual void paste();
+        // clears the whole query
+        virtual void clear();
+        // set the view readonly or not
+        virtual void setReadOnly(sal_Bool _bReadOnly);
+        // set the statement for representation
+        virtual void setStatement(const ::rtl::OUString& _rsStatement);
+        virtual ::rtl::OUString getStatement();
         /// late construction
         virtual void Construct(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xModel);
-
-        /** as columns may be hidden there is a difference between a columns model pos and its view pos
-            so we you may use these translation function
-        */
-        sal_uInt16 Model2ViewPos(sal_uInt16 nPos) const;
-        sal_uInt16 View2ModelPos(sal_uInt16 nPos) const;
-        /// for the same reason the view column count isn't the same as the model column count
-        sal_uInt16 ViewColumnCount() const;
-
-        void setSplitter(Splitter* _pSplitter);
-        void setTreeView(DBTreeView* _pTreeView);
-
     protected:
-        virtual void GetFocus();
+        // return the Rectangle where I can paint myself
         virtual void resizeControl(Rectangle& rRect);
     };
 }
-#endif // _SBX_BRWVIEW_HXX
+#endif // DBAUI_QUERYVIEW_TEXT_HXX
+
 
