@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:37:32 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,7 +852,7 @@ TabPage TP_TABLE_COLUMN
         Text [ danish ] = "Modificer kolonner jævnt" ;
         Text [ italian ] = "Modifica colonne proporzionalmente" ;
         Text [ spanish ] = "Modificar columnas proporcionalmente" ;
-        Text [ french ] = "Modifier les colonnes de manière proport." ;
+        Text [ french ] = "Modifier les colonnes proportionnellement" ;
         Text [ dutch ] = "Kolommen gelijkmatig wijzigen" ;
         Text [ portuguese ] = "Ajustar colunas proporcionalmente" ;
         Text[ chinese_simplified ] = "¶Ô³ÆµØµ÷ÕûÁÐ¿í";
@@ -1297,7 +1297,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ english_us ] = "~After" ;
         Text[ chinese_simplified ] = "Ö®ºó(~E)";
         Text[ russian ] = "ïîñëå";
-        Text[ polish ] = "p~otem";
+        Text[ polish ] = "za";
         Text[ japanese ] = "Œã(~E)";
         Text[ chinese_traditional ] = "¤§«á(~E)";
         Text[ arabic ] = "ÈÚÏ";
@@ -1399,7 +1399,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text [ danish ] = "Odel tabel ikke" ;
         Text [ italian ] = "Non separare la tabella" ;
         Text [ spanish ] = "~No dividir tabla" ;
-        Text [ french ] = "Ne pas ~séparer tableau" ;
+        Text [ french ] = "Ne pas ~diviser le tableau" ;
         Text [ dutch ] = "~Tabel niet splitsen" ;
         Text [ portuguese ] = "~Não separar tabela" ;
         Text[ chinese_simplified ] = "²»·Ö¸ô±í¸ñ";
@@ -1422,7 +1422,7 @@ TabPage TP_TABLE_TEXTFLOW
         TabStop = TRUE ;
         Text [ english_us ] = "~keep with next paragraph" ;
         Text [ portuguese_brazilian ] = "Mit folgendem Absatz ~zusammenhalten" ;
-        Text [ swedish ] = "Håll ~ihop med följande stycke" ;
+        Text [ swedish ] = "Håll ih~op med följande stycke" ;
         Text [ danish ] = "Hold sammen med næste afsnit" ;
         Text [ italian ] = "Non separare dal paragrafo seguente." ;
         Text [ spanish ] = "Mantener ~junto al párrafo siguiente" ;
@@ -1502,7 +1502,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text = "Oben" ;
         Text [ ENGLISH ] = "Top" ;
         Text [ english_us ] = "Top" ;
-        Text [ swedish ] = "Överst" ;
+        Text [ swedish ] = "Uppe" ;
         Text [ danish ] = "Top" ;
         Text [ italian ] = "Alto" ;
         Text [ spanish ] = "Arriba" ;
@@ -1554,7 +1554,7 @@ TabPage TP_TABLE_TEXTFLOW
         Text = "Unten" ;
         Text [ ENGLISH ] = "Bottom" ;
         Text [ english_us ] = "Bottom" ;
-        Text [ swedish ] = "Underst" ;
+        Text [ swedish ] = "Nere" ;
         Text [ danish ] = "Nederst" ;
         Text [ italian ] = "Basso" ;
         Text [ spanish ] = "Abajo" ;
@@ -1580,7 +1580,7 @@ InfoBox MSG_WRONG_TABLENAME
     MESSAGE [ English ] = "The name of the table must not contain spaces." ;
     Message [ english_us ] = "The name of the table must not contain spaces." ;
     Message [ portuguese_brazilian ] = "Der Name der Tabelle darf keine Leerzeichen enthalten." ;
-    Message [ swedish ] = "Namnet på tabellen får inte innehålla några blanksteg." ;
+    Message [ swedish ] = "Namnet på tabellen får inte innehålla några mellanslag." ;
     Message [ danish ] = "Et tabelnavn må ikke indeholde mellemrum." ;
     Message [ italian ] = "Il nome della tabella non può contenere spazi." ;
     Message [ spanish ] = "El nombre de la tabla no debe contener espacios." ;
