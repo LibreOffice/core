@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ public:
     void SetBase( long nLnAscent, long nLnDescent,
         long nFlyAscent, long nFlyDescent );
 
-    void StopAnimation( OutputDevice *pOut );
+    void StopAnimation( OutputDevice* pOut );
 
     inline sal_Bool IsAnimated() const { return bAnimated; }
     inline void SetAnimated( sal_Bool bNew ) { bAnimated = bNew; }
