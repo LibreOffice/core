@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-10 18:06:56 $
+#   last change: $Author: rt $ $Date: 2004-12-16 11:35:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,10 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+.IF "$(SYSTEM_LIBXML)" == "YES"
+CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
