@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:06:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 16:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,11 +156,11 @@
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
 
 #ifndef _VCL_UNOWRAP_HXX
@@ -465,7 +465,7 @@ public:
     void            SetPosInParent( USHORT nPos ) { nPosInParent = nPos; }
     USHORT          GetPosInParent() const { return nPosInParent; }
 
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
     BOOL            IsTopmostApplicationMenu();
     BOOL            registerAccessibleParent();
     void            revokeAccessibleParent();
@@ -623,7 +623,7 @@ public:
     PopupMenu*      GetActivePopup() const  { return pActivePopup; }
     void            PopupClosed( Menu* pMenu );
     USHORT          GetHighlightedItem() const { return nHighlightedItem; }
-    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     void SetAutoPopup( BOOL bAuto ) { mbAutoPopup = bAuto; }
 };
@@ -731,7 +731,7 @@ Menu::~Menu()
 
     // at the window free the reference to the accessible component
     if ( pWindow )
-        pWindow->SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >() );
+        pWindow->SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >() );
 
     // dispose accessible components
     if ( mxAccessible.is() )
@@ -1816,7 +1816,7 @@ void Menu::SelectItem( USHORT nItemId )
         static_cast<PopupMenu*>(this)->SelectEntry( nItemId );
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > Menu::GetAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > Menu::GetAccessible()
 {
     if ( !mxAccessible.is() )
     {
@@ -1827,10 +1827,10 @@ void Menu::SelectItem( USHORT nItemId )
                 sal_uInt16 nItemId = pStartedFrom->GetItemId( i );
                 if ( static_cast< Menu* >( pStartedFrom->GetPopupMenu( nItemId ) ) == this )
                 {
-                    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xParent = pStartedFrom->GetAccessible();
+                    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xParent = pStartedFrom->GetAccessible();
                     if ( xParent.is() )
                     {
-                        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
+                        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
                         if ( xParentContext.is() )
                             mxAccessible = xParentContext->getAccessibleChild( i );
                     }
@@ -1848,7 +1848,7 @@ void Menu::SelectItem( USHORT nItemId )
     return mxAccessible;
 }
 
-void Menu::SetAccessible( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >& rxAccessible )
+void Menu::SetAccessible( const ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >& rxAccessible )
 {
     mxAccessible = rxAccessible;
 }
@@ -2990,6 +2990,10 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
 
     if ( Application::GetAccessHdlCount() )
         Application::AccessNotify( AccessNotification( ACCESS_EVENT_POPUPMENU_START, pMenu ) );
+    SetAccessibleRole( ::com::sun::star::accessibility::AccessibleRole::MENU );
+#ifdef DEBUG
+    SetAccessibleName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Menu" ) ) );
+#endif
 }
 
 MenuFloatingWindow::~MenuFloatingWindow()
@@ -3019,7 +3023,7 @@ MenuFloatingWindow::~MenuFloatingWindow()
     }
 
     // free the reference to the accessible component
-    SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >() );
+    SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >() );
 
     if( Application::GetAccessHdlCount() )
         Application::AccessNotify( AccessNotification( ACCESS_EVENT_POPUPMENU_END, pMenu ) );
@@ -4054,9 +4058,9 @@ void MenuFloatingWindow::Command( const CommandEvent& rCEvt )
     }
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > MenuFloatingWindow::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > MenuFloatingWindow::CreateAccessible()
 {
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc;
 
     if ( pMenu )
         xAcc = pMenu->GetAccessible();
@@ -4137,12 +4141,16 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     aHideBtn.SetClickHdl( LINK( this, MenuBarWindow, HideHdl ) );
     aHideBtn.SetSymbol( SYMBOL_HIDE );
     aHideBtn.SetQuickHelpText( XubString( ResId( SV_HELPTEXT_MINIMIZE, pResMgr ) ) );
+    SetAccessibleRole( ::com::sun::star::accessibility::AccessibleRole::MENU_BAR );
+#ifdef DEBUG
+    SetAccessibleName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "MenuBar" ) ) );
+#endif
 }
 
 MenuBarWindow::~MenuBarWindow()
 {
     // free the reference to the accessible component
-    SetAccessible( ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >() );
+    SetAccessible( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >() );
 }
 
 void MenuBarWindow::SetMenu( MenuBar* pMen )
@@ -4755,9 +4763,9 @@ void MenuBarWindow::GetFocus()
     }
 }
 
-::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > MenuBarWindow::CreateAccessible()
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > MenuBarWindow::CreateAccessible()
 {
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xAcc;
 
     if ( pMenu )
         xAcc = pMenu->GetAccessible();
