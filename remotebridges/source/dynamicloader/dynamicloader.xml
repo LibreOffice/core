@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Kay Ramme </Author>
+
+<Name>  com.sun.star.loader.Dynamic </Name>
+
+<Description>
+   This service allows the delegation of the resolution
+   of a SingleServiceFactory for a service to be
+   delegated to a resolver (e.g. UnoUrlResolver).
+</Description>
+
+<ModuleName>    dynamicloader   </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
+
+<SupportedService>  com.sun.star.loader.Dynamic </SupportedService>
+
+<ServiceDependency> com.sun.star.bridge.UnoUrlResolver  </ServiceDependency>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper2 </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
+
+
+
+<Type>  com.sun.star.bridge.XUnoUrlResolver       </Type>
+<Type>  com.sun.star.lang.XMultiServiceFactory    </Type>
+<Type>  com.sun.star.lang.XServiceInfo            </Type>
+<Type>  com.sun.star.lang.XSingleServiceFactory   </Type>
+<Type>  com.sun.star.lang.XTypeProvider           </Type>
+<Type>  com.sun.star.loader.XImplementationLoader </Type>
+<Type>  com.sun.star.registry.XRegistryKey        </Type>
+<Type>  com.sun.star.uno.XWeak                    </Type>
+<Type>  com.sun.star.uno.XAggregation             </Type>
+
+</COMPONENTDESCRIPTION>
+
