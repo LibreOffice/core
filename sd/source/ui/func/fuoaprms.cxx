@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoaprms.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:04:21 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 #include "svx/xtable.hxx"
 
 #include "strings.hrc"
+#include "glob.hrc"
 #include "drawdoc.hxx"
 #ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
@@ -897,6 +898,7 @@ FuObjectAnimationParameters::FuObjectAnimationParameters (
         /***************************************************************
         |* ggfs. in Preview anzeigen
         \**************************************************************/
+/*
         SfxChildWindow* pPreviewChildWindow =
             pViewShell->GetViewFrame()->GetChildWindow(
                 PreviewChildWindow::GetChildWindowId());
@@ -923,8 +925,9 @@ FuObjectAnimationParameters::FuObjectAnimationParameters (
                 }
             }
         }
-    }
+    */
 
+    }
     // sieht man nicht, also muss an den Bindings nicht invalidiert werden
 }
 
