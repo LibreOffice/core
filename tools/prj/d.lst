@@ -35,6 +35,7 @@ hedabu: ..\bootstrp\copyprj.hxx %_DEST%\inc%_EXT%\bootstrp\copyprj.hxx
 hedabu: ..\bootstrp\deliver.hxx %_DEST%\inc%_EXT%\bootstrp\deliver.hxx
 hedabu: ..\bootstrp\drvmap.hxx %_DEST%\inc%_EXT%\bootstrp\drvmap.hxx
 hedabu: ..\bootstrp\envset.hxx %_DEST%\inc%_EXT%\bootstrp\envset.hxx
+hedabu: ..\bootstrp\prj.hxx %_DEST%\inc%_EXT%\bootstrp\prj.hxx
 hedabu: ..\bootstrp\errhdl.hxx %_DEST%\inc%_EXT%\bootstrp\errhdl.hxx
 hedabu: ..\bootstrp\fattr.hxx %_DEST%\inc%_EXT%\bootstrp\fattr.hxx
 hedabu: ..\bootstrp\getopt.h %_DEST%\inc%_EXT%\bootstrp\getopt.h
