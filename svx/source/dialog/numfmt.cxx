@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-01-26 17:38:46 $
+ *  last change: $Author: nn $ $Date: 2001-03-09 18:10:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,7 @@ void SvxNumberPreviewImpl::NotifyChange( const String& rPrevStr,
 void SvxNumberPreviewImpl::Paint( const Rectangle& rRect )
 {
     Font    aDrawFont   = GetFont();
-    Size    aSzWnd      = GetSizePixel();
+    Size    aSzWnd      = GetOutputSizePixel();
     Point   aPosText    = Point( (aSzWnd.Width()  - GetTextWidth( aPrevStr )) /2,
                                  (aSzWnd.Height() - GetTextHeight())/2 );
 
@@ -566,6 +566,8 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
             aValString = pNumItem->GetValueString();
             break;
         case SVX_VALUE_TYPE_NUMBER:
+            //  #50441# string may be set in addition to the value
+            aValString = pNumItem->GetValueString();
             nValDouble = pNumItem->GetValueDouble();
             break;
         case SVX_VALUE_TYPE_UNDEFINED:
@@ -594,7 +596,8 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
                                 pNumItem->GetNumberFormatter(),
                                 (pValFmtAttr) ? nInitFormat : 0L,
                                 eValType,
-                                nValDouble );
+                                nValDouble,
+                                &aValString );
 
     FillCurrencyBox();
 

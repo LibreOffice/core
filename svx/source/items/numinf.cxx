@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numinf.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: nn $ $Date: 2001-03-09 18:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,17 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const double& rVal, const sal_uInt16 nId ) :
 
     INIT( pNumFormatter, SVX_VALUE_TYPE_NUMBER, rVal, String() )
+
+{
+}
+
+// -----------------------------------------------------------------------
+
+SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
+                                      const double& rVal, const String& rValueStr,
+                                      const sal_uInt16 nId ) :
+
+    INIT( pNumFormatter, SVX_VALUE_TYPE_NUMBER, rVal, rValueStr )
 
 {
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmtsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-01-26 17:37:29 $
+ *  last change: $Author: nn $ $Date: 2001-03-09 18:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,10 +109,11 @@ SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumForma
 SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumFormatter,
                                               sal_uInt32                 nFormatKey,
                                               SvxNumberValueType eNumValType,
-                                              double             nNumVal )
+                                              double             nNumVal,
+                                              const String*      pNumStr )
 {
     return new SvxNumberFormatShell(pNumFormatter,nFormatKey,
-                                    eNumValType,nNumVal );
+                                    eNumValType,nNumVal,pNumStr );
 }
 
 // -----------------------------------------------------------------------
@@ -155,10 +156,15 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
 SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             sal_uInt32              nFormatKey,
                                             SvxNumberValueType  eNumValType,
-                                            double              nNumVal )
+                                            double              nNumVal,
+                                            const String*       pNumStr )
     :   _INIT
 {
-    aValStr.Erase();
+    //  #50441# When used in Writer, the SvxNumberInfoItem contains the
+    //  original string in addition to the value
+
+    if ( pNumStr )
+        aValStr = *pNumStr;
 
     switch ( eValType )
     {
@@ -484,8 +490,29 @@ void SvxNumberFormatShell::MakePreviewString( const String& rFormatStr,
 {
     Color* pColor = NULL;
 
-    pFormatter->GetPreviewString( rFormatStr, nValNum, rPreviewStr,
-                                  &pColor, eCurLanguage );
+    ULONG nExistingFormat = pFormatter->GetEntryKey( rFormatStr, eCurLanguage );
+    if ( nExistingFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
+    {
+        //  real preview - not implemented in NumberFormatter for text formats
+
+        pFormatter->GetPreviewString( rFormatStr, nValNum, rPreviewStr,
+                                      &pColor, eCurLanguage );
+    }
+    else
+    {
+        //  format exists
+
+        //  #50441# if a string was set in addition to the value, use it for text formats
+        BOOL bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
+                            ( aValStr.Len() && ( pFormatter->GetType(nExistingFormat) & NUMBERFORMAT_TEXT ) ) );
+        if ( bUseText )
+            pFormatter->GetOutputString( aValStr, nExistingFormat,
+                                         rPreviewStr, &pColor );
+        else
+            pFormatter->GetOutputString( nValNum, nExistingFormat,
+                                         rPreviewStr, &pColor );
+    }
+
     if ( pColor )
         rFontColor = *pColor;
     else
@@ -1162,7 +1189,11 @@ void SvxNumberFormatShell::GetPreviewString_Impl( String& rString,
 {
     Color* pColor = NULL;
 
-    if ( eValType == SVX_VALUE_TYPE_STRING )
+    //  #50441# if a string was set in addition to the value, use it for text formats
+    BOOL bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
+                        ( aValStr.Len() && ( pFormatter->GetType(nCurFormatKey) & NUMBERFORMAT_TEXT ) ) );
+
+    if ( bUseText )
         pFormatter->GetOutputString( aValStr, nCurFormatKey,
                                      rString, &pColor );
     else
