@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdminDlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:54:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:17:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ namespace dbaui
 
         // forwards to ODbDataSourceAdministrationHelper
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB();
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > createConnection();
+        virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
         virtual DATASOURCE_TYPE getDatasourceType(const SfxItemSet& _rSet) const;
         virtual void clearPassword();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: IItemSetHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:53:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ namespace dbaui
     {
     public:
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() = 0;
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > createConnection() = 0;
+        virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection() = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver() = 0;
         virtual DATASOURCE_TYPE getDatasourceType(const SfxItemSet& _rSet) const = 0;
         virtual void clearPassword() = 0;
