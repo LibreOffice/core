@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:59:42 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:33:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,7 @@ String STYLES + 3
     Text[ polish ] = "OK";
     Text[ portuguese_brazilian ] = "OK";
     Text[ japanese ] = "OK";
-    Text[ korean ] = "£Ï£Ë";
+    Text[ korean ] = "È®ÀÎ";
     Text[ chinese_simplified ] = "È·¶¨";
     Text[ chinese_traditional ] = "½T©w";
     Text[ arabic ] = "ÍÓäÇğ";
@@ -525,7 +525,7 @@ String TextField
     Text[ polish ] = "Nie zdefiniowano pola danych u¿ytkownika!";
     Text[ portuguese_brazilian ] = "Textfield is not defined!";
     Text[ japanese ] = "Õ°»Ş°ÃŞ°À‚ÌÌ¨°ÙÄŞ‚ª’è‹`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
-    Text[ korean ] = "Textfield is not defined!";
+    Text[ korean ] = "ÅØ½ºÆ®ÇÊµå°¡ Á¤ÀÇµÇÁö ¾Ê¾Ò½À´Ï´Ù!";
     Text[ chinese_simplified ] = "»¹Ã»ÓĞ¶¨ÒåÊ¹ÓÃÕß×Ö¶Î£¡";
     Text[ chinese_traditional ] = "ÁÙ¨S¦³©w¸q¨Ï¥ÎªÌ¸ê®ÆÄæ¦ì!";
     Text[ turkish ] = "Textfield is not defined!";
