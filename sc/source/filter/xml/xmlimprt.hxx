@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2001-02-01 15:08:02 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 17:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,6 @@ enum ScXMLDocTokens
     XML_TOK_DOC_MASTERSTYLES,
     XML_TOK_DOC_META,
     XML_TOK_DOC_SCRIPTS,
-    XML_TOK_DOC_TRACKED_CHANGES,
     XML_TOK_DOC_BODY,
     XML_TOK_OFFICE_END=XML_TOK_UNKNOWN
 };
@@ -145,6 +144,7 @@ enum ScXMLStyleTokens
 
 enum ScXMLBodyTokens
 {
+    XML_TOK_BODY_TRACKED_CHANGES,
     XML_TOK_BODY_CALCULATION_SETTINGS,
     XML_TOK_BODY_CONTENT_VALIDATIONS,
     XML_TOK_BODY_LABEL_RANGES,
@@ -777,8 +777,6 @@ public:
                                      const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList, sal_Bool bAutoStyles );
 //  SvXMLImportContext *CreateUseStylesContext(const NAMESPACE_RTL(OUString)& rLocalName ,
 //                                  const ::com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
-    SvXMLImportContext *CreateTrackedChangesContext(const USHORT nPrefix, const NAMESPACE_RTL(OUString)& rLocalName,
-                                     const com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList>& xAttrList);
     SvXMLImportContext *CreateBodyContext(
                                     const NAMESPACE_RTL(OUString)& rLocalName );
 
@@ -890,7 +888,6 @@ public:
 
     void SetRemoveLastChar(sal_Bool bValue) { bRemoveLastChar = bValue; }
     sal_Bool GetRemoveLastChar() { return bRemoveLastChar; }
-    void CreateChangeTrack();
 };
 
 #endif

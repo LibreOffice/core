@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-30 17:39:47 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 17:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,9 @@
 #ifndef _SC_XMLTRACKEDCHANGESCONTEXT_HXX
 #include "XMLTrackedChangesContext.hxx"
 #endif
+#ifndef _SC_XMLCHANGETRACKINGIMPORTHELPER_HXX
+#include "XMLChangeTrackingImportHelper.hxx"
+#endif
 
 #include <xmloff/xmltkmap.hxx>
 
@@ -108,12 +111,15 @@ using namespace com::sun::star;
 ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
                                               USHORT nPrfx,
                                                    const NAMESPACE_RTL(OUString)& rLName ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    pChangeTrackingImportHelper(NULL)
 {
 }
 
 ScXMLBodyContext::~ScXMLBodyContext()
 {
+    if (pChangeTrackingImportHelper)
+        delete pChangeTrackingImportHelper;
 }
 
 SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
@@ -140,6 +146,13 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
 //      pContext = new SwXMLListBlockContext( GetSwImport(),nPrefix, rLocalName,
 //                                            xAttrList, bOrdered );
 //      break;
+    case XML_TOK_BODY_TRACKED_CHANGES :
+    {
+        pChangeTrackingImportHelper = new ScXMLChangeTrackingImportHelper();
+        if (pChangeTrackingImportHelper)
+            pContext = new ScXMLTrackedChangesContext( GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
+    }
+    break;
     case XML_TOK_BODY_CALCULATION_SETTINGS :
         pContext = new ScXMLCalculationSettingsContext( GetScImport(), nPrefix, rLocalName, xAttrList );
         break;
@@ -199,6 +212,7 @@ void ScXMLBodyContext::EndElement()
         pDoc->AddDetectiveOperation( aOpData );
     }
 
-    GetScImport().CreateChangeTrack();
+    if (pChangeTrackingImportHelper)
+        pChangeTrackingImportHelper->CreateChangeTrack(GetScImport().GetDocument());
 }
 

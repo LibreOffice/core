@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-30 17:39:47 $
+ *  last change: $Author: sab $ $Date: 2001-02-01 17:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,12 +97,6 @@
 #ifndef _SC_XMLTABLESHAPEIMPORTHELPER_HXX
 #include "XMLTableShapeImportHelper.hxx"
 #endif
-#ifndef _SC_XMLTRACKEDCHANGESCONTEXT_HXX
-#include "XMLTrackedChangesContext.hxx"
-#endif
-#ifndef _SC_XMLCHANGETRACKINGIMPORTHELPER_HXX
-#include "XMLChangeTrackingImportHelper.hxx"
-#endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
@@ -152,7 +146,6 @@ static __FAR_DATA SvXMLTokenMapEntry aDocTokenMap[] =
     { XML_NAMESPACE_OFFICE, sXML_master_styles,     XML_TOK_DOC_MASTERSTYLES        },
     { XML_NAMESPACE_OFFICE, sXML_meta,              XML_TOK_DOC_META                },
     { XML_NAMESPACE_OFFICE, sXML_script,            XML_TOK_DOC_SCRIPTS             },
-    { XML_NAMESPACE_TABLE,  sXML_tracked_changes,   XML_TOK_DOC_TRACKED_CHANGES     },
     { XML_NAMESPACE_OFFICE, sXML_body,              XML_TOK_DOC_BODY                },
     XML_TOKEN_MAP_END
 };
@@ -179,6 +172,7 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aBodyTokenMap[] =
 {
+    { XML_NAMESPACE_TABLE, sXML_tracked_changes,        XML_TOK_BODY_TRACKED_CHANGES        },
     { XML_NAMESPACE_TABLE, sXML_calculation_settings,   XML_TOK_BODY_CALCULATION_SETTINGS   },
     { XML_NAMESPACE_TABLE, sXML_content_validations,    XML_TOK_BODY_CONTENT_VALIDATIONS    },
     { XML_NAMESPACE_TABLE, sXML_label_ranges,           XML_TOK_BODY_LABEL_RANGES           },
@@ -753,9 +747,6 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( USHORT nPrefix,
         break;
     case XML_TOK_DOC_SCRIPTS:
         pContext = GetScImport().CreateScriptContext( rLocalName );
-        break;
-    case XML_TOK_DOC_TRACKED_CHANGES:
-        pContext = GetScImport().CreateTrackedChangesContext( nPrefix, rLocalName, xAttrList );
         break;
     case XML_TOK_DOC_BODY:
         pContext = GetScImport().CreateBodyContext( rLocalName );
@@ -1349,8 +1340,7 @@ ScXMLImport::ScXMLImport() :
     sSC_currency(RTL_CONSTASCII_USTRINGPARAM(sXML_currency)),
     sSC_string(RTL_CONSTASCII_USTRINGPARAM(sXML_string)),
     sSC_boolean(RTL_CONSTASCII_USTRINGPARAM(sXML_boolean)),
-    bRemoveLastChar(sal_False),
-    pChangeTrackingImportHelper(NULL)
+    bRemoveLastChar(sal_False)
 
 //  pParaItemMapper( 0 ),
 {
@@ -1442,9 +1432,6 @@ ScXMLImport::~ScXMLImport()
     uno::Reference<document::XActionLockable> xActionLockable(GetModel(), uno::UNO_QUERY);
     if (xActionLockable.is())
         xActionLockable->removeActionLock();
-
-    if (pChangeTrackingImportHelper)
-        delete pChangeTrackingImportHelper;
 }
 
 void SAL_CALL ScXMLImport::setTargetDocument( const uno::Reference<lang::XComponent>& xComponent )
@@ -1495,19 +1482,6 @@ SvXMLImportContext *ScXMLImport::CreateStylesContext(const NAMESPACE_RTL(OUStrin
             //xStyles = pContext;
             SetStyles((SvXMLStylesContext*)pContext);
     }
-    return pContext;
-}
-
-SvXMLImportContext *ScXMLImport::CreateTrackedChangesContext(const USHORT nPrefix, const NAMESPACE_RTL(OUString)& rLocalName,
-                                     const uno::Reference<xml::sax::XAttributeList>& xAttrList)
-{
-    SvXMLImportContext *pContext = NULL;
-
-    pChangeTrackingImportHelper = new ScXMLChangeTrackingImportHelper();
-
-    pContext = new ScXMLTrackedChangesContext ( *this, nPrefix, rLocalName,
-                                                xAttrList, pChangeTrackingImportHelper );
-
     return pContext;
 }
 
@@ -1587,10 +1561,3 @@ sal_Bool ScXMLImport::GetValidation(const rtl::OUString& sName, ScMyImportValida
         aValidation = *aItr;
     return bFound;
 }
-
-void ScXMLImport::CreateChangeTrack()
-{
-    if (pChangeTrackingImportHelper)
-        pChangeTrackingImportHelper->CreateChangeTrack(GetDocument());
-}
-
