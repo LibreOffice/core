@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:29:21 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:30:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1643,7 +1643,7 @@ void SwDrawContact::_InvalidateObjs( const bool _bUpdateSortedObjsList )
     }
 
     // invalidate position of 'master' drawing object
-    SwAnchoredObject* pAnchoredObj = GetAnchoredObj();
+    SwAnchoredObject* pAnchoredObj = GetAnchoredObj( 0L );
     pAnchoredObj->InvalidateObjPos();
     // --> OD 2004-07-01 #i28701#
     if ( _bUpdateSortedObjsList )
