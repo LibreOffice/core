@@ -31,6 +31,7 @@
         <type>  com.sun.star.registry.XRegistryKey          </type>
         <type>  com.sun.star.container.XNameAccess          </type>
         <type>  com.sun.star.container.XSet                 </type>
+        <type>  com.sun.star.beans.PropertyValue            </type>
     </component-description>
     <project-build-dependency>  cppuhelper       </project-build-dependency>
     <project-build-dependency>  cppu             </project-build-dependency>
