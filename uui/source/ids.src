@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2001-08-10 20:08:40 $
+ *  last change: $Author: kz $ $Date: 2001-08-13 20:11:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //
 //  Miscellaneous Resources
 //
-// $Author: rt $ $Date: 2001-08-10 20:08:40 $ $Revision: 1.23 $
+// $Author: kz $ $Date: 2001-08-13 20:11:30 $ $Revision: 1.24 $
 //============================================================================
 
 #define __RSC
@@ -1128,8 +1128,8 @@ Resource RID_UUI_ERRHDL
         Text[ russian ] = "Volume $(ARG1) does not exist";
         Text[ greek ] = "Volume $(ARG1) does not exist";
         Text[ dutch ] = "Volume $(ARG1) does not exist";
-        Text[ french ] = "Volume $(ARG1) does not exist";
-        Text[ spanish ] = "Volume $(ARG1) does not exist";
+        Text[ french ] = "L'unit� $(ARG1) n'existe pas.";
+        Text[ spanish ] = "No existe la unidad $(ARG1)";
         Text[ finnish ] = "Volume $(ARG1) does not exist";
         Text[ italian ] = "Volume $(ARG1) does not exist";
         Text[ danish ] = "Volume $(ARG1) does not exist";
@@ -1139,7 +1139,7 @@ Resource RID_UUI_ERRHDL
         Text[ japanese ] = "ﾄﾞﾗｲﾌﾞ $(ARG1) はありません。";
         Text[ korean ] = "Volume $(ARG1) does not exist";
         Text[ chinese_simplified ] = "Volume $(ARG1) does not exist";
-        Text[ chinese_traditional ] = "Volume $(ARG1) does not exist";
+        Text[ chinese_traditional ] = "贏蝶 $(ARG1) 不存在。";
         Text[ turkish ] = "Volume $(ARG1) does not exist";
         Text[ arabic ] = "Volume $(ARG1) does not exist";
         Text[ catalan ] = "Volume $(ARG1) does not exist";
@@ -1154,8 +1154,8 @@ Resource RID_UUI_ERRHDL
         Text[ russian ] = "Folder $(ARG1) does not exist";
         Text[ greek ] = "Folder $(ARG1) does not exist";
         Text[ dutch ] = "Folder $(ARG1) does not exist";
-        Text[ french ] = "Folder $(ARG1) does not exist";
-        Text[ spanish ] = "Folder $(ARG1) does not exist";
+        Text[ french ] = "Le dossier $(ARG1) n'existe pas.";
+        Text[ spanish ] = "No existe la carpeta $(ARG1)";
         Text[ finnish ] = "Folder $(ARG1) does not exist";
         Text[ italian ] = "Folder $(ARG1) does not exist";
         Text[ danish ] = "Folder $(ARG1) does not exist";
@@ -1165,11 +1165,12 @@ Resource RID_UUI_ERRHDL
         Text[ japanese ] = "ﾌｫﾙﾀﾞ $(ARG1) はありません。";
         Text[ korean ] = "Folder $(ARG1) does not exist";
         Text[ chinese_simplified ] = "Folder $(ARG1) does not exist";
-        Text[ chinese_traditional ] = "Folder $(ARG1) does not exist";
+        Text[ chinese_traditional ] = "資料夾 $(ARG1) 不存在";
         Text[ turkish ] = "Folder $(ARG1) does not exist";
         Text[ arabic ] = "Folder $(ARG1) does not exist";
         Text[ catalan ] = "Folder $(ARG1) does not exist";
     };
 };
+
 
 
