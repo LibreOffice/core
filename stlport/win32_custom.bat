@@ -1,0 +1,10 @@
+rem parameters in order of their apearance:
+rem - path to unpacked tarball
+rem - relative path back to module root
+
+setlocal
+
+cd %1
+
+type %2\dos_lineends.patch | patch -b -p2
+
