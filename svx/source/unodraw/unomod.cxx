@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-24 15:35:53 $
+ *  last change: $Author: cl $ $Date: 2001-09-28 14:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,14 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
@@ -79,17 +87,125 @@
 #include <svtools/itemprop.hxx>
 #endif
 
+#ifndef _SVTOOLS_UNOEVENT_HXX_
+#include <svtools/unoevent.hxx>
+#endif
+
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
+
+#include <cppuhelper/implbase2.hxx>
+
+#ifndef _SVX_UNOFILL_HXX_
+#include <unofill.hxx>
+#endif
+
+#ifndef _SVX_UNONRULE_HXX
+#include <unonrule.hxx>
+#endif
+
+#ifndef _SVTOOLS_UNOIMAP_HXX
+#include <svtools/unoimap.hxx>
+#endif
+
+#ifndef _SVX_FMDPAGE_HXX
+#include <fmdpage.hxx>
+#endif
+#ifndef _SVX_FMMODEL_HXX
+#include <fmmodel.hxx>
+#endif
+
+#ifndef _SVX_FMPAGE_HXX
+#include <fmpage.hxx>
+#endif
+
+#ifndef _SFX_HRC
+#include <sfx2/sfx.hrc>
+#endif
+
+#ifndef _SVX_UNOAPI_HXX_
+#include <unoapi.hxx>
+#endif
+
+#include "svdmodel.hxx"
 #include "globl3d.hxx"
 #include "svdtypes.hxx"
 #include "unoprov.hxx"
-#include "unomod.hxx"
 #include "unopage.hxx"
 #include "unofield.hxx"
+#include "unomod.hxx"
+#include "unomodel.hxx"
+#include "svdobj.hxx"
+#include "svdpage.hxx"
+#include "unoshape.hxx"
 
 extern UHashMapEntry pSdrShapeIdentifierMap[];
 
+//-////////////////////////////////////////////////////////////////////
+
 using namespace ::rtl;
+using namespace ::osl;
+using namespace ::vos;
 using namespace ::com::sun::star;
+
+//-////////////////////////////////////////////////////////////////////
+
+#define QUERYINT( xint ) \
+    if( rType == ::getCppuType((const uno::Reference< xint >*)0) ) \
+        aAny <<= uno::Reference< xint >(this)
+
+#define ITYPE( xint ) \
+    ::getCppuType((const uno::Reference< xint >*)0)
+
+//-////////////////////////////////////////////////////////////////////
+
+#ifndef SVX_LIGHT
+
+class SvxUnoDrawPagesAccess : public ::cppu::WeakImplHelper2< ::com::sun::star::drawing::XDrawPages, ::com::sun::star::lang::XServiceInfo >
+{
+private:
+    SvxUnoDrawingModel& mrModel;
+
+public:
+    SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel ) throw();
+    virtual ~SvxUnoDrawPagesAccess() throw();
+
+    // XDrawPages
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL insertNewByIndex( sal_Int32 nIndex ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL remove( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException) ;
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+    // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
+};
+#endif
+//-////////////////////////////////////////////////////////////////////
+
+#ifndef SVX_LIGHT
+const SvEventDescription* ImplGetSupportedMacroItems()
+{
+    static const SvEventDescription aMacroDescriptionsImpl[] =
+    {
+        { SFX_EVENT_MOUSEOVER_OBJECT, "OnMouseOver" },
+        { SFX_EVENT_MOUSEOUT_OBJECT, "OnMouseOut" },
+        { 0, NULL }
+    };
+
+    return aMacroDescriptionsImpl;
+}
+#endif
+
+//-////////////////////////////////////////////////////////////////////
 
 uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( const OUString& ServiceSpecifier )
     throw( uno::Exception, uno::RuntimeException )
@@ -235,3 +351,463 @@ uno::Sequence< OUString > SvxUnoDrawMSFactory::concatServiceNames( uno::Sequence
 }
 
 
+#ifndef SVX_LIGHT
+
+///
+SvxUnoDrawingModel::SvxUnoDrawingModel( SdrModel* pDoc )
+: mpDoc( pDoc )
+{
+}
+
+SvxUnoDrawingModel::~SvxUnoDrawingModel() throw()
+{
+}
+
+uno::Any SAL_CALL SvxUnoDrawingModel::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    uno::Any aAny;
+
+    QUERYINT(lang::XServiceInfo);
+    else QUERYINT(lang::XMultiServiceFactory);
+    else QUERYINT(drawing::XDrawPagesSupplier);
+    else QUERYINT(com::sun::star::ucb::XAnyCompareFactory);
+    else
+        return SfxBaseModel::queryInterface( rType );
+
+    return aAny;
+}
+
+void SAL_CALL SvxUnoDrawingModel::acquire() throw(uno::RuntimeException)
+{
+    SfxBaseModel::acquire();
+}
+
+void SAL_CALL SvxUnoDrawingModel::release() throw(uno::RuntimeException)
+{
+    SfxBaseModel::release();
+}
+
+// XTypeProvider
+uno::Sequence< uno::Type > SAL_CALL SvxUnoDrawingModel::getTypes(  ) throw(uno::RuntimeException)
+{
+    if( maTypeSequence.getLength() == 0 )
+    {
+        const uno::Sequence< uno::Type > aBaseTypes( SfxBaseModel::getTypes() );
+        const sal_Int32 nBaseTypes = aBaseTypes.getLength();
+        const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
+
+        const sal_Int32 nOwnTypes = 4;      // !DANGER! Keep this updated!
+
+        maTypeSequence.realloc(  nBaseTypes + nOwnTypes );
+        uno::Type* pTypes = maTypeSequence.getArray();
+
+        *pTypes++ = ITYPE(lang::XServiceInfo);
+        *pTypes++ = ITYPE(lang::XMultiServiceFactory);
+        *pTypes++ = ITYPE(drawing::XDrawPagesSupplier);
+        *pTypes++ = ITYPE(com::sun::star::ucb::XAnyCompareFactory);
+
+        for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
+            *pTypes++ = *pBaseTypes++;
+    }
+
+    return maTypeSequence;
+}
+
+uno::Sequence< sal_Int8 > SAL_CALL SvxUnoDrawingModel::getImplementationId(  ) throw(uno::RuntimeException)
+{
+    static uno::Sequence< sal_Int8 > aId;
+    if( aId.getLength() == 0 )
+    {
+        aId.realloc( 16 );
+        rtl_createUuid( (sal_uInt8 *)aId.getArray(), 0, sal_True );
+    }
+    return aId;
+}
+
+void SAL_CALL SvxUnoDrawingModel::lockControllers(  )
+    throw(uno::RuntimeException)
+{
+    if( mpDoc )
+        mpDoc->setLock( sal_True );
+}
+
+void SAL_CALL SvxUnoDrawingModel::unlockControllers(  )
+    throw(uno::RuntimeException)
+{
+    if( mpDoc && mpDoc->isLocked() )
+    {
+        mpDoc->setLock( sal_False );
+    }
+}
+
+sal_Bool SAL_CALL SvxUnoDrawingModel::hasControllersLocked(  )
+    throw(uno::RuntimeException)
+{
+    return mpDoc && mpDoc->isLocked();
+}
+
+// XDrawPagesSupplier
+uno::Reference< drawing::XDrawPages > SAL_CALL SvxUnoDrawingModel::getDrawPages()
+    throw(uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    uno::Reference< drawing::XDrawPages >  xDrawPages( mxDrawPagesAccess );
+
+    if( !xDrawPages.is() )
+        mxDrawPagesAccess = xDrawPages = (drawing::XDrawPages*)new SvxUnoDrawPagesAccess(*this);
+
+    return xDrawPages;
+}
+
+// XMultiServiceFactory ( SvxFmMSFactory )
+uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawingModel::createInstance( const OUString& aServiceSpecifier )
+    throw(uno::Exception, uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.DashTable") ) )
+    {
+        if( !mxDashTable.is() )
+            mxDashTable = SvxUnoDashTable_createInstance( mpDoc );
+        return mxDashTable;
+    }
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GradientTable") ) )
+    {
+        if( !mxGradientTable.is() )
+            mxGradientTable = SvxUnoGradientTable_createInstance( mpDoc );
+        return mxGradientTable;
+    }
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.HatchTable") ) )
+    {
+        if( !mxHatchTable.is() )
+            mxHatchTable = SvxUnoHatchTable_createInstance( mpDoc );
+        return mxHatchTable;
+    }
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.BitmapTable") ) )
+    {
+        if( !mxBitmapTable.is() )
+            mxBitmapTable = SvxUnoBitmapTable_createInstance( mpDoc );
+        return mxBitmapTable;
+    }
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.TransparencyGradientTable") ) )
+    {
+        if( !mxTransGradientTable.is() )
+            mxTransGradientTable = SvxUnoTransGradientTable_createInstance( mpDoc );
+        return mxTransGradientTable;
+    }
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MarkerTable") ) )
+    {
+        if( !mxMarkerTable.is() )
+            mxMarkerTable = SvxUnoMarkerTable_createInstance( mpDoc );
+        return mxMarkerTable;
+    }
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.NumberingRules" ) ) )
+    {
+        return SvxCreateNumRule( mpDoc );
+    }
+
+    if( aServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.image.ImageMapRectangleObject") ) )
+    {
+        return SvUnoImageMapRectangleObject_createInstance( ImplGetSupportedMacroItems() );
+    }
+
+    if( aServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.image.ImageMapCircleObject") ) )
+    {
+        return SvUnoImageMapCircleObject_createInstance( ImplGetSupportedMacroItems() );
+    }
+
+    if( aServiceSpecifier.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.image.ImageMapPolygonObject") ) )
+    {
+        return SvUnoImageMapPolygonObject_createInstance( ImplGetSupportedMacroItems() );
+    }
+
+    if( 0 == aServiceSpecifier.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextField.DateTime") ) )
+    {
+        return (::cppu::OWeakObject * )new SvxUnoTextField( ID_EXT_DATEFIELD );
+    }
+
+    uno::Reference< uno::XInterface > xRet;
+
+    const String aType( aServiceSpecifier );
+    if( aType.EqualsAscii( "com.sun.star.presentation.", 0, 26 ) )
+    {
+        SvxShape* pShape = NULL;
+
+        sal_uInt16 nType = OBJ_TEXT;
+        // create a shape wrapper
+        if( aType.EqualsAscii( "TitleTextShape", 26, 14 ) )
+        {
+            nType = OBJ_TEXT;
+        }
+        else if( aType.EqualsAscii( "OutlinerShape", 26, 13 ) )
+        {
+            nType = OBJ_TEXT;
+        }
+        else if( aType.EqualsAscii( "SubtitleShape", 26, 13 ) )
+        {
+            nType = OBJ_TEXT;
+        }
+        else if( aType.EqualsAscii( "GraphicObjectShape", 26, 18 ) )
+        {
+            nType = OBJ_GRAF;
+        }
+        else if( aType.EqualsAscii( "PageShape", 26, 9 ) )
+        {
+            nType = OBJ_PAGE;
+        }
+        else if( aType.EqualsAscii( "OLE2Shape", 26, 9 ) )
+        {
+            nType = OBJ_OLE2;
+        }
+        else if( aType.EqualsAscii( "ChartShape", 26, 10 ) )
+        {
+            nType = OBJ_OLE2;
+        }
+        else if( aType.EqualsAscii( "TableShape", 26, 10 ) )
+        {
+            nType = OBJ_OLE2;
+        }
+        else if( aType.EqualsAscii( "OrgChartShape", 26, 13 ) )
+        {
+            nType = OBJ_OLE2;
+        }
+        else if( aType.EqualsAscii( "NotesShape", 26, 13 ) )
+        {
+            nType = OBJ_TEXT;
+        }
+        else if( aType.EqualsAscii( "HandoutShape", 26, 13 ) )
+        {
+            nType = OBJ_PAGE;
+        }
+        else
+        {
+            throw lang::ServiceNotRegisteredException();
+        }
+
+        // create the API wrapper
+        pShape = CreateSvxShapeByTypeAndInventor( nType, SdrInventor );
+
+        // set shape type
+        if( pShape )
+            pShape->SetShapeType(aServiceSpecifier);
+
+        xRet = (uno::XWeak*)pShape;
+    }
+    else
+    {
+        xRet = SvxFmMSFactory::createInstance( aServiceSpecifier );
+    }
+
+    return xRet;
+}
+
+uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getAvailableServiceNames()
+    throw(uno::RuntimeException)
+{
+    const uno::Sequence< OUString > aSNS_ORG( SvxFmMSFactory::getAvailableServiceNames() );
+
+    uno::Sequence< OUString > aSNS( 21 );
+
+    sal_uInt16 i = 0;
+
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DashTable"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GradientTable"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.HatchTable"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.BitmapTable"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TransparencyGradientTable"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.MarkerTable"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.NumberingRules"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.image.ImageMapRectangleObject"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.image.ImageMapCircleObject"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.image.ImageMapPolygonObject"));
+
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TitleTextShape"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OutlinerShape"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SubtitleShape"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.GraphicObjectShape"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.ChartShape"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.PageShape"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OLE2Shape"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.TableShape"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OrgChartShape"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.NotesShape"));
+    aSNS[i++] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutShape"));
+
+    DBG_ASSERT( i == aSNS.getLength(), "Sequence overrun!" );
+
+    return comphelper::concatSequences( aSNS_ORG, aSNS );
+}
+
+// lang::XServiceInfo
+OUString SAL_CALL SvxUnoDrawingModel::getImplementationName()
+    throw(uno::RuntimeException)
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM("SvxUnoDrawingModel"));
+}
+
+sal_Bool SAL_CALL SvxUnoDrawingModel::supportsService( const OUString& ServiceName )
+    throw(uno::RuntimeException)
+{
+    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+}
+
+uno::Sequence< OUString > SAL_CALL SvxUnoDrawingModel::getSupportedServiceNames() throw(uno::RuntimeException)
+{
+    OUString aSN( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocument"));
+    uno::Sequence< OUString > aSeq( &aSN, 1 );
+    return aSeq;
+}
+
+// XAnyCompareFactory
+uno::Reference< com::sun::star::ucb::XAnyCompare > SAL_CALL SvxUnoDrawingModel::createAnyCompareByName( const OUString& PropertyName )
+    throw(uno::RuntimeException)
+{
+    return SvxCreateNumRuleCompare();
+}
+
+//=============================================================================
+// class SvxUnoDrawPagesAccess
+//=============================================================================
+
+SvxUnoDrawPagesAccess::SvxUnoDrawPagesAccess( SvxUnoDrawingModel& rMyModel )  throw()
+:   mrModel(rMyModel)
+{
+}
+
+SvxUnoDrawPagesAccess::~SvxUnoDrawPagesAccess() throw()
+{
+}
+
+// XIndexAccess
+sal_Int32 SAL_CALL SvxUnoDrawPagesAccess::getCount()
+    throw(uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    sal_Int32 nCount = 0;
+
+    if( mrModel.mpDoc )
+        nCount = mrModel.mpDoc->GetPageCount();
+
+    return( nCount );
+}
+
+uno::Any SAL_CALL SvxUnoDrawPagesAccess::getByIndex( sal_Int32 Index )
+    throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    uno::Any aAny;
+
+    if( mrModel.mpDoc )
+    {
+        if( (Index < 0) || (Index >= mrModel.mpDoc->GetPageCount() ) )
+            throw lang::IndexOutOfBoundsException();
+
+        SdrPage* pPage = mrModel.mpDoc->GetPage( (sal_uInt16)Index );
+        if( pPage )
+        {
+            uno::Reference< uno::XInterface > xPage( pPage->mxUnoPage );
+
+            if( !xPage.is() )
+            {
+                if( PTR_CAST( FmFormModel, mrModel.mpDoc ) )
+                    xPage = (drawing::XDrawPage*)new SvxFmDrawPage( pPage );
+                else
+                    xPage = (drawing::XDrawPage*)new SvxDrawPage( pPage );
+
+                pPage->mxUnoPage = xPage;
+            }
+
+            aAny <<= xPage;
+        }
+    }
+    return aAny;
+}
+
+// XElementAccess
+uno::Type SAL_CALL SvxUnoDrawPagesAccess::getElementType()
+    throw(uno::RuntimeException)
+{
+    return ITYPE( drawing::XDrawPage );
+}
+
+sal_Bool SAL_CALL SvxUnoDrawPagesAccess::hasElements()
+    throw(uno::RuntimeException)
+{
+    return getCount() > 0;
+}
+
+// XDrawPages
+
+/******************************************************************************
+* Erzeugt eine neue Seite mit Model an der angegebennen Position und gibt die *
+* dazugehoerige SdDrawPage zurueck.                                           *
+******************************************************************************/
+uno::Reference< drawing::XDrawPage > SAL_CALL SvxUnoDrawPagesAccess::insertNewByIndex( sal_Int32 nIndex )
+    throw(uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    uno::Reference< drawing::XDrawPage > xDrawPage;
+
+    if( mrModel.mpDoc )
+    {
+        SdrPage* pPage;
+
+        if( PTR_CAST( FmFormModel, mrModel.mpDoc ) )
+            pPage = new FmFormPage(*(FmFormModel*)mrModel.mpDoc, NULL);
+        else
+            pPage = new SdrPage(*mrModel.mpDoc);
+
+        mrModel.mpDoc->InsertPage( pPage, (sal_uInt16)nIndex );
+        xDrawPage = uno::Reference< drawing::XDrawPage >::query( pPage->getUnoPage() );
+    }
+
+    return xDrawPage;
+}
+
+void SAL_CALL SvxUnoDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPage >& xPage )
+        throw(uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    sal_uInt16 nPageCount = mrModel.mpDoc->GetPageCount();
+    if( nPageCount > 1 )
+    {
+        // pPage von xPage besorgen und dann die Id (nPos )ermitteln
+        SvxDrawPage* pSvxPage = SvxDrawPage::getImplementation( xPage );
+        if( pSvxPage )
+        {
+            SdrPage* pPage = pSvxPage->GetSdrPage();
+            if(pPage)
+            {
+                sal_uInt16 nPage = pPage->GetPageNum();
+                mrModel.mpDoc->DeletePage( nPage );
+            }
+        }
+    }
+}
+
+// XServiceInfo
+sal_Char pSvxUnoDrawPagesAccessService[sizeof("com.sun.star.drawing.DrawPages")] = "com.sun.star.drawing.DrawPages";
+
+OUString SAL_CALL SvxUnoDrawPagesAccess::getImplementationName(  ) throw(uno::RuntimeException)
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SvxUnoDrawPagesAccess" ) );
+}
+
+sal_Bool SAL_CALL SvxUnoDrawPagesAccess::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
+{
+    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( pSvxUnoDrawPagesAccessService ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SvxUnoDrawPagesAccess::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+{
+    OUString aService( RTL_CONSTASCII_USTRINGPARAM( pSvxUnoDrawPagesAccessService ) );
+    uno::Sequence< OUString > aSeq( &aService, 1 );
+    return aSeq;
+}
+
+#endif

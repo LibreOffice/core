@@ -395,6 +395,7 @@ hedabu: ..\inc\unoshcol.hxx %_DEST%\inc%_EXT%\svx\unoshcol.hxx
 hedabu: ..\inc\unoipset.hxx %_DEST%\inc%_EXT%\svx\unoipset.hxx
 hedabu: ..\inc\unoprov.hxx %_DEST%\inc%_EXT%\svx\unoprov.hxx
 hedabu: ..\inc\unomod.hxx %_DEST%\inc%_EXT%\svx\unomod.hxx
+hedabu: ..\inc\unomodel.hxx %_DEST%\inc%_EXT%\svx\unomodel.hxx
 hedabu: ..\inc\fmdpage.hxx %_DEST%\inc%_EXT%\svx\fmdpage.hxx
 hedabu: ..\inc\fmsearch.hxx %_DEST%\inc%_EXT%\svx\fmsearch.hxx
 hedabu: ..\inc\vcattr.hxx %_DEST%\inc%_EXT%\svx\vcattr.hxx

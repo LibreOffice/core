@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-13 09:29:53 $
+ *  last change: $Author: cl $ $Date: 2001-09-28 14:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,6 +648,8 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                 case OBJ_CAPTION:
                     pRet = new SvxShapeCaption( pObj );
                     break;
+                case OBJ_TITLETEXT:
+                case OBJ_OUTLINETEXT:
                 case OBJ_TEXT:
                     pRet = new SvxShapeText( pObj );
                     break;
@@ -757,6 +759,11 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
 
         case E3D_SCENE_ID | E3D_INVENTOR_FLAG:
             nObjId = E3D_POLYSCENE_ID | E3D_INVENTOR_FLAG;
+            break;
+
+        case OBJ_TITLETEXT:
+        case OBJ_OUTLINETEXT:
+            nObjId = OBJ_TEXT;
             break;
         }
 
