@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-17 09:54:44 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 15:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,6 +929,33 @@ BOOL SwFEShell::HasTblAnyProtection( const String* pTblName,
 {
     return GetDoc()->HasTblAnyProtection( GetCrsr()->GetPoint(), pTblName,
                                         pFullTblProtection );
+}
+
+BOOL SwFEShell::CanUnProtectCells() const
+{
+    BOOL bUnProtectAvailable = FALSE;
+    const SwTableNode *pTblNd = IsCrsrInTbl();
+    if( pTblNd && !pTblNd->IsProtect() )
+    {
+        SwSelBoxes aBoxes;
+        if( IsTableMode() )
+            ::GetTblSelCrs( *this, aBoxes );
+        else
+        {
+            SwFrm *pFrm = GetCurrFrm();
+            do {
+                pFrm = pFrm->GetUpper();
+            } while ( pFrm && !pFrm->IsCellFrm() );
+            if( pFrm )
+            {
+                SwTableBox *pBox = (SwTableBox*)((SwCellFrm*)pFrm)->GetTabBox();
+                aBoxes.Insert( pBox );
+            }
+        }
+        if( aBoxes.Count() )
+            bUnProtectAvailable = ::HasProtectedCells( aBoxes );
+    }
+    return bUnProtectAvailable;
 }
 
 /***********************************************************************

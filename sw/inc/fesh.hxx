@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 14:43:25 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 15:11:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -591,6 +591,7 @@ public:
     void UnProtectTbls();   //bei allen Tabellen in der Selektion den Schutz aufheben
     BOOL HasTblAnyProtection( const String* pTblName = 0,
                                 BOOL* pFullTblProtection = 0 );
+    BOOL CanUnProtectCells() const;
 
     void SetHeadlineRepeat( BOOL bSet );//TRUE: Headline soll widerholt werden.
     BOOL IsHeadlineRepeat() const;

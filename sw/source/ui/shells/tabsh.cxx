@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-06-19 10:53:51 $
+ *  last change: $Author: jp $ $Date: 2001-10-18 15:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1245,6 +1245,12 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 if( ::HasProtectedCells( aBoxes ))
                     rSet.DisableItem( nSlot );
             }
+            break;
+
+        case FN_TABLE_UNSET_READ_ONLY_CELLS:
+            // disable in readonly sections, but enable in protected cells
+            if( !rSh.CanUnProtectCells() )
+                rSet.DisableItem( nSlot );
             break;
         }
     nSlot = aIter.NextWhich();
