@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-09 12:36:21 $
+ *  last change: $Author: oj $ $Date: 2002-07-22 12:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,20 @@ using namespace ::com::sun::star::sdbcx;
 #define MAX_PAGES   4   // max. Pages die angezeigt werden
 
 DBG_NAME(OCopyTableWizard);
+namespace
+{
+    void clearColumns(ODatabaseExport::TColumns& _rColumns,ODatabaseExport::TColumnVector& _rColumnsVec)
+    {
+        ODatabaseExport::TColumns::iterator aIter = _rColumns.begin();
+        ODatabaseExport::TColumns::iterator aEnd  = _rColumns.end();
+
+        for(;aIter != aEnd;++aIter)
+            delete aIter->second;
+
+        _rColumnsVec.clear();
+        _rColumns.clear();
+    }
+}
 //------------------------------------------------------------------------
 OCopyTableWizard::OCopyTableWizard(Window * pParent,
                                    const Reference< XPropertySet >& _xSourceObject,
@@ -166,6 +180,7 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_xFactory(_rM)
     ,m_xSourceConnection(_xSourceConnection)
+    ,m_bDeleteSourceColumns(sal_True)
 {
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
@@ -218,6 +233,7 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
     ,m_sName(_rDefaultName)
     ,m_vSourceVec(_rSourceColVec)
     ,m_xSourceConnection(_xConnection) // in this case source connection and dest connection are the same
+    ,m_bDeleteSourceColumns(sal_False)
 {
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
@@ -267,6 +283,11 @@ OCopyTableWizard::~OCopyTableWizard()
         delete pPage;
     }
 
+    if ( m_bDeleteSourceColumns )
+        clearColumns(m_vSourceColumns,m_vSourceVec);
+
+    clearColumns(m_vDestColumns,m_aDestVec);
+
     // clear the type information
     m_aTypeInfoIndex.clear();
     OTypeInfoMap::iterator aIter = m_aTypeInfo.begin();
@@ -280,7 +301,7 @@ OCopyTableWizard::~OCopyTableWizard()
     for(;aIter != m_aDestTypeInfo.end();++aIter)
         delete aIter->second;
 
-    m_aTypeInfo.clear();
+    m_aDestTypeInfoIndex.clear();
 
     DELETEZ(m_pTypeInfo);
 
@@ -500,8 +521,19 @@ void OCopyTableWizard::RemoveWizardPage(OWizardPage* pPage)
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
 {
-    m_aDestVec.insert(m_aDestVec.begin() + _nPos,
-        m_vDestColumns.insert(ODatabaseExport::TColumns::value_type(_pField->GetName(),_pField)).first);
+    OSL_ENSURE(_pField,"FieldDescrioption is null!");
+    if ( _pField )
+    {
+        ODatabaseExport::TColumns::iterator aFind = m_vDestColumns.find(_pField->GetName());
+        if ( aFind != m_vDestColumns.end() )
+        {
+            delete aFind->second;
+            m_vDestColumns.erase(aFind);
+        }
+
+        m_aDestVec.insert(m_aDestVec.begin() + _nPos,
+            m_vDestColumns.insert(ODatabaseExport::TColumns::value_type(_pField->GetName(),_pField)).first);
+    }
 }
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::loadData(const Reference<XPropertySet>& _xTable,
@@ -609,13 +641,7 @@ void OCopyTableWizard::loadData(const Reference<XPropertySet>& _xTable,
 // -----------------------------------------------------------------------------
 void OCopyTableWizard::clearDestColumns()
 {
-    ODatabaseExport::TColumns::iterator aIter = m_vDestColumns.begin();
-
-    for(;aIter != m_vDestColumns.end();++aIter)
-        delete aIter->second;
-
-    m_aDestVec.clear();
-    m_vDestColumns.clear();
+    clearColumns(m_vDestColumns,m_aDestVec);
 }
 // -----------------------------------------------------------------------------
 Reference<XNameAccess> OCopyTableWizard::getKeyColumns(const Reference<XPropertySet>& _xTable) const
