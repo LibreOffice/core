@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reg4msdocmsi.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2004-05-26 17:05:52 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:04:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,17 +176,11 @@ extern "C" UINT __stdcall InstallExecSequenceEntry(MSIHANDLE handle)
     if (reg4)
     {
         Register4MsDoc(handle, reg4);
-
-        if (IsModuleSelectedForInstallation(handle, TEXT("gm_o_Activexcontrol")))
-            RegisterActiveX4MsDoc(handle, reg4);
     }
 
     if (unreg4)
     {
         Unregister4MsDoc(handle, unreg4);
-
-        if (IsModuleInstalled(handle, TEXT("gm_o_Activexcontrol")))
-            UnregisterActiveX4MsDoc(handle, unreg4);
     }
     return ERROR_SUCCESS;
 }
@@ -198,30 +192,23 @@ extern "C" UINT __stdcall DeinstallExecSequenceEntry(MSIHANDLE handle)
     if (IsCompleteDeinstallation(handle))
     {
         Unregister4MsDocAll(handle);
-        UnregisterActiveX4MsDocAll(handle);
         return ERROR_SUCCESS;
     }
 
     if (IsModuleSelectedForDeinstallation(handle, TEXT("gm_p_Wrt_Bin")))
     {
         Unregister4MsDoc(handle, MSWORD | HTML_EDITOR);
-        UnregisterActiveX4MsDoc(handle, MSWORD);
     }
 
     if (IsModuleSelectedForDeinstallation(handle, TEXT("gm_p_Calc_Bin")))
     {
         Unregister4MsDoc(handle, MSEXCEL);
-        UnregisterActiveX4MsDoc(handle, MSEXCEL);
     }
 
     if (IsModuleSelectedForDeinstallation(handle, TEXT("gm_p_Impress_Bin")))
     {
         Unregister4MsDoc(handle, MSPOWERPOINT);
-        UnregisterActiveX4MsDoc(handle, MSPOWERPOINT);
     }
-
-    if (IsModuleSelectedForDeinstallation(handle, TEXT("gm_o_Activexcontrol")))
-        UnregisterActiveX4MsDocAll(handle);
 
     return ERROR_SUCCESS;
 }

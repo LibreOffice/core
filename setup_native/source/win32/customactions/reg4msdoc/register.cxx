@@ -2,9 +2,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2004-05-26 17:05:52 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,44 +380,4 @@ int FixReturnRegistrationState(MSIHANDLE handle)
 
     return registration_state;
 }
-
-
-// ActiveX control registration
-
-inline HINSTANCE LoadActiveXLibrary(MSIHANDLE handle)
-{
-    std::string axpath = UnicodeToAnsiString(
-        (GetOfficeInstallationPath(handle) + TEXT("program\\so_activex.dll")));
-    return LoadLibraryExA(axpath.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
-}
-
-inline bool IsValidHandle(HINSTANCE hinst)
-{ return ((hinst != INVALID_HANDLE_VALUE) && (hinst != NULL)); }
-
-typedef int (__stdcall *DllDocProc)(int, BOOL);
-
-void RegisterActiveX4MsDoc(MSIHANDLE handle, int nPref)
-{
-    HINSTANCE hinst = LoadActiveXLibrary(handle);
-    if (IsValidHandle(hinst))
-    {
-        DllDocProc DllRegisterServerDoc = (DllDocProc)GetProcAddress(hinst, "DllRegisterServerDoc");
-        if (DllRegisterServerDoc)
-            DllRegisterServerDoc(nPref, IsAllUserInstallation(handle));
-        FreeLibrary(hinst);
-    }
-}
-
-void UnregisterActiveX4MsDoc(MSIHANDLE handle, int nPref)
-{
-    HINSTANCE hinst = LoadActiveXLibrary(handle);
-    if (IsValidHandle(hinst))
-    {
-        DllDocProc DllUnregisterServerDoc = (DllDocProc)GetProcAddress(hinst, "DllUnregisterServerDoc");
-        if (DllUnregisterServerDoc)
-            DllUnregisterServerDoc(nPref, IsAllUserInstallation(handle));
-        FreeLibrary(hinst);
-    }
-}
-
 
