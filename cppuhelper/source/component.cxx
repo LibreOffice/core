@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-07 11:11:29 $
+ *  last change: $Author: hr $ $Date: 2001-09-26 15:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,8 @@ void OComponentHelper::addEventListener(
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
-        rxListener->disposing( EventObject( Reference<XInterface >::query( (XComponent *)this ) ) );
+        Reference< XInterface > x( (XComponent *)this, UNO_QUERY );
+        rxListener->disposing( EventObject( x ) );
     }
     else
     {
