@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Acceptor.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:51 $
+ *  last change: $Author: kr $ $Date: 2000-10-19 13:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ import com.sun.star.registry.XRegistryKey;
  * general components (like <code>SocketAcceptor</code>) to
  * implement its functionality.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:51 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-10-19 13:07:52 $
  * @author      Kay Ramme
  * @see         com.sun.star.connections.XAcceptor
  * @see         com.sun.star.connections.XConnector
@@ -208,7 +208,7 @@ public class Acceptor implements XAcceptor {
         if(_acceptor == null) {// this is the first time accept is called
               try {
                 // at first we try to find the delegatee via service name
-                  _acceptor = (XAcceptor)UnoRuntime.queryInterface(XAcceptor.class, _xMultiServiceFactory.createInstance("com.sun.star.connection.Acceptor" + mech));
+                  _acceptor = (XAcceptor)UnoRuntime.queryInterface(XAcceptor.class, _xMultiServiceFactory.createInstance("com.sun.star.connection.Acceptor." + mech));
               }
               catch(com.sun.star.uno.Exception exception) {
                 try {
