@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 14:33:36 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 12:41:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,15 +83,17 @@ OBJFILES=   			\
     $(OBJ)$/wtranode.obj    \
     $(OBJ)$/srciter.obj		\
     $(OBJ)$/utf8conv.obj	\
-    $(OBJ)$/hw2fw.obj
+    $(OBJ)$/hw2fw.obj      
+#        $(OBJ)$/sdfupdate.obj
 
 LIB1TARGET= $(LB)$/transex.lib
 LIB1ARCHIV= $(LB)$/libtransex.a
 LIB1FILES=  $(LB)$/transex3.lib
 
+APP1VERSIONMAP=exports.map
 
 # extractor and merger for *.src and *.hrc
-APP1TARGET=	$(TARGET)
+APP1TARGET=     $(TARGET)
 APP1OBJS=   $(OBJ)$/src_yy.obj
 
 .IF "$(OS)"!="MACOSX"
@@ -117,7 +119,7 @@ APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(TARGET).lib
 #APP2STDLIBS=$(TOOLSLIBST) $(L)$/bootstrp.lib
 
 # extractor and merger for *.lng and *.lng
-APP3TARGET= lngex
+APP3TARGET= ulfex
 APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj $(OBJ)$/utf8conv.obj
 
 .IF "$(OS)"!="MACOSX"
@@ -206,18 +208,26 @@ APP7STDLIBS+= \
 APP7STDLIBS+= $(BTSTRPLIB)
 .ENDIF
 
+#APP8TARGET=  sdfupdate
+#APP8OBJS= $(OBJ)$/sdfupdate.obj
+#APP8STDLIBS+= \
+#            $(TOOLSLIB) \
+#            $(VOSLIB) \
+#            $(SALLIB)
+
 #APP8TARGET= xgfconv
 #APP8STACK=  16000
 #APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/xgfconv.obj $(OBJ)$/export2.obj
 #APP8STDLIBS=$(BTSTRPLIB) $(TOOLSLIBST)
 
 # encoding converter for text files
-#APP9TARGET= txtconv
-#APP9STACK=  16000
-#APP9OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/txtconv.obj $(OBJ)$/hw2fw.obj
-#APP9STDLIBS=$(TOOLSLIBST)
+APP8TARGET= txtconv
+APP8STACK=  16000
+APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/txtconv.obj $(OBJ)$/hw2fw.obj
+APP8STDLIBS=$(TOOLSLIB) $(SALLIB)
 
 # localizer for l10n framework
+#APP9TARGET= localize_u
 APP9TARGET= localize
 EXCEPTIONSFILES=                            \
                     $(OBJ)$/localize.obj
@@ -243,16 +253,6 @@ DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OB
 
 .INCLUDE :  target.mk
 
-#ALLTAR : 	$(MISC)$/src_yy.c 	\
-#			$(MISC)$/xml_yy.c	\
-#			$(MISC)$/cfg_yy.c
-
-$(MISC)$/src_yy.c : srclex.l
-    +flex -l -8 -o$(MISC)$/src_yy.c srclex.l
-
-$(MISC)$/xrm_yy.c : xrmlex.l
-    +flex -l -8 -o$(MISC)$/xrm_yy.c xrmlex.l
-
-$(MISC)$/cfg_yy.c : cfglex.l
-    +flex -l -8 -o$(MISC)$/cfg_yy.c cfglex.l
+$(MISC)$/%_yy.c : %lex.l
+    +flex -l -8 -o$@ $<
 
