@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTypeProvider.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-07 14:45:17 $
+ *  last change:$Date: 2003-09-08 10:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,10 @@
 
 package ifc.lang;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.uno.Type;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.lang.XTypeProvider</code>
