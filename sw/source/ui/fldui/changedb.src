@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:51:34 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:58:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ portuguese_brazilian ] = "In diesem Dialog kцnnen Sie Datenbanken, auf die Sie in Ihrem Dokument ьber Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie kцnnen nur eine Дnderung pro Arbeitsgang durchfьhren. In der linken Liste ist Mehrfachselektion mцglich." ;
         Text [ portuguese ] = "Nesta caixa de diбlogo poderб substituir bases de dados por outras, tendo acesso a elas no seu documento atravйs dos campos da base de dados. Й apenas possнvel uma alteraзгo por cada operaзгo. Na lista da esquerda poderб seleccionar vбrias opзхes." ;
         Text[ chinese_simplified ] = "ФЪХвёц¶Ф»°їтДЪДъДЬ№»К№УГТ»ёцЖдЛыКэѕЭївАґґъМжДъµ±З°±ај­µДОДµµЛщК№УГµДКэѕЭївЎЈГїґОДъЦ»ДЬЧцТ»ПоёьёДЎЈФЪЧу·ЅµДБРµҐДЪДъїЙТФЅшРР¶аЦШСЎФсЎЈ";
-        Text[ russian ] = "В этом диалоге вы можете заменить базы данных, доступ к которым возможен при помощи полей базы данных, другими базами данных. За одну операцию вы можете произвести только одно изменение. В списке слева возможно многократное выделение.";
+        Text[ russian ] = "В этом диалоге Вы можете заменить базы данных, доступ к которым возможен при помощи полей базы данных, другими базами данных. За одну операцию можно произвести только одно изменение. В списке слева возможно многократное выделение.";
         Text[ polish ] = "W tym dialogu moїesz wymieniж dostкpne w twoim dokumencie poprzez pola bazy danych na inne. Moїesz dokonaж tylko jednej zmiany podczas sesji roboczej. Na liњcie z lewej strony moїliwa jest wielokrotna selekcja.";
         Text[ japanese ] = "‚±‚МАЮІ±ЫёЮ‚Е‚НГЮ°АНЮ°ЅМЁ°ЩДЮ‚р’К‚µ‚ДЃAДЮ·­ТЭД‚Й±ёѕЅ‚·‚йГЮ°АНЮ°Ѕ‚р‘ј‚МГЮ°АНЮ°Ѕ‚ЖЊрЉ·‚Е‚«‚Ь‚·ЃB€к“x‚Й1‚В‚М•ПЌX‚µ‚©‚Е‚«‚Ь‚№‚сЃBЌ¶‚МШЅД‚Е‚Н•Ўђ”‘I‘р‚Є‰В”\\‚Е‚·ЃB";
         Text[ chinese_traditional ] = "¦bіo­У№пёЬ¤и¶ф¤є±zЇа°чЁПҐО¤@­УЁдҐLёк®Ж®wЁУҐNґА±z·н«eЅsїиЄє¤еҐу©ТЁПҐОЄєёк®Ж®wЎC±zЁC¦ёҐuЇа§@¤@¦ёЕЬ§уЎC±zЇа°ч¦bҐЄДж¤є§@¦h­«їпѕЬЎC";
