@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-28 10:58:03 $
+ *  last change: $Author: ab $ $Date: 2001-04-06 13:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@
 #include "openflag.hxx"
 #include "helper.hxx"
 #include "dlgcont.hxx"
+#include "scriptcont.hxx"
 
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
@@ -279,6 +280,13 @@ void SfxObjectShell::DoHandsOff()
     const SfxFilter *pFilter = pMedium->GetFilter();
     if( !pFilter || pFilter->IsOwnFormat() || ( pFilter->GetFilterFlags() & SFX_FILTER_PACKED ) )
         HandsOff();
+
+    // Force document library container to release storage
+    SotStorageRef xDummyStorage;
+    SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
+    if( pDialogCont )
+        pDialogCont->setStorage( xDummyStorage );
+
     pMedium->Close();
 //  DELETEZ( pMedium );
 }
@@ -991,7 +999,15 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium * pNewMed )
             Broadcast( SfxSimpleHint(SFX_HINT_NAMECHANGED) );
         }
         if ( !pFilter || pFilter->IsOwnFormat())
-            bOk = SaveCompleted( pMedium->GetStorage() );
+        {
+            SvStorage* pStorage = pMedium->GetStorage();
+            bOk = SaveCompleted( pStorage );
+
+            // Set storage in document library container
+            SfxDialogLibraryContainer* pDialogCont = pImp->pDialogLibContainer;
+            if( pDialogCont )
+                pDialogCont->setStorage( pStorage );
+        }
         else if( pFilter->UsesStorage() )
             pMedium->GetStorage();
         else if( pMedium->GetOpenMode() & STREAM_WRITE )
