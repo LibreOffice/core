@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,6 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DATA_XDATABASEFAVORITES_HPP_
-#include <com/sun/star/data/XDatabaseFavorites.hpp>     // TODO : this is obsolete ....
-#endif
 #ifndef _COM_SUN_STAR_FORM_XLOADABLE_HPP_
 #include <com/sun/star/form/XLoadable.hpp>
 #endif
@@ -155,7 +152,6 @@
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
 #endif
-#include <svtools/iniprop.hxx>
 #ifndef _SVTABBX_HXX
 #include <svtools/svtabbx.hxx>
 #endif
@@ -760,12 +756,13 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
     try
     {
         Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-        Reference< data::XDatabaseFavorites >  xFav(xMgr->createInstance( C2U("com.sun.star.data.DatabaseEngine") ), UNO_QUERY );
-        // TODO : XDatabaseFavorites is an obsolete interface, the whole dialog has to be based on
-        // the sdb::DatabaseAccessContext service
 
-        Sequence< beans::PropertyValue > aFavs = xFav->getFavorites();
-        const beans::PropertyValue* pValues = aFavs.getConstArray();
+//      Reference< data::XDatabaseFavorites >  xFav(xMgr->createInstance( C2U("com.sun.star.data.DatabaseEngine") ), UNO_QUERY );
+//      // TODO : XDatabaseFavorites is an obsolete interface, the whole dialog has to be based on
+//      // the sdb::DatabaseAccessContext service
+
+//      Sequence< beans::PropertyValue > aFavs = xFav->getFavorites();
+//      const beans::PropertyValue* pValues = aFavs.getConstArray();
 
         Size aSize = aSelectionHB.GetSizePixel();
         long nTabs[3];
@@ -785,25 +782,25 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
         //aSelectionLB.SetSelectHdl(LINK(this, SwGlossaryGroupDlg, SelectHdl));
         aSelectionLB.GetModel()->SetSortMode(SortAscending);
 
-        String sActiveURL = pDatMan->getActiveDataSource();
-        sActiveURL = URIHelper::SmartRelToAbs(sActiveURL);
-        for(int i = 0; i < aFavs.getLength(); i++)
-        {
-            String sTemp(pValues[i].Name);
-            sTemp += '\t';
-            String sSource = *(OUString*)pValues[i].Value.getValue();
-            sTemp += sSource;
-            SvLBoxEntry* pEntry = aSelectionLB.InsertEntry(sTemp);
+//      String sActiveURL = pDatMan->getActiveDataSource();
+//      sActiveURL = URIHelper::SmartRelToAbs(sActiveURL);
+//      for(int i = 0; i < aFavs.getLength(); i++)
+//      {
+//          String sTemp(pValues[i].Name);
+//          sTemp += '\t';
+//          String sSource = *(OUString*)pValues[i].Value.getValue();
+//          sTemp += sSource;
+//          SvLBoxEntry* pEntry = aSelectionLB.InsertEntry(sTemp);
 //          String sTempPath = INetURLObject(sSource).PathToFileName();
-            sal_Bool bCaseSensitive = lcl_IsCaseSensitive(sSource);
+//          sal_Bool bCaseSensitive = lcl_IsCaseSensitive(sSource);
 //          sal_Bool bCaseSensitive = DirEntry(sTempPath).IsCaseSensitive();
-            if((bCaseSensitive && sActiveURL == sSource)||
-                !bCaseSensitive && COMPARE_EQUAL == sActiveURL.CompareTo(sSource))
-            {
-                aSelectionLB.Select(pEntry);
-            }
-        }
-        aSelectionLB.GetModel()->Resort();
+//          if((bCaseSensitive && sActiveURL == sSource)||
+//              !bCaseSensitive && COMPARE_EQUAL == sActiveURL.CompareTo(sSource))
+//          {
+//              aSelectionLB.Select(pEntry);
+//          }
+//      }
+//      aSelectionLB.GetModel()->Resort();
 
     }
 #ifdef DBG_UTIL

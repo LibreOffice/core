@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:44 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,9 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_DATA_XDATABASEDIALOGS_HPP_
-#include <com/sun/star/data/XDatabaseDialogs.hpp>
-#endif
+//#ifndef _COM_SUN_STAR_DATA_XDATABASEDIALOGS_HPP_
+//#include <com/sun/star/data/XDatabaseDialogs.hpp>
+//#endif
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #endif
@@ -384,13 +384,13 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
             }
 
             uno::Reference< sdb::XSQLQueryComposer >  xParser=pDatMan->getParser();
-            uno::Reference< data::XDatabaseDialogs >  xDlgs(xParser, UNO_QUERY);
-            if (xDlgs.is())
-            {
-                uno::Reference< container::XNamed >  xField;
-                xDlgs->executeFilter(xField);
-                pDatMan->setFilter(xParser->getFilter());
-            }
+//          uno::Reference< data::XDatabaseDialogs >  xDlgs(xParser, UNO_QUERY);
+//          if (xDlgs.is())
+//          {
+//              uno::Reference< container::XNamed >  xField;
+//              xDlgs->executeFilter(xField);
+//              pDatMan->setFilter(xParser->getFilter());
+//          }
         }
         else if(aCommand.EqualsAscii("Bib/removeFilter"))
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,12 +83,9 @@
 #endif
 
 
-#include <svtools/iniprop.hxx>
-
 #include "datman.hxx"
 #include "bibcont.hxx"
 
-using namespace vos;
 using namespace osl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

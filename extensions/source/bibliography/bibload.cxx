@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,9 +144,6 @@
 #include <vcl/group.hxx>
 #endif
 
-#ifndef _SFXINIPROP_HXX
-#include <svtools/iniprop.hxx>
-#endif
 #ifndef _SVEDIT_HXX
 #include <svtools/svmedit.hxx>
 #endif

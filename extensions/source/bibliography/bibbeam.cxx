@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 15:10:26 $
+ *  last change: $Author: os $ $Date: 2000-11-15 15:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,6 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
-#include <svtools/iniprop.hxx>
 #include <extensio.hrc>
 
 #ifndef _SV_LSTBOX_HXX //autogen wg. form::component::ListBox
