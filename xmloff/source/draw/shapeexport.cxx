@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-24 17:06:07 $
+ *  last change: $Author: sab $ $Date: 2001-07-27 10:16:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,11 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
     ImplXMLShapeExportInfo& aShapeInfo = (*maCurrentShapesIter).second[nZIndex];
 
+    // -----------------------------
+    // first compute the shapes type
+    // -----------------------------
+    ImpCalcShapeType(xShape, aShapeInfo.meShapeType);
+
     const sal_Bool bObjSupportsText =
         aShapeInfo.meShapeType != XmlShapeTypeDrawControlShape &&
         aShapeInfo.meShapeType != XmlShapeTypeDrawChartShape &&
@@ -212,11 +217,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         aShapeInfo.meShapeType != XmlShapeTypeDraw3DSphereObject &&
         aShapeInfo.meShapeType != XmlShapeTypeDraw3DLatheObject &&
         aShapeInfo.meShapeType != XmlShapeTypeDraw3DExtrudeObject;
-
-    // -----------------------------
-    // first compute the shapes type
-    // -----------------------------
-    ImpCalcShapeType(xShape, aShapeInfo.meShapeType);
 
     sal_Bool bIsEmptyPresObj = sal_False;
 
