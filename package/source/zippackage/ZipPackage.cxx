@@ -19,7 +19,7 @@ ZipPackage::ZipPackage (uno::Reference < io::XInputStream > xInput, uno::Referen
     ZipPackageFolder *pPkgFolder;//, *pCurrentFolder =&aRootFolder;
     package::ZipEntry aEntry;
     aZipOut.setMethod(DEFLATED);
-    aZipOut.setLevel(5);
+    aZipOut.setLevel(DEFAULT_COMPRESSION);
 
     //for (sal_uInt16 i=0;i<aZipFile.nTotal;i++)
     while (xEnum->hasMoreElements())
@@ -42,14 +42,14 @@ ZipPackage::ZipPackage (uno::Reference < io::XInputStream > xInput, uno::Referen
                     pPkgFolder = new ZipPackageFolder(aZipOut);//*this);
                     pPkgFolder->setName(sTemp);
                     pPkgFolder->setParent( uno::Reference < uno::XInterface >(xCurrent, uno::UNO_QUERY));
-                    aAny <<= uno::Reference < container::XNamed > (pPkgFolder);
+                    aAny <<= uno::Reference < lang::XUnoTunnel > (pPkgFolder);
                     xCurrent->insertByName(sTemp, aAny);
                     xCurrent = uno::Reference < container::XNameContainer > (pPkgFolder);
                 }
                 else
                 {
                     aAny = xCurrent->getByName(sTemp);
-                    uno::Reference < container::XNamed > xRef;
+                    uno::Reference < lang::XUnoTunnel> xRef;
                     aAny >>= xRef;
                     xCurrent = uno::Reference < container::XNameContainer > (xRef, uno::UNO_QUERY);
                 }
@@ -66,7 +66,7 @@ ZipPackage::ZipPackage (uno::Reference < io::XInputStream > xInput, uno::Referen
                     break;
                 if (xCurrent->hasByName(sTemp))
                 {
-                    uno::Reference < container::XNamed > xChildRef;
+                    uno::Reference < lang::XUnoTunnel > xChildRef;
                     aAny = xCurrent->getByName(sTemp);
                     aAny >>= xChildRef;
                     xCurrent = uno::Reference < container::XNameContainer > (xChildRef, uno::UNO_QUERY);
@@ -77,9 +77,9 @@ ZipPackage::ZipPackage (uno::Reference < io::XInputStream > xInput, uno::Referen
             pPkgStream = new ZipPackageStream( aZipFile );
             pPkgStream->bPackageMember = sal_True;
             pPkgStream->setParent( uno::Reference < uno::XInterface > (xCurrent, uno::UNO_QUERY));
-            pPkgStream->setName( sStreamName );
             pPkgStream->setZipEntry( aEntry );
-            aAny <<= uno::Reference < container::XNamed > (pPkgStream);
+            pPkgStream->setName( sStreamName );
+            aAny <<= uno::Reference < lang::XUnoTunnel > (pPkgStream);
             xCurrent->insertByName(sStreamName, aAny);
         }
     }
@@ -110,7 +110,7 @@ uno::Any SAL_CALL ZipPackage::getByHierarchicalName( const ::rtl::OUString& aNam
                 break;
             if (xCurrent->hasByName(sTemp))
             {
-                uno::Reference < container::XNamed > xRef;
+                uno::Reference < lang::XUnoTunnel > xRef;
                 aAny = xCurrent->getByName(sTemp);
                 aAny >>= xRef;
                 xCurrent = uno::Reference < container::XNameContainer > (xRef, uno::UNO_QUERY);
@@ -129,7 +129,7 @@ uno::Any SAL_CALL ZipPackage::getByHierarchicalName( const ::rtl::OUString& aNam
                 break;
             if (xCurrent->hasByName(sTemp))
             {
-                uno::Reference < container::XNamed > xChildRef;
+                uno::Reference < lang::XUnoTunnel > xChildRef;
                 aAny = xCurrent->getByName(sTemp);
                 aAny >>= xChildRef;
                 xCurrent = uno::Reference < container::XNameContainer > (xChildRef, uno::UNO_QUERY);
@@ -157,7 +157,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const ::rtl::OUString& aNam
                 break;
             if (xCurrent->hasByName(sTemp))
             {
-                uno::Reference < container::XNamed > xRef;
+                uno::Reference < lang::XUnoTunnel > xRef;
                 aAny = xCurrent->getByName(sTemp);
                 aAny >>= xRef;
                 xCurrent = uno::Reference < container::XNameContainer > (xRef, uno::UNO_QUERY);
@@ -176,7 +176,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const ::rtl::OUString& aNam
                 break;
             if (xCurrent->hasByName(sTemp))
             {
-                uno::Reference < container::XNamed > xChildRef;
+                uno::Reference < lang::XUnoTunnel > xChildRef;
                 aAny = xCurrent->getByName(sTemp);
                 aAny >>= xChildRef;
                 xCurrent = uno::Reference < container::XNameContainer > (xChildRef, uno::UNO_QUERY);

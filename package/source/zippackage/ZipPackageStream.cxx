@@ -46,6 +46,7 @@ uno::Any SAL_CALL ZipPackageStream::queryInterface( const uno::Type& rType )
                                                 static_cast< container::XNamed*     > ( this )  ,
                                                 static_cast< container::XChild*     > ( this )  ,
                                                 static_cast< io::XActiveDataSink*       > ( this )  ,
+                                                static_cast< lang::XUnoTunnel*      > ( this )  ,
                                                 static_cast< beans::XPropertySet*       > ( this ) ) );
 
     // If searched interface supported by this class ...
@@ -69,29 +70,6 @@ void SAL_CALL ZipPackageStream::release(  )
     throw()
 {
     ZipPackageEntry::release();
-}
-    // XChild
-uno::Reference< uno::XInterface > SAL_CALL ZipPackageStream::getParent(  )
-        throw(uno::RuntimeException)
-{
-    return xParentFolder;
-}
-void SAL_CALL ZipPackageStream::setParent( const uno::Reference< uno::XInterface >& Parent )
-        throw(lang::NoSupportException, uno::RuntimeException)
-{
-    xParentFolder = Parent;
-}
-    // XNamed
-::rtl::OUString SAL_CALL ZipPackageStream::getName(  )
-        throw(uno::RuntimeException)
-{
-    return aEntry.sName;
-}
-void SAL_CALL ZipPackageStream::setName( const ::rtl::OUString& aName )
-        throw(uno::RuntimeException)
-{
-    aEntry.sName = aName;
-
 }
     // XActiveDataSink
 void SAL_CALL ZipPackageStream::setInputStream( const uno::Reference< io::XInputStream >& aStream )
@@ -158,8 +136,27 @@ void SAL_CALL ZipPackageStream::removeVetoableChangeListener( const ::rtl::OUStr
         throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
-sal_Int64 SAL_CALL ZipPackageStream::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
-    throw(::com::sun::star::uno::RuntimeException)
+uno::Sequence< sal_Int8 > ZipPackageStream::getUnoTunnelImplementationId( void )
+    throw (uno::RuntimeException)
 {
-    return (sal_Int64)0;
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+
+sal_Int64 SAL_CALL ZipPackageStream::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
+    throw(uno::RuntimeException)
+{
+    if (aIdentifier.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
+        return reinterpret_cast<sal_Int64>(this);
+
+    throw uno::RuntimeException();
 }

@@ -5,7 +5,7 @@
 
 using namespace com::sun::star;
 
-ZipPackageFolderEnumeration::ZipPackageFolderEnumeration ( PropertyHash &rInput)
+ZipPackageFolderEnumeration::ZipPackageFolderEnumeration ( TunnelHash &rInput)
 //std::hash_map < rtl::OUString, com::sun::star::uno::Reference < com::sun::star::container::XNamed >, hashFunc, eqFunc > &rContents);
 : rContents (rInput)
 , aIterator (rInput.begin())

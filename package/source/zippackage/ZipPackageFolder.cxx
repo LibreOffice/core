@@ -3,6 +3,7 @@
 #include "ZipPackageFolder.hxx"
 #endif
 
+using namespace com::sun::star::package::ZipConstants;
 using namespace com::sun::star;
 using namespace rtl;
 
@@ -11,12 +12,11 @@ ZipPackageFolder::ZipPackageFolder (ZipOutputStream &rStream)//ZipPackage &rInPa
 {
     aEntry.nVersion     = -1;
     aEntry.nFlag        = 0;
-    aEntry.nFlag        |= 1 << 10;
-    aEntry.nMethod      = -1;
+    aEntry.nMethod      = STORED;
     aEntry.nTime        = -1;
-    aEntry.nCrc         = -1;
-    aEntry.nCompressedSize  = -1;
-    aEntry.nSize        = -1;
+    aEntry.nCrc         = 0;
+    aEntry.nCompressedSize  = 0;
+    aEntry.nSize        = 0;
     aEntry.nOffset      = -1;
 }
 
@@ -33,7 +33,8 @@ uno::Any SAL_CALL ZipPackageFolder::queryInterface( const uno::Type& rType )
                                                 static_cast< container::XChild*     > ( this )  ,
                                                 static_cast< container::XNameContainer*     > ( this )  ,
                                                 static_cast< container::XEnumerationAccess*     > ( this )  ,
-                                                static_cast< beans::XPropertySet*       > ( this ) ) ) ;
+                                                static_cast< lang::XUnoTunnel*      > ( this )  ,
+                                                static_cast< beans::XPropertySet*   > ( this ) ) ) ;
 
     // If searched interface supported by this class ...
     if ( aReturn.hasValue () == sal_True )
@@ -65,7 +66,7 @@ void SAL_CALL ZipPackageFolder::insertByName( const ::rtl::OUString& aName, cons
         throw container::ElementExistException();
     else
     {
-        uno::Reference < beans::XPropertySet > xRef;
+        uno::Reference < lang::XUnoTunnel > xRef;
         aElement >>= xRef;
         aContents[aName] = xRef;
     }
@@ -85,7 +86,7 @@ uno::Reference< container::XEnumeration > SAL_CALL ZipPackageFolder::createEnume
 uno::Type SAL_CALL ZipPackageFolder::getElementType(  )
         throw(uno::RuntimeException)
 {
-    return ::getCppuType ((const uno::Reference< container::XNamed > *) 0);
+    return ::getCppuType ((const uno::Reference< lang::XUnoTunnel > *) 0);
 }
 sal_Bool SAL_CALL ZipPackageFolder::hasElements(  )
         throw(uno::RuntimeException)
@@ -97,7 +98,7 @@ uno::Any SAL_CALL ZipPackageFolder::getByName( const ::rtl::OUString& aName )
         throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Any aAny;
-    PropertyHash::const_iterator aCI = aContents.find(aName);
+    TunnelHash::const_iterator aCI = aContents.find(aName);
     if (aCI == aContents.end())
         throw container::NoSuchElementException();
 //  rtl::OUString sTemp = aCI->first;
@@ -110,7 +111,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
 {
     sal_uInt32 i=0, nSize = aContents.size();
     OUString *pNames = new OUString[nSize];
-    for (PropertyHash::const_iterator aIterator = aContents.begin() ; aIterator != aContents.end(); i++,aIterator++)
+    for (TunnelHash::const_iterator aIterator = aContents.begin() ; aIterator != aContents.end(); i++,aIterator++)
         pNames[i] = (*aIterator).first;
     return uno::Sequence < OUString > (pNames, nSize);
 }
@@ -137,10 +138,6 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const ::rtl::OUString& aProper
 {
     if (aPropertyName == L"MediaType")
         aValue >>= sMediaType;
-    else if (aPropertyName == L"ZipEntry")
-        aValue >>= aEntry;
-    else if (aPropertyName == L"Path")
-        aValue >>= sPath;
     else
         throw beans::UnknownPropertyException();
 }
@@ -151,18 +148,6 @@ uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const ::rtl::OUString& Pro
     {
         uno::Any aAny;
         aAny <<= sMediaType;
-        return aAny;
-    }
-    else if (PropertyName == L"ZipEntry")
-    {
-        uno::Any aAny;
-        aAny <<= aEntry;
-        return aAny;
-    }
-    else if (PropertyName == L"Path")
-    {
-        uno::Any aAny;
-        aAny <<= sPath;
         return aAny;
     }
     else
@@ -186,36 +171,48 @@ void SAL_CALL ZipPackageFolder::removeVetoableChangeListener( const ::rtl::OUStr
 }
 void ZipPackageFolder::saveContents(rtl::OUString &rPath)
 {
-    sPath = sPath + getName();
-    PropertyHash::const_iterator aCI = aContents.begin();
-    uno::Reference < beans::XPropertySet > xProp;
-    package::ZipEntry aEntry;
-    uno::Any aAny;
+    uno::Reference < lang::XUnoTunnel > xTunnel;
+    package::ZipEntry *aEntry = NULL;
+    ZipPackageFolder *pFolder = NULL;
+    ZipPackageStream *pStream = NULL;
+    sal_Bool bIsFolder;
+    TunnelHash::const_iterator aCI = aContents.begin();
+
+    //rPath = rPath + getName();
 
     for (;aCI!=aContents.end();aCI++)
     {
-        //xProp = uno::Reference < beans::XPropertySet> (aCI->second, uno::UNO_QUERY);
-        aAny = aCI->second->getPropertyValue(L"ZipEntry");
-        aAny >>= aEntry;
-        aEntry.nCrc = -1;
-        aEntry.nSize = -1;
-        aEntry.nCompressedSize = -1;
-
-        rZipOut.putNextEntry(aEntry);
-        if (aEntry.nFlag & 1 << 10)
+        xTunnel = uno::Reference < lang::XUnoTunnel> ((*aCI).second, uno::UNO_QUERY);
+        try
         {
-            aEntry.sName = aEntry.sName + L"/";
+            pFolder = reinterpret_cast < ZipPackageFolder* > (xTunnel->getSomething(ZipPackageFolder::getUnoTunnelImplementationId()));
+            bIsFolder = sal_True;
+        }
+        catch (uno::RuntimeException)
+        {
+            pStream = reinterpret_cast < ZipPackageStream* > (xTunnel->getSomething(ZipPackageStream::getUnoTunnelImplementationId()));
+            bIsFolder = sal_False;
+        }
+
+        if (bIsFolder)
+        {
+            pFolder->aEntry.sName = rPath + pFolder->getName() + L"/";
+            Time aTime;
+            aTime = Time();
+            pFolder->aEntry.nTime = aTime.GetTime();
+            rZipOut.putNextEntry(pFolder->aEntry);
             rZipOut.closeEntry();
+            pFolder->saveContents(pFolder->aEntry.sName);
         }
         else
         {
-            sal_Int64 nLength;
-            uno::Sequence < sal_Int8 > aSeq (65535);
-            uno::Reference < io::XActiveDataSink > xSink = uno::Reference < io::XActiveDataSink > (aCI->second, uno::UNO_QUERY);
-            uno::Reference < io::XInputStream > xStream = xSink->getInputStream();
-
+            pStream->aEntry.sName = rPath + pStream->getName();
+            uno::Reference < io::XInputStream > xStream = pStream->getInputStream();
+            rZipOut.putNextEntry(pStream->aEntry);
             while (1)
             {
+                uno::Sequence < sal_Int8 > aSeq (65535);
+                sal_Int64 nLength;
                 nLength = xStream->readBytes(aSeq, 65535);
                 if (nLength < 65535)
                     aSeq.realloc(nLength);
@@ -227,8 +224,28 @@ void ZipPackageFolder::saveContents(rtl::OUString &rPath)
         }
     }
 }
-sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
-    throw(::com::sun::star::uno::RuntimeException)
+
+uno::Sequence< sal_Int8 > ZipPackageFolder::getUnoTunnelImplementationId( void )
+    throw (uno::RuntimeException)
 {
-    return (sal_Int64)0;
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
+}
+
+sal_Int64 SAL_CALL ZipPackageFolder::getSomething( const uno::Sequence< sal_Int8 >& aIdentifier )
+    throw(uno::RuntimeException)
+{
+    if (aIdentifier.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  aIdentifier.getConstArray(), 16 ) )
+        return reinterpret_cast<sal_Int64>(this);
+
+    throw uno::RuntimeException();
 }
