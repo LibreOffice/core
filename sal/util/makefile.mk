@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: tra $ $Date: 2001-05-15 08:04:59 $
+#   last change: $Author: tra $ $Date: 2001-05-21 11:42:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -187,46 +187,6 @@ DEF1NAME= $(SHL1TARGET)
 .IF "$(GUI)"=="OS2"
 DEF1EXPORT1=SignalHandlerFunction
 .ENDIF
-
-# --- systools ---
-
-.IF "$(GUI)"=="WNT"
-
-TARGET2=w9xucwrp
-SHL2TARGET=$(TARGET2)
-SHL2IMPLIB=i$(TARGET2)
-
-SHL2STDLIBS=\
-            advapi32.lib\
-            comdlg32.lib\
-            kernel32.lib\
-            shell32.lib\
-            user32.lib
-
-# --- the following libraries contain the 
-# --- code necessary to build the w9xucwrp 
-# --- dll ( see they come from the $(SLB) 
-# --- directory ), whereby the libraries
-# --- in the $(LB) directory contain the 
-# --- static code
-
-SHL2LIBS=\
-        $(SLB)$/advapi9x.lib\
-        $(SLB)$/comdlg9x.lib\
-        $(SLB)$/kernel9x.lib\
-        $(SLB)$/shell9x.lib\
-        $(SLB)$/user9x.lib\
-        $(LB)$/tools32.lib
-
-SHL2DEF=$(MISC)$/$(SHL2TARGET).def
-DEF2NAME=$(SHL2TARGET)
-
-DEF2EXPORTFILE=systools.dxp
-
-SHL2DEPN=makefile.mk
-
-.ENDIF
-
 
 # --- tec ---
 
