@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+#   last change: $Author: mh $ $Date: 2000-12-07 09:14:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,89 +82,6 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 # drawattr.cxx fuer IDL (enums), sollte in den Svx gehen??
 
-CXXFILES = \
-        tabview.cxx \
-        tabview2.cxx \
-        tabview3.cxx \
-        tabview4.cxx \
-        tabview5.cxx \
-        viewfunc.cxx \
-        viewfun2.cxx \
-        viewfun3.cxx \
-        viewfun4.cxx \
-        viewfun5.cxx \
-        viewfun6.cxx \
-        viewfun7.cxx \
-        dbfunc.cxx \
-        dbfunc2.cxx \
-        dbfunc3.cxx \
-        dbfunc4.cxx \
-        tabvwsh.cxx \
-        tabvwsh2.cxx \
-        tabvwsh3.cxx \
-        tabvwsh4.cxx \
-        tabvwsh5.cxx \
-        tabvwsh7.cxx \
-        tabvwsh8.cxx \
-        tabvwsh9.cxx \
-        tabvwsha.cxx \
-        tabvwshb.cxx \
-        tabvwshc.cxx \
-        tabvwshd.cxx \
-        tabvwshe.cxx \
-        tabvwshf.cxx \
-        tabvwshg.cxx \
-        tabvwshh.cxx \
-        printfun.cxx \
-        preview.cxx \
-        prevwsh.cxx \
-        prevwsh2.cxx \
-        editsh.cxx \
-        editsh2.cxx \
-        pivotsh.cxx \
-        auditsh.cxx \
-        gridwin.cxx \
-        gridwin2.cxx \
-        gridwin3.cxx \
-        gridwin4.cxx \
-        gridwin5.cxx \
-        drawview.cxx \
-        drawvie2.cxx \
-        drawvie3.cxx \
-        drawvie4.cxx \
-        drawutil.cxx \
-        output.cxx \
-        output2.cxx \
-        output3.cxx \
-        gridmerg.cxx \
-        invmerge.cxx \
-        select.cxx \
-        olinewin.cxx \
-        hintwin.cxx \
-        notemark.cxx \
-        tabcont.cxx \
-        tabsplit.cxx \
-        viewdata.cxx \
-        viewutil.cxx \
-        hdrcont.cxx \
-        colrowba.cxx \
-        olkact.cxx \
-        galwrap.cxx \
-        imapwrap.cxx \
-        reffact.cxx \
-        spelleng.cxx \
-        waitoff.cxx \
-        cellsh.cxx \
-        cellsh1.cxx \
-        cellsh2.cxx \
-        cellsh3.cxx \
-        cellsh4.cxx \
-        formatsh.cxx \
-        pgbrksh.cxx
-
-#       drawattr.cxx                ??????
-
-
 SLOFILES =  \
         $(SLO)$/tabview.obj \
         $(SLO)$/tabview2.obj \
@@ -187,7 +104,6 @@ SLOFILES =  \
         $(SLO)$/tabvwsh3.obj \
         $(SLO)$/tabvwsh4.obj \
         $(SLO)$/tabvwsh5.obj \
-        $(SLO)$/tabvwsh7.obj \
         $(SLO)$/tabvwsh8.obj \
         $(SLO)$/tabvwsh9.obj \
         $(SLO)$/tabvwsha.obj \
@@ -203,7 +119,6 @@ SLOFILES =  \
         $(SLO)$/prevwsh.obj \
         $(SLO)$/prevwsh2.obj \
         $(SLO)$/editsh.obj \
-        $(SLO)$/editsh2.obj \
         $(SLO)$/pivotsh.obj \
         $(SLO)$/auditsh.obj \
         $(SLO)$/gridwin.obj \
