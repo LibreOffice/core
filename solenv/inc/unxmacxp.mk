@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-04 22:12:09 $
+#   last change: $Author: pluby $ $Date: 2001-03-06 19:20:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -129,7 +129,7 @@ CFLAGSNOOPT=
 .ENDIF
 CFLAGSOUTOBJ=-o
 
-SOLARVERSHLLIBS=$(shell -/bin/sh -c "ls $(SOLARLIBDIR)$/*$(DLLPOST) $(LB)$/*$(DLLPOST) $(MISC)$/*$(DLLPOST) 2>/dev/null")
+SOLARVERSHLLIBS=$(shell -/bin/sh -c "ls $(SOLARLIBDIR)$/*$(DLLPOST) $(LB)$/*$(DLLPOST) $(MISC)$/*$(DLLPOST) 2>/dev/null | grep -E -v 'lib\w+static'")
 .IF "$(STLPORT4)"!=""
 SOLARVERSHLLIBS+=$(shell -/bin/sh -c "ls $(STLPORT4)$/lib$/*$(DLLPOST) 2>/dev/null")
 .ENDIF

@@ -333,18 +333,17 @@ $(SHL1TARGETN) : \
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
 .ENDIF
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
-    $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
+    $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) \
+    `cat /dev/null $(SHL1LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="S390"
-    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
-.ENDIF
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -356,14 +355,25 @@ $(SHL1TARGETN) : \
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
-.ENDIF
 .IF "$(UPDATER)"=="YES"
-.IF "$(OS)"=="MACOSX"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL1TARGETN).framework
-.ELSE
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL1TARGETN)
 .ENDIF
+.ELSE			# "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL1VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL1OBJS:s/.obj/.o/) \
+    $(SHL1VERSIONOBJ) $(SHL1DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    `cat /dev/null $(SHL1LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    $(SHL1STDLIBS) $(SHL1ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="S390"
+    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
+.ENDIF
+    @ls -l $@
+.IF "$(UPDATER)"=="YES"
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL1TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -707,18 +717,17 @@ $(SHL2TARGETN) : \
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
 .ENDIF
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
-    $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
+    $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) \
+    `cat /dev/null $(SHL2LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="S390"
-    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
-.ENDIF
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -730,14 +739,25 @@ $(SHL2TARGETN) : \
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
-.ENDIF
 .IF "$(UPDATER)"=="YES"
-.IF "$(OS)"=="MACOSX"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL2TARGETN).framework
-.ELSE
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL2TARGETN)
 .ENDIF
+.ELSE			# "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL2VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL2OBJS:s/.obj/.o/) \
+    $(SHL2VERSIONOBJ) $(SHL2DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    `cat /dev/null $(SHL2LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    $(SHL2STDLIBS) $(SHL2ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="S390"
+    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
+.ENDIF
+    @ls -l $@
+.IF "$(UPDATER)"=="YES"
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL2TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -1081,18 +1101,17 @@ $(SHL3TARGETN) : \
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
 .ENDIF
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
-    $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
+    $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) \
+    `cat /dev/null $(SHL3LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="S390"
-    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
-.ENDIF
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -1104,14 +1123,25 @@ $(SHL3TARGETN) : \
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
-.ENDIF
 .IF "$(UPDATER)"=="YES"
-.IF "$(OS)"=="MACOSX"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL3TARGETN).framework
-.ELSE
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL3TARGETN)
 .ENDIF
+.ELSE			# "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL3VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL3OBJS:s/.obj/.o/) \
+    $(SHL3VERSIONOBJ) $(SHL3DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    `cat /dev/null $(SHL3LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    $(SHL3STDLIBS) $(SHL3ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="S390"
+    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
+.ENDIF
+    @ls -l $@
+.IF "$(UPDATER)"=="YES"
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL3TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -1455,18 +1485,17 @@ $(SHL4TARGETN) : \
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
 .ENDIF
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
-    $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
+    $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) \
+    `cat /dev/null $(SHL4LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="S390"
-    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
-.ENDIF
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -1478,14 +1507,25 @@ $(SHL4TARGETN) : \
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
-.ENDIF
 .IF "$(UPDATER)"=="YES"
-.IF "$(OS)"=="MACOSX"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL4TARGETN).framework
-.ELSE
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL4TARGETN)
 .ENDIF
+.ELSE			# "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL4VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL4OBJS:s/.obj/.o/) \
+    $(SHL4VERSIONOBJ) $(SHL4DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    `cat /dev/null $(SHL4LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    $(SHL4STDLIBS) $(SHL4ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="S390"
+    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
+.ENDIF
+    @ls -l $@
+.IF "$(UPDATER)"=="YES"
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL4TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -1829,18 +1869,17 @@ $(SHL5TARGETN) : \
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
 .ENDIF
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
-    $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
+    $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) \
+    `cat /dev/null $(SHL5LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="S390"
-    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
-.ENDIF
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -1852,14 +1891,25 @@ $(SHL5TARGETN) : \
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
-.ENDIF
 .IF "$(UPDATER)"=="YES"
-.IF "$(OS)"=="MACOSX"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL5TARGETN).framework
-.ELSE
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL5TARGETN)
 .ENDIF
+.ELSE			# "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL5VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL5OBJS:s/.obj/.o/) \
+    $(SHL5VERSIONOBJ) $(SHL5DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    `cat /dev/null $(SHL5LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    $(SHL5STDLIBS) $(SHL5ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="S390"
+    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
+.ENDIF
+    @ls -l $@
+.IF "$(UPDATER)"=="YES"
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL5TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -2203,18 +2253,17 @@ $(SHL6TARGETN) : \
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
 .ENDIF
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
-    $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
+    $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) \
+    `cat /dev/null $(SHL6LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="S390"
-    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
-.ENDIF
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -2226,14 +2275,25 @@ $(SHL6TARGETN) : \
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
-.ENDIF
 .IF "$(UPDATER)"=="YES"
-.IF "$(OS)"=="MACOSX"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL6TARGETN).framework
-.ELSE
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL6TARGETN)
 .ENDIF
+.ELSE			# "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL6VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL6OBJS:s/.obj/.o/) \
+    $(SHL6VERSIONOBJ) $(SHL6DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    `cat /dev/null $(SHL6LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    $(SHL6STDLIBS) $(SHL6ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="S390"
+    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
+.ENDIF
+    @ls -l $@
+.IF "$(UPDATER)"=="YES"
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL6TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -2577,18 +2637,17 @@ $(SHL7TARGETN) : \
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
 .ENDIF
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
-    $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
+    $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) \
+    `cat /dev/null $(SHL7LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="S390"
-    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
-.ENDIF
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -2600,14 +2659,25 @@ $(SHL7TARGETN) : \
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
-.ENDIF
 .IF "$(UPDATER)"=="YES"
-.IF "$(OS)"=="MACOSX"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL7TARGETN).framework
-.ELSE
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL7TARGETN)
 .ENDIF
+.ELSE			# "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL7VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL7OBJS:s/.obj/.o/) \
+    $(SHL7VERSIONOBJ) $(SHL7DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    `cat /dev/null $(SHL7LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    $(SHL7STDLIBS) $(SHL7ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="S390"
+    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
+.ENDIF
+    @ls -l $@
+.IF "$(UPDATER)"=="YES"
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL7TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -2951,18 +3021,17 @@ $(SHL8TARGETN) : \
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
 .ENDIF
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
-    $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
+    $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) \
+    `cat /dev/null $(SHL8LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="S390"
-    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
-.ENDIF
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -2974,14 +3043,25 @@ $(SHL8TARGETN) : \
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
-.ENDIF
 .IF "$(UPDATER)"=="YES"
-.IF "$(OS)"=="MACOSX"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL8TARGETN).framework
-.ELSE
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL8TARGETN)
 .ENDIF
+.ELSE			# "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL8VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL8OBJS:s/.obj/.o/) \
+    $(SHL8VERSIONOBJ) $(SHL8DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    `cat /dev/null $(SHL8LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    $(SHL8STDLIBS) $(SHL8ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="S390"
+    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
+.ENDIF
+    @ls -l $@
+.IF "$(UPDATER)"=="YES"
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL8TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -3325,18 +3405,17 @@ $(SHL9TARGETN) : \
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
 .ENDIF
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
-    $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
+    $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) \
+    `cat /dev/null $(SHL9LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="S390"
-    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
-.ENDIF
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -3348,14 +3427,25 @@ $(SHL9TARGETN) : \
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
-.ENDIF
 .IF "$(UPDATER)"=="YES"
-.IF "$(OS)"=="MACOSX"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL9TARGETN).framework
-.ELSE
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL9TARGETN)
 .ENDIF
+.ELSE			# "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL9VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL9OBJS:s/.obj/.o/) \
+    $(SHL9VERSIONOBJ) $(SHL9DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    `cat /dev/null $(SHL9LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    $(SHL9STDLIBS) $(SHL9ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="S390"
+    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
+.ENDIF
+    @ls -l $@
+.IF "$(UPDATER)"=="YES"
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL9TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM
@@ -3699,18 +3789,17 @@ $(SHL10TARGETN) : \
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
 .ENDIF
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
-    $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
+    $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) \
+    `cat /dev/null $(SHL10LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="S390"
-    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
-.ENDIF
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -3722,14 +3811,25 @@ $(SHL10TARGETN) : \
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
-.ENDIF
 .IF "$(UPDATER)"=="YES"
-.IF "$(OS)"=="MACOSX"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL10TARGETN).framework
-.ELSE
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL10TARGETN)
 .ENDIF
+.ELSE			# "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL10VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL10OBJS:s/.obj/.o/) \
+    $(SHL10VERSIONOBJ) $(SHL10DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    `cat /dev/null $(SHL10LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    $(SHL10STDLIBS) $(SHL10ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="S390"
+    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
+.ENDIF
+    @ls -l $@
+.IF "$(UPDATER)"=="YES"
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL10TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM

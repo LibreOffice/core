@@ -48,16 +48,17 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="MACOSX"
     @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP1OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(APP1OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -68,6 +69,16 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @echo "Making: $@.app"
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ELSE		# "$(OS)"=="MACOSX"
+    @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    -o $@ $(APP1OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP1LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
+    $(APP_LINKTYPE) $(APP1STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @source $(MISC)$/$(@:b).cmd
+    @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -215,16 +226,17 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="MACOSX"
     @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP2OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(APP2OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -235,6 +247,16 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @echo "Making: $@.app"
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ELSE		# "$(OS)"=="MACOSX"
+    @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    -o $@ $(APP2OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP2LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
+    $(APP_LINKTYPE) $(APP2STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @source $(MISC)$/$(@:b).cmd
+    @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -382,16 +404,17 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="MACOSX"
     @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP3OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(APP3OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -402,6 +425,16 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @echo "Making: $@.app"
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ELSE		# "$(OS)"=="MACOSX"
+    @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    -o $@ $(APP3OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP3LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
+    $(APP_LINKTYPE) $(APP3STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @source $(MISC)$/$(@:b).cmd
+    @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -549,16 +582,17 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="MACOSX"
     @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP4OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(APP4OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -569,6 +603,16 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @echo "Making: $@.app"
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ELSE		# "$(OS)"=="MACOSX"
+    @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    -o $@ $(APP4OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP4LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
+    $(APP_LINKTYPE) $(APP4STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @source $(MISC)$/$(@:b).cmd
+    @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -716,16 +760,17 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="MACOSX"
     @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP5OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(APP5OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -736,6 +781,16 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @echo "Making: $@.app"
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ELSE		# "$(OS)"=="MACOSX"
+    @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    -o $@ $(APP5OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP5LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
+    $(APP_LINKTYPE) $(APP5STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @source $(MISC)$/$(@:b).cmd
+    @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -883,16 +938,17 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="MACOSX"
     @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP6OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(APP6OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -903,6 +959,16 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @echo "Making: $@.app"
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ELSE		# "$(OS)"=="MACOSX"
+    @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    -o $@ $(APP6OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP6LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
+    $(APP_LINKTYPE) $(APP6STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @source $(MISC)$/$(@:b).cmd
+    @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -1050,16 +1116,17 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="MACOSX"
     @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP7OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(APP7OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -1070,6 +1137,16 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @echo "Making: $@.app"
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ELSE		# "$(OS)"=="MACOSX"
+    @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    -o $@ $(APP7OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP7LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
+    $(APP_LINKTYPE) $(APP7STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @source $(MISC)$/$(@:b).cmd
+    @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -1217,16 +1294,17 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="MACOSX"
     @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP8OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(APP8OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -1237,6 +1315,16 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @echo "Making: $@.app"
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ELSE		# "$(OS)"=="MACOSX"
+    @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    -o $@ $(APP8OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP8LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
+    $(APP_LINKTYPE) $(APP8STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @source $(MISC)$/$(@:b).cmd
+    @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -1384,16 +1472,17 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="MACOSX"
     @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP9OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(APP9OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -1404,6 +1493,16 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @echo "Making: $@.app"
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ELSE		# "$(OS)"=="MACOSX"
+    @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    -o $@ $(APP9OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP9LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
+    $(APP_LINKTYPE) $(APP9STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @source $(MISC)$/$(@:b).cmd
+    @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
@@ -1551,16 +1650,17 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="MACOSX"
     @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP10OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(APP10OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -1571,6 +1671,16 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @echo "Making: $@.app"
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ELSE		# "$(OS)"=="MACOSX"
+    @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    -o $@ $(APP10OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP10LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
+    $(APP_LINKTYPE) $(APP10STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @source $(MISC)$/$(@:b).cmd
+    @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"

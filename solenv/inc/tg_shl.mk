@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-03 17:27:42 $
+#   last change: $Author: pluby $ $Date: 2001-03-06 19:20:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -238,8 +238,6 @@ $(SHL$(TNR)TARGETN) : \
                     $(USE_SHL$(TNR)VERSIONMAP)\
                     $(SHL$(TNR)RES)\
                     $(SHL$(TNR)VERSIONH)\
-.IF "$(OS)"=="MACOSX"
-.ENDIF
                     $(SHL$(TNR)DEPN)
     @echo ------------------------------
     @echo Making: $(SHL$(TNR)TARGETN)
@@ -435,18 +433,17 @@ $(SHL$(TNR)TARGETN) : \
         @+if ( ! -e $(SOLARLIBDIR)/so_locations ) touch $(SOLARLIBDIR)/so_locations
 .ENDIF			# "$(OS)"=="IRIX"
 .ENDIF
+.IF "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
-    $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
-    `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
+    $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) \
+    `cat /dev/null $(SHL$(TNR)LIBS) | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) -o $@ \
+    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-.IF "$(OS)"=="S390"
-    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
-.ENDIF
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -458,14 +455,25 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF
     @echo "Making: $@.framework"
     @create-bundle $@
-.ENDIF
 .IF "$(UPDATER)"=="YES"
-.IF "$(OS)"=="MACOSX"
     +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL$(TNR)TARGETN).framework
-.ELSE
-    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL$(TNR)TARGETN)
 .ENDIF
+.ELSE			# "$(OS)"=="MACOSX"
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL$(TNR)VERSIONMAPPARA) -L$(PRJ)$/$(ROUT)$/lib $(SOLARLIB) $(STDSLO) $(SHL$(TNR)OBJS:s/.obj/.o/) \
+    $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ:s/.obj/.o/) -o $@ \
+    `cat /dev/null $(SHL$(TNR)LIBS) | tr -s " " "\n" | sed s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+    $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.IF "$(OS)"=="S390"
+    +mv -f ($@:s/$(DLLPOST)/.x/) $(LB)
+.ENDIF
+    @ls -l $@
+.IF "$(UPDATER)"=="YES"
+    +$(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL$(TNR)TARGETN)
 .ENDIF			# "$(UPDATER)"=="YES"
+.ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(GUI)" == "UNX"
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM

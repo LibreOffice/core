@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-03 17:27:42 $
-#*    $Revision: 1.19 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2001-03-06 19:20:33 $
+#*    $Revision: 1.20 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -94,16 +94,17 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"=="MACOSX"
     @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).list
     @+-$(RM) $(MISC)$/$(@:b).cmd
-    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
-    -o $@ $(APP$(TNR)OBJS:s/.obj/.o/)\
-    `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
-    $(APP_LINKTYPE) $(APP$(TNR)STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @+echo $(STDSLO) $(APP$(TNR)OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` | tr -s " " "\n" > $(MISC)$/$(@:b).list
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) -o $@ \
+    $(APP_LINKTYPE) $(APP$(TNR)STDLIBS) $(STDLIB) -filelist $(MISC)$/$(@:b).list > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
-.IF "$(OS)"=="MACOSX"
 # This is a hack as libstatic and libcppuhelper have a circular dependency
 .IF "$(PRJNAME)"=="cppuhelper"
     @echo "------------------------------"
@@ -114,6 +115,16 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @echo "Making: $@.app"
     @create-bundle $@
 .ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ELSE		# "$(OS)"=="MACOSX"
+    @+echo unx
+    @+-$(RM) $(MISC)$/$(@:b).cmd
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+    -o $@ $(APP$(TNR)OBJS:s/.obj/.o/) \
+    `cat /dev/null $(APP$(TNR)LIBS) | sed s\#$(ROUT)\#$(OUT)\#g` \
+    $(APP_LINKTYPE) $(APP$(TNR)STDLIBS) $(STDLIB) > $(MISC)$/$(@:b).cmd
+    @cat $(MISC)$/$(@:b).cmd
+    @source $(MISC)$/$(@:b).cmd
+    @ls -l $@
 .ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
