@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:14:22 $
+#   last change: $Author: fs $ $Date: 2000-10-05 08:39:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -149,7 +149,10 @@ SLOFILES=\
     $(SLO)$/FStatement.obj			\
     $(SLO)$/FPreparedStatement.obj	\
     $(SLO)$/FDatabaseMetaData.obj	\
-    $(SLO)$/FDriver.obj		
+    $(SLO)$/FDriver.obj				\
+    $(SLO)$/fanalyzer.obj			\
+    $(SLO)$/fcode.obj				\
+    $(SLO)$/fcomp.obj
 
 # --- Targets ----------------------------------
 
