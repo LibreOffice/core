@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-06 09:51:10 $
+ *  last change: $Author: hr $ $Date: 2000-12-06 12:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1690,7 +1690,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
         // xTables will be filled in getCommand
         m_aActiveCommand = getCommand(bUseEscapeProcessing,xTables);
         if (!m_aActiveCommand.len())
-            throw throw FunctionSequenceException(*this);
+            throw FunctionSequenceException(*this);
 
         {
             m_xStatement = m_xActiveConnection->prepareStatement(
