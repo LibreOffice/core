@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-11 18:08:28 $
+ *  last change: $Author: ssa $ $Date: 2002-10-14 09:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,6 +692,7 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
             {
                 // #94144# allow Minimize again, should be masked out when read from configuration
                 // 91625 - ignore Minimize
+                //if ( !(nValidMask&WINDOWSTATE_MASK_MINIMIZED) )
                 if ( !(nValidMask&WINDOWSTATE_STATE_MINIMIZED) )
                     aState.mnState &= ~(WINDOWSTATE_STATE_MINIMIZED);
                 rData.SetState( aState.mnState );
