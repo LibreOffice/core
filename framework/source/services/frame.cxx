@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:07:59 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 13:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1449,7 +1449,7 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     css::uno::Reference< css::awt::XWindow >       xContainerWindow    = m_xContainerWindow;
     css::uno::Reference< css::awt::XWindow >       xOldComponentWindow = m_xComponentWindow;
     css::uno::Reference< css::frame::XController > xOldController      = m_xController;
-    sal_Bool                                       bHadFocus           = ( m_eActiveState==E_FOCUS && m_xComponentWindow.is() );
+    sal_Bool                                       bHadFocus           = m_eActiveState==E_FOCUS;
     sal_Bool                                       bWasConnected       = m_bConnected;
     aReadLock.unlock();
     /* } SAFE */
@@ -1490,7 +1490,14 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
 
         css::uno::Reference< css::lang::XComponent > xDisposable( xOldController, css::uno::UNO_QUERY );
         if (xDisposable.is())
-            xDisposable->dispose();
+        {
+            try
+            {
+                xDisposable->dispose();
+            }
+            catch(const css::lang::DisposedException&)
+                {}
+        }
         xOldController = NULL;
     }
 
@@ -1513,7 +1520,14 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
 
         css::uno::Reference< css::lang::XComponent > xDisposable( xOldComponentWindow, css::uno::UNO_QUERY );
         if (xDisposable.is())
-            xDisposable->dispose();
+        {
+            try
+            {
+                xDisposable->dispose();
+            }
+            catch(const css::lang::DisposedException&)
+                {}
+        }
         xOldComponentWindow = NULL;
     }
 
@@ -1540,10 +1554,12 @@ sal_Bool SAL_CALL Frame::setComponent(  const   css::uno::Reference< css::awt::X
     //_____________________________________________________________________________________________________
     // A new component window doesn't know anything about current active/focus states.
     // Set this information on it!
-    if ( xComponentWindow.is() && m_eActiveState == E_FOCUS )
+    if (
+        (bHadFocus            ) &&
+        (xComponentWindow.is())
+       )
     {
-        if ( bHadFocus )
-            xComponentWindow->setFocus();
+        xComponentWindow->setFocus();
     }
 
     // If it was a new component window - we must resize it to fill out
@@ -3176,9 +3192,10 @@ void Frame::implts_checkSuicide()
         if (bSuicide)
             close(sal_True);
     }
-    catch( css::util::CloseVetoException& )
-    {
-    }
+    catch(const css::util::CloseVetoException&)
+        {}
+    catch(const css::lang::DisposedException&)
+        {}
 }
 
 //_______________________________________________________________
