@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-02 21:02:30 $
+ *  last change: $Author: mib $ $Date: 2001-03-13 15:44:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,7 +413,15 @@ XMLTextParagraphExport* SwXMLExport::CreateTextParagraphExport()
 
 XMLShapeExport* SwXMLExport::CreateShapeExport()
 {
-    return new XMLShapeExport( *this, XMLTextParagraphExport::CreateShapeExtPropMapper( *this ) );
+    XMLShapeExport* pShapeExport = new XMLShapeExport( *this, XMLTextParagraphExport::CreateShapeExtPropMapper( *this ) );
+    Reference < XDrawPageSupplier > xDPS( GetModel(), UNO_QUERY );
+    if( xDPS.is() )
+    {
+         Reference < XShapes > xShapes( xDPS->getDrawPage(), UNO_QUERY );
+        pShapeExport->seekShapes( xShapes );
+    }
+
+    return pShapeExport;
 }
 
 __EXPORT SwXMLExport::~SwXMLExport()
