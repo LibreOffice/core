@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xerecord.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:35 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,18 +59,9 @@
  *
  ************************************************************************/
 
-#ifdef PCH
-#include "filt_pch.hxx"
-#endif
-
-#pragma hdrstop
-
-// ============================================================================
-
 #ifndef SC_XERECORD_HXX
 #include "xerecord.hxx"
 #endif
-
 
 // Base classes to export Excel records =======================================
 
@@ -87,7 +78,6 @@ void XclExpRecordBase::SaveRepeated( XclExpStream& rStrm, sal_uInt32 nCount )
     for( sal_uInt32 nIndex = 0; nIndex < nCount; ++nIndex )
         Save( rStrm );
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -113,12 +103,11 @@ void XclExpRecord::WriteBody( XclExpStream& rStrm )
 
 void XclExpRecord::Save( XclExpStream& rStrm )
 {
-    DBG_ASSERT( mnRecId != EXC_ID_UNKNOWN, "XclExpRecord::Save - Record ID uninitialized" );
+    DBG_ASSERT( mnRecId != EXC_ID_UNKNOWN, "XclExpRecord::Save - record ID uninitialized" );
     rStrm.StartRecord( mnRecId, mnRecSize );
     WriteBody( rStrm );
     rStrm.EndRecord();
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -126,7 +115,6 @@ void XclExpBoolRecord::WriteBody( XclExpStream& rStrm )
 {
     rStrm << static_cast< sal_uInt16 >( mbValue ? 1 : 0 );
 }
-
 
 // ----------------------------------------------------------------------------
 
@@ -147,14 +135,12 @@ void XclExpDummyRecord::WriteBody( XclExpStream& rStrm )
     rStrm.Write( mpData, GetRecSize() );
 }
 
-
 // ----------------------------------------------------------------------------
 
 void XclExpRefRecord::Save( XclExpStream& rStrm )
 {
     mrRec.Save( rStrm );
 }
-
 
 // ============================================================================
 
