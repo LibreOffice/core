@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:39:12 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:10:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ String STR_WIZDLG_FINISH
     Text[ czech ] = "Vytvořit";
     Text[ hebrew ] = "‮חדש‬";
     Text[ hindi ] = "उ~त्पन्न करो";
+    Text[ slovak ] = "Vytvo~riť";
 };
 
 String STR_WIZDLG_NEXT
@@ -123,6 +124,7 @@ String STR_WIZDLG_NEXT
     Text[ czech ] = "Další >>";
     Text[ hebrew ] = "‮הבא >>‬";
     Text[ hindi ] = "~आगे >>";
+    Text[ slovak ] = "Ďa~lší >>";
 };
 
 String STR_WIZDLG_PREVIOUS
@@ -154,11 +156,21 @@ String STR_WIZDLG_PREVIOUS
     Text[ czech ] = "<< Zpět";
     Text[ hebrew ] = "‮<< קודם‬";
     Text[ hindi ] = "<< पी~छे";
+    Text[ slovak ] = "<< ~Späť";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25.50.1  2003/06/12 11:05:43  gh
+ *  final Merge RC
+ *
+ *  Revision 1.25  2003/04/29 17:39:12  hr
+ *  INTEGRATION: CWS mergem8 (1.17.2.8.4.4.2.1.48); FILE MERGED
+ *  2003/04/29 08:35:06 gh 1.17.2.8.4.4.2.1.48.3: final merge for Beta2
+ *  2003/04/16 18:20:35 gh 1.17.2.8.4.4.2.1.48.2: RESYNC: (1.17.2.8.4.4.2.1-1.24); FILE MERGED
+ *  2003/04/14 15:07:24 gh 1.17.2.8.4.4.2.1.48.1: merging all languages
+ *
  *  Revision 1.17.2.8.4.4.2.1.48.3  2003/04/29 08:35:06  gh
  *  final merge for Beta2
  *
@@ -272,6 +284,8 @@ String STR_WIZDLG_PREVIOUS
  *
  *  Revision 1.0 14.02.01 11:46:26  fs
  ************************************************************************/
+
+
 
 
 
