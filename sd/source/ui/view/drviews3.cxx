@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-08-29 14:25:43 $
+ *  last change: $Author: cl $ $Date: 2002-09-27 12:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 
 #ifndef _SVX_RULER_HXX
@@ -816,28 +819,42 @@ void  SdDrawViewShell::GetRulerState(SfxItemSet& rSet)
                     aProtect.SetSizeProtect( TRUE );
                     aProtect.SetPosProtect( TRUE );
                 }
-            }
-        }
-        else if( pDrView->IsResizeAllowed(TRUE) )
-        {
-            Rectangle aRect = aMarkRect;
 
-            aRect.SetPos(aRect.TopLeft() + aPagePos);
-            SvxObjectItem aObjItem(aRect.Left(), aRect.Right(),
-                                   aRect.Top(), aRect.Bottom());
-            rSet.Put(aObjItem);
-            rSet.DisableItem( ITEMID_TABSTOP );
+                if( aEditAttr.GetItemState( EE_PARA_WRITINGDIR ) >= SFX_ITEM_AVAILABLE )
+                {
+                    const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&) aEditAttr.Get( EE_PARA_WRITINGDIR );
+
+                    const sal_Bool bRTL = rItem.GetValue() == ::com::sun::star::text::WritingMode_RL_TB;
+                    rSet.Put(SfxBoolItem(SID_RULER_TEXT_RIGHT_TO_LEFT, bRTL));
+                }
+            }
         }
         else
         {
-            rSet.DisableItem( SID_RULER_OBJECT );
             rSet.DisableItem( ITEMID_TABSTOP );
+            rSet.DisableItem( SID_RULER_TEXT_RIGHT_TO_LEFT );
+
+            if( pDrView->IsResizeAllowed(TRUE) )
+            {
+                Rectangle aRect = aMarkRect;
+
+                aRect.SetPos(aRect.TopLeft() + aPagePos);
+                SvxObjectItem aObjItem(aRect.Left(), aRect.Right(),
+                                       aRect.Top(), aRect.Bottom());
+                rSet.Put(aObjItem);
+                rSet.DisableItem( ITEMID_TABSTOP );
+            }
+            else
+            {
+                rSet.DisableItem( SID_RULER_OBJECT );
+            }
         }
     }
     else
     {
         rSet.DisableItem( SID_RULER_OBJECT );
         rSet.DisableItem( ITEMID_TABSTOP );
+        rSet.DisableItem( SID_RULER_TEXT_RIGHT_TO_LEFT );
     }
 
     rSet.Put( aLRSpace );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2002-08-29 13:18:57 $
+ *  last change: $Author: cl $ $Date: 2002-09-27 12:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1405,6 +1405,12 @@ interface DrawView : View
         Cachable ;
     ]
     SID_RULER_LR_MIN_MAX // ole : no, status : ?
+    [
+        ExecMethod = ExecRuler ;
+        StateMethod = GetRulerState ;
+    ]
+
+    SID_RULER_TEXT_RIGHT_TO_LEFT
     [
         ExecMethod = ExecRuler ;
         StateMethod = GetRulerState ;

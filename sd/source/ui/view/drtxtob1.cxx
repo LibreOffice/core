@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-09-13 10:34:58 $
+ *  last change: $Author: cl $ $Date: 2002-09-27 12:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,8 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
 
                 rReq.Done( aNewAttr );
                 pArgs = rReq.GetArgs();
+
+                Invalidate( SID_RULER_TEXT_RIGHT_TO_LEFT );
             }
             else if ( nSlot == SID_ATTR_CHAR_FONT       ||
                       nSlot == SID_ATTR_CHAR_FONTHEIGHT ||
