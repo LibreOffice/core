@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsListener.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:14:16 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "SlsListener.hxx"
 
 #include "SlideSorterViewShell.hxx"
@@ -233,8 +232,7 @@ void Listener::ConnectToController (void)
         catch (beans::UnknownPropertyException aEvent)
         {
             OSL_TRACE ("caught exception in SlideSorterController::SetupListeners: %s",
-                ::rtl::OUStringToOString(aEvent.Message,
-                    RTL_TEXTENCODING_UTF8).getStr());
+                ::rtl::OUStringToOString(aEvent.Message, RTL_TEXTENCODING_UTF8).getStr());
         }
 
         // Listen for disposing events.
@@ -449,6 +447,7 @@ void SAL_CALL Listener::frameAction (const frame::FrameActionEvent& rEvent)
 
         case frame::FrameAction_COMPONENT_REATTACHED:
             ConnectToController();
+            mrController.GetPageSelector().UpdateAllPages();
             break;
 
         default:
