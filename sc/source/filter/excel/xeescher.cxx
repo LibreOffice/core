@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:02:50 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,9 +726,9 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
                 // and export the properties, we need to recreate the drawing object and
                 // pass this to XclObjComment() for processing.
                 pCaption.reset(new SdrCaptionObj( aRect, aDummyTailPos ));
-                (pCaption.get())->SetMergedItemSet(rSet);
 
                 pScNote->InsertObject(pCaption.get(), rDoc, rScPos.Tab());
+                (pCaption.get())->SetMergedItemSet(rSet);
             }
 
             // create the Escher object
