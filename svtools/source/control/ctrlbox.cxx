@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:57 $
+ *  last change: $Author: er $ $Date: 2000-10-22 17:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,18 @@
 #endif
 #ifndef _FIELD_HXX
 #include <vcl/field.hxx>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _UNOTOOLS_CHARCLASS_HXX
+#include <unotools/charclass.hxx>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
 #endif
 
 #include <svtdata.hxx>
@@ -851,17 +863,19 @@ void FontStyleBox::LoseFocus()
 
 void FontStyleBox::Modify()
 {
-    International   aIntn = Application::GetAppInternational();
+    CharClass aChrCls( ::comphelper::getProcessServiceFactory(),
+        Application::GetSettings().GetLocale() );
+
     XubString       aStr = GetText();
     USHORT          nEntryCount = GetEntryCount();
 
     if ( GetEntryPos( aStr ) == COMBOBOX_ENTRY_NOTFOUND )
     {
-        aIntn.ToUpper( aStr );
+        aChrCls.toUpper( aStr );
         for ( USHORT i = 0; i < nEntryCount; i++ )
         {
             XubString aEntryText = GetEntry( i );
-            aIntn.ToUpper( aEntryText );
+            aChrCls.toUpper( aEntryText );
 
             if ( aStr == aEntryText )
             {
