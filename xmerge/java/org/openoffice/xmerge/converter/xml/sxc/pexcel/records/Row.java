@@ -74,17 +74,24 @@ public class Row implements BIFFRecord {
     private byte[] miyRw    = new byte[2];
     private byte[] grbit    = new byte[2];
     private byte[] ixfe     = new byte[2];
+    private float  scale = (float) 1;
 
     /**
      * Constructs a pocket Excel Document from the
      * <code>InputStream</code> and assigns it the document name passed in
      *
-     * @param   is InputStream containing a Pocket Excel Data file.
+     * @param   rw Zero based row number
+     * @param   miyRw row height
      */
-    public Row(int rw, int miyRw) {
+    public Row(int rw, int miyRw, boolean userDefined) {
         this.rw     = EndianConverter.writeShort((short) rw);
+        miyRw *= scale;
         this.miyRw  = EndianConverter.writeShort((short) miyRw);
-        grbit   = EndianConverter.writeShort((short) 0);
+        if(userDefined) {
+            grbit   = EndianConverter.writeShort((short) 2);
+        } else {
+            grbit   = EndianConverter.writeShort((short) 0);
+        }
         ixfe    = EndianConverter.writeShort((short) 0);
     }
 
@@ -133,6 +140,8 @@ public class Row implements BIFFRecord {
 
         int numOfBytesRead  = input.read(rw);
         numOfBytesRead      += input.read(miyRw);
+        short scaledHeight = (short) (EndianConverter.readShort(miyRw) / scale);
+        miyRw = EndianConverter.writeShort(scaledHeight);
         numOfBytesRead      += input.read(grbit);
         numOfBytesRead      += input.read(ixfe);
 

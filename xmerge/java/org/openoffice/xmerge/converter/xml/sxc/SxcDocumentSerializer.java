@@ -444,7 +444,8 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 Debug.log(Debug.TRACE, "traverseTableRow() Row Height : " + rowHeight);
                 ColumnRowInfo ri = new ColumnRowInfo(   rowHeight,
                                                             repeatedRows,
-                                                            ColumnRowInfo.ROW);
+                                                            ColumnRowInfo.ROW,
+                                                            rowHeight!=0);
                 ColumnRowList.add(ri);
             }
 
