@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:16:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ String S_GPF_ABORT
     Text[ russian ] = "Program aborted with GPF";
     Text[ greek ] = "Program aborted with GPF";
     Text[ dutch ] = "Programma gestopt met GPF";
-    Text[ french ] = "Programme interrompu à l'aide de GPF";
+    Text[ french ] = "Programme interrompu avec GPF";
     Text[ spanish ] = "Programa interrumpido con GPF";
     Text[ italian ] = "Program aborted with GPF";
     Text[ danish ] = "Program aborted with GPF";
@@ -279,7 +279,7 @@ String S_NO_POPUP
     Text[ russian ] = "PopUp menu not open";
     Text[ greek ] = "PopUp menu not open";
     Text[ dutch ] = "Geen PopUpMenu geopend";
-    Text[ french ] = "Aucun menu Pop-Up ouvert";
+    Text[ french ] = "Aucun menu Pop-up ouvert";
     Text[ spanish ] = "No existe ningún PopupMenu abierto";
     Text[ italian ] = "PopUp menu not open";
     Text[ danish ] = "PopUp menu not open";
