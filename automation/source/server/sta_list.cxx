@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: gh $ $Date: 2002-11-27 14:03:26 $
+ *  last change: $Author: gh $ $Date: 2002-12-09 14:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,9 +949,12 @@ void StatementList::DirectLog(ULONG nUId, String aMessage)
 
 #define CALL_EVENT_WITH_NOTIFY( EventType, Event, WinP, Method )    \
 {                                                                   \
-    NotifyEvent aNEvt( EventType, WinP, &Event );                   \
-    if ( !WinP->PreNotify( aNEvt ) )                                \
-        WinP->Method( Event );                                      \
+    if ( StatementList::WinPtrValid( WinP ) )                                       \
+    {                                                               \
+        NotifyEvent aNEvt( EventType, WinP, &Event );               \
+        if ( !WinP->PreNotify( aNEvt ) )                            \
+            WinP->Method( Event );                                  \
+    }                                                               \
 }
 
 void ImplKeyInput( Window* pWin, KeyEvent &aKEvnt )
@@ -963,13 +966,16 @@ void ImplKeyInput( Window* pWin, KeyEvent &aKEvnt )
         KeyCode aCode = aKEvnt.GetKeyCode();
         if ( (aCode.GetCode() == KEY_CONTEXTMENU) || ((aCode.GetCode() == KEY_F10) && aCode.IsShift()) )
         {
-            Point aPos;
-            // simulate mouseposition at center of window
-            Size aSize = pWin->GetOutputSize();
-            aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
+            if ( StatementList::WinPtrValid( pWin ) )
+            {
+                Point aPos;
+                // simulate mouseposition at center of window
+                Size aSize = pWin->GetOutputSize();
+                aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
 
-            CommandEvent aEvent( aPos, COMMAND_CONTEXTMENU, FALSE );
-            ImplCommand( pWin, aEvent );
+                CommandEvent aEvent( aPos, COMMAND_CONTEXTMENU, FALSE );
+                ImplCommand( pWin, aEvent );
+            }
         }
     }
 
