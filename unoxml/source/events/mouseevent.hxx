@@ -65,7 +65,7 @@ public:
                         const Reference< XEventTarget >& relatedTargetArg)
         throw(RuntimeException);
 
-    // delegate to CUIevent    
+    // delegate to CUIevent
     virtual Reference< XAbstractView > SAL_CALL getView() throw (RuntimeException);
     virtual sal_Int32 SAL_CALL getDetail() throw (RuntimeException);
     virtual void SAL_CALL initUIEvent(const OUString& typeArg,
@@ -83,10 +83,10 @@ public:
     virtual void SAL_CALL stopPropagation() throw (RuntimeException);
     virtual void SAL_CALL preventDefault() throw (RuntimeException);
     virtual void SAL_CALL initEvent(
-        const OUString& eventTypeArg, 
-        sal_Bool canBubbleArg, 
-        sal_Bool cancelableArg) 
-        throw (RuntimeException);    
+        const OUString& eventTypeArg,
+        sal_Bool canBubbleArg,
+        sal_Bool cancelableArg)
+        throw (RuntimeException);
 };
 }}
 #endif

@@ -1,7 +1,7 @@
 #include "mouseevent.hxx"
 
 namespace DOM { namespace events
-{    
+{
 
     sal_Int32 SAL_CALL CMouseEvent::getScreenX() throw (RuntimeException)
     {
@@ -139,7 +139,7 @@ namespace DOM { namespace events
         CUIEvent::preventDefault();
     }
 
-    void SAL_CALL CMouseEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg, 
+    void SAL_CALL CMouseEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
         sal_Bool cancelableArg) throw (RuntimeException)
     {
         // base initializer
