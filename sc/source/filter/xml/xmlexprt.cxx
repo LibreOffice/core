@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-06 19:45:45 $
+ *  last change: $Author: sab $ $Date: 2001-12-10 17:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,22 +587,20 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                                                                 {
                                                                     if (pDoc)
                                                                     {
-                                                                        awt::Point aPoint;
-                                                                        awt::Size aSize;
+
+                                                                        awt::Point aPoint(xShape->getPosition());
+                                                                        awt::Size aSize(xShape->getSize());
                                                                         rtl::OUString sType(xShape->getShapeType());
-                                                                        if ( !sType.equals(sCaptionShape) )
-                                                                        {
-                                                                            aPoint = xShape->getPosition();
-                                                                            aSize = xShape->getSize();
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            awt::Point aAnchorPoint(xShape->getPosition());
-                                                                            xShapeProp->getPropertyValue( sCaptionPoint ) >>= aPoint;
-                                                                            aPoint.X += aAnchorPoint.X;
-                                                                            aPoint.Y += aAnchorPoint.Y;
-                                                                        }
                                                                         Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
+                                                                        if ( sType.equals(sCaptionShape) )
+                                                                        {
+                                                                            awt::Point aRelativeCaptionPoint;
+                                                                            xShapeProp->getPropertyValue( sCaptionPoint ) >>= aRelativeCaptionPoint;
+                                                                            Point aCoreRelativeCaptionPoint(aRelativeCaptionPoint.X, aRelativeCaptionPoint.Y);
+                                                                            Point aCoreAbsoluteCaptionPoint(aPoint.X, aPoint.Y);
+                                                                            aCoreAbsoluteCaptionPoint += aCoreRelativeCaptionPoint;
+                                                                            aRectangle.Union(Rectangle(aCoreAbsoluteCaptionPoint, aCoreAbsoluteCaptionPoint));
+                                                                        }
                                                                         ScRange aRange = pDoc->GetRange(static_cast<USHORT>(nTable), aRectangle);
                                                                         ScMyShape aMyShape;
                                                                         aMyShape.aAddress = aRange.aStart;

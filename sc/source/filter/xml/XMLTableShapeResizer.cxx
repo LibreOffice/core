@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-23 12:03:05 $
+ *  last change: $Author: sab $ $Date: 2001-12-10 17:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ void ScMyShapeResizer::ResizeShapes()
     {
         rtl::OUString sRowHeight(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLHGT));
         rtl::OUString sPersistName (RTL_CONSTASCII_USTRINGPARAM("PersistName"));
+        rtl::OUString sCaptionPoint( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ));
         uno::Reference<table::XCellRange> xTableRow;
         uno::Reference<sheet::XSpreadsheet> xSheet;
         uno::Reference<table::XTableRows> xTableRows;
@@ -245,16 +246,31 @@ void ScMyShapeResizer::ResizeShapes()
                                             "no end address of this shape");
                                         Rectangle aRec = pDoc->GetMMRect(static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row),
                                             static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
-                                        awt::Point aRefPoint;
-                                        aRefPoint.X = aRec.Left();
-                                        aRefPoint.Y = aRec.Top();
-                                        awt::Point aPoint = aItr->xShape->getPosition();
-                                        aPoint.X += aRefPoint.X;
-                                        if (aPoint.X > aRec.Right())
-                                            aPoint.X = aRec.Right() - 1;
-                                        aPoint.Y += aRefPoint.Y;
-                                        if (aPoint.Y > aRec.Bottom())
-                                            aPoint.Y = aRec.Bottom() - 1;
+                                        awt::Point aPoint(aItr->xShape->getPosition());
+                                        awt::Size aSize(aItr->xShape->getSize());
+                                        Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
+
+                                        awt::Point aCaptionPoint;
+                                        uno::Reference< beans::XPropertySet > xShapeProps(aItr->xShape, uno::UNO_QUERY);
+                                        if (xShapeProps.is())
+                                            xShapeProps->getPropertyValue( sCaptionPoint ) >>= aCaptionPoint;
+                                        Point aCorePoint(aPoint.X, aPoint.Y);
+                                        Point aCoreCaptionPoint(aCaptionPoint.X, aCaptionPoint.Y);
+                                        aCoreCaptionPoint += aCorePoint;
+                                        aRectangle.Union(Rectangle(aCoreCaptionPoint, aCoreCaptionPoint));
+
+                                        Point aBeforeRightBottomPoint(aRectangle.BottomRight());
+
+                                        aRectangle += aRec.TopLeft();
+                                        if (aRectangle.Left() > aRec.Right())
+                                            aRectangle -= (Point(aRectangle.Left() - aRec.Right() + 2, 0));
+                                        if (aRectangle.Top() > aRec.Bottom())
+                                            aRectangle -= (Point(0, aRectangle.Top() - aRec.Bottom() + 2));
+
+                                        Point aDifferencePoint(aRectangle.BottomRight() - aBeforeRightBottomPoint);
+                                        aPoint.X += aDifferencePoint.X();
+                                        aPoint.Y += aDifferencePoint.Y();
+
                                         aItr->xShape->setPosition(aPoint);
                                     }
                                 }
