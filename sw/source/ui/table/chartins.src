@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartins.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:56:53 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ korean ] = "¼±ÅÃÇ¥½ÃµÈ ¼¿ÀÌ ¿øÇÏ´Â µ¥ÀÌÅÍ¸¦ Æ÷ÇÔÇÏ°í ÀÖÁö ¾ÊÀ» °æ¿ì, Áö±Ý ¿µ¿ªÀ» ¼±ÅÃÇ¥½ÃÇÏ½Ê½Ã¿À. \n\n¿­ ³»Áö Çà ¶óº§À» °¡Áø ¼¿µéÀ» ±×·¡ÇÈ¿¡ ³ªÅ¸³»°íÀÚÇÏ¸é ÀÌ ¼¿µéÀ» ÇÔ²² Æ÷ÇÔ½ÃÅ°½Ê½Ã¿À.";
         Text[ turkish ] = "Seçilen hücreler, istenen verileri içermiyorsa aralýðý þimdi seçin.\n\nGrafikte görünmelerini istiyorsanýz, sütun ya da satýr baþlýklarýný içeren hücreleri de seçin";
         Text[ catalan ] = "En caso de que las celdas marcadas no contengan los datos deseados, marque ahora el área.\n\nIncluya las celdas con  los nombres de las columnas y filas si desea que estas aparezcan en su gráfico.";
+        Text[ finnish ] = "Jos merkityt solut eivät esitä haluttuja tietoja, merkitse alue nyt.\nSisällytä valintaan sarake- ja riviotsikot sisältävät solut, jos haluat niiden näkyvän kaaviossa.";
     };
     FixedText FT_RANGE
     {
@@ -131,6 +132,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ korean ] = "¿µ¿ª(~A)";
         Text[ turkish ] = "~Aralýk";
         Text[ catalan ] = "~Área";
+        Text[ finnish ] = "~Alue";
     };
     Edit ED_RANGE
     {
@@ -167,6 +169,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ korean ] = "Ã¹¹øÂ° ÇàÀ» Ä¸¼ÇÀ¸·Î(~F)";
         Text[ turkish ] = "Baþlýklar ~birinci satýrda";
         Text[ catalan ] = "Primera ~fila como etiqueta";
+        Text[ finnish ] = "~Ensimmäinen rivi kuvaotsikkona";
     };
     CheckBox CB_FIRST_COL
     {
@@ -197,6 +200,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ korean ] = "Ã¹¹øÂ° ¿­À» Ä¸¼ÇÀ¸·Î(~C)";
         Text[ turkish ] = "Baþlýklar ~birinci sütunda";
         Text[ catalan ] = "Primera c~olumna como etiqueta";
+        Text[ finnish ] = "~Ensimmäinen sarake kuvaotsikkona";
     };
     GroupBox GB_1
     {
@@ -225,6 +229,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ korean ] = "¼±ÅÃ";
         Text[ turkish ] = "Seçim";
         Text[ catalan ] = "Selección";
+        Text[ finnish ] = "Valinta";
     };
     FixedText FT_HORZLINE
     {
@@ -275,6 +280,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ korean ] = "<<µÚ·Î)(~B)";
         Text[ turkish ] = "<< G~eri";
         Text[ catalan ] = "<< ~Regresar";
+        Text[ finnish ] = "<< ~Takaisin";
     };
     PushButton BT_NEXT
     {
@@ -305,6 +311,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ korean ] = "´ÙÀ½ (~N) >>";
         Text[ turkish ] = "~Ýleri >>";
         Text[ catalan ] = "~Siguiente >>";
+        Text[ finnish ] = "~Seuraava >>";
     };
     PushButton BT_FINISH
     {
@@ -334,6 +341,7 @@ ModelessDialog DLG_INSERT_CHART
         Text[ korean ] = "¸¸µé±â(~A)";
         Text[ turkish ] = "~Oluþtur";
         Text[ catalan ] = "~Crear";
+        Text[ finnish ] = "~Luo";
     };
     Text [ italian ] = "Formattazione automatica diagramma (1-4)" ;
     Text [ spanish ] = "AutoFormato diagrama (1-4)" ;
@@ -355,4 +363,5 @@ ModelessDialog DLG_INSERT_CHART
     Text[ korean ] = "ÀÚµ¿¼­½Ä Â÷Æ® (1-4)";
     Text[ turkish ] = "Otomatik þema formatlama (1-4)";
     Text[ catalan ] = "AutoFormato diagrama (1-4)";
+    Text[ finnish ] = "Automaattinen kaavion muotoilu(1-4)";
 };
