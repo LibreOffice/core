@@ -289,3 +289,82 @@ LINK_JAVA_LIBS=-L$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)
 
 endif
 
+###########################################################################
+#
+# MacOSX/Darwin specific settings
+#
+###########################################################################
+ifeq "$(PLATFORM)" "Darwin"
+# Settings for MacOSX using gcc 3.3 compiler
+    
+# Default is MacOSX on a ppc machine    
+PLATFORM=macosx
+PACKAGE_LIB_DIR=macosx_ppc.plt
+JAVA_PROC_TYPE=ppc
+
+OS=MACOSX
+PS=/
+CC=gcc
+LINK=gcc
+LIB=gcc
+ECHO=@echo
+MKDIR=mkdir -p
+CAT=cat
+OBJ_EXT=o
+SHAREDLIB_EXT=dylib
+SHAREDLIB_PRE=lib
+SHAREDLIB_OUT=$(OUT_LIB)
+    
+GCC_VERSION=$(shell $(CC) -dumpversion)
+
+COMID=gcc3
+CPPU_ENV=gcc3
+
+OSEP=\<
+CSEP=\>
+QUOTE=$(subst S,\,S)
+QM=\"
+    
+DEL=rm -f
+DELRECURSIVE=rm -rf
+COPY=cp
+URLPREFIX=file://
+
+# Include UDK version numbers
+include $(PRJ)/include/udkversion.mk
+
+SALLIB=-lsal
+CPPULIB=-lcppu
+CPPUHELPERLIB=-lcppuhelper$(COMID)
+SALHELPERLIB=-lsalhelper$(COMID)
+STLPORTLIB=-lstlport_gcc -lstdc++
+
+EMPTYSTRING=
+PATH_SEPARATOR=:
+
+# -O is necessary for inlining (see gcc documentation)
+ifeq "$(DEBUG)" "yes"
+CC_FLAGS=-malign-natural -c -g -fPIC -fno-common -fno-rtti
+else
+CC_FLAGS=-malign-natural -c -O -fPIC -fno-common -fno-rtti
+endif
+
+SDK_JAVA_INCLUDES = -I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers -I/System/Library/Frameworks/JavaVM.framework/Headers
+CC_INCLUDES=-I. -I/usr/include -I$(OUT)/inc/examples -I$(PRJ)/include
+STL_INCLUDES=-I$(OO_SDK_HOME)/include/stl
+CC_DEFINES=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV)
+
+CC_OUTPUT_SWITCH=-o
+
+LIBRARY_LINK_FLAGS=-dynamiclib -single_module
+
+# install_name '@executable_path$/(@:f)'
+
+LIBRARY_LINK_FLAGS+=-fPIC -fno-common
+
+EXE_LINK_FLAGS=
+LINK_LIBS=-L$(OUT)/lib -L$(PRJ)/$(PLATFORM)/lib -L$(OFFICE_PROGRAM_PATH)
+LINK_JAVA_LIBS=-framework JavaVM
+
+endif
+
