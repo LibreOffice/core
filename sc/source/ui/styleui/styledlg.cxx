@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-02 15:34:25 $
+ *  last change: $Author: dr $ $Date: 2002-08-06 08:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,9 +214,10 @@ void __EXPORT ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
 
 const SfxItemSet* __EXPORT ScStyleDlg::GetRefreshedSet()
 {
-    delete GetInputSetImpl();
-
-    return new SfxItemSet( GetStyleSheet().GetItemSet() );
+    SfxItemSet* pItemSet = GetInputSetImpl();
+    pItemSet->ClearItem();
+    pItemSet->SetParent( GetStyleSheet().GetItemSet().GetParent() );
+    return pItemSet;
 }
 
 
