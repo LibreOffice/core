@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:39:50 $
+ *  last change: $Author: nn $ $Date: 2001-11-07 17:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ BOOL lcl_GetDataArrayPos( const ScPivotParam& rParam, USHORT nIndex,
             {
                 if ( nPos == nIndex )
                 {
-                    rArrayPos = nPos;
+                    rArrayPos = i;          // position in aDataArr
                     rFuncBit = nMask;
                     return TRUE;
                 }
