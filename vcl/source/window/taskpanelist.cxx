@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-22 16:44:20 $
+ *  last change: $Author: ssa $ $Date: 2002-03-01 08:57:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,26 +67,32 @@
 #ifndef _SV_DOCKWIN_HXX
 #include <dockwin.hxx>
 #endif
+
 #include <taskpanelist.hxx>
+#include <functional>
+#include <algorithm>
 
 // compares window pos left-to-right
-bool LTR( const Window*& w1, const Window*& w2)
+struct LTRSort : public ::std::binary_function< const Window*, const Window*, bool >
 {
-    Point pos1, pos2;
-    if( w1->GetType() == RSC_DOCKINGWINDOW )
-        pos1 = ((DockingWindow*)w1)->GetPosPixel();
-    else
-        pos1 = w1->GetPosPixel();
-    if( w2->GetType() == RSC_DOCKINGWINDOW )
-        pos2 = ((DockingWindow*)w2)->GetPosPixel();
-    else
-        pos2 = w2->GetPosPixel();
+    bool operator()( const Window* w1, const Window* w2 )
+    {
+        Point pos1, pos2;
+        if( w1->GetType() == RSC_DOCKINGWINDOW )
+            pos1 = ((DockingWindow*)w1)->GetPosPixel();
+        else
+            pos1 = w1->GetPosPixel();
+        if( w2->GetType() == RSC_DOCKINGWINDOW )
+            pos2 = ((DockingWindow*)w2)->GetPosPixel();
+        else
+            pos2 = w2->GetPosPixel();
 
-    if( pos1.X() == pos2.X() )
-        return ( pos1.Y() < pos2.Y() );
-    else
-        return ( pos1.X() < pos2.X() );
-}
+        if( pos1.X() == pos2.X() )
+            return ( pos1.Y() < pos2.Y() );
+        else
+            return ( pos1.X() < pos2.X() );
+    }
+};
 
 // --------------------------------------------------
 
@@ -111,19 +117,11 @@ void TaskPaneList::AddWindow( Window *pWindow )
         else if( pWindow->GetType() == RSC_TOOLBOX )
             bToolbox = true;
 
-        bool bFound = false;
-        ::std::list< Window* >::iterator p = mTaskPanes.begin();
-        while( p != mTaskPanes.end() )
-        {
-            if( *p++ == pWindow )
-            {
-                bFound = true;
-                break;
-            }
-        }
+        ::std::vector< Window* >::iterator p;
+        p = ::std::find( mTaskPanes.begin(), mTaskPanes.end(), pWindow );
 
         // avoid duplicates
-        if( !bFound )
+        if( p == mTaskPanes.end() ) // not found
             mTaskPanes.push_back( pWindow );
     }
 }
@@ -132,7 +130,10 @@ void TaskPaneList::AddWindow( Window *pWindow )
 
 void TaskPaneList::RemoveWindow( Window *pWindow )
 {
-    mTaskPanes.remove( pWindow );
+    ::std::vector< Window* >::iterator p;
+    p = ::std::find( mTaskPanes.begin(), mTaskPanes.end(), pWindow );
+    if( p != mTaskPanes.end() )
+        mTaskPanes.erase( p );
 }
 
 // --------------------------------------------------
@@ -146,7 +147,7 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
     {
         // is the focus in the list ?
         BOOL bHasFocus = FALSE;
-        ::std::list< Window* >::iterator p = mTaskPanes.begin();
+        ::std::vector< Window* >::iterator p = mTaskPanes.begin();
         while( p != mTaskPanes.end() )
         {
             Window *pWin = *p;
@@ -174,9 +175,9 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 
 Window* TaskPaneList::FindNextPane( Window *pWindow )
 {
-    //mTaskPanes.sort(LTR);
+    ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSort() );
 
-    ::std::list< Window* >::iterator p = mTaskPanes.begin();
+    ::std::vector< Window* >::iterator p = mTaskPanes.begin();
     while( p != mTaskPanes.end() )
     {
         if( *p == pWindow )
