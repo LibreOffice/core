@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lathe3d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:36:12 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #include "svdstr.hrc"
 #include "svdglob.hxx"
 
-#ifndef _SV_POLY_HXX
-#include <vcl/poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 
 #ifndef _SVDPAGE_HXX
