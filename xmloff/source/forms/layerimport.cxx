@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerimport.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:02:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,10 +391,6 @@ namespace xmloff
             {
                 const SvXMLNumFormatContext* pDataStyle = static_cast<const SvXMLNumFormatContext*>(pStyle);
 
-                ::rtl::OUString sFormatDescription;
-                Locale aFormatLocale;
-                const_cast<SvXMLNumFormatContext*>(pDataStyle)->GetFormat(sFormatDescription, aFormatLocale);
-
                 // set this format at the control model
                 try
                 {
@@ -409,13 +405,9 @@ namespace xmloff
                     // obtain a key
                     if (xFormats.is())
                     {
-                        sal_Int32 nFormatKey = xFormats->queryKey(sFormatDescription, aFormatLocale, sal_False);
-                        if (-1 == nFormatKey)
-                        {   // not yet available -> add it
-                            nFormatKey = xFormats->addNew(sFormatDescription, aFormatLocale);
-                        }
-
+                        sal_Int32 nFormatKey = const_cast<SvXMLNumFormatContext*>(pDataStyle)->CreateAndInsert( xFormatsSupplier );
                         OSL_ENSURE(-1 != nFormatKey, "OFormLayerXMLImport_Impl::applyControlNumberStyle: could not obtain a format key!");
+
                         // set the format on the control model
                         _rxControlModel->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nFormatKey));
                     }
