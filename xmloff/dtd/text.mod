@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.38 2001-12-14 18:47:17 dvo Exp $
+	$Id: text.mod,v 1.39 2002-01-09 12:57:20 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -876,6 +876,7 @@
 <!ATTLIST text:user-index-source fo:language %string; #IMPLIED>
 <!ATTLIST text:user-index-source fo:country %string; #IMPLIED>
 <!ATTLIST text:user-index-source text:sort-algorithm %string; #IMPLIED>
+<!ATTLIST text:user-index-source text:index-name %string; #IMPLIED>
 
 <!ELEMENT text:user-index-entry-template ( text:index-entry-chapter |
 										   text:index-entry-page-number |

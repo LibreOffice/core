@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dvo $ $Date: 2001-09-24 13:40:55 $
+ *  last change: $Author: dvo $ $Date: 2002-01-09 12:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,7 @@ XMLSectionExport::XMLSectionExport(
         sProtectionKey(RTL_CONSTASCII_USTRINGPARAM("ProtectionKey")),
         sSortAlgorithm(RTL_CONSTASCII_USTRINGPARAM("SortAlgorithm")),
         sLocale(RTL_CONSTASCII_USTRINGPARAM("Locale")),
+        sUserIndexName(RTL_CONSTASCII_USTRINGPARAM("UserIndexName")),
         sEmpty()
 {
 }
@@ -864,6 +865,12 @@ void XMLSectionExport::ExportUserIndexStart(
                       XML_COPY_OUTLINE_LEVELS, sal_False);
         ExportBoolean(rPropertySet, sCreateFromLevelParagraphStyles,
                       XML_USE_INDEX_SOURCE_STYLES, sal_False);
+
+        Any aAny = rPropertySet->getPropertyValue( sUserIndexName );
+        OUString sIndexName;
+        aAny >>= sIndexName;
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_INDEX_NAME,
+                                 sIndexName);
 
         ExportBaseIndexSource(TEXT_SECTION_TYPE_USER, rPropertySet);
     }

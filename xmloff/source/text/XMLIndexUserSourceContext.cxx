@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexUserSourceContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2002-01-09 12:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,8 @@ const sal_Char sAPI_CreateFromTables[] = "CreateFromTables";
 const sal_Char sAPI_CreateFromTextFrames[] = "CreateFromTextFrames";
 const sal_Char sAPI_UseLevelFromSource[] = "UseLevelFromSource";
 const sal_Char sAPI_CreateFromLevelParagraphStyles[] = "CreateFromLevelParagraphStyles";
+const sal_Char sAPI_UserIndexName[] = "UserIndexName";
+
 
 TYPEINIT1(XMLIndexUserSourceContext, XMLIndexSourceBaseContext);
 
@@ -161,6 +163,7 @@ XMLIndexUserSourceContext::XMLIndexUserSourceContext(
             sAPI_UseLevelFromSource)),
         sCreateFromLevelParagraphStyles(RTL_CONSTASCII_USTRINGPARAM(
             sAPI_CreateFromLevelParagraphStyles)),
+        sUserIndexName(RTL_CONSTASCII_USTRINGPARAM(sAPI_UserIndexName)),
         bUseObjects(sal_False),
         bUseGraphic(sal_False),
         bUseMarks(sal_False),
@@ -232,6 +235,10 @@ void XMLIndexUserSourceContext::ProcessAttribute(
             }
             break;
 
+        case XML_TOK_INDEXSOURCE_USER_INDEX_NAME:
+            sIndexName = rValue;
+            break;
+
         default:
             XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
             break;
@@ -263,6 +270,12 @@ void XMLIndexUserSourceContext::EndElement()
 
     aAny.setValue(&bUseLevelParagraphStyles, ::getBooleanCppuType());
     rIndexPropertySet->setPropertyValue(sCreateFromLevelParagraphStyles, aAny);
+
+    if( sIndexName.getLength() > 0 )
+    {
+        aAny <<= sIndexName;
+        rIndexPropertySet->setPropertyValue(sUserIndexName, aAny);
+    }
 
     XMLIndexSourceBaseContext::EndElement();
 }
