@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-25 14:00:16 $
+ *  last change: $Author: mt $ $Date: 2001-05-17 13:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -799,10 +799,13 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                     mbTrackingSelect = TRUE;
                     if ( SelectEntries( nSelect, LET_TRACKING, FALSE, FALSE ) )
                     {
-                        mbTravelSelect = TRUE;
-                        mnSelectModifier = rMEvt.GetModifier();
-                        ImplCallSelect();
-                        mbTravelSelect = FALSE;
+                        if ( mbStackMode ) // #87072#
+                        {
+                            mbTravelSelect = TRUE;
+                            mnSelectModifier = rMEvt.GetModifier();
+                            ImplCallSelect();
+                            mbTravelSelect = FALSE;
+                        }
                     }
                     mbTrackingSelect = FALSE;
                 }
