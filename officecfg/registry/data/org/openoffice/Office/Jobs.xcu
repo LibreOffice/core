@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Jobs.xcu,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:37:37 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,11 @@
   <node oor:name="Events">
     <node oor:name="onFirstVisibleTask" oor:op="replace">
       <node oor:name="JobList">
-        <node oor:name="RegistrationRequest" oor:op="replace" />
+        <node oor:name="RegistrationRequest" oor:op="replace">
+            <prop oor:name="UserTime">
+                <value>2003-01-01T00:00:00+00:01</value>
+            </prop>
+        </node>
       </node>
     </node>
   </node>
