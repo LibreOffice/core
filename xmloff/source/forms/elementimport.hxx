@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 09:09:32 $
+ *  last change: $Author: fs $ $Date: 2001-03-28 12:26:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,9 @@ namespace xmloff
     //=====================================================================
     /** helper class for importing a single &lt;form:item&gt; element.
     */
-    class OComboItemImport : public OAccumulateCharacters
+    class OComboItemImport
+                :public SvXMLImportContext
+                ,public OAttributeMetaData
     {
         OListAndComboImportRef  m_xListBoxImport;
 
@@ -425,8 +427,10 @@ namespace xmloff
         OComboItemImport(SvXMLImport& _rImport, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
             const OListAndComboImportRef& _rListBox);
 
+    protected:
         // SvXMLImportContext overridables
-        virtual void EndElement();
+        virtual void StartElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
     };
 
     //=====================================================================
@@ -578,6 +582,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/02/13 09:09:32  fs
+ *  #83529# introducing ORadioImport - need special handling for DefaultState / State
+ *
  *  Revision 1.7  2001/01/24 09:37:58  fs
  *  OFormImport: call enter-/leaveEventContext when starting/ending the element
  *
