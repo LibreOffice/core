@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 14:00:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:50:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -989,19 +989,18 @@ void SwTxtNode::Update( const SwIndex & aPos, xub_StrLen nLen,
             }
 
         const SwBookmarks& rBkmk = GetDoc()->GetBookmarks();
-        if( rBkmk.Count() )
-            for( USHORT i = 0; i < rBkmk.Count(); ++i )
-            {
-                SwBookmark* pBkmk = rBkmk[ i ];
-                if( (this == &pBkmk->GetPos().nNode.GetNode() &&
-                     aPos.GetIndex() == (pIdx = (SwIndex*)&pBkmk->GetPos().
-                            nContent)->GetIndex() ) ||
-                    ( pBkmk->GetOtherPos() &&
-                      this == &pBkmk->GetOtherPos()->nNode.GetNode() &&
-                      aPos.GetIndex() == (pIdx = (SwIndex*)&pBkmk->
-                              GetOtherPos()->nContent)->GetIndex() ) )
-                        pIdx->Assign( &aTmpIdxReg, pIdx->GetIndex() );
-            }
+        for( USHORT i = 0; i < rBkmk.Count(); ++i )
+        {
+            // Bookmarks must never grow to either side, when
+            // editing (directly) to the left or right (#i29942#)!
+            // And a bookmark with same start and end must remain
+            // to the left of the inserted text (used in XML import).
+            const SwPosition* pEnd = rBkmk[i]->End();
+            pIdx = (SwIndex*)&pEnd->nContent;
+            if( this == &pEnd->nNode.GetNode() &&
+                aPos.GetIndex() == pIdx->GetIndex() )
+                pIdx->Assign( &aTmpIdxReg, pIdx->GetIndex() );
+        }
     }
     SwIndexReg::Update( aPos, nLen, bNegativ );
     if( pCollector )
