@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scresid.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,9 +66,13 @@
 #include <tools/resid.hxx>
 #endif
 
+#ifndef INCLUDED_SCDLLAPI_H
+#include "scdllapi.h"
+#endif
+
 //===================================================================
 
-class ScResId : public ResId
+class SC_DLLPUBLIC ScResId : public ResId
 {
  public:
     ScResId( USHORT nId );      // in scdll.cxx
