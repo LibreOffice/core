@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-02 11:08:11 $
+ *  last change: $Author: mba $ $Date: 2001-07-02 15:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,9 @@ void SfxVirtualMenu::CreateFromSVMenu()
                                     pSVMenu->GetHelpText(nId), *pBindings);
                 pMnuCtrl->Bind( this, nId, pSVMenu->GetItemText(nId),
                                 pSVMenu->GetHelpText(nId), *pBindings);
+
+                if (  aOptions.IsMenuIconsEnabled() )
+                    pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE ) );
             }
             else
             {
@@ -393,9 +396,6 @@ void SfxVirtualMenu::CreateFromSVMenu()
                     }
                     else
                     {
-                        if ( aOptions.IsMenuIconsEnabled() )
-                            pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE ) );
-
                         pMnuCtrl = SfxMenuControl::CreateControl(nId,
                             *pSVMenu, *pBindings);
 
@@ -412,6 +412,10 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
                         pMnuCtrl->Bind( this, nId, pSVMenu->GetItemText(nId),
                                     pSVMenu->GetHelpText(nId), *pBindings);
+
+//                        if ( !pSVMenu->GetPopupMenu( nId ) && aOptions.IsMenuIconsEnabled() )
+                        if (  aOptions.IsMenuIconsEnabled() )
+                            pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE ) );
                     }
 
                     if ( !IsItemHidden_Impl(nId, bOleServer, bMac) )
@@ -467,20 +471,17 @@ IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, pVoid )
     {
         USHORT nId = pSVMenu->GetItemId( nSVPos );
         PopupMenu* pPopup = pSVMenu->GetPopupMenu( nId );
-        if ( !pPopup )
+        if ( /*!pPopup &&*/ pSVMenu->GetItemType( nSVPos ) == MENUITEM_STRING && bIcons )
         {
-            if( pSVMenu->GetItemType( nSVPos ) == MENUITEM_STRING && bIcons )
-            {
-                String aCmd( pSVMenu->GetItemCommand( nId ) );
-                if ( aCmd.Len() )
-                    pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE ) );
-                else
-                    pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE ) );
-            }
-            else if( pSVMenu->GetItemType( nSVPos ) == MENUITEM_STRINGIMAGE && !bIcons )
-            {
-                pSVMenu->SetItemImage( nId, Image() );
-            }
+            String aCmd( pSVMenu->GetItemCommand( nId ) );
+            if ( aCmd.Len() )
+                pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE ) );
+            else
+                pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE ) );
+        }
+        else if( pSVMenu->GetItemType( nSVPos ) == MENUITEM_STRINGIMAGE && !bIcons )
+        {
+            pSVMenu->SetItemImage( nId, Image() );
         }
     }
 
