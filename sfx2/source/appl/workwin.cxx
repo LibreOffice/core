@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:03:53 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 07:03:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
 
 #include "objsh.hxx"
@@ -153,13 +152,13 @@ static const ResIdToResName pToolBarResToName[] =
     { 20410,    "graphicobjectbar"     },
     { 20411,    "oleobjectbar"         },
     { 14850,    "macrobar"             },
-    { 23310,    "writerviewerbar"      },
-    { 25000,    "calcviewerbar"        },
-    { 23023,    "impressviewerbar"     },
-    { 23024,    "drawviewerbar"        },
     { 10987,    "fontworkobjectbar"    },      //global
     { 10986,    "extrusionobjectbar"   },
     { 23022,    "formsobjectbar"       },
+    { 23310,    "viewerbar"            },      //writer (plugin)
+    { 25000,    "viewerbar"            },      //calc   (plugin)
+    { 23023,    "viewerbar"            },      //impress(plugin)
+    { 23024,    "viewerbar"            },      //draw   (plugin)
     { 0,        ""                     }
 };
 
