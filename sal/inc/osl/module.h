@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: obr $ $Date: 2000-11-01 11:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,11 @@
 extern "C" {
 #endif
 
+#ifdef SAL_DLLPREFIX
+#define SAL_MODULENAME(name) SAL_DLLPREFIX name SAL_DLLEXTENSION
+#else
+#define SAL_MODULENAME(name) name SAL_DLLEXTENSION
+#endif
 
 #define SAL_LOADMODULE_DEFAULT    0x00000
 #define SAL_LOADMODULE_LAZY       0x00001
@@ -114,52 +119,4 @@ void* SAL_CALL osl_getSymbolA(oslModule Module, const char *pszSymbolName);
 #endif
 
 #endif  /* _OSL_MODULE_H_  */
-
-
-/*************************************************************************
-*
-*    $Log: not supported by cvs2svn $
-*    Revision 1.8  2000/09/18 14:28:49  willem.vandorp
-*    OpenOffice header added.
-*
-*    Revision 1.7  2000/05/17 14:30:14  mfe
-*    comments upgraded
-*
-*    Revision 1.6  2000/03/31 15:55:56  rs
-*    UNICODE-Changes
-*
-*    Revision 1.5  2000/03/16 16:43:52  obr
-*    Unicode API changes
-*
-*    Revision 1.4  2000/01/06 11:46:32  mfe
-*    #71540# : for incompatible z'en
-*
-*    Revision 1.3  2000/01/04 14:07:19  mfe
-*    osl_loadModule takes 2nd parameter
-*
-*    Revision 1.2  1999/10/27 15:02:07  mfe
-*    Change of Copyright, removed compiler warnings, code clean up, ...
-*
-*    Revision 1.1  1999/08/05 10:18:19  jsc
-*    verschoben aus osl
-*
-*    Revision 1.6  1999/08/05 11:14:35  jsc
-*    verschoben in root inc-Verzeichnis
-*
-*    Revision 1.5  1999/01/20 18:53:40  jsc
-*    #61011# Typumstellung
-*
-*    Revision 1.4  1998/02/16 19:34:51  rh
-*    Cleanup of ports, integration of Size_t, features for process
-*
-*    Revision 1.3  1997/07/31 15:28:38  ts
-*    *** empty log message ***
-*
-*    Revision 1.2  1997/07/17 11:02:27  rh
-*    Header adapted and profile added
-*
-*    Revision 1.1  1997/07/03 10:04:31  rh
-*    Module handling added
-*
-*************************************************************************/
 
