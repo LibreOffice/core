@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-02 11:48:41 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,19 +84,20 @@ namespace dbaui
 #define COLUMN_ID_ORDER         2
 
     using namespace ::com::sun::star::uno;
+    using namespace ::svt;
 
     //==================================================================
     //= DbaMouseDownListBoxController
     //==================================================================
-    class DbaMouseDownListBoxController : public DbListBoxCellController
+    class DbaMouseDownListBoxController : public ListBoxCellController
     {
     protected:
         Link    m_aOriginalModifyHdl;
         Link    m_aAdditionalModifyHdl;
 
     public:
-        DbaMouseDownListBoxController(DbListBoxCtrl* _pParent)
-            :DbListBoxCellController(_pParent)
+        DbaMouseDownListBoxController(ListBoxControl* _pParent)
+            :ListBoxCellController(_pParent)
         {
         }
 
@@ -139,9 +140,9 @@ namespace dbaui
     void DbaMouseDownListBoxController::implCheckLinks()
     {
         if (m_aAdditionalModifyHdl.IsSet() || m_aOriginalModifyHdl.IsSet())
-            DbListBoxCellController::SetModifyHdl(LINK(this, DbaMouseDownListBoxController, OnMultiplexModify));
+            ListBoxCellController::SetModifyHdl(LINK(this, DbaMouseDownListBoxController, OnMultiplexModify));
         else
-            DbListBoxCellController::SetModifyHdl(Link());
+            ListBoxCellController::SetModifyHdl(Link());
     }
 
     //==================================================================
@@ -149,7 +150,7 @@ namespace dbaui
     //==================================================================
     //------------------------------------------------------------------
     IndexFieldsControl::IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex)
-        :DbBrowseBox(_pParent, _rId, DBBF_ACTIVATE_ON_BUTTONDOWN, BROWSER_STANDARD_FLAGS)
+        :EditBrowseBox(_pParent, _rId, EBBF_ACTIVATE_ON_BUTTONDOWN, BROWSER_STANDARD_FLAGS)
         ,m_aSeekRow(m_aFields.end())
         ,m_pSortingCell(NULL)
         ,m_pFieldNameCell(NULL)
@@ -167,7 +168,7 @@ namespace dbaui
     //------------------------------------------------------------------
     sal_Bool IndexFieldsControl::SeekRow(long nRow)
     {
-        if (!DbBrowseBox::SeekRow(nRow))
+        if (!EditBrowseBox::SeekRow(nRow))
             return sal_False;
 
         if (nRow < 0)
@@ -262,7 +263,7 @@ namespace dbaui
             // maximum plus some additional space
             return (nWidthAsc > nWidthDesc ? nWidthAsc : nWidthDesc) + GetTextWidth('0') * 2;
         }
-        return DbBrowseBox::GetTotalCellWidth(_nRow, _nColId);
+        return EditBrowseBox::GetTotalCellWidth(_nRow, _nColId);
     }
 
     //------------------------------------------------------------------
@@ -302,20 +303,20 @@ namespace dbaui
 
         // create the cell controllers
         // for the field name cell
-        m_pFieldNameCell = new DbListBoxCtrl(&GetDataWindow());
+        m_pFieldNameCell = new ListBoxControl(&GetDataWindow());
         m_pFieldNameCell->InsertEntry(String());
         const ::rtl::OUString* pFields = _rAvailableFields.getConstArray();
         const ::rtl::OUString* pFieldsEnd = pFields + _rAvailableFields.getLength();
         for (;pFields < pFieldsEnd; ++pFields)
             m_pFieldNameCell->InsertEntry(*pFields);
         // for the sort cell
-        m_pSortingCell = new DbListBoxCtrl(&GetDataWindow());
+        m_pSortingCell = new ListBoxControl(&GetDataWindow());
         m_pSortingCell->InsertEntry(m_sAscendingText);
         m_pSortingCell->InsertEntry(m_sDescendingText);
     }
 
     //------------------------------------------------------------------
-    DbCellController* IndexFieldsControl::GetController(long _nRow, sal_uInt16 _nColumnId)
+    CellController* IndexFieldsControl::GetController(long _nRow, sal_uInt16 _nColumnId)
     {
         if (!IsEnabled())
             return NULL;
@@ -358,7 +359,7 @@ namespace dbaui
     //------------------------------------------------------------------
     sal_Bool IndexFieldsControl::IsModified() const
     {
-        return DbBrowseBox::IsModified();
+        return EditBrowseBox::IsModified();
     }
 
     //------------------------------------------------------------------
@@ -432,7 +433,7 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------
-    void IndexFieldsControl::InitController(DbCellControllerRef& _rController, long _nRow, sal_uInt16 _nColumnId)
+    void IndexFieldsControl::InitController(CellControllerRef& _rController, long _nRow, sal_uInt16 _nColumnId)
     {
         ConstIndexFieldsIterator aFieldDescription;
         sal_Bool bNewField = !implGetFieldDesc(_nRow, aFieldDescription);
@@ -519,6 +520,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/05/02 11:48:41  fs
+ *  #86450# disable m_nMaxColumnsIndex for the moment - need more comprehensive handling for this
+ *
  *  Revision 1.4  2001/04/27 14:20:33  fs
  *  #86464# no SaveModified if not IfModified
  *

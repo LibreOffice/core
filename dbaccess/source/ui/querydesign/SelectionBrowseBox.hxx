@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 13:02:01 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,9 @@
 #ifndef DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
 #define DBAUI_QUERYDESIGN_OSELECTIONBROWSEBOX_HXX
 
-#ifndef _SVX_DBBROWSE_HXX
-#include <svx/dbbrowse.hxx>
-#endif // _SVX_DBBROWSE_HXX
+#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
+#include <svtools/editbrowsebox.hxx>
+#endif
 #ifndef _VECTOR_
 #include <vector>
 #endif
@@ -110,7 +110,7 @@ namespace dbaui
 #define BROW_ROW_CNT            12
     //==================================================================
     class OQueryDesignView;
-    class OSelectionBrowseBox : public DbBrowseBox
+    class OSelectionBrowseBox : public ::svt::EditBrowseBox
     {
         friend class OQueryDesignView;
         ::std::vector<FASTBOOL>             m_bVisibleRow;  // an Pos steht die RowId
@@ -119,11 +119,11 @@ namespace dbaui
         long                                m_nSeekRow;
         BrowserMode                         m_nMode;                        // Merken des BrowseModes
         Edit*                               m_pTextCell;
-        DbCheckBoxCtrl*                     m_pVisibleCell;
-        DbComboBoxCtrl*                     m_pFieldCell;
-        DbListBoxCtrl*                      m_pFunctionCell,
-                     *                      m_pTableCell,
-                     *                      m_pOrderCell;
+        ::svt::CheckBoxControl*             m_pVisibleCell;
+        ::svt::ComboBoxControl*             m_pFieldCell;
+        ::svt::ListBoxControl*              m_pFunctionCell;
+        ::svt::ListBoxControl*              m_pTableCell;
+        ::svt::ListBoxControl*              m_pOrderCell;
 
         sal_Int32                           m_nMaxColumns;              // maximale Anzahl der Spalten in einem Select-Statement
 
@@ -194,8 +194,8 @@ namespace dbaui
         virtual void                Command(const CommandEvent& rEvt);
         virtual void                ArrangeControls(sal_uInt16& nX, sal_uInt16 nY);
 
-        virtual DbCellController*   GetController(long nRow, sal_uInt16 nCol);
-        virtual void                InitController(DbCellControllerRef& rController, long nRow, sal_uInt16 nCol);
+        virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol);
+        virtual void                InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
         virtual void                CellModified();
         virtual sal_Bool            SaveModified();
         virtual void                Init();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 10:07:08 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:38:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,9 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
-using namespace dbaui;
-using namespace dbtools;
+using namespace ::dbaui;
+using namespace ::dbtools;
+using namespace ::svt;
 
 
 const USHORT SOURCE_COLUMN = 1;
@@ -136,7 +137,7 @@ const USHORT DEST_COLUMN = 2;
 DBG_NAME(ORelationControl);
 //------------------------------------------------------------------------
 ORelationControl::ORelationControl( ORelationDialog* pParent )
-    :DbBrowseBox( pParent, DBBF_NOROWPICTURE, WB_TABSTOP | WB_3DLOOK | WB_BORDER )
+    :EditBrowseBox( pParent, EBBF_NOROWPICTURE, WB_TABSTOP | WB_3DLOOK | WB_BORDER )
     ,m_pListCell( NULL )
     ,m_pConnData( NULL )
     ,m_xSourceDef( NULL )
@@ -180,7 +181,7 @@ void ORelationControl::Init(ORelationTableConnectionData* _pConnData)
         InsertDataColumn( 2, sDestComposedName, 100);
             // wenn es die Defs noch nicht gibt, dann muessen sie noch mit SetSource-/-DestDef gesetzt werden !
 
-        m_pListCell = new DbListBoxCtrl( &GetDataWindow() );
+        m_pListCell = new ListBoxControl( &GetDataWindow() );
 
         //////////////////////////////////////////////////////////////////////
         // Browser Mode setzen
@@ -202,7 +203,7 @@ void ORelationControl::Init(ORelationTableConnectionData* _pConnData)
 void ORelationControl::Resize()
 {
     DBG_CHKTHIS(ORelationControl,NULL);
-    DbBrowseBox::Resize();
+    EditBrowseBox::Resize();
     long nOutputWidth = GetOutputSizePixel().Width()-20;
     SetColumnWidth(1, (long)(nOutputWidth*0.5));
     SetColumnWidth(2, (long)(nOutputWidth*0.5));
@@ -225,7 +226,7 @@ long ORelationControl::PreNotify(NotifyEvent& rNEvt)
             Application::RemoveUserEvent(m_nDeActivateEvent);
         m_nDeActivateEvent = Application::PostUserEvent(LINK(this, ORelationControl, AsynchActivate));
     }
-    return DbBrowseBox::PreNotify(rNEvt);
+    return EditBrowseBox::PreNotify(rNEvt);
 }
 
 //------------------------------------------------------------------------------
@@ -257,7 +258,7 @@ BOOL ORelationControl::IsTabAllowed(BOOL bForward) const
     if (!bForward && (nCol == 1) && (nRow == 0))
         return FALSE;
 
-    return DbBrowseBox::IsTabAllowed(bForward);
+    return EditBrowseBox::IsTabAllowed(bForward);
 }
 
 //------------------------------------------------------------------------------
@@ -302,7 +303,7 @@ String ORelationControl::GetCellText( long nRow, USHORT nColId )
 }
 
 //------------------------------------------------------------------------------
-void ORelationControl::InitController( DbCellControllerRef& rController, long nRow, USHORT nColumnId )
+void ORelationControl::InitController( CellControllerRef& rController, long nRow, USHORT nColumnId )
 {
     DBG_CHKTHIS(ORelationControl,NULL);
     String aText;
@@ -363,10 +364,10 @@ void ORelationControl::InitController( DbCellControllerRef& rController, long nR
 }
 
 //------------------------------------------------------------------------------
-DbCellController* ORelationControl::GetController( long nRow, USHORT nColumnId )
+CellController* ORelationControl::GetController( long nRow, USHORT nColumnId )
 {
     DBG_CHKTHIS(ORelationControl,NULL);
-    return new DbListBoxCellController( m_pListCell );
+    return new ListBoxCellController( m_pListCell );
 }
 
 
@@ -453,7 +454,7 @@ void ORelationControl::SetDestDef(const Reference< XPropertySet>& xNewDest)
 void ORelationControl::CellModified()
 {
     DBG_CHKTHIS(ORelationControl,NULL);
-    DbBrowseBox::CellModified();
+    EditBrowseBox::CellModified();
     SaveModified();
     ((ORelationDialog*)GetParent())->NotifyCellChange();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexfieldscontrol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-02 11:47:20 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _DBAUI_INDEXFIELDSCONTROL_HXX_
 #define _DBAUI_INDEXFIELDSCONTROL_HXX_
 
-#ifndef _SVX_DBBROWSE_HXX
-#include <svx/dbbrowse.hxx>
+#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
+#include <svtools/editbrowsebox.hxx>
 #endif
 #ifndef _DBAUI_INDEXCOLLECTION_HXX_
 #include "indexcollection.hxx"
@@ -80,7 +80,7 @@ namespace dbaui
     //==================================================================
     // IndexFieldsControl
     //==================================================================
-    class IndexFieldsControl : public DbBrowseBox
+    class IndexFieldsControl : public ::svt::EditBrowseBox
     {
     protected:
         IndexFields                 m_aSavedValue;
@@ -90,8 +90,8 @@ namespace dbaui
 
         Link                        m_aModifyHdl;
 
-        DbListBoxCtrl*              m_pSortingCell;
-        DbListBoxCtrl*              m_pFieldNameCell;
+        ::svt::ListBoxControl*      m_pSortingCell;
+        ::svt::ListBoxControl*      m_pFieldNameCell;
 
         String                      m_sAscendingText;
         String                      m_sDescendingText;
@@ -117,13 +117,13 @@ namespace dbaui
         Link GetModifyHdl() const { return m_aModifyHdl; }
 
     protected:
-        // DbBrowseBox overridables
+        // EditBrowseBox overridables
         virtual void PaintCell( OutputDevice& _rDev, const Rectangle& _rRect, sal_uInt16 _nColumnId ) const;
         virtual sal_Bool SeekRow(long nRow);
         virtual sal_uInt32 GetTotalCellWidth(long nRow, sal_uInt16 nColId);
 
-        DbCellController*   GetController(long _nRow, sal_uInt16 _nColumnId);
-        void                InitController(DbCellControllerRef&, long _nRow, sal_uInt16 _nColumnId);
+        ::svt::CellController*  GetController(long _nRow, sal_uInt16 _nColumnId);
+        void                InitController(::svt::CellControllerRef&, long _nRow, sal_uInt16 _nColumnId);
 
     protected:
         String GetCurrentRowCellText(sal_uInt16 nColId) const;
@@ -143,6 +143,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/05/02 11:47:20  fs
+ *  #86464# +IsModified
+ *
  *  Revision 1.2  2001/03/30 14:10:22  oj
  *  #85298##85297# correct index impl
  *

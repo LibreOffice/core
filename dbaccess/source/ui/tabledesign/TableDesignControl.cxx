@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignControl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 14:26:29 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,8 @@
 #include "dbaccess_helpid.hrc"
 #endif
 
-using namespace dbaui;
+using namespace ::dbaui;
+using namespace ::svt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
@@ -96,7 +97,7 @@ using namespace ::com::sun::star::util;
 
 //------------------------------------------------------------------------
 OTableRowView::OTableRowView(Window* pParent)
-                   :DbBrowseBox(pParent, ModuleRes(RID_DB_TAB_EDITOR),DBBF_NONE,
+                   :EditBrowseBox(pParent, ModuleRes(RID_DB_TAB_EDITOR),EBBF_NONE,
                                   BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_AUTOSIZE_LASTCOL |
                                   BROWSER_KEEPSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL)
                    ,m_nDataPos(-1)
@@ -116,7 +117,7 @@ OTableRowView::~OTableRowView()
 //------------------------------------------------------------------------
 void OTableRowView::Init()
 {
-    DbBrowseBox::Init();
+    EditBrowseBox::Init();
 
 //  SetMapMode( MapMode(MAP_TWIP) );
 //  GetDataWindow().SetMapMode( GetMapMode() );
@@ -160,7 +161,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
             GetView()->getController()->dispatch( aUrl,Sequence< PropertyValue >() );
         }
     }
-    DbBrowseBox::KeyInput(rEvt);
+    EditBrowseBox::KeyInput(rEvt);
 }
 
 //------------------------------------------------------------------------
@@ -180,7 +181,7 @@ void OTableRowView::Command(const CommandEvent& rEvt)
         {
             if (!rEvt.IsMouseEvent())
             {
-                DbBrowseBox::Command(rEvt);
+                EditBrowseBox::Command(rEvt);
                 return;
             }
 
@@ -227,7 +228,7 @@ void OTableRowView::Command(const CommandEvent& rEvt)
 
         }
         default:
-            DbBrowseBox::Command(rEvt);
+            EditBrowseBox::Command(rEvt);
     }
 
 }
@@ -258,7 +259,7 @@ void OTableRowView::Paste( long nRow )
 }
 
 //------------------------------------------------------------------------------
-DbBrowseBox::RowStatus OTableRowView::GetRowStatus(long nRow) const
+EditBrowseBox::RowStatus OTableRowView::GetRowStatus(long nRow) const
 {
     if (m_nCurrentPos >= 0 && m_nDataPos == m_nCurrentPos)
         return CURRENT;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:32:28 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace dbaui
         EEditMode                   eEditMode;
 
         Edit*                       pNameCell;
-        DbListBoxCtrl*              pTypeCell;
+        ::svt::ListBoxControl*      pTypeCell;
         Edit*                       pDescrCell;
         OTableFieldDescWin*         pDescrWin;          // properties of one column
 
@@ -147,8 +147,8 @@ namespace dbaui
         virtual void CursorMoved();
         virtual RowStatus GetRowStatus(long nRow) const;
 
-        virtual DbCellController* GetController(long nRow, USHORT nCol);
-        virtual void InitController(DbCellControllerRef& rController, long nRow, USHORT nCol);
+        virtual ::svt::CellController* GetController(long nRow, USHORT nCol);
+        virtual void InitController(::svt::CellControllerRef& rController, long nRow, USHORT nCol);
 
         virtual void CellModified();
         virtual BOOL SaveModified();    // wird aufgerufen vor einem Zellenwechsel

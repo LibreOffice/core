@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 12:27:32 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef DBAUI_TABLEGRANTCONTROL_HXX
 #define DBAUI_TABLEGRANTCONTROL_HXX
 
-#ifndef _SVX_DBBROWSE_HXX
-#include <svx/dbbrowse.hxx>
+#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
+#include <svtools/editbrowsebox.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -81,7 +81,7 @@ class Edit;
 namespace dbaui
 {
 
-class OTableGrantControl : public DbBrowseBox
+class OTableGrantControl : public ::svt::EditBrowseBox
 {
     typedef struct
     {
@@ -98,11 +98,11 @@ class OTableGrantControl : public DbBrowseBox
     ::com::sun::star::uno::Sequence< ::rtl::OUString>                               m_aTableNames;
 
     mutable TTablePrivilegeMap  m_aPrivMap;
-    ::rtl::OUString     m_sUserName;
-    DbCheckBoxCtrl*     m_pCheckCell;
-    Edit*               m_pEdit;
-    long                m_nDataPos;
-    BOOL                m_bEnable;
+    ::rtl::OUString             m_sUserName;
+    ::svt::CheckBoxControl*     m_pCheckCell;
+    Edit*                       m_pEdit;
+    long                        m_nDataPos;
+    BOOL                        m_bEnable;
 
 public:
     OTableGrantControl( Window* pParent,const ResId& _RsId);
@@ -121,8 +121,8 @@ protected:
     virtual long PreParentNotify(NotifyEvent& rNEvt );
 
     virtual BOOL IsTabAllowed(BOOL bForward) const;
-    virtual void InitController( DbCellControllerRef& rController, long nRow, USHORT nCol );
-    virtual DbCellController* GetController( long nRow, USHORT nCol );
+    virtual void InitController( ::svt::CellControllerRef& rController, long nRow, USHORT nCol );
+    virtual ::svt::CellController* GetController( long nRow, USHORT nCol );
     virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColId ) const;
     virtual BOOL SeekRow( long nRow );
     virtual BOOL SaveModified();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-21 08:45:50 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:39:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
-using namespace dbaui;
+using namespace ::dbaui;
+using namespace ::svt;
 
 const USHORT COL_TABLE_NAME = 1;
 const USHORT COL_SELECT     = 2;
@@ -109,7 +110,7 @@ DBG_NAME(OTableGrantControl);
 // OTableGrantControl
 //================================================================================
 OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
-    :DbBrowseBox( pParent,_RsId, DBBF_NOROWPICTURE)
+    :EditBrowseBox( pParent,_RsId, EBBF_NOROWPICTURE)
     ,m_pCheckCell( NULL )
     ,m_pEdit( NULL )
     ,m_nDeActivateEvent(0)
@@ -185,13 +186,13 @@ void OTableGrantControl::UpdateTables()
 void OTableGrantControl::Init()
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
-    DbBrowseBox::Init();
+    EditBrowseBox::Init();
 
     //////////////////////////////////////////////////////////////////////
     // ComboBox instanzieren
     if(!m_pCheckCell)
     {
-        m_pCheckCell    = new DbCheckBoxCtrl( &GetDataWindow() );
+        m_pCheckCell    = new CheckBoxControl( &GetDataWindow() );
         m_pCheckCell->GetBox().EnableTriState(FALSE);
 
         m_pEdit         = new Edit( &GetDataWindow() );
@@ -212,7 +213,7 @@ void OTableGrantControl::Init()
 void OTableGrantControl::Resize()
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
-    DbBrowseBox::Resize();
+    EditBrowseBox::Resize();
 }
 
 //------------------------------------------------------------------------------
@@ -232,7 +233,7 @@ long OTableGrantControl::PreParentNotify(NotifyEvent& rNEvt)
             Application::RemoveUserEvent(m_nDeActivateEvent);
         m_nDeActivateEvent = Application::PostUserEvent(LINK(this, OTableGrantControl, AsynchActivate));
     }
-    return DbBrowseBox::PreParentNotify(rNEvt);
+    return EditBrowseBox::PreParentNotify(rNEvt);
 }
 
 //------------------------------------------------------------------------------
@@ -264,7 +265,7 @@ BOOL OTableGrantControl::IsTabAllowed(BOOL bForward) const
     if (!bForward && (nCol == 1) && (nRow == 0))
         return FALSE;
 
-    return DbBrowseBox::IsTabAllowed(bForward);
+    return EditBrowseBox::IsTabAllowed(bForward);
 }
 //------------------------------------------------------------------------------
 #define GRANT_REVOKE_RIGHT(what)                \
@@ -349,7 +350,7 @@ String OTableGrantControl::GetCellText( long nRow, USHORT nColId )
 }
 
 //------------------------------------------------------------------------------
-void OTableGrantControl::InitController( DbCellControllerRef& rController, long nRow, USHORT nColumnId )
+void OTableGrantControl::InitController( CellControllerRef& rController, long nRow, USHORT nColumnId )
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
     String sTablename = m_aTableNames[nRow];
@@ -437,11 +438,11 @@ void OTableGrantControl::setGrantUser(const Reference< XAuthorizable>& _xGrantUs
     m_xGrantUser = _xGrantUser;
 }
 //------------------------------------------------------------------------------
-DbCellController* OTableGrantControl::GetController( long nRow, USHORT nColumnId )
+CellController* OTableGrantControl::GetController( long nRow, USHORT nColumnId )
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
 
-    DbCellController* pController = NULL;
+    CellController* pController = NULL;
     switch( nColumnId )
     {
         case COL_TABLE_NAME:
@@ -456,7 +457,7 @@ DbCellController* OTableGrantControl::GetController( long nRow, USHORT nColumnId
             {
                 TTablePrivilegeMap::const_iterator aFind = findPrivilege(nRow);
                 if(aFind != m_aPrivMap.end() && isAllowed(nColumnId,aFind->second.nWithGrant))
-                    pController = new DbCheckBoxCellController( m_pCheckCell );
+                    pController = new CheckBoxCellController( m_pCheckCell );
             }
             break;
         default:
@@ -508,7 +509,7 @@ void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, 
 void OTableGrantControl::CellModified()
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
-    DbBrowseBox::CellModified();
+    EditBrowseBox::CellModified();
     SaveModified();
 }
 // -----------------------------------------------------------------------------

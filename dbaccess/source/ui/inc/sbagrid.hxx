@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-22 15:59:52 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:35:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,9 +316,9 @@ namespace dbaui
         virtual sal_Int8 ExecuteDrop( const BrowserExecuteDropEvent& rEvt );
         virtual void    MouseButtonDown( const BrowserMouseEvent& rMEvt);
 
-        // DbBrowseBox overridables
+        // EditBrowseBox overridables
         virtual BrowserHeader* imp_CreateHeaderBar(BrowseBox* pParent);
-        virtual DbCellController* GetController(long nRow, sal_uInt16 nCol);
+        virtual ::svt::CellController* GetController(long nRow, sal_uInt16 nCol);
 
         // DbGridControl overridables
         virtual void PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu);

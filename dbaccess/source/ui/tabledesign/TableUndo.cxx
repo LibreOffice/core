@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:32:28 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,9 @@
 #ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
 #endif
-using namespace dbaui;
+
+using namespace ::dbaui;
+using namespace ::svt;
 
 //==============================================================================
 // class OTableDesignUndoAct
@@ -158,7 +160,7 @@ void OTableDesignCellUndoAct::Undo()
     // Wenn erstes Undo zurueckgenommen wurde, ist Zelle nicht mehr modifiziert
     if (m_pTabDgnCtrl->GetCurUndoActId() == 1)
     {
-        DbCellControllerRef xController = m_pTabDgnCtrl->Controller();
+        CellControllerRef xController = m_pTabDgnCtrl->Controller();
         if(xController.Is())
             xController->ClearModified();
         m_pTabDgnCtrl->GetView()->getController()->setModified(sal_False);

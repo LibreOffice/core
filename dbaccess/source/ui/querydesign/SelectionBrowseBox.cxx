@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:22:47 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:40:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@
 #include "sqlmessage.hxx"
 #endif
 
-
+using namespace ::svt;
 using namespace ::dbaui;
 using namespace ::connectivity;
 using namespace ::com::sun::star::uno;
@@ -158,7 +158,7 @@ const String g_strZero = String::CreateFromAscii("0");
 DBG_NAME(OSelectionBrowseBox);
 //------------------------------------------------------------------------------
 OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
-                   :DbBrowseBox( pParent,DBBF_NOROWPICTURE, WB_3DLOOK, BROWSER_COLUMNSELECTION | BROWSER_HIDESELECT | BROWSER_KEEPSELECTION |
+                   :EditBrowseBox( pParent,EBBF_NOROWPICTURE, WB_3DLOOK, BROWSER_COLUMNSELECTION | BROWSER_HIDESELECT | BROWSER_KEEPSELECTION |
                                   BROWSER_HIDECURSOR | BROWSER_HLINESFULL | BROWSER_VLINESFULL)
                    ,m_nVisibleCount(0)
                    ,m_aFunctionStrings(ModuleRes(STR_QUERY_FUNCTIONS))
@@ -173,11 +173,11 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
 
     m_pTextCell     = new Edit(&GetDataWindow(), 0);
     //  m_pTextCell->EnableSpecialCheck(sal_False);
-    m_pVisibleCell  = new DbCheckBoxCtrl(&GetDataWindow());
-    m_pTableCell    = new DbListBoxCtrl(&GetDataWindow());
-    m_pFieldCell    = new DbComboBoxCtrl(&GetDataWindow());
-    m_pOrderCell    = new DbListBoxCtrl(&GetDataWindow());
-    m_pFunctionCell = new DbListBoxCtrl(&GetDataWindow());
+    m_pVisibleCell  = new CheckBoxControl(&GetDataWindow());
+    m_pTableCell    = new ListBoxControl(&GetDataWindow());
+    m_pFieldCell    = new ComboBoxControl(&GetDataWindow());
+    m_pOrderCell    = new ListBoxControl(&GetDataWindow());
+    m_pFunctionCell = new ListBoxControl(&GetDataWindow());
 
     m_pVisibleCell->SetHelpId(HID_QRYDGN_ROW_VISIBLE);
     m_pTableCell->SetHelpId(HID_QRYDGN_ROW_TABLE);
@@ -265,7 +265,7 @@ OQueryDesignView* OSelectionBrowseBox::getDesignView() const
 void OSelectionBrowseBox::Init()
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DbBrowseBox::Init();
+    EditBrowseBox::Init();
 
     SetMapMode( MapMode(MAP_TWIP) );
     GetDataWindow().SetMapMode( GetMapMode() );
@@ -362,7 +362,7 @@ void OSelectionBrowseBox::SetReadOnly(sal_Bool bRO)
 }
 
 //------------------------------------------------------------------------------
-DbCellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColId)
+CellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
@@ -380,22 +380,22 @@ DbCellController* OSelectionBrowseBox::GetController(long nRow, sal_uInt16 nColI
     switch (nCellIndex)
     {
         case BROW_FIELD_ROW:
-            return new DbComboBoxCellController(m_pFieldCell);
+            return new ComboBoxCellController(m_pFieldCell);
         case BROW_TABLE_ROW:
-            return new DbListBoxCellController(m_pTableCell);
+            return new ListBoxCellController(m_pTableCell);
         case BROW_VIS_ROW:
-            return new DbCheckBoxCellController(m_pVisibleCell);
+            return new CheckBoxCellController(m_pVisibleCell);
         case BROW_ORDER_ROW:
-            return new DbListBoxCellController(m_pOrderCell);
+            return new ListBoxCellController(m_pOrderCell);
         case BROW_FUNCTION_ROW:
-            return new DbListBoxCellController(m_pFunctionCell);
+            return new ListBoxCellController(m_pFunctionCell);
         default:
-            return new DbEditCellController(m_pTextCell);
+            return new EditCellController(m_pTextCell);
     }
 }
 
 //------------------------------------------------------------------------------
-void OSelectionBrowseBox::InitController(DbCellControllerRef& rController, long nRow, sal_uInt16 nColId)
+void OSelectionBrowseBox::InitController(CellControllerRef& rController, long nRow, sal_uInt16 nColId)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     OQueryController* pController = static_cast<OQueryController*>(static_cast<OQueryController*>(getDesignView()->getController()));
@@ -1238,14 +1238,14 @@ void OSelectionBrowseBox::MouseButtonDown(const BrowserMouseEvent& rEvt)
             }
         }
     }
-    DbBrowseBox::MouseButtonDown(rEvt);
+    EditBrowseBox::MouseButtonDown(rEvt);
 }
 
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::MouseButtonUp(const BrowserMouseEvent& rEvt)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DbBrowseBox::MouseButtonUp( rEvt );
+    EditBrowseBox::MouseButtonUp( rEvt );
     static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_QUERY_EXECUTE );
 }
 
@@ -1263,7 +1263,7 @@ void OSelectionBrowseBox::KeyInput( const KeyEvent& rEvt )
             return;
         }
     }
-    DbBrowseBox::KeyInput(rEvt);
+    EditBrowseBox::KeyInput(rEvt);
 }
 
 
@@ -1728,7 +1728,7 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDesc& rInfo, const EOrderDi
 void OSelectionBrowseBox::ArrangeControls(sal_uInt16& nX, sal_uInt16 nY)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    DbBrowseBox::ArrangeControls(nX, nY);
+    EditBrowseBox::ArrangeControls(nX, nY);
 }
 
 //------------------------------------------------------------------------------
@@ -1801,7 +1801,7 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
         {
             if (!rEvt.IsMouseEvent())
             {
-                DbBrowseBox::Command(rEvt);
+                EditBrowseBox::Command(rEvt);
                 return;
             }
 
@@ -1858,12 +1858,12 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
             }
             else
             {
-                DbBrowseBox::Command(rEvt);
+                EditBrowseBox::Command(rEvt);
                 return;
             }
         }
         default:
-            DbBrowseBox::Command(rEvt);
+            EditBrowseBox::Command(rEvt);
     }
 }
 
@@ -2160,7 +2160,7 @@ void OSelectionBrowseBox::ColumnResized(sal_uInt16 nColId)
     OTableFieldDesc* pEntry = (*getFields())[nColId-1];
     DBG_ASSERT(pEntry, "OSelectionBrowseBox::ColumnResized : keine FieldDescription !");
     static_cast<OQueryController*>(getDesignView()->getController())->setModified();
-    DbBrowseBox::ColumnResized(nColId);
+    EditBrowseBox::ColumnResized(nColId);
 
     if (pEntry)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-22 16:00:28 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,6 +280,7 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::form;
 using namespace ::dbaui;
 using namespace ::svx;
+using namespace ::svt;
 
 extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl()
 {
@@ -932,7 +933,7 @@ void SbaGridHeader::Command( const CommandEvent& rEvt )
 //---------------------------------------------------------------------------------------
 void SbaGridHeader::Select()
 {
-    DbBrowseHeader::Select();
+    EditBrowserHeader::Select();
     if (!((FmGridControl*)GetParent())->IsDesignMode())
     {   // in design mode the base class does the same ...
         ImplSelect(GetCurItemId());
@@ -1052,9 +1053,9 @@ BrowserHeader* SbaGridControl::imp_CreateHeaderBar(BrowseBox* pParent)
 }
 
 //---------------------------------------------------------------------------------------
-DbCellController* SbaGridControl::GetController(long nRow, sal_uInt16 nCol)
+CellController* SbaGridControl::GetController(long nRow, sal_uInt16 nCol)
 {
-    DbCellControllerRef aController;
+    CellControllerRef aController;
     if (m_bActivatingForDrop)
         return &aController;
 
@@ -1458,7 +1459,7 @@ void SbaGridControl::CursorMoved()
         ColChanged();
 
     m_nLastColId = GetCurColumnId();
-    m_nLastRowId = GetCurRow();
+    m_nLastRowId = (sal_uInt16)GetCurRow();
 }
 
 //---------------------------------------------------------------------------------------
@@ -1635,7 +1636,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
                 SelectAll();
 
             getMouseEvent().Clear();
-            DoRowDrag(nRow);
+            DoRowDrag((sal_Int16)nRow);
 
             bHandled = sal_True;
         }
@@ -1660,7 +1661,7 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
                 GetDataWindow().ReleaseMouse();
 
             getMouseEvent().Clear();
-            DoFieldDrag(nViewPos, nRow);
+            DoFieldDrag(nViewPos, (sal_Int16)nRow);
 
             bHandled = sal_True;
         }
@@ -1822,7 +1823,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             // there is a current and modified row or cell and he text is to be dropped into another one
             break;
 
-        DbCellControllerRef xCurrentController = Controller();
+        CellControllerRef xCurrentController = Controller();
         if (xCurrentController.Is() && xCurrentController->IsModified() && ((nRow != GetCurRow()) || (nCol != GetCurColumnId())))
             // the current controller is modified and the user wants to drop in another cell -> no chance
             // (when leaving the modified cell a error may occur - this is deadly while dragging)
@@ -1913,8 +1914,8 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
         if (!IsEditing())
             ActivateCell();
 
-        DbCellControllerRef xCurrentController = Controller();
-        if (!xCurrentController.Is() || !xCurrentController->ISA(DbEditCellController))
+        CellControllerRef xCurrentController = Controller();
+        if (!xCurrentController.Is() || !xCurrentController->ISA(EditCellController))
             return sal_False;
         Edit& rEdit = (Edit&)xCurrentController->GetWindow();
 

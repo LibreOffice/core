@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-12 10:01:09 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,8 +137,9 @@
 #include <sot/storage.hxx>
 #endif
 
-using namespace dbaui;
-using namespace comphelper;
+using namespace ::dbaui;
+using namespace ::comphelper;
+using namespace ::svt;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::io;
@@ -348,7 +349,7 @@ void OTableEditorCtrl::InitCellController()
 
     //////////////////////////////////////////////////////////////////////
     // Zelle Typ
-    pTypeCell = new DbListBoxCtrl( &GetDataWindow() );
+    pTypeCell = new ListBoxControl( &GetDataWindow() );
 
     //////////////////////////////////////////////////////////////////////
     // Zelle Beschreibung
@@ -419,7 +420,7 @@ sal_Bool OTableEditorCtrl::SetDataPtr( long nRow )
 sal_Bool OTableEditorCtrl::SeekRow(long _nRow)
 {
     // die Basisklasse braucht den Aufruf, da sie sich dort merkt, welche Zeile gepainted wird
-    DbBrowseBox::SeekRow(_nRow);
+    EditBrowseBox::SeekRow(_nRow);
 
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     m_nCurrentPos = _nRow;
@@ -448,7 +449,7 @@ void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const Rectangle& rRect,
 }
 
 //------------------------------------------------------------------------------
-DbCellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnId)
+CellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnId)
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
@@ -469,14 +470,14 @@ DbCellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnI
     switch (nColumnId)
     {
         case FIELD_NAME:
-            return new DbEditCellController( pNameCell );
+            return new EditCellController( pNameCell );
         case FIELD_TYPE:
             if (pActFieldDescr && (pActFieldDescr->GetName().getLength() != 0))
-                return new DbListBoxCellController( pTypeCell );
+                return new ListBoxCellController( pTypeCell );
             else return NULL;
         case FIELD_DESCR:
             if (pActFieldDescr && (pActFieldDescr->GetName().getLength() != 0))
-                return new DbEditCellController( pDescrCell );
+                return new EditCellController( pDescrCell );
             else return NULL;
         default:
             return NULL;
@@ -484,7 +485,7 @@ DbCellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnI
 }
 
 //------------------------------------------------------------------------------
-void OTableEditorCtrl::InitController(DbCellControllerRef&, long nRow, sal_uInt16 nColumnId)
+void OTableEditorCtrl::InitController(CellControllerRef&, long nRow, sal_uInt16 nColumnId)
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     SeekRow( nRow == -1 ? GetCurRow() : nRow);
@@ -527,23 +528,23 @@ void OTableEditorCtrl::InitController(DbCellControllerRef&, long nRow, sal_uInt1
 }
 
 //------------------------------------------------------------------------------
-DbBrowseBox::RowStatus OTableEditorCtrl::GetRowStatus(long nRow) const
+EditBrowseBox::RowStatus OTableEditorCtrl::GetRowStatus(long nRow) const
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     ( (OTableEditorCtrl*)this )->SetDataPtr( nRow );
     if( !pActRow )
-        return DbBrowseBox::CLEAN;
+        return EditBrowseBox::CLEAN;
     if (nRow >= 0 && nRow == m_nDataPos)
     {
         if( pActRow->IsPrimaryKey() )
-            return DbBrowseBox::CURRENT_PRIMARYKEY;
-        return DbBrowseBox::CURRENT;
+            return EditBrowseBox::CURRENT_PRIMARYKEY;
+        return EditBrowseBox::CURRENT;
     }
     else
     {
         if( pActRow->IsPrimaryKey() )
-            return DbBrowseBox::PRIMARYKEY;
-        return DbBrowseBox::CLEAN;
+            return EditBrowseBox::PRIMARYKEY;
+        return EditBrowseBox::CLEAN;
     }
 }
 
@@ -573,7 +574,7 @@ void OTableEditorCtrl::DisplayData(long nRow, sal_Bool bGrabFocus)
     if (bWasEditing)
         DeactivateCell();
 
-    DbCellControllerRef aTemp;
+    CellControllerRef aTemp;
     InitController(aTemp, nRow, FIELD_NAME);
     InitController(aTemp, nRow, FIELD_TYPE);
     InitController(aTemp, nRow, FIELD_DESCR);
@@ -598,7 +599,7 @@ void OTableEditorCtrl::CursorMoved()
     m_nDataPos = GetCurRow();
     if( m_nDataPos != nOldDataPos && m_nDataPos != -1)
     {
-        DbCellControllerRef aTemp;
+        CellControllerRef aTemp;
         InitController(aTemp,m_nDataPos,FIELD_NAME);
         InitController(aTemp,m_nDataPos,FIELD_TYPE);
         InitController(aTemp,m_nDataPos,FIELD_DESCR);
@@ -733,7 +734,7 @@ sal_Bool OTableEditorCtrl::CursorMoving(long nNewRow, sal_uInt16 nNewCol)
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
 
-    if (!DbBrowseBox::CursorMoving(nNewRow, nNewCol))
+    if (!EditBrowseBox::CursorMoving(nNewRow, nNewCol))
         return sal_False;
 
     //////////////////////////////////////////////////////////////////////
@@ -821,7 +822,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     // SaveData could create a undo action as well
     GetUndoManager()->LeaveListAction();
     RowModified(nRow);
-    DbCellControllerRef xController(Controller());
+    CellControllerRef xController(Controller());
     if(xController.Is())
         xController->SetModified();
 
@@ -1063,7 +1064,7 @@ String OTableEditorCtrl::GetControlText( long nRow, sal_uInt16 nColId )
     {
         GoToRow( nRow );
         GoToColumnId( nColId );
-        DbCellControllerRef xController = Controller();
+        CellControllerRef xController = Controller();
         if(xController.Is())
             return xController->GetWindow().GetText();
         else
@@ -1086,7 +1087,7 @@ void OTableEditorCtrl::SetControlText( long nRow, sal_uInt16 nColId, const Strin
     {
         GoToRow( nRow );
         GoToColumnId( nColId );
-        DbCellControllerRef xController = Controller();
+        CellControllerRef xController = Controller();
         if(xController.Is())
             xController->GetWindow().SetText( rText );
         else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 14:26:45 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::dbtools;
 using namespace ::comphelper;
+using namespace ::svt;
 
 #define HANDLE_SQL_ERRORS( action, successflag, context, message )          \
     try                                                                     \
@@ -1440,8 +1441,8 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId)
             case ID_BROWSER_CUT:
             case ID_BROWSER_PASTE:
             {
-                DbCellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
-                if (xCurrentController.Is() && xCurrentController->ISA(DbEditCellController))
+                CellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
+                if (xCurrentController.Is() && xCurrentController->ISA(EditCellController))
                 {
                     Edit& rEdit = (Edit&)xCurrentController->GetWindow();
                     sal_Bool bHasLen = (rEdit.GetSelection().Len() != 0);
@@ -1796,7 +1797,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId)
         case ID_BROWSER_CUT:
         case ID_BROWSER_PASTE:
         {
-            DbCellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
+            CellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
             if (!xCurrentController.Is())
                 // should be intercepted by GetState. Normally.
                 // Unfortunately ID_BROWSER_PASTE is a 'fast call' slot, which means it may be executed without checking if it is

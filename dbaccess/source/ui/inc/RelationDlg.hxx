@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationDlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:21:14 $
+ *  last change: $Author: fs $ $Date: 2001-06-29 08:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,9 @@
 #include <vcl/lstbox.hxx>
 #endif
 
-#ifndef _SVX_DBBROWSE_HXX
-#include <svx/dbbrowse.hxx>
-#endif // _SVX_DBBROWSE_HXX
+#ifndef _SVTOOLS_EDITBROWSEBOX_HXX_
+#include <svtools/editbrowsebox.hxx>
+#endif
 
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -100,12 +100,13 @@ namespace dbaui
 {
     //========================================================================
     class ORelationDialog;
-    class ORelationControl : public DbBrowseBox
+    typedef ::svt::EditBrowseBox ORelationControl_Base;
+    class ORelationControl : public ORelationControl_Base
     {
         friend class ORelationDialog;
 
         ULONG                                                                           m_nDeActivateEvent;
-        DbListBoxCtrl*                                                                  m_pListCell;
+        ::svt::ListBoxControl*                                                          m_pListCell;
         ORelationTableConnectionData*                                                   m_pConnData;
         long                                                                            m_nDataPos;
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>        m_xSourceDef;
@@ -126,10 +127,10 @@ namespace dbaui
 
         virtual BOOL IsTabAllowed(BOOL bForward) const;
 
-        virtual void Init() { DbBrowseBox::Init(); }    // late construction
         virtual void Init(ORelationTableConnectionData* _pConnData);
-        virtual void InitController( DbCellControllerRef& rController, long nRow, USHORT nCol );
-        virtual DbCellController* GetController( long nRow, USHORT nCol );
+        virtual void Init() { ORelationControl_Base::Init(); }
+        virtual void InitController( ::svt::CellControllerRef& rController, long nRow, USHORT nCol );
+        virtual ::svt::CellController* GetController( long nRow, USHORT nCol );
         virtual void PaintCell( OutputDevice& rDev, const Rectangle& rRect, USHORT nColId ) const;
         virtual BOOL SeekRow( long nRow );
         virtual BOOL SaveModified();
