@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-13 12:36:44 $
+ *  last change: $Author: dr $ $Date: 2001-06-28 07:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,11 @@ void ExcTable::AddWebQueries()
                         aLinkAny >>= aURL;
                         aLinkAny = xLinkProp->getPropertyValue( aPropRefresh );
                         aLinkAny >>= nRefresh;
-                        INetURLObject aURLObj( ScGlobal::GetAbsDocName( aURL, pExcRoot->pDoc->GetDocumentShell() ) );
+                        String aAbsDoc( ScGlobal::GetAbsDocName( aURL, pExcRoot->pDoc->GetDocumentShell() ) );
+                        INetURLObject aURLObj( aAbsDoc );
+                        String aWebQueryURL( aURLObj.getFSysPath( INetURLObject::FSYS_DOS ) );
+                        if( !aWebQueryURL.Len() )
+                            aWebQueryURL = aAbsDoc;
 
                         // find range or create a new range
                         ScRange aScDestRange;
@@ -321,8 +325,7 @@ void ExcTable::AddWebQueries()
                         }
 
                         // create the web query record
-                        Add( new XclExpWebQuery( aRangeName, aURLObj.getFSysPath( INetURLObject::FSYS_DOS ),
-                            xAreaLink->getSourceArea(), nRefresh ) );
+                        Add( new XclExpWebQuery( aRangeName, aWebQueryURL, xAreaLink->getSourceArea(), nRefresh ) );
                     }
                 }
             }
