@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-20 12:51:33 $
+ *  last change: $Author: mtg $ $Date: 2001-07-25 10:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,7 @@ void SwXMLExport::_ExportFontDecls()
 }
 
 #define NUM_EXPORTED_VIEW_SETTINGS 11
-void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
+void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
     Reference< XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
@@ -579,155 +579,17 @@ void SwXMLExport::GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::
 }
 #undef NUM_EXPORTED_VIEW_SETTINGS
 
-#define NUM_EXPORTED_CONFIGURATION_SETTINGS 16
-void SwXMLExport::GetConfigurationSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps)
+void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
 {
-    Reference < XMultiServiceFactory > xCreate(GetModel(), UNO_QUERY);
-    Reference < XPropertySet > xPropSet(
-        xCreate->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.document.Settings"))), UNO_QUERY);
-    if (xPropSet.is())
+    Reference< XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
+    if( xFac.is() )
     {
-        aProps.realloc ( NUM_EXPORTED_CONFIGURATION_SETTINGS );
-        PropertyValue *pValue = aProps.getArray();
-        sal_Int32 nIndex = 0;
-        const OUString sLinkUpdateMode ( RTL_CONSTASCII_USTRINGPARAM ( "LinkUpdateMode" ) );
-        const OUString sFieldAutoUpdate ( RTL_CONSTASCII_USTRINGPARAM ( "FieldAutoUpdate" ) );
-        const OUString sChartAutoUpdate ( RTL_CONSTASCII_USTRINGPARAM ( "ChartAutoUpdate" ) );
-        const OUString sAddParaTableSpacing ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacing" ) );
-        const OUString sAddParaTableSpacingAtStart ( RTL_CONSTASCII_USTRINGPARAM ( "AddParaTableSpacingAtStart" ) );
-        const OUString sPrinterName ( RTL_CONSTASCII_USTRINGPARAM ( "PrinterName" ) );
-        const OUString sPrinterSetup ( RTL_CONSTASCII_USTRINGPARAM ( "PrinterSetup" ) );
-        const OUString sIsKernAsianPunctuation ( RTL_CONSTASCII_USTRINGPARAM ( "IsKernAsianPunctuation" ) );
-        const OUString sCharacterCompressionType ( RTL_CONSTASCII_USTRINGPARAM ( "CharacterCompressionType" ) );
-        const OUString sApplyUserData ( RTL_CONSTASCII_USTRINGPARAM ( "ApplyUserData" ) );
-        const OUString sSaveGlobalDocumentLinks ( RTL_CONSTASCII_USTRINGPARAM ( "SaveGlobalDocumentLinks" ) );
-        const OUString sCurrentDatabaseDataSource ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseDataSource" ) );
-        const OUString sCurrentDatabaseCommand ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseCommand" ) );
-        const OUString sCurrentDatabaseCommandType ( RTL_CONSTASCII_USTRINGPARAM ( "CurrentDatabaseCommandType" ) );
-        const OUString sSaveVersionOnClose ( RTL_CONSTASCII_USTRINGPARAM ( "SaveVersionOnClose" ) );
-
-        pValue[nIndex].Name = sLinkUpdateMode;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sLinkUpdateMode );
-
-        pValue[nIndex].Name = sFieldAutoUpdate;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sFieldAutoUpdate );
-
-        pValue[nIndex].Name = sChartAutoUpdate;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sChartAutoUpdate );
-
-        pValue[nIndex].Name = sAddParaTableSpacing;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sAddParaTableSpacing );
-
-        pValue[nIndex].Name = sAddParaTableSpacingAtStart;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sAddParaTableSpacingAtStart );
-
-        {
-            Any aPrinterAny = xPropSet->getPropertyValue ( sPrinterSetup );
-            if ( aPrinterAny.getValueTypeClass() != TypeClass_VOID )
-            {
-                pValue[nIndex].Name = sPrinterName;
-                pValue[nIndex++].Value = xPropSet->getPropertyValue ( sPrinterName );
-
-                pValue[nIndex].Name = sPrinterSetup;
-                pValue[nIndex++].Value = aPrinterAny;
-            }
-        }
-
-
-        pValue[nIndex].Name = sIsKernAsianPunctuation;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sIsKernAsianPunctuation );
-
-        pValue[nIndex].Name = sCharacterCompressionType;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sCharacterCompressionType );
-
-        pValue[nIndex].Name = sApplyUserData;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sApplyUserData );
-
-        pValue[nIndex].Name = sSaveGlobalDocumentLinks;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sSaveGlobalDocumentLinks );
-
-        pValue[nIndex].Name = sCurrentDatabaseDataSource;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sCurrentDatabaseDataSource );
-
-        pValue[nIndex].Name = sCurrentDatabaseCommand;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sCurrentDatabaseCommand );
-
-        pValue[nIndex].Name = sCurrentDatabaseCommandType;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sCurrentDatabaseCommandType );
-
-        pValue[nIndex].Name = sSaveVersionOnClose;
-        pValue[nIndex++].Value = xPropSet->getPropertyValue ( sSaveVersionOnClose );
-
-        Reference < XText > xText;
-        SwXText *pText = 0;
-
-        if( GetModel().is() )
-        {
-            Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-            xText = xTextDoc->getText();
-            Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-            ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
-            if( xTextTunnel.is() )
-            {
-                pText = (SwXText *)xTextTunnel->getSomething( SwXText::getUnoTunnelId() );
-                ASSERT( pText, "SwXText missing" );
-            }
-        }
-        Reference< XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
-        ASSERT( xServiceFactory.is(), "XMLReader::Read: got no service manager" );
-        if( pText && xServiceFactory.is() )
-        {
-            Reference < XIndexContainer > xBox (xServiceFactory->createInstance
-                    (OUString( RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.document.IndexedPropertyValues") ) ), UNO_QUERY);
-            if (xBox.is() )
-            {
-                SwDoc *pDoc = pText->GetDoc();
-                vos::ORef < SvxForbiddenCharactersTable > xTable = pDoc->GetForbiddenCharacterTbl();
-                if (xTable.isValid())
-                {
-                    sal_Int32  nCount = 0, nNum = xTable->Count();
-                    ForbiddenCharacters *pCharacter;
-                    ForbiddenCharactersInfo *pInfoCharacter;
-                    Any aAny;
-                    OUString sLanguage  ( RTL_CONSTASCII_USTRINGPARAM ( "Language" ) );
-                    OUString sCountry   ( RTL_CONSTASCII_USTRINGPARAM ( "Country" ) );
-                    OUString sVariant   ( RTL_CONSTASCII_USTRINGPARAM ( "Variant" ) );
-                    OUString sBeginLine ( RTL_CONSTASCII_USTRINGPARAM ( "BeginLine" ) );
-                    OUString sEndLine   ( RTL_CONSTASCII_USTRINGPARAM ( "EndLine" ) );
-
-                    for ( ; nCount < nNum; nCount++ )
-                    {
-                        pInfoCharacter = xTable->GetObject( nCount );
-                        pCharacter = &(pInfoCharacter->aForbiddenChars);
-                        ULONG nLanguage = xTable->GetKey( pInfoCharacter );
-                        Locale aLocale;
-                        SvxLanguageToLocale ( aLocale, static_cast < LanguageType > (nLanguage) );
-                        Sequence < PropertyValue > aSequence ( SW_FORBIDDEN_CHARACTER_MAX );
-                        PropertyValue *pForChar = aSequence.getArray();
-
-                        pForChar[SW_FORBIDDEN_CHARACTER_LANGUAGE].Name    = sLanguage;
-                        pForChar[SW_FORBIDDEN_CHARACTER_LANGUAGE].Value <<= aLocale.Language;
-                        pForChar[SW_FORBIDDEN_CHARACTER_COUNTRY].Name    = sCountry;
-                        pForChar[SW_FORBIDDEN_CHARACTER_COUNTRY].Value <<= aLocale.Country;
-                        pForChar[SW_FORBIDDEN_CHARACTER_VARIANT].Name    = sVariant;
-                        pForChar[SW_FORBIDDEN_CHARACTER_VARIANT].Value <<= aLocale.Variant;
-                        pForChar[SW_FORBIDDEN_CHARACTER_BEGIN_LINE].Name    = sBeginLine;
-                        pForChar[SW_FORBIDDEN_CHARACTER_BEGIN_LINE].Value <<= pCharacter->beginLine;
-                        pForChar[SW_FORBIDDEN_CHARACTER_END_LINE].Name    = sEndLine;
-                        pForChar[SW_FORBIDDEN_CHARACTER_END_LINE].Value <<= pCharacter->endLine;
-                        aAny <<= aSequence;
-                        xBox->insertByIndex(nCount, aAny);
-                    }
-                    pValue[nIndex].Name = OUString ( RTL_CONSTASCII_USTRINGPARAM ( "ForbiddenCharacters" ) );
-                    pValue[nIndex++].Value <<= Reference < XIndexAccess > ( xBox, UNO_QUERY );
-                }
-            }
-        }
-        if (nIndex < NUM_EXPORTED_CONFIGURATION_SETTINGS )
-            aProps.realloc ( nIndex );
+        Reference< XPropertySet > xProps( xFac->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ), UNO_QUERY );
+        if( xProps.is() )
+            SvXMLUnitConverter::convertPropertySet( rProps, xProps );
     }
 }
-#undef NUM_EXPORTED_CONFIGURATION_SETTINGS
+
 void SwXMLExport::_ExportContent()
 {
 #ifdef XML_CORE_API
