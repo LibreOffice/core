@@ -6,9 +6,9 @@
 '*
 '*  $RCSfile: sc_ScHeaderFieldsObj.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:59:45 $ 
+'*  last change:$Date: 2003-01-30 08:36:11 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -72,7 +72,6 @@ option explicit
 
 ' REQUIRED VARIABLES for interface/service tests:
 
-
 Sub CreateObj()
 
 '*************************************************************************
@@ -84,8 +83,8 @@ On Error Goto ErrHndl
 	Dim StyleFamilies as Object, PageStyles as Object, DefaultStyle As Object
 	Dim RPHC as Object, tLeft as Object, TimeField as Object, oCur As Object
 
-    oDoc = StarDesktop.loadComponentFromURL("private:factory/scalc", "Test", 40, DimArray())
-
+    oDoc = utils.createDocument("scalc", cObjectName)
+    
     StyleFamilies = oDoc.getStyleFamilies()
     PageStyles = StyleFamilies.getByName("PageStyles")
     DefaultStyle = PageStyles.getByName("Default")
@@ -93,14 +92,9 @@ On Error Goto ErrHndl
     RPHC = DefaultStyle.getPropertyValue("RightPageHeaderContent")
     tLeft = RPHC.getLeftText
     TimeField = oDoc.createInstance("com.sun.star.text.TextField.Time")
-	oComponentInstance = oDoc.createInstance("com.sun.star.text.TextField.Time")
     oCur = tLeft.createTextCursor()
     tLeft.insertTextContent(oCur, TimeField, false)
-    tLeft.insertTextContent(oCur, oComponentInstance, false)
 
-	oXTextContent = oDoc.createInstance("com.sun.star.text.TextField.Time")
-	oXTextContentRange = tLeft.createTextCursor()
-	
     oObj=tLeft.getTextFields()
 
 Exit Sub
