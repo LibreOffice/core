@@ -2,9 +2,9 @@
  *
  *  $RCSfile: language.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:49:44 $
+ *  last change: $Author: rt $ $Date: 2000-12-06 14:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ String RID_SVXSTR_LANGUAGE_ALL
     Text[ polish ] = "Wszystkie";
     Text[ japanese ] = "‚·‚×‚Ä";
     Text[ greek ] = "¼ëá";
-    Text[ korean ] = "[¸ðµÎ]";
+    Text[ korean ] = "¸ðµÎ";
     Text[ chinese_traditional ] = "¥þ³¡";
     Text[ arabic ] = "Çáßá";
     Text[ turkish ] = "[Tümü]";
