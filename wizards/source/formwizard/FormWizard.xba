@@ -135,7 +135,7 @@ Sub FillUpFieldsListbox(bGetCommandType as Boolean)
 Dim n as Integer
 Dim SelIndex as Integer
 	n = Ubound(oDialogModel.lstTables.SelectedItems())
-	If n &lt;&gt; -1 Then
+	If n &gt; -1 Then
 		SelIndex = oDialogModel.lstTables.SelectedItems(0)
 		If bGetCommandType Then
 			CurCommandType = iCommandTypes(SelIndex)

@@ -92,7 +92,6 @@ End Function
 
 Function GetDBMetaData()
 	If oDBContext.HasElements Then
-		printdbgInfo oDBConnection
 		Tablenames() = oDBConnection.Tables.ElementNames()
 		Querynames() = oDBConnection.Queries.ElementNames()
 		GetDBMetaData = True
@@ -225,13 +224,13 @@ Dim i as Integer
 Dim a as Integer
 	MaxTableIndex = Ubound(TableNames()
 	MaxQueryIndex = Ubound(QueryNames()
-Dim LocCommandTypes(MaxTableIndex + MaxQueryIndex + 1)
+Dim LocCommandTypes(MaxTableIndex + MaxQueryIndex + 1) as Integer
 	For i = 0 To MaxTableIndex
 		LocCommandTypes(i) = com.sun.star.sdb.CommandType.TABLE
 	Next i  	
 	a = i + 1
 	For i = 0 To MaxQueryIndex
-		LocCommandTypes(a) = com.sun.star.sdb.CommandType.Query
+		LocCommandTypes(a) = com.sun.star.sdb.CommandType.QUERY
 	Next i
 	CreateCommandTypeList() = LocCommandTypes()
 End Function</script:module>
