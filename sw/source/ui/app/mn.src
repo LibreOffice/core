@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 03:19:46 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:13:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,36 +315,26 @@ Menu MN_PPREVIEW_POPUPMENU
     };
 };
 
+String MN_MEDIA_POPUPMENU
+{
+    Text [ de ] = "Medienobjekt" ;
+    Text [ en-US ] = "Media object" ;
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Menu MN_MEDIA_POPUPMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_FORMAT_ATTR_TRANSFORM
+        };
+        MN_NAME_GROUP
+        SEPARATOR ;
+        MN_DRAW6
+        MN_WRAP_DRAW
+        MN_ANCHOR
+        SEPARATOR ;
+        MN_DRAW3
+    };
+};
