@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-19 15:02:02 $
+ *  last change: $Author: tl $ $Date: 2001-07-23 11:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -424,6 +424,13 @@ EditEngine& SmDocShell::GetEditEngine()
         pEditEngine->SetPaperSize( Size( 800, 0 ) );
 
         pEditEngine->EraseVirtualDevice();
+
+        // set initial text if the document already has some...
+        // (may be the case when reloading a doc)
+        String aTxt( GetText() );
+        if (aTxt.Len())
+            pEditEngine->SetText( aTxt );
+
         pEditEngine->ClearModifyFlag();
 
         // forces new settings to be used if the itempool was modified

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 10:58:51 $
+ *  last change: $Author: tl $ $Date: 2001-07-23 11:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,7 +786,9 @@ sal_Int8 SmEditWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 ESelection SmEditWindow::GetSelection() const
 {
-    DBG_ASSERT( pEditView, "NULL pointer" );
+    // pointer may be 0 when reloading a document and the old view
+    // was already destroyed
+    //(DBG_ASSERT( pEditView, "NULL pointer" );
     ESelection eSel;
     if (pEditView)
         eSel = pEditView->GetSelection();
