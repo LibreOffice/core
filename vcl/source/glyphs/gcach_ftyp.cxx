@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:15:48 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,6 +813,12 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 #endif
         mnLoadFlags |= FT_LOAD_NO_HINTING;
 
+#ifdef FT_LOAD_TARGET_LIGHT
+    // enable "light hinting" if available
+    if( !(mnLoadFlags & FT_LOAD_NO_HINTING) && (nFTVERSION >= 2103))
+        mnLoadFlags |= FT_LOAD_TARGET_LIGHT;
+#endif
+
     if( ((mnCos != 0) && (mnSin != 0)) || (nPrioEmbedded <= 0) )
         mnLoadFlags |= FT_LOAD_NO_BITMAP;
 }
@@ -1586,7 +1592,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
     ImplKernPairData aKernPair;
 
     const FT_Byte* pBuffer = pKern;
-    USHORT nVersion = GetUShort( pBuffer+0 );
+    ULONG nVersion = GetUShort( pBuffer+0 );
     USHORT nTableCnt = GetUShort( pBuffer+2 );
 
     // Microsoft/Old TrueType style kern table
