@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2000-11-06 09:24:36 $
+ *  last change: $Author: ama $ $Date: 2000-11-09 11:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -604,9 +604,12 @@ SwRect lcl_CalcRect( const SwTxtPaintInfo *pInf, const SwLinePortion &rPor )
     SwRect aRect( GetDrawPos( pInf->GetPos(), rPor ),
                   Size( rPor.Width(), rPor.Height() ) );
     if( rPor.InSpaceGrp() && pInf->GetSpaceAdd() )
-        aRect.Width( aRect.Width() +
-                     rPor.CalcSpacing( pInf->GetSpaceAdd(), *pInf ) );
-
+    {
+        SwTwips nAdd = rPor.CalcSpacing( pInf->GetSpaceAdd(), *pInf );
+        if( rPor.InFldGrp() && pInf->GetSpaceAdd() < 0 && nAdd )
+            nAdd += pInf->GetSpaceAdd();
+        aRect.Width( aRect.Width() + nAdd );
+    }
     if( aRect.HasArea() )
     {
         ::SwAlignRect( aRect, (ViewShell*)pInf->GetVsh() );
@@ -673,7 +676,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
 void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                                   const MSHORT nWhich ) const
 {
-    if( OnWin() )
+    if( OnWin() && !IsMulti() )
     {
         sal_Bool bDraw = sal_False;
         switch( nWhich )
