@@ -9543,3 +9543,9 @@ _real@8@3ffeccccccccccccd000
 ?free@FactoryInfo@@QAEXXZ
 ?impl_GetOwnStaticMutex@SvtModuleOptions@@CAAAVMutex@osl@@XZ
 ??1?$Sequence@F@uno@star@sun@com@@QAE@XZ
+??1?$Reference@VXRemoteContentProviderSupplier@ucb@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?SupportsLocalDir@@YAEXZ
+?__query@?$Reference@VXRemoteContentProviderSupplier@ucb@star@sun@com@@@uno@star@sun@com@@CAPAVXRemoteContentProviderSupplier@ucb@345@PAVXInterface@2345@@Z
+?s_pType_com_sun_star_ucb_XRemoteContentProviderSupplier@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXRemoteContentProviderSupplier@ucb@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?set@?$Reference@VXRemoteContentProviderSupplier@ucb@star@sun@com@@@uno@star@sun@com@@QAAEPAVXRemoteContentProviderSupplier@ucb@345@@Z
+?UpdatePickList@SvtURLBox@@QAEXXZ
