@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-07-20 18:34:25 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 08:57:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,6 @@ enum ExportFormatExcel { ExpBiff2, ExpBiff3, ExpBiff4, ExpBiff4W, ExpBiff5 };
 // ***********************************************************************
 
 FltError ScImportLotus123( SfxMedium&, ScDocument*, CharSet eSrc = RTL_TEXTENCODING_DONTKNOW );
-
-FltError ScImportExcel( SvStream&, ScDocument* );
 
 FltError ScImportExcel( SfxMedium&, ScDocument* );
 
