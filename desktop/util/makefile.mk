@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hro $ $Date: 2001-06-18 14:22:59 $
+#   last change: $Author: hro $ $Date: 2001-06-19 13:09:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -157,11 +157,13 @@ APP1OBJS= \
 
 APP1DEF=    $(MISCX)$/$(TARGET).def
 
+.IF "$(GUI)" == "WNT"
 APP1RES=    $(RES)$/desktop.res
 
 APP1ICON=$(SOLARRESDIR)$/icons/001_star_butterfly.ico
 APP1VERINFO=verinfo.rc
 APP1LINKRES=$(MISC)$/$(TARGET).res
+.ENDIF
 
 
 
