@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: npower $ $Date: 2003-09-04 07:24:47 $
+ *  last change: $Author: npower $ $Date: 2003-09-10 08:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,13 +63,12 @@
 #define _FRAMEWORK_SCRIPT_PROVIDER_XFUNCTIONPROVIDER_HXX_
 
 #include <rtl/ustring>
-#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
 #include <drafts/com/sun/star/script/framework/provider/XScriptProvider.hpp>
-#include <drafts/com/sun/star/script/framework/provider/XScriptProviderAccess.hpp>
 #include <drafts/com/sun/star/script/framework/runtime/XScriptInvocation.hpp>
 #include <drafts/com/sun/star/script/framework/storage/XScriptStorageManager.hpp>
 #include <drafts/com/sun/star/script/framework/browse/XBrowseNode.hpp>
@@ -83,9 +82,9 @@ namespace func_provider
 #define dcsssf ::drafts::com::sun::star::script::framework
 
 class MasterScriptProvider :
-            public ::cppu::WeakImplHelper5 < dcsssf::provider::XScriptProvider,
-                dcsssf::browse::XBrowseNode, dcsssf::provider::XScriptProviderAccess,
-                css::lang::XServiceInfo, css::lang::XInitialization >
+            public ::cppu::WeakImplHelper4 < dcsssf::provider::XScriptProvider,
+                dcsssf::browse::XBrowseNode, css::lang::XServiceInfo,
+                css::lang::XInitialization >
 {
 public:
     MasterScriptProvider(
@@ -107,9 +106,7 @@ public:
     virtual sal_Int16 SAL_CALL getType()
         throw ( css::uno::RuntimeException );
 
-    // XBrowseNode implementation
-    virtual css::uno::Sequence< css::uno::Reference< dcsssf::provider::XScriptProvider > > SAL_CALL
-        getAllProviders() throw ( css::uno::RuntimeException );
+
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
         throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames( )
@@ -128,22 +125,34 @@ public:
      */
     virtual void SAL_CALL initialize( const css::uno::Sequence < css::uno::Any > & args )
         throw ( css::uno::Exception, css::uno::RuntimeException);
+
+    // Public method to return all Language Providers in this MasterScriptProviders
+    // context.
+    css::uno::Sequence< css::uno::Reference< dcsssf::provider::XScriptProvider > > SAL_CALL
+        getAllProviders() throw ( css::uno::RuntimeException );
 private:
     void addStorageAsListener() throw( css::uno::RuntimeException );
     bool  isValid();
     const css::uno::Sequence< ::rtl::OUString >& getProviderNames();
     ::rtl::OUString  getLanguageFromURI(const ::rtl::OUString& scriptURI );
-    css::uno::Reference< dcsssf::provider::XScriptProvider >
-        getScriptProvider( const ::rtl::OUString& language,
-                           const css::uno::Sequence< css::uno::Any >& args )
-                           throw ( css::uno::RuntimeException );
+
     /* to obtain other services if needed */
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::lang::XMultiComponentFactory > m_xMgr;
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Reference < dcsssf::storage::XScriptStorageManager > m_xScriptStorageMgr;
-    bool m_bInitialised;
+
+    // This component supports XInitialization, it can be created
+    // using createInstanceXXX() or createInstanceWithArgumentsXXX using
+    // the service Mangager.
+    // Need to detect proper initialisation and validity
+    // for the object, so m_bIsValid indicates that the object is valid is set in ctor
+    // in case of createInstanceWithArgumentsXXX() called m_bIsValid is set to reset
+    // and then set to true when initialisation is complete
+
     bool m_bIsValid;
+    // m_bInitialised ensure initialisation only takes place once.
+    bool m_bInitialised;
     css::uno::Reference< css::beans::XPropertySet > m_XScriptingContext;
     ProviderCache* m_pPCache;
     osl::Mutex m_mutex;

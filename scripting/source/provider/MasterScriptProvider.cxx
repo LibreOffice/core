@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: npower $ $Date: 2003-09-04 07:24:47 $
+ *  last change: $Author: npower $ $Date: 2003-09-10 08:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ Sequence< ::rtl::OUString > s_serviceNames = Sequence <
 //
 //*************************************************************************
 MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext > & xContext ) throw ( RuntimeException ):
-        m_xContext( xContext ), m_bInitialised( false ), m_bIsValid( false ),
+        m_xContext( xContext ), m_bIsValid( false ), m_bInitialised( false ),
         m_pPCache( 0 )
 {
     OSL_TRACE( "< MasterScriptProvider ctor called >\n" );
@@ -135,7 +135,13 @@ MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext >
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 
-    //Sequence< ::rtl::OUString >& providers = getProviderNames();
+    // Set up contextless cache
+    // if initialise method is called a new ProviderCache will be
+    // created with the appropriate context supplied as an argument
+    Sequence< Any > invokeArgs(1);
+    invokeArgs[ 0 ] <<= m_XScriptingContext;
+    m_pPCache = new ProviderCache( m_xContext, invokeArgs );
+
     m_bIsValid = true;
 }
 
@@ -164,6 +170,7 @@ throw ( Exception, RuntimeException )
     }
 
     m_bIsValid = false;
+
 
     // related to issue 11866
     // warning dialog gets launched when adding binding to script in doc
@@ -339,12 +346,15 @@ throw ( Exception, RuntimeException )
         //invokeArgs[ 0 ] <<= m_XScriptingContext;
         invokeArgs = Sequence< Any >( 0 ); // no arguments
     }
-
-    // should be zero, if not initialised, put assert here
-    if ( m_pPCache == 0 )
+    // should be initialised from ctor ( in case createInstance called
+    // instead of createInsanceWithArgs.... )
+    if ( m_pPCache != 0 )
     {
-        m_pPCache = new ProviderCache( m_xContext, invokeArgs );
+        OSL_TRACE("** MSP init, creating provider cache");
+        delete m_pPCache;
     }
+
+    m_pPCache = new ProviderCache( m_xContext, invokeArgs );
     if ( m_xModel.is() )
     {
         // This MSP created from a document, add to ActiveMSPList
@@ -496,46 +506,6 @@ MasterScriptProvider::getLanguageFromURI( const ::rtl::OUString& scriptURI )
 
 
 //*************************************************************************
-Reference< provider::XScriptProvider >
-MasterScriptProvider::getScriptProvider(
-    const ::rtl::OUString& language,
-    const Sequence< Any >& aArgs ) throw ( RuntimeException )
-{
-    Reference< provider::XScriptProvider > xScriptProvider;
-    try
-    {
-        // need to attempt to get the runtime service (not singleton) for the lang
-        ::rtl::OUStringBuffer buf( 80 );
-        buf.appendAscii( "drafts.com.sun.star.script.framework.provider.ScriptProviderFor");
-        buf.append( language );
-        ::rtl::OUString serviceName = buf.makeStringAndClear();
-        OSL_TRACE( "Service name is %s",
-            ::rtl::OUStringToOString( serviceName,
-                RTL_TEXTENCODING_ASCII_US ).pData->buffer  );
-
-        Reference< XInterface > xInterface =
-            m_xMgr->createInstanceWithArgumentsAndContext(
-                serviceName, aArgs, m_xContext );
-
-        // need to get the XScriptProvider interface from the service
-        validateXRef( xInterface,
-            "MasterScriptProvider::getScriptProvider: cannot get appropriate language ScriptProvider Service");
-        xScriptProvider = Reference< provider::XScriptProvider > ( xInterface,
-            UNO_QUERY_THROW );
-        validateXRef( xScriptProvider,
-            "Service doesn't support XScriptProvider interface" );
-    }
-    catch ( RuntimeException & e )
-    {
-        ::rtl::OUString temp = OUSTR( "MasterScriptProvider::getScriptProvider: can't get ScriptProvider for " );
-        temp.concat( language );
-        temp.concat( OUSTR( " :" ) );
-        throw RuntimeException( temp.concat( e.Message ),
-                Reference< XInterface >() );
-    }
-    return xScriptProvider;
-}
-
 ::rtl::OUString SAL_CALL
 MasterScriptProvider::getName()
         throw ( css::uno::RuntimeException )

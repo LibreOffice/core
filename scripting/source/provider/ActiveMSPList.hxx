@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActiveMSPList.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: npower $ $Date: 2003-09-04 07:23:12 $
+ *  last change: $Author: npower $ $Date: 2003-09-10 08:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,18 +87,20 @@ namespace func_provider
 //Typedefs
 //=============================================================================
 
-typedef ::std::hash_map< ::rtl::OUString,
-    css::uno::Reference< dcsssf::provider::XScriptProvider >,
-    ::rtl::OUStringHash,
-            ::std::equal_to< ::rtl::OUString > > Msp_hash;
 
 struct MspInst
 {
     css::uno::Reference< dcsssf::provider::XScriptProvider > provider;
-    ::rtl::OUString docName;
+    css::uno::Reference< dcsssf::browse::XBrowseNode > node;
 };
+
 typedef ::std::map < css::uno::Reference< css::frame::XModel >,
                      MspInst > Model_map;
+
+typedef ::std::hash_map< ::rtl::OUString,
+    MspInst,
+    ::rtl::OUStringHash,
+            ::std::equal_to< ::rtl::OUString > > Msp_hash;
 
 class ActiveMSPList : public ::cppu::WeakImplHelper2< css::lang::XEventListener , dcsssf::browse::XBrowseNode >
 {
