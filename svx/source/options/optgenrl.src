@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-21 09:18:05 $
+ *  last change: $Author: kz $ $Date: 2002-05-27 20:15:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,7 +364,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ portuguese_brazilian ] = "Pa?s/~CEP/Cidade";
         Text[ japanese ] = "å›½å";
         Text[ chinese_simplified ] = "å›½å®¶";
-        Text[ chinese_traditional ] = "åœ‹å®¶";
+        Text[ chinese_traditional ] = "åœ‹å®¶/åœ°å€";
         Text[ arabic ] = "ÇáÈáÏ";
         Text[ greek ] = "×şñá";
         Text[ korean ] = "êµ­ê°€";
