@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:53 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 07:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -488,6 +488,7 @@ String AddressBookTypes::getAddressURL( ADDRESSBOOK_TYPE _eType )
     switch ( _eType )
     {
         case ABT_MORK       : pURL = "sdbc:address:mozilla"; break;
+        case ABT_EVOLUTION  : pURL = "sdbc:address:evolution"; break;
         case ABT_LDAP       : pURL = "sdbc:address:ldap"; break;
         case ABT_OUTLOOK    : pURL = "sdbc:address:outlook"; break;
         case ABT_OE         : pURL = "sdbc:address:outlookexp"; break;
@@ -502,6 +503,8 @@ ADDRESSBOOK_TYPE AddressBookTypes::getAddressType( const String& _rAddressURL )
 {
     if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:mozilla" ) )
         return ABT_MORK;
+    else if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:evolution" ) )
+        return ABT_EVOLUTION;
     else if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:ldap" ) )
         return ABT_LDAP;
     else if ( 0 == _rAddressURL.CompareToAscii( "sdbc:address:outlook" ) )
