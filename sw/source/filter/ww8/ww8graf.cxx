@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:51:10 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2343,17 +2343,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
     const UINT32 nCntRelTo  = 4;
 
-/*
-    // our anchor settings
-    static const RndStdIds aAnchorTab[] = {
-        FLY_AT_CNTNT,   // Frame bound to paragraph
-        FLY_IN_CNTNT,   //             to character
-        FLY_PAGE,       //             to page
-        FLY_AT_FLY,     //             to another fly ( LAYER_IMPL )
-        FLY_AUTO_CNTNT, // automat. positioned frame bound to paragraph
-    };
-*/
-
     // horizontal Adjustment
     static const SwHoriOrient aHoriOriTab[ nCntXAlign ] = {
         HORI_NONE,      // Value of nXPos defined RelPos directly.
@@ -2431,15 +2420,25 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         }
     }
 
-
-    //No drawing layer stuff in the header, so if
-    //this is going to be in the headerfooter and
-    //cannot be replaced by a fly then anchor it
-    //to the current page.
-    if ((bIsHeader || bIsFooter) && !bOrgObjectWasReplace &&
-        !pRecord->bReplaceByFly)
+    //Drawing layer stuff that is not going to be replaced as a fly,
+    //ideally we will be able to remove this special check.
+    if (!bOrgObjectWasReplace && !pRecord->bReplaceByFly)
     {
-        eAnchor=FLY_PAGE;
+        if (bIsHeader || bIsFooter)
+        {
+            //No drawing layer stuff in the header, so if this is going to be
+            //in the headerfooter and cannot be replaced by a fly then anchor
+            //it to the current page. we want to be able to do this in the
+            //future.
+            eAnchor=FLY_PAGE;
+        }
+        else if (eAnchor == FLY_AUTO_CNTNT)
+        {
+            //Drawing layer stuff cannot be "to character", fudge as "to
+            //paragraph". #109069#, we want to be able to do this in the
+            //future
+            eAnchor = FLY_AT_CNTNT;
+        }
     }
 
     SwFmtAnchor aAnchor( eAnchor );
@@ -2778,18 +2777,6 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
                 aPoint.X() = aHori.GetPos();
                 aHori.SetPos(0);
                 aFlySet.ClearItem(RES_HORI_ORIENT);
-                pObject->SetAnchorPos(aPoint);
-            }
-
-            const SwFmtVertOrient *pVert =
-                (const SwFmtVertOrient *)aFlySet.GetItem(RES_VERT_ORIENT);
-            if (pVert && pVert->GetVertOrient() == VERT_NONE)
-            {
-                SwFmtVertOrient aVert(*pVert);
-                Point aPoint(pObject->GetAnchorPos());
-                aPoint.Y() = aVert.GetPos();
-                aVert.SetPos(0);
-                aFlySet.ClearItem(RES_VERT_ORIENT);
                 pObject->SetAnchorPos(aPoint);
             }
 
