@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:25:26 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:31:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
         Text[ turkish ] = "~Sonraki";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Siguiente";
+        Text[ finnish ] = "~Seuraava";
     };
     PushButton BTN_HYPH_DELETE
     {
