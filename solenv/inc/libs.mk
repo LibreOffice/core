@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: hr $ $Date: 2001-07-10 12:40:34 $
+#   last change: $Author: rt $ $Date: 2001-07-20 16:54:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -177,6 +177,7 @@ SFXDEBUGLIB=
 FWELIB=-lfwe$(UPD)$(DLLPOSTFIX)
 SVXLIB=-lsvx$(UPD)$(DLLPOSTFIX)
 BASCTLLIB=-lbasctl$(UPD)$(DLLPOSTFIX)
+BASICIDELIB=-lybctl
 SVXLLIB=-lsvxl
 .IF "$(OLD_CHAOS)"==""
 CHAOSLIB=-lcnt$(UPD)$(DLLPOSTFIX)
@@ -310,6 +311,7 @@ SJLIB=$(LIBPRE) sj.lib
 SVXLIB=$(LIBPRE) svx.lib
 SVXLIB+=$(LIBPRE) dl.lib
 BASCTLLIB=$(LIBPRE) basctl.lib
+BASICIDELIB=ybctl.lib
 SVXLLIB=$(LIBPRE) svxl.lib
 SDBLIB=$(LIBPRE) sdb.lib
 DBTOOLSLIB=$(LIBPRE) idbtools.lib
