@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:43:14 $
+ *  last change: $Author: oj $ $Date: 2001-06-21 10:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,6 +377,15 @@ void ODBTable::construct()
 
     registerProperty(PROPERTY_PRIVILEGES, PROPERTY_ID_PRIVILEGES, PropertyAttribute::BOUND | PropertyAttribute::READONLY,
                     &m_nPrivileges, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+
+    registerMayBeVoidProperty(PROPERTY_TEXTLINECOLOR, PROPERTY_ID_TEXTLINECOLOR, PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
+                    &m_aTextLineColor, ::getCppuType(static_cast<sal_Int32*>(NULL)));
+
+    registerProperty(PROPERTY_TEXTEMPHASIS, PROPERTY_ID_TEXTEMPHASIS, PropertyAttribute::BOUND,
+                    &m_nFontEmphasis, ::getCppuType(&m_nFontEmphasis));
+
+    registerProperty(PROPERTY_TEXTRELIEF, PROPERTY_ID_TEXTRELIEF, PropertyAttribute::BOUND,
+                    &m_nFontRelief, ::getCppuType(&m_nFontRelief));
 }
 // -----------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ODBTable::createArrayHelper( sal_Int32 _nId) const
