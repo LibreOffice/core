@@ -9,6 +9,9 @@
 
 #include <cppuhelper/bootstrap.hxx>
 
+#include <osl/file.hxx>
+#include <osl/process.h>
+
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -25,14 +28,20 @@ using namespace com::sun::star::registry;
 
 
 //============================================================================
-int SAL_CALL main( int argc, char **argv ) {
-
-     if (argc != 3)
+int SAL_CALL main( int argc, char **argv )
+{
+    OUString sConnectionString(RTL_CONSTASCII_USTRINGPARAM("uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager"));
+     if (argc != 2)
     {
-        printf("using: DocumentLoader <uno_connection_url> <file_url>\n\n"
-               "example: DocumentLoader \"uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager\" \"file://e:/temp/test.sxw\"\n");
+        printf("using: DocumentLoader <file_url> [<uno_connection_url>]\n\n"
+               "example: DocumentLoader  \"file://e:/temp/test.sxw\" \"uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager\"\n");
         exit(1);
     }
+     if (argc == 3)
+    {
+        sConnectionString = OUString(RTL_CONSTASCII_USTRINGPARAM(argv[2]));
+    }
+
 
     // Creates a simple registry service instance.
     Reference< XSimpleRegistry > xSimpleRegistry(
@@ -94,7 +103,7 @@ int SAL_CALL main( int argc, char **argv ) {
 
     // Resolves the component context from the office, on the uno URL given by argv[1].
     xInterface = Reference< XInterface >(
-        resolver->resolve( OUString::createFromAscii( argv[1] ) ), UNO_QUERY );
+        resolver->resolve( sConnectionString ), UNO_QUERY );
 
     // gets the server component context as property of the office component factory
     Reference< XPropertySet > xPropSet( xInterface, UNO_QUERY );
@@ -115,10 +124,12 @@ int SAL_CALL main( int argc, char **argv ) {
     /* Loads a component specified by an URL into the specified new or existing
        frame.
     */
+    OUString sDocUrl, sWorkingDir;
+    osl_getProcessWorkingDir(&sWorkingDir.pData);
+    osl::FileBase::getAbsoluteFileURL( sWorkingDir, OUString::createFromAscii(argv[1]), sDocUrl);
+
     Reference< XComponent > xComponent = xComponentLoader->loadComponentFromURL(
-        OUString::createFromAscii( argv[ 2 ] ),
-        OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ),
-        0,
+        sDocUrl, OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0,
         Sequence < ::com::sun::star::beans::PropertyValue >() );
 
     // dispose the local service manager

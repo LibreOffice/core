@@ -1,71 +1,112 @@
-# Builds the DocumentLoader demo.
+# Builds the C++ DocumentLoader example of the SDK.
 
-PRJ=..$(PS)..$(PS)..
-SETTINGS=../../../settings
+PRJ=../../..
+SETTINGS=$(PRJ)/settings
 
 include $(SETTINGS)/settings.mk
-
-include $(SETTINGS)/dk.mk
 include $(SETTINGS)/std.mk
+include $(SETTINGS)/dk.mk
 
 # Define non-platform/compiler specific settings
+COMPONENT_NAME=DocumentLoader
+COMPONENT_RDB_NAME = $(COMPONENT_NAME).rdb
+COMPONENT_RDB = $(OUT_BIN)/$(COMPONENT_RDB_NAME)
 
-REGISTERFLAGFILE= $(OUT_MISC)$(PS)documentloader_register_component.flag
-TYPEFLAGFILE= $(OUT_MISC)$(PS)documentloader_type_generation.flag
+OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
+OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
+OUT_COMP_OBJ=$(OUT_OBJ)/$(COMPONENT_NAME)
+
+COMPOENNT_ENV_FLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_prepare_env.flag
+COMPONENT_TYPEFLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_types.flag
+
+CXXFILES = DocumentLoader.cxx
+
+OBJFILES = $(patsubst %.cxx,$(OUT_SLO_COMP)/%.$(OBJ_EXT),$(CXXFILES))
 
 TYPES = \
-	-Tcom.sun.star.lang.XMultiServiceFactory \
-	-Tcom.sun.star.lang.XComponent \
-	-Tcom.sun.star.beans.XPropertySet \
-	-Tcom.sun.star.bridge.XUnoUrlResolver \
-	-Tcom.sun.star.frame.XComponentLoader \
-	-Tcom.sun.star.lang.XMultiComponentFactory \
-	-Tcom.sun.star.container.XHierarchicalNameAccess \
-	-Tcom.sun.star.registry.XSimpleRegistry
+	com.sun.star.lang.XMultiServiceFactory \
+	com.sun.star.lang.XComponent \
+	com.sun.star.beans.XPropertySet \
+	com.sun.star.bridge.XUnoUrlResolver \
+	com.sun.star.frame.XComponentLoader \
+	com.sun.star.lang.XMultiComponentFactory \
+	com.sun.star.container.XHierarchicalNameAccess \
+	com.sun.star.registry.XSimpleRegistry
 
-TYPEFILES = $(subst \\,\,$(patsubst -T%,$(OUT)$(PS)inc$(PS)examples$(PS)%.hpp,$(TYPES)))
+TYPESLIST = $(foreach t,$(TYPES),-T$(t))
+GENHPPFILES = $(foreach t,$(TYPES),$(OUT_COMP_INC)/$(subst .,/,$(t)).hpp)
 
 # Targets
 .PHONY: ALL
-ALL : $(OUT_BIN)$(PS)DocumentLoader$(EXE_EXT) \
-	register
+ALL : \
+	CppDocumentLoaderExample
 
 include $(SETTINGS)/stdtarget.mk
 
-#$(BIN_DIR)$(PS)rdbmaker -BUCR -bUCR -O$(OUT_BIN)$(PS)DocumentLoader.rdb $(TYPES) $(BIN_DIR)$(PS)$(DKREGISTRYNAME)
+# create all component sepcific output directories
+# and use OUT_COMP_GEN for dependencies 
+$(OUT_COMP_GEN) : $(OUT)
+	$(MKDIR) $(subst /,$(PS),$@)
+	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_INC))
+	$(MKDIR) $(subst /,$(PS),$(OUT_COMP_OBJ))
 
-$(TYPEFLAGFILE) : $(DKREGISTRYNAME)
-	@echo $(TYPEFILES)
-	-$(DEL) $@ $(OUT_BIN)$(PS)DocumentLoader.rdb
-	@echo Building for $(MAKECMDGOALS)
-	$(BIN_DIR)$(PS)cppumaker -BUCR -O$(OUT)$(PS)inc$(PS)examples $(TYPES) $(DKREGISTRYNAME)
-	$(BIN_DIR)$(PS)regmerge $(OUT_BIN)$(PS)DocumentLoader.rdb / $(DKREGISTRYNAME)
-	-$(DEL) $(REGISTERFLAGFILE)
-	@echo bla > $@
+# This example type library will be extended by the office types
+$(OUT_BIN)/%.rdb :
+	-$(DEL) $(subst /,$(PS),$@)
+	regmerge $@ / $(DKREGISTRYNAME) 
 
-$(OUT_OBJ)$(PS)DocumentLoader.$(OBJ_EXT) : DocumentLoader.cxx $(OUT) $(TYPEFLAGFILE)
-	@echo $(TYPEFILES)
-	$(CC) $(CC_FLAGS) $(CC_INCLUDES) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$@ $<
+$(GENHPPFILES) : $(COMPONENT_RDB) $(OUT_COMP_GEN)
+	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
+	cppumaker -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
+	echo flagged > $@
 
-$(OUT_BIN)$(PS)DocumentLoader$(EXE_EXT) : $(OUT_OBJ)$(PS)DocumentLoader.$(OBJ_EXT)
+$(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB) $(OUT_COMP_GEN)
+	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
+	cppumaker -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
+	echo flagged > $@
+
+$(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG) $(GENHPPFILES) $(OUT_COMP_GEN)
+	$(CC) $(CC_FLAGS) $(CC_INCLUDES) -I$(OUT_COMP_INC) $(CC_DEFINES) $(CC_OUTPUT_SWITCH)$(subst /,$(PS),$@) $<
+
+$(OUT_BIN)/%$(EXE_EXT) : $(OUT_COMP_OBJ)/%.$(OBJ_EXT) $(OUT_COMP_GEN)
 ifeq "$(OS)" "WIN"
-	$(LINK) $(EXE_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_MISC)$(PS)DocumentLoader.map \
-	  $(OUT_OBJ)$(PS)DocumentLoader.$(OBJ_EXT) $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) \
-	  $(SALLIB) $(STLPORTLIB)
+	$(LINK) $(EXE_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(basename $(@F)).map \
+	  $< $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB)
 else
-	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $(OUT_OBJ)$(PS)DocumentLoader.$(OBJ_EXT) \
-	 $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
+	$(LINK) $(EXE_LINK_FLAGS) $(LINK_LIBS) -o $@ $< \
+	  $(CPPUHELPERLIB) $(CPPULIB) $(SALHELPERLIB) $(SALLIB) $(STLPORTLIB) $(STDC++LIB)
 endif
 
-$(REGISTERFLAGFILE) : $(TYPEFLAGFILE) 
+$(COMPOENNT_ENV_FLAG) : 
 	-$(DEL) $@
 	@echo --------------------------------------------------------------------------------
-	@echo                     Register components in DocumentLoader.rdb
+	@echo        Register necessrary runtime components in DocumentLoader.rdb for 
 	@echo --------------------------------------------------------------------------------
-	regcomp -register -r $(OUT_BIN)$(PS)DocumentLoader.rdb -c $(SHAREDLIB_PRE)connectr.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)$(PS)DocumentLoader.rdb -c $(SHAREDLIB_PRE)remotebridge.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)$(PS)DocumentLoader.rdb -c $(SHAREDLIB_PRE)brdgfctr.$(SHAREDLIB_EXT)
-	regcomp -register -r $(OUT_BIN)$(PS)DocumentLoader.rdb -c $(SHAREDLIB_PRE)uuresolver.$(SHAREDLIB_EXT)
+	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c $(SHAREDLIB_PRE)connectr.$(SHAREDLIB_EXT)
+	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c $(SHAREDLIB_PRE)remotebridge.$(SHAREDLIB_EXT)
+	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c $(SHAREDLIB_PRE)brdgfctr.$(SHAREDLIB_EXT)
+	regcomp -register -r $(OUT_BIN)/DocumentLoader.rdb -c $(SHAREDLIB_PRE)uuresolver.$(SHAREDLIB_EXT)
 	@echo bla > $@
 
-register: $(REGISTERFLAGFILE)
+CppDocumentLoaderExample : $(OUT_BIN)/DocumentLoader$(EXE_EXT) $(COMPOENNT_ENV_FLAG)
+	@echo --------------------------------------------------------------------------------
+	@echo Please use one of the following commands to execute the examples!
+	@echo -
+	@echo make DocumentLoader.run
+	@echo ------
+	@echo The example loads a document in the DocumentLoader example directory. If you
+	@echo want to load your own document, please use: DocumentLoader filename [connection_url]
+	@echo --------------------------------------------------------------------------------
+
+%.run: $(OUT_BIN)/DocumentLoader$(EXE_EXT)
+	cd $(OUT_BIN) && $(basename $@) "../../examples/cpp/DocumentLoader/test.sxw"
+
+.PHONY: clean
+clean :
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_INC))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
+	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_OBJ))
+	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
+	-$(DEL) $(subst /,$(PS),$(COMPOENNT_ENV_FLAG))
+	-$(DEL) $(subst /,$(PS),$(COMPONENT_RDB))
+	-$(DEL) $(subst /,$(PS),$(OUT_BIN)/DocumentLoader*)
