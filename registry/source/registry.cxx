@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jsc $ $Date: 2002-05-24 13:16:10 $
+ *  last change: $Author: hr $ $Date: 2002-08-15 16:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ OString getTempName()
 
 #ifdef UNX
     strcat(tmpPattern, "/reg_XXXXXX");
-#ifdef FREEBSD
+#if defined(FREEBSD) || defined(MACOSX)
     pTmpName = mkstemp(tmpPattern);
 #else
     pTmpName = mktemp(tmpPattern);
