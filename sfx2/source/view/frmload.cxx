@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:33:12 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:39:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,10 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
         for ( SfxObjectShell* pDoc = SfxObjectShell::GetFirst( NULL, FALSE ); pDoc; pDoc = SfxObjectShell::GetNext( *pDoc, NULL, FALSE ) )
         {
             if ( xModel == pDoc->GetModel() )
+            {
+                pFrame->SetItemSet_Impl( &aSet );
                 return pFrame->InsertDocument( pDoc );
+            }
         }
     }
 
