@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagectrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-16 11:27:27 $
+ *  last change: $Author: os $ $Date: 2002-09-25 14:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,7 +210,6 @@ void __EXPORT SvxPageWindow::Paint( const Rectangle& rRect )
 }
 
 // -----------------------------------------------------------------------
-
 void SvxPageWindow::DrawPage( const Point& rOrg, const BOOL bSecond, const BOOL bEnabled )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -313,9 +312,10 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const BOOL bSecond, const BOOL 
         Size aDrawSize( 0, aRect.GetHeight() / 6);
         aFont.SetSize(aDrawSize);
         SetFont(aFont);
-        String sText('A');
-        Point aMove(GetTextWidth(sText), GetTextHeight());
+        String sText(String::CreateFromAscii("ABC"));
+        Point aMove(1, GetTextHeight());
         sal_Unicode cArrow = 0x2193;
+        long nAWidth = GetTextWidth(String(sText.GetChar(0)));
         switch(pImpl->nFrameDirection)
         {
             case FRMDIR_HORI_LEFT_TOP:
@@ -326,7 +326,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const BOOL bSecond, const BOOL 
             break;
             case FRMDIR_HORI_RIGHT_TOP:
                 aPos = aRect.TopRight();
-                aPos.X() -= aMove.X();
+                aPos.X() -= nAWidth;
                 aMove.Y() = 0;
                 aMove.X() *= -1;
                 cArrow = 0x2190;
@@ -338,20 +338,33 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const BOOL bSecond, const BOOL 
             break;
             case FRMDIR_VERT_TOP_RIGHT:
                 aPos = aRect.TopRight();
-                aPos.X() -= aMove.X();
+                aPos.X() -= nAWidth;
                 aMove.X() = 0;
             break;
         }
-        DrawText(aPos, sText);
-        aPos += aMove;
-        sText.Assign('B');
-        DrawText(aPos, sText);
-        aPos += aMove;
-        sText.Assign('C');
-        DrawText(aPos, sText);
-        aPos += aMove;
-        sText.Assign(cArrow);
-        DrawText(aPos, sText);
+        sText.Append(cArrow);
+        for(USHORT i = 0; i < sText.Len(); i++)
+        {
+            String sDraw(sText.GetChar(i));
+            long nHDiff = 0;
+            long nCharWidth = GetTextWidth(sDraw);
+            BOOL bHorizontal = 0 == aMove.Y();
+            if(!bHorizontal)
+            {
+                nHDiff = (nAWidth - nCharWidth)/2;
+                aPos.X() += nHDiff;
+            }
+            DrawText(aPos, sDraw);
+            if(bHorizontal)
+            {
+                aPos.X() += aMove.X() < 0 ? - nCharWidth : nCharWidth;
+            }
+            else
+            {
+                aPos.X() -= nHDiff;
+                aPos.Y() += aMove.Y();
+            }
+        }
         aFont.SetSize(aSaveSize);
         SetFont(aFont);
 
