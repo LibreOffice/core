@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsh.sdi,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:42:36 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ interface ImpressEditView : DrawView
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
     ]
-    SID_TITLE_MASTERPAGE // ole : no, status : play rec
+    SID_TITLE_MASTERPAGE // deprecated, to be removed see issue #i35731#
     [
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
