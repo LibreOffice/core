@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:23:53 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,6 @@ public:
     // Groesse
     void                SetSize(const Size& rLSize);
     inline const Size&  GetSize() const;
-    void                SetFrmSize(const SwFmtFrmSize& rFrmSize);
 
     inline USHORT       GetHeightPercent() const;
 
@@ -155,14 +154,6 @@ public:
                                     long nRight = LONG_MAX );
     void                SetULSpace( long nTop   = LONG_MAX,
                                     long nBottom= LONG_MAX );
-
-    void                SetWrapType(SwSurround eSurround);
-
-    void                SetAnchorOnly(BOOL bSet);
-    void                SetContour( BOOL bSet);
-    void                SetTransparent(BOOL bTrans);
-
-    void                ProtectPosSize(BOOL bProt);
 
     void                SetCol( const SwFmtCol &rCol);
 
@@ -195,9 +186,6 @@ public:
     inline const SvxBoxItem      &GetBox() const;
     inline const SwFmtSurround   &GetSurround() const;
     inline const SwFmtFrmSize    &GetFrmSize() const;
-
-    long CalcWidthSpace();
-    long CalcHeightSpace();
 
     long CalcWidthBorder()  { return CalcLeftSpace()+CalcRightSpace(); }
     long CalcHeightBorder() { return CalcTopSpace()+CalcBottomSpace(); }
