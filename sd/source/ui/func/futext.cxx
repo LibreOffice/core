@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-07 13:08:44 $
+ *  last change: $Author: dl $ $Date: 2001-06-12 12:45:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,7 +431,7 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             pWindow->ReleaseMouse();
                             SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.pURLField->GetURL());
                             SfxStringItem aReferer(SID_REFERER, pDocSh->GetMedium()->GetName());
-                            SfxBoolItem aBrowseItem( SID_BROWSING, TRUE );
+                            SfxBoolItem aBrowseItem( SID_BROWSE, TRUE );
                             SfxViewFrame* pFrame = pViewShell->GetViewFrame();
                             pWindow->ReleaseMouse();
 

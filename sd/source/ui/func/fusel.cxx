@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-28 10:54:31 $
+ *  last change: $Author: dl $ $Date: 2001-06-12 12:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                 pWindow->ReleaseMouse();
                 SfxStringItem aStrItem(SID_FILE_NAME, aVEvt.pURLField->GetURL());
                 SfxStringItem aReferer(SID_REFERER, pDocSh->GetMedium()->GetName());
-                SfxBoolItem aBrowseItem( SID_BROWSING, TRUE );
+                SfxBoolItem aBrowseItem( SID_BROWSE, TRUE );
                 SfxViewFrame* pFrame = pViewShell->GetViewFrame();
                 pWindow->ReleaseMouse();
 
@@ -1202,7 +1202,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                 SfxStringItem aReferer(SID_REFERER, pDocSh->GetMedium()->GetName());
                 SfxViewFrame* pFrame = pViewShell->GetViewFrame();
                 SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
-                SfxBoolItem aBrowseItem( SID_BROWSING, TRUE );
+                SfxBoolItem aBrowseItem( SID_BROWSE, TRUE );
                 pWindow->ReleaseMouse();
                 pFrame->GetDispatcher()->
                     Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
@@ -1244,7 +1244,7 @@ BOOL FuSelection::AnimateObj(SdrObject* pObj, const Point& rPos)
                         SfxStringItem aStrItem(SID_FILE_NAME, pInfo->aBookmark);
                         SfxViewFrame* pFrame = pViewShell->GetViewFrame();
                         SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
-                        SfxBoolItem aBrowseItem( SID_BROWSING, TRUE );
+                        SfxBoolItem aBrowseItem( SID_BROWSE, TRUE );
                         pFrame->GetDispatcher()->
                         Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                 &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoltext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:11:56 $
+ *  last change: $Author: dl $ $Date: 2001-06-12 12:42:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ BOOL FuOutlineText::MouseButtonUp(const MouseEvent& rMEvt)
                 pWindow->ReleaseMouse();
                 SfxStringItem aStrItem( SID_FILE_NAME, ( (SvxURLField*) pField)->GetURL() );
                 SfxStringItem aReferer( SID_REFERER, pDocSh->GetMedium()->GetName() );
-                SfxBoolItem aBrowseItem( SID_BROWSING, TRUE );
+                SfxBoolItem aBrowseItem( SID_BROWSE, TRUE );
                 SfxViewFrame* pFrame = pViewShell->GetViewFrame();
 
                 if ( rMEvt.IsMod1() )

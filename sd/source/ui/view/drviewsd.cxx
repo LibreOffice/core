@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-21 16:12:20 $
+ *  last change: $Author: dl $ $Date: 2001-06-12 12:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ void SdDrawViewShell::ExecNavigatorWin( SfxRequest& rReq )
                 SfxStringItem aReferer(SID_REFERER, pDocSh->GetMedium()->GetName());
                 SfxViewFrame* pFrame = GetViewFrame();
                 SfxFrameItem aFrameItem(SID_DOCFRAME, pFrame);
-                SfxBoolItem aBrowseItem(SID_BROWSING, TRUE);
+                SfxBoolItem aBrowseItem(SID_BROWSE, TRUE);
                 pFrame->GetDispatcher()->
                 Execute(SID_OPENDOC, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                             &aStrItem, &aFrameItem, &aBrowseItem, &aReferer, 0L);
