@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 09:32:10 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 08:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,8 +160,8 @@ ODBTable::ODBTable(const OConfigurationNode& _rTableConfig,
     // register our properties
     construct();
     refreshColumns();
-    refreshKeys();
-    refreshIndexes();
+    //  refreshKeys();
+    //  refreshIndexes();
 
     // load the settings from the configuration
     if(m_aConfigurationNode.isValid())
@@ -351,35 +351,54 @@ IMPLEMENT_SERVICE_INFO1(ODBTable, "com.sun.star.sdb.dbaccess.ODBTable", SERVICE_
 // -------------------------------------------------------------------------
 Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    if(rType == getCppuType( (Reference<XRename>*)0))
-        return Any();
-    if(rType == getCppuType( (Reference<XAlterTable>*)0))
-        return Any();
-    Any aRet = OConfigurationFlushable::queryInterface( rType);
-    if(aRet.hasValue())
-        return aRet;
+    Any aRet;
+    if(m_xTable.is())
+    {
+        aRet = m_xTable->queryInterface(rType);
+        if(aRet.hasValue())
+            aRet = OTable_Base::queryInterface( rType);
+    }
+    else
+    {
+        if(rType == getCppuType( (Reference<XRename>*)0))
+            return Any();
+        if(rType == getCppuType( (Reference<XAlterTable>*)0))
+            return Any();
+        aRet = OTable_Base::queryInterface( rType);
+    }
+    if(!aRet.hasValue())
+        aRet = OConfigurationFlushable::queryInterface( rType);
 
-    return OTable_Base::queryInterface( rType);
+    return aRet;
 }
 // -------------------------------------------------------------------------
 Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException)
 {
-    Type aRenameType = getCppuType( (Reference<XRename>*)0);
-    Type aAlterType = getCppuType( (Reference<XAlterTable>*)0);
-
-    Sequence< Type > aTypes(OTable_Base::getTypes());
-    Sequence< Type > aRet(aTypes.getLength()-2);
-
-    const Type* pBegin = aTypes.getConstArray();
-    const Type* pEnd = pBegin + aTypes.getLength();
-    for(sal_Int32 i=0;pBegin != pEnd ;++pBegin)
+    if(m_xTable.is())
     {
-        if(*pBegin != aRenameType && *pBegin != aAlterType)
-        {
-            aRet.getArray()[i++] = *pBegin;
-        }
+        Reference<XTypeProvider> xTypes(m_xTable,UNO_QUERY);
+        OSL_ENSURE(xTypes.is(),"Table must be a TypePropvider!");
+        return ::comphelper::concatSequences(xTypes->getTypes(),OConfigurationFlushable::getTypes());
     }
-    return ::comphelper::concatSequences(aRet,OConfigurationFlushable::getTypes());
+    else
+    {
+        Type aRenameType = getCppuType( (Reference<XRename>*)0);
+        Type aAlterType = getCppuType( (Reference<XAlterTable>*)0);
+
+        Sequence< Type > aTypes(OTable_Base::getTypes());
+        Sequence< Type > aRet(aTypes.getLength()-2);
+
+        const Type* pBegin = aTypes.getConstArray();
+        const Type* pEnd = pBegin + aTypes.getLength();
+        for(sal_Int32 i=0;pBegin != pEnd ;++pBegin)
+        {
+            if(*pBegin != aRenameType && *pBegin != aAlterType)
+            {
+                aRet.getArray()[i++] = *pBegin;
+            }
+        }
+        return ::comphelper::concatSequences(aRet,OConfigurationFlushable::getTypes());
+    }
 }
 
 // -----------------------------------------------------------------------------
