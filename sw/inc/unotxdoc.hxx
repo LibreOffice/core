@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-28 11:06:11 $
+ *  last change: $Author: mtg $ $Date: 2001-05-11 12:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,11 +154,20 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
+#ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
+#include <com/sun/star/i18n/XForbiddenCharacters.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
 #ifndef _SVX_FMDMOD_HXX
 #include <svx/fmdmod.hxx>
+#endif
+#ifndef _SVX_UNOFORBIDDENCHARSTABLE_HXX_
+#include <svx/UnoForbiddenCharsTable.hxx>
 #endif
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -196,6 +205,8 @@ __DEF_IMPLHELPER_PRE( 26 )
     __IFC_WRITEOFFSET( 25) __IFC_WRITEOFFSET( 26)
 __DEF_IMPLHELPER_POST( 26 )
 
+class SwDoc;
+class SvxForbiddenCharactersTable;
 class SwDocShell;
 class UnoActionContext;
 class SwXBodyText;
@@ -437,6 +448,7 @@ class SwXTextDocument : public SwXTextDocumentBaseClass,
     //
     void                        Invalidate();
     void                        Reactivate(SwDocShell* pNewDocShell);
+    SwXDocumentPropertyHelper * GetPropertyHelper ();
     sal_Bool                    IsValid() const {return bObjectValid;}
 
     void                        InitNewDoc();
@@ -578,3 +590,20 @@ public:
 };
 #endif
 
+class SwXDocumentPropertyHelper : public SvxUnoForbiddenCharsTable
+{
+    com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xDashTable;
+    com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xGradientTable;
+    com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xHatchTable;
+    com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xBitmapTable;
+    com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xTransGradientTable;
+    com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xMarkerTable;
+    com::sun::star::uno::Reference < com::sun::star::uno::XInterface > xDrawDefaults;
+
+    SwDoc*  m_pDoc;
+public:
+    SwXDocumentPropertyHelper(SwDoc& rDoc);
+    ~SwXDocumentPropertyHelper();
+    com::sun::star::uno::Reference<com::sun::star::uno::XInterface> GetDrawTable(short nWhich);
+    void Invalidate();
+};
