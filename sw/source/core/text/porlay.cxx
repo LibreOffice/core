@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-14 09:06:35 $
+ *  last change: $Author: fme $ $Date: 2002-09-09 09:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,22 +846,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, SwAttrHandler& rAH,
                 "Inserting WEAK into SwScriptInfo structure" );
         ASSERT( STRING_LEN != nChg, "65K? Strange length of script section" );
 
-#ifdef BIDI
-        // for performance reasons we regard a single blank as a weak character
-        do
-        {
-            nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
-
-            if ( nChg < rTxt.Len() && CH_BLANK == rTxt.GetChar( nChg ) &&
-                 ( nChg + 1 == rTxt.Len() ||
-                   (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nChg + 1 ) == nScript ) )
-                ++nChg;
-            else
-                break;
-        } while ( TRUE );
-#else
         nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
-#endif
 
         if ( nChg > rTxt.Len() )
             nChg = rTxt.Len();

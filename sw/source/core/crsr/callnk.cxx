@@ -2,9 +2,9 @@
  *
  *  $RCSfile: callnk.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-07-29 13:46:22 $
+ *  last change: $Author: fme $ $Date: 2002-09-09 09:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,19 +226,6 @@ SwCallLink::~SwCallLink()
             if( pBreakIt->xBreak.is() )
             {
                 const String& rTxt = ((SwTxtNode*)pCNd)->GetTxt();
-#ifdef BIDI
-                const USHORT nCurrScript = pBreakIt->xBreak->getScriptType( rTxt, nCmp );
-
-                if ( ! nCmp ||
-                     ( nCurrScript != pBreakIt->xBreak->getScriptType( rTxt, nCmp - 1 ) ) ||
-                     ( ' ' == rTxt.GetChar( nCmp - 1 ) && nCmp > 2 &&
-                       nCurrScript !=
-                       pBreakIt->xBreak->getScriptType( rTxt, nCmp - 2 ) ) )
-                {
-                    rShell.CallChgLnk();
-                    return;
-                }
-#else
                 if( !nCmp ||
                     pBreakIt->xBreak->getScriptType( rTxt, nCmp )
                      != pBreakIt->xBreak->getScriptType( rTxt, nCmp - 1 ))
@@ -246,7 +233,6 @@ SwCallLink::~SwCallLink()
                     rShell.CallChgLnk();
                     return;
                 }
-#endif
             }
         }
         else

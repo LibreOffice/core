@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: od $ $Date: 2002-08-30 12:02:03 $
+ *  last change: $Author: fme $ $Date: 2002-09-09 09:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1220,9 +1220,17 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 
             aStr = rInf.GetText().Copy( nCopyStart, nCopyLen );
             pStr = &aStr;
+
+            xub_Unicode cBulletChar = CH_BULLET;
+            if ( rInf.GetFont() )
+            {
+                if ( SW_CJK == rInf.GetFont()->GetActual() )
+                    cBulletChar = 0xFF65;
+            }
+
             for( xub_StrLen i = 0; i < aStr.Len(); ++i )
                 if( CH_BLANK == aStr.GetChar( i ) )
-                    aStr.SetChar( i, CH_BULLET );
+                    aStr.SetChar( i, cBulletChar );
 #else
             aStr = rInf.GetText().Copy( rInf.GetIdx(), rInf.GetLen() );
             pStr = &aStr;
