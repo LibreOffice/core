@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2001-05-10 06:10:44 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 07:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Size = MAP_APPFONT ( 150 , 12 ) ;
         TabStop = TRUE ;
         Text [ english_us ] = "~Show changes in spreadsheet" ;
-        Text [ portuguese_brazilian ] = "ƒnderungen in der Tabelle anzeigen" ;
+        Text [ portuguese_brazilian ] = "?nderungen in der Tabelle anzeigen" ;
         Text [ swedish ] = "Visa ~‰ndringar i tabellen" ;
         Text [ danish ] = "Vis Êndringerne i regnearket" ;
         Text [ italian ] = "Mostra modifiche nella tabella" ;
@@ -114,7 +114,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Size = MAP_APPFONT ( 150 , 12 ) ;
         TabStop = TRUE ;
         Text [ english_us ] = "Show ~accepted changes" ;
-        Text [ portuguese_brazilian ] = "A~kzeptierte ƒnderungen anzeigen" ;
+        Text [ portuguese_brazilian ] = "A~kzeptierte ?nderungen anzeigen" ;
         Text [ swedish ] = "Visa a~ccepterade ‰ndringar" ;
         Text [ danish ] = "Vis accepterede Êndringer" ;
         Text [ italian ] = "Mostra i cambiamenti a~ccettati" ;
@@ -143,7 +143,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         Size = MAP_APPFONT ( 150 , 12 ) ;
         TabStop = TRUE ;
         Text [ english_us ] = "Show ~rejected changes" ;
-        Text [ portuguese_brazilian ] = "A~bgelehnte ƒnderungen anzeigen" ;
+        Text [ portuguese_brazilian ] = "A~bgelehnte ?nderungen anzeigen" ;
         Text [ swedish ] = "Visa ~ej accepterade ‰ndringar" ;
         Text [ danish ] = "Vis forkastede Êndringer" ;
         Text [ italian ] = "Mostra i cambiamenti ~non accettati" ;
@@ -246,7 +246,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         QuickHelpText [ portuguese ] = "Afastar/Aproximar" ;
     QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸/”‚ÂÎË˜ËÚ¸";
         QuickHelpText[ polish ] = "Pomniejsz/PowiÍksz";
-        QuickHelpText[ japanese ] = "èkè¨/ägëÂ";
+        QuickHelpText[ japanese ] = "èkè¨/ägëÂ!";
         QuickHelpText[ chinese_simplified ] = "Àı–°/∑≈¥Û";
         QuickHelpText[ chinese_traditional ] = "¡Y§p/©Ò§j";
         QuickHelpText[ arabic ] = " ’€Ì—/ ﬂ»Ì—";
@@ -259,7 +259,7 @@ ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
         QuickHelpText[ finnish ] = "Pienenn‰/Suurenna!";
     };
     Text [ english_us ] = "Show Changes" ;
-    Text [ portuguese_brazilian ] = "ƒnderungen anzeigen" ;
+    Text [ portuguese_brazilian ] = "?nderungen anzeigen" ;
     Text [ swedish ] = "Visa ‰ndringar" ;
     Text [ danish ] = "Vis Êndringer" ;
     Text [ italian ] = "Mostra le modifiche" ;
