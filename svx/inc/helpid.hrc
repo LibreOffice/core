@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2001-10-25 14:09:57 $
+ *  last change: $Author: cl $ $Date: 2002-03-27 08:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,6 +490,8 @@
 #define HID_GALLERY_ICONVIEW                    (HID_SVX_START + 425)
 #define HID_GALLERY_LISTVIEW                    (HID_SVX_START + 426)
 #define HID_SVXDLG_FILTER_WARNING               (HID_SVX_START + 427)
+
+#define HID_TRANS_POSITION_SIZE                 (HID_SVX_START + 428)
 
 // -----------------------------------------------------------------------
 // "Uberlaufpr"ufung -----------------------------------------------------

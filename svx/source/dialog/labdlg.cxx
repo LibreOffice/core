@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-28 13:37:22 $
+ *  last change: $Author: cl $ $Date: 2002-03-27 08:49:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,10 +594,8 @@ SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrVie
 
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 
-    AddTabPage( RID_SVXPAGE_POSITION, SvxPositionTabPage::Create,
-                            SvxPositionTabPage::GetRanges );
-    AddTabPage( RID_SVXPAGE_SIZE, SvxSizeTabPage::Create,
-                            SvxSizeTabPage::GetRanges );
+    AddTabPage( RID_SVXPAGE_POSITION_SIZE, SvxPositionSizeTabPage::Create,
+                            SvxPositionSizeTabPage::GetRanges );
     AddTabPage( RID_SVXPAGE_CAPTION, SvxCaptionTabPage::Create,
                             SvxCaptionTabPage::GetRanges );
 }
@@ -614,16 +612,17 @@ void SvxCaptionTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     switch( nId )
     {
-        case RID_SVXPAGE_POSITION:
-            ( (SvxPositionTabPage&) rPage ).SetView( pView );
-            ( (SvxPositionTabPage&) rPage ).Construct();
-            if(nAnchorCtrls)
-                ( (SvxPositionTabPage&) rPage ).ShowAnchorCtrls(nAnchorCtrls);
-        break;
+        case RID_SVXPAGE_POSITION_SIZE:
+            ( (SvxPositionSizeTabPage&) rPage ).SetView( pView );
+            ( (SvxPositionSizeTabPage&) rPage ).Construct();
+            if( nAnchorCtrls & SVX_OBJ_NORESIZE )
+                ( (SvxPositionSizeTabPage&) rPage ).DisableResize();
 
-        case RID_SVXPAGE_SIZE:
-            ( (SvxSizeTabPage&) rPage ).SetView( pView );
-            ( (SvxSizeTabPage&) rPage ).Construct();
+            if( nAnchorCtrls & SVX_OBJ_NOPROTECT )
+                ( (SvxPositionSizeTabPage&) rPage ).DisableProtect();
+
+            if(nAnchorCtrls & 0x00ff )
+                ( (SvxPositionSizeTabPage&) rPage ).ShowAnchorCtrls(nAnchorCtrls);
         break;
 
         case RID_SVXPAGE_CAPTION:
