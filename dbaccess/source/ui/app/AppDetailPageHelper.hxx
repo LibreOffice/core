@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:28:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,6 @@ namespace dbaui
         ::svtools::ODocumentInfoPreview
                             m_aDocumentInfo;
         Window*             m_pTablePreview;
-        Timer               m_aPreviewTimer;
         ::std::auto_ptr<PopupMenu> m_aMenu;
         PreviewMode         m_ePreviewMode;
         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
@@ -222,8 +221,7 @@ namespace dbaui
 
         DECL_LINK(PreviewChangeHdl, void*);
         // click a TB slot
-        DECL_LINK(OnToolBoxSelected, ToolBox*);
-        DECL_LINK(OnToolBoxClicked, ToolBox*);
+        DECL_LINK(OnDropdownClickHdl, ToolBox*);
 
         inline OAppBorderWindow* getBorderWin() const { return m_pBorderWin; }
 
