@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2002-06-20 08:17:00 $
+ *  last change: $Author: cl $ $Date: 2002-09-04 14:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1174,7 +1174,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
         case SID_CONVERT_TO_METAFILE:
         case SID_CONVERT_TO_BITMAP:
         {
-            if ( pDrView->IsPresObjSelected() )
+            if ( pDrView->IsPresObjSelected(true,true,true) )
             {
                 InfoBox(pWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
             }
