@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:32:06 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,15 +479,10 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
     DPMAP( "FillBitmapOffsetX",         XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET,     XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X ),
     DPMAP( "FillBitmapOffsetY",         XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET, XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y ),
 
-    DPMAP( "IsHeaderVisible",           XML_NAMESPACE_PRESENTATION, XML_DISPLAY_HEADER,         XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_HEADER_VISIBLE ),
-//  DMAP( "HeaderText",                 XML_NAMESPACE_DRAW, XML_HEADER_TEXT,            XML_TYPE_STRING, CTF_HEADER_TEXT ),
-    DPMAP( "IsFooterVisible",           XML_NAMESPACE_PRESENTATION, XML_DISPLAY_FOOTER,         XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_FOOTER_VISIBLE ),
-//  DMAP( "FooterText",                 XML_NAMESPACE_DRAW, XML_FOOTER_TEXT,            XML_TYPE_STRING, CTF_FOOTER_TEXT ),
-    DPMAP( "IsPageNumberVisible",       XML_NAMESPACE_PRESENTATION, XML_DISPLAY_PAGE_NUMBER,    XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_NUMBER_VISIBLE ),
-    DPMAP( "IsDateTimeVisible",         XML_NAMESPACE_PRESENTATION, XML_DISPLAY_DATE_TIME,      XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_DATE_TIME_VISIBLE ),
-//  DMAP( "IsDateTimeFixed",            XML_NAMESPACE_DRAW, XML_DATE_TIME_UPDATE,       XML_SD_TYPE_DATETIMEUPDATE, CTF_DATE_TIME_UPDATE ),
-//  DMAP( "DateTimeText",               XML_NAMESPACE_DRAW, XML_DATE_TIME_TEXT,         XML_TYPE_STRING, CTF_DATE_TIME_TEXT ),
-//  DMAP( "DateTimeFormat",             XML_NAMESPACE_DRAW, XML_DATE_TIME_FORMAT,       XML_SD_TYPE_DATETIME_FORMAT, CTF_DATE_TIME_FORMAT ),
+    DPMAP( "IsHeaderVisible",           XML_NAMESPACE_PRESENTATION, XML_DISPLAY_HEADER,         XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_HEADER_VISIBLE ),
+    DPMAP( "IsFooterVisible",           XML_NAMESPACE_PRESENTATION, XML_DISPLAY_FOOTER,         XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_FOOTER_VISIBLE ),
+    DPMAP( "IsPageNumberVisible",       XML_NAMESPACE_PRESENTATION, XML_DISPLAY_PAGE_NUMBER,    XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_PAGE_NUMBER_VISIBLE ),
+    DPMAP( "IsDateTimeVisible",         XML_NAMESPACE_PRESENTATION, XML_DISPLAY_DATE_TIME,      XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_DATE_TIME_VISIBLE ),
 
     DPMAP( "TransitionType",            XML_NAMESPACE_SMIL, XML_TYPE,                   XML_SD_TYPE_TRANSITION_TYPE, CTF_PAGE_TRANSITION_TYPE ),
     DPMAP( "TransitionSubtype",         XML_NAMESPACE_SMIL, XML_SUBTYPE,                XML_SD_TYPE_TRANSTIION_SUBTYPE, CTF_PAGE_TRANSITION_SUBTYPE ),
@@ -498,15 +493,10 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
 
 const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[] =
 {
-    DPMAP( "IsHeaderVisible",               XML_NAMESPACE_PRESENTATION, XML_DISPLAY_HEADER,         XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_HEADER_VISIBLE ),
-//  DPMAP( "HeaderText",                    XML_NAMESPACE_DRAW, XML_HEADER_TEXT,            XML_TYPE_STRING, CTF_HEADER_TEXT ),
-    DPMAP( "IsFooterVisible",               XML_NAMESPACE_PRESENTATION, XML_DISPLAY_FOOTER,         XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_FOOTER_VISIBLE ),
-//  DPMAP( "FooterText",                    XML_NAMESPACE_DRAW, XML_FOOTER_TEXT,            XML_TYPE_STRING, CTF_FOOTER_TEXT ),
-    DPMAP( "IsPageNumberVisible",           XML_NAMESPACE_PRESENTATION, XML_DISPLAY_PAGE_NUMBER,    XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_PAGE_NUMBER_VISIBLE ),
-    DPMAP( "IsDateTimeVisible",             XML_NAMESPACE_PRESENTATION, XML_DISPLAY_DATE_TIME,      XML_SD_TYPE_PRESPAGE_VISIBILITY, CTF_DATE_TIME_VISIBLE ),
-//  DPMAP( "IsDateTimeFixed",               XML_NAMESPACE_DRAW, XML_DISPLAY_DATE_TIME,      XML_SD_TYPE_DATETIMEUPDATE, CTF_DATE_TIME_UPDATE ),
-//  DPMAP( "DateTimeText",                  XML_NAMESPACE_DRAW, XML_DATE_TIME_TEXT,         XML_TYPE_STRING, CTF_DATE_TIME_TEXT ),
-//  DPMAP( "DateTimeFormat",                XML_NAMESPACE_DRAW, XML_DATE_TIME_FORMAT,       XML_SD_TYPE_DATETIME_FORMAT, CTF_DATE_TIME_FORMAT ),
+    DPMAP( "IsHeaderVisible",               XML_NAMESPACE_PRESENTATION, XML_DISPLAY_HEADER,         XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_HEADER_VISIBLE ),
+    DPMAP( "IsFooterVisible",               XML_NAMESPACE_PRESENTATION, XML_DISPLAY_FOOTER,         XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_FOOTER_VISIBLE ),
+    DPMAP( "IsPageNumberVisible",           XML_NAMESPACE_PRESENTATION, XML_DISPLAY_PAGE_NUMBER,    XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_PAGE_NUMBER_VISIBLE ),
+    DPMAP( "IsDateTimeVisible",             XML_NAMESPACE_PRESENTATION, XML_DISPLAY_DATE_TIME,      XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE, CTF_DATE_TIME_VISIBLE ),
 
     { 0L }
 };
@@ -944,6 +934,56 @@ sal_Bool XMLMoveSizeProtectHdl::exportXML( OUString& rStrExpValue, const Any& rV
     return sal_True;
 }
 
+
+//////////////////////////////////////////////////////////////////////////////
+
+class XMLSdHeaderFooterVisibilityTypeHdl : public XMLPropertyHandler
+{
+public:
+    virtual ~XMLSdHeaderFooterVisibilityTypeHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+XMLSdHeaderFooterVisibilityTypeHdl::~XMLSdHeaderFooterVisibilityTypeHdl()
+{
+}
+
+sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
+        const ::rtl::OUString& rStrImpValue,
+        ::com::sun::star::uno::Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    // #i38644#
+    // attributes with this type where saved with VISIBLE|HIDDEN prior
+    // to src680m67. So we have to import that correctly
+    const sal_Bool bBool = IsXMLToken(rStrImpValue, XML_TRUE) || IsXMLToken(rStrImpValue, XML_VISIBLE);
+    rValue <<= bBool;
+    return bBool || IsXMLToken(rStrImpValue, XML_FALSE) || IsXMLToken(rStrImpValue, XML_HIDDEN);
+}
+
+sal_Bool XMLSdHeaderFooterVisibilityTypeHdl::exportXML(
+        OUString& rStrExpValue,
+        const Any& rValue,
+        const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+      OUStringBuffer aOut;
+    sal_Bool bValue;
+
+    if (rValue >>= bValue)
+    {
+        rUnitConverter.convertBool( aOut, bValue );
+        rStrExpValue = aOut.makeStringAndClear();
+
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
+
 //////////////////////////////////////////////////////////////////////////////
 
 XMLSdPropHdlFactory::XMLSdPropHdlFactory( uno::Reference< frame::XModel > xModel, SvXMLExport* pExport )
@@ -1216,6 +1256,9 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             case XML_SD_TYPE_MOVE_PROTECT:
             case XML_SD_TYPE_SIZE_PROTECT:
                 pHdl = new XMLMoveSizeProtectHdl( nType );
+                break;
+            case XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE:
+                pHdl = new XMLSdHeaderFooterVisibilityTypeHdl();
                 break;
         }
 
