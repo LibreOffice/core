@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUsers.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:21 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,10 +135,12 @@ void SAL_CALL OUsers::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOu
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (index < 0 || index >= getCount())
-                throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     m_pCollection->Delete(OLEVariant(index));
 
     OCollection_TYPE::dropByIndex(index);
 }
+// -----------------------------------------------------------------------------
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTables.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 19:05:48 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ void SAL_CALL OCalcTables::dropByIndex( sal_Int32 index ) throw(SQLException, In
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (index < 0 || index >= getCount())
-                throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     dropByName((*m_aElements[index]).first);
 }

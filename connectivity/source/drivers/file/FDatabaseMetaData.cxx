@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:31:44 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 
 using namespace com::sun::star::ucb;
 using namespace connectivity::file;
+using namespace connectivity;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
@@ -122,13 +123,10 @@ ODatabaseMetaData::~ODatabaseMetaData()
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-
-
-//  OResultSet* pResult = new OResultSet(hStmt);
-//      Reference< XResultSet > xRef = pResult;
-//  pResult->openTypeInfo();
-//  return xRef;
-    return Reference< XResultSet >();
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    Reference< XResultSet > xRef = pResult;
+    pResult->setTypeInfoMap();
+    return xRef;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)

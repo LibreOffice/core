@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BIndexes.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 09:34:22 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
+
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -233,6 +237,7 @@ void SAL_CALL OIndexes::dropByName( const ::rtl::OUString& elementName ) throw(S
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql);
+        ::comphelper::disposeComponent(xStmt);
     }
     OCollection_TYPE::dropByName(elementName);
 }
@@ -241,7 +246,7 @@ void SAL_CALL OIndexes::dropByIndex( sal_Int32 index ) throw(SQLException, Index
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     dropByName(m_aElements[index]->first);
 }

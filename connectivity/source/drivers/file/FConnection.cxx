@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 15:50:48 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,6 +174,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     //  String aFileName = aURL.PathToFileName();
     aFileName = aURL.GetMainURL();
+    m_aURL = aFileName;
 
     if(!aFileName.Len())
         aFileName = aDSN;

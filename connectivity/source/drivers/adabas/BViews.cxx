@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 07:03:17 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,14 @@ Reference< XNamed > OViews::createObject(const ::rtl::OUString& _rName)
     aSchema = _rName.copy(0,nLen);
     aName   = _rName.copy(nLen+1);
 
-    ::rtl::OUString sStmt = ::rtl::OUString::createFromAscii("SELECT DISTINCT DOMAIN.VIEWDEFS.DEFINITION FROM DOMAIN.VIEWDEFS WHERE DOMAIN.VIEWDEFS.OWNER = '");
-    sStmt += aSchema;
-    sStmt += ::rtl::OUString::createFromAscii("' AND DOMAIN.VIEWDEFS.VIEWNAME = '");
+    ::rtl::OUString sStmt = ::rtl::OUString::createFromAscii("SELECT DISTINCT * FROM DOMAIN.SHOW_VIEW WHERE ");
+    if(aSchema.getLength())
+    {
+        sStmt += ::rtl::OUString::createFromAscii("OWNER = '");
+        sStmt += aSchema;
+        sStmt += ::rtl::OUString::createFromAscii("' AND ");
+    }
+    sStmt += ::rtl::OUString::createFromAscii("VIEWNAME = '");
     sStmt += aName;
     sStmt += ::rtl::OUString::createFromAscii("'");
     Reference< XStatement > xStmt = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->createStatement(  );
@@ -136,7 +141,11 @@ Reference< XNamed > OViews::createObject(const ::rtl::OUString& _rName)
         Reference< XRow > xRow(xResult,UNO_QUERY);
         if(xResult->next()) // there can be only one table with this name
         {
-            connectivity::sdbcx::OView* pRet = new connectivity::sdbcx::OView(sal_True,aName,CheckOption::NONE,xRow->getString(1),aSchema);
+            connectivity::sdbcx::OView* pRet = new connectivity::sdbcx::OView(sal_True,
+                                                                                aName,
+                                                                                CheckOption::NONE,
+                                                                                xRow->getString(3),
+                                                                                aSchema);
             xRet = pRet;
         }
     }
@@ -221,7 +230,7 @@ void SAL_CALL OViews::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOu
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     if (index < 0 || index >= getCount())
-        throw IndexOutOfBoundsException();
+        throw IndexOutOfBoundsException(::rtl::OUString::valueOf(index),*this);
 
     dropByName((*m_aElements[index]).first);
 }

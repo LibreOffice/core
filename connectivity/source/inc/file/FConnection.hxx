@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:41 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,8 +211,10 @@ namespace connectivity
             // create a catalog or return the catalog already created
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier > createCatalog();
             String getExtension() const { return m_aFilenameExtension;}
+            String getURL() const { return m_aURL; }
 
             OFileDriver*        getDriver() const { return m_pDriver; }
+
         };
     }
 }

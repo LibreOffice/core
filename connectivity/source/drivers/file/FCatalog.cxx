@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCatalog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 09:05:49 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,4 +132,27 @@ Any SAL_CALL OFileCatalog::queryInterface( const Type & rType ) throw(RuntimeExc
     typedef sdbcx::OCatalog OFileCatalog_BASE;
     return OFileCatalog_BASE::queryInterface(rType);
 }
+// -----------------------------------------------------------------------------
+Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException)
+{
+    typedef sdbcx::OCatalog OFileCatalog_BASE;
+
+    Sequence< Type > aTypes = OFileCatalog_BASE::getTypes();
+    Sequence< Type > aRet(aTypes.getLength()-3);
+    const Type* pBegin = aTypes.getConstArray();
+    const Type* pEnd = pBegin + aTypes.getLength();
+    sal_Int32 i=0;
+    for(;pBegin != pEnd;++pBegin,++i)
+    {
+        if(!(*pBegin == ::getCppuType((const Reference<XGroupsSupplier>*)0) ||
+            *pBegin == ::getCppuType((const Reference<XUsersSupplier>*)0)   ||
+            *pBegin == ::getCppuType((const Reference<XViewsSupplier>*)0)))
+        {
+            aRet.getArray()[i] = *pBegin;
+        }
+    }
+    return aRet;
+}
+// -----------------------------------------------------------------------------
+
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 16:54:34 $
+ *  last change: $Author: oj $ $Date: 2001-03-30 14:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -443,7 +443,13 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         if(columnIndex > m_nLastColumnPos)
             fillRow(columnIndex);
         Sequence< sal_Int8 > nRet;
-        m_aRow[columnIndex] >>= nRet;
+        if(!(m_aRow[columnIndex] >>= nRet) && m_aRow[columnIndex].hasValue())
+        {   // something went wrong so we have another type here
+            OSL_ENSURE(TypeClass_STRING == m_aRow[columnIndex].getValueTypeClass(),"ONLY string types supported!");
+            ::rtl::OUString sRet;
+            m_aRow[columnIndex] >>= sRet;
+            return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(sRet.getStr()),sizeof(sal_Unicode)*sRet.getLength());
+        }
         return nRet;
     }
 
