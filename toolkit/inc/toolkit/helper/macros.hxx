@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:35:50 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 14:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,6 +202,15 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
 
 // -------------------------------------------------------------------------------------
 
+#if OSL_DEBUG_LEVEL > 0
+    #define DISPLAY_EXCEPTION( ClassName, MethodName, e )    \
+        ::rtl::OString sMessage( #ClassName "::" #MethodName ": caught an exception!\n" ); \
+        sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US ); \
+        OSL_ENSURE( sal_False, sMessage.getStr() );
+#else
+    #define DISPLAY_EXCEPTION( ClassName, MethodName, e )
+#endif
+
 #define IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ClassName, InterfaceName, MethodName, EventType ) \
 void ClassName::MethodName( const EventType& e ) throw(::com::sun::star::uno::RuntimeException) \
 { \
@@ -221,6 +230,10 @@ void ClassName::MethodName( const EventType& e ) throw(::com::sun::star::uno::Ru
             OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
             if ( e.Context == xListener || !e.Context.is() ) \
                 aIt.remove(); \
+        } \
+        catch( ::com::sun::star::uno::RuntimeException e ) \
+        { \
+            DISPLAY_EXCEPTION( ClassName, MethodName, e ) \
         } \
     } \
 }
