@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astscope.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,8 +180,8 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
 
     // The name does not start with "::"
     // Look up in the local scope and start with the first scope
-    OString firstScope = scopedName.indexOf(':') > 0 ?
-                            scopedName.getToken(0, ':') : scopedName;
+    sal_Int32 nIndex = scopedName.indexOf(':');
+    OString firstScope =  nIndex > 0 ? scopedName.copy(0, nIndex) : scopedName;
     sal_Bool    bFindFirstScope = sal_True;
     pDecl = lookupByNameLocal(firstScope);
     if ( !pDecl )
@@ -212,17 +212,15 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
 
     if ( bFindFirstScope && (firstScope != scopedName) )
     {
-        sal_Int32 count = scopedName.getTokenCount(':');
-        for ( sal_Int32 i = 2; i < count; i += 2 )
+        sal_Int32 nIndex = 1;
+        do
         {
             pScope = declAsScope(pDecl);
-
-            if ( pScope )
-                pDecl = pScope->lookupByNameLocal(scopedName.getToken(i, ':'));
-
-            if ( !pDecl )
+            if( pScope )
+                pDecl = pScope->lookupByNameLocal(scopedName.getToken(1, ':', nIndex ));
+            if( !pDecl )
                 return NULL;
-        }
+        } while( nIndex != -1 );
     }
 
 //  if ( !pDecl )

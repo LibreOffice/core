@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.ll,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-27 10:53:19 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ oneway		return IDL_ONEWAY;
 	}
 \:\:	{
 		yylval.strval = yytext;
-		return IDL_SCOPESEPERATOR;
+		return IDL_SCOPESEPARATOR;
 	}
 
 "/*"	{ 
@@ -378,7 +378,10 @@ oneway		return IDL_ONEWAY;
 
 <COMMENT>[*]+"/"  {
 				docu = docu.trim();
-				idlc()->setLineNumber( beginLine + docu.getTokenCount('\n') - 1);
+                sal_Int32 nIndex = 0;
+                int count = 0;
+                do { docu.getToken( 0, '\n', nIndex ); count++; } while( nIndex != -1 );
+				idlc()->setLineNumber( beginLine + count - 1);
 			  	BEGIN( INITIAL );
 			}
 
@@ -405,14 +408,20 @@ oneway		return IDL_ONEWAY;
 
 <DOCU>"\n"[ \t]*"*/" 	{
 				docu = docu.trim();
-				idlc()->setLineNumber( beginLine + docu.getTokenCount('\n') - 1);
+                sal_Int32 nIndex = 0;
+                int count = 0;
+                do { docu.getToken( 0, '\n', nIndex ); count++; } while( nIndex != -1 );
+				idlc()->setLineNumber( beginLine + count - 1);
 				idlc()->setDocumentation(docu);
 			  	BEGIN( INITIAL );
 			}
 
 <DOCU>"*/"	{
 				docu = docu.trim();
-				idlc()->setLineNumber( beginLine + docu.getTokenCount('\n') - 1);
+                sal_Int32 nIndex = 0;
+                int count = 0;
+                do { docu.getToken( 0, '\n', nIndex ); count++; } while( nIndex != -1 );
+				idlc()->setLineNumber( beginLine + count - 1);
 				idlc()->setDocumentation(docu);
 			  	BEGIN( INITIAL );
 			}

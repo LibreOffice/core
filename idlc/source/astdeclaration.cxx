@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astdeclaration.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,20 +75,16 @@ static OString sGlobal("::");
 static OString convertName(const OString& name)
 {
     OStringBuffer nameBuffer(name.getLength()+1);
-    sal_Int32 count = name.getTokenCount(':');
-    if ( count )
+    sal_Int32 nIndex = 0;
+    do
     {
-        sal_Int32 offset = (name.indexOf("::") == 0 ? 2 : 0);
-        for (sal_Int32 i=offset; i < count; i+=2 )
+        OString token( name.getToken( 0, ':', nIndex ) );
+        if( token.getLength() )
         {
             nameBuffer.append('/');
-            nameBuffer.append(name.getToken(i, ':'));
+            nameBuffer.append( token );
         }
-    } else
-    {
-        nameBuffer.append('/');
-        nameBuffer.append(name);
-    }
+    } while( nIndex != -1 );
     return nameBuffer.makeStringAndClear();
 }
 
@@ -138,27 +134,34 @@ AstDeclaration::~AstDeclaration()
 
 void AstDeclaration::setName(const ::rtl::OString& name)
 {
-    sal_Int32 count = name.getTokenCount(':');
-    if ( count > 0 )
-    {
-        m_localName = name.getToken(count-1, ':');
-        m_scopedName = name;
-    } else if ( m_pScope )
-    {
-        m_localName = name;
-        AstDeclaration* pDecl = scopeAsDecl(m_pScope);
-        if (pDecl)
-        {
-            m_scopedName = pDecl->getScopedName();
-            if (m_scopedName.getLength() > 0)
-                m_scopedName += sGlobal;
-            m_scopedName += m_localName;
-        }
-    } else
-    {
-        m_localName = name;
-        m_scopedName = name;
-    }
+    m_scopedName = name;
+    sal_Int32 nIndex = name.lastIndexOf( ':' );
+    m_localName = name.copy( nIndex != -1 ? nIndex+1 : 0 );
+
+// Huh ? There is always at least one token
+
+//  sal_Int32 count = name.getTokenCount(':');
+
+//  if ( count > 0 )
+//  {
+//      m_localName = name.getToken(count-1, ':');
+//      m_scopedName = name;
+//  } else if ( m_pScope )
+//  {
+//      m_localName = name;
+//      AstDeclaration* pDecl = scopeAsDecl(m_pScope);
+//      if (pDecl)
+//      {
+//          m_scopedName = pDecl->getScopedName();
+//          if (m_scopedName.getLength() > 0)
+//              m_scopedName += sGlobal;
+//          m_scopedName += m_localName;
+//      }
+//  } else
+//  {
+//      m_localName = name;
+//      m_scopedName = name;
+//  }
     m_fullName = convertName(m_scopedName);
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcproduce.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,9 @@
 #endif
 
 #ifdef SAL_UNX
-extern sal_Char SEPERATOR;
+extern sal_Char SEPARATOR;
 #else
-extern sal_Char SEPERATOR;
+extern sal_Char SEPARATOR;
 #endif
 
 using namespace ::rtl;
@@ -93,26 +93,24 @@ StringList* pCreatedDirectories = NULL;
 static sal_Bool checkOutputPath(const OString& completeName)
 {
     OStringBuffer buffer(completeName.getLength());
-    sal_Int32 count = completeName.getTokenCount(SEPERATOR) - 1;
-    sal_Int32 offset=0;
 
-    if ( !count )
+    if ( completeName.indexOf( SEPARATOR ) == -1 )
         return sal_True;
 
-    OString token(completeName.getToken(0, SEPERATOR));
+    sal_Int32 nIndex = 0;
+    OString token(completeName.getToken(0, SEPARATOR, nIndex));
     const sal_Char* p = token.getStr();
     if (strcmp(p, "..") == 0
         || *(p+1) == ':'
         || strcmp(p, ".") == 0)
     {
-        offset++;
         buffer.append(token);
-        buffer.append(SEPERATOR);
+        buffer.append(SEPARATOR);
     }
 
-    for (sal_Int32 i=offset; i < count; i++)
+    do
     {
-        buffer.append(completeName.getToken(i, SEPERATOR));
+        buffer.append(completeName.getToken(0, SEPARATOR, nIndex));
 
         if ( buffer.getLength() > 0 )
         {
@@ -135,9 +133,9 @@ static sal_Bool checkOutputPath(const OString& completeName)
                 pCreatedDirectories->push_front(buffer.getStr());
             }
         }
-        if ( i+1 < count )
-            buffer.append(SEPERATOR);
-    }
+        if ( nIndex != -1 )
+            buffer.append(SEPARATOR);
+    } while( nIndex != -1 );
     return sal_True;
 }
 
@@ -186,12 +184,12 @@ sal_Int32 SAL_CALL produceFile(const OString& fileName)
         regFileName = pOptions->getOption("-O");
         sal_Char c = regFileName.getStr()[regFileName.getLength()-1];
 
-        if ( c != SEPERATOR )
-            regFileName += OString::valueOf(SEPERATOR);
+        if ( c != SEPARATOR )
+            regFileName += OString::valueOf(SEPARATOR);
     }
 
     OString regTmpName(regFileName);
-    OString strippedFileName(fileName.copy(fileName.lastIndexOf(SEPERATOR) + 1));
+    OString strippedFileName(fileName.copy(fileName.lastIndexOf(SEPARATOR) + 1));
     regFileName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
     regTmpName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "_idlc_");
 

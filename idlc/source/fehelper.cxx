@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fehelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-11 07:24:23 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,9 @@ FeDeclarator::~FeDeclarator()
 sal_Bool FeDeclarator::checkType(AstDeclaration *type)
 {
     OString tmp(m_name);
-    sal_uInt32 count = 0;
-    if ( (count = m_name.getTokenCount(':')) > 0 )
-        tmp = m_name.getToken(count-1, ':');
+    sal_Int32 count = m_name.lastIndexOf( ':' );
+    if( count != -1 )
+        tmp = m_name.copy( count+1 );
 
     if (tmp == type->getLocalName())
         return sal_False;

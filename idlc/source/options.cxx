@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-09 07:57:56 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,10 +157,9 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     if ( inc.indexOf(';') > 0 )
                     {
                         OString tmp(s);
-                        sal_Int32 count = tmp.getTokenCount(';');
+                        sal_Int32 nIndex = 0;
                         inc = OString();
-                        for (sal_Int32 i=0; i < count; i++)
-                            inc = inc + " -I" + tmp.getToken(i, ';');
+                        do inc = inc + "-I" + tmp.getToken( 0, ';', nIndex ); while( nIndex != -1 );
                     } else
                         inc = OString("-I") + s;
 
@@ -264,7 +263,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
             } else
             {
                 OString name(av[i]);
-                name = name.toLowerCase();
+                name = name.toAsciiLowerCase();
                 if ( name.lastIndexOf(".idl") != (name.getLength() - 4) )
                 {
                     throw IllegalArgument("'" + OString(av[i]) +

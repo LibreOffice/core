@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcmain.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: pl $ $Date: 2001-05-10 13:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,9 @@
 #endif
 
 #ifdef SAL_UNX
-sal_Char SEPERATOR = '/';
+sal_Char SEPARATOR = '/';
 #else
-sal_Char SEPERATOR = '\\';
+sal_Char SEPARATOR = '\\';
 #endif
 
 using namespace ::rtl;
@@ -105,11 +105,11 @@ void SAL_CALL main( int argc, char** argv )
                 outputName = options.getOption("-O");
                 sal_Char c = outputName.getStr()[outputName.getLength()-1];
 
-                if ( c != SEPERATOR )
-                    outputName += OString::valueOf(SEPERATOR);
+                if ( c != SEPARATOR )
+                    outputName += OString::valueOf(SEPARATOR);
             }
 
-            OString strippedFileName(files[i].copy(files[i].lastIndexOf(SEPERATOR) + 1));
+            OString strippedFileName(files[i].copy(files[i].lastIndexOf(SEPARATOR) + 1));
             outputName += strippedFileName.replaceAt(strippedFileName.getLength() -3 , 3, "urd");
             removeIfExists(outputName);
         } else
