@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:53:05 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ TokenTable aTokTable_Java [] = {        // Token-Tabelle:
 
 // Der Konstruktor ermittelt die Laenge der Token-Tabelle.
 
-SbiTokenizer::SbiTokenizer( const String& rSrc, StarBASIC* pb )
+SbiTokenizer::SbiTokenizer( const ::rtl::OUString& rSrc, StarBASIC* pb )
            : SbiScanner( rSrc, pb )
 {
     pTokTable = aTokTable_Basic;
