@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-05 09:53:34 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -566,7 +566,7 @@ void OComboBoxModel::loadData()
 
                 aStatement += quoteName(aQuote, aFieldName);
                 aStatement += ::rtl::OUString::createFromAscii(" FROM ");
-                aStatement += quoteTableName(xMeta, m_aListSource);
+                aStatement += quoteTableName(xMeta, m_aListSource,::dbtools::eInDataManipulation);
 
                 xStmt = xConnection->createStatement();
                 xListCursor = xStmt->executeQuery(aStatement);

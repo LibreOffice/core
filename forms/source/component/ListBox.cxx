@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2002-06-05 09:54:34 $
+ *  last change: $Author: oj $ $Date: 2002-10-07 13:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -726,7 +726,7 @@ void OListBoxModel::loadData()
                     aStatement += quoteName(aQuote, aBoundFieldName);
                 }
                 aStatement += ::rtl::OUString::createFromAscii(" FROM ");
-                aStatement += quoteTableName(xMeta, sListSource);
+                aStatement += quoteTableName(xMeta, sListSource,::dbtools::eInDataManipulation);
 
                 xContentSetProperties->setPropertyValue(PROPERTY_COMMAND, makeAny(aStatement));
                 bExecute = sal_True;
