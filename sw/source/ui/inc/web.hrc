@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,10 @@
 #define STR_SHELLNAME_WEBTEXT                   (RC_WEB_BEGIN + 6)
 #define STR_SHELLNAME_WEBFRAME                  (RC_WEB_BEGIN + 7)
 #define RID_WEBFRAME_TOOLBOX                    (RC_WEB_BEGIN + 8)
-#define STR_WRITER_WEBDOC_FULLTYPE              (RC_WEB_BEGIN + 9)
+#define STR_WRITER_WEBDOC_FULLTYPE_50           (RC_WEB_BEGIN + 9)
 #define RID_WEBGRAPHIC_TOOLBOX                  (RC_WEB_BEGIN + 10)
 #define RID_WEBOLE_TOOLBOX                      (RC_WEB_BEGIN + 11)
+#define STR_WRITER_WEBDOC_FULLTYPE              (RC_WEB_BEGIN + 12)
 
 
 #define MN_WEBFILE                              (RC_WEB_BEGIN + 30)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:26 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ public:
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   long nVersion = SOFFICE_FILEFORMAT_NOW ) const;
+                                   long nVersion = SOFFICE_FILEFORMAT_CURRENT ) const;
 };
 
 #endif
