@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: vg $ $Date: 2002-07-04 14:12:02 $
+#   last change: $Author: vg $ $Date: 2002-07-05 12:54:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.60 $ ';
+$id_str = ' $Revision: 1.61 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -767,7 +767,7 @@ sub cancel_build {
     while (&children_number) {sleep(1)};
     print STDERR "\n";
     foreach (keys %broken_build) {
-        print STDERR "ERROR: error $_ occurred while making", $broken_build{$_}, "\n";
+        print STDERR "ERROR: error $_ occurred while making ", $broken_build{$_}, "\n";
     };
     exit(1);
 };
@@ -903,6 +903,7 @@ sub build_multiprocessing {
     while (&children_number()) {
         sleep(5);
     };
+    &cancel_build if (scalar keys %broken_build);
     print STDERR "Multiprocessing build is finished\n";
     exit(0);
 };
