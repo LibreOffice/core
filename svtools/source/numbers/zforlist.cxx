@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 16:45:08 $
+ *  last change: $Author: er $ $Date: 2000-11-03 17:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1328,6 +1328,10 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
 #ifndef PRODUCT
         ByteString aMsg( "ImpInsertFormat: bad numberformat code: " );
         aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
+        aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "\nLocale: " ) );
+        aMsg += ByteString( String( GetLocale().Language ), RTL_TEXTENCODING_UTF8 );
+        aMsg += '_';
+        aMsg += ByteString( String( GetLocale().Country ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
         delete pFormat;
@@ -1341,6 +1345,10 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
         aMsg.Append( RTL_CONSTASCII_STRINGPARAM( ": " ) );
         aMsg += ByteString( String( rCode.Code ), RTL_TEXTENCODING_UTF8 );
         aMsg += ByteString::CreateFromInt32( nPos );
+        aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "\nLocale: " ) );
+        aMsg += ByteString( String( GetLocale().Language ), RTL_TEXTENCODING_UTF8 );
+        aMsg += '_';
+        aMsg += ByteString( String( GetLocale().Country ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
         delete pFormat;
@@ -1449,6 +1457,10 @@ sal_Int32 SvNumberFormatter::GetFormatCodeIndex(
     {   // currency entries with decimals might not exist, e.g. Italian Lira
         ByteString aMsg( RTL_CONSTASCII_STRINGPARAM( "GetFormatCodeIndex: not found: " ) );
         aMsg += ByteString::CreateFromInt32( nTabOff );
+        aMsg.Append( RTL_CONSTASCII_STRINGPARAM( "\nLocale: " ) );
+        aMsg += ByteString( String( GetLocale().Language ), RTL_TEXTENCODING_UTF8 );
+        aMsg += '_';
+        aMsg += ByteString( String( GetLocale().Country ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
     }
 #endif
@@ -1507,7 +1519,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
     if (bOldConvertMode)
         pFormatScanner->SetConvertMode(FALSE);      // switch off for this function
 
-    NumberFormatCodeWrapper aNumberFormatCode( xServiceManager, pLocaleData->getLocale() );
+    NumberFormatCodeWrapper aNumberFormatCode( xServiceManager, GetLocale() );
 
     xub_StrLen nCheckPos = 0;
     SvNumberformat* pNewFormat = NULL;
