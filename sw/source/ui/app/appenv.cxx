@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appenv.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:58:48 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
         }
         rSh.InsertLineBreak();
     }
-    rSh.DelLeft();  // Letzten Linebreak wieder l”schen
+    rSh.DelLeft();  // Letzten Linebreak wieder lï¿½schen
 
     return sRet;
 }
@@ -367,11 +367,6 @@ static USHORT nTitleNo = 0;
         if ( pBoolItem && pBoolItem->GetValue() )
             nMode = ENV_NEWDOC;
     }
-
-    /*TODO #111050# call public made method of sfx (which was protected before!)
-      to force missing event OnNew ... */
-    if (nMode == ENV_NEWDOC)
-        xDocSh->Stamp_SetActivateEvent(SFX_EVENT_CREATEDOC);
 
     if (nMode == ENV_NEWDOC || nMode == ENV_INSERT)
     {
