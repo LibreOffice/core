@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 23:34:44 $
+ *  last change: $Author: rt $ $Date: 2001-06-16 00:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ String sCloseButton
     Text[ french ] = "Fermer";
     Text[ spanish ] = "~Cerrar";
     Text[ finnish ] = "~Close";
-    Text[ italian ] = "~Close";
+    Text[ italian ] = "~Chiudi";
     Text[ danish ] = "~Close";
     Text[ swedish ] = "~St‰ng";
     Text[ polish ] = "Zamknij";
@@ -1342,13 +1342,13 @@ String sProgressPage5
     Text[ portuguese_brazilian ] = "%1 found";
     Text[ japanese ] = "%1 Ç™å©Ç¬Ç©ÇËÇ‹ÇµÇΩÅB";
     Text[ korean ] = "%1¿ª(∏¶) √£æ“¿Ω";
-    Text[ chinese_simplified ] = "%1 “—æ≠’“µΩ°£";
-    Text[ chinese_traditional ] = "%1 §wß‰®Ï";
+    Text[ chinese_simplified ] = "%1 ±ª’“µΩ°£";
+    Text[ chinese_traditional ] = "%1 ≥Qß‰®Ï";
     Text[ turkish ] = "%1 found";
-    Text[ arabic ] = "%1  „ «·⁄ÀÊ— ⁄·Ï";
+    Text[ arabic ] = " „ «·⁄ÀÊ— ⁄·Ï %1";
     Text[ catalan ] = "%1 found";
     Text[ finnish ] = "%1 lˆydetty";
-    Text[ language_user1 ] = "BLG 08.06.01 : %1 soll \"Dokument(e)\" bzw. \"Vorlage(n)\" ersetzen - laut heutiger Info von Berend.";
+    Text[ language_user1 ] = "RB (15.06.01): %1 bezieht sich auf die Anzahl der gefundenen Dokumente bzw. Vorlagen.";
 };
 
 String sReady
@@ -1666,7 +1666,7 @@ String sSourceDocuments
     Text[ french ] = "Documents source";
     Text[ spanish ] = "Documentos fuente";
     Text[ finnish ] = "Sourcedocuments";
-    Text[ italian ] = "Sourcedocuments";
+    Text[ italian ] = "Documenti sorgente";
     Text[ danish ] = "Sourcedocuments";
     Text[ swedish ] = "K‰lldokument";
     Text[ polish ] = "Dokumenty ürÛd≥owe";
@@ -1693,7 +1693,7 @@ String sTargetDocuments
     Text[ french ] = "Documents cible";
     Text[ spanish ] = "Documentos destino";
     Text[ finnish ] = "Targetdocuments";
-    Text[ italian ] = "Targetdocuments";
+    Text[ italian ] = "Documenti di destinazione";
     Text[ danish ] = "Targetdocuments";
     Text[ swedish ] = "MÂldokument";
     Text[ polish ] = "Dokumenty docelowe";
@@ -1713,13 +1713,13 @@ String sCreateLogfile
     Text[English] = "Create Logfile";
     Text[ English_us ] = "Creae Logfile";
     Text[ portuguese ] = "Creae Logfile";
-    Text[ russian ] = "—ÓÁ‰‡Ú¸ Â„ËÒÚ‡ˆËÓÌÌ˚È Ù‡ÈÎ";
+    Text[ russian ] = "—ÓÁ‰‡Ú¸ Ù‡ÈÎ ÔÓÚÓÍÓÎ‡";
     Text[ greek ] = "Creae Logfile";
     Text[ dutch ] = "Creae Logfile";
     Text[ french ] = "CrÈer un fichier journal";
     Text[ spanish ] = "Crear archivo de operaciones";
     Text[ finnish ] = "Creae Logfile";
-    Text[ italian ] = "Creae Logfile";
+    Text[ italian ] = "Crea file di log";
     Text[ danish ] = "Creae Logfile";
     Text[ swedish ] = "Skapa loggfil";
     Text[ polish ] = "UtwÛrz plik rejestracyjny";
@@ -1739,13 +1739,13 @@ String sLogfileHelpText
     Text[English] = "A Logfile will be created within your Working Directory";
     Text[ English_us ] = "A log file will be created in your work directory";
     Text[ portuguese ] = "A Logfile will be created within your Working Directory";
-    Text[ russian ] = "¬ ¬‡¯ÂÏ ‡·Ó˜ÂÏ Í‡Ú‡ÎÓ„Â ·Û‰ÂÚ ÒÓÁ‰‡Ì Â„ËÒÚ‡ˆËÓÌÌ˚È Ù‡ÈÎ";
+    Text[ russian ] = "¬ ¬‡¯ÂÏ ‡·Ó˜ÂÏ Í‡Ú‡ÎÓ„Â ·Û‰ÂÚ ÒÓÁ‰‡Ì Ù‡ÈÎ ÔÓÚÓÍÓÎ‡.";
     Text[ greek ] = "A Logfile will be created within your Working Directory";
     Text[ dutch ] = "A Logfile will be created within your Working Directory";
     Text[ french ] = "Un fichier journal va Ítre crÈÈ dans votre dossier de travail.";
     Text[ spanish ] = "Se crear· un archivo de operaciones en su directorio de trabajo.";
     Text[ finnish ] = "A Logfile will be created within your Working Directory";
-    Text[ italian ] = "A Logfile will be created within your Working Directory";
+    Text[ italian ] = "Il programma crea un file di log nella vostra cartella di lavoro.";
     Text[ danish ] = "A Logfile will be created within your Working Directory";
     Text[ swedish ] = "En loggfil kommer att skapas i din arbetskatalog";
     Text[ polish ] = "W katalogu roboczym uøytkownika utworzony zostanie plik rejestracyjny.";
@@ -1823,7 +1823,7 @@ String sSumSOTextDocuments
     Text[English] = "All %PRODUCTNAME text documents in the following directory will be imported:";
     Text[ English_us ] = "All %PRODUCTNAME text documents contained in the following directory will be imported:";
     Text[ french ] = "Les documents texte %PRODUCTNAME contenus dans le rÈpertoire suivant vont Ítre importÈs :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutti i documenti di testo %PRODUCTNAME dalla cartella seguente:";
     Text[ spanish ] = "Se importar·n todos los documentos de texto de %PRODUCTNAME desde el siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -1852,7 +1852,7 @@ String sSumSOTableDocuments
     Text[English] = "All %PRODUCTNAME table documents in the following directory will be imported:";
     Text[ English_us ] = "All %PRODUCTNAME spreadsheets contained in the following directory will be imported:";
     Text[ french ] = "Les classeurs %PRODUCTNAME contenus dans le rÈpertoire suivant vont Ítre importÈs :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutti i fogli elettronici %PRODUCTNAME dalla cartella seguente:";
     Text[ spanish ] = "Se importar·n todas las hojas de c·lculo de %PRODUCTNAME del siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -1881,7 +1881,7 @@ String sSumSODrawDocuments
     Text[English] = "All %PRODUCTNAME drawing and impress documents in the following directory will be imported:";
     Text[ English_us ] = "All %PRODUCTNAME drawing and presentation documents contained in the following directory will be imported:";
     Text[ french ] = "Les dessins et prÈsentations %PRODUCTNAME contenus dans le rÈpertoire suivant vont Ítre importÈs :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutti i disegni e le presentazioni %PRODUCTNAME dalla cartella seguente:";
     Text[ spanish ] = "Se importar·n todos los documentos de presentaciÛn y dibujo de %PRODUCTNAME desde el siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -1910,7 +1910,7 @@ String sSumSOMathDocuments
     Text[English] = "All %PRODUCTNAME formula documents in the following directory will be imported:";
     Text[ English_us ] = "All %PRODUCTNAME formula documents contained in the following directory will be imported:";
     Text[ french ] = "Les formules %PRODUCTNAME contenues dans le rÈpertoire suivant vont Ítre importÈes :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutte le formule PRODUCTNAME dalla cartella seguente:";
     Text[ spanish ] = "Se importar·n todos los documentos de fÛrmula de %PRODUCTNAME desde el siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -1939,7 +1939,7 @@ String sSumSOTextTemplates
     Text[English] = "All %PRODUCTNAME text templates in the following directory will be imported:";
     Text[ English_us ] = "All %PRODUCTNAME text templates contained in the following directory will be imported:";
     Text[ french ] = "Les modËles de texte %PRODUCTNAME contenus dans le rÈpertoire suivant vont Ítre importÈs :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutti i modelli di testo %PRODUCTNAME dalla cartella seguente:";
     Text[ spanish ] = "Se importar·n todas las plantillas de %PRODUCTNAME del siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -1968,7 +1968,7 @@ String sSumSOTableTemplates
     Text[English] = "All %PRODUCTNAME table templates in the following directory will be imported:";
     Text[ English_us ] = "All %PRODUCTNAME table templates contained in the following directory will be imported:";
     Text[ french ] = "Les modËles de classeur %PRODUCTNAME contenus dans le rÈpertoire suivant vont Ítre importÈs :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutti i modelli di fogli elettronici %PRODUCTNAME dalla cartella seguente:";
     Text[ spanish ] = "Se importar·n todas las plantillas de hojas de c·lculo de %PRODUCTNAME desde el siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -1997,7 +1997,7 @@ String sSumSODrawTemplates
     Text[English] = "All %PRODUCTNAME drawing and impress templates in the following directory will be imported:";
     Text[ English_us ] = "All %PRODUCTNAME drawing and presentation templates contained in the following directory will be imported:";
     Text[ french ] = "Les modËles de dessin et de prÈsentation %PRODUCTNAME contenus dans le rÈpertoire suivant vont Ítre importÈs :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutti i modelli di disegni e presentazioni %PRODUCTNAME dalla cartella seguente:";
     Text[ spanish ] = "Se importar·n todas las plantillas de presentaciÛn y dibujo de %PRODUCTNAME desde el siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -2025,7 +2025,7 @@ String sSumSOGlobalDocuments
     Text[English] = "All %PRODUCTNAME global documents in the following directory will be imported:";
     Text[ English_us ] = "All %PRODUCTNAME master documents contained in the following directory will be imported:";
     Text[ french ] = "Les documents globaux %PRODUCTNAME contenus dans le rÈpertoire suivant vont Ítre importÈs :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutti i documenti master %PRODUCTNAME dalla cartella seguente:";
     Text[ spanish ] = "Se importar·n todos los documentos maestros de %PRODUCTNAME desde el siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -2055,7 +2055,7 @@ String sSumMSTextDocuments
     Text[English] = "All Word documents in the following directory will be imported:";
     Text[ English_us ] = "All Word documents contained in the following directory will be imported:";
     Text[ french ] = "Les documents Word contenus dans le rÈpertoire suivant vont Ítre importÈs :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutti i documenti di Word dalla cartella seguente:";
     Text[ spanish ] = "Se importar·n todos los documentos Word del siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -2084,7 +2084,7 @@ String sSumMSTableDocuments
     Text[English] = "All Excel documents in the following directory will be imported:";
     Text[ English_us ] = "All Excel documents contained in the following directory will be imported:";
     Text[ french ] = "Les documents Excel contenus dans le rÈpertoire suivant vont Ítre importÈs :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutti i documenti di Excel dalla seguente cartella:";
     Text[ spanish ] = "Se importar·n todos los documentos Excel del siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -2113,7 +2113,7 @@ String sSumMSDrawDocuments
     Text[English] = "All PowerPoint documents in the following directory will be imported:";
     Text[ English_us ] = "All PowerPoint documents contained in the following directory will be imported:";
     Text[ french ] = "Les documents PowerPoint contenus dans le rÈpertoire suivant vont Ítre importÈs :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutti i documenti di PowerPoint dalla seguente cartella:";
     Text[ spanish ] = "Se importar·n todos los documentos PowerPoint del siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -2142,7 +2142,7 @@ String sSumMSTextTemplates
     Text[English] = "All Word templates in the following directory will be imported:";
     Text[ English_us ] = "All Word templates contained in the following directory will be imported:";
     Text[ french ] = "Les modËles Word contenus dans le rÈpertoire suivant vont Ítre importÈs :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutti i modelli di Word dalla cartella seguente:";
     Text[ spanish ] = "Se importar·n todas las plantillas Word del siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -2171,7 +2171,7 @@ String sSumMSTableTemplates
     Text[English] = "All Excel templates in the following directory will be imported:";
     Text[ English_us ] = "All Excel templates contained in the following directory will be imported:";
     Text[ french ] = "Les modËles Excel contenus dans le rÈpertoire suivant vont Ítre importÈs :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutti i modelli di Excel dalla seguente cartella:";
     Text[ spanish ] = "Se importar·n todas las plantillas Excel del siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -2200,7 +2200,7 @@ String sSumMSDrawTemplates
     Text[English] = "All PowerPoint templates in the following directory will be imported:";
     Text[ English_us ] = "All PowerPoint templates contained in the following directory will be imported:";
     Text[ french ] = "Les modËles PowerPoint contenus dans le rÈpertoire suivant vont Ítre importÈs :";
-    Text[ italian ] = "Vengono importati tutti %1 dalla cartella seguente:";
+    Text[ italian ] = "Vengono importati tutti i modelli di PowerPoint dalla seguente cartella:";
     Text[ spanish ] = "Se importar·n todas las plantillas PowerPoint del siguiente directorio:";
     Text[ portuguese ] = "Ser„o importados todos os %1 do seguinte directÛrio:";
     Text[ dutch ] = "Alle %1 uit de volgende directory worden geÔmporteerd:";
@@ -2221,6 +2221,7 @@ String sSumMSDrawTemplates
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
     Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
 };
+
 
 
 
