@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:44:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define RETURN_DEBUG_STRING (rtl::OUString::createFromAscii("return from transliterationImpl"));
 #define RETURN_DEBUG_NUMBER 'TRAN'
 #else
