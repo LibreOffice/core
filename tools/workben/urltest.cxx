@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urltest.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:05:12 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1380,6 +1380,45 @@ main()
                                     RTL_TEXTENCODING_ASCII_US).GetBuffer(),
                        aTest[i].pUri == 0 ? "<none>" : aTest[i].pUri);
         }
+    }
+
+    if (true)
+    {
+        // #i13760#
+
+        // Test for unrelated URLs.
+        const rtl::OUString aBaseURL(RTL_CONSTASCII_USTRINGPARAM(
+                                "http://www.openoffice.org"));
+        rtl::OUString aRelURL (RTL_CONSTASCII_USTRINGPARAM(
+                                "http://www.sun.com"));
+
+        rtl::OUString aRelURLToTest(
+            INetURLObject::GetRelURL(aBaseURL, aRelURL));
+
+        if (INetURLObject(aRelURLToTest) != INetURLObject(aRelURL))
+            printf("BAD GetRelURL(%s, %s), ret = %s\n",
+                       ByteString(aBaseURL.getStr(),
+                                  RTL_TEXTENCODING_ASCII_US).GetBuffer(),
+                       ByteString(aRelURL.getStr(),
+                                  RTL_TEXTENCODING_ASCII_US).GetBuffer(),
+                       ByteString(aRelURLToTest.getStr(),
+                                  RTL_TEXTENCODING_ASCII_US).GetBuffer());
+
+        // Test for related URLs.
+        aRelURL = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "http://www.openoffice.org/api/test.html"));
+        aRelURLToTest = rtl::OUString(
+            INetURLObject::GetRelURL(aBaseURL, aRelURL));
+
+        if (!aRelURLToTest.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("api/test.html")))
+            printf("BAD GetRelURL(%s, %s), ret = %s\n",
+                       ByteString(aBaseURL.getStr(),
+                                  RTL_TEXTENCODING_ASCII_US).GetBuffer(),
+                       ByteString(aRelURL.getStr(),
+                                  RTL_TEXTENCODING_ASCII_US).GetBuffer(),
+                       ByteString(aRelURLToTest.getStr(),
+                                  RTL_TEXTENCODING_ASCII_US).GetBuffer());
     }
 
     return bSuccess ? EXIT_SUCCESS : EXIT_FAILURE;
