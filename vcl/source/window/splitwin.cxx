@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:39:50 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_SPLITWIN_CXX
-
 #include <string.h>
 
 #ifndef _LIST_HXX
@@ -70,8 +68,8 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _SV_RCID_H
-#include <rcid.h>
+#ifndef _TOOLS_RCID_H
+#include <tools/rcid.h>
 #endif
 #ifndef _SV_EVENT_HXX
 #include <event.hxx>
@@ -1895,7 +1893,6 @@ void SplitWindow::ImplDrawAutoHide( BOOL bInPaint )
 {
     if ( mbAutoHide )
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         Rectangle aTempRect;
         ImplGetAutoHideRect( aTempRect );
 
@@ -1998,7 +1995,6 @@ void SplitWindow::ImplDrawFadeIn( BOOL bInPaint )
 {
     if ( mbFadeIn )
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         Rectangle       aTempRect;
         Image           aImage;
         ImplGetFadeInRect( aTempRect );
@@ -2036,7 +2032,6 @@ void SplitWindow::ImplDrawFadeOut( BOOL bInPaint )
 {
     if ( mbFadeOut )
     {
-        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         Rectangle       aTempRect;
         Image           aImage;
         ImplGetFadeOutRect( aTempRect );
