@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: os $ $Date: 2001-09-06 10:47:48 $
+ *  last change: $Author: gt $ $Date: 2001-10-10 08:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,35 @@ inline BOOL StateToAttr( TriState aState )
     return ( STATE_CHECK == aState );
 }
 
+// class SvxCharBasePage -------------------------------------------------
+
+SvxCharBasePage::SvxCharBasePage( Window* pParent, const ResId& rResId, const SfxItemSet& rItemset,
+                                 USHORT nResIdPrewievWin, USHORT nResIdFontTypeFT ):
+    SfxTabPage( pParent, rResId, rItemset ),
+    m_aPreviewWin( this, ResId( nResIdPrewievWin ) ),
+    m_aFontTypeFT( this, ResId( nResIdFontTypeFT ) )
+{
+}
+
+// -----------------------------------------------------------------------
+
+SvxCharBasePage::~SvxCharBasePage()
+{
+}
+
+// -----------------------------------------------------------------------
+
+void SvxCharBasePage::SetFontWidthScale( const SfxItemSet& rSet )
+{
+    USHORT  nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
+    if( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxCharScaleWidthItem&    rItem = ( SvxCharScaleWidthItem& ) rSet.Get( nWhich );
+
+        m_aPreviewWin.SetFontWidthScale( rItem.GetValue() );
+    }
+}
+
 // SvxCharNamePage_Impl --------------------------------------------------
 
 struct SvxCharNamePage_Impl
@@ -302,9 +331,7 @@ struct SvxCharNamePage_Impl
 
 SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_CHAR_NAME ), rInSet ),
-    m_aPreviewWin           ( this, ResId( WIN_CHAR_PREVIEW ) ),
-    m_aFontTypeFT           ( this, ResId( FT_CHAR_FONTTYPE ) ),
+    SvxCharBasePage( pParent, SVX_RES( RID_SVXPAGE_CHAR_NAME ), rInSet, WIN_CHAR_PREVIEW, FT_CHAR_FONTTYPE ),
     m_pImpl                 ( new SvxCharNamePage_Impl )
 {
     m_pImpl->m_aNoStyleText = String( ResId( STR_CHARNAME_NOSTYLE ) );
@@ -456,7 +483,7 @@ void SvxCharNamePage::Initialize()
     m_pEastFontSizeLB->SetModifyHdl( aLink );
 
     m_pImpl->m_aUpdateTimer.SetTimeoutHdl( LINK( this, SvxCharNamePage, UpdateHdl_Impl ) );
-    m_pImpl->m_aUpdateTimer.Start();
+//  m_pImpl->m_aUpdateTimer.Start();
 }
 
 // -----------------------------------------------------------------------
@@ -593,6 +620,8 @@ void SvxCharNamePage::UpdatePreview_Impl()
     rCJKFont.SetWeight( aCJKFontInfo.GetWeight() );
     rCJKFont.SetItalic( aCJKFontInfo.GetItalic() );
     rCJKFont.SetSize( aCJKFontInfo.GetSize() );
+
+    SetFontWidthScale( GetItemSet() );
 
     m_aPreviewWin.Invalidate();
     m_aFontTypeFT.SetText( pFontList->GetFontMapText( aFontInfo ) );
@@ -1296,7 +1325,11 @@ void SvxCharNamePage::ActivatePage( const SfxItemSet& rSet )
             m_aPreviewWin.SetBackColor(COL_TRANSPARENT);
     }
 
+    SetFontWidthScale( rSet );
+
     m_aPreviewWin.Invalidate();
+
+    UpdatePreview_Impl();       // instead of asynchronous calling in ctor
 }
 
 // -----------------------------------------------------------------------
@@ -1330,6 +1363,8 @@ void SvxCharNamePage::Reset( const SfxItemSet& rSet )
     ResetWestOrEast_Impl( rSet, FALSE );
     ResetColor_Impl( rSet );
     m_pColorLB->SaveValue();
+
+    SetFontWidthScale( rSet );
 }
 
 // -----------------------------------------------------------------------
@@ -1415,7 +1450,7 @@ void SvxCharNamePage::SetPreviewBackgroundToCharacter()
 
 SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSet ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_CHAR_EFFECTS ), rInSet ),
+    SvxCharBasePage( pParent, SVX_RES( RID_SVXPAGE_CHAR_EFFECTS ), rInSet, WIN_EFFECTS_PREVIEW, FT_EFFECTS_FONTTYPE ),
 
     m_aUnderlineFT          ( this, ResId( FT_UNDERLINE ) ),
     m_aUnderlineLB          ( this, ResId( LB_UNDERLINE ) ),
@@ -1442,8 +1477,6 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
     m_aShadowBtn            ( this, ResId( CB_SHADOW ) ),
     m_aBlinkingBtn          ( this, ResId( CB_BLINKING ) ),
 
-    m_aPreviewWin           ( this, ResId( WIN_EFFECTS_PREVIEW ) ),
-    m_aFontTypeFT           ( this, ResId( FT_EFFECTS_FONTTYPE ) ),
     m_bPreviewBackgroundToCharacter(FALSE)
 
 {
@@ -1782,6 +1815,8 @@ void SvxCharEffectsPage::ActivatePage( const SfxItemSet& rSet )
             m_aPreviewWin.SetBackColor(COL_TRANSPARENT);
     }
 
+    SetFontWidthScale( rSet );
+
     m_aPreviewWin.Invalidate();
 }
 
@@ -2059,6 +2094,8 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
         m_aBlinkingBtn.Check( rItem.GetValue() );
     }
 
+    SetFontWidthScale( rSet );
+
     // preview update
     m_aPreviewWin.Invalidate();
 
@@ -2335,7 +2372,7 @@ void SvxCharEffectsPage::SetPreviewBackgroundToCharacter()
 
 SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rInSet ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_CHAR_POSITION ), rInSet ),
+    SvxCharBasePage( pParent, SVX_RES( RID_SVXPAGE_CHAR_POSITION ), rInSet, WIN_POS_PREVIEW, FT_POS_FONTTYPE ),
 
     m_aPositionLine     ( this, ResId( FL_POSITION ) ),
     m_aHighPosBtn       ( this, ResId( RB_HIGHPOS ) ),
@@ -2360,9 +2397,6 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
     m_aKerningFT        ( this, ResId( FT_KERNING2 ) ),
     m_aKerningEdit      ( this, ResId( ED_KERNING2 ) ),
     m_aPairKerningBtn   ( this, ResId( CB_PAIRKERNING ) ),
-
-    m_aPreviewWin       ( this, ResId( WIN_POS_PREVIEW ) ),
-    m_aFontTypeFT       ( this, ResId( FT_POS_FONTTYPE ) ),
 
     m_nSuperEsc         ( (short)DFLT_ESC_SUPER ),
     m_nSubEsc           ( (short)DFLT_ESC_SUB ),
@@ -2414,6 +2448,7 @@ void SvxCharPositionPage::Initialize()
     m_aKerningLB.SetSelectHdl( LINK( this, SvxCharPositionPage, KerningSelectHdl_Impl ) );
     m_aKerningEdit.SetModifyHdl( LINK( this, SvxCharPositionPage, KerningModifyHdl_Impl ) );
     m_aPairKerningBtn.SetClickHdl( LINK( this, SvxCharPositionPage, PairKerningHdl_Impl ) );
+    m_aScaleWidthMF.SetModifyHdl( LINK( this, SvxCharPositionPage, ScaleWidthModifyHdl_Impl ) );
 }
 
 // -----------------------------------------------------------------------
@@ -2544,6 +2579,8 @@ IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, CheckBox*, pBox )
         if (m_aFitToLineCB.IsChecked())
             nVal = m_nScaleWidthItemSetVal;
         m_aScaleWidthMF.SetValue( nVal );
+
+        m_aPreviewWin.SetFontWidthScale( nVal );
     }
     return 0;
 }
@@ -2632,6 +2669,15 @@ IMPL_LINK( SvxCharPositionPage, LoseFocusHdl_Impl, MetricField*, pField )
         else
             m_nSuperProp = (BYTE)m_aFontSizeEdit.GetValue();
     }
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxCharPositionPage, ScaleWidthModifyHdl_Impl, MetricField*, pField )
+{
+    m_aPreviewWin.SetFontWidthScale( USHORT( m_aScaleWidthMF.GetValue() ) );
+
     return 0;
 }
 
@@ -2850,7 +2896,7 @@ void SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
             m_aPreviewWin.SetBackColor(COL_TRANSPARENT);
     }
 
-    m_aPreviewWin.Invalidate();
+    m_aPreviewWin.SetFontWidthScale( USHORT( m_aScaleWidthMF.GetValue() ) );
 }
 
 // -----------------------------------------------------------------------
@@ -3036,8 +3082,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
     if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
     {
-        const SvxCharScaleWidthItem& rItem =
-                (SvxCharScaleWidthItem&) rSet.Get( nWhich );
+        const SvxCharScaleWidthItem& rItem = ( SvxCharScaleWidthItem& ) rSet.Get( nWhich );
         m_nScaleWidthInitialVal = rItem.GetValue();
         m_aScaleWidthMF.SetValue( m_nScaleWidthInitialVal );
     }
@@ -3046,9 +3091,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 
     nWhich = GetWhich( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE );
     if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
-    {
         m_nScaleWidthItemSetVal = ((SfxUInt16Item&) rSet.Get( nWhich )).GetValue();
-    }
 
     // Rotation
     nWhich = GetWhich( SID_ATTR_CHAR_ROTATED );
@@ -3287,7 +3330,7 @@ void SvxCharPositionPage::SetPreviewBackgroundToCharacter()
 
 SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rInSet ) :
 
-    SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_CHAR_TWOLINES ), rInSet ),
+    SvxCharBasePage( pParent, SVX_RES( RID_SVXPAGE_CHAR_TWOLINES ), rInSet, WIN_TWOLINES_PREVIEW, FT_TWOLINES_FONTTYPE ),
 
     m_aSwitchOnLine     ( this, ResId( FL_SWITCHON ) ),
     m_aTwoLinesBtn      ( this, ResId( CB_TWOLINES ) ),
@@ -3298,8 +3341,6 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rIn
     m_aEndBracketFT     ( this, ResId( FT_ENDBRACKET ) ),
     m_aEndBracketLB     ( this, ResId( ED_ENDBRACKET ) ),
 
-    m_aPreviewWin       ( this, ResId( WIN_TWOLINES_PREVIEW ) ),
-    m_aFontTypeFT       ( this, ResId( FT_TWOLINES_FONTTYPE ) ),
     m_bPreviewBackgroundToCharacter(FALSE)
 
 {
@@ -3618,6 +3659,8 @@ void SvxCharTwoLinesPage::ActivatePage( const SfxItemSet& rSet )
             m_aPreviewWin.SetBackColor(COL_TRANSPARENT);
     }
 
+    SetFontWidthScale( rSet );
+
     m_aPreviewWin.Invalidate();
 }
 
@@ -3664,6 +3707,8 @@ void SvxCharTwoLinesPage::Reset( const SfxItemSet& rSet )
         }
     }
     TwoLinesHdl_Impl( NULL );
+
+    SetFontWidthScale( rSet );
 }
 
 // -----------------------------------------------------------------------
