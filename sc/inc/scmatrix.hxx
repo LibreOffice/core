@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmatrix.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:15:10 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:57:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,13 @@
 class SvStream;
 class ScInterpreter;
 
-const BYTE SC_MATVAL_STRING    = 0x01;
-const BYTE SC_MATVAL_EMPTY     = SC_MATVAL_STRING | 0x02; // STRING plus flag
-const BYTE SC_MATVAL_EMPTYPATH = SC_MATVAL_EMPTY | 0x04;  // EMPTY plus flag
+typedef BYTE ScMatValType;
+const ScMatValType SC_MATVAL_VALUE     = 0x00;
+const ScMatValType SC_MATVAL_STRING    = 0x01;
+const ScMatValType SC_MATVAL_EMPTY     = SC_MATVAL_STRING | 0x02; // STRING plus flag
+const ScMatValType SC_MATVAL_EMPTYPATH = SC_MATVAL_EMPTY | 0x04;  // EMPTY plus flag
 
-union MatValue
+union ScMatrixValue
 {
     double fVal;
     String* pS;
@@ -118,8 +120,8 @@ union MatValue
  */
 class ScMatrix
 {
-    MatValue*       pMat;
-    BYTE*           bIsString;
+    ScMatrixValue*  pMat;
+    ScMatValType*   bIsString;
     ScInterpreter*  pErrorInterpreter;
     ULONG           nRefCnt;     // reference count
     SCSIZE          nColCount;
@@ -146,7 +148,7 @@ public:
     /// The maximum number of elements a matrix may have at runtime
     inline static size_t GetElementsMax()
     {
-        const size_t nMemMax = (((size_t)(~0))-64) / sizeof(MatValue);
+        const size_t nMemMax = (((size_t)(~0))-64) / sizeof(ScMatrixValue);
         const size_t nArbitraryLimit = 0x80000;  // 512k elements ~= 4MB memory
         return nMemMax < nArbitraryLimit ? nMemMax : nArbitraryLimit;
     }
@@ -239,9 +241,9 @@ public:
     const String& GetString( SCSIZE nIndex) const
         { return pMat[nIndex].GetString(); }
 
-    /// @ATTENTION: If bString the MatValue->pS may still be NULL to indicate
+    /// @ATTENTION: If bString the ScMatrixValue->pS may still be NULL to indicate
     /// an empty string!
-    const MatValue* Get( SCSIZE nC, SCSIZE nR, BOOL& bString) const;
+    const ScMatrixValue* Get( SCSIZE nC, SCSIZE nR, ScMatValType& nType) const;
 
     /// @return <TRUE/> if string or empty
     BOOL IsString( SCSIZE nIndex ) const
