@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-23 09:00:45 $
+ *  last change: $Author: er $ $Date: 2002-09-24 18:34:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,6 @@ void ScConsolidateDlg::Init()
 {
     DBG_ASSERT( pViewData && pDoc && pRangeUtil, "Error in Ctor" );
 
-    ScArea aArea;
     String aStr;
     USHORT i=0;
 
@@ -230,20 +229,22 @@ void ScConsolidateDlg::Init()
     aLbConsAreas.Clear();
     for ( i=0; i<theConsData.nDataAreaCount; i++ )
     {
-        aArea = *(theConsData.ppDataAreas[i] );
-        if ( aArea.nTab < pDoc->GetTableCount() )
+        const ScArea& rArea = *(theConsData.ppDataAreas[i] );
+        if ( rArea.nTab < pDoc->GetTableCount() )
         {
-            pRangeUtil->MakeAreaString( aArea, aStr, pDoc );
+            ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
+                    rArea.nColEnd, rArea.nRowEnd, rArea.nTab ).Format( aStr,
+                        SCR_ABS_3D, pDoc );
             aLbConsAreas.InsertEntry( aStr );
         }
     }
 
     if ( theConsData.nTab < pDoc->GetTableCount() )
-        aEdDestArea.SetText( ScRefTripel( theConsData.nCol,
-                                          theConsData.nRow,
-                                          theConsData.nTab,
-                                          FALSE, FALSE, FALSE ).
-                                                GetRefString( pDoc, MAXTAB+1 ) );
+    {
+        ScAddress( theConsData.nCol, theConsData.nRow, theConsData.nTab
+                ).Format( aStr, SCA_ABS_3D, pDoc );
+        aEdDestArea.SetText( aStr );
+    }
     else
         aEdDestArea.SetText( EMPTY_STRING );
 
@@ -527,9 +528,10 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
 
                     if ( ppAreas[i] )
                     {
-                        pRangeUtil->MakeAreaString( *(ppAreas[i]),
-                                                    aNewArea,
-                                                    pDoc );
+                        const ScArea& rArea = *(ppAreas[i]);
+                        ScRange( rArea.nColStart, rArea.nRowStart, rArea.nTab,
+                                rArea.nColEnd, rArea.nRowEnd, rArea.nTab
+                                ).Format( aNewArea, SCR_ABS_3D, pDoc );
 
                         if ( aLbConsAreas.GetEntryPos( aNewArea )
                              == LISTBOX_ENTRY_NOTFOUND )
