@@ -2,9 +2,9 @@
  *
  *  $RCSfile: memorytests.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 17:22:31 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 19:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,12 +519,15 @@ void test(uno::Reference<lang::XMultiServiceFactory> _xORB, rtl::OUString const&
     bool bLocal;
     cout << ++m_nCount << ". start test with  new provider\n";
  {
+     START_MEMORYMEASURE_FOR( aMemoryInfo, "*** API Test Execution ***" );
+
+     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierungs-check" );
+
+     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- Erzeuge Provider" );
+
      uno::Reference<lang::XMultiServiceFactory>xCfgProvider =
          getProvider(_xORB, ASCII("local"), _sSharePath, _sUserPath,
                      bLocal);
-
-     START_MEMORYMEASURE( aMemoryInfo );
-     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierung in API test" );
 
      MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- Habe Provider, starte Test" );
 
@@ -541,7 +544,7 @@ void test(uno::Reference<lang::XMultiServiceFactory> _xORB, rtl::OUString const&
 
      MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- Provider disposed" );
 
-     LOG_MEMORYMEASURE( "---------------- API Memory Test 2-----------------------------", "- Inner memory traces.", aMemoryInfo );
+     LOG_MEMORYMEASURE( "---------------- API Memory Test 2-----------------------------", "- Test memory traces.", aMemoryInfo );
  }
 
  cout << "finish provider test\n";
@@ -609,20 +612,20 @@ int main( int argc, char * argv[] )
 
 //      test(xORB, sSharePath, sUserPath, ASCII("org.openoffice.Office.Views"));
 
-        START_MEMORYMEASURE( aMemoryInfo );
+        START_MEMORYMEASURE_FOR( aMemoryInfo, "*** API Test Main ***" );
 
-        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierung" );
+        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierungs-check" );
 
-        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierung weil beim ersten mal falsch!" );
+        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "starte test !" );
 
         test(xORB, sSharePath, sUserPath);
 
-        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "ich habe fertig!" );
+        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "tests beendet !" );
 
         // stop the programm clear.
         Reference< XComponent > xComponent(xORB, UNO_QUERY);
         xComponent->dispose();
-        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "after dispose orb." );
+        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "ORB disposed." );
 
         LOG_MEMORYMEASURE( "---------------- API Memory Test-------------------------------", "Outer memory traces.", aMemoryInfo );
     }
@@ -950,8 +953,11 @@ void test_configuration_provider(uno::Reference<lang::XMultiServiceFactory> _xCf
                                  rtl::OUString const& _sUser, bool _bLocal,
                                  sal_Int32 _nCount)
 {
-    START_MEMORYMEASURE( aMemoryInfo );
-    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierung in Provider test" );
+    START_MEMORYMEASURE_FOR( aMemoryInfo, "*** Configuration Provider Loop Test ***" );
+    START_MEMORYMEASURE_FOR( aInnerMemoryInfo, "*** Configuration Provider Module Details ***" );
+
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierungs-check" );
+    MAKE_MEMORY_SNAPSHOT( aInnerMemoryInfo, "initialisierungs-check" );
 
     std::vector< Reference< XInterface > > aLoadedModules;
     aLoadedModules.reserve(configtest::s_nTestModules);
@@ -980,7 +986,9 @@ void test_configuration_provider(uno::Reference<lang::XMultiServiceFactory> _xCf
     sal_Int32 nPathIdx = aArgs.getLength();
     aArgs.realloc(nPathIdx + 1);
 
-    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- - Lade Module" );
+    const OString sInnerInfoText("- - - Loading module: ");
+    MAKE_MEMORY_SNAPSHOT( aInnerMemoryInfo, "- - - Before Loading Modules" );
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- - Prepared Arguments - Lade Module" );
 
     for (char const * const * ppTestModule = configtest::s_aTestModules; *ppTestModule; ++ppTestModule)
     {
@@ -989,6 +997,7 @@ void test_configuration_provider(uno::Reference<lang::XMultiServiceFactory> _xCf
 
         aArgs[nPathIdx] <<= configmgr::createPropertyValue(ASCII("nodepath"), sPath);
 
+        MAKE_MEMORY_SNAPSHOT( aInnerMemoryInfo, sInnerInfoText.concat(*ppTestModule) );
         Reference< XInterface > xIFace = _xCfgProvider->createInstanceWithArguments(
             /* OUString::createFromAscii("com.sun.star.configuration.ConfigurationUpdateAccess"), */
             OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"),
@@ -1011,14 +1020,16 @@ void test_configuration_provider(uno::Reference<lang::XMultiServiceFactory> _xCf
         test_read_access(_xCfgProvider, xIFace, aFilename);
     */
     }
+    MAKE_MEMORY_SNAPSHOT( aInnerMemoryInfo, "- - - Done Loading modules" );
 
-    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- - Module geladen" );
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- - Alle Module geladen" );
 
     aLoadedModules.clear();
 
-    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- - Module entsorgt" );
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "- - Module released" );
 
     LOG_MEMORYMEASURE( "---------------- API Memory Test 3 -----------------------------", "- - Provider memory traces.", aMemoryInfo );
+    LOG_MEMORYMEASURE( "---------------- API Memory Test 4 -----------------------------", "- - - Module memory traces.", aInnerMemoryInfo );
 
 }
 
@@ -1046,21 +1057,32 @@ int requestTest( int argc, char * argv[] )
         rtl::OUString sUserPath =   makeFileURL(enterValue("user path : ", s_pUpdatePath, false));
         cout << endl;
 
-        START_MEMORYMEASURE( aMemoryInfo );
+        START_MEMORYMEASURE_FOR( aMemoryInfo, "*** Request Tree Test ***" );
 
-        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierung" );
+        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierungs-check" );
 
-        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierung weil beim ersten mal falsch!" );
-
-
-        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "request subtrees" );
+        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "create tree manager" );
 
         OTreeLoad aTreeLoad(xORB, sSharePath, sUserPath);
         sal_Int32 nIdx = 0;
 
-        for (char const * const * ppRequestModule = configtest::s_aTestModules; *ppRequestModule; ++ppRequestModule)
-            aTreeLoad.requestSubtree( OUString::createFromAscii(*ppRequestModule));
+        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "created tree manager" );
 
+        OString const sInnerInfoText("- Loading module: ");
+
+        START_MEMORYMEASURE_FOR( aInnerMemoryInfo, "*** Request Tree Test Details ***" );
+        MAKE_MEMORY_SNAPSHOT( aInnerMemoryInfo, "initialisierungs-check" );
+
+        MAKE_MEMORY_SNAPSHOT( aInnerMemoryInfo, "- before loading modules" );
+        MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "request subtrees" );
+
+        for (char const * const * ppRequestModule = configtest::s_aTestModules; *ppRequestModule; ++ppRequestModule)
+        {
+            MAKE_MEMORY_SNAPSHOT( aInnerMemoryInfo, sInnerInfoText.concat(*ppRequestModule) );
+            aTreeLoad.requestSubtree( OUString::createFromAscii(*ppRequestModule));
+        }
+
+        MAKE_MEMORY_SNAPSHOT( aInnerMemoryInfo, "- loaded all modules" );
         MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "release subtrees" );
 
         for (char const * const * ppReleaseModule = configtest::s_aTestModules; *ppReleaseModule; ++ppReleaseModule)
@@ -1068,8 +1090,7 @@ int requestTest( int argc, char * argv[] )
 
         MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "ich habe fertig." );
         LOG_MEMORYMEASURE( "---------------- Request Memory Test ---------------------------", "Direct Cache Access memory traces.", aMemoryInfo );
-
-        volatile int dummy = 0;
+        LOG_MEMORYMEASURE( "---------------- Request Memory Detail -------------------------", "Module request memory traces.", aInnerMemoryInfo );
     }
     return 0;
 }
@@ -1085,27 +1106,49 @@ int trust( int argc, char * argv[] )
     std::vector<char*> aMemHolder;
     aMemHolder.reserve(1024);
 
-    START_MEMORYMEASURE( aMemoryInfo );
+    START_MEMORYMEASURE_FOR( aMemoryInfo, "Allocator check" );
 
-    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierung" );
-    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierung weil beim ersten mal falsch!" );
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "initialisierungs-check" );
+
+    sal_Int32 const total_alloc = 8 * 1024 * 1024;
 
     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "get 8 MB" );
 
-    char* pChar = new char[8 * 1024 * 1024];
+    char* pChar = new char[total_alloc];
 
     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "free 8 MB" );
 
     delete [] pChar;
 
-    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "get 8 MB as 1024 pieces" );
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "deleted 8 MB" );
 
+    sal_Int32 const chunk = 8 * 1024;
+    sal_Int32 const alloc_count = total_alloc/chunk;
 
-    for (sal_Int32 i=0;i<1024;i++)
+    sal_Int32 const msg_count = 16;
+    sal_Int32 const loop_count = alloc_count/msg_count;
+    sal_Int32 const loop_allocation = loop_count * chunk;
+
+    OString const sPieces = OString::valueOf(alloc_count).concat(" pieces");
+    OString const sInnerMessage = OString("Allocating ").concat(OString::valueOf(loop_count))
+                                  .concat(" chunks [").concat(OString::valueOf(loop_allocation)).concat(" Bytes].");
+
+    START_MEMORYMEASURE( aInnerMemoryInfo );
+    MAKE_MEMORY_SNAPSHOT( aInnerMemoryInfo, "initialisierungs-check" );
+
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, OString("get 8 MB as ").concat(sPieces) );
+
+    for (sal_Int32 i=0;i<alloc_count/loop_count;i++)
     {
-        pChar = new char[8 * 1024];
-        aMemHolder.push_back(pChar);
+        MAKE_MEMORY_SNAPSHOT( aInnerMemoryInfo, sInnerMessage );
+        for (sal_Int32 j=0;j<loop_count;j++)
+        {
+
+            pChar = new char[8 * 1024];
+            aMemHolder.push_back(pChar);
+        }
     }
+    MAKE_MEMORY_SNAPSHOT( aInnerMemoryInfo, "last allocation done" );
 
     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "free pieces" );
 
@@ -1119,10 +1162,10 @@ int trust( int argc, char * argv[] )
     }
     aMemHolder.clear();
 
-    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "get another 8 MB as 1024 pieces" );
+    MAKE_MEMORY_SNAPSHOT( aMemoryInfo, OString("get another 8 MB as ").concat(sPieces) );
 
 
-    for (sal_Int32 j=0;j<1024;j++)
+    for (sal_Int32 j=0;j<alloc_count;j++)
     {
         pChar = new char[8 * 1024];
         aMemHolder.push_back(pChar);
@@ -1142,8 +1185,8 @@ int trust( int argc, char * argv[] )
 
     MAKE_MEMORY_SNAPSHOT( aMemoryInfo, "ich habe fertig." );
     LOG_MEMORYMEASURE( "---------------- Trust Memory Test ----------------------------", "Cross-checked memory traces.", aMemoryInfo );
+    LOG_MEMORYMEASURE( "---------------- Small Allocation Loop ------------------------", "Allocation Loop Detail memory traces.", aInnerMemoryInfo );
 
-    volatile int dummy = 0;
     return 0;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: memorymeasure.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2001-06-15 08:29:44 $
+ *  last change: $Author: jb $ $Date: 2001-06-20 19:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,12 @@ public:
     //_____________________________________________________________________________________________________
     inline _DBGMemoryMeasure()
         {
+            makeSnapshot("Initializing Data");
+        }
+    //_____________________________________________________________________________________________________
+    inline _DBGMemoryMeasure(const ::rtl::OString& sComment)
+        {
+            makeSnapshot(sComment);
         }
 
     //_____________________________________________________________________________________________________
@@ -162,19 +168,14 @@ public:
                     sBuffer.append( (sal_Int32)pItem1->aStatus.dwAvailPageFile  );
                     sBuffer.append( "\n\tavail virt\t=\t"                       );
                     sBuffer.append( (sal_Int32)pItem1->aStatus.dwAvailVirtual   );
-                    sBuffer.append( "\n\tdifference\t=\t[ "                     );
 
                     if( pItem1 == m_lSnapshots.begin() )
                     {
-                        sBuffer.append( (sal_Int32)pItem1->aStatus.dwAvailPhys      );
-                        sBuffer.append( ", "                                        );
-                        sBuffer.append( (sal_Int32)pItem1->aStatus.dwAvailPageFile  );
-                        sBuffer.append( ", "                                        );
-                        sBuffer.append( (sal_Int32)pItem1->aStatus.dwAvailVirtual   );
-                        sBuffer.append( " ]\n\n"                                    );
+                        sBuffer.append( "\n\t[initial values]\n\n" );
                     }
                     else if( pItem2 != m_lSnapshots.end() )
                     {
+                        sBuffer.append( "\n\tdifference\t=\t[ "                     );
                         sBuffer.append( (sal_Int32)(pItem2->aStatus.dwAvailPhys     - pItem1->aStatus.dwAvailPhys       ) );
                         sBuffer.append( ", "                                                                              );
                         sBuffer.append( (sal_Int32)(pItem2->aStatus.dwAvailPageFile - pItem1->aStatus.dwAvailPageFile   ) );
@@ -184,7 +185,7 @@ public:
                     }
                     else
                     {
-                        sBuffer.append( "0, 0, 0 ]\n\n" );
+                        sBuffer.append( "\n\t[final values]\n\n" );
                     }
                     if( pItem1!=m_lSnapshots.end() ) ++pItem1;
                     if( pItem2!=m_lSnapshots.end() ) ++pItem2;
@@ -209,6 +210,9 @@ private:
 
 #define START_MEMORYMEASURE( AOBJECT )                                                                      \
                 _DBGMemoryMeasure AOBJECT;
+
+#define START_MEMORYMEASURE_FOR( AOBJECT, SCOMMENT )                                                                      \
+                _DBGMemoryMeasure AOBJECT( SCOMMENT );
 
     /*_____________________________________________________________________________________________________________
         MAKE_MEMORY_SNAPSHOT
