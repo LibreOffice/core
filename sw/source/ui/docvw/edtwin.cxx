@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-27 09:25:19 $
+ *  last change: $Author: os $ $Date: 2002-08-16 12:18:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1745,7 +1745,19 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     case KEY_TAB | KEY_SHIFT:
                         bNormalChar = FALSE;
                         eKeyState = KS_Ende;
-                        rSh.SelectNextPrevHyperlink(
+                        if ( rSh.GetSelectionType() &
+                                (SwWrtShell::SEL_GRF |
+                                    SwWrtShell::SEL_FRM |
+                                    SwWrtShell::SEL_OLE |
+                                    SwWrtShell::SEL_DRW |
+                                    SwWrtShell::SEL_DRW_FORM))
+
+                        {
+                            eKeyState = rKeyCode.GetModifier() & KEY_SHIFT ?
+                                                KS_PrevObject : KS_NextObject;
+                        }
+                        else
+                            rSh.SelectNextPrevHyperlink(
                                             KEY_SHIFT != rKeyCode.GetModifier() );
                     break;
                     case KEY_RETURN:
