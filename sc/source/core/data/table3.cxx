@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-09-05 09:41:51 $
+ *  last change: $Author: er $ $Date: 2002-01-22 17:47:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1441,7 +1441,8 @@ BOOL ScTable::CreateExcelQuery(USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT 
             nCol = nCol1;
             while (nCol <= nCol2)
             {
-                GetUpperCellString(nCol, nRow, aCellStr);
+                GetInputString( nCol, nRow, aCellStr );
+                ScGlobal::pCharClass->toUpper( aCellStr );
                 if (aCellStr.Len() > 0)
                 {
                     if (nIndex < nNewEntries)
