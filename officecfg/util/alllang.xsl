@@ -3,9 +3,9 @@
  *
  *  $RCSfile: alllang.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-28 11:50:53 $
+ *  last change: $Author: jb $ $Date: 2002-07-04 07:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 <xsl:param name="locale"/>
 <xsl:param name="xcs"/>
 <xsl:param name="schemaRoot">.</xsl:param>
+<xsl:param name="fallback-locale">en-US</xsl:param>
 
 <xsl:variable name="schemaRootURL"><xsl:value-of select="filehelper:makeAbs($schemaRoot)"/></xsl:variable>
 <xsl:variable name="schemaURL"><xsl:value-of select="filehelper:makeAbs($xcs)"/></xsl:variable>
@@ -82,12 +83,13 @@
 <!-- ensure that at least root is available -->
 	<xsl:template match="/oor:node">		
 		<xsl:copy>
-			<xsl:apply-templates select = "@*" />
 			<xsl:choose>
 				<xsl:when test="string-length($locale)">
-					<xsl:apply-templates select="." mode="locale"/>				
+			        <xsl:apply-templates select = "@*" mode="locale"/>
+					<xsl:apply-templates mode="locale"/>				
 				</xsl:when>
 				<xsl:otherwise>
+			        <xsl:apply-templates select = "@*" mode="non-locale"/>
 					<xsl:for-each select="node|prop">
 						<xsl:variable name="component-schema" select="document($schemaURL)/oor:component-schema"/>
 						<xsl:apply-templates select="." mode="non-locale">
@@ -104,7 +106,7 @@
 	<xsl:template match="node|prop" mode = "locale">				
 		<xsl:if test="count(descendant::value[@xml:lang = $locale])">
 			<xsl:copy>
-				<xsl:apply-templates select = "@*"/>
+				<xsl:apply-templates select = "@*" mode="locale"/>
 				<xsl:apply-templates mode = "locale"/>					
 			</xsl:copy>
 		</xsl:if>		
@@ -113,19 +115,27 @@
 	<xsl:template match="value" mode="locale">		
 		<xsl:if test="@xml:lang = $locale">
 			<xsl:copy>
-				<xsl:apply-templates select = "@*"/>
+				<xsl:apply-templates select = "@*" mode="locale"/>
 				<xsl:value-of select="."/>
 			</xsl:copy>	
 		</xsl:if>		
 	</xsl:template>
 
+	<xsl:template match = "@*" mode="locale">
+		<xsl:copy/>
+	</xsl:template>	
+
+    <!-- suppress all merge instructions -->
+	<xsl:template match = "@oor:op" mode="locale"/>
+
 <!-- locale independent data -->
 	<xsl:template match="node" mode="non-locale">
 		<xsl:param name = "context"/>
 		<xsl:param name = "component-schema"/>		
-		<xsl:if test="count(descendant::value[not (@xml:lang)]) or @oor:finalized='true'">
+
+		<xsl:if test="count(descendant::value[not (@xml:lang)]) or count(descendant-or-self::*[@oor:finalized='true'])">
 			<xsl:copy>
-				<xsl:apply-templates select = "@*" />
+				<xsl:apply-templates select = "@*"  mode="non-locale"/>
 				<xsl:choose>
 					<!-- look for matching templates in other components -->
 					<xsl:when test="$context/@oor:node-type and $context/@oor:component">
@@ -169,12 +179,12 @@
 		<xsl:choose>		
 			<xsl:when test="not ($context) or @oor:finalized='true'">
 				<xsl:copy>
-					<xsl:apply-templates select = "@*"/>
+					<xsl:apply-templates select = "@*" mode="non-locale"/>
 					<xsl:apply-templates select = "value" mode="non-locale"/>
 				</xsl:copy>
 			</xsl:when>
-			<!-- copy locale independent values only, if the values differ -->				
-			<xsl:otherwise>					
+			<xsl:when test="count (value[not (@xml:lang)])">
+			    <!-- copy locale independent values only, if the values differ -->				
 				<xsl:variable name="isEqual">
 					<xsl:call-template name="isEqual">
 						<xsl:with-param name="left"  select="$context/value"/>
@@ -183,10 +193,16 @@
 				</xsl:variable>
 				<xsl:if test="$isEqual ='false'">
 					<xsl:copy>
-						<xsl:apply-templates select = "@*"/>
+						<xsl:apply-templates select = "@*" mode="non-locale"/>
 						<xsl:apply-templates select = "value" mode="non-locale"/>
 					</xsl:copy>
 				</xsl:if>
+			</xsl:when>
+			<xsl:otherwise>					
+				<xsl:copy>
+					<xsl:apply-templates select = "@*" mode="non-locale"/>
+					<xsl:apply-templates select = "value" mode="fallback-locale"/>
+				</xsl:copy>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
@@ -194,19 +210,24 @@
 	<xsl:template match="value" mode="non-locale">		
 		<xsl:if test="not (@xml:lang)">
 			<xsl:copy>
-				<xsl:apply-templates select = "@*"/>
+				<xsl:apply-templates select = "@*" mode="non-locale"/>
 				<xsl:value-of select="."/>
 			</xsl:copy>						
 		</xsl:if>
 	</xsl:template>
 
-<!-- common templates -->
-	<xsl:template match = "@*">
+	<xsl:template match="value" mode="fallback-locale">		
+		<xsl:if test="@xml:lang = $fallback-locale">
+			<xsl:copy>
+				<xsl:apply-templates select = "@*" mode="non-locale"/>
+				<xsl:value-of select="."/>
+			</xsl:copy>						
+		</xsl:if>
+	</xsl:template>
+
+	<xsl:template match = "@*" mode="non-locale">
 		<xsl:copy/>
 	</xsl:template>	
-
-<!-- suppress all merge instructions -->
-	<xsl:template match = "@oor:op"/>
 
 <!-- compares two values -->
 	<xsl:template name="isEqual">		
