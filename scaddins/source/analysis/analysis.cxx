@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-09 11:23:41 $
+ *  last change: $Author: dr $ $Date: 2001-10-12 09:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,19 +682,10 @@ double SAL_CALL AnalysisAddIn::getYearfrac( constREFXPS& xOpt,
 
 sal_Int32 SAL_CALL AnalysisAddIn::getEdate( constREFXPS& xOpt, sal_Int32 nStartDate, sal_Int32 nMonths ) THROWDEF_RTE_IAE
 {
-    sal_Int32   nNullDate = GetNullDate( xOpt );
-    sal_Int32   nDate = nStartDate + nNullDate;
-    sal_uInt16  nDay, nMonth, nYear;
-    DaysToDate( nDate, nDay, nMonth, nYear );
-
-    nYear += nMonths / 12;
-    nMonth += nMonths % 12;
-
-    sal_uInt16  nDaysInMonth = DaysInMonth( nMonth, nYear );
-    if( nDay > nDaysInMonth )
-        nDay = nDaysInMonth;
-
-    return DateToDays( nDay, nMonth, nYear ) - nNullDate;
+    sal_Int32 nNullDate = GetNullDate( xOpt );
+    ScaDate aDate( nNullDate, nStartDate, 5 );
+    aDate.addMonths( nMonths );
+    return aDate.getDate( nNullDate );
 }
 
 

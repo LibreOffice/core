@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-09 11:09:01 $
+ *  last change: $Author: dr $ $Date: 2001-10-12 09:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1564,8 +1564,8 @@ double GetOddfprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
         for( i = 1 ; i <= nNC ; i++ )
         {
             aPre = aStartDate;
-            aStartDate.AddMonths( nMonthDelta );
-            aNextCoup.AddMonths( nMonthDelta );
+            aStartDate.addMonths( nMonthDelta );
+            aNextCoup.addMonths( nMonthDelta );
             pDC[ i ] = ScaDate::GetDiff( aPre, aStartDate );
             pNL[ i ] = GetCoupdays( nNullDate, aStartDate.GetDate( nNullDate ), aNextCoup.GetDate( nNullDate ),
                                         nFreq, nBase );
@@ -1828,14 +1828,14 @@ double GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF )
 //-------
 // COUPPCD: find last coupon date before settlement (can be equal to settlement)
 void lcl_GetCouppcd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
+    throw( lang::IllegalArgumentException )
 {
-    sal_uInt16 nFreqMonths = static_cast< sal_uInt16 >( 12 / nFreq );
     rDate = rMat;
     rDate.setYear( rSettle.nYear );
     if( rDate < rSettle )
         rDate.addYears( 1 );
     while( rDate > rSettle )
-        rDate.subMonths( nFreqMonths );
+        rDate.addMonths( -12 / nFreq );
 }
 
 double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
@@ -1853,14 +1853,14 @@ double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 //-------
 // COUPNCD: find first coupon date after settlement (is never equal to settlement)
 void lcl_GetCoupncd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
+    throw( lang::IllegalArgumentException )
 {
-    sal_uInt16 nFreqMonths = static_cast< sal_uInt16 >( 12 / nFreq );
     rDate = rMat;
     rDate.setYear( rSettle.nYear );
     if( rDate > rSettle )
-        rDate.subYears( 1 );
+        rDate.addYears( -1 );
     while( rDate <= rSettle )
-        rDate.addMonths( nFreqMonths );
+        rDate.addMonths( 12 / nFreq );
 }
 
 double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
@@ -1922,7 +1922,7 @@ double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
         ScaDate aDate;
         lcl_GetCouppcd( aDate, ScaDate( nNullDate, nSettle, nBase ), ScaDate( nNullDate, nMat, nBase ), nFreq );
         ScaDate aNextDate( aDate );
-        aNextDate.addMonths( static_cast< sal_uInt16 >( 12 / nFreq ) );
+        aNextDate.addMonths( 12 / nFreq );
         return ScaDate::getDiff( aDate, aNextDate );
     }
     return static_cast< double >( GetDaysInYear( 0, 0, nBase ) ) / nFreq;
@@ -3126,6 +3126,7 @@ ScaDate::ScaDate() :
     nDay( 1 ),
     nMonth( 1 ),
     nYear( 1900 ),
+    bLastDayMode( sal_True ),
     bLastDay( sal_False ),
     b30Days( sal_False ),
     bUSMode( sal_False )
@@ -3135,6 +3136,7 @@ ScaDate::ScaDate() :
 ScaDate::ScaDate( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nBase )
 {
     DaysToDate( nNullDate + nDate, nOrigDay, nMonth, nYear );
+    bLastDayMode = (nBase != 5);
     bLastDay = (nOrigDay >= DaysInMonth( nMonth, nYear ));
     b30Days = (nBase == 0) || (nBase == 4);
     bUSMode = (nBase == 0);
@@ -3146,6 +3148,7 @@ ScaDate::ScaDate( const ScaDate& rCopy ) :
     nDay( rCopy.nDay ),
     nMonth( rCopy.nMonth ),
     nYear( rCopy.nYear ),
+    bLastDayMode( rCopy.bLastDayMode ),
     bLastDay( rCopy.bLastDay ),
     b30Days( rCopy.b30Days ),
     bUSMode( rCopy.bUSMode )
@@ -3158,6 +3161,7 @@ ScaDate& ScaDate::operator=( const ScaDate& rCopy )
     nDay = rCopy.nDay;
     nMonth = rCopy.nMonth;
     nYear = rCopy.nYear;
+    bLastDayMode = rCopy.bLastDayMode;
     bLastDay = rCopy.bLastDay;
     b30Days = rCopy.b30Days;
     bUSMode = rCopy.bUSMode;
@@ -3203,36 +3207,40 @@ sal_Int32 ScaDate::getDaysInYearRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const
     return b30Days ? ((nTo - nFrom + 1) * 360) : GetDaysInYears( nFrom, nTo );
 }
 
-void ScaDate::addMonths( sal_uInt16 nAddMonths )
+void ScaDate::doAddYears( sal_Int32 nYearCount ) throw( lang::IllegalArgumentException )
 {
-    nMonth += nAddMonths;
-    nYear += (nMonth - 1) / 12;
-    nMonth = ((nMonth - 1) % 12) + 1;
-    setDay();
+    sal_Int32 nNewYear = nYearCount + nYear;
+    if( (nNewYear < 0) || (nNewYear > 0x7FFF) )
+        throw lang::IllegalArgumentException();
+    nYear = static_cast< sal_uInt16 >( nNewYear );
 }
 
-void ScaDate::subMonths( sal_uInt16 nSubMonths )
+void ScaDate::addMonths( sal_Int32 nMonthCount ) throw( lang::IllegalArgumentException )
 {
-    if( nSubMonths >= nMonth )
+    sal_Int32 nNewMonth = nMonthCount + nMonth;
+    if( nNewMonth > 12 )
     {
-        nYear -= ((nSubMonths - nMonth) / 12 + 1);
-        nSubMonths %= 12;
-        if( nSubMonths )
-            nMonth += 12 - nSubMonths;
+        doAddYears( (nNewMonth - 1) / 12 );
+        nMonth = static_cast< sal_uInt16 >( (nNewMonth - 1) % 12 ) + 1;
+    }
+    else if( nNewMonth < 1 )
+    {
+        doAddYears( nNewMonth / 12 - 1 );
+        nMonth = static_cast< sal_uInt16 >( nNewMonth % 12 + 12 );
     }
     else
-        nMonth -= nSubMonths;
+        nMonth = static_cast< sal_uInt16 >( nNewMonth );
     setDay();
 }
 
 sal_Int32 ScaDate::getDate( sal_Int32 nNullDate ) const
 {
     sal_uInt16 nLastDay = DaysInMonth( nMonth, nYear );
-    sal_uInt16 nRealDay = bLastDay ? nLastDay : Min( nLastDay, nOrigDay );
+    sal_uInt16 nRealDay = (bLastDayMode && bLastDay) ? nLastDay : Min( nLastDay, nOrigDay );
     return DateToDays( nRealDay, nMonth, nYear ) - nNullDate;
 }
 
-sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo )
+sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( lang::IllegalArgumentException )
 {
     if( rFrom > rTo )
         return getDiff( rTo, rFrom );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-09 11:09:01 $
+ *  last change: $Author: dr $ $Date: 2001-10-12 09:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1010,35 +1010,44 @@ private:
                                 /// @ return  count of days in the given year range
     sal_Int32                   getDaysInYearRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const;
 
+                                /// adds/subtracts the given count of years, does not adjust day
+    void                        doAddYears( sal_Int32 nYearCount ) throw( CSS::lang::IllegalArgumentException );
+
 public:
     sal_uInt16                  nOrigDay;
     sal_uInt16                  nDay;
     sal_uInt16                  nMonth;
     sal_uInt16                  nYear;
-    sal_Bool                    bLastDay;
-    sal_Bool                    b30Days;
-    sal_Bool                    bUSMode;
+    sal_Bool                    bLastDayMode : 1;
+    sal_Bool                    bLastDay : 1;
+    sal_Bool                    b30Days : 1;
+    sal_Bool                    bUSMode : 1;
 
                                 ScaDate();
+                                /** @param nBase
+                                        date handling mode (days in month / days in year):
+                                        0 = 30 days / 360 days (US NASD)
+                                        1 = exact / exact
+                                        2 = exact / 360
+                                        3 = exact / 365
+                                        4 = 30 days / 360 days (Europe)
+                                        5 = exact / exact (no last day adjustment) */
                                 ScaDate( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nBase );
                                 ScaDate( const ScaDate& rCopy );
     ScaDate&                    operator=( const ScaDate& rCopy );
 
-                                /// adds the given count of months, adjusts day
-    void                        addMonths( sal_uInt16 nAddMonths );
-                                /// subtracts the given count of months, adjusts day
-    void                        subMonths( sal_uInt16 nSubMonths );
+                                /// adds/subtracts the given count of months, adjusts day
+    void                        addMonths( sal_Int32 nMonthCount ) throw( CSS::lang::IllegalArgumentException );
+
                                 /// sets the given year, adjusts day
     inline void                 setYear( sal_uInt16 nNewYear );
-                                /// adds the given count of years, adjusts day
-    inline void                 addYears( sal_uInt16 nAddYears );
-                                /// subtracts the given count of years, adjusts day
-    inline void                 subYears( sal_uInt16 nSubYears );
+                                /// adds/subtracts the given count of years, adjusts day
+    inline void                 addYears( sal_Int32 nYearCount ) throw( CSS::lang::IllegalArgumentException );
 
                                 /// @return  the internal number of the current date
     sal_Int32                   getDate( sal_Int32 nNullDate ) const;
                                 /// @return  the number of days between the two dates
-    static sal_Int32            getDiff( const ScaDate& rFrom, const ScaDate& rTo );
+    static sal_Int32            getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( CSS::lang::IllegalArgumentException );
 
     sal_Bool                    operator<( const ScaDate& rCmp ) const;
     inline sal_Bool             operator<=( const ScaDate& rCmp ) const { return !(rCmp < *this); }
@@ -1062,15 +1071,9 @@ inline void ScaDate::setYear( sal_uInt16 nNewYear )
     setDay();
 }
 
-inline void ScaDate::addYears( sal_uInt16 nAddYears )
+inline void ScaDate::addYears( sal_Int32 nYearCount ) throw( CSS::lang::IllegalArgumentException )
 {
-    nYear += nAddYears;
-    setDay();
-}
-
-inline void ScaDate::subYears( sal_uInt16 nSubYears )
-{
-    nYear -= nSubYears;
+    doAddYears( nYearCount );
     setDay();
 }
 
