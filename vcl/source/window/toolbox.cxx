@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-30 16:38:24 $
+ *  last change: $Author: pb $ $Date: 2002-11-01 08:32:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5017,12 +5017,15 @@ ImplToolItem* ToolBox::ImplGetLastValidItem( USHORT nLine )
 
 // -----------------------------------------------------------------------
 
-static USHORT ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem > rList )
+static USHORT ImplFindItemPos( const ImplToolItem* pItem, const std::vector< ImplToolItem >& rList )
 {
     USHORT nPos;
     for( nPos = 0; nPos < rList.size(); nPos++ )
+    {
+        const ImplToolItem* pTemp = &rList[ nPos ];
         if( &rList[ nPos ] == pItem )
             return nPos;
+    }
     return TOOLBOX_ITEM_NOTFOUND;
 }
 
@@ -5128,8 +5131,8 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
             while( it != mpData->m_aItems.begin() )
             {
                 --it;
-                if ( (pItem->meType == TOOLBOXITEM_BUTTON) &&
-                    it->mbEnabled && it->mbVisible && !ImplIsFixedControl( pItem ) )
+                if ( (it->meType == TOOLBOXITEM_BUTTON) &&
+                    it->mbEnabled && it->mbVisible && !ImplIsFixedControl( &(*it) ) )
                 {
                     pItem = &(*it);
                     break;
