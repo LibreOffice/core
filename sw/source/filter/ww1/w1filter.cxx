@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:07:48 $
+ *  last change: $Author: cmc $ $Date: 2002-12-06 16:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,14 +406,7 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
             // ignore here
         break;
         default:
-        {
-#ifdef DEBUG
-            char s[200];
-            sprintf(s, "%s(%d) assert (Ww1PlainText::IsChar(c)) failed"
-             ": unknown char 0x%02x", __FILE__, __LINE__, cUnknown);
-            DBG_ERROR(s);
-#endif
-        }
+        break;
         }
 
     OutStart( rOut );   // Attrs ggfs. starten und Naechste Pos berechnen
@@ -488,14 +481,7 @@ void Ww1Manager::Out(Ww1Shell& rOut, BYTE cUnknown)
             // ignore here
         break;
         default:
-        {
-#ifdef DEBUG
-            char s[200];
-            sprintf(s, "%s(%d) assert (Ww1PlainText::IsChar(c)) failed"
-             ": unknown char 0x%02x", __FILE__, __LINE__, cUnknown);
-            DBG_ERROR(s);
-#endif
-        }
+        break;
         }
 // alle attribute, die's brauchen beginnen
     if (!Pushed())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: w1sprm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 08:07:49 $
+ *  last change: $Author: cmc $ $Date: 2002-12-06 16:36:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,6 @@
 #pragma hdrstop
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
-// std
-#include <stdio.h> // sprintf
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
@@ -198,16 +196,6 @@ void Ww1Sprm::Start(
 void Ww1SingleSprm::Start(
     Ww1Shell&, BYTE nId, BYTE*, USHORT, Ww1Manager&)
 {
-#ifdef DEBUG
-//  ASSERT(FALSE, "Unknown Sprm");
-    if (nId)
-    {
-        char s[200];
-        sprintf(s, "%s(%d) Sprm id %d started.",
-         __FILE__, __LINE__,(int)nId);
-        DBG_ERROR(s);
-    }
-#endif
 }
 
 void Ww1SingleSprm::Stop(

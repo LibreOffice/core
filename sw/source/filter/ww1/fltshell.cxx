@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-12-04 15:56:18 $
+ *  last change: $Author: cmc $ $Date: 2002-12-06 16:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 #define ITEMID_BOXINFO      SID_ATTR_BORDER_INNER
 #include <ctype.h>
-#include <stdio.h> // sprintf
 
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
