@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:25:58 $
+ *  last change: $Author: fs $ $Date: 2001-08-30 08:06:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
 #endif
-#ifndef _DBA_CORE_REGISTRYHELPER_HXX_
-#include "registryhelper.hxx"
-#endif
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
@@ -133,7 +130,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::container;
-using namespace ::com::sun::star::registry;
+using namespace ::com::sun::star::util;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
@@ -325,6 +322,20 @@ void OColumn::fireValueChange(const ::connectivity::ORowSetValue& _rOldValue)
 //============================================================
 //= OColumnSettings
 //============================================================
+DBG_NAME( OColumnSettings )
+//------------------------------------------------------------------------------
+OColumnSettings::OColumnSettings()
+    :m_bHidden(sal_False)
+{
+    DBG_CTOR( OColumnSettings, NULL );
+}
+
+//------------------------------------------------------------------------------
+OColumnSettings::~OColumnSettings()
+{
+    DBG_DTOR( OColumnSettings, NULL );
+}
+
 //------------------------------------------------------------------------------
 void OColumnSettings::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
@@ -447,7 +458,7 @@ sal_Bool OColumnSettings::isDefaulted() const
 }
 
 //------------------------------------------------------------------------------
-sal_Bool OColumnSettings::writeUITo(const OConfigurationNode& _rConfigNode)
+sal_Bool OColumnSettings::writeUITo(const OConfigurationNode& _rConfigNode, const Reference< XNumberFormatsSupplier >& _rxFormats)
 {
     _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_ALIGNMENT, m_aAlignment);
     _rConfigNode.setNodeValue(CONFIGKEY_COLUMN_WIDTH, m_aWidth);
@@ -458,8 +469,10 @@ sal_Bool OColumnSettings::writeUITo(const OConfigurationNode& _rConfigNode)
 }
 
 //------------------------------------------------------------------------------
-void OColumnSettings::readUIFrom(const OConfigurationNode& _rConfigNode)
+void OColumnSettings::readUIFrom(const OConfigurationNode& _rConfigNode, const Reference< XNumberFormatsSupplier >& _rxFormats)
 {
+    OSL_ENSURE( _rxFormats.is(), "OColumnSettings::readUIFrom: invalid (insufficient) context!" );
+
     // some defaults
     m_bHidden = sal_False;
     m_aRelativePosition.clear();
@@ -518,8 +531,9 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
 //--------------------------------------------------------------------------
 OColumns::~OColumns()
 {
+    clearColumnSettings();
+
     DBG_DTOR(OColumns, NULL);
-    //  DELETEZ(m_pColMap);
 }
 
 // XServiceInfo
@@ -543,16 +557,41 @@ Sequence< ::rtl::OUString > OColumns::getSupportedServiceNames(  ) throw (Runtim
     return aSNS;
 }
 
+//------------------------------------------------------------------
+struct DeleteColumnSettings : ::std::unary_function< MapName2Settings::value_type, void >
+{
+    void operator()( const MapName2Settings::value_type& _rMapElement ) const
+    {
+        delete _rMapElement.second;
+    }
+};
 
 //------------------------------------------------------------------
-void OColumns::append(const ::rtl::OUString& rName, OColumn* pCol)
+void OColumns::append( const ::rtl::OUString& _rName, OColumn* _pColumn )
 {
     MutexGuard aGuard(m_rMutex);
 
-    pCol->m_sName = rName;
-    OSL_ENSURE(m_aNameMap.find(rName) == m_aNameMap.end(),"OColumns::append: Column already exists");
+    OSL_ENSURE( _pColumn, "OColumns::append: invalid column!" );
+    OSL_ENSURE( 0 == m_aNameMap.count( _rName ),"OColumns::append: Column already exists");
 
-    insertElement(rName,pCol); // already acuires the column
+    _pColumn->m_sName = _rName;
+
+    // do we have settings for this column?
+    MapName2Settings::iterator aExistentSettings = m_aSettings.find( _rName );
+    if ( m_aSettings.end() != aExistentSettings )
+    {   // yes, we do
+        // merge the settings into the columns
+        OColumnSettings* pColSettings = _pColumn->getSettings();
+        if ( pColSettings )
+            *pColSettings = *aExistentSettings->second;
+
+        // and remove the settings
+        DeleteColumnSettings()( *aExistentSettings );
+        m_aSettings.erase( aExistentSettings );
+    }
+
+    // now really insert the column
+    insertElement( _rName, _pColumn );
 }
 
 //------------------------------------------------------------------
@@ -561,6 +600,7 @@ void OColumns::clearColumns()
     MutexGuard aGuard(m_rMutex);
     disposing();
 }
+
 // -----------------------------------------------------------------------------
 void SAL_CALL OColumns::disposing(void)
 {
@@ -568,8 +608,16 @@ void SAL_CALL OColumns::disposing(void)
     m_xDrvColumns = NULL;
     OColumns_BASE::disposing();
 }
+
 //------------------------------------------------------------------------------
-void OColumns::loadSettings(const OConfigurationNode& _rLocation)
+void OColumns::clearColumnSettings()
+{
+    ::std::for_each( m_aSettings.begin(), m_aSettings.end(), DeleteColumnSettings() );
+    m_aSettings.swap( MapName2Settings() );
+}
+
+//------------------------------------------------------------------------------
+void OColumns::loadSettings( const OConfigurationNode& _rLocation, const Reference< XNumberFormatsSupplier >& _rxNumberFormats )
 {
     MutexGuard aGuard(m_rMutex);
 
@@ -578,48 +626,49 @@ void OColumns::loadSettings(const OConfigurationNode& _rLocation)
 
     OSL_ENSURE(m_pColFactoryImpl, "OColumns::loadSettings: need a factory to create columns!");
 
+    // empty our remembered settings
+    clearColumnSettings();
+
     Sequence< ::rtl::OUString > aColumNames = aLocation.getNodeNames();
     const ::rtl::OUString* pColumNames = aColumNames.getConstArray();
     for (sal_Int32 i=0; i<aColumNames.getLength(); ++i, ++pColumNames)
     {
-        // do we already have a column with that name ?
-        OColumn* pExistent = NULL;
-        // create the column if neccessary
-        if (!hasByName(*pColumNames))
-        {
-            if (m_pColFactoryImpl)
-                pExistent = m_pColFactoryImpl->createColumn(*pColumNames);
+        OColumnSettings* pSettings = NULL;
 
-            if (pExistent)
-                append(*pColumNames, pExistent);
-            else
+        // do we already have a column with that name ?
+        // create the column if neccessary
+        if ( !hasByName( *pColumNames ) )
+        {
+            // create a new object to hold the settings
+            // later on, they will be merged into the real column if it get's inserted
+            pSettings = new OColumnSettings;
+            OSL_ENSURE( m_aSettings.end() == m_aSettings.find( *pColumNames ),
+                "OColumns::loadSettings: already have settings for this name!" );
+            m_aSettings.insert( MapName2Settings::value_type( *pColumNames, pSettings ) );
+        }
+        else
+        {
+            Reference< XUnoTunnel > xTunnel;
+            getByName( *pColumNames ) >>= xTunnel;
+            if ( xTunnel.is() )
             {
-                // column doesn't exist any longer so delete the config node
-                aLocation.removeNode(*pColumNames);
-                continue;
+                OColumn* pExistent = reinterpret_cast< OColumn* >( xTunnel->getSomething( OColumn::getUnoTunnelImplementationId() ) );
+                if ( pExistent )
+                    pSettings = pExistent->getSettings();
             }
         }
-        else
-        {
-            Reference<XNamed> xColumn;
-            ::cppu::extractInterface(xColumn,getByName(*pColumNames));
-            Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xColumn,UNO_QUERY);
-            if(xTunnel.is())
-                pExistent = (OColumn*)xTunnel->getSomething(OColumn::getUnoTunnelImplementationId());
-            OSL_ENSURE(pExistent,"OColumns::loadSettings: No column from unotunnelhelper!");
-        }
 
-        OConfigurationNode aCurrent = aLocation.openNode(*pColumNames);
-        OColumnSettings* pExistentSettings = pExistent->getSettings();
-        if (pExistentSettings)
-            pExistentSettings->readUIFrom(aCurrent);
-        else
-            OSL_ENSURE(sal_False, "OColumns::loadSettings : no settings for the column !");
+        OSL_ENSURE( pSettings, "OColumns::loadSettings: no object which is able to hold the settings!" );
+        if ( pSettings )
+        {
+            OConfigurationNode aCurrent = aLocation.openNode( *pColumNames );
+            pSettings->readUIFrom( aCurrent, _rxNumberFormats );
+        }
     }
 }
 
 //------------------------------------------------------------------------------
-void OColumns::storeSettings(const OConfigurationNode& _rLocation)
+void OColumns::storeSettings( const OConfigurationNode& _rLocation, const Reference< XNumberFormatsSupplier >& _rxNumberFormats )
 {
     MutexGuard aGuard(m_rMutex);
     if (!_rLocation.isValid())
@@ -692,7 +741,7 @@ void OColumns::storeSettings(const OConfigurationNode& _rLocation)
             }
 
             // let the column write itself
-            pCurrentSettings->writeUITo(aColumnNode);
+            pCurrentSettings->writeUITo( aColumnNode, _rxNumberFormats );
         }
     }
 
@@ -943,515 +992,3 @@ void SAL_CALL OColumns::dropByIndex( sal_Int32 index ) throw(SQLException, Index
 
     dropByName(m_aElements[index]->first);
 }
-
-/*
-
-//============================================================
-//= OColumn
-//============================================================
-DBG_NAME(OColumn);
-//------------------------------------------------------------------------------
-void OColumn::construct()
-{
-    m_nType = DataType::OTHER;
-    m_nPrecision = 0;
-    m_nNumberFormat = 0;
-    m_nScale = 0;
-    m_bAutoIncrement = m_bRowVersion = sal_False;
-    m_nIsNullable = ColumnValue::NULLABLE_UNKNOWN;
-    m_bHidden = sal_False;
-}
-
-//------------------------------------------------------------------------------
-void OColumn::construct(const OColumn& _rSource)
-{
-    m_aAlignment = _rSource.m_aAlignment;
-    m_aWidth = _rSource.m_aWidth;
-    m_sName = _rSource.m_sName;
-    m_aTypeName = _rSource.m_aTypeName;
-    m_aDescription = _rSource.m_aDescription;
-    m_aDefaultValue = _rSource.m_aDefaultValue;
-    m_nType = _rSource.m_nType;
-    m_nPrecision = _rSource.m_nPrecision;
-    m_nScale = _rSource.m_nScale;
-    m_nNumberFormat = _rSource.m_nNumberFormat;
-    m_nIsNullable = _rSource.m_nIsNullable;
-    m_bAutoIncrement = _rSource.m_bAutoIncrement;
-    m_bRowVersion = _rSource.m_bRowVersion;
-    m_bHidden = _rSource.m_bHidden;
-}
-
-//--------------------------------------------------------------------------
-OColumn::OColumn()
-        :OColumnBase(m_aMutex)
-        ,OPropertySetHelper(OColumnBase::rBHelper)
-{
-    DBG_CTOR(OColumn, NULL);
-    construct();
-}
-
-//--------------------------------------------------------------------------
-OColumn::OColumn(const ::rtl::OUString& _rName)
-        :OColumnBase(m_aMutex)
-        ,OPropertySetHelper(OColumnBase::rBHelper)
-        ,m_sName(_rName)
-{
-    DBG_CTOR(OColumn, NULL);
-    construct();
-}
-
-//--------------------------------------------------------------------------
-OColumn::OColumn(const OColumn& _rSource)
-        :OColumnBase(m_aMutex)
-        ,OPropertySetHelper(OColumnBase::rBHelper)
-{
-    DBG_CTOR(OColumn, NULL);
-    construct(_rSource);
-}
-
-//--------------------------------------------------------------------------
-OColumn::~OColumn()
-{
-    DBG_DTOR(OColumn, NULL);
-}
-
-// com::sun::star::lang::XTypeProvider
-//--------------------------------------------------------------------------
-Sequence< Type > OColumn::getTypes() throw (RuntimeException)
-{
-    OTypeCollection aTypes(::getCppuType( (const Reference< XPropertySet > *)0 ),
-                            OColumnBase::getTypes() );
-
-    return aTypes.getTypes();
-}
-
-//--------------------------------------------------------------------------
-Sequence< sal_Int8 > OColumn::getImplementationId() throw (RuntimeException)
-{
-    static OImplementationId * pId = 0;
-    if (! pId)
-    {
-        MutexGuard aGuard( Mutex::getGlobalMutex() );
-        if (! pId)
-        {
-            static OImplementationId aId;
-            pId = &aId;
-        }
-    }
-    return pId->getImplementationId();
-}
-
-// com::sun::star::uno::XInterface
-//--------------------------------------------------------------------------
-Any OColumn::queryInterface( const Type & rType ) throw (RuntimeException)
-{
-    Any aIface = OColumnBase::queryInterface( rType );
-    if (!aIface.hasValue())
-        aIface = ::cppu::queryInterface(
-                    rType,
-                    static_cast< XPropertySet * >( this ));
-    return aIface;
-}
-
-//--------------------------------------------------------------------------
-void OColumn::acquire() throw(RuntimeException)
-{
-    OColumnBase::acquire();
-}
-
-//--------------------------------------------------------------------------
-void OColumn::release() throw(RuntimeException)
-{
-    OColumnBase::release();
-}
-
-// OComponentHelper
-//------------------------------------------------------------------------------
-void OColumn::disposing()
-{
-    OPropertySetHelper::disposing();
-}
-
-// OPropertySetHelper
-//------------------------------------------------------------------------------
-void OColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
-{
-    switch (nHandle)
-    {
-        case PROPERTY_ID_ALIGN:
-            rValue = m_aAlignment;
-            break;
-        case PROPERTY_ID_HIDDEN:
-        {
-            sal_Bool bVal = m_bHidden;
-            rValue.setValue(&bVal, getBooleanCppuType());
-        }
-        case PROPERTY_ID_WIDTH:
-            rValue = m_aWidth;
-            break;
-        case PROPERTY_ID_TYPE:
-            rValue <<= m_nType;
-            break;
-        case PROPERTY_ID_PRECISION:
-            rValue <<= m_nPrecision;
-            break;
-        case PROPERTY_ID_SCALE:
-            rValue <<= m_nScale;
-            break;
-        case PROPERTY_ID_ISNULLABLE:
-            rValue <<= m_nIsNullable;
-            break;
-        case PROPERTY_ID_NUMBERFORMAT:
-            rValue <<= m_nNumberFormat;
-            break;
-        case PROPERTY_ID_TYPENAME:
-            rValue <<= m_aTypeName;
-            break;
-        case PROPERTY_ID_DESCRIPTION:
-            rValue <<= m_aDescription;
-            break;
-        case PROPERTY_ID_DEFAULTVALUE:
-            rValue <<= m_aDefaultValue;
-            break;
-        case PROPERTY_ID_ISAUTOINCREMENT:
-        {
-            sal_Bool bVal = m_bAutoIncrement;
-            rValue.setValue(&bVal, getBooleanCppuType());
-        }   break;
-        case PROPERTY_ID_ISROWVERSION:
-        {
-            sal_Bool bVal = m_bRowVersion;
-            rValue.setValue(&bVal, getBooleanCppuType());
-        }   break;
-        case PROPERTY_ID_NAME:
-            rValue <<= m_sName;
-            break;
-        default:
-            DBG_ERROR("unknown Property");
-    }
-}
-
-//------------------------------------------------------------------------------
-sal_Bool OColumn::convertFastPropertyValue(
-                            Any & rConvertedValue,
-                            Any & rOldValue,
-                            sal_Int32 nHandle,
-                            const Any& rValue )
-                                throw (IllegalArgumentException)
-{
-    sal_Bool bModified = sal_False;
-    switch (nHandle)
-    {
-        case PROPERTY_ID_ALIGN:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aAlignment,
-                ::getCppuType(static_cast< sal_Int32* >(NULL)));
-            break;
-        case PROPERTY_ID_WIDTH:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aWidth,
-                ::getCppuType(static_cast< sal_Int32* >(NULL)));
-            break;
-        case PROPERTY_ID_HIDDEN:
-            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bHidden);
-            break;
-    }
-    return bModified;
-}
-
-//------------------------------------------------------------------------------
-void OColumn::setFastPropertyValue_NoBroadcast(
-                                sal_Int32 nHandle,
-                                const Any& rValue
-                                                 )
-                                                 throw (Exception)
-{
-    switch (nHandle)
-    {
-        case PROPERTY_ID_ALIGN:
-            OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
-                "OColumn::setFastPropertyValue_NoBroadcast(ALIGN) : invalid value !");
-            m_aAlignment = rValue;
-            break;
-        case PROPERTY_ID_WIDTH:
-            OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< sal_Int32* >(NULL))),
-                "OColumn::setFastPropertyValue_NoBroadcast(WIDTH) : invalid value !");
-            m_aWidth = rValue;
-            break;
-        case PROPERTY_ID_HIDDEN:
-            OSL_ENSURE(rValue.getValueType().equals(::getBooleanCppuType()),
-                "OColumn::setFastPropertyValue_NoBroadcast(HIDDEN) : invalid value !");
-            m_bHidden = ::comphelper::getBOOL(rValue);
-            break;
-    }
-}
-
-//------------------------------------------------------------------------------
-Reference< XPropertySetInfo > OColumn::getPropertySetInfo() throw (RuntimeException)
-{
-    return createPropertySetInfo( getInfoHelper() ) ;
-}
-
-// comphelper::OPropertyArrayUsageHelper
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper* OColumn::createArrayHelper( ) const
-{
-    BEGIN_PROPERTY_HELPER(14)
-        DECL_PROP2(ALIGN,               sal_Int32,          BOUND, MAYBEVOID);
-        DECL_PROP1(DEFAULTVALUE,        ::rtl::OUString,    READONLY);
-        DECL_PROP1(DESCRIPTION,         ::rtl::OUString,    READONLY);
-        DECL_PROP1(NUMBERFORMAT,        sal_Int32,          BOUND);
-        DECL_BOOL_PROP1(ISAUTOINCREMENT,                    READONLY);
-        DECL_BOOL_PROP1(HIDDEN,                             BOUND);
-        DECL_PROP1(ISNULLABLE,          sal_Int32,          READONLY);
-        DECL_BOOL_PROP1(ISROWVERSION,                       READONLY);
-        DECL_PROP1(NAME,                ::rtl::OUString,    READONLY);
-        DECL_PROP1(PRECISION,           sal_Int32,          READONLY);
-        DECL_PROP1(SCALE,               sal_Int32,          READONLY);
-        DECL_PROP1(TYPE,                sal_Int32,          READONLY);
-        DECL_PROP1(TYPENAME,            ::rtl::OUString,    READONLY);
-        DECL_PROP2(WIDTH,               sal_Int32,          BOUND, MAYBEVOID);
-    END_PROPERTY_HELPER();
-}
-
-// cppu::OPropertySetHelper
-//------------------------------------------------------------------------------
-IPropertyArrayHelper& OColumn::getInfoHelper()
-{
-    return *getArrayHelper();
-}
-
-// XNamed
-//------------------------------------------------------------------------------
-::rtl::OUString OColumn::getName( ) throw(RuntimeException)
-{
-    return m_sName;
-}
-
-//------------------------------------------------------------------------------
-void OColumn::setName( const ::rtl::OUString& aName ) throw(RuntimeException)
-{
-    // name setting not allowed
-}
-
-// XServiceInfo
-//------------------------------------------------------------------------------
-rtl::OUString OColumn::getImplementationName(  ) throw(RuntimeException)
-{
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OColumn");
-}
-
-//------------------------------------------------------------------------------
-sal_Bool OColumn::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
-{
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
-}
-
-//------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > OColumn::getSupportedServiceNames(  ) throw (RuntimeException)
-{
-    Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = SERVICE_SDB_COLUMN;
-    return aSNS;
-}
-
-//============================================================
-//= OColumns
-//============================================================
-DBG_NAME(OColumns);
-
-//--------------------------------------------------------------------------
-OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, sal_Bool _bCaseSensitive)
-    :m_rParent(_rParent)
-    ,m_rMutex(_rMutex)
-    ,m_bCaseSensitive(_bCaseSensitive)
-{
-    m_pColMap = new OColumnMap(17, ::comphelper::UStringMixHash(_bCaseSensitive), ::comphelper::UStringMixEqual(_bCaseSensitive));
-}
-
-//--------------------------------------------------------------------------
-OColumns::~OColumns()
-{
-    DELETEZ(m_pColMap);
-}
-
-// XServiceInfo
-//------------------------------------------------------------------------------
-rtl::OUString OColumns::getImplementationName(  ) throw(RuntimeException)
-{
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.OColumns");
-}
-
-//------------------------------------------------------------------------------
-sal_Bool OColumns::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)
-{
-    return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
-}
-
-//------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > OColumns::getSupportedServiceNames(  ) throw (RuntimeException)
-{
-    Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = SERVICE_SDBCX_CONTAINER;
-    aSNS[1] = SERVICE_SDBCX_COLUMNS;
-    return aSNS;
-}
-
-// XElementAccess
-//------------------------------------------------------------------------------
-Type SAL_CALL OColumns::getElementType(  ) throw(RuntimeException)
-{
-    return::getCppuType(static_cast<Reference<XPropertySet>*>(NULL));
-}
-
-//------------------------------------------------------------------------------
-sal_Bool OColumns::hasElements(void) throw( RuntimeException )
-{
-    MutexGuard aGuard(m_rMutex);
-    return !m_aColArray.empty();
-}
-
-// XEnumerationAccess
-//------------------------------------------------------------------------------
-Reference< XEnumeration >  OColumns::createEnumeration(void) throw( RuntimeException )
-{
-    MutexGuard aGuard(m_rMutex);
-    return new ::comphelper::OEnumerationByIndex(this);
-}
-
-// XIndexAccess
-//------------------------------------------------------------------------------
-sal_Int32 OColumns::getCount( ) throw( RuntimeException )
-{
-    MutexGuard aGuard(m_rMutex);
-    return m_aColArray.size();
-}
-
-//------------------------------------------------------------------------------
-Any OColumns::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException,
-                                                  WrappedTargetException,
-                                                  RuntimeException)
-{
-    MutexGuard aGuard(m_rMutex);
-    if (Index < 0 || Index >= m_aColArray.size())
-        throw IndexOutOfBoundsException();
-
-    return makeAny(Reference< XPropertySet >(m_aColArray[Index]));
-}
-
-// XNameAccess
-//------------------------------------------------------------------------------
-Any OColumns::getByName(const ::rtl::OUString& aName) throw(NoSuchElementException,
-                                                            WrappedTargetException,
-                                                            RuntimeException)
-{
-    MutexGuard aGuard(m_rMutex);
-    OColumnMap::const_iterator i = m_pColMap->find(aName);
-    if (i == m_pColMap->end())
-        throw NoSuchElementException();
-
-    return makeAny(Reference< XPropertySet >((*i).second));
-}
-
-//------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > OColumns::getElementNames(void) throw(RuntimeException)
-{
-    MutexGuard aGuard(m_rMutex);
-    Sequence< ::rtl::OUString > aNameList(m_aColArray.size());
-    ::rtl::OUString* pStringArray = aNameList.getArray();
-    for (OColumnArray::const_iterator i = m_aColArray.begin(); m_aColArray.end() != i; i++)
-    {
-        (*pStringArray) = (*i)->m_sName;
-        ++pStringArray;
-    }
-    return aNameList;
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OColumns::appendByDescriptor( const Reference< XPropertySet >& descriptor ) throw(SQLException, ElementExistException, RuntimeException)
-{
-    // TODO
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OColumns::dropByName( const ::rtl::OUString& elementName ) throw(SQLException, NoSuchElementException, RuntimeException)
-{
-    // TODO
-}
-
-//------------------------------------------------------------------------------
-void SAL_CALL OColumns::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
-{
-    // TODO
-}
-
-//------------------------------------------------------------------------------
-sal_Bool OColumns::hasByName( const ::rtl::OUString& aName ) throw(RuntimeException)
-{
-    MutexGuard aGuard(m_rMutex);
-    OColumnMap::const_iterator i = m_pColMap->find(aName);
-    return i != m_pColMap->end();
-}
-
-//------------------------------------------------------------------------------
-sal_Int32 OColumns::findColumn(const rtl::OUString& columnName) throw( SQLException, RuntimeException )
-{
-    MutexGuard aGuard(m_rMutex);
-    OColumnMap::const_iterator i = m_pColMap->find(columnName);
-    if (i == m_pColMap->end())
-        return 0;
-
-    return find(m_aColArray.begin(), m_aColArray.end(), (*i).second) -  m_aColArray.begin() + 1;
-}
-
-//------------------------------------------------------------------------------
-void OColumns::disposing()
-{
-    MutexGuard aGuard(m_rMutex);
-    for (OColumnArray::iterator i = m_aColArray.begin(); m_aColArray.end() != i; i++)
-    {
-        (*i)->dispose();
-        (*i)->release();
-    }
-    m_aColArray.clear();
-    m_pColMap->clear();
-}
-
-#if 0
-//------------------------------------------------------------------
-const OColumn* OColumns::at(const rtl::OUString& rName) const
-{
-    OColumnMap::const_iterator i = m_pColMap->find(rName);
-    return i == m_pColMap->end() ? NULL : (*i).second;
-}
-
-#endif
-
-//------------------------------------------------------------------
-void OColumns::setCaseSensitive(sal_Bool bCaseSensitive)
-{
-    MutexGuard aGuard(m_rMutex);
-    OSL_ENSURE(m_pColMap->empty(), "OColumns::setCaseSensitive() there are still existing columns");
-    if (bCaseSensitive == m_pColMap->hash_funct().isCaseSensitive())
-        return;
-
-    delete(m_pColMap);
-    m_pColMap = new OColumnMap(17, ::comphelper::UStringMixHash(bCaseSensitive), ::comphelper::UStringMixEqual(bCaseSensitive));
-}
-
-//------------------------------------------------------------------
-void OColumns::append(OColumn* pCol)
-{
-    MutexGuard aGuard(m_rMutex);
-    pCol->acquire();
-    (*m_pColMap)[pCol->m_sName] = pCol;
-    m_aColArray.push_back(pCol);
-}
-
-//------------------------------------------------------------------
-void OColumns::clearColumns()
-{
-    MutexGuard aGuard(m_rMutex);
-    m_aColArray.clear();
-    m_pColMap->clear();
-}
-*/
-
