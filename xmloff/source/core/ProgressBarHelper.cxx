@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProgressBarHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-21 10:10:31 $
+ *  last change: $Author: sab $ $Date: 2001-09-12 12:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 #include "ProgressBarHelper.hxx"
 #endif
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 const sal_Int32 nDefaultProgressBarRange = 1000000;
@@ -81,7 +85,9 @@ ProgressBarHelper::ProgressBarHelper(const ::com::sun::star::uno::Reference < ::
                                     const ::rtl::OUString& rText)
     : fOldPercent(0.0),
     nRange(nDefaultProgressBarRange),
-    xStatusIndicator(xTempStatusIndicator)
+    xStatusIndicator(xTempStatusIndicator),
+    nReference(0),
+    nValue(0)
 {
 //  if (xStatusIndicator.is())
 //      xStatusIndicator->setText(rText);
@@ -116,17 +122,22 @@ sal_Int32 ProgressBarHelper::ChangeReference(sal_Int32 nNewReference)
 
 void ProgressBarHelper::SetValue(sal_Int32 nTempValue)
 {
-    nValue = nTempValue;
-    if (xStatusIndicator.is())
+    if (nTempValue >= nValue)
     {
-        double fValue(nValue);
-        double fNewValue ((fValue * nRange) / nReference);
-        double fPercent ((fNewValue * 100) / nRange);
-        if (fPercent >= (fOldPercent + fProgressStep))
+        nValue = nTempValue;
+        if (xStatusIndicator.is() && (nReference > 0))
         {
-            xStatusIndicator->setValue((sal_Int32)fNewValue);
-            fOldPercent = fPercent;
+            double fValue(nValue);
+            double fNewValue ((fValue * nRange) / nReference);
+            double fPercent ((fNewValue * 100) / nRange);
+            if (fPercent >= (fOldPercent + fProgressStep))
+            {
+                xStatusIndicator->setValue((sal_Int32)fNewValue);
+                fOldPercent = fPercent;
+            }
         }
     }
+    else
+        DBG_ERROR("tried to decrement the progressbar");
 }
 
