@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vectdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:02:23 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:06:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@ ModalDialog DLG_VECTORIZE
         Text[ czech ] = "Náhled";
         Text[ hebrew ] = "~Vorschau";
         Text[ hindi ] = "पूर्वदृश्य";
+        Text[ slovak ] = "Náhľad";
     };
 
     FixedLine GRP_SETTINGS
@@ -169,6 +170,7 @@ ModalDialog DLG_VECTORIZE
         Text[ czech ] = "Nastavení";
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "Settings";
+        Text[ slovak ] = "Nastavenia";
     };
 
     FixedText FT_LAYERS
@@ -202,6 +204,7 @@ ModalDialog DLG_VECTORIZE
         Text[ czech ] = "Počet barev:";
         Text[ hebrew ] = "~Farbanzahl:";
         Text[ hindi ] = "रंगों की संख्या:";
+        Text[ slovak ] = "Počet farieb:";
     };
 
     NumericField NM_LAYERS
@@ -251,6 +254,7 @@ ModalDialog DLG_VECTORIZE
         Text[ czech ] = "Redukce bodů:";
         Text[ hebrew ] = "~Punkt-Reduktion:";
         Text[ hindi ] = "बिन्दु घटाना:";
+        Text[ slovak ] = "Redukcia bodov:";
     };
 
     MetricField MT_REDUCE
@@ -303,6 +307,7 @@ ModalDialog DLG_VECTORIZE
         Text[ czech ] = "Výplň děr:";
         Text[ hebrew ] = "~Löcher füllen";
         Text[ hindi ] = "~छेदों को भरो:";
+        Text[ slovak ] = "Vy~plnenie dier:";
     };
 
     FixedText FT_FILLHOLES
@@ -336,6 +341,7 @@ ModalDialog DLG_VECTORIZE
         Text[ czech ] = "Velikost dlaždic:";
         Text[ hebrew ] = "~Kachelgröße:";
         Text[ hindi ] = "टइल परिमाण:";
+        Text[ slovak ] = "Veľkosť dlaždice:";
     };
 
     MetricField MT_FILLHOLES
@@ -387,6 +393,7 @@ ModalDialog DLG_VECTORIZE
         Text[ czech ] = "Zdrojový obrázek:";
         Text[ hebrew ] = "Originalbild:";
         Text[ hindi ] = "मूल चित्र:";
+        Text[ slovak ] = "Zdrojový obrázok:";
     };
 
     Control CTL_BMP
@@ -427,6 +434,7 @@ ModalDialog DLG_VECTORIZE
         Text[ czech ] = "Vektorový obrázek:";
         Text[ hebrew ] = "Vektorisiertes Bild:";
         Text[ hindi ] = "वेक्टरइस्ड चित्र:";
+        Text[ slovak ] = "Vektorizovaný obrázok:";
     };
 
     Control CTL_WMF
@@ -467,6 +475,7 @@ ModalDialog DLG_VECTORIZE
         Text[ czech ] = "Průběh";
         Text[ hebrew ] = "Fortschritt";
         Text[ hindi ] = "Progress";
+        Text[ slovak ] = "Priebeh";
     };
 
     Window WND_PRGS
@@ -500,7 +509,10 @@ ModalDialog DLG_VECTORIZE
     Text[ czech ] = "Převést na mnohoúhelník";
     Text[ hebrew ] = "In Polygon umwandeln";
     Text[ hindi ] = "बहुभुज में बदलो";
+    Text[ slovak ] = "Previesť na mnohouholník";
 };
+
+
 
 
 
