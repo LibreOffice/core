@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:48:38 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 08:18:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@ void SwView::ExecLingu(SfxRequest &rReq)
     {
         case FN_THESAURUS_DLG:
             StartThesaurus();
+            rReq.Ignore();
             break;
         case FN_SPELLING_DLG:
             SpellDocument( NULL, sal_False );
