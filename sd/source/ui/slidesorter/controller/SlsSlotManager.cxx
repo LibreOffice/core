@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:59:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:00:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "SlsSlotManager.hxx"
 
 #include "SlideSorterViewShell.hxx"
@@ -68,6 +67,7 @@
 #include "controller/SlsSelectionFunction.hxx"
 #include "controller/SlsFocusManager.hxx"
 #include "SlsHideSlideFunction.hxx"
+#include "SlsCommand.hxx"
 #include "model/SlideSorterModel.hxx"
 #include "model/SlsPageDescriptor.hxx"
 #include "model/SlsPageEnumeration.hxx"
@@ -167,6 +167,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         case SID_PRESENTATION:
         case SID_REHEARSE_TIMINGS:
             ShowSlideShow (rRequest);
+            rShell.Cancel();
             break;
 
         case SID_HIDE_SLIDE:
@@ -1358,6 +1359,39 @@ void SlotManager::AssignTransitionEffect (void)
                 pPage->SetSelected (FALSE);
         }
     }
+}
+
+
+
+
+void SlotManager::ExecuteCommandAsynchronously (::std::auto_ptr<Command> pCommand)
+{
+    // Ownership of command is (implicitely) transferred to the queue.
+    maCommandQueue.push(pCommand.get());
+    pCommand.release();
+    ULONG nUserEventId = Application::PostUserEvent(LINK(this,SlotManager,UserEventCallback));
+}
+
+
+
+
+IMPL_LINK(SlotManager, UserEventCallback, void*, pFoo)
+{
+    if ( ! maCommandQueue.empty())
+    {
+        Command* pCommand = maCommandQueue.front();
+        maCommandQueue.pop();
+
+        if (pCommand != NULL)
+        {
+            // The queue ownes the command that has just been removed from
+            // it.  Therefore it is deleted after it has been executed.
+            (*pCommand)();
+            delete pCommand;
+        }
+    }
+
+    return 1;
 }
 
 
