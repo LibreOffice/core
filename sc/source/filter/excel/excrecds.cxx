@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-13 12:33:15 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3190,7 +3190,7 @@ void ExcAutoFilterRecs::AddObjRecs( RootData& rRoot, const ScAddress& rPos, UINT
     ScAddress aAddr( rPos );
     for( UINT16 nObj = 0; nObj < nCols; nObj++ )
     {
-        XclObjDropDown* pObj = new XclObjDropDown( rRoot, aAddr, IsFiltered( nObj ) );
+        XclObjDropDown* pObj = new XclObjDropDown( *rRoot.pER, aAddr, IsFiltered( nObj ) );
         rRoot.pObjRecs->Add( pObj );
         aAddr.IncCol( 1 );
     }
