@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undostyl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-08-20 08:12:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ BOOL ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& rTarget) const
 //      apply page style
 //
 
-ScUndoApplyPageStyle::ScUndoApplyPageStyle( ScDocShell* pDocSh, USHORT nT,
+ScUndoApplyPageStyle::ScUndoApplyPageStyle( ScDocShell* pDocSh, SCTAB nT,
                     const String& rOld, const String& rNew ) :
     ScSimpleUndo( pDocSh ),
     nTab( nT ),
