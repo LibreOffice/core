@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-19 08:33:03 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1045,64 +1045,6 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
                 rSet.Put( SfxStringItem( SID_STATUSBARTEXT, GetStatusBarManager()->GetStatusBar()->GetText() ) );
                 break;
             }
-            case SID_OFFICE_VERSION_ID:
-            {
-                String sVersionString;
-                ResId aVerId( STR_VERSION_ID, pAppData_Impl->pLabelResMgr );
-                if(pAppData_Impl->pLabelResMgr->IsAvailable(    aVerId.SetRT( RSC_STRING ) ))
-                    sVersionString += String(aVerId);
-                else
-                    sVersionString += DEFINE_CONST_UNICODE("50"); // wenn man keine Iso-Dll haben sollte und vorher nicht abgeraucht ist
-                String sOS(S2U(getenv("OS")));
-                String sProc(S2U(getenv("CPU")));
-
-                sal_uInt16 nSystem = SYSTEM_ID;
-                if(nSystem < 10)
-                    sVersionString += '0';
-                sVersionString += String::CreateFromInt32( nSystem );
-                String sBuildVersion = lcl_GetVersionString(pAppData_Impl->pLabelResMgr);
-                sal_uInt16 nLen = sBuildVersion.Len();
-                if(nLen > 4)
-                {
-                    DBG_ERROR("Buildversion laenger als 4 Zeichen ?")
-                    sBuildVersion.Erase(4, nLen - 4);
-                }
-                else if(nLen < 4)
-                {
-                    DBG_ERROR("Buildversion kuerzer als 4 Zeichen ?")
-
-                    while(5 > nLen++)
-                        sBuildVersion.Insert(DEFINE_CONST_UNICODE("0"), 0);
-                }
-                sVersionString += sBuildVersion;
-                String sResStr(S2U(ResMgr::GetLang()));
-                if( sResStr.Len() < 2)
-                    sResStr.Insert(DEFINE_CONST_UNICODE("0"), 0);
-                sVersionString += sResStr;
-
-                aVerId = ResId( STR_VERSION_TYPE, pAppData_Impl->pLabelResMgr );
-                if(pAppData_Impl->pLabelResMgr->IsAvailable(    aVerId.SetRT( RSC_STRING ) ))
-                    sVersionString += String(aVerId);
-                else
-                    sVersionString += DEFINE_CONST_UNICODE("99"); // wenn man keine Iso-Dll haben sollte
-
-                sal_uInt16 nDemoKind = GetDemoKind();
-                switch(nDemoKind)
-                {
-                    case  SFX_DEMOKIND_FULL  : sVersionString += '1'; break;
-                    case  SFX_DEMOKIND_TRYBUY: sVersionString += '2'; break;
-                    case  SFX_DEMOKIND_DEMO  : sVersionString += '3'; break;
-                    default: sVersionString += '0';
-                }
-
-                // MT: Removed AppServer, do you still need the number?
-                // sVersionString += Application::IsRemoteServer() ? '1' : '0';
-                sVersionString += '0';
-                rSet.Put(SfxStringItem(nSID, sVersionString));
-
-            }
-            break;
-
             case SID_OFFICE_PRIVATE_USE:
             case SID_OFFICE_COMMERCIAL_USE:
             {
