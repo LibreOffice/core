@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationGraphicShape.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-03-06 17:34:56 $
+ *  last change: $Author: af $ $Date: 2002-03-07 09:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
 
 
 /// Set this object's name if is different to the current name.
-::rtl::OUString SAL_CALL
+::rtl::OUString
     AccessiblePresentationGraphicShape::createAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -136,7 +136,7 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
 
 
 
-::rtl::OUString SAL_CALL
+::rtl::OUString
     AccessiblePresentationGraphicShape::createAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePresentationShape.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-03-06 16:54:01 $
+ *  last change: $Author: af $ $Date: 2002-03-07 09:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
 
 
 /// Set this object's name if is different to the current name.
-::rtl::OUString SAL_CALL
+::rtl::OUString
     AccessiblePresentationShape::createAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -148,7 +148,7 @@ AccessiblePresentationShape::~AccessiblePresentationShape (void)
 
 
 
-::rtl::OUString SAL_CALL
+::rtl::OUString
     AccessiblePresentationShape::createAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
