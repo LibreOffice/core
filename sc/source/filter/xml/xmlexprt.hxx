@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 15:59:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:58:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XMLEXPRT_HXX
 #define SC_XMLEXPRT_HXX
 
@@ -153,10 +152,10 @@ class ScXMLExport : public SvXMLExport
     rtl::OUString               sElemTab;
     rtl::OUString               sElemP;
     sal_Int32                   nOpenRow;
-    sal_Int32                   nCurrentTable;
-    sal_Bool                    bHasRowHeader : 1;
-    sal_Bool                    bRowHeaderOpen : 1;
-    sal_Bool                    mbShowProgress : 1;
+    sal_uInt16                  nCurrentTable;
+    sal_Bool                    bHasRowHeader;
+    sal_Bool                    bRowHeaderOpen;
+    sal_Bool                    mbShowProgress;
 
 
     sal_Bool        HasDrawPages(com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xDoc);
@@ -197,8 +196,9 @@ class ScXMLExport : public SvXMLExport
         const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
     void OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow);
     void CloseRow(const sal_Int32 nRow);
-    sal_Bool GetColumnHeader(com::sun::star::table::CellRangeAddress& aColumnHeaderRange) const;
-    sal_Bool GetRowHeader(com::sun::star::table::CellRangeAddress& aRowHeaderRange) const;
+    void GetColumnRowHeader(sal_Bool& bHasColumnHeader, com::sun::star::table::CellRangeAddress& aColumnHeaderRange,
+        sal_Bool& bHasRowHeader, com::sun::star::table::CellRangeAddress& aRowHeaderRange,
+        rtl::OUString& rPrintRanges) const;
     void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
     void FillColumnRowGroups();
 
@@ -208,11 +208,7 @@ class ScXMLExport : public SvXMLExport
     sal_Bool GetMerged (const com::sun::star::table::CellRangeAddress* pCellRange,
         const com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet>& xTable);
 
-    sal_Bool GetCellText (const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell,
-        rtl::OUString& sOUTemp) const;
     sal_Bool GetCellText (ScMyCell& rMyCell) const;
-
-    rtl::OUString GetPrintRanges();
 
     void WriteCell (ScMyCell& aCell);
     void WriteAreaLink(const ScMyCell& rMyCell);
