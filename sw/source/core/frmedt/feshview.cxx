@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-17 08:12:58 $
+ *  last change: $Author: fme $ $Date: 2002-11-07 07:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,9 @@
 #endif
 #ifndef _SVDPAGE_HXX //autogen
 #include <svx/svdpage.hxx>
+#endif
+#ifndef _SVDPAGV_HXX //autogen wg. SdrPageView
+#include <svx/svdpagv.hxx>
 #endif
 #ifndef _IPOBJ_HXX //autogen
 #include <so3/ipobj.hxx>
@@ -1319,22 +1322,46 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
         if( !pBest || rMrkList.GetMarkCount() == 1 )
         {
             // Ausgangspunkt bestimmen.
+            SdrObjList* pList = NULL;
             if ( rMrkList.GetMarkCount() )
             {
-                SdrObject *pObj = rMrkList.GetMark(0)->GetObj();
-                if( pObj->IsWriterFlyFrame() )
-                    aPos = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Frm().Pos();
+                const SdrObject* pStartObj = rMrkList.GetMark(0)->GetObj();
+                if( pStartObj->IsWriterFlyFrame() )
+                    aPos = ((SwVirtFlyDrawObj*)pStartObj)->GetFlyFrm()->Frm().Pos();
                 else
-                    aPos = pObj->GetSnapRect().TopLeft();
+                    aPos = pStartObj->GetSnapRect().TopLeft();
+
+                // If an object inside a group is selected, we want to
+                // iterate over the group members.
+                if ( ! pStartObj->GetUserCall() )
+                    pList = pStartObj->GetObjList();
             }
             else
+            {
+                // If no object is selected, we check if we just entered a group.
+                // In this case we want to iterate over the group members.
                 aPos = GetCharRect().Center();
+                const SdrPageView* pPV = Imp()->GetDrawView()->GetPageViewPvNum( 0 );
+                const SdrObject* pStartObj = pPV ? pPV->GetAktGroup() : 0;
+                if ( pStartObj && pStartObj->ISA( SdrObjGroup ) )
+                    pList = pStartObj->GetSubList();
+            }
 
-            SdrPage* pPage = GetDoc()->GetDrawModel()->GetPage( 0 );
-            const ULONG nObjs = pPage->GetObjCount();
+            if ( ! pList )
+            {
+                // Here we are if
+                // A  No object has been selected and no group has been entered or
+                // B  An object has been selected and it is not inside a group
+                pList = GetDoc()->GetDrawModel()->GetPage( 0 );
+            }
+
+
+            ASSERT( pList, "No object list to iterate" )
+
+            const ULONG nObjs = pList->GetObjCount();
             for( ULONG nObj = 0; nObj < nObjs; ++nObj )
             {
-                SdrObject *pObj = pPage->GetObj( nObj );
+                SdrObject* pObj = pList->GetObj( nObj );
                 BOOL bFlyFrm = pObj->IsWriterFlyFrame();
                 if( ( bNoFly && bFlyFrm ) ||
                     ( bNoDraw && !bFlyFrm ) ||
@@ -1381,7 +1408,7 @@ BOOL SwFEShell::GotoObj( BOOL bNext, GotoObjType eType )
                     aBestPos = Point( nTmp, nTmp );
                     for( ULONG i = 0; i < nObjs; ++i )
                     {
-                        SdrObject *pObj = pPage->GetObj( i );
+                        SdrObject *pObj = pList->GetObj( i );
                         bFlyFrm = pObj->IsWriterFlyFrame();
                         if( ( bNoFly && bFlyFrm ) || ( bNoDraw && !bFlyFrm ) )
                             continue;
