@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-17 13:28:26 $
+ *  last change: $Author: cmc $ $Date: 2001-07-17 14:36:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1024,14 +1024,14 @@ long SwWW8ImplReader::Read_And( WW8PLCFManResult* pRes, BOOL )
     {
         const WW67_ATRD* pDescri = (WW67_ATRD*)pSD->GetData();
 #ifdef AUTHOR_AS_AUTHOR
-        const String* pA = GetAnnotationAuthor( SVBT16ToShort( pDescri->ibst ) );
+        const String* pA = GetAnnotationAuthor(SVBT16ToShort( pDescri->ibst ));
         if( pA )
             sAuthor = *pA;
 #endif
 
 #ifdef INITIAL_AS_AUTHOR
-        sAuthor = String( pDescri->xstUsrInitl + 1,
-                        (USHORT)pDescri->xstUsrInitl[0] );
+        sAuthor = String( pDescri->xstUsrInitl + 1, pDescri->xstUsrInitl[0],
+            RTL_TEXTENCODING_MS_1252);
 #endif
     }
     else
@@ -1039,30 +1039,15 @@ long SwWW8ImplReader::Read_And( WW8PLCFManResult* pRes, BOOL )
         const WW8_ATRD* pDescri = (const WW8_ATRD*)pSD->GetData();
 
 #ifdef AUTHOR_AS_AUTHOR
-        const String* pA = GetAnnotationAuthor( SVBT16ToShort( pDescri->ibst ) );
+        const String* pA = GetAnnotationAuthor(SVBT16ToShort( pDescri->ibst ));
         if( pA )
             sAuthor = *pA;
 #endif
 
 #ifdef INITIAL_AS_AUTHOR
-        BYTE nLen = (BYTE)SVBT16ToShort( pDescri->xstUsrInitl[0] );
-        String aTmp;
-        sal_Unicode* pData = aTmp.AllocBuffer( nLen );
-        sal_Unicode* pWork = pData;
-
-        for( BYTE nIdx = 1; nIdx <= nLen; ++nIdx, ++pWork )
-            *pWork = SVBT16ToShort( pDescri->xstUsrInitl[ nIdx ] );
-//      {
-//          UINT16 nChar = SVBT16ToShort( pDescri->xstUsrInitl[ nIdx ] );
-//          if( 0xF000 == (nChar & 0xFF00))
-//              nChar &= 0x00FF;
-//          *pWStr = nChar;
-//      }
-//      sAuthor = String( aTmp, CHARSET_ANSI );     // ANSI???
-
-// 2000/03/30 KHZ UNICODE
-// still missing: unicode-back conversion AND 0xF0.. specials
-
+        short nLen = SVBT16ToShort( pDescri->xstUsrInitl[0] );
+        for( BYTE nIdx = 1; nIdx <= nLen; ++nIdx)
+            sAuthor += SVBT16ToShort( pDescri->xstUsrInitl[ nIdx ] );
 #endif
     }
 
@@ -3083,11 +3068,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.26 2001-07-17 13:28:26 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.27 2001-07-17 14:36:39 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.26  2001/07/17 13:28:26  cmc
+      #89808# ##1192## Retain blank pages before explicit section breaks
+
       Revision 1.25  2001/07/17 13:00:33  cmc
       #89801# ##1140## Frame attributes in cells past the first cell in a table are to be ignored
 
