@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdouno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:13:03 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,13 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+
+#ifndef _VCL_PDFEXTOUTDEVDATA_HXX
+#include <vcl/pdfextoutdevdata.hxx>
+#endif
 
 #ifndef _SVDOUNO_HXX
 #include "svdouno.hxx"
@@ -128,6 +134,9 @@
 #endif
 #ifndef _SVDVITER_HXX
 #include "svdviter.hxx"
+#endif
+#ifndef SVX_SOURCE_FORM_FORMPDFEXPORT_HXX
+#include "formpdfexport.hxx"
 #endif
 
 #include <set>
@@ -329,30 +338,33 @@ UINT16 SdrUnoObj::GetObjIdentifier() const
     return UINT16(OBJ_UNO);
 }
 
-/** helper class to restore graphics at <awt::XView> object after <SdrUnoObj::Paint>
-
-    OD 08.05.2003 #109432#
-    Restoration of graphics necessary to assure that paint on a window
-
-    @author OD
-*/
-class RestoreXViewGraphics
+namespace
 {
-    private:
-        uno::Reference< awt::XView >        m_rXView;
-        uno::Reference< awt::XGraphics >    m_rXGraphics;
+    /** helper class to restore graphics at <awt::XView> object after <SdrUnoObj::Paint>
 
-    public:
-        RestoreXViewGraphics( const uno::Reference< awt::XView >& _rXView )
-        {
-             m_rXView = _rXView;
-             m_rXGraphics = m_rXView->getGraphics();
-        }
-        ~RestoreXViewGraphics()
-        {
-            m_rXView->setGraphics( m_rXGraphics );
-        }
-};
+        OD 08.05.2003 #109432#
+        Restoration of graphics necessary to assure that paint on a window
+
+        @author OD
+    */
+    class RestoreXViewGraphics
+    {
+        private:
+            uno::Reference< awt::XView >        m_rXView;
+            uno::Reference< awt::XGraphics >    m_rXGraphics;
+
+        public:
+            RestoreXViewGraphics( const uno::Reference< awt::XView >& _rXView )
+            {
+                m_rXView = _rXView;
+                m_rXGraphics = m_rXView->getGraphics();
+            }
+            ~RestoreXViewGraphics()
+            {
+                m_rXView->setGraphics( m_rXGraphics );
+            }
+    };
+}
 
 sal_Bool SdrUnoObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
@@ -360,6 +372,8 @@ sal_Bool SdrUnoObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec&
     OutputDevice* pOut = rXOut.GetOutDev();
     OutDevType eOutDevType = pOut->GetOutDevType();
     const SdrUnoControlRec* pControlRec = NULL;
+
+    vcl::PDFExtOutDevData* pPDFExport = PTR_CAST( vcl::PDFExtOutDevData, pOut->GetExtOutDevData() );
 
     if (pPV && xUnoControlModel.is())
     {
@@ -533,10 +547,32 @@ sal_Bool SdrUnoObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec&
             }
             else if (eOutDevType == OUTDEV_VIRDEV)
             {
-                uno::Reference< awt::XGraphics > x = pOut->CreateUnoGraphics();
-                xView->setGraphics( x );
-                Point aP = pOut->LogicToPixel( aRect.TopLeft() );
-                xView->draw( aP.X(), aP.Y() );
+                bool bDefaultDraw = true;
+                if ( pPDFExport )
+                {
+                    ::std::auto_ptr< ::vcl::PDFWriter::AnyWidget > pPDFControl;
+                    ::svxform::describePDFControl( xUnoControl, pPDFControl );
+                    if ( pPDFControl.get() != NULL )
+                    {
+                        // still need to fill in the location
+                        pPDFControl->Location = aRect;
+
+                        Size aFontSize( pPDFControl->TextFont.GetSize() );
+                        aFontSize = pOut->LogicToLogic( aFontSize, MapMode( MAP_POINT ), pOut->GetMapMode() );
+                        pPDFControl->TextFont.SetSize( aFontSize );
+
+                        pPDFExport->CreateControl( *pPDFControl.get() );
+                        bDefaultDraw = false;
+                    }
+                }
+
+                if ( bDefaultDraw )
+                {
+                    uno::Reference< awt::XGraphics > x = pOut->CreateUnoGraphics();
+                    xView->setGraphics( x );
+                    Point aP = pOut->LogicToPixel( aRect.TopLeft() );
+                    xView->draw( aP.X(), aP.Y() );
+                }
             }
             else
                 DBG_ERROR( "SdrUnoObj::DoPaintObject: Ehm - what kind of device is this?" );
