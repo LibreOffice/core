@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:11:07 $
+ *  last change: $Author: cl $ $Date: 2001-05-02 11:04:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,9 @@ public:
     PresObjKind     GetPresObjKind(SdrObject* pObj);
     String          GetPresObjText(PresObjKind eObjKind);
     SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind);
-    void            SetAutoLayout(AutoLayout eLayout, BOOL bInit=FALSE);
+    void            SetAutoLayout(AutoLayout eLayout, BOOL bInit=FALSE, BOOL bAPICall=FALSE);
     AutoLayout      GetAutoLayout() const { return eAutoLayout; }
-    void            CreateTitleAndLayout(BOOL bInit=FALSE);
+    void            CreateTitleAndLayout(BOOL bInit=FALSE, BOOL bAPICall=FALSE);
 
     virtual void       NbcInsertObject(SdrObject* pObj, ULONG nPos=CONTAINER_APPEND,
                                        const SdrInsertReason* pReason=NULL);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-06 14:08:56 $
+ *  last change: $Author: cl $ $Date: 2001-05-02 11:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,7 +504,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         sal_uInt16 nPgNum = pPreviousStandardPage->GetMasterPageNum(nPos=0);
         pStandardPage->InsertMasterPage(nPgNum);
         pStandardPage->SetLayoutName( pPreviousStandardPage->GetLayoutName() );
-        pStandardPage->SetAutoLayout(eStandardLayout, sal_True);
+        pStandardPage->SetAutoLayout(eStandardLayout, sal_True, sal_True);
     }
 
     aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
@@ -540,7 +540,7 @@ SdPage* SdXImpressDocument::InsertSdPage( sal_uInt16 nPage, sal_Bool bDuplicate 
         sal_uInt16 nPgNum = pPreviousNotesPage->GetMasterPageNum(nPos=0);
         pNotesPage->InsertMasterPage(nPgNum);
         pNotesPage->SetLayoutName( pPreviousNotesPage->GetLayoutName() );
-        pNotesPage->SetAutoLayout(eNotesLayout, sal_True);
+        pNotesPage->SetAutoLayout(eNotesLayout, sal_True, sal_True);
     }
 
     SetModified();
@@ -1452,7 +1452,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdMasterPagesAccess::insertNewByIn
         pDoc->InsertMasterPage(pMNotesPage,  nInsertPos + 1);
         pMNotesPage->InsertMasterPage( pMPage->GetPageNum() );
         pMNotesPage->SetLayoutName( aLayoutName );
-        pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, TRUE);
+        pMNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
         rModel.SetModified();
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-03 13:53:59 $
+ *  last change: $Author: cl $ $Date: 2001-05-02 11:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,7 +451,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
                 GetPage()->SetPresChange( (PresChange)nValue );
                 break;
             case WID_PAGE_LAYOUT:
-                GetPage()->SetAutoLayout( (AutoLayout)nValue, sal_True );
+                GetPage()->SetAutoLayout( (AutoLayout)nValue, sal_True, sal_True );
                 break;
             case WID_PAGE_DURATION:
                 GetPage()->SetTime((sal_uInt32)nValue);

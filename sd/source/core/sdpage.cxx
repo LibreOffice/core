@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
+ *  last change: $Author: cl $ $Date: 2001-05-02 11:04:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,7 +753,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
 |*
 \************************************************************************/
 
-void SdPage::CreateTitleAndLayout(BOOL bInit)
+void SdPage::CreateTitleAndLayout(BOOL bInit, BOOL bAPICall )
 {
     SdPage* pMasterPage = this;
 
@@ -821,7 +821,7 @@ void SdPage::CreateTitleAndLayout(BOOL bInit)
 
     BOOL bDeletePresObjOnMaster = FALSE;
 
-    if (eAutoLayout == AUTOLAYOUT_NONE)
+    if ((eAutoLayout == AUTOLAYOUT_NONE) && !bAPICall)
     {
         // Die aktuelle Seite soll kein AutoLayout haben!
         // Sind die Praesentationsobjekte auf der MasterPage noch notwendig?
@@ -1113,12 +1113,12 @@ Rectangle SdPage::GetLayoutRect() const
 |*
 \*************************************************************************/
 
-void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit)
+void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bAPICall )
 {
     eAutoLayout = eLayout;
     bOwnArrangement = TRUE;
 
-    CreateTitleAndLayout(bInit);
+    CreateTitleAndLayout(bInit, bAPICall);
 
     if ((eAutoLayout == AUTOLAYOUT_NONE && aPresObjList.Count() == 0) ||
         bMaster)
