@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-28 20:22:09 $
+ *  last change: $Author: tl $ $Date: 2002-08-14 09:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,7 +477,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
         if(pMap)
         {
             if ( pMap->nFlags & PropertyAttribute::READONLY)
-                throw lang::IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+                throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             SwFtnInfo aFtnInfo(pDoc->GetFtnInfo());
             switch(pMap->nWID)
             {
@@ -816,7 +816,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
         if(pMap)
         {
             if ( pMap->nFlags & PropertyAttribute::READONLY)
-                throw lang::IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+                throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             SwEndNoteInfo aEndInfo(pDoc->GetEndNoteInfo());
             switch(pMap->nWID)
             {
@@ -1074,7 +1074,7 @@ void SwXLineNumberingProperties::setPropertyValue(
         if(pMap)
         {
             if ( pMap->nFlags & PropertyAttribute::READONLY)
-                throw lang::IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+                throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             SwLineNumberInfo  aInfo(pDoc->GetLineNumberInfo());
             switch(pMap->nWID)
             {
@@ -2572,7 +2572,7 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
     if (!pMap)
         throw UnknownPropertyException(OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Unknown property: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
     if ( pMap->nFlags & PropertyAttribute::READONLY)
-        throw lang::IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+        throw PropertyVetoException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
     switch(pMap->nWID)
     {

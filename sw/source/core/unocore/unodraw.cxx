@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-23 08:22:23 $
+ *  last change: $Author: tl $ $Date: 2002-08-14 09:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,7 +1014,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
         if(pMap)
         {
             if ( pMap->nFlags & PropertyAttribute::READONLY)
-                throw IllegalArgumentException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ), 0 );
+                throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             //mit Layout kann der Anker umgesetzt werden, ohne dass sich die Position aendert
             if(pFmt)
             {
@@ -1384,7 +1384,7 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
         if(pMap)
         {
             if ( pMap->nFlags & PropertyAttribute::READONLY)
-                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if(pFmt)
             {
                 const SfxItemSet& rSet = pFmt->GetAttrSet();
@@ -1438,7 +1438,7 @@ Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
         if(pMap)
         {
             if ( pMap->nFlags & PropertyAttribute::READONLY)
-                throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+                throw PropertyVetoException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
             if(pMap->nWID < RES_FRMATR_END && pFmt)
             {
                 const SfxPoolItem& rDefItem =
