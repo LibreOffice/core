@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2002-04-25 15:17:16 $
+ *  last change: $Author: tbe $ $Date: 2002-05-17 09:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #include <toolkit/awt/vclxcontainer.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxgraphics.hxx>
+
+// TODO: #include <toolkit/awt/vclxaccessiblemenu.hxx>
+//#include <toolkit/awt/vclxaccessiblecomponent.hxx>
 
 #include <vcl/svapp.hxx>
 
@@ -317,4 +320,17 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
         pWindow->GetWindowPeer()->SetWindow( NULL );
         pWindow->SetWindowPeer( NULL, NULL );
     }
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > UnoWrapper::CreateAccessible( Window* pWindow, Menu* pMenu )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xPeer = pWindow->GetWindowPeer();
+
+    if ( !xPeer.is() )
+    {
+        xPeer = (::com::sun::star::awt::XWindowPeer*) new VCLXMenuWindow( pMenu );
+        SetWindowInterface( pWindow, xPeer );
+    }
+
+    return ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >( xPeer, ::com::sun::star::uno::UNO_QUERY );
 }

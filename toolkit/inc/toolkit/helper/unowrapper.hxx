@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unowrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-15 11:43:45 $
+ *  last change: $Author: tbe $ $Date: 2002-05-17 09:58:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#endif
 
 #include <vcl/unowrap.hxx>
 #include <vcl/window.hxx>
@@ -100,7 +103,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> GetWindowInterface( Window* pWindow, BOOL bCreate );
     virtual void                SetWindowInterface( Window* pWindow, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer> xIFace );
 
-
     void                WindowDestroyed( Window* pWindow );
     void                WindowEvent_Move( Window* pWindow );
     void                WindowEvent_Resize( Window* pWindow );
@@ -118,6 +120,10 @@ public:
     void                WindowEvent_GetFocus( Window* pWindow );
     void                WindowEvent_LoseFocus( Window* pWindow );
     void                WindowEvent_Paint( Window* pWindow, const Rectangle& rRect );
+
+    // Accessibility
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
+                                CreateAccessible( Window* pWindow, Menu* pMenu );
 };
 
 #endif // _TOOLKIT_HELPER_UNOWRAPPER_HXX_
