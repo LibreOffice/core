@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-14 15:19:42 $
+ *  last change: $Author: mt $ $Date: 2001-05-30 15:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,9 @@ public:
 
     inline void     SetCursor( const Cursor& rCursor );
     inline Cursor*  GetCursor();
+
+    void            AddDragAndDropListeners();
+    void            RemoveDragAndDropListeners();
 
 //  Fuer die SelectionEngine...
     void            CreateAnchor();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mt $ $Date: 2001-05-14 15:19:42 $
+ *  last change: $Author: mt $ $Date: 2001-05-30 15:44:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -395,6 +395,8 @@ void EditEngine::InsertView( EditView* pEditView, sal_uInt16 nIndex )
     pEditView->pImpEditView->SetEditSelection( aStartSel );
     if ( !pImpEditEngine->GetActiveView() )
         pImpEditEngine->SetActiveView( pEditView );
+
+    pEditView->pImpEditView->AddDragAndDropListeners();
 }
 
 EditView* EditEngine::RemoveView( EditView* pView )
@@ -415,6 +417,8 @@ EditView* EditEngine::RemoveView( EditView* pView )
             pImpEditEngine->SetActiveView( 0 );
             pImpEditEngine->GetSelEngine().SetCurView( 0 );
         }
+        pView->pImpEditView->RemoveDragAndDropListeners();
+
     }
     return pRemoved;
 }
