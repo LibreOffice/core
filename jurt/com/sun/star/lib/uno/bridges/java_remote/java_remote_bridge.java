@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:32:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 17:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@ import java.util.Vector;
 import com.sun.star.lib.util.IInvokeHook;
 import com.sun.star.lib.util.IInvokable;
 
-import com.sun.star.lib.sandbox.generic.DispatcherAdapterBase;
-
-
 import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
 
@@ -99,9 +96,6 @@ import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.DisposedException;
 
 import com.sun.star.lib.sandbox.Disposable;
-
-import com.sun.star.lib.uno.environments.java.IRequester;
-import com.sun.star.lib.uno.environments.java.Proxy;
 
 import com.sun.star.lib.uno.environments.remote.IMessage;
 import com.sun.star.lib.uno.environments.remote.IProtocol;
@@ -133,12 +127,15 @@ import com.sun.star.uno.Any;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.28 $ $ $Date: 2003-03-26 12:32:59 $
+ * @version     $Revision: 1.29 $ $ $Date: 2003-04-23 17:03:59 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
  */
-public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBridge, Disposable, XComponent, IStableObject {
+public class java_remote_bridge
+    implements IBridge, IReceiver, RequestHandler, XBridge, Disposable,
+        XComponent, IStableObject
+{
     /**
      * When set to true, enables various debugging output.
      */
@@ -205,7 +202,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                         String oid_o[] = new String[]{oid};
                         _java_environment.registerInterface(null, oid_o, interfaceType );
 
-                        addRefHolder(interfaceType, oid);
+                        addRefHolder(null, interfaceType, oid);
                     }
                     else {
                         Object object = null;
@@ -284,8 +281,9 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
             }
 
             // dispose this bridge only within an error
-            if(!_quit && !java_remote_bridge.this._disposed)
+            if (!_quit) {
                 java_remote_bridge.this.dispose(throwable);
+            }
 
             return null;
         }
@@ -303,8 +301,6 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     protected IEnvironment      _java_environment;
     protected MessageDispatcher _messageDispatcher;
     protected int               _life_count = 0;    // determines if this bridge is alife, which is controlled by acquire and release calls
-    protected boolean           _disposed = false;
-    protected boolean           _disposing = false;
 
     protected Hashtable         _refHolders;        // holds descriptions for out mapped objects, so we can release
                                                     // the outmapped objects when the bridge is to be disposed
@@ -316,6 +312,12 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     protected boolean           _forceSynchronous;
 
     protected IThreadPool       _iThreadPool;
+
+    // Variable state must only be used while synchronized on this object:
+    private int state = STATE_ALIVE;
+    private static final int STATE_ALIVE = 0;
+    private static final int STATE_DISPOSING = 1;
+    private static final int STATE_DISPOSED = 2;
 
     /**
      * This method is for testing only.
@@ -337,10 +339,13 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         Type  _type;
         String _oid;
         int    _mapCount;
+        Object _hardRef;
+            // keep a hard reference to the object, the java_environment will
+            // only hold it weakly
     }
 
 
-    final void addRefHolder(Type type, String oid) {
+    final void addRefHolder(Object obj, Type type, String oid) {
         acquire();
 
         synchronized(_refHolders) {
@@ -350,9 +355,11 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                 refHolder = new RefHolder();
                 refHolder._type = type;
                 refHolder._oid = oid;
+                refHolder._hardRef = obj;
 
                 _refHolders.put(oid + type, refHolder);
             }
+            // assert refHolder._hardRef == obj;
 
             ++ refHolder._mapCount;
         }
@@ -506,6 +513,8 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         _listeners        = new Vector();
         _stableListeners  = new Vector();
 
+        proxyFactory = new ProxyFactory(this);
+
         // create the message dispatcher and start it
           _messageDispatcher  = new MessageDispatcher();
         _messageDispatcher.start();
@@ -564,8 +573,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
      * @see                   com.sun.star.uno.IBridge#mapInterfaceTo
      */
     public Object mapInterfaceTo(Object object, Type type) {
-        if(_disposed) throw new DisposedException(
-            "java_remote_bridge(" + this + ").mapInterfaceTo - is disposed");
+        checkDisposed();
 
         String oid[] = new String[1];
 
@@ -574,7 +582,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
             oid[0] = (String)object;
         else {
             _java_environment.registerInterface(object, oid, type);
-            addRefHolder(type, oid[0]);
+            addRefHolder(object, type, oid[0]);
         }
           if(DEBUG) System.err.println("##### " + getClass() + " - mapInterfaceTo:" + object + " interface:" + type + " " + oid[0]);
 
@@ -590,56 +598,32 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
      * @see                   com.sun.star.uno.IBridge#mapInterfaceFrom
      */
     public Object mapInterfaceFrom(Object oId, Type type) {
-        if(_disposed) throw new DisposedException(
-            "java_remote_bridge(" + this + ").mapInterfaceFrom - is disposed");
-
+        checkDisposed();
+        // TODO  What happens if an exception is thrown after the call to
+        // acquire, but before it is guaranteed that a pairing release will be
+        // called eventually?
         acquire();
-
-        // see if we already have object with zInterface of given oid
-        Object object = _java_environment.getRegisteredInterface((String)oId, type);
-
-        if(object != null) {
-            if(object instanceof DispatcherAdapterBase) {
-                DispatcherAdapterBase dispatcherAdapterBase = (DispatcherAdapterBase)object;
-
-                if(dispatcherAdapterBase.getObject() instanceof DispatcherAdapterBase) {
-                    dispatcherAdapterBase = (DispatcherAdapterBase)dispatcherAdapterBase.getObject();
-
-                    if((dispatcherAdapterBase.getObject() instanceof String)) { // is it my proxy?
-                        try {
-                            sendRequest(oId,
-                                        type,
-                                        "release",
-                                        null,
-                                        new Boolean[]{new Boolean(_forceSynchronous)},
-                                          new Boolean[]{new Boolean(_forceSynchronous)});
-                        }
-                        catch(RuntimeException runtimeException) {
-                            throw runtimeException;
-                        }
-                        catch(Throwable throwable) {
-                            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".mapInterfaceFrom - unexpected:" + throwable);
-                        }
-                    }
-                }
+        String oid = (String) oId;
+        Object object = _java_environment.getRegisteredInterface(oid, type);
+        if (object == null) {
+            object = _java_environment.registerInterface(
+                proxyFactory.create(oid, type), new String[] { oid }, type);
+                // the proxy sends a release when finalized
+        } else {
+            try {
+                sendRequest(oid, type, "release", null,
+                            new Boolean[] { new Boolean(_forceSynchronous) },
+                            new Boolean[] { new Boolean(_forceSynchronous) });
+            } catch (Error e) {
+                throw e;
+            } catch (RuntimeException e) {
+                throw e;
+            } catch (Throwable e) {
+                throw new com.sun.star.uno.RuntimeException(
+                    getClass().getName() + ".mapInterfaceFrom - unexpected: "
+                    + e);
             }
         }
-        else {
-            String oid[] = new String[]{(String)oId};
-
-//              boolean virtual = false;
-//              if(oid[0].startsWith("virtual:")) {
-//                  oid[0] = oid[0].substring(8);
-
-//                  virtual = true;
-//              }
-
-            Object proxy = Proxy.create(this, oid[0], type, false, _forceSynchronous); // this proxy sends a release, when finalized
-            object = _java_environment.registerInterface(proxy, oid, type);
-        }
-
-          if(DEBUG) System.err.println("##### " + getClass() + " - mapInterfaceFrom:" + oId + " interface:" + type + " "  + object);
-
         return object;
     }
 
@@ -696,10 +680,8 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     private synchronized void dispose(Throwable throwable) {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".dispose - life count:" + _life_count);
 
-        if(_disposed) throw new DisposedException("java_remote_bridge(" + this + ").dispose - is disposed");
-
-        if(!_disposing) {
-            _disposing = true;
+        if (state == STATE_ALIVE) {
+            state = STATE_DISPOSING;
 
             notifyListeners();
             notifyStableListeners();
@@ -764,7 +746,9 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                 _java_environment   = null;
                 _messageDispatcher  = null;
 
-                _disposed = true;
+                // TODO!  Is it intended that state is left as STATE_DISPOSING
+                // when an exception is thrown?
+                state = STATE_DISPOSED;
             }
             catch(InterruptedException interruptedException) {
                 System.err.println(getClass().getName() + ".dispose - InterruptedException:" + interruptedException);
@@ -838,11 +822,8 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
                                + exception + " " + result);
         }
 
-        // FIXME  _disposed read outside of synchronized block
-        if (_disposed) {
-            throw new DisposedException("java_remote_bridge(" + this
-                                        + ").sendReply - is disposed");
-        }
+        // FIXME  checkDisposed called outside of synchronized block
+        checkDisposed();
 
         try {
             synchronized (_outputStream) {
@@ -860,7 +841,17 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         }
     }
 
-    public Object sendRequest(Object object, Type type, String operation, Object params[], Boolean synchron[], Boolean mustReply[]) throws Throwable {
+    public Object sendRequest(String oid, Type type, String operation,
+                              Object[] args)
+        throws Throwable
+    {
+        return sendRequest(
+            oid, type, operation, args,
+            _forceSynchronous ? new Boolean[] { Boolean.TRUE } : null,
+            _forceSynchronous ? new Boolean[] { Boolean.TRUE } : null);
+    }
+
+    private Object sendRequest(Object object, Type type, String operation, Object params[], Boolean synchron[], Boolean mustReply[]) throws Throwable {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".sendRequest:" + object + " " + type +" " + operation + " " + synchron + " " + mustReply);
         Object result = null;
 
@@ -870,8 +861,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
         if(mustReply == null)
             mustReply = new Boolean[1];
 
-        if(_disposed) throw new DisposedException(
-            "java_remote_bridge(" + this + ").sendRequest - is disposed");
+        checkDisposed();
 
         if(operation.equals("acquire")) acquire();  // keep this bridge alife
 
@@ -948,4 +938,14 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     public void removeStableListener(IStableListener stableListener) {
         _stableListeners.removeElement(stableListener);
     }
+
+    // This function must only be called while synchronized on this object:
+    private void checkDisposed() {
+        if (state == STATE_DISPOSED) {
+            throw new DisposedException("java_remote_bridge " + this
+                                        + " is disposed");
+        }
+    }
+
+    private final ProxyFactory proxyFactory;
 }
