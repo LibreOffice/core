@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-19 11:39:36 $
+ *  last change: $Author: nn $ $Date: 2002-01-08 09:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,10 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
         // SvNumberFormatsSupplierObj, sonst wird es geloescht.
         uno::Reference<util::XNumberFormatsSupplier> xFormatter = new SvNumberFormatsSupplierObj(
                                                 pDocShell->GetDocument()->GetFormatTable() );
-        xNumberAgg = uno::Reference<uno::XAggregation>( xFormatter, uno::UNO_QUERY );
+        {
+            xNumberAgg = uno::Reference<uno::XAggregation>( xFormatter, uno::UNO_QUERY );
+            // extra block to force deletion of the temporary before setDelegator
+        }
 
         // beim setDelegator darf die zusaetzliche Ref nicht mehr existieren
         xFormatter = NULL;
@@ -1033,7 +1036,10 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
         //  alles was ich nicht kenn, werf ich der SvxFmMSFactory an den Hals,
         //  da wird dann 'ne Exception geworfen, wenn's nicht passt...
 
-        xRet = SvxFmMSFactory::createInstance(aServiceSpecifier);
+        {
+            xRet = SvxFmMSFactory::createInstance(aServiceSpecifier);
+            // extra block to force deletion of the temporary before ScShapeObj ctor (setDelegator)
+        }
 
         //  #96117# if the drawing factory created a shape, a ScShapeObj has to be used
         //  to support own properties like ImageMap:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-19 11:36:01 $
+ *  last change: $Author: nn $ $Date: 2002-01-08 09:45:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,11 @@ ScShapeObj::ScShapeObj( uno::Reference<drawing::XShape>& xShape )
 {
     comphelper::increment( m_refCount );
 
-    mxShapeAgg = uno::Reference<uno::XAggregation>( xShape, uno::UNO_QUERY );
+    {
+        mxShapeAgg = uno::Reference<uno::XAggregation>( xShape, uno::UNO_QUERY );
+        // extra block to force deletion of the temporary before setDelegator
+    }
+
     if (mxShapeAgg.is())
     {
         xShape = NULL;      // during setDelegator, mxShapeAgg must be the only ref
