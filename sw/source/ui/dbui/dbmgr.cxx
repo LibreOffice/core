@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:27:32 $
+ *  last change: $Author: os $ $Date: 2001-02-26 10:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -414,17 +414,20 @@ BOOL SwNewDBMgr::MergeNew(USHORT nOpt, SwWrtShell& rSh,
         {
             pMergeData->bEndOfDB = !pMergeData->xResultSet->absolute(
                     (ULONG)pMergeData->aSelection.getConstArray()[ pMergeData->nSelectionIndex++ ] );
+            pMergeData->CheckEndOfDB();
             if(pMergeData->nSelectionIndex >= pMergeData->aSelection.getLength())
                 pMergeData->bEndOfDB = TRUE;
         }
         else
         {
             pMergeData->bEndOfDB = !pMergeData->xResultSet->first();
+            pMergeData->CheckEndOfDB();
         }
     }
     catch(Exception& rExcept)
     {
         pMergeData->bEndOfDB = TRUE;
+        pMergeData->CheckEndOfDB();
         DBG_ERROR("exception in MergeNew()")
     }
 
@@ -1704,12 +1707,14 @@ BOOL SwNewDBMgr::OpenMergeSource(const String& rDataSource,
                         nPos--;
                     }
                 }
+                pMergeData->CheckEndOfDB();
                 if(1 == pMergeData->xSelectionList->Count())
                     pMergeData->bEndOfDB = TRUE;
             }
             else
             {
                 pMergeData->bEndOfDB = !pMergeData->xResultSet->next();
+                pMergeData->CheckEndOfDB();
                 ++pMergeData->nSelectionIndex;
             }
             Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
@@ -1808,8 +1813,11 @@ BOOL SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTableNam
 BOOL    SwNewDBMgr::GetMergeColumnCnt(const String& rColumnName, USHORT nLanguage,
                                 String &rResult, double *pNumber, sal_uInt32 *pFormat)
 {
-    if(!pMergeData || !pMergeData->xResultSet.is())
+    if(!pMergeData || !pMergeData->xResultSet.is() || pMergeData->bAfterSelection )
+    {
+        rResult.Erase();
         return FALSE;
+    }
 
     BOOL bRet = lcl_GetColumnCnt(pMergeData, rColumnName, nLanguage, rResult, pNumber);
     return bRet;
@@ -1821,7 +1829,11 @@ BOOL SwNewDBMgr::ToNextMergeRecord()
 {
     DBG_ASSERT(pMergeData && pMergeData->xResultSet.is(), "no data source in merge")
     if(!pMergeData || !pMergeData->xResultSet.is() || pMergeData->bEndOfDB)
+    {
+        if(pMergeData)
+            pMergeData->CheckEndOfDB();
         return FALSE;
+    }
     try
     {
         if(pMergeData->bSelectionList)
@@ -1858,6 +1870,7 @@ BOOL SwNewDBMgr::ToNextMergeRecord()
                     nDiff--;
                 }
             }
+            pMergeData->CheckEndOfDB();
             if(pMergeData->nSelectionIndex >= pMergeData->xSelectionList->Count())
                 pMergeData->bEndOfDB = TRUE;
         }
@@ -1865,12 +1878,14 @@ BOOL SwNewDBMgr::ToNextMergeRecord()
         {
             pMergeData->bEndOfDB = !pMergeData->xResultSet->absolute(
                     (ULONG)pMergeData->aSelection.getConstArray()[ pMergeData->nSelectionIndex++ ] );
+            pMergeData->CheckEndOfDB();
             if(pMergeData->nSelectionIndex >= pMergeData->aSelection.getLength())
                 pMergeData->bEndOfDB = TRUE;
         }
         else
         {
             pMergeData->bEndOfDB = !pMergeData->xResultSet->next();
+            pMergeData->CheckEndOfDB();
             ++pMergeData->nSelectionIndex;
         }
     }
@@ -1932,6 +1947,7 @@ sal_Bool SwNewDBMgr::ToRecordId(sal_Int32 nSet)
     {
         bRet = lcl_MoveAbsolute(pMergeData, nAbsPos);
         pMergeData->bEndOfDB = !bRet;
+        pMergeData->CheckEndOfDB();
     }
     return bRet;
 }
@@ -2016,7 +2032,7 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
             {
                 if(pFound->bScrollable)
                 {
-                    pFound->bEndOfDB = !pMergeData->xResultSet->absolute(
+                    pFound->bEndOfDB = !pFound->xResultSet->absolute(
                         (ULONG)pFound->xSelectionList->GetObject( 0 ) );
                 }
                 else
@@ -2028,12 +2044,14 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
                         nPos--;
                     }
                 }
+                pFound->CheckEndOfDB();
                 if(1 == pFound->xSelectionList->Count())
                     pFound->bEndOfDB = TRUE;
             }
             else
             {
                 pFound->bEndOfDB = !pFound->xResultSet->next();
+                pFound->CheckEndOfDB();
                 ++pFound->nSelectionIndex;
             }
         }

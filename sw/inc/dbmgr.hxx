@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:13:10 $
+ *  last change: $Author: os $ $Date: 2001-02-26 10:26:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,7 @@ struct SwDSParam
     BOOL bScrollable;
     BOOL bSelectionList;
     BOOL bEndOfDB;
+    BOOL bAfterSelection;
     long nSelectionIndex;
 
     SwDSParam(const String& rSource, const String& rTable, BYTE nType, const String& rStatement) :
@@ -167,6 +168,7 @@ struct SwDSParam
         bScrollable(FALSE),
         bSelectionList(FALSE),
         bEndOfDB(FALSE),
+        bAfterSelection(FALSE),
         nSelectionIndex(0)
         {}
 
@@ -179,10 +181,17 @@ struct SwDSParam
         bScrollable(TRUE),
         bSelectionList(FALSE),
         bEndOfDB(FALSE),
+        bAfterSelection(FALSE),
         nSelectionIndex(0),
         xResultSet(xResSet),
         aSelection(rSelection)
         {}
+
+        void CheckEndOfDB()
+        {
+            if(bEndOfDB)
+                bAfterSelection = TRUE;
+        }
 };
 typedef SwDSParam* SwDSParamPtr;
 SV_DECL_PTRARR_DEL(SwDSParamArr, SwDSParamPtr, 0, 5)
