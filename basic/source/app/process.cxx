@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-10 15:59:46 $
+ *  last change: $Author: gh $ $Date: 2001-07-30 12:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,11 +163,7 @@ void Process::SetImage( const String &aAppPath, const String &aAppParams )
         }
         pArgumentList = new NAMESPACE_VOS(OArgumentList)( pParamList, nCount );
         ::rtl::OUString aNormalizedAppPath;
-#ifdef TF_FILEURL
         osl::FileBase::getFileURLFromSystemPath( ::rtl::OUString(aAppPath), aNormalizedAppPath );
-#else
-        osl::FileBase::normalizePath( ::rtl::OUString(aAppPath), aNormalizedAppPath );
-#endif
         pProcess = new NAMESPACE_VOS(OProcess)( aNormalizedAppPath );
         bHasBeenStarted = FALSE;
     }
