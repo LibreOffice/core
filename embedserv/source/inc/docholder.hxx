@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mav $ $Date: 2003-04-02 15:44:18 $
+ *  last change: $Author: abi $ $Date: 2003-04-04 09:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocument;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 
-    ::rtl::OUString m_aDocumentNamePart,m_aFilterName;
+    ::rtl::OUString m_aContainerName,m_aDocumentNamePart,m_aFilterName;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > DocumentFrame();
 
@@ -115,6 +115,10 @@ public:
     void resizeWin( const SIZEL& rNewSize );
 
     void setTitle(const rtl::OUString& aDocumentName);
+    rtl::OUString getTitle() const { return m_aDocumentNamePart; }
+
+    void setContainerName(const rtl::OUString& aContainerName);
+    rtl::OUString getContainerName() const { return m_aContainerName; }
 
     void show();
 

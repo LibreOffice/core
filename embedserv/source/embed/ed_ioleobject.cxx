@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2003-04-02 15:44:17 $
+ *  last change: $Author: abi $ $Date: 2003-04-04 09:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,9 @@ STDMETHODIMP EmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLES
     m_pDocHolder->setTitle(
         rtl::OUString(
             (sal_Unicode*)szContainerObj));
-//              RTL_CONSTASCII_USTRINGPARAM(szContainerObj));
+    m_pDocHolder->setContainerName(
+        rtl::OUString(
+            (sal_Unicode*)szContainerApp));
     return S_OK;
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intercept.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-04 09:03:46 $
+ *  last change: $Author: abi $ $Date: 2003-04-04 09:31:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 
 class StatusChangeListenerContainer;
 class EmbedDocument_Impl;
-
+class DocumentHolder;
 
 class Interceptor
     : public ::cppu::WeakImplHelper3<
@@ -94,7 +94,7 @@ class Interceptor
 {
 public:
 
-    Interceptor(EmbedDocument_Impl* pOLEInterface);
+    Interceptor(EmbedDocument_Impl* pOLEInterface,DocumentHolder* pDocH);
     ~Interceptor();
 
     // overwritten to release the statuslistner.
@@ -207,7 +207,7 @@ private:
     osl::Mutex   m_aMutex;
 
     EmbedDocument_Impl*   m_pOLEInterface;
-
+    DocumentHolder*       m_pDocH;
     ::com::sun::star::uno::Reference<
     ::com::sun::star::frame::XDispatchProvider > m_xSlaveDispatchProvider;
 

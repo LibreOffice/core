@@ -2,9 +2,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-04 09:03:46 $
+ *  last change: $Author: abi $ $Date: 2003-04-04 09:31:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,9 @@
 #ifndef _EMBEDDOC_HXX_
 #include "embeddoc.hxx"
 #endif
-
+#ifndef _DOCHOLDER_HXX_
+#include "docholder.hxx"
+#endif
 
 using namespace ::com::sun::star;
 
@@ -160,8 +162,11 @@ void SAL_CALL Interceptor::dispose()
 
 
 
-Interceptor::Interceptor(EmbedDocument_Impl* pOLEInterface)
+Interceptor::Interceptor(
+    EmbedDocument_Impl* pOLEInterface,
+    DocumentHolder* pDocH)
     : m_pOLEInterface(pOLEInterface),
+      m_pDocH(pDocH),
       m_pStatCL(0),
       m_pDisposeEventListeners(0)
 {
@@ -227,8 +232,9 @@ Interceptor::addStatusListener(
             RTL_CONSTASCII_USTRINGPARAM("Update"));
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("update"));
+        aStateEvent.State <<= (rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("($1) ")) +
+                               m_pDocH->getTitle());
         Control->statusChanged(aStateEvent);
 
         {
@@ -253,8 +259,9 @@ Interceptor::addStatusListener(
             RTL_CONSTASCII_USTRINGPARAM("Close and Return"));
         aStateEvent.IsEnabled = sal_True;
         aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("closeandreturn"));
+        aStateEvent.State <<= (rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("($2) ")) +
+                               m_pDocH->getContainerName());
         Control->statusChanged(aStateEvent);
 
 

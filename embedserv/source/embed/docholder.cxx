@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mav $ $Date: 2003-04-02 15:44:17 $
+ *  last change: $Author: abi $ $Date: 2003-04-04 09:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ uno::Reference< frame::XFrame > DocumentHolder::DocumentFrame()
             xDPI(m_xFrame,uno::UNO_QUERY);
         if(xDPI.is())
             xDPI->registerDispatchProviderInterceptor(
-                new Interceptor(m_pOLEInterface));
+                new Interceptor(m_pOLEInterface,this));
     }
 
     return m_xFrame;
@@ -434,6 +434,13 @@ void DocumentHolder::setTitle(const rtl::OUString& aDocumentName)
 
     m_aDocumentNamePart = aDocumentName;
 }
+
+
+void DocumentHolder::setContainerName(const rtl::OUString& aContainerName)
+{
+    m_aContainerName = aContainerName;
+}
+
 
 void DocumentHolder::hide()
 {
