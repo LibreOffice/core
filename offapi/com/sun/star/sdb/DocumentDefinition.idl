@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentDefinition.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 21:37:47 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 14:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,8 @@ module com { module sun { module star { module sdb {
     Document
     </type>
     could be a form or a report.
-
-@deprecated
 */
-published service Document
+published service DocumentDefinition
 {
     interface com::sun::star::beans::XPropertySet;
 
@@ -87,8 +85,8 @@ published service Document
         it is not possible to alter the name.*/
     [readonly, property] string Name;
 
-    /** is the URL of the document. */
-    [property] string DocumentLocation;
+    /** Indicates if the document is to be used as template, for example, if a report is to be filled with data. */
+    [readonly, property] boolean AsTemplate;
 };
 
 //=============================================================================
