@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 11:23:00 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 16:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ String STR_NONAME
     Text [ finnish ] = "Nimetön" ;
     Text [ danish ] = "ikke-navngivet" ;
     Text [ french ] = "Sans nom" ;
-    Text [ swedish ] = "namnlös" ;
+    Text [ swedish ] = "Namnlös" ;
     Text [ dutch ] = "naamloos" ;
     Text [ spanish ] = "Sin nombre" ;
     Text [ english_us ] = "Untitled" ;
@@ -309,6 +309,7 @@ String STR_STANDARD_SHORTCUT
     Text[ arabic ] = "ÞíÇÓí";
     Text[ catalan ] = "~Estàndard";
     Text[ thai ] = "~à¸„à¹ˆà¸²à¹€à¸£à¸´à¹ˆà¸¡à¸•à¹‰à¸™";
+    Text[ portuguese_brazilian ] = "~Definir como impressora padrão";
 };
 
 String STR_FILTERNAME_ALL
