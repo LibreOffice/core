@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-07 15:39:48 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ russian ] = "Îòòåíêè ñåğîãî";
         Text[ polish ] = "Odcienie szaroœci";
         Text[ japanese ] = "¸ŞÚ°½¹°Ù(~G)";
-        Text[ chinese_traditional ] = "¦Ç¯Å(~G)";
+        Text[ chinese_traditional ] = "¦Ç¶¥(~G)";
         Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
         Text[ dutch ] = "~Grijswaarden";
         Text[ chinese_simplified ] = "»Ò¶È(~G)";
