@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propshlp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2002-01-25 09:33:09 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 12:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,6 +370,27 @@ public:
                           of this object. Stored in the variable rBHelper.
      */
     OPropertySetHelper( OBroadcastHelper & rBHelper ) SAL_THROW( () );
+
+    /** Constructor.
+
+        @param rBHelper
+                        this structure containes the basic members of
+                        a broadcaster.
+                          The lifetime must be longer than the lifetime
+                          of this object. Stored in the variable rBHelper.
+
+        @param bIgnoreRuntimeExceptionsWhileFiring
+                        indicates whether occuring RuntimeExceptions will be
+                        ignored when firing notifications (vetoableChange((),
+                        propertyChange()) to listeners.
+                        PropertyVetoExceptions may still be thrown.
+                        This flag is useful in a inter-process scenarios when
+                        remote bridges may break down
+                        (firing DisposedExceptions).
+    */
+    OPropertySetHelper(
+        OBroadcastHelper & rBHelper, bool bIgnoreRuntimeExceptionsWhileFiring );
+
     /**
        You must call disposing before destruction.
      */
