@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-29 20:24:00 $
+ *  last change: $Author: ka $ $Date: 2001-10-25 15:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
         SvxPluginFileDlg aPluginFileDialog(pWin, nSlot);
 
         // open filedlg
-        if (RET_OK == aPluginFileDialog.Execute())
+        if ( ERRCODE_NONE == aPluginFileDialog.Execute() )
         {
             // get URL
             String aStrURL(aPluginFileDialog.GetPath());
