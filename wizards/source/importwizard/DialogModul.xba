@@ -357,7 +357,7 @@ Sub	SetupMSConfiguration()
 	MSFilterName(1,1) = &quot;scalc: StarOffice XML (Calc)&quot;
 	MSFilterName(1,2) = &quot;sxc&quot;
 
-	MSFilterName(2,0) = &quot;pod&quot;
+	MSFilterName(2,0) = &quot;ppt&quot;
 	MSFilterName(2,1) = &quot;simpress: StarOffice XML (Impress)&quot;
 	MSFilterName(2,2) = &quot;sxi&quot;
 

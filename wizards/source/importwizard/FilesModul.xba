@@ -205,8 +205,10 @@ Dim MaxFileIndex as Integer
 	ImportDialog.cbGoOn.Label = sReady
 	ImportDialog.cbGoOn.Enabled = True
 	bCallCancelMsg = False
-
-	oLogDocument.Dispose()
+&apos;Todo: Natürlich nur schließen, wenn auch vorhanden!
+	If Not IsNull(oLogDocument) Then
+		oLogDocument.Dispose()
+	End If
 	ImportDialogArea.endExecute
 	ImportDialogArea.Dispose	
 	End

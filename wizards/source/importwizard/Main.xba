@@ -37,7 +37,7 @@ Sub Main()
 	FillStep_Welcome()
 	RepaintHeaderPreview()
 	SetStates()
-	ImportDialogArea.Execute() &apos;Visible = True 
+	ImportDialogArea.Visible = True 
 	ImportDialog.cbGoOn.DefaultButton = True
 	Exit Sub
 RTError:
@@ -169,12 +169,6 @@ Dim sBitmapPath as String
 		sBitmapPath = SOBitmapPath &amp; &quot;Import_&quot; &amp; CurStep &amp; &quot;.bmp&quot;
 	End If
 	ImportDialog.ImportPreview.ImageURL = sBitmapPath
-End Sub
-
-
-Sub HelperDialog()
-&apos;Todo: The String &quot;start&quot; can be replaced by a HelpIndex
-	StarDesktop.LoadComponentfromUrl(&quot;vnd.sun.star.help://&quot; &amp; sDocType &amp; &quot;/start&quot;, &quot;_OFFICE_HELP&quot;, 64, NoArgs())
 End Sub
 
 
