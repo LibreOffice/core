@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileview.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-19 10:05:40 $
+ *  last change: $Author: fs $ $Date: 2001-09-05 09:45:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@ private:
 
     DECL_LINK( HeaderSelect_Impl, HeaderBar * );
 
+protected:
+    virtual void GetFocus();
+
 public:
     SvtFileView( Window* pParent, const ResId& rResId, sal_Bool bOnlyFolder, sal_Bool bMultiSelection );
     SvtFileView( Window* pParent, const ResId& rResId, sal_Int8 nFlags );
@@ -117,7 +120,6 @@ public:
 
     void                    ExecuteFilter( const String& rFilter );
     void                    SetNoSelection();
-    void                    SetFocusInView();
     void                    ResetCursor();
 
     void                    SetSelectHdl( const Link& rHdl );
