@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleFootnoteView.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:55:28 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:51:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ module com {  module sun {  module star {  module text {
      @since #107627#
 
  */
-service AccessibleFootnoteView
+published service AccessibleFootnoteView
 {
     /** This interface gives access to any paragraph fragment and table
         fragment that is contained in a footnote and is at least
