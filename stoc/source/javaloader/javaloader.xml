@@ -10,6 +10,7 @@
         <language>  c++ </language>
         <status value="final"/>
         <supported-service> com.sun.star.loader.Java2   </supported-service>
+        <supported-service> com.sun.star.loader.Java    </supported-service>
         <service-dependency> ... </service-dependency>
 
             <type>  com.sun.star.java.XJavaThreadRegister_11    </type>

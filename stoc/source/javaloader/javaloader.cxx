@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:58 $
+ *  last change: $Author: jsc $ $Date: 2001-11-02 15:44:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,9 +115,11 @@ namespace stoc_javaloader {
             MutexGuard guard( Mutex::getGlobalMutex() );
             if( !pNames )
             {
-                static Sequence< OUString > seqNames(1);
+                static Sequence< OUString > seqNames(2);
                 seqNames.getArray()[0] = OUString(
                     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java2") );
+                seqNames.getArray()[1] = OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.Java") );
                 pNames = &seqNames;
             }
         }
