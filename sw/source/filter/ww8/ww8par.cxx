@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:28:37 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:30:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,12 @@
 #ifndef _FMTFOLLOWTEXTFLOW_HXX
 #include <fmtfollowtextflow.hxx>
 #endif
+#ifndef _FCHRFMT_HXX
+#include <fchrfmt.hxx>
+#endif
+#ifndef _CHARFMT_HXX
+#include <charfmt.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_I18N_FORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
@@ -266,6 +272,7 @@
 #define MM_250 1417             // WW-Default fuer Hor. Seitenraender: 2.5 cm
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 
+using namespace sw::util;
 using namespace sw::types;
 
 SwMSDffManager::SwMSDffManager( SwWW8ImplReader& rRdr )
@@ -438,32 +445,6 @@ void SyncIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt)
     long nExtraListIndent = lcl_GetTrueMargin(rLR, rFmt, nWantedFirstLinePos);
     rLR.SetTxtLeft(nWantedFirstLinePos - nExtraListIndent);
     rLR.SetTxtFirstLineOfst(0);
-}
-
-const SwNumRule* GetNumRuleFromTxtNode(const SwTxtNode &rTxtNode,
-        const SwDoc &rDoc)
-{
-    const SwNumRule *pRet = 0;
-    const SwNumRule *pRule = 0;
-    const SwNodeNum* pNum;
-
-    if (
-        (pNum = rTxtNode.GetNum()) &&
-        (MAXLEVEL > pNum->GetLevel()) &&
-        (pRule = rTxtNode.GetNumRule())
-       )
-    {
-        pRet = pRule;
-    }
-    else if (
-              (pNum = rTxtNode.GetOutlineNum()) &&
-              (MAXLEVEL > pNum->GetLevel()) &&
-              (pRule = rDoc.GetOutlineNumRule())
-            )
-    {
-        pRet = pRule;
-    }
-    return pRet;
 }
 
 const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
@@ -1116,6 +1097,9 @@ void SwWW8ImplReader::ImportDop()
     rDoc.SetAddExtLeading(!pWDop->fNoLeading);
     rDoc.SetAddFlyOffsets( true );
 
+    if (!pWDop->fNoLeading)
+        maTracer.Log(sw::log::eExtraLeading);
+
     //import magic doptypography information, if its there
     if (pWwFib->nFib > 105)
         ImportDopTypography(pWDop->doptypography);
@@ -1219,11 +1203,18 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     mbAnl(pRdr->bAnl), mbInHyperlink(pRdr->bInHyperlink),
     mbPgSecBreak(pRdr->bPgSecBreak), mbWasParaEnd(pRdr->bWasParaEnd),
     mbHasBorder(pRdr->bHasBorder)
+    mcSymbol(pRdr->cSymbol), mbIgnoreText(pRdr->bIgnoreText),
+    mbSymbol(pRdr->bSymbol), mbHdFtFtnEdn(pRdr->bHdFtFtnEdn),
+    mbTxbxFlySection(pRdr->bTxbxFlySection), mbAnl(pRdr->bAnl),
+    mbInHyperlink(pRdr->bInHyperlink), mbPgSecBreak(pRdr->bPgSecBreak),
+    mbWasParaEnd(pRdr->bWasParaEnd), mbHasBorder(pRdr->bHasBorder),
+    mbFirstPara(pRdr->bFirstPara)
 {
     pRdr->bSymbol = false;
     pRdr->bHdFtFtnEdn = true;
     pRdr->bTxbxFlySection = pRdr->bAnl = pRdr->bPgSecBreak = pRdr->bWasParaEnd
         = pRdr->bHasBorder = false;
+    pRdr->bFirstPara = true;
     pRdr->nInTable = 0;
     pRdr->pWFlyPara = 0;
     pRdr->pSFlyPara = 0;
@@ -1231,7 +1222,7 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     pRdr->pPrevNumRule = 0;
     pRdr->pTableDesc = 0;
     pRdr->nAktColl = 0;
-    pRdr->nParaNumber = 0;
+
 
     pRdr->pCtrlStck = new SwWW8FltControlStack(&pRdr->rDoc, pRdr->nFieldFlags,
         *pRdr);
@@ -1277,6 +1268,7 @@ void WW8ReaderSave::Restore( SwWW8ImplReader* pRdr )
     pRdr->nAktColl = mnAktColl;
     pRdr->bHasBorder = mbHasBorder;
     pRdr->nParaNumber = mnParaNumber;
+    pRdr->bFirstPara = mbFirstPara;
 
     // schliesse alle Attribute, da sonst Attribute
     // entstehen koennen, die aus dem Fly rausragen
@@ -1552,6 +1544,7 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
             }
         }
     }
+    maTracer.LeaveEnvironment(sw::log::eDocumentProperties);
 }
 
 bool wwSectionManager::SectionIsProtected(const wwSection &rSection) const
@@ -1671,8 +1664,7 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
     }
 #endif
 
-    SvxULSpaceItem aUL(*(const SvxULSpaceItem*)GetFmtAttr(RES_UL_SPACE));
-    const SwNumRule* pRule = GetNumRuleFromTxtNode(*pTxt, rDoc);
+    const SwNumRule* pRule = sw::util::GetNumRuleFromTxtNode(*pTxt);
 
     if (
          pRule && !pWDop->fDontUseHTMLAutoSpacing &&
@@ -1681,34 +1673,17 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
     {
         // If after spacing is set to auto, set the after space to 0
         if (bParaAutoAfter)
-        {
-            aUL.SetLower(0);
-            pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
-            pCtrlStck->NewAttr(rPos, aUL);
-            pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_UL_SPACE);
-        }
+            SetLowerSpacing(*pPaM, 0);
+
         // If the previous textnode had numbering and
         // and before spacing is set to auto, set before space to 0
         if(pPrevNumRule && bParaAutoBefore)
-        {
-            aUL.SetUpper(0);
-            pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
-            pCtrlStck->NewAttr(rPos, aUL);
-            pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_UL_SPACE);
-        }
+            SetUpperSpacing(*pPaM, 0);
 
         // If the previous numbering rule was different we need
         // to insert a space after the previous paragraph
         if((pRule != pPrevNumRule) && pPreviousNumPaM)
-        {
-            const SwPosition* pPreviousPos = pPreviousNumPaM->GetPoint();
-            const SfxPoolItem* pOldUL = pCtrlStck->GetFmtAttr( *pPreviousPos, RES_UL_SPACE );
-            SvxULSpaceItem aOldUL(*(const SvxULSpaceItem*)pOldUL);
-            aOldUL.SetLower(GetParagraphAutoSpace(pWDop->fDontUseHTMLAutoSpacing));
-            pPreviousNumPaM->GetPoint()->nContent.Assign(pPreviousNumPaM->GetCntntNode(), 0);
-            pCtrlStck->NewAttr(*pPreviousPos, aOldUL);
-            pCtrlStck->SetAttr(*pPreviousPos, RES_UL_SPACE);
-        }
+            SetLowerSpacing(*pPreviousNumPaM, GetParagraphAutoSpace(pWDop->fDontUseHTMLAutoSpacing));
 
         // cache current paragraph
         if(pPreviousNumPaM)
@@ -1721,13 +1696,7 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
     {
         // If the previous paragraph has numbering but the current one does not
         // we need to add a space after the previous paragraph
-        const SwPosition* pPreviousPos = pPreviousNumPaM->GetPoint();
-        const SfxPoolItem* pOldUL = pCtrlStck->GetFmtAttr( *pPreviousPos, RES_UL_SPACE );
-        SvxULSpaceItem aOldUL(*(const SvxULSpaceItem*)pOldUL);
-        aOldUL.SetLower(GetParagraphAutoSpace(pWDop->fDontUseHTMLAutoSpacing));
-        pPreviousNumPaM->GetPoint()->nContent.Assign(pPreviousNumPaM->GetCntntNode(), 0);
-        pCtrlStck->NewAttr(*pPreviousPos, aOldUL);
-        pCtrlStck->SetAttr(*pPreviousPos, RES_UL_SPACE);
+        SetLowerSpacing(*pPreviousNumPaM, GetParagraphAutoSpace(pWDop->fDontUseHTMLAutoSpacing));
         delete pPreviousNumPaM, pPreviousNumPaM = 0;
         pPrevNumRule = 0;
     }
@@ -1742,23 +1711,51 @@ void SwWW8ImplReader::AppendTxtNode(SwPosition& rPos)
     // If this is the first paragraph in the document and
     // Auto-spacing before paragraph is set,
     // set the upper spacing value to 0
-    if(bParaAutoBefore && nParaNumber==0 && !pWDop->fDontUseHTMLAutoSpacing)
-    {
-        aUL.SetUpper(0);
+    if(bParaAutoBefore && bFirstPara && !pWDop->fDontUseHTMLAutoSpacing)
+        SetUpperSpacing(*pPaM, 0);
 
-        xub_StrLen nEnd = pPaM->GetPoint()->nContent.GetIndex();
-        pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
-        pCtrlStck->NewAttr(*pPaM->GetPoint(), aUL);
-        pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), nEnd);
-        pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_UL_SPACE);
-    }
-
-    nParaNumber++;
+    bFirstPara = false;
 
     rDoc.AppendTxtNode(rPos);
 
     //We can flush all anchored graphics at the end of a paragraph.
     pAnchorStck->Flush();
+}
+
+bool SwWW8ImplReader::SetSpacing(SwPaM &rMyPam, int nSpace, bool bIsUpper )
+{
+        bool bRet = false;
+        const SwPosition* pSpacingPos = rMyPam.GetPoint();
+
+        const SvxULSpaceItem* pULSpaceItem = (const SvxULSpaceItem*)pCtrlStck->GetFmtAttr(*pSpacingPos, RES_UL_SPACE);
+
+        if(pULSpaceItem != 0)
+        {
+            SvxULSpaceItem aUL(*pULSpaceItem);
+
+            if(bIsUpper)
+                aUL.SetUpper(nSpace);
+            else
+                aUL.SetLower(nSpace);
+
+            xub_StrLen nEnd = pSpacingPos->nContent.GetIndex();
+            rMyPam.GetPoint()->nContent.Assign(rMyPam.GetCntntNode(), 0);
+            pCtrlStck->NewAttr(*pSpacingPos, aUL);
+            rMyPam.GetPoint()->nContent.Assign(rMyPam.GetCntntNode(), nEnd);
+            pCtrlStck->SetAttr(*pSpacingPos, RES_UL_SPACE);
+            bRet = true;
+        }
+        return bRet;
+}
+
+bool SwWW8ImplReader::SetLowerSpacing(SwPaM &rMyPam, int nSpace)
+{
+    return SetSpacing(rMyPam, nSpace, false);
+}
+
+bool SwWW8ImplReader::SetUpperSpacing(SwPaM &rMyPam, int nSpace)
+{
+    return SetSpacing(rMyPam, nSpace, true);
 }
 
 USHORT SwWW8ImplReader::TabRowSprm(int nLevel) const
@@ -2579,6 +2576,8 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
     WW8_CP nNext = pPlcxMan->Where();
     SwTxtNode* pPreviousNode = 0;
     BYTE nDropLines = 0;
+    SwCharFmt* pNewSwCharFmt = 0;
+    const SwCharFmt* pFmt;
     pStrm->Seek( pSBase->WW8Cp2Fc( nStartCp + nCpOfs, &bIsUnicode ) );
 
     WW8_CP l = nStartCp;
@@ -2621,6 +2620,11 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
             // Word has no concept of a "whole word dropcap"
             aDrop.GetWholeWord() = false;
 
+            if(pFmt)
+                aDrop.SetCharFmt(const_cast<SwCharFmt*>(pFmt));
+            else if(pNewSwCharFmt)
+                aDrop.SetCharFmt(const_cast<SwCharFmt*>(pNewSwCharFmt));
+
             SwPosition aStart(*pEndNd);
             pCtrlStck->NewAttr(aStart, aDrop);
             pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_PARATR_DROP);
@@ -2641,6 +2645,25 @@ bool SwWW8ImplReader::ReadText(long nStartCp, long nTextLen, short nType)
             else
                 nDistance = 0;
 
+            const SwFmtCharFmt *pSwFmtCharFmt = 0;
+
+            if(pAktItemSet)
+                pSwFmtCharFmt = &(ItemGet<SwFmtCharFmt>(*pAktItemSet, RES_TXTATR_CHARFMT));
+
+            if(pSwFmtCharFmt)
+                pFmt = pSwFmtCharFmt->GetCharFmt();
+
+            if(pAktItemSet && !pFmt)
+            {
+                String sPrefix(CREATE_CONST_ASC( "WW8Dropcap"));
+                sPrefix += String::CreateFromInt32( nDropCap++ );
+                pNewSwCharFmt = rDoc.MakeCharFmt(sPrefix, (SwCharFmt*)rDoc.GetDfltCharFmt());
+                 pAktItemSet->ClearItem(RES_CHRATR_ESCAPEMENT);
+                pNewSwCharFmt->SetAttr( *pAktItemSet );
+            }
+
+            delete pAktItemSet;
+            pAktItemSet = 0;
             bDropCap=false;
         }
 
@@ -2700,7 +2723,7 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     maSectionManager(*this), maSectionNameGenerator(rD,CREATE_CONST_ASC("WW")),
     maGrfNameGenerator(bNewDoc,String('G')), maParaStyleMapper(rD),
     maCharStyleMapper(rD), pMSDffManager(0), mpAtnNames(0), pAuthorInfos(0),
-    mbNewDoc(bNewDoc)
+    mbNewDoc(bNewDoc), nDropCap(0)
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
@@ -2726,7 +2749,6 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     pPreviousNumPaM = 0;
     pPrevNumRule = 0;
     nColls = nAktColl = 0;
-    nParaNumber = 0;
     nObjLocFc = nPicLocFc = 0;
     nInTable=0;
     bReadNoTbl = bPgSecBreak = bSpec = bObj = bTxbxFlySection
@@ -2741,6 +2763,8 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     bNoLnNumYet = true;
     bInHyperlink = false;
     bWasParaEnd = false;
+    bDropCap = false;
+    bFirstPara = true;
     bParaAutoBefore = false;
     bParaAutoAfter = false;
     nProgress = 0;
@@ -2754,6 +2778,7 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     pDrawEditEngine = 0;
     pWWZOrder = 0;
     pFormImpl = 0;
+    mpChosenOutlineNumRule = 0;
     pNumFldType = 0;
     nFldNum = 0;
 
@@ -3090,6 +3115,8 @@ void SwWW8ImplReader::StoreMacroCmds()
 {
     if (pWwFib->lcbCmds)
     {
+        maTracer.Log(sw::log::eContainsWordBasic);
+
         pTableStream->Seek(pWwFib->fcCmds);
 
         SvStorageRef xDestRoot(mpDocShell->GetStorage());
@@ -3226,6 +3253,48 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 aSttNdIdx = pPaM->GetPoint()->nNode;
 
             ::StartProgress(STR_STATSTR_W4WREAD, 0, 100, mpDocShell);
+
+#ifdef DEBUGDUMP
+            //experimental embedded ttf dumper
+            if (pWwFib->lcbSttbttmbd && (7 < pWwFib->nVersion))
+            {
+                pTableStream->Seek(pWwFib->fcSttbttmbd);
+                sal_uInt16 nZeros;
+                *pTableStream >> nZeros;
+                sal_uInt16 nNoEntries;
+                *pTableStream >> nNoEntries;
+                sal_uInt32 nUnknown1;
+                *pTableStream >> nUnknown1;
+                sal_uInt16 nUnknown2;
+                *pTableStream >> nUnknown2;
+                std::vector<sal_uInt32> aOffsets;
+                for (sal_uInt16 nI = 0; nI < nNoEntries; ++nI)
+                {
+                    sal_uInt32 nOffset;
+                    *pTableStream >> nOffset;
+                    aOffsets.push_back(nOffset);
+                    sal_uInt32 nUnknown3;
+                    *pTableStream >> nUnknown3;
+                    sal_uInt32 nUnknown4;
+                    *pTableStream >> nUnknown4;
+                }
+                typedef std::vector<sal_uInt32>::iterator myIter;
+                myIter aEnd = aOffsets.end();
+                myIter aIter = aOffsets.begin();
+                while (aIter != aEnd)
+                {
+                    sal_uInt32 nOffset = *aIter;
+                    sal_uInt32 nLen = STREAM_SEEK_TO_END;
+                    ++aIter;
+                    pStrm->Seek(nOffset);
+                    if (aIter != aEnd)
+                        nLen = *aIter - nOffset;
+                    SvStream *pDbg = sw::hack::CreateDebuggingStream(CREATE_CONST_ASC(".ttf.dump"));
+                    sw::hack::DumpStream(*pStrm, *pDbg, nLen);
+                    delete pDbg;
+                }
+            }
+#endif
 
             // read Font Table
             pFonts = new WW8Fonts( *pTableStream, *pWwFib );
@@ -3469,6 +3538,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 if (pStg && !pGloss) /*meaningless for a glossary, cmc*/
                 {
                     const SvtFilterOptions* pVBAFlags = SvtFilterOptions::Get();
+                    maTracer.EnterEnvironment(sw::log::eMacros);
                     SvxImportMSVBasic aVBasic(*mpDocShell, *pStg,
                                     pVBAFlags->IsLoadWordBasicCode(),
                                     pVBAFlags->IsLoadWordBasicStorage() );
@@ -3476,9 +3546,14 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                     String s2(CREATE_CONST_ASC("VBA"));
                     int nRet = aVBasic.Import( s1, s2 );
                     if( 2 & nRet )
+                    {
+                        maTracer.Log(sw::log::eContainsVisualBasic);
                         rDoc.SetContainsMSVBasic(true);
+                    }
 
                     StoreMacroCmds();
+
+                    maTracer.LeaveEnvironment(sw::log::eMacros);
                 }
             }
 
@@ -3545,6 +3620,7 @@ void SwWW8ImplReader::SetOutLineStyles()
     #i3674# & #101291# Load new document and insert document cases.
     */
     SwNumRule aOutlineRule(*rDoc.GetOutlineNumRule());
+    mpChosenOutlineNumRule = &aOutlineRule;
 
     sw::ParaStyles aOutLined(sw::util::GetParaStyles(rDoc));
     sw::util::SortByOutline(aOutLined);
@@ -3558,12 +3634,65 @@ void SwWW8ImplReader::SetOutLineStyles()
     if (!mbNewDoc)
     {
         myiter aEnd = aOutLined.end();
-        for (myiter aIter = aOutLined.begin(); aIter < aEnd; ++aIter )
+        for (myiter aIter = aOutLined.begin(); aIter < aEnd; ++aIter)
         {
             if ((*aIter)->GetOutlineLevel() < MAXLEVEL)
                 nFlagsStyleOutlLevel |= 1 << (*aIter)->GetOutlineLevel();
             else
                 break;
+        }
+    }
+    else
+    {
+        /*
+        #111955#
+        Only import *one* of the possible multiple outline numbering rules, so
+        pick the one that affects most styles. If we're not importing a new
+        document, we got to stick with what is already there.
+        */
+        std::map<SwNumRule *, int>aRuleMap;
+        typedef std::map<SwNumRule *, int>::iterator myIter;
+        for (USHORT nI = 0; nI < nColls; ++nI)
+        {
+            SwWW8StyInf& rSI = pCollA[ nI ];
+            if (
+                (MAXLEVEL > rSI.nOutlineLevel) && rSI.pOutlineNumrule &&
+                rSI.pFmt
+               )
+            {
+                myIter aIter = aRuleMap.find(rSI.pOutlineNumrule);
+                if (aIter == aRuleMap.end())
+                    aRuleMap[rSI.pOutlineNumrule] = 1;
+                else
+                    ++(aIter->second);
+            }
+        }
+
+        int nMax = 0;
+        myIter aEnd = aRuleMap.end();
+        for (myIter aIter = aRuleMap.begin(); aIter != aEnd; ++aIter++)
+        {
+            if (aIter->second > nMax)
+            {
+                nMax = aIter->second;
+                mpChosenOutlineNumRule = aIter->first;
+            }
+        }
+
+        ASSERT(mpChosenOutlineNumRule, "Impossible");
+        if (mpChosenOutlineNumRule)
+            aOutlineRule = *mpChosenOutlineNumRule;
+
+        if (mpChosenOutlineNumRule != &aOutlineRule)
+        {
+            myiter aEnd = aOutLined.end();
+            for (myiter aIter = aOutLined.begin(); aIter < aEnd; ++aIter)
+            {
+                if ((*aIter)->GetOutlineLevel() < MAXLEVEL)
+                    (*aIter)->SetOutlineLevel(NO_NUMBERING);
+                else
+                    break;
+            }
         }
     }
 
@@ -3576,7 +3705,10 @@ void SwWW8ImplReader::SetOutLineStyles()
         if (rSI.IsOutlineNumbered())
         {
             USHORT nAktFlags = 1 << rSI.nOutlineLevel;
-            if (nAktFlags & nFlagsStyleOutlLevel)
+            if (
+                 (nAktFlags & nFlagsStyleOutlLevel) ||
+                 (rSI.pOutlineNumrule != mpChosenOutlineNumRule)
+               )
             {
                 /*
                 If our spot is already taken by something we can't replace
@@ -3625,7 +3757,7 @@ void SwWW8ImplReader::SetOutLineStyles()
                 const SwNumFmt& rRule=rSI.pOutlineNumrule->Get(nFromLevel);
                 aOutlineRule.Set(nToLevel, rRule);
                 // Set my outline level
-                ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel( nToLevel );
+                ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(nToLevel);
                 // If there are more styles on this level ignore them
                 nFlagsStyleOutlLevel |= nAktFlags;
             }
