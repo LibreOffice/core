@@ -1,5 +1,5 @@
 <!--
-	$Id: text.mod,v 1.42 2002-01-17 12:32:08 dvo Exp $
+	$Id: text.mod,v 1.43 2002-01-17 12:35:28 dvo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -110,8 +110,8 @@
 				   text:chapter |
 				   text:file-name |
 				   text:template-name |
-				   text:set-page-variable |
-				   text:get-page-variable |
+				   text:page-variable-set |
+				   text:page-variable-get |
 				   text:execute-macro |
 				   text:dde-connection |
 				   text:reference-ref |
@@ -543,12 +543,12 @@
 <!ATTLIST text:template-name text:display (full|path|name|name-and-extension|
 										  area|title) "full">
 
-<!ELEMENT text:set-page-variable EMPTY>
-<!ATTLIST text:set-page-variable text:active %boolean; "true">
-<!ATTLIST text:set-page-variable text:page-adjust %integer; "0">
+<!ELEMENT text:page-variable-set EMPTY>
+<!ATTLIST text:page-variable-set text:active %boolean; "true">
+<!ATTLIST text:page-variable-set text:page-adjust %integer; "0">
 
-<!ELEMENT text:get-page-variable (#PCDATA)>
-<!ATTLIST text:get-page-variable %numFormat;>
+<!ELEMENT text:page-variable-get (#PCDATA)>
+<!ATTLIST text:page-variable-get %numFormat;>
 
 <!ELEMENT text:execute-macro (#PCDATA|office:events)* >
 <!ATTLIST text:execute-macro text:description %string; #IMPLIED>
