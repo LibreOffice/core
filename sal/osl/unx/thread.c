@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-09 10:39:20 $
+ *  last change: $Author: mfe $ $Date: 2001-02-14 17:41:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,6 @@ static void* oslWorkerWrapperFunction(void* pData)
 
     pthread_mutex_unlock(&pThreadImpl->m_AccessLock);
 
-
     /* call worker-function with data */
     pThreadImpl->m_WorkerFunction(pThreadImpl->m_pData);
 
@@ -449,6 +448,30 @@ static sal_Bool osl_initThread()
         /*      one gets 959917873 as the policy                    */
         /*      so set the policy to a default one                  */
         policy=SCHED_OTHER;
+    }
+#endif
+
+    if ( ( nRet = sched_get_priority_min(policy) ) >= 0 )
+    {
+        OSL_TRACE("Min Prioriy for policy '%i' == '%i'\n",policy,nRet);
+        Thread_Prio_Lowest=nRet;
+    }
+#if defined(DEBUG)
+    else
+    {
+        fprintf(stderr,"failed to get min sched param [%s]\n",strerror(errno));
+    }
+#endif
+
+    if ( ( nRet = sched_get_priority_max(policy) ) >= 0 )
+    {
+        OSL_TRACE("Max Prioriy for policy '%i' == '%i'\n",policy,nRet);
+        Thread_Prio_Highest=nRet;
+    }
+#if defined(DEBUG)
+    else
+    {
+        fprintf(stderr,"failed to get max sched param [%s]\n",strerror(errno));
     }
 #endif
 
@@ -702,7 +725,8 @@ void SAL_CALL osl_setThreadPriority(oslThread Thread,
             return;
 
         default:
-            OSL_ASSERT(sal_False);      /* enum expanded, but forgotten here...*/
+            /* enum expanded, but forgotten here...*/
+            OSL_ENSURE(sal_False,"osl_setThreadPriority : unknown priority\n");
 
             /* let release-version behave friendly */
             return;
