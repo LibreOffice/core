@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:12 $
+ *  last change: $Author: hro $ $Date: 2002-10-15 13:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,8 @@ private:
 
 class OGuard
 {
+    OGuard( const OGuard& );
+    const OGuard& operator = ( const OGuard& );
 public:
     /** Acquires mutex
         @param pMutex pointer to mutex which is to be acquired  */
@@ -184,6 +186,8 @@ protected:
 */
 class OClearableGuard
 {
+    OClearableGuard( const OClearableGuard& );
+    const OClearableGuard& operator = ( const OClearableGuard& );
 public:
     /** Acquires mutex
         @param pMutex pointer to mutex which is to be acquired  */
