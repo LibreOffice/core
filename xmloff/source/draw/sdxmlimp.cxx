@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 13:00:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,8 @@ static __FAR_DATA SvXMLTokenMapEntry aDrawPageAttrTokenMap[] =
 static __FAR_DATA SvXMLTokenMapEntry aDrawPageElemTokenMap[] =
 {
     { XML_NAMESPACE_PRESENTATION,   XML_NOTES,              XML_TOK_DRAWPAGE_NOTES      },
+    { XML_NAMESPACE_ANIMATION,      XML_PAR,                XML_TOK_DRAWPAGE_PAR        },
+    { XML_NAMESPACE_ANIMATION,      XML_SEQ,                XML_TOK_DRAWPAGE_SEQ        },
     XML_TOKEN_MAP_END
 };
 
@@ -476,6 +478,16 @@ SdXMLImport::SdXMLImport(
         GetXMLToken(XML_NP_PRESENTATION),
         GetXMLToken(XML_N_PRESENTATION),
         XML_NAMESPACE_PRESENTATION);
+
+    GetNamespaceMap().Add(
+        GetXMLToken(XML_NP_SMIL),
+        GetXMLToken(XML_N_SMIL),
+        XML_NAMESPACE_SMIL);
+
+    GetNamespaceMap().Add(
+        GetXMLToken(XML_NP_ANIMATION),
+        GetXMLToken(XML_N_ANIMATION),
+        XML_NAMESPACE_ANIMATION);
 }
 
 // XImporter
