@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-22 19:18:39 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 19:34:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,17 +64,26 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-#ifndef _CPPUHELPER_FACTORY_HXX_
-#include <cppuhelper/factory.hxx>
-#endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XHIERARCHICALNAMEACCESS_HPP_
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XCHANGESBATCH_HPP_
 #include <com/sun/star/util/XChangesBatch.hpp>
@@ -91,12 +100,6 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
-#ifndef _ZIP_PACKAGE_BUFFER_HXX
-#include <ZipPackageBuffer.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
 #ifndef _HASHMAPS_HXX
 #include <HashMaps.hxx>
 #endif
@@ -109,7 +112,7 @@ class ZipPackageFolder;
 class ZipFile;
 class OutputThread;
 class ByteGrabber;
-
+namespace ucb { class Content; }
 enum SegmentEnum
 {
     e_Aborted = -1000,
@@ -132,7 +135,7 @@ protected:
     NameHash         aRecent;
     ::rtl::OUString  sURL;
     sal_Int32        nSegmentSize;
-    sal_Bool         bHasEncryptedEntries, bSpanned;
+    sal_Bool         bHasEncryptedEntries;
 
     ::com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > xRootFolder;
     ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xContentStream;
@@ -166,6 +169,7 @@ protected:
     sal_Int32 RequestDisk ( ::rtl::OUString &rMountPath, sal_Int16 nDiskNum);
     void unSpanFile ( );
     sal_Bool checkEnd ( com::sun::star::uno::Sequence < sal_Int8 > &rSequence );
+    void writeTempFile();
 
 public:
     ZipPackage (const ::com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > &xNewFactory);
