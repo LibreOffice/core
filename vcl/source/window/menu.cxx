@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:52:18 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:08:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4876,6 +4876,7 @@ void MenuBarWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                     else
                     {
                         SetFillColor( GetSettings().GetStyleSettings().GetMenuHighlightColor() );
+                        SetLineColor();
                         DrawRect( aRect );
                     }
                 }
