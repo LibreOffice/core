@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:49:59 $
+ *  last change: $Author: kz $ $Date: 2001-06-21 21:44:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,14 +696,14 @@ String RID_SANE_NORESOLUTIONOPTION_TXT
     Text [ french ] = "Le pιriphιrique utilisι ne permet pas de crιer un aperηu. Il permet uniquement une digitalisation normale en guise d'aperηu, ce qui peut durer nettement plus longtemps." ;
     Text [ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren." ;
     Text[ chinese_simplified ] = "ΥβΈφΙθ±ΈΓ»ΣΠΤ¤ΐΐΉ¦Δά΅£²ΙΣΓΖΥΝ¨Ι¨Γθ·½Κ½Τ¤ΐΐΏΙΔάΠθÒª½Ο³¤µΔΚ±Όδ΅£";
-    Text[ russian ] = "Σρςπξιρςβξ νε νΰρςπξενξ νΰ ρξηδΰνθε οπεδβΰπθςελόνξγξ οπξρμξςπΰ. Βμερςξ ύςξγξ β κΰχερςβε οπεδβΰπθςελόνξγξ οπξρμξςπΰ θροξλόησεςρÿ ξαϋχνξε ρξρκΰνθπξβΰννξε θηξαπΰζενθε, χςξ ηΰιμες ηνΰχθςελόνξ αξλόψε βπεμενθ.";
-    Text[ polish ] = "UrzΉdzenie to nie potrafi utworzyζ podglΉdu. Zastosowany zostanie zwyk³y tryb przeglΉdu. To moΏe trochκ d³uΏej potrwaζ.";
+    Text[ russian ] = "Σρςπξιρςβξ νε νΰρςπξενξ νΰ ρξηδΰνθε οπεδβΰπθςελόνξγξ οπξρμξςπΰ. Βμερςξ ύςξγξ β κΰχερςβε οπεδβΰπθςελόνξγξ οπξρμξςπΰ θροξλόησεςρÿ ξαϋχνξ";
+    Text[ polish ] = "UrzΉdzenie to nie dysponuje opcjΉ podglΉdu. Zastosowany zostanie wzamian zwyk³y tryb przeglΉdu. Operacja ta moΏe trochκ d³uΏej potrwaζ.";
     Text[ japanese ] = "‚±‚ΜΓήΚή²½‚ΝΜίΪΛή­°‚Μμ¬‚Ι‚Ν“K‚µ‚Δ‚Ά‚ά‚Ή‚ρB‚©‚ν‚θ‚ΙΜίΪΛή­°‚Ζ‚µ‚Δ•’Κ‚Μ½·¬έ‚ªg—p‚³‚κ‚ά‚·‚ªΤ‚ª­‚µ‚©‚©‚θ‚ά‚·B";
     Text[ chinese_traditional ] = "³o­Σ³]³Ζ¨S¦³³]©wΉwµψ¥\\―ΰ΅C¦]¦Ή±Δ¥Ξ΄¶³qªΊ±½΄y¤θ¦΅Ήwµψ·|»έ­nΈϋªψªΊ®Ι¶΅΅C";
     Text[ arabic ] = "ΗαΜεΗÒ ΫνΡ γυΪΟ αΕδΤΗΑ γΪΗνδΙ. ΘΟαΗπ γδ εΠΗ΅ Σζέ νΚγ ΗΣΚΞΟΗγ γΣΝ ΪΗΟν ίγΪΗνδΙ. νγίδ Γδ νΣΚΫΡή Παί έΚΡΙ ΓΨζα ΘίΛνΡ.";
     Text[ dutch ] = "Het apparaat is niet ingesteld op het maken van een voorbeeld. In plaats daarvan wordt gebruik gemaakt van een normale scan als voorbeeld. Dit kan beduidend langer duren.";
     Text[ chinese_simplified ] = "ΥβΈφΙθ±ΈΓ»ΣΠΤ¤ΐΐΉ¦Δά΅£²ΙΣΓΖΥΝ¨Ι¨Γθ·½Κ½Τ¤ΐΐΏΙΔάΠθÒª½Ο³¤µΔΚ±Όδ΅£";
-    Text[ greek ] = "Η συσκευή δεν έχει ρυθμιστεί για την εμφάνιση προεπισκόπησης. Αντί αυτού χρησιμοποιείται μια κανονική σάρωση. Η διαδικασία αυτή μπορεί να ? ";
+    Text[ greek ] = "Η συσκευή δεν έχει ρυθμιστεί για την εμφάνιση προεπισκόπησης. Αντί αυτού χρησιμοποιείται μια κανονική σάρωση. Η διαδικασία αυτή μπορεί να";
     Text[ korean ] = "ΐεΔ΅΄Β ΉΜΈ®ΊΈ±β ΏΙΌΗΐ» Α¦°ψΗΟΑφ ΎΚ½ΐ΄Ο΄Ω. ±Χ ΄λ½Ε ΐΟΉέ ½ΊΔµΐΜ ΉΜΈ®ΊΈ±β·Ξ ΐΜΏλµΙ °ΝΐΤ΄Ο΄Ω. ΐΜ ½ΊΔµΐΊ ½Γ°£ΐΜ ΘΞΎΐ ΄υ Ώΐ·΅ °ΙΈ± Όφ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Cihaz φnizleme iώlevine desteklemiyor. Bunun yerine φnizleme olarak normal bir tarama gφrόntόsό kullanύlacak. Bu iώlem daha fazla zaman alabilir.";
     Text[ catalan ] = "El dispositivo no estα preparado para ofrecer opciσn de previsualizaciσn. En lugar de esta se utilizarα un escaneado normal, que puede tardar considerablemente mαs.";
@@ -736,6 +736,7 @@ String RID_SANE_NOSANELIB_TXT
     Text[ catalan ] = "La interfaz SANE no se pudo inicializar. No se puede realizar ningϊn proceso de digitalizaciσn.";
     Text[ finnish ] = "SANE-liittymδδ ei voitu alustaa. Skannausta ei voida suorittaa.";
 };
+
 
 
 
