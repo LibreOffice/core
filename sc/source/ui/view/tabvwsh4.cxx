@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:01:43 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@
 #include "tpprint.hxx"
 #include "scextopt.hxx"
 #include "printopt.hxx"
+#include "drawview.hxx"
 
 #ifndef SC_NAVSETT_HXX
 #include "navsett.hxx"
@@ -726,7 +727,9 @@ void ScTabViewShell::SetDrawShellOrSub()
     }
     else
     {
-        SetCurSubShell(OST_Drawing);
+        SetCurSubShell(OST_Drawing, true /* force: different toolbars are
+                                            visible concerning shape type
+                                            and shape state */);
     }
 }
 
@@ -734,7 +737,9 @@ void ScTabViewShell::SetDrawShell( BOOL bActive )
 {
     if(bActive)
     {
-        SetCurSubShell(OST_Drawing);
+        SetCurSubShell(OST_Drawing, true /* force: different toolbars are
+                                            visible concerning shape type
+                                            and shape state */);
     }
     else
     {
@@ -949,16 +954,19 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
                     break;
             case    OST_Drawing:
                     {
-                        if( !pExtrusionBarShell )
-                        {
-                            pExtrusionBarShell = new svx::ExtrusionBar( this );
+                        if (svx::checkForSelectedCustomShapes(
+                                GetScDrawView(), true /* bOnlyExtruded */ )) {
+                            if (pExtrusionBarShell == 0)
+                                pExtrusionBarShell = new svx::ExtrusionBar(this);
+                            AddSubShell( *pExtrusionBarShell );
                         }
-                        if ( !pFontworkBarShell )
-                        {
-                            pFontworkBarShell = new svx::FontworkBar( this );
+                        sal_uInt32 nCheckStatus = 0;
+                        if (svx::checkForSelectedFontWork(
+                                GetScDrawView(), nCheckStatus )) {
+                            if (pFontworkBarShell == 0)
+                                pFontworkBarShell = new svx::FontworkBar(this);
+                            AddSubShell( *pFontworkBarShell );
                         }
-                        AddSubShell( *pExtrusionBarShell );
-                        AddSubShell( *pFontworkBarShell );
 
                         if ( !pDrawShell )
                         {
