@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salsys.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:57:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,9 +75,13 @@
 #ifndef _SV_SALSYS_HXX
 #include <salsys.hxx>
 #endif
+#ifndef _VCL_DLLAPI_H
+#include "dllapi.h"
+#endif
+
 #include <list>
 
-class X11SalSystem : public SalSystem
+class VCL_DLLPUBLIC X11SalSystem : public SalSystem
 {
 public:
     X11SalSystem() {}
