@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-07-23 11:03:50 $
+#   last change: $Author: rt $ $Date: 2004-09-08 16:16:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
+.IF "$(SYSTEM_LIBXML)" == "YES"
+CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
