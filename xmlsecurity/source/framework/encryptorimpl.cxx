@@ -2,9 +2,9 @@
  *
  *  $RCSfile: encryptorimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-29 17:10:38 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ void EncryptorImpl::startEngine( const cssu::Reference<
     try
     {
         xResultTemplate = m_xXMLEncryption->encrypt(
-            xEncryptionTemplate, m_xXMLSecurityContext);
+            xEncryptionTemplate, m_xSecurityEnvironment);
         m_nStatus = xResultTemplate->getStatus();
     }
     catch( cssu::Exception& )
@@ -267,7 +267,7 @@ void SAL_CALL EncryptorImpl::initialize( const cssu::Sequence< cssu::Any >& aArg
     aArguments[1] >>= m_xSAXEventKeeper;
     aArguments[2] >>= ouTempString;
     m_nIdOfTemplateEC = ouTempString.toInt32();
-    aArguments[3] >>= m_xXMLSecurityContext;
+    aArguments[3] >>= m_xSecurityEnvironment;
     aArguments[4] >>= m_xXMLEncryption;
 }
 
