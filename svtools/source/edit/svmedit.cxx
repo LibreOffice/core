@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mt $ $Date: 2002-05-17 11:48:47 $
+ *  last change: $Author: sb $ $Date: 2002-07-23 12:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2000 by Sun Microsystems, Inc.
+ *  Copyright: 2002 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include <memory>
+
 #include <vcl/rc.h>
 #include <vcl/decoview.hxx>
 
@@ -66,11 +68,13 @@
 #include <xtextedt.hxx>
 #include <brdcst.hxx>
 #include <lstner.hxx>
+#include "unoiface.hxx"
 
 #ifndef _UNDO_HXX
 #include <undo.hxx>
 #endif
 
+#include "textwindowaccessibility.hxx"
 
 // IDs erstmal aus VCL geklaut, muss mal richtig delivert werden...
 #define SV_MENU_EDIT_UNDO           1
@@ -85,6 +89,7 @@
 #include <vcl/scrbar.hxx>
 #endif
 
+namespace css = ::com::sun::star;
 
 class TextWindow : public Window
 {
@@ -122,6 +127,10 @@ public:
 
     BOOL            IsIgnoreTab() const { return mbIgnoreTab; }
     void            SetIgnoreTab( BOOL bIgnore ) { mbIgnoreTab = bIgnore; }
+
+    virtual
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >
+    GetComponentInterface(BOOL bCreate = TRUE);
 };
 
 
@@ -897,6 +906,22 @@ void TextWindow::LoseFocus()
         mpExtTextView->SetPaintSelection( FALSE );
 }
 
+// virtual
+::css::uno::Reference< ::css::awt::XWindowPeer >
+TextWindow::GetComponentInterface(BOOL bCreate)
+{
+    ::css::uno::Reference< ::css::awt::XWindowPeer > xPeer(
+        Window::GetComponentInterface(false));
+    if (!xPeer.is() && bCreate)
+    {
+        xPeer = new ::svtools::TextWindowAccessibility(this,
+                                                       *GetTextEngine(),
+                                                       *GetTextView());
+        SetComponentInterface(xPeer);
+    }
+    return xPeer;
+}
+
 MultiLineEdit::MultiLineEdit( Window* pParent, WinBits nWinStyle )
     : Edit( pParent, nWinStyle )
 {
@@ -1453,3 +1478,18 @@ USHORT MultiLineEdit::GetLeftMargin() const
         return 0;
 }
 
+// virtual
+::css::uno::Reference< ::css::awt::XWindowPeer >
+MultiLineEdit::GetComponentInterface(BOOL bCreate)
+{
+    ::css::uno::Reference< ::css::awt::XWindowPeer > xPeer(
+        Edit::GetComponentInterface(false));
+    if (!xPeer.is() && bCreate)
+    {
+        ::std::auto_ptr< VCLXMultiLineEdit > xEdit(new VCLXMultiLineEdit());
+        xEdit->SetWindow(this);
+        xPeer = xEdit.release();
+        SetComponentInterface(xPeer);
+    }
+    return xPeer;
+}
