@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: er $ $Date: 2000-11-18 19:21:48 $
+ *  last change: $Author: er $ $Date: 2000-11-23 19:55:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,9 @@ void CalendarWrapper::loadCalendar( const ::rtl::OUString& rUniqueID, const ::co
     catch ( Exception& e )
     {
 #ifndef PRODUCT
-        ByteString aMsg( "loadCalendar: Exception caught\n" );
+        ByteString aMsg( "loadCalendar: Exception caught\nrequested: " );
+        aMsg += ByteString( String( rUniqueID ), RTL_TEXTENCODING_UTF8 );
+        aMsg += '\n';
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
 #endif
