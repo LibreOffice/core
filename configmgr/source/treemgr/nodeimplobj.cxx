@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
+ *  last change: $Author: jb $ $Date: 2001-11-14 17:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ static
 inline
 Attributes adjustForDirectAccess(Attributes aAttributes)
 {
+    aAttributes.bFinalized |= aAttributes.bWritable;
     aAttributes.bWritable = true;
     return aAttributes;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 12:07:04 $
+ *  last change: $Author: jb $ $Date: 2001-11-14 17:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,14 @@
 #ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #include "valuenode.hxx"
 #endif
+
+#ifndef INCLUDED_CONFIGMGR_MERGECHANGE_HXX
+#include "mergechange.hxx"
+#endif
 #ifndef _CONFIGMGR_TREEACTIONS_HXX_
 #include "treeactions.hxx"
 #endif
+
 #ifndef CONFIGMGR_TREEPROVIDER_HXX
 #include "treeprovider.hxx"
 #endif
@@ -113,104 +118,123 @@ namespace configmgr
 // ------------------------------- invalidateTree -------------------------------
 // -----------------------------------------------------------------------------
 
-    struct OBuildChangeTree : NodeModification
+    struct OBuildChangeTreeForward : NodeModification
     {
     protected:
         SubtreeChange&  m_rChangeList;
         INode*          m_pCacheNode;
-        sal_Int32       m_nFlag;
+
     public:
-        OBuildChangeTree(SubtreeChange& rList, INode* pNode, sal_Int32 _nFlag)
-                :m_rChangeList(rList),
-                 m_pCacheNode(pNode),
-                 m_nFlag(_nFlag)
-            {
-            }
+        OBuildChangeTreeForward(SubtreeChange& rList, INode* pNode)
+                : m_rChangeList(rList)
+                , m_pCacheNode(pNode)
+        {
+        }
 
         virtual void handle(ValueNode& _nNode)
+        {
+            OUString aNodeName = _nNode.getName();
+            ISubtree* pTree = m_pCacheNode->asISubtree();
+            OSL_ENSURE(pTree, "OBuildChangeTree::handle : node must be a inner node!");
+            if (pTree)
             {
-                if (m_nFlag == 2) return;
-                OUString aNodeName = _nNode.getName();
-                ISubtree* pTree = m_pCacheNode->asISubtree();
-                OSL_ENSURE(pTree, "OBuildChangeTree::handle : node must be a inner node!");
-                if (pTree)
-                {
-                    INode* pChild = pTree->getChild(aNodeName);
-                    ValueNode* pValueNode = pChild ? pChild->asValueNode() : NULL;
-                    OSL_ENSURE(pValueNode, "OBuildChangeTree::handle : node must be a value node!");
+                INode* pChild = pTree->getChild(aNodeName);
+                ValueNode* pValueNode = pChild ? pChild->asValueNode() : NULL;
+                OSL_ENSURE(pValueNode, "OBuildChangeTree::handle : node must be a value node!");
 
-                    // if the values differ add a new change
-                    if (pValueNode && _nNode.getValue() != pValueNode->getValue())
-                    {
-                        ValueChange* pChange = new ValueChange(_nNode.getValue(), *pValueNode);
-                        m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
-                    }
+                // if the values differ add a new change
+                if (pValueNode && _nNode.getValue() != pValueNode->getValue())
+                {
+                    std::auto_ptr<Change> pChange( new ValueChange(_nNode.getValue(), *pValueNode) );
+                    m_rChangeList.addChange((pChange));
                 }
             }
+        }
         virtual void handle(ISubtree& _rSubtree)
+        {
+            OUString aNodeName = _rSubtree.getName();
+            ISubtree* pSubtreeInCache = m_pCacheNode->asISubtree();
+            OSL_ENSURE(pSubtreeInCache, "OBuildChangeTree::handle : node must be a inner node!");
+            if (pSubtreeInCache)
             {
-                OUString aNodeName = _rSubtree.getName();
-                ISubtree* pSubtreeInCache = m_pCacheNode->asISubtree();
-                OSL_ENSURE(pSubtreeInCache, "OBuildChangeTree::handle : node must be a inner node!");
-                if (pSubtreeInCache)
+                INode* pChild = pSubtreeInCache->getChild(aNodeName);
+                // node not in cache, so ignore it
+                // later, when we get additions and removements within on transaction, then we have to care about
+                if (pChild)
                 {
-                    INode* pChild = pSubtreeInCache->getChild(aNodeName);
-                    // node not in cache, so ignore it
-                    // later, when we get additions and removements within on transaction, then we have to care about
-                    if (pChild)
-                    {
-                        if (m_nFlag == 1)
-                        {
-                            ISubtree* pSubTree = pChild->asISubtree();
-                            OSL_ENSURE(pSubTree, "OBuildChangeTree::handle : node must be a inner node!");
-                            // generate a new change
+                    ISubtree* pSubTree = pChild->asISubtree();
+                    OSL_ENSURE(pSubTree, "OBuildChangeTree::handle : node must be a inner node!");
+                    // generate a new change
 
-                            SubtreeChange* pChange = new SubtreeChange(_rSubtree);
-                            OBuildChangeTree aNextLevel(*pChange, pSubTree, m_nFlag);
-                            aNextLevel.applyToChildren(_rSubtree);
+                    std::auto_ptr<SubtreeChange> pChange( new SubtreeChange(_rSubtree) );
+                    OBuildChangeTreeForward aNextLevel(*pChange, pSubTree);
+                    aNextLevel.applyToChildren(_rSubtree);
 
-                            // now count if there are any changes
-                            OChangeCounter aCounter;
-                            pChange->dispatch(aCounter);
+                    // now count if there are any changes
+                    OChangeActionCounter aCounter;
+                    aCounter.applyToChange(*pChange);
 
-                            if (aCounter.nCount != 0)
-                                m_rChangeList.addChange(::std::auto_ptr<Change>(pChange));
-                            else
-                                delete pChange;
-                        }
-                        else
-                        {
-                            // Do nothing, traverse down to next change
-                            ISubtree* pSubTree = pChild->asISubtree();
-                            Change* pChange = m_rChangeList.getChange(aNodeName);
-                            if (pChange && pChange->ISA(SubtreeChange))
-                            {
-                                SubtreeChange* pSubtreeChange = static_cast<SubtreeChange*>(pChange);
-                                OBuildChangeTree aNextLevel(*pSubtreeChange, pSubTree, m_nFlag);
-                                aNextLevel.applyToChildren(_rSubtree);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if(m_nFlag == 1)
-                        {
-                            // Subtree not in Cache, add in TreeChangeList
-                            // SubtreeChange* pChange = new SubtreeChange(_rSubtree);
-                            INode *pSubtree = _rSubtree.clone();
-                            auto_ptr<Change> pAdd(new AddNode(auto_ptr<INode>(pSubtree), aNodeName, _rSubtree.isDefault()));
+                    if (aCounter.hasChanges())
+                        m_rChangeList.addChange(std::auto_ptr<Change>(pChange.release()));
+                }
+                else
+                {
+                    // Subtree not in Cache, add in TreeChangeList
+                    // SubtreeChange* pChange = new SubtreeChange(_rSubtree);
+                    auto_ptr<INode> pSubtree( _rSubtree.clone() );
+                    auto_ptr<Change> pAdd(new AddNode(pSubtree, aNodeName, _rSubtree.isDefault()));
 
-                            m_rChangeList.addChange(::std::auto_ptr<Change>(pAdd));
-                        }
-                        else
-                        {
-                            // Remove Node
-                            auto_ptr<Change> pRemove(new RemoveNode(aNodeName,false));
-                            m_rChangeList.addChange(::std::auto_ptr<Change>(pRemove));
-                        }
-                    }
+                    m_rChangeList.addChange(::std::auto_ptr<Change>(pAdd));
                 }
             }
+        }
+    };
+
+    struct OBuildChangeTreeBackward : NodeModification
+    {
+    protected:
+        SubtreeChange&  m_rChangeList;
+        INode*          m_pCacheNode;
+    public:
+        OBuildChangeTreeBackward(SubtreeChange& rList, INode* pNode)
+                : m_rChangeList(rList)
+                , m_pCacheNode(pNode)
+        {
+        }
+
+        virtual void handle(ValueNode& _nNode)
+        {
+        }
+        virtual void handle(ISubtree& _rSubtree)
+        {
+            OUString aNodeName = _rSubtree.getName();
+            ISubtree* pSubtreeInCache = m_pCacheNode->asISubtree();
+            OSL_ENSURE(pSubtreeInCache, "OStripChangeTreeBackward::handle : node must be a inner node!");
+            if (pSubtreeInCache)
+            {
+                INode* pChild = pSubtreeInCache->getChild(aNodeName);
+                // node not in cache, so ignore it
+                // later, when we get additions and removements within on transaction, then we have to care about
+                if (pChild)
+                {
+                    // Do nothing, traverse down to next change
+                    ISubtree* pSubTree = pChild->asISubtree();
+                    Change* pChange = m_rChangeList.getChange(aNodeName);
+                    if (pChange && pChange->ISA(SubtreeChange))
+                    {
+                        SubtreeChange* pSubtreeChange = static_cast<SubtreeChange*>(pChange);
+                        OBuildChangeTreeBackward aNextLevel(*pSubtreeChange, pSubTree);
+                        aNextLevel.applyToChildren(_rSubtree);
+                    }
+                }
+                else
+                {
+                    // Remove Node
+                    auto_ptr<Change> pRemove(new RemoveNode(aNodeName,false));
+                    m_rChangeList.addChange(::std::auto_ptr<Change>(pRemove));
+                }
+            }
+        }
     };
 
 // -----------------------------------------------------------------------------
@@ -225,10 +249,10 @@ auto_ptr<TreeChangeList> createDiffs(ISubtree* _pCachedTree, ISubtree * _pLoaded
                                         new TreeChangeList(_rOptions, _aAbsoluteSubtreePath) );
 
     // create the differences
-    OBuildChangeTree aNewChangeTree(aNewChangeList.get()->root, _pCachedTree, 1);
+    OBuildChangeTreeForward aNewChangeTree(aNewChangeList->root, _pCachedTree);
     _pLoadedSubtree->forEachChild(aNewChangeTree);
 
-    OBuildChangeTree aNewChangeTree2(aNewChangeList.get()->root, _pLoadedSubtree, 2);
+    OBuildChangeTreeBackward aNewChangeTree2(aNewChangeList->root, _pLoadedSubtree);
     _pCachedTree->forEachChild(aNewChangeTree2);
 
     // MyAction aAction;
@@ -237,29 +261,6 @@ auto_ptr<TreeChangeList> createDiffs(ISubtree* _pCachedTree, ISubtree * _pLoaded
     return aNewChangeList;
 }
 
-// -----------------------------------------------------------------------------
-void concatSubtreeWithChanges(ISubtree* _pSubtree, TreeChangeList &_aChangeList)
-{
-    // POST: pSubtree = pSubtree + aChangeList
-
-    TreeUpdate aTreeUpdate(_pSubtree);
-    // ISubtree *pAll =
-
-    TreeChangeList aMergeChangeList(_aChangeList, SubtreeChange::NoChildCopy());
-
-    OMergeTreeAction aChangeHandler(aMergeChangeList.root, _pSubtree);
-    _aChangeList.root.forEachChange(aChangeHandler);
-
-    // now check the real modifications
-    OChangeActionCounter aChangeCounter;
-    aChangeCounter.handle(aMergeChangeList.root);
-    CFG_TRACE_INFO_NI("cache manager: counted changes from notification : additions: %i , removes: %i, value changes: %i", aChangeCounter.nAdds, aChangeCounter.nRemoves, aChangeCounter.nValues);
-    if (aChangeCounter.hasChanges())
-    {
-        // aTree.updateTree(aMergeChangeList);
-        aMergeChangeList.root.forEachChange(aTreeUpdate);
-    }
-}
 // -----------------------------------------------------------------------------
 
 auto_ptr<ISubtree> TreeManager::loadNodeFromSession( IConfigSession *_pSession, AbsolutePath const& _aAbsoluteSubtreePath,
@@ -347,24 +348,25 @@ void TreeManager::refreshSubtree(const AbsolutePath &_aAbsoluteSubtreePath, cons
     if (aLoadedSubtree.get())
     {
         OClearableWriteSynchronized aWriteGuard(this);
-        TreeInfo* pTreeInfo = this->requestTreeInfo(_aOptions, false);
-        if (pTreeInfo != NULL)
+        if (TreeInfo* pTreeInfo = this->requestTreeInfo(_aOptions, false))
         {
-            ISubtree* pCachedTree = pTreeInfo->acquireSubtreeWithDepth(_aAbsoluteSubtreePath, 0, 0);
-            if (pCachedTree != NULL)
+            if (ISubtree* pCachedTree = pTreeInfo->acquireSubtreeWithDepth(_aAbsoluteSubtreePath, 0, 0))
+            try
             {
                 auto_ptr<TreeChangeList> aTreeChanges( createDiffs(pCachedTree, aLoadedSubtree.get(), _aOptions, _aAbsoluteSubtreePath) );
 
                 // change all Values... found in the Subtree in the CacheTree
-                concatSubtreeWithChanges(pCachedTree, *(aTreeChanges.get()));
-
-                // blow away in the hole world
-                // notify(pTreeChanges);
+                applyUpdateWithAdjustment(*aTreeChanges, *pCachedTree);
 
                 aWriteGuard.downgrade(); // keep a read lock during notification
-                this->notifyUpdate(*(aTreeChanges.get()));
+                this->notifyUpdate(*aTreeChanges);
 
                 this->releaseSubtree(_aAbsoluteSubtreePath, _aOptions);
+            }
+            catch (...)
+            {
+                this->releaseSubtree(_aAbsoluteSubtreePath, _aOptions);
+                throw;
             }
         }
     }

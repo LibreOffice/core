@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jb $ $Date: 2001-07-16 17:03:09 $
+#   last change: $Author: jb $ $Date: 2001-11-14 17:06:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,9 @@ SLOFILES=\
     $(SLO)$/treechangefactory.obj		\
     $(SLO)$/changes.obj		\
     $(SLO)$/treeactions.obj		\
+    $(SLO)$/mergehelper.obj		\
+    $(SLO)$/updatehelper.obj		\
+    $(SLO)$/nodeconverter.obj		\
     $(SLO)$/cmtreemodel.obj	\
     $(SLO)$/cmtree.obj \
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-05 16:50:20 $
+ *  last change: $Author: jb $ $Date: 2001-11-14 17:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,22 +59,47 @@
  *
  ************************************************************************/
 #include <stdio.h>
+
 #include "setnodeimpl.hxx"
+
+#ifndef CONFIGMGR_CONFIGNODEFACTORY_HXX_
 #include "nodefactory.hxx"
+#endif
 
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODEIMPL_HXX_
 #include "treeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_VALUENODEBEHAVIOR_HXX_
 #include "valuenodeimpl.hxx"
+#endif
 
+#ifndef CONFIGMGR_CONFIGCHANGE_HXX_
 #include "nodechange.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGEIMPL_HXX_
 #include "nodechangeimpl.hxx"
+#endif
 
+#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #include "valuenode.hxx"
+#endif
+#ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
-#include "treeactions.hxx" // for ONodeConverter
+#endif
+#ifndef CONFIGMGR_NODECONVERTER_HXX
+#include "nodeconverter.hxx"
+#endif
 
+#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+#ifndef INCLUDED_VECTOR
 #include <vector>
+#define INCLUDED_VECTOR
+#endif
 
 namespace configmgr
 {
@@ -701,7 +726,7 @@ void ValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChan
             ValueChange const& aValueChange = static_cast<ValueChange const&>(aChange);
 
             // make an element for the old element
-            std::auto_ptr<ValueNode> aOldNode = ONodeConverter::createCorrespondingNode(aValueChange, getDefaultTreeNodeFactory());
+            std::auto_ptr<ValueNode> aOldNode = OTreeNodeConverter().createCorrespondingNode(aValueChange);
             aOldNode->setValue(aValueChange.getOldValue());
 
             bool bWasDefault = (aValueChange.getMode() == ValueChange::wasDefault);
