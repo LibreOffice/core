@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourceprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:10:48 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,13 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring>
 #endif
+
+#define FOLDERPICKER_TITLE            500
+#define FOLDER_PICKER_DEF_DESCRIPTION 501
+#define FILE_PICKER_TITLE_OPEN        502
+#define FILE_PICKER_TITLE_SAVE        503
+#define FILE_PICKER_FILE_TYPE         504
+#define FILE_PICKER_OVERWRITE         505
 
 //------------------------------------------------------------------------
 // deklarations

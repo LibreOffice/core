@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourceprovider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:10:22 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 09:49:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@
 #endif
 
 #include <svtools/svtools.hrc>
+#include <svtools/filedlg2.hrc>
 
 //------------------------------------------------------------
 // namespace directives
@@ -110,9 +111,6 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 //------------------------------------------------------------
 
 #define RES_NAME svt
-
-#define FOLDERPICKER_TITLE            500
-#define FOLDER_PICKER_DEF_DESCRIPTION 501
 
 //------------------------------------------------------------
 // we have to translate control ids to resource ids
@@ -137,7 +135,11 @@ _Entry CtrlIdToResIdTable[] = {
     { LISTBOX_IMAGE_TEMPLATE_LABEL,             STR_SVT_FILEPICKER_IMAGE_TEMPLATE },
     { CHECKBOX_SELECTION,                       STR_SVT_FILEPICKER_SELECTION },
     { FOLDERPICKER_TITLE,                       STR_SVT_FOLDERPICKER_DEFAULT_TITLE },
-    { FOLDER_PICKER_DEF_DESCRIPTION,            STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION }
+    { FOLDER_PICKER_DEF_DESCRIPTION,            STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION },
+    { FILE_PICKER_TITLE_OPEN,                   STR_FILEDLG_OPEN },
+    { FILE_PICKER_TITLE_SAVE,                   STR_FILEDLG_SAVE },
+    { FILE_PICKER_FILE_TYPE,                    STR_FILEDLG_TYPE },
+    { FILE_PICKER_OVERWRITE,                    STR_SVT_ALREADYEXISTOVERWRITE }
 };
 
 const sal_Int32 SIZE_TABLE = sizeof( CtrlIdToResIdTable ) / sizeof( _Entry );
