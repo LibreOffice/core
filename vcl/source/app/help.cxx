@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:50:48 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,12 @@ HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT 
         SetLineColor( COL_BLACK );
     SetFillColor();
 
+    if( mnStyle & QUICKHELP_BIDI_RTL )
+    {
+        ULONG nLayoutMode = GetLayoutMode();
+        nLayoutMode |= TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
+        SetLayoutMode( nLayoutMode );
+    }
     SetHelpText( rText );
     Window::SetHelpText( rText );
 
