@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextCursor.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:49:50 $
+ *  last change:$Date: 2003-09-08 12:50:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,21 @@
  *
  *
  ************************************************************************/
-
 package mod._sw;
 
+import java.io.PrintWriter;
+import java.util.Vector;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
 import com.sun.star.beans.Property;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.ControlCharacter;
 import com.sun.star.text.XParagraphCursor;
 import com.sun.star.text.XSimpleText;
@@ -72,13 +80,7 @@ import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import java.util.Vector;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
+
 
 /**
  * Test for object which is represented by service
@@ -137,22 +139,23 @@ public class SwXTextCursor extends TestCase {
     /**
     * Creates text document.
     */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory) tParam.getMSF());
+
         try {
-            log.println( "creating a textdocument" );
-            xTextDoc = SOF.createTextDoc( null );
-        } catch ( com.sun.star.uno.Exception e ) {
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            log.println("creating a textdocument");
+            xTextDoc = SOF.createTextDoc(null);
+        } catch (com.sun.star.uno.Exception e) {
+            e.printStackTrace(log);
+            throw new StatusException("Couldn³t create document", e);
         }
     }
 
     /**
     * Disposes text document.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
         xTextDoc.dispose();
     }
 
@@ -167,128 +170,154 @@ public class SwXTextCursor extends TestCase {
     *      {@link ifc.text._XTextRange} : major text of text document</li>
     * </ul>
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters
-            Param, PrintWriter log) {
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         XInterface oObj = null;
 
-        log.println( "creating a test environment" );
+        log.println("creating a test environment");
+
 
         // get the bodytext of textdocument here
-        log.println( "getting the TextCursor" );
+        log.println("getting the TextCursor");
+
         final XSimpleText aText = xTextDoc.getText();
         final XTextCursor textCursor = aText.createTextCursor();
         oObj = textCursor;
 
-        log.println( "inserting some text" );
+        log.println("inserting some text");
 
         try {
-            for (int i=0; i<3; i++) {
-                aText.insertString( textCursor,
-                    "" + (3 - i), false);
-                for (int j=0; j<5; j++) {
-                    aText.insertString( textCursor,
-                        "XTextCursor,XTextCursor", false);
-                    aText.insertString( textCursor,
-                        "The quick brown fox ", false);
-                    aText.insertString( textCursor,
-                        "jumps over the lazy dog ", false);
+            for (int i = 0; i < 3; i++) {
+                aText.insertString(textCursor, "" + (3 - i), false);
+
+                for (int j = 0; j < 5; j++) {
+                    aText.insertString(textCursor, "XTextCursor,XTextCursor",
+                                       false);
+                    aText.insertString(textCursor, "The quick brown fox ",
+                                       false);
+                    aText.insertString(textCursor, "jumps over the lazy dog ",
+                                       false);
                 }
-                aText.insertControlCharacter( textCursor,
-                    ControlCharacter.PARAGRAPH_BREAK, false);
-                aText.insertControlCharacter( textCursor,
-                    ControlCharacter.LINE_BREAK, false);
+
+                aText.insertControlCharacter(textCursor,
+                                             ControlCharacter.PARAGRAPH_BREAK,
+                                             false);
+                aText.insertControlCharacter(textCursor,
+                                             ControlCharacter.LINE_BREAK,
+                                             false);
             }
-        } catch ( com.sun.star.lang.IllegalArgumentException e ){
-            log.println( "Error, insert text to text document.");
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+            log.println("Error, insert text to text document.");
             e.printStackTrace(log);
         }
 
-        log.println( "creating a new environment for SwXTextCursor object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println("creating a new environment for SwXTextCursor object");
+
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
         tEnv.addObjRelation("XTEXT", xTextDoc.getText());
 
-        XPropertySet xCursorProp = (XPropertySet)
-            UnoRuntime.queryInterface(XPropertySet.class, oObj);
-        tEnv.addObjRelation("PropertyNames",getPropertyNames(xCursorProp));
+        XPropertySet xCursorProp = (XPropertySet) UnoRuntime.queryInterface(
+                                           XPropertySet.class, oObj);
+        tEnv.addObjRelation("PropertyNames", getPropertyNames(xCursorProp));
 
         //Adding relation for util.XSortable
-        final XParagraphCursor paragrCursor = (XParagraphCursor)
-            UnoRuntime.queryInterface(XParagraphCursor.class, oObj);
+        final XParagraphCursor paragrCursor = (XParagraphCursor) UnoRuntime.queryInterface(
+                                                      XParagraphCursor.class,
+                                                      oObj);
         final PrintWriter finalLog = log;
 
-        tEnv.addObjRelation("SORTCHECKER", new ifc.util._XSortable.XSortChecker() {
+        tEnv.addObjRelation("SORTCHECKER",
+                            new ifc.util._XSortable.XSortChecker() {
             PrintWriter out = finalLog;
+
             public void setPrintWriter(PrintWriter log) {
                 out = log;
             }
+
             public void prepareToSort() {
                 textCursor.gotoEnd(false);
+
                 try {
                     aText.insertControlCharacter(textCursor,
-                        ControlCharacter.PARAGRAPH_BREAK, false);
+                                                 ControlCharacter.PARAGRAPH_BREAK,
+                                                 false);
                     aText.insertString(textCursor, "4", false);
                     aText.insertControlCharacter(textCursor,
-                        ControlCharacter.PARAGRAPH_BREAK, false);
+                                                 ControlCharacter.PARAGRAPH_BREAK,
+                                                 false);
                     aText.insertString(textCursor, "b", false);
                     aText.insertControlCharacter(textCursor,
-                        ControlCharacter.PARAGRAPH_BREAK, false);
+                                                 ControlCharacter.PARAGRAPH_BREAK,
+                                                 false);
                     aText.insertString(textCursor, "3", false);
                     aText.insertControlCharacter(textCursor,
-                        ControlCharacter.PARAGRAPH_BREAK, false);
+                                                 ControlCharacter.PARAGRAPH_BREAK,
+                                                 false);
                     aText.insertString(textCursor, "a", false);
                     aText.insertControlCharacter(textCursor,
-                        ControlCharacter.PARAGRAPH_BREAK, false);
+                                                 ControlCharacter.PARAGRAPH_BREAK,
+                                                 false);
                     aText.insertString(textCursor, "23", false);
                     aText.insertControlCharacter(textCursor,
-                        ControlCharacter.PARAGRAPH_BREAK, false);
+                                                 ControlCharacter.PARAGRAPH_BREAK,
+                                                 false);
                     aText.insertString(textCursor, "ab", false);
                     aText.insertControlCharacter(textCursor,
-                        ControlCharacter.PARAGRAPH_BREAK, false);
-                } catch(com.sun.star.lang.IllegalArgumentException e) {
+                                                 ControlCharacter.PARAGRAPH_BREAK,
+                                                 false);
+                } catch (com.sun.star.lang.IllegalArgumentException e) {
                     out.println("Unexpected exception:" + e);
                 }
-                out.println("Preparing cursor to sorting. Text before sorting:");
+
+                out.println(
+                        "Preparing cursor to sorting. Text before sorting:");
                 paragrCursor.gotoEnd(true);
-                for(int i = 0; i < 6; i++) {
+
+                for (int i = 0; i < 6; i++) {
                     paragrCursor.gotoPreviousParagraph(true);
                 }
+
                 out.println(textCursor.getString());
             }
-            public boolean checkSort(boolean isSortNumbering,
-                    boolean isSortAscending) {
 
+            public boolean checkSort(boolean isSortNumbering,
+                                     boolean isSortAscending) {
                 out.println("Sort checking...");
+
+                String ls = System.getProperty("line.separator");
+
                 String text = paragrCursor.getString();
                 out.println("Text after sorting:\n" + text);
+
                 boolean res = false;
+
                 if (isSortNumbering) {
                     if (isSortAscending) {
-                        res  = text.endsWith("\r\n3\r\n4\r\n23\r\n");
+                        res = text.endsWith(ls+"3"+ls+"4"+ls+"23");
+
                         if (!res) {
-                            out.println("Text must ends by:\n" +
-                                "\r\n3\r\n4\r\n23\r\n");
+                            out.println("Text must ends by:\n" + "\r\n3\r\n4\r\n23\r\n");
                         }
                     } else {
-                        res = text.startsWith("23\r\n4\r\n3\r\n");
+                        res = text.startsWith("23"+ls+"4"+ls+"3"+ls);
+
                         if (!res) {
-                            out.println("Text must starts with:\n" +
-                                "23\r\n4\r\n3\r\n");
+                            out.println("Text must starts with:\n" + "23\r\n4\r\n3\r\n");
                         }
                     }
                 } else {
                     if (isSortAscending) {
-                        res = text.equals("\r\n23\r\n3\r\n4\r\na\r\nab\r\nb\r\n");
+                        res = text.equals(ls+"23"+ls+"3"+ls+"4"+ls+"a"+ls+"ab"+ls+"b");
+
                         if (!res) {
-                            out.println("Text must be equal to:\n" +
-                                "\r\n23\r\n3\r\n4\r\na\r\nab\r\nb\r\n");
+                            out.println("Text must be equal to:\n" + "\r\n23\r\n3\r\n4\r\na\r\nab\r\nb\r\n");
                         }
                     } else {
-                        res = text.equals("b\r\nab\r\na\r\n4\r\n3\r\n23\r\n");
+                        res = text.endsWith("b"+ls+"ab"+ls+"a"+ls+"4"+ls+"3"+ls+"23"+ls);
+
                         if (!res) {
-                            out.println("Text must be equal to:\n" +
-                                "b\r\nab\r\na\r\n4\r\n3\r\n23\r\n");
+                            out.println("Text must be equal to:\n" + "b\r\nab\r\na\r\n4\r\n3\r\n23\r\n");
                         }
                     }
                 }
@@ -306,17 +335,16 @@ public class SwXTextCursor extends TestCase {
 
     public String[] getPropertyNames(XPropertySet props) {
         Property[] the_props = props.getPropertySetInfo().getProperties();
-        Vector names = new Vector() ;
+        Vector names = new Vector();
 
-        for (int i=0;i<the_props.length;i++) {
-            boolean isWritable =
-                ((the_props[i].Attributes & PropertyAttribute.READONLY) == 0);
+        for (int i = 0; i < the_props.length; i++) {
+            boolean isWritable = ((the_props[i].Attributes & PropertyAttribute.READONLY) == 0);
+
             if (isWritable) {
                 names.add(the_props[i].Name);
             }
         }
-        return (String[]) names.toArray(new String[names.size()]) ;
+
+        return (String[]) names.toArray(new String[names.size()]);
     }
-
-}    // finish class SwXTextCursor
-
+} // finish class SwXTextCursor
