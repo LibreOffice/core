@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 14:59:14 $
+#   last change: $Author: hr $ $Date: 2004-09-09 11:19:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,6 +66,18 @@ ULFEX*=ulfex
 XMLEX*=xmlex
 XRMEX*=xrmex
 CFGEX*=cfgex
+
+# Not 4nt means $(GUI)==UNX or $(GUI)==WNT with tcsh
+.IF "$(USE_SHELL)"!="4nt"
+# iz32110: Calling a cygwin application from a non-cygwin shell requires
+# backslashes to be escaped by another backslash: EES .. extra escape slash
+EES=
+NULLDEV=/dev/null
+.ELSE
+# adding explicit blank at end of line to avoid concatination
+EES=\ 
+NULLDEV=nul
+.ENDIF
 
 .IF "$(GUI)"=="WNT"
 AWK*=awk
@@ -156,13 +168,6 @@ RM+=$(RMFLAGS)
 
 .IF "$(GUI)"=="UNX"
 SCP_CHECK_TOOL=checkscp
-NULLDEV=/dev/null
-.ELIF "$(GUI)"=="WNT"
-.IF "$(USE_SHELL)"!="4nt"
-NULLDEV=/dev/null
-.ELSE
-NULLDEV=nul
-.ENDIF
 .ENDIF
 
 EXECTEST = $(PERL) -w $(SOLARENV)$/bin$/exectest.pl
