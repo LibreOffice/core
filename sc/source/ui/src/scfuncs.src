@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-19 20:53:31 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8860,7 +8860,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Cost" ;
             Text[ chinese_simplified ] = "cost";
             Text[ russian ] = "Ñòîèìîñòü";
-            Text[ polish ] = "Cena zakupu";
+            Text[ polish ] = "Cena_zakupu";
             Text[ japanese ] = "æ“¾‰¿Šz";
             Text[ chinese_traditional ] = "cost";
             Text[ arabic ] = "Cost";
@@ -8924,7 +8924,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Salvage" ;
             Text[ chinese_simplified ] = "salvage";
             Text[ russian ] = "Îñòàòî÷íàÿ_ñòîèìîñòü";
-            Text[ polish ] = "Odzysk";
+            Text[ polish ] = "Wartoœæ_odzysku";
             Text[ japanese ] = "c‘¶‰¿Šz";
             Text[ chinese_traditional ] = "salvage";
             Text[ arabic ] = "Salvage";
@@ -8988,7 +8988,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Life" ;
             Text[ chinese_simplified ] = "life";
             Text[ russian ] = "Âğåìÿ_ıêñïëóàòàöèè";
-            Text[ polish ] = "czas_¿ycia";
+            Text[ polish ] = "okres_u¿ytkowania";
             Text[ japanese ] = "‘Ï—p”N”";
             Text[ chinese_traditional ] = "life";
             Text[ arabic ] = "Life";
@@ -9159,7 +9159,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Cost" ;
             Text[ chinese_simplified ] = "cost";
             Text[ russian ] = "Ñòîèìîñòü";
-            Text[ polish ] = "Cena zakupu";
+            Text[ polish ] = "Cena_zakupu";
             Text[ japanese ] = "æ“¾‰¿Šz";
             Text[ chinese_traditional ] = "cost";
             Text[ arabic ] = "Cost";
@@ -9223,7 +9223,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Salvage" ;
             Text[ chinese_simplified ] = "salvage";
             Text[ russian ] = "Îñòàòî÷íàÿ_ñòîèìîñòü";
-            Text[ polish ] = "Odzysk";
+            Text[ polish ] = "Wartoœæ_odzysku";
             Text[ japanese ] = "c‘¶‰¿Šz";
             Text[ chinese_traditional ] = "salvage";
             Text[ arabic ] = "Salvage";
@@ -9287,7 +9287,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Life" ;
             Text[ chinese_simplified ] = "life";
             Text[ russian ] = "Âğåìÿ_ıêñïëóàòàöèè";
-            Text[ polish ] = "czas_¿ycia";
+            Text[ polish ] = "okres_u¿ytkowania";
             Text[ japanese ] = "‘Ï—p”N”";
             Text[ chinese_traditional ] = "life";
             Text[ arabic ] = "Life";
@@ -9395,7 +9395,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Cost" ;
             Text[ chinese_simplified ] = "cost";
             Text[ russian ] = "Ñòîèìîñòü";
-            Text[ polish ] = "Cena zakupu";
+            Text[ polish ] = "Cena_zakupu";
             Text[ japanese ] = "æ“¾‰¿Šz";
             Text[ chinese_traditional ] = "cost";
             Text[ arabic ] = "Cost";
@@ -9459,7 +9459,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Salvage" ;
             Text[ chinese_simplified ] = "salvage";
             Text[ russian ] = "Îñòàòî÷íàÿ_ñòîèìîñòü";
-            Text[ polish ] = "Odzysk";
+            Text[ polish ] = "Wartoœæ_odzysku";
             Text[ japanese ] = "c‘¶‰¿Šz";
             Text[ chinese_traditional ] = "salvage";
             Text[ arabic ] = "Salvage";
@@ -9523,7 +9523,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Life" ;
             Text[ chinese_simplified ] = "life";
             Text[ russian ] = "Âğåìÿ_ıêñïëóàòàöèè";
-            Text[ polish ] = "czas_¿ycia";
+            Text[ polish ] = "okres_u¿ytkowania";
             Text[ japanese ] = "‘Ï—p”N”";
             Text[ chinese_traditional ] = "life";
             Text[ arabic ] = "Life";
@@ -9760,7 +9760,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Cost" ;
             Text[ chinese_simplified ] = "cost";
             Text[ russian ] = "Íà÷_ñòîèìîñòü";
-            Text[ polish ] = "Cena zakupu";
+            Text[ polish ] = "Cena_zakupu";
             Text[ japanese ] = "æ“¾‰¿Šz";
             Text[ chinese_traditional ] = "cost";
             Text[ arabic ] = "Cost";
@@ -9824,7 +9824,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Salvage" ;
             Text[ chinese_simplified ] = "salvage";
             Text[ russian ] = "Îñòàòî÷íàÿ_ñòîèìîñòü";
-            Text[ polish ] = "Wartoœæ odzysku";
+            Text[ polish ] = "Wartoœæ_odzysku";
             Text[ japanese ] = "c‘¶‰¿Šz";
             Text[ chinese_traditional ] = "salvage";
             Text[ arabic ] = "Salvage";
@@ -9888,7 +9888,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Life" ;
             Text[ chinese_simplified ] = "life";
             Text[ russian ] = "Âğåìÿ_ıêñïëóàòàöèè";
-            Text[ polish ] = "czas_¿ycia";
+            Text[ polish ] = "okres_u¿ytkowania";
             Text[ japanese ] = "‘Ï—p”N”";
             Text[ chinese_traditional ] = "life";
             Text[ arabic ] = "Life";
@@ -10124,7 +10124,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Cost" ;
             Text[ chinese_simplified ] = "cost";
             Text[ russian ] = "Ëèêâ_ñòîèìîñòü";
-            Text[ polish ] = "Cena zakupu";
+            Text[ polish ] = "Cena_zakupu";
             Text[ japanese ] = "æ“¾‰¿Šz";
             Text[ chinese_traditional ] = "cost";
             Text[ arabic ] = "Cost";
@@ -10188,7 +10188,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Salvage" ;
             Text[ chinese_simplified ] = "salvage";
             Text[ russian ] = "Îñò_ñòîèì";
-            Text[ polish ] = "Odzysk";
+            Text[ polish ] = "Wartoœæ_odzysku";
             Text[ japanese ] = "c‘¶‰¿Šz";
             Text[ chinese_traditional ] = "salvage";
             Text[ arabic ] = "Salvage";
@@ -10252,7 +10252,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ english_us ] = "Life" ;
             Text[ chinese_simplified ] = "life";
             Text[ russian ] = "Âğåìÿ_ïîëí_àìîğò";
-            Text[ polish ] = "czas_¿ycia";
+            Text[ polish ] = "okres_u¿ytkowania";
             Text[ japanese ] = "‘Ï—p”N”";
             Text[ chinese_traditional ] = "life";
             Text[ arabic ] = "Life";
@@ -15071,7 +15071,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "Âîçâğàùàåò ñëó÷àéíîå ÷èñëî ìåæäó 0 è 1.";
             Text[ polish ] = "Podaje liczbê losow¹ z zakresu od 0 do 1.";
             Text[ japanese ] = "0ˆÈã‚Å1‚æ‚è¬‚³‚¢—”‚ğ”­¶‚³‚¹‚Ü‚·B";
-            Text[ chinese_traditional ] = "¥Í¦¨¤@­Ó¤j©ó 0 ¤p©ó 1 ªºÀH¾÷¼Æ¡C";
+            Text[ chinese_traditional ] = "²£¥Í¤@­Ó¤j©ó 0 ¤p©ó 1 ªºÀH¾÷¼Æ¡C";
             Text[ arabic ] = "ÊŞÏã ÑŞã ÚÔæÇÆí Èíä 0 æ 1.";
             Text[ dutch ] = "Geeft als resultaat een toevallige waarde tussen 0 en 1.";
             Text[ chinese_simplified ] = "Éú³ÉÒ»¸ö´óÓÚ 0 Ğ¡ÓÚ 1 µÄËæ»úÊı¡£";
@@ -17402,7 +17402,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "Âû÷èñëÿåò àğêòàíãåíñ äëÿ çàäàííûõ êîîğäèíàò .";
             Text[ polish ] = "Oblicza arcus tangens na podstawie wspó³rzêdnych x i y.";
             Text[ japanese ] = "w’è‚³‚ê‚½ x-yÀ•W‚Ì±°¸Àİ¼ŞªİÄ‚ğ•Ô‚µ‚Ü‚·B";
-            Text[ chinese_traditional ] = "­pºâµ¹©w§¤¼Ğ­ÈªºÂIªº¤Ï¥¿¤Á­È¡C";
+            Text[ chinese_traditional ] = "­pºâµ¹©w®y¼Ğ­ÈªºÂIªº¤Ï¥¿¤Á­È¡C";
             Text[ arabic ] = "ÊÍÓÈ ÒÇæíÉ ÇáÙá ááÅÍÏÇËíÇÊ ÇáãÚØÇÉ.";
             Text[ dutch ] = "Berekent de boogtangens van de aangegeven coördinaten.";
             Text[ chinese_simplified ] = "¼ÆËã¸ø¶¨×ø±êÖµµÄµãµÄ·´ÕıÇĞÖµ¡£";
@@ -17473,7 +17473,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "Çíà÷åíèå äëÿ êîîğäèíàòû X.";
             Text[ polish ] = "Wartoœæ dla wspó³rzêdnej X.";
             Text[ japanese ] = "“_‚Ì xÀ•W‚ğw’èB";
-            Text[ chinese_traditional ] = "ÂIªº X-§¤¼Ğ­È¡C";
+            Text[ chinese_traditional ] = "ÂIªº X-®y¼Ğ­È¡C";
             Text[ arabic ] = "ŞíãÉ ÇáÅÍÏÇËí Ó.";
             Text[ dutch ] = "Waarde voor de X-coördinaat.";
             Text[ chinese_simplified ] = "µãµÄ x-×ø±êÖµ¡£";
@@ -17538,7 +17538,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ russian ] = "Çíà÷åíèå äëÿ êîîğäèíàòû Y.";
             Text[ polish ] = "Wartoœæ dla wspó³rzêdnej Y.";
             Text[ japanese ] = "“_‚Ì yÀ•W‚ğw’èB";
-            Text[ chinese_traditional ] = "ÂIªº Y-§¤¼Ğ­È¡C";
+            Text[ chinese_traditional ] = "ÂIªº Y-®y¼Ğ­È¡C";
             Text[ arabic ] = "ŞíãÉ ÇáÅÍÏÇËí Õ.";
             Text[ dutch ] = "Waarde voor de Y-coördinaat.";
             Text[ chinese_simplified ] = "µãµÄ y-×ø±êÖµ¡£";
@@ -22501,7 +22501,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ russian ] = "Âû÷èñëÿåò çíà÷åíèÿ â ñîîòâåòñòâèè ñ ëèíåéíûì òğåíäîì.";
             Text[ polish ] = "Wyznacza wartoœæ przy za³o¿eniu trendu liniowego.";
             Text[ japanese ] = "ÃŞ°À‚ğ’¼ü‚É“–‚Ä‚Í‚ß¤‚»‚Ì’¼üã‚ÅŒvZ‚µ‚Ü‚·B";
-            Text[ chinese_traditional ] = "­pºâ¦^Âkª½½u¤Wªº¤@²ÕÁa§¤¼Ğ­È¡C";
+            Text[ chinese_traditional ] = "­pºâ¦^Âkª½½u¤Wªº¤@²ÕÁa®y¼Ğ­È¡C";
             Text[ arabic ] = "ÊÍÓÈ äŞÇØ Úáì ÌÇäÈ ÇáÇÊÌÇå ÇáÎØí ÈãáÇÁãÉ ÎØ ãÓÊŞíã.";
             Text[ dutch ] = "Berekent waarden voor een lineaire trend.";
             Text[ chinese_simplified ] = "¼ÆËã»Ø¹éÖ±ÏßÉÏµÄÒ»×é×İ×ø±êÖµ¡£";
@@ -33905,7 +33905,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ norwegian ] = "Gesamtanzahl der Elemente." ;
             Text [ italian ] = "Numero totale degli elementi" ;
             Text [ portuguese_brazilian ] = "Gesamtanzahl der Elemente." ;
-            Text [ portuguese ] = "é um número inteiro que descreve a quantidade de objectos." ;
+            Text [ portuguese ] = "é o número total de elementos." ;
             Text [ finnish ] = "Gesamtanzahl der Elemente." ;
             Text [ danish ] = "Det samlede antal elementer." ;
             Text [ french ] = "Le nombre total d'éléments." ;
@@ -38451,7 +38451,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ norwegian ] = "Die Zeile in dem Bereich." ;
             Text [ italian ] = "La riga nell'area." ;
             Text [ portuguese_brazilian ] = "Die Zeile in dem Bereich." ;
-            Text [ portuguese ] = "é o númera da linha da qual se deseja obter uma referência." ;
+            Text [ portuguese ] = "é o número da linha da qual se deseja obter uma referência." ;
             Text [ finnish ] = "Die Zeile in dem Bereich." ;
             Text [ danish ] = "Rækken i området." ;
             Text [ french ] = "La ligne de la plage." ;
@@ -39661,7 +39661,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ norwegian ] = "Weist der Formelzelle eine Formatvorlage zu." ;
             Text [ italian ] = "Assegna alla cella un modello." ;
             Text [ portuguese_brazilian ] = "Weist der Formelzelle eine Formatvorlage zu." ;
-            Text [ portuguese ] = "Aplica um formato predefinido à célula." ;
+            Text [ portuguese ] = "Aplica um estilo de formato à célula." ;
             Text [ finnish ] = "Weist der Formelzelle eine Formatvorlage zu." ;
             Text [ danish ] = "Tildeler en formattypografi til en formelcelle." ;
             Text [ french ] = "Applique un style de format à une cellule contenant une formule." ;
@@ -43153,7 +43153,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ norwegian ] = "Anzahl" ;
             Text [ italian ] = "num_caratt" ;
             Text [ portuguese_brazilian ] = "Anzahl" ;
-            Text [ portuguese ] = "Núm_caracteres" ;
+            Text [ portuguese ] = "Núm_de_caracteres" ;
             Text [ finnish ] = "Anzahl" ;
             Text [ danish ] = "Antal" ;
             Text [ french ] = "Nombre" ;
