@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-11 08:36:17 $
+ *  last change: $Author: gt $ $Date: 2001-07-11 13:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2036,7 +2036,7 @@ sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
                 if( pStr[ 2 ] == 0 )
                 {
                     rCompl.r = f;
-                    rCompl.i = 1.0;
+                    rCompl.i = ( *pStr == '+' )? 1.0 : -1.0;
                     return sal_True;
                 }
             }
@@ -2137,23 +2137,44 @@ void Complex::Power( double fPower ) THROWDEF_RTE_IAE
 }
 
 
+void Complex::Sqrt( void )
+{
+    static const double fMultConst = 0.7071067811865475;    // ...2440084436210485 = 1/sqrt(2)
+    double  p = Abs();
+    double  i_ = sqrt( p - r ) * fMultConst;
+
+    r = sqrt( p + r ) * fMultConst;
+    i = ( i < 0.0 )? -i_ : i_;
+}
+
+
 void Complex::Sin( void ) THROWDEF_RTE_IAE
 {
-    double r_;
+    if( i )
+    {
+        double  r_;
 
-    r_ = sin( r ) * cosh( i );
-    i = -cos( r ) * sinh( i );
-    r = r_;
+        r_ = sin( r ) * cosh( i );
+        i = cos( r ) * sinh( i );
+        r = r_;
+    }
+    else
+        r = sin( r );
 }
 
 
 void Complex::Cos( void ) THROWDEF_RTE_IAE
 {
-    double r_;
+    if( i )
+    {
+        double      r_;
 
-    r_ = cos( r ) * cosh( i );
-    i = -sin( r ) * sinh( i );
-    r = r_;
+        r_ = cos( r ) * cosh( i );
+        i = -( sin( r ) * sinh( i ) );
+        r = r_;
+    }
+    else
+        r = cos( r );
 }
 
 

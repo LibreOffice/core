@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-11 08:36:17 $
+ *  last change: $Author: gt $ $Date: 2001-07-11 13:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1257,7 +1257,8 @@ STRING SAL_CALL AnalysisAddIn::getImsqrt( const STRING& aNum ) THROWDEF_RTE_IAE
 {
     Complex     z( aNum );
 
-    z.Power( 0.5 );
+//  z.Power( 0.5 );
+    z.Sqrt();
 
     return z.GetString();
 }

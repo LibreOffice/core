@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-21 12:00:59 $
+ *  last change: $Author: gt $ $Date: 2001-07-11 13:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,6 +470,7 @@ public:
 
     // following functions change the complex number itself to avoid unnecessary copy actions!
     void                    Power( double fPower ) THROWDEF_RTE_IAE;
+    void                    Sqrt( void );
     void                    Sin( void ) THROWDEF_RTE_IAE;
     void                    Cos( void ) THROWDEF_RTE_IAE;
     void                    Div( const Complex& rDivisor ) THROWDEF_RTE_IAE;
