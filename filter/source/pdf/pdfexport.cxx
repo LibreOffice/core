@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:36:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:34:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
 using namespace ::rtl;
@@ -343,6 +346,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                                 }
                             }
                         }
+
+                        // getting the string for the producer
                         String aProducer;
                         ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
                         if ( pMgr )
@@ -357,6 +362,25 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                             aProducer += String( sProductName );
                         }
                         aDocInfo.Producer = aProducer;
+
+                        // getting the string for the creator
+                        String aCreator;
+                        Reference< XServiceInfo > xInfo( mxSrcDoc, UNO_QUERY );
+                        if ( xInfo.is() )
+                        {
+                            if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.presentation.PresentationDocument" ) ) )
+                                aCreator.AppendAscii( "Impress" );
+                            else if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.drawing.DrawingDocument" ) ) )
+                                aCreator.AppendAscii( "Draw" );
+                            else if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.text.TextDocument" ) ) )
+                                aCreator.AppendAscii( "Writer" );
+                            else if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
+                                aCreator.AppendAscii( "Calc" );
+                            else if ( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.formula.FormulaProperties" ) ) )
+                                aCreator.AppendAscii( "Math" );
+                        }
+                        aDocInfo.Creator = aCreator;
+
                         pPDFWriter->SetDocInfo( aDocInfo );
                         pPDFWriter->Emit();
                     }
@@ -919,12 +943,33 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
 {
     if ( !rBitmapEx.IsEmpty() )
     {
-        BitmapEx    aBitmapEx( rBitmapEx );
-        sal_Bool    bIsBW = aBitmapEx.GetBitmap().GetBitCount() == 1;
+        BitmapEx        aBitmapEx( rBitmapEx );
+        Size            aSize( rSize );
+        const sal_Bool  bIsBW = aBitmapEx.GetBitmap().GetBitCount() == 1;
 
-        sal_Int32   nMaxBmpDPI = 300;
-        sal_Int32   nQuality   = 75;
-        sal_Int32   nColorMode = 0;
+        sal_Int32       nMaxBmpDPI = 300;
+        sal_Int32       nQuality   = 75;
+        sal_Int32       nColorMode = 0;
+
+        // #i19065# Negative sizes have mirror semantics on
+        // OutputDevice. BitmapEx and co. have no idea about that, so
+        // perform that _before_ doing anything with aBitmapEx.
+        ULONG nMirrorFlags(BMP_MIRROR_NONE);
+        if( aSize.Width() < 0 )
+        {
+            aSize.Width() *= -1;
+            nMirrorFlags |= BMP_MIRROR_HORZ;
+        }
+        if( aSize.Height() < 0 )
+        {
+            aSize.Height() *= -1;
+            nMirrorFlags |= BMP_MIRROR_VERT;
+        }
+
+        if( nMirrorFlags != BMP_MIRROR_NONE )
+        {
+            aBitmapEx.Mirror( nMirrorFlags );
+        }
 
         switch( nCompressMode )
         {
@@ -949,7 +994,7 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
         }
 
         // do downsampling if neccessary
-        const Size      aDstSizeTwip( rDummyVDev.PixelToLogic( rDummyVDev.LogicToPixel( rSize ), MAP_TWIP ) );
+        const Size      aDstSizeTwip( rDummyVDev.PixelToLogic( rDummyVDev.LogicToPixel( aSize ), MAP_TWIP ) );
         const Size      aBmpSize( aBitmapEx.GetSizePixel() );
         const double    fBmpPixelX = aBmpSize.Width();
         const double    fBmpPixelY = aBmpSize.Height();
@@ -1011,14 +1056,14 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
                 aFilterData[ 1 ].Value <<= nColorMode;
 
                 sal_uInt16 nError = aGraphicFilter.ExportGraphic( aGraphic, String(), aStrm, nFormatName, sal_True, &aFilterData );
-                rWriter.DrawJPGBitmap( aStrm, aSizePixel, Rectangle( rPoint, rSize ), aMask );
+                rWriter.DrawJPGBitmap( aStrm, aSizePixel, Rectangle( rPoint, aSize ), aMask );
             }
             else
             {
                 if ( aBitmapEx.IsTransparent() )
-                    rWriter.DrawBitmapEx( rPoint, rSize, aBitmapEx );
+                    rWriter.DrawBitmapEx( rPoint, aSize, aBitmapEx );
                 else
-                    rWriter.DrawBitmap( rPoint, rSize, aBitmapEx.GetBitmap() );
+                    rWriter.DrawBitmap( rPoint, aSize, aBitmapEx.GetBitmap() );
             }
         }
     }
