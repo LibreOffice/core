@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-17 09:12:07 $
+ *  last change: $Author: jl $ $Date: 2000-10-19 11:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #include <vector>
 #include <list>
 #include <hash_map>
-#include "stdafx.h"
 #include "comifaces.hxx"
 #include <tools/postsys.h>
 
@@ -103,6 +102,7 @@
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/script/XInvocation2.hpp>
 #include <com/sun/star/script/MemberType.hpp>
+#include <com/sun/star/reflection/XIdlReflection.hpp>
 
 #ifndef _TYPELIB_TYPEDESCRIPTION_H_
 #include <uno/typedescription.h>
@@ -134,10 +134,11 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::script;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge::ModelDependent;
+using namespace com::sun::star::reflection;
 
-#define INVOCATION_SERVICE L"com.sun.star.script.Invocation"
-#define JSCRIPT_VALUE_FUNC L"_GetValueObject"
-#define DISPID_JSCRIPT_VALUE_FUNC -1000l
+//#define INVOCATION_SERVICE L"com.sun.star.script.Invocation"
+//#define JSCRIPT_VALUE_FUNC L"_GetValueObject"
+//#define DISPID_JSCRIPT_VALUE_FUNC -1000l
 
 
 
@@ -287,6 +288,8 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
                                                      LCID lcid,
                                                      DISPID * rgdispid )
 {
+
+    OGuard guard( globalWrapperMutex);
     if( ! rgdispid)
         return E_POINTER;
     HRESULT ret = E_UNEXPECTED;
@@ -294,6 +297,11 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
     if( ! wcscmp( *rgszNames, JSCRIPT_VALUE_FUNC))
     {
         *rgdispid= DISPID_JSCRIPT_VALUE_FUNC;
+        return S_OK;
+    }
+    else if( ! wcscmp( *rgszNames, GET_STRUCT_FUNC))
+    {
+        *rgdispid= DISPID_GET_STRUCT_FUNC;
         return S_OK;
     }
     // ----------------------------------------
@@ -1158,8 +1166,48 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
         else
             ret= DISP_E_EXCEPTION;
     }
-    return S_OK;
+    else if( dispidMember == DISPID_GET_STRUCT_FUNC)
+    {
+        bHandled= sal_True;
+        sal_Bool bStruct= sal_False;
+        Reference<XMultiServiceFactory> fac= o2u_getMultiServiceFactory();
+        if( fac.is() )
+        {
+            Reference<XInterface> xIntCore= fac->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection"));
+            Reference<XIdlReflection> xRefl( xIntCore, UNO_QUERY);
+            if( xRefl.is() )
+            {
+                // the first parameter is in DISPPARAMS rgvargs contains the name of the struct.
+                CComVariant arg;
+                if( pdispparams->cArgs == 1 && SUCCEEDED( arg.ChangeType( VT_BSTR, &pdispparams->rgvarg[0])) )
+                {
+                    Reference<XIdlClass> classStruct= xRefl->forName( arg.bstrVal);
+                    if( classStruct.is())
+                    {
+                        Any anyStruct;
+                        classStruct->createObject( anyStruct);
+                        CComVariant var;
+                        if( anyToVariant( &var, anyStruct ))
+                        {
+                            if( var.vt == VT_DISPATCH)
+                            {
+                                VariantCopy( pvarResult, & var);
+                                bStruct= sal_True;
+                            }
+                        }
+
+                    }
+                }
+            }
+
+        }
+        ret= bStruct == sal_True ? S_OK : DISP_E_EXCEPTION;
+    }
+    return ret;
 }
+
+
+
 
 STDMETHODIMP InterfaceOleWrapper_Impl::GetDispID(BSTR bstrName, DWORD grfdex, DISPID __RPC_FAR *pid)
 {
@@ -1244,7 +1292,8 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetNameSpaceParent(
 *************************************************************************/
 UnoObjectWrapperRemoteOpt::UnoObjectWrapperRemoteOpt( Reference<XMultiServiceFactory>& aFactory,
                                                      sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
-                                                     InterfaceOleWrapper_Impl( aFactory, unoWrapperClass, comWrapperClass)
+InterfaceOleWrapper_Impl( aFactory, unoWrapperClass, comWrapperClass),
+m_currentId(1)
 
 {
 }
@@ -1263,7 +1312,7 @@ Reference< XInterface > UnoObjectWrapperRemoteOpt::createUnoWrapperInstance()
 STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID riid, OLECHAR ** rgszNames, unsigned int cNames,
                                 LCID lcid, DISPID * rgdispid )
 {
-    static DISPID currentId= 1;
+    OGuard guard( globalWrapperMutex);
 
     if( ! rgdispid)
         return E_POINTER;
@@ -1275,6 +1324,12 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID riid, OLECHAR **
         *rgdispid= DISPID_JSCRIPT_VALUE_FUNC;
         return S_OK;
     }
+    else if( ! wcscmp( *rgszNames, GET_STRUCT_FUNC))
+    {
+        *rgdispid= DISPID_GET_STRUCT_FUNC;
+        return S_OK;
+    }
+
     // ----------------------------------------
     if (m_xInvocation.is() && (cNames > 0))
     {
@@ -1285,12 +1340,12 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID riid, OLECHAR **
         {
             // name has not been bad before( member exists
             typedef NameToIdMap::iterator ITnames;
-            pair< ITnames, bool > pair_id= m_nameToDispIdMap.insert( NameToIdMap::value_type(name, currentId++));
+            pair< ITnames, bool > pair_id= m_nameToDispIdMap.insert( NameToIdMap::value_type(name, m_currentId++));
             // new ID inserted ?
             if( pair_id.second )
             {// yes, now create MemberInfo and ad to IdToMemberInfoMap
                 MemberInfo d(0, name);
-                m_idToMemberInfoMap.insert( IdToMemberInfoMap::value_type( currentId - 1, d));
+                m_idToMemberInfoMap.insert( IdToMemberInfoMap::value_type( m_currentId - 1, d));
             }
 
             *rgdispid = pair_id.first->second;
