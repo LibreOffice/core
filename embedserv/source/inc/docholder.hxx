@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: abi $ $Date: 2003-04-04 11:41:06 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,8 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > DocumentFrame();
 
+    CComPtr< IDispatch > m_pIDispatch;
+
 public:
 
     DocumentHolder( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,EmbedDocument_Impl *pOLEInterface);
@@ -126,6 +128,13 @@ public:
     void show();
 
     void hide();
+
+    IDispatch* GetIDispatch();
+
+    HRESULT SetVisArea( const RECTL *pRect );
+    HRESULT GetVisArea( RECTL *pRect );
+    HRESULT SetExtent( const SIZEL *pSize );
+    HRESULT GetExtent( SIZEL *pSize );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetDocument() { return m_xDocument; }
 
