@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webwizar.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:38:01 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 21:16:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,13 @@ String WEBDIALOG + 1
     Text[ danish ] = "AutoPilot - Web-side";
     Text[ polish ] = "AutoPilot - Strona WWW";
     Text[ portuguese_brazilian ] = "Web Page AutoPilot";
-    Text[ japanese ] = "µ°ÄÊß²Û¯Ä WebÍß°¼Ş ";
+    Text[ japanese ] = "µ°ÄÊß²Û¯Ä WebÍß°¼Ş";
     Text[ korean ] = "ÀÚµ¿ÆÄÀÏ·µ À¥ÆäÀÌÁö";
     Text[ chinese_simplified ] = "×Ô¶¯ÎÄ¼şÖúÀí ÍòÎ¬ÍøÒ³";
     Text[ chinese_traditional ] = "¦Û°ÊÀÉ®×§U²z Web ­¶";
     Text[ arabic ] = "ÇáãÑÔÏ ÇáÂáí áÕİÍÉ æíÈ";
     Text[ turkish ] = "OtoPilot Web sayfası";
+    Text[ catalan ] = "AutoPilot Web Page";
 };
 
 
@@ -94,7 +95,7 @@ String WEBDIALOG + 2
     Text = "A~bbrechen";
     Text[English] = "~Cancel";
     Text[ English_us ] = "~Cancel";
-    Text[ french ] = "A~nnuler";
+    Text[ french ] = "~Annuler";
     Text[ italian ] = "A~nnulla";
     Text[ spanish ] = "C~ancelar";
     Text[ portuguese ] = "C~ancelar";
@@ -112,6 +113,7 @@ String WEBDIALOG + 2
     Text[ arabic ] = "ÅáÛÇÁ ÇáÃãÑ";
     Text[ turkish ] = "~İptal";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "~Cancel";
 };
 
 String WEBDIALOG + 3
@@ -136,6 +138,7 @@ String WEBDIALOG + 3
     Text[ chinese_traditional ] = "§¹¦¨";
     Text[ arabic ] = "ÅäÔÇÁ";
     Text[ turkish ] = "~Oluştur";
+    Text[ catalan ] = "C~reate";
 };
 
 
@@ -163,6 +166,7 @@ String WEBDIALOG + 4
     Text[ chinese_traditional ] = "­n±Ä¥Î­ş¤@­Ó¼Ë¦¡¡H";
     Text[ arabic ] = "Ãí ŞÇáÈ ÊÑÛÈ ÈÇÓÊÎÏÇãå¿";
     Text[ turkish ] = "Hangi şablon kullanılsın ?";
+    Text[ catalan ] = "Which template should be used?";
 };
 
 String WEBDIALOG + 5
@@ -188,6 +192,7 @@ String WEBDIALOG + 5
     Text[ arabic ] = "Ãí äãØ ÊÑÛÈ ÈÇÓÊÎÏÇãå¿";
     Text[ turkish ] = "Hangi biçim kullanılsın ?";
     Text[ language_user1 ] = "The German should read \"Stilart\" and has nothing to do with \"Vorlage\". ENG: don't use style here.(EM16.5.00)";
+    Text[ catalan ] = "Which layout should be used?";
 };
 
 
@@ -202,7 +207,7 @@ String WEBDIALOG + 6
     Text[ dutch ] = "Background Picture";
     Text[ french ] = "Image d'arrière-plan";
     Text[ spanish ] = "Imagen de fondo";
-    Text[ italian ] = "Background Picture";
+    Text[ italian ] = "Immagine di sfondo";
     Text[ danish ] = "Background Picture";
     Text[ swedish ] = "Bakgrundsbild";
     Text[ polish ] = "Ilustracja t³a";
@@ -213,6 +218,7 @@ String WEBDIALOG + 6
     Text[ chinese_traditional ] = "­I´º¹Ï¤ù";
     Text[ turkish ] = "Background Picture";
     Text[ arabic ] = "ÕæÑÉ ÇáÎáİíÉ";
+    Text[ catalan ] = "Background Image";
 };
 
 
@@ -228,7 +234,7 @@ String WEBDIALOG + 7
     Text[ dutch ] = "Tiling";
     Text[ french ] = "Carrela~ge";
     Text[ spanish ] = "A~zulejado";
-    Text[ italian ] = "Tiling";
+    Text[ italian ] = "Affianca";
     Text[ danish ] = "Tiling";
     Text[ swedish ] = "Sida vid sida";
     Text[ polish ] = "P³ytki";
@@ -239,6 +245,7 @@ String WEBDIALOG + 7
     Text[ chinese_traditional ] = "¥­¾Q(~T)";
     Text[ turkish ] = "Tiling";
     Text[ arabic ] = "Tiling";
+    Text[ catalan ] = "~Tiled";
 };
 
 
@@ -253,7 +260,7 @@ String WEBDIALOG + 8
     Text[ dutch ] = "~Scaled";
     Text[ french ] = "~Gradué";
     Text[ spanish ] = "~Graduado";
-    Text[ italian ] = "~Scaled";
+    Text[ italian ] = "~In scala";
     Text[ danish ] = "~Scaled";
     Text[ swedish ] = "~Skalat";
     Text[ polish ] = "Skalowany";
@@ -264,6 +271,7 @@ String WEBDIALOG + 8
     Text[ chinese_traditional ] = "±Ä¥ÎÅã¥Ü¤ñ¨Ò(~S)";
     Text[ turkish ] = "~Scaled";
     Text[ arabic ] = "~Scaled";
+    Text[ catalan ] = "~Scaled";
 };
 
 
@@ -278,7 +286,7 @@ String WEBDIALOG + 9
     Text[ dutch ] = "Edit Document";
     Text[ french ] = "Éditer le document";
     Text[ spanish ] = "Editar documento";
-    Text[ italian ] = "Edit Document";
+    Text[ italian ] = "Modifica documento";
     Text[ danish ] = "Edit Document";
     Text[ swedish ] = "Redigera dokument";
     Text[ polish ] = "Edytuj dokument";
@@ -289,6 +297,7 @@ String WEBDIALOG + 9
     Text[ chinese_traditional ] = "½s¿è¤å¥ó";
     Text[ turkish ] = "Edit Document";
     Text[ arabic ] = "ÊÍÑíÑ ÇáãÓÊäÏ";
+    Text[ catalan ] = "Edit document";
 };
 
 String WEBDIALOG + 10
@@ -316,6 +325,7 @@ String WEBDIALOG + 10
     Text[ arabic ] = "ÅäÔÇÁ ŞÇáÈ";
     Text[ turkish ] = "Şablon oluştur";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Create template";
 };
 
 
@@ -341,6 +351,7 @@ String WEBERROR + 1
     Text[ chinese_traditional ] = "¨S¦³§ä¨ì­¶­±ª©¦¡ªº¼Ë¦¡¡C";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ŞÇáÈ áÅÚÏÇÏ ÇáÕİÍÉ.";
     Text[ turkish ] = "Sayfa yapısı için şablon bulunamadı.";
+    Text[ catalan ] = "A template for the page setup could not be found.";
 };
 
 String WEBERROR + 2
@@ -366,13 +377,14 @@ String WEBERROR + 2
     Text[ chinese_traditional ] = "¨S¦³§ä¨ì­¶­±ª©¦¡ªº¼Ë¦¡¡C";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì äãØ áäãØ ÇáÕİÍÉ.";
     Text[ turkish ] = "Sayfa biçimi için şablon bulunamadı.";
+    Text[ catalan ] = "A Style for the Page Style could not be found.";
 };
 
 String WEBERROR + 3
 {
     Text = "Bei der Auswertung der Vorlagen ist ein Fehler aufgetreten.";
     Text[English] = "An error occurred during the interpretation of the template.";
-    Text[ English_us ] = "An error occurred while interpreting the templates.";
+    Text[ English_us ] = "An error occurred as the templates were being interpreted.";
     Text[ french ] = "Une erreur s'est produite lors de l'évaluation du modèle.";
     Text[ italian ] = "Durante la valutazione dello stile si è verificato un errore.";
     Text[ spanish ] = "Ha ocurrido un error al verificar las plantillas.";
@@ -390,13 +402,14 @@ String WEBERROR + 3
     Text[ chinese_traditional ] = "¦b³B²z¼Ë¦¡¤å¥ó®Éµo¥Í¤@­Ó¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊŞííã ÇáŞæÇáÈ.";
     Text[ turkish ] = "Şablon değerlendirilirken bir hata oluştu.";
+    Text[ catalan ] = "An error occurred while interpreting the templates.";
 };
 
 String WEBERROR + 4
 {
     Text = "Bei der Aktualisierung der Vorlage ist ein Fehler aufgetreten.";
     Text[English] = "An error occurred while reloading the template.";
-    Text[ English_us ] = "An error occurred while refreshing the template.";
+    Text[ English_us ] = "An error occurred as the template was being refreshed.";
     Text[ french ] = "Une erreur s'est produite lors de l'actualisation du modèle.";
     Text[ italian ] = "Durante l'aggiornamento di uno stile si è verificato un errore.";
     Text[ spanish ] = "Ha ocurido un error al actualizar la plantilla.";
@@ -414,6 +427,7 @@ String WEBERROR + 4
     Text[ chinese_traditional ] = "¦b§ó·s¼Ë¦¡¤å¥ó®Éµo¥Í¤@­Ó¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍÏíË ÇáŞÇáÈ.";
     Text[ turkish ] = "Şablon güncellenirken bir hata oluştu.";
+    Text[ catalan ] = "An error occurred while refreshing the template.";
 };
 
 String WEBERROR + 5
@@ -439,13 +453,14 @@ String WEBERROR + 5
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÚííä ÃäãÇØ ÇáÊäÓíŞ.";
     Text[ turkish ] = "Format şablonları uygulanırken bir hata oluştu.";
     Text[ language_user1 ] = "- All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM p.s.Formatvorlagen sind Styles.";
+    Text[ catalan ] = "An error occurred while applying the Styles.";
 };
 
 String WEBERROR + 6
 {
     Text = "Bei der Auswertung der Dokumente ist ein Fehler aufgetreten.";
     Text[English] = "An error occcurred while interpreting the document.";
-    Text[ English_us ] = "An error occurred while interpreting the documents.";
+    Text[ English_us ] = "An error occurred while evaluating the documents.";
     Text[ french ] = "Une erreur s'est produite lors de l'évaluation des documents.";
     Text[ italian ] = "Errore durante la valutazione del documento.";
     Text[ spanish ] = "Ha ocurrido un error durante la evaluación de los documentos.";
@@ -463,6 +478,7 @@ String WEBERROR + 6
     Text[ chinese_traditional ] = "¦b³B²z³o­Ó¤å¥ó®Éµo¥Í¤@­Ó¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊŞííã ÇáãÓÊäÏÇÊ.";
     Text[ turkish ] = "Belgeler değerlendirilirken bir hata oluştu.";
+    Text[ catalan ] = "An error occurred while interpreting the documents.";
 };
 
 String WEBERROR + 7
@@ -487,6 +503,7 @@ String WEBERROR + 7
     Text[ chinese_traditional ] = "¦b°õ¦æ¦Û°ÊÀÉ®×§U²z®Éµo¥Í¤@­Ó¿ù»~¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊäİíĞ ÇáãÑÔÏ ÇáÂáí.";
     Text[ turkish ] = "OtoPilot çalıştırılırken bir hata oluştu.";
+    Text[ catalan ] = "An error occurred while running the AutoPilot.";
 };
 
 
