@@ -476,6 +476,31 @@ sub get_language_specific_include_pathes
     return \@patharray;
 }
 
+##############################################################
+# Returning the first item with a defined flag
+##############################################################
+
+sub return_first_item_with_special_flag
+{
+    my ($itemsref, $flag) = @_;
+
+    my $firstitem = "";
+
+    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
+    {
+        my $oneitem = ${$itemsref}[$i];
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'} };
+
+        if ( $styles =~ /\b$flag\b/ )
+        {
+            $firstitem = $oneitem;
+            last;
+        }
+    }
+
+    return $firstitem;
+}
 
 ##############################################################
 # Collecting all items with a defined flag
@@ -497,6 +522,33 @@ sub collect_all_items_with_special_flag
         {
             push( @allitems, $oneitem );
         }
+    }
+
+    return \@allitems;
+}
+
+##############################################################
+# Removing all items with a defined flag from collector
+##############################################################
+
+sub remove_all_items_with_special_flag
+{
+    my ($itemsref, $flag) = @_;
+
+    my @allitems = ();
+
+    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
+    {
+        my $oneitem = ${$itemsref}[$i];
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'} };
+        if ( $styles =~ /\b$flag\b/ )
+        {
+            my $infoline = "Attention: Removing from collector: $oneitem->{'Name'} !\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            next;
+        }
+        push( @allitems, $oneitem );
     }
 
     return \@allitems;
