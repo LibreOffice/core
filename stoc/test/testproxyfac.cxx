@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testproxyfac.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:14:54 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:50:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,166 +59,233 @@
  *
  ************************************************************************/
 
-#include <osl/diagnose.h>
-
-#include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/queryinterface.hxx>
-
-#include <com/sun/star/uno/XAggregation.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/registry/XSimpleRegistry.hpp>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/reflection/XProxyFactory.hpp>
-
-#include <rtl/ustrbuf.hxx>
-#include <rtl/unload.h>
+#include "osl/diagnose.h"
+#include "rtl/alloc.h"
+#include "uno/environment.hxx"
+#include "cppuhelper/servicefactory.hxx"
+#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/implbase3.hxx"
+#include "com/sun/star/uno/XCurrentContext.hpp"
+#include "com/sun/star/lang/DisposedException.hpp"
+#include "com/sun/star/lang/XComponent.hpp"
+#include "com/sun/star/lang/XServiceInfo.hpp"
+#include "com/sun/star/registry/XSimpleRegistry.hpp"
+#include "com/sun/star/registry/XImplementationRegistration.hpp"
+#include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/reflection/XProxyFactory.hpp"
 
 #include <stdio.h>
 
 
-using namespace rtl;
-using namespace cppu;
-using namespace osl;
-using namespace com::sun::star::uno;
-using namespace com::sun::star::reflection;
-using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
-using namespace com::sun::star::beans;
+using namespace ::rtl;
+using namespace ::osl;
+using namespace ::cppu;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 
-static sal_Int32 s_n = 0;
+typedef WeakImplHelper3< lang::XServiceInfo,
+                         XCurrentContext,
+                         reflection::XProxyFactory > t_impl;
 
-//==================================================================================================
-class Test1 : public WeakImplHelper2< XServiceInfo, XProxyFactory >
+//==============================================================================
+class TargetObject : public t_impl
 {
 public:
-    virtual ~Test1()
-        { ++s_n; }
+    static int s_obj;
+
+    virtual ~TargetObject()
+        { --s_obj;  OSL_TRACE( "~TargetObject()" ); }
+    TargetObject()
+        { ++s_obj; }
+
+    Any SAL_CALL queryInterface( Type const & type )
+        throw (RuntimeException);
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
-        { return OUString::createFromAscii( "a" ); }
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException)
+        { return OUString::createFromAscii( "target" ); }
+    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName )
+        throw (RuntimeException)
         { return sal_False; }
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException)
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw (RuntimeException)
         { return Sequence< OUString >(); }
     // XProxyFactory
-    virtual Reference< XAggregation > SAL_CALL createProxy( const Reference< XInterface > & xTarget ) throw (RuntimeException)
-        { return Reference< XAggregation >(); }
+    virtual Reference< XAggregation > SAL_CALL createProxy(
+        const Reference< XInterface > & xTarget ) throw (RuntimeException)
+        { return Reference< XAggregation >( xTarget, UNO_QUERY ); }
+    // XCurrentContext
+    virtual Any SAL_CALL getValueByName( OUString const & name )
+        throw (RuntimeException)
+        { return makeAny( name ); }
 };
-//==================================================================================================
-class Test2 : public WeakImplHelper1< XServiceInfo >
-{
-    Reference< XAggregation > _xAgg;
-public:
-    static Reference< XInterface > createTest2( const Reference< XAggregation > & xAgg )
-    {
-        Test2 * p = new Test2();
-        Reference< XInterface > xRet( (XInterface *)(XServiceInfo *)p );
-        p->_xAgg = xAgg;
-        xAgg->release(); // ref to 1
-        p->acquire(); // for xAgg dtor
-        p->_xAgg->setDelegator( xRet );
-        return xRet;
-    }
-    virtual ~Test2()
-        { ++s_n; }
 
-    virtual Any SAL_CALL queryInterface( const Type & rType ) throw (RuntimeException)
+//______________________________________________________________________________
+Any TargetObject::queryInterface( Type const & type )
+    throw (RuntimeException)
+{
+    Any ret( t_impl::queryInterface( type ) );
+    if (ret.hasValue())
+        return ret;
+    throw lang::DisposedException(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("my test exception") ),
+        static_cast< OWeakObject * >(this) );
+}
+
+int TargetObject::s_obj = 0;
+
+
+//==============================================================================
+class TestMaster : public WeakImplHelper1< lang::XServiceInfo >
+{
+    Reference< XAggregation > m_xProxyTarget;
+
+    inline TestMaster() { ++s_obj; }
+public:
+    static int s_obj;
+    static Reference< XInterface > create(
+        Reference< reflection::XProxyFactory > const & xProxyFac );
+    static Reference< XInterface > create(
+        Reference< XInterface > const & xTarget,
+        Reference< reflection::XProxyFactory > const & xProxyFac );
+
+    virtual ~TestMaster()
+        { --s_obj;  OSL_TRACE( "~TestMaster()" ); }
+
+    virtual Any SAL_CALL queryInterface( const Type & rType )
+        throw (RuntimeException)
     {
-        Any aRet( OWeakObject::queryInterface( rType ) );
-        if (! aRet.hasValue())
-        {
-            aRet = cppu::queryInterface( rType, (XServiceInfo *)this );
-            if (! aRet.hasValue())
-                return _xAgg->queryAggregation( rType );
-        }
-        return aRet;
+        Any aRet(
+            WeakImplHelper1< lang::XServiceInfo >::queryInterface( rType ) );
+        if (aRet.hasValue())
+            return aRet;
+        return m_xProxyTarget->queryAggregation( rType );
     }
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
-        { return OUString::createFromAscii( "b" ); }
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException)
+        { return OUString::createFromAscii( "master" ); }
+    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName )
+        throw (RuntimeException)
         { return sal_False; }
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException)
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
+        throw (RuntimeException)
         { return Sequence< OUString >(); }
 };
 
-static sal_Bool test_proxyfac( const Reference< XProxyFactory > & xProxyFac )
+int TestMaster::s_obj = 0;
+
+
+Reference< XInterface > TestMaster::create(
+    Reference< XInterface > const & xTarget,
+    Reference< reflection::XProxyFactory > const & xProxyFac )
 {
-    {
-    Reference< XServiceInfo > x1( new Test1() );
-    Reference< XServiceInfo > x1p( xProxyFac->createProxy( x1 ), UNO_QUERY );
-//      if (x1->getImplementationName() != x1p->getImplementationName() ||
-//          !x1->getImplementationName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("a") ))
-//      {
-//          return sal_False;
-//      }
-//      if (x1 == x1p)
-//          return sal_False;
-    //
-
-    Reference< XAggregation > xAgg( xProxyFac->createProxy( x1 ) );
-    Reference< XInterface > xMaster( Test2::createTest2( xAgg ) );
-
-    Reference< XServiceInfo > x2( xMaster, UNO_QUERY );
-    Test2 * pt2 = static_cast< Test2 * >( x2.get() );
-
-    if ((Test2 *)(XServiceInfo *)xMaster.get() != pt2 ||
-        !pt2->getImplementationName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("b") ) ||
-        !x2->getImplementationName().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("b") ))
-    {
-        return sal_False;
-    }
-
-    if (x2 == x1 || x2 == x1p)
-        return sal_False;
-    if (x2 != xAgg)
-        return sal_False;
-
-    if (x1->getImplementationName() == x2->getImplementationName() ||
-        x1p->getImplementationName() == x2->getImplementationName())
-    {
-        return sal_False;
-    }
-
-    if (s_n)
-        return sal_False;
-    }
-    return s_n == 2;
+    Reference< XAggregation > xAgg( xProxyFac->createProxy( xTarget ) );
+    TestMaster * that = new TestMaster;
+    Reference< XInterface > xRet( static_cast< OWeakObject * >( that ) );
+    // ownership take over
+    that->m_xProxyTarget.set( xAgg );
+    xAgg.clear();
+    that->m_xProxyTarget->setDelegator( xRet );
+    return xRet;
 }
 
-#ifdef UNX
-#define REG_PREFIX      "lib"
-#ifdef MACOSX
-#define DLL_POSTFIX     ".dylib"
-#else
-#define DLL_POSTFIX     ".so"
-#endif
-#else
-#define REG_PREFIX      ""
-#define DLL_POSTFIX     ".dll"
-#endif
-
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int __cdecl main( int argc, char * argv[] )
-#endif
+Reference< XInterface > TestMaster::create(
+    Reference< reflection::XProxyFactory > const & xProxyFac )
 {
-    sal_Bool bSucc = sal_False;
+    return create(
+        static_cast< OWeakObject * >( new TargetObject ), xProxyFac );
+}
+
+
+static void test_proxyfac_(
+    Reference< XInterface > const & xMaster, OUString const & test,
+    Reference< reflection::XProxyFactory > const & xProxyFac )
+{
+    Reference< lang::XServiceInfo > xMaster_XServiceInfo(
+        xMaster, UNO_QUERY_THROW );
+    OSL_ASSERT( xMaster_XServiceInfo->getImplementationName().equals( test ) );
+
+    Reference< reflection::XProxyFactory > xTarget( xMaster, UNO_QUERY_THROW );
+    Reference< XCurrentContext > xTarget_XCurrentContext(
+        xTarget, UNO_QUERY_THROW );
+    Reference< XCurrentContext > xMaster_XCurrentContext(
+        xMaster, UNO_QUERY_THROW );
+
+    OSL_ASSERT(
+        xTarget_XCurrentContext->getValueByName( test ) == makeAny( test ) );
+    OSL_ASSERT(
+        xMaster_XCurrentContext->getValueByName( test ) == makeAny( test ) );
+
+    Reference< XAggregation > xFakeAgg( xTarget->createProxy( xTarget ) );
+    if (xFakeAgg.is())
     {
-        Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb") ) ) );
+        OSL_ASSERT( xTarget == xFakeAgg );
+        OSL_ASSERT( xMaster == xFakeAgg );
+    }
+
+    Reference< lang::XServiceInfo > xTarget_XServiceInfo(
+        xTarget, UNO_QUERY_THROW );
+    OSL_ASSERT( xTarget_XServiceInfo->getImplementationName().equals( test ) );
+    Reference< lang::XServiceInfo > xTarget_XServiceInfo2(
+        xTarget, UNO_QUERY_THROW );
+    OSL_ASSERT( xTarget_XServiceInfo2.get() == xTarget_XServiceInfo.get() );
+
+    OSL_ASSERT( xTarget == xTarget_XCurrentContext );
+    OSL_ASSERT( xTarget_XCurrentContext == xMaster );
+    OSL_ASSERT(
+        xTarget_XCurrentContext.get() == xMaster_XCurrentContext.get() );
+    OSL_ASSERT( xTarget_XCurrentContext == xMaster );
+    OSL_ASSERT( xTarget == xMaster );
+    OSL_ASSERT( xTarget_XServiceInfo.get() == xMaster_XServiceInfo.get() );
+    OSL_ASSERT( xTarget_XServiceInfo == xMaster );
+    OSL_ASSERT( xMaster_XServiceInfo == xMaster );
+
+    try
+    {
+        Reference< registry::XRegistryKey >(
+            xMaster, UNO_QUERY_THROW );
+    }
+    catch (lang::DisposedException & exc)
+    {
+        if (! exc.Message.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("my test exception") ))
+            throw;
+    }
+}
+
+static void test_proxyfac(
+    Reference< XInterface > const & xMaster, OUString const & test,
+    Reference< reflection::XProxyFactory > const & xProxyFac )
+{
+    test_proxyfac_( xMaster, test, xProxyFac );
+    // proxy the proxy...
+    Reference< XInterface > xNew( TestMaster::create( xMaster, xProxyFac ) );
+    test_proxyfac_(
+        xNew, OUString( RTL_CONSTASCII_USTRINGPARAM("master") ), xProxyFac );
+}
+
+int SAL_CALL main( int argc, char * argv[] )
+{
+    bool success = true;
+
+    Environment cpp_env;
+    OUString cpp( RTL_CONSTASCII_USTRINGPARAM(
+                      CPPU_CURRENT_LANGUAGE_BINDING_NAME) );
+    uno_getEnvironment(
+        reinterpret_cast< uno_Environment ** >( &cpp_env ),
+        cpp.pData, 0 );
+    OSL_ENSURE( cpp_env.is(), "### cannot get C++ uno env!" );
+
+    {
+        Reference< lang::XMultiServiceFactory > xMgr(
+            createRegistryServiceFactory(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb") ) ) );
 
         try
         {
-            Reference< XImplementationRegistration > xImplReg(
+            Reference< registry::XImplementationRegistration > xImplReg(
                 xMgr->createInstance(
                     OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
@@ -233,34 +300,100 @@ int __cdecl main( int argc, char * argv[] )
                 OUString(
                     RTL_CONSTASCII_USTRINGPARAM(
                         "com.sun.star.loader.SharedLibrary") ),
-                aLibName, Reference< XSimpleRegistry >() );
+                aLibName, Reference< registry::XSimpleRegistry >() );
 
-            Reference< XInterface > r =
+            Reference< reflection::XProxyFactory > xProxyFac(
                 xMgr->createInstance(
                     OUString::createFromAscii(
-                        "com.sun.star.reflection.ProxyFactory") );
-            Reference< XProxyFactory > xProxyFac(r , UNO_QUERY );
-            OSL_ENSURE( xProxyFac.is(), "### no proxy factory!" );
+                        "com.sun.star.reflection.ProxyFactory") ),
+                UNO_QUERY_THROW );
 
-            bSucc = test_proxyfac( xProxyFac );
+            Reference< XAggregation > x(
+                xProxyFac->createProxy(
+                    static_cast< OWeakObject * >( new TargetObject ) ) );
+            // no call
+
+            {
+            Reference< XInterface > xMaster( TestMaster::create( xProxyFac ) );
+            test_proxyfac(
+                xMaster,
+                OUString( RTL_CONSTASCII_USTRINGPARAM("master") ),
+                xProxyFac );
+            }
+            {
+            Reference< XInterface > xMaster( TestMaster::create( xProxyFac ) );
+            // no call
+            }
+
+            {
+            Reference< XInterface > xMaster( TestMaster::create( xProxyFac ) );
+            Reference< reflection::XProxyFactory > xSlave_lives_alone(
+                xMaster, UNO_QUERY_THROW );
+            xMaster.clear();
+            test_proxyfac(
+                xSlave_lives_alone,
+                OUString( RTL_CONSTASCII_USTRINGPARAM("master") ),
+                xProxyFac );
+            uno_dumpEnvironment( stdout, cpp_env.get(), 0 );
+            }
+            {
+            Reference< XInterface > xMaster( TestMaster::create( xProxyFac ) );
+            Reference< reflection::XProxyFactory > xSlave_lives_alone(
+                xMaster, UNO_QUERY_THROW );
+            // no call
+            }
+
+            test_proxyfac(
+                xProxyFac->createProxy(
+                    static_cast< OWeakObject * >( new TargetObject ) ),
+                OUString( RTL_CONSTASCII_USTRINGPARAM("target") ),
+                xProxyFac );
+            uno_dumpEnvironment( stdout, cpp_env.get(), 0 );
         }
         catch (Exception & rExc)
         {
-            OSL_ENSURE( sal_False, "### exception occured!" );
-            OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### exception occured: " );
-            OSL_TRACE( aMsg.getStr() );
-            OSL_TRACE( "\n" );
+            OSL_ENSURE(
+                ! __FILE__,
+                OUStringToOString(
+                    rExc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            success = false;
         }
 
-        Reference< XPropertySet > rProps( xMgr , UNO_QUERY );
-        Any a = rProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) );
-        Reference< XComponent > rComp;
-        a >>= rComp;
-        rComp->dispose();
 
+        Reference< lang::XComponent > xComp;
+        Reference< beans::XPropertySet >(
+            xMgr, UNO_QUERY_THROW )->getPropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) )
+                    >>= xComp;
+        xComp->dispose();
     }
-    rtl_unloadUnusedModules(0);
-    printf( "testproxyfac %s !\n", (bSucc ? "succeeded" : "failed") );
-    return (bSucc ? 0 : -1);
+
+    if (TestMaster::s_obj != 0)
+        fprintf( stderr, "TestMaster objects: %d\n", TestMaster::s_obj );
+    if (TargetObject::s_obj != 0)
+        fprintf( stderr, "TargetObject objects: %d\n", TargetObject::s_obj );
+
+    uno_dumpEnvironment( stdout, cpp_env.get(), 0 );
+    void ** ppInterfaces;
+    sal_Int32 len;
+    uno_ExtEnvironment * env = cpp_env.get()->pExtEnv;
+    (*env->getRegisteredInterfaces)(
+        env, &ppInterfaces, &len, rtl_allocateMemory );
+    if (len != 0)
+        fprintf( stderr, "%d registered C++ interfaces left!\n", len );
+
+    success &= (TestMaster::s_obj == 0 &&
+                TargetObject::s_obj == 0 &&
+                len == 0);
+    if (success)
+    {
+        printf( "testproxyfac succeeded.\n" );
+        return 0;
+    }
+    else
+    {
+        fprintf( stderr, "testproxyfac failed!\n" );
+        return 1;
+    }
 }
+
