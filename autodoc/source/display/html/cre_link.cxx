@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cre_link.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,28 +101,28 @@ void
 LinkCreator::Display_Namespace( const ary::cpp::Namespace & i_rData )
 {
     Create_PrePath( i_rData );
-    strcat( pOut, "index.html" );   // KORR
+    strcat( pOut, "index.html" );   // KORR   // SAFE STRCAT (#100211# - checked)
 }
 
 void
 LinkCreator::Display_Class( const ary::cpp::Class & i_rData )
 {
     Create_PrePath( i_rData );
-    strcat( pOut, ClassFileName(i_rData.LocalName().c_str()) );
+    strcat( pOut, ClassFileName(i_rData.LocalName().c_str()) ); // SAFE STRCAT (#100211# - checked)
 }
 
 void
 LinkCreator::Display_Enum( const ary::cpp::Enum & i_rData )
 {
     Create_PrePath( i_rData );
-    strcat( pOut, EnumFileName(i_rData.LocalName().c_str()) );
+    strcat( pOut, EnumFileName(i_rData.LocalName().c_str()) ); // SAFE STRCAT (#100211# - checked)
 }
 
 void
 LinkCreator::Display_Typedef( const ary::cpp::Typedef & i_rData )
 {
     Create_PrePath( i_rData );
-    strcat( pOut, TypedefFileName(i_rData.LocalName().c_str()) );
+    strcat( pOut, TypedefFileName(i_rData.LocalName().c_str()) ); // SAFE STRCAT (#100211# - checked)
 }
 
 void
@@ -132,7 +132,7 @@ LinkCreator::Display_Function( const ary::cpp::Function & i_rData )
 
     if ( i_rData.Protection() != ary::cpp::PROTECT_global )
     {
-        strcat( pOut, "o.html" );
+        strcat( pOut, "o.html" );   // SAFE STRCAT (#100211# - checked)
     }
     else
     {
@@ -143,10 +143,10 @@ LinkCreator::Display_Function( const ary::cpp::Function & i_rData )
              *pOut = NULCH;
             return;
         }
-        strcat( pOut, HtmlFileName("o-", pFile->FileName().c_str()) );
+        strcat( pOut, HtmlFileName("o-", pFile->FileName().c_str()) ); // SAFE STRCAT (#100211# - checked)
     }
 
-    strcat( pOut, OperationLink(i_rData.LocalName(), i_rData.Signature()) );
+    strcat( pOut, OperationLink(i_rData.LocalName(), i_rData.Signature()) ); // SAFE STRCAT (#100211# - checked)
 }
 
 void
@@ -156,7 +156,7 @@ LinkCreator::Display_Variable( const ary::cpp::Variable & i_rData )
 
     if ( i_rData.Protection() != ary::cpp::PROTECT_global )
     {
-        strcat( pOut, "d.html" );
+        strcat( pOut, "d.html" );       // SAFE STRCAT (#100211# - checked)
     }
     else
     {
@@ -167,10 +167,10 @@ LinkCreator::Display_Variable( const ary::cpp::Variable & i_rData )
              *pOut = NULCH;
             return;
         }
-        strcat( pOut, HtmlFileName("d-", pFile->FileName().c_str()) );
+        strcat( pOut, HtmlFileName("d-", pFile->FileName().c_str()) );  // SAFE STRCAT (#100211# - checked)
     }
 
-    strcat( pOut, DataLink(i_rData.LocalName()) );
+    strcat( pOut, DataLink(i_rData.LocalName()) );  // SAFE STRCAT (#100211# - checked)
 }
 
 void
@@ -182,8 +182,8 @@ LinkCreator::Display_EnumValue( const ary::cpp::EnumValue & i_rData )
         return;
 
     pEnum->StoreAt(*this);
-    strcat(pOut, "#");
-    strcat(pOut, i_rData.LocalName().c_str());
+    strcat(pOut, "#");      // SAFE STRCAT (#100211# - checked)
+    strcat(pOut, i_rData.LocalName().c_str());  // SAFE STRCAT (#100211# - checked)
 }
 
 void
@@ -193,8 +193,8 @@ LinkCreator::Display_Define( const ary::cpp::Define & i_rData )
     // Only valid from Index:
 
     *pOut = '\0';
-    strcat(pOut, "../def-all.html#");
-    strcat(pOut, i_rData.DefinedName().c_str());
+    strcat(pOut, "../def-all.html#");               // SAFE STRCAT (#100211# - checked)
+    strcat(pOut, i_rData.DefinedName().c_str());    // SAFE STRCAT (#100211# - checked)
 }
 
 void
@@ -204,8 +204,8 @@ LinkCreator::Display_Macro( const ary::cpp::Macro & i_rData )
     // Only valid from Index:
 
     *pOut = '\0';
-    strcat(pOut, "../def-all.html#");
-    strcat(pOut, i_rData.DefinedName().c_str());
+    strcat(pOut, "../def-all.html#");               // SAFE STRCAT (#100211# - checked)
+    strcat(pOut, i_rData.DefinedName().c_str());    // SAFE STRCAT (#100211# - checked)
 }
 
 
@@ -275,8 +275,8 @@ Recursive_CreatePath( char *                            o_pOut,
         return;     // Global Namespace
     Recursive_CreatePath( o_pOut, it );
 
-    strcat( o_pOut, (*i_it).c_str() );
-    strcat( o_pOut, "/" );
+    strcat( o_pOut, (*i_it).c_str() );          // SAFE STRCAT (#100211# - checked)
+    strcat( o_pOut, "/" );                      // SAFE STRCAT (#100211# - checked)
 }
 
 
@@ -298,11 +298,11 @@ LinkCreator::Create_PrePath( const ary::CodeEntity & i_rData )
                 :   pEnv->CurNamespace()->Id() == i_rData.Owner() )
             return;
 
-        strcat( pOut, PathUp(pEnv->Depth() - 1) );
+        strcat( pOut, PathUp(pEnv->Depth() - 1) );      // SAFE STRCAT (#100211# - checked)
     }
     else
     {   // Within Index
-        strcat( pOut, "../names/" );
+        strcat( pOut, "../names/" );                    // SAFE STRCAT (#100211# - checked)
     }
 
     NameScope_const_iterator it( i_rData.Owner(), pEnv->Gate() );

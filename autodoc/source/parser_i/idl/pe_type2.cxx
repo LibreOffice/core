@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_type2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,5 @@ PE_Type::MyPE()
 }   // namespace uidl
 }   // namespace csi
 
-void
-DeleteDyn(csi::uidl::PE_Type * i_pObj)
-{   delete i_pObj;  }
+
 

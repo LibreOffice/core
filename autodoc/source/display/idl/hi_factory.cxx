@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_factory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-15 10:35:32 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ HtmlFactory_Idl::produce_Members( ce_list &           it_list,
                     i_detailsTitle,
                     1 );
 
-    for ( ; it_list; ++it_list )
+    for ( ; BOOL_OF(it_list); ++it_list )
     {
         const ary::idl::CodeEntity &
             rCe = Env().Data().Find_Ce(*it_list);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_interface.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ HF_IdlInterface::Produce_byData( const client & i_ce ) const
     dyn_ce_list dpFunctions;
     ary::idl::ifc_interface::attr::Get_Functions(dpFunctions, i_ce);
 
-    if ( *dpFunctions )
+    if ( BOOL_OF(*dpFunctions) )
     {
         eCurProducedMembers = mem_Functions;
 
@@ -178,7 +178,7 @@ HF_IdlInterface::Produce_byData( const client & i_ce ) const
     dyn_ce_list
         dpAttributes;
     ary::idl::ifc_interface::attr::Get_Attributes(dpAttributes, i_ce);
-    if (*dpAttributes)
+    if ( BOOL_OF(*dpAttributes) )
     {
         eCurProducedMembers = mem_Attributes;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsenv2.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:15:46 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,7 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
 
     void                SetDocu(
                             DYN ary::info::CodeInformation *
-                                                let_dpDocu )
-                                                { pDocu = let_dpDocu; }
+                                                let_dpDocu );
     void                SetOptional();
     void                PassDocuAt(
                             ary::idl::CodeEntity &

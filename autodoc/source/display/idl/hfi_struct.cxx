@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_struct.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ HF_IdlStruct::Produce_byData( const client & i_ce ) const
     else
         ary::idl::ifc_struct::attr::Get_Elements(dpElements, i_ce);
 
-    if (*dpElements)
+    if ( BOOL_OF(*dpElements) )
     {
         produce_Members( *dpElements,
                          C_sList_Elements,

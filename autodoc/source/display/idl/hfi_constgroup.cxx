@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_constgroup.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:24 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,8 @@ HF_IdlConstGroup::Produce_byData( const client & i_ce ) const
     dyn_ce_list
         dpConstants;
     ary::idl::ifc_constgroup::attr::Get_Constants(dpConstants, i_ce);
-    if (*dpConstants)
+
+    if ( BOOL_OF(*dpConstants) )
     {
         produce_Members( *dpConstants,
                          C_sList_Constants,

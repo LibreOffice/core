@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tkpchars.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ CharacterSource::LoadText( const char * i_sSourceText )
     nSourceSize = strlen(i_sSourceText);
 
     dpSource = new char[nSourceSize+1];
-    strcpy( dpSource,  i_sSourceText);
+    strcpy( dpSource,  i_sSourceText);      // SAFE STRCPY (#100211# - checked)
 
     BeginSource();
 }
@@ -135,7 +135,7 @@ CharacterSource::InsertTextAtCurPos( const char * i_sText2Insert )
 
     nSourceSize = strlen(i_sText2Insert);
     dpSource = new char[nSourceSize+1];
-    strcpy( dpSource,  i_sText2Insert);
+    strcpy( dpSource,  i_sText2Insert);     // SAFE STRCPY (#100211# - checked)
 
     BeginSource();
 }

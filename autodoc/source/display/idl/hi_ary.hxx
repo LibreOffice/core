@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_ary.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:51 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,8 @@ namespace output
     class Position;
 }
 
+/** A helper class to wrap the access to data in the Autodoc Repository.
+*/
 class AryAccess
 {
   public:

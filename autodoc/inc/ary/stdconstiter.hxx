@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdconstiter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:10:43 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ namespace ary
 {
 
 template <class ELEM>
+
 class StdConstIterator
 {
   public:
@@ -82,17 +83,23 @@ class StdConstIterator
     const ELEM &        operator*() const       { return *inq_CurElement(); }
                         operator bool() const   { return inq_CurElement() != 0; }
 
+    /// Needed as replacement for operator bool() in gcc 2.95.
+    bool                IsValid() const         { return operator bool(); }
     bool                IsSorted() const        { return inq_IsSorted(); }
 
+  protected:
+                        StdConstIterator() {}
+
   private:
+    //Locals
     virtual void        do_Advance() = 0;
     virtual const ELEM *
                         inq_CurElement() const = 0;
     virtual bool        inq_IsSorted() const = 0;
 
     // Forbidden:
-    // StdConstIterator(const StdConstIterator<ELEM>&);
-    // StdConstIterator<ELEM> & operator=(const StdConstIterator<ELEM>&);
+    StdConstIterator(const StdConstIterator<ELEM>&);
+    StdConstIterator<ELEM> & operator=(const StdConstIterator<ELEM>&);
 };
 
 

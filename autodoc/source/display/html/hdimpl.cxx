@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,12 +119,12 @@ DisplaySlot( ary::Display &          o_rDisplay,
 const char *
 PathUp( uintt i_nLevels )
 {
-    static char sResult[100];
+    static char sResult[300];
 
     sResult[0] = NULCH;
     for ( uintt lev = 0; lev < i_nLevels; ++lev )
     {
-        strcat( sResult, "../");
+        strcat( sResult, "../");        // SAFE STRCAT (#100211# - checked)
     }
     return sResult;
 }
@@ -133,9 +133,10 @@ const char *
 PathPerLevelsUp( uintt                   i_nLevels,
                  const char *            i_nPathBelowDestinationLevel )
 {
-    static char sResult[300];
-    strcpy( sResult, PathUp(i_nLevels) );
-    strcat( sResult, i_nPathBelowDestinationLevel );
+    static char sResult[500];
+    strcpy( sResult, PathUp(i_nLevels) );               // SAFE STRCPY (#100211# - checked)
+    // KORR_FUTURE: Make it still safer here:
+    strcat( sResult, i_nPathBelowDestinationLevel );    // SAFE STRCAT (#100211# - checked)
     return sResult;
 }
 
@@ -164,10 +165,11 @@ const char *
 HtmlFileName( const char *            i_sPrefix,
               const char *            i_sEntityName )
 {
-    static char sResult[100];
-    strcpy( sResult, i_sPrefix );
-    strcat( sResult, i_sEntityName );
-    strcat( sResult, ".html" );
+    // KORR_FUTURE: Make it still safer here:
+    static char sResult[300];
+    strcpy( sResult, i_sPrefix );       // SAFE STRCPY (#100211# - checked)
+    strcat( sResult, i_sEntityName );   // SAFE STRCAT (#100211# - checked)
+    strcat( sResult, ".html" );         // SAFE STRCAT (#100211# - checked)
     return sResult;
 }
 
@@ -182,18 +184,19 @@ const char *
 Path2Child( const char *            i_sFileName,
             const char *            i_sSubDir )
 {
-    static char sResult[200];
+    static char sResult[400];
     if ( i_sSubDir != 0 )
     {
-        strcpy( sResult, i_sSubDir );
-        strcat( sResult, "/" );
+        // KORR_FUTURE: Make it still safer here:
+        strcpy( sResult, i_sSubDir );       // SAFE STRCPY (#100211# - checked)
+        strcat( sResult, "/" );             // SAFE STRCAT (#100211# - checked)
     }
     else
     {
         sResult[0] = NULCH;
     }
 
-    strcat( sResult, i_sFileName );
+    strcat( sResult, i_sFileName );         // SAFE STRCAT (#100211# - checked)
     return sResult;
 }
 
@@ -208,11 +211,12 @@ OperationLink( const udmstri &         i_sOpName,
                ary::OSid               i_nSignature,
                const char *            i_sPrePath )
 {
-    static char sResult[200];
+    // KORR_FUTURE: Make it still safer here:
+    static char sResult[500];
 
     unsigned long nSignature = (unsigned long) i_nSignature;
-    sprintf( sResult, "%s#%s-%lu",
-             i_sPrePath, i_sOpName.c_str(), nSignature );
+    sprintf( sResult, "%s#%s-%lu",      // SAFE SPRINTF (#100211# - checked)
+           i_sPrePath, i_sOpName.c_str(), nSignature );
     return sResult;
 }
 
@@ -220,10 +224,11 @@ const char *
 DataLink( const udmstri &         i_sLocalName,
           const char *            i_sPrePath )
 {
-    static char sResult[100];
-    strcpy( sResult, i_sPrePath );
-    strcat( sResult, "#" );
-    strcat( sResult, i_sLocalName );
+    // KORR_FUTURE: Make it still safer here:
+    static char sResult[300];
+    strcpy( sResult, i_sPrePath );      // SAFE STRCPY (#100211# - checked)
+    strcat( sResult, "#" );             // SAFE STRCAT (#100211# - checked)
+    strcat( sResult, i_sLocalName );    // SAFE STRCAT (#100211# - checked)
     return sResult;
 }
 

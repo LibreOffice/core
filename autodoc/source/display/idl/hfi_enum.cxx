@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_enum.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:27 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ HF_IdlEnum::Produce_byData( const client & i_ce ) const
     dyn_ce_list
         dpValues;
     ary::idl::ifc_enum::attr::Get_Values(dpValues, i_ce);
-    if (*dpValues)
+    if ( BOOL_OF(*dpValues) )
     {
         produce_Members( *dpValues,
                          C_sList_Values,

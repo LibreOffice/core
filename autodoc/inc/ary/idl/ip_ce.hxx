@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ip_ce.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:12:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ namespace idl
     class StructElement;
     class Variable;
 
+    class NameLookup;
 
 /** @resp
     Provides the access logic for all code entities.
@@ -201,6 +202,8 @@ class CePilot
                             String &            o_ce,
                             String &            o_member,
                             const CodeEntity &  i_ce ) const;
+    const NameLookup &  NameDictionary() const;
+
     // ACCESS
     Module &            GlobalNamespace();
     CodeEntity &        Find_Ce(
@@ -283,7 +286,6 @@ class CePilot
     virtual const CodeEntity &
                         inq_Find_Ce(
                             Ce_id               i_nId ) const = 0;
-
     virtual const Module &
                         inq_Find_Module(
                             Ce_id               i_nId ) const = 0;
@@ -310,6 +312,9 @@ class CePilot
                             String &            o_ce,
                             String &            o_member,
                             const CodeEntity &  i_ce ) const = 0;
+    virtual const NameLookup &
+                        inq_NameDictionary() const = 0;
+
     // ACCESS
     virtual Module &    access_GlobalNamespace() = 0;
     virtual CodeEntity &
@@ -452,6 +457,9 @@ CePilot::Get_Text( StringVector &      o_module,
                    const CodeEntity &  i_ce ) const
     { inq_Get_Text(o_module, o_ce, o_member, i_ce);  }
 
+inline const NameLookup &
+CePilot::NameDictionary() const
+    { return inq_NameDictionary(); }
 
 inline Module &
 CePilot::GlobalNamespace()

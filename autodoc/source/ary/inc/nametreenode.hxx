@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nametreenode.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:13:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ template<class ITEM_ID>
 inline void
 NameTreeNode<ITEM_ID>::Get_Names( Dyn_StdConstIterator<ITEM_ID> & o_rResult ) const
 {
-    o_rResult = new SCI_Map<String,item_id>(LocalNames());
+    o_rResult = new SCI_DataInMap<String,item_id>(LocalNames());
 }
 
 

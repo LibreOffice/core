@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: np $ $Date: 2002-11-01 17:13:30 $
+#   last change: $Author: hr $ $Date: 2003-03-18 14:11:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ OBJFILES= \
     $(OBJ)$/i_function.obj      \
     $(OBJ)$/i_interface.obj     \
     $(OBJ)$/i_module.obj        \
+    $(OBJ)$/i_namelookup.obj    \
     $(OBJ)$/i_param.obj         \
     $(OBJ)$/i_property.obj      \
     $(OBJ)$/i_reposypart.obj    \

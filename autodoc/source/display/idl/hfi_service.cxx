@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_service.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ HF_IdlService::Produce_byData( const client & i_ce ) const
     dyn_comref_list
         dpIncludedServices;
     ServiceAttr::Get_IncludedServices(dpIncludedServices, i_ce);
-    if (*dpIncludedServices)
+    if ( BOOL_OF(*dpIncludedServices) )
     {
         produce_IncludedServices( i_ce, *dpIncludedServices );
         pNaviSubRow->SwitchOn(sli_IncludedServices);
@@ -164,7 +164,7 @@ HF_IdlService::Produce_byData( const client & i_ce ) const
     dyn_comref_list
         dpExportedInterfaces;
     ServiceAttr::Get_ExportedInterfaces(dpExportedInterfaces, i_ce);
-    if (*dpExportedInterfaces)
+    if ( BOOL_OF(*dpExportedInterfaces) )
     {
         produce_ExportedInterfaces( i_ce, *dpExportedInterfaces );
         pNaviSubRow->SwitchOn(sli_ExportedInterfaces);
@@ -173,7 +173,7 @@ HF_IdlService::Produce_byData( const client & i_ce ) const
     dyn_ce_list
         dpProperties;
     ServiceAttr::Get_Properties(dpProperties, i_ce);
-    if (*dpProperties)
+    if ( BOOL_OF(*dpProperties) )
     {
         produce_Members( *dpProperties,
                          C_sList_Properties,
@@ -218,7 +218,7 @@ HF_IdlService::produce_IncludedServices( const client & i_ce,
                 C_sList_IncludedServices,
                 2 );
 
-    for ( ; it_list; ++it_list )
+    for ( ; BOOL_OF(it_list); ++it_list )
     {
         Xml::Element &
             rRow = aTable.Add_Row();

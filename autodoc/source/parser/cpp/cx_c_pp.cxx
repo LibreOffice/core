@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_c_pp.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,8 +180,9 @@ Context_PP_MacroParams::ReadCharChain( CharacterSource & io_rText )
     char cSeparator = jumpTo( io_rText, ',', ')' );
     csv_assert( cSeparator != 0 );
 
-    static char cBuf[100];
-    strcpy( cBuf, io_rText.CutToken() );
+    static char cBuf[500];
+    // KORR_FUTURE, make it still safer, here:
+    strcpy( cBuf, io_rText.CutToken() );    // SAFE STRCPY (#100211# - checked)
     for ( uintt nLen = strlen(cBuf);
           nLen > 0 AND cBuf[nLen-1] < 33;
           --nLen )

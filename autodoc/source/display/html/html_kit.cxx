@@ -2,9 +2,9 @@
  *
  *  $RCSfile: html_kit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-02 12:36:16 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,7 +288,7 @@ FlagTable::FlagTable( XmlElement &        o_rOwner,
         TableCell & rCell1 = rRow1.AddCell();
         int nWidth = 100 / i_nNrOfColumns;
         static char sWidth[20];
-        sprintf( sWidth, "%d%%", nWidth );
+        sprintf( sWidth, "%d%%", nWidth );      // SAFE SPRINTF (#100211# - checked)
 
         rCell1
             << new AnAttribute( "bgcolor", "#eeeeff" )

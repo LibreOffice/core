@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_method.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:35 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ HF_IdlMethod::write_Declaration( const String &      i_sName,
         types = aDecl.Types();
     Xml::Element &
         names = aDecl.Names();
-    bool bParams = bool(i_rParams);
+    bool bParams = bool( BOOL_OF(i_rParams) );
     if (bParams)
     {
         front
@@ -168,7 +168,7 @@ HF_IdlMethod::write_Declaration( const String &      i_sName,
             << "()";
 
 
-    if (i_rExceptions)
+    if ( BOOL_OF(i_rExceptions) )
     {
         Xml::Element &
             rExcOut = aDecl.Add_RaisesLine("raises", NOT bParams);

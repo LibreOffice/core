@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsenv2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:02:05 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,12 @@ UnoIDL_PE::Leave( E_EnvStackAction  i_eWayOfLeaving )
         default:
             csv_assert(false);
     }   // end switch
+}
+
+void
+UnoIDL_PE::SetDocu( DYN ary::info::CodeInformation * let_dpDocu )
+{
+    pDocu = let_dpDocu;
 }
 
 void

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: i_reposypart.cxx,v $
+ *  $RCSfile: itrange.hxx,v $
  *
  *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:31 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -16,7 +16,7 @@
  *
  *  GNU Lesser General Public License Version 2.1
  *  =============================================
- *  Copyright 2002 by Sun Microsystems, Inc.
+ *  Copyright 2000 by Sun Microsystems, Inc.
  *  901 San Antonio Road, Palo Alto, CA 94303, USA
  *
  *  This library is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2002 by Sun Microsystems, Inc.
+ *  Copyright: 2000 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -59,111 +59,54 @@
  *
  ************************************************************************/
 
-
-#include <precomp.h>
-#include <idl/i_reposypart.hxx>
-
-
-// NOT FULLY DEFINED SERVICES
-#include <commonpart.hxx>
-#include <ary/idl/i_namelookup.hxx>
-#include "ii_gate.hxx"
-#include "ipi_ce.hxx"
-#include "ipi_type.hxx"
-#include "ipi_2s.hxx"
-#include "is_ce.hxx"
-#include "is_type.hxx"
+#ifndef ARY_ITRANGE_HXX
+#define ARY_ITRANGE_HXX
 
 
-
+// USED SERVICES
+    // BASE CLASSES
+    // COMPONENTS
+    // PARAMETERS
+#include <utility>
 
 namespace ary
 {
-namespace idl
-{
 
-
-//**************        CheshireCat     *****************//
-
-struct RepositoryPartition::CheshireCat
+template <typename ITER>
+class IteratorRange
 {
   public:
-    // LIFECYCLE
-                        CheshireCat(
-                            const n22::RepositoryCenter &
-                                                i_rRepository );
-                        ~CheshireCat();
+                        IteratorRange(
+                            ITER                i_begin,
+                            ITER                i_end )
+                                                :   itCurrent(i_begin),
+                                                    itEnd(i_end)
+                                                {}
+                        IteratorRange(
+                            std::pair<ITER,ITER>
+                                                i_range )
+                                                :   itCurrent(i_range.first),
+                                                    itEnd(i_range.second)
+                                                {}
 
+                        operator bool() const   { return itCurrent != itEnd; }
+    IteratorRange &     operator++()            { ++itCurrent; return *this; }
+
+    ITER                cur() const             { return itCurrent; }
+    ITER                end() const             { return itEnd; }
+
+
+  private:
     // DATA
-    Ce_Storage          aCeStorage;
-    Type_Storage        aTypeStorage;
-    NameLookup          aNamesDictionary;
-
-    Dyn<CePilot_Inst>   pCePilot;
-    Dyn<TypePilot_Inst> pTypePilot;
-    Dyn<SecondariesPilot_Inst>
-                        pSecondariesPilot;
-
-    Dyn<Gate_Inst>      pGate;
-
-    const n22::RepositoryCenter *
-                        pCenter;
+    ITER                itCurrent;
+    ITER                itEnd;
 };
 
-RepositoryPartition::
-CheshireCat::CheshireCat( const n22::RepositoryCenter & i_rRepository )
-    :   aCeStorage(),
-        aTypeStorage(),
-        aNamesDictionary(),
-        pCePilot(),
-        pTypePilot(),
-        pSecondariesPilot(),
-        pGate(),
-        pCenter(&i_rRepository)
-{
-    pCePilot = new CePilot_Inst( aCeStorage, aNamesDictionary );
-    pTypePilot = new TypePilot_Inst( aTypeStorage, *pCePilot );
-    pSecondariesPilot = new SecondariesPilot_Inst( aCeStorage, aTypeStorage );
-    pGate = new Gate_Inst( *pCePilot, *pTypePilot, *pSecondariesPilot );
-}
-
-RepositoryPartition::
-CheshireCat::~CheshireCat()
-{
-}
-
-
-//**************        RepositoryPartition      *****************//
-
-RepositoryPartition::RepositoryPartition( const n22::RepositoryCenter & i_rRepository )
-    :   cat(new CheshireCat(i_rRepository))
-{
-}
-
-RepositoryPartition::~RepositoryPartition()
-{
-}
-
-const Gate &
-RepositoryPartition::TheGate() const
-{
-    return * cat->pGate;
-}
-
-
-Gate &
-RepositoryPartition::TheGate()
-{
-    return * cat->pGate;
-}
 
 
 
 
+}   // namespace ary
 
 
-
-
-}   //  namespace idl
-}   //  namespace ary
-
+#endif

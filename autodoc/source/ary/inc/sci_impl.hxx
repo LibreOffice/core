@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sci_impl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:13:48 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,10 +102,10 @@ class SCI_Vector : public StdConstIterator<ELEM>
 
 
 
-//*************************     SCI_Vector      **********************************//
+//*************************     SCI_Map      **********************************//
 
 template <class KEY, class VALUE>
-class SCI_Map : public StdConstIterator<VALUE>
+class SCI_Map : public StdConstIterator< std::map<KEY,VALUE>::value_type >
 {
   public:
     typedef std::map<KEY,VALUE>     source;
@@ -118,7 +118,36 @@ class SCI_Map : public StdConstIterator<VALUE>
   private:
     // Interface StdConstIterator<>:
     virtual void        do_Advance();
-    virtual const VALUE *
+    virtual const std::map<KEY,VALUE>::value_type *
+                        inq_CurElement() const;
+    virtual bool        inq_IsSorted() const;
+
+    // DATA
+    source_iterator     itRun;
+    source_iterator     itEnd;
+};
+
+
+//*************************     SCI_MultiMap      **********************************//
+
+template <class KEY, class VALUE>
+class SCI_MultiMap : public StdConstIterator< std::multimap<KEY,VALUE>::value_type >
+{
+  public:
+    typedef std::multimap<KEY,VALUE>    source;
+    typedef source::const_iterator      source_iterator;
+
+                        SCI_MultiMap(
+                            const source &      i_rSource  );
+                        SCI_MultiMap(
+                            source_iterator     i_begin,
+                            source_iterator     i_end );
+    virtual             ~SCI_MultiMap();
+
+  private:
+    // Interface StdConstIterator<>:
+    virtual void        do_Advance();
+    virtual const std::multimap<KEY,VALUE>::value_type *
                         inq_CurElement() const;
     virtual bool        inq_IsSorted() const;
 
@@ -157,6 +186,36 @@ class SCI_Set : public StdConstIterator<typename TYPES::element_type>
     source_iterator     itEnd;
 };
 
+//*************************     SCI_DataInMap    **********************************//
+
+template <class KEY, class VALUE>
+class SCI_DataInMap : public StdConstIterator<VALUE>
+{
+  public:
+    typedef std::map<KEY,VALUE>     source;
+    typedef source::const_iterator  source_iterator;
+
+                        SCI_DataInMap(
+                            const source &      i_rSource  );
+    virtual             ~SCI_DataInMap();
+
+  private:
+    // Interface StdConstIterator<>:
+    virtual void        do_Advance();
+    virtual const VALUE *
+                        inq_CurElement() const;
+    virtual bool        inq_IsSorted() const;
+
+    // DATA
+    source_iterator     itRun;
+    source_iterator     itEnd;
+};
+
+
+
+
+
+//********************************************************************//
 
 
 // IMPLEMENTATION
@@ -222,11 +281,11 @@ SCI_Map<KEY,VALUE>::do_Advance()
 }
 
 template <class KEY, class VALUE>
-const VALUE *
+const std::map<KEY,VALUE>::value_type *
 SCI_Map<KEY,VALUE>::inq_CurElement() const
 {
     if (itRun != itEnd)
-        return &(*itRun).second;
+        return &(*itRun);
     return 0;
 }
 
@@ -237,6 +296,60 @@ SCI_Map<KEY,VALUE>::inq_IsSorted() const
 {
     return true;
 }
+
+
+
+
+
+
+
+template <class KEY, class VALUE>
+SCI_MultiMap<KEY,VALUE>::SCI_MultiMap( const source & i_rSource  )
+    :   itRun(i_rSource.begin()),
+        itEnd(i_rSource.end())
+{
+}
+
+template <class KEY, class VALUE>
+SCI_MultiMap<KEY,VALUE>::SCI_MultiMap( source_iterator i_begin,
+                                       source_iterator i_end )
+    :   itRun(i_begin),
+        itEnd(i_end)
+{
+}
+
+template <class KEY, class VALUE>
+SCI_MultiMap<KEY,VALUE>::~SCI_MultiMap()
+{
+}
+
+template <class KEY, class VALUE>
+void
+SCI_MultiMap<KEY,VALUE>::do_Advance()
+{
+    if (itRun != itEnd)
+        ++itRun;
+}
+
+template <class KEY, class VALUE>
+const std::multimap<KEY,VALUE>::value_type *
+SCI_MultiMap<KEY,VALUE>::inq_CurElement() const
+{
+    if (itRun != itEnd)
+        return &(*itRun);
+    return 0;
+}
+
+
+template <class KEY, class VALUE>
+bool
+SCI_MultiMap<KEY,VALUE>::inq_IsSorted() const
+{
+    return true;
+}
+
+
+
 
 
 
@@ -278,6 +391,50 @@ SCI_Set<ELEM>::inq_IsSorted() const
 {
     return true;
 }
+
+
+
+
+
+
+
+template <class KEY, class VALUE>
+SCI_DataInMap<KEY,VALUE>::SCI_DataInMap( const source & i_rSource  )
+    :   itRun(i_rSource.begin()),
+        itEnd(i_rSource.end())
+{
+}
+
+template <class KEY, class VALUE>
+SCI_DataInMap<KEY,VALUE>::~SCI_DataInMap()
+{
+}
+
+template <class KEY, class VALUE>
+void
+SCI_DataInMap<KEY,VALUE>::do_Advance()
+{
+    if (itRun != itEnd)
+        ++itRun;
+}
+
+template <class KEY, class VALUE>
+const VALUE *
+SCI_DataInMap<KEY,VALUE>::inq_CurElement() const
+{
+    if (itRun != itEnd)
+        return &(*itRun).second;
+    return 0;
+}
+
+
+template <class KEY, class VALUE>
+bool
+SCI_DataInMap<KEY,VALUE>::inq_IsSorted() const
+{
+    return true;
+}
+
 
 
 

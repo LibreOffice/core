@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2002-12-11 15:41:34 $
+#   last change: $Author: hr $ $Date: 2003-03-18 14:11:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,7 @@ PRJINC=$(PRJ)$/source
 .INCLUDE : $(PRJ)$/source$/mkinc$/fullcpp.mk
 
 UWINAPILIB=$(0)
+LIBSALCPPRT=$(0)
 
 # --- Files --------------------------------------------------------
 

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: precomp.h,v $
+ *  $RCSfile: i_namelookup.hxx,v $
  *
  *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 14:11:40 $
+ *  last change: $Author: hr $ $Date: 2003-03-18 14:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,69 +58,95 @@
  *
  *
  ************************************************************************/
-#ifndef __ADC_PRECOMP_H_06071998__
-#define __ADC_PRECOMP_H_06071998__
+
+#ifndef ARY_IDL_I_NAMELOOKUP_HXX
+#define ARY_IDL_I_NAMELOOKUP_HXX
 
 
-// For en/disabling csv_assertions:
-#ifndef DEBUG
-#define CSV_NO_ASSERTIONS
-#endif
-
-#ifdef NP_LOCALBUILD
-#pragma warning( disable : 4786 )
-#endif
-
-#include <cosv/csv_precomp.h>
-
+// USED SERVICES
+    // BASE CLASSES
+#include <ary/idl/i_language.hxx>
+    // COMPONENTS
+    // PARAMETERS
+#include <ary/stdconstiter.hxx>
+#include <ary/itrange.hxx>
 #include <vector>
 #include <map>
-#include <set>
 
 
+namespace ary
+{
 
-// Shortcuts to access csv::-types:
-using csv::String;
-using csv::StringVector;
-using csv::StreamStr;
-using csv::ios;
-using csv::ostream;
-using csv::c_str;
-typedef csv::StreamStrLock  StreamLock;
+namespace idl
+{
 
 
-
-// As long, as appearances of udmstri are not changed yet:
-typedef String udmstri;
-
-
-/** @attention
-    Has to be changed to returning csv::Cout(),if
-        1)  iostreams are not used ( #ifdef CSV_NO_IOSTREAM )
-        2)  used for an GUI-application.
+/*  OPEN?
 */
-inline ostream &
-Cout() { return std::cout; }
 
-/** @attention
-    Has to be changed to returning csv::Cerr(),if
-        1)  iostreams are not used ( #ifdef CSV_NO_IOSTREAM )
-        2)  used for an GUI-application.
+/** @resp
+    This class finds all occurrences in the current language of a
+    name in the repository.
+
+    @descr
 */
-inline ostream &
-Cerr() { return std::cerr; }
+class NameLookup
+{
+  public:
+    struct NameProperties
+    {
+                            NameProperties()
+                                :   nId(0),
+                                    nClass(0),
+                                    nOwner(0) {}
+                            NameProperties(
+                                Ce_id               i_id,
+                                RCid                i_class,
+                                Ce_id               i_owner )
+                                :   nId(i_id),
+                                    nClass(i_class),
+                                    nOwner(i_owner) {}
+        Ce_id               nId;
+        RCid                nClass;
+        Ce_id               nOwner;
+    };
+
+    /// Map from Name to NameProperties.
+    typedef std::multimap<String, NameProperties>   Map_Names;
+
+    // LIFECYCLE
+                        NameLookup();
+                        ~NameLookup();
+    // OPERATIONS
+    void                Add_Name(
+                            const String &      i_name,
+                            Ce_id               i_id,
+                            RCid                i_class,
+                            Ce_id               i_owner );
+    // INQUIRY
+    /**
+    */
+    bool                Has_Name(
+                            const String &      i_name,
+                            RCid                i_class,
+                            Ce_id               i_owner ) const;
+    void                Get_Names(
+                            Dyn_StdConstIterator<Map_Names::value_type> &
+                                                o_rResult,
+                            const String &      i_name ) const;
+  private:
+    // DATA
+    Map_Names           aNames;
+};
 
 
-inline csv::F_FLUSHING_FUNC
-Endl()  { return csv::Endl; }
-inline csv::F_FLUSHING_FUNC
-Flush() { return csv::Flush; }
+
+// IMPLEMENTATION
 
 
-// Hack for GCC 2.95:
-template <class XY>
-inline bool BOOL_OF(const XY & x) { return x.operator bool(); }
+}   // namespace idl
+}   // namespace ary
+
 
 #endif
-
 

@@ -1,6 +1,6 @@
 /*************************************************************************
  *
- *  $RCSfile: i_reposypart.cxx,v $
+ *  $RCSfile: i_namelookup.cxx,v $
  *
  *  $Revision: 1.2 $
  *
@@ -16,7 +16,7 @@
  *
  *  GNU Lesser General Public License Version 2.1
  *  =============================================
- *  Copyright 2002 by Sun Microsystems, Inc.
+ *  Copyright 2000 by Sun Microsystems, Inc.
  *  901 San Antonio Road, Palo Alto, CA 94303, USA
  *
  *  This library is free software; you can redistribute it and/or
@@ -50,7 +50,7 @@
  *
  *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
- *  Copyright: 2002 by Sun Microsystems, Inc.
+ *  Copyright: 2000 by Sun Microsystems, Inc.
  *
  *  All Rights Reserved.
  *
@@ -59,111 +59,74 @@
  *
  ************************************************************************/
 
-
 #include <precomp.h>
-#include <idl/i_reposypart.hxx>
-
-
-// NOT FULLY DEFINED SERVICES
-#include <commonpart.hxx>
 #include <ary/idl/i_namelookup.hxx>
-#include "ii_gate.hxx"
-#include "ipi_ce.hxx"
-#include "ipi_type.hxx"
-#include "ipi_2s.hxx"
-#include "is_ce.hxx"
-#include "is_type.hxx"
 
-
-
+// NOT FULLY DECLARED SERVICES
+#include <sci_impl.hxx>
 
 namespace ary
 {
 namespace idl
 {
 
-
-//**************        CheshireCat     *****************//
-
-struct RepositoryPartition::CheshireCat
-{
-  public:
-    // LIFECYCLE
-                        CheshireCat(
-                            const n22::RepositoryCenter &
-                                                i_rRepository );
-                        ~CheshireCat();
-
-    // DATA
-    Ce_Storage          aCeStorage;
-    Type_Storage        aTypeStorage;
-    NameLookup          aNamesDictionary;
-
-    Dyn<CePilot_Inst>   pCePilot;
-    Dyn<TypePilot_Inst> pTypePilot;
-    Dyn<SecondariesPilot_Inst>
-                        pSecondariesPilot;
-
-    Dyn<Gate_Inst>      pGate;
-
-    const n22::RepositoryCenter *
-                        pCenter;
-};
-
-RepositoryPartition::
-CheshireCat::CheshireCat( const n22::RepositoryCenter & i_rRepository )
-    :   aCeStorage(),
-        aTypeStorage(),
-        aNamesDictionary(),
-        pCePilot(),
-        pTypePilot(),
-        pSecondariesPilot(),
-        pGate(),
-        pCenter(&i_rRepository)
-{
-    pCePilot = new CePilot_Inst( aCeStorage, aNamesDictionary );
-    pTypePilot = new TypePilot_Inst( aTypeStorage, *pCePilot );
-    pSecondariesPilot = new SecondariesPilot_Inst( aCeStorage, aTypeStorage );
-    pGate = new Gate_Inst( *pCePilot, *pTypePilot, *pSecondariesPilot );
-}
-
-RepositoryPartition::
-CheshireCat::~CheshireCat()
+NameLookup::NameLookup()
+    :   aNames()
 {
 }
 
-
-//**************        RepositoryPartition      *****************//
-
-RepositoryPartition::RepositoryPartition( const n22::RepositoryCenter & i_rRepository )
-    :   cat(new CheshireCat(i_rRepository))
+NameLookup::~NameLookup()
 {
 }
 
-RepositoryPartition::~RepositoryPartition()
+void
+NameLookup::Add_Name( const String &      i_name,
+                      Ce_id               i_id,
+                      RCid                i_class,
+                      Ce_id               i_owner )
 {
+    aNames.insert( std::pair< const String, NameProperties>(
+                                   i_name,
+                                   NameProperties( i_id,
+                                                   i_class,
+                                                   i_owner )));
+//    aNames.insert( std::make_pair( i_name,
+//                                   NameProperties( i_id,
+//                                                   i_class,
+//                                                   i_owner )));
 }
 
-const Gate &
-RepositoryPartition::TheGate() const
+bool
+NameLookup::Has_Name( const String &      i_name,
+                      RCid                i_class,
+                      Ce_id               i_owner ) const
 {
-    return * cat->pGate;
+    IteratorRange<Map_Names::const_iterator>
+        aResult( aNames.equal_range(i_name) );
+
+    for ( ; BOOL_OF(aResult); ++aResult )
+    {
+        if ( (i_class == 0
+                OR (*aResult.cur()).second.nClass == i_class)
+             AND
+             ((*aResult.cur()).second.nOwner == i_owner
+                OR NOT i_owner.IsValid()) )
+        {
+            return true;
+        }
+    }   // end for
+    return false;
+}
+
+void
+NameLookup::Get_Names( Dyn_StdConstIterator<Map_Names::value_type> & o_rResult,
+                       const String &                         i_name ) const
+{
+    IteratorRange<Map_Names::const_iterator>
+        aResult( aNames.equal_range(i_name) );
+    o_rResult = new SCI_MultiMap<String, NameProperties>(aResult.cur(), aResult.end());
 }
 
 
-Gate &
-RepositoryPartition::TheGate()
-{
-    return * cat->pGate;
-}
-
-
-
-
-
-
-
-
-}   //  namespace idl
-}   //  namespace ary
-
+}   //  namespace   idl
+}   //  namespace   ary
