@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-26 14:42:27 $
+ *  last change: $Author: fme $ $Date: 2001-12-20 11:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,8 +315,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         if ( rInf.GetLast() && rInf.GetLast()->InFldGrp() &&
              ! rInf.GetLast()->IsFtnPortion() &&
              rInf.GetIdx() > rInf.GetLineStart() &&
-             0x01 == ( cFldChr =
-                       rInf.GetTxt().GetChar( rInf.GetIdx() - 1 ) ) )
+             CH_TXTATR_BREAKWORD ==
+                ( cFldChr = rInf.GetTxt().GetChar( rInf.GetIdx() - 1 ) ) )
         {
             SwFldPortion* pFld = (SwFldPortion*)rInf.GetLast();
             XubString aTxt;
@@ -438,7 +438,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // underflow
             xub_StrLen nX = nBreakPos;
             while( nX > rInf.GetLineStart() &&
-                   ( 0x01 != cFldChr || nX > rInf.GetIdx() ) &&
+                   ( CH_TXTATR_BREAKWORD != cFldChr || nX > rInf.GetIdx() ) &&
                    CH_BLANK == rInf.GetChar(--nX) )
                 nBreakPos = nX;
             if( nBreakPos > rInf.GetIdx() )
@@ -467,11 +467,11 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         // value, but we cannot correct the nBreakStart value:
         // If we have found a hyphenation position, nBreakStart can lie before
         // the field.
-        if ( 0x01 == cFldChr )
+        if ( CH_TXTATR_BREAKWORD == cFldChr )
         {
             if ( nBreakPos < rInf.GetIdx() )
                 nBreakPos = nOldIdx - 1;
-            else
+            else if ( STRING_LEN != nBreakPos )
             {
                 ASSERT( nBreakPos >= nFieldDiff, "I've got field trouble!" );
                 nBreakPos -= nFieldDiff;
