@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlview.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:52:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1219,8 +1219,7 @@ BOOL OutlineView::PrepareClose(BOOL bUI)
 
                 // als Praesentationsobjekt anmelden
                 pTO->SetUserCall(pPage);
-                List* pPresObjList = pPage->GetPresObjList();
-                pPresObjList->Insert(pTO, LIST_APPEND);
+                pPage->InsertPresObj(pTO, PRESOBJ_TITLE);
 
                 pPage->InsertObject(pTO);
                 pTO->SetOutlinerParaObject(pOPO);
@@ -1261,8 +1260,7 @@ BOOL OutlineView::PrepareClose(BOOL bUI)
                 // Seitenobjekt, kein Text im Outliner:
                 // wenn Objekt in Praesentationsliste der Seite ist -> Defaulttext,
                 // sonst Objekt loeschen
-                List* pPresObjList = pPage->GetPresObjList();
-                if (pPresObjList->GetPos(pTO) != LIST_ENTRY_NOTFOUND)
+                if (pPage->IsPresObj(pTO))
                 {
                     if( !pTO->IsEmptyPresObj() )
                     {
@@ -1357,8 +1355,7 @@ BOOL OutlineView::PrepareClose(BOOL bUI)
 
                 // als Praesentationsobjekt anmelden
                 pTO->SetUserCall(pPage);
-                List* pPresObjList = pPage->GetPresObjList();
-                pPresObjList->Insert(pTO, LIST_APPEND);
+                pPage->InsertPresObj(pTO, PRESOBJ_OUTLINE);
 
                 pPage->InsertObject(pTO);
                 pTO->SetOutlinerParaObject(pOPO);
@@ -1468,8 +1465,7 @@ BOOL OutlineView::PrepareClose(BOOL bUI)
                 // Seitenobjekt, aber kein Gliederungstext:
                 // wenn Objekt in Praesentationsliste der Seite ist -> Defaulttext,
                 // sonst Objekt loeschen
-                List* pPresObjList = pPage->GetPresObjList();
-                if (pPresObjList->GetPos(pTO) != LIST_ENTRY_NOTFOUND)
+                if( pPage->IsPresObj(pTO) )
                 {
                     if( !pTO->IsEmptyPresObj() )
                     {
@@ -1795,19 +1791,18 @@ IMPL_LINK( OutlineView, RemovingPagesHdl, OutlinerView *, pOutlinerView )
             }
 
             SdPage* pPage = pDoc->GetSdPage(nPage, PK_STANDARD);
-            List* pPresObjs = pPage->GetPresObjList();
-            if (pPage->GetObjCount() > pPresObjs->Count())
+            if (pPage->GetObjCount() > pPage->GetPresObjList().size())
             {
                 bValuableObjectsFound = TRUE;
             }
             else
             {
-                SdrObject* pObject = (SdrObject*)pPresObjs->First();
-                while (pObject && !bValuableObjectsFound)
-                {
-                    bValuableObjectsFound = !pObject->IsEmptyPresObj();
-                    pObject = (SdrObject*)pPresObjs->Next();
+                sd::PresentationObjectList::iterator aIter( pPage->GetPresObjList().begin() );
+                const sd::PresentationObjectList::iterator aEnd( pPage->GetPresObjList().end() );
 
+                while( (aIter != aEnd) && !bValuableObjectsFound)
+                {
+                    bValuableObjectsFound = !(*aIter++).mpObject->IsEmptyPresObj();
                 }
             }
         }
