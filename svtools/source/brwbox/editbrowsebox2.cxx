@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:47:14 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,54 +79,78 @@
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
+#ifndef _SVTOOLS_ACCESSIBLEBROWSEBOXCHECKBOXCELL_HXX
+#include "AccessibleBrowseBoxCheckBoxCell.hxx"
+#endif // _SVTOOLS_ACCESSIBLEBROWSEBOXCHECKBOXCELL_HXX
+
+
 namespace svt
 {
     using namespace com::sun::star::accessibility;
     using namespace com::sun::star::uno;
-    using namespace com::sun::star::accessibility::AccessibleEventId;
+    using namespace ::com::sun::star::accessibility::AccessibleEventId;
 
 // -----------------------------------------------------------------------------
-Reference< XAccessible > EditBrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnId )
+Reference< XAccessible > EditBrowseBox::CreateAccessibleCheckBoxCell(long _nRow, USHORT _nColumnPos,const TriState& eState,sal_Bool _bEnabled)
 {
-    return BrowseBox::CreateAccessibleCell( _nRow, _nColumnId );
+    XACC xAcc = GetAccessible();
+    Reference<XAccessibleContext> xAccContext = xAcc->getAccessibleContext();
+    return new AccessibleCheckBoxCell(xAccContext->getAccessibleChild( ::svt::BBINDEX_TABLE )
+        ,*this
+        ,NULL
+        ,_nRow
+        ,_nColumnPos
+        ,eState
+        ,_bEnabled);
+}
+// -----------------------------------------------------------------------------
+Reference< XAccessible > EditBrowseBox::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
+{
+    return BrowseBox::CreateAccessibleCell( _nRow, _nColumnPos );
 }
 // -----------------------------------------------------------------------------
 sal_Int32 EditBrowseBox::GetAccessibleControlCount() const
 {
-    return (IsEditing() && bHasFocus) ? 1 : 0;
+    return IsEditing() ? 1 : 0;
 }
 // -----------------------------------------------------------------------------
+void EditBrowseBox::implCreateActiveAccessible( )
+{
+    DBG_ASSERT( IsEditing(), "EditBrowseBox::implCreateActiveAccessible: not to be called if we're not editing currently!" );
+    DBG_ASSERT( !m_aImpl->m_xActiveCell.is(), "EditBrowseBox::implCreateActiveAccessible: not to be called if the old one is still alive!" );
 
+    if ( !m_aImpl->m_xActiveCell.is() && IsEditing() )
+    {
+         Reference< XAccessible > xCont = aController->GetWindow().GetAccessible();
+         Reference< XAccessible > xMy = GetAccessible();
+         if ( xMy.is() && xCont.is() )
+          {
+             m_aImpl->m_xActiveCell = m_aImpl->m_pActiveCell = new EditBrowseBoxTableCellAccess(
+                 xMy,                                                       // parent accessible
+                 xCont,                                                     // control accessible
+                 VCLUnoHelper::GetInterface( &aController->GetWindow() ),   // focus window (for notifications)
+                 *this,                                                     // the browse box
+                 GetCurRow(),
+                 GetColumnPos( GetCurColumnId() )
+             );
+
+             commitBrowseBoxEvent( CHILD, makeAny( m_aImpl->m_xActiveCell ), Any() );
+          }
+    }
+}
+
+// -----------------------------------------------------------------------------
 Reference< XAccessible > EditBrowseBox::CreateAccessibleControl( sal_Int32 _nIndex )
 {
-    if ( isAccessibleCreated() )
+    DBG_ASSERT( 0 == _nIndex, "EditBrowseBox::CreateAccessibleControl: invalid index!" );
+
+    if ( isAccessibleAlive() )
     {
-        if ( !m_aImpl->m_xActiveCell.is() && IsEditing() && bHasFocus )
-        {
-            Reference< XAccessible > xCont = aController->GetWindow().GetAccessible();
-            Reference< XAccessible > xMy = GetAccessible();
-            if ( xMy.is() && xCont.is() )
-            {
-                if ( m_aImpl->m_xActiveCell.is() )
-                {
-                    commitBrowseBoxEvent(CHILD,Any(),makeAny(m_aImpl->m_xActiveCell));
-                    m_aImpl->disposeCell();
-                }
-
-                m_aImpl->m_pFocusCell  = new EditBrowseBoxTableCell(xMy->getAccessibleContext()->getAccessibleChild(::svt::BBTYPE_BROWSEBOX),
-                                                                    *this,
-                                                                    VCLUnoHelper::GetInterface(&aController->GetWindow()),
-                                                                    GetCurRow(),
-                                                                    GetCurColumnId(),
-                                                                    xCont->getAccessibleContext());
-                m_aImpl->m_xActiveCell = m_aImpl->m_pFocusCell;
-
-                commitBrowseBoxEvent(CHILD,makeAny(m_aImpl->m_xActiveCell),Any());
-            }
-        }
+        if ( !m_aImpl->m_xActiveCell.is() )
+            implCreateActiveAccessible();
     }
 
-    return m_aImpl->m_xActiveCell;//CreateAccessibleCell(nRow, nColID+1);
+    return m_aImpl->m_xActiveCell;
 }
 // -----------------------------------------------------------------------------
 Reference<XAccessible > EditBrowseBox::CreateAccessibleRowHeader( sal_Int32 _nRow )
@@ -134,7 +158,7 @@ Reference<XAccessible > EditBrowseBox::CreateAccessibleRowHeader( sal_Int32 _nRo
     return BrowseBox::CreateAccessibleRowHeader( _nRow );
 }
 // -----------------------------------------------------------------------------
-void EditBrowseBoxImpl::disposeCell()
+void EditBrowseBoxImpl::clearActiveCell()
 {
     try
     {
@@ -142,8 +166,11 @@ void EditBrowseBoxImpl::disposeCell()
     }
     catch(const Exception&)
     {
-        OSL_ENSURE( sal_False, "EditBrowseBoxImpl::disposeCell: caught an exception while disposing the AccessibleCell!" );
+        OSL_ENSURE( sal_False, "EditBrowseBoxImpl::clearActiveCell: caught an exception while disposing the AccessibleCell!" );
     }
+
+    m_pActiveCell = NULL;
+    m_xActiveCell = NULL;
 }
 // -----------------------------------------------------------------------------
 void EditBrowseBox::GrabTableFocus()
@@ -163,16 +190,6 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
     if (bFocus != bHasFocus)
     {
         bHasFocus = bFocus;
-        if ( bHasFocus )
-            CreateAccessibleControl(0);
-        else
-        {
-            commitBrowseBoxEvent(CHILD,Any(),makeAny(m_aImpl->m_xActiveCell));
-            m_aImpl->disposeCell();
-
-            m_aImpl->m_pFocusCell  = NULL;
-            m_aImpl->m_xActiveCell = NULL;
-        }
 
         if ( GetBrowserFlags( ) & EBBF_SMART_TAB_TRAVEL )
         {
@@ -207,31 +224,30 @@ void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
     }
 }
 // -----------------------------------------------------------------------------
-Rectangle EditBrowseBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnId,sal_Int32 _nIndex)
+Rectangle EditBrowseBox::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 _nIndex)
 {
     Rectangle aRect;
     if ( SeekRow(_nRow) )
     {
-        CellController* pController = GetController(_nRow,_nColumnId);
+        CellController* pController = GetController( _nRow,GetColumnId( _nColumnPos ) );
         if ( pController )
             aRect = pController->GetWindow().GetCharacterBounds(_nIndex);
     }
     return aRect;
 }
 // -----------------------------------------------------------------------------
-sal_Int32 EditBrowseBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnId,const Point& _rPoint)
+sal_Int32 EditBrowseBox::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)
 {
     sal_Int32 nRet = -1;
     if ( SeekRow(_nRow) )
     {
-        CellController* pController = GetController(_nRow,_nColumnId);
+        CellController* pController = GetController( _nRow, GetColumnId( _nColumnPos ) );
         if ( pController )
             nRet = pController->GetWindow().GetIndexForPoint(_rPoint);
     }
     return nRet;
 }
-
-
+// -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 } // namespace svt
 // -----------------------------------------------------------------------------
