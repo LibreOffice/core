@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:29:32 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 09:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1644,41 +1644,75 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
 
     if (pItems)
     {
-        SCSIZE nStartPos;
-        SCSIZE nMoveCount=0;
+        ::std::vector<SCROW> aRows;
+        bool bConsecutive = true;
         SCSIZE i;
-        for (i=0; i < nCount; i++)
+        Search( nStartRow, i);  // i points to start row or position thereafter
+        SCSIZE nStartPos = i;
+        for ( ; i < nCount && pItems[i].nRow <= nEndRow; ++i)
         {
-            if ((pItems[i].nRow >= nStartRow) && (pItems[i].nRow <= nEndRow))
-            {
-                if (nMoveCount==0)
-                    nStartPos=i;
-                ++nMoveCount;
-
-                rCol.Insert(pItems[i].nRow, pItems[i].pCell);
+            SCROW nRow = pItems[i].nRow;
+            aRows.push_back( nRow);
+            rCol.Insert( nRow, pItems[i].pCell);
+            if (nRow != pItems[i].nRow)
+            {   // Listener inserted
+                bConsecutive = false;
+                Search( nRow, i);
             }
         }
-        if (nMoveCount > 0)
+        SCSIZE nStopPos = i;
+        if (nStartPos < nStopPos)
         {
-            //  Formeln benachrichtigen, dass sich etwas aendert
-
-            ScNoteCell* pNoteCell = new ScNoteCell;     // Dummy wie in DeleteRange
-            SCSIZE nEndPos = nStartPos+nMoveCount-1;
-            for (i=nStartPos; i<=nEndPos; i++)
-                pItems[i].pCell = pNoteCell;            // nicht auf die verschobenen zugreifen
+            // Create list of ranges of cell entry positions
+            typedef ::std::pair<SCSIZE,SCSIZE> PosPair;
+            typedef ::std::vector<PosPair> EntryPosPairs;
+            EntryPosPairs aEntries;
+            if (bConsecutive)
+                aEntries.push_back( PosPair(nStartPos, nStopPos));
+            else
+            {
+                bool bFirst = true;
+                nStopPos = 0;
+                for (::std::vector<SCROW>::const_iterator it( aRows.begin());
+                        it != aRows.end() && nStopPos < nCount; ++it,
+                        ++nStopPos)
+                {
+                    if (!bFirst && *it != pItems[nStopPos].nRow)
+                    {
+                        aEntries.push_back( PosPair(nStartPos, nStopPos));
+                        bFirst = true;
+                    }
+                    if (bFirst && Search( *it, nStartPos))
+                    {
+                        bFirst = false;
+                        nStopPos = nStartPos;
+                    }
+                }
+                if (!bFirst && nStartPos < nStopPos)
+                    aEntries.push_back( PosPair(nStartPos, nStopPos));
+            }
+            // Broadcast changes
             ScAddress aAdr( nCol, 0, nTab );
             ScHint aHint( SC_HINT_DYING, aAdr, NULL );  // areas only
             ScAddress& rAddress = aHint.GetAddress();
-            for (i=nStartPos; i<=nEndPos; i++)
+            ScNoteCell* pNoteCell = new ScNoteCell;     // Dummy like in DeleteRange
+            for (EntryPosPairs::const_iterator it( aEntries.begin());
+                    it != aEntries.end(); ++it)
             {
-                rAddress.SetRow( pItems[i].nRow );
-                pDocument->AreaBroadcast( aHint );
+                nStartPos = (*it).first;
+                nStopPos = (*it).second;
+                for (i=nStartPos; i<nStopPos; ++i)
+                    pItems[i].pCell = pNoteCell;
+                for (i=nStartPos; i<nStopPos; ++i)
+                {
+                    rAddress.SetRow( pItems[i].nRow );
+                    pDocument->AreaBroadcast( aHint );
+                }
+                nCount -= nStopPos - nStartPos;
+                memmove( &pItems[nStartPos], &pItems[nStopPos],
+                        (nCount - nStartPos) * sizeof(ColEntry) );
             }
             delete pNoteCell;
-
-            nCount -= nMoveCount;
-            memmove( &pItems[nStartPos], &pItems[nStartPos+nMoveCount],
-                        (nCount - nStartPos) * sizeof(ColEntry) );
             pItems[nCount].nRow = 0;
             pItems[nCount].pCell = NULL;
         }
