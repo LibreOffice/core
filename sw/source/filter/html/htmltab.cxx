@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:26:53 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 12:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3702,7 +3702,9 @@ HTMLTableCnts *SwHTMLParser::InsertTableContents(
     if( GetNumInfo().GetNumRule() )
     {
         // 1. Absatz auf nicht numeriert setzen
-        SetNodeNum( GetNumInfo().GetLevel() | NO_NUMLEVEL );
+        BYTE nLvl = GetNumInfo().GetLevel();
+        SetNoNum(&nLvl, TRUE);
+        SetNodeNum( nLvl);
     }
 
     // Attributierungs-Anfang neu setzen
