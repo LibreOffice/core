@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:31 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,13 +54,13 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _STORE_TYPES_H_
-#define _STORE_TYPES_H_ "$Revision: 1.1.1.1 $"
+#define _STORE_TYPES_H_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>

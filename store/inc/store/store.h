@@ -2,9 +2,9 @@
  *
  *  $RCSfile: store.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:31 $
+ *  last change: $Author: mhu $ $Date: 2001-03-13 20:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,13 +54,13 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
 #ifndef _STORE_STORE_H_
-#define _STORE_STORE_H_ "$Revision: 1.1.1.1 $"
+#define _STORE_STORE_H_ "$Revision: 1.2 $"
 
 #ifndef _STORE_TYPES_H_
 #include <store/types.h>
@@ -78,14 +78,18 @@ typedef void* storeHandle;
  *  @param  Handle [in]
  *  @return store_E_None upon success
  */
-storeError SAL_CALL store_acquireHandle (storeHandle Handle);
+storeError SAL_CALL store_acquireHandle (
+    storeHandle Handle
+) SAL_THROW_EXTERN_C();
 
 /** store_releaseHandle.
  *  @param  Handle [in]
  *  @return store_E_None          upon success,
  *          store_E_InvalidHandle otherwise.
  */
-storeError SAL_CALL store_releaseHandle (storeHandle Handle);
+storeError SAL_CALL store_releaseHandle (
+    storeHandle Handle
+) SAL_THROW_EXTERN_C();
 
 
 /** Opaque type storeFileHandle.
@@ -100,7 +104,8 @@ typedef void* storeFileHandle;
  */
 storeError SAL_CALL store_createMemoryFile (
     sal_uInt16       nPageSize,
-    storeFileHandle *phFile);
+    storeFileHandle *phFile
+) SAL_THROW_EXTERN_C();
 
 /** store_openFile.
  *  @param  pFilename [in] the filename in host syntax.
@@ -118,7 +123,8 @@ storeError SAL_CALL store_openFile (
     rtl_uString     *pFilename,
     storeAccessMode  eAccessMode,
     sal_uInt16       nPageSize,
-    storeFileHandle *phFile);
+    storeFileHandle *phFile
+) SAL_THROW_EXTERN_C();
 
 /** store_closeFile.
  *  @param  hFile [in]
@@ -126,14 +132,16 @@ storeError SAL_CALL store_openFile (
  *          store_E_InvalidHandle otherwise.
  */
 storeError SAL_CALL store_closeFile (
-    storeFileHandle hFile);
+    storeFileHandle hFile
+) SAL_THROW_EXTERN_C();
 
 /** store_flushFile.
  *  @param  hFile [in]
  *  @return store_E_None upon success
  */
 storeError SAL_CALL store_flushFile (
-    storeFileHandle hFile);
+    storeFileHandle hFile
+) SAL_THROW_EXTERN_C();
 
 /** store_getFileRefererCount.
  *  @param  hFile [in]
@@ -142,7 +150,8 @@ storeError SAL_CALL store_flushFile (
  */
 storeError SAL_CALL store_getFileRefererCount (
     storeFileHandle  hFile,
-    sal_uInt32      *pnRefCount);
+    sal_uInt32      *pnRefCount
+) SAL_THROW_EXTERN_C();
 
 /** store_getFileSize.
  *  @param  hFile [in]
@@ -151,7 +160,8 @@ storeError SAL_CALL store_getFileRefererCount (
  */
 storeError SAL_CALL store_getFileSize (
     storeFileHandle  hFile,
-    sal_uInt32      *pnSize);
+    sal_uInt32      *pnSize
+) SAL_THROW_EXTERN_C();
 
 /** store_rebuildFile.
  *  @param  pSrcFilename [in] opened with store_AccessReadOnly.
@@ -160,7 +170,8 @@ storeError SAL_CALL store_getFileSize (
  */
 storeError SAL_CALL store_rebuildFile (
     rtl_uString *pSrcFilename,
-    rtl_uString *pDstFilename);
+    rtl_uString *pDstFilename
+) SAL_THROW_EXTERN_C();
 
 
 /** Opaque type storeDirectoryHandle.
@@ -180,7 +191,8 @@ storeError SAL_CALL store_openDirectory (
     rtl_uString          *pPath,
     rtl_uString          *pName,
     storeAccessMode       eAccessMode,
-    storeDirectoryHandle *phDirectory);
+    storeDirectoryHandle *phDirectory
+) SAL_THROW_EXTERN_C();
 
 /** store_closeDirectory.
  *  @param  hDirectory [in]
@@ -188,7 +200,8 @@ storeError SAL_CALL store_openDirectory (
  *          store_E_InvalidHandle otherwise.
  */
 storeError SAL_CALL store_closeDirectory (
-    storeDirectoryHandle hDirectory);
+    storeDirectoryHandle hDirectory
+) SAL_THROW_EXTERN_C();
 
 /** store_findFirst.
  *  @param  hDirectory [in]
@@ -198,7 +211,8 @@ storeError SAL_CALL store_closeDirectory (
  */
 storeError SAL_CALL store_findFirst (
     storeDirectoryHandle  hDirectory,
-    storeFindData        *pFindData);
+    storeFindData        *pFindData
+) SAL_THROW_EXTERN_C();
 
 /** store_findNext.
  *  @param  hDirectory [in]
@@ -208,7 +222,8 @@ storeError SAL_CALL store_findFirst (
  */
 storeError SAL_CALL store_findNext (
     storeDirectoryHandle  hDirectory,
-    storeFindData        *pFindData);
+    storeFindData        *pFindData
+) SAL_THROW_EXTERN_C();
 
 
 /** Opaque type storeStreamHandle.
@@ -228,7 +243,8 @@ storeError SAL_CALL store_openStream (
     rtl_uString       *pPath,
     rtl_uString       *pName,
     storeAccessMode    eMode,
-    storeStreamHandle *phStrm);
+    storeStreamHandle *phStrm
+) SAL_THROW_EXTERN_C();
 
 /** store_closeStream.
  *  @param  hStrm [in]
@@ -236,7 +252,8 @@ storeError SAL_CALL store_openStream (
  *          store_E_InvalidHandle otherwise.
  */
 storeError SAL_CALL store_closeStream (
-    storeStreamHandle hStrm);
+    storeStreamHandle hStrm
+) SAL_THROW_EXTERN_C();
 
 /** store_readStream.
  *  @param  hStrm [in]
@@ -251,7 +268,8 @@ storeError SAL_CALL store_readStream (
     sal_uInt32         nOffset,
     void              *pBuffer,
     sal_uInt32         nBytes,
-    sal_uInt32        *pnDone);
+    sal_uInt32        *pnDone
+) SAL_THROW_EXTERN_C();
 
 /** store_writeStream.
  *  @param  hStrm [in]
@@ -266,14 +284,16 @@ storeError SAL_CALL store_writeStream (
     sal_uInt32         nOffset,
     const void        *pBuffer,
     sal_uInt32         nBytes,
-    sal_uInt32        *pnDone);
+    sal_uInt32        *pnDone
+) SAL_THROW_EXTERN_C();
 
 /** store_flushStream.
  *  @param  hStrm [in]
  *  @return store_E_None upon success
  */
 storeError SAL_CALL store_flushStream (
-    storeStreamHandle hStrm);
+    storeStreamHandle hStrm
+) SAL_THROW_EXTERN_C();
 
 /** store_getStreamSize.
  *  @param  hStrm [in]
@@ -282,7 +302,8 @@ storeError SAL_CALL store_flushStream (
  */
 storeError SAL_CALL store_getStreamSize (
     storeStreamHandle  hStrm,
-    sal_uInt32        *pnSize);
+    sal_uInt32        *pnSize
+) SAL_THROW_EXTERN_C();
 
 /** store_setStreamSize.
  *  @param  hStrm [in]
@@ -291,7 +312,8 @@ storeError SAL_CALL store_getStreamSize (
  */
 storeError SAL_CALL store_setStreamSize (
     storeStreamHandle hStrm,
-    sal_uInt32        nSize);
+    sal_uInt32        nSize
+) SAL_THROW_EXTERN_C();
 
 /** store_attrib.
  *  @param  hFile [in]
@@ -308,7 +330,8 @@ storeError SAL_CALL store_attrib (
     rtl_uString    *pName,
     sal_uInt32      nMask1,
     sal_uInt32      nMask2,
-    sal_uInt32     *pnAttrib);
+    sal_uInt32     *pnAttrib
+) SAL_THROW_EXTERN_C();
 
 /** store_link.
  *  @param  hFile [in]
@@ -321,7 +344,8 @@ storeError SAL_CALL store_attrib (
 storeError SAL_CALL store_link (
     storeFileHandle hFile,
     rtl_uString *pSrcPath, rtl_uString *pSrcName,
-    rtl_uString *pDstPath, rtl_uString *pDstName);
+    rtl_uString *pDstPath, rtl_uString *pDstName
+) SAL_THROW_EXTERN_C();
 
 /** store_symlink.
  *  @param  hFile [in]
@@ -334,7 +358,8 @@ storeError SAL_CALL store_link (
 storeError SAL_CALL store_symlink (
     storeFileHandle hFile,
     rtl_uString *pSrcPath, rtl_uString *pSrcName,
-    rtl_uString *pDstPath, rtl_uString *pDstName);
+    rtl_uString *pDstPath, rtl_uString *pDstName
+) SAL_THROW_EXTERN_C();
 
 /** store_rename.
  *  @param  hFile [in]
@@ -347,7 +372,8 @@ storeError SAL_CALL store_symlink (
 storeError SAL_CALL store_rename (
     storeFileHandle hFile,
     rtl_uString *pSrcPath, rtl_uString *pSrcName,
-    rtl_uString *pDstPath, rtl_uString *pDstName);
+    rtl_uString *pDstPath, rtl_uString *pDstName
+) SAL_THROW_EXTERN_C();
 
 /** store_remove.
  *  @param  hFile [in]
@@ -358,7 +384,8 @@ storeError SAL_CALL store_rename (
 storeError SAL_CALL store_remove (
     storeFileHandle hFile,
     rtl_uString    *pPath,
-    rtl_uString    *pName);
+    rtl_uString    *pName
+) SAL_THROW_EXTERN_C();
 
 /*========================================================================
  *
