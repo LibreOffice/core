@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-27 07:32:36 $
+ *  last change: $Author: cmc $ $Date: 2002-11-18 14:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,7 +312,7 @@ inline const Font* SwNumRule::GetBulletFont( const SwNodeNum& rNum ) const
 
 
 SwNodeNum::SwNodeNum( BYTE nLevel, USHORT nSetVal )
-    : nMyLevel( nLevel ), nSetValue( nSetVal ), bStartNum( FALSE )
+    : nSetValue( nSetVal ), nMyLevel( nLevel ), bStartNum( FALSE )
 {
     memset( nLevelVal, 0, sizeof( nLevelVal ) );
 }
