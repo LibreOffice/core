@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.c,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mh $ $Date: 2002-04-09 18:09:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 14:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -867,7 +867,7 @@ static sal_Bool  _osl_getDomainName (sal_Char *buffer, sal_Int32 bufsiz)
 
             if (execvp ("/bin/domainname", argv) < 0)
             {
-                exit(-1);
+                _exit(-1);
             }
         }
         else if (pid > 0)
