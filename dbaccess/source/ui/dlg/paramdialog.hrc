@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-26 18:06:58 $
+ *  last change: $Author: fs $ $Date: 2001-06-07 15:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,16 +63,15 @@
 #define _DBAUI_PARAMDIALOG_HRC_
 
 #define LB_ALLPARAMS    1
-#define GB_PARAMS       2
-#define GB_DATA         3
+#define FL_PARAMS       2
+#define FT_VALUE        3
 #define ET_PARAM        4
 #define CB_NULLVAL      5
-#define FT_DELIM        6
-#define BT_TRAVELNEXT   7
-#define BT_OK           8
-#define BT_CANCEL       9
-#define AB_PREV         10
-#define AB_NEXT         11
+#define BT_TRAVELNEXT   6
+#define BT_OK           7
+#define BT_CANCEL       8
+#define AB_PREV         9
+#define AB_NEXT         10
 
 
 #define STR_COULD_NOT_CONVERT_PARAM 1
@@ -82,6 +81,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2000/10/26 18:06:58  fs
+ *  initial checkin - parameter dialog
+ *
  *
  *  Revision 1.0 26.10.00 15:15:22  fs
  ************************************************************************/

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-13 08:23:17 $
+ *  last change: $Author: fs $ $Date: 2001-06-07 15:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,12 +125,11 @@ namespace dbaui
     //------------------------------------------------------------------------------
     #define INIT_MEMBERS()                                          \
         :ModalDialog( pParent, ModuleRes(DLG_PARAMETERS))           \
-        ,m_aNamesFrame  (this, ResId(GB_PARAMS))                    \
+        ,m_aNamesFrame  (this, ResId(FL_PARAMS))                    \
         ,m_aAllParams   (this, ResId(LB_ALLPARAMS))                 \
-        ,m_aValueFrame  (this, ResId(GB_DATA))                      \
+        ,m_aValueFrame  (this, ResId(FT_VALUE))                     \
         ,m_aParam       (this, ResId(ET_PARAM))                     \
         ,m_aTravelNext  (this, ResId(BT_TRAVELNEXT))                \
-        ,m_aDelimiter   (this, ResId(FT_DELIM))                     \
         ,m_aOKBtn       (this, ResId(BT_OK))                        \
         ,m_aCancelBtn   (this, ResId(BT_CANCEL))                    \
         ,m_nCurrentlySelected(LISTBOX_ENTRY_NOTFOUND)               \
@@ -549,6 +548,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/13 08:23:17  oj
+ *  #84710# use stream operators instead of cast
+ *
  *  Revision 1.3  2001/02/14 14:34:01  oj
  *  tabledesign changes
  *

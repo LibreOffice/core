@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-30 19:57:50 $
+ *  last change: $Author: fs $ $Date: 2001-06-07 15:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,19 +66,24 @@
 #include "dbu_resource.hrc"
 #endif
 
+#define LIST_WIDTH      100
+#define LIST_HEIGHT     50
+#define BUTTON_WIDTH    50
+#define BUTTON_HEIGHT   14
+
 ModalDialog DLG_PARAMETERS
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 223 , 98 ) ;
+    Size = MAP_APPFONT ( 6 + LIST_WIDTH + 3 + 6 + BUTTON_WIDTH + 6, 98 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text = "Parameter-Eingabe" ;
 
-    GroupBox GB_PARAMS
+    FixedLine FL_PARAMS
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 95 , 62 ) ;
+        Pos = MAP_APPFONT ( 4 , 3 ) ;
+        Size = MAP_APPFONT ( 3 + LIST_WIDTH + 3 , 8 ) ;
         Text = "~Parameter";
         Text [ ENGLISH ] = "~Parameters";
         Text[ english_us ] = "~Parameters";
@@ -105,15 +110,15 @@ ModalDialog DLG_PARAMETERS
     };
     ListBox LB_ALLPARAMS
     {
-        Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 83 , 45 ) ;
+        Pos = MAP_APPFONT ( 7 , 12 ) ;
+        Size = MAP_APPFONT ( LIST_WIDTH , LIST_HEIGHT ) ;
         Border = TRUE;
         SVLook = TRUE;
     };
-    GroupBox GB_DATA
+    FixedText FT_VALUE
     {
-        Pos = MAP_APPFONT ( 107 , 3 ) ;
-        Size = MAP_APPFONT ( 110 , 30 ) ;
+        Pos = MAP_APPFONT ( 7 , 12 + LIST_HEIGHT + 4 ) ;
+        Size = MAP_APPFONT ( LIST_WIDTH , 8 ) ;
         Text = "~Wert";
         Text [ ENGLISH ] = "~Value";
         Text[ english_us ] = "~Value";
@@ -141,15 +146,14 @@ ModalDialog DLG_PARAMETERS
     Edit ET_PARAM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 113 , 15 ) ;
-        Size = MAP_APPFONT ( 98 , 12 ) ;
-        Text = "" ;
+        Pos = MAP_APPFONT ( 7 , 12 + LIST_HEIGHT + 4 + 8 + 3 ) ;
+        Size = MAP_APPFONT ( LIST_WIDTH , 12 ) ;
         TabStop = TRUE ;
     };
     PushButton BT_TRAVELNEXT
     {
-        Pos = MAP_APPFONT ( 167 , 51 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 4 + 3 + LIST_WIDTH + 3 + 6 , 12 + LIST_HEIGHT + 4 + 8 + 3 + ( 12 - BUTTON_HEIGHT ) / 2) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         Text = "~nächster";
         Text [english] = "~next";
         TabStop = TRUE ;
@@ -174,22 +178,17 @@ ModalDialog DLG_PARAMETERS
         Text[ catalan ] = "~siguiente";
         Text[ finnish ] = "~seuraava";
     };
-    FixedLine FT_DELIM
-    {
-        Pos = MAP_APPFONT ( 3 , 71 ) ;
-        Size = MAP_APPFONT ( 217, 2 ) ;
-    };
     OKButton BT_OK
     {
-        Pos = MAP_APPFONT ( 114 , 76 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 4 + 3 + LIST_WIDTH + 3 + 6 , 3 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BT_CANCEL
     {
-        Pos = MAP_APPFONT ( 167 , 76 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Pos = MAP_APPFONT ( 4 + 3 + LIST_WIDTH + 3 + 6 , 3 + BUTTON_HEIGHT + 3 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
     };
     Text [ ENGLISH ] = "Parameter input" ;
@@ -244,6 +243,9 @@ ModalDialog DLG_PARAMETERS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/05/30 19:57:50  kz
+ *  Merge SRC633: 30.05.01 - 21:56:52
+ *
  *  Revision 1.9  2001/05/16 15:48:13  kz
  *  Merge SRC632: 16.05.01 - 17:48:17 (NoBranch)
  *

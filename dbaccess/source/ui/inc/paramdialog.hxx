@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-27 08:07:40 $
+ *  last change: $Author: fs $ $Date: 2001-06-07 15:09:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,12 +117,11 @@ namespace dbaui
     {
     protected:
         // the controls
-        GroupBox        m_aNamesFrame;
+        FixedLine       m_aNamesFrame;
         ListBox         m_aAllParams;
-        GroupBox        m_aValueFrame;
+        FixedText       m_aValueFrame;
         Edit            m_aParam;
         PushButton      m_aTravelNext;
-        FixedLine       m_aDelimiter;
         OKButton        m_aOKBtn;
         CancelButton    m_aCancelBtn;
 
@@ -181,6 +180,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/27 08:07:40  fs
+ *  OSQLParser interface was changed - adjustments
+ *
  *  Revision 1.1  2000/10/26 18:08:45  fs
  *  initial checkin - parameter dialog
  *
