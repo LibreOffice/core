@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-09 15:11:43 $
+ *  last change: $Author: mav $ $Date: 2002-07-09 15:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,6 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
         }
 
         aReq.AppendItem(SfxStringItem( SID_FILTER_NAME, aFilter ));
-        aReq.AppendItem( SfxBoolItem( SID_TEMPLATE, sal_False ) );
         SFX_APP()->ExecuteSlot( aReq );
     }
 }
