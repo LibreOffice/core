@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-26 09:21:51 $
+ *  last change: $Author: cl $ $Date: 2001-06-28 12:45:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,6 +768,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                         pOutl->SetAsianCompressionMode( (UINT16)nCharCompressType );
                     }
                 }
+                break;
 
             }
             default:
