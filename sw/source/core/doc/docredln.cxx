@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-11 08:54:19 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 09:38:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,9 +519,12 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         else
                             pRedl->SetEnd( *pStt, pREnd );
                         break;
+                    default:
+                        break;
                     }
                     break;
-
+                default:
+                    break;
                 }
                 break;
 
@@ -622,6 +625,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
 
                             pRedlineTbl->DeleteAndDestroy( nToBeDeleted );
                         }
+                        break;
+                    default:
                         break;
                     }
                     break;
@@ -743,6 +748,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                     n = (USHORT)-1;     // neu Aufsetzen
                                 }
                             }
+                            break;
+                        default:
                             break;
                         }
 
@@ -867,6 +874,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                                 }
                             }
                             break;
+                        default:
+                            break;
                         }
 
                         // insert the pNew part (if it exists)
@@ -921,7 +930,11 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         else
                             pRedl->SetEnd( *pStt, pREnd );
                         break;
+                    default:
+                        break;
                     }
+                    break;
+                default:
                     break;
                 }
                 break;
@@ -960,9 +973,10 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         else
                             pNewRedl->SetEnd( *pRStt, pEnd );
                         break;
+                    default:
+                        break;
                     }
                     break;
-
                 case REDLINE_FORMAT:
                     switch( eCmpPos )
                     {
@@ -1046,7 +1060,11 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                             pRedlineTbl->DeleteAndDestroy( n-- );
                         }
                         break;
+                    default:
+                        break;
                     }
+                    break;
+                default:
                     break;
                 }
                 break;
@@ -1055,6 +1073,8 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
             case REDLINE_FMTCOLL:
                 // wie soll das verhalten sein????
                 // erstmal so einfuegen
+                break;
+            default:
                 break;
             }
         }
@@ -1303,6 +1323,8 @@ BOOL SwDoc::DeleteRedline( const SwPaM& rRange, BOOL bSaveInUndo,
         case POS_COLLIDE_END:
         case POS_BEFORE:
             n = pRedlineTbl->Count();
+            break;
+        default:
             break;
         }
 
@@ -2485,7 +2507,6 @@ BOOL SwRedlineTbl::InsertWithValidRanges( SwRedlinePtr& p, USHORT* pInsPos )
             GoEndSection( pNew->GetPoint() );
             if( *pNew->GetPoint() > *pEnd )
             {
-                BOOL bWeiter = TRUE;
                 pC = 0;
                 if( aNewStt.nNode != pEnd->nNode )
                     do {
@@ -2690,7 +2711,7 @@ int SwRedlineExtraData::operator == ( const SwRedlineExtraData& ) const
 SwRedlineExtraData_FmtColl::SwRedlineExtraData_FmtColl( const String& rColl,
                                                 USHORT nPoolFmtId,
                                                 const SfxItemSet* pItemSet )
-    : sFmtNm( rColl ), nPoolId( nPoolFmtId ), pSet( 0 )
+    : sFmtNm(rColl), pSet(0), nPoolId(nPoolFmtId)
 {
     if( pItemSet && pItemSet->Count() )
         pSet = new SfxItemSet( *pItemSet );
@@ -2822,26 +2843,26 @@ int SwRedlineExtraData_Format::operator == ( const SwRedlineExtraData& rCmp ) co
 /*  */
 
 SwRedlineData::SwRedlineData( SwRedlineType eT, USHORT nAut )
-    : eType( eT ), pNext( 0 ), nAuthor( nAut ), pExtraData( 0 ), nSeqNo( 0 )
+    : pNext( 0 ), pExtraData( 0 ), eType( eT ), nAuthor( nAut ), nSeqNo( 0 )
 {
     aStamp.SetSec( 0 );
     aStamp.Set100Sec( 0 );
 }
 
 SwRedlineData::SwRedlineData( const SwRedlineData& rCpy, BOOL bCpyNext )
-    : nAuthor( rCpy.nAuthor ), eType( rCpy.eType ), aStamp( rCpy.aStamp ),
-    sComment( rCpy.sComment ), nSeqNo( rCpy.nSeqNo ),
+    :
+    pNext( (bCpyNext && rCpy.pNext) ? new SwRedlineData( *rCpy.pNext ) : 0 ),
     pExtraData( rCpy.pExtraData ? rCpy.pExtraData->CreateNew() : 0 ),
-    pNext( (bCpyNext && rCpy.pNext) ? new SwRedlineData( *rCpy.pNext ) : 0 )
+    sComment( rCpy.sComment ), aStamp( rCpy.aStamp ), eType( rCpy.eType ),
+    nAuthor( rCpy.nAuthor ), nSeqNo( rCpy.nSeqNo )
 {
 }
 
     // fuer sw3io: pNext geht in eigenen Besitz ueber!
-SwRedlineData::SwRedlineData( SwRedlineType eT, USHORT nAut, const DateTime& rDT,
-                   const String& rCmnt, SwRedlineData *pNxt,
-                   SwRedlineExtraData* pData )
-    : eType( eT ), pNext( pNxt ), nAuthor( nAut ), aStamp( rDT ),
-      sComment( rCmnt ), pExtraData( pData ), nSeqNo( 0 )
+SwRedlineData::SwRedlineData(SwRedlineType eT, USHORT nAut, const DateTime& rDT,
+    const String& rCmnt, SwRedlineData *pNxt, SwRedlineExtraData* pData)
+    : pNext(pNxt), pExtraData(pData), sComment(rCmnt), aStamp(rDT),
+    eType(eT), nAuthor(nAut), nSeqNo(0)
 {
 }
 
@@ -2877,8 +2898,8 @@ String SwRedlineData::GetDescr() const
 
 SwRedline::SwRedline( SwRedlineType eTyp, const SwPaM& rPam )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
-    pCntntSect( 0 ),
-    pRedlineData( new SwRedlineData( eTyp, GetDoc()->GetRedlineAuthor() ) )
+    pRedlineData( new SwRedlineData( eTyp, GetDoc()->GetRedlineAuthor() ) ),
+    pCntntSect( 0 )
 {
     bDelLastPara = bIsLastParaDelete = FALSE;
     bIsVisible = TRUE;
@@ -2888,8 +2909,8 @@ SwRedline::SwRedline( SwRedlineType eTyp, const SwPaM& rPam )
 
 SwRedline::SwRedline( SwRedlineType eTyp, const SwPosition& rPos )
     : SwPaM( rPos ),
-    pCntntSect( 0 ),
-    pRedlineData( new SwRedlineData( eTyp, GetDoc()->GetRedlineAuthor() ) )
+    pRedlineData( new SwRedlineData( eTyp, GetDoc()->GetRedlineAuthor() ) ),
+    pCntntSect( 0 )
 {
     bDelLastPara = bIsLastParaDelete = FALSE;
     bIsVisible = TRUE;
@@ -2897,8 +2918,8 @@ SwRedline::SwRedline( SwRedlineType eTyp, const SwPosition& rPos )
 
 SwRedline::SwRedline( const SwRedlineData& rData, const SwPaM& rPam )
     : SwPaM( *rPam.GetMark(), *rPam.GetPoint() ),
-    pCntntSect( 0 ),
-    pRedlineData( new SwRedlineData( rData ))
+    pRedlineData( new SwRedlineData( rData )),
+    pCntntSect( 0 )
 {
     bDelLastPara = bIsLastParaDelete = FALSE;
     bIsVisible = TRUE;
@@ -2908,8 +2929,8 @@ SwRedline::SwRedline( const SwRedlineData& rData, const SwPaM& rPam )
 
 SwRedline::SwRedline( const SwRedlineData& rData, const SwPosition& rPos )
     : SwPaM( rPos ),
-    pCntntSect( 0 ),
-    pRedlineData( new SwRedlineData( rData ))
+    pRedlineData( new SwRedlineData( rData )),
+    pCntntSect( 0 )
 {
     bDelLastPara = bIsLastParaDelete = FALSE;
     bIsVisible = TRUE;
@@ -2917,8 +2938,8 @@ SwRedline::SwRedline( const SwRedlineData& rData, const SwPosition& rPos )
 
 SwRedline::SwRedline( const SwRedline& rCpy )
     : SwPaM( *rCpy.GetMark(), *rCpy.GetPoint() ),
-    pCntntSect( 0 ),
-    pRedlineData( new SwRedlineData( *rCpy.pRedlineData ))
+    pRedlineData( new SwRedlineData( *rCpy.pRedlineData )),
+    pCntntSect( 0 )
 {
     bDelLastPara = bIsLastParaDelete = FALSE;
     bIsVisible = TRUE;
@@ -2997,6 +3018,8 @@ void SwRedline::Show( USHORT nLoop )
         case REDLINE_TABLE:             // TabellenStruktur wurde veraendert
             InvalidateRange();
             break;
+        default:
+            break;
         }
         pDoc->SetRedlineMode_intern( eOld );
         pDoc->DoUndo( bUndo );
@@ -3033,6 +3056,8 @@ void SwRedline::Hide( USHORT nLoop )
     case REDLINE_TABLE:             // TabellenStruktur wurde veraendert
         if( 1 <= nLoop )
             InvalidateRange();
+        break;
+    default:
         break;
     }
     pDoc->SetRedlineMode_intern( eOld );
@@ -3075,6 +3100,8 @@ void SwRedline::ShowOriginal( USHORT nLoop )
     case REDLINE_TABLE:             // TabellenStruktur wurde veraendert
         if( 1 <= nLoop )
             InvalidateRange();
+        break;
+    default:
         break;
     }
     pDoc->SetRedlineMode_intern( eOld );
@@ -3157,8 +3184,6 @@ void SwRedline::MoveToSection()
         SwPaM aPam( *pStt, *pEnd );
         SwCntntNode* pCSttNd = pStt->nNode.GetNode().GetCntntNode();
         SwCntntNode* pCEndNd = pEnd->nNode.GetNode().GetCntntNode();
-
-        BOOL bNoLastPara = FALSE;
 
         if( !pCSttNd )
         {
@@ -3299,16 +3324,6 @@ void SwRedline::CopyToSection()
     }
 }
 
-static bool lcl_PamIsFullPara(const SwPaM & rPam)
-{
-    const SwPosition* pStt = rPam.Start(),
-        * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark() :
-        rPam.GetPoint();
-
-    return pStt->nNode != pEnd->nNode && pStt->nContent.GetIndex() == 0 &&
-        pEnd->nContent.GetIndex() == 0;
-}
-
 void SwRedline::DelCopyOfSection()
 {
     if( pCntntSect )
@@ -3336,7 +3351,6 @@ void SwRedline::DelCopyOfSection()
             }
         }
 
-        SwNodes& rNds = pDoc->GetNodes();
         if( pCSttNd && pCEndNd )
             pDoc->DeleteAndJoin( aPam );
         else if( pCSttNd || pCEndNd )
@@ -3440,7 +3454,6 @@ void SwRedline::MoveFromSection()
         }
 
         {
-            BOOL bAddFlag = TRUE;
             SwPaM aPam( pCntntSect->GetNode(),
                         *pCntntSect->GetNode().EndOfSectionNode(), 1,
                         ( bDelLastPara ? -2 : -1 ) );
