@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-20 11:06:11 $
+ *  last change: $Author: fs $ $Date: 2002-10-09 08:53:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,6 @@ namespace dbaui
     class OTableController : public OTableController_BASE
     {
     private:
-        SfxUndoManager  m_aUndoManager;
         ::std::vector<OTableRow*>   m_vRowList;
         OTypeInfoMap                m_aTypeInfo;
         ::std::vector<OTypeInfoMap::iterator> m_aTypeInfoIndex;
