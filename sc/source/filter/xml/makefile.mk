@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: sab $ $Date: 2002-09-24 16:06:17 $
+#   last change: $Author: hr $ $Date: 2004-09-08 15:52:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -180,6 +180,9 @@ SLOFILES =  \
         $(SLO)$/XMLExportSharedData.obj \
         $(SLO)$/XMLEmptyContext.obj
 
+
+NOOPTFILES= \
+        $(SLO)$/xmlcvali.obj
 
 # --- Tagets -------------------------------------------------------
 
