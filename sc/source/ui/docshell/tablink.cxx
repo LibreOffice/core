@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 18:57:46 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef WNT
 #pragma optimize("",off)
 #endif
@@ -502,7 +501,7 @@ ScDocumentLoader::ScDocumentLoader( const String& rFileName,
             pExtDocOpt = new ScExtDocOptions;
             pDoc->SetExtDocOptions( pExtDocOpt );
         }
-        pExtDocOpt->nLinkCnt = nRekCnt;
+        pExtDocOpt->GetDocSettings().mnLinkCnt = nRekCnt;
     }
 
     pDocShell->DoLoad( pMedium );
