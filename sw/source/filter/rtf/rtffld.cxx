@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 07:43:24 $
+ *  last change: $Author: jp $ $Date: 2001-11-28 20:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,17 +189,17 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
         const sal_Char* pFldNm;
     };
     __READONLY_DATA _Dummy_RTF_FLD_TYPES aFldNmArr[ RTFFLD_EQ+1 ] = {
-            RTFFLD_TOC,         sTOC,
-            RTFFLD_IMPORT,      sIMPORT,
-            RTFFLD_INDEX,       sINDEX,
-            RTFFLD_SYMBOL,      sSYMBOL,
-            RTFFLD_PAGE,        sPAGE,
-            RTFFLD_DATE,        sDATE,
-            RTFFLD_DATA,        sDATA,
-            RTFFLD_MERGEFLD,    sMERGEFLD,
-            RTFFLD_IMPORT,      sIMPORT2,
-            RTFFLD_HYPERLINK,   sHYPERLINK,
-            RTFFLD_EQ,          sEQ
+            {RTFFLD_TOC,         sTOC},
+            {RTFFLD_IMPORT,      sIMPORT},
+            {RTFFLD_INDEX,       sINDEX},
+            {RTFFLD_SYMBOL,      sSYMBOL},
+            {RTFFLD_PAGE,        sPAGE},
+            {RTFFLD_DATE,        sDATE},
+            {RTFFLD_DATA,        sDATA},
+            {RTFFLD_MERGEFLD,    sMERGEFLD},
+            {RTFFLD_IMPORT,      sIMPORT2},
+            {RTFFLD_HYPERLINK,   sHYPERLINK},
+            {RTFFLD_EQ,          sEQ}
     };
 
 
