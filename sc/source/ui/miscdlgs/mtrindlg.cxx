@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mtrindlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-19 08:47:51 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:37:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#undef SC_DLLIMPLEMENTATION
 
 #ifdef PCH
 #include "ui_pch.hxx"
