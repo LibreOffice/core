@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gloslst.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:16:26 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,8 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
     Text[ hindi ] = "स्वचालित टेक्स्ट् चुनो: ";
     Text[ slovak ] = "Vybrať automatický text:";
 };
+
+
 
 
 
