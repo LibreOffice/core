@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-06 12:43:52 $
+ *  last change: $Author: sj $ $Date: 2002-07-25 11:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( SvInPlaceObject& rObj,
     }
     else
     {
-        rDestStg.SetVersion( SOFFICE_FILEFORMAT_31 );
+        rDestStg.SetVersion( SOFFICE_FILEFORMAT_50 );
         rObj.DoSaveAs( &rDestStg );
         rObj.DoSaveCompleted();
     }
