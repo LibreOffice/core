@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-29 10:43:50 $
+ *  last change: $Author: ama $ $Date: 2001-08-30 08:48:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,16 +158,29 @@ void SwBodyFrm::Format( const SwBorderAttrs *pAttrs )
     if ( !bValidSize )
     {
         SwTwips nHeight = GetUpper()->Prt().Height();
+        SwTwips nWidth = GetUpper()->Prt().Width();
         const SwFrm *pFrm = GetUpper()->Lower();
         do
-        {   if ( pFrm != this )
-                nHeight -= pFrm->Frm().Height();
+        {
+            if ( pFrm != this )
+            {
+#ifdef VERTICAL_LAYOUT
+                if( pFrm->IsVertical() )
+                    nWidth -= pFrm->Frm().Width();
+                else
+#endif
+                    nHeight -= pFrm->Frm().Height();
+            }
             pFrm = pFrm->GetNext();
         } while ( pFrm );
         if ( nHeight < 0 )
             nHeight = 0;
         Frm().Height( nHeight );
-        Frm().Width( GetUpper()->Prt().Width() );
+#ifdef VERTICAL_LAYOUT
+        if( IsVertical() && nWidth != Frm().Width() )
+            Frm().Pos().X() += Frm().Width() - nWidth;
+#endif
+        Frm().Width( nWidth );
     }
 
     Prt().Pos().X() = Prt().Pos().Y() = 0;

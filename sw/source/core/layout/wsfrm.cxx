@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-29 13:21:52 $
+ *  last change: $Author: ama $ $Date: 2001-08-30 08:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2410,6 +2410,12 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
     const BOOL bHeightChgd = rOldSize.Height() != Prt().Height();
     const BOOL bWidthChgd  = rOldSize.Width()  != Prt().Width();
 
+#ifdef VERTICAL_LAYOUT
+    const SzPtr pVar = ( bVarHeight == IsVertical() ) ? pWidth : pHeight;
+#else
+    const SzPtr pVar = pVARSIZE;
+#endif
+
     //Abkuerzung fuer Body-Inhalt
     if( IsBodyFrm() && IsInDocBody() && !Lower()->IsColumnFrm() && !bWidthChgd
         && ( !IsInSct() || !FindSctFrm()->IsColLocked() ) )
@@ -2441,7 +2447,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         {
             if ( pFrm->IsInTab() )
                 pFrm = pFrm->FindTabFrm();
-            if ( rOldSize.Height() < Prt().Height() )
+            if ( rOldSize.*pVar < Prt().SSize().*pVar )
             {
                 //Wenn der Body gewachsen ist, genuegt es den auf den letzten
                 //und den darauf folgenden geeignet zu invalidieren.
@@ -2467,6 +2473,28 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                 //Anderfalls werden alle herausragenden in ihrer Position
                 //invalidiert und nur der letzte noch (teilweise) passende
                 //Adjustiert.
+#ifdef VERTICAL_LAYOUT
+                if( IsVertical() )
+                {
+                    SwTwips nBot = Frm().Left() + Prt().Left();
+                    while ( pFrm->GetPrev() && pFrm->Frm().Left() < nBot )
+                    {
+                        pFrm->_InvalidateAll();
+                        pFrm->InvalidatePage( pPage );
+                        pFrm = pFrm->GetPrev();
+                    }
+                }
+                else
+                {
+                    SwTwips nBot = Frm().Top() + Prt().Bottom();
+                    while ( pFrm->GetPrev() && pFrm->Frm().Top() > nBot )
+                    {
+                        pFrm->_InvalidateAll();
+                        pFrm->InvalidatePage( pPage );
+                        pFrm = pFrm->GetPrev();
+                    }
+                }
+#else
                 SwTwips nBot = Frm().Top() + Prt().Bottom();
                 while ( pFrm->GetPrev() && pFrm->Frm().Top() > nBot )
                 {
@@ -2474,6 +2502,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                     pFrm->InvalidatePage( pPage );
                     pFrm = pFrm->GetPrev();
                 }
+#endif
                 if ( pFrm )
                 {
                     pFrm->_InvalidateSize();
@@ -2496,7 +2525,11 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
     }
 
     BOOL  bFixChgd, bVarChgd;
+#ifdef VERTICAL_LAYOUT
+    if ( pFrm->bVarHeight != pFrm->IsVertical() )
+#else
     if ( pFrm->bVarHeight )
+#endif
     {
         bFixChgd = bWidthChgd;
         bVarChgd = bHeightChgd;
@@ -2524,7 +2557,11 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
             //Neue Breite
             if ( bWidthChgd )
             {
+#ifdef VERTICAL_LAYOUT
+                if ( pFrm->bVarHeight != pFrm->IsVertical() )
+#else
                 if ( pFrm->bVarHeight )
+#endif
                     pFrm->Frm().Width( Prt().Width() );
                 else if ( (pFrm->GetType() & FRM_COLUMN) && rOldSize.Width() )
                     pFrm->Frm().Width( (pFrm->Frm().Width() * Prt().Width()) /
@@ -2533,7 +2570,11 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
             //Neue Hoehe
             if ( bHeightChgd )
             {
+#ifdef VERTICAL_LAYOUT
+                if ( pFrm->bVarHeight != pFrm->IsVertical() )
+#else
                 if ( !pFrm->bVarHeight )
+#endif
                     pFrm->Frm().Height( Prt().Height() );
                 else if ( (pFrm->GetType() & FRM_COLUMN) && rOldSize.Height() )
                     pFrm->Frm().Height( (pFrm->Frm().Height() * Prt().Height()) /

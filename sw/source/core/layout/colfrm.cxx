@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colfrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-29 13:23:19 $
+ *  last change: $Author: ama $ $Date: 2001-08-30 08:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,33 +441,62 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
             SvxLRSpaceItem aLR( pSet->GetLRSpace() );
             SvxULSpaceItem aUL( pSet->GetULSpace() );
 
+#ifdef VERTICAL_LAYOUT
+            if( IsVertical() )
+            {
+                if ( bLine )
+                {
+                    if ( i == 0 )
+                    {   aUL.SetUpper( pC->GetLeft() );
+                        aUL.SetLower( Max(pC->GetRight(), nMin) );
+                    }
+                    else if ( i == (pAttr->GetNumCols() - 1) )
+                    {   aUL.SetUpper( Max(pC->GetLeft(), nMin) );
+                        aUL.SetLower( pC->GetRight() );
+                    }
+                    else
+                    {   aUL.SetUpper( Max(pC->GetLeft(), nMin) );
+                        aUL.SetLower( Max(pC->GetRight(), nMin) );
+                    }
+                }
+                else
+                {
+                    aUL.SetUpper( pC->GetLeft() );
+                    aUL.SetLower( pC->GetRight());
+                }
+                aLR.SetLeft ( pC->GetUpper() );
+                aLR.SetRight( pC->GetLower() );
+            }
+            else
+#endif
+            {
             //Damit die Trennlinien Platz finden, muessen sie hier
             //Beruecksichtigung finden. Ueberall wo zwei Spalten aufeinanderstossen
             //wird jeweils rechts bzw. links ein Sicherheitsabstand von 20 plus
             //der halben Penbreite einkalkuliert.
-            if ( bLine )
-            {
-                if ( i == 0 )
-                {   aLR.SetLeft ( pC->GetLeft() );
-                    aLR.SetRight( Max(pC->GetRight(), nMin) );
-                }
-                else if ( i == (pAttr->GetNumCols() - 1) )
-                {   aLR.SetLeft ( Max(pC->GetLeft(), nMin) );
-                    aLR.SetRight( pC->GetRight() );
+                if ( bLine )
+                {
+                    if ( i == 0 )
+                    {   aLR.SetLeft ( pC->GetLeft() );
+                        aLR.SetRight( Max(pC->GetRight(), nMin) );
+                    }
+                    else if ( i == (pAttr->GetNumCols() - 1) )
+                    {   aLR.SetLeft ( Max(pC->GetLeft(), nMin) );
+                        aLR.SetRight( pC->GetRight() );
+                    }
+                    else
+                    {   aLR.SetLeft ( Max(pC->GetLeft(),  nMin) );
+                        aLR.SetRight( Max(pC->GetRight(), nMin) );
+                    }
                 }
                 else
-                {   aLR.SetLeft ( Max(pC->GetLeft(),  nMin) );
-                    aLR.SetRight( Max(pC->GetRight(), nMin) );
+                {
+                    aLR.SetLeft ( pC->GetLeft() );
+                    aLR.SetRight( pC->GetRight());
                 }
+                aUL.SetUpper( pC->GetUpper());
+                aUL.SetLower( pC->GetLower());
             }
-            else
-            {
-                aLR.SetLeft ( pC->GetLeft() );
-                aLR.SetRight( pC->GetRight());
-            }
-            aUL.SetUpper( pC->GetUpper());
-            aUL.SetLower( pC->GetLower());
-
             ((SwLayoutFrm*)pCol)->GetFmt()->SetAttr( aLR );
             ((SwLayoutFrm*)pCol)->GetFmt()->SetAttr( aUL );
         }

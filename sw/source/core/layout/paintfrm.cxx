@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-25 12:01:33 $
+ *  last change: $Author: ama $ $Date: 2001-08-30 08:49:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2506,6 +2506,13 @@ void SwFtnContFrm::PaintLine( const SwRect& rRect,
 |*
 |*************************************************************************/
 
+#ifdef VERTICAL_LAYOUT
+#define V_WIDTH SSize().*pDir1Sz
+#define V_HEIGHT SSize().*pDir2Sz
+#define V_X Pos().*pDir1Pt
+#define V_Y Pos().*pDir2Pt
+#endif
+
 void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
                                  const SwPageFrm *pPage ) const
 {
@@ -2513,6 +2520,64 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
     if ( !pCol || !pCol->IsColumnFrm() )
         return;
 
+#ifdef VERTICAL_LAYOUT
+    PtPtr pDir1Pt, pDir2Pt;
+    SzPtr pDir1Sz, pDir2Sz;
+    const FASTBOOL bVert = pCol->IsVertical();
+    if( bVert )
+    {
+        pDir1Pt = pY;
+        pDir2Pt = pX;
+        pDir1Sz = pHeight;
+        pDir2Sz = pWidth;
+    }
+    else
+    {
+        pDir1Pt = pX;
+        pDir2Pt = pY;
+        pDir1Sz = pWidth;
+        pDir2Sz = pHeight;
+    }
+
+    const SwTwips nHeight = Prt().V_HEIGHT * rFmtCol.GetLineHeight() / 100;
+
+    SwTwips nY = Frm().V_Y + Prt().V_Y;
+    switch ( rFmtCol.GetLineAdj() )
+    {
+        case COLADJ_CENTER:
+            nY += Prt().V_HEIGHT / 2 - nHeight / 2; break;
+        case COLADJ_BOTTOM:
+            if( !bVert )
+                nY = nY + Prt().V_HEIGHT - nHeight;
+            break;
+        case COLADJ_TOP:
+            if( bVert )
+                nY = nY + Prt().V_HEIGHT - nHeight;
+            break;
+        default:
+            ASSERT( !this, "Neues Adjustment fuer Spaltenlinie?" );
+    }
+
+    const Size aSz = bVert ? Size( nHeight, rFmtCol.GetLineWidth() ) :
+                             Size( rFmtCol.GetLineWidth(), nHeight );
+    const SwTwips nPenHalf = rFmtCol.GetLineWidth() / 2;
+
+    //Damit uns nichts verlorengeht muessen wir hier etwas grosszuegiger sein.
+    SwRect aRect( rRect );
+    aRect.V_X -= rFmtCol.GetLineWidth() + nPixelSzW;
+    aRect.V_WIDTH += 2 * rFmtCol.GetLineWidth() + nPixelSzW;
+
+    while ( pCol->GetNext() )
+    {
+        const SwRect aLineRect( bVert ?
+                Point( nY, pCol->Frm().Bottom() - nPenHalf ) :
+                Point( pCol->Frm().Right() - nPenHalf, nY ),
+                aSz );
+        if ( aRect.IsOver( aLineRect ) )
+            PaintBorderLine( aRect, aLineRect , pPage, &rFmtCol.GetLineColor());
+        pCol = pCol->GetNext();
+    }
+#else
     //Laenge der Linie ergibt sich aus der prozentualen Angabe im Attribut.
     //Die Position ist ebenfalls im Attribut angegeben.
     //Der Pen steht direkt im Attribut.
@@ -2548,6 +2613,7 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
             PaintBorderLine( aRect, aLineRect , pPage, &rFmtCol.GetLineColor() );
         pCol = pCol->GetNext();
     }
+#endif
 }
 
 /*************************************************************************
