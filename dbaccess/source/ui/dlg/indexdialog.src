@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-28 13:33:12 $
+ *  last change: $Author: kz $ $Date: 2002-06-13 12:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,7 @@ ModalDialog DLG_INDEXDESIGN
     Text[ portuguese_brazilian ] = "Indexes";
     Text[ japanese ] = "インデックス";
     Text[ korean ] = "색인";
-    Text[ chinese_simplified ] = "索引";
+    Text[ chinese_simplified ] = "标志";
     Text[ chinese_traditional ] = "索引";
     Text[ turkish ] = "Indexes";
     Text[ arabic ] = "�����";
@@ -852,6 +852,9 @@ String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2002/05/28 13:33:12  oj
+ *  #99607# set maskcolor to magenta
+ *
  *  Revision 1.24  2002/05/02 23:06:11  kz
  *  Merge SRX642: 03.05.02 - 01:05:08
  *
