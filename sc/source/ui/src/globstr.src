@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:06:36 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2694,7 +2694,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Search key not found." ;
         Text [ italian ] = "Termine non trovato" ;
         Text [ spanish ] = "No se encontrÛ la expresiÛn buscada." ;
-        Text [ french ] = "…lÈment recherchÈ introuvable." ;
+        Text [ french ] = "Terme recherchÈ introuvable !" ;
         Text [ dutch ] = "Zoekbegrip niet gevonden" ;
         Text [ swedish ] = "Sˆkord hittades inte." ;
         Text [ danish ] = "S¯gningen gav intet resultat." ;
@@ -6158,7 +6158,7 @@ Resource RID_GLOBSTR
         Text [ norwegian ] = " (required)" ;
         Text [ italian ] = "(richiesto)" ;
         Text [ portuguese_brazilian ] = "(exigido)" ;
-        Text [ portuguese ] = "(exigido)" ;
+        Text [ portuguese ] = "(necess·rio)" ;
         Text [ finnish ] = " (pakollinen)" ;
         Text [ danish ] = "(obligatorisk)" ;
         Text [ french ] = "(requis)" ;
@@ -6537,7 +6537,7 @@ Resource RID_GLOBSTR
         Text [ portuguese_brazilian ] = "Standard" ;
         Text[ chinese_simplified ] = "±Í◊º";
         Text[ russian ] = "—Ú‡Ì‰‡Ú";
-        Text[ polish ] = "Standard";
+        Text[ polish ] = "Domyúlnie";
         Text[ japanese ] = "ïWèÄ";
         Text[ chinese_traditional ] = "º–∑«";
         Text[ arabic ] = "«› —«÷Ì";
