@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-10 16:15:08 $
+ *  last change: $Author: thb $ $Date: 2002-10-24 17:21:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1543,4 +1543,31 @@ void GraphicManager::ImplDraw( OutputDevice* pOut, const Point& rPt, const Size&
     ( (GDIMetaFile&) rMtf ).WindStart();
 
     pOut->Pop();
+}
+
+// -----------------------------------------------------------------------------
+
+BOOL GraphicObject::ImplDrawTiled( OutputDevice& rOut, const Point& rPos,
+                                   int nNumTilesX, int nNumTilesY,
+                                   const Size& rTileSize, const GraphicAttr* pAttr, ULONG nFlags )
+{
+    Point   aCurrPos( rPos );
+    int     nX, nY;
+
+    for( nY=0; nY < nNumTilesY; ++nY )
+    {
+        aCurrPos.X() = rPos.X();
+
+        for( nX=0; nX < nNumTilesX; ++nX )
+        {
+            if( !Draw( &rOut, rOut.PixelToLogic( aCurrPos ), rOut.PixelToLogic( rTileSize ), pAttr, nFlags ) )
+                return FALSE;
+
+            aCurrPos.X() += rTileSize.Width();
+        }
+
+        aCurrPos.Y() += rTileSize.Height();
+    }
+
+    return TRUE;
 }

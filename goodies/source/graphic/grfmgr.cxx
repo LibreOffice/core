@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 10:00:27 $
+ *  last change: $Author: thb $ $Date: 2002-10-24 17:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,6 +723,96 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     pOut->SetDrawMode( nOldDrawMode );
 
     return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+BOOL GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
+                               const Size& rOffset, const GraphicAttr* pAttr, ULONG nFlags )
+{
+    enum { MaxTileCacheSize1D=100 };
+
+    if( pOut == NULL )
+        return FALSE;
+
+    const MapMode   aOutMapMode( pOut->GetMapMode() );
+    const MapMode   aMapMode( aOutMapMode.GetMapUnit(), Point(), aOutMapMode.GetScaleX(), aOutMapMode.GetScaleY() );
+    const Size      aOutTileSize( pOut->LogicToPixel( rSize, aOutMapMode ) );
+
+    if( GetGraphic().GetType() == GRAPHIC_BITMAP &&
+        aOutTileSize.Width() * aOutTileSize.Height() < MaxTileCacheSize1D*MaxTileCacheSize1D )
+    {
+        // First combine very small bitmaps into a larger tile
+        // ===================================================
+
+        VirtualDevice   aVDev;
+        int             nNumTilesInCacheX( (MaxTileCacheSize1D + aOutTileSize.Width()-1) / aOutTileSize.Width() );
+        int             nNumTilesInCacheY( (MaxTileCacheSize1D + aOutTileSize.Height()-1) / aOutTileSize.Height() );
+
+        aVDev.SetOutputSizePixel( Size( nNumTilesInCacheX*aOutTileSize.Width(), nNumTilesInCacheY*aOutTileSize.Height() ) );
+        aVDev.SetMapMode( aMapMode );
+
+        // draw bitmap content
+        if( !ImplDrawTiled( aVDev, Point(0,0), nNumTilesInCacheX, nNumTilesInCacheY, aOutTileSize, pAttr, nFlags ) )
+            return FALSE;
+
+        BitmapEx aTileBitmap( aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ) );
+
+        // draw alpha content, if any
+        if( IsTransparent() )
+        {
+            GraphicObject aAlphaGraphic;
+
+            if( GetGraphic().IsAlpha() )
+                aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetAlpha().GetBitmap() );
+            else
+                aAlphaGraphic.SetGraphic( GetGraphic().GetBitmapEx().GetMask() );
+
+            if( !aAlphaGraphic.ImplDrawTiled( aVDev, Point(0,0), nNumTilesInCacheX, nNumTilesInCacheY, aOutTileSize, pAttr, nFlags ) )
+                return FALSE;
+
+            // Combine bitmap and alpha/mask
+            if( GetGraphic().IsAlpha() )
+                aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
+                                        AlphaMask( aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ) ) );
+            else
+                aTileBitmap = BitmapEx( aTileBitmap.GetBitmap(),
+                                        aVDev.GetBitmap( Point(0,0), aVDev.GetOutputSize() ).CreateMask( Color(COL_WHITE) ) );
+        }
+
+        // paint generated tile
+        GraphicObject aTmpGraphic( aTileBitmap );
+        if( !aTmpGraphic.DrawTiled( pOut, rArea,
+                                    Size( rSize.Width()*nNumTilesInCacheX,
+                                          rSize.Height()*nNumTilesInCacheY ),
+                                    rOffset, pAttr, nFlags ) )
+            return FALSE;
+
+        return TRUE;
+    }
+    else
+    {
+        // normalize offset to at utmost tileSize
+        Size aOffset( rOffset.Width() % rSize.Width(),
+                      rOffset.Height() % rSize.Height() );
+
+        // normalize offset to positive values
+        if( aOffset.Width() < 0 )
+            aOffset.Width() = rSize.Width() + aOffset.Width();
+        if( aOffset.Height() < 0 )
+            aOffset.Height() = rSize.Height() + aOffset.Height();
+
+        const Size      aOutOffset( pOut->LogicToPixel( aOffset, aOutMapMode ) );
+        const Rectangle aOutArea( pOut->LogicToPixel( rArea, aOutMapMode ) );
+
+        // Paint all tiles
+        // ===============
+        return ImplDrawTiled( *pOut, Point( aOutArea.Left() - aOutOffset.Width(),
+                                            aOutArea.Top() - aOutOffset.Height() ),
+                              (aOutArea.GetWidth() + 2*aOutOffset.Width() + aOutTileSize.Width() - 1) / aOutTileSize.Width(),
+                              (aOutArea.GetHeight() + 2*aOutOffset.Height() + aOutTileSize.Height() - 1) / aOutTileSize.Height(),
+                              aOutTileSize, pAttr, nFlags );
+    }
 }
 
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-01 09:59:46 $
+ *  last change: $Author: thb $ $Date: 2002-10-24 17:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,6 +263,11 @@ private:
     BOOL                    ImplGetCropParams( OutputDevice* pOut, Point& rPt, Size& rSz, const GraphicAttr* pAttr,
                                                PolyPolygon& rClipPolyPoly, BOOL& bRectClipRegion ) const;
 
+    BOOL                    ImplDrawTiled( OutputDevice& rOut, const Point& rPos,
+                                           int nNumTilesX, int nNumTilesY,
+                                           const Size& rTileSize,
+                                           const GraphicAttr* pAttr, ULONG nFlags );
+
                             DECL_LINK( ImplAutoSwapOutHdl, void* );
 
 #endif // _SOLAR__PRIVATE
@@ -358,6 +363,34 @@ public:
 
     BOOL                    Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
                                   const GraphicAttr* pAttr = NULL, ULONG nFlags = GRFMGR_DRAW_STANDARD );
+
+    /** Draw the graphic repeatedly into the given output rectangle
+
+        @param pOut
+        OutputDevice where the rendering should take place
+
+        @param rArea
+        The output area that is filled with tiled instances of this graphic
+
+        @param rSize
+        The actual size of a single tile
+
+        @param rOffset
+        Offset from the left, top position of rArea, where to start
+        the tiling. The upper left corner of the graphic tilings will
+        virtually start at this position. Concretely, only that many
+        tiles are drawn to completely fill the given output area.
+
+        @param pAttr
+        Optional GraphicAttr
+
+        @param nFlags
+        Optional rendering flags
+
+        @return TRUE, if drawing completed successfully
+     */
+    BOOL                    DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
+                                       const Size& rOffset, const GraphicAttr* pAttr = NULL, ULONG nFlags = GRFMGR_DRAW_STANDARD );
 
     BOOL                    StartAnimation( OutputDevice* pOut, const Point& rPt, const Size& rSz, long nExtraData = 0L,
                                             const GraphicAttr* pAttr = NULL, ULONG nFlags = GRFMGR_DRAW_STANDARD,
