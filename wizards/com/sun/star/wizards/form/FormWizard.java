@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormWizard.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $  $Date: 2004-11-26 20:43:08 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 13:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,8 @@ package com.sun.star.wizards.form;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sdb.CommandType;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.document.OfficeDocument;
@@ -83,7 +85,6 @@ public class FormWizard extends WizardDialog{
 
     String sShowBinaryFields = "";
     String sMsgWizardName = "";
-
 
     public static final int SONULLPAGE = 0;
     public static final int SOMAINPAGE = 1;
@@ -189,7 +190,7 @@ public class FormWizard extends WizardDialog{
 
 
     public static void main(String args[]) {
-    String ConnectStr = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";      //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
+    String ConnectStr = "uno:socket,host=localhost,port=8111;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";      //localhost  ;Lo-1.Germany.sun.com; 10.16.65.155
     PropertyValue[] curproperties = null;
     try {
         XMultiServiceFactory xLocMSF = com.sun.star.wizards.common.Desktop.connect(ConnectStr);
@@ -197,8 +198,7 @@ public class FormWizard extends WizardDialog{
         if(xLocMSF != null){
             System.out.println("Connected to "+ ConnectStr);
             curproperties = new PropertyValue[1];
-            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/New Database16.odb"); //baseLocation ); "DataSourceName", "db1");
-//          curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774/New Database21.odb"); //baseLocation ); "DataSourceName", "db1");
+            curproperties[0] = Properties.createProperty("DatabaseLocation", "file:///C:/Documents and Settings/bc93774.EHAM02-DEV/My Documents/MyDocAssign.odb"); //Mydbwizard2DocAssign.odb; MyDBase.odb, Mydbwizard2DocAssign.odb MyDBase.odb; Mydbwizard2DocAssign.odb; NewAccessDatabase, MyDocAssign baseLocation ); "DataSourceName", "db1");
             CurFormWizard.startFormWizard(xLocMSF, curproperties);
         }
     }
@@ -252,7 +252,7 @@ public class FormWizard extends WizardDialog{
 
     public void finishWizard(){
         int ncurStep = getCurrentStep();
-        if ((switchToStep(ncurStep, SOSTOREPAGE)) || (ncurStep == SOSTOREPAGE))
+        if ((switchToStep(ncurStep, SOSTOREPAGE)) || (ncurStep == SOSTOREPAGE)){
             this.curFinalizer.initialize(curDBCommandFieldSelection.getSelectedCommandName(), this.curFormDocument);
             bFormOpenMode = curFinalizer.getOpenMode();
             FormName = curFinalizer.getName();
@@ -262,6 +262,7 @@ public class FormWizard extends WizardDialog{
                     xDialog.endExecute();
                 }
             }
+        }
     }
 
 
@@ -282,7 +283,6 @@ public class FormWizard extends WizardDialog{
         i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_FORM + 85), SODATAPAGE);
         i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_FORM + 86), SOSTYLEPAGE);
         i = insertRoadmapItem(i, false, oResource.getResText(UIConsts.RID_FORM + 87), SOSTOREPAGE);
-
         setRoadmapInteractive(false);
         setRoadmapComplete(true);
         setCurrentRoadmapItemID((short) 1);
@@ -293,9 +293,10 @@ public class FormWizard extends WizardDialog{
     try{
         curFormDocument =  new FormDocument(xMSF, true, false, oResource);
         if (curFormDocument.oMainFormDBMetaData.getConnection(CurPropertyValue)){
-            curFormDocument.oSubFormDBMetaData.getConnection(curFormDocument.oMainFormDBMetaData.DBConnection);
+            curFormDocument.oSubFormDBMetaData.getConnection(new PropertyValue[]{Properties.createProperty("ActiveConnection", curFormDocument.oMainFormDBMetaData.DBConnection)});
             curFormDocument.xProgressBar.setValue(20);
             buildSteps();
+            this.curDBCommandFieldSelection.preselectCommand(CurPropertyValue, false);
             createWindowPeer(curFormDocument.xWindowPeer);
             curFormDocument.oMainFormDBMetaData.setWindowPeer(xControl.getPeer());
     //      setAutoMnemonic("lblDialogHeader", false);
