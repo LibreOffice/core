@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accselectionhelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 08:37:59 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 09:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #pragma hdrstop
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#endif
 #ifndef _ACCSELECTIONHELPER_HXX_
 #include <accselectionhelper.hxx>
 #endif
@@ -95,9 +98,11 @@
 
 
 
-using ::com::sun::star::uno::Reference;
+using namespace ::com::sun::star::uno;
 using ::com::sun::star::uno::RuntimeException;
 using ::drafts::com::sun::star::accessibility::XAccessible;
+using ::drafts::com::sun::star::accessibility::XAccessibleContext;
+using ::drafts::com::sun::star::accessibility::XAccessibleSelection;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
 
 
@@ -128,6 +133,17 @@ SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
     return pFEShell;
 }
 
+void SwAccessibleSelectionHelper::throwIndexOutOfBoundsException()
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException )
+{
+    Reference < XAccessibleContext > xThis( &rContext );
+    Reference < XAccessibleSelection >xSelThis( xThis, UNO_QUERY );
+    IndexOutOfBoundsException aExcept(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("index out of bounds") ),
+                xSelThis );                                     \
+    throw aExcept;
+}
+
 
 //=====  XAccessibleSelection  ============================================
 
@@ -141,7 +157,7 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
     // Get the respective child as SwFrm (also do index checking), ...
     const SwFrmOrObj aChild = rContext.GetChild( nChildIndex );
     if( !aChild.IsValid() )
-        throw IndexOutOfBoundsException();
+        throwIndexOutOfBoundsException();
 
     // we can only select fly frames, so we ignore (should: return
     // false) all other attempts at child selection
@@ -170,7 +186,7 @@ sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     // Get the respective child as SwFrm (also do index checking), ...
     const SwFrmOrObj aChild = rContext.GetChild( nChildIndex );
     if( !aChild.IsValid() )
-        throw IndexOutOfBoundsException();
+        throwIndexOutOfBoundsException();
 
     // ... and compare to the currently selected frame
     sal_Bool bRet = sal_False;
@@ -292,7 +308,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     // IndexOutOfBoundsException
     SwFEShell* pFEShell = GetFEShell();
     if( 0 == pFEShell )
-        throw IndexOutOfBoundsException();
+        throwIndexOutOfBoundsException();
 
     SwFrmOrObj aChild;
     const SwFlyFrm *pFlyFrm = pFEShell->GetCurrFlyFrm();
@@ -309,7 +325,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     {
         sal_uInt16 nSelObjs = pFEShell->IsObjSelected();
         if( 0 == nSelObjs || nSelectedChildIndex >= nSelObjs )
-            throw IndexOutOfBoundsException();
+            throwIndexOutOfBoundsException();
 
         ::std::list< SwFrmOrObj > aChildren;
         rContext.GetChildren( aChildren );
@@ -334,7 +350,7 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     }
 
     if( !aChild.IsValid() )
-            throw IndexOutOfBoundsException();
+        throwIndexOutOfBoundsException();
 
     DBG_ASSERT( rContext.GetMap() != NULL, "We need the map." );
     Reference< XAccessible > xChild;
@@ -366,4 +382,7 @@ void SwAccessibleSelectionHelper::deselectSelectedAccessibleChild(
             RuntimeException )
 {
     // return sal_False     // we can't deselect
+    if( nSelectedChildIndex < 0 ||
+        nSelectedChildIndex >= getSelectedAccessibleChildCount() )
+        throwIndexOutOfBoundsException();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accselectionhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-15 13:17:31 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 09:29:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@ class SwAccessibleSelectionHelper
 
     /// get FE-Shell
     SwFEShell* GetFEShell();
+
+    void throwIndexOutOfBoundsException()
+        throw ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
 public:
 
