@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntctrl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-06 08:51:00 $
+ *  last change: $Author: oj $ $Date: 2002-08-13 08:42:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,18 +105,58 @@
 
 #include "fntctrl.hxx"
 #include "dialogs.hrc"
+#define TEXT_WIDTH  20
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
 
-
-static void SetFont( const SvxFont& rNewFont, SvxFont& rImplFont )
+// -----------------------------------------------------------------------
+// small helper functions to set fonts
+// -----------------------------------------------------------------------
+namespace
 {
-    rImplFont = rNewFont;
-    rImplFont.SetTransparent( TRUE );
-    rImplFont.SetAlign( ALIGN_BASELINE );
+    void scaleFontWidth(Font& _rFont,const OutputDevice& rOutDev,long& _n100PercentFont)
+    {
+        _rFont.SetWidth( 0 );
+        _n100PercentFont = rOutDev.GetFontMetric( _rFont ).GetWidth();
+    }
+    // -----------------------------------------------------------------------
+    void initFont(Font& _rFont)
+    {
+        _rFont.SetTransparent(TRUE);
+        _rFont.SetAlign(ALIGN_BASELINE);
+    }
+    // -----------------------------------------------------------------------
+    void setFontSize(Font& _rFont)
+    {
+        Size aSize( _rFont.GetSize() );
+        aSize.Height() = ( aSize.Height() * 3 ) / 5;
+        aSize.Width() = ( aSize.Width() * 3 ) / 5;
+        _rFont.SetSize( aSize );
+    }
+    // -----------------------------------------------------------------------
+    void calcFontHeightAnyAscent(OutputDevice* _pWin,Font& _rFont,long& _nHeight,long& _nAscent)
+    {
+        if ( !_nHeight )
+        {
+            _pWin->SetFont( _rFont );
+            FontMetric aMetric( _pWin->GetFontMetric() );
+            _nHeight = aMetric.GetLineHeight();
+            _nAscent = aMetric.GetAscent();
+        }
+    }
+    // -----------------------------------------------------------------------
+    void setFont( const SvxFont& rNewFont, SvxFont& rImplFont )
+    {
+        rImplFont = rNewFont;
+        rImplFont.SetTransparent( TRUE );
+        rImplFont.SetAlign( ALIGN_BASELINE );
+    }
+
 }
+// -----------------------------------------------------------------------
+
 
 // class FontPrevWin_Impl -----------------------------------------------
 
@@ -133,6 +173,7 @@ class FontPrevWin_Impl
     SvXub_StrLens                   aScriptChg;
     SvUShorts                       aScriptType;
     SvxFont                         aCJKFont;
+    SvxFont                         aCTLFont;
     String                          aText;
     String                          aScriptText;
     Color*                          pColor;
@@ -143,6 +184,7 @@ class FontPrevWin_Impl
 
     long                            n100PercentFontWidth;       // initial -1 -> not set yet
     long                            n100PercentFontWidthCJK;
+    long                            n100PercentFontWidthCTL;
     UINT16                          nFontWidthScale;
 
     BOOL                            bSelection      : 1,
@@ -181,13 +223,15 @@ void FontPrevWin_Impl::CheckScript()
 
 inline void FontPrevWin_Impl::Invalidate100PercentFontWidth()
 {
-    n100PercentFontWidth = n100PercentFontWidthCJK = -1;
+    n100PercentFontWidth = n100PercentFontWidthCJK = n100PercentFontWidthCTL = -1;
 }
 
 inline BOOL FontPrevWin_Impl::Is100PercentFontWidthValid() const
 {
     DBG_ASSERT( ( n100PercentFontWidth == -1 && n100PercentFontWidthCJK == -1 ) ||
-                ( n100PercentFontWidth != -1 && n100PercentFontWidthCJK != -1 ),
+                ( n100PercentFontWidth != -1 && n100PercentFontWidthCJK != -1 ) ||
+                ( n100PercentFontWidth == -1 && n100PercentFontWidthCTL == -1 ) ||
+                ( n100PercentFontWidth != -1 && n100PercentFontWidthCTL != -1 ),
                 "*FontPrevWin_Impl::Is100PercentFontWidthValid(): 100PercentFontWidth's not synchronous" );
     return n100PercentFontWidth != -1;
 }
@@ -216,13 +260,8 @@ void FontPrevWin_Impl::_CheckScript()
     if( !xBreak.is() )
     {
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        Reference < XInterface > xI = xMSF->createInstance(
-            ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
-        if ( xI.is() )
-        {
-            Any x = xI->queryInterface( ::getCppuType((const Reference< XBreakIterator >*)0) );
-            x >>= xBreak;
-        }
+        xBreak = Reference< XBreakIterator >(xMSF->createInstance(
+                ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),UNO_QUERY);
     }
     if( xBreak.is() )
     {
@@ -282,36 +321,30 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* pPrinter,
     }
     long nTxtWidth = 0;
     long nCJKHeight = 0;
+    long nCTLHeight = 0;
     long nHeight = 0;
     nAscent = 0;
     long nCJKAscent = 0;
+    long nCTLAscent = 0;
     do
     {
-        SvxFont& rFnt = (nScript==ScriptType::ASIAN) ? aCJKFont : rFont;
+        SvxFont& rFnt = (nScript==ScriptType::ASIAN) ? aCJKFont : ((nScript==ScriptType::COMPLEX) ? aCTLFont : rFont);
         ULONG nWidth = rFnt.GetTxtSize( pPrinter, aText, nStart, nEnd-nStart ).
                        Width();
         aTextWidth[ nIdx++ ] = nWidth;
         nTxtWidth += nWidth;
-        if( nScript==ScriptType::ASIAN )
+        switch(nScript)
         {
-            if( !nCJKHeight )
-            {
-                pWin->SetFont( aCJKFont );
-                FontMetric aMetric( pWin->GetFontMetric() );
-                nCJKHeight = aMetric.GetLineHeight();
-                nCJKAscent = aMetric.GetAscent();
-            }
+            case ScriptType::ASIAN:
+                calcFontHeightAnyAscent(pWin,aCJKFont,nCJKHeight,nCJKAscent);
+                break;
+            case ScriptType::COMPLEX:
+                calcFontHeightAnyAscent(pWin,aCTLFont,nCTLHeight,nCTLAscent);
+                break;
+            default:
+                calcFontHeightAnyAscent(pWin,rFont,nHeight,nAscent);
         }
-        else
-        {
-            if( !nHeight )
-            {
-                pWin->SetFont( rFont );
-                FontMetric aMetric( pWin->GetFontMetric() );
-                nHeight = aMetric.GetLineHeight();
-                nAscent = aMetric.GetAscent();
-            }
-        }
+
         if( nEnd < aText.Len() && nIdx < nCnt )
         {
             nStart = nEnd;
@@ -324,10 +357,15 @@ Size FontPrevWin_Impl::CalcTextSize( OutputDevice* pWin, OutputDevice* pPrinter,
     while( TRUE );
     nHeight -= nAscent;
     nCJKHeight -= nCJKAscent;
+    nCTLHeight -= nCTLAscent;
     if( nHeight < nCJKHeight )
         nHeight = nCJKHeight;
     if( nAscent < nCJKAscent )
         nAscent = nCJKAscent;
+    if( nHeight < nCTLHeight )
+        nHeight = nCTLHeight;
+    if( nAscent < nCTLAscent )
+        nAscent = nCTLAscent;
     nHeight += nAscent;
 
     Size aTxtSize( nTxtWidth, nHeight );
@@ -362,7 +400,7 @@ void FontPrevWin_Impl::DrawPrev( OutputDevice* pWin, Printer* pPrinter,
     }
     do
     {
-        SvxFont& rFnt = (nScript==ScriptType::ASIAN) ? aCJKFont : rFont;
+        SvxFont& rFnt = (nScript==ScriptType::ASIAN) ? aCJKFont : ((nScript==ScriptType::COMPLEX) ? aCTLFont : rFont);
         pPrinter->SetFont( rFnt );
 
         rFnt.DrawPrev( pWin, pPrinter, rPt, aText, nStart, nEnd - nStart );
@@ -394,21 +432,21 @@ BOOL FontPrevWin_Impl::SetFontWidthScale( UINT16 nScale )
     return FALSE;
 }
 
+
 // -----------------------------------------------------------------------
 
 void FontPrevWin_Impl::ScaleFontWidth( const OutputDevice& rOutDev )
 {
     if( !Is100PercentFontWidthValid() )
     {
-        aFont.SetWidth( 0 );
-        aCJKFont.SetWidth( 0 );
-
-        n100PercentFontWidth = rOutDev.GetFontMetric( aFont ).GetWidth();
-        n100PercentFontWidthCJK = rOutDev.GetFontMetric( aCJKFont ).GetWidth();
+        scaleFontWidth(aFont,rOutDev,n100PercentFontWidth);
+        scaleFontWidth(aCJKFont,rOutDev,n100PercentFontWidthCJK);
+        scaleFontWidth(aCTLFont,rOutDev,n100PercentFontWidthCTL);
     }
 
     aFont.SetWidth( n100PercentFontWidth * nFontWidthScale / 100 );
     aCJKFont.SetWidth( n100PercentFontWidthCJK * nFontWidthScale / 100 );
+    aCTLFont.SetWidth( n100PercentFontWidthCTL * nFontWidthScale / 100 );
 }
 
 // class SvxFontPrevWindow -----------------------------------------------
@@ -454,10 +492,9 @@ SvxFontPrevWindow::SvxFontPrevWindow( Window* pParent, const ResId& rId ) :
         pImpl->bDelPrinter = TRUE;
     }
     SetMapMode( MapMode( MAP_TWIP ) );
-    pImpl->aFont.SetTransparent(TRUE);
-    pImpl->aCJKFont.SetTransparent(TRUE);
-    pImpl->aFont.SetAlign(ALIGN_BASELINE);
-    pImpl->aCJKFont.SetAlign(ALIGN_BASELINE);
+    initFont(pImpl->aFont);
+    initFont(pImpl->aCJKFont);
+    initFont(pImpl->aCTLFont);
     InitSettings( TRUE, TRUE );
     SetBorderStyle( WINDOW_BORDER_MONO );
 }
@@ -472,6 +509,12 @@ SvxFontPrevWindow::~SvxFontPrevWindow()
         delete pImpl->pPrinter;
 
     delete pImpl;
+}
+
+// -----------------------------------------------------------------------
+SvxFont& SvxFontPrevWindow::GetCTLFont()
+{
+    return pImpl->aCTLFont;
 }
 
 // -----------------------------------------------------------------------
@@ -518,7 +561,7 @@ const SvxFont& SvxFontPrevWindow::GetFont() const
 
 void SvxFontPrevWindow::SetFont( const SvxFont& rOutFont )
 {
-    ::SetFont( rOutFont, pImpl->aFont );
+    setFont( rOutFont, pImpl->aFont );
 
     pImpl->Invalidate100PercentFontWidth();
     Invalidate();
@@ -526,10 +569,11 @@ void SvxFontPrevWindow::SetFont( const SvxFont& rOutFont )
 
 // -----------------------------------------------------------------------
 
-void SvxFontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& rCJKOutFont )
+void SvxFontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& rCJKOutFont, const SvxFont& rCTLFont )
 {
-    ::SetFont( rNormalOutFont, pImpl->aFont );
-    ::SetFont( rCJKOutFont, pImpl->aCJKFont );
+    setFont( rNormalOutFont, pImpl->aFont );
+    setFont( rCJKOutFont, pImpl->aCJKFont );
+    setFont( rCTLFont, pImpl->aCTLFont );
 
 
     pImpl->Invalidate100PercentFontWidth();
@@ -540,7 +584,15 @@ void SvxFontPrevWindow::SetFont( const SvxFont& rNormalOutFont, const SvxFont& r
 
 void SvxFontPrevWindow::SetCJKFont( const SvxFont &rCJKOutFont )
 {
-    ::SetFont( rCJKOutFont, pImpl->aCJKFont );
+    setFont( rCJKOutFont, pImpl->aCJKFont );
+
+    pImpl->Invalidate100PercentFontWidth();
+    Invalidate();
+}
+// -----------------------------------------------------------------------------
+void SvxFontPrevWindow::SetCTLFont( const SvxFont &rCTLOutFont )
+{
+    setFont( rCTLOutFont, pImpl->aCTLFont );
 
     pImpl->Invalidate100PercentFontWidth();
     Invalidate();
@@ -597,8 +649,8 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
         if ( !pImpl->aText.Len() )
             pImpl->aText = GetText();
 
-        if ( pImpl->aText.Len() > 15 )
-            pImpl->aText.Erase( pImpl->aText.Search( sal_Unicode( ' ' ), 16 ) );
+        if ( pImpl->aText.Len() > (TEXT_WIDTH-1) )
+            pImpl->aText.Erase( pImpl->aText.Search( sal_Unicode( ' ' ), TEXT_WIDTH ) );
     }
 
     // calculate text width scaling
@@ -644,17 +696,9 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
     if(pImpl->bTwoLines)
     {
         SvxFont aSmallFont( rFont );
-        Size aSize( aSmallFont.GetSize() );
-        aSize.Height() = ( aSize.Height() * 3 ) / 5;
-        aSize.Width() = ( aSize.Width() * 3 ) / 5;
-        aSmallFont.SetSize( aSize );
-        aSize = pImpl->aCJKFont.GetSize();
-        {
-            Size aTmpSize;
-            aTmpSize.Height() = ( aSize.Height() * 3 ) / 5;
-            aTmpSize.Width() = ( aSize.Width() * 3 ) / 5;
-            pImpl->aCJKFont.SetSize( aTmpSize );
-        }
+        Size aOldSize = pImpl->aCJKFont.GetSize();
+        setFontSize(aSmallFont);
+        setFontSize(pImpl->aCJKFont);
 
         long nStartBracketWidth = 0;
         long nEndBracketWidth = 0;
@@ -700,7 +744,7 @@ void SvxFontPrevWindow::Paint( const Rectangle& rRect )
             String sBracket(pImpl->cEndBracket);
             rFont.DrawPrev( this, pPrinter, aTmpPoint, sBracket );
         }
-        pImpl->aCJKFont.SetSize( aSize );
+        pImpl->aCJKFont.SetSize( aOldSize );
     }
     else
     {
@@ -758,4 +802,7 @@ void SvxFontPrevWindow::AutoCorrectFontColor( void )
 
     if( COL_AUTO == pImpl->aCJKFont.GetColor().GetColor() )
         pImpl->aCJKFont.SetColor( aFontColor );
+
+    if( COL_AUTO == pImpl->aCTLFont.GetColor().GetColor() )
+        pImpl->aCTLFont.SetColor( aFontColor );
 }
