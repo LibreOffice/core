@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngp.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:47:06 $
+#   last change: $Author: rt $ $Date: 2004-09-20 08:37:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,7 @@ CC*=gcc
 CFLAGS=-nostdinc -c $(INCLUDE) 
 CFLAGSCC= -pipe
 CFLAGSCXX= -pipe -fguiding-decls -fno-rtti -fno-exceptions
+CFLAGSCXX+= -Wno-ctor-dtor-privacy
 
 # Exceptions increase the size of shared libraries by 50% !!
 .IF "$(PRJNAME)"=="usr" || "$(PRJNAME)"=="uno" || "$(PRJNAME)"=="starone" || "$(PRJNAME)"=="schedule" || "$(PRJNAME)"=="one" || "$(SET_EXEPTIONS)"!=""
