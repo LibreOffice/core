@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,7 +807,7 @@ short SwSubFont::_CheckKerning( )
 
 USHORT SwFont::GetLeading( ViewShell *pSh, const OutputDevice *pOut )
 {
-    if( OUTDEV_PRINTER != pOut->GetOutDevType() )
+    if( pSh && pSh->GetWin() )
         return 0;
     else
     {
