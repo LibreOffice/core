@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:57:35 $
+ *  last change: $Author: rt $ $Date: 2001-03-21 20:56:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ Resource RID_GLOBSTR
         Text [ portuguese ] = "Inserir" ;
         Text [ finnish ] = "Lisää" ;
         Text [ danish ] = "Indsæt" ;
-        Text [ french ] = "Données insérées" ;
+        Text [ french ] = "Insérer" ;
         Text [ swedish ] = "Infoga" ;
         Text [ dutch ] = "Invoegen" ;
         Text [ spanish ] = "Insertar" ;
@@ -156,7 +156,7 @@ Resource RID_GLOBSTR
         Text [ portuguese ] = "Inserir" ;
         Text [ finnish ] = "Lisää" ;
         Text [ danish ] = "Indsæt" ;
-        Text [ french ] = "Données insérées" ;
+        Text [ french ] = "Insérer" ;
         Text [ swedish ] = "Infoga" ;
         Text [ dutch ] = "Invoegen" ;
         Text [ spanish ] = "Insertar" ;
@@ -532,7 +532,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "AutoFormat" ;
         Text[ chinese_simplified ] = "×Ô¶¯¸ñÊ½";
         Text[ russian ] = "Àâòîôîğìàò";
-        Text[ polish ] = "Autoformatowanie";
+        Text[ polish ] = "Autoformat";
         Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä";
         Text[ chinese_traditional ] = "¦Û°Ê®æ¦¡";
         Text[ arabic ] = "ÇáÊäÓíŞ ÇáÊáŞÇÆí";
@@ -2266,7 +2266,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "Îïåğàöèş âûïîëíèòü íåâîçìîæíî";
         Text[ polish ] = "Nie wykonuj operacji";
         Text[ japanese ] = "Às‚·‚é‰‰Z‚Í‚ ‚è‚Ü‚¹‚ñB";
-        Text[ chinese_traditional ] = "¤£°õ¦æ¾Ş§@";
+        Text[ chinese_traditional ] = "¤£°õ¦æ°Ê§@";
         Text[ arabic ] = "áÇ ÊæÌÏ ÚãáíÇÊ ááÊäİíĞ";
         Text[ greek ] = "Äåí õğÜñ÷ïõí åíôïëİò ãéá åêôİëåóç";
         Text[ korean ] = "ÀÛ¾÷¡¡½ÇÇà¡¡¾ÊÀ½.";
@@ -2441,7 +2441,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Grouping not possible" ;
         Text[ chinese_simplified ] = "ÎŞ·¨·Ö×é";
         Text[ russian ] = "Ãğóïïèğîâàòü íåâîçìîæíî";
-        Text[ polish ] = "Grupowanie niemo¿liwe";
+        Text[ polish ] = "Zgrupowanie niemo¿liwe";
         Text[ japanese ] = "¸ŞÙ°Ìß‰»‚Å‚«‚Ü‚¹‚ñB";
         Text[ chinese_traditional ] = "µLªk«Ø¥ß¸s²Õ";
         Text[ arabic ] = "ÇáÊÌãíÚ ÛíÑ ããßä";
@@ -3066,7 +3066,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "- desplazar a la última posición -" ;
         Text [ english_us ] = "- move to end position -" ;
         Text[ chinese_simplified ] = "- ÖÃÓÚÎ²¶Ë -";
-        Text[ russian ] = "- ïåğåìåñòèòü â êîíåö -";
+        Text[ russian ] = "- ïîìåñòèòü â êîíöå -";
         Text[ polish ] = "- przenieœ na koñcow¹ pozycjê -";
         Text[ japanese ] = "- ––”ö‚É‘}“ü -";
         Text[ chinese_traditional ] = "- ²¾°Ê¨ì§Àºİ -";
@@ -3290,18 +3290,18 @@ Resource RID_GLOBSTR
         Text[ english_us ] = "The source range contains subtotals which may distort the results. Use it anyway?";
         Text[ portuguese ] = "The source range contains subtotals which may distort the results. Use it anyway?";
         Text[ russian ] = "Èñõîäíûé äèàïàçîí ñîäåğæèò ïğîìåæóòî÷íûå èòîãè, êîòîğûå ìîãóò ôàëüñèôèöèğîâàòü ğåçóëüòàò. Ïğèìåíèòü åãî íåñìîòğÿ íà ıòî?";
-        Text[ greek ] = "The source range contains subtotals which may distort the results. Use it anyway?";
-        Text[ dutch ] = "The source range contains subtotals which may distort the results. Use it anyway?";
-        Text[ french ] = "The source range contains subtotals which may distort the results. Use it anyway?";
-        Text[ spanish ] = "The source range contains subtotals which may distort the results. Use it anyway?";
-        Text[ italian ] = "The source range contains subtotals which may distort the results. Use it anyway?";
+        Text[ greek ] = "Ç ğåñéï÷Ş ğñïİëåõóçò ğåñéİ÷åé ìåñéêÜ áèñïßóìáôá ôá ïğïßá ìğïñåß íá ïäçãŞóïõí óå ëÜèïò áğïôåëİóìáôá. Èİëåôå íá ÷ñçóéìïğïéçèåß;";
+        Text[ dutch ] = "Het bronbereik bevat subtotalen die kunnen leiden tot een foutief einresultaat. Wilt u deze toch gebruiken?";
+        Text[ french ] = "La plage source contient des sous-totaux qui pourraient fausser le résultat. L'utiliser quand même ?";
+        Text[ spanish ] = "El área fuente contiene resultados parciales que pueden falsificar los resultados. ¿Desea usarlo de todas formas?";
+        Text[ italian ] = "L'area sorgente contiene risultati parziali che possono falsificare il risultato. Volete usarla comunque?";
         Text[ danish ] = "The source range contains subtotals which may distort the results. Use it anyway?";
-        Text[ swedish ] = "The source range contains subtotals which may distort the results. Use it anyway?";
+        Text[ swedish ] = "Källområdet innehåller delresultat som kan förvanska resultatet. Ska det ändå användas";
         Text[ polish ] = "Obszar Ÿród³owy zawiera sumy poœrednie, które mog¹ sfa³szowaæ wynik. Czy u¿yæ go pomimo tego?";
         Text[ portuguese_brazilian ] = "The source range contains subtotals which may distort the results. Use it anyway?";
-        Text[ japanese ] = "The source range contains subtotals which may distort the results. Use it anyway?";
+        Text[ japanese ] = "‚±‚Ì¿°½”ÍˆÍ‚É‚ÍA‹È‚ª‚Á‚½Œ‹‰Ê‚ğ“±‚­‰Â”\\«‚Ì‚ ‚é¬Œv‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B‚»‚ê‚ğg—p‚µ‚Ü‚·‚©B";
         Text[ korean ] = "The source range contains subtotals which may distort the results. Use it anyway?";
-        Text[ chinese_simplified ] = "The source range contains subtotals which may distort the results. Use it anyway?";
+        Text[ chinese_simplified ] = "Õâ¸öÔ´ÇøÓòº¬ÓĞÒ»Ğ©¿ÉÄÜ»áÓ°Ïìµ½¼ÆËã½á¹ûµÄ×Ô¶¯ÇóºÍ¹«Ê½¡£»¹ÊÇÒªÊ¹ÓÃËü£¿";
         Text[ chinese_traditional ] = "³o­Ó·½°Ï°ì§t¦³¤@¨Ç¥i¯à·|¼vÅT¨ì­pºâµ²ªGªº¤p­p¤½¦¡¡CÁÙ¬O­n¨Ï¥Î¥¦¡H";
         Text[ turkish ] = "The source range contains subtotals which may distort the results. Use it anyway?";
         Text[ arabic ] = "íÍÊæí ÇáäØÇŞ ÇáãÕÏÑí Úáì ãÌÇãíÚ İÑÚíÉ ŞÏ ÊÍÑİ ÇáäÊíÌÉ. åá ÊÑíÏ ÇÓÊÎÏÇãå Úáì ÇáÑÛã ãä Ğáß¿";
@@ -5364,7 +5364,7 @@ Resource RID_GLOBSTR
         Text[ chinese_simplified ] = "´íÎó£ºÈ±ÉÙÔËËã·û";
         Text[ russian ] = "Îøèáêà: îòñóòñòâóşùèé îïåğàòîğ";
         Text[ polish ] = "B³¹d: Brakuj¹cy operator";
-        Text[ japanese ] = "´×°: ‰‰Zq‚Í‚ ‚è‚Ü‚¹‚ñ";
+        Text[ japanese ] = "´×°: ‰‰Zq‚ª‘«‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¿ù»~¡G¯Ê¤Ö¹Bºâ²Å";
         Text[ arabic ] = "ÎØÃ: ÚÇãá ÇáÊÔÛíá äÇŞÕ";
         Text[ greek ] = "ÓöÜëìá: Ëåßğåé ï ôåëåóôŞò";
@@ -5902,7 +5902,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH_US ] = "You have entered an invalid name.\nAutoFormat could not be created. \nTry again using a different name." ;
         Text[ chinese_simplified ] = "ÄúÊäÈëÁËÒ»¸öÎŞĞ§µÄÃû³Æ¡£\nÎŞ·¨½¨Á¢×Ô¶¯¸ñÊ½¡£\nÇëÄúÊäÈëÒ»¸öÓĞĞ§µÄÃû³Æ¡£";
         Text[ russian ] = "Âû ââåëè íåäîïóñòèìîå èìÿ.\nÑîçäàòü Àâòîôîğìàò íåâîçìîæíî.\nÂûáåğèòå äğóãîå èìÿ.";
-        Text[ polish ] = "Zosta³a wpisana nieprawid³owa nazwa. \\Autoformatowanie nie mog³o zostaæ utworzone.\nWybierz inn¹ nazwê.";
+        Text[ polish ] = "Wpisano nieprawid³ow¹ nazwê.\nUtworzenie Autoformatu nie by³o mo¿liwe.\nWybierz inn¹ nazwê.";
         Text[ japanese ] = "“ü—Í‚µ‚½–¼‘O‚Í–³Œø‚Å‚·B\nµ°ÄÌ«°Ï¯Ä‚Íì¬‚Å‚«‚Ü‚¹‚ñB\n‚Ù‚©‚Ì–¼‘O‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
         Text[ chinese_traditional ] = "±z¿é¤J¤F¤@­ÓµL®Äªº¦WºÙ¡C\nµLªk«Ø¥ß¦Û°Ê®æ¦¡¡C\n½Ğ±z¿é¤J¤@­Ó¦³®Äªº¦WºÙ¡C";
         Text[ arabic ] = "áŞÏ ŞãÊ ÈÅÏÎÇá ÇÓã ÛíÑ ÕÇáÍ.\nÊÚĞÑ ÅäÔÇÁ ÇáÊäÓíŞ ÇáÊáŞÇÆí.\nÇáÑÌÇÁ ÇÎÊíÇÑ ÇÓã ÂÎÑ.";
@@ -6113,7 +6113,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "To apply an AutoFormat,\na table range of at least\n3x3 cells must be selected." ;
         Text[ chinese_simplified ] = "ÎªÁËÊ¹ÓÃ×Ô¶¯¸ñÊ½£¬\nÄú±ØĞëÖÁÉÙÑ¡ÖĞÁË\n3x3 ¹¤×÷±íÇøÓò¡£";
         Text[ russian ] = "Äëÿ âîçìîæíîñòè ïğèìåíåíèÿ àâòîôîğìàòà\níåîáõîäèìî âûäåëèòü îáëàñòü òàáëèöû êàê ìèíèìóì\n3x3 ÿ÷ååê.";
-        Text[ polish ] = "Aby zastosowaæ Autoformatowanie,\ntrzeba zaznaczyæ obszar tabeli o wymiarach co najmniej \n3x3 komórki.";
+        Text[ polish ] = "Aby zastosowaæ Autoformat,\nnale¿y zaznaczyæ obszar tabeli o wymiarach co najmniej\n3x3 komórki.";
         Text[ japanese ] = "µ°ÄÌ«°Ï¯Ä‚ğg—p‚·‚é‚É‚ÍA\nÅ’á 3x3 ¾Ù‚Ì•\\”ÍˆÍ‚ğ‘I‘ğ‚µ‚Ä‚¨‚­•K—v‚ª‚ ‚è‚Ü‚·B";
         Text[ chinese_traditional ] = "¬°¤F¨Ï¥Î¦Û°Ê®æ¦¡¡A\n±z¥²¶·¦Ü¤Ö¿ï¨ú¤F\n3x3 ¤u§@ªí°Ï°ì¡C";
         Text[ arabic ] = "áßí ÊÓÊÎÏã ÇáÊäÓíŞ ÇáÊáŞÇÆí¡\níÌÈ Ãä ÊÍÏÏ äØÇŞ İí ÇáÌÏæá áÇ íŞá Úä\n3x3 ÎáÇíÇ.";
@@ -6506,7 +6506,7 @@ Resource RID_GLOBSTR
         Text [ italian ] = "Esporta Dif" ;
         Text [ spanish ] = "Exportar Dif" ;
         Text [ french ] = "Export Dif" ;
-        Text [ swedish ] = "Dif Export" ;
+        Text [ swedish ] = "Dif-export" ;
         Text [ danish ] = "Dif-eksport" ;
         Text [ portuguese ] = "Exportar Dif" ;
         Text [ portuguese_brazilian ] = "Dif-Export" ;
@@ -9366,7 +9366,7 @@ Resource RID_GLOBSTR
         Text[ russian ] = "İòèì äåéñòâèåì çàêîí÷èòñÿ çàïèñü èñïğàâëåíèé.\nËşáàÿ èíôîğìàöèÿ î ïğåäûäóùèõ èñïğàâëåíèÿõ áóäåò óòåğÿíà.\n\nÇàêîí÷èòü çàïèñü èñïğàâëåíèé?\n\n";
         Text[ polish ] = "Ta akcja koñczy rejestracjê modyfikacji.\nInformacje o zmianach zostan¹ usuniête.\n\nZakoñczyæ rejestracjê?\n\n";
         Text[ japanese ] = "•ÏX‚Ì‹L˜^‚ğ‚±‚Ì±¸¼®İ‚ÅI—¹‚µ‚Ü‚·B\n“¯‚É•ÏX‚µ‚½î•ñ‚àŠ®‘S‚É¸‚í‚ê‚Ü‚·B\n\n‹L˜^‚ğI—¹‚µ‚Ü‚·‚©B\n\n";
-        Text[ chinese_traditional ] = "³o­Ó¾Ş§@·|µ²§ô­×§ï¡C\n­×§ï¤º®e´N·|¬y¥¢¡C\n\n±zÁÙ¬O­nÄ~Äò¡H\n\n";
+        Text[ chinese_traditional ] = "³o­Ó°Ê§@·|µ²§ô­×§ï¡C\n­×§ï¤º®e´N·|¬y¥¢¡C\n\n±zÁÙ¬O­nÄ~Äò¡H\n\n";
         Text[ arabic ] = "åĞÇ ÇáÅÌÑÇÁ Óæİ íÄÏí Åáì ÅäåÇÁ ÚãáíÉ ÊÓÌíá ÇáÊÛííÑÇÊ.\nÓæİ íÄÏí åĞÇ ÈÏæÑå Åáì ÖíÇÚ ÇáãÚáæãÇÊ ÇáÎÇÕÉ ÈÇáÊÛííÑÇÊ.\n\nåá ÊÑíÏ ÅäåÇÁ ÇáÊÓÌíá¿\n\n";
         Text[ greek ] = "Ìå áõôŞ ôçí åíİñãåéá ôåñìáôßæåôáé ç êáôáãñáöŞ áëëáãşí. Ç \nğëçñïöïñßåò ó÷åôéêÜ ìå ôéò áëëáãİò ğñüêåéôáé íá ÷áèïıí.\n\nÍá ôåñìáôéóôåß ç åããñáöŞ;\n\n";
         Text[ korean ] = "ÀÌ¡¡µ¿ÀÛ°ú¡¡´õºÒ¾î¡¡º¯°æ¡¡±â·ÏÀº¡¡Á¾·áµË´Ï´Ù.\nÀÌ¿Í¡¡´õºÒ¾î¡¡ÀÌÀü º¯°æ¿¡´ëÇÑ  Á¤º¸´Â »ó½Ç µÉ°ÍÀÔ´Ï´Ù .\n\n±â·ÏÀ»¡¡Á¾·áÇÏ½Ã°Ú½À´Ï±î?\n\n";
