@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-23 10:50:29 $
+ *  last change: $Author: mba $ $Date: 2001-08-27 16:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,7 +684,10 @@ SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxIt
             pFrmItem = (const SfxFrameItem*) SfxRequest::GetItem( pSet, SID_DOCFRAME, FALSE, TYPE(SfxFrameItem) );
         SfxBoolItem aItem( SID_NEWDOCDIRECT, TRUE );
         if ( pFrmItem && pFrmItem->GetFrame() && !pFrmItem->GetFrame()->GetCurrentDocument() )
+        {
             GetDispatcher_Impl()->Execute( nSlotId, SFX_CALLMODE_SYNCHRON, &aItem, pFrmItem, 0L );
+            xDoc = pFrmItem->GetFrame()->GetCurrentDocument();
+        }
         else
             GetDispatcher_Impl()->Execute( nSlotId, SFX_CALLMODE_ASYNCHRON, &aItem, pFrmItem, 0L );
     }
@@ -694,6 +697,20 @@ SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxIt
         aParam = INetURLObject::decode( aParam, '%', INetURLObject::DECODE_WITH_CHARSET );
         if( xDoc.Is() )
             xDoc->DoInitNew_Impl( aParam );
+    }
+
+    if ( xDoc.Is() )
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >  xModel ( xDoc->GetModel(), ::com::sun::star::uno::UNO_QUERY );
+        if ( xModel.is() )
+        {
+            SfxItemSet* pNew = pSet->Clone();
+            pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
+            TransformItems( SID_OPENDOC, *pNew, aArgs );
+            xModel->attachResource( ::rtl::OUString(), aArgs );
+            delete pNew;
+        }
     }
 
     return xDoc;
