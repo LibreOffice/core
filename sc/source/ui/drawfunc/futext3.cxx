@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:27:37 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:54:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,7 +380,7 @@ void FuText::StopEditMode()
 
     if ( bComment )
     {
-        ScPostIt aNote;
+        ScPostIt aNote(pDoc);
         BOOL bWas = pDoc->GetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
 
         //  ignorieren nur, wenn Text unveraendert und Notiz dauerhaft angezeigt
@@ -388,24 +388,33 @@ void FuText::StopEditMode()
 
         if ( eResult != SDRENDTEXTEDIT_UNCHANGED || !bWas || !aNote.IsShown() )
         {
-            String aNewText;                            //! formatierten Text behalten ???
+            ::std::auto_ptr<EditTextObject> pEditText ;
             if ( eResult != SDRENDTEXTEDIT_DELETED )
             {
                 OutlinerParaObject* pParaObj = pObject->GetOutlinerParaObject();
                 if ( pParaObj )
                 {
-                    ScFieldEditEngine aEngine( pDoc->GetEnginePool() );
-                    aEngine.SetText( pParaObj->GetTextObject() );
-                    aNewText = aEngine.GetText( LINEEND_LF );
-                    aNewText.ConvertLineEnd();
+                    ScNoteEditEngine& rEE = pDoc->GetNoteEngine();
+                    rEE.SetText(pParaObj->GetTextObject());
+                    pEditText.reset(rEE.CreateTextObject());
                 }
             }
-            aNote.AutoSetText( aNewText );      // setzt auch Author und Date
+            Rectangle aNewRect;
+            Rectangle aOldRect = aNote.GetRectangle();
+            SdrCaptionObj* pCaption = static_cast<SdrCaptionObj*>(pObject);
+            if(pCaption)
+            {
+                aNewRect = pCaption->GetLogicRect();
+                if(aOldRect != aNewRect)
+                    aNote.SetRectangle(aNewRect);
+            }
+            aNote.SetEditTextObject(pEditText.get());    // if pEditText is NULL, then aNote.mpEditObj will be reset().
+            aNote.SetItemSet(pCaption->GetMergedItemSet());
 
-            BOOL bRemove = ( !aNote.IsShown() || !aNewText.Len() || !bWas );
+
+            BOOL bRemove = ( !aNote.IsShown() || aNote.IsEmpty() || !bWas );
             if ( bRemove )
                 aNote.SetShown( FALSE );
-//          pDoc->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
             pViewShell->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );  // mit Undo
 
             if ( bRemove && eResult != SDRENDTEXTEDIT_DELETED )     // Legenden-Objekt loeschen ?
@@ -424,6 +433,51 @@ void FuText::StopEditMode()
     }
 }
 
+// Called following an EndDragObj() to update the new note rectangle position
+void FuText::StopDragMode(SdrObject* pObject)
+{
+    BOOL bComment = FALSE;
+    ScAddress aTabPos;
 
+    if ( pObject && pObject->GetLayer()==SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj) )
+    {
+        ScDrawObjData* pData = ScDrawLayer::GetObjData( pObject );
+        if( pData )
+        {
+            aTabPos = pData->aStt;
+            bComment = TRUE;
+        }
+    }
 
+    if ( bComment )
+    {
+        ScDocument* pDoc = pViewShell->GetViewData()->GetDocument();
+        if(pDoc)
+        {
+            ScPostIt aNote(pDoc);
+            if(pDoc->GetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote ))
+            {
+                Rectangle aNewRect;
+                Rectangle aOldRect = aNote.GetRectangle();
+                SdrCaptionObj* pCaption = static_cast<SdrCaptionObj*>(pObject);
+                if(pCaption)
+                    aNewRect = pCaption->GetLogicRect();
+                if(pCaption && aOldRect != aNewRect)
+                {
+                    aNote.SetRectangle(aNewRect);
+                    // The new height is honoured if property item is reset.
+                    if(aNewRect.Bottom() - aNewRect.Top() > aOldRect.Bottom() - aOldRect.Top())
+                    {
+                        if(pCaption->IsAutoGrowHeight())
+                        {
+                            pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
+                            aNote.SetItemSet(pCaption->GetMergedItemSet());
+                        }
+                    }
+                    pViewShell->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
+                }
+            }
+        }
+    }
+}
 
