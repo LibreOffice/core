@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:03:07 $
+ *  last change: $Author: bm $ $Date: 2001-02-09 16:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,9 +90,6 @@ namespace com { namespace sun { namespace star {
     namespace task {
         class XStatusIndicator;
     }
-    namespace frame {
-        class XModel;
-    }
 }}}
 
 class SvXMLAutoStylePoolP;
@@ -119,13 +116,6 @@ protected:
 
 public:
     SchXMLExport();
-    SchXMLExport( com::sun::star::uno::Reference< com::sun::star::frame::XModel > xModel,
-                  const rtl::OUString& rFileName,
-                  const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler >& rHandler,
-                   const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::document::XGraphicObjectResolver > &,
-                  sal_Bool bShowProgress,
-                  sal_Bool bIncludeTable = sal_False );
     virtual ~SchXMLExport();
 
     void SetProgress( sal_Int32 nPercentage );

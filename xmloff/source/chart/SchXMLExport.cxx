@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bm $ $Date: 2001-01-15 09:00:44 $
+ *  last change: $Author: bm $ $Date: 2001-02-09 16:46:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1770,42 +1770,6 @@ SchXMLExport::SchXMLExport()
 : SvXMLExport( MAP_CM ),
   maExportHelper( *this, maAutoStylePool )
 {
-}
-
-SchXMLExport::SchXMLExport( uno::Reference< frame::XModel > xModel,
-                            const rtl::OUString& rFileName,
-                            const uno::Reference< xml::sax::XDocumentHandler >& rHandler,
-                            const uno::Reference< ::com::sun::star::document::XGraphicObjectResolver > & rEGO,
-                            sal_Bool bShowProgress,
-                            sal_Bool bIncludeTable ) :
-        // MAP_CM should become the application setting
-        SvXMLExport( rFileName, rHandler, xModel, rEGO, MAP_CM ),
-        maExportHelper( *this, maAutoStylePool )
-{
-    // get status indicator (if requested)
-    if( bShowProgress )
-    {
-        uno::Reference<frame::XController> xController( xModel->getCurrentController());
-        if( xController.is())
-        {
-            uno::Reference<frame::XFrame> xFrame( xController->getFrame());
-            if( xFrame.is())
-            {
-                uno::Reference<task::XStatusIndicatorSupplier> xFactory( xFrame, uno::UNO_QUERY );
-                if( xFactory.is())
-                {
-                    mxStatusIndicator = xFactory->getStatusIndicator();
-                }
-            }
-        }
-    }
-
-    // add progress view
-    if( mxStatusIndicator.is())
-    {
-        const rtl::OUString aText( RTL_CONSTASCII_USTRINGPARAM( "XML Export" ));
-        mxStatusIndicator->start( aText, 100 );     // use percentage as values
-    }
 }
 
 SchXMLExport::~SchXMLExport()
