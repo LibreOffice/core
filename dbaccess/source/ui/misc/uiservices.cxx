@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 10:09:48 $
+ *  last change: $Author: fs $ $Date: 2000-10-25 13:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,9 @@ using namespace ::com::sun::star::registry;
 // registry functions
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseAdministrationDialog();
 extern "C" void SAL_CALL createRegistryInfo_OSQLMessageDialog();
+extern "C" void SAL_CALL createRegistryInfo_OInteractionHandler();
 
 //***************************************************************************************
-//
-// Die vorgeschriebene C-Api muss erfuellt werden!
-// Sie besteht aus drei Funktionen, die von dem Modul exportiert werden muessen.
-//
 extern "C" void SAL_CALL createRegistryInfo()
 {
     static sal_Bool bInit = sal_False;
@@ -94,6 +91,7 @@ extern "C" void SAL_CALL createRegistryInfo()
     {
         createRegistryInfo_ODatabaseAdministrationDialog();
         createRegistryInfo_OSQLMessageDialog();
+        createRegistryInfo_OInteractionHandler();
         bInit = sal_True;
     }
 }
