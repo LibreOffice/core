@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:01:17 $
+#   last change: $Author: fs $ $Date: 2000-10-31 10:42:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,7 +81,6 @@ BMP_IN=$(PRJ)$/win$/res
 
 SRS1NAME=form
 SRC1FILES= \
-    qryparam.src 	\
     dbmsgbox.src 	\
     fmexpl.src 		\
     filtnav.src		\
@@ -122,7 +121,6 @@ SLOFILES = \
     $(SLO)$/fmexch.obj      \
     $(SLO)$/tabwin.obj      \
     $(SLO)$/multipro.obj	\
-    $(SLO)$/qryparam.obj	\
     $(SLO)$/fmurl.obj		\
     $(SLO)$/fmfilter.obj	\
     $(SLO)$/filtnav.obj		\
