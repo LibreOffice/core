@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-01 11:04:31 $
+ *  last change: $Author: oj $ $Date: 2001-03-02 13:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
         ::rtl::OUString sRealName,sTableName;
         xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
         xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
-        if(sTableName.indexOf(0,'.') != -1)
+        if(sTableName.indexOf('.',0) != -1)
         {
             ::rtl::OUString aCatlog,aSchema,aTable;
             ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),sTableName,aCatlog,aSchema,aTable);
@@ -695,7 +695,7 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
         ::rtl::OUString sRealName,sTableName;
         xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
         xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
-        if(sTableName.indexOf(0,'.') != -1)
+        if(sTableName.indexOf('.',0) != -1)
         {
             ::rtl::OUString aCatlog,aSchema,aTable;
             ::dbtools::qualifiedNameComponents(m_xConnection->getMetaData(),sTableName,aCatlog,aSchema,aTable);
