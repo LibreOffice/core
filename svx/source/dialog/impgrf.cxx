@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-23 16:19:22 $
+ *  last change: $Author: sj $ $Date: 2001-01-23 16:52:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ USHORT FillFilter( GraphicFilter& rFilter )
     INetURLObject aFilterPathUrl( aPathOpt.GetFilterPath() );
     if ( aFilterPathUrl.HasError() )
         aFilterPathUrl = INetURLObject( aPathOpt.GetFilterPath(), INET_PROT_FILE );
-    rFilter.SetFilterPath( aPathOpt.GetFilterPath() );
+    rFilter.SetFilterPath( aFilterPathUrl );
 
     INetURLObject aUserConfigPathUrl( aPathOpt.GetUserConfigPath() );
     if ( aUserConfigPathUrl.HasError() )
