@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-29 10:56:09 $
+ *  last change: $Author: cmc $ $Date: 2002-11-18 12:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,20 +183,26 @@ class SwRTFParser : public SvxRTFParser
     SwRelNumRuleSpaces* pRelNumRule;    // Liste aller benannten NumRules
 
     USHORT nAktPageDesc, nAktFirstPageDesc;
-    USHORT nAktBox;                     // akt. Box
-    USHORT nInsTblRow;          // beim nach \row kein \pard -> neue Line anlegen
-    USHORT nNewNumSectDef;      // jeder SectionWechsel kann neue Rules definieren
+    USHORT nAktBox;         // akt. Box
+    USHORT nInsTblRow;      // beim nach \row kein \pard -> neue Line anlegen
+    USHORT nNewNumSectDef;  // jeder SectionWechsel kann neue Rules definieren
 
-    BOOL bSwPageDesc : 1;
-    BOOL bReadSwFly : 1;        // lese Swg-Fly (wichtig fuer Bitmaps!)
-    BOOL bReadNoTbl : 1;        // verhinder Tabelle in Tabelle/FootNote
-    BOOL bFootnoteAutoNum : 1;  // automatische Numerierung ?
-    BOOL bStyleTabValid : 1;    // Styles schon erzeugt ?
-    BOOL bInPgDscTbl : 1;       // beim PageDescTbl lesen
-    BOOL bNewNumList : 1;       // Word 7.0 NumList gelesen, 6.0 ueberspringen
-    BOOL bFirstContinue: 1;     // 1.Call ins Continue
-    BOOL bFirstDocControl: 1;   // 1.Call of ReadDocControl
+    bool bSwPageDesc;
+    bool bReadSwFly;        // lese Swg-Fly (wichtig fuer Bitmaps!)
+    bool mbReadNoTbl;       // verhinder Tabelle in Tabelle/FootNote
+    bool mbIsFootnote;
+    bool bFootnoteAutoNum;  // automatische Numerierung ?
+    bool bStyleTabValid;    // Styles schon erzeugt ?
+    bool bInPgDscTbl;       // beim PageDescTbl lesen
+    bool bNewNumList;       // Word 7.0 NumList gelesen, 6.0 ueberspringen
+    bool bFirstContinue;    // 1.Call ins Continue
+    bool bFirstDocControl;  // 1.Call of ReadDocControl
 
+    /*
+     #i9243#
+     In a footnote tables are not possible (for some obscure reason!)
+    */
+    bool CantUseTables() const { return mbReadNoTbl || mbIsFootnote; }
 
     virtual void InsertPara();
     virtual void InsertText();
@@ -297,6 +303,9 @@ public:
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2002/05/29 10:56:09  cmc
+      #99290# I hate sunpro
+
       Revision 1.3  2002/05/22 11:28:00  cmc
       #99290# Collect tables and force recalc at end of parsing once for each table, not at end of each row
 

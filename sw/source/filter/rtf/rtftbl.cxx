@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-26 14:15:58 $
+ *  last change: $Author: cmc $ $Date: 2002-11-18 12:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,8 @@ extern void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* = 0,
 void SwRTFParser::ReadTable( int nToken )
 {
     nInsTblRow = USHRT_MAX;
-    if( bReadNoTbl )
+
+    if (CantUseTables())
     {
         // alle Tabellen-Tokens ueberlesen
         nToken = GetNextToken();        // RTF_TROWD ueberlesen
@@ -882,6 +883,9 @@ void SwRTFParser::CheckInsNewTblLine()
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.8  2002/09/26 14:15:58  cmc
+      #101746# Add cell padding import and export
+
       Revision 1.7  2002/07/31 13:51:32  cmc
       #101615# RTL support for frames and tables rtf im/ex
 

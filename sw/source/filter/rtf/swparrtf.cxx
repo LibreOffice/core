@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-31 10:18:48 $
+ *  last change: $Author: cmc $ $Date: 2002-11-18 12:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,9 +322,9 @@ SwRTFParser::SwRTFParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     pRelNumRule( new SwRelNumRuleSpaces( *pD, bReadNewDoc )),
     aTblFmts( 0, 10 )
 {
-    bReadNoTbl = bReadSwFly = bSwPageDesc = bStyleTabValid =
-    bInPgDscTbl = bNewNumList = FALSE;
-    bFirstContinue = bFirstDocControl = TRUE;
+    mbIsFootnote = mbReadNoTbl = bReadSwFly = bSwPageDesc = bStyleTabValid =
+    bInPgDscTbl = bNewNumList = false;
+    bFirstContinue = bFirstDocControl = true;
 
     pPam = new SwPaM( *rCrsr.GetPoint() );
     SetInsPos( SwxPosition( pPam ) );
@@ -346,8 +346,8 @@ SwRTFParser::SwRTFParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
 // Aufruf des Parsers
 SvParserState SwRTFParser::CallParser()
 {
-    bReadNoTbl = FALSE;
-    bFirstContinue = TRUE;
+    mbReadNoTbl = false;
+    bFirstContinue = true;
 
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
@@ -379,7 +379,7 @@ void SwRTFParser::Continue( int nToken )
 
             // verhinder das einlesen von Tabellen in Fussnoten / Tabellen
             ULONG nNd = pPos->nNode.GetIndex();
-            bReadNoTbl = 0 != pSttNd->FindTableNode() ||
+            mbReadNoTbl = 0 != pSttNd->FindTableNode() ||
                         ( nNd < pDoc->GetNodes().GetEndOfInserts().GetIndex() &&
                         pDoc->GetNodes().GetEndOfInserts().StartOfSectionIndex() < nNd );
         }
@@ -683,18 +683,19 @@ void SwRTFParser::NextToken( int nToken )
         ReadSectControls( nToken );
         break;
     case RTF_CELL:
-        if( bReadNoTbl )
+        if (CantUseTables())
             InsertPara();
         else
         {
-            if( USHRT_MAX != nInsTblRow && !pTableNode )    // Tabelle nicht mehr vorhanden ?
+            // Tabelle nicht mehr vorhanden ?
+            if (USHRT_MAX != nInsTblRow && !pTableNode)
                 NewTblLine();               // evt. Line copieren
             GotoNextBox();
         }
         break;
 
     case RTF_ROW:
-        if( !bReadNoTbl )
+        if (!CantUseTables())
         {
             // aus der Line raus
             nAktBox = 0;
@@ -721,7 +722,7 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_INTBL:
-        if( !bReadNoTbl )
+        if (!CantUseTables())
         {
             if( !pTableNode )           // Tabelle nicht mehr vorhanden ?
             {
@@ -2749,7 +2750,8 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
     const SwNodeIndex* pSttIdx = 0;
     SwFrmFmt* pHdFtFmt = 0;
     SwTxtAttr* pTxtAttr = 0;
-    int bDelFirstChar = FALSE, bIsFootnote = FALSE;
+    int bDelFirstChar = FALSE;
+    bool bOldIsFootnote = mbIsFootnote;
     BOOL bOldGrpStt = IsNewGroup();
 
     int nOpenBrakets = GetOpenBrakets() - 1;
@@ -2782,7 +2784,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
             if( pTxtAttr )
                 pSttIdx = ((SwTxtFtn*)pTxtAttr)->GetStartNode();
-            bIsFootnote = TRUE;
+            mbIsFootnote = true;
 
             // wurde an der Position ein Escapement aufgespannt, so entferne
             // das jetzt. Fussnoten sind bei uns immer hochgestellt.
@@ -2934,10 +2936,11 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
     // und alles wieder zurueck
     *pPam->GetPoint() = aSavePos;
-    if( bIsFootnote )
+    if (mbIsFootnote)
         SetNewGroup( bOldGrpStt );      // Status wieder zurueck
     else
         SetNewGroup( FALSE );           // { - Klammer war kein Group-Start!
+    mbIsFootnote = bOldIsFootnote;
     GetAttrStack().Insert( &aSaveStack, 0 );
 
     aFlyArr.Insert( &aSaveArray, 0 );
