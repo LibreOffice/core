@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TemplateConsts.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:00:13 $
+ *  last change: $Author: kz $  $Date: 2004-11-27 09:05:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,19 +72,35 @@ public interface TemplateConsts
     public final static String FILLIN_TIME = "<time>";
     public final static String FILLIN_LOCATION = "<location>";
 
+    /**
+     * section name <b>prefix</b> for sections that contain items.
+     * this is also used as table name prefix, since each items section
+     * must contain a table whos name is identical name to the section's name.
+     */
     public final static String SECTION_ITEMS = "AGENDA_ITEMS";
+    /**
+     * the name of the section which contains the topics.
+     */
     public final static String SECTION_TOPICS = "AGENDA_TOPICS";
+    /**
+     * the name of the parent minutes section.
+     */
     public final static String SECTION_MINUTES_ALL = "MINUTES_ALL";
+    /**
+     * the name of the child nimutes section.
+     * This section will be duplicated for each topic.
+     */
     public final static String SECTION_MINUTES = "MINUTES";
 
     //public final static String AGENDA_ITEM = "AGENDA_ITEM";
 
     /**
      * taged headings and names.
+     * These will be searched in item tables (in the template) and will be
+     * replaced with resource strings.
      *
      * headings...
      */
-
     public final static String FILLIN_MEETING_TYPE = "<meeting-type>";
     public final static String FILLIN_BRING = "<bring>";
     public final static String FILLIN_READ = "<read>";
@@ -104,7 +120,9 @@ public interface TemplateConsts
 
 
     /**
+     * Styles (paragraph styles) used for agenda items.
      * headings styles
+     *
      */
     public final static String STYLE_MEETING_TYPE = "MeetingType";
     public final static String STYLE_BRING = "Bring";
@@ -121,7 +139,11 @@ public interface TemplateConsts
     public final static String STYLE_TIMEKEEPER = "Timekeeper";
     public final static String STYLE_OBSERVERS = "Observers";
     public final static String STYLE_RESOURCE_PERSONS = "ResourcePersons";
+
     /**
+     * Styles (paragraph styles) used for the <b>text</b> of agenda items
+     * The agenda wizard creates fill-in fields with the given styles...)
+     *
      * headings fields styles
      */
     public final static String STYLE_MEETING_TYPE_TEXT = "MeetingTypeText";
@@ -141,21 +163,31 @@ public interface TemplateConsts
     public final static String STYLE_RESOURCE_PERSONS_TEXT = "ResourcePersonsText";
 
     /**
-     * topic...
+     * Fillins for the topic table.
+     * These strings will be searched inside the topic table as
+     * part of detecting its structure.
      */
     public final static String FILLIN_TOPIC_NUMBER = "<num>";
     public final static String FILLIN_TOPIC_TOPIC = "<topic>";
     public final static String FILLIN_TOPIC_RESPONSIBLE = "<responsible>";
     public final static String FILLIN_TOPIC_TIME = "<topic-time>";
 
+
     /**
-     * Minutes...
+     * fillins for minutes.
+     * These will be searched in the minutes section and will be replaced
+     * with the appropriate data.
      */
     public final static String FILLIN_MINUTES_TITLE = "<minutes-title>";
     public final static String FILLIN_MINUTES_LOCATION = "<minutes-location>";
     public final static String FILLIN_MINUTES_DATE = "<minutes-date>";
     public final static String FILLIN_MINUTES_TIME = "<minutes-time>";
 
+    /**
+     * Minutes-topic fillins
+     * These will be searched in the minutes-child-section, and
+     * will be replaced with topic data.
+     */
     public final static String FILLIN_MINUTE_NUM = "<mnum>";
     public final static String FILLIN_MINUTE_TOPIC = "<mtopic>";
     public final static String FILLIN_MINUTE_RESPONSIBLE = "<mresponsible>";
