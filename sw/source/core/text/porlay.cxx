@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-01 13:25:11 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -1247,8 +1246,11 @@ BYTE SwScriptInfo::DirType( const xub_StrLen nPos ) const
  **************************************************************************/
 
 USHORT SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
-                                       const xub_Unicode* pChar )
+                                       const xub_StrLen nStt, const xub_StrLen nEnd,
+                                       const xub_Unicode cChar )
 {
+    ASSERT( rNode.GetTxt().Len() == rText.Len(), "MaskHiddenRanges, string len mismatch" )
+
     PositionList aList;
     xub_StrLen nHiddenStart;
     xub_StrLen nHiddenEnd;
@@ -1260,15 +1262,19 @@ USHORT SwScriptInfo::MaskHiddenRanges( const SwTxtNode& rNode, XubString& rText,
     {
         nHiddenEnd = *(rFirst++);
         nHiddenStart = *(rFirst++);
-        nNumOfHiddenChars += ( nHiddenEnd - nHiddenStart );
 
-        if ( pChar )
+        if ( nHiddenEnd < nStt || nHiddenStart > nEnd )
+            continue;
+
+        while ( nHiddenStart < nHiddenEnd && nHiddenStart < nEnd )
         {
-            while ( nHiddenStart < nHiddenEnd && nHiddenStart < rText.Len() )
-                rText.SetChar( nHiddenStart++, *pChar );
+            if ( nHiddenStart >= nStt && nHiddenStart < nEnd )
+            {
+                rText.SetChar( nHiddenStart, cChar );
+                ++nNumOfHiddenChars;
+            }
+            ++nHiddenStart;
         }
-        else
-            rText.Erase( nHiddenStart, nHiddenEnd - nHiddenStart );
     }
 
     return nNumOfHiddenChars;
