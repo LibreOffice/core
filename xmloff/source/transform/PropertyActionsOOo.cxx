@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOOo.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 15:04:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 11:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_CONTRAST, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_DRAW, XML_GAMMA, XML_ATACTION_COPY,
+    { XML_NAMESPACE_DRAW, XML_GAMMA, XML_ATACTION_GAMMA_OOO,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_RED, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
@@ -191,7 +191,7 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE_DIRECTION, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-    { XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE, XML_ATACTION_INCH2IN,
+    { XML_NAMESPACE_DRAW, XML_CAPTION_ESCAPE, XML_ATACTION_CAPTION_ESCAPE_OOO,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_CAPTION_LINE_LENGTH, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
@@ -391,10 +391,9 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
                 XMLTransformerActionInit::QNameParam( XML_NAMESPACE_DRAW,
                                                  XML_OPACITY_NAME), 0 },
 
-    { XML_NAMESPACE_DRAW, XML_MOVE_PROTECT, XML_ATACTION_COPY, NO_PARAMS },
-    { XML_NAMESPACE_DRAW, XML_SIZE_PROTECT, XML_ATACTION_COPY, NO_PARAMS },
+    { XML_NAMESPACE_DRAW, XML_MOVE_PROTECT, XML_ATACTION_MOVE_PROTECT, NO_PARAMS },
+    { XML_NAMESPACE_DRAW, XML_SIZE_PROTECT, XML_ATACTION_SIZE_PROTECT, NO_PARAMS },
     { XML_NAMESPACE_DRAW, XML_FIT_TO_CONTOUR, XML_ATACTION_COPY, NO_PARAMS },
-
 
     // Font work properties
     { XML_NAMESPACE_DRAW, XML_FONTWORK_STYLE, XML_ATACTION_COPY, NO_PARAMS },
@@ -413,7 +412,7 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
 
     { XML_NAMESPACE_DRAW, XML_WRAP_INFLUENCE_ON_POSITION, XML_ATACTION_COPY, NO_PARAMS }, // new in OOo 2.0
 
-    { XML_NAMESPACE_DRAW, XML_MIRROR, XML_ATACTION_COPY,
+    { XML_NAMESPACE_DRAW, XML_MIRROR, XML_ATACTION_DRAW_MIRROR_OOO,
           NO_PARAMS }, /* generated entry */
 
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
@@ -777,6 +776,9 @@ XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
+    { XML_NAMESPACE_DRAW, XML_WRITING_MODE, XML_ATACTION_RENAME,
+        XMLTransformerActionInit::QNameParam( XML_NAMESPACE_STYLE,
+                                                 XML_WRITING_MODE ), 0 },
 //  { XML_NAMESPACE_STYLE, XML_WRITING_MODE_AUTOMATIC, XML_ATACTION_COPY,
 //      NO_PARAMS }, /* new attribute */
     { XML_NAMESPACE_STYLE, XML_SNAP_TO_LAYOUT_GRID, XML_ATACTION_COPY,
