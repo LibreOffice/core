@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multistratumbackend.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-18 15:48:44 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 14:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,7 +355,7 @@ rtl::OUString SAL_CALL
     {
         return mOwnerEntity;
     }
-    return rtl::OUString();
+    return OUString();
 }
 //------------------------------------------------------------------------------
 
@@ -376,7 +376,7 @@ rtl::OUString SAL_CALL
             return OUString();
         }
     }
-    return rtl::OUString();
+    return OUString();
 }
 //------------------------------------------------------------------------------
 
