@@ -2,9 +2,9 @@
  *
  *  $RCSfile: verinfo.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-10-30 16:15:04 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,10 +157,14 @@
   #endif
 #endif
 
+#ifdef SUBVERSION
 #if SUBVERSION < 10
   #define VER4 PPCAT(0, SUBVERSION)
 #else
   #define VER4 SUBVERSION
+#endif
+#else
+  #define VER4 0.0
 #endif
 
 #ifndef VER1
@@ -257,38 +261,3 @@
 
 #endif  // _VERINFO_HRC
 
-/*************************************************************************
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/20 14:43:18  hr
-      initial import
-
-      Revision 1.3  2000/06/29 17:24:48  hjs
-      year 2000 bug
-
-      Revision 1.2  2000/06/29 16:02:40  hjs
-      use VERVARIANT
-
-      Revision 1.1  2000/02/10 12:22:20  hjs
-      versioninfo resources
-
-
-      Rev 1.4   21 Dec 1995 14:32:38   HJS
-   umstellung von ver_final; 1=1,  10=a etc.
-
-      Rev 1.3   25 Sep 1995 14:50:58   ER
-   moved to t:/solar/inc (s:\solenv\inc)
-
-      Rev 1.2   16 Mar 1995 16:10:20   ER
-   kurz vor der dritten Auslieferung befinden wir uns
-   nicht mehr in der Test/UI Phase..
-
-      Rev 1.1   11 Oct 1993 18:14:00   ER
-   VerInfo auch unter WNT
-
-      Rev 1.0   07 Sep 1993 17:26:52   ER
-   Initial revision.
-
-*************************************************************************/
