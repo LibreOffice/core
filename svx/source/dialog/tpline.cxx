@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-06-25 17:03:59 $
+ *  last change: $Author: bm $ $Date: 2001-07-05 10:20:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,9 @@
 #endif
 #ifndef _SVX_XBITMAP_HXX //autogen
 #include <xbitmap.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
 #endif
 
 #include "opengrf.hxx"
@@ -1489,6 +1492,12 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
         for(long i = 0; i < nNumMenuGalleryItems; i++)
         {
             const String* pGrfName = (const String*)aGrfNames.GetObject(i);
+            const String* pUIName = pGrfName;
+
+            // convert URL encodings to UI characters (eg %20 for spaces)
+            String aPhysicalName;
+            if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( *pGrfName, aPhysicalName ))
+                pUIName = &aPhysicalName;
 
             SvxBrushItem* pBrushItem = new SvxBrushItem(*pGrfName, aEmptyStr, GPOS_AREA);
             pBrushItem->SetDoneLink(STATIC_LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));
@@ -1514,12 +1523,12 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
 
                 }
                 Image aImage(aBitmap);
-                pPopup->InsertItem(pInfo->nItemId, *pGrfName, aImage );
+                pPopup->InsertItem(pInfo->nItemId, *pUIName, aImage );
             }
             else
             {
                 Image aImage;
-                pPopup->InsertItem(pInfo->nItemId, *pGrfName, aImage );
+                pPopup->InsertItem(pInfo->nItemId, *pUIName, aImage );
             }
         }
         aSymbolMB.GetPopupMenu()->SetPopupMenu( MN_GALLERY, pPopup );
@@ -1612,19 +1621,19 @@ IMPL_STATIC_LINK(SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
 {
     PopupMenu* pPopup = pThis->aSymbolMB.GetPopupMenu()->GetPopupMenu( MN_GALLERY );
 
-    SvxBmpItemInfo* pInfo = 0;
+    SvxBmpItemInfo* pBmpInfo = 0;
     for ( USHORT i = 0; i < pThis->aGrfBrushItems.Count(); i++ )
     {
         SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)pThis->aGrfBrushItems.GetObject(i);
-        if(&pInfo->pBrushItem == &pItem)
+        if( pInfo->pBrushItem == pItem )
         {
-            pInfo = pInfo; break;
+            pBmpInfo = pInfo; break;
         }
     }
-    if(pInfo)
+    if( pBmpInfo )
     {
-        Image aImage(pItem->GetGraphic()->GetBitmap());
-        pPopup->SetItemImage( pInfo->nItemId, aImage );
+        Image aImage( pItem->GetGraphic()->GetBitmap() );
+        pPopup->SetItemImage( pBmpInfo->nItemId, aImage );
     }
 
     return 0;
