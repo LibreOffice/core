@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-05 15:05:37 $
+ *  last change: $Author: fme $ $Date: 2001-11-30 11:13:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1206,7 +1206,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                     nX = 0;
             }
 
-            return GetCrsrOfst( pPos, Point( nLeftMargin + nX, rPoint.Y() ),
+            return GetCrsrOfst( pPos, Point( GetLineStart() + nX, rPoint.Y() ),
                                 nChgNode, pCMS );
         }
         if( pPor->InTxtGrp() )
