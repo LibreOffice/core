@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericunodialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 15:51:13 $
+ *  last change: $Author: fs $ $Date: 2001-08-17 09:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,8 +270,9 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
             {
                 ::vos::OGuard aGuard(Application::GetSolarMutex());
                 pDialogToExecute = createDialog(pParent);
+                OSL_ENSURE( pDialogToExecute, "OGenericUnoDialog::execute: createDialog returned nonsense!" );
                 // do some initialisations
-                if (!m_bTitleAmbiguous)
+                if (!m_bTitleAmbiguous && pDialogToExecute)
                     pDialogToExecute->SetText(sTitle);
             }
 
@@ -282,6 +283,7 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
 
     // start execution
     sal_Int16 nReturn(0);
+    if ( pDialogToExecute )
     {   // again: this has to be guarded with the solar mutex
         ::vos::OGuard aGuard(Application::GetSolarMutex());
         nReturn = pDialogToExecute->Execute();
@@ -369,6 +371,9 @@ void OGenericUnoDialog::destroyDialog()
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/03/22 15:51:13  jl
+ *  replaced OSL_ENSHURE by OSL_ENSURE
+ *
  *  Revision 1.1  2000/11/24 12:34:35  fs
  *  initial checkin - frame for dialogs usuable as UNO service
  *
