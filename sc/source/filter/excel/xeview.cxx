@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:31:18 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:39:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -397,7 +397,10 @@ void XclExpTabViewSettings::CreateSelectionData( sal_uInt8 nPane,
 
 void XclExpTabViewSettings::WriteWindow2( XclExpStream& rStrm ) const
 {
-    XclExpWindow2( GetRoot(), maData, mnGridColorId ).Save( rStrm );
+//  #i43553# GCC 3.3 parse error
+//    XclExpWindow2( GetRoot(), maData, mnGridColorId ).Save( rStrm );
+    XclExpWindow2 aWindow2( GetRoot(), maData, mnGridColorId );
+    aWindow2.Save( rStrm );
 }
 
 void XclExpTabViewSettings::WriteScl( XclExpStream& rStrm ) const
@@ -409,7 +412,12 @@ void XclExpTabViewSettings::WriteScl( XclExpStream& rStrm ) const
 void XclExpTabViewSettings::WritePane( XclExpStream& rStrm ) const
 {
     if( maData.IsSplit() )
-        XclExpPane( GetRoot(), maData ).Save( rStrm );
+//  #i43553# GCC 3.3 parse error
+//        XclExpPane( GetRoot(), maData ).Save( rStrm );
+    {
+        XclExpPane aPane( GetRoot(), maData );
+        aPane.Save( rStrm );
+    }
 }
 
 void XclExpTabViewSettings::WriteSelection( XclExpStream& rStrm, sal_uInt8 nPane ) const
