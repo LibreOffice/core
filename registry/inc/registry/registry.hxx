@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-14 09:29:15 $
+ *  last change: $Author: jsc $ $Date: 2001-05-18 15:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,9 +454,9 @@ public:
     inline RegError openKey(const ::rtl::OUString& keyName,
                               RegistryKey& rOpenKey);
 
-    /** This function returns the names of all subkeys of the key.
+    /** This function returns an array with all subkeys. The subkeys will be open.
         @param  keyName Points to a null terminated string specifying the name of a key.
-        @param  rSubKeys Reference a RegistryKeyArray which will be filled with the names of the subkeys.
+        @param  rSubKeys Reference a RegistryKeyArray which will be filled with open subkeys.
         @return REG_NO_ERROR if succeeds else an error code.
     */
     inline RegError openSubKeys(const ::rtl::OUString& keyName,
