@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:39:30 $
+ *  last change: $Author: jp $ $Date: 2002-01-18 10:04:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2442,6 +2442,7 @@ void  SwContentTree::KeyInput(const KeyEvent& rEvent)
 
 void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
 {
+    BOOL bCallBase = TRUE;
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
         Point aPos( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ));
@@ -2540,12 +2541,18 @@ void  SwContentTree::RequestHelp( const HelpEvent& rHEvt )
                     else
                         Help::ShowQuickHelp( this, aItemRect, sEntry,
                             QUICKHELP_LEFT|QUICKHELP_VCENTER );
+                    bCallBase = FALSE;
                 }
             }
             else
+            {
                 Help::ShowQuickHelp( this, Rectangle(), aEmptyStr, 0 );
+                bCallBase = FALSE;
+            }
         }
     }
+    if( bCallBase )
+        Window::RequestHelp( rHEvt );
 }
 
 /***************************************************************************
@@ -3139,6 +3146,9 @@ void SwContentLBoxString::Paint( const Point& rPos, SvLBox& rDev, sal_uInt16 nFl
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.12  2001/09/28 06:39:30  os
+    #92514# cast of Any::getValue removed
+
     Revision 1.11  2001/07/26 06:09:42  os
     #89714# prevent removing of current entry after drag and drop
 
