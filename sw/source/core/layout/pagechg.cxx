@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:12:12 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1954,29 +1954,33 @@ void SwRootFrm::ImplCalcBrowseWidth()
                         break;
                     case FLY_AT_CNTNT:
                         {
-                            nWidth = pAnchoredObj->GetObjRect().Right();
-//                            if ( bFly )
-//                            {
-//                                nWidth = rFmt.GetFrmSize().GetWidth();
-//                                const SwFmtHoriOrient &rHori = rFmt.GetHoriOrient();
-//                                switch ( rHori.GetHoriOrient() )
-//                                {
-//                                    case HORI_NONE:
-//                                        nWidth += rHori.GetPos();
-//                                        break;
-//                                    case HORI_INSIDE:
-//                                    case HORI_LEFT:
-//                                        if ( PRTAREA == rHori.GetRelationOrient() )
-//                                            nWidth += pFrm->Prt().Left();
-//                                }
-//                            }
-//                            else
-//                                //Fuer Zeichenobjekte ist die Auswahl sehr klein,
-//                                //weil sie keine Attribute haben, also durch ihre
-//                                //aktuelle Groesse bestimmt werden.
-//                                nWidth = pObj->GetCurrentBoundRect().Right() -
-//                                         pObj->GetAnchorPos().X();
-
+                            // --> FME 2004-09-13 #i33170#
+                            // Reactivated old code because
+                            // nWidth = pAnchoredObj->GetObjRect().Right()
+                            // gives wrong results for objects that are still
+                            // at position WEIT_WECH.
+                            if ( bFly )
+                            {
+                                nWidth = rFmt.GetFrmSize().GetWidth();
+                                const SwFmtHoriOrient &rHori = rFmt.GetHoriOrient();
+                                switch ( rHori.GetHoriOrient() )
+                                {
+                                    case HORI_NONE:
+                                        nWidth += rHori.GetPos();
+                                        break;
+                                    case HORI_INSIDE:
+                                    case HORI_LEFT:
+                                        if ( PRTAREA == rHori.GetRelationOrient() )
+                                            nWidth += pFrm->Prt().Left();
+                                }
+                            }
+                            else
+                                //Fuer Zeichenobjekte ist die Auswahl sehr klein,
+                                //weil sie keine Attribute haben, also durch ihre
+                                //aktuelle Groesse bestimmt werden.
+                                nWidth = pAnchoredObj->GetObjRect().Right() -
+                                         pAnchoredObj->GetDrawObj()->GetAnchorPos().X();
+                            // <--
                         }
                         break;
                     default:    /* do nothing */;
