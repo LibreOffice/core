@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2003-09-29 14:40:53 $
+#   last change: $Author: kz $ $Date: 2003-11-18 16:40:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,9 @@ ENABLE_EXCEPTIONS=TRUE
 # BEGIN ----------------------------------------------------------------
 # auto generated Target:testjob by codegen.pl 
 
-CFLAGS+=/Ob1
+.IF "$(GUI)" == "WNT"
+    CFLAGS+=/Ob1
+.ENDIF
 
 SHL1OBJS=  \
     $(SLO)$/osl_Thread.obj
@@ -101,6 +103,8 @@ SHL1VERSIONMAP = export.map
 
 # END ------------------------------------------------------------------
 
+.IF "$(GUI)" == "WNT"
+
 SHL2OBJS=$(SLO)$/osl_process.obj
 SHL2TARGET=osl_process
 SHL2STDLIBS=$(SALLIB) 
@@ -117,24 +121,27 @@ SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
 DEF2EXPORTFILE=export.exp
 
-OBJFILES=$(OBJ)$/osl_process_child.obj 
-APP1TARGET=osl_process_child
-APP1OBJS=$(OBJFILES)
+#
+
+OBJ3FILES=$(OBJ)$/osl_process_child.obj 
+APP3TARGET=osl_process_child
+APP3OBJS=$(OBJ3FILES)
 
 .IF "$(GUI)" == "UNX"
-APP1STDLIBS=$(LB)$/libsal.so
+APP3STDLIBS=$(LB)$/libsal.so
 .ENDIF
 .IF "$(GUI)" == "WNT"
-APP1STDLIBS=kernel32.lib $(LB)$/isal.lib
+APP3STDLIBS=kernel32.lib $(LB)$/isal.lib
 .ENDIF
 
+.ENDIF # "$(GUI)" == "WNT"
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
 
-SLOFILES=$(SHL1OBJS)
+SLOFILES=$(SHL1OBJS) $(SHL2OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
+.INCLUDE : _cppunit.mk
