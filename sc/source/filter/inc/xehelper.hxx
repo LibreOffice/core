@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:37:50 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,8 +218,10 @@ public:
     void                        SetFormats( const XclFormatRunVec& rFormats );
     /** Appends a formatting run. nChar must be greater than last contained character index. */
     void                        AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIx );
-    /** Removes rormatting runs at the end, if the string contains too much. */
+    /** Removes formatting runs at the end, if the string contains too much. */
     void                        LimitFormatCount( sal_uInt16 nMaxCount );
+    /** returns and removes the Font Index for a char index otherwise EXC_FONT_NOTFOUND from the formatting runs. */
+    sal_uInt16                  RemoveFontOfChar(sal_uInt16 nCharIdx);
 
     // get data ---------------------------------------------------------------
 
@@ -398,12 +400,12 @@ class EditEngine;
     &U                      underlining on/off
     &E                      double underlining on/off
     &S                      strikeout characters on/off
+    &X                      superscript on/off
+    &Y                      subscript on/off
     &"fontname,fontstyle"   use font with name 'fontname' and style 'fontstyle'
     &fontheight             set font height in points ('fontheight' is a decimal value)
 
     Known but unsupported control sequences:
-    &X                      superscript on/off
-    &Y                      subscript on/off
     &G                      picture
  */
 class XclExpHFConverter : protected XclExpRoot, ScfNoCopy
