@@ -18,6 +18,11 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
+// #110897#
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
 namespace framework
 {
 
@@ -30,8 +35,16 @@ struct EventsConfig
 class EventsConfiguration
 {
     public:
-        static sal_Bool LoadEventsConfig( SvStream& rInStream, EventsConfig& aItems );
-        static sal_Bool StoreEventsConfig( SvStream& rOutStream, const EventsConfig& aItems );
+
+        // #110897#
+        static sal_Bool LoadEventsConfig(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            SvStream& rInStream, EventsConfig& aItems );
+
+        // #110897#
+        static sal_Bool StoreEventsConfig(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+            SvStream& rOutStream, const EventsConfig& aItems );
 };
 
 } // namespace framework
