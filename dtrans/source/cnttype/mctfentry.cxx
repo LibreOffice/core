@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mctfentry.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:36:58 $
+ *  last change: $Author: tra $ $Date: 2001-02-13 13:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
