@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 13:09:48 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,6 +788,8 @@ sal_Bool JavaType::dumpInheritedMembers(FileStream& o, const OString& type, sal_
 void JavaType::dumpSeqStaticMember(FileStream& o, const ::rtl::OString& typeName,
                                    const ::rtl::OString& name)
 {
+    sal_Int32 i;
+
     OString type(checkSpecialJavaType(typeName));
 
     sal_Int32 index = type.lastIndexOf(']');
@@ -799,7 +801,7 @@ void JavaType::dumpSeqStaticMember(FileStream& o, const ::rtl::OString& typeName
 
         o << indent() << "public static final ";
         dumpType(o, relType);
-        for (sal_Int32 i=0; i < seqNum; i++)
+        for ( i=0; i < seqNum; i++)
         {
             o << "[]";
         }
