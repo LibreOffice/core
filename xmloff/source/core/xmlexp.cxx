@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-04 05:26:04 $
+ *  last change: $Author: sab $ $Date: 2001-04-20 08:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,32 +362,47 @@ SvXMLExport::~SvXMLExport()
 {
     delete pImageMapExport;
     delete pEventExport;
-    delete pNumExport;
     delete pNamespaceMap;
     delete pUnitConv;
-    if (pProgressBarHelper)
+    if (pProgressBarHelper || pNumExport)
     {
         if (xExportInfo.is())
         {
             uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xExportInfo->getPropertySetInfo();
             if (xPropertySetInfo.is())
             {
-                OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
-                OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
-                if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
-                    xPropertySetInfo->hasPropertyByName(sProgressCurrent))
+                if (pProgressBarHelper)
                 {
-                    sal_Int32 nProgressMax(pProgressBarHelper->GetReference());
-                    sal_Int32 nProgressCurrent(pProgressBarHelper->GetValue());
-                    uno::Any aAny;
-                    aAny <<= nProgressMax;
-                    xExportInfo->setPropertyValue(sProgressMax, aAny);
-                    aAny <<= nProgressCurrent;
-                    xExportInfo->setPropertyValue(sProgressCurrent, aAny);
+                    OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
+                    OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
+                    if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
+                        xPropertySetInfo->hasPropertyByName(sProgressCurrent))
+                    {
+                        sal_Int32 nProgressMax(pProgressBarHelper->GetReference());
+                        sal_Int32 nProgressCurrent(pProgressBarHelper->GetValue());
+                        uno::Any aAny;
+                        aAny <<= nProgressMax;
+                        xExportInfo->setPropertyValue(sProgressMax, aAny);
+                        aAny <<= nProgressCurrent;
+                        xExportInfo->setPropertyValue(sProgressCurrent, aAny);
+                    }
+                }
+                if (pNumExport)
+                {
+                    OUString sWrittenNumberFormats(RTL_CONSTASCII_USTRINGPARAM(XML_WRITTENNUMBERFORMATS));
+                    if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
+                    {
+                        uno::Sequence<sal_Int32> aWasUsed;
+                        pNumExport->GetWasUsed(aWasUsed);
+                        uno::Any aAny;
+                        aAny <<= aWasUsed;
+                        xExportInfo->setPropertyValue(sWrittenNumberFormats, aAny);
+                    }
                 }
             }
         }
         delete pProgressBarHelper;
+        delete pNumExport;
     }
 }
 
@@ -406,6 +421,21 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         xNumberFormatsSupplier = xNumberFormatsSupplier.query( xModel );
         if(xNumberFormatsSupplier.is() && xHandler.is())
             pNumExport = new SvXMLNumFmtExport(xHandler, xNumberFormatsSupplier);
+    }
+    if (xExportInfo.is() && pNumExport)
+    {
+        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xExportInfo->getPropertySetInfo();
+        if (xPropertySetInfo.is())
+        {
+            OUString sWrittenNumberFormats(RTL_CONSTASCII_USTRINGPARAM(XML_WRITTENNUMBERFORMATS));
+            if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
+            {
+                uno::Any aAny = xExportInfo->getPropertyValue(sWrittenNumberFormats);
+                uno::Sequence<sal_Int32> aWasUsed;
+                if(aAny >>= aWasUsed)
+                    pNumExport->SetWasUsed(aWasUsed);
+            }
+        }
     }
 }
 

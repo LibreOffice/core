@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-30 10:46:46 $
+ *  last change: $Author: sab $ $Date: 2001-04-20 08:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,10 @@
 
 #ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
+#endif
+
+#ifndef _COMPHELPER_NAMECONTAINER_HXX_
+#include <comphelper/namecontainer.hxx>
 #endif
 
 using namespace ::rtl;
@@ -278,12 +282,12 @@ SvXMLImport::~SvXMLImport() throw ()
 //  delete pImageMapImportHelper;
     if (pNumImport)
         delete pNumImport;
-    if (pProgressBarHelper)
+    if (xImportInfo.is())
     {
-        if (xImportInfo.is())
+        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
+        if (xPropertySetInfo.is())
         {
-            uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
-            if (xPropertySetInfo.is())
+            if (pProgressBarHelper)
             {
                 OUString sProgressMax(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSMAX));
                 OUString sProgressCurrent(RTL_CONSTASCII_USTRINGPARAM(XML_PROGRESSCURRENT));
@@ -298,9 +302,16 @@ SvXMLImport::~SvXMLImport() throw ()
                     aAny <<= nProgressCurrent;
                     xImportInfo->setPropertyValue(sProgressCurrent, aAny);
                 }
+                delete pProgressBarHelper;
+            }
+            OUString sNumberStyles(RTL_CONSTASCII_USTRINGPARAM(XML_NUMBERSTYLES));
+            if (xNumberStyles.is() && xPropertySetInfo->hasPropertyByName(sNumberStyles))
+            {
+                uno::Any aAny;
+                aAny <<= xNumberStyles;
+                xImportInfo->setPropertyValue(sNumberStyles, aAny);
             }
         }
-        delete pProgressBarHelper;
     }
 
     if( xFontDecls.Is() )
@@ -573,6 +584,19 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
         else if( pAny->getValueType() == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0))
         {
             *pAny >>= xImportInfo;
+            if (xImportInfo.is())
+            {
+                uno::Reference< beans::XPropertySetInfo > xPropertySetInfo = xImportInfo->getPropertySetInfo();
+                if (xPropertySetInfo.is())
+                {
+                    OUString sNumberStyles(RTL_CONSTASCII_USTRINGPARAM(XML_NUMBERSTYLES));
+                    if (xPropertySetInfo->hasPropertyByName(sNumberStyles))
+                    {
+                        uno::Any aAny = xImportInfo->getPropertyValue(sNumberStyles);
+                        aAny >>= xNumberStyles;
+                    }
+                }
+            }
         }
     }
 }
@@ -860,6 +884,23 @@ ProgressBarHelper*  SvXMLImport::GetProgressBarHelper()
     return pProgressBarHelper;
 }
 
+void SvXMLImport::AddNumberStyle(sal_Int32 nKey, const OUString& rName)
+{
+    if (!xNumberStyles.is())
+    {
+        uno::Reference< container::XNameContainer > xTempNumberStyles( comphelper::NameContainer_createInstance( ::getCppuType((const sal_Int32*)0)) );
+        xNumberStyles = xTempNumberStyles;
+    }
+    if (xNumberStyles.is())
+    {
+        uno::Any aAny;
+        aAny <<= nKey;
+        xNumberStyles->insertByName(rName, aAny);
+    }
+    else
+        DBG_ERROR("not possible to create NameContainer");
+}
+
 XMLEventImportHelper& SvXMLImport::GetEventImport()
 {
     if (!pEventImportHelper)
@@ -889,6 +930,32 @@ void SvXMLImport::SetStyles( SvXMLStylesContext *pStyles )
 
 void SvXMLImport::SetAutoStyles( SvXMLStylesContext *pAutoStyles )
 {
+    if (pAutoStyles && xNumberStyles.is() && (mnImportFlags & IMPORT_CONTENT) )
+    {
+        uno::Reference<xml::sax::XAttributeList> xAttrList;
+        uno::Sequence< ::rtl::OUString > aNames = xNumberStyles->getElementNames();
+        sal_uInt32 nCount(aNames.getLength());
+        if (nCount)
+        {
+            const OUString* pNames = aNames.getConstArray();
+            if ( pNames )
+            {
+                SvXMLStyleContext* pContext;
+                uno::Any aAny;
+                sal_Int32 nKey(0);
+                for (sal_uInt32 i = 0; i < nCount; i++, pNames++)
+                {
+                    aAny = xNumberStyles->getByName(*pNames);
+                    if (aAny >>= nKey)
+                    {
+                        pContext = new SvXMLNumFormatContext( *this, XML_NAMESPACE_NUMBER,
+                                    *pNames, xAttrList, nKey, *pAutoStyles );
+                        pAutoStyles->AddStyle(*pContext);
+                    }
+                }
+            }
+        }
+    }
     xAutoStyles = pAutoStyles;
     GetTextImport()->SetAutoStyles( pAutoStyles );
     GetShapeImport()->SetAutoStylesContext( pAutoStyles );

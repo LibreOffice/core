@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 17:30:42 $
+ *  last change: $Author: sab $ $Date: 2001-04-20 08:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,6 +1011,32 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
     }
 }
 
+SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
+                                    USHORT nPrfx, const rtl::OUString& rLName,
+                                    const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                    sal_Int32 nTempKey,
+                                    SvXMLStylesContext& rStyles ) :
+    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_DATA_STYLE ),
+    pData( NULL ),
+    aMyConditions(),
+    nType( 0 ),
+    nFormatLang( LANGUAGE_SYSTEM ),
+    bAutoOrder( FALSE ),
+    bFromSystem( FALSE ),
+    bTruncate( TRUE ),
+    bAutoDec( FALSE ),
+    bAutoInt( FALSE ),
+    bHasExtraText( FALSE ),
+    bHasLongDoW( FALSE ),
+    bHasEra( FALSE ),
+    bHasDateTime( FALSE ),
+    bHasMap( sal_False ),
+    pStyles( &rStyles ),
+    nKey(nTempKey)
+{
+    SetAttribute(XML_NAMESPACE_STYLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_name)), rLName);
+}
+
 SvXMLNumFormatContext::~SvXMLNumFormatContext()
 {
 }
@@ -1091,7 +1117,7 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
 
         if (bHasMap)
         {
-            for (sal_Int32 i = 0; i < aMyConditions.size(); i++)
+            for (sal_uInt32 i = 0; i < aMyConditions.size(); i++)
             {
                 SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
                     XML_STYLE_FAMILY_DATA_STYLE, aMyConditions[i].sMapName, sal_False);
@@ -1216,6 +1242,8 @@ void SvXMLNumFormatContext::CreateAndInsert(sal_Bool bOverwrite)
 
         pData->AddKey( nIndex, GetName() );
         nKey = nIndex;
+
+        GetImport().AddNumberStyle( nKey, GetName() );
 
     #if 0
         ByteString aByte( String(sFormatName), gsl_getSystemTextEncoding() );

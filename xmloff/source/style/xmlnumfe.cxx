@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-18 16:15:34 $
+ *  last change: $Author: sab $ $Date: 2001-04-20 08:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,9 @@ public:
     sal_Bool    IsUsed( sal_uInt32 nKey ) const;
     sal_Bool    IsWasUsed( sal_uInt32 nKey ) const;
     void        Export();
+
+    void GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed);
+    void SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed);
 };
 
 //-------------------------------------------------------------------------
@@ -181,6 +184,25 @@ void SvXMLNumUsedList_Impl::Export()
     for (sal_uInt16 i = 0; i < nCount; i++)
         aWasUsed.Insert( aUsed[i], aWasUsed.Count());
     aUsed.Remove(0, nCount);
+}
+
+void SvXMLNumUsedList_Impl::GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed)
+{
+    sal_Int32 nCount(aWasUsed.Count());
+    rWasUsed.realloc(nCount);
+    sal_Int32* pWasUsed = rWasUsed.getArray();
+    if (pWasUsed)
+        for (sal_uInt16 i = 0; i < nCount; i++, pWasUsed++)
+            *pWasUsed = aWasUsed[i];
+}
+
+void SvXMLNumUsedList_Impl::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
+{
+    DBG_ASSERT(aWasUsed.Count() == 0, "WasUsed should be empty");
+    sal_Int32 nCount(rWasUsed.getLength());
+    const sal_Int32* pWasUsed = rWasUsed.getConstArray();
+    for (sal_uInt16 i = 0; i < nCount; i++, pWasUsed++)
+        aWasUsed.Insert(*pWasUsed, i);
 }
 
 //-------------------------------------------------------------------------
@@ -1558,4 +1580,15 @@ void SvXMLNumFmtExport::SetUsed( sal_uInt32 nKey )
     pUsedList->SetUsed( nKey );
 }
 
+void SvXMLNumFmtExport::GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed)
+{
+    if (pUsedList)
+        pUsedList->GetWasUsed(rWasUsed);
+}
+
+void SvXMLNumFmtExport::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
+{
+    if (pUsedList)
+        pUsedList->SetWasUsed(rWasUsed);
+}
 
