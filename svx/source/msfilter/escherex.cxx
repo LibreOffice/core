@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-20 17:44:41 $
+ *  last change: $Author: sj $ $Date: 2002-12-11 16:27:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,7 +818,11 @@ void EscherPropertyContainer::ImplCreateGraphicAttributes( const ::com::sun::sta
         MapMode aPrefMapMode;
         if ( pGraphicProvider->GetPrefSize( nBlibId, aPrefSize, aPrefMapMode ) )
         {
-            Size aCropSize( Application::GetDefaultDevice()->LogicToLogic( aPrefSize, aPrefMapMode, MAP_100TH_MM ) );
+            Size aCropSize;
+            if ( aPrefMapMode == MAP_PIXEL )
+                aCropSize = Application::GetDefaultDevice()->PixelToLogic( aPrefSize, MAP_100TH_MM );
+            else
+                aCropSize = Application::GetDefaultDevice()->LogicToLogic( aPrefSize, aPrefMapMode, MAP_100TH_MM );
             if ( aCropSize.Width() && aCropSize.Height() )
             {
                 if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "GraphicCrop" ) ) ) )
