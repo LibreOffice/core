@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:21:57 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 15:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,12 +181,12 @@ Reference< XNumberFormatter > OWizTypeSelectControl::GetFormatter()
 // -----------------------------------------------------------------------------
 const OTypeInfo*    OWizTypeSelectControl::getTypeInfo(sal_Int32 _nPos)
 {
-    return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getTypeInfo(_nPos);
+    return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getDestTypeInfo(_nPos);
 }
 // -----------------------------------------------------------------------------
 const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
 {
-    return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getTypeInfo();
+    return static_cast<OWizTypeSelect*>(GetParent())->m_pParent->getDestTypeInfo();
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OWizTypeSelectControl::getMetaData()

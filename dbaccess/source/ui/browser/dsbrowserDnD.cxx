@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-12 10:34:55 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 15:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,6 +437,7 @@ namespace dbaui
                         xNameAccess->getByName(sName) >>= xSourceObject;
                         OCopyTableWizard aWizard(getView(),
                                                  xSourceObject,
+                                                 xSrcConnection,
                                                  xDestConnection,
                                                  getNumberFormatter(),
                                                  getORB());
@@ -1191,6 +1192,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.31  2001/11/12 10:34:55  oj
+ *  #94391# exclude tablefilter and enable schema name again
+ *
  *  Revision 1.30  2001/10/08 07:26:29  oj
  *  #92786# refcount implemented for connectiondata and sqlexception catched
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 06:52:53 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 15:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ DBG_NAME(OCopyTableWizard);
 //------------------------------------------------------------------------
 OCopyTableWizard::OCopyTableWizard(Window * pParent,
                                    const Reference< XPropertySet >& _xSourceObject,
+                                   const Reference< XConnection >& _xSourceConnection,
                                    const Reference< XConnection >& _xConnection,
                                    const Reference< XNumberFormatter >& _xFormatter,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM)
@@ -164,6 +165,7 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
     ,m_xFormatter(_xFormatter)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_xFactory(_rM)
+    ,m_xSourceConnection(_xSourceConnection)
 {
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
@@ -215,6 +217,7 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
     ,m_xFactory(_rM)
     ,m_sName(_rDefaultName)
     ,m_vSourceVec(_rSourceColVec)
+    ,m_xSourceConnection(_xConnection) // in this case source connection and dest connection are the same
 {
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
@@ -249,7 +252,9 @@ void OCopyTableWizard::construct()
 
     FreeResource();
 
-    ::dbaui::fillTypeInfo(m_xConnection,m_sTypeNames,m_aTypeInfo,m_aTypeInfoIndex);
+    ::dbaui::fillTypeInfo(m_xSourceConnection,m_sTypeNames,m_aTypeInfo,m_aTypeInfoIndex);
+    m_pTypeInfo = new OTypeInfo();
+    m_pTypeInfo->aUIName = m_sTypeNames.GetToken(TYPE_OTHER);
 }
 //------------------------------------------------------------------------
 OCopyTableWizard::~OCopyTableWizard()
@@ -268,6 +273,15 @@ OCopyTableWizard::~OCopyTableWizard()
         delete aIter->second;
 
     m_aTypeInfo.clear();
+
+    m_aDestTypeInfoIndex.clear();
+    aIter = m_aDestTypeInfo.begin();
+    for(;aIter != m_aDestTypeInfo.end();++aIter)
+        delete aIter->second;
+
+    m_aTypeInfo.clear();
+
+    DELETEZ(m_pTypeInfo);
 
     DBG_DTOR(OCopyTableWizard,NULL);
 }
@@ -347,13 +361,15 @@ void OCopyTableWizard::CheckColumns()
         {
             ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
             sal_Int32 nMaxNameLen       = getMaxColumnNameLength();
-            ::rtl::OUString aColumnName,aOldColName;
 
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
             for(;aSrcIter != m_vSourceVec.end();++aSrcIter)
             {
                 OFieldDescription* pField = new OFieldDescription(*(*aSrcIter)->second);
                 pField->SetName(convertColumnName(TExportColumnFindFunctor(&m_vDestColumns),(*aSrcIter)->first,sExtraChars,nMaxNameLen));
+                pField->SetType(convertType((*aSrcIter)->second->getTypeInfo()));
+                if(!bPKeyAllowed)
+                    pField->SetPrimaryKey(sal_False);
 
                 // now create a column
                 insertColumn(m_vDestColumns.size(),pField);
@@ -538,6 +554,8 @@ void OCopyTableWizard::loadData(const Reference<XPropertySet>& _xTable,
                 // search for type
                 sal_Bool bForce;
                 const OTypeInfo* pTypeInfo = ::dbaui::getTypeInfoFromType(m_aTypeInfo,nType,sTypeName,nPrecision,nScale,bForce);
+                if(!pTypeInfo)
+                    pTypeInfo = m_pTypeInfo;
 
                 pActFieldDescr->SetType(pTypeInfo);
                 switch(pTypeInfo->nType)
@@ -887,5 +905,83 @@ OCopyTableWizard::Wizard_Create_Style OCopyTableWizard::getCreateStyle() const
     OSL_ENSURE(m_mNameMapping.find(_sColumnName) == m_mNameMapping.end(),"name doubled!");
     m_mNameMapping[_sColumnName] = sAlias;
     return sAlias;
+}
+// -----------------------------------------------------------------------------
+sal_Bool OCopyTableWizard::supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType)
+{
+    _rNewDataType = _nDataType;
+    return m_aDestTypeInfo.find(_nDataType) != m_aDestTypeInfo.end();
+}
+// -----------------------------------------------------------------------------
+const OTypeInfo* OCopyTableWizard::convertType(const OTypeInfo* _pType)
+{
+    if(m_xSourceConnection == m_xConnection)
+        return _pType;
+    if(m_aDestTypeInfoIndex.empty())
+        ::dbaui::fillTypeInfo(m_xConnection,m_sTypeNames,m_aDestTypeInfo,m_aDestTypeInfoIndex);
+
+    sal_Bool bForce;
+    const OTypeInfo* pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,_pType->nType,_pType->aTypeName,_pType->nPrecision,_pType->nMaximumScale,bForce);
+    if(!pType || bForce)
+    { // no type found so we have to find the correct one ourself
+        sal_Int32 nDefaultType = DataType::VARCHAR;
+        switch(_pType->nType)
+        {
+            case DataType::TINYINT:
+                if(supportsType(DataType::SMALLINT,nDefaultType))
+                    break;
+                // run through
+            case DataType::SMALLINT:
+                if(supportsType(DataType::INTEGER,nDefaultType))
+                    break;
+                // run through
+            case DataType::INTEGER:
+                if(supportsType(DataType::FLOAT,nDefaultType))
+                    break;
+                // run through
+            case DataType::FLOAT:
+                if(supportsType(DataType::REAL,nDefaultType))
+                    break;
+                // run through
+            case DataType::DATE:
+            case DataType::TIME:
+                if( DataType::DATE == _pType->nType || DataType::TIME == _pType->nType )
+                {
+                    if(supportsType(DataType::TIMESTAMP,nDefaultType))
+                        break;
+                }
+                // run through
+            case DataType::TIMESTAMP:
+            case DataType::REAL:
+            case DataType::BIGINT:
+                if(supportsType(DataType::DOUBLE,nDefaultType))
+                    break;
+                // run through
+            case DataType::DOUBLE:
+                if(supportsType(DataType::NUMERIC,nDefaultType))
+                    break;
+                // run through
+            case DataType::NUMERIC:
+                supportsType(DataType::DECIMAL,nDefaultType);
+                break;
+                // run through
+            case DataType::DECIMAL:
+                if(supportsType(DataType::NUMERIC,nDefaultType))
+                    break;
+                if(supportsType(DataType::DOUBLE,nDefaultType))
+                    break;
+                break;
+            default:
+                nDefaultType = DataType::VARCHAR;
+        }
+        pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,nDefaultType,_pType->aTypeName,_pType->nPrecision,_pType->nMaximumScale,bForce);
+        if(!pType)
+        {
+            pType = ::dbaui::getTypeInfoFromType(m_aDestTypeInfo,DataType::VARCHAR,_pType->aTypeName,_pType->nPrecision,_pType->nMaximumScale,bForce);
+            if(!pType)
+                pType = m_pTypeInfo;
+        }
+    }
+    return pType;
 }
 // -----------------------------------------------------------------------------

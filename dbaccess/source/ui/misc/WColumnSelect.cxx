@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-18 06:52:53 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 15:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,6 +349,10 @@ void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
                                                                 _nMaxNameLen);
     OFieldDescription* pNewField = new OFieldDescription(*_pSrcField);
     pNewField->SetName(sConvertedName);
+    pNewField->SetType(m_pParent->convertType(_pSrcField->getTypeInfo()));
+    if(!m_pParent->supportsPrimaryKey())
+        pNewField->SetPrimaryKey(sal_False);
+
     _pListbox->SetEntryData(_pListbox->InsertEntry(sConvertedName),pNewField);
     _rRightColumns.push_back(sConvertedName);
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 12:07:57 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 15:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1953,7 +1953,12 @@ IMPL_LINK(OFieldDescControl, OnControlFocusGot, Control*, pControl )
         ((OPropNumericEditCtrl*)pControl)->SaveValue();
         strHelpText = ((OPropNumericEditCtrl*)pControl)->GetHelp();
     }
-    if ((pControl == pDefault) || (pControl == pFormatSample) || (pControl == m_pColumnName))
+    if(pControl == m_pColumnName)
+    {
+        ((OPropColumnEditCtrl*)pControl)->SaveValue();
+        strHelpText = ((OPropColumnEditCtrl*)pControl)->GetHelp();
+    }
+    else if ((pControl == pDefault) || (pControl == pFormatSample) )
     {
         ((OPropEditCtrl*)pControl)->SaveValue();
         strHelpText = ((OPropEditCtrl*)pControl)->GetHelp();
@@ -1983,7 +1988,13 @@ IMPL_LINK(OFieldDescControl, OnControlFocusLost, Control*, pControl )
         if (pConverted->IsModified())
             CellModified(-1, pConverted->GetPos());
     }
-    if ((pControl == pDefault) || (pControl == pFormatSample) || (pControl == m_pColumnName))
+    if(pControl == m_pColumnName)
+    {
+        OPropColumnEditCtrl* pConverted = (OPropColumnEditCtrl*)pControl;
+        if (pConverted->IsModified())
+            CellModified(-1, pConverted->GetPos());
+    }
+    else if ((pControl == pDefault) || (pControl == pFormatSample) )
     {
         OPropEditCtrl* pConverted = (OPropEditCtrl*)pControl;
         if (pConverted->IsModified())

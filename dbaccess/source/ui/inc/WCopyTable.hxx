@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 14:45:22 $
+ *  last change: $Author: oj $ $Date: 2001-11-15 15:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,10 +193,14 @@ namespace dbaui
         // need for table creation
         void appendColumns(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup,const ODatabaseExport::TColumnVector* _pVec,sal_Bool _bKeyColumns=sal_False);
         void appendKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup,const ODatabaseExport::TColumnVector* _pVec);
+        // checks if the type is supported in the destination database
+        sal_Bool supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType);
 
     protected:
         OTypeInfoMap                m_aTypeInfo;
         ::std::vector<OTypeInfoMap::iterator> m_aTypeInfoIndex;
+        OTypeInfoMap                m_aDestTypeInfo;
+        ::std::vector<OTypeInfoMap::iterator> m_aDestTypeInfoIndex;
         TNameMapping                m_mNameMapping;
 
         ::std::vector<sal_Int32>    m_vColumnPos;
@@ -206,6 +210,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;  // dest conn
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xSourceObject;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xSourceConnection;    // source conn
 
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xSourceColumns;       // container
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;
@@ -214,6 +219,7 @@ namespace dbaui
         ::rtl::OUString                 m_sName;    // for a table the name is composed
         ::rtl::OUString                 m_sSourceName;
         ::rtl::OUString                 m_aKeyName;
+        OTypeInfo*                      m_pTypeInfo; // default type
     public:
         enum Wizard_Create_Style
         {
@@ -239,6 +245,7 @@ namespace dbaui
         // used for copy tables or queries
         OCopyTableWizard(Window * pParent,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&       _xSourceObject,
+                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&         _xSourceConnection,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&         _xConnection,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >&    _xFormatter,
                          const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
@@ -273,8 +280,12 @@ namespace dbaui
         // return sal_True if I need to set the autoincrement value by myself otherwise sal_False
         sal_Bool SetAutoincrement() const;
 
-        const OTypeInfo*    getTypeInfo(sal_Int32 _nPos) const { return m_aTypeInfoIndex[_nPos]->second; }
-        const OTypeInfoMap* getTypeInfo() const { return &m_aTypeInfo; }
+        const OTypeInfo*    getTypeInfo(sal_Int32 _nPos)        const { return m_aTypeInfoIndex[_nPos]->second; }
+        const OTypeInfoMap* getTypeInfo()                       const { return &m_aTypeInfo; }
+
+        const OTypeInfo*    getDestTypeInfo(sal_Int32 _nPos)    const { return m_aDestTypeInfoIndex[_nPos]->second; }
+        const OTypeInfoMap* getDestTypeInfo()                   const { return &m_aDestTypeInfo; }
+
         ::com::sun::star::lang::Locale  GetLocale() const { return m_aLocale; }
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > GetFormatter() const { return m_xFormatter; }
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> GetFactory() const { return m_xFactory; }
@@ -300,6 +311,7 @@ namespace dbaui
                                             const ::rtl::OUString&  _sColumnName,
                                             const ::rtl::OUString&  _sExtraChars,
                                             sal_Int32               _nMaxNameLen);
+        const OTypeInfo* convertType(const OTypeInfo* _pType);
     };
 }
 
