@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tra $ $Date: 2001-05-25 11:32:47 $
+ *  last change: $Author: tra $ $Date: 2001-07-26 11:36:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@
 
 #include <windows.h>
 #include <olestd.h>
+#include <shlobj.h>
 
 //------------------------------------------------------------------------
 // namespace directives
@@ -280,7 +281,7 @@ OUString CDataFormatTranslator::getClipboardFormatName( CLIPFORMAT aClipformat )
 
 CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT cf ) const
 {
-    CFormatEtc fetc( cf, TYMED_NULL, NULL, DVASPECT_CONTENT );;
+    CFormatEtc fetc( cf, TYMED_NULL, NULL, DVASPECT_CONTENT );
 
     switch( cf )
     {
@@ -295,6 +296,18 @@ CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformat( CLIPFORMAT
     default:
         fetc.setTymed( TYMED_HGLOBAL /*| TYMED_ISTREAM*/ );
     }
+
+    /*
+        hack: in order to paste urls copied by Internet Explorer
+        with "copy link" we set the lindex member to 0
+        but if we really want to support CFSTR_FILECONTENT and
+        the accompany format CFSTR_FILEDESCRIPTOR (FileGroupDescriptor)
+        the client of the clipboard service has to provide a id
+        of which FileContents it wants to paste
+        see MSDN: "Handling Shell Data Transfer Scenarios"
+    */
+    if ( cf == RegisterClipboardFormatA( CFSTR_FILECONTENTS ) )
+         fetc.setLindex( 0 );
 
     return fetc;
 }
