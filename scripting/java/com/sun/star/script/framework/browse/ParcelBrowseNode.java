@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelBrowseNode.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-05 12:51:30 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:02:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,37 +61,71 @@
 
 package com.sun.star.script.framework.browse;
 
-import drafts.com.sun.star.script.browse.XBrowseNode;
-import drafts.com.sun.star.script.browse.BrowseNodeTypes;
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.lib.uno.helper.PropertySet;
+import com.sun.star.uno.Any;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.script.framework.provider.PathUtils;
+
+import com.sun.star.beans.XIntrospectionAccess;
+import com.sun.star.script.XInvocation;
+
+import drafts.com.sun.star.script.browse.XBrowseNode;
+import drafts.com.sun.star.script.browse.BrowseNodeTypes;
+
+import com.sun.star.script.framework.provider.ScriptProvider;
+import com.sun.star.script.framework.log.*;
+import com.sun.star.script.framework.container.ScriptMetaData;
+import com.sun.star.script.framework.container.ScriptEntry;
+import com.sun.star.script.framework.container.Parcel;
+import com.sun.star.script.framework.container.ParcelContainer;
+import com.sun.star.script.framework.browse.DialogFactory;
 import java.io.*;
 import java.util.*;
+import javax.swing.JOptionPane;
 
-public class ParcelBrowseNode extends PropertySet implements XBrowseNode  {
-
-    private String name;
+public class ParcelBrowseNode extends PropertySet
+    implements XBrowseNode, XInvocation
+{
+    private ScriptProvider provider;
+    //private RootBrowseNode parent;
     private Collection browsenodes;
-    private XComponentContext m_XCtx;
+    private String name;
+    private ParcelContainer container;
+    private Parcel parcel;
     public boolean deletable = true;
-    public boolean editable = false;
+    public boolean editable  = false;
+    public boolean creatable = false;
 
-    public ParcelBrowseNode(String name) {
-        this.name = name;
+    public ParcelBrowseNode( ScriptProvider provider, ParcelContainer container, String parcelName ) {
+        this.provider = provider;
+        this.name = parcelName;
+        this.container = container;
+
+        // TODO decide whether exception is propagated out or not
+        try
+        {
+            parcel = (Parcel)this.container.getByName( parcelName );
+        }
+        catch ( Exception e )
+        {
+
+            LogUtils.DEBUG("** Exception: " + e );
+            LogUtils.DEBUG(" ** Failed to get parcel named " +
+                           parcelName + " from container" );
+        }
         registerProperty("Deletable", new Type(boolean.class),
             (short)0, "deletable");
         registerProperty("Editable", new Type(boolean.class),
             (short)0, "editable");
-    }
+        registerProperty("Creatable", new Type(boolean.class),
+            (short)0, "creatable");
+        if (provider.hasScriptEditor() == true)
+        {
+            this.creatable = true;
+        }
 
-    public ParcelBrowseNode(XComponentContext ctx, Collection scripts, String name ) {
-        this(name);
-        this.m_XCtx = ctx;
-        this.deletable = true;
-        loadScripts( scripts );
     }
 
     public String getName() {
@@ -99,37 +133,220 @@ public class ParcelBrowseNode extends PropertySet implements XBrowseNode  {
     }
 
     public XBrowseNode[] getChildNodes() {
-        if (browsenodes == null)
+        try
         {
+
+            if ( container != null && container.hasByName( name ) && parcel != null )
+            {
+                String[] names = parcel.getElementNames();
+                if ( browsenodes == null )
+                {
+                    browsenodes = new ArrayList( names.length );
+
+                    for ( int index = 0; index < names.length; index++ )
+                    {
+                        browsenodes.add( new ScriptBrowseNode( provider, parcel, names[ index ] ));
+                    }
+                }
+            }
+        }
+        catch ( Exception e )
+        {
+            LogUtils.DEBUG("Failed to getChildeNodes, exception: " + e );
+            LogUtils.DEBUG( LogUtils.getTrace( e ) );
             return new XBrowseNode[0];
         }
         return (XBrowseNode[])browsenodes.toArray(new XBrowseNode[0]);
     }
 
     public boolean hasChildNodes() {
-        if (browsenodes == null)
+        if ( container != null && container.hasByName( name ) && parcel != null )
         {
-            return false;
+            return parcel.hasElements();
         }
-        return browsenodes.size() > 0;
+
+        return false;
     }
 
     public short getType() {
         return BrowseNodeTypes.CONTAINER;
     }
 
-    public String toString() {
+    public String toString()
+    {
         return getName();
     }
 
-    private void loadScripts(Collection scripts ) {
-        browsenodes = new ArrayList( scripts.size() );
-        Iterator iter = scripts.iterator();
-        while ( iter.hasNext() )
+    // implementation of XInvocation interface
+    public XIntrospectionAccess getIntrospection() {
+        return null;
+    }
+
+    public Object invoke(String aFunctionName, Object[] aParams,
+                         short[][] aOutParamIndex, Object[][] aOutParam)
+        throws com.sun.star.lang.IllegalArgumentException,
+               com.sun.star.script.CannotConvertException,
+               com.sun.star.reflection.InvocationTargetException
+    {
+        // Initialise the out paramters - not used but prevents error in
+        // UNO bridge
+        aOutParamIndex[0] = new short[0];
+        aOutParam[0] = new Object[0];
+
+        Any result = new Any(new Type(Boolean.class), Boolean.TRUE);
+
+        if (aFunctionName.equals("Creatable"))
         {
-            ScriptMetaData script = (ScriptMetaData)iter.next();
-            ScriptBrowseNode sbn = new ScriptBrowseNode(script);
-            browsenodes.add(sbn);
+            try
+            {
+                String name;
+
+                if (aParams == null || aParams.length < 1 ||
+                    AnyConverter.isString(aParams[0]) == false)
+                {
+                    String prompt = "Enter name for new Script";
+                    String title = "Create Script";
+
+                    // try to get a DialogFactory instance, if it fails
+                    // just use a Swing JOptionPane to prompt for the name
+                    try
+                    {
+                        DialogFactory dialogFactory =
+                            DialogFactory.getDialogFactory();
+
+                        name = dialogFactory.showInputDialog(title, prompt);
+                    }
+                    catch (Exception e)
+                    {
+                        name = JOptionPane.showInputDialog(null, prompt, title,
+                            JOptionPane.QUESTION_MESSAGE);
+                    }
+                }
+                else {
+                    name = (String) AnyConverter.toString(aParams[0]);
+                }
+
+                if (name == null || name.equals(""))
+                {
+                    result =  new Any(new Type(Boolean.class), Boolean.FALSE);
+                }
+                else
+                {
+                    String source = new String(provider.getScriptEditor().getTemplate().getBytes());
+                    String languageName = name + "." + provider.getScriptEditor().getExtension();
+                    String language = container.getLanguage();
+
+                    ScriptEntry entry = new ScriptEntry( language, languageName, languageName, "", new HashMap() );
+
+                    Parcel parcel = (Parcel)container.getByName( getName() );
+                    ScriptMetaData data = new ScriptMetaData( parcel, entry, source );
+                    parcel.insertByName( languageName, data );
+
+                    ScriptBrowseNode sbn = new ScriptBrowseNode( provider, parcel, languageName );
+
+                    if(browsenodes==null)
+                    {
+                            LogUtils.DEBUG("browsenodes null!!");
+                            browsenodes = new ArrayList(4);
+                    }
+                    browsenodes.add(sbn);
+
+                    result = new Any(new Type(XBrowseNode.class), sbn);
+                }
+            }
+            catch (Exception e)
+            {
+                    System.err.print("create failed with: " + e );
+                LogUtils.DEBUG( LogUtils.getTrace( e ) );
+                result = new Any(new Type(Boolean.class), Boolean.FALSE);
+
+                // throw new com.sun.star.reflection.InvocationTargetException(
+                //     "Error creating script: " + e.getMessage());
+            }
         }
+        else if (aFunctionName.equals("Deletable"))
+        {
+            try
+            {
+                boolean goAhead = false;
+
+                String prompt = "Do you really want to delete this Parcel?";
+                String title = "Delete Parcel";
+
+                // try to get a DialogFactory instance, if it fails
+                // just use a Swing JOptionPane to prompt for the name
+                try
+                {
+                    DialogFactory dialogFactory =
+                        DialogFactory.getDialogFactory();
+
+                    goAhead = dialogFactory.showConfirmDialog(title, prompt);
+                }
+                catch (Exception e)
+                {
+                    int reply = JOptionPane.showConfirmDialog(
+                        null, prompt, title, JOptionPane.YES_NO_OPTION);
+
+                    if (reply == JOptionPane.YES_OPTION)
+                    {
+                        goAhead = true;
+                    }
+                    else
+                    {
+                        goAhead = false;
+                    }
+                }
+
+                if (goAhead == true)
+                {
+                    if ( container.deleteParcel(getName()) )
+                    {
+                        result = new Any(new Type(Boolean.class), Boolean.TRUE);
+                    }
+                    else
+                    {
+                        result = new Any(new Type(Boolean.class), Boolean.FALSE);
+                    }
+                }
+                else
+                {
+                    result = new Any(new Type(Boolean.class), Boolean.FALSE);
+                }
+            }
+            catch (Exception e)
+            {
+                result =  new Any(new Type(Boolean.class), Boolean.FALSE);
+
+                // throw new com.sun.star.reflection.InvocationTargetException(
+                //     "Error deleting parcel: " + e.getMessage());
+            }
+        }
+        else {
+            throw new com.sun.star.lang.IllegalArgumentException(
+                "Function " + aFunctionName + " not supported.");
+        }
+
+        return result;
+    }
+
+    public void setValue(String aPropertyName, Object aValue)
+        throws com.sun.star.beans.UnknownPropertyException,
+               com.sun.star.script.CannotConvertException,
+               com.sun.star.reflection.InvocationTargetException
+    {
+    }
+
+    public Object getValue(String aPropertyName)
+        throws com.sun.star.beans.UnknownPropertyException
+    {
+        return null;
+    }
+
+    public boolean hasMethod(String aName) {
+        return false;
+    }
+
+    public boolean hasProperty(String aName) {
+        return false;
     }
 }
