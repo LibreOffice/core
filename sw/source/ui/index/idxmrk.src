@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:23:19 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@
             QuickHelpText[ japanese ] = "ђV‚µ‚ўХ°»Ю°ђЭ’и‚МЌх€ш";\
             QuickHelpText[ korean ] = "New user defined index";\
             QuickHelpText[ chinese_simplified ] = "New user defined index";\
-            QuickHelpText[ chinese_traditional ] = "·sјW¦Ы­qҐШїэ";\
+            QuickHelpText[ chinese_traditional ] = "·sјWЁПҐОЄМ¦Ы­qҐШїэ!";\
             QuickHelpText[ arabic ] = "ЭеСУ МПнП гЪСЭ гд ЮИб ЗбгУКОПг";\
             QuickHelpText[ turkish ] = "Neues benutzerdefiniertes Verzeichnis";\
         };                                                          \
@@ -469,7 +469,7 @@
             Text [ ENGLISH ] = "~Apply to all similar texts." ;                 \
             Hide = TRUE;                                                        \
             Text[ english_us ] = "~Apply to all similar texts.";                \
-            Text[ portuguese ] = "~Aplicar a todos os textos semelhantes";     \
+            Text[ portuguese ] = "~Aplicar a todos os textos semelhantes.";     \
             Text[ russian ] = "Применить ко всем одинаковым текстам";           \
             Text[ dutch ] = "~Alle gelijkluidende teksten";              \
             Text[ french ] = "~Appliquer а tous les textes similaires.";         \
@@ -523,7 +523,7 @@
             Hide = TRUE;\
             Text[ english_us ] = "~Whole words only";\
             Text[ portuguese ] = "Sу ~palavras inteiras";\
-            Text[ russian ] = "Только полные слова";\
+            Text[ russian ] = "Только все слово";\
             Text[ greek ] = "Мьнп пльклзсет лЭоейт";\
             Text[ dutch ] = "Alleen hele ~woorden";\
             Text[ french ] = "~Mots entiers";\
