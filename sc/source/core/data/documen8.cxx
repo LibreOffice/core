@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:55 $
+ *  last change: $Author: vg $ $Date: 2003-05-27 15:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@
 #include "refupdat.hxx"
 #include "validat.hxx"      // fuer HasMacroCalls
 #include "markdata.hxx"
+#include "scmod.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"
 
@@ -225,6 +226,7 @@ SfxPrinter* ScDocument::GetPrinter()
 
         pPrinter = new SfxPrinter( pSet );
         UpdateDrawPrinter();
+        pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
     }
 
     return pPrinter;
@@ -246,6 +248,7 @@ void ScDocument::SetPrinter( SfxPrinter* pNewPrinter )
         SfxPrinter* pOld = pPrinter;
         pPrinter = pNewPrinter;
         UpdateDrawPrinter();
+        pPrinter->SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
         delete pOld;
     }
     InvalidateTextWidth();      // in both cases
