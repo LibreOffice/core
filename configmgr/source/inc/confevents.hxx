@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confevents.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:45 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ namespace configmgr
     struct TreeChangeList;
     class OOptions;
 
+    namespace memory { class Accessor; }
     namespace configuration { class AbsolutePath; }
     using configuration::AbsolutePath;
 
@@ -84,8 +85,8 @@ namespace configmgr
     };
     struct INodeListener : IConfigListener
     {
-        virtual void nodeChanged(Change const& aChange, AbsolutePath const& aPath, IConfigBroadcaster* pSource) = 0;
-        virtual void nodeDeleted(AbsolutePath const& aPath, IConfigBroadcaster* pSource) = 0;
+        virtual void nodeChanged(memory::Accessor const& _aChangedDataAccessor, Change const& aChange, AbsolutePath const& aPath, IConfigBroadcaster* pSource) = 0;
+        virtual void nodeDeleted(memory::Accessor const& _aChangedDataAccessor, AbsolutePath const& aPath, IConfigBroadcaster* pSource) = 0;
     };
     typedef vos::ORef<INodeListener> INodeListenerRef;
 
@@ -111,7 +112,7 @@ namespace configmgr
         virtual void removeListener(const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pListener);
 
     protected:
-        virtual void fireChanges(TreeChangeList const& _aChanges, sal_Bool _bError);
+        virtual void fireChanges(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& _aChanges, sal_Bool _bError);
     protected:
         virtual ConfigChangeBroadcastHelper* getBroadcastHelper(const vos::ORef < OOptions >& _xOptions, bool bCreate) = 0;
         ConfigChangeBroadcastHelper* newBroadcastHelper(); // needed to implement the preceding

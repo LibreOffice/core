@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatehelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 16:35:13 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,11 @@
 namespace configmgr
 {
 //..........................................................................
+    namespace memory    { class UpdateAccessor; }
+    namespace data      { class NodeAddress; class NodeAccess; }
+
+//..........................................................................
+#ifdef NON_SHARABLE_DATA
 
 // adjust a set of changes to the target tree, return true, if there are changes left
     bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, ISubtree const& _aTargetTree);
@@ -79,6 +84,26 @@ namespace configmgr
 
 // apply a set of changes to the target tree
     void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, ISubtree& _aTree);
+
+#else  // SHARABLE_DATA
+
+// adjust a set of changes to the target tree, return true, if there are changes left
+    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAccess const & _aRootNode);
+
+// adjust a set of changes to the target tree, return true, if there are changes left
+    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, memory::UpdateAccessor& _anUpdateAccess, data::NodeAddress _aRootNode);
+
+// apply a already matching set of changes to the target tree
+    void applyUpdateToTree(SubtreeChange& _anUpdateTree, memory::UpdateAccessor& _anUpdateAccess, data::NodeAddress _aRootNode);
+
+// apply a set of changes to the target tree
+    void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, memory::UpdateAccessor& _anUpdateAccess, data::NodeAddress _aRootNode);
+
+
+#endif // SHARABLE_DATA
+
+// apply a set of changes to the target tree, return true, if there are changes found
+    bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, data::NodeAccess const & _aExistingData, ISubtree const & _aNewData);
 
 //..........................................................................
 }   // namespace configmgr

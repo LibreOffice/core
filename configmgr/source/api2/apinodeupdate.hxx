@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeupdate.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,13 @@
 #define CONFIGMGR_API_NODEUPDATE_HXX_
 
 #include "apitypes.hxx"
+
+#ifndef CONFIGMGR_API_NODEACCESS_HXX_
 #include "apinodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_ACCESSOR_HXX
+#include "accessor.hxx"
+#endif
 
 namespace configmgr
 {
@@ -93,34 +99,42 @@ namespace configmgr
         class NodeGroupAccess : public NodeGroupInfoAccess
         {
         public:
-            configuration::GroupUpdater     getNodeUpdater();
-            configuration::GroupDefaulter   getNodeDefaulter();
+            typedef configuration::GroupUpdater     NodeUpdater;
+            typedef configuration::GroupDefaulter   NodeDefaulter;
+            NodeUpdater     getNodeUpdater(memory::Accessor const& _aAccessor);
+            NodeDefaulter   getNodeDefaulter(memory::Accessor const& _aAccessor);
 
-            ISynchronizedData* getDataLock();
+            /** ensures that the default data for a group is loaded (if possible)
+                <p>Must be called outside of any locks !</p>
+            */
+            friend NodeGroupAccess& withDefaultData(NodeGroupAccess& aGroup);
         };
 
         // Updating access for Set Nodes
         class NodeSetAccess : public NodeSetInfoAccess
         {
         public:
-            configuration::SetDefaulter     getNodeDefaulter();
-
-            ISynchronizedData* getDataLock();
+            typedef struct SetUpdater_PlaceHolder   NodeUpdater;
+            typedef configuration::SetDefaulter     NodeDefaulter;
+            NodeDefaulter     getNodeDefaulter(memory::Accessor const& _aAccessor);
         };
 
         // Updating access for Set Nodes containing whole trees
         class NodeTreeSetAccess : public NodeSetAccess
         {
         public:
-            configuration::SetElementFactory    getElementFactory();
-            configuration::TreeSetUpdater       getNodeUpdater();
+            typedef configuration::TreeSetUpdater     NodeUpdater;
+            NodeUpdater     getNodeUpdater(memory::Accessor const& _aAccessor);
+
+            configuration::SetElementFactory    getElementFactory(memory::Accessor const& _aAccessor);
         };
 
         // Updating access for Set Nodes containing simple values
         class NodeValueSetAccess : public NodeSetAccess
         {
         public:
-            configuration::ValueSetUpdater      getNodeUpdater();
+            typedef configuration::ValueSetUpdater     NodeUpdater;
+            NodeUpdater     getNodeUpdater(memory::Accessor const& _aAccessor);
         };
 
         /// informs a <type>SetElement</type> that it should now link to the given SetElement
@@ -133,15 +147,15 @@ namespace configmgr
         void detachSetElement(SetElement& aElement);
 
         /// informs a <type>SetElement</type> that it should now unlink from its owning SetElement
-        bool detachSetElement(Factory& rFactory, configuration::ElementTree const& aElementTree);
+        bool detachSetElement(Factory& rFactory, configuration::ElementRef const& aElementTree);
 
     // Guarding and locking implementations
         /// guards a NodeGroupAccess, or NodeSetAccess; provides an object (write)/provider(read) lock; ensures object was not disposed
         class UpdateGuardImpl : NotCopyable
         {
-            OReadSynchronized           m_aProviderLock;
-            OClearableWriteSynchronized m_aLock;
-            NodeAccess&         m_rNode;
+            memory::Accessor                m_aDataAccess;
+            osl::MutexGuard             m_aViewLock;
+            NodeAccess&                 m_rNode;
         public:
             UpdateGuardImpl(NodeGroupAccess& rNode) throw();
             UpdateGuardImpl(NodeSetAccess& rNode) throw();
@@ -149,7 +163,9 @@ namespace configmgr
         public:
             NodeAccess& get()        const { return m_rNode; }
 
-            void downgrade() { m_aLock.downgrade(); }
+            void downgrade() {  }
+
+            memory::Accessor const& accessor() const { return m_aDataAccess; }
         };
 
     // Thin Wrappers around NodeAccesses: Provide guarding and convenient access
@@ -163,15 +179,49 @@ namespace configmgr
         public:
             Access& get()        const { return static_cast<Access&>(m_aImpl.get()); }
 
-            Access& operator *() const  { return  get(); }
-            Access* operator->() const  { return &get(); }
+            configuration::Tree     getTree() const;
+            configuration::NodeRef  getNode() const;
+
+            typedef typename Access::NodeUpdater    Updater;
+            typedef typename Access::NodeDefaulter  Defaulter;
+
+            Updater    getNodeUpdater() const;
+            Defaulter  getNodeDefaulter() const;
+
+            memory::Accessor const& getDataAccessor() const { return m_aImpl.accessor(); }
 
             void clearForBroadcast() { m_aImpl.downgrade(); }
         };
 
+        template <class Access>
+        configuration::Tree GuardedNodeUpdate<Access>::getTree() const
+        {
+            return get().getTree(this->getDataAccessor());
+        }
+
+        template <class Access>
+        configuration::NodeRef GuardedNodeUpdate<Access>::getNode() const
+        {
+            return get().getNodeRef();
+        }
+
+        template <class Access>
+        GuardedNodeUpdate<Access>::Updater GuardedNodeUpdate<Access>::getNodeUpdater() const
+        {
+            return get().getNodeUpdater(this->getDataAccessor());
+        }
+
+        template <class Access>
+        GuardedNodeUpdate<Access>::Defaulter GuardedNodeUpdate<Access>::getNodeDefaulter() const
+        {
+            return get().getNodeDefaulter(this->getDataAccessor());
+        }
+
         /// wraps a NodeGroupAccess; provides an object (write) lock, ensures object was not disposed
         typedef GuardedNodeUpdate<NodeGroupAccess>  GuardedGroupUpdateAccess;
         typedef GuardedNodeUpdate<NodeSetAccess>    GuardedSetUpdateAccess;
+        typedef GuardedNodeUpdate<NodeTreeSetAccess>    GuardedTreeSetUpdateAccess;
+        typedef GuardedNodeUpdate<NodeValueSetAccess>   GuardedValueSetUpdateAccess;
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,10 +235,10 @@ CollectProperties::Result CollectProperties::handle(Tree const& _aTree, NodeRef 
 
     return CONTINUE;
 }
-
 //-----------------------------------------------------------------------------------
-// another helper class
+// another helper class - disabled, as it doesn't work well with Accessor changes
 //-----------------------------------------------------------------------------------
+#if 0
 
 class TreeNodePropertySetInfo
     :public ::cppu::WeakImplHelper1< beans::XPropertySetInfo >
@@ -303,7 +303,7 @@ sal_Bool SAL_CALL TreeNodePropertySetInfo::hasPropertyByName(const OUString& _rP
 
     return m_aTree.hasChild(m_aNode, aName);
 }
-
+#endif
 //-----------------------------------------------------------------------------------
 // yet another helper class (more robust, but can't well be extended to be a HierarchicalPropertySetInfo though)
 //-----------------------------------------------------------------------------------
@@ -319,7 +319,7 @@ public:
     {
     }
 
-    static NodePropertySetInfo* create(NodeGroupInfoAccess& _rNode, sal_Bool _bReadonly ) throw(RuntimeException);
+    static NodePropertySetInfo* create(NodeGroupInfoAccess& _rNode, data::Accessor const& _aDataAccessor, sal_Bool _bReadonly ) throw(RuntimeException);
     Property const* begin() const throw() { return m_aProperties.getConstArray(); }
     Property const* end()   const throw() { return m_aProperties.getConstArray() + m_aProperties.getLength(); }
 
@@ -333,15 +333,15 @@ public:
 
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
-NodePropertySetInfo* NodePropertySetInfo::create(NodeGroupInfoAccess& _rNode, sal_Bool _bReadonly ) throw(RuntimeException)
+NodePropertySetInfo* NodePropertySetInfo::create(NodeGroupInfoAccess& _rNode, data::Accessor const& _aDataAccessor, sal_Bool _bReadonly ) throw(RuntimeException)
 {
-    OReadSynchronized aGuard(_rNode.getDataLock());
+    osl::MutexGuard aGuard(_rNode.getDataLock());
 
-    configuration::Tree aTree( _rNode.getTree() );
+    configuration::Tree aTree( _rNode.getTree(_aDataAccessor) );
     OSL_ENSURE( !aTree.isEmpty(), "WARNING: Getting Tree information requires a valid tree");
     if (aTree.isEmpty()) return NULL;
 
-    configuration::NodeRef aNode( _rNode.getNode() );
+    configuration::NodeRef aNode( _rNode.getNodeRef() );
     OSL_ENSURE( aTree.isValidNode(aNode), "ERROR: Tree does not match node");
 
     Sequence< Property > aProperties = CollectProperties(_bReadonly).forChildren(aTree,aNode);
@@ -417,7 +417,8 @@ sal_Bool SAL_CALL NodePropertySetInfo::hasPropertyByName(const OUString& _rPrope
 Reference< beans::XPropertySetInfo > implGetPropertySetInfo( NodeGroupInfoAccess& rNode, sal_Bool _bWriteable )
     throw(RuntimeException)
 {
-    return NodePropertySetInfo::create(rNode, !_bWriteable);
+    GuardedNodeDataAccess lock( rNode );
+    return NodePropertySetInfo::create(rNode, lock.getDataAccessor(), !_bWriteable);
 }
 
 // XHierarchicalPropertySet & XHierarchicalMultiPropertySet
@@ -441,10 +442,10 @@ void implSetPropertyValue( NodeGroupAccess& rNode, const OUString& sPropertyName
 {
     try
     {
-        GuardedGroupUpdateAccess impl( rNode );
+        GuardedGroupUpdateAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         Name aChildName = validateChildName(sPropertyName,aTree,aNode);
 
@@ -477,16 +478,16 @@ void implSetPropertyValue( NodeGroupAccess& rNode, const OUString& sPropertyName
             }
         }
 
-        NodeChange aChange = impl->getNodeUpdater().validateSetValue( aChild, aValue );
+        NodeChange aChange = lock.getNodeUpdater().validateSetValue( aChild, aValue );
         if (aChange.test().isChange())
         {
-            Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,true));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChange,true));
 
             aSender.queryConstraints(aChange);
 
             aTree.integrate(aChange, aNode, true);
 
-            impl.clearForBroadcast();
+            lock.clearForBroadcast();
             aSender.notifyListeners(aChange);
         }
     }
@@ -532,10 +533,10 @@ void implSetPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& 
 {
     try
     {
-        GuardedGroupUpdateAccess impl( rNode );
+        GuardedGroupUpdateAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         NodeChanges aChanges;
         for(sal_Int32 i = 0, count= aValues.getLength(); i < count; ++i)
@@ -563,7 +564,7 @@ void implSetPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& 
                 continue;
             }
 
-            NodeChange aChange = impl->getNodeUpdater().validateSetValue( aChild, aValues[i] );
+            NodeChange aChange = lock.getNodeUpdater().validateSetValue( aChild, aValues[i] );
             if (aChange.maybeChange())
             {
                 aChanges.add(aChange);
@@ -572,13 +573,13 @@ void implSetPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& 
 
         if (!aChanges.test().isEmpty())
         {
-            Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChanges.compact(),true));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChanges.compact(),true));
 
             aSender.queryConstraints(aChanges);
 
             aTree.integrate(aChanges, aNode, true);
 
-            impl.clearForBroadcast();
+            lock.clearForBroadcast();
             aSender.notifyListeners(aChanges, true);
         }
     }
@@ -620,10 +621,10 @@ void implSetHierarchicalPropertyValue( NodeGroupAccess& rNode, const OUString& a
 
     try
     {
-        GuardedGroupUpdateAccess impl( rNode );
+        GuardedGroupUpdateAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         RelativePath const aRelPath = validateRelativePath( aPropertyName, aTree, aNode );
 
@@ -650,16 +651,16 @@ void implSetHierarchicalPropertyValue( NodeGroupAccess& rNode, const OUString& a
         }
         OSL_ASSERT(aNode.isValid());
 
-        NodeChange aChange = impl->getNodeUpdater().validateSetValue( aNestedValue.toValue(), aValue );
+        NodeChange aChange = lock.getNodeUpdater().validateSetValue( aNestedValue.toValue(), aValue );
         if (aChange.test().isChange())
         {
-            Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,false));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChange,false));
 
             aSender.queryConstraints(aChange);
 
             aTree.integrate(aChange, aNode, false);
 
-            impl.clearForBroadcast();
+            lock.clearForBroadcast();
             aSender.notifyListeners(aChange);
         }
     }
@@ -708,10 +709,10 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
 
     try
     {
-        GuardedGroupUpdateAccess impl( rNode );
+        GuardedGroupUpdateAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         NodeChanges aChanges;
         for(sal_Int32 i = 0, count= aValues.getLength(); i < count; ++i)
@@ -738,7 +739,7 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
             }
             OSL_ASSERT(aNode.isValid());
 
-            NodeChange aChange = impl->getNodeUpdater().validateSetValue( aNestedValue.toValue(), aValues[i] );
+            NodeChange aChange = lock.getNodeUpdater().validateSetValue( aNestedValue.toValue(), aValues[i] );
             if (aChange.maybeChange())
             {
                 aChanges.add(aChange);
@@ -752,13 +753,13 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
 
         if (!aChanges.test().isEmpty())
         {
-            Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChanges.compact(),false));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChanges.compact(),false));
 
             aSender.queryConstraints(aChanges);
 
             aTree.integrate(aChanges, aNode, false);
 
-            impl.clearForBroadcast();
+            lock.clearForBroadcast();
             aSender.notifyListeners(aChanges, true); // if we use 'false' we don't need 'Deep' change objects
         }
     }
@@ -800,10 +801,10 @@ Any implGetPropertyValue( NodeGroupInfoAccess& rNode,const OUString& aPropertyNa
 {
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         Name aChildName = validateChildName(aPropertyName,aTree,aNode);
 
@@ -822,7 +823,7 @@ Any implGetPropertyValue( NodeGroupInfoAccess& rNode,const OUString& aPropertyNa
             throw UnknownPropertyException( sMessage, xContext );
         }
 
-        return configapi::makeElement( impl->getFactory(), aTree, aChild );
+        return configapi::makeElement( rNode.getFactory(), aTree, aChild );
     }
     catch (configuration::InvalidName& ex)
     {
@@ -858,10 +859,10 @@ Sequence< Any > implGetPropertyValues( NodeGroupInfoAccess& rNode, const Sequenc
 
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         for(sal_Int32 i = 0; i < count; ++i)
         {
@@ -871,7 +872,7 @@ Sequence< Any > implGetPropertyValues( NodeGroupInfoAccess& rNode, const Sequenc
 
             if (aChild.isValid())
             {
-                aRet[i] = configapi::makeElement( impl->getFactory(), aTree, aChild );
+                aRet[i] = configapi::makeElement( rNode.getFactory(), aTree, aChild );
             }
             else
             {
@@ -899,10 +900,10 @@ Any implGetHierarchicalPropertyValue( NodeGroupInfoAccess& rNode, const OUString
     using configuration::getLocalDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         RelativePath aRelPath = validateRelativePath( aPropertyName, aTree, aNode );
 
@@ -920,7 +921,7 @@ Any implGetHierarchicalPropertyValue( NodeGroupInfoAccess& rNode, const OUString
         }
         OSL_ASSERT(aNode.isValid());
 
-        return configapi::makeElement( impl->getFactory(), aTree, aNestedNode );
+        return configapi::makeElement( rNode.getFactory(), aTree, aNestedNode );
     }
     catch (configuration::InvalidName& ex)
     {
@@ -953,10 +954,10 @@ Sequence< Any > implGetHierarchicalPropertyValues( NodeGroupInfoAccess& rNode, c
 
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         for(sal_Int32 i = 0; i < count; ++i)
         try
@@ -967,7 +968,7 @@ Sequence< Any > implGetHierarchicalPropertyValues( NodeGroupInfoAccess& rNode, c
 
             if (aNestedValue.isValid())
             {
-                aRet[i] = configapi::makeElement( impl->getFactory(), aTree, aNestedValue );
+                aRet[i] = configapi::makeElement( rNode.getFactory(), aTree, aNestedValue );
             }
             else
             {
@@ -1008,11 +1009,11 @@ void implFirePropertiesChangeEvent( NodeGroupInfoAccess& rNode, const Sequence< 
 
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
-        configapi::Factory& rFactory = impl->getFactory();
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
+        configapi::Factory& rFactory = rNode.getFactory();
 
         sal_Int32 nFire = 0;
 
@@ -1024,7 +1025,7 @@ void implFirePropertiesChangeEvent( NodeGroupInfoAccess& rNode, const Sequence< 
 
             if (aChild.isValid())
             {
-                aEvents[nFire].Source = impl->getUnoInstance();
+                aEvents[nFire].Source = rNode.getUnoInstance();
                 aEvents[nFire].PropertyName = aChildName.toString();
                 aEvents[nFire].PropertyHandle = -1;
 
@@ -1061,10 +1062,10 @@ beans::PropertyState implGetPropertyState( NodeAccess& rNode, const OUString& sP
     {
         using configuration::getChildOrElement;
 
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         Name aChildName = validateChildOrElementName(sPropertyName,aTree,aNode);
 
@@ -1118,10 +1119,10 @@ Sequence< beans::PropertyState > implGetPropertyStates( NodeAccess& rNode, const
 
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         for(sal_Int32 i = 0; i < count; ++i)
         {
@@ -1181,13 +1182,12 @@ void implSetPropertyToDefault( NodeGroupAccess& rNode, const OUString& sProperty
 {
     try
     {
-        GuardedGroupUpdateAccess impl( rNode );
+        GuardedGroupUpdateAccess lock( withDefaultData( rNode ) );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
-        configuration::GroupDefaulter aDefaulter = impl->getNodeDefaulter();
-        aDefaulter.ensureDataAvailable();
+        configuration::GroupDefaulter aDefaulter = lock.getNodeDefaulter();
 
         Name aChildName = validateChildName(sPropertyName,aTree,aNode);
 
@@ -1199,13 +1199,13 @@ void implSetPropertyToDefault( NodeGroupAccess& rNode, const OUString& sProperty
 
         if (aChange.test().isChange() )
         {
-            Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,bLocal));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChange,bLocal));
 
             aSender.queryConstraints(aChange);
 
             aTree.integrate(aChange, aNode, bLocal);
 
-            impl.clearForBroadcast();
+            lock.clearForBroadcast();
             aSender.notifyListeners(aChange);
         }
     }
@@ -1236,13 +1236,12 @@ void implSetPropertiesToDefault( NodeGroupAccess& rNode, const Sequence< OUStrin
 {
     try
     {
-        GuardedGroupUpdateAccess impl( rNode );
+        GuardedGroupUpdateAccess lock( withDefaultData( rNode ) );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
-        configuration::GroupDefaulter aDefaulter = impl->getNodeDefaulter();
-        aDefaulter.ensureDataAvailable();
+        configuration::GroupDefaulter aDefaulter = lock.getNodeDefaulter();
 
         NodeChanges aChanges;
         for(sal_Int32 i = 0, count= aPropertyNames.getLength(); i < count; ++i)
@@ -1291,13 +1290,13 @@ void implSetPropertiesToDefault( NodeGroupAccess& rNode, const Sequence< OUStrin
 
         if (!aChanges.test().isEmpty())
         {
-            Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChanges.compact(),bLocal));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChanges.compact(),bLocal));
 
             aSender.queryConstraints(aChanges);
 
             aTree.integrate(aChanges, aNode, bLocal);
 
-            impl.clearForBroadcast();
+            lock.clearForBroadcast();
             aSender.notifyListeners(aChanges, bLocal);
         }
 
@@ -1330,13 +1329,12 @@ void implSetAllPropertiesToDefault( NodeGroupAccess& rNode )
 {
     try
     {
-        GuardedGroupUpdateAccess impl( rNode );
+        GuardedGroupUpdateAccess lock( withDefaultData( rNode ) );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
-        configuration::GroupDefaulter aDefaulter = impl->getNodeDefaulter();
-        aDefaulter.ensureDataAvailable();
+        configuration::GroupDefaulter aDefaulter = lock.getNodeDefaulter();
 
         NodeChanges aChanges = aDefaulter.validateSetAllToDefault( );
 
@@ -1344,13 +1342,13 @@ void implSetAllPropertiesToDefault( NodeGroupAccess& rNode )
 
         if (!aChanges.test().isEmpty())
         {
-            Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChanges.compact(),bLocal));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChanges.compact(),bLocal));
 
             aSender.queryConstraints(aChanges);
 
             aTree.integrate(aChanges, aNode, bLocal);
 
-            impl.clearForBroadcast();
+            lock.clearForBroadcast();
             aSender.notifyListeners(aChanges, bLocal);
         }
 
@@ -1384,10 +1382,10 @@ Any implGetPropertyDefault( NodeGroupInfoAccess& rNode, const OUString& sPropert
     Any aDefault;
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         Name aChildName = validateChildName(sPropertyName,aTree,aNode);
 
@@ -1449,10 +1447,10 @@ Sequence< Any > implGetPropertyDefaults( NodeGroupInfoAccess& rNode, const Seque
     {
         using configuration::getChildOrElement;
 
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         for(sal_Int32 i = 0; i < count; ++i)
         {

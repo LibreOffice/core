@@ -2,9 +2,9 @@
  *
  *  $RCSfile: committer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,24 @@
 #include <stdio.h>
 #include "committer.hxx"
 
+#ifndef CONFIGMGR_API_TREEIMPLOBJECTS_HXX_
 #include "apitreeimplobj.hxx"
+#endif
+#ifndef CONFIGMGR_ROOTTREE_HXX_
 #include "roottree.hxx"
+#endif
+#ifndef CONFIGMGR_CMTREEMODEL_HXX
 #include "cmtreemodel.hxx"
+#endif
+#ifndef CONFIGMGR_API_PROVIDERIMPL2_HXX_
 #include "confproviderimpl2.hxx"
+#endif
+#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
+#include "updateaccessor.hxx"
+#endif
+#ifndef CONFIGMGR_TREEACCESSOR_HXX
+#include "treeaccessor.hxx"
+#endif
 
 namespace configmgr
 {
@@ -115,32 +129,43 @@ ITreeManager* Committer::getUpdateProvider()
 void Committer::commit()
 {
     ApiTreeImpl& rApiTree = m_rTree.getApiTree();
-    OClearableWriteSynchronized aProviderGuard(rApiTree.getProviderLock());
-    OClearableWriteSynchronized aLocalGuard(rApiTree.getDataLock());
 
-    Tree aTree(rApiTree.getTree());
-    if (!aTree.hasChanges()) return;
-
-    OSL_ENSURE(m_rTree.getOptions().isValid(),"INTERNAL ERROR: Invalid Options used.");
-    TreeChangeList  aChangeList(m_rTree.getOptions(),
-                                aTree.getRootPath(),
-                                aTree.getAttributes(aTree.getRootNode()));
+    OSL_PRECOND(!m_rTree.getLocation().isRoot(),"INTERNAL ERROR: Empty location used.");
+    OSL_PRECOND(m_rTree.getOptions().isValid(),"INTERNAL ERROR: Invalid Options used.");
 
     ITreeManager* pUpdateProvider = getUpdateProvider();
     OSL_ASSERT(pUpdateProvider);
 
-    CommitHelper    aHelper(aTree);
-    if (aHelper.prepareCommit(aChangeList))
+    memory::Segment * pCacheSegment = pUpdateProvider->getDataSegment(m_rTree.getLocation(),m_rTree.getOptions());
+    OSL_ASSERT(rApiTree.getSourceData() == pCacheSegment);
+
+    memory::UpdateAccessor aUpdateAccessor(pCacheSegment);
+    osl::ClearableMutexGuard aLocalGuard(rApiTree.getDataLock());
+
+    Tree aTree( aUpdateAccessor.accessor(), rApiTree.getTree());
+    if (!aTree.hasChanges()) return;
+
+    TreeChangeList  aChangeList(m_rTree.getOptions(),
+                                aTree.getRootPath(),
+                                aTree.getAttributes(aTree.getRootNode()));
+
+    aTree.unbind();
+
+    // now do the commit
+    CommitHelper    aHelper(rApiTree.getTree());
+    if (aHelper.prepareCommit(aUpdateAccessor.accessor(),aChangeList))
     try
     {
-        pUpdateProvider->updateTree(aChangeList);
-        aHelper.finishCommit(aChangeList);
+        pUpdateProvider->updateTree(aUpdateAccessor,aChangeList);
+
+        aHelper.finishCommit(aUpdateAccessor.accessor(),aChangeList);
 
         aLocalGuard.clear();        // done locally
-        aProviderGuard.downgrade(); // keep a read lock for notification
+
+        data::Accessor aNotifyAccessor = aUpdateAccessor.downgrade(); // keep a read lock for notification
 
         NotifyDisabler  aDisableNotify(m_rTree);    // do not notify self
-        pUpdateProvider->notifyUpdate(aChangeList);
+        pUpdateProvider->notifyUpdate(aNotifyAccessor,aChangeList);
     }
     catch(...)
     {
@@ -148,7 +173,7 @@ void Committer::commit()
         try
         {
 //          aHelper.finishCommit(aChangeList);
-            aHelper.failedCommit(aChangeList);
+            aHelper.failedCommit(aUpdateAccessor.accessor(),aChangeList);
         }
         catch(configuration::Exception&)
         {

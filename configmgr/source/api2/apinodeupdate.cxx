@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeupdate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,28 @@
 #include <stdio.h>
 #include "apinodeupdate.hxx"
 
+#ifndef CONFIGMGR_API_TREEIMPLOBJECTS_HXX_
 #include "apitreeimplobj.hxx"
+#endif
 
+#ifndef CONFIGMGR_API_TREEACCESS_HXX_
 #include "apitreeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGSET_HXX_
 #include "configset.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGGROUP_HXX_
 #include "configgroup.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
+#endif
+#ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "apifactory.hxx"
+#endif
 
 namespace configmgr
 {
@@ -76,63 +90,60 @@ namespace configmgr
     {
 //-----------------------------------------------------------------------------
 
-configuration::GroupUpdater NodeGroupAccess::getNodeUpdater()
+NodeGroupAccess& withDefaultData(NodeGroupAccess& _aGroup)
 {
-    return configuration::GroupUpdater(getTree(),getNode(), getApiTree().getProvider().getTypeConverter());
+    configuration::GroupDefaulter::ensureDataAvailable(_aGroup.getTreeRef(),_aGroup.getNodeRef(),
+                                                        _aGroup.getApiTree().getDefaultProvider());
+    return _aGroup;
 }
 //-----------------------------------------------------------------------------
 
-configuration::GroupDefaulter NodeGroupAccess::getNodeDefaulter()
+configuration::GroupUpdater NodeGroupAccess::getNodeUpdater(data::Accessor const& _aAccessor)
 {
-    return configuration::GroupDefaulter(getTree(),getNode(), getApiTree().getDefaultProvider());
+    return configuration::GroupUpdater(getTree(_aAccessor),getNodeRef(), getApiTree().getProvider().getTypeConverter());
 }
 //-----------------------------------------------------------------------------
 
-ISynchronizedData* NodeGroupAccess::getDataLock()
+configuration::GroupDefaulter NodeGroupAccess::getNodeDefaulter(data::Accessor const& _aAccessor)
 {
-    return getApiTree().getDataLock();
+    return configuration::GroupDefaulter(getTree(_aAccessor),getNodeRef(), getApiTree().getDefaultProvider());
 }
 //-----------------------------------------------------------------------------
 
-ISynchronizedData* NodeSetAccess::getDataLock()
-{
-    return getApiTree().getDataLock();
-}
-//-----------------------------------------------------------------------------
-
-configuration::SetElementFactory NodeTreeSetAccess::getElementFactory()
+configuration::SetElementFactory NodeTreeSetAccess::getElementFactory(data::Accessor const& _aAccessor)
 {
     using namespace configuration;
-    TemplateProvider aProvider = SetElementFactory::findTemplateProvider(getTree(),getNode());
-    return SetElementFactory(aProvider);
+    TemplateProvider aProvider = SetElementFactory::findTemplateProvider(getTree(_aAccessor),getNodeRef());
+    return SetElementFactory(_aAccessor,aProvider);
 }
 //-----------------------------------------------------------------------------
 
-configuration::SetDefaulter NodeSetAccess::getNodeDefaulter()
+configuration::SetDefaulter NodeSetAccess::getNodeDefaulter(data::Accessor const& _aAccessor)
 {
-    return configuration::SetDefaulter(getTree(),getNode(), getApiTree().getDefaultProvider());
+    return configuration::SetDefaulter(getTree(_aAccessor),getNodeRef(), getApiTree().getDefaultProvider());
 }
 //-----------------------------------------------------------------------------
 
-configuration::TreeSetUpdater NodeTreeSetAccess::getNodeUpdater()
+configuration::TreeSetUpdater NodeTreeSetAccess::getNodeUpdater(data::Accessor const& _aAccessor)
 {
-    return configuration::TreeSetUpdater(getTree(),getNode(),getElementInfo());
+    return configuration::TreeSetUpdater(getTree(_aAccessor),getNodeRef(),getElementInfo(_aAccessor));
 }
 //-----------------------------------------------------------------------------
 
 
-configuration::ValueSetUpdater NodeValueSetAccess::getNodeUpdater()
+configuration::ValueSetUpdater NodeValueSetAccess::getNodeUpdater(data::Accessor const& _aAccessor)
 {
-    return configuration::ValueSetUpdater(getTree(),getNode(),getElementInfo(), getApiTree().getProvider().getTypeConverter());
+    return configuration::ValueSetUpdater(getTree(_aAccessor),getNodeRef(),getElementInfo(_aAccessor), getApiTree().getProvider().getTypeConverter());
 }
 //-----------------------------------------------------------------------------
 
 void attachSetElement(NodeTreeSetAccess& aSet, SetElement& aElement)
 {
     using configuration::NodeID;
-    OSL_ENSURE( NodeID(aSet.getTree(),aSet.getNode()) ==
-                NodeID(aElement.getTree().getContextTree(),aElement.getTree().getContextNode()),
+    OSL_ENSURE( NodeID(aSet.getTreeRef(),aSet.getNodeRef()) ==
+                NodeID(aElement.getTreeRef().getContextTree(),aElement.getTreeRef().getContextNode()),
                 "ERROR: Attaching an unrelated SetElement to a SetInfoAccess");
+
     aElement.haveNewParent(&aSet);
 }
 //-----------------------------------------------------------------------------
@@ -140,13 +151,14 @@ void attachSetElement(NodeTreeSetAccess& aSet, SetElement& aElement)
 bool attachSetElement(NodeTreeSetAccess& aSet, configuration::ElementTree const& aElementTree)
 {
     using configuration::NodeID;
-    OSL_ENSURE( NodeID(aSet.getTree(),aSet.getNode()) ==
+    OSL_ENSURE( NodeID(aSet.getTreeRef(),aSet.getNodeRef()) ==
                 NodeID(aElementTree.getTree().getContextTree(),aElementTree.getTree().getContextNode()),
                 "ERROR: Attaching an unrelated ElementTree to a SetInfoAccess");
 
     Factory& rFactory = aSet.getFactory();
 
-    if (SetElement* pSetElement = rFactory.findSetElement(aElementTree))
+    configuration::ElementRef aElementRef( aElementTree.getImpl() ); // no other conversion available
+    if (SetElement* pSetElement = rFactory.findSetElement(aElementRef))
     {
         // the factory always does an extra acquire
         UnoInterfaceRef xReleaseSetElement(pSetElement->getUnoInstance(), uno::UNO_REF_NO_ACQUIRE);
@@ -162,16 +174,16 @@ bool attachSetElement(NodeTreeSetAccess& aSet, configuration::ElementTree const&
 
 void detachSetElement(SetElement& aElement)
 {
-    OSL_ENSURE( aElement.getTree().getContextTree().isEmpty(),
+    OSL_ENSURE( aElement.getTreeRef().getContextTree().isEmpty(),
                 "ERROR: Detaching a SetElement that has a parent");
 
     aElement.haveNewParent(0);
 }
 //-----------------------------------------------------------------------------
 
-bool detachSetElement(Factory& rFactory, configuration::ElementTree const& aElementTree)
+bool detachSetElement(Factory& rFactory, configuration::ElementRef const& aElementTree)
 {
-    OSL_ENSURE( aElementTree.getTree().getContextTree().isEmpty(),
+    OSL_ENSURE( aElementTree.getTreeRef().getContextTree().isEmpty(),
                 "ERROR: Detaching an ElementTree that has a parent");
 
     if (SetElement* pSetElement = rFactory.findSetElement(aElementTree))
@@ -189,8 +201,8 @@ bool detachSetElement(Factory& rFactory, configuration::ElementTree const& aElem
 //-----------------------------------------------------------------------------
 
 UpdateGuardImpl::UpdateGuardImpl(NodeGroupAccess& rNode) throw()
-: m_aProviderLock(rNode.getProviderLock())
-, m_aLock(rNode.getDataLock())
+: m_aDataAccess(rNode.getSourceData())
+, m_aViewLock(rNode.getDataLock())
 , m_rNode(rNode)
 {
     rNode.checkAlive();
@@ -198,8 +210,8 @@ UpdateGuardImpl::UpdateGuardImpl(NodeGroupAccess& rNode) throw()
 //-----------------------------------------------------------------------------
 
 UpdateGuardImpl::UpdateGuardImpl(NodeSetAccess& rNode) throw()
-: m_aProviderLock(rNode.getProviderLock())
-, m_aLock(rNode.getDataLock())
+: m_aDataAccess(rNode.getSourceData())
+, m_aViewLock(rNode.getDataLock())
 , m_rNode(rNode)
 {
 }

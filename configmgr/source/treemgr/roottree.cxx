@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-20 10:58:46 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,31 @@
  *
  ************************************************************************/
 #include <stdio.h>
-#include "roottree.hxx"
 
+#include "roottree.hxx"
 #include "roottreeimpl.hxx"
-#include "nodefactory.hxx"
+
+#ifndef CONFIGMGR_VIEWACCESS_HXX_
+#include "viewaccess.hxx"
+#endif
+
+#ifndef CONFIGMGR_NODEACCESS_HXX
+#include "nodeaccess.hxx"
+#endif
+
+#ifndef CONFIGMGR_VIEWBEHAVIORFACTORY_HXX_
+#include "viewfactory.hxx"
+#endif
+
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGEINFO_HXX_
 #include "nodechangeinfo.hxx"
+#endif
+#ifndef CONFIGMGR_CMTREEMODEL_HXX
 #include "cmtreemodel.hxx"
+#endif
 
 namespace configmgr
 {
@@ -76,22 +94,28 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
 RootTree createReadOnlyTree(    AbsolutePath const& aRootPath,
-                                ISubtree& rCacheNode, TreeDepth nDepth,
+                                memory::Segment const* _pDataSegment,
+                                data::NodeAccess const& _aCacheNode,
+                                TreeDepth nDepth,
                                 TemplateProvider const& aTemplateProvider)
 {
-    return RootTree( new RootTreeImpl(  NodeType::getReadAccessFactory(),
-                                        aRootPath, rCacheNode, nDepth,
+    return RootTree( _aCacheNode.accessor(),
+                     new RootTreeImpl(  view::createReadOnlyStrategy(_pDataSegment),
+                                        aRootPath, _aCacheNode, nDepth,
                                         aTemplateProvider
                                     ));
 }
 //-----------------------------------------------------------------------------
 
 RootTree createUpdatableTree(   AbsolutePath const& aRootPath,
-                                ISubtree& rCacheNode, TreeDepth nDepth,
+                                memory::Segment const* _pDataSegment,
+                                data::NodeAccess const& _aCacheNode,
+                                TreeDepth nDepth,
                                 TemplateProvider const& aTemplateProvider)
 {
-    return RootTree( new RootTreeImpl(  NodeType::getDeferredChangeFactory(),
-                                        aRootPath, rCacheNode, nDepth,
+    return RootTree( _aCacheNode.accessor(),
+                     new RootTreeImpl(  view::createDeferredChangeStrategy(_pDataSegment),
+                                        aRootPath, _aCacheNode, nDepth,
                                         aTemplateProvider
                                     ));
 }
@@ -110,7 +134,7 @@ bool adjustToChanges(   NodeChangesInformation& rLocalChanges,
     {
         OSL_ENSURE(rLocalChanges.empty(), "Should pass empty container to adjustToChanges(...)");
 
-        TreeImplHelper::impl(aBaseTree)->adjustToChanges(rLocalChanges, TreeImplHelper::offset(aBaseNode), aExternalChange);
+        aBaseTree.getView().adjustToChanges(rLocalChanges, aBaseNode, aExternalChange);
 
         return !rLocalChanges.empty();
     }
@@ -128,7 +152,7 @@ struct CommitHelper::Data
 };
 
 //-----------------------------------------------------------------------------
-CommitHelper::CommitHelper(Tree const& aTree)
+CommitHelper::CommitHelper(TreeRef const& aTree)
 : m_pData(  )
 , m_pTree( TreeImplHelper::impl(aTree) )
 {
@@ -146,7 +170,7 @@ void CommitHelper::reset()
 }
 
 //-----------------------------------------------------------------------------
-bool CommitHelper::prepareCommit(TreeChangeList& rChangeList)
+bool CommitHelper::prepareCommit(data::Accessor const& _aAccessor, TreeChangeList& rChangeList)
 {
     OSL_ENSURE(m_pTree,"ERROR: CommitHelper: Cannot commit without a tree");
     if (m_pTree == NULL)
@@ -156,7 +180,7 @@ bool CommitHelper::prepareCommit(TreeChangeList& rChangeList)
     m_pData.reset( new Data() );
 
     // get and check the changes
-    std::auto_ptr<SubtreeChange> pTreeChange(m_pTree->preCommitChanges(m_pData->m_aRemovedElements));
+    std::auto_ptr<SubtreeChange> pTreeChange(view::ViewTreeAccess(_aAccessor,*m_pTree).preCommitChanges(m_pData->m_aRemovedElements));
     if (pTreeChange.get() == NULL)
         return false;
 
@@ -171,7 +195,7 @@ bool CommitHelper::prepareCommit(TreeChangeList& rChangeList)
 }
 //-----------------------------------------------------------------------------
 
-void CommitHelper::finishCommit(TreeChangeList& rChangeList)
+void CommitHelper::finishCommit(data::Accessor const& _aAccessor, TreeChangeList& rChangeList)
 {
     OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
 
@@ -182,11 +206,11 @@ void CommitHelper::finishCommit(TreeChangeList& rChangeList)
     if ( !matches(rChangeList.getRootNodePath(), aPath) )
         throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
 
-    m_pTree->finishCommit(rChangeList.root);
+    view::ViewTreeAccess(_aAccessor,*m_pTree).finishCommit(rChangeList.root);
 }
 //-----------------------------------------------------------------------------
 
-void CommitHelper::revertCommit(TreeChangeList& rChangeList)
+void CommitHelper::revertCommit(data::Accessor const& _aAccessor, TreeChangeList& rChangeList)
 {
     OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
 
@@ -196,11 +220,11 @@ void CommitHelper::revertCommit(TreeChangeList& rChangeList)
     if ( !matches(rChangeList.getRootNodePath(), aPath) )
         throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
 
-    m_pTree->revertCommit(rChangeList.root);
+    view::ViewTreeAccess(_aAccessor,*m_pTree).revertCommit(rChangeList.root);
 }
 //-----------------------------------------------------------------------------
 
-void CommitHelper::failedCommit(TreeChangeList& rChangeList)
+void CommitHelper::failedCommit(data::Accessor const& _aAccessor, TreeChangeList& rChangeList)
 {
     OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
 
@@ -210,7 +234,7 @@ void CommitHelper::failedCommit(TreeChangeList& rChangeList)
     if ( !matches(rChangeList.getRootNodePath(), aPath) )
         throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
 
-    m_pTree->recoverFailedCommit(rChangeList.root);
+    view::ViewTreeAccess(_aAccessor,*m_pTree).recoverFailedCommit(rChangeList.root);
 }
 //-----------------------------------------------------------------------------
 

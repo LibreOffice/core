@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 16:35:13 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,13 @@
 //..........................................................................
 namespace configmgr
 {
+//-----------------------------------------------------------------------------
+
+// helper to implement force-writable support
+void forceWritable(INode& _rNode);
+void forceWritable(data::TreeAccessor const & _aTree);
+
+
 //==========================================================================
 //= OIdPropagator
 //==========================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:02 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,11 +151,11 @@ OUString implGetHierarchicalName( NodeAccess& rNode ) throw(RuntimeException)
     OUString sRet;
     try
     {
-        GuardedNodeAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree aTree( impl->getTree());
+        Tree aTree( lock.getTree());
 
-        AbsolutePath const aFullPath  = aTree.getAbsolutePath(impl->getNode());
+        AbsolutePath const aFullPath  = aTree.getAbsolutePath(lock.getNode());
         sRet = aFullPath.toString();
     }
     catch (configuration::Exception& ex)
@@ -176,9 +176,9 @@ OUString implComposeHierarchicalName(NodeGroupInfoAccess& rNode, const OUString&
     OUString sRet;
     try
     {
-        GuardedNodeAccess impl( rNode );
-        NodeRef aNode( impl->getNode() );
-        Tree aTree( impl->getTree() );
+        GuardedNodeDataAccess lock( rNode );
+        NodeRef aNode( lock.getNode() );
+        Tree aTree( lock.getTree() );
 
         RelativePath const aAddedPath = validateRelativePath(sRelativeName, aTree, aNode);
 
@@ -213,9 +213,9 @@ OUString implComposeHierarchicalName(NodeSetInfoAccess& rNode, const OUString& s
     OUString sRet;
     try
     {
-        GuardedNodeAccess impl( rNode );
-        NodeRef aNode( impl->getNode() );
-        Tree aTree( impl->getTree() );
+        GuardedNodeDataAccess lock( rNode );
+        NodeRef aNode( lock.getNode() );
+        Tree aTree( lock.getTree() );
 
         /*Path::*/Component const aAddedName = validateElementPathComponent(sElementName, aTree, aNode);
 
@@ -263,9 +263,9 @@ uno::Type implGetElementType(NodeSetInfoAccess& rNode) throw(RuntimeException)
     uno::Type aRet;
     try
     {
-        GuardedNode<NodeSetInfoAccess> impl( rNode );
+        GuardedNodeData<NodeSetInfoAccess> lock( rNode );
 
-        aRet = impl->getElementInfo().getElementType();
+        aRet = rNode.getElementInfo(lock.getDataAccessor()).getElementType();
     }
     catch (configuration::Exception& ex)
     {
@@ -286,10 +286,10 @@ sal_Bool implHasElements(NodeGroupInfoAccess& rNode) throw(RuntimeException)
 // Better: cater for the case where we are reaching the depth limit
     try
     {
-        GuardedNodeAccess impl( rNode ); // no provider lock needed
+        GuardedNodeDataAccess lock( rNode ); // no provider lock needed
 
-        Tree    aThisTree( impl->getTree() );
-        NodeRef aThisNode( impl->getNode() );
+        Tree    aThisTree( lock.getTree() );
+        NodeRef aThisNode( lock.getNode() );
         OSL_ASSERT( !aThisTree.hasElements(aThisNode) );
         return aThisTree.hasChildren(aThisNode);
     }
@@ -309,10 +309,10 @@ sal_Bool implHasElements(NodeSetInfoAccess& rNode) throw(RuntimeException)
 {
     try
     {
-        GuardedNodeDataAccess impl( rNode ); // provider lock needed
+        GuardedNodeDataAccess lock( rNode ); // provider lock needed
 
-        Tree    aThisTree( impl->getTree() );
-        NodeRef aThisNode( impl->getNode() );
+        Tree    aThisTree( lock.getTree() );
+        NodeRef aThisNode( lock.getNode() );
         OSL_ASSERT( !aThisTree.hasChildren(aThisNode) );
         return aThisTree.hasElements(aThisNode);
     }
@@ -460,10 +460,10 @@ OUString implGetExactName(NodeGroupInfoAccess& rNode, const OUString& rApproxima
         using internal::SearchExactName;
         using configuration::validateRelativePath;
 
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree aTree(impl->getTree());
-        NodeRef aNode(impl->getNode());
+        Tree aTree(lock.getTree());
+        NodeRef aNode(lock.getNode());
 
         RelativePath aApproximatePath = validateRelativePath(rApproximateName,aTree,aNode);
 
@@ -503,10 +503,10 @@ OUString implGetExactName(NodeSetInfoAccess& rNode, const OUString& rApproximate
         using configuration::validateElementPathComponent;
         using configuration::Path::Component;
 
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree aTree(impl->getTree());
-        NodeRef aNode(impl->getNode());
+        Tree aTree(lock.getTree());
+        NodeRef aNode(lock.getNode());
 
         /*Path::*/Component aApproximateName = validateElementPathComponent(rApproximateName,aTree,aNode);
 
@@ -546,10 +546,10 @@ beans::Property implGetAsProperty(NodeAccess& rNode)
     using beans::Property;
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree    aTree( impl->getTree());
-        NodeRef aNode( impl->getNode());
+        Tree    aTree( lock.getTree());
+        NodeRef aNode( lock.getNode());
 
         Name        aName       = aTree.getName(aNode);
         Attributes  aAttributes = aTree.getAttributes(aNode);
@@ -582,11 +582,11 @@ sal_Bool implHasByName(NodeAccess& rNode, const OUString& sName ) throw(RuntimeE
     using configuration::hasChildOrElement;
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
         Name aChildName = configuration::makeName(sName, Name::NoValidate());
 
-        return hasChildOrElement(impl->getTree(), impl->getNode(), aChildName);
+        return hasChildOrElement(lock.getTree(), lock.getNode(), aChildName);
     }
 #ifdef _DEBUG
     catch (configuration::InvalidName& ex)
@@ -616,10 +616,10 @@ Any implGetByName(NodeAccess& rNode, const OUString& sName )
     using configuration::getChildOrElement;
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree aTree( impl->getTree() );
-        NodeRef aNode( impl->getNode() );
+        Tree aTree( lock.getTree() );
+        NodeRef aNode( lock.getNode() );
 
         Name aChildName = configuration::validateChildOrElementName(sName,aTree,aNode);
 
@@ -636,7 +636,7 @@ Any implGetByName(NodeAccess& rNode, const OUString& sName )
         }
         OSL_ASSERT(aNode.isValid());
 
-        return configapi::makeElement( impl->getFactory(), aTree, aChildNode );
+        return configapi::makeElement( rNode.getFactory(), aTree, aChildNode );
     }
     catch (configuration::InvalidName& ex)
     {
@@ -665,9 +665,9 @@ Sequence< OUString > implGetElementNames( NodeAccess& rNode ) throw( RuntimeExce
 
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        impl->getTree().dispatchToChildren(impl->getNode(), aCollect);
+        lock.getTree().dispatchToChildren(lock.getNode(), aCollect);
     }
     catch (configuration::Exception& ex)
     {
@@ -692,10 +692,10 @@ sal_Bool implHasByHierarchicalName(NodeAccess& rNode, const OUString& sHierarchi
     using configuration::getDeepDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree aTree( impl->getTree() );
-        NodeRef aNode( impl->getNode() );
+        Tree aTree( lock.getTree() );
+        NodeRef aNode( lock.getNode() );
 
         RelativePath aRelPath = validateAndReducePath( sHierarchicalName, aTree, aNode );
 
@@ -729,10 +729,10 @@ Any implGetByHierarchicalName(NodeAccess& rNode, const OUString& sHierarchicalNa
     using configuration::getDeepDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        Tree aTree( impl->getTree() );
-        NodeRef aNode( impl->getNode() );
+        Tree aTree( lock.getTree() );
+        NodeRef aNode( lock.getNode() );
 
         RelativePath aRelPath = validateAndReducePath( sHierarchicalName, aTree, aNode );
 
@@ -744,12 +744,12 @@ Any implGetByHierarchicalName(NodeAccess& rNode, const OUString& sHierarchicalNa
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in Node ")  );
             sMessage += aTree.getAbsolutePath(aNode).toString();
 
-            Reference<uno::XInterface> xContext( impl->getUnoInstance() );
+            Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw NoSuchElementException( sMessage, xContext );
         }
 
         OSL_ASSERT(aNode.isValid());
-        return configapi::makeElement( impl->getFactory(), aTree, aNestedNode );
+        return configapi::makeElement( rNode.getFactory(), aTree, aNestedNode );
     }
     catch (configuration::InvalidName& ex)
     {
@@ -779,9 +779,9 @@ css::beans::PropertyState implGetStateAsProperty(NodeAccess& rNode)
     PropertyState aRet = PropertyState_AMBIGUOUS_VALUE;
     try
     {
-        GuardedNodeDataAccess impl( rNode );
+        GuardedNodeDataAccess lock( rNode );
 
-        if ( rNode.getTree().isNodeDefault( rNode.getNode() ) )
+        if ( lock.getTree().isNodeDefault( lock.getNode() ) )
             aRet = PropertyState_DEFAULT_VALUE;
     }
     catch (configuration::Exception& ex)
@@ -796,7 +796,7 @@ css::beans::PropertyState implGetStateAsProperty(NodeAccess& rNode)
 void implSetToDefaultAsProperty(NodeAccess& rNode)
     throw (css::lang::WrappedTargetException, uno::RuntimeException)
 {
-    GuardedNodeAccess impl( rNode );
+    GuardedNodeAccess lock( rNode );
 
     OUString const sMessage( RTL_CONSTASCII_USTRINGPARAM("Cannot set Property object to default: Object or View is read-only"));
     beans::PropertyVetoException aVeto(sMessage, rNode.getUnoInstance());
@@ -811,7 +811,7 @@ Reference< uno::XInterface > implGetDefaultAsProperty(NodeAccess& rNode)
     // not really supported
 
     /* possible, but nor really useful:
-    GuardedNodeAccess impl( rNode );
+    GuardedNodeAccess lock( rNode );
     if (implGetStateAsProperty(rNode) == PropertyState_DEFAULT_VALUE)
         return rNode.getUnoInstance();
     */
@@ -829,8 +829,8 @@ Reference< uno::XInterface > implGetDefaultAsProperty(NodeAccess& rNode)
 OUString SAL_CALL implGetElementTemplateName(NodeSetInfoAccess& rNode)
     throw(uno::RuntimeException)
 {
-    GuardedNode<NodeSetInfoAccess> impl(rNode);
-    return impl->getElementInfo().getTemplatePathString();
+    GuardedNodeData<NodeSetInfoAccess> lock(rNode);
+    return rNode.getElementInfo(lock.getDataAccessor()).getTemplateInfo().getTemplatePathString();
 }
 
 // XStringEscape

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confevents.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:43 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:46:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace configmgr
         ConfigChangeBroadcastHelper();
         ~ConfigChangeBroadcastHelper();
 
-        void broadcast(TreeChangeList const& anUpdate, sal_Bool bError, IConfigBroadcaster* pSource);
+        void broadcast(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& anUpdate, sal_Bool bError, IConfigBroadcaster* pSource);
 
     public:
         // IConfigBroadcaster implementation helper
@@ -149,11 +149,11 @@ namespace configmgr
     }
 */
     /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeBroadcaster::fireChanges(TreeChangeList const& rList_, sal_Bool bError_)
+    void ConfigChangeBroadcaster::fireChanges(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& rList_, sal_Bool bError_)
     {
         if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(rList_.getOptions(),false))
         {
-            pHelper->broadcast(rList_, bError_, this);
+            pHelper->broadcast(_aChangedDataAccessor, rList_, bError_, this);
         }
     }
 
@@ -189,9 +189,9 @@ namespace configmgr
     }
 */
     /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeBroadcastHelper::broadcast(TreeChangeList const& anUpdate, sal_Bool bError, IConfigBroadcaster* pSource)
+    void ConfigChangeBroadcastHelper::broadcast(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& anUpdate, sal_Bool bError, IConfigBroadcaster* pSource)
     {
-        m_changes.dispatch(anUpdate, bError, pSource);
+        m_changes.dispatch(_aChangedDataAccessor, anUpdate, bError, pSource);
     }
 
 

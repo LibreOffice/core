@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jb $ $Date: 2001-12-17 16:21:21 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,38 +63,59 @@
 #include "valueref.hxx"
 #include "noderef.hxx"
 
+#ifndef CONFIGMGR_CONFIGNODEIMPL_HXX_
 #include "treeimpl.hxx"
+#endif
 
-#include "noderef.hxx"
+#ifndef CONFIGMGR_VIEWACCESS_HXX_
+#include "viewaccess.hxx"
+#endif
 
-#include "setnodeimplbase.hxx"
-#include "valuenodeimpl.hxx"
-#include "groupnodeimpl.hxx"
-
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGE_HXX_
 #include "nodechange.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGSET_HXX_
 #include "configset.hxx"
+#endif
 
+#ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
+#endif
 
+#ifndef INCLUDED_ALGORITHM
 #include <algorithm> // for swap
+#define INCLUDED_ALGORITHM
+#endif
+#ifndef INCLUDED_FUNCTIONAL
 #include <functional> // for less
+#define INCLUDED_FUNCTIONAL
+#endif
 
 namespace configmgr
 {
     namespace configuration
     {
-
+//-----------------------------------------------------------------------------
 // helpers first
 
+view::ViewTreeAccess Tree::getView() const
+{
+    OSL_ENSURE(!isEmpty(),"Accessing view for tree: Tree must not be nil");
+    return view::ViewTreeAccess(this->getDataAccessor(),*m_ref);
+}
 //-----------------------------------------------------------------------------
 // class TreeImplHelper (declared in treeimpl.hxx)
 //-----------------------------------------------------------------------------
 
-NodeRef TreeImplHelper::makeNode(Node* pNode, NodeOffset nOffset, TreeDepth nDepth)
+NodeRef TreeImplHelper::makeNode(NodeOffset nOffset, TreeDepth nDepth)
 {
-    return NodeRef(pNode,nOffset,nDepth);
+    return NodeRef(nOffset,nDepth);
 }
 //-----------------------------------------------------------------------------
 
@@ -105,7 +126,7 @@ NodeRef TreeImplHelper::makeNode(TreeImpl& rTree, NodeOffset nOffset)
         OSL_ASSERT(rTree.isValidNode(nOffset));
 
         TreeDepth nDepth = remainingDepth(rTree.getAvailableDepth(), rTree.depthTo(nOffset));
-        return NodeRef(rTree.node(nOffset),nOffset,nDepth);
+        return NodeRef(nOffset,nDepth);
     }
     else
         return NodeRef();
@@ -123,57 +144,33 @@ NodeRef TreeImplHelper::makeNode(NodeID const& aNodeID)
 }
 //-----------------------------------------------------------------------------
 
-ValueRef TreeImplHelper::makeValue(Name const& aName, Node* pParentNode, NodeOffset nParentOffset)
+ValueRef TreeImplHelper::makeValue(Name const& aName, NodeOffset nParentOffset)
 {
-    return ValueRef(aName,pParentNode,nParentOffset);
+    return ValueRef(aName,nParentOffset);
 }
 //-----------------------------------------------------------------------------
 
-AnyNodeRef TreeImplHelper::makeAnyNode(Node* pNode, NodeOffset nOffset, TreeDepth nDepth)
+AnyNodeRef TreeImplHelper::makeAnyNode(NodeOffset nOffset, TreeDepth nDepth)
 {
-    return AnyNodeRef(pNode,nOffset, nDepth);
+    return AnyNodeRef(nOffset, nDepth);
 }
 //-----------------------------------------------------------------------------
 
-AnyNodeRef TreeImplHelper::makeAnyNode(Name const& aName, Node* pParentNode, NodeOffset nParentOffset)
+AnyNodeRef TreeImplHelper::makeAnyNode(Name const& aName, NodeOffset nParentOffset)
 {
-    return AnyNodeRef(aName,pParentNode,nParentOffset);
+    return AnyNodeRef(aName,nParentOffset);
 }
 //-----------------------------------------------------------------------------
 
-bool TreeImplHelper::isSet(NodeRef const& aNode)
+TreeImpl* TreeImplHelper::impl(TreeRef const& aRef)
 {
-    OSL_ASSERT(aNode.m_pImpl); return aNode.m_pImpl && aNode.m_pImpl->isSetNode();
-}
-//-----------------------------------------------------------------------------
-
-bool TreeImplHelper::isGroup(NodeRef const& aNode)
-{
-    OSL_ASSERT(aNode.m_pImpl); return aNode.m_pImpl && aNode.m_pImpl->isGroupNode();
-}
-//-----------------------------------------------------------------------------
-
-bool TreeImplHelper::isValueElement(NodeRef const& aNode)
-{
-    OSL_ASSERT(aNode.m_pImpl); return aNode.m_pImpl && aNode.m_pImpl->isValueElementNode();
+    return aRef.get();
 }
 //-----------------------------------------------------------------------------
 
 TreeImpl* TreeImplHelper::impl(Tree const& aTree)
 {
-    return aTree.m_pImpl;
-}
-//-----------------------------------------------------------------------------
-
-Node* TreeImplHelper::node(NodeRef const& aNode)
-{
-    return aNode.m_pImpl;
-}
-//-----------------------------------------------------------------------------
-
-Node* TreeImplHelper::parent_node(ValueRef const& aNode)
-{
-    return aNode.m_pParentImpl;
+    return aTree.m_ref.get();
 }
 //-----------------------------------------------------------------------------
 
@@ -195,22 +192,6 @@ Name TreeImplHelper::value_name(ValueRef const& aValueNode)
 }
 //-----------------------------------------------------------------------------
 
-static inline
-ValueMemberNode impl_member_node(Node* pParentImpl, Name const& aValueName)
-{
-    OSL_ENSURE(pParentImpl,"INTERNAL ERROR: impl_member_node: NULL parent passed");
-    OSL_ENSURE(pParentImpl->isGroupNode(),"INTERNAL ERROR: impl_member_node: non-group parent passed");
-    OSL_ENSURE(!aValueName.isEmpty(),"INTERNAL ERROR: impl_member_node: Missing value name");
-    return pParentImpl->groupImpl().getValue(aValueName);
-}
-//-----------------------------------------------------------------------------
-
-ValueMemberNode TreeImplHelper::member_node(ValueRef const& aValueNode)
-{
-    return impl_member_node(aValueNode.m_pParentImpl,aValueNode.m_sNodeName);
-}
-//-----------------------------------------------------------------------------
-
 TreeImpl* TreeImplHelper::tree(NodeID const& aNodeID)
 {
     return aNodeID.m_pTree;
@@ -220,6 +201,15 @@ TreeImpl* TreeImplHelper::tree(NodeID const& aNodeID)
 NodeOffset TreeImplHelper::offset(NodeID const& aNodeID)
 {
     return aNodeID.m_nNode;
+}
+//-----------------------------------------------------------------------------
+
+ValueMemberNode TreeImplHelper::member_node(Tree const & _aTree, ValueRef const& aValueNode)
+{
+    OSL_ENSURE(!_aTree.isEmpty(),"INTERNAL ERROR: member_node: NULL tree passed");
+    view::ViewTreeAccess aView = _aTree.getView();
+
+    return aView.getValue(aView.getGroupNodeAt(aValueNode.m_nParentPos), aValueNode.m_sNodeName );
 }
 
 //-----------------------------------------------------------------------------
@@ -247,7 +237,7 @@ namespace
 
         if (TreeImpl* pTree = anEntry.tree())
         {
-            Tree aTree( pTree );
+            Tree aTree( anEntry.accessor(), pTree );
             NodeRef aTreeRoot = aTree.getRootNode();
 
             OSL_ASSERT( NodeVisitor::DONE == SetNodeVisitor::DONE );
@@ -264,7 +254,6 @@ namespace
         GroupVisitorAdapter(Tree const& aParentTree, NodeRef const& aParentNode, NodeVisitor& rVisitor)
         : m_rVisitor(rVisitor)
         , m_aParentTree(aParentTree)
-        , m_pParentNode( TreeImplHelper::node(aParentNode) )
         , m_nParentPos( TreeImplHelper::offset(aParentNode) )
         {
             OSL_ASSERT(!aParentTree.isEmpty());
@@ -277,7 +266,6 @@ namespace
 
         NodeVisitor&    m_rVisitor;
         Tree            m_aParentTree;
-        Node*           m_pParentNode;
         NodeOffset      m_nParentPos;
     };
 
@@ -289,7 +277,7 @@ namespace
 
         Name aValueName = aValue.getNodeName();
 
-        ValueRef const aValueRef = TreeImplHelper::makeValue(aValueName,m_pParentNode,m_nParentPos);
+        ValueRef const aValueRef = TreeImplHelper::makeValue(aValueName,m_nParentPos);
 
         OSL_ASSERT( NodeVisitor::DONE       == GroupMemberVisitor::DONE );
         OSL_ASSERT( NodeVisitor::CONTINUE   == GroupMemberVisitor::CONTINUE );
@@ -328,7 +316,7 @@ namespace
     {
         Result visit(SetEntry const& anEntry);
 
-        static bool hasNonDefaultElement(SetNodeImpl& _rSet);
+        static bool hasNonDefaultElement(view::ViewTreeAccess const& _aView, view::SetNode const& _aSet);
     };
 
     SetNodeVisitor::Result FindNonDefaultElement::visit(SetEntry const& anEntry)
@@ -339,7 +327,7 @@ namespace
 
         if (TreeImpl* pTree = anEntry.tree())
         {
-            Tree aTree( pTree );
+            Tree aTree( anEntry.accessor(), pTree );
 
             Attributes aElementAttributes = aTree.getAttributes(aTree.getRootNode());
 
@@ -354,10 +342,10 @@ namespace
         return aResult;
     }
 
-    bool FindNonDefaultElement::hasNonDefaultElement(SetNodeImpl& _rSet)
+    bool FindNonDefaultElement::hasNonDefaultElement(view::ViewTreeAccess const& _aView, view::SetNode const& _aSet)
     {
         FindNonDefaultElement aCheck;
-        Result aRes = _rSet.dispatchToElements(aCheck);
+        Result aRes = _aView.dispatchToElements(_aSet,aCheck);
         return aRes == DONE;
     }
 //-----------------------------------------------------------------------------
@@ -368,23 +356,20 @@ namespace
 //-----------------------------------------------------------------------------
 
 NodeRef::NodeRef()
-: m_pImpl(0)
-, m_nPos(0)
+: m_nPos(0)
 , m_nDepth(0)
 {
 }
 //-----------------------------------------------------------------------------
 
-NodeRef::NodeRef(Node*  pImpl, NodeOffset nPos, TreeDepth nDepth)
-: m_pImpl(pImpl)
-, m_nPos(nPos)
+NodeRef::NodeRef(NodeOffset nPos, TreeDepth nDepth)
+: m_nPos(nPos)
 , m_nDepth(nDepth)
 {}
 //-----------------------------------------------------------------------------
 
 NodeRef::NodeRef(NodeRef const& rOther)
-: m_pImpl(rOther.m_pImpl)
-, m_nPos(rOther.m_nPos)
+: m_nPos(rOther.m_nPos)
 , m_nDepth(rOther.m_nDepth)
 {
 }
@@ -399,7 +384,6 @@ NodeRef& NodeRef::operator=(NodeRef const& rOther)
 
 void NodeRef::swap(NodeRef& rOther)
 {
-    std::swap(m_pImpl,  rOther.m_pImpl);
     std::swap(m_nPos,   rOther.m_nPos);
     std::swap(m_nDepth, rOther.m_nDepth);
 }
@@ -422,8 +406,10 @@ bool Tree::hasElements(NodeRef const& aNode) const
         CFG_TRACE_WARNING( "configuration: Querying node beyond available depth" );
     }
 
-    return aNode.m_pImpl && aNode.m_pImpl->isSetNode() &&
-            !aNode.m_pImpl->setImpl().isEmpty();
+    view::ViewTreeAccess aView = this->getView();
+
+    return    aView.isSetNode(aNode) &&
+            ! aView.isEmpty(aView.toSetNode(aNode));
 }
 //-----------------------------------------------------------------------------
 
@@ -438,8 +424,10 @@ bool Tree::hasElement(NodeRef const& aNode, Name const& aName) const
         CFG_TRACE_WARNING( "configuration: Querying node beyond available depth" );
     }
 
-    return  aNode.m_pImpl && aNode.m_pImpl->isSetNode() &&
-            aNode.m_pImpl->setImpl().findElement(aName).isValid();
+    view::ViewTreeAccess aView = this->getView();
+
+    return  aView.isSetNode(aNode) &&
+            aView.findElement(aView.toSetNode(aNode),aName).isValid();
 }
 //-----------------------------------------------------------------------------
 
@@ -454,11 +442,13 @@ bool Tree::hasElement(NodeRef const& aNode, Path::Component const& aName) const
         CFG_TRACE_WARNING( "configuration: Querying node beyond available depth" );
     }
 
+    view::ViewTreeAccess aView = this->getView();
+
     bool bFound = false;
 
-    if (aNode.m_pImpl && aNode.m_pImpl->isSetNode())
+    if (aView.isSetNode(aNode))
     {
-        SetEntry aChildEntry = aNode.m_pImpl->setImpl().findElement(aName.getName());
+        SetEntry aChildEntry = aView.findElement(aView.toSetNode(aNode),aName.getName());
 
         // do check if types do match as well
         bFound = aChildEntry.isValid() &&
@@ -480,11 +470,13 @@ ElementRef Tree::getElement(NodeRef const& aNode, Name const& aName) const
         CFG_TRACE_WARNING( "configuration: Requesting node beyond available depth" );
     }
 
+    view::ViewTreeAccess aView = this->getView();
+
     ElementTreeImpl* pElementTree = NULL;
 
-    if (aNode.m_pImpl && aNode.m_pImpl->isSetNode())
+    if (aView.isSetNode(aNode))
     {
-        SetEntry aChildEntry = aNode.m_pImpl->setImpl().findElement(aName);
+        SetEntry aChildEntry = aView.findElement(aView.toSetNode(aNode),aName);
         pElementTree = aChildEntry.tree();
     }
 
@@ -499,11 +491,13 @@ ElementRef Tree::getAvailableElement(NodeRef const& aNode, Name const& aName) co
     OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: NodeRef operation requires valid node" );
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match tree" );
 
+    view::ViewTreeAccess aView = this->getView();
+
     ElementTreeImpl* pElementTree = NULL;
 
-    if (aNode.m_pImpl && aNode.m_pImpl->isSetNode())
+    if (aView.isSetNode(aNode))
     {
-        SetEntry aChildEntry = aNode.m_pImpl->setImpl().findAvailableElement(aName);
+        SetEntry aChildEntry = aView.findAvailableElement(aView.toSetNode(aNode),aName);
         pElementTree = aChildEntry.tree();
     }
 
@@ -519,7 +513,7 @@ Attributes Tree::getAttributes(NodeRef const& aNode)    const
 
     if (!aNode.isValid()) return Attributes();
 
-    return aNode.m_pImpl->attributes();
+    return this->getView().getAttributes(aNode);
 }
 //-----------------------------------------------------------------------------
 
@@ -530,7 +524,7 @@ Name Tree::getName(NodeRef const& aNode) const
 
     if (isEmpty()) return Name();
 
-    return m_pImpl->getSimpleNodeName(aNode.m_nPos);
+    return m_ref->getSimpleNodeName(aNode.m_nPos);
 }
 //-----------------------------------------------------------------------------
 // class ValueRef
@@ -538,38 +532,32 @@ Name Tree::getName(NodeRef const& aNode) const
 
 bool ValueRef::checkValidState() const
 {
-    if (m_pParentImpl == NULL) return false;
     if (m_nParentPos  == 0)    return false;
 
     // old node semantics for now
     if ( m_sNodeName.isEmpty() ) return false;
 
-    if (!m_pParentImpl->isGroupNode()) return false;
-
-    return TreeImplHelper::member_node(*this).isValid();
+    return true;
 }
 //-----------------------------------------------------------------------------
 
 ValueRef::ValueRef()
 : m_sNodeName()
-, m_pParentImpl(0)
 , m_nParentPos(0)
 {
 }
 //-----------------------------------------------------------------------------
 
-ValueRef::ValueRef(Name const& aName, Node* pParentImpl, NodeOffset nParentPos)
+ValueRef::ValueRef(Name const& aName, NodeOffset nParentPos)
 : m_sNodeName(aName)
-, m_pParentImpl(pParentImpl)
 , m_nParentPos(nParentPos)
 {
-    OSL_ENSURE( pParentImpl == NULL || checkValidState(), "Constructing invalid ValueRef");
+    OSL_ENSURE( nParentPos == 0 || checkValidState(), "Constructing invalid ValueRef");
 }
 //-----------------------------------------------------------------------------
 
 ValueRef::ValueRef(ValueRef const& rOther)
 : m_sNodeName(rOther.m_sNodeName)
-, m_pParentImpl(rOther.m_pParentImpl)
 , m_nParentPos(rOther.m_nParentPos)
 {
 }
@@ -585,7 +573,6 @@ ValueRef& ValueRef::operator=(ValueRef const& rOther)
 void ValueRef::swap(ValueRef& rOther)
 {
     std::swap(m_sNodeName,  rOther.m_sNodeName);
-    std::swap(m_pParentImpl,rOther.m_pParentImpl);
     std::swap(m_nParentPos, rOther.m_nParentPos);
 }
 //-----------------------------------------------------------------------------
@@ -604,7 +591,7 @@ Attributes Tree::getAttributes(ValueRef const& aValue)  const
 
     if (!aValue.isValid()) return Attributes();
 
-    return TreeImplHelper::member_node(aValue).getAttributes();
+    return TreeImplHelper::member_node(*this,aValue).getAttributes();
 }
 //-----------------------------------------------------------------------------
 
@@ -627,7 +614,7 @@ UnoType Tree::getUnoType(ValueRef const& aValue) const
 
     if (!aValue.isValid()) return getVoidCppuType();
 
-    return TreeImplHelper::member_node(aValue).getValueType();
+    return TreeImplHelper::member_node(*this,aValue).getValueType();
 }
 
 //-----------------------------------------------------------------------------
@@ -636,18 +623,12 @@ UnoType Tree::getUnoType(ValueRef const& aValue) const
 
 bool AnyNodeRef::checkValidState() const
 {
-    if (m_pUsedImpl == NULL) return false;
     if (m_nUsedPos  == 0)    return false;
 
     if ( !m_sNodeName.isEmpty() ) // it's a local value
     {
         // not used as runtime check as it should not be dangerous
         OSL_ENSURE(m_nDepth ==0, "AnyNodeRef that wraps a ValueRef should have no depth"); // value has no depth
-
-        if (!m_pUsedImpl->isGroupNode()) return false;
-
-        // does the named value exist
-        if (!impl_member_node(m_pUsedImpl,m_sNodeName).isValid()) return false;
     }
 
     return true;
@@ -656,24 +637,21 @@ bool AnyNodeRef::checkValidState() const
 
 AnyNodeRef::AnyNodeRef()
 : m_sNodeName()
-, m_pUsedImpl(0)
 , m_nUsedPos(0)
 , m_nDepth(0)
 {
 }
 //-----------------------------------------------------------------------------
 
-AnyNodeRef::AnyNodeRef(Node* pImpl, NodeOffset nPos, TreeDepth nDepth)
+AnyNodeRef::AnyNodeRef(NodeOffset nPos, TreeDepth nDepth)
 : m_sNodeName()
-, m_pUsedImpl(pImpl)
 , m_nUsedPos(nPos)
 , m_nDepth(nDepth)
 {}
 //-----------------------------------------------------------------------------
 
-AnyNodeRef::AnyNodeRef(Name const& aName, Node* pParentImpl, NodeOffset nParentPos)
+AnyNodeRef::AnyNodeRef(Name const& aName, NodeOffset nParentPos)
 : m_sNodeName(aName)
-, m_pUsedImpl(pParentImpl)
 , m_nUsedPos(nParentPos)
 , m_nDepth(0)
 {}
@@ -681,7 +659,6 @@ AnyNodeRef::AnyNodeRef(Name const& aName, Node* pParentImpl, NodeOffset nParentP
 
 AnyNodeRef::AnyNodeRef(AnyNodeRef const& rOther)
 : m_sNodeName(rOther.m_sNodeName)
-, m_pUsedImpl(rOther.m_pUsedImpl)
 , m_nUsedPos(rOther.m_nUsedPos)
 , m_nDepth(rOther.m_nDepth)
 {
@@ -690,7 +667,6 @@ AnyNodeRef::AnyNodeRef(AnyNodeRef const& rOther)
 
 AnyNodeRef::AnyNodeRef(NodeRef const& aNodeRef)
 : m_sNodeName()
-, m_pUsedImpl( aNodeRef.m_pImpl )
 , m_nUsedPos(  aNodeRef.m_nPos )
 , m_nDepth( aNodeRef.m_nDepth )
 {}
@@ -698,7 +674,6 @@ AnyNodeRef::AnyNodeRef(NodeRef const& aNodeRef)
 
 AnyNodeRef::AnyNodeRef(ValueRef const& aValueRef)
 : m_sNodeName( TreeImplHelper::value_name(aValueRef) )
-, m_pUsedImpl( TreeImplHelper::parent_node(aValueRef) )
 , m_nUsedPos(  TreeImplHelper::parent_offset(aValueRef) )
 , m_nDepth( 0 )
 {}
@@ -714,7 +689,6 @@ AnyNodeRef& AnyNodeRef::operator=(AnyNodeRef const& rOther)
 void AnyNodeRef::swap(AnyNodeRef& rOther)
 {
     std::swap(m_sNodeName,  rOther.m_sNodeName);
-    std::swap(m_pUsedImpl,  rOther.m_pUsedImpl);
     std::swap(m_nUsedPos,   rOther.m_nUsedPos);
     std::swap(m_nDepth,     rOther.m_nDepth);
 }
@@ -740,7 +714,7 @@ NodeRef AnyNodeRef::toNode() const
     OSL_PRECOND( isValid(), "ERROR: Configuration: AnyNodeRef operation requires valid node" );
     if (!isValid() || !isNode()) return NodeRef();
 
-    return TreeImplHelper::makeNode(m_pUsedImpl,m_nUsedPos,m_nDepth);
+    return TreeImplHelper::makeNode(m_nUsedPos,m_nDepth);
 }
 //-----------------------------------------------------------------------------
 
@@ -749,7 +723,7 @@ ValueRef AnyNodeRef::toValue() const
     OSL_PRECOND( isValid(), "ERROR: Configuration: AnyNodeRef operation requires valid node" );
     if (!isValid() || isNode()) return ValueRef();
 
-    return TreeImplHelper::makeValue(m_sNodeName, m_pUsedImpl,m_nUsedPos);
+    return TreeImplHelper::makeValue(m_sNodeName, m_nUsedPos);
 }
 //-----------------------------------------------------------------------------
 
@@ -762,10 +736,10 @@ Attributes Tree::getAttributes(AnyNodeRef const& aNode) const
     if (!aNode.isValid()) return Attributes();
 
     if (aNode.isNode())
-        return aNode.m_pUsedImpl->attributes();
+        return this->getView().getAttributes(aNode.toNode());
 
     else
-        return impl_member_node(aNode.m_pUsedImpl,aNode.m_sNodeName).getAttributes();
+        return TreeImplHelper::member_node(*this,aNode.toValue()).getAttributes();
 }
 //-----------------------------------------------------------------------------
 
@@ -777,7 +751,7 @@ Name Tree::getName(AnyNodeRef const& aNode) const
     if (isEmpty() || !aNode.isValid()) return Name();
 
     if (aNode.isNode())
-        return m_pImpl->getSimpleNodeName(aNode.m_nUsedPos);
+        return m_ref->getSimpleNodeName(aNode.m_nUsedPos);
 
     else
         return aNode.m_sNodeName;
@@ -794,10 +768,10 @@ NodeVisitor::Result Tree::visit(AnyNodeRef const& aNode, NodeVisitor& aVisitor) 
 
 
 //-----------------------------------------------------------------------------
-// class Tree
+// class TreeRef
 //-----------------------------------------------------------------------------
 
-Tree::Tree(TreeImpl* pImpl)
+TreeRef::TreeRef(TreeImpl* pImpl)
 : m_pImpl(pImpl)
 {
     if (m_pImpl) m_pImpl->acquire();
@@ -805,7 +779,7 @@ Tree::Tree(TreeImpl* pImpl)
 //-----------------------------------------------------------------------------
 
 // just DTRT
-Tree::Tree(Tree const& aTree)
+TreeRef::TreeRef(TreeRef const& aTree)
 : m_pImpl(aTree.m_pImpl)
 {
     if (m_pImpl) m_pImpl->acquire();
@@ -813,30 +787,61 @@ Tree::Tree(Tree const& aTree)
 //-----------------------------------------------------------------------------
 
 // the usual exception-safe swap-based one
-Tree& Tree::operator=(Tree const& rOther)
+TreeRef& TreeRef::operator=(TreeRef const& rOther)
 {
-    Tree(rOther).swap(*this);
+    TreeRef(rOther).swap(*this);
     return *this;
 }
 //-----------------------------------------------------------------------------
 
-void Tree::swap(Tree& rOther)
+void TreeRef::swap(TreeRef& rOther)
 {
-    std::swap(m_pImpl,  rOther.m_pImpl);
+    std::swap(m_pImpl,      rOther.m_pImpl);
 }
 //-----------------------------------------------------------------------------
 
-Tree::~Tree()
+TreeRef::~TreeRef()
 {
     if (m_pImpl) m_pImpl->release();
 }
 //-----------------------------------------------------------------------------
 
-void Tree::disposeData()
+bool TreeRef::isEmpty() const
 {
-    TreeImpl* pImpl = m_pImpl;
-//  m_pImpl = 0;
-    if (pImpl)
+    return m_pImpl == 0 || m_pImpl->nodeCount() == 0;
+}
+//-----------------------------------------------------------------------------
+
+NodeOffset TreeRef::getContainedInnerNodeCount() const
+{
+    OSL_PRECOND(isValid(), "ERROR: Configuration: Counting nodes requires a valid Tree");
+
+    return m_pImpl ? m_pImpl->nodeCount() : 0;
+}
+//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------------------------
+// class Tree
+//-----------------------------------------------------------------------------
+
+Tree::Tree(data::Accessor const& _accessor, TreeImpl* pImpl)
+: m_accessor(_accessor)
+, m_ref(pImpl)
+{
+}
+//-----------------------------------------------------------------------------
+
+// just DTRT
+Tree::Tree(data::Accessor const& _accessor, TreeRef const& _ref)
+: m_accessor(_accessor)
+, m_ref(_ref)
+{
+}
+//-----------------------------------------------------------------------------
+
+void TreeRef::disposeData()
+{
+    if (TreeImpl* pImpl = get())
     {
         pImpl->disposeData();
 //      pImpl->release();
@@ -844,31 +849,19 @@ void Tree::disposeData()
 }
 //-----------------------------------------------------------------------------
 
-bool Tree::isEmpty() const
-{
-    return m_pImpl == 0 || m_pImpl->nodeCount() == 0;
-}
-//-----------------------------------------------------------------------------
-
-NodeOffset Tree::getContainedInnerNodeCount() const
-{
-    OSL_PRECOND(m_pImpl, "ERROR: Configuration: Counting nodes requires a valid Tree");
-
-    return m_pImpl ? m_pImpl->nodeCount() : 0;
-}
-//-----------------------------------------------------------------------------
-
 bool Tree::isValidNode(ValueRef const& aNode) const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
 
+    if (!this->isValid()) return false;
+
     if (!aNode.isValid()) return false;
     if (!aNode.checkValidState()) return false;
 
-    if (this->isEmpty()) return false;
+    if (!m_ref->isValidNode(aNode.m_nParentPos)) return false;
 
-    if (!m_pImpl->isValidNode(aNode.m_nParentPos)) return false;
-    if (m_pImpl->node(aNode.m_nParentPos) != aNode.m_pParentImpl) return false;
+    if (!this->getView().isGroupNodeAt(aNode.m_nParentPos)) return false;
+    if (!TreeImplHelper::member_node(*this,aNode).isValid()) return false;
 
     OSL_ASSERT(!aNode.m_sNodeName.isEmpty()); // old value handling ?
 
@@ -876,31 +869,38 @@ bool Tree::isValidNode(ValueRef const& aNode) const
 }
 //-----------------------------------------------------------------------------
 
-bool Tree::isValidNode(NodeRef const& aNode) const
+bool TreeRef::isValidNode(NodeRef const& aNode) const
 {
-    OSL_PRECOND(m_pImpl, "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND(!isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
 
+    if (!this->isValid()) return false;
     if (!aNode.isValid()) return false;
-    if (this->isEmpty()) return false;
 
     if (!m_pImpl->isValidNode(aNode.m_nPos)) return false;
-    if (m_pImpl->node(aNode.m_nPos) != aNode.m_pImpl) return false;
 
     return true;
 }
 //-----------------------------------------------------------------------------
 
+bool Tree::isValidNode(NodeRef const& aNode) const
+{
+    return m_ref.isValidNode(aNode);
+}
+//-----------------------------------------------------------------------------
+
 bool Tree::isValidNode(AnyNodeRef const& aNode) const
 {
-    OSL_PRECOND(m_pImpl, "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND(!isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
+
+    if (!this->isValid()) return false;
 
     if (!aNode.isValid()) return false;
     if (!aNode.checkValidState()) return false;
 
-    if (this->isEmpty()) return false;
+    if (!m_ref->isValidNode(aNode.m_nUsedPos)) return false;
 
-    if (!m_pImpl->isValidNode(aNode.m_nUsedPos)) return false;
-    if (m_pImpl->node(aNode.m_nUsedPos) != aNode.m_pUsedImpl) return false;
+    if (!aNode.isNode() && !this->getView().isGroupNodeAt(aNode.m_nUsedPos)) return false;
+    if (!aNode.isNode() && !TreeImplHelper::member_node(*this,aNode.toValue()).isValid()) return false;
 
     return true;
 }
@@ -908,7 +908,7 @@ bool Tree::isValidNode(AnyNodeRef const& aNode) const
 
 bool Tree::hasChildren(NodeRef const& aNode) const
 {
-    OSL_PRECOND( m_pImpl, "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
     if (aNode.m_nDepth == 0)
     {
@@ -916,15 +916,18 @@ bool Tree::hasChildren(NodeRef const& aNode) const
     }
 
     if (this->isEmpty()) return false;
-    if (!aNode.isValid()) return false;
 
-    return (m_pImpl->firstChild(aNode.m_nPos) != 0);
+    view::ViewTreeAccess aView = this->getView();
+
+    if (!aView.isGroupNode(aNode)) return false;
+
+    return aView.toGroupNode(aNode).getFirstChild().is();
 }
 //-----------------------------------------------------------------------------
 
 bool Tree::hasChildNode(NodeRef const& aNode, Name const& aName) const
 {
-    OSL_PRECOND( m_pImpl, "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
     if (aNode.m_nDepth == 0)
     {
@@ -932,17 +935,18 @@ bool Tree::hasChildNode(NodeRef const& aNode, Name const& aName) const
     }
 
     if (this->isEmpty()) return false;
-    if (!aNode.isValid()) return false;
 
-    NodeOffset nOffset  = m_pImpl->findChild(aNode.m_nPos, aName);
+    view::ViewTreeAccess aView = this->getView();
 
-    return nOffset != 0;
+    if (!aView.isGroupNode(aNode)) return false;
+
+    return aView.toGroupNode(aNode).findChild(aName).is();
 }
 //-----------------------------------------------------------------------------
 
 bool Tree::hasChildValue(NodeRef const& aNode, Name const& aName) const
 {
-    OSL_PRECOND( m_pImpl, "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
     if (aNode.m_nDepth == 0)
     {
@@ -951,15 +955,17 @@ bool Tree::hasChildValue(NodeRef const& aNode, Name const& aName) const
 
     if (this->isEmpty()) return false;
 
-    if (!TreeImplHelper::isGroup(aNode)) return false;
+    view::ViewTreeAccess aView = this->getView();
 
-    return aNode.m_pImpl->groupImpl().hasValue(aName);
+    if (! aView.isGroupNode(aNode) ) return false;
+
+    return aView.hasValue(aView.toGroupNode(aNode), aName);
 }
 //-----------------------------------------------------------------------------
 
 bool Tree::hasChild(NodeRef const& aNode, Name const& aName) const
 {
-    OSL_PRECOND( m_pImpl, "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
     if (aNode.m_nDepth == 0)
     {
@@ -969,14 +975,15 @@ bool Tree::hasChild(NodeRef const& aNode, Name const& aName) const
     if (this->isEmpty()) return false;
     if (!aNode.isValid()) return false;
 
-    if (TreeImplHelper::isGroup(aNode))
-    {
-        if (aNode.m_pImpl->groupImpl().hasValue(aName)) return true;
-    }
+    view::ViewTreeAccess aView = this->getView();
 
-    NodeOffset nOffset  = m_pImpl->findChild(aNode.m_nPos, aName);
+    if ( !aView.isGroupNode(aNode) ) return false;
 
-    return nOffset != 0;
+    view::GroupNode aGroupNode = aView.toGroupNode(aNode);
+
+    if (aView.hasValue(aGroupNode, aName)) return true;
+
+    return aGroupNode.findChild(aName).is();
 }
 //-----------------------------------------------------------------------------
 
@@ -990,11 +997,16 @@ NodeRef Tree::getChildNode(NodeRef const& aNode, Name const& aName) const
         CFG_TRACE_WARNING( "configuration: Requesting node beyond available depth" );
     }
 
-    NodeOffset nOffset  = m_pImpl ? m_pImpl->findChild(aNode.m_nPos, aName) : 0;
+    view::ViewTreeAccess aView = this->getView();
 
-    Node* pFound    = nOffset ? m_pImpl->node(nOffset) : 0;
+    NodeOffset nOffset  = 0;
 
-    return NodeRef(pFound, nOffset, childDepth(aNode.m_nDepth));
+    if ( aView.isGroupNode(aNode) )
+    {
+        nOffset = aView.toGroupNode(aNode).findChild(aName).get_offset();
+    }
+
+    return NodeRef(nOffset, childDepth(aNode.m_nDepth));
 }
 //-----------------------------------------------------------------------------
 
@@ -1008,11 +1020,13 @@ ValueRef Tree::getChildValue(NodeRef const& aNode, Name const& aName) const
         CFG_TRACE_WARNING( "configuration: Requesting node beyond available depth" );
     }
 
-    if (!TreeImplHelper::isGroup(aNode)) return ValueRef();
+    view::ViewTreeAccess aView = this->getView();
 
-    if (!aNode.m_pImpl->groupImpl().hasValue(aName)) return ValueRef();
+    if (! aView.isGroupNode(aNode) ) return ValueRef();
 
-    return ValueRef(aName, aNode.m_pImpl, aNode.m_nPos);
+    if (!aView.hasValue(aView.toGroupNode(aNode), aName)) return ValueRef();
+
+    return ValueRef(aName, aNode.m_nPos);
 }
 //-----------------------------------------------------------------------------
 
@@ -1026,20 +1040,22 @@ AnyNodeRef Tree::getAnyChild(NodeRef const& aNode, Name const& aName) const
         CFG_TRACE_WARNING( "configuration: Requesting node beyond available depth" );
     }
 
-    if (TreeImplHelper::isGroup(aNode))
+    view::ViewTreeAccess aView = this->getView();
+
+    NodeOffset nOffset  = 0;
+
+    if (aView.isGroupNode(aNode))
     {
-        if (aNode.m_pImpl->groupImpl().hasValue(aName))
+        if (aView.hasValue(aView.toGroupNode(aNode), aName))
         {
-            return AnyNodeRef(aName, aNode.m_pImpl, aNode.m_nPos);
+            return AnyNodeRef(aName, aNode.m_nPos);
 
         }
+
+        nOffset = aView.toGroupNode(aNode).findChild(aName).get_offset();
     }
 
-    NodeOffset nOffset  = m_pImpl ? m_pImpl->findChild(aNode.m_nPos, aName) : 0;
-
-    Node* pFound    = nOffset ? m_pImpl->node(nOffset) : 0;
-
-    return AnyNodeRef(pFound, nOffset, childDepth(aNode.m_nDepth));
+    return AnyNodeRef(nOffset, childDepth(aNode.m_nDepth));
 }
 //-----------------------------------------------------------------------------
 
@@ -1052,7 +1068,7 @@ NodeRef Tree::getParent(ValueRef const& aNode) const
 
     OSL_ASSERT(nParent == 0 || !aNode.m_sNodeName.isEmpty());
 
-    return TreeImplHelper::makeNode(*m_pImpl, nParent);
+    return TreeImplHelper::makeNode(*m_ref, nParent);
 }
 //-----------------------------------------------------------------------------
 
@@ -1060,15 +1076,13 @@ NodeRef Tree::getParent(NodeRef const& aNode) const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND(  isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    OSL_ASSERT( m_pImpl->parent(m_pImpl->root()) == 0 );
+    OSL_ASSERT( getView().makeNode(getRootNode()).getParent().is() == false );
 
-    NodeOffset nParent = aNode.isValid() ? aNode.m_pImpl->parent() : 0;
+    view::Node aParent = getView().makeNode(aNode).getParent();
 
-    OSL_ENSURE(  m_pImpl->isValidNode(nParent), "ERROR: Configuration: NodeRef has invalid parent");
+    OSL_ENSURE(  m_ref->isValidNode(aParent.get_offset()), "ERROR: Configuration: NodeRef has invalid parent");
 
-    Node*  pParent = nParent ? m_pImpl->node(nParent) : 0;
-
-    return NodeRef(pParent, nParent, parentDepth(aNode.m_nDepth));
+    return NodeRef(aParent.get_offset(), parentDepth(aNode.m_nDepth));
 }
 //-----------------------------------------------------------------------------
 
@@ -1076,14 +1090,14 @@ NodeRef Tree::getParent(AnyNodeRef const& aNode) const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND(  isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    OSL_ASSERT( m_pImpl->parent(m_pImpl->root()) == 0 );
+    OSL_ASSERT( getView().makeNode(getRootNode()).getParent().is() == false );
 
-    NodeOffset nParent = aNode.m_nUsedPos;
+    view::Node aParent = getView().makeNode(aNode.m_nUsedPos);
 
     if (aNode.m_sNodeName.isEmpty() && aNode.isValid())
-        nParent = aNode.m_pUsedImpl->parent();
+        aParent = aParent.getParent();
 
-    return TreeImplHelper::makeNode(*m_pImpl, nParent);
+    return TreeImplHelper::makeNode(*m_ref, aParent.get_offset());
 }
 //-----------------------------------------------------------------------------
 
@@ -1094,7 +1108,7 @@ UnoAny Tree::getNodeValue(ValueRef const& aNode) const
 
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: Value Ref does not point to valid value");
 
-    return TreeImplHelper::member_node(aNode).getValue();
+    return TreeImplHelper::member_node(*this,aNode).getValue();
 }
 //-----------------------------------------------------------------------------
 
@@ -1108,21 +1122,20 @@ AbsolutePath Tree::getAbsolutePath(NodeRef const& aNode) const
     if (!this->isEmpty())
     {
         if ( aNode.isValid() )
-            m_pImpl->prependLocalPathTo( aNode.m_nPos, aNames );
+            m_ref->prependLocalPathTo( aNode.m_nPos, aNames );
 
-        aNames.prepend( m_pImpl->getRootPath().rep() );
+        aNames.prepend( m_ref->getRootPath().rep() );
     }
     return AbsolutePath(aNames);
 }
 //-----------------------------------------------------------------------------
 
-NodeRef Tree::getRootNode() const
+NodeRef TreeRef::getRootNode() const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     if (isEmpty()) return NodeRef();
 
-    NodeOffset nRoot = m_pImpl->root();
-    return NodeRef( m_pImpl->node(nRoot), nRoot, m_pImpl->getAvailableDepth() );
+    return NodeRef( m_pImpl->root_(), m_pImpl->getAvailableDepth() );
 }
 //-----------------------------------------------------------------------------
 
@@ -1131,15 +1144,15 @@ Path::Component Tree::getRootName() const
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     if (isEmpty()) return Path::makeEmptyComponent();
 
-    return m_pImpl->getExtendedRootName();
+    return m_ref->getExtendedRootName();
 }
 //-----------------------------------------------------------------------------
 
-bool Tree::isRootNode(NodeRef const& aNode) const
+bool TreeRef::isRootNode(NodeRef const& aNode) const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( !aNode.isValid() || isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
-    return m_pImpl && aNode.isValid() && m_pImpl->root() == aNode.m_nPos;
+    return !isEmpty() && aNode.isValid() && m_pImpl->root_() == aNode.m_nPos;
 }
 //-----------------------------------------------------------------------------
 
@@ -1152,7 +1165,7 @@ bool Tree::hasNodeDefault(ValueRef const& aNode)        const // only works for 
     bool bHasDefault = false;
     if (aNode.isValid())
     {
-        ValueMemberNode  aValueMember = TreeImplHelper::member_node(aNode);
+        ValueMemberNode  aValueMember = TreeImplHelper::member_node(*this,aNode);
 
         bHasDefault = aValueMember.canGetDefaultValue();
     }
@@ -1169,7 +1182,7 @@ bool Tree::isNodeDefault(ValueRef const& aNode) const // only works for value no
 
     if (!hasNodeDefault(aNode)) return false;
 
-    return  TreeImplHelper::member_node(aNode).isDefault();
+    return  TreeImplHelper::member_node(*this,aNode).isDefault();
 }
 //-----------------------------------------------------------------------------
 
@@ -1180,7 +1193,7 @@ bool Tree::hasNodeDefault(NodeRef const& aNode)     const
     OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: ValueRef does not point to valid value");
 
     // not a set - then it has no default
-    return aNode.isValid() && aNode.m_pImpl->isSetNode();
+    return this->getView().isSetNode(aNode);
 }
 //-----------------------------------------------------------------------------
 
@@ -1192,11 +1205,13 @@ bool Tree::isNodeDefault(NodeRef const& aNode) const
 
     if (!hasNodeDefault(aNode)) return false;
 
+    view::ViewTreeAccess aView = this->getView();
+
     // not a set - then it isn't default
-    OSL_ASSERT(aNode.m_pImpl->isSetNode());
+    OSL_ASSERT(aView.isSetNode(aNode));
 
     // a set is defaults, if all its elements are default
-    return !FindNonDefaultElement::hasNonDefaultElement(aNode.m_pImpl->setImpl());
+    return !FindNonDefaultElement::hasNonDefaultElement(aView,aView.toSetNode(aNode));
 }
 //-----------------------------------------------------------------------------
 
@@ -1232,11 +1247,13 @@ bool Tree::areValueDefaultsAvailable(NodeRef const& aNode) const
     OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: Node operation requires a valid Node");
     OSL_PRECOND(  isValidNode(aNode), "ERROR: Configuration: Node does not match Tree");
 
-    OSL_PRECOND(  aNode.m_pImpl && aNode.m_pImpl->isGroupNode(),
+    view::ViewTreeAccess aView = this->getView();
+
+    OSL_PRECOND( aView.isGroupNode(aNode),
                 "WARNING: Configuration: Group Node expected. Result is not meaningful");
 
-    return  aNode.m_pImpl && aNode.m_pImpl->isGroupNode() &&
-            aNode.m_pImpl->groupImpl().areValueDefaultsAvailable();
+    return  aView.isGroupNode(aNode) &&
+            aView.areValueDefaultsAvailable( aView.toGroupNode(aNode) );
 }
 //-----------------------------------------------------------------------------
 
@@ -1248,7 +1265,7 @@ UnoAny Tree::getNodeDefaultValue(ValueRef const& aNode)     const // only works 
 
     if (aNode.isValid())
     {
-        ValueMemberNode  aValueMember = TreeImplHelper::member_node(aNode);
+        ValueMemberNode  aValueMember = TreeImplHelper::member_node(*this,aNode);
 
         if (aValueMember.canGetDefaultValue())
             return aValueMember.getDefaultValue();
@@ -1258,21 +1275,27 @@ UnoAny Tree::getNodeDefaultValue(ValueRef const& aNode)     const // only works 
 }
 //-----------------------------------------------------------------------------
 
-Tree Tree::getContextTree() const
+TreeRef TreeRef::getContextTree() const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
 
-    TreeImpl* pContext = isEmpty() ? 0 : m_pImpl->getContextTree();
+    TreeImpl* pContext = isValid() ? m_pImpl->getContextTree() : 0;
 
-    return Tree(pContext);
+    return TreeRef(pContext);
 }
 //-----------------------------------------------------------------------------
 
-NodeRef Tree::getContextNode() const
+Tree Tree::getContextTree() const
+{
+    return Tree(m_accessor, m_ref.getContextTree());
+}
+//-----------------------------------------------------------------------------
+
+NodeRef TreeRef::getContextNode() const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
 
-    if (isEmpty()) return NodeRef();
+    if (!isValid()) return NodeRef();
 
     NodeOffset nOffset = m_pImpl->getContextNode();
     TreeImpl* pContext = m_pImpl->getContextTree();
@@ -1285,11 +1308,17 @@ NodeRef Tree::getContextNode() const
 }
 //-----------------------------------------------------------------------------
 
+NodeRef Tree::getContextNode() const
+{
+    return m_ref.getContextNode();
+}
+//-----------------------------------------------------------------------------
+
 AbsolutePath Tree::getRootPath() const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
 
-    return isEmpty() ? AbsolutePath::root() : m_pImpl->getRootPath();
+    return isEmpty() ? AbsolutePath::root() : m_ref->getRootPath();
 }
 //-----------------------------------------------------------------------------
 
@@ -1297,7 +1326,7 @@ bool Tree::hasChanges()  const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
 
-    return !isEmpty() && m_pImpl->hasChanges();
+    return !isEmpty() && this->getView().hasChanges();
 }
 //-----------------------------------------------------------------------------
 
@@ -1305,9 +1334,9 @@ bool Tree::collectChanges(NodeChanges& aChanges)  const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
 
-    if (!isEmpty() && m_pImpl->hasChanges())
+    if (!isEmpty() && this->getView().hasChanges())
     {
-        m_pImpl->collectChanges(aChanges);
+        this->getView().collectChanges(aChanges);
         return true;
     }
     else
@@ -1324,7 +1353,7 @@ void Tree::integrate(NodeChange& aChange, NodeRef const& aNode, bool bLocal)  co
         aChange.apply();
         if (bLocal)
         {
-            m_pImpl->markChanged(aNode.m_nPos);
+            this->getView().markChanged(aNode);
         }
         else
         {
@@ -1332,9 +1361,9 @@ void Tree::integrate(NodeChange& aChange, NodeRef const& aNode, bool bLocal)  co
             NodeRef aAffectedNode   = aChange.getAffectedNode();
             OSL_ASSERT(!aAffectedTree.isEmpty() && aAffectedTree.isValidNode(aAffectedNode));
 
-            aAffectedTree.m_pImpl->markChanged(aAffectedNode.m_nPos);
+            aAffectedTree.getView().markChanged(aAffectedNode);
 
-            OSL_ASSERT(this->m_pImpl->hasChanges());
+            OSL_ASSERT(this->getView().hasChanges());
         }
     }
 }
@@ -1357,40 +1386,43 @@ NodeVisitor::Result Tree::dispatchToChildren(NodeRef const& aNode, NodeVisitor& 
         CFG_TRACE_WARNING("configuration: Dispatching Visitor to node beyond available depth" );
     }
 
+    view::ViewTreeAccess aView = this->getView();
+
     typedef NodeVisitor::Result Result;
     Result aRet = NodeVisitor::CONTINUE;
 
     if (!aNode.isValid())
         OSL_TRACE("WARNING: Configuration: trying to iterate an invalid node !");
 
-    else if (aNode.m_pImpl->isGroupNode())
+    else if (aView.isGroupNode(aNode))
     {
         GroupVisitorAdapter aAdapter(*this,aNode,aVisitor);
 
         OSL_ASSERT( NodeVisitor::DONE       == GroupMemberVisitor::DONE );
         OSL_ASSERT( NodeVisitor::CONTINUE   == GroupMemberVisitor::CONTINUE );
 
-        aRet = Result( aNode.m_pImpl->groupImpl().dispatchToValues(aAdapter) );
+        view::GroupNode const aParent = aView.toGroupNode(aNode);
 
-        NodeOffset const nParent = aNode.m_nPos;
+        aRet = Result( aView.dispatchToValues(aParent,aAdapter) );
+
         TreeDepth const nDepth = childDepth(aNode.m_nDepth);
 
-        for( NodeOffset nPos = m_pImpl->firstChild(nParent);
-             nPos != 0 && aRet != NodeVisitor::DONE;
-             nPos = m_pImpl->findNextChild(nParent,nPos))
+        for( view::Node aChild = aParent.getFirstChild();
+             aChild.is() && aRet != NodeVisitor::DONE;
+             aChild = aParent.getNextChild(aChild))
         {
-            aRet = visit( NodeRef( m_pImpl->node(nPos), nPos, nDepth ), aVisitor);
+            aRet = visit( NodeRef( aChild.get_offset(), nDepth ), aVisitor);
         }
     }
 
-    else if (aNode.m_pImpl->isSetNode())
+    else if (aView.isSetNode(aNode))
     {
         SetVisitorAdapter aAdapter(aVisitor);
 
         OSL_ASSERT( NodeVisitor::DONE == SetNodeVisitor::DONE );
         OSL_ASSERT( NodeVisitor::CONTINUE == SetNodeVisitor::CONTINUE );
 
-        aRet = Result(aNode.m_pImpl->setImpl().dispatchToElements(aAdapter));
+        aRet = Result(aView.dispatchToElements(aView.toSetNode(aNode),aAdapter));
     }
 
     else
@@ -1400,22 +1432,15 @@ NodeVisitor::Result Tree::dispatchToChildren(NodeRef const& aNode, NodeVisitor& 
 }
 //-----------------------------------------------------------------------------
 
-NodeRef Tree::bind(NodeOffset nNode) const
+void Tree::rebind(data::Accessor const& _aAccessor)
 {
-    if (m_pImpl && m_pImpl->isValidNode(nNode))
-    {
-        return TreeImplHelper::makeNode(*m_pImpl, nNode);
-    }
-    else
-    {
-        return NodeRef();
-    }
+    m_accessor = _aAccessor;
 }
 //-----------------------------------------------------------------------------
 
-NodeRef Tree::rebind(NodeRef const& aNode) const
+void Tree::unbind()
 {
-    return bind(aNode.m_nPos);
+    m_accessor.clear();
 }
 //-----------------------------------------------------------------------------
 
@@ -1456,6 +1481,13 @@ NodeID::NodeID(Tree const& rTree, NodeRef const& rNode)
 }
 //-----------------------------------------------------------------------------
 
+NodeID::NodeID(TreeRef const& rTree, NodeRef const& rNode)
+: m_pTree( TreeImplHelper::impl(rTree) )
+, m_nNode( TreeImplHelper::offset(rNode) )
+{
+}
+//-----------------------------------------------------------------------------
+
 NodeID::NodeID(TreeImpl* pImpl, NodeOffset nNode)
 : m_pTree( pImpl )
 , m_nNode( nNode )
@@ -1490,7 +1522,7 @@ NodeOffset NodeID::toIndex() const
     {
         OSL_ENSURE(m_pTree->isValidNode(n),"Cannot produce valid Index for NodeID");
 
-        n -= m_pTree->root();
+        n -= m_pTree->root_();
     }
     return n;
 }
@@ -1530,6 +1562,13 @@ SubNodeID::SubNodeID(Tree const& rTree, NodeRef const& rParentNode, Name const& 
 }
 //-----------------------------------------------------------------------------
 
+SubNodeID::SubNodeID(TreeRef const& rTree, NodeRef const& rParentNode, Name const& aName)
+: m_sNodeName(aName)
+, m_aParentID(rTree,rParentNode)
+{
+}
+//-----------------------------------------------------------------------------
+
 SubNodeID::SubNodeID(NodeID const& rParentNodeID, Name const& aName)
 : m_sNodeName(aName)
 , m_aParentID(rParentNodeID)
@@ -1539,18 +1578,19 @@ SubNodeID::SubNodeID(NodeID const& rParentNodeID, Name const& aName)
 
 bool SubNodeID::isEmpty() const
 {
-    OSL_ENSURE(m_aParentID.isEmpty() || isValidNode(),"Invalid subnode ID");
+    OSL_ENSURE( m_aParentID.isEmpty() ||
+                (m_aParentID.isValidNode() && !m_sNodeName.isEmpty()),"Invalid subnode ID");
     return m_aParentID.isEmpty();
 }
 //-----------------------------------------------------------------------------
 
-bool SubNodeID::isValidNode() const
+bool SubNodeID::isValidNode(data::Accessor const& _accessor) const
 {
     if (!m_aParentID.isValidNode()) return false;
 
     OSL_ENSURE(!m_sNodeName.isEmpty(),"Invalid subnode ID: Missing Name");
 
-    Tree aCheck( TreeImplHelper::tree(m_aParentID) );
+    Tree aCheck( _accessor, TreeImplHelper::tree(m_aParentID) );
     return aCheck.hasChild( TreeImplHelper::makeNode(m_aParentID),m_sNodeName );
 }
 //-----------------------------------------------------------------------------
@@ -1580,7 +1620,7 @@ Name validateElementName(OUString const& sName, Tree const& aTree, NodeRef const
     OSL_PRECOND(  aNode.isValid(), "ERROR: Configuration: Node operation requires a valid NodeRef");
     OSL_PRECOND(  aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
 
-    OSL_PRECOND(  TreeImplHelper::isSet(aNode), "ERROR: Configuration: Set node expected.");
+    OSL_PRECOND(  aTree.getView().isSetNode(aNode), "ERROR: Configuration: Set node expected.");
 
     return validateElementName(sName);
 }
@@ -1592,7 +1632,7 @@ Name validateChildName(OUString const& sName, Tree const& aTree, NodeRef const& 
     OSL_PRECOND(  aNode.isValid(), "ERROR: Configuration: Node operation requires a valid NodeRef");
     OSL_PRECOND(  aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
 
-    OSL_PRECOND(  TreeImplHelper::isGroup(aNode), "ERROR: Configuration: Group node expected.");
+    OSL_PRECOND(  aTree.getView().isGroupNode(aNode), "ERROR: Configuration: Group node expected.");
 
     return validateNodeName(sName);
 }
@@ -1606,7 +1646,7 @@ Name validateChildOrElementName(OUString const& sName, Tree const& aTree, NodeRe
 
     OSL_PRECOND(  isStructuralNode(aTree,aNode), "ERROR: Configuration: Inner node expected.");
 
-    if (TreeImplHelper::isSet(aNode))
+    if (aTree.getView().isSetNode(aNode))
         return validateElementName(sName);
 
     else
@@ -1619,7 +1659,7 @@ Path::Component validateElementPathComponent(OUString const& sName, Tree const& 
     Name aElementName = validateElementName(sName,aTree,aNode);
 
     TemplateHolder aTemplate = SetElementInfo::extractElementInfo(aTree,aNode);
-    if (aTemplate.isValid())
+    if (aTemplate.is())
     {
         return Path::makeCompositeName( aElementName, aTemplate->getName() );
     }
@@ -1631,13 +1671,13 @@ Path::Component validateElementPathComponent(OUString const& sName, Tree const& 
 }
 //-----------------------------------------------------------------------------
 
-static void implValidateLocalPath(RelativePath& _rPath, Tree const& , NodeRef const& aNode)
+static void implValidateLocalPath(RelativePath& _rPath, Tree const& aTree, NodeRef const& aNode)
 {
     if (_rPath.isEmpty())
         throw InvalidName(_rPath.toString(), "is an empty path.");
 
     // FOR NOW: validate only the first component
-    if (aNode.isValid() && !TreeImplHelper::isSet(aNode))
+    if (!aTree.getView().isSetNode(aNode))
         if (!_rPath.getFirstName().isSimpleName())
             throw InvalidName(_rPath.toString(), "is not valid in this context. Predicate expression used to select group member.");
 }
@@ -1688,30 +1728,30 @@ RelativePath validateAndReducePath(OUString const& _sPath, Tree const& aTree, No
 
 bool hasChildOrElement(Tree const& aTree, NodeRef const& aNode)
 {
-    return TreeImplHelper::isSet(aNode) ? aTree.hasElements(aNode) : aTree.hasChildren(aNode);
+    return aTree.getView().isSetNode(aNode) ? aTree.hasElements(aNode) : aTree.hasChildren(aNode);
 }
 //-----------------------------------------------------------------------------
 
 bool hasChildOrElement(Tree const& aTree, NodeRef const& aNode, Name const& aName)
 {
-    return TreeImplHelper::isSet(aNode) ? aTree.hasElement(aNode,aName) : aTree.hasChild(aNode,aName);
+    return aTree.getView().isSetNode(aNode) ? aTree.hasElement(aNode,aName) : aTree.hasChild(aNode,aName);
 }
 //-----------------------------------------------------------------------------
 
 bool hasChildOrElement(Tree const& aTree, NodeRef const& aNode, Path::Component const& aName)
 {
-    return TreeImplHelper::isSet(aNode) ? aTree.hasElement(aNode,aName) : aTree.hasChild(aNode,aName.getName());
+    return aTree.getView().isSetNode(aNode) ? aTree.hasElement(aNode,aName) : aTree.hasChild(aNode,aName.getName());
 }
 //-----------------------------------------------------------------------------
 
 bool findInnerChildOrAvailableElement(Tree& aTree, NodeRef& aNode, Name const& aName)
 {
-    if ( TreeImplHelper::isSet(aNode) )
+    if ( aTree.getView().isSetNode(aNode) )
     {
         ElementRef aElement = aTree.getAvailableElement(aNode,aName);
         if (aElement.isValid())
         {
-            aTree = aElement.getElementTree().getTree();
+            aTree = aElement.getElementTree(aTree.getDataAccessor()).getTree();
             aNode = aTree.getRootNode();
             return true;
         }
@@ -1738,12 +1778,12 @@ AnyNodeRef getChildOrElement(Tree& aTree, NodeRef const& aParentNode, Name const
         return AnyNodeRef(aTree.getChildValue(aParentNode,aName));
     }
 
-    else if ( TreeImplHelper::isSet(aParentNode) )
+    else if ( aTree.getView().isSetNode(aParentNode) )
     {
         ElementRef aElement = aTree.getElement(aParentNode,aName);
         if (aElement.isValid())
         {
-            aTree = aElement.getElementTree().getTree();
+            aTree = aElement.getElementTree(aTree.getDataAccessor()).getTree();
             return AnyNodeRef(aTree.getRootNode());
         }
     }
@@ -1787,7 +1827,7 @@ bool findElement(Tree& aTree, NodeRef& aNode, Path::Component const& aName)
 
     if (!aElement.isValid()) return false;
 
-    Tree aFoundTree = aElement.getElementTree().getTree();
+    Tree aFoundTree = aElement.getElementTree(aTree.getDataAccessor()).getTree();
 
     OSL_ENSURE(matches(aFoundTree.getRootName(),aName), "Element found, but type prefix does not match - failing");
     if ( !matches(aFoundTree.getRootName(),aName) ) return false;
@@ -1804,7 +1844,7 @@ bool findLocalInnerDescendant(Tree const& aTree, NodeRef& aNode, RelativePath& r
 {
     while ( !rPath.isEmpty() )
     {
-        if (  TreeImplHelper::isSet(aNode) ) return false;
+        if (  aTree.getView().isSetNode(aNode) ) return false;
 
         if ( ! findLocalInnerChild(aTree,aNode,rPath.getFirstName()) ) return false;
 
@@ -1820,7 +1860,7 @@ bool findDeepInnerDescendant(Tree& aTree, NodeRef& aNode, RelativePath& rPath)
 {
     while ( !rPath.isEmpty() )
     {
-        if (  TreeImplHelper::isSet(aNode) )
+        if ( aTree.getView().isSetNode(aNode) )
         {
             if ( ! findElement(aTree,aNode,rPath.getFirstName()) ) return false;
         }
@@ -1906,9 +1946,9 @@ void getAllContainedNodes(Tree const& aTree, NodeIDList& aList)
         NodeOffset nCount = pImpl->nodeCount();
         aList.reserve(nCount);
 
-        NodeOffset const nEnd = pImpl->root() + nCount;
+        NodeOffset const nEnd = pImpl->root_() + nCount;
 
-        for(NodeOffset nOffset = pImpl->root();
+        for(NodeOffset nOffset = pImpl->root_();
             nOffset < nEnd;
             ++nOffset)
         {
@@ -1921,44 +1961,45 @@ void getAllContainedNodes(Tree const& aTree, NodeIDList& aList)
 }
 //-----------------------------------------------------------------------------
 
-void getAllChildrenHelper(NodeID const& aNode, SubNodeIDList& aList)
+void getAllChildrenHelper(data::Accessor const& _aAccessor, NodeID const& aNode, SubNodeIDList& aList)
 {
     aList.clear();
 
     if (TreeImpl* pTreeImpl = TreeImplHelper::tree(aNode))
     {
+        view::ViewTreeAccess aView(_aAccessor, *pTreeImpl);
+
         if (NodeOffset const nParent = TreeImplHelper::offset(aNode))
         {
             OSL_ASSERT( pTreeImpl->isValidNode(nParent) );
-            if (Node* const pNode =pTreeImpl->node(nParent))
+
+            if (aView.isGroupNodeAt(nParent))
             {
-                if (pNode->isGroupNode())
+                view::GroupNode aParent = aView.getGroupNodeAt(nParent);
+
                 {
                     CollectValueIDs aCollector(aNode, aList);
-
-                    pNode->groupImpl().dispatchToValues(aCollector);
+                    aView.dispatchToValues(aView.getGroupNodeAt(nParent),aCollector);
                 }
-            }
-            else
-                OSL_ENSURE(false, "Unexpected: could not get node for offset");
 
-            for(NodeOffset nOffset = pTreeImpl->firstChild(nParent);
-                nOffset != 0;
-                nOffset = pTreeImpl->findNextChild(nParent,nOffset))
-            {
-                OSL_ASSERT( pTreeImpl->isValidNode(nOffset) );
-                aList.push_back( SubNodeID( aNode, pTreeImpl->getSimpleNodeName(nOffset)) );
+                for(view::Node aChild = aParent.getFirstChild();
+                    aChild.is();
+                    aChild = aParent.getNextChild(aChild))
+                {
+                    OSL_ASSERT( pTreeImpl->isValidNode(aChild.get_offset()) );
+                    aList.push_back( SubNodeID( aNode, pTreeImpl->getSimpleNodeName(aChild.get_offset())) );
+                }
             }
         }
     }
 }
 
 //-----------------------------------------------------------------------------
-NodeID findNodeFromIndex(Tree const& aTree, NodeOffset nIndex)
+NodeID findNodeFromIndex(TreeRef const& aTree, NodeOffset nIndex)
 {
     if (TreeImpl* pImpl = TreeImplHelper::impl(aTree))
     {
-        NodeOffset nNode = nIndex + pImpl->root();
+        NodeOffset nNode = nIndex + pImpl->root_();
         if (pImpl->isValidNode(nNode))
         {
             return NodeID(pImpl,nNode);
@@ -1972,13 +2013,13 @@ bool isSimpleValue(Tree const& aTree, AnyNodeRef const& aNode)
 {
     OSL_PRECOND( !aNode.isValid() || !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( !aNode.isValid() || aTree.isValidNode(aNode), "WARNING: Configuration: NodeRef does not match Tree");
-    return aNode.isValid() && (!aNode.isNode() || TreeImplHelper::isValueElement(aNode.toNode()));
+    return aNode.isValid() && (!aNode.isNode() || aTree.getView().isValueNode(aNode.toNode()));
 }
 //-----------------------------------------------------------------------------
 
 static inline bool isRootNode(Tree const& aTree, NodeRef const& aNode)
 {
-    return TreeImplHelper::offset(aNode) == TreeImplHelper::impl(aTree)->root();
+    return TreeImplHelper::offset(aNode) == TreeImplHelper::impl(aTree)->root_();
 }
 //-----------------------------------------------------------------------------
 
@@ -1986,12 +2027,15 @@ bool isSimpleValueElement(Tree const& aTree, NodeRef const& aNode)
 {
     OSL_PRECOND( !aNode.isValid() || !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( !aNode.isValid() || aTree.isValidNode(aNode), "WARNING: Configuration: NodeRef does not match Tree");
-    OSL_ASSERT( !aNode.isValid() ||
-                TreeImplHelper::isGroup(aNode) ||
-                TreeImplHelper::isSet(aNode) ||
-                (TreeImplHelper::isValueElement(aNode) && isRootNode(aTree,aNode)) );
 
-    return aNode.isValid() && isRootNode(aTree,aNode) && TreeImplHelper::isValueElement(aNode);
+    view::ViewTreeAccess aView = aTree.getView();
+
+    OSL_ASSERT( !aNode.isValid() ||
+                aView.isGroupNode(aNode) ||
+                aView.isSetNode(aNode) ||
+                (aView.isValueNode(aNode) && isRootNode(aTree,aNode)) );
+
+    return aNode.isValid() && isRootNode(aTree,aNode) && aView.isValueNode(aNode);
 }
 //-----------------------------------------------------------------------------
 
@@ -1999,13 +2043,15 @@ bool isStructuralNode(Tree const& aTree, NodeRef const& aNode)
 {
     OSL_PRECOND( !aNode.isValid() || !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( !aNode.isValid() || aTree.isValidNode(aNode), "WARNING: Configuration: NodeRef does not match Tree");
+
+    view::ViewTreeAccess aView = aTree.getView();
+
     OSL_ASSERT( !aNode.isValid() ||
-                TreeImplHelper::isGroup(aNode) ||
-                TreeImplHelper::isSet(aNode) ||
-                (TreeImplHelper::isValueElement(aNode) && isRootNode(aTree,aNode)) );
+                aView.isGroupNode(aNode) ||
+                aView.isSetNode(aNode) ||
+                (aView.isValueNode(aNode) && isRootNode(aTree,aNode)) );
 
-    return aNode.isValid() && ! TreeImplHelper::isValueElement(aNode);
-
+    return aNode.isValid() && ! aView.isValueNode(aNode);
 }
 //-----------------------------------------------------------------------------
 
@@ -2013,12 +2059,15 @@ bool isGroupNode(Tree const& aTree, NodeRef const& aNode)
 {
     OSL_PRECOND( !aNode.isValid() || !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( !aNode.isValid() || aTree.isValidNode(aNode), "WARNING: Configuration: NodeRef does not match Tree");
-    OSL_ASSERT( !aNode.isValid() ||
-                TreeImplHelper::isGroup(aNode) ||
-                TreeImplHelper::isSet(aNode) ||
-                (TreeImplHelper::isValueElement(aNode) && isRootNode(aTree,aNode)) );
 
-    return aNode.isValid() && TreeImplHelper::isGroup(aNode);
+    view::ViewTreeAccess aView = aTree.getView();
+
+    OSL_ASSERT( !aNode.isValid() ||
+                aView.isGroupNode(aNode) ||
+                aView.isSetNode(aNode) ||
+                (aView.isValueNode(aNode) && isRootNode(aTree,aNode)) );
+
+    return aNode.isValid() && aView.isGroupNode(aNode);
 }
 //-----------------------------------------------------------------------------
 
@@ -2026,12 +2075,15 @@ bool isSetNode(Tree const& aTree, NodeRef const& aNode)
 {
     OSL_PRECOND( !aNode.isValid() || !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( !aNode.isValid() || aTree.isValidNode(aNode), "WARNING: Configuration: NodeRef does not match Tree");
-    OSL_ASSERT( !aNode.isValid() ||
-                TreeImplHelper::isGroup(aNode) ||
-                TreeImplHelper::isSet(aNode) ||
-                (TreeImplHelper::isValueElement(aNode) && isRootNode(aTree,aNode)) );
 
-    return aNode.isValid() && TreeImplHelper::isSet(aNode);
+    view::ViewTreeAccess aView = aTree.getView();
+
+    OSL_ASSERT( !aNode.isValid() ||
+                aView.isGroupNode(aNode) ||
+                aView.isSetNode(aNode) ||
+                (aView.isValueNode(aNode) && isRootNode(aTree,aNode)) );
+
+    return aNode.isValid() && aView.isSetNode(aNode);
 }
 //-----------------------------------------------------------------------------
 
@@ -2045,18 +2097,28 @@ UnoAny getSimpleElementValue(Tree const& aTree, NodeRef const& aNode)
 
     OSL_PRECOND( isSimpleValueElement(aTree, aNode), "ERROR: Configuration: Getting value is supported only for value nodes");
 
-    return TreeImplHelper::node(aNode)->valueElementImpl().getValue();
+    view::ViewTreeAccess aView = aTree.getView();
+
+    return aView.getValue(aView.toValueNode(aNode));
 }
 
 //-----------------------------------------------------------------------------
 
-ISynchronizedData* getRootLock(Tree const& aTree)
+osl::Mutex& getRootLock(TreeRef const& aTree)
 {
     TreeImpl* pImpl = TreeImplHelper::impl(aTree);
     OSL_PRECOND( pImpl, "ERROR: Configuration: Tree locking requires a non-NULL Tree");
-    if (pImpl == NULL) return 0;
 
     return pImpl->getRootLock();
+}
+//-----------------------------------------------------------------------------
+
+memory::Segment const * getRootSegment(TreeRef const& aTree)
+{
+    TreeImpl* pImpl = TreeImplHelper::impl(aTree);
+    OSL_PRECOND( pImpl, "ERROR: Configuration: Tree locking requires a non-NULL Tree");
+
+    return pImpl ? pImpl->getRootSegment() : NULL;
 }
 
 //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactoryimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,13 +173,13 @@ SetElement* ReadOnlyObjectFactory::doCreateSetElement(configuration::ElementTree
     SetElement * pResult = 0;
     if (!pSetElementTemplate)
     {
-         OSetElementGroupInfo * pNewObject = new OSetElementGroupInfo(aTree,m_rProvider,pParentContext);
+         OSetElementGroupInfo * pNewObject = new OSetElementGroupInfo(aTree.getRef(),m_rProvider,pParentContext);
          pNewObject->acquire();
          pResult = &pNewObject->getElementClass();
     }
     else
     {
-         OSetElementSetInfo * pNewObject = new OSetElementSetInfo(aTree,m_rProvider,pParentContext);
+         OSetElementSetInfo * pNewObject = new OSetElementSetInfo(aTree.getRef(),m_rProvider,pParentContext);
          pNewObject->acquire();
          pResult = &pNewObject->getElementClass();
     }
@@ -344,13 +344,13 @@ SetElement* UpdateObjectFactory::doCreateSetElement(configuration::ElementTree c
     {
         if (!pSetElementTemplate)
         {
-             OSetElementGroupInfo * pNewObject = new OSetElementGroupInfo(aTree,m_rProvider,pParentContext);
+             OSetElementGroupInfo * pNewObject = new OSetElementGroupInfo(aTree.getRef(),m_rProvider,pParentContext);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }
         else
         {
-             OSetElementSetInfo * pNewObject = new OSetElementSetInfo(aTree,m_rProvider,pParentContext);
+             OSetElementSetInfo * pNewObject = new OSetElementSetInfo(aTree.getRef(),m_rProvider,pParentContext);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }
@@ -359,19 +359,19 @@ SetElement* UpdateObjectFactory::doCreateSetElement(configuration::ElementTree c
     {
         if (!pSetElementTemplate)
         {
-             OSetElementGroupUpdate * pNewObject = new OSetElementGroupUpdate(aTree,m_rProvider,pParentContext);
+             OSetElementGroupUpdate * pNewObject = new OSetElementGroupUpdate(aTree.getRef(),m_rProvider,pParentContext);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }
         else if (pSetElementTemplate->isInstanceValue())
         {
-             OSetElementValueSetUpdate * pNewObject = new OSetElementValueSetUpdate(aTree,m_rProvider,pParentContext);
+             OSetElementValueSetUpdate * pNewObject = new OSetElementValueSetUpdate(aTree.getRef(),m_rProvider,pParentContext);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }
         else
         {
-             OSetElementTreeSetUpdate * pNewObject = new OSetElementTreeSetUpdate(aTree,m_rProvider,pParentContext);
+             OSetElementTreeSetUpdate * pNewObject = new OSetElementTreeSetUpdate(aTree.getRef(),m_rProvider,pParentContext);
              pNewObject->acquire();
              pResult = &pNewObject->getElementClass();
         }

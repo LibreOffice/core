@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottreeimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,15 @@
 #ifndef CONFIGMGR_ROOTTREEIMPL_HXX_
 #define CONFIGMGR_ROOTTREEIMPL_HXX_
 
+#ifndef CONFIGMGR_CONFIGNODEIMPL_HXX_
 #include "treeimpl.hxx"
-
-#include "synchronize.hxx"
+#endif
 
 namespace configmgr
 {
-    class ISubtree;
+//-----------------------------------------------------------------------------
+    namespace data { class NodeAccess; }
+//-----------------------------------------------------------------------------
     namespace configuration
     {
 //-----------------------------------------------------------------------------
@@ -84,9 +86,9 @@ namespace configmgr
         public:
         //  Construction
             /// creates a TreeImpl without a parent tree
-            RootTreeImpl(   NodeFactory& rNodeFactory,
+            RootTreeImpl(   rtl::Reference<view::ViewStrategy> const& _xStrategy,
                             AbsolutePath const& aRootPath,
-                            ISubtree& rCacheTree, TreeDepth nDepth,
+                            data::NodeAccess const& _aCacheNode, TreeDepth nDepth,
                             TemplateProvider const& aTemplateProvider);
 
             // make it public
@@ -97,7 +99,7 @@ namespace configmgr
             virtual Path::Component doGetRootName() const;
             virtual void doFinishRootPath(Path::Rep& rPath) const;
 
-            AbsolutePath m_aRootPath;
+            AbsolutePath            m_aRootPath;
         };
 //-----------------------------------------------------------------------------
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setobjects.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 12:43:23 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,11 +200,11 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        OSetElementSetInfo(configuration::Tree const& aTree, ApiTreeImpl& rParentTree)
+        OSetElementSetInfo(configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rParentTree)
         {
         }
-        OSetElementSetInfo(configuration::Tree const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
+        OSetElementSetInfo(configuration::TreeRef const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rProvider,pParentTree)
         {
         }
@@ -236,11 +236,11 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        OSetElementTreeSetUpdate(configuration::Tree const& aTree, ApiTreeImpl& rParentTree)
+        OSetElementTreeSetUpdate(configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rParentTree)
         {
         }
-        OSetElementTreeSetUpdate(configuration::Tree const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
+        OSetElementTreeSetUpdate(configuration::TreeRef const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rProvider,pParentTree)
         {
         }
@@ -274,11 +274,11 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        OSetElementValueSetUpdate(configuration::Tree const& aTree, ApiTreeImpl& rParentTree)
+        OSetElementValueSetUpdate(configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rParentTree)
         {
         }
-        OSetElementValueSetUpdate(configuration::Tree const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
+        OSetElementValueSetUpdate(configuration::TreeRef const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rProvider,pParentTree)
         {
         }

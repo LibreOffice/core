@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jb $ $Date: 2001-12-07 10:39:46 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,11 @@ namespace configmgr
         for(ChildList::iterator it = aSet.GetSet().begin();
             it != aSet.GetSet().end();
             ++it)
-            m_aChildList.insert(m_aChildList.end(), (*it)->clone());
+        {
+            INode* pOrg = *it;
+            std::auto_ptr<INode> aCopy = pOrg->clone();
+            m_aChildList.insert(m_aChildList.end(), aCopy.release());
+        }
     }
     ChildListSet::~ChildListSet()
     {
@@ -174,7 +178,7 @@ namespace configmgr
     SearchNode::SearchNode(OUString const& aName)
         :INode(aName, configuration::Attributes()){}
 
-    INode* SearchNode::clone() const {return new SearchNode(*this);}
+    std::auto_ptr<INode> SearchNode::clone() const {return std::auto_ptr<INode>(new SearchNode(*this));}
 
     SearchNode::~SearchNode(){}
 
@@ -244,7 +248,10 @@ namespace configmgr
     }
 
 // --------------------------- Subtree implementation ---------------------------
-    INode* Subtree::clone() const {return new Subtree(*this, treeop::DeepChildCopy());}
+    std::auto_ptr<INode> Subtree::clone() const
+    {
+        return std::auto_ptr<INode>(new Subtree(*this, treeop::DeepChildCopy()));
+    }
 
     INode* Subtree::doGetChild(OUString const& aName) const
     {
@@ -325,15 +332,15 @@ namespace configmgr
 
     void ValueNode::setDefault()
     {
-        OSL_PRECOND( hasDefault(), "No default value to set for value node");
+        OSL_PRECOND( hasUsableDefault(), "No default value to set for value node");
         m_aValuePair.clear( selectValue() );
         this->markAsDefault();
         OSL_POSTCOND( isDefault(), "Could not set value node to default");
     }
 
-    INode* ValueNode::clone() const
+    std::auto_ptr<INode> ValueNode::clone() const
     {
-        return new ValueNode(*this);
+        return std::auto_ptr<INode>(new ValueNode(*this));
     }
 
     ValueNode* ValueNode::asValueNode() {return this;}

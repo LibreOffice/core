@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commontypes.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-01 14:08:58 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,15 +65,17 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
+#endif
+
+#ifndef INCLUDED_FUNCTIONAL
+#include <functional>
+#define INCLUDED_FUNCTIONAL
 #endif
 
 //..........................................................................
@@ -114,7 +116,12 @@ public:
     {
     }
 };
-
+//..........................................................................
+struct UStringLess : public std::binary_function< rtl::OUString, rtl::OUString, bool>
+{
+    bool operator() (const rtl::OUString& lhs, const rtl::OUString& rhs) const
+    { return lhs < rhs ? true : false;}      // construct prevents a MSVC6 warning
+};
 //..........................................................................
 }   // namespace configmgr
 //..........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeinfo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,27 @@
 #ifndef CONFIGMGR_CONFIGCHANGEINFO_HXX_
 #define CONFIGMGR_CONFIGCHANGEINFO_HXX_
 
+#ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGVALUEREF_HXX_
 #include "valueref.hxx"
+#endif
 
-#include <vos/ref.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
 
+#ifndef INCLUDED_VECTOR
 #include <vector>
+#define INCLUDED_VECTOR
+#endif
 
 namespace configmgr
 {
@@ -86,7 +99,7 @@ namespace configmgr
         class SubNodeID;
 
         class ElementTreeImpl;
-        typedef vos::ORef<ElementTreeImpl>  ElementTreeHolder;
+        typedef rtl::Reference<ElementTreeImpl> ElementTreeHolder;
 
 //-----------------------------------------------------------------------------
         /// captures the values of something changing
@@ -143,8 +156,8 @@ namespace configmgr
 
         //-------------------------------------------------
         // wrapper object creation
-            Tree    getNewElementTree() const;
-            Tree    getOldElementTree() const;
+            Tree    getNewElementTree(data::Accessor const& aAccessor) const;
+            Tree    getOldElementTree(data::Accessor const& aAccessor) const;
 
             NodeRef getNewElementNodeRef() const;
             NodeRef getOldElementNodeRef() const;
@@ -178,19 +191,24 @@ namespace configmgr
             // Does not check for existence of the affected node
 
             /// check whether the location has been initialized properly
-            bool isValidLocation() const;
+            bool isValidData() const;
+
+            /// check whether the location is for a valid object
+            bool isValidLocation(data::Accessor const& aAccessor) const;
 
         //-------------------------------------------------
             /// retrieve the path from the base node to the changed node (which might be a child of the affected node)
             RelativePath getAccessor() const { return m_path; }
 
             /// retrieve the tree where the change is actually initiated/reported
-            Tree getBaseTree() const;
+            Tree getBaseTree(data::Accessor const& aAccessor) const;
             /// retrieve the node where the change is actually initiated/reported
             NodeRef getBaseNode() const;
 
             /// retrieve the tree where the change is actually taking place (may be Empty, if the tree has never been accessed)
-            Tree getAffectedTree() const;
+            Tree getAffectedTree(data::Accessor const& aAccessor) const;
+            /// retrieve the tree where the change is actually taking place (may be Empty, if the tree has never been accessed)
+            TreeRef getAffectedTreeRef() const;
             /// retrieve the node where the change is actually taking place (if the affected Tree is not empty)
             NodeRef getAffectedNode() const;
             /// identify the node where the change is actually taking place
@@ -229,11 +247,20 @@ namespace configmgr
         {
         public:
         //-------------------------------------------------
+            explicit
+            NodeChangeInformation(data::Accessor const& _accessor)
+            : accessor(_accessor)
+            , change()
+            , location()
+            {
+            }
+        //-------------------------------------------------
+            data::Accessor      accessor;
             NodeChangeData      change;
             NodeChangeLocation  location;
 
         //-------------------------------------------------
-            bool hasValidLocation() const { return location.isValidLocation(); }
+            bool hasValidLocation() const { return location.isValidLocation(accessor); }
             bool isDataChange()     const { return change.isDataChange(); }
 
             bool isEmptyChange()    const { return change.isEmptyChange(); }
@@ -253,11 +280,10 @@ namespace configmgr
             bool empty() const { return m_data.empty(); }
 
             void reserve(Rep::size_type sz_)    { m_data.reserve(sz_); }
-            void resize(Rep::size_type sz_)     { m_data.resize(sz_); }
             void clear() { m_data.clear(); }
             void swap(NodeChangesInformation& aOther) throw() { m_data.swap(aOther.m_data); }
 
-            void push_back(NodeChangeInformation const& aChange_ = NodeChangeInformation())
+            void push_back(NodeChangeInformation const& aChange_)
             { m_data.push_back(aChange_); }
 
             Iterator begin() const { return m_data.begin(); }

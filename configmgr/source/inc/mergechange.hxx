@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 16:35:13 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,12 @@
 namespace configmgr
 {
     // -----------------------------------------------------------------------------
+    namespace memory    { class UpdateAccessor; }
+    namespace data      { class NodeAddress; }
 
     // method that applies changes on a existing subtree
-    void applyUpdateWithAdjustment(TreeChangeList & _anUpdate,    ISubtree& _aTree);
+    void applyUpdateWithAdjustment(TreeChangeList & _anUpdate, memory::UpdateAccessor& _aUpdateAccess, data::NodeAddress const & _aBaseAddress);
+    bool adjustUpdate(TreeChangeList & _anUpdate, memory::UpdateAccessor& _aUpdateAccess, data::NodeAddress const & _aBaseAddress);
     void mergeLayer         (TreeChangeList & _aLayer,      ISubtree& _aTree);
     void combineUpdates     (SubtreeChange  const& _anUpdate, SubtreeChange& _aCombinedUpdate);
     void applyLayerUpdate   (TreeChangeList const& _anUpdate, TreeChangeList& _aLayer);

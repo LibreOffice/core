@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 11:52:15 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _CONFIGMGR_COMMONTYPES_HXX_
 #include "commontypes.hxx"
 #endif
-#ifndef _CONFIGMGR_SYNCHRONIZE_HXX_
-#include "synchronize.hxx"
-#endif
 
 #ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #include "valuenode.hxx"
@@ -112,6 +109,19 @@ namespace configmgr
         class AbsolutePath;
     }
     //-------------------------
+    namespace memory
+    {
+        class Segment;
+        class Accessor;
+        class UpdateAccessor;
+    }
+    //-------------------------
+    namespace data
+    {
+        class NodeAccess;
+        class TreeAccessor;
+    }
+    //-------------------------
     class ISubtree;
     struct TreeChangeList;
 
@@ -140,19 +150,24 @@ namespace configmgr
     //==========================================================================
     // a ITreeProvider which can notify changes that were done, and manages the lifetime of subtrees
 
-    class ITreeManager : public ISynchronizedData
+    class ITreeManager
     {
     public:
         typedef configuration::AbsolutePath AbsolutePath;
 
          enum { ALL_LEVELS = ITreeProvider::ALL_LEVELS  };
 
+
+        /// get a data segment to host the given location
+        virtual memory::Segment* getDataSegment(  AbsolutePath const& _rAccessor,
+                                                    const vos::ORef < OOptions >& _xOptions) = 0;
+
        /** request that the tree named by a path is added to the collection of managed trees
             respecting certain options and requiring a specific loading depth.
             Return a reference to that managed tree.
             The reference must later be released by calling releaseSubtree with the same path and options.
         */
-        virtual ISubtree * requestSubtree(AbsolutePath const& aSubtreePath,
+        virtual data::NodeAccess requestSubtree(AbsolutePath const& aSubtreePath,
                                           const vos::ORef < OOptions >& _xOptions,
                                           sal_Int16 nMinLevels = ALL_LEVELS) CFG_UNO_THROW_ALL(  ) = 0;
 
@@ -164,10 +179,10 @@ namespace configmgr
                                   sal_Int16 nMinLevels = ALL_LEVELS) CFG_NOTHROW() = 0;
 
         /// update the managed data according to a changes list - update the changes list accordingly with old values
-        virtual void updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  ) = 0;
+        virtual void updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  ) = 0;
 
         // notification
-        virtual void notifyUpdate(TreeChangeList const& aChanges ) CFG_UNO_THROW_RTE(  ) = 0;
+        virtual void notifyUpdate(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges ) CFG_UNO_THROW_RTE(  ) = 0;
 
         // bookkeeping support
         virtual void releaseSubtree(AbsolutePath const& aSubtreePath,
@@ -191,9 +206,24 @@ namespace configmgr
     public:
         typedef configuration::Name         Name;
 
-        virtual ::std::auto_ptr<INode> requestTemplateInstance(
+        virtual ::std::auto_ptr<INode> loadTemplate(
                                             Name const& aName, Name const& aModule,
                                             const vos::ORef < OOptions >& _xOptions
+                                        ) CFG_UNO_THROW_ALL( ) = 0;
+
+    };
+
+    //==========================================================================
+    //= ITemplateManager
+    //==========================================================================
+    class ITemplateManager
+    {
+    public:
+        typedef configuration::Name         Name;
+
+        virtual data::TreeAccessor requestTemplate(
+                                            memory::Accessor const& _aAccessor,
+                                            Name const& aName, Name const& aModule
                                         ) CFG_UNO_THROW_ALL( ) = 0;
 
     };

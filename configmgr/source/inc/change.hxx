@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 17:07:52 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,22 +62,34 @@
 #ifndef CONFIGMGR_CHANGE_HXX
 #define CONFIGMGR_CHANGE_HXX
 
-#include <map>
-#include <memory>
+#ifndef CONFIGMGR_TREESEGMENT_HXX
+#include "treesegment.hxx"
+#endif
+#ifndef CONFIGMGR_TREEADDRESS_HXX
+#include "treeaddress.hxx"
+#endif
+#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
+#include "valuenode.hxx"
+#endif
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
 
-#include "valuenode.hxx"
+#ifndef INCLUDED_MAP
+#include <map>
+#define INCLUDED_MAP
+#endif
+#ifndef INCLUDED_MEMORY
+#include <memory>
+#define INCLUDED_MEMORY
+#endif
 
 namespace configmgr
 {
@@ -89,6 +101,7 @@ namespace configmgr
     class ValueChange;
     class AddNode;
     class RemoveNode;
+
 
     //==========================================================================
     //= ChangeTreeAction
@@ -148,7 +161,7 @@ namespace configmgr
 
         // some kind of simple rtti
         RTTI_BASE(Change);
-        virtual Change* clone() const = 0;
+        virtual std::auto_ptr<Change> clone() const = 0;
 
     private:
         virtual Change* doGetChild(rtl::OUString const& ) const { return 0; }
@@ -165,6 +178,7 @@ namespace configmgr
         enum Mode { wasDefault, changeValue, setToDefault, changeDefault };
 
     private:
+        uno::Type           m_aValueType;
         uno::Any            m_aValue;
         uno::Any            m_aOldValue;
         node::Attributes    m_aAttributes;
@@ -173,29 +187,29 @@ namespace configmgr
         ValueChange(
             rtl::OUString const& _rName,
             const node::Attributes& _rAttributes,
-            uno::Any aNewValue,
-            uno::Any aOldValue = uno::Any());
+            Mode aMode,
+            uno::Any const & aNewValue,
+            uno::Any const & aOldValue = uno::Any());
 
         ValueChange(
             rtl::OUString const& _rName,
             const node::Attributes& _rAttributes,
             Mode aMode,
-            uno::Any aNewValue,
-            uno::Any aOldValue = uno::Any());
+            uno::Type const & aValueType);
 
-        ValueChange(uno::Any aNewValue, ValueNode const& aOldValue);
+        ValueChange(uno::Any const & aNewValue, ValueNode const& aOldValue);
         ValueChange(SetToDefault, ValueNode const& aOldValue);
 
-        virtual Change* clone() const;
+        virtual std::auto_ptr<Change> clone() const;
 
         bool isChange() const;
 
-        uno::Type   getValueType() const;
+        uno::Type   getValueType() const { return m_aValueType; }
 
         uno::Any    getNewValue() const { return m_aValue; }
         uno::Any    getOldValue() const { return m_aOldValue; }
 
-        void        setNewValue(const uno::Any& _rNewVal) { m_aValue = _rNewVal; }
+        void        setNewValue(const uno::Any& _rNewVal);
         void        setNewValue(const uno::Any& _rNewVal, Mode aMode)
         { setNewValue(_rNewVal); m_eMode = aMode;}
 
@@ -217,6 +231,8 @@ namespace configmgr
 
         // "rtti"
         RTTI(ValueChange, Change);
+
+        friend class ApplyValueChange;
     };
 
     //==========================================================================
@@ -224,11 +240,10 @@ namespace configmgr
     //==========================================================================
     class AddNode : public Change
     {
-        std::auto_ptr<INode>            m_aOwnNewNode;
-        std::auto_ptr<INode>            m_aOwnOldNode;
-        INode*                          m_pNewNode;
-        INode*                          m_pOldNode;
-        bool                            m_bReplacing;
+        data::TreeSegment   m_aOwnNewNode;
+        data::TreeSegment   m_aOwnOldNode;
+        data::TreeAddress   m_aInsertedTree;
+        bool                m_bReplacing;
 
     private:
         void operator=(AddNode const&); // not implemented
@@ -236,55 +251,61 @@ namespace configmgr
         // needed for clone()
         AddNode(AddNode const&);
     public:
-        AddNode(std::auto_ptr<INode> aNewNode_,rtl::OUString const& _rName, bool _bToDefault);
+        AddNode(data::TreeSegment const & _aAddedTree, rtl::OUString const& _rName, bool _bToDefault);
         ~AddNode();
 
-        virtual Change* clone() const;
+        virtual std::auto_ptr<Change> clone() const;
 
         /// marks this as not merely adding a node but replacing another
         void setReplacing() { m_bReplacing = true; }
         /// is this  not merely adding a node but replacing another ?
-        bool isReplacing() const { return m_bReplacing || m_pOldNode; }
+        bool isReplacing() const { return m_bReplacing; }
 
-        /** returns the node this change represents; The Node object is owned by this change until
-            <method>releaseAddedNode</method> is called.<BR>
-            After ownership is lost this method returns NULL.
-        */
-        INode*                  getAddedNode()  const { return m_aOwnNewNode.get(); }
+        /// has this been applied and inserted
+        bool wasInserted() const { return m_aInsertedTree.is(); }
 
         /** returns the node this change represents, even if this node does not own the new Node object any more.
             This is somewhat dangerous if the node referenced by this object dies before the object itself does.<BR>
             In this case all calls to this method will return nonsense. This case can be detected by testing
             whether <method>getAddedNode</method> returns NULL.
         */
-        INode*                  getAddedNode_unsafe()   const { return m_pNewNode; }
+        data::TreeAddress   getInsertedTree()   const { return m_aInsertedTree; }
+
+        /** returns the node this change represents; The Node object is owned by this change until
+            <method>releaseAddedNode</method> is called.<BR>
+            After ownership is lost this method returns NULL.
+        */
+        data::TreeSegment::TreeDataPtr getNewTreeData() const  { return m_aOwnNewNode.getTreeData(); }
+
+        /** returns the node the change represents. .
+        */
+        data::TreeSegment         getNewTree() const   { return m_aOwnNewNode; }
+
         /** returns the node the change represents, and releases ownership of it. This means that
             afterwards <method>getAddedNode</method> will return NULL. This change object keeps a reference
             to the node though which can be retrieved using <method>getAddedNode_unsafe</method>.
         */
-        std::auto_ptr<INode>    releaseAddedNode() { return m_aOwnNewNode; }
+        void clearNewTree() { m_aOwnNewNode.clear(); }
+
+        /** .
+        */
+        void setInsertedAddress(data::TreeAddress const & _aInsertedAddress);
+
 
         /** returns the node this change replaces, ihe Node object is owned by this change.
             After ownership is lost this method returns NULL.
         */
-        INode*  getReplacedNode()           const   { return m_aOwnOldNode.get(); }
-        /** returns the node this change replaces, even if this node does not own the new Node object any more.
-            This is somewhat dangerous if the node referenced by this object dies before the object itself does.<BR>
-            In this case all calls to this method will return nonsense. This case can be detected by testing
-            whether <method>getAddedNode</method> returns NULL.
-        */
-        INode*  getReplacedNode_Unsafe()    const   { return m_pOldNode; }
-        /** returns the node the change replaces, and releases ownership of it. This means that
-            afterwards <method>getReplacedNode</method> will return NULL. This change object keeps a reference
-            to the node though which can be retrieved using <method>getReplacedNode_unsafe</method>.
-        */
-        std::auto_ptr<INode> releaseReplacedNode()  { return m_aOwnOldNode; }
-        /** forgets about the node the change replaces, returning the previous setting with ownership
-        */
-        std::auto_ptr<INode> resetReplacedNode()    { m_pOldNode = 0; return m_aOwnOldNode; }
+        data::TreeSegment::TreeDataPtr getReplacedTreeData() const  { return m_aOwnOldNode.getTreeData(); }
 
-        void    expectReplacedNode(INode* pOldNode);
-        void    takeReplacedNode(std::auto_ptr<INode> aNode);
+        /** returns the node the change replaces.
+        */
+        data::TreeSegment     getReplacedTree() const   { return m_aOwnOldNode; }
+
+        /** forgets about the node the change replaces
+        */
+        void clearReplacedTree() { m_aOwnOldNode.clear(); }
+
+        void takeReplacedTree(data::TreeSegment const& _aTree);
 
         virtual void dispatch(ChangeTreeAction& anAction) const { anAction.handle(*this); }
         virtual void dispatch(ChangeTreeModification& anAction) { anAction.handle(*this); }
@@ -299,8 +320,7 @@ namespace configmgr
     class RemoveNode : public Change
     {
     protected:
-        INode*                          m_pOldNode;
-        std::auto_ptr<INode>            m_aOwnOldNode;
+        data::TreeSegment               m_aOwnOldNode;
         bool                            m_bIsToDefault;
 
     private:
@@ -312,7 +332,7 @@ namespace configmgr
         RemoveNode(rtl::OUString const& _rName, bool _bToDefault);
         ~RemoveNode();
 
-        virtual Change* clone() const;
+        virtual std::auto_ptr<Change> clone() const;
 
         virtual void dispatch(ChangeTreeAction& anAction) const { anAction.handle(*this); }
         virtual void dispatch(ChangeTreeModification& anAction) { anAction.handle(*this); }
@@ -320,24 +340,16 @@ namespace configmgr
         /** returns the node this change removes, ihe Node object is owned by this change.
             After ownership is lost this method returns NULL.
         */
-        INode*  getRemovedNode()            const   { return m_aOwnOldNode.get(); }
-        /** returns the node this change removes, even if this node does not own the new Node object any more.
-            This is somewhat dangerous if the node referenced by this object dies before the object itself does.<BR>
-            In this case all calls to this method will return nonsense. This case can be detected by testing
-            whether <method>getRemovedNode</method> returns NULL.
+        data::TreeSegment::TreeDataPtr getRemovedTreeData() const { return m_aOwnOldNode.getTreeData(); }
+        /** returns the node the change removes.
         */
-        INode*  getRemovedNode_Unsafe() const   { return m_pOldNode; }
-        /** returns the node the change removes, and releases ownership of it. This means that
-            afterwards <method>getRemovedNode</method> will return NULL. This change object keeps a reference
-            to the node though which can be retrieved using <method>getRemovedNode_unsafe</method>.
-        */
-        std::auto_ptr<INode> releaseRemovedNode()   { return m_aOwnOldNode; }
+        data::TreeSegment getRemovedTree()          const   { return m_aOwnOldNode; }
+
         /** forgets about the node the change removes, returning the previous setting with ownership
         */
-        std::auto_ptr<INode> resetRemovedNode() { m_pOldNode = 0; return m_aOwnOldNode; }
+        void clearRemovedTree() { m_aOwnOldNode.clear(); }
 
-        void    expectRemovedNode(INode* pOldNode);
-        void    takeRemovedNode(std::auto_ptr<INode> aNode);
+        void takeRemovedTree(data::TreeSegment const & _aTree);
 
         // "rtti"
         RTTI(RemoveNode, Change);
@@ -416,7 +428,7 @@ namespace configmgr
 
         SubtreeChange(const SubtreeChange&, DeepChildCopy);
 
-        virtual Change* clone() const;
+        virtual std::auto_ptr<Change> clone() const;
 
         void swap(SubtreeChange& aOther);
 

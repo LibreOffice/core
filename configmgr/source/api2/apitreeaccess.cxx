@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeaccess.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:11:30 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,13 @@ void NodeElement::checkAlive() const
 }
 //-----------------------------------------------------------------------------
 
-configuration::Tree TreeElement::getTree() const
+configuration::Tree TreeElement::getTree(data::Accessor const& _aAccessor) const
+{
+    return configuration::Tree(_aAccessor, this->getTreeRef());
+}
+//-----------------------------------------------------------------------------
+
+configuration::TreeRef  TreeElement::getTreeRef() const
 {
     return getApiTree().getTree();
 }
@@ -104,7 +110,7 @@ Notifier TreeElement::getNotifier()
 }
 //-----------------------------------------------------------------------------
 
-ISynchronizedData const* TreeElement::getDataLock() const
+osl::Mutex& TreeElement::getDataLock() const
 {
     return getApiTree().getDataLock();
 }
@@ -116,17 +122,17 @@ osl::Mutex& TreeElement::getApiLock()
 }
 //-----------------------------------------------------------------------------
 
-configuration::ElementTree SetElement::getElementTree() const
+configuration::ElementRef SetElement::getElementRef() const
 {
-    return configuration::ElementTree::extract(getTree());
+    return configuration::ElementRef::extract(getTreeRef());
 }
 //-----------------------------------------------------------------------------
 
-configuration::SetElementInfo SetElement::getTemplateInfo() const
+configuration::TemplateInfo SetElement::getTemplateInfo() const
 {
-    configuration::ElementTree aTree = configuration::ElementTree::extract(getTree());
+    configuration::ElementRef aTree = configuration::ElementRef::extract(getTreeRef());
     OSL_ENSURE(aTree.isValid(), "This really must be a set element");
-    return configuration::SetElementInfo(aTree.getTemplate());
+    return configuration::TemplateInfo(aTree.getTemplate());
 }
 //-----------------------------------------------------------------------------
 
@@ -147,15 +153,9 @@ bool RootElement::disposeTree()
 }
 //-----------------------------------------------------------------------------
 
-ISynchronizedData * UpdateRootElement::getDataLock()
+memory::Segment const* RootElement::getSourceData()
 {
-    return getApiTree().getDataLock();
-}
-//-----------------------------------------------------------------------------
-
-ISynchronizedData * UpdateRootElement::getProviderLock()
-{
-    return getApiTree().getProviderLock();
+    return getApiTree().getSourceData();
 }
 //-----------------------------------------------------------------------------
 
@@ -166,7 +166,7 @@ Committer UpdateRootElement::getCommitter()
 //-----------------------------------------------------------------------------
 
 TreeReadGuardImpl::TreeReadGuardImpl(TreeElement& rTree) throw()
-: m_aLock(rTree.getDataLock())
+: m_aViewLock(rTree.getDataLock())
 , m_rTree(rTree)
 {
     rTree.checkAlive();
@@ -178,6 +178,19 @@ TreeReadGuardImpl::~TreeReadGuardImpl() throw ()
 }
 //-----------------------------------------------------------------------------
 
+GuardedRootElement::GuardedRootElement(RootElement& rTree)
+: m_aDataAccess(rTree.getSourceData())
+, m_aImpl(rTree)
+{
+}
+//-----------------------------------------------------------------------------
+
+configuration::Tree GuardedRootElement::getTree() const
+{
+    return this->get().getTree(m_aDataAccess);
+}
+
+//-----------------------------------------------------------------------------
     }
 }
 

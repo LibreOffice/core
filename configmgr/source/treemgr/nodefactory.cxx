@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodefactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:43:00 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,146 +61,158 @@
 #include <stdio.h>
 #include "nodefactory.hxx"
 
+#ifndef CONFIGMGR_NODEIMPLOBJECTS_HXX_
 #include "nodeimplobj.hxx"
-
+#endif
+#ifndef CONFIGMGR_VALUENODEACCESS_HXX
+#include "valuenodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_GROUPNODEACCESS_HXX
+#include "groupnodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_SETNODEACCESS_HXX
+#include "setnodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
-#include "cmtreemodel.hxx"
+#endif
 
+#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
 
 namespace configmgr
 {
-    namespace configuration
-    {
 //-----------------------------------------------------------------------------
+namespace view
+{
 
 // Creating Specific types of nodes
 //-----------------------------------------------------------------------------
 namespace
 {
 //---------------------------------------------------------------------
-    static bool isTreeSet(ISubtree& rOriginal, Template* pTemplate)
+    using configuration::NodeImplHolder;
+    using configuration::Template;
+    using data::ValueNodeAccess;
+    using data::GroupNodeAccess;
+    using data::SetNodeAccess;
+//---------------------------------------------------------------------
+/*  static bool isTreeSet(SetNodeAccess const& _aNodeAccess, Template* pTemplate)
     {
         OSL_ENSURE(pTemplate,"ERROR: Trying to instantiate a set without a template");
         if (!pTemplate) throw Exception("ERROR: Trying to instantiate a set without a template");
 
-        OSL_ENSURE(pTemplate->getName().toString() == rOriginal.getElementTemplateName(),
+        OSL_ENSURE(pTemplate->getName().toString() == _aNodeAccess.getElementTemplateName(),
                     "WARNING: Template name mismatch creating a set node");
 
         return ! pTemplate->isInstanceValue();
     }
-
+*/
 //---------------------------------------------------------------------
-    struct ReadOnlyNodeFactory : NodeFactory
+    struct BasicNodeFactory : NodeFactory
     {
-        NodeImplHolder makeValueNode(ValueNode& rOriginal);
-        NodeImplHolder makeGroupNode(ISubtree& rOriginal);
-        NodeImplHolder makeSetNode  (ISubtree& rOriginal, Template* pTemplate);
+        NodeImplHolder makeValueNode(ValueNodeAccess const& _aNodeAccess);
+        NodeImplHolder makeGroupNode(GroupNodeAccess const& _aNodeAccess);
+        NodeImplHolder makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate);
     };
     //-------------------------------------------------------------------------
 
-    NodeImplHolder ReadOnlyNodeFactory::makeValueNode(ValueNode& rOriginal)
+    NodeImplHolder BasicNodeFactory::makeValueNode(ValueNodeAccess const& _aNodeAccess)
     {
-        return new ReadOnlyValueElementNodeImpl(rOriginal);
+        return new configuration::ValueElementNodeImpl(_aNodeAccess.address());
     }
     //-------------------------------------------------------------------------
 
-    NodeImplHolder ReadOnlyNodeFactory::makeGroupNode(ISubtree& rOriginal)
+    NodeImplHolder BasicNodeFactory::makeGroupNode(GroupNodeAccess const& _aNodeAccess)
     {
-        return new ReadOnlyGroupNodeImpl(rOriginal);
+        return new configuration::GroupNodeImpl(_aNodeAccess.address());
     }
     //-------------------------------------------------------------------------
 
-    NodeImplHolder ReadOnlyNodeFactory::makeSetNode  (ISubtree& rOriginal, Template* pTemplate)
+    NodeImplHolder BasicNodeFactory::makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate)
     {
-        if (isTreeSet(rOriginal,pTemplate))
-            return new ReadOnlyTreeSetNodeImpl(rOriginal,pTemplate);
-        else
-            return new ReadOnlyValueSetNodeImpl(rOriginal,pTemplate);
+        return new configuration::SetNodeImpl(_aNodeAccess.address(),pTemplate);
     }
     //-------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-
+/*
     struct DirectNodeFactory : NodeFactory
     {
-        NodeImplHolder makeValueNode(ValueNode& rOriginal);
-        NodeImplHolder makeGroupNode(ISubtree& rOriginal);
-        NodeImplHolder makeSetNode  (ISubtree& rOriginal, Template* pTemplate);
+        NodeImplHolder makeValueNode(ValueNodeAccess const& _aNodeAccess);
+        NodeImplHolder makeGroupNode(GroupNodeAccess const& _aNodeAccess);
+        NodeImplHolder makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate);
     };
     //-------------------------------------------------------------------------
 
-    NodeImplHolder DirectNodeFactory::makeValueNode(ValueNode& rOriginal)
+    NodeImplHolder DirectNodeFactory::makeValueNode(ValueNodeAccess const& _aNodeAccess)
     {
-        return new DirectValueElementNodeImpl(rOriginal);
+        return new DirectValueElementNodeImpl(_aNodeAccess.address());
     }
     //-------------------------------------------------------------------------
 
-    NodeImplHolder DirectNodeFactory::makeGroupNode(ISubtree& rOriginal)
+    NodeImplHolder DirectNodeFactory::makeGroupNode(GroupNodeAccess const& _aNodeAccess)
     {
-        return new DirectGroupNodeImpl(rOriginal);
+        return new DirectGroupNodeImpl(_aNodeAccess.address());
     }
     //-------------------------------------------------------------------------
 
-    NodeImplHolder DirectNodeFactory::makeSetNode  (ISubtree& rOriginal, Template* pTemplate)
+    NodeImplHolder DirectNodeFactory::makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate)
     {
-        if (isTreeSet(rOriginal,pTemplate))
-            return new DirectTreeSetNodeImpl(rOriginal,pTemplate);
+        if (isTreeSet(_aNodeAccess,pTemplate))
+            return new DirectTreeSetNodeImpl(_aNodeAccess.address(),pTemplate);
         else
-            return new DirectValueSetNodeImpl(rOriginal,pTemplate);
+            return new DirectValueSetNodeImpl(_aNodeAccess.address(),pTemplate);
     }
     //-------------------------------------------------------------------------
-
+*/
 //-----------------------------------------------------------------------------
 
     struct DeferredNodeFactory : NodeFactory
     {
-        NodeImplHolder makeValueNode(ValueNode& rOriginal);
-        NodeImplHolder makeGroupNode(ISubtree& rOriginal);
-        NodeImplHolder makeSetNode  (ISubtree& rOriginal, Template* pTemplate);
+        NodeImplHolder makeValueNode(ValueNodeAccess const& _aNodeAccess);
+        NodeImplHolder makeGroupNode(GroupNodeAccess const& _aNodeAccess);
+        NodeImplHolder makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate);
     };
     //-------------------------------------------------------------------------
 
-    NodeImplHolder DeferredNodeFactory::makeValueNode(ValueNode& rOriginal)
+    NodeImplHolder DeferredNodeFactory::makeValueNode(ValueNodeAccess const& _aNodeAccess)
     {
-        return new DeferredValueElementNodeImpl(rOriginal);
+    //    OSL_ENSURE(false, "Wrong factory for value elements - should be immutable (=read-only)");
+        return new configuration::ValueElementNodeImpl(_aNodeAccess.address());
     }
     //-------------------------------------------------------------------------
 
-    NodeImplHolder DeferredNodeFactory::makeGroupNode(ISubtree& rOriginal)
+    NodeImplHolder DeferredNodeFactory::makeGroupNode(GroupNodeAccess const& _aNodeAccess)
     {
-        return new DeferredGroupNodeImpl(rOriginal);
+        return new configuration::DeferredGroupNodeImpl(_aNodeAccess.address());
     }
     //-------------------------------------------------------------------------
 
-    NodeImplHolder DeferredNodeFactory::makeSetNode  (ISubtree& rOriginal, Template* pTemplate)
+    NodeImplHolder DeferredNodeFactory::makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate)
     {
-        if (isTreeSet(rOriginal,pTemplate))
-            return new DeferredTreeSetNodeImpl(rOriginal,pTemplate);
-        else
-            return new DeferredValueSetNodeImpl(rOriginal,pTemplate);
+        return new configuration::DeferredSetNodeImpl(_aNodeAccess.address(),pTemplate);
     }
     //-------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-}
+} // anonymous
 //-----------------------------------------------------------------------------
 
-namespace NodeType
-{
 // Different standard (static) factories
 //---------------------------------------------------------------------
 
-    /// provides a factory for read-only node implementations
-    NodeFactory& getReadAccessFactory()
-    {
-        static ReadOnlyNodeFactory aFactory;
-        return aFactory;
-    }
     /// provides a factory for immediately commiting node implementations
     NodeFactory& getDirectAccessFactory()
     {
-        static DirectNodeFactory aFactory;
+        static BasicNodeFactory aFactory;
+        return aFactory;
+    }
+    /// provides a factory for read-only node implementations
+    NodeFactory& getReadAccessFactory()
+    {
+        static BasicNodeFactory aFactory;
         return aFactory;
     }
     /// provides a factory for nodes that cache changes temporarily
@@ -211,10 +223,8 @@ namespace NodeType
     }
 
 //---------------------------------------------------------------------
-}
+} // view
 
 //-----------------------------------------------------------------------------
-
-    }
-}
+} // configmgr
 

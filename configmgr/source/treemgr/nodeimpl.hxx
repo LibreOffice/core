@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:38:21 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,26 +62,38 @@
 #ifndef CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 #define CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 
-/*
-#include "template.hxx"
-#include <osl/diagnose.h>
-
-#include <memory>
-*/
-
+#ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
 #include "attributes.hxx"
+#endif
+#ifndef CONFIGMGR_NODEADDRESS_HXX
+#include "nodeaddress.hxx"
+#endif
 
-#include <vos/refernce.hxx>
-#include <vos/ref.hxx>
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/simplereferenceobject.hxx>
+#endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+
 namespace configmgr
 {
+//-----------------------------------------------------------------------------
+    namespace memory { class Accessor; };
+    namespace data { class NodeAccess; };
+    namespace view { class ViewStrategy; }
+//-----------------------------------------------------------------------------
     namespace configuration
     {
 //-----------------------------------------------------------------------------
         typedef unsigned int NodeOffset;
 
         class TreeImpl;
+
+        class Name;
 
         class NodeChange;
         class NodeChanges;
@@ -91,56 +103,30 @@ namespace configmgr
 // Specific types of nodes
 //-----------------------------------------------------------------------------
 
-        namespace NodeType
-        {
-        //---------------------------------------------------------------------
-            enum Enum { eVALUE, eGROUP, eSET, eVALUESET, eTREESET };
-            inline bool isSet(Enum e)   { return e >= eSET; }
-            inline bool isGroup(Enum e) { return e == eGROUP; }
-            inline bool isValue(Enum e) { return e == eVALUE; }
-
-        //---------------------------------------------------------------------
-        }
-
-//-----------------------------------------------------------------------------
         class NodeImpl;
-        typedef vos::ORef<NodeImpl> NodeImplHolder;
+        typedef rtl::Reference<NodeImpl> NodeImplHolder;
 
         struct INodeHandler;
 
         // Almost an interface, but derives from concrete OReference
-        class NodeImpl : public vos::OReference
+        class NodeImpl : public salhelper::SimpleReferenceObject
         {
+            friend class view::ViewStrategy;
+            data::NodeAddress m_aNodeRef_;
         public:
-            void collectChanges(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const
-                { doCollectChangesWithTarget(rChanges,pParent,nNode); }
+            NodeImpl(data::NodeAddress const & _aNodeRef)
+            : m_aNodeRef_(_aNodeRef)
+            {}
 
-            bool hasChanges()               const   { return doHasChanges(); }
-            void markChanged()                      { doMarkChanged(); }
-            void directCommitChanges()              { doCommitChanges(); }
+        public:
+//          void directCommitChanges(memory::Accessor const& _aAccessor) { doCommitChanges(_aAccessor); }
 
-            static void makeIndirect(NodeImplHolder&    aThis, bool bIndirect);
+            /// provide access to the address of the underlying node
+            data::NodeAddress getOriginalNodeAddress() const
+            { return m_aNodeRef_; }
 
-            NodeType::Enum  getType()   const   { return doGetType(); }
-            Attributes getAttributes()  const   { return doGetAttributes(); };
-            void dispatch(INodeHandler& rHandler_)  { doDispatch(rHandler_); }
-
-        private:
-            virtual NodeType::Enum  doGetType()         const = 0;
-            virtual Attributes      doGetAttributes()   const = 0;
-            virtual void            doDispatch(INodeHandler& rHandler_) = 0;
-
-            virtual bool doHasChanges() const = 0;
-            virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const = 0;
-            virtual void doMarkChanged() = 0;
-            virtual void doCommitChanges() = 0;
-
-            virtual NodeImplHolder doCloneIndirect(bool bIndirect) = 0;
-
-        protected:
-            //helper for migration to new (info based) model for adjusting to changes
-            static void addLocalChangeHelper( NodeChangesInformation& rLocalChanges, NodeChange const& aChange);
-
+            /// provide access to the data of the underlying node
+            data::NodeAccess getOriginalNodeAccess(memory::Accessor const& _aAccessor) const;
         };
 
 //-----------------------------------------------------------------------------

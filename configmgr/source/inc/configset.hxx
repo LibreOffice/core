@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@
 #include "noderef.hxx"
 #endif
 
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 
 #ifndef INCLUDED_MEMORY
@@ -93,7 +93,7 @@ namespace com { namespace sun { namespace star {
 
 namespace configmgr
 {
-    class INode;
+    namespace data { class TreeSegment; }
 
     namespace configuration
     {
@@ -113,16 +113,16 @@ namespace configmgr
         //---------------------------------------------------------------------
 
         class ElementTreeImpl;
-        typedef vos::ORef<ElementTreeImpl> ElementTreeHolder;
+        typedef rtl::Reference<ElementTreeImpl> ElementTreeHolder;
 
         class NodeChange;
         class Template;
-        typedef vos::ORef<Template> TemplateHolder;
+        typedef rtl::Reference<Template> TemplateHolder;
 //-----------------------------------------------------------------------------
         /// identifies a <type>Node</type> that is a element of a Container ("set").
         class ElementRef
         {
-            ElementTreeHolder m_aTreeHolder;
+            ElementTreeHolder   m_aTreeHolder;
         public:
             explicit ElementRef(ElementTreeImpl* pTree);
             ElementRef(ElementRef const& aOther);
@@ -134,7 +134,14 @@ namespace configmgr
             Path::Component getFullName() const;
             Name            getName() const;
 
-            ElementTree getElementTree() const;
+            TemplateHolder getTemplate() const;
+
+            ElementTree getElementTree(data::Accessor const& _accessor) const;
+            osl::Mutex& getTreeLock() const;
+
+            TreeRef getTreeRef() const;
+
+            static ElementRef extract(TreeRef const& aTree);
         };
 //-----------------------------------------------------------------------------
 
@@ -142,9 +149,12 @@ namespace configmgr
         class ElementTree
         {
             ElementTreeHolder m_aTreeHolder;
+            data::Accessor    m_accessor;
         public:
-            explicit ElementTree(ElementTreeImpl* pTree);
-            explicit ElementTree(ElementTreeHolder const& pTree);
+            static ElementTree emptyElement() { return ElementTree(); }
+
+            ElementTree(data::Accessor const& _accessor, ElementTreeImpl* pTree);
+            ElementTree(data::Accessor const& _accessor, ElementTreeHolder const& pTree);
             ElementTree(ElementTree const& aOther);
             ElementTree& operator=(ElementTree const& aOther);
             ~ElementTree();
@@ -159,39 +169,47 @@ namespace configmgr
             ElementTreeImpl& operator*() const;
 
             Tree getTree() const;
-            ISynchronizedData* getTreeLock() const;
 
             static ElementTree extract(Tree const& aTree);
-            /** gives ownership of the node tree to the element tree.
-                <p>WARNING: The INode passed must correspond to the root of the element tree</p>
+
+            /** if the element tree owns it's node tree, access to the segment is given to the caller.
             */
-            static void takeElementOwnership(std::auto_ptr<INode>& rOldOwner, ElementTree const& aElementTree);
-            /** if the element tree owns it's node tree, ownership is given to the caller.
-                <p>WARNING: Irresponsible use of this feature produces crashes</p>
-            */
-            static void releaseOwnedElement(std::auto_ptr<INode>& rNewOwner, ElementTree const& aElementTree);
-            /** if the element tree owns it's node tree, ownership is given to the caller
-                and the root of the tree is assigned the given name.
-                <p>WARNING: Irresponsible use of this feature produces crashes</p>
-            */
-            static void releaseOwnedElementAs(std::auto_ptr<INode>& rNewOwner, ElementTree const& aElementTree, Name const& aNewName);
+            static data::TreeSegment getOwnedElement(ElementTree const& aElementTree);
+        private:
+            ElementTree();
+        };
+//-----------------------------------------------------------------------------
+
+        /// provides information about the elements of a <type>Node</type> that is a Container ("set").
+        class TemplateInfo
+        {
+            TemplateHolder  m_aTemplate;
+        public:
+            explicit TemplateInfo(TemplateHolder const& aTemplate);
+
+            TemplateHolder getTemplate() const;
+
+            UnoType  getType() const;
+            Name     getTemplateName() const;
+            Name     getTemplatePackage() const;
+            OUString getTemplatePathString() const;
         };
 //-----------------------------------------------------------------------------
 
         /// provides information about the elements of a <type>Node</type> that is a Container ("set").
         class SetElementInfo
         {
-            TemplateHolder  m_aTemplate;
+            TemplateInfo    m_aTemplateInfo;
+            data::Accessor  m_aSetAccessor;
         public:
-            explicit SetElementInfo(TemplateHolder const& aTemplate);
-            //explicit SetElementInfo(UnoType const& aElementType);
+            SetElementInfo(data::Accessor const& _aSetAccessor, TemplateHolder const& aTemplate);
 
-            TemplateHolder getTemplate() const;
+            TemplateHolder getTemplate()        const;
+            TemplateInfo   getTemplateInfo()    const;
 
-            UnoType  getElementType() const;
-            Name     getTemplateName() const;
-            Name     getTemplatePackage() const;
-            OUString getTemplatePathString() const;
+            UnoType  getElementType() const { return m_aTemplateInfo.getType(); }
+
+            data::Accessor  getSetDataAccessor() const { return m_aSetAccessor; }
 
             static TemplateHolder extractElementInfo(Tree const& aTree, NodeRef const& aNode);
         };
@@ -200,14 +218,17 @@ namespace configmgr
         class SetElementFactory
         {
             TemplateProvider m_aProvider;
+            data::Accessor m_aDataAccessor;
+
+            data::Accessor const& getDataAccessor() const { return m_aDataAccessor; };
         public:
-            explicit SetElementFactory(TemplateProvider const& aProvider);
+            SetElementFactory(data::Accessor const& _aDataAccessor, TemplateProvider const& aProvider);
             SetElementFactory(SetElementFactory const& aOther);
             SetElementFactory& operator=(SetElementFactory const& aOther);
             ~SetElementFactory();
 
             ElementTree instantiateTemplate(TemplateHolder const& aTemplate);
-            ElementTree instantiateOnDefault(std::auto_ptr<INode> aTree, TemplateHolder const& aDummyTemplate);
+            ElementTree instantiateOnDefault(data::TreeSegment const& _aTree, TemplateHolder const& aDummyTemplate);
 
             static TemplateProvider findTemplateProvider(Tree const& aTree, NodeRef const& aNode);
         };
@@ -259,7 +280,7 @@ namespace configmgr
 
             ElementTreeHolder makeValueElement(Name const& aName, ElementNodeRef const& aElementTree, UnoAny const& aValue);
             ElementTreeHolder makeValueElement(Name const& aName, UnoAny const& aValue);
-            static ElementNodeRef extractElementNode(ElementRef const& aElement);
+            ElementNodeRef extractElementNode(ElementRef const& aElement);
         };
 //-----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,12 @@
 #define INCLUDED_MEMORY
 #endif
 
+#ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
+#endif
 
 namespace com { namespace sun { namespace star {
     namespace script { class XTypeConverter; }
@@ -107,12 +111,6 @@ namespace configmgr
     struct ServiceInfo;
 
     class OProviderImpl;
-//-----------------------------------------------------------------------------
-    namespace configuration
-    {
-        class Name;
-        class Tree;
-    }
 //-----------------------------------------------------------------------------
     namespace configapi
     {
@@ -145,7 +143,6 @@ namespace configmgr
             UnoTypeConverter            getTypeConverter() const;
             Factory&                    getFactory()        { return m_rFactory; }
             OProviderImpl&              getProviderImpl()   { return m_rProviderImpl; }
-            ISynchronizedData*          getSourceLock() const;
         };
 
     //-----------------------------------------------------------------------------
@@ -157,10 +154,10 @@ namespace configmgr
             typedef uno::Reference<ComponentAdapter> ComponentRef;
             typedef uno::Reference<com::sun::star::lang::XComponent> UnoComponent;
 
-            typedef configuration::Tree Tree;
+            typedef configuration::TreeRef TreeRef;
             typedef configuration::DefaultProvider DefaultProvider;
 
-            Tree                m_aTree;
+            TreeRef             m_aTree;
             NotifierImplHolder  m_aNotifier;
             DefaultProvider     m_aDefaultProvider;
             ComponentRef        m_xProvider;
@@ -169,16 +166,16 @@ namespace configmgr
             UnoInterface*       m_pInstance;
 
         public:
-            explicit ApiTreeImpl(UnoInterface* pInstance, Tree const& aTree, ApiTreeImpl& rParentTree);
-            explicit ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree, ApiTreeImpl* pParentTree);
-            explicit ApiTreeImpl(UnoInterface* _pInstance, ApiProvider& _rProvider, Tree const& _aTree, DefaultProvider const & _aDefaultProvider);
+            explicit ApiTreeImpl(UnoInterface* pInstance, configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree);
+            explicit ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::TreeRef const& aTree, ApiTreeImpl* pParentTree);
+            explicit ApiTreeImpl(UnoInterface* _pInstance, ApiProvider& _rProvider, configuration::TreeRef const& _aTree, DefaultProvider const & _aDefaultProvider);
             ~ApiTreeImpl();
 
         // initialization
             void setNodeInstance(configuration::NodeRef const& aNode, UnoInterface* pInstance);
 
         // model access
-            Tree                        getTree() const { return m_aTree; }
+            TreeRef getTree() const { return m_aTree; }
 
         // self-locked methods for dispose handling
             bool isAlive()  const;
@@ -200,8 +197,8 @@ namespace configmgr
             UnoInterfaceRef             getUnoProviderInstance() const; //  { return m_xProvider; }
 
         // locking support
-            ISynchronizedData*          getProviderLock() const { return m_rProvider.getSourceLock(); }
-            ISynchronizedData*          getDataLock() const     { return configuration::getRootLock(m_aTree); }
+            memory::Segment const *     getSourceData() const   { return configuration::getRootSegment(m_aTree); }
+            osl::Mutex&                 getDataLock() const     { return configuration::getRootLock(m_aTree); }
             osl::Mutex&                 getApiLock() const;
 
             /// wire this to a new parent tree
@@ -211,8 +208,8 @@ namespace configmgr
             void setParentTree(ApiTreeImpl* pNewParentTree);
             void deinit();
 
-            bool implDisposeTree();
-            void implDisposeNode(configuration::NodeRef const& aNode, UnoInterface* pInstance);
+            bool implDisposeTree(data::Accessor const& _aAccessor);
+            void implDisposeNode(data::Accessor const & _anAccessor, configuration::NodeRef const& aNode, UnoInterface* pInstance);
 
             friend class ComponentAdapter;
             void disposing(com::sun::star::lang::EventObject const& rEvt) throw();
@@ -224,19 +221,19 @@ namespace configmgr
     //-----------------------------------------------------------------------------
         class ApiRootTreeImpl
         {
-            typedef configuration::Tree Tree;
             typedef configuration::AbsolutePath AbsolutePath;
             typedef configuration::DefaultProvider DefaultProvider;
             vos::ORef< OOptions > m_xOptions;
 
         public:
-            explicit ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree, vos::ORef< OOptions >const& _xOptions);
+            explicit ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions);
             ~ApiRootTreeImpl();
 
             ApiTreeImpl& getApiTree() { return m_aTreeImpl; }
             ApiTreeImpl const& getApiTree() const { return m_aTreeImpl; }
-            vos::ORef< OOptions > getOptions() const {return m_xOptions;}
 
+            AbsolutePath const & getLocation() const { return m_aLocationPath; }
+            vos::ORef< OOptions > getOptions() const { return m_xOptions; }
 
         // self-locked methods for dispose handling
             bool disposeTree();
@@ -245,7 +242,7 @@ namespace configmgr
             bool enableNotification(bool bEnable);
         private:
             IConfigBroadcaster* implSetNotificationSource(IConfigBroadcaster* pNew);
-            void implSetLocation();
+            void implSetLocation(configuration::Tree const& _aTree);
             void releaseData();
 
         private:
@@ -256,8 +253,8 @@ namespace configmgr
         // IConfigListener
             void disposing(IConfigBroadcaster* pSource) ;
         //INodeListener : IConfigListener
-            void nodeChanged(Change const& aChange, AbsolutePath const& aPath, IConfigBroadcaster* pSource);
-            void nodeDeleted(AbsolutePath const& aPath, IConfigBroadcaster* pSource);
+            void nodeChanged(data::Accessor const& _aChangedDataAccessor, Change const& aChange, AbsolutePath const& aPath, IConfigBroadcaster* pSource);
+            void nodeDeleted(data::Accessor const& _aChangedDataAccessor, AbsolutePath const& aPath, IConfigBroadcaster* pSource);
 
         private:
             ApiTreeImpl                 m_aTreeImpl;

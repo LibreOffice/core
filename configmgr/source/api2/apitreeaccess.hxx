@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeaccess.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:38:33 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,15 @@
 #ifndef CONFIGMGR_API_TREEACCESS_HXX_
 #define CONFIGMGR_API_TREEACCESS_HXX_
 
+#ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
-#include "synchronize.hxx"
+#endif
+#ifndef CONFIGMGR_ACCESSOR_HXX
+#include "accessor.hxx"
+#endif
+#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include "options.hxx"
+#endif
 
 namespace osl { class Mutex; }
 
@@ -73,14 +79,21 @@ namespace configmgr
 //-----------------------------------------------------------------------------
     struct ServiceInfo;
 //-----------------------------------------------------------------------------
+    namespace memory
+    {
+        class Accessor;
+        class Segment;
+    }
+//-----------------------------------------------------------------------------
     namespace configuration
     {
         class Name;
         class Tree;
-        class ElementTree;
+        class TreeRef;
+        class ElementRef;
 //      class RootTree;
 
-        class SetElementInfo;
+        class TemplateInfo;
     }
 //-----------------------------------------------------------------------------
     namespace configapi
@@ -138,14 +151,15 @@ namespace configmgr
         {
         public:
         // model access
-            configuration::Tree     getTree() const;
+            configuration::TreeRef      getTreeRef() const;
+            configuration::Tree         getTree(memory::Accessor const& _aAccessor) const;
 
         // api object handling
             Factory&                    getFactory();
             Notifier                    getNotifier();
 
         // locking support
-            ISynchronizedData const*    getDataLock() const;
+            osl::Mutex&                 getDataLock() const;
             osl::Mutex&                 getApiLock();
         protected:
             virtual ApiTreeImpl& getApiTree() const = 0;
@@ -161,8 +175,8 @@ namespace configmgr
 
             void haveNewParent(NodeSetInfoAccess* pNewParent);
 
-            configuration::ElementTree      getElementTree() const;
-            configuration::SetElementInfo   getTemplateInfo() const;
+            configuration::ElementRef       getElementRef() const;
+            configuration::TemplateInfo     getTemplateInfo() const;
         };
 //-----------------------------------------------------------------------------
 
@@ -171,6 +185,8 @@ namespace configmgr
         {
         public:
             bool disposeTree();
+
+            memory::Segment const* getSourceData();
         protected:
             virtual ApiRootTreeImpl& getRootTree() = 0;
         };
@@ -181,15 +197,12 @@ namespace configmgr
         {
         public:
             Committer getCommitter();
-
-            ISynchronizedData * getDataLock();
-            ISynchronizedData * getProviderLock();
         };
 //-----------------------------------------------------------------------------
         /// guards a TreeElement; provides an object (read) lock, ensures object was not disposed
         class TreeReadGuardImpl : NotCopyable
         {
-            OReadSynchronized   m_aLock;
+            osl::MutexGuard     m_aViewLock;
             TreeElement&        m_rTree;
         public:
             TreeReadGuardImpl(TreeElement& rTree) throw();
@@ -200,21 +213,28 @@ namespace configmgr
 
     // Thin Wrappers around TreeElements: Provide guarding and convenient access
         /// wraps a TreeElement; provides an object (read) lock, ensures object was not disposed
-        template <class Access>
-        class GuardedElement
+        class GuardedTreeElement
         {
             TreeReadGuardImpl   m_aImpl;
         public:
-            GuardedElement(Access& rTree) : m_aImpl(rTree) {}
+            GuardedTreeElement(TreeElement& rTree) : m_aImpl(rTree) {}
         public:
-            Access& get()        const { return static_cast<Access&>(m_aImpl.get()); }
-
-            Access& operator *() const  { return  get(); }
-            Access* operator->() const  { return &get(); }
+            TreeElement&    get() const { return m_aImpl.get(); }
         };
-        typedef GuardedElement<TreeElement> GuardedTreeElement;
-        typedef GuardedElement<SetElement> GuardedSetElement;
-        typedef GuardedElement<RootElement> GuardedRootElement;
+
+        class GuardedRootElement
+        {
+            memory::Accessor      m_aDataAccess;
+            TreeReadGuardImpl   m_aImpl;
+        public:
+            GuardedRootElement(RootElement& rTree);
+        public:
+            RootElement& get() const { return static_cast<RootElement&>(m_aImpl.get()); }
+
+            configuration::Tree getTree() const;
+
+            memory::Accessor const & getDataAccessor() const { return m_aDataAccess; };
+        };
 //-----------------------------------------------------------------------------
     }
 }

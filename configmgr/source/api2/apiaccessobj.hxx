@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apiaccessobj.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 12:43:23 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,10 +123,10 @@ namespace configmgr
 
             mutable ApiTreeImpl     m_aTree;
         public:
-            OSetElement(UnoInterface* pUnoThis, configuration::Tree const& aTree, ApiTreeImpl& rParentTree)
+            OSetElement(UnoInterface* pUnoThis, configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree)
             : m_aTree(pUnoThis, aTree,rParentTree)
             {}
-            OSetElement(UnoInterface* pUnoThis, configuration::Tree const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
+            OSetElement(UnoInterface* pUnoThis, configuration::TreeRef const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
             : m_aTree(pUnoThis, rProvider,aTree,pParentTree)
             {}
 

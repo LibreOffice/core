@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2002-01-08 15:23:01 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,19 +74,21 @@ using namespace configmgr;
 //= ValueChange
 //==========================================================================
 // -------------------------------------------------------------------------
-ValueChange::ValueChange(OUString const& _rName,
-                         const node::Attributes& _rAttributes,
-                         Any aNewValue, Any aOldValue)
-    : Change(_rName,false)
-     ,m_aValue(aNewValue)
-     ,m_aOldValue(aOldValue)
-     ,m_eMode(changeValue)
-     ,m_aAttributes(_rAttributes)
+
+// works reliably only if old value is set and the value really changes
+uno::Type implGetValueType(uno::Any const & _aValue, uno::Any const & _aOldValue)
 {
-    if (_rAttributes.isDefault())
+    if (_aValue.hasValue())
     {
-        m_eMode = wasDefault;
-        m_aAttributes.setState( node::isModification );
+        OSL_ENSURE(!_aOldValue.hasValue() || _aOldValue.getValueType() == _aValue.getValueType(),
+                    "ERROR: Type mismatch in value change");
+
+        return _aValue.getValueType();
+    }
+    else
+    {
+        OSL_ENSURE(_aOldValue.hasValue(),"WARNING: Cannot determine value type of change");
+        return _aOldValue.getValueType();
     }
 }
 // -------------------------------------------------------------------------
@@ -95,12 +97,13 @@ static inline bool isDefaultMode(ValueChange::Mode _eMode)
 // -------------------------------------------------------------------------
 static inline bool isLayerChangeMode(ValueChange::Mode _eMode)
 { return (_eMode == ValueChange::setToDefault) || (_eMode == ValueChange::wasDefault); }
-// -------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 ValueChange::ValueChange(OUString const& _rName,
                          const node::Attributes& _rAttributes,
                          Mode _eMode,
-                         Any aNewValue, Any aOldValue)
+                         Any const & aNewValue, Any const & aOldValue)
     : Change(_rName, isDefaultMode(_eMode))
+     ,m_aValueType( implGetValueType(aNewValue,aOldValue) )
      ,m_aValue(aNewValue)
      ,m_aOldValue(aOldValue)
      ,m_eMode(_eMode)
@@ -108,19 +111,38 @@ ValueChange::ValueChange(OUString const& _rName,
 {
     m_aAttributes.markAsDefault(Change::isToDefault());
 }
+// -----------------------------------------------------------------------------
+ValueChange::ValueChange(OUString const& _rName,
+                         const node::Attributes& _rAttributes,
+                         Mode _eMode,
+                         uno::Type const & aValueType)
+    : Change(_rName, isDefaultMode(_eMode))
+     ,m_aValueType( aValueType )
+     ,m_aValue()
+     ,m_aOldValue()
+     ,m_eMode(_eMode)
+     ,m_aAttributes(_rAttributes)
+{
+    m_aAttributes.markAsDefault(Change::isToDefault());
+}
 // -------------------------------------------------------------------------
-ValueChange::ValueChange(Any aNewValue, ValueNode const& aOldValue)
+ValueChange::ValueChange(Any const & aNewValue, ValueNode const& aOldValue)
     : Change(aOldValue.getName(),false)
+     ,m_aValueType( aOldValue.getValueType() )
      ,m_aValue(aNewValue)
      ,m_aOldValue(aOldValue.getValue())
      ,m_aAttributes(aOldValue.getAttributes())
 {
+    OSL_ENSURE(aNewValue.getValueType() == m_aValueType || !aNewValue.hasValue(),
+                "ValueChange: Type mismatch in new value" );
+
     m_eMode = aOldValue.isDefault() ? wasDefault : changeValue;
     m_aAttributes.markAsDefault(false);
 }
 // -------------------------------------------------------------------------
 ValueChange::ValueChange(SetToDefault, ValueNode const& aOldValue)
     : Change(aOldValue.getName(),true)
+     ,m_aValueType( aOldValue.getValueType() )
      ,m_aValue(aOldValue.getDefault())
      ,m_aOldValue(aOldValue.getValue())
      ,m_eMode(setToDefault)
@@ -130,24 +152,24 @@ ValueChange::ValueChange(SetToDefault, ValueNode const& aOldValue)
 }
 
 // -----------------------------------------------------------------------------
-Change* ValueChange::clone() const
+void ValueChange::setNewValue(const uno::Any& _rNewVal)
 {
-    return new ValueChange(*this);
+    OSL_ENSURE(_rNewVal.getValueType() == m_aValueType || !_rNewVal.hasValue(),
+                "ValueChange: Type mismatch in setNewValue" );
+
+    m_aValue = _rNewVal;
+}
+
+// -----------------------------------------------------------------------------
+std::auto_ptr<Change> ValueChange::clone() const
+{
+    return std::auto_ptr<Change>(new ValueChange(*this));
 }
 
 // -----------------------------------------------------------------------------
 bool ValueChange::isChange() const // makes sense only if old value is set
 {
     return isLayerChangeMode(m_eMode) || (m_aOldValue != m_aValue);
-}
-// -----------------------------------------------------------------------------
-uno::Type ValueChange::getValueType() const // works reliably only if old value is set and the value really changes
-{
-    OSL_ENSURE(m_aOldValue.hasValue() || m_aValue.hasValue(),"WARNING: Cannot determine value type of change");
-    OSL_ENSURE(!m_aOldValue.hasValue() || !m_aValue.hasValue() ||
-                m_aOldValue.getValueType() == m_aValue.getValueType() ,"ERROR: Type mismatch in value change");
-
-    return (m_aValue.hasValue() ? m_aValue : m_aOldValue).getValueType();
 }
 // -------------------------------------------------------------------------
 namespace tree_changes_internal {
@@ -254,15 +276,15 @@ void ValueChange::setModeAsString(const ::rtl::OUString& _rMode)
 //==========================================================================
 //= AddNode
 //==========================================================================
-//--------------------------------------------------------------------------
-AddNode::AddNode(std::auto_ptr<INode> aNewNode_, OUString const& _rName, bool _bToDefault)
+using data::TreeSegment;
+//------------------------------------------0--------------------------------
+AddNode::AddNode(TreeSegment const & _aAddedTree, OUString const& _rName, bool _bToDefault)
     :Change(_rName,_bToDefault)
-    ,m_aOwnNewNode(aNewNode_)
+    ,m_aOwnNewNode(_aAddedTree)
     ,m_aOwnOldNode()
-    ,m_pOldNode(0)
+    ,m_aInsertedTree()
     ,m_bReplacing(false)
 {
-    m_pNewNode = m_aOwnNewNode.get();
 }
 
 //--------------------------------------------------------------------------
@@ -272,48 +294,46 @@ AddNode::~AddNode()
 
 // -----------------------------------------------------------------------------
 AddNode::AddNode(const AddNode& _aObj)
-        : Change(_aObj), m_bReplacing(_aObj.isReplacing())
+: Change(_aObj)
+, m_bReplacing(_aObj.m_bReplacing)
+, m_aOwnNewNode(_aObj.m_aOwnNewNode.cloneSegment())
+, m_aOwnOldNode(_aObj.m_aOwnOldNode.cloneSegment())
+, m_aInsertedTree()
 {
-    if (_aObj.m_aOwnNewNode.get())
-    {
-        m_aOwnNewNode.reset(_aObj.m_aOwnNewNode->clone());
-        m_pNewNode = m_aOwnNewNode.get();
-    }
-    else
-        m_pNewNode = NULL;
-
-    if (_aObj.m_aOwnOldNode.get())
-    {
-        m_aOwnOldNode.reset(_aObj.m_aOwnOldNode->clone());
-        m_pOldNode = m_aOwnOldNode.get();
-    }
-    else
-        m_pOldNode = NULL;
 }
 
 // -----------------------------------------------------------------------------
-Change* AddNode::clone() const
+std::auto_ptr<Change> AddNode::clone() const
 {
-    return new AddNode(*this);
+    return std::auto_ptr<Change>(new AddNode(*this));
 }
 
 //--------------------------------------------------------------------------
-void AddNode::expectReplacedNode(INode* pOldNode)
+void AddNode::setInsertedAddress(data::TreeAddress const & _aInsertedTree)
 {
-    if (pOldNode != m_aOwnOldNode.get())
+    OSL_ENSURE( !m_aInsertedTree.is(), "AddNode already was applied - inserted a second time ?");
+    m_aInsertedTree = _aInsertedTree;
+}
+//--------------------------------------------------------------------------
+
+#if 0
+void AddNode::expectReplacedNode(INode const* pOldNode)
+{
+    if (pOldNode != m_aOwnOldNode.getRoot())
     {
-        OSL_ENSURE(!m_aOwnOldNode.get(), "This RemoveNode already owns a Node - throwing that away");
-        m_aOwnOldNode.reset();
+        OSL_ENSURE(!m_aOwnOldNode.is(), "This AddNode already owns a replaced Node - throwing that away");
+        m_aOwnOldNode.clear();
     }
     m_pOldNode = pOldNode;
 }
+#endif
 //--------------------------------------------------------------------------
 
-void AddNode::takeReplacedNode(std::auto_ptr<INode> aNode)
+void AddNode::takeReplacedTree(TreeSegment const & _aReplacedTree)
 {
-    OSL_ENSURE(m_pOldNode == 0 || m_pOldNode == aNode.get(), "Removing unexpected Node");
-    m_aOwnOldNode = aNode;
-    m_pOldNode = m_aOwnOldNode.get();
+    m_aOwnOldNode   = _aReplacedTree;
+
+    if (m_aOwnOldNode.is()) m_bReplacing = true;
 }
 
 
@@ -323,7 +343,6 @@ void AddNode::takeReplacedNode(std::auto_ptr<INode> aNode)
 RemoveNode::RemoveNode(OUString const& _rName, bool _bToDefault)
     :Change(_rName,_bToDefault)
     ,m_aOwnOldNode()
-    ,m_pOldNode(0)
 {
 }
 
@@ -333,40 +352,33 @@ RemoveNode::~RemoveNode()
 }
 // -----------------------------------------------------------------------------
 RemoveNode::RemoveNode(const RemoveNode& _aObj)
-        :Change(_aObj)
+: Change(_aObj)
+, m_aOwnOldNode(_aObj.m_aOwnOldNode.cloneSegment())
 {
-    if (_aObj.m_aOwnOldNode.get())
-    {
-        m_aOwnOldNode.reset(_aObj.m_aOwnOldNode->clone());
-        m_pOldNode = m_aOwnOldNode.get();
-    }
-    else
-        m_pOldNode = NULL;
 }
 
 // -----------------------------------------------------------------------------
-Change* RemoveNode::clone() const
+std::auto_ptr<Change> RemoveNode::clone() const
 {
-    return new RemoveNode(*this);
+    return std::auto_ptr<Change>(new RemoveNode(*this));
 }
 //--------------------------------------------------------------------------
-
-void RemoveNode::expectRemovedNode(INode* pOldNode)
+#if 0
+void RemoveNode::expectRemovedNode(INode const* pOldNode)
 {
-    if (pOldNode != m_aOwnOldNode.get())
+    if (pOldNode != m_aOwnOldNode.getRoot())
     {
-        OSL_ENSURE(!m_aOwnOldNode.get(), "This RemoveNode already owns a Node - throwing that away");
-        m_aOwnOldNode.reset();
+        OSL_ENSURE(!m_aOwnOldNode.is(), "This RemoveNode already owns a Node - throwing that away");
+        m_aOwnOldNode.clear();
     }
     m_pOldNode = pOldNode;
 }
+#endif
 //--------------------------------------------------------------------------
 
-void RemoveNode::takeRemovedNode(std::auto_ptr<INode> aNode)
+void RemoveNode::takeRemovedTree(data::TreeSegment const & _aRemovedTree)
 {
-    OSL_ENSURE(m_pOldNode == 0 || m_pOldNode == aNode.get(), "Removing unexpected Node");
-    m_aOwnOldNode = aNode;
-    m_pOldNode = m_aOwnOldNode.get();
+    m_aOwnOldNode   = _aRemovedTree;
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:11:30 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,10 +178,10 @@ namespace configmgr
         void implCommitChanges( UpdateRootElement& rElement )
                 throw(css::lang::WrappedTargetException, uno::RuntimeException);
 
-        sal_Bool implHasPendingChanges( TreeElement& rElement )
+        sal_Bool implHasPendingChanges( RootElement& rElement )
                 throw(uno::RuntimeException);
 
-        uno::Sequence< css::util::ElementChange > implGetPendingChanges( TreeElement& rElement )
+        uno::Sequence< css::util::ElementChange > implGetPendingChanges( RootElement& rElement )
                 throw(uno::RuntimeException);
 
     // Set only

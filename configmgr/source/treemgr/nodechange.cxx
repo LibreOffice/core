@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechange.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ sal_uInt32 NodeChange::getChangeInfos(NodeChangesInformation& _rInfos) const
 
         for (NodeChangeImpl::ChangeCount ix = 0; ix < nChanges; ++ix)
         {
-            NodeChangeInformation aSingleInfo;
+            NodeChangeInformation aSingleInfo(m_pImpl->getDataAccessor());
             aSingleInfo.change.type = NodeChangeData::eNoChange;
 
             m_pImpl->fillChangeInfo(aSingleInfo,ix);
@@ -174,20 +174,20 @@ bool NodeChange::getChangeLocation(NodeChangeLocation& rLoc) const
 
 Tree NodeChange::getBaseTree() const
 {
-    return Tree(m_pImpl->getBaseTree().getBodyPtr());
+    return Tree(m_pImpl->getDataAccessor(), m_pImpl->getTargetTree().get());
 }
 //-----------------------------------------------------------------------------
 
 // retrieve the tree where the change is actually taking place
 NodeRef NodeChange::getBaseNode() const
 {
-    TreeHolder aTree = m_pImpl->getBaseTree();
-    NodeOffset nOffset = m_pImpl->getBaseNode();
+    TreeHolder aTree = m_pImpl->getTargetTree();
+    NodeOffset nOffset = m_pImpl->getTargetNode();
 
-    OSL_ASSERT(aTree.isValid() && aTree->isValidNode(nOffset));
+    OSL_ASSERT(aTree.is() && aTree->isValidNode(nOffset));
 
-    if (aTree.isValid() && nOffset)
-        return TreeImplHelper::makeNode(aTree.getBody(),nOffset);
+    if (aTree.is() && nOffset)
+        return TreeImplHelper::makeNode(*aTree,nOffset);
 
     return NodeRef();
 }
@@ -197,9 +197,9 @@ NodeRef NodeChange::getBaseNode() const
 Tree NodeChange::getAffectedTree() const
 {
     if (this->maybeChange())
-        return Tree(m_pImpl->getAffectedTree().getBodyPtr());
+        return Tree(m_pImpl->getDataAccessor(), m_pImpl->getTargetTree().get());
     else
-        return Tree(0);
+        return Tree(m_pImpl->getDataAccessor(), 0);
 }
 //-----------------------------------------------------------------------------
 
@@ -208,13 +208,13 @@ NodeRef NodeChange::getAffectedNode() const
 {
     if (this->maybeChange())
     {
-        TreeHolder aTree = m_pImpl->getAffectedTree();
-        NodeOffset nOffset = m_pImpl->getAffectedNode();
+        TreeHolder aTree = m_pImpl->getTargetTree();
+        NodeOffset nOffset = m_pImpl->getTargetNode();
 
-        OSL_ASSERT(aTree.isValid() && aTree->isValidNode(nOffset));
+        OSL_ASSERT(aTree.is() && aTree->isValidNode(nOffset));
 
-        if (aTree.isValid() && nOffset)
-            return TreeImplHelper::makeNode(aTree.getBody(),nOffset );
+        if (aTree.is() && nOffset)
+            return TreeImplHelper::makeNode(*aTree,nOffset );
     }
     return NodeRef();
 }
@@ -222,12 +222,12 @@ NodeRef NodeChange::getAffectedNode() const
 
 NodeID NodeChange::getAffectedNodeID() const
 {
-    TreeHolder aTree = m_pImpl->getAffectedTree();
-    NodeOffset nOffset = m_pImpl->getAffectedNode();
+    TreeHolder aTree = m_pImpl->getTargetTree();
+    NodeOffset nOffset = m_pImpl->getTargetNode();
 
-    OSL_ASSERT(aTree.isValid() ? aTree->isValidNode(nOffset) : 0==nOffset);
+    OSL_ASSERT(aTree.is() ? aTree->isValidNode(nOffset) : 0==nOffset);
 
-    return NodeID(aTree.getBodyPtr(),nOffset);
+    return NodeID(aTree.get(),nOffset);
 }
 //-----------------------------------------------------------------------------
 
@@ -343,7 +343,6 @@ sal_uInt32 NodeChanges::getChangesInfos(NodeChangesInformation& _rInfos) const
     sal_Int32 nResult = 0;
     for (Iterator it = begin(); it != end(); ++it)
     {
-        NodeChangeInformation aInfo;
         nResult += it->getChangeInfos(_rInfos);
     }
 

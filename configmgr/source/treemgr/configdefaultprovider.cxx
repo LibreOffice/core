@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configdefaultprovider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 12:01:06 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,12 @@
 #ifndef CONFIGMGR_CONFIGNODEIMPL_HXX_
 #include "treeimpl.hxx"
 #endif
+#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
+#include "updateaccessor.hxx"
+#endif
+#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
+#include "options.hxx"
+#endif
 
 namespace configmgr
 {
@@ -93,7 +99,7 @@ DefaultProvider DefaultProvider::createEmpty()
 
 DefaultProvider DefaultProvider::create(Tree const& _aRootTree, vos::ORef<OOptions> const& _xOptions,
                                           IDefaultProvider* _pDefaultProvider,
-                                          IDefaultableTreeManager* _pFetchProvider)
+                                          IDefaultableTreeManager* _pDefaultableTree)
 {
     OSL_PRECOND( !_aRootTree.isEmpty(), "ERROR: Cannot create DefaultProvider for NULL tree");
 
@@ -101,10 +107,9 @@ DefaultProvider DefaultProvider::create(Tree const& _aRootTree, vos::ORef<OOptio
 
     if (!_aRootTree.isEmpty())
     {
-        TreeDepth nDepth = TreeImplHelper::impl(_aRootTree)->getAvailableDepth();
-
-        xNewProxy = new DefaultProviderProxy(_pDefaultProvider, _pFetchProvider,
-                                             _aRootTree.getRootPath(), _xOptions, nDepth );
+        xNewProxy = new DefaultProviderProxy(_pDefaultProvider,_pDefaultableTree,
+                                             _aRootTree.getRootPath(), _xOptions,
+                                             _aRootTree.getRootNode().getDepth() );
     }
 
     return DefaultProvider( xNewProxy );
@@ -135,24 +140,11 @@ DefaultProvider::DefaultProvider(rtl::Reference< DefaultProviderProxy > const& _
 }
 //-----------------------------------------------------------------------------
 
-/// tries to load default data into the specified tree
-bool DefaultProvider::fetchDefaultData(Tree const& _aTree) const CFG_UNO_THROW_ALL()
-{
-    node::Attributes aAttributes = _aTree.getAttributes(_aTree.getRootNode());
-
-    if (aAttributes.isDefault()) return true;
-
-    // in replaced/added parts, defaults are considered non-existing
-    if (!aAttributes.isReplacedForUser())  return false;
-
-    if (!m_aProxy.is()) return false;
-
-    return m_aProxy->fetchDefaultData(_aTree.getRootPath());
-}
-//-----------------------------------------------------------------------------
-
 /// tries to load a default instance of the specified node
-std::auto_ptr<ISubtree> DefaultProvider::getDefaultTree(Tree const& _aTree, NodeRef const& _aNode) const CFG_UNO_THROW_ALL()
+std::auto_ptr<ISubtree> DefaultProvider::getDefaultTree(
+            memory::UpdateAccessor& _aTreeAccessor,
+            Tree const& _aTree, NodeRef const& _aNode
+     ) const CFG_UNO_THROW_ALL()
 {
     std::auto_ptr<ISubtree> aRet;
 
@@ -163,10 +155,47 @@ std::auto_ptr<ISubtree> DefaultProvider::getDefaultTree(Tree const& _aTree, Node
 
     if (m_aProxy.is() && aAttributes.existsInDefault())
     {
-        aRet = m_aProxy->getDefaultTree(_aTree.getAbsolutePath(_aNode));
+        aRet = m_aProxy->getDefaultTree(_aTreeAccessor,_aTree.getAbsolutePath(_aNode));
     }
 
     return aRet;
+}
+
+//-----------------------------------------------------------------------------
+/// tries to load default data into the specified tree
+static bool shouldFetchDefaultData(TreeRef const& _aTreeRef, bool & _rbHasDefaults)
+{
+    bool bShouldFetch = false;
+
+    data::Accessor aTempAccess( getRootSegment(_aTreeRef) );
+
+    Tree aTempTree(aTempAccess, _aTreeRef);
+
+    node::Attributes aAttributes = aTempTree.getAttributes(aTempTree.getRootNode());
+
+    if (aAttributes.isDefault())
+        _rbHasDefaults = true;
+
+    // in replaced/added parts, defaults are considered non-existing
+    else if (!aAttributes.isReplacedForUser())
+        _rbHasDefaults = false;
+
+    else
+        bShouldFetch = true;
+
+    return bShouldFetch;
+}
+
+//-----------------------------------------------------------------------------
+/// tries to load default data into the specified tree
+bool DefaultProvider::fetchDefaultData(TreeRef const& _aTreeRef) const CFG_UNO_THROW_ALL()
+{
+    bool bHasDefaults = false;
+
+    if (shouldFetchDefaultData(_aTreeRef,bHasDefaults) && m_aProxy.is() )
+        bHasDefaults = m_aProxy->fetchDefaultData();
+
+    return bHasDefaults;
 }
 
 //-----------------------------------------------------------------------------

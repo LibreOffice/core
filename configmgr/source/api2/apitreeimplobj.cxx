@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,8 +354,8 @@ public:
 
     // Interfaces
     virtual void disposing(IConfigBroadcaster* pSource);
-    virtual void nodeChanged(Change const& aChange, AbsolutePath const& sPath, IConfigBroadcaster* pSource);
-    virtual void nodeDeleted(AbsolutePath const& sPath, IConfigBroadcaster* pSource);
+    virtual void nodeChanged(data::Accessor const& _aChangedDataAccessor, Change const& aChange, AbsolutePath const& sPath, IConfigBroadcaster* pSource);
+    virtual void nodeDeleted(data::Accessor const& _aChangedDataAccessor, AbsolutePath const& sPath, IConfigBroadcaster* pSource);
 };
 
 //-------------------------------------------------------------------------
@@ -372,12 +372,6 @@ ApiProvider::ApiProvider(Factory& rFactory, OProviderImpl& rProviderImpl )
 UnoTypeConverter ApiProvider::getTypeConverter() const
 {
     return m_rProviderImpl.getTypeConverter();
-}
-//-------------------------------------------------------------------------
-
-ISynchronizedData* ApiProvider::getSourceLock() const
-{
-    return &m_rProviderImpl;
 }
 //-------------------------------------------------------------------------
 static
@@ -405,7 +399,7 @@ configuration::DefaultProvider extractDefaultProvider(ApiTreeImpl* pParentTree)
         return configuration::DefaultProvider::createEmpty();
 }
 //-------------------------------------------------------------------------
-ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, Tree const& aTree, ApiTreeImpl& rParentTree)
+ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree)
 : m_pInstance(pInstance)
 , m_aTree(aTree)
 , m_aDefaultProvider(rParentTree.getDefaultProvider())
@@ -417,7 +411,7 @@ ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, Tree const& aTree, ApiTreeImpl
     init(&rParentTree);
 }
 //-------------------------------------------------------------------------
-ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree, ApiTreeImpl* pParentTree)
+ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::TreeRef const& aTree, ApiTreeImpl* pParentTree)
 : m_pInstance(pInstance)
 , m_aTree(aTree)
 , m_aDefaultProvider(extractDefaultProvider(pParentTree))
@@ -430,7 +424,7 @@ ApiTreeImpl::ApiTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree c
     init(pParentTree);
 }
 //-------------------------------------------------------------------------
-ApiTreeImpl::ApiTreeImpl(UnoInterface* _pInstance, ApiProvider& _rProvider, Tree const& _aTree, DefaultProvider const& _aDefaultProvider)
+ApiTreeImpl::ApiTreeImpl(UnoInterface* _pInstance, ApiProvider& _rProvider, configuration::TreeRef const& _aTree, DefaultProvider const& _aDefaultProvider)
 : m_pInstance(_pInstance)
 , m_aTree(_aTree)
 , m_aDefaultProvider(_aDefaultProvider)
@@ -450,13 +444,13 @@ ApiTreeImpl::~ApiTreeImpl()
 }
 //-------------------------------------------------------------------------
 
-ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
-: m_aTreeImpl(pInstance, rProvider, aTree, createDefaultProvider(rProvider, aTree, _xOptions))
+ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider, configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions)
+: m_aTreeImpl(pInstance, rProvider, aTree.getRef(), createDefaultProvider(rProvider, aTree, _xOptions))
 , m_pNotificationListener(NULL)
 , m_xOptions(_xOptions)
 , m_aLocationPath( configuration::Path::Rep() )
 {
-    implSetLocation();
+    implSetLocation(aTree);
     enableNotification(true);
 }
 //-------------------------------------------------------------------------
@@ -518,7 +512,10 @@ bool ApiTreeImpl::disposeTree(bool bForce)
 
     // ensure our provider stays alive
     UnoInterfaceRef xKeepParentAlive(this->getParentComponent());
-    OWriteSynchronized aLocalGuard(getDataLock());
+
+    data::Accessor aSourceAccessor( getSourceData() );
+
+    osl::MutexGuard aLocalGuard(getDataLock());
     if (!bForce)
     {
         if (m_pParentTree != 0)
@@ -529,7 +526,7 @@ bool ApiTreeImpl::disposeTree(bool bForce)
     else if (m_pParentTree)
         setParentTree(NULL);
 
-    implDisposeTree();
+    implDisposeTree(aSourceAccessor); // TODO: accessor from lock
     OSL_ASSERT(!isAlive());
 
     return true;
@@ -541,8 +538,11 @@ bool ApiTreeImpl::disposeTreeNow()
     CFG_TRACE_INFO("ApiTreeImpl: Disposing Tree Now (unless disposed)");
     if (isAlive() )
     {
-        OWriteSynchronized aLocalGuard(getDataLock());
-        return implDisposeTree();
+        data::Accessor aSourceAccessor( getSourceData() );
+
+        osl::MutexGuard aLocalGuard(getDataLock());
+
+        return implDisposeTree(aSourceAccessor); // TODO: accessor from lock
     }
     else
         return false;
@@ -574,7 +574,7 @@ bool ApiRootTreeImpl::disposeTree()
     return bDisposed;
 }
 //-------------------------------------------------------------------------
-bool ApiTreeImpl::implDisposeTree()
+bool ApiTreeImpl::implDisposeTree(data::Accessor const& _aAccessor)
 {
     OSL_ENSURE(m_pParentTree == 0,"WARNING: Disposing a tree that still has a parent tree set");
 
@@ -584,13 +584,14 @@ bool ApiTreeImpl::implDisposeTree()
         CFG_TRACE_INFO("ApiTreeImpl: Tree is now disposed");
         using configuration::NodeIDList;
         using configuration::NodeID;
+        using configuration::Tree;
         using configuration::getAllContainedNodes;
         using com::sun::star::lang::EventObject;
 
         Factory& rFactory = getFactory();
 
         NodeIDList aChildNodes;
-        getAllContainedNodes(m_aTree, aChildNodes);
+        getAllContainedNodes( Tree(_aAccessor,m_aTree), aChildNodes);
 
         for (NodeIDList::reverse_iterator it = aChildNodes.rbegin(), stop = aChildNodes.rend();
             it != stop;
@@ -600,7 +601,7 @@ bool ApiTreeImpl::implDisposeTree()
         }
 
         CFG_TRACE_INFO_NI("ApiTreeImpl: Listeners are now informed");
-        aContainer.notifyDisposing();
+        aContainer.notifyDisposing(_aAccessor);
 
         OSL_ASSERT(!aContainer.isDisposed());
 
@@ -623,13 +624,15 @@ void ApiTreeImpl::disposeNode(NodeRef const& aNode, UnoInterface* pInstance)
 {
     if (isAlive())
     {
-        OWriteSynchronized aLocalGuard(getDataLock());
+        data::Accessor aSourceAccessor( getSourceData() );
+
+        osl::MutexGuard aLocalGuard(getDataLock());
         if (isAlive())
-            implDisposeNode(aNode,pInstance);
+            implDisposeNode(aSourceAccessor, aNode,pInstance);
     }
 }
 //-------------------------------------------------------------------------
-void ApiTreeImpl::implDisposeNode(NodeRef const& aNode, UnoInterface* pInstance)
+void ApiTreeImpl::implDisposeNode(data::Accessor const & _anAccessor, NodeRef const& aNode, UnoInterface* pInstance)
 {
     CFG_TRACE_INFO("ApiTreeImpl: Disposing a single node.");
     OSL_ENSURE(aNode.isValid(),"INTERNAL ERROR: Disposing NULL node");
@@ -641,7 +644,7 @@ void ApiTreeImpl::implDisposeNode(NodeRef const& aNode, UnoInterface* pInstance)
 
     NodeID aNodeID(m_aTree,aNode);
 
-    if (m_aNotifier->m_aListeners.disposeOne(aNodeID.toIndex()) )
+    if (m_aNotifier->m_aListeners.disposeOne(_anAccessor, aNodeID.toIndex()) )
     {
         getFactory().revokeElement(aNodeID);
     }
@@ -694,8 +697,8 @@ void ApiTreeImpl::setParentTree(ApiTreeImpl*    pParentTree) // internal impleme
     if (pParentTree)
     {
         using configuration::NodeID;
-        Tree aContext = m_aTree.getContextTree();
-        Tree aParent = pParentTree->m_aTree;
+        TreeRef aContext = m_aTree.getContextTree();
+        TreeRef aParent = pParentTree->m_aTree;
 
         NodeID aContextID( aContext, aContext.getRootNode() );
         NodeID aParentID( aParent, aParent.getRootNode() );
@@ -786,14 +789,14 @@ IConfigBroadcaster* ApiRootTreeImpl::implSetNotificationSource(IConfigBroadcaste
 }
 // ---------------------------------------------------------------------------------------------------
 
-void ApiRootTreeImpl::implSetLocation()
+void ApiRootTreeImpl::implSetLocation(configuration::Tree const& _aTree)
 {
     osl::MutexGuard aGuard(getApiTree().getApiLock());
 
-    Tree aTree = getApiTree().getTree();
-    if (!aTree.isEmpty())
+    OSL_ASSERT( configuration::equalTreeRef(_aTree.getRef(), getApiTree().getTree()) );
+    if (!_aTree.isEmpty())
     {
-        m_aLocationPath = aTree.getRootPath();
+        m_aLocationPath = _aTree.getRootPath();
         OSL_ENSURE(!m_aLocationPath.isRoot(), "Setting up a RootTree without location");
     }
     else
@@ -815,7 +818,7 @@ void ApiRootTreeImpl::implSetLocation()
 void ApiRootTreeImpl::releaseData()
 {
     CFG_TRACE_INFO("Api Root TreeImpl at %s: releasing the Data",OUSTRING2ASCII(m_aLocationPath.toString()));
-    Tree aTree( m_aTreeImpl.getTree() );
+    configuration::TreeRef aTree( m_aTreeImpl.getTree() );
 
     aTree.disposeData();
     OSL_ASSERT(aTree.isEmpty());
@@ -866,13 +869,13 @@ void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
 static
 void disposeOneRemovedNode(configuration::NodeChangeInformation const& aRemoveInfo, Factory& aFactory)
 {
-    if (aRemoveInfo.change.element.oldValue.isValid())
+    if (aRemoveInfo.change.element.oldValue.is())
     {
         OSL_ENSURE(aRemoveInfo.change.element.isDataChange(), "ERROR: Disposing replaced element: Element did not really change !");
 
-        configuration::ElementTree aElementTree( aRemoveInfo.change.element.oldValue.getBodyPtr() );
+        configuration::ElementRef aElementRef( aRemoveInfo.change.element.oldValue.get() );
 
-        SetElement* pSetElement = aFactory.findSetElement(aElementTree );
+        SetElement* pSetElement = aFactory.findSetElement(aElementRef );
         if (pSetElement)
         {
             // factory always does an extra acquire
@@ -886,7 +889,7 @@ void disposeOneRemovedNode(configuration::NodeChangeInformation const& aRemoveIn
     {
         // This must apply to a node for which no element tree had been loaded in this view
         // thus there should not be one now after the change (even if the change was replacing)
-        OSL_ENSURE(!aRemoveInfo.change.element.newValue.isValid(), "Cannot dispose replaced element: No tree object available");
+        OSL_ENSURE(!aRemoveInfo.change.element.newValue.is(), "Cannot dispose replaced element: No tree object available");
     }
 }
 // ---------------------------------------------------------------------------------------------------
@@ -917,7 +920,7 @@ void disposeRemovedNodes(configuration::NodeChangesInformation const& aChanges, 
 }
 // ---------------------------------------------------------------------------------------------------
 //INodeListener : IConfigListener
-void ApiRootTreeImpl::NodeListener::nodeChanged(Change const& aChange, AbsolutePath const& sPath, IConfigBroadcaster* _pSource)
+void ApiRootTreeImpl::NodeListener::nodeChanged(data::Accessor const& _aChangedDataAccessor, Change const& aChange, AbsolutePath const& sPath, IConfigBroadcaster* _pSource)
 {
     osl::ClearableMutexGuard aGuard(mutex);
 
@@ -929,13 +932,13 @@ void ApiRootTreeImpl::NodeListener::nodeChanged(Change const& aChange, AbsoluteP
         ApiRootTreeImpl* pKeepParent = pParent;
         aGuard.clear();
 
-        pKeepParent->nodeChanged(aChange,sPath,_pSource);
+        pKeepParent->nodeChanged(_aChangedDataAccessor,aChange,sPath,_pSource);
     }
 }
 // ---------------------------------------------------------------------------------------------------
 
 //INodeListener : IConfigListener
-void ApiRootTreeImpl::nodeChanged(Change const& aChange, AbsolutePath const& aChangePath, IConfigBroadcaster* pSource)
+void ApiRootTreeImpl::nodeChanged(data::Accessor const& _aChangedDataAccessor, Change const& aChange, AbsolutePath const& aChangePath, IConfigBroadcaster* pSource)
 {
     using configuration::AnyNodeRef;
     using configuration::NodeChanges;
@@ -946,9 +949,9 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, AbsolutePath const& aCh
     if (m_aTreeImpl.isAlive())
     try
     {
-        OClearableWriteSynchronized aLocalGuard(m_aTreeImpl.getDataLock());
+        osl::MutexGuard aLocalGuard(m_aTreeImpl.getDataLock());
 
-        Tree aTree( m_aTreeImpl.getTree() );
+        configuration::Tree aTree( _aChangedDataAccessor,m_aTreeImpl.getTree() );
 
         OSL_ENSURE(configuration::Path::hasPrefix(aChangePath, m_aLocationPath),
                     "'changed' Path does not indicate this tree or its context: ");
@@ -1041,7 +1044,7 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, AbsolutePath const& aCh
 }
 // ---------------------------------------------------------------------------------------------------
 
-void ApiRootTreeImpl::NodeListener::nodeDeleted(AbsolutePath const& _aPath, IConfigBroadcaster* _pSource)
+void ApiRootTreeImpl::NodeListener::nodeDeleted(data::Accessor const& _aChangedDataAccessor, AbsolutePath const& _aPath, IConfigBroadcaster* _pSource)
 {
     osl::ClearableMutexGuard aGuard(mutex);
 
@@ -1053,11 +1056,11 @@ void ApiRootTreeImpl::NodeListener::nodeDeleted(AbsolutePath const& _aPath, ICon
         ApiRootTreeImpl* pKeepParent = pParent;
         aGuard.clear();
 
-        pKeepParent->nodeDeleted(_aPath,_pSource);
+        pKeepParent->nodeDeleted(_aChangedDataAccessor,_aPath,_pSource);
     }
 }
 // ---------------------------------------------------------------------------------------------------
-void ApiRootTreeImpl::nodeDeleted(AbsolutePath const& _aDeletedPath, IConfigBroadcaster* pSource)
+void ApiRootTreeImpl::nodeDeleted(data::Accessor const& _aChangedDataAccessor, AbsolutePath const& _aDeletedPath, IConfigBroadcaster* pSource)
 {
     // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
     UnoInterfaceRef xKeepAlive( m_aTreeImpl.getUnoInstance() );
@@ -1065,7 +1068,7 @@ void ApiRootTreeImpl::nodeDeleted(AbsolutePath const& _aDeletedPath, IConfigBroa
 #ifdef DBG_UTIL
 
     {
-        OReadSynchronized aLocalGuard(m_aTreeImpl.getDataLock());
+        osl::MutexGuard aLocalGuard(m_aTreeImpl.getDataLock());
 
         OSL_ENSURE(configuration::Path::hasPrefix(m_aLocationPath, _aDeletedPath),
                     "'deleted' Path does not indicate this tree or its context: ");

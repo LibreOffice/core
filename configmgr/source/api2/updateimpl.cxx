@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updateimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,10 +154,10 @@ void implReplaceByName(NodeGroupAccess& rNode, const OUString& sName, const Any&
 {
     try
     {
-        GuardedGroupUpdateAccess impl( rNode );
+        GuardedGroupUpdateAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         Name aChildName = validateChildName(sName,aTree,aNode);
 
@@ -187,18 +187,18 @@ void implReplaceByName(NodeGroupAccess& rNode, const OUString& sName, const Any&
             }
         }
 
-        NodeChange aChange = impl->getNodeUpdater().validateSetValue(aChildValue, rElement);
+        NodeChange aChange = lock.getNodeUpdater().validateSetValue(aChildValue, rElement);
 
         if (aChange.test().isChange())
         {
-            Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,true));
-//          impl.clearForBroadcast();
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChange,true));
+//          lock.clearForBroadcast();
 
             aSender.queryConstraints(aChange);
 
             aTree.integrate(aChange, aNode, true);
 
-            impl.clearForBroadcast();
+            lock.clearForBroadcast();
             aSender.notifyListeners(aChange);
         }
     }
@@ -246,10 +246,10 @@ void implReplaceByName(NodeTreeSetAccess& rNode, const OUString& sName, const An
 {
     try
     {
-        GuardedSetUpdateAccess impl( rNode );
+        GuardedTreeSetUpdateAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         Name aChildName = validateElementName(sName,aTree,aNode);
 
@@ -268,7 +268,7 @@ void implReplaceByName(NodeTreeSetAccess& rNode, const OUString& sName, const An
             throw NoSuchElementException( sMessage, xContext );
         }
 
-        ElementTree aElementTree = configapi::extractElementTree(impl->getFactory(), rElement, impl->getElementInfo() );
+        ElementTree aElementTree = configapi::extractElementTree(rNode.getFactory(), rElement, rNode.getElementInfo(lock.getDataAccessor()) );
         if (!aElementTree.isValid())
         {
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot replace Set Element: ") );
@@ -278,18 +278,18 @@ void implReplaceByName(NodeTreeSetAccess& rNode, const OUString& sName, const An
             throw IllegalArgumentException( sMessage, xContext, 2 );
         }
 
-        NodeChange aChange = rNode.getNodeUpdater().validateReplaceElement( aElement, aElementTree );
+        NodeChange aChange = lock.getNodeUpdater().validateReplaceElement( aElement, aElementTree );
 
         if (aChange.test().isChange())
         {
-            Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,true));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChange,true));
 
             //aSender.queryConstraints(aChange); - N/A: no external constraints on set children possible
 
             aTree.integrate(aChange, aNode, true);
             attachSetElement(rNode, aElementTree);
 
-            impl.clearForBroadcast();
+            lock.clearForBroadcast();
             aSender.notifyListeners(aChange);
         }
     }
@@ -326,10 +326,10 @@ void implReplaceByName(NodeValueSetAccess& rNode, const OUString& sName, const A
 {
     try
     {
-        GuardedSetUpdateAccess impl( rNode );
+        GuardedValueSetUpdateAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         Name aChildName = validateElementName(sName,aTree,aNode);
 
@@ -348,17 +348,17 @@ void implReplaceByName(NodeValueSetAccess& rNode, const OUString& sName, const A
             throw NoSuchElementException( sMessage, xContext );
         }
 
-        NodeChange aChange = rNode.getNodeUpdater().validateReplaceElement( aElement, rElement );
+        NodeChange aChange = lock.getNodeUpdater().validateReplaceElement( aElement, rElement );
 
         if (aChange.test().isChange())
         {
-            Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,true));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChange,true));
 
             //aSender.queryConstraints(aChange); - N/A: no external constraints on set children possible
 
             aTree.integrate(aChange, aNode, true);
 
-            impl.clearForBroadcast();
+            lock.clearForBroadcast();
             aSender.notifyListeners(aChange);
         }
     }
@@ -402,10 +402,10 @@ void implInsertByName(NodeTreeSetAccess& rNode, const OUString& sName, const Any
 {
     try
     {
-        GuardedSetUpdateAccess impl( rNode );
+        GuardedTreeSetUpdateAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         Name aChildName = validateElementName(sName,aTree,aNode);
 
@@ -421,7 +421,7 @@ void implInsertByName(NodeTreeSetAccess& rNode, const OUString& sName, const Any
         }
         OSL_ENSURE(!configuration::hasChildOrElement(aTree,aNode,aChildName),"ERROR: Configuration: Existing Set element not found by implementation");
 
-        ElementTree aElementTree = configapi::extractElementTree(impl->getFactory(), rElement, impl->getElementInfo() );
+        ElementTree aElementTree = configapi::extractElementTree(rNode.getFactory(), rElement, rNode.getElementInfo(lock.getDataAccessor()) );
         if (!aElementTree.isValid())
         {
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot insert into Set: ") );
@@ -431,19 +431,19 @@ void implInsertByName(NodeTreeSetAccess& rNode, const OUString& sName, const Any
             throw IllegalArgumentException( sMessage, xContext, 2 );
         }
 
-        NodeChange aChange = rNode.getNodeUpdater().validateInsertElement(aChildName, aElementTree);
+        NodeChange aChange = lock.getNodeUpdater().validateInsertElement(aChildName, aElementTree);
 
         aChange.test(); // make sure old values are set up correctly
         OSL_ENSURE(aChange.isChange(), "ERROR: Adding a node validated as empty change");
 
-        Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,true));
+        Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChange,true));
 
         //aSender.queryConstraints(); - N/A: no external constraints on set children possible
 
         aTree.integrate(aChange, aNode, true);
         attachSetElement(rNode, aElementTree);
 
-        impl.clearForBroadcast();
+        lock.clearForBroadcast();
         aSender.notifyListeners(aChange);
     }
     catch (configuration::InvalidName& ex)
@@ -480,10 +480,10 @@ void implInsertByName(NodeValueSetAccess& rNode, const OUString& sName, const An
 {
     try
     {
-        GuardedSetUpdateAccess impl( rNode );
+        GuardedValueSetUpdateAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         Name aChildName = validateElementName(sName,aTree,aNode);
 
@@ -499,18 +499,18 @@ void implInsertByName(NodeValueSetAccess& rNode, const OUString& sName, const An
         }
         OSL_ENSURE(!configuration::hasChildOrElement(aTree,aNode,aChildName),"ERROR: Configuration: Existing Set element not found by implementation");
 
-        NodeChange aChange = rNode.getNodeUpdater().validateInsertElement(aChildName, rElement);
+        NodeChange aChange = lock.getNodeUpdater().validateInsertElement(aChildName, rElement);
 
         aChange.test(); // make sure old values are set up correctly
         OSL_ENSURE(aChange.isChange(), "ERROR: Adding a node validated as empty change");
 
-        Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,true));
+        Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChange,true));
 
         //aSender.queryConstraints(); - N/A: no external constraints on set children possible
 
         aTree.integrate(aChange, aNode, true);
 
-        impl.clearForBroadcast();
+        lock.clearForBroadcast();
         aSender.notifyListeners(aChange);
     }
     catch (configuration::InvalidName& ex)
@@ -552,10 +552,10 @@ void implRemoveByName(NodeTreeSetAccess& rNode, const OUString& sName )
 {
     try
     {
-        GuardedSetUpdateAccess impl( rNode );
+        GuardedTreeSetUpdateAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         Name aChildName = validateElementName(sName,aTree,aNode);
 
@@ -574,19 +574,19 @@ void implRemoveByName(NodeTreeSetAccess& rNode, const OUString& sName )
             throw NoSuchElementException( sMessage, xContext );
         }
 
-        NodeChange aChange = rNode.getNodeUpdater().validateRemoveElement(aElement);
+        NodeChange aChange = lock.getNodeUpdater().validateRemoveElement(aElement);
 
         aChange.test(); // make sure old values are set up correctly
         OSL_ENSURE(aChange.isChange(), "ERROR: Removing a node validated as empty change");
 
-        Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,true));
+        Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChange,true));
 
         //aSender.queryConstraints(); - N/A: no external constraints on set children possible
 
         aTree.integrate(aChange, aNode, true);
-        detachSetElement(impl->getFactory(), aElement.getElementTree());
+        detachSetElement(rNode.getFactory(), aElement);
 
-        impl.clearForBroadcast();
+        lock.clearForBroadcast();
         aSender.notifyListeners(aChange);
     }
     catch (configuration::InvalidName& ex)
@@ -616,10 +616,10 @@ void implRemoveByName(NodeValueSetAccess& rNode, const OUString& sName )
 {
     try
     {
-        GuardedSetUpdateAccess impl( rNode );
+        GuardedValueSetUpdateAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
         Name aChildName = validateElementName(sName,aTree,aNode);
 
@@ -637,18 +637,18 @@ void implRemoveByName(NodeValueSetAccess& rNode, const OUString& sName )
             throw NoSuchElementException( sMessage, xContext );
         }
 
-        NodeChange aChange = rNode.getNodeUpdater().validateRemoveElement(aElement);
+        NodeChange aChange = lock.getNodeUpdater().validateRemoveElement(aElement);
 
         aChange.test(); // make sure old values are set up correctly
         OSL_ENSURE(aChange.isChange(), "ERROR: Removing a node validated as empty change");
 
-        Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,true));
+        Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChange,true));
 
         //aSender.queryConstraints(); - N/A: no external constraints on set children possible
 
         aTree.integrate(aChange, aNode, true);
 
-        impl.clearForBroadcast();
+        lock.clearForBroadcast();
         aSender.notifyListeners(aChange);
     }
     catch (configuration::InvalidName& ex)
@@ -682,12 +682,12 @@ void implSetToDefaultAsProperty(NodeSetAccess& rNode)
 {
     try
     {
-        GuardedSetUpdateAccess impl( rNode );
+        GuardedSetUpdateAccess lock( rNode );
 
-        Tree const aTree( impl->getTree() );
-        NodeRef const aNode( impl->getNode() );
+        Tree const aTree( lock.getTree() );
+        NodeRef const aNode( lock.getNode() );
 
-        configuration::SetDefaulter aDefaulter = impl->getNodeDefaulter();
+        configuration::SetDefaulter aDefaulter = lock.getNodeDefaulter();
 
         NodeChange aChange = aDefaulter.validateSetToDefaultState();
 
@@ -695,13 +695,13 @@ void implSetToDefaultAsProperty(NodeSetAccess& rNode)
 
         if (aChange.test().isChange() )
         {
-            Broadcaster aSender(impl->getNotifier().makeBroadcaster(aChange,bLocal));
+            Broadcaster aSender(rNode.getNotifier().makeBroadcaster(aChange,bLocal));
 
             aSender.queryConstraints(aChange);
 
             aTree.integrate(aChange, aNode, bLocal);
 
-            impl.clearForBroadcast();
+            lock.clearForBroadcast();
             aSender.notifyListeners(aChange);
         }
     }
@@ -739,11 +739,12 @@ Reference< uno::XInterface > implCreateElement(NodeTreeSetAccess& rNode )
     Reference< uno::XInterface > xRet;
     try
     {
-        GuardedNode<NodeSetAccess> impl( rNode ); // no provider lock needed ? => if template lock is separate - OK
+        GuardedNodeData<NodeSetAccess> lock( rNode ); // no provider lock needed ? => if template lock is separate - OK
 
-        ElementTree aNewElement( rNode.getElementFactory().instantiateTemplate(impl->getElementInfo().getTemplate()) );
+        data::Accessor aDataAccess = lock.getDataAccessor();
+        ElementTree aNewElement( rNode.getElementFactory(aDataAccess).instantiateTemplate(rNode.getElementInfo(aDataAccess).getTemplate()) );
 
-        Any aAny = configapi::makeElement( impl->getFactory(), aNewElement );
+        Any aAny = configapi::makeElement( rNode.getFactory(), aNewElement );
         if (!(aAny >>= xRet)) // no parent available
         {
             OSL_ASSERT(!xRet.is()); // make sure we return NULL

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,19 +209,19 @@ NodeElement* Factory::makeElement(Tree const& aTree, NodeRef const& aNode)
 
         if (!aTree.isRootNode(aNode))
         {
-            pRet = doCreateGroupMember(aTree,aNode,aTemplate.getBodyPtr());
+            pRet = doCreateGroupMember(aTree,aNode,aTemplate.get());
         }
         else
         {
             ElementTree aElementTree = ElementTree::extract(aTree);
             if (aElementTree.isValid())
             {
-                pRet = doCreateSetElement(aElementTree,aTemplate.getBodyPtr());
+                pRet = doCreateSetElement(aElementTree,aTemplate.get());
             }
             else
             {
                 OSL_ENSURE(aTree.getContextTree().isEmpty(),"INTERNAL ERROR: Found tree (not a set element) with a parent tree.");
-                pRet = doCreateAccessRoot(aTree,aTemplate.getBodyPtr(), vos::ORef< OOptions >());
+                pRet = doCreateAccessRoot(aTree,aTemplate.get(), vos::ORef< OOptions >());
             }
         }
         implHaveNewElement(aNodeID,pRet);
@@ -297,7 +297,7 @@ TreeElement* Factory::makeAccessRoot(Tree const& aTree, vos::ORef< OOptions >con
     if (0 == pRet)
     {
         TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aRoot);
-        pRet = doCreateAccessRoot(aTree,aTemplate.getBodyPtr(), _xOptions);
+        pRet = doCreateAccessRoot(aTree,aTemplate.get(), _xOptions);
         implHaveNewElement (aNodeID,pRet);
     }
     return pRet;
@@ -329,7 +329,7 @@ NodeElement* Factory::makeGroupMember(Tree const& aTree, NodeRef const& aNode)
     {
         TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aNode);
 
-        pRet = doCreateGroupMember(aTree,aNode,aTemplate.getBodyPtr());
+        pRet = doCreateGroupMember(aTree,aNode,aTemplate.get());
 
         OSL_ENSURE( pRet,"WARNING: New API object could not be created");
 
@@ -373,7 +373,7 @@ SetElement* Factory::makeSetElement(ElementTree const& aElementTree)
     {
         TemplateHolder aTemplate = implGetSetElementTemplate(aTree,aRoot);
 
-        pRet = doCreateSetElement(aElementTree,aTemplate.getBodyPtr());
+        pRet = doCreateSetElement(aElementTree,aTemplate.get());
 
         implHaveNewElement(aNodeID,pRet);
     }
@@ -381,12 +381,12 @@ SetElement* Factory::makeSetElement(ElementTree const& aElementTree)
 }
 //-----------------------------------------------------------------------------
 
-SetElement* Factory::findSetElement(ElementTree const& aElementTree)
+SetElement* Factory::findSetElement(configuration::ElementRef const& aElement)
 {
-    OSL_PRECOND( aElementTree.isValid() , "ERROR: Configuration: Making element from tree requires valid tree");
-    if (!aElementTree.isValid()) return 0;
+    OSL_PRECOND( aElement.isValid() , "ERROR: Configuration: Making element from tree requires valid tree");
+    if (!aElement.isValid()) return 0;
 
-    Tree aTree = aElementTree.getTree();
+    configuration::TreeRef aTree = aElement.getTreeRef();
     OSL_ENSURE(!aTree.isEmpty(),"INTERNAL ERROR: Element Tree has no Tree");
 
     NodeRef aRoot = aTree.getRootNode();

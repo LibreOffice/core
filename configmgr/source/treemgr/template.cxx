@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-10-26 10:55:13 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #include "template.hxx"
 #include "templateimpl.hxx"
 
-#include "valuenode.hxx"
+#ifndef CONFIGMGR_SETNODEACCESS_HXX
+#include "setnodeaccess.hxx"
+#endif
 
 namespace configmgr
 {
@@ -79,7 +81,7 @@ TemplateProvider::TemplateProvider()
 }
 
 //-----------------------------------------------------------------------------
-TemplateProvider::TemplateProvider(ITemplateProvider& rProvider, vos::ORef< OOptions > const& xOptions)
+TemplateProvider::TemplateProvider(ITemplateManager& rProvider, vos::ORef< OOptions > const& xOptions)
 : m_aImpl( new TemplateProvider_Impl(rProvider,xOptions) )
 {
 }
@@ -181,15 +183,15 @@ TemplateHolder makeSimpleTemplate(UnoType const& aType, SpecialTemplateProvider 
 
 TemplateHolder makeTreeTemplate(OUString const& sName, OUString const& sModule, SpecialTemplateProvider const& aProvider)
 {
-    TemplateName aNames( TemplateName::parseTemplateNames(sName,sModule) );
+    TemplateName aNames( sName,sModule );
     return TemplateImplHelper::makeSpecialTemplate( aNames,aProvider, configapi::getUnoInterfaceType());
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder makeSetElementTemplate(ISubtree const& aSet, TemplateProvider const& aProvider)
+TemplateHolder makeSetElementTemplate(data::SetNodeAccess const& _aSet, TemplateProvider const& _aProvider)
 {
-    TemplateName aNames( TemplateName::parseTemplateNames( aSet.getElementTemplateName(), aSet.getElementTemplateModule() ) );
-    return TemplateImplHelper::makeElementTemplateWithType(aNames, aProvider, aSet);
+    TemplateName aNames( _aSet.getElementTemplateName(), _aSet.getElementTemplateModule() );
+    return TemplateImplHelper::makeElementTemplateWithType(aNames, _aProvider, _aSet);
 }
 //-----------------------------------------------------------------------------
     }

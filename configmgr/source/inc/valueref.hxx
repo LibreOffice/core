@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueref.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:19:26 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,6 @@ namespace configmgr
         typedef com::sun::star::uno::Any        UnoAny;
     //-------------------------------------------------------------------------
 
-        class Node;
         class TreeImpl;
 
         typedef unsigned int NodeOffset;
@@ -109,12 +108,11 @@ namespace configmgr
         private:
             friend class Tree;
             friend class TreeImplHelper;
-            ValueRef(Name const& aName, Node* pParentImpl, NodeOffset nParentPos);
+            ValueRef(Name const& aName, NodeOffset nParentPos);
 
             bool checkValidState() const;
         private:
             Name        m_sNodeName;
-            Node*       m_pParentImpl;
             NodeOffset  m_nParentPos;
         };
     //-------------------------------------------------------------------------
@@ -128,8 +126,8 @@ namespace configmgr
     //-------------------------------------------------------------------------
         inline bool ValueRef::isValid() const
         {
-            OSL_ASSERT( m_pParentImpl == 0 || checkValidState() );
-            return m_pParentImpl != 0;
+            OSL_ASSERT( m_nParentPos == 0 || checkValidState() );
+            return m_nParentPos != 0;
         }
 
     //-------------------------------------------------------------------------
@@ -140,6 +138,7 @@ namespace configmgr
             static SubNodeID createEmpty() { return SubNodeID(); }
             SubNodeID(Tree const& rTree, ValueRef const& rNode);
             SubNodeID(Tree const& rTree, NodeRef const& rParentNode, Name const& aName);
+            SubNodeID(TreeRef const& rTree, NodeRef const& rParentNode, Name const& aName);
             SubNodeID(NodeID const& rParentNodeID, Name const& aName);
 
         // comparison
@@ -151,7 +150,7 @@ namespace configmgr
             // checking
             bool isEmpty() const;
             // checking
-            bool isValidNode() const;
+            bool isValidNode(data::Accessor const& _accessor) const;
             // hashing
             size_t hashCode() const;
             // containing node this
@@ -167,7 +166,7 @@ namespace configmgr
     //-------------------------------------------------------------------------
 
         typedef std::vector<SubNodeID>      SubNodeIDList;
-        void getAllChildrenHelper(NodeID const& aNode, SubNodeIDList& aList);
+        void getAllChildrenHelper(data::Accessor const& _aAccessor, NodeID const& aNode, SubNodeIDList& aList);
 
     //-------------------------------------------------------------------------
         inline bool operator!=(SubNodeID const& lhs, SubNodeID const& rhs)

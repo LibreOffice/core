@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notifierimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,14 +108,17 @@ namespace configmgr
             };
             struct SubNodeToIndex
             {
-                configuration::Tree aTree;
+                typedef data::Accessor const & KeyFinder;
+                configuration::TreeRef aTree;
 
-                SubNodeToIndex( configuration::Tree const& aTree ) : aTree(aTree) {}
+                SubNodeToIndex( configuration::TreeRef const& aTree ) : aTree(aTree) {}
 
-                bool findKeysForIndex(NodeOffset nNode, SubNodeList& aList)
+                bool findKeysForIndex(KeyFinder _anAccessor, NodeOffset nNode, SubNodeList& aList)
                 {
+                    using configuration::getAllChildrenHelper;
+                    using configuration::findNodeFromIndex;
                     aList.clear();
-                    configuration::getAllChildrenHelper(configuration::findNodeFromIndex(aTree,nNode), aList);
+                    getAllChildrenHelper(_anAccessor,findNodeFromIndex(aTree,nNode), aList);
                     return !aList.empty();
                 }
                 NodeOffset findIndexForKey(SubNodeID const& aNode)
@@ -131,7 +134,7 @@ namespace configmgr
         public:
             /// construct this around the given Implementation, for the given tree
             explicit
-            NotifierImpl(configuration::Tree const& aTree);
+            NotifierImpl(configuration::TreeRef const& aTree);
             ~NotifierImpl();
 
             /// retrieve the mutex that is used by this

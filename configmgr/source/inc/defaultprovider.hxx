@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 11:52:15 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,11 @@ namespace configmgr
         class AbsolutePath;
     }
     //-------------------------
+    namespace memory
+    {
+        class Segment;
+    }
+    //-------------------------
     class ISubtree;
 
     //==========================================================================
@@ -117,7 +122,7 @@ namespace configmgr
                 the default data tree, yielding ownership of it
                 <NULL/>if no default data is available for the tree
         */
-        virtual std::auto_ptr<ISubtree> requestDefaultData(configuration::AbsolutePath const& aSubtreePath,
+        virtual std::auto_ptr<ISubtree> requestDefaultData( configuration::AbsolutePath const& aSubtreePath,
                                                             const vos::ORef < OOptions >& _xOptions,
                                                             sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  ) = 0;
     };
@@ -131,6 +136,10 @@ namespace configmgr
     class SAL_NO_VTABLE IDefaultableTreeManager
     {
     public:
+        /// get a data segment to host the given location - also available in ITreeManager
+        virtual memory::Segment* getDataSegment(configuration::AbsolutePath const& _rAccessor,
+                                                const vos::ORef < OOptions >& _xOptions) = 0;
+
         /** attempt to load default data into the tree named by a path using certain options
             and requiring a specific loading depth.
 
@@ -138,7 +147,8 @@ namespace configmgr
                 <TRUE/>,  if some default data is available within the tree
                 <FALSE/>, if no default data is available for the tree
         */
-        virtual sal_Bool fetchDefaultData(configuration::AbsolutePath const& aSubtreePath,
+        virtual sal_Bool fetchDefaultData(  memory::UpdateAccessor& _aAccessToken,
+                                            configuration::AbsolutePath const& aSubtreePath,
                                             const vos::ORef < OOptions >& _xOptions,
                                             sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  ) = 0;
 

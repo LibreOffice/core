@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 11:23:57 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ namespace configmgr
     using ::rtl::OUString;
 
     class ISubtree;
-    class ITemplateProvider;
+    class ITemplateManager;
     class IDefaultProvider;
     class IConfigSession;
     class TreeManager;
@@ -203,16 +203,18 @@ namespace configmgr
         virtual ~OProviderImpl();
 
         /// ITreeManager
-        virtual ISubtree * requestSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
+        virtual memory::Segment* getDataSegment(AbsolutePath const& _rAccessor, const vos::ORef < OOptions >& _xOptions);
+        virtual data::NodeAccess requestSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
                                           sal_Int16 nMinLevels = ALL_LEVELS) CFG_UNO_THROW_ALL(  );
-        virtual void updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  );
+        virtual void updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  );
 
         virtual void releaseSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) CFG_NOTHROW();
-        virtual void notifyUpdate(TreeChangeList const& aChanges) CFG_UNO_THROW_RTE(  );
+        virtual void notifyUpdate(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges) CFG_UNO_THROW_RTE(  );
         virtual void disposeData(const vos::ORef < OOptions >& _xOptions) CFG_NOTHROW();
         virtual void fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels = ALL_LEVELS) CFG_NOTHROW();
         /// IDefaultableTreeManager
-        virtual sal_Bool fetchDefaultData(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
+        virtual sal_Bool fetchDefaultData(  memory::UpdateAccessor& _aAccessToken,
+                                            AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
                                             sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  );
 
         // IInterface
@@ -222,19 +224,10 @@ namespace configmgr
         // DefaultProvider access
         IDefaultProvider&  getDefaultProvider() const;
 
-        // TemplateProvider access
-        ITemplateProvider&  getTemplateProvider() const;
+        // TemplateManager access
+        ITemplateManager&  getTemplateProvider() const;
 
     protected:
-        ISynchronizedData      & getTreeLock();
-        ISynchronizedData const& getTreeLock() const;
-
-        // ISyncronizedData
-        virtual void acquireReadAccess() const;
-        virtual void releaseReadAccess() const;
-        virtual void acquireWriteAccess();
-        virtual void releaseWriteAccess();
-
         static OUString getErrorMessage(AbsolutePath const& _rAccessor, const vos::ORef < OOptions >& _xOptions);
 
         virtual void SAL_CALL dispose() throw();
@@ -255,10 +248,10 @@ namespace configmgr
         void initSession(IConfigSession* pSession, const ConnectionSettings& _rSettings);
     private:
         void implInitFromSettings(const ConnectionSettings& _rSettings, bool& rNeedProfile);
-        void implInitFromProfile(ISubtree const* pProfile);
+        void implInitFromProfile(data::NodeAccess const& aProfile);
 
         virtual void initFromSettings(const ConnectionSettings& _rSettings, bool& rNeedProfile);
-        virtual void initFromProfile(ISubtree const* pProfile);
+        virtual void initFromProfile(data::NodeAccess const& aProfile);
     };
 } // namespace configmgr
 

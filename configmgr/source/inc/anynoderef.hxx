@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anynoderef.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,6 @@ namespace configmgr
 
         class Tree;
 
-        class Node;
         class TreeImpl;
 
         typedef unsigned int NodeOffset;
@@ -133,13 +132,12 @@ namespace configmgr
         private:
             friend class Tree;
             friend class TreeImplHelper;
-            AnyNodeRef(Node* pImpl, NodeOffset nParentPos, TreeDepth m_nDepth);
-            AnyNodeRef(Name const& aName, Node* pParentImpl, NodeOffset nParentPos);
+            AnyNodeRef(NodeOffset nParentPos, TreeDepth m_nDepth);
+            AnyNodeRef(Name const& aName, NodeOffset nParentPos);
 
             bool checkValidState() const;
         private:
             Name        m_sNodeName;
-            Node*       m_pUsedImpl;
             NodeOffset  m_nUsedPos;
             TreeDepth   m_nDepth;
         };
@@ -210,8 +208,8 @@ namespace configmgr
     //-------------------------------------------------------------------------
         inline bool AnyNodeRef::isValid() const
         {
-            OSL_ASSERT( m_pUsedImpl == 0 || checkValidState() );
-            return m_pUsedImpl != 0;
+            OSL_ASSERT( m_nUsedPos == 0 || checkValidState() );
+            return m_nUsedPos != 0;
         }
 
     //-------------------------------------------------------------------------

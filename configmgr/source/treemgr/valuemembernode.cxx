@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuemembernode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 17:07:52 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,26 @@
 #include <stdio.h>
 
 #include "valuemembernode.hxx"
+
+#ifndef CONFIGMGR_NODEIMPLOBJECTS_HXX_
 #include "nodeimplobj.hxx"
-
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGEIMPL_HXX_
 #include "nodechangeimpl.hxx"
-
-#include "valuenode.hxx"
+#endif
+#ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
+#endif
+#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
+#include "valuenode.hxx"
+#endif
+#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
+#include "updateaccessor.hxx"
+#endif
 
+#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
 
 namespace configmgr
 {
@@ -77,111 +89,72 @@ namespace configmgr
 
 // helpers
 //-----------------------------------------------------------------------------
+
 namespace
 {
 
 //-----------------------------------------------------------------------------
-// internal accessors for original data
+// internal accessors for direct updates to data
 //-----------------------------------------------------------------------------
 
 inline
-OUString getOriginalNodeName(ValueNode* pOriginal)
+void setOriginalValue(memory::UpdateAccessor& _aAccessor, data::ValueNodeAddress const& rOriginalAddress, UnoAny const& aNewValue)
 {
-    OSL_ENSURE( pOriginal, "Value Member Operation requires valid node");
-    return pOriginal->getName();
+    data::ValueNodeAccess::setValue(_aAccessor,rOriginalAddress,aNewValue);
 }
 //-----------------------------------------------------------------------------
 
 inline
-Attributes getOriginalNodeAttributes(ValueNode* pOriginal)
+void setOriginalToDefault(memory::UpdateAccessor& _aAccessor, data::ValueNodeAddress const& rOriginalAddress)
 {
-    OSL_ENSURE( pOriginal, "Value Member Operation requires valid node");
-    Attributes aAttributes = pOriginal->getAttributes();
-    return aAttributes;
+    data::ValueNodeAccess::setToDefault(_aAccessor,rOriginalAddress);
 }
 //-----------------------------------------------------------------------------
-
-
-inline
-bool isOriginalNodeDefault(ValueNode* pOriginal)
+/*
+void ValueMemberNode::DeferredImpl::commitDirect(data::Accessor const& _aAccessor)
 {
-    OSL_ENSURE( pOriginal, "Value Member Operation requires valid node");
-    return pOriginal->isDefault();
-}
-//-----------------------------------------------------------------------------
+    data::ValueNodeAccess aOriginalNode = getOriginalNode(_aAccessor);
 
-inline
-bool hasOriginalNodeDefault(ValueNode* pOriginal)
-{
-    OSL_ENSURE( pOriginal, "Value Member Operation requires valid node");
-    return pOriginal->hasDefault();
-}
-//-----------------------------------------------------------------------------
+    if (isChange())
+    {
+        if (m_bToDefault)
+            setOriginalToDefault(directValueAccess(aOriginalNode));
 
-inline
-UnoAny  getOriginalNodeValue(ValueNode* pOriginal)
-{
-    OSL_ENSURE( pOriginal, "Value Member Operation requires valid node");
-    return pOriginal->getValue();
-}
-//-----------------------------------------------------------------------------
+        else
+            setOriginalValue(directValueAccess(aOriginalNode),m_aNewValue);
+    }
 
-inline
-UnoAny getOriginalDefaultValue(ValueNode* pOriginal)
-{
-    OSL_ENSURE( pOriginal, "Value Member Operation requires valid node");
-    return pOriginal->getDefault();
+    OSL_ENSURE( m_aNewValue == aOriginalNode.getValue(), "Direct Commit: Inconsistent committed value");
+    m_bChange = false;
 }
-//-----------------------------------------------------------------------------
-
-inline
-UnoType getOriginalValueType(ValueNode* pOriginal)
-{
-    OSL_ENSURE( pOriginal, "Value Member Operation requires valid node");
-    return pOriginal->getValueType();
-}
-//-----------------------------------------------------------------------------
-
-inline
-void setOriginalValue(ValueNode* pOriginal, UnoAny const& aNewValue)
-{
-    OSL_ENSURE( pOriginal, "Value Member Operation requires valid node");
-    pOriginal->setValue(aNewValue);
-}
-//-----------------------------------------------------------------------------
-
-inline
-void setOriginalToDefault(ValueNode* pOriginal)
-{
-    OSL_ENSURE( pOriginal, "Value Member Operation requires valid node");
-    pOriginal->setDefault();
-}
+*/
 //-----------------------------------------------------------------------------
 } // anonymous namespace
+
 
 //-----------------------------------------------------------------------------
 // class ValueMemberNode
 //-----------------------------------------------------------------------------
 
-ValueMemberNode::ValueMemberNode(ValueNode* pOriginal)
-: m_pOriginal(pOriginal)
+ValueMemberNode::ValueMemberNode(data::ValueNodeAccess const& _aNodeAccess)
+: m_aNodeRef(_aNodeAccess)
 , m_xDeferredOperation()
 {}
 //-----------------------------------------------------------------------------
-ValueMemberNode::ValueMemberNode(DeferredImplRef const& xOriginal) // must be valid
-: m_pOriginal( &xOriginal->getOriginalNode() )
-, m_xDeferredOperation(xOriginal)
+ValueMemberNode::ValueMemberNode(data::Accessor const& _aAccessor, DeferredImplRef const& _xDeferred) // must be valid
+: m_aNodeRef( _xDeferred->getOriginalNode(_aAccessor) )
+, m_xDeferredOperation(_xDeferred)
 {}
 //-----------------------------------------------------------------------------
 
 ValueMemberNode::ValueMemberNode(ValueMemberNode const& rOriginal)
-: m_pOriginal(rOriginal.m_pOriginal)
+: m_aNodeRef(rOriginal.m_aNodeRef)
 , m_xDeferredOperation(rOriginal.m_xDeferredOperation)
 {}
 //-----------------------------------------------------------------------------
 ValueMemberNode& ValueMemberNode::operator=(ValueMemberNode const& rOriginal)
 {
-    m_pOriginal             = rOriginal.m_pOriginal;
+    m_aNodeRef              = rOriginal.m_aNodeRef;
     m_xDeferredOperation    = rOriginal.m_xDeferredOperation;
     return *this;
 }
@@ -193,16 +166,16 @@ ValueMemberNode::~ValueMemberNode()
 
 bool ValueMemberNode::isValid() const
 {
-    OSL_ASSERT( m_xDeferredOperation.isEmpty() ||
-                & m_xDeferredOperation->getOriginalNode() == m_pOriginal );
+    OSL_ASSERT( !m_xDeferredOperation.is() ||
+                 m_xDeferredOperation->getOriginalNodeAddress() == m_aNodeRef.address() );
 
-    return m_pOriginal != NULL;
+    return m_aNodeRef.isValid();
 }
 //-----------------------------------------------------------------------------
 
 bool ValueMemberNode::hasChange() const
 {
-    return m_xDeferredOperation.isValid()
+    return m_xDeferredOperation.is()
            && m_xDeferredOperation->isChange();
 }
 //-----------------------------------------------------------------------------
@@ -214,13 +187,13 @@ bool ValueMemberNode::hasChange() const
 
 Name ValueMemberNode::getNodeName() const
 {
-    return makeNodeName( getOriginalNodeName(m_pOriginal), Name::NoValidate() );
+    return m_aNodeRef.getName();
 }
 //-----------------------------------------------------------------------------
 
 Attributes ValueMemberNode::getAttributes() const
 {
-    return getOriginalNodeAttributes(m_pOriginal);
+    return m_aNodeRef.getAttributes();
 }
 //-----------------------------------------------------------------------------
 
@@ -230,17 +203,13 @@ bool ValueMemberNode::isDefault() const
     if (hasChange())
         return m_xDeferredOperation->isToDefault();
 
-    return isOriginalNodeDefault(m_pOriginal);
+    return m_aNodeRef.isDefault();
 }
 //-----------------------------------------------------------------------------
 
 bool ValueMemberNode::canGetDefaultValue() const
 {
-    // Nullable values have a default-default, namely NULL
-    if (this->getAttributes().bNullable)
-        return true;
-
-    return hasOriginalNodeDefault(m_pOriginal);
+    return m_aNodeRef.hasUsableDefault();
 }
 //-----------------------------------------------------------------------------
 
@@ -249,75 +218,87 @@ UnoAny  ValueMemberNode::getValue() const
     if (hasChange())
         return m_xDeferredOperation->getNewValue();
 
-    return getOriginalNodeValue(m_pOriginal);
+    return m_aNodeRef.getValue();
 }
 //-----------------------------------------------------------------------------
 
 UnoAny ValueMemberNode::getDefaultValue() const
 {
-    return getOriginalDefaultValue(m_pOriginal);
+    return m_aNodeRef.getDefaultValue();
 }
 //-----------------------------------------------------------------------------
 
 UnoType ValueMemberNode::getValueType() const
 {
-    return getOriginalValueType(m_pOriginal);
+    return m_aNodeRef.getValueType();
 }
 //-----------------------------------------------------------------------------
 
 
 void ValueMemberUpdate::setValue(UnoAny const& aNewValue)
 {
-    if (m_aMemberNode.m_xDeferredOperation.isValid())
-        m_aMemberNode.m_xDeferredOperation->setValue(aNewValue);
+    if (m_aMemberNode.m_xDeferredOperation.is())
+        m_aMemberNode.m_xDeferredOperation->setValue(aNewValue, m_aMemberNode.m_aNodeRef);
 
-    else
-        setOriginalValue(m_aMemberNode.m_pOriginal,aNewValue);
+    else if (memory::Segment * pUpdatableSegment = m_pStrategy->getDataSegmentForUpdate())
+    {
+        memory::UpdateAccessor aUpdater(pUpdatableSegment);
+        setOriginalValue( aUpdater, m_aMemberNode.m_aNodeRef.address(), aNewValue );
+    }
 }
 //-----------------------------------------------------------------------------
 
 void ValueMemberUpdate::setDefault()
 {
-    if (m_aMemberNode.m_xDeferredOperation.isValid())
-        m_aMemberNode.m_xDeferredOperation->setValueToDefault();
+    if (m_aMemberNode.m_xDeferredOperation.is())
+        m_aMemberNode.m_xDeferredOperation->setValueToDefault(m_aMemberNode.m_aNodeRef);
 
-    else
-        setOriginalToDefault(m_aMemberNode.m_pOriginal);
+    else if (memory::Segment * pUpdatableSegment = m_pStrategy->getDataSegmentForUpdate())
+    {
+        memory::UpdateAccessor aUpdater(pUpdatableSegment);
+        setOriginalToDefault( aUpdater, m_aMemberNode.m_aNodeRef.address() );
+    }
 }
 
 //-----------------------------------------------------------------------------
-// class ValueMemberNode::DeferredImpl : public vos::OReference
+// class ValueMemberNode::DeferredImpl
 //-----------------------------------------------------------------------------
 
-ValueMemberNode::DeferredImpl::DeferredImpl(ValueNode& rOriginal)
-: m_rOriginal(rOriginal)
-, m_aNewValue( getOriginalNodeValue(&m_rOriginal) )
+ValueMemberNode::DeferredImpl::DeferredImpl(data::ValueNodeAccess const& _aValueNode)
+: m_aValueRef(_aValueNode.address())
+, m_aNewValue(_aValueNode.getValue())
 , m_bToDefault(false)
 , m_bChange(false)
 {}
 //-----------------------------------------------------------------------------
 
-void ValueMemberNode::DeferredImpl::setValue(UnoAny const& aNewValue)
+void ValueMemberNode::DeferredImpl::setValue(UnoAny const& aNewValue, data::ValueNodeAccess const& _aOriginalNode)
 {
+    OSL_ENSURE(_aOriginalNode.address() == m_aValueRef, "Incorrect original node passed");
+
     m_aNewValue = aNewValue;
     m_bToDefault = false;
 
-    m_bChange = isOriginalNodeDefault(&m_rOriginal) || aNewValue != getOriginalNodeValue(&m_rOriginal);
+    m_bChange = _aOriginalNode.isDefault() || aNewValue != _aOriginalNode.getValue();
 }
 //-----------------------------------------------------------------------------
 
-void ValueMemberNode::DeferredImpl::setValueToDefault()
+void ValueMemberNode::DeferredImpl::setValueToDefault(data::ValueNodeAccess const& _aOriginalNode)
 {
-    m_aNewValue = getOriginalDefaultValue( &m_rOriginal );
+    OSL_ENSURE(_aOriginalNode.address() == m_aValueRef, "Incorrect original node passed");
+
+    m_aNewValue = _aOriginalNode.getDefaultValue();
     m_bToDefault = true;
 
-    m_bChange = ! isOriginalNodeDefault(&m_rOriginal);
+    m_bChange = !_aOriginalNode.isDefault();
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<ValueChange> ValueMemberNode::DeferredImpl::preCommitChange()
+std::auto_ptr<ValueChange> ValueMemberNode::DeferredImpl::preCommitChange(data::Accessor const& _aAccessor)
 {
     OSL_ENSURE(isChange(), "Trying to commit a non-change");
+
+    data::ValueNodeAccess aOriginalNode = getOriginalNode(_aAccessor);
 
     // first find the mode of the change
     ValueChange::Mode eMode;
@@ -325,29 +306,31 @@ std::auto_ptr<ValueChange> ValueMemberNode::DeferredImpl::preCommitChange()
     if (m_bToDefault)
         eMode = ValueChange::setToDefault;
 
-    else if (! isOriginalNodeDefault(&m_rOriginal))
+    else if (! aOriginalNode.isDefault())
         eMode = ValueChange::changeValue;
 
     else
         eMode = ValueChange::wasDefault;
 
     // now make a ValueChange
-    std::auto_ptr<ValueChange>pChange( new ValueChange( getOriginalNodeName(&m_rOriginal),
-                                                        getOriginalNodeAttributes(&m_rOriginal),
+    std::auto_ptr<ValueChange>pChange( new ValueChange( aOriginalNode.getName().toString(),
+                                                        aOriginalNode.getAttributes(),
                                                         eMode,
                                                         this->getNewValue(),
-                                                        getOriginalNodeValue(&m_rOriginal)
+                                                        aOriginalNode.getValue()
                                                       ) );
 
     return  pChange;
 }
 //-----------------------------------------------------------------------------
 
-void ValueMemberNode::DeferredImpl::finishCommit(ValueChange& rChange)
+void ValueMemberNode::DeferredImpl::finishCommit(ValueChange& rChange, data::Accessor const& _aAccessor)
 {
     OSL_ENSURE(rChange.getNewValue() == this->getNewValue(),"Committed change does not match the intended value");
 
-    m_aNewValue = getOriginalNodeValue(&m_rOriginal);
+    data::ValueNodeAccess aOriginalNode = getOriginalNode(_aAccessor);
+
+    m_aNewValue = aOriginalNode.getValue();
     m_bToDefault = false;
 
     OSL_ENSURE(rChange.getNewValue() == m_aNewValue,"Committed change does not match the actual value");
@@ -355,49 +338,38 @@ void ValueMemberNode::DeferredImpl::finishCommit(ValueChange& rChange)
 }
 //-----------------------------------------------------------------------------
 
-void ValueMemberNode::DeferredImpl::revertCommit(ValueChange& rChange)
+void ValueMemberNode::DeferredImpl::revertCommit(ValueChange& rChange, data::Accessor const& )
 {
+    //data::ValueNodeAccess aOriginalNode = getOriginalNode(_aAccessor):
+
     OSL_ENSURE(rChange.getNewValue() == this->getNewValue(),"Reverted change does not match the intended value");
     OSL_ENSURE(isChange(), "ValueMemeberNode::DeferredImpl: No Changes to revert");
 }
 //-----------------------------------------------------------------------------
 
-void ValueMemberNode::DeferredImpl::failedCommit(ValueChange& )
+void ValueMemberNode::DeferredImpl::failedCommit(ValueChange& , data::Accessor const& _aAccessor)
 {
+    data::ValueNodeAccess aOriginalNode = getOriginalNode(_aAccessor);
+
     // discard the change
-    m_aNewValue = getOriginalNodeValue(&m_rOriginal);
+    m_aNewValue = aOriginalNode.getValue();
     m_bToDefault = false;
 
     m_bChange= false;
 }
 //-----------------------------------------------------------------------------
-
-void ValueMemberNode::DeferredImpl::commitDirect()
+ValueChangeImpl* ValueMemberNode::DeferredImpl::collectChange(data::Accessor const& _aAccessor)
 {
-    if (isChange())
-    {
-        if (m_bToDefault)
-            setOriginalToDefault(&m_rOriginal);
+    data::ValueNodeAccess aOriginalNode = getOriginalNode(_aAccessor);
 
-        else
-            setOriginalValue(&m_rOriginal,m_aNewValue);
-    }
-
-    OSL_ENSURE( m_aNewValue == getOriginalNodeValue( &m_rOriginal ), "Direct Commit: Inconsistent committed value");
-    m_bChange = false;
-}
-//-----------------------------------------------------------------------------
-
-ValueChangeImpl* ValueMemberNode::DeferredImpl::collectChange()
-{
-    UnoAny aOldValue = getOriginalNodeValue(&m_rOriginal);
+    UnoAny aOldValue = aOriginalNode.getValue();
     if (!m_bChange)
     {
         return NULL;
     }
     else if (m_bToDefault)
     {
-        OSL_ASSERT( m_aNewValue == getOriginalDefaultValue(&m_rOriginal) );
+        OSL_ASSERT( m_aNewValue == aOriginalNode.getDefaultValue() );
         return new ValueResetImpl( m_aNewValue, aOldValue );
     }
 

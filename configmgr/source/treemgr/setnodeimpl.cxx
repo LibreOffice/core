@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 17:06:13 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 
 #include "setnodeimpl.hxx"
 
-#ifndef CONFIGMGR_CONFIGNODEFACTORY_HXX_
-#include "nodefactory.hxx"
+#ifndef CONFIGMGR_VIEWBEHAVIORFACTORY_HXX_
+#include "viewfactory.hxx"
 #endif
 
 #ifndef CONFIGMGR_CONFIGPATH_HXX_
@@ -83,19 +83,45 @@
 #include "nodechangeimpl.hxx"
 #endif
 
-#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
-#include "valuenode.hxx"
+#ifndef CONFIGMGR_NODEACCESS_HXX
+#include "nodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_VALUENODEACCESS_HXX
+#include "valuenodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_GROUPNODEACCESS_HXX
+#include "groupnodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_SETNODEACCESS_HXX
+#include "setnodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_NODEVISITOR_HXX
+#include "nodevisitor.hxx"
 #endif
 #ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
 #endif
+#ifndef CONFIGMGR_VIEWACCESS_HXX_
+#include "viewaccess.hxx"
+#endif
+
 #ifndef CONFIGMGR_NODECONVERTER_HXX
 #include "nodeconverter.hxx"
+#endif
+#ifndef _CONFIGMGR_TREEACTIONS_HXX_
+#include "treeactions.hxx"
+#endif
+#ifndef CONFIGMGR_TREE_CHANGEFACTORY_HXX
+#include "treechangefactory.hxx"
+#endif
+#ifndef CONFIGMGR_COLLECTCHANGES_HXX_
+#include "collectchanges.hxx"
 #endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
+
 #ifndef INCLUDED_VECTOR
 #include <vector>
 #define INCLUDED_VECTOR
@@ -105,65 +131,44 @@ namespace configmgr
 {
     namespace configuration
     {
-
 //-------------------------------------------------------------------------
 // initialization helpers
 //-------------------------------------------------------------------------
 namespace
 {
-    typedef AbstractSetNodeImpl::Element Element;
+    using namespace data;
 
-    class CollectElementTrees : NodeModification
+    typedef SetNodeImpl::Element Element;
+
+    class CollectElementTrees : SetVisitor
     {
     public:
-        CollectElementTrees(NodeFactory& rFactory,
+        CollectElementTrees(view::ViewStrategyRef const& _xStrategy,
                             TreeImpl* pParentTree, NodeOffset nPos,
                             TreeDepth nDepth,
                             TemplateHolder const& aTemplate,
                             TemplateProvider const& aTemplateProvider)
         : m_aTemplate(aTemplate)
         , m_aTemplateProvider(aTemplateProvider)
-        , m_rFactory(rFactory)
+        , m_xStrategy(_xStrategy)
         , m_pParentTree(pParentTree)
         , m_nPos(nPos)
         , m_nDepth(nDepth)
         {
-            OSL_ENSURE(m_aTemplate.isValid(),"WARNING: Collecting a set without a template");
+            OSL_ENSURE(m_aTemplate.is(),"WARNING: Collecting a set without a template");
         }
 
-        void collect(ISubtree& aSet)
+        void collect(SetNodeAccess const& _aNode)
         {
-            NodeModification::applyToChildren(aSet);
+            this->visitElements(_aNode);
         }
 
-        Element create(INode& aNode)
-        {
-            OSL_ENSURE(collection.empty(),"warning: trying to reuse a full collection");
-
-            collection.resize(1); // make an empty one for case of failure
-            NodeModification::applyToNode(aNode);
-
-            OSL_ENSURE(collection.size()==2,"warning: could not create an element");
-            return collection.back();
-        }
-
-        Element create(ISubtree& aNode)
+        Element create(TreeAccessor const & _aElementTree)
         {
             OSL_ENSURE(collection.empty(),"warning: trying to reuse a full collection");
 
             collection.resize(1); // make an empty one for case of failure
-            handle(aNode);
-
-            OSL_ENSURE(collection.size()==2,"warning: could not create an element");
-            return collection.back();
-        }
-
-        Element create(ValueNode& aNode)
-        {
-            OSL_ENSURE(collection.empty(),"warning: trying to reuse a full collection");
-
-            collection.resize(1); // make an empty one for case of failure
-            handle(aNode);
+            this->visitTree(_aElementTree);
 
             OSL_ENSURE(collection.size()==2,"warning: could not create an element");
             return collection.back();
@@ -172,13 +177,16 @@ namespace
         typedef vector<Element> Collection;
         Collection collection;
     private:
-        void handle(ValueNode& rValue);
-        void handle(ISubtree& rTree);
+        Result handle(TreeAccessor const& _aElement);
 
-        void add(INode& rNode);
-        TemplateHolder      m_aTemplate;
-        TemplateProvider    m_aTemplateProvider;
-        NodeFactory&        m_rFactory;
+        Result handle(NodeAccess const& _aNonValue);
+        Result handle(ValueNodeAccess const& _aValue);
+
+        void add(TreeAccessor const& _aNode);
+
+        TemplateHolder          m_aTemplate;
+        TemplateProvider        m_aTemplateProvider;
+        view::ViewStrategyRef   m_xStrategy;
         TreeImpl*   m_pParentTree;
         NodeOffset  m_nPos;
         TreeDepth   m_nDepth;
@@ -192,27 +200,27 @@ namespace
         if (!aTree.isValid()) throw Exception("INTERNAL ERROR: Unexpected null tree in set node");
 
         OSL_ENSURE(aTree->nodeCount(), "INTERNAL ERROR: Unexpected empty (!) tree constructed in set node");
-        OSL_ENSURE(aTree->isValidNode(aTree->root()), "INTERNAL ERROR: Corrupt tree constructed in set node");
+        OSL_ENSURE(aTree->isValidNode(aTree->root_()), "INTERNAL ERROR: Corrupt tree constructed in set node");
 
         return aTree->getSimpleRootName();
     }
     //-------------------------------------------------------------------------
 
     static
-    bool isInDefault(ElementTreeImpl* pTree)
+    bool isInDefault(SetEntry const& _anEntry)
     {
-        if (pTree == NULL) return false;
+        if (!_anEntry.isValid()) return false;
 
-        node::Attributes aAttributes = pTree->node(pTree->root())->attributes();
+        node::Attributes aAttributes = _anEntry.getTreeView().getRootAttributes();
 
         bool bReplaced = aAttributes.isReplacedForUser();
 
         return !bReplaced;
     }
     //-------------------------------------------------------------------------
-    void CollectElementTrees::handle(ValueNode& rValue)
+    CollectElementTrees::Result CollectElementTrees::handle(ValueNodeAccess const& _aValue)
     {
-        if (m_aTemplate.isValid())
+        if (m_aTemplate.is())
         {
             OSL_ENSURE(m_aTemplate->isInstanceTypeKnown(),"ERROR: Template must have a validated type when building a set.");
             OSL_ENSURE(m_aTemplate->isInstanceValue(),"ERROR: Found a value node in a Complex Template Set");
@@ -220,7 +228,7 @@ namespace
             if (!m_aTemplate->isInstanceValue())
                 throw Exception("INTERNAL ERROR: Corrupt tree contains a value node within a template-set");
 
-            UnoType aValueType = rValue.getValueType();
+            UnoType aValueType = _aValue.getValueType();
             UnoType aExpectedType = m_aTemplate->getInstanceType();
 
             if (aValueType.getTypeClass() != aExpectedType.getTypeClass() &&
@@ -231,12 +239,13 @@ namespace
             //  throw TypeMismatch(aValueType.getTypeName(),aExpectedType.getTypeName(), "INTERNAL ERROR: - Corrupt tree contains mistyped value node within a value-set")));
             }
         }
-        add(rValue);
+        return CONTINUE;
     }
     //-------------------------------------------------------------------------
-    void CollectElementTrees::handle(ISubtree& rTree)
+    CollectElementTrees::Result CollectElementTrees::handle(NodeAccess const& _aNonValue)
     {
-        if (m_aTemplate.isValid())
+        OSL_ENSURE(!ValueNodeAccess::isInstance(_aNonValue),"Unexpected: Value-node dispatched to wrong handler");
+        if (m_aTemplate.is())
         {
             OSL_ENSURE(m_aTemplate->isInstanceTypeKnown(),"ERROR: Template must have a validated type when building a set.");
             OSL_ENSURE(!m_aTemplate->isInstanceValue(),"ERROR: Found a non-leaf node in a Value Set");
@@ -245,24 +254,34 @@ namespace
                 throw Exception("INTERNAL ERROR: Corrupt tree contains a non-leaf node within a value-set");
 
         }
-        add(rTree);
+        return CONTINUE;
     }
     //-------------------------------------------------------------------------
-    void CollectElementTrees::add(INode& rNode)
+    CollectElementTrees::Result CollectElementTrees::handle(TreeAccessor const& _aTree)
     {
-        node::Attributes const aAttributes = rNode.getAttributes();
+        // check the node type
+        Result aResult = this->visitNode( _aTree.getRootNode() );
+
+        if (aResult == CONTINUE) this->add(_aTree);
+
+        return aResult;
+    }
+    //-------------------------------------------------------------------------
+    void CollectElementTrees::add(TreeAccessor const& _aTree)
+    {
+        node::Attributes const aAttributes = _aTree.getAttributes();
 
         bool bWritable  = aAttributes.bWritable;
         bool bInDefault = !aAttributes.isReplacedForUser();
 
-        NodeFactory& rNodeFactory = bWritable ? m_rFactory : NodeType::getReadAccessFactory();
+        view::ViewStrategyRef xStrategy = bWritable ? m_xStrategy : view::createReadOnlyStrategy(m_pParentTree ? m_pParentTree->getDataSegment() : NULL);
 
         ElementTreeImpl * pNewTree;
         if (m_pParentTree)
-            pNewTree = new ElementTreeImpl(rNodeFactory, *m_pParentTree, m_nPos, rNode,m_nDepth, m_aTemplate, m_aTemplateProvider);
+            pNewTree = new ElementTreeImpl(xStrategy, *m_pParentTree, m_nPos, _aTree,m_nDepth, m_aTemplate, m_aTemplateProvider);
 
         else
-            pNewTree = new ElementTreeImpl(rNodeFactory, rNode,m_nDepth, m_aTemplate, m_aTemplateProvider);
+            pNewTree = new ElementTreeImpl(xStrategy, _aTree, m_nDepth, m_aTemplate, m_aTemplateProvider);
 
         collection.push_back( Element(pNewTree,bInDefault));
     }
@@ -348,25 +367,134 @@ ElementSet::Element ElementSet::removeElement(Name const& aName)
 }
 //-------------------------------------------------------------------------
 
-//-------------------------------------------------------------------------
-// class AbstractSetNodeImpl
+//-----------------------------------------------------------------------------
+// class SetEntry
+//-----------------------------------------------------------------------------
+
+SetEntry::SetEntry(data::Accessor const& _aAccessor, ElementTreeImpl* pTree_)
+: m_aAccessor(_aAccessor), m_pTree(pTree_)
+{
+    OSL_ENSURE(pTree_ == 0 || pTree_->isValidNode(pTree_->root_()),
+                "INTERNAL ERROR: Invalid empty tree used for SetEntry ");
+}
+
+//-----------------------------------------------------------------------------
+
+view::ViewTreeAccess SetEntry::getTreeView() const
+{
+    OSL_ENSURE(isValid(), "Cannot get View Access for NULL SetEntry");
+    return view::ViewTreeAccess(m_aAccessor,*m_pTree);
+}
+
+//-----------------------------------------------------------------------------
 //-------------------------------------------------------------------------
 
-AbstractSetNodeImpl::AbstractSetNodeImpl(ISubtree& rOriginal, Template* pTemplate)
-: SetNodeImpl(rOriginal,pTemplate)
+//-------------------------------------------------------------------------
+// class SetNodeImpl
+//-------------------------------------------------------------------------
+
+SetNodeImpl::SetNodeImpl(data::SetNodeAddress const& _aNodeRef,Template* pTemplate)
+: NodeImpl(_aNodeRef)
+,m_aTemplate(pTemplate)
+,m_aTemplateProvider()
+,m_pParentTree(0)
+,m_nContextPos(0)
+,m_aInit(0)
 {
 }
-//-------------------------------------------------------------------------
+    // unbind the original
+//-----------------------------------------------------------------------------
 
-AbstractSetNodeImpl::AbstractSetNodeImpl(AbstractSetNodeImpl& rOriginal)
-: SetNodeImpl(rOriginal)
+SetNodeImpl::~SetNodeImpl()
 {
-    // steal the data (losing pending changes)
-    m_aDataSet.swap(rOriginal.m_aDataSet);
 }
-//-------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
-bool AbstractSetNodeImpl::doIsEmpty() const
+void SetNodeImpl::rebuildFrom(SetNodeImpl& rOldData,data::SetNodeAccess const& _aNewNode,data::SetNodeAccess const& _aOldNode)
+{
+    m_aTemplate         = rOldData.m_aTemplate;
+    m_aTemplateProvider = rOldData.m_aTemplateProvider;
+    m_pParentTree       = rOldData.m_pParentTree;
+    m_nContextPos       = rOldData.m_nContextPos;
+    m_aInit             = rOldData.m_aInit;
+
+    if (rOldData.implHasLoadedElements())
+    {
+        rOldData.doTransferElements(m_aDataSet);
+        implRebuildElements(_aNewNode,_aOldNode);
+        OSL_ASSERT(this->implHasLoadedElements());
+    }
+    else
+        OSL_ASSERT(!this->implHasLoadedElements());
+
+    rOldData.m_aTemplate.clear();
+    rOldData.m_aTemplateProvider = TemplateProvider();
+    rOldData.m_pParentTree = 0;
+    rOldData.m_nContextPos = 0;
+
+}
+
+//-----------------------------------------------------------------------------
+void SetNodeImpl::doTransferElements(ElementSet& rReplacement)
+{
+    m_aDataSet.swap(rReplacement);
+}
+//-----------------------------------------------------------------------------
+
+void SetNodeImpl::implRebuildElements(data::SetNodeAccess const& _aNewNode,data::SetNodeAccess const& _aOldNode)
+{
+    OSL_ENSURE(m_pParentTree,"Cannot rebuild set without context tree");
+    rtl::Reference<view::ViewStrategy> xNewStrategy = m_pParentTree->getViewBehavior();
+
+    for(ElementSet::Iterator it = m_aDataSet.begin(), stop = m_aDataSet.end();
+        it != stop;
+        ++it)
+    {
+        OSL_ASSERT(it->isValid());
+        if (!it->isValid()) continue;
+
+        Element aElement = *it;
+        Name aName = aElement->getSimpleRootName();
+
+        data::TreeAccessor const& aNewElementAccess = _aNewNode.getElementTree(aName);
+        data::TreeAccessor const& aOldElementAccess = aElement->getOriginalTreeAccess(_aOldNode.accessor());
+        OSL_ASSERT(aNewElementAccess.isValid());
+        OSL_ASSERT(aOldElementAccess.isValid());
+
+        aElement->rebuild(xNewStrategy,aNewElementAccess,aOldElementAccess.accessor());
+    }
+}
+//-----------------------------------------------------------------------------
+
+data::SetNodeAccess SetNodeImpl::getDataAccess(data::Accessor const& _aAccessor) const
+{
+    using namespace data;
+
+    NodeAccess aNodeAccess = getOriginalNodeAccess(_aAccessor);
+    OSL_ASSERT(SetNodeAccess::isInstance(aNodeAccess));
+
+    SetNodeAccess aSetAccess(aNodeAccess);
+    OSL_ASSERT(aSetAccess.isValid());
+
+    return aSetAccess;
+}
+//-----------------------------------------------------------------------------
+
+TreeImpl*   SetNodeImpl::getParentTree() const
+{
+    OSL_ENSURE(m_pParentTree,"Set Node: Parent tree not set !");
+    return m_pParentTree;
+}
+//-----------------------------------------------------------------------------
+
+NodeOffset  SetNodeImpl::getContextOffset() const
+{
+    OSL_ENSURE(m_nContextPos,"Set Node: Position within parent tree not set !");
+    return m_nContextPos;
+}
+//-----------------------------------------------------------------------------
+
+bool SetNodeImpl::doIsEmpty() const
 {
     /*
     for(ElementSet::Iterator it = m_aDataSet.begin(), stop = m_aDataSet.end();
@@ -382,122 +510,60 @@ bool AbstractSetNodeImpl::doIsEmpty() const
 }
 //-------------------------------------------------------------------------
 
-SetEntry AbstractSetNodeImpl::doFindElement(Name const& aName)
+ElementTreeImpl* SetNodeImpl::doFindElement(Name const& aName)
 {
-    return SetEntry( m_aDataSet.findElement(aName).getBodyPtr() );
+    return m_aDataSet.findElement(aName).get();
+}
+//-------------------------------------------------------------------------
+void SetNodeImpl::doDifferenceToDefaultState(data::Accessor const& _aAccessor, SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree)
+{
+    OSL_ENSURE(implHasLoadedElements(),"Should not query difference to default state for set that is not loaded");
+    implDifferenceToDefaultState(_aAccessor,_rChangeToDefault,_rDefaultTree);
+}
+//-----------------------------------------------------------------------------
+
+SetElementChangeImpl* SetNodeImpl::doAdjustToAddedElement(data::Accessor const& _aAccessor, Name const& aName, AddNode const& aAddNodeChange, Element const & aNewElement)
+{
+    return implAdjustToAddedElement(_aAccessor,aName,aNewElement,aAddNodeChange.isReplacing());
 }
 //-------------------------------------------------------------------------
 
-void AbstractSetNodeImpl::doClearElements()
-{
-    m_aDataSet.clearElements();
-}
-//-------------------------------------------------------------------------
-
-void AbstractSetNodeImpl::implInitElement(Element const& aNewElement)
-{
-    OSL_PRECOND(aNewElement.isValid(),"INTERNAL ERROR: Set element is NULL");
-    OSL_ENSURE(!aNewElement->isFree(),"INTERNAL ERROR: Set element is free-floating");
-
-    OSL_ENSURE(aNewElement->getContextTree() == getParentTree(),"INTERNAL ERROR: Set element has wrong context tree");
-    OSL_ENSURE(aNewElement->getContextNode() == getContextOffset(),"INTERNAL ERROR: Set element has wrong context node");
-
-    Name aName = validatedName(aNewElement);
-
-    OSL_ENSURE(!aName.isEmpty(),"INTERNAL ERROR: Unnamed element in set");
-    OSL_ENSURE(m_aDataSet.getElement(aName) == 0,"INTERNAL ERROR: Duplicate element name in set");
-
-    m_aDataSet.insertElement(aName,aNewElement);
-}
-//-------------------------------------------------------------------------
-
-void AbstractSetNodeImpl::doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges,
-                                            TreeDepth nDepth)
-{
-    for (SubtreeChange::ChildIterator it = rExternalChanges.begin(); it != rExternalChanges.end(); ++it)
-    {
-        implAdjustToElementChange(rLocalChanges, *it, nDepth);
-    }
-}
-//-------------------------------------------------------------------------
-
-void AbstractSetNodeImpl::implAdjustToElementChange(NodeChangesInformation& rLocalChanges, Change const& aChange, TreeDepth nDepth)
-{
-    OSL_ENSURE( implHasLoadedElements() , "Unexpected call: Processing element change in uninitialized set");
-
-    Name aName = makeElementName( aChange.getNodeName(), Name::NoValidate() );
-
-    NodeChangeImpl* pThisChange = 0;
-    if (aChange.ISA(AddNode))
-    {
-        AddNode const& aAddNode = static_cast<AddNode const&>(aChange);
-
-        Element aNewElement = doMakeAdditionalElement(aAddNode,nDepth);
-
-        pThisChange = doAdjustToAddedElement(aName, aAddNode,aNewElement);
-    }
-    else if (aChange.ISA(RemoveNode))
-    {
-        RemoveNode const& aRemoveNode = static_cast<RemoveNode const&>(aChange);
-        pThisChange = doAdjustToRemovedElement(aName, aRemoveNode);
-    }
-    else
-    {
-        if (nDepth > 0)
-        {
-            doAdjustChangedElement(rLocalChanges,aName, aChange);
-        }
-        else
-        {
-            SetEntry aCheck = doFindElement(aName);
-
-            if (aCheck.isValid()) // found even beyond nDepth
-            {
-                doAdjustChangedElement(rLocalChanges,aName, aChange);
-            }
-        }
-    }
-
-    if (pThisChange)
-    {
-        addLocalChangeHelper( rLocalChanges, NodeChange(pThisChange) );
-    }
-}
-
-// Default implementations
-//-------------------------------------------------------------------------
-
-NodeChangeImpl* AbstractSetNodeImpl::doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement)
+SetElementChangeImpl* SetNodeImpl::implAdjustToAddedElement(data::Accessor const& _aAccessor, Name const& aName, Element const & aNewElement, bool _bReplacing)
 {
     OSL_ENSURE( validatedName(aNewElement) == aName, "Unexpected Name on new element" );
 
     if (Element* pOriginal = getStoredElement(aName))
     {
-        OSL_ENSURE( aAddNodeChange.isReplacing(), "Added Element already exists - replacing" );
+        OSL_ENSURE( _bReplacing, "Added Element already exists - replacing" );
 
-        Element aOldElement = *pOriginal;
-        implReplaceElement(aName,aNewElement, false);
+        Element aOldElement = this->replaceElement(aName,aNewElement);
 
-        return doCreateReplace(aName,aNewElement,aOldElement);
+        return implCreateReplace(_aAccessor, aName,aNewElement,aOldElement);
     }
     else
     {
-        OSL_ENSURE( !aAddNodeChange.isReplacing(), "Replaced Element doesn't exist - simply adding" );
-        implInsertElement(aName,aNewElement, false);
+        OSL_ENSURE( !_bReplacing, "Replaced Element doesn't exist - simply adding" );
+        this->insertElement(aName,aNewElement);
 
-        return doCreateInsert(aName,aNewElement);
+        return implCreateInsert(_aAccessor, aName,aNewElement);
     }
 }
 //-------------------------------------------------------------------------
 
-NodeChangeImpl* AbstractSetNodeImpl::doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange)
+SetElementChangeImpl* SetNodeImpl::doAdjustToRemovedElement(data::Accessor const& _aAccessor, Name const& aName, RemoveNode const& aRemoveNodeChange)
+{
+    return implAdjustToRemovedElement(_aAccessor,aName);
+}
+//-------------------------------------------------------------------------
+
+SetElementChangeImpl* SetNodeImpl::implAdjustToRemovedElement(data::Accessor const& _aAccessor, Name const& aName)
 {
     if (Element* pOriginal = getStoredElement(aName))
     {
         Element aOldElement = *pOriginal;
-        implRemoveElement(aName, false);
+        this->removeElement(aName);
 
-        return doCreateRemove(aName,aOldElement);
+        return implCreateRemove(_aAccessor, aName,aOldElement);
     }
     else
     {
@@ -507,97 +573,107 @@ NodeChangeImpl* AbstractSetNodeImpl::doAdjustToRemovedElement(Name const& aName,
 }
 //-------------------------------------------------------------------------
 
-NodeChangeImpl* AbstractSetNodeImpl::doCreateInsert(Name const& aName, Element const& aNewElement) const
+SetElementChangeImpl* SetNodeImpl::implCreateInsert(data::Accessor const& _aAccessor, Name const& aName, Element const& aNewElement) const
 {
     Path::Component aFullName = Path::makeCompositeName(aName, this->getElementTemplate()->getName());
 
     SetElementChangeImpl* pRet = new SetInsertImpl(aFullName, aNewElement.tree, true);
-    pRet->setTarget( getParentTree(), getContextOffset() );
+    pRet->setTarget( _aAccessor, getParentTree(), getContextOffset() );
     return pRet;
 }
 //-------------------------------------------------------------------------
 
-NodeChangeImpl* AbstractSetNodeImpl::doCreateReplace(Name const& aName, Element const& aNewElement, Element const& aOldElement) const
+SetElementChangeImpl* SetNodeImpl::implCreateReplace(data::Accessor const& _aAccessor, Name const& aName, Element const& aNewElement, Element const& aOldElement) const
 {
     Path::Component aFullName = Path::makeCompositeName(aName, this->getElementTemplate()->getName());
 
     SetElementChangeImpl* pRet = new SetReplaceImpl(aFullName, aNewElement.tree, aOldElement.tree);
-    pRet->setTarget( getParentTree(), getContextOffset() );
+    pRet->setTarget( _aAccessor, getParentTree(), getContextOffset() );
     return pRet;
 }
 //-------------------------------------------------------------------------
 
-NodeChangeImpl* AbstractSetNodeImpl::doCreateRemove(Name const& aName, Element const& aOldElement) const
+SetElementChangeImpl* SetNodeImpl::implCreateRemove(data::Accessor const& _aAccessor, Name const& aName, Element const& aOldElement) const
 {
     Path::Component aFullName = Path::makeCompositeName(aName, this->getElementTemplate()->getName());
 
     SetElementChangeImpl* pRet = new SetRemoveImpl(aFullName, aOldElement.tree);
-    pRet->setTarget( getParentTree(), getContextOffset() );
+    pRet->setTarget( _aAccessor, getParentTree(), getContextOffset() );
     return pRet;
 }
 //-------------------------------------------------------------------------
 
-void AbstractSetNodeImpl::implInsertElement(Name const& aName, Element const& aNewElement,bool bCommit)
+void SetNodeImpl::insertElement(Name const& aName, Element const& aNewElement)
 {
-    attach(aNewElement,aName,bCommit);
+    attach(aNewElement,aName);
     try
     {
         m_aDataSet.insertElement(aName,aNewElement);
     }
     catch (std::exception&)
     {
-        detach(aNewElement,bCommit);
+        detach(aNewElement);
         throw;
     }
 }
 //-------------------------------------------------------------------------
 
-void    AbstractSetNodeImpl::implReplaceElement(Name const& aName, Element const& aNewElement,bool bCommit)
+Element SetNodeImpl::replaceElement(Name const& aName, Element const& aNewElement)
 {
-    attach(aNewElement,aName,bCommit);
+    attach(aNewElement,aName);
     try
     {
-        detach(m_aDataSet.replaceElement(aName,aNewElement),bCommit);
+        Element aOldElement = m_aDataSet.replaceElement(aName,aNewElement);
+        detach(aOldElement);
+        return aOldElement;
     }
     catch (std::exception&)
     {
-        detach(aNewElement,bCommit);
+        detach(aNewElement);
         throw;
     }
 }
 //-------------------------------------------------------------------------
 
-void    AbstractSetNodeImpl::implRemoveElement(Name const& aName,bool bCommit)
+Element SetNodeImpl::removeElement(Name const& aName)
 {
-    detach(m_aDataSet.removeElement(aName),bCommit);
+    Element aOldElement = m_aDataSet.removeElement(aName);
+    detach(aOldElement);
+    return aOldElement;
 }
 //-------------------------------------------------------------------------
-
-void    AbstractSetNodeImpl::implMakeIndirect(bool bIndirect)
+/*
+void    SetNodeImpl::implMakeIndirect(bool bIndirect)
 {
     for(ElementSet::Iterator it = m_aDataSet.begin(), stop = m_aDataSet.end();
         it != stop;
         ++it)
     {
-        (*it)->makeIndirect(bIndirect);
+        view::ViewTreeAccess accessor = (*it)->getAccess();
+        if (bIndirect)
+            accessor.makeIndirect();
+
+        else
+            accessor.makeDirect();
+
     }
 }
 //-------------------------------------------------------------------------
-
-SetNodeVisitor::Result  AbstractSetNodeImpl::doDispatchToElements(SetNodeVisitor& aVisitor)
+*/
+SetNodeVisitor::Result  SetNodeImpl::doDispatchToElements(data::Accessor const& _aAccessor, SetNodeVisitor& aVisitor)
 {
     SetNodeVisitor::Result eRet = SetNodeVisitor::CONTINUE;
     for(ElementSet::Iterator it = m_aDataSet.begin(), stop = m_aDataSet.end();
         it != stop && eRet != SetNodeVisitor::DONE;
         ++it)
     {
-        eRet = aVisitor.visit( SetEntry(it->getBodyPtr()) );
+        eRet = aVisitor.visit( SetEntry(_aAccessor, it->get()) );
     }
     return eRet;
 }
 //-----------------------------------------------------------------------------
 
-void AbstractSetNodeImpl::attach(Element const& aNewElement, Name const& aName, bool bCommit)
+void SetNodeImpl::attach(Element const& aNewElement, Name const& aName)
 {
     // check for name (this also reject NULLs, therefore it should go first)
     Name aActualName = validatedName(aNewElement);
@@ -642,88 +718,51 @@ void AbstractSetNodeImpl::attach(Element const& aNewElement, Name const& aName, 
         }
     }
 
-    if (bCommit) aNewElement->attachTo( getOriginalSetNode(), aName );
+//  if (bCommit) aNewElement->attachTo( directSetAccess_hack(getOriginalNodeAddress()), aName );
 }
 //-------------------------------------------------------------------------
 
-void AbstractSetNodeImpl::detach(Element const& aOldElement, bool bCommit)
+void SetNodeImpl::detach(Element const& aOldElement)
 {
     if (aOldElement.isValid())
     {
         aOldElement->detachTree();
-        if (bCommit) aOldElement->detachFrom(getOriginalSetNode(), validatedName(aOldElement));
+//      if (bCommit) aOldElement->detachFrom( directSetAccess_hack(getOriginalNodeAddress()), validatedName(aOldElement));
     }
 }
 //-------------------------------------------------------------------------
 
-Element AbstractSetNodeImpl::entryToElement(SetEntry const& _anEntry)
+Element SetNodeImpl::entryToElement(SetEntry const& _anEntry)
 {
     ElementTreeImpl * pTree = _anEntry.tree();
-    return Element(pTree, isInDefault(pTree));
+    return Element(pTree, isInDefault(_anEntry));
 }
 //-------------------------------------------------------------------------
 
 
-//-------------------------------------------------------------------------
-// class TreeSetNodeImpl/ValueSetNodeImpl
-//-------------------------------------------------------------------------
-
-void TreeSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& aNewEntry)
+SetElementChangeImpl* SetNodeImpl::doAdjustChangedElement(data::Accessor const & _aAccessor, NodeChangesInformation& rLocalChanges, Name const& aName, Change const& _aElementChange)
 {
-    AbstractSetNodeImpl::implInsertElement( aName, implMakeElement(aNewEntry), true);
-}
-//-------------------------------------------------------------------------
+    SetElementChangeImpl* pThisChange  = NULL;
 
-void ValueSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& aNewEntry)
-{
-    AbstractSetNodeImpl::implInsertElement( aName, implMakeElement(aNewEntry), true);
-}
-//-------------------------------------------------------------------------
-
-void TreeSetNodeImpl::doRemoveElement(Name const& aName)
-{
-    AbstractSetNodeImpl::implRemoveElement( aName, true );
-}
-//-------------------------------------------------------------------------
-
-void ValueSetNodeImpl::doRemoveElement(Name const& aName)
-{
-    AbstractSetNodeImpl::implRemoveElement( aName, true );
-}
-//-------------------------------------------------------------------------
-
-void TreeSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange)
-{
     if (Element* pElement = getStoredElement(aName))
     {
         OSL_ASSERT(pElement->isValid());
 
-        if (aChange.ISA(SubtreeChange))
+        if (_aElementChange.ISA(SubtreeChange))
         {
-            SubtreeChange const& aSubtreeChange = static_cast<SubtreeChange const&>(aChange);
+            //OSL_ENSURE( !containsValues(), "Unexpected kind of change: Tree change applied to value set element" );
+
+            SubtreeChange const& aSubtreeChange = static_cast<SubtreeChange const&>(_aElementChange);
             // recurse to element tree
-            (*pElement)->adjustToChanges(rLocalChanges,aSubtreeChange);
+            view::Tree aElementTree(_aAccessor,**pElement);
+
+            view::getViewBehavior(aElementTree)->adjustToChanges(rLocalChanges, view::getRootNode(aElementTree), aSubtreeChange);
         }
-        else
-            OSL_ENSURE( false, "Unexpected kind of change to set element" );
-    }
-    else
-    {
-        // could be changed to do an insert instead (?)
-        OSL_ENSURE( false, "Changed Element doesn't exist - (and not adding now)" );
-    }
-}
-//-------------------------------------------------------------------------
-
-void ValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange)
-{
-    if (Element* pElement = getStoredElement(aName))
-    {
-        OSL_ASSERT(pElement->isValid());
-
-        if ( aChange.ISA(ValueChange) )
+        else if ( _aElementChange.ISA(ValueChange) )
         {
-            ValueChange const& aValueChange = static_cast<ValueChange const&>(aChange);
+            //OSL_ENSURE( containsValues(), "Unexpected kind of change: Value change applied to tree set element" );
+
+            ValueChange const& aValueChange = static_cast<ValueChange const&>(_aElementChange);
 
             // make an element for the old element
             std::auto_ptr<ValueNode> aOldNode = OTreeNodeConverter().createCorrespondingNode(aValueChange);
@@ -731,20 +770,19 @@ void ValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChan
 
             bool bWasDefault = (aValueChange.getMode() == ValueChange::wasDefault);
 
-            std::auto_ptr<INode> aOldNodeBase( aOldNode.release() );
+            std::auto_ptr<INode> aBasePtr(aOldNode.release());
+            Name aElementTypeName = getElementTemplate()->getName();
+            data::TreeSegment aOldBaseTree = data::TreeSegment::createNew( aBasePtr, aElementTypeName.toString() );
 
-            ElementTreeHolder aOldElement = new ElementTreeImpl(aOldNodeBase, getElementTemplate(), getTemplateProvider());
+            ElementTreeHolder aOldElement = new ElementTreeImpl(aOldBaseTree, getElementTemplate(), getTemplateProvider());
 
-            OSL_ASSERT(aOldNodeBase.get() == NULL); // the tree took ownership
+            OSL_ASSERT(aOldBaseTree.is()); // the tree took ownership
             OSL_ASSERT(aOldElement->isFree()); // the tree is free-floating
 
-            NodeChangeImpl* pThisChange = this->doCreateReplace(aName,*pElement,Element(aOldElement,bWasDefault));
-
-            if (pThisChange)
-                addLocalChangeHelper( rLocalChanges, NodeChange(pThisChange) );
+            pThisChange = implCreateReplace(_aAccessor,aName,*pElement,Element(aOldElement,bWasDefault));
         }
         else
-            OSL_ENSURE( false, "Unexpected kind of change to value set element" );
+            OSL_ENSURE( false, "Unexpected kind of change to set element" );
 
     }
     else
@@ -752,163 +790,329 @@ void ValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChan
         // could be changed to do an insert instead (?)
         OSL_ENSURE( false, "Changed Element doesn't exist - (and not adding now)" );
     }
+    return pThisChange;
 }
 //-------------------------------------------------------------------------
 
-void TreeSetNodeImpl::initHelper( NodeFactory& rFactory, ISubtree& rTree, TreeDepth nDepth)
+bool SetNodeImpl::implHasLoadedElements() const
 {
-    CollectElementTrees aCollector( rFactory, getParentTree(), getContextOffset(),
+    return m_aInit == 0; // cannot check whether init was called though ...
+}
+//-----------------------------------------------------------------------------
+
+void SetNodeImpl::initElements(TemplateProvider const& aTemplateProvider,TreeImpl& rParentTree,NodeOffset nPos,TreeDepth nDepth)
+{
+    OSL_ENSURE(m_pParentTree == 0 || m_pParentTree == &rParentTree, "WARNING: Set Node: Changing parent");
+    OSL_ENSURE(m_nContextPos == 0 || m_nContextPos == nPos,         "WARNING: Set Node: Changing location within parent");
+    m_pParentTree = &rParentTree;
+    m_nContextPos = nPos;
+
+    OSL_ENSURE(!m_aTemplateProvider.isValid() || !implHasLoadedElements(),"ERROR: Reinitializing set"); //doClearElements();
+    OSL_ASSERT(doIsEmpty()); //doClearElements();
+
+    OSL_ENSURE(!m_aTemplate.is() || m_aTemplate->isInstanceTypeKnown(),"ERROR: Need a type-validated template to fill a set");
+    OSL_ENSURE(aTemplateProvider.isValid() || nDepth == 0 || m_aTemplate->isInstanceValue(), "ERROR: Need a template provider to fill a non-primitive set");
+
+    if (nDepth > 0) // dont set a template provider for zero-depth sets
+    {
+        m_aInit = nDepth;
+        m_aTemplateProvider = aTemplateProvider;
+    }
+}
+//-----------------------------------------------------------------------------
+
+bool SetNodeImpl::implLoadElements(data::Accessor const& _aAccessor)
+{
+    if (m_aInit > 0)
+    {
+        OSL_ENSURE(!getElementTemplate().is() || getElementTemplate()->isInstanceTypeKnown(),"ERROR: Need a type-validated template to fill a set");
+        OSL_ENSURE(getTemplateProvider().isValid() || getElementTemplate()->isInstanceValue(), "ERROR: Need a template provider to fill a non-primitive set");
+
+        TreeDepth nDepth = m_aInit;
+        implInitElements(this->getDataAccess(_aAccessor),nDepth);
+        m_aInit = 0;
+
+    }
+    OSL_ASSERT(implHasLoadedElements());
+
+    return m_aInit == 0;
+}
+//-----------------------------------------------------------------------------
+
+void SetNodeImpl::implEnsureElementsLoaded(data::Accessor const& _aAccessor)
+{
+    if (!implLoadElements(_aAccessor))
+        throw ConstraintViolation("Trying to access set elements beyond the loaded nestíng level");
+}
+//-----------------------------------------------------------------------------
+
+void SetNodeImpl::implInitElements( data::SetNodeAccess const& _aNode, TreeDepth nDepth)
+{
+    TreeImpl* pThisTree = getParentTree();
+
+    OSL_ENSURE(pThisTree,"Cannot load elements of a set that has no parent tree");
+
+    CollectElementTrees aCollector( pThisTree->getViewBehavior(), pThisTree, getContextOffset(),
                                     nDepth, getElementTemplate(), getTemplateProvider() );
-    aCollector.collect(rTree);
+    aCollector.collect(_aNode);
 
     typedef CollectElementTrees::Collection::const_iterator Iter;
     for(Iter it = aCollector.collection.begin(), stop = aCollector.collection.end();
         it != stop; ++it)
     {
-        implInitElement(implValidateElement(*it));
+        implInitElement(implValidateElement(_aNode.accessor(),*it));
     }
 }
 //-------------------------------------------------------------------------
 
-void ValueSetNodeImpl::initHelper(NodeFactory& rFactory, ISubtree& rSet)
+void SetNodeImpl::implInitElement(Element const& aNewElement)
 {
-    CollectElementTrees aCollector( rFactory, getParentTree(), getContextOffset(),
-                                    0, getElementTemplate(), getTemplateProvider() );
-    aCollector.collect(rSet);
+    OSL_PRECOND(aNewElement.isValid(),"INTERNAL ERROR: Set element is NULL");
+    OSL_ENSURE(!aNewElement->isFree(),"INTERNAL ERROR: Set element is free-floating");
 
-    typedef CollectElementTrees::Collection::const_iterator Iter;
-    for(Iter it = aCollector.collection.begin(), stop = aCollector.collection.end();
-        it != stop; ++it)
-    {
-        implInitElement(implValidateElement(*it));
-    }
+    OSL_ENSURE(aNewElement->getContextTree() == getParentTree(),"INTERNAL ERROR: Set element has wrong context tree");
+    OSL_ENSURE(aNewElement->getContextNode() == getContextOffset(),"INTERNAL ERROR: Set element has wrong context node");
+
+    Name aName = validatedName(aNewElement);
+
+    OSL_ENSURE(!aName.isEmpty(),"INTERNAL ERROR: Unnamed element in set");
+    OSL_ENSURE(m_aDataSet.getElement(aName) == 0,"INTERNAL ERROR: Duplicate element name in set");
+
+    m_aDataSet.insertElement(aName,aNewElement);
 }
 //-------------------------------------------------------------------------
 
-Element TreeSetNodeImpl::makeAdditionalElement(NodeFactory& rFactory, AddNode const& aAddNodeChange, TreeDepth nDepth)
+Element SetNodeImpl::makeAdditionalElement(data::Accessor const& _aAccessor, rtl::Reference<view::ViewStrategy> const& _xStrategy, AddNode const& aAddNodeChange, TreeDepth nDepth)
 {
+    OSL_ENSURE(aAddNodeChange.wasInserted(), "Cannot integrate element that is not in tree yet");
+
+    data::TreeAddress aAddedTree = aAddNodeChange.getInsertedTree();
     // need 'unsafe', because ownership would be gone when notifications are sent
-    if (INode* pNode = aAddNodeChange.getAddedNode_unsafe())
+    if (aAddedTree.is())
     {
-        OSL_ENSURE( pNode->ISA(ISubtree), "Type mismatch when adjusting to update: value element found in tree set");
+        // OSL_ENSURE( pNode->ISA(ISubtree), "Type mismatch when adjusting to update: value element found in tree set");
 
-        if ( ISubtree* pTreeNode = pNode->asISubtree() )
-        {
-            CollectElementTrees aCollector( rFactory, getParentTree(), getContextOffset(),
+        CollectElementTrees aCollector( _xStrategy, getParentTree(), getContextOffset(),
                                         nDepth, getElementTemplate(), getTemplateProvider() );
 
-            return implValidateElement(aCollector.create(*pTreeNode));
-        }
+        data::TreeAccessor aElementAccess( _aAccessor, aAddedTree);
+
+        return implValidateElement(_aAccessor, aCollector.create(aElementAccess));
     }
-    else
-    {
-        OSL_ENSURE(false, "Cannot correctly add a node without an INode object");
-    }
+
     return Element();
 }
 //-------------------------------------------------------------------------
 
-Element ValueSetNodeImpl::makeAdditionalElement(NodeFactory& rFactory, AddNode const& aAddNodeChange)
-{
-    // need 'unsafe', because ownership would be gone when notifications are sent
-    if (INode* pNode = aAddNodeChange.getAddedNode_unsafe())
-    {
-        OSL_ENSURE( pNode->ISA(ValueNode), "Type mismatch when adjusting to update: complex element found in value set");
-        if ( ValueNode* pValueNode = pNode->asValueNode() )
-        {
-            CollectElementTrees aCreator( rFactory, getParentTree(), getContextOffset(),
-                                            0, getElementTemplate(), getTemplateProvider() );
-
-            return implValidateElement(aCreator.create(*pValueNode));
-        }
-    }
-    else
-    {
-        OSL_ENSURE(false, "Cannot correctly add a node without an INode object");
-    }
-    return Element();
-}
-//-------------------------------------------------------------------------
-
-NodeType::Enum TreeSetNodeImpl::doGetType() const
-{
-    return NodeType::eTREESET;
-}
-//-------------------------------------------------------------------------
-
-NodeType::Enum  ValueSetNodeImpl::doGetType() const
-{
-    return NodeType::eVALUESET;
-}
-//-------------------------------------------------------------------------
-
-Element TreeSetNodeImpl::implValidateElement(Element const& aNewElement)
+Element SetNodeImpl::implValidateElement(data::Accessor const& _aAccessor, Element const& aNewElement)
 {
     TemplateHolder aTemplate = getElementTemplate();
-    OSL_ENSURE(aTemplate.isValid(),"INTERNAL ERROR: No template in set node");
+    OSL_ENSURE(aTemplate.is(),"INTERNAL ERROR: No template in set node");
+    OSL_ENSURE(aTemplate->isInstanceTypeKnown(),"INTERNAL ERROR: Unspecifed template in set node");
 
     OSL_ENSURE(aNewElement.isValid(),"INTERNAL ERROR: Unexpected NULL element in set node");
     if (aNewElement.isValid())
     {
-        // TODO: add some validation here
-        if (!aNewElement->isTemplateInstance())
+        if (aTemplate->isInstanceValue())
         {
-            throw TypeMismatch( OUString(RTL_CONSTASCII_USTRINGPARAM("<Unknown> [Missing Template]")),
-                                aTemplate->getName().toString(),
-                                " - Trying to insert element without template into set");
-        }
-        if (!aNewElement->isInstanceOf(aTemplate))
-        {
-            throw TypeMismatch( aNewElement->getTemplate()->getPathString(),
-                                aTemplate->getPathString(),
-                                " - Trying to insert element with wrong template into set");
-        }
-    }
-    return aNewElement;
-}
-//-------------------------------------------------------------------------
-
-Element ValueSetNodeImpl::implValidateElement(Element const& aNewElement)
-{
-    TemplateHolder aTemplate = getElementTemplate();
-    OSL_ENSURE(aTemplate.isValid(),"INTERNAL ERROR: No template in set node");
-
-    OSL_ENSURE(aNewElement.isValid(),"INTERNAL ERROR: Unexpected NULL element in set node");
-    if (aNewElement.isValid())
-    {
-        if (aNewElement->nodeCount() == 0)
-        {
-            OSL_ENSURE(false,"INTERNAL ERROR: Invalid (empty) element tree in value set");
-            throw Exception("INTERNAL ERROR: Invalid (empty) element tree in value set");
-        }
-        if (aNewElement->nodeCount() > 1)
-        {
-            OSL_ENSURE(false,"INTERNAL ERROR: Complex element tree in value set");
-            throw Exception("INTERNAL ERROR: Complex element tree in value set");
-        }
-
-        // checks that this is a value
-        ValueElementNodeImpl& rNode = aNewElement->node(aNewElement->root())->valueElementImpl();
-
-        UnoType aElementType    = aTemplate->getInstanceType();
-        UnoType aValueType      = rNode.getValueType();
-
-        OSL_ENSURE( aValueType.getTypeClass() != uno::TypeClass_INTERFACE,
-                    "INTERNAL ERROR: Inserting complex type into value set node");
-
-        if (aValueType != aElementType)
-        {
-            // handle 'Any'
-            if (aElementType.getTypeClass() != uno::TypeClass_ANY)
+            if (aNewElement->nodeCount() == 0)
             {
-                OSL_ENSURE(false,"INTERNAL ERROR:  ´Wrong value type inserting into value set");
-                throw TypeMismatch(aValueType.getTypeName(), aElementType.getTypeName(),
-                                    "- INTERNAL ERROR: Mistyped element in value set");
+                OSL_ENSURE(false,"INTERNAL ERROR: Invalid (empty) element tree in value set");
+                throw Exception("INTERNAL ERROR: Invalid (empty) element tree in value set");
+            }
+            if (aNewElement->nodeCount() > 1)
+            {
+                OSL_ENSURE(false,"INTERNAL ERROR: Complex element tree in value set");
+                throw Exception("INTERNAL ERROR: Complex element tree in value set");
+            }
+
+            view::Node aElementRoot = view::getRootNode( view::Tree(_aAccessor, *aNewElement) );
+
+            OSL_ENSURE(aElementRoot.isValueNode(),"INTERNAL ERROR: Inserting complex type into value set node");
+
+            view::ValueNode aValueNode(aElementRoot);
+            UnoType aValueType = aValueNode.get_impl()->getValueType(aValueNode.accessor());
+
+            OSL_ENSURE( aValueType.getTypeClass() != uno::TypeClass_INTERFACE,
+                        "INTERNAL ERROR: Inserting complex type into value set node");
+
+            UnoType aElementType    = aTemplate->getInstanceType();
+
+            if (aValueType != aElementType)
+            {
+                // handle 'Any'
+                if (aElementType.getTypeClass() != uno::TypeClass_ANY)
+                {
+                    OSL_ENSURE(false,"INTERNAL ERROR:  ´Wrong value type inserting into value set");
+                    throw TypeMismatch(aValueType.getTypeName(), aElementType.getTypeName(),
+                                        "- INTERNAL ERROR: Mistyped element in value set");
+                }
+            }
+        }
+        else // a complete tree
+        {
+            // TODO: add some validation here
+            if (!aNewElement->isTemplateInstance())
+            {
+                throw TypeMismatch( OUString(RTL_CONSTASCII_USTRINGPARAM("<Unknown> [Missing Template]")),
+                                    aTemplate->getName().toString(),
+                                    " - Trying to insert element without template into set");
+            }
+            if (!aNewElement->isInstanceOf(aTemplate))
+            {
+                throw TypeMismatch( aNewElement->getTemplate()->getPathString(),
+                                    aTemplate->getPathString(),
+                                    " - Trying to insert element with wrong template into set");
             }
         }
     }
-
     return aNewElement;
+}
+//-------------------------------------------------------------------------
+
+namespace
+{
+    //-------------------------------------------------------------------------
+    class DiffToDefault : data::SetVisitor
+    {
+        SubtreeChange&          m_rChange;
+        ISubtree&               m_rDefaultTree;
+        OTreeChangeFactory&     m_rChangeFactory;
+    public:
+        explicit
+        DiffToDefault(SubtreeChange& _rChange, ISubtree& _rDefaultTree)
+        : m_rChange(_rChange)
+        , m_rDefaultTree(_rDefaultTree)
+        , m_rChangeFactory( getDefaultTreeChangeFactory() )
+        {
+        }
+
+        void diff(data::SetNodeAccess const& _aActualTree)
+        {
+            translate(m_rDefaultTree);
+            visitElements(_aActualTree);
+        }
+
+    private:
+        void translate(ISubtree& _rDefaultTree);
+        void handleDefault(data::TreeSegment const & _pDefaultElement);
+        void handleActual(data::TreeAccessor const& _aElement);
+
+        virtual Result handle(data::TreeAccessor const& _aElement)
+        { handleActual(_aElement); return CONTINUE; }
+    };
+    //-------------------------------------------------------------------------
+
+    void DiffToDefault::translate(ISubtree& _rDefaultTree)
+    {
+        typedef CollectNames::NameList::const_iterator NameIter;
+
+        OUString aTypeName = _rDefaultTree.getElementTemplateName();
+        OSL_ENSURE(aTypeName.getLength(),"Cannot get element type for default set");
+
+        CollectNames aCollector;
+        aCollector.applyToChildren(_rDefaultTree);
+
+        CollectNames::NameList const& aNames = aCollector.list();
+
+        for(NameIter it = aNames.begin(); it != aNames.end(); ++it)
+        {
+            std::auto_ptr<INode> aChild = _rDefaultTree.removeChild(*it);
+            handleDefault( data::TreeSegment::createNew(aChild,aTypeName) );
+        }
+
+    }
+    //-------------------------------------------------------------------------
+
+    void DiffToDefault::handleDefault(data::TreeSegment const &_pDefaultElement)
+    {
+        OSL_PRECOND(_pDefaultElement.is(), "Unexpected NULL default node");
+        if (!_pDefaultElement.is()) return;
+
+        OUString sName = _pDefaultElement.getName().toString();
+
+        OSL_ENSURE(_pDefaultElement.getTreeData()->getAttributes().isDefault(), "Missing default state on default element tree");
+        OSL_ENSURE(_pDefaultElement.getSegmentRootNode()->isDefault(), "Missing default attribute on default node");
+
+        std::auto_ptr<AddNode> pAddIt( m_rChangeFactory.createAddNodeChange(_pDefaultElement, sName,true) );
+
+        m_rChange.addChange(base_ptr(pAddIt));
+    }
+    //-------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+    void DiffToDefault::handleActual(data::TreeAccessor const& _aElement)
+    {
+        bool bDefaultElement = _aElement.getRootNode().isDefault();
+
+        OUString sName = _aElement.getName().toString();
+
+        if (Change* pDefaultNode = m_rChange.getChange(sName) )
+        {
+
+            if (pDefaultNode->ISA(AddNode))
+            {
+                AddNode* pAddIt = static_cast<AddNode*>(pDefaultNode);
+                if (bDefaultElement)
+                {
+                    data::TreeSegment aDefaultTree = pAddIt->getNewTree();
+                    m_rDefaultTree.addChild( aDefaultTree.cloneData(true) );
+
+                    // no change needed - remove the change and recover the default
+                    m_rChange.removeChange(sName);
+                }
+                else
+                {
+                   // OSL_ENSURE(!pAddIt->getReplacedNode().is(), "Duplicate node name in actual tree");
+
+                   // pAddIt->expectReplacedNode(pActualNode);
+                }
+            }
+            else
+            {
+                // should never happen
+                OSL_ENSURE(pDefaultNode->ISA(RemoveNode), "Unexpected node type found in translated default tree");
+                OSL_ENSURE(!pDefaultNode->ISA(RemoveNode), "Duplicate node name in actual tree");
+
+                if (bDefaultElement) m_rChange.removeChange(sName);
+            }
+        }
+        else
+        {
+            OSL_ENSURE(!bDefaultElement, "Node marked 'default' not found in actual default data");
+
+            std::auto_ptr<RemoveNode> pRemoveIt( m_rChangeFactory.createRemoveNodeChange(sName,true) );
+            // pRemoveIt->expectRemovedNode(pActualNode);
+            m_rChange.addChange(base_ptr(pRemoveIt));
+        }
+    }
+//-----------------------------------------------------------------------------
+}
+//-----------------------------------------------------------------------------
+void SetNodeImpl::implDifferenceToDefaultState(data::Accessor const& _aAccessor, SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree) const
+{
+    DiffToDefault(_rChangeToDefault,_rDefaultTree).diff( getDataAccess(_aAccessor) );
+}
+//-----------------------------------------------------------------------------
+void SetNodeImpl::convertChanges(NodeChangesInformation& rLocalChanges, data::Accessor const& _accessor, SubtreeChange const& rExternalChange,
+                                     TreeDepth nDepth)
+{
+    OSL_ASSERT(nDepth > 0);
+
+    if (TreeImpl* pParentTree = this->getParentTree())
+    {
+        NodeOffset nNode = getContextOffset();
+
+        OSL_ENSURE(pParentTree->isValidNode(nNode), "Invalid context node in Set");
+        OSL_ENSURE(view::Node(_accessor, *pParentTree, nNode).get_impl() == this,
+                    "Wrong context node in Set");
+
+        CollectChanges aCollector(rLocalChanges, _accessor, *pParentTree, nNode, getElementTemplate(), nDepth);
+
+        aCollector.collectFrom(rExternalChange);
+    }
+    else
+        OSL_ENSURE(false, "Missing context tree in Set");
 }
 //-----------------------------------------------------------------------------
 

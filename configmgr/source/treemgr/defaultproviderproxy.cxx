@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultproviderproxy.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 12:01:06 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include "options.hxx"
 #endif
+#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
+#include "updateaccessor.hxx"
+#endif
 
 namespace configmgr
 {
@@ -102,52 +105,34 @@ DefaultProviderProxy::~DefaultProviderProxy()
 }
 //-----------------------------------------------------------------------------
 
-sal_Int16 DefaultProviderProxy::implGetRemainingDepth(AbsolutePath const& _aLocation) const
+/// tries to load a default instance of the specified node (which must be within the request range owned)
+std::auto_ptr<ISubtree> DefaultProviderProxy::getDefaultTree(
+                            memory::UpdateAccessor& _aDestinationSpace,
+                            AbsolutePath const& _aLocation
+                       ) const CFG_UNO_THROW_ALL()
 {
     OSL_ENSURE( Path::hasPrefix(_aLocation,m_aBaseLocation),
                 "ERROR: DefaultProviderProxy called for out-of-scope location" );
 
-    sal_Int16 nDepth = m_nRequestDepth;
-    if (nDepth != ITreeProvider::ALL_LEVELS)
-    {
-        sal_Int16 nLocalDepth = sal_Int16(_aLocation.getDepth()) - sal_Int16(m_aBaseLocation.getDepth());
-
-        OSL_ENSURE( 0 <= nLocalDepth && nLocalDepth < nDepth,
-                    "WARNING: DefaultProviderProxy called for tree outside available depth" );
-
-        if (nDepth >= nLocalDepth)
-            nDepth -= nLocalDepth;
-
-        else
-            nDepth = 0;
-    }
-    return nDepth;
-}
-//-----------------------------------------------------------------------------
-
-/// tries to load default data into the specified location (which must be within the request range owned)
-bool DefaultProviderProxy::fetchDefaultData(AbsolutePath const& _aLocation) const CFG_UNO_THROW_ALL()
-{
-    sal_Int16 nDepth = implGetRemainingDepth(_aLocation);
-
-    return nDepth != 0 && m_pDefaultTreeManager != NULL &&
-            m_pDefaultTreeManager->fetchDefaultData(_aLocation, m_xOptions, nDepth);
-}
-//-----------------------------------------------------------------------------
-
-/// tries to load a default instance of the specified node (which must be within the request range owned)
-std::auto_ptr<ISubtree> DefaultProviderProxy::getDefaultTree(AbsolutePath const& _aLocation) const CFG_UNO_THROW_ALL()
-{
-    sal_Int16 nDepth = implGetRemainingDepth(_aLocation);
-
     std::auto_ptr<ISubtree> aRet;
 
-    if (nDepth != 0 && m_pDefaultTreeProvider != NULL)
-        aRet = m_pDefaultTreeProvider->requestDefaultData(_aLocation, m_xOptions, nDepth);
+    if (m_pDefaultTreeProvider != NULL)
+        aRet = m_pDefaultTreeProvider->requestDefaultData(_aLocation, m_xOptions, ITreeProvider::ALL_LEVELS);
 
     return aRet;
 }
 
+//-----------------------------------------------------------------------------
+/// tries to load default data into the specified tree
+bool DefaultProviderProxy::fetchDefaultData()  CFG_UNO_THROW_ALL()
+{
+    OSL_PRECOND(m_pDefaultTreeManager, "No tree to fetch defaults into");
+    if (!m_pDefaultTreeManager) return false;
+
+    memory::UpdateAccessor anAccessToken(m_pDefaultTreeManager->getDataSegment(m_aBaseLocation,m_xOptions));
+
+    return !! m_pDefaultTreeManager->fetchDefaultData(anAccessToken,m_aBaseLocation,m_xOptions, m_nRequestDepth);
+}
 //-----------------------------------------------------------------------------
     }
 }

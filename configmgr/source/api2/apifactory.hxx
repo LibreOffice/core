@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-30 14:50:24 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,23 @@
 #ifndef CONFIGMGR_API_FACTORY_HXX_
 #define CONFIGMGR_API_FACTORY_HXX_
 
+#ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
+#endif
+#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
+#include "options.hxx"
+#endif
+
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
+#endif
+
+#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
-#include <options.hxx>
+#endif
 
 namespace osl { class Mutex; }
 namespace configmgr
@@ -76,10 +89,11 @@ namespace configmgr
         class NodeID;
         class NodeRef;
         class Tree;
+        class ElementRef;
         class ElementTree;
 
         class Template;
-        typedef vos::ORef<Template> TemplateHolder;
+        typedef rtl::Reference<Template> TemplateHolder;
     }
     namespace configapi
     {
@@ -126,7 +140,7 @@ namespace configmgr
             TreeElement*    makeAccessRoot(configuration::Tree const& aTree, vos::ORef< OOptions >const& _xOptions);
             SetElement*     makeSetElement(configuration::ElementTree const& aTree);
 
-            SetElement*     findSetElement(configuration::ElementTree const& aTree);
+            SetElement*     findSetElement(configuration::ElementRef const& aElement);
 
             /// check for the existence of an element
             sal_Bool        hasElement(configuration::NodeID const& _rNode) { return NULL != implFind(_rNode); }

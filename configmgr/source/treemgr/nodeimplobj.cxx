@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 17:06:13 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #include <stdio.h>
 #include "nodeimplobj.hxx"
 
-#ifndef CONFIGMGR_CONFIGNODEFACTORY_HXX_
-#include "nodefactory.hxx"
-#endif
 
 #ifndef CONFIGMGR_CONFIGCHANGE_HXX_
 #include "nodechange.hxx"
@@ -75,6 +72,9 @@
 #include "nodechangeimpl.hxx"
 #endif
 
+#ifndef CONFIGMGR_SETNODEACCESS_HXX
+#include "setnodeaccess.hxx"
+#endif
 #ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #include "valuenode.hxx"
 #endif
@@ -82,221 +82,34 @@
 #include "change.hxx"
 #endif
 
+#ifndef CONFIGMGR_VIEWACCESS_HXX_
+#include "viewaccess.hxx"
+#endif
+#ifndef CONFIGMGR_VIEWBEHAVIORFACTORY_HXX_
+#include "viewfactory.hxx"
+#endif
+
 namespace configmgr
 {
     namespace configuration
     {
 //-----------------------------------------------------------------------------
-
-static void failReadOnly()
-{
-    throw ConstraintViolation("INTERNAL ERROR: Trying to update a read-only node");
-}
-
-static
-inline
-Attributes forceReadOnly(Attributes aAttributes)
-{
-    aAttributes.bWritable = false;
-    return aAttributes;
-}
-
-static
-inline
-Attributes adjustForDirectAccess(Attributes aAttributes)
-{
-    aAttributes.bFinalized |= aAttributes.bWritable;
-    aAttributes.bWritable = true;
-    return aAttributes;
-}
-// Specific types of nodes for direct or read only access
-//-----------------------------------------------------------------------------
-
 // Value Nodes
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// class ReadOnlyValueElementNodeImpl
-//-----------------------------------------------------------------------------
-Attributes ReadOnlyValueElementNodeImpl::doGetAttributes() const
-{
-    return forceReadOnly( ValueElementNodeImpl::doGetAttributes() );
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder ReadOnlyValueElementNodeImpl::doCloneIndirect(bool)
-{
-    return this;
-}
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// class DirectValueElementNodeImpl
-//-----------------------------------------------------------------------------
-
-DirectValueElementNodeImpl::DirectValueElementNodeImpl(ValueNode& rOriginal)
-: ValueElementNodeImpl(rOriginal)
-{}
-//-----------------------------------------------------------------------------
-
-DirectValueElementNodeImpl::DirectValueElementNodeImpl(DeferredValueElementNodeImpl& rOriginal)
-: ValueElementNodeImpl(rOriginal)
-{}
-//-----------------------------------------------------------------------------
-
-Attributes DirectValueElementNodeImpl::doGetAttributes() const
-{
-    return adjustForDirectAccess( ValueElementNodeImpl::doGetAttributes() );
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder DirectValueElementNodeImpl::doCloneIndirect(bool bIndirect)
-{
-    if (bIndirect)
-        return new DeferredValueElementNodeImpl(*this);
-    else
-        return this;
-}
-//-----------------------------------------------------------------------------
-
-
-//-----------------------------------------------------------------------------
 // class DeferredValueElementNodeImpl
-//-----------------------------------------------------------------------------
-
-DeferredValueElementNodeImpl::DeferredValueElementNodeImpl(ValueNode& rOriginal)
-: ValueElementNodeImpl(rOriginal)
-{
-}
-//-----------------------------------------------------------------------------
-
-DeferredValueElementNodeImpl::DeferredValueElementNodeImpl(DirectValueElementNodeImpl& rOriginal)
-: ValueElementNodeImpl(rOriginal)
-{
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder DeferredValueElementNodeImpl::doCloneIndirect(bool bIndirect)
-{
-    if (bIndirect)
-        return this;
-    else
-        return new DirectValueElementNodeImpl(*this);
-}
 //-----------------------------------------------------------------------------
 
 // Group Nodes
 //-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
-// class ReadOnlyGroupNodeImpl
-//-----------------------------------------------------------------------------
-
-Attributes ReadOnlyGroupNodeImpl::doGetAttributes() const
-{
-    return forceReadOnly( GroupNodeImpl::doGetAttributes() );
-}
-//-----------------------------------------------------------------------------
-
-ValueMemberNode ReadOnlyGroupNodeImpl::doGetValueMember(Name const& aName, bool bForUpdate)
-{
-    if (bForUpdate) failReadOnly();
-
-    return GroupNodeImpl::doGetValueMember(aName, bForUpdate);
-}
-//-----------------------------------------------------------------------------
-
-bool ReadOnlyGroupNodeImpl::doHasChanges() const
-{
-    return false;
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyGroupNodeImpl::doCommitChanges()
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyGroupNodeImpl::doMarkChanged()
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder ReadOnlyGroupNodeImpl::doCloneIndirect(bool)
-{
-    return this;
-}
-//-----------------------------------------------------------------------------
-
-
-//-----------------------------------------------------------------------------
-// class DirectGroupNodeImpl
-//-----------------------------------------------------------------------------
-
-DirectGroupNodeImpl::DirectGroupNodeImpl(ISubtree& rOriginal)
-: GroupNodeImpl(rOriginal)
-{}
-//-----------------------------------------------------------------------------
-
-DirectGroupNodeImpl::DirectGroupNodeImpl(DeferredGroupNodeImpl& rOriginal)
-: GroupNodeImpl(rOriginal)
-{}
-//-----------------------------------------------------------------------------
-
-ValueMemberNode DirectGroupNodeImpl::doGetValueMember(Name const& aName, bool bForUpdate)
-{
-    return GroupNodeImpl::doGetValueMember(aName, bForUpdate);
-}
-//-----------------------------------------------------------------------------
-
-bool DirectGroupNodeImpl::doHasChanges() const
-{
-    return false;
-}
-//-----------------------------------------------------------------------------
-
-void DirectGroupNodeImpl::doCommitChanges()
-{
-    OSL_ENSURE(false,"WARNING: Should not commit changes on object that hasn't any");
-}
-//-----------------------------------------------------------------------------
-
-void DirectGroupNodeImpl::doMarkChanged()
-{
-    // ignore
-}
-//-----------------------------------------------------------------------------
-
-Attributes DirectGroupNodeImpl::doGetAttributes() const
-{
-    return adjustForDirectAccess( GroupNodeImpl::doGetAttributes() );
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder DirectGroupNodeImpl::doCloneIndirect(bool bIndirect)
-{
-    if (bIndirect)
-        return new DeferredGroupNodeImpl(*this);
-    else
-        return this;
-}
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
 // class DeferredGroupNodeImpl
 //-----------------------------------------------------------------------------
 
-DeferredGroupNodeImpl::DeferredGroupNodeImpl(ISubtree& rOriginal)
-: GroupNodeImpl(rOriginal)
-, m_aChanges()
-{
-}
-//-----------------------------------------------------------------------------
-
-DeferredGroupNodeImpl::DeferredGroupNodeImpl(DirectGroupNodeImpl& rOriginal)
-: GroupNodeImpl(rOriginal)
+DeferredGroupNodeImpl::DeferredGroupNodeImpl(data::GroupNodeAddress const& _aNodeRef)
+: GroupNodeImpl(_aNodeRef)
 , m_aChanges()
 {
 }
@@ -307,17 +120,17 @@ DeferredGroupNodeImpl::~DeferredGroupNodeImpl()
 }
 //-----------------------------------------------------------------------------
 
-ValueMemberNode DeferredGroupNodeImpl::doGetValueMember(Name const& aName, bool bForUpdate)
+ValueMemberNode DeferredGroupNodeImpl::makeValueMember(data::Accessor const& _aAccessor, Name const& _aName, bool _bForUpdate)
 {
-    ValueChanges::iterator it = m_aChanges.find(aName);
+    MemberChanges::iterator it = m_aChanges.find(_aName);
 
     if (it != m_aChanges.end())
     {
-        if (it->second.isEmpty())
-            OSL_ENSURE(aName.isEmpty(), "ERROR: Found empty change reference");
+        if (!it->second.is())
+            OSL_ENSURE(_aName.isEmpty(), "ERROR: Found empty change reference");
 
-        else if (bForUpdate || it->second->isChange()) // found one
-            return ValueMemberNode(it->second);
+        else if (_bForUpdate || it->second->isChange()) // found one
+            return ValueMemberNode(_aAccessor, it->second);
 
         else // leftover non-change
             m_aChanges.erase(it);
@@ -325,26 +138,28 @@ ValueMemberNode DeferredGroupNodeImpl::doGetValueMember(Name const& aName, bool 
         // if not found continue with default
     }
 
-    if (bForUpdate) // create a new change
-    {
-        if (ValueNode* pOriginal = getOriginalValueNode(aName))
-        {
-            DeferredValueImplRef aNewChange(new ValueMemberNode::DeferredImpl(*pOriginal));
-            m_aChanges[aName] = aNewChange;
+    data::ValueNodeAccess aOriginal = getOriginalValueNode(_aAccessor,_aName);
 
-            return ValueMemberNode(aNewChange);
+    if (_bForUpdate) // create a new change
+    {
+        if (aOriginal.isValid())
+        {
+            MemberChange aNewChange(new ValueMemberNode::DeferredImpl(aOriginal));
+            m_aChanges[_aName] = aNewChange;
+
+            return ValueMemberNode(_aAccessor, aNewChange);
        }
     }
 
-    return GroupNodeImpl::doGetValueMember(aName, bForUpdate);
+    return GroupNodeImpl::makeValueMember(aOriginal);
 }
 //-----------------------------------------------------------------------------
 
-bool DeferredGroupNodeImpl::doHasChanges() const
+bool DeferredGroupNodeImpl::hasChanges() const
 {
-    for (ValueChanges::const_iterator it = m_aChanges.begin(); it != m_aChanges.end(); it)
+    for (MemberChanges::const_iterator it = m_aChanges.begin(); it != m_aChanges.end(); it)
     {
-        if (!it->second.isValid())
+        if (!it->second.is())
         {
             // empty element is present -> marked as changed
             OSL_ASSERT(it->first.isEmpty());
@@ -359,16 +174,16 @@ bool DeferredGroupNodeImpl::doHasChanges() const
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParentTree, NodeOffset nNode) const
+void DeferredGroupNodeImpl::collectValueChanges(data::Accessor const& _aAccessor, NodeChanges& rChanges, TreeImpl* pParentTree, NodeOffset nNode) const
 {
-    for (ValueChanges::const_iterator it = m_aChanges.begin(); it != m_aChanges.end(); ++it)
+    for (MemberChanges::const_iterator it = m_aChanges.begin(); it != m_aChanges.end(); ++it)
     {
-        if (it->second.isValid())
+        if (it->second.is())
         {
             OSL_ASSERT(!it->first.isEmpty());
-            if (ValueChangeImpl* pValueChange = it->second->collectChange())
+            if (ValueChangeImpl* pValueChange = it->second->collectChange(_aAccessor))
             {
-                pValueChange->setTarget(pParentTree,nNode,it->first);
+                pValueChange->setTarget(_aAccessor,pParentTree,nNode,it->first);
 
                 rChanges.add( NodeChange(pValueChange) );
             }
@@ -381,42 +196,43 @@ void DeferredGroupNodeImpl::doCollectChangesWithTarget(NodeChanges& rChanges, Tr
 }
 //-----------------------------------------------------------------------------
 
-ValueChangeImpl* DeferredGroupNodeImpl::doAdjustToValueChange(Name const& aName, ValueChange const& rExternalChange)
+DeferredGroupNodeImpl::MemberChange DeferredGroupNodeImpl::findValueChange(Name const& aName)
 {
-    ValueChanges::iterator it = m_aChanges.find(aName);
+    MemberChange aResult;
+
+    MemberChanges::iterator it = m_aChanges.find(aName);
 
     if (it != m_aChanges.end())
     {
-        if (it->second.isValid())
+        if (it->second.is() )
         {
-            if (ValueChangeImpl* pValueChange = it->second->adjustToChange(rExternalChange))
+            if (it->second->isChange())
             {
-                OSL_ENSURE(it->second->isChange(), "Got an adjusted change from a non-changing value");
+                aResult = it->second;
             }
 
-            else // leftover non-change
+            else // leftover non-change -> drop
             {
-                OSL_ENSURE(!it->second->isChange(), "Got no adjusted change from a changing value") ;
                 m_aChanges.erase(it);
-                // then do as without deferred change
             }
         }
         else
             OSL_ENSURE(aName.isEmpty(), "ERROR: Found empty change reference");
     }
 
-    return GroupNodeImpl::doAdjustToValueChange(aName, rExternalChange);
+    return aResult;
 }
-//-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::doCommitChanges()
+//-----------------------------------------------------------------------------
+/*
+void DeferredGroupNodeImpl::doCommitChanges(data::Accessor const& _aAccessor)
 {
     for (ValueChanges::iterator pos = m_aChanges.begin(); pos != m_aChanges.end(); )
     {
         ValueChanges::iterator it = pos++; // this is used to allow erasing below
-        if (it->second.isValid())
+        if (it->second.is())
         {
-            it->second->commitDirect();
+            it->second->commitDirect(_aAccessor);
             m_aChanges.erase(it); // this goes here to ensure exception safety
         }
         else
@@ -424,28 +240,30 @@ void DeferredGroupNodeImpl::doCommitChanges()
     }
     m_aChanges.clear();
 }
+*/
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::doPreCommitChanges()
+std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::preCommitValueChanges(data::Accessor const& _aAccessor)
 {
     std::auto_ptr<SubtreeChange> aRet;
 
     if (!m_aChanges.empty())
     {
-        aRet.reset( new SubtreeChange(this->getOriginalNodeName(),
-                                      this->getAttributes()) );
+        data::NodeAccess aOriginalData = this->getOriginalNodeAccess(_aAccessor);
+        aRet.reset( new SubtreeChange(  aOriginalData.getName().toString(),
+                                        aOriginalData.getAttributes() ) );
 
-        for (ValueChanges::iterator pos = m_aChanges.begin(); pos != m_aChanges.end(); )
+        for (MemberChanges::iterator pos = m_aChanges.begin(); pos != m_aChanges.end(); )
         {
-            ValueChanges::iterator it = pos++; // this is used to allow erasing below
+            MemberChanges::iterator it = pos++; // this is used to allow erasing below
 
-            if (!it->second.isValid())
+            if (!it->second.is())
             {
                 OSL_ASSERT(it->first.isEmpty());
             }
             else if (it->second->isChange())
             {
-                std::auto_ptr<ValueChange> aValueChange = it->second->preCommitChange();
+                std::auto_ptr<ValueChange> aValueChange = it->second->preCommitChange(_aAccessor);
                 if (aValueChange.get())
                 {
                     std::auto_ptr<Change> aBaseChange(aValueChange.release());
@@ -464,7 +282,7 @@ std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::doPreCommitChanges()
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::doFinishCommit(SubtreeChange& rChanges)
+void DeferredGroupNodeImpl::finishCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges)
 {
     OSL_ENSURE(!rChanges.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
@@ -474,7 +292,7 @@ void DeferredGroupNodeImpl::doFinishCommit(SubtreeChange& rChanges)
     {
         Name aValueName = makeNodeName(it->getNodeName(), Name::NoValidate());
 
-        ValueChanges::iterator itStoredChange = m_aChanges.find(aValueName);
+        MemberChanges::iterator itStoredChange = m_aChanges.find(aValueName);
 
         if (itStoredChange != m_aChanges.end())
         {
@@ -483,12 +301,12 @@ void DeferredGroupNodeImpl::doFinishCommit(SubtreeChange& rChanges)
 
             ValueChange & rValueChange = static_cast<ValueChange&>(*it);
 
-            DeferredValueImplRef aStoredChange = itStoredChange->second;
-            OSL_ENSURE( aStoredChange.isValid(), "Found empty change object for Member value change");
+            MemberChange aStoredChange = itStoredChange->second;
+            OSL_ENSURE( aStoredChange.is(), "Found empty change object for Member value change");
 
-            if (aStoredChange.isValid())
+            if (aStoredChange.is())
             {
-                aStoredChange->finishCommit(rValueChange);
+                aStoredChange->finishCommit(rValueChange,_aAccessor);
                 OSL_ENSURE(!aStoredChange->isChange(),"ValueChange is not moot after finishCommit");
             }
 
@@ -506,7 +324,7 @@ void DeferredGroupNodeImpl::doFinishCommit(SubtreeChange& rChanges)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::doRevertCommit(SubtreeChange& rChanges)
+void DeferredGroupNodeImpl::revertCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges)
 {
     OSL_ENSURE(!rChanges.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
@@ -516,7 +334,7 @@ void DeferredGroupNodeImpl::doRevertCommit(SubtreeChange& rChanges)
     {
         Name aValueName = makeNodeName(it->getNodeName(), Name::NoValidate());
 
-        ValueChanges::iterator itStoredChange = m_aChanges.find(aValueName);
+        MemberChanges::iterator itStoredChange = m_aChanges.find(aValueName);
 
         if (itStoredChange != m_aChanges.end())
         {
@@ -525,12 +343,12 @@ void DeferredGroupNodeImpl::doRevertCommit(SubtreeChange& rChanges)
 
             ValueChange & rValueChange = static_cast<ValueChange&>(*it);
 
-            DeferredValueImplRef aStoredChange = itStoredChange->second;
-            OSL_ENSURE( aStoredChange.isValid(), "Cannot restore change: found empty change object for Member value change");
+            MemberChange aStoredChange = itStoredChange->second;
+            OSL_ENSURE( aStoredChange.is(), "Cannot restore change: found empty change object for Member value change");
 
-            if (aStoredChange.isValid())
+            if (aStoredChange.is())
             {
-                aStoredChange->revertCommit(rValueChange);
+                aStoredChange->revertCommit(rValueChange,_aAccessor);
                 OSL_ENSURE(!aStoredChange->isChange(),"ValueChange is not moot after reverting - will be discarded nevertheless");
             }
             m_aChanges.erase( itStoredChange ); // remove change if it is moot
@@ -541,7 +359,7 @@ void DeferredGroupNodeImpl::doRevertCommit(SubtreeChange& rChanges)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::doFailedCommit(SubtreeChange& rChanges)
+void DeferredGroupNodeImpl::failedCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges)
 {
     OSL_ENSURE(!rChanges.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
@@ -551,7 +369,7 @@ void DeferredGroupNodeImpl::doFailedCommit(SubtreeChange& rChanges)
     {
         Name aValueName = makeNodeName(it->getNodeName(), Name::NoValidate());
 
-        ValueChanges::iterator itStoredChange = m_aChanges.find(aValueName);
+        MemberChanges::iterator itStoredChange = m_aChanges.find(aValueName);
 
         if (itStoredChange != m_aChanges.end())
         {
@@ -560,11 +378,11 @@ void DeferredGroupNodeImpl::doFailedCommit(SubtreeChange& rChanges)
 
             ValueChange & rValueChange = static_cast<ValueChange&>(*it);
 
-            DeferredValueImplRef aStoredChange = itStoredChange->second;
-            OSL_ENSURE( aStoredChange.isValid(), "Cannot recover from failed change: found empty change object for Member value change");
+            MemberChange aStoredChange = itStoredChange->second;
+            OSL_ENSURE( aStoredChange.is(), "Cannot recover from failed change: found empty change object for Member value change");
 
-            if (aStoredChange.isValid())
-                 aStoredChange->failedCommit(rValueChange);
+            if (aStoredChange.is())
+                 aStoredChange->failedCommit(rValueChange,_aAccessor);
            {
                 if (!aStoredChange->isChange())
                     m_aChanges.erase( itStoredChange ); // remove change if it is moot
@@ -582,347 +400,23 @@ void DeferredGroupNodeImpl::doFailedCommit(SubtreeChange& rChanges)
 //-----------------------------------------------------------------------------
 
 
-void DeferredGroupNodeImpl::doMarkChanged()
+void DeferredGroupNodeImpl::markChanged()
 {
     // special mark: a NULL DeferredImplRef at empty Name
-    m_aChanges.insert( ValueChanges::value_type() );
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder DeferredGroupNodeImpl::doCloneIndirect(bool bIndirect)
-{
-    if (bIndirect)
-        return this;
-    else
-        return new DirectGroupNodeImpl(*this);
+    m_aChanges.insert( MemberChanges::value_type() );
 }
 //-----------------------------------------------------------------------------
 
 // Set nodes
 //-----------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-// class ReadOnlyTreeSetNodeImpl
-//-----------------------------------------------------------------------------
-
-void ReadOnlyTreeSetNodeImpl::doInsertElement(Name const& , SetEntry const& )
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyTreeSetNodeImpl::doRemoveElement(Name const& )
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyTreeSetNodeImpl::doInitElements( ISubtree& rTree, TreeDepth nDepth)
-{
-    TreeSetNodeImpl::initHelper( NodeType::getReadAccessFactory(), rTree, nDepth);
-}
-//-----------------------------------------------------------------------------
-
-ReadOnlyTreeSetNodeImpl::Element ReadOnlyTreeSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth)
-{
-    return TreeSetNodeImpl::makeAdditionalElement( NodeType::getReadAccessFactory(), aAddNodeChange, nDepth);
-}
-//-----------------------------------------------------------------------------
-
-Attributes ReadOnlyTreeSetNodeImpl::doGetAttributes() const
-{
-    return forceReadOnly( TreeSetNodeImpl::doGetAttributes() );
-}
-//-----------------------------------------------------------------------------
-
-bool ReadOnlyTreeSetNodeImpl::doHasChanges()    const
-{
-    return false;
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyTreeSetNodeImpl::doCollectChanges(NodeChanges& ) const
-{
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyTreeSetNodeImpl::doCommitChanges()
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyTreeSetNodeImpl::doMarkChanged()
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder ReadOnlyTreeSetNodeImpl::doCloneIndirect(bool)
-{
-    return this;
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyTreeSetNodeImpl::doMarkAsDefault()
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// class ReadOnlyValueSetNodeImpl
-//-----------------------------------------------------------------------------
-
-void ReadOnlyValueSetNodeImpl::doInsertElement(Name const& , SetEntry const& )
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyValueSetNodeImpl::doRemoveElement(Name const& )
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyValueSetNodeImpl::doInitElements( ISubtree& rTree, TreeDepth )
-{
-    ValueSetNodeImpl::initHelper( NodeType::getReadAccessFactory(), rTree);
-}
-//-----------------------------------------------------------------------------
-
-ReadOnlyValueSetNodeImpl::Element ReadOnlyValueSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth )
-{
-    return ValueSetNodeImpl::makeAdditionalElement( NodeType::getReadAccessFactory(), aAddNodeChange);
-}
-//-----------------------------------------------------------------------------
-
-Attributes ReadOnlyValueSetNodeImpl::doGetAttributes() const
-{
-    return forceReadOnly( ValueSetNodeImpl::doGetAttributes() );
-}
-//-----------------------------------------------------------------------------
-
-bool ReadOnlyValueSetNodeImpl::doHasChanges()   const
-{
-    return false;
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyValueSetNodeImpl::doCollectChanges(NodeChanges& ) const
-{
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyValueSetNodeImpl::doCommitChanges()
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyValueSetNodeImpl::doMarkChanged()
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder ReadOnlyValueSetNodeImpl::doCloneIndirect(bool)
-{
-    return this;
-}
-//-----------------------------------------------------------------------------
-
-void ReadOnlyValueSetNodeImpl::doMarkAsDefault()
-{
-    failReadOnly();
-}
-//-----------------------------------------------------------------------------
-
-
-//-----------------------------------------------------------------------------
-// class DirectTreeSetNodeImpl
-//-----------------------------------------------------------------------------
-
-DirectTreeSetNodeImpl::DirectTreeSetNodeImpl(ISubtree& rOriginal, Template* pTemplate)
-: TreeSetNodeImpl(rOriginal,pTemplate)
-{
-}
-//-----------------------------------------------------------------------------
-
-DirectTreeSetNodeImpl::DirectTreeSetNodeImpl(DeferredTreeSetNodeImpl& rOriginal)
-: TreeSetNodeImpl(rOriginal)
-{
-    implMakeIndirect(false);
-}
-//-----------------------------------------------------------------------------
-
-void DirectTreeSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& aNewEntry)
-{
-    TreeSetNodeImpl::doInsertElement(aName,aNewEntry);
-    aNewEntry.tree()->makeIndirect(false);
-    implMarkAsDefault(false);
-}
-//-----------------------------------------------------------------------------
-
-void DirectTreeSetNodeImpl::doRemoveElement(Name const& aName)
-{
-    TreeSetNodeImpl::doRemoveElement(aName);
-    implMarkAsDefault(false);
-}
-//-----------------------------------------------------------------------------
-
-void DirectTreeSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth nDepth)
-{
-    TreeSetNodeImpl::initHelper(NodeType::getDirectAccessFactory(), rTree, nDepth);
-}
-//-----------------------------------------------------------------------------
-
-DirectTreeSetNodeImpl::Element DirectTreeSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth)
-{
-    return TreeSetNodeImpl::makeAdditionalElement( NodeType::getDirectAccessFactory(), aAddNodeChange, nDepth);
-}
-//-----------------------------------------------------------------------------
-
-bool DirectTreeSetNodeImpl::doHasChanges() const
-{
-    return false;
-}
-//-----------------------------------------------------------------------------
-
-void DirectTreeSetNodeImpl::doCollectChanges(NodeChanges& ) const
-{
-}
-//-----------------------------------------------------------------------------
-
-void DirectTreeSetNodeImpl::doCommitChanges()
-{
-    OSL_ENSURE(false,"WARNING: Should not commit changes on object that hasn't any");
-}
-//-----------------------------------------------------------------------------
-
-void DirectTreeSetNodeImpl::doMarkChanged()
-{
-    implMarkAsDefault(false);
-}
-//-----------------------------------------------------------------------------
-
-Attributes DirectTreeSetNodeImpl::doGetAttributes() const
-{
-    return adjustForDirectAccess( TreeSetNodeImpl::doGetAttributes() );
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder DirectTreeSetNodeImpl::doCloneIndirect(bool bIndirect)
-{
-    if (bIndirect)
-        return new DeferredTreeSetNodeImpl(*this);
-    else
-        return this;
-}
-//-----------------------------------------------------------------------------
-
-void DirectTreeSetNodeImpl::doMarkAsDefault()
-{
-    implMarkAsDefault(true);
-}
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// class DirectValueSetNodeImpl
-//-----------------------------------------------------------------------------
-
-DirectValueSetNodeImpl::DirectValueSetNodeImpl(ISubtree& rOriginal, Template* pTemplate)
-: ValueSetNodeImpl(rOriginal,pTemplate)
-{
-}
-//-----------------------------------------------------------------------------
-
-DirectValueSetNodeImpl::DirectValueSetNodeImpl(DeferredValueSetNodeImpl& rOriginal)
-: ValueSetNodeImpl(rOriginal)
-{
-    implMakeIndirect(false);
-}
-//-----------------------------------------------------------------------------
-
-void DirectValueSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& aNewElement)
-{
-    ValueSetNodeImpl::doInsertElement(aName,aNewElement);
-    aNewElement.tree()->makeIndirect(false);
-    implMarkAsDefault(false);
-}
-//-----------------------------------------------------------------------------
-
-void DirectValueSetNodeImpl::doRemoveElement(Name const& aName)
-{
-    ValueSetNodeImpl::doRemoveElement(aName);
-    implMarkAsDefault(false);
-}
-//-----------------------------------------------------------------------------
-
-void DirectValueSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth )
-{
-    ValueSetNodeImpl::initHelper( NodeType::getDirectAccessFactory(), rTree);
-}
-//-----------------------------------------------------------------------------
-
-DirectValueSetNodeImpl::Element DirectValueSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth )
-{
-    return ValueSetNodeImpl::makeAdditionalElement( NodeType::getDirectAccessFactory(), aAddNodeChange);
-}
-//-----------------------------------------------------------------------------
-
-bool DirectValueSetNodeImpl::doHasChanges() const
-{
-    return false;
-}
-//-----------------------------------------------------------------------------
-
-void DirectValueSetNodeImpl::doCollectChanges(NodeChanges& ) const
-{
-}
-//-----------------------------------------------------------------------------
-
-void DirectValueSetNodeImpl::doCommitChanges()
-{
-    OSL_ENSURE(false,"WARNING: Should not commit changes on object that hasn't any");
-}
-//-----------------------------------------------------------------------------
-
-void DirectValueSetNodeImpl::doMarkChanged()
-{
-    // Ignore
-    implMarkAsDefault(false);
-}
-//-----------------------------------------------------------------------------
-
-Attributes DirectValueSetNodeImpl::doGetAttributes() const
-{
-    return adjustForDirectAccess( ValueSetNodeImpl::doGetAttributes() );
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder DirectValueSetNodeImpl::doCloneIndirect(bool bIndirect)
-{
-    if (bIndirect)
-        return new DeferredValueSetNodeImpl(*this);
-    else
-        return this;
-}
-//-----------------------------------------------------------------------------
-
-void DirectValueSetNodeImpl::doMarkAsDefault()
-{
-    implMarkAsDefault(true);
-}
-//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // class DeferredTreeSetNodeImpl
 //-----------------------------------------------------------------------------
 
-DeferredTreeSetNodeImpl::DeferredTreeSetNodeImpl(ISubtree& rOriginal, Template* pTemplate)
-: TreeSetNodeImpl(rOriginal,pTemplate)
+DeferredSetNodeImpl::DeferredSetNodeImpl(data::SetNodeAddress const& _aNodeRef, Template* pTemplate)
+: SetNodeImpl(_aNodeRef,pTemplate)
 , m_aChangedData()
 , m_bChanged(false)
 , m_bDefault(false)
@@ -930,20 +424,10 @@ DeferredTreeSetNodeImpl::DeferredTreeSetNodeImpl(ISubtree& rOriginal, Template* 
 }
 //-----------------------------------------------------------------------------
 
-DeferredTreeSetNodeImpl::DeferredTreeSetNodeImpl(DirectTreeSetNodeImpl& rOriginal)
-: TreeSetNodeImpl(rOriginal)
-, m_aChangedData()
-, m_bChanged(false)
-, m_bDefault(false)
-{
-    implMakeIndirect(true);
-}
-//-----------------------------------------------------------------------------
-
-bool DeferredTreeSetNodeImpl::doIsEmpty() const
+bool DeferredSetNodeImpl::doIsEmpty() const
 {
     if (m_aChangedData.isEmpty())
-        return TreeSetNodeImpl::doIsEmpty();
+        return SetNodeImpl::doIsEmpty();
 
     // look for added elements
     {for(ElementSet::ConstIterator it = m_aChangedData.begin(), stop = m_aChangedData.end();
@@ -955,46 +439,39 @@ bool DeferredTreeSetNodeImpl::doIsEmpty() const
 
 
     // look for elements in the base set that are not 'deleted' (the changes are all deletions here)
-    {for(NativeIterator it = TreeSetNodeImpl::beginElementSet(), stop = TreeSetNodeImpl::endElementSet();
+    {for(NativeIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
         it != stop;
         ++it)
     {
-        if (m_aChangedData.hasElement(it->first)) return false;
+        if (!m_aChangedData.hasElement(it->first)) return false;
     }}
 
     return true;
 }
 //-----------------------------------------------------------------------------
 
-SetEntry DeferredTreeSetNodeImpl::doFindElement(Name const& aName)
+ElementTreeImpl* DeferredSetNodeImpl::doFindElement(Name const& aName)
 {
     Element* pElement = m_aChangedData.getElement(aName);
     if (!pElement)
-        pElement = TreeSetNodeImpl::getStoredElement(aName);
+        pElement = SetNodeImpl::getStoredElement(aName);
 
-    return SetEntry(pElement ? pElement->getBodyPtr() : 0);
+    return pElement ? pElement->get() : 0;
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doClearElements()
-{
-    TreeSetNodeImpl::doClearElements();
-    m_aChangedData.clearElements();
-}
-//-----------------------------------------------------------------------------
-
-SetNodeVisitor::Result DeferredTreeSetNodeImpl::doDispatchToElements(SetNodeVisitor& aVisitor)
+SetNodeVisitor::Result DeferredSetNodeImpl::doDispatchToElements(data::Accessor const& _aAccessor, SetNodeVisitor& aVisitor)
 {
     SetNodeVisitor::Result eRet = SetNodeVisitor::CONTINUE;
     // look for elements in the base set that are not hidden by changes
-    {for(NativeIterator it = TreeSetNodeImpl::beginElementSet(), stop = TreeSetNodeImpl::endElementSet();
+    {for(NativeIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
         it != stop && eRet != SetNodeVisitor::DONE;
         ++it)
     {
         if (m_aChangedData.getElement(it->first) == 0)
         {
             OSL_ASSERT(it->second.isValid());
-            eRet = aVisitor.visit(SetEntry(it->second.getBodyPtr()));
+            eRet = aVisitor.visit(SetEntry(_aAccessor,it->second.get()));
         }
     }}
 
@@ -1005,71 +482,44 @@ SetNodeVisitor::Result DeferredTreeSetNodeImpl::doDispatchToElements(SetNodeVisi
     {
         if (it->isValid())
         {
-            eRet = aVisitor.visit(SetEntry(it->getBodyPtr()));
+            eRet = aVisitor.visit(SetEntry(_aAccessor,it->get()));
         }
     }}
     return eRet;
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& aNewEntry)
-{
-    implInsertNewElement(aName, TreeSetNodeImpl::implMakeElement(aNewEntry));
-    m_bDefault = false;
-}
-//-----------------------------------------------------------------------------
-
-void DeferredTreeSetNodeImpl::doRemoveElement(Name const& aName)
-{
-    implRemoveOldElement(aName);
-    m_bDefault = false;
-}
-//-----------------------------------------------------------------------------
-
-void DeferredTreeSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth nDepth)
-{
-    TreeSetNodeImpl::initHelper(NodeType::getDeferredChangeFactory(), rTree, nDepth);
-}
-//-----------------------------------------------------------------------------
-
-DeferredTreeSetNodeImpl::Element DeferredTreeSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth)
-{
-    return TreeSetNodeImpl::makeAdditionalElement( NodeType::getDeferredChangeFactory(), aAddNodeChange, nDepth);
-}
-//-----------------------------------------------------------------------------
-
-
-bool DeferredTreeSetNodeImpl::doHasChanges() const
+bool DeferredSetNodeImpl::hasChanges() const
 {
     return m_bChanged || !m_aChangedData.isEmpty();
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doCollectChanges(NodeChanges& rChanges) const
+void DeferredSetNodeImpl::collectElementChanges(data::Accessor const& _aAccessor, NodeChanges& rChanges) const
 {
     // collect added and deleted nodes
     {for(NativeIterator it = m_aChangedData.beginNative(), stop = m_aChangedData.endNative();
         it != stop;
         ++it)
     {
-        Element const* pOriginal = TreeSetNodeImpl::getStoredElement(it->first);
+        Element const* pOriginal = SetNodeImpl::getStoredElement(it->first);
 
         if (it->second.isValid()) // added one
         {
             if (pOriginal)
             {
-                rChanges.add(NodeChange(doCreateReplace(it->first,it->second,*pOriginal)));
+                rChanges.add(NodeChange(implCreateReplace(_aAccessor, it->first,it->second,*pOriginal)));
             }
             else
             {
-                rChanges.add(NodeChange(doCreateInsert(it->first,it->second)));
+                rChanges.add(NodeChange(implCreateInsert(_aAccessor, it->first,it->second)));
             }
         }
         else
         {
             if (pOriginal)
             {
-                rChanges.add(NodeChange(doCreateRemove(it->first,*pOriginal)));
+                rChanges.add(NodeChange(implCreateRemove(_aAccessor, it->first,*pOriginal)));
             }
 
             //else nothing to do
@@ -1077,47 +527,42 @@ void DeferredTreeSetNodeImpl::doCollectChanges(NodeChanges& rChanges) const
     }}
 
     // collect preexisting nodes
-    {for(NativeIterator it = TreeSetNodeImpl::beginElementSet(), stop = TreeSetNodeImpl::endElementSet();
+    // if (!containsValues()) // value elements ar immutable !
+    {for(NativeIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
         it != stop;
         ++it)
     {
         if (m_aChangedData.getElement(it->first) == 0)
         {
             OSL_ASSERT(it->second.isValid());
-            if (it->second->hasChanges())
-                it->second->collectChanges(rChanges);
+            view::ViewTreeAccess aElementView(_aAccessor, *it->second);
+
+            if (aElementView.hasChanges())
+                aElementView.collectChanges(rChanges);
         }
     }}
 
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doMarkChanged()
+void DeferredSetNodeImpl::markChanged()
 {
     m_bChanged = true;
 }
 //-----------------------------------------------------------------------------
 
-NodeImplHolder DeferredTreeSetNodeImpl::doCloneIndirect(bool bIndirect)
+void DeferredSetNodeImpl::doTransferElements(ElementSet& rReplacement)
 {
-    if (bIndirect)
-        return this;
-    else
-        return new DirectTreeSetNodeImpl(*this);
-}
-//-----------------------------------------------------------------------------
-
-void DeferredTreeSetNodeImpl::doCommitChanges()
-{
-    // commit preexisting nodes
-    {for(NativeIterator it = TreeSetNodeImpl::beginElementSet(), stop = TreeSetNodeImpl::endElementSet();
+    // transfer preexisting nodes (unless replaced/deleted)
+    {for(NativeIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
         it != stop;
         ++it)
     {
         if (m_aChangedData.getElement(it->first) == 0)
         {
             OSL_ASSERT(it->second.isValid());
-            it->second->commitDirect();
+
+            rReplacement.insertElement(it->first,it->second);
         }
     }}
 
@@ -1128,39 +573,11 @@ void DeferredTreeSetNodeImpl::doCommitChanges()
 
         while(it != stop)
         {
-            Name    aName       = it->first;
-            Element aNewElement = it->second;
-
-            Element* pOriginal = TreeSetNodeImpl::getStoredElement(aName);
-
-            if (aNewElement.isValid())
-            {
-                if (pOriginal)
-                    TreeSetNodeImpl::implReplaceElement(aName,aNewElement,true);
-
-                else
-                    TreeSetNodeImpl::implInsertElement(aName,aNewElement,true);
-
-                aNewElement->makeIndirect(true);
-            }
-            else
-            {
-                if (pOriginal)
-                {
-                    TreeSetNodeImpl::implRemoveElement(aName,true);
-                }
-
-                //else nothing to do
-            }
-            if (pOriginal)
-            {
-                OSL_ASSERT(pOriginal->isValid());
-                (*pOriginal)->commitDirect();
-                (*pOriginal)->makeIndirect(false);
-            }
+            if (it->second.isValid())
+                rReplacement.insertElement(it->first,it->second);
 
             ++it;
-            m_aChangedData.removeElement(aName);
+            m_aChangedData.removeElement(it->first);
         }
     }
 
@@ -1168,19 +585,36 @@ void DeferredTreeSetNodeImpl::doCommitChanges()
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::doPreCommitChanges(ElementList& _rRemovedElements)
+void DeferredSetNodeImpl::rebuildElement(data::Accessor const& _aAccessor, Name const& _aName, Element const& _aElement)
 {
-    // nowfirst get the name of this node
-    OUString aName = this->getOriginalNodeName();
+    TreeImpl* pContext = this->getParentTree();
+    OSL_ENSURE(pContext, "Context tree must be set before rebuilding");
+
+    rtl::Reference<view::ViewStrategy> xContextBehavior = pContext->getViewBehavior();
+
+    data::TreeAccessor aElementAccessor = this->getDataAccess(_aAccessor).getElementTree(_aName);
+    OSL_ENSURE(aElementAccessor.isValid(), "Element Tree not found in data");
+
+    OSL_ENSURE(_aElement.isValid(), "Element not found in view");
+    data::Accessor aOldAccessor( _aElement->getViewBehavior()->getDataSegment() );
+    _aElement->rebuild(xContextBehavior,aElementAccessor,aOldAccessor);
+}
+
+//-----------------------------------------------------------------------------
+std::auto_ptr<SubtreeChange> DeferredSetNodeImpl::preCommitChanges(data::Accessor const& _aAccessor, ElementList& _rRemovedElements)
+{
+    data::NodeAccess aOriginalData = this->getOriginalNodeAccess(_aAccessor);
+    // now first get the name of this node
+    Name sSetName = aOriginalData.getName();
 
     // and make a SubtreeChange
-    std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(aName,
+    std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(sSetName.toString(),
                                                                getElementTemplate()->getName().toString(),
                                                                getElementTemplate()->getModule().toString(),
-                                                               this->getAttributes()) );
+                                                               aOriginalData.getAttributes() ) );
 
     // commit preexisting nodes
-    {for(NativeIterator it = TreeSetNodeImpl::beginElementSet(), stop = TreeSetNodeImpl::endElementSet();
+    {for(NativeIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
         it != stop;
         ++it)
     {
@@ -1189,9 +623,11 @@ std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::doPreCommitChanges(Element
             OSL_ASSERT(it->second.isValid());
             OSL_ENSURE( !m_bDefault || it->second.inDefault, "m_bDefault is inconsistent");
 
-            std::auto_ptr<SubtreeChange> pNewChange( it->second->preCommitChanges(_rRemovedElements) );
+            view::ViewTreeAccess aElementView(_aAccessor,*it->second);
+            std::auto_ptr<SubtreeChange> pNewChange = aElementView.preCommitChanges(_rRemovedElements);
             if (pNewChange.get() != 0)
             {
+                //OSL_ENSURE( !containsValues(), "Unexpected change generated by value set element");
                 std::auto_ptr<Change> pNewChangeBase( pNewChange.release() );
                 pSetChange->addChange(pNewChangeBase);
             }
@@ -1208,14 +644,13 @@ std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::doPreCommitChanges(Element
             Name    aName       = it->first;
             Element aNewElement = it->second;
 
-            Element* pOriginal = TreeSetNodeImpl::getStoredElement(aName);
+            Element* pOriginal = SetNodeImpl::getStoredElement(aName);
 
             if (aNewElement.isValid())
             {
-                std::auto_ptr<INode> aAddedTree;
-                aNewElement->releaseTo( aAddedTree );
+                data::TreeSegment aAddedTree = aNewElement->releaseOwnedTree();
 
-                OSL_ENSURE( aAddedTree.get(), "Could not take the new tree from the ElementTree");
+                OSL_ENSURE( aAddedTree.is(), "Could not take the new tree from the ElementTree");
                 OSL_ENSURE( !m_bDefault || aNewElement.inDefault, "m_bDefault is inconsistent");
 
                 AddNode* pAddNode = new AddNode(aAddedTree, aName.toString(), aNewElement.inDefault );
@@ -1251,14 +686,13 @@ std::auto_ptr<SubtreeChange> DeferredTreeSetNodeImpl::doPreCommitChanges(Element
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
+void DeferredSetNodeImpl::finishCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
     OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
                 "ERROR: Element template of change does not match the template of the set");
     OSL_ENSURE( rChanges.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
                 "ERROR: Element template module of change does not match the template of the set");
-
 
     for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
         it != stop;
@@ -1280,7 +714,7 @@ void DeferredTreeSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
                 OSL_ASSERT(!aOriginal.isValid());
 
             // handle a added, replaced or deleted node
-            std::auto_ptr<INode> aRemovedNode;
+            data::TreeSegment aRemovedTree;
 
             if (pNewElement->isValid())
             {
@@ -1289,17 +723,17 @@ void DeferredTreeSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
 
                 AddNode& rAddNode =  static_cast<AddNode&>(*it);
 
-                aRemovedNode = rAddNode.releaseReplacedNode();
+                aRemovedTree = rAddNode.getReplacedTree();
                 OSL_ASSERT( rAddNode.isReplacing() == (0!=pOriginal)  );
-                OSL_ASSERT( rAddNode.isReplacing() == (0!=aRemovedNode.get())  );
+                OSL_ASSERT( rAddNode.isReplacing() == aRemovedTree.is()  );
 
                 if (aOriginal.isValid())
-                    TreeSetNodeImpl::implReplaceElement(aElementName,*pNewElement,false);
+                    SetNodeImpl::replaceElement(aElementName,*pNewElement);
 
                 else
-                    TreeSetNodeImpl::implInsertElement(aElementName,*pNewElement,false);
+                    SetNodeImpl::insertElement(aElementName,*pNewElement);
 
-                (*pNewElement)->makeIndirect(true);
+                this->rebuildElement(_aAccessor,aElementName,*pNewElement);
             }
             else
             {
@@ -1307,33 +741,32 @@ void DeferredTreeSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
                 if (!it->ISA(RemoveNode)) throw Exception("Unexpected type of element change");
 
                 RemoveNode& rRemoveNode =  static_cast<RemoveNode&>(*it);
-                aRemovedNode = rRemoveNode.releaseRemovedNode();
+                aRemovedTree = rRemoveNode.getRemovedTree();
 
                 OSL_ASSERT(aOriginal.isValid());
                 if (aOriginal.isValid())
-                    TreeSetNodeImpl::implRemoveElement(aElementName,false);
+                    SetNodeImpl::removeElement(aElementName);
             }
             // handle a added or deleted node
             if (aOriginal.isValid())
             {
-                OSL_ENSURE(aRemovedNode.get(), "Cannot take over the removed node");
+                OSL_ENSURE(aRemovedTree.is(), "Cannot take over the removed node");
 
-                aOriginal->takeNodeFrom(aRemovedNode);
-                aOriginal->commitDirect(); // tree is detached => commit directly
-                aOriginal->makeIndirect(false);
+                aOriginal->takeTreeAndRebuild(aRemovedTree, _aAccessor);
             }
             m_aChangedData.removeElement(aElementName);
         }
         else
         {
             // handle preexisting nodes
-            OSL_ENSURE(pOriginal, "Changed Element is missing");
+            //OSL_ENSURE(!containsValues(), "Unexpected change to value set element");
+            OSL_ENSURE(pOriginal && pOriginal->isValid(), "Changed Element is missing");
             OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected type of element change");
 
-            if (!it->ISA(SubtreeChange)) throw Exception("Unexpected type of element change");
+            if (!it->ISA(SubtreeChange)) throw Exception("Unexpected set element change");
 
-            if (pOriginal)
-                (*pOriginal)->finishCommit(static_cast<SubtreeChange&>(*it));
+            if (pOriginal && pOriginal->isValid())
+                view::ViewTreeAccess(_aAccessor,**pOriginal).finishCommit(static_cast<SubtreeChange&>(*it));
         }
     }
     m_bChanged = false;
@@ -1342,7 +775,7 @@ void DeferredTreeSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
+void DeferredSetNodeImpl::revertCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
     OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
@@ -1362,7 +795,7 @@ void DeferredTreeSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
         if (Element* pNewElement = m_aChangedData.getElement(aElementName))
         {
             // handle a added, replaced or deleted node
-            std::auto_ptr<INode> pRemovedNode;
+            data::TreeSegment pRemovedTree;
 
             if (pNewElement->isValid())
             {
@@ -1371,15 +804,17 @@ void DeferredTreeSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
 
                 AddNode& rAddNode =  static_cast<AddNode&>(*it);
 
-                pRemovedNode = rAddNode.releaseReplacedNode();
+                pRemovedTree = rAddNode.getReplacedTree();
                 OSL_ASSERT( rAddNode.isReplacing() == (0!=pOriginal)  );
-                OSL_ASSERT( rAddNode.isReplacing() == (0!=rAddNode.getReplacedNode_Unsafe())  );
+                OSL_ASSERT( rAddNode.isReplacing() == (0!=pRemovedTree.is())  );
 
-                std::auto_ptr<INode> aAddedNode = rAddNode.releaseAddedNode();
-                OSL_ENSURE(aAddedNode.get(), "Cannot restore new node: Change lost ownership");
+                OSL_ENSURE(!rAddNode.wasInserted(), "Cannot retract new node: Change was integrated");
+
+                data::TreeSegment aAddedTree = rAddNode.getNewTree();
+                OSL_ENSURE(aAddedTree.is(), "Cannot restore new node: Change lost ownership");
 
                 // restore the tree
-                (*pNewElement)->takeNodeFrom(aAddedNode);
+                (*pNewElement)->takeTreeBack(aAddedTree);
             }
             else
             {
@@ -1387,43 +822,44 @@ void DeferredTreeSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
                 if (!it->ISA(RemoveNode)) throw Exception("Unexpected type of element change");
 
                 RemoveNode& rRemoveNode =  static_cast<RemoveNode&>(*it);
-                pRemovedNode = rRemoveNode.releaseRemovedNode();
+                pRemovedTree = rRemoveNode.getRemovedTree();
 
                 OSL_ASSERT(pOriginal);
-                OSL_ASSERT((0 != pOriginal) == (0!=rRemoveNode.getRemovedNode_Unsafe())  );
+                OSL_ASSERT((0 != pOriginal) == (0!=pRemovedTree.is())  );
             }
-            OSL_ENSURE(pRemovedNode.get() == 0, "Possible problems reverting removed node: Change took ownership");
-            // handle a added or deleted node
-            if (pOriginal && pRemovedNode.get())
+            OSL_ENSURE(pRemovedTree.is(), "Possible problems reverting removed node: Change took ownership");
+            // try handle a added or deleted node
+            if (pOriginal && pRemovedTree.is())
             {
                 OSL_ASSERT(pOriginal->isValid());
-                (*pOriginal)->takeNodeFrom(pRemovedNode);
+                (*pOriginal)->takeTreeAndRebuild(pRemovedTree,_aAccessor);
+                OSL_DEBUG_ONLY(pRemovedTree.clear());
             }
-            OSL_ENSURE(pRemovedNode.get() == 0, "Could not revert removed node: Nowhere to put ownership");
+            OSL_ENSURE(!pRemovedTree.is(), "Could not revert removed node: Nowhere to put ownership");
         }
         else
         {
             // handle preexisting nodes
-            OSL_ENSURE(pOriginal, "Changed Element is missing");
-            OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected type of element change");
+            //OSL_ENSURE(!containsValues(), "Unexpected change to value set element");
+            OSL_ENSURE(pOriginal && pOriginal->isValid(), "Changed Element is missing");
+            OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected set element change");
 
-            if (!it->ISA(SubtreeChange)) throw Exception("Unexpected type of element change");
+            if (!it->ISA(SubtreeChange)) throw Exception("Unexpected set element change");
 
-            if (pOriginal)
-                (*pOriginal)->revertCommit(static_cast<SubtreeChange&>(*it));
+            if (pOriginal && pOriginal->isValid())
+                view::ViewTreeAccess(_aAccessor,**pOriginal).revertCommit(static_cast<SubtreeChange&>(*it));
         }
     }
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
+void DeferredSetNodeImpl::failedCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
     OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
                 "ERROR: Element template of change does not match the template of the set");
     OSL_ENSURE( rChanges.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
                 "ERROR: Element template module of change does not match the template of the set");
-
 
     for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
         it != stop;
@@ -1445,7 +881,7 @@ void DeferredTreeSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
                 OSL_ASSERT(!aOriginal.isValid());
 
             // handle a added, replaced or deleted node
-            std::auto_ptr<INode> aRemovedNode;
+            data::TreeSegment aRemovedTree;
 
             if (pNewElement->isValid())
             {
@@ -1454,37 +890,33 @@ void DeferredTreeSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
 
                 AddNode& rAddNode =  static_cast<AddNode&>(*it);
 
-                aRemovedNode = rAddNode.releaseReplacedNode();
+                aRemovedTree = rAddNode.getReplacedTree();
                 OSL_ASSERT( rAddNode.isReplacing() == (0!=pOriginal)  );
-                OSL_ASSERT( rAddNode.isReplacing() == (0!=rAddNode.getReplacedNode_Unsafe())  );
+                OSL_ASSERT( rAddNode.isReplacing() == aRemovedTree.is()  );
 
-                std::auto_ptr<INode> aAddedNode = rAddNode.releaseAddedNode();
-
-                if (aAddedNode.get()) // Change not done; need to restore new node (element will be released into the wild then)
-                {
-                    (*pNewElement)->takeNodeFrom(aAddedNode);
-                    detach(*pNewElement, false);
-                }
-
-                else if (getOriginalSetNode().getChild(aElementName.toString()) == rAddNode.getAddedNode_unsafe())
+                if (rAddNode.wasInserted())
                 { // it has been integrated into the master tree
+                    OSL_ENSURE(getDataAccess(_aAccessor).getElementTree(aElementName).address() == rAddNode.getInsertedTree(),
+                                "Internal Error: Inserted tree address does not match actual data");
 
                     // so add it
                     if (aOriginal.isValid())
-                        TreeSetNodeImpl::implReplaceElement(aElementName,*pNewElement,false);
+                        SetNodeImpl::replaceElement(aElementName,*pNewElement);
 
                     else
-                        TreeSetNodeImpl::implInsertElement(aElementName,*pNewElement,false);
+                        SetNodeImpl::insertElement(aElementName,*pNewElement);
 
-                    (*pNewElement)->makeIndirect(true);
+                    this->rebuildElement(_aAccessor,aElementName,*pNewElement);
                 }
-                else
+                else // Change not done; need to restore new node (element will be released into the wild then)
                 {
-                    OSL_ENSURE(false, "Unexpected: added node is gone, but where ? May cause invalid references");
-                    detach(*pNewElement, false);
-                    // pNewElement->disposeData()
-                }
+                    data::TreeSegment aAddedTree = rAddNode.getNewTree();
 
+                    OSL_ENSURE(aAddedTree.is(), "Unexpected: added node is gone, but where ? May cause invalid references");
+                    if (aAddedTree.is())
+                        (*pNewElement)->takeTreeBack(aAddedTree);
+                    detach(*pNewElement);
+                }
             }
             else
             {
@@ -1492,39 +924,39 @@ void DeferredTreeSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
                 if (!it->ISA(RemoveNode)) throw Exception("Unexpected type of element change");
 
                 RemoveNode& rRemoveNode =  static_cast<RemoveNode&>(*it);
-                aRemovedNode = rRemoveNode.releaseRemovedNode();
+                aRemovedTree = rRemoveNode.getRemovedTree();
 
                 OSL_ASSERT(aOriginal.isValid());
-                if (aRemovedNode.get() || rRemoveNode.getRemovedNode_Unsafe() != getOriginalSetNode().getChild(aElementName.toString()))
+                if (aRemovedTree.is() && !getDataAccess(_aAccessor).hasElement(aElementName))
                 {
                     // really removed - then remove the originel
                     if (aOriginal.isValid())
-                        TreeSetNodeImpl::implRemoveElement(aElementName,false);
-                    OSL_ENSURE(NULL == getOriginalSetNode().getChild(aElementName.toString()),"ERROR: Removed Node still there or replaced");
+                        SetNodeImpl::removeElement(aElementName);
                 }
             }
 
             // handle a added or deleted node
-            if (aOriginal.isValid() && aRemovedNode.get())
+            if (aOriginal.isValid() && aRemovedTree.is())
             {
-                aOriginal->takeNodeFrom(aRemovedNode);
-                aOriginal->commitDirect(); // tree is detached => commit directly
-                aOriginal->makeIndirect(false);
+                aOriginal->takeTreeAndRebuild(aRemovedTree,_aAccessor);
+                //aOriginal->getAccess().makeDirect();
+                OSL_DEBUG_ONLY(aRemovedTree.clear());
             }
-            OSL_ENSURE(aRemovedNode.get() == 0, "Could not revert removed node: Nowhere to put ownership");
+            OSL_ENSURE(!aRemovedTree.is(), "Could not revert removed node: Nowhere to put ownership");
 
             m_aChangedData.removeElement(aElementName);
         }
         else
         {
             // handle preexisting nodes
-            OSL_ENSURE(pOriginal, "Changed Element is missing");
-            OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected type of element change");
+            //OSL_ENSURE(!containsValues(), "Unexpected change to value set element");
+            OSL_ENSURE(pOriginal && pOriginal->isValid(), "Changed Element is missing");
+            OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected set element change");
 
-            if (!it->ISA(SubtreeChange)) throw Exception("Unexpected type of element change");
+            if (!it->ISA(SubtreeChange)) throw Exception("Unexpected set element change");
 
-            if (pOriginal)
-                (*pOriginal)->recoverFailedCommit(static_cast<SubtreeChange&>(*it));
+            if (pOriginal && pOriginal->isValid())
+                view::ViewTreeAccess(_aAccessor,**pOriginal).recoverFailedCommit(static_cast<SubtreeChange&>(*it));
         }
     }
     m_bChanged = false;
@@ -1534,9 +966,9 @@ void DeferredTreeSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::implInsertNewElement(Name const& aName, Element const& aNewElement)
+void DeferredSetNodeImpl::insertNewElement(Name const& aName, Element const& aNewElement)
 {
-    attach(aNewElement,aName,false);
+    attach(aNewElement,aName);
     try
     {
         // put the new element into the changed set
@@ -1544,31 +976,33 @@ void DeferredTreeSetNodeImpl::implInsertNewElement(Name const& aName, Element co
         if (pAddedElement)
         {
             OSL_ENSURE(!pAddedElement->isValid(),"WARNING: Element being inserted was already there - replacing");
-            detach(m_aChangedData.replaceElement(aName,aNewElement),false);
+            detach(m_aChangedData.replaceElement(aName,aNewElement));
         }
         else
         {
             m_aChangedData.insertElement(aName, aNewElement);
         }
         m_bChanged = true;
+        m_bDefault = false;
     }
     catch (std::exception&)
     {
-        detach(aNewElement,false);
+        detach(aNewElement);
         throw;
     }
 }
 //-------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::implRemoveOldElement(Name const& aName)
+void DeferredSetNodeImpl::removeOldElement(Name const& aName)
 {
     // put an empty (dummy) element into the changed set
     Element* pAddedElement = m_aChangedData.getElement(aName);
     if (pAddedElement)
     {
         OSL_ENSURE(pAddedElement->isValid(),"WARNING: Element being removed was already removed");
-        detach(m_aChangedData.replaceElement(aName, Element()),false);
+        detach(m_aChangedData.replaceElement(aName, Element()));
         m_bChanged = true;
+        m_bDefault = false;
     }
     else
     {
@@ -1580,8 +1014,9 @@ void DeferredTreeSetNodeImpl::implRemoveOldElement(Name const& aName)
     if (pOldElement)
     {
         OSL_ASSERT(pOldElement->isValid());
-        detach(*pOldElement,false);
+        detach(*pOldElement);
         m_bChanged = true;
+        m_bDefault = false;
     }
     else // just clear things out
     {
@@ -1592,7 +1027,7 @@ void DeferredTreeSetNodeImpl::implRemoveOldElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange)
+SetElementChangeImpl* DeferredSetNodeImpl::doAdjustChangedElement(data::Accessor const & _aAccessor, NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange)
 {
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
@@ -1602,15 +1037,20 @@ void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLo
 
             if (aChange.ISA(SubtreeChange))
             {
+                //OSL_ENSURE( !containsValues(), "Unexpected kind of change: Tree change applied to value set element" );
                 SubtreeChange const& aSubtreeChange = static_cast<SubtreeChange const&>(aChange);
 
                 // recurse to element tree - but do not notify those changes (?)
+                view::Tree aElementTree(_aAccessor, **pElement);
 
                 NodeChangesInformation aIgnoredChanges;
-                (*pElement)->adjustToChanges(aIgnoredChanges,aSubtreeChange);
+                view::getViewBehavior(aElementTree)->adjustToChanges(aIgnoredChanges,view::getRootNode(aElementTree),aSubtreeChange);
             }
             else
-            OSL_ENSURE( false, "Unexpected kind of change to set element" );
+            {
+                OSL_ENSURE( aChange.ISA(ValueChange), "Unexpected kind of change to value set element" );
+                //OSL_ENSURE( containsValues(), "Unexpected kind of change: Value change applied to tree set element" );
+            }
 
         }
         else
@@ -1625,21 +1065,22 @@ void DeferredTreeSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLo
             Element aLocalElement = *pLocalElement;
 
             // also signal something happened
-            addLocalChangeHelper(rLocalChanges, NodeChange( doCreateReplace(aName,aLocalElement,aLocalElement) ) );
+            return implCreateReplace(_aAccessor,aName,aLocalElement,aLocalElement);
         }
         else
         {
             // already removed locally - should be notified by different route (if applicable)
+            return NULL;
         }
     }
     else
     {
-        TreeSetNodeImpl::doAdjustChangedElement(rLocalChanges,aName,aChange);
+        return SetNodeImpl::doAdjustChangedElement(_aAccessor, rLocalChanges,aName,aChange);
     }
 }
 //-----------------------------------------------------------------------------
 
-NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement)
+SetElementChangeImpl* DeferredSetNodeImpl::doAdjustToAddedElement(data::Accessor const& _aAccessor, Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement)
 {
     m_bDefault = false;
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
@@ -1649,12 +1090,12 @@ NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToAddedElement(Name const& aNam
         {
             OSL_ENSURE( aAddNodeChange.isReplacing(), "Added Element already exists - replacing" );
 
-            TreeSetNodeImpl::implReplaceElement(aName,aNewElement, false);
+            this->replaceElement(aName,aNewElement);
         }
         else
         {
             OSL_ENSURE( !aAddNodeChange.isReplacing(), "Replaced Element doesn't exist - simply adding" );
-            TreeSetNodeImpl::implInsertElement(aName,aNewElement, false);
+            this->insertElement(aName,aNewElement);
         }
 
 
@@ -1663,22 +1104,22 @@ NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToAddedElement(Name const& aNam
             Element aLocalElement = *pLocalElement;
 
             // just signal something happened
-            return doCreateReplace(aName,aLocalElement,aLocalElement);
+            return implCreateReplace(_aAccessor,aName,aLocalElement,aLocalElement);
         }
         else // had been removed locally
         {
             // signal what happened
-            return doCreateInsert(aName,aNewElement);
+            return implCreateInsert(_aAccessor,aName,aNewElement);
         }
     }
     else
     {
-        return TreeSetNodeImpl::doAdjustToAddedElement(aName,aAddNodeChange,aNewElement);
+        return SetNodeImpl::implAdjustToAddedElement(_aAccessor,aName,aNewElement,aAddNodeChange.isReplacing());
     }
 }
 //-----------------------------------------------------------------------------
 
-NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange)
+SetElementChangeImpl* DeferredSetNodeImpl::doAdjustToRemovedElement(data::Accessor const& _aAccessor, Name const& aName, RemoveNode const& aRemoveNodeChange)
 {
     m_bDefault = false;
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
@@ -1686,7 +1127,7 @@ NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToRemovedElement(Name const& aN
         if (Element* pOriginal = getStoredElement(aName))
         {
             // take away the original
-                TreeSetNodeImpl::implRemoveElement(aName, false);
+            this->removeElement(aName);
         }
 
         if (pLocalElement->isValid()) // remains a valid replacement
@@ -1694,7 +1135,7 @@ NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToRemovedElement(Name const& aN
             Element aLocalElement = *pLocalElement;
 
             // signal something happened
-            return doCreateReplace(aName,aLocalElement,aLocalElement);
+            return implCreateReplace(_aAccessor,aName,aLocalElement,aLocalElement);
         }
         else // already was removed locally
         {
@@ -1703,16 +1144,16 @@ NodeChangeImpl* DeferredTreeSetNodeImpl::doAdjustToRemovedElement(Name const& aN
     }
     else
     {
-        return TreeSetNodeImpl::doAdjustToRemovedElement(aName,aRemoveNodeChange);
+        return SetNodeImpl::implAdjustToRemovedElement(_aAccessor,aName);
     }
 }
 //-----------------------------------------------------------------------------
 
-void DeferredTreeSetNodeImpl::doDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree)
+void DeferredSetNodeImpl::doDifferenceToDefaultState(data::Accessor const& _aAccessor, SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree)
 {
     if (!m_bDefault)
     {
-        implDifferenceToDefaultState(_rChangeToDefault,_rDefaultTree);
+        implDifferenceToDefaultState(_aAccessor,_rChangeToDefault,_rDefaultTree);
 
         NativeIterator it = m_aChangedData.beginNative();
         NativeIterator const stop = m_aChangedData.endNative();
@@ -1728,9 +1169,14 @@ void DeferredTreeSetNodeImpl::doDifferenceToDefaultState(SubtreeChange& _rChange
 
             if (pChange == NULL)
             {
-                std::auto_ptr<INode> aDefaultTree = _rDefaultTree.removeChild(aName.toString());
+                std::auto_ptr<INode> aDefaultNode = _rDefaultTree.removeChild(aName.toString());
+                OSL_ENSURE( aDefaultNode.get(), "Error: unused Default tree not found after SetNodeImpl::implDifferenceToDefaultState");
 
-                OSL_ENSURE( aDefaultTree.get(), "Error: unused Default tree not after SetNodeImpl::implDifferenceToDefaultState");
+                OUString aElementTypeName = _rDefaultTree.getElementTemplateName();
+                OSL_ENSURE( _rDefaultTree.isSetNode(), "Error: missing set template information in default data");
+
+                data::TreeSegment aDefaultTree = data::TreeSegment::createNew(aDefaultNode,aElementTypeName);
+                OSL_ENSURE( aDefaultTree.is(), "Error: unused Default tree not accessible after SetNodeImpl::implDifferenceToDefaultState");
 
                 AddNode* pAddIt = new AddNode(aDefaultTree, aName.toString(), true );
 
@@ -1749,7 +1195,7 @@ void DeferredTreeSetNodeImpl::doDifferenceToDefaultState(SubtreeChange& _rChange
             {
                 // adjust the AddNode - remove the original expected node
                 AddNode* pAddIt = static_cast<AddNode*>(pChange);
-                pAddIt->expectReplacedNode(NULL);
+                pAddIt->clearReplacedTree();
 
                 if (aElement.isValid())
                 {
@@ -1772,7 +1218,7 @@ void DeferredTreeSetNodeImpl::doDifferenceToDefaultState(SubtreeChange& _rChange
                     OSL_ENSURE(!aElement.inDefault, "Default element replaced by default");
                     // adjust the RemoveNode - remove the original expected node
                     RemoveNode* pRemoveIt = static_cast<RemoveNode*>(pChange);
-                    pRemoveIt->expectRemovedNode(NULL);
+                    pRemoveIt->clearRemovedTree();
                 }
                 else
                 {
@@ -1784,859 +1230,6 @@ void DeferredTreeSetNodeImpl::doDifferenceToDefaultState(SubtreeChange& _rChange
         }
     }
 }
-//-----------------------------------------------------------------------------
-
-void DeferredTreeSetNodeImpl::doMarkAsDefault()
-{
-    m_bDefault = true;
-}
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// class DeferredValueSetNodeImpl
-//-----------------------------------------------------------------------------
-
-DeferredValueSetNodeImpl::DeferredValueSetNodeImpl(ISubtree& rOriginal, Template* pTemplate)
-: ValueSetNodeImpl(rOriginal,pTemplate)
-, m_aChangedData()
-, m_bChanged(false)
-, m_bDefault(false)
-{
-}
-//-----------------------------------------------------------------------------
-
-DeferredValueSetNodeImpl::DeferredValueSetNodeImpl(DirectValueSetNodeImpl& rOriginal)
-: ValueSetNodeImpl(rOriginal)
-, m_aChangedData()
-, m_bChanged(false)
-, m_bDefault(false)
-{
-    implMakeIndirect(true);
-}
-//-----------------------------------------------------------------------------
-
-bool DeferredValueSetNodeImpl::doIsEmpty() const
-{
-    if (m_aChangedData.isEmpty())
-        return ValueSetNodeImpl::doIsEmpty();
-
-    // look for added elements
-    {for(ElementSet::ConstIterator it = m_aChangedData.begin(), stop = m_aChangedData.end();
-        it != stop;
-        ++it)
-    {
-        if (it->isValid()) return false;
-    }}
-
-
-    // look for elements in the base set that are not 'deleted'
-    {for(NativeIterator it = ValueSetNodeImpl::beginElementSet(), stop = ValueSetNodeImpl::endElementSet();
-        it != stop;
-        ++it)
-    {
-        if (m_aChangedData.hasElement(it->first)) return false;
-    }}
-
-    return true;
-}
-//-----------------------------------------------------------------------------
-
-SetEntry DeferredValueSetNodeImpl::doFindElement(Name const& aName)
-{
-    Element* pElement = m_aChangedData.getElement(aName);
-    if (!pElement)
-        pElement = ValueSetNodeImpl::getStoredElement(aName);
-
-    return SetEntry(pElement ? pElement->getBodyPtr() : 0);
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doClearElements()
-{
-    ValueSetNodeImpl::doClearElements();
-    m_aChangedData.clearElements();
-}
-//-----------------------------------------------------------------------------
-
-SetNodeVisitor::Result DeferredValueSetNodeImpl::doDispatchToElements(SetNodeVisitor& aVisitor)
-{
-    SetNodeVisitor::Result eRet = SetNodeVisitor::CONTINUE;
-    // look for elements in the base set that are not hidden by changes
-    {for(NativeIterator it = ValueSetNodeImpl::beginElementSet(), stop = ValueSetNodeImpl::endElementSet();
-        it != stop && eRet != SetNodeVisitor::DONE;
-        ++it)
-    {
-        if (m_aChangedData.getElement(it->first) == 0)
-        {
-            OSL_ASSERT(it->second.isValid());
-            eRet = aVisitor.visit(SetEntry(it->second.getBodyPtr()));
-        }
-    }}
-
-    // look for added elements
-    {for(ElementSet::ConstIterator it = m_aChangedData.begin(), stop = m_aChangedData.end();
-        it != stop && eRet != SetNodeVisitor::DONE;
-        ++it)
-    {
-        if (it->isValid())
-        {
-            eRet = aVisitor.visit(SetEntry(it->getBodyPtr()));
-        }
-    }}
-    return eRet;
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doInsertElement(Name const& aName, SetEntry const& aNewEntry)
-{
-    implInsertNewElement(aName, ValueSetNodeImpl::implMakeElement(aNewEntry));
-    m_bDefault = false;
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doRemoveElement(Name const& aName)
-{
-    implRemoveOldElement(aName);
-    m_bDefault = false;
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doInitElements(ISubtree& rTree, TreeDepth )
-{
-    ValueSetNodeImpl::initHelper( NodeType::getDeferredChangeFactory(), rTree);
-}
-//-----------------------------------------------------------------------------
-
-DeferredValueSetNodeImpl::Element DeferredValueSetNodeImpl::doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth )
-{
-    return ValueSetNodeImpl::makeAdditionalElement( NodeType::getDeferredChangeFactory(), aAddNodeChange);
-}
-//-----------------------------------------------------------------------------
-
-bool DeferredValueSetNodeImpl::doHasChanges() const
-{
-    return m_bChanged || !m_aChangedData.isEmpty();
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doCollectChanges(NodeChanges& rChanges) const
-{
-    // collect added and deleted nodes
-    {for(NativeIterator it = m_aChangedData.beginNative(), stop = m_aChangedData.endNative();
-        it != stop;
-        ++it)
-    {
-        Element const* pOriginal = ValueSetNodeImpl::getStoredElement(it->first);
-
-        if (it->second.isValid()) // added one
-        {
-            if (pOriginal)
-            {
-                rChanges.add(NodeChange(doCreateReplace(it->first,it->second,*pOriginal)));
-            }
-            else
-            {
-                rChanges.add(NodeChange(doCreateInsert(it->first,it->second)));
-            }
-        }
-        else
-        {
-            if (pOriginal)
-            {
-                rChanges.add(NodeChange(doCreateRemove(it->first,*pOriginal)));
-            }
-
-            //else nothing to do
-        }
-    }}
-
-    // collect preexisting nodes
-    {for(NativeIterator it = ValueSetNodeImpl::beginElementSet(), stop = ValueSetNodeImpl::endElementSet();
-        it != stop;
-        ++it)
-    {
-        if (m_aChangedData.getElement(it->first) == 0)
-        {
-            OSL_ASSERT(it->second.isValid());
-            if (it->second->hasChanges())
-                it->second->collectChanges(rChanges);
-        }
-    }}
-
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doMarkChanged()
-{
-    m_bChanged = true;
-}
-//-----------------------------------------------------------------------------
-
-NodeImplHolder DeferredValueSetNodeImpl::doCloneIndirect(bool bIndirect)
-{
-    if (bIndirect)
-        return this;
-    else
-        return new DirectValueSetNodeImpl(*this);
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doCommitChanges()
-{
-    // commit preexisting nodes
-    {for(NativeIterator it = ValueSetNodeImpl::beginElementSet(), stop = ValueSetNodeImpl::endElementSet();
-        it != stop;
-        ++it)
-    {
-        if (m_aChangedData.getElement(it->first) == 0)
-        {
-            OSL_ASSERT(it->second.isValid());
-            it->second->commitDirect();
-        }
-    }}
-
-
-    // commit added and deleted nodes
-    {
-        NativeIterator it = m_aChangedData.beginNative();
-        NativeIterator const stop = m_aChangedData.endNative();
-
-        while(it != stop)
-        {
-            Name    aName       = it->first;
-            Element aNewElement = it->second;
-
-            Element* pOriginal = ValueSetNodeImpl::getStoredElement(aName);
-
-            if (aNewElement.isValid())
-            {
-                if (pOriginal)
-                    ValueSetNodeImpl::implReplaceElement(aName,aNewElement,true);
-
-                else
-                    ValueSetNodeImpl::implInsertElement(aName,aNewElement,true);
-
-                aNewElement->makeIndirect(true);
-            }
-            else
-            {
-                if (pOriginal)
-                    ValueSetNodeImpl::implRemoveElement(aName,true);
-
-                //else nothing to do
-            }
-            if (pOriginal)
-            {
-                OSL_ASSERT(pOriginal->isValid());
-                (*pOriginal)->commitDirect();
-                (*pOriginal)->makeIndirect(false);
-            }
-
-            ++it;
-            m_aChangedData.removeElement(aName);
-        }
-    }
-
-    m_bChanged = false;
-}
-//-----------------------------------------------------------------------------
-
-std::auto_ptr<SubtreeChange> DeferredValueSetNodeImpl::doPreCommitChanges(ElementList& _rRemovedElements)
-{
-    // and make a SubtreeChange
-    std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(this->getOriginalNodeName(),
-                                                                getElementTemplate()->getName().toString(),
-                                                                getElementTemplate()->getModule().toString(),
-                                                                this->getAttributes()) );
-
-    // commit preexisting nodes
-    {for(NativeIterator it = ValueSetNodeImpl::beginElementSet(), stop = ValueSetNodeImpl::endElementSet();
-        it != stop;
-        ++it)
-    {
-        if (m_aChangedData.getElement(it->first) == 0)
-        {
-            OSL_ASSERT(it->second.isValid());
-
-            std::auto_ptr<SubtreeChange> pNewChange( it->second->preCommitChanges(_rRemovedElements) );
-
-            OSL_ENSURE(pNewChange.get() == NULL, "Unexpected change generated by value set element - ignoring that change");
-
-            OSL_ENSURE( !m_bDefault || it->second.inDefault, "m_bDefault is inconsistent");
-        }
-    }}
-
-    // commit added and deleted nodes
-    {
-        NativeIterator it = m_aChangedData.beginNative();
-        NativeIterator const stop = m_aChangedData.endNative();
-
-        while(it != stop)
-        {
-            Name    aName       = it->first;
-            Element aNewElement = it->second;
-
-            Element* pOriginal = ValueSetNodeImpl::getStoredElement(aName);
-
-            if (aNewElement.isValid())
-            {
-                std::auto_ptr<INode> aAddedTree;
-                aNewElement->releaseTo( aAddedTree );
-
-                OSL_ENSURE( aAddedTree.get(), "Could not take the new tree from the ElementTree");
-                OSL_ENSURE( !m_bDefault || aNewElement.inDefault, "m_bDefault is inconsistent");
-
-                AddNode* pAddNode = new AddNode(aAddedTree, aName.toString(), aNewElement.inDefault );
-
-                std::auto_ptr<Change> pNewChange( pAddNode );
-
-                if (pOriginal)
-                    pAddNode->setReplacing();
-
-                pSetChange->addChange(pNewChange);
-            }
-            else
-            {
-                if (pOriginal)
-                {
-                    OSL_ENSURE( !m_bDefault || aNewElement.inDefault, "m_bDefault is inconsistent");
-
-                    std::auto_ptr<Change> pNewChange( new RemoveNode(aName.toString(), aNewElement.inDefault) );
-
-                    pSetChange->addChange(pNewChange);
-                }
-                //else nothing to do
-            }
-
-            // collect removed or replaced element
-            if (pOriginal)
-                _rRemovedElements.push_back( pOriginal->tree );
-
-            ++it;
-        }
-    }
-
-    return pSetChange;
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
-{
-    OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
-                "ERROR: Element template of change does not match the template of the set");
-    OSL_ENSURE( rChanges.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
-                "ERROR: Element template module of change does not match the template of the set");
-
-
-    for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
-        it != stop;
-        ++it)
-    {
-        Name aElementName = makeElementName(it->getNodeName(), Name::NoValidate());
-
-        Element* pOriginal = getStoredElement(aElementName);
-
-        if (Element* pNewElement = m_aChangedData.getElement(aElementName))
-        {
-            Element aOriginal;
-            if (pOriginal)
-            {
-                aOriginal = *pOriginal;
-                OSL_ASSERT(aOriginal.isValid());
-            }
-            else
-                OSL_ASSERT(!aOriginal.isValid());
-
-            // handle a added, replaced or deleted node
-            std::auto_ptr<INode> aRemovedNode;
-
-            if (pNewElement->isValid())
-            {
-                OSL_ENSURE( it->ISA(AddNode) , "Unexpected type of element change");
-                if (!it->ISA(AddNode)) throw Exception("Unexpected type of element change");
-
-                AddNode& rAddNode =  static_cast<AddNode&>(*it);
-
-                aRemovedNode = rAddNode.releaseReplacedNode();
-                OSL_ASSERT( rAddNode.isReplacing() == (0!=pOriginal)  );
-                OSL_ASSERT( rAddNode.isReplacing() == (0!=aRemovedNode.get())  );
-
-                if (aOriginal.isValid())
-                    ValueSetNodeImpl::implReplaceElement(aElementName,*pNewElement,false);
-
-                else
-                    ValueSetNodeImpl::implInsertElement(aElementName,*pNewElement,false);
-
-                (*pNewElement)->makeIndirect(true);
-            }
-            else
-            {
-                OSL_ENSURE( it->ISA(RemoveNode) , "Unexpected type of element change");
-                if (!it->ISA(RemoveNode)) throw Exception("Unexpected type of element change");
-
-                RemoveNode& rRemoveNode =  static_cast<RemoveNode&>(*it);
-                aRemovedNode = rRemoveNode.releaseRemovedNode();
-
-                OSL_ASSERT(aOriginal.isValid());
-                if (aOriginal.isValid())
-                    ValueSetNodeImpl::implRemoveElement(aElementName,false);
-            }
-            // handle a added or deleted node
-            if (aOriginal.isValid())
-            {
-                OSL_ENSURE(aRemovedNode.get(), "Cannot take over the removed node");
-
-                aOriginal->takeNodeFrom(aRemovedNode);
-                aOriginal->commitDirect(); // tree is detached => commit directly
-                aOriginal->makeIndirect(false);
-            }
-            m_aChangedData.removeElement(aElementName);
-        }
-        else
-        {
-            // cannot apply changes to preexisting nodes
-            OSL_ENSURE(false, "Unexpected: Cannot finish commit - unexpected change for value set element");
-
-            throw Exception("Unexpected value set element change");
-        }
-    }
-    m_bChanged = false;
-
-    OSL_ENSURE(m_aChangedData.isEmpty(), "ERROR: Uncommitted changes left in set node");
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
-{
-    OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
-                "ERROR: Element template of change does not match the template of the set");
-    OSL_ENSURE( rChanges.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
-                "ERROR: Element template module of change does not match the template of the set");
-
-
-    for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
-        it != stop;
-        ++it)
-    {
-        Name aElementName = makeElementName(it->getNodeName(), Name::NoValidate());
-
-        Element* pOriginal = getStoredElement(aElementName);
-
-        if (Element* pNewElement = m_aChangedData.getElement(aElementName))
-        {
-            // handle a added, replaced or deleted node
-            std::auto_ptr<INode> pRemovedNode;
-
-            if (pNewElement->isValid())
-            {
-                OSL_ENSURE( it->ISA(AddNode) , "Unexpected type of element change");
-                if (!it->ISA(AddNode)) throw Exception("Unexpected type of element change");
-
-                AddNode& rAddNode =  static_cast<AddNode&>(*it);
-
-                pRemovedNode = rAddNode.releaseReplacedNode();
-                OSL_ASSERT( rAddNode.isReplacing() == (0!=pOriginal)  );
-                OSL_ASSERT( rAddNode.isReplacing() == (0!=rAddNode.getReplacedNode_Unsafe())  );
-
-                std::auto_ptr<INode> aAddedNode = rAddNode.releaseAddedNode();
-                OSL_ENSURE(aAddedNode.get(), "Cannot restore new node: Change lost ownership");
-
-                // restore the tree
-                (*pNewElement)->takeNodeFrom(aAddedNode);
-            }
-            else
-            {
-                OSL_ENSURE( it->ISA(RemoveNode) , "Unexpected type of element change");
-                if (!it->ISA(RemoveNode)) throw Exception("Unexpected type of element change");
-
-                RemoveNode& rRemoveNode =  static_cast<RemoveNode&>(*it);
-                pRemovedNode = rRemoveNode.releaseRemovedNode();
-
-                OSL_ASSERT(pOriginal);
-                OSL_ASSERT((0 != pOriginal) == (0!=rRemoveNode.getRemovedNode_Unsafe())  );
-            }
-            OSL_ENSURE(pRemovedNode.get() == 0, "Possible problems reverting removed node: Change took ownership");
-            // handle a added or deleted node
-            if (pOriginal && pRemovedNode.get())
-            {
-                OSL_ASSERT(pOriginal->isValid());
-                (*pOriginal)->takeNodeFrom(pRemovedNode);
-            }
-            OSL_ENSURE(pRemovedNode.get() == 0, "Could not revert removed node: Nowhere to put ownership");
-        }
-        else
-        {
-            // cannot apply changes to preexisting nodes
-            OSL_ENSURE(false, "Unexpected: Cannot revert commit - unexpected change for value set element");
-
-            throw Exception("Unexpected value set element change");
-        }
-    }
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
-{
-    OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
-                "ERROR: Element template of change does not match the template of the set");
-    OSL_ENSURE( rChanges.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
-                "ERROR: Element template module of change does not match the template of the set");
-
-
-    for(SubtreeChange::MutatingChildIterator it = rChanges.begin_changes(), stop = rChanges.end_changes();
-        it != stop;
-        ++it)
-    {
-        Name aElementName = makeElementName(it->getNodeName(), Name::NoValidate());
-
-        Element* pOriginal = getStoredElement(aElementName);
-
-        if (Element* pNewElement = m_aChangedData.getElement(aElementName))
-        {
-            Element aOriginal;
-            if (pOriginal)
-            {
-                aOriginal = *pOriginal;
-                OSL_ASSERT(aOriginal.isValid());
-            }
-            else
-                OSL_ASSERT(!aOriginal.isValid());
-
-            // handle a added, replaced or deleted node
-            std::auto_ptr<INode> aRemovedNode;
-
-            if (pNewElement->isValid())
-            {
-                OSL_ENSURE( it->ISA(AddNode) , "Unexpected type of element change");
-                if (!it->ISA(AddNode)) throw Exception("Unexpected type of element change");
-
-                AddNode& rAddNode =  static_cast<AddNode&>(*it);
-
-                aRemovedNode = rAddNode.releaseReplacedNode();
-                OSL_ASSERT( rAddNode.isReplacing() == (0!=pOriginal)  );
-                OSL_ASSERT( rAddNode.isReplacing() == (0!=rAddNode.getReplacedNode_Unsafe())  );
-
-                std::auto_ptr<INode> aAddedNode = rAddNode.releaseAddedNode();
-
-                if (aAddedNode.get()) // Change not done; need to restore new node (element will be released into the wild then)
-                {
-                    (*pNewElement)->takeNodeFrom(aAddedNode);
-                    detach(*pNewElement, false);
-                }
-
-                else if (getOriginalSetNode().getChild(aElementName.toString()) == rAddNode.getAddedNode_unsafe())
-                { // it has been integrated into the master tree
-
-                    // so add it
-                    if (aOriginal.isValid())
-                        ValueSetNodeImpl::implReplaceElement(aElementName,*pNewElement,false);
-
-                    else
-                        ValueSetNodeImpl::implInsertElement(aElementName,*pNewElement,false);
-
-                    (*pNewElement)->makeIndirect(true);
-                }
-                else
-                {
-                    OSL_ENSURE(false, "Unexpected: added node is gone, but where ? May cause invalid references");
-                    detach(*pNewElement, false);
-                    // pNewElement->disposeData()
-                }
-
-            }
-            else
-            {
-                OSL_ENSURE( it->ISA(RemoveNode) , "Unexpected type of element change");
-                if (!it->ISA(RemoveNode)) throw Exception("Unexpected type of element change");
-
-                RemoveNode& rRemoveNode =  static_cast<RemoveNode&>(*it);
-                aRemovedNode = rRemoveNode.releaseRemovedNode();
-
-                OSL_ASSERT(aOriginal.isValid());
-                if (aRemovedNode.get() || rRemoveNode.getRemovedNode_Unsafe() != getOriginalSetNode().getChild(aElementName.toString()))
-                {
-                    // really removed - then remove the originel
-                    if (aOriginal.isValid())
-                        ValueSetNodeImpl::implRemoveElement(aElementName,false);
-                    OSL_ENSURE(NULL == getOriginalSetNode().getChild(aElementName.toString()),"ERROR: Removed Node still there or replaced");
-                }
-            }
-
-            // handle a added or deleted node
-            if (aOriginal.isValid() && aRemovedNode.get())
-            {
-                aOriginal->takeNodeFrom(aRemovedNode);
-                aOriginal->commitDirect(); // tree is detached => commit directly
-                aOriginal->makeIndirect(false);
-            }
-            OSL_ENSURE(aRemovedNode.get() == 0, "Could not revert removed node: Nowhere to put ownership");
-
-            m_aChangedData.removeElement(aElementName);
-        }
-        else
-        {
-            // cannot handle changes to preexisting nodes
-            OSL_ENSURE(false, "Unexpected: Cannot finish commit - unexpected change for value set element");
-
-            throw Exception("Unexpected value set element change");
-        }
-    }
-    m_bChanged = false;
-    m_bDefault = false;
-
-    OSL_ENSURE(m_aChangedData.isEmpty(), "ERROR: Uncommitted changes left in set node");
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::implInsertNewElement(Name const& aName, Element const& aNewElement)
-{
-    attach(aNewElement,aName,false);
-    try
-    {
-        // put the new element into the changed set
-        Element* pAddedElement = m_aChangedData.getElement(aName);
-        if (pAddedElement)
-        {
-            OSL_ENSURE(!pAddedElement->isValid(),"WARNING: Element being inserted was already there - replacing");
-            detach(m_aChangedData.replaceElement(aName,aNewElement),false);
-        }
-        else
-        {
-            m_aChangedData.insertElement(aName, aNewElement);
-        }
-        m_bChanged = true;
-    }
-    catch (std::exception&)
-    {
-        detach(aNewElement,false);
-        throw;
-    }
-}
-//-------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::implRemoveOldElement(Name const& aName)
-{
-    // put an empty (dummy) element into the changed set
-    Element* pAddedElement = m_aChangedData.getElement(aName);
-    if (pAddedElement)
-    {
-        OSL_ENSURE(pAddedElement->isValid(),"WARNING: Element being removed was already removed");
-        detach(m_aChangedData.replaceElement(aName, Element()),false);
-        m_bChanged = true;
-    }
-    else
-    {
-        m_aChangedData.insertElement(aName, Element());
-    }
-
-    // now check the original one
-    Element* pOldElement = getStoredElement(aName);
-    if (pOldElement)
-    {
-        OSL_ASSERT(pOldElement->isValid());
-        detach(*pOldElement,false);
-        m_bChanged = true;
-    }
-    else // just clear things out
-    {
-        m_aChangedData.removeElement(aName);
-    }
-
-    OSL_ENSURE(pOldElement || pAddedElement,"WARNING: Element being removed was not found in set");
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange)
-{
-    if (Element* pLocalElement = m_aChangedData.getElement(aName))
-    {
-        if (Element* pElement = getStoredElement(aName))
-        {
-            OSL_ASSERT(pElement->isValid());
-            OSL_ENSURE( aChange.ISA(ValueChange), "Unexpected kind of change to value set element" );
-
-        }
-        else
-        {
-            // could be changed to do an insert instead (?)
-            OSL_ENSURE( false, "Changed Element didn't exist before it was removed/replaced" );
-        }
-
-        if (pLocalElement->isValid())
-        {
-            // we have a complete replacement for the changed node
-            Element aLocalElement = *pLocalElement;
-
-            // also signal something happened
-            addLocalChangeHelper( rLocalChanges, NodeChange( doCreateReplace(aName,aLocalElement,aLocalElement) ) );
-        }
-        else
-        {
-            // already removed locally - should be notified by different route (if applicable)
-        }
-    }
-    else
-    {
-        ValueSetNodeImpl::doAdjustChangedElement(rLocalChanges,aName,aChange);
-    }
-}
-//-----------------------------------------------------------------------------
-
-NodeChangeImpl* DeferredValueSetNodeImpl::doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement)
-{
-    m_bDefault = false;
-    if (Element* pLocalElement = m_aChangedData.getElement(aName))
-    {
-        // We have another element replacing ours - what do we do ?
-        if (Element* pOriginal = getStoredElement(aName))
-        {
-            OSL_ENSURE( aAddNodeChange.isReplacing(), "Added Element already exists - replacing" );
-
-            ValueSetNodeImpl::implReplaceElement(aName,aNewElement, false);
-        }
-        else
-        {
-            OSL_ENSURE( !aAddNodeChange.isReplacing(), "Replaced Element doesn't exist - simply adding" );
-            ValueSetNodeImpl::implInsertElement(aName,aNewElement, false);
-        }
-
-
-        if (pLocalElement->isValid()) // ours remains a valid replacement
-        {
-            Element aLocalElement = *pLocalElement;
-
-            // just signal something happened
-            return doCreateReplace(aName,aLocalElement,aLocalElement);
-        }
-        else // had been removed locally
-        {
-            // signal what happened
-            return doCreateInsert(aName,aNewElement);
-        }
-    }
-    else
-    {
-        return ValueSetNodeImpl::doAdjustToAddedElement(aName,aAddNodeChange,aNewElement);
-    }
-}
-//-----------------------------------------------------------------------------
-
-NodeChangeImpl* DeferredValueSetNodeImpl::doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange)
-{
-    m_bDefault = false;
-    if (Element* pLocalElement = m_aChangedData.getElement(aName))
-    {
-        if (Element* pOriginal = getStoredElement(aName))
-        {
-            // take away the original
-                ValueSetNodeImpl::implRemoveElement(aName, false);
-        }
-
-        if (pLocalElement->isValid()) // remains a valid replacement
-        {
-            Element aLocalElement = *pLocalElement;
-
-            // signal something happened
-            return doCreateReplace(aName,aLocalElement,aLocalElement);
-        }
-        else // already was removed locally
-        {
-            return 0;
-        }
-    }
-    else
-    {
-        return ValueSetNodeImpl::doAdjustToRemovedElement(aName,aRemoveNodeChange);
-    }
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree)
-{
-    if (!m_bDefault)
-    {
-        implDifferenceToDefaultState(_rChangeToDefault,_rDefaultTree);
-
-        NativeIterator it = m_aChangedData.beginNative();
-        NativeIterator const stop = m_aChangedData.endNative();
-
-        while(it != stop)
-        {
-            Name    aName       = it->first;
-            Element aElement    = it->second;
-
-            Change* pChange = _rChangeToDefault.getChange( aName.toString() );
-            OSL_ENSURE(pChange == NULL || pChange->ISA(AddNode) || pChange->ISA(RemoveNode),
-                        "Unexpected change type found in difference to default tree");
-
-            if (pChange == NULL)
-            {
-                std::auto_ptr<INode> aDefaultTree = _rDefaultTree.removeChild(aName.toString());
-
-                OSL_ENSURE( aDefaultTree.get(), "Error: unused Default tree not after SetNodeImpl::implDifferenceToDefaultState");
-
-                AddNode* pAddIt = new AddNode(aDefaultTree, aName.toString(), true );
-
-                std::auto_ptr<Change> pNewChange( pAddIt );
-
-                if (aElement.isValid())
-                {
-                    OSL_ENSURE(!aElement.inDefault, "Default element replaced by default");
-                    pAddIt->setReplacing();
-                }
-
-                _rChangeToDefault.addChange(pNewChange);
-
-            }
-            else if ( pChange->ISA(AddNode) )
-            {
-                // adjust the AddNode - remove the original expected node
-                AddNode* pAddIt = static_cast<AddNode*>(pChange);
-                pAddIt->expectReplacedNode(NULL);
-
-                if (aElement.isValid())
-                {
-                    if (aElement.inDefault)
-                    {
-                        // change already done locally
-                        _rChangeToDefault.removeChange(aName.toString());
-                    }
-                    else // adjust here
-                        pAddIt->setReplacing();
-                }
-
-                else
-                    OSL_ENSURE(!pAddIt->isReplacing(),"Could not unmark the 'replacing' state of an AddNode");
-            }
-            else if ( pChange->ISA(RemoveNode) )
-            {
-                if (aElement.isValid())
-                {
-                    OSL_ENSURE(!aElement.inDefault, "Default element replaced by default");
-                    // adjust the RemoveNode - remove the original expected node
-                    RemoveNode* pRemoveIt = static_cast<RemoveNode*>(pChange);
-                    pRemoveIt->expectRemovedNode(NULL);
-                }
-                else
-                {
-                    // change already done locally
-                    _rChangeToDefault.removeChange(aName.toString());
-                }
-                // TODO: mark local removal as to-default
-            }
-        }
-    }
-}
-//-----------------------------------------------------------------------------
-
-void DeferredValueSetNodeImpl::doMarkAsDefault()
-{
-    m_bDefault = true;
-}
-
 //-----------------------------------------------------------------------------
     }
 }

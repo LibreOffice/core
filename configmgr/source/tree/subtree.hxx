@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtree.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:30 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ namespace configmgr
         virtual INode* addChild(std::auto_ptr<INode> node); // takes ownership
         virtual ::std::auto_ptr<INode> removeChild(OUString const& name);
 
-        virtual INode* clone() const;
+        virtual std::auto_ptr<INode> clone() const;
 
 // Iteration support
         virtual void forEachChild(NodeAction& anAction) const;
@@ -151,7 +151,7 @@ namespace configmgr
     public:
         SearchNode(OUString const& aName);
         virtual ~SearchNode();
-        virtual INode* clone() const;
+        virtual std::auto_ptr<INode> clone() const;
 
 // double dispatch support
         virtual void dispatch(NodeAction& anAction) const { }

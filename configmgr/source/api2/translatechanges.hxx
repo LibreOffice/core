@@ -2,9 +2,9 @@
  *
  *  $RCSfile: translatechanges.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:15:37 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@ namespace configmgr
     namespace beans     = css::beans;
     namespace container = css::container;
 // ---------------------------------------------------------------------------------------------------
+    namespace memory
+    {
+        class Accessor;
+    }
 
     namespace configuration
     {
@@ -90,6 +94,7 @@ namespace configmgr
         //class NodeChange;
         //class NodeChanges;
         class Tree;
+        class TreeRef;
         class NodeRef;
         class NodeID;
         class RelativePath;
@@ -115,11 +120,13 @@ namespace configmgr
                                     configuration::NodeRef const& aBaseNode);
 
         // change path and base settings to start from the given base tree (root)
-        bool rebaseChange(  configuration::NodeChangeLocation& aChange,
-                            configuration::Tree const& aBaseTree);
+        bool rebaseChange(  memory::Accessor const& _aAccessor,
+                            configuration::NodeChangeLocation& aChange,
+                            configuration::TreeRef const& _aBaseTreeRef);
         // change path and base settings to start from the given base node
-        bool rebaseChange(  configuration::NodeChangeLocation& aChange,
-                            configuration::Tree const& aBaseTree,
+        bool rebaseChange(  memory::Accessor const& _aAccessor,
+                            configuration::NodeChangeLocation& aChange,
+                            configuration::TreeRef const& _aBaseTreeRef,
                             configuration::NodeRef const& aBaseNode);
         // resolve non-uno elements to Uno Objects
         bool resolveUnoObjects(UnoChange& aUnoChange, configuration::NodeChangeData const& aChange,  Factory& rFactory);

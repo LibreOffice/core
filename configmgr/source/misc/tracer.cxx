@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tracer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: lla $ $Date: 2001-05-14 08:50:25 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ sal_uInt32 OConfigTracer::getGlobalTimer()
     sal_uInt32 nSeconds;
     gettimeofday( &currentTime, NULL );
     nSeconds = (sal_uInt32)( currentTime.tv_sec - s_aStartTime.tv_sec );
-    return ( nSeconds * 1000 ) + (long)( currentTime.tv_usec - s_aStartTime.tv_usec );
+    return ( nSeconds * 1000 ) + (long)( currentTime.tv_usec - s_aStartTime.tv_usec )/1000;
 #endif
 }
 
@@ -539,6 +539,9 @@ void OConfigTracer::implTrace(const sal_Char* _pType, const sal_Char* _pFormat, 
 //**************************************************************************
 // history:
 //  $Log: not supported by cvs2svn $
+//  Revision 1.9  2001/05/14 08:50:25  lla
+//  Some bugs removed withhin tracing.
+//
 //  Revision 1.8  2001/03/13 15:26:48  kz
 //  use ftime() for windows
 //

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignotifier.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ Broadcaster Notifier::makeBroadcaster(NodeChanges const& aChanges, bool bLocal) 
 }
 // ---------------------------------------------------------------------------------------------------
 
-NotifierImpl::NotifierImpl(Tree const& aTree)
+NotifierImpl::NotifierImpl(configuration::TreeRef const& aTree)
 : m_aMutex()
 , m_aListeners(m_aMutex, aTree.getContainedInnerNodeCount(), SubNodeToIndex(aTree))
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: translatechanges.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ namespace configmgr
     namespace configapi
     {
         using configuration::Tree;
+        using configuration::TreeRef;
         using configuration::Name;
         using configuration::AbsolutePath;
         using configuration::RelativePath;
@@ -115,13 +116,13 @@ bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChang
 }
 bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChange, Tree const& aBaseTree, NodeRef const& aBaseNode)
 {
-    OSL_ENSURE(aChange.isValidLocation(), "Trying to resolve against change location that wasn't set up properly");
+    OSL_ENSURE(aChange.isValidLocation(aBaseTree.getDataAccessor()), "Trying to resolve against change location that wasn't set up properly");
 
     namespace Path = configuration::Path;
 
     typedef Path::Iterator Iter;
 
-    Tree aChangeBaseTree = aChange.getBaseTree();
+    Tree aChangeBaseTree = aChange.getBaseTree(aBaseTree.getDataAccessor());
 
     AbsolutePath aOuterBasePath     = aBaseTree.getAbsolutePath(aBaseNode);
     AbsolutePath aChangeBasePath    = aChangeBaseTree.getAbsolutePath(aChange.getBaseNode());
@@ -176,13 +177,15 @@ bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChang
 
 // ---------------------------------------------------------------------------------------------------
 // change path and base settings to start from the given base
-bool rebaseChange(NodeChangeLocation& aChange, Tree const& aBaseTree)
+bool rebaseChange(data::Accessor const& _aAccessor, NodeChangeLocation& aChange, TreeRef const& _aBaseTreeRef)
 {
-    return rebaseChange(aChange,aBaseTree,aBaseTree.getRootNode());
+    return rebaseChange(_aAccessor, aChange,_aBaseTreeRef,_aBaseTreeRef.getRootNode());
 }
-bool rebaseChange(NodeChangeLocation& aChange, Tree const& aBaseTree, NodeRef const& aBaseNode)
+bool rebaseChange(data::Accessor const& _aAccessor, NodeChangeLocation& aChange, TreeRef const& _aBaseTreeRef, NodeRef const& aBaseNode)
 {
-    OSL_ENSURE(aChange.isValidLocation(), "Trying to rebase change location that wasn't set up properly");
+    OSL_ENSURE(aChange.isValidLocation(_aAccessor), "Trying to rebase change location that wasn't set up properly");
+
+    Tree aBaseTree(_aAccessor,_aBaseTreeRef);
 
     RelativePath aNewPath;
     if (resolveChangeLocation(aNewPath,aChange,aBaseTree, aBaseNode))

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,12 +148,12 @@ Reference< uno::XInterface > implGetParent(NodeAccess& rNode, InnerElement&) thr
 
     try
     {
-        GuardedNodeAccess impl( rNode ); // no provider lock needed - tree must be prebuilt already
+        GuardedNodeDataAccess impl( rNode ); // no provider lock needed - tree must be prebuilt already
 
-        Tree aTree(impl->getTree());
-        NodeRef aParentNode = aTree.getParent(impl->getNode());
+        Tree aTree(impl.getTree());
+        NodeRef aParentNode = aTree.getParent(impl.getNode());
 
-        Any aAny = configapi::makeInnerElement( impl->getFactory(), aTree, aParentNode );
+        Any aAny = configapi::makeInnerElement( rNode.getFactory(), aTree, aParentNode );
 
         if (!(aAny >>= xRet)) // no parent available
         {
@@ -180,9 +180,9 @@ Reference< uno::XInterface > implGetParent(NodeAccess& rNode, SetElement& rEleme
     try
     {
         // assume shared lock for connected trees
-        GuardedNodeAccess impl( rNode ); // no provider lock needed - tree must be prebuilt already
+        GuardedNodeDataAccess impl( rNode ); // no provider lock needed - tree must be prebuilt already
 
-        Tree aTree(impl->getTree());
+        Tree aTree(impl.getTree());
 
         Tree aParentTree( aTree.getContextTree() );
 
@@ -191,7 +191,7 @@ Reference< uno::XInterface > implGetParent(NodeAccess& rNode, SetElement& rEleme
             NodeRef aParentNode( aTree.getContextNode() );
 
             // assume shared factory for connected trees
-            Any aAny = configapi::makeInnerElement( impl->getFactory(), aParentTree, aParentNode );
+            Any aAny = configapi::makeInnerElement( rNode.getFactory(), aParentTree, aParentNode );
 
             if (!(aAny >>= xRet)) // no parent available
             {
@@ -334,10 +334,10 @@ OUString implGetName(NodeAccess& rNode, NodeElement& ) throw(RuntimeException)
     OUString sRet;
     try
     {
-        GuardedNodeAccess impl( rNode ); // maybe passive only ?
+        GuardedNodeDataAccess impl( rNode ); // maybe passive only ?
 
-        Tree    aTree(impl->getTree());
-        NodeRef aNode(impl->getNode());
+        Tree    aTree(impl.getTree());
+        NodeRef aNode(impl.getNode());
 
         sRet = aTree.getName(aNode).toString();
     }
@@ -558,12 +558,12 @@ void implCommitChanges( UpdateRootElement& rElement ) throw(css::lang::WrappedTa
 }
 //-----------------------------------------------------------------------------
 
-sal_Bool implHasPendingChanges( TreeElement& rElement ) throw(uno::RuntimeException)
+sal_Bool implHasPendingChanges( RootElement& rElement ) throw(uno::RuntimeException)
 {
     try
     {
-        GuardedTreeElement aLocked(rElement);
-        return aLocked->getTree().hasChanges();
+        GuardedRootElement aLocked(rElement);
+        return aLocked.getTree().hasChanges();
     }
     catch (configuration::Exception& ex)
     {
@@ -577,7 +577,7 @@ sal_Bool implHasPendingChanges( TreeElement& rElement ) throw(uno::RuntimeExcept
 }
 //-----------------------------------------------------------------------------
 
-uno::Sequence< css::util::ElementChange > implGetPendingChanges( TreeElement& rElement )
+uno::Sequence< css::util::ElementChange > implGetPendingChanges( RootElement& rElement )
         throw(uno::RuntimeException)
 {
     using css::util::ElementChange;
@@ -586,21 +586,21 @@ uno::Sequence< css::util::ElementChange > implGetPendingChanges( TreeElement& rE
     std::vector<ElementChange> aResult;
     try
     {
-        GuardedTreeElement aLocked(rElement);
+        GuardedRootElement aLocked(rElement);
 
-        Tree aTree( aLocked->getTree() );
+        Tree aTree( aLocked.getTree() );
 
         NodeChangesInformation aInfos;
 
         {
             NodeChanges aChanges;
-            if (aLocked->getTree().collectChanges(aChanges))
+            if (aTree.collectChanges(aChanges))
             {
                 aChanges.getChangesInfos(aInfos);
             }
         }
 
-        Factory& rFactory = aLocked->getFactory();
+        Factory& rFactory = rElement.getFactory();
 
         for(NodeChangesInformation::Iterator it = aInfos.begin(), stop = aInfos.end();
             it != stop;
@@ -632,8 +632,8 @@ OUString implGetTemplateName(SetElement& rElement)
 {
     try
     {
-        GuardedSetElement aLocked(rElement);
-        return aLocked->getTemplateInfo().getTemplatePathString();
+        GuardedTreeElement aLocked(rElement);
+        return rElement.getTemplateInfo().getTemplatePathString();
     }
     catch (configuration::Exception& ex)
     {
@@ -655,9 +655,9 @@ sal_Int64 implGetSomething(SetElement& rElement, const uno::Sequence< sal_Int8 >
     sal_Int64 nSomething = 0;
     try
     {
-        GuardedSetElement aLocked(rElement);
+        GuardedTreeElement aLocked(rElement);
 
-        if (!aLocked->getFactory().tunnelSetElement(nSomething, rElement, aIdentifier))
+        if (!rElement.getFactory().tunnelSetElement(nSomething, rElement, aIdentifier))
             OSL_ASSERT(nSomething == 0);
     }
     catch (configuration::Exception& ex)

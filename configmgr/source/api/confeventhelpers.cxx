@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:43 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@ void ConfigChangesBroadcasterImpl::dispatchInner
 (
     INodeListenerRef const& pTarget,
     AbsolutePath const& _aTargetPath,
+    memory::Accessor const& _aChangedDataAccessor,
     Change const& rBaseChange,
     AbsolutePath const& _aChangeLocation,
     sal_Bool , //_bError,
@@ -220,10 +221,10 @@ void ConfigChangesBroadcasterImpl::dispatchInner
         OSL_ASSERT( !pTargetChange || matches(_aChangeLocation.compose(aLocalPath),_aTargetPath) );
 
         if (pRemoved)
-            pTarget->nodeDeleted(_aChangeLocation.compose(aLocalPath), pSource);
+            pTarget->nodeDeleted(_aChangedDataAccessor,_aChangeLocation.compose(aLocalPath), pSource);
 
         else if (pTargetChange)
-            pTarget->nodeChanged(*pTargetChange, _aTargetPath, pSource);
+            pTarget->nodeChanged(_aChangedDataAccessor,*pTargetChange, _aTargetPath, pSource);
 
     }
     catch (InvalidName& )
@@ -237,6 +238,7 @@ void ConfigChangesBroadcasterImpl::dispatchOuter
 (
     INodeListenerRef const& pTarget,
     AbsolutePath const& _aTargetPath,
+    memory::Accessor const& _aChangedDataAccessor,
     Change const& rBaseChange,
     AbsolutePath const& _aChangeLocation,
     sal_Bool , //_bError,
@@ -246,13 +248,13 @@ void ConfigChangesBroadcasterImpl::dispatchOuter
     OSL_ASSERT(pTarget.isValid());
     OSL_ASSERT( Path::hasPrefix( _aChangeLocation, _aTargetPath) );
 
-    pTarget->nodeChanged(rBaseChange, _aChangeLocation, pSource);
+    pTarget->nodeChanged(_aChangedDataAccessor, rBaseChange, _aChangeLocation, pSource);
 }
 
 /////////////////////////////////////////////////////////////////////////
-void ConfigChangesBroadcasterImpl::dispatch(TreeChangeList const& rList_, sal_Bool _bError, IConfigBroadcaster* pSource)
+void ConfigChangesBroadcasterImpl::dispatch(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& rList_, sal_Bool _bError, IConfigBroadcaster* pSource)
 {
-    dispatch(rList_.root, rList_.getRootNodePath(),_bError, pSource);
+    dispatch(_aChangedDataAccessor, rList_.root, rList_.getRootNodePath(),_bError, pSource);
 }
 /////////////////////////////////////////////////////////////////////////
 namespace
@@ -270,6 +272,7 @@ namespace
 /////////////////////////////////////////////////////////////////////////
 void ConfigChangesBroadcasterImpl::dispatch
 (
+    memory::Accessor const& _aChangedDataAccessor,
     Change const& rBaseChange,
     AbsolutePath const& _aChangeLocation,
     sal_Bool _bError,
@@ -324,10 +327,10 @@ void ConfigChangesBroadcasterImpl::dispatch
     aGuard.clear();
 
     {for (DispatchTargets::const_iterator it = aOuterTargets.begin(); it != aOuterTargets.end(); ++it){
-        this->dispatchOuter(it->pTarget, *it->pDispatchPath, rBaseChange, _aChangeLocation, _bError, pSource);
+        this->dispatchOuter(it->pTarget, *it->pDispatchPath, _aChangedDataAccessor, rBaseChange, _aChangeLocation, _bError, pSource);
     }}
     {for (DispatchTargets::const_iterator it = aInnerTargets.begin(); it != aInnerTargets.end(); ++it){
-        this->dispatchInner(it->pTarget, *it->pDispatchPath, rBaseChange, _aChangeLocation, _bError, pSource);
+        this->dispatchInner(it->pTarget, *it->pDispatchPath, _aChangedDataAccessor, rBaseChange, _aChangeLocation, _bError, pSource);
     }}
 }
 

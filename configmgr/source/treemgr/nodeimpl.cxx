@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 17:07:52 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,18 @@
 #ifndef CONFIGMGR_GROUPNODEBEHAVIOR_HXX_
 #include "groupnodeimpl.hxx"
 #endif
-#ifndef CONFIGMGR_SETNODEIMPL_HXX_
-#include "setnodeimpl.hxx"
+
+#ifndef CONFIGMGR_NODEACCESS_HXX
+#include "nodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_VALUENODEACCESS_HXX
+#include "valuenodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_GROUPNODEACCESS_HXX
+#include "groupnodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_NODEVISITOR_HXX
+#include "nodevisitor.hxx"
 #endif
 
 #ifndef CONFIGMGR_CONFIGNODEIMPL_HXX_
@@ -86,15 +96,6 @@
 #ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
 #endif
-#ifndef CONFIGMGR_COLLECTCHANGES_HXX_
-#include "collectchanges.hxx"
-#endif
-#ifndef _CONFIGMGR_TREEACTIONS_HXX_
-#include "treeactions.hxx"
-#endif
-#ifndef CONFIGMGR_TREE_CHANGEFACTORY_HXX
-#include "treechangefactory.hxx"
-#endif
 
 #ifndef CONFIGMGR_CMTREEMODEL_HXX
 #include "cmtreemodel.hxx"
@@ -109,86 +110,17 @@ namespace configmgr
     namespace configuration
     {
 
-// helpers
-//-----------------------------------------------------------------------------
-
-namespace
-{
-    inline Attributes fetchAttributes(INode const& rNode)
-    {
-        return rNode.getAttributes();
-    }
-
-    struct GroupMemberDispatch : NodeAction
-    {
-        GroupMemberDispatch(GroupNodeImpl& rGroup, GroupMemberVisitor& rVisitor)
-        : m_rGroup(rGroup)
-        , m_rVisitor(rVisitor)
-        , m_aResult(GroupMemberVisitor::CONTINUE)
-        {}
-
-        bool done() const { return m_aResult == GroupMemberVisitor::DONE; }
-
-        bool test_value(INode const & rNode) const;
-
-        GroupMemberVisitor::Result result() const { return m_aResult; }
-
-        virtual void handle(ValueNode const& _rValue);
-        virtual void handle(ISubtree const& _rSubtree);
-
-        GroupNodeImpl&      m_rGroup;
-        GroupMemberVisitor& m_rVisitor;
-
-        GroupMemberVisitor::Result m_aResult;
-    };
-
-    bool GroupMemberDispatch::test_value(INode const& _rNode) const
-    {
-        Name aName = makeName( _rNode.getName(), Name::NoValidate() );
-
-        return m_rGroup.hasValue( aName );
-    }
-
-    void GroupMemberDispatch::handle(ValueNode const& _rValue)
-    {
-        OSL_ENSURE( test_value(_rValue), "ERROR: GroupMemberDispatch:Did not find a ValueMember for a value child.");
-        if ( !done() )
-        {
-            Name aValueName( makeNodeName(_rValue.getName(), Name::NoValidate()) );
-
-            m_aResult = m_rVisitor.visit( m_rGroup.getValue(aValueName) );
-        }
-    }
-
-    void GroupMemberDispatch::handle(ISubtree const& _rTree)
-    {
-        OSL_ENSURE( !test_value(_rTree), "ERROR: GroupMemberDispatch:Found a ValueMember for a subtree child.");
-    }
-}
 
 //-----------------------------------------------------------------------------
 // class NodeImpl
 //-----------------------------------------------------------------------------
 
-void NodeImpl::makeIndirect(NodeImplHolder& aThis,bool bIndirect)
+/// provide access to the data of the underlying node
+data::NodeAccess NodeImpl::getOriginalNodeAccess(data::Accessor const& _aAccessor) const
 {
-    OSL_PRECOND(aThis.isValid(), "ERROR: Unexpected NULL node");
-
-    if (aThis.isValid())
-    {
-        OSL_ENSURE(!aThis->doHasChanges(), "WARNING: Uncommitted changes while (possibly) changing node type - changes may be lost");
-        NodeImplHolder aChanged = aThis->doCloneIndirect(bIndirect);
-        aThis = aChanged;
-    }
+    return data::NodeAccess(_aAccessor,m_aNodeRef_);
 }
-
-// helper for derived classes
 //-----------------------------------------------------------------------------
-
-void NodeImpl::addLocalChangeHelper( NodeChangesInformation& rLocalChanges_, NodeChange const& aChange_)
-{
-    aChange_.getChangeInfos(rLocalChanges_);
-}
 
 
 // Specific types of nodes
@@ -198,760 +130,109 @@ void NodeImpl::addLocalChangeHelper( NodeChangesInformation& rLocalChanges_, Nod
 // class GroupNodeImpl
 //-----------------------------------------------------------------------------
 
-GroupNodeImpl::GroupNodeImpl(ISubtree& rOriginal)
-: m_rOriginal(rOriginal)
+data::GroupNodeAccess GroupNodeImpl::getDataAccess(data::Accessor const& _aAccessor) const
+{
+    using namespace data;
+
+    NodeAccess aNodeAccess = getOriginalNodeAccess(_aAccessor);
+    OSL_ASSERT(GroupNodeAccess::isInstance(aNodeAccess));
+
+    GroupNodeAccess aGroupAccess(aNodeAccess);
+    OSL_ASSERT(aGroupAccess.isValid());
+
+    return aGroupAccess;
+}
+//-----------------------------------------------------------------------------
+
+GroupNodeImpl::GroupNodeImpl(data::GroupNodeAddress const& _aNodeRef)
+: NodeImpl(_aNodeRef)
 {
 }
 //-----------------------------------------------------------------------------
 
-GroupNodeImpl::GroupNodeImpl(GroupNodeImpl& rOriginal)
-: m_rOriginal(rOriginal.m_rOriginal)
+bool GroupNodeImpl::areValueDefaultsAvailable(data::Accessor const& _aAccessor) const
 {
+    data::GroupNodeAccess aGroupAccess = getDataAccess(_aAccessor);
+
+#ifdef NON_SHARABLE_DATA
+    return  aGroupAccess.data().getDefaultsLevel() != 0 ||
+            aGroupAccess.isDefault();
+#else // SHARABLE_DATA
+    return aGroupAccess.data().hasDefaultsAvailable();
+#endif
 }
 //-----------------------------------------------------------------------------
 
-OUString GroupNodeImpl::getOriginalNodeName() const
+ValueMemberNode GroupNodeImpl::makeValueMember(data::ValueNodeAccess const& _aNodeAccess)
 {
-    return m_rOriginal.getName();
+    return ValueMemberNode(_aNodeAccess);
 }
 //-----------------------------------------------------------------------------
 
-bool GroupNodeImpl::hasValue(Name const& aName) const
+data::ValueNodeAccess GroupNodeImpl::getOriginalValueNode(data::Accessor const& _aAccessor, Name const& _aName) const
 {
-    return this->getOriginalValueNode(aName) != NULL;
+    OSL_ENSURE( !_aName.isEmpty(), "Cannot get nameless child value");
+
+    using namespace data;
+
+    NodeAccess aChild = this->getDataAccess(_aAccessor).getChildNode(_aName);
+
+    return ValueNodeAccess(aChild);
 }
-//-----------------------------------------------------------------------------
-
-bool GroupNodeImpl::areValueDefaultsAvailable() const
-{
-    return m_rOriginal.getDefaultsLevel() != 0 || m_rOriginal.getAttributes().isDefault();
-}
-//-----------------------------------------------------------------------------
-
-ValueNode* GroupNodeImpl::getOriginalValueNode(Name const& aName) const
-{
-    OSL_ENSURE( !aName.isEmpty(), "Cannot get nameless child value");
-    INode* pChildNode = m_rOriginal.getChild(aName.toString());
-
-    return pChildNode ? pChildNode->asValueNode() : NULL;
-}
-//-----------------------------------------------------------------------------
-
-GroupMemberVisitor::Result GroupNodeImpl::dispatchToValues(GroupMemberVisitor& aVisitor)
-{
-    GroupMemberDispatch aDispatch(*this,aVisitor);
-
-    aDispatch.applyToChildren( m_rOriginal );
-
-    return aDispatch.result();
-}
-//-----------------------------------------------------------------------------
-
-ValueMemberNode GroupNodeImpl::doGetValueMember(Name const& aName, bool )
-{
-    return ValueMemberNode( getOriginalValueNode(aName) );
-}
-//-----------------------------------------------------------------------------
-
-NodeType::Enum  GroupNodeImpl::doGetType() const
-{
-    return NodeType::eGROUP;
-}
-//-----------------------------------------------------------------------------
-
-Attributes GroupNodeImpl::doGetAttributes() const
-{
-    return fetchAttributes(m_rOriginal);
-}
-//-----------------------------------------------------------------------------
-
-void GroupNodeImpl::doDispatch(INodeHandler& rHandler)
-{
-    rHandler.handle(*this);
-}
-
-//-----------------------------------------------------------------------------
-// class SetEntry
-//-----------------------------------------------------------------------------
-
-SetEntry::SetEntry(ElementTreeImpl* pTree_)
-: m_pTree(pTree_)
-{
-    OSL_ENSURE(pTree_ == 0 || pTree_->isValidNode(pTree_->root()),
-                "INTERNAL ERROR: Invalid empty tree used for SetEntry ");
-}
-
-//-----------------------------------------------------------------------------
-// class SetNodeImpl
-//-----------------------------------------------------------------------------
-
-SetNodeImpl::SetNodeImpl(ISubtree& rOriginal,Template* pTemplate)
-: m_rOriginal(rOriginal)
-,m_aTemplate(pTemplate)
-,m_aTemplateProvider()
-,m_pParentTree(0)
-,m_nContextPos(0)
-,m_aInit(0)
-{
-}
-//-----------------------------------------------------------------------------
-
-SetNodeImpl::SetNodeImpl(SetNodeImpl& rOriginal)
-: m_rOriginal(rOriginal.m_rOriginal)
-,m_aTemplate(rOriginal.m_aTemplate)
-,m_aTemplateProvider(rOriginal.m_aTemplateProvider)
-,m_pParentTree(rOriginal.m_pParentTree)
-,m_nContextPos(rOriginal.m_nContextPos)
-,m_aInit(rOriginal.m_aInit)
-{
-    // unbind the original
-    rOriginal.m_aTemplate.unbind();
-    rOriginal.m_aTemplateProvider = TemplateProvider();
-    rOriginal.m_pParentTree = 0;
-    rOriginal.m_nContextPos = 0;
-
-}
-//-----------------------------------------------------------------------------
-
-SetNodeImpl::~SetNodeImpl()
-{
-}
-//-----------------------------------------------------------------------------
-
-OUString SetNodeImpl::getOriginalNodeName() const
-{
-    return m_rOriginal.getName();
-}
-//-----------------------------------------------------------------------------
-
-TreeImpl*   SetNodeImpl::getParentTree() const
-{
-    OSL_ENSURE(m_pParentTree,"Set Node: Parent tree not set !");
-    return m_pParentTree;
-}
-//-----------------------------------------------------------------------------
-
-NodeOffset  SetNodeImpl::getContextOffset() const
-{
-    OSL_ENSURE(m_nContextPos,"Set Node: Position within parent tree not set !");
-    return m_nContextPos;
-}
-//-----------------------------------------------------------------------------
-
-bool SetNodeImpl::isEmpty()
-{
-    return !implLoadElements() || doIsEmpty();
-}
-//-----------------------------------------------------------------------------
-
-SetEntry SetNodeImpl::findElement(Name const& aName)
-{
-    implEnsureElementsLoaded();
-    return doFindElement(aName);
-};
-//-----------------------------------------------------------------------------
-
-SetEntry SetNodeImpl::findAvailableElement(Name const& aName)
-{
-    if (implLoadElements())
-        return doFindElement(aName);
-    else
-        return SetEntry(0);
-};
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::insertElement(Name const& aName, SetEntry const& aNewEntry)
-{
-    // cannot insert, if we cannot check for collisions
-    implEnsureElementsLoaded();
-    doInsertElement(aName,aNewEntry);
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::removeElement(Name const& aName)
-{
-    // cannot remove, if we cannot check for existance
-    implEnsureElementsLoaded();
-    doRemoveElement(aName);
-}
-//-----------------------------------------------------------------------------
-
-std::auto_ptr<SubtreeChange> SetNodeImpl::differenceToDefaultState(ISubtree& _rDefaultTree)
-{
-    std::auto_ptr<SubtreeChange> aResult;
-    if (!getOriginalSetNode().isDefault())
-    {
-        aResult.reset( new SubtreeChange( getOriginalSetNode(), true ) );
-
-        if (this->hasChanges())
-        {
-            OSL_ENSURE(implHasLoadedElements(),"Unexpected: Found set with changes but elements are not loaded");
-            this->doDifferenceToDefaultState(*aResult,_rDefaultTree);
-        }
-        else
-            this->implDifferenceToDefaultState(*aResult,_rDefaultTree);
-    }
-    return aResult;
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::doDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree)
-{
-    OSL_ENSURE(!hasChanges(), "ERROR: SetNodeImpl::doDifferenceToDefaultState does not account for changes");
-
-    implDifferenceToDefaultState(_rChangeToDefault,_rDefaultTree);
-}
-//-----------------------------------------------------------------------------
-
-SetNodeVisitor::Result SetNodeImpl::dispatchToElements(SetNodeVisitor& aVisitor)
-{
-    if (implLoadElements())
-        return doDispatchToElements(aVisitor);
-
-    else
-        return SetNodeVisitor::CONTINUE;
-}
-//-----------------------------------------------------------------------------
-
-Attributes SetNodeImpl::doGetAttributes() const
-{
-    return fetchAttributes(m_rOriginal);
-}
-//-----------------------------------------------------------------------------
-
-NodeType::Enum  SetNodeImpl::doGetType() const
-{
-    return NodeType::eSET;
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::doDispatch(INodeHandler& rHandler)
-{
-    rHandler.handle(*this);
-}
-//-----------------------------------------------------------------------------
-
-bool SetNodeImpl::implHasLoadedElements() const
-{
-    return m_aInit == 0; // cannot check whether init was called though ...
-}
-//-----------------------------------------------------------------------------
-
-bool SetNodeImpl::implLoadElements()
-{
-    if (m_aInit > 0)
-    {
-        implInitElements(m_aInit);
-        m_aInit = 0;
-
-    }
-    OSL_ASSERT(implHasLoadedElements());
-
-    return m_aInit == 0;
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::implEnsureElementsLoaded()
-{
-    if (!implLoadElements())
-        throw ConstraintViolation("Trying to access set elements beyond the loaded nestíng level");
-}
-//-----------------------------------------------------------------------------
-
-bool SetNodeImpl::implInitElements(InitHelper const& aInit)
-{
-    TreeDepth nDepth = aInit;
-    if (nDepth > 0)
-    {
-        OSL_ENSURE(m_aTemplate.isEmpty() || m_aTemplate->isInstanceTypeKnown(),"ERROR: Need a type-validated template to fill a set");
-        OSL_ENSURE(m_aTemplateProvider.isValid() || m_aTemplate->isInstanceValue(), "ERROR: Need a template provider to fill a non-primitive set");
-
-        doInitElements(m_rOriginal,childDepth(nDepth));
-        return true;
-    }
-    else
-        return false;
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::initElements(TemplateProvider const& aTemplateProvider,TreeImpl& rParentTree,NodeOffset nPos,TreeDepth nDepth)
-{
-    OSL_ENSURE(m_pParentTree == 0 || m_pParentTree == &rParentTree, "WARNING: Set Node: Changing parent");
-    OSL_ENSURE(m_nContextPos == 0 || m_nContextPos == nPos,         "WARNING: Set Node: Changing location within parent");
-    m_pParentTree = &rParentTree;
-    m_nContextPos = nPos;
-
-    OSL_ENSURE(!m_aTemplateProvider.isValid() || !implHasLoadedElements(),"ERROR: Reinitializing set"); //doClearElements();
-    OSL_ASSERT(doIsEmpty()); //doClearElements();
-
-    OSL_ENSURE(m_aTemplate.isEmpty() || m_aTemplate->isInstanceTypeKnown(),"ERROR: Need a type-validated template to fill a set");
-    OSL_ENSURE(aTemplateProvider.isValid() || nDepth == 0 || m_aTemplate->isInstanceValue(), "ERROR: Need a template provider to fill a non-primitive set");
-
-    if (nDepth > 0) // dont set a template provider for zero-depth sets
-    {
-        m_aInit = nDepth;
-        m_aTemplateProvider = aTemplateProvider;
-    }
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::implMarkAsDefault(bool bDefault)
-{
-    m_rOriginal.markAsDefault(bDefault);
-}
-//-----------------------------------------------------------------------------
-
-namespace
-{
-    //-------------------------------------------------------------------------
-    class DiffToDefault : NodeAction
-    {
-        SubtreeChange&          m_rChange;
-        ISubtree&               m_rDefaultTree;
-        OTreeChangeFactory&     m_rChangeFactory;
-    public:
-        explicit
-        DiffToDefault(SubtreeChange& _rChange, ISubtree& _rDefaultTree)
-        : m_rChange(_rChange)
-        , m_rDefaultTree(_rDefaultTree)
-        , m_rChangeFactory( getDefaultTreeChangeFactory() )
-        {
-        }
-
-        void diff(ISubtree const& _rActualTree)
-        {
-            translate(m_rDefaultTree);
-            applyToChildren(_rActualTree);
-        }
-
-    private:
-        void translate(ISubtree& _rDefaultTree);
-        void handleDefault(std::auto_ptr<INode> _pDefaultNode);
-        void handleActual(INode const& _rNode);
-
-        virtual void handle(ValueNode const& _aValue)   { handleActual(_aValue); }
-        virtual void handle(ISubtree const&  _aTree)    { handleActual(_aTree); }
-    };
-    //-------------------------------------------------------------------------
-
-    void DiffToDefault::translate(ISubtree& _rDefaultTree)
-    {
-        typedef CollectNames::NameList::const_iterator NameIter;
-
-        CollectNames aCollector;
-        aCollector.applyToChildren(_rDefaultTree);
-
-        CollectNames::NameList const& aNames = aCollector.list();
-
-        for(NameIter it = aNames.begin(); it != aNames.end(); ++it)
-        {
-            handleDefault(_rDefaultTree.removeChild(*it));
-        }
-
-    }
-    //-------------------------------------------------------------------------
-
-    void DiffToDefault::handleDefault(std::auto_ptr<INode> _pDefaultNode)
-    {
-        OSL_PRECOND(_pDefaultNode.get(), "Unexpected NULL default node");
-        if (!_pDefaultNode.get()) return;
-
-        OUString sName = _pDefaultNode->getName();
-
-        OSL_ENSURE(_pDefaultNode->isDefault(), "Missing default attribute on default data node");
-
-        std::auto_ptr<AddNode> pAddIt( m_rChangeFactory.createAddNodeChange(_pDefaultNode, sName,true) );
-
-        m_rChange.addChange(base_ptr(pAddIt));
-    }
-    //-------------------------------------------------------------------------
-
-    void DiffToDefault::handleActual(INode const& _rNode)
-    {
-        //needed, as the expect.. functions take a non-const pointer
-        INode* pActualNode = const_cast<INode*>(&_rNode);
-
-        OUString sName = _rNode.getName();
-
-        if (Change* pDefaultNode = m_rChange.getChange(sName) )
-        {
-            if (pDefaultNode->ISA(AddNode))
-            {
-                AddNode* pAddIt = static_cast<AddNode*>(pDefaultNode);
-                if (_rNode.isDefault())
-                {
-                    m_rDefaultTree.addChild( pAddIt->releaseAddedNode() );
-
-                    // no change needed - remove the change and recover the default
-                    m_rChange.removeChange(sName);
-                }
-                else
-                {
-                    OSL_ENSURE(!pAddIt->getReplacedNode_Unsafe(), "Duplicate node name in actual tree");
-
-                    pAddIt->expectReplacedNode(pActualNode);
-                }
-            }
-            else
-            {
-                // should never happen
-                OSL_ENSURE(pDefaultNode->ISA(RemoveNode), "Unexpected node type found in translated default tree");
-                OSL_ENSURE(!pDefaultNode->ISA(RemoveNode), "Duplicate node name in actual tree");
-
-                if (_rNode.isDefault()) m_rChange.removeChange(sName);
-            }
-        }
-        else
-        {
-            OSL_ENSURE(!_rNode.isDefault(), "Node marked 'default' not found in actual default data");
-
-            std::auto_ptr<RemoveNode> pRemoveIt( m_rChangeFactory.createRemoveNodeChange(sName,true) );
-            pRemoveIt->expectRemovedNode(pActualNode);
-            m_rChange.addChange(base_ptr(pRemoveIt));
-        }
-    }
-    //-------------------------------------------------------------------------
-}
-//-----------------------------------------------------------------------------
-void SetNodeImpl::implDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree) const
-{
-    DiffToDefault(_rChangeToDefault,_rDefaultTree).diff(m_rOriginal);
-}
-//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // class ValueElementNodeImpl
 //-----------------------------------------------------------------------------
 
-ValueElementNodeImpl::ValueElementNodeImpl(ValueNode& rOriginal)
-: m_rOriginal(rOriginal)
+data::ValueNodeAccess ValueElementNodeImpl::getDataAccess(data::Accessor const& _aAccessor) const
+{
+    using namespace data;
+
+    NodeAccess aNodeAccess = getOriginalNodeAccess(_aAccessor);
+    OSL_ASSERT(ValueNodeAccess::isInstance(aNodeAccess));
+
+    ValueNodeAccess aValueAccess(aNodeAccess);
+    OSL_ASSERT(aValueAccess.isValid());
+
+    return aValueAccess;
+}
+//-----------------------------------------------------------------------------
+
+ValueElementNodeImpl::ValueElementNodeImpl(data::ValueNodeAddress const& _aNodeRef)
+: NodeImpl(_aNodeRef)
 {
 }
 //-----------------------------------------------------------------------------
 
-ValueElementNodeImpl::ValueElementNodeImpl(ValueElementNodeImpl& rOriginal)
-: m_rOriginal(rOriginal.m_rOriginal)
+UnoAny  ValueElementNodeImpl::getValue(data::Accessor const& _aAccessor) const
 {
+    return getDataAccess(_aAccessor).getValue();
 }
 //-----------------------------------------------------------------------------
 
-OUString ValueElementNodeImpl::getOriginalNodeName() const
+UnoType ValueElementNodeImpl::getValueType(data::Accessor const& _aAccessor) const
 {
-    return m_rOriginal.getName();
-}
-//-----------------------------------------------------------------------------
-
-
-UnoAny  ValueElementNodeImpl::getValue() const
-{
-    return m_rOriginal.getValue();
-}
-//-----------------------------------------------------------------------------
-
-UnoType ValueElementNodeImpl::getValueType() const
-{
-    return m_rOriginal.getValueType();
-}
-//-----------------------------------------------------------------------------
-
-Attributes ValueElementNodeImpl::doGetAttributes() const
-{
-    return fetchAttributes(m_rOriginal);
-}
-//-----------------------------------------------------------------------------
-
-NodeType::Enum ValueElementNodeImpl::doGetType() const
-{
-    return NodeType::eVALUE;
-}
-//-----------------------------------------------------------------------------
-
-void ValueElementNodeImpl::doDispatch(INodeHandler& rHandler)
-{
-    rHandler.handle(*this);
-}
-//-----------------------------------------------------------------------------
-
-bool ValueElementNodeImpl::doHasChanges()   const
-{
-    return false; // this is an immutable object
-}
-//-----------------------------------------------------------------------------
-
-void ValueElementNodeImpl::doMarkChanged()
-{
-    OSL_ENSURE(false,"WARNING: Cannot mark value element as changed");
-}
-//-----------------------------------------------------------------------------
-
-void ValueElementNodeImpl::doCommitChanges()
-{
-    OSL_ENSURE(!hasChanges(),"ERROR: Commit missing unexpected change of value element node");
-}
-//-----------------------------------------------------------------------------
-
-void ValueElementNodeImpl::doCollectChangesWithTarget(NodeChanges& , TreeImpl* , NodeOffset ) const
-{
-    OSL_ENSURE(!hasChanges(),"ERROR: Collection of changes missing unexpected change of value element node");
-}
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// legacy commit
-//-----------------------------------------------------------------------------
-
-std::auto_ptr<SubtreeChange> SetNodeImpl::preCommitChanges(ElementList& _rRemovedElements)
-{
-    // cannot have changes if elements not yet loaded
-    if (implHasLoadedElements())
-    {
-        return doPreCommitChanges(_rRemovedElements);
-    }
-    else
-    {
-        OSL_ENSURE(!hasChanges(),"ERROR: Cannot have changes if elements haven't been loaded yet");
-        return std::auto_ptr<SubtreeChange>();
-    }
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::finishCommit(SubtreeChange& rChanges)
-{
-    // cannot have changes if elements not yet loaded
-    OSL_ENSURE(implHasLoadedElements(),"ERROR: Cannot have provided changes to be finished - set not yet loaded");
-    doFinishCommit(rChanges);
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::revertCommit(SubtreeChange& rChanges)
-{
-    // cannot have changes if elements not yet loaded
-    OSL_ENSURE(implHasLoadedElements(),"ERROR: Cannot have provided changes to be reverted - set not yet loaded");
-    doRevertCommit(rChanges);
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::failedCommit(SubtreeChange& rChanges)
-{
-    // cannot have changes if elements not yet loaded
-    OSL_ENSURE(implHasLoadedElements(),"ERROR: Cannot have provided changes that failed - set not yet loaded");
-    doFailedCommit(rChanges);
-}
-//-----------------------------------------------------------------------------
-
-std::auto_ptr<SubtreeChange> SetNodeImpl::doPreCommitChanges(ElementList& )
-{
-    OSL_ENSURE(!hasChanges(),"ERROR: Committing to an old changes tree is not supported on this node");
-    return std::auto_ptr<SubtreeChange>();
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::doFinishCommit(SubtreeChange& rChange)
-{
-    OSL_ENSURE(rChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChange.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
-                "ERROR: Element template of change does not match the template of the set");
-    OSL_ENSURE( rChange.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
-                "ERROR: Element template of change does not match the template of the set");
-
-    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes are lost");
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::doRevertCommit(SubtreeChange& rChange)
-{
-    OSL_ENSURE(rChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChange.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
-                "ERROR: Element template of change does not match the template of the set");
-    OSL_ENSURE( rChange.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
-                "ERROR: Element template of change does not match the template of the set");
-
-    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not restored");
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::doFailedCommit(SubtreeChange& rChange)
-{
-    OSL_ENSURE(rChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-    OSL_ENSURE( rChange.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
-                "ERROR: Element template of change does not match the template of the set");
-    OSL_ENSURE( rChange.getElementTemplateModule() ==  getElementTemplate()->getModule().toString(),
-                "ERROR: Element template of change does not match the template of the set");
-
-    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not recovered");
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const
-{
-    OSL_ENSURE(getParentTree()  == pParent, "Unexpected value for context tree parameter");
-    OSL_ENSURE(getContextOffset() == nNode, "Unexpected value for context node parameter");
-
-    doCollectChanges( rChanges );
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChange, TreeDepth nDepth)
-{
-    if (nDepth > 0)
-    {
-        OSL_ENSURE( m_aTemplateProvider.isValid(), "SetNodeImpl: Cannot adjust to changes - node was never initialized" );
-
-        if (implHasLoadedElements())
-        {
-            doAdjustToChanges(rLocalChanges, rExternalChange, childDepth(nDepth));
-        }
-        else
-        {
-            OSL_ENSURE( !hasChanges(),"Cannot have changes to consider when no elements are loaded");
-
-            implCollectChanges( rLocalChanges, rExternalChange, nDepth);
-        }
-    }
-}
-//-----------------------------------------------------------------------------
-
-void SetNodeImpl::implCollectChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChange,
-                                     TreeDepth nDepth)
-{
-    OSL_ASSERT(nDepth > 0);
-
-    if (TreeImpl* pParentTree = this->getParentTree())
-    {
-        NodeOffset nNode = getContextOffset();
-
-        OSL_ENSURE(pParentTree->isValidNode(nNode), "Invalid context node in Set");
-        OSL_ENSURE(&pParentTree->node(nNode)->setImpl() == this, "Wrong context node in Set");
-
-        CollectChanges aCollector(rLocalChanges, *pParentTree, nNode, getElementTemplate(), nDepth);
-
-        aCollector.collectFrom(rExternalChange);
-    }
-    else
-        OSL_ENSURE(false, "Missing context tree in Set");
-}
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-std::auto_ptr<SubtreeChange> GroupNodeImpl::preCommitChanges()
-{
-    return doPreCommitChanges();
-}
-//-----------------------------------------------------------------------------
-
-std::auto_ptr<SubtreeChange> GroupNodeImpl::doPreCommitChanges()
-{
-    OSL_ENSURE(!hasChanges(),"ERROR: Committing to an old changes tree is not supported on this node");
-    return std::auto_ptr<SubtreeChange>();
-}
-//-----------------------------------------------------------------------------
-
-void GroupNodeImpl::doFinishCommit(SubtreeChange& rChange)
-{
-    OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
-    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes are lost");
-}
-//-----------------------------------------------------------------------------
-
-void GroupNodeImpl::doRevertCommit(SubtreeChange& rChange)
-{
-    OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
-    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not restored");
-}
-//-----------------------------------------------------------------------------
-
-void GroupNodeImpl::doFailedCommit(SubtreeChange& rChange)
-{
-    OSL_ENSURE(!rChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
-    OSL_ENSURE(!hasChanges(),"ERROR: Old-style commit not supported: changes not recovered");
-}
-//-----------------------------------------------------------------------------
-
-void GroupNodeImpl::doCollectChangesWithTarget(NodeChanges& , TreeImpl* , NodeOffset ) const
-{
-//  OSL_ENSURE(!hasChanges(),"ERROR: Some Pending changes may be missed by collection");
-}
-//-----------------------------------------------------------------------------
-
-void GroupNodeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges, TreeImpl& rParentTree, NodeOffset nPos)
-{
-    for (SubtreeChange::ChildIterator it = rExternalChanges.begin(); it != rExternalChanges.end(); ++it)
-    {
-        if (it->ISA(ValueChange))
-        {
-            ValueChange const& rValueChange = static_cast<ValueChange const&>(*it);
-
-            Name aValueName = makeNodeName( rValueChange.getNodeName(), Name::NoValidate() );
-
-            if (ValueChangeImpl* pThisChange = doAdjustToValueChange(aValueName, rValueChange))
-            {
-                pThisChange->setTarget(&rParentTree,nPos,aValueName);
-                addLocalChangeHelper(rLocalChanges, NodeChange(pThisChange));
-            }
-            else
-                OSL_TRACE("WARNING: Configuration: derived class hides an external value member change from listeners");
-        }
-        else
-            OSL_ENSURE(it->ISA(SubtreeChange), "Unexpected change type within group");
-    }
-}
-//-----------------------------------------------------------------------------
-
-ValueChangeImpl* GroupNodeImpl::doAdjustToValueChange(Name const& aName, ValueChange const& rExternalChange)
-{
-    ValueChangeImpl* pChangeImpl = NULL;
-
-    if (ValueNode* pLocalNode = getOriginalValueNode(aName))
-    {
-        switch( rExternalChange. getMode() )
-        {
-        case ValueChange::wasDefault:
-        case ValueChange::changeValue:
-            pChangeImpl = new ValueReplaceImpl( rExternalChange.getNewValue(), rExternalChange.getOldValue() );
-            break;
-
-            break;
-
-        case ValueChange::setToDefault:
-            pChangeImpl = new ValueResetImpl( rExternalChange.getNewValue(), rExternalChange.getOldValue() );
-            break;
-
-        default: OSL_ENSURE(false, "Unknown change mode");
-            // fall thru to next case for somewhat meaningful return value
-        case ValueChange::changeDefault:
-            {
-                UnoAny aLocalValue = pLocalNode->getValue();
-
-                pChangeImpl = new ValueReplaceImpl( aLocalValue, aLocalValue );
-            }
-            break;
-        }
-        OSL_ASSERT( pChangeImpl );
-    }
-    else
-    {
-        OSL_ENSURE(false, "ERROR: Notification tries to change nonexistent value within group");
-    }
-
-    return pChangeImpl;
+    return getDataAccess(_aAccessor).getValueType();
 }
 //-----------------------------------------------------------------------------
 
 namespace
 {
-    struct AbstractNodeCast : INodeHandler
+    struct AbstractNodeCast : data::NodeVisitor
     {
-        virtual void handle( ValueElementNodeImpl& rNode)
+        virtual Result handle( data::ValueNodeAccess const& rNode)
         {
             throw Exception( "INTERNAL ERROR: Node is not a value node. Cast failing." );
+            return CONTINUE;
         }
-        virtual void handle( GroupNodeImpl& rNode)
+        virtual Result handle( data::GroupNodeAccess const& rNode)
         {
             throw Exception( "INTERNAL ERROR: Node is not a group node. Cast failing." );
+            return CONTINUE;
         }
-        virtual void handle( SetNodeImpl& rNode)
+        virtual Result handle( data::SetNodeAccess const& rNode)
         {
-            throw Exception( "INTERNAL ERROR: Node is not a set node. Cast failing." );
+            return CONTINUE;
         }
     };
 
@@ -959,10 +240,13 @@ namespace
     class NodeCast : AbstractNodeCast
     {
     public:
-        NodeCast(NodeImpl& rOriginalNode)
+        typedef typename NodeType::DataAccess DataNodeType;
+
+        NodeCast(NodeImpl& rOriginalNode, data::Accessor const& _aAccessor)
         : m_pNode(0)
         {
-            rOriginalNode.dispatch(*this);
+            if (this->visitNode(rOriginalNode.getOriginalNodeAccess(_aAccessor)) == DONE)
+                m_pNode = static_cast<NodeType*>(&rOriginalNode);
         }
 
         NodeType& get() const
@@ -973,25 +257,11 @@ namespace
 
         operator NodeType& () const { return get(); }
     private:
-        virtual void handle( NodeType& rNode) { m_pNode = &rNode; }
+        virtual Result handle( DataNodeType& ) { return DONE; }
+
         NodeType* m_pNode;
     };
 }
-//-----------------------------------------------------------------------------
-// domain-specific 'dynamic_cast' replacements
-ValueElementNodeImpl&   AsValueNode(NodeImpl& rNode)
-{
-    return NodeCast<ValueElementNodeImpl>(rNode).get();
-}
-GroupNodeImpl&  AsGroupNode(NodeImpl& rNode)
-{
-    return NodeCast<GroupNodeImpl>(rNode).get();
-}
-SetNodeImpl&    AsSetNode  (NodeImpl& rNode)
-{
-    return NodeCast<SetNodeImpl>(rNode).get();
-}
-
 //-----------------------------------------------------------------------------
     }
 }

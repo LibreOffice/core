@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodefactory.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:35:59 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,29 +62,31 @@
 #ifndef CONFIGMGR_CONFIGNODEFACTORY_HXX_
 #define CONFIGMGR_CONFIGNODEFACTORY_HXX_
 
-#include "apitypes.hxx"
-
-#include <vos/ref.hxx>
-
-#include <osl/diagnose.h>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
 
 namespace configmgr
 {
-    class INode;
-    class ISubtree;
-    class ValueNode;
+//-----------------------------------------------------------------------------
+    namespace data
+    {
+        class ValueNodeAccess;
+        class GroupNodeAccess;
+        class SetNodeAccess;
+    }
+//-----------------------------------------------------------------------------
 
     namespace configuration
     {
-//-----------------------------------------------------------------------------
-        typedef com::sun::star::uno::Any UnoAny;
-        typedef com::sun::star::uno::Type UnoType;
-
         class NodeImpl;
-        typedef vos::ORef<NodeImpl> NodeImplHolder;
-
-        class Name;
         class Template;
+
+    }
+//-----------------------------------------------------------------------------
+    namespace view
+    {
+        typedef rtl::Reference<configuration::NodeImpl> NodeImplRef;
 
 //-----------------------------------------------------------------------------
 
@@ -93,29 +95,14 @@ namespace configmgr
 
         struct NodeFactory
         {
-            virtual NodeImplHolder makeValueNode(ValueNode& rOriginal) = 0;
-            virtual NodeImplHolder makeGroupNode(ISubtree& rOriginal) = 0;
-            virtual NodeImplHolder makeSetNode  (ISubtree& rOriginal, Template* pTemplate) = 0;
+
+            virtual NodeImplRef makeValueNode(data::ValueNodeAccess const& _aNodeAccess) = 0;
+            virtual NodeImplRef makeGroupNode(data::GroupNodeAccess const& _aNodeAccess) = 0;
+            virtual NodeImplRef makeSetNode(data::SetNodeAccess const& _aNodeAccess, configuration::Template* pTemplate) = 0;
         };
-//-----------------------------------------------------------------------------
-
-        namespace NodeType
-        {
-        // Different standard (static) factories
-        //---------------------------------------------------------------------
-
-            /// provides a factory for read-only node implementations
-            NodeFactory& getReadAccessFactory();
-            /// provides a factory for immediately commiting node implementations
-            NodeFactory& getDirectAccessFactory();
-            /// provides a factory for nodes that cache changes temporarily
-            NodeFactory& getDeferredChangeFactory();
-        //---------------------------------------------------------------------
-        }
-
-//-----------------------------------------------------------------------------
-
     }
+//-----------------------------------------------------------------------------
+
 }
 
 #endif // CONFIGMGR_CONFIGNODEFACTORY_HXX_

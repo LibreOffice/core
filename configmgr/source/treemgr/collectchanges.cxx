@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collectchanges.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 17:07:52 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,17 +124,19 @@ bool convertNodeChange(NodeChangeData& aData_, RemoveNode const& aChange_)
 //-----------------------------------------------------------------------------
 
 CollectChanges::CollectChanges( NodeChangesInformation& rTargetList_,
+                data::Accessor const& _aDataAccessor,
                 TreeImpl& rStartTree_, NodeOffset nStartNode_,
                 TemplateHolder aElementTemplate_,
                 TreeDepth nMaxDepth)
 : m_rTargetList(rTargetList_)
 , m_aAccessor()
 , m_aContextTypeName()
+, m_aDataAccessor(_aDataAccessor)
 , m_pBaseTree(&rStartTree_)
 , m_nBaseNode(nStartNode_)
 , m_nDepthLeft( nMaxDepth )
 {
-    if (aElementTemplate_.isValid())
+    if (aElementTemplate_.is())
         m_aContextTypeName = aElementTemplate_->getName();
 }
 
@@ -143,6 +145,7 @@ CollectChanges::CollectChanges( CollectChanges const& rBase, Path::Component con
 : m_rTargetList(rBase.m_rTargetList)
 , m_aAccessor(rBase.m_aAccessor.compose(rChildName))
 , m_aContextTypeName(aSubTypeName_)
+, m_aDataAccessor(rBase.m_aDataAccessor)
 , m_pBaseTree(rBase.m_pBaseTree)
 , m_nBaseNode(rBase.m_nBaseNode)
 , m_nDepthLeft(childDepth(rBase.m_nDepthLeft))
@@ -168,7 +171,7 @@ Path::Component CollectChanges::implGetNodeName(Change const& aChange_) const
 //-----------------------------------------------------------------------------
 void CollectChanges::collectFrom(ValueChange const& aChange_)
 {
-    NodeChangeInformation aInfo;
+    NodeChangeInformation aInfo(m_aDataAccessor);
 
     if ( convertNodeChange( aInfo.change, aChange_ ) &&
          implSetLocation( aInfo.location, aChange_, false ) )
@@ -180,7 +183,7 @@ void CollectChanges::collectFrom(ValueChange const& aChange_)
 //-----------------------------------------------------------------------------
 void CollectChanges::collectFrom(AddNode const& aChange_)
 {
-    NodeChangeInformation aInfo;
+    NodeChangeInformation aInfo(m_aDataAccessor);
 
     if ( convertNodeChange( aInfo.change, aChange_ ) &&
          implSetLocation( aInfo.location, aChange_, true ) )
@@ -192,7 +195,7 @@ void CollectChanges::collectFrom(AddNode const& aChange_)
 //-----------------------------------------------------------------------------
 void CollectChanges::collectFrom(RemoveNode const& aChange_)
 {
-    NodeChangeInformation aInfo;
+    NodeChangeInformation aInfo(m_aDataAccessor);
 
     if ( convertNodeChange( aInfo.change, aChange_ ) &&
          implSetLocation( aInfo.location, aChange_, true ) )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localizedtreeactions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-12-07 18:19:33 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,13 @@
 #ifndef CONFIGMGR_LOCALIZEDTREEACTIONS_HXX
 #define CONFIGMGR_LOCALIZEDTREEACTIONS_HXX
 
+#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #include "valuenode.hxx"
+#endif
 
+#ifndef CONFIGMGR_TREESEGMENT_HXX
+#include "treesegment.hxx"
+#endif
 //..........................................................................
 namespace configmgr
 {
@@ -73,11 +78,9 @@ class SubtreeChange;
 // Helper function to invoke the previous ones properly
 
 // convert to the given locale format, no matter what the original representation
-std::auto_ptr<INode> cloneForLocale(INode const* _pNode, OUString const& _sLocale);
+data::TreeSegment cloneForLocale(INode const* _pNode, OUString const& _sLocale);
 // convert to the given locale format, assuming the original representation was expanded
-std::auto_ptr<INode> cloneExpandedForLocale(INode const* _pNode, OUString const& _sLocale);
-// convert to the given locale format, assuming the original representation was expanded
-std::auto_ptr<INode> cloneExpandedForLocale(ISubtree const* _pNode, OUString const& _sLocale);
+data::TreeSegment cloneExpandedForLocale(data::TreeAccessor const & _aTree, OUString const& _sLocale, bool bMakeWritable = false);
 // convert to the given locale format, assuming the original representation was expanded
 std::auto_ptr<INode> reduceExpandedForLocale(std::auto_ptr<ISubtree> _pNode, OUString const& _sLocale);
 

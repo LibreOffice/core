@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupobjects.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-04 12:43:23 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,11 +171,11 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        OSetElementGroupInfo(configuration::Tree const& aTree, ApiTreeImpl& rParentTree)
+        OSetElementGroupInfo(configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rParentTree)
         {
         }
-        OSetElementGroupInfo(configuration::Tree const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
+        OSetElementGroupInfo(configuration::TreeRef const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rProvider,pParentTree)
         {
         }
@@ -209,11 +209,11 @@ namespace configmgr
     {
     public:
         // Construction/Destruction
-        OSetElementGroupUpdate(configuration::Tree const& aTree, ApiTreeImpl& rParentTree)
+        OSetElementGroupUpdate(configuration::TreeRef const& aTree, ApiTreeImpl& rParentTree)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rParentTree)
         {
         }
-        OSetElementGroupUpdate(configuration::Tree const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
+        OSetElementGroupUpdate(configuration::TreeRef const& aTree, ApiProvider& rProvider, ApiTreeImpl* pParentTree = 0)
         : m_aAccessElement(static_cast<css::container::XChild*>(this),aTree,rProvider,pParentTree)
         {
         }

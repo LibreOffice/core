@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 17:00:14 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ namespace configmgr
 
         virtual ~INode();
 
-        virtual INode* clone() const = 0;
+        virtual std::auto_ptr<INode> clone() const = 0;
     public:
 
         const OUString& getName() const { return m_aName; }
@@ -275,6 +275,9 @@ namespace configmgr
 
         bool isSetNode() const { return m_sTemplateName.getLength() != 0; }
 
+        void makeSetNode(OUString const& _sTemplateName, OUString const& _sTemplateModule)
+        { m_sTemplateName = _sTemplateName; m_sTemplateModule = _sTemplateModule; }
+
         OUString const& getElementTemplateName()   const { return m_sTemplateName; }
         OUString const& getElementTemplateModule() const { return m_sTemplateModule; }
 
@@ -330,13 +333,15 @@ namespace configmgr
         {
         }
 
+        bool isEmpty()      const {return  m_aValuePair.isEmpty();}
         bool isValid()      const {return !m_aValuePair.isEmpty();}
 
         bool isNull()       const {return m_aValuePair.isNull();}
-        bool hasDefault()   const {return getAttributes().bNullable || m_aValuePair.hasSecond();}
+        bool hasUsableDefault()   const {return getAttributes().bNullable || m_aValuePair.hasSecond();}
 
         uno::Type   getValueType()  const {return m_aValuePair.getValueType();}
         uno::Any    getValue()      const {return m_aValuePair.getValue( selectMember(this->isDefault()) );}
+        uno::Any    getUserValue()  const {return m_aValuePair.getFirst();}
         uno::Any    getDefault()    const {return m_aValuePair.getSecond();}
 
         void setValue(uno::Any const& _aValue);
@@ -344,7 +349,7 @@ namespace configmgr
 
         void changeDefault(uno::Any const& _aValue);
 
-        virtual INode* clone() const;
+        virtual std::auto_ptr<INode> clone() const;
 
         ValueNode* asValueNode();
         ValueNode const* asValueNode() const;

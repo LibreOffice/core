@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treechangefactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:30 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,21 +112,31 @@ std::auto_ptr<ValueChange> OTreeChangeFactory::createValueChange(
                                     configuration::Attributes _aAttrs,
                                     ValueChange::Mode _eMode,
                                     uno::Any const& _aNewValue,
-                                    uno::Any _aOldValue
+                                    uno::Any const& _aOldValue
                                 )
 {
     return std::auto_ptr<ValueChange>(new ValueChange(_aName,_aAttrs,_eMode,_aNewValue,_aOldValue));
 }
 
 //-----------------------------------------------
-std::auto_ptr<ValueChange> OTreeChangeFactory::createValueChange(
-                                    Name const& _aName,
-                                    configuration::Attributes _aAttrs,
-                                    uno::Any const& _aNewValue,
-                                    uno::Any _aOldValue
-                                )
+std::auto_ptr<ValueChange> OTreeChangeFactory::createValueChange(ValueNode const& _aNewValue, bool _bWasDefault)
 {
-    return std::auto_ptr<ValueChange>(new ValueChange(_aName,_aAttrs,_aNewValue,_aOldValue));
+    Name aName              = _aNewValue.getName();
+    uno::Any aValue         = _aNewValue.getValue();
+    node::Attributes aAttrs = _aNewValue.getAttributes();
+
+    ValueChange::Mode eMode = aAttrs.isDefault() ?
+                                    _bWasDefault ? ValueChange::changeDefault   : ValueChange:: setToDefault:
+                                    _bWasDefault ? ValueChange::wasDefault      : ValueChange::changeValue;
+
+    if (aValue.hasValue())
+    {
+        return std::auto_ptr<ValueChange>(new ValueChange(aName,aAttrs,eMode,aValue));
+    }
+    else
+    {
+        return std::auto_ptr<ValueChange>(new ValueChange(aName,aAttrs,eMode,_aNewValue.getValueType()));
+    }
 }
 
 //-----------------------------------------------
@@ -194,11 +204,11 @@ std::auto_ptr<SubtreeChange> OTreeChangeFactory::createSetNodeChange(
 
 //= Set Changes ============================================================
 std::auto_ptr<AddNode> OTreeChangeFactory::createAddNodeChange(
-                                std::auto_ptr<INode> _aNewNode,
+                                data::TreeSegment const & _aNewTree,
                                 Name const& _aName,
                                 bool _bToDefault)
 {
-    return std::auto_ptr<AddNode>(new AddNode(_aNewNode,_aName,_bToDefault));
+    return std::auto_ptr<AddNode>(new AddNode(_aNewTree,_aName,_bToDefault));
 }
 
 //-----------------------------------------------

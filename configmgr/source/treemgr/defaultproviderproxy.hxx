@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultproviderproxy.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 12:01:06 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,11 @@ namespace configmgr
     class IDefaultableTreeManager;
     class OOptions;
 //-----------------------------------------------------------------------------
+    namespace memory
+    {
+        class UpdateAccessor;
+    }
+//-----------------------------------------------------------------------------
     namespace configuration
     {
 //-----------------------------------------------------------------------------
@@ -118,14 +123,11 @@ namespace configmgr
 
             ~DefaultProviderProxy();
 
-        /// tries to load default data into the specified location (which must be within the request range owned)
-            bool fetchDefaultData(AbsolutePath const& _aLocation) const CFG_UNO_THROW_ALL();
-
         /// tries to load a default instance of the specified node (which must be within the request range owned)
-            std::auto_ptr<ISubtree> getDefaultTree(AbsolutePath const& _aLocation) const CFG_UNO_THROW_ALL();
+            std::auto_ptr<ISubtree> getDefaultTree(memory::UpdateAccessor& _aDestinationSpace, AbsolutePath const& _aLocation) const CFG_UNO_THROW_ALL();
 
-        private:
-            sal_Int16 implGetRemainingDepth(AbsolutePath const& _aLocation) const;
+            /// tries to load default data into the owned tree - call only outside of any locks
+            bool fetchDefaultData() CFG_UNO_THROW_ALL();
         };
 //-----------------------------------------------------------------------------
     }

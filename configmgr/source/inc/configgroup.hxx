@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configgroup.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ namespace com { namespace sun { namespace star {
 
 namespace configmgr
 {
+//-----------------------------------------------------------------------------
     namespace configuration
     {
 //-----------------------------------------------------------------------------
@@ -90,7 +91,6 @@ namespace configmgr
         typedef com::sun::star::uno::Reference<com::sun::star::script::XTypeConverter>  UnoTypeConverter;
 //-----------------------------------------------------------------------------
 
-        class NodeRef;
         class NodeChange;
         class RelativePath;
 //-----------------------------------------------------------------------------
@@ -141,13 +141,16 @@ namespace configmgr
 
             bool hasDoneSet() const { return m_bHasDoneSet; }
 
-            bool ensureDataAvailable();
+            bool isDataAvailable();
 
             NodeChange validateSetToDefaultValue(ValueRef const& aValueNode);
 
             NodeChange validateSetToDefaultState(NodeRef const& aNode);
 
             NodeChanges validateSetAllToDefault();
+
+            static bool isDataAvailable(TreeRef const& _aParentTree, NodeRef const& _aGroupNode);
+            static bool ensureDataAvailable(TreeRef const& _aParentTree, NodeRef const& _aGroupNode, DefaultProvider const& _aSource);
         };
 //-----------------------------------------------------------------------------
         bool convertCompatibleValue(UnoTypeConverter const& xConverter, uno::Any& rConverted,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,8 @@
 #ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
 #endif
-
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
+#ifndef CONFIGMGR_ACCESSOR_HXX
+#include "accessor.hxx"
 #endif
 
 #ifndef INCLUDED_VECTOR
@@ -84,8 +83,9 @@
 namespace configmgr
 {
     class INode;
-    class ISynchronizedData;
 
+    namespace data      { using memory::Accessor; class TreeAccessor; }
+    namespace view      { class ViewTreeAccess; }
     namespace configapi { class Factory; }
     namespace configuration
     {
@@ -116,7 +116,6 @@ namespace configmgr
         class NodeID;
         class Tree;
 
-        class Node;
         class TreeImpl;
 
         typedef unsigned int NodeOffset;
@@ -155,18 +154,87 @@ namespace configmgr
             /// checks, if this represents an existing node
             inline bool isValid() const;
 
+            /// returns the offset of this Node
+            inline NodeOffset getOffset() const;
+
+            /// returns the offset of this Node
+            inline TreeDepth getDepth() const;
+
         private:
             friend class Tree;
+            friend class TreeRef;
             friend class TreeImplHelper;
             friend class AnyNodeRef;
-            NodeRef(Node*   pImpl, NodeOffset nPos, TreeDepth nDepth);
+            NodeRef(NodeOffset nPos, TreeDepth nDepth);
         private:
-            Node*   m_pImpl;
             NodeOffset  m_nPos;
             TreeDepth   m_nDepth;
         };
     //-------------------------------------------------------------------------
 
+        /** identifies a hierarchy of config entries (identified by <type>NodeRef</type>s and <type>ValueRef</type>s)
+
+            <p>Examples for trees include</p>
+            <ulist>
+                <li>A module tree (for a specific set of parameters).</li>
+                <li>An updating tree (for a part of the whole).</li>
+                <li>A set element (updating or not), which could be detached.</li>
+            <ulist>
+        */
+        class TreeRef
+        {
+        public:
+            /// create a tree with a given implementation
+            TreeRef(TreeImpl* pImpl);
+            /// copy a tree (with reference semantics)
+            TreeRef(TreeRef const& rOther);
+            /// copy a tree (with reference semantics)
+            TreeRef& operator=(TreeRef const& rOther);
+
+            ~TreeRef();
+
+            void swap(TreeRef& rOther);
+
+            /// checks, if this refers to an existing tree
+            inline bool isValid() const;
+
+            /// checks, if this represents a real tree
+            bool isEmpty() const;
+
+            /// retrieves the number of immediately contained (subtree) nodes
+            NodeOffset getContainedInnerNodeCount() const;
+
+            /// checks whether the node <var>aNode</var> is a valid inner node in this tree.
+            bool isValidNode(NodeRef const& aNode) const;
+
+            // releases the data this tree operates on
+            void disposeData();
+
+        // Root node
+        public:
+            /// checks whether <var>aNode</var> is the root node of this tree
+            bool            isRootNode(NodeRef const& aNode) const;
+
+            /// gets the root node of this tree
+            NodeRef         getRootNode() const;
+
+        // Tree context handling
+        public:
+            /// gets the parent tree of this tree, if available
+            TreeRef getContextTree() const;
+            /// gets the parent node of this tree ('s root node), if available
+            NodeRef getContextNode() const;
+
+            friend bool equalTreeRef(TreeRef const& lhs, TreeRef const& rhs) { return lhs.m_pImpl == rhs.m_pImpl; }
+        private:
+            friend class Tree;
+            friend class TreeImplHelper;
+            TreeImpl* operator->() const { return  m_pImpl; }
+            TreeImpl& operator* () const { return *m_pImpl; }
+            TreeImpl* get()        const { return  m_pImpl; }
+
+            TreeImpl* m_pImpl;
+        };
         /** represents a hierarchy of config entries (identified by <type>NodeRef</type>s and <type>ValueRef</type>s)
 
             <p>Examples for trees include</p>
@@ -180,30 +248,27 @@ namespace configmgr
         {
         public:
             /// create a tree with a given implementation
-            Tree(TreeImpl* pImpl);
-            /// copy a tree (with reference semantics)
-            Tree(Tree const& rOther);
-            /// copy a tree (with reference semantics)
-            Tree& operator=(Tree const& rOther);
+            Tree(data::Accessor const& _accessor, TreeImpl* pImpl);
+            /// create a tree with a given implementation
+            Tree(data::Accessor const& _accessor, TreeRef const& _aTree);
 
-            void swap(Tree& rOther);
+            /// checks, if this refers to an existing tree
+            bool isValid() const
+            { return m_ref.isValid(); }
 
-            ~Tree();
-
-            /// checks, if this represents an real tree
-            bool isEmpty() const;
-
-            // releases the data this tree operates on
-            void disposeData();
+            /// checks, if this represents a real tree
+            bool isEmpty() const
+            { return m_ref.isEmpty(); }
 
             /// retrieves the number of immediately contained (subtree) nodes
-            NodeOffset getContainedInnerNodeCount() const;
-
-            /// checks whether the node <var>aNode</var> is a valid inner node in this tree.
-            bool isValidNode(AnyNodeRef const& aNode) const;
+            NodeOffset getContainedInnerNodeCount() const
+            { return m_ref.getContainedInnerNodeCount(); }
 
             /// checks whether the node <var>aNode</var> is a valid inner node in this tree.
             bool isValidNode(NodeRef const& aNode) const;
+
+            /// checks whether the node <var>aNode</var> is a valid inner node in this tree.
+            bool isValidNode(AnyNodeRef const& aNode) const;
 
             /// checks whether the node <var>aNode</var> is a valid value node in this tree.
             bool isValidNode(ValueRef const& aNode) const;
@@ -323,10 +388,12 @@ namespace configmgr
             AbsolutePath    getRootPath() const;
 
             /// gets the root node of this tree
-            NodeRef         getRootNode() const;
+            NodeRef         getRootNode() const
+            { return m_ref.getRootNode(); }
 
             /// checks whether <var>aNode</var> is the root node of this tree
-            bool            isRootNode(NodeRef const& aNode) const;
+            bool            isRootNode(NodeRef const& aNode) const
+            { return m_ref.isRootNode(aNode); }
 
         public:
         // value handling
@@ -422,15 +489,23 @@ namespace configmgr
             NodeVisitor::Result dispatchToChildren(AnyNodeRef const& aNode, NodeVisitor& aVisitor) const;
         // More NodeRef handling
         public:
-            NodeRef bind(NodeOffset nNode) const;
-            NodeRef rebind(NodeRef const& aNode) const;
+            TreeRef getRef() const { return m_ref; }
 
+        // view & data layer binding
+        public:
+            data::Accessor getDataAccessor() const { return m_accessor; }
+
+            view::ViewTreeAccess getView() const;
+
+            void rebind(data::Accessor const& _aAccessor);
+            void unbind();
         // Comparison
         public:
-            friend bool equalTree(Tree const& lhs, Tree const& rhs) { return lhs.m_pImpl == rhs.m_pImpl; }
+            friend bool equalTree(Tree const& lhs, Tree const& rhs) { return equalTreeRef(lhs.m_ref, rhs.m_ref); }
         private:
             friend class TreeImplHelper;
-            TreeImpl* m_pImpl;
+            data::Accessor  m_accessor;
+            TreeRef         m_ref;
         };
     //-------------------------------------------------------------------------
 
@@ -438,6 +513,7 @@ namespace configmgr
         {
         public:
             NodeID(Tree const& rTree, NodeRef const& rNode);
+            NodeID(TreeRef const& rTree, NodeRef const& rNode);
             NodeID(TreeImpl* pImpl, NodeOffset nNode);
 
         // comparison
@@ -566,18 +642,36 @@ namespace configmgr
         /// test whether the given inner node is a set node
         bool isSetNode(Tree const& aTree, NodeRef const& aNode);
 
-        ISynchronizedData* getRootLock(Tree const& aTree);
+        osl::Mutex&             getRootLock(TreeRef const& aTree);
+        memory::Segment const * getRootSegment(TreeRef const& aTree);
 
         typedef std::vector<NodeID>     NodeIDList;
 
         void getAllContainedNodes(Tree const& aTree, NodeIDList& aList);
-        NodeID findNodeFromIndex(Tree const& aTree, NodeOffset nIndex);
+        NodeID findNodeFromIndex(TreeRef const& aTreeRef, NodeOffset nIndex);
+
+    //-------------------------------------------------------------------------
+        inline bool TreeRef::isValid() const
+        {
+            return m_pImpl != 0;
+        }
 
     //-------------------------------------------------------------------------
         inline bool NodeRef::isValid() const
         {
-            OSL_ASSERT( m_pImpl != 0 || m_nPos == 0 );
-            return m_pImpl != 0;
+            return m_nPos != 0;
+        }
+
+    //-------------------------------------------------------------------------
+        inline NodeOffset NodeRef::getOffset() const
+        {
+            return m_nPos;
+        }
+
+    //-------------------------------------------------------------------------
+        inline TreeDepth NodeRef::getDepth() const
+        {
+            return m_nDepth;
         }
 
     //-------------------------------------------------------------------------

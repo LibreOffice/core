@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treechangefactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:15 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,15 +93,13 @@ namespace configmgr
                                         configuration::Attributes _aAttrs,
                                         ValueChange::Mode _eMode,
                                         uno::Any const& _aNewValue,
-                                        uno::Any _aOldValue = uno::Any()
+                                        uno::Any const& _aOldValue = uno::Any()
                                         );
 
         //-----------------------------------------------
         std::auto_ptr<ValueChange> createValueChange(
-                                        Name const& _aName,
-                                        configuration::Attributes _aAttrs,
-                                        uno::Any const& _aNewValue,
-                                        uno::Any _aOldValue = uno::Any()
+                                        ValueNode const& _aNewValue,
+                                        bool _bWasDefault
                                         );
 
         //-----------------------------------------------
@@ -133,7 +131,7 @@ namespace configmgr
 
     //= Set Changes ============================================================
         std::auto_ptr<AddNode>      createAddNodeChange(
-                                        std::auto_ptr<INode> _aNewNode,
+                                        data::TreeSegment const & _aNewTree,
                                         Name const& _aName,
                                         bool _bToDefault = false);
 

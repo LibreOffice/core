@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinotifierimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ inline
 void genericAddListener(NodeAccess& rNode, const Reference< Listener >& xListener )
 {
     GuardedNotifier aGuardedNotifier( rNode );  // guard the notifier
-    aGuardedNotifier->add(rNode.getNode(), xListener);
+    aGuardedNotifier->add(rNode.getNodeRef(), xListener);
 }
 
 /// remove a Listener from the notifier of a NodeAccess
@@ -116,7 +116,7 @@ inline
 void genericRemoveListener(NodeAccess& rNode, const Reference< Listener >& xListener )
 {
     GuardedNotifier aGuardedNotifier( rNode );  // guard the notifier
-    aGuardedNotifier->remove(rNode.getNode(), xListener);
+    aGuardedNotifier->remove(rNode.getNodeRef(), xListener);
 }
 
 
@@ -134,11 +134,11 @@ bool genericAddChildListener(NodeGroupInfoAccess& rNode, const Reference< Listen
 
     if (sName.getLength() != 0)
     {
-        GuardedNodeAccess           aGuardedNode( rNode );      // guard access to children
+        GuardedNodeDataAccess       aGuardedNode( rNode );      // guard access to children
         GuardedNotifier             aGuardedNotifier( rNode );  // guard the notifier
 
-        Tree        aTree( aGuardedNode->getTree() );
-        NodeRef     aNode( aGuardedNode->getNode() );
+        Tree        aTree( aGuardedNode.getTree() );
+        NodeRef     aNode( aGuardedNode.getNode() );
 
         Name        aChildName = validateChildName(sName,aTree,aNode);
 
@@ -150,7 +150,7 @@ bool genericAddChildListener(NodeGroupInfoAccess& rNode, const Reference< Listen
     {
         GuardedNotifier  aGuardedNotifier( rNode ); // guard the notifier
 
-        aGuardedNotifier->addForAll(rNode.getNode(), xListener);
+        aGuardedNotifier->addForAll(rNode.getNodeRef(), xListener);
 
         // always ok, as we addreess no specific NodeRef
     }
@@ -171,11 +171,11 @@ bool genericRemoveChildListener(NodeGroupInfoAccess& rNode, const Reference< Lis
 
     if (sName.getLength() != 0)
     {
-        GuardedNodeAccess           aGuardedNode( rNode );      // guard access to children
+        GuardedNodeDataAccess       aGuardedNode( rNode );      // guard access to children
         GuardedNotifier             aGuardedNotifier( rNode );  // guard the notifier
 
-        Tree        aTree( aGuardedNode->getTree() );
-        NodeRef     aNode( aGuardedNode->getNode() );
+        Tree        aTree( aGuardedNode.getTree() );
+        NodeRef     aNode( aGuardedNode.getNode() );
 
         Name        aChildName = validateChildName(sName,aTree,aNode);
 
@@ -187,7 +187,7 @@ bool genericRemoveChildListener(NodeGroupInfoAccess& rNode, const Reference< Lis
     {
         GuardedNotifier  aGuardedNotifier( rNode ); // guard the notifier
 
-        aGuardedNotifier->removeForAll(rNode.getNode(), xListener);
+        aGuardedNotifier->removeForAll(rNode.getNodeRef(), xListener);
 
         // always ok, as we addreess no specific NodeRef
     }
@@ -249,7 +249,7 @@ void implAddListener( NodeAccess& rNode, const uno::Reference< beans::XPropertie
     GuardedNotifier impl( rNode );
 
     // TODO: is an exception for unknown names allowed/needed ?
-    impl->add(rNode.getNode(), xListener, aPropertyNames);
+    impl->add(rNode.getNodeRef(), xListener, aPropertyNames);
 }
 
 

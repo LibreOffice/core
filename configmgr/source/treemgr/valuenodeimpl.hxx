@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenodeimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:41:31 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,23 @@
 #ifndef CONFIGMGR_VALUENODEBEHAVIOR_HXX_
 #define CONFIGMGR_VALUENODEBEHAVIOR_HXX_
 
+#ifndef CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 #include "nodeimpl.hxx"
+#endif
 
 namespace configmgr
 {
-    class ValueNode;
+//-----------------------------------------------------------------------------
+
     class ValueChange;
+//-----------------------------------------------------------------------------
+
+    namespace data
+    {
+        class GroupNodeAccess;
+        class ValueNodeAccess;
+    }
+//-----------------------------------------------------------------------------
 
     namespace configuration
     {
@@ -89,37 +100,20 @@ namespace configmgr
         */
         class ValueElementNodeImpl : public NodeImpl
         {
-            ValueNode& m_rOriginal;
         public:
-            explicit ValueElementNodeImpl(ValueNode& rOriginal) ;
-            explicit ValueElementNodeImpl(ValueElementNodeImpl& rOriginal) ;
+            explicit ValueElementNodeImpl(data::ValueNodeAddress const& _aNodeRef) ;
 
-            /// retrieve the name of the underlying node
-            OUString getOriginalNodeName() const;
-
-        // the following delegate directly to m_rOriginal
+        // the following delegate directly to the original node
         public:
             /// Does this node assume its default value
             /// retrieve the current value of this node
-            UnoAny  getValue() const;
+            UnoAny  getValue(data::Accessor const& _aAccessor) const;
 
             /// get the type of this value
-            UnoType getValueType()  const;
+            UnoType getValueType(data::Accessor const& _aAccessor)  const;
 
-        protected:
-            virtual Attributes doGetAttributes() const;
-
-        private: // change handling. Is ineffective as this is an immutable object
-            virtual bool doHasChanges() const;
-            virtual void doMarkChanged();
-            virtual void doCommitChanges();
-
-            void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
-
-            // virtual NodeImplHolder doCloneIndirect(bool bIndirect) = 0;
-        private:
-            virtual NodeType::Enum  doGetType() const;
-            virtual void            doDispatch(INodeHandler& rHandler);
+            typedef data::ValueNodeAccess DataAccess;
+            DataAccess getDataAccess(data::Accessor const& _aAccessor) const;
         };
 
 //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jb $ $Date: 2001-11-14 17:06:13 $
+#   last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,16 +78,26 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files ---
 
 SLOFILES=\
-    $(SLO)$/localizedtreeactions.obj		\
-    $(SLO)$/treenodefactory.obj		\
+    $(SLO)$/builddata.obj		\
+    $(SLO)$/node.obj			\
+    $(SLO)$/treefragment.obj	\
+    $(SLO)$/treesegment.obj		\
+    $(SLO)$/nodevisitor.obj		\
+    $(SLO)$/nodeaccess.obj		\
+    $(SLO)$/treeaccessor.obj	\
+    $(SLO)$/valuenodeaccess.obj	\
+    $(SLO)$/groupnodeaccess.obj	\
+    $(SLO)$/setnodeaccess.obj	\
+    $(SLO)$/localizedtreeactions.obj	\
+    $(SLO)$/treenodefactory.obj			\
     $(SLO)$/treechangefactory.obj		\
-    $(SLO)$/changes.obj		\
+    $(SLO)$/changes.obj			\
     $(SLO)$/treeactions.obj		\
     $(SLO)$/mergehelper.obj		\
-    $(SLO)$/updatehelper.obj		\
-    $(SLO)$/nodeconverter.obj		\
-    $(SLO)$/cmtreemodel.obj	\
-    $(SLO)$/cmtree.obj \
+    $(SLO)$/updatehelper.obj	\
+    $(SLO)$/nodeconverter.obj	\
+    $(SLO)$/cmtreemodel.obj		\
+    $(SLO)$/cmtree.obj			\
 
 # --- Targets ---
 

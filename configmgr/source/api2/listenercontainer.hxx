@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:12:15 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ namespace configmgr
             typedef BasicContainerHelperArray::size_type    Index;
 
             typedef Key_ Key;
+            typedef typename KeyToIndex_::KeyFinder KeyFinder;
             typedef cppu::OMultiTypeInterfaceContainerHelperVar< Key_,KeyHash_,KeyEq_ > SpecialContainerHelper;
             typedef cppu::OBroadcastHelperVar< SpecialContainerHelper, Key >            SpecialBroadcastHelper;
             typedef std::vector<Key> KeyList;
@@ -261,14 +262,14 @@ namespace configmgr
              * Call disposing on all object in all the containers that
              * support XEventListener. Then clear the container.
              */
-            bool disposeAll() throw(uno::RuntimeException);
+            bool disposeAll(KeyFinder _aFinder) throw(uno::RuntimeException);
 
             /**
              * Call disposing on all object in all the container for anIndex
              * and in the containers for the associated indices
              * support XEventListener. Then clear the container.
              */
-            bool disposeOne( Index anIndex ) throw(uno::RuntimeException);
+            bool disposeOne( KeyFinder _aFinder, Index anIndex ) throw(uno::RuntimeException);
 
             /**
              * Start disposing this object, leave the mutex locked for dispose processing
@@ -288,7 +289,7 @@ namespace configmgr
              * @return <FALSE/>
              *      if disposing had already been started before
              */
-            void notifyDisposing() throw(uno::RuntimeException);
+            void notifyDisposing(KeyFinder _aFinder) throw(uno::RuntimeException);
 
             /// mark the end of the dispose processing
             void endDisposing() throw();
@@ -365,7 +366,7 @@ namespace configmgr
             sal_Int32 removeSpecialListener( const Key_& aKey, uno::Reference< lang::XEventListener > const& xListener) throw(uno::RuntimeException);
 
         private:
-            void implFillDisposer(DisposeNotifier& aNotifier, Index nIndex);
+            void implFillDisposer(DisposeNotifier& aNotifier, KeyFinder _aFinder, Index nIndex);
 
             SpecialBroadcastHelper      m_aSpecialHelper;
             BasicContainerHelperArray   m_aContainers;
@@ -408,7 +409,7 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeAll() throw(uno::RuntimeException)
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeAll(KeyFinder _aFinder) throw(uno::RuntimeException)
         {
             if (beginDisposing())
             {
@@ -421,7 +422,7 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeOne(Index nIndex) throw(uno::RuntimeException)
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeOne(KeyFinder _aFinder, Index nIndex) throw(uno::RuntimeException)
         {
     //      OSL_ENSURE(!isDisposed(),"Object is already disposed in toto");
 
@@ -435,7 +436,7 @@ namespace configmgr
                     {
                         DisposeNotifier aNotifier(pObject);
 
-                        implFillDisposer(aNotifier, nIndex);
+                        implFillDisposer(aNotifier, _aFinder, nIndex);
                         m_aContainers[nIndex].pInterface = 0;
                         delete m_aContainers[nIndex].pContainer;
 
@@ -466,7 +467,7 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::notifyDisposing() throw(uno::RuntimeException)
+        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::notifyDisposing(KeyFinder _aFinder) throw(uno::RuntimeException)
         {
             OSL_ENSURE(isDisposing(),"Disposing isn't in progress on this object");
             OSL_ENSURE(m_bDisposeLock,"Duplicate call for dispose notification or disposing is not taking place");
@@ -488,7 +489,7 @@ namespace configmgr
                         if (m_aContainers[ix].pInterface)
                         {
                             aNotifiers.push_back(DisposeNotifier(m_aContainers[ix].pInterface));
-                            implFillDisposer(aNotifiers.back(), ix);
+                            implFillDisposer(aNotifiers.back(), _aFinder, ix);
                             m_aContainers[ix].pInterface = 0;
                             delete m_aContainers[ix].pContainer;
                         }
@@ -617,7 +618,7 @@ namespace configmgr
 *///-----------------------------------------------------------------------------
     // relation function. Uses KeyToIndex
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::implFillDisposer(DisposeNotifier& aNotifier, Index nIndex)
+        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::implFillDisposer(DisposeNotifier& aNotifier, KeyFinder _aFinder, Index nIndex)
         {
             if (BasicContainerHelper* pMultiContainer = m_aContainers[nIndex].pContainer)
             {
@@ -631,7 +632,7 @@ namespace configmgr
                 }
             }
             KeyList aKeys;
-            if (m_aMapper.findKeysForIndex(nIndex,aKeys))
+            if (m_aMapper.findKeysForIndex(_aFinder, nIndex,aKeys))
             {
                 for(KeyList::iterator it = aKeys.begin(); it != aKeys.end(); ++it)
                 {

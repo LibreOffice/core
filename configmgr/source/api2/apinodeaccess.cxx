@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,15 +85,21 @@ NodeAccess::~NodeAccess()
 }
 //-----------------------------------------------------------------------------
 
-configuration::NodeRef NodeAccess::getNode() const
+configuration::NodeRef NodeAccess::getNodeRef() const
 {
     return doGetNode();
 }
 //-----------------------------------------------------------------------------
 
-configuration::Tree NodeAccess::getTree() const
+configuration::TreeRef  NodeAccess::getTreeRef() const
 {
     return getApiTree().getTree();
+}
+//-----------------------------------------------------------------------------
+
+configuration::Tree NodeAccess::getTree(data::Accessor const & _aAccessor) const
+{
+    return configuration::Tree(_aAccessor,getApiTree().getTree());
 }
 //-----------------------------------------------------------------------------
 
@@ -105,7 +111,7 @@ void NodeAccess::checkAlive() const
 
 void NodeAccess::disposeNode()
 {
-    getApiTree().disposeNode(getNode(), getUnoInstance());
+    getApiTree().disposeNode(getNodeRef(), getUnoInstance());
 }
 //-----------------------------------------------------------------------------
 
@@ -122,15 +128,15 @@ Notifier NodeAccess::getNotifier() const
 }
 //-----------------------------------------------------------------------------
 
-ISynchronizedData const* NodeAccess::getDataLock() const
+osl::Mutex& NodeAccess::getDataLock() const
 {
     return getApiTree().getDataLock();
 }
 //-----------------------------------------------------------------------------
 
-ISynchronizedData const* NodeAccess::getProviderLock() const
+memory::Segment const* NodeAccess::getSourceData() const
 {
-    return getApiTree().getProviderLock();
+    return getApiTree().getSourceData();
 }
 //-----------------------------------------------------------------------------
 osl::Mutex& NodeAccess::getApiLock()
@@ -187,32 +193,38 @@ UnoAny  makeElement(configapi::Factory& rFactory, configuration::ElementTree con
 }
 //-----------------------------------------------------------------------------
 
-configuration::ElementTree extractElementTree(configapi::Factory& rFactory, UnoAny const& aElement, configuration::SetElementInfo const& aElementInfo )
+configuration::ElementRef extractElementRef(configapi::Factory& rFactory, UnoAny const& aElement, configuration::TemplateInfo const& aTemplateInfo )
 {
-    using configuration::ElementTree;
-    configuration::TemplateHolder const aRequestedTemplate = aElementInfo.getTemplate();
-    OSL_ENSURE(aRequestedTemplate.isValid(), "ERROR: Need a template to extract a matching set element");
-    if (!aRequestedTemplate.isValid())
-        return ElementTree(0);
-
-    ElementTree aRet(0);
+    using configuration::ElementRef;
+    configuration::TemplateHolder const aRequestedTemplate = aTemplateInfo.getTemplate();
+    OSL_ENSURE(aRequestedTemplate.is(), "ERROR: Need a template to extract a matching set element");
+    if (!aRequestedTemplate.is())
+        return ElementRef(NULL);
 
     if (SetElement* pSetElement = rFactory.extractSetElement(aElement))
     {
         configuration::TemplateHolder aFoundTemplate = pSetElement->getTemplateInfo().getTemplate();
-        if (!aFoundTemplate.isValid())
-            return ElementTree(0);
+        if (aFoundTemplate.is())
+        {
+            if (aFoundTemplate != aRequestedTemplate)
+                throw configuration::TypeMismatch(aFoundTemplate->getPathString(), aRequestedTemplate->getPathString());
 
-        if (aFoundTemplate != aRequestedTemplate)
-            throw configuration::TypeMismatch(aFoundTemplate->getPathString(), aRequestedTemplate->getPathString());
-
-        aRet = pSetElement->getElementTree();
+            return pSetElement->getElementRef( );
+        }
     }
-    return aRet;
+    return ElementRef(NULL);
 }
 //-----------------------------------------------------------------------------
 
-SetElement* findSetElement(Factory& rFactory, configuration::ElementTree const& aElementTree)
+configuration::ElementTree extractElementTree(configapi::Factory& rFactory, UnoAny const& aElement, configuration::SetElementInfo const& aElementInfo )
+{
+    using namespace configuration;
+    ElementRef aExtractedRef = extractElementRef(rFactory,aElement,aElementInfo.getTemplateInfo());
+    return aExtractedRef.getElementTree(aElementInfo.getSetDataAccessor());
+}
+//-----------------------------------------------------------------------------
+
+SetElement* findSetElement(Factory& rFactory, configuration::ElementRef const& aElementTree)
 {
     SetElement* pSetElement = rFactory.findSetElement(aElementTree);
     if (pSetElement)
@@ -224,15 +236,16 @@ SetElement* findSetElement(Factory& rFactory, configuration::ElementTree const& 
 }
 //-----------------------------------------------------------------------------
 
-configuration::SetElementInfo NodeSetInfoAccess::getElementInfo() const
+configuration::SetElementInfo NodeSetInfoAccess::getElementInfo(data::Accessor const& _aAccessor) const
 {
     using configuration::SetElementInfo;
+    using configuration::TemplateHolder;
 
-    configuration::TemplateHolder aTemplate = SetElementInfo::extractElementInfo(getTree(),getNode());
+    TemplateHolder aTemplate = SetElementInfo::extractElementInfo(getTree(_aAccessor),getNodeRef());
 
-    OSL_ENSURE(aTemplate.isValid(), "ERROR: Set must have an element template");
+    OSL_ENSURE(aTemplate.is(), "ERROR: Set must have an element template");
 
-    return SetElementInfo(aTemplate);
+    return SetElementInfo(_aAccessor,aTemplate);
 }
 //-----------------------------------------------------------------------------
 
@@ -246,6 +259,18 @@ NodeReadGuardImpl::NodeReadGuardImpl(NodeAccess& rNode) throw()
 
 NodeReadGuardImpl::~NodeReadGuardImpl() throw ()
 {
+}
+//-----------------------------------------------------------------------------
+
+configuration::Tree NodeReadGuardImpl::getTree(data::Accessor const& _aAccessor) const
+{
+    return this->get().getTree(_aAccessor);
+}
+//-----------------------------------------------------------------------------
+
+configuration::NodeRef NodeReadGuardImpl::getNode() const
+{
+    return this->get().getNodeRef();
 }
 //-----------------------------------------------------------------------------
     }

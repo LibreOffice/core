@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,20 @@
 #ifndef CONFIGMGR_GROUPNODEBEHAVIOR_HXX_
 #include "groupnodeimpl.hxx"
 #endif
-#ifndef CONFIGMGR_SETNODEIMPL_HXX_
+#ifndef CONFIGMGR_SETNODEBEHAVIOR_HXX_
 #include "setnodeimpl.hxx"
 #endif
 #ifndef CONFIGMGR_VALUENODEBEHAVIOR_HXX_
 #include "valuenodeimpl.hxx"
 #endif
+#ifndef CONFIGMGR_NODEADDRESS_HXX
+#include "nodeaddress.hxx"
+#endif
+
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/simplereferenceobject.hxx>
+#endif
+
 #ifndef INCLUDED_MEMORY
 #include <memory>
 #define INCLUDED_MEMORY
@@ -91,69 +99,26 @@ namespace configmgr
 // Value Nodes
 //-----------------------------------------------------------------------------
 
-        class ReadOnlyValueElementNodeImpl : public ValueElementNodeImpl
+        class ValueMemberNode::DeferredImpl : public salhelper::SimpleReferenceObject
         {
-        public:
-            explicit
-            ReadOnlyValueElementNodeImpl(ValueNode& rOriginal)
-            : ValueElementNodeImpl(rOriginal)
-            {}
-
-        protected:
-        // NodeImpl implementation
-            virtual Attributes doGetAttributes() const;
-
-            virtual NodeImplHolder doCloneIndirect(bool bIndirect);
-        };
-//-----------------------------------------------------------------------------
-        class DeferredValueElementNodeImpl;
-
-        class DirectValueElementNodeImpl : public ValueElementNodeImpl
-        {
-        public:
-            explicit
-            DirectValueElementNodeImpl(ValueNode& rOriginal);
-
-            explicit
-            DirectValueElementNodeImpl(DeferredValueElementNodeImpl& rOriginal);
-
-        protected:
-        // NodeImpl implementation
-            virtual Attributes doGetAttributes() const;
-
-            virtual NodeImplHolder doCloneIndirect(bool bIndirect);
-        };
-//-----------------------------------------------------------------------------
-
-        class DeferredValueElementNodeImpl : public ValueElementNodeImpl
-        {
-        public:
-            explicit
-            DeferredValueElementNodeImpl(ValueNode& rOriginal);
-            explicit
-            DeferredValueElementNodeImpl(DirectValueElementNodeImpl& rOriginal);
-
-        protected:
-        // NodeImpl implementation
-            virtual NodeImplHolder doCloneIndirect(bool bIndirect);
-        };
-//-----------------------------------------------------------------------------
-
-        class ValueMemberNode::DeferredImpl : public vos::OReference
-        {
-            ValueNode& m_rOriginal;
+            data::ValueNodeAddress m_aValueRef;
 
             UnoAny      m_aNewValue;
             bool        m_bToDefault;
             bool        m_bChange;
         public:
-            explicit DeferredImpl(ValueNode& rOriginal) ;
+            explicit DeferredImpl(data::ValueNodeAccess const& _aValueNode) ;
 
             /// does this wrap a change
             bool isChange() const   { return m_bChange; }
 
+            /// retrieve the underlying (original) node location
+            data::ValueNodeAddress getOriginalNodeAddress() const
+            { return m_aValueRef; }
+
             /// retrieve the underlying (original) node
-            ValueNode& getOriginalNode() const { return m_rOriginal; }
+            data::ValueNodeAccess getOriginalNode(data::Accessor const& _aAccessor) const
+            { return data::ValueNodeAccess(_aAccessor,m_aValueRef); }
 
             /// Does this node change to default
             bool isToDefault()      const { return m_bToDefault; }
@@ -162,21 +127,21 @@ namespace configmgr
             UnoAny  getNewValue()   const { return m_aNewValue; }
 
             /// Set this node to a new value
-            void    setValue(UnoAny const& aNewValue);
+            void    setValue(UnoAny const& aNewValue, data::ValueNodeAccess const& _aOriginalNode);
 
             /// Set this node to assume its default value
-            void    setValueToDefault();
+            void    setValueToDefault(data::ValueNodeAccess const& _aOriginalNode);
 
         public:
             // commit protocol
-            std::auto_ptr<ValueChange> preCommitChange();
-            void finishCommit(ValueChange& rChange);
-            void revertCommit(ValueChange& rChange);
-            void failedCommit(ValueChange& rChange);
+            std::auto_ptr<ValueChange> preCommitChange(data::Accessor const& _aAccessor);
+            void finishCommit(ValueChange& rChange, data::Accessor const& _aAccessor);
+            void revertCommit(ValueChange& rChange, data::Accessor const& _aAccessor);
+            void failedCommit(ValueChange& rChange, data::Accessor const& _aAccessor);
 
-            void commitDirect();
+            // void commitDirect(data::Accessor const& _aAccessor);
 
-            ValueChangeImpl* collectChange();
+            ValueChangeImpl* collectChange(data::Accessor const& _aAccessor);
             ValueChangeImpl* adjustToChange(ValueChange const& rExternalChange);
 
             // notification protocol
@@ -190,319 +155,85 @@ namespace configmgr
 // Group Nodes
 //-----------------------------------------------------------------------------
 
-        class ReadOnlyGroupNodeImpl : public GroupNodeImpl
-        {
-        public:
-            explicit
-            ReadOnlyGroupNodeImpl(ISubtree& rOriginal)
-            : GroupNodeImpl(rOriginal)
-            {}
-
-        // Base obverrideables
-        private:
-        // NodeImpl implementation
-            virtual Attributes doGetAttributes() const;
-            virtual ValueMemberNode doGetValueMember(Name const& aName, bool bForUpdate);
-
-            virtual bool doHasChanges() const;
-            virtual void doCommitChanges();
-            virtual void doMarkChanged();
-            virtual NodeImplHolder doCloneIndirect(bool bIndirect);
-        };
-//-----------------------------------------------------------------------------
-        class DeferredGroupNodeImpl;
-
-        class DirectGroupNodeImpl : public GroupNodeImpl
-        {
-        public:
-            explicit
-            DirectGroupNodeImpl(ISubtree& rOriginal);
-
-            explicit
-            DirectGroupNodeImpl(DeferredGroupNodeImpl& rOriginal);
-
-        // Base obverrideables
-        private:
-        // NodeImpl implementation
-            virtual Attributes doGetAttributes() const;
-            virtual ValueMemberNode doGetValueMember(Name const& aName, bool bForUpdate);
-
-            virtual bool doHasChanges() const;
-            virtual void doCommitChanges();
-            virtual void doMarkChanged();
-            virtual NodeImplHolder doCloneIndirect(bool bIndirect);
-        };
-//-----------------------------------------------------------------------------
-
         class DeferredGroupNodeImpl : public GroupNodeImpl
         {
         public:
             explicit
-            DeferredGroupNodeImpl(ISubtree& rOriginal);
+            DeferredGroupNodeImpl(data::GroupNodeAddress const& _aNodeRef);
             explicit
-            DeferredGroupNodeImpl(DirectGroupNodeImpl& rOriginal);
+            DeferredGroupNodeImpl(data::GroupNodeAddress const& _aNewAddress, GroupNodeImpl& rOriginal);
 
             ~DeferredGroupNodeImpl();
 
-        protected:
+        public:
         // commit protocol
-            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges();
-            virtual void doFinishCommit(SubtreeChange& rChange);
-            virtual void doRevertCommit(SubtreeChange& rChange);
-            virtual void doFailedCommit(SubtreeChange& rChange);
+            std::auto_ptr<SubtreeChange> preCommitValueChanges(data::Accessor const& _aAccessor);
+            void finishCommit(data::Accessor const& _aAccessor, SubtreeChange& rChange);
+            void revertCommit(data::Accessor const& _aAccessor, SubtreeChange& rChange);
+            void failedCommit(data::Accessor const& _aAccessor, SubtreeChange& rChange);
 
-        // notification protocol
-            virtual ValueChangeImpl* doAdjustToValueChange(Name const& aName, ValueChange const& rExternalChange);
+            void collectValueChanges(data::Accessor const& _aAccessor, NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
 
-        // Base obverrideables
-        private:
-        // NodeImpl implementation
-            virtual ValueMemberNode doGetValueMember(Name const& aName, bool bForUpdate);
+        public:
+        // data access
+            bool hasChanges() const;
+            void markChanged();
 
-            virtual bool doHasChanges() const;
-            virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
-            virtual void doCommitChanges();
-            virtual void doMarkChanged();
-            virtual NodeImplHolder doCloneIndirect(bool bIndirect);
+            typedef ValueMemberNode::DeferredImplRef MemberChange;
+            MemberChange findValueChange(Name const& aName);
+
+            ValueMemberNode makeValueMember(data::Accessor const& _aAccessor, Name const& _aName, bool _bForUpdate);
 
         private:
-            typedef ValueMemberNode::DeferredImplRef DeferredValueImplRef;
-            typedef std::map< Name, DeferredValueImplRef > ValueChanges;
+            typedef std::map< Name, MemberChange > MemberChanges;
 
-            ValueChanges    m_aChanges;
+            MemberChanges    m_aChanges;
         };
 //-----------------------------------------------------------------------------
 
 // Set nodes
 //-----------------------------------------------------------------------------
 
-        class ReadOnlyTreeSetNodeImpl : public TreeSetNodeImpl
+        class DeferredSetNodeImpl : public SetNodeImpl
         {
         public:
             explicit
-            ReadOnlyTreeSetNodeImpl(ISubtree& rOriginal, Template* pTemplate)
-            : TreeSetNodeImpl(rOriginal,pTemplate)
-            {}
+            DeferredSetNodeImpl(data::SetNodeAddress const& _aNodeRef, Template* pTemplate);
 
-
-        // Base Overrideables
-        private:
-        // NodeImpl implementation
-            virtual Attributes doGetAttributes() const;
-
-            virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
-            virtual void doRemoveElement(Name const& aName);
-
-            virtual void doMarkAsDefault();
-
-            virtual void doInitElements( ISubtree& rTree, TreeDepth nDepth);
-            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
-
-            virtual bool doHasChanges() const;
-            virtual void doCollectChanges(NodeChanges& rChanges) const;
-            virtual void doCommitChanges();
-            virtual void doMarkChanged();
-            virtual NodeImplHolder doCloneIndirect(bool bIndirect);
-        };
-//-----------------------------------------------------------------------------
-
-        class ReadOnlyValueSetNodeImpl : public ValueSetNodeImpl
-        {
         public:
-            explicit
-            ReadOnlyValueSetNodeImpl(ISubtree& rOriginal, Template* pTemplate)
-            : ValueSetNodeImpl(rOriginal,pTemplate)
-            {}
+            bool hasChanges() const;
+            void markChanged();
+            void collectElementChanges(data::Accessor const& _aAccessor, NodeChanges& rChanges) const;
 
-
-        // Base Overrideables
-        private:
-            virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
-            virtual void doRemoveElement(Name const& aName);
-
-            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
-            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
-
-            virtual void doMarkAsDefault();
-
-        // NodeImpl implementation
-            virtual Attributes doGetAttributes() const;
-
-            virtual bool doHasChanges() const;
-            virtual void doCollectChanges(NodeChanges& rChanges) const;
-            virtual void doCommitChanges();
-            virtual void doMarkChanged();
-            virtual NodeImplHolder doCloneIndirect(bool bIndirect);
-        };
-//-----------------------------------------------------------------------------
-        class DeferredTreeSetNodeImpl;
-
-        class DirectTreeSetNodeImpl : public TreeSetNodeImpl
-        {
         public:
-            explicit
-            DirectTreeSetNodeImpl(ISubtree& rOriginal, Template* pTemplate);
+            std::auto_ptr<SubtreeChange> preCommitChanges(data::Accessor const& _aAccessor, ElementList& _rRemovedElements);
+            void failedCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges);
+            void finishCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges);
+            void revertCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges);
 
-            explicit
-            DirectTreeSetNodeImpl(DeferredTreeSetNodeImpl& rOriginal);
-
-
+            void insertNewElement(Name const& aName, Element const& aNewElement);
+            void removeOldElement(Name const& aName);
         // Base Overrideables
         private:
         // NodeImpl implementation
-            virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
-            virtual void doRemoveElement(Name const& aName);
+            virtual bool                   doIsEmpty() const;
+            virtual ElementTreeImpl*       doFindElement(Name const& aName) ;
+            virtual SetNodeVisitor::Result doDispatchToElements(data::Accessor const& _aAccessor, SetNodeVisitor& aVisitor);
 
-            virtual void doMarkAsDefault();
+            virtual void doDifferenceToDefaultState(data::Accessor const& _aAccessor, SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree);
 
-            virtual void doInitElements( ISubtree& rTree, TreeDepth nDepth);
-            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
+            virtual SetElementChangeImpl* doAdjustToAddedElement(data::Accessor const& _aAccessor, Name const& aName, AddNode const& aAddNodeChange, Element const & aNewElement);
+            virtual SetElementChangeImpl* doAdjustToRemovedElement(data::Accessor const& _aAccessor, Name const& aName, RemoveNode const& aRemoveNodeChange);
 
-            virtual Attributes doGetAttributes() const;
+            virtual SetElementChangeImpl* doAdjustChangedElement(data::Accessor const& _aAccessor, NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
 
-            virtual bool doHasChanges() const;
-            virtual void doCollectChanges(NodeChanges& rChanges) const;
-            virtual void doCommitChanges();
-            virtual void doMarkChanged();
-            virtual NodeImplHolder doCloneIndirect(bool bIndirect);
-        };
-//-----------------------------------------------------------------------------
-        class DeferredValueSetNodeImpl;
-
-        class DirectValueSetNodeImpl : public ValueSetNodeImpl
-        {
-        public:
-            explicit
-            DirectValueSetNodeImpl(ISubtree& rOriginal, Template* pTemplate);
-
-            explicit
-            DirectValueSetNodeImpl(DeferredValueSetNodeImpl& rOriginal);
-
-        // Base Overrideables
-        private:
-        // NodeImpl implementation
-            virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
-            virtual void doRemoveElement(Name const& aName);
-
-            virtual void doMarkAsDefault();
-
-            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
-            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
-
-            virtual Attributes doGetAttributes() const;
-
-            virtual bool doHasChanges() const;
-            virtual void doCollectChanges(NodeChanges& rChanges) const;
-            virtual void doCommitChanges();
-            virtual void doMarkChanged();
-            virtual NodeImplHolder doCloneIndirect(bool bIndirect);
-        };
-//-----------------------------------------------------------------------------
-
-        class DeferredTreeSetNodeImpl : public TreeSetNodeImpl
-        {
-        public:
-            explicit
-            DeferredTreeSetNodeImpl(ISubtree& rOriginal, Template* pTemplate);
-            explicit
-            DeferredTreeSetNodeImpl(DirectTreeSetNodeImpl& rOriginal);
-
-
-        protected:
-            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges(ElementList& _rRemovedElements);
-            virtual void doFinishCommit(SubtreeChange& rChanges);
-            virtual void doRevertCommit(SubtreeChange& rChanges);
-            virtual void doFailedCommit(SubtreeChange& rChanges);
-
-        // Base Overrideables
-        private:
-        // NodeImpl implementation
-            virtual bool        doIsEmpty() const;
-            virtual SetEntry    doFindElement(Name const& aName) ;
-            virtual void        doClearElements();
-            virtual SetNodeVisitor::Result doDispatchToElements(SetNodeVisitor& aVisitor);
-
-            virtual void doInsertElement(Name const& aName, SetEntry const& aNewEntry);
-            virtual void doRemoveElement(Name const& aName);
-
-            virtual void doDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree);
-            virtual void doMarkAsDefault();
-
-            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
-            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
-
-            virtual void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
-
-            virtual NodeChangeImpl* doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement);
-            virtual NodeChangeImpl* doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange);
-
-            virtual bool doHasChanges() const;
-            virtual void doCollectChanges(NodeChanges& rChanges) const;
-            virtual void doCommitChanges();
-            virtual void doMarkChanged();
-            virtual NodeImplHolder doCloneIndirect(bool bIndirect);
+            virtual void doTransferElements(ElementSet& rReplacement);
 
         // Implementation
         private:
-            void implInsertNewElement(Name const& aName, Element const& aNewElement);
-            void implRemoveOldElement(Name const& aName);
+            void rebuildElement(data::Accessor const& _aAccessor, Name const& aName, Element const& _aElement);
 
-            ElementSet m_aChangedData;
-            bool    m_bChanged;
-            bool    m_bDefault;
-        };
-//-----------------------------------------------------------------------------
-
-        class DeferredValueSetNodeImpl : public ValueSetNodeImpl
-        {
-        public:
-            explicit
-            DeferredValueSetNodeImpl(ISubtree& rOriginal, Template* pTemplate);
-
-            explicit
-            DeferredValueSetNodeImpl(DirectValueSetNodeImpl& rOriginal);
-
-
-        protected:
-        // legacy commit support
-            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges(ElementList& _rRemovedElements);
-            virtual void doFinishCommit(SubtreeChange& rChanges);
-            virtual void doRevertCommit(SubtreeChange& rChanges);
-            virtual void doFailedCommit(SubtreeChange& rChanges);
-
-        // Base Overrideables
         private:
-        // NodeImpl implementation
-            virtual bool        doIsEmpty() const;
-            virtual SetEntry    doFindElement(Name const& aName) ;
-            virtual void        doClearElements();
-            virtual SetNodeVisitor::Result doDispatchToElements(SetNodeVisitor& aVisitor);
-
-            virtual void doInsertElement(Name const& aName,  SetEntry const& aNewEntry);
-            virtual void doRemoveElement(Name const& aName);
-
-            virtual void doDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree);
-            virtual void doMarkAsDefault();
-
-            virtual void doInitElements(ISubtree& rTree, TreeDepth nDepth);
-            virtual Element doMakeAdditionalElement(AddNode const& aAddNodeChange, TreeDepth nDepth);
-
-            virtual void doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
-
-            virtual NodeChangeImpl* doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement);
-            virtual NodeChangeImpl* doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange);
-
-            virtual bool doHasChanges() const;
-            virtual void doCollectChanges(NodeChanges& rChanges) const;
-            virtual void doCommitChanges();
-            virtual void doMarkChanged();
-            virtual NodeImplHolder doCloneIndirect(bool bIndirect);
-
-        // Implementation
-        private:
-            void implInsertNewElement(Name const& aName, Element const& aNewElement);
-            void implRemoveOldElement(Name const& aName);
-
             ElementSet m_aChangedData;
             bool    m_bChanged;
             bool    m_bDefault;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-20 10:58:46 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,14 +73,30 @@
 
 namespace configmgr
 {
-    class ISubtree;
+//-----------------------------------------------------------------------------
+
     class SubtreeChange;
     struct TreeChangeList;
+//-----------------------------------------------------------------------------
+
+    namespace memory
+    {
+        class Segment;
+        class Accessor;
+    }
+//-----------------------------------------------------------------------------
+
+    namespace data
+    {
+        class NodeAccess;
+    }
+//-----------------------------------------------------------------------------
 
     namespace configuration
     {
 //-----------------------------------------------------------------------------
         class Tree; typedef Tree RootTree;
+        class TreeRef;
         class TreeImpl;
         class NodeRef;
         class NodeChangesInformation;
@@ -92,11 +108,15 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
         RootTree createReadOnlyTree(    AbsolutePath const& aRootPath,
-                                        ISubtree& rCacheNode, TreeDepth nDepth,
+                                        memory::Segment const* _pDataSegment,
+                                        data::NodeAccess const& _aCacheNode,
+                                        TreeDepth nDepth,
                                         TemplateProvider const& aTemplateProvider);
 
         RootTree createUpdatableTree(   AbsolutePath const& aRootPath,
-                                        ISubtree& rCacheNode, TreeDepth nDepth,
+                                        memory::Segment const* _pDataSegment,
+                                        data::NodeAccess const& _aCacheNode,
+                                        TreeDepth nDepth,
                                         TemplateProvider const& aTemplateProvider);
 
 //-----------------------------------------------------------------------------
@@ -107,18 +127,18 @@ namespace configmgr
             std::auto_ptr<Data> m_pData;
             TreeImpl*           m_pTree;
         public:
-            CommitHelper(Tree const& aTree);
+            CommitHelper(TreeRef const& aTree);
             ~CommitHelper();
 
             // collect all changes into rChangeList
-            bool prepareCommit(TreeChangeList& rChangeList);
+            bool prepareCommit(memory::Accessor const & _aAccessor, TreeChangeList& rChangeList);
 
             // finish and clean up the changes in rChangeList after they are integrated
-            void finishCommit(TreeChangeList& rChangeList);
+            void finishCommit(memory::Accessor const & _aAccessor, TreeChangeList& rChangeList);
             // restore the changes in rChangeList as pending
-            void revertCommit(TreeChangeList& rChangeList);
+            void revertCommit(memory::Accessor const & _aAccessor, TreeChangeList& rChangeList);
             // throw away and clean up the changes in rChangeList after a commit failed
-            void failedCommit(TreeChangeList& rChangeList);
+            void failedCommit(memory::Accessor const & _aAccessor, TreeChangeList& rChangeList);
 
             // dispose of auxiliary data for a commit operation
             void reset();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,6 +211,7 @@ namespace configmgr
     {
     // -----------------------------------------------------------------------------------------------
         using configuration::Tree;
+        using configuration::TreeRef;
         using configuration::NodeRef;
         using configuration::NodeID;
         using configuration::SubNodeID;
@@ -361,11 +362,12 @@ namespace configmgr
     // -----------------------------------------------------------------------------------------------
 
         inline NodeID makeRootID( Tree const& aTree ) { return NodeID( aTree, aTree.getRootNode() ); }
+        inline NodeID makeRootID( TreeRef const& aTree ) { return NodeID( aTree, aTree.getRootNode() ); }
         inline NodeID makeRootID( ApiTreeRef const& pTreeImpl ) { return makeRootID( pTreeImpl->getTree() ); }
     // -----------------------------------------------------------------------------------------------
         NotifierData findNotifier(NodeChangeLocation const& aChange, ApiTreeRef const& pTreeImpl)
         {
-            OSL_ENSURE(aChange.isValidLocation(),"Invalid change location - cannot find notifier");
+            OSL_ENSURE(aChange.isValidData(),"Invalid change location - cannot find notifier");
 
             NodeID aAffectedNode = aChange.getAffectedNodeID();
             if (aAffectedNode.isEmpty())
@@ -544,10 +546,10 @@ namespace configmgr
                     NotifierData const& rLocalNotifier,
                     NodeChangeLocation const& aChange)
         {
-            OSL_ENSURE(configuration::equalTree(rLocalNotifier.second->getTree(), aChange.getAffectedTree()),
+            OSL_ENSURE(configuration::equalTreeRef(rLocalNotifier.second->getTree(), aChange.getAffectedTreeRef()),
                         "ERROR: Tree Mismatch creating Single Broadcaster");
 
-            OSL_ENSURE(aChange.isValidLocation(), "ERROR: Invalid Change Location for Broadcaster");
+            OSL_ENSURE(aChange.isValidData(), "ERROR: Invalid Change Location for Broadcaster");
 
             NodeID aAffectedNodeID = aChange.getAffectedNodeID();
             if (aAffectedNodeID.isEmpty())
@@ -571,10 +573,10 @@ namespace configmgr
                     SubNodeID const& aChangedNodeID,
                     NodeChangeLocation const& aChange)
         {
-            OSL_ENSURE(aChange.isValidLocation(), "ERROR: Invalid Change Location for Broadcaster");
+            OSL_ENSURE(aChange.isValidData(), "ERROR: Invalid Change Location for Broadcaster");
             OSL_ENSURE(aAffectedID.isValidNode(),"Cannot broadcast without affected node");
 
-            OSL_ENSURE(configuration::equalTree(rLocalNotifier.second->getTree(), aChange.getAffectedTree()),
+            OSL_ENSURE(configuration::equalTreeRef(rLocalNotifier.second->getTree(), aChange.getAffectedTreeRef()),
                         "ERROR: Tree Mismatch creating Single Broadcaster");
             OSL_ENSURE( aChange.getAffectedNodeID() == aAffectedID,
                         "ERROR: Node Mismatch creating Single Broadcaster");
@@ -659,7 +661,7 @@ namespace configmgr
             if (aChanges.empty())
                 return 0;
 
-            OSL_ENSURE(aChanges.begin()->location.isValidLocation(), "ERROR: Invalid Change Location for Broadcaster");
+            OSL_ENSURE(aChanges.begin()->hasValidLocation(), "ERROR: Invalid Change Location for Broadcaster");
 
             NodeID aAffectedNodeID = aChanges.begin()->location.getAffectedNodeID();
             if (aAffectedNodeID.isEmpty())
@@ -686,10 +688,10 @@ namespace configmgr
                 SubNodeSet aChangedNodes;
                 for (NodeChangesInformation::Iterator it = aChanges.begin(); it != aChanges.end(); ++it)
                 {
-                    OSL_ENSURE(it->location.isValidLocation(), "ERROR: Invalid Change Location for Broadcaster");
+                    OSL_ENSURE(it->hasValidLocation(), "ERROR: Invalid Change Location for Broadcaster");
 
                     OSL_ENSURE(it->location.getAffectedNodeID() == aAffectedNodeID, "ERROR: Change is not local to affected node (as advertised)");
-                    OSL_ENSURE(configuration::equalTree(rLocalNotifier.second->getTree(), it->location.getAffectedTree()),
+                    OSL_ENSURE(configuration::equalTreeRef(rLocalNotifier.second->getTree(), it->location.getAffectedTreeRef()),
                                 "ERROR: Tree Mismatch creating Multi Change Broadcaster");
 
                     SubNodeID aChangedValueID = it->location.getChangingValueID();
@@ -798,7 +800,7 @@ namespace configmgr
             NodeSet aNodes;
             for (NodeChangesInformation::Iterator itChanges = aChanges.begin(); itChanges != aChanges.end(); ++itChanges)
             {
-                OSL_ENSURE(itChanges->location.isValidLocation(), "ERROR: Invalid Change Location for Broadcaster");
+                OSL_ENSURE(itChanges->hasValidLocation(), "ERROR: Invalid Change Location for Broadcaster");
 
                 NodeID aAffectedNodeID = itChanges->location.getAffectedNodeID();
                 if (!aAffectedNodeID.isEmpty())
@@ -867,11 +869,11 @@ namespace configmgr
 
             OSL_ASSERT(rSelected.empty()); // nothing in there yet
 
-            Tree const aSelectedTree( aSelector.second->getTree() );
+            TreeRef const aSelectedTree( aSelector.second->getTree() );
 
             for (NodeChangesInformation::Iterator it = aOriginal.begin(); it != aOriginal.end(); ++it)
             {
-                if ( configuration::equalTree(it->location.getAffectedTree(),aSelectedTree) )
+                if ( configuration::equalTreeRef(it->location.getAffectedTreeRef(),aSelectedTree) )
                 {
                     rSelected.push_back(*it);
                 }
@@ -990,7 +992,7 @@ namespace configmgr
 
         BroadcasterImplRef pRet;
 
-        if (aChange.location.isValidLocation())
+        if (aChange.hasValidLocation())
         {
             if (bLocal)
             {
@@ -1055,7 +1057,7 @@ namespace configmgr
 
     bool Broadcaster::Impl::translateChanges(NodeChangesInformation& _rInfos, NodeChanges const& aChanges, bool bSingleBase) const
     {
-        Tree aBaseTree = m_aNotifierData.second->getTree();
+        TreeRef aBaseTree = m_aNotifierData.second->getTree();
         Factory& rFactory = m_aNotifierData.second->getFactory();
 
         NodeChangesInformation aRawInfos;
@@ -1075,7 +1077,7 @@ namespace configmgr
         {
             NodeChangeInformation aInfo = *pos;
 
-            if( !configapi::rebaseChange(aInfo.location,aBaseTree) )
+            if( !configapi::rebaseChange(aInfo.accessor,aInfo.location,aBaseTree) )
             {
                 OSL_TRACE("Change is not within expected tree - skipping for notification");
                 continue;
@@ -1100,7 +1102,7 @@ namespace configmgr
         NodeChangesInformation aNewInfos;
         aNewInfos.reserve( aChanges.size() );
 
-        Tree aBaseTree = m_aNotifierData.second->getTree();
+        TreeRef aBaseTree = m_aNotifierData.second->getTree();
         Factory& rFactory = m_aNotifierData.second->getFactory();
 
         for (NodeChangesInformation::Iterator it = aChanges.begin(); it != aChanges.end(); ++it)
@@ -1109,7 +1111,7 @@ namespace configmgr
 
             // enabling the Single base optimization requires a base node (not only a base tree) for correct accessors
             //if (!bSingleBase || !configuration::equalTree(aBaseTree,aNewChange.info.baseTree))
-            if( !configapi::rebaseChange(aInfo.location,aBaseTree) )
+            if( !configapi::rebaseChange(aInfo.accessor,aInfo.location,aBaseTree) )
             {
                 OSL_TRACE("Change is not within expected tree - skipping for notification");
                 continue;

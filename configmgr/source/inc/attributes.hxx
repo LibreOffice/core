@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attributes.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2001-11-08 10:55:44 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,7 @@ namespace configmgr
             bool bNullable      : 1;    // values only: can be NULL
             bool bLocalized     : 1;    // values only: value may depend on locale
 
-            bool bNotified      : 1;    // can register a listener for changes to this node
-            bool bConstrained   : 1;    // can register a veto listener to constrain changes to this node
+            int  reserved       : 2;    // can register a veto listener to constrain changes to this node
 
 
             Attributes()
@@ -96,8 +95,6 @@ namespace configmgr
             , state_(node::isMerged)
             , bNullable(true)
             , bLocalized(false)
-            , bNotified(true)
-            , bConstrained(false)
             {}
             /* ! IMPORTANT: if these defaults are changed,
                 the handling in CmXMLFormater::handleAttributes()

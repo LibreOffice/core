@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeconverter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 16:35:14 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,13 +122,6 @@ std::auto_ptr<ValueNode> OTreeNodeConverter::createCorrespondingNode(ValueChange
     return aRet;
 }
 
-//--------------------------------------------------------------------------
-std::auto_ptr<INode> OTreeNodeConverter::extractAddedNode(AddNode& _rChange)
-{
-    std::auto_ptr<INode> aRet = _rChange.releaseAddedNode();
-    return aRet;
-}
-
 //==========================================================================
 //= ONodeConverter
 //==========================================================================
@@ -202,7 +195,7 @@ void ONodeConverter::handle(ValueChange& aValueNode)
 //--------------------------------------------------------------------------
 void ONodeConverter::handle(AddNode& aAddNode)
 {
-    m_pNode = m_rFactory.extractAddedNode(aAddNode);
+    m_pNode = aAddNode.getNewTree().cloneData(true);
 }
 
 //--------------------------------------------------------------------------
@@ -247,8 +240,8 @@ void OCreateSubtreeAction::handle(RemoveNode& _rChange)
 void OCreateSubtreeAction::handle(AddNode& _rChange)
 {
     // free the node and add it to the subtree
-    std::auto_ptr<INode> aNewNode = m_rNodeFactory.extractAddedNode(_rChange);
-    m_rTree.addChild(aNewNode);
+    data::TreeSegment aNewNode = _rChange.getNewTree();
+    m_rTree.addChild(aNewNode.cloneData(true));
 }
 
 

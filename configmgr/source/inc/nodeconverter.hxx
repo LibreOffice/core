@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeconverter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 16:35:13 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,6 @@ namespace configmgr
     // node conversion functions
         std::auto_ptr<ISubtree>  createCorrespondingNode(SubtreeChange   const& _rChange);
         std::auto_ptr<ValueNode> createCorrespondingNode(ValueChange     const& _rChange);
-
-        static std::auto_ptr<INode> extractAddedNode(AddNode& _rChange);
 
         std::auto_ptr<INode>     createCorrespondingNode(Change& _rChange);
         std::auto_ptr<ISubtree>  createCorrespondingTree(SubtreeChange& _rChange);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeinfo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,25 +109,25 @@ bool NodeChangeData::isDataChange() const
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChangeData::getNewElementTree() const
+Tree NodeChangeData::getNewElementTree(data::Accessor const& aAccessor) const
 {
-    return Tree( element.newValue.getBodyPtr() );
+    return Tree( aAccessor, element.newValue.get() );
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChangeData::getOldElementTree() const
+Tree NodeChangeData::getOldElementTree(data::Accessor const& aAccessor) const
 {
-    return Tree( element.oldValue.getBodyPtr() );
+    return Tree( aAccessor, element.oldValue.get() );
 }
 //-----------------------------------------------------------------------------
 
 NodeRef NodeChangeData::getNewElementNodeRef() const
 {
     ElementTreeHolder newElement = this->element.newValue;
-    if ( newElement.isValid() &&  newElement->nodeCount() > 0)
+    if ( newElement.is() &&  newElement->nodeCount() > 0)
     {
-        NodeOffset n = newElement->root();
-        return TreeImplHelper::makeNode( newElement.getBody(), n);
+        NodeOffset n = newElement->root_();
+        return TreeImplHelper::makeNode( *newElement, n);
     }
     else
         return NodeRef();
@@ -137,10 +137,10 @@ NodeRef NodeChangeData::getNewElementNodeRef() const
 NodeRef NodeChangeData::getOldElementNodeRef() const
 {
     ElementTreeHolder oldElement = this->element.oldValue;
-    if ( oldElement.isValid() &&  oldElement->nodeCount() > 0)
+    if ( oldElement.is() &&  oldElement->nodeCount() > 0)
     {
-        NodeOffset n = oldElement->root();
-        return TreeImplHelper::makeNode( oldElement.getBody(), n);
+        NodeOffset n = oldElement->root_();
+        return TreeImplHelper::makeNode( *oldElement, n);
     }
     else
         return NodeRef();
@@ -150,9 +150,9 @@ NodeRef NodeChangeData::getOldElementNodeRef() const
 NodeID NodeChangeData::getNewElementNodeID() const
 {
     ElementTreeHolder newElement = this->element.newValue;
-    if ( newElement.isValid() &&  newElement->nodeCount() > 0)
+    if ( newElement.is() &&  newElement->nodeCount() > 0)
     {
-        return NodeID( newElement.getBodyPtr(), newElement->root() );
+        return NodeID( newElement.get(), newElement->root_() );
     }
     else
         return NodeID(0,0);
@@ -162,9 +162,9 @@ NodeID NodeChangeData::getNewElementNodeID() const
 NodeID NodeChangeData::getOldElementNodeID() const
 {
     ElementTreeHolder oldElement = this->element.oldValue;
-    if ( oldElement.isValid() &&  oldElement->nodeCount() > 0)
+    if ( oldElement.is() &&  oldElement->nodeCount() > 0)
     {
-        return NodeID( oldElement.getBodyPtr(), oldElement->root() );
+        return NodeID( oldElement.get(), oldElement->root_() );
     }
     else
         return NodeID(0,0);
@@ -179,7 +179,7 @@ NodeChangeLocation::NodeChangeLocation()
 {
 }
 //-----------------------------------------------------------------------------
-bool NodeChangeLocation::isValidLocation() const
+bool NodeChangeLocation::isValidLocation(data::Accessor const& aAccessor) const
 {
     // TODO: Validate that base,target and accessor relate correctly (?)
     return   m_base.isValidNode() &&
@@ -188,8 +188,19 @@ bool NodeChangeLocation::isValidLocation() const
                 :   ( m_affected.isValidNode() &&
                       (! m_bSubNodeChanging ||
                          (!m_path.isEmpty() &&
-                            SubNodeID(m_affected,m_path.getLocalName().getName()).isValidNode()
+                            SubNodeID(m_affected,m_path.getLocalName().getName()).isValidNode(aAccessor)
                     ) )  ) );
+}
+//-----------------------------------------------------------------------------
+bool NodeChangeLocation::isValidData() const
+{
+    // TODO: Validate that base,target and accessor relate correctly (?)
+    return   m_base.isValidNode() &&
+            (m_affected.isEmpty()
+                ?   ! m_bSubNodeChanging
+                :   ( m_affected.isValidNode() &&
+                      (! m_bSubNodeChanging || !m_path.isEmpty() )
+            )       );
 }
 //-----------------------------------------------------------------------------
 
@@ -222,10 +233,10 @@ void NodeChangeLocation::setChangingSubnode( bool bSubnode )
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChangeLocation::getBaseTree() const
+Tree NodeChangeLocation::getBaseTree(data::Accessor const& aAccessor) const
 {
     OSL_ENSURE(m_base.isValidNode(), "Invalid base location set in NodeChangeLocation");
-    return Tree( TreeImplHelper::tree(m_base) );
+    return Tree( aAccessor, TreeImplHelper::tree(m_base) );
 }
 //-----------------------------------------------------------------------------
 
@@ -237,10 +248,16 @@ NodeRef NodeChangeLocation::getBaseNode() const
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChangeLocation::getAffectedTree() const
+TreeRef NodeChangeLocation::getAffectedTreeRef() const
 {
     NodeID aAffected = this->getAffectedNodeID();
-    return Tree( TreeImplHelper::tree(aAffected) );
+    return TreeRef( TreeImplHelper::tree(aAffected) );
+}
+//-----------------------------------------------------------------------------
+
+Tree NodeChangeLocation::getAffectedTree(data::Accessor const& aAccessor) const
+{
+    return Tree( aAccessor, getAffectedTreeRef() );
 }
 //-----------------------------------------------------------------------------
 
@@ -266,8 +283,6 @@ SubNodeID NodeChangeLocation::getChangingValueID() const
     OSL_ENSURE(!m_path.isEmpty(), "No target accessor set in NodeChangeLocation with subnode");
 
     SubNodeID aResult( m_affected, m_path.getLocalName().getName() );
-
-    OSL_ENSURE(aResult.isValidNode(), "Invalid change location set in NodeChangeLocation");
 
     return aResult;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyinfohelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:03 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,8 @@ beans::Property helperMakeProperty(configuration::Name const& aName,
     sal_Int16 nPropAttributes = 0;
     if (!aAttributes.bWritable)     nPropAttributes |= PropertyAttribute::READONLY;
     if ( aAttributes.bNullable)     nPropAttributes |= PropertyAttribute::MAYBEVOID;
-    if ( aAttributes.bNotified)     nPropAttributes |= PropertyAttribute::BOUND;
-    if ( aAttributes.bConstrained)  nPropAttributes |= PropertyAttribute::CONSTRAINED;
+    /*if ( aAttributes.bNotified)*/ nPropAttributes |= PropertyAttribute::BOUND;
+    /*if ( aAttributes.bConstrained)nPropAttributes |= PropertyAttribute::CONSTRAINED;*/
 
     if ( bDefaultable)  nPropAttributes |= PropertyAttribute::MAYBEDEFAULT;
 

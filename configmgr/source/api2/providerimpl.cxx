@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 17:01:59 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,13 @@
 #ifndef _CONFIGMGR_TREECACHE_HXX_
 #include "treecache.hxx"
 #endif
+#ifndef CONFIGMGR_TREEACCESSOR_HXX
+#include "treeaccessor.hxx"
+#endif
+#ifndef CONFIGMGR_GROUPNODEACCESS_HXX
+#include "groupnodeaccess.hxx"
+#endif
+#include "valuenodeaccess.hxx"
 #ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
 #endif
@@ -200,8 +207,10 @@ namespace configmgr
         {
             static ::rtl::OUString ssUserProfile(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup"));
             AbsolutePath aProfileModule = AbsolutePath::makeModulePath(ssUserProfile, AbsolutePath::NoValidate());
-            if (ISubtree* pSubTree = m_pTreeMgr->requestSubtree(aProfileModule, m_xDefaultOptions))
-                implInitFromProfile(pSubTree);
+
+            data::NodeAccess aProfileTree = m_pTreeMgr->requestSubtree(aProfileModule, m_xDefaultOptions);
+            if (aProfileTree.isValid())
+                implInitFromProfile(aProfileTree);
 
             // should we clean this up ?
             // m_pTreeMgr->releaseSubtree(ssUserProfile, m_xDefaultOptions);
@@ -219,7 +228,7 @@ namespace configmgr
     {
     }
     //-----------------------------------------------------------------------------
-    void OProviderImpl::initFromProfile(ISubtree const* )
+    void OProviderImpl::initFromProfile(data::NodeAccess const& )
     {
     }
     //-----------------------------------------------------------------------------
@@ -257,26 +266,31 @@ namespace configmgr
             rNeedProfile = true; // to get locale
     }
     //-----------------------------------------------------------------------------
-    void OProviderImpl::implInitFromProfile(ISubtree const* pProfile)
+    void OProviderImpl::implInitFromProfile(data::NodeAccess const& aProfile)
     {
-        OSL_ASSERT(pProfile);
+        OSL_ASSERT(aProfile.isValid());
+
+        data::GroupNodeAccess aProfileNode( aProfile );
+
+        OSL_ASSERT(aProfileNode.isValid());
 
         // read the default locale for the user
         if (m_xDefaultOptions->getDefaultLocale().getLength() == 0)
         {
-            static ::rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("L10N"));
-            static ::rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
+            using configuration::Name;
+            using configuration::makeNodeName;
+            static Name ssSubGroup = makeNodeName(OUString(RTL_CONSTASCII_USTRINGPARAM("L10N")), Name::NoValidate());
+            static Name ssLocale   = makeNodeName(OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale")), Name::NoValidate());
 
-            INode const* pNode = pProfile->getChild(ssSubGroup);
-            ISubtree const* pSubTree = pNode ? pNode->asISubtree() : NULL;
-            if (pSubTree)
+            data::GroupNodeAccess aL10NNode( aProfileNode.getChildNode(ssSubGroup) );
+            if (aL10NNode.isValid())
             {
-                pNode = pSubTree->getChild(ssLocale);
-                ValueNode const * pValueNode = pNode ? pNode->asValueNode() : NULL;
-                if (pValueNode)
+                data::ValueNodeAccess aValue( aL10NNode.getChildNode(ssLocale) );
+
+                if (aValue.isValid())
                 {
                     rtl::OUString sDefaultLocale;
-                    if (pValueNode->getValue() >>= sDefaultLocale)
+                    if (aValue.getValue() >>= sDefaultLocale)
                     {
                         m_xDefaultOptions->setDefaultLocale(sDefaultLocale);
                     }
@@ -287,7 +301,7 @@ namespace configmgr
         }
 
     // call the template method
-        this->initFromProfile(pProfile);
+        this->initFromProfile(aProfile);
     }
 
     //-----------------------------------------------------------------------------
@@ -331,22 +345,23 @@ namespace configmgr
         return *m_pTreeMgr;
     }
 
-    // TemplateProvider access
+    // TemplateManager access
     //-----------------------------------------------------------------------------
-    ITemplateProvider&  OProviderImpl::getTemplateProvider() const
+    ITemplateManager&  OProviderImpl::getTemplateProvider() const
     {
         return *m_pTreeMgr;
     }
 
     // ITreeProvider /ITreeManager
     //-----------------------------------------------------------------------------
-    ISubtree* OProviderImpl::requestSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
-                                             sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  )
+    data::NodeAccess OProviderImpl::requestSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
+                                                    sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  )
     {
-        ISubtree* pTree = NULL;
+        data::NodeAccess aTree = data::NodeAccess::emptyNode();
         try
         {
-            pTree = m_pTreeMgr->requestSubtree(aSubtreePath, _xOptions, nMinLevels);
+            aTree = m_pTreeMgr->requestSubtree(aSubtreePath, _xOptions, nMinLevels);
+
         }
         catch(uno::Exception&e)
         {
@@ -358,7 +373,7 @@ namespace configmgr
             throw lang::WrappedTargetException(sMessage, getProviderInstance(), uno::makeAny(e));
         }
 
-        if (!pTree)
+        if (!aTree.isValid())
         {
             ::rtl::OUString sMessage = getErrorMessage(aSubtreePath, _xOptions);
 
@@ -367,13 +382,13 @@ namespace configmgr
             throw uno::Exception(sMessage, getProviderInstance());
         }
 
-        return pTree;
+        return aTree;
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  )
+    void OProviderImpl::updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  )
     {
-        m_pTreeMgr->updateTree(aChanges);
+        m_pTreeMgr->updateTree(_aAccessToken, aChanges);
     }
 
     //-----------------------------------------------------------------------------
@@ -389,9 +404,9 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::notifyUpdate(TreeChangeList const& aChanges) CFG_UNO_THROW_RTE(  )
+    void OProviderImpl::notifyUpdate(data::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges) CFG_UNO_THROW_RTE(  )
     {
-        m_pTreeMgr->notifyUpdate(aChanges);
+        m_pTreeMgr->notifyUpdate(_aChangedDataAccessor,aChanges);
     }
 
     //-----------------------------------------------------------------------------
@@ -401,9 +416,9 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    sal_Bool OProviderImpl::fetchDefaultData(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  )
+    sal_Bool OProviderImpl::fetchDefaultData(memory::UpdateAccessor& _aAccessToken, AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels) CFG_UNO_THROW_ALL(  )
     {
-        return m_pTreeMgr->fetchDefaultData(aSubtreePath, _xOptions, nMinLevels);
+        return m_pTreeMgr->fetchDefaultData(_aAccessToken, aSubtreePath, _xOptions, nMinLevels);
     }
 
     // IInterface
@@ -426,40 +441,9 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    ISynchronizedData& OProviderImpl::getTreeLock()
+    memory::Segment* OProviderImpl::getDataSegment(AbsolutePath const& _rAccessor, const vos::ORef < OOptions >& _xOptions)
     {
-        return *m_pTreeMgr;
-    }
-
-    //-----------------------------------------------------------------------------
-    ISynchronizedData const& OProviderImpl::getTreeLock() const
-    {
-        return *m_pTreeMgr;
-    }
-
-    // ISyncronizedData
-    //-----------------------------------------------------------------------------
-    void OProviderImpl::acquireReadAccess() const
-    {
-        getTreeLock().acquireReadAccess();
-    }
-
-    //-----------------------------------------------------------------------------
-    void OProviderImpl::releaseReadAccess() const
-    {
-        getTreeLock().releaseReadAccess();
-    }
-
-    //-----------------------------------------------------------------------------
-    void OProviderImpl::acquireWriteAccess()
-    {
-        getTreeLock().acquireWriteAccess();
-    }
-
-    //-----------------------------------------------------------------------------
-    void OProviderImpl::releaseWriteAccess()
-    {
-        getTreeLock().releaseWriteAccess();
+        return m_pTreeMgr->getDataSegment(_rAccessor, _xOptions);
     }
 
     //-----------------------------------------------------------------------------------
@@ -506,13 +490,13 @@ namespace configmgr
 
             AbsolutePath aAccessorPath = AbsolutePath::parse(_rAccessor);
 
-            ISubtree*   pTree = this->requestSubtree(aAccessorPath,_xOptions, sal_Int16(nMinLevels));
+            data::NodeAccess aTree = this->requestSubtree(aAccessorPath,_xOptions, sal_Int16(nMinLevels));
 
             TreeDepth nDepth = (nMinLevels == ALL_LEVELS) ? C_TreeDepthAll : TreeDepth(nMinLevels);
 
             RootTree aRootTree( createReadOnlyTree(
-                    aAccessorPath,
-                    *pTree, nDepth,
+                    aAccessorPath, this->getDataSegment(aAccessorPath,_xOptions),
+                    aTree, nDepth,
                     TemplateProvider( this->getTemplateProvider(), _xOptions )
                 ));
 
@@ -541,13 +525,13 @@ namespace configmgr
 
             AbsolutePath aAccessorPath = AbsolutePath::parse(_rAccessor);
 
-            ISubtree*   pTree = requestSubtree(aAccessorPath, _xOptions, sal_Int16(nMinLevels));
+            data::NodeAccess    aTree = requestSubtree(aAccessorPath, _xOptions, sal_Int16(nMinLevels));
 
             TreeDepth nDepth = (nMinLevels == ALL_LEVELS) ? C_TreeDepthAll : TreeDepth(nMinLevels);
 
             RootTree aRootTree( createUpdatableTree(
-                                    aAccessorPath,
-                                    *pTree, nDepth,
+                                    aAccessorPath, this->getDataSegment(aAccessorPath,_xOptions),
+                                    aTree, nDepth,
                                     TemplateProvider( this->getTemplateProvider(), _xOptions )
                                 ));
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-14 16:35:14 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,25 @@
 //..........................................................................
 namespace configmgr
 {
+// -------------------------------------------------------------------------
+namespace
+{
+    struct ForceWritable : NodeModification
+    {
+        void handle(ValueNode& _rValue)     { implForceWritable(_rValue); }
+        void handle(ISubtree& _rSubtree)    { implForceWritable(_rSubtree); applyToChildren(_rSubtree); }
+
+        void implForceWritable(INode& _rNode) { _rNode.forceWritableToFinalized(); }
+    };
+}
+
+// -------------------------------------------------------------------------
+void forceWritable(INode& _rNode)
+{
+    ForceWritable aVisitor;
+
+    aVisitor.applyToNode(_rNode);
+}
 
 //==========================================================================
 //= OIdPropagator

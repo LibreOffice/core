@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: jb $ $Date: 2001-06-20 20:16:02 $
+#   last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,12 +84,12 @@ SLOFILES=	\
         $(SLO)$/attributelist.obj	\
         $(SLO)$/confname.obj	\
         $(SLO)$/configunoreg.obj	\
-        $(SLO)$/synchronize.obj	\
         $(SLO)$/filehelper.obj	\
         $(SLO)$/strimpl.obj	\
         $(SLO)$/mergechange.obj \
         $(SLO)$/trivialbufferedfile.obj \
 
+#		$(SLO)$/synchronize.obj	\
 #		$(SLO)$/memory.obj \
 
 

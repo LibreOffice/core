@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupnodeimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,17 @@
 
 namespace configmgr
 {
-    class ISubtree;
-    class ValueNode;
+//-----------------------------------------------------------------------------
     class SubtreeChange;
     class ValueChange;
+//-----------------------------------------------------------------------------
+
+    namespace data
+    {
+        class GroupNodeAccess;
+        class ValueNodeAccess;
+    }
+//-----------------------------------------------------------------------------
 
     namespace configuration
     {
@@ -105,60 +112,18 @@ namespace configmgr
 
         class GroupNodeImpl : public NodeImpl
         {
-            ISubtree& m_rOriginal;
         public:
-            explicit GroupNodeImpl(ISubtree& rOriginal);
-            explicit GroupNodeImpl(GroupNodeImpl& rOriginal); // only for makeIndirect
+            explicit GroupNodeImpl(data::GroupNodeAddress const& _aNodeRef);
 
-            /// retrieve the name of the underlying node
-            OUString getOriginalNodeName() const;
+            typedef data::GroupNodeAccess DataAccess;
 
-            /// does this hold a child value of the given name
-            bool hasValue(Name const& aName) const;
+            DataAccess getDataAccess(data::Accessor const& _aAccessor) const;
 
-            /// are defaults for this node available ?
-            bool areValueDefaultsAvailable() const;
+            bool areValueDefaultsAvailable(data::Accessor const& _aAccessor) const;
 
-            /// retrieve data for the child value of the given name
-            ValueMemberNode getValue(Name const& aName)
-            { return doGetValueMember(aName,false); }
+            data::ValueNodeAccess getOriginalValueNode(data::Accessor const& _aAccessor, Name const& aName) const;
 
-            /// retrieve data for updating the child value of the given name
-            ValueMemberUpdate getValueForUpdate(Name const& aName)
-            { return ValueMemberUpdate( doGetValueMember(aName,true) ); }
-
-            // visitor support
-            GroupMemberVisitor::Result dispatchToValues(GroupMemberVisitor& aVisitor);
-
-            // commit protocol
-            std::auto_ptr<SubtreeChange> preCommitChanges();
-            void finishCommit(SubtreeChange& rChanges) { doFinishCommit(rChanges); }
-            void revertCommit(SubtreeChange& rChanges) { doRevertCommit(rChanges); }
-            void failedCommit(SubtreeChange& rChanges) { doFailedCommit(rChanges); }
-
-            /// Adjust the internal representation after external changes to the original data - build NodeChangeInformation objects for notification
-            void adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChanges, TreeImpl& rParentTree, NodeOffset nPos);
-        protected:
-            virtual std::auto_ptr<SubtreeChange> doPreCommitChanges();
-            virtual void doFinishCommit(SubtreeChange& rChanges);
-            virtual void doRevertCommit(SubtreeChange& rChanges);
-            virtual void doFailedCommit(SubtreeChange& rChanges);
-
-            virtual void doCollectChangesWithTarget(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
-            virtual ValueChangeImpl* doAdjustToValueChange(Name const& aName, ValueChange const& rExternalChange);
-
-        protected:
-            virtual ValueMemberNode doGetValueMember(Name const& aName, bool bForUpdate) = 0;
-
-            ValueNode* getOriginalValueNode(Name const& aName) const;
-        protected:
-        // NodeImpl implementation
-            virtual Attributes      doGetAttributes() const;
-
-        private:
-            virtual NodeType::Enum  doGetType() const;
-            virtual void            doDispatch(INodeHandler& rHandler);
-
+            ValueMemberNode makeValueMember(data::ValueNodeAccess const& _aValueNode);
         };
 
 //-----------------------------------------------------------------------------

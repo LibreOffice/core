@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-20 11:01:51 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,32 +62,72 @@
 #include "treeimpl.hxx"
 #include "roottreeimpl.hxx"
 
+#ifndef CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 #include "nodeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGEIMPL_HXX_
 #include "nodechangeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGTEMPLATE_HXX_
 #include "template.hxx"
+#endif
 
+#ifndef CONFIGMGR_NODEVISITOR_HXX
+#include "nodevisitor.hxx"
+#endif
+#ifndef CONFIGMGR_VALUENODEACCESS_HXX
+#include "valuenodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_GROUPNODEACCESS_HXX
+#include "groupnodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_SETNODEACCESS_HXX
+#include "setnodeaccess.hxx"
+#endif
+
+#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #include "valuenode.hxx"
+#endif
+#ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
+#endif
 
+#ifndef CONFIGMGR_VALUENODEBEHAVIOR_HXX_
 #include "valuenodeimpl.hxx"
-#include "setnodeimplbase.hxx"
+#endif
+#ifndef CONFIGMGR_SETNODEBEHAVIOR_HXX_
+#include "setnodeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_GROUPNODEBEHAVIOR_HXX_
 #include "groupnodeimpl.hxx"
+#endif
+#ifndef CONFIGMGR_VIEWACCESS_HXX_
+#include "viewaccess.hxx"
+#endif
 
-#include <algorithm> // for reverse
+#ifndef CONFIGMGR_VIEWBEHAVIORFACTORY_HXX_
+#include "viewfactory.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODEFACTORY_HXX_
+#include "nodefactory.hxx"
+#endif
+#ifndef CONFIGMGR_SEGMENT_HXX
+#include "segment.hxx"
+#endif
+#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
+#include "updateaccessor.hxx"
+#endif
+
+#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
 
 namespace configmgr
 {
+//-----------------------------------------------------------------------------
     namespace configuration
     {
-
-//-----------------------------------------------------------------------------
-inline
-static
-Name nodeName(INode const& aNode)
-{
-    return makeName(aNode.getName(),Name::NoValidate());
-}
+        using view::NodeFactory;
 //-----------------------------------------------------------------------------
 // class TreeImplBuilder - friend of TreeImpl
 //-----------------------------------------------------------------------------
@@ -95,38 +135,47 @@ Name nodeName(INode const& aNode)
 /** is a visitor-style algorithm to construct a <type>TreeImpl::NodeList</type>
     representing a configuration hierarchy
 */
-class TreeImplBuilder : public NodeModification
+class TreeImplBuilder : public data::NodeVisitor
 {
 public:
     /** constructs a TreeImplBuilder to append onto <var>rList</var>
         the products of <var>rFactory</var> up to depth <var>nDepth</var>
     */
-    TreeImplBuilder(TemplateProvider const& aTemplateProvider, NodeFactory& rFactory, TreeImpl& rTree)
+    TreeImplBuilder(
+            TemplateProvider const& aTemplateProvider,
+            rtl::Reference<view::ViewStrategy> const& _xStrategy,
+            TreeImpl& rTree
+         )
         : m_aTemplateProvider(aTemplateProvider)
-        , m_rFactory(rFactory)
+        , m_xStrategy(_xStrategy)
+        , m_rFactory(_xStrategy->getNodeFactory())
         , m_rTree(rTree)
         , m_nParent(0)
         , m_nDepthLeft(rTree.m_nDepth)
     {
         OSL_ASSERT(m_rTree.m_aNodes.empty());
         OSL_DEBUG_ONLY(m_bMemberCheck = false);
+        m_rTree.m_xStrategy = _xStrategy;
     }
 
 private:
-    /// implements the NodeModification handler for ValueNodes
-    virtual void handle(ValueNode& rValue);
-    /// implements the NodeModification member for ValueNodes
-    virtual void handle(ISubtree& rTree);
+    /// implements the NodeVisitor handler for Value Nodes
+    virtual Result handle(data::ValueNodeAccess const& _aValue);
+    /// implements the NodeVisitor member for Group Nodes
+    virtual Result handle(data::GroupNodeAccess const& _aGroup);
+    /// implements the NodeVisitor member for Set Nodes
+    virtual Result handle(data::SetNodeAccess const& _aSet);
 
-    /// add a Node for group node <var>rGroup</var> to the list
-    void addGroup(ISubtree& rGroup);
-    /// add a Node for set node <var>rSet</var> to the list
-    void addSet(ISubtree& rSet);
+    /// add a Node for group node <var>_aGroup</var> to the list
+    void addGroup(data::GroupNodeAccess const& _aGroup);
+    /// add a Node for set node <var>_aSet</var> to the list
+    void addSet(data::SetNodeAccess const& _aSet);
     /// add a Node for value node <var>rValue</var> to the list
-    void addValueElement(ValueNode& rValue);
+    void addValueElement(data::ValueNodeAccess const& _aValue);
     /// add a Member for value node <var>rValue</var> to the list
-    void addValueMember(ValueNode& rValue);
+    void addValueMember(data::ValueNodeAccess const& _aValue);
 
+    rtl::Reference<view::ViewStrategy>  m_xStrategy;
     TemplateProvider m_aTemplateProvider;
     NodeFactory&    m_rFactory;
     TreeImpl&       m_rTree;
@@ -137,55 +186,64 @@ private:
 #endif
 };
 //-----------------------------------------------------------------------------
+typedef TreeImplBuilder::Result VisitorStatus;
+//-----------------------------------------------------------------------------
 
-void TreeImplBuilder::handle(ValueNode& rValue)
+VisitorStatus TreeImplBuilder::handle(data::ValueNodeAccess const& _aValue)
 {
     if (m_nParent == 0)
-        addValueElement(rValue); // if it is the root it is a value set element
+        addValueElement(_aValue); // if it is the root it is a value set element
     else
-        addValueMember(rValue); // if it is not the root it is a group member
+        addValueMember(_aValue); // if it is not the root it is a group member
+
+    return CONTINUE;
 }
 //-----------------------------------------------------------------------------
 
-void TreeImplBuilder::handle(ISubtree& rTree)
+VisitorStatus TreeImplBuilder::handle(data::GroupNodeAccess const& _aGroup)
 {
-    if (rTree.isSetNode())
-        addSet(rTree);
-    else
-        addGroup(rTree);
+    addGroup(_aGroup);
+    return CONTINUE;
 }
 //-----------------------------------------------------------------------------
 
-void TreeImplBuilder::addValueElement(ValueNode& rValue)
+VisitorStatus TreeImplBuilder::handle(data::SetNodeAccess const& _aSet)
 {
-    NodeImplHolder aValueNode( m_rFactory.makeValueNode(rValue) );
-    OSL_ENSURE( aValueNode.isValid(), "could not make value node wrapper" );
+    addSet(_aSet);
+    return CONTINUE;
+}
+//-----------------------------------------------------------------------------
+
+void TreeImplBuilder::addValueElement(data::ValueNodeAccess const& _aValue)
+{
+    NodeImplHolder aValueNode( m_rFactory.makeValueNode(_aValue) );
+    OSL_ENSURE( aValueNode.is(), "could not make value node wrapper" );
 
     OSL_ENSURE( m_nParent == 0, "Adding value element that is not root of its fragment" );
     // TODO:!isValid() => maybe substitute a SimpleValueNodeImpl if possible
-    if( aValueNode.isValid() )
+    if( aValueNode.is() )
     {
-        m_rTree.m_aNodes.push_back( Node(aValueNode,nodeName(rValue),m_nParent) );
+        m_rTree.m_aNodes.push_back( NodeData(aValueNode,_aValue.getName(),m_nParent) );
     }
 }
 //-----------------------------------------------------------------------------
 
-void TreeImplBuilder::addValueMember(ValueNode& )
+void TreeImplBuilder::addValueMember(data::ValueNodeAccess const& )
 {
     // nothing to do
     OSL_DEBUG_ONLY(m_bMemberCheck = true);
 }
 //-----------------------------------------------------------------------------
 
-void TreeImplBuilder::addGroup(ISubtree& rTree)
+void TreeImplBuilder::addGroup(data::GroupNodeAccess const& _aTree)
 {
-    NodeImplHolder aGroupNode( m_rFactory.makeGroupNode(rTree) );
-    OSL_ENSURE( aGroupNode.isValid(), "could not make group node wrapper" );
+    NodeImplHolder aGroupNode( m_rFactory.makeGroupNode(_aTree) );
+    OSL_ENSURE( aGroupNode.is(), "could not make group node wrapper" );
 
     // TODO:!isValid() => maybe substitute a SimpleValueNodeImpl if possible
-    if( aGroupNode.isValid() )
+    if( aGroupNode.is() )
     {
-        m_rTree.m_aNodes.push_back( Node(aGroupNode,nodeName(rTree),m_nParent) );
+        m_rTree.m_aNodes.push_back( NodeData(aGroupNode,_aTree.getName(),m_nParent) );
 
         // now fill in group members
         if (m_nDepthLeft > 0)
@@ -193,7 +251,7 @@ void TreeImplBuilder::addGroup(ISubtree& rTree)
             NodeOffset nSaveParent = m_nParent;
             decDepth(m_nDepthLeft);
 
-            m_nParent = m_rTree.m_aNodes.size() + m_rTree.root() - 1;
+            m_nParent = m_rTree.m_aNodes.size() + m_rTree.root_() - 1;
 
         #ifdef _DEBUG
             bool bSaveMemberCheck = m_bMemberCheck;
@@ -201,7 +259,7 @@ void TreeImplBuilder::addGroup(ISubtree& rTree)
         #endif
 
             // now recurse:
-            this->applyToChildren(rTree);
+            this->visitChildren(_aTree);
 
             OSL_ENSURE(m_nParent < m_rTree.m_aNodes.size() || m_bMemberCheck,
                         "WARNING: Configuration: Group within requested depth has no members");
@@ -215,36 +273,125 @@ void TreeImplBuilder::addGroup(ISubtree& rTree)
 }
 //-----------------------------------------------------------------------------
 
-void TreeImplBuilder::addSet(ISubtree& rTree)
+void TreeImplBuilder::addSet(data::SetNodeAccess const& _aSet)
 {
-    TemplateHolder aTemplate = makeSetElementTemplate(rTree, m_aTemplateProvider);
-    OSL_ASSERT(aTemplate.isValid());
+    TemplateHolder aTemplate = makeSetElementTemplate(_aSet, m_aTemplateProvider);
+    OSL_ASSERT(aTemplate.is());
     OSL_ENSURE(aTemplate->isInstanceTypeKnown(),"ERROR: Cannor create set instance without knowing the instance type");
 
-    NodeImplHolder aSetNode( m_rFactory.makeSetNode(rTree,aTemplate.getBodyPtr()) );
-    OSL_ENSURE( aSetNode.isValid(), "could not make set node wrapper" );
+    NodeImplHolder aSetNode( m_rFactory.makeSetNode(_aSet,aTemplate.get()) );
+    OSL_ENSURE( aSetNode.is(), "could not make set node wrapper" );
 
     // TODO:!isValid() => maybe substitute a SimpleValueNodeImpl if possible
-    if( aSetNode.isValid() )
+    if( aSetNode.is() )
     {
-        m_rTree.m_aNodes.push_back( Node(aSetNode,nodeName(rTree),m_nParent) );
+        m_rTree.m_aNodes.push_back( NodeData(aSetNode,_aSet.getName(),m_nParent) );
 
         // this also relies on one based offsets
-        NodeOffset nNodeAdded = m_rTree.m_aNodes.size() + m_rTree.root() - 1;
+        NodeOffset nNodeAdded = m_rTree.m_aNodes.size() + m_rTree.root_() - 1;
 
-        m_rTree.m_aNodes.back().setImpl().initElements(m_aTemplateProvider, m_rTree, nNodeAdded, m_nDepthLeft);
+        OSL_ASSERT(&m_rTree.m_aNodes.back().nodeImpl() == aSetNode.get());
+        static_cast<SetNodeImpl&>(*aSetNode).initElements(m_aTemplateProvider, m_rTree, nNodeAdded, m_nDepthLeft);
     }
 }
 
 //-----------------------------------------------------------------------------
-// class Node
+// class NodeData
 //-----------------------------------------------------------------------------
 
-Node::Node(NodeImplHolder const& aSpecificNode, Name const& aName, NodeOffset nParent)
+NodeData::NodeData(NodeImplHolder const& aSpecificNode, Name const& aName, NodeOffset nParent)
 : m_pSpecificNode(aSpecificNode)
 , m_nParent(nParent)
-, m_aName(aName)
+, m_aName_(aName)
 {
+}
+//-----------------------------------------------------------------------------
+
+data::NodeAccess NodeData::getOriginalNodeAccess(data::Accessor const& _aAccessor) const
+{
+    return data::NodeAccess(_aAccessor, m_pSpecificNode->getOriginalNodeAddress());
+}
+//-----------------------------------------------------------------------------
+
+void NodeData::rebuild(rtl::Reference<view::ViewStrategy> const & _xNewStrategy, data::NodeAccess const & _aNewData, data::Accessor const& _aOldAccessor)
+{
+    using namespace data;
+
+    NodeImplHolder aNewImpl;
+    if (this->isSetNode(_aOldAccessor))
+    {
+        SetNodeAccess aNewSet(_aNewData);
+        aNewImpl = _xNewStrategy->getNodeFactory().makeSetNode(aNewSet,NULL);
+
+        SetNodeImpl & rOldSetData = this->setImpl(_aOldAccessor);
+        SetNodeImpl & rNewSetData = static_cast<SetNodeImpl &>(*aNewImpl);
+
+        SetNodeAccess aOldSet = rOldSetData.getDataAccess(_aOldAccessor);
+
+        rNewSetData.rebuildFrom(rOldSetData,aNewSet,aOldSet);
+    }
+    else if (this->isGroupNode(_aOldAccessor))
+        aNewImpl = _xNewStrategy->getNodeFactory().makeGroupNode(GroupNodeAccess(_aNewData));
+
+    else if (this->isValueElementNode(_aOldAccessor))
+        aNewImpl = _xNewStrategy->getNodeFactory().makeValueNode(ValueNodeAccess(_aNewData));
+
+    m_pSpecificNode = aNewImpl;
+}
+
+//-----------------------------------------------------------------------------
+
+bool NodeData::isSetNode(data::Accessor const& _aAccessor) const
+{
+    return data::SetNodeAccess::isInstance(getOriginalNodeAccess(_aAccessor));
+}
+//-----------------------------------------------------------------------------
+
+bool NodeData::isValueElementNode(data::Accessor const& _aAccessor) const
+{
+    return data::ValueNodeAccess::isInstance(getOriginalNodeAccess(_aAccessor));
+}
+//-----------------------------------------------------------------------------
+
+bool NodeData::isGroupNode(data::Accessor const& _aAccessor) const
+{
+    return data::GroupNodeAccess::isInstance(getOriginalNodeAccess(_aAccessor));
+}
+//-----------------------------------------------------------------------------
+
+SetNodeImpl&   NodeData::implGetSetImpl(data::Accessor const& _aAccessor)   const
+{
+    OSL_ASSERT(m_pSpecificNode != 0);
+    OSL_ASSERT(isSetNode(_aAccessor));
+
+    if (!isSetNode(_aAccessor))
+            throw Exception( "INTERNAL ERROR: Node is not a set node. Cast failing." );
+
+    return static_cast<SetNodeImpl&>(*m_pSpecificNode);
+}
+//---------------------------------------------------------------------
+
+GroupNodeImpl& NodeData::implGetGroupImpl(data::Accessor const& _aAccessor) const
+{
+    OSL_ASSERT(m_pSpecificNode != 0);
+    OSL_ASSERT(isGroupNode(_aAccessor));
+
+    if (!isGroupNode(_aAccessor))
+            throw Exception( "INTERNAL ERROR: Node is not a group node. Cast failing." );
+
+    return static_cast<GroupNodeImpl&>(*m_pSpecificNode);
+}
+//---------------------------------------------------------------------
+
+ValueElementNodeImpl& NodeData::implGetValueImpl(data::Accessor const& _aAccessor) const
+{
+    OSL_ASSERT(m_pSpecificNode != 0);
+    OSL_ASSERT(isValueElementNode(_aAccessor));
+
+    if (!isValueElementNode(_aAccessor))
+            throw Exception( "INTERNAL ERROR: Node is not a value node. Cast failing." );
+
+    return static_cast<ValueElementNodeImpl&>(*m_pSpecificNode);
 }
 //-----------------------------------------------------------------------------
 
@@ -284,6 +431,53 @@ void TreeImpl::disposeData()
 }
 //-----------------------------------------------------------------------------
 
+data::Accessor TreeImpl::getDataAccessor(data::Accessor const& _aExternalAccessor) const
+{
+    if (memory::Segment const* pDataSegment = getDataSegment())
+        return data::Accessor(pDataSegment);
+
+    else
+        return _aExternalAccessor;
+}
+//-----------------------------------------------------------------------------
+
+data::TreeAccessor ElementTreeImpl::getOriginalTreeAccess(data::Accessor const& _aAccessor) const
+{
+    data::Accessor const& aRealAccessor = this->getDataAccessor(_aAccessor);
+//    data::NodeAccess aRoot = nodeData(root_())->getOriginalNodeAccess(aRealAccessor);
+    return data::TreeAccessor(aRealAccessor, m_aDataAddress/*aRoot.getDataPtr()*/);
+}
+
+//-----------------------------------------------------------------------------
+void TreeImpl::rebuild(rtl::Reference<view::ViewStrategy> const & _xNewStrategy, data::NodeAccess const & _aNewData, data::Accessor const& _aOldAccessor)
+{
+    m_xStrategy = _xNewStrategy;
+    this->implRebuild( this->root_(), _aNewData, _aOldAccessor);
+}
+
+//-----------------------------------------------------------------------------
+void TreeImpl::implRebuild(NodeOffset nNode, data::NodeAccess const & _aNewData, data::Accessor const& _aOldAccessor)
+{
+    NodeData * pNode = nodeData(nNode);
+    if (pNode->isGroupNode(_aOldAccessor))
+    {
+        // first rebuild the children
+        data::GroupNodeAccess aNewGroupAccess(_aNewData);
+        OSL_ASSERT(aNewGroupAccess.isValid());
+
+        for (NodeOffset nChild = firstChild_(nNode); isValidNode(nChild); nChild = findNextChild_(nNode,nChild))
+        {
+            data::NodeAccess aChildAccess = aNewGroupAccess.getChildNode(implGetOriginalName(nChild));
+            OSL_ASSERT(aChildAccess.isValid());
+            implRebuild(nChild,aChildAccess,_aOldAccessor);
+        }
+    }
+
+    pNode->rebuild(m_xStrategy,_aNewData,_aOldAccessor);
+}
+
+//-----------------------------------------------------------------------------
+
 void ElementTreeImpl::doFinishRootPath(Path::Rep& rPath) const
 {
     rPath.prepend( doGetRootName() );
@@ -321,14 +515,19 @@ AbsolutePath TreeImpl::getRootPath() const
     return AbsolutePath(aPath);
 }
 //-----------------------------------------------------------------------------
-void TreeImpl::build(NodeFactory& rFactory, INode& rCacheNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider)
+void TreeImpl::build(rtl::Reference<view::ViewStrategy> const& _xStrategy, data::NodeAccess const& _aRootNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider)
 {
     OSL_ASSERT(m_aNodes.empty());
     m_nDepth = nDepth;
-    TreeImplBuilder a(aTemplateProvider, rFactory,*this);
-    a.applyToNode(rCacheNode);
+    TreeImplBuilder a(aTemplateProvider, _xStrategy,*this);
+    a.visitNode(_aRootNode);
 }
 //-----------------------------------------------------------------------------
+
+rtl::Reference< view::ViewStrategy > TreeImpl::getViewBehavior() const
+{
+    return m_xStrategy;
+}
 
 // context handling
 //-----------------------------------------------------------------------------
@@ -343,7 +542,7 @@ void TreeImpl::setContext(TreeImpl* pParentTree, NodeOffset nParentNode)
         if (!pParentTree->isValidNode(nParentNode))
             throw Exception("INTERNAL ERROR: Moving tree to invalid parent node");
 
-        OSL_ENSURE( pParentTree->node(nParentNode)->isSetNode(),"WARNING: Moving tree to node that is not a set");
+    //  OSL_ENSURE( pParentTree->isSetNodeAt(nParentNode),"WARNING: Moving tree to node that is not a set");
     }
     else
     {
@@ -363,403 +562,14 @@ void TreeImpl::clearContext()
 }
 //-----------------------------------------------------------------------------
 
-bool TreeImpl::hasChanges() const
-{
-    return node(root())->hasChanges();
-}
 //-----------------------------------------------------------------------------
-
-void TreeImpl::collectChanges(NodeChanges& rChanges)
-{
-    implCollectChangesFrom(root(),rChanges);
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::implCollectChangesFrom(NodeOffset nNode, NodeChanges& rChanges)
-{
-    Node const* pNode = node(nNode);
-    if (pNode->hasChanges())
-    {
-        pNode->collectChanges(rChanges,this,nNode);
-        for (NodeOffset nChild = firstChild(nNode); isValidNode(nChild); nChild = findNextChild(nNode, nChild) )
-        {
-            implCollectChangesFrom(nChild,rChanges);
-        }
-    }
-}
-//-----------------------------------------------------------------------------
-// mark the given node and all its ancestors (we can stop when we hit a node that already is marked)
-void TreeImpl::markChanged(NodeOffset nNode)
-{
-    OSL_ASSERT(isValidNode(nNode));
-
-    if (nNode)
-    {
-        do
-        {
-            Node* pNode = node(nNode);
-            pNode->markChanged();
-
-            nNode = pNode->parent();
-        }
-        while (nNode && !node(nNode)->hasChanges());
-    }
-
-    if (nNode == 0) // just marked parent
-    {
-        TreeImpl* pContext = getContextTree();
-        NodeOffset nContext = getContextNode();
-        if (pContext)
-        {
-            OSL_ASSERT(pContext->isValidNode(nContext));
-            pContext->markChanged(nContext);
-        }
-    }
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::commitDirect()
-{
-    implCommitDirectFrom(root());
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::implCommitDirectFrom(NodeOffset nNode)
-{
-    Node* pNode = node(nNode);
-    if (pNode->hasChanges())
-    {
-        pNode->commitDirect();
-        for (NodeOffset nChild = firstChild(nNode); isValidNode(nChild); nChild = findNextChild(nNode, nChild) )
-        {
-            implCommitDirectFrom(nChild);
-        }
-    }
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::makeIndirect(bool bIndirect)
-{
-    // do it from outside in
-    for(NodeList::reverse_iterator it = m_aNodes.rbegin(), stop = m_aNodes.rend();
-        it != stop;
-        ++it)
-        it->makeIndirect(bIndirect);
-}
-//-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// old-style commit handling
-//-----------------------------------------------------------------------------
-
-std::auto_ptr<SubtreeChange> TreeImpl::preCommitChanges(ElementList& _rRemovedElements)
-{
-    return doCommitChanges( _rRemovedElements, root() );
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::finishCommit(SubtreeChange& rRootChange)
-{
-    doFinishCommit( rRootChange, root() );
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::revertCommit(SubtreeChange& rRootChange)
-{
-    doRevertCommit( rRootChange, root() );
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::recoverFailedCommit(SubtreeChange& rRootChange)
-{
-    doFailedCommit( rRootChange, root() );
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& aExternalChange)
-{
-    OSL_PRECOND( getSimpleRootName().toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
-
-    TreeDepth nDepth = getAvailableDepth();
-
-    doAdjustToChanges(rLocalChanges,aExternalChange,root(), nDepth);
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset nNode, SubtreeChange const& aExternalChange)
-{
-    OSL_PRECOND( isValidNode(nNode), "ERROR: Valid node required for adjusting to changes" );
-    OSL_PRECOND( getSimpleNodeName(nNode).toString() == aExternalChange.getNodeName(), "Name of change does not match actual node" );
-
-    TreeDepth nDepth = remainingDepth(getAvailableDepth(),depthTo(nNode));
-
-    doAdjustToChanges(rLocalChanges,aExternalChange,nNode, nDepth);
-}
-//-----------------------------------------------------------------------------
-
-std::auto_ptr<SubtreeChange> TreeImpl::doCommitChanges(ElementList& _rRemovedElements, NodeOffset nNode)
-{
-    OSL_ASSERT(isValidNode(nNode));
-    Node* pNode = node(nNode);
-
-    std::auto_ptr<SubtreeChange> aRet;
-
-    if (!pNode->hasChanges())
-    {
-        // do nothing
-        OSL_ASSERT(!aRet.get());
-        OSL_ASSERT(nNode == root()); // only hit this for root (external request)
-    }
-    else if (pNode->isSetNode())
-    {
-        aRet = pNode->setImpl().preCommitChanges(_rRemovedElements);
-    }
-    else if (pNode->isGroupNode())
-    {
-        std::auto_ptr<SubtreeChange> aGroupChange(pNode->groupImpl().preCommitChanges());
-
-        OSL_ASSERT(aGroupChange.get());
-        if (aGroupChange.get())
-            doCommitSubChanges(_rRemovedElements, *aGroupChange, nNode);
-
-        aRet = aGroupChange;
-    }
-    else
-        OSL_ENSURE(nNode == root() && pNode->isValueElementNode(), "TreeImpl: Cannot commit changes: Unexpected node type");
-
-    return aRet;
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::doFinishCommit(SubtreeChange& rSubtreeChange, NodeOffset nNode)
-{
-    OSL_ASSERT(isValidNode(nNode));
-    Node* pNode = node(nNode);
-
-    OSL_ENSURE(rSubtreeChange.getNodeName() == getSimpleNodeName(nNode).toString(), "ERROR: Change name does not match node");
-    if (pNode->isSetNode())
-    {
-        OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-
-        pNode->setImpl().finishCommit(rSubtreeChange);
-    }
-    else if (pNode->isGroupNode())
-    {
-        OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
-
-        pNode->groupImpl().finishCommit(rSubtreeChange);
-        doFinishSubCommitted( rSubtreeChange, nNode);
-    }
-    else
-        OSL_ENSURE(nNode == root() && pNode->isValueElementNode(), "TreeImpl: Cannot finish commit: Unexpected node type");
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::doRevertCommit(SubtreeChange& rSubtreeChange, NodeOffset nNode)
-{
-    OSL_ASSERT(isValidNode(nNode));
-    Node* pNode = node(nNode);
-
-    OSL_ENSURE(rSubtreeChange.getNodeName() == getSimpleNodeName(nNode).toString(), "ERROR: Change name does not match node");
-    if (pNode->isSetNode())
-    {
-        OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-
-        pNode->setImpl().revertCommit(rSubtreeChange);
-    }
-    else if (pNode->isGroupNode())
-    {
-        OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
-
-        pNode->groupImpl().revertCommit(rSubtreeChange);
-        doRevertSubCommitted( rSubtreeChange, nNode);
-    }
-    else
-        OSL_ENSURE(nNode == root() && pNode->isValueElementNode(), "TreeImpl: Cannot revert commit: Unexpected node type");
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::doFailedCommit(SubtreeChange& rSubtreeChange, NodeOffset nNode)
-{
-    OSL_ASSERT(isValidNode(nNode));
-    Node* pNode = node(nNode);
-
-    OSL_ENSURE(rSubtreeChange.getNodeName() == getSimpleNodeName(nNode).toString(), "ERROR: Change name does not match node");
-    if (pNode->isSetNode())
-    {
-        OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-
-        pNode->setImpl().failedCommit(rSubtreeChange);
-    }
-    else if (pNode->isGroupNode())
-    {
-        OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
-
-        pNode->groupImpl().failedCommit(rSubtreeChange);
-        doFailedSubCommitted( rSubtreeChange, nNode);
-    }
-    else
-        OSL_ENSURE(nNode == root() && pNode->isValueElementNode(), "TreeImpl: Cannot finish commit: Unexpected node type");
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rSubtreeChange, NodeOffset nNode, TreeDepth nDepth)
-{
-    OSL_ASSERT(isValidNode(nNode));
-    Node* pNode = node(nNode);
-
-    OSL_ENSURE(rSubtreeChange.getNodeName() == getSimpleNodeName(nNode).toString(), "ERROR: Change name does not match node");
-
-    if (pNode->isSetNode())
-    {
-        OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
-
-        pNode->setImpl().adjustToChanges(rLocalChanges, rSubtreeChange, nDepth);
-    }
-    else if (pNode->isGroupNode())
-    {
-        OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
-
-        pNode->groupImpl().adjustToChanges(rLocalChanges, rSubtreeChange, *this, nNode);
-        doAdjustToSubChanges( rLocalChanges, rSubtreeChange, nNode, nDepth);
-    }
-    else // might occur on external change (?)
-    {
-        OSL_ENSURE(pNode->isValueElementNode(), "TreeImpl: Unknown node type to adjust to changes");
-
-        OSL_ENSURE(nNode == root(), "TreeImpl: Unexpected node type - non-root value element");
-
-        OSL_ENSURE(false,"ERROR: Change type does not match node: Trying to apply subtree change to value element.");
-    }
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::doCommitSubChanges(ElementList& _rRemovedElements, SubtreeChange& aChangesParent, NodeOffset nParentNode)
-{
-    for(NodeOffset nNode = firstChild(nParentNode); nNode != 0; nNode = findNextChild(nParentNode,nNode) )
-    {
-        if (node(nNode)->hasChanges())
-        {
-            std::auto_ptr<SubtreeChange> aSubChanges( doCommitChanges(_rRemovedElements, nNode) );
-            std::auto_ptr<Change> aSubChangesBase( aSubChanges.release() );
-            aChangesParent.addChange( aSubChangesBase );
-        }
-    }
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::doFinishSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode)
-{
-    for(SubtreeChange::MutatingChildIterator
-            it = aChangesParent.begin_changes(),
-            stop = aChangesParent.end_changes();
-        it != stop;
-        ++it)
-    {
-        if ( it->ISA(SubtreeChange) )
-        {
-            NodeOffset nNode = findChild(nParentNode, makeNodeName(it->getNodeName(), Name::NoValidate()) );
-            OSL_ENSURE( nNode != 0, "Changed sub-node not found in tree");
-
-            doFinishCommit(static_cast<SubtreeChange&>(*it),nNode);
-        }
-        else
-        {
-            OSL_ENSURE(it->ISA(ValueChange), "Unexpected change type for child of group node; change is ignored");
-            OSL_ENSURE(0 == findChild(nParentNode, makeNodeName(it->getNodeName(), Name::NoValidate())),
-                        "Found sub(tree) node where a value was expected");
-        }
-    }
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::doRevertSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode)
-{
-    for(SubtreeChange::MutatingChildIterator
-            it = aChangesParent.begin_changes(),
-            stop = aChangesParent.end_changes();
-        it != stop;
-        ++it)
-    {
-        if ( it->ISA(SubtreeChange) )
-        {
-            NodeOffset nNode = findChild(nParentNode, makeNodeName(it->getNodeName(), Name::NoValidate()) );
-            OSL_ENSURE( nNode != 0, "Changed sub-node not found in tree");
-
-            doRevertCommit(static_cast<SubtreeChange&>(*it),nNode);
-        }
-        else
-        {
-            OSL_ENSURE(it->ISA(ValueChange), "Unexpected change type for child of group node; change is ignored");
-            OSL_ENSURE(0 == findChild(nParentNode, makeNodeName(it->getNodeName(), Name::NoValidate())),
-                        "Found sub(tree) node where a value was expected");
-        }
-    }
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::doFailedSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode)
-{
-    for(SubtreeChange::MutatingChildIterator
-            it = aChangesParent.begin_changes(),
-            stop = aChangesParent.end_changes();
-        it != stop;
-        ++it)
-    {
-        if ( it->ISA(SubtreeChange) )
-        {
-            NodeOffset nNode = findChild(nParentNode, makeNodeName(it->getNodeName(), Name::NoValidate()) );
-            OSL_ENSURE( nNode != 0, "Changed node not found in tree");
-
-            doFailedCommit(static_cast<SubtreeChange&>(*it),nNode);
-        }
-        else
-        {
-            OSL_ENSURE(it->ISA(ValueChange), "Unexpected change type for child of group node; change is ignored");
-            OSL_ENSURE(0 == findChild(nParentNode, makeNodeName(it->getNodeName(), Name::NoValidate())),
-                        "Found sub(tree) node where a value was expected");
-        }
-    }
-}
-//-----------------------------------------------------------------------------
-
-void TreeImpl::doAdjustToSubChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& aChangesParent, NodeOffset nParentNode,
-                                    TreeDepth nDepth)
-{
-    for(SubtreeChange::ChildIterator
-            it = aChangesParent.begin(),
-            stop = aChangesParent.end();
-        it != stop;
-        ++it)
-    {
-        if ( it->ISA(SubtreeChange) )
-        {
-            NodeOffset nNode = findChild(nParentNode, makeNodeName(it->getNodeName(), Name::NoValidate()) );
-            OSL_ENSURE( nNode != 0 || depthTo(nParentNode) >= getAvailableDepth(), "Changed node not found in tree");
-
-            if (nNode != 0)
-            {
-                OSL_ENSURE( nDepth > 0, "Depth is smaller than expected for tree");
-                doAdjustToChanges(rLocalChanges, static_cast<SubtreeChange const&>(*it),nNode,childDepth(nDepth));
-            }
-        }
-        else
-        {
-            OSL_ENSURE(it->ISA(ValueChange), "Unexpected change type for child of group node; change is ignored");
-            OSL_ENSURE(0 == findChild(nParentNode, makeNodeName(it->getNodeName(), Name::NoValidate())),
-                        "Found sub(tree) node where a value was expected");
-        }
-    }
-}
-//-----------------------------------------------------------------------------
-
 // Node Collection navigation
 //-----------------------------------------------------------------------------
 
-NodeOffset TreeImpl::parent(NodeOffset nNode) const
+NodeOffset TreeImpl::parent_(NodeOffset nNode) const
 {
     OSL_ASSERT(isValidNode(nNode));
-    return node(nNode)->parent();
+    return nodeData(nNode)->getParent();
 }
 //-----------------------------------------------------------------------------
 inline // is protected and should be used only here
@@ -767,13 +577,13 @@ Name TreeImpl::implGetOriginalName(NodeOffset nNode) const
 {
     OSL_ASSERT(isValidNode(nNode));
 
-    return node(nNode)->m_aName;
+    return nodeData(nNode)->getName();
 }
 //-----------------------------------------------------------------------------
 
 Path::Component ElementTreeImpl::doGetRootName() const
 {
-    return makeExtendedName( implGetOriginalName( root() ) );
+    return makeExtendedName( m_aElementName );
 }
 
 //-----------------------------------------------------------------------------
@@ -787,7 +597,7 @@ Path::Component RootTreeImpl::doGetRootName() const
 
 Name TreeImpl::getSimpleNodeName(NodeOffset nNode) const
 {
-    if (nNode == root()) return getSimpleRootName();
+    if (nNode == root_()) return getSimpleRootName();
 
     return implGetOriginalName(nNode);
 }
@@ -810,7 +620,7 @@ TreeDepth TreeImpl::depthTo(NodeOffset nNode) const
     OSL_ASSERT(isValidNode(nNode));
 
     TreeDepth nDepth = 0;
-    while( 0 != (nNode=parent(nNode)) )
+    while( 0 != (nNode=parent_(nNode)) )
     {
         ++nDepth;
     }
@@ -823,53 +633,53 @@ void TreeImpl::prependLocalPathTo(NodeOffset nNode, Path::Rep& rNames)
 {
     OSL_ASSERT(isValidNode(nNode));
 
-    for (; nNode != root(); nNode = parent(nNode) )
+    for (; nNode != root_(); nNode = parent_(nNode) )
     {
         OSL_ENSURE( isValidNode(nNode), "ERROR: Configuration: node has invalid parent");
         rNames.prepend( Path::wrapSimpleName( implGetOriginalName(nNode) ) );
     }
 
-    OSL_ASSERT(nNode == root());
+    OSL_ASSERT(nNode == root_());
 }
 //-----------------------------------------------------------------------------
 
 // Node iteration and access
-NodeOffset TreeImpl::firstChild (NodeOffset nParent) const
+NodeOffset TreeImpl::firstChild_ (NodeOffset nParent) const
 {
-    return findNextChild(nParent,nParent);
+    return findNextChild_(nParent,nParent);
 }
 //-----------------------------------------------------------------------------
 
-NodeOffset TreeImpl::nextSibling(NodeOffset nNode) const
+NodeOffset TreeImpl::nextSibling_(NodeOffset nNode) const
 {
-    return findNextChild(parent(nNode),nNode);
+    return findNextChild_(parent_(nNode),nNode);
 }
 //-----------------------------------------------------------------------------
 
-NodeOffset TreeImpl::findNextChild(NodeOffset nParent, NodeOffset nStartAfter) const
+NodeOffset TreeImpl::findNextChild_(NodeOffset nParent, NodeOffset nStartAfter) const
 {
     OSL_ASSERT(isValidNode(nParent));
     OSL_ASSERT(nStartAfter == 0 || isValidNode(nStartAfter));
 
-    NodeOffset nPos = nStartAfter ? nStartAfter : root()-1;
-    NodeOffset const nAfterLast = nodeCount() + root();
+    NodeOffset nPos = nStartAfter ? nStartAfter : root_()-1;
+    NodeOffset const nAfterLast = nodeCount() + root_();
     while (++nPos < nAfterLast)
     {
-        if(parent(nPos) == nParent) return nPos;
+        if(parent_(nPos) == nParent) return nPos;
     }
     return 0;
 }
 //-----------------------------------------------------------------------------
 
-NodeOffset TreeImpl::findChild(NodeOffset nParent, Name const& aName) const
+NodeOffset TreeImpl::findChild_(NodeOffset nParent, Name const& aName) const
 {
     OSL_ASSERT(isValidNode(nParent));
 
     NodeOffset nPos = nParent;
-    NodeOffset const nAfterLast = nodeCount() + root();
+    NodeOffset const nAfterLast = nodeCount() + root_();
     while (++nPos < nAfterLast)
     {
-        if(parent(nPos) == nParent && implGetOriginalName(nPos) == aName)
+        if(parent_(nPos) == nParent && implGetOriginalName(nPos) == aName)
             return nPos;
     }
     return 0;
@@ -878,43 +688,27 @@ NodeOffset TreeImpl::findChild(NodeOffset nParent, Name const& aName) const
 //-----------------------------------------------------------------------------
 // locking
 //-----------------------------------------------------------------------------
-ISynchronizedData* TreeImpl::getRootLock()
+osl::Mutex& TreeImpl::getRootLock() const
 {
     if ( m_pParentTree )
         return m_pParentTree->getRootLock();
     else
-        return this;
+        return m_aOwnLock;
 }
-
-ISynchronizedData const* TreeImpl::getRootLock() const
+//-----------------------------------------------------------------------------
+memory::Segment const * TreeImpl::getRootSegment() const
 {
     if ( m_pParentTree )
-        return m_pParentTree->getRootLock();
+        return m_pParentTree->getRootSegment();
     else
-        return this;
-}
-
-//-----------------------------------------------------------------------------
-
-void TreeImpl::acquireReadAccess() const
-{
-    m_aOwnLock.acquireReadAccess();
+        return this->getDataSegment();
 }
 //-----------------------------------------------------------------------------
-void TreeImpl::releaseReadAccess() const
+memory::Segment const * TreeImpl::getDataSegment() const
 {
-    m_aOwnLock.releaseReadAccess();
+    return m_xStrategy->getDataSegment();
 }
 //-----------------------------------------------------------------------------
-void TreeImpl::acquireWriteAccess()
-{
-    m_aOwnLock.acquireWriteAccess();
-}
-//-----------------------------------------------------------------------------
-void TreeImpl::releaseWriteAccess()
-{
-    m_aOwnLock.releaseWriteAccess();
-}
 
 //-----------------------------------------------------------------------------
 // dynamic-casting
@@ -982,83 +776,125 @@ ElementTreeImpl const* RootTreeImpl::doCastToElementTree() const
 // class RootTreeImpl
 //-----------------------------------------------------------------------------
 
-RootTreeImpl::RootTreeImpl( NodeFactory& rNodeFactory,
+RootTreeImpl::RootTreeImpl( rtl::Reference<view::ViewStrategy> const& _xStrategy,
                             AbsolutePath const& aRootPath,
-                            ISubtree& rCacheNode, TreeDepth nDepth,
+                            data::NodeAccess const& _aCacheNode, TreeDepth nDepth,
                             TemplateProvider const& aTemplateProvider)
 : TreeImpl()
 , m_aRootPath(aRootPath)
 {
-    OSL_ENSURE( aRootPath.getLocalName().getName().toString() == rCacheNode.getName(),
-                "Constructing root node: Path does not match node name");
+//    OSL_ENSURE( aRootPath.getLocalName().getName() == _aCacheNode.getName(),
+//                "Constructing root node: Path does not match node name");
 
-    TreeImpl::build(rNodeFactory,rCacheNode,nDepth,aTemplateProvider);
+    TreeImpl::build(_xStrategy,_aCacheNode,nDepth,aTemplateProvider);
 }
+
 //-----------------------------------------------------------------------------
 // class ElementTreeImpl
 //-----------------------------------------------------------------------------
 
-ElementTreeImpl::ElementTreeImpl(   NodeFactory& rFactory,
-                                    INode& rCacheNode, TreeDepth nDepth,
+ElementTreeImpl::ElementTreeImpl(   rtl::Reference<view::ViewStrategy> const& _xStrategy,
+                                    data::TreeAccessor const& _aCacheTree, TreeDepth nDepth,
                                     TemplateHolder aTemplateInfo,
                                     TemplateProvider const& aTemplateProvider )
 : TreeImpl()
 , m_aInstanceInfo(aTemplateInfo)
-, m_pOwnedNode(0)
+, m_aDataAddress(_aCacheTree.address())
+, m_aElementName(_aCacheTree.getName())
+, m_aOwnData()
 {
-    TreeImpl::build( rFactory, rCacheNode, nDepth, aTemplateProvider );
+    TreeImpl::build( _xStrategy, _aCacheTree.getRootNode(), nDepth, aTemplateProvider );
 }
 //-----------------------------------------------------------------------------
 
-ElementTreeImpl::ElementTreeImpl(   NodeFactory& rFactory,
+ElementTreeImpl::ElementTreeImpl(   rtl::Reference<view::ViewStrategy> const& _xStrategy,
                                     TreeImpl& rParentTree, NodeOffset nParentNode,
-                                    INode& rCacheNode, TreeDepth nDepth,
+                                    data::TreeAccessor const& _aCacheTree, TreeDepth nDepth,
                                     TemplateHolder aTemplateInfo,
                                     TemplateProvider const& aTemplateProvider )
 : TreeImpl( rParentTree, nParentNode )
 , m_aInstanceInfo(aTemplateInfo)
-, m_pOwnedNode(0)
+, m_aDataAddress(_aCacheTree.address())
+, m_aElementName(_aCacheTree.getName())
+, m_aOwnData()
 {
-    TreeImpl::build( rFactory, rCacheNode, nDepth, aTemplateProvider );
+    TreeImpl::build( _xStrategy, _aCacheTree.getRootNode(), nDepth, aTemplateProvider );
 }
 //-----------------------------------------------------------------------------
 
-ElementTreeImpl::ElementTreeImpl(   std::auto_ptr<INode>& pNewNode,
+ElementTreeImpl::ElementTreeImpl(   data::TreeSegment const& pNewTree,
                                     TemplateHolder aTemplate,
                                     TemplateProvider const& aTemplateProvider )
 : TreeImpl()
 , m_aInstanceInfo(aTemplate)
-, m_pOwnedNode(0)
+, m_aDataAddress(pNewTree.getBaseAddress())
+, m_aElementName(pNewTree.getName())
+, m_aOwnData(pNewTree)
 {
-    if (!pNewNode.get())
+    if (!pNewTree.is())
     {
         throw Exception("ERROR: Provider can't create Element Instance From Template");
     }
 
-    TreeImpl::build( NodeType::getDirectAccessFactory(), *pNewNode, c_TreeDepthAll, aTemplateProvider );
-    m_pOwnedNode = pNewNode.release();
+    data::NodeAccess aNewNodeWrapper( m_aOwnData.getAccessor(), m_aOwnData.getSegmentRootNode() );
+
+    TreeImpl::build( view::createDirectAccessStrategy(m_aOwnData), aNewNodeWrapper, c_TreeDepthAll, aTemplateProvider );
 }
 //-----------------------------------------------------------------------------
 
 ElementTreeImpl::~ElementTreeImpl()
 {
-    delete m_pOwnedNode;
+}
+//-----------------------------------------------------------------------------
+
+memory::Segment * ElementTreeImpl::getUpdatableSegment(TreeImpl& _rTree)
+{
+    TreeImpl * pTree = &_rTree;
+    while (ElementTreeImpl * pElement = pTree->asElementTree())
+    {
+        if (pElement->m_aOwnData.is())
+        {
+            OSL_ENSURE( pElement->getContextTree()==NULL ||
+                        pElement->getContextTree()->getViewBehavior() != pElement->getViewBehavior(),
+                        "ElementTree with parent in same fragment should not own its data");
+
+            memory::Segment * pSegment = pElement->m_aOwnData.getSegment();
+            OSL_ASSERT(_rTree.getDataSegment() == pSegment);
+            return pSegment;
+        }
+
+        pTree = pElement->getContextTree();
+
+        if (!pTree)
+        {
+            OSL_ENSURE( false, "ElementTree without own data should have a parent");
+
+            return NULL;
+        }
+
+    }
+    OSL_ENSURE( false, "Tree is not part of free-floating segment - cannot support direct update");
+
+    return NULL;
+
 }
 //-----------------------------------------------------------------------------
 
 void ElementTreeImpl::disposeData()
 {
     TreeImpl::disposeData();
-    delete m_pOwnedNode;
-    m_pOwnedNode = 0;
+    m_aOwnData.clear();
 }
 //-----------------------------------------------------------------------------
 
 Path::Component ElementTreeImpl::makeExtendedName(Name const& _aSimpleName) const
 {
+    Name aTypeName = implGetOriginalName(root_());
+
     OSL_ENSURE(this->isTemplateInstance(), "ElementTree: Cannot discover the type this instantiatiates");
 
-    Name aTypeName = this->isTemplateInstance() ? this->getTemplate()->getName() : Name();
+    OSL_ENSURE(! this->isTemplateInstance() || this->getTemplate()->getName() == aTypeName,
+                "ElementTree: Type name does not match template");
 
     return Path::makeCompositeName(_aSimpleName, aTypeName);
 }
@@ -1066,76 +902,223 @@ Path::Component ElementTreeImpl::makeExtendedName(Name const& _aSimpleName) cons
 
 // ownership handling
 //-----------------------------------------------------------------------------
-
-/// transfer ownership to the given set
-void ElementTreeImpl::attachTo(ISubtree& rOwningSet, Name const& aElementName)
+void ElementTreeImpl::rebuild(rtl::Reference<view::ViewStrategy> const & _aStrategy, data::TreeAccessor const & _aNewTree, data::Accessor const& _aOldAccessor)
 {
-    OSL_ENSURE(m_pOwnedNode,"ERROR: Cannot add a non-owned node to a subtree");
+    TreeImpl::rebuild(_aStrategy,_aNewTree.getRootNode(),_aOldAccessor);
+    m_aDataAddress = _aNewTree.address();
+    m_aElementName = _aNewTree.getName();
+}
 
-    if (m_pOwnedNode)
+//-----------------------------------------------------------------------------
+#if 0
+void ElementTreeImpl::rebuild(rtl::Reference<view::ViewStrategy> const & _xStrategy, data::TreeAccessor const & _aNewTree)
+{
+    data::Accessor aOldAccessor( getViewBehavior()->getDataSegment() );
+    this->rebuild(_xStrategy,_aNewTree,aOldAccessor);
+}
+#endif
+//-----------------------------------------------------------------------------
+/// transfer ownership to the given set
+
+// -----------------------------------------------------------------------------
+#ifdef NON_SHARABLE_DATA
+// -----------------------------------------------------------------------------
+void ElementTreeImpl::attachTo(data::SetNodeAccess const & aOwningSet, Name const& aElementName)
+{
+    OSL_ENSURE(m_aOwnData.is(),"ERROR: Cannot add a non-owned node to a subtree");
+
+    if (m_aOwnData.is())
     {
         OSL_ENSURE(this->getSimpleRootName() == aElementName,"ElementTree: Attaching with unexpected element name");
-        m_pOwnedNode->setName(aElementName.toString());
+        m_aOwnData.setName(aElementName);
 
-        std::auto_ptr<INode> aNode(m_pOwnedNode);
-        m_pOwnedNode = 0;
+        INode * pOldNode = m_aOwnData.getTreeData();
+        OSL_ASSERT(pOldNode);
 
-        rOwningSet.addChild(aNode);
+        // copy over to the new segment
+        std::auto_ptr<INode> aNewNode(pOldNode->clone());
+
+        TreeImpl* pOwningTree = this->getContextTree();
+        OSL_ENSURE(pOwningTree, "Element Tree Context must be set before attaching data");
+        OSL_ENSURE( getUpdatableSegment(*pOwningTree) != NULL, "Cannot attach directly to new tree - no update access available");
+
+        rtl::Reference<view::ViewStrategy> xNewBehavior = pOwningTree->getViewBehavior();
+
+        ISubtree * pOwningNodeData = xNewBehavior->getDataForUpdate(aOwningSet);
+        OSL_ASSERT(pOwningNodeData);
+
+        INode * pNewNode = pOwningNodeData->addChild(aNewNode);
+
+        data::TreeAccessor aNewAccessor(aOwningSet.accessor(),pNewNode);
+
+        this->rebuild(xNewBehavior,aNewAccessor,m_aOwnData.getAccessor());
+
+        m_aOwnData.clearData();
+        OSL_ASSERT(!m_aOwnData.is());
     }
 }
 //-----------------------------------------------------------------------------
 
 /// tranfer ownership from the given set
-void ElementTreeImpl::detachFrom(ISubtree& rOwningSet, Name const& aElementName)
+void ElementTreeImpl::detachFrom(data::SetNodeAccess const & aOwningSet, Name const& aElementName)
 {
-    OSL_ENSURE(!m_pOwnedNode,"ERROR: Cannot detach a already owned node from a subtree");
-    if (!m_pOwnedNode)
+    OSL_ENSURE(!m_aOwnData.is(),"ERROR: Cannot detach a already owned node from a subtree");
+    if (!m_aOwnData.is())
     {
         OSL_ENSURE(this->getSimpleRootName() == aElementName,"ElementTree: Detaching with unexpected element name");
-        std::auto_ptr<INode> aNode( rOwningSet.removeChild(aElementName.toString()) );
-        OSL_ENSURE(aNode.get(),"ERROR: Detached node not found in the given subtree");
 
-        m_pOwnedNode = aNode.release();
+        TreeImpl* pOwningTree = this->getContextTree();
+        OSL_ENSURE(pOwningTree, "Element Tree Context must still be set when detaching data");
+        OSL_ENSURE( getUpdatableSegment(*pOwningTree) != NULL, "Cannot detach directly from old tree - no update access available");
+
+        rtl::Reference<view::ViewStrategy> xOldBehavior = pOwningTree->getViewBehavior();
+
+        ISubtree * pOwningNodeData = xOldBehavior->getDataForUpdate(aOwningSet);
+        OSL_ASSERT(pOwningNodeData);
+
+        std::auto_ptr<INode> aOldNode =  pOwningNodeData->removeChild(aElementName.toString());
+        OSL_ENSURE(aOldNode.get(),"ERROR: Detached node not found in the given subtree");
+
+        // copy over to the new segment
+        std::auto_ptr<INode> aNewNode(aOldNode->clone());
+
+        data::TreeSegment aNewSegment = data::TreeSegment::createNew(aNewNode);
+
+        this->takeTreeAndRebuild( aNewSegment, aOwningSet.accessor() );
+
+        OSL_ENSURE(m_aOwnData.is(),"ERROR: Could not create own data segment for detached node");
+    }
+}
+//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+#else // SHARABLE_DATA
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void ElementTreeImpl::attachTo(data::SetNodeAccess const & aOwningSet, Name const& aElementName)
+{
+    OSL_ENSURE(m_aOwnData.is(),"ERROR: Cannot add a non-owned node to a subtree");
+
+    if (m_aOwnData.is())
+    {
+        OSL_ENSURE(this->getSimpleRootName() == aElementName,"ElementTree: Attaching with unexpected element name");
+        m_aOwnData.setName(aElementName);
+
+        TreeImpl* pOwningTree = this->getContextTree();
+        OSL_ENSURE(pOwningTree, "Element Tree Context must be set before attaching data");
+
+        if (memory::Segment * pTargetSpace = getUpdatableSegment(*pOwningTree))
+        {
+            memory::UpdateAccessor aTargetAccessor(pTargetSpace);
+
+            // copy over to the new segment
+            data::TreeAddress aNewElement = m_aOwnData.getTreeAccess().copyTree(aTargetAccessor);
+
+            data::SetNodeAccess::addElement(aTargetAccessor,aOwningSet.address(),  aNewElement);
+
+            data::TreeAccessor aNewAccessor(aTargetAccessor.downgrade(),aNewElement);
+
+            rtl::Reference<view::ViewStrategy> xNewBehavior = pOwningTree->getViewBehavior();
+
+            this->rebuild(xNewBehavior,aNewAccessor,m_aOwnData.getAccessor());
+        }
+        else
+            OSL_ENSURE( false, "Cannot attach directly to new tree - no update access available");
+
+        m_aOwnData.clearData();
+        OSL_ASSERT(!m_aOwnData.is());
     }
 }
 //-----------------------------------------------------------------------------
 
-/// transfer ownership from the given owner
-void ElementTreeImpl::takeNodeFrom(std::auto_ptr<INode>& rOldOwner)
+/// tranfer ownership from the given set
+void ElementTreeImpl::detachFrom(data::SetNodeAccess const & aOwningSet, Name const& aElementName)
 {
-    OSL_ENSURE(!m_pOwnedNode,"ERROR: Cannot take over a node - already owning");
-    OSL_ENSURE(rOldOwner.get(),"ERROR: Cannot take over NULL node");
-    if (!m_pOwnedNode)
+    OSL_ENSURE(!m_aOwnData.is(),"ERROR: Cannot detach a already owned node from a subtree");
+    if (!m_aOwnData.is())
     {
-        m_pOwnedNode = rOldOwner.release();
+        OSL_ENSURE(this->getSimpleRootName() == aElementName,"ElementTree: Detaching with unexpected element name");
+
+        TreeImpl* pOwningTree = this->getContextTree();
+        OSL_ENSURE(pOwningTree, "Element Tree Context must still be set when detaching data");
+
+        if (memory::Segment * pTargetSpace = getUpdatableSegment(*pOwningTree))
+        {
+            using namespace data;
+
+            // make a new segment with a copy of the data
+            TreeSegment aNewSegment = TreeSegment::createNew( this->getOriginalTreeAccess(aOwningSet.accessor()) );
+
+            OSL_ENSURE(aNewSegment.is(),"ERROR: Could not create detached copy of elment data");
+
+            this->takeTreeAndRebuild( aNewSegment, aOwningSet.accessor() );
+
+            memory::UpdateAccessor aTargetAccessor(pTargetSpace);
+
+            TreeAddress aOldElement = data::SetNodeAccess::removeElement(aTargetAccessor,aOwningSet.address(), aElementName );
+            OSL_ENSURE(aOldElement.is(),"ERROR: Detached node not found in the given subtree");
+
+            TreeAccessor::freeTree(aTargetAccessor,aOldElement);
+        }
+        else
+            OSL_ENSURE( false, "Cannot detach directly from old tree - no update access available");
+
+        OSL_ENSURE(m_aOwnData.is(),"ERROR: Could not create own data segment for detached node");
+    }
+}
+//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+#endif // SHARABLE_DATA
+// -----------------------------------------------------------------------------
+
+/// transfer ownership from the given owner
+void ElementTreeImpl::takeTreeBack(data::TreeSegment const & _aDataSegment)
+{
+    OSL_ENSURE(!m_aOwnData.is(),"ERROR: Cannot take over a node - already owning");
+    OSL_ENSURE(_aDataSegment.is(),"ERROR: Cannot take over NULL tree segment");
+
+    m_aOwnData = _aDataSegment;
+    OSL_ENSURE(m_aOwnData.is(),"ERROR: Could not take over data segment");
+
+    m_aDataAddress = m_aOwnData.getBaseAddress();
+    m_aElementName = m_aOwnData.getName();
+}
+//-----------------------------------------------------------------------------
+
+/// transfer ownership from the given owner
+void ElementTreeImpl::takeTreeAndRebuild(data::TreeSegment const & _aDataSegment, data::Accessor const & _aOldAccessor)
+{
+    OSL_ENSURE(!m_aOwnData.is(),"ERROR: Cannot take over a node - already owning");
+    OSL_ENSURE(_aDataSegment.is(),"ERROR: Cannot take over NULL tree segment");
+    if (!m_aOwnData.is())
+    {
+        this->rebuild(view::createDirectAccessStrategy(_aDataSegment), _aDataSegment.getTreeAccess(),_aOldAccessor);
+
+        m_aOwnData = _aDataSegment;
+        OSL_ENSURE(m_aOwnData.is(),"ERROR: Could not take over data segment");
     }
 }
 //-----------------------------------------------------------------------------
 
 /// transfer ownership to the given owner
-void ElementTreeImpl::releaseTo(std::auto_ptr<INode>& rNewOwner)
+data::TreeSegment ElementTreeImpl::getOwnedTree() const
 {
-    OSL_ENSURE(m_pOwnedNode,"ERROR: Cannot release a non-owned node");
-    if (m_pOwnedNode)
-    {
-        Name aNodeName = getSimpleRootName();
-        m_pOwnedNode->setName( aNodeName.toString() );
-    }
-
-    rNewOwner.reset(m_pOwnedNode);
-    m_pOwnedNode = 0;
+    OSL_ENSURE(m_aOwnData.is(),"ERROR: Cannot provide segment for a non-owned node");
+    return m_aOwnData;
 }
 //-----------------------------------------------------------------------------
 
-/// transfer ownership to the given owner, also providing a new name
-void ElementTreeImpl::releaseAs(std::auto_ptr<INode>& rNewOwner, Name const& aElementName)
+/// release ownership
+data::TreeSegment ElementTreeImpl::releaseOwnedTree()
 {
-    OSL_ENSURE(m_pOwnedNode,"ERROR: Cannot release and rename a non-owned node");
+    OSL_ENSURE(m_aOwnData.is(),"ERROR: Cannot release and rename a non-owned node");
 
-    if (m_pOwnedNode)
-        renameTree(aElementName);
+    data::TreeSegment aTree = m_aOwnData;
+    m_aOwnData.clear();
 
-    this->releaseTo(rNewOwner);
+    if (aTree.is())
+        aTree.setName(m_aElementName);
+
+    return aTree;
 }
 //-----------------------------------------------------------------------------
 
@@ -1145,7 +1128,7 @@ void ElementTreeImpl::releaseAs(std::auto_ptr<INode>& rNewOwner, Name const& aEl
 /// renames the tree's root without concern for context consistency !
 void ElementTreeImpl::renameTree(Name const& aNewName)
 {
-    node(root())->renameNode(aNewName);
+    m_aElementName = aNewName;
 }
 //-----------------------------------------------------------------------------
 

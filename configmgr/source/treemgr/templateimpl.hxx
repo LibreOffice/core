@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-10-26 10:55:13 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,28 +75,31 @@
 #include "options.hxx"
 #endif
 
-#ifndef _VOS_REFERNCE_HXX_
-#include <vos/refernce.hxx>
-#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/simplereferenceobject.hxx>
+#endif
+
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
 #endif
 
 #ifndef INCLUDED_MAP
 #include <map>
 #define INCLUDED_MAP
 #endif
-#ifndef INCLUDED_MEMORY
-#include <memory>
-#define INCLUDED_MEMORY
-#endif
 
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    class INode;
-    class ISubtree;
     class ITemplateProvider;
+//-----------------------------------------------------------------------------
+    namespace data { class SetNodeAccess; class TreeSegment; }
 //-----------------------------------------------------------------------------
 
     namespace configuration
@@ -172,10 +175,6 @@ namespace configmgr
             }
 
             //-----------------------------------------------------------------
-            // static TemplateName parseTemplatePath(OUString const& sName);
-            //-----------------------------------------------------------------
-            static TemplateName parseTemplateNames(OUString const& sName, OUString const& sModule);
-            //-----------------------------------------------------------------
             static UnoType resolveSimpleTypeName(Name const& aName);
             //-----------------------------------------------------------------
             static Name makeSimpleTypeName(UnoType const& aType);
@@ -210,9 +209,9 @@ namespace configmgr
             static void assignActualType (Template& aTemplate,UnoType const& aType);
             //-----------------------------------------------------------------
 
-            static TemplateHolder makeSpecialTemplate (TemplateName const& aNames, SpecialTemplateProvider const& aProvider, UnoType const& aType);
+            static TemplateHolder makeSpecialTemplate (TemplateName const& _aNames, SpecialTemplateProvider const& aProvider, UnoType const& aType);
 
-            static TemplateHolder makeElementTemplateWithType(TemplateName const& aNames, TemplateProvider const& aProvider, ISubtree const& aSet);
+            static TemplateHolder makeElementTemplateWithType(TemplateName const& aNames, TemplateProvider const& _aProvider, data::SetNodeAccess const& _aSet);
             //-----------------------------------------------------------------
 
             static TemplateHolder createNew (TemplateName const& aNames,UnoType const& aType);
@@ -227,7 +226,7 @@ namespace configmgr
         // class SpecialTemplateProvider_Impl
         //---------------------------------------------------------------------
 
-        struct SpecialTemplateProvider_Impl : vos::OReference
+        struct SpecialTemplateProvider_Impl : salhelper::SimpleReferenceObject
         {
             SpecialTemplateProvider_Impl();
 
@@ -241,15 +240,15 @@ namespace configmgr
         // class TemplateProvider_Impl
         //---------------------------------------------------------------------
 
-        struct TemplateProvider_Impl : vos::OReference
+        struct TemplateProvider_Impl : salhelper::SimpleReferenceObject
         {
-            TemplateProvider_Impl(ITemplateProvider& rProvider, vos::ORef< OOptions > const& xOptions);
+            TemplateProvider_Impl(ITemplateManager& rProvider, vos::ORef< OOptions > const& xOptions);
 
-            std::auto_ptr<INode> instantiate(TemplateHolder const& aTemplate);
+            data::TreeSegment instantiate(memory::Accessor const& _aSourceAccessor, TemplateHolder const& aTemplate);
 
-            TemplateHolder makeElementTemplateWithType(TemplateName const& aNames, ISubtree const& aSet);
+            TemplateHolder makeElementTemplateWithType(TemplateName const& _aNames, data::SetNodeAccess const& _aSet);
         private:
-            ITemplateProvider& m_rProvider;
+            ITemplateManager& m_rProvider;
             vos::ORef< OOptions > m_xOptions;
 
             TemplateRepository m_aRepository;

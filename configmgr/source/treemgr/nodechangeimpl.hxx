@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:40 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,16 @@
 #ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
 #endif
-#ifndef CONFIGMGR_CONFIGNODEIMPL_HXX_
-#include "treeimpl.hxx"
+
+#ifndef CONFIGMGR_VIEWACCESS_HXX_
+#include "viewaccess.hxx"
 #endif
 
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/simplereferenceobject.hxx>
 #endif
 
 #ifndef INCLUDED_VECTOR
@@ -93,6 +97,8 @@ namespace configmgr
 {
     class ISubtree;
 
+    namespace view { class ViewTreeAccess; struct Node; struct GroupNode; struct SetNode; }
+//-----------------------------------------------------------------------------
     namespace configuration
     {
 //-----------------------------------------------------------------------------
@@ -101,29 +107,27 @@ namespace configmgr
         typedef com::sun::star::uno::Any        UnoAny;
 //-----------------------------------------------------------------------------
 
-        class Node;
         class ValueMemberNode;
         class ValueMemberUpdate;
-        class SetNodeImpl;
 //-----------------------------------------------------------------------------
         class NodeChangeData;
         class NodeChangeLocation;
         class NodeChangeInformation;
 //-----------------------------------------------------------------------------
 
-        typedef vos::ORef<TreeImpl>         TreeHolder;
-        typedef vos::ORef<ElementTreeImpl>  ElementTreeHolder;
+        typedef rtl::Reference<TreeImpl>        TreeHolder;
+        typedef rtl::Reference<ElementTreeImpl> ElementTreeHolder;
 //-----------------------------------------------------------------------------
         struct ElementTreeChange
         {
-            Path::Component   m_aElementName;
-            ElementTreeHolder m_aAddedElement;
-            ElementTreeHolder m_aRemovedElement;
+            Path::Component m_aElementName;
+            ElementTreeHolder  m_aAddedElement;
+            ElementTreeHolder  m_aRemovedElement;
 
             ElementTreeChange(
                 Path::Component const& _aElementName,
-                ElementTreeHolder const& _aAddedElement,
-                ElementTreeHolder const& _aRemovedElement
+                ElementTreeHolder  const& _aAddedElement,
+                ElementTreeHolder  const& _aRemovedElement
              )
             : m_aElementName(_aElementName)
             , m_aAddedElement(_aAddedElement)
@@ -140,7 +144,7 @@ namespace configmgr
 
         /// represents a node position in some tree
         class NodeChangeImpl
-        : public vos::OReference
+        : public salhelper::SimpleReferenceObject
         {
         public:
             explicit
@@ -148,20 +152,19 @@ namespace configmgr
 
         public:
         // related/affected nodes and trees
-            /// the tree on which the operation originated
-            TreeHolder getBaseTree() const; // default is the changing tree
-            /// the node thru which the operation originated
-            NodeOffset getBaseNode() const; // default is the owning node
-
             /// the tree within which the change occurs
-            TreeHolder getAffectedTree() const;
-            /// the node that is affected by the change
-            NodeOffset getAffectedNode() const;
+            TreeHolder getTargetTree() const;
 
+            /// the node that is affected by the change
+            NodeOffset getTargetNode() const;
+
+            data::Accessor getDataAccessor() const { return m_aDataAccessor; }
         protected:
             /// setup the 'target' node that is to be affected or changed
-            void setAffected(TreeHolder const& aAffectedTree, NodeOffset nAffectedNode);
+            void setTarget(data::Accessor const& _aAccessor, TreeHolder const& _aAffectedTree, NodeOffset _nAffectedNode);
+            void setTarget(view::Node _aAffectedNode);
 
+            view::ViewTreeAccess getTargetView();
         public:
         // getting information
             typedef sal_uInt32 ChangeCount;
@@ -206,18 +209,19 @@ namespace configmgr
             virtual bool doFillChange(NodeChangeData& rChange, ChangeCount _ix) const = 0;
 
             /// dry-check whether this is a change
-            virtual void doTest( Node& rTarget) = 0;
+            virtual void doTest( view::Node const& rTarget) = 0;
             /// do apply the actual change
-            virtual void doApply( Node& rTarget) = 0;
+            virtual void doApply( view::Node const& rTarget) = 0;
 
         private:
             typedef sal_uInt16 State;
+            data::Accessor m_aDataAccessor;
             TreeHolder m_aAffectedTree;
             NodeOffset m_nAffectedNode;
             State      m_nState;
 
             void implApply();
-            Node* implGetTarget() const;
+            view::Node implGetTarget();
         };
 //-----------------------------------------------------------------------------
 
@@ -236,7 +240,8 @@ namespace configmgr
 
         public:
             /// setup the 'target' node that is to be affected or changed
-            void setTarget(TreeHolder const& aAffectedTree, NodeOffset nParentNode, Name const& sNodeName);
+            void setTarget(view::GroupNode const& _aParentNode, Name const& sNodeName);
+            void setTarget(data::Accessor const& _aAccessor, TreeHolder const& aAffectedTree, NodeOffset nParentNode, Name const& sNodeName);
 
         public:
             /// get the name of the value
@@ -266,9 +271,9 @@ namespace configmgr
         protected:
         // override apply functionality
             /// retrieve the old value from the given node
-            virtual void doTest( Node& rTarget);
+            virtual void doTest( view::Node const& rTarget);
             /// do apply the actual change
-            virtual void doApply( Node& rTarget);
+            virtual void doApply( view::Node const& rTarget);
 
         protected:
         // new overrideables
@@ -328,8 +333,7 @@ namespace configmgr
         public:
             explicit SetChangeImpl(bool bNoCheck = false);
 
-            /// setup the 'target' node that is to be affected or changed
-            void setTarget(TreeHolder const& aAffectedTree, NodeOffset nAffectedNode);
+            using NodeChangeImpl::setTarget;
 
         protected:
         /// virtual hooks for some of the public methods
@@ -371,9 +375,9 @@ namespace configmgr
 
 
             /// retrieve the old value from the given node
-            virtual void doTest( Node& rTarget);
+            virtual void doTest( view::Node const& rTarget);
             /// do apply the actual change
-            virtual void doApply( Node& rTarget);
+            virtual void doApply( view::Node const& rTarget);
         };
 //-----------------------------------------------------------------------------
 
@@ -397,15 +401,15 @@ namespace configmgr
             virtual RelativePath doGetChangingNodePath(ChangeCount _ix) const;
 
             /// retrieve the old value from the given node
-            virtual void doTest( Node& rTarget);
+            virtual void doTest( view::Node const& rTarget);
             /// do apply the actual change
-            virtual void doApply( Node& rTarget);
+            virtual void doApply( view::Node const& rTarget);
 
         private:
             /// new overridable: retrieve the old value from a properly typed node
-            virtual void doTestElement(SetNodeImpl& rNode, Name const& aName) = 0;
+            virtual void doTestElement(view::SetNode const& _aNode, Name const& aName) = 0;
             /// new overridable: apply the change to a properly typed node
-            virtual void doApplyToElement(SetNodeImpl& rNode, Name const& aName) = 0;
+            virtual void doApplyToElement(view::SetNode const& _aNode, Name const& aName) = 0;
         };
 //-----------------------------------------------------------------------------
 
@@ -424,9 +428,9 @@ namespace configmgr
             virtual bool doFillChange(NodeChangeData& rChange, ChangeCount _ix) const;
 
             /// new overridable: retrieve the old value from a properly typed node
-            virtual void doTestElement(SetNodeImpl& rNode, Name const& aName);
+            virtual void doTestElement(view::SetNode const& _aNode, Name const& aName);
             /// new overridable: apply the change to a properly typed node
-            virtual void doApplyToElement(SetNodeImpl& rNode, Name const& aName);
+            virtual void doApplyToElement(view::SetNode const& _aNode, Name const& aName);
         };
 //-----------------------------------------------------------------------------
 
@@ -447,9 +451,9 @@ namespace configmgr
             virtual bool doFillChange(NodeChangeData& rChange, ChangeCount _ix) const;
 
             /// new overridable: retrieve the old value from a properly typed node
-            virtual void doTestElement(SetNodeImpl& rNode, Name const& aName);
+            virtual void doTestElement(view::SetNode const& _aNode, Name const& aName);
             /// new overridable: apply the change to a properly typed node
-            virtual void doApplyToElement(SetNodeImpl& rNode, Name const& aName);
+            virtual void doApplyToElement(view::SetNode const& _aNode, Name const& aName);
         };
 //-----------------------------------------------------------------------------
 
@@ -469,9 +473,9 @@ namespace configmgr
             virtual bool doFillChange(NodeChangeData& rChange, ChangeCount _ix) const;
 
             /// new overridable: retrieve the old value from a properly typed node
-            virtual void doTestElement(SetNodeImpl& rNode, Name const& aName);
+            virtual void doTestElement(view::SetNode const& _aNode, Name const& aName);
             /// new overridable: apply the change to a properly typed node
-            virtual void doApplyToElement(SetNodeImpl& rNode, Name const& aName);
+            virtual void doApplyToElement(view::SetNode const& _aNode, Name const& aName);
         };
 //-----------------------------------------------------------------------------
 

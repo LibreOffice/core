@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configgroup.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,12 @@
 #ifndef CONFIGMGR_GROUPNODEBEHAVIOR_HXX_
 #include "groupnodeimpl.hxx"
 #endif
-#ifndef _CONFIGMGR_TRACER_HXX_
-#include "tracer.hxx"
-#endif
-
 #ifndef CONFIGMGR_VALUENODEBEHAVIOR_HXX_
 #include "valuenodeimpl.hxx"
+#endif
+
+#ifndef _CONFIGMGR_TRACER_HXX_
+#include "tracer.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
@@ -110,7 +110,7 @@ GroupUpdateHelper::GroupUpdateHelper(Tree const& aParentTree, NodeRef const& aGr
     implValidateTree(m_aTree);
     implValidateNode(m_aTree,m_aNode);
 
-    if (!TreeImplHelper::isGroup(m_aNode))
+    if (! m_aTree.getView().isGroupNode(m_aNode) )
         throw Exception("INTERNAL ERROR: Group Member Update: node is not a group");
 }
 //-----------------------------------------------------------------------------
@@ -120,13 +120,15 @@ void GroupUpdateHelper::implValidateTree(Tree const& aTree) const
     if (aTree.isEmpty())
         throw Exception("INTERNAL ERROR: Group Member Update: Unexpected NULL tree");
 
+    typedef rtl::Reference<TreeImpl> TreeHolder;
+
     // check for proper nesting
     TreeHolder const aParentTree = TreeImplHelper::impl(m_aTree);
     for(TreeHolder aTestTree =  TreeImplHelper::impl(aTree);
         aTestTree != aParentTree;           // search this as ancestor tree
         aTestTree = aTestTree->getContextTree() )
     {
-        if (!aTestTree.isValid()) // no more trees to look for
+        if (!aTestTree.is()) // no more trees to look for
             throw Exception("INTERNAL ERROR: Group Member Update: improper tree relationship");
     }
 }
@@ -275,9 +277,9 @@ NodeChange GroupUpdater::validateSetValue(ValueRef const& aValueNode, UnoAny con
     // now build the specific change
     std::auto_ptr<ValueChangeImpl> pChange( new ValueReplaceImpl(aNewValue) );
 
+    NodeRef aParent = m_aHelper.tree().getParent(aValueNode);
     pChange->setTarget(
-                TreeImplHelper::impl(m_aHelper.tree()),
-                TreeImplHelper::parent_offset(aValueNode),
+                m_aHelper.tree().getView().toGroupNode(aParent),
                 m_aHelper.tree().getName(aValueNode)
             );
 
@@ -338,12 +340,25 @@ GroupDefaulter::GroupDefaulter(Tree const& _aParentTree, NodeRef const& _aGroupN
 {
 }
 //-----------------------------------------------------------------------------
-
-bool GroupDefaulter::ensureDataAvailable()
+bool GroupDefaulter::isDataAvailable(TreeRef const& _aParentTree, NodeRef const& _aGroupNode)
 {
-    if ( m_aHelper.tree().areValueDefaultsAvailable(m_aHelper.node()) ) return true;
+    data::Accessor aTempAccess( getRootSegment(_aParentTree) );
 
-    return m_aDefaultProvider.fetchDefaultData( m_aHelper.tree() );
+    Tree aTempTree(aTempAccess, _aParentTree);
+
+    return aTempTree.areValueDefaultsAvailable(_aGroupNode);
+}
+//-----------------------------------------------------------------------------
+bool GroupDefaulter::ensureDataAvailable(TreeRef const& _aParentTree, NodeRef const& _aGroupNode, DefaultProvider const& _aDataSource)
+{
+    return  isDataAvailable(_aParentTree, _aGroupNode) ||
+            _aDataSource.fetchDefaultData( _aParentTree );
+}
+//-----------------------------------------------------------------------------
+
+bool GroupDefaulter::isDataAvailable()
+{
+    return m_aHelper.tree().areValueDefaultsAvailable(m_aHelper.node());
 }
 //-----------------------------------------------------------------------------
 
@@ -360,11 +375,11 @@ NodeChange GroupDefaulter::validateSetToDefaultValue(ValueRef const& aValueNode)
     // now build the specific change
     std::auto_ptr<ValueChangeImpl> pChange( new ValueResetImpl() );
 
+    NodeRef aParent = m_aHelper.tree().getParent(aValueNode);
     pChange->setTarget(
-                TreeImplHelper::impl(m_aHelper.tree()),
-                TreeImplHelper::parent_offset(aValueNode),
+                m_aHelper.tree().getView().toGroupNode(aParent),
                 m_aHelper.tree().getName(aValueNode)
-             );
+            );
 
     return NodeChange(pChange.release());
 }
@@ -377,7 +392,7 @@ NodeChange GroupDefaulter::validateSetToDefaultState(NodeRef const& aNode)
     NodeChange aResult;
 
     // only works for set nodes - groups are left alone
-    if ( TreeImplHelper::isSet(aNode) )
+    if ( m_aHelper.tree().getView().isSetNode(aNode) )
     {
        aResult = SetDefaulter( m_aHelper.tree(), aNode, m_aDefaultProvider ).validateSetToDefaultState();
     }

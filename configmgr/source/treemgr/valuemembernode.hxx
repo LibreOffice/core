@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuemembernode.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:40:28 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,12 @@
 
 #include "nodeimpl.hxx"
 
+#ifndef CONFIGMGR_VALUENODEACCESS_HXX
+#include "valuenodeaccess.hxx"
+#endif
+
 namespace configmgr
 {
-    class ValueNode;
-
     namespace configuration
     {
 //-----------------------------------------------------------------------------
@@ -80,19 +82,19 @@ namespace configmgr
         class ValueMemberNode
         {
             class DeferredImpl;
-            typedef vos::ORef<DeferredImpl> DeferredImplRef;
+            typedef rtl::Reference<DeferredImpl> DeferredImplRef;
 
-            ValueNode* m_pOriginal;
             DeferredImplRef m_xDeferredOperation;
+            data::ValueNodeAccess m_aNodeRef;
         private:
             friend class GroupNodeImpl;
             friend class DeferredGroupNodeImpl;
             friend class ValueMemberUpdate;
 
             /// create a ValueMemberNode for a given node
-            explicit ValueMemberNode(ValueNode* pOriginal = NULL);
+            explicit ValueMemberNode(data::ValueNodeAccess const& _aNodeAccess);
             /// create a deferred ValueMemberNode (xOriginal must not be empty)
-            explicit ValueMemberNode(DeferredImplRef const& xOriginal);
+            ValueMemberNode(data::Accessor const& _aAccessor, DeferredImplRef const& _xDeferred);
         public:
             ValueMemberNode(ValueMemberNode const& rOriginal);
             ValueMemberNode& operator=(ValueMemberNode const& rOriginal);
@@ -126,13 +128,14 @@ namespace configmgr
        /// handle class for updating values that are members of a group
         class ValueMemberUpdate
         {
-            ValueMemberNode m_aMemberNode;
+            ValueMemberNode                     m_aMemberNode;
+            view::ViewStrategy *                m_pStrategy;
         private:
             typedef ValueMemberNode::DeferredImplRef DeferredImplRef;
-            friend class GroupNodeImpl;
+            friend class view::ViewStrategy;
 
-            ValueMemberUpdate(ValueMemberNode const& rOriginal)
-                : m_aMemberNode(rOriginal) {}
+            ValueMemberUpdate(ValueMemberNode const& rOriginal, view::ViewStrategy& _rStrategy)
+                : m_aMemberNode(rOriginal), m_pStrategy(&_rStrategy)  {}
 
         public:
             /// does this wrap a valid value ?

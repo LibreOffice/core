@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-20 11:01:51 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,20 +62,51 @@
 #ifndef CONFIGMGR_CONFIGNODEIMPL_HXX_
 #define CONFIGMGR_CONFIGNODEIMPL_HXX_
 
+#ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
-#include "synchronize.hxx"
+#endif
+#ifndef CONFIGMGR_CHANGE_HXX
+#include "change.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 #include "nodeimpl.hxx"
-#include "nodefactory.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGTEMPLATE_HXX_
 #include "template.hxx"
-#include "treeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_RWLOCK_HXX_
+#include "rwlock.hxx"
+#endif
+#ifndef CONFIGMGR_TREEACCESSOR_HXX
+#include "treeaccessor.hxx"
+#endif
 
-#include <vos/ref.hxx>
-#include <vos/refernce.hxx>
-#include <vector>
-#include <map>
-#include <memory>
+#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
+#include <salhelper/simplereferenceobject.hxx>
+#endif
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
+
+#ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+
+#ifndef INCLUDED_VECTOR
+#include <vector>
+#define INCLUDED_VECTOR
+#endif
+#ifndef INCLUDED_MAP
+#include <map>
+#define INCLUDED_MAP
+#endif
+#ifndef INCLUDED_MEMORY
+#include <memory>
+#define INCLUDED_MEMORY
+#endif
 
 namespace configmgr
 {
@@ -84,6 +115,8 @@ namespace configmgr
 
     class Change;
     class SubtreeChange;
+
+    namespace view { class ViewStrategy; class ViewTreeAccess; }
 
     namespace configuration
     {
@@ -94,10 +127,8 @@ namespace configmgr
         struct Attributes;
 
 //-----------------------------------------------------------------------------
-        class Node;
         class TreeImpl;
         class TemplateProvider;
-        struct NodeFactory;
 //-----------------------------------------------------------------------------
         typedef unsigned int NodeOffset;
         typedef unsigned int TreeDepth;
@@ -154,65 +185,56 @@ namespace configmgr
                 (as given by a <type scope='configmgr::configuration::NodeType>Enum</type> value).
             </p>
         */
-        class Node
+        class NodeData
         {
-            Name                m_aName; // cached for better performance
+            Name                m_aName_; // cached for better performance
             NodeImplHolder      m_pSpecificNode;
             NodeOffset          m_nParent;
-
-            friend class TreeImpl;        // can access the name
-            friend class ElementTreeImpl; // can rename root nodes
         public:
-            Node(NodeImplHolder const& aSpecificNodeImpl, Name const& aName, NodeOffset nParent);
+            NodeData(NodeImplHolder const& aSpecificNodeImpl, Name const& aName, NodeOffset nParent);
 
+            void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::NodeAccess const & _aNewData, data::Accessor const & _aOldAccessor);
         // COMMON: information
-            NodeOffset          parent()        const { return m_nParent; }
-            NodeType::Enum      getNodeType()   const { return m_pSpecificNode->getType(); }
-
-            Attributes          attributes()    const { return m_pSpecificNode->getAttributes(); }
+            Name                getName()       const { return m_aName_; }
+            NodeOffset          getParent()     const { return m_nParent; }
 
         // change management
-            bool hasChanges()                   const { return m_pSpecificNode->hasChanges(); }
-            void markChanged()                        { m_pSpecificNode->markChanged(); }
-            void makeIndirect(bool bIndirect)         { NodeImpl::makeIndirect(m_pSpecificNode,bIndirect); }
-
-            void commitDirect()                       { m_pSpecificNode->directCommitChanges(); }
-
-            void collectChanges(NodeChanges& rChanges, TreeImpl* pTree, NodeOffset nContext)    const
-            { m_pSpecificNode->collectChanges(rChanges,pTree,nContext); }
-
-        // COMMON: handler dispatch
-            void dispatch(INodeHandler& rHandler) { m_pSpecificNode->dispatch(rHandler); }
+        public:
+        // BASIC NODE: access to common attributes
+            NodeImpl &          nodeImpl()          { return implGetNodeImpl(); }
+            NodeImpl const &    nodeImpl() const    { return implGetNodeImpl(); }
 
         // SET: access to child elements
-            bool                isSetNode()     const { return NodeType::isSet(getNodeType()); }
-            SetNodeImpl&        setImpl()             { return implGetSetImpl(); }
-            SetNodeImpl const&  setImpl()       const { return implGetSetImpl(); }
+            bool                isSetNode(data::Accessor const& _aAccessor)     const;
+            SetNodeImpl&        setImpl(data::Accessor const& _aAccessor)             { return implGetSetImpl(_aAccessor); }
+            SetNodeImpl const&  setImpl(data::Accessor const& _aAccessor)       const { return implGetSetImpl(_aAccessor); }
 
         // VALUES: access to data
-            bool                        isValueElementNode()    const { return NodeType::isValue(getNodeType()); }
-            ValueElementNodeImpl&       valueElementImpl()            { return implGetValueImpl(); }
-            ValueElementNodeImpl const& valueElementImpl()      const { return implGetValueImpl(); }
+            bool                        isValueElementNode(data::Accessor const& _aAccessor)    const;
+            ValueElementNodeImpl&       valueElementImpl(data::Accessor const& _aAccessor)            { return implGetValueImpl(_aAccessor); }
+            ValueElementNodeImpl const& valueElementImpl(data::Accessor const& _aAccessor)      const { return implGetValueImpl(_aAccessor); }
 
         // GROUP: access to children
-            bool                isGroupNode()   const { return NodeType::isGroup(getNodeType()); }
-            GroupNodeImpl&      groupImpl()           { return implGetGroupImpl(); }
-            GroupNodeImpl const&groupImpl()     const { return implGetGroupImpl(); }
+            bool                isGroupNode(data::Accessor const& _aAccessor)   const;
+            GroupNodeImpl&      groupImpl(data::Accessor const& _aAccessor)           { return implGetGroupImpl(_aAccessor); }
+            GroupNodeImpl const&groupImpl(data::Accessor const& _aAccessor)     const { return implGetGroupImpl(_aAccessor); }
+
+        // access helper
+        public:
+            data::NodeAccess getOriginalNodeAccess(data::Accessor const& _aAccessor) const;
 
         private:
-            void renameNode(Name const& aNewName) { m_aName = aNewName; }
-            friend class ElementTreeImpl; // can rename root nodes
-        private:
-            SetNodeImpl&    implGetSetImpl()   const;
-            GroupNodeImpl&  implGetGroupImpl() const ;
-            ValueElementNodeImpl& implGetValueImpl() const ;
+            NodeImpl&       implGetNodeImpl() const;
+            SetNodeImpl&    implGetSetImpl(data::Accessor const& _aAccessor)   const;
+            GroupNodeImpl&  implGetGroupImpl(data::Accessor const& _aAccessor) const ;
+            ValueElementNodeImpl& implGetValueImpl(data::Accessor const& _aAccessor) const ;
         };
 //-----------------------------------------------------------------------------
         class RootTreeImpl; // for 'dynamic-casting'
         class ElementTreeImpl; // for 'dynamic-casting'
 
-        typedef vos::ORef<ElementTreeImpl> ElementTreeHolder; // see also setnodeimplbase.hxx
-        typedef std::vector< ElementTreeHolder > ElementList; // see also setnodeimplbase.hxx
+        typedef rtl::Reference<ElementTreeImpl> ElementTreeHolder; // see also setnodeimpl.hxx
+        typedef std::vector< ElementTreeHolder > ElementList; // see also setnodeimpl.hxx
 
         /** is the Implementation class for class <type>Tree</type>.
             <p> Holds a list of <type>Node</type> which it allows to access by
@@ -221,11 +243,14 @@ namespace configmgr
             <p> Also provides for navigation to the context this tree is located in
             </p>
         */
-        class TreeImpl : public vos::OReference, private ISynchronizedData
+        class TreeImpl : public salhelper::SimpleReferenceObject
         {
+            friend class view::ViewStrategy;
+            friend class TreeSetNodeImpl;
+         //   friend class DeferredSetNodeImpl;
         public:
             /// the type of the internal list of <type>Node</type>
-            typedef std::vector<Node> NodeList;
+            typedef std::vector<NodeData> NodeList;
 
         protected:
         //  Construction
@@ -236,10 +261,14 @@ namespace configmgr
             /// creates a TreeImpl with a parent tree
             TreeImpl(TreeImpl& rParentTree, NodeOffset nParentNode);
 
-            /// fills this TreeImpl starting from rNode, using the given factory and the tree's template provider
-            void build(NodeFactory& rFactory, INode& rNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider);
+            /// fills this TreeImpl starting from _aRootNode, using the given factory and the tree's template provider
+            void build(rtl::Reference<view::ViewStrategy> const& _xStrategy, data::NodeAccess const& _aRootNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider);
+
+            void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::NodeAccess const & _aNewData, data::Accessor const & _aOldAccessor);
 
         public:
+            data::Accessor      getDataAccessor(data::Accessor const& _aExternalAccessor) const;
+
             /// destroys a TreeImpl
             virtual ~TreeImpl();
 
@@ -259,20 +288,15 @@ namespace configmgr
         // Node Collection information
             /// checks whether <var>nNode</var> is a valid node offset in this tree
             bool isValidNode(NodeOffset nNode)  const;
+
             /// gets the depth that is available in this tree (due to the original request)
             TreeDepth getAvailableDepth()       const   { return m_nDepth; }
 
+            /// gets the depth that is available in this tree within the given node
+            TreeDepth getRemainingDepth(NodeOffset nNode) const
+            { return remainingDepth(getAvailableDepth(),depthTo(nNode)); }
+
         // Node Collection navigation
-            /// gets the <type>NodeOffset</type> of the root node in this tree
-            NodeOffset      root() const { return m_nRoot; }
-
-            /** gets the <type>NodeOffset</type> of the parent node <var>nNode</var> in this tree
-                or 0 (zero) if it is the root node
-                <p>PRE: <code>isValidNode(nNode)</code>
-                </p>
-            */
-            NodeOffset      parent(NodeOffset nNode) const;
-
             /** gets the simple <type>Name</type> of the node <var>nNode</var>
                 <p>PRE: <code>isValidNode(nNode)</code>
                 </p>
@@ -299,16 +323,18 @@ namespace configmgr
             /// append the local path (relative to root) to a node to a collection of names
             void    prependLocalPathTo(NodeOffset nNode, Path::Rep& rNames);
 
-        // Change management
-            bool    hasChanges() const;
-            void    collectChanges(NodeChanges& rChanges);
-            void    markChanged(NodeOffset nNode);
+            // check whether defaults are available
+            bool    hasDefaults(NodeOffset _nNode, data::Accessor const& _aAccessor) const;
+        public:
+            /// gets the <type>NodeOffset</type> of the root node in this tree
+            NodeOffset      root_() const { return m_nRoot; }
 
-            void    makeIndirect(bool bIndirect);
-        // external update
-            void    adjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& aExternalChange);
-            void    adjustToChanges(NodeChangesInformation& rLocalChanges, NodeOffset nNode, SubtreeChange const& aExternalChange);
-
+            /** gets the <type>NodeOffset</type> of the parent node <var>nNode</var> in this tree
+                or 0 (zero) if it is the root node
+                <p>PRE: <code>isValidNode(nNode)</code>
+                </p>
+            */
+            NodeOffset      parent_(NodeOffset nNode) const;
 
         // Node iteration and access
             /** gets the <type>NodeOffset</type> of the first child node
@@ -317,7 +343,7 @@ namespace configmgr
                 <p>PRE: <code>isValidNode(nParent)</code>
                 </p>
             */
-            NodeOffset      firstChild (NodeOffset nParent) const;
+            NodeOffset      firstChild_ (NodeOffset nParent) const;
 
             /** gets the <type>NodeOffset</type> of the next node
                 after <var>nNode</var> in this tree (in list order)
@@ -326,7 +352,7 @@ namespace configmgr
                 <p>PRE: <code>isValidNode(nNode)</code>
                 </p>
             */
-            NodeOffset      nextSibling(NodeOffset nNode) const;
+            NodeOffset      nextSibling_(NodeOffset nNode) const;
 
             /** gets the <type>NodeOffset</type> of the first child node
                 of node <var>nParent</var> that is after
@@ -339,7 +365,7 @@ namespace configmgr
                 <p>PRE: <code>isValidNode(nStartAfter) || nStartAfter == 0</code>
                 </p>
             */
-            NodeOffset      findNextChild(NodeOffset nParent, NodeOffset nStartAfter) const;
+            NodeOffset      findNextChild_(NodeOffset nParent, NodeOffset nStartAfter) const;
 
             /** gets the <type>NodeOffset</type> of the first (and only) child node
                 of node <var>nParent</var> in this tree (in list order)
@@ -348,17 +374,22 @@ namespace configmgr
                 <p>PRE: <code>isValidNode(nParent)</code>
                 </p>
             */
-            NodeOffset      findChild(NodeOffset nParent, Name const& aName) const;
+            NodeOffset      findChild_(NodeOffset nParent, Name const& aName) const;
 
         // Node Collection access
             /// get the number of nodes in this tree
             NodeOffset      nodeCount() const;
 
-            /// get the <type>Node</type> for node <var>nNode</var> in this tree
-            Node*       node(NodeOffset nNode);
-            /// get the <type>Node</type> for node <var>nNode</var> in this tree
-            Node const* node(NodeOffset nNode) const;
+            /// get the <type>NodeData</type> for node <var>nNode</var> in this tree
+            NodeData*       nodeData(NodeOffset nNode);
+            /// get the <type>NodeData</type> for node <var>nNode</var> in this tree
+            NodeData const* nodeData(NodeOffset nNode) const;
+            /// get the <type>NodeData</type> for node <var>nNode</var> in this tree
+            NodeImpl&       nodeImpl(NodeOffset nNode)       { return nodeData(nNode)->nodeImpl(); }
+            /// get the <type>NodeData</type> for node <var>nNode</var> in this tree
+            NodeImpl const& nodeImpl(NodeOffset nNode) const { return nodeData(nNode)->nodeImpl(); }
 
+            NodeOffset nodeOffset(NodeData const & rNodeData) const;
         // dynamic_cast replacement
             RootTreeImpl        * asRootTree();
             RootTreeImpl const  * asRootTree() const;
@@ -366,42 +397,22 @@ namespace configmgr
             ElementTreeImpl     * asElementTree();
             ElementTreeImpl const* asElementTree() const;
 
-        // synchronization
-            ISynchronizedData* getRootLock();
-            ISynchronizedData const* getRootLock() const;
+        // synchronization and memory managers
+            osl::Mutex& getRootLock() const;
+            memory::Segment const * getRootSegment() const;
+            memory::Segment const * getDataSegment() const;
 
-        public:
+        // Behavior
+            rtl::Reference< view::ViewStrategy > getViewBehavior() const;
+        protected:
             // immediate commit
+/*          // implementation of  commit protocol
             void commitDirect();
 
-            // full commit protocol
-            std::auto_ptr<SubtreeChange>    preCommitChanges(ElementList& _rRemovedElements);
-            void finishCommit(SubtreeChange& rRootChange);
-            void revertCommit(SubtreeChange& rRootChange);
-            void recoverFailedCommit(SubtreeChange& rRootChange);
-        protected:
-            // implementation of  commit protocol
-            std::auto_ptr<SubtreeChange> doCommitChanges(ElementList& _rRemovedElements, NodeOffset nNode);
-            void doFinishCommit(SubtreeChange& rChange, NodeOffset nNode);
-            void doRevertCommit(SubtreeChange& rChange, NodeOffset nNode);
-            void doFailedCommit(SubtreeChange& rChange, NodeOffset nNode);
-
-            // implementation of notification protocol
-            void doAdjustToChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rChange, NodeOffset nNode,
-                                    TreeDepth nDepth);
-
-        private:
-            // recursion helpers for implementation of protocols
-            void doCommitSubChanges(ElementList& _rRemovedElements, SubtreeChange& aChangesParent, NodeOffset nParentNode);
-            void doFinishSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
-            void doRevertSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
-            void doFailedSubCommitted(SubtreeChange& aChangesParent, NodeOffset nParentNode);
-
-            void doAdjustToSubChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rChange, NodeOffset nParentNode,
-                                        TreeDepth nDepth);
-
-            void implCollectChangesFrom(NodeOffset nNode, NodeChanges& rChanges);
             void implCommitDirectFrom(NodeOffset nNode);
+*/
+            void implRebuild(NodeOffset nNode, data::NodeAccess const & _aNewData, data::Accessor const & _aOldAccessor);
+
         protected:
             /// set a new parent context for this tree
             void setContext(TreeImpl* pParentTree, NodeOffset nParentNode);
@@ -411,23 +422,20 @@ namespace configmgr
             Name    implGetOriginalName(NodeOffset nNode) const;
 
         private:
-            // ISynchronizedData
-            void acquireReadAccess() const;
-            void releaseReadAccess() const;
-            void acquireWriteAccess();
-            void releaseWriteAccess();
-        private:
             virtual RootTreeImpl const* doCastToRootTree() const = 0;
             virtual ElementTreeImpl const* doCastToElementTree() const = 0;
 
             /// get the full name of the root of this tree
             virtual Path::Component doGetRootName() const = 0;
+
             /// prepend the absolute path to the root of this tree (no context use)
             virtual void doFinishRootPath(Path::Rep& rPath) const = 0;
 
-            mutable OTreeAccessor m_aOwnLock;
+            osl::Mutex& doGetRootLock() const;
+            mutable osl::Mutex m_aOwnLock;
 
-            NodeList        m_aNodes;
+            rtl::Reference<view::ViewStrategy> m_xStrategy;
+            NodeList    m_aNodes;
             TreeImpl*   m_pParentTree;
             NodeOffset  m_nParentNode;
             TreeDepth   m_nDepth;
@@ -447,22 +455,22 @@ namespace configmgr
         public:
 
             /// creates a TreeImpl for a detached, virgin instance of <var>aTemplate</var> (always will be direct)
-            ElementTreeImpl( std::auto_ptr<INode>& pNewNode, TemplateHolder aTemplate, TemplateProvider const& aTemplateProvider  );
+            ElementTreeImpl( data::TreeSegment const& _aElementData, TemplateHolder aTemplate, TemplateProvider const& aTemplateProvider  );
 
             /** creates a TreeImpl with a parent tree, that (supposedly)
                 is an instance of <var>aTemplateInfo</var>
             */
-            ElementTreeImpl(NodeFactory& rNodeFactory,
+            ElementTreeImpl(rtl::Reference<view::ViewStrategy> const& _xStrategy,
                             TreeImpl& rParentTree, NodeOffset nParentNode,
-                            INode& rCacheNode, TreeDepth nDepth,
+                            data::TreeAccessor const& _aDataTree, TreeDepth nDepth,
                             TemplateHolder aTemplateInfo,
                             TemplateProvider const& aTemplateProvider );
 
             /** creates a TreeImpl with no parent node, that (supposedly)
                 is an instance of <var>aTemplateInfo</var>
             */
-            ElementTreeImpl(NodeFactory& rNodeFactory,
-                            INode& rCacheNode, TreeDepth nDepth,
+            ElementTreeImpl(rtl::Reference<view::ViewStrategy> const& _xStrategy,
+                            data::TreeAccessor const& _aDataTree, TreeDepth nDepth,
                             TemplateHolder aTemplateInfo,
                             TemplateProvider const& aTemplateProvider );
 
@@ -471,11 +479,19 @@ namespace configmgr
         // realeses the data this refers to
             virtual void disposeData();
 
+        // rebuilding
+            void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::TreeAccessor const & _aNewData,
+                            data::Accessor const & _aOldAccessor);
+
+        // data access
+            data::TreeAccessor  getOriginalTreeAccess(data::Accessor const& _aAccessor) const;
+
         // Tree information
             /// checks whether this is an instance of a known template
-            bool isTemplateInstance() const { return !!m_aInstanceInfo.isValid(); }
+            bool isTemplateInstance() const { return !!m_aInstanceInfo.is(); }
             /// checks whether this is an instance of the given template
-            bool isInstanceOf(TemplateHolder const& aTemplateInfo) const { return m_aInstanceInfo == aTemplateInfo && aTemplateInfo.isValid(); }
+            bool isInstanceOf(TemplateHolder const& aTemplateInfo) const
+            { return m_aInstanceInfo == aTemplateInfo && aTemplateInfo.is(); }
             /// retrieves the template that this is an instance of
             TemplateHolder getTemplate() const { return m_aInstanceInfo; }
             /// makes a complete name from a simple name and template information
@@ -483,18 +499,21 @@ namespace configmgr
 
         // node control operation
             /// check if this is a free-floating tree
-            bool isFree() const { return m_pOwnedNode != 0; }
+            bool isFree() const { return m_aOwnData.is(); }
             /// transfer ownership to the given set
-            void attachTo(ISubtree& rOwningSet, Name const& aElementName);
+            void attachTo(data::SetNodeAccess const & _aUpdatableSetNode, Name const& aElementName);
             /// tranfer ownership from the given set
-            void detachFrom(ISubtree& rOwningSet, Name const& aElementName);
+            void detachFrom(data::SetNodeAccess const & _aUpdatableSetNode, Name const& aElementName);
 
-            /// tranfer ownership from the given oenwer
-            void takeNodeFrom(std::auto_ptr<INode>& rOldOwner);
-            /// transfer ownership to the given owner
-            void releaseTo(std::auto_ptr<INode>& rNewOwner);
-            /// transfer ownership to the given owner, also providing a new name
-            void releaseAs(std::auto_ptr<INode>& rNewOwner, Name const& aElementName);
+            /// take ownership of the given tree (which must not already be the one in use)
+            void takeTreeAndRebuild(data::TreeSegment const& _aElementData, data::Accessor const & _aOldDataAccessor);
+            /// take ownership of the given tree (which must already be the one in use)
+            void takeTreeBack(data::TreeSegment const& _aElementData);
+
+            /// release ownership
+            data::TreeSegment getOwnedTree() const;
+            /// release ownership
+            data::TreeSegment releaseOwnedTree();
 
         // context operation
             /// set a new root name
@@ -505,42 +524,28 @@ namespace configmgr
             void detachTree();
 
         private:
+            static memory::Segment * getUpdatableSegment(TreeImpl& _rTree);
+
             virtual RootTreeImpl const* doCastToRootTree() const;
             virtual ElementTreeImpl const* doCastToElementTree() const;
 
             virtual Path::Component doGetRootName() const;
+
             virtual void doFinishRootPath(Path::Rep& rPath) const;
         private:
-            TemplateHolder  const m_aInstanceInfo;
-            INode* m_pOwnedNode;
+            TemplateHolder  const   m_aInstanceInfo;
+            data::TreeSegment       m_aOwnData;
+            data::TreeAddress       m_aDataAddress;
+            Name m_aElementName;
         };
 //-----------------------------------------------------------------------------
-#if 1 // OLD_NODE_IMPL_USED
-        SetNodeImpl&    AsSetNode  (NodeImpl& rNode);
-        GroupNodeImpl&  AsGroupNode(NodeImpl& rNode);
-        ValueElementNodeImpl&   AsValueNode(NodeImpl& rNode);
 
         inline
-        SetNodeImpl&   Node::implGetSetImpl()   const
+        NodeImpl&   NodeData::implGetNodeImpl()   const
         {
-            OSL_ASSERT(isSetNode());
-            return AsSetNode(m_pSpecificNode.getBody());
+            OSL_ASSERT(m_pSpecificNode != 0);
+            return *m_pSpecificNode;
         }
-        //---------------------------------------------------------------------
-        inline
-        GroupNodeImpl& Node::implGetGroupImpl() const
-        {
-            OSL_ASSERT(isGroupNode());
-            return AsGroupNode(m_pSpecificNode.getBody());
-        }
-        //---------------------------------------------------------------------
-        inline
-        ValueElementNodeImpl& Node::implGetValueImpl() const
-        {
-            OSL_ASSERT(isValueElementNode());
-            return AsValueNode(m_pSpecificNode.getBody());
-        }
-#endif
 //-----------------------------------------------------------------------------
         inline
         bool TreeImpl::isValidNode(NodeOffset nNode) const
@@ -555,26 +560,34 @@ namespace configmgr
         }
         //---------------------------------------------------------------------
         inline
-        Node* TreeImpl::node(NodeOffset nNode)
+        NodeData* TreeImpl::nodeData(NodeOffset nNode)
         {
+            if (nNode == 0) return NULL;
             OSL_ASSERT(isValidNode(nNode));
-            return &m_aNodes[nNode-root()];
+            return &m_aNodes[nNode-root_()];
         }
         //---------------------------------------------------------------------
         inline
-        Node const* TreeImpl::node(NodeOffset nNode) const
+        NodeData const* TreeImpl::nodeData(NodeOffset nNode) const
         {
+            if (nNode == 0) return NULL;
             OSL_ASSERT(isValidNode(nNode));
-            return &m_aNodes[nNode-root()];
+            return &m_aNodes[nNode-root_()];
         }
-//-----------------------------------------------------------------------------
-
-        typedef vos::ORef<TreeImpl> TreeHolder;
+        //---------------------------------------------------------------------
+        inline
+        NodeOffset TreeImpl::nodeOffset(NodeData const & rNode) const
+        {
+            NodeOffset nOffset = root_() + (&rNode - &m_aNodes[0]);
+            OSL_ASSERT(isValidNode(nOffset));
+            return nOffset;
+        }
 
 //-----------------------------------------------------------------------------
 // helper for other impl classes
 //-----------------------------------------------------------------------------
     class Tree;
+    class TreeRef;
     class NodeRef;
     class ValueRef;
     class AnyNodeRef;
@@ -587,7 +600,7 @@ namespace configmgr
     {
     public:
         static
-        NodeRef makeNode(Node* pNode, NodeOffset nOffset, TreeDepth nDepth);
+        NodeRef makeNode(NodeOffset nOffset, TreeDepth nDepth);
 
         static
         NodeRef makeNode(TreeImpl& rTree, NodeOffset nOffset);
@@ -596,34 +609,25 @@ namespace configmgr
         NodeRef makeNode(NodeID const& aNodeID);
 
         static
-        ValueRef makeValue(Name const& aName, Node* pParentNode, NodeOffset nParentOffset);
+        ValueRef makeValue(Name const& aName, NodeOffset nParentOffset);
 
         static
-        AnyNodeRef makeAnyNode(Node* pNode, NodeOffset nOffset, TreeDepth nDepth);
+        AnyNodeRef makeAnyNode(NodeOffset nOffset, TreeDepth nDepth);
 
         static
-        AnyNodeRef makeAnyNode(Name const& aName, Node* pParentNode, NodeOffset nParentOffset);
-
-        static
-        bool isSet(NodeRef const& aNode);
-
-        static
-        bool isGroup(NodeRef const& aNode);
-
-        static
-        bool isValueElement(NodeRef const& aNode);
+        AnyNodeRef makeAnyNode(Name const& aName, NodeOffset nParentOffset);
 
         static
         TreeImpl* impl(Tree const& aTree);
 
         static
-        Node* node(NodeRef const& aNode);
+        TreeImpl* impl(TreeRef const& aTree);
+
+        static
+        NodeData* nodeData(NodeRef const& aNode);
 
         static
         NodeOffset offset(NodeRef const& aNode);
-
-        static
-        Node* parent_node(ValueRef const& aNode);
 
         static
         NodeOffset parent_offset(ValueRef const& aNode);
@@ -632,7 +636,7 @@ namespace configmgr
         Name value_name(ValueRef const& aNode);
 
         static
-        ValueMemberNode member_node(ValueRef const& aValue);
+        ValueMemberNode member_node(Tree const & _aTree,ValueRef const& aValue);
 
         static
         TreeImpl* tree(NodeID const& aNodeID);
@@ -642,16 +646,13 @@ namespace configmgr
 
     };
 //-----------------------------------------------------------------------------
-    class ElementRef;
+    class ElementTree;
 //-----------------------------------------------------------------------------
 
     struct ElementHelper
     {
         static
-        UnoType getUnoType(ElementRef const& aElement);
-
-        static
-        Name getElementName(ElementRef const& aElement);
+        UnoType getUnoType(ElementTree const& aElement);
     };
 //-----------------------------------------------------------------------------
     }

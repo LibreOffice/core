@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-12-07 18:15:23 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,13 +152,13 @@ SubtreeChange::SubtreeChange(const SubtreeChange& _aObj, DeepChildCopy)
         ++aIter)
     {
         OSL_ASSERT(aIter->second);
-        Children::value_type aCopy(aIter->first, aIter->second->clone());
+        Children::value_type aCopy(aIter->first, aIter->second->clone().release());
         m_aChanges.insert(m_aChanges.end(), aCopy);
     }
 }
 
 // -----------------------------------------------------------------------------
-Change* SubtreeChange::clone() const
+std::auto_ptr<Change> SubtreeChange::clone() const
 {
     return new SubtreeChange(*this, DeepChildCopy());
 }

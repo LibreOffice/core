@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configdefaultprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-09 11:52:15 $
+ *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,17 @@ namespace configmgr
 
     namespace uno = com::sun::star::uno;
 //-----------------------------------------------------------------------------
+    namespace memory
+    {
+        class UpdateAccessor;
+    }
+//-----------------------------------------------------------------------------
     namespace configuration
     {
 //-----------------------------------------------------------------------------
 
         class Tree;
+        class TreeRef;
         class NodeRef;
 //-----------------------------------------------------------------------------
 
@@ -109,9 +115,10 @@ namespace configmgr
         public:
             // factory methods
             static DefaultProvider createEmpty();
-            static DefaultProvider create(Tree const& _aRootTree, vos::ORef<OOptions> const& _xOptions,
+            static DefaultProvider create(Tree const& _aRootTree,
+                                          vos::ORef<OOptions> const& _xOptions,
                                           IDefaultProvider* _pDefaultProvider,
-                                          IDefaultableTreeManager* _pFetchProvider);
+                                          IDefaultableTreeManager* _pDefaultableTree);
 
             // actual c'tor
             explicit
@@ -124,15 +131,15 @@ namespace configmgr
 
             bool isValid() const { return !! m_aProxy.is(); }
 
-        /// tries to load default data into the specified tree
-            bool fetchDefaultData(Tree const& _aTree) const CFG_UNO_THROW_ALL();
-
         /// tries to load a default instance of the specified node
-            std::auto_ptr<ISubtree> getDefaultTree(Tree const& _aTree, NodeRef const& _aNode) const CFG_UNO_THROW_ALL();
+            std::auto_ptr<ISubtree> getDefaultTree(memory::UpdateAccessor& _aDestinationSpace, Tree const& _aTree, NodeRef const& _aNode) const CFG_UNO_THROW_ALL();
 
+        /// tries to load default data into the specified tree
+            bool fetchDefaultData(TreeRef const& _aTreeRef) const CFG_UNO_THROW_ALL();
         };
 
 //-----------------------------------------------------------------------------
+
     }
 }
 
