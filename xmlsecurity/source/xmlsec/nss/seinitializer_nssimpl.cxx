@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-23 03:00:42 $
+ *  last change: $Author: mmi $ $Date: 2004-07-23 03:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,10 +234,13 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     }
     else
     {
-        if (!getMozillaCurrentProfile((rtl::OUString&)sCertDir))
+        rtl::OUString ouCertDir;
+        if (!getMozillaCurrentProfile(ouCertDir))
         {
             return NULL;
         }
+
+        sCertDir = rtl::OString(ouCertDir, ouCertDir.getLength(), RTL_TEXTENCODING_ASCII_US);
 
         /*
         char *pCurrentProfilePath = getCurrentProfilePath();
