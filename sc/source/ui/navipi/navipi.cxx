@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:49:12 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -442,6 +442,7 @@ CommandToolBox::CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId )
     InitImageList();    // ImageList members of ScNavigatorDlg must be initialized before!
 
     SetSizePixel( CalcWindowSizePixel() );
+    SetDropdownClickHdl( LINK(this, CommandToolBox, ToolBoxDropdownClickHdl) );
 //  EnableItem( IID_UP, FALSE );
 //  EnableItem( IID_DOWN, FALSE );
 }
@@ -510,16 +511,20 @@ void __EXPORT CommandToolBox::Select()
 
 void __EXPORT CommandToolBox::Click()
 {
+}
+
+//------------------------------------------------------------------------
+
+IMPL_LINK( CommandToolBox, ToolBoxDropdownClickHdl, ToolBox*, pBox )
+{
     //  Das Popupmenue fuer den Dropmodus muss im Click (Button Down)
     //  statt im Select (Button Up) aufgerufen werden.
 
     if ( GetCurItemId() == IID_DROPMODE )
     {
-        Point aMenuPos = GetItemRect(IID_DROPMODE).BottomLeft();
-
         ScPopupMenu aPop( ScResId( RID_POPUP_DROPMODE ) );
         aPop.CheckItem( RID_DROPMODE_URL + rDlg.GetDropMode() );
-        aPop.Execute( this, aMenuPos );
+        aPop.Execute( this, GetItemRect(IID_DROPMODE), POPUPMENU_EXECUTE_DOWN );
         USHORT nId = aPop.GetSelected();
 
         EndSelection();     // vor SetDropMode (SetDropMode ruft SetItemImage)
@@ -532,6 +537,8 @@ void __EXPORT CommandToolBox::Click()
         MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
         MouseMove( aLeave );
     }
+
+    return 1;
 }
 
 //------------------------------------------------------------------------
