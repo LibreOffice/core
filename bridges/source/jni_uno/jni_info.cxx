@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:37:12 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ JNI_interface_type_info::JNI_interface_type_info(
     OString java_name(
         OUStringToOString(
             uno_name.replace( '.', '/' ),
-            RTL_TEXTENCODING_ASCII_US ) );
+            RTL_TEXTENCODING_JAVA_UTF8 ) );
     JLocalAutoRef jo_class( jni, find_class( jni, java_name.getStr() ) );
     JLocalAutoRef jo_type( jni, create_type( jni, (jclass) jo_class.get() ) );
 
@@ -188,7 +188,7 @@ JNI_interface_type_info::JNI_interface_type_info(
                         OUStringToOString(
                             *reinterpret_cast< OUString const * >(
                                 &method_td->aBase.pMemberName ),
-                            RTL_TEXTENCODING_ASCII_US ) );
+                            RTL_TEXTENCODING_JAVA_UTF8 ) );
 
                     m_methods[ nMethodIndex ] = jni->GetMethodID(
                         (jclass) jo_class.get(), method_name.getStr(),
@@ -227,7 +227,7 @@ JNI_interface_type_info::JNI_interface_type_info(
                     OString method_name(
                         OUStringToOString(
                             name_buf.makeStringAndClear(),
-                            RTL_TEXTENCODING_ASCII_US ) );
+                            RTL_TEXTENCODING_JAVA_UTF8 ) );
                     m_methods[ nMethodIndex ] = jni->GetMethodID(
                         (jclass) jo_class.get(), method_name.getStr(),
                         method_signature.getStr() );
@@ -248,7 +248,7 @@ JNI_interface_type_info::JNI_interface_type_info(
                         name_buf.append( member_name );
                         method_name = OUStringToOString(
                             name_buf.makeStringAndClear(),
-                            RTL_TEXTENCODING_ASCII_US );
+                            RTL_TEXTENCODING_JAVA_UTF8 );
                         m_methods[ nMethodIndex ] = jni->GetMethodID(
                             (jclass) jo_class.get(), method_name.getStr(),
                             method_signature.getStr() );
@@ -298,7 +298,7 @@ JNI_compound_type_info::JNI_compound_type_info(
     OString java_name(
         OUStringToOString(
             uno_name.replace( '.', '/' ),
-            RTL_TEXTENCODING_ASCII_US ) );
+            RTL_TEXTENCODING_JAVA_UTF8 ) );
     JLocalAutoRef jo_class( jni, find_class( jni, java_name.getStr() ) );
 
     JNI_info const * jni_info = jni.get_info();
@@ -351,7 +351,7 @@ JNI_compound_type_info::JNI_compound_type_info(
                     OUStringToOString(
                         *reinterpret_cast< OUString const * >(
                             &td->ppMemberNames[ nPos ] ),
-                        RTL_TEXTENCODING_ASCII_US ) );
+                        RTL_TEXTENCODING_JAVA_UTF8 ) );
 
                 m_fields[ nPos ] = jni->GetFieldID(
                     (jclass) jo_class.get(), member_name.getStr(),
