@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-06 11:36:49 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 22:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -977,12 +977,11 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
             Point aTreePos(aTreeLB.GetPosPixel());
             Size aTreeSize(aTreeLB.GetSizePixel());
             Point aGBPos(aHiddenGB.GetPosPixel());
-            long nDiff = aGBPos.Y();
             DBG_ASSERT(pPageInfo->pPage, "TabPage nicht gefunden!")
             Size aPageSize(pPageInfo->pPage->GetSizePixel());
             Size aGBSize(aHiddenGB.GetSizePixel());
             Point aPagePos( aGBPos.X() + ( aGBSize.Width() - aPageSize.Width() ) / 2,
-                            nDiff * 2 );
+                            aGBPos.Y() + ( aGBSize.Height() - aPageSize.Height() ) / 2 );
             pPageInfo->pPage->SetPosPixel( aPagePos );
             if ( RID_SVXPAGE_COLOR == pPageInfo->nPageId )
             {
@@ -1863,10 +1862,76 @@ void OfaTreeOptionsDialog::Initialize()
                 AddTabPage( (sal_uInt16)rDSArray.GetValue(i), rDSArray.GetString(i), nGroup);
         }
 
+        ResizeTreeLB();
         ActivateLastSelection();
-        if ( nSlot == SID_OPTPAGE_USERDATA )
-            ActivatePage(   RID_SFXPAGE_GENERAL );
     }
+    else
+        ResizeTreeLB();
+
+    if ( nSlot == SID_OPTPAGE_USERDATA )
+        ActivatePage( RID_SFXPAGE_GENERAL );
+}
+
+namespace
+{
+    void MoveControl( Control& _rCtrl, long _nDeltaPixel )
+    {
+        Point   aPt( _rCtrl.GetPosPixel() );
+        aPt.X() += _nDeltaPixel;
+        _rCtrl.SetPosPixel( aPt );
+    }
+}
+
+void OfaTreeOptionsDialog::ResizeTreeLB( void )
+{
+    const long          nMax = aHiddenGB.GetSizePixel().Width() * 42 / 100;
+                                                    // don't ask where 42 comes from... but it looks / feels ok ;-)
+    long                nDelta = 50;                // min.
+    USHORT              nDepth = 0;
+    const long          nIndent0 = PixelToLogic( Size( 28, 0 ) ).Width();
+    const long          nIndent1 = PixelToLogic( Size( 52, 0 ) ).Width();
+
+    SvTreeList*         pTreeList = aTreeLB.GetModel();
+    DBG_ASSERT( pTreeList, "-OfaTreeOptionsDialog::ResizeTreeLB(): no model, no cookies!" );
+
+    SvListEntry*        pEntry = pTreeList->First();
+    while( pEntry )
+    {
+        long            n = aTreeLB.GetTextWidth( aTreeLB.GetEntryText( static_cast< SvLBoxEntry* >( pEntry ) ) );
+        n += ( nDepth == 0 )? nIndent0 : nIndent1;
+
+        if( n > nDelta )
+            nDelta = n;
+
+        pEntry = pTreeList->Next( pEntry, &nDepth );
+    }
+
+    nDelta = LogicToPixel( Size( nDelta + 3, 0 ) ).Width();         // + extra space [logic]
+    nDelta += GetSettings().GetStyleSettings().GetScrollBarSize();  // + scroll bar, in case it's needed
+
+    if( nDelta > nMax )
+        nDelta = nMax;
+
+    // starting resizing with this
+    Size            aSize( GetSizePixel() );
+    aSize.Width() += nDelta;
+    SetSizePixel( aSize );
+
+    // resize treelistbox
+    aSize = aTreeLB.GetSizePixel();
+    aSize.Width() += nDelta;
+    aTreeLB.SetSizePixel( aSize );
+
+    // ... and move depending controls
+    MoveControl( aOkPB, nDelta );
+    MoveControl( aCancelPB, nDelta );
+    MoveControl( aHelpPB, nDelta );
+    MoveControl( aBackPB, nDelta );
+    MoveControl( aHiddenGB, nDelta );
+    MoveControl( aPageTitleFT, nDelta );
+    MoveControl( aLine1FL, nDelta );
+    MoveControl( aHelpFT, nDelta );
+    MoveControl( aHelpImg, nDelta );
 }
 
 short OfaTreeOptionsDialog::Execute()
