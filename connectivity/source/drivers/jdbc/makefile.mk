@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: mh $ $Date: 2001-10-22 10:42:04 $
+#   last change: $Author: rt $ $Date: 2003-04-24 13:23:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,12 +127,9 @@ SHL1STDLIBS=\
     $(VOSLIB)					\
     $(OSLLIB)					\
     $(SALLIB)					\
+    $(JVMACCESSLIB)				\
     $(DBTOOLSLIB)				\
     $(COMPHELPERLIB)
-
-.IF "$(COMPHELPERLIB)" == ""
-SHL1STDLIBS+= icomphelp2.lib
-.ENDIF
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(JDBC_TARGET)
