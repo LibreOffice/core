@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:45:50 $
+ *  last change: $Author: rt $ $Date: 2004-01-05 16:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,9 @@ BOOL SwChildWinWrapper::ReInitDlg(SwDocShell *pDocSh)
 
 SfxChildWinInfo SwFldDlgWrapper::GetInfo() const
 {
-    return SfxChildWindow::GetInfo();
+    SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
+    aInfo.aPos = GetWindow()->OutputToAbsoluteScreenPixel(aInfo.aPos);
+    return aInfo;
 }
 
 
@@ -203,7 +205,6 @@ SwFldDlgWrapper::SwFldDlgWrapper( Window* pParent, USHORT nId,
     SwFldDlg *pDlg = new SwFldDlg( pB, this, pParent );
     pWindow = pDlg;
     pDlg->Start();
-    pDlg->Initialize( pInfo );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
 }
 
