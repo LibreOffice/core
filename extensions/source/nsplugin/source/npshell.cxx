@@ -2,9 +2,9 @@
  *
  *  $RCSfile: npshell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2004-09-03 11:41:22 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 16:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,10 +266,12 @@ NPP_GetValue(void * instance, NPPVariable variable, void *value)
 
     switch (variable) {
         case NPPVpluginNameString:
-            *((char **)value) = PLUGIN_NAME;
+            // add here, for dynamic productname
+            *((char **)value) = NSP_getPluginName();
             break;
         case NPPVpluginDescriptionString:
-            *((char **)value) = PLUGIN_DESCRIPTION;
+            // add here, for dynamic product description
+            *((char **)value) = NSP_getPluginDesc();
             break;
         default:
             err = NPERR_GENERIC_ERROR;
@@ -543,6 +545,9 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
     if (0 == STRNICMP(url, "file:///", strlen("file:///")))
     {
         sprintf(localPathNew, "%s", fname);
+        char* pAskSymbol = NULL;
+        if(NULL != (pAskSymbol = strrchr(localPathNew, '?')))
+            *pAskSymbol = 0;
     }
     else // from network, on windows, fname is c:\abc123
     {
@@ -561,6 +566,9 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
             return;
         }
         strcat(localPathNew, filename);
+        char* pAskSymbol = NULL;
+        if(NULL != (pAskSymbol = strrchr(localPathNew, '?')))
+            *pAskSymbol = 0;
 
         sprintf(localFileNew, "file://%s", localPathNew);
         UnixToDosPath(localFileNew);
