@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: vg $ $Date: 2002-06-27 10:24:04 $
+#   last change: $Author: vg $ $Date: 2002-06-27 12:06:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,7 @@ use Cwd;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.57 $ ';
+$id_str = ' $Revision: 1.58 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -274,6 +274,7 @@ sub dmake_dir {
     my ($folder_nick, $BuildDir);
     $folder_nick = shift;
     $BuildDir = &CorrectPath($StandDir . $PathHash{$folder_nick});
+    &print_error("\n$BuildDir not found!!\n") if (!(-d $BuildDir));
     if ($cmd_file) {
         print "cd $BuildDir\n";
         print $check_error_string;
@@ -285,7 +286,7 @@ sub dmake_dir {
     };
     &RemoveFromDependencies($folder_nick, \%LocalDepsHash) if (!$child);
     if (!$cmd_file && !$show) {
-        &print_error("\n$BuildDir not found!!\n") if (!(chdir ($BuildDir)));
+        chdir $BuildDir;
         cwd();
         system ("$dmake");
         if ($? && ($? != -1)) {
@@ -594,7 +595,8 @@ sub FindIndepPrj {
             };
             @PrjDeps = @{$$Dependencies{$Prj}};
             if ($#PrjDeps == -1) {
-                return $Prj;
+                return $Prj if defined $PathHash{$Prj};
+                &print_error("No path found for $Prj");
             };
         };
         # If there are only dependent projects in hash - generate error
