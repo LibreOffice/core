@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlexp2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:25:21 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:49:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,12 +104,12 @@
 
 //------------------------------------------------------------------------
 
-void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, USHORT nTab,
-        USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow )
+void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
+        SCCOL nStartCol, SCROW nStartRow,   SCCOL nEndCol, SCROW nEndRow )
 {
     if ( pDrawLayer->HasObjectsInRows( nTab, nStartRow, nEndRow ) )
     {
-        SdrPage* pDrawPage = pDrawLayer->GetPage( nTab );
+        SdrPage* pDrawPage = pDrawLayer->GetPage( static_cast<sal_uInt16>(nTab) );
         if ( pDrawPage )
         {
             bTabHasGraphics = TRUE;
@@ -129,8 +129,8 @@ void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, USHORT nTab,
 }
 
 
-void ScHTMLExport::FillGraphList( const SdrPage* pPage, USHORT nTab,
-        USHORT nStartCol, USHORT nStartRow, USHORT nEndCol, USHORT nEndRow )
+void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
+        SCCOL nStartCol, SCROW nStartRow,   SCCOL nEndCol, SCROW nEndRow )
 {
     ULONG   nObjCount = pPage->GetObjCount();
     if ( nObjCount )
@@ -152,10 +152,10 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, USHORT nTab,
                 // If the image is somewhere in a merged range we must
                 // move the anchor to the upper left (THE span cell).
                 pDoc->ExtendOverlapped( aR );
-                USHORT nCol1 = aR.aStart.Col();
-                USHORT nRow1 = aR.aStart.Row();
-                USHORT nCol2 = aR.aEnd.Col();
-                USHORT nRow2 = aR.aEnd.Row();
+                SCCOL nCol1 = aR.aStart.Col();
+                SCROW nRow1 = aR.aStart.Row();
+                SCCOL nCol2 = aR.aEnd.Col();
+                SCROW nRow2 = aR.aEnd.Row();
                 // All cells empty under object?
                 BOOL bInCell = (pDoc->GetEmptyLinesInBlock(
                     nCol1, nRow1, nTab, nCol2, nRow2, nTab, DIR_TOP )
