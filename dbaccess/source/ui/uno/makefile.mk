@@ -2,9 +2,9 @@
  #
  #  $RCSfile: makefile.mk,v $
  #
- #  $Revision: 1.3 $
+ #  $Revision: 1.4 $
  #
- #  last change: $Author: fs $ $Date: 2001-08-17 09:21:14 $
+ #  last change: $Author: oj $ $Date: 2002-03-04 13:08:57 $
  #
  #  The Contents of this file are made available subject to the terms of
  #  either of the following licenses
@@ -81,9 +81,10 @@ SRCFILES =	\
 
 SLOFILES=	\
         $(SLO)$/unofilter.obj	\
+        $(SLO)$/unoorder.obj	\
         $(SLO)$/unosqlmessage.obj	\
         $(SLO)$/unoadmin.obj	\
-        $(SLO)$/dbinteraction.obj	\
+        $(SLO)$/dbinteraction.obj
 
 # --- Targets ----------------------------------
 
@@ -93,6 +94,9 @@ SLOFILES=	\
  #########################################################################
  # history:
  #	$Log: not supported by cvs2svn $
+ #	Revision 1.3  2001/08/17 09:21:14  fs
+ #	#91038# +unofilter
+ #	
  #	Revision 1.2  2001/06/18 12:35:37  fs
  #	#88389# OGenericUnoDialog moved to svtools
  #	
