@@ -29,7 +29,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\statusbar
 ..\%__SRC%\lib\sci.lib %_DEST%\lib%_EXT%\sci.lib
 ..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
-mkdir: %_DEST%\inc\%_EXT%\sc
 ..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
 
 ..\uiconfig\scalc\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\menubar\*.xml
