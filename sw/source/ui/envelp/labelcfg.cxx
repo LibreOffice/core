@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labelcfg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-08-29 12:20:07 $
+ *  last change: $Author: os $ $Date: 2001-09-21 14:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,8 @@ SwLabRec* lcl_CreateSwLabRec(Sequence<Any>& rValues, const OUString& rManufactur
                             case 4 : pNewRec->lHeight   = MM100_TO_TWIP(nVal); break;
                             case 5 : pNewRec->lLeft     = MM100_TO_TWIP(nVal);break;
                             case 6 : pNewRec->lUpper    = MM100_TO_TWIP(nVal);break;
-                            case 7 : pNewRec->nRows     = nVal; break;
-                            case 8 : pNewRec->nCols     = nVal; break;
+                            case 7 : pNewRec->nCols     = nVal; break;
+                            case 8 : pNewRec->nRows     = nVal; break;
                         }
                     }
                 }
@@ -199,8 +199,8 @@ Sequence<PropertyValue> lcl_CreateProperties(
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lHeight) );          sTmp += sColon;
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lLeft)   );          sTmp += sColon;
                 sTmp += OUString::valueOf(TWIP_TO_MM100(rRec.lUpper)  );          sTmp += sColon;
-                sTmp += OUString::valueOf(rRec.nRows   );          sTmp += sColon;
-                sTmp += OUString::valueOf(rRec.nCols   );
+                sTmp += OUString::valueOf(rRec.nCols   );sTmp += sColon;
+                sTmp += OUString::valueOf(rRec.nRows   );
                 pValues[nProp].Value <<= sTmp;
             }
             break;
