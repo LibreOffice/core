@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:50:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5138,7 +5138,7 @@
 				<info>
 					<desc xml:lang="en-US">Specifies the default external mail application.</desc>
 				</info>
-				<value>Netscape 6.x</value>
+				<value>Mozilla 1.0 - 1.2</value>
 			</prop>
 			<set oor:name="Profiles" oor:node-type="MailCommandLineProfile">
 				<info>
