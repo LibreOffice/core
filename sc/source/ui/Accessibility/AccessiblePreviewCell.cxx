@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-27 14:21:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,15 +93,15 @@
 #include <toolkit/helper/convert.hxx>
 #endif
 
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
 ScAccessiblePreviewCell::ScAccessiblePreviewCell( const ::com::sun::star::uno::Reference<
-                                ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+                                ::com::sun::star::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell, /* const */ ScAddress& rCellAddress,
                             sal_Int32 nIndex ) :
     ScAccessibleCellBase( rxParent, ( pViewShell ? pViewShell->GetDocument() : NULL ), rCellAddress, nIndex ),
@@ -156,11 +156,11 @@ void ScAccessiblePreviewCell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
 //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAt( const awt::Point& rPoint )
+uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAtPoint( const awt::Point& rPoint )
                                 throw (uno::RuntimeException)
 {
     uno::Reference<XAccessible> xRet;
-    if (contains(rPoint))
+    if (containsPoint(rPoint))
     {
          ScUnoGuard aGuard;
         IsObjectValid();
@@ -224,7 +224,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessi
     else
     {
         pStateSet->AddState(AccessibleStateType::ENABLED);
-        pStateSet->AddState(AccessibleStateType::MULTILINE);
+        pStateSet->AddState(AccessibleStateType::MULTI_LINE);
         if (IsOpaque(xParentStates))
             pStateSet->AddState(AccessibleStateType::OPAQUE);
         if (isShowing())
@@ -251,7 +251,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAccessiblePreviewCell::getSupportedServi
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.table.AccessibleCellView"));
+    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.table.AccessibleCellView"));
 
     return aSequence;
 }
@@ -357,7 +357,7 @@ void ScAccessiblePreviewCell::CreateTextHelper()
             (new ScAccessiblePreviewCellTextData(mpViewShell, maCellAddress));
         ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewCellTextData));
 
-        mpTextHelper = new accessibility::AccessibleTextHelper(pEditSource );
+        mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
         mpTextHelper->SetEventSource(this);
     }
 }
