@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpurl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:32:53 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,18 +413,25 @@ extern "C" int  no_func(void  *client,  char  *prompt, char*
     curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,memory_write);    \
     curl_easy_setopt(curl,CURLOPT_WRITEDATA,&data)
 
-
-#define SET_URL(url)                                              \
+#define SET_URL_BASE(url)                                         \
     rtl::OString urlParAscii(url.getStr(),                        \
                              url.getLength(),                     \
                              RTL_TEXTENCODING_UTF8);              \
     curl_easy_setopt(curl,                                        \
-                     CURLOPT_URL,                                 \
+                                         CURLOPT_URL,             \
                      urlParAscii.getStr());                       \
+
+//CURLOPT_PASSWDFUNCTION deprecated
+#if defined(CURLOPT_PASSWDFUNCTION) && CURLOPT_PASSWDFUNCTION != 0
+#define SET_URL(url)                                              \
+    SET_URL_BASE(url)                                             \
     curl_easy_setopt(curl,                                        \
                      CURLOPT_PASSWDFUNCTION,                      \
                      no_func)
-
+#else
+#define SET_URL(url)                                              \
+    SET_URL_BASE(url)
+#endif
 
         // Setting username:password
 #define SET_USER_PASSWORD(username,password)                      \
@@ -564,7 +571,7 @@ rtl::OUString FTPURL::net_title() const
     CURL *curl = m_pFCP->handle();
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,TRUE);       // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
     struct curl_slist *slist = 0;
     // post request
     slist = curl_slist_append(slist,"PWD");
@@ -695,7 +702,7 @@ void FTPURL::insert(bool replaceExisting,void* stream) const
     CURL *curl = m_pFCP->handle();
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,FALSE);    // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_NOBODY,false);    // no data => no transfer
     curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
     curl_easy_setopt(curl,CURLOPT_QUOTE,0);
     curl_easy_setopt(curl,CURLOPT_READFUNCTION,memory_read);
@@ -706,7 +713,7 @@ void FTPURL::insert(bool replaceExisting,void* stream) const
     SET_URL(url);
 
     CURLcode err = curl_easy_perform(curl);
-    curl_easy_setopt(curl, CURLOPT_UPLOAD,FALSE);
+    curl_easy_setopt(curl, CURLOPT_UPLOAD,false);
 
     if(err != CURLE_OK)
         throw curl_exception(err);
@@ -748,7 +755,7 @@ void FTPURL::mkdir(bool ReplaceExisting) const
 
     CURL *curl = m_pFCP->handle();
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,TRUE);       // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
     curl_easy_setopt(curl,CURLOPT_QUOTE,0);
 
     // post request
@@ -791,7 +798,7 @@ rtl::OUString FTPURL::ren(const rtl::OUString& NewTitle)
     curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,TRUE);       // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
     curl_easy_setopt(curl,CURLOPT_QUOTE,0);
 
     rtl::OUString url(parent(true));
@@ -842,7 +849,7 @@ void FTPURL::del() const
     curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,TRUE);       // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
     curl_easy_setopt(curl,CURLOPT_QUOTE,0);
 
     rtl::OUString url(parent(true));
