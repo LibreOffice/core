@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:49:34 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
@@ -176,6 +179,235 @@ void Align(SvStorageStream *pS,int nAmount,BOOL bFill=FALSE)
         }
     }
 }
+
+// string import/export =======================================================
+
+/*  #110435# (DR, 2003-11-12) ** Import of Unicode strings in form controls **
+
+    Strings may be stored either as compressed or uncompressed Unicode
+    character array. There are no encoded byte strings anywhere.
+
+    The string length field stores the length of the character array (not the
+    character count of the string) in the lower 31 bits, and the compression
+    state in the highest bit.
+
+    A set bit means the character array is compressed. This means all Unicode
+    characters are <=0xFF. Therefore the high bytes of all characters are left
+    out, and the character array size is equal to the string length.
+
+    A cleared bit means the character array is not compressed. The buffer
+    contains Little-Endian Unicode characters, and the resulting string length
+    is half the buffer size.
+
+    TODO: This implementation of the new string import is a hack to keep
+    msocximex.hxx unchanged. A better implementation would replace the char*
+    members of all classes by something more reasonable.
+ */
+
+namespace {
+
+const sal_uInt32 SVX_MSOCX_SIZEMASK     = 0x7FFFFFFF;   /// Mask for character buffer size.
+const sal_uInt32 SVX_MSOCX_COMPRESSED   = 0x80000000;   /// 1 = compressed Unicode array.
+
+
+/** Returns true, if the passed length field specifies a compressed character array.
+ */
+inline bool lclIsCompressed( sal_uInt32 nLenFld )
+{
+    return (nLenFld & SVX_MSOCX_COMPRESSED) != 0;
+}
+
+
+/** Extracts and returns the memory size of the character buffer.
+    @return  Character buffer size (may differ from resulting string length!).
+ */
+inline sal_uInt32 lclGetBufferSize( sal_uInt32 nLenFld )
+{
+    return nLenFld & SVX_MSOCX_SIZEMASK;
+}
+
+
+// import ---------------------------------------------------------------------
+
+/** Reads the character array of a string in a form control.
+
+    Creates a new character array containing the character data.
+    The length field must be read before and passed to this function.
+    Aligns stream position to multiple of 4 before.
+
+    @param rStrm
+        The input stream.
+
+    @param rpcCharArr
+        (out-param) Will point to the created character array,
+        or will be 0 if string is empty. The array is NOT null-terminated.
+        If the passed pointer points to an old existing array, it will be
+        deleted before. Caller must delete the returned array.
+
+    @param nLenFld
+        The corresponding string length field read somewhere before.
+ */
+void lclReadCharArray( SvStorageStream& rStrm, char*& rpcCharArr, sal_uInt32 nLenFld )
+{
+    delete[] rpcCharArr;
+    sal_uInt32 nBufSize = lclGetBufferSize( nLenFld );
+    if( nBufSize )
+    {
+        rpcCharArr = new char[ nBufSize ];
+        Align( &rStrm, 4 );
+        rStrm.Read( rpcCharArr, nBufSize );
+    }
+    else
+        rpcCharArr = 0;
+}
+
+
+/** Creates an OUString from a character array created with lclReadCharArray().
+
+    The passed parameters must match, that means the length field must be the
+    same used to create the passed character array.
+
+    @param pcCharArr
+        The character array returned by lclReadCharArray(). May be compressed
+        or uncompressed, next parameter nLenFld will specify this.
+
+    @param nLenFld
+        MUST be the same string length field that has been passed to
+        lclReadCharArray() to create the character array in previous parameter
+        pcCharArr.
+
+    @return
+        An OUString containing the decoded string data. Will be empty if
+        pcCharArr is 0.
+ */
+OUString lclCreateOUString( const char* pcCharArr, sal_uInt32 nLenFld )
+{
+    OUStringBuffer aBuffer;
+    sal_uInt32 nBufSize = lclGetBufferSize( nLenFld );
+    if( lclIsCompressed( nLenFld ) )
+    {
+        // buffer contains compressed Unicode, not encoded bytestring
+        sal_Int32 nStrLen = static_cast< sal_Int32 >( nBufSize );
+        aBuffer.setLength( nStrLen );
+        const char* pcCurrChar = pcCharArr;
+        for( sal_Int32 nChar = 0; nChar < nStrLen; ++nChar, ++pcCurrChar )
+            /*  *pcCurrChar may contain negative values and therefore MUST be
+                casted to unsigned char, before assigned to a sal_Unicode. */
+            aBuffer.setCharAt( nChar, static_cast< unsigned char >( *pcCurrChar ) );
+    }
+    else
+    {
+        // buffer contains Little-Endian Unicode
+        sal_Int32 nStrLen = static_cast< sal_Int32 >( nBufSize ) / 2;
+        aBuffer.setLength( nStrLen );
+        const char* pcCurrChar = pcCharArr;
+        for( sal_Int32 nChar = 0; nChar < nStrLen; ++nChar )
+        {
+            /*  *pcCurrChar may contain negative values and therefore MUST be
+                casted to unsigned char, before assigned to a sal_Unicode. */
+            sal_Unicode cChar = static_cast< unsigned char >( *pcCurrChar++ );
+            cChar |= (static_cast< unsigned char >( *pcCurrChar++ ) << 8);
+            aBuffer.setCharAt( nChar, cChar );
+        }
+    }
+    return aBuffer.makeStringAndClear();
+}
+
+// export ---------------------------------------------------------------------
+
+/** This class implements writing a character array from a Unicode string.
+
+    Usage:
+    1)  Construct an instance, either directly with an OUString, or with an UNO
+        Any containing an OUString.
+    2)  Check with HasData(), if there is something to write.
+    3)  Write the string length field with WriteLenField() at the right place.
+    4)  Write the encoded character array with WriteCharArray().
+ */
+class SvxOcxString
+{
+public:
+    /** Constructs an empty string. String data may be set later by assignment. */
+    inline explicit             SvxOcxString() : mnLenFld( 0 ) {}
+    /** Constructs the string from the passed OUString. */
+    inline explicit             SvxOcxString( const OUString& rStr ) { Init( rStr ); }
+    /** Constructs the string from the passed UNO Any. */
+    inline explicit             SvxOcxString( const uno::Any& rAny ) { Init( rAny ); }
+
+    /** Assigns the passed string to the object. */
+    inline SvxOcxString&        operator=( const OUString& rStr ) { Init( rStr ); return *this; }
+    /** Assigns the string in the passed UNO Any to the object. */
+    inline SvxOcxString&        operator=( const uno::Any& rAny ) { Init( rAny ); return *this; }
+
+    /** Returns true, if the string contains at least one character to write. */
+    inline bool                 HasData() const { return maString.getLength() > 0; }
+
+    /** Writes the encoded 32-bit string length field. Aligns stream position to mult. of 4 before. */
+    void                        WriteLenField( SvStorageStream& rStrm ) const;
+    /** Writes the encoded character array. Aligns stream position to mult. of 4 before. */
+    void                        WriteCharArray( SvStorageStream& rStrm ) const;
+
+private:
+    inline void                 Init( const OUString& rStr ) { maString = rStr; Init(); }
+    void                        Init( const uno::Any& rAny );
+    void                        Init();
+
+    OUString                    maString;       /// The initial string data.
+    sal_uInt32                  mnLenFld;       /// The encoded string length field.
+};
+
+void SvxOcxString::Init( const uno::Any& rAny )
+{
+    if( !(rAny >>= maString) )
+        maString = OUString();
+    Init();
+}
+
+void SvxOcxString::Init()
+{
+    mnLenFld = static_cast< sal_uInt32 >( maString.getLength() );
+    bool bCompr = true;
+    // try to find a character >= 0x100 -> character array will be stored uncompressed then
+    if( const sal_Unicode* pChar = maString.getStr() )
+        for( const sal_Unicode* pEnd = pChar + maString.getLength(); bCompr && (pChar < pEnd); ++pChar )
+            bCompr = (*pChar < 0x100);
+    if( bCompr )
+        mnLenFld |= SVX_MSOCX_COMPRESSED;
+    else
+        mnLenFld *= 2;
+}
+
+void SvxOcxString::WriteLenField( SvStorageStream& rStrm ) const
+{
+    if( HasData() )
+    {
+        Align( &rStrm, 4, TRUE );
+        rStrm << mnLenFld;
+    }
+}
+
+void SvxOcxString::WriteCharArray( SvStorageStream& rStrm ) const
+{
+    if( HasData() )
+    {
+        const sal_Unicode* pChar = maString.getStr();
+        const sal_Unicode* pEnd = pChar + maString.getLength();
+        bool bCompr = lclIsCompressed( mnLenFld );
+
+        Align( &rStrm, 4, TRUE );
+        for( ; pChar < pEnd; ++pChar )
+        {
+            // write compressed Unicode (not encoded bytestring), or Little-Endian Unicode
+            rStrm << static_cast< sal_uInt8 >( *pChar );
+            if( !bCompr )
+                rStrm << static_cast< sal_uInt8 >( *pChar >> 8 );
+        }
+    }
+}
+
+} // namespace
+
+// ============================================================================
 
 sal_uInt16 OCX_Control::nStandardId(0x0200);
 sal_uInt16 OCX_FontData::nStandardId(0x0200);
@@ -489,9 +721,7 @@ sal_Bool OCX_CommandButton::Import(
 
     if (pCaption)
     {
-        UniString sTmp(pCaption,RTL_TEXTENCODING_MS_1252);
-        OUString sStr = sTmp;
-        aTmp.setValue(&sStr,getCppuType((OUString *)0));
+        aTmp <<= lclCreateOUString( pCaption, nCaptionLen );
         xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
 
@@ -544,19 +774,9 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef &rContents,
     *rContents << sal_uInt8(0x00);
     *rContents << sal_uInt8(0x00);
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Label"));
-    const OUString *pStr = (const OUString *)aTmp.getValue();
-
-    nCaptionLen = pStr ? pStr->getLength() : 0;
-    if (nCaptionLen)
-    {
-        nCaptionLen |= 0x80000000;
-        *rContents << nCaptionLen;
-        Align(rContents,4,TRUE);
-        String aTmpStr(*pStr);
-        ByteString sByte(aTmpStr,RTL_TEXTENCODING_MS_1252);
-        rContents->Write(sByte.GetBuffer(),sByte.Len());
-    }
+    SvxOcxString aCaption( rPropSet->getPropertyValue(WW8_ASCII2STR("Label")) );
+    aCaption.WriteLenField( *rContents );
+    aCaption.WriteCharArray( *rContents );
 
     Align(rContents,4,TRUE);
 
@@ -572,7 +792,7 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nFixedAreaLen;
 
     sal_uInt8 nTmp = 0x27;
-    if (nCaptionLen)
+    if (aCaption.HasData())
         nTmp |= 0x08;
     *rContents << nTmp;
     *rContents << sal_uInt8(0x00);
@@ -783,9 +1003,7 @@ sal_Bool OCX_OptionButton::Import(
 
     if (pCaption)
     {
-        UniString sTmp(pCaption,RTL_TEXTENCODING_MS_1252);
-        OUString sStr = sTmp;
-        aTmp.setValue(&sStr,getCppuType((OUString *)0));
+        aTmp <<= lclCreateOUString( pCaption, nCaptionLen );
         xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
 
@@ -834,7 +1052,7 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[0] |= 0x40;
 
     Align(rContents,4,TRUE);
-    nValueLen = 1|0x80000000;
+    nValueLen = 1|SVX_MSOCX_COMPRESSED;
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultState"));
     INT16 nDefault;
     aTmp >>= nDefault;
@@ -842,18 +1060,10 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[2] |= 0x40;
 
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Label"));
-    OUString *pStr = (OUString *)aTmp.getValue();
-    nCaptionLen = pStr->getLength();
-    ByteString sByte;
-    if (nCaptionLen)
-    {
-        Align(rContents,4,TRUE);
-        nCaptionLen |= 0x80000000;
-        *rContents << nCaptionLen;
+    SvxOcxString aCaption( rPropSet->getPropertyValue(WW8_ASCII2STR("Label")) );
+    if (aCaption.HasData())
         pBlockFlags[2] |= 0x80;
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
-    }
+    aCaption.WriteLenField( *rContents );
 
     Align(rContents,4,TRUE);
     *rContents << rSize.Width;
@@ -862,9 +1072,8 @@ sal_Bool OCX_OptionButton::WriteContents(SvStorageStreamRef &rContents,
     nDefault += 0x30;
     *rContents << sal_uInt8(nDefault);
     *rContents << sal_uInt8(0x00);
-    Align(rContents,4,TRUE);
-    if (nCaptionLen)
-        rContents->Write(sByte.GetBuffer(),sByte.Len());
+
+    aCaption.WriteCharArray( *rContents );
 
     Align(rContents,4,TRUE);
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
@@ -1036,9 +1245,7 @@ sal_Bool OCX_TextBox::Import(
 
     if (pValue)
     {
-        UniString sTmp(pValue,RTL_TEXTENCODING_MS_1252);
-        OUString sStr = sTmp;
-        aTmp.setValue(&sStr,getCppuType((OUString *)0));
+        aTmp <<= lclCreateOUString( pValue, nValueLen );
         xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
     }
 
@@ -1133,18 +1340,10 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nPasswordChar;
     pBlockFlags[1] |= 0x02;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultText"));
-    OUString *pStr = (OUString *)aTmp.getValue();
-    nValueLen = pStr->getLength();
-    ByteString sByte;
-    if (nValueLen)
-    {
-        Align(rContents,4,TRUE);
-        nValueLen |= 0x80000000;
-        *rContents << nValueLen;
+    SvxOcxString aValue( rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultText")) );
+    aValue.WriteLenField( *rContents );
+    if (aValue.HasData())
         pBlockFlags[2] |= 0x40;
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
-    }
 
     Align(rContents,4,TRUE);
     *rContents << nSpecialEffect;
@@ -1154,8 +1353,7 @@ sal_Bool OCX_TextBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
-    if (nValueLen)
-        rContents->Write(sByte.GetBuffer(),sByte.Len());
+    aValue.WriteCharArray( *rContents );
 
     Align(rContents,4,TRUE);
 
@@ -1289,18 +1487,10 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[0] |= 0x10;
 
 #if 0 //Each control has a different Value format, and how to convert each to text has to be found out
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultText"));
-    OUString *pStr = (OUString *)aTmp.getValue();
-    nValueLen = pStr->getLength();
-    ByteString sByte;
-    if (nValueLen)
-    {
-        Align(rContents,4,TRUE);
-        nValueLen |= 0x80000000;
-        *rContents << nValueLen;
+    SvxOcxString aValue( rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultText")) );
+    aValue.WriteLenField( *rContents );
+    if (aValue.HasData())
         pBlockFlags[2] |= 0x40;
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
-    }
 #endif
 
     Align(rContents,4,TRUE);
@@ -1312,8 +1502,7 @@ sal_Bool OCX_FieldControl::WriteContents(SvStorageStreamRef &rContents,
     *rContents << rSize.Height;
 
 #if 0
-    if (nValueLen)
-        rContents->Write(sByte.GetBuffer(),sByte.Len());
+    aValue.WriteCharArray( *rContents );
 #endif
 
     Align(rContents,4,TRUE);
@@ -1440,9 +1629,7 @@ sal_Bool OCX_ToggleButton::Import(
 
     if (pCaption)
     {
-        UniString sTmp(pCaption,RTL_TEXTENCODING_MS_1252);
-        OUString sStr = sTmp;
-        aTmp.setValue(&sStr,getCppuType((OUString *)0));
+        aTmp <<= lclCreateOUString( pCaption, nCaptionLen );
         xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
 
@@ -1496,9 +1683,7 @@ sal_Bool OCX_Label::Import(
 
     if (pCaption)
     {
-        UniString sTmp(pCaption,RTL_TEXTENCODING_MS_1252);
-        OUString sStr = sTmp;
-        aTmp.setValue(&sStr,getCppuType((OUString *)0));
+        aTmp <<= lclCreateOUString( pCaption, nCaptionLen );
         xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
 
@@ -1549,12 +1734,10 @@ sal_Bool OCX_ComboBox::Import(
     xPropSet->setPropertyValue( WW8_ASCII2STR("TextColor"), aTmp);
 
     if (pValue)
-        {
-            UniString sTmp(pValue,RTL_TEXTENCODING_MS_1252);
-            OUString sStr = sTmp;
-            aTmp.setValue(&sStr,getCppuType((OUString *)0));
-            xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
-        }
+    {
+        aTmp <<= lclCreateOUString( pValue, nValueLen );
+        xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
+    }
 
     aTmp <<= ImportColor(nBackColor);
     xPropSet->setPropertyValue( WW8_ASCII2STR("BackgroundColor"), aTmp);
@@ -1645,18 +1828,10 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nDropButtonStyle;
     pBlockFlags[2] |= 0x04;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Text"));
-    OUString *pStr = (OUString *)aTmp.getValue();
-    nValueLen = pStr->getLength();
-    ByteString sByte;
-    if (nValueLen)
-    {
-        Align(rContents,4,TRUE);
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
-        nValueLen |= 0x80000000;
-        *rContents << nValueLen;
+    SvxOcxString aValue( rPropSet->getPropertyValue(WW8_ASCII2STR("Text")) );
+    aValue.WriteLenField( *rContents );
+    if (aValue.HasData())
         pBlockFlags[2] |= 0x40;
-    }
 
     Align(rContents,4,TRUE);
     *rContents << nSpecialEffect;
@@ -1666,8 +1841,7 @@ sal_Bool OCX_ComboBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << rSize.Width;
     *rContents << rSize.Height;
 
-    if (nValueLen)
-        rContents->Write(sByte.GetBuffer(),sByte.Len());
+    aValue.WriteCharArray( *rContents );
 
     Align(rContents,4,TRUE);
 
@@ -1785,12 +1959,10 @@ sal_Bool OCX_ListBox::Import(
 
 #if 0       //Don't delete this for now until I figure out if I can make this
     if (pValue)
-        {
-            UniString sTmp(pValue,RTL_TEXTENCODING_MS_1252);
-            OUString sStr = sTmp;
-            aTmp.setValue(&sStr,getCppuType((OUString *)0));
-            xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
-        }
+    {
+        aTmp <<= lclCreateOUString( pValue, nValueLen );
+        xPropSet->setPropertyValue( WW8_ASCII2STR("DefaultText"), aTmp);
+    }
 #endif
 
     aTmp <<= ImportColor(nBackColor);
@@ -1866,17 +2038,11 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     Align(rContents,4,TRUE);
 
 #if 0
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultText"));
-    OUString *pStr = (OUString *)aTmp.getValue();
-    nValueLen = pStr->getLength();
-    ByteString sByte;
-    if (nValueLen)
-    {
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
-        nValueLen |= 0x80000000;
-        *rContents << nValueLen;
+    SvxOcxString aValue( rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultText")) );
+    aValue.WriteLenField( *rContents );
+    if (aValue.HasData())
         pBlockFlags[2] |= 0x40;
-    }
+
     Align(rContents,4,TRUE);
 #endif
 
@@ -1884,11 +2050,7 @@ sal_Bool OCX_ListBox::WriteContents(SvStorageStreamRef &rContents,
     *rContents << rSize.Height;
 
 #if 0
-    if (nValueLen)
-    {
-        rContents->Write(sByte.GetBuffer(),sByte.Len());
-        Align(rContents,4,TRUE);
-    }
+    aValue.WriteCharArray( *rContents );
 #endif
 
     Align(rContents,4,TRUE);
@@ -2073,15 +2235,17 @@ sal_Bool OCX_ModernControl::Read(SvStorageStream *pS)
     if (pBlockFlags[2] & 0x20)
         *pS >> nMultiState;
 
-    if (pBlockFlags[2] & 0x40)
+    bool bValue = (pBlockFlags[2] & 0x40) != 0;
+    if (bValue)
     {
         Align(pS,4);
-        *pS >> nValueLen; //bit 0x80000000L set
+        *pS >> nValueLen;
     }
-    if (pBlockFlags[2] & 0x80)
+    bool bCaption = (pBlockFlags[2] & 0x80) != 0;
+    if (bCaption)
     {
         Align(pS,4);
-        *pS >> nCaptionLen; //bit 0x80000000L set
+        *pS >> nCaptionLen;
     }
     if (pBlockFlags[3] & 0x01)
     {
@@ -2117,10 +2281,11 @@ sal_Bool OCX_ModernControl::Read(SvStorageStream *pS)
     if (pBlockFlags[3] & 0x80)
         *pS >> nUnknown9;
     */
-    if (pBlockFlags[4] & 0x01)
+    bool bGroupName = (pBlockFlags[4] & 0x01) != 0;
+    if (bGroupName)
     {
         Align(pS,4);
-        *pS >> nGroupNameLen; // bit 0x80000000L set
+        *pS >> nGroupNameLen;
     }
 
     //End
@@ -2129,33 +2294,16 @@ sal_Bool OCX_ModernControl::Read(SvStorageStream *pS)
     *pS >> nWidth;
     *pS >> nHeight;
 
-    if (nValueLen)
-    {
-        nValueLen &= 0x7FFFFFFF;
-        pValue= new char[nValueLen+1];
-        pS->Read(pValue,nValueLen);
-        pValue[nValueLen]=0;
-        Align(pS,4);
-    }
+    if (bValue)
+        lclReadCharArray( *pS, pValue, nValueLen );
 
-    if (nCaptionLen)
-    {
-        nCaptionLen &= 0x7FFFFFFF;
-        pCaption = new char[nCaptionLen+1];
-        pS->Read(pCaption,nCaptionLen);
-        pCaption[nCaptionLen]=0;
-        Align(pS,4);
-    }
+    if (bCaption)
+        lclReadCharArray( *pS, pCaption, nCaptionLen );
 
-    if (nGroupNameLen)
-    {
-        nGroupNameLen &= 0x7FFFFFFF;
-        pGroupName = new char[nGroupNameLen+1];
-        pS->Read(pGroupName,nGroupNameLen);
-        pGroupName[nGroupNameLen]=0;
-        Align(pS,4);
-    }
+    if (bGroupName)
+        lclReadCharArray( *pS, pGroupName, nGroupNameLen );
 
+    Align(pS,4);
     if (nIcon)
     {
         pS->Read(pIconHeader,20);
@@ -2204,7 +2352,8 @@ sal_Bool OCX_CommandButton::Read(SvStorageStream *pS)
         fAutoSize = (nTemp&0x10)>>4;
     }
 
-    if (pBlockFlags[0] & 0x08)
+    bool bCaption = (pBlockFlags[0] & 0x08) != 0;
+    if (bCaption)
         *pS >> nCaptionLen;
 
     if (pBlockFlags[0] & 0x10) /*Picture Position, a strange mechanism here*/
@@ -2234,14 +2383,8 @@ sal_Bool OCX_CommandButton::Read(SvStorageStream *pS)
         *pS >> nIcon;
     }
 
-    if (nCaptionLen)
-    {
-        Align(pS,4);
-        nCaptionLen &= 0x7FFFFFFF;
-        pCaption = new char[nCaptionLen+1];
-        pS->Read(pCaption,nCaptionLen);
-        pCaption[nCaptionLen]=0;
-    }
+    if (bCaption)
+        lclReadCharArray( *pS, pCaption, nCaptionLen );
 
     Align(pS,4);
     *pS >> nWidth;
@@ -2294,7 +2437,8 @@ sal_Bool OCX_Label::Read(SvStorageStream *pS)
         *pS >> nTemp;
         fAutoSize = (nTemp&0x10)>>4;
     }
-    if (pBlockFlags[0] & 0x08)
+    bool bCaption = (pBlockFlags[0] & 0x08) != 0;
+    if (bCaption)
         *pS >> nCaptionLen;
 
     if (pBlockFlags[0] & 0x10)
@@ -2342,16 +2486,10 @@ sal_Bool OCX_Label::Read(SvStorageStream *pS)
         *pS >> nIcon;
     }
 
-    if (nCaptionLen)
-    {
-        Align(pS,4);
-        nCaptionLen &= 0x7FFFFFFF;
-        pCaption = new char[nCaptionLen+1];
-        pS->Read(pCaption,nCaptionLen);
-        pCaption[nCaptionLen]=0;
-        Align(pS,4);
-    }
+    if (bCaption)
+        lclReadCharArray( *pS, pCaption, nCaptionLen );
 
+    Align(pS,4);
     *pS >> nWidth;
     *pS >> nHeight;
 
@@ -2414,17 +2552,10 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
     *rContents << sal_uInt8(0x00);
     pBlockFlags[0] |= 0x04;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Label"));
-    OUString *pStr = (OUString *)aTmp.getValue();
-    nCaptionLen = pStr->getLength();
-    ByteString sByte;
-    if (nCaptionLen)
-    {
-        nCaptionLen |= 0x80000000;
-        *rContents << nCaptionLen;
+    SvxOcxString aCaption( rPropSet->getPropertyValue(WW8_ASCII2STR("Label")) );
+    aCaption.WriteLenField( *rContents );
+    if (aCaption.HasData())
         pBlockFlags[0] |= 0x08;
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
-    }
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Border"));
     sal_Int16 nBorder;
@@ -2437,8 +2568,7 @@ sal_Bool OCX_Label::WriteContents(SvStorageStreamRef &rContents,
     *rContents << nSpecialEffect;
     pBlockFlags[1] |= 0x02;
 
-    if (nCaptionLen)
-        rContents->Write(sByte.GetBuffer(),sByte.Len());
+    aCaption.WriteCharArray( *rContents );
 
     Align(rContents,4,TRUE);
     *rContents << rSize.Width;
@@ -2865,9 +2995,7 @@ sal_Bool OCX_CheckBox::Import(
 
     if (pCaption)
     {
-        UniString sTmp(pCaption,RTL_TEXTENCODING_MS_1252);
-        OUString sStr = sTmp;
-        aTmp.setValue(&sStr,getCppuType((OUString *)0));
+        aTmp <<= lclCreateOUString( pCaption, nCaptionLen );
         xPropSet->setPropertyValue( WW8_ASCII2STR("Label"), aTmp);
     }
 
@@ -2920,25 +3048,17 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
     pBlockFlags[2] |= 0x20;
 
     Align(rContents,4,TRUE);
-    nValueLen = 1|0x80000000;
+    nValueLen = 1|SVX_MSOCX_COMPRESSED;
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("DefaultState"));
     INT16 nDefault;
     aTmp >>= nDefault;
     *rContents << nValueLen;
     pBlockFlags[2] |= 0x40;
 
-    aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Label"));
-    OUString *pStr = (OUString *)aTmp.getValue();
-    nCaptionLen = pStr->getLength();
-    ByteString sByte;
-    if (nCaptionLen)
-    {
-        Align(rContents,4,TRUE);
-        nCaptionLen |= 0x80000000;
-        *rContents << nCaptionLen;
+    SvxOcxString aCaption( rPropSet->getPropertyValue(WW8_ASCII2STR("Label")) );
+    aCaption.WriteLenField( *rContents );
+    if (aCaption.HasData())
         pBlockFlags[2] |= 0x80;
-        sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
-    }
 
     Align(rContents,4,TRUE);
     *rContents << rSize.Width;
@@ -2947,9 +3067,8 @@ sal_Bool OCX_CheckBox::WriteContents(SvStorageStreamRef &rContents,
     nDefault += 0x30;
     *rContents << sal_uInt8(nDefault);
     *rContents << sal_uInt8(0x00);
-    Align(rContents,4,TRUE);
-    if (nCaptionLen)
-        rContents->Write(sByte.GetBuffer(),sByte.Len());
+
+    aCaption.WriteCharArray( *rContents );
 
     Align(rContents,4,TRUE);
     nFixedAreaLen = static_cast<sal_uInt16>(rContents->Tell()-nOldPos-4);
@@ -3044,7 +3163,8 @@ sal_Bool OCX_FontData::Read(SvStorageStream *pS)
     *pS >> nFixedAreaLen;
     pS->Read(pBlockFlags,4);
 
-    if (pBlockFlags[0] & 0x01)
+    bool bFontName = (pBlockFlags[0] & 0x01) != 0;
+    if (bFontName)
         *pS >> nFontNameLen;
     if (pBlockFlags[0] & 0x02)
     {
@@ -3079,14 +3199,8 @@ sal_Bool OCX_FontData::Read(SvStorageStream *pS)
         *pS >> nFontWeight;
     }
 
-    if (nFontNameLen)
-    {
-        Align(pS,4);
-        nFontNameLen &= 0x7FFFFFFF;
-        pFontName = new char[nFontNameLen+1];
-        pS->Read(pFontName,nFontNameLen);
-        pFontName[nFontNameLen]=0;
-    }
+    if (bFontName)
+        lclReadCharArray( *pS, pFontName, nFontNameLen );
 
     Align(pS,4);
     return(TRUE);
@@ -3097,9 +3211,7 @@ void OCX_FontData::Import(uno::Reference< beans::XPropertySet > &rPropSet)
     uno::Any aTmp;
     if (pFontName)
     {
-        UniString sTmp(pFontName,RTL_TEXTENCODING_MS_1252);
-        OUString sStr = sTmp;
-        aTmp.setValue(&sStr,getCppuType((OUString *)0));
+        aTmp <<= lclCreateOUString( pFontName, nFontNameLen );
         rPropSet->setPropertyValue( WW8_ASCII2STR("FontName"), aTmp);
     }
 
@@ -3144,24 +3256,14 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
     sal_uInt8 nFlags=0x00;
     sal_uInt32 nOldPos = rContent->Tell();
     rContent->SeekRel(8);
-    ByteString sByte;
+    SvxOcxString aFontName;
     uno::Any aTmp;
 
     if (bHasFont)
-    {
-        aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("FontName"));
-        OUString *pStr = (OUString *)aTmp.getValue();
-        nFontNameLen = pStr->getLength();
-        if (nFontNameLen)
-            sByte = ByteString(String(*pStr),RTL_TEXTENCODING_MS_1252);
-    }
-    if (!nFontNameLen)
-    {
-        sByte = ByteString("Times New Roman");
-        nFontNameLen = sByte.Len();
-    }
-    nFontNameLen |= 0x80000000;
-    *rContent << nFontNameLen;
+        aFontName = rPropSet->getPropertyValue(WW8_ASCII2STR("FontName"));
+    if (!aFontName.HasData())
+        aFontName = OUString( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) );
+    aFontName.WriteLenField( *rContent );
     nFlags |= 0x01;
 
     if (bHasFont)
@@ -3208,8 +3310,7 @@ sal_Bool OCX_FontData::Export(SvStorageStreamRef &rContent,
         }
     }
 
-    Align(rContent,4,TRUE);
-    rContent->Write(sByte.GetBuffer(),sByte.Len());
+    aFontName.WriteCharArray( *rContent );
     Align(rContent,4,TRUE);
 
     sal_uInt16 nFixedAreaLen = static_cast<sal_uInt16>(rContent->Tell()-nOldPos-4);
