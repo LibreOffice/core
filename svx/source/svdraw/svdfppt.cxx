@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: sj $ $Date: 2001-09-10 11:37:50 $
+ *  last change: $Author: sj $ $Date: 2001-09-26 13:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -766,7 +766,6 @@ SdrEscherImport::SdrEscherImport( SvStream& rDocStream_ ) :
     bTimesNewRomanAvailable ( FALSE ),
     eCharSetSystem          ( gsl_getSystemTextEncoding() )
 {
-    nIStarBats = nIWingdings = 0;
 }
 
 SdrEscherImport::~SdrEscherImport()
@@ -2321,44 +2320,20 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                     delete pDbgOut;
                  }
 #endif
-
-                sal_uInt32 nFontId = PPT_UNIQUE_FONT_ID_UNDEFINED;
-
-                if ( pFont->aName.CompareIgnoreCaseToAscii( "Wingdings" )== COMPARE_EQUAL )
+                // following block is necessary, because our old PowerPoint export did not set the
+                // correct charset
+                if ( pFont->aName.EqualsIgnoreCaseAscii( "Wingdings" ) ||
+                    pFont->aName.EqualsIgnoreCaseAscii( "Wingdings 2" ) ||
+                        pFont->aName.EqualsIgnoreCaseAscii( "Wingdings 3" ) ||
+                            pFont->aName.EqualsIgnoreCaseAscii( "Monotype Sorts" ) ||
+                                pFont->aName.EqualsIgnoreCaseAscii( "Monotype Sorts 2" ) ||
+                                    pFont->aName.EqualsIgnoreCaseAscii( "Webdings" ) ||
+                                        pFont->aName.EqualsIgnoreCaseAscii( "StarBats" ) ||
+                                            pFont->aName.EqualsIgnoreCaseAscii( "StarMath" ) ||
+                                                pFont->aName.EqualsIgnoreCaseAscii( "ZapfDingbats" ) )
                 {
-                    nFontId = PPT_UNIQUE_FONT_ID_WINGDINGS;
-                    nIWingdings = nCount | 0x80000000;
-                }
-                else if ( pFont->aName.CompareIgnoreCaseToAscii( "Wingdings 2" )== COMPARE_EQUAL )
-                    nFontId = PPT_UNIQUE_FONT_ID_WINGDINGS2;
-                else if ( pFont->aName.CompareIgnoreCaseToAscii( "Wingdings 3" )== COMPARE_EQUAL )
-                    nFontId = PPT_UNIQUE_FONT_ID_WINGDINGS3;
-                else if ( pFont->aName.CompareIgnoreCaseToAscii( "Monotype Sorts" )== COMPARE_EQUAL )
-                    nFontId = PPT_UNIQUE_FONT_ID_MONOTYPE_SORTS;
-                else if ( pFont->aName.CompareIgnoreCaseToAscii( "Monotype Sorts 2" )== COMPARE_EQUAL )
-                    nFontId = PPT_UNIQUE_FONT_ID_MONOTYPE_SORTS2;
-                else if ( pFont->aName.CompareIgnoreCaseToAscii( "Webdings" )== COMPARE_EQUAL )
-                    nFontId = PPT_UNIQUE_FONT_ID_WEBDINGS;
-                else if ( pFont->aName.CompareIgnoreCaseToAscii( "StarBats" )== COMPARE_EQUAL )
-                {
-                    nFontId = PPT_UNIQUE_FONT_ID_STARBATS;
-                    nIStarBats = nCount | 0x80000000;
-                }
-                else if ( pFont->aName.CompareIgnoreCaseToAscii( "StarMath" )== COMPARE_EQUAL )
-                    nFontId = PPT_UNIQUE_FONT_ID_STARMATH;
-                else if ( pFont->aName.CompareIgnoreCaseToAscii( "ZapfDingbats" ) == COMPARE_EQUAL )
-                    nFontId = PPT_UNIQUE_FONT_ID_ZAPFDINGBATS;
-
-                pFont->nUniqueFontId = nFontId;
-                pFonts->C40_INSERT( PptFontEntityAtom, pFont, nCount++ );
-            }
-            if ( ! ( nIStarBats & 0x80000000 ) )
-            {
-                PptFontEntityAtom* pFont = new PptFontEntityAtom;
-                pFont->aName = String( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) );
-                pFont->bAvailable = sal_True;
-                pFont->nUniqueFontId = PPT_UNIQUE_FONT_ID_STARBATS;
-                nIStarBats = nCount | 0x80000000;
+                    pFont->eCharSet = RTL_TEXTENCODING_SYMBOL;
+                };
                 pFonts->C40_INSERT( PptFontEntityAtom, pFont, nCount++ );
             }
             delete pVDev;
@@ -2435,8 +2410,25 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                         pParaText[ nCurrentIndex++ ] = ' ';
                     else
                     {
-                        memcpy( pParaText + nCurrentIndex, pPortion->maString.GetBuffer(), pPortion->Count() << 1 );
-                        nCurrentIndex += pPortion->Count();
+                        sal_uInt32 nCharacters = pPortion->Count();
+                        const sal_Unicode* pSource = pPortion->maString.GetBuffer();
+                        sal_Unicode* pDest = pParaText + nCurrentIndex;
+                        PptFontEntityAtom* pFontEnityAtom = GetFontEnityAtom( pPortion->pCharSet->mnFont );
+                        if ( pFontEnityAtom && ( pFontEnityAtom->eCharSet == RTL_TEXTENCODING_SYMBOL ) )
+                        {
+                            sal_uInt32 i;
+                            sal_Unicode nUnicode;
+                            for ( i = 0; i < nCharacters; i++ )
+                            {
+                                nUnicode = pSource[ i ];
+                                if ( ! ( nUnicode & 0xff00 ) )
+                                    nUnicode |= 0xf000;
+                                pDest[ i ] = nUnicode;
+                            }
+                        }
+                        else
+                            memcpy( pDest, pSource, nCharacters << 1 );
+                        nCurrentIndex += nCharacters;
                     }
                 }
                 sal_uInt16  nParaIndex = (UINT16)pTextObj->GetCurrentIndex();
@@ -4025,7 +4017,7 @@ BOOL PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
 
 void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, SvxNumberFormat& rNumberFormat, UINT32 nLevel, const PPTParaLevel& rParaLevel, const PPTCharLevel& rCharLevel, UINT32 nInstance )
 {
-    nIsBullet = rParaLevel.mbIsBullet ? 1 : 0;
+    nIsBullet = rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BulletOn ) != 0 ? 1 : 0;
     nBulletChar = rParaLevel.mnBulletChar;
     nBulletFont = rParaLevel.mnBulletFont;
     nBulletHeight = rParaLevel.mnBulletHeight;
@@ -4134,12 +4126,26 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager,
     }
     Color aCol( rManager.MSO_CLR_ToColor( nBulletColor ) );
     aFont.SetColor( aCol );
-    rNumberFormat.SetBulletFont( &aFont );
-    sal_uInt16 nBuChar;
+
+    sal_uInt16 nBuChar = (sal_uInt16)nBulletChar;
     if ( aFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
-        nBuChar = (sal_uInt8)nBulletChar | 0xf000;
-    else
-        nBuChar = (sal_uInt16)nBulletChar;
+    {
+        sal_uInt16 nBuCharHiByte = nBuChar >> 8;
+        if ( !nBuCharHiByte )
+            nBuChar |= 0xf000;
+        else if ( nBuCharHiByte != 0xf0 )
+        {   // a symbol font isn't possible here,
+            PptFontEntityAtom* pAtom = rManager.GetFontEnityAtom( 0 );
+            if ( pAtom )
+            {
+                aFont.SetName( pAtom->aName );
+                aFont.SetCharSet( pAtom->eCharSet );
+                aFont.SetFamily( pAtom->eFamily );
+                aFont.SetPitch( pAtom->ePitch );
+            }
+        }
+    }
+    rNumberFormat.SetBulletFont( &aFont );
     rNumberFormat.SetBulletChar( nBuChar );
     rNumberFormat.SetBulletRelSize( (UINT16)nBulletHeight );
     rNumberFormat.SetBulletColor( aCol );
@@ -4258,9 +4264,9 @@ void PPTCharSheet::Read( SvStream& rIn, BOOL bMasterStyle, UINT32 nLevel, BOOL b
 
 PPTParaSheet::PPTParaSheet( UINT32 nInstance )
 {
-    BOOL bHasBullet = FALSE;
-    UINT32 nBulletColor = 0x8000000;
-    UINT16 nUpperDist = 0;
+    sal_uInt16 nBuFlags = 0;
+    sal_uInt32 nBulletColor = 0x8000000;
+    sal_uInt16 nUpperDist = 0;
 
     switch ( nInstance )
     {
@@ -4273,7 +4279,7 @@ PPTParaSheet::PPTParaSheet( UINT32 nInstance )
         case TSS_TYPE_HALFBODY :
         case TSS_TYPE_QUARTERBODY :
         {
-            bHasBullet = TRUE;
+            nBuFlags = 1;
             nUpperDist = 0x14;
         }
         break;
@@ -4289,7 +4295,7 @@ PPTParaSheet::PPTParaSheet( UINT32 nInstance )
     }
     for ( UINT32 i = 0; i < 5; i++ )
     {
-        maParaLevel[ i ].mbIsBullet = bHasBullet;
+        maParaLevel[ i ].mnBuFlags = nBuFlags;
         maParaLevel[ i ].mnBulletChar = 0x2022;
         maParaLevel[ i ].mnBulletFont = 0;
         maParaLevel[ i ].mnBulletHeight = 100;
@@ -4314,35 +4320,22 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
                     sal_uInt32 nLevel, sal_Bool bFirst, sal_Bool bSimpleText )
 {
     // Absatzattribute
-    UINT16  nVal16;
-    UINT32  nVal32, nPMask;
+    sal_uInt16  nVal16, nMask16;
+    sal_uInt32  nVal32, nPMask;
     rIn >> nPMask;
 
-    if ( nPMask & 0xF )
+    nMask16 = (sal_uInt16)nPMask & 0xf;
+    if ( nMask16 )
     {
-        UINT16 nBulFlg;
-        rIn >> nBulFlg; // Bullet-HardAttr-Flags
-
-        if ( nPMask & 1 )
-            maParaLevel[ nLevel ].mbIsBullet = ( nBulFlg & 1 ) != 0;
+        rIn >> nVal16;
+        maParaLevel[ nLevel ].mnBuFlags &=~ nMask16;
+        nVal16 &= nMask16;
+        maParaLevel[ nLevel ].mnBuFlags |= nVal16;
     }
-
     if ( nPMask & 0x0080 )
         rIn >> maParaLevel[ nLevel ].mnBulletChar;
     if ( nPMask & 0x0010 )
-    {
-        rIn >> nVal16;
-        sal_uInt8 nBuCharHiByte = (sal_uInt8)( maParaLevel[ nLevel ].mnBulletChar >> 8 );
-        sal_Bool bFontPossible = ( nBuCharHiByte == 0 ) || ( nBuCharHiByte == 0xf0 );
-        if ( !bFontPossible )   // #90437# if the bullet is a unicode character, symbol
-        {                       // fonts are not possible here and standard unicode is used
-            PptFontEntityAtom* pFontEnityAtom = rManager.GetFontEnityAtom( nVal16 );
-            if ( pFontEnityAtom && pFontEnityAtom->eCharSet != RTL_TEXTENCODING_SYMBOL )
-                bFontPossible = sal_True;
-        }
-        if ( bFontPossible )
-            maParaLevel[ nLevel ].mnBulletFont = nVal16;
-    }
+        rIn >> maParaLevel[ nLevel ].mnBulletFont;
     if ( nPMask & 0x0040 )
     {
         rIn >> nVal16;
@@ -4351,11 +4344,7 @@ void PPTParaSheet::Read( SdrPowerPointImport& rManager, SvStream& rIn, sal_Bool 
     if ( nPMask & 0x0020 )
     {
         rIn >> nVal32;
-        {
-            if ( ! ( nVal32 & 0xff000000 ) )
-                nVal32 = PPT_COLSCHEME_HINTERGRUND;
-            maParaLevel[ nLevel ].mnBulletColor = nVal32;
-        }
+        maParaLevel[ nLevel ].mnBulletColor = nVal32;
     }
     if ( bFirst )
     {
@@ -5219,13 +5208,12 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 nCharCount--;
 
                 rIn >> nMask;
-                aSet.mnAttrSet = nMask & 0x1fdf1;
-                UINT16 nBulFlg = 0;
+                aSet.mnAttrSet = nMask & 0x1fdf5;
+                sal_uInt16 nBulFlg = 0;
                 if ( nMask & 0xF )
-                {
                     rIn >> nBulFlg; // Bullet-HardAttr-Flags
-                    aSet.mpArry[ PPT_ParaAttr_BulletOn ] = ( nBulFlg & 1 ) ? 1 : 0;
-                }
+                aSet.mpArry[ PPT_ParaAttr_BulletOn ]    = ( nBulFlg & 1 ) ? 1 : 0;
+                aSet.mpArry[ PPT_ParaAttr_BuHardColor ] = ( nBulFlg & 4 ) ? 1 : 0;
                 if ( nMask & 0x0080 )
                     rIn >> aSet.mpArry[ PPT_ParaAttr_BulletChar ];
                 if ( nMask & 0x0010 )
@@ -5239,16 +5227,12 @@ PPTStyleTextPropReader::PPTStyleTextPropReader( SvStream& rIn, SdrPowerPointImpo
                 }
                 if ( nMask & 0x0020 )
                 {
-                    UINT32 nVal;
-                    rIn >> nVal;
-                    if ( ( nMask & ( 1 << PPT_ParaAttr_BuHardColor ) ) && ( nBulFlg && ( 1 << PPT_ParaAttr_BuHardColor ) ) )
-                    {
-                        if ( ! ( nVal & 0xff000000 ) )
-                            nVal |= PPT_COLSCHEME_HINTERGRUND;
-                        aSet.mnBulletColor = nVal;
-                    }
-                    else
-                        aSet.mnAttrSet ^= 0x20;
+                    sal_uInt32 nVal32, nHiByte;
+                    rIn >> nVal32;
+                    nHiByte = nVal32 >> 24;
+                    if ( nHiByte <= 8 )
+                        nVal32 = nHiByte | PPT_COLSCHEME;
+                    aSet.mnBulletColor = nVal32;
                 }
                 if ( nMask & 0x0F00 )
                 {
@@ -6003,8 +5987,15 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
     {
         if ( nAttr == PPT_ParaAttr_BulletColor )
         {
-            nRetValue = pParaSet->mnBulletColor;
-            if ( nRetValue == 0x8000000 )
+            sal_Bool bHardBulletColor;
+            if ( pParaSet->mnAttrSet & ( 1 << PPT_ParaAttr_BuHardColor ) )
+                bHardBulletColor = pParaSet->mpArry[ PPT_ParaAttr_BuHardColor ] != 0;
+            else
+                bHardBulletColor = ( mrStyleSheet.mpParaSheet[ mnInstance ]->maParaLevel[ pParaSet->mnDepth ].mnBuFlags
+                                        & ( 1 << PPT_ParaAttr_BuHardColor ) ) != 0;
+            if ( bHardBulletColor )
+                nRetValue = pParaSet->mnBulletColor;
+            else
             {
                 nRetValue = PPT_COLSCHEME_TEXT_UND_ZEILEN;
                 if ( ( nInstanceInSheet != 0xffffffff ) && mnPortionCount )
@@ -6012,7 +6003,7 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
                     PPTPortionObj* pPortion = mpPortionList[ 0 ];
                     if ( pPortion )
                     {
-                        if ( pPortion->pCharSet->mnAttrSet & PPT_CharAttr_FontColor )
+                        if ( pPortion->pCharSet->mnAttrSet & ( 1 << PPT_CharAttr_FontColor ) )
                             nRetValue = pPortion->pCharSet->mnColor;
                         else
                             nRetValue = mrStyleSheet.mpCharSheet[ nInstanceInSheet ]->maCharLevel[ pParaSet->mnDepth ].mnFontColor;
@@ -6037,11 +6028,10 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
         {
             case PPT_ParaAttr_BulletOn :
             {
-                nRetValue = ( rParaLevel.mbIsBullet ) ? 1 : 0;
+                nRetValue = rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BulletOn );
                 if ( pParaLevel )
                 {
-                    UINT32 nTmp = ( pParaLevel->mbIsBullet ) ? 1 : 0;
-                    if ( nRetValue != nTmp )
+                    if ( nRetValue != ( (sal_uInt32)pParaLevel->mnBuFlags & ( 1 << PPT_ParaAttr_BulletOn ) ) )
                         bIsHardAttribute = 1;
                 }
             }
@@ -6074,10 +6064,18 @@ BOOL PPTParagraphObj::GetAttrib( UINT32 nAttr, UINT32& nRetValue, UINT32 nInstan
             break;
             case PPT_ParaAttr_BulletColor :
             {
-                nRetValue = rParaLevel.mnBulletColor;
-                if ( pParaLevel && ( nRetValue != pParaLevel->mnBulletColor ) )
-                    bIsHardAttribute = 1;
-                if ( nRetValue == 0x8000000 )
+                sal_Bool bHardBulletColor;
+                if ( pParaSet->mnAttrSet & ( 1 << PPT_ParaAttr_BuHardColor ) )
+                    bHardBulletColor = pParaSet->mpArry[ PPT_ParaAttr_BuHardColor ] != 0;
+                else
+                    bHardBulletColor = ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BuHardColor ) ) != 0;
+                if ( bHardBulletColor )
+                {
+                    nRetValue = rParaLevel.mnBulletColor;
+                    if ( pParaLevel && ( nRetValue != pParaLevel->mnBulletColor ) )
+                        bIsHardAttribute = 1;
+                }
+                else
                 {
                     if ( mnPortionCount )
                     {
@@ -6212,9 +6210,11 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
                             SvxNumberFormat aNumberFormat( pRule->GetLevel( i ) );
                             const PPTParaLevel& rParaLevel = mrStyleSheet.mpParaSheet[ nInst ]->maParaLevel[ n ];
                             const PPTCharLevel& rCharLevel = mrStyleSheet.mpCharSheet[ nInst ]->maCharLevel[ n ];
-                            UINT32 nColor = ( rParaLevel.mnBulletColor == 0x8000000 )
-                                ? rCharLevel.mnFontColor
-                                : rParaLevel.mnBulletColor;
+                            sal_uInt32 nColor;
+                            if ( rParaLevel.mnBuFlags & ( 1 << PPT_ParaAttr_BuHardColor ) )
+                                nColor = rParaLevel.mnBulletColor;
+                            else
+                                nColor = rCharLevel.mnFontColor;
                             aNumberFormat.SetBulletColor( rManager.MSO_CLR_ToColor( nColor ) );
                             pRule->SetLevel( i, aNumberFormat );
                         }
