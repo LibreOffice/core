@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: kz $ $Date: 2004-10-04 21:05:18 $
+#   last change: $Author: hr $ $Date: 2004-11-09 11:51:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,12 +122,8 @@ SHL1STDLIBS+=\
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
         $(VOSLIB) \
-        $(SALLIB)
-
-.IF "$(SOLAR_JAVA)" != ""
-SHL1STDLIBS+=\
+        $(SALLIB) \
         $(SJLIB)
-.ENDIF # SOLAR_JAVA
 
 .IF "$(GUI)"=="WNT"
 
