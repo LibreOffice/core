@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:37:17 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:46:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,10 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
 
+    // OD 2004-06-01 #i26791# - in order to suppress event handling in
+    // <SwDrawContact::Changed> during contruction of <ViewShell> instance
+    mbInConstructor = true;
+
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
     bEndActionByVirDev = FALSE;
     bPaintWorks = bEnableSmooth = TRUE;
@@ -254,6 +258,9 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
         SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
     if( GetDoc()->GetDrawModel() || pOpt->IsGridVisible() )
         Imp()->MakeDrawView();
+
+    // OD 2004-06-01 #i26791#
+    mbInConstructor = false;
 }
 
 /*************************************************************************
@@ -282,6 +289,11 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     aBrowseBorder( rShell.GetBrowseBorder() )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::SwViewShell" );
+
+    // OD 2004-06-01 #i26791# - in order to suppress event handling in
+    // <SwDrawContact::Changed> during contruction of <ViewShell> instance
+    mbInConstructor = true;
+
     bPaintWorks = bEnableSmooth = TRUE;
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
     bEndActionByVirDev = FALSE;
@@ -311,6 +323,10 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
         SwTxtFrm::GetTxtCache()->IncreaseMax( 100 );
     if( GetDoc()->GetDrawModel() || pOpt->IsGridVisible() )
         Imp()->MakeDrawView();
+
+    // OD 2004-06-01 #i26791#
+    mbInConstructor = false;
+
 }
 
 /******************************************************************************
