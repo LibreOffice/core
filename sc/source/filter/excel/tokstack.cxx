@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokstack.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:24:47 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,11 +132,11 @@ TokenPool::TokenPool( void )
 
     nP_Ext = 32;
     ppP_Ext = new EXTCONT*[ nP_Ext ];
-    memset( ppP_Ext, '\0', sizeof( EXTCONT* ) * nP_Ext );
+    memset( ppP_Ext, 0, sizeof( EXTCONT* ) * nP_Ext );
 
     nP_Nlf = 16;
     ppP_Nlf = new NLFCONT*[ nP_Nlf ];
-    memset( ppP_Nlf, '\0', sizeof( NLFCONT* ) * nP_Nlf );
+    memset( ppP_Nlf, 0, sizeof( NLFCONT* ) * nP_Nlf );
 
     pScToken = new ScTokenArray;
 
@@ -388,34 +388,34 @@ void TokenPool::GetElementRek( const UINT16 nId )
     {
         if( *pAkt < nScTokenOff )
         {// Rekursion oder nicht?
-            switch( pType[ ( TokenId ) *pAkt ] )
+            switch( pType[ *pAkt ] )
             {
                 case T_Id:
-                    GetElementRek( ( TokenId ) *pAkt );
+                    GetElementRek( *pAkt );
                     break;
                 case T_Str:
-                    pScToken->AddString( ppP_Str[ pElement[ ( TokenId ) *pAkt ] ]->GetBuffer() );
+                    pScToken->AddString( ppP_Str[ pElement[ *pAkt ] ]->GetBuffer() );
                     break;
                 case T_D:
-                    pScToken->AddDouble( pP_Dbl[ pElement[ ( TokenId ) *pAkt ] ] );
+                    pScToken->AddDouble( pP_Dbl[ pElement[ *pAkt ] ] );
                     break;
                 case T_RefC:
-                    pScToken->AddSingleReference( *ppP_RefTr[ pElement[ (UINT16) *pAkt ] ] );
+                    pScToken->AddSingleReference( *ppP_RefTr[ pElement[ *pAkt ] ] );
                     break;
                 case T_RefA:
                     {
                     ComplRefData    aComplRefData;
-                    aComplRefData.Ref1 = *ppP_RefTr[ pElement[ ( TokenId ) *pAkt ] ];
-                    aComplRefData.Ref2 = *ppP_RefTr[ pElement[ ( TokenId ) *pAkt ] + 1 ];
+                    aComplRefData.Ref1 = *ppP_RefTr[ pElement[ *pAkt ] ];
+                    aComplRefData.Ref2 = *ppP_RefTr[ pElement[ *pAkt ] + 1 ];
                     pScToken->AddDoubleReference( aComplRefData );
                     }
                     break;
                 case T_RN:
-                    pScToken->AddName( pElement[ ( TokenId ) *pAkt ] );
+                    pScToken->AddName( pElement[ *pAkt ] );
                     break;
                 case T_Ext:
                     {
-                    UINT16      n = pElement[ ( TokenId ) *pAkt ];
+                    UINT16      n = pElement[ *pAkt ];
                     EXTCONT*    p = ( n < nP_Ext )? ppP_Ext[ n ] : NULL;
 
                     if( p )
@@ -424,7 +424,7 @@ void TokenPool::GetElementRek( const UINT16 nId )
                     break;
                 case T_Nlf:
                     {
-                    UINT16      n = pElement[ ( TokenId ) *pAkt ];
+                    UINT16      n = pElement[ *pAkt ];
                     NLFCONT*    p = ( n < nP_Nlf )? ppP_Nlf[ n ] : NULL;
 
                     if( p )
@@ -463,7 +463,7 @@ void TokenPool::operator >>( TokenId& rId )
 }
 
 
-TokenId TokenPool::Store( const double& rDouble )
+const TokenId TokenPool::Store( const double& rDouble )
 {
     if( nElementAkt >= nElement )
         GrowElement();
@@ -481,11 +481,11 @@ TokenId TokenPool::Store( const double& rDouble )
     nElementAkt++;
     nP_DblAkt++;
 
-    return ( TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
 }
 
 
-TokenId TokenPool::Store( const UINT16 nIndex )
+const TokenId TokenPool::Store( const UINT16 nIndex )
 {
     if( nElementAkt >= nElement )
         GrowElement();
@@ -494,11 +494,11 @@ TokenId TokenPool::Store( const UINT16 nIndex )
     pType[ nElementAkt ] = T_RN;                // Typinfo Range Name eintragen
 
     nElementAkt++;
-    return ( TokenId ) nElementAkt;             // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt;               // Ausgabe von altem Wert + 1!
 }
 
 
-TokenId TokenPool::Store( const String& rString )
+const TokenId TokenPool::Store( const String& rString )
 {
     // weitgehend nach Store( const sal_Char* ) kopiert, zur Vermeidung
     //  eines temporaeren Strings in "
@@ -526,11 +526,11 @@ TokenId TokenPool::Store( const String& rString )
     nElementAkt++;
     nP_StrAkt++;
 
-    return ( TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
 }
 
 
-TokenId TokenPool::Store( const SingleRefData& rTr )
+const TokenId TokenPool::Store( const SingleRefData& rTr )
 {
     if( nElementAkt >= nElement )
         GrowElement();
@@ -549,11 +549,11 @@ TokenId TokenPool::Store( const SingleRefData& rTr )
     nElementAkt++;
     nP_RefTrAkt++;
 
-    return ( TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
 }
 
 
-TokenId TokenPool::Store( const ComplRefData& rTr )
+const TokenId TokenPool::Store( const ComplRefData& rTr )
 {
     if( nElementAkt >= nElement )
         GrowElement();
@@ -578,11 +578,11 @@ TokenId TokenPool::Store( const ComplRefData& rTr )
 
     nElementAkt++;
 
-    return ( TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
 }
 
 
-TokenId TokenPool::Store( const DefTokenId e, const String& r )
+const TokenId TokenPool::Store( const DefTokenId e, const String& r )
 {
     if( nElementAkt >= nElement )
         GrowElement();
@@ -604,11 +604,11 @@ TokenId TokenPool::Store( const DefTokenId e, const String& r )
     nElementAkt++;
     nP_ExtAkt++;
 
-    return ( TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
+    return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
 }
 
 
-TokenId TokenPool::StoreNlf( const SingleRefData& rTr )
+const TokenId TokenPool::StoreNlf( const SingleRefData& rTr )
 {
     if( nElementAkt >= nElement )
         GrowElement();
@@ -629,7 +629,7 @@ TokenId TokenPool::StoreNlf( const SingleRefData& rTr )
     nElementAkt++;
     nP_NlfAkt++;
 
-    return ( TokenId ) nElementAkt;
+    return ( const TokenId ) nElementAkt;
 }
 
 
@@ -639,8 +639,9 @@ void TokenPool::Reset( void )
 }
 
 
-BOOL TokenPool::IsSingleOp( TokenId nId, const DefTokenId eId ) const
+BOOL TokenPool::IsSingleOp( const TokenId& rId, const DefTokenId eId ) const
 {
+    UINT16 nId = (UINT16) rId;
     if( nId && nId <= nElementAkt )
     {// existent?
         nId--;
@@ -661,8 +662,9 @@ BOOL TokenPool::IsSingleOp( TokenId nId, const DefTokenId eId ) const
 }
 
 
-BOOL TokenPool::IsExternal( TokenId n ) const
+BOOL TokenPool::IsExternal( const TokenId& rId ) const
 {
+    UINT16 n = (UINT16) rId;
     if( n && n <= nElementAkt )
     {
         n--;
@@ -673,9 +675,10 @@ BOOL TokenPool::IsExternal( TokenId n ) const
 }
 
 
-const String* TokenPool::GetString( TokenId n ) const
+const String* TokenPool::GetString( const TokenId& r ) const
 {
     const String*   p = NULL;
+    UINT16 n = (UINT16) r;
     if( n && n <= nElementAkt )
     {
         n--;
