@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpids.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 14:51:28 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,3 +281,8 @@
 #define HID_SD_TASK_PANE_PREVIEW_RECENT     (HID_SD_START + 175)
 #define HID_SD_TASK_PANE_PREVIEW_ALL        (HID_SD_START + 176)
 #define HID_SD_TASK_PANE_PREVIEW_LAYOUTS    (HID_SD_START + 177)
+
+#define HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE           (HID_SD_START + 178)
+#define HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS           (HID_SD_START + 179)
+#define HID_SD_CUSTOMANIMATIONDIALOG_EXIT               (HID_SD_START + 180)
+#define HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH         (HID_SD_START + 181)
